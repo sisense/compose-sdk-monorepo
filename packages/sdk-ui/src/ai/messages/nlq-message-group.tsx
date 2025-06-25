@@ -33,7 +33,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
   const { chatMode = 'analyze', enableInsights } = useChatConfig();
   const { themeSettings } = useThemeContext();
 
-  const { queryTitle, chartRecommendations, jaql, userMsg, clarification } = data;
+  const { queryTitle, chartRecommendations, jaql, userMsg, clarification = '' } = data;
   console.debug(`JAQL for ${queryTitle}`, jaql);
   console.debug(`chart recommendations for ${queryTitle}`, chartRecommendations);
 
@@ -65,7 +65,7 @@ export default function NlqMessageGroup({ data, alwaysShowFeedback }: NlqMessage
 
   const isAnalyzeMode = chatMode === 'analyze';
 
-  const answer = `${userMsg}${userMsg && clarification ? ' ' : ''}${clarification}`;
+  const answer = `${userMsg}${userMsg && clarification ? '\n' : ''}${clarification}`;
 
   return (
     <>

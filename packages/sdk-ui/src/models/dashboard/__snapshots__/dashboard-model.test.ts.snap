@@ -84,6 +84,7 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
   "widgets": [
     {
       "chartType": "pie",
+      "customWidgetType": "",
       "dataOptions": {
         "category": [],
         "value": [],
@@ -102,7 +103,6 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
       "filters": [],
       "highlights": [],
       "oid": "widget-1",
-      "pluginType": "",
       "styleOptions": {
         "subtype": "pie/donut",
       },

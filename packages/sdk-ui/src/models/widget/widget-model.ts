@@ -42,11 +42,11 @@ export interface WidgetModel {
   widgetType: WidgetType;
 
   /**
-   * Plugin type. Only present for plugin widgets.
+   * Custom widget type. Only present for custom widgets.
    *
-   * If this is a plugin widget, this is typically the name/ID of the plugin.
+   * If this is a custom widget, this is typically the name/ID of the custom widget.
    */
-  pluginType: string;
+  customWidgetType: string;
 
   /**
    * Widget data options.

@@ -6,7 +6,7 @@ import { useDashboardThemeInternal } from './use-dashboard-theme';
 import { useComposedDashboardInternal } from './use-composed-dashboard';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 import { useCallback, useEffect } from 'react';
-import { usePlugins } from '@/plugins-provider';
+import { useCustomWidgets } from '@/custom-widgets-provider';
 import { TabberWidget } from '@/widgets/tabber-widget';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { useDefaults } from '@/common/hooks/use-defaults';
@@ -20,6 +20,10 @@ export enum DashboardChangeType {
   UI_FILTERS_PANEL_COLLAPSE = 'UI.FILTERS.PANEL.COLLAPSE',
   /** Widgets panel layout updated */
   WIDGETS_PANEL_LAYOUT_UPDATE = 'WIDGETS_PANEL_LAYOUT.UPDATE',
+  /** Edit mode isEditing changed */
+  WIDGETS_PANEL_LAYOUT_IS_EDITING_CHANGE = 'WIDGETS_PANEL.EDIT_MODE.IS_EDITING.CHANGE',
+  /** Widgets deleted from the dashboard */
+  WIDGETS_DELETE = 'WIDGETS.DELETE',
 }
 
 export type DashboardChangeAction =
@@ -34,6 +38,14 @@ export type DashboardChangeAction =
   | {
       type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_UPDATE;
       payload: WidgetsPanelLayout;
+    }
+  | {
+      type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_IS_EDITING_CHANGE;
+      payload: boolean;
+    }
+  | {
+      type: DashboardChangeType.WIDGETS_DELETE;
+      payload: string[];
     };
 
 /**
@@ -88,16 +100,16 @@ export const Dashboard = asSisenseComponent({
     onChange,
   }: DashboardProps) => {
     const { themeSettings } = useDashboardThemeInternal({ styleOptions });
-    const { registerPlugin } = usePlugins();
+    const { registerCustomWidget } = useCustomWidgets();
     const app = useSisenseContext().app;
     const config = useDefaults(propConfig, DEFAULT_DASHBOARD_CONFIG);
 
     useEffect(() => {
       const tabberEnabled = app?.settings?.tabberConfig?.enabled || false;
       if (tabberEnabled) {
-        registerPlugin('WidgetsTabber', TabberWidget);
+        registerCustomWidget('WidgetsTabber', TabberWidget);
       }
-    }, [app?.settings?.tabberConfig?.enabled, registerPlugin]);
+    }, [app?.settings?.tabberConfig?.enabled, registerCustomWidget]);
     const {
       dashboard: {
         filters: dashboardFilters = [],

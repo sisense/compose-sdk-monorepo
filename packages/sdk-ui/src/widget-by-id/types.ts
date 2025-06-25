@@ -49,7 +49,7 @@ export type FusionWidgetType =
   | 'map/scatter'
   | 'map/area'
   | TextWidgetType
-  | 'plugin';
+  | 'custom';
 
 export type WidgetSubtype =
   | 'area/basic'
@@ -503,7 +503,7 @@ export type FunnelWidgetStyle = BaseWidgetStyle &
   };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type PluginStyle = any;
+export type CustomWidgetStyle = any;
 
 export type TableWidgetStyle = {
   'colors/columns': boolean;

@@ -33,7 +33,7 @@ export function getAuthenticator({
 
   // sso overrides all other auth methods
   if (ssoEnabled) {
-    return new SsoAuthenticator(url, enableSilentPreAuth);
+    return new SsoAuthenticator(normalizeUrl(rawUrl, true), enableSilentPreAuth);
   }
 
   // username/password or tokens are chosen relative to priority

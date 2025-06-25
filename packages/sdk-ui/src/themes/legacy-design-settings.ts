@@ -195,6 +195,11 @@ export function convertToThemeSettings(
       dividerLineColor: DEFAULT_DIVIDER_COLOR,
       borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
       borderColor: DEFAULT_DASHBOARD_BORDER_COLOR,
+      toolbar: {
+        primaryTextColor: legacyDesignSettings.dashboards.toolbarTextColor,
+        secondaryTextColor: legacyDesignSettings.dashboards.toolbarSecondaryTextColor,
+        backgroundColor: legacyDesignSettings.dashboards.toolbarBackgroundColor,
+      },
     },
     filter: {
       panel: {

@@ -12,6 +12,7 @@ import { ClientApplication } from '../app/client-application';
 import { DeepPartial } from 'ts-essentials';
 import { useTranslation } from 'react-i18next';
 import { translation } from '../translation/resources/en';
+import { CustomWidgetsProvider } from '../custom-widgets-provider';
 
 type UserSetupFn = (typeof userEvent)['setup'];
 interface SetupResult extends RenderResult {
@@ -55,7 +56,11 @@ type MockedSisenseContextProviderProps = PropsWithChildren<
   DeepPartial<Omit<SisenseContextPayload, 'app'>>
 >;
 
-const mockHttpClient = new HttpClient('mock-url', {} as Authenticator, 'mock-env');
+const mockHttpClient = new HttpClient(
+  'http://mock-url/sometenant?someparam=true',
+  {} as Authenticator,
+  'mock-env',
+);
 export const MockedSisenseContextProvider = ({
   children,
   tracking = {
@@ -78,7 +83,7 @@ export const MockedSisenseContextProvider = ({
         errorBoundary: { showErrorBox: true, ...errorBoundary },
       }}
     >
-      {children}
+      <CustomWidgetsProvider>{children}</CustomWidgetsProvider>
     </SisenseContext.Provider>
   );
 };

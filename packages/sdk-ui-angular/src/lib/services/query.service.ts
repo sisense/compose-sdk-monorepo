@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql, QueryResultData } from '@sisense/sdk-data';
 import {
   type ExecuteCsvQueryParams as ExecuteCsvQueryParamsPreact,
+  type ExecuteCustomWidgetQueryParams as ExecuteCustomWidgetQueryParamsPreact,
   executePivotQuery,
   type ExecutePivotQueryParams as ExecutePivotQueryParamsPreact,
   executeQuery,
@@ -10,6 +11,7 @@ import {
   type ExecuteQueryParams as ExecuteQueryParamsPreact,
   HookAdapter,
   useExecuteCsvQueryInternal,
+  useExecuteCustomWidgetQueryInternal,
 } from '@sisense/sdk-ui-preact';
 
 import { createSisenseContextConnector } from '../component-wrapper-helpers';
@@ -50,6 +52,13 @@ export interface ExecuteCsvQueryParams
     ExecuteQueryHandlers {}
 
 /**
+ * Parameters for custom widget query execution.
+ */
+export interface ExecuteCustomWidgetQueryParams
+  extends Omit<ExecuteCustomWidgetQueryParamsPreact, 'enabled' | 'onBeforeQuery'>,
+    ExecuteQueryHandlers {}
+
+/**
  * Service for executing data queries.
  *
  * @group Queries
@@ -57,7 +66,12 @@ export interface ExecuteCsvQueryParams
 @Injectable({
   providedIn: 'root',
 })
-@TrackableService<QueryService>(['executeQuery', 'executeQueryByWidgetId', 'executePivotQuery'])
+@TrackableService<QueryService>([
+  'executeQuery',
+  'executeQueryByWidgetId',
+  'executePivotQuery',
+  'executeCustomWidgetQuery',
+])
 export class QueryService {
   constructor(private sisenseContextService: SisenseContextService) {}
 
@@ -178,6 +192,38 @@ export class QueryService {
     ]);
 
     const resultPromise = new Promise<{ data: Blob | string }>((resolve, reject) => {
+      hookAdapter.subscribe((res) => {
+        const { data, isSuccess, isError, error } = res;
+        if (isSuccess) {
+          resolve({ data });
+        } else if (isError) {
+          reject(error);
+        }
+      });
+    });
+
+    hookAdapter.run(params);
+
+    return resultPromise.finally(() => {
+      hookAdapter.destroy();
+    });
+  }
+
+  /**
+   * Executes a data query from custom widget component props.
+   *
+   * This method takes custom widget props (dataSource, dataOptions, filters, etc.)
+   * and executes the appropriate data query
+   *
+   * @param params - Custom widget component props containing data source, data options, filters, etc.
+   * @returns Promise resolving to query result with formatted data
+   */
+  async executeCustomWidgetQuery(params: ExecuteCustomWidgetQueryParams) {
+    const hookAdapter = new HookAdapter(useExecuteCustomWidgetQueryInternal, [
+      createSisenseContextConnector(this.sisenseContextService),
+    ]);
+
+    const resultPromise = new Promise<{ data: QueryResultData }>((resolve, reject) => {
       hookAdapter.subscribe((res) => {
         const { data, isSuccess, isError, error } = res;
         if (isSuccess) {

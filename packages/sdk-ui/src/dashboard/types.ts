@@ -78,6 +78,72 @@ export interface DashboardFiltersPanelConfig extends FiltersPanelConfig {
 }
 
 /**
+ * Widgets panel configuration
+ */
+export interface WidgetsPanelConfig {
+  /**
+   * If true adjust layout based on available width of widgets panel.
+   *
+   * If not specified, the default value is `false`.
+   */
+  responsive?: boolean;
+  /**
+   * Edit mode configuration.
+   * If enabled, an 'Edit Layout' action is visible to users on the dashboard toolbar.
+   * Clicking 'Edit Layout' opens the dashboard in editing mode, where the user can resize or reposition widgets using drag and drop.
+   * If history enabled, layout changes are temporarily stored during editing, with undo/redo buttons available on the toolbar.
+   * Finally, changes are confirmed or discarded with 'Apply' or 'Cancel' buttons.
+   *
+   * If persistence is enabled for the dashboard, changes to the layout will be saved to Fusion on clicking the 'Apply' button.
+   *
+   * This feature is in alpha.
+   *
+   * @alpha
+   */
+  editMode?: EditModeConfig;
+}
+
+/**
+ * Edit mode configuration
+ */
+export interface EditModeConfig {
+  /** Flag indicating whether the edit layout feature is enabled
+   *
+   * @default false
+   */
+  enabled: boolean;
+  /**
+   * Flag indicating whether the dashboard is currently in edit mode.
+   * If specified, will override inner mode state.
+   * */
+  isEditing?: boolean;
+  /** Configuration for the edit mode history */
+  applyChangesAsBatch?: {
+    /**
+     * If true, changes are applied when the user clicks 'Apply'
+     * or discarded when the user clicks 'Cancel'.
+     *
+     * If false, changes will be applied immediately as the user makes each change
+     * without confirmation or the ability to cancel/undo.
+     *
+     * @default: true
+     * */
+    enabled: boolean;
+    /**
+     * The maximum number of history items to keep.
+     *
+     * @default 20
+     */
+    historyLimit?: number;
+  };
+  /** Flag indicating whether the drag handle icon is visible
+   *
+   * @default true
+   */
+  showDragHandleIcon?: boolean;
+}
+
+/**
  * Dashboard configuration
  */
 export interface DashboardConfig {
@@ -99,27 +165,7 @@ export interface DashboardConfig {
   /**
    * Configuration for the widgets panel
    */
-  widgetsPanel?: {
-    /**
-     * If true adjust layout based on available width of widgets panel.
-     *
-     * If not specified, the default value is `false`.
-     */
-    responsive?: boolean;
-    /**
-     * If true, an 'Edit Layout' action is visible to users on the dashboard toolbar.
-     * Clicking 'Edit Layout' opens the dashboard in editing mode, where the user can resize or reposition widgets using drag and drop.
-     * Layout changes are temporarily stored during editing, with undo/redo buttons available on the toolbar.
-     * Finally, changes are confirmed or discarded with 'Apply' or 'Cancel' buttons.
-     *
-     * If persistence is enabled for the dashboard, changes to the layout will be saved to Fusion on clicking the 'Apply' button.
-     *
-     * This feature is in alpha.
-     *
-     * @alpha
-     */
-    editMode?: boolean;
-  };
+  widgetsPanel?: WidgetsPanelConfig;
 }
 
 /**
@@ -136,6 +182,13 @@ export interface DashboardByIdConfig extends DashboardConfig {
    * - Currently only changes to dashboard filters are persisted.
    */
   persist?: boolean;
+  /**
+   * Whether to load the dashboard in shared mode (co-authoring feature).
+   *
+   * @default false
+   * @internal
+   */
+  sharedMode?: boolean;
 }
 
 /**

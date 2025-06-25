@@ -110,11 +110,19 @@ Default chart type of each series
 
 #### dataOptions
 
-> **dataOptions**: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md) \| [`GenericDataOptions`](../../sdk-ui/type-aliases/type-alias.GenericDataOptions.md) \| [`PivotTableDataOptions`](../interfaces/interface.PivotTableDataOptions.md) \| `undefined`
+> **dataOptions**: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md) \| [`GenericDataOptions`](../type-aliases/type-alias.GenericDataOptions.md) \| [`PivotTableDataOptions`](../interfaces/interface.PivotTableDataOptions.md) \| `undefined`
 
 Configurations for how to interpret and present the data passed to the chart
 
 ### Widget
+
+#### customWidgetType
+
+> **customWidgetType**: `string` \| `undefined`
+
+Custom widget type. This is typically the name/ID of the custom widget.
+
+***
 
 #### description
 
@@ -140,17 +148,9 @@ Unique identifier of the widget
 
 ***
 
-#### pluginType
-
-> **pluginType**: `string` \| `undefined`
-
-Plugin type. This is typically the name/ID of the plugin.
-
-***
-
 #### styleOptions
 
-> **styleOptions**: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md) \| [`PivotTableWidgetStyleOptions`](../type-aliases/type-alias.PivotTableWidgetStyleOptions.md) \| [`PluginWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PluginWidgetStyleOptions.md) \| [`TextWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.TextWidgetStyleOptions.md) \| `undefined`
+> **styleOptions**: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md) \| [`CustomWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.CustomWidgetStyleOptions.md) \| [`PivotTableWidgetStyleOptions`](../type-aliases/type-alias.PivotTableWidgetStyleOptions.md) \| [`TextWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.TextWidgetStyleOptions.md) \| `undefined`
 
 Style options for both the chart and widget including the widget header
 
@@ -166,7 +166,7 @@ Title of the widget
 
 #### widgetType
 
-> **widgetType**: `"chart"` \| `"pivot"` \| `"plugin"` \| `"text"`
+> **widgetType**: `"chart"` \| `"custom"` \| `"pivot"` \| `"text"`
 
 Widget type
 

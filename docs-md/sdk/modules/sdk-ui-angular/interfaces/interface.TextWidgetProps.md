@@ -4,7 +4,7 @@ title: TextWidgetProps
 
 # Interface TextWidgetProps
 
-Props for the `TextWidget` component.
+Props for the text widget.
 
 ## Properties
 

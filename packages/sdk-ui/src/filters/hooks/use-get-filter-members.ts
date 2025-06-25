@@ -44,50 +44,95 @@ export interface GetFilterMembersParams extends HookEnableParam {
   count?: number;
 }
 
-export interface GetFilterMembersSuccess {
-  /** Whether the data fetching is loading */
-  isLoading: boolean;
-  /**
-   * Function to load more data rows
-   *
-   * @internal
-   */
-  loadMore: (count: number) => void;
-  /** Whether the data fetching has failed */
-  isError: false;
-  /** The error if any occurred */
-  error: undefined;
-  /** The result data */
-  data: {
-    selectedMembers: SelectedMember[];
-    allMembers: Member[];
-    excludeMembers: boolean;
-    enableMultiSelection: boolean;
-    hasBackgroundFilter: boolean;
-  };
-}
-
-export interface GetFilterMembersError {
-  /** Whether the data fetching is loading */
-  isLoading: false;
-  /** Whether the data fetching has failed */
-  error: Error;
-  /** The error if any occurred */
-  isError: true;
-  /** The result data */
-  data: undefined;
-  /**
-   * Function to load more data rows
-   *
-   * @internal
-   */
-  loadMore: (count: number) => void;
+/**
+ * Result data of retrieving filter members.
+ */
+export interface GetFilterMembersData {
+  /** Array of members that are currently selected */
+  selectedMembers: SelectedMember[];
+  /** Array of all available members */
+  allMembers: Member[];
+  /** Flag indicating whether members are excluded */
+  excludeMembers: boolean;
+  /** Flag indicating if multiple selection is enabled */
+  enableMultiSelection: boolean;
+  /** Flag indicating if there is a background filter applied */
+  hasBackgroundFilter: boolean;
 }
 
 /**
- * State for {@link useGetFilterMembers} hook.
+ * State of a filter members load that has succeeded.
  */
-export type GetFilterMembersResult = GetFilterMembersError | GetFilterMembersSuccess;
+export interface FilterMembersSuccessState {
+  /** Whether the data fetching is loading */
+  isLoading: false;
+  /** Whether the data fetching has failed */
+  isError: false;
+  /** Whether the data fetching has succeeded */
+  isSuccess: true;
+  /** The status of the data fetching execution */
+  status: 'success';
+  /** The error if any occurred */
+  error: undefined;
+  /** The result data */
+  data: GetFilterMembersData;
+}
+
+/**
+ * State of a filter members load that is loading.
+ */
+export interface FilterMembersLoadingState {
+  /** Whether the data fetching is loading */
+  isLoading: true;
+  /** Whether the data fetching has failed */
+  isError: false;
+  /** Whether the data fetching has succeeded */
+  isSuccess: false;
+  /** The status of the data fetching execution */
+  status: 'loading';
+  /** The error if any occurred */
+  error: undefined;
+  /** The result data */
+  data: GetFilterMembersData;
+}
+
+/**
+ * State of a filter members load that has failed.
+ */
+export interface FilterMembersErrorState {
+  /** Whether the data fetching is loading */
+  isLoading: false;
+  /** Whether the data fetching has failed */
+  isError: true;
+  /** Whether the data fetching has succeeded */
+  isSuccess: false;
+  /** The status of the data fetching execution */
+  status: 'error';
+  /** The error if any occurred */
+  error: Error;
+  /** The result data */
+  data: undefined;
+}
+
+/**
+ * States of the {@link useGetFilterMembers} hook.
+ */
+export type FilterMembersState =
+  | FilterMembersLoadingState
+  | FilterMembersErrorState
+  | FilterMembersSuccessState;
+
+/**
+ * Result of the {@link useGetFilterMembers} hook.
+ */
+export type GetFilterMembersResult = FilterMembersState & {
+  /**
+   * Function to load more data rows
+   *
+   * @internal
+   */
+  loadMore: (count: number) => void;
+};
 
 /**
  * {@link useGetFilterMembers} without tracking to be used inside other hooks or components in Compose SDK.
@@ -119,7 +164,7 @@ export const useGetFilterMembersInternal = ({
   if (backgroundFilter) {
     queryFilters.push(backgroundFilter);
   }
-  const { data, isLoading, isError, error, loadMore } = useExecuteQueryInternal({
+  const { data, loadMore, ...loadState } = useExecuteQueryInternal({
     // prioritize attribute dataSource for the use case of multi-source dashboard
     dataSource: filterAttribute.dataSource
       ? convertDataSource(filterAttribute.dataSource)
@@ -184,29 +229,26 @@ export const useGetFilterMembersInternal = ({
   );
 
   const hasBackgroundFilter = !!backgroundFilter && parentFilters.length === 0;
+  const resultData = {
+    selectedMembers,
+    allMembers,
+    excludeMembers,
+    enableMultiSelection,
+    hasBackgroundFilter,
+  };
 
-  if (error) {
+  if (loadState.isError) {
     return {
-      isLoading,
-      loadMore,
-      isError,
-      error,
+      ...loadState,
       data: undefined,
+      loadMore,
     };
   }
 
   return {
-    isLoading,
+    ...loadState,
+    data: resultData,
     loadMore,
-    isError,
-    error,
-    data: {
-      selectedMembers,
-      allMembers,
-      excludeMembers,
-      enableMultiSelection,
-      hasBackgroundFilter,
-    },
   };
 };
 
@@ -234,6 +276,5 @@ export const useGetFilterMembersInternal = ({
  * @returns Results that contains the status of the filter query execution, the result data, or the error if any occurred
  * @shortDescription Hook to fetch members of a filter
  * @group Filter Tiles
- * @beta
  */
 export const useGetFilterMembers = withTracking('useGetFilterMembers')(useGetFilterMembersInternal);

@@ -44,7 +44,7 @@ import { LegendPosition } from './chart-options-processor/translations/legend-se
 import { Coordinates } from '@/charts/map-charts/scattermap/types';
 import { StyledColumn, StyledMeasureColumn, Hierarchy, HierarchyId } from '.';
 import { HighchartsOptionsInternal } from './chart-options-processor/chart-options-service';
-import { CSSProperties } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import { GeoDataElement, RawGeoDataElement } from './chart/restructured-charts/areamap-chart/types';
 import { TabCornerRadius, TabInterval, TabSize } from '@/widgets/tabber-widget';
 import { SoftUnion } from './utils/utility-types';
@@ -1165,6 +1165,17 @@ export type DashboardThemeSettings = {
   dividerLineColor?: string;
   borderWidth?: number;
   borderColor?: string;
+  /**
+   * Toolbar style settings for dashboard
+   */
+  toolbar?: {
+    /** Primary text color for the dashboard toolbar */
+    primaryTextColor?: string;
+    /** Secondary text color for the dashboard toolbar */
+    secondaryTextColor?: string;
+    /** Background color for the dashboard toolbar */
+    backgroundColor?: string;
+  };
 };
 
 /**
@@ -1381,7 +1392,7 @@ export type CompleteThemeSettings = DeepRequired<Omit<ThemeSettings, 'typography
 
 /** Complete set of configuration options that define functional style of the various elements of the charts as well as the look and feel of widget itself and widget header. */
 export type WidgetStyleOptions =
-  | (ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions | PluginWidgetStyleOptions) &
+  | (ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions | CustomWidgetStyleOptions) &
       WidgetContainerStyleOptions;
 
 /** Style settings defining the look and feel of widget itself and widget header */
@@ -1426,6 +1437,12 @@ export interface WidgetContainerStyleOptions {
      * @internal
      */
     renderToolbar?: RenderToolbarHandler;
+    /**
+     * Custom title to render in widget header
+     *
+     * @internal
+     */
+    renderTitle?: RenderTitleHandler;
   };
 }
 
@@ -1445,6 +1462,9 @@ export type RenderToolbarHandler = (
   onRefresh: () => void,
   defaultToolbar: JSX.Element,
 ) => JSX.Element | null;
+
+/** @internal */
+export type RenderTitleHandler = (defaultHeaderTitle: ReactNode) => ReactNode;
 
 /** Style settings defining the look and feel of the widget created in Fusion */
 export interface WidgetByIdStyleOptions extends WidgetContainerStyleOptions {
@@ -1493,9 +1513,9 @@ export type TextWidgetStyleOptions = {
 };
 
 /**
- * Style settings defining the look and feel of PluginWidget
+ * Style settings defining the look and feel of CustomWidget
  */
-export type PluginWidgetStyleOptions = Record<string, unknown> & WidgetContainerStyleOptions;
+export type CustomWidgetStyleOptions = Record<string, unknown> & WidgetContainerStyleOptions;
 
 /**
  * Runs type guard check for ThemeOid.
@@ -1666,6 +1686,31 @@ export type BoxplotDataPoint = {
   };
 };
 
+/** Data point that represents the entire Indicator chart data. */
+export type IndicatorDataPoint = {
+  /**
+   * A collection of data point entries that represents values for all related `dataOptions`.
+   *
+   * @internal
+   */
+  entries?: {
+    value?: DataPointEntry;
+    secondary?: DataPointEntry;
+    min?: DataPointEntry;
+    max?: DataPointEntry;
+  };
+};
+
+/**
+ * Data point that represents the entire Text widget data.
+ *
+ * @internal
+ */
+export type TextWidgetDataPoint = {
+  /** HTML content of the text widget */
+  html?: string;
+};
+
 /**
  * Data point in an Areamap chart.
  */
@@ -1824,6 +1869,19 @@ export type MenuPosition = {
 };
 
 /**
+ * Menu alignment configuration for positioning
+ * Used in {@link @sisense/sdk-ui!ContextMenuProps | `ContextMenuProps`}
+ *
+ * @internal
+ */
+export type MenuAlignment = {
+  /** Vertical alignment of the menu relative to its anchor point */
+  vertical?: 'top' | 'bottom';
+  /** Horizontal alignment of the menu relative to its anchor point */
+  horizontal?: 'left' | 'right';
+};
+
+/**
  * Context menu section
  * Used in {@link @sisense/sdk-ui!ContextMenuProps | `ContextMenuProps`}
  */
@@ -1893,7 +1951,7 @@ export type LoadingIndicatorConfig = {
 };
 
 /**
- * Data options with arbitrary keys. This is typically used in the context of a plugin widget.
+ * Data options with arbitrary keys. This is typically used in the context of a custom widget.
  */
 export type GenericDataOptions = Record<string, Array<StyledColumn | StyledMeasureColumn>>;
 

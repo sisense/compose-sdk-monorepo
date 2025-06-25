@@ -2,8 +2,10 @@ import {
   AreamapDataPoint,
   BoxplotDataPoint,
   DataPoint,
+  IndicatorDataPoint,
   ScatterDataPoint,
   ScattermapDataPoint,
+  TextWidgetDataPoint,
 } from '@sisense/sdk-ui-preact';
 
 export type DataPointEvent = {
@@ -41,12 +43,29 @@ export type BoxplotDataPointEvent = {
   nativeEvent: PointerEvent;
 };
 
+export type IndicatorDataPointEvent = {
+  /** Data point that was clicked */
+  point: IndicatorDataPoint;
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent;
+};
+
+export type TextWidgetDataPointEvent = {
+  /** Data point that was clicked */
+  point: TextWidgetDataPoint;
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent;
+};
+
 export type ChartDataPointClickEvent =
   | DataPointEvent
   | ScatterDataPointEvent
   | BoxplotDataPointEvent
   | AreamapDataPointEvent
-  | ScattermapDataPointEvent;
+  | ScattermapDataPointEvent
+  | IndicatorDataPointEvent;
+
+export type WidgetDataPointClickEvent = ChartDataPointClickEvent | TextWidgetDataPointEvent;
 
 export type ChartDataPointContextMenuEvent =
   | DataPointEvent
@@ -100,10 +119,19 @@ export type ScattermapDataPointEventHandler = (event: ScattermapDataPointEvent) 
  */
 export type BoxplotDataPointEventHandler = (event: BoxplotDataPointEvent) => void;
 
+/** Click handler for when a data point on Indicator is clicked. */
+export type IndicatorDataPointEventHandler = (event: IndicatorDataPointEvent) => void;
+
 /**
  * Click handler for when a data point on Chart is clicked.
  */
 export type ChartDataPointClickEventHandler = (event: ChartDataPointClickEvent) => void;
+
+/** Click handler for when a data point on TextWidget is clicked. */
+export type TextWidgetDataPointEventHandler = (event: TextWidgetDataPointEvent) => void;
+
+/** Click handler for when a data point on Widget is clicked. */
+export type WidgetDataPointClickEventHandler = (event: WidgetDataPointClickEvent) => void;
 
 /**
  * Context menu handler for when a data point on the Chart is right-clicked.

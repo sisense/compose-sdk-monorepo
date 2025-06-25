@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, render, fireEvent } from '@testing-library/react';
 import { useDashboardHeaderToolbar } from './use-dashboard-header-toolbar';
 import '@testing-library/jest-dom';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
@@ -9,6 +9,16 @@ vi.mock('@/theme-provider', () => ({
   useThemeContext: () => mockUseThemeContext(),
 }));
 
+// Mock the useMenu hook
+const mockOpenMenu = vi.fn();
+const mockCloseMenu = vi.fn();
+vi.mock('@/common/hooks/use-menu', () => ({
+  useMenu: () => ({
+    openMenu: mockOpenMenu,
+    closeMenu: mockCloseMenu,
+  }),
+}));
+
 describe('useDashboardHeaderToolbar', () => {
   const mockThemeSettings = {
     general: {
@@ -17,6 +27,13 @@ describe('useDashboardHeaderToolbar', () => {
     typography: {
       primaryTextColor: '#000000',
       fontFamily: 'Arial',
+    },
+    dashboard: {
+      toolbar: {
+        primaryTextColor: '#000000',
+        secondaryTextColor: '#9EA2AB',
+        backgroundColor: '#ffffff',
+      },
     },
   };
 
@@ -39,122 +56,99 @@ describe('useDashboardHeaderToolbar', () => {
     vi.clearAllMocks();
   });
 
-  it('should render toolbar with menu items', () => {
+  it('should render MenuButton when menuItems is not empty', () => {
     const { result } = renderHook(() =>
       useDashboardHeaderToolbar({
         menuItems: mockMenuItems,
       }),
     );
-
-    const toolbar = result.current.toolbar();
-    expect(toolbar).toBeTruthy();
-    expect(toolbar.props.children.length).toBe(2);
+    const { getByTestId } = render(result.current.toolbar());
+    const button = getByTestId('dashboard-toolbar-menu');
+    expect(button).toBeInTheDocument();
   });
 
-  it('should not render toolbar when menuItems is empty', () => {
+  it('should not render MenuButton when menuItems is empty', () => {
     const { result } = renderHook(() =>
       useDashboardHeaderToolbar({
         menuItems: [],
       }),
     );
 
-    const toolbar = result.current.toolbar();
-    expect(toolbar.props.children[0]).toBeFalsy();
+    const { queryByTestId } = render(result.current.toolbar());
+    expect(queryByTestId('dashboard-toolbar-menu')).toBeNull();
   });
 
-  it('should open menu when clicking the icon button', () => {
+  it('should call openMenu with correct arguments when MenuButton is clicked', () => {
     const { result } = renderHook(() =>
       useDashboardHeaderToolbar({
         menuItems: mockMenuItems,
       }),
     );
 
-    const toolbar = result.current.toolbar();
-    const iconButton = toolbar.props.children[0];
+    const { getByTestId } = render(result.current.toolbar());
+    const button = getByTestId('dashboard-toolbar-menu');
+
+    // Patch the button to mock getBoundingClientRect on the event target
+    const rect = {
+      left: 10,
+      top: 0,
+      right: 30,
+      bottom: 30,
+      width: 20,
+      height: 30,
+      x: 10,
+      y: 0,
+      toJSON: () => {},
+    };
+    button.getBoundingClientRect = () => rect;
 
     act(() => {
-      iconButton.props.onClick({ currentTarget: document.createElement('button') });
+      fireEvent.click(button, { target: button });
     });
 
-    const updatedToolbar = result.current.toolbar();
-    const menu = updatedToolbar.props.children[1];
-    expect(menu.props.open).toBe(true);
+    expect(mockOpenMenu).toHaveBeenCalledTimes(1);
+    const callArgs = mockOpenMenu.mock.calls[0][0];
+    expect(callArgs.position).toEqual({ left: 20, top: 30 });
+    expect(callArgs.itemSections[0].items.length).toBe(2);
+    expect(callArgs.itemSections[0].items[0].caption).toBe('Item 1');
+    expect(typeof callArgs.itemSections[0].items[0].onClick).toBe('function');
   });
 
-  it('should close menu when clicking a menu item', () => {
+  it('should call item onClick and closeMenu when menu item is clicked', () => {
     const { result } = renderHook(() =>
       useDashboardHeaderToolbar({
         menuItems: mockMenuItems,
       }),
     );
 
-    const toolbar = result.current.toolbar();
-    const iconButton = toolbar.props.children[0];
+    const { getByTestId } = render(result.current.toolbar());
+    const button = getByTestId('dashboard-toolbar-menu');
 
-    // Open menu
+    // Patch the button to mock getBoundingClientRect on the event target
+    const rect = {
+      left: 10,
+      top: 0,
+      right: 30,
+      bottom: 30,
+      width: 20,
+      height: 30,
+      x: 10,
+      y: 0,
+      toJSON: () => {},
+    };
+    button.getBoundingClientRect = () => rect;
+
     act(() => {
-      iconButton.props.onClick({ currentTarget: document.createElement('button') });
+      fireEvent.click(button, { target: button });
     });
 
-    // Click menu item
-    const updatedToolbar = result.current.toolbar();
-    const menu = updatedToolbar.props.children[1];
-    const menuItems = menu.props.children;
-
+    // Simulate clicking the first menu item
+    const callArgs = mockOpenMenu.mock.calls[0][0];
     act(() => {
-      menuItems[0].props.onClick();
+      callArgs.itemSections[0].items[0].onClick();
     });
 
     expect(mockMenuItems[0].onClick).toHaveBeenCalled();
-
-    const finalToolbar = result.current.toolbar();
-    const finalMenu = finalToolbar.props.children[1];
-    expect(finalMenu.props.open).toBe(false);
-  });
-
-  it('should close menu when clicking outside', () => {
-    const { result } = renderHook(() =>
-      useDashboardHeaderToolbar({
-        menuItems: mockMenuItems,
-      }),
-    );
-
-    const toolbar = result.current.toolbar();
-    const iconButton = toolbar.props.children[0];
-
-    // Open menu
-    act(() => {
-      iconButton.props.onClick({ currentTarget: document.createElement('button') });
-    });
-
-    // Close menu
-    const updatedToolbar = result.current.toolbar();
-    const menu = updatedToolbar.props.children[1];
-
-    act(() => {
-      menu.props.onClose();
-    });
-
-    const finalToolbar = result.current.toolbar();
-    const finalMenu = finalToolbar.props.children[1];
-    expect(finalMenu.props.open).toBe(false);
-  });
-
-  it('should render menu items with correct styles', () => {
-    const { result } = renderHook(() =>
-      useDashboardHeaderToolbar({
-        menuItems: mockMenuItems,
-      }),
-    );
-
-    const toolbar = result.current.toolbar();
-    const menu = toolbar.props.children[1];
-    const menuItems = menu.props.children;
-
-    expect(menuItems[0].props.sx).toEqual({
-      fontSize: '13px',
-      fontFamily: mockThemeSettings.typography.fontFamily,
-      color: mockThemeSettings.typography.primaryTextColor,
-    });
+    expect(mockCloseMenu).toHaveBeenCalled();
   });
 });

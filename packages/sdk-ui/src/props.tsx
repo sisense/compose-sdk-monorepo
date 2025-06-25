@@ -28,6 +28,7 @@ import {
   TreemapStyleOptions,
   CustomDrilldownResult,
   MenuPosition,
+  MenuAlignment,
   MenuItemSection,
   SunburstStyleOptions,
   ChartWidgetStyleOptions,
@@ -54,7 +55,9 @@ import {
   GenericDataOptions,
   IndicatorRenderOptions,
   TabberStyleProps,
-  PluginWidgetStyleOptions,
+  IndicatorDataPoint,
+  TextWidgetDataPoint,
+  CustomWidgetStyleOptions,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -400,6 +403,28 @@ export type BoxplotDataPointEventHandler = (
   nativeEvent: PointerEvent,
 ) => void;
 
+/**
+ * Click handler for when an indicator chart is clicked.
+ */
+export type IndicatorDataPointEventHandler = (
+  /** Data point that was clicked */
+  point: IndicatorDataPoint,
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
+ * Click handler for when text widget is clicked.
+ *
+ * @internal
+ */
+export type TextWidgetDataPointEventHandler = (
+  /** Data point that was clicked */
+  point: TextWidgetDataPoint,
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent,
+) => void;
+
 interface HighchartsBasedChartEventProps {
   /**
    * A callback that allows you to customize the underlying chart element before it is rendered.
@@ -544,6 +569,13 @@ interface IndicatorChartEventProps extends BaseChartEventProps {
    * @category Callbacks
    */
   onBeforeRender?: IndicatorBeforeRenderHandler;
+  /**
+   * A callback that allows you to customize what happens when indicator chart is clicked.
+   *
+   * @category Callbacks
+   * @internal
+   */
+  onDataPointClick?: IndicatorDataPointEventHandler;
 }
 
 /**
@@ -661,7 +693,8 @@ interface ChartEventProps extends BaseChartEventProps {
     | ScatterDataPointEventHandler
     | AreamapDataPointEventHandler
     | BoxplotDataPointEventHandler
-    | ScattermapDataPointEventHandler;
+    | ScattermapDataPointEventHandler
+    | IndicatorDataPointEventHandler;
 
   /**
    * Context menu handler callback for a data point
@@ -1392,18 +1425,27 @@ export interface TextWidgetProps {
    * @category Widget
    */
   styleOptions: TextWidgetStyleOptions;
+
+  /**
+   * A callback that allows you to customize what happens when a text widget is clicked.
+   * Since TextWidget doesn't have specific data points, this fires when clicking anywhere on the widget.
+   *
+   * @category Callbacks
+   * @internal
+   */
+  onDataPointClick?: TextWidgetDataPointEventHandler;
 }
 
 /**
- * Props for the Plugin Widget component
+ * Props for the Custom Widget component
  */
-export interface PluginWidgetProps {
+export interface CustomWidgetProps {
   /**
-   * Plugin type. This is typically the name/ID of the plugin.
+   * Custom widget type. This is typically the name/ID of the custom widget.
    *
    * @category Widget
    */
-  pluginType: string;
+  customWidgetType: string;
 
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
@@ -1436,18 +1478,18 @@ export interface PluginWidgetProps {
   dataOptions: GenericDataOptions;
 
   /**
-   * Style options for the plugin widget.
+   * Style options for the custom widget.
    *
    * @category Widget
    */
-  styleOptions?: PluginWidgetStyleOptions;
+  styleOptions?: CustomWidgetStyleOptions;
 
   /**
    * Title of the widget
    *
    * @category Widget
    */
-  title: string;
+  title?: string;
 
   /**
    *  Description of the widget
@@ -1482,7 +1524,7 @@ export type WithCommonWidgetProps<BaseWidget, Type extends WidgetType> = BaseWid
 /**
  * Type of the widget component.
  */
-export type WidgetType = 'chart' | 'pivot' | 'text' | 'plugin';
+export type WidgetType = 'chart' | 'pivot' | 'text' | 'custom';
 
 /**
  * Props for the widget component within a container component like dashboard.
@@ -1491,7 +1533,7 @@ export type WidgetProps =
   | WithCommonWidgetProps<ChartWidgetProps, 'chart'>
   | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>
   | WithCommonWidgetProps<TextWidgetProps, 'text'>
-  | WithCommonWidgetProps<PluginWidgetProps, 'plugin'>;
+  | WithCommonWidgetProps<CustomWidgetProps, 'custom'>;
 
 /**
  * Props for the facade widget component.
@@ -1691,6 +1733,14 @@ export interface ContextMenuProps {
    * @category Widget
    */
   children?: React.ReactNode;
+  /**
+   * Menu alignment configuration for positioning
+   *
+   * @category Widget
+   *
+   * @internal
+   */
+  alignment?: MenuAlignment;
 }
 
 /**

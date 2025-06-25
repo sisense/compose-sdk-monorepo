@@ -9,8 +9,8 @@ React components and utilities for working with dashboards
 - [ChartWidget](function.ChartWidget.md)
 - [Dashboard](function.Dashboard.md)
 - [dashboardHelpers](namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
-- [extractDimensionsAndMeasures](function.extractDimensionsAndMeasures.md) <Badge type="alpha" text="Alpha" />
+- [extractDimensionsAndMeasures](function.extractDimensionsAndMeasures.md)
 - [PivotTableWidget](function.PivotTableWidget.md) <Badge type="beta" text="Beta" />
 - [useComposedDashboard](function.useComposedDashboard.md)
-- [useExecutePluginQuery](function.useExecutePluginQuery.md) <Badge type="alpha" text="Alpha" />
+- [useCustomWidgets](function.useCustomWidgets.md)
 - [Widget](function.Widget.md)

@@ -12,9 +12,9 @@ import {
 import {
   type BeforeMenuOpenHandler,
   ComponentAdapter,
-  PluginWidgetProps,
+  CustomWidgetProps,
   type SoftUnion,
-  TextWidgetProps,
+  TextWidgetProps as TextWidgetPropsPreact,
   Widget as WidgetPreact,
   type WidgetProps as WidgetPropsPreact,
 } from '@sisense/sdk-ui-preact';
@@ -29,6 +29,7 @@ import {
 import { translateToPreactWidgetProps } from '../../helpers/widget-props-preact-translator';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
+import { TextWidgetEventProps, WithoutPreactChartEventProps } from '../../types';
 import {
   ChartDataPointClickEvent,
   ChartDataPointContextMenuEvent,
@@ -36,6 +37,13 @@ import {
 } from '../../types/data-point';
 import { ChartWidgetProps } from './chart-widget.component';
 import { PivotTableWidgetProps } from './pivot-table-widget.component';
+
+/**
+ * Props for the text widget.
+ */
+export interface TextWidgetProps
+  extends WithoutPreactChartEventProps<TextWidgetPropsPreact>,
+    TextWidgetEventProps {}
 
 /**
  * {@inheritDoc @sisense/sdk-ui!WithCommonWidgetProps}
@@ -65,7 +73,7 @@ export type WidgetProps = SoftUnion<
   | WithCommonWidgetProps<ChartWidgetProps, 'chart'>
   | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>
   | WithCommonWidgetProps<TextWidgetProps, 'text'>
-  | WithCommonWidgetProps<PluginWidgetProps, 'plugin'>
+  | WithCommonWidgetProps<CustomWidgetProps, 'custom'>
 >;
 
 /**
@@ -147,12 +155,12 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   chartType: WidgetProps['chartType'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PluginWidgetProps.pluginType}
+   * {@inheritDoc @sisense/sdk-ui!CustomWidgetProps.customWidgetType}
    *
    * @category Widget
    */
   @Input()
-  pluginType: WidgetProps['pluginType'];
+  customWidgetType: WidgetProps['customWidgetType'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataSource}
@@ -305,7 +313,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
       id: this.id,
       widgetType: this.widgetType,
       chartType: this.chartType,
-      pluginType: this.pluginType,
+      customWidgetType: this.customWidgetType,
       dataSource: this.dataSource,
       dataOptions: this.dataOptions,
       filters: this.filters,

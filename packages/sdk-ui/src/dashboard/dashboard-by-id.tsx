@@ -48,6 +48,7 @@ export const DashboardById = asSisenseComponent({
     includeWidgets: true,
     includeFilters: true,
     persist: config.persist,
+    sharedMode: config.sharedMode,
   });
 
   const handleChange = useCallback(

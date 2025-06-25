@@ -1,7 +1,13 @@
 import { useLayoutEffect, useRef } from 'preact/hooks';
 
 /** @internal */
-export const CustomElement = ({ nativeElement }: { nativeElement: HTMLDivElement }) => {
+export const CustomElement = ({
+  nativeElement,
+  onDestroy,
+}: {
+  nativeElement: HTMLDivElement;
+  onDestroy?: () => void;
+}) => {
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
@@ -9,6 +15,14 @@ export const CustomElement = ({ nativeElement }: { nativeElement: HTMLDivElement
       contentRef.current.appendChild(nativeElement);
     }
   }, [nativeElement]);
+
+  useLayoutEffect(() => {
+    return () => {
+      if (onDestroy) {
+        onDestroy();
+      }
+    };
+  }, [onDestroy]);
 
   return <div ref={contentRef} style="width: 100%; height: 100%"></div>;
 };

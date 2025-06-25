@@ -47,6 +47,7 @@ Angular filter tile components
 
 - [CriteriaFilterTileComponent](filter-tiles/class.CriteriaFilterTileComponent.md)
 - [DateRangeFilterTileComponent](filter-tiles/class.DateRangeFilterTileComponent.md)
+- [FiltersPanelComponent](filter-tiles/class.FiltersPanelComponent.md)
 - [FilterTileComponent](filter-tiles/class.FilterTileComponent.md) - Facade component rendering a filter tile based on filter type
 - [MemberFilterTileComponent](filter-tiles/class.MemberFilterTileComponent.md)
 - [RelativeDateFilterTileComponent](filter-tiles/class.RelativeDateFilterTileComponent.md)
@@ -72,8 +73,10 @@ Angular query service
 Angular components and utilities for working with dashboards
 
 - [ChartWidgetComponent](dashboards/class.ChartWidgetComponent.md)
+- [CustomWidgetsService](dashboards/class.CustomWidgetsService.md)
 - [DashboardComponent](dashboards/class.DashboardComponent.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
+- [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md)
 - [PivotTableWidgetComponent](dashboards/class.PivotTableWidgetComponent.md) <Badge type="beta" text="Beta" />
 - [WidgetComponent](dashboards/class.WidgetComponent.md)
 
@@ -103,3 +106,7 @@ For more information on requirements for enabling Generative AI features, please
 - [ChatbotComponent](generative-ai/class.ChatbotComponent.md)
 - [GetNlgInsightsComponent](generative-ai/class.GetNlgInsightsComponent.md)
 - [SdkAiModule](generative-ai/class.SdkAiModule.md)
+
+## Filters
+
+- [FilterService](filters/class.FilterService.md)

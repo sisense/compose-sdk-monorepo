@@ -6,11 +6,16 @@ import {
   UseDashboardModelInternalAction,
   UseDashboardModelActionTypeInternal,
   persistDashboardModelMiddleware,
+  UseDashboardModelActionType,
 } from './use-dashboard-model-reducer';
 import { checkPersistenceSupport } from './use-dasboard-model-utils';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { DashboardModel } from '@/models';
 import { usePrevious } from '@/common/hooks/use-previous';
+import {
+  deleteWidgetsFromLayout,
+  findDeletedWidgetsFromLayout,
+} from '@/dashboard/components/editable-layout/helpers';
 
 export interface UseDashboardPersistenceParams {
   /**
@@ -23,6 +28,13 @@ export interface UseDashboardPersistenceParams {
    * @default true
    */
   persist?: boolean;
+  /**
+   * Whether to load the dashboard in shared mode (co-authoring feature).
+   *
+   * @default false
+   * @internal
+   */
+  sharedMode?: boolean;
 }
 
 export interface UseDashboardPersistenceResult {
@@ -48,6 +60,7 @@ export interface UseDashboardPersistenceResult {
 export function useDashboardPersistence({
   dashboard,
   persist = true,
+  sharedMode = false,
 }: UseDashboardPersistenceParams): UseDashboardPersistenceResult {
   const { restApi: api, isReady: apiIsReady } = useRestApi();
   const { app } = useSisenseContext();
@@ -67,18 +80,56 @@ export function useDashboardPersistence({
         throw new RestApiNotReadyError();
       }
 
+      if (
+        localDashboard &&
+        action.type === UseDashboardModelActionType.WIDGETS_DELETE &&
+        localDashboard.layoutOptions.widgetsPanel
+      ) {
+        const updatedWidgetsPanel = deleteWidgetsFromLayout(
+          localDashboard.layoutOptions.widgetsPanel,
+          action.payload,
+        );
+        action = {
+          type: UseDashboardModelActionTypeInternal.UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE,
+          payload: {
+            widgetsPanel: updatedWidgetsPanel,
+            widgets: action.payload,
+          },
+        };
+      }
+      if (
+        localDashboard &&
+        action.type === UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE &&
+        localDashboard.layoutOptions.widgetsPanel
+      ) {
+        const widgetsToDelete = findDeletedWidgetsFromLayout(
+          localDashboard.layoutOptions.widgetsPanel,
+          action.payload,
+        );
+        if (widgetsToDelete.length > 0) {
+          action = {
+            type: UseDashboardModelActionTypeInternal.UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE,
+            payload: {
+              widgetsPanel: action.payload,
+              widgets: widgetsToDelete,
+            },
+          };
+        }
+      }
+
       if (shouldEnablePersist) {
         const processedAction = await persistDashboardModelMiddleware(
           localDashboard?.oid,
           action,
           api,
+          sharedMode,
         );
         dispatch(processedAction);
       } else {
         dispatch(action);
       }
     },
-    [shouldEnablePersist, localDashboard?.oid, api, apiIsReady, dispatch],
+    [shouldEnablePersist, localDashboard, api, apiIsReady, dispatch, sharedMode],
   );
 
   // Sync with external dashboard changes when the dashboard reference changes

@@ -1,4 +1,4 @@
-import { PluginWidgetProps, WidgetProps } from '@/props';
+import { CustomWidgetProps, WidgetProps } from '@/props';
 import { WidgetPanelLayoutManager } from '@/dashboard/hooks/use-widgets-layout';
 import { TabberTab } from '@/types';
 import { useCallback, useState, useEffect, useMemo } from 'react';
@@ -21,7 +21,7 @@ export type SingleTabberConfig = {
 };
 
 export const isTabberWidget = (widget: WidgetProps): boolean => {
-  return (widget as PluginWidgetProps).pluginType === 'WidgetsTabber';
+  return (widget as CustomWidgetProps).customWidgetType === 'WidgetsTabber';
 };
 
 /**

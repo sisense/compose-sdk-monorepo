@@ -46,6 +46,7 @@ const addWidgetToDashboardMock = vi.fn().mockImplementation(() =>
     oid: NEW_WIDGET_OID,
   }),
 );
+const deleteWidgetFromDashboardMock = vi.fn().mockImplementation(() => Promise.resolve());
 
 vi.mock('@/api/rest-api', async () => {
   return {
@@ -54,6 +55,7 @@ vi.mock('@/api/rest-api', async () => {
       restApi: {
         patchDashboard: patchDashboardMock,
         addWidgetToDashboard: addWidgetToDashboardMock,
+        deleteWidgetFromDashboard: deleteWidgetFromDashboardMock,
       },
     }),
   };
@@ -75,6 +77,7 @@ describe('useDashboardPersistence', () => {
   beforeEach(() => {
     patchDashboardMock.mockClear();
     addWidgetToDashboardMock.mockClear();
+    deleteWidgetFromDashboardMock.mockClear();
     useSisenseContextMock.mockReset();
     useSisenseContextMock.mockReturnValue({
       tracking: {},
@@ -320,5 +323,135 @@ describe('useDashboardPersistence', () => {
     ).rejects.toThrow('Network error');
 
     expect(patchDashboardMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('should update and persist dashboard widgets deletion', async () => {
+    // First add a widget to the dashboard
+    const newWidget = widgetModelTranslator.fromWidgetDto(sampleEcommerceDashboard.widgets![0]!);
+    const dashboardWithWidget = {
+      ...dashboardMock,
+      widgets: [newWidget],
+    };
+
+    const { result } = renderHook(() =>
+      useDashboardPersistence({
+        dashboard: dashboardWithWidget,
+        persist: true,
+      }),
+    );
+
+    const { dispatchChanges } = result.current;
+
+    // Delete the widget
+    act(() => {
+      dispatchChanges({
+        type: UseDashboardModelActionType.WIDGETS_DELETE,
+        payload: [newWidget.oid],
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current.dashboard?.widgets).toHaveLength(0);
+    });
+
+    await waitFor(() => {
+      expect(deleteWidgetFromDashboardMock).toHaveBeenCalledTimes(1);
+      expect(deleteWidgetFromDashboardMock).toHaveBeenCalledWith(
+        dashboardMock.oid,
+        newWidget.oid,
+        false,
+      );
+    });
+  });
+
+  it('should update and persist dashboard layout changes', async () => {
+    const newLayout = {
+      columns: [
+        {
+          widthPercentage: 50,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget-1',
+                  widthPercentage: 100,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 50,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget-2',
+                  widthPercentage: 100,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const { result } = renderHook(() =>
+      useDashboardPersistence({
+        dashboard: dashboardMock,
+        persist: true,
+      }),
+    );
+
+    const { dispatchChanges } = result.current;
+
+    act(() => {
+      dispatchChanges({
+        type: UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE,
+        payload: newLayout,
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current.dashboard?.layoutOptions.widgetsPanel).toEqual(newLayout);
+    });
+
+    await waitFor(() => {
+      expect(patchDashboardMock).toHaveBeenCalledTimes(1);
+      expect(patchDashboardMock).toHaveBeenCalledWith(
+        dashboardMock.oid,
+        {
+          layout: expect.any(Object),
+        },
+        false,
+      );
+    });
+  });
+
+  it('should not persist widget deletion when persist is false', async () => {
+    const newWidget = widgetModelTranslator.fromWidgetDto(sampleEcommerceDashboard.widgets![0]!);
+    const dashboardWithWidget = {
+      ...dashboardMock,
+      widgets: [newWidget],
+    };
+
+    const { result } = renderHook(() =>
+      useDashboardPersistence({
+        dashboard: dashboardWithWidget,
+        persist: false,
+      }),
+    );
+
+    const { dispatchChanges } = result.current;
+
+    act(() => {
+      dispatchChanges({
+        type: UseDashboardModelActionType.WIDGETS_DELETE,
+        payload: [newWidget.oid],
+      });
+    });
+
+    expect(result.current.dashboard?.widgets).toHaveLength(0);
+    expect(deleteWidgetFromDashboardMock).toHaveBeenCalledTimes(0);
   });
 });

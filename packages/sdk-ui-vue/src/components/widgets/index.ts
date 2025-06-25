@@ -6,6 +6,6 @@ export {
   type WidgetProps,
   type WithCommonWidgetProps,
   type TextWidgetProps,
-  type PluginWidgetProps,
+  type CustomWidgetProps,
   type PivotTableWidgetProps,
 } from './widget';

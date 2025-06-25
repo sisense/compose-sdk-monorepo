@@ -4,6 +4,7 @@ import { filterFactory } from '@sisense/sdk-data';
 import { fireEvent, render } from '@testing-library/react';
 import { DashboardContainer } from './dashboard-container';
 import * as DM from '../../__test-helpers__/sample-ecommerce';
+import { MenuProvider } from '@/common/components/menu/menu-provider';
 
 vi.mock('./dashboard-header', async () => {
   return {
@@ -30,15 +31,17 @@ describe('DashboardContainer', () => {
   it('should render with header and filters panel', async () => {
     const DASHBOARD_TITLE = 'Test Dashboard';
     const { getByText, getByTestId } = render(
-      <DashboardContainer
-        title={DASHBOARD_TITLE}
-        layoutOptions={{}}
-        config={{}}
-        widgets={[]}
-        filters={[]}
-        onFiltersChange={vi.fn()}
-        defaultDataSource={''}
-      />,
+      <MenuProvider>
+        <DashboardContainer
+          title={DASHBOARD_TITLE}
+          layoutOptions={{}}
+          config={{}}
+          widgets={[]}
+          filters={[]}
+          onFiltersChange={vi.fn()}
+          defaultDataSource={''}
+        />
+      </MenuProvider>,
     );
 
     expect(getByText(DASHBOARD_TITLE)).toBeInTheDocument();
@@ -49,22 +52,24 @@ describe('DashboardContainer', () => {
   it('should render without header and filters panel', async () => {
     const DASHBOARD_TITLE = 'Test Dashboard';
     const { queryByTestId } = render(
-      <DashboardContainer
-        title={DASHBOARD_TITLE}
-        layoutOptions={{}}
-        config={{
-          toolbar: {
-            visible: false,
-          },
-          filtersPanel: {
-            visible: false,
-          },
-        }}
-        widgets={[]}
-        filters={[]}
-        onFiltersChange={vi.fn()}
-        defaultDataSource={''}
-      />,
+      <MenuProvider>
+        <DashboardContainer
+          title={DASHBOARD_TITLE}
+          layoutOptions={{}}
+          config={{
+            toolbar: {
+              visible: false,
+            },
+            filtersPanel: {
+              visible: false,
+            },
+          }}
+          widgets={[]}
+          filters={[]}
+          onFiltersChange={vi.fn()}
+          defaultDataSource={''}
+        />
+      </MenuProvider>,
     );
 
     expect(queryByTestId('dashboard-header')).toBeNull();
@@ -76,15 +81,17 @@ describe('DashboardContainer', () => {
     const filters = [filterFactory.members(DM.Commerce.Gender, ['male'])];
     const DASHBOARD_TITLE = 'Test Dashboard';
     const { getByTestId } = render(
-      <DashboardContainer
-        title={DASHBOARD_TITLE}
-        layoutOptions={{}}
-        config={{}}
-        widgets={[]}
-        filters={filters}
-        onFiltersChange={onFiltersChangeMock}
-        defaultDataSource={''}
-      />,
+      <MenuProvider>
+        <DashboardContainer
+          title={DASHBOARD_TITLE}
+          layoutOptions={{}}
+          config={{}}
+          widgets={[]}
+          filters={filters}
+          onFiltersChange={onFiltersChangeMock}
+          defaultDataSource={''}
+        />
+      </MenuProvider>,
     );
 
     fireEvent.click(getByTestId('filter-panel-button'));
@@ -96,16 +103,18 @@ describe('DashboardContainer', () => {
     const onChangeMock = vi.fn();
     const DASHBOARD_TITLE = 'Test Dashboard';
     const { container } = render(
-      <DashboardContainer
-        title={DASHBOARD_TITLE}
-        layoutOptions={{}}
-        config={{}}
-        widgets={[]}
-        filters={[]}
-        onFiltersChange={vi.fn()}
-        defaultDataSource={''}
-        onChange={onChangeMock}
-      />,
+      <MenuProvider>
+        <DashboardContainer
+          title={DASHBOARD_TITLE}
+          layoutOptions={{}}
+          config={{}}
+          widgets={[]}
+          filters={[]}
+          onFiltersChange={vi.fn()}
+          defaultDataSource={''}
+          onChange={onChangeMock}
+        />
+      </MenuProvider>,
     );
 
     fireEvent.click(container.querySelector('.arrow-wrapper') as Element);

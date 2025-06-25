@@ -250,6 +250,11 @@ export const redThemeSettings: CompleteThemeSettings = {
     dividerLineWidth: 4,
     borderColor: '#D5D5D5',
     borderWidth: 1,
+    toolbar: {
+      primaryTextColor: '#FFFFFF',
+      secondaryTextColor: '#C5C8CF',
+      backgroundColor: '#16161C',
+    },
   },
   filter: {
     panel: {

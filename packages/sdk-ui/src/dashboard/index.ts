@@ -14,5 +14,7 @@ export type {
   DashboardStyleOptions,
   DashboardConfig,
   DashboardByIdConfig,
+  WidgetsPanelConfig,
+  EditModeConfig,
   DashboardFiltersPanelConfig,
 } from './types';

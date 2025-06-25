@@ -137,6 +137,11 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
     dividerLineColor: DEFAULT_DIVIDER_COLOR,
     borderColor: DEFAULT_DASHBOARD_BORDER_COLOR,
     borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
+    toolbar: {
+      primaryTextColor: '#5B6372',
+      secondaryTextColor: '#9EA2AB',
+      backgroundColor: '#FFFFFF',
+    },
   },
   filter: {
     panel: {
@@ -371,6 +376,11 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
     dividerLineColor: DEFAULT_DIVIDER_COLOR,
     borderColor: DEFAULT_DASHBOARD_BORDER_COLOR,
     borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
+    toolbar: {
+      primaryTextColor: '#FFFFFF',
+      secondaryTextColor: '#C5C8CF',
+      backgroundColor: '#313138',
+    },
   },
   filter: {
     panel: {

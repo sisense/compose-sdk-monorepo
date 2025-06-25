@@ -9,8 +9,8 @@ export const DASHBOARD_HEADER_HEIGHT = 48;
 const DashboardHeaderContainer = styled.div<Themable>`
   height: ${DASHBOARD_HEADER_HEIGHT}px;
   font-family: ${({ theme }) => theme.typography.fontFamily};
-  background-color: ${({ theme }) => theme.general.backgroundColor};
-  color: ${({ theme }) => theme.typography.primaryTextColor};
+  background-color: ${({ theme }) => theme.dashboard.toolbar.backgroundColor};
+  color: ${({ theme }) => theme.dashboard.toolbar.primaryTextColor};
   border-bottom: ${({ theme }) =>
     getDividerStyle(theme.dashboard.borderColor, theme.dashboard.borderWidth)};
   padding: 10px 20px;

@@ -9,7 +9,7 @@ export {
   type SisenseContextProviderProps,
   ThemeProvider,
   type ThemeProviderProps,
-  PluginsProvider,
+  CustomWidgetsProvider,
 } from './providers';
 export * from './composables';
 export * from './components/context-menu';

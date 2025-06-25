@@ -1,5 +1,4 @@
 import { getDividerStyle } from '@/dashboard/utils';
-import { WidgetSpaceAround } from '@/widgets/common/widget-style-utils';
 import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
 import styled from '@emotion/styled';
@@ -12,9 +11,8 @@ import isNumber from 'lodash-es/isNumber';
 const SMALL_WIDTH = '600px';
 const MEDIUM_WIDTH = '900px';
 
-const GridContainer = styled.div<{ padding: string; widths: number[] }>`
+const GridContainer = styled.div<{ widths: number[] }>`
   display: grid;
-  padding: ${({ padding }) => padding};
   grid-template-columns: ${({ widths }) => widths.map((w) => `${w}%`).join(' ')};
   @container content-panel-container (max-width: ${SMALL_WIDTH}) {
     grid-template-columns: repeat(1, 1fr);
@@ -125,8 +123,6 @@ export interface ContentPanelProps {
 export const ContentPanel = ({ layout, responsive, widgets }: ContentPanelProps) => {
   const { themeSettings } = useThemeContext();
 
-  const padding = WidgetSpaceAround[themeSettings.widget.spaceAround] || '0px';
-
   useEffect(() => {
     window.dispatchEvent(new Event('resize'));
   }, [responsive]);
@@ -134,7 +130,7 @@ export const ContentPanel = ({ layout, responsive, widgets }: ContentPanelProps)
   const colWidths = layout.columns.map((c) => c.widthPercentage);
 
   return (
-    <GridContainer padding={padding} widths={colWidths}>
+    <GridContainer widths={colWidths}>
       {layout.columns.map((column, columnIndex) => (
         <Column
           key={columnIndex}

@@ -2,6 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { useEditModeToolbar } from './use-edit-mode-toolbar';
 import { WidgetsPanelLayout } from '@/models';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
 
 // Mock functions
 const mockOnApply = vi.fn();
@@ -60,7 +61,7 @@ describe('useEditModeToolbar', () => {
     expect(result.current.hasChanges).toBe(true);
   });
 
-  it('should handle undo/redo operations', () => {
+  it('should handle undo/redo operations', async () => {
     const { result } = renderHook(() =>
       useEditModeToolbar({
         initialLayout: mockInitialLayout,
@@ -91,15 +92,23 @@ describe('useEditModeToolbar', () => {
 
     expect(result.current.hasChanges).toBe(true);
 
+    // Initial render
+    const { rerender } = render(result.current.toolbar());
+
     act(() => {
-      result.current.toolbar().props.children[0].props.onClick();
+      screen.getByTitle('dashboard.toolbar.undo').click();
     });
 
     expect(result.current.layout).toEqual(mockInitialLayout);
     expect(result.current.hasChanges).toBe(false);
 
+    rerender(result.current.toolbar());
+    await waitFor(() => {
+      expect(screen.getByTitle('dashboard.toolbar.redo')).not.toBeDisabled();
+    });
+
     act(() => {
-      result.current.toolbar().props.children[1].props.onClick();
+      screen.getByTitle('dashboard.toolbar.redo').click();
     });
 
     expect(result.current.layout).toEqual(newLayout);
@@ -136,8 +145,9 @@ describe('useEditModeToolbar', () => {
       result.current.setLayout(newLayout);
     });
 
+    render(result.current.toolbar());
     act(() => {
-      result.current.toolbar().props.children[3].props.onClick();
+      screen.getByTitle('dashboard.toolbar.apply').click();
     });
 
     expect(mockOnApply).toHaveBeenCalledWith(newLayout);
@@ -174,8 +184,9 @@ describe('useEditModeToolbar', () => {
       result.current.setLayout(newLayout);
     });
 
+    render(result.current.toolbar());
     act(() => {
-      result.current.toolbar().props.children[2].props.onClick();
+      screen.getByTitle('dashboard.toolbar.cancel').click();
     });
 
     expect(mockOnCancel).toHaveBeenCalled();

@@ -15,6 +15,7 @@ export const ContextMenu = ({
   itemSections,
   children,
   closeContextMenu,
+  alignment,
 }: ContextMenuProps) => {
   const [innerItemSections, setInnerItemSections] = useState(itemSections);
   const open = !!position;
@@ -75,7 +76,12 @@ export const ContextMenu = ({
 
   return (
     <>
-      <Menu position={position ?? null} open={open} onClose={closeContextMenu}>
+      <Menu
+        position={position ?? null}
+        open={open}
+        onClose={closeContextMenu}
+        alignment={alignment}
+      >
         {innerItemSections?.map(renderMenuItemSection)}
         {children}
       </Menu>

@@ -71,7 +71,7 @@ export function SingleSelect<Value = unknown>(props: SingleSelectProps<Value>) {
             }}
           />
         </SelectField>
-        <Popper open={open} anchorEl={selectElementRef.current}>
+        <Popper open={open} anchorEl={selectElementRef.current} preventClickPropagation={true}>
           <Content
             theme={themeSettings}
             style={{

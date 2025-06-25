@@ -6,3 +6,4 @@ export {
   type RelativeDateFilterTileProps,
 } from './relative-date-filter-tile';
 export { FilterTile, type FilterTileProps } from './filter-tile';
+export { FiltersPanel, type FiltersPanelProps } from './filters-panel';

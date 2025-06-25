@@ -128,8 +128,8 @@ export function getWidgetSelections(
   dataOptions: ChartDataOptions | PivotTableDataOptions,
   points: Array<ChartDataPoint>,
 ) {
-  if (widgetType === 'plugin') {
-    // no plugins support
+  if (widgetType === 'custom') {
+    // no custom widgets support
     return [];
   } else if (widgetType === 'text') {
     // no text support
@@ -163,7 +163,7 @@ export function getSelectableWidgetAttributes(
 ) {
   let targetDataOptions: (Column | StyledColumn)[] = [];
 
-  if (widgetType === 'plugin') {
+  if (widgetType === 'custom') {
     targetDataOptions = [];
   } else if (widgetType === 'text') {
     targetDataOptions = [];

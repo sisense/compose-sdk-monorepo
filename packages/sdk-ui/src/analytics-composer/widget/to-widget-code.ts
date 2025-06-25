@@ -10,7 +10,7 @@ import {
 import {
   isChartWidgetProps,
   isPivotTableWidgetProps,
-  isPluginWidgetProps,
+  isCustomWidgetProps,
 } from '@/widget-by-id/utils.js';
 import { TranslatableError } from '@/translation/translatable-error';
 import { validateChartType, checkIfMeasuresExist } from '../common/utils.js';
@@ -90,8 +90,8 @@ export const getWidgetCode = (
     return generateCode(templateKeyMap.pivot, codeProps, uiFramework);
   }
 
-  if (isPluginWidgetProps(widgetProps)) {
-    return '/** Plugin widget code not supported yet */';
+  if (isCustomWidgetProps(widgetProps)) {
+    return '/** Custom widget code not supported yet */';
   }
 
   throw new TranslatableError('errors.otherWidgetTypesNotSupported');

@@ -54,24 +54,55 @@ const PanelBodyInner = styled.div`
  * Props of the {@link FiltersPanel} component
  *
  */
-export type FiltersPanelProps = {
+export interface FiltersPanelProps {
   /** Array of filters to display */
   filters: Filter[] | FilterRelations;
   /** Callback to handle changes in filters */
   onFiltersChange: (filters: Filter[] | FilterRelations) => void;
   /** Default data source used for filter tiles */
   defaultDataSource?: DataSource;
-  /** All data sources available for filter tiles @internal */
+  /**
+   * All data sources available for filter tiles
+   *
+   * @internal
+   */
   dataSources?: DataSource[];
   /** The configuration for the filters panel */
   config?: FiltersPanelConfig;
-};
+}
 
 /**
  * Filters panel component that renders a list of filter tiles
  *
+ * @example
+ * Here's how to render a filters panel with a set of filters.
+ * ```tsx
+ * import { useState } from 'react';
+ * import { FiltersPanel } from '@sisense/sdk-ui';
+ * import { filterFactory, type Filter, type FilterRelations } from '@sisense/sdk-data';
+ * import * as DM from './sample-ecommerce-model';
+ *
+ * export function Example() {
+ *   const [filters, setFilters] = useState<Filter[]>([
+ *     filterFactory.members(DM.Commerce.Gender, ['Male', 'Female']),
+ *     filterFactory.members(DM.Commerce.AgeRange, ['0-18', '19-24']),
+ *   ]);
+ *
+ *   const handleFiltersChange = (updatedFilters: Filter[] | FilterRelations) => {
+ *     console.log('Filters changed:', updatedFilters);
+ *   };
+ *
+ *   return (
+ *     <FiltersPanel
+ *       filters={filters}
+ *       defaultDataSource={DM.DataSource}
+ *       onFiltersChange={handleFiltersChange}
+ *     />
+ *   );
+ * }
+ * ```
+ *
  * @group Filter Tiles
- * @alpha
  */
 export const FiltersPanel = asSisenseComponent({
   componentName: 'FiltersPanel',
@@ -124,14 +155,14 @@ export const FiltersPanel = asSisenseComponent({
     const { ExistingFilterEditor, startEditingFilter } = useExistingFilterEditing({
       onFilterChanged: handleFilterChange,
       defaultDataSource: defaultDataSource,
-      config: config.actions.editFilter,
+      config: config?.actions?.editFilter,
     });
 
     const { NewFilterCreator, startFilterCreation } = useNewFilterCreation({
       dataSources: dataSources ? dataSources : defaultDataSource ? [defaultDataSource] : [],
       onFilterCreated: handleFilterAdd,
       defaultDataSource: defaultDataSource,
-      config: config.actions.addFilter,
+      config: config?.actions?.addFilter,
       disabledAttributes: filters.flatMap((filter) =>
         isCascadingFilter(filter)
           ? filter.filters.map((levelFilter) => levelFilter.attribute)
@@ -146,7 +177,7 @@ export const FiltersPanel = asSisenseComponent({
             () => startFilterCreation(filtersPanelRef.current!),
             [startFilterCreation],
           )}
-          shouldShowAddFilterButton={config.actions.addFilter.enabled}
+          shouldShowAddFilterButton={config?.actions?.addFilter?.enabled}
         />
         <PanelBody>
           <PanelBodyInner>
@@ -161,7 +192,7 @@ export const FiltersPanel = asSisenseComponent({
               >
                 <FilterTile
                   onDelete={
-                    config.actions.deleteFilter.enabled
+                    config?.actions?.deleteFilter?.enabled
                       ? () => handleFilterDelete(filter)
                       : undefined
                   }
@@ -170,7 +201,7 @@ export const FiltersPanel = asSisenseComponent({
                   onChange={(newFilter) => handleFilterChange(newFilter!)}
                   defaultDataSource={defaultDataSource}
                   onEdit={
-                    config.actions.editFilter.enabled && isFilterSupportEditing(filter)
+                    config?.actions?.editFilter?.enabled && isFilterSupportEditing(filter)
                       ? (levelIndex) =>
                           startEditingFilter(filterTilesRef.current[index], filter, levelIndex)
                       : undefined

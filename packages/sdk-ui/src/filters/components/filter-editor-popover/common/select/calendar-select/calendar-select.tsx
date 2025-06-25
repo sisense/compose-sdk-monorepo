@@ -156,7 +156,7 @@ export function CalendarSelect(props: CalendarSelectProps) {
             style={{ marginRight: '3px' }}
           />
         </SelectField>
-        <Popper open={open} anchorEl={selectElementRef.current}>
+        <Popper open={open} anchorEl={selectElementRef.current} preventClickPropagation={true}>
           <CalendarDateSelector
             selectorMode={getCalendarDateSelectorMode(type)}
             limit={normalizedLimits}

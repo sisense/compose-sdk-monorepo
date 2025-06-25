@@ -97,7 +97,7 @@ describe('Rest API', () => {
   describe('getWidget', () => {
     it('should send correct request to fetch a widget', async () => {
       await restApi.getWidget('widgetOid', 'dashboardOid');
-      expect(httpGetMock).toHaveBeenCalledWith('api/v1/dashboards/dashboardOid/widgets/widgetOid');
+      expect(httpGetMock).toHaveBeenCalledWith('api/v1/dashboards/dashboardOid/widgets/widgetOid?');
     });
 
     it('should throw an error when fetching a widget with an invalid identifier', async () => {
@@ -172,7 +172,7 @@ describe('Rest API', () => {
     it('should send correct post to add a widget with correct dashboardId', async () => {
       const dashboardId = '123';
       await restApi.addWidgetToDashboard(dashboardId, {} as any);
-      expect(httpPostMock).toHaveBeenCalledWith(`api/v1/dashboards/${dashboardId}/widgets`, {});
+      expect(httpPostMock).toHaveBeenCalledWith(`api/v1/dashboards/${dashboardId}/widgets?`, {});
     });
   });
 

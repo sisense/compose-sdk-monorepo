@@ -509,7 +509,7 @@ describe('translate widget data options', () => {
   });
 });
 
-describe('translate widget plugin data options from pluginPanels', () => {
+describe('translate widget custom data options from customPanels', () => {
   describe('createDataOptionsFromPanels', () => {
     it('should extract data options for table chart correctly', () => {
       const panels = [

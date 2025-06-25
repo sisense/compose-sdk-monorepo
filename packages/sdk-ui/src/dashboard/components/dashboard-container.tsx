@@ -1,5 +1,5 @@
 import { ContentPanel } from '@/dashboard/components/content-panel';
-import { DashboardContainerProps } from '@/dashboard/types';
+import { DashboardContainerProps, WidgetsPanelLayout } from '@/dashboard/types';
 import { DashboardHeader } from '@/dashboard/components/dashboard-header';
 import { useThemeContext } from '@/theme-provider';
 import styled from '@emotion/styled';
@@ -7,7 +7,7 @@ import { FiltersPanel } from '@/filters';
 import { getDividerStyle, getDefaultWidgetsPanelLayout } from '@/dashboard/utils';
 import { HorizontalCollapse } from '@/dashboard/components/horizontal-collapse';
 import { useFiltersPanelCollapsedState } from '@/dashboard/hooks/use-filters-panel-collapsed-state';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { DashboardChangeType } from '@/dashboard/dashboard';
 import { WidgetProps } from '@/props';
 import { DataSource } from '@sisense/sdk-data';
@@ -21,6 +21,7 @@ import {
   useDashboardHeaderToolbar,
 } from '../hooks/use-dashboard-header-toolbar';
 import { useTranslation } from 'react-i18next';
+import { findDeletedWidgetsFromLayout } from './editable-layout/helpers';
 
 enum DashboardMode {
   VIEW = 'view',
@@ -77,7 +78,45 @@ export const DashboardContainer = ({
   const updatedLayout = useMemo(() => {
     return internalLayout ?? getDefaultWidgetsPanelLayout(widgets);
   }, [internalLayout, widgets]);
+
   const [mode, setMode] = useState<DashboardMode>(DashboardMode.VIEW);
+  const editMode = config?.widgetsPanel?.editMode;
+  const isEditModeEnabled = editMode?.enabled ?? false;
+  const isModeStateForced = 'isEditing' in (editMode ?? {});
+  const isEditMode = !!(
+    isEditModeEnabled && (isModeStateForced ? editMode?.isEditing : mode === DashboardMode.EDIT)
+  );
+  const isHistoryEnabled = isEditModeEnabled && (editMode?.applyChangesAsBatch?.enabled ?? true);
+
+  const handleModeChange = useCallback(
+    (newMode: DashboardMode) => {
+      if (!isModeStateForced) setMode(newMode);
+      onChange?.({
+        type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_IS_EDITING_CHANGE,
+        payload: newMode === DashboardMode.EDIT,
+      });
+    },
+    [onChange, isModeStateForced, setMode],
+  );
+
+  const handleLayoutChange = useCallback(
+    (changedLayout: WidgetsPanelLayout) => {
+      const deletedWidgets = findDeletedWidgetsFromLayout(updatedLayout, changedLayout);
+      setInternalLayout(changedLayout);
+
+      onChange?.({
+        type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_UPDATE,
+        payload: changedLayout,
+      });
+      if (deletedWidgets.length > 0) {
+        onChange?.({
+          type: DashboardChangeType.WIDGETS_DELETE,
+          payload: deletedWidgets,
+        });
+      }
+    },
+    [onChange, updatedLayout, setInternalLayout],
+  );
 
   const {
     layout: editModeLayout,
@@ -85,30 +124,35 @@ export const DashboardContainer = ({
     toolbar: editModeToolbar,
   } = useEditModeToolbar({
     initialLayout: updatedLayout,
+    historyCapacity: editMode?.applyChangesAsBatch?.historyLimit,
     onApply: () => {
-      setInternalLayout(editModeLayout);
-      setMode(DashboardMode.VIEW);
-      onChange?.({
-        type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_UPDATE,
-        payload: editModeLayout,
-      });
+      handleLayoutChange(editModeLayout);
+      handleModeChange(DashboardMode.VIEW);
     },
-    onCancel: () => setMode(DashboardMode.VIEW),
+    onCancel: () => handleModeChange(DashboardMode.VIEW),
   });
 
   const headerToolbarMenuItems = useMemo(() => {
     const items: DashboardHeaderToolbarMenuItem[] = [];
 
-    if (config?.widgetsPanel?.editMode) {
-      items.push({
-        title: t('dashboard.toolbar.editLayout'),
-        onClick: () => setMode(DashboardMode.EDIT),
-        ariaLabel: 'edit layout button',
-      });
+    if (isEditModeEnabled) {
+      if (isHistoryEnabled || !isEditMode) {
+        items.push({
+          title: t('dashboard.toolbar.editLayout'),
+          onClick: () => handleModeChange(DashboardMode.EDIT),
+          ariaLabel: 'edit layout button',
+        });
+      } else {
+        items.push({
+          title: t('dashboard.toolbar.viewMode'),
+          onClick: () => handleModeChange(DashboardMode.VIEW),
+          ariaLabel: 'view layout button',
+        });
+      }
     }
 
     return items;
-  }, [t, config?.widgetsPanel?.editMode]);
+  }, [t, isEditModeEnabled, isEditMode, isHistoryEnabled, handleModeChange]);
 
   const { toolbar: headerToolbar } = useDashboardHeaderToolbar({
     menuItems: headerToolbarMenuItems,
@@ -126,27 +170,32 @@ export const DashboardContainer = ({
     [onChange, setIsFilterPanelCollapsed],
   );
 
-  useEffect(() => {
-    setMode(DashboardMode.VIEW);
-  }, [widgets, filters, layoutOptions, config]);
-
   const isToolbarVisible = config?.toolbar?.visible !== false;
   const isFiltersPanelVisible = config?.filtersPanel?.visible !== false;
   const isLayoutResponsive = config?.widgetsPanel?.responsive ?? false;
-  const isEditMode = mode === DashboardMode.EDIT;
 
   return (
     <DashboardWrapper theme={themeSettings}>
       <ContentColumn theme={themeSettings} showRightBorder={!isFiltersPanelVisible}>
         {isToolbarVisible && (
-          <DashboardHeader title={title} toolbar={isEditMode ? editModeToolbar : headerToolbar} />
+          <DashboardHeader
+            title={title}
+            toolbar={isEditMode && isHistoryEnabled ? editModeToolbar : headerToolbar}
+          />
         )}
         <ContentPanelWrapper responsive={isLayoutResponsive}>
           {isEditMode ? (
             <EditableLayout
-              layout={editModeLayout}
+              layout={isHistoryEnabled ? editModeLayout : updatedLayout}
               widgets={widgets}
-              onLayoutChange={(updatedLayout) => setEditModeLayout(updatedLayout)}
+              onLayoutChange={(updatedLayout) =>
+                isHistoryEnabled
+                  ? setEditModeLayout(updatedLayout)
+                  : handleLayoutChange(updatedLayout)
+              }
+              config={{
+                showDragHandleIcon: editMode?.showDragHandleIcon,
+              }}
             />
           ) : (
             <ContentPanel

@@ -5,7 +5,11 @@ import { WidgetProps } from '@/props.js';
 import { OpenMenuFn } from '@/common/components/menu/types.js';
 import { DataPoint } from '@/types';
 import { combineHandlers } from '@/utils/combine-handlers';
-import { isChartWidgetProps, registerDataPointContextMenuHandler } from '@/widget-by-id/utils';
+import {
+  isChartWidgetProps,
+  isTextWidgetProps,
+  registerDataPointContextMenuHandler,
+} from '@/widget-by-id/utils';
 import { WidgetsOptions } from '@/index-typedoc';
 import { JTDConfig, JTDDrillTarget, JTDNavigateType } from '@/widget-by-id/types';
 import { useModalContext } from '@/common/components/modal';
@@ -443,7 +447,7 @@ export const useJtd = ({
 
       if (jtdConfig.navigateType === JTDNavigateType.CLICK) {
         // For click navigation, register onDataPointClick handler
-        if (isChartWidgetProps(widgetProps)) {
+        if (isChartWidgetProps(widgetProps) || isTextWidgetProps(widgetProps)) {
           const originalClickHandler = widgetProps.onDataPointClick;
 
           widgetProps.onDataPointClick = combineHandlers([

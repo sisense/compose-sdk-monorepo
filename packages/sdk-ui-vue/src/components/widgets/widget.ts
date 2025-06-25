@@ -4,7 +4,7 @@ import { Widget as WidgetPreact } from '@sisense/sdk-ui-preact';
 import type {
   ChartWidgetProps,
   PivotTableWidgetProps as PivotTableWidgetPropsPreact,
-  PluginWidgetProps,
+  CustomWidgetProps,
   SoftUnion,
   TextWidgetProps,
   WidgetProps as WidgetPropsPreact,
@@ -12,7 +12,7 @@ import type {
 } from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
-export { WithCommonWidgetProps, TextWidgetProps, PluginWidgetProps };
+export { WithCommonWidgetProps, TextWidgetProps, CustomWidgetProps };
 
 export interface PivotTableWidgetProps extends PivotTableWidgetPropsPreact {}
 
@@ -23,7 +23,7 @@ export type WidgetProps = SoftUnion<
   | WithCommonWidgetProps<ChartWidgetProps, 'chart'>
   | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>
   | WithCommonWidgetProps<TextWidgetProps, 'text'>
-  | WithCommonWidgetProps<PluginWidgetProps, 'plugin'>
+  | WithCommonWidgetProps<CustomWidgetProps, 'custom'>
 >;
 
 /**
@@ -93,11 +93,11 @@ export const Widget = defineComponent({
      */
     chartType: String as PropType<WidgetProps['chartType']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PluginWidgetProps.pluginType}
+     * {@inheritDoc @sisense/sdk-ui!CustomWidgetProps.customWidgetType}
      *
      * @category Widget
      */
-    pluginType: String as PropType<WidgetProps['pluginType']>,
+    customWidgetType: String as PropType<WidgetProps['customWidgetType']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataSource}
      *

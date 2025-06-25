@@ -1,5 +1,4 @@
 import {
-  type TextWidgetProps,
   type WidgetModel,
   widgetModelTranslator as widgetModelTranslatorPreact,
 } from '@sisense/sdk-ui-preact';
@@ -10,6 +9,7 @@ import {
   PivotTableProps,
   PivotTableWidgetProps,
   TableProps,
+  type TextWidgetProps,
 } from '../components';
 import { ExecutePivotQueryParams, ExecuteQueryParams } from '../services';
 

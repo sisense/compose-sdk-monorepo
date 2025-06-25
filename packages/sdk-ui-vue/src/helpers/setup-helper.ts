@@ -1,6 +1,6 @@
 import { h, ref, toRaw, isReactive, type Slots, onBeforeUnmount } from 'vue';
 import {
-  createPluginsContextConnector,
+  createCustomWidgetsContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
 } from './context-connectors';
@@ -16,7 +16,7 @@ export function createDefaultContextConnectors() {
   return [
     createSisenseContextConnector(),
     createThemeContextConnector(),
-    createPluginsContextConnector(),
+    createCustomWidgetsContextConnector(),
   ];
 }
 

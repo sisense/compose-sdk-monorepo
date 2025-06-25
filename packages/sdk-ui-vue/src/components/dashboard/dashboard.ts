@@ -1,10 +1,16 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { Dashboard as DashboardPreact } from '@sisense/sdk-ui-preact';
-import type { DashboardProps as DashboardPropsPreact } from '@sisense/sdk-ui-preact';
+import type {
+  DashboardProps as DashboardPropsPreact,
+  DashboardConfig,
+  DashboardFiltersPanelConfig,
+} from '@sisense/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
-import type { DashboardConfig } from '../../types';
 import type { WidgetProps } from '../widgets';
+
+// Re-exports related types
+export { DashboardConfig, DashboardFiltersPanelConfig };
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!Dashboard | `Dashboard`} component.
@@ -14,10 +20,6 @@ export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
    */
   widgets: WidgetProps[];
-  /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
-   */
-  config?: DashboardConfig;
 }
 
 /**

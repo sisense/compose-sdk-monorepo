@@ -85,7 +85,7 @@ export type AppConfig = {
   /**
    * Configuration of the tabber widget
    *
-   * Set the `tabberConfig.enabled` property to `true` to enable the tabber widget support. Otherwise, the tabber widget will be treated as 'unknown plugin type'.
+   * Set the `tabberConfig.enabled` property to `true` to enable the tabber widget support. Otherwise, the tabber widget will be treated as 'unknown custom widget type'.
    * Only tabber widgets that are configured using the Fusion UI as documented [here](https://docs.sisense.com/main/SisenseLinux/tabber.htm#Creating) are supported.
    */
   tabberConfig?: {
@@ -232,9 +232,10 @@ export const createClientApplication = async ({
   }
 
   const url = normalizeUrl(rawUrl);
+  const urlWithSearchParams = normalizeUrl(rawUrl, true);
 
   const auth = getAuthenticator({
-    url,
+    url: urlWithSearchParams,
     token,
     wat,
     ssoEnabled,

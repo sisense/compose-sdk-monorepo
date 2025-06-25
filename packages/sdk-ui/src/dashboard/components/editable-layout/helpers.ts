@@ -225,7 +225,7 @@ function removeWidgetFromLayoutColumn(
     ...column,
     rows: column.rows.map((row, index) => {
       if (index === rowIndex) {
-        return removeWidgetFromLayoutRow(row, widgetId);
+        return removeWidgetsFromLayoutRow(row, [widgetId]);
       }
       return row;
     }),
@@ -293,14 +293,14 @@ function moveWidgetInNewRow(
  *
  * @internal
  */
-function removeWidgetFromLayoutRow(row: WidgetsPanelRow, widgetId: string) {
-  const removalWidgetWidth =
-    row.cells.find((subcell) => subcell.widgetId === widgetId)?.widthPercentage || 0;
-  const cellsCountAfterRemove = row.cells.length - 1;
+function removeWidgetsFromLayoutRow(row: WidgetsPanelRow, widgetIds: string[]) {
+  const widgetsToRemove = row.cells.filter((cell) => widgetIds.includes(cell.widgetId));
+  const removalWidgetWidth = widgetsToRemove.reduce((acc, cell) => acc + cell.widthPercentage, 0);
+  const cellsCountAfterRemove = row.cells.length - widgetsToRemove.length;
   return {
     ...row,
     cells: row.cells
-      .filter((cell) => cell.widgetId !== widgetId)
+      .filter((cell) => !widgetIds.includes(cell.widgetId))
       .map((cell) => ({
         ...cell,
         widthPercentage: cell.widthPercentage + removalWidgetWidth / cellsCountAfterRemove,
@@ -410,6 +410,141 @@ function moveWidgetAsideAnother(
     }),
   };
 }
+
+/**
+ * Deletes a widget from a layout.
+ *
+ * @param layout - The current layout to modify
+ * @param columnIndex - Index of the column containing the widget
+ * @param rowIndex - Index of the row containing the widget
+ * @param widgetId - ID of the widget to delete
+ *
+ * @returns A new layout with the widget removed
+ *
+ * @internal
+ */
+export function deleteWidgetFromLayout(
+  layout: WidgetsPanelLayout,
+  columnIndex: number,
+  rowIndex: number,
+  widgetId: string,
+) {
+  return {
+    ...layout,
+    columns: layout.columns.map((column, cIndex) => {
+      if (cIndex === columnIndex) {
+        return clearColumnFromEmptyRows({
+          ...column,
+          rows: column.rows.map((row, rIndex) => {
+            if (rIndex === rowIndex) {
+              return removeWidgetsFromLayoutRow(row, [widgetId]);
+            }
+            return row;
+          }),
+        });
+      }
+      return column;
+    }),
+  };
+}
+
+/**
+ * Deletes widgets from a layout.
+ *
+ * @param layout - The current layout to modify
+ * @param widgetIds - IDs of the widgets to delete
+ *
+ * @returns A new layout with the widgets removed
+ *
+ * @internal
+ */
+export function deleteWidgetsFromLayout(layout: WidgetsPanelLayout, widgetIds: string[]) {
+  return {
+    ...layout,
+    columns: layout.columns.map((column) => {
+      return clearColumnFromEmptyRows({
+        ...column,
+        rows: column.rows.map((row) => {
+          return removeWidgetsFromLayoutRow(row, widgetIds);
+        }),
+      });
+    }),
+  };
+}
+
+/**
+ * Finds widgets that were deleted from a layout.
+ *
+ * @param previousLayout - The previous layout
+ * @param newLayout - The new layout
+ *
+ * @returns An array of widget IDs that were deleted
+ *
+ * @internal
+ */
+export function findDeletedWidgetsFromLayout(
+  previousLayout: WidgetsPanelLayout,
+  newLayout: WidgetsPanelLayout,
+) {
+  const previousWidgets = previousLayout.columns.flatMap((column) =>
+    column.rows.flatMap((row) => row.cells.map((cell) => cell.widgetId)),
+  );
+  const newWidgets = newLayout.columns.flatMap((column) =>
+    column.rows.flatMap((row) => row.cells.map((cell) => cell.widgetId)),
+  );
+  return previousWidgets.filter((widgetId) => !newWidgets.includes(widgetId));
+}
+
+/**
+ * Distribute equal width to all cells in a row.
+ *
+ * @param row - The row to distribute the width to
+ *
+ * @returns A new row with the width distributed
+ *
+ * @internal
+ */
+function distributeEqualWidthToCells(row: WidgetsPanelRow) {
+  return {
+    ...row,
+    cells: row.cells.map((cell) => ({ ...cell, widthPercentage: 100 / row.cells.length })),
+  };
+}
+
+/**
+ * Distributes equal width to all cells in a row.
+ *
+ * @param layout - The current layout to modify
+ * @param columnIndex - Index of the column containing the row
+ * @param rowIndex - Index of the row to distribute the width to
+ *
+ * @returns A new layout with the width distributed
+ *
+ * @internal
+ */
+export const distributeEqualWidthInRow = (
+  layout: WidgetsPanelLayout,
+  columnIndex: number,
+  rowIndex: number,
+) => {
+  return {
+    ...layout,
+    columns: layout.columns.map((column, cIndex) => {
+      if (cIndex === columnIndex) {
+        return {
+          ...column,
+          rows: column.rows.map((row, rIndex) => {
+            if (rIndex === rowIndex) {
+              return distributeEqualWidthToCells(row);
+            }
+            return row;
+          }),
+        };
+      }
+      return column;
+    }),
+  };
+};
 
 /**
  * Updates the layout based on drag and drop operations.

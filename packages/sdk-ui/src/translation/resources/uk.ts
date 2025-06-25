@@ -52,7 +52,7 @@ export const translation: TranslationDictionary = {
       onlyTableWidgetSupported: 'Метод {{methodName}} підтримується тільки для табличних віджетів',
       onlyPivotWidgetSupported: 'Метод {{methodName}} підтримується тільки для півот віджетів',
       onlyTextWidgetSupported: 'Метод {{methodName}} підтримується тільки для текстових віджетів',
-      onlyPluginWidgetSupported: 'Метод {{methodName}} підтримується тільки для плагінних віджетів',
+      onlyCustomWidgetSupported: 'Метод {{methodName}} підтримується тільки для кастомних віджетів',
       unsupportedWidgetType: 'Тип віджету {{widgetType}} не підтримується',
       unsupportedFusionWidgetType: 'Тип Fusion віджету {{widgetType}} не підтримується',
     },
@@ -72,7 +72,7 @@ export const translation: TranslationDictionary = {
     missingModelTitle: 'Не знайдено заголовоку моделі',
     httpClientNotFound: 'HttpClient не знайдено',
     serverSettingsNotLoaded: 'Failed to load server settings',
-    requiredColumnMissing: 'Відсутній обов’язковий стовпець',
+    requiredColumnMissing: "Відсутній обов'язковий стовпець",
     unexpectedChartType: 'Невідомий тип графіка: {{chartType}}',
     noRowNumColumn: 'Дані не містять row num column',
     ticIntervalCalculationFailed:
@@ -222,6 +222,7 @@ export const translation: TranslationDictionary = {
       cancel: 'Відмінити',
       apply: 'Застосувати',
       editLayout: 'Редагувати макет',
+      viewMode: 'Режим перегляду',
     },
   },
   unsupportedFilterMessage: 'Непідтримуваний Фільтр (застосовано до запиту даних)',
@@ -248,10 +249,14 @@ export const translation: TranslationDictionary = {
       details: 'Деталі віджета',
       tooltip: 'Натисніть щоб побачити повну інформацію',
     },
+    menu: {
+      deleteWidget: 'Видалити віджет',
+      distributeEqualWidth: 'Розподілити порівну в цьому рядку',
+    },
   },
-  plugins: {
+  customWidgets: {
     registerPrompt:
-      'Невідомий плагін: {{pluginType}}. Будь ласка зареєструйте цей плагін щоб він міг бути відображений.',
+      'Невідомий кастомний віджет: {{customWidgetType}}. Будь ласка зареєструйте цей кастомний віджет щоб він міг бути відображений.',
   },
   ai: {
     analyticsChatbot: 'Аналітичний чат-бот',

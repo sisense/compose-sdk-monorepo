@@ -137,8 +137,8 @@ describe('getSelectableWidgetAttributes()', () => {
     DM.Category.Category,
   ];
 
-  it('should return no selectable attributes for "plugin" widget', () => {
-    const selectableAttributes = getSelectableWidgetAttributes('plugin', {});
+  it('should return no selectable attributes for "custom" widget', () => {
+    const selectableAttributes = getSelectableWidgetAttributes('custom', {});
 
     expect(selectableAttributes).toEqual([]);
   });
@@ -190,8 +190,8 @@ describe('getSelectableWidgetAttributes()', () => {
 });
 
 describe('getWidgetSelections()', () => {
-  it('should return no selections for "plugin" widget', () => {
-    const selections = getWidgetSelections('plugin', {}, []);
+  it('should return no selections for "custom" widget', () => {
+    const selections = getWidgetSelections('custom', {}, []);
     expect(selections).toEqual([]);
   });
 

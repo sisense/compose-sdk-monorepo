@@ -10,6 +10,7 @@ type ButtonProps = {
   type?: 'primary' | 'secondary';
   disabled?: boolean;
   onClick?: () => void;
+  title?: string;
 };
 
 const BUTTON_TEXT_COLOR = '#3a4356';
@@ -18,7 +19,7 @@ const BUTTON_TEXT_COLOR = '#3a4356';
 export const Button = (props: ButtonProps) => {
   const { themeSettings } = useThemeContext();
   const theme = themeSettings.general.buttons;
-  const { children, type = 'primary', disabled, onClick, ...restProps } = props;
+  const { children, type = 'primary', disabled, onClick, title, ...restProps } = props;
   return (
     <ButtonMui
       variant="contained"
@@ -60,6 +61,7 @@ export const Button = (props: ButtonProps) => {
       }}
       onClick={onClick}
       disabled={disabled}
+      title={title}
       {...restProps}
     >
       {children}

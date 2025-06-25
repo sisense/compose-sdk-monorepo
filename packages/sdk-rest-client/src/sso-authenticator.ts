@@ -3,7 +3,7 @@
 import { normalizeUrl } from '@sisense/sdk-common';
 
 import { BaseAuthenticator } from './base-authenticator.js';
-import { addQueryParamsToUrl } from './helpers.js';
+import { addPathnameToUrl, addQueryParamsToUrl } from './helpers.js';
 import { errorInterceptor } from './interceptors.js';
 import { Authenticator } from './interfaces.js';
 import { TranslatableError } from './translation/translatable-error.js';
@@ -21,7 +21,7 @@ export class SsoAuthenticator extends BaseAuthenticator {
 
   constructor(url: string, enableSilentPreAuth = false) {
     super('sso');
-    this.url = normalizeUrl(url);
+    this.url = normalizeUrl(url, true);
     this._enableSilentPreAuth = enableSilentPreAuth;
   }
 
@@ -71,7 +71,8 @@ export class SsoAuthenticator extends BaseAuthenticator {
   }
 
   private async checkAuthentication(): Promise<{ isAuthenticated: boolean; loginUrl: string }> {
-    const fetchUrl = `${this.url}api/auth/isauth`;
+    const fetchUrl = addPathnameToUrl(normalizeUrl(this.url), 'api/auth/isauth');
+
     const response = await fetch(fetchUrl, {
       headers: { Internal: 'true' },
       credentials: 'include',
@@ -98,9 +99,15 @@ export class SsoAuthenticator extends BaseAuthenticator {
       }
     }
 
+    // Workaround: if the loginUrl looks like a relative URL to ssoRouter plugin, prepend the Sisense URL
+    const redirectUrl =
+      result.loginUrl && result.loginUrl?.search(/^\/api\/v\d+\/[^/]+\/login$/) !== -1
+        ? addPathnameToUrl(this.url, result.loginUrl)
+        : result.loginUrl || '';
+
     return {
       isAuthenticated: result.isAuthenticated,
-      loginUrl: result.loginUrl || '',
+      loginUrl: redirectUrl,
     };
   }
 }

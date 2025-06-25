@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, type MouseEvent } from 'react';
 import DOMPurify from 'dompurify';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
-import { TextWidgetStyleOptions, CompleteThemeSettings } from '@/types';
+import { TextWidgetStyleOptions, CompleteThemeSettings, TextWidgetDataPoint } from '@/types';
 import { TextWidgetProps } from '@/props';
 import { WidgetSpaceAround } from './common/widget-style-utils';
 import { useThemeContext } from '../theme-provider';
@@ -25,6 +25,7 @@ type Themeable = {
 
 type Stylable = {
   styleOptions: TextWidgetStyleOptions;
+  cursor?: string;
 };
 
 const VERTICAL_ALIGNMENT_DICTIONARY = {
@@ -49,6 +50,7 @@ const TextWidgetContainer = styled.div<Stylable>`
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
+  cursor: ${(props) => props.cursor || 'default'};
 `;
 
 const InnerHtml = styled.div`
@@ -63,11 +65,26 @@ const InnerHtml = styled.div`
 export const TextWidget: FunctionComponent<TextWidgetProps> = asSisenseComponent({
   componentName: 'TextWidget',
 })((props) => {
-  const sanitizedHtml = DOMPurify.sanitize(props.styleOptions.html);
+  const { html } = props.styleOptions;
+  const sanitizedHtml = DOMPurify.sanitize(html);
   const { themeSettings } = useThemeContext();
+
+  const handleContainerClick = (event: MouseEvent<HTMLDivElement>) => {
+    if (props.onDataPointClick) {
+      const point: TextWidgetDataPoint = {
+        html,
+      };
+      props.onDataPointClick(point, event.nativeEvent);
+    }
+  };
+
   return (
     <TextWidgetSpaceAroundWrapper themeSettings={themeSettings} styleOptions={props.styleOptions}>
-      <TextWidgetContainer styleOptions={props.styleOptions}>
+      <TextWidgetContainer
+        styleOptions={props.styleOptions}
+        onClick={handleContainerClick}
+        cursor={props.onDataPointClick ? 'pointer' : 'default'}
+      >
         <InnerHtml dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
       </TextWidgetContainer>
     </TextWidgetSpaceAroundWrapper>

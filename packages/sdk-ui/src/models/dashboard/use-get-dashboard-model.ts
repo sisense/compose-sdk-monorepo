@@ -150,13 +150,14 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams): D
     if (shouldLoad(app)) {
       dispatch({ type: 'loading' });
 
-      const { dashboardOid, includeWidgets, includeFilters } = params;
+      const { dashboardOid, includeWidgets, includeFilters, sharedMode } = params;
       void getDashboardModel(
         app.httpClient,
         dashboardOid,
         {
           includeWidgets,
           includeFilters,
+          sharedMode,
         },
         themeSettings,
         app.settings,

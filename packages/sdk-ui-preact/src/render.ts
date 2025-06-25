@@ -29,8 +29,10 @@ export const createElement = <P>(
 };
 
 /** @internal */
-export const createWrapperElement = <R = VNode>(nativeElement: HTMLDivElement): R =>
-  createElement(CustomElement, { nativeElement }) as R;
+export const createWrapperElement = <R = VNode>(
+  nativeElement: HTMLDivElement,
+  onDestroy?: () => void,
+): R => createElement(CustomElement, { nativeElement, onDestroy }) as R;
 
 type AnyObject = Record<string, any>;
 

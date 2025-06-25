@@ -65,7 +65,7 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
             fontSize: themeSettings.widget.header.titleFontSize,
           }}
         >
-          {title || ''}
+          {styleOptions?.renderTitle?.(title) ?? title}
         </div>
         <div className={'csdk-ml-auto csdk-flex csdk-items-center'}>{renderToolbar()}</div>
       </div>

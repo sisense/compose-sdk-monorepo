@@ -83,11 +83,19 @@ Default chart type of each series
 
 #### dataOptions
 
-> **`readonly`** **dataOptions**?: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md) \| [`GenericDataOptions`](../../sdk-ui/type-aliases/type-alias.GenericDataOptions.md) \| [`PivotTableDataOptions`](../interfaces/interface.PivotTableDataOptions.md)
+> **`readonly`** **dataOptions**?: [`ChartDataOptions`](../type-aliases/type-alias.ChartDataOptions.md) \| [`GenericDataOptions`](../type-aliases/type-alias.GenericDataOptions.md) \| [`PivotTableDataOptions`](../interfaces/interface.PivotTableDataOptions.md)
 
 Configurations for how to interpret and present the data passed to the chart
 
 ### Widget
+
+#### customWidgetType
+
+> **`readonly`** **customWidgetType**?: `string`
+
+Custom widget type. This is typically the name/ID of the custom widget.
+
+***
 
 #### description
 
@@ -113,17 +121,9 @@ Unique identifier of the widget
 
 ***
 
-#### pluginType
-
-> **`readonly`** **pluginType**?: `string`
-
-Plugin type. This is typically the name/ID of the plugin.
-
-***
-
 #### styleOptions
 
-> **`readonly`** **styleOptions**?: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md) \| [`PivotTableWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PivotTableWidgetStyleOptions.md) \| [`PluginWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PluginWidgetStyleOptions.md) \| [`TextWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.TextWidgetStyleOptions.md)
+> **`readonly`** **styleOptions**?: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md) \| [`CustomWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.CustomWidgetStyleOptions.md) \| [`PivotTableWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PivotTableWidgetStyleOptions.md) \| [`TextWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.TextWidgetStyleOptions.md)
 
 Style options for both the chart and widget including the widget header
 
@@ -139,7 +139,7 @@ Title of the widget
 
 #### widgetType
 
-> **`readonly`** **widgetType**: `"chart"` \| `"pivot"` \| `"plugin"` \| `"text"`
+> **`readonly`** **widgetType**: `"chart"` \| `"custom"` \| `"pivot"` \| `"text"`
 
 Widget type
 
@@ -157,7 +157,7 @@ This callback is not supported for Areamap Chart, Scattermap Chart, Table, and P
 
 #### onDataPointClick
 
-> **`readonly`** **onDataPointClick**?: [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+> **`readonly`** **onDataPointClick**?: [`AreamapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.DataPointEventHandler.md) \| [`IndicatorDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.IndicatorDataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.ScattermapDataPointEventHandler.md) \| `TextWidgetDataPointEventHandler`
 
 Click handler callback for a data point
 

@@ -1,4 +1,4 @@
-import { MenuPosition, MenuItemSection } from '@/types';
+import { MenuPosition, MenuItemSection, MenuAlignment } from '@/types';
 
 export type MenuOptions = {
   /** @internal */
@@ -6,6 +6,8 @@ export type MenuOptions = {
   position: MenuPosition;
   itemSections: MenuItemSection[];
   onClose?: () => void;
+  /** @internal */
+  alignment?: MenuAlignment;
 };
 
 /** @internal */

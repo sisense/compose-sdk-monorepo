@@ -85,7 +85,7 @@ export class DashboardService {
         [id]="widget.id"
         [widgetType]="widget.widgetType"
         [chartType]="widget.chartType"
-        [pluginType]="widget.pluginType"
+        [customWidgetType]="widget.customWidgetType"
         [dataSource]="widget.dataSource"
         [dataOptions]="widget.dataOptions"
         [filters]="widget.filters"

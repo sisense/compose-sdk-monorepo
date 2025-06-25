@@ -47,9 +47,11 @@ Vue filter tile components
 
 - [CriteriaFilterTile](filter-tiles/class.CriteriaFilterTile.md)
 - [DateRangeFilterTile](filter-tiles/class.DateRangeFilterTile.md)
+- [FiltersPanel](filter-tiles/class.FiltersPanel.md)
 - [FilterTile](filter-tiles/class.FilterTile.md) - Facade component rendering a filter tile based on filter type
 - [MemberFilterTile](filter-tiles/class.MemberFilterTile.md)
 - [RelativeDateFilterTile](filter-tiles/class.RelativeDateFilterTile.md)
+- [useGetFilterMembers](filter-tiles/function.useGetFilterMembers.md)
 
 ## Contexts
 
@@ -63,6 +65,7 @@ Vue context components
 Vue composables for working with queries
 
 - [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
+- [useExecuteCustomWidgetQuery](queries/function.useExecuteCustomWidgetQuery.md)
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 
 ## Dashboards
@@ -72,7 +75,9 @@ Vue components and utilities for working with dashboards
 - [ChartWidget](dashboards/class.ChartWidget.md)
 - [Dashboard](dashboards/class.Dashboard.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
+- [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md)
 - [useComposedDashboard](dashboards/function.useComposedDashboard.md)
+- [useCustomWidgets](dashboards/function.useCustomWidgets.md)
 - [Widget](dashboards/class.Widget.md)
 
 ## Fusion Assets

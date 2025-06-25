@@ -16,6 +16,16 @@ Widget chart type.
 
 ***
 
+### customWidgetType
+
+> **customWidgetType**: `string`
+
+Custom widget type. Only present for custom widgets.
+
+If this is a custom widget, this is typically the name/ID of the custom widget.
+
+***
+
 ### dataOptions
 
 > **dataOptions**: [`WidgetDataOptions`](../type-aliases/type-alias.WidgetDataOptions.md)
@@ -69,16 +79,6 @@ Widget highlights.
 > **`readonly`** **oid**: `string`
 
 Unique identifier of the widget.
-
-***
-
-### pluginType
-
-> **pluginType**: `string`
-
-Plugin type. Only present for plugin widgets.
-
-If this is a plugin widget, this is typically the name/ID of the plugin.
 
 ***
 

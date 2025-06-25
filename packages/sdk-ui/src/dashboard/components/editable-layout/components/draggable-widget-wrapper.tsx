@@ -3,6 +3,8 @@ import { CSS } from '@dnd-kit/utilities';
 import styled from '@emotion/styled';
 import { EditableLayoutDragData } from '@/dashboard/components/editable-layout/types';
 import { Z_INDEX_ACTIVE_DRAGGABLE } from '@/dashboard/components/editable-layout/const';
+import { ReactNode, useCallback } from 'react';
+import { DragHandleIcon } from '@/common/icons/drag-handle-icon';
 
 const Wrapper = styled.div<{
   transform?: string | null;
@@ -10,17 +12,22 @@ const Wrapper = styled.div<{
 }>`
   transform: ${({ transform }) => transform || 'none'};
   z-index: ${({ zIndex }) => zIndex};
-  cursor: move;
   position: relative;
 `;
 
-const Overlay = styled.div`
-  position: absolute;
-  z-index: 10;
-  top: 0;
-  left: 0;
+const DragHandleWrapper = styled.div`
+  cursor: move;
+  display: flex;
   width: 100%;
-  height: 100%;
+  align-items: center;
+  svg {
+    margin-right: 4px;
+  }
+
+  & > div {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 /**
@@ -40,7 +47,16 @@ type DraggableWidgetWrapperProps = {
   /**
    * The child elements to render inside the wrapper
    */
-  children: React.ReactNode;
+  children: (withDragHandle: (element: ReactNode) => ReactNode) => ReactNode;
+  /**
+   * Options for drag handle
+   */
+  dragHandleOptions?: {
+    icon?: {
+      visible?: boolean;
+      color?: string;
+    };
+  };
 };
 
 /**
@@ -48,21 +64,36 @@ type DraggableWidgetWrapperProps = {
  *
  * @internal
  */
-export const DraggableWidgetWrapper = ({ id, data, children }: DraggableWidgetWrapperProps) => {
+export const DraggableWidgetWrapper = ({
+  id,
+  data,
+  children,
+  dragHandleOptions,
+}: DraggableWidgetWrapperProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: `DraggableWidgetWrapper/${id}`,
     data,
   });
+
+  const shouldShowDragHandleIcon = dragHandleOptions?.icon?.visible ?? true;
+  const withDragHandle = useCallback(
+    (element: ReactNode) => (
+      <DragHandleWrapper {...listeners}>
+        {shouldShowDragHandleIcon && <DragHandleIcon color={dragHandleOptions?.icon?.color} />}
+        <div>{element}</div>
+      </DragHandleWrapper>
+    ),
+    [listeners, dragHandleOptions, shouldShowDragHandleIcon],
+  );
+
   return (
     <Wrapper
       ref={setNodeRef}
-      {...listeners}
       {...attributes}
       transform={CSS.Translate.toString(transform)}
       zIndex={transform ? Z_INDEX_ACTIVE_DRAGGABLE : 10}
     >
-      {children}
-      <Overlay />
+      {children(withDragHandle)}
     </Wrapper>
   );
 };

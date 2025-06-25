@@ -52,7 +52,7 @@ export const translation = {
       onlyTableWidgetSupported: 'Only table widget is supported for method {{methodName}}',
       onlyPivotWidgetSupported: 'Only pivot widget is supported for method {{methodName}}',
       onlyTextWidgetSupported: 'Only text widget is supported for method {{methodName}}',
-      onlyPluginWidgetSupported: 'Only plugin widget is supported for method {{methodName}}',
+      onlyCustomWidgetSupported: 'Only custom widget is supported for method {{methodName}}',
       unsupportedWidgetType: 'Unsupported widget type: {{widgetType}}',
       unsupportedFusionWidgetType: 'Unsupported Fusion widget type: {{widgetType}}',
     },
@@ -244,10 +244,14 @@ export const translation = {
       details: 'Widget Details',
       tooltip: 'Click to view full details',
     },
+    menu: {
+      deleteWidget: 'Delete Widget',
+      distributeEqualWidth: 'Distribute equally in this row',
+    },
   },
-  plugins: {
+  customWidgets: {
     registerPrompt:
-      'Unknown plugin type: {{pluginType}}. Please register this plugin so it can be rendered.',
+      'Unknown custom widget type: {{customWidgetType}}. Please register this custom widget so it can be rendered.',
   },
   ai: {
     analyticsChatbot: 'Analytics Chatbot',
@@ -395,6 +399,7 @@ export const translation = {
       cancel: 'Cancel',
       apply: 'Apply',
       editLayout: 'Edit Layout',
+      viewMode: 'View mode',
     },
   },
   jumpToDashboard: {

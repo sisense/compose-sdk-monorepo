@@ -22,8 +22,18 @@ export const addQueryParamsToUrl = (url: string, params: { [key: string]: string
     urlObject.searchParams.append(paramName, paramValue);
   }
 
-  // replace the trailing slash if there is one
-  return urlObject.toString().replace(/\/([?&])/, '$1');
+  return urlObject.toString();
+};
+
+export const addPathnameToUrl = (url: string, newPathname: string): string => {
+  if (!url || typeof url !== 'string') return url;
+  // can't just append to the url because it might already have a query string
+  const urlObject = new URL(url);
+
+  const pathnameToAdd = newPathname.startsWith('/') ? newPathname.slice(1) : newPathname;
+  urlObject.pathname += pathnameToAdd;
+
+  return urlObject.toString();
 };
 
 /**

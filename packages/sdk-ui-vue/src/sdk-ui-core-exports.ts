@@ -1,7 +1,7 @@
 // This file re-exports common types/utils from @sisense/sdk-ui-preact
 
 // Re-exports utils from @sisense/sdk-ui-preact
-export { boxWhiskerProcessResult } from '@sisense/sdk-ui-preact';
+export { boxWhiskerProcessResult, extractDimensionsAndMeasures } from '@sisense/sdk-ui-preact';
 
 // Re-exports types from @sisense/sdk-ui-preact
 export type {

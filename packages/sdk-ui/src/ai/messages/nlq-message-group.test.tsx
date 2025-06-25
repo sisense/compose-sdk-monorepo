@@ -169,7 +169,7 @@ describe('show user message and clarification in the chat', () => {
     });
     await waitFor(() =>
       expect(
-        screen.getByText('This is an answer to your question. Ask me anything.'),
+        screen.getByText(/This is an answer to your question.\s*Ask me anything./),
       ).toBeInTheDocument(),
     );
   });

@@ -10,31 +10,30 @@ import {
 import {
   ComponentAdapter,
   DashboardById as DashboardByIdPreact,
+  type DashboardByIdConfig,
   type DashboardByIdProps as DashboardByIdPropsPreact,
 } from '@sisense/sdk-ui-preact';
 
 import {
-  createPluginsContextConnector,
+  createCustomWidgetsContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
   styles,
   template,
 } from '../../component-wrapper-helpers';
-import { PluginsService } from '../../services/plugins.service';
+import { CustomWidgetsService } from '../../services/custom-widgets.service';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
-import type { DashboardByIdConfig } from '../../types';
+
+// Re-exports related types
+export { DashboardByIdConfig };
 
 /**
  * Props of the {@link DashboardByIdComponent}.
  */
-export interface DashboardByIdProps extends DashboardByIdPropsPreact {
-  /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
-   */
-  config?: DashboardByIdConfig;
-}
+export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
+
 /**
  * An Angular component used for easily rendering a dashboard by its ID created in a Sisense Fusion instance.
  *
@@ -107,17 +106,17 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
      */
     public themeService: ThemeService,
     /**
-     * Plugin service
+     * Custom widgets service
      *
      * @internal
      * @category Constructor
      */
-    public pluginService: PluginsService,
+    public customWidgetsService: CustomWidgetsService,
   ) {
     this.componentAdapter = new ComponentAdapter(DashboardByIdPreact, [
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
-      createPluginsContextConnector(this.pluginService),
+      createCustomWidgetsContextConnector(this.customWidgetsService),
     ]);
   }
 

@@ -17,9 +17,6 @@ export type {
   ChartDataPointContextMenuEventHandler,
   ChartDataPointsEvent,
   ChartDataPointsEventHandler,
-  DashboardByIdConfig,
-  DashboardConfig,
-  DashboardFiltersPanelConfig,
   DataPointEvent,
   DataPointEventHandler,
   DataPointsEvent,
@@ -29,6 +26,10 @@ export type {
   FilterDeleteEventHandler,
   FilterEditEvent,
   FilterEditEventHandler,
+  FiltersPanelChangeEvent,
+  FiltersPanelChangeEventHandler,
+  IndicatorDataPointEvent,
+  IndicatorDataPointEventHandler,
   ScatterDataPointEvent,
   ScatterDataPointEventHandler,
   ScatterDataPointsEvent,
@@ -40,7 +41,7 @@ export * from './lib/utilities';
 
 /* Re-exports internal core functionalities to use in dependant angular modules */
 export {
-  createPluginsContextConnector,
+  createCustomWidgetsContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
 } from './lib/component-wrapper-helpers';

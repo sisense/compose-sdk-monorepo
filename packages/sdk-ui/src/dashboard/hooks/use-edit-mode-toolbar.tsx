@@ -2,8 +2,9 @@ import { useStateWithHistory } from '@/common/hooks/use-state-with-history';
 import { WidgetsPanelLayout } from '@/models';
 import styled from '@emotion/styled';
 import { SVGProps, useCallback, useEffect, useRef } from 'react';
-import { PrimaryButton, SecondaryButton } from '@/filters/components/common/buttons';
 import { useTranslation } from 'react-i18next';
+import { useThemeContext } from '@/theme-provider';
+import { Button } from '@/common/components/button';
 
 const ToolbarContainer = styled.div`
   display: flex;
@@ -11,12 +12,18 @@ const ToolbarContainer = styled.div`
   justify-content: flex-end;
 `;
 
-const IconButton = styled(SecondaryButton)`
+const IconButton = styled(Button)`
+  width: auto;
+  min-width: 0;
   padding: 0;
   background: transparent;
+  &:disabled,
+  &:hover {
+    background: transparent;
+  }
 `;
 
-const UndoIcon = (props: SVGProps<SVGSVGElement>) => (
+const UndoIcon = (props: SVGProps<SVGSVGElement> & { color?: string }) => (
   <svg
     width="30px"
     height="30px"
@@ -26,7 +33,7 @@ const UndoIcon = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      fill="currentColor"
+      fill={props.color ?? 'currentColor'}
       d="M7.022 12a5.5 5.5 0 1 1 1.195 3.95l.778-.627A4.5 4.5 0 1 0 8.027 12H9.5a.5.5 0 1 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 1 0V12h.022z"
     ></path>
   </svg>
@@ -102,6 +109,7 @@ export function useEditModeToolbar({
   historyCapacity = 20,
 }: UseEditModeToolbarProps): UseEditModeToolbarResult {
   const { t } = useTranslation();
+  const { themeSettings } = useThemeContext();
   const {
     state: layout,
     setState: setLayout,
@@ -146,29 +154,39 @@ export function useEditModeToolbar({
     () => (
       <ToolbarContainer>
         <IconButton onClick={undo} disabled={!canUndo} title={t('dashboard.toolbar.undo')}>
-          <UndoIcon />
+          <UndoIcon color={themeSettings.dashboard.toolbar.primaryTextColor} />
         </IconButton>
         <IconButton onClick={redo} disabled={!canRedo} title={t('dashboard.toolbar.redo')}>
-          <RedoIcon />
+          <RedoIcon color={themeSettings.dashboard.toolbar.primaryTextColor} />
         </IconButton>
-        <SecondaryButton
-          onClick={handleCancel}
-          title={t('dashboard.toolbar.cancel')}
-          style={{ marginLeft: '8px' }}
-        >
-          {t('dashboard.toolbar.cancel')}
-        </SecondaryButton>
-        <PrimaryButton
-          onClick={handleApply}
-          disabled={!hasChanges}
-          title={t('dashboard.toolbar.applyChanges')}
-          style={{ marginLeft: '8px' }}
-        >
-          {t('dashboard.toolbar.apply')}
-        </PrimaryButton>
+        <span className="csdk-ml-[8px]">
+          <Button type="secondary" onClick={handleCancel} title={t('dashboard.toolbar.cancel')}>
+            {t('dashboard.toolbar.cancel')}
+          </Button>
+        </span>
+        <span className="csdk-ml-[8px]">
+          <Button
+            type="primary"
+            onClick={handleApply}
+            disabled={!hasChanges}
+            title={t('dashboard.toolbar.apply')}
+          >
+            {t('dashboard.toolbar.apply')}
+          </Button>
+        </span>
       </ToolbarContainer>
     ),
-    [canUndo, canRedo, hasChanges, handleApply, handleCancel, undo, redo, t],
+    [
+      canUndo,
+      canRedo,
+      hasChanges,
+      handleApply,
+      handleCancel,
+      undo,
+      redo,
+      t,
+      themeSettings.dashboard.toolbar.primaryTextColor,
+    ],
   );
 
   return {

@@ -1,15 +1,15 @@
 import {
   ContextConnector,
-  CustomPluginsProvider,
-  CustomPluginsProviderProps,
   CustomSisenseContextProvider,
   CustomSisenseContextProviderProps,
   CustomThemeProvider,
   CustomThemeProviderProps,
+  CustomWidgetsProviderAdapter,
+  CustomWidgetsProviderAdapterProps,
   DataObserver,
 } from '@sisense/sdk-ui-preact';
 
-import { PluginsService } from '../services/plugins.service';
+import { CustomWidgetsService } from '../services/custom-widgets.service';
 import { SisenseContextService } from '../services/sisense-context.service';
 import { ThemeService } from '../services/theme.service';
 
@@ -96,24 +96,34 @@ export const createSisenseContextConnector = (
 };
 
 /**
- * Creates plugins context connector
+ * Creates custom widgets context connector
  *
- * @param pluginsService - The plugin service
+ * @param customWidgetsService - The custom widgets service
  * @internal
  */
-export const createPluginsContextConnector = (
-  pluginsService: PluginsService,
-): ContextConnector<CustomPluginsProviderProps> => {
-  const pluginsContext = {
-    pluginMap: pluginsService.getPlugins().value,
-    registerPlugin: pluginsService.registerPlugin.bind(pluginsService),
-    getPlugin: pluginsService.getPlugin.bind(pluginsService),
-  };
-  const propsObserver = new DataObserver<CustomPluginsProviderProps>({
-    context: pluginsContext,
+export const createCustomWidgetsContextConnector = (
+  customWidgetsService: CustomWidgetsService,
+): ContextConnector<CustomWidgetsProviderAdapterProps> => {
+  const { customWidgetsMap$ } = customWidgetsService;
+  const propsObserver = new DataObserver<CustomWidgetsProviderAdapterProps>();
+
+  customWidgetsMap$.subscribe({
+    next: (customWidgetsMap) => {
+      propsObserver.setValue({
+        context: {
+          customWidgetsMap: customWidgetsMap,
+        },
+      });
+    },
+    error: (error: Error) => {
+      propsObserver.setValue({
+        error,
+      });
+    },
   });
+
   return {
     propsObserver,
-    providerComponent: CustomPluginsProvider,
+    providerComponent: CustomWidgetsProviderAdapter,
   };
 };

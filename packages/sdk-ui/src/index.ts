@@ -11,7 +11,7 @@ export {
   isChartWidgetProps,
   isPivotTableWidgetProps,
   isTextWidgetProps,
-  isPluginWidgetProps,
+  isCustomWidgetProps,
 } from './widget-by-id/utils';
 export {
   type CartesianWidgetType,
@@ -51,13 +51,16 @@ export * from './areamap-chart';
 export * from './area-range-chart';
 export * from './sisense-context/custom-sisense-context-provider';
 export * from './theme-provider/custom-theme-provider';
-export * from './plugins-provider/custom-plugins-provider';
-export * from './plugins-provider/types';
-export { usePlugins } from './plugins-provider/plugins-provider';
+export * from './custom-widgets-provider/custom-widgets-provider-adapter';
+export * from './custom-widgets-provider/types';
+export { useCustomWidgets } from './custom-widgets-provider';
 export {
   extractDimensionsAndMeasures,
-  useExecutePluginQuery,
-} from './plugins-provider/use-execute-plugin-query';
+  useExecuteCustomWidgetQuery,
+  useExecuteCustomWidgetQueryInternal,
+  type ExecuteCustomWidgetQueryParams,
+  type CustomWidgetQueryState,
+} from './custom-widgets-provider';
 export { getThemeSettingsByOid } from './themes/theme-loader';
 export { getDefaultThemeSettings } from './theme-provider/default-theme-settings';
 export {

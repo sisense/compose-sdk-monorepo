@@ -10,11 +10,13 @@ import {
 import {
   ComponentAdapter,
   Dashboard as DashboardPreact,
+  type DashboardConfig,
+  type DashboardFiltersPanelConfig,
   type DashboardProps as DashboardPropsPreact,
 } from '@sisense/sdk-ui-preact';
 
 import {
-  createPluginsContextConnector,
+  createCustomWidgetsContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
@@ -22,20 +24,18 @@ import {
   template,
 } from '../../component-wrapper-helpers';
 import { translateToPreactDashboardProps } from '../../helpers/dashboard-props-preact-translator';
-import { PluginsService } from '../../services/plugins.service';
+import { CustomWidgetsService } from '../../services/custom-widgets.service';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
-import type { DashboardConfig } from '../../types';
 import { WidgetProps } from '../widgets/widget.component';
+
+// Re-exports related types
+export { DashboardConfig, DashboardFiltersPanelConfig };
 
 /**
  * Props of the {@link DashboardComponent}.
  */
 export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
-  /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
-   */
-  config?: DashboardConfig;
   /**
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
    */
@@ -179,17 +179,17 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
      */
     public themeService: ThemeService,
     /**
-     * Plugin service
+     * Custom widgets service
      *
      * @internal
      * @category Constructor
      */
-    public pluginService: PluginsService,
+    public customWidgetsService: CustomWidgetsService,
   ) {
     this.componentAdapter = new ComponentAdapter(DashboardPreact, [
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
-      createPluginsContextConnector(this.pluginService),
+      createCustomWidgetsContextConnector(this.customWidgetsService),
     ]);
   }
 

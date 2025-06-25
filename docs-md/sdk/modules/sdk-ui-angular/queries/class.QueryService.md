@@ -49,6 +49,33 @@ CSV query result
 
 ***
 
+### executeCustomWidgetQuery
+
+> **executeCustomWidgetQuery**(`params`): `Promise`\< \{
+  `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
+ } \>
+
+Executes a data query from custom widget component props.
+
+This method takes custom widget props (dataSource, dataOptions, filters, etc.)
+and executes the appropriate data query
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `params` | [`ExecuteCustomWidgetQueryParams`](../interfaces/interface.ExecuteCustomWidgetQueryParams.md) | Custom widget component props containing data source, data options, filters, etc. |
+
+#### Returns
+
+`Promise`\< \{
+  `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
+ } \>
+
+Promise resolving to query result with formatted data
+
+***
+
 ### executePivotQuery <Badge type="beta" text="Beta" />
 
 > **executePivotQuery**(`params`): `Promise`\< \{

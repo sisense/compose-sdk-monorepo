@@ -97,7 +97,7 @@ An example of using the `createComposedDashboard` to construct a composed dashbo
      [id]="widget.id"
      [widgetType]="widget.widgetType"
      [chartType]="widget.chartType"
-     [pluginType]="widget.pluginType"
+     [customWidgetType]="widget.customWidgetType"
      [dataSource]="widget.dataSource"
      [dataOptions]="widget.dataOptions"
      [filters]="widget.filters"

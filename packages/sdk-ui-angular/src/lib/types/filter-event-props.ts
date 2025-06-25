@@ -1,4 +1,4 @@
-import { Filter } from '@sisense/sdk-data';
+import { Filter, FilterRelations } from '@sisense/sdk-data';
 
 export type FilterChangeEvent = {
   /** Filter that was changed */
@@ -8,6 +8,11 @@ export type FilterChangeEvent = {
 export type FilterEditEvent = {
   /** Index of the filter level that triggers the edit event (in the case of a cascading filter) */
   levelIndex?: number;
+};
+
+export type FiltersPanelChangeEvent = {
+  /** The updated filters */
+  filters: Filter[] | FilterRelations;
 };
 
 /**
@@ -24,6 +29,11 @@ export type FilterEditEventHandler = (event: FilterEditEvent) => void;
  * Filter delete event handler.
  */
 export type FilterDeleteEventHandler = () => void;
+
+/**
+ * Filters panel change event handler.
+ */
+export type FiltersPanelChangeEventHandler = (event: FiltersPanelChangeEvent) => void;
 
 export interface BaseFilterTileEventProps {
   /**

@@ -3,13 +3,23 @@ import { useTabber, isTabberWidget, modifyLayout } from './use-tabber';
 import { TabberWidgetExtraProps, WidgetProps } from '@/props';
 
 describe('isTabberWidget', () => {
-  it('should return true for widget with pluginType "WidgetsTabber"', () => {
-    const widget: WidgetProps = { id: 'w1', pluginType: 'WidgetsTabber' } as WidgetProps;
+  it('should return true for widget with customWidgetType "WidgetsTabber"', () => {
+    const widget: WidgetProps = {
+      id: 'w1',
+      widgetType: 'custom',
+      customWidgetType: 'WidgetsTabber',
+      dataOptions: {},
+    };
     expect(isTabberWidget(widget)).toBe(true);
   });
 
-  it('should return false for widget with any other pluginType', () => {
-    const widget: WidgetProps = { id: 'w2', pluginType: 'OtherWidget' } as WidgetProps;
+  it('should return false for widget with any other customWidgetType', () => {
+    const widget: WidgetProps = {
+      id: 'w2',
+      widgetType: 'custom',
+      customWidgetType: 'OtherWidget',
+      dataOptions: {},
+    };
     expect(isTabberWidget(widget)).toBe(false);
   });
 });
@@ -97,8 +107,20 @@ describe('useTabber hook', () => {
   };
 
   const widgets: WidgetProps[] = [
-    { id: 'tabber1', pluginType: 'WidgetsTabber', name: 'Tabber Widget' } as unknown as WidgetProps,
-    { id: 'wX', pluginType: 'OtherWidget', name: 'Regular Widget' } as unknown as WidgetProps,
+    {
+      id: 'tabber1',
+      widgetType: 'custom',
+      customWidgetType: 'WidgetsTabber',
+      dataOptions: {},
+      title: 'Tabber Widget',
+    },
+    {
+      id: 'wX',
+      widgetType: 'custom',
+      customWidgetType: 'OtherWidget',
+      dataOptions: {},
+      title: 'Regular Widget',
+    },
   ];
 
   it('should augment tabber widgets with onTabSelected callback and selectedTab property', () => {
@@ -278,9 +300,27 @@ describe('useTabber hook', () => {
     };
 
     const widgetsWithTwoTabbers: WidgetProps[] = [
-      { id: 'tabber1', pluginType: 'WidgetsTabber', name: 'Tabber 1' } as unknown as WidgetProps,
-      { id: 'tabber2', pluginType: 'WidgetsTabber', name: 'Tabber 2' } as unknown as WidgetProps,
-      { id: 'wX', pluginType: 'OtherWidget', name: 'Regular Widget' } as unknown as WidgetProps,
+      {
+        id: 'tabber1',
+        widgetType: 'custom',
+        customWidgetType: 'WidgetsTabber',
+        dataOptions: {},
+        title: 'Tabber 1',
+      },
+      {
+        id: 'tabber2',
+        widgetType: 'custom',
+        customWidgetType: 'WidgetsTabber',
+        dataOptions: {},
+        title: 'Tabber 2',
+      },
+      {
+        id: 'wX',
+        widgetType: 'custom',
+        customWidgetType: 'OtherWidget',
+        dataOptions: {},
+        title: 'Regular Widget',
+      },
     ];
 
     const { result, rerender } = renderHook(
@@ -385,10 +425,18 @@ describe('useTabber hook', () => {
       widgets: [
         {
           id: 'tabber1',
-          pluginType: 'WidgetsTabber',
-          name: 'Tabber Widget',
-        } as unknown as WidgetProps,
-        { id: 'wX', pluginType: 'OtherWidget', name: 'Regular Widget' } as unknown as WidgetProps,
+          widgetType: 'custom',
+          customWidgetType: 'WidgetsTabber',
+          dataOptions: {},
+          title: 'Tabber Widget',
+        },
+        {
+          id: 'wX',
+          widgetType: 'custom',
+          customWidgetType: 'OtherWidget',
+          dataOptions: {},
+          title: 'Regular Widget',
+        },
       ],
     };
 
@@ -413,10 +461,18 @@ describe('useTabber hook', () => {
       widgets: [
         {
           id: 'tabber2',
-          pluginType: 'WidgetsTabber',
-          name: 'Tabber Widget',
-        } as unknown as WidgetProps,
-        { id: 'wX', pluginType: 'OtherWidget', name: 'Regular Widget' } as unknown as WidgetProps,
+          widgetType: 'custom',
+          customWidgetType: 'WidgetsTabber',
+          dataOptions: {},
+          title: 'Tabber Widget',
+        },
+        {
+          id: 'wX',
+          widgetType: 'custom',
+          customWidgetType: 'OtherWidget',
+          dataOptions: {},
+          title: 'Regular Widget',
+        },
       ],
     };
 

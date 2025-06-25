@@ -7,7 +7,7 @@ import { SisenseContext } from './sisense-context';
 import { I18nProvider } from '../translation/i18n-provider';
 import { SisenseQueryClientProvider } from './sisense-query-client-provider';
 import { isAuthTokenPending } from '@sisense/sdk-rest-client';
-import { PluginsProvider } from '@/plugins-provider';
+import { CustomWidgetsProvider } from '@/custom-widgets-provider';
 import { MenuProvider } from '@/common/components/menu/menu-provider';
 import { EmotionCacheProvider } from '@/emotion-cache-provider';
 
@@ -140,9 +140,9 @@ export const SisenseContextProvider: FunctionComponent<
           >
             <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
               <SisenseQueryClientProvider>
-                <PluginsProvider>
+                <CustomWidgetsProvider>
                   <MenuProvider>{children}</MenuProvider>
-                </PluginsProvider>
+                </CustomWidgetsProvider>
               </SisenseQueryClientProvider>
             </ThemeProvider>
           </SisenseContext.Provider>

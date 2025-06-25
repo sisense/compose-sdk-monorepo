@@ -7,6 +7,8 @@ import {
   ChartDataPointClickEvent,
   ChartDataPointContextMenuEvent,
   ChartDataPointsEvent,
+  WidgetDataPointClickEvent,
+  WidgetDataPointClickEventHandler,
 } from '../types';
 
 type SoftWidgetPropsPreact = SoftUnion<WidgetPropsPreact>;
@@ -28,7 +30,10 @@ export function translateToPreactWidgetProps(widgetProps: WidgetProps): WidgetPr
     onBeforeMenuOpen: beforeMenuOpen,
     onDataPointClick: dataPointClick
       ? (...[point, nativeEvent]: Arguments<SoftWidgetPropsPreact['onDataPointClick']>) =>
-          dataPointClick({ point, nativeEvent } as ChartDataPointClickEvent)
+          (dataPointClick as WidgetDataPointClickEventHandler)({
+            point,
+            nativeEvent,
+          } as WidgetDataPointClickEvent)
       : undefined,
     onDataPointContextMenu: dataPointContextMenu
       ? (...[point, nativeEvent]: Arguments<SoftWidgetPropsPreact['onDataPointContextMenu']>) =>

@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import deepMerge from 'ts-deepmerge';
-import type { DeepRequired } from 'ts-essentials';
 import { AnyObject } from '@/utils/utility-types';
 
 /**
@@ -12,11 +11,10 @@ import { AnyObject } from '@/utils/utility-types';
  */
 export const useDefaults = <Config extends AnyObject>(
   config: Config | undefined,
-  defaults: DeepRequired<Config>,
-): DeepRequired<Config> => {
+  defaults: Config,
+): Config => {
   return useMemo(
-    () =>
-      deepMerge.withOptions({ mergeArrays: false }, defaults, config || {}) as DeepRequired<Config>,
+    () => deepMerge.withOptions({ mergeArrays: false }, defaults, config || {}) as Config,
     [config, defaults],
   );
 };

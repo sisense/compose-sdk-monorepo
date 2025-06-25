@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.4.0] - 2025-06-24
+
+### Added
+- Add support for co-authored shared dashboards
+- Add an option to delete widget in edit dashboard layout mode
+- Add custom widget registration flow for Angular and Vue
+  - add `CustomWidget` component support
+  - allow providing framework specific components
+  - add guides for React, Angular and Vue
+- Add `FilterEditor` and `FiltersPanel` component support for Angular and Vue
+- Add `useGetFilterMembers` hook support for Angular and Vue
+- Add `useExecuteCustomWidgetQuery` hook support for Angular and Vue
+
+### Changed
+- Improve editable dashboard layout: add theming, extend configs, support distributing cells equally in a row
+- Extend `IndicatorChart` and `TextWidget` components with `onDataPointClick` callback
+
+
+## [2.3.1] - 2025-06-17
+
+### Changed
+- Improve SSO authentication to be compatible with SSO Router plugin
+
+
 ## [2.3.0] - 2025-06-11
 
 ### Added
@@ -9,13 +33,11 @@
 - Add `widgetsPanel.editMode` configuration to enable editable dashboard layout (alpha)
 - Add limited `Jump To Dashboard` add-on support (alpha)
 
-
 ### Changed
 - Fix `TabberWidget` error handling for unsupported old add-on versions
 - Refactor `WidgetById` component, apply dashboard-level palette to it
 - Improve AI chat: add Markdown support in messages
 - Enable UMD build output for `@sisense/sdk-ui` package
-
 
 
 ## [2.2.0] - 2025-05-27

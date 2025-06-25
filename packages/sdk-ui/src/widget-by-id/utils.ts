@@ -17,7 +17,7 @@ import {
   ChartProps,
   ChartWidgetProps,
   PivotTableWidgetProps,
-  PluginWidgetProps,
+  CustomWidgetProps,
   TextWidgetProps,
   CommonWidgetProps,
   WithCommonWidgetProps,
@@ -86,8 +86,8 @@ export function getFusionWidgetType(
   if (widgetType === 'pivot') {
     return 'pivot2';
   }
-  if (widgetType === 'plugin') {
-    return 'plugin';
+  if (widgetType === 'custom') {
+    return 'custom';
   }
   if (widgetType === 'text') {
     return 'richtexteditor';
@@ -100,8 +100,8 @@ export function getFusionWidgetType(
 export function getWidgetType(fusionWidgetType: FusionWidgetType): WidgetType {
   if (isPivotTableFusionWidget(fusionWidgetType)) {
     return 'pivot';
-  } else if (isPluginFusionWidget(fusionWidgetType)) {
-    return 'plugin';
+  } else if (isCustomWidgetFusionWidget(fusionWidgetType)) {
+    return 'custom';
   } else if (isTextFusionWidget(fusionWidgetType)) {
     return 'text';
   } else if (isChartFusionWidget(fusionWidgetType)) {
@@ -197,11 +197,11 @@ export function isTextWidgetDtoStyle(widgetStyle: WidgetStyle): widgetStyle is T
   return 'content' in widgetStyle && 'html' in widgetStyle.content;
 }
 
-export function isPluginFusionWidget(fusionWidgetType: FusionWidgetType) {
-  return fusionWidgetType === 'plugin';
+export function isCustomWidgetFusionWidget(fusionWidgetType: FusionWidgetType) {
+  return fusionWidgetType === 'custom';
 }
-export function isPluginWidget(widgetType: WidgetType) {
-  return widgetType === 'plugin';
+export function isCustomWidget(widgetType: WidgetType) {
+  return widgetType === 'custom';
 }
 
 export function isChartFusionWidget(fusionWidgetType: FusionWidgetType) {
@@ -238,16 +238,16 @@ export function isPivotTableWidgetProps(
 }
 
 /**
- * Type guard for checking if the widget props is for a plugin widget
+ * Type guard for checking if the widget props is for a custom widget
  *
  * @param widgetProps - The widget props to check.
- * @returns whether the widget props is for a plugin widget
+ * @returns whether the widget props is for a custom widget
  * @internal
  */
-export function isPluginWidgetProps(
+export function isCustomWidgetProps(
   widgetProps: CommonWidgetProps,
-): widgetProps is WithCommonWidgetProps<PluginWidgetProps, 'plugin'> {
-  return widgetProps.widgetType === 'plugin';
+): widgetProps is WithCommonWidgetProps<CustomWidgetProps, 'custom'> {
+  return widgetProps.widgetType === 'custom';
 }
 
 /**
@@ -266,8 +266,8 @@ export function isChartWidgetProps(
 export function getInternalWidgetType(widgetProps: CommonWidgetProps): WidgetTypeInternal {
   if (isPivotTableWidgetProps(widgetProps)) {
     return 'pivot';
-  } else if (isPluginWidgetProps(widgetProps)) {
-    return 'plugin';
+  } else if (isCustomWidgetProps(widgetProps)) {
+    return 'custom';
   } else if (isTextWidgetProps(widgetProps)) {
     return 'text';
   }

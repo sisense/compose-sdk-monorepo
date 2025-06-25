@@ -2,7 +2,7 @@ import {
   ChartDataOptionsInternal,
   IndicatorChartDataOptionsInternal,
 } from './chart-data-options/types';
-import { useEffect, useRef, type FunctionComponent } from 'react';
+import { useEffect, useRef, type FunctionComponent, type MouseEvent } from 'react';
 import { IndicatorChartData } from './chart-data/types';
 import {
   GaugeSpecificDesignOptions,
@@ -23,6 +23,13 @@ import {
   IndicatorRenderOptions,
   buildRenderOptionsFromLegacyOptions,
 } from './charts/indicator/indicator-render-options';
+import { IndicatorDataPoint, DataPointEntry } from './types';
+import { getDataPointMetadata } from './chart-options-processor/data-points';
+import {
+  applyFormatPlainText,
+  getCompleteNumberFormatConfig,
+} from './chart-options-processor/translations/number-format-config';
+import { IndicatorDataPointEventHandler } from './props';
 
 export type IndicatorLegacyChartOptions = ReturnType<typeof createIndicatorLegacyChartOptions>;
 
@@ -32,9 +39,64 @@ export interface IndicatorCanvasProps {
   dataOptions: IndicatorChartDataOptionsInternal;
   designOptions: IndicatorChartDesignOptions;
   onBeforeRender?: IndicatorOnBeforeRender;
+  onDataPointClick?: IndicatorDataPointEventHandler;
 }
 
 const defaultOnBeforeRender: IndicatorOnBeforeRender = (options) => options;
+
+// Helper function to create an IndicatorDataPoint
+const createIndicatorDataPoint = (
+  chartData: IndicatorChartData,
+  dataOptions: IndicatorChartDataOptionsInternal,
+): IndicatorDataPoint => {
+  const entries: NonNullable<IndicatorDataPoint['entries']> = {};
+
+  // Helper function to create display value
+  const createDisplayValue = (value: number | undefined, dataOption: any) => {
+    if (value === undefined) return undefined;
+    const formatConfig = getCompleteNumberFormatConfig(dataOption);
+    return applyFormatPlainText(formatConfig, value);
+  };
+
+  // Create entries for each available data option
+  if (dataOptions.value && dataOptions.value.length > 0) {
+    entries.value = {
+      ...getDataPointMetadata('value', dataOptions.value[0]),
+      value: chartData.value ?? 0,
+      displayValue: createDisplayValue(chartData.value, dataOptions.value[0]),
+    } as DataPointEntry;
+  }
+
+  if (
+    dataOptions.secondary &&
+    dataOptions.secondary.length > 0 &&
+    chartData.secondary !== undefined
+  ) {
+    entries.secondary = {
+      ...getDataPointMetadata('secondary', dataOptions.secondary[0]),
+      value: chartData.secondary,
+      displayValue: createDisplayValue(chartData.secondary, dataOptions.secondary[0]),
+    } as DataPointEntry;
+  }
+
+  if (dataOptions.min && dataOptions.min.length > 0 && chartData.min !== undefined) {
+    entries.min = {
+      ...getDataPointMetadata('min', dataOptions.min[0]),
+      value: chartData.min,
+      displayValue: createDisplayValue(chartData.min, dataOptions.min[0]),
+    } as DataPointEntry;
+  }
+
+  if (dataOptions.max && dataOptions.max.length > 0 && chartData.max !== undefined) {
+    entries.max = {
+      ...getDataPointMetadata('max', dataOptions.max[0]),
+      value: chartData.max,
+      displayValue: createDisplayValue(chartData.max, dataOptions.max[0]),
+    } as DataPointEntry;
+  }
+
+  return { entries };
+};
 
 /**
  * @internal
@@ -44,6 +106,7 @@ export const IndicatorCanvas: FunctionComponent<IndicatorCanvasProps> = ({
   dataOptions,
   designOptions,
   onBeforeRender = defaultOnBeforeRender,
+  onDataPointClick,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -94,6 +157,13 @@ export const IndicatorCanvas: FunctionComponent<IndicatorCanvasProps> = ({
     );
   }, [chartData, dataOptions, designOptions, themeSettings, onBeforeRender]);
 
+  const handleContainerClick = (event: MouseEvent<HTMLDivElement>) => {
+    if (onDataPointClick) {
+      const point = createIndicatorDataPoint(chartData, dataOptions);
+      onDataPointClick(point, event.nativeEvent);
+    }
+  };
+
   return (
     <div
       ref={containerRef}
@@ -104,8 +174,10 @@ export const IndicatorCanvas: FunctionComponent<IndicatorCanvasProps> = ({
         height: '100%',
         alignItems: 'center',
         backgroundColor: themeSettings?.chart?.backgroundColor,
+        cursor: onDataPointClick ? 'pointer' : 'default',
       }}
       aria-label="indicator-root"
+      onClick={handleContainerClick}
     >
       <canvas ref={canvasRef} />
     </div>

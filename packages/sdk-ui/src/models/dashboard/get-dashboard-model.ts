@@ -22,6 +22,14 @@ export interface GetDashboardModelOptions {
    * If not specified, the default value is `false`
    */
   includeFilters?: boolean;
+
+  /**
+   * Whether to load the dashboard in shared mode (co-authoring feature).
+   *
+   * @default false
+   * @internal
+   */
+  sharedMode?: boolean;
 }
 
 /**
@@ -42,7 +50,7 @@ export async function getDashboardModel(
   themeSettings?: CompleteThemeSettings,
   appSettings?: AppSettings,
 ): Promise<DashboardModel> {
-  const { includeWidgets, includeFilters } = options;
+  const { includeWidgets, includeFilters, sharedMode } = options;
   const api = new RestApi(http);
   const fields = ['oid', 'title', 'datasource', 'style', 'settings'];
 
@@ -57,7 +65,7 @@ export async function getDashboardModel(
     fields.push('filterRelations');
   }
 
-  const dashboard = await api.getDashboard(dashboardOid, { fields });
+  const dashboard = await api.getDashboard(dashboardOid, { fields, sharedMode });
 
   if (!dashboard) {
     throw new TranslatableError('errors.dashboardWithOidNotFound', { dashboardOid });
@@ -77,7 +85,7 @@ export async function getDashboardModel(
       widgets = fetchedWidgets.filter((widget): widget is WidgetDto => widget !== undefined);
     } else {
       // Fetch all widgets at once
-      widgets = (await api.getDashboardWidgets(dashboardOid)) || [];
+      widgets = (await api.getDashboardWidgets(dashboardOid, sharedMode)) || [];
     }
 
     dashboard.widgets = widgets;

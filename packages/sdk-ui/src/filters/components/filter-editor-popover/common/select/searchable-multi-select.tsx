@@ -113,6 +113,7 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
       setOpen(true);
     }
   }, [open, onClose]);
+
   return (
     <ClickAwayListener onClickAway={onClose}>
       <div style={{ width }}>
@@ -152,7 +153,12 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
             />
           )}
         </div>
-        <Popper open={open} anchorEl={selectElementRef.current} style={{ maxHeight: 300 }}>
+        <Popper
+          open={open}
+          anchorEl={selectElementRef.current}
+          style={{ maxHeight: 300 }}
+          preventClickPropagation={true}
+        >
           <ScrollWrapper onScroll={onListScroll}>
             <Content
               theme={themeSettings}

@@ -9,6 +9,7 @@ import type {
   ChartDataPointsEventHandler,
   DataPointEventHandler,
   DataPointsEventHandler,
+  IndicatorDataPointEventHandler,
   ScatterDataPointEventHandler,
   ScatterDataPointsEventHandler,
   ScattermapDataPointEventHandler,
@@ -148,6 +149,13 @@ export interface IndicatorChartEventProps extends BaseChartEventProps {
    * @category Callbacks
    */
   beforeRender?: IndicatorBeforeRenderHandler;
+  /**
+   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.onDataPointClick}
+   *
+   * @category Callbacks
+   * @internal
+   */
+  dataPointClick?: IndicatorDataPointEventHandler;
 }
 
 export interface ChartEventProps extends BaseChartEventProps {

@@ -3,7 +3,7 @@ import { setupServer } from 'msw/node';
 import * as mockGlobals from '@/__mocks__/data/mock-globals.json';
 import * as mockPalettes from '@/__mocks__/data/mock-palettes.json';
 
-export const mockUrl = 'http://fake-url';
+export const mockUrl = 'http://fake-url/';
 export const mockToken = 'fake-token';
 export const mockDashboardId = 'fake-dashboard-id';
 export const mockWidgetId = 'fake-widget-id';

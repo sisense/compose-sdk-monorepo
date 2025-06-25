@@ -84,7 +84,7 @@ describe('helpers', () => {
   describe('getHttpClient', () => {
     const fakeUsername = 'username';
     const fakePassword = 'password';
-    const fakeDeploymentUrl = '10.0.0.1';
+    const fakeDeploymentUrl = 'https://10.0.0.1';
 
     it('should return HttpClient', () => {
       const httpClient = getHttpClient({

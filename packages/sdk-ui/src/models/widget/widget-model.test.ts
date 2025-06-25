@@ -48,18 +48,18 @@ describe('WidgetModel', () => {
       });
     });
 
-    it('should create plugin widget when unsupported widget type', () => {
+    it('should create custom widget when unsupported widget type', () => {
       const unsupportedWidgetDto: WidgetDto = {
         ...mockWidgetDto,
         type: 'unsupportedType' as FusionWidgetType,
       };
 
-      const widgetPlugin = widgetModelTranslator.fromWidgetDto(unsupportedWidgetDto);
+      const widgetCustom = widgetModelTranslator.fromWidgetDto(unsupportedWidgetDto);
 
-      expect(widgetPlugin.widgetType).equals('plugin');
-      expect(widgetPlugin.pluginType).equals(unsupportedWidgetDto.type);
-      expect(widgetPlugin.dataOptions).toBeDefined();
-      expect(widgetPlugin.styleOptions).toMatchObject(unsupportedWidgetDto.style);
+      expect(widgetCustom.widgetType).equals('custom');
+      expect(widgetCustom.customWidgetType).equals(unsupportedWidgetDto.type);
+      expect(widgetCustom.dataOptions).toBeDefined();
+      expect(widgetCustom.styleOptions).toMatchObject(unsupportedWidgetDto.style);
     });
   });
 });

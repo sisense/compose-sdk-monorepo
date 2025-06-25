@@ -2,7 +2,7 @@ import { getAuthenticator } from './authenticator.js';
 describe('getAuthenticator', () => {
   const fakeUsername = 'username';
   const fakePassword = 'password';
-  const fakeDeploymentUrl = '10.0.0.1';
+  const fakeDeploymentUrl = 'https://10.0.0.1';
   const fakeToken = 'token';
   const fakeWat = 'wat';
 

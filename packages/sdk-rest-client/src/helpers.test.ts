@@ -93,7 +93,7 @@ describe('appendHeaders', () => {
 
       const resultUrl = addQueryParamsToUrl(url, queryParams);
 
-      const expectedResult = 'https://example.com?param1=value1&param2=value2';
+      const expectedResult = 'https://example.com/?param1=value1&param2=value2';
       expect(resultUrl).toBe(expectedResult);
     });
 
@@ -107,7 +107,7 @@ describe('appendHeaders', () => {
       const resultUrl = addQueryParamsToUrl(url, queryParams);
 
       const expectedResult =
-        'https://example.com?existingParam=existingValue&param1=value1&param2=value2';
+        'https://example.com/?existingParam=existingValue&param1=value1&param2=value2';
       expect(resultUrl).toBe(expectedResult);
     });
 

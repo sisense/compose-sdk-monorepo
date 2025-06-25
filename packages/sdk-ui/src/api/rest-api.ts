@@ -25,6 +25,7 @@ type GetDashboardsOptions = {
 
 type GetDashboardOptions = {
   fields?: string[];
+  sharedMode?: boolean;
 };
 
 export class RestApi {
@@ -75,12 +76,12 @@ export class RestApi {
    * Get a specific dashboard
    */
   public getDashboard = (dashboardOid: string, options: GetDashboardOptions = {}) => {
-    const { fields } = options;
+    const { fields, sharedMode } = options;
     // Note: do not use `expand` query parameter cause it is restricted for all non-admin users.
     const queryParams = new URLSearchParams({
       ...(fields?.length && { fields: fields?.join(',') }),
+      ...(sharedMode && { sharedMode: 'true' }),
     }).toString();
-
     return this.httpClient
       .get<DashboardDto>(`api/v1/dashboards/${dashboardOid}?${queryParams}`)
       .catch(() => {
@@ -93,9 +94,13 @@ export class RestApi {
   /**
    * Get all widgets of a specific dashboard
    */
-  public getDashboardWidgets = (dashboardOid: string) => {
+  public getDashboardWidgets = (dashboardOid: string, sharedMode?: boolean) => {
+    const queryParams = new URLSearchParams({
+      ...(sharedMode && { sharedMode: 'true' }),
+    }).toString();
+
     return this.httpClient
-      .get<WidgetDto[]>(`api/v1/dashboards/${dashboardOid}/widgets`)
+      .get<WidgetDto[]>(`api/v1/dashboards/${dashboardOid}/widgets?${queryParams}`)
       .catch(() => {
         // when error is encountered, API may return only status code 422 without informative error message
         // to remedy, catch error and throw a more informative error message
@@ -106,9 +111,13 @@ export class RestApi {
   /**
    * Get a specific widget from a dashboard
    */
-  public getWidget = (widgetOid: string, dashboardOid: string) => {
+  public getWidget = (widgetOid: string, dashboardOid: string, sharedMode?: boolean) => {
+    const queryParams = new URLSearchParams({
+      ...(sharedMode && { sharedMode: 'true' }),
+    }).toString();
+
     return this.httpClient
-      .get<WidgetDto>(`api/v1/dashboards/${dashboardOid}/widgets/${widgetOid}`)
+      .get<WidgetDto>(`api/v1/dashboards/${dashboardOid}/widgets/${widgetOid}?${queryParams}`)
       .catch(() => {
         // when error is encountered, API may return only status code 422 without informative error message
         // to remedy, catch error and throw a more informative error message
@@ -186,15 +195,54 @@ export class RestApi {
   /**
    * Partially update a dashboard
    */
-  public patchDashboard = (dashboardOid: string, dashboard: Partial<DashboardDto>) => {
-    return this.httpClient.patch<DashboardDto>(`api/v1/dashboards/${dashboardOid}`, dashboard);
+  public patchDashboard = (
+    dashboardOid: string,
+    dashboard: Partial<DashboardDto>,
+    sharedMode?: boolean,
+  ) => {
+    const queryParams = new URLSearchParams({
+      ...(sharedMode && { sharedMode: 'true' }),
+    }).toString();
+
+    return this.httpClient.patch<DashboardDto>(
+      `api/v1/dashboards/${dashboardOid}?${queryParams}`,
+      dashboard,
+    );
   };
 
   /**
    * Add widget to a dashboard
    */
-  public addWidgetToDashboard = (dashboardOid: string, widgetDto: WidgetDto) => {
-    return this.httpClient.post<WidgetDto>(`api/v1/dashboards/${dashboardOid}/widgets`, widgetDto);
+  public addWidgetToDashboard = (
+    dashboardOid: string,
+    widgetDto: WidgetDto,
+    sharedMode?: boolean,
+  ) => {
+    const queryParams = new URLSearchParams({
+      ...(sharedMode && { sharedMode: 'true' }),
+    }).toString();
+
+    return this.httpClient.post<WidgetDto>(
+      `api/v1/dashboards/${dashboardOid}/widgets?${queryParams}`,
+      widgetDto,
+    );
+  };
+
+  /**
+   * Delete widget from a dashboard
+   */
+  public deleteWidgetFromDashboard = (
+    dashboardOid: string,
+    widgetOid: string,
+    sharedMode?: boolean,
+  ) => {
+    const queryParams = new URLSearchParams({
+      ...(sharedMode && { sharedMode: 'true' }),
+    }).toString();
+
+    return this.httpClient.delete(
+      `api/v1/dashboards/${dashboardOid}/widgets/${widgetOid}?${queryParams}`,
+    );
   };
 
   /**

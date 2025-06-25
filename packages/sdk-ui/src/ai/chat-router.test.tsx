@@ -10,7 +10,7 @@ import { ChatConfigProvider } from './chat-config';
 import { Chat, ChatContext } from './api/types';
 
 const setupMockDataTopicsApi = (contexts: ChatContext[]) => {
-  server.use(http.get('*/api/datasources', () => HttpResponse.json(contexts)));
+  server.use(http.get('*/api/datasources/**', () => HttpResponse.json(contexts)));
 };
 
 const setupMockChatsApi = (chatResponse: Chat) => {

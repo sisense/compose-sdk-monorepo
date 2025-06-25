@@ -47,11 +47,11 @@ React filter tile components
 
 - [CriteriaFilterTile](filter-tiles/function.CriteriaFilterTile.md)
 - [DateRangeFilterTile](filter-tiles/function.DateRangeFilterTile.md)
-- [FiltersPanel](filter-tiles/function.FiltersPanel.md) <Badge type="alpha" text="Alpha" />
+- [FiltersPanel](filter-tiles/function.FiltersPanel.md)
 - [FilterTile](filter-tiles/function.FilterTile.md) - Facade component rendering a filter tile based on filter type
 - [MemberFilterTile](filter-tiles/function.MemberFilterTile.md)
 - [RelativeDateFilterTile](filter-tiles/function.RelativeDateFilterTile.md)
-- [useGetFilterMembers](filter-tiles/function.useGetFilterMembers.md) <Badge type="beta" text="Beta" /> - Hook to fetch members of a filter
+- [useGetFilterMembers](filter-tiles/function.useGetFilterMembers.md) - Hook to fetch members of a filter
 
 ## Contexts
 
@@ -66,6 +66,7 @@ React components and hooks for working with queries
 
 - [ExecuteQuery](queries/function.ExecuteQuery.md)
 - [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
+- [useExecuteCustomWidgetQuery](queries/function.useExecuteCustomWidgetQuery.md)
 - [useExecutePivotQuery](queries/function.useExecutePivotQuery.md) <Badge type="beta" text="Beta" />
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 - [useQueryCache](queries/function.useQueryCache.md) <Badge type="alpha" text="Alpha" />
@@ -77,10 +78,10 @@ React components and utilities for working with dashboards
 - [ChartWidget](dashboards/function.ChartWidget.md)
 - [Dashboard](dashboards/function.Dashboard.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
-- [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md) <Badge type="alpha" text="Alpha" />
+- [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md)
 - [PivotTableWidget](dashboards/function.PivotTableWidget.md) <Badge type="beta" text="Beta" />
 - [useComposedDashboard](dashboards/function.useComposedDashboard.md)
-- [useExecutePluginQuery](dashboards/function.useExecutePluginQuery.md) <Badge type="alpha" text="Alpha" />
+- [useCustomWidgets](dashboards/function.useCustomWidgets.md)
 - [Widget](dashboards/function.Widget.md)
 
 ## Fusion Assets

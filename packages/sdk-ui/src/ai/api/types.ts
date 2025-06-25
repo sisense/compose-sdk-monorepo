@@ -87,7 +87,7 @@ export interface NlqResponseData extends ExpandedQueryModel {
   /** The response message for the chat  */
   userMsg: string;
   /** @internal */
-  clarification: string;
+  clarification?: string;
 }
 export interface NlqResponse {
   data: NlqResponseData;

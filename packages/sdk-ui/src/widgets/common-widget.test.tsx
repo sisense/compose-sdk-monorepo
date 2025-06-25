@@ -1,11 +1,10 @@
 import { render } from '@testing-library/react';
 import { CommonWidget } from './common-widget';
+import type { WidgetProps, CommonWidgetProps } from '@/props';
 import { ChartWidget } from '@/widgets/chart-widget';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { CommonWidgetProps, WidgetProps } from '@/props';
-import { measureFactory } from '@sisense/sdk-data';
 
-// Mock child widgets
+// Mock child widgets:
 vi.mock('@/widgets/pivot-table-widget', () => ({
   PivotTableWidget: vi.fn(() => <div>Mocked PivotTableWidget</div>),
 }));
@@ -18,47 +17,62 @@ vi.mock('@/widgets/text-widget', () => ({
   TextWidget: vi.fn(() => <div>Mocked TextWidget</div>),
 }));
 
-vi.mock('@/widgets/plugin-widget', () => ({
-  PluginWidget: vi.fn(() => <div>Mocked PluginWidget</div>),
+vi.mock('@/widgets/custom-widget', () => ({
+  CustomWidget: vi.fn(() => <div>Mocked CustomWidget</div>),
 }));
 
 describe('CommonWidget Component', () => {
-  const pluginWidgetProps: WidgetProps = {
-    id: 'widget-plugin',
-    widgetType: 'plugin',
-    pluginType: 'test-plugin',
-    title: 'Test Plugin',
+  const customWidgetProps: WidgetProps = {
+    id: 'widget-custom',
+    widgetType: 'custom',
+    customWidgetType: 'test-custom-widget',
+    title: 'Test Custom Widget',
     dataOptions: {},
+    dataSource: DM.DataSource,
+  };
+
+  const chartWidgetProps: WidgetProps = {
+    id: 'widget-chart',
+    widgetType: 'chart',
+    chartType: 'line',
+    title: 'Test Chart',
+    dataOptions: {
+      category: [DM.Commerce.Date.Years],
+      value: [DM.Commerce.Revenue],
+    },
+    dataSource: DM.DataSource,
   };
 
   const pivotTableWidgetProps: WidgetProps = {
     id: 'widget-pivot',
     widgetType: 'pivot',
-    dataOptions: {},
+    title: 'Test Pivot Table',
+    dataOptions: {
+      rows: [DM.Commerce.Date.Years],
+      columns: [DM.Commerce.Gender],
+      values: [DM.Commerce.Revenue],
+    },
+    dataSource: DM.DataSource,
   };
 
   const textWidgetProps: WidgetProps = {
     id: 'widget-text',
     widgetType: 'text',
     styleOptions: {
-      html: 'ololo',
-      vAlign: 'valign-middle',
+      html: 'Test text content',
+      vAlign: 'valign-middle' as const,
       bgColor: 'white',
     },
   };
 
-  const chartWidgetProps: WidgetProps = {
-    id: 'widget-chart',
-    widgetType: 'chart',
-    chartType: 'indicator',
-    dataOptions: {
-      value: [measureFactory.sum(DM.Commerce.Cost)],
-    },
-  };
+  it('renders CustomWidget for custom widget props', () => {
+    const { getByText } = render(<CommonWidget {...customWidgetProps} />);
+    expect(getByText('Mocked CustomWidget')).toBeInTheDocument();
+  });
 
-  it('renders PluginWidget for plugin widget props', () => {
-    const { getByText } = render(<CommonWidget {...pluginWidgetProps} />);
-    expect(getByText('Mocked PluginWidget')).toBeInTheDocument();
+  it('renders ChartWidget for chart widget props', () => {
+    const { getByText } = render(<CommonWidget {...chartWidgetProps} />);
+    expect(getByText('Mocked ChartWidget')).toBeInTheDocument();
   });
 
   it('renders PivotTableWidget for pivot table widget props', () => {

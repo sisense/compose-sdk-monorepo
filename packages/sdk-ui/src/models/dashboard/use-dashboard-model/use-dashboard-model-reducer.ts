@@ -16,6 +16,7 @@ export type UseDashboardModelState = DashboardModel | null;
  */
 export enum UseDashboardModelActionTypeInternal {
   DASHBOARD_INIT = 'DASHBOARD.INIT',
+  UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE = 'UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE',
 }
 
 /**
@@ -27,6 +28,7 @@ export enum UseDashboardModelActionType {
   FILTERS_UPDATE = 'FILTERS.UPDATE',
   ADD_WIDGET = 'WIDGETS.ADD',
   WIDGETS_PANEL_LAYOUT_UPDATE = 'WIDGETS_PANEL_LAYOUT.UPDATE',
+  WIDGETS_DELETE = 'WIDGETS.DELETE',
 }
 
 /**
@@ -39,6 +41,13 @@ export type UseDashboardModelInternalAction =
   | {
       type: UseDashboardModelActionTypeInternal.DASHBOARD_INIT;
       payload: DashboardModel;
+    }
+  | {
+      type: UseDashboardModelActionTypeInternal.UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE;
+      payload: {
+        widgetsPanel: WidgetsPanelLayout;
+        widgets: string[];
+      };
     };
 
 /**
@@ -49,7 +58,8 @@ export type UseDashboardModelInternalAction =
 export type UseDashboardModelAction =
   | UseDashboardModelFilterUpdateAction
   | UseDashboardModelAddWidgetAction
-  | UseDashboardModelLayoutUpdateAction;
+  | UseDashboardModelLayoutUpdateAction
+  | UseDashboardWidgetsDeleteAction;
 
 /**
  * Filter update actions for the dashboard model state used in {@link useDashboardModel}.
@@ -82,6 +92,16 @@ export type UseDashboardModelLayoutUpdateAction = {
 };
 
 /**
+ * Layout update action for the dashboard model state used in {@link useDashboardModel}.
+ *
+ * @internal
+ */
+export type UseDashboardWidgetsDeleteAction = {
+  type: UseDashboardModelActionType.WIDGETS_DELETE;
+  payload: string[];
+};
+
+/**
  * Reducer for the dashboard model state used in {@link useDashboardModel}.
  *
  * @param state
@@ -110,6 +130,24 @@ export function dashboardReducer(
           ...(state as DashboardModel).layoutOptions,
           widgetsPanel: action.payload,
         },
+      };
+    case UseDashboardModelActionType.WIDGETS_DELETE:
+      return {
+        ...(state as DashboardModel),
+        widgets: (state as DashboardModel).widgets.filter(
+          (widget) => !action.payload.includes(widget.oid),
+        ),
+      };
+    case UseDashboardModelActionTypeInternal.UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE:
+      return {
+        ...(state as DashboardModel),
+        layoutOptions: {
+          ...(state as DashboardModel).layoutOptions,
+          widgetsPanel: action.payload.widgetsPanel,
+        },
+        widgets: (state as DashboardModel).widgets.filter(
+          (widget) => !action.payload.widgets.includes(widget.oid),
+        ),
       };
     case UseDashboardModelActionType.ADD_WIDGET: {
       const widgets = [...(state as DashboardModel).widgets, action.payload];
@@ -180,29 +218,57 @@ export async function persistDashboardModelMiddleware(
   dashboardOid: string | undefined,
   action: UseDashboardModelInternalAction,
   restApi: RestApi,
+  sharedMode: boolean,
 ): Promise<UseDashboardModelInternalAction> {
   if (!dashboardOid) throw new Error('Dashboard model is not initialized');
 
-  if (action.type === UseDashboardModelActionType.FILTERS_UPDATE) {
-    await restApi.patchDashboard(dashboardOid, translateFiltersAndRelationsToDto(action.payload));
-  } else if (action.type === UseDashboardModelActionType.ADD_WIDGET) {
-    const widgetDto = await restApi.addWidgetToDashboard(
-      dashboardOid,
-      widgetModelTranslator.toWidgetDto(action.payload),
-    );
+  switch (action.type) {
+    case UseDashboardModelActionType.FILTERS_UPDATE:
+      await restApi.patchDashboard(dashboardOid, translateFiltersAndRelationsToDto(action.payload));
+      break;
+    case UseDashboardModelActionType.ADD_WIDGET: {
+      const widgetDto = await restApi.addWidgetToDashboard(
+        dashboardOid,
+        widgetModelTranslator.toWidgetDto(action.payload),
+        sharedMode,
+      );
 
-    if (!widgetDto) throw new Error('Failed to add widget to dashboard');
-    return {
-      type: UseDashboardModelActionType.ADD_WIDGET,
-      payload: widgetModelTranslator.fromWidgetDto(widgetDto),
-    };
-  } else if (
-    action.type === UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE &&
-    action.payload
-  ) {
-    await restApi.patchDashboard(dashboardOid, {
-      layout: layoutToLayoutDto(action.payload),
-    });
+      if (!widgetDto) throw new Error('Failed to add widget to dashboard');
+      return {
+        type: UseDashboardModelActionType.ADD_WIDGET,
+        payload: widgetModelTranslator.fromWidgetDto(widgetDto),
+      };
+    }
+    case UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE:
+      await restApi.patchDashboard(
+        dashboardOid,
+        {
+          layout: layoutToLayoutDto(action.payload),
+        },
+        sharedMode,
+      );
+      break;
+    case UseDashboardModelActionType.WIDGETS_DELETE:
+      await Promise.all(
+        action.payload.map((widgetOid) =>
+          restApi.deleteWidgetFromDashboard(dashboardOid, widgetOid, sharedMode),
+        ),
+      );
+      break;
+    case UseDashboardModelActionTypeInternal.UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE:
+      await restApi.patchDashboard(
+        dashboardOid,
+        {
+          layout: layoutToLayoutDto(action.payload.widgetsPanel),
+        },
+        sharedMode,
+      );
+      await Promise.all(
+        action.payload.widgets.map((widgetOid) =>
+          restApi.deleteWidgetFromDashboard(dashboardOid, widgetOid, sharedMode),
+        ),
+      );
+      break;
   }
 
   return action;

@@ -52,6 +52,7 @@ export function useDashboardModelInternal({
   includeWidgets,
   includeFilters,
   persist = true,
+  sharedMode = false,
 }: UseDashboardModelParams): UseDashboardModelResult {
   // Pure data fetching
   const {
@@ -63,12 +64,14 @@ export function useDashboardModelInternal({
     dashboardOid,
     includeWidgets,
     includeFilters,
+    sharedMode,
   });
 
   // Persistence layer
   const { dashboard, dispatchChanges } = useDashboardPersistence({
     dashboard: fetchedDashboard ?? null,
     persist,
+    sharedMode,
   });
 
   return {

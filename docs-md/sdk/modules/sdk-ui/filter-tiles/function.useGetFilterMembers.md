@@ -2,7 +2,7 @@
 title: useGetFilterMembers
 ---
 
-# Function useGetFilterMembers <Badge type="beta" text="Beta" />
+# Function useGetFilterMembers
 
 > **useGetFilterMembers**(...`args`): [`GetFilterMembersResult`](../type-aliases/type-alias.GetFilterMembersResult.md)
 

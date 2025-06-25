@@ -54,6 +54,7 @@ const MenuTreeRootProvider: React.FC<MenuProviderProps> = ({ children, onBeforeM
         position={menuOptions?.position}
         itemSections={menuOptions?.itemSections}
         closeContextMenu={onMenuClose}
+        alignment={menuOptions?.alignment}
       />
       {children}
     </MenuContext.Provider>

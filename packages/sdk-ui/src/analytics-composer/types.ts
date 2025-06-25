@@ -14,7 +14,7 @@ type ExtraWidgetCodeProps = {
   componentString: string;
   extraImportsString: string;
   idString?: string;
-  widgetTypeString?: 'chart' | 'pivot' | 'text' | 'plugin';
+  widgetTypeString?: 'chart' | 'pivot' | 'text' | 'custom';
 };
 
 /** @internal */
@@ -288,7 +288,7 @@ export type TemplateKeyMapByWidgetType = {
   chart: CodeTemplateKey;
   pivot: CodeTemplateKey;
   text?: CodeTemplateKey;
-  plugin?: CodeTemplateKey;
+  custom?: CodeTemplateKey;
 };
 
 /** TYPE FOR DASHBOARD CODE */

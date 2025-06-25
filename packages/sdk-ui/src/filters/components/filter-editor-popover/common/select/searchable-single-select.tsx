@@ -130,7 +130,7 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
             />
           )}
         </div>
-        <Popper open={open} anchorEl={selectElementRef.current}>
+        <Popper open={open} anchorEl={selectElementRef.current} preventClickPropagation={true}>
           <ScrollWrapper onScroll={onListScroll}>
             <Content
               theme={themeSettings}

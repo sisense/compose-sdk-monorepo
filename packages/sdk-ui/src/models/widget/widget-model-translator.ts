@@ -12,7 +12,7 @@ import {
   isChartFusionWidget,
   isChartWidgetProps,
   isPivotWidget,
-  isPluginWidget,
+  isCustomWidget,
   isSupportedWidgetType,
   isTableWidgetModel,
   isTextWidget,
@@ -23,7 +23,7 @@ import {
   WidgetProps,
   PivotTableProps,
   PivotTableWidgetProps,
-  PluginWidgetProps,
+  CustomWidgetProps,
   TableProps,
   TableWidgetProps,
   TextWidgetProps,
@@ -58,7 +58,7 @@ import {
   CompleteThemeSettings,
   GenericDataOptions,
   PivotTableWidgetStyleOptions,
-  PluginWidgetStyleOptions,
+  CustomWidgetStyleOptions,
   TableStyleOptions,
   TextWidgetStyleOptions,
 } from '@/types.js';
@@ -377,20 +377,20 @@ export function toTextWidgetProps(widgetModel: WidgetModel): TextWidgetProps {
 }
 
 /**
- * Translates a {@link WidgetModel} to the props for rendering a plugin widget.
+ * Translates a {@link WidgetModel} to the props for rendering a custom widget.
  *
  * @internal
  */
-export function toPluginWidgetProps(widgetModel: WidgetModel): PluginWidgetProps {
-  if (!isPluginWidget(widgetModel.widgetType)) {
-    throw new TranslatableError('errors.widgetModel.onlyPluginWidgetSupported', {
-      methodName: 'toPluginWidgetProps',
+export function toCustomWidgetProps(widgetModel: WidgetModel): CustomWidgetProps {
+  if (!isCustomWidget(widgetModel.widgetType)) {
+    throw new TranslatableError('errors.widgetModel.onlyCustomWidgetSupported', {
+      methodName: 'toCustomWidgetProps',
     });
   }
   return {
-    pluginType: widgetModel.pluginType,
+    customWidgetType: widgetModel.customWidgetType,
     dataOptions: widgetModel.dataOptions as GenericDataOptions,
-    styleOptions: widgetModel.styleOptions as PluginWidgetStyleOptions,
+    styleOptions: widgetModel.styleOptions as CustomWidgetStyleOptions,
     dataSource: widgetModel.dataSource,
     filters: widgetModel.filters,
     highlights: widgetModel.highlights,
@@ -411,8 +411,8 @@ export function toCommonWidgetProps(widgetModel: WidgetModel): CommonWidgetProps
     return { widgetType: 'pivot', ...toPivotTableWidgetProps(widgetModel) };
   } else if (isTextWidget(widgetType)) {
     return { widgetType: 'text', ...toTextWidgetProps(widgetModel) };
-  } else if (isPluginWidget(widgetType)) {
-    return { widgetType: 'plugin', ...toPluginWidgetProps(widgetModel) };
+  } else if (isCustomWidget(widgetType)) {
+    return { widgetType: 'custom', ...toCustomWidgetProps(widgetModel) };
   } else {
     return { widgetType: 'chart', ...toChartWidgetProps(widgetModel) };
   }
@@ -437,8 +437,8 @@ const DEFAULT_WIDGET_MODEL: WidgetModel = {
   title: '',
   dataSource: '',
   description: '',
-  widgetType: 'plugin',
-  pluginType: '',
+  widgetType: 'custom',
+  customWidgetType: '',
   dataOptions: {},
   styleOptions: {},
   drilldownOptions: {},
@@ -462,15 +462,15 @@ export function fromWidgetDto(
   themeSettings?: CompleteThemeSettings,
   appSettings?: AppSettings,
 ): WidgetModel {
-  let fusionWidgetType, pluginType, dataOptions, styleOptions;
+  let fusionWidgetType, customWidgetType, dataOptions, styleOptions;
 
   const panels = attachDataSourceToPanels(widgetDto.metadata.panels, widgetDto.datasource);
 
   fusionWidgetType = widgetDto.type;
   if (!isSupportedWidgetType(fusionWidgetType)) {
-    // unknown types are assumped to be plugins
-    pluginType = fusionWidgetType;
-    fusionWidgetType = 'plugin' as const;
+    // unknown types are assumed to be custom widgets
+    customWidgetType = fusionWidgetType;
+    fusionWidgetType = 'custom' as const;
     dataOptions = createDataOptionsFromPanels(panels, themeSettings?.palette.variantColors ?? []);
     const { widgetDesign, ...rest } = widgetDto.style;
     styleOptions = { ...rest, ...(widgetDesign ? getFlattenWidgetDesign(widgetDesign) : {}) };
@@ -495,7 +495,7 @@ export function fromWidgetDto(
     );
   }
 
-  // does not handle plugin widget type
+  // does not handle custom widget type
   const drilldownOptions = extractDrilldownOptions(fusionWidgetType, panels);
   const filters = extractWidgetFilters(panels);
   const chartType = isChartFusionWidget(fusionWidgetType)
@@ -510,7 +510,7 @@ export function fromWidgetDto(
     description: widgetDto.desc || '',
     widgetType: getWidgetType(fusionWidgetType),
     chartType: chartType,
-    pluginType: pluginType || '',
+    customWidgetType: customWidgetType || '',
     dataOptions: dataOptions || {},
     styleOptions: styleOptions || {},
     drilldownOptions: drilldownOptions,
@@ -636,7 +636,7 @@ export function toWidgetDto(
       name: 'columns',
       items,
     });
-    // tablewidgetagg is now a disabled plugin by default, and tablewidget should be fully compatible
+    // tablewidgetagg is now a disabled custom widget by default, and tablewidget should be fully compatible
     fusionWidgetType = 'tablewidget';
   } else if (isIndicator(chartType)) {
     ['value', 'min', 'max', 'secondary'].forEach((panelName) => {
