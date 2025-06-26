@@ -101,7 +101,7 @@ export class SsoAuthenticator extends BaseAuthenticator {
 
     // Workaround: if the loginUrl looks like a relative URL to ssoRouter plugin, prepend the Sisense URL
     const redirectUrl =
-      result.loginUrl && result.loginUrl?.search(/^\/api\/v\d+\/[^/]+\/login$/) !== -1
+      result.loginUrl && result.loginUrl?.search(/^(\/[^/]+)*?\/api\/v\d+\/\w+\/login[/]?$/) !== -1
         ? addPathnameToUrl(this.url, result.loginUrl)
         : result.loginUrl || '';
 

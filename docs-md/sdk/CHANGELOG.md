@@ -1,9 +1,13 @@
 # Changelog
 
+## [2.4.1] - 2025-06-25
+
+### Changed
+- Improve SSO Router check to include cases where proxyUrl is used
+
 ## [2.4.0] - 2025-06-24
 
 ### Added
-- Add support for co-authored shared dashboards
 - Add an option to delete widget in edit dashboard layout mode
 - Add custom widget registration flow for Angular and Vue
   - add `CustomWidget` component support
