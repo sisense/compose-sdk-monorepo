@@ -40,7 +40,11 @@
                 "elements": [
                   {
                     "widgetid": "682b70452d7f147f883dd0f7",
-                    "height": "172px"
+                    "height": "172px",
+                    "minWidth": 100,
+                    "maxWidth": 1000,
+                    "minHeight": 100,
+                    "maxHeight": 1000
                   }
                 ]
               }
@@ -53,7 +57,11 @@
                 "elements": [
                   {
                     "widgetid": "682b70452d7f147f883dd0f9",
-                    "height": "172px"
+                    "height": "172px",
+                    "minWidth": 100,
+                    "maxWidth": 1000,
+                    "minHeight": 100,
+                    "maxHeight": 1000
                   }
                 ]
               }
@@ -66,7 +74,11 @@
                 "elements": [
                   {
                     "widgetid": "682b70452d7f147f883dd0f6",
-                    "height": "184px"
+                    "height": "184px",
+                    "minWidth": 100,
+                    "maxWidth": 1000,
+                    "minHeight": 100,
+                    "maxHeight": 1000
                   }
                 ]
               }
@@ -84,7 +96,11 @@
                 "elements": [
                   {
                     "widgetid": "682b70452d7f147f883dd0fd",
-                    "height": 277.87671798828126
+                    "height": 277.87671798828126,
+                    "minWidth": 100,
+                    "maxWidth": 1000,
+                    "minHeight": 100,
+                    "maxHeight": 1000
                   }
                 ]
               }
@@ -97,7 +113,11 @@
                 "elements": [
                   {
                     "widgetid": "682b70452d7f147f883dd0f8",
-                    "height": "384px"
+                    "height": "384px",
+                    "minWidth": 100,
+                    "maxWidth": 1000,
+                    "minHeight": 100,
+                    "maxHeight": 1000
                   }
                 ]
               },
@@ -106,7 +126,11 @@
                 "elements": [
                   {
                     "widgetid": "682b70452d7f147f883dd0fa",
-                    "height": "384px"
+                    "height": "384px",
+                    "minWidth": 100,
+                    "maxWidth": 1000,
+                    "minHeight": 100,
+                    "maxHeight": 1000
                   }
                 ]
               }
@@ -124,7 +148,11 @@
                 "elements": [
                   {
                     "widgetid": "682b70452d7f147f883dd0fc",
-                    "height": "392px"
+                    "height": "392px",
+                    "minWidth": 100,
+                    "maxWidth": 1000,
+                    "minHeight": 100,
+                    "maxHeight": 1000
                   }
                 ]
               }
@@ -137,7 +165,11 @@
                 "elements": [
                   {
                     "widgetid": "682b70452d7f147f883dd0fe",
-                    "height": "384px"
+                    "height": "384px",
+                    "minWidth": 100,
+                    "maxWidth": 1000,
+                    "minHeight": 100,
+                    "maxHeight": 1000
                   }
                 ]
               }

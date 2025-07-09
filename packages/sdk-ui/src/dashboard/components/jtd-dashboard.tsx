@@ -10,7 +10,7 @@ import { Dashboard } from '@/dashboard/dashboard';
 import { DashboardConfig } from '@/dashboard/types';
 
 // Props interface for JTD Dashboard component
-interface JTDDashboardProps {
+interface JtdDashboardProps {
   dashboardOid: string;
   filters: Filter[];
   mergeTargetDashboardFilters: boolean;
@@ -23,13 +23,13 @@ interface JTDDashboardProps {
  * This component reuses DashboardById logic but is specifically designed for JTD use cases
  * @internal
  */
-export const JTDDashboard = ({
+export const JtdDashboard = ({
   dashboardOid,
   filters: runtimeFilters,
   mergeTargetDashboardFilters,
   displayToolbarRow,
   displayFilterPane,
-}: JTDDashboardProps) => {
+}: JtdDashboardProps) => {
   // Call all hooks at the top level
   const { dashboard, isLoading, isError, error } = useDashboardModel({
     dashboardOid,

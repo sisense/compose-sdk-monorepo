@@ -13,6 +13,11 @@ import { ResizableColumns } from './components/resizable-columns';
 import {
   deleteWidgetFromLayout,
   distributeEqualWidthInRow,
+  getRowHeight,
+  getRowMinHeight,
+  getRowMaxHeight,
+  getColumnMinWidths,
+  getColumnMaxWidths,
   updateLayoutAfterDragAndDrop,
   updateLayoutWidths,
   updateRowHeight,
@@ -28,13 +33,7 @@ import {
   isEditableLayoutDragData,
   isEditableLayoutDropData,
 } from './utils';
-import {
-  MAX_ROW_HEIGHT,
-  MIN_CELL_WIDTH_PERCENTAGE,
-  MIN_COL_WIDTH_PERCENTAGE,
-  MIN_ROW_HEIGHT,
-  WIDGET_HEADER_HEIGHT,
-} from '@/dashboard/components/editable-layout/const';
+import { WIDGET_HEADER_HEIGHT } from '@/dashboard/components/editable-layout/const';
 import { useThemeContext } from '@/theme-provider';
 import { useMenu } from '@/common/hooks/use-menu';
 import { MenuItemSection } from '@/types';
@@ -266,11 +265,7 @@ export const EditableLayout = ({
         }}
         onDragEnd={handleDragEnd}
       >
-        <ResizableColumns
-          widths={colWidths}
-          minColWidth={MIN_COL_WIDTH_PERCENTAGE}
-          onWidthsChange={onColumnWidthsChange}
-        >
+        <ResizableColumns widths={colWidths} onWidthsChange={onColumnWidthsChange}>
           {internalLayout.columns.map((column, columnIndex) => (
             <ColumnInner key={columnIndex}>
               {column.rows?.map((row, rowIndex) => {
@@ -279,9 +274,9 @@ export const EditableLayout = ({
                   <ResizableRow
                     key={`${columnIndex},${rowIndex}`}
                     id={`${columnIndex},${rowIndex}`}
-                    height={parseInt(`${row.cells[0]?.height ?? 0}`) + WIDGET_HEADER_HEIGHT}
-                    minHeight={MIN_ROW_HEIGHT}
-                    maxHeight={MAX_ROW_HEIGHT}
+                    height={getRowHeight(row, widgets) + WIDGET_HEADER_HEIGHT}
+                    minHeight={getRowMinHeight(row)}
+                    maxHeight={getRowMaxHeight(row)}
                     onHeightChange={(height) => onRowHeightChange(height, columnIndex, rowIndex)}
                   >
                     {isDragging && (
@@ -293,7 +288,8 @@ export const EditableLayout = ({
                     )}
                     <ResizableColumns
                       widths={rowWidths}
-                      minColWidth={MIN_CELL_WIDTH_PERCENTAGE}
+                      minColWidths={getColumnMinWidths(row)}
+                      maxColWidths={getColumnMaxWidths(row)}
                       onWidthsChange={(widths) => onCellWidthChange(widths, columnIndex, rowIndex)}
                     >
                       {row.cells.map((subcell) => {

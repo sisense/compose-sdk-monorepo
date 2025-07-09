@@ -68,7 +68,7 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
     enabled: true,
   },
   jumpToDashboardConfig: {
-    enabled: false,
+    enabled: true,
   },
 };
 

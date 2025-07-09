@@ -14,6 +14,7 @@ import { getPaletteColor } from '@/chart-data-options/coloring/utils';
 import { useCallback } from 'react';
 import { getAreamapDataPoint } from './areamap-utils.js';
 import { AreamapChartDesignOptions, AreamapData, GeoDataElement } from '../types.js';
+import { getDataOptionTitle } from '@/chart-data-options/utils.js';
 
 export type AreamapProps = {
   chartData: AreamapData;
@@ -59,8 +60,7 @@ export const Areamap: React.FC<AreamapProps> = ({
           geoJson={geoJson}
           geoData={geoData}
           dataOptions={{
-            originalValueTitle:
-              dataOptions.color?.column.title || dataOptions.color?.column.name || '',
+            originalValueTitle: dataOptions.color ? getDataOptionTitle(dataOptions.color) : '',
             onAreaClick: onAreaClickHandler,
           }}
           mapType={designOptions.mapType}

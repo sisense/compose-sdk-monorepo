@@ -36,14 +36,22 @@ export async function getDashboardModels(
 
   if (!dashboards) return [];
 
+  // Remove dashboards that do not have an oid
+  // prevents invalid request trying to get /api/v1/dashboards/undefined?fields=...
+  const validDashboards = dashboards.filter((dashboard) => dashboard.oid);
+
   // Remove duplicated dashboards due to co-authoring
   // The deduplication algorithm iterates forward through the array elements.
   // It retains the leading elements, which are assumed to be the owner's dashboards,
   // and removes duplicate copies of co-owned or shared dashboards.
-  const dedupedDashboards = dedupe(dashboards, (m) => m.oid);
+  const dedupedDashboards = dedupe(validDashboards, (m) => m.oid);
 
-  if (dedupedDashboards.length !== dashboards.length) {
-    console.warn('Removing detected duplicate dashboard(s)');
+  if (dedupedDashboards.length !== validDashboards.length) {
+    console.warn(
+      `Removing ${
+        validDashboards.length - dedupedDashboards.length
+      } detected duplicate dashboard(s)`,
+    );
   }
 
   return dedupedDashboards.map((dashboard) => dashboardModelTranslator.fromDashboardDto(dashboard));

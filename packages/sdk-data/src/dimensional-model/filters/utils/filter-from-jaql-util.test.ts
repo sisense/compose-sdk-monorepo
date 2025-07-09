@@ -41,8 +41,8 @@ describe('filter-from-jaql-util', () => {
 
         const filter = createFilterFromJaqlInternal(jaql, guid);
         const attribute = createAttributeFromFilterJaql(jaql);
-        // including all members is equivalent to excluding none
-        const expectedFilter = filterFactory.members(attribute, [], { guid, excludeMembers: true });
+        // empty members array is interpreted by server as all members are included
+        const expectedFilter = filterFactory.members(attribute, [], { guid });
         expectEqualFilters(filter, expectedFilter);
       });
 

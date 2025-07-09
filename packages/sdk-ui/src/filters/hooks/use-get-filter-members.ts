@@ -16,6 +16,7 @@ import { withTracking } from '@/decorators/hook-decorators';
 import { Member, SelectedMember } from '../components/member-filter-tile';
 import { TranslatableError } from '@/translation/translatable-error';
 import { HookEnableParam } from '@/common/hooks/types';
+import { parseISOWithTimezoneCheck } from '@/utils/parseISOWithTimezoneCheck';
 
 /**
  * Returns new `members` array with members transformed to required type.
@@ -185,7 +186,7 @@ export const useGetFilterMembersInternal = ({
           cell.map((d) => ({
             ...d,
             text: applyDateFormat(
-              new Date(d.data),
+              parseISOWithTimezoneCheck(d.data),
               getDefaultDateMask((filterAttribute as DimensionalLevelAttribute).granularity),
               app?.settings?.locale,
             ),

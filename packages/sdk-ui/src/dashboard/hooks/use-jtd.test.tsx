@@ -7,13 +7,105 @@ import {
   getJtdClickHandler,
 } from './use-jtd';
 import { ChartWidgetProps } from '@/props';
-import { JTDConfig, JTDNavigateType } from '@/widget-by-id/types';
+import { JtdConfig, JtdNavigateType } from '@/widget-by-id/types';
 import { SizeMeasurement } from '@/types';
-import React from 'react';
+import { filterFactory, type Attribute, Sort } from '@sisense/sdk-data';
+
+// Mock filterFactory.members to return proper filter objects
+const createMockFilter = (attribute: any, members: string[]) => ({
+  attribute,
+  members,
+  filterType: 'members',
+  // Properties required by Element interface
+  name: `${attribute.expression}_filter`,
+  type: 'filter',
+  description: `Filter for ${attribute.expression}`,
+  id: `${attribute.expression}_${members.join(',')}`,
+  expression: `filter(${attribute.expression})`,
+  severity: 'info' as any,
+  // Properties required by Filter interface
+  isScope: false,
+  config: {
+    guid: `filter-${attribute.expression}`,
+    disabled: false,
+    locked: false,
+    excludeMembers: false,
+    enableMultiSelection: true,
+    deactivatedMembers: [],
+  },
+  jaql: (nested?: boolean) => {
+    const result = {
+      jaql: {
+        title: attribute.name || attribute.expression,
+        dim: attribute.expression,
+        datatype: 'text',
+        filter: {
+          members: members,
+        },
+      },
+    };
+    return nested === true ? result.jaql : result;
+  },
+  filterJaql: () => ({
+    members: members,
+  }),
+  serialize: () => ({}),
+  toJSON: () => ({}),
+});
+
+vi.mock('@sisense/sdk-data', async () => {
+  const actual = await vi.importActual('@sisense/sdk-data');
+  return {
+    ...(actual as any),
+    filterFactory: {
+      ...(actual as any).filterFactory,
+      members: vi.fn((attribute: Attribute, members: string[]) =>
+        createMockFilter(attribute, members),
+      ),
+    },
+  };
+});
+
+// Helper function to create test attributes
+const createTestAttribute = (expression: string): Attribute => {
+  return {
+    expression,
+    name: expression,
+    type: 'dimension',
+    description: '',
+    id: expression,
+    serialize: () => ({
+      name: expression,
+      type: 'dimension',
+      description: '',
+      expression,
+      __serializable: 'DimensionalAttribute',
+    }),
+    toJSON: () => ({
+      name: expression,
+      type: 'dimension',
+      description: '',
+      expression,
+      __serializable: 'DimensionalAttribute',
+    }),
+    jaql: (nested?: boolean) => {
+      const result = {
+        jaql: {
+          title: expression,
+          dim: expression,
+          datatype: 'text',
+        },
+      };
+      return nested === true ? result.jaql : result;
+    },
+    getSort: () => Sort.Ascending,
+    sort: () => createTestAttribute(expression),
+  };
+};
 
 // Mock dependencies
-vi.mock('@/common/components/modal', () => ({
-  useModalContext: vi.fn(),
+vi.mock('@/common/hooks/use-modal', () => ({
+  useModal: vi.fn(),
 }));
 
 vi.mock('@/widget-by-id/utils', () => ({
@@ -26,7 +118,7 @@ vi.mock('@/utils/combine-handlers', () => ({
 }));
 
 vi.mock('@/dashboard/components/jtd-dashboard', () => ({
-  JTDDashboard: vi.fn(() => null),
+  JtdDashboard: vi.fn(() => null),
 }));
 
 vi.mock('@/sisense-context/sisense-context', () => ({
@@ -46,9 +138,7 @@ vi.mock('react', () => {
   const mockReact = {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     ...actual,
-    createElement: vi.fn((component, props) => ({ component, props })),
     useCallback: vi.fn((callback) => callback),
-    useMemo: vi.fn((callback) => callback()),
     createContext: vi.fn(() => ({
       Provider: vi.fn(),
       Consumer: vi.fn(),
@@ -81,15 +171,18 @@ describe('useJtd', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
 
+    // Clear the modal calls
+    mockOpenModal.mockClear();
+
     // Setup mocks
-    const { useModalContext } = await import('@/common/components/modal');
+    const { useModal } = await import('@/common/hooks/use-modal');
     const { isChartWidgetProps, registerDataPointContextMenuHandler } = await import(
       '@/widget-by-id/utils'
     );
 
-    // Ensure useModalContext is properly mocked for each test
-    vi.mocked(useModalContext).mockReset();
-    vi.mocked(useModalContext).mockReturnValue({
+    // Ensure useModal is properly mocked for each test
+    vi.mocked(useModal).mockReset();
+    vi.mocked(useModal).mockReturnValue({
       openModal: mockOpenModal,
       closeModal: vi.fn(),
       closeAllModals: vi.fn(),
@@ -126,7 +219,7 @@ describe('useJtd', () => {
     it('should return an async function', () => {
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -140,13 +233,19 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        sampleWidget as any,
-        sampleDataPoint as any,
-        [],
-        [],
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: sampleDataPoint as any,
+        },
+        {
+          dashboardFilters: [],
+          originalWidgetFilters: [],
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       expect(clickHandler).toBeInstanceOf(Function);
@@ -155,7 +254,7 @@ describe('useJtd', () => {
     it('should call openModal with correct parameters when executed', async () => {
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 1000,
         modalWindowHeight: 800,
@@ -169,13 +268,19 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        sampleWidget as any,
-        sampleDataPoint as any,
-        [],
-        [],
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: sampleDataPoint as any,
+        },
+        {
+          dashboardFilters: [],
+          originalWidgetFilters: [],
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       await clickHandler();
@@ -185,16 +290,14 @@ describe('useJtd', () => {
         width: 1000,
         height: 800,
         measurement: SizeMeasurement.PERCENT,
-        allowResize: false,
         content: expect.any(Object),
       });
     });
 
-    it('should create JTDDashboard with correct props', async () => {
-      const mockCreateElement = vi.mocked(React.createElement);
+    it('should create JtdDashboard with correct props', async () => {
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -208,21 +311,34 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        sampleWidget as any,
-        sampleDataPoint as any,
-        [],
-        [],
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: sampleDataPoint as any,
+        },
+        {
+          dashboardFilters: [],
+          originalWidgetFilters: [],
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       await clickHandler();
 
-      expect(mockCreateElement).toHaveBeenCalledWith(
-        expect.any(Function), // JTDDashboard component
+      expect(mockOpenModal).toHaveBeenCalledWith(
         expect.objectContaining({
-          key: 'jtd-dashboard-1',
+          title: 'Dashboard 1',
+          content: expect.any(Object), // JSX element
+        }),
+      );
+
+      // Check the content props by examining the modal call
+      const modalCall = mockOpenModal.mock.calls[0][0];
+      expect(modalCall.content.props).toEqual(
+        expect.objectContaining({
           dashboardOid: 'dashboard-1',
           filters: expect.any(Array),
           mergeTargetDashboardFilters: true,
@@ -233,15 +349,13 @@ describe('useJtd', () => {
     });
 
     it('should merge filters correctly from all sources', async () => {
-      const mockCreateElement = vi.mocked(React.createElement);
-
       // Test with empty filters to avoid mocking complexity
       const dashboardFilters: any[] = [];
       const widgetFilters: any[] = [];
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -255,37 +369,41 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        sampleWidget as any,
-        sampleDataPoint as any,
-        dashboardFilters,
-        widgetFilters,
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: sampleDataPoint as any,
+        },
+        {
+          dashboardFilters,
+          originalWidgetFilters: widgetFilters,
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       await clickHandler();
 
-      const createElementCall = mockCreateElement.mock.calls.find(
-        (call) => call[1] && 'dashboardOid' in call[1],
-      );
-      expect(createElementCall).toBeDefined();
-      const props = createElementCall![1] as any;
+      expect(mockOpenModal).toHaveBeenCalled();
+
+      // Check the content props by examining the modal call
+      const modalCall = mockOpenModal.mock.calls[0][0];
+      expect(modalCall.content.props).toBeDefined();
 
       // Should include generated filters from data point
-      expect(props.filters).toBeInstanceOf(Array);
+      expect(modalCall.content.props.filters).toBeInstanceOf(Array);
     });
 
     it('should filter dashboard and widget filters based on allowed dimensions', async () => {
-      const mockCreateElement = vi.mocked(React.createElement);
-
       // Test with empty filters to avoid mocking complexity
       const dashboardFilters: any[] = [];
       const widgetFilters: any[] = [];
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -299,26 +417,31 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        sampleWidget as any,
-        sampleDataPoint as any,
-        dashboardFilters,
-        widgetFilters,
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: sampleDataPoint as any,
+        },
+        {
+          dashboardFilters,
+          originalWidgetFilters: widgetFilters,
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       await clickHandler();
 
       // The function should complete without errors and call the modal
-      expect(mockCreateElement).toHaveBeenCalled();
       expect(mockOpenModal).toHaveBeenCalled();
     });
 
     it('should handle empty filter arrays gracefully', async () => {
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -332,13 +455,19 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        sampleWidget as any,
-        sampleDataPoint as any,
-        [], // empty dashboard filters
-        [], // empty widget filters
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: sampleDataPoint as any,
+        },
+        {
+          dashboardFilters: [], // empty dashboard filters
+          originalWidgetFilters: [], // empty widget filters
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       await clickHandler();
@@ -355,7 +484,7 @@ describe('useJtd', () => {
       const customDrillTarget = { id: 'custom-dashboard', caption: 'Custom Dashboard Title' };
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [customDrillTarget],
         modalWindowWidth: 1200,
         modalWindowHeight: 900,
@@ -369,13 +498,19 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        customDrillTarget,
-        sampleWidget as any,
-        sampleDataPoint as any,
-        [],
-        [],
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: customDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: sampleDataPoint as any,
+        },
+        {
+          dashboardFilters: [],
+          originalWidgetFilters: [],
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       await clickHandler();
@@ -388,19 +523,21 @@ describe('useJtd', () => {
         }),
       );
 
-      expect(React.createElement).toHaveBeenCalledWith(
-        expect.any(Function),
+      // Check the content props by examining the modal call
+      const modalCall = mockOpenModal.mock.calls[0][0];
+      expect(modalCall.content.props).toEqual(
         expect.objectContaining({
-          key: 'jtd-custom-dashboard',
           dashboardOid: 'custom-dashboard',
           displayFilterPane: false,
           mergeTargetDashboardFilters: true,
         }),
       );
+
+      // Check that the JSX element has the correct key
+      expect(modalCall.content.key).toBe('jtd-custom-dashboard');
     });
 
     it('should handle widgets without formula context gracefully', async () => {
-      const mockCreateElement = vi.mocked(React.createElement);
       const { isChartWidgetProps } = await import('@/widget-by-id/utils');
       vi.mocked(isChartWidgetProps).mockReturnValue(true);
 
@@ -421,7 +558,7 @@ describe('useJtd', () => {
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -435,42 +572,83 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        simpleWidget as any,
-        sampleDataPoint as any,
-        [], // empty dashboard filters
-        [], // empty widget filters
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: simpleWidget as any,
+          point: sampleDataPoint as any,
+        },
+        {
+          dashboardFilters: [], // empty dashboard filters
+          originalWidgetFilters: [], // empty widget filters
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       await clickHandler();
 
-      expect(mockCreateElement).toHaveBeenCalled();
       expect(mockOpenModal).toHaveBeenCalled();
-      const createElementCall = mockCreateElement.mock.calls.find(
-        (call) => call[1] && 'dashboardOid' in call[1],
-      );
-      expect(createElementCall).toBeDefined();
+
+      // Check the content props by examining the modal call
+      const modalCall = mockOpenModal.mock.calls[0][0];
+      expect(modalCall.content.props).toBeDefined();
     });
 
     it('should pass datapoint-generated filters to the modal', async () => {
-      const mockCreateElement = vi.mocked(React.createElement);
-
       // Create a datapoint with category and breakBy entries that should generate filters
       const dataPointWithEntries = {
         entries: {
           category: [
-            { attribute: { expression: '[Category]' }, value: 'Electronics' },
-            { attribute: { expression: '[Brand]' }, value: 'Apple' },
+            {
+              attribute: {
+                expression: '[Category]',
+                jaql: () => ({
+                  jaql: {
+                    dataType: 'text',
+                    title: 'Category',
+                    dim: '[Category]',
+                  },
+                }),
+              },
+              value: 'Electronics',
+            },
+            {
+              attribute: {
+                expression: '[Brand]',
+                jaql: () => ({
+                  jaql: {
+                    dataType: 'text',
+                    title: 'Brand',
+                    dim: '[Brand]',
+                  },
+                }),
+              },
+              value: 'Apple',
+            },
           ],
-          breakBy: [{ attribute: { expression: '[Region]' }, value: 'North America' }],
+          breakBy: [
+            {
+              attribute: {
+                expression: '[Region]',
+                jaql: () => ({
+                  jaql: {
+                    dataType: 'text',
+                    title: 'Region',
+                    dim: '[Region]',
+                  },
+                }),
+              },
+              value: 'North America',
+            },
+          ],
         },
       };
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -484,31 +662,55 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        sampleWidget as any,
-        dataPointWithEntries as any,
-        [], // no dashboard filters
-        [], // no widget filters
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: dataPointWithEntries as any,
+        },
+        {
+          dashboardFilters: [], // no dashboard filters
+          originalWidgetFilters: [], // no widget filters
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       await clickHandler();
 
-      // Verify that React.createElement was called with filters
-      const createElementCall = mockCreateElement.mock.calls.find(
-        (call) => call[1] && 'dashboardOid' in call[1],
-      );
-      expect(createElementCall).toBeDefined();
-      const dashboardProps = createElementCall![1] as any;
+      // Verify that JSX was called with filters
+      const modalCall = mockOpenModal.mock.calls[0][0];
+      expect(modalCall.content.props).toBeDefined();
+      const dashboardProps = modalCall.content.props;
 
       // Should have generated filters from the datapoint entries
       expect(dashboardProps.filters).toBeInstanceOf(Array);
       expect(dashboardProps.filters.length).toBeGreaterThan(0);
 
-      // The filters should be based on the datapoint entries
-      // Note: We can't verify exact filter content due to filterFactory complexity,
-      // but we can verify that filters were generated from the datapoint
+      // Find the generated filters
+      const generatedFilters = dashboardProps.filters.filter(
+        (filter: any) =>
+          filter.attribute.expression === '[Category]' &&
+          filter.jaql().jaql.filter.members.includes('Electronics'),
+      );
+      expect(generatedFilters).toHaveLength(1);
+
+      // Verify that conflicting dashboard filters are not present
+      const conflictingDashboardFilters = dashboardProps.filters.filter(
+        (filter: any) =>
+          filter.attribute.expression === '[Category]' &&
+          filter.jaql().jaql.filter.members.includes('Clothing'),
+      );
+      expect(conflictingDashboardFilters).toHaveLength(0);
+
+      // Verify that conflicting widget filters are not present
+      const conflictingWidgetFilters = dashboardProps.filters.filter(
+        (filter: any) =>
+          filter.attribute.expression === '[Brand]' &&
+          filter.jaql().jaql.filter.members.includes('Samsung'),
+      );
+      expect(conflictingWidgetFilters).toHaveLength(0);
     });
 
     it('should pass widget filters to the modal when includeDims allows them', async () => {
@@ -525,7 +727,7 @@ describe('useJtd', () => {
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -539,13 +741,19 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        sampleWidget as any,
-        { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
-        [], // no dashboard filters
-        widgetFilters as any,
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
+        },
+        {
+          dashboardFilters: [], // no dashboard filters
+          originalWidgetFilters: widgetFilters as any,
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       // This test verifies the function handles widget filters when allowed dimensions are specified
@@ -555,20 +763,14 @@ describe('useJtd', () => {
     });
 
     it('should pass dashboard filters to the modal when includeDims allows them', async () => {
-      vi.mocked(React.createElement);
       // Create a simple dashboard filter
       const dashboardFilters = [
-        {
-          attribute: { expression: '[DashboardDim]' },
-          filterType: 'members',
-          // Mock the jaql function to avoid errors
-          jaql: () => ({ filter: { members: ['value1'] } }),
-        },
+        filterFactory.members(createTestAttribute('[Category]'), ['Clothing']),
       ];
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -582,13 +784,19 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        sampleWidget as any,
-        { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
-        dashboardFilters as any,
-        [], // no widget filters
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
+        },
+        {
+          dashboardFilters: dashboardFilters as any,
+          originalWidgetFilters: [], // no widget filters
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       // This test verifies the function handles dashboard filters when allowed dimensions are specified
@@ -597,26 +805,17 @@ describe('useJtd', () => {
     });
 
     it('should exclude filters when dimensions are not in allowed lists', async () => {
-      vi.mocked(React.createElement);
       const dashboardFilters = [
-        {
-          attribute: { expression: '[ExcludedDashDim]' },
-          filterType: 'members',
-          jaql: () => ({ filter: { members: ['value1'] } }),
-        },
+        filterFactory.members(createTestAttribute('[ExcludedDashDim]'), ['value1']),
       ];
 
       const widgetFilters = [
-        {
-          attribute: { expression: '[ExcludedWidgetDim]' },
-          filterType: 'members',
-          jaql: () => ({ filter: { members: ['value2'] } }),
-        },
+        filterFactory.members(createTestAttribute('[ExcludedWidgetDim]'), ['value2']),
       ];
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -630,13 +829,19 @@ describe('useJtd', () => {
       };
 
       const clickHandler = getJtdClickHandler(
-        jtdConfig as JTDConfig,
-        sampleDrillTarget,
-        sampleWidget as any,
-        { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
-        dashboardFilters as any,
-        widgetFilters as any,
-        mockOpenModal,
+        {
+          jtdConfig: jtdConfig as JtdConfig,
+          drillTarget: sampleDrillTarget,
+          widgetProps: sampleWidget as any,
+          point: { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
+        },
+        {
+          dashboardFilters: dashboardFilters as any,
+          originalWidgetFilters: widgetFilters as any,
+        },
+        {
+          openModal: mockOpenModal,
+        },
       );
 
       // The function should complete successfully even when filters are excluded
@@ -644,12 +849,12 @@ describe('useJtd', () => {
       expect(mockOpenModal).toHaveBeenCalled();
     });
 
-    it('should not be called when JTD config is disabled', () => {
+    it('should not be called when Jtd config is disabled', () => {
       // This test verifies that getJtdClickHandler is never called when config is disabled
       // The logic should prevent reaching this function entirely when enabled = false
-      const disabledJTDConfig = {
+      const disabledJtdConfig = {
         enabled: false, // This should prevent getJtdClickHandler from being used
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -666,7 +871,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: disabledJTDConfig as JTDConfig },
+            'widget-1': { jtdConfig: disabledJtdConfig as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -700,7 +905,7 @@ describe('useJtd', () => {
       expect(result.current.connectToWidgetProps).toBeInstanceOf(Function);
     });
 
-    it('should return widget unchanged when no JTD config', () => {
+    it('should return widget unchanged when no Jtd config', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {},
@@ -716,10 +921,10 @@ describe('useJtd', () => {
       expect(modifiedWidget).toBe(originalWidget);
     });
 
-    it('should return widget unchanged when JTD config is disabled', () => {
-      const disabledJTDConfig = {
-        enabled: false, // JTD is disabled
-        navigateType: JTDNavigateType.CLICK,
+    it('should return widget unchanged when Jtd config is disabled', () => {
+      const disabledJtdConfig = {
+        enabled: false, // Jtd is disabled
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -735,7 +940,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: disabledJTDConfig as JTDConfig },
+            'widget-1': { jtdConfig: disabledJtdConfig as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -751,10 +956,10 @@ describe('useJtd', () => {
       expect((modifiedWidget as ChartWidgetProps).onDataPointClick).toBeUndefined();
     });
 
-    it('should add onDataPointClick handler when JTD config is enabled', () => {
-      const enabledJTDConfig = {
-        enabled: true, // JTD is enabled
-        navigateType: JTDNavigateType.CLICK,
+    it('should add onDataPointClick handler when Jtd config is enabled', () => {
+      const enabledJtdConfig = {
+        enabled: true, // Jtd is enabled
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -770,7 +975,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: enabledJTDConfig as JTDConfig },
+            'widget-1': { jtdConfig: enabledJtdConfig as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -788,7 +993,7 @@ describe('useJtd', () => {
     it('should handle mixed enabled/disabled configs for different widgets', () => {
       const enabledConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -796,7 +1001,7 @@ describe('useJtd', () => {
 
       const disabledConfig = {
         enabled: false,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [{ id: 'dashboard-2', caption: 'Dashboard 2' }],
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -805,8 +1010,8 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'enabled-widget': { jtdConfig: enabledConfig as JTDConfig },
-            'disabled-widget': { jtdConfig: disabledConfig as JTDConfig },
+            'enabled-widget': { jtdConfig: enabledConfig as JtdConfig },
+            'disabled-widget': { jtdConfig: disabledConfig as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -831,7 +1036,7 @@ describe('useJtd', () => {
     it('should not add onDataPointClick handler for non-CLICK navigation when disabled', () => {
       const disabledRightClickConfig = {
         enabled: false,
-        navigateType: JTDNavigateType.RIGHT_CLICK,
+        navigateType: JtdNavigateType.RIGHT_CLICK,
         drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -840,7 +1045,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: disabledRightClickConfig as JTDConfig },
+            'widget-1': { jtdConfig: disabledRightClickConfig as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -857,9 +1062,9 @@ describe('useJtd', () => {
     });
 
     it('should add onDataPointClick handler for CLICK navigation', () => {
-      const sampleJTDConfig = {
+      const sampleJtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -888,7 +1093,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: sampleJTDConfig },
+            'widget-1': { jtdConfig: sampleJtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -902,9 +1107,9 @@ describe('useJtd', () => {
     });
 
     it('should not add onDataPointClick handler for non-CLICK navigation', () => {
-      const sampleJTDConfig = {
+      const sampleJtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.RIGHT_CLICK,
+        navigateType: JtdNavigateType.RIGHT_CLICK,
         drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
       };
 
@@ -917,7 +1122,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: sampleJTDConfig as JTDConfig },
+            'widget-1': { jtdConfig: sampleJtdConfig as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -961,14 +1166,9 @@ describe('useJtd', () => {
         },
       };
 
-      const sampleDataPoint = {};
       const sampleConfig = {};
 
-      const filters = getFormulaContextFilters(
-        sampleDataPoint as any,
-        sampleWidget as any,
-        sampleConfig as any,
-      );
+      const filters = getFormulaContextFilters(sampleWidget as any, sampleConfig as any);
 
       expect(filters).toHaveLength(1);
       expect(filters[0]).toMatchObject({
@@ -988,7 +1188,7 @@ describe('useJtd', () => {
         widgetType: 'text',
       };
 
-      const filters = getFormulaContextFilters({} as any, textWidget as any, {} as any);
+      const filters = getFormulaContextFilters(textWidget as any, {} as any);
 
       expect(filters).toHaveLength(0);
     });
@@ -1002,11 +1202,7 @@ describe('useJtd', () => {
         widgetType: 'chart',
       };
 
-      const filters = getFormulaContextFilters(
-        {} as any,
-        widgetWithoutDataOptions as any,
-        {} as any,
-      );
+      const filters = getFormulaContextFilters(widgetWithoutDataOptions as any, {} as any);
 
       expect(filters).toHaveLength(0);
     });
@@ -1072,23 +1268,21 @@ describe('useJtd', () => {
 
   describe('Error handling', () => {
     it('should handle missing modal context gracefully', async () => {
-      const { useModalContext } = await import('@/common/components/modal');
-      vi.mocked(useModalContext).mockReturnValue(null);
+      const { useModal } = await import('@/common/hooks/use-modal');
+      vi.mocked(useModal).mockImplementation(() => {
+        throw new Error('Missing initialized modal root');
+      });
 
-      const { result } = renderHook(() =>
-        useJtd({
-          widgetOptions: {},
-          dashboardFilters: [],
-          widgetFilters: new Map(),
-          openMenu: mockOpenMenu,
-        }),
-      );
-
-      const widget = { id: 'test' };
-      const modifiedWidget = result.current.connectToWidgetProps(widget as any);
-
-      // Should not throw error
-      expect(modifiedWidget).toBeDefined();
+      expect(() => {
+        renderHook(() =>
+          useJtd({
+            widgetOptions: {},
+            dashboardFilters: [],
+            widgetFilters: new Map(),
+            openMenu: mockOpenMenu,
+          }),
+        );
+      }).toThrow('Missing initialized modal root');
     });
 
     it('should handle malformed formula context gracefully', () => {
@@ -1107,16 +1301,16 @@ describe('useJtd', () => {
       };
 
       expect(() => {
-        getFormulaContextFilters({} as any, widgetWithMalformedContext as any, {} as any);
+        getFormulaContextFilters(widgetWithMalformedContext as any, {} as any);
       }).not.toThrow();
     });
   });
 
   describe('Integration tests', () => {
     it('should open modal when datapoint is clicked with single drill target', async () => {
-      const sampleJTDConfig = {
+      const sampleJtdConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
@@ -1145,7 +1339,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: sampleJTDConfig as JTDConfig },
+            'widget-1': { jtdConfig: sampleJtdConfig as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1169,7 +1363,6 @@ describe('useJtd', () => {
         width: 800,
         height: 600,
         measurement: SizeMeasurement.PIXEL,
-        allowResize: true,
         content: expect.any(Object),
       });
     });
@@ -1177,7 +1370,7 @@ describe('useJtd', () => {
     it('should open context menu with multiple drill targets', async () => {
       const multiTargetConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillTargets: [
           { id: 'dashboard-1', caption: 'Dashboard 1' },
           { id: 'dashboard-2', caption: 'Dashboard 2' },
@@ -1244,7 +1437,7 @@ describe('useJtd', () => {
       const customMenuCaption = 'Custom Jump Menu';
       const multiTargetConfig = {
         enabled: true,
-        navigateType: JTDNavigateType.CLICK,
+        navigateType: JtdNavigateType.CLICK,
         drillToDashboardRightMenuCaption: customMenuCaption, // Custom caption
         drillTargets: [
           { id: 'dashboard-1', caption: 'Dashboard 1' },
@@ -1306,6 +1499,379 @@ describe('useJtd', () => {
           }),
         ]),
       });
+    });
+
+    it('should prioritize generated filters over other filter types', async () => {
+      // Create conflicting dashboard and widget filters that would conflict with generated filters
+      const dashboardFilters = [createMockFilter(createTestAttribute('[Category]'), ['Clothing'])];
+
+      const widgetFilters = [createMockFilter(createTestAttribute('[Brand]'), ['OldBrand'])];
+
+      // Create a data point with category entries that would generate filters
+      const dataPointWithEntries = {
+        entries: {
+          category: [
+            {
+              attribute: {
+                name: '[Category]',
+                type: 'dimension',
+                expression: '[Category]',
+                jaql: () => ({ dim: '[Category]', title: 'Category', datatype: 'text' }),
+              },
+              value: 'Electronics',
+            },
+          ],
+          breakBy: [
+            {
+              attribute: {
+                name: '[Brand]',
+                type: 'dimension',
+                expression: '[Brand]',
+                jaql: () => ({ dim: '[Brand]', title: 'Brand', datatype: 'text' }),
+              },
+              value: 'Apple',
+            },
+          ],
+        },
+      };
+
+      // Create a widget with formula context filters
+      const widgetWithFormulaContext = {
+        id: 'widget-1',
+        widgetType: 'chart',
+        chartType: 'column',
+        dataOptions: {
+          value: [
+            {
+              column: {
+                context: {
+                  'filter-1': {
+                    filterType: 'numeric',
+                    attribute: createTestAttribute('[Region]'),
+                    valueA: 0,
+                    valueB: 100,
+                    jaql: () => ({
+                      jaql: {
+                        title: 'Region',
+                        dim: '[Region]',
+                        datatype: 'numeric',
+                        filter: {
+                          fromNotEqual: 0,
+                          toNotEqual: 100,
+                        },
+                      },
+                    }),
+                    filterJaql: () => ({
+                      fromNotEqual: 0,
+                      toNotEqual: 100,
+                    }),
+                    id: 'filter-1',
+                    config: {
+                      guid: 'filter-1',
+                      disabled: false,
+                      locked: false,
+                    },
+                    serialize: () => ({}),
+                    toJSON: () => ({}),
+                  },
+                },
+              },
+            },
+          ],
+        },
+      };
+
+      const jtdConfig = {
+        enabled: true,
+        navigateType: JtdNavigateType.CLICK,
+        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        modalWindowWidth: 800,
+        modalWindowHeight: 600,
+        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowResize: true,
+        displayToolbarRow: true,
+        displayFilterPane: true,
+        mergeTargetDashboardFilters: false,
+        includeDashFilterDims: ['[Category]', '[Brand]', '[Region]'],
+        includeWidgetFilterDims: ['[Category]', '[Brand]', '[Region]'],
+      };
+
+      const { result } = renderHook(() =>
+        useJtd({
+          widgetOptions: {
+            'widget-1': { jtdConfig },
+          },
+          dashboardFilters,
+          widgetFilters: new Map([['widget-1', widgetFilters]]),
+          openMenu: mockOpenMenu,
+        }),
+      );
+
+      const modifiedWidget = result.current.connectToWidgetProps(widgetWithFormulaContext as any);
+
+      // Simulate datapoint click
+      await act(async () => {
+        if (modifiedWidget && 'onDataPointClick' in modifiedWidget) {
+          const onDataPointClick = (modifiedWidget as ChartWidgetProps).onDataPointClick;
+          if (typeof onDataPointClick === 'function') {
+            onDataPointClick(dataPointWithEntries as any, {} as any);
+          }
+        }
+      });
+
+      // Get the filters passed to JtdDashboard
+      const modalCall = mockOpenModal.mock.calls[0][0];
+      expect(modalCall.content.props).toBeDefined();
+      const dashboardProps = modalCall.content.props;
+
+      // Verify that generated filters are present and have priority
+      expect(dashboardProps.filters).toBeInstanceOf(Array);
+
+      // Find the generated filters
+      const generatedFilters = dashboardProps.filters.filter(
+        (filter: any) =>
+          filter.attribute.expression === '[Category]' &&
+          filter.jaql().jaql.filter.members.includes('Electronics'),
+      );
+      expect(generatedFilters).toHaveLength(1);
+
+      // Verify that conflicting dashboard filters are not present
+      const conflictingDashboardFilters = dashboardProps.filters.filter(
+        (filter: any) =>
+          filter.attribute.expression === '[Category]' &&
+          filter.jaql().jaql.filter.members.includes('Clothing'),
+      );
+      expect(conflictingDashboardFilters).toHaveLength(0);
+
+      // Verify that conflicting widget filters are not present
+      const conflictingWidgetFilters = dashboardProps.filters.filter(
+        (filter: any) =>
+          filter.attribute.expression === '[Brand]' &&
+          filter.jaql().jaql.filter.members.includes('OldBrand'),
+      );
+      expect(conflictingWidgetFilters).toHaveLength(0);
+
+      // Verify that generated brand filters are present
+      const generatedBrandFilters = dashboardProps.filters.filter(
+        (filter: any) =>
+          filter.attribute.expression === '[Brand]' &&
+          filter.jaql().jaql.filter.members.includes('Apple'),
+      );
+      expect(generatedBrandFilters).toHaveLength(1);
+    });
+
+    it('should register onDataPointsSelected handler for RIGHT_CLICK navigation', async () => {
+      const jtdConfig = {
+        enabled: true,
+        navigateType: JtdNavigateType.RIGHT_CLICK,
+        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        modalWindowWidth: 800,
+        modalWindowHeight: 600,
+        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowResize: true,
+        displayToolbarRow: true,
+        displayFilterPane: true,
+        mergeTargetDashboardFilters: false,
+        includeDashFilterDims: ['[Category]', '[Brand]'],
+        includeWidgetFilterDims: ['[Category]', '[Brand]'],
+      };
+
+      const sampleWidget = {
+        id: 'widget-1',
+        widgetType: 'chart',
+        chartType: 'column',
+      };
+
+      const { result } = renderHook(() =>
+        useJtd({
+          widgetOptions: {
+            'widget-1': { jtdConfig },
+          },
+          dashboardFilters: [],
+          widgetFilters: new Map(),
+          openMenu: mockOpenMenu,
+        }),
+      );
+
+      const modifiedWidget = result.current.connectToWidgetProps(sampleWidget as any);
+
+      // Verify that onDataPointsSelected handler is registered
+      expect(modifiedWidget).toHaveProperty('onDataPointsSelected');
+      expect(typeof (modifiedWidget as any).onDataPointsSelected).toBe('function');
+
+      // Create multiple data points for selection
+      const multipleDataPoints = [
+        {
+          entries: {
+            category: [
+              {
+                attribute: { expression: '[Category]', name: 'Category' },
+                value: 'Electronics',
+              },
+            ],
+          },
+        },
+        {
+          entries: {
+            category: [
+              {
+                attribute: { expression: '[Category]', name: 'Category' },
+                value: 'Clothing',
+              },
+            ],
+          },
+        },
+      ];
+      const mockEvent = { clientX: 150, clientY: 250 } as MouseEvent;
+
+      // Simulate multiple data points selection
+      await act(async () => {
+        if (modifiedWidget && 'onDataPointsSelected' in modifiedWidget) {
+          const onDataPointsSelected = (modifiedWidget as any).onDataPointsSelected;
+          if (typeof onDataPointsSelected === 'function') {
+            onDataPointsSelected(multipleDataPoints, mockEvent);
+          }
+        }
+      });
+
+      // Verify that context menu was opened
+      expect(mockOpenMenu).toHaveBeenCalledWith({
+        id: 'jump-to-dashboard-menu',
+        position: { left: 150, top: 250 },
+        itemSections: expect.arrayContaining([
+          expect.objectContaining({
+            items: expect.arrayContaining([
+              expect.objectContaining({
+                caption: expect.stringContaining('Jump to'),
+              }),
+            ]),
+          }),
+        ]),
+      });
+    });
+
+    it('should merge filters from multiple data points with same dimension', async () => {
+      const jtdConfig = {
+        enabled: true,
+        navigateType: JtdNavigateType.RIGHT_CLICK,
+        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        modalWindowWidth: 800,
+        modalWindowHeight: 600,
+        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowResize: true,
+        displayToolbarRow: true,
+        displayFilterPane: true,
+        mergeTargetDashboardFilters: false,
+        includeDashFilterDims: ['[Category]'],
+        includeWidgetFilterDims: ['[Category]'],
+      };
+
+      const sampleWidget = {
+        id: 'widget-1',
+        widgetType: 'chart',
+        chartType: 'column',
+      };
+
+      const { result } = renderHook(() =>
+        useJtd({
+          widgetOptions: {
+            'widget-1': { jtdConfig },
+          },
+          dashboardFilters: [],
+          widgetFilters: new Map(),
+          openMenu: mockOpenMenu,
+        }),
+      );
+
+      const modifiedWidget = result.current.connectToWidgetProps(sampleWidget as any);
+
+      // Create multiple data points with same dimension but different values
+      const multipleDataPointsSameDimension = [
+        {
+          entries: {
+            category: [
+              {
+                attribute: { expression: '[Category]', name: 'Category' },
+                value: 'Electronics',
+              },
+            ],
+          },
+        },
+        {
+          entries: {
+            category: [
+              {
+                attribute: { expression: '[Category]', name: 'Category' },
+                value: 'Clothing',
+              },
+            ],
+          },
+        },
+        {
+          entries: {
+            category: [
+              {
+                attribute: { expression: '[Category]', name: 'Category' },
+                value: 'Sports',
+              },
+            ],
+          },
+        },
+      ];
+
+      // Mock the menu click to trigger the actual filter creation
+      let menuClickHandler: (() => void) | undefined;
+      mockOpenMenu.mockImplementation((menuOptions: any) => {
+        // Extract the click handler from the menu item
+        const menuItem = menuOptions.itemSections[0]?.items[0];
+        if (menuItem?.onClick) {
+          menuClickHandler = menuItem.onClick;
+        }
+      });
+
+      const mockEvent = { clientX: 150, clientY: 250 } as MouseEvent;
+
+      // Simulate multiple data points selection to open menu
+      await act(async () => {
+        if (modifiedWidget && 'onDataPointsSelected' in modifiedWidget) {
+          const onDataPointsSelected = (modifiedWidget as any).onDataPointsSelected;
+          if (typeof onDataPointsSelected === 'function') {
+            onDataPointsSelected(multipleDataPointsSameDimension, mockEvent);
+          }
+        }
+      });
+
+      // Verify menu was opened
+      expect(mockOpenMenu).toHaveBeenCalled();
+      expect(menuClickHandler).toBeDefined();
+
+      // Simulate clicking the menu item to create filters
+      if (menuClickHandler) {
+        await act(async () => {
+          menuClickHandler!();
+        });
+      }
+
+      // Verify that a single merged filter was created with all members
+      const modalCall = mockOpenModal.mock.calls[0][0];
+      expect(modalCall.content.props).toBeDefined();
+      const dashboardProps = modalCall.content.props;
+
+      // Find filters for the Category dimension
+      const categoryFilters = dashboardProps.filters.filter(
+        (filter: any) => filter.attribute.expression === '[Category]',
+      );
+
+      // Should have exactly one filter for Category dimension
+      expect(categoryFilters).toHaveLength(1);
+
+      // The single filter should contain all three members
+      const categoryFilter = categoryFilters[0];
+      const filterJaql = categoryFilter.jaql();
+      expect(filterJaql.jaql.filter.members).toContain('Electronics');
+      expect(filterJaql.jaql.filter.members).toContain('Clothing');
+      expect(filterJaql.jaql.filter.members).toContain('Sports');
+      expect(filterJaql.jaql.filter.members).toHaveLength(3);
     });
   });
 });

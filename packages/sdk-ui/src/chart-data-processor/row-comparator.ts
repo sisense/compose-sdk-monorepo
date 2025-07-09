@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { isNumber, isDatetime } from '@sisense/sdk-data';
-import parseISO from 'date-fns/parseISO';
 import isObject from 'lodash-es/isObject';
 import { Row, Column, Value, ComparableData, CompareValue } from './table-processor';
+import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';
 
 export const createCompareValue = (
   displayValue: string | undefined | null,
@@ -18,7 +18,7 @@ export const createCompareValue = (
     value = parseFloat(displayValue as string);
     valueIsNaN = isNaN(value);
   } else if (isDatetime(columnType)) {
-    value = parseISO(displayValue as string).valueOf();
+    value = parseISOWithTimezoneCheck(displayValue as string).valueOf();
     valueIsNaN = isNaN(value);
   } else {
     value = displayValue as string;

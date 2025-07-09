@@ -224,7 +224,11 @@ export async function persistDashboardModelMiddleware(
 
   switch (action.type) {
     case UseDashboardModelActionType.FILTERS_UPDATE:
-      await restApi.patchDashboard(dashboardOid, translateFiltersAndRelationsToDto(action.payload));
+      await restApi.patchDashboard(
+        dashboardOid,
+        translateFiltersAndRelationsToDto(action.payload),
+        sharedMode,
+      );
       break;
     case UseDashboardModelActionType.ADD_WIDGET: {
       const widgetDto = await restApi.addWidgetToDashboard(

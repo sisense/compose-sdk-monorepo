@@ -2,9 +2,10 @@
 
 import { render, waitFor, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ModalProvider, useModal } from './index';
+import { ModalProvider } from './index';
 import { SizeMeasurement } from '@/types';
 import React, { useState } from 'react';
+import { useModal } from '@/common/hooks/use-modal';
 
 describe('ModalProvider + useModal Integration', () => {
   const TestComponent = ({
@@ -661,7 +662,7 @@ describe('ModalProvider + useModal Integration', () => {
       render(<TestComponentWithoutProvider />);
 
       expect(screen.getByTestId('error-message')).toHaveTextContent(
-        'useModal must be used within a ModalProvider',
+        'Missing initialized modal root',
       );
 
       // Restore console.error

@@ -19,6 +19,12 @@ import {
 import { CascadingFilterDto, FilterDto, LayoutDto } from '@/api/types/dashboard-dto';
 import { ConditionFilterJaql } from '@sisense/sdk-data/dist/dimensional-model/filters/utils/types';
 import { WidgetsPanelLayout } from '@/dashboard/types';
+import {
+  MAX_COLUMN_WIDTH,
+  MIN_COLUMN_WIDTH,
+  MAX_ROW_HEIGHT,
+  MIN_ROW_HEIGHT,
+} from '@/dashboard/components/editable-layout/const';
 
 /**
  * Translates a {@link Filter} to a {@link FilterDto}.
@@ -160,6 +166,10 @@ export function layoutToLayoutDto(layout: WidgetsPanelLayout): LayoutDto {
             {
               widgetid: cell.widgetId,
               height: cell.height ?? DEFAULT_HEIGHT,
+              minWidth: cell.minWidth ?? MIN_COLUMN_WIDTH,
+              maxWidth: cell.maxWidth ?? MAX_COLUMN_WIDTH,
+              minHeight: cell.minHeight ?? MIN_ROW_HEIGHT,
+              maxHeight: cell.maxHeight ?? MAX_ROW_HEIGHT,
             },
           ],
         })),

@@ -404,6 +404,7 @@ export const translation = {
   },
   jumpToDashboard: {
     defaultCaption: 'Jump to',
+    jumpableTooltip: 'This widget is jumpable',
   },
 };
 

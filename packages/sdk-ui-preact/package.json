@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.4.1",
+  "version": "2.5.0",
   "type": "module",
   "exports": {
     ".": {
@@ -50,7 +50,8 @@
     "build:prod": "tsc --noEmit && vite build",
     "clean": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
     "lint": "eslint . --quiet",
-    "lint:fix": "run lint --fix"
+    "lint:fix": "run lint --fix",
+    "publish:prepare": "node ./scripts/prepare-publish.cjs"
   },
   "files": [
     "dist/**/*"

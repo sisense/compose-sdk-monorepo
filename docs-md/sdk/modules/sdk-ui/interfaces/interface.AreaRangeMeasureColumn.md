@@ -53,6 +53,14 @@ Color options for data bars for this measure in the pivot table
 
 ***
 
+### name
+
+> **name**?: `string`
+
+Name of the measure.
+
+***
+
 ### numberFormatConfig
 
 > **numberFormatConfig**?: [`NumberFormatConfig`](../type-aliases/type-alias.NumberFormatConfig.md)

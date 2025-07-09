@@ -6,7 +6,6 @@ import {
   IncludeMembersFilterJaql,
   isDatetime,
 } from '@sisense/sdk-data';
-import parseISO from 'date-fns/parseISO';
 import uniqBy from 'lodash-es/uniqBy';
 import partition from 'lodash-es/partition';
 import { createDataColumn } from './translate-widget-data-options.js';
@@ -17,6 +16,7 @@ import { applyDateFormat } from '../query/date-formats/apply-date-format.js';
 import { sliceFromMatched } from '@/utils/array-utils';
 import { Column } from '@/chart-data/types';
 import { Hierarchy, HierarchyId } from '@/models/hierarchy';
+import { parseISOWithTimezoneCheck } from '@/utils/parseISOWithTimezoneCheck';
 
 const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
   item?.parent
@@ -37,7 +37,7 @@ const getDrilldownSelections = (
         dateFormat
           ? (member) => ({
               categoryValue: member,
-              categoryDisplayValue: applyDateFormat(parseISO(member), dateFormat),
+              categoryDisplayValue: applyDateFormat(parseISOWithTimezoneCheck(member), dateFormat),
             })
           : (member) => ({ categoryValue: member }),
       ) ?? [];

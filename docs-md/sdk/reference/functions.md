@@ -2465,7 +2465,7 @@ Returns the k-means cluster (R expression) of the total cost and total revenue.
 RDOUBLE("m <-log(matrix(unlist(args), ncol=2)); kmeans (m,3)$cluster", [Total Cost], [Total Revenue])
 ```
 
-For additional discussion on using `RDOUBLE` and how to do advanced forecasting with R, see [this community post](https://community.sisense.com/t5/knowledge/so-how-exactly-does-r-work-with-sisense/ta-p/8817).
+For additional discussion on using `RDOUBLE` and how to do advanced forecasting with R, see [this community post](https://community.sisense.com/kb/faqs/so-how-exactly-does-r-work-with-sisense/8817).
 
 ---
 
@@ -2499,6 +2499,6 @@ Returns the k-means cluster (R expression) of the total cost and total revenue.
 RINT("m <-log(matrix(unlist(args), ncol=2)); kmeans (m,3)$cluster", [Total Cost], [Total Revenue])
 ```
 
-For additional discussion on using `RINT` and how to do advanced forecasting with R, see [this community post](https://community.sisense.com/t5/knowledge/so-how-exactly-does-r-work-with-sisense/ta-p/8817).
+For additional discussion on using `RINT` and how to do advanced forecasting with R, see [this community post](https://community.sisense.com/kb/faqs/so-how-exactly-does-r-work-with-sisense/8817).
 
 ---

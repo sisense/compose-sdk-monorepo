@@ -4,6 +4,7 @@ import { ErrorBoundary } from '../error-boundary/error-boundary';
 import { SisenseContext, SisenseContextPayload } from './sisense-context';
 import { I18nProvider } from '../translation/i18n-provider';
 import { MenuProvider } from '@/common/components/menu/menu-provider';
+import { ModalProvider } from '@/common/components/modal/modal-provider';
 import { SisenseQueryClientProvider } from './sisense-query-client-provider';
 import { CustomContextProviderProps } from '../types';
 import { EmotionCacheProvider } from '@/emotion-cache-provider';
@@ -47,7 +48,9 @@ export const CustomSisenseContextProvider: FunctionComponent<
             <SisenseContext.Provider value={context}>
               <ThemeProvider skipTracking theme={context.app?.settings.serverThemeSettings}>
                 <SisenseQueryClientProvider>
-                  <MenuProvider>{children}</MenuProvider>
+                  <MenuProvider>
+                    <ModalProvider>{children}</ModalProvider>
+                  </MenuProvider>
                 </SisenseQueryClientProvider>
               </ThemeProvider>
             </SisenseContext.Provider>

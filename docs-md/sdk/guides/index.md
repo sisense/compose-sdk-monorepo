@@ -25,9 +25,9 @@ indexTopics:
     - title: Dashboards
       description: Learn how to render dashboards using Compose SDK
       link: ./dashboards
-    - title: Chart Plugins
-      description: Render a custom chart plugin with Compose SDK dashboards
-      link: ./chart-plugins
+    - title: Custom Widgets
+      description: Learn how to create and use custom widgets with Compose SDK
+      link: ./custom-widgets
     - title: Migration Guide
       description: Migrate your project from 0.X.X to 1.0.0
       link: ./migration-guide-1.0.0

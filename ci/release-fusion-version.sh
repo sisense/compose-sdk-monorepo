@@ -85,6 +85,7 @@ main() {
 
   yarn nx:build:prod
 
+  yarn workspace @sisense/sdk-ui-preact publish:prepare
   yarn workspaces foreach --all --no-private npm publish --tolerate-republish --tag "$dist_tag"
 
   echo -e "\n✅ Fusion release complete. Published versions:"

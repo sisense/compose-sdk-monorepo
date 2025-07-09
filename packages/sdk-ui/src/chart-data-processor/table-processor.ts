@@ -6,9 +6,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { RowComparator, createCompareValue } from './row-comparator';
 import { isDatetime, isNumber } from '@sisense/sdk-data';
-import parseISO from 'date-fns/parseISO';
 import { Distribution } from './distribution';
 import { CategoricalDistribution } from './categorical-distribution';
+import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';
 
 export type FilterTypes = 'greater' | 'lesser' | 'equal' | 'contains' | 'not equal';
 
@@ -107,7 +107,9 @@ const _getAggregatedValues = (
     const blur = dataArray.some((row) => row[col.index].blur);
 
     if (isDatetime(col.type)) {
-      const data = dataArray.map((r) => parseISO(r[col.index].displayValue).valueOf());
+      const data = dataArray.map((r) =>
+        parseISOWithTimezoneCheck(r[col.index].displayValue).valueOf(),
+      );
       value = new Distribution(data).getStat(aggFunc);
     } else if (isNumber(col.type)) {
       // maybe want to use value if it exists before parsing displayValue

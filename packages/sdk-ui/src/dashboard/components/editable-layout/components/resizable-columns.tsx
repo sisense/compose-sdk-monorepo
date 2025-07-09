@@ -1,9 +1,14 @@
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { DndContext, DragMoveEvent } from '@dnd-kit/core';
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
 import { useSyncedState } from '@/common/hooks/use-synced-state';
-import { RESIZE_LINE_SIZE, Z_INDEX_RESIZE_OVERLAY } from '../const';
+import {
+  MAX_COLUMN_WIDTH,
+  MIN_COLUMN_WIDTH,
+  RESIZE_LINE_SIZE,
+  Z_INDEX_RESIZE_OVERLAY,
+} from '../const';
 import { DraggableLine } from './draggable-line';
 
 const Container = styled.div<{ width: number[] }>`
@@ -51,9 +56,13 @@ interface ResizableColumnsProps {
    */
   widths: number[];
   /**
-   * The minimum width of the columns (in percentage)
+   * The minimum width of the columns (in pixels)
    */
-  minColWidth: number;
+  minColWidths?: number[];
+  /**
+   * The maximum width of the columns (in pixels)
+   */
+  maxColWidths?: number[];
   /**
    * The callback function to call when the widths change
    */
@@ -68,7 +77,8 @@ interface ResizableColumnsProps {
 export const ResizableColumns = ({
   children,
   widths,
-  minColWidth,
+  minColWidths,
+  maxColWidths,
   onWidthsChange,
 }: ResizableColumnsProps) => {
   const [totalWidth, setTotalWidth] = useState(0);
@@ -80,28 +90,78 @@ export const ResizableColumns = ({
     null,
   );
 
+  const innerMinColWidths = useMemo(() => {
+    const defaultMinWidths = new Array(widths.length).fill(MIN_COLUMN_WIDTH);
+    const pixelWidths = minColWidths ?? defaultMinWidths;
+
+    return pixelWidths.map((pixelWidth) => (pixelWidth / totalWidth) * 100);
+  }, [minColWidths, widths, totalWidth]);
+
+  const innerMaxColWidths = useMemo(() => {
+    const defaultMaxWidths = new Array(widths.length).fill(MAX_COLUMN_WIDTH);
+    const pixelWidths = maxColWidths ?? defaultMaxWidths;
+
+    return pixelWidths.map((pixelWidth) => (pixelWidth / totalWidth) * 100);
+  }, [maxColWidths, widths, totalWidth]);
+
   const onDragMoveHandler = useCallback(
     (event: DragMoveEvent, columnIndex: number) => {
       const x = event.delta.x;
       const coefficient = totalWidth / 100;
-      const clampedX = Math.min(
-        Math.max(x, minColWidth * coefficient - widths[columnIndex] * coefficient),
-        widths[columnIndex + 1] * coefficient - minColWidth * coefficient,
-      );
+
+      // Get the current widths of the two columns being resized (in percentage)
+      const currentLeftWidth = widths[columnIndex];
+      const currentRightWidth = widths[columnIndex + 1];
+
+      // Get the min and max constraints (already converted to percentages)
+      const leftMinWidth = innerMinColWidths[columnIndex];
+      const leftMaxWidth = innerMaxColWidths[columnIndex];
+      const rightMinWidth = innerMinColWidths[columnIndex + 1];
+      const rightMaxWidth = innerMaxColWidths[columnIndex + 1];
+
+      // Calculate the delta in percentage
+      const deltaPercent = x / coefficient;
+
+      // Calculate new widths
+      let newLeftWidth = currentLeftWidth + deltaPercent;
+      let newRightWidth = currentRightWidth - deltaPercent;
+
+      // Apply min/max constraints with coordination between columns
+      // If left column hits its minimum, right column should not grow beyond its maximum
+      if (newLeftWidth <= leftMinWidth) {
+        newLeftWidth = leftMinWidth;
+        newRightWidth = Math.min(
+          rightMaxWidth,
+          currentRightWidth - (leftMinWidth - currentLeftWidth),
+        );
+      }
+      // If right column hits its minimum, left column should not grow beyond its maximum
+      else if (newRightWidth <= rightMinWidth) {
+        newRightWidth = rightMinWidth;
+        newLeftWidth = Math.min(
+          leftMaxWidth,
+          currentLeftWidth + (currentRightWidth - rightMinWidth),
+        );
+      }
+      // Otherwise apply normal constraints
+      else {
+        newLeftWidth = Math.max(leftMinWidth, Math.min(leftMaxWidth, newLeftWidth));
+        newRightWidth = Math.max(rightMinWidth, Math.min(rightMaxWidth, newRightWidth));
+      }
+
       setInternalWidths(() =>
         widths.map((width, index) => {
-          const delta = clampedX / coefficient;
           if (columnIndex === index) {
-            return width + delta;
+            return newLeftWidth;
           }
           if (columnIndex + 1 === index) {
-            return width - delta;
+            return newRightWidth;
           }
           return width;
         }),
       );
     },
-    [widths, totalWidth, minColWidth, setInternalWidths],
+    [widths, totalWidth, innerMinColWidths, innerMaxColWidths, setInternalWidths],
   );
 
   useEffect(() => {

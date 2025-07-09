@@ -9,7 +9,7 @@ import {
 } from '@sisense/sdk-data';
 
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
-import { toKebabCase, isNonEmptyArray } from '../common/utils';
+import { toKebabCase, isNonEmptyArray, quoteUnsafeKeys } from '../common/utils';
 import { CODE_TEMPLATES_INDENT } from '../common/constants';
 
 const NEW_LINE = '\n';
@@ -124,7 +124,8 @@ export const stringifyProps = (
           value.length ? NEW_LINE + ' '.repeat(indent + 2) : ''
         }]`;
       } else if (typeof value === 'object' && value !== null) {
-        s += `${key}: ${stringifyProps(value, indent + 2, wrapInQuotes)}`;
+        const processedValue = Array.isArray(value) ? value : quoteUnsafeKeys(value);
+        s += `${key}: ${stringifyProps(processedValue, indent + 2, wrapInQuotes)}`;
       } else if (['number', 'boolean', 'undefined'].includes(typeof value) || value === null) {
         s += `${key}: ${value}`;
       } else if (typeof value === 'string') {

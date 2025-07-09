@@ -65,13 +65,8 @@ export const createGenericFilter = (
  * @returns The created Filter object.
  */
 export const createFilterIncludeAll = (attribute: Attribute, guid: string): Filter => {
-  // including all members is equivalent to excluding none
-  // so we can simply create a filter with no members and excludeMembers set to true
-  const config: MembersFilterConfig = {
-    guid,
-    excludeMembers: true,
-  };
-  return filterFactory.members(attribute, [], config);
+  // empty members array is interpreted by server as all members are included
+  return filterFactory.members(attribute, [], { guid });
 };
 
 /**

@@ -64,12 +64,30 @@ Configuration of the component that is rendered in case of an error
 
 **jumpToDashboardConfig**?: `object`
 
-Configuration of the jump to dashboard feature
-Only the widgets with pre-configured JTD config will support this feature.
-You can configure the JTD config in the widget settings in Fusion UI having jump to dashboard plugin enabled.
+Configuration of the Jump to Dashboard feature
 
-This feature is currently in alpha.
-To learn more about the jump to dashboard feature, see the [Jump to Dashboard documentation](https://docs.sisense.com/main/SisenseLinux/jump-to-dashboard.htm?tocpath=Add-ons%7C_____2#ConfiguringJTDPerWidget).
+This feature is currently in Beta.
+
+**Note:** Only widgets that are configured using the Fusion UI as documented
+[here](https://docs.sisense.com/main/SisenseLinux/jump-to-dashboard.htm?tocpath=Add-ons%7C_____2#ConfiguringJTDPerWidget)
+are supported in Compose SDK.
+
+Widgets that are configured using an older version of Jump To Dashboard, or via scripts, are not supported.
+
+Known limitations:
+- Jump To Dashboard is not currently supported for Pivot widgets.
+- Target dashboards are always opened in a popup window, options to open in new tab and new window are not supported.
+- Show 'Header' and 'Dashboards panel' options are not supported (only relevant to Fusion).
+- 'Reset filters after JTD' is not supported, since changes are never saved to the target dashboard using Compose SDK.
+
+The following Jump To Dashboard configuration is supported:
+  - Target dashboard set by Id, with configurable display title
+  - 'Popup window' display type ('Allow Resize' not supported)
+  - Display filter panel on the target dashboard (true/false)
+  - Navigation setting (Click / Right click)
+    - Note: 'Keep changes made by user' is not supported, since changes are never saved to the target dashboard using Compose SDK.
+  - Apply filters to the target dashboard (select)
+  - Merge target dashboard filters (true/false)
 
 > #### `jumpToDashboardConfig.enabled`
 >
@@ -77,7 +95,7 @@ To learn more about the jump to dashboard feature, see the [Jump to Dashboard do
 >
 > Whether to enable or disable the jump to dashboard feature
 >
-> If not specified, the default value is `false`
+> If not specified, the default value is `true`
 >
 >
 

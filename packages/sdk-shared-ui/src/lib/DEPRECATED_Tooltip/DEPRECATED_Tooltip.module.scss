@@ -56,6 +56,14 @@
     transform: rotate(45deg);
   }
 
+  // Fixes tooltip arrow
+  // overrides `transform: translateX(calc(-100% + 1px));` from '@rc-component/tooltip/assets/bootstrap_white';
+  .rc-tooltip-placement-right .rc-tooltip-arrow,
+  .rc-tooltip-placement-rightTop .rc-tooltip-arrow,
+  .rc-tooltip-placement-rightBottom .rc-tooltip-arrow {
+    transform: rotate(45deg);
+  }
+
   .rc-tooltip-content:before {
     content: '';
     position: absolute;

@@ -108,7 +108,7 @@ export interface WidgetDto {
     drillHistory?: PanelItem[];
     usedFormulasMapping?: any;
   };
-  drillToDashboardConfig?: JTDConfigDto;
+  drillToDashboardConfig?: JtdConfigDto;
   style: WidgetStyle;
   title: string;
   desc: string | null;
@@ -665,12 +665,12 @@ export type TextWidgetDtoStyle = {
   };
 };
 
-export type JTDDrillTarget = {
+export type JtdDrillTarget = {
   caption: string;
   id: string;
 };
 
-export type JTDConfigDto = {
+export type JtdConfigDto = {
   drilledDashboardPrefix: string;
   drilledDashboardsFolderPrefix: string;
   displayFilterPane: boolean;
@@ -699,7 +699,7 @@ export type JTDConfigDto = {
   showFolderNameOnMenuSelection: boolean;
   resetDashFiltersAfterJTD: boolean;
   sameCubeRestriction: boolean;
-  showJTDIcon: boolean;
+  showJTDIcon?: boolean;
   sendPieChartMeasureFiltersOnClick: boolean;
   forceZeroInsteadNull: boolean;
   mergeTargetDashboardFilters: boolean;
@@ -713,27 +713,27 @@ export type JTDConfigDto = {
   includeWidgetFilterDims?: string[];
 };
 
-export enum JTDNavigateType {
+export enum JtdNavigateType {
   CLICK = 'click',
   RIGHT_CLICK = 'rightclick',
   PIVOT_LINK = 'pivotlink',
   BLOX = 'blox',
 }
 
-export type JTDConfig = {
+export type JtdConfig = {
   drilledDashboardPrefix?: string;
   displayFilterPane?: boolean;
   displayToolbarRow?: boolean;
   drillToDashboardRightMenuCaption?: string;
-  navigateType?: JTDNavigateType;
+  navigateType?: JtdNavigateType;
   includeDashFilterDims?: string[];
   includeWidgetFilterDims?: string[];
-  drillTargets: JTDDrillTarget[];
+  drillTargets: JtdDrillTarget[];
   modalWindowResize?: boolean;
   modalWindowMeasurement?: SizeMeasurement;
   modalWindowWidth?: number;
   modalWindowHeight?: number;
-  showJTDIcon?: boolean;
+  showJtdIcon?: boolean;
   mergeTargetDashboardFilters?: boolean;
   sendFormulaFiltersDuplicate?: number | 'none' | undefined;
   enabled?: boolean;

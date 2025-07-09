@@ -160,3 +160,37 @@ export function removeEmptyLineBeforeImport(input: string) {
 
   return lines.join('\n');
 }
+
+/**
+ * Returns a new object where any "unsafe" keys (i.e., keys that contain
+ * characters not allowed in JavaScript dot notation — such as spaces, slashes, dashes, etc.)
+ * are wrapped in double quotes.
+ *
+ * If the object contains a `composeCode` field, it is returned as-is without modification.
+ *
+ * Safe keys (valid JS identifiers) are left unchanged.
+ *
+ * @param obj - The input object with arbitrary string keys
+ * @returns A new object with the same values, but with unsafe keys wrapped in quotes,
+ *          unless the object has a `composeCode` field
+ *
+ * @example
+ * quoteUnsafeKeys({ "user-id": true, normalKey: 42 })
+ * // => { '"user-id"': true, normalKey: 42 }
+ */
+export function quoteUnsafeKeys<T extends Record<string, any>>(obj: T): Record<string, any> {
+  const isSafeKey = (key: string): boolean => /^[$A-Z_][0-9A-Z_$]*$/i.test(key);
+
+  if ('composeCode' in obj) {
+    return obj;
+  }
+
+  const result: Record<string, any> = {};
+
+  for (const [key, value] of Object.entries(obj)) {
+    const newKey = isSafeKey(key) ? key : `"${key}"`;
+    result[newKey] = value;
+  }
+
+  return result;
+}

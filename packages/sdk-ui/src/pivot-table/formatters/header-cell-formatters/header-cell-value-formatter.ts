@@ -8,7 +8,7 @@ import {
   getNumberFormatConfig,
   getPivotDataOptionByJaqlIndex,
 } from '../utils.js';
-import parseISO from 'date-fns/parseISO';
+import { parseISOWithTimezoneCheck } from '@/utils/parseISOWithTimezoneCheck';
 
 const PIVOT_TABLE_NULL_VALUE = 'N\\A';
 
@@ -49,20 +49,22 @@ export const createHeaderCellValueFormatter = (
 };
 
 /**
- * Formats the date time string.
+ * Formats the date time string or Date object.
  * If the date is invalid, it returns the original value.
  */
 export function formatDatetimeString(
-  value: string,
+  value: string | Date,
   dateFormatter: DateFormatter,
   dateFormat?: string,
 ): string {
   if (!dateFormat) {
-    return value;
+    return typeof value === 'string' ? value : value.toISOString();
   }
-  const date = parseISO(value);
+
+  const date = typeof value === 'string' ? parseISOWithTimezoneCheck(value) : value;
+
   if (isInvalidDate(date)) {
-    return value;
+    return typeof value === 'string' ? value : value.toISOString();
   }
   return dateFormatter(date, dateFormat);
 }

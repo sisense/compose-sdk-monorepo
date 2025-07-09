@@ -25,9 +25,9 @@ import {
 import {
   isJaqlWithFormula,
   isSharedFormulaReferenceContext,
-  JTDConfig,
-  JTDConfigDto,
-  JTDNavigateType,
+  JtdConfig,
+  JtdConfigDto,
+  JtdNavigateType,
   SharedFormulaReferenceContext,
   WidgetDto,
 } from '@/widget-by-id/types';
@@ -40,12 +40,17 @@ export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => 
     widthPercentage: c.width,
     rows: (c.cells || []).map((cell) => {
       const totalWidth = cell.subcells.reduce((acc, subcell) => acc + subcell.width, 0);
+
       return {
         cells: cell.subcells.map((subcell) => ({
           // If the total width of the subcells is less than 100, we increase width percentage to make the subcells fill the column
           widthPercentage: totalWidth < 100 ? subcell.width / (totalWidth / 100) : subcell.width,
           height: subcell.elements[0].height,
           widgetId: subcell.elements[0].widgetid,
+          minWidth: subcell.elements[0].minWidth,
+          maxWidth: subcell.elements[0].maxWidth,
+          minHeight: subcell.elements[0].minHeight,
+          maxHeight: subcell.elements[0].maxHeight,
         })),
       };
     }),
@@ -92,23 +97,23 @@ const isTabberWidgetDto = (widget: WidgetDto): widget is WidgetDto & { style: Ta
   return widget.subtype === 'WidgetsTabber';
 };
 
-const translateNavigateType = (navigateType: number): JTDNavigateType => {
+const translateNavigateType = (navigateType: number): JtdNavigateType => {
   switch (navigateType) {
     case 1:
-      return JTDNavigateType.RIGHT_CLICK;
+      return JtdNavigateType.RIGHT_CLICK;
     case 2:
-      return JTDNavigateType.PIVOT_LINK;
+      return JtdNavigateType.PIVOT_LINK;
     case 3:
-      return JTDNavigateType.CLICK;
+      return JtdNavigateType.CLICK;
     case 4:
-      return JTDNavigateType.BLOX;
+      return JtdNavigateType.BLOX;
     default:
   }
   console.warn(`Unknown navigate type: ${navigateType}, using CLICK instead`);
-  return JTDNavigateType.CLICK;
+  return JtdNavigateType.CLICK;
 };
 
-const translateToJTDConfig = (jtdConfigDto: JTDConfigDto): JTDConfig => {
+const translateToJtdConfig = (jtdConfigDto: JtdConfigDto): JtdConfig => {
   const measurement = jtdConfigDto.modalWindowMeasurement || SizeMeasurement.PERCENT;
   return {
     ...jtdConfigDto,
@@ -123,6 +128,7 @@ const translateToJTDConfig = (jtdConfigDto: JTDConfigDto): JTDConfig => {
       caption: drillTarget.caption,
       id: drillTarget.id || drillTarget.oid,
     })),
+    showJtdIcon: typeof jtdConfigDto.showJTDIcon === 'boolean' ? jtdConfigDto.showJTDIcon : true,
   };
 };
 
@@ -143,9 +149,10 @@ export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptio
         },
         forceApplyBackgroundFilters: true,
       },
-      ...(widget?.drillToDashboardConfig && {
-        jtdConfig: translateToJTDConfig(widget.drillToDashboardConfig),
-      }),
+      ...(widget?.drillToDashboardConfig &&
+        widget.drillToDashboardConfig.version && {
+          jtdConfig: translateToJtdConfig(widget.drillToDashboardConfig),
+        }),
     };
   });
 

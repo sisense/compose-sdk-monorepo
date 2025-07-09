@@ -19,6 +19,7 @@ const DragHandleWrapper = styled.div`
   cursor: move;
   display: flex;
   width: 100%;
+  min-height: 20px;
   align-items: center;
   svg {
     margin-right: 4px;

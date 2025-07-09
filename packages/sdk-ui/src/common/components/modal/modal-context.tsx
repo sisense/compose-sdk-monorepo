@@ -36,16 +36,3 @@ export const ModalContext = createContext<ModalSettings | null>(null);
  * @internal
  */
 export const useModalContext = () => useContext(ModalContext);
-
-/**
- * Hook to use modal functionality
- *
- * @returns Modal API functions
- */
-export const useModal = () => {
-  const context = useModalContext();
-  if (!context) {
-    throw new Error('useModal must be used within a ModalProvider');
-  }
-  return context;
-};

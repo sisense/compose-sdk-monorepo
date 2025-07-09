@@ -7,6 +7,9 @@ import {
 } from '@/models';
 import isUndefined from 'lodash-es/isUndefined';
 import { EditableLayoutDropData, EditableLayoutDragData, DropType } from './types';
+import { getChartDefaultSize, getWidgetDefaultSize } from '@/dynamic-size-container';
+import { ChartType, WidgetProps } from '@/index-typedoc';
+import { MAX_ROW_HEIGHT, MIN_ROW_HEIGHT, MIN_COLUMN_WIDTH, MAX_COLUMN_WIDTH } from './const';
 
 /**
  * Updates the height of all cells in a specific row within a column layout.
@@ -589,4 +592,72 @@ export function updateLayoutAfterDragAndDrop(
     default:
       return layout;
   }
+}
+
+export function getRowHeight(row: WidgetsPanelRow, widgets: WidgetProps[]) {
+  return row.cells.reduce((acc, cell) => {
+    if ('height' in cell && cell.height !== undefined) {
+      const height = typeof cell.height === 'string' ? parseInt(cell.height) : cell.height;
+      return Math.max(acc, height);
+    } else {
+      const widget = widgets.find((widget) => widget.id === cell.widgetId);
+      if (widget) {
+        if (widget.widgetType === 'chart' && 'chartType' in widget) {
+          return Math.max(acc, getWidgetDefaultSize(widget.chartType).height);
+        } else if (widget.widgetType === 'pivot') {
+          return Math.max(acc, getWidgetDefaultSize('pivot').height);
+        } else {
+          // For text and custom widgets, use a default size
+          return Math.max(acc, getChartDefaultSize('' as ChartType).height);
+        }
+      }
+    }
+    return acc;
+  }, 0);
+}
+
+export function getRowMaxHeight(row: WidgetsPanelRow) {
+  let maxHeight = Infinity;
+  let someCellHasMaxHeight = false;
+
+  row.cells.forEach((cell) => {
+    if ('maxHeight' in cell && cell.maxHeight !== undefined) {
+      maxHeight = Math.min(maxHeight, cell.maxHeight);
+      someCellHasMaxHeight = true;
+    }
+  });
+
+  return someCellHasMaxHeight ? maxHeight : MAX_ROW_HEIGHT;
+}
+
+export function getRowMinHeight(row: WidgetsPanelRow) {
+  let minHeight = -Infinity;
+  let someCellHasMinHeight = false;
+
+  row.cells.forEach((cell) => {
+    if ('minHeight' in cell && cell.minHeight !== undefined) {
+      minHeight = Math.max(minHeight, cell.minHeight);
+      someCellHasMinHeight = true;
+    }
+  });
+
+  return someCellHasMinHeight ? minHeight : MIN_ROW_HEIGHT;
+}
+
+export function getColumnMinWidths(row: WidgetsPanelRow) {
+  return row.cells.map((cell) => {
+    if ('minWidth' in cell && cell.minWidth !== undefined) {
+      return cell.minWidth;
+    }
+    return MIN_COLUMN_WIDTH;
+  });
+}
+
+export function getColumnMaxWidths(row: WidgetsPanelRow) {
+  return row.cells.map((cell) => {
+    if ('maxWidth' in cell && cell.maxWidth !== undefined) {
+      return cell.maxWidth;
+    }
+    return MAX_COLUMN_WIDTH;
+  });
 }

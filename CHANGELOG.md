@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.5.0] - 2025-07-08
+
+### Added
+- Add Angular v20 support
+- Add `name` property for `StyledColumn` and `StyledMeasureColumn`
+
+### Changed
+- Improve editable dashboard layout: add default min and max cell size, fix drag handle
+- Improve `Jump to Dashboard`: filter priority, multiselect, widget title, documentation
+- Improve cascading filters: child members are now restricted by parent filter
+- Improve trend/forecast: for multiple functions, report errors per function and display valid results
+- Fix `useGetDashboardModels`: do not return dashboards without oid
+- Fix filter issues related to `Include All` state
+- Fix incorrect date labels due to daylight saving timezone shift
+
 ## [2.4.1] - 2025-06-25
 
 ### Changed

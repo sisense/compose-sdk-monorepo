@@ -1,5 +1,6 @@
 import {
   Attribute,
+  DimensionalLevelAttribute,
   Filter,
   filterFactory,
   isMembersFilter,
@@ -44,4 +45,20 @@ export function getConfigWithUpdatedDeactivated(filter: Filter, selectedMembers:
         ),
       }
     : filter.config;
+}
+
+/**
+ * Returns the granularities that are restricted by the parent filters (previous cascading levels)
+ *
+ * @param datetimeAttribute - The datetime attribute
+ * @param parentFilters - The parent filters
+ * @returns The restricted granularities
+ */
+export function getRestrictedGranularities(
+  datetimeAttribute: Attribute,
+  parentFilters: Filter[] = [],
+) {
+  return parentFilters
+    .filter((filter) => filter.attribute.expression === datetimeAttribute.expression)
+    .map((f) => (f.attribute as DimensionalLevelAttribute).granularity);
 }

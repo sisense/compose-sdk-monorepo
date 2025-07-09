@@ -20,4 +20,5 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build:prod
       - run: ls -lha
+      - run: yarn workspace @sisense/sdk-ui-preact publish:prepare
       - run: yarn publish --access public

@@ -4,6 +4,7 @@ import { http, HttpResponse } from 'msw';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 import { MenuProvider } from '@/common/components/menu/menu-provider.js';
+import { ModalProvider } from '@/common/components/modal/modal-provider.js';
 import { isTextWidgetProps } from '@/widgets/text-widget.js';
 import { mockToken, mockUrl, server } from '@/__mocks__/msw';
 import { act, useMemo } from 'react';
@@ -22,6 +23,12 @@ import { CartesianChartDataOptions, DataPoint } from '@/types.js';
 const getProperty = (widget: WidgetProps, key: keyof WidgetProps | keyof ChartWidgetProps) => {
   return isTextWidgetProps(widget) ? (key === 'dataOptions' ? {} : []) : widget[key];
 };
+
+const CombinedProvider = ({ children }: { children: React.ReactNode }) => (
+  <MenuProvider>
+    <ModalProvider>{children}</ModalProvider>
+  </MenuProvider>
+);
 
 const contextProviderProps: SisenseContextProviderProps = {
   url: mockUrl,
@@ -77,7 +84,7 @@ describe('useComposedDashboard', () => {
     const { result } = renderHook(
       () => useComposedDashboard({ widgets: [widgetPropsMock], filters }),
       {
-        wrapper: MenuProvider,
+        wrapper: CombinedProvider,
       },
     );
 

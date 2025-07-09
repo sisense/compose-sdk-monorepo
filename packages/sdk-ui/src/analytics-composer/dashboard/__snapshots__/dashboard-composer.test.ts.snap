@@ -1099,7 +1099,7 @@ export default function CodeExample() {
       },
     }];
     const filters: Filter[] | FilterRelations = [
-        filterFactory.members(DM.Country.Country, [], { excludeMembers: true }),
+        filterFactory.members(DM.Country.Country, []),
         filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
         filterFactory.greaterThan(DM.Commerce.Revenue, 0)
         ];
@@ -1255,6 +1255,10 @@ export default function CodeExample() {
                       widthPercentage: 100,
                       height: '184px',
                       widgetId: '6560ce3b6f1df500326a06a2',
+                      minWidth: 48,
+                      maxWidth: 1028,
+                      minHeight: 48,
+                      maxHeight: 1028,
                     }
                   ],
                 },{
@@ -1262,6 +1266,10 @@ export default function CodeExample() {
                       widthPercentage: 100,
                       height: '172px',
                       widgetId: '6560ce3b6f1df500326a069e',
+                      minWidth: 48,
+                      maxWidth: 1028,
+                      minHeight: 48,
+                      maxHeight: 1028,
                     }
                   ],
                 },{
@@ -1269,6 +1277,10 @@ export default function CodeExample() {
                       widthPercentage: 100,
                       height: '172px',
                       widgetId: '6560ce3b6f1df500326a06a0',
+                      minWidth: 48,
+                      maxWidth: 1028,
+                      minHeight: 48,
+                      maxHeight: 1028,
                     }
                   ],
                 },{
@@ -1276,6 +1288,10 @@ export default function CodeExample() {
                       widthPercentage: 100,
                       height: '184px',
                       widgetId: '6560ce3b6f1df500326a069d',
+                      minWidth: 48,
+                      maxWidth: 1028,
+                      minHeight: 48,
+                      maxHeight: 1028,
                     }
                   ],
                 }
@@ -1287,6 +1303,10 @@ export default function CodeExample() {
                       widthPercentage: 100,
                       height: '392px',
                       widgetId: '6560ce3b6f1df500326a06a4',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
                     }
                   ],
                 },{
@@ -1294,10 +1314,18 @@ export default function CodeExample() {
                       widthPercentage: 50.25466893039049,
                       height: '384px',
                       widgetId: '6560ce3b6f1df500326a06a1',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
                     },{
                       widthPercentage: 49.745331069609506,
                       height: '384px',
                       widgetId: '6560ce3b6f1df500326a069f',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
                     }
                   ],
                 }
@@ -1309,6 +1337,10 @@ export default function CodeExample() {
                       widthPercentage: 100,
                       height: '392px',
                       widgetId: '6560ce3b6f1df500326a06a3',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
                     }
                   ],
                 },{
@@ -1316,6 +1348,10 @@ export default function CodeExample() {
                       widthPercentage: 100,
                       height: '384px',
                       widgetId: '6560ce3b6f1df500326a06a5',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
                     }
                   ],
                 }
@@ -1327,6 +1363,10 @@ export default function CodeExample() {
                       widthPercentage: 100,
                       height: '392px',
                       widgetId: '67111cb76ab71f0032d8599d',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
                     }
                   ],
                 },{
@@ -1334,10 +1374,18 @@ export default function CodeExample() {
                       widthPercentage: 50.25466893039049,
                       height: '384px',
                       widgetId: '672352d827ea67002bdcf485',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
                     },{
                       widthPercentage: 49.745331069609506,
                       height: '384px',
                       widgetId: '6742206527ea67002bdcf6ac',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
                     }
                   ],
                 }

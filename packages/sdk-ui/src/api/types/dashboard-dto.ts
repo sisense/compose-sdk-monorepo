@@ -17,6 +17,10 @@ export type LayoutDto = {
         elements: {
           height: number | string;
           widgetid: string;
+          minWidth: number;
+          maxWidth: number;
+          minHeight: number;
+          maxHeight: number;
         }[];
       }[];
     }[];

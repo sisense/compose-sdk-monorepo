@@ -60,6 +60,10 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
               "cells": [
                 {
                   "height": 3000,
+                  "maxHeight": 4000,
+                  "maxWidth": 2000,
+                  "minHeight": 100,
+                  "minWidth": 100,
                   "widgetId": "widget-1",
                   "widthPercentage": 2000,
                 },

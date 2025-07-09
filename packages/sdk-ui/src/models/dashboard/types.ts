@@ -1,6 +1,6 @@
 import { CommonFiltersOptions } from '@/common-filters/types';
 import { ColorPaletteTheme, TabberConfig } from '@/types';
-import { JTDConfig } from '@/widget-by-id/types';
+import { JtdConfig } from '@/widget-by-id/types';
 
 export type {
   CommonFiltersOptions,
@@ -20,6 +20,22 @@ export interface WidgetsPanelCell {
    * @internal
    */
   height?: number | string;
+  /**
+   * @internal
+   */
+  minHeight?: number;
+  /**
+   * @internal
+   */
+  maxHeight?: number;
+  /**
+   * @internal
+   */
+  minWidth?: number;
+  /**
+   * @internal
+   */
+  maxWidth?: number;
   widgetId: string;
 }
 
@@ -67,7 +83,7 @@ export type WidgetsOptions = Record<
      * Jump to dashboard config for widgets
       @internal
      */
-    jtdConfig?: JTDConfig;
+    jtdConfig?: JtdConfig;
   }
 >;
 /**

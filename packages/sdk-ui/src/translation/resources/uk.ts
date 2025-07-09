@@ -402,6 +402,7 @@ export const translation: TranslationDictionary = {
     searchPlaceholder: 'Пошук',
   },
   jumpToDashboard: {
+    jumpableTooltip: 'З цього віджета можна перейти до інших віджетів',
     defaultCaption: 'Перейти до',
   },
 };

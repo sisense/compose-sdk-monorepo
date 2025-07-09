@@ -109,6 +109,10 @@ describe('layoutToLayoutDto', () => {
                     {
                       height: '200px',
                       widgetid: 'widget-1',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 60,
+                      maxHeight: 1500,
                     },
                   ],
                 },
@@ -183,6 +187,10 @@ describe('layoutToLayoutDto', () => {
                     {
                       height: 300,
                       widgetid: 'widget-1',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 60,
+                      maxHeight: 1500,
                     },
                   ],
                 },
@@ -196,6 +204,10 @@ describe('layoutToLayoutDto', () => {
                     {
                       height: '250px',
                       widgetid: 'widget-2',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 60,
+                      maxHeight: 1500,
                     },
                   ],
                 },
@@ -205,6 +217,10 @@ describe('layoutToLayoutDto', () => {
                     {
                       height: '250px',
                       widgetid: 'widget-3',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 60,
+                      maxHeight: 1500,
                     },
                   ],
                 },
@@ -223,6 +239,10 @@ describe('layoutToLayoutDto', () => {
                     {
                       height: '400px',
                       widgetid: 'widget-4',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 60,
+                      maxHeight: 1500,
                     },
                   ],
                 },
@@ -280,6 +300,426 @@ describe('layoutToLayoutDto', () => {
                     {
                       height: '500px',
                       widgetid: 'widget-1',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 60,
+                      maxHeight: 1500,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it('should correctly translate layout with custom minWidth, maxWidth, minHeight, maxHeight properties', () => {
+    const layout = {
+      columns: [
+        {
+          widthPercentage: 100,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 50,
+                  height: '300px',
+                  widgetId: 'widget-1',
+                  minWidth: 200,
+                  maxWidth: 800,
+                  minHeight: 100,
+                  maxHeight: 600,
+                },
+                {
+                  widthPercentage: 50,
+                  height: '250px',
+                  widgetId: 'widget-2',
+                  minWidth: 150,
+                  maxWidth: 1000,
+                  minHeight: 80,
+                  maxHeight: 500,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = layoutToLayoutDto(layout);
+
+    expect(result).toEqual({
+      columns: [
+        {
+          width: 100,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 50,
+                  elements: [
+                    {
+                      height: '300px',
+                      widgetid: 'widget-1',
+                      minWidth: 200,
+                      maxWidth: 800,
+                      minHeight: 100,
+                      maxHeight: 600,
+                    },
+                  ],
+                },
+                {
+                  width: 50,
+                  elements: [
+                    {
+                      height: '250px',
+                      widgetid: 'widget-2',
+                      minWidth: 150,
+                      maxWidth: 1000,
+                      minHeight: 80,
+                      maxHeight: 500,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it('should correctly translate layout with default values for minWidth, maxWidth, minHeight, maxHeight when not provided', () => {
+    const layout = {
+      columns: [
+        {
+          widthPercentage: 100,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  height: '400px',
+                  widgetId: 'widget-1',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = layoutToLayoutDto(layout);
+
+    expect(result).toEqual({
+      columns: [
+        {
+          width: 100,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 100,
+                  elements: [
+                    {
+                      height: '400px',
+                      widgetid: 'widget-1',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 60,
+                      maxHeight: 1500,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it('should correctly translate layout with mixed custom and default values', () => {
+    const layout = {
+      columns: [
+        {
+          widthPercentage: 60,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  height: '350px',
+                  widgetId: 'widget-1',
+                  minWidth: 300,
+                  maxHeight: 800,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 40,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  height: '200px',
+                  widgetId: 'widget-2',
+                  maxWidth: 1200,
+                  minHeight: 120,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = layoutToLayoutDto(layout);
+
+    expect(result).toEqual({
+      columns: [
+        {
+          width: 60,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 100,
+                  elements: [
+                    {
+                      height: '350px',
+                      widgetid: 'widget-1',
+                      minWidth: 300,
+                      maxWidth: 2048,
+                      minHeight: 60,
+                      maxHeight: 800,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          width: 40,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 100,
+                  elements: [
+                    {
+                      height: '200px',
+                      widgetid: 'widget-2',
+                      minWidth: 128,
+                      maxWidth: 1200,
+                      minHeight: 120,
+                      maxHeight: 1500,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it('should correctly translate layout with edge case values for min/max properties', () => {
+    const layout = {
+      columns: [
+        {
+          widthPercentage: 100,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  height: '500px',
+                  widgetId: 'widget-1',
+                  minWidth: 0,
+                  maxWidth: 9999,
+                  minHeight: 1,
+                  maxHeight: 2000,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = layoutToLayoutDto(layout);
+
+    expect(result).toEqual({
+      columns: [
+        {
+          width: 100,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 100,
+                  elements: [
+                    {
+                      height: '500px',
+                      widgetid: 'widget-1',
+                      minWidth: 0,
+                      maxWidth: 9999,
+                      minHeight: 1,
+                      maxHeight: 2000,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it('should correctly translate complex layout with multiple rows and cells having different min/max properties', () => {
+    const layout = {
+      columns: [
+        {
+          widthPercentage: 70,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 60,
+                  height: '300px',
+                  widgetId: 'widget-1',
+                  minWidth: 200,
+                  maxWidth: 600,
+                  minHeight: 100,
+                  maxHeight: 500,
+                },
+                {
+                  widthPercentage: 40,
+                  height: '300px',
+                  widgetId: 'widget-2',
+                  minWidth: 150,
+                  maxWidth: 400,
+                  minHeight: 100,
+                  maxHeight: 500,
+                },
+              ],
+            },
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  height: '200px',
+                  widgetId: 'widget-3',
+                  minWidth: 300,
+                  maxWidth: 800,
+                  minHeight: 80,
+                  maxHeight: 400,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 30,
+          rows: [
+            {
+              cells: [
+                {
+                  widthPercentage: 100,
+                  height: '400px',
+                  widgetId: 'widget-4',
+                  minWidth: 100,
+                  maxWidth: 500,
+                  minHeight: 150,
+                  maxHeight: 600,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = layoutToLayoutDto(layout);
+
+    expect(result).toEqual({
+      columns: [
+        {
+          width: 70,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 60,
+                  elements: [
+                    {
+                      height: '300px',
+                      widgetid: 'widget-1',
+                      minWidth: 200,
+                      maxWidth: 600,
+                      minHeight: 100,
+                      maxHeight: 500,
+                    },
+                  ],
+                },
+                {
+                  width: 40,
+                  elements: [
+                    {
+                      height: '300px',
+                      widgetid: 'widget-2',
+                      minWidth: 150,
+                      maxWidth: 400,
+                      minHeight: 100,
+                      maxHeight: 500,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              subcells: [
+                {
+                  width: 100,
+                  elements: [
+                    {
+                      height: '200px',
+                      widgetid: 'widget-3',
+                      minWidth: 300,
+                      maxWidth: 800,
+                      minHeight: 80,
+                      maxHeight: 400,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          width: 30,
+          cells: [
+            {
+              subcells: [
+                {
+                  width: 100,
+                  elements: [
+                    {
+                      height: '400px',
+                      widgetid: 'widget-4',
+                      minWidth: 100,
+                      maxWidth: 500,
+                      minHeight: 150,
+                      maxHeight: 600,
                     },
                   ],
                 },

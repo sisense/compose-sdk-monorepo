@@ -80,6 +80,10 @@ export interface CategoryStyle {
   width?: number;
   /** {@inheritDoc DataColorOptions} */
   color?: DataColorOptions;
+  /**
+   * Name of the column.
+   */
+  name?: string;
 }
 
 /**
@@ -181,6 +185,10 @@ export type ValueStyle = {
    * @internal
    */
   width?: number;
+  /**
+   * Name of the measure.
+   */
+  name?: string;
 };
 
 /**

@@ -32,7 +32,7 @@ Set up your Sisense instance to authenticate users with SSO using one of the fol
 If you're experiencing difficulties or unexpected behavior when using SSO, the cause may be a hidden feature configuration. To resolve the issue, you can:
 
 - Contact [support](https://www.sisense.com/support/) to validate you Fusion configuration settings
-- See this [community post](https://community.sisense.com/t5/developer-forum/issue-with-sisense-compose-sdk-and-sso-authentication/m-p/18601/highlight/true#M40) to try to resolve the issue yourself
+- See this [community post](https://community.sisense.com/discussions/help_and_how_to/issue-with-sisense-compose-sdk-and-sso-authentication/18580/replies/18601#M40) to try to resolve the issue yourself
 :::
 
 #### Authenticate with SSO

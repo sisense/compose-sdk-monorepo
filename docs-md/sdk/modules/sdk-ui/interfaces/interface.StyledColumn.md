@@ -117,6 +117,14 @@ Boolean flag whether to render category/column value as HTML in the Table compon
 
 ***
 
+### name
+
+> **name**?: `string`
+
+Name of the column.
+
+***
+
 ### numberFormatConfig
 
 > **numberFormatConfig**?: [`NumberFormatConfig`](../type-aliases/type-alias.NumberFormatConfig.md)

@@ -49,6 +49,10 @@ describe('DashboardModel', () => {
                         {
                           height: 3000,
                           widgetid: 'widget-1',
+                          minWidth: 100,
+                          maxWidth: 2000,
+                          minHeight: 100,
+                          maxHeight: 4000,
                         },
                       ],
                     },

@@ -33,6 +33,7 @@ import {
   createExcludeMembersFilter,
   getConfigWithUpdatedDeactivated,
   getMembersWithDeactivated,
+  getRestrictedGranularities,
 } from '../../utils.js';
 import { granularities } from '../../common/granularities';
 import { useFilterEditorContext } from '../../../filter-editor-context';
@@ -59,14 +60,13 @@ type DatetimeConditionFilterData = {
 function getDatetimeExcludeConditionFilterData(
   filter: Filter,
   t: TFunction,
+  shouldMatchFilterGranularity = false,
 ): Omit<DatetimeConditionFilterData, 'multiSelectEnabled'> {
   const defaultData = {
     selectedMembers: [],
-    attribute: createLevelAttribute(
-      filter.attribute as DimensionalLevelAttribute,
-      DateLevels.Years,
-      t,
-    ),
+    attribute: shouldMatchFilterGranularity
+      ? (filter.attribute as DimensionalLevelAttribute)
+      : createLevelAttribute(filter.attribute as DimensionalLevelAttribute, DateLevels.Years, t),
   };
 
   if (isExcludeMembersFilter(filter)) {
@@ -97,8 +97,8 @@ export const DatetimeExcludeConditionForm = ({
   const { t } = useTranslation();
   const { defaultDataSource, parentFilters } = useFilterEditorContext();
   const initialFilterData = useMemo(
-    () => getDatetimeExcludeConditionFilterData(filter, t),
-    [filter, t],
+    () => getDatetimeExcludeConditionFilterData(filter, t, !!parentFilters?.length),
+    [filter, parentFilters, t],
   );
   const [attribute, setAttribute] = useState<DimensionalLevelAttribute>(
     initialFilterData.attribute,
@@ -158,14 +158,16 @@ export const DatetimeExcludeConditionForm = ({
 
   const multiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
-  const translatedGranularities = useMemo(
-    () =>
-      granularities.map((granularity) => ({
+  const translatedGranularities = useMemo(() => {
+    const restrictedGranularities = getRestrictedGranularities(filter.attribute, parentFilters);
+
+    return granularities
+      .filter((granularity) => !restrictedGranularities.includes(granularity.value))
+      .map((granularity) => ({
         value: granularity.value,
         displayValue: t(granularity.displayValue),
-      })),
-    [t],
-  );
+      }));
+  }, [parentFilters, filter.attribute, t]);
 
   const prepareAndChangeFilter = useCallback(
     (data: DatetimeConditionFilterData) => {

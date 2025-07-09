@@ -30,6 +30,7 @@ import {
   getConfigWithUpdatedDeactivated,
   getMembersWithDeactivated,
   getMembersWithoutDeactivated,
+  getRestrictedGranularities,
 } from './utils';
 
 function createMembersFilter(attribute: Attribute, members: string[], config?: FilterConfig) {
@@ -56,7 +57,7 @@ type DatetimeMembersSectionProps = {
 export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
   const { filter, selected, multiSelectEnabled, limits, onChange } = props;
   const { t } = useTranslation();
-  const { defaultDataSource } = useFilterEditorContext();
+  const { defaultDataSource, parentFilters } = useFilterEditorContext();
   const isIncludeFilter = isIncludeMembersFilter(filter);
 
   const [attribute, setAttribute] = useState<DimensionalLevelAttribute>(
@@ -84,6 +85,7 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
   } = useGetFilterMembersInternal({
     filter: filterToQueryMembers,
     count: QUERY_MEMBERS_COUNT,
+    parentFilters,
     ...(defaultDataSource && { defaultDataSource }),
   });
 
@@ -119,14 +121,17 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
   }, [multiSelectEnabled, membersData, filter, attribute, formatter, members]);
   const isMultiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
-  const translatedGranularities = useMemo(
-    () =>
-      granularities.map((granularity) => ({
+
+  const translatedGranularities = useMemo(() => {
+    const restrictedGranularities = getRestrictedGranularities(filter.attribute, parentFilters);
+
+    return granularities
+      .filter((granularity) => !restrictedGranularities.includes(granularity.value))
+      .map((granularity) => ({
         value: granularity.value,
         displayValue: t(granularity.displayValue),
-      })),
-    [t],
-  );
+      }));
+  }, [parentFilters, filter.attribute, t]);
 
   const prepareAndChangeFilter = useCallback(
     ({ selectedMembers, multiSelectEnabled, attribute }: MembersFilterData) => {

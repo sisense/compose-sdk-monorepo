@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import parseISO from 'date-fns/parseISO';
 import { Data, isDatetime } from '@sisense/sdk-data';
 import { getBaseDateFnsLocale } from '../chart-data-processor/data-table-date-period';
 import { applyDateFormat, defaultDateConfig } from './date-formats';
@@ -12,6 +11,7 @@ import type { Column, Cell, QueryResultData } from '@sisense/sdk-data';
 import { isCell } from '../chart-data-processor/table-creators';
 import { createCompareValue } from '../chart-data-processor/row-comparator';
 import { isMeasureColumn } from '@/chart-data-options/utils';
+import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';
 
 //TODO: refactor this function
 // eslint-disable-next-line max-lines-per-function, sonarjs/cognitive-complexity
@@ -83,7 +83,12 @@ export function applyDateFormats(
 
       let text = newCell.text;
       try {
-        text = applyDateFormat(parseISO(newCell.data), dateFormatForThisColumn, locale, dateConfig);
+        text = applyDateFormat(
+          parseISOWithTimezoneCheck(newCell.data),
+          dateFormatForThisColumn,
+          locale,
+          dateConfig,
+        );
       } catch (e: unknown) {
         console.error(e);
       }

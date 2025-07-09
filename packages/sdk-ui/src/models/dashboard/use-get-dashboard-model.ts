@@ -127,7 +127,7 @@ export const useGetDashboardModel = withTracking('useGetDashboardModel')(
  * @internal
  */
 export function useGetDashboardModelInternal(params: GetDashboardModelParams): DashboardModelState {
-  const isParamsChanged = useHasChanged(params, ['dashboardOid']);
+  const isParamsChanged = useHasChanged(params, ['dashboardOid', 'sharedMode']);
   const shouldLoad = useShouldLoad(params, isParamsChanged);
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<DashboardModel>, {
     isLoading: true,

@@ -87,8 +87,26 @@ export function isMeasureColumn(
   return !('type' in column);
 }
 
-export const getDataOptionTitle = ({ column }: StyledColumn | StyledMeasureColumn) => {
-  return ('title' in column && column.title) || column.name;
+/**
+ * Returns the title of a column (data option).
+ *
+ * @param column - The column to get the title of.
+ * @param name - The name of the column.
+ * @returns The title of the column.
+ */
+export const getDataOptionTitle = ({ column, name }: StyledColumn | StyledMeasureColumn) => {
+  // Use optional `name` property of styled column
+  if (name) {
+    return name;
+  }
+
+  // Use `title` property of measure column if it exists
+  if ('title' in column && column.title) {
+    return column.title;
+  }
+
+  // Default column name
+  return column.name;
 };
 
 export const getDataOptionGranularity = ({ column, granularity }: StyledColumn) => {

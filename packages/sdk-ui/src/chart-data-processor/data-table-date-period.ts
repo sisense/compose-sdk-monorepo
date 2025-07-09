@@ -16,7 +16,6 @@ import getMonth from 'date-fns/getMonth';
 import addYears from 'date-fns/addYears';
 import getQuarter from 'date-fns/getQuarter';
 import getTime from 'date-fns/getTime';
-import parseISO from 'date-fns/parseISO';
 import startOfDay from 'date-fns/startOfDay';
 import startOfMonth from 'date-fns/startOfMonth';
 import startOfQuarter from 'date-fns/startOfQuarter';
@@ -28,6 +27,7 @@ import subYears from 'date-fns/subYears';
 import { enUS, enGB, de, fr, es, it, ja, ko, nl, pt, ru, tr, zhCN, uk } from 'date-fns/locale';
 
 import range from 'lodash-es/range';
+import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';
 
 export const getBaseDateFnsLocale = (language?: string): Locale => {
   switch (language) {
@@ -98,7 +98,7 @@ export const formatPeriod = (period: ExtendedDatePeriod, date: number, locale: L
     ? formatPseudoPeriod(period, date, locale)
     : FORMAT_PERIOD_FN[period](date, locale);
 
-export const parseDataTableDateValue = (value: string) => parseISO(value);
+export const parseDataTableDateValue = (value: string) => parseISOWithTimezoneCheck(value);
 
 export const toPeriodCompareValue = (period: ExtendedDatePeriod, value: string, locale: Locale) => {
   return isPseudoDatePeriod(period)

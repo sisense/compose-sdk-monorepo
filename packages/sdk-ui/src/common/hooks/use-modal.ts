@@ -1,5 +1,5 @@
 import { TranslatableError } from '@/translation/translatable-error.js';
-import { useModalContext } from '../components/modal/modal-context.js';
+import { useModalContext } from '@/common/components/modal';
 
 /**
  * Hook to access modal API.
@@ -9,16 +9,11 @@ import { useModalContext } from '../components/modal/modal-context.js';
  * @internal
  */
 export const useModal = () => {
-  const modalSettings = useModalContext();
+  const modalContext = useModalContext();
 
-  if (!modalSettings) {
+  if (!modalContext) {
     throw new TranslatableError('errors.missingModalRoot');
   }
 
-  const { openModal, closeModal } = modalSettings;
-
-  return {
-    openModal,
-    closeModal,
-  };
+  return modalContext;
 };

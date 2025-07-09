@@ -1,5 +1,4 @@
 export {
-  useModal,
   ModalContext,
   useModalContext,
   type ModalOptions,
