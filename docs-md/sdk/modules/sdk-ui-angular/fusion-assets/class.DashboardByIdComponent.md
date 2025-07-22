@@ -16,7 +16,7 @@ import { Component } from '@angular/core';
   selector: 'code-example',
   template: `
     <div style="width: 100vw;">
-      `<csdk-dashboard-by-id *ngIf="dashboardOid" [dashboardOid]="dashboardOid" />`
+      `<csdk-dashboard-by-id *ngIf="dashboardOid" [dashboardOid]="dashboardOid" />` 
     </div>
   `,
  })

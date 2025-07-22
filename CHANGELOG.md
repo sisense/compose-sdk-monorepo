@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.35.0] - 2025-07-22
+
+### Changed
+
+- Removed React as a peer dependency in the `sdk-ui-angular` and `sdk-ui-vue` packages
+
 ## [1.34.0] - 2025-04-15
 
 ### Added
