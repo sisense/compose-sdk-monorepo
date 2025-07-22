@@ -8,6 +8,7 @@ import { DimensionalLevelAttribute } from './attributes.js';
 import { DimensionalElement } from './base.js';
 import { SortDirection } from './interfaces.js';
 import {
+  AnyObject,
   BaseJaql,
   DataType,
   FormulaJaql,
@@ -33,6 +34,11 @@ import {
  * @internal
  */
 export class JaqlElement extends DimensionalElement {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'JaqlElement';
+
   private readonly metadataItem: MetadataItem;
 
   expression: string;
@@ -89,7 +95,6 @@ export class JaqlElement extends DimensionalElement {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'JaqlElement';
 
     result.metadataItem = this.metadataItem as JSONObject;
     result.type = this.type;
@@ -103,6 +108,13 @@ const toMetadataType: Record<DataType, string> = {
   numeric: MetadataTypes.NumericAttribute,
   datetime: MetadataTypes.DateLevel,
 } as const;
+
+/**
+ * @internal
+ */
+export const isJaqlElement = (v: AnyObject): v is JaqlElement => {
+  return v && v.__serializable === 'JaqlElement';
+};
 
 /**
  * Create a JaqlElement from a MetadataItem

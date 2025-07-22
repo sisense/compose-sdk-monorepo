@@ -3,7 +3,6 @@ import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
 import styled from '@emotion/styled';
 import { useThemeContext } from '@/theme-provider';
-import { useEffect } from 'react';
 import { Widget } from '@/widgets/widget';
 import isUndefined from 'lodash-es/isUndefined';
 import isNumber from 'lodash-es/isNumber';
@@ -122,10 +121,6 @@ export interface ContentPanelProps {
  */
 export const ContentPanel = ({ layout, responsive, widgets }: ContentPanelProps) => {
   const { themeSettings } = useThemeContext();
-
-  useEffect(() => {
-    window.dispatchEvent(new Event('resize'));
-  }, [responsive]);
 
   const colWidths = layout.columns.map((c) => c.widthPercentage);
 

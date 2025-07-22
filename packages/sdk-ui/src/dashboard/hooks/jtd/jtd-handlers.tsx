@@ -64,7 +64,7 @@ export const getJtdClickHandler = (
   // Merge all filters: formula context filters are always included
   const mergedFilters = mergeFilters(
     mergeFilters(
-      mergeFilters(allowedWidgetFilters, allowedDashboardFilters),
+      mergeFilters(allowedDashboardFilters, allowedWidgetFilters),
       formulaContextFilters,
     ),
     generatedFilters,

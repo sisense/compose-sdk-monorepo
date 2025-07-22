@@ -1,11 +1,4 @@
-/* eslint-disable max-params */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable sonarjs/no-duplicate-string */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { parseExpression } from '../../utils.js';
 import {
   DimensionalAttribute,
@@ -16,7 +9,14 @@ import {
 import { DimensionalElement, normalizeName } from '../base.js';
 import { DATA_MODEL_MODULE_NAME } from '../consts.js';
 import { Attribute, DateDimension, Dimension, LevelAttribute } from '../interfaces.js';
-import { DateLevels, JaqlDataSource, JSONObject, MetadataTypes, Sort } from '../types.js';
+import {
+  AnyObject,
+  DateLevels,
+  JaqlDataSource,
+  JSONObject,
+  MetadataTypes,
+  Sort,
+} from '../types.js';
 
 /**
  * Represents a Dimension in a Dimensional Model
@@ -24,6 +24,11 @@ import { DateLevels, JaqlDataSource, JSONObject, MetadataTypes, Sort } from '../
  * @internal
  */
 export class DimensionalDimension extends DimensionalElement implements Dimension, Attribute {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DimensionalDimension';
+
   static parseType(type: string): string {
     switch (type) {
       case 'datetime':
@@ -191,7 +196,6 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'DimensionalDimension';
 
     result.expression = this.expression;
 
@@ -240,11 +244,23 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
 }
 
 /**
+ * @internal
+ */
+export const isDimensionalDimension = (v: AnyObject): v is DimensionalDimension => {
+  return v && v.__serializable === 'DimensionalDimension';
+};
+
+/**
  * Represents a Date Dimension in a Dimensional Model
  *
  * @internal
  */
 export class DimensionalDateDimension extends DimensionalDimension implements DateDimension {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DimensionalDateDimension';
+
   constructor(
     name: string,
     expression: string,
@@ -529,9 +545,7 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
    * Gets a serializable representation of the element
    */
   serialize(): JSONObject {
-    const result = super.serialize();
-    result.__serializable = 'DimensionalDateDimension';
-    return result;
+    return super.serialize();
   }
 
   /**
@@ -545,6 +559,13 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
     return nested ? result.jaql : result;
   }
 }
+
+/**
+ * @internal
+ */
+export const isDimensionalDateDimension = (v: AnyObject): v is DimensionalDateDimension => {
+  return v && v.__serializable === 'DimensionalDateDimension';
+};
 
 /**
  * Creates a new Dimension instance from the given JSON object.

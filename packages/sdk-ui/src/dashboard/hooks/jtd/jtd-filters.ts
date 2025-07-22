@@ -1,6 +1,6 @@
 import { mergeFilters, type Filter, filterFactory, isCascadingFilter } from '@sisense/sdk-data';
 import { WidgetProps } from '@/props.js';
-import { DataPoint } from '@/types';
+import { DataPoint, ScatterDataPoint, DataPointEntry } from '@/types';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
 import { JtdConfig } from '@/widget-by-id/types';
 
@@ -168,37 +168,161 @@ export const handleFormulaDuplicateFilters = (
 };
 
 /**
- * Generate filters from data point based on its category entries
+ * Type guard to check if a data point is a ScatterDataPoint.
+ * Checks for actual scatter chart structure (x/y coordinates) and scatter-only properties.
  *
- * @param point - The data point
- * @returns Array of filters generated from the data point
+ * @param point - The data point to check
+ * @returns True if the point is a ScatterDataPoint, false otherwise
+ * @internal
  */
-export const getFiltersFromDataPoint = (point: DataPoint): Filter[] => {
+export const isScatterDataPoint = (
+  point: DataPoint | ScatterDataPoint,
+): point is ScatterDataPoint => {
+  // Check if it has scatter chart structure (x/y coordinates)
+  const hasScatterStructure = 'x' in point || 'y' in point;
+  // Check if it has scatter properties and no regular chart properties
+  const hasOnlyScatterProperties =
+    ('breakByColor' in (point.entries || {}) || 'breakByPoint' in (point.entries || {})) &&
+    !('category' in (point.entries || {})) &&
+    !('breakBy' in (point.entries || {}));
+
+  return hasScatterStructure || hasOnlyScatterProperties;
+};
+
+/**
+ * Extracts filters from scatter chart data point (breakByColor and breakByPoint).
+ *
+ * @param point - The scatter data point
+ * @returns Array of filters generated from scatter chart breakBy properties
+ * @internal
+ */
+export const getFiltersFromScatterDataPoint = (point: ScatterDataPoint): Filter[] => {
   const filters: Filter[] = [];
+  const scatterEntries = point.entries;
 
-  // Extract category entries which represent dimensions that can be filtered
-  const categoryEntries = point.entries?.category || [];
-
-  for (const entry of categoryEntries) {
-    if (entry.attribute && entry.value !== undefined && entry.value !== null) {
-      // Create a members filter for each category dimension
-      const filter = filterFactory.members(entry.attribute, [String(entry.value)]);
-      filters.push(filter);
-    }
+  if (
+    scatterEntries?.breakByColor?.attribute &&
+    scatterEntries.breakByColor.value !== undefined &&
+    scatterEntries.breakByColor.value !== null
+  ) {
+    const filter = filterFactory.members(scatterEntries.breakByColor.attribute, [
+      String(scatterEntries.breakByColor.value),
+    ]);
+    filters.push(filter);
   }
 
-  // Also check for breakBy entries which can also be used for filtering
-  const breakByEntries = point.entries?.breakBy || [];
-
-  for (const entry of breakByEntries) {
-    if (entry.attribute && entry.value !== undefined && entry.value !== null) {
-      // Create a members filter for each breakBy dimension
-      const filter = filterFactory.members(entry.attribute, [String(entry.value)]);
-      filters.push(filter);
-    }
+  if (
+    scatterEntries?.breakByPoint?.attribute &&
+    scatterEntries.breakByPoint.value !== undefined &&
+    scatterEntries.breakByPoint.value !== null
+  ) {
+    const filter = filterFactory.members(scatterEntries.breakByPoint.attribute, [
+      String(scatterEntries.breakByPoint.value),
+    ]);
+    filters.push(filter);
   }
 
   return filters;
+};
+
+/**
+ * Type representing entries that may contain both regular and scatter properties
+ * @internal
+ */
+type MixedDataPointEntries = {
+  category?: DataPointEntry[];
+  value?: DataPointEntry[];
+  breakBy?: DataPointEntry[];
+  breakByColor?: DataPointEntry;
+  breakByPoint?: DataPointEntry;
+};
+
+/**
+ * Helper function to safely access mixed entries with proper typing
+ * @internal
+ */
+const getMixedEntries = (point: DataPoint): MixedDataPointEntries | undefined => {
+  return point.entries as MixedDataPointEntries | undefined;
+};
+
+/**
+ * Extracts filters from regular chart data point (category and breakBy array).
+ * Also processes any scatter properties (breakByColor/breakByPoint) if present.
+ *
+ * @param point - The regular data point (may have mixed properties)
+ * @returns Array of filters generated from all available entries
+ * @internal
+ */
+export const getFiltersFromRegularDataPoint = (point: DataPoint): Filter[] => {
+  const filters: Filter[] = [];
+  const entries = getMixedEntries(point);
+
+  // Extract category entries which represent dimensions that can be filtered
+  const categoryEntries = entries?.category || [];
+  for (const entry of categoryEntries) {
+    if (entry.attribute && entry.value !== undefined && entry.value !== null) {
+      const filter = filterFactory.members(entry.attribute, [String(entry.value)]);
+      filters.push(filter);
+    }
+  }
+
+  // Handle breakBy entries (array format)
+  const breakByEntries = entries?.breakBy;
+  if (breakByEntries) {
+    for (const entry of breakByEntries) {
+      if (entry.attribute && entry.value !== undefined && entry.value !== null) {
+        const filter = filterFactory.members(entry.attribute, [String(entry.value)]);
+        filters.push(filter);
+      }
+    }
+  }
+
+  // Also process scatter properties if present (for mixed data points)
+  const breakByColorEntry = entries?.breakByColor;
+  if (
+    breakByColorEntry?.attribute &&
+    breakByColorEntry.value !== undefined &&
+    breakByColorEntry.value !== null
+  ) {
+    const filter = filterFactory.members(breakByColorEntry.attribute, [
+      String(breakByColorEntry.value),
+    ]);
+    filters.push(filter);
+  }
+
+  const breakByPointEntry = entries?.breakByPoint;
+  if (
+    breakByPointEntry?.attribute &&
+    breakByPointEntry.value !== undefined &&
+    breakByPointEntry.value !== null
+  ) {
+    const filter = filterFactory.members(breakByPointEntry.attribute, [
+      String(breakByPointEntry.value),
+    ]);
+    filters.push(filter);
+  }
+
+  return filters;
+};
+
+/**
+ * Extracts filters from a data point for Jump To Dashboard functionality.
+ *
+ * This function handles both regular DataPoint and ScatterDataPoint types:
+ * - If data point has scatter properties (breakByColor/breakByPoint), process as scatter chart
+ * - Otherwise, process as regular chart (category/breakBy entries)
+ * - Scatter properties take priority over regular properties when both exist
+ *
+ * @param point - The data point from chart interaction
+ * @returns Array of filters generated from the data point
+ * @internal
+ */
+export const getFiltersFromDataPoint = (point: DataPoint | ScatterDataPoint): Filter[] => {
+  if (isScatterDataPoint(point)) {
+    return getFiltersFromScatterDataPoint(point);
+  } else {
+    return getFiltersFromRegularDataPoint(point);
+  }
 };
 
 /**
@@ -207,6 +331,7 @@ export const getFiltersFromDataPoint = (point: DataPoint): Filter[] => {
  * @param filters - The filters to filter
  * @param allowedDims - The allowed dimensions
  * @returns The filtered filters
+ * @internal
  */
 export const filterByAllowedDimensions = (filters: Filter[], allowedDims?: string[]): Filter[] => {
   if (!allowedDims) {
@@ -259,6 +384,7 @@ export const filterByAllowedDimensions = (filters: Filter[], allowedDims?: strin
  * @param widgetFilters - Widget-specific filters
  * @param formulaContextFilters - Formula context filters
  * @returns Merged filters array
+ * @internal
  */
 export const mergeJtdFilters = (
   generatedFilters: Filter[],

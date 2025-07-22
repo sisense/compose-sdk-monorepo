@@ -33,6 +33,10 @@ export interface SisenseChartProps {
   onDataPointContextMenu?: SisenseChartDataPointEventHandler;
   onDataPointsSelected?: SisenseChartDataPointsEventHandler;
   onBeforeRender?: BeforeRenderHandler;
+  size?: {
+    width?: number;
+    height?: number;
+  };
 }
 
 export type SisenseChartType =

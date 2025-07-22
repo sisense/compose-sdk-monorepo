@@ -10,6 +10,25 @@ import {
   DimensionalLevelAttribute,
   DimensionalMeasureTemplate,
   ExcludeFilter,
+  isCascadingFilter,
+  isCustomFilter,
+  isDateRangeFilter,
+  isDimensionalAttribute,
+  isDimensionalBaseMeasure,
+  isDimensionalCalculatedMeasure,
+  isDimensionalDateDimension,
+  isDimensionalDimension,
+  isDimensionalLevelAttribute,
+  isDimensionalMeasureTemplate,
+  isExcludeFilter,
+  isJaqlElement,
+  isLogicalAttributeFilter,
+  isMeasureFilter,
+  isMembersFilter,
+  isNumericFilter,
+  isRankingFilter,
+  isRelativeDateFilter,
+  isTextFilter,
   JaqlElement,
   JSONObject,
   LogicalAttributeFilter,
@@ -72,8 +91,8 @@ const deserializeDimensionalDimension = (v: any) =>
   new DimensionalDimension(
     v.name,
     v.expression,
-    v.attributes.map((a: any) => deserializeAttribute(a)),
-    v.dimensions.map((d: any) => deserializeDimension(d)),
+    v.attributes.map(deserializeAttribute),
+    v.dimensions.map(deserializeDimension),
     v.type,
     v.description,
     normalizeSort(v.sort),
@@ -282,7 +301,7 @@ const deserializeFilter = (v: any): any => {
 
 SuperJSON.registerCustom<JaqlElement, any>(
   {
-    isApplicable: (v): v is JaqlElement => v instanceof JaqlElement,
+    isApplicable: isJaqlElement,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeJaqlElement(v),
   },
@@ -291,9 +310,7 @@ SuperJSON.registerCustom<JaqlElement, any>(
 
 SuperJSON.registerCustom<DimensionalAttribute, any>(
   {
-    isApplicable: (v): v is DimensionalAttribute => {
-      return v instanceof DimensionalAttribute && v.type !== 'datelevel';
-    },
+    isApplicable: isDimensionalAttribute,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeDimensionalAttribute(v),
   },
@@ -302,7 +319,7 @@ SuperJSON.registerCustom<DimensionalAttribute, any>(
 
 SuperJSON.registerCustom<DimensionalLevelAttribute, any>(
   {
-    isApplicable: (v): v is DimensionalLevelAttribute => v instanceof DimensionalLevelAttribute,
+    isApplicable: isDimensionalLevelAttribute,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeDimensionalLevelAttribute(v),
   },
@@ -311,9 +328,7 @@ SuperJSON.registerCustom<DimensionalLevelAttribute, any>(
 
 SuperJSON.registerCustom<DimensionalDimension, any>(
   {
-    isApplicable: (v): v is DimensionalDimension => {
-      return v instanceof DimensionalDimension && v.type !== 'datedimension';
-    },
+    isApplicable: isDimensionalDimension,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeDimensionalDimension(v),
   },
@@ -322,7 +337,7 @@ SuperJSON.registerCustom<DimensionalDimension, any>(
 
 SuperJSON.registerCustom<DimensionalDateDimension, any>(
   {
-    isApplicable: (v): v is DimensionalDateDimension => v instanceof DimensionalDateDimension,
+    isApplicable: isDimensionalDateDimension,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeDimensionalDateDimension(v),
   },
@@ -331,7 +346,7 @@ SuperJSON.registerCustom<DimensionalDateDimension, any>(
 
 SuperJSON.registerCustom<DimensionalBaseMeasure, any>(
   {
-    isApplicable: (v): v is DimensionalBaseMeasure => v instanceof DimensionalBaseMeasure,
+    isApplicable: isDimensionalBaseMeasure,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeDimensionalBaseMeasure(v),
   },
@@ -340,8 +355,7 @@ SuperJSON.registerCustom<DimensionalBaseMeasure, any>(
 
 SuperJSON.registerCustom<DimensionalCalculatedMeasure, any>(
   {
-    isApplicable: (v): v is DimensionalCalculatedMeasure =>
-      v instanceof DimensionalCalculatedMeasure,
+    isApplicable: isDimensionalCalculatedMeasure,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeDimensionalCalculatedMeasure(v),
   },
@@ -350,7 +364,7 @@ SuperJSON.registerCustom<DimensionalCalculatedMeasure, any>(
 
 SuperJSON.registerCustom<DimensionalMeasureTemplate, any>(
   {
-    isApplicable: (v): v is DimensionalMeasureTemplate => v instanceof DimensionalMeasureTemplate,
+    isApplicable: isDimensionalMeasureTemplate,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeDimensionalMeasureTemplate(v),
   },
@@ -359,7 +373,7 @@ SuperJSON.registerCustom<DimensionalMeasureTemplate, any>(
 
 SuperJSON.registerCustom<MembersFilter, any>(
   {
-    isApplicable: (v): v is MembersFilter => v instanceof MembersFilter,
+    isApplicable: isMembersFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },
@@ -368,7 +382,7 @@ SuperJSON.registerCustom<MembersFilter, any>(
 
 SuperJSON.registerCustom<LogicalAttributeFilter, any>(
   {
-    isApplicable: (v): v is LogicalAttributeFilter => v instanceof LogicalAttributeFilter,
+    isApplicable: isLogicalAttributeFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },
@@ -377,7 +391,7 @@ SuperJSON.registerCustom<LogicalAttributeFilter, any>(
 
 SuperJSON.registerCustom<CascadingFilter, any>(
   {
-    isApplicable: (v): v is CascadingFilter => v instanceof CascadingFilter,
+    isApplicable: isCascadingFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },
@@ -386,7 +400,7 @@ SuperJSON.registerCustom<CascadingFilter, any>(
 
 SuperJSON.registerCustom<ExcludeFilter, any>(
   {
-    isApplicable: (v): v is ExcludeFilter => v instanceof ExcludeFilter,
+    isApplicable: isExcludeFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },
@@ -397,7 +411,7 @@ SuperJSON.registerCustom<ExcludeFilter, any>(
 
 SuperJSON.registerCustom<MeasureFilter, any>(
   {
-    isApplicable: (v): v is MeasureFilter => v instanceof MeasureFilter,
+    isApplicable: isMeasureFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },
@@ -406,7 +420,7 @@ SuperJSON.registerCustom<MeasureFilter, any>(
 
 SuperJSON.registerCustom<RankingFilter, any>(
   {
-    isApplicable: (v): v is RankingFilter => v instanceof RankingFilter,
+    isApplicable: isRankingFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },
@@ -415,7 +429,7 @@ SuperJSON.registerCustom<RankingFilter, any>(
 
 SuperJSON.registerCustom<NumericFilter, any>(
   {
-    isApplicable: (v): v is NumericFilter => v instanceof NumericFilter,
+    isApplicable: isNumericFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },
@@ -424,7 +438,7 @@ SuperJSON.registerCustom<NumericFilter, any>(
 
 SuperJSON.registerCustom<TextFilter, any>(
   {
-    isApplicable: (v): v is TextFilter => v instanceof TextFilter,
+    isApplicable: isTextFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },
@@ -433,7 +447,7 @@ SuperJSON.registerCustom<TextFilter, any>(
 
 SuperJSON.registerCustom<DateRangeFilter, any>(
   {
-    isApplicable: (v): v is DateRangeFilter => v instanceof DateRangeFilter,
+    isApplicable: isDateRangeFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },
@@ -442,7 +456,7 @@ SuperJSON.registerCustom<DateRangeFilter, any>(
 
 SuperJSON.registerCustom<RelativeDateFilter, any>(
   {
-    isApplicable: (v): v is RelativeDateFilter => v instanceof RelativeDateFilter,
+    isApplicable: isRelativeDateFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },
@@ -451,7 +465,7 @@ SuperJSON.registerCustom<RelativeDateFilter, any>(
 
 SuperJSON.registerCustom<CustomFilter, any>(
   {
-    isApplicable: (v): v is CustomFilter => v instanceof CustomFilter,
+    isApplicable: isCustomFilter,
     serialize: (v) => v.serialize(),
     deserialize: (v) => deserializeFilter(v),
   },

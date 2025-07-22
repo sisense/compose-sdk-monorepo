@@ -64,7 +64,7 @@ export class WatAuthenticator extends BaseAuthenticator {
     return this._result;
   }
 
-  applyHeader(headers: HeadersInit) {
+  applyHeaders(headers: HeadersInit) {
     if (!!this._webSessionToken && !!this._initialiser) {
       const authHeader = this._webSessionToken;
       const initialiserHeader = this._initialiser;

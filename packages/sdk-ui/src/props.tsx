@@ -197,6 +197,17 @@ export interface SisenseContextProviderProps {
    *
    */
   enableSilentPreAuth?: boolean;
+
+  /**
+   * Alternative host to use for SSO authentication.
+   * Used **only** when the SSO Login URL is configured as a *relative* url.
+   * If not specified, the default value is `''`.
+   *
+   * @category Sisense Authentication
+   *
+   * @internal
+   */
+  alternativeSsoHost?: string;
 }
 
 /**

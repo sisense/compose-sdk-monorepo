@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 
 const ArrowWrapper = styled.div<{ reversed: boolean }>`
   background-color: #b6b6b6;
@@ -64,9 +64,6 @@ export const HorizontalCollapse = ({
   onCollapsedChange?: (collapsed: boolean) => void;
   children: ReactNode;
 }) => {
-  useEffect(() => {
-    window.dispatchEvent(new Event('resize'));
-  }, [collapsed]);
   return (
     <Wrapper>
       <ArrowWrapper

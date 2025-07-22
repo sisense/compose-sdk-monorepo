@@ -13,6 +13,7 @@ import { filterFactory, type Attribute, Sort } from '@sisense/sdk-data';
 
 // Mock filterFactory.members to return proper filter objects
 const createMockFilter = (attribute: any, members: string[]) => ({
+  __serializable: 'MembersFilter',
   attribute,
   members,
   filterType: 'members',
@@ -74,6 +75,7 @@ const createTestAttribute = (expression: string): Attribute => {
     type: 'dimension',
     description: '',
     id: expression,
+    __serializable: 'DimensionalAttribute',
     serialize: () => ({
       name: expression,
       type: 'dimension',

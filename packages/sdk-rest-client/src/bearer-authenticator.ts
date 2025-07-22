@@ -11,7 +11,7 @@ export class BearerAuthenticator extends BaseAuthenticator {
     this._resolve(true);
   }
 
-  applyHeader(headers: HeadersInit) {
+  applyHeaders(headers: HeadersInit) {
     const authHeader = 'Bearer ' + this.bearer;
     appendHeaders(headers, { Authorization: authHeader });
   }

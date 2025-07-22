@@ -1,4 +1,8 @@
-import { createDimensionalElementFromMetadataItem, createJaqlElement } from './jaql-element.js';
+import {
+  createDimensionalElementFromMetadataItem,
+  createJaqlElement,
+  isJaqlElement,
+} from './jaql-element.js';
 import { MetadataItem } from './types.js';
 
 describe('createJaqlElement', () => {
@@ -33,6 +37,7 @@ describe('createJaqlElement', () => {
 
     metadata.forEach((metadataItem) => {
       const jaqlElement = createJaqlElement(metadataItem);
+      expect(isJaqlElement(jaqlElement)).toBe(true);
       expect(jaqlElement.jaql()).toEqual(metadataItem);
       expect(jaqlElement.jaql(false)).toEqual(metadataItem);
       expect(jaqlElement.jaql(true)).toEqual(metadataItem.jaql);

@@ -8,6 +8,7 @@ import {
   isDatetime,
   DimensionalLevelAttribute,
   JaqlElement,
+  DateLevels,
 } from '@sisense/sdk-data';
 import { StyledColumn, StyledMeasureColumn, AnyColumn, CategoryStyle, ValueStyle } from './types';
 
@@ -110,7 +111,7 @@ export const getDataOptionTitle = ({ column, name }: StyledColumn | StyledMeasur
 };
 
 export const getDataOptionGranularity = ({ column, granularity }: StyledColumn) => {
-  return granularity || (column as DimensionalLevelAttribute).granularity;
+  return granularity || (column as DimensionalLevelAttribute).granularity || DateLevels.Years;
 };
 
 /** @internal */

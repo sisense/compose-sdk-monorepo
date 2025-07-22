@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.6.0] - 2025-07-22
+
+### Added
+- Add alternative SSO host support for internal testing
+
+### Changed
+- Improve charts resizing functionality
+- Improve default date granularity, set to `Years` when not provided
+- Fix multiple bugs in JTD (Jump to Dashboard)
+
 ## [2.5.0] - 2025-07-08
 
 ### Added

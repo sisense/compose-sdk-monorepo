@@ -48,7 +48,7 @@ describe('WatAuthenticator', () => {
   it('should apply authorization and initialiser headers', async () => {
     await mockAuthenticateSuccessfully();
     const headers: HeadersInit = {};
-    auth.applyHeader(headers);
+    auth.applyHeaders(headers);
     expect(headers).toStrictEqual({ Authorization: 'sessionToken', Initialiser: 'initialiser' });
   });
 

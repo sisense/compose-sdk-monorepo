@@ -82,23 +82,13 @@ export interface DashboardFiltersPanelConfig extends FiltersPanelConfig {
  */
 export interface WidgetsPanelConfig {
   /**
-   * If true adjust layout based on available width of widgets panel.
+   * If `true`, adjust layout based on available width of widgets panel.
    *
    * If not specified, the default value is `false`.
    */
   responsive?: boolean;
   /**
    * Edit mode configuration.
-   * If enabled, an 'Edit Layout' action is visible to users on the dashboard toolbar.
-   * Clicking 'Edit Layout' opens the dashboard in editing mode, where the user can resize or reposition widgets using drag and drop.
-   * If history enabled, layout changes are temporarily stored during editing, with undo/redo buttons available on the toolbar.
-   * Finally, changes are confirmed or discarded with 'Apply' or 'Cancel' buttons.
-   *
-   * If persistence is enabled for the dashboard, changes to the layout will be saved to Fusion on clicking the 'Apply' button.
-   *
-   * This feature is in alpha.
-   *
-   * @alpha
    */
   editMode?: EditModeConfig;
 }
@@ -107,36 +97,53 @@ export interface WidgetsPanelConfig {
  * Edit mode configuration
  */
 export interface EditModeConfig {
-  /** Flag indicating whether the edit layout feature is enabled
+  /**
+   * If `true` the editable layout feature is enabled for the end user.
+   *
+   * If `false` the end user is unable to edit the layout of widgets in the dashboard.
+   *
+   * When persistence is enabled combined with `editMode` for a Fusion dashboard, changes to the layout will saved to Fusion.
    *
    * @default false
    */
   enabled: boolean;
   /**
-   * Flag indicating whether the dashboard is currently in edit mode.
-   * If specified, will override inner mode state.
+   * Indicates whether the dashboard is currently in edit mode.
+   *
+   * If set, this controls whether editing is currently in progress,
+   * which by default is automatically managed from UI interactions with the dashboard toolbar menu/buttons.
+   *
    * */
   isEditing?: boolean;
-  /** Configuration for the edit mode history */
+  /**
+   * Configuration for the edit mode user experience
+   */
   applyChangesAsBatch?: {
     /**
-     * If true, changes are applied when the user clicks 'Apply'
+     * If `true`, a history of changes will be accumulated during editing,
+     * and users may undo/redo through the history of changes made during the current edit.
+     *
+     * The current layout state will be applied to the dashboard when the user clicks 'Apply',
      * or discarded when the user clicks 'Cancel'.
      *
-     * If false, changes will be applied immediately as the user makes each change
+     * If `false`, the layout changes will be applied immediately after the user makes each change,
      * without confirmation or the ability to cancel/undo.
      *
      * @default: true
      * */
     enabled: boolean;
     /**
-     * The maximum number of history items to keep.
+     * The maximum number of history items to keep while applying changes in batch mode.
+     *
+     * History will be temporarily stored in the browser during editing.
      *
      * @default 20
      */
     historyLimit?: number;
   };
-  /** Flag indicating whether the drag handle icon is visible
+  /**
+   * Determines whether the drag handle icon should be displayed on the
+   * header of each widget when layout editing is possible.
    *
    * @default true
    */

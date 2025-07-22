@@ -41,6 +41,7 @@ export const SisenseChart = ({
   onDataPointContextMenu,
   onDataPointsSelected,
   onBeforeRender = defaultOnBeforeRender,
+  size,
 }: SisenseChartProps) => {
   const { app } = useSisenseContext();
   const { t: translate } = useTranslation();
@@ -106,8 +107,21 @@ export const SisenseChart = ({
     translate,
   ]);
 
+  const optionsWithSize = useMemo(() => {
+    if (!options) return null;
+
+    return {
+      ...options,
+      chart: {
+        ...options.chart,
+        ...(size?.width && { width: size.width }),
+        ...(size?.height && { height: size.height }),
+      },
+    };
+  }, [options, size]);
+
   return (
-    options && (
+    optionsWithSize && (
       <div
         aria-label="chart-root"
         style={{
@@ -118,7 +132,7 @@ export const SisenseChart = ({
         }}
       >
         {!!alerts.length && <AlertBox alerts={alerts} />}
-        <HighchartsReactMemoized options={options} />
+        <HighchartsReactMemoized options={optionsWithSize} />
       </div>
     )
   );

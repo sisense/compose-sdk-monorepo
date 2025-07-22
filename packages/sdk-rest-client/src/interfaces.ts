@@ -11,5 +11,5 @@ export interface Authenticator {
 
   authenticated: () => Promise<boolean>;
 
-  applyHeader: (headers: HeadersInit) => void;
+  applyHeaders: (headers: HeadersInit) => void;
 }

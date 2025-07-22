@@ -25,6 +25,10 @@ export type HighchartsBasedChartRendererProps<CT extends HighchartBasedChartType
   onDataPointContextMenu?: SisenseChartDataPointEventHandler;
   onDataPointsSelected?: SisenseChartDataPointsEventHandler;
   onBeforeRender?: BeforeRenderHandler;
+  size?: {
+    width?: number;
+    height?: number;
+  };
 };
 
 /**
@@ -56,6 +60,7 @@ export function createHighchartsBasedChartRenderer<CT extends HighchartBasedChar
     onDataPointContextMenu,
     onDataPointsSelected,
     onBeforeRender,
+    size,
   }: HighchartsBasedChartRendererProps<CT>) {
     const { app } = useSisenseContext();
     const { t: translate } = useTranslation();
@@ -103,6 +108,19 @@ export function createHighchartsBasedChartRenderer<CT extends HighchartBasedChar
       ],
     );
 
+    const highchartsOptionsWithSize = useMemo(() => {
+      if (!highchartsOptions) return null;
+
+      return {
+        ...highchartsOptions,
+        chart: {
+          ...highchartsOptions.chart,
+          ...(size?.width && { width: size.width }),
+          ...(size?.height && { height: size.height }),
+        },
+      };
+    }, [highchartsOptions, size]);
+
     const alerts: string[] = getAlerts({
       chartData,
       dataOptions,
@@ -111,7 +129,7 @@ export function createHighchartsBasedChartRenderer<CT extends HighchartBasedChar
     });
 
     return (
-      highchartsOptions && (
+      highchartsOptionsWithSize && (
         <div
           aria-label="chart-root"
           style={{
@@ -122,7 +140,7 @@ export function createHighchartsBasedChartRenderer<CT extends HighchartBasedChar
           }}
         >
           {!!alerts.length && <AlertBox alerts={alerts} />}
-          <HighchartsReactMemoized options={highchartsOptions} />
+          <HighchartsReactMemoized options={highchartsOptionsWithSize} />
         </div>
       )
     );

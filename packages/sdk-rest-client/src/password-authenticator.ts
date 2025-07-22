@@ -51,7 +51,7 @@ export class PasswordAuthenticator extends BaseAuthenticator {
     return this._result;
   }
 
-  applyHeader(headers: HeadersInit) {
+  applyHeaders(headers: HeadersInit) {
     const authHeader = 'Bearer ' + this._authheader;
     appendHeaders(headers, { Authorization: authHeader });
   }

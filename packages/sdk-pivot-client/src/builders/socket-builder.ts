@@ -55,7 +55,7 @@ export class SocketBuilder {
 
   private getQueryOptionsWat(auth: WatAuthenticator): SocketQueryOptions {
     const headers = new Headers();
-    auth.applyHeader(headers);
+    auth.applyHeaders(headers);
     const authorization = headers.get('Authorization');
     const initialiser = headers.get('Initialiser');
     if (!authorization || !initialiser) {

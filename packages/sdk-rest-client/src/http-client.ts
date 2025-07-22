@@ -45,7 +45,7 @@ export class HttpClient {
       config.credentials = 'include';
     }
 
-    this.auth.applyHeader(config.headers);
+    this.auth.applyHeaders(config.headers);
 
     const fetchUrl = requestConfig?.skipTrackingParam
       ? url

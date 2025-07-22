@@ -25,17 +25,6 @@ export const addQueryParamsToUrl = (url: string, params: { [key: string]: string
   return urlObject.toString();
 };
 
-export const addPathnameToUrl = (url: string, newPathname: string): string => {
-  if (!url || typeof url !== 'string') return url;
-  // can't just append to the url because it might already have a query string
-  const urlObject = new URL(url);
-
-  const pathnameToAdd = newPathname.startsWith('/') ? newPathname.slice(1) : newPathname;
-  urlObject.pathname += pathnameToAdd;
-
-  return urlObject.toString();
-};
-
 /**
  * Checks if API token or WAT token is pending (e.g., being generated)
  *

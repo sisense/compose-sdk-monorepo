@@ -10,6 +10,11 @@ export abstract class DimensionalElement implements Element {
   /**
    * @internal
    */
+  readonly __serializable: string = 'DimensionalElement';
+
+  /**
+   * @internal
+   */
   private _name: string;
 
   /**
@@ -87,7 +92,7 @@ export abstract class DimensionalElement implements Element {
       description: this.description,
       dataSource: this.dataSource,
       composeCode: this.composeCode,
-      __serializable: 'DimensionalElement',
+      __serializable: this.__serializable,
     };
   }
 
@@ -106,7 +111,7 @@ export abstract class DimensionalElement implements Element {
 }
 
 /**
- * @param name
+ * @param name - The name to normalize
  * @internal
  */
 export function normalizeName(name: string): string {

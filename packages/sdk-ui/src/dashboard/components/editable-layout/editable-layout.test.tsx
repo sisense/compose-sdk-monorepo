@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach, beforeAll, afterAll } from 'vitest';
 import { EditableLayout, EditableLayoutProps } from './editable-layout';
 import { WidgetsPanelLayout } from '@/models';
@@ -294,23 +294,6 @@ describe('EditableLayout', () => {
 
       // Should not throw any errors
       expect(true).toBe(true);
-    });
-  });
-
-  describe('Resize Event', () => {
-    it('should dispatch resize event after layout changes', async () => {
-      render(<EditableLayout {...defaultProps} />);
-
-      // Trigger a layout change
-      const resizeButtons = screen.getAllByTestId('resize-columns');
-      fireEvent.click(resizeButtons[0]);
-
-      // Fast-forward timers to trigger the setTimeout
-      vi.runAllTimers();
-
-      await waitFor(() => {
-        expect(window.dispatchEvent).toHaveBeenCalledWith(expect.any(Event));
-      });
     });
   });
 

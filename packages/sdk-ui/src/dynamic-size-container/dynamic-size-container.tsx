@@ -17,6 +17,7 @@ export type DynamicSizeContainerProps = {
     height?: boolean;
   };
   onSizeChange?: (size: ContainerSize) => void;
+  debounceMs?: number;
 };
 
 /**
@@ -68,9 +69,11 @@ export const DynamicSizeContainer = ({
   rerenderOnResize = false,
   useContentSize,
   onSizeChange,
+  debounceMs = 300,
 }: DynamicSizeContainerProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerSize, setContainerSize] = useState<Partial<ContainerSize> | undefined>();
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const updateContainerSize = useCallback(() => {
     const containerElementSize = {
@@ -95,17 +98,40 @@ export const DynamicSizeContainer = ({
       }
       return prevSize;
     });
-  }, [containerRef, defaultSize]);
+  }, [defaultSize]);
+
+  const debouncedUpdateContainerSize = useCallback(() => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      updateContainerSize();
+    }, debounceMs);
+  }, [updateContainerSize, debounceMs]);
 
   useLayoutEffect(() => {
     updateContainerSize();
   }, [updateContainerSize]);
 
   useEffect(() => {
-    // Attach a resize event listener to update content size on window resize.
-    window.addEventListener('resize', updateContainerSize);
-    return () => window.removeEventListener('resize', updateContainerSize);
-  }, [updateContainerSize]);
+    const containerElement = containerRef.current;
+    if (!containerElement) return;
+
+    // Use ResizeObserver to monitor container size changes with debouncing
+    const resizeObserver = new ResizeObserver(() => {
+      debouncedUpdateContainerSize();
+    });
+
+    resizeObserver.observe(containerElement);
+
+    return () => {
+      resizeObserver.disconnect();
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, [debouncedUpdateContainerSize]);
 
   const contentSize = useMemo(
     () => calculateContentSize(containerSize, size, defaultSize),

@@ -172,6 +172,45 @@ export function isSupportedWidgetType(
   return supportedWidgetTypes.includes(fusionWidgetType);
 }
 
+/**
+ * Widget types that support Jump To Dashboard (JTD) functionality
+ *
+ * Supported types:
+ * - Pie chart with no categories, Pie chart
+ * - Indicator
+ * - Text widget
+ * - Column chart, Bar chart, Line chart, Area chart
+ * - Pivot
+ * - Scatter chart, Polar chart
+ * - Blox
+ *
+ * @internal
+ */
+export const JTD_SUPPORTED_WIDGET_TYPES: FusionWidgetType[] = [
+  'chart/pie',
+  'indicator',
+  'richtexteditor',
+  'chart/column',
+  'chart/bar',
+  'chart/line',
+  'chart/area',
+  'pivot',
+  'pivot2',
+  'chart/scatter',
+  'chart/polar',
+];
+
+/**
+ * Check if the widget type supports Jump To Dashboard (JTD)
+ *
+ * @param fusionWidgetType - The fusion widget type
+ * @returns True if the widget type supports JTD, false otherwise
+ * @internal
+ */
+export function widgetTypeSupportsJtd(fusionWidgetType: FusionWidgetType): boolean {
+  return JTD_SUPPORTED_WIDGET_TYPES.includes(fusionWidgetType);
+}
+
 export function isTableFusionWidget(fusionWidgetType: FusionWidgetType) {
   return fusionWidgetType === 'tablewidget' || fusionWidgetType === 'tablewidgetagg';
 }
@@ -206,6 +245,15 @@ export function isCustomWidget(widgetType: WidgetType) {
 
 export function isChartFusionWidget(fusionWidgetType: FusionWidgetType) {
   return !isPivotTableFusionWidget(fusionWidgetType) && !isTextFusionWidget(fusionWidgetType);
+}
+export function isChartTypeFusionWidget(fusionWidgetType: FusionWidgetType) {
+  return fusionWidgetType.startsWith('chart');
+}
+export function isPieChartFusionWidget(fusionWidgetType: FusionWidgetType) {
+  return fusionWidgetType === 'chart/pie';
+}
+export function isIndicatorFusionWidget(fusionWidgetType: FusionWidgetType) {
+  return fusionWidgetType === 'indicator';
 }
 export function isChartWidget(widgetType: WidgetType) {
   return widgetType === 'chart';

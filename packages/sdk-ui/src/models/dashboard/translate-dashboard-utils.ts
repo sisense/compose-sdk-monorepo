@@ -26,7 +26,6 @@ import {
   isJaqlWithFormula,
   isSharedFormulaReferenceContext,
   JtdConfig,
-  JtdConfigDto,
   JtdNavigateType,
   SharedFormulaReferenceContext,
   WidgetDto,
@@ -34,6 +33,14 @@ import {
 import { SizeMeasurement } from '@/types';
 import { RestApi } from '@/api/rest-api';
 import { TabberConfig, TabberDtoStyle } from '@/types';
+import {
+  isChartTypeFusionWidget,
+  isIndicatorFusionWidget,
+  isPieChartFusionWidget,
+  isPivotTableFusionWidget,
+  isTextFusionWidget,
+  widgetTypeSupportsJtd,
+} from '@/widget-by-id/utils';
 
 export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => ({
   columns: (layout.columns || []).map((c) => ({
@@ -113,8 +120,43 @@ const translateNavigateType = (navigateType: number): JtdNavigateType => {
   return JtdNavigateType.CLICK;
 };
 
-const translateToJtdConfig = (jtdConfigDto: JtdConfigDto): JtdConfig => {
+const getJtdNavigateType = (widget: WidgetDto): JtdNavigateType => {
+  const jtdConfigDto = widget.drillToDashboardConfig;
+  if (!jtdConfigDto) {
+    // default one
+    return JtdNavigateType.RIGHT_CLICK;
+  }
+
+  if (isPivotTableFusionWidget(widget.type)) {
+    return translateNavigateType(jtdConfigDto.drillToDashboardNavigateTypePivot);
+  }
+
+  if (isPieChartFusionWidget(widget.type)) {
+    const chartCategories = widget.metadata?.panels.find((p) => p.name === 'categories');
+    const isPieChartWithoutCategories = (chartCategories?.items?.length || 0) > 0;
+    if (isPieChartWithoutCategories) {
+      return JtdNavigateType.CLICK;
+    }
+  }
+  if (isChartTypeFusionWidget(widget.type)) {
+    return translateNavigateType(jtdConfigDto.drillToDashboardNavigateTypeCharts);
+  }
+  if (isIndicatorFusionWidget(widget.type) || isTextFusionWidget(widget.type)) {
+    return JtdNavigateType.CLICK;
+  }
+  return JtdNavigateType.RIGHT_CLICK;
+};
+
+const translateToJtdConfig = (widget: WidgetDto): JtdConfig | undefined => {
+  const jtdConfigDto = widget.drillToDashboardConfig;
+  if (!jtdConfigDto) {
+    return undefined;
+  }
+  if (!widgetTypeSupportsJtd(widget.type)) {
+    return undefined;
+  }
   const measurement = jtdConfigDto.modalWindowMeasurement || SizeMeasurement.PERCENT;
+
   return {
     ...jtdConfigDto,
     modalWindowHeight:
@@ -123,7 +165,7 @@ const translateToJtdConfig = (jtdConfigDto: JtdConfigDto): JtdConfig => {
       jtdConfigDto.modalWindowWidth || (measurement === SizeMeasurement.PERCENT ? 85 : 1200),
     enabled: typeof jtdConfigDto.enabled === 'boolean' ? jtdConfigDto.enabled : true,
     modalWindowMeasurement: measurement,
-    navigateType: translateNavigateType(jtdConfigDto.drillToDashboardNavigateType),
+    navigateType: getJtdNavigateType(widget),
     drillTargets: jtdConfigDto.dashboardIds.map((drillTarget) => ({
       caption: drillTarget.caption,
       id: drillTarget.id || drillTarget.oid,
@@ -151,7 +193,7 @@ export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptio
       },
       ...(widget?.drillToDashboardConfig &&
         widget.drillToDashboardConfig.version && {
-          jtdConfig: translateToJtdConfig(widget.drillToDashboardConfig),
+          jtdConfig: translateToJtdConfig(widget),
         }),
     };
   });
@@ -180,6 +222,7 @@ export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersOptio
  * @param dashboard - The dashboard DTO to replace shared formulas in
  * @param api - The REST API instance
  * @returns The dashboard DTO with shared formulas, defined by id references, replaced
+ * @internal
  */
 export async function withSharedFormulas(
   dashboard: DashboardDto,
@@ -206,6 +249,7 @@ export async function withSharedFormulas(
  *
  * @param widgets - An array of widgets to extract shared formulas from
  * @returns An array of unique shared formulas ids
+ * @internal
  */
 function getSharedFormulas(widgets: WidgetDto[]): string[] {
   const sharedFormulas = widgets.flatMap((widget) =>
@@ -229,6 +273,7 @@ function getSharedFormulas(widgets: WidgetDto[]): string[] {
  * @param widget - The widget to apply shared formulas to
  * @param sharedFormulasDictionary - A dictionary of shared formulas
  * @returns The widget with shared formulas applied
+ * @internal
  */
 function applySharedFormulas(
   widget: WidgetDto,

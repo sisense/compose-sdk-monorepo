@@ -17,13 +17,25 @@ import {
   MeasureContext,
   MeasureTemplate,
 } from '../interfaces.js';
-import { AggregationTypes, JaqlDataSource, JSONObject, MetadataTypes, Sort } from '../types.js';
+import {
+  AggregationTypes,
+  AnyObject,
+  JaqlDataSource,
+  JSONObject,
+  MetadataTypes,
+  Sort,
+} from '../types.js';
 import * as m from './factory.js';
 
 /**
  * @internal
  */
 export abstract class AbstractMeasure extends DimensionalElement {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'AbstractMeasure';
+
   protected _sort: Sort = Sort.None;
 
   protected _format: string | undefined = '#,#.00';
@@ -106,6 +118,11 @@ export abstract class AbstractMeasure extends DimensionalElement {
  * @internal
  */
 export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasure {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DimensionalBaseMeasure';
+
   static aggregationFromJAQL(agg: string): string {
     switch (agg) {
       case 'sum':
@@ -250,7 +267,6 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'DimensionalBaseMeasure';
     result.aggregation = this.aggregation;
     result.attribute = this.attribute.serialize();
 
@@ -280,12 +296,24 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
 }
 
 /**
+ * @internal
+ */
+export const isDimensionalBaseMeasure = (v: AnyObject): v is DimensionalBaseMeasure => {
+  return Boolean(v && v.__serializable === 'DimensionalBaseMeasure');
+};
+
+/**
  * Stands for a Calculated Measure
  *
  * @see {https://sisense.dev/guides/querying/useJaql/#step-7-adding-a-formula}
  * @internal
  */
 export class DimensionalCalculatedMeasure extends AbstractMeasure implements CalculatedMeasure {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DimensionalCalculatedMeasure';
+
   constructor(
     name: string,
     expression: string,
@@ -364,12 +392,11 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'DimensionalCalculatedMeasure';
     result.expression = this.expression;
     result.context = Object.fromEntries(
       Object.entries(this.context).map(([key, value]) => [
         key,
-        value.serialize ? value.serialize(value) : value,
+        value.serialize ? value.serialize() : value,
       ]),
     );
 
@@ -403,11 +430,23 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
 }
 
 /**
+ * @internal
+ */
+export const isDimensionalCalculatedMeasure = (v: AnyObject): v is DimensionalCalculatedMeasure => {
+  return Boolean(v && v.__serializable === 'DimensionalCalculatedMeasure');
+};
+
+/**
  * Stands for a Measure template - generator for different aggregation over Attribute
  *
  * @internal
  */
 export class DimensionalMeasureTemplate extends AbstractMeasure implements MeasureTemplate {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DimensionalMeasureTemplate';
+
   constructor(
     name: string,
     attribute: Attribute,
@@ -439,7 +478,6 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'DimensionalMeasureTemplate';
 
     result.attribute = this.attribute.serialize();
 
@@ -488,7 +526,7 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
    * @param nested - defines whether the JAQL is nested within parent JAQL statement or a root JAQL element
    */
   jaql(nested?: boolean): any {
-    return this.sum().sort(this._sort).jaql(nested);
+    return this.sum(this._format).sort(this._sort).jaql(nested);
   }
 
   /**
@@ -497,7 +535,7 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
    * @param format - optional format to apply on the resulting {@link Measure}
    */
   sum(format?: string): Measure {
-    return m.sum(this.attribute, format).sort(this._sort);
+    return m.sum(this.attribute, undefined, format).sort(this._sort);
   }
 
   /**
@@ -506,7 +544,7 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
    * @param format - optional format to apply on the resulting {@link Measure}
    */
   average(format?: string): Measure {
-    return m.average(this.attribute, format).sort(this._sort);
+    return m.average(this.attribute, undefined, format).sort(this._sort);
   }
 
   /**
@@ -515,7 +553,7 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
    * @param format - optional format to apply on the resulting {@link Measure}
    */
   median(format?: string): Measure {
-    return m.median(this.attribute, format).sort(this._sort);
+    return m.median(this.attribute, undefined, format).sort(this._sort);
   }
 
   /**
@@ -524,7 +562,7 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
    * @param format - optional format to apply on the resulting {@link Measure}
    */
   min(format?: string): Measure {
-    return m.median(this.attribute, format).sort(this._sort);
+    return m.min(this.attribute, undefined, format).sort(this._sort);
   }
 
   /**
@@ -533,7 +571,7 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
    * @param format - optional format to apply on the resulting {@link Measure}
    */
   max(format?: string): Measure {
-    return m.max(this.attribute, format).sort(this._sort);
+    return m.max(this.attribute, undefined, format).sort(this._sort);
   }
 
   /**
@@ -542,7 +580,7 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
    * @param format - optional format to apply on the resulting {@link Measure}
    */
   count(format?: string): Measure {
-    return m.count(this.attribute, format).sort(this._sort);
+    return m.count(this.attribute, undefined, format).sort(this._sort);
   }
 
   /**
@@ -551,12 +589,19 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
    * @param format - optional format to apply on the resulting {@link Measure}
    */
   countDistinct(format?: string): Measure {
-    return m.countDistinct(this.attribute, format).sort(this._sort);
+    return m.countDistinct(this.attribute, undefined, format).sort(this._sort);
   }
 }
 
 /**
- * @param json
+ * @internal
+ */
+export const isDimensionalMeasureTemplate = (v: AnyObject): v is DimensionalMeasureTemplate => {
+  return Boolean(v && v.__serializable === 'DimensionalMeasureTemplate');
+};
+
+/**
+ * @param json - The JSON object to create a measure from
  * @internal
  */
 export function createMeasure(json: any): Measure | BaseMeasure {
@@ -602,7 +647,7 @@ export function createMeasure(json: any): Measure | BaseMeasure {
       throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAttributeDimExpression');
     }
 
-    return new DimensionalMeasureTemplate(name, att, format, desc);
+    return new DimensionalMeasureTemplate(name, att, format, desc, sort);
   } else if (MetadataTypes.isBaseMeasure(json)) {
     if (att === undefined) {
       throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAttributeDimExpression');
@@ -613,7 +658,7 @@ export function createMeasure(json: any): Measure | BaseMeasure {
       throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAggAggregation');
     }
 
-    return new DimensionalBaseMeasure(name, att, agg, format, desc);
+    return new DimensionalBaseMeasure(name, att, agg, format, desc, sort);
   }
 
   throw new TranslatableError('errors.measure.unsupportedType');

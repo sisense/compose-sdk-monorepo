@@ -49,6 +49,8 @@ describe('CustomSuperJSON', () => {
       address: 'some-address',
     };
 
+    const jaqlElement = new JaqlElement({ jaql: { title: 'test' } }, 'some-type');
+
     const attribute = new DimensionalAttribute(
       'some-attribute-name',
       '[some.expression]',
@@ -392,6 +394,37 @@ describe('CustomSuperJSON', () => {
       expect(CustomSuperJSON.parse(CustomSuperJSON.stringify(customFilter))).toStrictEqual(
         customFilter,
       );
+    });
+
+    it('should serialize and deserialize complex JS object', () => {
+      const complexObject = {
+        attributes: [jaqlElement, attribute, levelAttribute],
+        dimensions: [dimension, dateDimension],
+        measures: [baseMeasure, calculatedMeasure, measureTemplate],
+        filters: [
+          textFilter,
+          membersFilter,
+          logicalAttributeFilter,
+          cascadingFilter,
+          excludeFilter,
+          measureFilter1,
+          measureFilter2,
+          measureFilter3,
+          rankingFilter,
+          numericFilter,
+          dateRangeFilter,
+          relativeDateFilter,
+          customFilter,
+        ],
+        sort: [Sort.Ascending, Sort.Descending],
+        limit: 10,
+        offset: 0,
+        groupBy: [attribute, levelAttribute],
+        timeDimension: dateDimension,
+        timeZone: 'UTC',
+      };
+      const serialized = CustomSuperJSON.serialize(complexObject);
+      expect(CustomSuperJSON.deserialize(serialized)).toStrictEqual(complexObject);
     });
   });
 });

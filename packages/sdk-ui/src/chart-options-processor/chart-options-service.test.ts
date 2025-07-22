@@ -108,6 +108,7 @@ const months = {
     type: 'date',
   },
   continuous: true,
+  granularity: DateLevels.Months,
   dateFormat: 'Y-MM',
 };
 const area = {
@@ -840,6 +841,7 @@ describe('cartesianData', () => {
         type: 'date',
       },
       continuous: true,
+      granularity: DateLevels.Months,
       dateFormat: 'Y-MM',
     };
     const dataOptions: CartesianChartDataOptionsInternal = {

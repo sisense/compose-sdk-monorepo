@@ -1,9 +1,9 @@
 /// <reference lib="dom" />
 
-import { normalizeUrl } from '@sisense/sdk-common';
+import { mergeUrlsWithParams, normalizeUrl } from '@sisense/sdk-common';
 
 import { BaseAuthenticator } from './base-authenticator.js';
-import { addPathnameToUrl, addQueryParamsToUrl } from './helpers.js';
+import { addQueryParamsToUrl } from './helpers.js';
 import { errorInterceptor } from './interceptors.js';
 import { Authenticator } from './interfaces.js';
 import { TranslatableError } from './translation/translatable-error.js';
@@ -14,32 +14,57 @@ interface IsAuthResponse {
   loginUrl?: string;
 }
 
+/**
+ * Authenticator for handling SSO (Single Sign-On) authentication flow
+ */
 export class SsoAuthenticator extends BaseAuthenticator {
   readonly url: string;
 
-  private _enableSilentPreAuth: boolean;
+  private readonly _enableSilentPreAuth: boolean;
 
-  constructor(url: string, enableSilentPreAuth = false) {
+  private readonly _alternativeSsoHost: string;
+
+  constructor(url: string, enableSilentPreAuth = false, alternativeSsoHost = '') {
     super('sso');
     this.url = normalizeUrl(url, true);
     this._enableSilentPreAuth = enableSilentPreAuth;
+    this._alternativeSsoHost = alternativeSsoHost;
   }
 
-  async authenticate(silent = true) {
+  /**
+   * Attempts to authenticate the user via SSO.
+   * If silent mode is enabled and supported, tries silent authentication first.
+   *
+   * @param silent - Whether to attempt silent authentication first
+   * @returns Promise resolving to authentication result
+   */
+  async authenticate(silent = true): Promise<boolean> {
     try {
       this._authenticating = true;
 
-      const { isAuthenticated, loginUrl: url } = await this.checkAuthentication();
+      const { isAuthenticated, loginUrl: authUrl } = await this.checkAuthentication();
 
       if (isAuthenticated) {
         this._resolve(true);
         return await this._result;
       }
 
-      const loginUrl = addQueryParamsToUrl(url, { return_to: window.location.href });
+      let finalLoginUrl = '';
+      try {
+        // Check if authUrl is a valid absolute path URL (with http)
+        new URL(authUrl);
+        finalLoginUrl = authUrl;
+        // If authUrl is a relative path, combine it with the base URL
+        // If the user specifies an alternative host, prioritize using that host
+        // Otherwise, default to the connection's configured host
+      } catch {
+        finalLoginUrl = mergeUrlsWithParams(this._alternativeSsoHost || this.url, authUrl);
+      }
+
+      finalLoginUrl = addQueryParamsToUrl(finalLoginUrl, { return_to: window.location.href });
 
       if (this._enableSilentPreAuth && silent) {
-        await this.authenticateSilent(loginUrl);
+        await this.authenticateSilent(finalLoginUrl);
         const { isAuthenticated } = await this.checkAuthentication();
         if (isAuthenticated) {
           this._resolve(true);
@@ -47,7 +72,7 @@ export class SsoAuthenticator extends BaseAuthenticator {
         }
       }
 
-      window?.location?.replace(loginUrl);
+      window?.location?.replace(finalLoginUrl);
     } finally {
       this._resolve(false);
       this._authenticating = false;
@@ -55,6 +80,11 @@ export class SsoAuthenticator extends BaseAuthenticator {
     return this._result;
   }
 
+  /**
+   * Attempts silent authentication using an invisible iframe
+   *
+   * @param loginUrl - The URL to load in the iframe
+   */
   private async authenticateSilent(loginUrl: string): Promise<void> {
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
@@ -70,8 +100,14 @@ export class SsoAuthenticator extends BaseAuthenticator {
     document.body.removeChild(iframe);
   }
 
+  /**
+   * Checks the current authentication status with the server
+   *
+   * @returns Promise with authentication status and login URL if needed
+   * @throws {TranslatableError} If authentication check fails
+   */
   private async checkAuthentication(): Promise<{ isAuthenticated: boolean; loginUrl: string }> {
-    const fetchUrl = addPathnameToUrl(normalizeUrl(this.url), 'api/auth/isauth');
+    const fetchUrl = mergeUrlsWithParams(this.url, 'api/auth/isauth');
 
     const response = await fetch(fetchUrl, {
       headers: { Internal: 'true' },
@@ -99,23 +135,18 @@ export class SsoAuthenticator extends BaseAuthenticator {
       }
     }
 
-    // Workaround: if the loginUrl looks like a relative URL to ssoRouter plugin, prepend the Sisense URL
-    const redirectUrl =
-      result.loginUrl && result.loginUrl?.search(/^(\/[^/]+)*?\/api\/v\d+\/\w+\/login[/]?$/) !== -1
-        ? addPathnameToUrl(this.url, result.loginUrl)
-        : result.loginUrl || '';
-
     return {
       isAuthenticated: result.isAuthenticated,
-      loginUrl: redirectUrl,
+      loginUrl: result.loginUrl || '',
     };
   }
 }
 
 /**
- * Checks if the authenticator is SSO authenticator
+ * Type guard to check if an authenticator is an SSO authenticator
  *
- * @param authenticator - authenticator to check
+ * @param authenticator - The authenticator to check
+ * @returns boolean indicating if the authenticator is an SSO authenticator
  * @internal
  */
 export function isSsoAuthenticator(

@@ -141,8 +141,12 @@ export const MetadataTypes = {
       const type = o;
       return type.toLowerCase() === MetadataTypes.BaseMeasure;
     }
-    // JaqlElement doesn't have property attribute. Check for jaql instead
-    return (o.agg || o.aggregation) && (o.attribute || o.jaql) && !this.isMeasureTemplate(o);
+    // JaqlElement doesn't have property attribute. Check for jaql, dim, or expression instead
+    return (
+      (o.agg || o.aggregation) &&
+      (o.attribute || o.jaql || o.dim || o.expression) &&
+      !this.isMeasureTemplate(o)
+    );
   },
 
   /**

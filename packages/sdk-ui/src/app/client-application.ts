@@ -217,6 +217,7 @@ type ClientApplicationParams = Pick<
   | 'ssoEnabled'
   | 'enableSilentPreAuth'
   | 'useFusionAuth'
+  | 'alternativeSsoHost'
 >;
 
 function getBaseUrl(url: string, tenantName: string) {
@@ -245,6 +246,7 @@ export const createClientApplication = async ({
   appConfig,
   enableSilentPreAuth,
   useFusionAuth,
+  alternativeSsoHost,
 }: ClientApplicationParams): Promise<ClientApplication> => {
   if (rawUrl === undefined) {
     throw new TranslatableError('errors.sisenseContextNoAuthentication');
@@ -260,6 +262,7 @@ export const createClientApplication = async ({
     ssoEnabled,
     enableSilentPreAuth,
     useFusionAuth,
+    alternativeSsoHost,
   });
 
   if (!auth) {

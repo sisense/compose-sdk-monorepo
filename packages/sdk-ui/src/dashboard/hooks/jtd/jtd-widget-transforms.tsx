@@ -196,7 +196,6 @@ export const applyRightClickNavigation = (
       },
       actions,
     );
-
     if (menuItem) {
       actions.openMenu?.({
         id: jumpToDashboardMenuId,

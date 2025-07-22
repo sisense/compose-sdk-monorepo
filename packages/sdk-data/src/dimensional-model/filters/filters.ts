@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import hash from 'hash-it';
 import merge from 'lodash-es/merge.js';
 import omit from 'lodash-es/omit.js';
@@ -15,7 +16,7 @@ import {
   Measure,
   MembersFilterConfig,
 } from '../interfaces.js';
-import { DimensionalBaseMeasure } from '../measures/measures.js';
+import { isDimensionalBaseMeasure } from '../measures/measures.js';
 import { AnyObject, DateLevels, JSONObject, JSONValue, MetadataTypes } from '../types.js';
 import {
   getDefaultBaseFilterConfig,
@@ -113,6 +114,11 @@ export const FilterTypes = {
  */
 abstract class AbstractFilter extends DimensionalElement implements Filter {
   /**
+   * @internal
+   */
+  readonly __serializable: string = 'AbstractFilter';
+
+  /**
    * Attribute this filter instance is filtering
    */
   readonly attribute: Attribute;
@@ -166,7 +172,6 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'AbstractFilter';
 
     result.filterType = this.filterType;
     result.attribute = this.attribute.serialize();
@@ -236,6 +241,11 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
  * @internal
  */
 export class LogicalAttributeFilter extends AbstractFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'LogicalAttributeFilter';
+
   readonly filters: Filter[];
 
   readonly operator: string;
@@ -264,7 +274,6 @@ export class LogicalAttributeFilter extends AbstractFilter {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'LogicalAttributeFilter';
     result.operator = this.operator;
     result.filters = this.filters.map((f) => f.serialize());
 
@@ -286,6 +295,11 @@ export class LogicalAttributeFilter extends AbstractFilter {
  * @internal
  */
 export class MembersFilter extends AbstractFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'MembersFilter';
+
   readonly members: string[];
 
   config: CompleteMembersFilterConfig;
@@ -327,7 +341,6 @@ export class MembersFilter extends AbstractFilter {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'MembersFilter';
     if (this.config) {
       result.config = (
         this.config.backgroundFilter
@@ -365,6 +378,11 @@ export class MembersFilter extends AbstractFilter {
  * @internal
  */
 export class CascadingFilter extends AbstractFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'CascadingFilter';
+
   // level filters
   readonly _filters: Filter[];
 
@@ -397,7 +415,6 @@ export class CascadingFilter extends AbstractFilter {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'CascadingFilter';
     result._filters = this.filters.map((f) => f.serialize());
     return result;
   }
@@ -427,6 +444,11 @@ export class CascadingFilter extends AbstractFilter {
  * @internal
  */
 export class ExcludeFilter extends AbstractFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'ExcludeFilter';
+
   readonly filter: Filter;
 
   readonly input?: Filter;
@@ -456,7 +478,6 @@ export class ExcludeFilter extends AbstractFilter {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'ExcludeFilter';
 
     result.filter = this.filter.serialize();
 
@@ -490,6 +511,11 @@ export class ExcludeFilter extends AbstractFilter {
  * @internal
  */
 export class DoubleOperatorFilter<Type> extends AbstractFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DoubleOperatorFilter';
+
   operatorA?: string;
 
   operatorB?: string;
@@ -543,7 +569,6 @@ export class DoubleOperatorFilter<Type> extends AbstractFilter {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'DoubleOperatorFilter';
     if (this.operatorA) {
       result.operatorA = this.operatorA;
     }
@@ -585,6 +610,11 @@ export class DoubleOperatorFilter<Type> extends AbstractFilter {
  * @internal
  */
 export class MeasureFilter extends DoubleOperatorFilter<number> {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'MeasureFilter';
+
   measure: Measure;
 
   constructor(
@@ -624,7 +654,6 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'MeasureFilter';
 
     result.measure = this.measure.serialize();
 
@@ -638,7 +667,7 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
 
     const result = super.jaql(nested);
 
-    if (this.measure instanceof DimensionalBaseMeasure) {
+    if (isDimensionalBaseMeasure(this.measure)) {
       Object.entries(this.measure.jaql().jaql).forEach(([key, value]) => {
         result.jaql[key] = value;
       });
@@ -652,6 +681,11 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
  * @internal
  */
 export class RankingFilter extends AbstractFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'RankingFilter';
+
   count: number;
 
   operator: string;
@@ -685,7 +719,6 @@ export class RankingFilter extends AbstractFilter {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'RankingFilter';
 
     result.count = this.count;
     result.operator = this.operator;
@@ -711,6 +744,11 @@ export class RankingFilter extends AbstractFilter {
  * @internal
  */
 export class NumericFilter extends DoubleOperatorFilter<number> {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'NumericFilter';
+
   constructor(
     att: Attribute,
     operatorA?: string,
@@ -727,9 +765,7 @@ export class NumericFilter extends DoubleOperatorFilter<number> {
    * Gets a serializable representation of the element
    */
   serialize(): JSONObject {
-    const result = super.serialize();
-    result.__serializable = 'NumericFilter';
-    return result;
+    return super.serialize();
   }
 }
 
@@ -737,6 +773,11 @@ export class NumericFilter extends DoubleOperatorFilter<number> {
  * @internal
  */
 export class TextFilter extends DoubleOperatorFilter<string> {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'TextFilter';
+
   constructor(
     att: Attribute,
     operator: string,
@@ -751,9 +792,7 @@ export class TextFilter extends DoubleOperatorFilter<string> {
    * Gets a serializable representation of the element
    */
   serialize(): JSONObject {
-    const result = super.serialize();
-    result.__serializable = 'TextFilter';
-    return result;
+    return super.serialize();
   }
 }
 
@@ -761,6 +800,11 @@ export class TextFilter extends DoubleOperatorFilter<string> {
  * @internal
  */
 export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DateRangeFilter';
+
   constructor(
     levelAttribute: LevelAttribute,
     valueFrom?: Date | string,
@@ -811,9 +855,7 @@ export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
    * Gets a serializable representation of the element
    */
   serialize(): JSONObject {
-    const result = super.serialize();
-    result.__serializable = 'DateRangeFilter';
-    return result;
+    return super.serialize();
   }
 }
 
@@ -821,6 +863,11 @@ export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
  * @internal
  */
 export class RelativeDateFilter extends AbstractFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'RelativeDateFilter';
+
   readonly offset: number;
 
   readonly count: number;
@@ -876,7 +923,6 @@ export class RelativeDateFilter extends AbstractFilter {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'RelativeDateFilter';
     result.offset = this.offset;
     result.count = this.count;
     result.operator = this.operator;
@@ -916,6 +962,11 @@ export class RelativeDateFilter extends AbstractFilter {
  * @internal
  */
 export class CustomFilter extends AbstractFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'CustomFilter';
+
   readonly jaqlExpression: any;
 
   constructor(att: Attribute, jaql: any, config?: BaseFilterConfig, composeCode?: string) {
@@ -945,7 +996,6 @@ export class CustomFilter extends AbstractFilter {
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'CustomFilter';
     result.jaqlExpression = this.jaqlExpression;
 
     return result;
@@ -959,7 +1009,7 @@ export class CustomFilter extends AbstractFilter {
  * @internal
  */
 export function isCustomFilter(filter: Filter & AnyObject): filter is CustomFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.advanced;
+  return filter && filter.__serializable === 'CustomFilter';
 }
 
 /**
@@ -969,7 +1019,7 @@ export function isCustomFilter(filter: Filter & AnyObject): filter is CustomFilt
  * @internal
  */
 export function isMembersFilter(filter: Filter & AnyObject): filter is MembersFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.members;
+  return filter && filter.__serializable === 'MembersFilter';
 }
 
 /**
@@ -979,7 +1029,7 @@ export function isMembersFilter(filter: Filter & AnyObject): filter is MembersFi
  * @internal
  */
 export function isNumericFilter(filter: Filter & AnyObject): filter is NumericFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.numeric;
+  return filter && filter.__serializable === 'NumericFilter';
 }
 
 /**
@@ -989,7 +1039,7 @@ export function isNumericFilter(filter: Filter & AnyObject): filter is NumericFi
  * @internal
  */
 export function isRankingFilter(filter: Filter & AnyObject): filter is RankingFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.ranking;
+  return filter && filter.__serializable === 'RankingFilter';
 }
 
 /**
@@ -999,7 +1049,7 @@ export function isRankingFilter(filter: Filter & AnyObject): filter is RankingFi
  * @internal
  */
 export function isMeasureFilter(filter: Filter & AnyObject): filter is MeasureFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.measure;
+  return filter && filter.__serializable === 'MeasureFilter';
 }
 
 /**
@@ -1010,7 +1060,7 @@ export function isMeasureFilter(filter: Filter & AnyObject): filter is MeasureFi
  */
 
 export function isExcludeFilter(filter: Filter & AnyObject): filter is ExcludeFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.exclude;
+  return filter && filter.__serializable === 'ExcludeFilter';
 }
 
 /**
@@ -1023,7 +1073,7 @@ export function isExcludeFilter(filter: Filter & AnyObject): filter is ExcludeFi
 export function isLogicalAttributeFilter(
   filter: Filter & AnyObject,
 ): filter is LogicalAttributeFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.logicalAttribute;
+  return filter && filter.__serializable === 'LogicalAttributeFilter';
 }
 
 /**
@@ -1034,7 +1084,7 @@ export function isLogicalAttributeFilter(
  */
 
 export function isCascadingFilter(filter: Filter & AnyObject): filter is CascadingFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.cascading;
+  return filter && filter.__serializable === 'CascadingFilter';
 }
 
 /**
@@ -1045,7 +1095,7 @@ export function isCascadingFilter(filter: Filter & AnyObject): filter is Cascadi
  */
 
 export function isRelativeDateFilter(filter: Filter & AnyObject): filter is RelativeDateFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.relativeDate;
+  return filter && filter.__serializable === 'RelativeDateFilter';
 }
 
 /**
@@ -1056,7 +1106,7 @@ export function isRelativeDateFilter(filter: Filter & AnyObject): filter is Rela
  */
 
 export function isTextFilter(filter: Filter & AnyObject): filter is TextFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.text;
+  return filter && filter.__serializable === 'TextFilter';
 }
 
 /**
@@ -1066,7 +1116,7 @@ export function isTextFilter(filter: Filter & AnyObject): filter is TextFilter {
  * @internal
  */
 export function isDateRangeFilter(filter: Filter & AnyObject): filter is DateRangeFilter {
-  return 'filterType' in filter && filter.filterType === FilterTypes.dateRange;
+  return filter && filter.__serializable === 'DateRangeFilter';
 }
 
 /**

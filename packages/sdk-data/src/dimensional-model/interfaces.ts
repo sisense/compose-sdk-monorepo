@@ -49,6 +49,11 @@ export interface Element {
   readonly dataSource?: JaqlDataSource;
 
   /**
+   * @internal
+   */
+  readonly __serializable: string;
+
+  /**
    * Gets a serializable representation of the element.
    *
    * @internal

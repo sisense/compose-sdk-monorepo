@@ -17,6 +17,7 @@ type AuthenticatorConfig = {
   ssoEnabled?: boolean;
   enableSilentPreAuth?: boolean;
   useFusionAuth?: boolean;
+  alternativeSsoHost?: string;
 };
 
 export function getAuthenticator({
@@ -28,12 +29,17 @@ export function getAuthenticator({
   ssoEnabled = false,
   enableSilentPreAuth = false,
   useFusionAuth = false,
+  alternativeSsoHost = '',
 }: AuthenticatorConfig): Authenticator | null {
   const url = normalizeUrl(rawUrl);
 
   // sso overrides all other auth methods
   if (ssoEnabled) {
-    return new SsoAuthenticator(normalizeUrl(rawUrl, true), enableSilentPreAuth);
+    return new SsoAuthenticator(
+      normalizeUrl(rawUrl, true),
+      enableSilentPreAuth,
+      alternativeSsoHost,
+    );
   }
 
   // username/password or tokens are chosen relative to priority

@@ -16,24 +16,28 @@ export default function getScrollbarWidth(): number {
   oldDevicePixelRatio = devicePixelRatio;
   /* istanbul ignore else */
   if (typeof document !== 'undefined') {
-    const div = document.createElement('div');
-    css(div, {
-      width: 100,
-      height: 100,
-      position: 'absolute',
-      top: -9999,
-      overflow: 'scroll',
-      MsOverflowStyle: 'scrollbar',
-    });
-    let host = document.querySelector('.pivot-container');
-    if (!host) {
-      host = document.body;
-      // do not cache such value
-      oldDevicePixelRatio = -1;
+    let widthTestDiv = document.querySelector('.csdk-pivot-scrollbar-width-checker') as HTMLElement;
+    if (!widthTestDiv) {
+      widthTestDiv = document.createElement('div');
+      widthTestDiv.className = 'csdk-pivot-scrollbar-width-checker';
+      css(widthTestDiv, {
+        width: 100,
+        height: 100,
+        position: 'absolute',
+        top: -9999,
+        overflow: 'scroll',
+        MsOverflowStyle: 'scrollbar',
+      });
+      let host = document.querySelector('.pivot-container');
+      if (!host) {
+        host = document.body;
+        // do not cache such value
+        oldDevicePixelRatio = -1;
+      }
+      host.appendChild(widthTestDiv);
     }
-    host.appendChild(div);
-    scrollbarWidth = div.offsetWidth - div.clientWidth;
-    host.removeChild(div);
+
+    scrollbarWidth = widthTestDiv.offsetWidth - widthTestDiv.clientWidth;
   } else {
     scrollbarWidth = 0;
   }

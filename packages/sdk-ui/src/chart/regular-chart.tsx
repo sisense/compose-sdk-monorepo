@@ -166,7 +166,7 @@ export const RegularChart = (props: RegularChartProps) => {
       }}
       rerenderOnResize={shouldRerenderOnResize(chartType)}
     >
-      {() => {
+      {(size) => {
         if (!chartData && isLoading) {
           return <LoadingIndicator themeSettings={themeSettings} />;
         }
@@ -179,7 +179,7 @@ export const RegularChart = (props: RegularChartProps) => {
           if (chartBuilder.renderer.isCorrectRendererProps(chartRendererProps)) {
             return (
               <LoadingOverlay isVisible={isLoading}>
-                <chartBuilder.renderer.ChartRendererComponent {...chartRendererProps} />
+                <chartBuilder.renderer.ChartRendererComponent {...chartRendererProps} size={size} />
               </LoadingOverlay>
             );
           }
@@ -210,6 +210,7 @@ export const RegularChart = (props: RegularChartProps) => {
                 designOptions={{
                   ...chartRendererProps.designOptions,
                 }}
+                size={size}
               />
             </LoadingOverlay>
           );

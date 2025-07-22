@@ -35,7 +35,7 @@ describe('helpers', () => {
     beforeEach(() => {
       // Initialize the httpClient and queryApi for each test
       httpClient = {
-        url: '',
+        url: 'http://test.sisense.com',
         post: vi.fn(),
         get: vi.fn(),
       } as unknown as Mocked<HttpClient>;

@@ -9,7 +9,15 @@ import { DimensionalElement, normalizeName } from './base.js';
 import { DATA_MODEL_MODULE_NAME } from './consts.js';
 import { Attribute, LevelAttribute } from './interfaces.js';
 import { simpleColumnType } from './simple-column-types.js';
-import { DateLevel, DateLevels, JaqlDataSource, JSONObject, MetadataTypes, Sort } from './types.js';
+import {
+  AnyObject,
+  DateLevel,
+  DateLevels,
+  JaqlDataSource,
+  JSONObject,
+  MetadataTypes,
+  Sort,
+} from './types.js';
 /**
  * @internal
  */
@@ -20,6 +28,11 @@ export const jaqlSimpleColumnType = (datatype: string) =>
  * @internal
  */
 export class DimensionalAttribute extends DimensionalElement implements Attribute {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DimensionalAttribute';
+
   readonly expression: string;
 
   readonly panel: string;
@@ -116,7 +129,6 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'DimensionalAttribute';
 
     result.expression = this.expression;
 
@@ -131,7 +143,19 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
 /**
  * @internal
  */
+export const isDimensionalAttribute = (v: AnyObject): v is DimensionalAttribute => {
+  return Boolean(v && v.__serializable === 'DimensionalAttribute');
+};
+
+/**
+ * @internal
+ */
 export class DimensionalLevelAttribute extends DimensionalAttribute implements LevelAttribute {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'DimensionalLevelAttribute';
+
   private _format: string | undefined;
 
   readonly granularity: string;
@@ -262,7 +286,6 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
    */
   serialize(): JSONObject {
     const result = super.serialize();
-    result.__serializable = 'DimensionalLevelAttribute';
     result.granularity = this.granularity;
 
     if (this.getFormat() !== undefined) {
@@ -460,6 +483,13 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
     }
   }
 }
+
+/**
+ * @internal
+ */
+export const isDimensionalLevelAttribute = (v: AnyObject): v is DimensionalLevelAttribute => {
+  return Boolean(v && v.__serializable === 'DimensionalLevelAttribute');
+};
 
 /**
  * Creates an Attribute instance from the given JSON object.

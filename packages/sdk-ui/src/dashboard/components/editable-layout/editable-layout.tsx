@@ -6,7 +6,7 @@ import { MouseEvent } from 'react';
 
 import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Widget } from '@/widgets/widget';
 import { ResizableRow } from './components/resizable-row';
 import { ResizableColumns } from './components/resizable-columns';
@@ -145,11 +145,6 @@ export const EditableLayout = ({
     () => internalLayout.columns.map((c) => c.widthPercentage),
     [internalLayout],
   );
-
-  useEffect(() => {
-    // Dispatch a resize event to trigger Highcharts to recalculate chart sizes
-    setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
-  }, [internalLayout]);
 
   const onColumnWidthsChange = useCallback(
     (widths: number[]) => {

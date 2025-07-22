@@ -10,6 +10,16 @@ import {
   DateOperators,
   DateRangeFilter,
   ExcludeFilter,
+  isCascadingFilter,
+  isDateRangeFilter,
+  isExcludeFilter,
+  isLogicalAttributeFilter,
+  isMeasureFilter,
+  isMembersFilter,
+  isNumericFilter,
+  isRankingFilter,
+  isRelativeDateFilter,
+  isTextFilter,
   LogicalAttributeFilter,
   MeasureFilter,
   MembersFilter,
@@ -28,6 +38,8 @@ describe('General Filter', () => {
       new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
       ['Female'],
     );
+
+    expect(isMembersFilter(filter)).toBe(true);
 
     expect(filter.attribute).toBeDefined();
     expect(filter.filterType).toBeDefined();
@@ -51,6 +63,8 @@ describe('Filters jaql preparations', () => {
       'Female',
     ]);
 
+    expect(isMembersFilter(filter)).toBe(true);
+
     const jaql = filter.jaql();
 
     expect(jaql).toStrictEqual(result);
@@ -69,6 +83,8 @@ describe('Filters jaql preparations', () => {
     const filter = new ExcludeFilter(
       new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), ['Female']),
     );
+
+    expect(isExcludeFilter(filter)).toBe(true);
 
     const jaql = filter.jaql();
 
@@ -94,6 +110,8 @@ describe('Filters jaql preparations', () => {
       new Date('2010-01-01'),
       new Date('2012-01-01'),
     );
+
+    expect(isDateRangeFilter(filter)).toBe(true);
 
     const jaql = filter.jaql();
 
@@ -143,6 +161,8 @@ describe('Filters jaql preparations', () => {
       'or',
     );
 
+    expect(isLogicalAttributeFilter(filter)).toBe(true);
+
     const jaql = filter.jaql();
 
     expect(jaql).toStrictEqual(result);
@@ -167,6 +187,8 @@ describe('Filters jaql preparations', () => {
         'sum',
       ),
     );
+
+    expect(isMeasureFilter(filter)).toBe(true);
 
     const jaql = filter.jaql();
 
@@ -193,6 +215,8 @@ describe('Filters jaql preparations', () => {
       DateOperators.Last,
       new Date('2012-01-01'),
     );
+
+    expect(isRelativeDateFilter(filter)).toBe(true);
 
     const jaql = filter.jaql();
 
@@ -225,6 +249,8 @@ describe('Filters jaql preparations', () => {
       new Date('2012-01-01'),
     );
 
+    expect(isRelativeDateFilter(filter)).toBe(true);
+
     const jaql = filter.jaql();
 
     expect(jaql).toStrictEqual(result);
@@ -245,6 +271,8 @@ describe('Filters jaql preparations', () => {
       TextOperators.Contains,
       'Male',
     );
+
+    expect(isTextFilter(filter)).toBe(true);
 
     const jaql = filter.jaql();
 
@@ -268,6 +296,8 @@ describe('Filters jaql preparations', () => {
       NumericOperators.To,
       3,
     );
+
+    expect(isNumericFilter(filter)).toBe(true);
 
     const jaql = filter.jaql();
 
@@ -297,6 +327,8 @@ describe('Filters jaql preparations', () => {
       RankingOperators.Top,
       2,
     );
+
+    expect(isRankingFilter(filter)).toBe(true);
 
     const jaql = filter.jaql();
 
@@ -340,6 +372,8 @@ describe('Filters jaql preparations', () => {
     );
 
     const filter = new CascadingFilter([levelFilter1, levelFilter2]);
+
+    expect(isCascadingFilter(filter)).toBe(true);
 
     const jaql = filter.jaql();
     expect(jaql).toStrictEqual(result);

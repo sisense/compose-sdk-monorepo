@@ -1,2 +1,2 @@
 export { escapeSingleQuotes } from './escapeSingleQuotes.js';
-export { normalizeUrl } from './normalizeUrl.js';
+export { mergeUrlsWithParams, normalizeUrl } from './url.js';

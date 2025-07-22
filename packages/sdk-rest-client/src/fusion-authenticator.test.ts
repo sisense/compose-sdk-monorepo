@@ -76,11 +76,78 @@ describe('FusionAuthenticator', () => {
 
     const headers = {};
 
-    auth.applyHeader(headers);
+    auth.applyHeaders(headers);
     // flush promises
     await new Promise((resolve) => setImmediate(resolve));
 
     expect(headers).toStrictEqual({ 'X-Xsrf-Token': fakeCsrfToken });
+  });
+
+  it('should append Authorization and Initialiser headers when it is WAT authorization flow', async () => {
+    global.window = {
+      prism: {
+        user: {
+          _id: '123',
+        },
+        $injector: {
+          get: () => ({
+            getParentEventTarget: () => ({
+              getEnvironment: () => ({
+                isTokenBasedAuth_: () => true,
+                getWebSessionToken: () => 'test-wat-token',
+                getHashedWebAccessToken: () => 'test-wat-initialiser',
+              }),
+            }),
+          }),
+        },
+      },
+      document: {},
+    } as unknown as FusionWindow;
+
+    await auth.authenticate();
+
+    const headers = {};
+
+    auth.applyHeaders(headers);
+    // flush promises
+    await new Promise((resolve) => setImmediate(resolve));
+
+    expect(headers).toStrictEqual({
+      Authorization: 'test-wat-token',
+      Initialiser: 'test-wat-initialiser',
+    });
+  });
+
+  it('should not append Authorization and Initialiser headers if wat or watInitialiser are missing', async () => {
+    global.window = {
+      prism: {
+        user: {
+          _id: '123',
+        },
+        $injector: {
+          get: () => ({
+            getParentEventTarget: () => ({
+              getEnvironment: () => ({
+                isTokenBasedAuth_: () => true,
+                getWebSessionToken: () => undefined,
+                getHashedWebAccessToken: () => undefined,
+              }),
+            }),
+          }),
+        },
+      },
+      document: {},
+    } as unknown as FusionWindow;
+
+    await auth.authenticate();
+
+    const headers = {};
+
+    auth.applyHeaders(headers);
+    // flush promises
+    await new Promise((resolve) => setImmediate(resolve));
+
+    expect(headers).toStrictEqual({});
   });
 
   it('should run type guard correctly', () => {
