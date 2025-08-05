@@ -623,7 +623,7 @@ export function getStyleWithWidgetDesign(
   widgetDesign?: WidgetDesign,
   isWidgetDesignStyleEnabled?: boolean,
 ): WidgetStyleOptions {
-  if (!widgetDesign || !isWidgetDesignStyleEnabled) return widgetStyle;
+  if (!widgetDesign || !isWidgetDesignStyleEnabled) return widgetStyle as WidgetStyleOptions;
   const flattenedWidgetDesign = getFlattenWidgetDesign(widgetDesign);
 
   return {

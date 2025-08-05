@@ -9,7 +9,7 @@ import {
   TreemapChartDesignOptions,
 } from './translations/design-options';
 import { determineHighchartsChartType } from './translations/translations-to-highcharts';
-import { getTooltipSettings } from './tooltip';
+import { getCategoryTooltipSettings } from './tooltip';
 import { getPiePlotOptions } from './translations/pie-plot-options';
 import { getFunnelPlotOptions } from './translations/funnel-plot-options';
 import { formatCategoricalChartData } from './translations/pie-series';
@@ -83,7 +83,7 @@ export const getCategoricalChartOptions = (
           dataOptions,
           themeSettings,
         ),
-        tooltip: getTooltipSettings(pieDesignOptions.pieLabels?.showDecimals, dataOptions),
+        tooltip: getCategoryTooltipSettings(pieDesignOptions.pieLabels?.showDecimals, dataOptions),
         drilldown: {
           activeDataLabelStyle: {
             cursor: 'pointer',
@@ -120,7 +120,10 @@ export const getCategoricalChartOptions = (
         legend: getLegendSettings(funnelDesignOptions.legend),
         series: funnelSeries,
         plotOptions: getFunnelPlotOptions(funnelDesignOptions, dataOptions, themeSettings),
-        tooltip: getTooltipSettings(funnelDesignOptions.funnelLabels?.showDecimals, dataOptions),
+        tooltip: getCategoryTooltipSettings(
+          funnelDesignOptions.funnelLabels?.showDecimals,
+          dataOptions,
+        ),
       };
       return { options: funnelOptions, alerts };
     case 'treemap':

@@ -9,7 +9,7 @@ import {
   StyledMeasureColumn,
 } from '../chart-data-options/types';
 import { TFunction } from '@sisense/sdk-common';
-import { getCartesianChartOptions } from './cartesian-chart-options';
+import { getCartesianChartOptions } from './cartesian/cartesian-chart-options';
 import { SeriesType } from './chart-options-service';
 import {
   formatForecastAdjustRangeStart,

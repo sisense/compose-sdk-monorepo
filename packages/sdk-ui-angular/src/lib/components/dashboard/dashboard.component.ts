@@ -187,9 +187,9 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
     public customWidgetsService: CustomWidgetsService,
   ) {
     this.componentAdapter = new ComponentAdapter(DashboardPreact, [
+      createCustomWidgetsContextConnector(this.customWidgetsService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
-      createCustomWidgetsContextConnector(this.customWidgetsService),
     ]);
   }
 

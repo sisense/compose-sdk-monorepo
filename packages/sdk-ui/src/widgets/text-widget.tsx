@@ -35,6 +35,8 @@ const VERTICAL_ALIGNMENT_DICTIONARY = {
 } as const;
 
 const TextWidgetSpaceAroundWrapper = styled.div<Themeable>`
+  width: 100%;
+  height: 100%;
   padding: ${(props) =>
     WidgetSpaceAround[
       get(props.styleOptions, 'spaceAround', props.themeSettings.widget.spaceAround)
@@ -51,6 +53,27 @@ const TextWidgetContainer = styled.div<Stylable>`
   padding: 10px;
   box-sizing: border-box;
   cursor: ${(props) => props.cursor || 'default'};
+  position: relative;
+
+  &:hover .text-widget-header {
+    visibility: visible;
+  }
+`;
+
+const TextWidgetHeader = styled.div`
+  position: absolute;
+  width: 100%;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  visibility: hidden;
+`;
+
+const TextWidgetHeaderTitle = styled.div`
+  flex-grow: 1;
 `;
 
 const InnerHtml = styled.div`
@@ -65,7 +88,7 @@ const InnerHtml = styled.div`
 export const TextWidget: FunctionComponent<TextWidgetProps> = asSisenseComponent({
   componentName: 'TextWidget',
 })((props) => {
-  const { html } = props.styleOptions;
+  const { html, header } = props.styleOptions;
   const sanitizedHtml = DOMPurify.sanitize(html);
   const { themeSettings } = useThemeContext();
 
@@ -78,6 +101,8 @@ export const TextWidget: FunctionComponent<TextWidgetProps> = asSisenseComponent
     }
   };
 
+  const isHeaderHidden = header?.hidden ?? false;
+
   return (
     <TextWidgetSpaceAroundWrapper themeSettings={themeSettings} styleOptions={props.styleOptions}>
       <TextWidgetContainer
@@ -85,6 +110,12 @@ export const TextWidget: FunctionComponent<TextWidgetProps> = asSisenseComponent
         onClick={handleContainerClick}
         cursor={props.onDataPointClick ? 'pointer' : 'default'}
       >
+        {!isHeaderHidden && (
+          <TextWidgetHeader className={'text-widget-header'}>
+            <TextWidgetHeaderTitle>{header?.renderTitle?.(null)}</TextWidgetHeaderTitle>
+            <div>{header?.renderToolbar?.(null)}</div>
+          </TextWidgetHeader>
+        )}
         <InnerHtml dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
       </TextWidgetContainer>
     </TextWidgetSpaceAroundWrapper>

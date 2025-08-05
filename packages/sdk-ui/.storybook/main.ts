@@ -14,6 +14,7 @@ const config: StorybookConfig = {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {},
   },
+
   async viteFinal(config) {
     // We get "Unable to preload CSS for ___" errors when trying to render a
     // story from a storybook build (not in development). This seems to work
@@ -29,6 +30,9 @@ const config: StorybookConfig = {
   },
   docs: {
     autodocs: true,
+  },
+  typescript: {
+    reactDocgen: false,
   },
 };
 

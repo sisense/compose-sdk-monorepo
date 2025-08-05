@@ -4,34 +4,69 @@ import {
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
 import { applyFormat, getCompleteNumberFormatConfig } from './translations/number-format-config';
-import { TooltipOptions } from '@sisense/sisense-charts';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from './translations/scatter-tooltip';
 import { colorChineseSilver, colorWhite } from '../chart-data-options/coloring/consts';
+import {
+  TooltipSettings,
+  HighchartsDataPointContext,
+  HighchartsDataPointContextNode,
+} from './translations/tooltip-utils';
 
-export type TooltipSettings = TooltipOptions;
+export type { TooltipSettings, HighchartsDataPointContext, HighchartsDataPointContextNode };
 
-export type InternalSeriesNode = {
-  val: number;
-  name: string;
-  parentNode?: InternalSeriesNode;
-  color?: string;
-};
+const formatTooltipContent = (
+  highchartsDataPoint: HighchartsDataPointContext,
+  showDecimals: boolean | undefined,
+  chartDataOptions: ChartDataOptionsInternal,
+): string => {
+  // Calculate percentage for pie and funnel charts
+  const formattedPercentage = highchartsDataPoint.percentage
+    ? showDecimals
+      ? highchartsDataPoint.percentage.toFixed(1)
+      : `${Math.round(highchartsDataPoint.percentage)}`
+    : undefined;
 
-export type InternalSeries = {
-  series: { name: string; color: string };
-  x: string;
-  y: number;
-  point: {
-    name: string;
-    color: string;
-    custom?: { number1?: number; string1?: string; xDisplayValue?: string };
-    node?: InternalSeriesNode;
+  const cartesianChartDataOptions = chartDataOptions as CartesianChartDataOptionsInternal;
+
+  // Find number format configuration
+  const getNumberFormatConfig = () => {
+    const matchingY = cartesianChartDataOptions.y?.find(
+      (y) => y.column.name === highchartsDataPoint.series.name,
+    );
+
+    if (matchingY?.numberFormatConfig) {
+      return matchingY.numberFormatConfig;
+    }
+
+    if (cartesianChartDataOptions.breakBy.length > 0) {
+      return cartesianChartDataOptions.y?.find((y) => y.enabled)?.numberFormatConfig;
+    }
+
+    return undefined;
   };
-  percentage?: number;
-  color?: string;
+
+  const numberFormatConfig = getCompleteNumberFormatConfig(getNumberFormatConfig());
+  const xValue = highchartsDataPoint.point?.custom?.xDisplayValue ?? highchartsDataPoint.x;
+  const formattedValue =
+    applyFormat(numberFormatConfig, highchartsDataPoint.y) +
+    (formattedPercentage ? ` / ${formattedPercentage}%` : '');
+  const color = highchartsDataPoint.point.color || highchartsDataPoint.series.color;
+
+  const seriesName = highchartsDataPoint.series.name || '';
+  const pointName = highchartsDataPoint.point.name || '';
+  const separator = seriesName && pointName ? ' - ' : '';
+
+  return tooltipWrapper(`
+      ${seriesName}
+      ${separator}
+      ${pointName}
+      <br />
+      ${spanSegment(formattedValue, color)}
+      ${xValue ? tooltipSeparator() + xValue : ''}
+    `);
 };
 
-export const getTooltipSettings = (
+export const getCategoryTooltipSettings = (
   showDecimals: boolean | undefined,
   chartDataOptions: ChartDataOptionsInternal,
 ): TooltipSettings => {
@@ -43,38 +78,7 @@ export const getTooltipSettings = (
     borderWidth: 1,
     useHTML: true,
     formatter: function () {
-      const that: InternalSeries = this as InternalSeries;
-
-      // Applicable only to pie and funnel charts
-      let percentage: string | undefined;
-      if (that.percentage) {
-        percentage = showDecimals ? that.percentage.toFixed(1) : `${Math.round(that.percentage)}`;
-      }
-
-      const cartesianChartDataOptions: CartesianChartDataOptionsInternal =
-        chartDataOptions as CartesianChartDataOptionsInternal;
-      let partialNumberFormatConfig = cartesianChartDataOptions.y?.find(
-        (y) => y.column.name === that.series.name,
-      )?.numberFormatConfig;
-      if (!partialNumberFormatConfig && cartesianChartDataOptions.breakBy.length > 0) {
-        partialNumberFormatConfig = cartesianChartDataOptions.y?.find(
-          (y) => y.enabled,
-        )?.numberFormatConfig;
-      }
-      const numberFormatConfig = getCompleteNumberFormatConfig(partialNumberFormatConfig);
-      const xValue = that.point?.custom?.xDisplayValue ?? that.x;
-      const value =
-        applyFormat(numberFormatConfig, that.y) + (percentage ? ` / ${percentage}%` : '');
-      const color = that.point.color || that.series.color;
-
-      return tooltipWrapper(`
-          ${that.series.name || ''}
-          ${that.series.name && that.point.name ? ' - ' : ''}
-          ${that.point.name || ''}
-          <br />
-          ${spanSegment(value, color)}
-          ${xValue ? tooltipSeparator() + xValue : ''}
-        `);
+      return formatTooltipContent(this, showDecimals, chartDataOptions);
     },
   };
 };

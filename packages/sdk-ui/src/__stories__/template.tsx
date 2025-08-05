@@ -44,13 +44,13 @@ const visualTestIdDecorator = {
 
 export const templateForComponent =
   <P extends {}>(Component: React.FC<P>) =>
-  (props: P, decorators?: StoryObj<typeof Component>['decorators']): StoryObj<typeof Component> => {
+  (props: P, decorators?: ((Story: StoryFn) => JSX.Element)[]): StoryObj<typeof Component> => {
     return {
       args: props,
       decorators: [
         ...contextDecorator.decorators,
         ...visualTestIdDecorator.decorators,
-        ...(decorators || []),
+        ...(decorators ?? []),
       ],
     };
   };

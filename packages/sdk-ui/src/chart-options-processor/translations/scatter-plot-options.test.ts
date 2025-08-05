@@ -1,4 +1,7 @@
-import { getScatterPlotOptions, type ScatterChartInternalSeries } from './scatter-plot-options';
+import {
+  getScatterPlotOptions,
+  type ScatterChartHighchartsDataPointContext,
+} from './scatter-plot-options';
 import { ScatterChartDesignOptions } from './design-options';
 
 const chartDesignOptions = {
@@ -131,7 +134,7 @@ describe('getScatterPlotOptions', () => {
               maskedY: baseValue,
             },
           },
-        } as ScatterChartInternalSeries);
+        } as ScatterChartHighchartsDataPointContext);
 
         expect(formattedValue).toBe(expectedValue);
       });
@@ -162,7 +165,7 @@ describe('getScatterPlotOptions', () => {
               maskedX: baseValue,
             },
           },
-        } as ScatterChartInternalSeries);
+        } as ScatterChartHighchartsDataPointContext);
 
         expect(formattedValue).toBe(expectedValue);
       });
@@ -193,7 +196,7 @@ describe('getScatterPlotOptions', () => {
               maskedSize: baseValue,
             },
           },
-        } as ScatterChartInternalSeries);
+        } as ScatterChartHighchartsDataPointContext);
 
         expect(formattedValue).toBe(expectedValue);
       });
@@ -224,7 +227,7 @@ describe('getScatterPlotOptions', () => {
               maskedBreakByColor: baseValue,
             },
           },
-        } as ScatterChartInternalSeries);
+        } as ScatterChartHighchartsDataPointContext);
 
         expect(formattedValue).toBe(expectedValue);
       });

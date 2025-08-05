@@ -3,6 +3,7 @@ import { StyledMeasureColumn, StyledColumn } from '../../chart-data-options/type
 import { applyFormat, getCompleteNumberFormatConfig } from './number-format-config.js';
 import type { SeriesChartType } from '@/types';
 import { isMeasureColumn } from '@/chart-data-options/utils.js';
+import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 
 export const isValueNumeric = (value: StyledMeasureColumn | StyledColumn | undefined) =>
   value ? isMeasureColumn(value) || (value.column.type && isNumber(value.column.type)) : false;
@@ -56,13 +57,25 @@ export type TooltipSettings = {
   useHTML?: boolean;
   crosshairs?: boolean;
   shared?: boolean;
-  formatter?: () => string;
+  formatter?: (this: HighchartsDataPointContext) => string | false;
   style?: {
     fontFamily?: string;
   };
+  padding?: number;
+  outside?: boolean;
 };
 
-export type InternalSeries = {
+export type HighchartsDataPointContextNode = {
+  val: number;
+  name: string;
+  parentNode?: HighchartsDataPointContextNode;
+  color?: string;
+};
+
+/**
+ * Context of a hovered data point in a Highcharts chart for the tooltip formatter function.
+ */
+export type HighchartsDataPointContext = {
   series: { name: string; color: string };
   x: string;
   y: number;
@@ -93,6 +106,9 @@ export type InternalSeries = {
       median: number;
       average: number;
     };
+    options?: TooltipFormatterContextObject['point']['options'];
+    node?: HighchartsDataPointContextNode;
   };
   percentage?: number;
+  color?: string;
 };

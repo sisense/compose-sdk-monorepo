@@ -42,7 +42,7 @@ export function TrackableService<T>(trackableMethods: MethodsArray<T>) {
   };
 }
 
-async function track(action: TrackingEventType, methodName: string) {
+export async function track(action: TrackingEventType, methodName: string) {
   try {
     const app = await DecoratorsModule.sisenseContextService.getApp();
 

@@ -38,7 +38,9 @@ export class ChatRestApi {
 
   private getQueryRecommendations = (contextTitle: string, config: QueryRecommendationConfig) => {
     return this.httpClient.get<QueryRecommendationResponse>(
-      `api/v2/ai/recommendations/query/${contextTitle}/${config.numOfRecommendations}`,
+      `api/v2/ai/recommendations/query/${contextTitle}/${config.numOfRecommendations}${
+        config.userPrompt ? '?userPrompt=' + encodeURIComponent(config.userPrompt) : ''
+      }`,
     );
   };
 

@@ -64,6 +64,9 @@ rm -rf ./packages/sdk-query-client/src/__test-helpers__
 # Remove e2e tests
 rm -rf ./e2e
 
+# Remove Cursor rules
+rm -rf ./.cursor
+
 # Remove code for features that are under development.
 rm -rf packages/sdk-ui/src/__exclude__
 

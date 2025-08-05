@@ -8,7 +8,7 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import merge from 'ts-deepmerge';
 
-import { TrackableService } from '../decorators/trackable.decorator';
+import { track, TrackableService } from '../decorators/trackable.decorator';
 import { type ThemeSettings } from '../sdk-ui-core-exports';
 import { SisenseContextService } from './sisense-context.service';
 
@@ -64,12 +64,14 @@ export const THEME_CONFIG_TOKEN = new InjectionToken<ThemeConfig>('theme configu
 export class ThemeService {
   private themeSettings$: BehaviorSubject<CompleteThemeSettings>;
 
+  private initializationPromise: Promise<void> = Promise.resolve();
+
   constructor(
     private sisenseContextService: SisenseContextService,
     @Optional() @Inject(THEME_CONFIG_TOKEN) themeConfig?: ThemeConfig,
   ) {
     this.themeSettings$ = new BehaviorSubject<CompleteThemeSettings>(getDefaultThemeSettings());
-    void this.initThemeSettings(themeConfig?.theme);
+    this.initializationPromise = this.initThemeSettings(themeConfig?.theme);
   }
 
   private async initThemeSettings(theme: ThemeConfig['theme']) {
@@ -79,7 +81,9 @@ export class ThemeService {
     await this.applyThemeSettings(app.settings.serverThemeSettings);
 
     if (theme) {
-      await this.updateThemeSettings(theme);
+      // Manually tracks theme update during initialization as execution of updateThemeSettings for consistency.
+      track('sdkAngularServiceMethodExecuted', 'ThemeService.updateThemeSettings');
+      await this.applyThemeSettings(theme);
     }
   }
 
@@ -111,6 +115,7 @@ export class ThemeService {
   }
 
   async updateThemeSettings(theme: string | ThemeSettings) {
+    await this.initializationPromise;
     await this.applyThemeSettings(theme);
   }
 }

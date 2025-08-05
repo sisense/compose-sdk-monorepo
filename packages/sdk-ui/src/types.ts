@@ -1466,6 +1466,9 @@ export type RenderToolbarHandler = (
 /** @internal */
 export type RenderTitleHandler = (defaultHeaderTitle: ReactNode) => ReactNode;
 
+/** @internal */
+export type TextWidgetRenderToolbarHandler = (defaultToolbar: ReactNode) => ReactNode;
+
 /** Style settings defining the look and feel of the widget created in Fusion */
 export interface WidgetByIdStyleOptions extends WidgetContainerStyleOptions {
   /**
@@ -1510,6 +1513,31 @@ export type TextWidgetStyleOptions = {
   html: string;
   vAlign: `valign-${'middle' | 'top' | 'bottom'}`;
   bgColor: string;
+  /**
+   * Widget header styles
+   *
+   * @internal
+   */
+  header?: {
+    /**
+     * Header visibility toggle
+     *
+     * @internal
+     */
+    hidden?: boolean;
+    /**
+     * Custom toolbar to render to the right of the title
+     *
+     * @internal
+     */
+    renderToolbar?: TextWidgetRenderToolbarHandler;
+    /**
+     * Custom title to render in widget header
+     *
+     * @internal
+     */
+    renderTitle?: RenderTitleHandler;
+  };
 };
 
 /**

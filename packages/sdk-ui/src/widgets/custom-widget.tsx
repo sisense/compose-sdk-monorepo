@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useMemo } from 'react';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '@/dynamic-size-container';
 import ErrorBoundaryBox from '@/error-boundary/error-boundary-box';
 import { useCustomWidgets } from '@/custom-widgets-provider';
@@ -9,6 +9,7 @@ import { getDataSourceName } from '@sisense/sdk-data';
 import { WidgetContainer } from './common/widget-container';
 import { useTranslation } from 'react-i18next';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+import { withErrorBoundary } from '@/decorators/component-decorators/with-error-boundary';
 
 /**
  * Component that renders a custom widget.
@@ -17,21 +18,18 @@ import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense
  */
 export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseComponent({
   componentName: 'CustomWidget',
-})((widgetProps) => {
+})((widgetProps: CustomWidgetProps) => {
   const { t } = useTranslation();
   const { getCustomWidget } = useCustomWidgets();
   const { app } = useSisenseContext();
 
   const renderCustomWidget = getCustomWidget(widgetProps.customWidgetType);
-  if (!renderCustomWidget) {
-    return (
-      <ErrorBoundaryBox
-        error={t('customWidgets.registerPrompt', {
-          customWidgetType: widgetProps.customWidgetType,
-        })}
-      />
-    );
-  }
+  const renderCustomWidgetWithErrorBoundary = useMemo(() => {
+    if (!renderCustomWidget) return null;
+    return withErrorBoundary({ componentName: 'CustomWidget' })((props) => (
+      <>{renderCustomWidget(props)}</>
+    ));
+  }, [renderCustomWidget]);
 
   const dataSource = widgetProps.dataSource ?? app?.defaultDataSource;
   const customWidgetProps: CustomWidgetComponentProps = {
@@ -53,7 +51,15 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
         styleOptions={widgetProps.styleOptions}
         dataSetName={dataSource && getDataSourceName(dataSource)}
       >
-        {renderCustomWidget(customWidgetProps)}
+        {renderCustomWidgetWithErrorBoundary ? (
+          renderCustomWidgetWithErrorBoundary(customWidgetProps)
+        ) : (
+          <ErrorBoundaryBox
+            error={t('customWidgets.registerPrompt', {
+              customWidgetType: widgetProps.customWidgetType,
+            })}
+          />
+        )}
       </WidgetContainer>
     </DynamicSizeContainer>
   );

@@ -93,10 +93,12 @@ export const useGetQueryRecommendations = (
   const runGetQueryRecommendations = async (api: ChatRestApi) => {
     try {
       dispatch({ type: 'loading' });
-      const { contextTitle, count, enableAxisTitlesInWidgetProps } = toPlainObject(params);
+      const { contextTitle, count, enableAxisTitlesInWidgetProps, customPrompt } =
+        toPlainObject(params);
       const recCount = count ?? DEFAULT_RECOMMENDATIONS_COUNT;
       const rawRecommendations = await api?.ai.getQueryRecommendations(contextTitle, {
         numOfRecommendations: recCount,
+        ...(customPrompt ? { userPrompt: customPrompt } : undefined),
       });
 
       const recommendations =

@@ -21,6 +21,14 @@ export interface ChatConfig {
   numOfRecommendations: number;
 
   /**
+   * Pass a custom prompt to AI when generating query recommendations
+   *
+   * e.g. "Focus on age range"
+   *
+   */
+  customPrompt?: string;
+
+  /**
    * Number of recent prompts that should be shown in a chat session
    *
    * If not specified, the default value is `5`

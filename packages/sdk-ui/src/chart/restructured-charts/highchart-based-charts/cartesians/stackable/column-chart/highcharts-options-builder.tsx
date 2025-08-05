@@ -1,6 +1,8 @@
 import { HighchartsOptionsBuilder } from '../../../types';
 import omit from 'lodash-es/omit';
-import { getLegacyCartesianChartOptions } from '../../helpers/get-legacy-cartesian-chart-options';
+import { getLegacyCartesianChartOptions } from '../../helpers/highchart-options/get-legacy-cartesian-chart-options';
+import { getBasicCartesianLegend } from '../../helpers/highchart-options/legend';
+import { getBasicCartesianTooltip } from '../../helpers/highchart-options/tooltip';
 
 export const columnHighchartsOptionsBuilder: HighchartsOptionsBuilder<'column'> = {
   getChart: function (ctx) {
@@ -19,16 +21,14 @@ export const columnHighchartsOptionsBuilder: HighchartsOptionsBuilder<'column'> 
   },
 
   getLegend: function (ctx) {
-    return getLegacyCartesianChartOptions(ctx, 'column').legend;
+    return getBasicCartesianLegend(ctx.designOptions.legend);
   },
 
   getPlotOptions: function (ctx) {
     return getLegacyCartesianChartOptions(ctx, 'column').plotOptions;
   },
 
-  getTooltip: function (ctx) {
-    return getLegacyCartesianChartOptions(ctx, 'column').tooltip;
-  },
+  getTooltip: getBasicCartesianTooltip,
 
   getExtras: function (ctx) {
     const options = getLegacyCartesianChartOptions(ctx, 'column');

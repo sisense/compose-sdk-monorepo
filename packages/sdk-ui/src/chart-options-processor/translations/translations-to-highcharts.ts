@@ -8,6 +8,7 @@ import {
   ChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
+  StyledMeasureColumn,
 } from '../../chart-data-options/types';
 import {
   SeriesValueData,
@@ -506,6 +507,102 @@ export const autoCalculateYAxisMinMax = (
   return axisMinMax;
 };
 
+/**
+ * Determines if chart type should be ignored based on y column configuration
+ */
+const shouldIgnoreSeriesChartType = (yColumns: readonly StyledMeasureColumn[]): boolean => {
+  if (yColumns.length <= 1) {
+    return true;
+  }
+
+  const enabledCount = yColumns.filter(({ enabled }) => enabled).length;
+  return enabledCount <= 1;
+};
+
+/**
+ * Converts y column chart type to HighchartsType or undefined
+ */
+const getSeriesChartType = (
+  yColumn: StyledMeasureColumn,
+  shouldIgnoreChartType: boolean,
+): HighchartsType | undefined => {
+  if (!yColumn.chartType || yColumn.chartType === 'auto' || shouldIgnoreChartType) {
+    return undefined;
+  }
+  return yColumn.chartType;
+};
+
+/**
+ * Determines axis side (0 = left, 1 = right) for a y column
+ */
+const getAxisSide = (showOnRightAxis?: boolean): number => (showOnRightAxis ? 1 : 0);
+
+/**
+ * Converts boolean flags to strict booleans
+ */
+const toBooleanFlag = (flag?: boolean): boolean => !!flag;
+
+/**
+ * Creates arrays by repeating a value for each series
+ */
+const createSeriesArray = <T>(value: T, seriesCount: number): T[] => Array(seriesCount).fill(value);
+
+/**
+ * Handles the case when there are no breakBy values
+ */
+const determineYAxisOptionsWithoutBreakBy = (
+  yColumns: readonly StyledMeasureColumn[],
+): [number[], (HighchartsType | undefined)[], boolean[], boolean[]] => {
+  // Handle special case when there are no y values
+  if (yColumns.length === 0) {
+    return [[0], [undefined], [false], [false]];
+  }
+
+  const shouldIgnoreChartType = shouldIgnoreSeriesChartType(yColumns);
+
+  const yAxisSide = yColumns.map(({ showOnRightAxis }) => getAxisSide(showOnRightAxis));
+  const yAxisChartType = yColumns.map((yColumn) =>
+    getSeriesChartType(yColumn, shouldIgnoreChartType),
+  );
+  const yTreatNullDataAsZeros = yColumns.map(({ treatNullDataAsZeros }) =>
+    toBooleanFlag(treatNullDataAsZeros),
+  );
+  const yConnectNulls = yColumns.map(({ connectNulls }) => toBooleanFlag(connectNulls));
+
+  return [yAxisSide, yAxisChartType, yTreatNullDataAsZeros, yConnectNulls];
+};
+
+/**
+ * Handles the case when there are breakBy values
+ */
+const determineYAxisOptionsWithBreakBy = (
+  yColumns: readonly StyledMeasureColumn[],
+  seriesCount: number,
+): [number[], (HighchartsType | undefined)[], boolean[], boolean[]] => {
+  const firstYColumn = yColumns[0];
+  const onRightAxis = getAxisSide(firstYColumn?.showOnRightAxis);
+
+  // When no y columns exist, use undefined for boolean flags to match original behavior
+  const treatNullDataAsZeros = firstYColumn
+    ? toBooleanFlag(firstYColumn.treatNullDataAsZeros)
+    : undefined;
+  const connectNulls = firstYColumn ? toBooleanFlag(firstYColumn.connectNulls) : undefined;
+
+  return [
+    createSeriesArray(onRightAxis, seriesCount),
+    createSeriesArray(undefined as HighchartsType | undefined, seriesCount),
+    createSeriesArray(treatNullDataAsZeros as boolean, seriesCount),
+    createSeriesArray(connectNulls as boolean, seriesCount),
+  ];
+};
+
+/**
+ * Determines Y-axis configuration options for cartesian charts
+ *
+ * @param chartData - Chart data containing series information
+ * @param dataOptions - Chart data options containing y columns and breakBy configuration
+ * @returns Tuple containing [yAxisSide, yAxisChartType, yTreatNullDataAsZeros, yConnectNulls]
+ */
 export const determineYAxisOptions = (
   chartData: ChartData,
   dataOptions: ChartDataOptionsInternal,
@@ -513,53 +610,14 @@ export const determineYAxisOptions = (
   if (chartData.type !== 'cartesian') {
     return [[], [], [], []];
   }
-  // Determine whether the Y value is on the left side or right side
-  let yAxisSide: number[] = [];
-  let yAxisChartType: (HighchartsType | undefined)[] = [];
 
   const cartesianDataOptions = dataOptions as CartesianChartDataOptionsInternal;
-  let yTreatNullDataAsZeros = cartesianDataOptions.y.map(
-    ({ treatNullDataAsZeros }) => !!treatNullDataAsZeros,
-  );
-  let yConnectNulls = cartesianDataOptions.y.map(({ connectNulls }) => !!connectNulls);
-  if (cartesianDataOptions.breakBy.length === 0) {
-    // handle a special case when there is no break by and no y values
-    if (cartesianDataOptions.y.length === 0) {
-      return [[0], [undefined], [false], [false]];
-    }
+  const { y: yColumns, breakBy } = cartesianDataOptions;
+  const hasBreakBy = breakBy.length > 0;
 
-    // Each Y value has individual axis setting, 0 is on left axis, 1 is on right axis
-    yAxisSide = cartesianDataOptions.y.map(({ showOnRightAxis }) => (showOnRightAxis ? 1 : 0));
-    // SeriesChartType is only respected if multiple Y values enabled.
-    let ignoreSeriesChartType = cartesianDataOptions.y.length <= 1;
-    if (!ignoreSeriesChartType) {
-      let numEnabled = 0;
-      cartesianDataOptions.y.map(({ enabled }) => {
-        if (enabled) {
-          numEnabled += 1;
-        }
-        // This line is needed so Typescript doesn't complain.
-        return null;
-      });
-      if (numEnabled <= 1) {
-        ignoreSeriesChartType = true;
-      }
-    }
-    yAxisChartType = cartesianDataOptions.y.map(({ chartType }) => {
-      if (!chartType || chartType === 'auto' || ignoreSeriesChartType) {
-        return undefined;
-      }
-      return chartType;
-    });
-  } else {
-    // Each series has same value of these measure options (only one measure allowed)
-    const onRightAxis = cartesianDataOptions.y[0]?.showOnRightAxis ? 1 : 0;
-    yAxisSide = chartData.series.map(() => onRightAxis);
-    yAxisChartType = chartData.series.map(() => undefined);
-    yTreatNullDataAsZeros = chartData.series.map(() => yTreatNullDataAsZeros[0]);
-    yConnectNulls = chartData.series.map(() => yConnectNulls[0]);
-  }
-  return [yAxisSide, yAxisChartType, yTreatNullDataAsZeros, yConnectNulls];
+  return hasBreakBy
+    ? determineYAxisOptionsWithBreakBy(yColumns, chartData.series.length)
+    : determineYAxisOptionsWithoutBreakBy(yColumns);
 };
 
 export const getColorSetting = (

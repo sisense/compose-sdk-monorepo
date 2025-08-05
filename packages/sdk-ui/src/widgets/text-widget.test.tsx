@@ -85,6 +85,216 @@ describe('TextWidget', () => {
       expect(await findByText('Sample Text')).toBeInTheDocument();
     });
 
+    describe('styleOptions.header', () => {
+      it('should render header when header is not provided (defaults to visible)', () => {
+        const props: TextWidgetProps = {
+          styleOptions: {
+            html: '<p>Sample Text</p>',
+            bgColor: '#ffffff',
+            vAlign: 'valign-top',
+          },
+        };
+        const { container } = render(<TextWidget {...props} />);
+
+        const headerElement = container.querySelector('.text-widget-header');
+        expect(headerElement).toBeInTheDocument();
+      });
+
+      it('should not render header when header.hidden is true', () => {
+        const props: TextWidgetProps = {
+          styleOptions: {
+            html: '<p>Sample Text</p>',
+            bgColor: '#ffffff',
+            vAlign: 'valign-top',
+            header: {
+              hidden: true,
+            },
+          },
+        };
+        const { container } = render(<TextWidget {...props} />);
+
+        const headerElement = container.querySelector('.text-widget-header');
+        expect(headerElement).not.toBeInTheDocument();
+      });
+
+      it('should render header when header is provided and hidden is false', () => {
+        const props: TextWidgetProps = {
+          styleOptions: {
+            html: '<p>Sample Text</p>',
+            bgColor: '#ffffff',
+            vAlign: 'valign-top',
+            header: {
+              hidden: false,
+            },
+          },
+        };
+        const { container } = render(<TextWidget {...props} />);
+
+        const headerElement = container.querySelector('.text-widget-header');
+        expect(headerElement).toBeInTheDocument();
+      });
+
+      it('should render header when header is provided without hidden property (defaults to false)', () => {
+        const props: TextWidgetProps = {
+          styleOptions: {
+            html: '<p>Sample Text</p>',
+            bgColor: '#ffffff',
+            vAlign: 'valign-top',
+            header: {},
+          },
+        };
+        const { container } = render(<TextWidget {...props} />);
+
+        const headerElement = container.querySelector('.text-widget-header');
+        expect(headerElement).toBeInTheDocument();
+      });
+
+      it('should render custom title when renderTitle is provided', () => {
+        const customTitle = 'Custom Widget Title';
+        const renderTitleMock = vi.fn(() => <div data-testid="custom-title">{customTitle}</div>);
+
+        const props: TextWidgetProps = {
+          styleOptions: {
+            html: '<p>Sample Text</p>',
+            bgColor: '#ffffff',
+            vAlign: 'valign-top',
+            header: {
+              renderTitle: renderTitleMock,
+            },
+          },
+        };
+        const { getByTestId, getByText } = render(<TextWidget {...props} />);
+
+        expect(renderTitleMock).toHaveBeenCalledWith(null);
+        expect(getByTestId('custom-title')).toBeInTheDocument();
+        expect(getByText(customTitle)).toBeInTheDocument();
+      });
+
+      it('should render custom toolbar when renderToolbar is provided', () => {
+        const customToolbar = 'Custom Toolbar';
+        const renderToolbarMock = vi.fn(() => (
+          <div data-testid="custom-toolbar">{customToolbar}</div>
+        ));
+
+        const props: TextWidgetProps = {
+          styleOptions: {
+            html: '<p>Sample Text</p>',
+            bgColor: '#ffffff',
+            vAlign: 'valign-top',
+            header: {
+              renderToolbar: renderToolbarMock,
+            },
+          },
+        };
+        const { getByTestId, getByText } = render(<TextWidget {...props} />);
+
+        expect(renderToolbarMock).toHaveBeenCalledWith(null);
+        expect(getByTestId('custom-toolbar')).toBeInTheDocument();
+        expect(getByText(customToolbar)).toBeInTheDocument();
+      });
+
+      it('should render both custom title and toolbar when both are provided', () => {
+        const customTitle = 'Custom Title';
+        const customToolbar = 'Custom Toolbar';
+        const renderTitleMock = vi.fn(() => <div data-testid="custom-title">{customTitle}</div>);
+        const renderToolbarMock = vi.fn(() => (
+          <div data-testid="custom-toolbar">{customToolbar}</div>
+        ));
+
+        const props: TextWidgetProps = {
+          styleOptions: {
+            html: '<p>Sample Text</p>',
+            bgColor: '#ffffff',
+            vAlign: 'valign-top',
+            header: {
+              renderTitle: renderTitleMock,
+              renderToolbar: renderToolbarMock,
+            },
+          },
+        };
+        const { getByTestId, getByText } = render(<TextWidget {...props} />);
+
+        expect(renderTitleMock).toHaveBeenCalledWith(null);
+        expect(renderToolbarMock).toHaveBeenCalledWith(null);
+        expect(getByTestId('custom-title')).toBeInTheDocument();
+        expect(getByTestId('custom-toolbar')).toBeInTheDocument();
+        expect(getByText(customTitle)).toBeInTheDocument();
+        expect(getByText(customToolbar)).toBeInTheDocument();
+      });
+
+      it('should render empty title and toolbar sections when header is provided but no render functions', () => {
+        const props: TextWidgetProps = {
+          styleOptions: {
+            html: '<p>Sample Text</p>',
+            bgColor: '#ffffff',
+            vAlign: 'valign-top',
+            header: {},
+          },
+        };
+        const { container } = render(<TextWidget {...props} />);
+
+        const headerElement = container.querySelector('.text-widget-header');
+        expect(headerElement).toBeInTheDocument();
+
+        // Should have title and toolbar divs but they should be empty
+        const titleElement = headerElement?.querySelector('div:first-child');
+        const toolbarElement = headerElement?.querySelector('div:last-child');
+
+        expect(titleElement).toBeInTheDocument();
+        expect(toolbarElement).toBeInTheDocument();
+        expect(titleElement?.textContent).toBe('');
+        expect(toolbarElement?.textContent).toBe('');
+      });
+
+      it('should handle renderTitle returning null', () => {
+        const renderTitleMock = vi.fn(() => null);
+
+        const props: TextWidgetProps = {
+          styleOptions: {
+            html: '<p>Sample Text</p>',
+            bgColor: '#ffffff',
+            vAlign: 'valign-top',
+            header: {
+              renderTitle: renderTitleMock,
+            },
+          },
+        };
+        const { container } = render(<TextWidget {...props} />);
+
+        expect(renderTitleMock).toHaveBeenCalledWith(null);
+        const headerElement = container.querySelector('.text-widget-header');
+        expect(headerElement).toBeInTheDocument();
+
+        const titleElement = headerElement?.querySelector('div:first-child');
+        expect(titleElement).toBeInTheDocument();
+        expect(titleElement?.textContent).toBe('');
+      });
+
+      it('should handle renderToolbar returning null', () => {
+        const renderToolbarMock = vi.fn(() => null);
+
+        const props: TextWidgetProps = {
+          styleOptions: {
+            html: '<p>Sample Text</p>',
+            bgColor: '#ffffff',
+            vAlign: 'valign-top',
+            header: {
+              renderToolbar: renderToolbarMock,
+            },
+          },
+        };
+        const { container } = render(<TextWidget {...props} />);
+
+        expect(renderToolbarMock).toHaveBeenCalledWith(null);
+        const headerElement = container.querySelector('.text-widget-header');
+        expect(headerElement).toBeInTheDocument();
+
+        const toolbarElement = headerElement?.querySelector('div:last-child');
+        expect(toolbarElement).toBeInTheDocument();
+        expect(toolbarElement?.textContent).toBe('');
+      });
+    });
+
     describe('onDataPointClick event handler', () => {
       it('should call onDataPointClick when widget is clicked', () => {
         const onDataPointClickMock = vi.fn();

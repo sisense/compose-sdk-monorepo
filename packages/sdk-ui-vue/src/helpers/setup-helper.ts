@@ -14,9 +14,9 @@ import { isObject } from '../utils.js';
 
 export function createDefaultContextConnectors() {
   return [
+    createCustomWidgetsContextConnector(),
     createSisenseContextConnector(),
     createThemeContextConnector(),
-    createCustomWidgetsContextConnector(),
   ];
 }
 

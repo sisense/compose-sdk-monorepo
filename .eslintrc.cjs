@@ -111,6 +111,7 @@ module.exports = {
             '**/__test-helpers__/*.{ts,tsx}',
             '**/test-helpers/*.{ts,tsx}',
             '**/*.test.{ts,tsx}',
+            'e2e/**/*.spec.{ts,tsx,js,jsx}',
           ],
           rules: {
             'sonarjs/no-duplicate-string': 'off',
@@ -161,12 +162,12 @@ module.exports = {
         },
         {
           // Temporarily disable import sorting for the sdk-ui package
-          files: ['packages/sdk-ui/**/*.{ts,js,tsx,jsx}'],
+          files: ['packages/sdk-ui/**/*.{ts,js,tsx,jsx}', 'e2e/**/*.{ts,js,tsx,jsx}'],
           rules: {
             'simple-import-sort/imports': 'off',
             'simple-import-sort/exports': 'off',
           },
-        }
+        },
       ],
     },
   ],

@@ -4,7 +4,7 @@ import {
 } from '../../chart-data-options/types';
 import { colorChineseSilver, colorWhite } from '../../chart-data-options/coloring/consts';
 import {
-  InternalSeries,
+  HighchartsDataPointContext,
   TooltipSettings,
   formatTooltipValue,
   isTooltipPercentValueSupported,
@@ -17,16 +17,13 @@ import { renderForecastTooltipString } from '../advanced-analytics/tooltips/fore
 import { DimensionalCalculatedMeasure } from '@sisense/sdk-data';
 
 export const cartesianDataFormatter = function (
-  that: InternalSeries,
-  showDecimals: boolean | undefined,
+  highchartsDataPoint: HighchartsDataPointContext,
   chartDataOptions: ChartDataOptionsInternal,
   translate?: TFunction,
 ) {
-  // Applicable only to pie and funnel charts
-  let percentage: string | undefined;
-  if (that.percentage) {
-    percentage = showDecimals ? that.percentage.toFixed(1) : `${Math.round(that.percentage)}`;
-  }
+  const percentage = highchartsDataPoint.percentage
+    ? `${Math.round(highchartsDataPoint.percentage)}`
+    : undefined;
 
   const cartesianChartDataOptions: CartesianChartDataOptionsInternal =
     chartDataOptions as CartesianChartDataOptionsInternal;
@@ -34,38 +31,46 @@ export const cartesianDataFormatter = function (
   const dataOptionY =
     cartesianChartDataOptions.breakBy.length > 0
       ? cartesianChartDataOptions.y?.find((y) => y.enabled)
-      : cartesianChartDataOptions.y?.find((y) => y.column.title === that.series.name);
+      : cartesianChartDataOptions.y?.find(
+          (y) => y.column.title === highchartsDataPoint.series.name,
+        );
 
   const isPercentValueSupported = isTooltipPercentValueSupported(dataOptionY);
-  const yValue = formatTooltipValue(dataOptionY, that.point.y, '');
+  const yValue = formatTooltipValue(dataOptionY, highchartsDataPoint.point.y, '');
 
-  const maskedX = that.point?.custom?.xDisplayValue ?? that.x;
+  const maskedX = highchartsDataPoint.point?.custom?.xDisplayValue ?? highchartsDataPoint.x;
   const x1Value = cartesianChartDataOptions.x
-    ? formatTooltipValue(cartesianChartDataOptions.x[0], that.x, maskedX)
+    ? formatTooltipValue(cartesianChartDataOptions.x[0], highchartsDataPoint.x, maskedX)
     : maskedX;
 
   let x2Value = undefined;
   if (
-    that.point.custom?.xValue &&
+    highchartsDataPoint.point.custom?.xValue &&
     cartesianChartDataOptions?.x &&
     cartesianChartDataOptions.x.length === 2
   ) {
-    const maskedX1 = `${that.point.custom.xValue[0]}`; // X2 is in position xValue[0]
+    const maskedX1 = `${highchartsDataPoint.point.custom.xValue[0]}`; // X2 is in position xValue[0]
     x2Value = formatTooltipValue(cartesianChartDataOptions.x[1], maskedX1, maskedX1);
   }
 
   const value = yValue + (isPercentValueSupported && percentage ? ` / ${percentage}%` : '');
-  const color = that.point.color || that.series.color;
-  const isForecast = isForecastSeries(that.point.name || that.series.name);
-  const isTrend = isTrendSeries(that.point.name || that.series.name);
+  const color = highchartsDataPoint.point.color || highchartsDataPoint.series.color;
+  const isForecast = isForecastSeries(
+    highchartsDataPoint.point.name || highchartsDataPoint.series.name,
+  );
+  const isTrend = isTrendSeries(highchartsDataPoint.point.name || highchartsDataPoint.series.name);
   const yName =
     translate && isForecast
-      ? `${that.series.name.substring(10)}`
+      ? `${highchartsDataPoint.series.name.substring(10)}`
       : translate && isTrend
-      ? `${that.series.name.substring(7)}`
-      : that.series.name;
-  const low = that.point?.low ? formatTooltipValue(dataOptionY, that.point?.low, '') : '';
-  const high = that.point?.high ? formatTooltipValue(dataOptionY, that.point?.high, '') : '';
+      ? `${highchartsDataPoint.series.name.substring(7)}`
+      : highchartsDataPoint.series.name;
+  const low = highchartsDataPoint.point?.low
+    ? formatTooltipValue(dataOptionY, highchartsDataPoint.point?.low, '')
+    : '';
+  const high = highchartsDataPoint.point?.high
+    ? formatTooltipValue(dataOptionY, highchartsDataPoint.point?.high, '')
+    : '';
 
   const displayValue = (value: string | undefined, labelPrefix: string, color: string) => {
     if (!value || value === '') return '';
@@ -84,7 +89,7 @@ export const cartesianDataFormatter = function (
     );
     const modelTypeValue = match ? match[1] : null;
 
-    const { min, max, median, average } = that.point.trend!;
+    const { min, max, median, average } = highchartsDataPoint.point.trend!;
     const formattedMin = formatTooltipValue(dataOptionY, min, '');
     const formattedMax = formatTooltipValue(dataOptionY, max, '');
     const formattedMedian = formatTooltipValue(dataOptionY, median, '');
@@ -150,8 +155,7 @@ export const cartesianDataFormatter = function (
  `);
 };
 
-export const getTooltipSettings = (
-  showDecimals: boolean | undefined,
+export const getCartesianTooltipSettings = (
   chartDataOptions: ChartDataOptionsInternal,
   translate?: TFunction,
 ): TooltipSettings => {
@@ -162,9 +166,8 @@ export const getTooltipSettings = (
     borderRadius: 10,
     borderWidth: 1,
     useHTML: true,
-    formatter: function () {
-      const that: InternalSeries = this as InternalSeries;
-      return cartesianDataFormatter(that, showDecimals, chartDataOptions, translate);
+    formatter: function (this: HighchartsDataPointContext) {
+      return cartesianDataFormatter(this, chartDataOptions, translate);
     },
   };
 };

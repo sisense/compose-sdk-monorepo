@@ -4,7 +4,7 @@ import { fontStyleDefault } from '../defaults/cartesian';
 import { ValueLabelSettings } from './value-label-section';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { CompleteNumberFormatConfig, CompleteThemeSettings } from '../../types';
-import { InternalSeries } from './tooltip-utils';
+import { HighchartsDataPointContext } from './tooltip-utils';
 import { FunnelChartDesignOptions } from './design-options';
 import { withPercentSign, fraction, fromFraction } from '../../chart-data/utils';
 import {
@@ -89,14 +89,14 @@ export const seriesDataLabels = (labels: FunnelLabels): { enabled: boolean } => 
   };
 };
 
-const getCategory = (ctx: InternalSeries, labels: FunnelLabels): string => {
+const getCategory = (ctx: HighchartsDataPointContext, labels: FunnelLabels): string => {
   if (!labels.showCategories) return '';
 
   return ctx.point.name || ctx.series.name;
 };
 
 const getValue = (
-  ctx: InternalSeries,
+  ctx: HighchartsDataPointContext,
   labels: FunnelLabels,
   numberFormatConfig: CompleteNumberFormatConfig,
 ): string => {
@@ -107,7 +107,7 @@ const getValue = (
   return value;
 };
 
-const getPercent = (ctx: InternalSeries, labels: FunnelLabels): string => {
+const getPercent = (ctx: HighchartsDataPointContext, labels: FunnelLabels): string => {
   if (!labels.showPercent) return '';
   const percent = ctx.point?.custom?.number1 || 0;
   const percentString = labels.showDecimals ? percent.toFixed(1) : `${Math.round(percent)}`;
@@ -185,7 +185,7 @@ export const getFunnelPlotOptions = (
       enabled:
         funnelLabels.enabled &&
         (funnelLabels.showCategories || funnelLabels.showValue || funnelLabels.showPercent),
-      formatter: function (this: InternalSeries) {
+      formatter: function (this: HighchartsDataPointContext) {
         const category = getCategory(this, funnelLabels);
         const value = getValue(this, funnelLabels, numberFormatConfig);
         const percent = getPercent(this, funnelLabels);

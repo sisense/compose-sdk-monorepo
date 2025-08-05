@@ -35,7 +35,7 @@ export {
   getFilterCompareId,
 } from '@sisense/sdk-data';
 
-const fusionWidgetTypeToChartType = <Record<FusionWidgetType, ChartType>>{
+const fusionWidgetTypeToChartType: Partial<Record<FusionWidgetType, ChartType>> = {
   'chart/line': 'line',
   'chart/area': 'area',
   'chart/bar': 'bar',
@@ -113,7 +113,7 @@ export function getWidgetType(fusionWidgetType: FusionWidgetType): WidgetType {
 }
 
 export function getChartSubtype(widgetSubtype: WidgetSubtype): ChartSubtype | undefined {
-  const widgetSubtypeToChartSubtype = <Record<WidgetSubtype, ChartSubtype>>{
+  const widgetSubtypeToChartSubtype: Partial<Record<WidgetSubtype, ChartSubtype>> = {
     'area/basic': 'area/basic',
     'area/stacked': 'area/stacked',
     'area/stacked100': 'area/stacked100',

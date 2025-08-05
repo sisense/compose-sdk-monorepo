@@ -241,19 +241,19 @@ export const filterToOption = (filter: Filter): FilterOptionType => {
   let operatorB: string | undefined = '';
   switch (filter.filterType) {
     case FilterTypes.exclude:
-      operatorA = ((<ExcludeFilter>filter).filter as NumericFilter).operatorA;
-      operatorB = ((<ExcludeFilter>filter).filter as NumericFilter).operatorB;
+      operatorA = ((filter as ExcludeFilter).filter as NumericFilter).operatorA;
+      operatorB = ((filter as ExcludeFilter).filter as NumericFilter).operatorB;
       break;
     case FilterTypes.ranking:
-      operatorA = (<RankingFilter>filter).operator;
+      operatorA = (filter as RankingFilter).operator;
       break;
     case FilterTypes.numeric:
-      operatorA = (<NumericFilter>filter).operatorA;
-      operatorB = (<NumericFilter>filter).operatorB;
+      operatorA = (filter as NumericFilter).operatorA;
+      operatorB = (filter as NumericFilter).operatorB;
       break;
     case FilterTypes.text:
-      operatorA = (<TextFilter>filter).operatorA;
-      operatorA = (<TextFilter>filter).operatorA;
+      operatorA = (filter as TextFilter).operatorA;
+      operatorA = (filter as TextFilter).operatorA;
       break;
     default:
       throw new UnsupportedFilterError(filter);
@@ -273,20 +273,20 @@ export const filterToDefaultValues = (filter: Filter): CriteriaFilterValueType[]
   let valB: CriteriaFilterValueType | undefined = undefined;
   switch (filter.filterType) {
     case FilterTypes.exclude:
-      valA = ((<ExcludeFilter>filter).filter as NumericFilter).valueA;
-      valB = ((<ExcludeFilter>filter).filter as NumericFilter).valueB;
+      valA = ((filter as ExcludeFilter).filter as NumericFilter).valueA;
+      valB = ((filter as ExcludeFilter).filter as NumericFilter).valueB;
       break;
     case FilterTypes.ranking:
-      valA = (<RankingFilter>filter).count;
-      valB = (<RankingFilter>filter).measure;
+      valA = (filter as RankingFilter).count;
+      valB = (filter as RankingFilter).measure;
       break;
     case FilterTypes.numeric:
-      valA = (<NumericFilter>filter).valueA;
-      valB = (<NumericFilter>filter).valueB;
+      valA = (filter as NumericFilter).valueA;
+      valB = (filter as NumericFilter).valueB;
       break;
     case FilterTypes.text:
-      valA = (<TextFilter>filter).valueA;
-      valB = (<TextFilter>filter).valueB;
+      valA = (filter as TextFilter).valueA;
+      valB = (filter as TextFilter).valueB;
       break;
     default:
   }
@@ -297,7 +297,7 @@ export const filterToDefaultValues = (filter: Filter): CriteriaFilterValueType[]
 
 export const valuesToDisplayValues = (values: CriteriaFilterValueType[]): (string | number)[] => {
   return values.map((value) => {
-    if (MetadataTypes.isMeasure(value)) return (<Measure>value).name;
+    if (MetadataTypes.isMeasure(value)) return (value as Measure).name;
     return value as string | number;
   });
 };

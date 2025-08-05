@@ -7,7 +7,7 @@ import {
   ChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
 } from '../../chart-data-options/types';
-import { InternalSeries } from './tooltip-utils';
+import { HighchartsDataPointContext } from './tooltip-utils';
 import { CompleteThemeSettings } from '@/types';
 
 export const DefaultPieLabels: PieLabels = {
@@ -100,7 +100,7 @@ export const getPiePlotOptions = (
     const numberFormatConfig = getCompleteNumberFormatConfig(
       (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig,
     );
-    pieDataLabels.formatter = function (this: InternalSeries) {
+    pieDataLabels.formatter = function (this: HighchartsDataPointContext) {
       const name = this.point.name || this.series.name;
       const value = this.y;
       return `<div>

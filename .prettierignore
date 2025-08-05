@@ -9,5 +9,8 @@ dist/
 coverage/
 
 # Ignore auto-generated files:
-CHANGELOG.md
 docs-md/
+
+# Ignore changelog files:
+CHANGELOG.md
+CHANGELOG_INTERNAL.md

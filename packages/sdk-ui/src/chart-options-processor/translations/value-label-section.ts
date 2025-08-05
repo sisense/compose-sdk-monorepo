@@ -3,7 +3,7 @@ import type { DataLabelsOptions } from '@sisense/sisense-charts';
 import { Style } from '../chart-options-service';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { AxisOrientation } from './axis-section';
-import { InternalSeries } from './tooltip-utils';
+import { HighchartsDataPointContext } from './tooltip-utils';
 import { PolarType } from './design-options';
 import { NumberFormatConfig } from '@/types';
 
@@ -33,7 +33,11 @@ export type ValueLabelSettings = {
     relative: boolean;
     totals: boolean;
   };
-  formatter?: (this: InternalSeries, options?: DataLabelsOptions, valuePropName?: string) => string;
+  formatter?: (
+    this: HighchartsDataPointContext,
+    options?: DataLabelsOptions,
+    valuePropName?: string,
+  ) => string;
 };
 
 const defaultValueLabelSettings: ValueLabelSettings = {
@@ -49,7 +53,7 @@ export const createValueLabelFormatter = (
   numberFormatConfig?: NumberFormatConfig,
   options?: ValueLabelOptions,
 ) => {
-  return function (this: InternalSeries) {
+  return function (this: HighchartsDataPointContext) {
     const isDummyPointBetweenCategoriesGroups = this.y === 0 && this.x === ' ';
     if (this.y === undefined || isNaN(this.y) || isDummyPointBetweenCategoriesGroups) {
       return '';

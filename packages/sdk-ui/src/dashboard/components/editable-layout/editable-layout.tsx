@@ -32,6 +32,7 @@ import {
   getDraggingWidgetId,
   isEditableLayoutDragData,
   isEditableLayoutDropData,
+  composeTextWidgetToolbarHandlers,
 } from './utils';
 import { WIDGET_HEADER_HEIGHT } from '@/dashboard/components/editable-layout/const';
 import { useThemeContext } from '@/theme-provider';
@@ -307,13 +308,10 @@ export const EditableLayout = ({
                                 widgetId: subcell.widgetId,
                               }}
                               dragHandleOptions={{
-                                icon:
-                                  widgetProps.widgetType === 'text'
-                                    ? { visible: false }
-                                    : {
-                                        visible: showDragHandleIcon,
-                                        color: themeSettings.widget.header.titleTextColor,
-                                      },
+                                icon: {
+                                  visible: showDragHandleIcon,
+                                  color: themeSettings.widget.header.titleTextColor,
+                                },
                               }}
                             >
                               {(withDragHandle) => (
@@ -324,7 +322,30 @@ export const EditableLayout = ({
                                     isDropping={isDragging && draggingWidgetId !== subcell.widgetId}
                                   >
                                     {widgetProps.widgetType === 'text' ? (
-                                      withDragHandle(<Widget {...widgetProps} />)
+                                      <Widget
+                                        {...{
+                                          ...widgetProps,
+                                          styleOptions: {
+                                            ...widgetProps?.styleOptions,
+                                            header: {
+                                              ...widgetProps?.styleOptions?.header,
+                                              renderTitle: composeTitleHandlers(
+                                                withDragHandle,
+                                                widgetProps?.styleOptions?.header?.renderTitle,
+                                              ),
+                                              renderToolbar: composeTextWidgetToolbarHandlers(
+                                                widgetProps?.styleOptions?.header?.renderToolbar,
+                                                (defaultToolbar) =>
+                                                  addWidgetContextMenu(
+                                                    columnIndex,
+                                                    rowIndex,
+                                                    subcell.widgetId,
+                                                  )(() => {}, <>{defaultToolbar}</>),
+                                              ),
+                                            },
+                                          },
+                                        }}
+                                      />
                                     ) : (
                                       <Widget
                                         {...{

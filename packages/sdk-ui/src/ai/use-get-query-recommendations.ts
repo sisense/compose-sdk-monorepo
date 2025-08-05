@@ -29,6 +29,14 @@ export interface GetQueryRecommendationsParams {
    * @internal
    */
   enableAxisTitlesInWidgetProps?: boolean;
+
+  /**
+   * Pass a custom prompt to AI when generating query recommendations
+   *
+   * e.g. "Focus on age range"
+   *
+   */
+  customPrompt?: string;
 }
 
 /**
@@ -63,7 +71,7 @@ export interface UseGetQueryRecommendationsState {
 export const useGetQueryRecommendationsInternal = (
   params: UseGetQueryRecommendationsParams,
 ): UseGetQueryRecommendationsState => {
-  const { contextTitle, count, enableAxisTitlesInWidgetProps, enabled } = params;
+  const { contextTitle, count, enableAxisTitlesInWidgetProps, enabled, customPrompt } = params;
 
   const api = useChatApi();
 
@@ -83,6 +91,7 @@ export const useGetQueryRecommendationsInternal = (
     queryFn: () =>
       api?.ai.getQueryRecommendations(contextTitle, {
         numOfRecommendations: recCount,
+        ...(customPrompt ? { userPrompt: customPrompt } : null),
       }),
     enabled: !!api && shouldGetRecommendations,
   });

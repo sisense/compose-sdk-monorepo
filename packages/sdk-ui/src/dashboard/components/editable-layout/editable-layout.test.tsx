@@ -230,14 +230,14 @@ describe('EditableLayout', () => {
       expect(row2).toHaveAttribute('data-height', '232');
     });
 
-    it('should render drag handles for non-text widgets', () => {
+    it('should render drag handles for widgets', () => {
       render(<EditableLayout {...defaultProps} />);
 
       const chartWidgetWrapper = screen.getByTestId('draggable-widget-widget1');
       const textWidgetWrapper = screen.getByTestId('draggable-widget-widget2');
 
       expect(chartWidgetWrapper).toHaveAttribute('data-drag-handle-visible', 'true');
-      expect(textWidgetWrapper).toHaveAttribute('data-drag-handle-visible', 'false');
+      expect(textWidgetWrapper).toHaveAttribute('data-drag-handle-visible', 'true');
     });
   });
 

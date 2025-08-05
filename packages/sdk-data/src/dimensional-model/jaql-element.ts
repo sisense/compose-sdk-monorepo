@@ -2,9 +2,9 @@ import {
   createAttributeHelper,
   createCalculatedMeasureHelper,
   createMeasureHelper,
+  getGranularityFromJaql,
   getSortType,
 } from '../utils.js';
-import { DimensionalLevelAttribute } from './attributes.js';
 import { DimensionalElement } from './base.js';
 import { SortDirection } from './interfaces.js';
 import {
@@ -144,7 +144,7 @@ export function createDimensionalElementFromMetadataItem(item: MetadataItem) {
     return createCalculatedMeasureHelper(jaql as FormulaJaql);
   }
 
-  const granularity = DimensionalLevelAttribute.translateJaqlToGranularity(jaql);
+  const granularity = getGranularityFromJaql(jaql);
 
   // measure
   if ('agg' in jaql && jaql.dim && jaql.datatype) {

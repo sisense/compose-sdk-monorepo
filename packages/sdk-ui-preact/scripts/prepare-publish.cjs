@@ -32,5 +32,5 @@ function preparePackageForPublish() {
   console.log('📤 Ready to publish with zero runtime dependencies');
 }
 
-// Run script
-preparePackageForPublish();
+// Temporarily disables the script
+// preparePackageForPublish();

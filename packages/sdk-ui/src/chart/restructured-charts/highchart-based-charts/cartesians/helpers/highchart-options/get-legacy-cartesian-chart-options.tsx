@@ -1,6 +1,6 @@
-import { getCartesianChartOptions } from '@/chart-options-processor/cartesian-chart-options';
-import { BuildContext } from '../../types';
-import { CartesianChartTypes } from '../types';
+import { getCartesianChartOptions } from '@/chart-options-processor/cartesian/cartesian-chart-options';
+import { BuildContext } from '../../../types';
+import { CartesianChartTypes } from '../../types';
 
 export const getLegacyCartesianChartOptions = (
   ctx: BuildContext<CartesianChartTypes>,

@@ -139,7 +139,7 @@ export function useGetSharedFormulaInternal(params: UseGetSharedFormulaParams) {
     if (shouldLoad(app)) {
       dispatch({ type: 'loading' });
 
-      let fetchPromise = Promise.resolve(<DimensionalCalculatedMeasure | null>null);
+      let fetchPromise: Promise<DimensionalCalculatedMeasure | null> = Promise.resolve(null);
       if (oid) {
         fetchPromise = fetchFormulaByOid(oid, app);
       } else if (name && dataSource) {

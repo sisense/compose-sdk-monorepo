@@ -20,6 +20,10 @@ afterEach(() => {
   // Clean up mounted components after each test
   // https://testing-library.com/docs/react-testing-library/api/#cleanup
   cleanup();
+
+  // Clear all timers to prevent debounced callbacks from firing after test teardown
+  // This prevents "window is not defined" errors from async operations
+  vi.clearAllTimers();
 });
 
 vi.stubGlobal('__PACKAGE_VERSION__', '0.0.0');

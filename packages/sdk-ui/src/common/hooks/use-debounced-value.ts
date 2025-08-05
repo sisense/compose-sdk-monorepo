@@ -18,5 +18,12 @@ export function useDebouncedValue<T>(value: T, wait: number): T {
     updateDebouncedValue(value);
   }, [value, updateDebouncedValue]);
 
+  // Cleanup: cancel pending debounced calls when the component unmounts
+  useEffect(() => {
+    return () => {
+      updateDebouncedValue.cancel();
+    };
+  }, [updateDebouncedValue]);
+
   return debouncedValue;
 }

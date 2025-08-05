@@ -6,6 +6,16 @@ title: ChatConfig
 
 ## Properties
 
+### customPrompt
+
+> **customPrompt**?: `string`
+
+Pass a custom prompt to AI when generating query recommendations
+
+e.g. "Focus on age range"
+
+***
+
 ### dataTopicsList
 
 > **dataTopicsList**?: `string`[]

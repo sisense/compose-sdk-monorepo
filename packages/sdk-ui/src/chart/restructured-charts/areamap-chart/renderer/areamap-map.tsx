@@ -4,7 +4,7 @@ import type {
   FeatureCollection as GeoJsonFeatureCollection,
 } from 'geojson';
 import Leaflet from 'leaflet';
-import 'proj4leaflet';
+import * as proj4 from 'proj4leaflet';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { scaleBrightness } from '@/utils/color/index.js';
 import { AreamapType } from '@/types.js';
@@ -14,6 +14,10 @@ import { GeoDataElement } from '../types.js';
 // update this imports after moving both map charts (scattermap and areamap) to restructured charts
 import '@/charts/map-charts/map-charts.scss';
 import { prepareFitBoundsAnimationOptions } from '@/charts/map-charts/scattermap/utils/map.js';
+
+// Using direct import instead of Leaflet.Proj namespace because the library doesn't properly attach to Leaflet in module builds.
+// This is a known Webpack/module issue: https://github.com/kartena/Proj4Leaflet/pull/147
+const Proj4CRS = (proj4 as unknown as { CRS: typeof Leaflet.Proj.CRS }).CRS;
 
 export type AreamapProps = {
   geoJson: GeoJsonFeatureCollection;
@@ -164,7 +168,7 @@ function createMap(element: HTMLElement, mapType: AreamapType): Leaflet.Map {
   } else {
     // case usa map -> configuring Albers Projection, ref: http://epsg.io/5070
     return Leaflet.map(element, {
-      crs: new Leaflet.Proj.CRS(
+      crs: new Proj4CRS(
         'EPSG:5070',
         '+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 ' +
           '+ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',

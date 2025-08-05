@@ -118,12 +118,14 @@ export class AiService {
     params: GetQueryRecommendationsParams,
   ): Promise<QueryRecommendation[]> {
     const api = await this.getApi();
-    const { contextTitle, count, enableAxisTitlesInWidgetProps } = params;
+    const { contextTitle, count, enableAxisTitlesInWidgetProps, customPrompt } = params;
     const recCount = count ?? DEFAULT_RECOMMENDATIONS_COUNT;
 
     const rawRecommendations =
-      (await api.ai.getQueryRecommendations(contextTitle, { numOfRecommendations: recCount })) ||
-      [];
+      (await api.ai.getQueryRecommendations(contextTitle, {
+        numOfRecommendations: recCount,
+        ...(customPrompt ? { userPrompt: customPrompt } : undefined),
+      })) || [];
 
     return rawRecommendations.map(
       (recommendation: QueryRecommendation) =>

@@ -22,7 +22,7 @@ import {
   ChartStyleOptions,
   HighchartsSelectEvent,
 } from '../types';
-import { getCartesianChartOptions } from './cartesian-chart-options';
+import { getCartesianChartOptions } from './cartesian/cartesian-chart-options';
 import { getCategoricalChartOptions } from './category-chart-options';
 import { getScatterChartOptions } from './scatter-chart-options';
 import {

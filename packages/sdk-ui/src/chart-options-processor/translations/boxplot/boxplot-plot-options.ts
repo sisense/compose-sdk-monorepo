@@ -2,11 +2,15 @@ import type { DataLabelsOptions } from '@sisense/sisense-charts';
 import { PlotOptions } from '../../chart-options-service.js';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from '../number-format-config.js';
 import { ValueLabelOptions } from '../value-label-section.js';
-import { InternalSeries } from '../tooltip-utils.js';
+import { HighchartsDataPointContext } from '../tooltip-utils.js';
 import { NumberFormatConfig } from '@/types.js';
 
 const createValueLabelFormatter = (numberFormatConfig?: NumberFormatConfig) => {
-  return function (this: InternalSeries, _options?: DataLabelsOptions, valueProp?: string) {
+  return function (
+    this: HighchartsDataPointContext,
+    _options?: DataLabelsOptions,
+    valueProp?: string,
+  ) {
     const value = valueProp ? (this.point[valueProp] as number) : undefined;
     if (value === undefined || isNaN(value)) {
       return '';

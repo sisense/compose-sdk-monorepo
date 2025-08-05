@@ -1,7 +1,7 @@
 import type { NumberFormatConfig } from '@/types';
 import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
-import { getTooltipSettings } from './tooltip';
-import { InternalSeries } from './tooltip-utils';
+import { getCartesianTooltipSettings } from './tooltip';
+import { HighchartsDataPointContext } from './tooltip-utils';
 
 const format1: NumberFormatConfig = {
   name: 'Currency',
@@ -29,7 +29,7 @@ const dataOptions: CartesianChartDataOptionsInternal = {
 };
 
 it('should display cartesian tooltip for point', () => {
-  const point: InternalSeries = {
+  const point: HighchartsDataPointContext = {
     series: { name: '3.14', color: 'red' },
     x: '1.25905',
     y: 42.0009,
@@ -42,13 +42,13 @@ it('should display cartesian tooltip for point', () => {
     },
   };
 
-  const seriesPoint = { ...point, ...getTooltipSettings(false, dataOptions) };
+  const seriesPoint = { ...point, ...getCartesianTooltipSettings(dataOptions) };
   const tooltip = seriesPoint.formatter ? seriesPoint.formatter() : null;
   expect(tooltip).toMatchSnapshot();
 });
 
 it('should display pie tooltip for point', () => {
-  const point: InternalSeries = {
+  const point: HighchartsDataPointContext = {
     series: { name: '3.14', color: 'red' },
     x: '',
     y: 42.0009,
@@ -63,14 +63,14 @@ it('should display pie tooltip for point', () => {
 
   const seriesPoint = {
     ...point,
-    ...getTooltipSettings(false, { ...dataOptions, breakBy: [dataOptions.x[0]] }),
+    ...getCartesianTooltipSettings({ ...dataOptions, breakBy: [dataOptions.x[0]] }),
   };
   const tooltip = seriesPoint.formatter ? seriesPoint.formatter() : null;
   expect(tooltip).toMatchSnapshot();
 });
 
 it('should not contain percent for unsupported column', () => {
-  const point: InternalSeries = {
+  const point: HighchartsDataPointContext = {
     series: { name: '3.14', color: 'red' },
     x: '',
     y: 42.0009,
@@ -85,7 +85,7 @@ it('should not contain percent for unsupported column', () => {
 
   const seriesPoint = {
     ...point,
-    ...getTooltipSettings(false, {
+    ...getCartesianTooltipSettings({
       ...dataOptions,
       y: [{ ...dataOptions.y[0], chartType: 'line' }],
     }),

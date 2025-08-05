@@ -1,7 +1,7 @@
 import { TFunction } from '@sisense/sdk-common';
 import { BoxplotChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
-import { InternalSeries, TooltipSettings, formatTooltipValue } from '../tooltip-utils';
+import { HighchartsDataPointContext, TooltipSettings, formatTooltipValue } from '../tooltip-utils';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
 import isUndefined from 'lodash-es/isUndefined';
 import './boxplot-tooltip.scss';
@@ -19,7 +19,7 @@ export const getBoxplotTooltipSettings = (
     borderWidth: 1,
     useHTML: true,
     // eslint-disable-next-line max-lines-per-function
-    formatter(this: InternalSeries) {
+    formatter(this: HighchartsDataPointContext) {
       const { x, y } = this;
       const {
         high: whiskerMax,

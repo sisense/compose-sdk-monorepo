@@ -1,6 +1,6 @@
 import { getScatterTooltipSettings, tooltipFormatter } from './scatter-tooltip';
 import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
-import { InternalSeries } from './tooltip-utils';
+import { HighchartsDataPointContext } from './tooltip-utils';
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import type { NumberFormatConfig } from '@/types';
 
@@ -23,7 +23,7 @@ describe('Scatter tooltip', () => {
           maskedY: '0',
         },
       },
-    } as InternalSeries;
+    } as HighchartsDataPointContext;
 
     const dataOptions = {
       x: {
@@ -67,7 +67,9 @@ describe('Scatter tooltip', () => {
     } as ScatterChartDataOptionsInternal;
 
     const options = getScatterTooltipSettings(dataOptions);
-    const tooltip = options.formatter?.call(tooltipContext);
+    const tooltip = options.formatter?.call(
+      tooltipContext as unknown as HighchartsDataPointContext,
+    );
 
     expect(tooltip).toMatchSnapshot();
   });
@@ -85,7 +87,7 @@ describe('Scatter tooltip', () => {
           maskedY: 'Apple',
         },
       },
-    } as InternalSeries;
+    } as HighchartsDataPointContext;
 
     const dataOptions = {
       y: {
@@ -111,7 +113,7 @@ describe('Scatter tooltip', () => {
           maskedBreakByPoint: 'Sisense',
         },
       },
-    } as InternalSeries;
+    } as HighchartsDataPointContext;
 
     const dataOptions = {
       x: {
@@ -144,7 +146,7 @@ describe('Scatter tooltip', () => {
           maskedSize: '124',
         },
       },
-    } as InternalSeries;
+    } as HighchartsDataPointContext;
 
     const dataOptions = {
       x: {
@@ -181,7 +183,7 @@ describe('Scatter tooltip', () => {
           maskedSize: '124',
         },
       },
-    } as InternalSeries;
+    } as HighchartsDataPointContext;
 
     const dataOptions: ScatterChartDataOptionsInternal = {
       x: {
@@ -219,7 +221,7 @@ describe('Scatter tooltip', () => {
           maskedBreakByPoint: 'Sisense',
         },
       },
-    } as InternalSeries;
+    } as HighchartsDataPointContext;
 
     const dataOptions = {
       breakByPoint: {
@@ -245,7 +247,7 @@ describe('Scatter tooltip', () => {
           maskedBreakByColor: 'Sisense',
         },
       },
-    } as InternalSeries;
+    } as HighchartsDataPointContext;
 
     const dataOptions = {
       breakByColor: {
@@ -271,7 +273,7 @@ describe('Scatter tooltip', () => {
           maskedSize: '10M',
         },
       },
-    } as InternalSeries;
+    } as HighchartsDataPointContext;
 
     const dataOptions = {
       size: {
@@ -319,7 +321,7 @@ it('Format numbers when x-axis, y-axis, break by / point, color, and size', () =
         maskedSize: '12.345678',
       },
     },
-  } as InternalSeries;
+  } as HighchartsDataPointContext;
 
   const dataOptions: ScatterChartDataOptionsInternal = {
     x: {

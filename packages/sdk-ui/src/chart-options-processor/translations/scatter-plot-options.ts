@@ -2,7 +2,7 @@ import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types'
 import { PlotOptions } from '../chart-options-service';
 import { getRotationType, ValueLabelOptions, ValueLabelSettings } from './value-label-section';
 import { ScatterChartDesignOptions } from './design-options';
-import { InternalSeries } from './tooltip-utils';
+import { HighchartsDataPointContext } from './tooltip-utils';
 import { ScatterCustomPointOptions } from './scatter-tooltip';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { isMeasureColumn } from '@/chart-data-options/utils';
@@ -26,7 +26,7 @@ export const defaultScatterMarkerSize: ScatterMarkerSize = {
   scatterBubbleMaxSize: 48,
 };
 
-export type ScatterChartInternalSeries = InternalSeries & {
+export type ScatterChartHighchartsDataPointContext = HighchartsDataPointContext & {
   point: {
     custom?: ScatterCustomPointOptions;
   };
@@ -55,7 +55,7 @@ const getScatterValueLabelSettings = (
   };
 
   settings.formatter = function () {
-    const that = this as ScatterChartInternalSeries;
+    const that = this as ScatterChartHighchartsDataPointContext;
     const pointValueKeyToDataItemMapping = {
       maskedY: chartDataOptions.y,
       maskedX: chartDataOptions.x,

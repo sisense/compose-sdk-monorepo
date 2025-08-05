@@ -16,7 +16,11 @@ describe('useTrackComponentInit', () => {
 
   it('tracks the sdkComponentInit event once and only once', async () => {
     const { rerender } = renderHook(
-      () => useTrackComponentInit('TestComponent', { prop1: 'value1', prop2: 'value2' }),
+      () =>
+        useTrackComponentInit(
+          { componentName: 'TestComponent', config: {} },
+          { prop1: 'value1', prop2: 'value2' },
+        ),
       {
         wrapper: MockedSisenseContextProvider,
       },
@@ -48,13 +52,20 @@ describe('useTrackComponentInit', () => {
   });
 
   it('calls trackProductEvent with correct params when tracking is disabled in context provider', async () => {
-    renderHook(() => useTrackComponentInit('TestComponent', { prop1: 'value1', prop2: 'value2' }), {
-      wrapper: ({ children }) => (
-        <MockedSisenseContextProvider tracking={{ enabled: false }}>
-          {children}
-        </MockedSisenseContextProvider>
-      ),
-    });
+    renderHook(
+      () =>
+        useTrackComponentInit(
+          { componentName: 'TestComponent', config: {} },
+          { prop1: 'value1', prop2: 'value2' },
+        ),
+      {
+        wrapper: ({ children }) => (
+          <MockedSisenseContextProvider tracking={{ enabled: false }}>
+            {children}
+          </MockedSisenseContextProvider>
+        ),
+      },
+    );
 
     // Flush promises so hasTrackedRef.current is set after trackProductEvent() resolves
     // https://rickschubert.net/blog/posts/flushing-promises/#:~:text=How%20does%20flushing%20promises%20work
@@ -76,14 +87,50 @@ describe('useTrackComponentInit', () => {
   });
 
   it('does not track if already inside tracking context', () => {
-    renderHook(() => useTrackComponentInit('TestComponent', { prop1: 'value1', prop2: 'value2' }), {
-      wrapper: ({ children }) => (
-        <MockedSisenseContextProvider>
-          <TrackingContextProvider>{children}</TrackingContextProvider>
-        </MockedSisenseContextProvider>
-      ),
-    });
+    renderHook(
+      () =>
+        useTrackComponentInit(
+          { componentName: 'TestComponent', config: {} },
+          { prop1: 'value1', prop2: 'value2' },
+        ),
+      {
+        wrapper: ({ children }) => (
+          <MockedSisenseContextProvider>
+            <TrackingContextProvider>{children}</TrackingContextProvider>
+          </MockedSisenseContextProvider>
+        ),
+      },
+    );
 
     expect(trackProductEvent).not.toHaveBeenCalled();
+  });
+
+  it('uses the package name and version from the component config', () => {
+    renderHook(
+      () =>
+        useTrackComponentInit(
+          {
+            componentName: 'TestComponent',
+            config: { packageName: 'test-package', packageVersion: '1.0.1' },
+          },
+          { prop1: 'value1', prop2: 'value2' },
+        ),
+      {
+        wrapper: MockedSisenseContextProvider,
+      },
+    );
+
+    expect(trackProductEvent).toHaveBeenCalledWith(
+      'sdkComponentInit',
+      {
+        packageName: 'test-package',
+        packageVersion: '1.0.1',
+        componentName: 'TestComponent',
+        attributesUsed: 'prop1, prop2',
+        authType: undefined,
+      },
+      expect.anything(),
+      false,
+    );
   });
 });

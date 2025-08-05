@@ -98,6 +98,7 @@ export type ChatResponse = NlqResponse | TextResponse | ErrorResponse;
 
 export interface QueryRecommendationConfig {
   numOfRecommendations: number;
+  userPrompt?: string;
 }
 
 export type NlqResult = Omit<NlqResponseData, 'followupQuestions'>;

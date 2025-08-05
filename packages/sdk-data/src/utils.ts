@@ -36,6 +36,7 @@ import {
   FormulaJaql,
   Jaql,
   JaqlSortDirection,
+  MetadataItemJaql,
   MetadataTypes,
   Sort,
 } from './dimensional-model/types.js';
@@ -570,7 +571,7 @@ export function createDimensionalElementFromJaql(
  * @internal
  */
 export function getGranularityFromJaql(
-  jaql: BaseJaql | FilterJaql | FilterJaqlInternal | RankingFilterJaql,
+  jaql: BaseJaql | FilterJaql | FilterJaqlInternal | RankingFilterJaql | MetadataItemJaql,
 ): string | undefined {
   return jaql?.datatype && isDatetime(jaql.datatype)
     ? DimensionalLevelAttribute.translateJaqlToGranularity(jaql)

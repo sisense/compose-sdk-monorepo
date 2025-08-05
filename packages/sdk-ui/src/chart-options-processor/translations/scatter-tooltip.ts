@@ -1,4 +1,4 @@
-import { InternalSeries, TooltipSettings, formatTooltipValue } from './tooltip-utils';
+import { HighchartsDataPointContext, TooltipSettings, formatTooltipValue } from './tooltip-utils';
 import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { getDataOptionTitle } from '../../chart-data-options/utils';
 
@@ -45,7 +45,7 @@ const buildTooltip = (blocks: string[]): string => {
 };
 
 const buildSpans = (
-  ctx: InternalSeries,
+  ctx: HighchartsDataPointContext,
   dataOptions: ScatterChartDataOptionsInternal,
 ): ScatterTooltipElements => {
   const { maskedX, maskedY, maskedBreakByPoint, maskedSize, maskedBreakByColor } = ctx.point
@@ -96,7 +96,7 @@ const buildBlocks = (
 };
 
 export const tooltipFormatter = (
-  ctx: InternalSeries,
+  ctx: HighchartsDataPointContext,
   dataOptions: ScatterChartDataOptionsInternal,
 ): string => {
   const spans = buildSpans(ctx, dataOptions);
@@ -110,8 +110,7 @@ export const getScatterTooltipSettings = (
 ): TooltipSettings => ({
   enabled: true,
   useHTML: true,
-  formatter(): string {
-    const ctx: InternalSeries = this as InternalSeries;
-    return tooltipFormatter(ctx, dataOptions);
+  formatter(this: HighchartsDataPointContext): string {
+    return tooltipFormatter(this, dataOptions);
   },
 });

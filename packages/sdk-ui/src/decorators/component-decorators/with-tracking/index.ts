@@ -1,1 +1,1 @@
-export { withTracking } from './with-tracking';
+export { withTracking, type TrackingDecoratorConfig } from './with-tracking';

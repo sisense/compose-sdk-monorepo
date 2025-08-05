@@ -5,16 +5,25 @@ import isFunction from 'lodash-es/isFunction';
 import { ErrorTracker } from './error-tracker';
 import { useTracking } from '@/common/hooks/use-tracking';
 
-type TrackingDecoratorConfig = {
+/**
+ * Configuration for withTracking decorator
+ *
+ * @internal
+ */
+export type TrackingDecoratorConfig = {
   componentName: string;
   config: {
     skip?: boolean | ((props: any) => boolean);
     transparent?: boolean;
+    packageName?: string;
+    packageVersion?: string;
   };
 };
 
 /**
  * Adds tracking to the component
+ *
+ * @internal
  */
 export const withTracking: ComponentDecorator<TrackingDecoratorConfig> = ({
   componentName,
@@ -29,7 +38,7 @@ export const withTracking: ComponentDecorator<TrackingDecoratorConfig> = ({
         return <Component {...props} />;
       }
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      useTrackComponentInit(componentName, props);
+      useTrackComponentInit({ componentName, config }, props);
       return (
         // If component is transperent for tracking, nested components will be tracked
         <TrackingContextProvider skipNested={!transparent}>

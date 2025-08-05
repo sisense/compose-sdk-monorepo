@@ -54,7 +54,7 @@ const dashboardOid = ref<string>('your-dashboard-oid');
 ![Embedded Sample ECommerce Dashboard](../../img/dashboard-guides/fusion-dashboard-light-theme.png 'Embedded Sample ECommerce Dashboard')
 
 ::: tip Note
-Follow [this guide](../custom-widgets/custom-widgets.md) to learn how to define your own custom widget component, and have it rendered in place of a corresponding Fusion widget plugin when using the `DashboardById` component.
+Follow [this guide](../custom-widgets/index.md) to learn how to define your own custom widget component, and have it rendered in place of a corresponding Fusion widget plugin when using the `DashboardById` component.
 :::
 
 ## Simple customization

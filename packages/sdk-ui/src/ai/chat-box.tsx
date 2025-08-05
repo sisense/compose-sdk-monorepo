@@ -61,8 +61,13 @@ const FollowupQuestionsContainer = styled.div<Themable>`
 
 export default function ChatBox({ contextTitle, onGoBack, contextDetails }: ChatBoxProps) {
   const { t } = useTranslation();
-  const { enableFollowupQuestions, enableHeader, numOfRecentPrompts, numOfRecommendations } =
-    useChatConfig();
+  const {
+    enableFollowupQuestions,
+    enableHeader,
+    numOfRecentPrompts,
+    numOfRecommendations,
+    customPrompt,
+  } = useChatConfig();
   const { themeSettings } = useThemeContext();
   const {
     data: queryRecommendations,
@@ -71,6 +76,7 @@ export default function ChatBox({ contextTitle, onGoBack, contextDetails }: Chat
   } = useGetQueryRecommendationsInternal({
     contextTitle: contextTitle,
     count: numOfRecommendations,
+    customPrompt: customPrompt,
   });
   const questions = useMemo(
     () => queryRecommendations?.map((q) => q.nlqPrompt),

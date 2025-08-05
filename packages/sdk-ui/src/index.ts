@@ -23,6 +23,7 @@ export { getChartType } from './widget-by-id/utils';
 export * from './query-execution';
 export { executeQuery, executePivotQuery } from './query/execute-query';
 export { SisenseContextProvider } from './sisense-context/sisense-context-provider';
+export * from './decorators/component-decorators/with-tracking';
 export { DrilldownWidget } from './widgets/drilldown-widget';
 export { processDrilldownSelections } from './widgets/common/use-drilldown-core';
 export { ChartWidget } from './widgets/chart-widget';

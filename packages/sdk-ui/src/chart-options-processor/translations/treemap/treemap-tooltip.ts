@@ -1,9 +1,12 @@
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { TreemapChartDesignOptions } from '../design-options';
-import { InternalSeriesNode, TooltipSettings } from '../../tooltip';
+import {
+  HighchartsDataPointContext,
+  HighchartsDataPointContextNode,
+  TooltipSettings,
+} from '../tooltip-utils';
 import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
 import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config';
-import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import './treemap-tooltip.scss';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
 import { TFunction } from '@sisense/sdk-common';
@@ -11,7 +14,7 @@ import { TFunction } from '@sisense/sdk-common';
 type TooltipFormatterOptions = {
   displayTotalContribution: boolean;
   displayColorCircles: boolean;
-  shouldSkip: (context: TooltipFormatterContextObject) => boolean;
+  shouldSkip: (context: HighchartsDataPointContext) => boolean;
 };
 
 export const getTreemapTooltipSettings = (
@@ -77,7 +80,7 @@ function getFormattedContribution(value: number, total: number) {
 }
 
 export function treemapTooltipFormatter(
-  context: TooltipFormatterContextObject,
+  context: HighchartsDataPointContext,
   chartDataOptions: CategoricalChartDataOptionsInternal,
   designOptions: TreemapChartDesignOptions,
   translate: TFunction,
@@ -94,8 +97,8 @@ export function treemapTooltipFormatter(
   const color = context.color as string;
 
   let rootValue = 0;
-  const nodesToShow: InternalSeriesNode[] = [];
-  const handleNode = (node: InternalSeriesNode) => {
+  const nodesToShow: HighchartsDataPointContextNode[] = [];
+  const handleNode = (node: HighchartsDataPointContextNode) => {
     if (node.parentNode) {
       nodesToShow.push(node);
     } else {
@@ -105,7 +108,7 @@ export function treemapTooltipFormatter(
     handleNode(node.parentNode);
   };
   // eslint-disable-next-line
-  handleNode(context.point['node'] as InternalSeriesNode);
+  handleNode(context.point['node'] as HighchartsDataPointContextNode);
 
   return `
       <div

@@ -9,11 +9,11 @@ import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 import { prepareSunburstLevels } from './sunburst-levels';
 import { prepareSunburstDataItems, SUNBURST_ROOT_PARENT_ID } from './sunburst-series';
 import { getLegendSettings } from '../legend-section';
-import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
 import './sunburst.scss';
 import { getLegend } from '../../style-to-design-options-translator/translate-to-highcharts-options';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
 import { TFunction } from '@sisense/sdk-common';
+import { HighchartsDataPointContext } from '../tooltip-utils';
 
 const DEFAULT_SUNBURST_SERIES = {
   type: 'sunburst',
@@ -84,8 +84,8 @@ export function prepareSunburstOptions(
     tooltip: getTreemapTooltipSettings(dataOptions, designOptions, translate, {
       displayTotalContribution: true,
       displayColorCircles: true,
-      shouldSkip: (context: TooltipFormatterContextObject) =>
-        context.point.options.id === SUNBURST_ROOT_PARENT_ID,
+      shouldSkip: (context: HighchartsDataPointContext) =>
+        context.point.options?.id === SUNBURST_ROOT_PARENT_ID,
     }),
     legend: getLegendSettings(getLegend(designOptions.legend)),
   };

@@ -17,7 +17,7 @@ import {
   isHighchartsBasedChartRendererProps,
 } from '../../../highcharts-based-chart-renderer/highcharts-based-chart-renderer';
 import { getCommonCartesianAlerts } from '../../helpers/alerts.js';
-import { barHighchartsOptionsBuilder } from './highcharts-options-builder.js';
+import { barHighchartsOptionsBuilder } from './highchart-options/highcharts-options-builder.js';
 import { ChartBuilder } from '@/chart/restructured-charts/types.js';
 
 export const barChartBuilder: ChartBuilder<'bar'> = {

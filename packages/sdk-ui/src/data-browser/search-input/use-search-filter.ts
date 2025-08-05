@@ -1,5 +1,5 @@
 import debounce from 'lodash-es/debounce';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 
 const SEARCH_DEBOUNCE_TIME = 300;
 type UseSearchFilterReturn = {
@@ -28,6 +28,13 @@ export const useSearchFilter = (initialValue?: string): UseSearchFilterReturn =>
       }, SEARCH_DEBOUNCE_TIME),
     [setSearchFilter],
   );
+
+  // Cleanup: cancel pending debounced calls when the component unmounts
+  useEffect(() => {
+    return () => {
+      debouncedSetSearchFilter.cancel();
+    };
+  }, [debouncedSetSearchFilter]);
 
   const onSearchInputUpdate = useCallback(
     (value: string) => {

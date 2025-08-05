@@ -2,6 +2,7 @@ import { TrackingEventDetails } from '@sisense/sdk-tracking';
 import { useSisenseContext } from '../../../sisense-context/sisense-context';
 import { createContext, ReactNode, useContext, useEffect, useRef } from 'react';
 import { useTracking } from '@/common/hooks/use-tracking';
+import { TrackingDecoratorConfig } from './with-tracking';
 
 const action = 'sdkComponentInit';
 interface ComponentInitEventDetails extends TrackingEventDetails {
@@ -10,6 +11,8 @@ interface ComponentInitEventDetails extends TrackingEventDetails {
   componentName: string;
   attributesUsed: string;
 }
+
+type TrackingComponentConfig = TrackingDecoratorConfig;
 
 const TrackingContext = createContext(false);
 export const TrackingContextProvider = ({
@@ -20,8 +23,12 @@ export const TrackingContextProvider = ({
   skipNested?: boolean;
 }) => <TrackingContext.Provider value={skipNested}>{children}</TrackingContext.Provider>;
 
-export const useTrackComponentInit = <P extends {}>(componentName: string, props: P) => {
-  const { tracking, app } = useSisenseContext();
+export const useTrackComponentInit = <P extends {}>(
+  trackingComponentConfig: TrackingComponentConfig,
+  props: P,
+) => {
+  const { componentName, config: componentLevelConfig } = trackingComponentConfig;
+  const { tracking: contextLevelTracking, app } = useSisenseContext();
   const { trackEvent } = useTracking();
 
   const inTrackingContext = useContext(TrackingContext);
@@ -29,12 +36,12 @@ export const useTrackComponentInit = <P extends {}>(componentName: string, props
   const hasTrackedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!tracking || !app) return;
+    if (!contextLevelTracking || !app) return;
     const hasBeenTracked = hasTrackedRef.current;
     if (!hasBeenTracked && !inTrackingContext) {
       const payload: ComponentInitEventDetails = {
-        packageName: tracking.packageName,
-        packageVersion: __PACKAGE_VERSION__,
+        packageName: componentLevelConfig.packageName || contextLevelTracking.packageName,
+        packageVersion: componentLevelConfig.packageVersion || __PACKAGE_VERSION__,
         componentName,
         attributesUsed: Object.entries(props)
           .filter(([, v]) => !!v)
@@ -42,9 +49,17 @@ export const useTrackComponentInit = <P extends {}>(componentName: string, props
           .join(', '),
       };
 
-      void trackEvent(action, payload, !tracking.enabled).finally(
+      void trackEvent(action, payload, !contextLevelTracking.enabled).finally(
         () => (hasTrackedRef.current = true),
       );
     }
-  }, [componentName, props, tracking, inTrackingContext, trackEvent, app]);
+  }, [
+    componentName,
+    props,
+    contextLevelTracking,
+    inTrackingContext,
+    trackEvent,
+    app,
+    componentLevelConfig,
+  ]);
 };
