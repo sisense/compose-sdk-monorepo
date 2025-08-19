@@ -3,18 +3,18 @@
 exports[`AlertBox component > renders alerts correctly 1`] = `
 <div>
   <div
-    class="_alert_box_5a370e"
+    class="_alert_box_619f3c"
   >
     <div
-      class="_content_5a370e"
+      class="_content_619f3c"
     >
       <div
-        class="_alert_5a370e"
+        class="_alert_619f3c"
       >
         Alert 1
       </div>
       <div
-        class="_alert_5a370e"
+        class="_alert_619f3c"
       >
         Alert 2
       </div>
@@ -26,10 +26,10 @@ exports[`AlertBox component > renders alerts correctly 1`] = `
 exports[`AlertBox component > renders no alerts when alerts array is empty 1`] = `
 <div>
   <div
-    class="_alert_box_5a370e"
+    class="_alert_box_619f3c"
   >
     <div
-      class="_content_5a370e"
+      class="_content_619f3c"
     />
   </div>
 </div>
@@ -38,10 +38,10 @@ exports[`AlertBox component > renders no alerts when alerts array is empty 1`] =
 exports[`AlertBox component > renders no alerts when alerts property is not provided 1`] = `
 <div>
   <div
-    class="_alert_box_5a370e"
+    class="_alert_box_619f3c"
   >
     <div
-      class="_content_5a370e"
+      class="_content_619f3c"
     />
   </div>
 </div>

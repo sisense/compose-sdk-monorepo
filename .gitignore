@@ -70,3 +70,10 @@ packages/sdk-*/vite.config.ts.timestamp-*
 
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
+
+
+
+# complex snapshot testing for Charts refactoring
+*.snapshot.json
+*.snapshot.test.ts
+*.snapshot.test.ts.snap

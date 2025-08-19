@@ -30,7 +30,7 @@ import { getDataOptionGranularity } from '@/chart-data-options/utils';
 type FormatterFn = (value: any) => string;
 
 // todo: move all formatters related logic into a single place
-function createFormatter(dataOption: StyledColumn | StyledMeasureColumn) {
+export function createFormatter(dataOption: StyledColumn | StyledMeasureColumn) {
   const type = 'type' in dataOption.column ? dataOption.column.type : 'numeric';
   let formatter: FormatterFn = (value: number | string | Date) => `${value}`;
 

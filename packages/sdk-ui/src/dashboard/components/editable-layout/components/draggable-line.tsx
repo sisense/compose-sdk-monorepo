@@ -50,6 +50,10 @@ type DraggableLineProps = {
    * The orientation of the draggable line
    */
   orientation?: DraggableLineOrientation;
+  /**
+   * The aria-label of the draggable line
+   */
+  ariaLabel?: string;
 };
 
 /**
@@ -57,13 +61,17 @@ type DraggableLineProps = {
  *
  * @internal
  */
-export const DraggableLine = ({ id, orientation = 'horizontal' }: DraggableLineProps) => {
+export const DraggableLine = ({
+  id,
+  orientation = 'horizontal',
+  ariaLabel,
+}: DraggableLineProps) => {
   const { attributes, listeners, setNodeRef } = useDraggable({
     id,
   });
   return orientation === 'vertical' ? (
-    <VerticalLine ref={setNodeRef} {...listeners} {...attributes} />
+    <VerticalLine ref={setNodeRef} {...listeners} {...attributes} aria-label={ariaLabel} />
   ) : (
-    <HorizontalLine ref={setNodeRef} {...listeners} {...attributes} />
+    <HorizontalLine ref={setNodeRef} {...listeners} {...attributes} aria-label={ariaLabel} />
   );
 };

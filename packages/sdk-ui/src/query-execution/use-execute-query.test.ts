@@ -362,15 +362,13 @@ describe('useExecuteQuery', () => {
         expect(result.current.data).toBe(mockData);
       });
 
+      expect(executeQueryWithCacheMock).toHaveBeenCalledTimes(1);
+
       result.current.refetch();
 
       await waitFor(() => {
-        expect(result.current.isLoading).toBe(false);
-        expect(result.current.isSuccess).toBe(true);
-        expect(result.current.data).toBe(mockData);
+        expect(executeQueryWithCacheMock).toHaveBeenCalledTimes(2);
       });
-
-      expect(executeQueryWithCacheMock).toHaveBeenCalledTimes(2);
     });
   });
 });

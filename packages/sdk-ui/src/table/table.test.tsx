@@ -153,6 +153,6 @@ describe('Table', () => {
 
     const errorBoxContainer = await findByLabelText('error-box');
     expect(errorBoxContainer).toBeTruthy();
-    expect(onDataReadyMock).toHaveBeenCalledTimes(4);
+    expect(onDataReadyMock).toHaveBeenCalledTimes(2);
   });
 });

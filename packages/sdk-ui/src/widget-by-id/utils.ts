@@ -23,6 +23,7 @@ import {
   WithCommonWidgetProps,
   WidgetProps,
   WidgetType,
+  PivotTableProps,
 } from '@/props';
 import { combineHandlers } from '@/utils/combine-handlers';
 import { WidgetTypeInternal } from '@/models/widget/types';
@@ -344,9 +345,11 @@ export function registerDataPointClickHandler(
  */
 export function registerDataPointContextMenuHandler(
   widgetProps: WidgetProps,
-  handler: NonNullable<ChartProps['onDataPointContextMenu']>,
+  handler: NonNullable<
+    ChartProps['onDataPointContextMenu'] | PivotTableProps['onDataPointContextMenu']
+  >,
 ): void {
-  if (!isChartWidgetProps(widgetProps)) return;
+  if (!isChartWidgetProps(widgetProps) && !isPivotTableWidgetProps(widgetProps)) return;
 
   widgetProps.onDataPointContextMenu = combineHandlers([
     widgetProps.onDataPointContextMenu,

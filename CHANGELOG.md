@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.8.0] - 2025-08-19
+
+### Added
+- Add click and context menu support for pivot tables (for internal testing)
+- Extend `CustomWidget` styleOptions with size properties
+- Extend theme settings for dividers in dashboard toolbar and filters panel
+
+### Changed
+- Fix missing formatting for "total" value labels in column chart
+- Update internal dependencies: React, React DOM, MUI Data Grid and other
+
 ## [2.7.0] - 2025-08-05
 
 ### Added

@@ -5,10 +5,12 @@ import {
   type PivotTreeNode,
 } from '@sisense/sdk-pivot-client';
 import type { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
-import type { PivotTableDataOptions, StyledColumn } from '@/chart-data-options/types';
+import type { PivotTableDataOptionsInternal, StyledColumn } from '@/chart-data-options/types';
 import type { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { preparePivotStylingProps } from '../helpers/prepare-pivot-styling-props';
 import { useSyncedState } from '@/common/hooks/use-synced-state';
+import { useApplyPivotTableCellEvents } from './use-apply-pivot-table-cell-events';
+import { PivotTableDataPointEventHandler } from '@/index-typedoc';
 
 const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
 
@@ -16,7 +18,7 @@ type PivotRenderOptions = {
   /** The pivot builder instance. */
   pivotBuilder: PivotBuilder;
   /** The pivot table data options. */
-  dataOptions: PivotTableDataOptions;
+  dataOptions: PivotTableDataOptionsInternal;
   /** The pivot table style options. */
   styleOptions: PivotTableStyleOptions;
   /** The theme settings. */
@@ -25,6 +27,10 @@ type PivotRenderOptions = {
   size: ContainerSize | null;
   /** Callback to handle total height change. */
   onTotalHeightChange?: (totalHeight: number) => void;
+  /** Callback to handle data point click. */
+  onDataPointClick?: PivotTableDataPointEventHandler;
+  /** Callback to handle data point context menu. */
+  onDataPointContextMenu?: PivotTableDataPointEventHandler;
 };
 
 /**
@@ -37,6 +43,8 @@ export function useRenderPivot({
   themeSettings,
   size,
   onTotalHeightChange,
+  onDataPointClick,
+  onDataPointContextMenu,
 }: PivotRenderOptions): {
   pivotElement: JSX.Element | null;
 } {
@@ -44,6 +52,11 @@ export function useRenderPivot({
   const [rowsPerPage, setRowsPerPage] = useSyncedState<number>(
     styleOptions?.rowsPerPage || DEFAULT_TABLE_ROWS_PER_PAGE,
   );
+  const { handlePivotTableCellClick } = useApplyPivotTableCellEvents({
+    dataOptions,
+    onDataPointClick,
+    onDataPointContextMenu,
+  });
   const onUpdatePredefinedColumnWidth = useCallback(
     (horizontalLastLevelsNodes: Array<PivotTreeNode>, resizedColumnWidth?: Array<number>) => {
       const dataOptionsFlatten = [
@@ -103,6 +116,7 @@ export function useRenderPivot({
         onUpdatePredefinedColumnWidth,
         onItemsPerPageChange,
         onTotalHeightChange,
+        onCellClick: handlePivotTableCellClick,
         ...pivotStylingProps,
       };
     }
@@ -114,6 +128,7 @@ export function useRenderPivot({
     pivotStylingProps,
     onTotalHeightChange,
     onItemsPerPageChange,
+    handlePivotTableCellClick,
   ]);
 
   useEffect(() => {

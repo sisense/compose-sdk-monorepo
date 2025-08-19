@@ -467,7 +467,7 @@ export const getYAxisSettings = (
       tickInterval: axis.enabled ? axis.tickInterval : null,
       stackLabels: {
         enabled: showTotal,
-        formatter: getLabelsFormatter(y2NumberFormatConfig, 'normal', true),
+        formatter: getLabelsFormatter(y1NumberFormatConfig, 'normal', true),
         style: {
           ...stackTotalFontStyleDefault,
           ...(themeSettings ? { color: themeSettings.typography.primaryTextColor } : null),

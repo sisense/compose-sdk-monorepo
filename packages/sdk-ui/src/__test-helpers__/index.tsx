@@ -13,6 +13,7 @@ import { DeepPartial } from 'ts-essentials';
 import { useTranslation } from 'react-i18next';
 import { translation } from '../translation/resources/en';
 import { CustomWidgetsProvider } from '../custom-widgets-provider';
+import { MenuProvider } from '@/common/components/menu/menu-provider';
 
 type UserSetupFn = (typeof userEvent)['setup'];
 interface SetupResult extends RenderResult {
@@ -83,7 +84,9 @@ export const MockedSisenseContextProvider = ({
         errorBoundary: { showErrorBox: true, ...errorBoundary },
       }}
     >
-      <CustomWidgetsProvider>{children}</CustomWidgetsProvider>
+      <MenuProvider>
+        <CustomWidgetsProvider>{children}</CustomWidgetsProvider>
+      </MenuProvider>
     </SisenseContext.Provider>
   );
 };

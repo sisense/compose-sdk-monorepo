@@ -157,7 +157,8 @@ describe('getDashboardModel', () => {
     }
 
     expect(result).toBeUndefined();
-    expect(error).toEqual(new Error(`Dashboard with oid ${dashboardMock.oid} not found`));
+    expect(error).toBeInstanceOf(Error);
+    expect((error as Error).message).toContain(`Dashboard with oid ${dashboardMock.oid} not found`);
   });
 
   it('should handle network error', async () => {

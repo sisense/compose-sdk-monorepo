@@ -6,7 +6,7 @@ import {
   EVENT_HEADER_CELL_FORMAT,
 } from '@sisense/sdk-pivot-client';
 import over from 'lodash-es/over';
-import { type PivotTableDataOptions } from '@/chart-data-options/types';
+import { type PivotTableDataOptionsInternal } from '@/chart-data-options/types';
 import { applyDateFormat } from '@/query/date-formats';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { createDataCellValueFormatter, createHeaderCellValueFormatter } from '../formatters';
@@ -26,7 +26,7 @@ export const useApplyPivotTableFormatting = ({
   dataOptions,
 }: {
   dataService: DataService;
-  dataOptions: PivotTableDataOptions;
+  dataOptions: PivotTableDataOptionsInternal;
 }) => {
   const { app } = useSisenseContext();
   const { t: translate } = useTranslation();

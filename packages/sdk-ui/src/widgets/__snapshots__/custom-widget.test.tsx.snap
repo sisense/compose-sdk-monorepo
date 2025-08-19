@@ -12,7 +12,9 @@ exports[`CustomWidget > renders custom widget when custom widget is found 1`] = 
     "filters": [],
     "highlights": [],
     "styleOptions": {
+      "height": 400,
       "someStyle": "value",
+      "width": 400,
     },
     "title": "My awesome custom widget",
   },

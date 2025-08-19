@@ -6,7 +6,7 @@ type Props = {
   onRequestClose: PopoverProps['onRequestClose'];
   onClick: React.MouseEventHandler<HTMLSpanElement>;
   onKeyPress: React.KeyboardEventHandler<HTMLSpanElement>;
-  sortingPopup: JSX.Element | null;
+  sortingPopup: React.JSX.Element | null;
   className: string;
   getTooltipContainer?: () => HTMLElement;
 };

@@ -1,5 +1,6 @@
 import { isIndicator, isTable, TableType } from '../chart-options-processor/translations/types';
 import { ChartType } from '../types';
+import { DEFAULT_WIDGET_HEADER_HEIGHT } from '@/widgets/constants';
 
 export const DEFAULT_PIVOT_TABLE_SIZE = {
   width: 400,
@@ -29,8 +30,6 @@ type WidgetSizeOptions = {
   hasHeader?: boolean;
 };
 
-const WIDGET_HEADER_DEFAULT_HEIGHT = 25;
-
 export const getWidgetDefaultSize = (
   type: ChartType | TableType | 'pivot',
   { hasHeader }: WidgetSizeOptions = {},
@@ -38,7 +37,7 @@ export const getWidgetDefaultSize = (
   const size = type === 'pivot' ? DEFAULT_PIVOT_TABLE_SIZE : getChartDefaultSize(type);
 
   if (hasHeader) {
-    size.height = size.height + WIDGET_HEADER_DEFAULT_HEIGHT;
+    size.height = size.height + DEFAULT_WIDGET_HEADER_HEIGHT;
   }
 
   return size;

@@ -1,7 +1,7 @@
 import { ContentPanel } from '@/dashboard/components/content-panel';
 import { DashboardContainerProps, WidgetsPanelLayout } from '@/dashboard/types';
 import { DashboardHeader } from '@/dashboard/components/dashboard-header';
-import { useThemeContext } from '@/theme-provider';
+import { ThemeProvider, useThemeContext } from '@/theme-provider';
 import styled from '@emotion/styled';
 import { FiltersPanel } from '@/filters';
 import { getDividerStyle, getDefaultWidgetsPanelLayout } from '@/dashboard/utils';
@@ -34,20 +34,15 @@ const DashboardWrapper = styled.div<Themable>`
   color: ${({ theme }) => theme.typography.primaryTextColor};
   display: flex;
   max-height: 100%;
+  border: ${({ theme }) =>
+    getDividerStyle(theme.dashboard.borderColor, theme.dashboard.borderWidth)};
 `;
 
 const ContentColumn = styled.div<Themable & { showRightBorder: boolean }>`
   background-color: ${({ theme }) => theme.dashboard.backgroundColor};
   flex-grow: 1;
   flex-shrink: 1;
-  border-top: ${({ theme }) =>
-    getDividerStyle(theme.dashboard.borderColor, theme.dashboard.borderWidth)};
-  border-bottom: ${({ theme }) =>
-    getDividerStyle(theme.dashboard.borderColor, theme.dashboard.borderWidth)};
-  border-left: ${({ theme }) =>
-    getDividerStyle(theme.dashboard.borderColor, theme.dashboard.borderWidth)};
-  border-right: ${({ theme, showRightBorder }) =>
-    showRightBorder ? (theme.dashboard.borderColor, theme.dashboard.borderWidth) : 'none'};
+
   display: flex;
   flex-direction: column;
   max-height: 100%;
@@ -213,13 +208,23 @@ export const DashboardContainer = ({
           onCollapsedChange={setIsFilterPanelCollapsedAndFireEvent}
         >
           <div className="csdk-w-[240px] csdk-h-[100%] csdk-flex">
-            <FiltersPanel
-              filters={filters}
-              onFiltersChange={onFiltersChange}
-              defaultDataSource={defaultDataSource}
-              config={config?.filtersPanel}
-              dataSources={getUniqueDataSources(widgets, defaultDataSource)}
-            />
+            <ThemeProvider
+              theme={{
+                filter: {
+                  panel: {
+                    borderWidth: 0,
+                  },
+                },
+              }}
+            >
+              <FiltersPanel
+                filters={filters}
+                onFiltersChange={onFiltersChange}
+                defaultDataSource={defaultDataSource}
+                config={config?.filtersPanel}
+                dataSources={getUniqueDataSources(widgets, defaultDataSource)}
+              />
+            </ThemeProvider>
           </div>
         </HorizontalCollapse>
       )}

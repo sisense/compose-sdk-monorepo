@@ -245,7 +245,7 @@ describe('useComposedDashboard', () => {
 
       expect(filterTiles).toHaveLength(1);
       expect(drilldownBreadcrumbs).toHaveLength(1);
-      expect(chartMocksManager.renderedCharts).toHaveLength(1);
+      expect(chartMocksManager.renderedCharts).toHaveLength(2);
       expect(chartMocks).toHaveLength(1);
 
       // prepare data point mock

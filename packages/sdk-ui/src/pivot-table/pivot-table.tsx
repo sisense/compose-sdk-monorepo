@@ -114,6 +114,8 @@ export const PivotTable = asSisenseComponent({
     highlights,
     refreshCounter = 0,
     onHeightChange,
+    onDataPointClick,
+    onDataPointContextMenu,
   } = pivotTableProps;
   const styleOptions = useMemo(
     () => pivotTableProps.styleOptions ?? {},
@@ -152,7 +154,7 @@ export const PivotTable = asSisenseComponent({
     pivotBuilder,
     shouldBeRecreated: isJaqlChanged || isForceReload,
   });
-  useApplyPivotTableFormatting({ dataService, dataOptions });
+  useApplyPivotTableFormatting({ dataService, dataOptions: dataOptionsInternal });
 
   const handlePivotHeightChange = useCallback(
     (height: number) => {
@@ -164,11 +166,13 @@ export const PivotTable = asSisenseComponent({
 
   const { pivotElement } = useRenderPivot({
     pivotBuilder,
-    dataOptions,
+    dataOptions: dataOptionsInternal,
     styleOptions,
     themeSettings,
     size,
     onTotalHeightChange: handlePivotHeightChange,
+    onDataPointClick,
+    onDataPointContextMenu,
   });
 
   // The pivot data layer depends on the pivot's render props.

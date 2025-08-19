@@ -1,4 +1,4 @@
-@import './icons.scss';
+@use 'icons';
 
 .icon {
   width: 24px;
@@ -11,17 +11,17 @@
 }
 
 .numberIcon {
-  background-image: $NUMBER_ICON;
+  background-image: icons.$NUMBER_ICON;
 }
 
 .dateIcon {
-  background-image: $DATE_ICON;
+  background-image: icons.$DATE_ICON;
 }
 
 .textIcon {
-  background-image: $TEXT_ICON;
+  background-image: icons.$TEXT_ICON;
 }
 
 .booleanIcon {
-  background-image: $BOOLEAN_ICON;
+  background-image: icons.$BOOLEAN_ICON;
 }

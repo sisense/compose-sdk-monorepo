@@ -62,16 +62,16 @@ export const useFetch = withTracking('useFetch')(
 
     const enabled = options?.enabled ?? true;
 
-    return useQuery({
+    return useQuery<TData, TError>({
       queryKey: ['fetch', path, init, options?.requestConfig],
-      queryFn: async () => {
+      queryFn: async (): Promise<TData> => {
         if (!httpClient) {
           throw new TranslatableError('errors.httpClientNotFound');
         }
-        return httpClient.call(httpClient.url + path, init ?? {}, {
+        return httpClient.call<TData>(httpClient.url + path, init ?? {}, {
           ...options?.requestConfig,
           skipTrackingParam: true,
-        });
+        }) as TData;
       },
       enabled: enabled && !!httpClient, // Ensure the query is enabled only when httpClient is available
     });

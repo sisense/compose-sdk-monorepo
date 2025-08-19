@@ -17,8 +17,8 @@ type Props = {
 
 export const HeaderText = (props: Props) => {
   const { hierarchy, prependedText } = props;
-  const containerRef: RefObject<HTMLSpanElement> = useRef(null);
-  const textRef: RefObject<HTMLSpanElement> = useRef(null);
+  const containerRef: RefObject<HTMLSpanElement | null> = useRef(null);
+  const textRef: RefObject<HTMLSpanElement | null> = useRef(null);
 
   const initialText = hierarchy.map(wrapWithLeftSingleQuotationMark).join(' \u2192 ');
   const [text, setText] = useState(initialText);

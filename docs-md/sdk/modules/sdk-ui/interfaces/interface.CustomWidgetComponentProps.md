@@ -47,4 +47,21 @@ Props passed to a user-defined custom widget component.
 
 ### styleOptions
 
-> **styleOptions**: `StyleOptions`
+> **styleOptions**: `StyleOptions` & \{
+  `height`: `number`;
+  `width`: `number`;
+ }
+
+> #### `styleOptions.height`
+>
+> **height**?: `number`
+>
+> The height of the custom widget component.
+>
+> #### `styleOptions.width`
+>
+> **width**?: `number`
+>
+> The width of the custom widget component.
+>
+>

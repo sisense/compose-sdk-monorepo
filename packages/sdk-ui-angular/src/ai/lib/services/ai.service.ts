@@ -128,7 +128,7 @@ export class AiService {
       })) || [];
 
     return rawRecommendations.map(
-      (recommendation: QueryRecommendation) =>
+      (recommendation: QueryRecommendationPreact) =>
         ({
           ...recommendation,
           widgetProps: recommendation.jaql

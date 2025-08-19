@@ -4,7 +4,12 @@ import {
   DEFAULT_DASHBOARD_BORDER_WIDTH,
   DEFAULT_DIVIDER_COLOR,
   DEFAULT_DIVIDER_WIDTH,
+  DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_COLOR,
+  DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_WIDTH,
+  DEFAULT_FILTER_PANEL_DIVIDER_LINE_COLOR,
+  DEFAULT_FILTER_PANEL_DIVIDER_LINE_WIDTH,
   DEFAULT_FILTER_PANEL_BORDER_COLOR,
+  DEFAULT_FILTER_PANEL_BORDER_WIDTH,
   DEFAULT_TITLE_FONT_SIZE,
   getDefaultThemeSettings,
 } from '../theme-provider/default-theme-settings';
@@ -199,14 +204,18 @@ export function convertToThemeSettings(
         primaryTextColor: legacyDesignSettings.dashboards.toolbarTextColor,
         secondaryTextColor: legacyDesignSettings.dashboards.toolbarSecondaryTextColor,
         backgroundColor: legacyDesignSettings.dashboards.toolbarBackgroundColor,
+        dividerLineColor: DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_COLOR,
+        dividerLineWidth: DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_WIDTH,
       },
     },
     filter: {
       panel: {
         titleColor: legacyDesignSettings.dashboards.panelTitleTextColor,
         backgroundColor: legacyDesignSettings.dashboards.panelBackgroundColor,
-        borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
+        dividerLineColor: DEFAULT_FILTER_PANEL_DIVIDER_LINE_COLOR,
+        dividerLineWidth: DEFAULT_FILTER_PANEL_DIVIDER_LINE_WIDTH,
         borderColor: DEFAULT_FILTER_PANEL_BORDER_COLOR,
+        borderWidth: DEFAULT_FILTER_PANEL_BORDER_WIDTH,
       },
     },
   };

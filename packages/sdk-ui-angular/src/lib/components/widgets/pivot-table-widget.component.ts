@@ -26,7 +26,8 @@ import { ThemeService } from '../../services';
 /**
  * Props of the {@link PivotTableWidgetComponent}.
  */
-export interface PivotTableWidgetProps extends PivotTableWidgetPropsPreact {}
+export interface PivotTableWidgetProps
+  extends Omit<PivotTableWidgetPropsPreact, 'onDataPointClick' | 'onDataPointContextMenu'> {}
 
 /**
  * The Pivot Table Widget component extends the {@link PivotTableComponent} component to support widget features,

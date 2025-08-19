@@ -27,10 +27,7 @@ describe('Widget Component', () => {
     expect(getByText('Mocked CommonWidget')).toBeInTheDocument();
 
     // Verify that CommonWidget received the correct props
-    expect(CommonWidget).toHaveBeenCalledWith(
-      expect.objectContaining(mockWidgetProps),
-      expect.anything(),
-    );
+    expect(CommonWidget).toHaveBeenCalledWith(expect.objectContaining(mockWidgetProps), undefined);
   });
 
   it('uses the widget id as a key', () => {
@@ -39,7 +36,7 @@ describe('Widget Component', () => {
     // Verify the `key` prop is set correctly on CommonWidget
     expect(CommonWidget).toHaveBeenCalledWith(
       expect.objectContaining({ id: 'widget-1' }),
-      expect.anything(),
+      undefined,
     );
   });
 });

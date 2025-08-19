@@ -58,6 +58,7 @@ import {
   IndicatorDataPoint,
   TextWidgetDataPoint,
   CustomWidgetStyleOptions,
+  PivotTableDataPoint,
 } from './types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
@@ -432,6 +433,16 @@ export type IndicatorDataPointEventHandler = (
 export type TextWidgetDataPointEventHandler = (
   /** Data point that was clicked */
   point: TextWidgetDataPoint,
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
+ * Click handler for when a pivot table cell is clicked.
+ */
+export type PivotTableDataPointEventHandler = (
+  /** Data point that was clicked */
+  point: PivotTableDataPoint,
   /** Native MouseEvent */
   nativeEvent: MouseEvent,
 ) => void;
@@ -1075,6 +1086,20 @@ export interface PivotTableProps {
    * @internal
    */
   onHeightChange?: (height: number) => void;
+
+  /**
+   * Callback function that is called when the pivot table cell is clicked
+   *
+   * @internal
+   */
+  onDataPointClick?: PivotTableDataPointEventHandler;
+
+  /**
+   * Callback function that is called when the pivot table cell is right-clicked
+   *
+   * @internal
+   */
+  onDataPointContextMenu?: PivotTableDataPointEventHandler;
 }
 
 /**
@@ -1424,6 +1449,19 @@ export interface PivotTableWidgetProps {
    * @category Widget
    */
   description?: string;
+  /**
+   * Callback function that is called when the pivot table cell is clicked
+   *
+   * @internal
+   */
+  onDataPointClick?: PivotTableDataPointEventHandler;
+
+  /**
+   * Callback function that is called when the pivot table cell is right-clicked
+   *
+   * @internal
+   */
+  onDataPointContextMenu?: PivotTableDataPointEventHandler;
 }
 
 /**

@@ -90,7 +90,7 @@ describe('CommonWidget Component', () => {
     expect(getByText('Mocked ChartWidget')).toBeInTheDocument();
     expect(ChartWidget).toHaveBeenCalledWith(
       expect.objectContaining({ highlightSelectionDisabled: true }),
-      expect.anything(),
+      undefined,
     );
   });
 

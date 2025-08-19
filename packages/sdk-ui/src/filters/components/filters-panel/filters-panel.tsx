@@ -32,12 +32,20 @@ import { getDividerStyle } from '@/dashboard/utils';
 const PanelWrapper = styled.div<Themable>`
   background-color: ${({ theme }) => theme.filter.panel.backgroundColor};
   font-family: ${({ theme }) => theme.typography.fontFamily};
-  border: ${({ theme }) =>
-    getDividerStyle(theme.filter.panel.borderColor, theme.filter.panel.borderWidth)};
+  ${({ theme }) =>
+    (theme.filter.panel.borderWidth === 0 || theme.filter.panel.borderWidth === undefined) &&
+    `border-left: ${getDividerStyle(
+      theme.filter.panel.dividerLineColor,
+      theme.filter.panel.dividerLineWidth,
+    )};`}
+  ${({ theme }) =>
+    theme.filter.panel.borderWidth > 0 &&
+    `border: ${getDividerStyle(theme.filter.panel.borderColor, theme.filter.panel.borderWidth)};`}
   width: fit-content;
-  min-width: 238px;
+  min-width: 240px;
   max-height: 100%;
   overflow: hidden;
+  box-sizing: border-box;
 `;
 
 const PanelBody = styled.div`

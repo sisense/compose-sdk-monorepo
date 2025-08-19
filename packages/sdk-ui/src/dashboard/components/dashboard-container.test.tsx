@@ -4,7 +4,7 @@ import { filterFactory } from '@sisense/sdk-data';
 import { fireEvent, render } from '@testing-library/react';
 import { DashboardContainer } from './dashboard-container';
 import * as DM from '../../__test-helpers__/sample-ecommerce';
-import { MenuProvider } from '@/common/components/menu/menu-provider';
+import { MockedSisenseContextProvider } from '@/__test-helpers__';
 
 vi.mock('./dashboard-header', async () => {
   return {
@@ -31,7 +31,7 @@ describe('DashboardContainer', () => {
   it('should render with header and filters panel', async () => {
     const DASHBOARD_TITLE = 'Test Dashboard';
     const { getByText, getByTestId } = render(
-      <MenuProvider>
+      <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
           layoutOptions={{}}
@@ -41,7 +41,7 @@ describe('DashboardContainer', () => {
           onFiltersChange={vi.fn()}
           defaultDataSource={''}
         />
-      </MenuProvider>,
+      </MockedSisenseContextProvider>,
     );
 
     expect(getByText(DASHBOARD_TITLE)).toBeInTheDocument();
@@ -52,7 +52,7 @@ describe('DashboardContainer', () => {
   it('should render without header and filters panel', async () => {
     const DASHBOARD_TITLE = 'Test Dashboard';
     const { queryByTestId } = render(
-      <MenuProvider>
+      <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
           layoutOptions={{}}
@@ -69,7 +69,7 @@ describe('DashboardContainer', () => {
           onFiltersChange={vi.fn()}
           defaultDataSource={''}
         />
-      </MenuProvider>,
+      </MockedSisenseContextProvider>,
     );
 
     expect(queryByTestId('dashboard-header')).toBeNull();
@@ -81,7 +81,7 @@ describe('DashboardContainer', () => {
     const filters = [filterFactory.members(DM.Commerce.Gender, ['male'])];
     const DASHBOARD_TITLE = 'Test Dashboard';
     const { getByTestId } = render(
-      <MenuProvider>
+      <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
           layoutOptions={{}}
@@ -91,7 +91,7 @@ describe('DashboardContainer', () => {
           onFiltersChange={onFiltersChangeMock}
           defaultDataSource={''}
         />
-      </MenuProvider>,
+      </MockedSisenseContextProvider>,
     );
 
     fireEvent.click(getByTestId('filter-panel-button'));
@@ -103,7 +103,7 @@ describe('DashboardContainer', () => {
     const onChangeMock = vi.fn();
     const DASHBOARD_TITLE = 'Test Dashboard';
     const { container } = render(
-      <MenuProvider>
+      <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
           layoutOptions={{}}
@@ -114,7 +114,7 @@ describe('DashboardContainer', () => {
           defaultDataSource={''}
           onChange={onChangeMock}
         />
-      </MenuProvider>,
+      </MockedSisenseContextProvider>,
     );
 
     fireEvent.click(container.querySelector('.arrow-wrapper') as Element);

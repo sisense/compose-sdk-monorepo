@@ -20,6 +20,18 @@ Filter theme settings
 >
 > Background color
 >
+> #### `panel.dividerLineColor`
+>
+> **dividerLineColor**?: `string`
+>
+> Divider line color for the filter panel
+>
+> #### `panel.dividerLineWidth`
+>
+> **dividerLineWidth**?: `number`
+>
+> Divider line width for the filter panel
+>
 > #### `panel.titleColor`
 >
 > **titleColor**?: `string`

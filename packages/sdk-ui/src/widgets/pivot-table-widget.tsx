@@ -71,6 +71,8 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
           highlights={props.highlights}
           refreshCounter={refreshCounter}
           onHeightChange={setPivotTableHeight}
+          onDataPointClick={props.onDataPointClick}
+          onDataPointContextMenu={props.onDataPointContextMenu}
         />
       </WidgetContainer>
     </DynamicSizeContainer>

@@ -254,12 +254,16 @@ export const redThemeSettings: CompleteThemeSettings = {
       primaryTextColor: '#FFFFFF',
       secondaryTextColor: '#C5C8CF',
       backgroundColor: '#16161C',
+      dividerLineColor: '#D5D5D5',
+      dividerLineWidth: 1,
     },
   },
   filter: {
     panel: {
       backgroundColor: '#313138',
       titleColor: '#FFFFFF',
+      dividerLineColor: '#DADADA',
+      dividerLineWidth: 1,
       borderColor: '#DADADA',
       borderWidth: 1,
     },

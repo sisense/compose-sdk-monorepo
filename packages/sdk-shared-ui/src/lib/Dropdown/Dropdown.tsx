@@ -1,9 +1,8 @@
 import classNames from 'classnames';
 import React, { forwardRef } from 'react';
-import { ScrollbarProps } from 'react-custom-scrollbars';
 
 import { styleguideConstants } from '../constants/styleguideConstants';
-import type { MenuItemConfig } from '../Menu';
+import type { MenuItemConfig, ScrollbarProps } from '../Menu';
 import { itemTypes, Menu } from '../Menu';
 // import { SLF } from '@sbi/styleguide';
 import { Popover } from '../Popover';

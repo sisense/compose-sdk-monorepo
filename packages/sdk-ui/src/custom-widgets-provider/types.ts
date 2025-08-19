@@ -8,7 +8,16 @@ import { GenericDataOptions } from '@/types';
 export interface CustomWidgetComponentProps<DataOptions = GenericDataOptions, StyleOptions = any> {
   dataSource?: DataSource;
   dataOptions: DataOptions;
-  styleOptions: StyleOptions;
+  styleOptions: StyleOptions & {
+    /**
+     * The width of the custom widget component.
+     */
+    width?: number;
+    /**
+     * The height of the custom widget component.
+     */
+    height?: number;
+  };
   filters?: Filter[] | FilterRelations;
   highlights?: Filter[];
   description?: string;

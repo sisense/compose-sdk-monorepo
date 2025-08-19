@@ -80,7 +80,9 @@ export const DraggableWidgetWrapper = ({
   const withDragHandle = useCallback(
     (element: ReactNode) => (
       <DragHandleWrapper {...listeners}>
-        {shouldShowDragHandleIcon && <DragHandleIcon color={dragHandleOptions?.icon?.color} />}
+        {shouldShowDragHandleIcon && (
+          <DragHandleIcon aria-label="drag-handle" color={dragHandleOptions?.icon?.color} />
+        )}
         <div>{element}</div>
       </DragHandleWrapper>
     ),
@@ -93,6 +95,7 @@ export const DraggableWidgetWrapper = ({
       {...attributes}
       transform={CSS.Translate.toString(transform)}
       zIndex={transform ? Z_INDEX_ACTIVE_DRAGGABLE : 10}
+      data-testid={`draggable-widget-${id}`}
     >
       {children(withDragHandle)}
     </Wrapper>

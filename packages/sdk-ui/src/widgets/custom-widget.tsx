@@ -11,6 +11,17 @@ import { useTranslation } from 'react-i18next';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { withErrorBoundary } from '@/decorators/component-decorators/with-error-boundary';
 
+const withSize = (props: CustomWidgetComponentProps, size: { width: number; height: number }) => {
+  return {
+    ...props,
+    styleOptions: {
+      ...props.styleOptions,
+      width: size.width,
+      height: size.height,
+    },
+  };
+};
+
 /**
  * Component that renders a custom widget.
  *
@@ -43,8 +54,19 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
     description: widgetProps.description,
   };
 
+  const size = useMemo(
+    () => ({
+      ...(widgetProps.styleOptions?.width ? { width: widgetProps.styleOptions.width } : null),
+      ...(widgetProps.styleOptions?.height ? { height: widgetProps.styleOptions.height } : null),
+    }),
+    [widgetProps.styleOptions?.width, widgetProps.styleOptions?.height],
+  );
+
+  const wrapperDefaultSize = useMemo(() => getWidgetDefaultSize('line', { hasHeader: true }), []);
+  const chartDefaultSize = useMemo(() => getWidgetDefaultSize('line'), []);
+
   return (
-    <DynamicSizeContainer defaultSize={getWidgetDefaultSize('line', { hasHeader: true })}>
+    <DynamicSizeContainer size={size} defaultSize={wrapperDefaultSize}>
       <WidgetContainer
         title={widgetProps.title}
         description={widgetProps.description}
@@ -52,7 +74,9 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
         dataSetName={dataSource && getDataSourceName(dataSource)}
       >
         {renderCustomWidgetWithErrorBoundary ? (
-          renderCustomWidgetWithErrorBoundary(customWidgetProps)
+          <DynamicSizeContainer defaultSize={chartDefaultSize}>
+            {(size) => renderCustomWidgetWithErrorBoundary(withSize(customWidgetProps, size))}
+          </DynamicSizeContainer>
         ) : (
           <ErrorBoundaryBox
             error={t('customWidgets.registerPrompt', {

@@ -6,7 +6,7 @@
     "url": "https://github.com/sisense/compose-sdk-monorepo",
     "directory": "packages/sdk-shared-ui"
   },
-  "version": "2.7.0",
+  "version": "2.8.0",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",
@@ -194,16 +194,15 @@
     "@storybook/react-vite": "^8.4.7",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
-    "@types/react": "18.3.1",
-    "@types/react-custom-scrollbars": "^4.0.13",
-    "@types/react-dom": "18.3.1",
+    "@types/react": "19.1.9",
+    "@types/react-dom": "19.1.7",
     "@vitejs/plugin-react": "^4.3.3",
-    "@vitest/coverage-v8": "^2.1.9",
+    "@vitest/coverage-v8": "^3.2.4",
     "classnames": "^2.3.1",
     "eslint": "^8.40.0",
     "prettier": "3.3.3",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "rollup-plugin-copy": "^3.5.0",
     "sass": "^1.83.0",
     "storybook": "^8.4.7",
@@ -212,7 +211,7 @@
     "vite": "^5.4.11",
     "vite-plugin-css-injected-by-js": "^3.5.1",
     "vite-plugin-dts": "^4.3.0",
-    "vitest": "^2.1.9"
+    "vitest": "^3.2.4"
   },
   "peerDependencies": {
     "classnames": "^2.3.1",
@@ -242,7 +241,7 @@
     "@rc-component/tooltip": "^1.2.0",
     "classnames": "^2.5.1",
     "prop-types": "^15.8.1",
-    "react-custom-scrollbars": "^4.2.1",
-    "react-use": "^17.6.0"
+    "react-use": "^17.6.0",
+    "simplebar-react": "^3.3.2"
   }
 }

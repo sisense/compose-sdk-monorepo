@@ -4,10 +4,10 @@ exports[`ErrorBoundaryBox > should render error correctly 1`] = `
 <div>
   <div
     aria-label="error-box"
-    class="_container_a59050"
+    class="_container_5eeb40"
   >
     <div
-      class="_card_a59050"
+      class="_card_5eeb40"
       style="background-color: rgb(255, 255, 255);"
     >
       <div
@@ -46,10 +46,10 @@ exports[`ErrorBoundaryBox > should render error with theme settings correctly 1`
 <div>
   <div
     aria-label="error-box"
-    class="_container_a59050"
+    class="_container_5eeb40"
   >
     <div
-      class="_card_a59050"
+      class="_card_5eeb40"
       style="background-color: red;"
     >
       <div
@@ -80,7 +80,7 @@ exports[`ErrorBoundaryBox > should render error with theme settings correctly 1`
         </svg>
       </div>
       <div
-        class="_text_a59050"
+        class="_text_5eeb40"
         style="color: green; font-family: Roboto;"
       >
         errorBoxText

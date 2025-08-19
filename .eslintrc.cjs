@@ -161,8 +161,12 @@ module.exports = {
           },
         },
         {
-          // Temporarily disable import sorting for the sdk-ui package
-          files: ['packages/sdk-ui/**/*.{ts,js,tsx,jsx}', 'e2e/**/*.{ts,js,tsx,jsx}'],
+          // Temporarily disable import sorting for the sdk-ui and sdk-pivot-client packages
+          files: [
+            'packages/sdk-ui/**/*.{ts,js,tsx,jsx}',
+            'packages/sdk-pivot-client/**/*.{ts,js,tsx,jsx}',
+            'e2e/**/*.{ts,js,tsx,jsx}',
+          ],
           rules: {
             'simple-import-sort/imports': 'off',
             'simple-import-sort/exports': 'off',

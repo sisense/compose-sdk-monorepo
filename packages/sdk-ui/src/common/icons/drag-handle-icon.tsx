@@ -1,4 +1,4 @@
-export const DragHandleIcon = ({ color = '#131f29' }) => (
+export const DragHandleIcon = ({ color = '#131f29', ...props }) => (
   <svg
     width="20"
     height="20"
@@ -6,6 +6,7 @@ export const DragHandleIcon = ({ color = '#131f29' }) => (
     fill={color}
     version="1.1"
     viewBox="0 0 32 32"
+    {...props}
   >
     <rect x="10" y="6" width="4" height="4" />
     <rect x="18" y="6" width="4" height="4" />

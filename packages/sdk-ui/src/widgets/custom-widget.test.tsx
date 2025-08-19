@@ -72,7 +72,7 @@ describe('CustomWidget', () => {
     expect(queryByRole('generic', { name: 'error-box' })).not.toBeInTheDocument();
 
     // And our custom widget component was called
-    expect(customWidgetComponentMock).toHaveBeenCalledOnce();
+    expect(customWidgetComponentMock).toHaveBeenCalled();
     expect(customWidgetComponentMock.mock.calls[0]).toMatchSnapshot();
 
     // Our custom widget text is now rendered

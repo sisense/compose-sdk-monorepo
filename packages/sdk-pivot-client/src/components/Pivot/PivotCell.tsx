@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable sonarjs/prefer-single-boolean-return */
+/* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
 import cn from 'classnames';
 import { Tooltip } from '@sisense/sdk-shared-ui/Tooltip';
@@ -151,7 +154,7 @@ type State = {
   isDrilled?: boolean;
   isSelected?: boolean;
   sortIconShouldBeVisible?: boolean;
-  sortingPopup: JSX.Element | null;
+  sortingPopup: React.JSX.Element | null;
   merge?: { colSpan?: number; rowSpan?: number };
   isEmbedImage?: boolean;
   backgroundColor?: string;
@@ -161,7 +164,8 @@ type State = {
 
 export class PivotCell extends React.PureComponent<PivotCellProps, State> {
   cellEl: HTMLDivElement | undefined;
-  contentRef: React.RefObject<HTMLDivElement>;
+
+  contentRef: React.RefObject<HTMLDivElement | null>;
 
   metadataClassName?: string;
 
@@ -811,7 +815,7 @@ export class PivotCell extends React.PureComponent<PivotCellProps, State> {
   };
 
   // TODO: use React.ReactComponentElement instead JSX.Element
-  setSortingPopup = (sortingPopup: JSX.Element | null): void => {
+  setSortingPopup = (sortingPopup: React.JSX.Element | null): void => {
     const sortIconShouldBeVisible = sortingPopup !== null;
 
     this.setState((prevState) => ({

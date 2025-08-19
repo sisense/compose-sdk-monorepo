@@ -113,7 +113,8 @@ describe('useGeoJson', () => {
 
     await waitFor(() => {
       expect(result.current.geoJson).toBeUndefined();
-      expect(result.current.error).toEqual(new Error('Failed loading map'));
+      expect(result.current.error).toBeInstanceOf(Error);
+      expect(result.current.error?.message).toContain('Failed loading map');
     });
   });
 
@@ -178,12 +179,12 @@ describe('useGeoJson', () => {
   });
 
   it('should throw an error for unsupported map types', () => {
-    const unsupportedMapType: AreamapType = 'galactica' as AreamapType;
+    const unsupportedMapType: AreamapType = 'galaxy' as AreamapType;
 
     const { result } = renderHook(() => useGeoJson(unsupportedMapType));
-
     expect(result.current.geoJson).toBeUndefined();
-    expect(result.current.error).toEqual(new Error(`Unsupported map type: galactica`));
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toContain('Unsupported map type: galaxy');
   });
 
   it('should cleanup outdated geoJson caches from LocalStorage when Sisense version changes', async () => {

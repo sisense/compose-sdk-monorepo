@@ -98,7 +98,7 @@ export const ResizableRow = ({
     (event: DragMoveEvent) => {
       const { delta } = event;
       const y = Math.max(minY, Math.min(maxY, delta.y));
-      setInternalHeight(height + y + RESIZE_LINE_SIZE);
+      setInternalHeight(Math.round(height + y + RESIZE_LINE_SIZE));
     },
     [minY, maxY, height, setInternalHeight],
   );
@@ -109,7 +109,7 @@ export const ResizableRow = ({
   }, [setIsDragging, setShouldCallOnHeightChange]);
 
   return (
-    <Container height={internalHeight} isDragging={isDragging}>
+    <Container height={internalHeight} isDragging={isDragging} data-testid={`resizable-row-${id}`}>
       {children}
       {isDragging && <Overlay />}
       <DndContext
@@ -118,7 +118,7 @@ export const ResizableRow = ({
         onDragEnd={onDragEnd}
         modifiers={[restrictToVerticalAxis]}
       >
-        <DraggableLine id={id} orientation="horizontal" />
+        <DraggableLine id={id} orientation="horizontal" ariaLabel={`row-resize-handle`} />
       </DndContext>
     </Container>
   );

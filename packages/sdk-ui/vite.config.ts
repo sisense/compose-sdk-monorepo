@@ -74,6 +74,13 @@ export default defineConfig(({ mode }) => ({
       ],
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler', // Use modern Sass compiler API (Vite 5.4+)
+      },
+    },
+  },
   resolve: {
     alias: { '@': resolve(__dirname, './src') },
   },

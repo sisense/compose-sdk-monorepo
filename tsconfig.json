@@ -27,11 +27,7 @@
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": true,
-    "types": [
-      "vitest/globals",
-      "@testing-library/jest-dom",
-      "@testing-library/react"
-    ],
+    "types": ["vitest/globals", "@testing-library/jest-dom", "@testing-library/react"],
     "baseUrl": "."
   },
   "include": ["**/*.ts", "**/*.tsx"]

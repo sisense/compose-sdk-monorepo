@@ -55,7 +55,7 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -136,7 +136,7 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -217,7 +217,7 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -276,7 +276,7 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -335,7 +335,7 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -416,7 +416,7 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
         class="css-1wpi5bx"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-p0gqv1 css-fzgmul-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"

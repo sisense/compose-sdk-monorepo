@@ -6,7 +6,12 @@ export const DEFAULT_DIVIDER_COLOR = '#F2F2F2';
 export const DEFAULT_DIVIDER_WIDTH = 4;
 export const DEFAULT_DASHBOARD_BORDER_COLOR = '#D5D5D5';
 export const DEFAULT_DASHBOARD_BORDER_WIDTH = 1;
+export const DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_COLOR = '#D5D5D5';
+export const DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_WIDTH = 1;
+export const DEFAULT_FILTER_PANEL_DIVIDER_LINE_COLOR = '#DADADA';
+export const DEFAULT_FILTER_PANEL_DIVIDER_LINE_WIDTH = 1;
 export const DEFAULT_FILTER_PANEL_BORDER_COLOR = '#DADADA';
+export const DEFAULT_FILTER_PANEL_BORDER_WIDTH = 1;
 export const DEFAULT_TITLE_FONT_SIZE = 15;
 
 const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
@@ -141,14 +146,18 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
       primaryTextColor: '#5B6372',
       secondaryTextColor: '#9EA2AB',
       backgroundColor: '#FFFFFF',
+      dividerLineColor: DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_COLOR,
+      dividerLineWidth: DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_WIDTH,
     },
   },
   filter: {
     panel: {
       titleColor: '#5B6372',
       backgroundColor: '#F6F6F6',
+      dividerLineColor: DEFAULT_FILTER_PANEL_DIVIDER_LINE_COLOR,
+      dividerLineWidth: DEFAULT_FILTER_PANEL_DIVIDER_LINE_WIDTH,
       borderColor: DEFAULT_FILTER_PANEL_BORDER_COLOR,
-      borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
+      borderWidth: DEFAULT_FILTER_PANEL_BORDER_WIDTH,
     },
   },
   aiChat: {
@@ -380,14 +389,18 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
       primaryTextColor: '#FFFFFF',
       secondaryTextColor: '#C5C8CF',
       backgroundColor: '#313138',
+      dividerLineColor: DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_COLOR,
+      dividerLineWidth: DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_WIDTH,
     },
   },
   filter: {
     panel: {
       titleColor: '#FFFFFF',
       backgroundColor: '#313138',
-      borderColor: '#DADADA',
-      borderWidth: DEFAULT_DASHBOARD_BORDER_WIDTH,
+      dividerLineColor: DEFAULT_FILTER_PANEL_DIVIDER_LINE_COLOR,
+      dividerLineWidth: DEFAULT_FILTER_PANEL_DIVIDER_LINE_WIDTH,
+      borderColor: DEFAULT_FILTER_PANEL_BORDER_COLOR,
+      borderWidth: DEFAULT_FILTER_PANEL_BORDER_WIDTH,
     },
   },
   aiChat: {

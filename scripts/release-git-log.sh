@@ -28,8 +28,8 @@ if [ -z "$LAST_TAG" ]; then
     LAST_TAG=$(git rev-list --max-parents=0 HEAD)
 fi
 
-echo -e "\n${BOLD_BLUE}📋 Changes since last release (${BOLD_GREEN}$LAST_TAG${BOLD_BLUE}):${RESET}"
-echo -e "${BOLD_BLUE}═══════════════════════════════════════════════════════════════${RESET}"
+printf "\n${BOLD_BLUE}📋 Changes since last release (${BOLD_GREEN}$LAST_TAG${BOLD_BLUE}):${RESET}\n"
+printf "${BOLD_BLUE}═══════════════════════════════════════════════════════════════${RESET}\n"
 echo ""
 
 # Create temporary files for each commit type
@@ -37,7 +37,7 @@ TEMP_DIR=$(mktemp -d)
 trap "rm -rf $TEMP_DIR" EXIT
 
 # Process commits and group by type
-git --no-pager log ${LAST_TAG}..HEAD --no-merges --pretty=format:"%s" | while IFS= read -r line; do
+{ git --no-pager log ${LAST_TAG}..HEAD --no-merges --pretty=format:"%s"; echo; } | while IFS= read -r line; do
     # Extract commit type using simple pattern matching
     if echo "$line" | grep -qE '^[a-z]+(\([^)]*\))?:'; then
         commit_type=$(echo "$line" | sed 's/^\([a-z]*\).*/\1/')
@@ -79,18 +79,18 @@ get_type_info() {
 # Output grouped commits in logical order
 for commit_type in feat fix refactor chore docs style test perf ci build revert other; do
     if [[ -f "$TEMP_DIR/$commit_type" && -s "$TEMP_DIR/$commit_type" ]]; then
-        echo -e "\n${BOLD_BLUE}$(get_type_info $commit_type)${RESET}"
-        echo -e "${DARK_GRAY}────────────────────────────────────────────────────────────────${RESET}"
+        printf "\n${BOLD_BLUE}$(get_type_info $commit_type)${RESET}\n"
+        printf "${DARK_GRAY}────────────────────────────────────────────────────────────────${RESET}\n"
 
         # Output each commit in the group with arrow bullets
         while IFS= read -r commit_line; do
-            echo -e "${DARK_GRAY}▸${RESET}$commit_line"
+            printf "${DARK_GRAY}▸${RESET}%s\n" "$commit_line"
         done < "$TEMP_DIR/$commit_type"
     fi
 done
 
 echo ""
-echo -e "${BOLD_BLUE}═══════════════════════════════════════════════════════════════${RESET}"
-echo -e "${BOLD_CYAN}📊 Summary:${RESET}"
-echo -e "   ${DARK_GRAY}├─${RESET} Range: ${YELLOW}${LAST_TAG}${RESET}..${YELLOW}HEAD${RESET}"
-echo -e "   ${DARK_GRAY}└─${RESET} Total commits: ${BOLD_GREEN}$(git rev-list --count ${LAST_TAG}..HEAD --no-merges)${RESET}"
+printf "${BOLD_BLUE}═══════════════════════════════════════════════════════════════${RESET}\n"
+printf "${BOLD_CYAN}📊 Summary:${RESET}\n"
+printf "   ${DARK_GRAY}├─${RESET} Range: ${YELLOW}${LAST_TAG}${RESET}..${YELLOW}HEAD${RESET}\n"
+printf "   ${DARK_GRAY}└─${RESET} Total commits: ${BOLD_GREEN}$(git rev-list --count ${LAST_TAG}..HEAD --no-merges)${RESET}\n"

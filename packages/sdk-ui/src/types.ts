@@ -1175,6 +1175,10 @@ export type DashboardThemeSettings = {
     secondaryTextColor?: string;
     /** Background color for the dashboard toolbar */
     backgroundColor?: string;
+    /** Divider line color for the dashboard toolbar */
+    dividerLineColor?: string;
+    /** Divider line width for the dashboard toolbar */
+    dividerLineWidth?: number;
   };
 };
 
@@ -1187,14 +1191,24 @@ export type FilterThemeSettings = {
     titleColor?: string;
     /** Background color */
     backgroundColor?: string;
+    /** Divider line color for the filter panel */
+    dividerLineColor?: string;
+    /** Divider line width for the filter panel */
+    dividerLineWidth?: number;
     /**
-     * Border color
+     * Border color for the filter panel component
+     *
+     * **Note:** Does not apply to filter panel inside `Dashboard`
+     * use dividerLineColor and dividerLineWidth instead
      *
      * @internal
      * */
     borderColor?: string;
     /**
-     * Border width
+     * Border width for the filter panel component
+     *
+     * **Note:** Does not apply to filter panel inside `Dashboard`
+     * use dividerLineColor and dividerLineWidth instead
      *
      * @internal
      * */
@@ -1543,7 +1557,17 @@ export type TextWidgetStyleOptions = {
 /**
  * Style settings defining the look and feel of CustomWidget
  */
-export type CustomWidgetStyleOptions = Record<string, unknown> & WidgetContainerStyleOptions;
+export type CustomWidgetStyleOptions = WidgetContainerStyleOptions &
+  Record<string, unknown> & {
+    /**
+     * The width of the custom widget component.
+     */
+    width?: number;
+    /**
+     * The height of the custom widget component.
+     */
+    height?: number;
+  };
 
 /**
  * Runs type guard check for ThemeOid.
@@ -1737,6 +1761,38 @@ export type IndicatorDataPoint = {
 export type TextWidgetDataPoint = {
   /** HTML content of the text widget */
   html?: string;
+};
+
+/** Data point in a PivotTable. */
+export type PivotTableDataPoint = {
+  /**
+   * Boolean flag that defines if the data point is a data cell
+   *
+   * @internal
+   */
+  isDataCell: boolean;
+  /**
+   * Boolean flag that defines if the data point is a caption cell
+   *
+   * @internal
+   */
+  isCaptionCell: boolean;
+  /**
+   * Boolean flag that defines if the data point is a total cell (subtotal or grandtotal)
+   *
+   * @internal
+   */
+  isTotalCell: boolean;
+  /**
+   * A collection of data point entries that represents values for all related `dataOptions`.
+   *
+   * @internal
+   */
+  entries: {
+    rows?: DataPointEntry[];
+    columns?: DataPointEntry[];
+    values?: DataPointEntry[];
+  };
 };
 
 /**

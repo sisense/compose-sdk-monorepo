@@ -1,7 +1,8 @@
+import 'simplebar-react/dist/simplebar.min.css';
+
 import classnames from 'classnames';
 import React, { Component } from 'react';
-import type { ScrollbarProps } from 'react-custom-scrollbars';
-import { Scrollbars } from 'react-custom-scrollbars';
+import SimpleBar from 'simplebar-react';
 
 import { LazyLoader } from '../LazyLoader';
 import { Popover } from '../Popover';
@@ -42,6 +43,13 @@ export type MenuItemConfig = {
 type ActionableComponent = {
   component: React.ComponentType<{ onRequestClose?: () => void }>;
   componentProps: any;
+};
+
+export type ScrollbarProps = {
+  onScroll?: () => void;
+  style?: React.CSSProperties;
+  className?: string;
+  autoHide?: boolean;
 };
 
 export type MenuProps = {
@@ -339,7 +347,7 @@ class Menu extends Component<MenuProps, State> {
 
     return (
       <div className={containerClasses} onMouseEnter={onMouseEnter} style={styles}>
-        <Scrollbars className={scrollbarClasses} {...otherScrollbarProps} hideTracksWhenNotNeeded>
+        <SimpleBar className={scrollbarClasses} {...otherScrollbarProps}>
           {this.getSeparateGroups(visibleItems).map((group, index) => {
             return (
               <div className={style.separateGroup} key={index}>
@@ -350,7 +358,7 @@ class Menu extends Component<MenuProps, State> {
           <div className={loaderClass}>
             <LazyLoader isLoading={isLoading} />
           </div>
-        </Scrollbars>
+        </SimpleBar>
       </div>
     );
   }

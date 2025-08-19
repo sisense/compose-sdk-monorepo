@@ -152,10 +152,10 @@ export const ResizableColumns = ({
       setInternalWidths(() =>
         widths.map((width, index) => {
           if (columnIndex === index) {
-            return newLeftWidth;
+            return Number(newLeftWidth.toFixed(2));
           }
           if (columnIndex + 1 === index) {
-            return newRightWidth;
+            return Number(newRightWidth.toFixed(2));
           }
           return width;
         }),
@@ -193,7 +193,7 @@ export const ResizableColumns = ({
         ? children
         : children.map((child, columnIndex) => {
             return (
-              <Column key={columnIndex}>
+              <Column key={columnIndex} data-testid={`resizable-column-${columnIndex}`}>
                 {child}
                 {(currentlyResizingColumnIndex === columnIndex ||
                   currentlyResizingColumnIndex === columnIndex - 1) && <Overlay />}
@@ -209,7 +209,11 @@ export const ResizableColumns = ({
                   }}
                 >
                   {columnIndex !== children.length - 1 && (
-                    <DraggableLine orientation="vertical" id={`${columnIndex}`} />
+                    <DraggableLine
+                      orientation="vertical"
+                      id={`${columnIndex}`}
+                      ariaLabel={`column-resize-handle`}
+                    />
                   )}
                 </DndContext>
               </Column>

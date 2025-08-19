@@ -1,6 +1,6 @@
-@import 'color';
-@import 'icons';
-@import 'fixed-data-table-custom';
+@use 'color';
+@use 'icons';
+@use 'fixed-data-table-custom' as *;
 
 .tableWrapper {
   height: 100%;
@@ -17,7 +17,7 @@
 }
 
 .tableHeader {
-  color: $SHUTTLE_GRAY;
+  color: color.$SHUTTLE_GRAY;
   background-color: transparent;
   margin: 0px;
   border: none;
@@ -27,11 +27,11 @@
 }
 
 .tableCell {
-  color: $SHUTTLE_GRAY;
+  color: color.$SHUTTLE_GRAY;
   background-color: transparent;
   border: none;
-  border-right: 1px solid $ATHENS_GRAY_DARK;
-  border-bottom: 1px solid $ATHENS_GRAY_DARK;
+  border-right: 1px solid color.$ATHENS_GRAY_DARK;
+  border-bottom: 1px solid color.$ATHENS_GRAY_DARK;
   overflow: hidden;
   width: 100%;
   box-sizing: border-box;
@@ -44,9 +44,9 @@
 }
 
 .headerColor {
-  background-color: $ATHENS_GRAY_LIGHT;
+  background-color: color.$ATHENS_GRAY_LIGHT;
 }
 
 .rowColor {
-  background-color: $ATHENS_GRAY_LIGHT;
+  background-color: color.$ATHENS_GRAY_LIGHT;
 }

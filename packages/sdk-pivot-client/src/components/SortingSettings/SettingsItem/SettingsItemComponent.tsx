@@ -16,7 +16,7 @@ type Props = {
     selected: boolean;
     direction: 'asc' | 'desc' | null;
   }) => void;
-  subtotalsCaption: null | JSX.Element;
+  subtotalsCaption: null | React.JSX.Element;
 };
 
 export const SettingsItemComponent = (props: Props) => {

@@ -7,7 +7,7 @@ import {
 
 import { useApplyPivotTableFormatting } from './use-apply-pivot-table-formatting';
 import { useSisenseContextMock } from '@/sisense-context/__mocks__/sisense-context';
-import type { PivotTableDataOptions } from '@/chart-data-options/types';
+import type { PivotTableDataOptionsInternal } from '@/chart-data-options/types';
 import type { ClientApplication } from '@/app/client-application';
 
 vi.mock('@/sisense-context/sisense-context');
@@ -29,7 +29,7 @@ const DataServiceMock = {
 
 describe('useApplyPivotTableFormatting', () => {
   const dataService = DataServiceMock as unknown as DataService;
-  const dataOptions = {} as PivotTableDataOptions;
+  const dataOptions = {} as PivotTableDataOptionsInternal;
 
   beforeEach(() => {
     useSisenseContextMock.mockReturnValue({

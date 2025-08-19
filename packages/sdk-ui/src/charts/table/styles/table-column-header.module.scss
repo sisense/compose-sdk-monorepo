@@ -1,5 +1,5 @@
-@import 'color';
-@import 'icons';
+@use 'color';
+@use 'icons';
 
 .headerCell {
   display: flex;
@@ -16,13 +16,13 @@
 
 .headerCell:hover {
   .noSort.standard {
-    background-image: $SORT_ASCENDING;
+    background-image: icons.$SORT_ASCENDING;
   }
 }
 
 .headerCell:hover {
   .noSort.caret {
-    background-image: $CARET_DOWN;
+    background-image: icons.$CARET_DOWN;
     transform: rotate(180deg);
   }
 }
@@ -40,19 +40,19 @@
 }
 
 .numberIcon {
-  background-image: $NUMBER_ICON;
+  background-image: icons.$NUMBER_ICON;
 }
 
 .dateIcon {
-  background-image: $DATE_ICON;
+  background-image: icons.$DATE_ICON;
 }
 
 .textIcon {
-  background-image: $TEXT_ICON;
+  background-image: icons.$TEXT_ICON;
 }
 
 .booleanIcon {
-  background-image: $BOOLEAN_ICON;
+  background-image: icons.$BOOLEAN_ICON;
 }
 
 .sortIcon {
@@ -64,15 +64,15 @@
 }
 
 .sortAscending.standard {
-  background-image: $SORT_ASCENDING;
+  background-image: icons.$SORT_ASCENDING;
 }
 
 .sortDescending.standard {
-  background-image: $SORT_DESCENDING;
+  background-image: icons.$SORT_DESCENDING;
 }
 
 .sortAscending.caret {
-  background-image: $CARET_DOWN;
+  background-image: icons.$CARET_DOWN;
   transform: rotate(180deg);
   &:hover {
     transform: rotate(0deg);
@@ -80,7 +80,7 @@
 }
 
 .sortDescending.caret {
-  background-image: $CARET_DOWN;
+  background-image: icons.$CARET_DOWN;
   &:hover {
     transform: rotate(180deg);
   }
