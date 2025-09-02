@@ -17,10 +17,11 @@ import {
 } from '../chart-data-options/types';
 import { ChartDesignOptions, DesignOptions } from './translations/types';
 import { DateLevels } from '@sisense/sdk-data';
-import { applyDateFormat } from '../query/date-formats/apply-date-format';
+import { formatDateValue } from '../query/date-formats/apply-date-format';
 import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
 import { describe } from 'vitest';
 import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { withYAxisNormalizationForPolar } from '@/chart-options-processor/cartesian/utils/axis/axis-builders';
 
 const translateMock = ((key: string) => key) as TFunction;
 
@@ -138,7 +139,7 @@ const baseChartDesignOptions = {
   designPerSeries: {},
 } as ChartDesignOptions;
 
-const dateFormatter = (date: Date, format: string) => applyDateFormat(date, format);
+const dateFormatter = (date: Date, format: string) => formatDateValue(date, format);
 
 const themeSettings = getDefaultThemeSettings();
 
@@ -824,6 +825,40 @@ describe('cartesianData', () => {
     expect(chartOptions2).toMatchSnapshot();
   });
 
+  it('timeseries with N\\A values', () => {
+    const timeSeriesDataWithNA = createDataTableFromData({
+      columns: [
+        { name: 'Months', type: 'date' },
+        { name: 'Area', type: 'string' },
+        { name: 'Quantity', type: 'number' },
+        { name: 'Units', type: 'number' },
+      ],
+      rows: [
+        ['2020-01', 'A', 6781, 10],
+        ['N\\A', 'A', 4471, 70],
+        ['2020-03', 'B', 1812, 50],
+      ],
+    });
+
+    const dataOptions: CartesianChartDataOptionsInternal = {
+      x: [months],
+      y: [meas1],
+      breakBy: [],
+    };
+    const chartData = cartesianData(dataOptions, timeSeriesDataWithNA);
+
+    const { options: chartOptions } = highchartsOptionsService(
+      chartData,
+      'line',
+      baseChartDesignOptions,
+      dataOptions,
+      translateMock,
+      themeSettings,
+      dateFormatter,
+    );
+    expect(chartOptions).toMatchSnapshot();
+  });
+
   it('timeseries with one data point', () => {
     const singleRowData = createDataTableFromData({
       columns: [
@@ -1043,13 +1078,16 @@ describe('cartesianData', () => {
   it('disables and clears y-axis title when chart type is polar', () => {
     const chartData = cartesianData(TestChartDataOptions, TestQueryResult);
 
+    // Create properly normalized polar design options using the transformer
+    const polarDesignOptions = withYAxisNormalizationForPolar({
+      ...baseChartDesignOptions,
+      polarType: 'area',
+    } as DesignOptions<'polar'>);
+
     const { options: chartOptions } = highchartsOptionsService(
       chartData,
       'polar',
-      {
-        ...baseChartDesignOptions,
-        polarType: 'area',
-      } as DesignOptions<'polar'>,
+      polarDesignOptions,
       TestChartDataOptions,
       translateMock,
     );

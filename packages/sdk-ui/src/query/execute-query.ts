@@ -45,7 +45,7 @@ export type PivotQueryDescription = Partial<
 };
 
 /** @internal */
-const prepareQueryParams = (
+export const prepareQueryParams = (
   queryDescription: QueryDescription,
   defaultDataSource?: DataSource,
 ): InternalQueryDescription => {

@@ -17,6 +17,20 @@ import {
   BaseDesignOptionsType,
 } from './design-options';
 
+/**
+ * Style configuration for text elements
+ */
+export type TextStyle = {
+  fontFamily?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  color?: string;
+  textOutline?: string;
+  pointerEvents?: string;
+  textOverflow?: string;
+  width?: string;
+};
+
 export const POLAR_CHART_TYPES = ['polar'] as const;
 export type PolarChartType = (typeof POLAR_CHART_TYPES)[number];
 

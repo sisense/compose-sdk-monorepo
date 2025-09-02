@@ -68,8 +68,7 @@ packages/sdk-*/vite.config.ts.timestamp-*
 # cursor ignore
 .cursorignore
 
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
+.cursor/rules/__personal__/*
 
 
 

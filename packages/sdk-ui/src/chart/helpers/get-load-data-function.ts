@@ -25,8 +25,12 @@ export type LoadDataFunction = (options: {
 /**
  * Get the load data function based on the chart type
  */
-export function getLoadDataFunction(chartType: ChartType): LoadDataFunction {
-  if (isRestructuredChartType(chartType)) {
+export function getLoadDataFunction(
+  chartType: ChartType,
+  /** Indicates if the chart is a forecast or trend chart for temporal routing between legacy and restructured charts processing */
+  isForecastOrTrendChart: boolean,
+): LoadDataFunction {
+  if (isRestructuredChartType(chartType) && !isForecastOrTrendChart) {
     const chartBuilder = getChartBuilder(chartType);
     return chartBuilder.data.loadData as LoadDataFunction;
   }

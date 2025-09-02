@@ -208,9 +208,11 @@ export type QueryByWidgetIdQueryParams = {
 export type QueryByWidgetIdState = QueryState & QueryByWidgetIdQueryParams;
 
 /**
- * Parameters for {@link useExecuteQuery} hook.
+ * Base query parameters
+ *
+ * @internal
  */
-export interface ExecuteQueryParams {
+export interface BaseQueryParams {
   /**
    * Data source the query is run against - e.g. `Sample ECommerce`
    *
@@ -229,7 +231,12 @@ export interface ExecuteQueryParams {
 
   /** Highlight filters that will highlight results that pass filter criteria */
   highlights?: Filter[];
+}
 
+/**
+ * Parameters for {@link useExecuteQuery} hook.
+ */
+export interface ExecuteQueryParams extends BaseQueryParams {
   /**
    * Number of rows to return in the query result
    *

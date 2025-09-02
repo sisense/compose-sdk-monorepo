@@ -1,6 +1,6 @@
 /* eslint-disable max-params */
 import type { DataLabelsOptions } from '@sisense/sisense-charts';
-import { Style } from '../chart-options-service';
+import { TextStyle } from './types';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { AxisOrientation } from './axis-section';
 import { HighchartsDataPointContext } from './tooltip-utils';
@@ -23,7 +23,7 @@ export type ValueLabelSettings = {
   rotation?: number;
   y?: number;
   x?: number;
-  style?: Style;
+  style?: TextStyle;
   overflow?: string;
   allowOverlap?: boolean;
   verticalAlign?: 'bottom' | 'middle' | 'top';

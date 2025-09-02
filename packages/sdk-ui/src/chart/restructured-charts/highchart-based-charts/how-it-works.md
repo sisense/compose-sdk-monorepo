@@ -10,8 +10,10 @@ Highcharts-based charts in the restructured charts architecture provide a stream
 
 Highcharts-based charts are chart types that use Highcharts as their rendering engine. Currently supported types include:
 
+- `area` - Area charts
 - `column` - Column charts
 - `bar` - Bar charts
+- `line` - Line charts
 
 These charts follow the same restructured chart architecture but have additional infrastructure specifically designed for Highcharts integration.
 
@@ -115,10 +117,12 @@ Highcharts-based charts are organized into families that share common characteri
 highchart-based-charts/
 ├── cartesians/           # Charts with X/Y axes
 │   ├── helpers/          # Common cartesian functionality
+│   ├── line-chart/       # Line charts (non-stackable)
 │   └── stackable/        # Charts that support stacking
 │       ├── helpers/      # Common stackable functionality
-│       ├── column-chart/
-│       └── bar-chart/
+│       ├── area-chart/   # Area charts with stacking support
+│       ├── column-chart/ # Column charts with stacking support
+│       └── bar-chart/    # Bar charts with stacking support
 ```
 
 ### Benefits of Hierarchical Organization
@@ -228,7 +232,23 @@ export const myChartBuilder: ChartBuilder<'mychart'> = {
 };
 ```
 
-### Step 3: Register the Chart
+### Step 3: Update the Chart Type Registry
+
+Before registering your chart, you need to update the `isHighchartsBasedChart` function to include your new chart type:
+
+```typescript
+// highcharts-based-chart-renderer/utils.ts
+export const isHighchartsBasedChart = (
+  chartType: ChartType,
+): chartType is HighchartBasedChartTypes => {
+  return ['column', 'bar', 'line', 'area', 'mychart'].includes(chartType);
+  //                                    ^^^^^^^^^ Add your new chart type here
+};
+```
+
+This function is used by the system to determine which charts should use the Highcharts-based rendering pipeline.
+
+### Step 4: Register the Chart
 
 Add your chart builder to the chart builder factory to make it available in the system.
 

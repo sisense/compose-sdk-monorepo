@@ -27,7 +27,7 @@ import { isBoxplotChartData } from '@/chart-data/boxplot-data';
 import isArray from 'lodash-es/isArray';
 import { getLoadDataFunction } from './helpers/get-load-data-function';
 import { useChartDataPreparation } from './helpers/use-chart-data-preparation';
-import { isRestructuredChartType } from './restructured-charts/utils';
+import { isRestructuredChartType, hasForecastOrTrend } from './restructured-charts/utils';
 import { getChartBuilder } from './restructured-charts/chart-builder-factory';
 import { isSisenseChartProps, isSisenseChartType, SisenseChart } from '../sisense-chart';
 
@@ -93,19 +93,22 @@ export const RegularChart = (props: RegularChartProps) => {
   const defaultSize = getChartDefaultSize(chartType);
   const { themeSettings } = useThemeContext();
 
+  /** Indicates if the chart is a forecast or trend chart for routing between legacy and restructured charts processing */
+  const isForecastOrTrendChart = hasForecastOrTrend(chartDataOptions, chartType);
+
   const {
     dataOptions: syncDataOptions,
     attributes,
     measures,
     dataColumnNamesMapping,
-  } = useTranslatedDataOptions(chartDataOptions, chartType);
+  } = useTranslatedDataOptions(chartDataOptions, chartType, isForecastOrTrendChart);
 
   /** Indicates if the provided data options has no dimensions */
   const hasNoDimensions = attributes.length === 0 && measures.length === 0;
 
   const loadData = useMemo(() => {
-    return getLoadDataFunction(chartType);
-  }, [chartType]);
+    return getLoadDataFunction(chartType, isForecastOrTrendChart);
+  }, [chartType, isForecastOrTrendChart]);
   const [data, dataOptions] = useSyncedData({
     dataSet,
     chartDataOptions: syncDataOptions,
@@ -134,6 +137,7 @@ export const RegularChart = (props: RegularChartProps) => {
     data,
     chartDataOptions: syncDataOptions,
     chartType,
+    isForecastOrTrendChart,
     attributes,
     measures,
     dataColumnNamesMapping,
@@ -174,7 +178,10 @@ export const RegularChart = (props: RegularChartProps) => {
           return <NoResultsOverlay iconType={chartType} />;
         }
 
-        if (isRestructuredChartType(chartType)) {
+        // Check if chart should use restructured architecture
+        const shouldUseRestructured = isRestructuredChartType(chartType) && !isForecastOrTrendChart;
+
+        if (shouldUseRestructured) {
           const chartBuilder = getChartBuilder(chartType);
           if (chartBuilder.renderer.isCorrectRendererProps(chartRendererProps)) {
             return (

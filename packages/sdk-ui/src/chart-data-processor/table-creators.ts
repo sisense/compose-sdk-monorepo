@@ -8,6 +8,7 @@
 import { Cell, Data, isDatetime } from '@sisense/sdk-data';
 import { createCompareValue } from './row-comparator';
 import { ComparableData, DataTable } from './table-processor';
+import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
 
 // for item table, index of original source of data is stored
 // in a column, and it is not changed by filtering or sorting
@@ -111,8 +112,13 @@ export const createDataTableFromData = (data: Data): DataTable => {
       let compareValue;
       let rawValue;
       if (isDatetime(column.type)) {
-        compareValue = createCompareValue(`${rowValue}`, column.type);
-        rawValue = new Date(compareValue.value).toISOString();
+        if (rowValue === NOT_AVAILABLE_DATA_VALUE) {
+          compareValue = { value: rowValue, valueUndefined: false, valueIsNaN: true };
+          rawValue = rowValue;
+        } else {
+          compareValue = createCompareValue(`${rowValue}`, column.type);
+          rawValue = new Date(compareValue.value).toISOString();
+        }
       }
       return {
         rawValue: rawValue ?? rowValue,

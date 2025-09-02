@@ -3,6 +3,7 @@ import omit from 'lodash-es/omit';
 import { getLegacyCartesianChartOptions } from '../../helpers/highchart-options/get-legacy-cartesian-chart-options';
 import { getBasicCartesianLegend } from '../../helpers/highchart-options/legend';
 import { getBasicCartesianTooltip } from '../../helpers/highchart-options/tooltip';
+import { getAxes } from './highchart-options/axes';
 
 export const columnHighchartsOptionsBuilder: HighchartsOptionsBuilder<'column'> = {
   getChart: function (ctx) {
@@ -12,13 +13,7 @@ export const columnHighchartsOptionsBuilder: HighchartsOptionsBuilder<'column'> 
     return getLegacyCartesianChartOptions(ctx, 'column').series;
   },
 
-  getAxes: function (ctx) {
-    const { xAxis, yAxis } = getLegacyCartesianChartOptions(ctx, 'column');
-    return {
-      xAxis,
-      yAxis,
-    };
-  },
+  getAxes,
 
   getLegend: function (ctx) {
     return getBasicCartesianLegend(ctx.designOptions.legend);

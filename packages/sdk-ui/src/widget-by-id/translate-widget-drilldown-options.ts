@@ -12,11 +12,10 @@ import { createDataColumn } from './translate-widget-data-options.js';
 import { DatetimeMask, Panel, PanelItem, FusionWidgetType } from './types.js';
 import { getEnabledPanelItems, getRootPanelItem } from './utils.js';
 import { DataPoint, DrilldownOptions } from '../types.js';
-import { applyDateFormat } from '../query/date-formats/apply-date-format.js';
 import { sliceFromMatched } from '@/utils/array-utils';
 import { Column } from '@/chart-data/types';
 import { Hierarchy, HierarchyId } from '@/models/hierarchy';
-import { parseISOWithTimezoneCheck } from '@/utils/parseISOWithTimezoneCheck';
+import { formatDateValue } from '@/query/date-formats/apply-date-format.js';
 
 const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
   item?.parent
@@ -37,7 +36,7 @@ const getDrilldownSelections = (
         dateFormat
           ? (member) => ({
               categoryValue: member,
-              categoryDisplayValue: applyDateFormat(parseISOWithTimezoneCheck(member), dateFormat),
+              categoryDisplayValue: formatDateValue(member, dateFormat),
             })
           : (member) => ({ categoryValue: member }),
       ) ?? [];

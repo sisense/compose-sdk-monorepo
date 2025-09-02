@@ -19,6 +19,8 @@ import {
 } from './fiscal-date-format-replacers';
 import { getBaseDateFnsLocale } from '../../chart-data-processor/data-table-date-period';
 import { DateLevels } from '@sisense/sdk-data';
+import { parseISOWithTimezoneCheck } from '../../utils/parseISOWithTimezoneCheck';
+import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
 
 export type DateFormat = string;
 
@@ -99,14 +101,34 @@ export const defaultDateConfig: DateConfig = Object.freeze({
 });
 
 /**
- * Returns a formatted date, according to the provided date format string.
+ * Safely formats a date value, handling special cases like 'N\A'
  *
- * @param date -
- * @param format -
- * @param locale -
- * @param cfg -
+ * @param value - The date value to format, can be a Date object, ISO string, or special value like 'N\A'
+ * @param format - The date format to apply
+ * @param locale - Optional locale for formatting
+ * @param cfg - Optional date configuration
+ * @returns Formatted date string or the original value for special cases
  */
-export function applyDateFormat(
+export function formatDateValue(
+  value: Date | string,
+  format: DateFormat,
+  locale: Locale = getBaseDateFnsLocale(),
+  cfg: DateConfig = defaultDateConfig,
+): string {
+  if (value === NOT_AVAILABLE_DATA_VALUE) {
+    return value;
+  }
+
+  const date = value instanceof Date ? value : parseISOWithTimezoneCheck(value);
+  return applyDateFormat(date, format, locale, cfg);
+}
+
+/**
+ * Internal function that applies date formatting rules
+ * Returns a formatted date, according to the provided date format string
+ * @internal
+ */
+function applyDateFormat(
   date: Date,
   format: DateFormat,
   locale: Locale = getBaseDateFnsLocale(),

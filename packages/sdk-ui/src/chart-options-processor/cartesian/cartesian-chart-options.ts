@@ -16,6 +16,7 @@ import {
 import { determineHighchartsChartType } from '../translations/translations-to-highcharts';
 import { getCartesianTooltipSettings } from '../translations/tooltip';
 import merge from 'deepmerge';
+import flow from 'lodash-es/flow';
 import { chartOptionsDefaults } from '../defaults/cartesian';
 import { ChartType, CompleteThemeSettings } from '../../types';
 import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
@@ -33,9 +34,28 @@ import {
   getAdditionalLegendSettings,
   getChartSpacingForTotalLabels,
 } from './utils/chart-spacing-calculator';
-import { configureAxes } from './utils/axis-configuration';
+import {
+  isContinuousDatetimeXAxis,
+  buildYAxisMeta,
+  getXAxisOrientation,
+  buildCategoriesMeta,
+  buildXAxisSettings,
+  buildYAxisMinMax,
+  buildStackingMeta,
+  buildYAxisSettings,
+  hasSecondaryYAxis,
+  type YAxisMeta,
+  type CategoriesMeta,
+  type StackingMeta,
+  type XAxisOrientation,
+  withChartSpecificAxisSettings,
+} from './utils/axis/axis-builders';
 import { processSeries } from './utils/series-processor';
-import { applyLabelPositioning, determineChartState } from './utils/chart-configuration';
+import {
+  withXAxisLabelPositioning,
+  withYAxisLabelPositioning,
+  determineChartState,
+} from './utils/chart-configuration';
 
 const DEFAULT_CHART_SPACING = 20;
 
@@ -77,26 +97,80 @@ export const getCartesianChartOptions = (
     alerts.push(seriesSliceWarning(chartData.series.length, seriesCapacity));
   }
 
-  // Configure axes using the extracted utility
-  const axisConfig = configureAxes({
+  // Configure axes using functional builders
+  const continuousDatetimeXAxis = isContinuousDatetimeXAxis(dataOptions.x);
+  const yAxisMeta: YAxisMeta = buildYAxisMeta(chartData, dataOptions);
+  const xAxisOrientation: XAxisOrientation = getXAxisOrientation(chartType, yAxisMeta.chartType);
+
+  const categoriesMeta: CategoriesMeta = buildCategoriesMeta(
     chartData,
-    chartType,
-    chartDesignOptions,
     dataOptions,
-    themeSettings,
+    chartDesignOptions,
+    continuousDatetimeXAxis,
+  );
+
+  const xAxisSettings = buildXAxisSettings({
+    designOptions: chartDesignOptions,
+    dataOptions,
+    chartData,
+    categoriesMeta,
+    orientation: xAxisOrientation,
+    isContinuous: continuousDatetimeXAxis,
     dateFormatter,
   });
+
+  // Calculate Y-axis min/max for primary axis
+  const primaryMinMax = buildYAxisMinMax(
+    0,
+    chartType,
+    chartData,
+    chartDesignOptions,
+    yAxisMeta.side,
+    yAxisMeta.treatNullAsZero,
+  );
+
+  // Calculate Y-axis min/max for secondary axis if needed
+  const secondaryMinMax = hasSecondaryYAxis(yAxisMeta.side)
+    ? buildYAxisMinMax(
+        1,
+        chartType,
+        chartData,
+        chartDesignOptions,
+        yAxisMeta.side,
+        yAxisMeta.treatNullAsZero,
+      )
+    : undefined;
+
+  const stackingMeta: StackingMeta = buildStackingMeta(
+    chartType,
+    chartDesignOptions as StackableChartDesignOptions,
+  );
+
+  // specific to stackable charts
+  const totalLabelRotation =
+    (chartDesignOptions as StackableChartDesignOptions).totalLabelRotation ?? 0;
+
+  const yAxisResult = buildYAxisSettings(
+    chartDesignOptions.yAxis,
+    chartDesignOptions.y2Axis,
+    primaryMinMax,
+    secondaryMinMax,
+    stackingMeta,
+    totalLabelRotation,
+    dataOptions,
+    themeSettings,
+  );
 
   // Calculate spacing using the extracted utility
   const spacingConfig = calculateChartSpacing({
     chartType,
     chartData,
-    chartDesignOptions,
-    xAxisOrientation: axisConfig.xAxisOrientation,
+    chartDesignOptions: chartDesignOptions,
+    xAxisOrientation,
   });
 
   // Determine chart state
-  const chartState = determineChartState(chartType, chartDesignOptions, axisConfig.stacking);
+  const chartState = determineChartState(chartType, chartDesignOptions, stackingMeta.stacking);
 
   // Apply label positioning adjustments
   const stackableDesignOptions = chartDesignOptions as StackableChartDesignOptions;
@@ -107,40 +181,44 @@ export const getCartesianChartOptions = (
       ? getChartSpacingForTotalLabels(chartType, stackableDesignOptions)
       : { rightSpacing: 0, topSpacing: 0 };
 
-  applyLabelPositioning(
-    axisConfig.xAxisSettings,
-    axisConfig.yAxisSettings,
-    spacingConfig.rightShift,
-    spacingConfig.topShift,
-    totalLabelRightSpacing,
-    totalLabelTopSpacing,
-  );
+  const updatedXAxisSettings = flow(
+    withChartSpecificAxisSettings(chartType),
+    withXAxisLabelPositioning({
+      totalLabelRightSpacing,
+      totalLabelTopSpacing,
+    }),
+  )(xAxisSettings);
+
+  const updatedYAxisSettings = withYAxisLabelPositioning({
+    rightShift: spacingConfig.rightShift,
+    topShift: spacingConfig.topShift,
+  })(yAxisResult.settings);
 
   // Process series data using the extracted utility
   const processedSeries = processSeries({
     chartData,
     chartType,
-    chartDesignOptions,
+    chartDesignOptions: chartDesignOptions,
     dataOptions,
-    continuousDatetimeXAxis: axisConfig.continuousDatetimeXAxis,
-    indexMap: axisConfig.indexMap,
-    categories: axisConfig.categories,
+    continuousDatetimeXAxis,
+    indexMap: categoriesMeta.indexMap,
+    categories: categoriesMeta.categories,
     treatNullDataAsZeros: chartState.treatNullDataAsZeros,
-    yTreatNullDataAsZeros: axisConfig.yTreatNullDataAsZeros,
-    yConnectNulls: axisConfig.yConnectNulls,
-    yAxisSide: axisConfig.yAxisSide,
-    yAxisChartType: axisConfig.yAxisChartType,
-    yAxisSettings: axisConfig.yAxisSettings,
-    axisClipped: axisConfig.axisClipped,
-    xAxisSettings: axisConfig.xAxisSettings,
-    stacking: axisConfig.stacking,
+    yTreatNullDataAsZeros: yAxisMeta.treatNullAsZero,
+    yConnectNulls: yAxisMeta.connectNulls,
+    yAxisSide: yAxisMeta.side,
+    yAxisChartType: yAxisMeta.chartType,
+    yAxisSettings: updatedYAxisSettings,
+    axisClipped: yAxisResult.clipped,
+    xAxisSettings: updatedXAxisSettings,
+    stacking: stackingMeta.stacking,
     themeSettings,
     dateFormatter,
   });
 
   // Assemble the final chart configuration
   const options = merge<HighchartsOptionsInternal>(
-    chartOptionsDefaults(chartType, chartState.polarType, axisConfig.stacking as Stacking),
+    chartOptionsDefaults(chartType, chartState.polarType, stackingMeta.stacking as Stacking),
     {
       title: { text: null },
       chart: {
@@ -177,8 +255,8 @@ export const getCartesianChartOptions = (
           },
         },
       },
-      xAxis: axisConfig.xAxisSettings,
-      yAxis: axisConfig.yAxisSettings,
+      xAxis: updatedXAxisSettings,
+      yAxis: updatedYAxisSettings,
       legend: {
         ...getLegendSettings(chartDesignOptions.legend),
         ...getAdditionalLegendSettings(chartType, dataOptions, chartDesignOptions),
@@ -189,13 +267,12 @@ export const getCartesianChartOptions = (
           dataLabels: chartState.isPolarChart
             ? getPolarValueLabelSettings(chartDesignOptions.valueLabel, chartState.polarType!)
             : getValueLabelSettings(
-                axisConfig.xAxisOrientation,
+                xAxisOrientation,
                 chartDesignOptions.valueLabel,
-                Boolean(axisConfig.stacking && chartType !== 'area'),
+                Boolean(stackingMeta.stacking && chartType !== 'area'),
               ),
           marker: getMarkerSettings(chartDesignOptions.marker),
-          ...(axisConfig.stacking && { stacking: axisConfig.stacking as any }),
-          stacking: (axisConfig.stacking as Stacking) || undefined,
+          stacking: (stackingMeta.stacking as Stacking) || undefined,
           connectNulls: false,
           ...(chartType === 'line' &&
             (chartDesignOptions as LineChartDesignOptions).step && {

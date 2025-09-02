@@ -1,3 +1,4 @@
+import { NOT_AVAILABLE_DATA_VALUE } from '@/const.js';
 import { ScattermapChartDataOptionsInternal } from '../chart-data-options/types.js';
 import {
   Column,
@@ -11,7 +12,6 @@ import { combineLocationNames } from '../charts/map-charts/scattermap/utils/loca
 import { ScattermapChartData } from './types.js';
 import { isNumber } from '@sisense/sdk-data';
 
-const DATA_VALUE_N_A = 'N\\A';
 const LOCATION_DEFAULT_VALUE = 1;
 
 export const scattermapData = (
@@ -33,7 +33,9 @@ export const scattermapData = (
 
   const locations = dataTable.rows
     .filter((row) => {
-      return locationColumns.some((column) => (getValue(row, column) as string) !== DATA_VALUE_N_A);
+      return locationColumns.some(
+        (column) => (getValue(row, column) as string) !== NOT_AVAILABLE_DATA_VALUE,
+      );
     })
     .map((row) => {
       const rawName = locationColumns.map((column) => getValue(row, column) as string);

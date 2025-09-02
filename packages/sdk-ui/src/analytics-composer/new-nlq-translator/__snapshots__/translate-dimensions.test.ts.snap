@@ -1,0 +1,85 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`translateDimensions > should translate dimensions from JSON array of strings 1`] = `
+[
+  {
+    "__serializable": "DimensionalAttribute",
+    "composeCode": "DM.Country.Country",
+    "dataSource": {
+      "address": "LocalHost",
+      "id": "localhost_aSampleIAAaECommerce",
+      "live": false,
+      "title": "Sample ECommerce",
+    },
+    "description": "",
+    "expression": "[Country.Country]",
+    "name": "Country",
+    "type": "text-attribute",
+  },
+  {
+    "__serializable": "DimensionalAttribute",
+    "composeCode": "DM.Brand.Brand",
+    "dataSource": {
+      "address": "LocalHost",
+      "id": "localhost_aSampleIAAaECommerce",
+      "live": false,
+      "title": "Sample ECommerce",
+    },
+    "description": "",
+    "expression": "[Brand.Brand]",
+    "name": "Brand",
+    "type": "text-attribute",
+  },
+  {
+    "__serializable": "DimensionalAttribute",
+    "composeCode": "DM.Category.Category",
+    "dataSource": {
+      "address": "LocalHost",
+      "id": "localhost_aSampleIAAaECommerce",
+      "live": false,
+      "title": "Sample ECommerce",
+    },
+    "description": "",
+    "expression": "[Category.Category]",
+    "name": "Category",
+    "type": "text-attribute",
+  },
+]
+`;
+
+exports[`translateDimensions > should translate dimensions with date levels 1`] = `
+[
+  {
+    "__serializable": "DimensionalLevelAttribute",
+    "composeCode": "DM.Commerce.Date.Years",
+    "dataSource": {
+      "address": "LocalHost",
+      "id": "localhost_aSampleIAAaECommerce",
+      "live": false,
+      "title": "Sample ECommerce",
+    },
+    "description": "",
+    "expression": "[Commerce.Date]",
+    "format": "yyyy",
+    "granularity": "Years",
+    "name": "Date",
+    "type": "datelevel",
+  },
+  {
+    "__serializable": "DimensionalLevelAttribute",
+    "composeCode": "DM.Commerce.Date.Months",
+    "dataSource": {
+      "address": "LocalHost",
+      "id": "localhost_aSampleIAAaECommerce",
+      "live": false,
+      "title": "Sample ECommerce",
+    },
+    "description": "",
+    "expression": "[Commerce.Date]",
+    "format": "yyyy-MM",
+    "granularity": "Months",
+    "name": "Date",
+    "type": "datelevel",
+  },
+]
+`;

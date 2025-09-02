@@ -1,0 +1,83 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`translateMeasures > translateMeasuresFromJSONFunctionCall > should translate measures from parsed function calls 1`] = `
+[
+  {
+    "__serializable": "DimensionalBaseMeasure",
+    "aggregation": "sum",
+    "attribute": {
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Commerce.Revenue",
+      "dataSource": {
+        "address": "LocalHost",
+        "id": "localhost_aSampleIAAaECommerce",
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "description": "",
+      "expression": "[Commerce.Revenue]",
+      "name": "Revenue",
+      "type": "numeric-attribute",
+    },
+    "composeCode": "measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')",
+    "dataSource": undefined,
+    "description": "",
+    "name": "Total Revenue",
+    "sort": 0,
+    "type": "basemeasure",
+  },
+  {
+    "__serializable": "DimensionalBaseMeasure",
+    "aggregation": "count",
+    "attribute": {
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Commerce.Revenue",
+      "dataSource": {
+        "address": "LocalHost",
+        "id": "localhost_aSampleIAAaECommerce",
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "description": "",
+      "expression": "[Commerce.Revenue]",
+      "name": "Revenue",
+      "type": "numeric-attribute",
+    },
+    "composeCode": "measureFactory.count(DM.Commerce.Revenue, 'Revenue Count')",
+    "dataSource": undefined,
+    "description": "",
+    "name": "Revenue Count",
+    "sort": 0,
+    "type": "basemeasure",
+  },
+]
+`;
+
+exports[`translateMeasures > translateMeasuresFromJSONFunctionCall > should translate single measure 1`] = `
+[
+  {
+    "__serializable": "DimensionalBaseMeasure",
+    "aggregation": "avg",
+    "attribute": {
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Commerce.Revenue",
+      "dataSource": {
+        "address": "LocalHost",
+        "id": "localhost_aSampleIAAaECommerce",
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "description": "",
+      "expression": "[Commerce.Revenue]",
+      "name": "Revenue",
+      "type": "numeric-attribute",
+    },
+    "composeCode": "measureFactory.average(DM.Commerce.Revenue)",
+    "dataSource": undefined,
+    "description": "",
+    "name": "avg Revenue",
+    "sort": 0,
+    "type": "basemeasure",
+  },
+]
+`;

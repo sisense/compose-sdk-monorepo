@@ -1,3 +1,5 @@
+import omit from 'lodash-es/omit.js';
+
 import { Filter, FilterRelations, isFilterRelations } from '../../index.js';
 import {
   calculateNewRelations,
@@ -214,4 +216,60 @@ export function findFilter(
 
   const filtersArray = isFilterRelations(filters) ? getFiltersArray(filters) : filters;
   return filtersArray.find(searchFn);
+}
+
+function isFilter(node: any): node is Filter {
+  return node && typeof node === 'object' && 'attribute' in node && 'config' in node;
+}
+
+function filterWithoutGuid(filter: Filter) {
+  return {
+    ...filter,
+    config: omit(filter.config, 'guid'),
+  };
+}
+
+function filtersWithoutGuids(filters: Filter[]) {
+  return filters.map(filterWithoutGuid);
+}
+
+function filterRelationsWithoutGuids(filterRelations: FilterRelations) {
+  const traverse = (node: FilterRelations | Filter | Filter[]): any => {
+    if (Array.isArray(node)) {
+      return node.map(traverse);
+    }
+
+    if (isFilter(node)) {
+      return filterWithoutGuid(node);
+    }
+
+    if (isFilterRelations(node)) {
+      return {
+        ...node,
+        left: traverse(node.left),
+        right: traverse(node.right),
+      };
+    }
+
+    return node;
+  };
+  return traverse(filterRelations);
+}
+
+/**
+ * Removes GUIDs from filters for consistent snapshot testing.
+ *
+ * THIS FUNCTION IS USED FOR UNIT TESTING ONLY.
+ *
+ * @param filters - The filters to remove GUIDs from.
+ * @returns The filters without GUIDs.
+ * @group Filter Utilities
+ * @internal
+ */
+export function withoutGuids(filters: Filter[] | FilterRelations) {
+  if (isFilterRelations(filters)) {
+    return filterRelationsWithoutGuids(filters);
+  } else {
+    return filtersWithoutGuids(filters);
+  }
 }

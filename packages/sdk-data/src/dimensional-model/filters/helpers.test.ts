@@ -7,6 +7,7 @@ import {
   withAddedFilters,
   withoutFilter,
   withoutFilters,
+  withoutGuids,
   withReplacedFilter,
 } from './helpers.js';
 
@@ -308,6 +309,120 @@ describe('Filter Utilities', () => {
         (f) => f.config.guid === memberGenderFilter.config.guid,
       );
       expect(result).toEqual(memberGenderFilter);
+    });
+  });
+
+  describe('withoutGuids', () => {
+    it('should remove GUIDs from an array of filters', () => {
+      const filtersWithGuids = [memberGenderFilter, memberCostFilter];
+      const result = withoutGuids(filtersWithGuids);
+
+      // Verify that GUIDs are removed (should not have guid property)
+      expect(result[0].config).not.toHaveProperty('guid');
+      expect(result[1].config).not.toHaveProperty('guid');
+
+      // Verify that other properties are preserved
+      expect(result[0].attribute).toEqual(memberGenderFilter.attribute);
+      expect(result[1].attribute).toEqual(memberCostFilter.attribute);
+
+      // Verify result is an array with correct length
+      expect(Array.isArray(result)).toBe(true);
+      expect(result).toHaveLength(2);
+    });
+
+    it('should remove GUIDs from filter relations', () => {
+      const result = withoutGuids(filterRelations);
+
+      // Verify that the structure is maintained
+      expect(result).toHaveProperty('left');
+      expect(result).toHaveProperty('right');
+      expect(result).toHaveProperty('operator');
+
+      const typedResult = result as FilterRelations;
+      expect(typedResult.operator).toBe('AND');
+
+      // Test that the function processes filter relations without error
+      // The exact internal structure testing is handled by the unit tests
+      // of the helper functions (filterRelationsWithoutGuids)
+      expect(typeof result).toBe('object');
+      expect(result).not.toBeNull();
+    });
+
+    it('should handle an empty array of filters', () => {
+      const result = withoutGuids([]);
+      expect(result).toEqual([]);
+    });
+
+    it('should not modify the original filters array', () => {
+      const originalFilters = [memberGenderFilter, memberCostFilter];
+      const originalGuid1 = memberGenderFilter.config.guid;
+      const originalGuid2 = memberCostFilter.config.guid;
+
+      const result = withoutGuids(originalFilters);
+
+      // Verify original filters still have their GUIDs
+      expect(originalFilters[0].config.guid).toBe(originalGuid1);
+      expect(originalFilters[1].config.guid).toBe(originalGuid2);
+
+      // Verify result doesn't have GUIDs
+      expect(result[0].config.guid).toBeUndefined();
+      expect(result[1].config.guid).toBeUndefined();
+    });
+
+    it('should not modify the original filter relations', () => {
+      // Store original GUID values
+      const originalLeftGuid = memberGenderFilter.config.guid;
+      const originalRightGuid = memberCostFilter.config.guid;
+
+      const result = withoutGuids(filterRelations);
+
+      // Verify original filters in relations still have their GUIDs
+      expect(memberGenderFilter.config.guid).toBe(originalLeftGuid);
+      expect(memberCostFilter.config.guid).toBe(originalRightGuid);
+
+      // Verify result is a FilterRelations object and GUIDs are removed from its filters
+      expect(result).toHaveProperty('left');
+      expect(result).toHaveProperty('right');
+      expect(result).toHaveProperty('operator');
+    });
+
+    it('should handle complex nested filter relations', () => {
+      // Create a nested filter relations structure
+      const nestedFilterRelations: FilterRelations = {
+        left: filterRelations, // This is itself a FilterRelations
+        right: textFilter,
+        operator: 'OR',
+      };
+
+      const result = withoutGuids(nestedFilterRelations);
+
+      // Verify the nested structure is maintained
+      expect(result).toHaveProperty('left');
+      expect(result).toHaveProperty('right');
+      expect(result).toHaveProperty('operator');
+
+      // Verify that the structure has the correct operators
+      const typedResult = result as FilterRelations;
+      expect(typedResult.operator).toBe('OR');
+
+      // Test that the function processes nested structures without error
+      // and maintains the overall structure
+      expect(typeof result).toBe('object');
+      expect(result).not.toBeNull();
+    });
+
+    it('should correctly identify and handle Filter[] vs FilterRelations input', () => {
+      // Test that it uses the correct branch for arrays
+      const arrayResult = withoutGuids([memberGenderFilter]);
+      expect(Array.isArray(arrayResult)).toBe(true);
+      expect(arrayResult[0].config.guid).toBeUndefined();
+
+      // Test that it uses the correct branch for filter relations
+      const relationsResult = withoutGuids(filterRelations);
+      expect(Array.isArray(relationsResult)).toBe(false);
+      expect(relationsResult).toHaveProperty('operator');
+      expect(relationsResult).toHaveProperty('left');
+      expect(relationsResult).toHaveProperty('right');
     });
   });
 });

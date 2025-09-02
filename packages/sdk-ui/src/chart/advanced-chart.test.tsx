@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { measureFactory } from '@sisense/sdk-data';
 import { Chart, HighchartsOptions, SisenseContextProviderProps } from '@/index';
@@ -26,6 +26,8 @@ describe('Advanced Charts', () => {
     server.use(
       http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlForecast)),
     );
+
+    let preparedHighchartsOptions: HighchartsOptions | undefined;
 
     const { findByLabelText } = render(
       <SisenseContextProvider {...contextProviderProps}>
@@ -55,18 +57,25 @@ describe('Advanced Charts', () => {
           }}
           styleOptions={{ height: 600 }}
           onBeforeRender={(options: HighchartsOptions) => {
-            expect(options).toMatchSnapshot();
+            preparedHighchartsOptions = options;
             return options;
           }}
         />
       </SisenseContextProvider>,
     );
 
+    await waitFor(() => {
+      expect(preparedHighchartsOptions).toBeDefined();
+      expect(preparedHighchartsOptions).toMatchSnapshot();
+    });
+
     expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });
 
   it('should render trend chart', async () => {
     server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlTrend)));
+
+    let preparedHighchartsOptions: HighchartsOptions | undefined;
 
     const { findByLabelText } = render(
       <SisenseContextProvider {...contextProviderProps}>
@@ -86,12 +95,17 @@ describe('Advanced Charts', () => {
             breakBy: [],
           }}
           onBeforeRender={(options: HighchartsOptions) => {
-            expect(options).toMatchSnapshot();
+            preparedHighchartsOptions = options;
             return options;
           }}
         />
       </SisenseContextProvider>,
     );
+
+    await waitFor(() => {
+      expect(preparedHighchartsOptions).toBeDefined();
+      expect(preparedHighchartsOptions).toMatchSnapshot();
+    });
 
     expect(await findByLabelText('chart-root')).toBeInTheDocument();
   });

@@ -21,6 +21,7 @@ export type {
   PivotQueryLoadingState,
   PivotQuerySuccessState,
   PivotQueryErrorState,
+  BaseQueryParams,
   ExecuteQueryParams,
   ExecuteQueryResult,
   ExecuteCsvQueryParams,

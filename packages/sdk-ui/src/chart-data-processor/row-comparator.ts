@@ -4,6 +4,7 @@ import { isNumber, isDatetime } from '@sisense/sdk-data';
 import isObject from 'lodash-es/isObject';
 import { Row, Column, Value, ComparableData, CompareValue } from './table-processor';
 import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';
+import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
 
 export const createCompareValue = (
   displayValue: string | undefined | null,
@@ -18,8 +19,13 @@ export const createCompareValue = (
     value = parseFloat(displayValue as string);
     valueIsNaN = isNaN(value);
   } else if (isDatetime(columnType)) {
-    value = parseISOWithTimezoneCheck(displayValue as string).valueOf();
-    valueIsNaN = isNaN(value);
+    if (displayValue === NOT_AVAILABLE_DATA_VALUE) {
+      value = displayValue;
+      valueIsNaN = true;
+    } else {
+      value = parseISOWithTimezoneCheck(displayValue as string).valueOf();
+      valueIsNaN = isNaN(value);
+    }
   } else {
     value = displayValue as string;
     lowercaseValue = displayValue?.toLowerCase();

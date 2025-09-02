@@ -63,6 +63,7 @@ import {
 } from './prepare-design-options';
 import { CartesianChartType, SeriesDesignOptions } from '../translations/types';
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
+import { withYAxisNormalizationForPolar } from '../cartesian/utils/axis/axis-builders';
 
 export const getLegend = (legend?: Legend): LegendPosition => {
   if (legend?.enabled) {
@@ -398,11 +399,16 @@ export const getPolarChartDesignOptions = (
     getDefaultStyleOptions(),
   );
   const designPerSeries = getDesignOptionsPerSeries(dataOptions, 'polar', styleOptionsWithDefaults);
-  return {
+
+  const designOptionsBase = {
     ...style,
     polarType: DefaultPolarType,
     designPerSeries,
   };
+
+  // Apply polar-specific Y-axis normalization at design options level
+  // This disables Y-axis titles which are not meaningful in polar coordinate system
+  return withYAxisNormalizationForPolar(designOptionsBase);
 };
 
 const getScatterChartMarkerSize = (markerSize?: ScatterMarkerSize) => {

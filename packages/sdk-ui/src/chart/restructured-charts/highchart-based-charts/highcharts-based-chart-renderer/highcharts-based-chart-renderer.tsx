@@ -10,7 +10,7 @@ import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-optio
 import { HighchartsReactMemoized } from '@/highcharts-memorized';
 import AlertBox from '@/alert-box/alert-box';
 import { useThemeContext } from '@/theme-provider/theme-context';
-import { applyDateFormat } from '@/query/date-formats';
+import { formatDateValue } from '@/query/date-formats';
 import { useCallback, useMemo } from 'react';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { useTranslation } from 'react-i18next';
@@ -67,7 +67,7 @@ export function createHighchartsBasedChartRenderer<CT extends HighchartBasedChar
     const { themeSettings } = useThemeContext();
     const dateFormatter = useCallback(
       (date: Date, format: string) =>
-        applyDateFormat(date, format, app?.settings.locale, app?.settings.dateConfig),
+        formatDateValue(date, format, app?.settings.locale, app?.settings.dateConfig),
       [app?.settings.dateConfig, app?.settings.locale],
     );
 

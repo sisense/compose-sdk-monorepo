@@ -44,6 +44,7 @@ export default defineConfig(({ mode }) => ({
     __PACKAGE_VERSION__: JSON.stringify(process.env.npm_package_version),
   },
   server: {
+    allowedHosts: true,
     watch: {
       ignored: [resolve(__dirname, './coverage'), '**/*.test.*'],
     },
@@ -56,6 +57,7 @@ export default defineConfig(({ mode }) => ({
         index: resolve(__dirname, 'src/index.ts'),
         ai: resolve(__dirname, 'src/ai/index.ts'),
         'analytics-composer': resolve(__dirname, 'src/analytics-composer/index.ts'),
+        'analytics-composer/node': resolve(__dirname, 'src/analytics-composer/index-node.ts'),
       },
       formats: ['es', 'cjs'],
     },

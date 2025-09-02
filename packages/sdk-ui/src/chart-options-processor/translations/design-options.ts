@@ -44,7 +44,7 @@ export type StackableChartDesignOptions = CartesianChartDesignOptions & {
   stackType: StackType;
   showTotal?: boolean;
   totalLabelRotation?: number;
-} & DesignPerSeries;
+};
 
 export type LineChartDesignOptions = CartesianChartDesignOptions & {
   /** Step type for step line charts: left, center, or right */

@@ -11,7 +11,7 @@ import { SisenseChartDataPointEventHandler } from '@/sisense-chart/types';
 import { withThemeOptions } from '@/chart-options-processor/theme-option-service';
 import { BeforeRenderHandler } from '@/props';
 
-export function buildHighchartsOptions<CT extends HighchartBasedChartTypes>({
+export const buildHighchartsOptions = <CT extends HighchartBasedChartTypes>({
   highchartsOptionsBuilder: builder,
   chartData,
   dataOptions,
@@ -31,7 +31,7 @@ export function buildHighchartsOptions<CT extends HighchartBasedChartTypes>({
   };
   extraConfig: BuildContext<CT>['extraConfig'];
   onBeforeRender?: BeforeRenderHandler;
-}): HighchartsOptionsInternal {
+}): HighchartsOptionsInternal => {
   const builderContext: BuildContext<CT> = {
     chartData,
     dataOptions,
@@ -53,7 +53,7 @@ export function buildHighchartsOptions<CT extends HighchartBasedChartTypes>({
     tooltip: builder.getTooltip(builderContext),
     ...builder.getExtras(builderContext),
   });
-}
+};
 
 /**
  * Returns a function that applies user customizations to the chart options.

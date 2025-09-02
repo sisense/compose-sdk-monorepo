@@ -260,25 +260,26 @@ export type StatisticalModels = {
     };
     forecastPeriod: number;
     confidence: number;
-    modelType: string;
+    modelType: 'en' | 'aa' | 'hw' | 'fb';
     boundaries: {
       upper: {
         isEnabled: boolean;
-        value: null;
+        value: number | null;
       };
       lower: {
         isEnabled: boolean;
-        value: null;
+        value: number | null;
       };
       isInt: {
         isEnabled: boolean;
       };
     };
+    isAccessible: boolean;
   };
   trend?: {
     isEnabled: boolean;
     isViewerDisabled: boolean;
-    trendType: string;
+    trendType: 'linear' | 'logarithmic' | 'smooth' | 'local';
     ignoreAnomalies: boolean;
     trendOnForecast: boolean;
     compare: {
@@ -358,6 +359,7 @@ export type PanelColorFormatSingle = {
   type: 'color';
   color?: string;
   colorIndex?: number;
+  isHandPickedColor?: boolean;
 };
 
 export type PanelColorFormatRange = {

@@ -60,8 +60,10 @@ The factory pattern is used to register and retrieve chart builders:
 ```typescript
 const chartBuildersMap = {
   areamap: areamapChartBuilder,
+  area: areaChartBuilder,
   column: columnChartBuilder,
   bar: barChartBuilder,
+  line: lineChartBuilder,
 };
 
 function getChartBuilder(chartType) {
@@ -86,7 +88,7 @@ First, extend the `SupportedChartType` union and create type mappings:
 
 ```typescript
 // In types.ts
-export type SupportedChartType = 'areamap' | 'column' | 'bar' | 'mynewchart';
+export type SupportedChartType = 'areamap' | 'area' | 'column' | 'bar' | 'line' | 'mynewchart';
 
 // Add type mappings for your chart
 export type TypedChartDataOptions<CT> = CT extends 'mynewchart'

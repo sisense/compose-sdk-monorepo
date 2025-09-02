@@ -18,6 +18,8 @@ type UseChartDataPreparationProps = {
   data: Data;
   chartDataOptions: ChartDataOptionsInternal;
   chartType: ChartType;
+  /** Indicates if the chart is a forecast or trend chart for temporal routing between legacy and restructured charts processing */
+  isForecastOrTrendChart: boolean;
   attributes: Attribute[];
   measures: Measure[];
   dataColumnNamesMapping: DataColumnNamesMapping;
@@ -29,6 +31,7 @@ export function useChartDataPreparation({
   data,
   chartDataOptions,
   chartType,
+  isForecastOrTrendChart,
   attributes,
   measures,
   dataColumnNamesMapping,
@@ -57,17 +60,18 @@ export function useChartDataPreparation({
       );
     }
 
-    return getChartData(chartType, chartDataOptions, dataTable);
+    return getChartData(chartType, chartDataOptions, dataTable, isForecastOrTrendChart);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, chartType]);
+  }, [data, chartType, isForecastOrTrendChart]);
 }
 
 function getChartData(
   chartType: ChartType,
   chartDataOptions: ChartDataOptionsInternal,
   dataTable: DataTable,
+  isForecastOrTrendChart = false,
 ): ChartData {
-  if (isRestructuredChartType(chartType)) {
+  if (isRestructuredChartType(chartType) && !isForecastOrTrendChart) {
     const chartBuilder = getChartBuilder(chartType);
     if (chartBuilder.dataOptions.isCorrectDataOptionsInternal(chartDataOptions)) {
       return chartBuilder.data.getChartData(chartDataOptions, dataTable);

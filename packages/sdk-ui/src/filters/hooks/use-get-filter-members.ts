@@ -8,15 +8,13 @@ import {
   isNumber,
 } from '@sisense/sdk-data';
 import { useMemo } from 'react';
-import { applyDateFormat } from '@/query/date-formats';
-import { getDefaultDateMask } from '@/query/date-formats/apply-date-format';
+import { formatDateValue, getDefaultDateMask } from '@/query/date-formats/apply-date-format';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { useExecuteQueryInternal } from '@/query-execution/use-execute-query';
 import { withTracking } from '@/decorators/hook-decorators';
 import { Member, SelectedMember } from '../components/member-filter-tile';
 import { TranslatableError } from '@/translation/translatable-error';
 import { HookEnableParam } from '@/common/hooks/types';
-import { parseISOWithTimezoneCheck } from '@/utils/parseISOWithTimezoneCheck';
 
 /**
  * Returns new `members` array with members transformed to required type.
@@ -185,8 +183,8 @@ export const useGetFilterMembersInternal = ({
         rows: data.rows.map((cell) =>
           cell.map((d) => ({
             ...d,
-            text: applyDateFormat(
-              parseISOWithTimezoneCheck(d.data),
+            text: formatDateValue(
+              d.data,
               getDefaultDateMask((filterAttribute as DimensionalLevelAttribute).granularity),
               app?.settings?.locale,
             ),

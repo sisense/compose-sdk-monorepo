@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { AxisSettings } from '../translations/axis-section';
 import { DeepPick } from 'ts-essentials';
-import { Style, HighchartsOptionsInternal, Stacking } from '../chart-options-service';
+import { HighchartsOptionsInternal, Stacking } from '../chart-options-service';
+import { TextStyle } from '../translations/types';
 import { ChartType } from '../../types';
 import merge from 'deepmerge';
 import { PolarType } from '../translations/design-options';
@@ -12,7 +13,7 @@ export const lineColorDefault = '#d1d1d7';
 const titleMargin = 25;
 const autoRotation = [-10, -20, -30, -40, -50, -60, -70, -80, -90];
 
-export const fontStyleDefault: Style = {
+export const fontStyleDefault: TextStyle = {
   fontFamily: 'Open Sans',
   fontSize: '13px',
   fontWeight: 'normal',
@@ -21,7 +22,7 @@ export const fontStyleDefault: Style = {
   pointerEvents: 'none',
 };
 
-export const stackTotalFontStyleDefault: Style = {
+export const stackTotalFontStyleDefault: TextStyle = {
   color: '#56535b',
   fontFamily: 'Open Sans',
   fontSize: '13px',
@@ -90,6 +91,8 @@ export const yAxisDefaults: AxisSettings = {
     enabled: false,
     rotation: 0,
     labelrank: 99999,
+    x: 0,
+    y: 0,
   },
   showLastLabel: true,
 };

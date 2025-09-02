@@ -2,6 +2,7 @@ import { ScattermapChartLocation } from '@/chart-data/types';
 import { ScattermapChartDataOptionsInternal } from '@/chart-data-options/types.js';
 import { getDataOptionTitle, isMeasureColumn } from '@/chart-data-options/utils.js';
 import { formatTooltipValue } from '@/chart-options-processor/translations/tooltip-utils.js';
+import { NOT_AVAILABLE_TEXT } from '@/const';
 
 export const enum TooltipShowDetails {
   YES,
@@ -9,7 +10,6 @@ export const enum TooltipShowDetails {
   LOADING,
 }
 
-const TOOLTIP_NO_VALUE = `N/A`;
 const TOOLTIP_DETAILS_ITEMS_LIMIT = 10;
 
 // todo: reuse common loading indicator from `loading-indicator.tsx`
@@ -98,7 +98,7 @@ export const createScattermapTooltip = (
         </div>
         <div class="csdk-scattermap-tooltip-row">
         ${dataOptions.colorBy ? formatCategoryHtml(getDataOptionTitle(dataOptions.colorBy)) : ''}
-        ${dataOptions.colorBy ? spanSegment(formatedColorValue || TOOLTIP_NO_VALUE) : ''}
+        ${dataOptions.colorBy ? spanSegment(formatedColorValue || NOT_AVAILABLE_TEXT) : ''}
         </div>
         <div class="csdk-scattermap-tooltip-row">
         ${
@@ -112,7 +112,7 @@ export const createScattermapTooltip = (
           showDetails === TooltipShowDetails.YES &&
           dataOptions.details &&
           isMeasureColumn(dataOptions.details)
-            ? spanSegment(formatedDetails || TOOLTIP_NO_VALUE)
+            ? spanSegment(formatedDetails || NOT_AVAILABLE_TEXT)
             : ''
         }
         </div>

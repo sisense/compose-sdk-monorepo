@@ -13,9 +13,11 @@ import {
 export const useTranslatedDataOptions = (
   chartDataOptions: ChartDataOptions,
   chartType: ChartType,
+  /** Indicates if the chart is a forecast or trend chart for temporal routing between legacy and restructured charts processing */
+  isForecastOrTrendChart: boolean,
 ) => {
   return useMemo(() => {
-    if (isRestructuredChartType(chartType)) {
+    if (isRestructuredChartType(chartType) && !isForecastOrTrendChart) {
       const chartBuilder = getChartBuilder(chartType);
       if (!chartBuilder.dataOptions.isCorrectDataOptions(chartDataOptions)) {
         throw new Error('Incorrect data options');
@@ -24,7 +26,7 @@ export const useTranslatedDataOptions = (
     } else {
       return legacyTranslateDataOptions(chartDataOptions, chartType);
     }
-  }, [chartDataOptions, chartType]);
+  }, [chartDataOptions, chartType, isForecastOrTrendChart]);
 };
 
 function newTranslateDataOptions<CT extends SupportedChartType>(

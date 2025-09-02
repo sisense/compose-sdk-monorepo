@@ -73,6 +73,8 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
           onHeightChange={setPivotTableHeight}
           onDataPointClick={props.onDataPointClick}
           onDataPointContextMenu={props.onDataPointContextMenu}
+          onDataCellFormat={props.onDataCellFormat}
+          onHeaderCellFormat={props.onHeaderCellFormat}
         />
       </WidgetContainer>
     </DynamicSizeContainer>

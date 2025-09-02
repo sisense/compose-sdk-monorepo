@@ -84,7 +84,7 @@ function withComposeCode(
         // Remove trivial arg values from the end of the array
         .filter(
           (str, index) =>
-            !(['', '{  }', '[]', 'undefined', 'null'].includes(str) && index === length - 1),
+            !(['', '{  }', '{}', 'undefined', 'null'].includes(str) && index === length - 1),
         )
         .join(', ');
       const signature = `${factoryName}.${funcName ?? func.name}(${argValues})`;

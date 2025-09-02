@@ -154,7 +154,12 @@ export const PivotTable = asSisenseComponent({
     pivotBuilder,
     shouldBeRecreated: isJaqlChanged || isForceReload,
   });
-  useApplyPivotTableFormatting({ dataService, dataOptions: dataOptionsInternal });
+  useApplyPivotTableFormatting({
+    dataService,
+    dataOptions: dataOptionsInternal,
+    onDataCellFormat: pivotTableProps.onDataCellFormat,
+    onHeaderCellFormat: pivotTableProps.onHeaderCellFormat,
+  });
 
   const handlePivotHeightChange = useCallback(
     (height: number) => {

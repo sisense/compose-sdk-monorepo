@@ -275,17 +275,6 @@ export type HighchartsOptionsInternal = {
   drilldown?: DrilldownOptions;
 };
 
-export type Style = {
-  fontFamily?: string;
-  fontSize?: string;
-  fontWeight?: string;
-  color?: string;
-  textOutline?: string;
-  pointerEvents?: string;
-  textOverflow?: string;
-  width?: string;
-};
-
 type Navigator = {
   series: {
     type: HighchartsType;

@@ -1,15 +1,16 @@
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { filterFactory, CascadingFilter, Filter, isCascadingFilter } from '@sisense/sdk-data';
-import omit from 'lodash-es/omit';
+import {
+  filterFactory,
+  CascadingFilter,
+  Filter,
+  isCascadingFilter,
+  withoutGuids,
+} from '@sisense/sdk-data';
 import {
   flattenCascadingFilters,
   reassembleCascadingFilters,
   withCascadingFiltersConversion,
 } from './cascading-utils';
-
-function withoutGuids(filters: Filter[]) {
-  return filters.map((filter) => omit(filter.config, 'guid'));
-}
 
 describe('cascading-utils', () => {
   describe('flattenCascadingFilters()', () => {

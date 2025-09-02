@@ -9,6 +9,7 @@ import {
 } from './widget-model-translator';
 import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import cloneDeep from 'lodash-es/cloneDeep';
+import { advancedLineChartWidgetDto } from '../__mocks__/advanced-line-chart-widget';
 
 describe('WidgetModelTranslator', () => {
   const mockIndicatorWidgetDto = dashboardMock.widgets![0];
@@ -40,6 +41,24 @@ describe('WidgetModelTranslator', () => {
       expect(resWidgetDto.type).toBe(mockLineWidgetDto.type);
       expect(resWidgetDto.metadata.panels[0].name).toBe('x-axis');
       expect(resWidgetDto.metadata.panels[1].name).toBe('values');
+    });
+
+    it('should create a valid WidgetDto for the "line" chart with advanced analytics', () => {
+      const { widgetFromChart } = getWidgetTransformChain(advancedLineChartWidgetDto);
+      expect(widgetFromChart.chartType).toBe('line');
+
+      resWidgetDto = toWidgetDto(widgetFromChart);
+
+      expect(resWidgetDto.type).toBe(advancedLineChartWidgetDto.type);
+      // values
+
+      resWidgetDto.metadata.panels[1].items.forEach((actualItem, index) => {
+        const expectedItem = advancedLineChartWidgetDto.metadata.panels[1].items[index];
+        expect(actualItem.panel).toBe(expectedItem.panel);
+        expect(actualItem.y2).toBe(expectedItem.y2);
+        expect(actualItem.statisticalModels).toStrictEqual(expectedItem.statisticalModels);
+        expect(actualItem.format?.color).toStrictEqual(expectedItem.format?.color);
+      });
     });
 
     it('should create a valid WidgetDto for the "table" chart', () => {

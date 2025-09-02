@@ -6,7 +6,8 @@ import {
 } from '../../translations/design-options';
 import { ChartDesignOptions, SeriesDesignOptions } from '../../translations/types';
 import { ChartType, CompleteThemeSettings } from '../../../types';
-import { AxisSettings, getDateFormatter } from '../../translations/axis-section';
+import { AxisSettings } from '../../translations/axis-section';
+import { getDateFormatter } from './axis/axis-utils';
 import { AxisClipped } from '../../translations/translations-to-highcharts';
 import {
   formatSeries,

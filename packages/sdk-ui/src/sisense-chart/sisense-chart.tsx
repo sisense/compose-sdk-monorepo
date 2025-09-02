@@ -22,7 +22,7 @@ import {
 } from '@/chart-options-processor/translations/types';
 
 import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { applyDateFormat } from '@/query/date-formats';
+import { formatDateValue } from '@/query/date-formats';
 import AlertBox from '@/alert-box/alert-box';
 import { HighchartsReactMemoized } from '@/highcharts-memorized';
 import { SisenseChartProps, SisenseChartType } from './types';
@@ -50,8 +50,8 @@ export const SisenseChart = ({
 
   const dateFormatter = useCallback(
     (date: Date, format: string) =>
-      applyDateFormat(date, format, app?.settings.locale, app?.settings.dateConfig),
-    [],
+      formatDateValue(date, format, app?.settings.locale, app?.settings.dateConfig),
+    [app?.settings.locale, app?.settings.dateConfig],
   );
 
   const { themeSettings } = useThemeContext();

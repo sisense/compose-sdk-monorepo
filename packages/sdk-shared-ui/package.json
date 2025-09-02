@@ -6,7 +6,7 @@
     "url": "https://github.com/sisense/compose-sdk-monorepo",
     "directory": "packages/sdk-shared-ui"
   },
-  "version": "2.8.0",
+  "version": "2.9.0",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",

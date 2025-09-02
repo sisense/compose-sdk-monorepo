@@ -5,8 +5,6 @@ import {
   Sort,
   BaseJaql,
   PivotJaql,
-  ForecastFormulaOptions,
-  TrendFormulaOptions,
   JaqlDataSource,
   getSortType,
   createDimensionalElementFromJaql,
@@ -38,6 +36,7 @@ import {
   createValueToColorMap,
   createValueColorOptions,
   createValueToColorMultiColumnsMap,
+  createPanelColorFormat,
 } from './translate-panel-color-format.js';
 import {
   getEnabledPanelItems,
@@ -56,6 +55,7 @@ import { WidgetDataOptions } from '../models/index.js';
 import { TranslatableError } from '../translation/translatable-error.js';
 import findKey from 'lodash-es/findKey';
 import camelCase from 'lodash-es/camelCase';
+import { applyStatisticalModels, createStatisticalModels } from './translate-statistical-models.js';
 
 function getNumberFormatName(mask: NumericMask) {
   if (mask.percent || mask.type === 'percent') {
@@ -97,58 +97,6 @@ function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
   }
 
   return null;
-}
-
-/**
- * Temporary internal flag to enable/disable statistical models in the data options.
- *
- * @internal
- */
-const ENABLE_STATISTICAL_MODELS = true;
-
-/** @internal */
-export function applyStatisticalModels(
-  dataOption: StyledMeasureColumn,
-  statisticalModels?: {
-    forecast?: {
-      isEnabled: boolean;
-      isViewerDisabled: boolean;
-      confidence: number;
-      forecastPeriod: number;
-    };
-    trend?: {
-      isEnabled: boolean;
-      isViewerDisabled: boolean;
-      trendType: string;
-    };
-  },
-): StyledMeasureColumn {
-  if (!statisticalModels || !ENABLE_STATISTICAL_MODELS) return dataOption;
-
-  const { forecast, trend } = statisticalModels;
-  let newDataOption = { ...dataOption }; // Create a shallow copy to avoid mutation
-
-  if (forecast && !forecast.isViewerDisabled && forecast.isEnabled) {
-    newDataOption = {
-      ...newDataOption,
-      forecast: {
-        confidenceInterval: forecast.confidence / 100,
-        forecastHorizon: forecast.forecastPeriod,
-        modelType: 'auto',
-      } as ForecastFormulaOptions,
-    };
-  }
-
-  if (trend && !trend.isViewerDisabled && trend.isEnabled) {
-    newDataOption = {
-      ...newDataOption,
-      trend: {
-        modelType: trend.trendType as TrendFormulaOptions['modelType'],
-      },
-    };
-  }
-
-  return newDataOption;
 }
 
 const extractDatetimeFormat = (item: PanelItem) => {
@@ -235,7 +183,33 @@ export function createPanelItem(column: StyledColumn | StyledMeasureColumn): Pan
     throw new TranslatableError('errors.unsupportedDimensionalElement');
   }
 
-  return jaql.jaql ? jaql : { jaql };
+  const baseItem: PanelItem = jaql.jaql ? jaql : { jaql };
+
+  // Only extend measure columns with additional properties
+  if (MetadataTypes.isMeasure(element)) {
+    const measureColumn = column as StyledMeasureColumn;
+
+    // panel
+    baseItem.panel = 'measures';
+
+    // y2
+    baseItem.y2 = measureColumn.showOnRightAxis ?? undefined;
+
+    // color
+    const colorFormat = createPanelColorFormat(measureColumn.color);
+    baseItem.format = {
+      ...baseItem.format,
+      ...(colorFormat && { color: colorFormat }),
+    };
+
+    // Add statistical models if present
+    const statisticalModels = createStatisticalModels(measureColumn);
+    if (statisticalModels) {
+      baseItem.statisticalModels = statisticalModels;
+    }
+  }
+
+  return baseItem;
 }
 
 /** @internal */

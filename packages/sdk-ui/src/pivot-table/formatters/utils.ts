@@ -20,6 +20,30 @@ export const getPivotDataOptionByJaqlIndex = (
   return alignedDataOptionsArray[dataOptionIndex];
 };
 
+export const getPivotDataOptionIdByJaqlIndex = (
+  dataOptions: PivotTableDataOptions,
+  dataOptionIndex = -1,
+): string | undefined => {
+  const { rows = [], columns = [], values = [] } = dataOptions;
+  const rowsLength = Number(rows.length) || 0;
+  const columnsLength = Number(columns.length) || 0;
+  const valuesLength = Number(values.length) || 0;
+
+  if (dataOptionIndex === -1) {
+    return undefined;
+  }
+  if (dataOptionIndex < rowsLength) {
+    return `rows.${dataOptionIndex}`;
+  }
+  if (dataOptionIndex < rowsLength + columnsLength) {
+    return `columns.${dataOptionIndex - rowsLength}`;
+  }
+  if (dataOptionIndex < rowsLength + columnsLength + valuesLength) {
+    return `values.${dataOptionIndex - rowsLength - columnsLength}`;
+  }
+  return undefined;
+};
+
 export const getNumberFormatConfig = (dataOption?: AnyColumn) => {
   const numberFormatConfig =
     dataOption && 'numberFormatConfig' in dataOption ? dataOption.numberFormatConfig : undefined;

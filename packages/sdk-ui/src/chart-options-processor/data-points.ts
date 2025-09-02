@@ -24,7 +24,7 @@ import {
 } from './translations/number-format-config';
 import { formatDatetimeString } from '@/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
 import { getDefaultDateFormat } from './translations/axis-section';
-import { applyDateFormat } from '@/query/date-formats';
+import { formatDateValue } from '@/query/date-formats';
 import { getDataOptionGranularity } from '@/chart-data-options/utils';
 
 type FormatterFn = (value: any) => string;
@@ -47,7 +47,7 @@ export function createFormatter(dataOption: StyledColumn | StyledMeasureColumn) 
       (dataOption as StyledColumn).dateFormat ||
       getDefaultDateFormat(getDataOptionGranularity(dataOption as StyledColumn));
     // todo: connect "app?.settings.locale" and "app?.settings.dateConfig" configurations
-    const dateFormatter = (date: Date, format: string) => applyDateFormat(date, format);
+    const dateFormatter = (date: Date, format: string) => formatDateValue(date, format);
     formatter = (value: Date | string) =>
       formatDatetimeString(isDate(value) ? value.toISOString() : value, dateFormatter, dateFormat);
   }

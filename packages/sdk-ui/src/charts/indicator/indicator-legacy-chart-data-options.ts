@@ -20,6 +20,7 @@ import {
   getColoringServiceByColorOptions,
 } from '../../chart-data-options/coloring';
 import isNumber from 'lodash-es/isNumber';
+import { NOT_AVAILABLE_TEXT } from '@/const';
 
 export type IndicatorLegacyChartDataOptions = ReturnType<typeof createLegacyChartDataOptions>;
 
@@ -116,7 +117,7 @@ function getValueText(value: undefined | number, formatConfig: Required<NumberFo
   if (value === undefined) {
     return '';
   } else if (isNaN(value)) {
-    return '#N/A';
+    return `#${NOT_AVAILABLE_TEXT}`;
   } else {
     return applyFormatPlainText(formatConfig, value);
   }

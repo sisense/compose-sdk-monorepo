@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.9.0] - 2025-09-02
+
+### Added
+- Add custom cell formatter for pivot tables (for internal testing)
+
+### Changed
+- Improve NLQ to JAQL translation and NLQ Query JSON mapping
+- Fix issues related to empty data values: prevent N/A from being formatted
+
 ## [2.8.0] - 2025-08-19
 
 ### Added

@@ -29,6 +29,12 @@ export type UniformDataColorOptions = {
    * Color name, e.g., `red`, or a hexadecimal value, e.g., `#ff0000`.
    */
   color: string;
+  /**
+   * Color index in the palette colors array
+   *
+   * @internal
+   */
+  colorIndex?: number;
 };
 
 /**

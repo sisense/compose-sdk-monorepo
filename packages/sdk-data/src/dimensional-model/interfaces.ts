@@ -407,6 +407,16 @@ export interface LevelAttribute extends Attribute {
 }
 
 /**
+ * Runs type guard check for LevelAttribute.
+ *
+ * @param arg - object to check
+ * @internal
+ */
+export function isLevelAttribute(arg: Attribute | LevelAttribute): arg is LevelAttribute {
+  return 'granularity' in arg;
+}
+
+/**
  * Base filter configuration
  */
 export interface BaseFilterConfig {

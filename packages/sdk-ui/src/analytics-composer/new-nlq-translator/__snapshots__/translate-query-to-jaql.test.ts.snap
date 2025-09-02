@@ -1,0 +1,36 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`translateQueryParamsToJaql > should convert BaseQueryParams to JAQL payload 1`] = `
+[
+  {
+    "jaql": {
+      "datatype": "text",
+      "dim": "[Category.Category]",
+      "title": "Category",
+    },
+  },
+  {
+    "jaql": {
+      "agg": "countduplicates",
+      "datatype": "text",
+      "dim": "[Category.Category]",
+      "sort": "desc",
+      "title": "Category Count",
+    },
+  },
+  {
+    "jaql": {
+      "datatype": "text",
+      "dim": "[Category.Category]",
+      "filter": {
+        "members": [
+          "Category A",
+          "Category B",
+        ],
+      },
+      "title": "Category",
+    },
+    "panel": "scope",
+  },
+]
+`;

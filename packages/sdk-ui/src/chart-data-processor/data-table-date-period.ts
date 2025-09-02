@@ -215,7 +215,11 @@ const PSEUDO_PERIOD_FN: PseudoDatePeriodConfig<(date: DateFnsDate) => number> = 
   [PseudoDatePeriod.TIME_OF_DAY]: getHours,
 };
 
-export const toPseudoPeriodCompareValue = (period: PseudoDatePeriod, value: string) =>
-  PSEUDO_PERIOD_FN[period](parseDataTableDateValue(value));
+export const toPseudoPeriodCompareValue = (period: PseudoDatePeriod, value: string) => {
+  if (value === 'N\\A') {
+    return NaN; // Return NaN for N\A values to maintain consistent sorting
+  }
+  return PSEUDO_PERIOD_FN[period](parseDataTableDateValue(value));
+};
 
 export const today = () => startOfDay(Date.now());

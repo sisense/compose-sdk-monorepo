@@ -27,6 +27,10 @@ export const formatForecastSeries = (
   const measureName = s.name.substring(FORECAST_PREFIX.length + 1);
   const measure = lowerSeriesHash[measureName];
   const startIndex = s.data.findIndex((d) => !isNaN(d?.y || NaN));
+  if (startIndex === -1) {
+    console.debug('Forecast data has no valid data points', s.name, s.data);
+    return -1;
+  }
   s.type = 'line';
   s.showInLegend = false;
   s.data[startIndex - 1].y = measure.data[startIndex - 1].y;
@@ -64,6 +68,10 @@ export const formatForecastAdjustRangeStart = (
   const measureName = s.name.substring(10, s.name.length - 7);
   const measure = seriesHash[measureName];
   const startIndex = s.data.findIndex((d) => !isNaN(d?.low || NaN));
+  if (startIndex === -1) {
+    console.debug('Forecast range data has no valid data points', s.name, s.data);
+    return;
+  }
   s.data[startIndex - 1].low = measure.data[startIndex - 1].y;
   s.data[startIndex - 1].high = measure.data[startIndex - 1].y;
 };

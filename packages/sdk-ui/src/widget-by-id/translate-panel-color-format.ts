@@ -19,6 +19,26 @@ import {
 import { normalizeName } from '@sisense/sdk-data';
 import { getPaletteColor } from '../chart-data-options/coloring/utils.js';
 
+/**
+ * Infers the range mode based on the provided colors and palette
+ */
+const inferRangeMode = (
+  options: RangeDataColorOptions,
+  paletteColors?: Color[],
+): PanelColorFormatRange['rangeMode'] => {
+  const baseColor = getPaletteColor(paletteColors, 0);
+  const autoMinColor = toGray(baseColor);
+  const autoMaxColor = scaleBrightness(baseColor, -0.2);
+
+  const isAutoMin = options.minColor === DEFAULT_COLOR || options.minColor === autoMinColor;
+  const isAutoMax = options.maxColor === DEFAULT_COLOR || options.maxColor === autoMaxColor;
+
+  if (isAutoMin && isAutoMax) return 'auto';
+  if (isAutoMin) return 'max';
+  if (isAutoMax) return 'min';
+  return 'both';
+};
+
 const createRangeDataColorOptions = (
   format: PanelColorFormatRange,
   paletteColors?: Color[],
@@ -86,6 +106,7 @@ export const createValueColorOptions = (
       return {
         type: 'uniform',
         color: format.color || getPaletteColor(customPaletteColors, format.colorIndex || 0),
+        ...(format.colorIndex !== undefined && { colorIndex: format.colorIndex }),
       } as UniformDataColorOptions;
     case 'range':
       return createRangeDataColorOptions(format, customPaletteColors);
@@ -110,10 +131,91 @@ export const createValueColorOptions = (
 };
 
 export const createValueToColorMap = (membersFormat: PanelMembersFormat): ValueToColorMap => {
-  return Object.entries(membersFormat).reduce((acc, [member, { color }]) => {
+  return Object.entries(membersFormat).reduce<ValueToColorMap>((acc, [member, { color }]) => {
     acc[member] = color;
     return acc;
   }, {});
+};
+
+/**
+ * Creates a PanelColorFormat from DataColorOptions
+ *
+ * TODO: basic use cases done for the studio assistant, need more testing with real Fusion widgets
+ *
+ * @param options The DataColorOptions to convert
+ * @returns The corresponding PanelColorFormat
+ */
+export const createPanelColorFormat = (
+  options: DataColorOptions | undefined,
+  paletteColors?: Color[],
+): PanelColorFormat | undefined => {
+  if (options === undefined) {
+    return undefined;
+  }
+
+  const defaultColor = getPaletteColor(paletteColors, 0);
+
+  if (typeof options === 'string') {
+    return {
+      type: 'color',
+      color: options,
+    };
+  }
+
+  switch (options.type) {
+    case 'uniform':
+      return {
+        type: 'color',
+        color: options.color,
+        ...(options.colorIndex !== undefined && { colorIndex: options.colorIndex }),
+        isHandPickedColor: options.colorIndex === undefined,
+      };
+    case 'range': {
+      const baseColor = getPaletteColor(paletteColors, 0);
+      const autoMinColor = toGray(baseColor);
+      const autoMaxColor = scaleBrightness(baseColor, -0.2);
+      const rangeMode = inferRangeMode(options, paletteColors);
+
+      const rangeFormat: PanelColorFormatRange = {
+        type: 'range',
+        steps: options.steps || 5,
+        rangeMode,
+        min: rangeMode === 'max' ? autoMinColor : options.minColor,
+        max: rangeMode === 'min' ? autoMaxColor : options.maxColor,
+      };
+
+      if (rangeFormat.rangeMode !== 'auto') {
+        if (options.minValue !== undefined) {
+          rangeFormat.minvalue = options.minValue.toString();
+        }
+        if (options.midValue !== undefined) {
+          rangeFormat.midvalue = options.midValue.toString();
+        }
+        if (options.maxValue !== undefined) {
+          rangeFormat.maxvalue = options.maxValue.toString();
+        }
+      }
+
+      return rangeFormat;
+    }
+    case 'conditional':
+      return {
+        type: 'condition',
+        conditions: (options.conditions || [])
+          .filter((condition) => typeof condition.expression === 'string')
+          .map(({ color, expression, operator }) => ({
+            color: color || defaultColor,
+            expression,
+            operator,
+          })),
+      };
+    default:
+      return {
+        type: 'color',
+        color: defaultColor,
+        colorIndex: 0,
+      };
+  }
 };
 
 export const createValueToColorMultiColumnsMap = (

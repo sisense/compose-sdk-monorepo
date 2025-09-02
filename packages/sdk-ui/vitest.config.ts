@@ -37,6 +37,7 @@ const config: ViteUserConfig = {
         'src/@types',
         'src/widgets/common/drilldown-breadcrumbs',
         'src/charts/indicator/chart/*', // legacy indicator's code, copy-pasted from PWC
+        'src/utils/__development-utils__',
       ],
     },
   },

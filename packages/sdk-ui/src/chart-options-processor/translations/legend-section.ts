@@ -1,4 +1,4 @@
-import { Style } from '../chart-options-service';
+import { TextStyle } from './types';
 
 export type LegendPosition = 'top' | 'left' | 'right' | 'bottom' | null;
 
@@ -7,7 +7,7 @@ export type LegendSettings = {
   align?: 'center' | 'left' | 'right';
   verticalAlign?: 'top' | 'middle' | 'bottom';
   layout?: 'horizontal' | 'vertical';
-  itemStyle?: Style & { cursor?: string };
+  itemStyle?: TextStyle & { cursor?: string };
   symbolRadius?: number;
   symbolHeight?: number;
   symbolWidth?: number;

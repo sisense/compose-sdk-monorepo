@@ -29,8 +29,7 @@ export const cloneFilter = <TFilter extends Filter>(filter: TFilter): TFilter =>
 function createIncludeAllFilter(attribute: Attribute, guid: string, backgroundFilter?: Filter) {
   const config = {
     guid,
-    excludeMembers: false,
-    backgroundFilter: backgroundFilter,
+    ...(backgroundFilter ? { backgroundFilter } : {}),
   };
   return filterFactory.members(attribute, [], config);
 }

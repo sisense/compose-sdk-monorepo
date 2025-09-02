@@ -4,14 +4,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Data, isDatetime } from '@sisense/sdk-data';
 import { getBaseDateFnsLocale } from '../chart-data-processor/data-table-date-period';
-import { applyDateFormat, defaultDateConfig } from './date-formats';
+import { defaultDateConfig } from './date-formats';
 import type { DateFormat, DateConfig } from './date-formats';
 import { StyledColumn } from '../chart-data-options/types';
 import type { Column, Cell, QueryResultData } from '@sisense/sdk-data';
 import { isCell } from '../chart-data-processor/table-creators';
 import { createCompareValue } from '../chart-data-processor/row-comparator';
 import { isMeasureColumn } from '@/chart-data-options/utils';
-import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';
+import { formatDateValue } from './date-formats/apply-date-format';
+import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
 
 //TODO: refactor this function
 // eslint-disable-next-line max-lines-per-function, sonarjs/cognitive-complexity
@@ -63,13 +64,16 @@ export function applyDateFormats(
       columnIndex: number,
     ): string | number | Cell {
       const dateFormatForThisColumn = dateFormats.get(columnIndex);
-      if (!dateFormatForThisColumn) {
+      if (!dateFormatForThisColumn || oldCell === NOT_AVAILABLE_DATA_VALUE) {
         return oldCell;
       }
 
       let newCell;
       let date;
       if (isCell(oldCell)) {
+        if (oldCell.data === NOT_AVAILABLE_DATA_VALUE) {
+          return oldCell;
+        }
         newCell = { ...oldCell };
       } else {
         // oldCell is a date string, emulate how JAQL results treats dates
@@ -83,12 +87,7 @@ export function applyDateFormats(
 
       let text = newCell.text;
       try {
-        text = applyDateFormat(
-          parseISOWithTimezoneCheck(newCell.data),
-          dateFormatForThisColumn,
-          locale,
-          dateConfig,
-        );
+        text = formatDateValue(newCell.data, dateFormatForThisColumn, locale, dateConfig);
       } catch (e: unknown) {
         console.error(e);
       }

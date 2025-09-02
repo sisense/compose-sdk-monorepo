@@ -1,9 +1,12 @@
 import { Attribute, Measure, QueryResultData } from '@sisense/sdk-data';
 import { QueryDescription, QueryExecutionConfig } from '@sisense/sdk-query-client';
 import type {
+  AreaStyleOptions,
   AreamapStyleOptions,
   ChartDataOptions,
   ChartStyleOptions,
+  LineStyleOptions,
+  PolarStyleOptions,
   ScattermapStyleOptions,
   StackableStyleOptions,
 } from '@/types';
@@ -28,25 +31,23 @@ import { ScattermapProps } from '@/charts/map-charts/scattermap/scattermap';
 import { AreamapData } from './areamap-chart/types';
 import { HighchartsBasedChartRendererProps } from './highchart-based-charts/highcharts-based-chart-renderer/highcharts-based-chart-renderer';
 
-export type SupportedChartType = 'areamap' | 'column' | 'bar'; // TODO: Extend with other chart types
+export type SupportedChartType = 'areamap' | 'column' | 'bar' | 'line' | 'area' | 'polar';
 
 export type TypedChartDataOptions<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapChartDataOptions
   : CT extends 'scattermap'
   ? ScattermapChartDataOptions
-  : CT extends 'column' | 'bar'
+  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
   ? CartesianChartDataOptions
-  : // TODO: Extend with other chart types
-    never;
+  : never;
 
 export type TypedDataOptionsInternal<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapChartDataOptionsInternal
   : CT extends 'scattermap'
   ? ScattermapChartDataOptionsInternal
-  : CT extends 'column' | 'bar'
+  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
   ? CartesianChartDataOptionsInternal
-  : // TODO: Extend with other chart types
-    never;
+  : never;
 
 export type TypedChartStyleOptions<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapStyleOptions
@@ -54,8 +55,13 @@ export type TypedChartStyleOptions<CT extends SupportedChartType> = CT extends '
   ? ScattermapStyleOptions
   : CT extends 'column' | 'bar'
   ? StackableStyleOptions
-  : // TODO: Extend with other chart types
-    never;
+  : CT extends 'line'
+  ? LineStyleOptions
+  : CT extends 'area'
+  ? AreaStyleOptions
+  : CT extends 'polar'
+  ? PolarStyleOptions
+  : never;
 
 export type TypedDesignOptions<CT extends SupportedChartType> = DesignOptions<CT>;
 
@@ -63,10 +69,9 @@ export type TypedChartData<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapData
   : CT extends 'scattermap'
   ? ScattermapChartData
-  : CT extends 'column' | 'bar'
+  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
   ? CartesianChartData
-  : // TODO: Extend with other chart types
-    never;
+  : never;
 
 export type TypedLoadDataFunction<CT extends SupportedChartType> = (options: {
   app: ClientApplication;
@@ -79,10 +84,9 @@ export type TypedChartRendererProps<CT extends SupportedChartType> = CT extends 
   ? AreamapProps
   : CT extends 'scattermap'
   ? ScattermapProps
-  : CT extends 'column' | 'bar'
+  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
   ? HighchartsBasedChartRendererProps<CT>
-  : // TODO: Extend with other chart types
-    never;
+  : never;
 
 /**
  * Chart builder interface.

@@ -60,6 +60,10 @@ import {
   CustomWidgetStyleOptions,
   PivotTableDataPoint,
 } from './types';
+import {
+  type CustomDataCellFormatter,
+  type CustomHeaderCellFormatter,
+} from './pivot-table/formatters/types';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
 import { ComponentType, PropsWithChildren, ReactNode } from 'react';
 import {
@@ -1100,6 +1104,52 @@ export interface PivotTableProps {
    * @internal
    */
   onDataPointContextMenu?: PivotTableDataPointEventHandler;
+
+  /**
+   * Applies custom styling and behavior to pivot table data cells.
+   *
+   * This formatter function returns formatting objects instead of mutating parameters,
+   * following functional programming principles. Use this single callback to combine
+   * multiple handlers and control the call sequence from outside the pivot.
+   *
+   * @example
+   * ```typescript
+   * const customDataFormatter: CustomDataCellFormatter = (cell, jaqlPanelItem, dataOption, id) => {
+   *   if (cell.value > 1000) {
+   *     return {
+   *       style: { backgroundColor: 'lightgreen' },
+   *       content: `${cell.value} (High)`
+   *     };
+   *   }
+   * };
+   * ```
+   *
+   * @internal
+   */
+  onDataCellFormat?: CustomDataCellFormatter;
+
+  /**
+   * Applies custom styling and behavior to pivot table row and column headers.
+   *
+   * This formatter function returns formatting objects instead of mutating parameters,
+   * following functional programming principles. Use this single callback to combine
+   * multiple handlers and control the call sequence from outside the pivot.
+   *
+   * @example
+   * ```typescript
+   * const customHeaderFormatter: CustomHeaderCellFormatter = (cell, jaqlPanelItem, dataOption, id) => {
+   *   if (cell.content === 'Total') {
+   *     return {
+   *       style: { fontWeight: 'bold', color: 'blue' },
+   *       className: 'total-header'
+   *     };
+   *   }
+   * };
+   * ```
+   *
+   * @internal
+   */
+  onHeaderCellFormat?: CustomHeaderCellFormatter;
 }
 
 /**
@@ -1462,6 +1512,52 @@ export interface PivotTableWidgetProps {
    * @internal
    */
   onDataPointContextMenu?: PivotTableDataPointEventHandler;
+
+  /**
+   * Applies custom styling and behavior to pivot table data cells.
+   *
+   * This formatter function returns formatting objects instead of mutating parameters,
+   * following functional programming principles. Use this single callback to combine
+   * multiple handlers and control the call sequence from outside the pivot.
+   *
+   * @example
+   * ```typescript
+   * const customDataFormatter: CustomDataCellFormatter = (cell, jaqlPanelItem, dataOption, id) => {
+   *   if (cell.value > 1000) {
+   *     return {
+   *       style: { backgroundColor: 'lightgreen' },
+   *       content: `${cell.value} (High)`
+   *     };
+   *   }
+   * };
+   * ```
+   *
+   * @internal
+   */
+  onDataCellFormat?: CustomDataCellFormatter;
+
+  /**
+   * Applies custom styling and behavior to pivot table row and column headers.
+   *
+   * This formatter function returns formatting objects instead of mutating parameters,
+   * following functional programming principles. Use this single callback to combine
+   * multiple handlers and control the call sequence from outside the pivot.
+   *
+   * @example
+   * ```typescript
+   * const customHeaderFormatter: CustomHeaderCellFormatter = (cell, jaqlPanelItem, dataOption, id) => {
+   *   if (cell.content === 'Total') {
+   *     return {
+   *       style: { fontWeight: 'bold', color: 'blue' },
+   *       className: 'total-header'
+   *     };
+   *   }
+   * };
+   * ```
+   *
+   * @internal
+   */
+  onHeaderCellFormat?: CustomHeaderCellFormatter;
 }
 
 /**

@@ -1,5 +1,5 @@
 import {
-  applyDateFormat,
+  formatDateValue,
   defaultDateConfig,
   JAN,
   JUL,
@@ -215,7 +215,7 @@ describe('when the fiscal year feature flag is disabled', () => {
   ])(
     'Locale: $locale.code | Date: $date | Format: $format | Expected: $expected',
     ({ locale, date, format, expected }) => {
-      const actual = applyDateFormat(date, format, locale, fiscalDisabledConfig);
+      const actual = formatDateValue(date, format, locale, fiscalDisabledConfig);
       expect(actual).toBe(expected);
     },
   );
@@ -240,7 +240,7 @@ describe('when the fiscal year feature flag is disabled', () => {
           timeZone: 'Europe/Paris',
           selectedDateLevel: DAYS,
         };
-        const actual = applyDateFormat(date, 'w', locale, config);
+        const actual = formatDateValue(date, 'w', locale, config);
         expect(actual).toBe(expected);
       },
     );
@@ -295,7 +295,7 @@ describe.skip('when the fiscal year feature flag is enabled', () => {
       };
       const locale = enUS;
       const format = `'FY' yyyy. Q. 'Week' ww. MMMM d HH:mm A Z`;
-      const actual = applyDateFormat(date, format, locale, cfg);
+      const actual = formatDateValue(date, format, locale, cfg);
       expect(actual).toBe(expected);
     },
   );
@@ -310,7 +310,7 @@ describe('behavior that is the same regardless of fiscal year settings', () => {
     ])(
       'Locale: $locale.code | Date: $date | Format: $format | Expected: $expected',
       ({ locale, date, format, expected }) => {
-        const actual = applyDateFormat(date, format, locale, defaultDateConfig);
+        const actual = formatDateValue(date, format, locale, defaultDateConfig);
         expect(actual).toBe(expected);
       },
     );
@@ -325,7 +325,7 @@ describe('behavior that is the same regardless of fiscal year settings', () => {
     ])(
       'Locale: $locale.code | Date: $date | Format: $format | Expected: $expected',
       ({ locale, date, format, expected }) => {
-        const actual = applyDateFormat(date, format, locale, defaultDateConfig);
+        const actual = formatDateValue(date, format, locale, defaultDateConfig);
         expect(actual).toBe(expected);
       },
     );
@@ -345,7 +345,7 @@ describe('behavior that is the same regardless of fiscal year settings', () => {
     ])(
       'Locale: $locale.code | Date: $date | Format: $format | Expected: $expected',
       ({ locale, date, format, expected }) => {
-        const actual = applyDateFormat(date, format, locale, defaultDateConfig);
+        const actual = formatDateValue(date, format, locale, defaultDateConfig);
         expect(actual).toBe(expected);
       },
     );
@@ -370,7 +370,7 @@ describe('behavior that is the same regardless of fiscal year settings', () => {
     ])(
       'Locale: $locale.code | Date: $date | Zone: $zone | Format: $format | Expected: $expected',
       ({ locale, date, zone, format, expected }) => {
-        const actual = applyDateFormat(date, format, locale, {
+        const actual = formatDateValue(date, format, locale, {
           ...defaultDateConfig,
           timeZone: zone,
         });

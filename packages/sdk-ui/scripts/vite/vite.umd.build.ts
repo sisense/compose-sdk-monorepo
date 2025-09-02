@@ -10,7 +10,12 @@ import { replaceReact18Hooks } from '../vite-plugins/replace-react18-hooks';
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 
-const external = ['react', 'react-dom', 'react/jsx-runtime'];
+const external = [
+  // React + all submodules
+  /^react(?:\/[\w-]+)*$/,
+  // React DOM + all submodules
+  /^react-dom(?:\/[\w-]+)*$/,
+];
 
 const buildUMD = async () => {
   await build({
@@ -55,6 +60,7 @@ const buildUMD = async () => {
           globals: {
             react: '@sbi/react',
             'react-dom': '@sbi/react-dom',
+            'react-dom/server': '@sbi/react-dom/server',
             'react/jsx-runtime': '@sbi/react',
           },
         },

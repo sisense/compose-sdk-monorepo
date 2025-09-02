@@ -3,7 +3,7 @@ import { CompleteThemeSettings } from '@/index-typedoc';
 import { TFunction } from '@sisense/sdk-common';
 import { TypedChartData, TypedDataOptionsInternal, TypedDesignOptions } from '../types';
 
-export type HighchartBasedChartTypes = 'column' | 'bar';
+export type HighchartBasedChartTypes = 'column' | 'bar' | 'line' | 'area' | 'polar';
 
 export type HighchartsOptionsBuilder<CT extends HighchartBasedChartTypes> = {
   getChart: (ctx: BuildContext<CT>) => HighchartsOptionsInternal['chart'];

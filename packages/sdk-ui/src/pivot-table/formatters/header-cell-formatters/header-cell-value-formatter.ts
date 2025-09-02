@@ -9,8 +9,7 @@ import {
   getPivotDataOptionByJaqlIndex,
 } from '../utils.js';
 import { parseISOWithTimezoneCheck } from '@/utils/parseISOWithTimezoneCheck';
-
-const PIVOT_TABLE_NULL_VALUE = 'N\\A';
+import { NOT_AVAILABLE_DATA_VALUE } from '@/const.js';
 
 export const createHeaderCellValueFormatter = (
   dataOptions: PivotTableDataOptions,
@@ -43,7 +42,7 @@ export const createHeaderCellValueFormatter = (
     }
 
     if (cell.content === '') {
-      cell.content = PIVOT_TABLE_NULL_VALUE;
+      cell.content = NOT_AVAILABLE_DATA_VALUE;
     }
   };
 };
@@ -57,6 +56,10 @@ export function formatDatetimeString(
   dateFormatter: DateFormatter,
   dateFormat?: string,
 ): string {
+  if (value === NOT_AVAILABLE_DATA_VALUE) {
+    return value;
+  }
+
   if (!dateFormat) {
     return typeof value === 'string' ? value : value.toISOString();
   }
