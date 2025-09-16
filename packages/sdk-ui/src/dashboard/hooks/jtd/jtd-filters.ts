@@ -1,8 +1,23 @@
-import { mergeFilters, type Filter, filterFactory, isCascadingFilter } from '@sisense/sdk-data';
+import {
+  mergeFilters,
+  type Filter,
+  filterFactory,
+  isCascadingFilter,
+  type LevelAttribute,
+  DateLevels,
+  MetadataTypes,
+} from '@sisense/sdk-data';
 import { WidgetProps } from '@/props.js';
 import { DataPoint, ScatterDataPoint, DataPointEntry } from '@/types';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
 import { JtdConfig } from '@/widget-by-id/types';
+import {
+  DatePeriod,
+  startOfPeriod,
+  parseDataTableDateValue,
+  getBaseDateFnsLocale,
+} from '@/chart-data-processor/data-table-date-period';
+import { format } from 'date-fns';
 
 /**
  * Jump to Dashboard (JTD) Filter Merging Logic:
@@ -12,7 +27,7 @@ import { JtdConfig } from '@/widget-by-id/types';
  * 1. **Generated Filters**: Created from the clicked datapoint's category and breakBy entries
  * 2. **Dashboard Filters**: Current dashboard filters (filtered by includeDashFilterDims)
  * 3. **Widget Filters**: Original widget-specific filters (filtered by includeWidgetFilterDims)
- * 4. **Formula Context Filters**: NEW - Embedded filters from the clicked widget's datapoint calculations
+ * 4. **Formula Context Filters**: Embedded filters from the clicked widget's datapoint calculations
  *
  * ## Formula Context Filters (New Feature)
  *
@@ -168,6 +183,89 @@ export const handleFormulaDuplicateFilters = (
 };
 
 /**
+ * Maps granularity strings from DateLevels to DatePeriod enum values
+ * @param granularity - The date granularity string (e.g., "Months", "Years")
+ * @returns Corresponding DatePeriod enum value or null if unsupported
+ * @internal
+ */
+const mapGranularityToDatePeriod = (granularity: string): DatePeriod | null => {
+  switch (granularity) {
+    case DateLevels.Years:
+      return DatePeriod.YEAR;
+    case DateLevels.Quarters:
+      return DatePeriod.QUARTER;
+    case DateLevels.Months:
+      return DatePeriod.MONTH;
+    case DateLevels.Weeks:
+      return DatePeriod.WEEK;
+    case DateLevels.Days:
+      return DatePeriod.DATE;
+    default:
+      return null;
+  }
+};
+
+/**
+ * Normalizes a date value to the start of the period for the given granularity
+ * This ensures the filter member value matches what the backend query returns
+ * Uses existing date utilities instead of manual parsing to reduce business logic
+ *
+ * @param value - The raw date value (e.g., "2009-11-15T12:30:00.000")
+ * @param granularity - The date granularity (e.g., "Months")
+ * @returns Normalized date string that matches backend member query format
+ * @internal
+ */
+export const normalizeDateForGranularity = (value: string, granularity: string): string => {
+  try {
+    // Map granularity string to DatePeriod enum
+    const datePeriod = mapGranularityToDatePeriod(granularity);
+    if (!datePeriod) {
+      // For unsupported granularities, return original value
+      return value;
+    }
+
+    // Parse the date using existing utility
+    const parsedDate = parseDataTableDateValue(value);
+    if (!parsedDate || isNaN(parsedDate.getTime())) {
+      return value;
+    }
+
+    // Get start of period using existing utility
+    const locale = getBaseDateFnsLocale();
+    const startOfPeriodDate = startOfPeriod(datePeriod, parsedDate, locale);
+
+    // Format in JAQL-compatible format (ISO without milliseconds)
+    return format(startOfPeriodDate, "yyyy-MM-dd'T'HH:mm:ss");
+  } catch (error) {
+    console.warn('Error normalizing date for granularity:', error);
+    return value;
+  }
+};
+
+/**
+ * Creates a filter from a data point entry, handling both date-level and regular attributes
+ * @param entry - The data point entry containing attribute and value
+ * @returns Filter instance or null if entry is invalid
+ * @internal
+ */
+const createFilterFromEntry = (entry: DataPointEntry): Filter | null => {
+  if (!entry.attribute || entry.value === undefined || entry.value === null) {
+    return null;
+  }
+
+  if (entry.attribute.type === MetadataTypes.DateLevel) {
+    // For date-level attributes, normalize the date to match backend member query format
+    const levelAttribute = entry.attribute as LevelAttribute;
+    const granularity = levelAttribute.granularity || DateLevels.Days;
+    const normalizedDate = normalizeDateForGranularity(String(entry.value), granularity);
+    return filterFactory.members(entry.attribute, [normalizedDate]);
+  } else {
+    // For regular attributes, use members filter
+    return filterFactory.members(entry.attribute, [String(entry.value)]);
+  }
+};
+
+/**
  * Type guard to check if a data point is a ScatterDataPoint.
  * Checks for actual scatter chart structure (x/y coordinates) and scatter-only properties.
  *
@@ -200,26 +298,18 @@ export const getFiltersFromScatterDataPoint = (point: ScatterDataPoint): Filter[
   const filters: Filter[] = [];
   const scatterEntries = point.entries;
 
-  if (
-    scatterEntries?.breakByColor?.attribute &&
-    scatterEntries.breakByColor.value !== undefined &&
-    scatterEntries.breakByColor.value !== null
-  ) {
-    const filter = filterFactory.members(scatterEntries.breakByColor.attribute, [
-      String(scatterEntries.breakByColor.value),
-    ]);
-    filters.push(filter);
+  if (scatterEntries?.breakByColor) {
+    const filter = createFilterFromEntry(scatterEntries.breakByColor);
+    if (filter) {
+      filters.push(filter);
+    }
   }
 
-  if (
-    scatterEntries?.breakByPoint?.attribute &&
-    scatterEntries.breakByPoint.value !== undefined &&
-    scatterEntries.breakByPoint.value !== null
-  ) {
-    const filter = filterFactory.members(scatterEntries.breakByPoint.attribute, [
-      String(scatterEntries.breakByPoint.value),
-    ]);
-    filters.push(filter);
+  if (scatterEntries?.breakByPoint) {
+    const filter = createFilterFromEntry(scatterEntries.breakByPoint);
+    if (filter) {
+      filters.push(filter);
+    }
   }
 
   return filters;
@@ -230,8 +320,8 @@ export const getFiltersFromScatterDataPoint = (point: ScatterDataPoint): Filter[
  * @internal
  */
 type MixedDataPointEntries = {
-  category?: DataPointEntry[];
-  value?: DataPointEntry[];
+  category: DataPointEntry[]; // Keep required to match DataPoint
+  value: DataPointEntry[]; // Keep required to match DataPoint
   breakBy?: DataPointEntry[];
   breakByColor?: DataPointEntry;
   breakByPoint?: DataPointEntry;
@@ -242,7 +332,24 @@ type MixedDataPointEntries = {
  * @internal
  */
 const getMixedEntries = (point: DataPoint): MixedDataPointEntries | undefined => {
-  return point.entries as MixedDataPointEntries | undefined;
+  // Ensure we preserve the required arrays from DataPoint while allowing additional properties
+  if (!point.entries) {
+    return undefined;
+  }
+  if (isScatterDataPoint(point)) {
+    return {
+      category: point.entries.category || [],
+      value: point.entries.value || [],
+      breakBy: point.entries.breakBy,
+      breakByColor: point.entries.breakByColor,
+      breakByPoint: point.entries.breakByPoint,
+    };
+  }
+  return {
+    category: point.entries.category || [],
+    value: point.entries.value || [],
+    breakBy: point.entries.breakBy,
+  };
 };
 
 /**
@@ -260,8 +367,8 @@ export const getFiltersFromRegularDataPoint = (point: DataPoint): Filter[] => {
   // Extract category entries which represent dimensions that can be filtered
   const categoryEntries = entries?.category || [];
   for (const entry of categoryEntries) {
-    if (entry.attribute && entry.value !== undefined && entry.value !== null) {
-      const filter = filterFactory.members(entry.attribute, [String(entry.value)]);
+    const filter = createFilterFromEntry(entry);
+    if (filter) {
       filters.push(filter);
     }
   }
@@ -270,8 +377,8 @@ export const getFiltersFromRegularDataPoint = (point: DataPoint): Filter[] => {
   const breakByEntries = entries?.breakBy;
   if (breakByEntries) {
     for (const entry of breakByEntries) {
-      if (entry.attribute && entry.value !== undefined && entry.value !== null) {
-        const filter = filterFactory.members(entry.attribute, [String(entry.value)]);
+      const filter = createFilterFromEntry(entry);
+      if (filter) {
         filters.push(filter);
       }
     }
@@ -279,27 +386,19 @@ export const getFiltersFromRegularDataPoint = (point: DataPoint): Filter[] => {
 
   // Also process scatter properties if present (for mixed data points)
   const breakByColorEntry = entries?.breakByColor;
-  if (
-    breakByColorEntry?.attribute &&
-    breakByColorEntry.value !== undefined &&
-    breakByColorEntry.value !== null
-  ) {
-    const filter = filterFactory.members(breakByColorEntry.attribute, [
-      String(breakByColorEntry.value),
-    ]);
-    filters.push(filter);
+  if (breakByColorEntry) {
+    const filter = createFilterFromEntry(breakByColorEntry);
+    if (filter) {
+      filters.push(filter);
+    }
   }
 
   const breakByPointEntry = entries?.breakByPoint;
-  if (
-    breakByPointEntry?.attribute &&
-    breakByPointEntry.value !== undefined &&
-    breakByPointEntry.value !== null
-  ) {
-    const filter = filterFactory.members(breakByPointEntry.attribute, [
-      String(breakByPointEntry.value),
-    ]);
-    filters.push(filter);
+  if (breakByPointEntry) {
+    const filter = createFilterFromEntry(breakByPointEntry);
+    if (filter) {
+      filters.push(filter);
+    }
   }
 
   return filters;
@@ -394,11 +493,11 @@ export const mergeJtdFilters = (
 ): Filter[] => {
   // Merge all filter types with generated filters having the highest priority
   const allFilters = [
-    ...generatedFilters,
-    ...dashboardFilters,
-    ...widgetFilters,
-    ...formulaContextFilters,
+    ...(formulaContextFilters || []),
+    ...(widgetFilters || []),
+    ...(dashboardFilters || []),
+    ...(generatedFilters || []),
   ];
 
-  return mergeFilters(allFilters);
+  return mergeFilters([], allFilters);
 };

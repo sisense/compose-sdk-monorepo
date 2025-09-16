@@ -4,12 +4,23 @@ import {
   translateFiltersJSON,
   translateHighlightsFromJSONFunctionCall,
 } from './translate-filters.js';
-import { isFilterRelations, withoutGuids } from '@sisense/sdk-data';
+import { isFilterRelations, withoutGuids, JSONArray } from '@sisense/sdk-data';
 import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../__mocks__/mock-data-sources.js';
 import { ParsedFunctionCall } from './common.js';
+import { NlqTranslationResult } from '../types.js';
+
+function getSuccessData<T>(result: NlqTranslationResult<T>): T {
+  if (!result.success) throw new Error('Expected success result');
+  return result.data;
+}
+
+function getErrors<T>(result: NlqTranslationResult<T>): string[] {
+  if (result.success) throw new Error('Expected error result');
+  return result.errors;
+}
 
 describe('translateFilters', () => {
   it('should translate filter relations', () => {
@@ -38,13 +49,15 @@ describe('translateFilters', () => {
       },
     ];
 
-    const filters = translateFiltersFromJSONFunctionCall(
+    const result = translateFiltersFromJSONFunctionCall(
       mockFiltersJSON,
       MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
       MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
     );
-    expect(isFilterRelations(filters)).toBe(true);
-    expect(withoutGuids(filters)).toMatchSnapshot();
+    expect(result.success).toBe(true);
+    const data = getSuccessData(result);
+    expect(isFilterRelations(data)).toBe(true);
+    expect(withoutGuids(data)).toMatchSnapshot();
   });
 
   it('should translate filters', () => {
@@ -53,32 +66,35 @@ describe('translateFilters', () => {
       { function: 'filterFactory.members', args: ['DM.Commerce.Date.Years', ['2024', '2025']] },
     ];
 
-    const filters = translateFiltersFromJSONFunctionCall(
+    const result = translateFiltersFromJSONFunctionCall(
       mockFiltersJSON,
       MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
       MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
     );
-    expect(isFilterRelations(filters)).toBe(false);
-    expect(withoutGuids(filters)).toMatchSnapshot();
+    expect(result.success).toBe(true);
+    const data = getSuccessData(result);
+    expect(isFilterRelations(data)).toBe(false);
+    expect(withoutGuids(data)).toMatchSnapshot();
   });
 
-  it('should throw error for nonexistent filterFactory function', () => {
+  it('should return error for nonexistent filterFactory function', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       { function: 'filterFactory.nonexistentFunction', args: ['DM.Country.Country', 'test'] },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow(
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain(
       'Function "filterFactory.nonexistentFunction" not found in filterFactory or measureFactory.',
     );
   });
 
-  it('should throw error for nonexistent measureFactory function', () => {
+  it('should return error for nonexistent measureFactory function', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       {
         function: 'filterFactory.measureGreaterThan',
@@ -89,80 +105,87 @@ describe('translateFilters', () => {
       },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow(
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain(
       'Function "measureFactory.nonexistentFunction" not found in filterFactory or measureFactory.',
     );
   });
 
-  it('should throw error for completely invalid factory name', () => {
+  it('should return error for completely invalid factory name', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       { function: 'invalidFactory.someFunction', args: ['DM.Country.Country', 'test'] },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow(
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain(
       'Function "invalidFactory.someFunction" not found in filterFactory or measureFactory.',
     );
   });
 
-  it('should throw error for function path without factory prefix', () => {
+  it('should return error for function path without factory prefix', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       { function: 'members', args: ['DM.Country.Country', ['United States']] },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow('Function "members" not found in filterFactory or measureFactory.');
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain(
+      'Function "members" not found in filterFactory or measureFactory.',
+    );
   });
 
-  it('should throw error for attribute name with insufficient parts after DM', () => {
+  it('should return error for attribute name with insufficient parts after DM', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       { function: 'filterFactory.members', args: ['DM.Country', ['United States']] },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow(
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain(
       'Invalid attribute name format: "DM.Country". Expected format: "DM.TableName.ColumnName[.Level]".',
     );
   });
 
-  it('should throw error for attribute name with only DM prefix', () => {
+  it('should return error for attribute name with only DM prefix', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       { function: 'filterFactory.members', args: ['DM.', ['United States']] },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow(
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain(
       'Invalid attribute name format: "DM.". Expected format: "DM.TableName.ColumnName[.Level]".',
     );
   });
 
-  it('should throw error for nonexistent table name', () => {
+  it('should return error for nonexistent table name', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       {
         function: 'filterFactory.members',
@@ -170,16 +193,17 @@ describe('translateFilters', () => {
       },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow('Table "NonExistentTable" not found in the data model.');
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain('Table "NonExistentTable" not found in the data model.');
   });
 
-  it('should throw error for nonexistent column name', () => {
+  it('should return error for nonexistent column name', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       {
         function: 'filterFactory.members',
@@ -187,16 +211,19 @@ describe('translateFilters', () => {
       },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow('Column "NonExistentColumn" not found in table "Country".');
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain(
+      'Column "NonExistentColumn" not found in table "Country".',
+    );
   });
 
-  it('should throw error for date level on non-datetime column', () => {
+  it('should return error for date level on non-datetime column', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       {
         function: 'filterFactory.members',
@@ -204,18 +231,19 @@ describe('translateFilters', () => {
       },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow(
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain(
       'Invalid date level "Years" in attribute "DM.Country.Country.Years". Column "Country.Country" is not a datetime column.',
     );
   });
 
-  it('should throw error for invalid date level on datetime column', () => {
+  it('should return error for invalid date level on datetime column', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       {
         function: 'filterFactory.members',
@@ -223,186 +251,203 @@ describe('translateFilters', () => {
       },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow(
-      'Invalid date level "InvalidLevel" in attribute "DM.Commerce.Date.InvalidLevel". Valid levels are: Years, Quarters, Months, Weeks, Days, Hours, MinutesRoundTo30, MinutesRoundTo15, Minutes, Seconds, AggHours, AggMinutesRoundTo30, AggMinutesRoundTo15, AggMinutesRoundTo1.',
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain(
+      'Invalid date level "InvalidLevel" in attribute "DM.Commerce.Date.InvalidLevel".',
     );
   });
 
-  it('should throw error when trying to use measure function as top-level filter', () => {
+  it('should return error when trying to use measure function as top-level filter', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue'] },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow('Invalid filter JSON');
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain('Invalid filter JSON');
   });
 
-  it('should throw error when trying to use measure function with title as top-level filter', () => {
+  it('should return error when trying to use measure function with title as top-level filter', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       { function: 'measureFactory.count', args: ['DM.Commerce.Revenue', 'Revenue Count'] },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow('Invalid filter JSON');
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain('Invalid filter JSON');
   });
 
-  it('should throw error when trying to use average measure as top-level filter', () => {
+  it('should return error when trying to use average measure as top-level filter', () => {
     const mockFiltersJSON: ParsedFunctionCall[] = [
       { function: 'measureFactory.average', args: ['DM.Commerce.Revenue'] },
     ];
 
-    expect(() => {
-      translateFiltersFromJSONFunctionCall(
-        mockFiltersJSON,
-        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-      );
-    }).toThrow('Invalid filter JSON');
+    const result = translateFiltersFromJSONFunctionCall(
+      mockFiltersJSON,
+      MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+      MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+    );
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain('Invalid filter JSON');
   });
 
   describe('translateFiltersFromJSON', () => {
     it('should return empty array when filtersJSON is null', () => {
-      const filters = translateFiltersJSON(
-        null as any,
+      const result = translateFiltersJSON(
+        null as unknown as JSONArray,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(filters).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
     it('should return empty array when filtersJSON is undefined', () => {
-      const filters = translateFiltersJSON(
-        undefined as any,
+      const result = translateFiltersJSON(
+        undefined as unknown as JSONArray,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(filters).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
     it('should return empty array when filtersJSON is false', () => {
-      const filters = translateFiltersJSON(
-        false as any,
+      const result = translateFiltersJSON(
+        false as unknown as JSONArray,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(filters).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
     it('should return empty array when filtersJSON is 0', () => {
-      const filters = translateFiltersJSON(
-        0 as any,
+      const result = translateFiltersJSON(
+        0 as unknown as JSONArray,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(filters).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
     it('should return empty array when filtersJSON is empty string', () => {
-      const filters = translateFiltersJSON(
-        '' as any,
+      const result = translateFiltersJSON(
+        '' as unknown as JSONArray,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(filters).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
     it('should translate empty array to empty array', () => {
-      const filters = translateFiltersJSON(
+      const result = translateFiltersJSON(
         [],
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(filters).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
-    it('should throw error for array of strings instead of function calls', () => {
-      const invalidFiltersJSON = ['DM.Country.Country', 'DM.Brand.Brand'] as any;
+    it('should return error for array of strings instead of function calls', () => {
+      const invalidFiltersJSON = ['DM.Country.Country', 'DM.Brand.Brand'] as unknown as JSONArray;
 
-      expect(() => {
-        translateFiltersJSON(
-          invalidFiltersJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateFiltersJSON(
+        invalidFiltersJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid filters JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
 
-    it('should throw error for array of objects missing function property', () => {
-      const invalidFiltersJSON = [{ args: ['DM.Country.Country', ['United States']] }] as any;
+    it('should return error for array of objects missing function property', () => {
+      const invalidFiltersJSON = [
+        { args: ['DM.Country.Country', ['United States']] },
+      ] as unknown as JSONArray;
 
-      expect(() => {
-        translateFiltersJSON(
-          invalidFiltersJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateFiltersJSON(
+        invalidFiltersJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid filters JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
 
-    it('should throw error for array of objects missing args property', () => {
-      const invalidFiltersJSON = [{ function: 'filterFactory.members' }] as any;
+    it('should return error for array of objects missing args property', () => {
+      const invalidFiltersJSON = [{ function: 'filterFactory.members' }] as unknown as JSONArray;
 
-      expect(() => {
-        translateFiltersJSON(
-          invalidFiltersJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateFiltersJSON(
+        invalidFiltersJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid filters JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
 
-    it('should throw error for array containing non-objects', () => {
+    it('should return error for array containing non-objects', () => {
       const invalidFiltersJSON = [
         { function: 'filterFactory.members', args: ['DM.Country.Country', ['United States']] },
         'not an object',
-      ] as any;
+      ] as unknown as JSONArray;
 
-      expect(() => {
-        translateFiltersJSON(
-          invalidFiltersJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateFiltersJSON(
+        invalidFiltersJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid filters JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
 
-    it('should throw error for array containing null values', () => {
+    it('should return error for array containing null values', () => {
       const invalidFiltersJSON = [
         { function: 'filterFactory.members', args: ['DM.Country.Country', ['United States']] },
         null,
-      ] as any;
+      ] as unknown as JSONArray;
 
-      expect(() => {
-        translateFiltersJSON(
-          invalidFiltersJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateFiltersJSON(
+        invalidFiltersJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid filters JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
@@ -412,14 +457,16 @@ describe('translateFilters', () => {
         { function: 'filterFactory.members', args: ['DM.Country.Country', ['United States']] },
       ];
 
-      const filters = translateFiltersJSON(
+      const result = translateFiltersJSON(
         validFiltersJSON,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
 
-      expect(Array.isArray(filters)).toBe(true);
-      expect(filters).toHaveLength(1);
+      expect(result.success).toBe(true);
+      const data = getSuccessData(result);
+      expect(Array.isArray(data)).toBe(true);
+      expect(data).toHaveLength(1);
     });
   });
 
@@ -430,31 +477,34 @@ describe('translateFilters', () => {
         { function: 'filterFactory.members', args: ['DM.Brand.Brand', ['Brand A']] },
       ];
 
-      const highlights = translateHighlightsFromJSONFunctionCall(
+      const result = translateHighlightsFromJSONFunctionCall(
         mockHighlightsJSON,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
 
-      expect(highlights).toHaveLength(2);
-      expect(withoutGuids(highlights)).toMatchSnapshot();
+      expect(result.success).toBe(true);
+      const data = getSuccessData(result);
+      expect(data).toHaveLength(2);
+      expect(withoutGuids(data)).toMatchSnapshot();
     });
 
-    it('should throw error when trying to use measure function as highlight', () => {
+    it('should return error when trying to use measure function as highlight', () => {
       const mockHighlightsJSON: ParsedFunctionCall[] = [
         { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue'] },
       ];
 
-      expect(() => {
-        translateHighlightsFromJSONFunctionCall(
-          mockHighlightsJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow('Invalid filter JSON');
+      const result = translateHighlightsFromJSONFunctionCall(
+        mockHighlightsJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)[0]).toContain('Invalid filter JSON');
     });
 
-    it('should throw error when trying to use filter relation as highlight', () => {
+    it('should return error when trying to use filter relation as highlight', () => {
       const mockHighlightsJSON: ParsedFunctionCall[] = [
         {
           function: 'filterFactory.logic.and',
@@ -471,27 +521,29 @@ describe('translateFilters', () => {
         },
       ];
 
-      expect(() => {
-        translateHighlightsFromJSONFunctionCall(
-          mockHighlightsJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow('Invalid filter JSON');
+      const result = translateHighlightsFromJSONFunctionCall(
+        mockHighlightsJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)[0]).toContain('Invalid filter JSON');
     });
 
-    it('should throw error when trying to use average measure as highlight', () => {
+    it('should return error when trying to use average measure as highlight', () => {
       const mockHighlightsJSON: ParsedFunctionCall[] = [
         { function: 'measureFactory.average', args: ['DM.Commerce.Revenue'] },
       ];
 
-      expect(() => {
-        translateHighlightsFromJSONFunctionCall(
-          mockHighlightsJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow('Invalid filter JSON');
+      const result = translateHighlightsFromJSONFunctionCall(
+        mockHighlightsJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)[0]).toContain('Invalid filter JSON');
     });
   });
 });

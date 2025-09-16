@@ -1,5 +1,5 @@
 import { Attribute, JaqlDataSourceForDto, JSONArray } from '@sisense/sdk-data';
-import { NormalizedTable } from '../types.js';
+import { NlqTranslationResult, NormalizedTable } from '../types.js';
 import { createAttribute } from './common.js';
 
 function isStringArray(value: JSONArray): value is string[] {
@@ -10,14 +10,31 @@ export const translateDimensionsJSON = (
   dimensionsJSON: JSONArray,
   dataSource: JaqlDataSourceForDto,
   tables: NormalizedTable[],
-): Attribute[] => {
+): NlqTranslationResult<Attribute[]> => {
   if (!dimensionsJSON) {
-    return [];
+    return { success: true, data: [] };
   }
+
   if (!isStringArray(dimensionsJSON)) {
-    throw new Error('Invalid dimensions JSON. Expected an array of strings.');
+    return {
+      success: false,
+      errors: ['Invalid dimensions JSON. Expected an array of strings.'],
+    };
   }
-  return dimensionsJSON.map((dimension) => {
-    return createAttribute(dimension, dataSource, tables);
+
+  const results: Attribute[] = [];
+  const errors: string[] = [];
+
+  // Process each dimension and collect errors instead of throwing
+  dimensionsJSON.forEach((dimension, index) => {
+    try {
+      const attribute = createAttribute(dimension, dataSource, tables);
+      results.push(attribute);
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      errors.push(`Dimension ${index + 1} ("${dimension}"): ${errorMsg}`);
+    }
   });
+
+  return errors.length > 0 ? { success: false, errors } : { success: true, data: results };
 };

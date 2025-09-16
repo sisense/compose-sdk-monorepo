@@ -44,6 +44,7 @@ export type {
   // Dashboard:
   DashboardLayoutOptions,
   DashboardModel,
+  DashStyle,
   DataColorCondition,
   DataColorOptions,
   // Style related:
@@ -55,6 +56,7 @@ export type {
   DecimalScale,
   DrilldownOptions,
   DrilldownSelection,
+  EndCapType,
   FilterVariant,
   FunnelStyleOptions,
   GaugeIndicatorStyleOptions,
@@ -72,6 +74,7 @@ export type {
   IndicatorStyleOptions,
   Labels,
   Legend,
+  LineOptions,
   LineStyleOptions,
   LineSubtype,
   LineWidth,

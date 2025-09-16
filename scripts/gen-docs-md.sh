@@ -2,7 +2,7 @@
 #
 # This script generates API Doc in Markdown format.
 # It runs typedoc with typedoc-plugin-markdown to generate the markdown files
-# and runs additional ad-hoc steps to adjust the file contents as required by sisense.dev.
+# and runs additional ad-hoc steps to adjust the file contents as required by developer.sisense.com.
 
 ORANGE=$'\e[0;33m'
 NC=$'\e[0m'
@@ -46,8 +46,8 @@ find ${docs_path}/modules/sdk-ui-vue \( -type d -name .git -prune \) -o -type f 
 # Adjust the media paths in the markdown files
 find ${docs_path}/modules \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed "${sed_option[@]}" -e 's|media://|../../../img/|g'
 
-# Replace tsx code blocks with ts as required by sisense.dev
+# Replace tsx code blocks with ts as required by developer.sisense.com
 find ${docs_path}/modules \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed "${sed_option[@]}" -e 's|```tsx|```ts|g'
 
-# Copy CHANGELOG.md from the root directory to the docs-md so it can be published to sisense.dev
+# Copy CHANGELOG.md from the root directory to the docs-md so it can be published to developer.sisense.com
 cp -Rf ./CHANGELOG.md ${docs_path}/

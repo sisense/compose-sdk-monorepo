@@ -35,9 +35,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
       "borderWidth": 0,
       "enabled": true,
       "itemStyle": {
-        "color": "#5b6372",
-        "cursor": "default",
-        "fontFamily": "Open Sans",
         "fontSize": "13px",
         "fontWeight": "normal",
         "pointerEvents": "auto",
@@ -63,8 +60,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           "crop": false,
           "enabled": false,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -248,7 +243,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
         "dataLabels": {
           "formatter": [Function],
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -420,7 +414,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
         "dataLabels": {
           "formatter": [Function],
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -498,8 +491,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           "formatter": [Function],
           "overflow": "none",
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -527,8 +518,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           "enabled": true,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -560,8 +549,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           "enabled": true,
           "formatter": [Function],
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -587,7 +574,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           "rotation": 0,
           "style": {
             "color": "#5B6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "bold",
             "pointerEvents": "none",
@@ -606,8 +592,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           "enabled": true,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -635,8 +619,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
             -90,
           ],
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -660,8 +642,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           "labelrank": 99999,
           "rotation": 0,
           "style": {
-            "color": "#56535b",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "bold",
             "pointerEvents": "none",
@@ -679,8 +659,6 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           "enabled": false,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -730,9 +708,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
       "borderWidth": 0,
       "enabled": true,
       "itemStyle": {
-        "color": "#5b6372",
-        "cursor": "default",
-        "fontFamily": "Open Sans",
         "fontSize": "13px",
         "fontWeight": "normal",
         "pointerEvents": "auto",
@@ -758,8 +733,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           "crop": false,
           "enabled": false,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -943,7 +916,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
         "dataLabels": {
           "formatter": [Function],
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -1115,7 +1087,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
         "dataLabels": {
           "formatter": [Function],
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -1193,8 +1164,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           "formatter": [Function],
           "overflow": "none",
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -1222,8 +1191,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           "enabled": true,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -1255,8 +1222,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           "enabled": undefined,
           "formatter": [Function],
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -1284,7 +1249,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           "rotation": 0,
           "style": {
             "color": "#5B6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "bold",
             "pointerEvents": "none",
@@ -1303,8 +1267,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           "enabled": undefined,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -1334,8 +1296,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           "enabled": undefined,
           "formatter": [Function],
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -1362,7 +1322,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           "rotation": 0,
           "style": {
             "color": "#5B6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "bold",
             "pointerEvents": "none",
@@ -1381,8 +1340,6 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           "enabled": undefined,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -1431,9 +1388,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
       "borderWidth": 0,
       "enabled": true,
       "itemStyle": {
-        "color": "#5b6372",
-        "cursor": "default",
-        "fontFamily": "Open Sans",
         "fontSize": "13px",
         "fontWeight": "normal",
         "pointerEvents": "auto",
@@ -1459,8 +1413,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           "crop": false,
           "enabled": false,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -1644,7 +1596,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
         "dataLabels": {
           "formatter": [Function],
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -1816,7 +1767,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
         "dataLabels": {
           "formatter": [Function],
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -1894,8 +1844,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           "formatter": [Function],
           "overflow": "none",
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -1923,8 +1871,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           "enabled": true,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -1956,8 +1902,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           "enabled": true,
           "formatter": [Function],
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -1983,7 +1927,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           "rotation": 0,
           "style": {
             "color": "#5B6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "bold",
             "pointerEvents": "none",
@@ -2002,8 +1945,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           "enabled": true,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -2031,8 +1972,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
             -90,
           ],
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -2056,8 +1995,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           "labelrank": 99999,
           "rotation": 0,
           "style": {
-            "color": "#56535b",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "bold",
             "pointerEvents": "none",
@@ -2075,8 +2012,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           "enabled": false,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -2126,9 +2061,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
       "borderWidth": 0,
       "enabled": true,
       "itemStyle": {
-        "color": "#5b6372",
-        "cursor": "default",
-        "fontFamily": "Open Sans",
         "fontSize": "13px",
         "fontWeight": "normal",
         "pointerEvents": "auto",
@@ -2154,8 +2086,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           "crop": false,
           "enabled": false,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -2339,7 +2269,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
         "dataLabels": {
           "formatter": [Function],
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -2511,7 +2440,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
         "dataLabels": {
           "formatter": [Function],
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -2589,8 +2517,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           "formatter": [Function],
           "overflow": "none",
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -2618,8 +2544,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           "enabled": true,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -2651,8 +2575,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           "enabled": undefined,
           "formatter": [Function],
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -2680,7 +2602,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           "rotation": 0,
           "style": {
             "color": "#5B6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "bold",
             "pointerEvents": "none",
@@ -2699,8 +2620,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           "enabled": undefined,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -2730,8 +2649,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           "enabled": undefined,
           "formatter": [Function],
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -2758,7 +2675,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           "rotation": 0,
           "style": {
             "color": "#5B6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "bold",
             "pointerEvents": "none",
@@ -2777,8 +2693,6 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           "enabled": undefined,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -2825,9 +2739,6 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
     "borderWidth": 0,
     "enabled": true,
     "itemStyle": {
-      "color": "#5b6372",
-      "cursor": "default",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -2853,8 +2764,6 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
         "crop": false,
         "enabled": false,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -2947,7 +2856,6 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -3025,8 +2933,6 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
         "formatter": [Function],
         "overflow": "none",
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3054,8 +2960,6 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3087,8 +2991,6 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
         "enabled": true,
         "formatter": [Function],
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3114,7 +3016,6 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
         "rotation": 0,
         "style": {
           "color": "#5B6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -3133,8 +3034,6 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3183,9 +3082,6 @@ exports[`cartesianData > timeseries with one data point 1`] = `
       "borderWidth": 0,
       "enabled": true,
       "itemStyle": {
-        "color": "#5b6372",
-        "cursor": "default",
-        "fontFamily": "Open Sans",
         "fontSize": "13px",
         "fontWeight": "normal",
         "pointerEvents": "auto",
@@ -3211,8 +3107,6 @@ exports[`cartesianData > timeseries with one data point 1`] = `
           "crop": false,
           "enabled": false,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -3274,7 +3168,6 @@ exports[`cartesianData > timeseries with one data point 1`] = `
         "dataLabels": {
           "formatter": [Function],
         },
-        "lineWidth": 2,
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -3352,8 +3245,6 @@ exports[`cartesianData > timeseries with one data point 1`] = `
           "formatter": [Function],
           "overflow": "none",
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -3381,8 +3272,6 @@ exports[`cartesianData > timeseries with one data point 1`] = `
           "enabled": true,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -3414,8 +3303,6 @@ exports[`cartesianData > timeseries with one data point 1`] = `
           "enabled": true,
           "formatter": [Function],
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -3441,7 +3328,6 @@ exports[`cartesianData > timeseries with one data point 1`] = `
           "rotation": 0,
           "style": {
             "color": "#5B6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "bold",
             "pointerEvents": "none",
@@ -3460,8 +3346,6 @@ exports[`cartesianData > timeseries with one data point 1`] = `
           "enabled": true,
           "margin": 25,
           "style": {
-            "color": "#5b6372",
-            "fontFamily": "Open Sans",
             "fontSize": "13px",
             "fontWeight": "normal",
             "pointerEvents": "none",
@@ -3486,8 +3370,6 @@ exports[`highchartsOptionsService - cartesian charts > labels > should prepare c
     "labelrank": 99999,
     "rotation": 45,
     "style": {
-      "color": "#56535b",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "bold",
       "pointerEvents": "none",
@@ -3510,8 +3392,6 @@ exports[`highchartsOptionsService - cartesian charts > labels > should prepare c
     "labelrank": 99999,
     "rotation": 90,
     "style": {
-      "color": "#56535b",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "bold",
       "pointerEvents": "none",
@@ -3534,8 +3414,6 @@ exports[`highchartsOptionsService - cartesian charts > labels > should prepare c
     "labelrank": 99999,
     "rotation": 0,
     "style": {
-      "color": "#56535b",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "bold",
       "pointerEvents": "none",
@@ -3581,9 +3459,6 @@ exports[`renders a categorical line chart 1`] = `
     "borderWidth": 0,
     "enabled": true,
     "itemStyle": {
-      "color": "#5b6372",
-      "cursor": "default",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -3609,8 +3484,6 @@ exports[`renders a categorical line chart 1`] = `
         "crop": false,
         "enabled": false,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3689,7 +3562,6 @@ exports[`renders a categorical line chart 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -3756,7 +3628,6 @@ exports[`renders a categorical line chart 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -3819,8 +3690,6 @@ exports[`renders a categorical line chart 1`] = `
         "formatter": [Function],
         "overflow": "none",
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3845,8 +3714,6 @@ exports[`renders a categorical line chart 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3878,8 +3745,6 @@ exports[`renders a categorical line chart 1`] = `
         "enabled": true,
         "formatter": [Function],
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3904,8 +3769,6 @@ exports[`renders a categorical line chart 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#56535b",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -3924,8 +3787,6 @@ exports[`renders a categorical line chart 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -3972,9 +3833,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
     "borderWidth": 0,
     "enabled": true,
     "itemStyle": {
-      "color": "#5b6372",
-      "cursor": "default",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -4000,8 +3858,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         "crop": false,
         "enabled": false,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -4117,7 +3973,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -4221,7 +4076,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -4289,8 +4143,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         "formatter": [Function],
         "overflow": "none",
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -4310,8 +4162,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
           "isPlotBand": true,
           "label": {
             "style": {
-              "color": "#5b6372",
-              "fontFamily": "Open Sans",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -4330,8 +4180,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
           "isPlotBand": true,
           "label": {
             "style": {
-              "color": "#5b6372",
-              "fontFamily": "Open Sans",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -4350,8 +4198,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
           "isPlotBand": true,
           "label": {
             "style": {
-              "color": "#5b6372",
-              "fontFamily": "Open Sans",
               "fontSize": "13px",
               "fontWeight": "normal",
               "pointerEvents": "none",
@@ -4389,8 +4235,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -4422,8 +4266,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         "enabled": true,
         "formatter": [Function],
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -4448,8 +4290,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#56535b",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -4468,8 +4308,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -4497,8 +4335,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
           -90,
         ],
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -4522,8 +4358,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#56535b",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -4541,8 +4375,6 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         "enabled": false,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -4589,9 +4421,6 @@ exports[`renders a time series chart with break by 1`] = `
     "borderWidth": 0,
     "enabled": true,
     "itemStyle": {
-      "color": "#5b6372",
-      "cursor": "default",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -4617,8 +4446,6 @@ exports[`renders a time series chart with break by 1`] = `
         "crop": false,
         "enabled": false,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -4819,7 +4646,6 @@ exports[`renders a time series chart with break by 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -5004,7 +4830,6 @@ exports[`renders a time series chart with break by 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -5082,8 +4907,6 @@ exports[`renders a time series chart with break by 1`] = `
         "formatter": [Function],
         "overflow": "none",
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -5111,8 +4934,6 @@ exports[`renders a time series chart with break by 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -5144,8 +4965,6 @@ exports[`renders a time series chart with break by 1`] = `
         "enabled": true,
         "formatter": [Function],
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -5171,7 +4990,6 @@ exports[`renders a time series chart with break by 1`] = `
         "rotation": 0,
         "style": {
           "color": "#5B6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -5190,8 +5008,6 @@ exports[`renders a time series chart with break by 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -5238,9 +5054,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
     "borderWidth": 0,
     "enabled": true,
     "itemStyle": {
-      "color": "#5b6372",
-      "cursor": "default",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -5266,8 +5079,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         "crop": false,
         "enabled": false,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -5468,7 +5279,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -5653,7 +5463,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -5731,8 +5540,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         "formatter": [Function],
         "overflow": "none",
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -5760,8 +5567,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -5793,8 +5598,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         "enabled": true,
         "formatter": [Function],
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -5820,7 +5623,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         "rotation": 0,
         "style": {
           "color": "#5B6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -5839,8 +5641,6 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -5887,9 +5687,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
     "borderWidth": 0,
     "enabled": true,
     "itemStyle": {
-      "color": "#5b6372",
-      "cursor": "default",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -5915,8 +5712,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         "crop": false,
         "enabled": false,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -6100,7 +5895,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -6272,7 +6066,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -6350,8 +6143,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         "formatter": [Function],
         "overflow": "none",
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -6379,8 +6170,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -6412,8 +6201,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         "enabled": true,
         "formatter": [Function],
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -6439,7 +6226,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         "rotation": 0,
         "style": {
           "color": "#5B6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -6458,8 +6244,6 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -6506,9 +6290,6 @@ exports[`renders a time series with granularity Month 1`] = `
     "borderWidth": 0,
     "enabled": true,
     "itemStyle": {
-      "color": "#5b6372",
-      "cursor": "default",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -6534,8 +6315,6 @@ exports[`renders a time series with granularity Month 1`] = `
         "crop": false,
         "enabled": false,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -6719,7 +6498,6 @@ exports[`renders a time series with granularity Month 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -6891,7 +6669,6 @@ exports[`renders a time series with granularity Month 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -6969,8 +6746,6 @@ exports[`renders a time series with granularity Month 1`] = `
         "formatter": [Function],
         "overflow": "none",
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -6998,8 +6773,6 @@ exports[`renders a time series with granularity Month 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -7031,8 +6804,6 @@ exports[`renders a time series with granularity Month 1`] = `
         "enabled": true,
         "formatter": [Function],
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -7058,7 +6829,6 @@ exports[`renders a time series with granularity Month 1`] = `
         "rotation": 0,
         "style": {
           "color": "#5B6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -7077,8 +6847,6 @@ exports[`renders a time series with granularity Month 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -7125,9 +6893,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
     "borderWidth": 0,
     "enabled": true,
     "itemStyle": {
-      "color": "#5b6372",
-      "cursor": "default",
-      "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "normal",
       "pointerEvents": "auto",
@@ -7153,8 +6918,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         "crop": false,
         "enabled": false,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -7338,7 +7101,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -7510,7 +7272,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -7588,8 +7349,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         "formatter": [Function],
         "overflow": "none",
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -7617,8 +7376,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -7650,8 +7407,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         "enabled": true,
         "formatter": [Function],
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",
@@ -7677,7 +7432,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         "rotation": 0,
         "style": {
           "color": "#5B6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -7696,8 +7450,6 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         "enabled": true,
         "margin": 25,
         "style": {
-          "color": "#5b6372",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
           "pointerEvents": "none",

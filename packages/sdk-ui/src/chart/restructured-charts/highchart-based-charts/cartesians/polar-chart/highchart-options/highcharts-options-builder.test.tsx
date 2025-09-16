@@ -48,7 +48,10 @@ describe('polar-chart highcharts-options-builder', () => {
     },
     designOptions: {
       lineType: 'straight',
-      legend: 'bottom',
+      legend: {
+        enabled: true,
+        position: 'bottom',
+      },
       lineWidth: 2,
       valueLabel: {},
       marker: { enabled: false, size: 'small', fill: 'full' },
@@ -252,7 +255,10 @@ describe('polar-chart highcharts-options-builder', () => {
         ...mockContext,
         designOptions: {
           ...mockContext.designOptions,
-          legend: 'top' as const,
+          legend: {
+            enabled: true,
+            position: 'top' as const,
+          },
         },
       };
 
@@ -266,7 +272,10 @@ describe('polar-chart highcharts-options-builder', () => {
 
       const result = polarHighchartsOptionsBuilder.getLegend(contextWithTopLegend);
 
-      expect(mockedGetBasicCartesianLegend).toHaveBeenCalledWith('top');
+      expect(mockedGetBasicCartesianLegend).toHaveBeenCalledWith({
+        enabled: true,
+        position: 'top',
+      });
       expect(result).toEqual(topLegend);
     });
   });

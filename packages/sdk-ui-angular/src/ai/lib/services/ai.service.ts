@@ -76,20 +76,16 @@ export const AI_CONTEXT_CONFIG_TOKEN = new InjectionToken<AiContextConfig>('AI C
 })
 @TrackableService<AiService>(['getNlgInsights', 'getQueryRecommendations'])
 export class AiService {
-  private apiPromise: Promise<ChatRestApi>;
-
   constructor(
     private sisenseContextService: SisenseContextService,
-    @Optional() @Inject(AI_CONTEXT_CONFIG_TOKEN) aiContextConfig?: AiContextConfig,
-  ) {
-    this.apiPromise = this.sisenseContextService
-      .getApp()
-      .then((app) => new ChatRestApi(app.httpClient, aiContextConfig?.volatile));
-  }
+    @Optional() @Inject(AI_CONTEXT_CONFIG_TOKEN) private aiContextConfig?: AiContextConfig,
+  ) {}
 
   /** @internal */
   getApi(): Promise<ChatRestApi> {
-    return this.apiPromise;
+    return this.sisenseContextService
+      .getApp()
+      .then((app) => new ChatRestApi(app.httpClient, this.aiContextConfig?.volatile));
   }
 
   /**

@@ -53,7 +53,6 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -417,7 +416,6 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -979,7 +977,6 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",

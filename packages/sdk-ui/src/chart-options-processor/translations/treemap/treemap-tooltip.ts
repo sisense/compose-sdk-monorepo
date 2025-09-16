@@ -89,6 +89,8 @@ export function treemapTooltipFormatter(
   if (formatterOptions?.shouldSkip && formatterOptions.shouldSkip(context)) {
     return false;
   }
+
+  const isYEmpty = chartDataOptions.y?.length === 0;
   const numberFormatConfig = getCompleteNumberFormatConfig(
     chartDataOptions.y?.[0]?.numberFormatConfig,
   );
@@ -112,7 +114,9 @@ export function treemapTooltipFormatter(
 
   return `
       <div
-        class="csdk-treemap-tooltip-wrapper">
+        class="csdk-treemap-tooltip-wrapper"
+        style="padding-bottom: ${isYEmpty ? '0' : '10px'};"
+        >
         ${[...nodesToShow]
           .reverse()
           .map((node, index) => {
@@ -141,13 +145,17 @@ export function treemapTooltipFormatter(
                 </div>`;
           })
           .join('')}
-        <div class="csdk-treemap-tooltip-value">
+        ${
+          isYEmpty
+            ? ''
+            : `<div class="csdk-treemap-tooltip-value">
           <span style="color:${color}; font-size: 15px">${
-    isContributionMode
-      ? getFormattedContribution(nodesToShow[0].val, rootValue)
-      : applyFormat(numberFormatConfig, nodesToShow[0]?.val)
-  }</span> ${translate('treemap.tooltip.of')} ${valueTitle}
-        </div>
+                isContributionMode
+                  ? getFormattedContribution(nodesToShow[0].val, rootValue)
+                  : applyFormat(numberFormatConfig, nodesToShow[0]?.val)
+              }</span> ${translate('treemap.tooltip.of')} ${valueTitle}
+        </div>`
+        }
         ${
           nodesToShow[1]
             ? `<div class="csdk-treemap-tooltip-value" style="padding-top: 4px;">

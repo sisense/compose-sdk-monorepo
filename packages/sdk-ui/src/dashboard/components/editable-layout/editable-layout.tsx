@@ -26,20 +26,18 @@ import { useSyncedState } from '@/common/hooks/use-synced-state';
 import { CellDropOverlay } from './components/cell-drop-overlay';
 import { RowDropOverlay } from './components/row-drop-overlay';
 import { DraggableWidgetWrapper } from './components/draggable-widget-wrapper';
-import {
-  composeToolbarHandlers,
-  composeTitleHandlers,
-  getDraggingWidgetId,
-  isEditableLayoutDragData,
-  isEditableLayoutDropData,
-  composeTextWidgetToolbarHandlers,
-} from './utils';
+import { getDraggingWidgetId, isEditableLayoutDragData, isEditableLayoutDropData } from './utils';
 import { WIDGET_HEADER_HEIGHT } from '@/dashboard/components/editable-layout/const';
 import { useThemeContext } from '@/theme-provider';
 import { useMenu } from '@/common/hooks/use-menu';
 import { MenuItemSection } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { MenuButton } from '@/common/components/menu/menu-button';
+import {
+  composeTextWidgetToolbarHandlers,
+  composeTitleHandlers,
+  composeToolbarHandlers,
+} from '@/utils/combine-handlers';
 
 const Wrapper = styled.div`
   overflow: hidden;

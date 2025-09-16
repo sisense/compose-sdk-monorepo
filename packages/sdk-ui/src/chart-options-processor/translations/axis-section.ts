@@ -39,12 +39,14 @@ export type AxisSettings = {
   tickWidth?: number;
   lineColor?: string;
   lineWidth?: number;
+  offset?: number;
   labels?: {
     overflow?: 'none' | 'justify';
     enabled?: boolean;
     autoRotation?: number[];
     style?: TextStyle;
     rotation?: number;
+    y?: number;
     formatter?: (this: AxisLabelsFormatterContextObject) => string;
   };
   min?: number | null;
@@ -70,6 +72,10 @@ export type AxisSettings = {
   stackLabels?: StackLabel;
   showLastLabel?: boolean;
   visible?: boolean;
+  accessibility?: {
+    description?: string;
+    rangeDescription?: string;
+  };
 };
 
 export type StackLabel = {

@@ -2,34 +2,18 @@ import {
   LegendPosition,
   LegendSettings,
 } from '@/chart-options-processor/translations/legend-section';
+import type { LegendOptions } from '@/types';
 
 const legendItemStyleDefault: LegendSettings['itemStyle'] = {
-  cursor: 'default',
-  fontFamily: 'Open Sans',
   fontSize: '13px',
   fontWeight: 'normal',
-  color: '#5b6372',
   textOutline: 'none',
   pointerEvents: 'auto',
 };
 
-export const getBasicCartesianLegend = (position: LegendPosition): LegendSettings => {
-  const additionalSettings = {
-    symbolRadius: 0,
-    backgroundColor: 'transparent',
-    borderColor: 'transparent',
-    borderWidth: 0,
-    itemStyle: legendItemStyleDefault,
-  };
-
-  if (!position) {
-    return {
-      enabled: false,
-      align: 'center',
-      verticalAlign: 'bottom',
-      layout: 'horizontal',
-    };
-  }
+const transformDeprecatedLegendPositionToLegendSettings = (
+  position: LegendPosition,
+): LegendSettings => {
   switch (position) {
     case 'bottom':
       return {
@@ -37,7 +21,6 @@ export const getBasicCartesianLegend = (position: LegendPosition): LegendSetting
         align: 'center',
         verticalAlign: 'bottom',
         layout: 'horizontal',
-        ...additionalSettings,
       };
     case 'left':
       return {
@@ -45,7 +28,6 @@ export const getBasicCartesianLegend = (position: LegendPosition): LegendSetting
         align: 'left',
         verticalAlign: 'middle',
         layout: 'vertical',
-        ...additionalSettings,
       };
     case 'right':
       return {
@@ -53,7 +35,6 @@ export const getBasicCartesianLegend = (position: LegendPosition): LegendSetting
         align: 'right',
         verticalAlign: 'middle',
         layout: 'vertical',
-        ...additionalSettings,
       };
     case 'top':
       return {
@@ -61,7 +42,6 @@ export const getBasicCartesianLegend = (position: LegendPosition): LegendSetting
         align: 'center',
         verticalAlign: 'top',
         layout: 'horizontal',
-        ...additionalSettings,
       };
     // edge case when position is something like bottomright or not selected in fusion.
     // eslint-disable-next-line sonarjs/no-duplicated-branches
@@ -71,7 +51,103 @@ export const getBasicCartesianLegend = (position: LegendPosition): LegendSetting
         align: 'center',
         verticalAlign: 'bottom',
         layout: 'horizontal',
-        ...additionalSettings,
       };
   }
+};
+
+const transformLegendTitleOptionsToLegendSettings = (title: LegendOptions['title']) => {
+  if (title?.enabled === false || !title) return undefined;
+
+  const { text, textStyle } = title;
+
+  return {
+    title: {
+      ...(text !== undefined && { text }),
+      ...(textStyle !== undefined && { style: textStyle }),
+    },
+  };
+};
+
+const transformLegendItemsOptionsToLegendSettings = (items: LegendOptions['items']) => {
+  if (!items) return undefined;
+
+  const {
+    layout,
+    textStyle,
+    marginBottom,
+    marginTop,
+    distance,
+    width,
+    hoverTextStyle,
+    hiddenTextStyle,
+  } = items || {};
+
+  return {
+    ...(layout !== undefined && { layout }),
+    ...(textStyle !== undefined && { itemStyle: textStyle }),
+    ...(marginBottom !== undefined && { itemMarginBottom: marginBottom }),
+    ...(marginTop !== undefined && { itemMarginTop: marginTop }),
+    ...(distance !== undefined && { itemDistance: distance }),
+    ...(width !== undefined && { itemWidth: width }),
+    ...(hoverTextStyle !== undefined && { itemHoverStyle: hoverTextStyle }),
+    ...(hiddenTextStyle !== undefined && { itemHiddenStyle: hiddenTextStyle }),
+  };
+};
+
+const transformLegendSymbolsOptionsToLegendSettings = (symbols: LegendOptions['symbols']) => {
+  if (!symbols) return undefined;
+
+  const { radius, height, width, padding, squared } = symbols;
+
+  return {
+    ...(radius !== undefined && { symbolRadius: radius }),
+    ...(height !== undefined && { symbolHeight: height }),
+    ...(width !== undefined && { symbolWidth: width }),
+    ...(padding !== undefined && { symbolPadding: padding }),
+    ...(squared !== undefined && { squareSymbol: squared }),
+  };
+};
+
+const transformLegendOptionsToLegendSettings = (legend: LegendOptions): LegendSettings => {
+  const { title, items, symbols, xOffset, yOffset, ...restLegendOptions } = legend;
+  return {
+    ...restLegendOptions,
+    ...transformLegendTitleOptionsToLegendSettings(title),
+    ...transformLegendItemsOptionsToLegendSettings(items),
+    ...transformLegendSymbolsOptionsToLegendSettings(symbols),
+    ...(xOffset !== undefined && { x: xOffset }),
+    ...(yOffset !== undefined && { y: yOffset }),
+  };
+};
+
+export const getBasicCartesianLegend = (legend?: LegendOptions): LegendSettings => {
+  const defaultSettings = {
+    enabled: false,
+    symbolRadius: 0,
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    borderWidth: 0,
+    align: 'center' as const,
+    verticalAlign: 'bottom' as const,
+    layout: 'horizontal' as const,
+  };
+
+  if (!legend) {
+    return defaultSettings;
+  }
+
+  const { position, ...restLegendOptions } = legend;
+
+  const positionSettings = transformDeprecatedLegendPositionToLegendSettings(position || null);
+  const legendSettings = transformLegendOptionsToLegendSettings(restLegendOptions);
+
+  return {
+    ...defaultSettings,
+    ...positionSettings,
+    ...legendSettings,
+    itemStyle: {
+      ...legendItemStyleDefault,
+      ...legendSettings.itemStyle,
+    },
+  };
 };

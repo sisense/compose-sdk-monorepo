@@ -16,7 +16,10 @@ export const CATEGORIES_CAPACITY = 100000;
 export const BaseDesignOptions: Merge<DesignOptions> = {
   lineType: 'straight',
   stackType: 'classic',
-  legend: 'bottom',
+  legend: {
+    enabled: true,
+    position: 'bottom',
+  },
   lineWidth: 2,
   valueLabel: {},
   marker: { enabled: false, size: 'small', fill: 'full' },

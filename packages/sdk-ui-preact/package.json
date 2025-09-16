@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-ui-preact",
-  "homepage": "https://sisense.dev/guides/sdk/",
+  "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package containing general UI elements and related logic tailored for Preact development",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.9.0",
+  "version": "2.10.0",
   "type": "module",
   "exports": {
     ".": {

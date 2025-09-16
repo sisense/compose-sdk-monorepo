@@ -3,7 +3,9 @@
 exports[`Treemap Chart tooltip formatter > contribution mode 1`] = `
 "
       <div
-        class="csdk-treemap-tooltip-wrapper">
+        class="csdk-treemap-tooltip-wrapper"
+        style="padding-bottom: 10px;"
+        >
 
                 <div
                   class="csdk-treemap-tooltip-level"
@@ -113,7 +115,9 @@ exports[`Treemap Chart tooltip formatter > contribution mode 1`] = `
 exports[`Treemap Chart tooltip formatter > single category tooltip 1`] = `
 "
       <div
-        class="csdk-treemap-tooltip-wrapper">
+        class="csdk-treemap-tooltip-wrapper"
+        style="padding-bottom: 10px;"
+        >
 
                 <div
                   class="csdk-treemap-tooltip-level"
@@ -140,7 +144,9 @@ exports[`Treemap Chart tooltip formatter > single category tooltip 1`] = `
 exports[`Treemap Chart tooltip formatter > three categories tooltip 1`] = `
 "
       <div
-        class="csdk-treemap-tooltip-wrapper">
+        class="csdk-treemap-tooltip-wrapper"
+        style="padding-bottom: 10px;"
+        >
 
                 <div
                   class="csdk-treemap-tooltip-level"

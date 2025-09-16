@@ -20,7 +20,7 @@
   },
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
-  "homepage": "https://sisense.dev/guides/sdk/",
+  "homepage": "https://developer.sisense.com/guides/sdk/",
   "keywords": [
     "typedoc",
     "typedoc-plugin",

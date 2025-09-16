@@ -185,7 +185,7 @@ export const ChartWidget = defineComponent({
      * @internal
      */
     topSlot: Object as PropType<ChartWidgetProps['topSlot']>,
-    // TODO Remove this prop as part of https://sisense.dev/guides/sdk/guides/migration-guide-1.0.0.html#removed
+    // TODO Remove this prop as part of https://developer.sisense.com/guides/sdk/guides/migration-guide-1.0.0.html#removed
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
      * @category Widget

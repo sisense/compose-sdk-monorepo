@@ -51,7 +51,7 @@ export function prepareTreemapOptions(
     series: [
       {
         ...DEFAULT_TREEMAP_SERIES,
-        name: getDataOptionTitle(dataOptions.y[0]),
+        name: dataOptions.y[0] ? getDataOptionTitle(dataOptions.y[0]) : '',
         data: prepareTreemapDataItems(chartData, dataOptions, themeSettings),
         levels: prepareTreemapLevels(dataOptions, designOptions, themeSettings),
       },

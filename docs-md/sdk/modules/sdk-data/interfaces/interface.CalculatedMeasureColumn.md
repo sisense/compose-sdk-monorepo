@@ -22,7 +22,7 @@ Measure context
 
 > **expression**: `string`
 
-Expression representing the element in a [JAQL query](https://sisense.dev/guides/querying/useJaql/).
+Expression representing the element in a [JAQL query](https://developer.sisense.com/guides/querying/useJaql/).
 
 ***
 

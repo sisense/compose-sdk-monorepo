@@ -113,7 +113,18 @@ export function processSeries(config: SeriesProcessingConfig) {
         },
         connectNulls: yConnectNulls[index],
         marker: getMarkerSettings(seriesDesignOptions.marker),
-        lineWidth: seriesDesignOptions.lineWidth,
+        ...(seriesDesignOptions.line?.width !== undefined && {
+          lineWidth: seriesDesignOptions.line?.width,
+        }),
+        ...(seriesDesignOptions.line?.dashStyle !== undefined && {
+          dashStyle: seriesDesignOptions.line?.dashStyle,
+        }),
+        ...(seriesDesignOptions.line?.endCap !== undefined && {
+          linecap: seriesDesignOptions.line?.endCap?.toLowerCase(),
+        }),
+        ...(seriesDesignOptions.line?.shadow !== undefined && {
+          shadow: seriesDesignOptions.line?.shadow,
+        }),
       };
     });
 }

@@ -5,6 +5,7 @@ import {
   AreaChartDesignOptions,
   BarChartDesignOptions,
   ColumnChartDesignOptions,
+  CalendarHeatmapChartDesignOptions,
   PieChartDesignOptions,
   FunnelChartDesignOptions,
   IndicatorChartDesignOptions,
@@ -18,17 +19,53 @@ import {
 } from './design-options';
 
 /**
- * Style configuration for text elements
+ * Style configuration for text elements in charts and UI components.
+ * Defines the visual appearance and behavior of text rendering.
  */
 export type TextStyle = {
+  /**
+   * Font family name for the text.
+   * Examples: 'Arial', 'Helvetica', 'Times New Roman', 'sans-serif'
+   */
   fontFamily?: string;
+  /**
+   * Font size in CSS units (px, em, rem, pt, etc.).
+   * Examples: '12px', '1.2em', '16pt'
+   */
   fontSize?: string;
+  /**
+   * Font weight for text rendering.
+   * Examples: 'normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900'
+   */
   fontWeight?: string;
+  /**
+   * Font style for text rendering.
+   * Examples: 'normal', 'italic', 'oblique'
+   */
+  fontStyle?: string;
+  /**
+   * Text color in any valid CSS color format.
+   * Examples: '#FF0000', 'rgb(255, 0, 0)', 'red', 'rgba(255, 0, 0, 0.5)'
+   */
   color?: string;
+  /**
+   * Text outline/stroke configuration.
+   * Defines the outline color and width for text rendering.
+   * Examples: '1px solid black', '2px #333'
+   */
   textOutline?: string;
+  /**
+   * CSS pointer-events property for text interaction.
+   * Controls how the text responds to mouse events.
+   * Examples: 'auto', 'none', 'visible', 'visibleFill', 'visibleStroke'
+   */
   pointerEvents?: string;
+  /**
+   * Text overflow handling behavior.
+   * Controls how text is displayed when it exceeds its container.
+   * Examples: 'clip', 'ellipsis', 'visible', 'hidden'
+   */
   textOverflow?: string;
-  width?: string;
 };
 
 export const POLAR_CHART_TYPES = ['polar'] as const;
@@ -78,6 +115,15 @@ export const SCATTERMAP_CHART_TYPES = ['scattermap'] as const;
 /** Scattermap chart types  @expandType */
 export type ScattermapChartType = (typeof SCATTERMAP_CHART_TYPES)[number];
 
+export const CALENDAR_HEATMAP_CHART_TYPES = ['calendar-heatmap'] as const;
+/**
+ * Calendar heatmap chart types
+ *
+ * @expandType
+ * @alpha
+ */
+export type CalendarHeatmapChartType = (typeof CALENDAR_HEATMAP_CHART_TYPES)[number];
+
 export const RANGE_CHART_TYPES = ['arearange'] as const;
 /** AreaRange chart types  @expandType */
 export type RangeChartType = (typeof RANGE_CHART_TYPES)[number];
@@ -124,6 +170,8 @@ export type DesignOptions<SpecificChartType extends ChartType = ChartType> =
     ? AreamapChartDesignOptions
     : SpecificChartType extends 'scattermap'
     ? ScattermapChartDesignOptions
+    : SpecificChartType extends 'calendar-heatmap'
+    ? CalendarHeatmapChartDesignOptions
     : SpecificChartType extends 'arearange'
     ? AreaRangeChartDesignOptions
     : never;
@@ -143,7 +191,8 @@ export type ChartDesignOptions<SpecificChartType extends ChartType = ChartType> 
  *
  * @internal
  */
-export type SeriesDesignOptions = Pick<BaseDesignOptionsType, 'lineWidth' | 'marker'>;
+export type SeriesDesignOptions = Pick<BaseDesignOptionsType, 'marker'> &
+  Pick<LineChartDesignOptions, 'line'>;
 export type DesignPerSeries = { designPerSeries: Record<SeriesId, SeriesDesignOptions> };
 
 export const isCartesian = (chartType: ChartType): chartType is CartesianChartType => {
@@ -200,6 +249,7 @@ export const ALL_CHART_TYPES = [
   ...AREAMAP_CHART_TYPES,
   ...IMAGE_CHART_TYPES,
   ...SCATTERMAP_CHART_TYPES,
+  ...CALENDAR_HEATMAP_CHART_TYPES,
   ...RANGE_CHART_TYPES,
 ] as const;
 

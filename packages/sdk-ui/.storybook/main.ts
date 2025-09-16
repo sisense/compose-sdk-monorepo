@@ -26,6 +26,12 @@ const config: StorybookConfig = {
       'vite-plugin-css-injected-by-js',
       'vite:dts',
     ]);
+
+    config.server = {
+      ...config.server,
+      allowedHosts: true,
+    };
+
     return config;
   },
   docs: {

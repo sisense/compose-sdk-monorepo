@@ -13,6 +13,7 @@ export const DEFAULT_FILTER_PANEL_DIVIDER_LINE_WIDTH = 1;
 export const DEFAULT_FILTER_PANEL_BORDER_COLOR = '#DADADA';
 export const DEFAULT_FILTER_PANEL_BORDER_WIDTH = 1;
 export const DEFAULT_TITLE_FONT_SIZE = 15;
+export const DEFAULT_HYPERLINK_COLOR = '#1FAFF3';
 
 const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
   chart: {
@@ -32,6 +33,7 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
     fontFamily: '"Open Sans","Roboto","Helvetica","Arial",sans-serif',
     primaryTextColor: '#5B6372',
     secondaryTextColor: '#9EA2AB',
+    hyperlinkColor: DEFAULT_HYPERLINK_COLOR,
   },
   palette: {
     variantColors: ['#00cee6', '#9b9bd7', '#6eda55', '#fc7570', '#fbb755', '#218a8c'],
@@ -275,6 +277,7 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
     fontFamily: '"Open Sans","Roboto","Helvetica","Arial",sans-serif',
     primaryTextColor: '#FFFFFF',
     secondaryTextColor: '#C5C8CF',
+    hyperlinkColor: DEFAULT_HYPERLINK_COLOR,
   },
   palette: {
     variantColors: ['#00cee6', '#9b9bd7', '#6eda55', '#fc7570', '#fbb755', '#218a8c'], // Variant colors remain the same

@@ -672,6 +672,10 @@ export type JtdDrillTarget = {
   id: string;
 };
 
+export type JtdPivotDrillTarget = JtdDrillTarget & {
+  pivotDimensions: string[];
+};
+
 export type JtdConfigDto = {
   drilledDashboardPrefix: string;
   drilledDashboardsFolderPrefix: string;
@@ -688,12 +692,7 @@ export type JtdConfigDto = {
   drillToDashboardNavigateTypeCharts: number;
   drillToDashboardNavigateTypeOthers: number;
   drilledDashboardDisplayType: number;
-  dashboardIds: Array<{
-    oid: string;
-    caption: string;
-    id: string;
-    dashboardTitle: string;
-  }>;
+  dashboardIds: Array<JtdDrillTarget | JtdPivotDrillTarget>;
   modalWindowResize: boolean;
   modalWindowMeasurement?: SizeMeasurement;
   modalWindowWidth?: number;

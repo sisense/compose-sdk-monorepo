@@ -31,7 +31,7 @@ export function translateScattermapChartDataOptions(
 ): ScattermapChartDataOptionsInternal {
   const { geo, size, colorBy, details } = scattermap;
   return {
-    locations: geo.map(normalizeColumn),
+    locations: geo.map((c) => normalizeColumn(c)),
     size: size && normalizeMeasureColumn(size),
     colorBy: colorBy && normalizeMeasureColumn(colorBy),
     details: details && normalizeAnyColumn(details),

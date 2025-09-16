@@ -25,7 +25,10 @@ describe('getScatterChartOptions', () => {
   };
   const chartType = 'scatter';
   const chartDesignOptions: ChartDesignOptions = {
-    legend: 'bottom',
+    legend: {
+      position: 'bottom',
+      enabled: true,
+    },
     valueLabel: {},
     lineType: 'straight',
     lineWidth: 0,
@@ -152,7 +155,10 @@ describe('getScatterChartOptions', () => {
 });
 
 describe('Scatter legend', () => {
-  const options = getScatterLegendSettings('bottom');
+  const options = getScatterLegendSettings({
+    position: 'bottom',
+    enabled: true,
+  });
 
   it('should be enabled', () => {
     expect(options.enabled).toBe(true);
@@ -160,9 +166,6 @@ describe('Scatter legend', () => {
 
   it('should have correct item styles', () => {
     expect(options.itemStyle).toStrictEqual({
-      color: '#5b6372',
-      cursor: 'default',
-      fontFamily: 'Open Sans',
       fontSize: '13px',
       fontWeight: 'normal',
       pointerEvents: 'auto',

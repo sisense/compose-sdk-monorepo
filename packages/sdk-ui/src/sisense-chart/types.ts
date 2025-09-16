@@ -5,6 +5,7 @@ import { BeforeRenderHandler } from '@/props.js';
 import {
   BoxplotChartType,
   BoxplotDataPoint,
+  CalendarHeatmapDataPoint,
   CartesianChartType,
   CategoricalChartType,
   DataPoint,
@@ -17,7 +18,11 @@ export type SisenseChartDataPointsEventHandler = (
   nativeEvent: MouseEvent,
 ) => void;
 
-export type SisenseChartDataPoint = DataPoint | ScatterDataPoint | BoxplotDataPoint;
+export type SisenseChartDataPoint =
+  | DataPoint
+  | ScatterDataPoint
+  | BoxplotDataPoint
+  | CalendarHeatmapDataPoint;
 
 export type SisenseChartDataPointEventHandler = (
   point: SisenseChartDataPoint,

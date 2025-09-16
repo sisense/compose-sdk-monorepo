@@ -31,6 +31,8 @@ export function isRestructuredChartType(chartType: ChartType): chartType is Supp
     'bar',
     'line',
     'polar',
+    'pie',
+    'calendar-heatmap',
   ];
   return restructuredChartTypes.includes(chartType as SupportedChartType);
 }

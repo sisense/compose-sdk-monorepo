@@ -19,6 +19,8 @@ TypeScript interfaces for components and hooks listed above
 - [BarChartProps](interface.BarChartProps.md)
 - [BoxplotChartProps](interface.BoxplotChartProps.md)
 - [BoxplotStyleOptions](interface.BoxplotStyleOptions.md)
+- [CalendarHeatmapChartDataOptions](interface.CalendarHeatmapChartDataOptions.md) <Badge type="alpha" text="Alpha" />
+- [CalendarHeatmapStyleOptions](interface.CalendarHeatmapStyleOptions.md) <Badge type="alpha" text="Alpha" />
 - [CartesianChartDataOptions](interface.CartesianChartDataOptions.md)
 - [CategoricalChartDataOptions](interface.CategoricalChartDataOptions.md)
 - [ChartProps](interface.ChartProps.md)
@@ -77,6 +79,9 @@ TypeScript interfaces for components and hooks listed above
 - [HierarchyModel](interface.HierarchyModel.md)
 - [IndicatorChartDataOptions](interface.IndicatorChartDataOptions.md)
 - [IndicatorChartProps](interface.IndicatorChartProps.md)
+- [LegendItemsOptions](interface.LegendItemsOptions.md)
+- [LegendSymbolsOptions](interface.LegendSymbolsOptions.md)
+- [LegendTitleOptions](interface.LegendTitleOptions.md)
 - [LineChartProps](interface.LineChartProps.md)
 - [LineStyleOptions](interface.LineStyleOptions.md)
 - [Member](interface.Member.md)

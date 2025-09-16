@@ -63,8 +63,6 @@ describe('getFunnelPlotOptions', () => {
           formatter: expect.any(Function),
           funnelMinimumFontSizeToTextLabel: 8,
           style: {
-            color: '#5b6372',
-            fontFamily: 'Open Sans',
             fontSize: '13px',
             fontWeight: 'normal',
             pointerEvents: 'none',

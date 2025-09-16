@@ -79,7 +79,7 @@ export function getDesignOptionsPerSeries(
       );
       return {
         seriesId,
-        designOptions: pick(completeDesignOptions, ['lineWidth', 'marker']),
+        designOptions: pick(completeDesignOptions, ['line', 'marker']),
       };
     },
   );

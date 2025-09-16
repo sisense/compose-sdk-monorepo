@@ -1,21 +1,33 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import Tooltip from '@mui/material/Tooltip';
-import { WidgetProps } from '@/props.js';
-import { DataPoint } from '@/types';
-import { combineHandlers } from '@/utils/combine-handlers.js';
+import { combineHandlers } from '@/utils/combine-handlers';
+import { WidgetProps, PivotTableDataPointEventHandler } from '@/props.js';
+import { DataPoint, PivotTableDataPoint } from '@/types';
+import { CustomDataCellFormatter, CustomHeaderCellFormatter } from '@/pivot-table/formatters/types';
 import {
   isChartWidgetProps,
   isTextWidgetProps,
+  isPivotTableWidgetProps,
   registerDataPointContextMenuHandler,
 } from '@/widget-by-id/utils';
 import { JtdJumpableIcon } from '@/common/icons/jtd-jumpable-icon';
-import { handleDataPointClick, handleTextWidgetClick } from './jtd-handlers';
+import {
+  handleDataPointClick,
+  handleTextWidgetClick,
+  handlePivotDataPointClick,
+  convertPivotToDataPoint,
+} from './jtd-handlers';
+import {
+  createJtdHyperlinkDataCellFormatter,
+  createJtdHyperlinkHeaderCellFormatter,
+} from './jtd-formatters';
 import {
   getJumpToDashboardMenuItem,
   getJumpToDashboardMenuItemForMultiplePoints,
 } from './jtd-menu';
 import { JtdActions, JtdWidgetTransformConfig } from './jtd-types';
+import { DEFAULT_HYPERLINK_COLOR } from '@/theme-provider/default-theme-settings';
 
 const jumpToDashboardMenuId = 'jump-to-dashboard-menu';
 
@@ -105,27 +117,71 @@ export const applyClickNavigationForChart = (
   // Add pointer cursor for supported chart types
   const updatedProps = addPointerCursorToChart(widgetProps);
 
+  const jtdClickHandler = (point: DataPoint, nativeEvent: PointerEvent) => {
+    handleDataPointClick(
+      {
+        jtdConfig: config.jtdConfig,
+        widgetProps,
+        point,
+      },
+      {
+        dashboardFilters: config.dashboardFilters,
+        originalWidgetFilters: config.originalWidgetFilters,
+      },
+      actions,
+      {
+        nativeEvent,
+        getJumpToDashboardMenuItem,
+      },
+    );
+  };
+
+  // Replace the original onDataPointClick handler instead of combining
+  // When JTD click navigation is configured, we want ONLY JTD behavior, not the default chart filtering
+  // The original onDataPointClick (if any) would typically apply filters, which conflicts with JTD
   return {
     ...updatedProps,
-    onDataPointClick: (point: DataPoint, nativeEvent: PointerEvent) => {
-      handleDataPointClick(
-        {
-          jtdConfig: config.jtdConfig,
-          widgetProps,
-          point,
-        },
-        {
-          dashboardFilters: config.dashboardFilters,
-          originalWidgetFilters: config.originalWidgetFilters,
-        },
-        actions,
-        {
-          nativeEvent,
-          getJumpToDashboardMenuItem,
-        },
-      );
-    },
+    onDataPointClick: jtdClickHandler,
   } as WidgetProps;
+};
+
+/**
+ * Apply JTD click navigation for pivot table widgets
+ *
+ * @param widgetProps - The widget props
+ * @param config - The JTD configuration and context
+ * @param actions - The action functions
+ * @returns Updated widget props with click navigation
+ * @internal
+ */
+export const applyClickNavigationForPivot = (
+  widgetProps: WidgetProps,
+  config: JtdWidgetTransformConfig,
+  actions: Pick<JtdActions, 'openModal' | 'openMenu' | 'translate'>,
+): WidgetProps => {
+  if (!isPivotTableWidgetProps(widgetProps)) {
+    return widgetProps;
+  }
+
+  const pivotHandler: PivotTableDataPointEventHandler = (point: PivotTableDataPoint) => {
+    handlePivotDataPointClick(
+      {
+        jtdConfig: config.jtdConfig,
+        widgetProps,
+        point,
+      },
+      {
+        dashboardFilters: config.dashboardFilters,
+        originalWidgetFilters: config.originalWidgetFilters,
+      },
+      actions,
+    );
+  };
+
+  return {
+    ...widgetProps,
+    onDataPointClick: combineHandlers([widgetProps.onDataPointClick, pivotHandler]),
+  };
 };
 
 /**
@@ -240,6 +296,151 @@ export const applyRightClickNavigation = (
   return {
     ...widgetProps,
     onDataPointsSelected: combineHandlers([originalPointsSelectedHandler, onDataPointsSelected]),
+  };
+};
+
+/**
+ * Apply JTD right-click navigation for pivot table widgets
+ *
+ * @param widgetProps - The widget props
+ * @param config - The JTD configuration and context
+ * @param actions - The action functions
+ * @returns Updated widget props with right-click navigation
+ * @internal
+ */
+export const applyRightClickNavigationForPivot = (
+  widgetProps: WidgetProps,
+  config: JtdWidgetTransformConfig,
+  actions: Pick<JtdActions, 'openModal' | 'openMenu' | 'translate'>,
+): WidgetProps => {
+  if (!isPivotTableWidgetProps(widgetProps)) {
+    return widgetProps;
+  }
+
+  const jtdContextMenuHandler: PivotTableDataPointEventHandler = (
+    point: PivotTableDataPoint,
+    nativeEvent: MouseEvent,
+  ) => {
+    // Convert pivot data point to regular data point format for menu creation
+    const convertedPoint = convertPivotToDataPoint(point);
+
+    const menuItem = getJumpToDashboardMenuItem(
+      {
+        jtdConfig: config.jtdConfig,
+        point: convertedPoint,
+        widgetProps,
+      },
+      {
+        dashboardFilters: config.dashboardFilters,
+        originalWidgetFilters: config.originalWidgetFilters,
+      },
+      actions,
+    );
+
+    if (menuItem) {
+      nativeEvent.preventDefault();
+      nativeEvent.stopPropagation();
+
+      actions.openMenu?.({
+        id: jumpToDashboardMenuId,
+        position: {
+          left: nativeEvent.clientX,
+          top: nativeEvent.clientY,
+        },
+        itemSections: [{ items: [menuItem] }],
+      });
+    }
+  };
+
+  return {
+    ...widgetProps,
+    onDataPointContextMenu: combineHandlers([
+      widgetProps.onDataPointContextMenu,
+      jtdContextMenuHandler,
+    ]),
+  };
+};
+
+/**
+ * Applies hyperlink styling to pivot table cells for PIVOT_LINK navigation
+ * @param widgetProps - Pivot table widget props
+ * @param config - JTD configuration
+ * @param hyperlinkColor
+ * @returns Updated widget props with hyperlink styling
+ * @internal
+ */
+export const applyPivotLinkStyling = (
+  widgetProps: WidgetProps,
+  config: JtdWidgetTransformConfig,
+  hyperlinkColor = DEFAULT_HYPERLINK_COLOR,
+): WidgetProps => {
+  if (!isPivotTableWidgetProps(widgetProps)) {
+    return widgetProps;
+  }
+
+  // Create the JTD hyperlink formatters for both data and header cells
+
+  const jtdHyperlinkFormatter = createJtdHyperlinkDataCellFormatter(
+    hyperlinkColor,
+    config.jtdConfig,
+  );
+  const jtdHyperlinkHeaderFormatter = createJtdHyperlinkHeaderCellFormatter(
+    hyperlinkColor,
+    config.jtdConfig,
+  );
+
+  // Combine existing formatters with JTD formatters into single callbacks
+  const combinedDataCellFormatter: CustomDataCellFormatter = (
+    cell,
+    jaqlPanelItem,
+    dataOption,
+    id,
+  ) => {
+    // First apply existing formatter if present
+    const existingResult = widgetProps.onDataCellFormat?.(cell, jaqlPanelItem, dataOption, id);
+    // Then apply JTD formatter
+    const jtdResult = jtdHyperlinkFormatter(cell, jaqlPanelItem, dataOption, id);
+
+    // Merge results, with JTD taking precedence for conflicting properties
+    return {
+      ...existingResult,
+      ...jtdResult,
+      // Merge styles if both exist
+      style: {
+        ...existingResult?.style,
+        ...jtdResult?.style,
+      },
+    };
+  };
+
+  const combinedHeaderCellFormatter: CustomHeaderCellFormatter = (
+    cell,
+    jaqlPanelItem,
+    dataOption,
+    id,
+  ) => {
+    // First apply existing formatter if present
+    const existingResult = widgetProps.onHeaderCellFormat?.(cell, jaqlPanelItem, dataOption, id);
+    // Then apply JTD formatter
+    const jtdResult = jtdHyperlinkHeaderFormatter(cell, jaqlPanelItem, dataOption, id);
+
+    // Merge results, with JTD taking precedence for conflicting properties
+    return {
+      ...existingResult,
+      ...jtdResult,
+      // Merge styles if both exist
+      style: {
+        ...existingResult?.style,
+        ...jtdResult?.style,
+      },
+    };
+  };
+
+  // Add the combined formatters to the widget props
+  return {
+    ...widgetProps,
+    onDataCellFormat: combinedDataCellFormatter,
+    onHeaderCellFormat: combinedHeaderCellFormatter,
   };
 };
 

@@ -3,20 +3,30 @@ import { QueryDescription, QueryExecutionConfig } from '@sisense/sdk-query-clien
 import type {
   AreaStyleOptions,
   AreamapStyleOptions,
+  CalendarHeatmapStyleOptions,
   ChartDataOptions,
   ChartStyleOptions,
   LineStyleOptions,
+  PieStyleOptions,
   PolarStyleOptions,
   ScattermapStyleOptions,
   StackableStyleOptions,
 } from '@/types';
 import type { ChartRendererProps } from '@/chart';
-import type { CartesianChartData, ScattermapChartData } from '@/chart-data/types';
+import type {
+  CartesianChartData,
+  CategoricalChartData,
+  ScattermapChartData,
+} from '@/chart-data/types';
 import {
   AreamapChartDataOptions,
   AreamapChartDataOptionsInternal,
+  CalendarHeatmapChartDataOptions,
+  CalendarHeatmapChartDataOptionsInternal,
   CartesianChartDataOptions,
   CartesianChartDataOptionsInternal,
+  CategoricalChartDataOptions,
+  CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
   ScattermapChartDataOptions,
   ScattermapChartDataOptionsInternal,
@@ -30,29 +40,48 @@ import { AreamapProps } from '@/chart/restructured-charts/areamap-chart/renderer
 import { ScattermapProps } from '@/charts/map-charts/scattermap/scattermap';
 import { AreamapData } from './areamap-chart/types';
 import { HighchartsBasedChartRendererProps } from './highchart-based-charts/highcharts-based-chart-renderer/highcharts-based-chart-renderer';
+import { CalendarHeatmapChartData } from './highchart-based-charts/calendar-heatmap-chart/data';
 
-export type SupportedChartType = 'areamap' | 'column' | 'bar' | 'line' | 'area' | 'polar';
+export type SupportedChartType =
+  | 'areamap'
+  | 'column'
+  | 'bar'
+  | 'line'
+  | 'area'
+  | 'polar'
+  | 'pie'
+  | 'calendar-heatmap';
 
 export type TypedChartDataOptions<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapChartDataOptions
   : CT extends 'scattermap'
   ? ScattermapChartDataOptions
+  : CT extends 'pie'
+  ? CategoricalChartDataOptions
   : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
   ? CartesianChartDataOptions
+  : CT extends 'calendar-heatmap'
+  ? CalendarHeatmapChartDataOptions
   : never;
 
 export type TypedDataOptionsInternal<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapChartDataOptionsInternal
   : CT extends 'scattermap'
   ? ScattermapChartDataOptionsInternal
+  : CT extends 'pie'
+  ? CategoricalChartDataOptionsInternal
   : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
   ? CartesianChartDataOptionsInternal
+  : CT extends 'calendar-heatmap'
+  ? CalendarHeatmapChartDataOptionsInternal
   : never;
 
 export type TypedChartStyleOptions<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapStyleOptions
   : CT extends 'scattermap'
   ? ScattermapStyleOptions
+  : CT extends 'pie'
+  ? PieStyleOptions
   : CT extends 'column' | 'bar'
   ? StackableStyleOptions
   : CT extends 'line'
@@ -61,6 +90,8 @@ export type TypedChartStyleOptions<CT extends SupportedChartType> = CT extends '
   ? AreaStyleOptions
   : CT extends 'polar'
   ? PolarStyleOptions
+  : CT extends 'calendar-heatmap'
+  ? CalendarHeatmapStyleOptions
   : never;
 
 export type TypedDesignOptions<CT extends SupportedChartType> = DesignOptions<CT>;
@@ -69,8 +100,12 @@ export type TypedChartData<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapData
   : CT extends 'scattermap'
   ? ScattermapChartData
+  : CT extends 'pie'
+  ? CategoricalChartData
   : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
   ? CartesianChartData
+  : CT extends 'calendar-heatmap'
+  ? CalendarHeatmapChartData
   : never;
 
 export type TypedLoadDataFunction<CT extends SupportedChartType> = (options: {
@@ -84,7 +119,7 @@ export type TypedChartRendererProps<CT extends SupportedChartType> = CT extends 
   ? AreamapProps
   : CT extends 'scattermap'
   ? ScattermapProps
-  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
+  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar' | 'pie' | 'calendar-heatmap'
   ? HighchartsBasedChartRendererProps<CT>
   : never;
 

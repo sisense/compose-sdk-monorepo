@@ -1,3 +1,5 @@
+import { Transformer } from '@/utils/utility-types/transformer';
+import flow from 'lodash-es/flow';
 import { CategoricalChartType } from '../../types';
 import { CategoricalChartDataOptions } from '../types';
 
@@ -5,7 +7,20 @@ export function validateCategoricalChartDataOptions(
   chartType: CategoricalChartType,
   dataOptions: CategoricalChartDataOptions,
 ): CategoricalChartDataOptions {
-  return filterCategoricalDataOptionsByAllowedLength(chartType, dataOptions);
+  const maxLengths = maxCategoricalDataOptionsLengthsMap[chartType];
+
+  // For pie charts, only apply value limitation if there are categories
+  const shouldApplyValueLimitation = chartType !== 'pie' || dataOptions.category.length > 0;
+
+  const transformers: Transformer<CategoricalChartDataOptions>[] = [
+    withCategoryLimitation(maxLengths.category),
+    shouldApplyValueLimitation
+      ? withValueLimitation(maxLengths.value)
+      : (data: CategoricalChartDataOptions) => data,
+  ];
+
+  // Apply transformers in sequence
+  return flow(...transformers)(dataOptions);
 }
 
 type MaxCategoricalDataOptionsLengths = {
@@ -40,36 +55,43 @@ const maxCategoricalDataOptionsLengthsMap: MaxCategoricalDataOptionsLengthsMap =
 };
 
 /**
- * Filter data options by allowed length of attributes for specific chart type.
+ * Creates a transformer that limits the number of categories in chart data options.
  *
- * @param chartType
- * @param dataOptions
- * @returns
+ * @param maxCategories - Maximum allowed number of categories
+ * @returns Transformer function that limits categories
  */
-function filterCategoricalDataOptionsByAllowedLength(
-  chartType: CategoricalChartType,
-  dataOptions: CategoricalChartDataOptions,
-): CategoricalChartDataOptions {
-  const maxLengths = maxCategoricalDataOptionsLengthsMap[chartType];
-  if (dataOptions.category.length > maxLengths.category) {
-    console.warn(
-      `Maximum 'category' length is limited to ${maxLengths.category} for '${chartType}' chart. Taken first ${maxLengths.category} categories`,
-    );
-  }
-  const filteredCategory = dataOptions.category.slice(0, maxLengths.category);
-
-  let filteredValue = dataOptions.value;
-  if (chartType !== 'pie' || dataOptions.category.length > 0) {
-    if (dataOptions.value.length > maxLengths.value) {
+export function withCategoryLimitation(maxCategories: number) {
+  return (dataOptions: CategoricalChartDataOptions): CategoricalChartDataOptions => {
+    if (dataOptions.category.length > maxCategories) {
       console.warn(
-        `Maximum 'value' length is limited to ${maxLengths.value} for '${chartType}' chart. Taken first ${maxLengths.value} values`,
+        `Maximum 'category' length is limited to ${maxCategories}. Taken first ${maxCategories} categories`,
       );
     }
-    filteredValue = dataOptions.value.slice(0, maxLengths.value);
-  }
-  return {
-    ...dataOptions,
-    category: filteredCategory,
-    value: filteredValue,
+
+    return {
+      ...dataOptions,
+      category: dataOptions.category.slice(0, maxCategories),
+    };
+  };
+}
+
+/**
+ * Creates a transformer that limits the number of values in chart data options.
+ *
+ * @param maxValues - Maximum allowed number of values
+ * @returns Transformer function that limits values
+ */
+export function withValueLimitation(maxValues: number) {
+  return (dataOptions: CategoricalChartDataOptions): CategoricalChartDataOptions => {
+    if (dataOptions.value.length > maxValues) {
+      console.warn(
+        `Maximum 'value' length is limited to ${maxValues}. Taken first ${maxValues} values`,
+      );
+    }
+
+    return {
+      ...dataOptions,
+      value: dataOptions.value.slice(0, maxValues),
+    };
   };
 }

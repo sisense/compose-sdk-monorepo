@@ -14,17 +14,13 @@ const titleMargin = 25;
 const autoRotation = [-10, -20, -30, -40, -50, -60, -70, -80, -90];
 
 export const fontStyleDefault: TextStyle = {
-  fontFamily: 'Open Sans',
   fontSize: '13px',
   fontWeight: 'normal',
-  color: '#5b6372',
   textOutline: 'none',
   pointerEvents: 'none',
 };
 
 export const stackTotalFontStyleDefault: TextStyle = {
-  color: '#56535b',
-  fontFamily: 'Open Sans',
   fontSize: '13px',
   textOverflow: 'ellipsis',
   pointerEvents: 'none',
@@ -130,7 +126,7 @@ export const cartesianDefaults: HighchartsOptionsInternal = {
     alignTicks: false,
     polar: false,
   },
-  legend: getLegendSettings(null),
+  legend: getLegendSettings(),
   credits: {
     enabled: false,
   },

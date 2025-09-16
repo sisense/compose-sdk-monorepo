@@ -24,6 +24,11 @@ TypeScript type aliases for components and hooks listed above
 - [BoxplotDataPointEventHandler](type-alias.BoxplotDataPointEventHandler.md)
 - [BoxplotSubtype](type-alias.BoxplotSubtype.md)
 - [BoxWhiskerType](type-alias.BoxWhiskerType.md)
+- [CalendarHeatmapChartType](type-alias.CalendarHeatmapChartType.md) <Badge type="alpha" text="Alpha" />
+- [CalendarHeatmapDataPoint](type-alias.CalendarHeatmapDataPoint.md) <Badge type="alpha" text="Alpha" />
+- [CalendarHeatmapDataPointEventHandler](type-alias.CalendarHeatmapDataPointEventHandler.md) <Badge type="alpha" text="Alpha" />
+- [CalendarHeatmapDataPointsEventHandler](type-alias.CalendarHeatmapDataPointsEventHandler.md) <Badge type="alpha" text="Alpha" />
+- [CalendarHeatmapViewType](type-alias.CalendarHeatmapViewType.md)
 - [CartesianChartType](type-alias.CartesianChartType.md)
 - [CartesianWidgetType](type-alias.CartesianWidgetType.md)
 - [CategoricalChartType](type-alias.CategoricalChartType.md)
@@ -60,6 +65,7 @@ TypeScript type aliases for components and hooks listed above
 - [DashboardModelState](type-alias.DashboardModelState.md)
 - [DashboardModelSuccessState](type-alias.DashboardModelSuccessState.md)
 - [DashboardStyleOptions](type-alias.DashboardStyleOptions.md)
+- [DashStyle](type-alias.DashStyle.md)
 - [DataColorCondition](type-alias.DataColorCondition.md)
 - [DataColorOptions](type-alias.DataColorOptions.md)
 - [DataPoint](type-alias.DataPoint.md)
@@ -73,6 +79,7 @@ TypeScript type aliases for components and hooks listed above
 - [DrilldownSelection](type-alias.DrilldownSelection.md)
 - [DrilldownWidgetConfig](type-alias.DrilldownWidgetConfig.md)
 - [EmptyObject](type-alias.EmptyObject.md)
+- [EndCapType](type-alias.EndCapType.md)
 - [ExecuteCSVQueryConfig](type-alias.ExecuteCSVQueryConfig.md)
 - [ExecuteQueryResult](type-alias.ExecuteQueryResult.md)
 - [FilterMembersState](type-alias.FilterMembersState.md)
@@ -96,7 +103,9 @@ TypeScript type aliases for components and hooks listed above
 - [IndicatorStyleOptions](type-alias.IndicatorStyleOptions.md)
 - [Labels](type-alias.Labels.md)
 - [Legend](type-alias.Legend.md)
+- [LegendOptions](type-alias.LegendOptions.md)
 - [LegendPosition](type-alias.LegendPosition.md)
+- [LineOptions](type-alias.LineOptions.md)
 - [LineSubtype](type-alias.LineSubtype.md)
 - [LineWidth](type-alias.LineWidth.md)
 - [LoadingIndicatorConfig](type-alias.LoadingIndicatorConfig.md)
@@ -162,6 +171,7 @@ TypeScript type aliases for components and hooks listed above
 - [TabularChartDataOptions](type-alias.TabularChartDataOptions.md)
 - [TabularChartStyleOptions](type-alias.TabularChartStyleOptions.md)
 - [TabularWidgetType](type-alias.TabularWidgetType.md)
+- [TextStyle](type-alias.TextStyle.md)
 - [TextWidgetStyleOptions](type-alias.TextWidgetStyleOptions.md)
 - [TextWidgetType](type-alias.TextWidgetType.md)
 - [ThemeOid](type-alias.ThemeOid.md)

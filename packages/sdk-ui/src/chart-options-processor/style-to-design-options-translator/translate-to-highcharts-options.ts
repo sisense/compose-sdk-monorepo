@@ -2,7 +2,6 @@
 import merge from 'ts-deepmerge';
 import {
   AxisLabel,
-  Legend,
   Navigator,
   LineWidth,
   Markers,
@@ -23,6 +22,7 @@ import {
   ChartType,
 } from '@/types';
 import { Axis } from '../translations/axis-section';
+import { chartSubtypeToDesignOptions } from '../subtype-to-design-options';
 import {
   BaseDesignOptions,
   CATEGORIES_CAPACITY,
@@ -45,7 +45,6 @@ import {
   ScattermapChartDesignOptions,
   BaseDesignOptionsType,
 } from '../translations/design-options';
-import { LegendPosition } from '../translations/legend-section';
 import { Marker } from '../translations/marker-section';
 import { PieLabels, PieType } from '../translations/pie-plot-options';
 import {
@@ -64,13 +63,6 @@ import {
 import { CartesianChartType, SeriesDesignOptions } from '../translations/types';
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
 import { withYAxisNormalizationForPolar } from '../cartesian/utils/axis/axis-builders';
-
-export const getLegend = (legend?: Legend): LegendPosition => {
-  if (legend?.enabled) {
-    return (legend.position || null) as LegendPosition;
-  }
-  return null;
-};
 
 const getAxisLabel = (axis: AxisLabel | undefined, defaultAxis: Axis): Axis => {
   if (!axis) return defaultAxis;
@@ -124,7 +116,6 @@ export const getCartesianChartStyle = (
   styleOptions: BaseStyleOptions & BaseAxisStyleOptions,
   shouldHaveY2Axis: boolean,
 ): BaseDesignOptionsType => {
-  const legend = getLegend(styleOptions.legend);
   const dataLimits = getCartesianDataLimits();
   const xAxis = getAxisLabel(styleOptions.xAxis, BaseDesignOptions.xAxis);
   let x2Axis = null;
@@ -156,7 +147,7 @@ export const getCartesianChartStyle = (
 
   return {
     ...BaseDesignOptions,
-    legend,
+    legend: styleOptions.legend,
     autoZoom,
     valueLabel: styleOptions.seriesLabels || {},
     xAxis,
@@ -210,7 +201,18 @@ export const getSeriesChartDesignOptions = (
   ) as SeriesDesignOptions;
   if (chartType === 'line') {
     const lineStyleOptions = styleOptions as LineStyleOptions;
-    seriesDesignOptions.lineWidth = getLineWidth(lineStyleOptions.lineWidth || { width: 'bold' });
+
+    if (lineStyleOptions.line) {
+      seriesDesignOptions.line = {
+        width:
+          lineStyleOptions.line?.width ??
+          getLineWidth(lineStyleOptions.lineWidth ?? { width: 'bold' }),
+        dashStyle: lineStyleOptions.line?.dashStyle,
+        endCap: lineStyleOptions.line?.endCap,
+        shadow: lineStyleOptions.line?.shadow,
+      };
+    }
+
     seriesDesignOptions.marker = getMarkers(
       lineStyleOptions?.markers ?? { enabled: true, fill: 'filled', size: 'small' },
     );
@@ -229,7 +231,6 @@ export const getLineChartDesignOptions = (
   hasY2Axis: boolean,
 ): LineChartDesignOptions => {
   const style = getCartesianChartStyle(styleOptions, hasY2Axis);
-  style.lineWidth = getLineWidth(styleOptions.lineWidth || { width: 'bold' });
   style.marker = getMarkers(
     styleOptions?.markers ?? { enabled: true, fill: 'filled', size: 'small' },
   );
@@ -242,6 +243,12 @@ export const getLineChartDesignOptions = (
   const result: LineChartDesignOptions = {
     ...style,
     designPerSeries,
+    line: {
+      width: styleOptions.line?.width ?? getLineWidth(styleOptions.lineWidth ?? { width: 'bold' }),
+      dashStyle: styleOptions.line?.dashStyle,
+      endCap: styleOptions.line?.endCap,
+      shadow: styleOptions.line?.shadow,
+    },
   };
 
   if (styleOptions.subtype === 'line/step') {
@@ -258,8 +265,13 @@ export const getAreaChartDesignOptions = (
 ): AreaChartDesignOptions => {
   return {
     ...getStackableChartDesignOptions(styleOptions, dataOptions, hasY2Axis, 'area'),
-    lineWidth: getLineWidth(styleOptions.lineWidth || { width: 'thin' }),
     marker: getMarkers(styleOptions?.markers ?? { enabled: true, fill: 'filled', size: 'small' }),
+    line: {
+      width: styleOptions.line?.width ?? getLineWidth(styleOptions.lineWidth ?? { width: 'thin' }),
+      dashStyle: styleOptions.line?.dashStyle,
+      endCap: styleOptions.line?.endCap,
+      shadow: styleOptions.line?.shadow,
+    },
   };
 };
 
@@ -311,7 +323,7 @@ const DefaultPieLabels: PieLabels = {
 };
 export const DefaultPieType = 'classic';
 export const getPieChartDesignOptions = (styleOptions: PieStyleOptions): PieChartDesignOptions => {
-  const { legend, labels } = styleOptions;
+  const { legend, labels, subtype } = styleOptions;
 
   let pieLabels: PieLabels = DefaultPieLabels;
   if (labels) {
@@ -325,7 +337,10 @@ export const getPieChartDesignOptions = (styleOptions: PieStyleOptions): PieChar
     };
   }
 
-  const pieType: PieType = DefaultPieType;
+  // Determine pie type from subtype, falling back to default
+  const subtypeDesignOptions = subtype ? chartSubtypeToDesignOptions[subtype] : undefined;
+  const pieType: PieType = subtypeDesignOptions?.pieType || DefaultPieType;
+
   const convolution = styleOptions?.convolution ? styleOptions.convolution : { enabled: false };
 
   const dataLimits = getDataLimits(styleOptions, 'pie');
@@ -335,7 +350,7 @@ export const getPieChartDesignOptions = (styleOptions: PieStyleOptions): PieChar
     pieLabels,
     pieType,
     convolution,
-    legend: getLegend(legend),
+    legend,
     dataLimits,
   };
 };
@@ -371,7 +386,7 @@ export const getFunnelChartDesignOptions = (
     funnelType,
     funnelDirection,
     funnelLabels,
-    legend: getLegend(legend),
+    legend,
     dataLimits,
   };
 };
@@ -427,7 +442,7 @@ export const getScatterChartDesignOptions = (
     marker: getMarkers(styleOptions?.markers ?? { enabled: true, fill: 'filled', size: 'small' }),
     dataLimits: getDataLimits(styleOptions, 'scatter'),
     markerSize: getScatterChartMarkerSize(styleOptions.markerSize),
-    legend: getLegend(styleOptions.legend),
+    legend: styleOptions.legend,
   };
 };
 

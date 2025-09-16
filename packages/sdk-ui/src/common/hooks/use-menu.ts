@@ -9,16 +9,11 @@ import { useMenuContext } from '../components/menu/menu-context.js';
  * @internal
  */
 export const useMenu = () => {
-  const menuSettings = useMenuContext();
+  const menuApi = useMenuContext();
 
-  if (!menuSettings) {
+  if (!menuApi) {
     throw new TranslatableError('errors.missingMenuRoot');
   }
 
-  const { openMenu, closeMenu } = menuSettings;
-
-  return {
-    openMenu,
-    closeMenu,
-  };
+  return menuApi;
 };

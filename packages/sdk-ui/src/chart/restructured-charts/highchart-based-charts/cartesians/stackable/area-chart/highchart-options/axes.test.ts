@@ -79,7 +79,10 @@ describe('axes', () => {
         showTotal,
         totalLabelRotation,
         valueLabel: {},
-        legend: 'bottom',
+        legend: {
+          enabled: true,
+          position: 'bottom',
+        },
         lineType: 'straight',
         lineWidth: 2,
         marker: { enabled: false, size: 'small', fill: 'full' },

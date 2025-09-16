@@ -30,6 +30,11 @@ describe('FilterEditorNumerical', () => {
     );
   });
 
+  afterEach(() => {
+    // Clear any pending timers to prevent unhandled errors
+    vi.clearAllTimers();
+  });
+
   it('should render filter editor', async () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
@@ -350,11 +355,14 @@ describe('FilterEditorNumerical', () => {
     await user.type(fromInput, '1');
     await user.type(toInput, '5');
 
-    expect(filterChangeHandlerMock).toHaveBeenLastCalledWith(
-      filterFactory.between(DM.Commerce.CategoryID, 1, 5, {
-        ...initialFilter.config,
-      }),
-    );
+    // Wait for debounced functions to complete
+    await waitFor(() => {
+      expect(filterChangeHandlerMock).toHaveBeenLastCalledWith(
+        filterFactory.between(DM.Commerce.CategoryID, 1, 5, {
+          ...initialFilter.config,
+        }),
+      );
+    });
   });
 
   it('should change filter to "is not" filter with multi-select mode by default', async () => {
@@ -404,9 +412,12 @@ describe('FilterEditorNumerical', () => {
     await user.click(valueInput);
     await user.type(valueInput, '1');
 
-    expect(filterChangeHandlerMock).toHaveBeenCalledWith(
-      filterFactory.equals(DM.Commerce.CategoryID, 1, initialFilter.config),
-    );
+    // Wait for debounced functions to complete
+    await waitFor(() => {
+      expect(filterChangeHandlerMock).toHaveBeenCalledWith(
+        filterFactory.equals(DM.Commerce.CategoryID, 1, initialFilter.config),
+      );
+    });
   });
 
   it('should change filter to "does not equal" filter', async () => {
@@ -426,9 +437,12 @@ describe('FilterEditorNumerical', () => {
     await user.click(valueInput);
     await user.type(valueInput, '1');
 
-    expect(filterChangeHandlerMock).toHaveBeenCalledWith(
-      filterFactory.doesntEqual(DM.Commerce.CategoryID, 1, initialFilter.config),
-    );
+    // Wait for debounced functions to complete
+    await waitFor(() => {
+      expect(filterChangeHandlerMock).toHaveBeenCalledWith(
+        filterFactory.doesntEqual(DM.Commerce.CategoryID, 1, initialFilter.config),
+      );
+    });
   });
 
   it('should change filter to "smaller than" filter', async () => {
@@ -553,7 +567,7 @@ describe('FilterEditorNumerical', () => {
     // validates invalid value for "from" input
     await user.type(fromInput, '1 item');
     await user.type(toInput, '5');
-    expect(within(rangeSection).getByText('Numbers only')).toBeInTheDocument();
+    await waitFor(() => expect(within(rangeSection).getByText('Numbers only')).toBeInTheDocument());
 
     // validates invalid value for "to" input
     await user.clear(fromInput);

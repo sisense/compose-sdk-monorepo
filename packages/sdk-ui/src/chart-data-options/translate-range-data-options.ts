@@ -35,8 +35,8 @@ export function translateRangeChartDataOptions(
   const seriesValues = y.filter((v) => v.length === 1).flat();
 
   return {
-    x: areaRange.category.map(normalizeColumn),
-    breakBy: areaRange.breakBy?.map(normalizeColumn) || [],
+    x: areaRange.category.map((c) => normalizeColumn(c)),
+    breakBy: areaRange.breakBy?.map((c) => normalizeColumn(c)) || [],
     y: cartesianValues,
     rangeValues: rangeValues,
     seriesValues: seriesValues,

@@ -63,7 +63,6 @@ exports[`Chart > add handlers to a chart 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -392,8 +391,8 @@ exports[`Chart > add handlers to a chart 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#5B6372",
-          "fontFamily": "Open Sans",
+          "color": "#000000",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -488,7 +487,6 @@ exports[`Chart > change theme of a chart 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "red",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -816,8 +814,8 @@ exports[`Chart > change theme of a chart 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#5B6372",
-          "fontFamily": "Open Sans",
+          "color": "red",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -904,7 +902,6 @@ exports[`Chart > funnel chart > render funnel chart with cat and no value 1`] = 
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -1143,7 +1140,6 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -1382,7 +1378,6 @@ exports[`Chart > funnel chart > render funnel chart with two values 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -1599,7 +1594,6 @@ exports[`Chart > pie chart > render pie chart with cat and no value 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -1841,7 +1835,6 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -2083,7 +2076,6 @@ exports[`Chart > pie chart > render pie chart with two values 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -2241,7 +2233,6 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -3296,8 +3287,8 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#5B6372",
-          "fontFamily": "Open Sans",
+          "color": "#000000",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -3392,7 +3383,6 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -3968,8 +3958,8 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#5B6372",
-          "fontFamily": "Open Sans",
+          "color": "#000000",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -4064,7 +4054,6 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -4307,7 +4296,6 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -4498,7 +4486,6 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -4921,8 +4908,8 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#5B6372",
-          "fontFamily": "Open Sans",
+          "color": "#000000",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -5017,7 +5004,6 @@ exports[`Chart > render a column chart with breakBy 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -5208,7 +5194,6 @@ exports[`Chart > render a column chart with breakBy 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -5343,7 +5328,6 @@ exports[`Chart > render a column chart with breakBy 1`] = `
       "dataLabels": {
         "formatter": [Function],
       },
-      "lineWidth": 2,
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -5501,8 +5485,8 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#5B6372",
-          "fontFamily": "Open Sans",
+          "color": "#000000",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -5597,7 +5581,6 @@ exports[`Chart > render a line chart 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -5925,8 +5908,8 @@ exports[`Chart > render a line chart 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#5B6372",
-          "fontFamily": "Open Sans",
+          "color": "#000000",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -6021,7 +6004,6 @@ exports[`Chart > render a line chart with only category (x-axis) 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -6349,8 +6331,8 @@ exports[`Chart > render a line chart with only category (x-axis) 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#5B6372",
-          "fontFamily": "Open Sans",
+          "color": "#000000",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",
@@ -6445,7 +6427,6 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -6905,8 +6886,8 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#5B6372",
-          "fontFamily": "Open Sans",
+          "color": "#000000",
+          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
           "pointerEvents": "none",

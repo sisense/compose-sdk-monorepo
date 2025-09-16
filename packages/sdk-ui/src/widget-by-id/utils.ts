@@ -25,7 +25,7 @@ import {
   WidgetType,
   PivotTableProps,
 } from '@/props';
-import { combineHandlers } from '@/utils/combine-handlers';
+import { combineHandlers, composeToolbarHandlers } from '@/utils/combine-handlers';
 import { WidgetTypeInternal } from '@/models/widget/types';
 import { WidgetModel } from '@/models';
 import { TranslatableError } from '@/translation/translatable-error.js';
@@ -386,7 +386,7 @@ export function registerRenderToolbarHandler(
     ...widgetStyleOptions,
     header: {
       ...widgetStyleOptions?.header,
-      renderToolbar: combineHandlers([widgetStyleOptions?.header?.renderToolbar, handler]),
+      renderToolbar: composeToolbarHandlers(widgetStyleOptions?.header?.renderToolbar, handler),
     },
   } as ChartStyleOptions;
 }

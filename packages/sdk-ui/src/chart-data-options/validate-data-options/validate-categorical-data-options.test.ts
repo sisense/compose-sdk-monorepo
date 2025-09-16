@@ -76,7 +76,7 @@ describe('validateCategoricalChartDataOptions', () => {
       // Expect that a warning message is logged to the console
       expect(consoleWarnSpy).toHaveBeenCalledWith(
         expect.stringContaining(
-          `Maximum 'category' length is limited to 1 for 'funnel' chart. Taken first 1 categories`,
+          `Maximum 'category' length is limited to 1. Taken first 1 categories`,
         ),
       );
     });
@@ -93,9 +93,7 @@ describe('validateCategoricalChartDataOptions', () => {
 
       // Expect that a warning message is logged to the console
       expect(consoleWarnSpy).toHaveBeenCalledWith(
-        expect.stringContaining(
-          `Maximum 'value' length is limited to 1 for 'funnel' chart. Taken first 1 values`,
-        ),
+        expect.stringContaining(`Maximum 'value' length is limited to 1. Taken first 1 values`),
       );
     });
   });

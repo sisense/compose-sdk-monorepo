@@ -29,7 +29,10 @@ export {
   addPointerCursorToChart,
   applyClickNavigationForChart,
   applyClickNavigationForText,
+  applyClickNavigationForPivot,
   applyRightClickNavigation,
+  applyRightClickNavigationForPivot,
+  applyPivotLinkStyling,
   addJtdIconToHeader,
 } from './jtd-widget-transforms';
 

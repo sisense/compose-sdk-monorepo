@@ -1,5 +1,5 @@
 import { JaqlDataSourceForDto, JSONArray, Measure } from '@sisense/sdk-data';
-import { NormalizedTable } from '../types.js';
+import { NlqTranslationResult, NormalizedTable } from '../types.js';
 import {
   isMeasureElement,
   isParsedFunctionCallArray,
@@ -36,28 +36,45 @@ export const translateMeasuresFromJSONFunctionCall = (
   measuresJSON: ParsedFunctionCall[],
   dataSource: JaqlDataSourceForDto,
   tables: NormalizedTable[],
-): Measure[] => {
-  return measuresJSON.map((measureJSON) => {
-    const measure = processNode(measureJSON, dataSource, tables);
-    if (!isMeasureElement(measure)) {
-      throw new Error('Invalid measure JSON');
+): NlqTranslationResult<Measure[]> => {
+  const results: Measure[] = [];
+  const errors: string[] = [];
+
+  // Process each measure and collect errors instead of throwing
+  measuresJSON.forEach((measureJSON, index) => {
+    try {
+      const measure = processNode(measureJSON, dataSource, tables);
+      if (!isMeasureElement(measure)) {
+        errors.push(`Measure ${index + 1} (${measureJSON.function}): Invalid measure JSON`);
+      } else {
+        results.push(measure);
+      }
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      errors.push(`Measure ${index + 1} (${measureJSON.function}): ${errorMsg}`);
     }
-    return measure;
   });
+
+  return errors.length > 0 ? { success: false, errors } : { success: true, data: results };
 };
 
 export const translateMeasuresJSON = (
   measuresJSON: JSONArray,
   dataSource: JaqlDataSourceForDto,
   tables: NormalizedTable[],
-): Measure[] => {
+): NlqTranslationResult<Measure[]> => {
   if (!measuresJSON) {
-    return [];
+    return { success: true, data: [] };
   }
+
   if (!isParsedFunctionCallArray(measuresJSON)) {
-    throw new Error(
-      'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
-    );
+    return {
+      success: false,
+      errors: [
+        'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
+      ],
+    };
   }
+
   return translateMeasuresFromJSONFunctionCall(measuresJSON, dataSource, tables);
 };

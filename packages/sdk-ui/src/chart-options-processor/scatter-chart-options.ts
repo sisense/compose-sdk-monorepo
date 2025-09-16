@@ -1,14 +1,14 @@
 /* eslint-disable max-params */
 import { ChartDesignOptions } from './translations/types';
 import { determineHighchartsChartType } from './translations/translations-to-highcharts';
-import { ChartType, OptionsWithAlerts, CompleteThemeSettings } from '../types';
+import { ChartType, OptionsWithAlerts, CompleteThemeSettings, LegendOptions } from '../types';
 import { ScatterChartData } from '../chart-data/types';
 import { HighchartsOptionsInternal } from './chart-options-service';
 import {
   ChartDataOptionsInternal,
   ScatterChartDataOptionsInternal,
 } from '../chart-data-options/types';
-import { getLegendSettings, LegendPosition, LegendSettings } from './translations/legend-section';
+import { getLegendSettings, LegendSettings } from './translations/legend-section';
 import { getScatterPlotOptions } from './translations/scatter-plot-options';
 import { getScatterXAxisSettings, getScatterYAxisSettings } from './translations/scatter-axis';
 import { buildScatterSeries } from './translations/scatter-series';
@@ -23,12 +23,12 @@ const MARGIN_TOP = 30;
  * @param position
  * @internal
  */
-export const getScatterLegendSettings = (position: LegendPosition): LegendSettings => ({
-  ...getLegendSettings(position),
+export const getScatterLegendSettings = (legend?: LegendOptions): LegendSettings => ({
   symbolHeight: 12,
   symbolWidth: 12,
   itemMarginBottom: 0,
   itemMarginTop: 0,
+  ...getLegendSettings(legend),
 });
 
 /**

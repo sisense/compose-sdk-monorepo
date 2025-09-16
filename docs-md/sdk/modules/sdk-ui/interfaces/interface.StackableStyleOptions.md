@@ -30,7 +30,7 @@ Total height of the component, which is considered in the following order of pri
 
 ### legend
 
-> **legend**?: [`Legend`](../type-aliases/type-alias.Legend.md)
+> **legend**?: [`LegendOptions`](../type-aliases/type-alias.LegendOptions.md)
 
 Configuration for legend - a key that provides information about the data series or colors used in chart
 

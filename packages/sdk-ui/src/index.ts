@@ -50,6 +50,7 @@ export * from './boxplot-chart';
 export * from './scattermap-chart';
 export * from './areamap-chart';
 export * from './area-range-chart';
+export * from './calendar-heatmap-chart';
 export * from './sisense-context/custom-sisense-context-provider';
 export * from './theme-provider/custom-theme-provider';
 export * from './custom-widgets-provider/custom-widgets-provider-adapter';

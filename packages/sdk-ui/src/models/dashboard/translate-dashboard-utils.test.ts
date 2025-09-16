@@ -1,10 +1,15 @@
 import { RestApi } from '@/api/rest-api';
-import { translateLayout, withSharedFormulas } from '@/models/dashboard/translate-dashboard-utils';
+import {
+  translateLayout,
+  withSharedFormulas,
+  convertDimensionsToDimIndexes,
+} from '@/models/dashboard/translate-dashboard-utils';
 import isEqual from 'lodash-es/isEqual';
 import {
   dashboardWithSharedFormulas,
   sharedFormulasDictionary,
 } from '../__mocks__/dashboard-with-shared-formulas';
+import { WidgetDto } from '@/widget-by-id/types';
 
 describe('translate-dashboard-utils', () => {
   describe('translateLayout', () => {
@@ -721,6 +726,384 @@ describe('translate-dashboard-utils', () => {
       );
       expect(result).toMatchSnapshot();
       expect(api.getSharedFormulas).toHaveBeenCalledWith(Object.keys(sharedFormulasDictionary));
+    });
+  });
+
+  describe('convertDimensionsToDimIndexes', () => {
+    let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+
+    beforeEach(() => {
+      consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      consoleWarnSpy.mockRestore();
+    });
+
+    const createMockWidget = (
+      panels: Array<{ name: string; items: Array<{ instanceid?: string }> }>,
+    ): WidgetDto =>
+      ({
+        oid: 'test-widget-oid',
+        type: 'chart/column',
+        subtype: 'column',
+        datasource: { title: 'test' } as any,
+        metadata: {
+          panels,
+        },
+        style: {},
+        title: 'Test Widget',
+        desc: 'Test Description',
+      } as WidgetDto);
+
+    describe('should find dimensions in different panels', () => {
+      it('should convert dimensions found in columns panel', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [
+              { instanceid: 'col-dim-1' },
+              { instanceid: 'col-dim-2' },
+              { instanceid: 'col-dim-3' },
+            ],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, ['col-dim-1', 'col-dim-3']);
+
+        expect(result).toEqual(['columns.0', 'columns.2']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+
+      it('should convert dimensions found in rows panel', () => {
+        const widget = createMockWidget([
+          {
+            name: 'rows',
+            items: [{ instanceid: 'row-dim-1' }, { instanceid: 'row-dim-2' }],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, ['row-dim-2', 'row-dim-1']);
+
+        expect(result).toEqual(['rows.1', 'rows.0']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+
+      it('should convert dimensions found in values panel', () => {
+        const widget = createMockWidget([
+          {
+            name: 'values',
+            items: [
+              { instanceid: 'val-dim-1' },
+              { instanceid: 'val-dim-2' },
+              { instanceid: 'val-dim-3' },
+            ],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, ['val-dim-2']);
+
+        expect(result).toEqual(['values.1']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+
+      it('should convert dimensions found across multiple panels', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [{ instanceid: 'col-dim-1' }, { instanceid: 'col-dim-2' }],
+          },
+          {
+            name: 'rows',
+            items: [{ instanceid: 'row-dim-1' }],
+          },
+          {
+            name: 'values',
+            items: [{ instanceid: 'val-dim-1' }, { instanceid: 'val-dim-2' }],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, [
+          'col-dim-2',
+          'row-dim-1',
+          'val-dim-1',
+          'col-dim-1',
+        ]);
+
+        expect(result).toEqual(['columns.1', 'rows.0', 'values.0', 'columns.0']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('should handle edge cases', () => {
+      it('should return original dimension ID when not found and log warning', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [{ instanceid: 'col-dim-1' }, { instanceid: 'col-dim-2' }],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, ['col-dim-1', 'non-existent-dim']);
+
+        expect(result).toEqual(['columns.0', 'non-existent-dim']);
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          'Error converting JTD config: Dimension non-existent-dim not found in widget test-widget-oid',
+        );
+      });
+
+      it('should handle empty dimension IDs array', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [{ instanceid: 'col-dim-1' }],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, []);
+
+        expect(result).toEqual([]);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+
+      it('should handle widget with no panels', () => {
+        const widget = createMockWidget([]);
+
+        const result = convertDimensionsToDimIndexes(widget, ['some-dim']);
+
+        expect(result).toEqual(['some-dim']);
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          'Error converting JTD config: Dimension some-dim not found in widget test-widget-oid',
+        );
+      });
+
+      it('should handle widget with undefined metadata', () => {
+        const widget = {
+          oid: 'test-widget-oid',
+          metadata: undefined,
+        } as any;
+
+        const result = convertDimensionsToDimIndexes(widget, ['some-dim']);
+
+        expect(result).toEqual(['some-dim']);
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          'Error converting JTD config: Dimension some-dim not found in widget test-widget-oid',
+        );
+      });
+
+      it('should handle panels with no items', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [],
+          },
+          {
+            name: 'rows',
+            items: [],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, ['some-dim']);
+
+        expect(result).toEqual(['some-dim']);
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          'Error converting JTD config: Dimension some-dim not found in widget test-widget-oid',
+        );
+      });
+
+      it('should handle panels with undefined items', () => {
+        const widget = {
+          oid: 'test-widget-oid',
+          metadata: {
+            panels: [
+              { name: 'columns', items: undefined },
+              { name: 'rows', items: undefined },
+            ],
+          },
+        } as any;
+
+        const result = convertDimensionsToDimIndexes(widget, ['some-dim']);
+
+        expect(result).toEqual(['some-dim']);
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          'Error converting JTD config: Dimension some-dim not found in widget test-widget-oid',
+        );
+      });
+
+      it('should handle items without instanceid', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [
+              { instanceid: 'col-dim-1' },
+              {}, // item without instanceid
+              { instanceid: 'col-dim-2' },
+            ],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, ['col-dim-1', 'col-dim-2']);
+
+        expect(result).toEqual(['columns.0', 'columns.2']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+
+      it('should handle items with undefined instanceid', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [
+              { instanceid: 'col-dim-1' },
+              { instanceid: undefined },
+              { instanceid: 'col-dim-2' },
+            ],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, ['col-dim-1', 'col-dim-2']);
+
+        expect(result).toEqual(['columns.0', 'columns.2']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('should handle mixed scenarios', () => {
+      it('should handle mix of found and not found dimensions', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [{ instanceid: 'col-dim-1' }, { instanceid: 'col-dim-2' }],
+          },
+          {
+            name: 'rows',
+            items: [{ instanceid: 'row-dim-1' }],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, [
+          'col-dim-1',
+          'non-existent-1',
+          'row-dim-1',
+          'non-existent-2',
+          'col-dim-2',
+        ]);
+
+        expect(result).toEqual([
+          'columns.0',
+          'non-existent-1',
+          'rows.0',
+          'non-existent-2',
+          'columns.1',
+        ]);
+
+        expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          'Error converting JTD config: Dimension non-existent-1 not found in widget test-widget-oid',
+        );
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          'Error converting JTD config: Dimension non-existent-2 not found in widget test-widget-oid',
+        );
+      });
+
+      it('should handle duplicate dimension IDs in input', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [{ instanceid: 'col-dim-1' }, { instanceid: 'col-dim-2' }],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, [
+          'col-dim-1',
+          'col-dim-1',
+          'col-dim-2',
+        ]);
+
+        expect(result).toEqual(['columns.0', 'columns.0', 'columns.1']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+
+      it('should handle priority order (columns > rows > values)', () => {
+        // Test that if a dimension exists in multiple panels, it returns the first match (columns, then rows, then values)
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [{ instanceid: 'duplicate-dim' }],
+          },
+          {
+            name: 'rows',
+            items: [{ instanceid: 'duplicate-dim' }],
+          },
+          {
+            name: 'values',
+            items: [{ instanceid: 'duplicate-dim' }],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, ['duplicate-dim']);
+
+        // Should return columns.0 since columns is checked first
+        expect(result).toEqual(['columns.0']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+
+      it('should handle large number of dimensions', () => {
+        const items = Array.from({ length: 100 }, (_, i) => ({ instanceid: `dim-${i}` }));
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items,
+          },
+        ]);
+
+        const dimensionIds = ['dim-0', 'dim-50', 'dim-99'];
+        const result = convertDimensionsToDimIndexes(widget, dimensionIds);
+
+        expect(result).toEqual(['columns.0', 'columns.50', 'columns.99']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('should handle special characters and edge case IDs', () => {
+      it('should handle dimension IDs with special characters', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [
+              { instanceid: 'dim-with-dash' },
+              { instanceid: 'dim_with_underscore' },
+              { instanceid: 'dim.with.dots' },
+              { instanceid: 'dim with spaces' },
+              { instanceid: 'dim@with#special$chars%' },
+            ],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, [
+          'dim-with-dash',
+          'dim_with_underscore',
+          'dim.with.dots',
+          'dim with spaces',
+          'dim@with#special$chars%',
+        ]);
+
+        expect(result).toEqual(['columns.0', 'columns.1', 'columns.2', 'columns.3', 'columns.4']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+
+      it('should handle empty string dimension ID', () => {
+        const widget = createMockWidget([
+          {
+            name: 'columns',
+            items: [{ instanceid: '' }, { instanceid: 'normal-dim' }],
+          },
+        ]);
+
+        const result = convertDimensionsToDimIndexes(widget, ['', 'normal-dim']);
+
+        expect(result).toEqual(['columns.0', 'columns.1']);
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
     });
   });
 });

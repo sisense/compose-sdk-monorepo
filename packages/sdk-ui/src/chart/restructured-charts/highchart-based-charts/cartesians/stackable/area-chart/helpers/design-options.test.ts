@@ -96,7 +96,7 @@ describe('Area Chart Design Options', () => {
 
         const result = translateAreaStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
 
-        expect(result.lineWidth).toBe(1);
+        expect(result.line?.width).toBe(1);
       });
 
       test('converts bold line width to 3', () => {
@@ -106,7 +106,7 @@ describe('Area Chart Design Options', () => {
 
         const result = translateAreaStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
 
-        expect(result.lineWidth).toBe(3);
+        expect(result.line?.width).toBe(3);
       });
 
       test('converts thick line width to 5', () => {
@@ -116,7 +116,7 @@ describe('Area Chart Design Options', () => {
 
         const result = translateAreaStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
 
-        expect(result.lineWidth).toBe(5);
+        expect(result.line?.width).toBe(5);
       });
 
       test('defaults to thin (1) when no lineWidth provided', () => {
@@ -124,7 +124,7 @@ describe('Area Chart Design Options', () => {
 
         const result = translateAreaStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
 
-        expect(result.lineWidth).toBe(1);
+        expect(result.line?.width).toBe(1);
       });
     });
 
@@ -205,7 +205,7 @@ describe('Area Chart Design Options', () => {
 
         expect(result.lineType).toBe('smooth');
         expect(result.stackType).toBe('stack100');
-        expect(result.lineWidth).toBe(5);
+        expect(result.line?.width).toBe(5);
         expect(result.marker).toEqual({
           enabled: false,
           fill: 'hollow',

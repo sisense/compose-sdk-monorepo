@@ -35,7 +35,10 @@ exports[`prepareChartDesignOptions > should return design options for areamap ch
     },
   },
   "indicatorType": "numeric",
-  "legend": "bottom",
+  "legend": {
+    "enabled": true,
+    "position": "bottom",
+  },
   "lineType": "straight",
   "lineWidth": 2,
   "mapType": "world",
@@ -93,7 +96,6 @@ exports[`prepareChartDesignOptions > should return design options for combo "lin
   },
   "designPerSeries": {
     "$measure1_Total Revenue": {
-      "lineWidth": 5,
       "marker": {
         "enabled": true,
         "fill": "full",
@@ -127,9 +129,18 @@ exports[`prepareChartDesignOptions > should return design options for combo "lin
     },
   },
   "indicatorType": "numeric",
-  "legend": "bottom",
+  "legend": {
+    "enabled": true,
+    "position": "bottom",
+  },
+  "line": {
+    "dashStyle": undefined,
+    "endCap": undefined,
+    "shadow": undefined,
+    "width": 1,
+  },
   "lineType": "straight",
-  "lineWidth": 1,
+  "lineWidth": 2,
   "marker": {
     "enabled": true,
     "fill": "hollow",
@@ -210,7 +221,10 @@ exports[`prepareChartDesignOptions > should return design options for funnel cha
     },
   },
   "indicatorType": "numeric",
-  "legend": "left",
+  "legend": {
+    "enabled": true,
+    "position": "left",
+  },
   "lineType": "straight",
   "lineWidth": 2,
   "marker": {
@@ -290,7 +304,10 @@ exports[`prepareChartDesignOptions > should return design options for scattermap
     },
   },
   "indicatorType": "numeric",
-  "legend": "bottom",
+  "legend": {
+    "enabled": true,
+    "position": "bottom",
+  },
   "lineType": "straight",
   "lineWidth": 2,
   "marker": {

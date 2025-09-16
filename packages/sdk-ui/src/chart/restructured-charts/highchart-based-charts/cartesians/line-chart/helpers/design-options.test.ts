@@ -95,7 +95,7 @@ describe('translateLineStyleOptionsToDesignOptions', () => {
 
       const result = translateLineStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
 
-      expect(result.lineWidth).toBe(1);
+      expect(result.line?.width).toBe(1);
     });
 
     test('converts bold line width to 3', () => {
@@ -105,7 +105,7 @@ describe('translateLineStyleOptionsToDesignOptions', () => {
 
       const result = translateLineStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
 
-      expect(result.lineWidth).toBe(3);
+      expect(result.line?.width).toBe(3);
     });
 
     test('converts thick line width to 5', () => {
@@ -115,7 +115,7 @@ describe('translateLineStyleOptionsToDesignOptions', () => {
 
       const result = translateLineStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
 
-      expect(result.lineWidth).toBe(5);
+      expect(result.line?.width).toBe(5);
     });
 
     test('defaults to bold (3) when no lineWidth provided', () => {
@@ -123,7 +123,7 @@ describe('translateLineStyleOptionsToDesignOptions', () => {
 
       const result = translateLineStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
 
-      expect(result.lineWidth).toBe(3);
+      expect(result.line?.width).toBe(3);
     });
   });
 
@@ -194,7 +194,7 @@ describe('translateLineStyleOptionsToDesignOptions', () => {
       expect(result).toEqual(
         expect.objectContaining({
           lineType: 'smooth',
-          lineWidth: 5,
+          line: { width: 5 },
           marker: {
             enabled: true,
             fill: 'hollow',
@@ -222,7 +222,7 @@ describe('translateLineStyleOptionsToDesignOptions', () => {
       expect(result).toEqual(
         expect.objectContaining({
           lineType: 'straight',
-          lineWidth: 1,
+          line: { width: 1 },
           marker: {
             enabled: false,
             fill: 'full',

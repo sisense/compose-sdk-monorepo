@@ -73,5 +73,3 @@ export type CustomHeaderCellFormatter = (
   dataOption?: AnyColumn,
   id?: string,
 ) => CellFormattingResult | void;
-
-export type DateFormatter = (date: Date, format: string) => string;

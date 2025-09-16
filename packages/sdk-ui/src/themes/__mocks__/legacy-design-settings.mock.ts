@@ -7,7 +7,7 @@ export const redLegacyDesignSettings: LegacyDesignSettings = {
     customFontSelected: false,
     predefinedFont: 'Open Sans',
     hyperlinkColor: '#1FAFF3',
-    hyperlinkHoverColor: '#0065E3',
+    hyperlinkHoverColor: '#0F8FD3',
     primaryTextColor: '#ff0000',
     secondaryTextColor: '#f9a8a8',
     fontFamily: 'Open Sans',
@@ -73,6 +73,7 @@ export const redThemeSettings: CompleteThemeSettings = {
     fontFamily: 'Open Sans',
     primaryTextColor: '#ff0000',
     secondaryTextColor: '#f9a8a8',
+    hyperlinkColor: '#1FAFF3',
     fontsLoader: {
       fonts: [
         {

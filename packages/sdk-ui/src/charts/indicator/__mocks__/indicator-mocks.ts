@@ -15,7 +15,10 @@ export const chartData: IndicatorChartData = {
 
 export const chartDesignOptions: IndicatorChartDesignOptions = {
   lineType: 'straight',
-  legend: 'bottom',
+  legend: {
+    position: 'bottom',
+    enabled: true,
+  },
   lineWidth: 2,
   valueLabel: {},
   marker: {

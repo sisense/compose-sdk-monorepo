@@ -305,7 +305,7 @@ export const isDimensionalBaseMeasure = (v: AnyObject): v is DimensionalBaseMeas
 /**
  * Stands for a Calculated Measure
  *
- * @see {https://sisense.dev/guides/querying/useJaql/#step-7-adding-a-formula}
+ * @see {https://developer.sisense.com/guides/querying/useJaql/#step-7-adding-a-formula}
  * @internal
  */
 export class DimensionalCalculatedMeasure extends AbstractMeasure implements CalculatedMeasure {

@@ -31,7 +31,7 @@ import { TranslatableError } from '@/translation/translatable-error';
 export type LineType = 'straight' | 'smooth';
 export type StackType = 'classic' | 'stacked' | 'stack100';
 
-export type HighchartsType = ChartType | 'spline' | 'areaspline' | 'bubble';
+export type HighchartsType = ChartType | 'spline' | 'areaspline' | 'bubble' | 'heatmap';
 export type HighchartsSeriesValues = {
   name: string;
   data: SeriesPointStructure[];

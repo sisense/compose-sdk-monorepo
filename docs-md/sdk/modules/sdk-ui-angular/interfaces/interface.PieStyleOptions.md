@@ -47,7 +47,7 @@ Configuration that defines behavior of data labels on Pie chart
 
 ### legend
 
-> **legend**?: [`Legend`](../type-aliases/type-alias.Legend.md)
+> **legend**?: [`LegendOptions`](../../sdk-ui/type-aliases/type-alias.LegendOptions.md)
 
 Configuration for legend - a key that provides information about the data series or colors used in chart
 

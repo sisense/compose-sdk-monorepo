@@ -97,6 +97,9 @@ export type HighchartsDataPointContext = {
       string1?: string;
       xDisplayValue?: string;
       xValue?: (number | string)[];
+      empty?: boolean;
+      monthDay?: number;
+      hasData?: boolean;
     };
     upperPointName?: string;
     lowerPointName?: string;
@@ -108,6 +111,8 @@ export type HighchartsDataPointContext = {
     };
     options?: TooltipFormatterContextObject['point']['options'];
     node?: HighchartsDataPointContextNode;
+    date?: string | number | Date;
+    value?: number;
   };
   percentage?: number;
   color?: string;

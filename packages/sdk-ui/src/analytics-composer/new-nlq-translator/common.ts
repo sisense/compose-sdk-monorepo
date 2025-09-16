@@ -13,6 +13,8 @@ import {
 } from '@sisense/sdk-data';
 import { NormalizedTable, NormalizedField } from '../types.js';
 
+const ATTRIBUTE_PREFIX = 'DM.';
+
 // Type to represent a function arg
 export type ParsedArg = string | number | ParsedFunctionCall | string[];
 
@@ -93,9 +95,9 @@ function parseAttributeName(attributeName: string): {
   // Parse "DM.Commerce.Date.Years" -> tableName: "Commerce", columnName: "Date", level: "Years"
   // Parse "DM.Brand.Brand" -> tableName: "Brand", columnName: "Brand", level: undefined
   const parts = attributeName.split('.');
-  if (parts.length < 3 || parts[0] !== 'DM') {
+  if (parts.length < 3 || `${parts[0]}.` !== ATTRIBUTE_PREFIX) {
     throw new Error(
-      `Invalid attribute name format: "${attributeName}". Expected format: "DM.TableName.ColumnName[.Level]".`,
+      `Invalid attribute name format: "${attributeName}". Expected format: "${ATTRIBUTE_PREFIX}TableName.ColumnName[.Level]".`,
     );
   }
 
@@ -146,6 +148,66 @@ function findDataFieldAndLevel(
   return { field, level };
 }
 
+/**
+ * Validates if a string is likely an attribute based on the actual table schema.
+ *
+ * @param str - The string to check
+ * @param tables - The normalized tables to check against
+ * @returns True if the string matches known table/column combinations
+ */
+export function validateLikelyAttribute(
+  str: string,
+  tables: NormalizedTable[],
+):
+  | { isLikelyAttribute: true; suggestion: string }
+  | { isLikelyAttribute: false; suggestion?: never } {
+  if (str.startsWith(ATTRIBUTE_PREFIX)) return { isLikelyAttribute: true, suggestion: str }; // Already valid format
+
+  const parts = str.split('.');
+
+  // "Commerce.Revenue" - check if table.column exists
+  if (parts.length === 2) {
+    const [tableName, columnName] = parts;
+
+    const isLikelyAttribute = tables.some(
+      (t) => t.name === tableName && t.columns.some((c) => c.name === columnName),
+    );
+
+    if (isLikelyAttribute) {
+      return { isLikelyAttribute, suggestion: `${ATTRIBUTE_PREFIX}${str}` };
+    }
+
+    return { isLikelyAttribute: false };
+  }
+
+  // "Commerce.Date.Years" - check if table.column exists and level is valid for datetime columns
+  if (parts.length === 3) {
+    const [tableName, columnName, level] = parts;
+
+    const table = tables.find((t) => t.name === tableName);
+    if (!table) {
+      return { isLikelyAttribute: false };
+    }
+
+    const column = table.columns.find((c) => c.name === columnName);
+    if (!column) {
+      return { isLikelyAttribute: false };
+    }
+
+    // Level is only valid for datetime columns
+    if (column.dataType === DataType.DATETIME) {
+      const validLevels = DateLevels.all;
+      if (validLevels.includes(level)) {
+        return { isLikelyAttribute: true, suggestion: `${ATTRIBUTE_PREFIX}${str}` };
+      }
+    }
+
+    return { isLikelyAttribute: false };
+  }
+
+  return { isLikelyAttribute: false };
+}
+
 export function createAttribute(
   attributeName: string,
   dataSource: JaqlDataSourceForDto,
@@ -173,9 +235,19 @@ function processArg(arg: ParsedArg, dataSource: JaqlDataSourceForDto, tables: No
   ) {
     return processNode(arg, dataSource, tables);
   }
-  if (typeof arg === 'string' && arg.startsWith('DM.')) {
-    return createAttribute(arg, dataSource, tables);
+
+  if (typeof arg === 'string') {
+    if (arg.startsWith(ATTRIBUTE_PREFIX)) {
+      return createAttribute(arg, dataSource, tables);
+    }
+
+    // Check if string looks like an attribute but is missing DM prefix
+    const { isLikelyAttribute, suggestion } = validateLikelyAttribute(arg, tables);
+    if (isLikelyAttribute) {
+      throw new Error(`Invalid attribute format: "${arg}". Did you mean "${suggestion}"?`);
+    }
   }
+
   return arg;
 }
 

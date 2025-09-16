@@ -420,6 +420,19 @@ export interface AreamapChartDataOptions {
 }
 
 /**
+ * Configuration for how to query aggregate data and assign data
+ * to a Calendar Heatmap chart.
+ *
+ * @alpha
+ */
+export interface CalendarHeatmapChartDataOptions {
+  /** Date column representing dates on the calendar heatmap. */
+  date: Column | StyledColumn;
+  /** Measure column (or measure) assigned to the calendar cells. */
+  value: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
+}
+
+/**
  * Configuration for how to query data and assign data to Table.
  */
 export interface TableDataOptions {
@@ -631,7 +644,8 @@ export type RegularChartDataOptions =
   | BoxplotChartCustomDataOptions
   | AreamapChartDataOptions
   | ScattermapChartDataOptions
-  | RangeChartDataOptions;
+  | RangeChartDataOptions
+  | CalendarHeatmapChartDataOptions;
 
 /** @internal */
 export interface CartesianChartDataOptionsInternal {
@@ -724,7 +738,8 @@ export type ChartDataOptionsInternal =
   | BoxplotChartDataOptionsInternal
   | AreamapChartDataOptionsInternal
   | ScattermapChartDataOptionsInternal
-  | RangeChartDataOptionsInternal;
+  | RangeChartDataOptionsInternal
+  | CalendarHeatmapChartDataOptionsInternal;
 
 /** @internal */
 export type IndicatorChartDataOptionsInternal = {
@@ -751,4 +766,10 @@ export interface BoxplotChartDataOptionsInternal {
 export type AreamapChartDataOptionsInternal = {
   geo: StyledColumn;
   color?: StyledMeasureColumn;
+};
+
+/** @internal */
+export type CalendarHeatmapChartDataOptionsInternal = {
+  date: StyledColumn;
+  value: StyledMeasureColumn;
 };

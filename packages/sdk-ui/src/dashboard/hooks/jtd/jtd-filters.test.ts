@@ -1,13 +1,20 @@
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory, DateLevels } from '@sisense/sdk-data';
 import { Attribute } from '@sisense/sdk-data';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   getFiltersFromDataPoint,
   isScatterDataPoint,
   getFiltersFromScatterDataPoint,
   getFiltersFromRegularDataPoint,
+  getFormulaContextFilters,
+  handleFormulaDuplicateFilters,
+  normalizeDateForGranularity,
+  filterByAllowedDimensions,
+  mergeJtdFilters,
 } from './jtd-filters.js';
 import { DataPoint, DataPointEntry, ScatterDataPoint } from '../../../types.js';
+import { WidgetProps } from '../../../props.js';
+import { JtdConfig } from '../../../widget-by-id/types.js';
 
 // Helper function to compare filters without GUID
 const expectFilterMatch = (actualFilter: any, expectedFilter: any) => {
@@ -879,10 +886,11 @@ describe('jtd-filters', () => {
 
         const filters = getFiltersFromDataPoint(dataPoint);
 
-        expect(filters).toHaveLength(3);
+        // This data point has both regular (category, breakBy) and scatter (breakByPoint) properties
+        // Since it has regular properties, isScatterDataPoint returns false, so breakByPoint is NOT processed
+        expect(filters).toHaveLength(2);
         expectFiltersToContain(filters, filterFactory.members(mockAgeRangeAttribute, ['25-34']));
         expectFiltersToContain(filters, filterFactory.members(mockGenderAttribute, ['Female']));
-        expectFiltersToContain(filters, filterFactory.members(mockCategoryAttribute, ['Laptops']));
       });
 
       it('should handle missing breakBy entries gracefully', () => {
@@ -1046,10 +1054,11 @@ describe('jtd-filters', () => {
 
         const filters = getFiltersFromDataPoint(hybridDataPoint);
 
-        // Should have 2 filters (from both category and breakByColor)
-        expect(filters).toHaveLength(2);
+        // This data point has regular (category) and scatter (breakByColor) properties
+        // Since it has regular properties, isScatterDataPoint returns false, so breakByColor is NOT processed
+        expect(filters).toHaveLength(1);
         expectFiltersToContain(filters, filterFactory.members(mockAttribute, ['Test Value']));
-        expectFiltersToContain(filters, filterFactory.members(mockGenderAttribute, ['Male']));
+        // breakByColor should NOT be processed for mixed data points that are classified as regular
       });
 
       it('should handle scatter charts with both breakByColor and breakByPoint', () => {
@@ -1254,6 +1263,517 @@ describe('jtd-filters', () => {
         expect(filters).toHaveLength(1);
         expectFilterMatch(filters[0], filterFactory.members(mockAttribute, ['123']));
       });
+    });
+  });
+
+  describe('getFormulaContextFilters', () => {
+    const mockFormulaAttribute = {
+      name: 'Formula Attribute',
+      type: 'numeric-attribute',
+      expression: '[Commerce.Cost]',
+      dataSource: {
+        title: 'Sample ECommerce',
+        type: 'live',
+      },
+      id: 'formula-attribute-id',
+      description: 'Formula attribute',
+      getSort: () => 'none',
+      sort: 'none',
+      serialize: () => ({}),
+      toJSON: () => ({}),
+      jaql: () => ({ jaql: 'mock' }),
+    } as unknown as Attribute;
+
+    const createMockWidgetProps = (dataOptions: any): WidgetProps =>
+      ({
+        id: 'test-widget',
+        title: 'Test Widget',
+        dataOptions,
+        chartType: 'column',
+        widgetType: 'chart',
+        filters: [],
+      } as WidgetProps);
+
+    const createMockJtdConfig = (sendFormulaFiltersDuplicate?: number | 'none'): JtdConfig =>
+      ({
+        sendFormulaFiltersDuplicate,
+      } as JtdConfig);
+
+    it('should extract formula context filters from widget data options', () => {
+      const mockWidget = createMockWidgetProps({
+        value: [
+          {
+            column: {
+              context: {
+                'filter-1': {
+                  filterType: 'numeric',
+                  attribute: mockFormulaAttribute,
+                  valueA: 10,
+                  valueB: 100,
+                },
+              },
+            },
+          },
+        ],
+      });
+
+      const jtdConfig = createMockJtdConfig();
+      const filters = getFormulaContextFilters(mockWidget, jtdConfig);
+
+      expect(filters).toHaveLength(1);
+      expect(filters[0].filterType).toBe('numeric');
+      expect(filters[0].attribute).toEqual(mockFormulaAttribute);
+    });
+
+    it('should return empty array for non-chart widgets', () => {
+      const mockWidget = {
+        title: 'Non-chart widget',
+      } as WidgetProps;
+
+      const jtdConfig = createMockJtdConfig();
+      const filters = getFormulaContextFilters(mockWidget, jtdConfig);
+
+      expect(filters).toEqual([]);
+    });
+
+    it('should return empty array when no dataOptions', () => {
+      const mockWidget = createMockWidgetProps(undefined);
+      const jtdConfig = createMockJtdConfig();
+      const filters = getFormulaContextFilters(mockWidget, jtdConfig);
+
+      expect(filters).toEqual([]);
+    });
+
+    it('should return empty array when no context in columns', () => {
+      const mockWidget = createMockWidgetProps({
+        value: [
+          {
+            column: {
+              // No context
+            },
+          },
+        ],
+      });
+
+      const jtdConfig = createMockJtdConfig();
+      const filters = getFormulaContextFilters(mockWidget, jtdConfig);
+
+      expect(filters).toEqual([]);
+    });
+
+    it('should handle multiple filters in context', () => {
+      const mockWidget = createMockWidgetProps({
+        value: [
+          {
+            column: {
+              context: {
+                'filter-1': {
+                  filterType: 'numeric',
+                  attribute: mockFormulaAttribute,
+                  valueA: 10,
+                  valueB: 100,
+                },
+                'filter-2': {
+                  filterType: 'members',
+                  attribute: mockGenderAttribute,
+                  members: ['Male', 'Female'],
+                },
+              },
+            },
+          },
+        ],
+      });
+
+      const jtdConfig = createMockJtdConfig();
+      const filters = getFormulaContextFilters(mockWidget, jtdConfig);
+
+      expect(filters).toHaveLength(2);
+    });
+
+    it('should handle errors gracefully', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      const invalidWidget = {
+        dataOptions: {
+          value: [
+            {
+              column: {
+                context: null, // This might cause an error
+              },
+            },
+          ],
+        },
+      } as any;
+
+      const jtdConfig = createMockJtdConfig();
+      const filters = getFormulaContextFilters(invalidWidget, jtdConfig);
+
+      expect(filters).toEqual([]);
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('handleFormulaDuplicateFilters', () => {
+    const createMockAttribute = (expression: string) =>
+      ({
+        name: 'Test Attribute',
+        type: 'text-attribute',
+        expression,
+        dataSource: { title: 'Test', type: 'live' },
+        id: 'test-id',
+        description: 'Test',
+        getSort: () => 'none',
+        sort: 'none',
+        serialize: () => ({}),
+        toJSON: () => ({}),
+        jaql: () => ({ jaql: 'mock' }),
+      } as unknown as Attribute);
+
+    const createMockFilter = (expression: string, filterType = 'members') => {
+      const attr = createMockAttribute(expression);
+      if (filterType === 'members') {
+        return filterFactory.members(attr, ['test']);
+      }
+      // For other types, create a basic filter structure that matches the interface
+      return {
+        ...filterFactory.members(attr, ['test']),
+        filterType,
+      } as any;
+    };
+
+    it('should return all filters when no duplicates exist', () => {
+      const filters = [
+        createMockFilter('[Commerce.Cost]'),
+        createMockFilter('[Commerce.Gender]'),
+        createMockFilter('[Commerce.Age]'),
+      ];
+
+      const result = handleFormulaDuplicateFilters(filters);
+      expect(result).toHaveLength(3);
+      expect(result).toEqual(filters);
+    });
+
+    it('should exclude all duplicate filters when sendFormulaFiltersDuplicate is "none"', () => {
+      const filters = [
+        createMockFilter('[Commerce.Cost]'),
+        createMockFilter('[Commerce.Cost]'), // Duplicate
+        createMockFilter('[Commerce.Gender]'),
+      ];
+
+      const result = handleFormulaDuplicateFilters(filters, 'none');
+      expect(result).toHaveLength(1);
+      expect(result[0].attribute.expression).toBe('[Commerce.Gender]');
+    });
+
+    it('should include first duplicate when sendFormulaFiltersDuplicate is 1', () => {
+      const filters = [
+        createMockFilter('[Commerce.Cost]'),
+        createMockFilter('[Commerce.Cost]'), // Duplicate
+        createMockFilter('[Commerce.Gender]'),
+      ];
+
+      const result = handleFormulaDuplicateFilters(filters, 1);
+      expect(result).toHaveLength(2);
+      expect(result.find((f) => f.attribute.expression === '[Commerce.Cost]')).toBeDefined();
+      expect(result.find((f) => f.attribute.expression === '[Commerce.Gender]')).toBeDefined();
+    });
+
+    it('should include second duplicate when sendFormulaFiltersDuplicate is 2', () => {
+      const filters = [
+        createMockFilter('[Commerce.Cost]', 'numeric'),
+        createMockFilter('[Commerce.Cost]', 'members'), // Different type - second duplicate
+        createMockFilter('[Commerce.Gender]'),
+      ];
+
+      const result = handleFormulaDuplicateFilters(filters, 2);
+      expect(result).toHaveLength(2);
+      const costFilter = result.find((f) => f.attribute.expression === '[Commerce.Cost]');
+      expect(costFilter?.filterType).toBe('members'); // Should be the second one
+    });
+
+    it('should treat invalid number as "none"', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      const filters = [
+        createMockFilter('[Commerce.Cost]'),
+        createMockFilter('[Commerce.Cost]'), // Duplicate
+        createMockFilter('[Commerce.Gender]'),
+      ];
+
+      const result = handleFormulaDuplicateFilters(filters, 5); // Out of range
+      expect(result).toHaveLength(1);
+      expect(result[0].attribute.expression).toBe('[Commerce.Gender]');
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('invalid sendFormulaFiltersDuplicate number 5'),
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    it('should include first duplicate for any other value', () => {
+      const filters = [
+        createMockFilter('[Commerce.Cost]'),
+        createMockFilter('[Commerce.Cost]'), // Duplicate
+        createMockFilter('[Commerce.Gender]'),
+      ];
+
+      const result = handleFormulaDuplicateFilters(filters, 'other' as any);
+      expect(result).toHaveLength(2);
+      expect(result.find((f) => f.attribute.expression === '[Commerce.Cost]')).toBeDefined();
+    });
+
+    it('should return empty array for empty input', () => {
+      const result = handleFormulaDuplicateFilters([]);
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('normalizeDateForGranularity', () => {
+    it('should normalize date for Years granularity', () => {
+      const result = normalizeDateForGranularity('2009-11-15T12:30:00.000', DateLevels.Years);
+      expect(result).toBe('2009-01-01T00:00:00');
+    });
+
+    it('should normalize date for Months granularity', () => {
+      const result = normalizeDateForGranularity('2009-11-15T12:30:00.000', DateLevels.Months);
+      expect(result).toBe('2009-11-01T00:00:00');
+    });
+
+    it('should normalize date for Days granularity', () => {
+      const result = normalizeDateForGranularity('2009-11-15T12:30:00.000', DateLevels.Days);
+      expect(result).toBe('2009-11-15T00:00:00');
+    });
+
+    it('should normalize date for Weeks granularity', () => {
+      const result = normalizeDateForGranularity('2009-11-15T12:30:00.000', DateLevels.Weeks);
+      // Week start depends on locale, but should be normalized to start of week
+      expect(result).toMatch(/2009-11-\d{2}T00:00:00/);
+    });
+
+    it('should normalize date for Quarters granularity', () => {
+      const result = normalizeDateForGranularity('2009-11-15T12:30:00.000', DateLevels.Quarters);
+      expect(result).toBe('2009-10-01T00:00:00'); // Q4 starts in October
+    });
+
+    it('should return original value for unsupported granularity', () => {
+      const originalValue = '2009-11-15T12:30:00.000';
+      const result = normalizeDateForGranularity(originalValue, 'UnsupportedGranularity');
+      expect(result).toBe(originalValue);
+    });
+
+    it('should return original value for invalid date', () => {
+      const invalidDate = 'invalid-date';
+      const result = normalizeDateForGranularity(invalidDate, DateLevels.Days);
+      expect(result).toBe(invalidDate);
+    });
+
+    it('should handle empty string gracefully', () => {
+      const result = normalizeDateForGranularity('', DateLevels.Days);
+      expect(result).toBe('');
+    });
+
+    it('should handle date parsing errors gracefully', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      const result = normalizeDateForGranularity('2009-13-45T99:99:99', DateLevels.Days);
+      expect(result).toBe('2009-13-45T99:99:99'); // Returns original on error
+
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('filterByAllowedDimensions', () => {
+    const createMockAttribute = (expression: string) =>
+      ({
+        name: 'Test Attribute2',
+        type: 'text-attribute',
+        expression,
+        dataSource: { title: 'Test', type: 'live' },
+        id: 'test-id',
+        description: 'Test',
+        getSort: () => 'none',
+        sort: 'none',
+        serialize: () => ({}),
+        toJSON: () => ({}),
+        jaql: () => ({ jaql: 'mock' }),
+      } as unknown as Attribute);
+
+    const createMockFilter = (expression: string) => {
+      const attr = createMockAttribute(expression);
+      return filterFactory.members(attr, ['test']);
+    };
+
+    const createMockCascadingFilter = (expressions: string[]) => {
+      const filters = expressions.map((expr) => createMockFilter(expr));
+      return filterFactory.cascading(filters, {
+        guid: 'test-guid',
+        disabled: false,
+        locked: false,
+      });
+    };
+
+    it('should return all filters when allowedDims is undefined', () => {
+      const filters = [createMockFilter('[Commerce.Cost]'), createMockFilter('[Commerce.Gender]')];
+
+      const result = filterByAllowedDimensions(filters);
+      expect(result).toEqual(filters);
+    });
+
+    it('should return empty array when allowedDims is empty', () => {
+      const filters = [createMockFilter('[Commerce.Cost]'), createMockFilter('[Commerce.Gender]')];
+
+      const result = filterByAllowedDimensions(filters, []);
+      expect(result).toEqual([]);
+    });
+
+    it('should filter regular filters by allowed dimensions', () => {
+      const filters = [
+        createMockFilter('[Commerce.Cost]'),
+        createMockFilter('[Commerce.Gender]'),
+        createMockFilter('[Commerce.Age]'),
+      ];
+
+      const result = filterByAllowedDimensions(filters, ['[Commerce.Cost]', '[Commerce.Age]']);
+      expect(result).toHaveLength(2);
+      expect(result.find((f) => f.attribute.expression === '[Commerce.Cost]')).toBeDefined();
+      expect(result.find((f) => f.attribute.expression === '[Commerce.Age]')).toBeDefined();
+    });
+
+    it('should exclude cascading filter when no levels match', () => {
+      const cascadingFilter = createMockCascadingFilter(['[Commerce.Cost]', '[Commerce.Gender]']);
+      const filters = [cascadingFilter];
+
+      const result = filterByAllowedDimensions(filters, ['[Commerce.Age]']);
+      expect(result).toEqual([]);
+    });
+
+    it('should transform cascading filter to regular filter when only one level matches', () => {
+      const cascadingFilter = createMockCascadingFilter(['[Commerce.Cost]', '[Commerce.Gender]']);
+      const filters = [cascadingFilter];
+
+      const result = filterByAllowedDimensions(filters, ['[Commerce.Cost]']);
+      expect(result).toHaveLength(1);
+      expect(result[0].filterType).toBe('members');
+      expect(result[0].attribute.expression).toBe('[Commerce.Cost]');
+    });
+
+    it('should preserve cascading filter when multiple levels match', () => {
+      const cascadingFilter = createMockCascadingFilter([
+        '[Commerce.Cost]',
+        '[Commerce.Gender]',
+        '[Commerce.Age]',
+      ]);
+      const filters = [cascadingFilter];
+
+      const result = filterByAllowedDimensions(filters, ['[Commerce.Cost]', '[Commerce.Gender]']);
+      expect(result).toHaveLength(1);
+      expect(result[0].filterType).toBe('cascading');
+      expect((result[0] as any).filters).toHaveLength(2);
+    });
+
+    it('should handle mixed regular and cascading filters', () => {
+      const regularFilter = createMockFilter('[Commerce.Age]');
+      const cascadingFilter = createMockCascadingFilter(['[Commerce.Cost]', '[Commerce.Gender]']);
+      const filters = [regularFilter, cascadingFilter];
+
+      const result = filterByAllowedDimensions(filters, ['[Commerce.Age]', '[Commerce.Cost]']);
+      expect(result).toHaveLength(2);
+      expect(
+        result.find(
+          (f) => f.filterType === 'members' && f.attribute.expression === '[Commerce.Age]',
+        ),
+      ).toBeDefined();
+      expect(
+        result.find(
+          (f) => f.filterType === 'members' && f.attribute.expression === '[Commerce.Cost]',
+        ),
+      ).toBeDefined();
+    });
+
+    it('should handle empty filters array', () => {
+      const result = filterByAllowedDimensions([], ['[Commerce.Cost]']);
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('mergeJtdFilters', () => {
+    const createMockAttribute = (expression: string) =>
+      ({
+        name: 'Test Attribute1',
+        type: 'text-attribute',
+        expression,
+        dataSource: { title: 'Test', type: 'live' },
+        id: 'test-id',
+        description: 'Test',
+        getSort: () => 'none',
+        sort: 'none',
+        serialize: () => ({}),
+        toJSON: () => ({}),
+        jaql: () => ({ jaql: {} }),
+      } as unknown as Attribute);
+
+    const createMockFilter = (expression: string, members = ['test']) => {
+      const attr = createMockAttribute(expression);
+      return filterFactory.members(attr, members);
+    };
+
+    it('should merge all filter types', () => {
+      const generatedFilters = [createMockFilter('[Generated]')];
+      const dashboardFilters = [createMockFilter('[Dashboard]')];
+      const widgetFilters = [createMockFilter('[Widget]')];
+      const formulaContextFilters = [createMockFilter('[Formula]')];
+
+      const result = mergeJtdFilters(
+        generatedFilters,
+        dashboardFilters,
+        widgetFilters,
+        formulaContextFilters,
+      );
+
+      expect(result).toHaveLength(4);
+    });
+
+    it('should handle empty filter arrays', () => {
+      const result = mergeJtdFilters([], [], [], []);
+      expect(result).toEqual([]);
+    });
+
+    it('should merge filters in correct priority order', () => {
+      // All arrays have filters on the same dimension to test merge priority
+      const generatedFilters = [createMockFilter('[Test]', ['generated'])];
+      const dashboardFilters = [createMockFilter('[Test]', ['dashboard'])];
+      const widgetFilters = [createMockFilter('[Test]', ['widget'])];
+      const formulaContextFilters = [createMockFilter('[Test]', ['formula'])];
+
+      const result = mergeJtdFilters(
+        generatedFilters,
+        dashboardFilters,
+        widgetFilters,
+        formulaContextFilters,
+      );
+
+      // mergeFilters should handle the deduplication,
+      // but generated filters should have highest priority
+      expect(result).toHaveLength(1);
+      expect((result[0] as any).members).toEqual(['generated']);
+    });
+
+    it('should handle undefined/null filter arrays gracefully', () => {
+      const generatedFilters = [createMockFilter('[Test]')];
+
+      const result = mergeJtdFilters(generatedFilters, null as any, undefined as any, []);
+
+      expect(result).toHaveLength(1);
+    });
+
+    it('should preserve filter properties during merge', () => {
+      const testAttribute = createMockAttribute('[Test.Complex]');
+      const complexFilter = filterFactory.members(testAttribute, ['test']);
+
+      const result = mergeJtdFilters([complexFilter], [], [], []);
+
+      expect(result).toHaveLength(1);
+      expect(result[0]).toMatchObject(complexFilter);
     });
   });
 });

@@ -28,10 +28,10 @@ export const translateCartesianChartDataOptions = (
   dataOptions: CartesianChartDataOptions,
 ): CartesianChartDataOptionsInternal => {
   return {
-    x: dataOptions.category.map(normalizeColumn),
-    y: dataOptions.value.map(normalizeMeasureColumn),
+    x: dataOptions.category.map((c) => normalizeColumn(c)),
+    y: dataOptions.value.map((c) => normalizeMeasureColumn(c)),
     // breakBy may be undefined. If so, default to empty array
-    breakBy: dataOptions.breakBy?.map(normalizeColumn) || [],
+    breakBy: dataOptions.breakBy?.map((c) => normalizeColumn(c)) || [],
     seriesToColorMap: dataOptions.seriesToColorMap,
   };
 };
@@ -104,7 +104,7 @@ function getColumn(
 /**
  * Checks if the column is an attribute column.
  */
-function isAttributeColumn(
+export function isAttributeColumn(
   column: MeasureColumn | CalculatedMeasureColumn | Column,
 ): column is Column {
   return !isMeasureColumn(column);

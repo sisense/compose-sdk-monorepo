@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify';
 import { HighchartsDataPointContext, TooltipSettings, formatTooltipValue } from './tooltip-utils';
 import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { getDataOptionTitle } from '../../chart-data-options/utils';
@@ -30,9 +31,11 @@ const block = (element: string, title?: string): string => {
 };
 
 export const tooltipWrapper = (content: string) =>
-  `<div style="minWidth: 100px; color: #5B6372; fontSize: 13px; lineHeight: 18px; margin: 4px 6px">
+  DOMPurify.sanitize(
+    `<div style="min-width: 100px; color: #5B6372; font-size: 13px; line-height: 18px; margin: 4px 6px">
     ${content}
-  </div>`;
+  </div>`,
+  );
 
 export const tooltipSeparator = () => '<hr class="csdk-border-t" style="margin: 7px 0px" />';
 

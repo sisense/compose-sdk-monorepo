@@ -59,6 +59,8 @@ import {
   TextWidgetDataPoint,
   CustomWidgetStyleOptions,
   PivotTableDataPoint,
+  CalendarHeatmapStyleOptions,
+  CalendarHeatmapDataPoint,
 } from './types';
 import {
   type CustomDataCellFormatter,
@@ -78,6 +80,7 @@ import {
   RegularChartDataOptions,
   TabularChartDataOptions,
   RangeChartDataOptions,
+  CalendarHeatmapChartDataOptions,
 } from './chart-data-options/types';
 import { AppConfig } from './app/client-application';
 import { ExecuteQueryParams, QueryByWidgetIdState } from './query-execution';
@@ -124,7 +127,7 @@ export interface SisenseContextProviderProps {
   ssoEnabled?: boolean;
 
   /**
-   * Token for [bearer authentication](https://sisense.dev/guides/restApi/using-rest-api.html).
+   * Token for [bearer authentication](https://developer.sisense.com/guides/restApi/using-rest-api.html).
    *
    * To signify that the token is pending (e.g., being generated), set the value to `null`. This is supported for React and Vue only.
    *
@@ -430,6 +433,30 @@ export type IndicatorDataPointEventHandler = (
 ) => void;
 
 /**
+ * Click handler for when a calendar-heatmap data point is clicked
+ *
+ * @alpha
+ */
+export type CalendarHeatmapDataPointEventHandler = (
+  /** Data point that was clicked */
+  point: CalendarHeatmapDataPoint,
+  /** Native PointerEvent */
+  nativeEvent: PointerEvent,
+) => void;
+
+/**
+ * Click handler for when multiple calendar-heatmap data points are selected.
+ *
+ * @alpha
+ */
+export type CalendarHeatmapDataPointsEventHandler = (
+  /** Data points that were selected */
+  points: CalendarHeatmapDataPoint[],
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
  * Click handler for when text widget is clicked.
  *
  * @internal
@@ -605,6 +632,35 @@ interface IndicatorChartEventProps extends BaseChartEventProps {
 }
 
 /**
+ * Event props for CalendarHeatmap chart which uses CalendarHeatmapDataPoint type
+ * to describe data points for events.
+ *
+ * @internal
+ */
+export interface CalendarHeatmapChartEventProps
+  extends BaseChartEventProps,
+    HighchartsBasedChartEventProps {
+  /**
+   * Click handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointClick?: CalendarHeatmapDataPointEventHandler;
+  /**
+   * Context menu handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointContextMenu?: CalendarHeatmapDataPointEventHandler;
+  /**
+   * Handler callback for selection of multiple data points
+   *
+   * @category Callbacks
+   */
+  onDataPointsSelected?: CalendarHeatmapDataPointsEventHandler;
+}
+
+/**
  * Base Chart Props to be extended by {@link ChartProps}
  *
  * @internal
@@ -618,7 +674,7 @@ export interface BaseChartProps extends BaseChartEventProps {
    *
    * (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
    * retrieve the data source name from a data model you create using the `get-data-model`
-   * {@link https://sisense.dev/guides/sdk/guides/cli.html | command} of the Compose SDK CLI. Under the hood, the chart
+   * {@link https://developer.sisense.com/guides/sdk/guides/cli.html | command} of the Compose SDK CLI. The chart
    * connects to the data source, executes a query, and loads the data as specified in
    * `dataOptions`, `filters`, and `highlights`.
    *
@@ -720,7 +776,8 @@ interface ChartEventProps extends BaseChartEventProps {
     | AreamapDataPointEventHandler
     | BoxplotDataPointEventHandler
     | ScattermapDataPointEventHandler
-    | IndicatorDataPointEventHandler;
+    | IndicatorDataPointEventHandler
+    | CalendarHeatmapDataPointEventHandler;
 
   /**
    * Context menu handler callback for a data point
@@ -730,14 +787,18 @@ interface ChartEventProps extends BaseChartEventProps {
   onDataPointContextMenu?:
     | DataPointEventHandler
     | ScatterDataPointEventHandler
-    | BoxplotDataPointEventHandler;
+    | BoxplotDataPointEventHandler
+    | CalendarHeatmapDataPointEventHandler;
 
   /**
    * Handler callback for selection of multiple data points
    *
    * @category Callbacks
    */
-  onDataPointsSelected?: DataPointsEventHandler | ScatterDataPointsEventHandler;
+  onDataPointsSelected?:
+    | DataPointsEventHandler
+    | ScatterDataPointsEventHandler
+    | CalendarHeatmapDataPointsEventHandler;
 
   /**
    * A callback that allows you to customize the underlying chart element before it is rendered. The returned options are then used when rendering the chart.
@@ -2025,4 +2086,24 @@ export interface UseGetSharedFormulaParams extends HookEnableParam {
    * Data source - e.g. `Sample ECommerce`
    */
   dataSource?: DataSource;
+}
+
+/**
+ * Props of the {@link CalendarHeatmapChart} component.
+ *
+ * @internal
+ */
+export interface CalendarHeatmapChartProps extends BaseChartProps, CalendarHeatmapChartEventProps {
+  /**
+   * Configurations for how to interpret and present the data passed to the chart
+   *
+   * @category Chart
+   */
+  dataOptions: CalendarHeatmapChartDataOptions;
+  /**
+   * Configurations for how to style and present a chart's data.
+   *
+   * @category Chart
+   */
+  styleOptions?: CalendarHeatmapStyleOptions;
 }

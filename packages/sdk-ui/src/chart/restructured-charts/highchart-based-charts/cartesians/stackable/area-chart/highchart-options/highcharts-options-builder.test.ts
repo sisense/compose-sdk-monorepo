@@ -75,7 +75,10 @@ describe('areaHighchartsOptionsBuilder', () => {
       showTotal,
       totalLabelRotation: 0,
       valueLabel: {},
-      legend: legendPosition,
+      legend: {
+        enabled: true,
+        position: legendPosition,
+      },
       lineType: 'straight',
       lineWidth: 2,
       marker: { enabled: false, size: 'small', fill: 'full' },
@@ -312,7 +315,10 @@ describe('areaHighchartsOptionsBuilder', () => {
         const ctx = createMockBuildContext('stacked', false, position);
         areaHighchartsOptionsBuilder.getLegend(ctx);
 
-        expect(getBasicCartesianLegend).toHaveBeenCalledWith(position);
+        expect(getBasicCartesianLegend).toHaveBeenCalledWith({
+          enabled: true,
+          position,
+        });
       });
     });
   });

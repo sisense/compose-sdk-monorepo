@@ -10,6 +10,7 @@ import {
   JaqlElement,
   DateLevels,
 } from '@sisense/sdk-data';
+import isUndefined from 'lodash-es/isUndefined';
 import { StyledColumn, StyledMeasureColumn, AnyColumn, CategoryStyle, ValueStyle } from './types';
 
 type AnyObject = Record<string, any>;
@@ -95,7 +96,12 @@ export function isMeasureColumn(
  * @param name - The name of the column.
  * @returns The title of the column.
  */
-export const getDataOptionTitle = ({ column, name }: StyledColumn | StyledMeasureColumn) => {
+export const getDataOptionTitle = (styledColumn: StyledColumn | StyledMeasureColumn) => {
+  if (!styledColumn) {
+    return '';
+  }
+
+  const { column, name } = styledColumn;
   // Use optional `name` property of styled column
   if (name) {
     return name;
@@ -149,22 +155,21 @@ export function isCategoryStyle(category: Column | CategoryStyle): category is C
   return !('column' in category);
 }
 
-export function normalizeColumn(targetColumn: Column | StyledColumn): StyledColumn {
+export function normalizeColumn(
+  targetColumn: Column | StyledColumn,
+  defaultStyle?: CategoryStyle,
+): StyledColumn {
   const { column, style } = splitColumn(targetColumn) as { column: Column; style: CategoryStyle };
 
-  const levelDimensionDateFormat = isDatetime(column.type)
-    ? (column as LevelAttribute)?.getFormat?.()
-    : undefined;
-
-  const dateFormat = style.dateFormat || levelDimensionDateFormat;
-
   const nColumn = {
+    ...defaultStyle,
     ...style,
     column,
   };
 
-  if (dateFormat) {
-    nColumn.dateFormat = dateFormat;
+  if (isDatetime(column.type) && isUndefined(nColumn.dateFormat)) {
+    // Takes level attribute format as default date format
+    nColumn.dateFormat = (column as LevelAttribute)?.getFormat?.();
   }
 
   return nColumn;
@@ -172,6 +177,7 @@ export function normalizeColumn(targetColumn: Column | StyledColumn): StyledColu
 
 export function normalizeMeasureColumn(
   targetColumn: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn,
+  defaultStyle?: ValueStyle,
 ): StyledMeasureColumn {
   const { column, style } = splitColumn(targetColumn) as {
     column: MeasureColumn | CalculatedMeasureColumn;
@@ -179,6 +185,7 @@ export function normalizeMeasureColumn(
   };
 
   return {
+    ...defaultStyle,
     ...style,
     column: safeMerge(column, {
       title: column.title ?? column.name,
@@ -188,8 +195,11 @@ export function normalizeMeasureColumn(
   };
 }
 
-export function normalizeAnyColumn(targetColumn: AnyColumn) {
+export function normalizeAnyColumn(
+  targetColumn: AnyColumn,
+  defaultStyle?: CategoryStyle | ValueStyle,
+) {
   return isMeasureColumn(targetColumn)
-    ? normalizeMeasureColumn(targetColumn)
-    : normalizeColumn(targetColumn);
+    ? normalizeMeasureColumn(targetColumn, defaultStyle as ValueStyle)
+    : normalizeColumn(targetColumn, defaultStyle as CategoryStyle);
 }

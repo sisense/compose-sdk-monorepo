@@ -10,7 +10,6 @@ import { prepareSunburstLevels } from './sunburst-levels';
 import { prepareSunburstDataItems, SUNBURST_ROOT_PARENT_ID } from './sunburst-series';
 import { getLegendSettings } from '../legend-section';
 import './sunburst.scss';
-import { getLegend } from '../../style-to-design-options-translator/translate-to-highcharts-options';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
 import { TFunction } from '@sisense/sdk-common';
 import { HighchartsDataPointContext } from '../tooltip-utils';
@@ -87,6 +86,6 @@ export function prepareSunburstOptions(
       shouldSkip: (context: HighchartsDataPointContext) =>
         context.point.options?.id === SUNBURST_ROOT_PARENT_ID,
     }),
-    legend: getLegendSettings(getLegend(designOptions.legend)),
+    legend: getLegendSettings(designOptions.legend),
   };
 }

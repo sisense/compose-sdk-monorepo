@@ -1,7 +1,7 @@
 import { type JaqlPanel, type PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
 import { type Column } from '@sisense/sdk-data';
 import type { StyledColumn, PivotTableDataOptions } from '@/chart-data-options/types.js';
-import type { DateFormatter, HeaderCellFormatter } from '../types.js';
+import type { HeaderCellFormatter } from '../types.js';
 import { applyFormatPlainText } from '@/chart-options-processor/translations/number-format-config.js';
 import {
   getDateFormatConfig,
@@ -10,6 +10,7 @@ import {
 } from '../utils.js';
 import { parseISOWithTimezoneCheck } from '@/utils/parseISOWithTimezoneCheck';
 import { NOT_AVAILABLE_DATA_VALUE } from '@/const.js';
+import { DateFormatter } from '@/common/formatters/create-date-formatter.js';
 
 export const createHeaderCellValueFormatter = (
   dataOptions: PivotTableDataOptions,
@@ -25,7 +26,12 @@ export const createHeaderCellValueFormatter = (
       return;
     }
 
-    const dateFormat = getDateFormatConfig(dataOption as Column | StyledColumn);
+    // Only dimensions (Column/StyledColumn) can have date formatting, not measures
+    const isDimension =
+      'type' in dataOption || ('column' in dataOption && 'type' in dataOption.column);
+    const dateFormat = isDimension
+      ? getDateFormatConfig(dataOption as Column | StyledColumn)
+      : undefined;
 
     switch (jaqlPanelItem?.jaql?.datatype) {
       case 'numeric':

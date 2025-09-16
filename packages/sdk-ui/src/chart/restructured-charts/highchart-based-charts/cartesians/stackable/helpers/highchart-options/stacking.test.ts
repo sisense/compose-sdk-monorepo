@@ -61,7 +61,10 @@ describe('stacking', () => {
         showTotal,
         totalLabelRotation,
         valueLabel,
-        legend: 'bottom',
+        legend: {
+          enabled: true,
+          position: 'bottom',
+        },
         lineType: 'straight',
         lineWidth: 2,
         marker: { enabled: false, size: 'small', fill: 'full' },
@@ -342,6 +345,7 @@ describe('stacking', () => {
             fontFamily: 'Arial',
             primaryTextColor: '#ff0000',
             secondaryTextColor: '#666666',
+            hyperlinkColor: '#0000ff',
           },
         };
         const ctx = createMockBuildContext('stacked', true, 0, { enabled: true }, themeSettings);

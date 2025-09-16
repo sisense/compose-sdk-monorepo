@@ -30,6 +30,7 @@ import { useChartDataPreparation } from './helpers/use-chart-data-preparation';
 import { isRestructuredChartType, hasForecastOrTrend } from './restructured-charts/utils';
 import { getChartBuilder } from './restructured-charts/chart-builder-factory';
 import { isSisenseChartProps, isSisenseChartType, SisenseChart } from '../sisense-chart';
+import { isCalendarHeatmapChartData } from './restructured-charts/highchart-based-charts/calendar-heatmap-chart/data';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -64,6 +65,9 @@ const hasNoResults = (chartType: ChartType, chartData: ChartData) => {
   }
   if (chartType === 'boxplot' && isBoxplotChartData(chartData)) {
     return chartData.xValues.length === 0;
+  }
+  if (chartType === 'calendar-heatmap' && isCalendarHeatmapChartData(chartData)) {
+    return chartData.values.length === 0;
   }
   return 'series' in chartData && chartData.series.length === 0;
 };

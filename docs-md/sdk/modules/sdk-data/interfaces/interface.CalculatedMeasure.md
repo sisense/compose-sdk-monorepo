@@ -8,7 +8,7 @@ Interface for a Calculated Measure, extending [Measure](interface.Measure.md).
 
 ## See
 
-[Using the JAQL to Add A Formula](https://sisense.dev/guides/querying/useJaql/#step-7-adding-a-formula)
+[Using the JAQL to Add A Formula](https://developer.sisense.com/guides/querying/useJaql/#step-7-adding-a-formula)
 
 ## Methods
 

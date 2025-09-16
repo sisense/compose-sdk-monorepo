@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.10.0] - 2025-09-16
+
+### Added
+- Add `SisenseContextService.setConfig` method for runtime configuration in Angular
+- Add calendar-heatmap chart support for internal testing
+- Improve `Jump to Dashboard`: add jump from pivot widget support
+- Extend charts line styling options
+- Extend charts legend styling options
+
+### Changed
+- Fix redundant JAQL queries in the dashboard cross-filtering behavior
+- Fix Treemap chart error when only category is provided in `dataOptions`
+
 ## [2.9.0] - 2025-09-02
 
 ### Added
@@ -951,7 +964,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - Add prefix `csdk-` to all Tailwind CSS classes to avoid conflicts with user-defined classes
 - Refactor common logic behind data-driven UI components into a higher-order component, `asSisenseComponent`
 - Improve validation of data options for `Table` component
-- Reorganize API reference (on sisense.dev) by splitting API items into individual files
+- Reorganize API reference (on developer.sisense.com) by splitting API items into individual files
   and group individual files by modules and types.
 
 ## [0.8.0] - 2023-08-15

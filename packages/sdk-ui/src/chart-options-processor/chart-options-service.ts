@@ -23,7 +23,7 @@ import {
   HighchartsSelectEvent,
 } from '../types';
 import { getCartesianChartOptions } from './cartesian/cartesian-chart-options';
-import { getCategoricalChartOptions } from './category-chart-options';
+import { getCategoricalChartOptions } from './category-chart-options/category-chart-options';
 import { getScatterChartOptions } from './scatter-chart-options';
 import {
   RangeChartDataOptionsInternal,
@@ -162,6 +162,12 @@ export type SeriesType = HighchartsSeriesValues & {
   dashStyle?: string;
   lineWidth?: number;
   zIndex?: number;
+  keys?: string[];
+  nullColor?: string;
+  borderWidth?: number;
+  borderColor?: string;
+  colsize?: number;
+  rowsize?: number;
 };
 
 type ChartPlotOptions = {
@@ -226,6 +232,7 @@ export type PlotOptions = {
   boxplot?: ChartPlotOptions;
   scatter?: ChartPlotOptions;
   arearange?: ChartPlotOptions;
+  heatmap?: ChartPlotOptions;
 };
 
 /**
@@ -255,6 +262,13 @@ export type HighchartsOptionsInternal = {
     zooming?: {
       type: string;
     };
+    plotBorderWidth?: number;
+    backgroundColor?: string;
+    marginBottom?: number;
+    marginLeft?: number;
+    marginRight?: number;
+    width?: number;
+    height?: number;
   };
   title?: {
     text: string | null;
@@ -273,6 +287,18 @@ export type HighchartsOptionsInternal = {
   credits?: { enabled: boolean };
   exporting?: { enabled: boolean };
   drilldown?: DrilldownOptions;
+  accessibility?: {
+    enabled?: boolean;
+    landmarkVerbosity?: 'one' | 'all';
+  };
+  colorAxis?: {
+    min?: number;
+    max?: number;
+    stops?: [number, string][];
+    labels?: {
+      format: string;
+    };
+  };
 };
 
 type Navigator = {

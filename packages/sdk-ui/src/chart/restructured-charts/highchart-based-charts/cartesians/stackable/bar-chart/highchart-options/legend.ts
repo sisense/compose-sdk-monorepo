@@ -1,4 +1,7 @@
-import { LegendSettings } from '@/chart-options-processor/translations/legend-section';
+import {
+  isLegendOnRight,
+  LegendSettings,
+} from '@/chart-options-processor/translations/legend-section';
 import { BuildContext } from '../../../../types';
 import { getBasicCartesianLegend } from '../../../helpers/highchart-options/legend';
 
@@ -14,8 +17,8 @@ function withRightMargin(ctx: BuildContext<'bar'>): (legend: LegendSettings) => 
   const LEGEND_RIGHT_MARGIN = 80;
 
   return (legend: LegendSettings) => {
-    if (ctx.dataOptions.x.length > 1 && ctx.designOptions.legend === 'right') {
-      return { ...legend, margin: LEGEND_RIGHT_MARGIN };
+    if (ctx.dataOptions.x.length > 1 && isLegendOnRight(ctx.designOptions.legend)) {
+      return { ...legend, margin: ctx.designOptions.legend?.margin ?? LEGEND_RIGHT_MARGIN };
     }
     return legend;
   };

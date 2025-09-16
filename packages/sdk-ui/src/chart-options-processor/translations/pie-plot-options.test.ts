@@ -41,8 +41,6 @@ describe('getPiePlotOptions', () => {
           showDecimals: false,
           showPercentLabels: true,
           style: {
-            color: '#5b6372',
-            fontFamily: 'Open Sans',
             fontSize: '13px',
             fontWeight: 'normal',
             pointerEvents: 'none',

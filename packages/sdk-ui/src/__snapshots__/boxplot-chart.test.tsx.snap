@@ -58,7 +58,6 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -77,8 +76,6 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
         "formatter": [Function],
         "rotation": 0,
         "style": {
-          "color": "#001b4f",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
         },
@@ -437,7 +434,6 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
     "enabled": true,
     "itemStyle": {
       "color": "#000000",
-      "cursor": "default",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -456,8 +452,6 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
         "formatter": [Function],
         "rotation": 0,
         "style": {
-          "color": "#001b4f",
-          "fontFamily": "Open Sans",
           "fontSize": "13px",
           "fontWeight": "normal",
         },

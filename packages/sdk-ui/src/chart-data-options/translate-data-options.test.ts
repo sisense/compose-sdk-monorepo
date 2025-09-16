@@ -282,9 +282,9 @@ describe('translate data options', () => {
     it('should translate correctly to internal data options', () => {
       const result = translatePivotTableDataOptions(dataOptions1);
       expect(result).toEqual({
-        rows: [col1].map(normalizeColumn),
-        columns: [col2].map(normalizeColumn),
-        values: [meas1, meas2Styled].map(normalizeMeasureColumn),
+        rows: [col1].map((c) => normalizeColumn(c)),
+        columns: [col2].map((c) => normalizeColumn(c)),
+        values: [meas1, meas2Styled].map((c) => normalizeMeasureColumn(c)),
         grandTotals: undefined,
       });
     });

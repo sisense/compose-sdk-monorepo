@@ -404,5 +404,16 @@ export const translation: TranslationDictionary = {
   jumpToDashboard: {
     jumpableTooltip: 'З цього віджета можна перейти до інших віджетів',
     defaultCaption: 'Перейти до',
+    noDrillTargets: 'Цілі для переходу відсутні',
+  },
+  calendarHeatmap: {
+    navigation: {
+      firstMonth: 'Перший місяць',
+      lastMonth: 'Останній місяць',
+      previousMonth: 'Попередній місяць',
+      nextMonth: 'Наступний місяць',
+      previousGroup: 'Попередня група',
+      nextGroup: 'Наступна група',
+    },
   },
 };

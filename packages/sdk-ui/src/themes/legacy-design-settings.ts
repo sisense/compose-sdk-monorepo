@@ -147,6 +147,7 @@ export function convertToThemeSettings(
       fontFamily: legacyDesignSettings.typography.fontFamily,
       primaryTextColor: legacyDesignSettings.typography.primaryTextColor,
       secondaryTextColor: legacyDesignSettings.typography.secondaryTextColor,
+      hyperlinkColor: legacyDesignSettings.typography.hyperlinkColor,
       fontsLoader: {
         fonts: prepareLegacyThemeSettingsFonts(
           legacyDesignSettings.typography.fontFamily,

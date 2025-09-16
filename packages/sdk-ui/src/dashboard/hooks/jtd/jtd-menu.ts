@@ -78,7 +78,7 @@ export const getJumpToDashboardMenuItemForMultiplePoints = (
   context: JtdContext,
   actions: Pick<JtdActions, 'openModal' | 'translate'>,
 ) => {
-  if (!coreData.jtdConfig) {
+  if (!coreData.jtdConfig || coreData.jtdConfig.drillTargets.length === 0) {
     return null;
   }
   const multipleDrillTargets = coreData.jtdConfig.drillTargets.length > 1;

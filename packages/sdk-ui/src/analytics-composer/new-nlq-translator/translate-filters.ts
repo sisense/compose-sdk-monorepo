@@ -8,7 +8,7 @@ import {
   mergeFiltersOrFilterRelations,
   JSONArray,
 } from '@sisense/sdk-data';
-import { NormalizedTable } from '../types.js';
+import { NlqTranslationResult, NormalizedTable } from '../types.js';
 import {
   isFilterElement,
   isFilterRelationsElement,
@@ -89,31 +89,50 @@ export const translateFiltersFromJSONFunctionCall = (
   filtersJSON: ParsedFunctionCall[],
   dataSource: JaqlDataSourceForDto,
   tables: NormalizedTable[],
-): Filter[] | FilterRelations => {
-  const filters = filtersJSON.map((filterJSON) => {
-    const filter = processNode(filterJSON, dataSource, tables);
-    if (!isFilterRelationsElement(filter) && !isFilterElement(filter)) {
-      throw new Error('Invalid filter JSON');
+): NlqTranslationResult<Filter[] | FilterRelations> => {
+  const filters: (Filter | FilterRelations)[] = [];
+  const errors: string[] = [];
+
+  // Process each filter and collect errors instead of throwing
+  filtersJSON.forEach((filterJSON, index) => {
+    try {
+      const filter = processNode(filterJSON, dataSource, tables);
+      if (!isFilterRelationsElement(filter) && !isFilterElement(filter)) {
+        errors.push(`Filter ${index + 1} (${filterJSON.function}): Invalid filter JSON`);
+      } else {
+        filters.push(filter);
+      }
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      errors.push(`Filter ${index + 1} (${filterJSON.function}): ${errorMsg}`);
     }
-    return filter;
   });
 
-  return postProcessFilters(filters);
+  if (errors.length > 0) {
+    return { success: false, errors };
+  }
+
+  return { success: true, data: postProcessFilters(filters) };
 };
 
 export const translateFiltersJSON = (
   filtersJSON: JSONArray,
   dataSource: JaqlDataSourceForDto,
   tables: NormalizedTable[],
-): Filter[] | FilterRelations => {
+): NlqTranslationResult<Filter[] | FilterRelations> => {
   if (!filtersJSON) {
-    return [];
+    return { success: true, data: [] };
   }
+
   if (!isParsedFunctionCallArray(filtersJSON)) {
-    throw new Error(
-      'Invalid filters JSON. Expected an array of function calls with "function" and "args" properties.',
-    );
+    return {
+      success: false,
+      errors: [
+        'Invalid filters JSON. Expected an array of function calls with "function" and "args" properties.',
+      ],
+    };
   }
+
   return translateFiltersFromJSONFunctionCall(filtersJSON, dataSource, tables);
 };
 
@@ -121,28 +140,45 @@ export const translateHighlightsFromJSONFunctionCall = (
   highlightsJSON: ParsedFunctionCall[],
   dataSource: JaqlDataSourceForDto,
   tables: NormalizedTable[],
-): Filter[] => {
-  return highlightsJSON.map((filterJSON) => {
-    const filter = processNode(filterJSON, dataSource, tables);
-    if (!isFilterElement(filter)) {
-      throw new Error('Invalid filter JSON');
+): NlqTranslationResult<Filter[]> => {
+  const results: Filter[] = [];
+  const errors: string[] = [];
+
+  // Process each highlight and collect errors instead of throwing
+  highlightsJSON.forEach((filterJSON, index) => {
+    try {
+      const filter = processNode(filterJSON, dataSource, tables);
+      if (!isFilterElement(filter)) {
+        errors.push(`Highlight ${index + 1} (${filterJSON.function}): Invalid filter JSON`);
+      } else {
+        results.push(postProcessFilter(filter));
+      }
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      errors.push(`Highlight ${index + 1} (${filterJSON.function}): ${errorMsg}`);
     }
-    return postProcessFilter(filter);
   });
+
+  return errors.length > 0 ? { success: false, errors } : { success: true, data: results };
 };
 
 export const translateHighlightsJSON = (
   highlightsJSON: JSONArray,
   dataSource: JaqlDataSourceForDto,
   tables: NormalizedTable[],
-): Filter[] => {
+): NlqTranslationResult<Filter[]> => {
   if (!highlightsJSON) {
-    return [];
+    return { success: true, data: [] };
   }
+
   if (!isParsedFunctionCallArray(highlightsJSON)) {
-    throw new Error(
-      'Invalid highlights JSON. Expected an array of function calls with "function" and "args" properties.',
-    );
+    return {
+      success: false,
+      errors: [
+        'Invalid highlights JSON. Expected an array of function calls with "function" and "args" properties.',
+      ],
+    };
   }
+
   return translateHighlightsFromJSONFunctionCall(highlightsJSON, dataSource, tables);
 };

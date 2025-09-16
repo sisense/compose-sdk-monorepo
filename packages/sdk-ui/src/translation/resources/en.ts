@@ -405,6 +405,17 @@ export const translation = {
   jumpToDashboard: {
     defaultCaption: 'Jump to',
     jumpableTooltip: 'This widget is jumpable',
+    noDrillTargets: 'No drill targets available',
+  },
+  calendarHeatmap: {
+    navigation: {
+      firstMonth: 'First Month',
+      lastMonth: 'Last Month',
+      previousMonth: 'Previous Month',
+      nextMonth: 'Next Month',
+      previousGroup: 'Previous Group',
+      nextGroup: 'Next Group',
+    },
   },
 };
 

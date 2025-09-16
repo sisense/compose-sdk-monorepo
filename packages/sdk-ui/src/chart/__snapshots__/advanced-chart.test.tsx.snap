@@ -61,7 +61,6 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#5B6372",
-      "cursor": "default",
       "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "normal",
@@ -6264,7 +6263,7 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
       "plotBands": [
         {
           "borderWidth": 0,
-          "color": "#F7F7FA",
+          "color": "#FFFFFF",
           "from": 49,
           "label": {
             "style": {
@@ -6441,7 +6440,6 @@ exports[`Advanced Charts > should render trend chart 1`] = `
     "enabled": true,
     "itemStyle": {
       "color": "#5B6372",
-      "cursor": "default",
       "fontFamily": "Open Sans",
       "fontSize": "13px",
       "fontWeight": "normal",

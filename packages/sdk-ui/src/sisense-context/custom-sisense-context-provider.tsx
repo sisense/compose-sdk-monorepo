@@ -28,11 +28,11 @@ export const CustomSisenseContextProvider: FunctionComponent<
   if (!context)
     return (
       <EmotionCacheProvider>
-        <ErrorBoundary showErrorBox={false} error={error}>
-          <I18nProvider>
+        <I18nProvider>
+          <ErrorBoundary showErrorBox={true} error={error}>
             <ThemeProvider>{children}</ThemeProvider>
-          </I18nProvider>
-        </ErrorBoundary>
+          </ErrorBoundary>
+        </I18nProvider>
       </EmotionCacheProvider>
     );
 

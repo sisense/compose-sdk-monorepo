@@ -1,14 +1,26 @@
 import { describe, it, expect } from 'vitest';
+import { JSONArray } from '@sisense/sdk-data';
 import {
   translateMeasuresJSON,
   translateMeasuresFromJSONFunctionCall,
 } from './translate-measures.js';
+import { NlqTranslationResult } from '../types.js';
 
 import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../__mocks__/mock-data-sources.js';
 import { ParsedFunctionCall } from './common.js';
+
+function getSuccessData<T>(result: NlqTranslationResult<T>): T {
+  if (!result.success) throw new Error('Expected success result');
+  return result.data;
+}
+
+function getErrors<T>(result: NlqTranslationResult<T>): string[] {
+  if (result.success) throw new Error('Expected error result');
+  return result.errors;
+}
 
 describe('translateMeasures', () => {
   describe('translateMeasuresFromJSONFunctionCall', () => {
@@ -18,14 +30,16 @@ describe('translateMeasures', () => {
         { function: 'measureFactory.count', args: ['DM.Commerce.Revenue', 'Revenue Count'] },
       ];
 
-      const measures = translateMeasuresFromJSONFunctionCall(
+      const result = translateMeasuresFromJSONFunctionCall(
         mockMeasuresJSON,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
 
-      expect(measures).toHaveLength(2);
-      expect(measures).toMatchSnapshot();
+      expect(result.success).toBe(true);
+      const data = getSuccessData(result);
+      expect(data).toHaveLength(2);
+      expect(data).toMatchSnapshot();
     });
 
     it('should translate single measure', () => {
@@ -33,31 +47,34 @@ describe('translateMeasures', () => {
         { function: 'measureFactory.average', args: ['DM.Commerce.Revenue'] },
       ];
 
-      const measures = translateMeasuresFromJSONFunctionCall(
+      const result = translateMeasuresFromJSONFunctionCall(
         mockMeasuresJSON,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
 
-      expect(measures).toHaveLength(1);
-      expect(measures).toMatchSnapshot();
+      expect(result.success).toBe(true);
+      const data = getSuccessData(result);
+      expect(data).toHaveLength(1);
+      expect(data).toMatchSnapshot();
     });
 
-    it('should throw error when trying to use filter function as measure', () => {
+    it('should return error when trying to use filter function as measure', () => {
       const mockMeasuresJSON: ParsedFunctionCall[] = [
         { function: 'filterFactory.members', args: ['DM.Country.Country', ['United States']] },
       ];
 
-      expect(() => {
-        translateMeasuresFromJSONFunctionCall(
-          mockMeasuresJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow('Invalid measure JSON');
+      const result = translateMeasuresFromJSONFunctionCall(
+        mockMeasuresJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)[0]).toContain('Invalid measure JSON');
     });
 
-    it('should throw error when trying to use filter relation as measure', () => {
+    it('should return error when trying to use filter relation as measure', () => {
       const mockMeasuresJSON: ParsedFunctionCall[] = [
         {
           function: 'filterFactory.logic.and',
@@ -74,160 +91,178 @@ describe('translateMeasures', () => {
         },
       ];
 
-      expect(() => {
-        translateMeasuresFromJSONFunctionCall(
-          mockMeasuresJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow('Invalid measure JSON');
+      const result = translateMeasuresFromJSONFunctionCall(
+        mockMeasuresJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)[0]).toContain('Invalid measure JSON');
     });
   });
 
   describe('translateMeasuresFromJSON', () => {
     it('should return empty array when measuresJSON is null', () => {
-      const measures = translateMeasuresJSON(
-        null as any,
+      const result = translateMeasuresJSON(
+        null as unknown as JSONArray,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(measures).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
     it('should return empty array when measuresJSON is undefined', () => {
-      const measures = translateMeasuresJSON(
-        undefined as any,
+      const result = translateMeasuresJSON(
+        undefined as unknown as JSONArray,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(measures).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
     it('should return empty array when measuresJSON is false', () => {
-      const measures = translateMeasuresJSON(
-        false as any,
+      const result = translateMeasuresJSON(
+        false as unknown as JSONArray,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(measures).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
     it('should return empty array when measuresJSON is 0', () => {
-      const measures = translateMeasuresJSON(
-        0 as any,
+      const result = translateMeasuresJSON(
+        0 as unknown as JSONArray,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(measures).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
     it('should return empty array when measuresJSON is empty string', () => {
-      const measures = translateMeasuresJSON(
-        '' as any,
+      const result = translateMeasuresJSON(
+        '' as unknown as JSONArray,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(measures).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
     it('should translate empty array to empty array', () => {
-      const measures = translateMeasuresJSON(
+      const result = translateMeasuresJSON(
         [],
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
-      expect(measures).toEqual([]);
+      expect(result.success).toBe(true);
+      expect(getSuccessData(result)).toEqual([]);
     });
 
-    it('should throw error for array of strings instead of function calls', () => {
-      const invalidMeasuresJSON = ['DM.Commerce.Revenue', 'DM.Commerce.Cost'] as any;
+    it('should return error for array of strings instead of function calls', () => {
+      const invalidMeasuresJSON = [
+        'DM.Commerce.Revenue',
+        'DM.Commerce.Cost',
+      ] as unknown as JSONArray;
 
-      expect(() => {
-        translateMeasuresJSON(
-          invalidMeasuresJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateMeasuresJSON(
+        invalidMeasuresJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
 
-    it('should throw error for array of objects missing function property', () => {
-      const invalidMeasuresJSON = [{ args: ['DM.Commerce.Revenue', 'Total Revenue'] }] as any;
+    it('should return error for array of objects missing function property', () => {
+      const invalidMeasuresJSON = [
+        { args: ['DM.Commerce.Revenue', 'Total Revenue'] },
+      ] as unknown as JSONArray;
 
-      expect(() => {
-        translateMeasuresJSON(
-          invalidMeasuresJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateMeasuresJSON(
+        invalidMeasuresJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
 
-    it('should throw error for array of objects missing args property', () => {
-      const invalidMeasuresJSON = [{ function: 'measureFactory.sum' }] as any;
+    it('should return error for array of objects missing args property', () => {
+      const invalidMeasuresJSON = [{ function: 'measureFactory.sum' }] as unknown as JSONArray;
 
-      expect(() => {
-        translateMeasuresJSON(
-          invalidMeasuresJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateMeasuresJSON(
+        invalidMeasuresJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
 
-    it('should throw error for array containing non-objects', () => {
+    it('should return error for array containing non-objects', () => {
       const invalidMeasuresJSON = [
         { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Total Revenue'] },
         'not an object',
-      ] as any;
+      ] as unknown as JSONArray;
 
-      expect(() => {
-        translateMeasuresJSON(
-          invalidMeasuresJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateMeasuresJSON(
+        invalidMeasuresJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
 
-    it('should throw error for array containing null values', () => {
+    it('should return error for array containing null values', () => {
       const invalidMeasuresJSON = [
         { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Total Revenue'] },
         null,
-      ] as any;
+      ] as unknown as JSONArray;
 
-      expect(() => {
-        translateMeasuresJSON(
-          invalidMeasuresJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateMeasuresJSON(
+        invalidMeasuresJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
 
-    it('should throw error for array containing boolean values', () => {
+    it('should return error for array containing boolean values', () => {
       const invalidMeasuresJSON = [
         { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Total Revenue'] },
         true,
-      ] as any;
+      ] as unknown as JSONArray;
 
-      expect(() => {
-        translateMeasuresJSON(
-          invalidMeasuresJSON,
-          MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
-        );
-      }).toThrow(
+      const result = translateMeasuresJSON(
+        invalidMeasuresJSON,
+        MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      );
+
+      expect(result.success).toBe(false);
+      expect(getErrors(result)).toContain(
         'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
       );
     });
@@ -238,14 +273,16 @@ describe('translateMeasures', () => {
         { function: 'measureFactory.count', args: ['DM.Commerce.Revenue'] },
       ];
 
-      const measures = translateMeasuresJSON(
+      const result = translateMeasuresJSON(
         validMeasuresJSON,
         MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
       );
 
-      expect(Array.isArray(measures)).toBe(true);
-      expect(measures).toHaveLength(2);
+      expect(result.success).toBe(true);
+      const data = getSuccessData(result);
+      expect(Array.isArray(data)).toBe(true);
+      expect(data).toHaveLength(2);
     });
   });
 });

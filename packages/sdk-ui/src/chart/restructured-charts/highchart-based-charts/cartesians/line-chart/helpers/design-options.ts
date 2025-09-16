@@ -58,7 +58,14 @@ const withLineSpecificStyles =
   (styleOptions: LineStyleOptions) =>
   (options: Partial<LineChartDesignOptions>): Partial<LineChartDesignOptions> => ({
     ...options,
-    lineWidth: convertLineWidthToNumber(styleOptions.lineWidth || { width: 'bold' }),
+    line: {
+      width:
+        styleOptions.line?.width ??
+        convertLineWidthToNumber(styleOptions.lineWidth || { width: 'bold' }),
+      dashStyle: styleOptions.line?.dashStyle,
+      endCap: styleOptions.line?.endCap,
+      shadow: styleOptions.line?.shadow,
+    },
     marker: convertMarkersToInternal(
       styleOptions?.markers ?? { enabled: true, fill: 'filled', size: 'small' },
     ),

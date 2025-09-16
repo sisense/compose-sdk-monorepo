@@ -6,8 +6,10 @@ import {
   mergeFilters,
   Attribute,
 } from '@sisense/sdk-data';
+import { TranslatableError } from '@/translation/translatable-error';
 import { WidgetProps } from '@/props.js';
-import { JtdConfig } from '@/widget-by-id/types';
+import { PivotTableDataPoint, DataPoint } from '@/types';
+import { JtdConfig, JtdDrillTarget, JtdPivotDrillTarget } from '@/widget-by-id/types';
 import { OpenModalFn } from '@/common/components/modal/modal-context';
 import { JtdDashboard } from '@/dashboard/components/jtd-dashboard';
 import {
@@ -198,7 +200,9 @@ export const handleDataPointClick = (
   actions: Pick<JtdActions, 'openModal' | 'openMenu' | 'translate'>,
   event: JtdDataPointClickEvent,
 ) => {
-  if (coreData.jtdConfig.drillTargets.length === 1) {
+  if (coreData.jtdConfig.drillTargets.length === 0) {
+    throw new TranslatableError('jumpToDashboard.noDrillTargets');
+  } else if (coreData.jtdConfig.drillTargets.length === 1) {
     // Single drill target - direct navigation
     const drillTarget = coreData.jtdConfig.drillTargets[0];
     const clickHandler = getJtdClickHandler(
@@ -233,6 +237,93 @@ export const handleDataPointClick = (
 };
 
 /**
+ * Convert PivotTableDataPoint to DataPoint format for JTD processing
+ *
+ * @param pivotPoint - The pivot table data point
+ * @returns Converted data point
+ * @internal
+ */
+export const convertPivotToDataPoint = (pivotPoint: PivotTableDataPoint): DataPoint => {
+  // Convert pivot entries structure to regular data point structure
+  const rows = pivotPoint.entries.rows || [];
+  const columns = pivotPoint.entries.columns || [];
+  const category = [...rows, ...columns];
+  const value = pivotPoint.entries.values || [];
+
+  return {
+    entries: {
+      category,
+      value, // Ensure it's always DataPointEntry[]
+      breakBy: [], // Pivot tables don't have breakBy in the same way as charts
+    },
+  };
+};
+
+/**
+ * Handle pivot table data point click
+ *
+ * @param data - Core data with drill target (config, drill target, widget props, pivot point)
+ * @param context - Context data (filters)
+ * @param actions - Action functions
+ * @param eventData - Event-related data
+ * @internal
+ */
+export const handlePivotDataPointClick = (
+  data: { jtdConfig: JtdConfig; widgetProps: WidgetProps; point: PivotTableDataPoint },
+  context: JtdContext,
+  actions: Pick<JtdActions, 'openModal' | 'openMenu' | 'translate'>,
+) => {
+  // Convert pivot data point to regular data point format
+  const convertedPoint = convertPivotToDataPoint(data.point);
+  const drillTarget = data.jtdConfig.drillTargets[0];
+
+  // Filter data based on pivotDimensions if specified
+  if (
+    isPivotDrillTarget(drillTarget) &&
+    drillTarget.pivotDimensions &&
+    drillTarget.pivotDimensions.length > 0
+  ) {
+    if (data.point.entries?.columns?.length && !data.point.entries?.values?.length) {
+      // clicked on break by values
+      if (!drillTarget.pivotDimensions.includes(data.point.entries?.columns[0].id)) {
+        return;
+      }
+    } else if (data.point.entries?.columns?.length && data.point.entries?.values?.length) {
+      // clicked on values cell
+      if (!drillTarget.pivotDimensions.includes(data.point.entries?.values[0].id)) {
+        return;
+      }
+    } else if (
+      data.point.entries?.rows?.length &&
+      !data.point.entries?.values?.length &&
+      !data.point.entries?.columns?.length &&
+      data.point.isDataCell
+    ) {
+      // clicked on some row values
+      if (!drillTarget.pivotDimensions.includes(data.point.entries?.rows[0].id)) {
+        return;
+      }
+    } else {
+      return;
+    }
+  }
+
+  const clickHandler = getJtdClickHandler(
+    {
+      jtdConfig: data.jtdConfig,
+      drillTarget,
+      widgetProps: data.widgetProps,
+      point: convertedPoint,
+    },
+    context,
+    {
+      openModal: actions.openModal,
+    },
+  );
+  return clickHandler();
+};
+
+/**
  * Handle text widget click (placeholder for future implementation)
  *
  * @param jtdConfig - The JTD config
@@ -249,28 +340,28 @@ export const handleTextWidgetClick = (
   originalWidgetFilters: Filter[],
   openModal: OpenModalFn,
 ) => {
-  // Text widgets don't support  functionality yet
-  // This is a placeholder for potential future implementation
-  if (jtdConfig.drillTargets.length === 1) {
-    const drillTarget = jtdConfig.drillTargets[0];
-    const clickHandler = getJtdClickHandler(
-      {
-        jtdConfig,
-        drillTarget,
-        widgetProps,
-        point: undefined,
-      },
-      {
-        dashboardFilters,
-        originalWidgetFilters,
-      },
-      {
-        openModal,
-      },
-    );
-    return clickHandler();
+  if (jtdConfig.drillTargets.length === 0) {
+    throw new TranslatableError('jumpToDashboard.noDrillTargets');
   }
-
-  // Multiple drill targets not supported for text widgets
-  return Promise.resolve('');
+  const drillTarget = jtdConfig.drillTargets[0];
+  const clickHandler = getJtdClickHandler(
+    {
+      jtdConfig,
+      drillTarget,
+      widgetProps,
+      point: undefined,
+    },
+    {
+      dashboardFilters,
+      originalWidgetFilters,
+    },
+    {
+      openModal,
+    },
+  );
+  return clickHandler();
 };
+
+function isPivotDrillTarget(target: JtdDrillTarget): target is JtdPivotDrillTarget {
+  return 'pivotDimensions' in target;
+}

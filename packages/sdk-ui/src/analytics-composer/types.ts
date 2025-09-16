@@ -383,3 +383,12 @@ export type NlqResponseJSON = {
   filters: JSONArray;
   highlights?: JSONArray;
 };
+
+/**
+ * Represents the result of a translation operation that can either succeed with data or fail with errors.
+ *
+ * @internal
+ */
+export type NlqTranslationResult<T> =
+  | { success: true; data: T }
+  | { success: false; errors: string[] };

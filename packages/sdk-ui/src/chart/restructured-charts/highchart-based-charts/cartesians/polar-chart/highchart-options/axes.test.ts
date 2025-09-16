@@ -36,7 +36,10 @@ describe('polar-chart axes', () => {
     },
     designOptions: {
       lineType: 'straight',
-      legend: 'bottom',
+      legend: {
+        enabled: true,
+        position: 'bottom',
+      },
       lineWidth: 2,
       valueLabel: {},
       marker: { enabled: false, size: 'small', fill: 'full' },

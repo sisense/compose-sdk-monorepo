@@ -72,12 +72,12 @@ export function translateChartDataOptions(
   } else throw new TranslatableError('errors.unexpectedChartType', { chartType });
 }
 
-const translateCategoricalChartDataOptions = (
+export const translateCategoricalChartDataOptions = (
   categorical: CategoricalChartDataOptions,
 ): CategoricalChartDataOptionsInternal => {
   return {
-    y: categorical.value.map(normalizeMeasureColumn),
-    breakBy: categorical.category.map(normalizeColumn),
+    y: categorical.value.map((c) => normalizeMeasureColumn(c)),
+    breakBy: categorical.category.map((c) => normalizeColumn(c)),
     seriesToColorMap: categorical.seriesToColorMap,
   };
 };
@@ -86,13 +86,13 @@ const translateIndicatorChartDataOptions = (
   indicatorChartDataOptions: IndicatorChartDataOptions,
 ): IndicatorChartDataOptionsInternal => {
   return {
-    value: indicatorChartDataOptions.value?.map(normalizeMeasureColumn),
-    secondary: indicatorChartDataOptions.secondary?.map(normalizeMeasureColumn),
+    value: indicatorChartDataOptions.value?.map((c) => normalizeMeasureColumn(c)),
+    secondary: indicatorChartDataOptions.secondary?.map((c) => normalizeMeasureColumn(c)),
     min: indicatorChartDataOptions.min
-      ?.map(normalizeMeasureColumn)
+      ?.map((c) => normalizeMeasureColumn(c))
       ?.map(withDefaultAggregation('min')),
     max: indicatorChartDataOptions.max
-      ?.map(normalizeMeasureColumn)
+      ?.map((c) => normalizeMeasureColumn(c))
       ?.map(withDefaultAggregation('max')),
   };
 };
@@ -185,7 +185,9 @@ export function getMeasures(
 
 export function translateTableDataOptions(dataOptions: TableDataOptions): TableDataOptionsInternal {
   return {
-    columns: dataOptions.columns.map(normalizeAnyColumn).map(updateStyledColumnSortForTable),
+    columns: dataOptions.columns
+      .map((c) => normalizeAnyColumn(c))
+      .map(updateStyledColumnSortForTable),
   };
 }
 
@@ -196,9 +198,9 @@ export function translatePivotTableDataOptions(
   dataOptions: PivotTableDataOptions,
 ): PivotTableDataOptionsInternal {
   return {
-    rows: dataOptions.rows?.map(normalizeColumn),
-    columns: dataOptions.columns?.map(normalizeColumn),
-    values: dataOptions.values?.map(normalizeMeasureColumn),
+    rows: dataOptions.rows?.map((c) => normalizeColumn(c)),
+    columns: dataOptions.columns?.map((c) => normalizeColumn(c)),
+    values: dataOptions.values?.map((c) => normalizeMeasureColumn(c)),
     grandTotals: dataOptions.grandTotals,
   };
 }

@@ -95,16 +95,24 @@ export const applyThemeToChart = (
     },
   };
 
-  const mergedOptions = merge(chartOptions, basicOptions);
+  const mergedOptions = merge(basicOptions, chartOptions);
 
   mergedOptions.xAxis = mergedOptions.xAxis?.map((axis) => {
     axis.plotBands = axis.plotBands?.map((plotBand) => {
       return merge(plotBand, {
         ...plotBandOptions,
-        color: plotBand.color || themeSettings?.chart.backgroundColor,
+        color: themeSettings?.chart.backgroundColor,
       } as AxisPlotBand);
     });
-    return merge(axis, axisOptions);
+    const mergedAxis = merge(axis, axisOptions);
+    if (mergedAxis.stackLabels) {
+      mergedAxis.stackLabels.style = {
+        ...mergedAxis.stackLabels.style,
+        color: themeSettings.chart.textColor,
+        fontFamily: themeSettings.typography.fontFamily,
+      };
+    }
+    return mergedAxis;
   });
 
   if (mergedOptions.yAxis) {
@@ -115,7 +123,15 @@ export const applyThemeToChart = (
           color: plotBand.color || themeSettings?.chart.backgroundColor,
         }) as AxisPlotBand;
       });
-      return merge(axis, axisOptions);
+      const mergedAxis = merge(axis, axisOptions);
+      if (mergedAxis.stackLabels) {
+        mergedAxis.stackLabels.style = {
+          ...mergedAxis.stackLabels.style,
+          color: themeSettings.chart.textColor,
+          fontFamily: themeSettings.typography.fontFamily,
+        };
+      }
+      return mergedAxis;
     });
   }
 

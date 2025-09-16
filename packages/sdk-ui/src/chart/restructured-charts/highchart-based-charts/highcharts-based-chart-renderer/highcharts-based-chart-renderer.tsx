@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { BuildContext, HighchartBasedChartTypes, HighchartsOptionsBuilder } from '../types.js';
 import { TypedChartData, TypedDataOptionsInternal, TypedDesignOptions } from '../../types.js';
 import {
@@ -9,26 +10,20 @@ import { buildHighchartsOptions } from './build-highchart-options.js';
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
 import { HighchartsReactMemoized } from '@/highcharts-memorized';
 import AlertBox from '@/alert-box/alert-box';
-import { useThemeContext } from '@/theme-provider/theme-context';
-import { formatDateValue } from '@/query/date-formats';
-import { useCallback, useMemo } from 'react';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { useTranslation } from 'react-i18next';
 import { ChartRendererProps } from '@/chart/types';
 import { isHighchartsBasedChart } from './utils';
+import { useExtraConfig } from './use-extra-config.js';
+import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container.js';
 
 export type HighchartsBasedChartRendererProps<CT extends HighchartBasedChartTypes> = {
   chartData: TypedChartData<CT>;
   dataOptions: TypedDataOptionsInternal<CT>;
   designOptions: TypedDesignOptions<CT>;
+  size: ContainerSize;
   onDataPointClick?: SisenseChartDataPointEventHandler;
   onDataPointContextMenu?: SisenseChartDataPointEventHandler;
   onDataPointsSelected?: SisenseChartDataPointsEventHandler;
   onBeforeRender?: BeforeRenderHandler;
-  size?: {
-    width?: number;
-    height?: number;
-  };
 };
 
 /**
@@ -62,24 +57,7 @@ export function createHighchartsBasedChartRenderer<CT extends HighchartBasedChar
     onBeforeRender,
     size,
   }: HighchartsBasedChartRendererProps<CT>) {
-    const { app } = useSisenseContext();
-    const { t: translate } = useTranslation();
-    const { themeSettings } = useThemeContext();
-    const dateFormatter = useCallback(
-      (date: Date, format: string) =>
-        formatDateValue(date, format, app?.settings.locale, app?.settings.dateConfig),
-      [app?.settings.dateConfig, app?.settings.locale],
-    );
-
-    const extraConfig = useMemo(
-      () => ({
-        translate,
-        themeSettings,
-        dateFormatter,
-        accessibilityEnabled: app?.settings.accessibilityConfig?.enabled || false,
-      }),
-      [translate, themeSettings, dateFormatter, app?.settings.accessibilityConfig?.enabled],
-    );
+    const extraConfig = useExtraConfig();
 
     const highchartsOptions: HighchartsOptionsInternal = useMemo(
       () =>

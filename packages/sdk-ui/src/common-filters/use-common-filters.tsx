@@ -82,12 +82,6 @@ export const useCommonFilters = ({
 
       connectedWidgetProps.onBeforeMenuOpen = onBeforeMenuOpen;
 
-      if (commonFiltersConnectionProps.onDataPointClick) {
-        registerDataPointClickHandler(
-          connectedWidgetProps,
-          commonFiltersConnectionProps.onDataPointClick,
-        );
-      }
       connectedWidgetProps.filters = applyRelationsToOtherFilters(
         mergeFilters(
           commonFiltersConnectionProps.filters,

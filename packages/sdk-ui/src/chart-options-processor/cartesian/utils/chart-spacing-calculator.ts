@@ -3,6 +3,7 @@ import { StackableChartDesignOptions } from '../../translations/design-options';
 import { CartesianChartData } from '../../../chart-data/types';
 import { CartesianChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { ChartDesignOptions } from '../../translations/types';
+import { isLegendOnRight } from '@/chart-options-processor/translations/legend-section';
 
 const DEFAULT_CHART_SPACING = 20;
 
@@ -146,7 +147,7 @@ function calculateAxisLabelSpacing(config: SpacingConfig): {
 
   // X-axis label spacing calculations
   const xAxisLabelRightSpacing =
-    chartDesignOptions.legend !== 'right' &&
+    !isLegendOnRight(chartDesignOptions.legend) &&
     chartData.xAxisCount > 1 &&
     xAxisOrientation === 'vertical'
       ? AXIS_LABEL_SPACING.X_AXIS_VERTICAL_RIGHT
@@ -209,8 +210,12 @@ export function getAdditionalLegendSettings(
   dataOptions: CartesianChartDataOptionsInternal,
   chartDesignOptions: ChartDesignOptions,
 ): { margin?: number } | undefined {
-  if (chartType === 'bar' && dataOptions.x.length > 1 && chartDesignOptions.legend === 'right') {
-    return { margin: LEGEND_SETTINGS.RIGHT_MARGIN };
+  if (
+    chartType === 'bar' &&
+    dataOptions.x.length > 1 &&
+    isLegendOnRight(chartDesignOptions.legend)
+  ) {
+    return { margin: chartDesignOptions.legend?.margin ?? LEGEND_SETTINGS.RIGHT_MARGIN };
   }
   return undefined;
 }

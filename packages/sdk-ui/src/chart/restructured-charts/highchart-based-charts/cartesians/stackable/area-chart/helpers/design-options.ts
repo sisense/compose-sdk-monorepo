@@ -67,7 +67,14 @@ const withAreaSpecificStyles =
   (styleOptions: AreaStyleOptions) =>
   (options: Partial<AreaChartDesignOptions>): Partial<AreaChartDesignOptions> => ({
     ...options,
-    lineWidth: convertLineWidthToNumber(styleOptions.lineWidth || { width: 'thin' }),
+    line: {
+      width:
+        styleOptions.line?.width ??
+        convertLineWidthToNumber(styleOptions.lineWidth || { width: 'thin' }),
+      dashStyle: styleOptions.line?.dashStyle,
+      endCap: styleOptions.line?.endCap,
+      shadow: styleOptions.line?.shadow,
+    },
     marker: convertMarkersToInternal(
       styleOptions?.markers ?? { enabled: true, fill: 'filled', size: 'small' },
     ),

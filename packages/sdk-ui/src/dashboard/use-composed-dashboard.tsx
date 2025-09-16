@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import flow from 'lodash-es/flow';
 import { useCommonFilters } from '@/common-filters/use-common-filters';
 import { WidgetProps } from '@/props';
 import { defaultMerger, useWithChangeDetection } from '@/common/hooks/use-with-change-detection';
@@ -130,13 +131,17 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     onBeforeMenuOpen: onBeforeInnerWidgetMenuOpen,
   });
 
+  const widgetFiltersMap = useMemo(() => {
+    return widgets.reduce((acc, widget) => {
+      acc.set(widget.id, (widget as { filters?: Filter[] }).filters || []);
+      return acc;
+    }, new Map<string, Filter[]>());
+  }, [widgets]);
+
   const { connectToWidgetProps: connectToWidgetPropsJtd } = useJtd({
     widgetOptions: widgetsOptions || {},
     dashboardFilters: Array.isArray(filters) ? filters : [],
-    widgetFilters: widgets.reduce((acc, widget) => {
-      acc.set(widget.id, (widget as { filters?: Filter[] }).filters || []);
-      return acc;
-    }, new Map<string, Filter[]>()),
+    widgetFilters: widgetFiltersMap,
     openMenu,
   });
 
@@ -154,13 +159,16 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
       [setInnerWidgets],
     ),
   }) as WidgetProps[];
+
   // Connect common filters to widgets
   const widgetsWithCommonFilters = useMemo(() => {
-    return widgetsWithChangeDetection.map((widget) => ({
-      ...connectToWidgetPropsJtd(
-        connectToWidgetProps(widget, widgetsOptions?.[widget.id]?.filtersOptions),
-      ),
-    }));
+    return widgetsWithChangeDetection.map((widget) =>
+      flow(
+        (widget: WidgetProps) =>
+          connectToWidgetProps(widget, widgetsOptions?.[widget.id]?.filtersOptions),
+        connectToWidgetPropsJtd,
+      )(widget),
+    );
   }, [widgetsWithChangeDetection, widgetsOptions, connectToWidgetProps, connectToWidgetPropsJtd]);
 
   const { layoutManager: tabberLayoutManager, widgets: widgetsWithTabberConfigs } = useTabber({

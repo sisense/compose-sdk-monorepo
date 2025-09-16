@@ -36,8 +36,10 @@ import {
   AreamapChartType,
   BoxplotChartType,
   ScattermapChartType,
+  CalendarHeatmapChartType,
   RangeChartType,
   TableChartType,
+  TextStyle,
 } from './chart-options-processor/translations/types';
 import { DataPointsEventHandler } from './props';
 import { LegendPosition } from './chart-options-processor/translations/legend-section';
@@ -68,6 +70,7 @@ export type {
   ChartDataOptions,
   ScatterChartDataOptions,
   IndicatorChartDataOptions,
+  CalendarHeatmapChartDataOptions,
   StyledColumn,
   StyledMeasureColumn,
 } from './chart-data-options/types';
@@ -87,6 +90,7 @@ export type {
   BoxplotChartType,
   ScattermapChartType,
   AreamapChartType,
+  CalendarHeatmapChartType,
   TableType,
   TableChartType,
   AreaSubtype,
@@ -104,6 +108,7 @@ export type {
   Coordinates,
   RangeChartType,
   TableColorOptions,
+  TextStyle,
 };
 
 export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
@@ -131,6 +136,59 @@ export type Navigator = {
 export type LineWidth = {
   /** Line width type */
   width: 'thin' | 'bold' | 'thick';
+};
+
+/** Configuration that defines line dash type */
+export type DashStyle =
+  | 'Solid'
+  | 'ShortDash'
+  | 'ShortDot'
+  | 'ShortDashDot'
+  | 'ShortDashDotDot'
+  | 'Dot'
+  | 'Dash'
+  | 'LongDash'
+  | 'DashDot'
+  | 'LongDashDot'
+  | 'LongDashDotDot';
+
+/** Configuration that defines line end cap type */
+export type EndCapType = 'Round' | 'Square';
+
+/**
+ * Configuration options for styling lines in charts.
+ *
+ * This type is used to customize the visual appearance of lines in various chart types
+ * including Line charts, Area charts, and AreaRange charts.
+ */
+export type LineOptions = {
+  /**
+   * Width of the line in pixels.
+   */
+  width?: number;
+
+  /**
+   * Dash pattern for the line.
+   *
+   * Defines the visual pattern of the line.
+   */
+  dashStyle?: DashStyle;
+
+  /**
+   * Style of the line end caps.
+   *
+   * Controls how the ends of lines are rendered:
+   * - `'Round'`: Rounded ends for a softer appearance
+   * - `'Square'`: Sharp, flat ends for a crisp appearance
+   */
+  endCap?: EndCapType;
+
+  /**
+   * Whether to apply a shadow effect to the line.
+   *
+   * When enabled, adds a subtle shadow behind the line for enhanced.
+   */
+  shadow?: boolean;
 };
 
 /** Options that define  markers - symbols or data points that highlight specific values. */
@@ -180,13 +238,163 @@ export type TotalLabels = {
   rotation?: number;
 };
 
-/** Options that define legend - a key that provides information about the data series or colors used in chart. */
-export type Legend = {
+/**
+ * Configuration for the legend title
+ */
+export interface LegendTitleOptions {
+  /** Whether the legend title is enabled */
+  enabled?: boolean;
+  /** The text content of the legend title */
+  text?: string;
+  /** Styling for the legend title */
+  textStyle?: TextStyle;
+}
+
+/**
+ * Configuration for individual legend items
+ */
+export interface LegendItemsOptions {
+  /**
+   * Layout direction for legend items
+   *
+   * Can be one of 'horizontal' or 'vertical' or 'proximate'.
+   * When 'proximate', the legend items will be placed as close as possible to the graphs they're representing, except in inverted charts or when the legend position doesn't allow it.
+   */
+  layout?: 'horizontal' | 'vertical' | 'proximate';
+  /** Distance between legend items in pixels */
+  distance?: number;
+  /** Top margin applied to each legend item, in pixels */
+  marginTop?: number;
+  /** Bottom margin applied to each legend item, in pixels */
+  marginBottom?: number;
+  /**
+   * Width of legend items, in pixels.
+   *
+   * @default undefined
+   */
+  width?: number;
+  /** Styling for legend items text */
+  textStyle?: TextStyle;
+  /**
+   * Styling for legend items on hover
+   *
+   * @internal
+   */
+  hoverTextStyle?: TextStyle;
+  /**
+   * Styling for hidden legend items
+   *
+   * @internal
+   */
+  hiddenTextStyle?: TextStyle;
+}
+
+/**
+ * Configuration for legend symbols
+ */
+export interface LegendSymbolsOptions {
+  /** Width of the legend symbol in pixels */
+  width?: number;
+  /** Height of the legend symbol in pixels */
+  height?: number;
+  /**
+   * If true, the `width` of the symbol will be the same as the `height`.
+   *
+   * @default true
+   */
+  squared?: boolean;
+  /** Border radius applied to symbols. Set to half of the `height` value to create a circle*/
+  radius?: number;
+  /** Padding between the symbol and text of each legend item, in pixels */
+  padding?: number;
+}
+
+/**
+ * Options that define legend - a key that provides information about the data series or colors used in chart.
+ */
+export type LegendOptions = {
   /** Boolean flag that defines if legend should be shown on the chart */
   enabled: boolean;
-  /** Position of the legend */
+  /**
+   * Position of the legend
+   *
+   * @deprecated Please use `align`, `verticalAlign` and `items.layout` properties instead
+   */
   position?: LegendPosition;
+  /** Horizontal alignment of the legend */
+  align?: 'left' | 'center' | 'right';
+  /** Vertical alignment of the legend */
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  /**
+   * Maximum height of the legend in pixels.
+   * When the maximum height is exceeded by the number of items in the legend, scroll navigation arrows will appear
+   */
+  maxHeight?: number;
+  /** Margin in pixels between the legend and the axis labels or plot area */
+  margin?: number;
+  /** Padding inside the legend, in pixels */
+  padding?: number;
+  /** Background color of the legend */
+  backgroundColor?: string;
+  /** Width of the legend border in pixels */
+  borderWidth?: number;
+  /** Color of the legend border */
+  borderColor?: string;
+  /**
+   * Border radius in pixels applied to the legend border, if visible.
+   *
+   * @default 0
+   */
+  borderRadius?: number;
+  /**
+   * Whether to show shadow on the legend
+   *
+   * @internal
+   */
+  shadow?: boolean;
+  /** If `true`, the order of legend items is reversed.
+   *
+   * @default false
+   */
+  reversed?: boolean;
+  /**
+   * If `true`, legend items are displayed right-to-left.
+   *
+   * @default false
+   */
+  rtl?: boolean;
+  /**
+   * If `true`, the legend can float over the chart.
+   *
+   * @default false
+   */
+  floating?: boolean;
+  /** Width of the legend, specified in pixels e.g. `200` or percentage of the chart width e.g. `'30%'` */
+  width?: number | string;
+  /** Configuration for the legend title */
+  title?: LegendTitleOptions;
+  /** Configuration for legend items */
+  items?: LegendItemsOptions;
+  /** Configuration for legend symbols in pixels */
+  symbols?: LegendSymbolsOptions;
+  /**
+   * Horizontal offset of the legend in pixels, relative to its horizontal alignment specified via `align`.
+   *
+   * @default 0
+   */
+  xOffset?: number;
+  /**
+   * Vertical offset of the legend in pixels, relative to its vertical alignment specified via `verticalAlign`.
+   *
+   * @default 0
+   */
+  yOffset?: number;
 };
+
+/**
+ * Alias for LegendOptions for backward compatibility
+ */
+export type Legend = LegendOptions;
 
 /** Configuration that defines behavior of data labels on chart */
 export type Labels = {
@@ -295,8 +503,10 @@ export interface DataLimits {
  * @internal
  */
 export interface BaseStyleOptions extends ReservedStyleOptions {
-  /** Configuration for legend - a key that provides information about the data series or colors used in chart */
-  legend?: Legend;
+  /**
+   * Configuration for legend - a key that provides information about the data series or colors used in chart
+   * */
+  legend?: LegendOptions;
   /**
    * Configuration for series labels - titles/names identifying data series in a chart
    *
@@ -353,8 +563,15 @@ export type CartesianStyleOptions = LineStyleOptions | AreaStyleOptions | Stacka
 
 /** Configuration options that define functional style of the various elements of LineChart */
 export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
-  /** Configuration that defines line width */
+  /**
+   * Configuration that defines line width
+   *
+   * @deprecated
+   * Use line.width instead
+   */
   lineWidth?: LineWidth;
+  /** Configuration that defines line style */
+  line?: LineOptions;
   /** Subtype of LineChart */
   subtype?: LineSubtype;
   /**
@@ -372,16 +589,30 @@ export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions
 
 /** Configuration options that define functional style of the various elements of AreaRangeChart */
 export interface AreaRangeStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
-  /** Configuration that defines line width */
+  /**
+   * Configuration that defines line width
+   *
+   * @deprecated
+   * Use line.width instead
+   */
   lineWidth?: LineWidth;
+  /** Configuration that defines line style */
+  line?: LineOptions;
   /** Subtype of AreaRangeChart */
   subtype?: AreaRangeSubtype;
 }
 
 /** Configuration options that define functional style of the various elements of AreaChart */
 export interface AreaStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
-  /** Configuration that defines line width */
+  /**
+   * Configuration that defines line width
+   *
+   * @deprecated
+   * Use line.width instead
+   */
   lineWidth?: LineWidth;
+  /** Configuration that defines line style */
+  line?: LineOptions;
   /** Subtype of AreaChart*/
   subtype?: AreaSubtype;
 }
@@ -707,6 +938,23 @@ export interface ScattermapStyleOptions extends Pick<BaseStyleOptions, 'width' |
 }
 
 /**
+ * Configuration options that define functional style of the various elements of CalendarHeatmapChart
+ *
+ * @alpha
+ */
+export interface CalendarHeatmapStyleOptions extends Pick<BaseStyleOptions, 'width' | 'height'> {
+  /**
+   * {@inheritDoc CalendarHeatmapViewType}
+   */
+  viewType?: CalendarHeatmapViewType;
+}
+
+/**
+ * View type determines how many months to display: 'month' (1), 'quarter' (3), 'half-year' (6), 'year' (12)
+ */
+export type CalendarHeatmapViewType = 'month' | 'quarter' | 'half-year' | 'year';
+
+/**
  * Configuration options that define functional style of the various elements of chart.
  */
 export type ChartStyleOptions = RegularChartStyleOptions | TabularChartStyleOptions;
@@ -726,7 +974,8 @@ export type RegularChartStyleOptions =
   | BoxplotStyleOptions
   | AreamapStyleOptions
   | ScattermapStyleOptions
-  | AreaRangeStyleOptions;
+  | AreaRangeStyleOptions
+  | CalendarHeatmapStyleOptions;
 
 /** Mapping of each of the chart value series to colors. */
 export type ValueToColorMap = {
@@ -749,6 +998,7 @@ export type ChartType =
   | AreamapChartType
   | BoxplotChartType
   | ScattermapChartType
+  | CalendarHeatmapChartType
   | RangeChartType
   | TableChartType;
 
@@ -1084,6 +1334,8 @@ export interface TypographyThemeSettings {
   primaryTextColor?: string;
   /** Secondary text color */
   secondaryTextColor?: string;
+  /** Hyperlink color */
+  hyperlinkColor?: string;
   /** Settings for font loading */
   fontsLoader?: FontsLoaderSettings;
 }
@@ -1613,7 +1865,8 @@ export type ChartDataPoints =
   | ScatterDataPoint[]
   | BoxplotDataPoint[]
   | AreamapDataPoint[]
-  | ScattermapDataPoint[];
+  | ScattermapDataPoint[]
+  | CalendarHeatmapDataPoint[];
 
 /**
  * Abstract data point in a chart - union of all types of data points.
@@ -1623,14 +1876,19 @@ export type ChartDataPoint =
   | ScatterDataPoint
   | BoxplotDataPoint
   | AreamapDataPoint
-  | ScattermapDataPoint;
+  | ScattermapDataPoint
+  | CalendarHeatmapDataPoint;
 
 /**
  * Abstract data point in a chart that based on Highcharts.
  *
  * @internal
  */
-export type HighchartsBasedChartDataPoint = DataPoint | ScatterDataPoint | BoxplotDataPoint;
+export type HighchartsBasedChartDataPoint =
+  | DataPoint
+  | ScatterDataPoint
+  | BoxplotDataPoint
+  | CalendarHeatmapDataPoint;
 
 /**
  * Abstract event handler for data point click event
@@ -1750,6 +2008,23 @@ export type IndicatorDataPoint = {
     secondary?: DataPointEntry;
     min?: DataPointEntry;
     max?: DataPointEntry;
+  };
+};
+
+/**
+ * Data point in a CalendarHeatmap chart.
+ *
+ * @alpha
+ */
+export type CalendarHeatmapDataPoint = {
+  /**
+   * A collection of data point entries that represents values for all related `dataOptions`.
+   *
+   * @internal
+   */
+  entries?: {
+    date: DataPointEntry;
+    value?: DataPointEntry;
   };
 };
 

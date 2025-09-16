@@ -25,10 +25,8 @@ export const getBoxplotPlotOptions = (valueLabel: ValueLabelOptions): PlotOption
       dataLabels: {
         enabled: valueLabel.enabled ?? false,
         style: {
-          fontFamily: 'Open Sans',
           fontSize: '13px',
           fontWeight: 'normal',
-          color: '#001b4f',
         },
         rotation: valueLabel.rotation ?? 0,
         align: 'center',
@@ -44,10 +42,8 @@ export const getBoxplotPlotOptions = (valueLabel: ValueLabelOptions): PlotOption
       dataLabels: {
         enabled: valueLabel.enabled ?? false,
         style: {
-          fontFamily: 'Open Sans',
           fontSize: '13px',
           fontWeight: 'normal',
-          color: '#001b4f',
         },
         rotation: valueLabel.rotation ?? 0,
         align: 'center',

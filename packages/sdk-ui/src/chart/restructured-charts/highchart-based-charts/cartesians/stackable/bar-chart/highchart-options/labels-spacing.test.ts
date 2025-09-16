@@ -13,7 +13,10 @@ describe('labels-spacing', () => {
       stackType,
       totalLabelRotation,
       // Add other required properties with default values
-      legend: 'bottom',
+      legend: {
+        enabled: true,
+        position: 'bottom',
+      },
       valueLabel: {},
       lineType: 'straight',
       lineWidth: 2,

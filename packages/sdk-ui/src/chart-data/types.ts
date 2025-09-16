@@ -3,6 +3,7 @@ import { IndicatorChartType } from '@/chart-options-processor/translations/types
 import { ComparableData, Value } from '@/chart-data-processor/table-processor';
 import { Coordinates } from '@/charts/map-charts/scattermap/types';
 import { AreamapData } from '@/chart/restructured-charts/areamap-chart/types';
+import { CalendarHeatmapChartData } from '@/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/data';
 
 export type CategoricalXValues = {
   key: string;
@@ -170,4 +171,5 @@ export type ChartData =
   | BoxplotChartData
   | AreamapData
   | ScattermapChartData
-  | RangeChartData;
+  | RangeChartData
+  | CalendarHeatmapChartData;

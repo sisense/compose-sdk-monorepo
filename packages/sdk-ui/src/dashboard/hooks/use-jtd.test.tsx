@@ -7,7 +7,7 @@ import {
   getJtdClickHandler,
 } from './use-jtd';
 import { ChartWidgetProps } from '@/props';
-import { JtdConfig, JtdNavigateType } from '@/widget-by-id/types';
+import { JtdConfig, JtdNavigateType, JtdPivotDrillTarget } from '@/widget-by-id/types';
 import { SizeMeasurement } from '@/types';
 import { filterFactory, type Attribute, Sort } from '@sisense/sdk-data';
 
@@ -88,7 +88,6 @@ const createTestAttribute = (expression: string): Attribute => {
       type: 'dimension',
       description: '',
       expression,
-      __serializable: 'DimensionalAttribute',
     }),
     jaql: (nested?: boolean) => {
       const result = {
@@ -112,7 +111,24 @@ vi.mock('@/common/hooks/use-modal', () => ({
 
 vi.mock('@/widget-by-id/utils', () => ({
   isChartWidgetProps: vi.fn(),
-  registerDataPointContextMenuHandler: vi.fn(),
+  registerDataPointContextMenuHandler: vi.fn((widgetProps, handler) => {
+    const existingHandler = widgetProps.onDataPointContextMenu;
+    widgetProps.onDataPointContextMenu = existingHandler
+      ? (...args: any[]) => {
+          existingHandler(...args);
+          handler(...args);
+        }
+      : handler;
+  }),
+  registerDataPointClickHandler: vi.fn((widgetProps, handler) => {
+    const existingHandler = widgetProps.onDataPointClick;
+    widgetProps.onDataPointClick = existingHandler
+      ? (...args: any[]) => {
+          existingHandler(...args);
+          handler(...args);
+        }
+      : handler;
+  }),
 }));
 
 vi.mock('@/utils/combine-handlers', () => ({
@@ -123,22 +139,30 @@ vi.mock('@/dashboard/components/jtd-dashboard', () => ({
   JtdDashboard: vi.fn(() => null),
 }));
 
-vi.mock('@/sisense-context/sisense-context', () => ({
-  useSisenseContext: vi.fn(() => ({
-    app: {
-      settings: {
-        jumpToDashboardConfig: {
-          enabled: true,
+vi.mock('@/sisense-context/sisense-context', async (importOriginal) => {
+  const actual = (await importOriginal()) as any;
+  return {
+    ...actual,
+    SisenseContext: {
+      Provider: vi.fn(),
+      Consumer: vi.fn(),
+      displayName: 'SisenseContext',
+    },
+    useSisenseContext: vi.fn(() => ({
+      app: {
+        settings: {
+          jumpToDashboardConfig: {
+            enabled: true,
+          },
         },
       },
-    },
-  })),
-}));
+    })),
+  };
+});
 
-vi.mock('react', () => {
-  const actual = vi.importActual('react');
-  const mockReact = {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+vi.mock('react', async (importOriginal) => {
+  const actual = (await importOriginal()) as any;
+  return {
     ...actual,
     useCallback: vi.fn((callback) => callback),
     createContext: vi.fn(() => ({
@@ -147,24 +171,46 @@ vi.mock('react', () => {
       displayName: 'MockContext',
     })),
   };
+});
+
+vi.mock('react-i18next', async (importOriginal) => {
+  const actual = (await importOriginal()) as any;
   return {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    ...mockReact,
-    default: mockReact,
+    ...actual,
+    initReactI18next: {
+      type: '3rdParty',
+      init: vi.fn(),
+    },
+    useTranslation: vi.fn(() => ({
+      t: vi.fn((key: string) => {
+        // Mock translations
+        const translations: Record<string, string> = {
+          'jumpToDashboard.defaultCaption': 'Jump to',
+        };
+        return translations[key] || key;
+      }),
+    })),
   };
 });
 
-vi.mock('react-i18next', () => ({
-  useTranslation: vi.fn(() => ({
-    t: vi.fn((key: string) => {
-      // Mock translations
-      const translations: Record<string, string> = {
-        'jumpToDashboard.defaultCaption': 'Jump to',
-      };
-      return translations[key] || key;
-    }),
-  })),
-}));
+vi.mock('@/theme-provider', async (importOriginal) => {
+  const actual = (await importOriginal()) as any;
+  return {
+    ...actual,
+    useThemeContext: vi.fn(() => ({
+      themeSettings: {
+        // Mock theme settings with minimal required structure
+        chart: {
+          backgroundColor: '#ffffff',
+          textColor: '#000000',
+        },
+        typography: {
+          fontFamily: 'Arial',
+        },
+      },
+    })),
+  };
+});
 
 describe('useJtd', () => {
   const mockOpenModal = vi.fn();
@@ -236,8 +282,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -271,8 +317,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -314,8 +360,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -372,8 +418,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -420,8 +466,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -458,8 +504,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -501,8 +547,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: customDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: customDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -575,8 +621,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: simpleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -665,8 +711,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: dataPointWithEntries as any,
         },
@@ -744,8 +790,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
         },
@@ -787,8 +833,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
         },
@@ -832,8 +878,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as JtdConfig,
-          drillTarget: sampleDrillTarget,
+          jtdConfig: jtdConfig as unknown as JtdConfig,
+          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
           widgetProps: sampleWidget as any,
           point: { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
         },
@@ -873,7 +919,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: disabledJtdConfig as JtdConfig },
+            'widget-1': { jtdConfig: disabledJtdConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -942,7 +988,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: disabledJtdConfig as JtdConfig },
+            'widget-1': { jtdConfig: disabledJtdConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -977,7 +1023,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: enabledJtdConfig as JtdConfig },
+            'widget-1': { jtdConfig: enabledJtdConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1012,8 +1058,8 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'enabled-widget': { jtdConfig: enabledConfig as JtdConfig },
-            'disabled-widget': { jtdConfig: disabledConfig as JtdConfig },
+            'enabled-widget': { jtdConfig: enabledConfig as unknown as JtdConfig },
+            'disabled-widget': { jtdConfig: disabledConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1047,7 +1093,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: disabledRightClickConfig as JtdConfig },
+            'widget-1': { jtdConfig: disabledRightClickConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1095,7 +1141,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: sampleJtdConfig },
+            'widget-1': { jtdConfig: sampleJtdConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1124,7 +1170,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: sampleJtdConfig as JtdConfig },
+            'widget-1': { jtdConfig: sampleJtdConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1341,7 +1387,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: sampleJtdConfig as JtdConfig },
+            'widget-1': { jtdConfig: sampleJtdConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1397,7 +1443,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: multiTargetConfig },
+            'widget-1': { jtdConfig: multiTargetConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1465,7 +1511,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig: multiTargetConfig },
+            'widget-1': { jtdConfig: multiTargetConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1601,7 +1647,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig },
+            'widget-1': { jtdConfig: jtdConfig as unknown as JtdConfig },
           },
           dashboardFilters,
           widgetFilters: new Map([['widget-1', widgetFilters]]),
@@ -1687,7 +1733,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig },
+            'widget-1': { jtdConfig: jtdConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1777,7 +1823,7 @@ describe('useJtd', () => {
       const { result } = renderHook(() =>
         useJtd({
           widgetOptions: {
-            'widget-1': { jtdConfig },
+            'widget-1': { jtdConfig: jtdConfig as unknown as JtdConfig },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),

@@ -7,13 +7,21 @@ import { WidgetsOptions } from '@/index-typedoc';
 import { JtdNavigateType } from '@/widget-by-id/types';
 import { useModal } from '@/common/hooks/use-modal';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { isChartWidgetProps, isTextWidgetProps } from '@/widget-by-id/utils';
+import { useThemeContext } from '@/theme-provider';
+import {
+  isChartWidgetProps,
+  isTextWidgetProps,
+  isPivotTableWidgetProps,
+} from '@/widget-by-id/utils';
 
 // Import JTD-specific functions and types
 import {
   applyClickNavigationForChart,
   applyClickNavigationForText,
+  applyClickNavigationForPivot,
   applyRightClickNavigation,
+  applyRightClickNavigationForPivot,
+  applyPivotLinkStyling,
   addJtdIconToHeader,
   type JtdWidgetTransformConfig,
   type JtdActions,
@@ -42,6 +50,7 @@ export const useJtd = ({
   const { openModal } = useModal();
   const translate = useTranslation().t;
   const { app } = useSisenseContext();
+  const { themeSettings } = useThemeContext();
 
   const connectToWidgetProps = useCallback(
     (widgetProps: WidgetProps) => {
@@ -79,11 +88,20 @@ export const useJtd = ({
         } else if (isTextWidgetProps(updatedProps)) {
           updatedProps = applyClickNavigationForText(updatedProps, config, actions);
         }
+      } else if (jtdConfig.navigateType === JtdNavigateType.RIGHT_CLICK) {
+        if (isChartWidgetProps(updatedProps)) {
+          updatedProps = applyRightClickNavigation(updatedProps, config, actions);
+        } else if (isPivotTableWidgetProps(updatedProps)) {
+          updatedProps = applyRightClickNavigationForPivot(updatedProps, config, actions);
+        }
       } else if (
-        jtdConfig.navigateType === JtdNavigateType.RIGHT_CLICK &&
-        isChartWidgetProps(updatedProps)
+        jtdConfig.navigateType === JtdNavigateType.PIVOT_LINK &&
+        isPivotTableWidgetProps(updatedProps)
       ) {
-        updatedProps = applyRightClickNavigation(updatedProps, config, actions);
+        updatedProps = applyClickNavigationForPivot(updatedProps, config, actions);
+
+        const { hyperlinkColor } = themeSettings.typography;
+        updatedProps = applyPivotLinkStyling(updatedProps, config, hyperlinkColor);
       }
 
       // Add JTD icon if configured
@@ -100,6 +118,7 @@ export const useJtd = ({
       dashboardFilters,
       widgetFilters,
       translate,
+      themeSettings,
       app?.settings.jumpToDashboardConfig?.enabled,
     ],
   );

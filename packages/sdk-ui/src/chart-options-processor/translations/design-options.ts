@@ -1,12 +1,14 @@
 import { ValueLabelOptions } from './value-label-section';
 import { Axis } from './axis-section';
 import { Marker } from './marker-section';
-import { LegendPosition } from './legend-section';
 import { LineType, StackType } from './translations-to-highcharts';
 import { PieType, PieLabels } from './pie-plot-options';
 import { FunnelSize, FunnelType, FunnelDirection, FunnelLabels } from './funnel-plot-options';
 import {
+  CalendarHeatmapViewType,
   Convolution,
+  LineOptions,
+  LegendOptions,
   ScattermapMarkers,
   SunburstStyleOptions,
   TreemapStyleOptions,
@@ -20,9 +22,13 @@ type DataLimits = {
 };
 
 export type BaseDesignOptionsType = {
-  legend: LegendPosition;
+  legend?: LegendOptions;
   valueLabel: ValueLabelOptions;
   lineType: LineType;
+  /**
+   * @deprecated
+   * Use line.width instead
+   */
   lineWidth: number;
   marker: Marker;
   xAxis: Axis;
@@ -41,6 +47,7 @@ export type BaseDesignOptionsType = {
 
 export type CartesianChartDesignOptions = BaseDesignOptionsType & DesignPerSeries;
 export type StackableChartDesignOptions = CartesianChartDesignOptions & {
+  line?: LineOptions;
   stackType: StackType;
   showTotal?: boolean;
   totalLabelRotation?: number;
@@ -49,6 +56,7 @@ export type StackableChartDesignOptions = CartesianChartDesignOptions & {
 export type LineChartDesignOptions = CartesianChartDesignOptions & {
   /** Step type for step line charts: left, center, or right */
   step?: 'left' | 'center' | 'right';
+  line?: LineOptions;
 };
 
 export type AreaChartDesignOptions = StackableChartDesignOptions;
@@ -56,6 +64,14 @@ export type AreaChartDesignOptions = StackableChartDesignOptions;
 export type BarChartDesignOptions = StackableChartDesignOptions;
 
 export type ColumnChartDesignOptions = StackableChartDesignOptions;
+
+// todo: remove BaseDesignOptionsType after refactor of `ChartDesignOptions` usage
+export type CalendarHeatmapChartDesignOptions = BaseDesignOptionsType & {
+  width?: number;
+  height?: number;
+  viewType: CalendarHeatmapViewType;
+  cellSize?: number;
+};
 
 export type PolarType = 'line' | 'area' | 'column';
 export type PolarChartDesignOptions = CartesianChartDesignOptions & {
@@ -223,4 +239,7 @@ export type ScattermapChartDesignOptions = BaseDesignOptionsType & {
   markers: Required<ScattermapMarkers>;
 };
 
-export type AreaRangeChartDesignOptions = BaseDesignOptionsType;
+export type AreaRangeChartDesignOptions = BaseDesignOptionsType & {
+  /** Configuration that defines line style */
+  line?: LineOptions;
+};

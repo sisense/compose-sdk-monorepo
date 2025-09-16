@@ -147,6 +147,30 @@ const getJtdNavigateType = (widget: WidgetDto): JtdNavigateType => {
   return JtdNavigateType.RIGHT_CLICK;
 };
 
+export const convertDimensionsToDimIndexes = (widget: WidgetDto, dimensionIds: string[]) => {
+  const columns = widget.metadata?.panels.find((p) => p.name === 'columns');
+  const rows = widget.metadata?.panels.find((p) => p.name === 'rows');
+  const values = widget.metadata?.panels.find((p) => p.name === 'values');
+  return dimensionIds.map((dimensionId) => {
+    const columnsIndex = columns?.items?.findIndex((item) => item.instanceid === dimensionId);
+    if (columnsIndex !== undefined && columnsIndex !== -1) {
+      return `columns.${columnsIndex}`;
+    }
+    const rowsIndex = rows?.items?.findIndex((item) => item.instanceid === dimensionId);
+    if (rowsIndex !== undefined && rowsIndex !== -1) {
+      return `rows.${rowsIndex}`;
+    }
+    const valuesIndex = values?.items?.findIndex((item) => item.instanceid === dimensionId);
+    if (valuesIndex !== undefined && valuesIndex !== -1) {
+      return `values.${valuesIndex}`;
+    }
+    console.warn(
+      `Error converting JTD config: Dimension ${dimensionId} not found in widget ${widget.oid}`,
+    );
+    return dimensionId;
+  });
+};
+
 const translateToJtdConfig = (widget: WidgetDto): JtdConfig | undefined => {
   const jtdConfigDto = widget.drillToDashboardConfig;
   if (!jtdConfigDto) {
@@ -168,7 +192,12 @@ const translateToJtdConfig = (widget: WidgetDto): JtdConfig | undefined => {
     navigateType: getJtdNavigateType(widget),
     drillTargets: jtdConfigDto.dashboardIds.map((drillTarget) => ({
       caption: drillTarget.caption,
-      id: drillTarget.id || drillTarget.oid,
+      id: drillTarget.id,
+      ...('pivotDimensions' in drillTarget && drillTarget.pivotDimensions
+        ? {
+            pivotDimensions: convertDimensionsToDimIndexes(widget, drillTarget.pivotDimensions),
+          }
+        : {}),
     })),
     showJtdIcon: typeof jtdConfigDto.showJTDIcon === 'boolean' ? jtdConfigDto.showJTDIcon : true,
   };

@@ -58,7 +58,10 @@ describe('polar-chart design-options', () => {
     // Setup default mocks
     mockedGetCartesianChartStyle.mockReturnValue({
       lineType: 'straight',
-      legend: 'bottom',
+      legend: {
+        enabled: true,
+        position: 'bottom',
+      },
       lineWidth: 2,
       valueLabel: {},
       marker: { enabled: false, size: 'small', fill: 'full' },
