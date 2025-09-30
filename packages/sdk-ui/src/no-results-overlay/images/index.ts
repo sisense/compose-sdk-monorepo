@@ -12,6 +12,7 @@ import treemapChartNoResultsImage from './treemap-no-results-small.svg';
 import usaMapNoResultsImage from './usa-map-no-results-small.svg';
 import boxplotChartNoResultsImage from './boxplot-no-results-small.svg';
 import sunburstChartNoResultsImage from './sunburst-no-results-small.svg';
+import calendarHeatmapChartNoResultsImage from './calendar-heatmap-no-results-small.svg';
 import { ChartType, TableType } from '../../types';
 
 const noResultOverlayImages = {
@@ -30,6 +31,7 @@ const noResultOverlayImages = {
   scattermap: usaMapNoResultsImage,
   boxplot: boxplotChartNoResultsImage,
   sunburst: sunburstChartNoResultsImage,
+  'calendar-heatmap': calendarHeatmapChartNoResultsImage,
 };
 
 export function getNoResultOverlayImage(type: ChartType | TableType) {

@@ -50,19 +50,12 @@ import { CSSProperties, ReactNode } from 'react';
 import { GeoDataElement, RawGeoDataElement } from './chart/restructured-charts/areamap-chart/types';
 import { TabCornerRadius, TabInterval, TabSize } from '@/widgets/tabber-widget';
 import { SoftUnion } from './utils/utility-types';
+import { CalendarDayOfWeek } from './chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 
 export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
 export type { AppConfig } from './app/client-application';
 export type { DateConfig } from './query/date-formats';
-
-/**
- * @internal
- * Enum for size measurement units
- */
-export enum SizeMeasurement {
-  PERCENT = '%',
-  PIXEL = 'px',
-}
+export type { CalendarDayOfWeek } from './chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 
 export type {
   CartesianChartDataOptions,
@@ -210,11 +203,24 @@ export type X2Title = {
   text?: string;
 };
 
+export type SeriesLabelsTextStyle = Omit<TextStyle, 'pointerEvents' | 'textOverflow' | 'color'> & {
+  /**
+   * Color of the labels text
+   * The default color setting is "contrast", which applies the maximum contrast between the background and the text
+   *
+   * @default 'contrast'
+   */
+  color?: 'contrast' | string;
+};
+
 /** Options that define series labels - titles/names identifying data series in a chart. */
 export type SeriesLabels = {
   /** Boolean flag that defines if series labels should be shown on the chart */
   enabled: boolean;
-  /** Rotation of series labels (in degrees) */
+  /**
+   * Rotation of series labels (in degrees)
+   * Note that due to a more complex structure, backgrounds, borders and padding will be lost on a rotated data label
+   * */
   rotation?: number;
   /**
    * Boolean flag that defines if value should be shown in series labels
@@ -226,6 +232,70 @@ export type SeriesLabels = {
    * (only applicable for subtypes that support percentage, like "stacked100")
    */
   showPercentage?: boolean;
+  /**
+   * Text to be shown before the series labels
+   */
+  prefix?: string;
+  /**
+   * Text to be shown after the series labels
+   */
+  suffix?: string;
+  /**
+   * If `true`, series labels appear inside bars/columns instead of at the datapoints. Not applicable for some chart types e.g. line, area
+   */
+  alignInside?: boolean;
+  /**
+   * The horizontal alignment of the data label compared to the point
+   */
+  align?: 'left' | 'center' | 'right';
+  /**
+   * The vertical alignment of the data label
+   */
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  /**
+   * Styling for labels text
+   */
+  textStyle?: SeriesLabelsTextStyle;
+  /**
+   * Background color of the labels. `auto` uses the same color as the data point
+   */
+  backgroundColor?: 'auto' | string;
+  /**
+   * Color of the labels border
+   */
+  borderColor?: string;
+  /**
+   * Border radius in pixels applied to the labels border, if visible
+   *
+   * @default 0
+   */
+  borderRadius?: number;
+  /**
+   * Border width of the series labels, in pixels
+   */
+  borderWidth?: number;
+  /**
+   * Padding of the series labels, in pixels
+   */
+  padding?: number;
+  /**
+   * Horizontal offset of the labels in pixels, relative to its horizontal alignment specified via `align`
+   *
+   * @default 0
+   */
+  xOffset?: number;
+  /**
+   * Vertical offset of the labels in pixels, relative to its vertical alignment specified via `verticalAlign`
+   *
+   * @default 0
+   */
+  yOffset?: number;
+  /**
+   * The animation delay time in milliseconds. Set to 0 to render the data labels immediately
+   *
+   * @internal
+   */
+  delay?: number;
 };
 
 /**
@@ -393,6 +463,8 @@ export type LegendOptions = {
 
 /**
  * Alias for LegendOptions for backward compatibility
+ *
+ * @deprecated Please use {@link LegendOptions} instead
  */
 export type Legend = LegendOptions;
 
@@ -509,8 +581,6 @@ export interface BaseStyleOptions extends ReservedStyleOptions {
   legend?: LegendOptions;
   /**
    * Configuration for series labels - titles/names identifying data series in a chart
-   *
-   * @internal
    */
   seriesLabels?: SeriesLabels;
   /**
@@ -625,10 +695,35 @@ export interface StackableStyleOptions extends BaseStyleOptions, BaseAxisStyleOp
    Bar chart with 'column/classic' subtype and Column chart with 'bar/classic' subtype
   */
   subtype?: StackableSubtype;
+  /**
+   * Configuration for series styling
+   */
+  series?: {
+    /**
+     * Padding between each column or bar, in x axis units.
+     *
+     * @default 0.01
+     */
+    padding?: number;
+    /**
+     * Padding between each value groups, in x axis units.
+     *
+     * @default 0.1
+     */
+    groupPadding?: number;
+    /**
+     * The corner radius of the border surrounding each column or bar.
+     * A number signifies pixels.
+     * A percentage string, like for example 50%, signifies a relative size.
+     *
+     * @default 0
+     */
+    borderRadius?: number | string;
+  };
 }
 
 /** Configuration options that define functional style of the various elements of Pie chart */
-export interface PieStyleOptions extends BaseStyleOptions {
+export interface PieStyleOptions extends Omit<BaseStyleOptions, 'seriesLabels'> {
   /**
    * Configuration that defines the ability of the Pie chart to collapse (convolve) and
    * hide part of the data under the single category "Others".
@@ -641,7 +736,7 @@ export interface PieStyleOptions extends BaseStyleOptions {
 }
 
 /** Configuration options that define functional style of the various elements of FunnelChart */
-export interface FunnelStyleOptions extends BaseStyleOptions {
+export interface FunnelStyleOptions extends Omit<BaseStyleOptions, 'seriesLabels'> {
   /** Visual size of the lowest slice (degree of funnel narrowing from highest to lowest slices)*/
   funnelSize?: FunnelSize;
   /** Visual type of the lowest slice of FunnelChart */
@@ -855,14 +950,16 @@ export interface GaugeIndicatorStyleOptions extends BaseIndicatorStyleOptions {
 }
 
 /** Configuration options that define functional style of the various elements of ScatterChart */
-export interface ScatterStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
+export interface ScatterStyleOptions
+  extends Omit<BaseStyleOptions, 'seriesLabels'>,
+    BaseAxisStyleOptions {
   /** Subtype of ScatterChart*/
   subtype?: never;
   markerSize?: ScatterMarkerSize;
 }
 
 /** Configuration options that define functional style of the various elements of TreemapChart */
-export interface TreemapStyleOptions extends BaseStyleOptions {
+export interface TreemapStyleOptions extends Omit<BaseStyleOptions, 'seriesLabels'> {
   /** Labels options object */
   labels?: {
     /** Array with single label options objects (order of items relative to dataOptions.category) */
@@ -879,7 +976,7 @@ export interface TreemapStyleOptions extends BaseStyleOptions {
 }
 
 /** Configuration options that define functional style of the various elements of the SunburstChart component */
-export interface SunburstStyleOptions extends BaseStyleOptions {
+export interface SunburstStyleOptions extends Omit<BaseStyleOptions, 'seriesLabels'> {
   /** Labels options object */
   labels?: {
     /** Array with single label options objects (order of items relative to dataOptions.category) */
@@ -938,15 +1035,99 @@ export interface ScattermapStyleOptions extends Pick<BaseStyleOptions, 'width' |
 }
 
 /**
- * Configuration options that define functional style of the various elements of CalendarHeatmapChart
- *
- * @alpha
+ * Configuration for day numbers (1-31) labels in calendar-heatmap cells
+ */
+export type CalendarHeatmapCellLabels = {
+  /**
+   * Boolean flag that defines if calendar day numbers should be shown in cells
+   *
+   * @default true
+   */
+  enabled?: boolean;
+  /** Style configuration for calendar day numbers in cells */
+  style?: Omit<TextStyle, 'color'> & {
+    /**
+     * Color of the labels text
+     *
+     * The "contrast" color applies the maximum contrast between the background and the text
+     */
+    color?: string | 'contrast';
+  };
+};
+
+/**
+ * Configuration options that define functional style of the various elements of calendar-heatmap chart
  */
 export interface CalendarHeatmapStyleOptions extends Pick<BaseStyleOptions, 'width' | 'height'> {
   /**
    * {@inheritDoc CalendarHeatmapViewType}
    */
   viewType?: CalendarHeatmapViewType;
+
+  /**
+   * Determines which day of the week to start the calendar with
+   * @default 'sunday'
+   */
+  startOfWeek?: CalendarDayOfWeek;
+
+  /**
+   * Configuration for day numbers (1-31) in calendar cells
+   */
+  cellLabels?: CalendarHeatmapCellLabels;
+
+  /**
+   * Configuration for weekday names in the header
+   */
+  dayLabels?: {
+    /**
+     * Boolean flag that defines if calendar weekday names should be shown
+     *
+     * @default true
+     */
+    enabled?: boolean;
+    /** Style configuration for calendar weekday names */
+    style?: TextStyle;
+  };
+
+  /**
+   * Configuration for month names in multi-month view types
+   */
+  monthLabels?: {
+    /**
+     * Boolean flag that defines if month names should be shown
+     *
+     * @default true
+     */
+    enabled?: boolean;
+    /** Style configuration for month names */
+    style?: TextStyle;
+  };
+
+  /**
+   * Configuration for weekend days
+   */
+  weekends?: {
+    /**
+     * Boolean flag that enables/disables weekend highlighting
+     *
+     * @default false
+     */
+    enabled?: boolean;
+    /** Weekend days - defaults to ['saturday', 'sunday'] */
+    days?: CalendarDayOfWeek[];
+    /**
+     * Calendar cell color for weekend days
+     *
+     * @default '#e6e6e6'
+     */
+    cellColor?: string;
+    /**
+     * Whether to hide values in tooltip for weekend days
+     *
+     * @default false
+     */
+    hideValues?: boolean;
+  };
 }
 
 /**
@@ -2013,8 +2194,6 @@ export type IndicatorDataPoint = {
 
 /**
  * Data point in a CalendarHeatmap chart.
- *
- * @alpha
  */
 export type CalendarHeatmapDataPoint = {
   /**
@@ -2159,6 +2338,9 @@ export type HighchartsPoint = {
       level?: number;
       levelsCount?: number;
     };
+    date?: number;
+    dateString?: string;
+    value?: number;
     q1?: number;
     median?: number;
     q3?: number;

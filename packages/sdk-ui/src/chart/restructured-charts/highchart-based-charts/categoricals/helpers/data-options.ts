@@ -11,6 +11,7 @@ import {
   CategoricalChartDataOptionsInternal,
   StyledMeasureColumn,
   StyledColumn,
+  ChartDataOptionsInternal,
 } from '@/chart-data-options/types';
 import {
   isMeasureColumn,
@@ -68,7 +69,7 @@ export function isCategoricalChartDataOptions(
  * Type guard to check if internal data options are categorical chart data options.
  */
 export function isCategoricalChartDataOptionsInternal(
-  dataOptions: any,
+  dataOptions: ChartDataOptionsInternal,
 ): dataOptions is CategoricalChartDataOptionsInternal {
   return (
     dataOptions &&

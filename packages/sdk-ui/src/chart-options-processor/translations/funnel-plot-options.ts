@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
-import { ValueLabelSettings } from './value-label-section';
+import { DataLabelsSettings } from './value-label-section';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { CompleteNumberFormatConfig, CompleteThemeSettings } from '../../types';
 import { HighchartsDataPointContext } from './tooltip-utils';
@@ -46,7 +46,7 @@ export type FunnelDirection = (typeof funnelDirections)[number];
 export type FunnelOptions = {
   allowPointSelect: boolean;
   cursor: 'pointer';
-  dataLabels: ValueLabelSettings & {
+  dataLabels: DataLabelsSettings & {
     funnelMinimumFontSizeToTextLabel: number;
     formatter?: () => string;
   };

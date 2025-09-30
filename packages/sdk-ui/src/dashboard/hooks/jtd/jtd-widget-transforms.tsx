@@ -10,6 +10,7 @@ import {
   isTextWidgetProps,
   isPivotTableWidgetProps,
   registerDataPointContextMenuHandler,
+  registerDataPointsSelectedHandler,
 } from '@/widget-by-id/utils';
 import { JtdJumpableIcon } from '@/common/icons/jtd-jumpable-icon';
 import {
@@ -17,10 +18,12 @@ import {
   handleTextWidgetClick,
   handlePivotDataPointClick,
   convertPivotToDataPoint,
+  getJtdClickHandler,
 } from './jtd-handlers';
 import {
   createJtdHyperlinkDataCellFormatter,
   createJtdHyperlinkHeaderCellFormatter,
+  getPivotTargetActionability,
 } from './jtd-formatters';
 import {
   getJumpToDashboardMenuItem,
@@ -127,6 +130,7 @@ export const applyClickNavigationForChart = (
       {
         dashboardFilters: config.dashboardFilters,
         originalWidgetFilters: config.originalWidgetFilters,
+        extraFilters: config.extraFilters,
       },
       actions,
       {
@@ -173,6 +177,7 @@ export const applyClickNavigationForPivot = (
       {
         dashboardFilters: config.dashboardFilters,
         originalWidgetFilters: config.originalWidgetFilters,
+        extraFilters: config.extraFilters,
       },
       actions,
     );
@@ -249,6 +254,7 @@ export const applyRightClickNavigation = (
       {
         dashboardFilters: config.dashboardFilters,
         originalWidgetFilters: config.originalWidgetFilters,
+        extraFilters: config.extraFilters,
       },
       actions,
     );
@@ -265,6 +271,16 @@ export const applyRightClickNavigation = (
   };
 
   const onDataPointsSelected = (points: DataPoint[], nativeEvent: MouseEvent) => {
+    // Handle multi-point selection for right-click JTD navigation
+    if (points.length === 0) return;
+
+    // For single point, use the same logic as context menu
+    if (points.length === 1) {
+      onDataPointContextMenu(points[0], nativeEvent as PointerEvent);
+      return;
+    }
+
+    // For multiple points, use the multi-point menu handler
     const menuItem = getJumpToDashboardMenuItemForMultiplePoints(
       {
         jtdConfig: config.jtdConfig,
@@ -274,6 +290,7 @@ export const applyRightClickNavigation = (
       {
         dashboardFilters: config.dashboardFilters,
         originalWidgetFilters: config.originalWidgetFilters,
+        extraFilters: config.extraFilters,
       },
       actions,
     );
@@ -290,13 +307,11 @@ export const applyRightClickNavigation = (
     }
   };
 
-  registerDataPointContextMenuHandler(widgetProps, onDataPointContextMenu);
+  const updatedProps = { ...widgetProps };
+  registerDataPointContextMenuHandler(updatedProps, onDataPointContextMenu);
+  registerDataPointsSelectedHandler(updatedProps, onDataPointsSelected);
 
-  const originalPointsSelectedHandler = widgetProps.onDataPointsSelected;
-  return {
-    ...widgetProps,
-    onDataPointsSelected: combineHandlers([originalPointsSelectedHandler, onDataPointsSelected]),
-  };
+  return updatedProps;
 };
 
 /**
@@ -321,21 +336,75 @@ export const applyRightClickNavigationForPivot = (
     point: PivotTableDataPoint,
     nativeEvent: MouseEvent,
   ) => {
-    // Convert pivot data point to regular data point format for menu creation
+    // Use pivot-specific logic to find actionable targets for this cell
+    const { isActionable, matchingTargets } = getPivotTargetActionability(config.jtdConfig, point);
+
+    if (!isActionable || matchingTargets.length === 0) {
+      // No JTD menu - let any existing handler run
+      return;
+    }
+
+    // Convert pivot data point to regular data point format for handlers
     const convertedPoint = convertPivotToDataPoint(point);
 
-    const menuItem = getJumpToDashboardMenuItem(
-      {
-        jtdConfig: config.jtdConfig,
-        point: convertedPoint,
-        widgetProps,
-      },
-      {
-        dashboardFilters: config.dashboardFilters,
-        originalWidgetFilters: config.originalWidgetFilters,
-      },
-      actions,
-    );
+    // Use jumpToDashboardRightMenuCaption if provided, otherwise use translated default
+    const menuCaption =
+      config.jtdConfig.jumpToDashboardRightMenuCaption ||
+      (actions.translate ? actions.translate('jumpToDashboard.defaultCaption') : 'Jump to');
+
+    let menuItem;
+
+    if (matchingTargets.length > 1) {
+      // Multiple targets - create submenu with only matching targets
+      menuItem = {
+        caption: menuCaption,
+        subItems: [
+          {
+            items: matchingTargets.map((jumpTarget) => ({
+              caption: jumpTarget.caption,
+              onClick: getJtdClickHandler(
+                {
+                  jtdConfig: config.jtdConfig,
+                  point: convertedPoint,
+                  widgetProps,
+                  jumpTarget,
+                },
+                {
+                  dashboardFilters: config.dashboardFilters,
+                  originalWidgetFilters: config.originalWidgetFilters,
+                  extraFilters: config.extraFilters,
+                },
+                {
+                  openModal: actions.openModal,
+                },
+              ),
+            })),
+          },
+        ],
+      };
+    } else {
+      // Single target - create direct menu item
+      const jumpTarget = matchingTargets[0];
+      menuItem = {
+        caption: `${menuCaption} ${jumpTarget.caption}`,
+        onClick: getJtdClickHandler(
+          {
+            jtdConfig: config.jtdConfig,
+            point: convertedPoint,
+            widgetProps,
+            jumpTarget,
+          },
+          {
+            dashboardFilters: config.dashboardFilters,
+            originalWidgetFilters: config.originalWidgetFilters,
+            extraFilters: config.extraFilters,
+          },
+          {
+            openModal: actions.openModal,
+          },
+        ),
+      };
+    }
 
     if (menuItem) {
       nativeEvent.preventDefault();
@@ -452,8 +521,8 @@ export const applyPivotLinkStyling = (
  * @internal
  */
 export const addJtdIconToHeader = (widgetProps: WidgetProps): WidgetProps => {
-  // Only add header to chart widgets (text widgets don't have header styleOptions)
-  if (!isChartWidgetProps(widgetProps)) {
+  // Only add header to widgets that support header styleOptions (chart and pivot widgets)
+  if (!isChartWidgetProps(widgetProps) && !isPivotTableWidgetProps(widgetProps)) {
     return widgetProps;
   }
 

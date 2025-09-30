@@ -1,8 +1,23 @@
-import { CALENDAR_HEATMAP_DEFAULTS, CALENDAR_LAYOUT } from '../../../constants.js';
+import { CALENDAR_HEATMAP_DEFAULTS } from '../../../constants.js';
+import { getWeekdayLabels } from '../../../utils/index.js';
 import { CalendarHeatmapChartData, CalendarHeatmapDataValue } from '../../../data.js';
 import { DateFormatter } from '@/common/formatters/create-date-formatter.js';
+import {
+  CalendarDayOfWeek,
+  getDayOfWeek,
+  getDayOfWeekIndex,
+} from '../../../utils/calendar-utils.js';
+import { CalendarHeatmapChartDesignOptions } from '@/chart-options-processor/translations/design-options.js';
 
-const CALENDAR_DATA_DATE_FORMAT = 'yyyy-MM-dd';
+const CALENDAR_DATA_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+
+/**
+ * Check if a given date is a weekend based on the weekend configuration
+ */
+function isWeekendDay(date: Date, weekendDays: CalendarDayOfWeek[]): boolean {
+  const dayOfWeek = getDayOfWeek(date.getDay());
+  return weekendDays.includes(dayOfWeek);
+}
 
 /**
  * Represents a calendar chart data point for Highcharts
@@ -12,34 +27,41 @@ export interface CalendarChartDataPoint {
   x: number;
   /** Y coordinate (week row, 0-5) */
   y: number;
-  /** Data value or null for empty cells */
+  /** Data value or null for cells without data */
   value: number | null;
-  /** Date timestamp or null for empty cells */
-  date: number | null;
+  /** Date timestamp */
+  date: number;
   /** Date string for tooltip display */
   dateString?: string;
   /** Custom color override */
   color?: string;
+  /** Class name for the data point */
+  className?: string;
   /** Custom properties for the data point */
   custom: {
     /** Day of the month (1-31) */
     monthDay?: number;
     /** Whether this cell has data */
     hasData?: boolean;
-    /** Whether this is an empty calendar cell */
-    empty?: boolean;
+    /** Whether this data point should be blurred for highlighting */
+    blur?: boolean;
   };
 }
 
 /**
  * Generates calendar chart data for an entire month with provided data values
  *
- * @param dataPoints - Array of data points with dates and values
+ * @param data - Array of data points with dates and values
+ * @param dateFormatter - Date formatter function
+ * @param startOfWeek - Week start preference
+ * @param weekendsConfig - Weekend configuration (days, cellColor, hideValues)
  * @returns Array of calendar chart data points formatted for Highcharts
  */
 export function generateCalendarChartData(
   data: CalendarHeatmapChartData,
   dateFormatter: DateFormatter,
+  startOfWeek: CalendarDayOfWeek,
+  weekendsConfig: CalendarHeatmapChartDesignOptions['weekends'],
 ): CalendarChartDataPoint[] {
   if (data.values.length === 0) return [];
 
@@ -60,79 +82,59 @@ export function generateCalendarChartData(
   const firstDayOfMonth = new Date(year, month, 1);
   const lastDayOfMonth = new Date(year, month + 1, 0);
   const daysInMonth = lastDayOfMonth.getDate();
-  const firstWeekday = firstDayOfMonth.getDay(); // 0 = Sunday, 6 = Saturday
+  const rawFirstWeekday = firstDayOfMonth.getDay(); // 0 = Sunday, 6 = Saturday
+  const startOfWeekDayIndex = getDayOfWeekIndex(startOfWeek);
 
+  // This adjusts the rawFirstWeekday (0-6, Sunday=0) to be relative to our chosen start of week
+  const firstWeekday = (rawFirstWeekday - startOfWeekDayIndex + 7) % 7;
+
+  const weekdayLabels = getWeekdayLabels(startOfWeek, dateFormatter);
   const chartData: CalendarChartDataPoint[] = [];
-
-  // Add empty tiles before the first day of the month
-  for (let emptyDay = 0; emptyDay < firstWeekday; emptyDay++) {
-    chartData.push(createEmptyCalendarCell(emptyDay, 5));
-  }
 
   // Generate all days in the month
   for (let day = 1; day <= daysInMonth; day++) {
     const currentDate = new Date(Date.UTC(year, month, day));
     const dateString = dateFormatter(currentDate, CALENDAR_DATA_DATE_FORMAT);
 
-    const xCoordinate = (firstWeekday + day - 1) % CALENDAR_LAYOUT.WEEKDAY_LABELS.length;
-    const yCoordinate = Math.floor(
-      (firstWeekday + day - 1) / CALENDAR_LAYOUT.WEEKDAY_LABELS.length,
-    );
+    const xCoordinate = (firstWeekday + day - 1) % weekdayLabels.length;
+    const yCoordinate = Math.floor((firstWeekday + day - 1) / weekdayLabels.length);
 
     // Look up the value for this date, or use null if no data available
-    const value = dataMap.get(dateString)?.value || null;
+    const dataValue = dataMap.get(dateString);
+    const value = dataValue?.value || null;
     const hasData = dataMap.has(dateString);
+
+    // Determine if this day should be highlighted based on the weekend configuration
+    const isWeekend = isWeekendDay(currentDate, weekendsConfig.days);
+
+    // Determine color based on priority: no-data > weekend highlighting > data colors
+    let cellColor: string | undefined = undefined;
+    if (!hasData) {
+      cellColor = CALENDAR_HEATMAP_DEFAULTS.NO_DATA_COLOR;
+    } else if (weekendsConfig.enabled && weekendsConfig.days.length > 0 && isWeekend) {
+      cellColor = weekendsConfig.cellColor || CALENDAR_HEATMAP_DEFAULTS.WEEKEND_CELL_COLOR;
+    } else if (dataValue?.color) {
+      // Use color from data (includes both data table colors and generated colors)
+      cellColor = dataValue.color;
+    }
+
+    const shouldHideWeekendValue = weekendsConfig.enabled && weekendsConfig.hideValues && isWeekend;
 
     chartData.push({
       x: xCoordinate,
       y: 5 - yCoordinate, // Invert Y coordinate so first week is at top
       value: value,
       date: currentDate.getTime(),
-      dateString: dateString,
-      color: hasData ? undefined : CALENDAR_HEATMAP_DEFAULTS.NO_DATA_COLOR,
+      dateString,
+      color: cellColor,
       custom: {
         monthDay: day,
-        hasData: hasData,
+        hasData: !shouldHideWeekendValue && hasData,
+        blur: dataValue?.blur,
       },
+      className: hasData && dataValue?.blur ? 'csdk-highcharts-point-blured' : '',
     });
   }
 
-  // Calculate how many cells we need to complete the calendar grid
-  const totalCellsUsed = firstWeekday + daysInMonth;
-  const remainingCells = CALENDAR_HEATMAP_DEFAULTS.TOTAL_CALENDAR_CELLS - totalCellsUsed;
-
-  // Add empty tiles after the last day of the month to complete the grid
-  for (
-    let emptyDay = 0;
-    emptyDay < remainingCells && emptyDay < CALENDAR_LAYOUT.WEEKDAY_LABELS.length;
-    emptyDay++
-  ) {
-    const lastFilledCell = chartData[chartData.length - 1];
-    const nextX = (lastFilledCell.x + 1) % CALENDAR_LAYOUT.WEEKDAY_LABELS.length;
-    const nextY = lastFilledCell.y - (lastFilledCell.x === 6 ? 1 : 0); // Move to next row if at end of week
-
-    chartData.push(createEmptyCalendarCell(nextX, nextY));
-  }
-
   return chartData;
-}
-
-/**
- * Creates an empty calendar cell data point
- *
- * @param x - X coordinate
- * @param y - Y coordinate
- * @returns Empty calendar cell data point
- */
-function createEmptyCalendarCell(x: number, y: number): CalendarChartDataPoint {
-  return {
-    x,
-    y,
-    value: null,
-    date: null,
-    color: CALENDAR_HEATMAP_DEFAULTS.EMPTY_CELL_COLOR,
-    custom: {
-      empty: true,
-    },
-  };
 }

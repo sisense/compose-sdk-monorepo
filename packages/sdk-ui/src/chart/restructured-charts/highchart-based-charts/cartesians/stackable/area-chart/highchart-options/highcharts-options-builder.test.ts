@@ -74,7 +74,7 @@ describe('areaHighchartsOptionsBuilder', () => {
       stackType,
       showTotal,
       totalLabelRotation: 0,
-      valueLabel: {},
+      seriesLabels: {},
       legend: {
         enabled: true,
         position: legendPosition,

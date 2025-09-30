@@ -64,7 +64,7 @@ Configuration of the component that is rendered in case of an error
 
 **jumpToDashboardConfig**?: `object`
 
-Configuration of the Jump to Dashboard feature
+Configuration of the Jump To Dashboard feature
 
 This feature is currently in Beta.
 
@@ -93,7 +93,7 @@ The following Jump To Dashboard configuration is supported:
 >
 > **enabled**?: `boolean`
 >
-> Whether to enable or disable the jump to dashboard feature
+> Whether to enable or disable the Jump To Dashboard feature
 >
 > If not specified, the default value is `true`
 >

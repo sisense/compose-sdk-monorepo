@@ -10,18 +10,17 @@ import { isCalendarHeatmapChartData } from '../data.js';
 import { CalendarHeatmapViewType } from '@/types.js';
 import { calculateCalendarSize } from './helpers/sizing-helpers.js';
 import { useDateFormatter } from '@/common/hooks/useDateFormatter.js';
-import { getAvailableMonths } from './helpers/view-helpers.js';
+import { getAvailableMonths, shouldUseShortMonthNames } from './helpers/view-helpers.js';
+import { Themable } from '@/theme-provider/types.js';
+import { useThemeContext } from '@/theme-provider/index.js';
 
-export const ChartRootContainer = styled.div<{
-  containerWidth?: number;
-  containerHeight?: number;
-}>`
+export const ChartRootContainer = styled.div<Themable>`
   display: flex;
   flex-direction: column;
-  width: ${(props) => (props.containerWidth ? `${props.containerWidth}px` : '100%')};
-  height: ${(props) => (props.containerHeight ? `${props.containerHeight}px` : '100%')};
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.chart.backgroundColor};
 `;
 
 export const ChartsWrapper = styled.div`
@@ -44,16 +43,22 @@ export function CalendarHeatmap({
   onBeforeRender,
   size,
 }: CalendarHeatmapProps) {
+  const { themeSettings } = useThemeContext();
   const dateFormatter = useDateFormatter();
 
   // Get viewType from design options
   const viewType: CalendarHeatmapViewType = designOptions.viewType;
 
-  // Get available months from data
-  const availableMonths = useMemo(
-    () => getAvailableMonths(chartData, dateFormatter),
-    [chartData, dateFormatter],
-  );
+  // Calculate common chart size for each chart in the layout
+  const chartSize = useMemo(() => {
+    return calculateCalendarSize(size, viewType);
+  }, [size, viewType]);
+
+  // Get available months from data (with short names if chart is small)
+  const availableMonths = useMemo(() => {
+    const useShortNames = shouldUseShortMonthNames(chartSize);
+    return getAvailableMonths(chartData, dateFormatter, useShortNames);
+  }, [chartData, dateFormatter, chartSize]);
 
   // Initialize navigation
   const {
@@ -65,11 +70,6 @@ export function CalendarHeatmap({
     goToPreviousGroup,
     goToNextGroup,
   } = useCalendarHeatmapNavigation(availableMonths, viewType);
-
-  // Calculate common chart size for each chart in the layout
-  const chartSize = useMemo(() => {
-    return calculateCalendarSize(size, viewType);
-  }, [size, viewType]);
 
   // Generate chart options
   const chartOptionsPerMonth = useCalendarHeatmapChartOptions({
@@ -89,7 +89,7 @@ export function CalendarHeatmap({
   });
 
   return (
-    <ChartRootContainer containerWidth={size?.width} containerHeight={size?.height}>
+    <ChartRootContainer theme={themeSettings}>
       {availableMonths.length > 0 && (
         <CalendarPagination
           currentViewIndex={currentViewIndex}
@@ -110,6 +110,8 @@ export function CalendarHeatmap({
           availableMonths={availableMonths}
           currentViewIndex={currentViewIndex}
           viewType={viewType}
+          monthLabels={designOptions.monthLabels}
+          size={size}
         />
       </ChartsWrapper>
     </ChartRootContainer>

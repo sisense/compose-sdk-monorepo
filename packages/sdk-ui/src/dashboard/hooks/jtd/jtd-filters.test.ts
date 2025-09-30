@@ -14,7 +14,7 @@ import {
 } from './jtd-filters.js';
 import { DataPoint, DataPointEntry, ScatterDataPoint } from '../../../types.js';
 import { WidgetProps } from '../../../props.js';
-import { JtdConfig } from '../../../widget-by-id/types.js';
+import { JtdConfig } from './jtd-types';
 
 // Helper function to compare filters without GUID
 const expectFilterMatch = (actualFilter: any, expectedFilter: any) => {

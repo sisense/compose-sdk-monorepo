@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
-  getValueLabelSettings,
-  getPolarValueLabelSettings,
-  ValueLabelSettings,
+  getDataLabelsSettings,
+  getPolarDataLabelsSettings,
+  DataLabelsSettings,
 } from './value-label-section';
 
 const types = {
@@ -13,7 +13,7 @@ const types = {
 
 describe('getValueLabelSettings(), chart with vertical xAxis', () => {
   it('horizontal', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('vertical', {
+    const valueLabelSettings: DataLabelsSettings = getDataLabelsSettings('vertical', {
       enabled: true,
       rotation: 0,
     });
@@ -27,7 +27,7 @@ describe('getValueLabelSettings(), chart with vertical xAxis', () => {
   });
 
   it('diagonal', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('vertical', {
+    const valueLabelSettings: DataLabelsSettings = getDataLabelsSettings('vertical', {
       enabled: true,
       rotation: -45,
     });
@@ -41,7 +41,7 @@ describe('getValueLabelSettings(), chart with vertical xAxis', () => {
   });
 
   it('vertical', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('vertical', {
+    const valueLabelSettings: DataLabelsSettings = getDataLabelsSettings('vertical', {
       enabled: true,
       rotation: -90,
     });
@@ -57,7 +57,7 @@ describe('getValueLabelSettings(), chart with vertical xAxis', () => {
 
 describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
   it('horizontal', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', {
+    const valueLabelSettings: DataLabelsSettings = getDataLabelsSettings('horizontal', {
       enabled: true,
       rotation: 0,
     });
@@ -71,7 +71,7 @@ describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
     });
   });
   it('diagonal', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', {
+    const valueLabelSettings: DataLabelsSettings = getDataLabelsSettings('horizontal', {
       enabled: true,
       rotation: -45,
     });
@@ -86,7 +86,7 @@ describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
     });
   });
   it('vertical', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', {
+    const valueLabelSettings: DataLabelsSettings = getDataLabelsSettings('horizontal', {
       enabled: true,
       rotation: -90,
     });
@@ -103,7 +103,7 @@ describe('getValueLabelSettings(), chart with horizontal xAxis', () => {
 
 describe('when valueLabel is null', () => {
   it('should return enabled= false', () => {
-    const valueLabelSettings: ValueLabelSettings = getValueLabelSettings('horizontal', {});
+    const valueLabelSettings: DataLabelsSettings = getDataLabelsSettings('horizontal');
     expect(valueLabelSettings).toEqual({
       enabled: false,
     });
@@ -119,7 +119,7 @@ describe('getPolarValueLabelSettings()', () => {
   };
 
   it('should return "horizontal" settings for "area" type polar', () => {
-    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings(
+    const valueLabelSettings: DataLabelsSettings = getPolarDataLabelsSettings(
       { enabled: true, rotation: 0 },
       'area',
     );
@@ -131,7 +131,7 @@ describe('getPolarValueLabelSettings()', () => {
   });
 
   it('should return "diagonal" settings for "line" type polar', () => {
-    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings(
+    const valueLabelSettings: DataLabelsSettings = getPolarDataLabelsSettings(
       { enabled: true, rotation: -45 },
       'line',
     );
@@ -144,7 +144,7 @@ describe('getPolarValueLabelSettings()', () => {
   });
 
   it('should return "vertical" settings for "column" type polar', () => {
-    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings(
+    const valueLabelSettings: DataLabelsSettings = getPolarDataLabelsSettings(
       { enabled: true, rotation: -90 },
       'column',
     );
@@ -157,7 +157,7 @@ describe('getPolarValueLabelSettings()', () => {
   });
 
   it('should return enabled=false when `valueLabel` is disabled', () => {
-    const valueLabelSettings: ValueLabelSettings = getPolarValueLabelSettings(
+    const valueLabelSettings: DataLabelsSettings = getPolarDataLabelsSettings(
       { enabled: false },
       'column',
     );

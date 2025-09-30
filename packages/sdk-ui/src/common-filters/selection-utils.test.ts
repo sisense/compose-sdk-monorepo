@@ -8,6 +8,7 @@ import {
 import {
   AreamapDataPoint,
   BoxplotDataPoint,
+  CalendarHeatmapDataPoint,
   DataPoint,
   ScatterDataPoint,
   ScattermapDataPoint,
@@ -368,5 +369,54 @@ describe('getWidgetSelections()', () => {
     const selections = getWidgetSelections('areamap', dataOptions, points);
     expect(selections[0].attribute.expression).toEqual(DM.Country.Country.expression);
     expect(selections[0].values).toEqual(['USA']);
+  });
+
+  it('should return selections for "calendar-heatmap" widget', () => {
+    const dataOptions = {
+      date: DM.Commerce.Date.Days,
+      value: DM.Commerce.Revenue,
+    };
+    const points = [
+      {
+        entries: {
+          date: {
+            id: 'date',
+            attribute: DM.Commerce.Date.Days,
+            value: '2023-01-15',
+            displayValue: 'Jan 15, 2023',
+            dataOption: {} as any,
+          },
+          value: {
+            id: 'value',
+            attribute: DM.Commerce.Revenue,
+            value: 1500,
+            displayValue: '$1,500',
+            dataOption: {} as any,
+          },
+        },
+      },
+      {
+        entries: {
+          date: {
+            id: 'date',
+            attribute: DM.Commerce.Date.Days,
+            value: '2023-01-16',
+            displayValue: 'Jan 16, 2023',
+            dataOption: {} as any,
+          },
+          value: {
+            id: 'value',
+            attribute: DM.Commerce.Revenue,
+            value: 2000,
+            displayValue: '$2,000',
+            dataOption: {} as any,
+          },
+        },
+      },
+    ] as CalendarHeatmapDataPoint[];
+    const selections = getWidgetSelections('calendar-heatmap', dataOptions, points);
+    expect(selections[0].attribute.expression).toEqual(DM.Commerce.Date.Days.expression);
+    expect(selections[0].values).toEqual(['2023-01-15', '2023-01-16']);
+    expect(selections[0].displayValues).toEqual(['Jan 15, 2023', 'Jan 16, 2023']);
   });
 });

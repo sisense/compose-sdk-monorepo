@@ -149,7 +149,7 @@ export const getCartesianChartStyle = (
     ...BaseDesignOptions,
     legend: styleOptions.legend,
     autoZoom,
-    valueLabel: styleOptions.seriesLabels || {},
+    ...(styleOptions.seriesLabels && { seriesLabels: styleOptions.seriesLabels }),
     xAxis,
     yAxis,
     ...(y2Axis && { y2Axis }),

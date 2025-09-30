@@ -16,8 +16,8 @@ import {
 } from '../../chart-data/types';
 import { fromFraction } from '../../chart-data/utils';
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
-import { seriesSliceWarning } from '../../utils/data-limit-warning';
 import { getPaletteColor } from '../../chart-data-options/coloring/utils';
+import { seriesSliceWarning } from '@/utils/data-limit-warning';
 
 /**
  * Convert categorical chart data into renderable highcharts funnel series. *
@@ -34,14 +34,10 @@ export const formatFunnelChartData = (
   themeSettings?: CompleteThemeSettings,
 ): SeriesWithAlerts<SeriesType[]> => {
   let series: SeriesType[];
-  const alerts: SeriesWithAlerts<SeriesType[]>['alerts'] = [];
+  const alerts = getAlerts(chartData, designOptions);
   const { seriesCapacity } = designOptions.dataLimits;
 
   if (chartData.xAxisCount === 0) {
-    if (chartData.series.length > seriesCapacity) {
-      alerts.push(seriesSliceWarning(chartData.series.length, seriesCapacity));
-    }
-
     const seriesValues = chartData.series.slice(0, seriesCapacity);
     const categories = seriesValues.map((s) => s.title ?? s.name);
 
@@ -67,10 +63,6 @@ export const formatFunnelChartData = (
 
     computeFunnelPercents(series[0]);
   } else {
-    if (chartData.xValues.length > seriesCapacity) {
-      alerts.push(seriesSliceWarning(chartData.xValues.length, seriesCapacity));
-    }
-
     const categories = chartData.xValues
       .slice(0, seriesCapacity)
       .map((xAxisValue: CategoricalXValues) => xAxisValue.xValues.join(','));
@@ -91,7 +83,34 @@ export const formatFunnelChartData = (
   return { series, alerts };
 };
 
-const computeFunnelPercents = (seriesValues: HighchartsSeriesValues): HighchartsSeriesValues => {
+/**
+ * Calculate alerts for funnel chart based on data limits.
+ *
+ * @param chartData - The categorical chart data
+ * @param designOptions - The funnel chart design options
+ * @returns Array of alert messages
+ */
+export function getAlerts(
+  chartData: CategoricalChartData,
+  designOptions: FunnelChartDesignOptions,
+): string[] {
+  const alerts: string[] = [];
+  const { seriesCapacity } = designOptions.dataLimits;
+
+  if (chartData.xAxisCount === 0) {
+    if (chartData.series.length > seriesCapacity) {
+      alerts.push(seriesSliceWarning(chartData.series.length, seriesCapacity));
+    }
+  } else {
+    if (chartData.xValues.length > seriesCapacity) {
+      alerts.push(seriesSliceWarning(chartData.xValues.length, seriesCapacity));
+    }
+  }
+
+  return alerts;
+}
+
+function computeFunnelPercents(seriesValues: HighchartsSeriesValues): HighchartsSeriesValues {
   let baseY = 0;
   const data = seriesValues.data.map((value: SeriesPointStructure, index: number) => {
     const y = value.y as number;
@@ -104,4 +123,4 @@ const computeFunnelPercents = (seriesValues: HighchartsSeriesValues): Highcharts
     ...seriesValues,
     data,
   };
-};
+}

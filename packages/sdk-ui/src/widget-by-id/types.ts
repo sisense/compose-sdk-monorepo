@@ -9,7 +9,7 @@ import {
   JaqlSortDirection,
 } from '@sisense/sdk-data';
 import { HierarchyId } from '@/models/hierarchy';
-import { SizeMeasurement } from '@/types';
+import { JtdConfigDto } from '@/dashboard/hooks/jtd/jtd-types';
 
 /**
  * The type of a widget on a dashboard that is a variant of Cartesian widget.
@@ -48,6 +48,7 @@ export type FusionWidgetType =
   | 'chart/boxplot'
   | 'map/scatter'
   | 'map/area'
+  | 'heatmap'
   | TextWidgetType
   | 'custom';
 
@@ -440,6 +441,8 @@ export type AxisStyle = {
   logarithmic?: boolean;
   min?: number | null;
   max?: number | null;
+  intervalJumps?: number;
+  x2Title?: AxisTitleStyle;
 };
 
 type BaseWidgetStyle = {
@@ -450,6 +453,11 @@ type BaseWidgetStyle = {
   navigator: {
     enabled: boolean;
   };
+};
+
+type DataLimits = {
+  categoriesCapacity?: number;
+  seriesCapacity?: number;
 };
 
 export type CartesianWidgetStyle = BaseWidgetStyle &
@@ -468,13 +476,15 @@ export type CartesianWidgetStyle = BaseWidgetStyle &
       size: number | string;
       fill: string;
     };
-    dataLimits?: any;
+    dataLimits?: DataLimits;
   };
 
 export type PolarWidgetStyle = BaseWidgetStyle &
   WidgetContainerStyleOptions & {
     categories?: AxisStyle;
     axis?: AxisStyle;
+    dataLimits?: DataLimits;
+    seriesLabels: LabelsStyle;
   };
 
 type ScatterMarkerSize = {
@@ -485,9 +495,11 @@ type ScatterMarkerSize = {
 
 export type ScatterWidgetStyle = BaseWidgetStyle &
   WidgetContainerStyleOptions & {
+    seriesLabels: LabelsStyle;
     xAxis: AxisStyle;
     yAxis: AxisStyle;
     markerSize?: ScatterMarkerSize;
+    dataLimits?: DataLimits;
   };
 
 export type FunnelWidgetStyle = BaseWidgetStyle &
@@ -501,6 +513,24 @@ export type FunnelWidgetStyle = BaseWidgetStyle &
       percent: boolean;
       value: boolean;
       decimals: boolean;
+    };
+  };
+
+export type PieWidgetStyle = BaseWidgetStyle &
+  WidgetContainerStyleOptions & {
+    labels: {
+      enabled: boolean;
+      categories: boolean;
+      percent: boolean;
+      value: boolean;
+      decimals: boolean;
+    };
+    dataLimits?: DataLimits;
+    convolution?: {
+      enabled?: boolean;
+      independentSlicesCount?: number;
+      minimalIndependentSlicePercentage?: number;
+      selectedConvolutionType?: 'byPercentage' | 'bySlicesCount';
     };
   };
 
@@ -593,6 +623,8 @@ export type SunburstWidgetStyle = {
 };
 
 export type BoxplotWidgetStyle = WidgetContainerStyleOptions & {
+  seriesLabels?: LabelsStyle;
+  dataLimits?: DataLimits;
   xAxis: AxisStyle;
   yAxis: AxisStyle;
   whisker: {
@@ -619,10 +651,25 @@ export type ScattermapWidgetStyle = WidgetContainerStyleOptions & {
 /** Currently, WidgetStyle for areamap is an empty object */
 export type AreamapWidgetStyle = {};
 
+export type CalendarHeatmapWidgetStyle = {
+  dayNameEnabled?: boolean;
+  dayNumberEnabled?: boolean;
+  'domain/month'?: boolean;
+  'domain/quarter'?: boolean;
+  'domain/half-year'?: boolean;
+  'domain/year'?: boolean;
+  grayoutEnabled?: boolean;
+  'view/monthly'?: boolean;
+  'view/weekly'?: boolean;
+  'week/monday'?: boolean;
+  'week/sunday'?: boolean;
+};
+
 export type WidgetStyle = { widgetDesign?: WidgetDesign; narration?: any } & (
   | CartesianWidgetStyle
   | PolarWidgetStyle
   | FunnelWidgetStyle
+  | PieWidgetStyle
   | ScatterWidgetStyle
   | TableWidgetStyle
   | IndicatorWidgetStyle
@@ -632,6 +679,7 @@ export type WidgetStyle = { widgetDesign?: WidgetDesign; narration?: any } & (
   | ScattermapWidgetStyle
   | AreamapWidgetStyle
   | PivotWidgetStyle
+  | CalendarHeatmapWidgetStyle
   | TextWidgetDtoStyle
 );
 
@@ -665,77 +713,4 @@ export type TextWidgetDtoStyle = {
     bgColor: string;
     textAlign: 'center';
   };
-};
-
-export type JtdDrillTarget = {
-  caption: string;
-  id: string;
-};
-
-export type JtdPivotDrillTarget = JtdDrillTarget & {
-  pivotDimensions: string[];
-};
-
-export type JtdConfigDto = {
-  drilledDashboardPrefix: string;
-  drilledDashboardsFolderPrefix: string;
-  displayFilterPane: boolean;
-  displayDashboardsPane: boolean;
-  displayToolbarRow: boolean;
-  displayHeaderRow: boolean;
-  volatile: boolean;
-  hideDrilledDashboards: boolean;
-  hideSharedDashboardsForNonOwner: boolean;
-  drillToDashboardRightMenuCaption: string;
-  drillToDashboardNavigateType: number;
-  drillToDashboardNavigateTypePivot: number;
-  drillToDashboardNavigateTypeCharts: number;
-  drillToDashboardNavigateTypeOthers: number;
-  drilledDashboardDisplayType: number;
-  dashboardIds: Array<JtdDrillTarget | JtdPivotDrillTarget>;
-  modalWindowResize: boolean;
-  modalWindowMeasurement?: SizeMeasurement;
-  modalWindowWidth?: number;
-  modalWindowHeight?: number;
-  showFolderNameOnMenuSelection: boolean;
-  resetDashFiltersAfterJTD: boolean;
-  sameCubeRestriction: boolean;
-  showJTDIcon?: boolean;
-  sendPieChartMeasureFiltersOnClick: boolean;
-  forceZeroInsteadNull: boolean;
-  mergeTargetDashboardFilters: boolean;
-  drillToDashboardByName: boolean;
-  sendBreakByValueFilter: boolean;
-  ignoreFiltersSource: boolean;
-  sendFormulaFiltersDuplicate?: number | 'none' | undefined;
-  enabled?: boolean;
-  version?: string;
-  includeDashFilterDims?: string[];
-  includeWidgetFilterDims?: string[];
-};
-
-export enum JtdNavigateType {
-  CLICK = 'click',
-  RIGHT_CLICK = 'rightclick',
-  PIVOT_LINK = 'pivotlink',
-  BLOX = 'blox',
-}
-
-export type JtdConfig = {
-  drilledDashboardPrefix?: string;
-  displayFilterPane?: boolean;
-  displayToolbarRow?: boolean;
-  drillToDashboardRightMenuCaption?: string;
-  navigateType?: JtdNavigateType;
-  includeDashFilterDims?: string[];
-  includeWidgetFilterDims?: string[];
-  drillTargets: JtdDrillTarget[];
-  modalWindowResize?: boolean;
-  modalWindowMeasurement?: SizeMeasurement;
-  modalWindowWidth?: number;
-  modalWindowHeight?: number;
-  showJtdIcon?: boolean;
-  mergeTargetDashboardFilters?: boolean;
-  sendFormulaFiltersDuplicate?: number | 'none' | undefined;
-  enabled?: boolean;
 };

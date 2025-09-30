@@ -52,6 +52,14 @@ Configuration for navigator - zoom/pan tool for large datasets in a chart
 
 ***
 
+### seriesLabels
+
+> **seriesLabels**?: [`SeriesLabels`](../type-aliases/type-alias.SeriesLabels.md)
+
+Configuration for series labels - titles/names identifying data series in a chart
+
+***
+
 ### subtype
 
 > **subtype**?: [`BoxplotSubtype`](../type-aliases/type-alias.BoxplotSubtype.md)

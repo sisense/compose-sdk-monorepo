@@ -1,11 +1,11 @@
 import type { DataLabelsOptions } from '@sisense/sisense-charts';
 import { PlotOptions } from '../../chart-options-service.js';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from '../number-format-config.js';
-import { ValueLabelOptions } from '../value-label-section.js';
 import { HighchartsDataPointContext } from '../tooltip-utils.js';
-import { NumberFormatConfig } from '@/types.js';
+import { SeriesLabels } from '@/types.js';
+import { prepareDataLabelsOptions } from '@/chart-options-processor/series-labels.js';
 
-const createValueLabelFormatter = (numberFormatConfig?: NumberFormatConfig) => {
+const createDataLabelsFormatter = (seriesLabels: SeriesLabels | undefined) => {
   return function (
     this: HighchartsDataPointContext,
     _options?: DataLabelsOptions,
@@ -15,22 +15,27 @@ const createValueLabelFormatter = (numberFormatConfig?: NumberFormatConfig) => {
     if (value === undefined || isNaN(value)) {
       return '';
     }
-    return applyFormatPlainText(getCompleteNumberFormatConfig(numberFormatConfig), value);
+    return `${seriesLabels?.prefix ?? ''}${applyFormatPlainText(
+      getCompleteNumberFormatConfig(),
+      value,
+    )}${seriesLabels?.suffix ?? ''}`;
   };
 };
 
-export const getBoxplotPlotOptions = (valueLabel: ValueLabelOptions): PlotOptions => {
+export const getBoxplotPlotOptions = (seriesLabels: SeriesLabels | undefined): PlotOptions => {
+  const dataLabelsFromDesignOptions = prepareDataLabelsOptions(seriesLabels);
   return {
     series: {
       dataLabels: {
-        enabled: valueLabel.enabled ?? false,
+        rotation: seriesLabels?.rotation ?? 0,
+        align: 'center',
+        ...dataLabelsFromDesignOptions,
         style: {
           fontSize: '13px',
           fontWeight: 'normal',
+          ...dataLabelsFromDesignOptions.style,
         },
-        rotation: valueLabel.rotation ?? 0,
-        align: 'center',
-        formatter: createValueLabelFormatter(),
+        formatter: createDataLabelsFormatter(seriesLabels),
       },
       grouping: false,
       stickyTracking: false,
@@ -40,14 +45,15 @@ export const getBoxplotPlotOptions = (valueLabel: ValueLabelOptions): PlotOption
     },
     boxplot: {
       dataLabels: {
-        enabled: valueLabel.enabled ?? false,
+        rotation: seriesLabels?.rotation ?? 0,
+        align: 'center',
+        ...dataLabelsFromDesignOptions,
         style: {
           fontSize: '13px',
           fontWeight: 'normal',
+          ...dataLabelsFromDesignOptions.style,
         },
-        rotation: valueLabel.rotation ?? 0,
-        align: 'center',
-        formatter: createValueLabelFormatter(),
+        formatter: createDataLabelsFormatter(seriesLabels),
       },
     },
     scatter: {

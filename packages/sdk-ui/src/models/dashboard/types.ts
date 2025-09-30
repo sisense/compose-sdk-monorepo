@@ -1,6 +1,9 @@
 import { CommonFiltersOptions } from '@/common-filters/types';
 import { ColorPaletteTheme, TabberConfig } from '@/types';
-import { JtdConfig } from '@/widget-by-id/types';
+import type {
+  JumpToDashboardConfig,
+  JumpToDashboardConfigForPivot,
+} from '@/dashboard/hooks/jtd/jtd-types';
 
 export type {
   CommonFiltersOptions,
@@ -70,6 +73,12 @@ export type WidgetsPanelLayout = WidgetsPanelColumnLayout;
  * Widget ID
  */
 export type WidgetId = string;
+
+/**
+ * Dashboard ID
+ * @internal
+ */
+export type DashboardId = string;
 /**
  * Options for widgets in a dashboard
  *
@@ -80,10 +89,9 @@ export type WidgetsOptions = Record<
   {
     filtersOptions?: CommonFiltersOptions;
     /**
-     * Jump to dashboard config for widgets
-      @internal
+     * Jump To Dashboard config for widgets.
      */
-    jtdConfig?: JtdConfig;
+    jtdConfig?: JumpToDashboardConfig | JumpToDashboardConfigForPivot;
   }
 >;
 /**

@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.11.0] - 2025-09-30
+
+### Added
+- Add `CalendarHeatmapChart` component for React, Angular, and Vue
+- Extend widget, dashboard components and hooks to support calendar-heatmap chart type
+- Add code-first `Jump to Dashboard` configuration support, `applyJtdConfig` and `applyJtdConfigs` helper utilities
+- Add `useJtdWidget` hook to enable `Jump to Dashboard` capabilities for a specific widget
+- Extend charts styling options:
+  - Add `seriesLabels` prop for data point labels styling
+  - Add `series` prop for better control over group padding (column and bar charts)
+
+### Changed
+- Improve `Jump to Dashboard`: fix multiple bugs
+- Improve `useExecuteQueryByWidgetId` hook: add `ungroup` to query for table widget
+- Rename `Legend` type to `LegendOptions`
+
 ## [2.10.0] - 2025-09-16
 
 ### Added

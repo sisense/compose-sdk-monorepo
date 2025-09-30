@@ -20,6 +20,26 @@ export function translateCalendarHeatmapStyleOptionsToDesignOptions(
     width: styleOptions.width,
     height: styleOptions.height,
     viewType: styleOptions.viewType || CALENDAR_HEATMAP_DEFAULTS.VIEW_TYPE,
+    startOfWeek: styleOptions.startOfWeek || CALENDAR_HEATMAP_DEFAULTS.START_OF_WEEK,
+    cellLabels: {
+      enabled: styleOptions.cellLabels?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_CELL_LABEL,
+      style: styleOptions.cellLabels?.style,
+    },
+    dayLabels: {
+      enabled: styleOptions.dayLabels?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_DAY_LABEL,
+      style: styleOptions.dayLabels?.style,
+    },
+    monthLabels: {
+      enabled: styleOptions.monthLabels?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_MONTH_LABEL,
+      style: styleOptions.monthLabels?.style,
+    },
+    weekends: {
+      enabled: styleOptions.weekends?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.WEEKEND_ENABLED,
+      days: styleOptions.weekends?.days ?? [...CALENDAR_HEATMAP_DEFAULTS.WEEKEND_DAYS],
+      cellColor: styleOptions.weekends?.cellColor ?? CALENDAR_HEATMAP_DEFAULTS.WEEKEND_CELL_COLOR,
+      hideValues:
+        styleOptions.weekends?.hideValues ?? CALENDAR_HEATMAP_DEFAULTS.WEEKEND_HIDE_VALUES,
+    },
   };
 }
 

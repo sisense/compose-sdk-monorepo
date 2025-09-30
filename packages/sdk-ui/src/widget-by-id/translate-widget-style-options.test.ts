@@ -29,11 +29,11 @@ function generateWidgetAxisOptions(options = {}) {
     },
     labels: {
       enabled: true,
-      rotation: 0,
     },
+    isIntervalEnabled: true,
+    intervalJumps: 1,
+    logarithmic: false,
     gridLines: true,
-    min: null,
-    max: null,
   };
 
   return merge(cloneDeep(defaultOptions), options);
@@ -111,7 +111,7 @@ describe('translate widget style options', () => {
         title: widgetStyle.xAxis?.x2Title,
         x2Title: widgetStyle.xAxis?.title,
       });
-      expect(styleOptions.yAxis).toEqual({ ...widgetStyle.yAxis, min: null, max: null });
+      expect(styleOptions.yAxis).toEqual({ ...widgetStyle.yAxis, min: undefined, max: undefined });
       expect(styleOptions.y2Axis).toEqual(widgetStyle.y2Axis);
     });
 
@@ -288,10 +288,13 @@ describe('translate widget style options', () => {
       ) as BaseStyleOptions;
 
       expect(styleOptions).toEqual({
-        ...widgetStyle,
+        // Only extract supported properties, not all widget style properties
+        legend: widgetStyle.legend,
+        navigator: widgetStyle.navigator,
         funnelSize: widgetStyle.size,
         funnelType: widgetStyle.type,
         funnelDirection: widgetStyle.direction,
+        labels: widgetStyle.labels,
       });
     });
   });

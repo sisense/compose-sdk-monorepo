@@ -12,8 +12,6 @@ import {
 import { WidgetProps } from '@/props.js';
 import { JtdWidgetTransformConfig } from './jtd-types';
 import { PivotTableDataPoint } from '@/types';
-import { JtdNavigateType } from '@/widget-by-id/types';
-import { SizeMeasurement } from '@/types';
 
 // Mock dependencies
 vi.mock('@/widget-by-id/utils', async (importOriginal) => {
@@ -87,8 +85,8 @@ describe('jtd-widget-transforms', () => {
   const mockConfig: JtdWidgetTransformConfig = {
     jtdConfig: {
       enabled: true,
-      navigateType: JtdNavigateType.CLICK,
-      drillTargets: [
+      navigateType: 'click',
+      jumpTargets: [
         {
           id: 'target-dashboard-1',
           caption: 'Target Dashboard',
@@ -96,9 +94,11 @@ describe('jtd-widget-transforms', () => {
       ],
       modalWindowWidth: 800,
       modalWindowHeight: 600,
-      modalWindowMeasurement: SizeMeasurement.PIXEL,
-      displayToolbarRow: true,
-      displayFilterPane: true,
+      modalWindowMeasurement: 'px',
+      dashboardConfig: {
+        toolbar: { visible: true },
+        filtersPanel: { visible: true },
+      },
       includeDashFilterDims: ['Category'],
       includeWidgetFilterDims: ['Region'],
       mergeTargetDashboardFilters: false,
@@ -236,6 +236,23 @@ describe('jtd-widget-transforms', () => {
 
       expect((result as any).onDataPointClick).toBeDefined();
       expect((result as any).onDataPointClick).not.toBe(existingClickHandler);
+    });
+
+    it('should call both existing handler and JTD handler when data point is clicked', () => {
+      vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(true);
+      const existingClickHandler = vi.fn();
+      const chartWithClick = { ...mockChartWidgetProps, onDataPointClick: existingClickHandler };
+
+      const result = applyClickNavigationForChart(chartWithClick, mockConfig, mockActions);
+
+      // Simulate a data point click
+      const mockDataPoint = { categoryValue: 'test' } as any;
+      const mockNativeEvent = {} as any;
+      (result as any).onDataPointClick(mockDataPoint, mockNativeEvent);
+
+      // Both handlers should be called
+      expect(existingClickHandler).not.toHaveBeenCalled();
+      expect(jtdHandlers.handleDataPointClick).toHaveBeenCalled();
     });
   });
 
@@ -408,6 +425,7 @@ describe('jtd-widget-transforms', () => {
   describe('addJtdIconToHeader', () => {
     it('should add JTD icon to widget with title', () => {
       vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(true);
+      vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(false);
       const widgetWithTitle = { ...mockChartWidgetProps, title: 'My Chart' };
 
       const result = addJtdIconToHeader(widgetWithTitle);
@@ -417,8 +435,9 @@ describe('jtd-widget-transforms', () => {
       expect(typeof (result as any).styleOptions?.header?.renderTitle).toBe('function');
     });
 
-    it('should return unchanged props for non-chart widgets', () => {
+    it('should return unchanged props for non-supported widgets (text, custom)', () => {
       vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(false);
+      vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(false);
 
       const result = addJtdIconToHeader(mockChartWidgetProps);
 
@@ -427,6 +446,7 @@ describe('jtd-widget-transforms', () => {
 
     it('should add header renderTitle function for chart widgets', () => {
       vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(true);
+      vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(false);
       const widgetWithTitle = { ...mockChartWidgetProps, title: 'Original Title' };
 
       const result = addJtdIconToHeader(widgetWithTitle);
@@ -442,6 +462,47 @@ describe('jtd-widget-transforms', () => {
       const result = addJtdIconToHeader(widgetWithEmptyTitle);
 
       expect(result).toBe(widgetWithEmptyTitle);
+    });
+
+    it('should add JTD icon to pivot widgets', () => {
+      vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(false);
+      vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(true);
+
+      const mockPivotProps = {
+        ...mockPivotWidgetProps,
+        title: 'Pivot Table',
+      };
+
+      const result = addJtdIconToHeader(mockPivotProps);
+
+      expect(result).not.toBe(mockPivotProps);
+      expect((result as any).styleOptions?.header?.renderTitle).toBeDefined();
+      expect(typeof (result as any).styleOptions?.header?.renderTitle).toBe('function');
+    });
+
+    it('should preserve existing header properties for pivot widgets', () => {
+      vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(false);
+      vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(true);
+
+      const mockPivotProps = {
+        ...mockPivotWidgetProps,
+        id: 'pivot-widget-1',
+        widgetType: 'pivot' as const,
+        title: 'Pivot Table',
+        styleOptions: {
+          header: {
+            backgroundColor: 'red',
+            titleAlignment: 'center' as const,
+          },
+        },
+      } as any;
+
+      const result = addJtdIconToHeader(mockPivotProps);
+
+      expect(result).not.toBe(mockPivotProps);
+      expect((result as any).styleOptions?.header?.backgroundColor).toBe('red');
+      expect((result as any).styleOptions?.header?.titleAlignment).toBe('center');
+      expect((result as any).styleOptions?.header?.renderTitle).toBeDefined();
     });
   });
 });

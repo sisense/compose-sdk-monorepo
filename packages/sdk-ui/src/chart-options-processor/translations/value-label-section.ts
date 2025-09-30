@@ -5,20 +5,15 @@ import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-fo
 import { AxisOrientation } from './axis-section';
 import { HighchartsDataPointContext } from './tooltip-utils';
 import { PolarType } from './design-options';
-import { NumberFormatConfig } from '@/types';
-
-export type ValueLabelOptions = {
-  enabled?: boolean;
-  rotation?: number;
-  showValue?: boolean;
-  showPercentage?: boolean;
-};
+import { NumberFormatConfig, SeriesLabels } from '@/types';
+import { prepareDataLabelsOptions } from '../series-labels';
 
 export type RotationType = 'horizontal' | 'diagonal' | 'vertical';
 
-export type ValueLabelSettings = {
+export type DataLabelsSettings = {
   enabled?: boolean;
   align?: string;
+  inside?: boolean;
   crop?: boolean;
   rotation?: number;
   y?: number;
@@ -28,6 +23,14 @@ export type ValueLabelSettings = {
   allowOverlap?: boolean;
   verticalAlign?: 'bottom' | 'middle' | 'top';
   padding?: number;
+  color?: 'contrast' | string;
+  backgroundColor?: string;
+  borderColor?: string;
+  borderRadius?: number;
+  borderWidth?: number;
+  animation?: {
+    defer?: boolean | number;
+  };
   types?: {
     count: boolean;
     relative: boolean;
@@ -40,7 +43,7 @@ export type ValueLabelSettings = {
   ) => string;
 };
 
-const defaultValueLabelSettings: ValueLabelSettings = {
+const defaultDataLabelsSettings: DataLabelsSettings = {
   enabled: true,
   types: {
     count: false,
@@ -49,9 +52,9 @@ const defaultValueLabelSettings: ValueLabelSettings = {
   },
 };
 
-export const createValueLabelFormatter = (
+export const createDataLabelsFormatter = (
   numberFormatConfig?: NumberFormatConfig,
-  options?: ValueLabelOptions,
+  options?: SeriesLabels,
 ) => {
   return function (this: HighchartsDataPointContext) {
     const isDummyPointBetweenCategoriesGroups = this.y === 0 && this.x === ' ';
@@ -64,14 +67,14 @@ export const createValueLabelFormatter = (
     if (showValue) {
       labelText += applyFormatPlainText(getCompleteNumberFormatConfig(numberFormatConfig), this.y);
     }
-    if (showValue && options?.showPercentage) {
+    if (showValue && options?.showPercentage && this.percentage !== undefined) {
       labelText += ' / ';
     }
     if (options?.showPercentage && this.percentage !== undefined) {
       labelText += `${Math.round(this.percentage)}%`;
     }
 
-    return labelText;
+    return `${options?.prefix ?? ''}${labelText}${options?.suffix ?? ''}`;
   };
 };
 
@@ -91,20 +94,21 @@ export const getRotationType = (rotation: number): RotationType => {
 };
 
 /* eslint-disable-next-line max-params */
-export const getValueLabelSettings = (
+export const getDataLabelsSettings = (
   xAxisOrientation: AxisOrientation,
-  valueLabel: ValueLabelOptions,
+  seriesLabels?: SeriesLabels,
   inside?: boolean,
-): ValueLabelSettings => {
-  if (!valueLabel.enabled) {
+): DataLabelsSettings => {
+  if (!seriesLabels?.enabled) {
     return { enabled: false };
   }
 
-  const settings: ValueLabelSettings = {
-    ...defaultValueLabelSettings,
+  const settings: DataLabelsSettings = {
+    ...defaultDataLabelsSettings,
     align: 'center',
     verticalAlign: 'middle',
-    rotation: valueLabel.rotation ?? 0,
+    rotation: seriesLabels.rotation ?? 0,
+    ...prepareDataLabelsOptions(seriesLabels),
   };
 
   if (inside) {
@@ -119,6 +123,7 @@ export const getValueLabelSettings = (
     return {
       ...settings,
       align: rotationType === 'horizontal' ? 'left' : 'center',
+      ...prepareDataLabelsOptions(seriesLabels),
     };
   } else {
     switch (rotationType) {
@@ -127,6 +132,7 @@ export const getValueLabelSettings = (
           ...settings,
           verticalAlign: 'bottom',
           padding: 5,
+          ...prepareDataLabelsOptions(seriesLabels),
         };
       case 'diagonal':
         return {
@@ -134,32 +140,34 @@ export const getValueLabelSettings = (
           align: 'left',
           y: -10,
           x: -2,
+          ...prepareDataLabelsOptions(seriesLabels),
         };
       case 'vertical':
         return {
           ...settings,
           align: 'left',
           y: -10,
+          ...prepareDataLabelsOptions(seriesLabels),
         };
     }
   }
 };
 
-export const getPolarValueLabelSettings = (
-  valueLabel: ValueLabelOptions,
+export const getPolarDataLabelsSettings = (
+  seriesLabels: SeriesLabels | undefined,
   polarType: PolarType,
-): ValueLabelSettings => {
-  if (!valueLabel) {
+): DataLabelsSettings => {
+  if (!seriesLabels) {
     return { enabled: false };
   }
-  const rotation = valueLabel.rotation ?? 0;
-  const enabled = valueLabel.enabled ?? defaultValueLabelSettings.enabled;
+  const rotation = seriesLabels.rotation ?? 0;
+  const enabled = seriesLabels.enabled ?? defaultDataLabelsSettings.enabled;
   return {
-    ...defaultValueLabelSettings,
+    ...defaultDataLabelsSettings,
     verticalAlign: polarType === 'line' ? 'bottom' : 'middle',
     rotation: rotation,
-    enabled: enabled,
     align: getRotationType(rotation) === 'vertical' ? 'left' : 'center',
     padding: 5,
+    ...prepareDataLabelsOptions({ ...seriesLabels, enabled }),
   };
 };

@@ -2,6 +2,7 @@ import { isMeasureColumn, translateColumnToAttribute } from '@/chart-data-option
 import {
   isAreamap,
   isBoxplot,
+  isCalendarHeatmap,
   isCartesian,
   isCategorical,
   isRange,
@@ -28,6 +29,8 @@ import {
   ScattermapDataPoint,
   StyledColumn,
   MenuItemSection,
+  CalendarHeatmapChartDataOptions,
+  CalendarHeatmapDataPoint,
 } from '../index.js';
 import { createCommonFilter, getFilterByAttribute, isEqualMembersFilters } from './utils.js';
 import { WidgetTypeInternal } from '@/models/widget/types.js';
@@ -123,6 +126,10 @@ function getAreamapChartSelections(points: AreamapDataPoint[]): DataSelection[] 
   return getSelectionsFromPoints(points, ['geo']);
 }
 
+function getCalendarHeatmapChartSelections(points: CalendarHeatmapDataPoint[]): DataSelection[] {
+  return getSelectionsFromPoints(points, ['date']);
+}
+
 export function getWidgetSelections(
   widgetType: WidgetTypeInternal,
   dataOptions: ChartDataOptions | PivotTableDataOptions,
@@ -152,6 +159,8 @@ export function getWidgetSelections(
     return getScattermapChartSelections(points as ScattermapDataPoint[]);
   } else if (isAreamap(widgetType)) {
     return getAreamapChartSelections(points as AreamapDataPoint[]);
+  } else if (isCalendarHeatmap(widgetType)) {
+    return getCalendarHeatmapChartSelections(points as CalendarHeatmapDataPoint[]);
   }
 
   return [];
@@ -188,6 +197,8 @@ export function getSelectableWidgetAttributes(
     ].filter((a): a is Column | StyledColumn => !!(a && !isMeasureColumn(a)));
   } else if (isScattermap(widgetType) || isAreamap(widgetType)) {
     targetDataOptions = [...(dataOptions as ScattermapChartDataOptions).geo];
+  } else if (isCalendarHeatmap(widgetType)) {
+    targetDataOptions = [(dataOptions as CalendarHeatmapChartDataOptions).date];
   }
 
   return targetDataOptions.map(translateColumnToAttribute);

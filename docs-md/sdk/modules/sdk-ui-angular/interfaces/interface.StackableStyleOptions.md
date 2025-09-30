@@ -52,6 +52,64 @@ Configuration for navigator - zoom/pan tool for large datasets in a chart
 
 ***
 
+### series
+
+> **series**?: `object`
+
+Configuration for series styling
+
+#### Type declaration
+
+> ##### `series.borderRadius`
+>
+> **borderRadius**?: `number` \| `string`
+>
+> The corner radius of the border surrounding each column or bar.
+> A number signifies pixels.
+> A percentage string, like for example 50%, signifies a relative size.
+>
+> ###### Default
+>
+> ```ts
+> 0
+> ```
+>
+> ##### `series.groupPadding`
+>
+> **groupPadding**?: `number`
+>
+> Padding between each value groups, in x axis units.
+>
+> ###### Default
+>
+> ```ts
+> 0.1
+> ```
+>
+> ##### `series.padding`
+>
+> **padding**?: `number`
+>
+> Padding between each column or bar, in x axis units.
+>
+> ###### Default
+>
+> ```ts
+> 0.01
+> ```
+>
+>
+
+***
+
+### seriesLabels
+
+> **seriesLabels**?: [`SeriesLabels`](../type-aliases/type-alias.SeriesLabels.md)
+
+Configuration for series labels - titles/names identifying data series in a chart
+
+***
+
 ### subtype
 
 > **subtype**?: [`StackableSubtype`](../type-aliases/type-alias.StackableSubtype.md)

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/default-param-last */
 import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
-import { ValueLabelSettings } from './value-label-section';
+import { DataLabelsSettings } from './value-label-section';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import {
   ChartDataOptionsInternal,
@@ -33,7 +33,7 @@ export type PieType = (typeof pieTypes)[number];
 export type PieOptions = {
   allowPointSelect: boolean;
   cursor?: string;
-  dataLabels: ValueLabelSettings & {
+  dataLabels: DataLabelsSettings & {
     showPercentLabels: boolean;
     showDecimals: boolean;
     pieMinimumFontSizeToTextLabel: number;

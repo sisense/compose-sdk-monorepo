@@ -53,6 +53,7 @@ const fusionWidgetTypeToChartType: Partial<Record<FusionWidgetType, ChartType>> 
   'map/area': 'areamap',
   tablewidget: 'table',
   tablewidgetagg: 'table',
+  heatmap: 'calendar-heatmap',
 };
 
 const chartTypeToFusionWidgetType: Record<ChartType, FusionWidgetType> = Object.entries(
@@ -169,6 +170,7 @@ export function isSupportedWidgetType(
     'map/scatter',
     'map/area',
     'richtexteditor',
+    'heatmap',
   ];
   return supportedWidgetTypes.includes(fusionWidgetType);
 }

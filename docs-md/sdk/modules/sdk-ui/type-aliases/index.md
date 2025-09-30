@@ -24,10 +24,12 @@ TypeScript type aliases for components and hooks listed above
 - [BoxplotDataPointEventHandler](type-alias.BoxplotDataPointEventHandler.md)
 - [BoxplotSubtype](type-alias.BoxplotSubtype.md)
 - [BoxWhiskerType](type-alias.BoxWhiskerType.md)
-- [CalendarHeatmapChartType](type-alias.CalendarHeatmapChartType.md) <Badge type="alpha" text="Alpha" />
-- [CalendarHeatmapDataPoint](type-alias.CalendarHeatmapDataPoint.md) <Badge type="alpha" text="Alpha" />
-- [CalendarHeatmapDataPointEventHandler](type-alias.CalendarHeatmapDataPointEventHandler.md) <Badge type="alpha" text="Alpha" />
-- [CalendarHeatmapDataPointsEventHandler](type-alias.CalendarHeatmapDataPointsEventHandler.md) <Badge type="alpha" text="Alpha" />
+- [CalendarDayOfWeek](type-alias.CalendarDayOfWeek.md)
+- [CalendarHeatmapCellLabels](type-alias.CalendarHeatmapCellLabels.md)
+- [CalendarHeatmapChartType](type-alias.CalendarHeatmapChartType.md)
+- [CalendarHeatmapDataPoint](type-alias.CalendarHeatmapDataPoint.md)
+- [CalendarHeatmapDataPointEventHandler](type-alias.CalendarHeatmapDataPointEventHandler.md)
+- [CalendarHeatmapDataPointsEventHandler](type-alias.CalendarHeatmapDataPointsEventHandler.md)
 - [CalendarHeatmapViewType](type-alias.CalendarHeatmapViewType.md)
 - [CartesianChartType](type-alias.CartesianChartType.md)
 - [CartesianWidgetType](type-alias.CartesianWidgetType.md)
@@ -101,6 +103,7 @@ TypeScript type aliases for components and hooks listed above
 - [IndicatorDataPointEventHandler](type-alias.IndicatorDataPointEventHandler.md)
 - [IndicatorRenderOptions](type-alias.IndicatorRenderOptions.md)
 - [IndicatorStyleOptions](type-alias.IndicatorStyleOptions.md)
+- [JtdTarget](type-alias.JtdTarget.md)
 - [Labels](type-alias.Labels.md)
 - [Legend](type-alias.Legend.md)
 - [LegendOptions](type-alias.LegendOptions.md)
@@ -156,6 +159,7 @@ TypeScript type aliases for components and hooks listed above
 - [ScatterMarkerSize](type-alias.ScatterMarkerSize.md)
 - [SeriesChartType](type-alias.SeriesChartType.md)
 - [SeriesLabels](type-alias.SeriesLabels.md)
+- [SeriesLabelsTextStyle](type-alias.SeriesLabelsTextStyle.md)
 - [SeriesStyleOptions](type-alias.SeriesStyleOptions.md)
 - [ShadowsTypes](type-alias.ShadowsTypes.md)
 - [SharedFormulaErrorState](type-alias.SharedFormulaErrorState.md)
@@ -178,6 +182,7 @@ TypeScript type aliases for components and hooks listed above
 - [ThemeProviderProps](type-alias.ThemeProviderProps.md)
 - [ThemeSettingsFontSource](type-alias.ThemeSettingsFontSource.md)
 - [TranslationConfig](type-alias.TranslationConfig.md)
+- [TriggerMethod](type-alias.TriggerMethod.md)
 - [UniformDataColorOptions](type-alias.UniformDataColorOptions.md)
 - [UseComposedDashboardOptions](type-alias.UseComposedDashboardOptions.md)
 - [UseQueryResult](type-alias.UseQueryResult.md)

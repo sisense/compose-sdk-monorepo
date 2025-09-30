@@ -15,10 +15,11 @@ import {
   getColorSetting,
   indexMapWhenOnlyY,
 } from '../../translations/translations-to-highcharts';
-import { createValueLabelFormatter } from '../../translations/value-label-section';
+import { createDataLabelsFormatter } from '../../translations/value-label-section';
 import { getMarkerSettings } from '../../translations/marker-section';
 import { onlyY } from '../../../chart-data/utils';
 import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
+import { prepareDataLabelsOptions } from '@/chart-options-processor/series-labels';
 
 /**
  * Configuration for series processing
@@ -106,9 +107,10 @@ export function processSeries(config: SeriesProcessingConfig) {
         yAxis: yAxisSide[index],
         ...(yAxisChartType[index] && { type: yAxisChartType[index] }),
         dataLabels: {
-          formatter: createValueLabelFormatter(
+          ...prepareDataLabelsOptions(chartDesignOptions.seriesLabels),
+          formatter: createDataLabelsFormatter(
             dataOption?.numberFormatConfig,
-            chartDesignOptions.valueLabel,
+            chartDesignOptions.seriesLabels,
           ),
         },
         connectNulls: yConnectNulls[index],
@@ -125,6 +127,18 @@ export function processSeries(config: SeriesProcessingConfig) {
         ...(seriesDesignOptions.line?.shadow !== undefined && {
           shadow: seriesDesignOptions.line?.shadow,
         }),
+        ...('itemPadding' in chartDesignOptions &&
+          chartDesignOptions.itemPadding !== undefined && {
+            pointPadding: chartDesignOptions.itemPadding,
+          }),
+        ...('groupPadding' in chartDesignOptions &&
+          chartDesignOptions.groupPadding !== undefined && {
+            groupPadding: chartDesignOptions.groupPadding,
+          }),
+        ...('borderRadius' in chartDesignOptions &&
+          chartDesignOptions.borderRadius !== undefined && {
+            borderRadius: chartDesignOptions.borderRadius,
+          }),
       };
     });
 }

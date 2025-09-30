@@ -105,6 +105,7 @@ export {
   type WidgetsPanelRow,
   type WidgetsPanelCell,
   type WidgetId,
+  type DashboardId,
   type WidgetsOptions,
   type CommonFiltersOptions,
   type CommonFiltersApplyMode,
@@ -145,6 +146,14 @@ export * as dashboardModelTranslator from './models/dashboard/dashboard-model-tr
  */
 export * as dashboardHelpers from './dashboard/dashboard-helpers';
 
+/**
+ * Jump To Dashboard (JTD) configuration types
+ *
+ * @group Dashboards
+ * @shortDescription Configuration types for Jump To Dashboard functionality
+ */
+export type { JumpToDashboardConfig } from './dashboard/hooks/jtd';
+
 export type { AutoZoomNavigatorScrollerLocation } from './widget-by-id/types';
 export { boxWhiskerProcessResult } from './boxplot-utils';
 export { queryStateReducer } from './query-execution/query-state-reducer';
@@ -167,6 +176,7 @@ export { LoadingIndicator } from './common/components/loading-indicator';
 export { LoadingOverlay } from './common/components/loading-overlay';
 export { useFetch, type RequestConfig, type UseQueryResult } from './common/hooks/use-fetch';
 export { useGetDataSourceFields } from './common/hooks/fusion-endpoints/use-get-data-source-fields';
+export { useJtdWidget } from './dashboard/hooks/use-jtd-widget';
 export type { EmptyObject } from './utils/utility-types';
 export { translateColumnToAttribute } from './chart-data-options/utils';
 export { isSameAttribute } from './utils/filters';

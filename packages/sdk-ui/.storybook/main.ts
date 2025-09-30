@@ -4,12 +4,9 @@ import { withoutVitePlugins } from '@storybook/builder-vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: [
-    getAbsolutePath('@storybook/addon-links'),
-    getAbsolutePath('@storybook/addon-essentials'),
-    getAbsolutePath('@storybook/addon-interactions'),
-    getAbsolutePath('@storybook/addon-storysource'),
-  ],
+
+  addons: [getAbsolutePath('@storybook/addon-links'), getAbsolutePath('@storybook/addon-docs')],
+
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {},
@@ -34,9 +31,7 @@ const config: StorybookConfig = {
 
     return config;
   },
-  docs: {
-    autodocs: true,
-  },
+
   typescript: {
     reactDocgen: false,
   },

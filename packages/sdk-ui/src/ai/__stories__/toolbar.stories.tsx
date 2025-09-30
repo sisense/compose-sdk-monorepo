@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-vite';
 import { templateForComponent } from '../../__stories__/template';
 import ToolbarComponent from '../common/toolbar';
 

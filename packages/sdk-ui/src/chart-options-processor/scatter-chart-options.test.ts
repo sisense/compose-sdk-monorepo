@@ -29,7 +29,6 @@ describe('getScatterChartOptions', () => {
       position: 'bottom',
       enabled: true,
     },
-    valueLabel: {},
     lineType: 'straight',
     lineWidth: 0,
     marker: {

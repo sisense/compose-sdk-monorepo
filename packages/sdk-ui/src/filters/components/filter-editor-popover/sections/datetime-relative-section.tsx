@@ -10,13 +10,14 @@ import {
   filterFactory,
 } from '@sisense/sdk-data';
 import { SelectableSection } from '../common/selectable-section';
-import { createLevelAttribute, isRelativeDateFilterWithoutAnchor } from '../utils';
+import { isRelativeDateFilterWithoutAnchor } from '../utils';
 import { useThemeContext } from '@/theme-provider';
 import { Input, SingleSelect } from '../common';
 import { Checkbox } from '../../common';
 import styled from '@emotion/styled';
 import { Themable } from '@/theme-provider/types';
 import { dateLevelGranularities as granularities } from './common/granularities';
+import { createLevelAttribute } from '@/utils/create-level-attribute';
 
 const IncludeCurrentCheckbox = styled(Checkbox)`
   margin-top: 0;

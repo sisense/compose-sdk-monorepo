@@ -1,6 +1,8 @@
 import { getJtdClickHandler, getJtdClickHandlerForMultiplePoints } from './jtd-handlers';
 import { JtdCoreData, JtdContext, JtdActions } from './jtd-types';
 
+export const jumpToDashboardMenuId = 'jump-to-dashboard-menu';
+
 /**
  * Get the JTD menu item for a specific data point of the specific widget
  *
@@ -18,24 +20,24 @@ export const getJumpToDashboardMenuItem = (
   if (!coreData.jtdConfig) {
     return null;
   }
-  const multipleDrillTargets = coreData.jtdConfig.drillTargets.length > 1;
+  const multipleJumpTargets = coreData.jtdConfig.jumpTargets.length > 1;
 
-  // Use drillToDashboardRightMenuCaption if provided, otherwise use translated default
+  // Use jumpToDashboardRightMenuCaption if provided, otherwise use translated default
   const menuCaption =
-    coreData.jtdConfig.drillToDashboardRightMenuCaption ||
+    coreData.jtdConfig.jumpToDashboardRightMenuCaption ||
     actions.translate!('jumpToDashboard.defaultCaption');
 
-  if (multipleDrillTargets) {
+  if (multipleJumpTargets) {
     return {
       caption: menuCaption,
       subItems: [
         {
-          items: coreData.jtdConfig.drillTargets.map((drillTarget) => ({
-            caption: drillTarget.caption,
+          items: coreData.jtdConfig.jumpTargets.map((jumpTarget) => ({
+            caption: jumpTarget.caption,
             onClick: getJtdClickHandler(
               {
                 ...coreData,
-                drillTarget,
+                jumpTarget,
               },
               context,
               {
@@ -48,13 +50,13 @@ export const getJumpToDashboardMenuItem = (
     };
   }
 
-  const drillTarget = coreData.jtdConfig.drillTargets[0];
+  const jumpTarget = coreData.jtdConfig.jumpTargets[0];
   return {
-    caption: `${menuCaption} ${drillTarget.caption}`,
+    caption: `${menuCaption} ${jumpTarget.caption}`,
     onClick: getJtdClickHandler(
       {
         ...coreData,
-        drillTarget,
+        jumpTarget,
       },
       context,
       {
@@ -78,27 +80,27 @@ export const getJumpToDashboardMenuItemForMultiplePoints = (
   context: JtdContext,
   actions: Pick<JtdActions, 'openModal' | 'translate'>,
 ) => {
-  if (!coreData.jtdConfig || coreData.jtdConfig.drillTargets.length === 0) {
+  if (!coreData.jtdConfig || coreData.jtdConfig.jumpTargets.length === 0) {
     return null;
   }
-  const multipleDrillTargets = coreData.jtdConfig.drillTargets.length > 1;
+  const multipleJumpTargets = coreData.jtdConfig.jumpTargets.length > 1;
 
-  // Use drillToDashboardRightMenuCaption if provided, otherwise use translated default
+  // Use jumpToDashboardRightMenuCaption if provided, otherwise use translated default
   const menuCaption =
-    coreData.jtdConfig.drillToDashboardRightMenuCaption ||
+    coreData.jtdConfig.jumpToDashboardRightMenuCaption ||
     actions.translate!('jumpToDashboard.defaultCaption');
 
-  if (multipleDrillTargets) {
+  if (multipleJumpTargets) {
     return {
       caption: menuCaption,
       subItems: [
         {
-          items: coreData.jtdConfig.drillTargets.map((drillTarget) => ({
-            caption: drillTarget.caption,
+          items: coreData.jtdConfig.jumpTargets.map((jumpTarget) => ({
+            caption: jumpTarget.caption,
             onClick: getJtdClickHandlerForMultiplePoints(
               {
                 ...coreData,
-                drillTarget,
+                jumpTarget,
               },
               context,
               {
@@ -111,13 +113,13 @@ export const getJumpToDashboardMenuItemForMultiplePoints = (
     };
   }
 
-  const drillTarget = coreData.jtdConfig.drillTargets[0];
+  const jumpTarget = coreData.jtdConfig.jumpTargets[0];
   return {
-    caption: `${menuCaption} ${drillTarget.caption}`,
+    caption: `${menuCaption} ${jumpTarget.caption}`,
     onClick: getJtdClickHandlerForMultiplePoints(
       {
         ...coreData,
-        drillTarget,
+        jumpTarget,
       },
       context,
       {

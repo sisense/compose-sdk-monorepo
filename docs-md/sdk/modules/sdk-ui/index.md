@@ -14,6 +14,7 @@ React components and utilities for working with charts
 - [BarChart](charts/function.BarChart.md)
 - [BoxplotChart](charts/function.BoxplotChart.md)
 - [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [CalendarHeatmapChart](charts/function.CalendarHeatmapChart.md)
 - [Chart](charts/function.Chart.md) - Common component for rendering charts of different types including table
 - [ColumnChart](charts/function.ColumnChart.md)
 - [FunnelChart](charts/function.FunnelChart.md)
@@ -82,6 +83,7 @@ React components and utilities for working with dashboards
 - [PivotTableWidget](dashboards/function.PivotTableWidget.md) <Badge type="beta" text="Beta" />
 - [useComposedDashboard](dashboards/function.useComposedDashboard.md)
 - [useCustomWidgets](dashboards/function.useCustomWidgets.md)
+- [useJtdWidget](dashboards/function.useJtdWidget.md)
 - [Widget](dashboards/function.Widget.md)
 
 ## Fusion Assets

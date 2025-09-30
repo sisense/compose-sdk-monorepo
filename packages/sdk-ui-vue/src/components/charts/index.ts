@@ -1,5 +1,6 @@
 export { AreaChart, type AreaChartProps } from './area-chart';
 export { BarChart, type BarChartProps } from './bar-chart';
+export { CalendarHeatmapChart, type CalendarHeatmapChartProps } from './calendar-heatmap-chart';
 export { ColumnChart, type ColumnChartProps } from './column-chart';
 export { FunnelChart, type FunnelChartProps } from './funnel-chart';
 export { LineChart, type LineChartProps } from './line-chart';

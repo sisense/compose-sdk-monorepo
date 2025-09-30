@@ -241,11 +241,12 @@ export async function executeQueryByWidgetId({
         grandTotals,
       };
     } else {
-      const { dimensions, measures } = query as ExecuteQueryParams;
+      const { dimensions, measures, ungroup } = query as ExecuteQueryParams;
       return {
         ...baseParams,
         dimensions,
         measures,
+        ungroup,
       };
     }
   };

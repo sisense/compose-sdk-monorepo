@@ -59,12 +59,58 @@ export default function CodeExample() {
       } }
       filters={ [] }
       styleOptions={ {
-        lineWidth: {
-          width: 'bold',
-        },
+        subtype: 'line/spline',
         legend: {
           enabled: true,
           position: 'bottom',
+        },
+        xAxis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: undefined,
+          title: {
+            enabled: false,
+            text: 'MONTH',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        yAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: true,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        y2Axis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          title: {
+            enabled: true,
+            text: 'QUANTITY',
+          },
+          labels: {
+            enabled: true,
+          },
         },
         seriesLabels: {
           enabled: false,
@@ -72,76 +118,21 @@ export default function CodeExample() {
           showValue: false,
           showPercentage: false,
         },
-        markers: {
-          enabled: true,
-          fill: 'hollow',
-          size: 'small',
-        },
-        xAxis: {
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: false,
-          title: {
-            enabled: false,
-            text: 'MONTH',
-          },
-          x2Title: {
-            enabled: false,
-          },
-          intervalEnabled: false,
-          min: null,
-          max: null,
-        },
-        yAxis: {
-          inactive: false,
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: true,
-          logarithmic: true,
-          title: {
-            enabled: true,
-            text: 'SALES',
-          },
-          min: null,
-          intervalEnabled: false,
-          max: null,
-        },
-        y2Axis: {
-          inactive: false,
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: false,
-          logarithmic: false,
-          title: {
-            enabled: true,
-            text: 'QUANTITY',
-          },
-          templateMainYHasGridLines: true,
-          intervalEnabled: true,
-          min: null,
-          max: null,
-        },
-        navigator: {
-          enabled: true,
-          scrollerLocation: undefined,
-        },
         dataLimits: {
           seriesCapacity: 50,
           categoriesCapacity: 100000,
         },
-        subtype: 'line/spline',
+        navigator: {
+          enabled: true,
+        },
+        lineWidth: {
+          width: 'bold',
+        },
+        markers: {
+          enabled: true,
+          size: 'small',
+          fill: 'hollow',
+        },
       } }
       drilldownOptions={ {
         drilldownPaths: [],
@@ -223,12 +214,58 @@ export class CodeExample {
       };
     filters = [];
     styleOptions: ChartStyleOptions = {
-        lineWidth: {
-          width: 'bold',
-        },
+        subtype: 'line/spline',
         legend: {
           enabled: true,
           position: 'bottom',
+        },
+        xAxis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: undefined,
+          title: {
+            enabled: false,
+            text: 'MONTH',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        yAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: true,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        y2Axis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          title: {
+            enabled: true,
+            text: 'QUANTITY',
+          },
+          labels: {
+            enabled: true,
+          },
         },
         seriesLabels: {
           enabled: false,
@@ -236,76 +273,21 @@ export class CodeExample {
           showValue: false,
           showPercentage: false,
         },
-        markers: {
-          enabled: true,
-          fill: 'hollow',
-          size: 'small',
-        },
-        xAxis: {
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: false,
-          title: {
-            enabled: false,
-            text: 'MONTH',
-          },
-          x2Title: {
-            enabled: false,
-          },
-          intervalEnabled: false,
-          min: null,
-          max: null,
-        },
-        yAxis: {
-          inactive: false,
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: true,
-          logarithmic: true,
-          title: {
-            enabled: true,
-            text: 'SALES',
-          },
-          min: null,
-          intervalEnabled: false,
-          max: null,
-        },
-        y2Axis: {
-          inactive: false,
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: false,
-          logarithmic: false,
-          title: {
-            enabled: true,
-            text: 'QUANTITY',
-          },
-          templateMainYHasGridLines: true,
-          intervalEnabled: true,
-          min: null,
-          max: null,
-        },
-        navigator: {
-          enabled: true,
-          scrollerLocation: undefined,
-        },
         dataLimits: {
           seriesCapacity: 50,
           categoriesCapacity: 100000,
         },
-        subtype: 'line/spline',
+        navigator: {
+          enabled: true,
+        },
+        lineWidth: {
+          width: 'bold',
+        },
+        markers: {
+          enabled: true,
+          size: 'small',
+          fill: 'hollow',
+        },
       };
     drilldownOptions = {
         drilldownPaths: [],
@@ -370,12 +352,58 @@ export const MOCK_CODE_VUE_1 = `<script setup lang="ts">
       });
   const filters = ref([]);
   const styleOptions = ref<ChartStyleOptions>({
-        lineWidth: {
-          width: 'bold',
-        },
+        subtype: 'line/spline',
         legend: {
           enabled: true,
           position: 'bottom',
+        },
+        xAxis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: undefined,
+          title: {
+            enabled: false,
+            text: 'MONTH',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        yAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: true,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        y2Axis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          title: {
+            enabled: true,
+            text: 'QUANTITY',
+          },
+          labels: {
+            enabled: true,
+          },
         },
         seriesLabels: {
           enabled: false,
@@ -383,76 +411,21 @@ export const MOCK_CODE_VUE_1 = `<script setup lang="ts">
           showValue: false,
           showPercentage: false,
         },
-        markers: {
-          enabled: true,
-          fill: 'hollow',
-          size: 'small',
-        },
-        xAxis: {
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: false,
-          title: {
-            enabled: false,
-            text: 'MONTH',
-          },
-          x2Title: {
-            enabled: false,
-          },
-          intervalEnabled: false,
-          min: null,
-          max: null,
-        },
-        yAxis: {
-          inactive: false,
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: true,
-          logarithmic: true,
-          title: {
-            enabled: true,
-            text: 'SALES',
-          },
-          min: null,
-          intervalEnabled: false,
-          max: null,
-        },
-        y2Axis: {
-          inactive: false,
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: false,
-          logarithmic: false,
-          title: {
-            enabled: true,
-            text: 'QUANTITY',
-          },
-          templateMainYHasGridLines: true,
-          intervalEnabled: true,
-          min: null,
-          max: null,
-        },
-        navigator: {
-          enabled: true,
-          scrollerLocation: undefined,
-        },
         dataLimits: {
           seriesCapacity: 50,
           categoriesCapacity: 100000,
         },
-        subtype: 'line/spline',
+        navigator: {
+          enabled: true,
+        },
+        lineWidth: {
+          width: 'bold',
+        },
+        markers: {
+          enabled: true,
+          size: 'small',
+          fill: 'hollow',
+        },
       });
   const drilldownOptions = ref({
         drilldownPaths: [],

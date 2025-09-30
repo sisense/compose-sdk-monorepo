@@ -10,7 +10,7 @@ import {
   handleTextWidgetClick,
 } from './jtd-handlers';
 import { PivotTableDataPoint, DataPoint } from '@/types';
-import { JtdConfig, JtdDrillTarget, JtdNavigateType } from '@/widget-by-id/types';
+import { JtdConfig, JtdTarget } from './jtd-types';
 import { WidgetProps } from '@/props.js';
 import {
   JtdCoreData,
@@ -19,7 +19,6 @@ import {
   JtdClickHandlerData,
   JtdDataPointClickEvent,
 } from './jtd-types';
-import { SizeMeasurement } from '@/types';
 
 // Mock dependencies
 vi.mock('./jtd-filters', () => ({
@@ -81,8 +80,8 @@ describe('jtd-handlers', () => {
 
   const mockJtdConfig: JtdConfig = {
     enabled: true,
-    navigateType: JtdNavigateType.CLICK,
-    drillTargets: [
+    navigateType: 'click',
+    jumpTargets: [
       {
         id: 'target-dashboard-1',
         caption: 'Target Dashboard',
@@ -90,9 +89,11 @@ describe('jtd-handlers', () => {
     ],
     modalWindowWidth: 800,
     modalWindowHeight: 600,
-    modalWindowMeasurement: SizeMeasurement.PIXEL,
-    displayToolbarRow: true,
-    displayFilterPane: true,
+    modalWindowMeasurement: 'px',
+    dashboardConfig: {
+      toolbar: { visible: true },
+      filtersPanel: { visible: true },
+    },
     includeDashFilterDims: ['Category'],
     includeWidgetFilterDims: ['Region'],
     mergeTargetDashboardFilters: false,
@@ -115,7 +116,7 @@ describe('jtd-handlers', () => {
     categoryDisplayValue: 'Electronics',
   };
 
-  const mockDrillTarget: JtdDrillTarget = {
+  const mockJumpTarget: JtdTarget = {
     id: 'target-dashboard-1',
     caption: 'Target Dashboard',
   };
@@ -144,7 +145,7 @@ describe('jtd-handlers', () => {
       const data: JtdClickHandlerData = {
         jtdConfig: mockJtdConfig,
         widgetProps: mockWidgetProps,
-        drillTarget: mockDrillTarget,
+        jumpTarget: mockJumpTarget,
         point: mockDataPoint,
       };
 
@@ -158,7 +159,7 @@ describe('jtd-handlers', () => {
       const data: JtdClickHandlerData = {
         jtdConfig: mockJtdConfig,
         widgetProps: mockWidgetProps,
-        drillTarget: mockDrillTarget,
+        jumpTarget: mockJumpTarget,
       };
 
       const handler = getJtdClickHandler(data, mockContext, mockActions);
@@ -171,7 +172,7 @@ describe('jtd-handlers', () => {
       const data: JtdClickHandlerData = {
         jtdConfig: mockJtdConfig,
         widgetProps: mockWidgetProps,
-        drillTarget: mockDrillTarget,
+        jumpTarget: mockJumpTarget,
         point: mockDataPoint,
       };
 
@@ -191,7 +192,7 @@ describe('jtd-handlers', () => {
       const data: JtdClickHandlerData = {
         jtdConfig: mockJtdConfig,
         widgetProps: mockWidgetProps,
-        drillTarget: mockDrillTarget,
+        jumpTarget: mockJumpTarget,
         point: mockDataPoint,
       };
 
@@ -214,7 +215,7 @@ describe('jtd-handlers', () => {
         jtdConfig: mockJtdConfig,
         widgetProps: mockWidgetProps,
         points: [mockDataPoint, mockDataPoint],
-        drillTarget: mockDrillTarget,
+        jumpTarget: mockJumpTarget,
       };
 
       const handler = getJtdClickHandlerForMultiplePoints(data, mockContext, mockActions);
@@ -228,7 +229,7 @@ describe('jtd-handlers', () => {
         jtdConfig: mockJtdConfig,
         widgetProps: mockWidgetProps,
         points,
-        drillTarget: mockDrillTarget,
+        jumpTarget: mockJumpTarget,
       };
 
       const handler = getJtdClickHandlerForMultiplePoints(data, mockContext, mockActions);
@@ -239,7 +240,7 @@ describe('jtd-handlers', () => {
         title: 'Target Dashboard',
         width: 800,
         height: 600,
-        measurement: SizeMeasurement.PIXEL,
+        measurement: 'px',
         content: expect.any(Object),
       });
     });
@@ -277,14 +278,14 @@ describe('jtd-handlers', () => {
 
     it('should throw error when no drill targets are available', () => {
       const data: JtdCoreData = {
-        jtdConfig: { ...mockJtdConfig, drillTargets: [] },
+        jtdConfig: { ...mockJtdConfig, jumpTargets: [] },
         widgetProps: mockWidgetProps,
         point: mockDataPoint,
       };
 
       expect(() => {
         handleDataPointClick(data, mockContext, mockActions, mockEvent);
-      }).toThrow('No drill targets available');
+      }).toThrow('jumpToDashboard.noJumpTargets');
     });
   });
 
@@ -350,7 +351,7 @@ describe('jtd-handlers', () => {
   });
 
   describe('handlePivotDataPointClick', () => {
-    it('should convert pivot point and handle click', () => {
+    it('should not handle click when no dimension-specific targets match', () => {
       const pivotPoint: PivotTableDataPoint = {
         isDataCell: true,
         isCaptionCell: false,
@@ -377,7 +378,373 @@ describe('jtd-handlers', () => {
       };
 
       const data = {
-        jtdConfig: mockJtdConfig,
+        jtdConfig: mockJtdConfig, // Has targets without pivotDimensions (no longer treated as fallback)
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // After removing fallback logic, should return undefined when no targets with pivotDimensions match
+      expect(result).toBeUndefined();
+      expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
+    });
+
+    it('should not drill when dimension is unsupported by pivot targets', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: false,
+        isCaptionCell: true,
+        isTotalCell: false,
+        entries: {
+          rows: [
+            {
+              id: 'unsupported-dimension-id',
+              dataOption: { name: 'Unsupported' } as any,
+              attribute: mockAttribute1,
+              value: 'Some Value',
+            },
+          ],
+          columns: [],
+          values: [],
+        },
+      };
+
+      // Create a JTD config with dimension-specific pivot targets
+      const jtdConfigWithPivotTargets: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'target1',
+            caption: 'Target 1',
+            pivotDimensions: ['rows.0', 'columns.0'],
+          },
+          {
+            id: 'target2',
+            caption: 'Target 2',
+            pivotDimensions: ['rows.0', 'columns.0'],
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithPivotTargets,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should return undefined (no action) when dimension is not supported
+      expect(result).toBeUndefined();
+      expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
+    });
+
+    it('should not handle click when no dimension-specific targets are configured', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: true,
+        isCaptionCell: false,
+        isTotalCell: false,
+        entries: {
+          rows: [
+            {
+              id: 'any-dimension-id',
+              dataOption: { name: 'Any Dimension' } as any,
+              attribute: mockAttribute1,
+              value: 'Some Value',
+            },
+          ],
+          columns: [],
+          values: [],
+        },
+      };
+
+      // Create a JTD config with non-pivot targets (no pivotDimensions)
+      const jtdConfigWithoutPivotTargets: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'target1',
+            caption: 'Target 1',
+            // No pivotDimensions property = no longer treated as actionable
+          },
+          {
+            id: 'target2',
+            caption: 'Target 2',
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithoutPivotTargets,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // After removing fallback logic, should return undefined when no targets with pivotDimensions exist
+      expect(result).toBeUndefined();
+      expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
+    });
+
+    it('should handle values cells with rows only (no columns)', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: true,
+        isCaptionCell: false,
+        isTotalCell: false,
+        entries: {
+          rows: [
+            {
+              id: 'rows.0',
+              dataOption: { name: 'Category' } as any,
+              attribute: mockAttribute1,
+              value: 'Electronics',
+            },
+          ],
+          columns: [], // No columns
+          values: [
+            {
+              id: 'values.0',
+              dataOption: { name: 'Revenue' } as any,
+              value: 1500,
+            },
+            {
+              id: 'values.0',
+              dataOption: { name: 'Profit' } as any,
+              value: 300,
+            },
+          ],
+        },
+      };
+
+      // Create a JTD config with value-specific targets
+      const jtdConfigWithValueTargets: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'value-target-1',
+            caption: 'Revenue Target',
+            pivotDimensions: ['values.0'],
+          },
+          {
+            id: 'value-target-2',
+            caption: 'Profit Target',
+            pivotDimensions: ['values.0'], // This should match the deepest value
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithValueTargets,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should return a function and select the target matching the deepest value dimension
+      expect(typeof result).toBe('function');
+      expect(jtdFilters.getFiltersFromDataPoint).toHaveBeenCalled();
+    });
+
+    it('should not allow clicks on column headers', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: false,
+        isCaptionCell: true, // This is a header cell
+        isTotalCell: false,
+        entries: {
+          rows: [],
+          columns: [
+            {
+              id: 'columns.0',
+              dataOption: { name: 'Year' } as any,
+              attribute: mockAttribute1,
+              value: '2023',
+            },
+            {
+              id: 'columns.1',
+              dataOption: { name: 'Quarter' } as any,
+              attribute: mockAttribute2,
+              value: 'Q1',
+            },
+          ],
+          values: [], // No values = column header click
+        },
+      };
+
+      // Create a JTD config with column-specific targets
+      const jtdConfigWithColumnTargets: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'year-target',
+            caption: 'Year Target',
+            pivotDimensions: ['columns.0'],
+          },
+          {
+            id: 'quarter-target',
+            caption: 'Quarter Target',
+            pivotDimensions: ['columns.1'], // This should match the deepest column
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithColumnTargets,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should return undefined (not clickable) for header cells
+      expect(result).toBeUndefined();
+      expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
+    });
+
+    it('should prioritize values over columns when both exist', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: true,
+        isCaptionCell: false,
+        isTotalCell: false,
+        entries: {
+          rows: [
+            {
+              id: 'rows.0',
+              dataOption: { name: 'Category' } as any,
+              attribute: mockAttribute1,
+              value: 'Electronics',
+            },
+          ],
+          columns: [
+            {
+              id: 'columns.0',
+              dataOption: { name: 'Year' } as any,
+              attribute: mockAttribute1,
+              value: '2023',
+            },
+          ],
+          values: [
+            {
+              id: 'values.0',
+              dataOption: { name: 'Revenue' } as any,
+              value: 1000,
+            },
+          ],
+        },
+      };
+
+      // Create targets for both column and value dimensions
+      const jtdConfigWithMixedTargets: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'year-target',
+            caption: 'Year Target',
+            pivotDimensions: ['columns.0'],
+          },
+          {
+            id: 'revenue-target',
+            caption: 'Revenue Target',
+            pivotDimensions: ['values.0'], // Values should take priority
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithMixedTargets,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should prioritize values dimension over column dimension
+      expect(typeof result).toBe('function');
+      expect(jtdFilters.getFiltersFromDataPoint).toHaveBeenCalled();
+    });
+
+    it('should not allow clicks on single column headers', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: false,
+        isCaptionCell: true, // This is a header cell
+        isTotalCell: false,
+        entries: {
+          rows: [],
+          columns: [
+            {
+              id: 'columns.0',
+              dataOption: { name: 'Year' } as any,
+              attribute: mockAttribute1,
+              value: '2023',
+            },
+          ],
+          values: [],
+        },
+      };
+
+      const jtdConfigWithSingleColumn: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'year-target',
+            caption: 'Year Target',
+            pivotDimensions: ['columns.0'],
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithSingleColumn,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should return undefined (not clickable) for header cells
+      expect(result).toBeUndefined();
+      expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
+    });
+
+    it('should handle single value dimension correctly', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: true,
+        isCaptionCell: false,
+        isTotalCell: false,
+        entries: {
+          rows: [
+            {
+              id: 'rows.0',
+              dataOption: { name: 'Category' } as any,
+              attribute: mockAttribute1,
+              value: 'Electronics',
+            },
+          ],
+          columns: [],
+          values: [
+            {
+              id: 'values.0',
+              dataOption: { name: 'Revenue' } as any,
+              value: 1500,
+            },
+          ],
+        },
+      };
+
+      const jtdConfigWithSingleValue: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'revenue-target',
+            caption: 'Revenue Target',
+            pivotDimensions: ['values.0'],
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithSingleValue,
         widgetProps: mockWidgetProps,
         point: pivotPoint,
       };
@@ -386,6 +753,300 @@ describe('jtd-handlers', () => {
 
       expect(typeof result).toBe('function');
       expect(jtdFilters.getFiltersFromDataPoint).toHaveBeenCalled();
+    });
+
+    it('should not allow clicks on three-level column hierarchy headers', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: false,
+        isCaptionCell: true, // This is a header cell
+        isTotalCell: false,
+        entries: {
+          rows: [],
+          columns: [
+            {
+              id: 'columns.0',
+              dataOption: { name: 'Year' } as any,
+              attribute: mockAttribute1,
+              value: '2023',
+            },
+            {
+              id: 'columns.1',
+              dataOption: { name: 'Quarter' } as any,
+              attribute: mockAttribute2,
+              value: 'Q1',
+            },
+            {
+              id: 'columns.2',
+              dataOption: { name: 'Month' } as any,
+              attribute: mockAttribute1,
+              value: 'January',
+            },
+          ],
+          values: [],
+        },
+      };
+
+      const jtdConfigWithThreeLevels: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'year-target',
+            caption: 'Year Target',
+            pivotDimensions: ['columns.0'],
+          },
+          {
+            id: 'quarter-target',
+            caption: 'Quarter Target',
+            pivotDimensions: ['columns.0'],
+          },
+          {
+            id: 'month-target',
+            caption: 'Month Target',
+            pivotDimensions: ['columns.2'], // Deepest level should be selected
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithThreeLevels,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should return undefined (not clickable) for header cells
+      expect(result).toBeUndefined();
+      expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
+    });
+
+    it('should handle multiple values selecting deepest one', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: true,
+        isCaptionCell: false,
+        isTotalCell: false,
+        entries: {
+          rows: [
+            {
+              id: 'rows.0',
+              dataOption: { name: 'Category' } as any,
+              attribute: mockAttribute1,
+              value: 'Electronics',
+            },
+          ],
+          columns: [],
+          values: [
+            {
+              id: 'values.0',
+              dataOption: { name: 'Revenue' } as any,
+              value: 1000,
+            },
+            {
+              id: 'values.1',
+              dataOption: { name: 'Profit' } as any,
+              value: 200,
+            },
+            {
+              id: 'values.2',
+              dataOption: { name: 'Margin' } as any,
+              value: 0.2,
+            },
+          ],
+        },
+      };
+
+      const jtdConfigWithMultipleValues: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'revenue-target',
+            caption: 'Revenue Target',
+            pivotDimensions: ['values.0'],
+          },
+          {
+            id: 'profit-target',
+            caption: 'Profit Target',
+            pivotDimensions: ['values.0'],
+          },
+          {
+            id: 'margin-target',
+            caption: 'Margin Target',
+            pivotDimensions: ['values.2'], // Deepest value should be selected
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithMultipleValues,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should select the deepest (margin) value dimension
+      expect(typeof result).toBe('function');
+      expect(jtdFilters.getFiltersFromDataPoint).toHaveBeenCalled();
+    });
+
+    it('should handle empty entries gracefully', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: true,
+        isCaptionCell: false,
+        isTotalCell: false,
+        entries: {
+          rows: [],
+          columns: [],
+          values: [],
+        },
+      };
+
+      const data = {
+        jtdConfig: mockJtdConfig,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should return undefined when no matching targets are found for empty entries
+      expect(result).toBeUndefined();
+      // getFiltersFromDataPoint should not be called since no jump is performed
+      expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
+    });
+
+    it('should handle missing entries object', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: true,
+        isCaptionCell: false,
+        isTotalCell: false,
+        entries: undefined as any,
+      };
+
+      const data = {
+        jtdConfig: mockJtdConfig,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should return undefined when no matching targets are found for missing entries
+      expect(result).toBeUndefined();
+      // getFiltersFromDataPoint should not be called since no jump is performed
+      expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
+    });
+
+    it('should throw error when no drill targets are configured', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: true,
+        isCaptionCell: false,
+        isTotalCell: false,
+        entries: {
+          rows: [],
+          columns: [],
+          values: [],
+        },
+      };
+
+      const jtdConfigWithoutTargets: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [], // Empty array
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithoutTargets,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      expect(() => {
+        handlePivotDataPointClick(data, mockContext, mockActions);
+      }).toThrow('jumpToDashboard.noJumpTargets');
+    });
+
+    it('should not drill for totals/blank-context when dimension-specific targets exist', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: false,
+        isCaptionCell: false,
+        isTotalCell: true, // Total cell - no specific dimension
+        entries: {
+          rows: [],
+          columns: [],
+          values: [], // No dimension identified
+        },
+      };
+
+      // Configure dimension-specific targets
+      const jtdConfigWithPivotTargets: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'category-target',
+            caption: 'Category Target',
+            pivotDimensions: ['rows.0'],
+          },
+          {
+            id: 'year-target',
+            caption: 'Year Target',
+            pivotDimensions: ['columns.0'],
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithPivotTargets,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should return undefined (no drilling) when dimension-specific targets exist but no dimension identified
+      expect(result).toBeUndefined();
+      expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
+    });
+
+    it('should use first target for totals when no dimension-specific targets exist', () => {
+      const pivotPoint: PivotTableDataPoint = {
+        isDataCell: false,
+        isCaptionCell: false,
+        isTotalCell: true, // Total cell - no specific dimension
+        entries: {
+          rows: [],
+          columns: [],
+          values: [], // No dimension identified
+        },
+      };
+
+      // Configure non-dimension-specific targets
+      const jtdConfigWithoutPivotTargets: JtdConfig = {
+        ...mockJtdConfig,
+        jumpTargets: [
+          {
+            id: 'general-target-1',
+            caption: 'General Target 1',
+            // No pivotDimensions = not dimension-specific
+          },
+          {
+            id: 'general-target-2',
+            caption: 'General Target 2',
+            // No pivotDimensions = not dimension-specific
+          },
+        ],
+      };
+
+      const data = {
+        jtdConfig: jtdConfigWithoutPivotTargets,
+        widgetProps: mockWidgetProps,
+        point: pivotPoint,
+      };
+
+      const result = handlePivotDataPointClick(data, mockContext, mockActions);
+
+      // Should return undefined (no action) for total cells - totals are not clickable
+      expect(result).toBeUndefined();
+      expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
     });
   });
 
@@ -420,7 +1081,7 @@ describe('jtd-handlers', () => {
         title: 'Target Dashboard',
         width: 800,
         height: 600,
-        measurement: SizeMeasurement.PIXEL,
+        measurement: 'px',
         content: expect.any(Object),
       });
     });
@@ -428,13 +1089,439 @@ describe('jtd-handlers', () => {
     it('should throw error when no drill targets available for text widget', () => {
       expect(() => {
         handleTextWidgetClick(
-          { ...mockJtdConfig, drillTargets: [] },
+          { ...mockJtdConfig, jumpTargets: [] },
           mockWidgetProps,
           mockContext.dashboardFilters,
           mockContext.originalWidgetFilters,
           mockOpenModal,
         );
-      }).toThrow('No drill targets available');
+      }).toThrow('jumpToDashboard.noJumpTargets');
+    });
+  });
+
+  describe('extraFilters functionality', () => {
+    const mockExtraFilter1 = {
+      __serializable: 'MembersFilter',
+      attribute: mockAttribute1,
+      members: ['ExtraFilter1'],
+      filterType: 'members',
+      name: 'ExtraFilter1',
+      type: 'filter',
+      id: 'extra1',
+      jaql: () => ({
+        jaql: {
+          title: mockAttribute1.name,
+          dim: mockAttribute1.expression,
+          datatype: 'text',
+          filter: { members: ['ExtraFilter1'] },
+        },
+      }),
+    } as any;
+
+    const mockExtraFilter2 = {
+      __serializable: 'MembersFilter',
+      attribute: mockAttribute2,
+      members: ['ExtraFilter2'],
+      filterType: 'members',
+      name: 'ExtraFilter2',
+      type: 'filter',
+      id: 'extra2',
+      jaql: () => ({
+        jaql: {
+          title: mockAttribute2.name,
+          dim: mockAttribute2.expression,
+          datatype: 'text',
+          filter: { members: ['ExtraFilter2'] },
+        },
+      }),
+    } as any;
+
+    const mockGeneratedFilter = {
+      __serializable: 'MembersFilter',
+      attribute: mockAttribute1,
+      members: ['Generated'],
+      filterType: 'members',
+      name: 'Generated',
+      type: 'filter',
+      id: 'generated',
+      jaql: () => ({
+        jaql: {
+          title: mockAttribute1.name,
+          dim: mockAttribute1.expression,
+          datatype: 'text',
+          filter: { members: ['Generated'] },
+        },
+      }),
+    } as any;
+
+    const mockDashboardFilter = {
+      __serializable: 'MembersFilter',
+      attribute: mockAttribute1,
+      members: ['Dashboard'],
+      filterType: 'members',
+      name: 'Dashboard',
+      type: 'filter',
+      id: 'dashboard',
+      jaql: () => ({
+        jaql: {
+          title: mockAttribute1.name,
+          dim: mockAttribute1.expression,
+          datatype: 'text',
+          filter: { members: ['Dashboard'] },
+        },
+      }),
+    } as any;
+
+    const mockFormulaFilter = {
+      __serializable: 'MembersFilter',
+      attribute: mockAttribute1,
+      members: ['Formula'],
+      filterType: 'members',
+      name: 'Formula',
+      type: 'filter',
+      id: 'formula',
+      jaql: () => ({
+        jaql: {
+          title: mockAttribute1.name,
+          dim: mockAttribute1.expression,
+          datatype: 'text',
+          filter: { members: ['Formula'] },
+        },
+      }),
+    } as any;
+
+    beforeEach(() => {
+      // Setup mocks to return specific filters
+      (jtdFilters.getFiltersFromDataPoint as any).mockReturnValue([mockGeneratedFilter]);
+      (jtdFilters.getFormulaContextFilters as any).mockReturnValue([mockFormulaFilter]);
+      (jtdFilters.filterByAllowedDimensions as any).mockImplementation(
+        (filters: Filter[]) => filters,
+      );
+      (jtdFilters.handleFormulaDuplicateFilters as any).mockImplementation(
+        (filters: Filter[]) => filters,
+      );
+    });
+
+    describe('getJtdClickHandler with extraFilters', () => {
+      it('should merge extraFilters with highest priority', () => {
+        const contextWithExtraFilters: JtdContext = {
+          ...mockContext,
+          dashboardFilters: [mockDashboardFilter],
+          extraFilters: [mockExtraFilter1, mockExtraFilter2],
+        };
+
+        const data: JtdClickHandlerData = {
+          jtdConfig: mockJtdConfig,
+          jumpTarget: mockJtdConfig.jumpTargets[0],
+          widgetProps: mockWidgetProps,
+          point: mockDataPoint,
+        };
+
+        const handler = getJtdClickHandler(data, contextWithExtraFilters, mockActions);
+
+        expect(typeof handler).toBe('function');
+
+        // Call the handler to trigger modal opening
+        handler();
+
+        // Verify that openModal was called (which means filters were processed)
+        expect(mockOpenModal).toHaveBeenCalled();
+
+        // The mergeFilters function should be called with extraFilters last (highest priority)
+        // We can't directly test the merge order, but we can verify that all filter types are considered
+        expect(jtdFilters.getFiltersFromDataPoint).toHaveBeenCalledWith(mockDataPoint);
+        expect(jtdFilters.getFormulaContextFilters).toHaveBeenCalledWith(
+          mockWidgetProps,
+          mockJtdConfig,
+        );
+        expect(jtdFilters.filterByAllowedDimensions).toHaveBeenCalled();
+      });
+
+      it('should handle empty extraFilters array', () => {
+        const contextWithEmptyExtraFilters: JtdContext = {
+          ...mockContext,
+          extraFilters: [],
+        };
+
+        const data: JtdClickHandlerData = {
+          jtdConfig: mockJtdConfig,
+          jumpTarget: mockJtdConfig.jumpTargets[0],
+          widgetProps: mockWidgetProps,
+          point: mockDataPoint,
+        };
+
+        const handler = getJtdClickHandler(data, contextWithEmptyExtraFilters, mockActions);
+
+        expect(typeof handler).toBe('function');
+        handler();
+        expect(mockOpenModal).toHaveBeenCalled();
+      });
+
+      it('should handle undefined extraFilters', () => {
+        const contextWithoutExtraFilters: JtdContext = {
+          ...mockContext,
+          extraFilters: undefined,
+        };
+
+        const data: JtdClickHandlerData = {
+          jtdConfig: mockJtdConfig,
+          jumpTarget: mockJtdConfig.jumpTargets[0],
+          widgetProps: mockWidgetProps,
+          point: mockDataPoint,
+        };
+
+        const handler = getJtdClickHandler(data, contextWithoutExtraFilters, mockActions);
+
+        expect(typeof handler).toBe('function');
+        handler();
+        expect(mockOpenModal).toHaveBeenCalled();
+      });
+
+      it('should work without data point but with extraFilters', () => {
+        const contextWithExtraFilters: JtdContext = {
+          ...mockContext,
+          extraFilters: [mockExtraFilter1],
+        };
+
+        const data: JtdClickHandlerData = {
+          jtdConfig: mockJtdConfig,
+          jumpTarget: mockJtdConfig.jumpTargets[0],
+          widgetProps: mockWidgetProps,
+          point: undefined,
+        };
+
+        const handler = getJtdClickHandler(data, contextWithExtraFilters, mockActions);
+
+        expect(typeof handler).toBe('function');
+        handler();
+        expect(mockOpenModal).toHaveBeenCalled();
+
+        // Should not try to get filters from undefined data point
+        expect(jtdFilters.getFiltersFromDataPoint).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('getJtdClickHandlerForMultiplePoints with extraFilters', () => {
+      const mockPoints = [mockDataPoint, { ...mockDataPoint, categoryValue: 'Category2' }];
+
+      beforeEach(() => {
+        // Mock for multiple points - return different filters for each point
+        (jtdFilters.getFiltersFromDataPoint as any)
+          .mockReturnValueOnce([mockGeneratedFilter])
+          .mockReturnValue([{ ...mockGeneratedFilter, members: ['Generated2'] }]);
+      });
+
+      it('should merge extraFilters with highest priority for multiple points', () => {
+        const contextWithExtraFilters: JtdContext = {
+          ...mockContext,
+          dashboardFilters: [mockDashboardFilter],
+          extraFilters: [mockExtraFilter1, mockExtraFilter2],
+        };
+
+        const data: JtdClickHandlerData = {
+          jtdConfig: mockJtdConfig,
+          jumpTarget: mockJtdConfig.jumpTargets[0],
+          widgetProps: mockWidgetProps,
+          points: mockPoints,
+        };
+
+        const handler = getJtdClickHandlerForMultiplePoints(
+          data,
+          contextWithExtraFilters,
+          mockActions,
+        );
+
+        expect(typeof handler).toBe('function');
+        handler();
+        expect(mockOpenModal).toHaveBeenCalled();
+
+        // Should process filters from all points
+        expect(jtdFilters.getFiltersFromDataPoint).toHaveBeenCalledTimes(2);
+        expect(jtdFilters.getFormulaContextFilters).toHaveBeenCalledWith(
+          mockWidgetProps,
+          mockJtdConfig,
+        );
+      });
+
+      it('should handle empty points array with extraFilters', () => {
+        const contextWithExtraFilters: JtdContext = {
+          ...mockContext,
+          extraFilters: [mockExtraFilter1],
+        };
+
+        const data: JtdClickHandlerData = {
+          jtdConfig: mockJtdConfig,
+          jumpTarget: mockJtdConfig.jumpTargets[0],
+          widgetProps: mockWidgetProps,
+          points: [],
+        };
+
+        const handler = getJtdClickHandlerForMultiplePoints(
+          data,
+          contextWithExtraFilters,
+          mockActions,
+        );
+
+        // Should return a no-op function for empty points
+        expect(typeof handler).toBe('function');
+        handler();
+
+        // Should not open modal for empty points
+        expect(mockOpenModal).not.toHaveBeenCalled();
+      });
+
+      it('should handle undefined points with extraFilters', () => {
+        const contextWithExtraFilters: JtdContext = {
+          ...mockContext,
+          extraFilters: [mockExtraFilter1],
+        };
+
+        const data: JtdClickHandlerData = {
+          jtdConfig: mockJtdConfig,
+          jumpTarget: mockJtdConfig.jumpTargets[0],
+          widgetProps: mockWidgetProps,
+          points: undefined,
+        };
+
+        const handler = getJtdClickHandlerForMultiplePoints(
+          data,
+          contextWithExtraFilters,
+          mockActions,
+        );
+
+        expect(typeof handler).toBe('function');
+        handler();
+
+        // Should not open modal for undefined points
+        expect(mockOpenModal).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('handleDataPointClick with extraFilters', () => {
+      it('should pass extraFilters through context to click handlers', () => {
+        const mockGetJumpToDashboardMenuItem = vi.fn().mockReturnValue({
+          caption: 'Test Menu Item',
+          onClick: vi.fn(),
+        });
+
+        // Use a config with multiple drill targets to trigger the menu path
+        const multiTargetConfig: JtdConfig = {
+          ...mockJtdConfig,
+          jumpTargets: [mockJtdConfig.jumpTargets[0], { caption: 'Second Target', id: 'target-2' }],
+        };
+
+        const coreData: JtdCoreData = {
+          jtdConfig: multiTargetConfig,
+          widgetProps: mockWidgetProps,
+          point: mockDataPoint,
+        };
+
+        const contextWithExtraFilters: JtdContext = {
+          ...mockContext,
+          extraFilters: [mockExtraFilter1],
+        };
+
+        const eventData: JtdDataPointClickEvent = {
+          nativeEvent: new MouseEvent('click') as any,
+          getJumpToDashboardMenuItem: mockGetJumpToDashboardMenuItem,
+        };
+
+        handleDataPointClick(
+          coreData,
+          contextWithExtraFilters,
+          { ...mockActions, translate: vi.fn() },
+          eventData,
+        );
+
+        expect(mockGetJumpToDashboardMenuItem).toHaveBeenCalled();
+
+        // Verify the context passed includes extraFilters
+        const callArgs = mockGetJumpToDashboardMenuItem.mock.calls[0];
+        expect(callArgs).toBeDefined();
+        expect(callArgs[1]).toEqual(contextWithExtraFilters); // context should be the second argument
+      });
+    });
+
+    describe('handlePivotDataPointClick with extraFilters', () => {
+      const mockPivotDataPoint: PivotTableDataPoint = {
+        isDataCell: true,
+        isCaptionCell: false,
+        isTotalCell: false,
+        entries: {
+          rows: [
+            {
+              id: 'rows.0',
+              dataOption: { name: 'Category' } as any,
+              attribute: mockAttribute1,
+              value: 'Electronics',
+            },
+          ],
+          columns: [],
+          values: [
+            {
+              id: 'values.0',
+              dataOption: { name: 'Revenue' } as any,
+              value: 1000,
+            },
+          ],
+        },
+      } as PivotTableDataPoint;
+
+      it('should handle extraFilters in pivot data point clicks', () => {
+        // Create JTD config with proper pivotDimensions to match the mock data point
+        const jtdConfigWithPivotTargets: JtdConfig = {
+          ...mockJtdConfig,
+          jumpTargets: [
+            {
+              id: 'target-with-pivot-dimensions',
+              caption: 'Target With Pivot Dimensions',
+              pivotDimensions: ['rows.0', 'values.0'], // Match both rows and values from mockPivotDataPoint
+            },
+          ],
+        };
+
+        const pivotData = {
+          jtdConfig: jtdConfigWithPivotTargets,
+          widgetProps: mockWidgetProps,
+          point: mockPivotDataPoint,
+        };
+
+        const contextWithExtraFilters: JtdContext = {
+          ...mockContext,
+          extraFilters: [mockExtraFilter1, mockExtraFilter2],
+        };
+
+        const result = handlePivotDataPointClick(pivotData, contextWithExtraFilters, mockActions);
+
+        // The handler should return a function, call it to trigger the modal
+        if (typeof result === 'function') {
+          (result as () => void)();
+        }
+
+        expect(mockOpenModal).toHaveBeenCalled();
+      });
+    });
+
+    describe('handleTextWidgetClick with extraFilters', () => {
+      it('should work with current signature (extraFilters handled internally)', async () => {
+        // Note: handleTextWidgetClick currently doesn't accept extraFilters parameter
+        // extraFilters would need to be passed through context in future versions
+        await handleTextWidgetClick(
+          mockJtdConfig,
+          mockWidgetProps,
+          mockContext.dashboardFilters,
+          mockContext.originalWidgetFilters,
+          mockOpenModal,
+        );
+
+        expect(mockOpenModal).toHaveBeenCalled();
+      });
+
+      it('should work with empty dashboard and widget filters', async () => {
+        await handleTextWidgetClick(mockJtdConfig, mockWidgetProps, [], [], mockOpenModal);
+
+        expect(mockOpenModal).toHaveBeenCalled();
+      });
     });
   });
 });

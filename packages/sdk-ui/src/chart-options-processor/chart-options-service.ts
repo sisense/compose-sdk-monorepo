@@ -8,7 +8,7 @@ import { TFunction } from '@sisense/sdk-common';
 import { ChartData, RangeChartData } from '../chart-data/types';
 import { ChartDesignOptions } from './translations/types';
 import { LegendSettings } from './translations/legend-section';
-import { ValueLabelSettings } from './translations/value-label-section';
+import { DataLabelsSettings } from './translations/value-label-section';
 import { MarkerSettings } from './translations/marker-section';
 import { AxisSettings } from './translations/axis-section';
 import { HighchartsType, HighchartsSeriesValues } from './translations/translations-to-highcharts';
@@ -171,7 +171,7 @@ export type SeriesType = HighchartsSeriesValues & {
 };
 
 type ChartPlotOptions = {
-  dataLabels?: ValueLabelSettings;
+  dataLabels?: DataLabelsSettings;
   groupPadding?: number;
   pointPadding?: number;
   pointPlacement?: null;
@@ -197,7 +197,7 @@ export type Stacking = 'normal' | 'percent';
 export type PlotOptions = {
   series: {
     lineWidth?: number;
-    dataLabels?: ValueLabelSettings;
+    dataLabels?: DataLabelsSettings;
     marker?: MarkerSettings;
     stacking?: Stacking;
     stickyTracking?: boolean;

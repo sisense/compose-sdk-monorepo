@@ -3,6 +3,9 @@ import { useMenu } from '@/common/hooks/use-menu';
 import { useThemeContext } from '@/theme-provider';
 import { MenuButton } from '@/common/components/menu/menu-button';
 
+/**
+ * @internal
+ */
 export interface DashboardHeaderToolbarMenuItem {
   title: string;
   icon?: JSX.Element;
@@ -10,12 +13,16 @@ export interface DashboardHeaderToolbarMenuItem {
   onClick: () => void;
 }
 
+/**
+ * @internal
+ */
 export interface UseDashboardHeaderToolbarProps {
   menuItems: DashboardHeaderToolbarMenuItem[];
 }
 
 /**
  * Hook that returns a toolbar element for dashboard header
+ * @internal
  */
 export const useDashboardHeaderToolbar = ({ menuItems }: UseDashboardHeaderToolbarProps) => {
   const { themeSettings } = useThemeContext();

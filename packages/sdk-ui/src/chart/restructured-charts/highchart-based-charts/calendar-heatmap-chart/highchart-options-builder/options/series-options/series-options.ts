@@ -12,7 +12,15 @@ import { generateCalendarChartData } from './calendar-data-generator.js';
 export function getSeriesOptions(
   ctx: BuildContext<'calendar-heatmap'>,
 ): HighchartsOptionsInternal['series'] {
-  const calendarChartData = generateCalendarChartData(ctx.chartData, ctx.extraConfig.dateFormatter);
+  const startOfWeek = ctx.designOptions?.startOfWeek;
+  const weekends = ctx.designOptions.weekends;
+
+  const calendarChartData = generateCalendarChartData(
+    ctx.chartData,
+    ctx.extraConfig.dateFormatter,
+    startOfWeek,
+    weekends,
+  );
 
   return [
     {
@@ -22,7 +30,7 @@ export function getSeriesOptions(
       data: calendarChartData,
       nullColor: CALENDAR_HEATMAP_DEFAULTS.NO_DATA_COLOR,
       borderWidth: CALENDAR_HEATMAP_DEFAULTS.BORDER_WIDTH,
-      borderColor: CALENDAR_HEATMAP_DEFAULTS.EMPTY_CELL_COLOR,
+      borderColor: 'transparent',
       colsize: 1, // Each cell spans 1 unit on x-axis
       rowsize: 1, // Each cell spans 1 unit on y-axis
     },

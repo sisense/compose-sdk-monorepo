@@ -10,7 +10,7 @@ const chartDesignOptions = {
     scatterBubbleMinSize: 20,
     scatterBubbleMaxSize: 40,
   },
-  valueLabel: {
+  seriesLabels: {
     enabled: true,
     rotation: 0,
   },
@@ -74,7 +74,7 @@ describe('getScatterPlotOptions', () => {
       const options = getScatterPlotOptions(
         {
           ...chartDesignOptions,
-          valueLabel: {
+          seriesLabels: {
             enabled: true,
             rotation: -45,
           },
@@ -91,7 +91,7 @@ describe('getScatterPlotOptions', () => {
       const options = getScatterPlotOptions(
         {
           ...chartDesignOptions,
-          valueLabel: {
+          seriesLabels: {
             enabled: true,
             rotation: -90,
           },
@@ -112,7 +112,7 @@ describe('getScatterPlotOptions', () => {
         const options = getScatterPlotOptions(
           {
             ...chartDesignOptions,
-            valueLabel: {
+            seriesLabels: {
               enabled: true,
               rotation: -90,
             },
@@ -143,7 +143,7 @@ describe('getScatterPlotOptions', () => {
         const options = getScatterPlotOptions(
           {
             ...chartDesignOptions,
-            valueLabel: {
+            seriesLabels: {
               enabled: true,
               rotation: -90,
             },
@@ -174,7 +174,7 @@ describe('getScatterPlotOptions', () => {
         const options = getScatterPlotOptions(
           {
             ...chartDesignOptions,
-            valueLabel: {
+            seriesLabels: {
               enabled: true,
               rotation: -90,
             },
@@ -205,7 +205,7 @@ describe('getScatterPlotOptions', () => {
         const options = getScatterPlotOptions(
           {
             ...chartDesignOptions,
-            valueLabel: {
+            seriesLabels: {
               enabled: true,
               rotation: -90,
             },

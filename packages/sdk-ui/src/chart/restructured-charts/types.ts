@@ -1,5 +1,5 @@
 import { Attribute, Measure, QueryResultData } from '@sisense/sdk-data';
-import { QueryDescription, QueryExecutionConfig } from '@sisense/sdk-query-client';
+import { QueryExecutionConfig } from '@sisense/sdk-query-client';
 import type {
   AreaStyleOptions,
   AreamapStyleOptions,
@@ -11,6 +11,9 @@ import type {
   PolarStyleOptions,
   ScattermapStyleOptions,
   StackableStyleOptions,
+  FunnelStyleOptions,
+  TreemapStyleOptions,
+  SunburstStyleOptions,
 } from '@/types';
 import type { ChartRendererProps } from '@/chart';
 import type {
@@ -40,6 +43,7 @@ import { AreamapProps } from '@/chart/restructured-charts/areamap-chart/renderer
 import { ScattermapProps } from '@/charts/map-charts/scattermap/scattermap';
 import { AreamapData } from './areamap-chart/types';
 import { HighchartsBasedChartRendererProps } from './highchart-based-charts/highcharts-based-chart-renderer/highcharts-based-chart-renderer';
+import { QueryDescription } from '@/query/execute-query';
 import { CalendarHeatmapChartData } from './highchart-based-charts/calendar-heatmap-chart/data';
 
 export type SupportedChartType =
@@ -50,13 +54,16 @@ export type SupportedChartType =
   | 'area'
   | 'polar'
   | 'pie'
-  | 'calendar-heatmap';
+  | 'funnel'
+  | 'calendar-heatmap'
+  | 'treemap'
+  | 'sunburst';
 
 export type TypedChartDataOptions<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapChartDataOptions
   : CT extends 'scattermap'
   ? ScattermapChartDataOptions
-  : CT extends 'pie'
+  : CT extends 'pie' | 'funnel' | 'treemap' | 'sunburst'
   ? CategoricalChartDataOptions
   : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
   ? CartesianChartDataOptions
@@ -68,7 +75,7 @@ export type TypedDataOptionsInternal<CT extends SupportedChartType> = CT extends
   ? AreamapChartDataOptionsInternal
   : CT extends 'scattermap'
   ? ScattermapChartDataOptionsInternal
-  : CT extends 'pie'
+  : CT extends 'pie' | 'funnel' | 'treemap' | 'sunburst'
   ? CategoricalChartDataOptionsInternal
   : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
   ? CartesianChartDataOptionsInternal
@@ -82,6 +89,12 @@ export type TypedChartStyleOptions<CT extends SupportedChartType> = CT extends '
   ? ScattermapStyleOptions
   : CT extends 'pie'
   ? PieStyleOptions
+  : CT extends 'funnel'
+  ? FunnelStyleOptions
+  : CT extends 'treemap'
+  ? TreemapStyleOptions
+  : CT extends 'sunburst'
+  ? SunburstStyleOptions
   : CT extends 'column' | 'bar'
   ? StackableStyleOptions
   : CT extends 'line'
@@ -100,7 +113,7 @@ export type TypedChartData<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapData
   : CT extends 'scattermap'
   ? ScattermapChartData
-  : CT extends 'pie'
+  : CT extends 'pie' | 'funnel' | 'treemap' | 'sunburst'
   ? CategoricalChartData
   : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
   ? CartesianChartData
@@ -119,7 +132,17 @@ export type TypedChartRendererProps<CT extends SupportedChartType> = CT extends 
   ? AreamapProps
   : CT extends 'scattermap'
   ? ScattermapProps
-  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar' | 'pie' | 'calendar-heatmap'
+  : CT extends
+      | 'column'
+      | 'bar'
+      | 'line'
+      | 'area'
+      | 'polar'
+      | 'pie'
+      | 'funnel'
+      | 'calendar-heatmap'
+      | 'treemap'
+      | 'sunburst'
   ? HighchartsBasedChartRendererProps<CT>
   : never;
 

@@ -11,6 +11,7 @@ export type {
   ScatterChartType,
   IndicatorChartType,
   BoxplotChartType,
+  CalendarHeatmapChartType,
   ScattermapChartType,
   AreamapChartType,
   TableType,
@@ -43,6 +44,7 @@ export type {
   IndicatorChartDataOptions,
   BoxplotChartDataOptions,
   BoxplotChartCustomDataOptions,
+  CalendarHeatmapChartDataOptions,
   ScattermapChartDataOptions,
   AreamapChartDataOptions,
   TableDataOptions,
@@ -82,6 +84,7 @@ export type {
   TreemapStyleOptions,
   SunburstStyleOptions,
   BoxplotStyleOptions,
+  CalendarHeatmapStyleOptions,
   ScattermapStyleOptions,
   AreamapStyleOptions,
   ChartWidgetStyleOptions,
@@ -107,6 +110,7 @@ export type {
   SeriesLabels,
   X2Title,
   ScattermapMarkers,
+  CalendarHeatmapViewType,
 
   // Models:
   WidgetModel,
@@ -118,6 +122,8 @@ export type {
   ScatterDataPoint,
   HighchartsOptions,
   BoxplotDataPoint,
+  CalendarHeatmapDataPoint,
+  CalendarDayOfWeek,
   IndicatorBeforeRenderHandler,
   IndicatorRenderOptions,
 

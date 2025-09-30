@@ -1,48 +1,26 @@
-// JTD (Jump to Dashboard) Feature Module
-// Re-exports for easier importing and better organization
+// JTD (Jump To Dashboard) Feature Module
+// Public API exports only
 
-// Filter utilities
-export {
-  getFiltersFromDataPoint,
-  getFormulaContextFilters,
-  filterByAllowedDimensions,
-  handleFormulaDuplicateFilters,
-  mergeJtdFilters,
-} from './jtd-filters';
+/**
+ * Jump To Dashboard configuration for regular widgets
+ * @group Dashboards
+ */
+export { type JumpToDashboardConfig } from './jtd-types';
 
-// Handler utilities
-export {
-  getJtdClickHandler,
-  getJtdClickHandlerForMultiplePoints,
-  handleDataPointClick,
-  handleTextWidgetClick,
-} from './jtd-handlers';
+/**
+ * Jump To Dashboard configuration for pivot widgets
+ * @group Dashboards
+ */
+export { type JumpToDashboardConfigForPivot } from './jtd-types';
 
-// Menu utilities
-export {
-  getJumpToDashboardMenuItem,
-  getJumpToDashboardMenuItemForMultiplePoints,
-} from './jtd-menu';
+/**
+ * Target dashboard configuration for Jump To Dashboard
+ * @group Dashboards
+ */
+export { type JtdTarget } from './jtd-types';
 
-// Widget transform utilities
-export {
-  addPointerCursorToChart,
-  applyClickNavigationForChart,
-  applyClickNavigationForText,
-  applyClickNavigationForPivot,
-  applyRightClickNavigation,
-  applyRightClickNavigationForPivot,
-  applyPivotLinkStyling,
-  addJtdIconToHeader,
-} from './jtd-widget-transforms';
-
-// Unified types
-export {
-  type JtdCoreData,
-  type JtdContext,
-  type JtdActions,
-  type JtdClickHandlerData,
-  type JtdWidgetTransformConfig,
-  type JtdDataPointClickEvent,
-  type JtdMenuItem,
-} from './jtd-types';
+/**
+ * Trigger method for Jump To Dashboard interactions
+ * @group Dashboards
+ */
+export { type TriggerMethod } from './jtd-types';

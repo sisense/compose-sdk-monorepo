@@ -71,6 +71,7 @@ export const getScatterChartOptions = (
     scatterDataTable,
     createCategoriesMap(xCategories, yCategories),
     scatterDataOptions,
+    designOptions,
     themeSettings,
     seriesCapacity,
   );

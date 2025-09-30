@@ -3,7 +3,7 @@ import { StyledMeasureColumn, StyledColumn } from '../../chart-data-options/type
 import { applyFormat, getCompleteNumberFormatConfig } from './number-format-config.js';
 import type { SeriesChartType } from '@/types';
 import { isMeasureColumn } from '@/chart-data-options/utils.js';
-import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
+import { TooltipFormatterContextObject, CSSObject } from '@sisense/sisense-charts';
 
 export const isValueNumeric = (value: StyledMeasureColumn | StyledColumn | undefined) =>
   value ? isMeasureColumn(value) || (value.column.type && isNumber(value.column.type)) : false;
@@ -58,11 +58,13 @@ export type TooltipSettings = {
   crosshairs?: boolean;
   shared?: boolean;
   formatter?: (this: HighchartsDataPointContext) => string | false;
-  style?: {
-    fontFamily?: string;
-  };
+  style?: CSSObject;
   padding?: number;
   outside?: boolean;
+  position?: {
+    relativeTo?: 'chart';
+  };
+  followPointer?: boolean;
 };
 
 export type HighchartsDataPointContextNode = {
@@ -97,7 +99,6 @@ export type HighchartsDataPointContext = {
       string1?: string;
       xDisplayValue?: string;
       xValue?: (number | string)[];
-      empty?: boolean;
       monthDay?: number;
       hasData?: boolean;
     };

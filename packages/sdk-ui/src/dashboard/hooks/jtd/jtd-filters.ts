@@ -10,7 +10,7 @@ import {
 import { WidgetProps } from '@/props.js';
 import { DataPoint, ScatterDataPoint, DataPointEntry } from '@/types';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
-import { JtdConfig } from '@/widget-by-id/types';
+import { JtdConfig } from './jtd-types';
 import {
   DatePeriod,
   startOfPeriod,
@@ -20,7 +20,7 @@ import {
 import { format } from 'date-fns';
 
 /**
- * Jump to Dashboard (JTD) Filter Merging Logic:
+ * Jump To Dashboard (JTD) Filter Merging Logic:
  *
  * When a user clicks on a datapoint to open a JTD modal, multiple types of filters are merged:
  *
@@ -75,6 +75,7 @@ import { format } from 'date-fns';
  * @param clickedWidget - The clicked widget
  * @param jtdConfig - The JTD configuration
  * @returns Array of formula context filters
+ * @internal
  */
 export const getFormulaContextFilters = (
   clickedWidget: WidgetProps,

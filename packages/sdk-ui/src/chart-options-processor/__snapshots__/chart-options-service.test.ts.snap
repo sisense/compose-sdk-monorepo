@@ -241,6 +241,7 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           },
         ],
         "dataLabels": {
+          "enabled": false,
           "formatter": [Function],
         },
         "marker": {
@@ -412,6 +413,7 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           },
         ],
         "dataLabels": {
+          "enabled": false,
           "formatter": [Function],
         },
         "marker": {
@@ -914,6 +916,7 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           },
         ],
         "dataLabels": {
+          "enabled": false,
           "formatter": [Function],
         },
         "marker": {
@@ -1085,6 +1088,7 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           },
         ],
         "dataLabels": {
+          "enabled": false,
           "formatter": [Function],
         },
         "marker": {
@@ -1594,6 +1598,7 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           },
         ],
         "dataLabels": {
+          "enabled": false,
           "formatter": [Function],
         },
         "marker": {
@@ -1765,6 +1770,7 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           },
         ],
         "dataLabels": {
+          "enabled": false,
           "formatter": [Function],
         },
         "marker": {
@@ -2267,6 +2273,7 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           },
         ],
         "dataLabels": {
+          "enabled": false,
           "formatter": [Function],
         },
         "marker": {
@@ -2438,6 +2445,7 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           },
         ],
         "dataLabels": {
+          "enabled": false,
           "formatter": [Function],
         },
         "marker": {
@@ -2854,6 +2862,7 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -3166,6 +3175,7 @@ exports[`cartesianData > timeseries with one data point 1`] = `
           },
         ],
         "dataLabels": {
+          "enabled": false,
           "formatter": [Function],
         },
         "marker": {
@@ -3365,10 +3375,10 @@ exports[`highchartsOptionsService - cartesian charts > labels > should prepare c
   {
     "allowOverlap": false,
     "crop": true,
-    "enabled": true,
+    "enabled": false,
     "formatter": [Function],
     "labelrank": 99999,
-    "rotation": 45,
+    "rotation": 0,
     "style": {
       "fontSize": "13px",
       "fontWeight": "bold",
@@ -3387,10 +3397,10 @@ exports[`highchartsOptionsService - cartesian charts > labels > should prepare c
   {
     "allowOverlap": false,
     "crop": true,
-    "enabled": true,
+    "enabled": false,
     "formatter": [Function],
     "labelrank": 99999,
-    "rotation": 90,
+    "rotation": 0,
     "style": {
       "fontSize": "13px",
       "fontWeight": "bold",
@@ -3409,7 +3419,7 @@ exports[`highchartsOptionsService - cartesian charts > labels > should prepare c
   {
     "allowOverlap": false,
     "crop": true,
-    "enabled": true,
+    "enabled": false,
     "formatter": [Function],
     "labelrank": 99999,
     "rotation": 0,
@@ -3560,6 +3570,7 @@ exports[`renders a categorical line chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -3626,6 +3637,7 @@ exports[`renders a categorical line chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -3971,6 +3983,7 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -4074,6 +4087,7 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -4644,6 +4658,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -4828,6 +4843,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -5277,6 +5293,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -5461,6 +5478,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -5893,6 +5911,7 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -6064,6 +6083,7 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -6496,6 +6516,7 @@ exports[`renders a time series with granularity Month 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -6667,6 +6688,7 @@ exports[`renders a time series with granularity Month 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -7099,6 +7121,7 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {
@@ -7270,6 +7293,7 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
       },
       "marker": {

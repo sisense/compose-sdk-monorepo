@@ -17,7 +17,6 @@ describe('labels-spacing', () => {
         enabled: true,
         position: 'bottom',
       },
-      valueLabel: {},
       lineType: 'straight',
       lineWidth: 2,
       marker: { enabled: false, size: 'small', fill: 'full' },

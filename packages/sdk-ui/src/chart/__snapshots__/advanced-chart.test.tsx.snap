@@ -718,7 +718,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
+        "rotation": 0,
       },
       "lineWidth": 3,
       "marker": {
@@ -1331,7 +1333,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
+        "rotation": 0,
       },
       "lineWidth": 3,
       "marker": {
@@ -2281,7 +2285,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
+        "rotation": 0,
       },
       "lineWidth": 3,
       "marker": {
@@ -3185,7 +3191,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
+        "rotation": 0,
       },
       "lineWidth": 3,
       "marker": {
@@ -4089,7 +4097,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
+        "rotation": 0,
       },
       "lineWidth": 3,
       "marker": {
@@ -5104,7 +5114,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
+        "rotation": 0,
       },
       "enableMouseTracking": false,
       "fillOpacity": 0.15,
@@ -6120,7 +6132,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
+        "rotation": 0,
       },
       "enableMouseTracking": false,
       "fillOpacity": 0.15,
@@ -7017,7 +7031,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
+        "rotation": 0,
       },
       "lineWidth": 3,
       "marker": {
@@ -7850,7 +7866,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         },
       ],
       "dataLabels": {
+        "enabled": false,
         "formatter": [Function],
+        "rotation": 0,
       },
       "lineWidth": 3,
       "marker": {

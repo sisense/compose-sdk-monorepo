@@ -16,7 +16,7 @@
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.json", "src/**/*.dash.json"],
-  "exclude": ["**/*.snapshot.test.ts", "src/**/*.snapshot.json"],
+  "exclude": ["src/**/*.snapshot.test.ts", "src/**/*.snapshot.json"],
   "references": [
     { "path": "../sdk-data" },
     { "path": "../sdk-rest-client" },

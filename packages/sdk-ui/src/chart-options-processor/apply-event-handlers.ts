@@ -58,8 +58,11 @@ export const applyEventHandlersToChart = (
   };
 
   if (onDataPointsSelected) {
-    eventOptions.chart.zoomType = 'x';
-    // make selection two dimensional for scatter charts
+    // make selection one dimensional (X) for all charts except heatmap
+    if (chartOptions.chart?.type !== 'heatmap') {
+      eventOptions.chart.zoomType = 'x';
+    }
+    // make selection two dimensional (X and Y) for scatter charts
     if (['scatter', 'bubble'].includes(chartOptions.chart?.type)) {
       eventOptions.chart.zoomType = 'xy';
     }

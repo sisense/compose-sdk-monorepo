@@ -5,8 +5,8 @@ import { ChartData } from '../../chart-data/types';
 import { ChartDesignOptions } from '../translations/types';
 import { getLegendSettings } from '../translations/legend-section';
 import {
-  getPolarValueLabelSettings,
-  getValueLabelSettings,
+  getPolarDataLabelsSettings,
+  getDataLabelsSettings,
 } from '../translations/value-label-section';
 import { getMarkerSettings } from '../translations/marker-section';
 import {
@@ -265,10 +265,10 @@ export const getCartesianChartOptions = (
       plotOptions: {
         series: {
           dataLabels: chartState.isPolarChart
-            ? getPolarValueLabelSettings(chartDesignOptions.valueLabel, chartState.polarType!)
-            : getValueLabelSettings(
+            ? getPolarDataLabelsSettings(chartDesignOptions.seriesLabels, chartState.polarType!)
+            : getDataLabelsSettings(
                 xAxisOrientation,
-                chartDesignOptions.valueLabel,
+                chartDesignOptions.seriesLabels,
                 Boolean(stackingMeta.stacking && chartType !== 'area'),
               ),
           marker: getMarkerSettings(chartDesignOptions.marker),

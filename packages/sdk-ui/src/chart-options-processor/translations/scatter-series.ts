@@ -18,6 +18,7 @@ import { seriesSliceWarning } from '../../utils/data-limit-warning';
 import { getDataOptionTitle, isMeasureColumn } from '../../chart-data-options/utils';
 import { compareValues, SortDirectionValue } from '../../chart-data-processor/row-comparator';
 import { createDataColoringFunction } from '../../chart-data/data-coloring/create-data-coloring-function';
+import { ChartDesignOptions } from './types';
 
 const defaultSeriesColor = '#00cee6';
 
@@ -309,11 +310,15 @@ export const buildScatterSeries = (
   data: ScatterDataTable,
   categoriesMap: ScatterAxisCategoriesMap,
   dataOptions?: ScatterChartDataOptionsInternal,
+  designOptions?: ChartDesignOptions,
   themeSettings?: CompleteThemeSettings,
   seriesCapacity?: number,
 ): SeriesWithAlerts<SeriesType[]> => {
   const alerts: SeriesWithAlerts<SeriesType[]>['alerts'] = [];
-  const series = fill(data, categoriesMap, dataOptions, themeSettings);
+  const series = fill(data, categoriesMap, dataOptions, themeSettings).map((seriesItem) => ({
+    ...seriesItem,
+    dataLabels: designOptions?.seriesLabels,
+  }));
 
   if (seriesCapacity && series.length > seriesCapacity) {
     alerts.push(seriesSliceWarning(series.length, seriesCapacity));

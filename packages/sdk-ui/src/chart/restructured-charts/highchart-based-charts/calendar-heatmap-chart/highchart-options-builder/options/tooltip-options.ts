@@ -11,6 +11,8 @@ import {
 import { getDataOptionGranularity } from '@/chart-data-options/utils.js';
 import { getDefaultDateFormat } from '@/chart-options-processor/translations/axis-section.js';
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service.js';
+import { scaleBrightness } from '@/utils/color/color-interpolation.js';
+import { CALENDAR_HEATMAP_COLORS, CALENDAR_HEATMAP_SIZING } from '../../constants.js';
 
 /**
  * Prepares the Highcharts's tooltip options for calendar heatmap
@@ -23,6 +25,9 @@ export function getTooltipOptions(
 ): HighchartsOptionsInternal['tooltip'] {
   const { dateFormatter } = ctx.extraConfig;
   const valueName = ctx.dataOptions.value.column.title || ctx.dataOptions.value.column.name;
+  // Prevent tooltip cropping in small charts
+  const shouldUseFixedTooltipWidth =
+    ctx.designOptions.width && ctx.designOptions.width < CALENDAR_HEATMAP_SIZING.MIN_TOOLTIP_WIDTH;
 
   return {
     animation: false,
@@ -31,6 +36,14 @@ export function getTooltipOptions(
     borderRadius: 10,
     borderWidth: 1,
     useHTML: true,
+    style: {
+      width: shouldUseFixedTooltipWidth ? CALENDAR_HEATMAP_SIZING.MIN_TOOLTIP_WIDTH : undefined,
+    },
+    position: {
+      relativeTo: 'chart',
+    },
+    followPointer: true,
+    outside: true,
     formatter: function () {
       // Use type assertion to access custom properties
       const point = this.point;
@@ -61,9 +74,14 @@ export function getTooltipOptions(
         formattedValue = '—';
       }
 
+      const color =
+        point.color &&
+        scaleBrightness(point.color, CALENDAR_HEATMAP_COLORS.TOOLTIP_COLOR_BRIGHTNESS_PERCENT);
+
       return tooltipWrapper(`
         ${valueName}
-        <br />${formattedValue}
+        <br />
+        <span style="color: ${color ?? 'inherit'}">${formattedValue}</span>
         ${tooltipSeparator()}
         ${formattedDate}
       `);

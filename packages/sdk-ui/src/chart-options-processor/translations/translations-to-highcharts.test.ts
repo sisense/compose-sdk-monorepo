@@ -238,7 +238,9 @@ describe('addStackingIfSpecified', () => {
   it('should return stacking as normal and showTotal based on design options for stackable chart types', () => {
     const result = addStackingIfSpecified('column', {
       stackType: 'stacked',
-      valueLabel: true,
+      seriesLabels: {
+        enabled: true,
+      },
       showTotal: true,
     } as unknown as StackableChartDesignOptions);
     expect(result).toEqual({ stacking: 'normal', showTotal: true });
@@ -247,7 +249,9 @@ describe('addStackingIfSpecified', () => {
   it('should return stacking as percent and showTotal based on design options for stack100 chart types', () => {
     const result = addStackingIfSpecified('bar', {
       stackType: 'stack100',
-      valueLabel: true,
+      seriesLabels: {
+        enabled: true,
+      },
       showTotal: true,
     } as unknown as StackableChartDesignOptions);
     expect(result).toEqual({ stacking: 'percent', showTotal: true });

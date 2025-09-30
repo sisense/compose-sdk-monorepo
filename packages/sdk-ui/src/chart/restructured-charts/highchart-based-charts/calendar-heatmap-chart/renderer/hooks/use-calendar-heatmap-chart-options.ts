@@ -16,6 +16,39 @@ import {
   SisenseChartDataPointEventHandler,
   SisenseChartDataPointsEventHandler,
 } from '@/sisense-chart/types.js';
+import {
+  getCalendarHeatmapDefaultColorOptions,
+  withCalendarHeatmapDataColoring,
+} from '../../utils/with-calendar-heatmap-data-coloring.js';
+
+/**
+ * Custom hook for generating extra config for calendar heatmap chart.
+ *
+ * @returns Extra config object
+ */
+const useCalendarHeatmapExtraConfig = () => {
+  const extraConfig = useExtraConfig();
+  return useMemo(
+    () => ({
+      ...extraConfig,
+      themeSettings: {
+        ...extraConfig.themeSettings,
+        chart: {
+          ...extraConfig.themeSettings.chart,
+          animation: {
+            ...extraConfig.themeSettings.chart.animation,
+            redraw: {
+              ...extraConfig.themeSettings.chart.animation.redraw,
+              // Disable errorneous "redraw" animation for calendar heatmap chart
+              duration: 0,
+            },
+          },
+        },
+      },
+    }),
+    [extraConfig],
+  );
+};
 
 export interface UseCalendarHeatmapChartOptionsParams {
   chartData: CalendarHeatmapChartData;
@@ -77,7 +110,14 @@ export function useCalendarHeatmapChartOptions({
   eventHandlers,
   onBeforeRender,
 }: UseCalendarHeatmapChartOptionsParams): HighchartsOptionsInternal[] {
-  const extraConfig = useExtraConfig();
+  const extraConfig = useCalendarHeatmapExtraConfig();
+
+  // Coloring should be applied to entire chart data, not just month data
+  const chartDataWithColoring = useMemo(() => {
+    const colorOptions =
+      dataOptions.value.color ?? getCalendarHeatmapDefaultColorOptions(extraConfig.themeSettings);
+    return withCalendarHeatmapDataColoring(colorOptions)(chartData);
+  }, [chartData, dataOptions.value.color, extraConfig.themeSettings]);
 
   // Generate chart options for each month to display
   return useMemo(() => {
@@ -86,7 +126,7 @@ export function useCalendarHeatmapChartOptions({
     const monthsToDisplay = getDisplayMonths(availableMonths, currentViewIndex, viewType);
 
     return monthsToDisplay.map((month) => {
-      const monthData = filterChartDataForMonth(chartData, month.year, month.month);
+      const monthData = filterChartDataForMonth(chartDataWithColoring, month.year, month.month);
 
       return buildHighchartsOptions({
         highchartsOptionsBuilder: calendarHeatmapHighchartsOptionsBuilder,
@@ -113,7 +153,7 @@ export function useCalendarHeatmapChartOptions({
     availableMonths,
     currentViewIndex,
     viewType,
-    chartData,
+    chartDataWithColoring,
     dataOptions,
     designOptions,
     chartSize,

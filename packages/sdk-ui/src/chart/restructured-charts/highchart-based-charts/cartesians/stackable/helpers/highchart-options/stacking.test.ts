@@ -5,7 +5,7 @@ import { StackableChartTypes } from '../../types';
 import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
 import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettings, SeriesLabels } from '@/types';
 import { TFunction } from '@sisense/sdk-common';
 
 // Mock the dependencies
@@ -31,7 +31,7 @@ describe('stacking', () => {
       stackType: 'classic' | 'stacked' | 'stack100' = 'stacked',
       showTotal = false,
       totalLabelRotation = 0,
-      valueLabel: any = {},
+      seriesLabels?: SeriesLabels,
       themeSettings?: Partial<CompleteThemeSettings>,
     ): BuildContext<StackableChartTypes> => ({
       chartData: {
@@ -60,7 +60,7 @@ describe('stacking', () => {
         stackType,
         showTotal,
         totalLabelRotation,
-        valueLabel,
+        seriesLabels,
         legend: {
           enabled: true,
           position: 'bottom',
@@ -207,13 +207,12 @@ describe('stacking', () => {
         expect((result[1].stackLabels as any)?.formatter).toBeDefined();
       });
 
-      test('should not show total when valueLabel is undefined', () => {
-        // Create context with explicit undefined valueLabel
+      test('should not show total when seriesLabels is undefined', () => {
+        // Create context with explicit undefined seriesLabels
         const ctx: BuildContext<StackableChartTypes> = {
-          ...createMockBuildContext('stacked', true, 0, {}),
+          ...createMockBuildContext('stacked', true, 0),
           designOptions: {
-            ...createMockBuildContext('stacked', true, 0, {}).designOptions,
-            valueLabel: undefined as any, // Explicitly set to undefined
+            ...createMockBuildContext('stacked', true, 0).designOptions, // Explicitly set to undefined
           },
         };
         const basicAxisSettings = createMockAxisSettings();
@@ -223,12 +222,14 @@ describe('stacking', () => {
         expect(result[1].stackLabels?.enabled).toBe(false);
       });
 
-      test('should not show total when valueLabel is null', () => {
+      test('should not show total when seriesLabels is false', () => {
         const ctx: BuildContext<StackableChartTypes> = {
-          ...createMockBuildContext('stacked', true, 0, {}),
+          ...createMockBuildContext('stacked', true, 0),
           designOptions: {
-            ...createMockBuildContext('stacked', true, 0, {}).designOptions,
-            valueLabel: null as any, // Explicitly set to null
+            ...createMockBuildContext('stacked', true, 0).designOptions,
+            seriesLabels: {
+              enabled: false,
+            }, // Explicitly set to false
           },
         };
         const basicAxisSettings = createMockAxisSettings();
@@ -238,32 +239,7 @@ describe('stacking', () => {
         expect(result[1].stackLabels?.enabled).toBe(false);
       });
 
-      test('should not show total when valueLabel is false', () => {
-        const ctx: BuildContext<StackableChartTypes> = {
-          ...createMockBuildContext('stacked', true, 0, {}),
-          designOptions: {
-            ...createMockBuildContext('stacked', true, 0, {}).designOptions,
-            valueLabel: false as any, // Explicitly set to false
-          },
-        };
-        const basicAxisSettings = createMockAxisSettings();
-        const result = withStacking(ctx)(basicAxisSettings);
-
-        expect(result[0].stackLabels?.enabled).toBe(false);
-        expect(result[1].stackLabels?.enabled).toBe(false);
-      });
-
-      test('should show total when valueLabel is empty object and showTotal is true', () => {
-        const ctx = createMockBuildContext('stacked', true, 0, {});
-        const basicAxisSettings = createMockAxisSettings();
-        const result = withStacking(ctx)(basicAxisSettings);
-
-        // Empty object {} is truthy, so it should respect showTotal=true
-        expect(result[0].stackLabels?.enabled).toBe(true);
-        expect(result[1].stackLabels?.enabled).toBe(true);
-      });
-
-      test('should not show total when valueLabel is provided but showTotal is false', () => {
+      test('should not show total when seriesLabels is provided but showTotal is false', () => {
         const ctx = createMockBuildContext('stacked', false, 0, { enabled: true });
         const basicAxisSettings = createMockAxisSettings();
         const result = withStacking(ctx)(basicAxisSettings);

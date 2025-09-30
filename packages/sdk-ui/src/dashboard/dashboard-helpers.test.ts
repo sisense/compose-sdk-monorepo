@@ -1,216 +1,165 @@
-import { describe, it, expect } from 'vitest';
-import { Filter, filterFactory } from '@sisense/sdk-data';
+import { describe, it, expect, vi } from 'vitest';
+import { applyJtdConfig, applyJtdConfigs } from './dashboard-helpers';
 import { DashboardProps } from './types';
-import * as dashboardHelpers from './dashboard-helpers';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { WidgetProps } from '@/props';
+import { JumpToDashboardConfig } from '@/dashboard/hooks/jtd/jtd-types';
 
-// Mock Filters
-const filterByAgeRange = filterFactory.members(DM.Commerce.AgeRange, ['18-24', '25-34']);
-const filterByRevenue = filterFactory.greaterThan(DM.Commerce.Revenue, 1000);
-const filterByCost = filterFactory.lessThan(DM.Commerce.Cost, 5000);
-const filterByGender = filterFactory.equals(DM.Commerce.Gender, 'Male');
-const filterByAgeRangeOrFilterByRevenue = filterFactory.logic.or(filterByAgeRange, filterByRevenue);
+describe('Dashboard JTD Helpers', () => {
+  const mockWidgets: WidgetProps[] = [
+    {
+      id: 'widget-1',
+      widgetType: 'chart',
+      chartType: 'column' as const,
+      dataOptions: {},
+      title: 'Widget 1',
+    },
+    {
+      id: 'widget-2',
+      widgetType: 'chart',
+      chartType: 'pie' as const,
+      dataOptions: {},
+      title: 'Widget 2',
+    },
+    {
+      id: 'widget-3',
+      widgetType: 'chart',
+      chartType: 'bar' as const,
+      dataOptions: {},
+      title: 'Widget 3',
+    },
+  ];
 
-const initialDashboard: DashboardProps = {
-  title: 'test-dashboard',
-  widgets: [],
-  filters: [filterByAgeRange, filterByRevenue],
-  styleOptions: {},
-};
+  const mockDashboard: DashboardProps = {
+    title: 'Test Dashboard',
+    widgets: mockWidgets,
+    widgetsOptions: {
+      'widget-1': {
+        filtersOptions: { ignoreFilters: { all: false, ids: [] } },
+      },
+    },
+  };
 
-describe('DashboardHelpers', () => {
-  describe('replaceFilters', () => {
-    it('should replace the filters of the dashboard with new filters', () => {
-      const newFilters = [filterByCost, filterByGender];
-      const updatedDashboard = dashboardHelpers.replaceFilters(initialDashboard, newFilters);
+  const mockJtdConfig: JumpToDashboardConfig = {
+    enabled: true,
+    targets: [{ id: 'target-dashboard-id', caption: 'Sales Details' }],
+    interaction: {
+      triggerMethod: 'rightclick',
+    },
+  };
 
-      expect(updatedDashboard.filters).toEqual(newFilters);
-      expect(updatedDashboard).not.toBe(initialDashboard); // Ensures immutability
-      expect(initialDashboard.filters).toEqual([filterByAgeRange, filterByRevenue]); // Original dashboard remains unchanged
+  const mockJumpToDashboardConfig: JumpToDashboardConfig = {
+    targets: [{ id: 'target-dashboard-id', caption: 'Sales Analytics' }],
+    interaction: {
+      triggerMethod: 'rightclick',
+      captionPrefix: 'Jump to Dashboard',
+    },
+  };
+
+  describe('applyJtdConfig', () => {
+    it('should apply JTD config to a widget in the dashboard', () => {
+      const result = applyJtdConfig(mockDashboard, 'widget-1', mockJtdConfig);
+
+      expect(result).not.toBe(mockDashboard); // Should return a new object
+      expect(result.widgetsOptions?.['widget-1']?.jtdConfig).toEqual(mockJtdConfig);
+      expect(result.widgetsOptions?.['widget-1']?.filtersOptions).toEqual({
+        ignoreFilters: { all: false, ids: [] },
+      }); // Should preserve existing options
     });
-    it('should replace the filters of the dashboard with new filter relations', () => {
-      const updatedDashboard = dashboardHelpers.replaceFilters(
-        initialDashboard,
-        filterByAgeRangeOrFilterByRevenue,
+
+    it('should apply JTD config to a widget that has no previous options', () => {
+      const result = applyJtdConfig(mockDashboard, 'widget-2', mockJtdConfig);
+
+      expect(result.widgetsOptions?.['widget-2']?.jtdConfig).toEqual(mockJtdConfig);
+      expect(result.widgetsOptions?.['widget-1']).toEqual(
+        mockDashboard.widgetsOptions?.['widget-1'],
+      ); // Should not affect other widgets
+    });
+
+    it('should support JumpToDashboardConfig format', () => {
+      const result = applyJtdConfig(mockDashboard, 'widget-2', mockJumpToDashboardConfig);
+
+      expect(result.widgetsOptions?.['widget-2']?.jtdConfig).toEqual(mockJumpToDashboardConfig);
+    });
+
+    it('should create widgetsOptions if it does not exist', () => {
+      const dashboardWithoutOptions: DashboardProps = {
+        title: 'Test Dashboard',
+        widgets: mockWidgets,
+      };
+
+      const result = applyJtdConfig(dashboardWithoutOptions, 'widget-1', mockJtdConfig);
+
+      expect(result.widgetsOptions?.['widget-1']?.jtdConfig).toEqual(mockJtdConfig);
+    });
+
+    it('should warn and return original dashboard if widget does not exist', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      const result = applyJtdConfig(mockDashboard, 'non-existent-widget', mockJtdConfig);
+
+      expect(result).toBe(mockDashboard); // Should return the same object
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Widget with OID "non-existent-widget" not found in dashboard. JTD config not applied.',
       );
-      expect(updatedDashboard.filters).toEqual(filterByAgeRangeOrFilterByRevenue);
-      expect(updatedDashboard).not.toBe(initialDashboard); // Ensures immutability
-      expect(initialDashboard.filters).toEqual([filterByAgeRange, filterByRevenue]); // Original dashboard remains unchanged
+
+      consoleSpy.mockRestore();
     });
   });
 
-  describe('addFilter', () => {
-    it('should add a new filter to the dashboard', () => {
-      const updatedDashboard = dashboardHelpers.addFilter(initialDashboard, filterByCost);
+  describe('applyJtdConfigs', () => {
+    const mockConfigsPerWidget = {
+      'widget-1': mockJtdConfig,
+      'widget-2': mockJumpToDashboardConfig,
+    };
 
-      expect(updatedDashboard.filters).toEqual([filterByAgeRange, filterByRevenue, filterByCost]);
-      expect(updatedDashboard).not.toBe(initialDashboard); // Ensures immutability
-      expect(initialDashboard.filters).toEqual([filterByAgeRange, filterByRevenue]); // Original dashboard remains unchanged
+    it('should apply JTD configs to multiple widgets in the dashboard', () => {
+      const result = applyJtdConfigs(mockDashboard, mockConfigsPerWidget);
+
+      expect(result).not.toBe(mockDashboard); // Should return a new object
+      expect(result.widgetsOptions?.['widget-1']?.jtdConfig).toEqual(mockJtdConfig);
+      expect(result.widgetsOptions?.['widget-2']?.jtdConfig).toEqual(mockJumpToDashboardConfig);
+      expect(result.widgetsOptions?.['widget-1']?.filtersOptions).toEqual({
+        ignoreFilters: { all: false, ids: [] },
+      }); // Should preserve existing options
     });
-    it('should add a new filter to the dashboard with existing filter relations', () => {
-      const dashboardWithRelations: DashboardProps = {
-        ...initialDashboard,
-        filters: filterByAgeRangeOrFilterByRevenue,
+
+    it('should handle empty configs object', () => {
+      const result = applyJtdConfigs(mockDashboard, {});
+
+      expect(result.widgetsOptions).toEqual(mockDashboard.widgetsOptions);
+    });
+
+    it('should warn and filter out configs for non-existent widgets', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      const configsWithInvalidWidget = {
+        'widget-1': mockJtdConfig,
+        'non-existent-widget': mockJtdConfig,
+        'another-invalid-widget': mockJumpToDashboardConfig,
       };
 
-      const updatedDashboard = dashboardHelpers.addFilter(dashboardWithRelations, filterByCost);
-      expect(updatedDashboard.filters).toEqual(
-        filterFactory.logic.and(filterByAgeRangeOrFilterByRevenue, filterByCost),
-      );
-      expect(updatedDashboard).not.toBe(dashboardWithRelations); // Ensures immutability
-      expect(dashboardWithRelations.filters).toEqual(filterByAgeRangeOrFilterByRevenue); // Original dashboard remains unchanged
-    });
-    it('should work when dashboard provided without filters', () => {
-      const updatedDashboard = dashboardHelpers.addFilter(
-        { ...initialDashboard, filters: undefined },
-        filterByCost,
+      const result = applyJtdConfigs(mockDashboard, configsWithInvalidWidget);
+
+      expect(result.widgetsOptions?.['widget-1']?.jtdConfig).toEqual(mockJtdConfig);
+      expect(result.widgetsOptions?.['non-existent-widget']).toBeUndefined();
+      expect(result.widgetsOptions?.['another-invalid-widget']).toBeUndefined();
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Widgets with OIDs [non-existent-widget, another-invalid-widget] not found in dashboard. JTD configs for these widgets not applied.',
       );
 
-      expect(updatedDashboard.filters).toEqual([filterByCost]);
+      consoleSpy.mockRestore();
     });
-  });
 
-  describe('addFilters', () => {
-    it('should add multiple new filters to the dashboard', () => {
-      const newFilters = [filterByCost, filterByGender];
-      const updatedDashboard = dashboardHelpers.addFilters(initialDashboard, newFilters);
-
-      expect(updatedDashboard.filters).toEqual([
-        filterByAgeRange,
-        filterByRevenue,
-        filterByCost,
-        filterByGender,
-      ]);
-      expect(updatedDashboard).not.toBe(initialDashboard); // Ensures immutability
-      expect(initialDashboard.filters).toEqual([filterByAgeRange, filterByRevenue]); // Original dashboard remains unchanged
-    });
-    it('should add multiple new filters to the dashboard with existing filter relations', () => {
-      const dashboardWithRelations: DashboardProps = {
-        ...initialDashboard,
-        filters: filterByAgeRangeOrFilterByRevenue,
+    it('should create widgetsOptions if it does not exist', () => {
+      const dashboardWithoutOptions: DashboardProps = {
+        title: 'Test Dashboard',
+        widgets: mockWidgets,
       };
 
-      const updatedDashboard = dashboardHelpers.addFilters(dashboardWithRelations, [
-        filterByCost,
-        filterByGender,
-      ]);
-      expect(updatedDashboard.filters).toEqual(
-        filterFactory.logic.and(
-          filterFactory.logic.and(filterByAgeRangeOrFilterByRevenue, filterByCost),
-          filterByGender,
-        ),
-      );
-      expect(updatedDashboard).not.toBe(dashboardWithRelations); // Ensures immutability
-      expect(dashboardWithRelations.filters).toEqual(filterByAgeRangeOrFilterByRevenue); // Original dashboard remains unchanged
-    });
+      const result = applyJtdConfigs(dashboardWithoutOptions, mockConfigsPerWidget);
 
-    it('should work when dashboard provided without filters', () => {
-      const newFilters = [filterByCost, filterByGender];
-      const updatedDashboard = dashboardHelpers.addFilters(
-        { ...initialDashboard, filters: undefined },
-        newFilters,
-      );
-
-      expect(updatedDashboard.filters).toEqual(newFilters);
-    });
-  });
-
-  describe('replaceFilter', () => {
-    it('should modify an existing filter in the dashboard', () => {
-      const modifiedFilter: Filter = { ...filterByAgeRange /* modified properties */ };
-      const updatedDashboard = dashboardHelpers.replaceFilter(
-        initialDashboard,
-        filterByAgeRange,
-        modifiedFilter,
-      );
-
-      expect(updatedDashboard.filters).toEqual([modifiedFilter, filterByRevenue]);
-      expect(updatedDashboard).not.toBe(initialDashboard); // Ensures immutability
-      expect(initialDashboard.filters).toEqual([filterByAgeRange, filterByRevenue]); // Original dashboard remains unchanged
-    });
-
-    it('should not modify the dashboard if the filter to modify is not found', () => {
-      const nonExistentFilter = { config: { guid: 'non-existent' } /* properties */ } as Filter;
-      const updatedDashboard = dashboardHelpers.replaceFilter(
-        initialDashboard,
-        nonExistentFilter,
-        filterByCost,
-      );
-
-      expect(updatedDashboard.filters).toEqual([filterByAgeRange, filterByRevenue]);
-      expect(updatedDashboard).not.toBe(initialDashboard); // Ensures immutability
-    });
-
-    it('should modify an existing filter in the dashboard with filter relations', () => {
-      const dashboardWithRelations: DashboardProps = {
-        ...initialDashboard,
-        filters: filterByAgeRangeOrFilterByRevenue,
-      };
-
-      const updatedDashboard = dashboardHelpers.replaceFilter(
-        dashboardWithRelations,
-        filterByAgeRange,
-        filterByCost,
-      );
-
-      expect(updatedDashboard.filters).toEqual(
-        filterFactory.logic.or(filterByCost, filterByRevenue),
-      );
-      expect(updatedDashboard).not.toBe(dashboardWithRelations); // Ensures immutability
-      expect(dashboardWithRelations.filters).toEqual(filterByAgeRangeOrFilterByRevenue); // Original dashboard remains unchanged
-    });
-    it('should work when dashboard provided without filters', () => {
-      const nonExistentFilter = { config: { guid: 'non-existent' } /* properties */ } as Filter;
-      const updatedDashboard = dashboardHelpers.replaceFilter(
-        { ...initialDashboard, filters: undefined },
-        nonExistentFilter,
-        filterByCost,
-      );
-
-      expect(updatedDashboard.filters).toEqual([]);
-    });
-  });
-
-  describe('removeFilter', () => {
-    it('should remove an existing filter from the dashboard', () => {
-      const updatedDashboard = dashboardHelpers.removeFilter(initialDashboard, filterByAgeRange);
-
-      expect(updatedDashboard.filters).toEqual([filterByRevenue]);
-      expect(updatedDashboard).not.toBe(initialDashboard); // Ensures immutability
-      expect(initialDashboard.filters).toEqual([filterByAgeRange, filterByRevenue]); // Original dashboard remains unchanged
-    });
-
-    it('should not modify the dashboard if the filter to remove is not found', () => {
-      const nonExistentFilter = { config: { guid: 'non-existent' } /* properties */ } as Filter;
-      const updatedDashboard = dashboardHelpers.removeFilter(initialDashboard, nonExistentFilter);
-
-      expect(updatedDashboard.filters).toEqual([filterByAgeRange, filterByRevenue]);
-      expect(updatedDashboard).not.toBe(initialDashboard); // Ensures immutability
-    });
-
-    it('should remove an existing filter from the dashboard with filter relations', () => {
-      const dashboardWithRelations: DashboardProps = {
-        ...initialDashboard,
-        filters: filterByAgeRangeOrFilterByRevenue,
-      };
-
-      const updatedDashboard = dashboardHelpers.removeFilter(
-        dashboardWithRelations,
-        filterByAgeRange,
-      );
-
-      expect(updatedDashboard.filters).toEqual([filterByRevenue]);
-      expect(updatedDashboard).not.toBe(dashboardWithRelations); // Ensures immutability
-      expect(dashboardWithRelations.filters).toEqual(filterByAgeRangeOrFilterByRevenue); // Original dashboard remains unchanged
-    });
-    it('should work when dashboard provided without filters', () => {
-      const nonExistentFilter = { config: { guid: 'non-existent' } /* properties */ } as Filter;
-      const updatedDashboard = dashboardHelpers.removeFilter(
-        { ...initialDashboard, filters: undefined },
-        nonExistentFilter,
-      );
-
-      expect(updatedDashboard.filters).toEqual([]);
+      expect(result.widgetsOptions?.['widget-1']?.jtdConfig).toEqual(mockJtdConfig);
+      expect(result.widgetsOptions?.['widget-2']?.jtdConfig).toEqual(mockJumpToDashboardConfig);
     });
   });
 });

@@ -3,6 +3,7 @@ import {
   getValue,
   getColumnByName,
   getValues,
+  isBlurred,
 } from '@/chart-data-processor/table-processor';
 import { CalendarHeatmapChartDataOptionsInternal } from '@/chart-data-options/types';
 import { ChartData } from '@/chart-data/types';
@@ -12,6 +13,7 @@ export type CalendarHeatmapDataValue = {
   date: Date;
   value?: number;
   blur?: boolean;
+  color?: string;
 };
 
 export type CalendarHeatmapChartData = {
@@ -49,15 +51,17 @@ export function getCalendarHeatmapChartData(
   // Convert each row to a calendar heatmap data point
   const values: CalendarHeatmapDataValue[] = dataTable.rows.map((row) => {
     const date = getValue(row, dateColumn)!;
-    const { compareValue } = getValues(row, [valueColumn])[0];
+    const rawValue = getValue(row, valueColumn)!;
+    const { compareValue, color } = getValues(row, [valueColumn])[0];
     const isValidValue = !compareValue?.valueIsNaN && !compareValue?.valueUndefined;
-    const value = isValidValue ? (compareValue?.value as number) : undefined;
+    const value = isValidValue ? (rawValue as number) : undefined;
+    const blur = isBlurred(row, valueColumn);
 
     return {
       date: new Date(date),
       value: value,
-      // TODO: Extend later for conditional highlighting features
-      blur: false,
+      color,
+      blur,
     };
   });
 

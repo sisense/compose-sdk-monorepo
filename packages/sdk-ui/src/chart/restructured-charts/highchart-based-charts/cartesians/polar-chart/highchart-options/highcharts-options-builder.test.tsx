@@ -53,7 +53,6 @@ describe('polar-chart highcharts-options-builder', () => {
         position: 'bottom',
       },
       lineWidth: 2,
-      valueLabel: {},
       marker: { enabled: false, size: 'small', fill: 'full' },
       xAxis: {
         type: 'linear',

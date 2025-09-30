@@ -2,11 +2,49 @@
 title: CalendarHeatmapStyleOptions
 ---
 
-# Interface CalendarHeatmapStyleOptions <Badge type="alpha" text="Alpha" />
+# Interface CalendarHeatmapStyleOptions
 
-Configuration options that define functional style of the various elements of CalendarHeatmapChart
+Configuration options that define functional style of the various elements of calendar-heatmap chart
 
 ## Properties
+
+### cellLabels
+
+> **cellLabels**?: [`CalendarHeatmapCellLabels`](../type-aliases/type-alias.CalendarHeatmapCellLabels.md)
+
+Configuration for day numbers (1-31) in calendar cells
+
+***
+
+### dayLabels
+
+> **dayLabels**?: `object`
+
+Configuration for weekday names in the header
+
+#### Type declaration
+
+> ##### `dayLabels.enabled`
+>
+> **enabled**?: `boolean`
+>
+> Boolean flag that defines if calendar weekday names should be shown
+>
+> ###### Default
+>
+> ```ts
+> true
+> ```
+>
+> ##### `dayLabels.style`
+>
+> **style**?: [`TextStyle`](../type-aliases/type-alias.TextStyle.md)
+>
+> Style configuration for calendar weekday names
+>
+>
+
+***
 
 ### height
 
@@ -20,11 +58,109 @@ Total height of the component, which is considered in the following order of pri
 
 ***
 
+### monthLabels
+
+> **monthLabels**?: `object`
+
+Configuration for month names in multi-month view types
+
+#### Type declaration
+
+> ##### `monthLabels.enabled`
+>
+> **enabled**?: `boolean`
+>
+> Boolean flag that defines if month names should be shown
+>
+> ###### Default
+>
+> ```ts
+> true
+> ```
+>
+> ##### `monthLabels.style`
+>
+> **style**?: [`TextStyle`](../type-aliases/type-alias.TextStyle.md)
+>
+> Style configuration for month names
+>
+>
+
+***
+
+### startOfWeek
+
+> **startOfWeek**?: [`CalendarDayOfWeek`](../type-aliases/type-alias.CalendarDayOfWeek.md)
+
+Determines which day of the week to start the calendar with
+
+#### Default
+
+```ts
+'sunday'
+```
+
+***
+
 ### viewType
 
 > **viewType**?: [`CalendarHeatmapViewType`](../type-aliases/type-alias.CalendarHeatmapViewType.md)
 
 View type determines how many months to display: 'month' (1), 'quarter' (3), 'half-year' (6), 'year' (12)
+
+***
+
+### weekends
+
+> **weekends**?: `object`
+
+Configuration for weekend days
+
+#### Type declaration
+
+> ##### `weekends.cellColor`
+>
+> **cellColor**?: `string`
+>
+> Calendar cell color for weekend days
+>
+> ###### Default
+>
+> ```ts
+> '#e6e6e6'
+> ```
+>
+> ##### `weekends.days`
+>
+> **days**?: [`CalendarDayOfWeek`](../type-aliases/type-alias.CalendarDayOfWeek.md)[]
+>
+> Weekend days - defaults to ['saturday', 'sunday']
+>
+> ##### `weekends.enabled`
+>
+> **enabled**?: `boolean`
+>
+> Boolean flag that enables/disables weekend highlighting
+>
+> ###### Default
+>
+> ```ts
+> false
+> ```
+>
+> ##### `weekends.hideValues`
+>
+> **hideValues**?: `boolean`
+>
+> Whether to hide values in tooltip for weekend days
+>
+> ###### Default
+>
+> ```ts
+> false
+> ```
+>
+>
 
 ***
 

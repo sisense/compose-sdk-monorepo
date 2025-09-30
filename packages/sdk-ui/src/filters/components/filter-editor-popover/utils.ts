@@ -1,4 +1,3 @@
-import { TFunction } from '@sisense/sdk-common';
 import {
   Filter,
   isMembersFilter,
@@ -8,13 +7,10 @@ import {
   isRankingFilter,
   isTextFilter,
   NumericOperators,
-  DimensionalLevelAttribute,
-  getColumnNameFromAttribute,
   isRelativeDateFilter,
   RelativeDateFilter,
   isCustomFilter,
 } from '@sisense/sdk-data';
-import { generateAttributeName } from '@/utils/generate-attribute-name';
 
 export function isSupportedByFilterEditor(filter: Filter): boolean {
   return !isRankingFilter(filter) && !isCustomFilter(filter);
@@ -58,29 +54,6 @@ export function isRelativeDateFilterWithAnchor(filter: Filter): filter is Relati
 
 export function isRelativeDateFilterWithoutAnchor(filter: Filter): filter is RelativeDateFilter {
   return isRelativeDateFilter(filter) && !filter.anchor;
-}
-
-export function createLevelAttribute(
-  baseLevelAttribute: DimensionalLevelAttribute,
-  granularity: string,
-  t: TFunction,
-): DimensionalLevelAttribute {
-  // todo: change after adding 'title' support for Filter
-  const name = generateAttributeName(
-    t,
-    getColumnNameFromAttribute(baseLevelAttribute),
-    granularity,
-  );
-
-  return new DimensionalLevelAttribute(
-    name,
-    baseLevelAttribute.expression,
-    granularity,
-    DimensionalLevelAttribute.getDefaultFormatForGranularity(granularity),
-    undefined,
-    undefined,
-    baseLevelAttribute.dataSource,
-  );
 }
 
 /**

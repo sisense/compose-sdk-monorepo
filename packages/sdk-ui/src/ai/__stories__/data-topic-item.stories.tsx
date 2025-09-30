@@ -1,5 +1,5 @@
 import { templateForComponent } from '../../__stories__/template';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-vite';
 import { DataTopicItem as DataTopicItemComponent } from '../data-topics';
 
 const template = templateForComponent(DataTopicItemComponent);

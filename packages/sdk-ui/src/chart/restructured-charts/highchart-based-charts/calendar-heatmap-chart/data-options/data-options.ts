@@ -1,4 +1,10 @@
-import { Attribute, Measure, DateLevels } from '@sisense/sdk-data';
+import {
+  Attribute,
+  Measure,
+  DateLevels,
+  isDatetime,
+  isDimensionalLevelAttribute,
+} from '@sisense/sdk-data';
 import {
   CalendarHeatmapChartDataOptions,
   CalendarHeatmapChartDataOptionsInternal,
@@ -10,14 +16,16 @@ import {
   normalizeColumn,
   normalizeMeasureColumn,
 } from '@/chart-data-options/utils';
-import { getDefaultDateFormat } from '@/chart-options-processor/translations/axis-section';
 import { isAttributeColumn } from '../../cartesians/helpers/data-options.js';
+import { createLevelAttribute } from '@/utils/create-level-attribute.js';
 
 /**
  * Translates calendar heatmap chart data options from user format to internal format
  *
  * Converts user-provided data options to the internal format used by the chart engine,
  * applying default date formatting and normalizing columns.
+ * Ensures that the date attribute has 'day' level granularity, which is required
+ * for proper calendar heatmap visualization.
  *
  * @param dataOptions - User-provided calendar heatmap chart data options
  * @returns Normalized internal data options
@@ -25,11 +33,22 @@ import { isAttributeColumn } from '../../cartesians/helpers/data-options.js';
 export function translateCalendarHeatmapChartDataOptions(
   dataOptions: CalendarHeatmapChartDataOptions,
 ): CalendarHeatmapChartDataOptionsInternal {
-  const { date, value } = dataOptions;
+  const normalizedDateColumn = normalizeColumn(dataOptions.date);
+  const normalizedValueColumn = normalizeMeasureColumn(dataOptions.value);
+  const dateColumn = normalizedDateColumn.column;
+  const isDateLevelAttribute = isDimensionalLevelAttribute(dateColumn);
+
+  if (isDateLevelAttribute && dateColumn.granularity !== DateLevels.Days) {
+    console.warn(
+      `The calendar heatmap chart’s "date" data option supports only day level granularity. Converted to day level.`,
+    );
+
+    normalizedDateColumn.column = createLevelAttribute(dateColumn, DateLevels.Days);
+  }
 
   return {
-    date: normalizeColumn(date, { dateFormat: getDefaultDateFormat(DateLevels.Days) }),
-    value: normalizeMeasureColumn(value),
+    date: normalizedDateColumn,
+    value: normalizedValueColumn,
   };
 }
 
@@ -77,7 +96,15 @@ export function getCalendarHeatmapMeasures(
 export function isCalendarHeatmapChartDataOptions(
   dataOptions: ChartDataOptions,
 ): dataOptions is CalendarHeatmapChartDataOptions {
-  return 'date' in dataOptions && 'value' in dataOptions;
+  const hasValidStructure =
+    'date' in dataOptions && dataOptions.date && 'value' in dataOptions && dataOptions.value;
+
+  if (!hasValidStructure) {
+    return false;
+  }
+
+  const normalizedDateColumn = normalizeColumn(dataOptions.date);
+  return isDatetime(normalizedDateColumn.column.type);
 }
 
 /**

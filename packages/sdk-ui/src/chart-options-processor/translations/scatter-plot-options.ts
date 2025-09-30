@@ -1,11 +1,12 @@
 import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { PlotOptions } from '../chart-options-service';
-import { getRotationType, ValueLabelOptions, ValueLabelSettings } from './value-label-section';
+import { getRotationType, DataLabelsSettings } from './value-label-section';
 import { ScatterChartDesignOptions } from './design-options';
 import { HighchartsDataPointContext } from './tooltip-utils';
 import { ScatterCustomPointOptions } from './scatter-tooltip';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { isMeasureColumn } from '@/chart-data-options/utils';
+import { SeriesLabels } from '@/types';
 
 // TODO write API docs
 export type ScatterMarkerSize = {
@@ -32,16 +33,16 @@ export type ScatterChartHighchartsDataPointContext = HighchartsDataPointContext 
   };
 };
 
-const getScatterValueLabelSettings = (
-  valueLabel: ValueLabelOptions,
+const getScatterDataLabelsSettings = (
+  seriesLabels: SeriesLabels | undefined,
   chartDataOptions: ScatterChartDataOptionsInternal,
-): ValueLabelSettings => {
-  if (!valueLabel.enabled) {
+): DataLabelsSettings => {
+  if (!seriesLabels?.enabled) {
     return { enabled: false };
   }
 
-  const rotation = valueLabel.rotation ?? 0;
-  const settings: ValueLabelSettings = {
+  const rotation = seriesLabels.rotation ?? 0;
+  const settings: DataLabelsSettings = {
     enabled: true,
     align: 'center',
     verticalAlign: 'middle',
@@ -121,7 +122,7 @@ export const getScatterPlotOptions = (
     series: {
       allowPointSelect: false,
       boostThreshold: 0,
-      dataLabels: getScatterValueLabelSettings(chartDesignOptions.valueLabel, dataOptions),
+      dataLabels: getScatterDataLabelsSettings(chartDesignOptions.seriesLabels, dataOptions),
       stickyTracking: false,
       turboThreshold: 0,
     },

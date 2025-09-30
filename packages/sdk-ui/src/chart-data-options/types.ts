@@ -320,6 +320,8 @@ export interface CategoricalChartDataOptions {
   value: (MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn)[];
   /**
    * Columns (or attributes) whose values represent categories in the chart.
+   *
+   * For funnel charts, only the first 50 categories will be used.
    */
   category: (Column | StyledColumn)[];
   /**
@@ -421,9 +423,7 @@ export interface AreamapChartDataOptions {
 
 /**
  * Configuration for how to query aggregate data and assign data
- * to a Calendar Heatmap chart.
- *
- * @alpha
+ * to a calendar-heatmap chart.
  */
 export interface CalendarHeatmapChartDataOptions {
   /** Date column representing dates on the calendar heatmap. */

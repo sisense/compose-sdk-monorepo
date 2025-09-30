@@ -5,10 +5,17 @@ import {
   Measure,
 } from '@sisense/sdk-data';
 import isDate from 'lodash-es/isDate';
-import { DataPoint, HighchartsPoint, ScatterDataPoint, BoxplotDataPoint } from '../types';
+import {
+  DataPoint,
+  HighchartsPoint,
+  ScatterDataPoint,
+  BoxplotDataPoint,
+  CalendarHeatmapDataPoint,
+} from '../types';
 import { SisenseChartDataPoint } from '../sisense-chart/types';
 import {
   BoxplotChartDataOptionsInternal,
+  CalendarHeatmapChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
@@ -423,6 +430,38 @@ const getBoxplotDataPoint = (
   };
 };
 
+const getCalendarHeatmapDataPoint = (
+  point: HighchartsPoint,
+  dataOptions: CalendarHeatmapChartDataOptionsInternal,
+): CalendarHeatmapDataPoint => {
+  const date = new Date(point.options.date!);
+  const dateString = point.options.dateString!;
+  const value = point.options.value!;
+
+  const dateEntry: DataPointEntry = {
+    ...getDataPointMetadata('date', dataOptions.date),
+    value: dateString,
+    displayValue: createFormatter(dataOptions.date)(date),
+  };
+
+  const hasValue = typeof value === 'number';
+  const valueEntry: DataPointEntry | undefined =
+    dataOptions.value && hasValue
+      ? {
+          ...getDataPointMetadata('value', dataOptions.value),
+          value: typeof value === 'number' ? value : 0,
+          displayValue: createFormatter(dataOptions.value)(value),
+        }
+      : undefined;
+
+  return {
+    entries: {
+      date: dateEntry,
+      value: valueEntry,
+    },
+  };
+};
+
 export function getDataPoint(
   point: HighchartsPoint,
   dataOptions: ChartDataOptionsInternal,
@@ -442,6 +481,11 @@ export function getDataPoint(
       return getBoxplotDataPoint(point, dataOptions as BoxplotChartDataOptionsInternal);
     case 'arearange':
       return getRangeDataPoint(point, dataOptions as RangeChartDataOptionsInternal);
+    case 'heatmap':
+      return getCalendarHeatmapDataPoint(
+        point,
+        dataOptions as CalendarHeatmapChartDataOptionsInternal,
+      );
     default:
       return getCartesianDataPoint(point, dataOptions as CartesianChartDataOptionsInternal);
   }

@@ -15,6 +15,10 @@ import {
   FilterRelationsModelNode,
   FormulaJaql,
   FormulaContext,
+  Measure,
+  Dimension,
+  createDimensionalElementFromJaql,
+  MetadataTypes,
 } from '@sisense/sdk-data';
 import { CommonFiltersApplyMode } from '@/common-filters/types';
 import {
@@ -25,12 +29,17 @@ import {
 import {
   isJaqlWithFormula,
   isSharedFormulaReferenceContext,
-  JtdConfig,
-  JtdNavigateType,
+  Panel,
+  PanelItem,
   SharedFormulaReferenceContext,
   WidgetDto,
 } from '@/widget-by-id/types';
-import { SizeMeasurement } from '@/types';
+import {
+  TriggerMethod,
+  JtdTarget,
+  JumpToDashboardConfig,
+  JumpToDashboardConfigForPivot,
+} from '@/dashboard/hooks/jtd/jtd-types';
 import { RestApi } from '@/api/rest-api';
 import { TabberConfig, TabberDtoStyle } from '@/types';
 import {
@@ -104,27 +113,29 @@ const isTabberWidgetDto = (widget: WidgetDto): widget is WidgetDto & { style: Ta
   return widget.subtype === 'WidgetsTabber';
 };
 
-const translateNavigateType = (navigateType: number): JtdNavigateType => {
+const translateNavigateType = (navigateType: number): TriggerMethod => {
   switch (navigateType) {
     case 1:
-      return JtdNavigateType.RIGHT_CLICK;
+      return 'rightclick';
     case 2:
-      return JtdNavigateType.PIVOT_LINK;
+      // Legacy PIVOT_LINK - mapped to CLICK for backward compatibility
+      return 'click';
     case 3:
-      return JtdNavigateType.CLICK;
+      return 'click';
     case 4:
-      return JtdNavigateType.BLOX;
+      // Legacy BLOX - mapped to CLICK for backward compatibility
+      return 'click';
     default:
   }
   console.warn(`Unknown navigate type: ${navigateType}, using CLICK instead`);
-  return JtdNavigateType.CLICK;
+  return 'click';
 };
 
-const getJtdNavigateType = (widget: WidgetDto): JtdNavigateType => {
+export const getJtdNavigateType = (widget: WidgetDto): TriggerMethod => {
   const jtdConfigDto = widget.drillToDashboardConfig;
   if (!jtdConfigDto) {
     // default one
-    return JtdNavigateType.RIGHT_CLICK;
+    return 'rightclick';
   }
 
   if (isPivotTableFusionWidget(widget.type)) {
@@ -133,24 +144,25 @@ const getJtdNavigateType = (widget: WidgetDto): JtdNavigateType => {
 
   if (isPieChartFusionWidget(widget.type)) {
     const chartCategories = widget.metadata?.panels.find((p) => p.name === 'categories');
-    const isPieChartWithoutCategories = (chartCategories?.items?.length || 0) > 0;
+    const isPieChartWithoutCategories = (chartCategories?.items?.length || 0) === 0;
     if (isPieChartWithoutCategories) {
-      return JtdNavigateType.CLICK;
+      return 'click';
     }
   }
   if (isChartTypeFusionWidget(widget.type)) {
     return translateNavigateType(jtdConfigDto.drillToDashboardNavigateTypeCharts);
   }
   if (isIndicatorFusionWidget(widget.type) || isTextFusionWidget(widget.type)) {
-    return JtdNavigateType.CLICK;
+    return 'click';
   }
-  return JtdNavigateType.RIGHT_CLICK;
+  return 'rightclick';
 };
 
 export const convertDimensionsToDimIndexes = (widget: WidgetDto, dimensionIds: string[]) => {
   const columns = widget.metadata?.panels.find((p) => p.name === 'columns');
   const rows = widget.metadata?.panels.find((p) => p.name === 'rows');
   const values = widget.metadata?.panels.find((p) => p.name === 'values');
+
   return dimensionIds.map((dimensionId) => {
     const columnsIndex = columns?.items?.findIndex((item) => item.instanceid === dimensionId);
     if (columnsIndex !== undefined && columnsIndex !== -1) {
@@ -171,7 +183,9 @@ export const convertDimensionsToDimIndexes = (widget: WidgetDto, dimensionIds: s
   });
 };
 
-const translateToJtdConfig = (widget: WidgetDto): JtdConfig | undefined => {
+const translateToJtdConfig = (
+  widget: WidgetDto,
+): JumpToDashboardConfig | JumpToDashboardConfigForPivot | undefined => {
   const jtdConfigDto = widget.drillToDashboardConfig;
   if (!jtdConfigDto) {
     return undefined;
@@ -179,34 +193,147 @@ const translateToJtdConfig = (widget: WidgetDto): JtdConfig | undefined => {
   if (!widgetTypeSupportsJtd(widget.type)) {
     return undefined;
   }
-  const measurement = jtdConfigDto.modalWindowMeasurement || SizeMeasurement.PERCENT;
-
-  return {
-    ...jtdConfigDto,
-    modalWindowHeight:
-      jtdConfigDto.modalWindowHeight || (measurement === SizeMeasurement.PERCENT ? 85 : 800),
-    modalWindowWidth:
-      jtdConfigDto.modalWindowWidth || (measurement === SizeMeasurement.PERCENT ? 85 : 1200),
+  // in fusion, '%' is default value, so we translate fusion dto with '%' by default
+  const measurement = jtdConfigDto.modalWindowMeasurement || '%';
+  const PartialJumpToDashboardConfig: Omit<JumpToDashboardConfig, 'targets'> = {
     enabled: typeof jtdConfigDto.enabled === 'boolean' ? jtdConfigDto.enabled : true,
-    modalWindowMeasurement: measurement,
-    navigateType: getJtdNavigateType(widget),
-    drillTargets: jtdConfigDto.dashboardIds.map((drillTarget) => ({
-      caption: drillTarget.caption,
-      id: drillTarget.id,
-      ...('pivotDimensions' in drillTarget && drillTarget.pivotDimensions
-        ? {
-            pivotDimensions: convertDimensionsToDimIndexes(widget, drillTarget.pivotDimensions),
-          }
-        : {}),
-    })),
-    showJtdIcon: typeof jtdConfigDto.showJTDIcon === 'boolean' ? jtdConfigDto.showJTDIcon : true,
+    filtering: {},
+    targetDashboardConfig: {
+      toolbar: {
+        visible: jtdConfigDto.displayToolbarRow || false,
+      },
+      filtersPanel: {
+        visible: jtdConfigDto.displayFilterPane || false,
+      },
+    },
+    modal: {
+      height: jtdConfigDto.modalWindowHeight || (measurement === '%' ? 85 : 800),
+      width: jtdConfigDto.modalWindowWidth || (measurement === '%' ? 85 : 1200),
+      measurementUnit: measurement,
+    },
+    interaction: {
+      triggerMethod: getJtdNavigateType(widget),
+      showIcon: typeof jtdConfigDto.showJTDIcon === 'boolean' ? jtdConfigDto.showJTDIcon : true,
+      captionPrefix: jtdConfigDto.drillToDashboardRightMenuCaption || 'Jump to',
+    },
+  };
+
+  if (isPivotTableFusionWidget(widget.type)) {
+    return {
+      ...PartialJumpToDashboardConfig,
+      targets:
+        extractPivotTargetsConfigFromWidgetDto(widget) ||
+        new Map<
+          Dimension | { dimension: Dimension; location: 'row' | 'column' | 'value' } | Measure,
+          JtdTarget[]
+        >(),
+    };
+  }
+  return {
+    ...PartialJumpToDashboardConfig,
+    targets: jtdConfigDto.dashboardIds.map(
+      (drillTarget) =>
+        ({
+          caption: drillTarget.caption,
+          id: drillTarget.id,
+        } as JtdTarget),
+    ),
   };
 };
+
+/**
+ * Extract pivot targets configuration from widget DTO and build Map-based targets
+ * @param widget - Widget DTO with drillToDashboardConfig
+ * @returns Map of dimensions/measures to their targets or undefined if no targets found
+ * @internal
+ */
+export function extractPivotTargetsConfigFromWidgetDto(widget: WidgetDto):
+  | Map<
+      | Dimension
+      | {
+          dimension: Dimension;
+          location: 'row' | 'column' | 'value';
+        }
+      | Measure,
+      JtdTarget[]
+    >
+  | undefined {
+  const jtdConfigDto = widget.drillToDashboardConfig;
+  if (!jtdConfigDto || !jtdConfigDto.dashboardIds || jtdConfigDto.dashboardIds.length === 0) {
+    return undefined;
+  }
+
+  const targets = new Map<
+    | Dimension
+    | {
+        dimension: Dimension;
+        location: 'row' | 'column' | 'value';
+      }
+    | Measure,
+    JtdTarget[]
+  >();
+  // Cache dimension objects by instanceId to ensure same object reference for same dimension
+  const dimensionCache = new Map<
+    string,
+    | Dimension
+    | {
+        dimension: Dimension;
+        location: 'row' | 'column' | 'value';
+      }
+    | Measure
+  >();
+
+  // Process each drill target
+  jtdConfigDto.dashboardIds.forEach((drillTarget) => {
+    const jtdTarget: JtdTarget = {
+      caption: drillTarget.caption,
+      id: drillTarget.id || drillTarget.oid || '',
+    };
+
+    // Check if this is a pivot target with pivotDimensions
+    if ('pivotDimensions' in drillTarget && drillTarget.pivotDimensions) {
+      drillTarget.pivotDimensions.forEach((pivotDimensionId) => {
+        // Check cache first to ensure same object reference for same dimension
+        let dimensionObj = dimensionCache.get(pivotDimensionId);
+
+        if (!dimensionObj) {
+          // Find and convert the panel item to Dimension/Measure
+          dimensionObj = findDimensionByInstanceId(widget.metadata.panels, pivotDimensionId);
+          if (dimensionObj) {
+            dimensionCache.set(pivotDimensionId, dimensionObj);
+          }
+        }
+
+        if (dimensionObj) {
+          // Add target to existing array or create new array
+          const existingTargets = targets.get(dimensionObj) || [];
+          existingTargets.push(jtdTarget);
+          targets.set(dimensionObj, existingTargets);
+        } else {
+          console.warn(
+            `Could not find dimension with instanceId: ${pivotDimensionId} in widget panels`,
+          );
+        }
+      });
+    } else {
+      // Non-pivot target - this shouldn't happen for pivot widgets but handle gracefully
+      console.warn('Pivot widget has drill target without pivotDimensions:', drillTarget);
+    }
+  });
+
+  return targets;
+}
 
 export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptions {
   const widgetsOptionsMap: WidgetsOptions = {};
 
   widgets.forEach((widget: WidgetDto) => {
+    // Safely translate JTD config, avoiding non-null assertion
+    const jtd: JumpToDashboardConfig | JumpToDashboardConfigForPivot | undefined =
+      widget?.drillToDashboardConfig && widget.drillToDashboardConfig.version
+        ? translateToJtdConfig(widget)
+        : undefined;
+
     widgetsOptionsMap[widget.oid] = {
       filtersOptions: {
         applyMode:
@@ -220,10 +347,7 @@ export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptio
         },
         forceApplyBackgroundFilters: true,
       },
-      ...(widget?.drillToDashboardConfig &&
-        widget.drillToDashboardConfig.version && {
-          jtdConfig: translateToJtdConfig(widget),
-        }),
+      ...(jtd ? { jtdConfig: jtd } : {}),
     };
   });
 
@@ -342,4 +466,50 @@ function applySharedFormulas(
       panels: updatedPanels,
     },
   };
+}
+
+/**
+ * Find dimension or measure by instanceId in widget panels and convert to proper type
+ * @param panels - Widget metadata panels to search
+ * @param pivotDimension - Instance ID to find, this is not a PivotDimId, it is the instanceId of the dimension or measure
+ * @returns Dimension/Measure object with optional location info or undefined if not found
+ * @internal
+ */
+export function findDimensionByInstanceId(
+  panels: Panel[],
+  pivotDimension: string,
+):
+  | Dimension
+  | Measure
+  | {
+      dimension: Dimension;
+      location: 'row' | 'column' | 'value';
+    }
+  | undefined {
+  // Find the panel item by instanceid
+  for (const panel of panels) {
+    const item: PanelItem | undefined = panel.items.find(
+      (item) => item.instanceid === pivotDimension,
+    );
+    if (item) {
+      // Create the dimension/measure object from JAQL - this is the key conversion
+      const element = createDimensionalElementFromJaql(item.jaql);
+
+      // Determine the location based on panel name
+      const panelName = panel.name || item.panel;
+
+      // For rows and columns panels, return with location info for dimensions only
+      if (panelName === 'rows' && MetadataTypes.isAttribute(element)) {
+        return { dimension: element as Dimension, location: 'row' };
+      } else if (panelName === 'columns' && MetadataTypes.isAttribute(element)) {
+        return { dimension: element as Dimension, location: 'column' };
+      }
+
+      // For all other cases (values/measures, filters, or measures in rows/columns),
+      // return the element directly without location info
+      return element as Dimension | Measure;
+    }
+  }
+
+  return undefined;
 }

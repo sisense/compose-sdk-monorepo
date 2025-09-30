@@ -1,4 +1,3 @@
-import { ValueLabelOptions } from './value-label-section';
 import { Axis } from './axis-section';
 import { Marker } from './marker-section';
 import { LineType, StackType } from './translations-to-highcharts';
@@ -9,12 +8,14 @@ import {
   Convolution,
   LineOptions,
   LegendOptions,
+  SeriesLabels,
   ScattermapMarkers,
   SunburstStyleOptions,
   TreemapStyleOptions,
 } from '../../types';
 import { ScatterMarkerSize } from './scatter-plot-options';
-import { DesignPerSeries } from './types';
+import { DesignPerSeries, TextStyle } from './types';
+import { CalendarDayOfWeek } from '@/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 
 type DataLimits = {
   seriesCapacity: number;
@@ -23,7 +24,7 @@ type DataLimits = {
 
 export type BaseDesignOptionsType = {
   legend?: LegendOptions;
-  valueLabel: ValueLabelOptions;
+  seriesLabels?: SeriesLabels;
   lineType: LineType;
   /**
    * @deprecated
@@ -51,6 +52,9 @@ export type StackableChartDesignOptions = CartesianChartDesignOptions & {
   stackType: StackType;
   showTotal?: boolean;
   totalLabelRotation?: number;
+  itemPadding?: number;
+  groupPadding?: number;
+  borderRadius?: number | string;
 };
 
 export type LineChartDesignOptions = CartesianChartDesignOptions & {
@@ -71,6 +75,25 @@ export type CalendarHeatmapChartDesignOptions = BaseDesignOptionsType & {
   height?: number;
   viewType: CalendarHeatmapViewType;
   cellSize?: number;
+  startOfWeek: CalendarDayOfWeek;
+  cellLabels: {
+    enabled: boolean;
+    style?: TextStyle;
+  };
+  dayLabels: {
+    enabled: boolean;
+    style?: TextStyle;
+  };
+  monthLabels: {
+    enabled: boolean;
+    style?: TextStyle;
+  };
+  weekends: {
+    enabled: boolean;
+    days: CalendarDayOfWeek[];
+    cellColor?: string;
+    hideValues: boolean;
+  };
 };
 
 export type PolarType = 'line' | 'area' | 'column';

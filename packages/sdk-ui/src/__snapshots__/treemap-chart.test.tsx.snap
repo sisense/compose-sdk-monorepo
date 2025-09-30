@@ -46,6 +46,7 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
     },
   },
   "legend": {
+    "enabled": false,
     "itemStyle": {
       "color": "#000000",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
@@ -811,6 +812,7 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
     "useHTML": true,
   },
   "xAxis": undefined,
+  "yAxis": undefined,
 }
 `;
 
@@ -860,6 +862,7 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
     },
   },
   "legend": {
+    "enabled": false,
     "itemStyle": {
       "color": "#000000",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
@@ -1704,6 +1707,7 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
     "useHTML": true,
   },
   "xAxis": undefined,
+  "yAxis": undefined,
 }
 `;
 
@@ -1753,6 +1757,7 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
     },
   },
   "legend": {
+    "enabled": false,
     "itemStyle": {
       "color": "#000000",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
@@ -2048,6 +2053,7 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
     "useHTML": true,
   },
   "xAxis": undefined,
+  "yAxis": undefined,
 }
 `;
 
@@ -2097,6 +2103,7 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
     },
   },
   "legend": {
+    "enabled": false,
     "itemStyle": {
       "color": "#000000",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
@@ -2845,6 +2852,7 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
     "useHTML": true,
   },
   "xAxis": undefined,
+  "yAxis": undefined,
 }
 `;
 
@@ -2894,6 +2902,7 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
     },
   },
   "legend": {
+    "enabled": false,
     "itemStyle": {
       "color": "#000000",
       "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
@@ -3354,5 +3363,6 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
     "useHTML": true,
   },
   "xAxis": undefined,
+  "yAxis": undefined,
 }
 `;

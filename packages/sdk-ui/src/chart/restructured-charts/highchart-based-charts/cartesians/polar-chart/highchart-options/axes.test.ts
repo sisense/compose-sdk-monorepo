@@ -41,7 +41,6 @@ describe('polar-chart axes', () => {
         position: 'bottom',
       },
       lineWidth: 2,
-      valueLabel: {},
       marker: { enabled: false, size: 'small', fill: 'full' },
       xAxis: {
         type: 'linear',

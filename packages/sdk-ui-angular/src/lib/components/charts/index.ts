@@ -3,6 +3,7 @@ export * from './area-range-chart.component';
 export * from './areamap-chart.component';
 export * from './bar-chart.component';
 export * from './boxplot-chart.component';
+export * from './calendar-heatmap-chart.component';
 export * from './chart.component';
 export * from './column-chart.component';
 export * from './funnel-chart.component';

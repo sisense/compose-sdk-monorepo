@@ -39,6 +39,9 @@ export function translateStackableStyleOptionsToDesignOptions(
       : DefaultStackType,
     showTotal: styleOptions.totalLabels?.enabled ?? false,
     totalLabelRotation: styleOptions.totalLabels?.rotation ?? 0,
+    itemPadding: styleOptions.series?.padding ?? 0.01,
+    groupPadding: styleOptions.series?.groupPadding ?? 0.1,
+    borderRadius: styleOptions.series?.borderRadius ?? 0,
   };
 }
 

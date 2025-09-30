@@ -120,7 +120,6 @@ export const CALENDAR_HEATMAP_CHART_TYPES = ['calendar-heatmap'] as const;
  * Calendar heatmap chart types
  *
  * @expandType
- * @alpha
  */
 export type CalendarHeatmapChartType = (typeof CALENDAR_HEATMAP_CHART_TYPES)[number];
 
@@ -163,6 +162,8 @@ export type DesignOptions<SpecificChartType extends ChartType = ChartType> =
     : SpecificChartType extends 'scatter'
     ? ScatterChartDesignOptions
     : SpecificChartType extends 'treemap'
+    ? TreemapChartDesignOptions
+    : SpecificChartType extends 'sunburst'
     ? TreemapChartDesignOptions
     : SpecificChartType extends 'boxplot'
     ? BoxplotChartDesignOptions
@@ -237,6 +238,10 @@ export const isAreamap = (chartType: ChartType): chartType is AreamapChartType =
 
 export const isRange = (chartType: ChartType): chartType is RangeChartType => {
   return RANGE_CHART_TYPES.find((value) => value === chartType) !== undefined;
+};
+
+export const isCalendarHeatmap = (chartType: ChartType): chartType is CalendarHeatmapChartType => {
+  return CALENDAR_HEATMAP_CHART_TYPES.find((value) => value === chartType) !== undefined;
 };
 
 export const ALL_CHART_TYPES = [

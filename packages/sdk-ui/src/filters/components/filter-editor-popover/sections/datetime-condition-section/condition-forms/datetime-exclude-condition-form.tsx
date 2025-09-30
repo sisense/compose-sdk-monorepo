@@ -11,7 +11,6 @@ import {
 import { SingleSelect } from '../../../common/index.js';
 import {
   convertDateToMemberString,
-  createLevelAttribute,
   isExcludeMembersFilter,
   isIncludeMembersFilter,
 } from '../../../utils.js';
@@ -37,6 +36,7 @@ import {
 } from '../../utils.js';
 import { granularities } from '../../common/granularities';
 import { useFilterEditorContext } from '../../../filter-editor-context';
+import { createLevelAttribute } from '@/utils/create-level-attribute.js';
 
 function createExcludeConditionFilter(baseFilter: Filter, data: DatetimeConditionFilterData) {
   const { selectedMembers, multiSelectEnabled, attribute } = data;

@@ -16,7 +16,7 @@ import { getDefaultWidgetsPanelLayout } from '@/dashboard/utils';
 import { useTabber } from '@/dashboard/hooks/use-tabber';
 import { WidgetsPanelLayout } from '@/models';
 import { combineHandlers } from '@/utils/combine-handlers.js';
-import { useJtd } from '@/dashboard/hooks/use-jtd';
+import { useJtdInternal } from '@/dashboard/hooks/use-jtd';
 
 export type ComposableDashboardProps = Pick<
   DashboardProps,
@@ -132,15 +132,15 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   });
 
   const widgetFiltersMap = useMemo(() => {
-    return widgets.reduce((acc, widget) => {
+    return innerWidgets.reduce((acc, widget) => {
       acc.set(widget.id, (widget as { filters?: Filter[] }).filters || []);
       return acc;
     }, new Map<string, Filter[]>());
-  }, [widgets]);
+  }, [innerWidgets]);
 
-  const { connectToWidgetProps: connectToWidgetPropsJtd } = useJtd({
+  const { connectToWidgetProps: connectToWidgetPropsJtd } = useJtdInternal({
     widgetOptions: widgetsOptions || {},
-    dashboardFilters: Array.isArray(filters) ? filters : [],
+    dashboardFilters: Array.isArray(commonFilters) ? commonFilters : [],
     widgetFilters: widgetFiltersMap,
     openMenu,
   });

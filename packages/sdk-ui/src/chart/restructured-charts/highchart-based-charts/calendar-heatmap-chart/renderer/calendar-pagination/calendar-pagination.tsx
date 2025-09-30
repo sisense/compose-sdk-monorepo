@@ -9,16 +9,19 @@ import { MonthInfo, getMonthsPerView } from '../helpers/view-helpers.js';
 import { formatViewTitle } from './helpers.js';
 import { ViewType } from '../../types.js';
 import { CalendarHeatmapViewType } from '@/types.js';
+import { Themable } from '@/theme-provider/types.js';
+import { CALENDAR_HEATMAP_SIZING } from '../../constants.js';
 
 export const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px 20px;
-  background-color: rgba(255, 255, 255, 0.95);
-  height: 50px;
+  background-color: transparent;
+  height: ${CALENDAR_HEATMAP_SIZING.PAGINATION_HEIGHT}px;
   opacity: 1;
   transition: opacity 0.3s ease;
+  box-sizing: border-box;
 `;
 
 export const NavigationButton = styled.button<{ disabled: boolean }>`
@@ -38,10 +41,11 @@ export const NavigationButton = styled.button<{ disabled: boolean }>`
   }
 `;
 
-export const ViewDisplay = styled.div`
+export const ViewDisplay = styled.div<Themable>`
   font-size: 15px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 400;
+  color: ${({ theme }) => theme.chart.textColor};
+  font-family: ${({ theme }) => theme.typography.fontFamily};
   min-width: 110px;
   text-align: center;
   margin: 0 10px;
@@ -105,13 +109,15 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
         onClick={onGoToFirst}
         title={firstMonthLabel}
         aria-label={firstMonthLabel}
+        theme={themeSettings}
       >
         <DoubleArrowEndIcon
           direction="left"
           disabled={isAtFirst}
           theme={themeSettings}
-          width={30}
-          height={30}
+          fill={themeSettings.chart.secondaryTextColor}
+          width={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.WIDTH}
+          height={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.HEIGHT}
         />
       </NavigationButton>
 
@@ -127,8 +133,9 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
             direction="left"
             disabled={isAtFirst}
             theme={themeSettings}
-            width={30}
-            height={30}
+            fill={themeSettings.chart.secondaryTextColor}
+            width={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.WIDTH}
+            height={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.HEIGHT}
           />
         </NavigationButton>
       )}
@@ -144,13 +151,14 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
           direction="left"
           disabled={viewType === ViewType.MONTH ? isAtFirst : !canGoToPrevMonth}
           theme={themeSettings}
-          width={30}
-          height={30}
+          fill={themeSettings.chart.secondaryTextColor}
+          width={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.WIDTH}
+          height={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.HEIGHT}
         />
       </NavigationButton>
 
       {/* Current View Display */}
-      <ViewDisplay>{viewTitle}</ViewDisplay>
+      <ViewDisplay theme={themeSettings}>{viewTitle}</ViewDisplay>
 
       {/* Next Button - consolidated for both month and multi-month views */}
       <NavigationButton
@@ -163,8 +171,9 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
           direction="right"
           disabled={viewType === ViewType.MONTH ? isAtLast : !canGoToNextMonth}
           theme={themeSettings}
-          width={30}
-          height={30}
+          fill={themeSettings.chart.secondaryTextColor}
+          width={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.WIDTH}
+          height={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.HEIGHT}
         />
       </NavigationButton>
 
@@ -180,8 +189,9 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
             direction="right"
             disabled={isAtLast}
             theme={themeSettings}
-            width={30}
-            height={30}
+            fill={themeSettings.chart.secondaryTextColor}
+            width={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.WIDTH}
+            height={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.HEIGHT}
           />
         </NavigationButton>
       )}
@@ -197,8 +207,9 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
           direction="right"
           disabled={isAtLast}
           theme={themeSettings}
-          width={30}
-          height={30}
+          fill={themeSettings.chart.secondaryTextColor}
+          width={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.WIDTH}
+          height={CALENDAR_HEATMAP_SIZING.PAGINATION_BUTTON_SIZE.HEIGHT}
         />
       </NavigationButton>
     </PaginationContainer>

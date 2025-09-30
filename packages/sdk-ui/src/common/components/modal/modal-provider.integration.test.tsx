@@ -3,7 +3,6 @@
 import { render, waitFor, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ModalProvider } from './index';
-import { SizeMeasurement } from '@/types';
 import React, { useState } from 'react';
 import { useModal } from '@/common/hooks/use-modal';
 
@@ -223,7 +222,7 @@ describe('ModalProvider + useModal Integration', () => {
             modalOptions={{
               width: 80,
               height: 70,
-              measurement: SizeMeasurement.PERCENT,
+              measurement: '%',
             }}
           />
         </ModalProvider>,
@@ -293,7 +292,7 @@ describe('ModalProvider + useModal Integration', () => {
             modalOptions={{
               width: 60, // Should be 600px (60% of 1000px)
               height: 50, // Should be 400px (50% of 800px)
-              measurement: SizeMeasurement.PERCENT,
+              measurement: '%',
             }}
           />
         </ModalProvider>,
@@ -340,7 +339,7 @@ describe('ModalProvider + useModal Integration', () => {
             modalOptions={{
               width: 800,
               height: 600,
-              measurement: SizeMeasurement.PIXEL,
+              measurement: 'px',
             }}
           />
         </ModalProvider>,

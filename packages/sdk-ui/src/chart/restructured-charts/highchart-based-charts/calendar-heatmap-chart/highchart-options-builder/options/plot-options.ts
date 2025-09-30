@@ -1,9 +1,5 @@
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
-import {
-  CALENDAR_HEATMAP_COLORS,
-  CALENDAR_HEATMAP_DEFAULTS,
-  CALENDAR_TYPOGRAPHY,
-} from '../../constants';
+import { CALENDAR_HEATMAP_DEFAULTS, CALENDAR_TYPOGRAPHY } from '../../constants';
 import { BuildContext } from '../../../types';
 import { HighchartsDataPointContext } from '@/chart-options-processor/tooltip';
 
@@ -30,27 +26,36 @@ function calculateFontSize(cellSize: number): number {
 export function getPlotOptions(
   ctx: BuildContext<'calendar-heatmap'>,
 ): HighchartsOptionsInternal['plotOptions'] {
-  const cellSize = ctx.designOptions?.cellSize || CALENDAR_HEATMAP_DEFAULTS.CELL_SIZE;
-  const fontSize = calculateFontSize(cellSize);
+  const cellLabels = ctx.designOptions.cellLabels;
+  const cellSize = ctx.designOptions?.cellSize ?? 0;
+  const fontSize = cellLabels?.style?.fontSize || `${calculateFontSize(cellSize)}px`;
+  const fontWeight = cellLabels?.style?.fontWeight ?? 'normal';
+  const textOutline = cellLabels?.style?.textOutline ?? 'none';
+  const fontFamily =
+    cellLabels?.style?.fontFamily ?? ctx.extraConfig.themeSettings?.typography.fontFamily;
+  const color = cellLabels?.style?.color || ctx.extraConfig.themeSettings?.chart.textColor;
 
   return {
     series: {},
     heatmap: {
       dataLabels: {
-        enabled: cellSize >= CALENDAR_HEATMAP_DEFAULTS.MIN_CELL_SIZE_FOR_LABELS,
+        enabled:
+          cellLabels.enabled &&
+          (ctx.designOptions?.width ?? 0) >=
+            CALENDAR_HEATMAP_DEFAULTS.SHOW_CELL_LABEL_CHART_SIZE_THRESHOLD,
         style: {
-          textOutline: 'none',
-          fontWeight: 'normal',
-          fontSize: `${fontSize}px`,
-          color: CALENDAR_HEATMAP_COLORS.TEXT_COLOR,
+          color,
+          fontSize,
+          fontWeight,
+          textOutline,
+          fontFamily,
+          ...(cellLabels.style?.fontStyle && { fontStyle: cellLabels.style.fontStyle }),
+          ...(cellLabels.style?.pointerEvents && { pointerEvents: cellLabels.style.pointerEvents }),
+          ...(cellLabels.style?.textOverflow && { textOverflow: cellLabels.style.textOverflow }),
         },
         y: cellSize * CALENDAR_TYPOGRAPHY.LABEL_Y_OFFSET_RATIO,
         formatter: function (this: HighchartsDataPointContext) {
           const point = this.point;
-          // Show day number for all month days, empty string for empty tiles
-          if (point.custom && point.custom.empty) {
-            return '';
-          }
           return point.custom && point.custom.monthDay ? point.custom.monthDay.toString() : '';
         },
       },

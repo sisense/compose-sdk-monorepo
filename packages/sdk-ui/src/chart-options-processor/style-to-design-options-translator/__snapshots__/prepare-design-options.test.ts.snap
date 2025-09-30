@@ -58,7 +58,6 @@ exports[`prepareChartDesignOptions > should return design options for areamap ch
   "pieType": "classic",
   "skin": "vertical",
   "stackType": "classic",
-  "valueLabel": {},
   "xAxis": {
     "enabled": true,
     "gridLine": true,
@@ -155,12 +154,12 @@ exports[`prepareChartDesignOptions > should return design options for combo "lin
     "showValue": true,
   },
   "pieType": "classic",
-  "skin": "vertical",
-  "stackType": "classic",
-  "valueLabel": {
+  "seriesLabels": {
     "enabled": true,
     "rotation": -90,
   },
+  "skin": "vertical",
+  "stackType": "classic",
   "xAxis": {
     "enabled": true,
     "gridLine": false,
@@ -192,7 +191,7 @@ exports[`prepareChartDesignOptions > should return design options for funnel cha
     "enabled": true,
   },
   "dataLimits": {
-    "categoriesCapacity": 100000,
+    "categoriesCapacity": 50000,
     "seriesCapacity": 3,
   },
   "funnelDirection": "regular",
@@ -222,8 +221,20 @@ exports[`prepareChartDesignOptions > should return design options for funnel cha
   },
   "indicatorType": "numeric",
   "legend": {
+    "align": "left",
+    "backgroundColor": "transparent",
+    "borderColor": "transparent",
+    "borderWidth": 0,
     "enabled": true,
-    "position": "left",
+    "itemStyle": {
+      "fontSize": "13px",
+      "fontWeight": "normal",
+      "pointerEvents": "auto",
+      "textOutline": "none",
+    },
+    "layout": "vertical",
+    "symbolRadius": 0,
+    "verticalAlign": "middle",
   },
   "lineType": "straight",
   "lineWidth": 2,
@@ -243,7 +254,6 @@ exports[`prepareChartDesignOptions > should return design options for funnel cha
   "pieType": "classic",
   "skin": "vertical",
   "stackType": "classic",
-  "valueLabel": {},
   "xAxis": {
     "enabled": true,
     "gridLine": true,
@@ -331,7 +341,6 @@ exports[`prepareChartDesignOptions > should return design options for scattermap
   "pieType": "classic",
   "skin": "vertical",
   "stackType": "classic",
-  "valueLabel": {},
   "xAxis": {
     "enabled": true,
     "gridLine": true,

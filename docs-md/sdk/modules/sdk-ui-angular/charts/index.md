@@ -12,6 +12,7 @@ Angular components and utilities for working with charts
 - [BarChartComponent](class.BarChartComponent.md)
 - [BoxplotChartComponent](class.BoxplotChartComponent.md)
 - [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [CalendarHeatmapChartComponent](class.CalendarHeatmapChartComponent.md)
 - [ChartComponent](class.ChartComponent.md) - Common component for rendering charts of different types including table
 - [ColumnChartComponent](class.ColumnChartComponent.md)
 - [FunnelChartComponent](class.FunnelChartComponent.md)

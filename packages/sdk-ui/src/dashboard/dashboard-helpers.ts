@@ -7,6 +7,8 @@ import {
   withoutFilters,
   withReplacedFilter,
 } from '@/filters/helpers';
+import type { JumpToDashboardConfig } from './hooks/jtd/jtd-types';
+import { WidgetsOptions } from '@/models/dashboard/types';
 
 /**
  * Creates a new dashboard instance with its filters replaced by a new set of filters.
@@ -144,4 +146,186 @@ export const removeFilters = (
   filtersToRemove: Filter[],
 ): DashboardProps => {
   return replaceFilters(dashboard, withoutFilters(filtersToRemove)(dashboard.filters));
+};
+
+/**
+ * Creates a new `DashboardProps` instance with JTD (Jump To Dashboard) configuration applied to a single widget.
+ *
+ * Jump To Dashboard (JTD) allows users to navigate from one dashboard to another when interacting with widgets,
+ * such as clicking on chart data points or using context menus. This function applies JTD configuration to a specific
+ * widget in a dashboard, enabling jump-to-dashboard functionality.
+ *
+ * This function does not modify the original dashboard; instead, it returns a new `DashboardProps` instance with the JTD
+ * configuration applied. If the specified widget does not exist in the dashboard, the function returns the original
+ * `DashboardProps` unchanged and logs a warning to the console.
+ *
+ * @example
+ * Apply JTD configuration to a dashboard widget.
+ * ```ts
+ * const jtdConfig: JumpToDashboardConfig = {
+ *   targets: [{ id: 'dashboardId1', caption: 'Analytics Dashboard' }],
+ *   interaction: {
+ *     triggerMethod: 'rightclick',
+ *     contextMenuCaption: 'Jump to Analytics'
+ *   }
+ * };
+ *
+ * const updatedDashboard = dashboardHelpers.applyJtdConfig(dashboard, 'widgetId3', jtdConfig);
+ * ```
+ *
+ * @param dashboard - The original dashboard to modify. Must be a valid `DashboardProps` object containing the target widget.
+ * @param widgetOid - The unique identifier (OID) of the widget to apply JTD configuration to. Must match an existing widget ID in the dashboard.
+ * @param config - The JTD configuration to apply.
+ *
+ * @returns A new `DashboardProps` instance with the JTD configuration applied to the specified widget. If the widget doesn't exist, returns the original dashboard unchanged.
+ *
+ * @group Dashboard Utilities
+ */
+export const applyJtdConfig = (
+  dashboard: DashboardProps,
+  widgetOid: string,
+  config: JumpToDashboardConfig,
+): DashboardProps => {
+  // Ensure the widget exists in the dashboard
+  const widgetExists = dashboard.widgets.some((widget) => widget.id === widgetOid);
+  if (!widgetExists) {
+    console.warn(`Widget with OID "${widgetOid}" not found in dashboard. JTD config not applied.`);
+    return dashboard;
+  }
+
+  // Create a new widgetsOptions object with the JTD config applied
+  const currentWidgetsOptions = dashboard.widgetsOptions || {};
+  const currentWidgetOptions = currentWidgetsOptions[widgetOid] || {};
+
+  const updatedWidgetsOptions: WidgetsOptions = {
+    ...currentWidgetsOptions,
+    [widgetOid]: {
+      ...currentWidgetOptions,
+      jtdConfig: config,
+    },
+  };
+
+  return {
+    ...dashboard,
+    widgetsOptions: updatedWidgetsOptions,
+  };
+};
+
+/**
+ * Creates a new `DashboardProps` instance with JTD (Jump To Dashboard) configurations applied to multiple widgets in a single operation.
+ *
+ * Jump To Dashboard (JTD) allows users to navigate from one dashboard to another when interacting with widgets.
+ * This function efficiently applies JTD configurations to multiple widgets in a single operation.
+ *
+ * This function does not modify the original dashboard; instead, it returns a new `DashboardProps` instance with all valid
+ * JTD configurations applied. Configurations for non-existent widgets are automatically filtered out, and warnings
+ * are logged to the console for invalid widget OIDs.
+ *
+ * @example
+ * Apply a variety of Jump To Dashboard configuration options to multiple widgets in a single operation.
+ * ```ts
+ * import { dashboardHelpers } from '@sisense/sdk-ui';
+ *
+ * const dashboard: DashboardProps = {
+ *   title: 'Executive Dashboard',
+ *   widgets: [
+ *     { id: 'widgetId1', widgetType: 'chart', chartType: 'column', dataOptions: {...} },
+ *     { id: 'widgetId2', widgetType: 'chart', chartType: 'pie', dataOptions: {...} },
+ *     { id: 'widgetId3', widgetType: 'table', dataOptions: {...} }
+ *   ]
+ * };
+ *
+ * const jtdConfigs = {
+ *   'widgetId1': {
+ *     enabled: true,
+ *     targets: [{ id: 'dashboardId1', caption: 'Sales Breakdown' }],
+ *     interaction: {
+ *       triggerMethod: 'rightclick'
+ *     }
+ *   },
+ *   'widgetId2': {
+ *     targets: [{ id: 'dashboardId2', caption: 'Revenue Analysis' }],
+ *     interaction: {
+ *       triggerMethod: 'click',
+ *       contextMenuCaption: 'Analyze Revenue'
+ *     }
+ *   },
+ *   'widgetId3': {
+ *     enabled: true,
+ *     targets: [
+ *       { id: 'dashboardId3', caption: 'Customer Details' },
+ *       { id: 'dashboardId4', caption: 'Product Analytics' }
+ *     ],
+ *     interaction: {
+ *       triggerMethod: 'rightclick'
+ *     }
+ *   }
+ * };
+ *
+ * const updatedDashboard = dashboardHelpers.applyJtdConfigs(dashboard, jtdConfigs);
+ * ```
+ *
+ * @example Error handling
+ * Batch apply JTD configurations with error handling.
+ * ```ts
+ * const configsWithInvalidWidget = {
+ *   'widgetId1': { targets: [{ id: 'dashboardId1', caption: 'Target' }] },
+ *   'invalidWidgetId': { targets: [{ id: 'dashboardId2', caption: 'Other' }] } // Will be filtered out
+ * };
+ *
+ * const result = dashboardHelpers.applyJtdConfigs(dashboard, configsWithInvalidWidget);
+ * // Console warning: "Widgets with OIDs [invalidWidgetId] not found in dashboard..."
+ * // Only 'widgetId1' gets the JTD configuration applied
+ * ```
+ *
+ * @param dashboard - The original dashboard to modify. Must be a valid `DashboardProps` object with widgets to configure.
+ * @param jtdConfigs - An object mapping widget OIDs (keys) to their respective JTD configurations (values).
+ * @returns A new `DashboardProps` instance with all valid JTD configurations applied to their respective widgets. Invalid widget configurations are skipped and warnings are logged.
+ *
+ * @group Dashboard Utilities
+ */
+export const applyJtdConfigs = (
+  dashboard: DashboardProps,
+  jtdConfigs: Record<string, JumpToDashboardConfig>,
+): DashboardProps => {
+  // Get all widget OIDs in the dashboard
+  const existingWidgetOids = new Set(dashboard.widgets.map((widget) => widget.id));
+
+  // Filter out configs for widgets that don't exist
+  const validConfigs: Record<string, JumpToDashboardConfig> = {};
+  const invalidWidgetOids: string[] = [];
+
+  Object.entries(jtdConfigs).forEach(([widgetOid, config]) => {
+    if (existingWidgetOids.has(widgetOid)) {
+      validConfigs[widgetOid] = config;
+    } else {
+      invalidWidgetOids.push(widgetOid);
+    }
+  });
+
+  // Warn about invalid widget OIDs
+  if (invalidWidgetOids.length > 0) {
+    console.warn(
+      `Widgets with OIDs [${invalidWidgetOids.join(
+        ', ',
+      )}] not found in dashboard. JTD configs for these widgets not applied.`,
+    );
+  }
+
+  // Create a new widgetsOptions object with all JTD configs applied
+  const currentWidgetsOptions = dashboard.widgetsOptions || {};
+  const updatedWidgetsOptions: WidgetsOptions = { ...currentWidgetsOptions };
+
+  Object.entries(validConfigs).forEach(([widgetOid, config]) => {
+    const currentWidgetOptions = updatedWidgetsOptions[widgetOid] || {};
+    updatedWidgetsOptions[widgetOid] = {
+      ...currentWidgetOptions,
+      jtdConfig: config,
+    };
+  });
+
+  return {
+    ...dashboard,
+    widgetsOptions: updatedWidgetsOptions,
+  };
 };

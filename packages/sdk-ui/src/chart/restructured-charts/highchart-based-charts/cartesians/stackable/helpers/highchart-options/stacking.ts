@@ -28,7 +28,7 @@ interface StackingMeta {
 const buildStackingMeta = (
   stackableOptions: BuildContext<StackableChartTypes>['designOptions'],
 ): StackingMeta => {
-  const showTotal = stackableOptions.valueLabel ? stackableOptions.showTotal || false : false;
+  const showTotal = stackableOptions.seriesLabels?.enabled && stackableOptions.showTotal;
 
   switch (stackableOptions.stackType) {
     case 'stacked':

@@ -1,12 +1,11 @@
 import { createContext, useContext } from 'react';
-import { SizeMeasurement } from '@/types';
 
 export interface ModalOptions {
   title?: string;
   content: React.ReactNode;
   width?: number;
   height?: number;
-  measurement?: SizeMeasurement;
+  measurement?: '%' | 'px';
 }
 
 export type ModalInstance = {

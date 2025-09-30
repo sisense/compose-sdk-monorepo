@@ -1,7 +1,12 @@
 import { ViewType } from '../../types';
 import { CalendarHeatmapChartData } from '../../data';
-import { FULL_MONTH_DATE_FORMAT } from '../../constants';
+import {
+  FULL_MONTH_DATE_FORMAT,
+  SHORT_MONTH_DATE_FORMAT,
+  CALENDAR_HEATMAP_DEFAULTS,
+} from '../../constants';
 import { CalendarHeatmapViewType } from '@/types';
+import { CalendarSize } from './sizing-helpers';
 
 export interface MonthInfo {
   year: number;
@@ -9,15 +14,22 @@ export interface MonthInfo {
   monthName: string;
 }
 
+// Helper function to determine if short month names should be used based on calendar size
+export function shouldUseShortMonthNames(calendarSize: CalendarSize): boolean {
+  return calendarSize.width <= CALENDAR_HEATMAP_DEFAULTS.SHORT_MONTH_NAME_CHART_SIZE_THRESHOLD;
+}
+
 // Helper function to get available months from chart data
 export function getAvailableMonths(
   chartData: CalendarHeatmapChartData,
   dateFormatter: (date: Date, format: string) => string,
+  useShortMonthNames?: boolean,
 ): MonthInfo[] {
   if (!chartData.values || chartData.values.length === 0) return [];
 
   const monthsSet = new Set<string>();
   const months: MonthInfo[] = [];
+  const monthFormat = useShortMonthNames ? SHORT_MONTH_DATE_FORMAT : FULL_MONTH_DATE_FORMAT;
 
   chartData.values.forEach((dataPoint) => {
     const year = dataPoint.date.getFullYear();
@@ -29,7 +41,7 @@ export function getAvailableMonths(
       months.push({
         year,
         month,
-        monthName: dateFormatter(dataPoint.date, FULL_MONTH_DATE_FORMAT),
+        monthName: dateFormatter(dataPoint.date, monthFormat),
       });
     }
   });

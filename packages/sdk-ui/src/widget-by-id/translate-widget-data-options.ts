@@ -47,6 +47,7 @@ import {
 import {
   AreamapChartDataOptions,
   BoxplotChartDataOptions,
+  CalendarHeatmapChartDataOptions,
   PivotTableDataOptions,
   ScattermapChartDataOptions,
   TableDataOptions,
@@ -556,6 +557,23 @@ function extractAreamapChartDataOptions(
 }
 
 /**
+ * Extract data options for calendar heatmap from WidgetDto
+ *
+ * @param panels - Panels
+ * @param paletteColors - Palette colors
+ * @returns Calendar heatmap chart data options
+ */
+function extractCaledarHeatmapChartDataOptions(
+  panels: Panel[],
+  paletteColors?: Color[],
+): CalendarHeatmapChartDataOptions {
+  return {
+    date: createColumnsFromPanelItems<StyledColumn>(panels, 'date', paletteColors)[0],
+    value: createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'color', paletteColors)[0],
+  };
+}
+
+/**
  * Recursive helper function for attachDataSourceToPanels
  */
 function attachDataSourceToPanelItem(item: PanelItem, dataSource: JaqlDataSource): PanelItem {
@@ -634,6 +652,9 @@ export function extractDataOptions(
   }
   if (fusionWidgetType === 'map/area') {
     return extractAreamapChartDataOptions(panels, customPaletteColors);
+  }
+  if (fusionWidgetType === 'heatmap') {
+    return extractCaledarHeatmapChartDataOptions(panels, customPaletteColors);
   }
   if (fusionWidgetType === 'richtexteditor') {
     return {};

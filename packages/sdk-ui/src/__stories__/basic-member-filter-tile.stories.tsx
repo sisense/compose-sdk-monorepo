@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react-vite';
 import { ThemeProvider } from '../theme-provider';
 import { BasicMemberFilterTile } from '../filters';
 import type {

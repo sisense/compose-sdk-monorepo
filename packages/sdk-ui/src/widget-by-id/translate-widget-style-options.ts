@@ -1,5 +1,8 @@
-import { LEGACY_DESIGN_TYPES } from '../themes/legacy-design-settings';
+/* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable max-params */
+import isString from 'lodash-es/isString';
+import { LEGACY_DESIGN_TYPES } from '../themes/legacy-design-settings';
+import { CALENDAR_HEATMAP_DEFAULTS } from '@/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/constants';
 import { TranslatableError } from '../translation/translatable-error';
 import {
   ChartStyleOptions,
@@ -27,6 +30,17 @@ import {
   WidgetStyleOptions,
   TextWidgetStyleOptions,
   CartesianStyleOptions,
+  PieStyleOptions,
+  LineWidth,
+  Markers,
+  BaseStyleOptions,
+  LegendPosition,
+  LineStyleOptions,
+  Labels,
+  StackableStyleOptions,
+  CalendarHeatmapStyleOptions,
+  CalendarHeatmapViewType,
+  CalendarDayOfWeek,
 } from '../types';
 import {
   Panel,
@@ -49,32 +63,52 @@ import {
   WidgetDto,
   TextWidgetDtoStyle,
   isValidScrollerLocation,
+  PieWidgetStyle,
+  CalendarHeatmapWidgetStyle,
 } from './types';
 import { getEnabledPanelItems, getChartSubtype } from './utils';
+import {
+  FunnelDirection,
+  FunnelSize,
+  FunnelType,
+} from '@/chart-options-processor/translations/funnel-plot-options';
 
-function extractBaseStyleOptions(
-  widgetSubtype: WidgetSubtype,
-  widgetStyle: WidgetStyle,
-): ChartStyleOptions {
-  const chartSubtype = getChartSubtype(widgetSubtype);
-  return {
-    ...widgetStyle,
-    ...(chartSubtype && { subtype: chartSubtype }),
-  } as ChartStyleOptions;
-}
+/**
+ * Helper function to extract axis style options from WidgetDto
+ */
+function extractAxisStyleOptions(widgetAxisStyleOptions?: AxisStyle): AxisLabel {
+  const {
+    min,
+    max,
+    enabled,
+    gridLines,
+    intervalJumps,
+    isIntervalEnabled,
+    labels,
+    logarithmic,
+    title,
+  } = widgetAxisStyleOptions || {};
 
-function extractAxisStyleOptions(widgetAxisStyleOptions?: AxisStyle) {
-  const { min, max } = widgetAxisStyleOptions || {};
   return {
-    ...widgetAxisStyleOptions,
-    min: typeof min == 'number' ? min : null,
-    max: typeof max == 'number' ? max : null,
+    enabled,
+    gridLines,
+    intervalJumps,
+    isIntervalEnabled,
+    // any non-number value of 'min/max' options should be removed
+    min: typeof min === 'number' ? min : undefined,
+    max: typeof max === 'number' ? max : undefined,
+    logarithmic,
+    ...(title && { title: { enabled: title.enabled, text: title.text } }),
+    ...(labels && { labels: { enabled: labels.enabled } }),
   };
 }
 
 type AxisStyleOptions = Pick<BaseAxisStyleOptions, 'xAxis' | 'yAxis' | 'y2Axis'>;
 
-function prepareCartesianChartAxisOptions(
+/**
+ * Helper function to extract cartesian chart axis options from WidgetDto
+ */
+function extractCartesianChartAxisOptions(
   widgetType: FusionWidgetType,
   widgetStyle: CartesianWidgetStyle,
   panels: Panel[],
@@ -91,16 +125,23 @@ function prepareCartesianChartAxisOptions(
   const hasX2Axis = xAxesRelatedPanelItems.length === 2;
 
   if (hasX2Axis) {
+    const { title, x2Title } = widgetStyle.xAxis;
     // Notes: Swap 'title' and 'x2Title' options since, in the current widget model, 'title' represents the top axis
     // while 'x2Title' represents the bottom axis, which contradicts our interface.
     axisOptions.xAxis = {
       ...axisOptions.xAxis,
-      title: axisOptions.xAxis?.x2Title,
-      x2Title: axisOptions.xAxis?.title,
+      title: {
+        enabled: x2Title?.enabled,
+        text: x2Title?.text,
+      },
+      x2Title: {
+        enabled: title?.enabled,
+        text: title?.text,
+      },
     } as AxisLabel;
   }
 
-  const hasXAxisTitleText = !!(axisOptions.xAxis?.title && 'text' in axisOptions.xAxis.title);
+  const hasXAxisTitleText = isString(axisOptions.xAxis?.title?.text);
   const xAxisRelatedPanelItem = xAxesRelatedPanelItems[xAxesRelatedPanelItems.length - 1];
   if (!hasXAxisTitleText && xAxisRelatedPanelItem) {
     axisOptions.xAxis = {
@@ -112,7 +153,7 @@ function prepareCartesianChartAxisOptions(
     } as AxisLabel;
   }
 
-  const hasX2AxisTitleText = !!(axisOptions.xAxis?.x2Title && 'text' in axisOptions.xAxis.x2Title);
+  const hasX2AxisTitleText = isString(axisOptions.xAxis?.x2Title?.text);
   const x2AxisRelatedPanelItem = xAxesRelatedPanelItems[0];
   if (!hasX2AxisTitleText && hasX2Axis) {
     axisOptions.xAxis = {
@@ -123,7 +164,7 @@ function prepareCartesianChartAxisOptions(
       },
     } as AxisLabel;
   }
-  const hasYAxisTitleText = !!(axisOptions.yAxis?.title && 'text' in axisOptions.yAxis.title);
+  const hasYAxisTitleText = isString(axisOptions.yAxis?.title?.text);
   const yAxisRelatedPanelItems = yAxesRelatedPanelItems.filter((item) => !item.y2);
   if (!hasYAxisTitleText && yAxisRelatedPanelItems.length === 1) {
     axisOptions.yAxis = {
@@ -135,7 +176,7 @@ function prepareCartesianChartAxisOptions(
     } as AxisLabel;
   }
 
-  const hasY2AxisTitleText = !!(axisOptions.y2Axis?.title && 'text' in axisOptions.y2Axis.title);
+  const hasY2AxisTitleText = isString(axisOptions.y2Axis?.title?.text);
   const y2AxisRelatedPanelItems = yAxesRelatedPanelItems.filter((item) => item.y2);
   if (!hasY2AxisTitleText && y2AxisRelatedPanelItems.length === 1) {
     axisOptions.y2Axis = {
@@ -150,7 +191,10 @@ function prepareCartesianChartAxisOptions(
   return axisOptions;
 }
 
-function preparePolarChartAxisOptions(
+/**
+ * Helper function to extract polar chart axis options from WidgetDto
+ */
+function extractPolarChartAxisOptions(
   widgetStyle: PolarWidgetStyle,
   panels: Panel[],
 ): AxisStyleOptions {
@@ -160,7 +204,7 @@ function preparePolarChartAxisOptions(
   } as AxisStyleOptions;
   const xAxisRelatedPanelItem = getEnabledPanelItems(panels, 'categories')[0];
 
-  const hasXAxisTitleText = !!(axisOptions.xAxis?.title && 'text' in axisOptions.xAxis.title);
+  const hasXAxisTitleText = isString(axisOptions.xAxis?.title?.text);
   if (!hasXAxisTitleText && xAxisRelatedPanelItem) {
     axisOptions.xAxis = {
       ...axisOptions.xAxis,
@@ -181,7 +225,7 @@ function preparePolarChartAxisOptions(
   return axisOptions;
 }
 
-function prepareScatterChartAxisOptions(
+function extractScatterChartAxisOptions(
   widgetStyle: ScatterWidgetStyle,
   panels: Panel[],
 ): AxisStyleOptions {
@@ -192,7 +236,7 @@ function prepareScatterChartAxisOptions(
   const xAxisRelatedPanelItem = getEnabledPanelItems(panels, 'x-axis')[0];
   const yAxisRelatedPanelItems = getEnabledPanelItems(panels, 'y-axis')[0];
 
-  const hasXAxisTitleText = !!(axisOptions.xAxis?.title && 'text' in axisOptions.xAxis.title);
+  const hasXAxisTitleText = isString(axisOptions.xAxis?.title?.text);
   if (!hasXAxisTitleText && xAxisRelatedPanelItem) {
     axisOptions.xAxis = {
       ...axisOptions.xAxis,
@@ -203,7 +247,7 @@ function prepareScatterChartAxisOptions(
     } as AxisLabel;
   }
 
-  const hasYAxisTitleText = !!(axisOptions.yAxis?.title && 'text' in axisOptions.yAxis.title);
+  const hasYAxisTitleText = isString(axisOptions.yAxis?.title?.text);
   if (!hasYAxisTitleText && yAxisRelatedPanelItems) {
     axisOptions.yAxis = {
       ...axisOptions.yAxis,
@@ -217,7 +261,10 @@ function prepareScatterChartAxisOptions(
   return axisOptions;
 }
 
-function prepareBoxplotChartAxisOptions(
+/**
+ * Helper function to extract boxplot chart axis options from WidgetDto
+ */
+function extractBoxplotChartAxisOptions(
   widgetStyle: BoxplotWidgetStyle,
   panels: Panel[],
 ): AxisStyleOptions {
@@ -228,7 +275,7 @@ function prepareBoxplotChartAxisOptions(
   const xAxisRelatedPanelItem = getEnabledPanelItems(panels, 'category')[0];
   const yAxisRelatedPanelItem = getEnabledPanelItems(panels, 'value')[0];
 
-  const hasXAxisTitleText = !!(axisOptions.xAxis?.title && 'text' in axisOptions.xAxis.title);
+  const hasXAxisTitleText = isString(axisOptions.xAxis?.title?.text);
   if (!hasXAxisTitleText && xAxisRelatedPanelItem) {
     axisOptions.xAxis = {
       ...axisOptions.xAxis,
@@ -239,7 +286,7 @@ function prepareBoxplotChartAxisOptions(
     } as AxisLabel;
   }
 
-  const hasYAxisTitleText = !!(axisOptions.yAxis?.title && 'text' in axisOptions.yAxis.title);
+  const hasYAxisTitleText = isString(axisOptions.yAxis?.title?.text);
   if (!hasYAxisTitleText && yAxisRelatedPanelItem) {
     axisOptions.yAxis = {
       ...axisOptions.yAxis,
@@ -254,11 +301,11 @@ function prepareBoxplotChartAxisOptions(
 }
 
 /**
- * @internal
+ * Helper function to extract values (series labels) chart labels options from WidgetDto
  */
-function extractCartesianLabelsOptions(
+function extractValueLabelsOptions(
   widgetSubtype: WidgetSubtype,
-  widgetStyle: CartesianWidgetStyle,
+  widgetStyle: CartesianWidgetStyle | PolarWidgetStyle | ScatterWidgetStyle | BoxplotWidgetStyle,
 ) {
   const showTotals =
     widgetStyle.seriesLabels?.enabled && widgetStyle.seriesLabels?.labels?.types?.totals;
@@ -295,19 +342,216 @@ function extractCartesianLabelsOptions(
   };
 }
 
-function extractCartesianChartStyleOptions(
+/**
+ * Helper function to extract chart subtype
+ */
+function extractChartSubtype(widgetSubtype: WidgetSubtype): { subtype?: string } {
+  const chartSubtype = getChartSubtype(widgetSubtype);
+  return chartSubtype ? { subtype: chartSubtype } : {};
+}
+
+/**
+ * Helper function to extract navigator options with scroller location from WidgetDto
+ */
+function extractNavigatorOptions(
+  widgetStyle: WidgetStyle,
+  widgetOptions?: WidgetDto['options'],
+): Pick<BaseAxisStyleOptions, 'navigator'> {
+  if ('navigator' in widgetStyle) {
+    const navigator: CartesianStyleOptions['navigator'] = {
+      enabled: widgetStyle.navigator.enabled,
+    };
+    const scrollerLocation = widgetOptions?.previousScrollerLocation;
+    if (scrollerLocation && isValidScrollerLocation(scrollerLocation)) {
+      navigator.scrollerLocation = scrollerLocation;
+    }
+
+    return { navigator };
+  }
+
+  return {};
+}
+
+/**
+ * Helper function to extract legend options from WidgetDto
+ */
+function extractLegendOptions(widgetStyle: WidgetStyle): Pick<BaseStyleOptions, 'legend'> {
+  if ('legend' in widgetStyle && widgetStyle.legend) {
+    return {
+      legend: {
+        enabled: widgetStyle.legend.enabled,
+        position: widgetStyle.legend.position as LegendPosition,
+      },
+    };
+  }
+
+  return {};
+}
+
+/**
+ * Helper function to extract data limits options from WidgetDto
+ */
+function extractDataLimitsOptions(
+  widgetStyle: WidgetStyle,
+): Pick<CartesianStyleOptions, 'dataLimits'> {
+  if ('dataLimits' in widgetStyle && widgetStyle.dataLimits) {
+    const { seriesCapacity, categoriesCapacity } = widgetStyle.dataLimits;
+    return {
+      dataLimits: {
+        seriesCapacity,
+        categoriesCapacity,
+      },
+    };
+  }
+
+  return {};
+}
+
+/**
+ * Helper function to extract line width options from WidgetDto
+ */
+function extractLineWidthOptions(
+  widgetStyle: CartesianWidgetStyle,
+): Pick<LineStyleOptions, 'lineWidth'> {
+  if (widgetStyle.lineWidth) {
+    const { width } = widgetStyle.lineWidth;
+    return { lineWidth: { width } as LineWidth };
+  }
+
+  return {};
+}
+
+/**
+ * Helper function to extract markers options from WidgetDto
+ */
+function extractMarkersOptions(
+  widgetStyle: CartesianWidgetStyle,
+): Pick<BaseAxisStyleOptions, 'markers'> {
+  if (widgetStyle.markers) {
+    const { enabled, size, fill } = widgetStyle.markers;
+    return {
+      markers: {
+        enabled,
+        size,
+        fill,
+      } as Markers,
+    };
+  }
+
+  return {};
+}
+
+function extractCategoricalLabelsOptions(widgetStyle: WidgetStyle): { labels?: Labels } {
+  if ('labels' in widgetStyle && widgetStyle.labels) {
+    const { enabled, categories, percent, decimals, value } = widgetStyle.labels;
+    return {
+      labels: {
+        enabled,
+        categories,
+        percent,
+        decimals,
+        value,
+      },
+    };
+  }
+
+  return {};
+}
+
+/**
+ * Common function to extract base cartesian chart style options (without navigator)
+ */
+function extractBaseCartesianStyleOptions(
   widgetType: FusionWidgetType,
   widgetSubtype: WidgetSubtype,
   widgetStyle: CartesianWidgetStyle,
   panels: Panel[],
 ): CartesianStyleOptions {
   return {
-    ...extractBaseStyleOptions(widgetSubtype, widgetStyle),
-    ...prepareCartesianChartAxisOptions(widgetType, widgetStyle, panels),
-    ...extractCartesianLabelsOptions(widgetSubtype, widgetStyle),
-    lineWidth: widgetStyle.lineWidth,
-    markers: widgetStyle.markers,
-  } as CartesianStyleOptions;
+    ...(extractChartSubtype(widgetSubtype) as StackableStyleOptions),
+    ...extractLegendOptions(widgetStyle),
+    ...extractCartesianChartAxisOptions(widgetType, widgetStyle, panels),
+    ...extractValueLabelsOptions(widgetSubtype, widgetStyle),
+    ...extractDataLimitsOptions(widgetStyle),
+  };
+}
+
+/**
+ * Extract style options for line charts
+ */
+function extractLineChartStyleOptions(widget: WidgetDto): CartesianStyleOptions {
+  const widgetSubtype = widget.subtype as WidgetSubtype;
+  const widgetStyle = widget.style as CartesianWidgetStyle;
+
+  return {
+    ...extractBaseCartesianStyleOptions(
+      'chart/line',
+      widgetSubtype,
+      widgetStyle,
+      widget.metadata.panels,
+    ),
+    ...extractNavigatorOptions(widgetStyle, widget.options),
+    // Line-specific properties:
+    ...extractLineWidthOptions(widgetStyle),
+    ...extractMarkersOptions(widgetStyle),
+  };
+}
+
+/**
+ * Extract style options for area charts
+ */
+function extractAreaChartStyleOptions(widget: WidgetDto): CartesianStyleOptions {
+  const widgetSubtype = widget.subtype as WidgetSubtype;
+  const widgetStyle = widget.style as CartesianWidgetStyle;
+
+  return {
+    ...extractBaseCartesianStyleOptions(
+      'chart/area',
+      widgetSubtype,
+      widgetStyle,
+      widget.metadata.panels,
+    ),
+    ...extractNavigatorOptions(widgetStyle, widget.options),
+    // Area-specific properties:
+    ...extractLineWidthOptions(widgetStyle),
+    ...extractMarkersOptions(widgetStyle),
+  };
+}
+
+/**
+ * Extract style options for bar charts
+ */
+function extractBarChartStyleOptions(widget: WidgetDto): CartesianStyleOptions {
+  const widgetSubtype = widget.subtype as WidgetSubtype;
+  const widgetStyle = widget.style as CartesianWidgetStyle;
+
+  return {
+    ...extractBaseCartesianStyleOptions(
+      'chart/bar',
+      widgetSubtype,
+      widgetStyle,
+      widget.metadata.panels,
+    ),
+    ...extractNavigatorOptions(widgetStyle, widget.options),
+  };
+}
+
+/**
+ * Extract style options for column charts
+ */
+function extractColumnChartStyleOptions(widget: WidgetDto): CartesianStyleOptions {
+  const widgetSubtype = widget.subtype as WidgetSubtype;
+  const widgetStyle = widget.style as CartesianWidgetStyle;
+
+  return {
+    ...extractBaseCartesianStyleOptions(
+      'chart/column',
+      widgetSubtype,
+      widgetStyle,
+      widget.metadata.panels,
+    ),
+    ...extractNavigatorOptions(widgetStyle, widget.options),
+  };
 }
 
 function extractPolarChartStyleOptions(
@@ -316,27 +560,42 @@ function extractPolarChartStyleOptions(
   panels: Panel[],
 ): PolarStyleOptions {
   return {
-    ...extractBaseStyleOptions(widgetSubtype, widgetStyle),
-    ...preparePolarChartAxisOptions(widgetStyle, panels),
-  } as PolarStyleOptions;
+    ...(extractChartSubtype(widgetSubtype) as PolarStyleOptions),
+    ...extractLegendOptions(widgetStyle),
+    ...extractPolarChartAxisOptions(widgetStyle, panels),
+    ...extractDataLimitsOptions(widgetStyle),
+    ...extractValueLabelsOptions(widgetSubtype, widgetStyle),
+  };
 }
 
-function extractScatterChartDataOptions(
+/**
+ * Helper function to extract scatter chart style options from WidgetDto
+ */
+function extractScatterChartStyleOptions(
   widgetSubtype: WidgetSubtype,
   widgetStyle: ScatterWidgetStyle,
   panels: Panel[],
 ): ScatterStyleOptions {
   return {
-    ...extractBaseStyleOptions(widgetSubtype, widgetStyle),
-    ...prepareScatterChartAxisOptions(widgetStyle, panels),
-    markerSize: {
-      scatterDefaultSize: widgetStyle.markerSize?.defaultSize,
-      scatterBubbleMinSize: widgetStyle.markerSize?.min,
-      scatterBubbleMaxSize: widgetStyle.markerSize?.max,
-    },
-  } as ScatterStyleOptions;
+    ...(extractChartSubtype(widgetSubtype) as ScatterStyleOptions),
+    ...extractLegendOptions(widgetStyle),
+    ...extractScatterChartAxisOptions(widgetStyle, panels),
+    ...extractDataLimitsOptions(widgetStyle),
+    ...extractValueLabelsOptions(widgetSubtype, widgetStyle),
+    // Extract scatter-specific properties
+    ...(widgetStyle.markerSize && {
+      markerSize: {
+        scatterDefaultSize: widgetStyle.markerSize.defaultSize,
+        scatterBubbleMinSize: widgetStyle.markerSize.min,
+        scatterBubbleMaxSize: widgetStyle.markerSize.max,
+      },
+    }),
+  };
 }
 
+/**
+ * Helper function to extract table chart style options from WidgetDto
+ */
 export function extractTableChartStyleOptions(widgetStyle: TableWidgetStyle): TableStyleOptions {
   return {
     header: {
@@ -357,18 +616,48 @@ export function extractTableChartStyleOptions(widgetStyle: TableWidgetStyle): Ta
   };
 }
 
-function extractFunnelChartDataOptions(
+/**
+ * Helper function to extract funnel chart style options from WidgetDto
+ */
+function extractFunnelChartStyleOptions(
   widgetSubtype: WidgetSubtype,
   widgetStyle: FunnelWidgetStyle,
 ): FunnelStyleOptions {
   return {
-    ...extractBaseStyleOptions(widgetSubtype, widgetStyle),
-    funnelSize: widgetStyle.size,
-    funnelType: widgetStyle.type,
-    funnelDirection: widgetStyle.direction,
-    labels: widgetStyle.labels,
-    legend: widgetStyle.legend,
-  } as FunnelStyleOptions;
+    ...(extractChartSubtype(widgetSubtype) as FunnelStyleOptions),
+    ...extractLegendOptions(widgetStyle),
+    ...extractCategoricalLabelsOptions(widgetStyle),
+    // Extract funnel-specific properties
+    funnelSize: widgetStyle.size as FunnelSize,
+    funnelType: widgetStyle.type as FunnelType,
+    funnelDirection: widgetStyle.direction as FunnelDirection,
+  };
+}
+
+function extractPieChartStyleOptions(
+  widgetSubtype: WidgetSubtype,
+  widgetStyle: PieWidgetStyle,
+): PieStyleOptions {
+  // Extract pie-specific style options without spreading all widget properties
+  const chartSubtype = extractChartSubtype(widgetSubtype) as PieStyleOptions;
+  return {
+    // Add subtype if available and it's a pie subtype
+    ...(chartSubtype.subtype &&
+      ['pie/classic', 'pie/donut', 'pie/ring'].includes(chartSubtype.subtype) &&
+      chartSubtype),
+    ...extractLegendOptions(widgetStyle),
+    ...extractCategoricalLabelsOptions(widgetStyle),
+    ...extractDataLimitsOptions(widgetStyle),
+    ...(widgetStyle.convolution && {
+      convolution: {
+        enabled: widgetStyle.convolution.enabled!,
+        independentSlicesCount: widgetStyle.convolution.independentSlicesCount,
+        minimalIndependentSlicePercentage:
+          widgetStyle.convolution.minimalIndependentSlicePercentage,
+        selectedConvolutionType: widgetStyle.convolution.selectedConvolutionType,
+      },
+    }),
+  };
 }
 
 export const getIndicatorTypeSpecificOptions = (
@@ -398,6 +687,9 @@ export const getIndicatorTypeSpecificOptions = (
   }
 };
 
+/**
+ * Helper function to extract indicator chart style options from WidgetDto
+ */
 function extractIndicatorChartStyleOptions(
   widgetSubtype: WidgetSubtype,
   widgetStyle: IndicatorWidgetStyle,
@@ -427,6 +719,9 @@ function extractIndicatorChartStyleOptions(
   };
 }
 
+/**
+ * Helper function to extract treemap chart style options from WidgetDto
+ */
 function extractTreemapChartStyleOptions(widgetStyle: TreemapWidgetStyle): TreemapStyleOptions {
   return {
     labels: {
@@ -442,6 +737,9 @@ function extractTreemapChartStyleOptions(widgetStyle: TreemapWidgetStyle): Treem
   };
 }
 
+/**
+ * Helper function to extract sunburst chart style options from WidgetDto
+ */
 function extractSunburstChartStyleOptions(widgetStyle: SunburstWidgetStyle): SunburstStyleOptions {
   return {
     legend: {
@@ -454,23 +752,33 @@ function extractSunburstChartStyleOptions(widgetStyle: SunburstWidgetStyle): Sun
   };
 }
 
-function extractBoxplotChartStyleOptions(
-  widgetSubtype: WidgetSubtype,
-  widgetStyle: BoxplotWidgetStyle,
-  panels: Panel[],
-): BoxplotStyleOptions {
+/**
+ * Helper function to extract boxplot chart style options from WidgetDto
+ */
+function extractBoxplotChartStyleOptions(widget: WidgetDto): BoxplotStyleOptions {
+  const widgetSubtype = widget.subtype as WidgetSubtype;
+  const widgetStyle = widget.style as BoxplotWidgetStyle;
+
   return {
-    ...extractBaseStyleOptions(widgetSubtype, widgetStyle),
-    ...prepareBoxplotChartAxisOptions(widgetStyle, panels),
-  } as BoxplotStyleOptions;
+    ...(extractChartSubtype(widgetSubtype) as BoxplotStyleOptions),
+    ...extractLegendOptions(widgetStyle),
+    ...extractBoxplotChartAxisOptions(widgetStyle, widget.metadata.panels),
+    ...extractValueLabelsOptions(widgetSubtype, widgetStyle),
+    ...extractDataLimitsOptions(widgetStyle),
+    ...extractNavigatorOptions(widgetStyle, widget.options),
+  };
 }
 
+/**
+ * Helper function to extract scattermap chart style options from WidgetDto
+ */
 function extractScattermapChartStyleOptions(
   widgetSubtype: WidgetSubtype,
   widgetStyle: ScattermapWidgetStyle,
 ): ScattermapStyleOptions {
   return {
-    ...extractBaseStyleOptions(widgetSubtype, widgetStyle),
+    ...(extractChartSubtype(widgetSubtype) as ScattermapStyleOptions),
+    // Extract scattermap-specific properties
     markers: {
       fill: widgetStyle.markers.fill,
       size: {
@@ -479,9 +787,12 @@ function extractScattermapChartStyleOptions(
         maxSize: widgetStyle.markers.size.max,
       },
     },
-  } as ScattermapStyleOptions;
+  };
 }
 
+/**
+ * Helper function to extract areamap chart style options from WidgetDto
+ */
 function extractAreamapChartStyleOptions(widgetSubtype: WidgetSubtype): AreamapStyleOptions {
   let mapType: AreamapType;
   switch (widgetSubtype) {
@@ -499,6 +810,56 @@ function extractAreamapChartStyleOptions(widgetSubtype: WidgetSubtype): AreamapS
   };
 }
 
+/**
+ * Helper function to extract calendar heatmap chart style options from WidgetDto
+ */
+function extractCalendarHeatmapChartStyleOptions(
+  widgetStyle: CalendarHeatmapWidgetStyle,
+): CalendarHeatmapStyleOptions {
+  let viewType: CalendarHeatmapViewType = CALENDAR_HEATMAP_DEFAULTS.VIEW_TYPE;
+
+  if (widgetStyle['domain/year']) {
+    viewType = 'year';
+  } else if (widgetStyle['domain/half-year']) {
+    viewType = 'half-year';
+  } else if (widgetStyle['domain/quarter']) {
+    viewType = 'quarter';
+  } else if (widgetStyle['domain/month']) {
+    viewType = 'month';
+  }
+
+  let startOfWeek: CalendarDayOfWeek = CALENDAR_HEATMAP_DEFAULTS.START_OF_WEEK;
+
+  if (widgetStyle['week/monday']) {
+    startOfWeek = 'monday';
+  } else if (widgetStyle['week/sunday']) {
+    startOfWeek = 'sunday';
+  }
+
+  return {
+    viewType,
+    startOfWeek,
+    cellLabels: {
+      enabled: widgetStyle.dayNumberEnabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_CELL_LABEL,
+    },
+    dayLabels: {
+      enabled: widgetStyle.dayNameEnabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_DAY_LABEL,
+    },
+    monthLabels: {
+      enabled: CALENDAR_HEATMAP_DEFAULTS.SHOW_MONTH_LABEL,
+    },
+    weekends: {
+      enabled: widgetStyle.grayoutEnabled ?? CALENDAR_HEATMAP_DEFAULTS.WEEKEND_ENABLED,
+      days: widgetStyle.grayoutEnabled ? [...CALENDAR_HEATMAP_DEFAULTS.WEEKEND_DAYS] : [],
+      cellColor: CALENDAR_HEATMAP_DEFAULTS.WEEKEND_CELL_COLOR,
+      hideValues: true,
+    },
+  };
+}
+
+/**
+ * Helper function to extract pivot table chart style options from WidgetDto
+ */
 export function extractPivotTableStyleOptions(
   widgetStyle: PivotWidgetStyle,
 ): PivotTableStyleOptions {
@@ -514,6 +875,9 @@ export function extractPivotTableStyleOptions(
   };
 }
 
+/**
+ * Helper function to extract style options from WidgetDto
+ */
 export function extractStyleOptions<WType extends FusionWidgetType>(
   widgetType: WType,
   widget: WidgetDto,
@@ -525,35 +889,25 @@ export function extractStyleOptions<WType extends FusionWidgetType>(
   } = widget as WidgetDto & { subtype: WidgetSubtype };
   switch (widgetType) {
     case 'chart/line':
+      return extractLineChartStyleOptions(widget);
     case 'chart/area':
+      return extractAreaChartStyleOptions(widget);
     case 'chart/bar':
-    case 'chart/column': {
-      const styleOptions = extractCartesianChartStyleOptions(
-        widgetType,
-        widgetSubtype,
-        style as CartesianWidgetStyle,
-        panels,
-      );
-      if (styleOptions.navigator) {
-        const scrollerLocation = widget.options?.previousScrollerLocation;
-        styleOptions.navigator.scrollerLocation = isValidScrollerLocation(scrollerLocation)
-          ? scrollerLocation
-          : undefined;
-      }
-      return styleOptions;
-    }
+      return extractBarChartStyleOptions(widget);
+    case 'chart/column':
+      return extractColumnChartStyleOptions(widget);
     case 'chart/polar':
       return extractPolarChartStyleOptions(widgetSubtype, style as PolarWidgetStyle, panels);
     case 'chart/scatter':
-      return extractScatterChartDataOptions(widgetSubtype, style as ScatterWidgetStyle, panels);
+      return extractScatterChartStyleOptions(widgetSubtype, style as ScatterWidgetStyle, panels);
     case 'chart/funnel':
-      return extractFunnelChartDataOptions(widgetSubtype, style as FunnelWidgetStyle);
+      return extractFunnelChartStyleOptions(widgetSubtype, style as FunnelWidgetStyle);
     case 'treemap':
       return extractTreemapChartStyleOptions(style as TreemapWidgetStyle);
     case 'sunburst':
       return extractSunburstChartStyleOptions(style as SunburstWidgetStyle);
     case 'chart/pie':
-      return extractBaseStyleOptions(widgetSubtype, style);
+      return extractPieChartStyleOptions(widgetSubtype, style as PieWidgetStyle);
     case 'tablewidget':
     case 'tablewidgetagg':
       return extractTableChartStyleOptions(style as TableWidgetStyle);
@@ -566,25 +920,14 @@ export function extractStyleOptions<WType extends FusionWidgetType>(
         style as IndicatorWidgetStyle,
         panels,
       );
-    case 'chart/boxplot': {
-      const boxplotStyleOptions = extractBoxplotChartStyleOptions(
-        widgetSubtype,
-        style as BoxplotWidgetStyle,
-        panels,
-      );
-      if (boxplotStyleOptions.navigator) {
-        boxplotStyleOptions.navigator.scrollerLocation = isValidScrollerLocation(
-          widget.options?.previousScrollerLocation,
-        )
-          ? widget.options?.previousScrollerLocation
-          : undefined;
-      }
-      return boxplotStyleOptions;
-    }
+    case 'chart/boxplot':
+      return extractBoxplotChartStyleOptions(widget);
     case 'map/scatter':
       return extractScattermapChartStyleOptions(widgetSubtype, style as ScattermapWidgetStyle);
     case 'map/area':
       return extractAreamapChartStyleOptions(widgetSubtype);
+    case 'heatmap':
+      return extractCalendarHeatmapChartStyleOptions(style as CalendarHeatmapWidgetStyle);
     case 'richtexteditor':
       return (style as TextWidgetDtoStyle).content;
     default:

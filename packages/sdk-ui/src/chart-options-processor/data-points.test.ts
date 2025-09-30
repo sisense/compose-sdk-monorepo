@@ -2,6 +2,7 @@ import uniqueId from 'lodash-es/uniqueId';
 import merge from 'ts-deepmerge';
 import {
   BoxplotChartDataOptionsInternal,
+  CalendarHeatmapChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
   HighchartsPoint,
@@ -367,6 +368,93 @@ describe('getDataPoint', () => {
           dataOption: dataOptions.breakBy[0],
         },
       ],
+    });
+  });
+
+  it('should prepare calendar heatmap data point with valid entries', () => {
+    const testDate = new Date('2023-01-15T00:00:00.000Z');
+    const rawPoint = createPointMock('heatmap', {
+      options: {
+        name: 'test-point',
+        custom: {},
+        date: testDate.getTime(),
+        dateString: '2023-01-15',
+        value: 1500,
+      },
+    });
+    const dataOptions = {
+      date: createDataOptionMock(),
+      value: createDataOptionMock(true),
+    } as CalendarHeatmapChartDataOptionsInternal;
+
+    const { entries } = getDataPoint(rawPoint, dataOptions);
+
+    expect(entries).toMatchObject({
+      date: {
+        id: 'date',
+        value: '2023-01-15',
+        dataOption: dataOptions.date,
+      },
+      value: {
+        id: 'value',
+        value: 1500,
+        dataOption: dataOptions.value,
+      },
+    });
+  });
+
+  it('should prepare calendar heatmap data point without value when value is not provided', () => {
+    const testDate = new Date('2023-01-15T00:00:00.000Z');
+    const rawPoint = createPointMock('heatmap', {
+      options: {
+        name: 'test-point',
+        custom: {},
+        date: testDate.getTime(),
+        dateString: '2023-01-15',
+        value: undefined,
+      },
+    });
+    const dataOptions = {
+      date: createDataOptionMock(),
+      value: createDataOptionMock(true),
+    } as CalendarHeatmapChartDataOptionsInternal;
+
+    const { entries } = getDataPoint(rawPoint, dataOptions);
+
+    expect(entries).toMatchObject({
+      date: {
+        id: 'date',
+        value: '2023-01-15',
+        dataOption: dataOptions.date,
+      },
+      value: undefined,
+    });
+  });
+
+  it('should prepare calendar heatmap data point without value option', () => {
+    const testDate = new Date('2023-01-15T00:00:00.000Z');
+    const rawPoint = createPointMock('heatmap', {
+      options: {
+        name: 'test-point',
+        custom: {},
+        date: testDate.getTime(),
+        dateString: '2023-01-15',
+        value: 1500,
+      },
+    });
+    const dataOptions = {
+      date: createDataOptionMock(),
+    } as CalendarHeatmapChartDataOptionsInternal;
+
+    const { entries } = getDataPoint(rawPoint, dataOptions);
+
+    expect(entries).toMatchObject({
+      date: {
+        id: 'date',
+        value: '2023-01-15',
+        dataOption: dataOptions.date,
+      },
+      value: undefined,
     });
   });
 });

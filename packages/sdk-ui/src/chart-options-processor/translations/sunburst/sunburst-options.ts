@@ -48,6 +48,56 @@ const DEFAULT_SUNBURST_OPTIONS: HighchartsOptionsInternal = {
   },
 };
 
+/**
+ * Prepares the series configuration for sunburst chart
+ */
+export function prepareSunburstSeries(
+  chartData: CategoricalChartData,
+  dataOptions: CategoricalChartDataOptionsInternal,
+  designOptions: SunburstChartDesignOptions,
+  themeSettings?: CompleteThemeSettings,
+) {
+  return [
+    {
+      ...DEFAULT_SUNBURST_SERIES,
+      name: 'Root',
+      data: prepareSunburstDataItems(chartData, dataOptions, themeSettings),
+      levels: prepareSunburstLevels(chartData, dataOptions, designOptions, themeSettings),
+      showInLegend: false,
+      turboThreshold: 2000,
+    },
+    ...dataOptions.breakBy.map((column, index) => ({
+      name: getDataOptionTitle(column),
+      showInLegend: true,
+      color:
+        (column?.color as UniformDataColorOptions)?.color ||
+        getPaletteColor(themeSettings?.palette.variantColors, index),
+      data: [],
+      states: {
+        hover: {
+          enabled: false,
+        },
+      },
+    })),
+  ];
+}
+
+/**
+ * Prepares the tooltip configuration for sunburst chart
+ */
+export function prepareSunburstTooltip(
+  dataOptions: CategoricalChartDataOptionsInternal,
+  designOptions: SunburstChartDesignOptions,
+  translate: TFunction,
+) {
+  return getTreemapTooltipSettings(dataOptions, designOptions, translate, {
+    displayTotalContribution: true,
+    displayColorCircles: true,
+    shouldSkip: (context: HighchartsDataPointContext) =>
+      context.point.options?.id === SUNBURST_ROOT_PARENT_ID,
+  });
+}
+
 export function prepareSunburstOptions(
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
@@ -57,35 +107,8 @@ export function prepareSunburstOptions(
 ): HighchartsOptionsInternal {
   return {
     ...DEFAULT_SUNBURST_OPTIONS,
-    series: [
-      {
-        ...DEFAULT_SUNBURST_SERIES,
-        name: 'Root',
-        data: prepareSunburstDataItems(chartData, dataOptions, themeSettings),
-        levels: prepareSunburstLevels(chartData, dataOptions, designOptions, themeSettings),
-        showInLegend: false,
-        turboThreshold: 2000,
-      },
-      ...dataOptions.breakBy.map((column, index) => ({
-        name: getDataOptionTitle(column),
-        showInLegend: true,
-        color:
-          (column?.color as UniformDataColorOptions)?.color ||
-          getPaletteColor(themeSettings?.palette.variantColors, index),
-        data: [],
-        states: {
-          hover: {
-            enabled: false,
-          },
-        },
-      })),
-    ],
-    tooltip: getTreemapTooltipSettings(dataOptions, designOptions, translate, {
-      displayTotalContribution: true,
-      displayColorCircles: true,
-      shouldSkip: (context: HighchartsDataPointContext) =>
-        context.point.options?.id === SUNBURST_ROOT_PARENT_ID,
-    }),
+    series: prepareSunburstSeries(chartData, dataOptions, designOptions, themeSettings),
+    tooltip: prepareSunburstTooltip(dataOptions, designOptions, translate),
     legend: getLegendSettings(designOptions.legend),
   };
 }

@@ -13,4 +13,5 @@ React components and utilities for working with dashboards
 - [PivotTableWidget](function.PivotTableWidget.md) <Badge type="beta" text="Beta" />
 - [useComposedDashboard](function.useComposedDashboard.md)
 - [useCustomWidgets](function.useCustomWidgets.md)
+- [useJtdWidget](function.useJtdWidget.md)
 - [Widget](function.Widget.md)

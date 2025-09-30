@@ -78,11 +78,11 @@ describe('axes', () => {
         stackType,
         showTotal,
         totalLabelRotation,
-        valueLabel: {},
         legend: {
           enabled: true,
           position: 'bottom',
         },
+        seriesLabels: {},
         lineType: 'straight',
         lineWidth: 2,
         marker: { enabled: false, size: 'small', fill: 'full' },

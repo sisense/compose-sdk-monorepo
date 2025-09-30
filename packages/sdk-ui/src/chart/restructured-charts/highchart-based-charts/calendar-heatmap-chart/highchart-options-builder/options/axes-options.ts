@@ -1,10 +1,7 @@
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service.js';
 import { BuildContext } from '../../../types.js';
-import {
-  CALENDAR_LAYOUT,
-  CALENDAR_TYPOGRAPHY,
-  CALENDAR_HEATMAP_DEFAULTS,
-} from '../../constants.js';
+import { CALENDAR_TYPOGRAPHY, CALENDAR_HEATMAP_DEFAULTS } from '../../constants.js';
+import { CalendarDayOfWeekEnum, getWeekdayLabels } from '../../utils/index.js';
 
 /**
  * Calculates axis font size based on cell size
@@ -15,20 +12,11 @@ import {
  * @internal
  */
 function calculateAxisFontSize(cellSize: number): number {
-  const calculatedSize = cellSize * CALENDAR_TYPOGRAPHY.AXIS_FONT_SIZE_RATIO;
-  return Math.max(CALENDAR_TYPOGRAPHY.MIN_AXIS_FONT_SIZE, calculatedSize);
-}
-
-/**
- * Calculates axis offset based on cell size
- *
- * @param cellSize - The size of each calendar cell
- * @returns Calculated offset for axis positioning
- *
- * @internal
- */
-function calculateAxisOffset(cellSize: number): number {
-  return Math.max(20, cellSize * CALENDAR_TYPOGRAPHY.AXIS_OFFSET_RATIO);
+  const calculatedSize = cellSize * CALENDAR_TYPOGRAPHY.FONT_SIZE_RATIO;
+  return Math.max(
+    CALENDAR_TYPOGRAPHY.MIN_AXIS_FONT_SIZE,
+    Math.min(CALENDAR_TYPOGRAPHY.MAX_FONT_SIZE, calculatedSize),
+  );
 }
 
 /**
@@ -40,7 +28,9 @@ function calculateAxisOffset(cellSize: number): number {
  * @internal
  */
 function calculateLabelYPosition(cellSize: number): number {
-  return Math.max(15, cellSize * CALENDAR_TYPOGRAPHY.AXIS_LABEL_Y_RATIO);
+  const LABEL_Y_POSITION_RATIO = 0.5;
+  const LABEL_Y_POSITION_THRESHOLD = 30;
+  return cellSize < LABEL_Y_POSITION_THRESHOLD ? cellSize * LABEL_Y_POSITION_RATIO : 0;
 }
 
 /**
@@ -53,28 +43,46 @@ export function getAxesOptions(ctx: BuildContext<'calendar-heatmap'>): {
   xAxis: HighchartsOptionsInternal['xAxis'];
   yAxis: HighchartsOptionsInternal['yAxis'];
 } {
-  const cellSize = ctx.designOptions.cellSize || CALENDAR_HEATMAP_DEFAULTS.CELL_SIZE;
-  const axisFontSize = calculateAxisFontSize(cellSize);
-  const axisOffset = calculateAxisOffset(cellSize);
+  const cellSize = ctx.designOptions.cellSize ?? 0;
+  const startOfWeek = ctx.designOptions.startOfWeek;
+  const dayLabels = ctx.designOptions.dayLabels;
   const labelYPosition = calculateLabelYPosition(cellSize);
+  const weekdayLabels = getWeekdayLabels(startOfWeek, ctx.extraConfig.dateFormatter);
+  const color = dayLabels.style?.color || ctx.extraConfig.themeSettings?.chart.textColor;
+  const fontFamily =
+    dayLabels.style?.fontFamily || ctx.extraConfig.themeSettings?.typography.fontFamily;
+  const fontSize = dayLabels.style?.fontSize ?? `${calculateAxisFontSize(cellSize)}px`;
 
   return {
     xAxis: [
       {
-        categories: [...CALENDAR_LAYOUT.WEEKDAY_LABELS],
+        categories: dayLabels.enabled ? [...weekdayLabels] : [],
         opposite: true,
         lineWidth: 0, // Remove axis line
-        offset: axisOffset,
+        offset: 0,
         labels: {
           rotation: 0,
           y: labelYPosition,
           style: {
-            fontSize: `${axisFontSize}px`,
+            fontSize,
+            color,
+            fontFamily,
+            ...(dayLabels.style?.fontWeight && { fontWeight: dayLabels.style.fontWeight }),
+            ...(dayLabels.style?.fontStyle && { fontStyle: dayLabels.style.fontStyle }),
+            ...(dayLabels.style?.textOutline && { textOutline: dayLabels.style.textOutline }),
+            ...(dayLabels.style?.pointerEvents && { pointerEvents: dayLabels.style.pointerEvents }),
+            ...(dayLabels.style?.textOverflow && { textOverflow: dayLabels.style.textOverflow }),
           },
+          enabled:
+            dayLabels.enabled &&
+            (ctx.designOptions.width ?? 0) >=
+              CALENDAR_HEATMAP_DEFAULTS.SHOW_DAY_LABEL_CHART_SIZE_THRESHOLD,
         },
         accessibility: {
           description: 'weekdays',
-          rangeDescription: 'X Axis is showing all 7 days of the week, starting with Sunday.',
+          rangeDescription: `X Axis is showing all 7 days of the week, starting with ${
+            startOfWeek === CalendarDayOfWeekEnum.MONDAY ? 'Monday' : 'Sunday'
+          }.`,
         },
       },
     ],

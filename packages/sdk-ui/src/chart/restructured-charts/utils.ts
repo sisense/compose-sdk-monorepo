@@ -32,7 +32,10 @@ export function isRestructuredChartType(chartType: ChartType): chartType is Supp
     'line',
     'polar',
     'pie',
+    'funnel',
     'calendar-heatmap',
+    'treemap',
+    'sunburst',
   ];
   return restructuredChartTypes.includes(chartType as SupportedChartType);
 }

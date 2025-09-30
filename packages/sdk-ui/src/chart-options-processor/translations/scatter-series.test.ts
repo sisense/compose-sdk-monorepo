@@ -5,6 +5,7 @@ import { MarkerSettings } from './marker-section';
 import { SeriesType } from '../chart-options-service';
 import { SeriesPointStructure } from './translations-to-highcharts';
 import { StyledMeasureColumn } from '@/index';
+import { ChartDesignOptions } from './types';
 
 describe('Scatter series builder', () => {
   const xCategories = ['x1', 'x2', 'x3'];
@@ -718,6 +719,7 @@ describe('Scatter series builder', () => {
       dataWithBreakByColor,
       categoriesMap,
       dataOptions,
+      {} as ChartDesignOptions,
       undefined,
       seriesCapacity,
     );

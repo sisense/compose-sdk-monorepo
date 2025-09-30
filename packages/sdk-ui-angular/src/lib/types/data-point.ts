@@ -1,6 +1,7 @@
 import {
   AreamapDataPoint,
   BoxplotDataPoint,
+  CalendarHeatmapDataPoint,
   DataPoint,
   IndicatorDataPoint,
   ScatterDataPoint,
@@ -50,6 +51,20 @@ export type IndicatorDataPointEvent = {
   nativeEvent: MouseEvent;
 };
 
+export type CalendarHeatmapDataPointEvent = {
+  /** Data point that was clicked */
+  point: CalendarHeatmapDataPoint;
+  /** Native PointerEvent */
+  nativeEvent: PointerEvent;
+};
+
+export type CalendarHeatmapDataPointsEvent = {
+  /** Data points that were selected */
+  points: CalendarHeatmapDataPoint[];
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent;
+};
+
 export type TextWidgetDataPointEvent = {
   /** Data point that was clicked */
   point: TextWidgetDataPoint;
@@ -63,14 +78,16 @@ export type ChartDataPointClickEvent =
   | BoxplotDataPointEvent
   | AreamapDataPointEvent
   | ScattermapDataPointEvent
-  | IndicatorDataPointEvent;
+  | IndicatorDataPointEvent
+  | CalendarHeatmapDataPointEvent;
 
 export type WidgetDataPointClickEvent = ChartDataPointClickEvent | TextWidgetDataPointEvent;
 
 export type ChartDataPointContextMenuEvent =
   | DataPointEvent
   | ScatterDataPointEvent
-  | BoxplotDataPointEvent;
+  | BoxplotDataPointEvent
+  | CalendarHeatmapDataPointEvent;
 
 export type DataPointsEvent = {
   /** Data points that were selected */
@@ -93,7 +110,10 @@ export type BoxplotDataPointsEvent = {
   nativeEvent: MouseEvent;
 };
 
-export type ChartDataPointsEvent = DataPointsEvent | ScatterDataPointsEvent;
+export type ChartDataPointsEvent =
+  | DataPointsEvent
+  | ScatterDataPointsEvent
+  | CalendarHeatmapDataPointsEvent;
 
 /**
  * A handler function that allows you to customize what happens when certain events occur to
@@ -143,6 +163,16 @@ export type ScatterDataPointsEventHandler = (event: ScatterDataPointsEvent) => v
 
 /** Click handler for when multiple data points are selected. */
 export type DataPointsEventHandler = (event: DataPointsEvent) => void;
+
+/**
+ * Click handler for when a calendar-heatmap data point is clicked
+ */
+export type CalendarHeatmapDataPointEventHandler = (event: CalendarHeatmapDataPointEvent) => void;
+
+/**
+ * Click handler for when multiple calendar-heatmap data points are selected.
+ */
+export type CalendarHeatmapDataPointsEventHandler = (event: CalendarHeatmapDataPointsEvent) => void;
 
 /** Click handler for when multiple data points on Chart are selected. */
 export type ChartDataPointsEventHandler = (event: ChartDataPointsEvent) => void;

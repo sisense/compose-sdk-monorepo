@@ -1,99 +1,147 @@
 import { useMemo } from 'react';
 import { mergeFilters, type Filter } from '@sisense/sdk-data';
+import deepMerge from 'ts-deepmerge';
 import { LoadingOverlay } from '@/common/components/loading-overlay';
 import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-translator';
 import { useDashboardModel } from '@/models/dashboard/use-dashboard-model/use-dashboard-model';
 import { useDefaults } from '@/common/hooks/use-defaults';
-import { DEFAULT_DASHBOARD_BY_ID_CONFIG } from '@/dashboard/constants';
+import { DEFAULT_DASHBOARD_BY_ID_CONFIG, DEFAULT_DASHBOARD_CONFIG } from '@/dashboard/constants';
 import { Dashboard } from '@/dashboard/dashboard';
-import { DashboardConfig } from '@/dashboard/types';
+import { DashboardConfig, DashboardProps } from '@/dashboard/types';
+import { DashboardId } from '@/models/dashboard/types';
 import { withErrorBoundary } from '@/decorators/component-decorators/with-error-boundary';
+import { withTracking } from '@/decorators/component-decorators/with-tracking';
 
 interface JtdDashboardProps {
-  dashboardOid: string;
+  dashboard: DashboardId | DashboardProps;
   filters: Filter[];
   mergeTargetDashboardFilters: boolean;
-  displayToolbarRow: boolean;
-  displayFilterPane: boolean;
+  dashboardConfig?: DashboardConfig;
 }
 
 /**
- * JTD-specific Dashboard component that handles runtime filters
- * This component reuses DashboardById logic but is specifically designed for JTD use cases
+ * Type guard to check if dashboard prop is a DashboardId (string)
+ */
+const isDashboardId = (dashboard: DashboardId | DashboardProps): dashboard is DashboardId => {
+  return typeof dashboard === 'string';
+};
+
+/**
+ * Hook to prepare dashboard props from either ID or props
  * @internal
  */
-export const JtdDashboard = withErrorBoundary({
-  componentName: 'JtdDashboard',
-})(
-  ({
-    dashboardOid,
-    filters: runtimeFilters,
-    mergeTargetDashboardFilters,
-    displayToolbarRow,
-    displayFilterPane,
-  }: JtdDashboardProps) => {
-    const { dashboard, isLoading, isError, error } = useDashboardModel({
-      dashboardOid,
-      includeWidgets: true,
-      includeFilters: true,
-      persist: false, // Always non-persistent for JTD
-    });
+const useJtdTargetDashboardProps = (dashboard: DashboardId | DashboardProps) => {
+  const shouldLoadDashboard = isDashboardId(dashboard);
 
-    const dashboardProps = useMemo(() => {
-      const props = dashboard && dashboardModelTranslator.toDashboardProps(dashboard);
+  const {
+    dashboard: dashboardModel,
+    isLoading,
+    isError,
+    error,
+  } = useDashboardModel({
+    dashboardOid: shouldLoadDashboard ? dashboard : '',
+    includeWidgets: true,
+    includeFilters: true,
+    persist: false,
+    enabled: shouldLoadDashboard,
+  });
 
-      if (props && runtimeFilters) {
+  return useMemo(() => {
+    if (shouldLoadDashboard) {
+      return {
+        dashboardProps: dashboardModel && dashboardModelTranslator.toDashboardProps(dashboardModel),
+        isLoading,
+        isError,
+        error,
+      };
+    }
+
+    return {
+      dashboardProps: dashboard,
+      isLoading: false,
+      isError: false,
+      error: undefined,
+    };
+  }, [dashboard, dashboardModel, isLoading, isError, error, shouldLoadDashboard]);
+};
+
+// Removed individual components - now using unified approach with hook
+
+/**
+ * JTD-specific Dashboard component that handles runtime filters
+ * This component can render either by dashboard ID or with provided dashboard props
+ * @internal
+ */
+export const JtdDashboard = withTracking({ componentName: 'JtdDashboard', config: {} })(
+  withErrorBoundary({
+    componentName: 'JtdDashboard',
+  })(
+    ({
+      dashboard,
+      filters: runtimeFilters,
+      mergeTargetDashboardFilters,
+      dashboardConfig: jtdDashboardConfig,
+    }: JtdDashboardProps) => {
+      const { dashboardProps, isLoading, isError, error } = useJtdTargetDashboardProps(dashboard);
+
+      const finalDashboardProps = useMemo(() => {
+        if (!dashboardProps || !runtimeFilters) {
+          return dashboardProps;
+        }
+
         if (mergeTargetDashboardFilters) {
-          // Merge runtime filters with target dashboard filters
-          const dashboardFilters = props.filters || [];
+          const dashboardFilters = dashboardProps.filters || [];
           const mergedFilters =
             Array.isArray(runtimeFilters) && Array.isArray(dashboardFilters)
               ? mergeFilters(dashboardFilters, runtimeFilters)
-              : runtimeFilters; // If either is FilterRelations, use runtime filters
+              : runtimeFilters;
 
-          return {
-            ...props,
-            filters: mergedFilters,
-          };
+          return { ...dashboardProps, filters: mergedFilters };
         } else {
-          // Only use runtime filters (generated + widget/dashboard filtered by JTD logic)
-          return {
-            ...props,
-            filters: runtimeFilters,
-          };
+          return { ...dashboardProps, filters: runtimeFilters };
         }
+      }, [dashboardProps, runtimeFilters, mergeTargetDashboardFilters]);
+
+      const shouldLoadDashboard = isDashboardId(dashboard);
+      // TODO - check if relevant:
+      // No need to merge finalDashboardProps?.config with default config.
+      // The default dashboard config will be applied inside Dashboard component.
+      const baseConfig = useDefaults(
+        finalDashboardProps?.config,
+        shouldLoadDashboard ? DEFAULT_DASHBOARD_BY_ID_CONFIG : DEFAULT_DASHBOARD_CONFIG,
+      );
+
+      // TODO - check if relevant:
+      // This entire useMemo could be replaced with:
+      // const dashboardConfig = useDefaults(jtdDashboardConfig, finalDashboardProps?.config);
+      const dashboardConfig = useMemo(() => {
+        if (!jtdDashboardConfig) {
+          return baseConfig;
+        }
+
+        // Deep merge baseConfig with jtdDashboardConfig, giving priority to jtdDashboardConfig
+        return deepMerge.withOptions(
+          { mergeArrays: false },
+          baseConfig,
+          jtdDashboardConfig,
+        ) as DashboardConfig;
+      }, [baseConfig, jtdDashboardConfig]);
+
+      if (isError && error) {
+        throw error;
       }
 
-      return props;
-    }, [dashboard, runtimeFilters, mergeTargetDashboardFilters]);
+      if (shouldLoadDashboard) {
+        return (
+          <LoadingOverlay isVisible={isLoading}>
+            {finalDashboardProps && <Dashboard {...finalDashboardProps} config={dashboardConfig} />}
+          </LoadingOverlay>
+        );
+      }
 
-    // Move useDefaults calls to top level
-    const defaultConfig = useDefaults(dashboardProps?.config, DEFAULT_DASHBOARD_BY_ID_CONFIG);
-    const baseConfig = useDefaults<DashboardConfig>(undefined, defaultConfig);
-
-    const dashboardConfig = useMemo(() => {
-      // Override toolbar and filters panel visibility based on JTD config
-      return {
-        ...baseConfig,
-        toolbar: {
-          ...baseConfig.toolbar,
-          visible: displayToolbarRow,
-        },
-        filtersPanel: {
-          ...baseConfig.filtersPanel,
-          visible: displayFilterPane,
-        },
-      };
-    }, [baseConfig, displayToolbarRow, displayFilterPane]);
-
-    if (isError && error) {
-      throw error;
-    }
-
-    return (
-      <LoadingOverlay isVisible={isLoading}>
-        {dashboardProps && <Dashboard {...dashboardProps} config={dashboardConfig} />}
-      </LoadingOverlay>
-    );
-  },
+      return finalDashboardProps ? (
+        <Dashboard {...finalDashboardProps} config={dashboardConfig} />
+      ) : null;
+    },
+  ),
 );

@@ -4,6 +4,9 @@ import { TabberTab } from '@/types';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import { TabbersOptions, WidgetsPanelColumnLayout } from '@/models';
 
+/**
+ * @internal
+ */
 export type UseTabber = ({
   widgets,
   config,
@@ -15,6 +18,9 @@ export type UseTabber = ({
   widgets: WidgetProps[];
 };
 
+/**
+ * @internal
+ */
 export type SingleTabberConfig = {
   tabs: TabberTab[];
   activeTab: number;
@@ -91,6 +97,13 @@ const getSelectedTabs = (config: TabbersOptions): Record<string, number> => {
   }, {});
 };
 
+/**
+ * Hook that modifies widget properties so it became a tabber widget.
+ * Incapsulates logic for updating layout via navigating tabs
+ * @param widgets
+ * @param tabbersConfigs
+ * @internal
+ */
 export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) => {
   const initialSelectedTabs = useMemo(() => getSelectedTabs(tabbersConfigs), [tabbersConfigs]);
   const [selectedTabs, setSelectedTabs] = useState<Record<string, number>>(initialSelectedTabs);

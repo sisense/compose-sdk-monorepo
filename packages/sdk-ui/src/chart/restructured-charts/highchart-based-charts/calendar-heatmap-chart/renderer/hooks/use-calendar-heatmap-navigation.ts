@@ -1,6 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { MonthInfo, getMonthsPerView } from '../helpers/view-helpers.js';
 import { CalendarHeatmapViewType } from '@/types.js';
+import { usePrevious } from '@/common/hooks/use-previous.js';
 
 export interface CalendarHeatmapNavigationResult {
   currentViewIndex: number;
@@ -37,6 +38,7 @@ export function useCalendarHeatmapNavigation(
   availableMonths: MonthInfo[],
   viewType: CalendarHeatmapViewType,
 ): CalendarHeatmapNavigationResult {
+  const availableMonthsPrevious = usePrevious(availableMonths);
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
 
   const goToFirstView = useCallback(() => {
@@ -82,6 +84,20 @@ export function useCalendarHeatmapNavigation(
         : Math.max(0, availableMonths.length - monthsPerView);
     setCurrentViewIndex((prev) => Math.min(maxIndex, prev + navigationStep));
   }, [viewType, availableMonths.length]);
+
+  // Reset current view index when available months changed
+  useEffect(() => {
+    if (!availableMonthsPrevious) return;
+
+    const isAvailableMonthsChanged =
+      availableMonthsPrevious.length !== availableMonths.length ||
+      availableMonthsPrevious[0]?.year !== availableMonths[0]?.year ||
+      availableMonthsPrevious[0]?.month !== availableMonths[0]?.month;
+
+    if (isAvailableMonthsChanged) {
+      setCurrentViewIndex(0);
+    }
+  }, [availableMonths, availableMonthsPrevious]);
 
   return {
     currentViewIndex,

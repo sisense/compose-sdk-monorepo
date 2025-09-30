@@ -1,14 +1,11 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import {
-  useJtd,
-  getFormulaContextFilters,
-  handleFormulaDuplicateFilters,
-  getJtdClickHandler,
-} from './use-jtd';
+import { useJtdInternal } from './use-jtd';
+import { getFormulaContextFilters, handleFormulaDuplicateFilters } from './jtd/jtd-filters';
+import { getJtdClickHandler } from './jtd/jtd-handlers';
 import { ChartWidgetProps } from '@/props';
-import { JtdConfig, JtdNavigateType, JtdPivotDrillTarget } from '@/widget-by-id/types';
-import { SizeMeasurement } from '@/types';
+import { JtdConfig, JtdTarget, JumpToDashboardConfig } from './jtd/jtd-types';
+import { normalizeToJumpToDashboardConfig } from './jtd/jtd-config-transformers';
 import { filterFactory, type Attribute, Sort } from '@sisense/sdk-data';
 
 // Mock filterFactory.members to return proper filter objects
@@ -111,6 +108,8 @@ vi.mock('@/common/hooks/use-modal', () => ({
 
 vi.mock('@/widget-by-id/utils', () => ({
   isChartWidgetProps: vi.fn(),
+  isTextWidgetProps: vi.fn(),
+  isPivotTableWidgetProps: vi.fn(),
   registerDataPointContextMenuHandler: vi.fn((widgetProps, handler) => {
     const existingHandler = widgetProps.onDataPointContextMenu;
     widgetProps.onDataPointContextMenu = existingHandler
@@ -123,6 +122,15 @@ vi.mock('@/widget-by-id/utils', () => ({
   registerDataPointClickHandler: vi.fn((widgetProps, handler) => {
     const existingHandler = widgetProps.onDataPointClick;
     widgetProps.onDataPointClick = existingHandler
+      ? (...args: any[]) => {
+          existingHandler(...args);
+          handler(...args);
+        }
+      : handler;
+  }),
+  registerDataPointsSelectedHandler: vi.fn((widgetProps, handler) => {
+    const existingHandler = widgetProps.onDataPointsSelected;
+    widgetProps.onDataPointsSelected = existingHandler
       ? (...args: any[]) => {
           existingHandler(...args);
           handler(...args);
@@ -212,7 +220,7 @@ vi.mock('@/theme-provider', async (importOriginal) => {
   };
 });
 
-describe('useJtd', () => {
+describe('useJtdInternal', () => {
   const mockOpenModal = vi.fn();
   const mockOpenMenu = vi.fn();
 
@@ -267,14 +275,16 @@ describe('useJtd', () => {
     it('should return an async function', () => {
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -282,8 +292,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -302,14 +312,16 @@ describe('useJtd', () => {
     it('should call openModal with correct parameters when executed', async () => {
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 1000,
         modalWindowHeight: 800,
-        modalWindowMeasurement: SizeMeasurement.PERCENT,
+        modalWindowMeasurement: '%',
         modalWindowResize: false,
-        displayToolbarRow: false,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: false },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: true,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -317,8 +329,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -337,7 +349,7 @@ describe('useJtd', () => {
         title: 'Dashboard 1',
         width: 1000,
         height: 800,
-        measurement: SizeMeasurement.PERCENT,
+        measurement: '%',
         content: expect.any(Object),
       });
     });
@@ -345,14 +357,16 @@ describe('useJtd', () => {
     it('should create JtdDashboard with correct props', async () => {
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: false,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: false },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: true,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -360,8 +374,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -387,11 +401,13 @@ describe('useJtd', () => {
       const modalCall = mockOpenModal.mock.calls[0][0];
       expect(modalCall.content.props).toEqual(
         expect.objectContaining({
-          dashboardOid: 'dashboard-1',
+          dashboard: 'dashboard-1',
           filters: expect.any(Array),
           mergeTargetDashboardFilters: true,
-          displayToolbarRow: false,
-          displayFilterPane: true,
+          dashboardConfig: {
+            toolbar: { visible: false },
+            filtersPanel: { visible: true },
+          },
         }),
       );
     });
@@ -403,14 +419,16 @@ describe('useJtd', () => {
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: ['[DashboardDim]'],
         includeWidgetFilterDims: ['[WidgetDim]'],
@@ -418,8 +436,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -451,14 +469,16 @@ describe('useJtd', () => {
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: ['[AllowedDashDim]'],
         includeWidgetFilterDims: ['[AllowedWidgetDim]'],
@@ -466,8 +486,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -489,14 +509,16 @@ describe('useJtd', () => {
     it('should handle empty filter arrays gracefully', async () => {
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -504,8 +526,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -532,14 +554,16 @@ describe('useJtd', () => {
       const customDrillTarget = { id: 'custom-dashboard', caption: 'Custom Dashboard Title' };
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [customDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [customDrillTarget],
         modalWindowWidth: 1200,
         modalWindowHeight: 900,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: false,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: false },
+        },
         mergeTargetDashboardFilters: true,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -547,8 +571,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: customDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: customDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -575,8 +599,12 @@ describe('useJtd', () => {
       const modalCall = mockOpenModal.mock.calls[0][0];
       expect(modalCall.content.props).toEqual(
         expect.objectContaining({
-          dashboardOid: 'custom-dashboard',
-          displayFilterPane: false,
+          dashboard: 'custom-dashboard',
+          dashboardConfig: {
+            toolbar: { visible: true },
+            filtersPanel: { visible: false },
+          },
+          filters: expect.any(Array),
           mergeTargetDashboardFilters: true,
         }),
       );
@@ -606,14 +634,16 @@ describe('useJtd', () => {
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -621,8 +651,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: simpleWidget as any,
           point: sampleDataPoint as any,
         },
@@ -696,14 +726,16 @@ describe('useJtd', () => {
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -711,8 +743,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: dataPointWithEntries as any,
         },
@@ -775,14 +807,16 @@ describe('useJtd', () => {
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: [],
         includeWidgetFilterDims: ['[WidgetDim]'], // Allow this widget dimension
@@ -790,8 +824,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
         },
@@ -818,14 +852,16 @@ describe('useJtd', () => {
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: ['[DashboardDim]'], // Allow this dashboard dimension
         includeWidgetFilterDims: [],
@@ -833,8 +869,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
         },
@@ -863,14 +899,16 @@ describe('useJtd', () => {
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: ['[AllowedDashDim]'], // Different from filter dimension
         includeWidgetFilterDims: ['[AllowedWidgetDim]'], // Different from filter dimension
@@ -878,8 +916,8 @@ describe('useJtd', () => {
 
       const clickHandler = getJtdClickHandler(
         {
-          jtdConfig: jtdConfig as unknown as JtdConfig,
-          drillTarget: sampleDrillTarget as unknown as JtdPivotDrillTarget,
+          jtdConfig: jtdConfig as JtdConfig,
+          jumpTarget: sampleDrillTarget as unknown as JtdTarget,
           widgetProps: sampleWidget as any,
           point: { entries: { category: [], breakBy: [] } } as any, // minimal datapoint
         },
@@ -902,24 +940,28 @@ describe('useJtd', () => {
       // The logic should prevent reaching this function entirely when enabled = false
       const disabledJtdConfig = {
         enabled: false, // This should prevent getJtdClickHandler from being used
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [sampleDrillTarget],
+        navigateType: 'click',
+        jumpTargets: [sampleDrillTarget],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
       };
 
-      // Test that useJtd doesn't create any click handlers when disabled
+      // Test that useJtdInternal doesn't create any click handlers when disabled
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: disabledJtdConfig as unknown as JtdConfig },
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(disabledJtdConfig as JtdConfig),
+            },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -942,7 +984,7 @@ describe('useJtd', () => {
   describe('Hook behavior', () => {
     it('should return connectToWidgetProps function', () => {
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {},
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -955,7 +997,7 @@ describe('useJtd', () => {
 
     it('should return widget unchanged when no Jtd config', () => {
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {},
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -972,23 +1014,27 @@ describe('useJtd', () => {
     it('should return widget unchanged when Jtd config is disabled', () => {
       const disabledJtdConfig = {
         enabled: false, // Jtd is disabled
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        navigateType: 'click',
+        jumpTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: disabledJtdConfig as unknown as JtdConfig },
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(disabledJtdConfig as JtdConfig),
+            },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1007,23 +1053,27 @@ describe('useJtd', () => {
     it('should add onDataPointClick handler when Jtd config is enabled', () => {
       const enabledJtdConfig = {
         enabled: true, // Jtd is enabled
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        navigateType: 'click',
+        jumpTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: enabledJtdConfig as unknown as JtdConfig },
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(enabledJtdConfig as JtdConfig),
+            },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1041,25 +1091,29 @@ describe('useJtd', () => {
     it('should handle mixed enabled/disabled configs for different widgets', () => {
       const enabledConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        navigateType: 'click',
+        jumpTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
       };
 
       const disabledConfig = {
         enabled: false,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [{ id: 'dashboard-2', caption: 'Dashboard 2' }],
+        navigateType: 'click',
+        jumpTargets: [{ id: 'dashboard-2', caption: 'Dashboard 2' }],
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'enabled-widget': { jtdConfig: enabledConfig as unknown as JtdConfig },
-            'disabled-widget': { jtdConfig: disabledConfig as unknown as JtdConfig },
+            'enabled-widget': {
+              jtdConfig: normalizeToJumpToDashboardConfig(enabledConfig as JtdConfig),
+            },
+            'disabled-widget': {
+              jtdConfig: normalizeToJumpToDashboardConfig(disabledConfig as JtdConfig),
+            },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1084,16 +1138,18 @@ describe('useJtd', () => {
     it('should not add onDataPointClick handler for non-CLICK navigation when disabled', () => {
       const disabledRightClickConfig = {
         enabled: false,
-        navigateType: JtdNavigateType.RIGHT_CLICK,
-        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        navigateType: 'rightclick',
+        jumpTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: disabledRightClickConfig as unknown as JtdConfig },
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(disabledRightClickConfig as JtdConfig),
+            },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1112,14 +1168,16 @@ describe('useJtd', () => {
     it('should add onDataPointClick handler for CLICK navigation', () => {
       const sampleJtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        navigateType: 'click',
+        jumpTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         drilledDashboardPrefix: '',
         drilledDashboardsFolderPrefix: '',
@@ -1139,9 +1197,11 @@ describe('useJtd', () => {
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: sampleJtdConfig as unknown as JtdConfig },
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(sampleJtdConfig as JtdConfig),
+            },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1157,8 +1217,8 @@ describe('useJtd', () => {
     it('should not add onDataPointClick handler for non-CLICK navigation', () => {
       const sampleJtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.RIGHT_CLICK,
-        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        navigateType: 'rightclick',
+        jumpTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
       };
 
       const sampleWidget = {
@@ -1168,9 +1228,11 @@ describe('useJtd', () => {
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: sampleJtdConfig as unknown as JtdConfig },
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(sampleJtdConfig as JtdConfig),
+            },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1323,7 +1385,7 @@ describe('useJtd', () => {
 
       expect(() => {
         renderHook(() =>
-          useJtd({
+          useJtdInternal({
             widgetOptions: {},
             dashboardFilters: [],
             widgetFilters: new Map(),
@@ -1358,14 +1420,16 @@ describe('useJtd', () => {
     it('should open modal when datapoint is clicked with single drill target', async () => {
       const sampleJtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        navigateType: 'click',
+        jumpTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         drilledDashboardPrefix: '',
         drilledDashboardsFolderPrefix: '',
@@ -1385,9 +1449,11 @@ describe('useJtd', () => {
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: sampleJtdConfig as unknown as JtdConfig },
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(sampleJtdConfig as JtdConfig),
+            },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1410,7 +1476,7 @@ describe('useJtd', () => {
         title: 'Dashboard 1',
         width: 800,
         height: 600,
-        measurement: SizeMeasurement.PIXEL,
+        measurement: 'px',
         content: expect.any(Object),
       });
     });
@@ -1418,17 +1484,19 @@ describe('useJtd', () => {
     it('should open context menu with multiple drill targets', async () => {
       const multiTargetConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [
+        navigateType: 'click',
+        jumpTargets: [
           { id: 'dashboard-1', caption: 'Dashboard 1' },
           { id: 'dashboard-2', caption: 'Dashboard 2' },
         ],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -1441,9 +1509,11 @@ describe('useJtd', () => {
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: multiTargetConfig as unknown as JtdConfig },
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(multiTargetConfig as JtdConfig),
+            },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1485,18 +1555,20 @@ describe('useJtd', () => {
       const customMenuCaption = 'Custom Jump Menu';
       const multiTargetConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillToDashboardRightMenuCaption: customMenuCaption, // Custom caption
-        drillTargets: [
+        navigateType: 'click',
+        jumpToDashboardRightMenuCaption: customMenuCaption, // Custom caption
+        jumpTargets: [
           { id: 'dashboard-1', caption: 'Dashboard 1' },
           { id: 'dashboard-2', caption: 'Dashboard 2' },
         ],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: [],
         includeWidgetFilterDims: [],
@@ -1509,9 +1581,11 @@ describe('useJtd', () => {
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: multiTargetConfig as unknown as JtdConfig },
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(multiTargetConfig as JtdConfig),
+            },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1631,23 +1705,25 @@ describe('useJtd', () => {
 
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.CLICK,
-        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        navigateType: 'click',
+        jumpTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: ['[Category]', '[Brand]', '[Region]'],
         includeWidgetFilterDims: ['[Category]', '[Brand]', '[Region]'],
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: jtdConfig as unknown as JtdConfig },
+            'widget-1': { jtdConfig: normalizeToJumpToDashboardConfig(jtdConfig as JtdConfig) },
           },
           dashboardFilters,
           widgetFilters: new Map([['widget-1', widgetFilters]]),
@@ -1711,14 +1787,16 @@ describe('useJtd', () => {
     it('should register onDataPointsSelected handler for RIGHT_CLICK navigation', async () => {
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.RIGHT_CLICK,
-        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        navigateType: 'rightclick',
+        jumpTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: ['[Category]', '[Brand]'],
         includeWidgetFilterDims: ['[Category]', '[Brand]'],
@@ -1731,9 +1809,9 @@ describe('useJtd', () => {
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: jtdConfig as unknown as JtdConfig },
+            'widget-1': { jtdConfig: normalizeToJumpToDashboardConfig(jtdConfig as JtdConfig) },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1801,14 +1879,16 @@ describe('useJtd', () => {
     it('should merge filters from multiple data points with same dimension', async () => {
       const jtdConfig = {
         enabled: true,
-        navigateType: JtdNavigateType.RIGHT_CLICK,
-        drillTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
+        navigateType: 'rightclick',
+        jumpTargets: [{ id: 'dashboard-1', caption: 'Dashboard 1' }],
         modalWindowWidth: 800,
         modalWindowHeight: 600,
-        modalWindowMeasurement: SizeMeasurement.PIXEL,
+        modalWindowMeasurement: 'px',
         modalWindowResize: true,
-        displayToolbarRow: true,
-        displayFilterPane: true,
+        dashboardConfig: {
+          toolbar: { visible: true },
+          filtersPanel: { visible: true },
+        },
         mergeTargetDashboardFilters: false,
         includeDashFilterDims: ['[Category]'],
         includeWidgetFilterDims: ['[Category]'],
@@ -1821,9 +1901,9 @@ describe('useJtd', () => {
       };
 
       const { result } = renderHook(() =>
-        useJtd({
+        useJtdInternal({
           widgetOptions: {
-            'widget-1': { jtdConfig: jtdConfig as unknown as JtdConfig },
+            'widget-1': { jtdConfig: normalizeToJumpToDashboardConfig(jtdConfig as JtdConfig) },
           },
           dashboardFilters: [],
           widgetFilters: new Map(),
@@ -1920,6 +2000,300 @@ describe('useJtd', () => {
       expect(filterJaql.jaql.filter.members).toContain('Clothing');
       expect(filterJaql.jaql.filter.members).toContain('Sports');
       expect(filterJaql.jaql.filter.members).toHaveLength(3);
+    });
+  });
+
+  describe('extraFilters functionality', () => {
+    const testAttribute1 = {
+      name: 'Category',
+      expression: '[Category.Category]',
+      type: 'text-attribute',
+    };
+    const testAttribute2 = { name: 'Brand', expression: '[Brand.Brand]', type: 'text-attribute' };
+
+    const mockExtraFilter1 = createMockFilter(testAttribute1, ['ExtraFilterValue1']);
+    const mockExtraFilter2 = createMockFilter(testAttribute2, ['ExtraFilterValue2']);
+    const mockDrillTarget = { id: 'dashboard-1', caption: 'Dashboard 1' };
+    const mockDataOptions = {
+      category: [testAttribute1],
+      value: [
+        {
+          name: 'Total',
+          expression: 'sum([Commerce.Revenue])',
+          type: 'basemeasure',
+          id: 'revenue',
+          __serializable: 'BaseMeasure',
+        },
+      ],
+      breakBy: [],
+    };
+
+    beforeEach(() => {
+      // Reset any global state if needed
+    });
+
+    it('should use extraFilters from JtdConfig in widget transforms', () => {
+      const jtdConfigWithExtraFilters: JtdConfig = {
+        enabled: true,
+        jumpTargets: [mockDrillTarget],
+        navigateType: 'rightclick',
+        extraFilters: [mockExtraFilter1, mockExtraFilter2],
+        showJtdIcon: true,
+      };
+
+      const { result } = renderHook(() =>
+        useJtdInternal({
+          widgetOptions: {
+            'widget-1': { jtdConfig: normalizeToJumpToDashboardConfig(jtdConfigWithExtraFilters) },
+          },
+          dashboardFilters: [],
+          widgetFilters: new Map(),
+          openMenu: mockOpenMenu,
+        }),
+      );
+
+      const originalWidget = {
+        id: 'widget-1',
+        widgetType: 'chart',
+        chartType: 'column',
+        dataOptions: mockDataOptions,
+      } as any;
+
+      const transformedWidget = result.current.connectToWidgetProps(originalWidget);
+
+      // Verify that the widget has JTD functionality applied
+      expect(transformedWidget).toBeDefined();
+      expect(transformedWidget.id).toBe('widget-1');
+      // The widget should have event handlers added when JTD is enabled with RIGHT_CLICK
+      expect((transformedWidget as any).onDataPointsSelected).toBeDefined();
+    });
+
+    it('should handle JumpToDashboardConfig with extraFilters', () => {
+      const jumpConfigWithExtraFilters: JumpToDashboardConfig = {
+        enabled: true,
+        targets: [mockDrillTarget],
+        interaction: { triggerMethod: 'click' },
+        filtering: {
+          extraFilters: [mockExtraFilter1],
+        },
+      };
+
+      const { result } = renderHook(() =>
+        useJtdInternal({
+          widgetOptions: {
+            'widget-1': { jtdConfig: jumpConfigWithExtraFilters },
+          },
+          dashboardFilters: [],
+          widgetFilters: new Map(),
+          openMenu: mockOpenMenu,
+        }),
+      );
+
+      const originalWidget = {
+        id: 'widget-1',
+        widgetType: 'chart',
+        chartType: 'column',
+        dataOptions: mockDataOptions,
+      } as any;
+
+      const transformedWidget = result.current.connectToWidgetProps(originalWidget);
+
+      // Verify that the widget has JTD functionality applied
+      expect(transformedWidget).toBeDefined();
+      expect(transformedWidget.id).toBe('widget-1');
+      // The widget should have event handlers added when JTD is enabled with CLICK
+      expect((transformedWidget as any).onDataPointClick).toBeDefined();
+    });
+
+    it('should handle empty extraFilters array', () => {
+      const jtdConfigWithEmptyExtraFilters: JtdConfig = {
+        enabled: true,
+        jumpTargets: [mockDrillTarget],
+        navigateType: 'click',
+        extraFilters: [],
+        showJtdIcon: false,
+      };
+
+      const { result } = renderHook(() =>
+        useJtdInternal({
+          widgetOptions: {
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(jtdConfigWithEmptyExtraFilters),
+            },
+          },
+          dashboardFilters: [],
+          widgetFilters: new Map(),
+          openMenu: mockOpenMenu,
+        }),
+      );
+
+      const originalWidget = {
+        id: 'widget-1',
+        widgetType: 'chart',
+        chartType: 'column',
+        dataOptions: mockDataOptions,
+      } as any;
+
+      const transformedWidget = result.current.connectToWidgetProps(originalWidget);
+
+      // Verify that the widget has JTD functionality applied even with empty extraFilters
+      expect(transformedWidget).toBeDefined();
+      expect(transformedWidget.id).toBe('widget-1');
+      expect((transformedWidget as any).onDataPointClick).toBeDefined();
+    });
+
+    it('should handle undefined extraFilters', () => {
+      const jtdConfigWithoutExtraFilters: JtdConfig = {
+        enabled: true,
+        jumpTargets: [mockDrillTarget],
+        navigateType: 'click',
+        // extraFilters is undefined
+      };
+
+      const { result } = renderHook(() =>
+        useJtdInternal({
+          widgetOptions: {
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(jtdConfigWithoutExtraFilters),
+            },
+          },
+          dashboardFilters: [],
+          widgetFilters: new Map(),
+          openMenu: mockOpenMenu,
+        }),
+      );
+
+      const originalWidget = {
+        id: 'widget-1',
+        widgetType: 'chart',
+        chartType: 'column',
+        dataOptions: mockDataOptions,
+      } as any;
+
+      const transformedWidget = result.current.connectToWidgetProps(originalWidget);
+
+      // Verify that the widget has JTD functionality applied even with undefined extraFilters
+      expect(transformedWidget).toBeDefined();
+      expect(transformedWidget.id).toBe('widget-1');
+      expect((transformedWidget as any).onDataPointClick).toBeDefined();
+    });
+
+    it('should handle different widget types with extraFilters', () => {
+      const jtdConfigWithExtraFilters: JtdConfig = {
+        enabled: true,
+        jumpTargets: [mockDrillTarget],
+        navigateType: 'rightclick',
+        extraFilters: [mockExtraFilter1, mockExtraFilter2],
+      };
+
+      const { result } = renderHook(() =>
+        useJtdInternal({
+          widgetOptions: {
+            'chart-widget': {
+              jtdConfig: normalizeToJumpToDashboardConfig(jtdConfigWithExtraFilters),
+            },
+          },
+          dashboardFilters: [],
+          widgetFilters: new Map(),
+          openMenu: mockOpenMenu,
+        }),
+      );
+
+      const chartWidget = {
+        id: 'chart-widget',
+        widgetType: 'chart',
+        chartType: 'column',
+        dataOptions: mockDataOptions,
+      } as any;
+
+      const transformedWidget = result.current.connectToWidgetProps(chartWidget);
+
+      // Verify that chart widgets get right-click handler for RIGHT_CLICK navigation
+      expect(transformedWidget).toBeDefined();
+      expect(transformedWidget.id).toBe('chart-widget');
+      expect((transformedWidget as any).onDataPointsSelected).toBeDefined();
+    });
+
+    it('should transform JumpToDashboardConfig correctly', () => {
+      const jumpConfigWithExtraFilters: JumpToDashboardConfig = {
+        enabled: true,
+        targets: [mockDrillTarget],
+        interaction: { triggerMethod: 'rightclick' },
+        filtering: {
+          extraFilters: [mockExtraFilter1, mockExtraFilter2],
+          includeDashboardFilters: ['[Geography.Country]'],
+          includeWidgetFilters: ['[Category.Category]'],
+          mergeWithTargetFilters: false,
+        },
+        targetDashboardConfig: {
+          filtersPanel: { visible: true },
+          toolbar: { visible: false },
+        },
+        modal: {
+          width: 1200,
+          height: 800,
+          measurementUnit: 'px',
+        },
+      };
+
+      const { result } = renderHook(() =>
+        useJtdInternal({
+          widgetOptions: {
+            'widget-1': { jtdConfig: jumpConfigWithExtraFilters },
+          },
+          dashboardFilters: [],
+          widgetFilters: new Map(),
+          openMenu: mockOpenMenu,
+        }),
+      );
+
+      const originalWidget = {
+        id: 'widget-1',
+        widgetType: 'chart',
+        chartType: 'column',
+        dataOptions: mockDataOptions,
+      } as any;
+
+      const transformedWidget = result.current.connectToWidgetProps(originalWidget);
+
+      // Verify the JumpToDashboardConfig was properly transformed and applied
+      expect(transformedWidget).toBeDefined();
+      expect(transformedWidget.id).toBe('widget-1');
+      expect((transformedWidget as any).onDataPointsSelected).toBeDefined(); // RIGHT_CLICK navigation
+    });
+
+    it('should not apply JTD when jumpTargets are empty', () => {
+      const jtdConfigWithExtraFiltersButNoTargets: JtdConfig = {
+        enabled: true,
+        jumpTargets: [], // No drill targets
+        extraFilters: [mockExtraFilter1],
+        navigateType: 'click',
+      };
+
+      const { result } = renderHook(() =>
+        useJtdInternal({
+          widgetOptions: {
+            'widget-1': {
+              jtdConfig: normalizeToJumpToDashboardConfig(jtdConfigWithExtraFiltersButNoTargets),
+            },
+          },
+          dashboardFilters: [],
+          widgetFilters: new Map(),
+          openMenu: mockOpenMenu,
+        }),
+      );
+
+      const originalWidget = {
+        id: 'widget-1',
+        widgetType: 'chart',
+        chartType: 'column',
+        dataOptions: mockDataOptions,
+      } as any;
+
+      const modifiedWidget = result.current.connectToWidgetProps(originalWidget);
+
+      // Should return the original widget unchanged when no drill targets
+      expect(modifiedWidget).toEqual(originalWidget);
     });
   });
 });

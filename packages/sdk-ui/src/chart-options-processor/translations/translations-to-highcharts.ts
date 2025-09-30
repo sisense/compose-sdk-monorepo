@@ -132,7 +132,7 @@ export const addStackingIfSpecified = (
     throw new TranslatableError('errors.polarChartDesignOptionsNotExpected');
   }
 
-  const showTotal = designOptions.valueLabel ? designOptions.showTotal || false : false;
+  const showTotal = Boolean(designOptions.seriesLabels?.enabled && designOptions.showTotal);
   switch (designOptions.stackType) {
     case 'stacked':
       return {
@@ -477,7 +477,7 @@ export const autoCalculateYAxisMinMax = (
     axisMinMax = adjustMinWhenColumnBar(chartType, axisMinMax);
 
     // add padding for value labels
-    if (designOptions.valueLabel) {
+    if (designOptions.seriesLabels) {
       axisMinMax = addPaddingForValueLabels(
         yAxis.min || axisMinMax.min,
         yAxis.max || axisMinMax.max,

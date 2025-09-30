@@ -20,7 +20,6 @@ export const chartDesignOptions: IndicatorChartDesignOptions = {
     enabled: true,
   },
   lineWidth: 2,
-  valueLabel: {},
   marker: {
     enabled: false,
     size: 'small',

@@ -8,7 +8,7 @@ import { isChartWidgetProps } from '@/widget-by-id/utils';
 import { useGetNlgInsightsInternal } from '@/ai/use-get-nlg-insights';
 import LoadingDotsIcon from '@/ai/icons/loading-dots-icon';
 import { useCommonFilters } from '@/common-filters/use-common-filters';
-import { WidgetProps } from '@/props';
+import { ChartWidgetProps, WidgetProps } from '@/props';
 import { getFiltersArray } from '@/utils/filter-relations';
 import upperFirst from 'lodash-es/upperFirst';
 import merge from 'ts-deepmerge';
@@ -46,6 +46,12 @@ export interface NlqChartWidgetProps {
    */
 
   styleOptions?: NlqChartWidgetStyleOptions;
+
+  /**
+   * Widget props if we have them in full, to ensure NlqChartWidget will be rendered
+   * the same way as ChartWidget
+   */
+  widgetProps?: ChartWidgetProps;
 }
 
 /**
@@ -74,6 +80,7 @@ export const NlqChartWidget = ({
   nlqResponse,
   onDataReady,
   styleOptions,
+  widgetProps,
   filters = [],
 }: NlqChartWidgetProps) => {
   nlqResponse.queryTitle = upperFirst(nlqResponse.queryTitle);
@@ -129,11 +136,15 @@ export const NlqChartWidget = ({
     return <></>;
   }
 
+  const finalChartWidgetProps = widgetProps || {
+    ...chartWidgetProps,
+    styleOptions,
+    onDataReady,
+  };
   return (
     <ChartWidget
-      {...chartWidgetProps}
+      {...finalChartWidgetProps}
       highlightSelectionDisabled={true}
-      onDataReady={onDataReady}
       topSlot={
         summary &&
         !isError && (

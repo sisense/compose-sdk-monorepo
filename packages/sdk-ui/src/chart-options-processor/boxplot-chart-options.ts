@@ -76,7 +76,7 @@ export const getBoxplotChartOptions = (
     // we are just using one of them to get formatting configuration
     yAxis: getBoxplotYAxisSettings(chartDesignOptions.yAxis, chartData, dataOptions.whiskerMax),
     series,
-    plotOptions: getBoxplotPlotOptions(chartDesignOptions.valueLabel),
+    plotOptions: getBoxplotPlotOptions(chartDesignOptions.seriesLabels),
     tooltip: getBoxplotTooltipSettings(dataOptions, translate),
   };
   return { options: boxplotOptions, alerts };

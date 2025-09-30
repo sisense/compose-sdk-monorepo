@@ -129,7 +129,7 @@ export type AppConfig = {
   };
 
   /**
-   * Configuration of the Jump to Dashboard feature
+   * Configuration of the Jump To Dashboard feature
    *
    * This feature is currently in Beta.
    *
@@ -157,7 +157,7 @@ export type AppConfig = {
    */
   jumpToDashboardConfig?: {
     /**
-     * Whether to enable or disable the jump to dashboard feature
+     * Whether to enable or disable the Jump To Dashboard feature
      *
      * If not specified, the default value is `true`
      */

@@ -2,7 +2,7 @@
 title: CalendarHeatmapDataPointsEventHandler
 ---
 
-# Type alias CalendarHeatmapDataPointsEventHandler <Badge type="alpha" text="Alpha" />
+# Type alias CalendarHeatmapDataPointsEventHandler
 
 > **CalendarHeatmapDataPointsEventHandler**: (`points`, `nativeEvent`) => `void`
 

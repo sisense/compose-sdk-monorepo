@@ -434,8 +434,6 @@ export type IndicatorDataPointEventHandler = (
 
 /**
  * Click handler for when a calendar-heatmap data point is clicked
- *
- * @alpha
  */
 export type CalendarHeatmapDataPointEventHandler = (
   /** Data point that was clicked */
@@ -446,8 +444,6 @@ export type CalendarHeatmapDataPointEventHandler = (
 
 /**
  * Click handler for when multiple calendar-heatmap data points are selected.
- *
- * @alpha
  */
 export type CalendarHeatmapDataPointsEventHandler = (
   /** Data points that were selected */
@@ -2090,8 +2086,6 @@ export interface UseGetSharedFormulaParams extends HookEnableParam {
 
 /**
  * Props of the {@link CalendarHeatmapChart} component.
- *
- * @internal
  */
 export interface CalendarHeatmapChartProps extends BaseChartProps, CalendarHeatmapChartEventProps {
   /**

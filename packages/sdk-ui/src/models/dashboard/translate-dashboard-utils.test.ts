@@ -3,6 +3,9 @@ import {
   translateLayout,
   withSharedFormulas,
   convertDimensionsToDimIndexes,
+  findDimensionByInstanceId,
+  extractPivotTargetsConfigFromWidgetDto,
+  getJtdNavigateType,
 } from '@/models/dashboard/translate-dashboard-utils';
 import isEqual from 'lodash-es/isEqual';
 import {
@@ -10,6 +13,7 @@ import {
   sharedFormulasDictionary,
 } from '../__mocks__/dashboard-with-shared-formulas';
 import { WidgetDto } from '@/widget-by-id/types';
+import { Dimension } from '@sisense/sdk-data';
 
 describe('translate-dashboard-utils', () => {
   describe('translateLayout', () => {
@@ -1103,6 +1107,687 @@ describe('translate-dashboard-utils', () => {
 
         expect(result).toEqual(['columns.0', 'columns.1']);
         expect(consoleWarnSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    const mockPanels = [
+      {
+        name: 'rows',
+        items: [
+          {
+            jaql: {
+              table: 'Commerce',
+              column: 'Date',
+              dim: '[Commerce.Date (Calendar)]',
+              datatype: 'datetime' as const,
+              level: 'months' as const,
+              title: 'Months in Date',
+            },
+            instanceid: 'date-months-dim',
+            panel: 'rows',
+          },
+          {
+            jaql: {
+              table: 'Commerce',
+              column: 'Category',
+              dim: '[Commerce.Category]',
+              datatype: 'text' as const,
+              title: 'Category',
+            },
+            instanceid: 'category-dim',
+            panel: 'rows',
+          },
+        ],
+      },
+      {
+        name: 'columns',
+        items: [
+          {
+            jaql: {
+              table: 'Commerce',
+              column: 'Gender',
+              dim: '[Commerce.Gender]',
+              datatype: 'text' as const,
+              title: 'Gender',
+            },
+            instanceid: 'gender-dim',
+            panel: 'columns',
+          },
+        ],
+      },
+      {
+        name: 'values',
+        items: [
+          {
+            jaql: {
+              table: 'Commerce',
+              column: 'Revenue',
+              dim: '[Commerce.Revenue]',
+              datatype: 'numeric' as const,
+              agg: 'sum',
+              title: 'Total Revenue',
+            },
+            instanceid: 'revenue-measure',
+            panel: 'measures',
+          },
+        ],
+      },
+    ];
+
+    it('should find dimension in rows panel and return with row location', () => {
+      const result = findDimensionByInstanceId(mockPanels as any, 'category-dim');
+
+      expect(result).toBeDefined();
+      expect(result).toHaveProperty('dimension');
+      expect(result).toHaveProperty('location', 'row');
+      expect((result as any).dimension.name).toBe('Category');
+    });
+
+    it('should find dimension in columns panel and return with column location', () => {
+      const result = findDimensionByInstanceId(mockPanels as any, 'gender-dim');
+
+      expect(result).toBeDefined();
+      expect(result).toHaveProperty('dimension');
+      expect(result).toHaveProperty('location', 'column');
+      expect((result as any).dimension.name).toBe('Gender');
+    });
+
+    it('should find datetime dimension with level in rows panel', () => {
+      const result = findDimensionByInstanceId(mockPanels as any, 'date-months-dim');
+
+      expect(result).toBeDefined();
+      expect(result).toHaveProperty('dimension');
+      expect(result).toHaveProperty('location', 'row');
+      expect((result as any).dimension.name).toBe('Months in Date');
+    });
+
+    it('should find measure in values panel and return without location', () => {
+      const result = findDimensionByInstanceId(mockPanels as any, 'revenue-measure');
+
+      expect(result).toBeDefined();
+      expect(result).not.toHaveProperty('location');
+      expect((result as any).name).toBe('Total Revenue');
+    });
+
+    it('should return undefined for non-existent instanceId', () => {
+      const result = findDimensionByInstanceId(mockPanels as any, 'non-existent-id');
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should handle empty panels array', () => {
+      const result = findDimensionByInstanceId([], 'any-id');
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should handle panels with empty items', () => {
+      const emptyPanels = [
+        { name: 'rows', items: [] },
+        { name: 'columns', items: [] },
+      ];
+
+      const result = findDimensionByInstanceId(emptyPanels, 'any-id');
+
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('extractPivotTargetsConfigFromWidgetDto', () => {
+    const createMockWidget = (drillConfig?: any, panels?: any[]) => ({
+      oid: 'test-widget-oid',
+      type: 'pivot2' as const,
+      subtype: 'pivot2' as const,
+      datasource: { title: 'test' } as any,
+      style: {},
+      title: 'Test Widget',
+      desc: 'Test Description',
+      metadata: {
+        panels: panels || [
+          {
+            name: 'rows',
+            items: [
+              {
+                jaql: {
+                  table: 'Commerce',
+                  column: 'Category',
+                  dim: '[Commerce.Category]',
+                  datatype: 'text' as const,
+                  title: 'Category',
+                },
+                instanceid: 'category-dim',
+                panel: 'rows',
+              },
+            ],
+          },
+          {
+            name: 'columns',
+            items: [
+              {
+                jaql: {
+                  table: 'Commerce',
+                  column: 'Gender',
+                  dim: '[Commerce.Gender]',
+                  datatype: 'text' as const,
+                  title: 'Gender',
+                },
+                instanceid: 'gender-dim',
+                panel: 'columns',
+              },
+            ],
+          },
+          {
+            name: 'values',
+            items: [
+              {
+                jaql: {
+                  table: 'Commerce',
+                  column: 'Revenue',
+                  dim: '[Commerce.Revenue]',
+                  datatype: 'numeric' as const,
+                  agg: 'sum',
+                  title: 'Total Revenue',
+                },
+                instanceid: 'revenue-measure',
+                panel: 'measures',
+              },
+            ],
+          },
+        ],
+      },
+      drillToDashboardConfig: drillConfig,
+    });
+
+    it('should return undefined when widget has no drillToDashboardConfig', () => {
+      const widget = createMockWidget();
+      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should return undefined when drillToDashboardConfig has no dashboardIds', () => {
+      const widget = createMockWidget({
+        enabled: true,
+        version: '1',
+      });
+      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should return undefined when dashboardIds is empty', () => {
+      const widget = createMockWidget({
+        enabled: true,
+        version: '1',
+        dashboardIds: [],
+      });
+      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should extract single target with single pivot dimension', () => {
+      const widget = createMockWidget({
+        enabled: true,
+        version: '1',
+        dashboardIds: [
+          {
+            id: 'dashboard-1',
+            caption: 'Dashboard 1',
+            pivotDimensions: ['category-dim'],
+          },
+        ],
+      });
+
+      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+
+      expect(result).toBeDefined();
+      expect(result).toBeInstanceOf(Map);
+      expect(result!.size).toBe(1);
+
+      const entries = Array.from(result!.entries());
+      const [dimension, targets] = entries[0];
+
+      expect(dimension).toHaveProperty('dimension');
+      expect(dimension).toHaveProperty('location', 'row');
+      expect(targets).toHaveLength(1);
+      expect(targets[0]).toEqual({
+        caption: 'Dashboard 1',
+        id: 'dashboard-1',
+      });
+    });
+
+    it('should extract single target with multiple pivot dimensions', () => {
+      const widget = createMockWidget({
+        enabled: true,
+        version: '1',
+        dashboardIds: [
+          {
+            id: 'dashboard-1',
+            caption: 'Dashboard 1',
+            pivotDimensions: ['category-dim', 'gender-dim', 'revenue-measure'],
+          },
+        ],
+      });
+
+      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+
+      expect(result).toBeDefined();
+      expect(result!.size).toBe(3);
+
+      const entries = Array.from(result!.entries());
+      const dimensionTypes = entries.map(([dim]) => {
+        if ('location' in dim) {
+          return `${(dim as any).location}-dimension`;
+        }
+        return 'measure';
+      });
+
+      expect(dimensionTypes).toContain('row-dimension');
+      expect(dimensionTypes).toContain('column-dimension');
+      expect(dimensionTypes).toContain('measure');
+    });
+
+    it('should extract multiple targets for same dimension', () => {
+      const widget = createMockWidget({
+        enabled: true,
+        version: '1',
+        dashboardIds: [
+          {
+            id: 'dashboard-1',
+            caption: 'Dashboard 1',
+            pivotDimensions: ['category-dim'],
+          },
+          {
+            id: 'dashboard-2',
+            caption: 'Dashboard 2',
+            pivotDimensions: ['category-dim'],
+          },
+        ],
+      });
+
+      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+
+      expect(result).toBeDefined();
+      expect(result!.size).toBe(1);
+
+      const entries = Array.from(result!.entries());
+      const [, targets] = entries[0];
+
+      expect(targets).toHaveLength(2);
+      expect('id' in targets[0] ? targets[0].id : targets[0].caption).toContain('dashboard-1');
+      expect('id' in targets[1] ? targets[1].id : targets[1].caption).toContain('dashboard-2');
+    });
+
+    it('should handle mixed found and not found pivot dimensions', () => {
+      // Suppress console warnings for this test
+      const originalWarn = console.warn;
+      const warnCalls: any[] = [];
+      console.warn = (...args: any[]) => {
+        warnCalls.push(args);
+      };
+
+      const widget = createMockWidget({
+        enabled: true,
+        version: '1',
+        dashboardIds: [
+          {
+            id: 'dashboard-1',
+            caption: 'Dashboard 1',
+            pivotDimensions: ['category-dim', 'non-existent-dim', 'gender-dim'],
+          },
+        ],
+      });
+
+      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+
+      expect(result).toBeDefined();
+      expect(result!.size).toBe(2); // Only found dimensions
+      expect(warnCalls.length).toBeGreaterThan(0);
+      expect(warnCalls[0][0]).toContain(
+        'Could not find dimension with instanceId: non-existent-dim',
+      );
+
+      console.warn = originalWarn;
+    });
+
+    it('should handle target without pivotDimensions gracefully', () => {
+      // Suppress console warnings for this test
+      const originalWarn = console.warn;
+      const warnCalls: any[] = [];
+      console.warn = (...args: any[]) => {
+        warnCalls.push(args);
+      };
+
+      const widget = createMockWidget({
+        enabled: true,
+        version: '1',
+        dashboardIds: [
+          {
+            id: 'dashboard-1',
+            caption: 'Dashboard 1',
+            // No pivotDimensions property
+          },
+        ],
+      });
+
+      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+
+      expect(result).toBeDefined();
+      expect(result!.size).toBe(0);
+      expect(warnCalls.length).toBeGreaterThan(0);
+      expect(warnCalls[0][0]).toContain('Pivot widget has drill target without pivotDimensions');
+      expect(warnCalls[0][1]).toBeDefined(); // The target object
+
+      console.warn = originalWarn;
+    });
+
+    it('should work with real transformation flow using panels', () => {
+      // This test verifies the end-to-end transformation from Map<Dimension, JtdTarget[]> to pivotDimensions: PivotDimId[]
+      const widget = createMockWidget({
+        enabled: true,
+        version: '1',
+        dashboardIds: [
+          {
+            id: 'dashboard-1',
+            caption: 'Dashboard 1',
+            pivotDimensions: ['category-dim', 'gender-dim'],
+          },
+        ],
+      });
+
+      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+
+      // Verify that the Map was created correctly
+      expect(result).toBeDefined();
+      expect(result!.size).toBe(2);
+
+      // Verify that dimensions were properly extracted and can be used as Map keys
+      const dimensionKeys = Array.from(result!.keys());
+      expect(dimensionKeys).toHaveLength(2);
+
+      // Check that both dimensions have the correct structure
+      const locatedDimensions: {
+        dimension: Dimension;
+        location: 'row' | 'column' | 'value';
+      }[] = dimensionKeys.filter((key) => 'location' in key) as {
+        dimension: Dimension;
+        location: 'row' | 'column' | 'value';
+      }[];
+      const directMeasures = dimensionKeys.filter((key) => !('location' in key));
+
+      // Validate located dimensions (rows/columns)
+      locatedDimensions.forEach((key) => {
+        expect(key).toHaveProperty('dimension');
+        expect(key).toHaveProperty('location');
+        expect(['row', 'column'].includes(key.location)).toBe(true);
+      });
+
+      // Validate direct measures (values)
+      directMeasures.forEach((key) => {
+        expect(key).toHaveProperty('name');
+      });
+
+      // Verify targets are properly associated
+      const allTargets = Array.from(result!.values()).flat();
+      expect(allTargets).toHaveLength(2); // 2 dimensions × 1 target each = 2 total targets
+      expect(allTargets.every((target) => target.caption === 'Dashboard 1')).toBe(true);
+      expect(
+        allTargets.every(
+          (target) => ('id' in target && target.id === 'dashboard-1') || 'dashboard' in target,
+        ),
+      ).toBe(true);
+    });
+  });
+
+  describe('getJtdNavigateType', () => {
+    const createMockWidget = (
+      type: string,
+      drillToDashboardConfig?: any,
+      panels?: Array<{ name: string; items: Array<{ instanceid?: string }> }>,
+    ): WidgetDto =>
+      ({
+        oid: 'test-widget-oid',
+        type,
+        subtype: type.split('/')[1],
+        datasource: { title: 'test' } as any,
+        metadata: {
+          panels: panels || [],
+        },
+        style: {},
+        title: 'Test Widget',
+        desc: 'Test Description',
+        drillToDashboardConfig,
+      } as WidgetDto);
+
+    describe('pie chart navigation type logic', () => {
+      it('should return CLICK for pie chart without categories (bug fix test)', () => {
+        // This test specifically covers the bug fix where the original logic was:
+        // const isPieChartWithoutCategories = (chartCategories?.items?.length || 0) > 0;
+        // which was incorrect - it should be === 0 for "without categories"
+
+        const pieChartWithoutCategories = createMockWidget(
+          'chart/pie',
+          {
+            enabled: true,
+            dashboardIds: [{ id: 'test-dashboard' }],
+          },
+          [
+            {
+              name: 'categories',
+              items: [], // Empty items array = no categories
+            },
+          ],
+        );
+
+        const result = getJtdNavigateType(pieChartWithoutCategories);
+
+        expect(result).toBe('click');
+      });
+
+      it('should return CLICK for pie chart with undefined categories panel', () => {
+        const pieChartWithoutCategories = createMockWidget(
+          'chart/pie',
+          {
+            enabled: true,
+            dashboardIds: [{ id: 'test-dashboard' }],
+          },
+          [], // No panels at all
+        );
+
+        const result = getJtdNavigateType(pieChartWithoutCategories);
+
+        expect(result).toBe('click');
+      });
+
+      it('should return CLICK for pie chart with categories panel but undefined items', () => {
+        const pieChartWithoutCategories = createMockWidget(
+          'chart/pie',
+          {
+            enabled: true,
+            dashboardIds: [{ id: 'test-dashboard' }],
+          },
+          [
+            {
+              name: 'categories',
+              items: undefined as any, // Undefined items = no categories
+            },
+          ],
+        );
+
+        const result = getJtdNavigateType(pieChartWithoutCategories);
+
+        expect(result).toBe('click');
+      });
+
+      it('should fall through to chart navigation type for pie chart WITH categories', () => {
+        // When pie chart has categories, it should NOT trigger the special case
+        // and should fall through to the normal chart logic
+
+        const pieChartWithCategories = createMockWidget(
+          'chart/pie',
+          {
+            enabled: true,
+            dashboardIds: [{ id: 'test-dashboard' }],
+            drillToDashboardNavigateTypeCharts: 1, // RIGHT_CLICK
+          },
+          [
+            {
+              name: 'categories',
+              items: [{ instanceid: 'category-1' }, { instanceid: 'category-2' }], // Has categories
+            },
+          ],
+        );
+
+        const result = getJtdNavigateType(pieChartWithCategories);
+
+        // Should fall through to chart navigation logic, not return CLICK
+        expect(result).toBe('rightclick');
+      });
+
+      it('should fall through to chart navigation type for pie chart with single category', () => {
+        // Edge case: even one category should prevent the special case
+
+        const pieChartWithOneCategory = createMockWidget(
+          'chart/pie',
+          {
+            enabled: true,
+            dashboardIds: [{ id: 'test-dashboard' }],
+            drillToDashboardNavigateTypeCharts: 1, // RIGHT_CLICK
+          },
+          [
+            {
+              name: 'categories',
+              items: [{ instanceid: 'category-1' }], // Has one category
+            },
+          ],
+        );
+
+        const result = getJtdNavigateType(pieChartWithOneCategory);
+
+        expect(result).toBe('rightclick');
+      });
+    });
+
+    describe('default behavior and other widget types', () => {
+      it('should return RIGHT_CLICK when no drillToDashboardConfig is provided', () => {
+        const widget = createMockWidget('chart/column');
+
+        const result = getJtdNavigateType(widget);
+
+        expect(result).toBe('rightclick');
+      });
+
+      it('should handle pivot table navigation type', () => {
+        const pivotWidget = createMockWidget('pivot', {
+          enabled: true,
+          dashboardIds: [{ id: 'test-dashboard' }],
+          drillToDashboardNavigateTypePivot: 3, // Maps to CLICK
+        });
+
+        const result = getJtdNavigateType(pivotWidget);
+
+        expect(result).toBe('click');
+      });
+
+      it('should handle chart navigation type', () => {
+        const chartWidget = createMockWidget('chart/column', {
+          enabled: true,
+          dashboardIds: [{ id: 'test-dashboard' }],
+          drillToDashboardNavigateTypeCharts: 1, // RIGHT_CLICK
+        });
+
+        const result = getJtdNavigateType(chartWidget);
+
+        expect(result).toBe('rightclick');
+      });
+
+      it('should return CLICK for indicator widgets', () => {
+        const indicatorWidget = createMockWidget('indicator', {
+          enabled: true,
+          dashboardIds: [{ id: 'test-dashboard' }],
+        });
+
+        const result = getJtdNavigateType(indicatorWidget);
+
+        expect(result).toBe('click');
+      });
+
+      it('should return CLICK for text widgets', () => {
+        const textWidget = createMockWidget('richtexteditor', {
+          enabled: true,
+          dashboardIds: [{ id: 'test-dashboard' }],
+        });
+
+        const result = getJtdNavigateType(textWidget);
+
+        expect(result).toBe('click');
+      });
+
+      it('should return RIGHT_CLICK as fallback for unknown widget types', () => {
+        const unknownWidget = createMockWidget('unknown/widget', {
+          enabled: true,
+          dashboardIds: [{ id: 'test-dashboard' }],
+        });
+
+        const result = getJtdNavigateType(unknownWidget);
+
+        expect(result).toBe('rightclick');
+      });
+    });
+
+    describe('edge cases', () => {
+      it('should handle pie chart with mixed panel types', () => {
+        const pieChartMixedPanels = createMockWidget(
+          'chart/pie',
+          {
+            enabled: true,
+            dashboardIds: [{ id: 'test-dashboard' }],
+          },
+          [
+            {
+              name: 'values',
+              items: [{ instanceid: 'value-1' }],
+            },
+            {
+              name: 'categories',
+              items: [], // Empty categories
+            },
+            {
+              name: 'filters',
+              items: [{ instanceid: 'filter-1' }],
+            },
+          ],
+        );
+
+        const result = getJtdNavigateType(pieChartMixedPanels);
+
+        expect(result).toBe('click');
+      });
+
+      it('should handle pie chart with multiple panels but no categories panel', () => {
+        const pieChartNoCategoriesPanel = createMockWidget(
+          'chart/pie',
+          {
+            enabled: true,
+            dashboardIds: [{ id: 'test-dashboard' }],
+          },
+          [
+            {
+              name: 'values',
+              items: [{ instanceid: 'value-1' }],
+            },
+            {
+              name: 'filters',
+              items: [{ instanceid: 'filter-1' }],
+            },
+            // No categories panel at all
+          ],
+        );
+
+        const result = getJtdNavigateType(pieChartNoCategoriesPanel);
+
+        expect(result).toBe('click');
       });
     });
   });

@@ -9,10 +9,12 @@ export function formatViewTitle(
 ): string {
   const monthsToDisplay = getDisplayMonths(availableMonths, currentViewIndex, viewType);
 
+  if (monthsToDisplay.length === 0) return '';
+
   if (viewType === 'month') {
     // For month view - show "Month Year" format
     const month = monthsToDisplay[0];
-    return `${month.monthName} ${month.year}`;
+    return month ? `${month.monthName} ${month.year}` : '';
   }
 
   // For other views: determine year range

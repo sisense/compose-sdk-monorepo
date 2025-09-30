@@ -238,6 +238,7 @@ export default function CodeExample() {
         filterFactory.members(DM.Commerce.Gender, ['Unspecified'], { excludeMembers: true })
         ],
       styleOptions: {
+        subtype: 'pie/classic',
         legend: {
           enabled: false,
           position: 'bottom',
@@ -245,14 +246,14 @@ export default function CodeExample() {
         labels: {
           enabled: true,
           categories: true,
-          value: false,
           percent: true,
           decimals: false,
+          value: false,
         },
         dataLimits: {
           seriesCapacity: 100000,
+          categoriesCapacity: undefined,
         },
-        subtype: 'pie/classic',
       },
       drilldownOptions: {
         drilldownPaths: [],
@@ -370,6 +371,7 @@ export default function CodeExample() {
         filterFactory.members(DM.Commerce.Gender, ['Unspecified'], { excludeMembers: true })
         ],
       styleOptions: {
+        subtype: 'pie/classic',
         legend: {
           enabled: false,
           position: 'left',
@@ -377,14 +379,14 @@ export default function CodeExample() {
         labels: {
           enabled: true,
           categories: true,
-          value: false,
           percent: true,
           decimals: false,
+          value: false,
         },
         dataLimits: {
           seriesCapacity: 100000,
+          categoriesCapacity: undefined,
         },
-        subtype: 'pie/classic',
       },
       drilldownOptions: {
         drilldownPaths: [],
@@ -540,57 +542,52 @@ export default function CodeExample() {
           enabled: true,
           position: 'right',
         },
-        seriesLabels: {
-          enabled: false,
-          rotation: 0,
-        },
-        markerSize: {
-          scatterDefaultSize: 10,
-          scatterBubbleMinSize: 12,
-          scatterBubbleMaxSize: 48,
-        },
         xAxis: {
           enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
           gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
           logarithmic: true,
           title: {
             enabled: false,
             text: 'SALES',
           },
-          intervalEnabled: false,
-          logarithmicOld: true,
-          hideMinMax: false,
-          min: null,
-          max: null,
+          labels: {
+            enabled: true,
+          },
         },
         yAxis: {
           enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
           gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
           logarithmic: true,
           title: {
             enabled: true,
             text: 'QUANTITY',
           },
-          intervalEnabled: false,
-          logarithmicOld: true,
-          hideMinMax: false,
-          min: null,
-          max: null,
+          labels: {
+            enabled: true,
+          },
         },
         dataLimits: {
-          categoriesCapacityX: 500,
-          categoriesCapacityY: 500,
           seriesCapacity: 50,
+          categoriesCapacity: undefined,
+        },
+        seriesLabels: {
+          enabled: false,
+          rotation: 0,
+          showValue: false,
+          showPercentage: false,
+        },
+        markerSize: {
+          scatterDefaultSize: 10,
+          scatterBubbleMinSize: 12,
+          scatterBubbleMaxSize: 48,
         },
       },
       drilldownOptions: {
@@ -656,12 +653,58 @@ export default function CodeExample() {
       },
       filters: [],
       styleOptions: {
-        lineWidth: {
-          width: 'bold',
-        },
+        subtype: 'line/spline',
         legend: {
           enabled: true,
           position: 'bottom',
+        },
+        xAxis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: undefined,
+          title: {
+            enabled: false,
+            text: 'MONTH',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        yAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: true,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        y2Axis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          title: {
+            enabled: true,
+            text: 'QUANTITY',
+          },
+          labels: {
+            enabled: true,
+          },
         },
         seriesLabels: {
           enabled: false,
@@ -669,76 +712,21 @@ export default function CodeExample() {
           showValue: false,
           showPercentage: false,
         },
-        markers: {
-          enabled: true,
-          fill: 'hollow',
-          size: 'small',
-        },
-        xAxis: {
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: false,
-          title: {
-            enabled: false,
-            text: 'MONTH',
-          },
-          x2Title: {
-            enabled: false,
-          },
-          intervalEnabled: false,
-          min: null,
-          max: null,
-        },
-        yAxis: {
-          inactive: false,
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: true,
-          logarithmic: true,
-          title: {
-            enabled: true,
-            text: 'SALES',
-          },
-          min: null,
-          intervalEnabled: false,
-          max: null,
-        },
-        y2Axis: {
-          inactive: false,
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: false,
-          logarithmic: false,
-          title: {
-            enabled: true,
-            text: 'QUANTITY',
-          },
-          templateMainYHasGridLines: true,
-          intervalEnabled: true,
-          min: null,
-          max: null,
-        },
-        navigator: {
-          enabled: true,
-          scrollerLocation: undefined,
-        },
         dataLimits: {
           seriesCapacity: 50,
           categoriesCapacity: 100000,
         },
-        subtype: 'line/spline',
+        navigator: {
+          enabled: true,
+        },
+        lineWidth: {
+          width: 'bold',
+        },
+        markers: {
+          enabled: true,
+          size: 'small',
+          fill: 'hollow',
+        },
       },
       drilldownOptions: {
         drilldownPaths: [],
@@ -786,9 +774,58 @@ export default function CodeExample() {
         filterFactory.topRanking(DM.Category.Category, measureFactory.sum(DM.Commerce.Revenue, 'sum Revenue'), 3)
         ],
       styleOptions: {
+        subtype: 'bar/stacked',
         legend: {
           enabled: true,
           position: 'bottom',
+        },
+        xAxis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: undefined,
+          title: {
+            enabled: true,
+            text: 'AGE RANGE',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        yAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        y2Axis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          title: {
+            enabled: false,
+            text: undefined,
+          },
+          labels: {
+            enabled: true,
+          },
         },
         seriesLabels: {
           enabled: false,
@@ -796,73 +833,13 @@ export default function CodeExample() {
           showValue: false,
           showPercentage: false,
         },
-        xAxis: {
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: false,
-          title: {
-            enabled: true,
-            text: 'AGE RANGE',
-          },
-          x2Title: {
-            enabled: false,
-          },
-          intervalEnabled: false,
-          min: null,
-          max: null,
-        },
-        yAxis: {
-          inactive: false,
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: true,
-          logarithmic: false,
-          title: {
-            enabled: true,
-            text: 'SALES',
-          },
-          intervalEnabled: true,
-          hideMinMax: false,
-          min: null,
-          max: null,
-        },
-        y2Axis: {
-          inactive: true,
-          enabled: true,
-          ticks: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: false,
-          logarithmic: false,
-          title: {
-            enabled: false,
-          },
-          intervalEnabled: true,
-          hideMinMax: false,
-          min: null,
-          max: null,
-        },
         dataLimits: {
           seriesCapacity: 50,
           categoriesCapacity: 100000,
         },
         navigator: {
           enabled: true,
-          scrollerLocation: undefined,
         },
-        subtype: 'bar/stacked',
-        lineWidth: undefined,
-        markers: undefined,
       },
       drilldownOptions: {
         drilldownPaths: [],
@@ -955,90 +932,51 @@ export default function CodeExample() {
         filterFactory.members(DM.Country.Country, ['France', 'Israel', 'Ukraine'])
         ],
       styleOptions: {
+        subtype: 'polar/area',
         legend: {
           enabled: true,
           position: 'bottom',
         },
-        seriesLabels: {
-          enabled: false,
-          rotation: 0,
-        },
-        categories: {
+        xAxis: {
           enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: false,
+          min: undefined,
+          max: undefined,
+          logarithmic: undefined,
+          title: {
+            enabled: false,
+            text: 'Country',
+          },
           labels: {
             enabled: true,
-            rotation: 0,
+          },
+        },
+        yAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: true,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          labels: {
+            enabled: true,
           },
           title: {
             enabled: false,
           },
-          gridLines: true,
-          isIntervalEnabled: false,
-        },
-        axis: {
-          enabled: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: true,
-          logarithmic: false,
-          isIntervalEnabled: true,
         },
         dataLimits: {
           seriesCapacity: 50,
           categoriesCapacity: 200,
         },
-        narration: {
+        seriesLabels: {
           enabled: false,
-          display: 'above',
-          format: 'bullets',
-          verbosity: 'medium',
-          up_sentiment: 'good',
-          aggregation: 'sum',
-          labels: [{
-              id: 'country',
-              title: 'Country',
-              singular: 'Country',
-              plural: 'Country',
-            },{
-              id: 'age_range',
-              title: 'Age Range',
-              singular: 'Age Range',
-              plural: 'Age Range',
-            }
-          ],
-        },
-        subtype: 'polar/area',
-        xAxis: {
-          enabled: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          title: {
-            enabled: false,
-            text: 'Country',
-          },
-          gridLines: true,
-          isIntervalEnabled: false,
-          min: null,
-          max: null,
-        },
-        yAxis: {
-          enabled: true,
-          labels: {
-            enabled: true,
-            rotation: 0,
-          },
-          gridLines: true,
-          logarithmic: false,
-          isIntervalEnabled: true,
-          min: null,
-          max: null,
-          title: {
-            enabled: false,
-          },
+          rotation: 0,
+          showValue: false,
+          showPercentage: false,
         },
       },
       drilldownOptions: {

@@ -4,10 +4,9 @@ import {
   getJumpToDashboardMenuItemForMultiplePoints,
 } from './jtd-menu';
 import { JtdCoreData, JtdContext, JtdActions } from './jtd-types';
-import { JtdConfig, JtdDrillTarget, JtdNavigateType } from '@/widget-by-id/types';
+import { JtdConfig, JtdTarget } from './jtd-types';
 import { WidgetProps } from '@/props.js';
 import { DataPoint } from '@/types';
-import { SizeMeasurement } from '@/types';
 
 // Mock dependencies
 vi.mock('./jtd-handlers', () => ({
@@ -22,25 +21,27 @@ describe('jtd-menu', () => {
   const mockOpenModal = vi.fn();
   const mockTranslate = vi.fn();
 
-  const mockDrillTarget1: JtdDrillTarget = {
+  const mockJumpTarget1: JtdTarget = {
     id: 'target-dashboard-1',
     caption: 'Sales Dashboard',
   };
 
-  const mockDrillTarget2: JtdDrillTarget = {
+  const mockJumpTarget2: JtdTarget = {
     id: 'target-dashboard-2',
     caption: 'Marketing Dashboard',
   };
 
   const mockSingleTargetConfig: JtdConfig = {
     enabled: true,
-    navigateType: JtdNavigateType.RIGHT_CLICK,
-    drillTargets: [mockDrillTarget1],
+    navigateType: 'rightclick',
+    jumpTargets: [mockJumpTarget1],
     modalWindowWidth: 800,
     modalWindowHeight: 600,
-    modalWindowMeasurement: SizeMeasurement.PIXEL,
-    displayToolbarRow: true,
-    displayFilterPane: true,
+    modalWindowMeasurement: 'px',
+    dashboardConfig: {
+      toolbar: { visible: true },
+      filtersPanel: { visible: true },
+    },
     includeDashFilterDims: ['Category'],
     includeWidgetFilterDims: ['Region'],
     mergeTargetDashboardFilters: false,
@@ -49,12 +50,12 @@ describe('jtd-menu', () => {
 
   const mockMultipleTargetsConfig: JtdConfig = {
     ...mockSingleTargetConfig,
-    drillTargets: [mockDrillTarget1, mockDrillTarget2],
+    jumpTargets: [mockJumpTarget1, mockJumpTarget2],
   };
 
   const mockCustomCaptionConfig: JtdConfig = {
     ...mockSingleTargetConfig,
-    drillToDashboardRightMenuCaption: 'Navigate to',
+    jumpToDashboardRightMenuCaption: 'Navigate to',
   };
 
   const mockWidgetProps: WidgetProps = {
@@ -124,7 +125,7 @@ describe('jtd-menu', () => {
         expect(jtdHandlers.getJtdClickHandler).toHaveBeenCalledWith(
           {
             ...coreData,
-            drillTarget: mockDrillTarget1,
+            jumpTarget: mockJumpTarget1,
           },
           mockContext,
           { openModal: mockOpenModal },
@@ -189,7 +190,7 @@ describe('jtd-menu', () => {
         expect(jtdHandlers.getJtdClickHandler).toHaveBeenCalledWith(
           {
             ...coreData,
-            drillTarget: mockDrillTarget1,
+            jumpTarget: mockJumpTarget1,
           },
           mockContext,
           { openModal: mockOpenModal },
@@ -197,7 +198,7 @@ describe('jtd-menu', () => {
         expect(jtdHandlers.getJtdClickHandler).toHaveBeenCalledWith(
           {
             ...coreData,
-            drillTarget: mockDrillTarget2,
+            jumpTarget: mockJumpTarget2,
           },
           mockContext,
           { openModal: mockOpenModal },
@@ -207,7 +208,7 @@ describe('jtd-menu', () => {
       it('should use custom caption for multiple targets', () => {
         const multipleTargetsWithCustomCaption: JtdConfig = {
           ...mockMultipleTargetsConfig,
-          drillToDashboardRightMenuCaption: 'Go to',
+          jumpToDashboardRightMenuCaption: 'Go to',
         };
 
         const coreData: JtdCoreData = {
@@ -265,7 +266,7 @@ describe('jtd-menu', () => {
         expect(jtdHandlers.getJtdClickHandlerForMultiplePoints).toHaveBeenCalledWith(
           {
             ...coreData,
-            drillTarget: mockDrillTarget1,
+            jumpTarget: mockJumpTarget1,
           },
           mockContext,
           { openModal: mockOpenModal },
@@ -326,7 +327,7 @@ describe('jtd-menu', () => {
         expect(jtdHandlers.getJtdClickHandlerForMultiplePoints).toHaveBeenCalledWith(
           {
             ...coreData,
-            drillTarget: mockDrillTarget1,
+            jumpTarget: mockJumpTarget1,
           },
           mockContext,
           { openModal: mockOpenModal },
@@ -334,7 +335,7 @@ describe('jtd-menu', () => {
         expect(jtdHandlers.getJtdClickHandlerForMultiplePoints).toHaveBeenCalledWith(
           {
             ...coreData,
-            drillTarget: mockDrillTarget2,
+            jumpTarget: mockJumpTarget2,
           },
           mockContext,
           { openModal: mockOpenModal },
@@ -346,7 +347,7 @@ describe('jtd-menu', () => {
       it('should handle empty drill targets array', () => {
         const emptyTargetsConfig: JtdConfig = {
           ...mockSingleTargetConfig,
-          drillTargets: [],
+          jumpTargets: [],
         };
 
         const coreData: JtdCoreData = {
@@ -361,7 +362,7 @@ describe('jtd-menu', () => {
           mockActions,
         );
 
-        // Should still work but access drillTargets[0] which would be undefined
+        // Should still work but access jumpTargets[0] which would be undefined
         // The function doesn't handle this case explicitly, so it would fail
         expect(() => {
           result?.onClick?.();

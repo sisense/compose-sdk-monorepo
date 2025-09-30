@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import { SisenseContextProviderProps } from '../../index';
 import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
 import AiContextProvider from '../ai-context-provider';

@@ -7,3 +7,7 @@ title: Legend
 > **Legend**: [`LegendOptions`](type-alias.LegendOptions.md)
 
 Alias for LegendOptions for backward compatibility
+
+::: warning Deprecated
+Please use [LegendOptions](type-alias.LegendOptions.md) instead
+:::

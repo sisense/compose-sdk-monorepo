@@ -45,6 +45,7 @@ const RedoIcon = (props: SVGProps<SVGSVGElement>) => (
 
 /**
  * Props for the useEditModeToolbar hook
+ * @internal
  */
 export interface UseEditModeToolbarProps {
   /**
@@ -71,6 +72,7 @@ export interface UseEditModeToolbarProps {
 
 /**
  * Return type for the useEditModeToolbar hook
+ * @internal
  */
 export interface UseEditModeToolbarResult {
   /**
@@ -101,6 +103,7 @@ export interface UseEditModeToolbarResult {
  *
  * @param props Configuration options for the toolbar
  * @returns Layout state and toolbar component
+ * @internal
  */
 export function useEditModeToolbar({
   initialLayout,

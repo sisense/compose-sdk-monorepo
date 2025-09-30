@@ -360,6 +360,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
     "useHTML": true,
   },
   "xAxis": undefined,
+  "yAxis": undefined,
 }
 `;
 
@@ -921,6 +922,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
     "useHTML": true,
   },
   "xAxis": undefined,
+  "yAxis": undefined,
 }
 `;
 
@@ -1482,5 +1484,6 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
     "useHTML": true,
   },
   "xAxis": undefined,
+  "yAxis": undefined,
 }
 `;

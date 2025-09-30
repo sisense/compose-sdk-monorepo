@@ -10,7 +10,10 @@ export type HighchartBasedChartTypes =
   | 'area'
   | 'polar'
   | 'pie'
-  | 'calendar-heatmap';
+  | 'funnel'
+  | 'treemap'
+  | 'calendar-heatmap'
+  | 'sunburst';
 
 export type HighchartsOptionsBuilder<CT extends HighchartBasedChartTypes> = {
   getChart: (ctx: BuildContext<CT>) => HighchartsOptionsInternal['chart'];

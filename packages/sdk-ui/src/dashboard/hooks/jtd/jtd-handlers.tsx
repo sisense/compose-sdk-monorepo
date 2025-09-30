@@ -1,35 +1,39 @@
 import React from 'react';
 import {
+  Attribute,
   type Filter,
   filterFactory,
   isMembersFilter,
   mergeFilters,
-  Attribute,
 } from '@sisense/sdk-data';
 import { TranslatableError } from '@/translation/translatable-error';
 import { WidgetProps } from '@/props.js';
 import { PivotTableDataPoint, DataPoint } from '@/types';
-import { JtdConfig, JtdDrillTarget, JtdPivotDrillTarget } from '@/widget-by-id/types';
+import {
+  isJumpTargetWithId,
+  JtdActions,
+  JtdClickHandlerData,
+  JtdConfig,
+  JtdContext,
+  JtdCoreData,
+  JtdDataPointClickEvent,
+} from './jtd-types';
 import { OpenModalFn } from '@/common/components/modal/modal-context';
 import { JtdDashboard } from '@/dashboard/components/jtd-dashboard';
 import {
+  filterByAllowedDimensions,
   getFiltersFromDataPoint,
   getFormulaContextFilters,
-  filterByAllowedDimensions,
   handleFormulaDuplicateFilters,
 } from './jtd-filters';
-import {
-  JtdCoreData,
-  JtdContext,
-  JtdActions,
-  JtdClickHandlerData,
-  JtdDataPointClickEvent,
-} from './jtd-types';
+import { isPivotClickHandlerActionable } from './jtd-formatters';
+
+const noJumpTargetsError = 'jumpToDashboard.noJumpTargets';
 
 /**
  * Get the JTD click handler for a specific data point of the specific widget
  *
- * @param data - Core data with drill target (config, drill target, widget props, point)
+ * @param data - Core data with jump target (config, jump target, widget props, point)
  * @param context - Context data (filters)
  * @param actions - Action functions
  * @returns The JTD click handler
@@ -63,30 +67,37 @@ export const getJtdClickHandler = (
     data.jtdConfig.includeWidgetFilterDims,
   );
 
-  // Merge all filters: formula context filters are always included
+  // Merge all filters: formula context filters are always included, extra filters have highest priority
   const mergedFilters = mergeFilters(
     mergeFilters(
-      mergeFilters(allowedDashboardFilters, allowedWidgetFilters),
-      formulaContextFilters,
+      mergeFilters(
+        mergeFilters(allowedDashboardFilters, allowedWidgetFilters),
+        formulaContextFilters,
+      ),
+      generatedFilters,
     ),
-    generatedFilters,
+    context.extraFilters || [],
   );
 
-  // Return the click handler
+  const jumpTarget = isJumpTargetWithId(data.jumpTarget)
+    ? data.jumpTarget.id
+    : data.jumpTarget.dashboard;
+  const jumpTargetId = isJumpTargetWithId(data.jumpTarget)
+    ? data.jumpTarget.id
+    : data.jumpTarget.dashboard.id;
   return () => {
     return actions.openModal({
-      title: data.drillTarget.caption,
+      title: data.jumpTarget.caption,
       width: data.jtdConfig.modalWindowWidth,
       height: data.jtdConfig.modalWindowHeight,
-      measurement: data.jtdConfig.modalWindowMeasurement,
+      measurement: data.jtdConfig.modalWindowMeasurement === 'px' ? 'px' : '%',
       content: (
         <JtdDashboard
-          key={`jtd-${data.drillTarget.id}`}
-          dashboardOid={data.drillTarget.id}
+          key={`jtd-${jumpTargetId}`}
+          dashboard={jumpTarget}
           filters={mergedFilters}
           mergeTargetDashboardFilters={data.jtdConfig.mergeTargetDashboardFilters || false}
-          displayToolbarRow={data.jtdConfig.displayToolbarRow || false}
-          displayFilterPane={data.jtdConfig.displayFilterPane || false}
+          dashboardConfig={data.jtdConfig.dashboardConfig}
         />
       ),
     });
@@ -96,7 +107,7 @@ export const getJtdClickHandler = (
 /**
  * Get the JTD click handler for multiple data points
  *
- * @param data - Core data with drill target (config, drill target, widget props, points)
+ * @param data - Core data with jump target (config, jump target, widget props, points)
  * @param context - Context data (filters)
  * @param actions - Action functions
  * @returns The JTD click handler
@@ -160,25 +171,34 @@ export const getJtdClickHandlerForMultiplePoints = (
             data.jtdConfig.sendFormulaFiltersDuplicate,
           )
         : [];
-    // Merge all filters with generated filters taking priority
+    // Merge all filters with generated filters taking priority, extra filters have highest priority
     const allFilters = mergeFilters(
-      mergeFilters(allowedDashboardFilters, allowedWidgetFilters),
-      mergeFilters(formulaContextFilters, mergedGeneratedFilters),
+      mergeFilters(
+        mergeFilters(allowedDashboardFilters, allowedWidgetFilters),
+        mergeFilters(formulaContextFilters, mergedGeneratedFilters),
+      ),
+      context.extraFilters || [],
     );
 
+    const jumpTarget = isJumpTargetWithId(data.jumpTarget)
+      ? data.jumpTarget.id
+      : data.jumpTarget.dashboard;
+    const jumpTargetId = isJumpTargetWithId(data.jumpTarget)
+      ? data.jumpTarget.id
+      : data.jumpTarget.dashboard.id;
+
     return actions.openModal({
-      title: data.drillTarget.caption,
+      title: data.jumpTarget.caption,
       width: data.jtdConfig.modalWindowWidth,
       height: data.jtdConfig.modalWindowHeight,
-      measurement: data.jtdConfig.modalWindowMeasurement,
+      measurement: data.jtdConfig.modalWindowMeasurement === 'px' ? 'px' : '%',
       content: (
         <JtdDashboard
-          key={`jtd-${data.drillTarget.id}`}
-          dashboardOid={data.drillTarget.id}
+          key={`jtd-${jumpTargetId}`}
+          dashboard={jumpTarget}
           filters={allFilters}
           mergeTargetDashboardFilters={data.jtdConfig.mergeTargetDashboardFilters || false}
-          displayToolbarRow={data.jtdConfig.displayToolbarRow || false}
-          displayFilterPane={data.jtdConfig.displayFilterPane || false}
+          dashboardConfig={data.jtdConfig.dashboardConfig}
         />
       ),
     });
@@ -200,15 +220,15 @@ export const handleDataPointClick = (
   actions: Pick<JtdActions, 'openModal' | 'openMenu' | 'translate'>,
   event: JtdDataPointClickEvent,
 ) => {
-  if (coreData.jtdConfig.drillTargets.length === 0) {
-    throw new TranslatableError('jumpToDashboard.noDrillTargets');
-  } else if (coreData.jtdConfig.drillTargets.length === 1) {
-    // Single drill target - direct navigation
-    const drillTarget = coreData.jtdConfig.drillTargets[0];
+  if (coreData.jtdConfig.jumpTargets.length === 0) {
+    throw new TranslatableError(noJumpTargetsError);
+  } else if (coreData.jtdConfig.jumpTargets.length === 1) {
+    // Single jump target - direct navigation
+    const jumpTarget = coreData.jtdConfig.jumpTargets[0];
     const clickHandler = getJtdClickHandler(
       {
         ...coreData,
-        drillTarget,
+        jumpTarget,
       },
       context,
       {
@@ -217,7 +237,7 @@ export const handleDataPointClick = (
     );
     return clickHandler();
   } else {
-    // Multiple drill targets - show context menu
+    // Multiple jump targets - show context menu
     const menuItem = event.getJumpToDashboardMenuItem(coreData, context, {
       openModal: actions.openModal,
       translate: actions.translate!,
@@ -245,10 +265,12 @@ export const handleDataPointClick = (
  */
 export const convertPivotToDataPoint = (pivotPoint: PivotTableDataPoint): DataPoint => {
   // Convert pivot entries structure to regular data point structure
-  const rows = pivotPoint.entries.rows || [];
-  const columns = pivotPoint.entries.columns || [];
+  // Handle case where entries might be undefined
+  const entries = pivotPoint.entries || { rows: [], columns: [], values: [] };
+  const rows = entries.rows || [];
+  const columns = entries.columns || [];
   const category = [...rows, ...columns];
-  const value = pivotPoint.entries.values || [];
+  const value = entries.values || [];
 
   return {
     entries: {
@@ -262,7 +284,7 @@ export const convertPivotToDataPoint = (pivotPoint: PivotTableDataPoint): DataPo
 /**
  * Handle pivot table data point click
  *
- * @param data - Core data with drill target (config, drill target, widget props, pivot point)
+ * @param data - Core data with jump target (config, jump target, widget props, pivot point)
  * @param context - Context data (filters)
  * @param actions - Action functions
  * @param eventData - Event-related data
@@ -273,45 +295,29 @@ export const handlePivotDataPointClick = (
   context: JtdContext,
   actions: Pick<JtdActions, 'openModal' | 'openMenu' | 'translate'>,
 ) => {
-  // Convert pivot data point to regular data point format
-  const convertedPoint = convertPivotToDataPoint(data.point);
-  const drillTarget = data.jtdConfig.drillTargets[0];
-
-  // Filter data based on pivotDimensions if specified
-  if (
-    isPivotDrillTarget(drillTarget) &&
-    drillTarget.pivotDimensions &&
-    drillTarget.pivotDimensions.length > 0
-  ) {
-    if (data.point.entries?.columns?.length && !data.point.entries?.values?.length) {
-      // clicked on break by values
-      if (!drillTarget.pivotDimensions.includes(data.point.entries?.columns[0].id)) {
-        return;
-      }
-    } else if (data.point.entries?.columns?.length && data.point.entries?.values?.length) {
-      // clicked on values cell
-      if (!drillTarget.pivotDimensions.includes(data.point.entries?.values[0].id)) {
-        return;
-      }
-    } else if (
-      data.point.entries?.rows?.length &&
-      !data.point.entries?.values?.length &&
-      !data.point.entries?.columns?.length &&
-      data.point.isDataCell
-    ) {
-      // clicked on some row values
-      if (!drillTarget.pivotDimensions.includes(data.point.entries?.rows[0].id)) {
-        return;
-      }
-    } else {
-      return;
-    }
+  // Guard against misconfigured jump targets
+  if (data.jtdConfig.jumpTargets.length === 0) {
+    throw new TranslatableError(noJumpTargetsError);
   }
 
-  const clickHandler = getJtdClickHandler(
+  // Use click handler-specific logic to determine if cell should be actionable and get matching target
+  const { isActionable, matchingTarget } = isPivotClickHandlerActionable(
+    data.jtdConfig,
+    data.point,
+  );
+
+  if (!isActionable || !matchingTarget) {
+    // Cell is not actionable, don't perform any navigation
+    return;
+  }
+
+  // Convert pivot data point to regular data point format
+  const convertedPoint = convertPivotToDataPoint(data.point);
+
+  return getJtdClickHandler(
     {
       jtdConfig: data.jtdConfig,
-      drillTarget,
+      jumpTarget: matchingTarget,
       widgetProps: data.widgetProps,
       point: convertedPoint,
     },
@@ -319,8 +325,7 @@ export const handlePivotDataPointClick = (
     {
       openModal: actions.openModal,
     },
-  );
-  return clickHandler();
+  )();
 };
 
 /**
@@ -340,14 +345,14 @@ export const handleTextWidgetClick = (
   originalWidgetFilters: Filter[],
   openModal: OpenModalFn,
 ) => {
-  if (jtdConfig.drillTargets.length === 0) {
-    throw new TranslatableError('jumpToDashboard.noDrillTargets');
+  if (jtdConfig.jumpTargets.length === 0) {
+    throw new TranslatableError(noJumpTargetsError);
   }
-  const drillTarget = jtdConfig.drillTargets[0];
+  const jumpTarget = jtdConfig.jumpTargets[0];
   const clickHandler = getJtdClickHandler(
     {
       jtdConfig,
-      drillTarget,
+      jumpTarget,
       widgetProps,
       point: undefined,
     },
@@ -361,7 +366,3 @@ export const handleTextWidgetClick = (
   );
   return clickHandler();
 };
-
-function isPivotDrillTarget(target: JtdDrillTarget): target is JtdPivotDrillTarget {
-  return 'pivotDimensions' in target;
-}
