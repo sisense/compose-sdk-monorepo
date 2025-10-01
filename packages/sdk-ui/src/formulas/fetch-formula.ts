@@ -6,7 +6,7 @@ import {
   FormulaJaql,
   createDimensionalElementFromJaql,
   getDataSourceName,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 /**
  * Fetch a formula by oid from the default Sisense instance

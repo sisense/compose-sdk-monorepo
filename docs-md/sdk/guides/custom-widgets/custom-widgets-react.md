@@ -24,7 +24,7 @@ To display a dashboard using Compose SDK, we need the `oid` for the relevant das
 The dashboard can be easily displayed using the `DashboardById` component, passing this value into the `dashboardOid` prop.
 
 ```ts
-import { DashboardById } from '@sisense/sdk-ui';
+import { DashboardById } from '@ethings-os/sdk-ui';
 
 function App() {
   return (
@@ -59,7 +59,7 @@ Compose SDK translates all widget metadata and filters to Compose SDK data struc
 In the custom widget component, we can use the props directly with the `useExecuteCustomWidgetQuery` hook which runs a data query and applies some formatting on the results (defined by the `StyledColumn` information in `dataOptions`).
 
 ```ts
-import { CustomWidgetComponent, useExecuteCustomWidgetQuery } from '@sisense/sdk-ui';
+import { CustomWidgetComponent, useExecuteCustomWidgetQuery } from '@ethings-os/sdk-ui';
 
 const ResultsTable: CustomWidgetComponent = (props) => {
   const { data } = useExecuteCustomWidgetQuery(props);
@@ -96,7 +96,7 @@ const ResultsTable: CustomWidgetComponent = (props) => {
 If you prefer to work with the raw data without any formatting applied, you can use `extractDimensionsAndMeasures` with `useExecuteQuery` instead.
 
 ```ts
-import { useExecuteQuery, extractDimensionsAndMeasures } from '@sisense/sdk-ui';
+import { useExecuteQuery, extractDimensionsAndMeasures } from '@ethings-os/sdk-ui';
 
 const { dimensions, measures } = extractDimensionsAndMeasures(props.dataOptions);
 const { data } = useExecuteQuery({
@@ -111,7 +111,7 @@ const { data } = useExecuteQuery({
 To register the custom widget, we need to call `registerCustomWidget`, which is returned from the `useCustomWidgets` hook.
 
 ```ts
-import { DashboardById, useCustomWidgets } from '@sisense/sdk-ui';
+import { DashboardById, useCustomWidgets } from '@ethings-os/sdk-ui';
 
 ...
 
@@ -163,7 +163,7 @@ import {
   PluginComponent,
   useExecutePluginQuery,
   usePlugins
-} from '@sisense/sdk-ui';
+} from '@ethings-os/sdk-ui';
 
 const MyWidget: PluginComponent = (props) => {
   const { data } = useExecutePluginQuery(props);
@@ -184,7 +184,7 @@ import {
   CustomWidgetComponent,
   useExecuteCustomWidgetQuery,
   useCustomWidgets
-} from '@sisense/sdk-ui';
+} from '@ethings-os/sdk-ui';
 
 const MyWidget: CustomWidgetComponent = (props) => {
   const { data } = useExecuteCustomWidgetQuery(props);

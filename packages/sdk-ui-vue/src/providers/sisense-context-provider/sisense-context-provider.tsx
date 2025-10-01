@@ -1,7 +1,7 @@
 import { defineComponent, provide, ref } from 'vue';
 import type { PropType, Ref } from 'vue';
-import type { SisenseContextProviderProps as SisenseContextProviderPropsPreact } from '@sisense/sdk-ui-preact';
-import { createClientApplication, type CustomSisenseContext } from '@sisense/sdk-ui-preact';
+import type { SisenseContextProviderProps as SisenseContextProviderPropsPreact } from '@ethings-os/sdk-ui-preact';
+import { createClientApplication, type CustomSisenseContext } from '@ethings-os/sdk-ui-preact';
 import { ThemeProvider } from '../theme-provider';
 import { defaultSisenseContext, sisenseContextKey } from './sisense-context';
 
@@ -10,9 +10,9 @@ import { defaultSisenseContext, sisenseContextKey } from './sisense-context';
  *
  * Use one of the following to authenticate:
  *
- * - {@link @sisense/sdk-ui-vue!SisenseContextProviderProps.ssoEnabled | `ssoEnabled`}
- * - {@link @sisense/sdk-ui-vue!SisenseContextProviderProps.token | `token`}
- * - {@link @sisense/sdk-ui-vue!SisenseContextProviderProps.wat | `wat`}
+ * - {@link @ethings-os/sdk-ui-vue!SisenseContextProviderProps.ssoEnabled | `ssoEnabled`}
+ * - {@link @ethings-os/sdk-ui-vue!SisenseContextProviderProps.token | `token`}
+ * - {@link @ethings-os/sdk-ui-vue!SisenseContextProviderProps.wat | `wat`}
  */
 export interface SisenseContextProviderProps extends SisenseContextProviderPropsPreact {}
 
@@ -65,7 +65,7 @@ export interface SisenseContextProviderProps extends SisenseContextProviderProps
 export const SisenseContextProvider = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.defaultDataSource}
+     * {@inheritDoc @ethings-os/sdk-ui!SisenseContextProviderProps.defaultDataSource}
      *
      * @category Sisense App
      */
@@ -73,7 +73,7 @@ export const SisenseContextProvider = defineComponent({
       SisenseContextProviderProps['defaultDataSource']
     >,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.url}
+     * {@inheritDoc @ethings-os/sdk-ui!SisenseContextProviderProps.url}
      *
      * @category Sisense App
      */
@@ -82,25 +82,25 @@ export const SisenseContextProvider = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.ssoEnabled}
+     * {@inheritDoc @ethings-os/sdk-ui!SisenseContextProviderProps.ssoEnabled}
      *
      * @category Sisense Authentication
      */
     ssoEnabled: Boolean as PropType<SisenseContextProviderProps['ssoEnabled']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.token}
+     * {@inheritDoc @ethings-os/sdk-ui!SisenseContextProviderProps.token}
      *
      * @category Sisense Authentication
      */
     token: String as PropType<SisenseContextProviderProps['token']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.wat}
+     * {@inheritDoc @ethings-os/sdk-ui!SisenseContextProviderProps.wat}
      *
      * @category Sisense Authentication
      */
     wat: String as PropType<SisenseContextProviderProps['wat']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.appConfig}
+     * {@inheritDoc @ethings-os/sdk-ui!SisenseContextProviderProps.appConfig}
      *
      * @category Sisense App
      */

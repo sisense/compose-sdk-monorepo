@@ -8,7 +8,7 @@ import {
   LevelAttribute,
   MetadataTypes,
   normalizeName,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 import { prepareDescription } from '../utils/prepare-description.js';
 import { ElementWriter, escapeSpecialChars, NEWLINE, rnt, writeIndented } from './base.js';

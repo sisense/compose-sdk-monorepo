@@ -9,7 +9,7 @@ import {
   isScatter,
   isScattermap,
 } from '@/chart-options-processor/translations/types';
-import { Column, Attribute, Filter, isMembersFilter, MembersFilter } from '@sisense/sdk-data';
+import { Column, Attribute, Filter, isMembersFilter, MembersFilter } from '@ethings-os/sdk-data';
 import uniq from 'lodash-es/uniq';
 import groupBy from 'lodash-es/groupBy';
 import partition from 'lodash-es/partition';

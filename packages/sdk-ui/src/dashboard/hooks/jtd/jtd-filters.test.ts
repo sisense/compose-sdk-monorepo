@@ -1,5 +1,5 @@
-import { filterFactory, DateLevels } from '@sisense/sdk-data';
-import { Attribute } from '@sisense/sdk-data';
+import { filterFactory, DateLevels } from '@ethings-os/sdk-data';
+import { Attribute } from '@ethings-os/sdk-data';
 import { describe, it, expect, vi } from 'vitest';
 import {
   getFiltersFromDataPoint,

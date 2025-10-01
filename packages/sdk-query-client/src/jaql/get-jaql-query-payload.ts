@@ -12,7 +12,7 @@ import {
   PivotAttribute,
   PivotGrandTotals,
   PivotMeasure,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import merge from 'ts-deepmerge';
 import { v4 as uuid } from 'uuid';
 

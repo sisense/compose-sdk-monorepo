@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { PivotTable as PivotTablePreact } from '@sisense/sdk-ui-preact';
-import type { PivotTableProps } from '@sisense/sdk-ui-preact';
+import { PivotTable as PivotTablePreact } from '@ethings-os/sdk-ui-preact';
+import type { PivotTableProps } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 // Note: uses direct reexport as a temporary workaround for getting the correct API docs
@@ -20,9 +20,9 @@ export { PivotTableProps };
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { PivotTable, type PivotTableProps } from '@sisense/sdk-ui-vue/Table';
+ * import { PivotTable, type PivotTableProps } from '@ethings-os/sdk-ui-vue/Table';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -48,7 +48,7 @@ const pivotTableProps = ref<PivotTableProps>({
 export const PivotTable = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!PivotTableProps.dataOptions}
      *
      * @category Data
      */
@@ -57,19 +57,19 @@ export const PivotTable = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!PivotTableProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<PivotTableProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!PivotTableProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<PivotTableProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!PivotTableProps.highlights}
      *
      * @category Data
      */
@@ -77,7 +77,7 @@ export const PivotTable = defineComponent({
     /** @internal */
     refreshCounter: Number as PropType<PivotTableProps['refreshCounter']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!PivotTableProps.styleOptions}
      *
      * @category Representation
      */

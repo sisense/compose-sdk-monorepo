@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Table, Column, Cell } from 'fixed-data-table-2';
 import 'fixed-data-table-2/dist/fixed-data-table.css';
 import styles from './styles/data-table-wrapper.module.scss';
-import { isNumber } from '@sisense/sdk-data';
+import { isNumber } from '@ethings-os/sdk-data';
 import { SortableTableColumnHeader } from './header/sortable-table-column-header';
 import classnames from 'classnames';
 import { DataTableWrapperProps } from './types';

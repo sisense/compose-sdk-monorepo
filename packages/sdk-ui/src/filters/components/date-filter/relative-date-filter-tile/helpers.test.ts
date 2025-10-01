@@ -1,6 +1,6 @@
 import { createAnchorDateFromRelativeDateFilter } from './helpers';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { filterFactory, RelativeDateFilter as RelativeDateFilterType } from '@sisense/sdk-data';
+import { filterFactory, RelativeDateFilter as RelativeDateFilterType } from '@ethings-os/sdk-data';
 
 describe('createAnchorDateFromRelativeDateFilter', () => {
   it('should return the anchor date if no offset is provided', () => {

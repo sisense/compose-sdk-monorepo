@@ -11,9 +11,9 @@ import { CodeTemplates } from '../types.js';
  */
 export const CODE_TEMPLATES: CodeTemplates = {
   react: {
-    baseChartTmpl: `import { {{componentString}} } from '@sisense/sdk-ui';
+    baseChartTmpl: `import { {{componentString}} } from '@ethings-os/sdk-ui';
 {{extraImportsString}}
-import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+import * as DM from './{{dataSourceString}}'; // generated with @ethings-os/sdk-cli
 
 export default function CodeExample() {
   return (
@@ -42,7 +42,7 @@ export default function CodeExample() {
       styleOptions: {{styleOptionsString}},
       drilldownOptions: {{drilldownOptionsString}},
     }`,
-    widgetByIdTmpl: `import { WidgetById } from '@sisense/sdk-ui';
+    widgetByIdTmpl: `import { WidgetById } from '@ethings-os/sdk-ui';
 
 const CodeExample = () => {
     return (
@@ -58,7 +58,7 @@ const CodeExample = () => {
 
 export default CodeExample;
 `,
-    executeQueryByWidgetIdTmpl: `import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui';
+    executeQueryByWidgetIdTmpl: `import { useExecuteQueryByWidgetId } from '@ethings-os/sdk-ui';
 
 const CodeExample = () => {
   const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
@@ -81,9 +81,9 @@ const CodeExample = () => {
 
 export default CodeExample;
 `,
-    executeQueryTmpl: `import { useExecuteQuery } from '@sisense/sdk-ui';
+    executeQueryTmpl: `import { useExecuteQuery } from '@ethings-os/sdk-ui';
 {{extraImportsString}}
-import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+import * as DM from './{{dataSourceString}}'; // generated with @ethings-os/sdk-cli
 
 const CodeExample = () => {
   const queryProps = {
@@ -111,9 +111,9 @@ const CodeExample = () => {
 
 export default CodeExample;
 `,
-    executePivotQueryTmpl: `import { useExecutePivotQuery, ExecutePivotQueryParams } from '@sisense/sdk-ui';
+    executePivotQueryTmpl: `import { useExecutePivotQuery, ExecutePivotQueryParams } from '@ethings-os/sdk-ui';
 {{extraImportsString}}
-import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+import * as DM from './{{dataSourceString}}'; // generated with @ethings-os/sdk-cli
 
 const CodeExample = () => {
     const pivotQueryProps: ExecutePivotQueryParams = {
@@ -140,9 +140,9 @@ const CodeExample = () => {
 
 export default CodeExample;
 `,
-    pivotTableWidgetTmpl: `import { {{componentString}} } from '@sisense/sdk-ui';
+    pivotTableWidgetTmpl: `import { {{componentString}} } from '@ethings-os/sdk-ui';
 {{extraImportsString}}
-import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+import * as DM from './{{dataSourceString}}'; // generated with @ethings-os/sdk-cli
 
 export default function CodeExample() {
   return (
@@ -164,7 +164,7 @@ export default function CodeExample() {
       filters: {{filtersString}},
       styleOptions: {{styleOptionsString}},
     }`,
-    dashboardByIdTmpl: `import { DashboardById } from '@sisense/sdk-ui';
+    dashboardByIdTmpl: `import { DashboardById } from '@ethings-os/sdk-ui';
 
 const CodeExample = () => {
   return (
@@ -176,10 +176,10 @@ const CodeExample = () => {
 
 export default CodeExample;`,
     dashboardTmpl: `import { useMemo } from 'react';
-import { Dashboard, DashboardProps, WidgetProps } from '@sisense/sdk-ui';
-import { Filter, FilterRelations } from '@sisense/sdk-data';
+import { Dashboard, DashboardProps, WidgetProps } from '@ethings-os/sdk-ui';
+import { Filter, FilterRelations } from '@ethings-os/sdk-data';
 {{extraImportsString}}
-import * as DM from './{{defaultDataSourceString}}'; // generated with @sisense/sdk-cli
+import * as DM from './{{defaultDataSourceString}}'; // generated with @ethings-os/sdk-cli
 
 export default function CodeExample() {
   const dashboardProps: DashboardProps = useMemo(() => {
@@ -208,9 +208,9 @@ export default function CodeExample() {
   },
   angular: {
     baseChartTmpl: `import { Component } from '@angular/core';
-import { type ChartDataOptions, type ChartStyleOptions } from '@sisense/sdk-ui-angular';
+import { type ChartDataOptions, type ChartStyleOptions } from '@ethings-os/sdk-ui-angular';
 {{extraImportsString}}
-import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+import * as DM from './{{dataSourceString}}'; // generated with @ethings-os/sdk-cli
 
 @Component({
     selector: 'code-example',
@@ -265,8 +265,8 @@ export class CodeExample {
   includeDashboardFilters = true;
 }`,
     executeQueryByWidgetIdTmpl: `import { Component } from '@angular/core';
-import { QueryService } from '@sisense/sdk-ui-angular';
-import { type QueryResultData } from '@sisense/sdk-data';
+import { QueryService } from '@ethings-os/sdk-ui-angular';
+import { type QueryResultData } from '@ethings-os/sdk-data';
 
 @Component({
   selector: 'code-example',
@@ -300,9 +300,9 @@ export class CodeExample {
 `,
     executeQueryTmpl: `import { Component } from '@angular/core';
 {{extraImportsString}}
-import { type QueryResultData } from '@sisense/sdk-data';
-import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
-import { QueryService } from '@sisense/sdk-ui-angular';
+import { type QueryResultData } from '@ethings-os/sdk-data';
+import * as DM from './{{dataSourceString}}'; // generated with @ethings-os/sdk-cli
+import { QueryService } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'code-example',
@@ -369,9 +369,9 @@ export class CodeExample {
   vue: {
     baseChartTmpl: `<script setup lang="ts">
   import { ref } from 'vue';
-  import { {{componentString}}, type ChartStyleOptions } from '@sisense/sdk-ui-vue';
+  import { {{componentString}}, type ChartStyleOptions } from '@ethings-os/sdk-ui-vue';
   {{extraImportsString}}
-  import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+  import * as DM from './{{dataSourceString}}'; // generated with @ethings-os/sdk-cli
 
   const dataOptions = ref({{dataOptionsString}});
   const filters = ref({{filtersString}});
@@ -403,7 +403,7 @@ export class CodeExample {
       drilldownOptions: {{drilldownOptionsString}},
     }`,
     widgetByIdTmpl: `<script setup lang="ts">
-import { WidgetById } from '@sisense/sdk-ui-vue';
+import { WidgetById } from '@ethings-os/sdk-ui-vue';
 </script>
 <template>
   <WidgetById
@@ -413,7 +413,7 @@ import { WidgetById } from '@sisense/sdk-ui-vue';
 </template>
 `,
     executeQueryByWidgetIdTmpl: `<script setup lang="ts">
-import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui-vue';
+import { useExecuteQueryByWidgetId } from '@ethings-os/sdk-ui-vue';
 
 const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
   widgetOid: "{{widgetOid}}",
@@ -429,9 +429,9 @@ const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
 </template>
 `,
     executeQueryTmpl: `<script setup lang="ts">
-import { useExecuteQuery } from '@sisense/sdk-ui-vue';
+import { useExecuteQuery } from '@ethings-os/sdk-ui-vue';
 {{extraImportsString}}
-import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+import * as DM from './{{dataSourceString}}'; // generated with @ethings-os/sdk-cli
 
 const queryProps = {
   dataSource: DM.DataSource,
@@ -461,7 +461,7 @@ const { data, isLoading, isError, error } = useExecuteQuery(queryProps);
       styleOptions: {{styleOptionsString}},
     }`,
     dashboardByIdTmpl: `<script setup lang="ts">
-import { DashboardById } from '@sisense/sdk-ui-vue';
+import { DashboardById } from '@ethings-os/sdk-ui-vue';
 </script>
 <template>
   <DashboardById :dashboardOid="'{{dashboardOid}}'" />

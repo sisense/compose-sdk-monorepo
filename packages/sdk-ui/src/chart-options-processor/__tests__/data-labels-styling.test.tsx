@@ -9,7 +9,7 @@ import { BarChart } from '../../bar-chart';
 import { AreaChart } from '../../area-chart';
 import { AreaRangeChart } from '../../area-range-chart';
 import { PolarChart } from '../../polar-chart';
-import { Data } from '@sisense/sdk-data';
+import { Data } from '@ethings-os/sdk-data';
 
 // Mock data for testing
 const mockData: Data = data;

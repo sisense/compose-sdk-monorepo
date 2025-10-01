@@ -2,7 +2,7 @@ import {
   FilterTileContainer,
   FilterTileDesignOptions,
 } from '@/filters/components/filter-tile-container';
-import { Filter } from '@sisense/sdk-data';
+import { Filter } from '@ethings-os/sdk-data';
 import { useTranslation } from 'react-i18next';
 import { FilterContentDisplay } from '@/filters/components/common';
 

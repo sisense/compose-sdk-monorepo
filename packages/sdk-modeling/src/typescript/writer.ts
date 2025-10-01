@@ -11,7 +11,7 @@ import {
   Element,
   MeasureTemplate,
   MetadataTypes,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { createWriteStream } from 'fs';
 import path from 'path';
 

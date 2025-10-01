@@ -10,8 +10,8 @@ A Vue component that wraps all generative AI components and hooks.
 
 ```vue
 <script setup lang="ts">
-import { SisenseContextProvider } from '@sisense/sdk-ui-vue';
-import { AiContextProvider, Chatbot } from '@sisense/sdk-ui-vue/ai';
+import { SisenseContextProvider } from '@ethings-os/sdk-ui-vue';
+import { AiContextProvider, Chatbot } from '@ethings-os/sdk-ui-vue/ai';
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-import { Attribute, filterFactory, Measure, measureFactory } from '@sisense/sdk-data';
+import { Attribute, filterFactory, Measure, measureFactory } from '@ethings-os/sdk-data';
 import { render, renderHook } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import * as DM from '@/__test-helpers__/sample-ecommerce';

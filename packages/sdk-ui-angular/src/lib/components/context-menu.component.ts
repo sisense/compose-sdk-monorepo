@@ -14,7 +14,7 @@ import {
   ContextMenu as ContextMenuPreact,
   type ContextMenuProps,
   createWrapperElement,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -52,19 +52,19 @@ export class ContextMenuComponent implements AfterViewInit, OnChanges, OnDestroy
   preactContentRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ContextMenuProps.position}
+   * {@inheritDoc @ethings-os/sdk-ui!ContextMenuProps.position}
    */
   @Input()
   position: ContextMenuProps['position'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ContextMenuProps.itemSections}
+   * {@inheritDoc @ethings-os/sdk-ui!ContextMenuProps.itemSections}
    */
   @Input()
   itemSections: ContextMenuProps['itemSections'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ContextMenuProps.closeContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!ContextMenuProps.closeContextMenu}
    */
   @Output()
   contextMenuClose = new EventEmitter<

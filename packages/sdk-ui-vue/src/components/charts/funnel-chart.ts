@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { FunnelChart as FunnelChartPreact } from '@sisense/sdk-ui-preact';
-import type { FunnelChartProps as FunnelChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { FunnelChart as FunnelChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { FunnelChartProps as FunnelChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!FunnelChart | `FunnelChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!FunnelChart | `FunnelChart`} component.
  */
 export interface FunnelChartProps extends FunnelChartPropsPreact {}
 
@@ -26,8 +26,8 @@ export interface FunnelChartProps extends FunnelChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { FunnelChart, type FunnelChartProps } from '@sisense/sdk-ui-vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { FunnelChart, type FunnelChartProps } from '@ethings-os/sdk-ui-vue';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
  *
  * const dimProductName = DM.DimProducts.ProductName;
@@ -53,7 +53,7 @@ export interface FunnelChartProps extends FunnelChartPropsPreact {}
 export const FunnelChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -62,55 +62,55 @@ export const FunnelChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<FunnelChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<FunnelChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<FunnelChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<FunnelChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<FunnelChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<FunnelChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<FunnelChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<FunnelChartProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.styleOptions}
      *
      * @category Chart
      */

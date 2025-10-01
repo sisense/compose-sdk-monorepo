@@ -4,7 +4,7 @@ import {
   useExecuteCustomWidgetQueryInternal,
   type ExecuteCustomWidgetQueryParams as ExecuteCustomWidgetQueryParamsPreact,
   type CustomWidgetQueryState,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { createSisenseContextConnector } from '../helpers/context-connectors';
 import type { MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
@@ -28,7 +28,7 @@ export interface ExecuteCustomWidgetQueryParams extends ExecuteCustomWidgetQuery
  *   useExecuteCustomWidgetQuery,
  *   type CustomWidgetComponentProps,
  *   type ExecuteCustomWidgetQueryParams,
- * } from '@sisense/sdk-ui-vue';
+ * } from '@ethings-os/sdk-ui-vue';
  * import * as DM from './sample-ecommerce';
  *
  * const props: CustomWidgetComponentProps = {

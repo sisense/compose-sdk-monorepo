@@ -13,7 +13,7 @@ import {
   ComponentAdapter,
   MemberFilterTile as MemberFilterTilePreact,
   type MemberFilterTileProps as MemberFilterTilePropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -47,7 +47,7 @@ export interface MemberFilterTileProps extends Omit<MemberFilterTilePropsPreact,
  * ```
  * ```ts
  * import { Component } from '@angular/core';
- * import { Filter, filterFactory } from '@sisense/sdk-data';
+ * import { Filter, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../../assets/sample-healthcare-model';
  *
  * @Component({
@@ -83,31 +83,31 @@ export class MemberFilterTileComponent implements AfterViewInit, OnChanges, OnDe
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.title}
+   * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.title}
    */
   @Input()
   title!: MemberFilterTileProps['title'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.dataSource}
+   * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.dataSource}
    */
   @Input()
   dataSource: MemberFilterTileProps['dataSource'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.attribute}
+   * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.attribute}
    */
   @Input()
   attribute!: MemberFilterTileProps['attribute'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.filter}
+   * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.filter}
    */
   @Input()
   filter!: MemberFilterTileProps['filter'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onChange}
+   * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.onChange}
    */
   @Output()
   filterChange = new EventEmitter<

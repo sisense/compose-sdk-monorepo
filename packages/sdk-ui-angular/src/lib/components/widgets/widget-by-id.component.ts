@@ -11,7 +11,7 @@ import {
   ComponentAdapter,
   WidgetById as WidgetByIdPreact,
   type WidgetByIdProps as WidgetByIdPropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -73,7 +73,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.widgetOid}
+   * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.widgetOid}
    *
    * @category Widget
    */
@@ -81,7 +81,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   widgetOid!: WidgetByIdProps['widgetOid'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.dashboardOid}
+   * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.dashboardOid}
    *
    * @category Widget
    */
@@ -89,7 +89,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   dashboardOid!: WidgetByIdProps['dashboardOid'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.filters}
    *
    * @category Data
    */
@@ -97,7 +97,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   filters: WidgetByIdProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.highlights}
    *
    * @category Data
    */
@@ -105,7 +105,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   highlights: WidgetByIdProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.filtersMergeStrategy}
+   * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.filtersMergeStrategy}
    *
    * @category Data
    */
@@ -113,7 +113,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   filtersMergeStrategy: WidgetByIdProps['filtersMergeStrategy'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.includeDashboardFilters}
+   * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.includeDashboardFilters}
    *
    * @category Data
    */
@@ -121,7 +121,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   includeDashboardFilters: WidgetByIdProps['includeDashboardFilters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.title}
+   * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.title}
    *
    * @category Widget
    */
@@ -129,7 +129,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   title: WidgetByIdProps['title'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.description}
+   * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.description}
    *
    * @category Widget
    */
@@ -137,7 +137,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   description: WidgetByIdProps['description'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.styleOptions}
    *
    * @category Widget
    */
@@ -145,7 +145,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   styleOptions: WidgetByIdProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.highlightSelectionDisabled}
+   * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.highlightSelectionDisabled}
    *
    * @category Widget
    */
@@ -157,7 +157,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
   drilldownOptions: WidgetByIdProps['drilldownOptions'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!WidgetByIdProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!WidgetByIdProps.onDataReady}
    *
    * @category Callbacks
    */

@@ -12,8 +12,8 @@ Here’s how to render a filter model as a filter tile.
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { FilterTile } from '@sisense/sdk-ui-vue';
-import { filterFactory, type Filter } from '@sisense/sdk-data';
+import { FilterTile } from '@ethings-os/sdk-ui-vue';
+import { filterFactory, type Filter } from '@ethings-os/sdk-data';
 import * as DM from '../assets/sample-ecommerce-model.js';
 
 const filter = ref<Filter>(filterFactory.members(DM.Commerce.Gender, ['Male', 'Female']));

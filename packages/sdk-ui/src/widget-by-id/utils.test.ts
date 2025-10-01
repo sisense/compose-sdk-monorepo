@@ -1,4 +1,4 @@
-import { Filter, Jaql } from '@sisense/sdk-data';
+import { Filter, Jaql } from '@ethings-os/sdk-data';
 import {
   getRootPanelItem,
   getFilterRelationsFromJaql,

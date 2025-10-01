@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type TreemapChartProps as TreemapChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type TreemapChartProps as TreemapChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -33,8 +33,8 @@ export interface TreemapChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
+import type { ChartType } from '@ethings-os/sdk-ui-angular';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({
@@ -89,7 +89,7 @@ export class AnalyticsComponent {
 })
 export class TreemapChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!TreemapChartProps.dataSet}
    *
    * @category Data
    */
@@ -97,7 +97,7 @@ export class TreemapChartComponent {
   dataSet: TreemapChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!TreemapChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -105,7 +105,7 @@ export class TreemapChartComponent {
   dataOptions!: TreemapChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!TreemapChartProps.filters}
    *
    * @category Data
    */
@@ -113,7 +113,7 @@ export class TreemapChartComponent {
   filters: TreemapChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!TreemapChartProps.highlights}
    *
    * @category Data
    */
@@ -121,7 +121,7 @@ export class TreemapChartComponent {
   highlights: TreemapChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!TreemapChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -129,7 +129,7 @@ export class TreemapChartComponent {
   styleOptions: TreemapChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!TreemapChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -137,7 +137,7 @@ export class TreemapChartComponent {
   beforeRender: TreemapChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!TreemapChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!TreemapChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -145,7 +145,7 @@ export class TreemapChartComponent {
   dataReady: TreemapChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!TreemapChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -153,7 +153,7 @@ export class TreemapChartComponent {
   dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!TreemapChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -161,7 +161,7 @@ export class TreemapChartComponent {
   dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TreemapChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!TreemapChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

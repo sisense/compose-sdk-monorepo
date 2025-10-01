@@ -5,7 +5,7 @@ import { FunnelChartData, FunnelChartDataOptionsInternal } from '../types';
 import { FunnelChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { seriesSliceWarning } from '@/utils/data-limit-warning';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 // Test helper to create mock BuildContext for funnel charts
 const createMockBuildContext = (

@@ -4,7 +4,7 @@ import { SisenseContextProvider } from '../../sisense-context/sisense-context-pr
 import { SisenseContextProviderProps } from '../../props';
 import AiContextProvider from '../ai-context-provider';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 const sisenseContextProps: SisenseContextProviderProps = {
   url: import.meta.env.VITE_APP_SISENSE_URL ?? '',

@@ -1,7 +1,7 @@
 import {
   type DashboardModel,
   dashboardModelTranslator as dashboardModelTranslatorPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import type { DashboardProps } from '../components/dashboard';
 
 /**
@@ -10,7 +10,7 @@ import type { DashboardProps } from '../components/dashboard';
  * @example
  * ```vue
 <script setup lang="ts">
-import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@sisense/sdk-ui-vue';
+import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { dashboard } = useGetDashboardModel({

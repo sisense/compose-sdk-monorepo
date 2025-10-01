@@ -4,7 +4,7 @@ import {
   CalculatedMeasureColumn,
   Column,
   MeasureColumn,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import {
   BoxplotChartDataOptions,
   BoxplotChartCustomDataOptions,

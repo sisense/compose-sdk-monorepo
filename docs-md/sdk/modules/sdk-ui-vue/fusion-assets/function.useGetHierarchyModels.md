@@ -24,7 +24,7 @@ Retrieve hierarchy models:
 
 ```vue
 <script setup lang="ts">
-import { useGetHierarchyModels } from '@sisense/sdk-ui-vue';
+import { useGetHierarchyModels } from '@ethings-os/sdk-ui-vue';
 const { data: hierarchyModels } = useGetHierarchyModels({
   dataSource: DM.DataSource,
   dimension: DM.DimCountries.Region,

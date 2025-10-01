@@ -17,13 +17,13 @@ import {
   BoxplotChartCustomDataOptions,
   PivotTableDataOptions,
 } from './types';
-import { Attribute, Column, Measure, MeasureColumn, analyticsFactory } from '@sisense/sdk-data';
+import { Attribute, Column, Measure, MeasureColumn, analyticsFactory } from '@ethings-os/sdk-data';
 import { ChartType } from '../types';
 import { describe } from 'vitest';
 import { normalizeColumn, normalizeMeasureColumn } from './utils';
 
-vi.mock('@sisense/sdk-data', async () => {
-  const actual: typeof import('@sisense/sdk-data') = await vi.importActual('@sisense/sdk-data');
+vi.mock('@ethings-os/sdk-data', async () => {
+  const actual: typeof import('@ethings-os/sdk-data') = await vi.importActual('@ethings-os/sdk-data');
   return {
     ...actual,
     analyticsFactory: {

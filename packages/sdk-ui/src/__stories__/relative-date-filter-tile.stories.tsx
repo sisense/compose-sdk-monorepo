@@ -7,7 +7,7 @@ import {
   Filter,
   RelativeDateFilter,
   filterFactory,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 const template = templateForComponent(RelativeDateFilterTile);
 

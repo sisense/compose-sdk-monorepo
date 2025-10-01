@@ -1,4 +1,4 @@
-import { Attribute, Measure, type Filter } from '@sisense/sdk-data';
+import { Attribute, Measure, type Filter } from '@ethings-os/sdk-data';
 import { WidgetProps } from '@/props.js';
 import { DataPoint } from '@/types';
 import { DashboardConfig, DashboardProps } from '@/dashboard/types';

@@ -1,4 +1,4 @@
-import { AbstractTranslatableError } from '@sisense/sdk-common';
+import { AbstractTranslatableError } from '@ethings-os/sdk-common';
 import { i18nextInstance } from './initialize-i18n';
 import { PACKAGE_NAMESPACE } from './resources';
 

@@ -1,12 +1,12 @@
 import { type Ref, toRefs, watch } from 'vue';
-import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
+import { dataLoadStateReducer } from '@ethings-os/sdk-ui-preact';
 import {
   type UseGetNlqResultParams as UseGetNlqResultParamsPreact,
   type UseGetNlqResultState as UseGetNlqResultStatePreact,
   type ChatRestApi,
   widgetComposer,
   prepareGetNlqResultPayload,
-} from '@sisense/sdk-ui-preact/ai';
+} from '@ethings-os/sdk-ui-preact/ai';
 import { useReducer } from '../../helpers/use-reducer.js';
 import { getAiContext } from '../providers/index.js';
 import { collectRefs, toPlainObject } from '../../utils.js';
@@ -15,17 +15,17 @@ import type { MaybeRefOrWithRefs, ToRefsExceptFns } from '../../types';
 import type { WidgetProps } from '../../components/widgets';
 
 /**
- * Parameters for {@link @sisense/sdk-ui-vue!useGetNlqResult | `useGetNlqResult`} composable.
+ * Parameters for {@link @ethings-os/sdk-ui-vue!useGetNlqResult | `useGetNlqResult`} composable.
  */
 export interface UseGetNlqResultParams extends UseGetNlqResultParamsPreact {}
 
 /**
- * State for {@link @sisense/sdk-ui-vue!useGetNlqResult | `useGetNlqResult`} composable.
+ * State for {@link @ethings-os/sdk-ui-vue!useGetNlqResult | `useGetNlqResult`} composable.
  */
 export interface UseGetNlqResultState
   extends ToRefsExceptFns<Omit<UseGetNlqResultStatePreact, 'data'>, 'refetch'> {
   /**
-   * {@inheritDoc @sisense/sdk-ui!UseGetNlqResultState.data}
+   * {@inheritDoc @ethings-os/sdk-ui!UseGetNlqResultState.data}
    */
   data: Ref<WidgetProps | undefined>;
 }
@@ -36,8 +36,8 @@ export interface UseGetNlqResultState
  * @example
  * ```vue
 <script setup lang="ts">
-import { ChartWidget } from '@sisense/sdk-ui-vue';
-import { useGetNlqResult, type UseGetNlqResultParams } from '@sisense/sdk-ui-vue/ai';
+import { ChartWidget } from '@ethings-os/sdk-ui-vue';
+import { useGetNlqResult, type UseGetNlqResultParams } from '@ethings-os/sdk-ui-vue/ai';
 
 const params: UseGetNlqResultParams = {
   dataSource: 'Sample Retail',

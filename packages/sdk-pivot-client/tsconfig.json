@@ -10,8 +10,8 @@
     "lib": ["es2017", "dom"],
     "jsx": "react-jsx",
     "paths": {
-      "@sisense/sdk-shared-ui": ["../sdk-shared-ui/dist/lightweight"],
-      "@sisense/sdk-shared-ui/*": ["../sdk-shared-ui/dist/lightweight/*"]
+      "@ethings-os/sdk-shared-ui": ["../sdk-shared-ui/dist/lightweight"],
+      "@ethings-os/sdk-shared-ui/*": ["../sdk-shared-ui/dist/lightweight/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],

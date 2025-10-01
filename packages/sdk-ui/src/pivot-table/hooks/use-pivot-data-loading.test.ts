@@ -6,7 +6,7 @@ import {
   EVENT_QUERY_END,
   JaqlRequest,
   JaqlPanel,
-} from '@sisense/sdk-pivot-client';
+} from '@ethings-os/sdk-pivot-client';
 
 type AnyFunction = (...args: any[]) => any;
 

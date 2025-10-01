@@ -24,8 +24,8 @@ export interface AiContextProviderProps {
  *
  * @example
  * ```tsx
- * import { SisenseContextProvider } from '@sisense/sdk-ui';
- * import { AiContextProvider, Chatbot } from '@sisense/sdk-ui/ai';
+ * import { SisenseContextProvider } from '@ethings-os/sdk-ui';
+ * import { AiContextProvider, Chatbot } from '@ethings-os/sdk-ui/ai';
  *
  * function App() {
  *   return (

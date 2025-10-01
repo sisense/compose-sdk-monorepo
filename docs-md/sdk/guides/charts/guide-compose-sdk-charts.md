@@ -58,7 +58,7 @@ For example, the following code snippets set a chart’s dataset using data from
 ```ts
 // Component behavior in .component.ts
 
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../sample-ecommerce';
 
 //...
@@ -166,7 +166,7 @@ For example, the following code snippets filter a chart’s dataset to only incl
 ```ts
 // Component behavior in .component.ts
 
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import { filterFactory, measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../sample-ecommerce';
 
 //...
@@ -217,7 +217,7 @@ For example, the following code snippets filter a chart’s dataset based on the
 ```ts
 // Component behavior in .component.ts
 
-import { Filter, filterFactory, measureFactory } from '@sisense/sdk-data';
+import { Filter, filterFactory, measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../sample-ecommerce';
 
 //...
@@ -288,7 +288,7 @@ For example, the following code snippets highlight certain age ranges in a chart
 ```ts
 // Component behavior in .component.ts
 
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import { filterFactory, measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../sample-ecommerce';
 
 //...
@@ -337,7 +337,7 @@ For example, the following code snippets highlight a chart’s data based on age
 ```ts
 // Component behavior in .component.ts
 
-import { Filter, filterFactory, measureFactory } from '@sisense/sdk-data';
+import { Filter, filterFactory, measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../sample-ecommerce';
 
 //...
@@ -413,9 +413,9 @@ In the examples below, we’ll show the data options that replace the placeholde
 ##### React
 
 ```ts
-import { Chart } from '@sisense/sdk-ui';
+import { Chart } from '@ethings-os/sdk-ui';
 import * as DM from '../sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 //...
 
@@ -433,7 +433,7 @@ import { measureFactory } from '@sisense/sdk-data';
 ```ts
 // Component behavior in .component.ts
 
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../sample-ecommerce';
 
 chart = {
@@ -662,7 +662,7 @@ For example, the following code snippets limit the number of slices in the pie c
 ```ts
 // Component behavior in .component.ts
 
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import { filterFactory, measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../sample-ecommerce';
 
 //...
@@ -732,8 +732,8 @@ For example, the following code snippets remove the tooltip that shows by defaul
 // Component behavior in .component.ts
 
 import { Component } from '@angular/core';
-import { measureFactory } from '@sisense/sdk-data';
-import { DataPoint, HighchartsOptions } from '@sisense/sdk-ui';
+import { measureFactory } from '@ethings-os/sdk-data';
+import { DataPoint, HighchartsOptions } from '@ethings-os/sdk-ui';
 import * as DM from '../../sample-ecommerce';
 
 type PointInfo = { range: string; value: string } | null;

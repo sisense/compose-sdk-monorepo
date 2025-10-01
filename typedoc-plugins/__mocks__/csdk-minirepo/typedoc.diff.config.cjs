@@ -29,5 +29,5 @@ const baseConfig = {
 
 module.exports = {
   ...baseConfig,
-  plugin: ['@sisense/typedoc-plugin-diff-packages'],
+  plugin: ['@ethings-os/typedoc-plugin-diff-packages'],
 };

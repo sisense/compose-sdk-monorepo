@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { trackProductEvent } from '@sisense/sdk-tracking';
+import { trackProductEvent } from '@ethings-os/sdk-tracking';
 import { useExecuteQuery } from './use-execute-query';
 import {
   executeQueryMock,
@@ -7,7 +7,7 @@ import {
   createExecuteQueryCacheKeyMock,
 } from '../query/__mocks__/execute-query';
 import type { Mock } from 'vitest';
-import { QueryResultData } from '@sisense/sdk-data';
+import { QueryResultData } from '@ethings-os/sdk-data';
 import { ClientApplication } from '../app/client-application';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { ExecuteQueryParams } from './types';
@@ -17,9 +17,9 @@ import { act } from 'react';
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');
 
-vi.mock('@sisense/sdk-tracking', async () => {
-  const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
-    '@sisense/sdk-tracking',
+vi.mock('@ethings-os/sdk-tracking', async () => {
+  const actual: typeof import('@ethings-os/sdk-tracking') = await vi.importActual(
+    '@ethings-os/sdk-tracking',
   );
   return {
     ...actual,

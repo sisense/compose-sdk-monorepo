@@ -9,7 +9,7 @@ export const translation = {
  *
  * @example
  * ```typescript
- * import { TranslationDictionary } from '@sisense/sdk-common';
+ * import { TranslationDictionary } from '@ethings-os/sdk-common';
  *
  * const customTranslationResources: Partial<TranslationDictionary> = {
  * ```

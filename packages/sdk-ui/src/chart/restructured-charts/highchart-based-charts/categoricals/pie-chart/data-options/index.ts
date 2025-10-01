@@ -1,4 +1,4 @@
-import { Attribute, Measure } from '@sisense/sdk-data';
+import { Attribute, Measure } from '@ethings-os/sdk-data';
 import { ChartDataOptions, ChartDataOptionsInternal } from '@/chart-data-options/types';
 import {
   withCategoryLimitation,

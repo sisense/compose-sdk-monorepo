@@ -1,6 +1,6 @@
 import { UseDashboardModelAction, UseDashboardModelActionType } from '@/models';
 import { DashboardChangeAction, DashboardChangeType } from '@/dashboard/dashboard';
-import { Authenticator } from '@sisense/sdk-rest-client';
+import { Authenticator } from '@ethings-os/sdk-rest-client';
 
 /**
  * Convert a dashboard change action to a use dashboard model action.

@@ -5,7 +5,7 @@ import { TextWidgetDataPointEventHandler } from './data-point';
  */
 export interface TextWidgetEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!TextWidgetProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!TextWidgetProps.onDataPointClick}
    *
    * @category Callbacks
    * @internal

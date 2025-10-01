@@ -15,9 +15,9 @@ import {
   MembersFilter,
   RankingFilter,
   TurnOffMembersFilterJaql,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { CascadingFilterDto, FilterDto, LayoutDto } from '@/api/types/dashboard-dto';
-import { ConditionFilterJaql } from '@sisense/sdk-data/dist/dimensional-model/filters/utils/types';
+import { ConditionFilterJaql } from '@ethings-os/sdk-data/dist/dimensional-model/filters/utils/types';
 import { WidgetsPanelLayout } from '@/dashboard/types';
 import {
   MAX_COLUMN_WIDTH,

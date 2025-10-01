@@ -12,8 +12,8 @@ Specifying a query is similar to providing parameters to a [`useExecuteQuery`](.
 Here's how you can use the GetNlgInsights component in a Vue application:
 ```vue
 <script setup lang="ts">
-import { GetNlgInsights, type GetNlgInsightsProps } from '@sisense/sdk-ui-vue/ai';
-import { measureFactory } from '@sisense/sdk-data';
+import { GetNlgInsights, type GetNlgInsightsProps } from '@ethings-os/sdk-ui-vue/ai';
+import { measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../assets/sample-retail-model';
 
 const props: GetNlgInsightsProps = {

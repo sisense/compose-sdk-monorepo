@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../styles/field-type-icon.module.scss';
 import classnames from 'classnames';
-import { isBoolean, isDatetime, isNumber, isText } from '@sisense/sdk-data';
+import { isBoolean, isDatetime, isNumber, isText } from '@ethings-os/sdk-data';
 
 type Props = {
   columnType: string;

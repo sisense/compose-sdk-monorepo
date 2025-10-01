@@ -4,7 +4,7 @@ import { ScattermapChartLocation } from '../../../../chart-data/types';
 import { useSisenseContext } from '../../../../sisense-context/sisense-context.js';
 import { ScattermapChartDataOptionsInternal } from '../../../../chart-data-options/types.js';
 import { QueryDescription, executeQuery } from '../../../../query/execute-query.js';
-import { DataSource, Filter, filterFactory } from '@sisense/sdk-data';
+import { DataSource, Filter, filterFactory } from '@ethings-os/sdk-data';
 import { mergeFilters } from '../../../../widget-by-id/utils.js';
 import {
   isMeasureColumn,

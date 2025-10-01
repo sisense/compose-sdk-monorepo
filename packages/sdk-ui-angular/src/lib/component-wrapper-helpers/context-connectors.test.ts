@@ -4,7 +4,7 @@ import {
   CustomSisenseContext,
   CustomSisenseContextProvider,
   CustomThemeProvider,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { of } from 'rxjs';
 import { Mocked } from 'vitest';
 

@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => ({
         index: resolve(__dirname, 'src/index.ts'),
         ai: resolve(__dirname, 'src/ai/index.ts'),
       },
-      name: '@sisense/sdk-ui-preact',
+      name: '@ethings-os/sdk-ui-preact',
       formats: ['es', 'cjs'],
     },
   },

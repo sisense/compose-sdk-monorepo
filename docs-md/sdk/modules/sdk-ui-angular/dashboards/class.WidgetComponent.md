@@ -23,7 +23,7 @@ Facade component that renders a widget within a dashboard based on the widget ty
 ```ts
 // Component behavior in example.component.ts
 import { Component } from '@angular/core';
-import { type WidgetProps } from '@sisense/sdk-ui-angular';
+import { type WidgetProps } from '@ethings-os/sdk-ui-angular';
 
 @Component({
  selector: 'example',

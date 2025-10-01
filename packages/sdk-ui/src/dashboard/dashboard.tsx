@@ -4,7 +4,7 @@ import { ThemeProvider } from '@/theme-provider';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { useDashboardThemeInternal } from './use-dashboard-theme';
 import { useComposedDashboardInternal } from './use-composed-dashboard';
-import { Filter, FilterRelations } from '@sisense/sdk-data';
+import { Filter, FilterRelations } from '@ethings-os/sdk-data';
 import { useCallback, useEffect } from 'react';
 import { useCustomWidgets } from '@/custom-widgets-provider';
 import { TabberWidget } from '@/widgets/tabber-widget';
@@ -58,7 +58,7 @@ export type DashboardChangeAction =
  * Example of rendering a Fusion dashboard using the `useGetDashboardModel hook and the `Dashboard` component.
  *
  * ```ts
- * import { Dashboard, useGetDashboardModel, dashboardModelTranslator } from '@sisense/sdk-ui';
+ * import { Dashboard, useGetDashboardModel, dashboardModelTranslator } from '@ethings-os/sdk-ui';
 
 const CodeExample = () => {
   const { dashboard } = useGetDashboardModel({

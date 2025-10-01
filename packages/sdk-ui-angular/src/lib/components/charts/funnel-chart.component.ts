@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type FunnelChartProps as FunnelChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type FunnelChartProps as FunnelChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -32,9 +32,9 @@ export interface FunnelChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory, Filter } from '@sisense/sdk-data';
+import { measureFactory, filterFactory, Filter } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import type { ChartType } from '@ethings-os/sdk-ui-angular';
 @Component({
   selector: 'app-analytics',
   templateUrl: './analytics.component.html',
@@ -87,7 +87,7 @@ export class AnalyticsComponent {
 })
 export class FunnelChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.dataSet}
    *
    * @category Data
    */
@@ -95,7 +95,7 @@ export class FunnelChartComponent {
   dataSet: FunnelChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -103,7 +103,7 @@ export class FunnelChartComponent {
   dataOptions!: FunnelChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.filters}
    *
    * @category Data
    */
@@ -111,7 +111,7 @@ export class FunnelChartComponent {
   filters: FunnelChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.highlights}
    *
    * @category Data
    */
@@ -119,7 +119,7 @@ export class FunnelChartComponent {
   highlights: FunnelChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -127,7 +127,7 @@ export class FunnelChartComponent {
   styleOptions: FunnelChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -135,7 +135,7 @@ export class FunnelChartComponent {
   beforeRender: FunnelChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!FunnelChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!FunnelChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -143,7 +143,7 @@ export class FunnelChartComponent {
   dataReady: FunnelChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -151,7 +151,7 @@ export class FunnelChartComponent {
   dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -159,7 +159,7 @@ export class FunnelChartComponent {
   dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FunnelChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!FunnelChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

@@ -21,9 +21,9 @@ A component displaying data as a series of points connected by a line. Used to s
 ```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory, Filter } from '@sisense/sdk-data';
+import { measureFactory, filterFactory, Filter } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import type { ChartType } from '@ethings-os/sdk-ui-angular';
 @Component({
  selector: 'app-analytics',
  templateUrl: './analytics.component.html',

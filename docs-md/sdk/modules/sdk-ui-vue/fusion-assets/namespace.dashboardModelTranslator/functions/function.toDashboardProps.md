@@ -22,7 +22,7 @@ Translates [DashboardModel](../../interface.DashboardModel.md) to [DashboardProp
 
 ```vue
 <script setup lang="ts">
-import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@sisense/sdk-ui-vue';
+import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { dashboard } = useGetDashboardModel({

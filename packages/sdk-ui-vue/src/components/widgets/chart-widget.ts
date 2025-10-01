@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { ChartWidget as ChartWidgetPreact } from '@sisense/sdk-ui-preact';
-import type { ChartWidgetProps } from '@sisense/sdk-ui-preact';
+import { ChartWidget as ChartWidgetPreact } from '@ethings-os/sdk-ui-preact';
+import type { ChartWidgetProps } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 import type { Chart } from '../charts';
 
@@ -48,9 +48,9 @@ export { ChartWidgetProps };
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { ChartWidget } from '@sisense/sdk-ui-vue';
+ * import { ChartWidget } from '@ethings-os/sdk-ui-vue';
 
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -67,14 +67,14 @@ export { ChartWidgetProps };
 export const ChartWidget = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.bottomSlot}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.bottomSlot}
      *
      * @category Widget
      * @internal
      */
     bottomSlot: Object as PropType<ChartWidgetProps['bottomSlot']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.chartType}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.chartType}
      *
      * @category Chart
      */
@@ -83,14 +83,14 @@ export const ChartWidget = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.contextMenuItems}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.contextMenuItems}
      *
      * @category Widget
      * @internal
      */
     contextMenuItems: Array as PropType<ChartWidgetProps['contextMenuItems']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.dataOptions}
      *
      * @category Chart
      */
@@ -99,87 +99,87 @@ export const ChartWidget = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataSource}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.dataSource}
      *
      * @category Data
      */
     dataSource: [String, Object] as PropType<ChartWidgetProps['dataSource']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.description}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.description}
      *
      * @category Widget
      */
     description: String as PropType<ChartWidgetProps['description']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.drilldownOptions}
      *
      * @category Widget
      * @internal
      */
     drilldownOptions: Object as PropType<ChartWidgetProps['drilldownOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.filters}
      *
      * @category Data
      */
     filters: [Array, Object] as PropType<ChartWidgetProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlightSelectionDisabled}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.highlightSelectionDisabled}
      *
      * @category Widget
      */
     highlightSelectionDisabled: Boolean as PropType<ChartWidgetProps['highlightSelectionDisabled']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<ChartWidgetProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<ChartWidgetProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenuClose}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointContextMenuClose}
      *
      * @category Callbacks
      * @internal
      */
     onContextMenuClose: Function as PropType<ChartWidgetProps['onContextMenuClose']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<ChartWidgetProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<ChartWidgetProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<ChartWidgetProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.styleOptions}
      *
      * @category Widget
      */
     styleOptions: Object as PropType<ChartWidgetProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.title}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.title}
      *
      * @category Widget
      */
     title: String as PropType<ChartWidgetProps['title']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.topSlot}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.topSlot}
      *
      * @category Widget
      * @internal
@@ -187,13 +187,13 @@ export const ChartWidget = defineComponent({
     topSlot: Object as PropType<ChartWidgetProps['topSlot']>,
     // TODO Remove this prop as part of https://developer.sisense.com/guides/sdk/guides/migration-guide-1.0.0.html#removed
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.styleOptions}
      * @category Widget
      * @internal
      */
     widgetStyleOptions: Object as PropType<ChartWidgetProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onDataReady}
      *
      * @category Callbacks
      */

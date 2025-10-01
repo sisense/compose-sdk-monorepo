@@ -22,8 +22,8 @@ Vue example of configuring the date min max values and handling onChange event.
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DateRangeFilterTile, type DateRangeFilterTileProps } from '@sisense/sdk-ui-vue';
-import { filterFactory } from '@sisense/sdk-data';
+import { DateRangeFilterTile, type DateRangeFilterTileProps } from '@ethings-os/sdk-ui-vue';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../assets/sample-retail-model';
 
 const dateRangeFilterValue = ref<Filter | null>(filterFactory.dateRange(DM.DimDate.Date.Years));

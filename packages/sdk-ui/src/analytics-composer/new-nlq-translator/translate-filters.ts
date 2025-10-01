@@ -7,7 +7,7 @@ import {
   isLevelAttribute,
   mergeFiltersOrFilterRelations,
   JSONArray,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { NlqTranslationResult, NormalizedTable } from '../types.js';
 import {
   isFilterElement,

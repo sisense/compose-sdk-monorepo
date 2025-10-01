@@ -1,5 +1,5 @@
 {
-  "name": "@sisense/sdk-ui-angular",
+  "name": "@ethings-os/sdk-ui-angular",
   "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package containing general UI elements and related logic tailored for Angular development",
   "repository": {
@@ -76,9 +76,9 @@
     "@angular/core": "^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0"
   },
   "dependencies": {
-    "@sisense/sdk-data": "workspace:*",
-    "@sisense/sdk-tracking": "workspace:*",
-    "@sisense/sdk-ui-preact": "workspace:*",
+    "@ethings-os/sdk-data": "workspace:*",
+    "@ethings-os/sdk-tracking": "workspace:*",
+    "@ethings-os/sdk-ui-preact": "workspace:*",
     "rxjs": "^7.8.1",
     "ts-deepmerge": "^6.2.0",
     "tslib": "^2.3.0"

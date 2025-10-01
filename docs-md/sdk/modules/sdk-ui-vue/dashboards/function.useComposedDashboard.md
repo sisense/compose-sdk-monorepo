@@ -61,7 +61,7 @@ composes them into a coordinated dashboard with cross filtering, and change dete
 How to use `useComposedDashboard` within a Vue component:
 ```vue
 <script setup lang="ts">
-import { Widget, FilterTile, useComposedDashboard, type DashboardProps } from '@sisense/sdk-ui-vue';
+import { Widget, FilterTile, useComposedDashboard, type DashboardProps } from '@ethings-os/sdk-ui-vue';
 
 const initialDashboardProps: DashboardProps = { ... };
 const { dashboard } = useComposedDashboard(initialDashboardProps);

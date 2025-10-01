@@ -39,7 +39,7 @@ import {
   RelativeDateFilter,
   Sort,
   TextFilter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import SuperJSON, { SuperJSONResult } from 'superjson';
 
 // Centralized place to deserialize dimensional elements and register serialize/deserialize methods to SuperJSON.

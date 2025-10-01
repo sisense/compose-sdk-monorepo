@@ -6,7 +6,7 @@ import {
   Filter,
   FilterConfig,
   filterFactory,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { usePrevious } from '@/common/hooks/use-previous';
 import { MembersListSelect } from '@/filters/components/filter-editor-popover/common/select/members-list-select';
 import {

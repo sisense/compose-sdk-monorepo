@@ -17,7 +17,7 @@ Criteria Filter Tile Component
 ```
 ```ts
 import { Component } from '@angular/core';
-import { Filter, filterFactory } from '@sisense/sdk-data';
+import { Filter, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({

@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { BarChart as BarChartPreact } from '@sisense/sdk-ui-preact';
-import type { BarChartProps as BarChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { BarChart as BarChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { BarChartProps as BarChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!BarChart | `BarChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!BarChart | `BarChart`} component.
  */
 export interface BarChartProps extends BarChartPropsPreact {}
 
@@ -26,9 +26,9 @@ export interface BarChartProps extends BarChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { BarChart,type BarChartProps } from '@sisense/sdk-ui-vue';
+ * import { BarChart,type BarChartProps } from '@ethings-os/sdk-ui-vue';
 
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -51,7 +51,7 @@ export interface BarChartProps extends BarChartPropsPreact {}
 export const BarChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!BarChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -60,55 +60,55 @@ export const BarChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!BarChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<BarChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BarChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<BarChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BarChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<BarChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BarChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<BarChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<BarChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<BarChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<BarChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<BarChartProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BarChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.styleOptions}
      *
      * @category Chart
      */

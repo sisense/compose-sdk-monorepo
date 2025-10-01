@@ -1,4 +1,4 @@
-import { DataSource } from '@sisense/sdk-data';
+import { DataSource } from '@ethings-os/sdk-data';
 import { Meta } from '@storybook/react-vite';
 import { SisenseContextProviderProps } from '../index';
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';

@@ -11,7 +11,7 @@ import {
   ComponentAdapter,
   PivotTable as PivotTablePreact,
   type PivotTableProps as PivotTablePropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -42,9 +42,9 @@ export interface PivotTableProps extends PivotTablePropsPreact {}
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-ecommerce';
-import type { PivotTableDataOptions } from '@sisense/sdk-ui-angular';
+import type { PivotTableDataOptions } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-analytics',
@@ -95,7 +95,7 @@ export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy 
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableProps.dataSet}
    *
    * @category Data
    */
@@ -103,7 +103,7 @@ export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy 
   dataSet: PivotTableProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableProps.dataOptions}
    *
    * @category Data
    */
@@ -111,7 +111,7 @@ export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy 
   dataOptions!: PivotTableProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableProps.filters}
    *
    * @category Data
    */
@@ -119,7 +119,7 @@ export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy 
   filters: PivotTableProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableProps.highlights}
    *
    * @category Data
    */
@@ -127,7 +127,7 @@ export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy 
   highlights: PivotTableProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableProps.styleOptions}
    *
    * @category Representation
    */

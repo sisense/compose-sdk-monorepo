@@ -1,4 +1,4 @@
-import { Filter, FilterRelations } from '@sisense/sdk-data';
+import { Filter, FilterRelations } from '@ethings-os/sdk-data';
 
 export type FilterChangeEvent = {
   /** Filter that was changed */

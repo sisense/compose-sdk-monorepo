@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedSisenseContextProvider, setup } from '../../../__test-helpers__/index.js';
 import { CriteriaFilterTile, CriteriaFilterTileProps } from './criteria-filter-tile';
-import { createAttribute, createMeasure, filterFactory } from '@sisense/sdk-data';
+import { createAttribute, createMeasure, filterFactory } from '@ethings-os/sdk-data';
 
 const mockAttribute = createAttribute({
   name: 'BrandID',

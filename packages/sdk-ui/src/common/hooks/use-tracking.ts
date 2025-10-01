@@ -1,12 +1,12 @@
 import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import {
   ErrorEventOptions,
   eventRegistry,
   TrackingEventType,
   TrackingEventDetails,
   trackProductEvent,
-} from '@sisense/sdk-tracking';
+} from '@ethings-os/sdk-tracking';
 import { useCallback } from 'react';
 
 export const executeTracking = (

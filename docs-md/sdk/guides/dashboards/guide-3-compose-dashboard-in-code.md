@@ -17,7 +17,7 @@ In this example, we'll start `dashboardProps` almost empty with just title and a
 ##### React
 
 ```ts
-import { Dashboard, DashboardProps, WidgetProps } from '@sisense/sdk-ui';
+import { Dashboard, DashboardProps, WidgetProps } from '@ethings-os/sdk-ui';
 import { useMemo } from 'react';
 
 const CodeExample = () => {
@@ -43,10 +43,10 @@ Let's add a chart widget to the list of widgets. It is a simple indicator displa
 ##### React
 
 ```ts
-import { Dashboard, DashboardProps, WidgetProps } from '@sisense/sdk-ui';
+import { Dashboard, DashboardProps, WidgetProps } from '@ethings-os/sdk-ui';
 import * as DM from './sample-ecommerce';
 import { useMemo } from 'react';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 const CodeExample = () => {
   // DashboardProps is a set of properties for the Dashboard component
@@ -103,10 +103,10 @@ import {
   StackableStyleOptions,
   WidgetProps,
   WidgetsPanelColumnLayout,
-} from '@sisense/sdk-ui';
+} from '@ethings-os/sdk-ui';
 import * as DM from './sample-ecommerce';
 import { useMemo } from 'react';
-import { Filter, filterFactory, measureFactory } from '@sisense/sdk-data';
+import { Filter, filterFactory, measureFactory } from '@ethings-os/sdk-data';
 
 const seriesToColorMap = {
   Female: '#00cee6',

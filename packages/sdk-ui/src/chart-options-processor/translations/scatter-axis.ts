@@ -8,7 +8,7 @@ import {
 } from './../../chart-data-options/types';
 import { Axis, AxisSettings } from './axis-section';
 import { fontStyleDefault } from '../defaults/cartesian';
-import { isNumber } from '@sisense/sdk-data';
+import { isNumber } from '@ethings-os/sdk-data';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { isMeasureColumn } from '@/chart-data-options/utils';
 

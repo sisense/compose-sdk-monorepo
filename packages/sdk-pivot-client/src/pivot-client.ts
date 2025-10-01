@@ -1,8 +1,8 @@
-import { normalizeUrl } from '@sisense/sdk-common';
-import { Authenticator } from '@sisense/sdk-rest-client';
+import { normalizeUrl } from '@ethings-os/sdk-common';
+import { Authenticator } from '@ethings-os/sdk-rest-client';
 import { PivotBuilder, PivotDataBuilder, SocketBuilder } from './builders';
 import { JaqlRequest } from './data-load/types.js';
-import { PivotQueryResultData } from '@sisense/sdk-data';
+import { PivotQueryResultData } from '@ethings-os/sdk-data';
 import { DataService } from './data-handling';
 import { SisenseDataLoadService } from './data-load';
 

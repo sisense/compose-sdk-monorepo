@@ -5,7 +5,7 @@ module.exports = {
   plugin: [
     'typedoc-plugin-vue',
     './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs',
-    '@sisense/typedoc-plugin-diff-packages',
+    '@ethings-os/typedoc-plugin-diff-packages',
   ],
   // validation is not needed for diff-packages
   validation: {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useCallback, useMemo } from 'react';
-import { createAttribute } from '@sisense/sdk-data';
+import { createAttribute } from '@ethings-os/sdk-data';
 import { DataPoint, DrilldownSelection, ScatterDataPoint } from '../../types.js';
 import { ChartWidgetProps } from '@/props.js';
 import { useMenu } from '@/common/hooks/use-menu.js';

@@ -1,6 +1,6 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { SisenseContextService, TrackableService, WidgetProps } from '@sisense/sdk-ui-angular';
+import { SisenseContextService, TrackableService, WidgetProps } from '@ethings-os/sdk-ui-angular';
 import {
   AiContextProviderProps,
   ChatRestApi,
@@ -13,17 +13,17 @@ import {
   QueryRecommendation as QueryRecommendationPreact,
   UseGetNlgInsightsParams,
   widgetComposer,
-} from '@sisense/sdk-ui-preact/ai';
+} from '@ethings-os/sdk-ui-preact/ai';
 
 export interface AiContextConfig extends Omit<AiContextProviderProps, 'children'> {}
 export interface GetNlgInsightsParams extends Omit<UseGetNlgInsightsParams, 'enabled'> {}
 
 /**
- * {@inheritDoc @sisense/sdk-ui!QueryRecommendation}
+ * {@inheritDoc @ethings-os/sdk-ui!QueryRecommendation}
  */
 export interface QueryRecommendation extends Omit<QueryRecommendationPreact, 'widgetProps'> {
   /**
-   * {@inheritDoc @sisense/sdk-ui!QueryRecommendation.widgetProps}
+   * {@inheritDoc @ethings-os/sdk-ui!QueryRecommendation.widgetProps}
    */
   widgetProps?: WidgetProps;
 }
@@ -36,8 +36,8 @@ export interface QueryRecommendation extends Omit<QueryRecommendationPreact, 'wi
  * along with importing dependency {@link SdkUiModule} and injecting {@link SisenseContextConfig} to connect to a Sisense instance:
  *
  * ```ts
- * import { SdkUiModule, SisenseContextConfig } from '@sisense/sdk-ui-angular';
- * import { SdkAiModule, AI_CONTEXT_CONFIG_TOKEN, AiContextConfig } from '@sisense/sdk-ui-angular/ai';
+ * import { SdkUiModule, SisenseContextConfig } from '@ethings-os/sdk-ui-angular';
+ * import { SdkAiModule, AI_CONTEXT_CONFIG_TOKEN, AiContextConfig } from '@ethings-os/sdk-ui-angular/ai';
  *
  * const AI_CONTEXT_CONFIG: AiContextConfig = {
  *   volatile: true,

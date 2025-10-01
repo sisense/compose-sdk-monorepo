@@ -1,4 +1,4 @@
-import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
+import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@ethings-os/sdk-pivot-client';
 import { type PivotTableDataOptions } from '@/chart-data-options/types.js';
 import { type DataCellFormatter } from '../types.js';
 import { applyFormatPlainText } from '@/chart-options-processor/translations/number-format-config.js';

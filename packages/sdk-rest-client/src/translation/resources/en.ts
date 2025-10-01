@@ -24,7 +24,7 @@ export const translation = {
  *
  * @example
  * ```typescript
- * import { TranslationDictionary } from '@sisense/sdk-rest-client';
+ * import { TranslationDictionary } from '@ethings-os/sdk-rest-client';
  *
  * const customTranslationResources: Partial<TranslationDictionary> = {
  * ```

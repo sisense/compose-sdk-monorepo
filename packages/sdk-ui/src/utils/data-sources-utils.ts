@@ -1,4 +1,4 @@
-import { DataSource, isDataSourceInfo } from '@sisense/sdk-data';
+import { DataSource, isDataSourceInfo } from '@ethings-os/sdk-data';
 
 export type DataSourceObject = {
   title: string;

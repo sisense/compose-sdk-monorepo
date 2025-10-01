@@ -6,7 +6,7 @@ import type {
   Measure,
   MeasureColumn,
   MembersFilter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { DeepRequired } from 'ts-essentials';
 import {
   AreaSubtype,
@@ -52,7 +52,7 @@ import { TabCornerRadius, TabInterval, TabSize } from '@/widgets/tabber-widget';
 import { SoftUnion } from './utils/utility-types';
 import { CalendarDayOfWeek } from './chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 
-export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
+export type { SortDirection, PivotRowsSort } from '@ethings-os/sdk-data';
 export type { AppConfig } from './app/client-application';
 export type { DateConfig } from './query/date-formats';
 export type { CalendarDayOfWeek } from './chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
@@ -2400,7 +2400,7 @@ export type SeriesWithAlerts<T> = {
 
 /**
  * Context menu position coordinates
- * Used in {@link @sisense/sdk-ui!ContextMenuProps | `ContextMenuProps`}
+ * Used in {@link @ethings-os/sdk-ui!ContextMenuProps | `ContextMenuProps`}
  */
 export type MenuPosition = {
   /** Horizontal position */
@@ -2411,7 +2411,7 @@ export type MenuPosition = {
 
 /**
  * Menu alignment configuration for positioning
- * Used in {@link @sisense/sdk-ui!ContextMenuProps | `ContextMenuProps`}
+ * Used in {@link @ethings-os/sdk-ui!ContextMenuProps | `ContextMenuProps`}
  *
  * @internal
  */
@@ -2424,7 +2424,7 @@ export type MenuAlignment = {
 
 /**
  * Context menu section
- * Used in {@link @sisense/sdk-ui!ContextMenuProps | `ContextMenuProps`}
+ * Used in {@link @ethings-os/sdk-ui!ContextMenuProps | `ContextMenuProps`}
  */
 export type MenuItemSection = {
   /** @internal */

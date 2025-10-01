@@ -27,7 +27,7 @@ import {
   StyledMeasureColumn,
 } from '../chart-data-options/types';
 import { isEnabled } from './utils';
-import { isNumber } from '@sisense/sdk-data';
+import { isNumber } from '@ethings-os/sdk-data';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,

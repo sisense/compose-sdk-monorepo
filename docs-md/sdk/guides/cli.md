@@ -26,7 +26,7 @@ The `get-data-model` command creates a [TypeScript representation of a data mode
 This example command creates a data model file for the Sample ECommerce data model using username/password authentication. After running this command, the CLI will prompt you for your password. (Be sure to replace `<username>` and `<your_instance_url>` with your actual username and Sisense instance URL).
 
 ```sh
-npx @sisense/sdk-cli@latest get-data-model --dataSource "Sample ECommerce" --url <your_instance_url> --output src/sample-ecommerce.ts --username <username>
+npx @ethings-os/sdk-cli@latest get-data-model --dataSource "Sample ECommerce" --url <your_instance_url> --output src/sample-ecommerce.ts --username <username>
 ```
 
 ## get-api-token
@@ -44,5 +44,5 @@ The `get-api-token` command gets an [API token for authentication](../getting-st
 This example gets an API Token using username/password authentication. After running this command, the CLI will prompt you for your password. (Be sure to replace `<username>` and `<your_instance_url>` with your actual username and Sisense instance URL).
 
 ```sh
-npx @sisense/sdk-cli@latest get-api-token --username <username> --url <your_instance_url>
+npx @ethings-os/sdk-cli@latest get-api-token --username <username> --url <your_instance_url>
 ```

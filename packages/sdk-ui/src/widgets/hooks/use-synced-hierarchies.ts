@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Attribute, DataSource } from '@sisense/sdk-data';
+import { Attribute, DataSource } from '@ethings-os/sdk-data';
 import isString from 'lodash-es/isString';
 import partition from 'lodash-es/partition';
 import { Hierarchy, HierarchyId } from '@/models/hierarchy';

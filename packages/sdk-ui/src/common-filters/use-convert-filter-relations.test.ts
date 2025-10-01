@@ -1,6 +1,6 @@
 // useConvertFilterRelations.spec.tsx
 import { useConvertFilterRelations } from './use-convert-filter-relations';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';

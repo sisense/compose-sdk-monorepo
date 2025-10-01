@@ -1,4 +1,4 @@
-import type { HttpClient } from '@sisense/sdk-rest-client';
+import type { HttpClient } from '@ethings-os/sdk-rest-client';
 import { TranslatableError } from '../translation/translatable-error';
 import type { ThemeOid, CompleteThemeSettings } from '../types';
 import {

@@ -23,8 +23,8 @@ Here's how you can use the CriteriaFilterTile component in a Vue application:
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { CriteriaFilterTile } from '@sisense/sdk-ui-vue';
-import { filterFactory } from '@sisense/sdk-data';
+import { CriteriaFilterTile } from '@ethings-os/sdk-ui-vue';
+import { filterFactory } from '@ethings-os/sdk-data';
 
 const criteriaFilterTileProps = ref({
  title: 'Revenue',

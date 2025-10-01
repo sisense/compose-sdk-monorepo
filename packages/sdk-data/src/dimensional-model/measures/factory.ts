@@ -108,7 +108,7 @@ function measureFunction(
  * You can nest custom formulas by placing one inside the `formula` parameter of another.
  *
  * Note: To use [shared formulas](https://docs.sisense.com/main/SisenseLinux/shared-formulas.htm)
- * from a Fusion instance, you must fetch them first using {@link @sisense/sdk-ui!useGetSharedFormula | useGetSharedFormula}.
+ * from a Fusion instance, you must fetch them first using {@link @ethings-os/sdk-ui!useGetSharedFormula | useGetSharedFormula}.
  *
  * @example
  * An example of constructing a custom formulas using dimensions, measures, and nested custom formulas

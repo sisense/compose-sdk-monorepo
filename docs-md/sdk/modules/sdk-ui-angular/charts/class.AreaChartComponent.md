@@ -22,9 +22,9 @@ but with filled in areas under each line and an option to display them as stacke
 ```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory, Filter } from '@sisense/sdk-data';
+import { measureFactory, filterFactory, Filter } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import type { ChartType } from '@ethings-os/sdk-ui-angular';
 
 @Component({
  selector: 'app-analytics',

@@ -4,7 +4,7 @@ import {
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../__mocks__/mock-data-sources.js';
 import { translateQueryJSON } from './translate-query.js';
-import { withoutGuids } from '@sisense/sdk-data';
+import { withoutGuids } from '@ethings-os/sdk-data';
 
 describe('translateQuery', () => {
   it('should translate query json', () => {

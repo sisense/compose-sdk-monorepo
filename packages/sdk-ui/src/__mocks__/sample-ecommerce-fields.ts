@@ -1,5 +1,5 @@
 import { AnyObject } from '@/utils/utility-types';
-import { DataSourceField } from '@sisense/sdk-data';
+import { DataSourceField } from '@ethings-os/sdk-data';
 
 /**
  * Actual fields from the Sample ECommerce datasource returned by server.

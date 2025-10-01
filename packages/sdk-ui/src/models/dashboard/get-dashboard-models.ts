@@ -1,4 +1,4 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import { RestApi } from '../../api/rest-api.js';
 import { dashboardModelTranslator } from '@/models';
 import { dedupe } from '@/utils/dedupe.js';

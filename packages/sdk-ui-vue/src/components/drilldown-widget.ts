@@ -2,7 +2,7 @@ import type { Component, PropType } from 'vue';
 import type {
   ContextMenuProps,
   DrilldownWidgetProps as DrilldownWidgetPropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { defineComponent } from 'vue';
 
 export type DrilldownWidgetConfig = {
@@ -12,12 +12,12 @@ export type DrilldownWidgetConfig = {
 };
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!DrilldownWidget | `DrilldownWidget`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!DrilldownWidget | `DrilldownWidget`} component.
  */
 export interface DrilldownWidgetProps
   extends Omit<DrilldownWidgetPropsPreact, 'children' | 'config'> {
   /**
-   * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.config}
+   * {@inheritDoc @ethings-os/sdk-ui!DrilldownWidgetProps.config}
    *
    * @category Widget
    */
@@ -79,7 +79,7 @@ export interface DrilldownWidgetProps
  *
  * <script>
  * import { ref } from 'vue';
- * import { DrilldownWidget } from '@sisense/sdk-ui-vue';
+ * import { DrilldownWidget } from '@ethings-os/sdk-ui-vue';
  *
  * const chartProps = ref<ChartProps>({
   chartType: 'bar',
@@ -117,7 +117,7 @@ export interface DrilldownWidgetProps
 export const DrilldownWidgetTs = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.config}
+     * {@inheritDoc @ethings-os/sdk-ui!DrilldownWidgetProps.config}
      *
      * @category Widget
      */
@@ -127,7 +127,7 @@ export const DrilldownWidgetTs = defineComponent({
       default: () => ({}),
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownPaths}
+     * {@inheritDoc @ethings-os/sdk-ui!DrilldownWidgetProps.drilldownPaths}
      *
      * @category Widget
      *
@@ -138,7 +138,7 @@ export const DrilldownWidgetTs = defineComponent({
       default: () => [],
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.initialDimension}
+     * {@inheritDoc @ethings-os/sdk-ui!DrilldownWidgetProps.initialDimension}
      *
      * @category Widget
      */

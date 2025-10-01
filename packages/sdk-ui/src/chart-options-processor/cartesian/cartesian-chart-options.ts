@@ -24,7 +24,7 @@ import { HighchartsOptionsInternal, Stacking } from '../chart-options-service';
 import { getNavigator, setInitialScrollerPosition } from '../translations/navigator';
 import { categoriesSliceWarning, seriesSliceWarning } from '../../utils/data-limit-warning';
 import { OptionsWithAlerts } from '../../types';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { NavigatorOptions } from '@sisense/sisense-charts';
 import { TranslatableError } from '@/translation/translatable-error';
 

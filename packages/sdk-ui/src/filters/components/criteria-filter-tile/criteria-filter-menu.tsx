@@ -10,7 +10,7 @@ import {
 } from './criteria-filter-operations';
 import { useThemeContext } from '../../../../src/theme-provider';
 import { useTranslation } from 'react-i18next';
-import { FilterTypes, Measure } from '@sisense/sdk-data';
+import { FilterTypes, Measure } from '@ethings-os/sdk-data';
 import { Dropdown } from '../common/dropdown';
 import { FilterVariant, isVertical } from '../common/filter-utils';
 import styled from '@emotion/styled';

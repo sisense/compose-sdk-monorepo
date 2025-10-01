@@ -13,7 +13,7 @@ import {
   Chart as ChartPreact,
   type ChartProps as ChartPropsPreact,
   ComponentAdapter,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -104,7 +104,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.chartType}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.chartType}
    *
    * @category Chart
    */
@@ -112,7 +112,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   chartType!: ChartProps['chartType'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.dataSet}
    *
    * @category Data
    */
@@ -120,7 +120,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataSet: ChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -128,7 +128,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataOptions!: ChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.filters}
    *
    * @category Data
    */
@@ -136,7 +136,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   filters: ChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.highlights}
    *
    * @category Data
    */
@@ -144,7 +144,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   highlights: ChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -152,7 +152,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   styleOptions: ChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -160,7 +160,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   beforeRender: ChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!ChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!ChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -168,7 +168,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataReady: ChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -176,7 +176,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataPointClick = new EventEmitter<ChartDataPointClickEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -184,7 +184,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataPointContextMenu = new EventEmitter<ChartDataPointContextMenuEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

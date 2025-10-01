@@ -4,7 +4,7 @@ import {
   translateFiltersJSON,
   translateHighlightsFromJSONFunctionCall,
 } from './translate-filters.js';
-import { isFilterRelations, withoutGuids, JSONArray } from '@sisense/sdk-data';
+import { isFilterRelations, withoutGuids, JSONArray } from '@ethings-os/sdk-data';
 import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,

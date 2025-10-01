@@ -15,7 +15,7 @@ import {
   MetadataItem,
   createDimensionalElementFromMetadataItem,
   isDatetime,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { AxesMapping, ChartRecommendations, ExpandedQueryModel } from '@/analytics-composer/types';
 import { normalizeAnyColumn } from '@/chart-data-options/utils';
 

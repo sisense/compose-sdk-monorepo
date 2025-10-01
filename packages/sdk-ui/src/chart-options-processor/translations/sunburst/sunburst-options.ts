@@ -11,7 +11,7 @@ import { prepareSunburstDataItems, SUNBURST_ROOT_PARENT_ID } from './sunburst-se
 import { getLegendSettings } from '../legend-section';
 import './sunburst.scss';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { HighchartsDataPointContext } from '../tooltip-utils';
 
 const DEFAULT_SUNBURST_SERIES = {

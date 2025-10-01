@@ -1,6 +1,6 @@
 import { usePrevious } from '@/common/hooks/use-previous';
 import { TranslatableError } from '@/translation/translatable-error';
-import { Filter } from '@sisense/sdk-data';
+import { Filter } from '@ethings-os/sdk-data';
 import { useEffect, useState, useCallback } from 'react';
 
 /**

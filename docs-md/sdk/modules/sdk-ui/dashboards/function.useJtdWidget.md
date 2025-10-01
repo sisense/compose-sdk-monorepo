@@ -38,7 +38,7 @@ Enhanced widget props with JTD navigation capabilities, menu combination, and st
 
 Basic JTD configuration with right-click navigation.
 ```typescript
-import { useJtdWidget } from '@sisense/sdk-ui';
+import { useJtdWidget } from '@ethings-os/sdk-ui';
 
 const jtdConfig: JumpToDashboardConfig = {
   targets: [{ id: 'dashboard-1', caption: 'Sales Dashboard' }],

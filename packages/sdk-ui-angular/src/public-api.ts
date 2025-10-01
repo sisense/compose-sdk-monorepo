@@ -1,5 +1,5 @@
 /**
- * Public API Surface of @sisense/sdk-ui-angular
+ * Public API Surface of @ethings-os/sdk-ui-angular
  */
 export * from './lib/components';
 export * from './lib/sdk-ui.module';

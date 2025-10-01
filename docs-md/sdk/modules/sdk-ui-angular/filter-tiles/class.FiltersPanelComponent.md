@@ -22,8 +22,8 @@ Here's how to render a filters panel with a set of filters.
 ```ts
 // Component behavior in example.component.ts
 import { Component } from '@angular/core';
-import { type FiltersPanelProps } from '@sisense/sdk-ui-angular';
-import { filterFactory } from '@sisense/sdk-data';
+import { type FiltersPanelProps } from '@ethings-os/sdk-ui-angular';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({

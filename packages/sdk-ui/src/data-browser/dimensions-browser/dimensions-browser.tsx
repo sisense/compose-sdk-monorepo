@@ -7,7 +7,7 @@ import {
   ItemSecondaryActionConfig,
   ItemsGroup,
 } from '@/common/components/grouped-items-browser/types';
-import { Attribute, DateDimension, Dimension, MetadataTypes } from '@sisense/sdk-data';
+import { Attribute, DateDimension, Dimension, MetadataTypes } from '@ethings-os/sdk-data';
 import { useMemo } from 'react';
 import { DateAttributeIcon } from '@/common/icons/date-attribute-icon.js';
 import { NumericAttributeIcon } from '@/common/icons/numeric-attribute-icon.js';

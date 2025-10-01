@@ -1,10 +1,10 @@
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@ethings-os/sdk-data';
 import type {
   ClientApplication,
   ExecuteQueryByWidgetIdParams,
   QueryByWidgetIdState,
-} from '@sisense/sdk-ui-preact';
-import { executeQueryByWidgetId, queryStateReducer } from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
+import { executeQueryByWidgetId, queryStateReducer } from '@ethings-os/sdk-ui-preact';
 import { getSisenseContext } from '../providers/sisense-context-provider';
 import { ref, toRefs, watch, type ToRefs } from 'vue';
 import { collectRefs, toPlainValue, toPlainObject } from '../utils';
@@ -28,7 +28,7 @@ import type { MaybeRefOrWithRefs } from '../types';
  * ```vue
  * <script setup>
  * import { ref } from 'vue';
- * import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui-vue';
+ * import { useExecuteQueryByWidgetId } from '@ethings-os/sdk-ui-vue';
  *
  * const widgetId = ref('your_widget_id_here');
  * const filters = ref([...]); // Define filters if necessary

@@ -44,8 +44,8 @@ In this snippet, we’re querying the Sample ECommerce model to get total cost a
 
 ```ts
 import * as DM from '../../sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
-import { QueryService } from '@sisense/sdk-ui-angular';
+import { measureFactory } from '@ethings-os/sdk-data';
+import { QueryService } from '@ethings-os/sdk-ui-angular';
 
 //...
 
@@ -204,9 +204,9 @@ When we put the steps together, the code for populating our 3rd party chart with
 ##### React
 
 ```ts
-import { useExecuteQuery } from '@sisense/sdk-ui';
+import { useExecuteQuery } from '@ethings-os/sdk-ui';
 import * as DM from '../sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 import Plot from 'react-plotly.js';
 
@@ -273,8 +273,8 @@ export default MyPlotlyChart;
 ```ts
 import { Component } from '@angular/core';
 import * as DM from '../../sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
-import { QueryService } from '@sisense/sdk-ui-angular';
+import { measureFactory } from '@ethings-os/sdk-data';
+import { QueryService } from '@ethings-os/sdk-ui-angular';
 
 import { PlotData } from 'plotly.js-dist-min';
 

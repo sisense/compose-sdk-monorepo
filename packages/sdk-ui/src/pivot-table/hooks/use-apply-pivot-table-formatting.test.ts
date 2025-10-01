@@ -3,7 +3,7 @@ import {
   EVENT_DATA_CELL_FORMAT,
   EVENT_HEADER_CELL_FORMAT,
   type DataService,
-} from '@sisense/sdk-pivot-client';
+} from '@ethings-os/sdk-pivot-client';
 
 import { useApplyPivotTableFormatting } from './use-apply-pivot-table-formatting';
 import { useSisenseContextMock } from '@/sisense-context/__mocks__/sisense-context';

@@ -11,7 +11,7 @@ These operators are still in beta.
 ## Example
 
 ```ts
-import { filters } from '@sisense/sdk-data';
+import { filters } from '@ethings-os/sdk-data';
 
 // define filters
 const revenueFilter = filterFactory.greaterThan(DM.Commerce.Revenue, 1000);

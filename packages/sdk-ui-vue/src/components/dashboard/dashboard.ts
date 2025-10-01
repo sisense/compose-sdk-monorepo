@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { Dashboard as DashboardPreact } from '@sisense/sdk-ui-preact';
+import { Dashboard as DashboardPreact } from '@ethings-os/sdk-ui-preact';
 import type {
   DashboardProps as DashboardPropsPreact,
   DashboardConfig,
   DashboardFiltersPanelConfig,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 import type { WidgetProps } from '../widgets';
 
@@ -13,11 +13,11 @@ import type { WidgetProps } from '../widgets';
 export { DashboardConfig, DashboardFiltersPanelConfig };
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!Dashboard | `Dashboard`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!Dashboard | `Dashboard`} component.
  */
 export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.widgets}
    */
   widgets: WidgetProps[];
 }
@@ -42,7 +42,7 @@ export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
  * </template>
  *
  * <script setup lang="ts">
- * import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@sisense/sdk-ui-vue';
+ * import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@ethings-os/sdk-ui-vue';
  * import { computed } from 'vue';
  *
  * const { dashboard } = useGetDashboardModel({
@@ -64,42 +64,42 @@ export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
 export const Dashboard = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.title}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.title}
      */
     title: String as PropType<DashboardProps['title']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.layoutOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.layoutOptions}
      */
     layoutOptions: Object as PropType<DashboardProps['layoutOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.config}
      */
     config: Object as PropType<DashboardProps['config']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.widgets}
      */
     widgets: {
       type: Object as PropType<DashboardProps['widgets']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.filters}
      */
     filters: [Object, Array] as PropType<DashboardProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.defaultDataSource}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.defaultDataSource}
      */
     defaultDataSource: [String, Object] as PropType<DashboardProps['defaultDataSource']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgetsOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.widgetsOptions}
      */
     widgetsOptions: Object as PropType<DashboardProps['widgetsOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.styleOptions}
      */
     styleOptions: Object as PropType<DashboardProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.tabbersOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.tabbersOptions}
      *
      * @internal
      */

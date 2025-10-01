@@ -4,7 +4,7 @@ import { beforeEach, Mock } from 'vitest';
 import { render } from '@testing-library/react';
 import { MockedSisenseContextProvider } from '@/__test-helpers__';
 import { Dashboard, DashboardChangeType } from '@/dashboard/dashboard';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../__test-helpers__/sample-ecommerce';
 
 vi.mock('./use-composed-dashboard', () => ({

@@ -3,7 +3,7 @@ import type {
   CustomHeaderCellFormatter,
   CellFormattingResult,
 } from './types.js';
-import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
+import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@ethings-os/sdk-pivot-client';
 import type { PivotTableDataOptionsInternal } from '@/chart-data-options/types';
 import {
   getPivotDataOptionByJaqlIndex,

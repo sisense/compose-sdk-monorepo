@@ -18,8 +18,8 @@ import {
   MeasureColumn,
   Sort,
   SortDirection,
-} from '@sisense/sdk-data';
-import { convertSortDirectionToSort } from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
+import { convertSortDirectionToSort } from '@ethings-os/sdk-data';
 import { isMeasureColumn } from '@/chart-data-options/utils';
 
 const flatResults = (dimensions: string[], sourceTable: DataTable): DataTable => {

@@ -28,7 +28,7 @@ import {
   useExecuteCustomWidgetQuery,
   type CustomWidgetComponentProps,
   type ExecuteCustomWidgetQueryParams,
-} from '@sisense/sdk-ui-vue';
+} from '@ethings-os/sdk-ui-vue';
 import * as DM from './sample-ecommerce';
 
 const props: CustomWidgetComponentProps = {

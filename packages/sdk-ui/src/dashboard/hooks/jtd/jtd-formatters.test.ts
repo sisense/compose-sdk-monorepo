@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { UserType } from '@sisense/sdk-pivot-client';
-import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
+import { UserType } from '@ethings-os/sdk-pivot-client';
+import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@ethings-os/sdk-pivot-client';
 import {
   createJtdHyperlinkDataCellFormatter,
   createJtdHyperlinkHeaderCellFormatter,

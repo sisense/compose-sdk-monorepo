@@ -1,6 +1,6 @@
 import { watchEffect } from 'vue';
-import type { ContextConnector, CustomSisenseContextProviderProps } from '@sisense/sdk-ui-preact';
-import { CustomSisenseContextProvider, DataObserver } from '@sisense/sdk-ui-preact';
+import type { ContextConnector, CustomSisenseContextProviderProps } from '@ethings-os/sdk-ui-preact';
+import { CustomSisenseContextProvider, DataObserver } from '@ethings-os/sdk-ui-preact';
 import { getSisenseContext } from '../../providers';
 
 /**

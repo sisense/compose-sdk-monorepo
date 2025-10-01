@@ -7,7 +7,7 @@ You can write a little more code to embed the dashboard with customizations. In 
 ##### React
 
 ```ts
-import { Dashboard, dashboardModelTranslator, useGetDashboardModel } from '@sisense/sdk-ui';
+import { Dashboard, dashboardModelTranslator, useGetDashboardModel } from '@ethings-os/sdk-ui';
 
 const CodeExample = () => {
   // DashboardModel is the data representation of a Fusion dashboard in Compose SDK
@@ -48,7 +48,7 @@ import {
   type DashboardProps,
   DashboardService,
   dashboardModelTranslator,
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'code-example',
@@ -84,7 +84,7 @@ export class CodeExampleComponent {
 ##### Vue
 ```ts
 <script setup lang="ts">
-import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@sisense/sdk-ui-vue';
+import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { dashboard } = useGetDashboardModel({
@@ -134,9 +134,9 @@ Basically, a dashboard and its props are composed of existing building blocks in
 ##### React
 
 ```ts
-import { Dashboard, dashboardModelTranslator, useGetDashboardModel } from '@sisense/sdk-ui';
+import { Dashboard, dashboardModelTranslator, useGetDashboardModel } from '@ethings-os/sdk-ui';
 import * as DM from './sample-ecommerce';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 
 const CodeExample = () => {
   // DashboardModel is the data representation of a Fusion dashboard in Compose SDK
@@ -192,9 +192,9 @@ import {
   type DashboardProps,
   DashboardService,
   dashboardModelTranslator,
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 import * as DM from './sample-ecommerce';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 
 @Component({
   selector: 'code-example',
@@ -251,8 +251,8 @@ export class CodeExampleComponent {
 ##### Vue
 ```ts
 <script setup lang="ts">
-import { filterFactory } from '@sisense/sdk-data';
-import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@sisense/sdk-ui-vue';
+import { filterFactory } from '@ethings-os/sdk-data';
+import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@ethings-os/sdk-ui-vue';
 import * as DM from '../assets/sample-ecommerce-model';
 import { computed } from 'vue';
 

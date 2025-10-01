@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Dropdown, type DropdownProps } from '@sisense/sdk-shared-ui/Dropdown';
+import { Dropdown, type DropdownProps } from '@ethings-os/sdk-shared-ui/Dropdown';
 
 import { ListOfSortingDirections } from '../../../../data-handling/constants.js';
 

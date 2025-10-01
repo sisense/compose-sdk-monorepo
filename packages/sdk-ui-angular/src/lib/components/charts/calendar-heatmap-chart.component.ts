@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type CalendarHeatmapChartProps as CalendarHeatmapChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type CalendarHeatmapChartProps as CalendarHeatmapChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -33,9 +33,9 @@ export interface CalendarHeatmapChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-ecommerce';
-import type { CalendarHeatmapChartProps } from '@sisense/sdk-ui-angular';
+import type { CalendarHeatmapChartProps } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-analytics',
@@ -86,7 +86,7 @@ export class AnalyticsComponent {
 })
 export class CalendarHeatmapChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.dataSet}
    *
    * @category Data
    */
@@ -94,7 +94,7 @@ export class CalendarHeatmapChartComponent {
   dataSet: CalendarHeatmapChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -102,7 +102,7 @@ export class CalendarHeatmapChartComponent {
   dataOptions!: CalendarHeatmapChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.filters}
    *
    * @category Data
    */
@@ -110,7 +110,7 @@ export class CalendarHeatmapChartComponent {
   filters: CalendarHeatmapChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.highlights}
    *
    * @category Data
    */
@@ -118,7 +118,7 @@ export class CalendarHeatmapChartComponent {
   highlights: CalendarHeatmapChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -126,7 +126,7 @@ export class CalendarHeatmapChartComponent {
   styleOptions: CalendarHeatmapChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -134,7 +134,7 @@ export class CalendarHeatmapChartComponent {
   beforeRender: CalendarHeatmapChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!CalendarHeatmapChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!CalendarHeatmapChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -142,7 +142,7 @@ export class CalendarHeatmapChartComponent {
   dataReady: CalendarHeatmapChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -150,7 +150,7 @@ export class CalendarHeatmapChartComponent {
   dataPointClick = new EventEmitter<CalendarHeatmapDataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -158,7 +158,7 @@ export class CalendarHeatmapChartComponent {
   dataPointContextMenu = new EventEmitter<CalendarHeatmapDataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

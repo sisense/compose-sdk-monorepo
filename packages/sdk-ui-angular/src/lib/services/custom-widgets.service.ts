@@ -4,7 +4,7 @@ import {
   type CustomWidgetComponent as CustomWidgetComponentPreact,
   type CustomWidgetComponentProps,
   type GenericDataOptions,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { BehaviorSubject } from 'rxjs';
 
 import { DynamicRenderer } from './dynamic-renderer.service';

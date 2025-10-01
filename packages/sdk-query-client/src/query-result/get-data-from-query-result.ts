@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Cell, Column, DataCell, Element, QueryResultData } from '@sisense/sdk-data';
-import { simpleColumnType } from '@sisense/sdk-data';
+import { Cell, Column, DataCell, Element, QueryResultData } from '@ethings-os/sdk-data';
+import { simpleColumnType } from '@ethings-os/sdk-data';
 import numeral from 'numeral';
 
 import { JaqlResponse } from '../types.js';

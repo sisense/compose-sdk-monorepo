@@ -1,6 +1,6 @@
 import { inject, ref } from 'vue';
 import type { InjectionKey, Ref } from 'vue';
-import type { CustomAiContext } from '@sisense/sdk-ui-preact/ai';
+import type { CustomAiContext } from '@ethings-os/sdk-ui-preact/ai';
 
 export const defaultAiContext: Partial<CustomAiContext> = {
   api: undefined,

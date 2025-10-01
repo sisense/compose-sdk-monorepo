@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { HighchartsOptions, SeriesType } from './chart-options-processor/chart-options-service';
-import type { Data } from '@sisense/sdk-data';
+import type { Data } from '@ethings-os/sdk-data';
 import { BoxplotChart } from './boxplot-chart';
 import { withBlurredRows } from './__test-helpers__';
 

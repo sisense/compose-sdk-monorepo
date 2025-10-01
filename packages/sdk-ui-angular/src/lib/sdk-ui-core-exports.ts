@@ -1,9 +1,9 @@
-// This file re-exports common types/utils from @sisense/sdk-ui-preact
+// This file re-exports common types/utils from @ethings-os/sdk-ui-preact
 
-// Re-exports utils from @sisense/sdk-ui-preact
-export { boxWhiskerProcessResult, extractDimensionsAndMeasures } from '@sisense/sdk-ui-preact';
+// Re-exports utils from @ethings-os/sdk-ui-preact
+export { boxWhiskerProcessResult, extractDimensionsAndMeasures } from '@ethings-os/sdk-ui-preact';
 
-// Re-exports types from @sisense/sdk-ui-preact
+// Re-exports types from @ethings-os/sdk-ui-preact
 export type {
   // General (Others):
   AppConfig,
@@ -145,4 +145,4 @@ export type {
   WidgetStyleOptions,
   WidgetType,
   X2Title,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';

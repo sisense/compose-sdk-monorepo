@@ -1,6 +1,6 @@
 /** @vitest-environment jsdom */
 import { renderHook, waitFor } from '@testing-library/react';
-import { trackProductEvent } from '@sisense/sdk-tracking';
+import { trackProductEvent } from '@ethings-os/sdk-tracking';
 import type { Mock } from 'vitest';
 import { useGetDashboardModels } from './use-get-dashboard-models.js';
 import { getDashboardModels } from './get-dashboard-models.js';
@@ -14,9 +14,9 @@ const dashboardModelsMock: DashboardModel[] = [
   sampleHealthcareDashboard,
 ].map((dashboard) => dashboardModelTranslator.fromDashboardDto(dashboard));
 
-vi.mock('@sisense/sdk-tracking', async () => {
-  const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
-    '@sisense/sdk-tracking',
+vi.mock('@ethings-os/sdk-tracking', async () => {
+  const actual: typeof import('@ethings-os/sdk-tracking') = await vi.importActual(
+    '@ethings-os/sdk-tracking',
   );
   return {
     ...actual,

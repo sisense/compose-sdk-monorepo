@@ -5,7 +5,7 @@ import {
   Filter,
   filterFactory,
   isDateRangeFilter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { SelectableSection } from '../common';
 import { DatetimeLimits } from './types';
 import {

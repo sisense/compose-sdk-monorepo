@@ -1,5 +1,5 @@
-import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
-import * as auth from '@sisense/sdk-rest-client';
+import { Authenticator, HttpClient } from '@ethings-os/sdk-rest-client';
+import * as auth from '@ethings-os/sdk-rest-client';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { ArgumentsCamelCase } from 'yargs';

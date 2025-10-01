@@ -2,11 +2,11 @@ import { defineComponent, type PropType } from 'vue';
 import {
   PolarChart as PolarChartPreact,
   type PolarChartProps as PolarChartPropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!PolarChart | `PolarChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!PolarChart | `PolarChart`} component.
  */
 export interface PolarChartProps extends PolarChartPropsPreact {}
 
@@ -26,9 +26,9 @@ export interface PolarChartProps extends PolarChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { PolarChart,type PolarChartProps } from '@sisense/sdk-ui-vue';
+ * import { PolarChart,type PolarChartProps } from '@ethings-os/sdk-ui-vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -50,7 +50,7 @@ export interface PolarChartProps extends PolarChartPropsPreact {}
 export const PolarChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.dataOptions}
      *
      * @category Data
      */
@@ -59,55 +59,55 @@ export const PolarChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<PolarChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<PolarChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<PolarChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<PolarChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<PolarChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<PolarChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<PolarChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<PolarChartProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!PolarChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.styleOptions}
      *
      * @category Chart
      */

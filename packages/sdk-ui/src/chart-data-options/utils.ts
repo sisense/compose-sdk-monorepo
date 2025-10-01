@@ -9,7 +9,7 @@ import {
   DimensionalLevelAttribute,
   JaqlElement,
   DateLevels,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import isUndefined from 'lodash-es/isUndefined';
 import { StyledColumn, StyledMeasureColumn, AnyColumn, CategoryStyle, ValueStyle } from './types';
 

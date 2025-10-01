@@ -1,4 +1,4 @@
-import { I18NextInstance } from '@sisense/sdk-common';
+import { I18NextInstance } from '@ethings-os/sdk-common';
 import { useEffect, useState } from 'react';
 import { initializeI18n } from './initialize-i18n';
 

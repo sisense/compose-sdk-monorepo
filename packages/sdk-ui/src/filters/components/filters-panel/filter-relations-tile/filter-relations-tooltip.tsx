@@ -3,7 +3,7 @@ import { Themable } from '@/theme-provider/types';
 import { FilterRelationsRules, getFilterRelationsDescription } from '@/utils/filter-relations';
 import styled from '@emotion/styled';
 import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
-import { Filter } from '@sisense/sdk-data';
+import { Filter } from '@ethings-os/sdk-data';
 import { useTranslation } from 'react-i18next';
 import { generateTooltipLines } from './tooltip-utils';
 

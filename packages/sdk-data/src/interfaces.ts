@@ -162,7 +162,7 @@ export type DataSource = string | DataSourceInfo;
  * Data set, which is made up of an array of {@link Column | columns}
  * and a two-dimensional array of data {@link Cell | cells}.
  *
- * This structure can be used for user-provided data in {@link @sisense/sdk-ui!ChartProps | Chart components}.
+ * This structure can be used for user-provided data in {@link @ethings-os/sdk-ui!ChartProps | Chart components}.
  */
 export interface Data {
   /** Array of {@link Column | columns} */

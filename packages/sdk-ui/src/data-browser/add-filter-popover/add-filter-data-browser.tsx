@@ -7,7 +7,7 @@ import {
   DataSourceField,
   Dimension,
   getDimensionsFromDataSourceFields,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { useMemo, useState } from 'react';
 import { DataSourceSelector } from '../data-source-selector/data-source-selector.js';
 import { useDataSourceSelection } from '../data-source-selector/use-data-source-selection.js';

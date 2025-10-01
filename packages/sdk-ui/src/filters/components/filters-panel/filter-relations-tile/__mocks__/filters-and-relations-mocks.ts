@@ -1,5 +1,5 @@
 import { FilterRelationsRules } from '@/utils/filter-relations';
-import { Filter, filterFactory } from '@sisense/sdk-data';
+import { Filter, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 const countryFilter = filterFactory.members(DM.Country.Country, []);

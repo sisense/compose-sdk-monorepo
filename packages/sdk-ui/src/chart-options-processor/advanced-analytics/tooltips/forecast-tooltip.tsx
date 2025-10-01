@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { useTranslation } from 'react-i18next';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import AdvancedAnalyticsTooltipTitle from './tooltip-title.js';
 import AdvancedAnalyticsTooltipRow from './tooltip-row.js';
 import AdvancedAnalyticsTooltipFooter from './tooltip-footer.js';

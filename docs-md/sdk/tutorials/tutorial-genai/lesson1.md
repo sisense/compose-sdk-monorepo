@@ -31,7 +31,7 @@ Let’s start by creating a React project and installing dependencies. We’ll u
 1. Select `TypeScript` as the variant
 1. Run `cd compose-sdk-genai-tutorial` to navigate to your project directory
 1. Run `npm install` to install your project and dependencies
-1. Run `npm i @sisense/sdk-ui @sisense/sdk-data` to install Sisense packages
+1. Run `npm i @ethings-os/sdk-ui @ethings-os/sdk-data` to install Sisense packages
 
 ## Add context providers
 
@@ -42,7 +42,7 @@ Since most of our Compose SDK functionality needs access to a Sisense instance, 
 In `main.tsx`, import the `SisenseContextProvider` from the `sdk-ui` module:
 
 ```ts
-import { SisenseContextProvider } from '@sisense/sdk-ui';
+import { SisenseContextProvider } from '@ethings-os/sdk-ui';
 ```
 
 Wrap the `<App>` component with a `<SisenseContextProvider>` like this:
@@ -69,12 +69,12 @@ VITE_APP_SISENSE_URL="http://myinstanceurl/"
 VITE_APP_SISENSE_TOKEN="OiJhbGJeyciIUzI1..."
 ```
 
-You'll also need the `<AiContextProvider>`. This is required for using any of the components exported from `@sisense/sdk-ui/ai`.
+You'll also need the `<AiContextProvider>`. This is required for using any of the components exported from `@ethings-os/sdk-ui/ai`.
 
 In `main.tsx`, import the `SisenseContextProvider` from the `sdk-ui/ai` namespace:
 
 ```ts
-import { AiContextProvider } from '@sisense/sdk-ui/ai';
+import { AiContextProvider } from '@ethings-os/sdk-ui/ai';
 ```
 
 This component internally uses the `SisenseContextProvider`, so we'll go ahead and nest this provider in between our `<SisenseContextProvider>` and `<App>` components.
@@ -99,7 +99,7 @@ In the `App.tsx` file, import the `<Chatbot>` component.
 Note: From here on in we won’t mention imports anymore. Just know that you’ll need to add the appropriate imports as we continue to add code to our project.
 
 ```ts
-import { Chatbot } from '@sisense/sdk-ui/ai';
+import { Chatbot } from '@ethings-os/sdk-ui/ai';
 ```
 
 Then, replace the contents of the `App()` function with the following code to render a basic chatbot.

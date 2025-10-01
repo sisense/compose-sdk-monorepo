@@ -4,7 +4,7 @@ import {
   getDefaultThemeSettings,
   getThemeSettingsByOid,
   type ThemeProviderProps as ThemeConfig,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { BehaviorSubject, skip } from 'rxjs';
 import merge from 'ts-deepmerge';
 

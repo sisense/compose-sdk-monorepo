@@ -10,11 +10,11 @@ import {
   isTooltipPercentValueSupported,
 } from './tooltip-utils';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from './scatter-tooltip';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { isForecastSeries, isTrendSeries } from '../advanced-chart-options';
 import { renderTrendTooltipString } from '../advanced-analytics/tooltips/trend-tooltip';
 import { renderForecastTooltipString } from '../advanced-analytics/tooltips/forecast-tooltip';
-import { DimensionalCalculatedMeasure } from '@sisense/sdk-data';
+import { DimensionalCalculatedMeasure } from '@ethings-os/sdk-data';
 
 export const cartesianDataFormatter = function (
   highchartsDataPoint: HighchartsDataPointContext,

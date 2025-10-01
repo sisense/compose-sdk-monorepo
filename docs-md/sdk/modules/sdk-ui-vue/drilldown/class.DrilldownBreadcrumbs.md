@@ -4,7 +4,7 @@ title: DrilldownBreadcrumbs
 
 # Class DrilldownBreadcrumbs
 
-`DrilldownBreadcrumbs` component from the `@sisense/sdk-ui-vue` package.
+`DrilldownBreadcrumbs` component from the `@ethings-os/sdk-ui-vue` package.
 This component provides a way to display and interact with the drilldown path in data visualization components,
 allowing users to navigate through different levels of data drilldowns. It includes functionalities to clear selections
 or slice through the drilldown selections for a more intuitive data exploration experience.

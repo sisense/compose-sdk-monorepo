@@ -1,10 +1,10 @@
-import { createFilterMatcher } from '@sisense/sdk-data';
+import { createFilterMatcher } from '@ethings-os/sdk-data';
 import {
   type JaqlPanel,
   type PivotTreeNode,
   UserType,
   type JaqlRequest,
-} from '@sisense/sdk-pivot-client';
+} from '@ethings-os/sdk-pivot-client';
 import type { HeaderCellFormatter } from '../types.js';
 
 export const createHeaderCellHighlightFormatter = (): HeaderCellFormatter => {

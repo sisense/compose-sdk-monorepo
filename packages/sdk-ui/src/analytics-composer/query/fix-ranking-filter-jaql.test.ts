@@ -1,4 +1,4 @@
-import { MetadataItem } from '@sisense/sdk-data';
+import { MetadataItem } from '@ethings-os/sdk-data';
 import { fixRankingFilterJaql } from './fix-ranking-filter-jaql';
 
 describe('fixRankingFilterJaql', () => {

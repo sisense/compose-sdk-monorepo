@@ -10,7 +10,7 @@ import flow from 'lodash-es/flow';
 import { Widget } from '@/widgets/widget.js';
 import { useComposedDashboardInternal } from '@/dashboard/use-composed-dashboard.js';
 import { FiltersMergeStrategy, mergeFiltersByStrategy } from '@/utils/filter-relations.js';
-import { Filter, getFiltersArray } from '@sisense/sdk-data';
+import { Filter, getFiltersArray } from '@ethings-os/sdk-data';
 import isUndefined from 'lodash-es/isUndefined';
 import omitBy from 'lodash-es/omitBy';
 import { DrilldownOptions } from '@/types.js';

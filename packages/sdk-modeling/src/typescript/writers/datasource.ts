@@ -1,4 +1,4 @@
-import { DataSource, DataSourceInfo } from '@sisense/sdk-data';
+import { DataSource, DataSourceInfo } from '@ethings-os/sdk-data';
 
 import { NEWLINE } from './base.js';
 import { Writer } from './interfaces.js';

@@ -9,7 +9,7 @@ import { colorChineseSilver, colorWhite } from '../../../chart-data-options/colo
 import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config';
 import './treemap-tooltip.scss';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 
 type TooltipFormatterOptions = {
   displayTotalContribution: boolean;

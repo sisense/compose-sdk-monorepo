@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { getAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
-import { PivotClient } from '@sisense/sdk-pivot-client';
-import { DimensionalQueryClient } from '@sisense/sdk-query-client';
+import { getAuthenticator, HttpClient } from '@ethings-os/sdk-rest-client';
+import { PivotClient } from '@ethings-os/sdk-pivot-client';
+import { DimensionalQueryClient } from '@ethings-os/sdk-query-client';
 import { getSettings } from './settings/settings';
 import { createClientApplication } from './client-application';
 import { TranslatableError } from '../translation/translatable-error';
 
-vi.mock('@sisense/sdk-rest-client', () => {
+vi.mock('@ethings-os/sdk-rest-client', () => {
   return {
     HttpClient: vi.fn(),
     getAuthenticator: vi.fn(),
@@ -14,11 +14,11 @@ vi.mock('@sisense/sdk-rest-client', () => {
   };
 });
 
-vi.mock('@sisense/sdk-query-client', () => ({
+vi.mock('@ethings-os/sdk-query-client', () => ({
   DimensionalQueryClient: vi.fn(),
 }));
 
-vi.mock('@sisense/sdk-pivot-client', () => ({
+vi.mock('@ethings-os/sdk-pivot-client', () => ({
   PivotClient: vi.fn(),
 }));
 

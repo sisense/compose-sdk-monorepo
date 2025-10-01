@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Filter, FilterRelations } from '@sisense/sdk-data';
+import { Filter, FilterRelations } from '@ethings-os/sdk-data';
 import {
   type ComposableDashboardProps as ComposableDashboardPropsPreact,
   createHookApiFacade,
@@ -12,7 +12,7 @@ import {
   useComposedDashboardInternal,
   UseComposedDashboardOptions,
   WidgetsPanelLayout,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { BehaviorSubject } from 'rxjs';
 
 import { createSisenseContextConnector } from '../component-wrapper-helpers';
@@ -106,7 +106,7 @@ export class DashboardService {
     // Component behavior in example.component.ts
     import { Component } from '@angular/core';
     import { BehaviorSubject } from 'rxjs';
-    import { DashboardService, type DashboardProps } from '@sisense/sdk-ui-angular';
+    import { DashboardService, type DashboardProps } from '@ethings-os/sdk-ui-angular';
 
     @Component({
       selector: 'example',

@@ -1,7 +1,7 @@
 import * as DM from '../../__test-helpers__/sample-ecommerce';
 import { ChartWidgetProps, PivotTableWidgetProps } from '../../props';
 import { mockPivotTableProps } from '../../pivot-table/__mocks__/mocks';
-import { QueryResultData } from '@sisense/sdk-data';
+import { QueryResultData } from '@ethings-os/sdk-data';
 
 export const mockPivotTableWidgetProps: PivotTableWidgetProps = {
   ...mockPivotTableProps,

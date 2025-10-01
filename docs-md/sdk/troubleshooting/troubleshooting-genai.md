@@ -12,7 +12,7 @@ Here are some common errors that you may encounter.
 
 #### Blank screen with Uncaught SyntaxError: The requested module [...] does not provide an export named 'AiContextProvider'
 
-Check that you are importing from `@sisense/sdk-ui/ai` and not `@sisense/sdk-ui`.
+Check that you are importing from `@ethings-os/sdk-ui/ai` and not `@ethings-os/sdk-ui`.
 
 #### Error: No QueryClient set, use QueryClientProvider to set one
 

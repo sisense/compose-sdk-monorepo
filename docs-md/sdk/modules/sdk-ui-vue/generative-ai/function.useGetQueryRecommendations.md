@@ -29,7 +29,7 @@ The composable load state that contains the status of the execution and recommen
 import {
  useGetQueryRecommendations,
  type UseGetQueryRecommendationsParams,
-} from '@sisense/sdk-ui-vue/ai';
+} from '@ethings-os/sdk-ui-vue/ai';
 
 const params: UseGetQueryRecommendationsParams = {
  contextTitle: 'Sample Retail',

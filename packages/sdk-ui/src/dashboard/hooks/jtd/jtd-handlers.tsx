@@ -5,7 +5,7 @@ import {
   filterFactory,
   isMembersFilter,
   mergeFilters,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { TranslatableError } from '@/translation/translatable-error';
 import { WidgetProps } from '@/props.js';
 import { PivotTableDataPoint, DataPoint } from '@/types';

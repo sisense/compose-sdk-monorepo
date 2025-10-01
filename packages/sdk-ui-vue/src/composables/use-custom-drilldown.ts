@@ -1,4 +1,4 @@
-import { MetadataTypes, type Attribute, type Column, type MembersFilter } from '@sisense/sdk-data';
+import { MetadataTypes, type Attribute, type Column, type MembersFilter } from '@ethings-os/sdk-data';
 import {
   updateDrilldownSelections,
   isSameAttribute,
@@ -8,9 +8,9 @@ import {
   type DrilldownSelection,
   type Hierarchy,
   type StyledColumn,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { ref, computed, type Ref } from 'vue';
-import type { TFunction } from '@sisense/sdk-common';
+import type { TFunction } from '@ethings-os/sdk-common';
 
 /**
  * @internal

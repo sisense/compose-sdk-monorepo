@@ -1,5 +1,5 @@
 import { isFiltersChanged, isRelationsChanged } from '@/utils/filters-comparator';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@ethings-os/sdk-data';
 import { ExecuteQueryParams } from '../index.js';
 import { useHasChanged } from '../common/hooks/use-has-changed';
 import { areMeasuresChanged } from '@/utils/measures-comparator.js';

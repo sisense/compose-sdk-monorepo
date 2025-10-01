@@ -1,7 +1,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import { TablePagination } from '@sisense/sdk-shared-ui/TablePagination';
+import { TablePagination } from '@ethings-os/sdk-shared-ui/TablePagination';
 
 import {
   createCallbackMemoizer,

@@ -1,4 +1,4 @@
-import { trackHook } from '@sisense/sdk-ui-preact';
+import { trackHook } from '@ethings-os/sdk-ui-preact';
 import { getSisenseContext } from '../providers/sisense-context-provider';
 import { ref, watchEffect } from 'vue';
 
@@ -14,7 +14,7 @@ import { ref, watchEffect } from 'vue';
  * @example
  * How to use `useTracking` to track the usage of a custom composable:
  * ```javascript
- * import { useTracking } from '@sisense/sdk-ui-vue';
+ * import { useTracking } from '@ethings-os/sdk-ui-vue';
  *
  * // Example composable that utilizes useTracking for monitoring its usage
  * export const useCustomComposable = () => {

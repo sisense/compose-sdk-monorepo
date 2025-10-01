@@ -4,7 +4,7 @@ import { BuildContext } from '../../../../types';
 import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
 import { CompleteThemeSettings } from '@/types';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 
 // Mock the dependencies
 vi.mock('../../../helpers/highchart-options/get-legacy-cartesian-chart-options', () => ({

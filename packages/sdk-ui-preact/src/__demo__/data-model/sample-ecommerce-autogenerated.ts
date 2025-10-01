@@ -6,7 +6,7 @@ import {
   createDimension,
   DateDimension,
   Dimension,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 export const DataSource = 'Sample ECommerce';
 

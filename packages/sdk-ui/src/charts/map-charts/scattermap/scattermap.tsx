@@ -22,7 +22,7 @@ import {
   Filter,
   FilterRelations,
   getFilterListAndRelationsJaql,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 import '../map-charts.scss';
 import './scattermap.scss';

@@ -10,7 +10,7 @@ import {
   FilterJaql,
   BaseJaql,
   PivotJaql,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,

@@ -6,7 +6,7 @@ import {
   updateInnerDataOptionsSort,
 } from './table-data';
 import { StyledColumn, TableDataOptionsInternal } from '../chart-data-options/types';
-import { Attribute, DimensionalAttribute, Sort } from '@sisense/sdk-data';
+import { Attribute, DimensionalAttribute, Sort } from '@ethings-os/sdk-data';
 import { Column as DataTableColumn } from '../chart-data-processor/table-processor';
 
 describe('Table data processing', () => {

@@ -52,11 +52,11 @@ In the custom widget component, we can use the inputs directly with the `execute
 
 ```typescript
 import { Component, Input, OnInit } from '@angular/core';
-import { QueryService } from '@sisense/sdk-ui-angular';
+import { QueryService } from '@ethings-os/sdk-ui-angular';
 import type {
   CustomWidgetComponentProps,
   QueryResultData
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -107,7 +107,7 @@ export class ResultsTableComponent implements OnInit, CustomWidgetComponentProps
 If you prefer to work with the raw data without any formatting applied, you can use `extractDimensionsAndMeasures` with `executeQuery` instead.
 
 ```typescript
-import { extractDimensionsAndMeasures } from '@sisense/sdk-ui-angular';
+import { extractDimensionsAndMeasures } from '@ethings-os/sdk-ui-angular';
 
 ngOnInit() {
   const { dimensions, measures } = extractDimensionsAndMeasures(this.dataOptions);
@@ -125,7 +125,7 @@ To register the custom widget, we need to inject the `CustomWidgetsService` and 
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
-import { CustomWidgetsService } from '@sisense/sdk-ui-angular';
+import { CustomWidgetsService } from '@ethings-os/sdk-ui-angular';
 import { ResultsTableComponent } from './results-table.component';
 
 @Component({

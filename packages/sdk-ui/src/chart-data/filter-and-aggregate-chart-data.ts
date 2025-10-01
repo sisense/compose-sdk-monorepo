@@ -1,5 +1,5 @@
 /* eslint-disable max-params */
-import { CalculatedMeasureColumn, Column, MeasureColumn } from '@sisense/sdk-data';
+import { CalculatedMeasureColumn, Column, MeasureColumn } from '@ethings-os/sdk-data';
 import union from 'lodash-es/union';
 import { DataColumnNamesMapping } from '../chart-data-options/validate-data-options';
 import { rownumColumnName } from '../chart-data-processor/table-creators';

@@ -29,7 +29,7 @@ The dashboard can be easily displayed using the `DashboardById` component, passi
 </template>
 
 <script setup>
-import { DashboardById } from '@sisense/sdk-ui-vue';
+import { DashboardById } from '@ethings-os/sdk-ui-vue';
 </script>
 ```
 
@@ -78,7 +78,7 @@ In the custom widget component, we can use the props directly with the `useExecu
 
 <script setup>
 import { defineComponent } from 'vue';
-import { useExecuteCustomWidgetQuery } from '@sisense/sdk-ui-vue';
+import { useExecuteCustomWidgetQuery } from '@ethings-os/sdk-ui-vue';
 
 const props = defineProps({
   title: String,
@@ -94,7 +94,7 @@ If you prefer to work with the raw data without any formatting applied, you can 
 
 ```vue
 <script setup>
-import { useExecuteQuery, extractDimensionsAndMeasures } from '@sisense/sdk-ui-vue';
+import { useExecuteQuery, extractDimensionsAndMeasures } from '@ethings-os/sdk-ui-vue';
 
 const props = defineProps({
   title: String,
@@ -122,7 +122,7 @@ To register the custom widget, we need to use the `useCustomWidgets` composable 
 
 <script setup>
 import { onMounted } from 'vue';
-import { DashboardById, useCustomWidgets } from '@sisense/sdk-ui-vue';
+import { DashboardById, useCustomWidgets } from '@ethings-os/sdk-ui-vue';
 import ResultsTable from './ResultsTable.vue';
 
 const { registerCustomWidget } = useCustomWidgets();

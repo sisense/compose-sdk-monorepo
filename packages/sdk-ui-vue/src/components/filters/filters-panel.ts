@@ -1,17 +1,17 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { FiltersPanel as FiltersPanelPreact } from '@sisense/sdk-ui-preact';
+import { FiltersPanel as FiltersPanelPreact } from '@ethings-os/sdk-ui-preact';
 import type {
   FiltersPanelProps as FiltersPanelPropsPreact,
   FiltersPanelConfig,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /** Reexport related types */
 export type { FiltersPanelConfig };
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!FiltersPanel | `FiltersPanel`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!FiltersPanel | `FiltersPanel`} component.
  */
 export interface FiltersPanelProps extends FiltersPanelPropsPreact {}
 
@@ -23,8 +23,8 @@ export interface FiltersPanelProps extends FiltersPanelPropsPreact {}
  * ```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { FiltersPanel } from '@sisense/sdk-ui-vue';
-import { filterFactory, type Filter, type FilterRelations } from '@sisense/sdk-data';
+import { FiltersPanel } from '@ethings-os/sdk-ui-vue';
+import { filterFactory, type Filter, type FilterRelations } from '@ethings-os/sdk-data';
 import * as DM from '../assets/sample-ecommerce-model.js';
 
 const filters = ref<Filter[]>([
@@ -54,28 +54,28 @@ const handleFiltersChange = (updatedFilters: Filter[] | FilterRelations) => {
 export const FiltersPanel = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!FiltersPanelProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!FiltersPanelProps.filters}
      */
     filters: {
       type: [Array, Object] as PropType<FiltersPanelProps['filters']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!FiltersPanelProps.defaultDataSource}
+     * {@inheritDoc @ethings-os/sdk-ui!FiltersPanelProps.defaultDataSource}
      */
     defaultDataSource: [String, Object] as PropType<FiltersPanelProps['defaultDataSource']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FiltersPanelProps.dataSources}
+     * {@inheritDoc @ethings-os/sdk-ui!FiltersPanelProps.dataSources}
      *
      * @internal
      */
     dataSources: Array as PropType<FiltersPanelProps['dataSources']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FiltersPanelProps.config}
+     * {@inheritDoc @ethings-os/sdk-ui!FiltersPanelProps.config}
      */
     config: Object as PropType<FiltersPanelProps['config']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FiltersPanelProps.onFiltersChange}
+     * {@inheritDoc @ethings-os/sdk-ui!FiltersPanelProps.onFiltersChange}
      */
     onFiltersChange: {
       type: Function as PropType<FiltersPanelProps['onFiltersChange']>,

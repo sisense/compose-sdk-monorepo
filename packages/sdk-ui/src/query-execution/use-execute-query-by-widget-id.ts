@@ -22,7 +22,7 @@ import {
   QueryByWidgetIdState,
   QueryByWidgetIdQueryParams,
 } from './types';
-import { Filter, getFilterListAndRelationsJaql, QueryResultData } from '@sisense/sdk-data';
+import { Filter, getFilterListAndRelationsJaql, QueryResultData } from '@ethings-os/sdk-data';
 import { widgetModelTranslator } from '../models';
 import { useShouldLoad } from '../common/hooks/use-should-load';
 import { convertToQueryDescription } from './utils';

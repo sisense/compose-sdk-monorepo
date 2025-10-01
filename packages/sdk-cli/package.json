@@ -1,5 +1,5 @@
 {
-  "name": "@sisense/sdk-cli",
+  "name": "@ethings-os/sdk-cli",
   "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package for interacting with Sisense via CLI",
   "repository": {
@@ -20,12 +20,12 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "bin": "./dist/index.js",
   "dependencies": {
-    "@sisense/sdk-common": "workspace:*",
-    "@sisense/sdk-data": "workspace:*",
-    "@sisense/sdk-modeling": "workspace:*",
-    "@sisense/sdk-query-client": "workspace:*",
-    "@sisense/sdk-rest-client": "workspace:*",
-    "@sisense/sdk-tracking": "workspace:*",
+    "@ethings-os/sdk-common": "workspace:*",
+    "@ethings-os/sdk-data": "workspace:*",
+    "@ethings-os/sdk-modeling": "workspace:*",
+    "@ethings-os/sdk-query-client": "workspace:*",
+    "@ethings-os/sdk-rest-client": "workspace:*",
+    "@ethings-os/sdk-tracking": "workspace:*",
     "cross-fetch": "^4.0.0",
     "inquirer": "^8.1.2",
     "js-levenshtein": "^1.1.6",

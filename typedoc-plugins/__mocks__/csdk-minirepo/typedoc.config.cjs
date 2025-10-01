@@ -29,5 +29,5 @@ const baseConfig = {
 
 module.exports = {
   ...baseConfig,
-  plugin: ['@sisense/typedoc-plugin-markdown'],
+  plugin: ['@ethings-os/typedoc-plugin-markdown'],
 };

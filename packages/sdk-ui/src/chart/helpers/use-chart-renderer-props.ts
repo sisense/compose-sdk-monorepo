@@ -3,7 +3,7 @@ import { ChartData } from '@/chart-data/types';
 import { DesignOptions } from '@/chart-options-processor/translations/types';
 import { ChartProps } from '@/props';
 import { ChartType } from '@/types';
-import { Data, DataSource, isDataSource } from '@sisense/sdk-data';
+import { Data, DataSource, isDataSource } from '@ethings-os/sdk-data';
 import { ChartRendererProps } from '../types';
 
 type UnpreparedInternalChartProps = {

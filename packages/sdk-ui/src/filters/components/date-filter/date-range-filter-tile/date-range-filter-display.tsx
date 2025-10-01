@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { DateRangeFilter } from '@sisense/sdk-data';
+import { DateRangeFilter } from '@ethings-os/sdk-data';
 import { useTranslation } from 'react-i18next';
 import { FilterContentDisplay } from '@/filters/components/common/filter-content-display';
 

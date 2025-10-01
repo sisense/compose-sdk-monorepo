@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   EVENT_SORTING_SETTINGS_CHANGED,
   type SortingSettingsChangePayload,
-} from '@sisense/sdk-pivot-client';
+} from '@ethings-os/sdk-pivot-client';
 import { PivotTableProps } from '../props';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { useSisenseContext } from '../sisense-context/sisense-context';

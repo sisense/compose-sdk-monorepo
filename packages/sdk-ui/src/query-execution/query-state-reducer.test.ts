@@ -1,4 +1,4 @@
-import { QueryResultData } from '@sisense/sdk-data';
+import { QueryResultData } from '@ethings-os/sdk-data';
 import { queryStateReducer } from './query-state-reducer';
 import { QueryState, QueryAction } from './types';
 

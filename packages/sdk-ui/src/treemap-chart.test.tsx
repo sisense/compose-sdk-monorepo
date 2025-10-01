@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
-import type { Data } from '@sisense/sdk-data';
+import type { Data } from '@ethings-os/sdk-data';
 import { TreemapChart } from './treemap-chart';
 
 // Mocks highcharts to prevent internal `sisense-charts` related error in testing environment

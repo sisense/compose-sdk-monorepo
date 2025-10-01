@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import {
   DateLevels,
   DateOperators,
@@ -8,7 +8,7 @@ import {
   Filter,
   FilterConfig,
   filterFactory,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { SelectableSection } from '../common/selectable-section';
 import { isRelativeDateFilterWithoutAnchor } from '../utils';
 import { useThemeContext } from '@/theme-provider';

@@ -1,6 +1,6 @@
 import type { PivotTableDataOptions, StyledMeasureColumn } from '@/chart-data-options/types';
-import { JaqlPanel, PivotDataNode, PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
-import { InputStyles } from '@sisense/sdk-pivot-client/dist/utils/types';
+import { JaqlPanel, PivotDataNode, PivotTreeNode, UserType } from '@ethings-os/sdk-pivot-client';
+import { InputStyles } from '@ethings-os/sdk-pivot-client/dist/utils/types';
 import { getColoringServiceByColorOptions } from '@/chart-data-options/coloring';
 import { getPivotDataOptionByJaqlIndex } from '@/pivot-table/formatters/utils';
 import { RangeDataColorOptions } from '@/chart-data/data-coloring';

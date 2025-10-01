@@ -19,7 +19,7 @@ Here's how you can use the DashboardById component in a Vue application:
 </template>
 
 <script setup lang="ts">
-import { DashboardById } from '@sisense/sdk-ui-vue';
+import { DashboardById } from '@ethings-os/sdk-ui-vue';
 
 const dashboardOid = '6441e728dac1920034bce737';
 </script>

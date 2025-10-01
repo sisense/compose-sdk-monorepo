@@ -13,7 +13,7 @@ import {
   ComponentAdapter,
   DrilldownBreadcrumbs as DrilldownBreadcrumbsPreact,
   type DrilldownBreadcrumbsProps as DrilldownBreadcrumbsPropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -55,7 +55,7 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.filtersDisplayValues}
+   * {@inheritDoc @ethings-os/sdk-ui!DrilldownBreadcrumbsProps.filtersDisplayValues}
    *
    * @category Widget
    */
@@ -63,7 +63,7 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
   filtersDisplayValues!: DrilldownBreadcrumbsProps['filtersDisplayValues'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.currentDimension}
+   * {@inheritDoc @ethings-os/sdk-ui!DrilldownBreadcrumbsProps.currentDimension}
    *
    * @category Widget
    */
@@ -71,7 +71,7 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
   currentDimension!: DrilldownBreadcrumbsProps['currentDimension'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.clearDrilldownSelections}
+   * {@inheritDoc @ethings-os/sdk-ui!DrilldownBreadcrumbsProps.clearDrilldownSelections}
    *
    * @category Widget
    */
@@ -81,7 +81,7 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
   >();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.sliceDrilldownSelections}
+   * {@inheritDoc @ethings-os/sdk-ui!DrilldownBreadcrumbsProps.sliceDrilldownSelections}
    *
    * @category Widget
    */

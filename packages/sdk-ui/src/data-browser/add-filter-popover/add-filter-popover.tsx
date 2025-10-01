@@ -4,7 +4,7 @@ import { useThemeContext } from '@/theme-provider/theme-context';
 import { Themable } from '@/theme-provider/types';
 import { TranslatableError } from '@/translation/translatable-error';
 import styled from '@emotion/styled';
-import { DataSource, DateDimension, Filter, filterFactory, MetadataTypes } from '@sisense/sdk-data';
+import { DataSource, DateDimension, Filter, filterFactory, MetadataTypes } from '@ethings-os/sdk-data';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AttributiveElement } from '../dimensions-browser/types';

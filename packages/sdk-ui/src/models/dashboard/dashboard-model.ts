@@ -1,4 +1,4 @@
-import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+import { DataSource, Filter, FilterRelations } from '@ethings-os/sdk-data';
 import { DashboardStyleOptions, TabbersOptions, WidgetModel } from '@/models';
 import { type WidgetsOptions } from './types';
 import { DashboardLayoutOptions } from '@/dashboard';

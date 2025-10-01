@@ -7,7 +7,7 @@ import {
   Data,
   QueryResultData,
   FilterRelations,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import {
   ChartDataOptions,
   CartesianChartDataOptions,
@@ -679,8 +679,8 @@ export interface BaseChartProps extends BaseChartEventProps {
    *
    * OR
    *
-   * (2) Explicit {@link @sisense/sdk-data!Data | `Data`}, which is made up of an array of
-   * {@link @sisense/sdk-data!Column | `Column` } objects and a two-dimensional array of row data. This approach
+   * (2) Explicit {@link @ethings-os/sdk-data!Data | `Data`}, which is made up of an array of
+   * {@link @ethings-os/sdk-data!Column | `Column` } objects and a two-dimensional array of row data. This approach
    * allows the chart component to be used with any data you provide.
    *
    * To learn more about using data from an external data source, see the
@@ -713,14 +713,14 @@ export interface BaseChartProps extends BaseChartEventProps {
    * Filters to limit (or slice) a chart’s data using one of the following options.
    *
    * (1) Array of {@link Filter} or {@link FilterRelations} returned from filter factory functions, such as
-   * {@link @sisense/sdk-data!filterFactory.greaterThan | `greaterThan()`} and {@link @sisense/sdk-data!filterFactory.members | `members()`}.
+   * {@link @ethings-os/sdk-data!filterFactory.greaterThan | `greaterThan()`} and {@link @ethings-os/sdk-data!filterFactory.members | `members()`}.
    *
    * Use this option for filters that do not require a UI to set them
    * or for filters where you will supply your own UI components or use pre-built UI components. This is the most common option.
    *
    * To learn more about using filter factory functions to create filters, see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions).
    *
-   * (2) Array of {@link Filter} controlled by filter UI components – for example {@link @sisense/sdk-ui!MemberFilterTile | `MemberFilterTile`}.
+   * (2) Array of {@link Filter} controlled by filter UI components – for example {@link @ethings-os/sdk-ui!MemberFilterTile | `MemberFilterTile`}.
    *
    * Use this option for filters that you want your users to set using pre-built UI components.
    *
@@ -737,7 +737,7 @@ export interface BaseChartProps extends BaseChartEventProps {
    * `dataOptions` of the chart. Otherwise, the filters will be applied as regular slice filters.
    *
    * (1) Array of {@link Filter} returned from filter factory functions, such as
-   * {@link @sisense/sdk-data!filterFactory.greaterThan | `greaterThan()`} and {@link @sisense/sdk-data!filterFactory.members | `members()`}.
+   * {@link @ethings-os/sdk-data!filterFactory.greaterThan | `greaterThan()`} and {@link @ethings-os/sdk-data!filterFactory.members | `members()`}.
    *
    * Use this option for highlights that do not require a UI to set them
    * or for highlights where you will supply your own UI components or use pre-built UI components. This is the most common option.
@@ -745,7 +745,7 @@ export interface BaseChartProps extends BaseChartEventProps {
    * To learn more about using filter factory functions to create highlights, see the
    * [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#filter-functions-for-highlighting).
    *
-   * (2) Array of {@link Filter} controlled by filter UI components – for example {@link @sisense/sdk-ui!MemberFilterTile | `MemberFilterTile`}.
+   * (2) Array of {@link Filter} controlled by filter UI components – for example {@link @ethings-os/sdk-ui!MemberFilterTile | `MemberFilterTile`}.
    *
    * Use this option for highlights that you want your users to set using pre-built UI components.
    *

@@ -8,9 +8,9 @@ import {
   Filter,
   Measure,
   QueryResultData,
-} from '@sisense/sdk-data';
-import { PivotClient } from '@sisense/sdk-pivot-client';
-import { HttpClient } from '@sisense/sdk-rest-client';
+} from '@ethings-os/sdk-data';
+import { PivotClient } from '@ethings-os/sdk-pivot-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import type { Mocked } from 'vitest';
 
 import {

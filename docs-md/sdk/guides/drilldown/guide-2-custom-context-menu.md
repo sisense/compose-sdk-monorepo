@@ -172,7 +172,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import MenuItem from '@mui/material/MenuItem';
 import MoveDown from '@mui/icons-material/MoveDown';
-import { ContextMenuProps } from '@sisense/sdk-ui';
+import { ContextMenuProps } from '@ethings-os/sdk-ui';
 
 export const CustomContextMenu = ({
   position,

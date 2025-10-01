@@ -8,7 +8,7 @@ import {
 } from './execute-query';
 import { translation } from '@/translation/resources/en';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import { filterFactory, measureFactory } from '@ethings-os/sdk-data';
 
 const app = {
   queryClient: {

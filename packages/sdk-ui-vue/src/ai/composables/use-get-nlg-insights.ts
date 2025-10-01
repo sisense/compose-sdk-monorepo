@@ -1,11 +1,11 @@
 import { toRefs, watch } from 'vue';
-import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
+import { dataLoadStateReducer } from '@ethings-os/sdk-ui-preact';
 import {
   prepareGetNlgInsightsPayload,
   type UseGetNlgInsightsParams as UseGetNlgInsightsParamsPreact,
   type UseGetNlgInsightsState as UseGetNlgInsightsStatePreact,
   type ChatRestApi,
-} from '@sisense/sdk-ui-preact/ai';
+} from '@ethings-os/sdk-ui-preact/ai';
 import { useReducer } from '../../helpers/use-reducer.js';
 import { getAiContext } from '../providers/index.js';
 import { collectRefs, toPlainObject } from '../../utils.js';
@@ -13,25 +13,25 @@ import { useTracking } from '../../composables/use-tracking.js';
 import type { MaybeRefOrWithRefs, ToRefsExceptFns } from '../../types';
 
 /**
- * Parameters of the {@link @sisense/sdk-ui-vue!useGetNlgInsights | `useGetNlgInsights`} composable.
+ * Parameters of the {@link @ethings-os/sdk-ui-vue!useGetNlgInsights | `useGetNlgInsights`} composable.
  */
 export interface UseGetNlgInsightsParams extends UseGetNlgInsightsParamsPreact {}
 
 /**
- * State for {@link @sisense/sdk-ui-vue!useGetNlgInsights | `useGetNlgInsights`} composable.
+ * State for {@link @ethings-os/sdk-ui-vue!useGetNlgInsights | `useGetNlgInsights`} composable.
  */
 export interface UseGetNlgInsightsState
   extends ToRefsExceptFns<UseGetNlgInsightsStatePreact, 'refetch'> {}
 
 /**
  * A Vue composable that fetches an analysis of the provided query using natural language generation (NLG).
- * Specifying a query is similar to providing parameters to a {@link @sisense/sdk-ui-vue!useExecuteQuery | `useExecuteQuery`} composable, using dimensions, measures, and filters.
+ * Specifying a query is similar to providing parameters to a {@link @ethings-os/sdk-ui-vue!useExecuteQuery | `useExecuteQuery`} composable, using dimensions, measures, and filters.
  *
  * @example
  * ```vue
 <script setup lang="ts">
-import { useGetNlgInsights, type GetNlgInsightsProps } from '@sisense/sdk-ui-vue/ai';
-import { measureFactory } from '@sisense/sdk-data';
+import { useGetNlgInsights, type GetNlgInsightsProps } from '@ethings-os/sdk-ui-vue/ai';
+import { measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../assets/sample-retail-model';
 
 const props: GetNlgInsightsProps = {

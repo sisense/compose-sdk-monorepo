@@ -1,6 +1,6 @@
 import { watchEffect } from 'vue';
-import type { ContextConnector, CustomThemeProviderProps } from '@sisense/sdk-ui-preact';
-import { CustomThemeProvider, DataObserver } from '@sisense/sdk-ui-preact';
+import type { ContextConnector, CustomThemeProviderProps } from '@ethings-os/sdk-ui-preact';
+import { CustomThemeProvider, DataObserver } from '@ethings-os/sdk-ui-preact';
 import { getThemeContext } from '../../providers';
 
 /**

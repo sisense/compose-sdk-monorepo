@@ -3,7 +3,7 @@ import { CartesianChartDataOptions } from '@/index';
 import { RegularChartProps } from '../props.js';
 import './chart.css';
 import { RegularChart } from './regular-chart.js';
-import { isDataSource } from '@sisense/sdk-data';
+import { isDataSource } from '@ethings-os/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 import {
   extractForecastMeasures,

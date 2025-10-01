@@ -13,22 +13,22 @@ If your application is still using C-SDK version less than `1.0.0`, follow this 
 
 ## Renamed
 
-(1) For chart components in `@sisense/sdk-ui`,
+(1) For chart components in `@ethings-os/sdk-ui`,
    type alias `StyleOptions` has been renamed to `ChartStyleOptions`.
    If your app uses this type alias explicitly, do a simple search and replace in the code.
 
-(2) For indicator chart in `@sisense/sdk-ui`,
+(2) For indicator chart in `@ethings-os/sdk-ui`,
     interface `IndicatorDataOptions` has been renamed to `IndicatorChartDataOptions`.
     If your app uses this interface explicitly, do a simple search and replace in the code.
 
-(3) In `@sisense/sdk-data`, namespaces `measures` and `filters` have been renamed to
+(3) In `@ethings-os/sdk-data`, namespaces `measures` and `filters` have been renamed to
     `measureFactory` and `filterFactory`, respectively.
     Here is a code example to demonstrate the usage of `measureFactory` and `filterFactory`
 
 BEFORE
 
 ```
-  import { filters, measures } from '@sisense/sdk-data';
+  import { filters, measures } from '@ethings-os/sdk-data';
   import * as DM from './sample-ecommerce';
   const { data, isLoading, isError } = useExecuteQuery({
     dataSource: DM.DataSource,
@@ -50,7 +50,7 @@ BEFORE
 
 AFTER
 ```
-  import { filterFactory, measureFactory } from '@sisense/sdk-data';
+  import { filterFactory, measureFactory } from '@ethings-os/sdk-data';
   import * as DM from './sample-ecommerce';
   const { data, isLoading, isError } = useExecuteQuery({
     dataSource: DM.DataSource,

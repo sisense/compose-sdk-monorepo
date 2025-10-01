@@ -6,7 +6,7 @@ import {
   type LevelAttribute,
   DateLevels,
   MetadataTypes,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { WidgetProps } from '@/props.js';
 import { DataPoint, ScatterDataPoint, DataPointEntry } from '@/types';
 import { isChartWidgetProps } from '@/widget-by-id/utils';

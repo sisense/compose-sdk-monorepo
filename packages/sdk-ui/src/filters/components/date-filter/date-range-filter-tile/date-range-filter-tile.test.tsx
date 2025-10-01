@@ -7,7 +7,7 @@ import * as jaqlDates from '@/__mocks__/data/mock-jaql-dates.json';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { mockToken, mockUrl, server } from '@/__mocks__/msw';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { DateRangeFilterTile } from './date-range-filter-tile';

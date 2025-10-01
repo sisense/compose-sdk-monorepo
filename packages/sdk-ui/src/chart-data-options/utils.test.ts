@@ -5,7 +5,7 @@ import {
   DimensionalLevelAttribute,
   LevelAttribute,
   MeasureColumn,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import {
   safeMerge,
   safeCombine,

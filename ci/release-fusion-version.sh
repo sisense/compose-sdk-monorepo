@@ -14,7 +14,7 @@ set -o xtrace
 set -euo pipefail
 
 # Refference package name
-ref_pkg_name="@sisense/sdk-ui"
+ref_pkg_name="@ethings-os/sdk-ui"
 
 # Get current Git branch
 get_current_branch() {
@@ -85,7 +85,7 @@ main() {
 
   yarn nx:build:prod
 
-  yarn workspace @sisense/sdk-ui-preact publish:prepare
+  yarn workspace @ethings-os/sdk-ui-preact publish:prepare
   yarn workspaces foreach --all --no-private npm publish --tolerate-republish --tag "$dist_tag"
 
   echo -e "\n✅ Fusion release complete. Published versions:"

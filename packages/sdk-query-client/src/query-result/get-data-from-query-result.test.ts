@@ -1,4 +1,4 @@
-import { DataCell, DimensionalAttribute, DimensionalBaseMeasure } from '@sisense/sdk-data';
+import { DataCell, DimensionalAttribute, DimensionalBaseMeasure } from '@ethings-os/sdk-data';
 
 import { getDataFromQueryResult, setCellsBlur } from './get-data-from-query-result.js';
 

@@ -1,4 +1,4 @@
-import { TrackingEventDetails } from '@sisense/sdk-tracking';
+import { TrackingEventDetails } from '@ethings-os/sdk-tracking';
 import { useSisenseContext } from '../../../sisense-context/sisense-context';
 import { createContext, ReactNode, useContext, useEffect, useRef } from 'react';
 import { useTracking } from '@/common/hooks/use-tracking';

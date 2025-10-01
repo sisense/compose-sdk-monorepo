@@ -1,5 +1,5 @@
 import { defineComponent, type PropType } from 'vue';
-import { Chart as ChartPreact, type ChartProps } from '@sisense/sdk-ui-preact';
+import { Chart as ChartPreact, type ChartProps } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 // Note: uses direct reexport as a temporary workaround for getting the correct API docs
@@ -13,10 +13,10 @@ export { ChartProps };
  * plot a bar chart of the Sample Retail data source hosted in a Sisense instance:
  * ```tsx
  * <script setup lang="ts">
- * import { Chart } from '@sisense/sdk-ui-vue';
- * import type { ChartProps } from '@sisense/sdk-ui-vue';
+ * import { Chart } from '@ethings-os/sdk-ui-vue';
+ * import type { ChartProps } from '@ethings-os/sdk-ui-vue';
  * import * as DM from '../assets/sample-retail-model';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import { ref } from 'vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
@@ -68,7 +68,7 @@ const chartProps = ref<ChartProps>({
 export const Chart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.chartType}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.chartType}
      *
      * @category Chart
      */
@@ -77,7 +77,7 @@ export const Chart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -86,55 +86,55 @@ export const Chart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<ChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<ChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<ChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<ChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<ChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<ChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<ChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<ChartProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartProps.styleOptions}
      *
      * @category Chart
      */

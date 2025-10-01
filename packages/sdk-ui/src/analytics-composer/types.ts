@@ -1,7 +1,7 @@
 import { WidgetProps, ChartWidgetProps, PivotTableWidgetProps } from '@/props';
 import { ChartDataOptions, ChartStyleOptions } from '@/types';
 import { ExecuteQueryParams, ExecutePivotQueryParams } from '@/query-execution';
-import { JSONArray, MetadataItem } from '@sisense/sdk-data';
+import { JSONArray, MetadataItem } from '@ethings-os/sdk-data';
 import { DynamicChartType } from '../chart-options-processor/translations/types.js';
 import { AnyColumn } from '@/chart-data-options/types.js';
 import { DashboardProps } from '@/dashboard/types.js';

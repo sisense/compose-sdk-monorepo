@@ -1,5 +1,5 @@
 import { areMeasuresChanged } from './measures-comparator';
-import { Measure, CalculatedMeasure, measureFactory, filterFactory } from '@sisense/sdk-data';
+import { Measure, CalculatedMeasure, measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 const createCountriesBeginningWithAMeasure = (): CalculatedMeasure => {

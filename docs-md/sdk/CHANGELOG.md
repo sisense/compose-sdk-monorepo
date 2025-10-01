@@ -130,7 +130,7 @@
 - Fix `TabberWidget` error handling for unsupported old add-on versions
 - Refactor `WidgetById` component, apply dashboard-level palette to it
 - Improve AI chat: add Markdown support in messages
-- Enable UMD build output for `@sisense/sdk-ui` package
+- Enable UMD build output for `@ethings-os/sdk-ui` package
 
 
 ## [2.2.0] - 2025-05-27
@@ -359,7 +359,7 @@
 ### Added
 - Support persistence of filters for embedded Fusion dashboards using flag `DashboardByIdProps.persist` (alpha)
 - Add `FilterRelations` support for dashboards
-- Add package `@sisense/sdk-shared-ui`
+- Add package `@ethings-os/sdk-shared-ui`
 
 ### Changed
 - Extend `filterFactory` functions to support the `config` param
@@ -538,7 +538,7 @@
 - Support widget design styling on fetched dashboards
 - Support dashboard color palette
 - Extend `useExecuteQueryByWidgetId` hook to support pivot tables
-- Add embed code logic in `@sisense/sdk-ui/analytics-composer` namespace for internal testing
+- Add embed code logic in `@ethings-os/sdk-ui/analytics-composer` namespace for internal testing
 
 ### Changed
 - Improve query validation logic for query hooks and components
@@ -621,7 +621,7 @@
 - Support boolean flag `ungroup` for JAQL queries with no aggregation
 - Make UI improvements: error messages for unsupported functionality in `BoxplotChart` and chart redraw on highlights deselect
 - Make improvements to AI chat to code (internal)
-- Move the `@sisense/sdk-ui-vue` package from beta to General Availability (GA)
+- Move the `@ethings-os/sdk-ui-vue` package from beta to General Availability (GA)
 - Move components `AreamapChart`, `ScattermapChart`, and `BoxplotChart` from beta to General Availability (GA)
 - Move component `PivotTable` and hook `useExecutePivotQuery` from alpha to beta
 - Move AI components and hooks from private beta to beta
@@ -634,10 +634,10 @@
 ## [1.10.0] - 2024-05-09
 
 ### Added
-- Implement `WidgetService.getWidgetModel()` in `@sisense/sdk-angular`
+- Implement `WidgetService.getWidgetModel()` in `@ethings-os/sdk-angular`
 
 ### Changed
-- Adjust `@mui` and `@emotion` packages in `@sisense/sdk-ui` to work with React 17
+- Adjust `@mui` and `@emotion` packages in `@ethings-os/sdk-ui` to work with React 17
 - Refactor `Chart` to simplify steps of adding new chart types
 - Upgrade `@sisense/sisense-charts` to 5.1.1
 - Make improvements to the AI components and hooks (private beta): toggleable insights
@@ -651,7 +651,7 @@
 - Add extra factory functions for measure filters: `measureEquals`, `measureGreaterThan`, and `measureLessThan`
 
 ### Changed
-- Reduce the bundle size of `@sisense/sdk-ui`
+- Reduce the bundle size of `@ethings-os/sdk-ui`
 - Extend CLI command `get-data-model` to include field descriptions in the generated data model file.
   _Note: User account of role 'Data Designer' and above is required to include field descriptions_
 - Upgrade `sisense-charts` to prevent jQuery patching by Highcharts
@@ -689,7 +689,7 @@
 - Extend the `PivotTable` component (alpha) to support
   UI sorting, date and number formatting, and dynamic sizing
 - Add generic `useFetch` React hook to call any Sisense REST endpoint
-- Add Typedoc plugin `@sisense/typedoc-plugin-markdown` (forked from `tgreyuk/typedoc-plugin-markdown` version `4.0.0-next.20`)
+- Add Typedoc plugin `@ethings-os/typedoc-plugin-markdown` (forked from `tgreyuk/typedoc-plugin-markdown` version `4.0.0-next.20`)
 
 ### Changed
 - Enable accessibility support in Highcharts
@@ -697,7 +697,7 @@
 - Fix the issue with Indicator chart not using theme colors
 - Fix issues with `PieChart`: highlights and convolution animation
 - Make improvements to the AI components and hooks (private beta)
-- Move the `@sisense/sdk-ui-angular` package from beta to General Availability (GA)
+- Move the `@ethings-os/sdk-ui-angular` package from beta to General Availability (GA)
 
 ## [1.6.0] - 2024-03-20
 
@@ -734,7 +734,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 ## [1.4.0] - 2024-02-22
 
 ### Added
-- Implement additional components and hooks in `@sisense/sdk-ui-vue` package for public beta testing
+- Implement additional components and hooks in `@ethings-os/sdk-ui-vue` package for public beta testing
 - Add component `PivotTable` (alpha) for React, Angular, and Vue
 
 ### Changed
@@ -750,7 +750,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 ## [1.3.0] - 2024-02-07
 
 ### Added
-- Implement additional components and hooks in `@sisense/sdk-ui-vue` package for internal testing
+- Implement additional components and hooks in `@ethings-os/sdk-ui-vue` package for internal testing
 - Support filter relations (logic operators `and` and `or`) for `DashboardWidget` and `useExecuteQueryByWidgetId`
 
 ### Changed
@@ -765,7 +765,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 
 ### Added
 - Add React hook `useExecutePivotQuery` (alpha) to execute a pivot data query and return the result in both table and tree structures
-- Implement additional components and hooks in `@sisense/sdk-ui-vue` package for internal testing
+- Implement additional components and hooks in `@ethings-os/sdk-ui-vue` package for internal testing
 
 ### Changed
 - Re-export common types of `sdk-ui` from `sdk-ui-angular`
@@ -780,8 +780,8 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 ### Added
 - Add component `AreamapChart`
   and support the `areamap` chart type in components `Chart`, `ChartWidget`, and `DashboardWidget` for beta testing
-- Mark `@sisense/sdk-ui-angular` package as ready for public beta testing
-- Implement additional components and hooks in `@sisense/sdk-ui-vue` package for internal testing
+- Mark `@ethings-os/sdk-ui-angular` package as ready for public beta testing
+- Implement additional components and hooks in `@ethings-os/sdk-ui-vue` package for internal testing
 
 ### Changed
 - **Breaking:** Rename `ScattermapChartDataOptions.locations` to `ScattermapChartDataOptions.geo` for `ScattermapChart` (beta)
@@ -790,7 +790,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 ## [1.0.0] - 2023-12-27
 
 ### Added
-- Publish `@sisense/sdk-ui-vue` and related dependencies to NPM registry for internal testing.
+- Publish `@ethings-os/sdk-ui-vue` and related dependencies to NPM registry for internal testing.
 - Add component `ScattermapChart`
   and support the `scattermap` chart type in components `Chart`, `ChartWidget`, and `DashboardWidget` for beta testing
 - Add component `BoxplotChart`
@@ -816,11 +816,11 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 ### Changed
 - Fix `ChartWidget` rendering issue when updating filters
 - Adjust the SSO authentication flow to not show error while waiting for SSO redirect
-- Fix named export error in `@sisense/sdk-cli`
+- Fix named export error in `@ethings-os/sdk-cli`
 - Adjust the range of axes when `treatNullAsZero` is enabled for time series
 - Support cross filtering when clicking on data points in charts
 - Correct `modelType` of the `trend()` measure function to match the values expected by the backend API
-- Add translations for messages in `@sisense/sdk-rest-client` and `@sisense/sdk-data`
+- Add translations for messages in `@ethings-os/sdk-rest-client` and `@ethings-os/sdk-data`
 - Extend components `MemberFilterTile` and `DateRangeFilterTile` to show UI errors in case of JAQL query failures
 - Extend `CriteriaFilterTile` and `CriteriaFilterMenu` to support ranking criteria filter options
 - Make minor UI improvements to highcharts legends, drilldown breadcrumbs, chart markers, and transition animation between chart types
@@ -828,8 +828,8 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 ## [0.15.0] - 2023-11-30
 
 ### Added
-- Add AI `Chatbot` component and related logic in `@sisense/sdk-ui/ai` namespace for internal testing
-- Support fully Angular in `@sisense/sdk-ui-angular` package
+- Add AI `Chatbot` component and related logic in `@ethings-os/sdk-ui/ai` namespace for internal testing
+- Support fully Angular in `@ethings-os/sdk-ui-angular` package
 - Add loading indicators for charts and tables
 - Implement `CriteriaFilterMenu` component for vertical double-input and horizontal use cases
 - Extend `IndicatorChart` with the `ticker` mode
@@ -838,7 +838,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - Add Authentication user guide
 
 ### Changed
-- Support Angular v17 in `@sisense/sdk-ui-angular`
+- Support Angular v17 in `@ethings-os/sdk-ui-angular`
 - Extend `widgetStyleOptions` with ability to render custom chart header in widget
 - Support text inputs in criteria filters
 - Support dependent filters
@@ -857,12 +857,12 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - Support highlights for scatter chart and pie chart
 - Implement colors by series in sunburst chart
 - Implement usage tracking of public hooks
-- Extract usage tracking logic into a separate package `@sisense/sdk-tracking`
+- Extract usage tracking logic into a separate package `@ethings-os/sdk-tracking`
 
 ## [0.13.0] - 2023-11-02
 
 ### Added
-- Publish `@sisense/sdk-ui-angular` and related dependencies to NPM registry for internal testing.
+- Publish `@ethings-os/sdk-ui-angular` and related dependencies to NPM registry for internal testing.
 - Add component `SunburstChart`
   and support the `sunburst` chart type in components `Chart`, `ChartWidget`, and `DashboardWidget`
 - Add troubleshooting guides for common issues
@@ -957,7 +957,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - **Breaking:** Remove `username` and `password` from `SisenseContextProviderProps`
 - Fix axis min/max configuration
 - Match number format in the `DashboardWidget` component
-- Make `HighchartsOptions` importable from `@sisense/sdk-ui`
+- Make `HighchartsOptions` importable from `@ethings-os/sdk-ui`
 - Update supported react/react-dom versions in `peerDependencies`: `^16.14.0`, `^17.0.0`, or `^18.0.0`
 - Rename directories and files to consistent kebab-case
 
@@ -998,7 +998,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - Display No Results overlay, instead of an error box, when there are no results to visualize
 - Apply theme settings to component `DateRangeFilterTile`
 - Migrate from `jest` to `vitest` for unit tests
-- Produce only ESM bundle for `@sisense/sdk-ui` and target ES6 instead of default ES20221
+- Produce only ESM bundle for `@ethings-os/sdk-ui` and target ES6 instead of default ES20221
 
 ## [0.7.4] - 2023-08-05
 
@@ -1059,8 +1059,8 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - Support partial assignment of the `StyleOptions` and `ThemeSettings` properties
 - Fix issues with Web Access Token authentication
 - Bundle `@sisense/sisense-charts`, which is a React wrapper of `highcharts`,
-  with `@sisense/sdk-ui`
-- Bundle `@sisense/task-manager` with `@sisense/sdk-query-client`
+  with `@ethings-os/sdk-ui`
+- Bundle `@ethings-os/task-manager` with `@ethings-os/sdk-query-client`
 
 ## [0.3.0] - 2023-07-13
 

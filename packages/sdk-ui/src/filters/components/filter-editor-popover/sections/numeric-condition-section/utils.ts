@@ -1,5 +1,5 @@
-import { TFunction } from '@sisense/sdk-common';
-import { Filter } from '@sisense/sdk-data';
+import { TFunction } from '@ethings-os/sdk-common';
+import { Filter } from '@ethings-os/sdk-data';
 import {
   filterToDefaultValues,
   filterToOption,

@@ -22,7 +22,7 @@ Translates a [WidgetModel](../../interface.WidgetModel.md) to the props for rend
 
 ```vue
 <script setup lang="ts">
-import { widgetModelTranslator, useGetWidgetModel, Table } from '@sisense/sdk-ui-vue';
+import { widgetModelTranslator, useGetWidgetModel, Table } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { data: widgetModel } = useGetWidgetModel({

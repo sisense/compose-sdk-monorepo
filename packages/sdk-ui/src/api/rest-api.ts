@@ -1,4 +1,4 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import { useMemo } from 'react';
 import { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
 import isUndefined from 'lodash-es/isUndefined';
@@ -9,7 +9,7 @@ import {
   getDataSourceName,
   getTableNameFromAttribute,
   type DataSource,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { HierarchyDto, SharedFormulaDto, WidgetDto } from '../widget-by-id/types';
 import type { DashboardDto } from './types/dashboard-dto';

@@ -3,7 +3,7 @@
 /** @vitest-environment jsdom */
 
 import { getDashboardModel, type GetDashboardModelOptions } from './get-dashboard-model';
-import { type HttpClient } from '@sisense/sdk-rest-client';
+import { type HttpClient } from '@ethings-os/sdk-rest-client';
 import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import zipObject from 'lodash-es/zipObject';
 import { isWidgetModel } from '../widget';

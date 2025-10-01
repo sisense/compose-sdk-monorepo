@@ -1,4 +1,4 @@
-import { Measure, measureFactory } from '@sisense/sdk-data';
+import { Measure, measureFactory } from '@ethings-os/sdk-data';
 import { SeriesType } from './chart-options-service';
 import { AxisPlotBand, AxisSettings } from './translations/axis-section';
 import { CartesianChartDataOptions, StyledMeasureColumn } from '..';

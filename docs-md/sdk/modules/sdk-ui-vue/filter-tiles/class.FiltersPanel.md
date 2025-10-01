@@ -12,8 +12,8 @@ Here's how to render a filters panel with a set of filters.
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { FiltersPanel } from '@sisense/sdk-ui-vue';
-import { filterFactory, type Filter, type FilterRelations } from '@sisense/sdk-data';
+import { FiltersPanel } from '@ethings-os/sdk-ui-vue';
+import { filterFactory, type Filter, type FilterRelations } from '@ethings-os/sdk-data';
 import * as DM from '../assets/sample-ecommerce-model.js';
 
 const filters = ref<Filter[]>([

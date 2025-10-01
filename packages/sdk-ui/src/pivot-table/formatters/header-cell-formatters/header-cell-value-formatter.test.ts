@@ -1,6 +1,6 @@
 import { StyledColumn, type PivotTableDataOptions } from '../../../chart-data-options/types.js';
 import { createHeaderCellValueFormatter } from './header-cell-value-formatter.js';
-import { JaqlRequest, PivotTreeNode, UserType, type JaqlPanel } from '@sisense/sdk-pivot-client';
+import { JaqlRequest, PivotTreeNode, UserType, type JaqlPanel } from '@ethings-os/sdk-pivot-client';
 
 const dateFormatterMock = vi.fn().mockReturnValue('formatted date');
 const jaqlMock = {} as JaqlRequest;

@@ -23,7 +23,7 @@ An example of using the `GetNlgInsightsComponent`:
 ```ts
 // Component behavior in example.component.ts
 import { Component } from '@angular/core';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({

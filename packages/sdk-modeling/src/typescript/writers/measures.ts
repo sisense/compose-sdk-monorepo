@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 /* eslint-disable sonarjs/no-nested-template-literals */
 
-import { BaseMeasure, MeasureTemplate, normalizeName } from '@sisense/sdk-data';
+import { BaseMeasure, MeasureTemplate, normalizeName } from '@ethings-os/sdk-data';
 
 import { prepareDescription } from '../utils/prepare-description.js';
 import { ElementWriter, NEWLINE, rnt, writeIndented } from './base.js';

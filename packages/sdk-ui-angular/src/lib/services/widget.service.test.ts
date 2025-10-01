@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 /** @vitest-environment jsdom */
 
-import { type ClientApplication, getWidgetModel } from '@sisense/sdk-ui-preact';
+import { type ClientApplication, getWidgetModel } from '@ethings-os/sdk-ui-preact';
 import { Mock, Mocked } from 'vitest';
 
 import { type WidgetModel } from '../sdk-ui-core-exports';
@@ -12,7 +12,7 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', () => ({
+vi.mock('@ethings-os/sdk-ui-preact', () => ({
   getWidgetModel: vi.fn(),
 }));
 

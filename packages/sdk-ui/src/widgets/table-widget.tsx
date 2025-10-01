@@ -4,7 +4,7 @@ import React, { useState, type FunctionComponent } from 'react';
 import { TableWidgetProps } from '../props';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
-import { getDataSourceName } from '@sisense/sdk-data';
+import { getDataSourceName } from '@ethings-os/sdk-data';
 import { WidgetContainer } from './common/widget-container';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { Table } from '@/table';

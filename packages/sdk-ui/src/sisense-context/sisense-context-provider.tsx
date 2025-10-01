@@ -6,7 +6,7 @@ import { ErrorBoundary } from '../error-boundary/error-boundary';
 import { SisenseContext } from './sisense-context';
 import { I18nProvider } from '../translation/i18n-provider';
 import { SisenseQueryClientProvider } from './sisense-query-client-provider';
-import { isAuthTokenPending } from '@sisense/sdk-rest-client';
+import { isAuthTokenPending } from '@ethings-os/sdk-rest-client';
 import { CustomWidgetsProvider } from '@/custom-widgets-provider';
 import { MenuProvider } from '@/common/components/menu/menu-provider';
 import { ModalProvider } from '@/common/components/modal/modal-provider';
@@ -22,9 +22,9 @@ import { EmotionCacheProvider } from '@/emotion-cache-provider';
  * other SDK components inside this component.
  *
  * ```tsx
- * import { Chart, SisenseContextProvider } from '@sisense/sdk-ui';
+ * import { Chart, SisenseContextProvider } from '@ethings-os/sdk-ui';
  * import * as DM from './sample-ecommerce';
- * import { measures } from '@sisense/sdk-data';
+ * import { measures } from '@ethings-os/sdk-data';
  *
  * function App() {
  *   return (

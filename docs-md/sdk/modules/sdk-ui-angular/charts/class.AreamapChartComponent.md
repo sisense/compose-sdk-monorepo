@@ -19,7 +19,7 @@ An Angular component that allows to visualize geographical data as polygons on a
 
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-ecommerce';
 
 @Component({

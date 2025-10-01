@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { FilterTile as FilterTilePreact } from '@sisense/sdk-ui-preact';
-import type { FilterTileProps as FilterTilePropsPreact } from '@sisense/sdk-ui-preact';
+import { FilterTile as FilterTilePreact } from '@ethings-os/sdk-ui-preact';
+import type { FilterTileProps as FilterTilePropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!FilterTile | `FilterTile`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!FilterTile | `FilterTile`} component.
  */
 export interface FilterTileProps extends FilterTilePropsPreact {}
 
@@ -17,8 +17,8 @@ export interface FilterTileProps extends FilterTilePropsPreact {}
  * ```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { FilterTile } from '@sisense/sdk-ui-vue';
-import { filterFactory, type Filter } from '@sisense/sdk-data';
+import { FilterTile } from '@ethings-os/sdk-ui-vue';
+import { filterFactory, type Filter } from '@ethings-os/sdk-data';
 import * as DM from '../assets/sample-ecommerce-model.js';
 
 const filter = ref<Filter>(filterFactory.members(DM.Commerce.Gender, ['Male', 'Female']));
@@ -42,29 +42,29 @@ const handleFilterChange = (updatedFilter: Filter | null) => {
 export const FilterTile = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!FilterTileProps.filter}
+     * {@inheritDoc @ethings-os/sdk-ui!FilterTileProps.filter}
      */
     filter: {
       type: Object as PropType<FilterTileProps['filter']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!FilterTileProps.defaultDataSource}
+     * {@inheritDoc @ethings-os/sdk-ui!FilterTileProps.defaultDataSource}
      */
     defaultDataSource: [String, Object] as PropType<FilterTileProps['defaultDataSource']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FilterTileProps.onChange}
+     * {@inheritDoc @ethings-os/sdk-ui!FilterTileProps.onChange}
      */
     onChange: {
       type: Function as PropType<FilterTileProps['onChange']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!FilterTileProps.onDelete}
+     * {@inheritDoc @ethings-os/sdk-ui!FilterTileProps.onDelete}
      */
     onDelete: Function as PropType<FilterTileProps['onDelete']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!FilterTileProps.onEdit}
+     * {@inheritDoc @ethings-os/sdk-ui!FilterTileProps.onEdit}
      */
     onEdit: Function as PropType<FilterTileProps['onEdit']>,
   },

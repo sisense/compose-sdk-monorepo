@@ -6,7 +6,7 @@ import { IndicatorRenderOptions, IndicatorStyleOptions } from '../types';
 import { Table } from '../table';
 import { ThemeProvider } from '../theme-provider';
 import { DataPointEventHandler, DataPointsEventHandler } from '../props';
-import { Data } from '@sisense/sdk-data';
+import { Data } from '@ethings-os/sdk-data';
 import { setTimeout } from 'timers/promises';
 
 const dataSet = {

@@ -1,5 +1,5 @@
 import { isFiltersChanged, isRelationsChanged } from './filters-comparator'; // Update with the correct path
-import { Filter, filterFactory, getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { Filter, filterFactory, getFilterListAndRelationsJaql } from '@ethings-os/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 describe('isFiltersChanged', () => {

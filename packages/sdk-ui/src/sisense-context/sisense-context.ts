@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import { ClientApplication } from '../app/client-application';
-import { TrackingEventDetails } from '@sisense/sdk-tracking';
+import { TrackingEventDetails } from '@ethings-os/sdk-tracking';
 import { SisenseContextProviderProps } from '..';
 
 export type SisenseContextPayload = {

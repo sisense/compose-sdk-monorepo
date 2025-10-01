@@ -25,7 +25,7 @@ React component that renders a dashboard whose elements are customizable. It inc
 Example of rendering a Fusion dashboard using the `useGetDashboardModel hook and the `Dashboard` component.
 
 ```ts
-import { Dashboard, useGetDashboardModel, dashboardModelTranslator } from '@sisense/sdk-ui';
+import { Dashboard, useGetDashboardModel, dashboardModelTranslator } from '@ethings-os/sdk-ui';
 
 const CodeExample = () => {
  const { dashboard } = useGetDashboardModel({

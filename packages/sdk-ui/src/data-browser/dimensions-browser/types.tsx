@@ -1,4 +1,4 @@
-import { Attribute, DateDimension, Dimension } from '@sisense/sdk-data';
+import { Attribute, DateDimension, Dimension } from '@ethings-os/sdk-data';
 
 /**
  * Properties for the `DimensionsBrowser` component.

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { MockedSisenseContextProvider } from '@/__test-helpers__';
-import { Attribute, Filter, filterFactory } from '@sisense/sdk-data';
+import { Attribute, Filter, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { FiltersPanel } from './filters-panel';
 

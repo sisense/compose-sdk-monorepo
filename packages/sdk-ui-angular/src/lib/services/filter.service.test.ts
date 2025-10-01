@@ -1,8 +1,8 @@
 /** @vitest-environment jsdom */
 
 /* eslint-disable @typescript-eslint/unbound-method */
-import { DimensionalAttribute, filterFactory } from '@sisense/sdk-data';
-import { HookAdapter } from '@sisense/sdk-ui-preact';
+import { DimensionalAttribute, filterFactory } from '@ethings-os/sdk-data';
+import { HookAdapter } from '@ethings-os/sdk-ui-preact';
 import { of } from 'rxjs';
 
 import { FilterService, GetFilterMembersParams } from './filter.service';
@@ -12,8 +12,8 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@sisense/sdk-ui-preact')>();
+vi.mock('@ethings-os/sdk-ui-preact', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@ethings-os/sdk-ui-preact')>();
   return {
     ...actual,
     useGetFilterMembers: vi.fn(),

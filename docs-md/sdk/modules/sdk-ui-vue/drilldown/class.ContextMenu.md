@@ -4,7 +4,7 @@ title: ContextMenu
 
 # Class ContextMenu
 
-`ContextMenu` component from the `@sisense/sdk-ui-vue` package.
+`ContextMenu` component from the `@ethings-os/sdk-ui-vue` package.
 This component provides a context menu that can be customized with different items and sections.
 It allows for flexible positioning and can be easily integrated into Vue applications.
 

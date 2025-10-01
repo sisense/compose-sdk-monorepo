@@ -9,7 +9,7 @@ import {
   EMPTY_PIVOT_QUERY_RESULT_DATA,
   PivotGrid,
   PivotQueryResultData,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 export class PivotDataBuilder {
   /**

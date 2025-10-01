@@ -1,6 +1,6 @@
 import { haveSameAttribute } from '@/utils/filters-comparator.js';
 import { isSameAttribute } from '@/utils/filters.js';
-import { Filter, Attribute, filterFactory, MembersFilter } from '@sisense/sdk-data';
+import { Filter, Attribute, filterFactory, MembersFilter } from '@ethings-os/sdk-data';
 import isEqual from 'lodash-es/isEqual';
 import { FiltersIgnoringRules, PureFilter } from './types.js';
 

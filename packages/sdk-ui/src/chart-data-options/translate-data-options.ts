@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { Attribute, Measure } from '@sisense/sdk-data';
+import { Attribute, Measure } from '@ethings-os/sdk-data';
 import { isRange } from './../chart-options-processor/translations/types';
 import {
   isCartesian,

@@ -1,5 +1,5 @@
-import { trackProductEvent } from '@sisense/sdk-tracking';
-import { TrackingEventType } from '@sisense/sdk-tracking/src/registry';
+import { trackProductEvent } from '@ethings-os/sdk-tracking';
+import { TrackingEventType } from '@ethings-os/sdk-tracking/src/registry';
 
 import packageVersion from '../../version';
 import { DecoratorsModule } from './decorators.module';

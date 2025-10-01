@@ -7,7 +7,7 @@ import {
   isTooltipPercentValueSupported,
 } from '../tooltip-utils';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { cartesianDataFormatter } from '../tooltip';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
 

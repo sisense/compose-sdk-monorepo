@@ -8,7 +8,7 @@ import {
   filterFactory,
   measureFactory,
   Filter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { vi } from 'vitest';
 import { FilterTile } from './filter-tile';
 import { MockedSisenseContextProvider } from '@/__test-helpers__';

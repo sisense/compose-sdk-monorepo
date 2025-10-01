@@ -9,7 +9,7 @@ import {
 } from './criteria-filter-operations.js';
 import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container.js';
 import { CriteriaFilterMenu } from './criteria-filter-menu.js';
-import { Filter, Measure } from '@sisense/sdk-data';
+import { Filter, Measure } from '@ethings-os/sdk-data';
 import { CriteriaFilterDisplay } from './criteria-filter-display.js';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
 import { FilterVariant, isVertical } from '../common/filter-utils.js';

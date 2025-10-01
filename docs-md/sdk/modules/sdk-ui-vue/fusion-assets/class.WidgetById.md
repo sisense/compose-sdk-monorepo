@@ -22,7 +22,7 @@ Here's how you can use the WidgetById component in a Vue application:
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { WidgetById } from '@sisense/sdk-ui-vue';
+import { WidgetById } from '@ethings-os/sdk-ui-vue';
 
 </script>
 ```

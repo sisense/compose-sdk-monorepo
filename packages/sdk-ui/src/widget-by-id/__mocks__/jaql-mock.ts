@@ -1,4 +1,4 @@
-import { BaseJaql, FormulaJaql } from '@sisense/sdk-data';
+import { BaseJaql, FormulaJaql } from '@ethings-os/sdk-data';
 
 export const jaqlMock = {
   ageRange: {

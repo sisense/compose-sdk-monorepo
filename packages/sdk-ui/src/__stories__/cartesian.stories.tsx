@@ -1,7 +1,7 @@
 import { Chart } from '../chart';
 import { templateForComponent } from './template';
 import { NumberFormatConfig, ChartStyleOptions } from '../types';
-import { Data } from '@sisense/sdk-data';
+import { Data } from '@ethings-os/sdk-data';
 import { HighchartsOptions } from '..';
 
 const template = templateForComponent(Chart);

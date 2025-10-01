@@ -1,4 +1,4 @@
-import { DataSource, isDataSourceInfo } from '@sisense/sdk-data';
+import { DataSource, isDataSourceInfo } from '@ethings-os/sdk-data';
 
 import { NEWLINE } from './base.js';
 import { Writer } from './interfaces.js';
@@ -6,7 +6,7 @@ import { Writer } from './interfaces.js';
 export class ImportsWriter implements Writer {
   constructor(
     private dataSource: DataSource,
-    private dataModule: string = '@sisense/sdk-data',
+    private dataModule: string = '@ethings-os/sdk-data',
   ) {}
 
   write(stream: NodeJS.WritableStream) {

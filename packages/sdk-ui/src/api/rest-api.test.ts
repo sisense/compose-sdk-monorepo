@@ -1,4 +1,4 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import { RestApi, useRestApi } from './rest-api';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { renderHook } from '@testing-library/react';

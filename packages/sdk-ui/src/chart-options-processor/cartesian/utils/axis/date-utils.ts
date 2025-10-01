@@ -1,4 +1,4 @@
-import { DateLevels } from '@sisense/sdk-data';
+import { DateLevels } from '@ethings-os/sdk-data';
 import { StyledColumn } from '../../../../chart-data-options/types';
 import { getDataOptionGranularity } from '@/chart-data-options/utils';
 import { TranslatableError } from '@/translation/translatable-error';

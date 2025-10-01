@@ -1,4 +1,4 @@
-# @sisense/typedoc-plugin-markdown
+# @ethings-os/typedoc-plugin-markdown
 
 This plugin was forked from `tgreyuk/typedoc-plugin-markdown` version `4.0.0-next.20`.
 
@@ -13,7 +13,7 @@ To build only the plugin, run:
 
 ```
 # From the root directory
-yarn workspace @sisense/typedoc-plugin-markdown run build
+yarn workspace @ethings-os/typedoc-plugin-markdown run build
 ```
 
 or

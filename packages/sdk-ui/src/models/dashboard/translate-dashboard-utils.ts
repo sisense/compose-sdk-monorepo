@@ -19,7 +19,7 @@ import {
   Dimension,
   createDimensionalElementFromJaql,
   MetadataTypes,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { CommonFiltersApplyMode } from '@/common-filters/types';
 import {
   combineFiltersAndRelations,

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type ScatterChartProps as ScatterChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type ScatterChartProps as ScatterChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -38,7 +38,7 @@ export interface ScatterChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({
@@ -91,7 +91,7 @@ export class AnalyticsComponent {
 })
 export class ScatterChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.dataSet}
    *
    * @category Data
    */
@@ -99,7 +99,7 @@ export class ScatterChartComponent {
   dataSet: ScatterChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.dataOptions}
    *
    * @category Data
    */
@@ -107,7 +107,7 @@ export class ScatterChartComponent {
   dataOptions!: ScatterChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.filters}
    *
    * @category Data
    */
@@ -115,7 +115,7 @@ export class ScatterChartComponent {
   filters: ScatterChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.highlights}
    *
    * @category Data
    */
@@ -123,7 +123,7 @@ export class ScatterChartComponent {
   highlights: ScatterChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -131,7 +131,7 @@ export class ScatterChartComponent {
   styleOptions: ScatterChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -139,7 +139,7 @@ export class ScatterChartComponent {
   beforeRender: ScatterChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!ScatterChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!ScatterChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -147,7 +147,7 @@ export class ScatterChartComponent {
   dataReady: ScatterChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -155,7 +155,7 @@ export class ScatterChartComponent {
   dataPointClick = new EventEmitter<ScatterDataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -163,7 +163,7 @@ export class ScatterChartComponent {
   dataPointContextMenu = new EventEmitter<ScatterDataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

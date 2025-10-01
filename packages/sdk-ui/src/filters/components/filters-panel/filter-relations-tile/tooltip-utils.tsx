@@ -5,7 +5,7 @@ import {
   isAttributeDescriptionNode,
   isOperatorDescriptionNode,
 } from '@/utils/filter-relations';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { ReactNode } from 'react';
 
 export function generateTooltipLines(

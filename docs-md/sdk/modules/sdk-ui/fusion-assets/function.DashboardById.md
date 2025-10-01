@@ -23,7 +23,7 @@ React component that renders a dashboard created in Sisense Fusion by its ID.
 ## Example
 
 ```ts
-import { DashboardById } from '@sisense/sdk-ui';
+import { DashboardById } from '@ethings-os/sdk-ui';
 
  const CodeExample = () => {
    return (

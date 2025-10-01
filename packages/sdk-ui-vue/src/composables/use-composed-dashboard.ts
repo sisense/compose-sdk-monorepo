@@ -6,14 +6,14 @@ import {
   type UseComposedDashboardOptions,
   type WidgetsPanelLayout,
   createHookApiFacade,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import type { DashboardProps } from '../components/dashboard';
 import { createSisenseContextConnector } from '../helpers/context-connectors';
 import type { MaybeRef } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
 import { useRefState } from '../helpers/use-ref-state';
-import type { Filter, FilterRelations } from '@sisense/sdk-data';
+import type { Filter, FilterRelations } from '@ethings-os/sdk-data';
 
 export interface ComposableDashboardProps extends ComposableDashboardPropsPreact {}
 
@@ -25,7 +25,7 @@ export interface ComposableDashboardProps extends ComposableDashboardPropsPreact
  * How to use `useComposedDashboard` within a Vue component:
  * ```vue
 <script setup lang="ts">
-import { Widget, FilterTile, useComposedDashboard, type DashboardProps } from '@sisense/sdk-ui-vue';
+import { Widget, FilterTile, useComposedDashboard, type DashboardProps } from '@ethings-os/sdk-ui-vue';
 
 const initialDashboardProps: DashboardProps = { ... };
 const { dashboard } = useComposedDashboard(initialDashboardProps);

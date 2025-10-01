@@ -1,5 +1,5 @@
 import { DataPoint, ChartType, ChartDataOptions, ScatterChartDataOptions } from '../../types';
-import { Attribute, Column } from '@sisense/sdk-data';
+import { Attribute, Column } from '@ethings-os/sdk-data';
 import {
   BOXPLOT_CHART_TYPES,
   CARTESIAN_CHART_TYPES,

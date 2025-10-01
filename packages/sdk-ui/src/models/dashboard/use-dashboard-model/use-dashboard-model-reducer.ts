@@ -1,5 +1,5 @@
 import { DashboardModel, WidgetModel, widgetModelTranslator, WidgetsPanelLayout } from '@/models';
-import { Filter, FilterRelations } from '@sisense/sdk-data';
+import { Filter, FilterRelations } from '@ethings-os/sdk-data';
 import { RestApi } from '@/api/rest-api';
 import { filterToFilterDto, layoutToLayoutDto } from '../translate-dashboard-dto-utils';
 import {

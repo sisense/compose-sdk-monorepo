@@ -39,7 +39,7 @@ export const translation = {
  *
  * @example
  * ```typescript
- * import { TranslationDictionary } from '@sisense/sdk-data';
+ * import { TranslationDictionary } from '@ethings-os/sdk-data';
  *
  * const customTranslationResources: Partial<TranslationDictionary> = {
  * ```

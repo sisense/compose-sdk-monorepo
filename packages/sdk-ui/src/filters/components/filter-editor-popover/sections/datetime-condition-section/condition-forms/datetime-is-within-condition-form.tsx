@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import {
   DateLevels,
   DateOperators,
   DimensionalLevelAttribute,
   Filter,
   filterFactory,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { Input, SingleSelect } from '../../../common/index.js';
 import { isRelativeDateFilterWithAnchor } from '../../../utils.js';
 import { useThemeContext } from '@/index-typedoc.js';

@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { templateForComponent } from './template.js';
 import { CriteriaFilterTile } from '../filters/components/criteria-filter-tile/criteria-filter-tile.js';
-import { Filter, createAttribute, createMeasure, filterFactory } from '@sisense/sdk-data';
+import { Filter, createAttribute, createMeasure, filterFactory } from '@ethings-os/sdk-data';
 
 const template = templateForComponent(CriteriaFilterTile);
 

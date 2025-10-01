@@ -12,9 +12,9 @@ import {
   RankingOperators,
   TextFilter,
   TextOperators,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { TranslatableError } from '@/translation/translatable-error';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 
 /**
  * Collection of filter options for the {@link CriteriaFilterMenu},

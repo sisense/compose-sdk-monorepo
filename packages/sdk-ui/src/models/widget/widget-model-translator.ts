@@ -40,7 +40,7 @@ import {
   convertDataSource,
   JaqlDataSource,
   JaqlDataSourceForDto,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { getPivotQueryOptions } from '@/pivot-table/hooks/use-get-pivot-table-query.js';
 import {

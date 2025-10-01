@@ -12,7 +12,7 @@ import {
   DashboardById as DashboardByIdPreact,
   type DashboardByIdConfig,
   type DashboardByIdProps as DashboardByIdPropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createCustomWidgetsContextConnector,
@@ -73,13 +73,13 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.dashboardOid}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardByIdProps.dashboardOid}
    */
   @Input()
   dashboardOid!: DashboardByIdProps['dashboardOid'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardByIdProps.config}
    */
   @Input()
   config: DashboardByIdProps['config'];

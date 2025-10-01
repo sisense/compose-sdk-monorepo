@@ -21,7 +21,7 @@ const buildUMD = async () => {
     build: {
       lib: {
         entry: resolve(__dirname, '../../src/lib/index.ts'),
-        name: '@sisense/sdk-shared-ui',
+        name: '@ethings-os/sdk-shared-ui',
         fileName: () => 'index.umd.js',
         formats: ['umd'],
       },

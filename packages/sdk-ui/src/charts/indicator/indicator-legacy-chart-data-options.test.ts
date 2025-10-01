@@ -1,4 +1,4 @@
-import { MeasureColumn } from '@sisense/sdk-data';
+import { MeasureColumn } from '@ethings-os/sdk-data';
 import { createLegacyChartDataOptions } from './indicator-legacy-chart-data-options';
 import { chartData, chartDataOptions, chartDesignOptions } from './__mocks__/indicator-mocks';
 

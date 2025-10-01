@@ -1,4 +1,4 @@
-import { filterFactory, measureFactory, MembersFilter } from '@sisense/sdk-data';
+import { filterFactory, measureFactory, MembersFilter } from '@ethings-os/sdk-data';
 import * as DM from '../../__test-helpers__/sample-ecommerce';
 import { filterToFilterDto } from '@/models/dashboard/translate-dashboard-dto-utils';
 import { CascadingFilterDto, FilterDto } from '@/api/types/dashboard-dto';

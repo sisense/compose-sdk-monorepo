@@ -3,7 +3,7 @@ import {
   DataSourceField,
   DataSourceMetadata,
   DataSourceSchema,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 import {
   ExecutingCsvQueryResult,

@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 import { UnsupportedFilterTile } from './unsupported-filter-tile';
-import { Filter } from '@sisense/sdk-data';
+import { Filter } from '@ethings-os/sdk-data';
 import { mockUrl, mockToken } from '@/__mocks__/msw';
 import { MockedSisenseContextProvider } from '@/__test-helpers__';
 import { SisenseContextProviderProps } from '@/props';

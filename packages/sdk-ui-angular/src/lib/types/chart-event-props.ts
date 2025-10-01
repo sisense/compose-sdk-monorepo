@@ -1,5 +1,5 @@
-import type { Data } from '@sisense/sdk-data';
-import type { BeforeRenderHandler, IndicatorBeforeRenderHandler } from '@sisense/sdk-ui-preact';
+import type { Data } from '@ethings-os/sdk-data';
+import type { BeforeRenderHandler, IndicatorBeforeRenderHandler } from '@ethings-os/sdk-ui-preact';
 
 import type {
   AreamapDataPointEventHandler,
@@ -19,7 +19,7 @@ import type {
 
 export interface HighchartsBasedChartEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -28,7 +28,7 @@ export interface HighchartsBasedChartEventProps {
 
 export interface BaseChartEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataReady}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -43,19 +43,19 @@ export interface RegularChartEventProps
   extends BaseChartEventProps,
     HighchartsBasedChartEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
   dataPointClick?: DataPointEventHandler;
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
   dataPointContextMenu?: DataPointEventHandler;
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */
@@ -70,19 +70,19 @@ export interface ScatterChartEventProps
   extends BaseChartEventProps,
     HighchartsBasedChartEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
   dataPointClick?: ScatterDataPointEventHandler;
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
   dataPointContextMenu?: ScatterDataPointEventHandler;
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */
@@ -95,7 +95,7 @@ export interface ScatterChartEventProps
  */
 export interface AreamapChartEventProps extends BaseChartEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!AreamapChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -108,7 +108,7 @@ export interface AreamapChartEventProps extends BaseChartEventProps {
  */
 export interface ScattermapChartEventProps extends BaseChartEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -123,21 +123,21 @@ export interface BoxplotChartEventProps
   extends BaseChartEventProps,
     HighchartsBasedChartEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
   dataPointClick?: BoxplotDataPointEventHandler;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
   dataPointContextMenu?: BoxplotDataPointEventHandler;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */
@@ -146,13 +146,13 @@ export interface BoxplotChartEventProps
 
 export interface IndicatorChartEventProps extends BaseChartEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
   beforeRender?: IndicatorBeforeRenderHandler;
   /**
-   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.onDataPointClick}
    *
    * @category Callbacks
    * @internal
@@ -168,19 +168,19 @@ export interface CalendarHeatmapChartEventProps
   extends BaseChartEventProps,
     HighchartsBasedChartEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
   dataPointClick?: CalendarHeatmapDataPointEventHandler;
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
   dataPointContextMenu?: CalendarHeatmapDataPointEventHandler;
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */
@@ -189,28 +189,28 @@ export interface CalendarHeatmapChartEventProps
 
 export interface ChartEventProps extends BaseChartEventProps {
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
   dataPointClick?: ChartDataPointClickEventHandler;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
   dataPointContextMenu?: ChartDataPointContextMenuEventHandler;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */
   dataPointsSelect?: ChartDataPointsEventHandler;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartProps.onBeforeRender}
    *
    * @category Callbacks
    */

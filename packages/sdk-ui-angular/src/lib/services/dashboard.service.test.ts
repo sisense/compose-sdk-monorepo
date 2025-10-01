@@ -5,7 +5,7 @@ import {
   type ClientApplication,
   getDashboardModel,
   getDashboardModels,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { Mock, Mocked } from 'vitest';
 
 import { type DashboardModel } from '../sdk-ui-core-exports';
@@ -16,7 +16,7 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', () => ({
+vi.mock('@ethings-os/sdk-ui-preact', () => ({
   getDashboardModel: vi.fn(),
   getDashboardModels: vi.fn(),
 }));

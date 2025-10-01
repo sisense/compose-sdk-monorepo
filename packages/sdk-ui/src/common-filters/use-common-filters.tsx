@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import last from 'lodash-es/last';
-import { FilterRelations, type Filter } from '@sisense/sdk-data';
+import { FilterRelations, type Filter } from '@ethings-os/sdk-data';
 import {
   isTextWidgetProps,
   mergeFilters,

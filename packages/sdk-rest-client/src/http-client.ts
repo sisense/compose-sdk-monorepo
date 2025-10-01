@@ -1,5 +1,5 @@
 /// <reference lib="dom" />
-import { normalizeUrl } from '@sisense/sdk-common';
+import { normalizeUrl } from '@ethings-os/sdk-common';
 
 import { addQueryParamsToUrl } from './helpers.js';
 import { errorInterceptor, getResponseInterceptor } from './interceptors.js';

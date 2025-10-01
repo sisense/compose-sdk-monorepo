@@ -23,7 +23,7 @@ Each package with translations provides a `TranslationDictionary` type listing a
 
 **Example: complete translation for the `sdk-ui` package**
 ```
-import { TranslationDictionary } from '@sisense/sdk-ui';
+import { TranslationDictionary } from '@ethings-os/sdk-ui';
 
 const customTranslationResources: TranslationDictionary = {
   ...
@@ -35,7 +35,7 @@ Note that specifying all translation keys is not required; any keys you do not p
 #### Example: Translation Resources
 Let’s create translation resources for some fields in `sdk-ui` in **French**, and one error message in `sdk-data` in **Spanish**:
 ```
-import { TranslationDictionary } from '@sisense/sdk-ui';
+import { TranslationDictionary } from '@ethings-os/sdk-ui';
 
 const frenchTranslationResources: Partial<TranslationDictionary> = {
   errors: {
@@ -45,7 +45,7 @@ const frenchTranslationResources: Partial<TranslationDictionary> = {
 };
 ```
 ```
-import { TranslationDictionary } from '@sisense/sdk-data';
+import { TranslationDictionary } from '@ethings-os/sdk-data';
 
 const spanishTranslationResources: Partial<TranslationDictionary> = {
   errors: {
@@ -63,7 +63,7 @@ Similar to how we set the language, we can now provide additional translation re
 
 Below is an example of loading both translations while setting the default language to **French**:
 ```
-import { translationNamespace as sdkDataNamespace } from '@sisense/sdk-data';
+import { translationNamespace as sdkDataNamespace } from '@ethings-os/sdk-data';
 
 <SisenseContextProvider
   appConfig={{

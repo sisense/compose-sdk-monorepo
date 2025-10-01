@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`writer > writeJavascript > should generate JS and TS definition files 1`] = `
-"import { createAttribute, createDateDimension, createDimension } from '@sisense/sdk-data';
+"import { createAttribute, createDateDimension, createDimension } from '@ethings-os/sdk-data';
 export var DataSource = 'Sample ECommerce';
 export var Brand = createDimension({
     name: 'Brand',
@@ -124,7 +124,7 @@ export var Country = createDimension({
         dataSource: { title: 'Sample ECommerce', live: false },
     }),
 });
-import type { Dimension, DateDimension, Attribute } from '@sisense/sdk-data';
+import type { Dimension, DateDimension, Attribute } from '@ethings-os/sdk-data';
 export declare const DataSource = 'Sample ECommerce';
 interface BrandDimension extends Dimension {
     Brand: Attribute;
@@ -161,9 +161,9 @@ export {};
 `;
 
 exports[`writer > writeTypescript > should generate data model file as TypeScript file (dataSource defined as DataSourceInfo) 1`] = `
-"import type { Dimension, DateDimension, Attribute, DataSourceInfo } from '@sisense/sdk-data';
+"import type { Dimension, DateDimension, Attribute, DataSourceInfo } from '@ethings-os/sdk-data';
 
-import { createAttribute, createDateDimension, createDimension } from '@sisense/sdk-data';
+import { createAttribute, createDateDimension, createDimension } from '@ethings-os/sdk-data';
 
 export const DataSource: DataSourceInfo = { title: 'Sample ECommerce', type: 'elasticube' };
 
@@ -321,9 +321,9 @@ export const Country = createDimension({
 `;
 
 exports[`writer > writeTypescript > should generate data model file as TypeScript file 1`] = `
-"import type { Dimension, DateDimension, Attribute } from '@sisense/sdk-data';
+"import type { Dimension, DateDimension, Attribute } from '@ethings-os/sdk-data';
 
-import { createAttribute, createDateDimension, createDimension } from '@sisense/sdk-data';
+import { createAttribute, createDateDimension, createDimension } from '@ethings-os/sdk-data';
 
 export const DataSource = 'Sample ECommerce';
 

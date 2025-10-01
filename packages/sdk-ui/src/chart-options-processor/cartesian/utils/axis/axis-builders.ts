@@ -1,4 +1,4 @@
-import { isDatetime } from '@sisense/sdk-data';
+import { isDatetime } from '@ethings-os/sdk-data';
 import { ChartType, CompleteThemeSettings } from '../../../../types';
 import { CartesianChartData } from '../../../../chart-data/types';
 import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types';

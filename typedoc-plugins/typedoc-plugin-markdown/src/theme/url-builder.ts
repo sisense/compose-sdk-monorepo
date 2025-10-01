@@ -57,11 +57,11 @@ export class UrlBuilder {
       this.options.getValue('entryPointStrategy') === EntryPointStrategy.Packages &&
       !Boolean(project.groups)
     ) {
-      // [tuan]: each projectChild is a module (e.g., @sisense/sdk-ui, @sisense/sdk-data, etc)
+      // [tuan]: each projectChild is a module (e.g., @ethings-os/sdk-ui, @ethings-os/sdk-data, etc)
       project.children?.forEach((projectChild, projectChildIndex) => {
         /** CSDK START */
-        // Remove @sisense/ prefix from module name
-        projectChild.name = projectChild.name.replace('@sisense/', '');
+        // Remove @ethings-os/ prefix from module name
+        projectChild.name = projectChild.name.replace('@ethings-os/', '');
         /** CSDK END */
 
         // console.log('projectChild', projectChild.name, projectChild.url);

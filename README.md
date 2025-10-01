@@ -43,7 +43,7 @@ yarn build
 
 (First installation and build may take a few minutes to complete.)
 
-## Run the Storybook (`@sisense/sdk-ui`)
+## Run the Storybook (`@ethings-os/sdk-ui`)
 
 The Storybook contains chart examples of different chart types and configurations.
 These examples do not need a Sisense instance to run.

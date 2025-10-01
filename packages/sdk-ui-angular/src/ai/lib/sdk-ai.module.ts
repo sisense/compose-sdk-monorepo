@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { SdkUiModule } from '@sisense/sdk-ui-angular';
+import { SdkUiModule } from '@ethings-os/sdk-ui-angular';
 
 import { ChatbotComponent, GetNlgInsightsComponent } from './components';
 
@@ -13,8 +13,8 @@ import { ChatbotComponent, GetNlgInsightsComponent } from './components';
  * along with importing dependency {@link SdkUiModule} and injecting {@link SisenseContextConfig} to connect to a Sisense instance:
  *
  * ```ts
- * import { SdkUiModule, SisenseContextConfig } from '@sisense/sdk-ui-angular';
- * import { SdkAiModule, AI_CONTEXT_CONFIG_TOKEN, AiContextConfig } from '@sisense/sdk-ui-angular/ai';
+ * import { SdkUiModule, SisenseContextConfig } from '@ethings-os/sdk-ui-angular';
+ * import { SdkAiModule, AI_CONTEXT_CONFIG_TOKEN, AiContextConfig } from '@ethings-os/sdk-ui-angular/ai';
  *
  * const AI_CONTEXT_CONFIG: AiContextConfig = {
  *   volatile: true,

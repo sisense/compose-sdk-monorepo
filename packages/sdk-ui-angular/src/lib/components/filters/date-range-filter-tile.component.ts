@@ -13,7 +13,7 @@ import {
   ComponentAdapter,
   DateRangeFilterTile as DateRangeFilterTilePreact,
   type DateRangeFilterTileProps as DateRangeFilterTilePropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -47,7 +47,7 @@ export interface DateRangeFilterTileProps extends Omit<DateRangeFilterTilePropsP
  * ```
  * ```ts
  * import { Component } from '@angular/core';
- * import { Filter, filterFactory } from '@sisense/sdk-data';
+ * import { Filter, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../../assets/sample-healthcare-model';
  *
  * @Component({
@@ -87,43 +87,43 @@ export class DateRangeFilterTileComponent implements AfterViewInit, OnChanges, O
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.title}
+   * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.title}
    */
   @Input()
   title!: DateRangeFilterTileProps['title'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.attribute}
+   * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.attribute}
    */
   @Input()
   attribute!: DateRangeFilterTileProps['attribute'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.dataSource}
+   * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.dataSource}
    */
   @Input()
   dataSource: DateRangeFilterTileProps['dataSource'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.filter}
+   * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.filter}
    */
   @Input()
   filter!: DateRangeFilterTileProps['filter'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.earliestDate}
+   * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.earliestDate}
    */
   @Input()
   earliestDate: DateRangeFilterTileProps['earliestDate'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.lastDate}
+   * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.lastDate}
    */
   @Input()
   lastDate: DateRangeFilterTileProps['lastDate'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.onChange}
+   * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.onChange}
    */
   @Output()
   filterChange = new EventEmitter<

@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import {
   DateLevels,
   DimensionalLevelAttribute,
   Filter,
   filterFactory,
   Sort,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { SingleSelect } from '../../../common/index.js';
 import {
   convertDateToMemberString,

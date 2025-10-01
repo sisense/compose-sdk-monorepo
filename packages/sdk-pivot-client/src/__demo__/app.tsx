@@ -1,7 +1,7 @@
 import './app.css';
 import '../styles';
 import React, { useMemo } from 'react';
-import { BearerAuthenticator } from '@sisense/sdk-rest-client';
+import { BearerAuthenticator } from '@ethings-os/sdk-rest-client';
 import { PivotClient } from '../pivot-client';
 import { PivotBuilderDemo } from './pivot-builder-demo';
 import { defaultQuery as defaultQuery1, defaultQuery2 } from './examples';

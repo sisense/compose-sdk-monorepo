@@ -1,5 +1,5 @@
-import { JaqlSortDirection, getSortType } from '@sisense/sdk-data';
-import { type SortingSettingsChangePayload } from '@sisense/sdk-pivot-client';
+import { JaqlSortDirection, getSortType } from '@ethings-os/sdk-data';
+import { type SortingSettingsChangePayload } from '@ethings-os/sdk-pivot-client';
 import isEqual from 'lodash-es/isEqual';
 import isString from 'lodash-es/isString';
 import { PivotTableDataOptionsInternal } from '..';

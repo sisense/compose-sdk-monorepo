@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   getWidgetModel,
   type GetWidgetModelParams as GetWidgetModelParamsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import { TrackableService } from '../decorators/trackable.decorator';
 import { SisenseContextService } from './sisense-context.service';

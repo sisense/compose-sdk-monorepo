@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { DateRangeFilterTile as DateRangeFilterTilePreact } from '@sisense/sdk-ui-preact';
-import type { DateRangeFilterTileProps as DateRangeFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
+import { DateRangeFilterTile as DateRangeFilterTilePreact } from '@ethings-os/sdk-ui-preact';
+import type { DateRangeFilterTileProps as DateRangeFilterTilePropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!DateRangeFilterTile | `DateRangeFilterTile`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!DateRangeFilterTile | `DateRangeFilterTile`} component.
  */
 export interface DateRangeFilterTileProps extends DateRangeFilterTilePropsPreact {}
 
@@ -27,8 +27,8 @@ export interface DateRangeFilterTileProps extends DateRangeFilterTilePropsPreact
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { DateRangeFilterTile, type DateRangeFilterTileProps } from '@sisense/sdk-ui-vue';
- * import { filterFactory } from '@sisense/sdk-data';
+ * import { DateRangeFilterTile, type DateRangeFilterTileProps } from '@ethings-os/sdk-ui-vue';
+ * import { filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
  *
  * const dateRangeFilterValue = ref<Filter | null>(filterFactory.dateRange(DM.DimDate.Date.Years));
@@ -51,60 +51,60 @@ export interface DateRangeFilterTileProps extends DateRangeFilterTilePropsPreact
 export const DateRangeFilterTile = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.attribute}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.attribute}
      */
     attribute: {
       type: Object as PropType<DateRangeFilterTileProps['attribute']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.dataSource}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.dataSource}
      */
     datasource: [String, Object] as PropType<DateRangeFilterTileProps['dataSource']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.earliestDate}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.earliestDate}
      */
     earliestDate: Object as PropType<DateRangeFilterTileProps['earliestDate']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.filter}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.filter}
      */
     filter: {
       type: Object as PropType<DateRangeFilterTileProps['filter']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.lastDate}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.lastDate}
      */
     lastDate: Object as PropType<DateRangeFilterTileProps['lastDate']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.onChange}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.onChange}
      */
     onChange: {
       type: Function as PropType<DateRangeFilterTileProps['onChange']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.parentFilters}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.parentFilters}
      */
     parentFilters: Object as PropType<DateRangeFilterTileProps['parentFilters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.title}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.title}
      */
     title: {
       type: String as PropType<DateRangeFilterTileProps['title']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.tiled}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.tiled}
      * @internal
      */
     tiled: Boolean as PropType<DateRangeFilterTileProps['tiled']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.onDelete}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.onDelete}
      */
     onDelete: Function as PropType<DateRangeFilterTileProps['onDelete']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.onEdit}
+     * {@inheritDoc @ethings-os/sdk-ui!DateRangeFilterTileProps.onEdit}
      */
     onEdit: Function as PropType<DateRangeFilterTileProps['onEdit']>,
   },

@@ -1,13 +1,13 @@
 import { setup } from '@/__test-helpers__';
-import { BearerAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
+import { BearerAuthenticator, HttpClient } from '@ethings-os/sdk-rest-client';
 import { screen, waitFor } from '@testing-library/react';
 import { ChatApiContext } from '../api/chat-api-provider';
 import { SendFeedbackRequest } from '../api/types';
 import { ChatRestApi } from '../api/chat-rest-api';
 import FeedbackWrapper from './feedback-wrapper';
 
-vi.mock('@sisense/sdk-rest-client', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('@sisense/sdk-rest-client')>();
+vi.mock('@ethings-os/sdk-rest-client', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('@ethings-os/sdk-rest-client')>();
   return {
     ...mod,
     HttpClient: vi.fn(),

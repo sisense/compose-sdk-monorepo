@@ -27,7 +27,7 @@ If omitted, all scatter points are equal in size. If used, the circle sizes are 
 ```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({

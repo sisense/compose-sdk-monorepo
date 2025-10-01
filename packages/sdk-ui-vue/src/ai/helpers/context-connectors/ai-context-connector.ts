@@ -1,8 +1,8 @@
 import { watchEffect } from 'vue';
-import { DataObserver } from '@sisense/sdk-ui-preact';
-import type { ContextConnector } from '@sisense/sdk-ui-preact';
-import { CustomAiContextProvider } from '@sisense/sdk-ui-preact/ai';
-import type { CustomAiContextProviderProps } from '@sisense/sdk-ui-preact/ai';
+import { DataObserver } from '@ethings-os/sdk-ui-preact';
+import type { ContextConnector } from '@ethings-os/sdk-ui-preact';
+import { CustomAiContextProvider } from '@ethings-os/sdk-ui-preact/ai';
+import type { CustomAiContextProviderProps } from '@ethings-os/sdk-ui-preact/ai';
 import { getAiContext } from '../../providers';
 
 /**

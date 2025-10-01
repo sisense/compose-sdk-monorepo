@@ -5,7 +5,7 @@ import {
   InitPageData,
   JaqlRequest,
   PivotBuilder,
-} from '@sisense/sdk-pivot-client';
+} from '@ethings-os/sdk-pivot-client';
 import { useHasChanged } from '@/common/hooks/use-has-changed';
 
 interface LoadingState {

@@ -1,14 +1,14 @@
 import { ChartDataOptions } from '@/types';
-import { escapeSingleQuotes } from '@sisense/sdk-common';
+import { escapeSingleQuotes } from '@ethings-os/sdk-common';
 import {
   DimensionalBaseMeasure,
   DimensionalElement,
   JaqlElement,
   MetadataItemJaql,
   normalizeAttributeName,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
-import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+import { DataSource, Filter, FilterRelations } from '@ethings-os/sdk-data';
 import { toKebabCase, isNonEmptyArray, quoteUnsafeKeys } from '../common/utils';
 import { CODE_TEMPLATES_INDENT } from '../common/constants';
 
@@ -175,6 +175,6 @@ export function stringifyExtraImports(
   }
 
   return importNames.length > 0
-    ? `import { ${importNames.join(', ')} } from '@sisense/sdk-data';`
+    ? `import { ${importNames.join(', ')} } from '@ethings-os/sdk-data';`
     : '';
 }

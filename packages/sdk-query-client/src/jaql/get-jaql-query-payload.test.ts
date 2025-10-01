@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { DataSource } from '@sisense/sdk-data';
+import { DataSource } from '@ethings-os/sdk-data';
 
 import { QueryOptions } from '../types.js';
 import { prepareQueryOptions } from './get-jaql-query-payload.js';

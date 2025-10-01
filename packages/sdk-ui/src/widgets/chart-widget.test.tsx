@@ -1,13 +1,13 @@
 /** @vitest-environment jsdom */
 import { render } from '@testing-library/react';
-import { measureFactory } from '@sisense/sdk-data';
-import { type TFunction } from '@sisense/sdk-common';
+import { measureFactory } from '@ethings-os/sdk-data';
+import { type TFunction } from '@ethings-os/sdk-common';
 import cloneDeep from 'lodash-es/cloneDeep';
 import get from 'lodash-es/get';
 import { mockChartWidgetPropsForTable, mockResolvedQuery } from './__mocks__/mocks';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { ClientApplication } from '../app/client-application';
-import { HttpClient, SsoAuthenticator } from '@sisense/sdk-rest-client';
+import { HttpClient, SsoAuthenticator } from '@ethings-os/sdk-rest-client';
 import { ChartWidget } from './chart-widget';
 import { executeQueryMock } from '@/query/__mocks__/execute-query';
 import * as DM from '../__test-helpers__/sample-ecommerce';

@@ -1,4 +1,4 @@
-import { isNumber } from '@sisense/sdk-data';
+import { isNumber } from '@ethings-os/sdk-data';
 import { StyledMeasureColumn, StyledColumn } from '../../chart-data-options/types.js';
 import { applyFormat, getCompleteNumberFormatConfig } from './number-format-config.js';
 import type { SeriesChartType } from '@/types';

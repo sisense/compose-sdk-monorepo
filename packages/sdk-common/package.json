@@ -1,5 +1,5 @@
 {
-  "name": "@sisense/sdk-common",
+  "name": "@ethings-os/sdk-common",
   "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package for common functionalities",
   "repository": {

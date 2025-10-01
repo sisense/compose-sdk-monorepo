@@ -1,7 +1,7 @@
 import { Themable } from '@/theme-provider/types';
 import { FilterRelationsRules } from '@/utils/filter-relations';
 import styled from '@emotion/styled';
-import { Filter } from '@sisense/sdk-data';
+import { Filter } from '@ethings-os/sdk-data';
 import { EditPencilIcon } from '@/common/icons/edit-pencil-icon';
 import { FilterRelationsTooltip } from './filter-relations-tooltip';
 import { useThemeContext } from '@/theme-provider';

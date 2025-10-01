@@ -2,9 +2,9 @@
 
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@sisense/sdk-data';
-import type { ExecuteQueryByWidgetIdParams, ExecuteQueryParams } from '@sisense/sdk-ui-angular';
-import { executePivotQuery, executeQuery, executeQueryByWidgetId } from '@sisense/sdk-ui-preact';
+import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@ethings-os/sdk-data';
+import type { ExecuteQueryByWidgetIdParams, ExecuteQueryParams } from '@ethings-os/sdk-ui-angular';
+import { executePivotQuery, executeQuery, executeQueryByWidgetId } from '@ethings-os/sdk-ui-preact';
 import { Mock, Mocked } from 'vitest';
 
 import { ExecutePivotQueryParams, QueryService } from './query.service';
@@ -14,7 +14,7 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', () => ({
+vi.mock('@ethings-os/sdk-ui-preact', () => ({
   executeQuery: vi.fn(),
   executeQueryByWidgetId: vi.fn(),
   executePivotQuery: vi.fn(),

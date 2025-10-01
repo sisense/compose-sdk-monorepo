@@ -1,4 +1,4 @@
-import { createAttribute, measureFactory } from '@sisense/sdk-data';
+import { createAttribute, measureFactory } from '@ethings-os/sdk-data';
 import { QueryRecommendation } from '../api/types';
 import { UseGetNlqResultParams } from '../use-get-nlq-result';
 

@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { TableWidget } from './table-widget';
 import { Table } from '@/table';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 import { TableDataOptions } from '..';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import * as DM from '@/__test-helpers__/sample-ecommerce';

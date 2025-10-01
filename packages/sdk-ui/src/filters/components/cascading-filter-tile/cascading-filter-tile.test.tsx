@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { CascadingFilter, Filter, filterFactory, isCascadingFilter } from '@sisense/sdk-data';
+import { CascadingFilter, Filter, filterFactory, isCascadingFilter } from '@ethings-os/sdk-data';
 import { SisenseContextProviderProps } from '@/index';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
 import * as jaqlAgeRange from '@/__mocks__/data/mock-jaql-age-range.json';

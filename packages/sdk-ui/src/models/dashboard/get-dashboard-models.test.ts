@@ -3,7 +3,7 @@
 /** @vitest-environment jsdom */
 
 import { getDashboardModels, type GetDashboardModelsOptions } from './get-dashboard-models.js';
-import { type HttpClient } from '@sisense/sdk-rest-client';
+import { type HttpClient } from '@ethings-os/sdk-rest-client';
 import { DashboardDto } from '../../api/types/dashboard-dto.js';
 import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboard.js';
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';

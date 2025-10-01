@@ -13,12 +13,12 @@ import {
   createThemeContextConnector,
   SisenseContextService,
   ThemeService,
-} from '@sisense/sdk-ui-angular';
-import { ComponentAdapter } from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-angular';
+import { ComponentAdapter } from '@ethings-os/sdk-ui-preact';
 import {
   GetNlgInsights as GetNlgInsightsPreact,
   type GetNlgInsightsProps as GetNlgInsightsPropsPreact,
-} from '@sisense/sdk-ui-preact/ai';
+} from '@ethings-os/sdk-ui-preact/ai';
 
 import { createAiContextConnector, rootId, styles, template } from '../component-wrapper-helpers';
 import { AiService } from '../services/ai.service';
@@ -47,7 +47,7 @@ export interface GetNlgInsightsProps extends GetNlgInsightsPropsPreact {}
  * ```ts
 // Component behavior in example.component.ts
 import { Component } from '@angular/core';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({
@@ -80,31 +80,31 @@ export class GetNlgInsightsComponent implements AfterViewInit, OnChanges, OnDest
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!GetNlgInsightsProps.dataSource}
+   * {@inheritDoc @ethings-os/sdk-ui!GetNlgInsightsProps.dataSource}
    */
   @Input()
   dataSource!: GetNlgInsightsProps['dataSource'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!GetNlgInsightsProps.dimensions}
+   * {@inheritDoc @ethings-os/sdk-ui!GetNlgInsightsProps.dimensions}
    */
   @Input()
   dimensions: GetNlgInsightsProps['dimensions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!GetNlgInsightsProps.measures}
+   * {@inheritDoc @ethings-os/sdk-ui!GetNlgInsightsProps.measures}
    */
   @Input()
   measures: GetNlgInsightsProps['measures'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!GetNlgInsightsProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!GetNlgInsightsProps.filters}
    */
   @Input()
   filters: GetNlgInsightsProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!GetNlgInsightsProps.verbosity}
+   * {@inheritDoc @ethings-os/sdk-ui!GetNlgInsightsProps.verbosity}
    */
   @Input()
   verbosity: GetNlgInsightsProps['verbosity'];

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useCallback, useMemo } from 'react';
 import last from 'lodash-es/last';
-import { type TFunction } from '@sisense/sdk-common';
-import { Attribute, Column, MembersFilter, filterFactory, MetadataTypes } from '@sisense/sdk-data';
+import { type TFunction } from '@ethings-os/sdk-common';
+import { Attribute, Column, MembersFilter, filterFactory, MetadataTypes } from '@ethings-os/sdk-data';
 import { useTranslation } from 'react-i18next';
 import { StyledColumn, DrilldownSelection, DataPoint, ChartDataPoint } from '../../types.js';
 import { isSameAttribute } from '@/utils/filters.js';

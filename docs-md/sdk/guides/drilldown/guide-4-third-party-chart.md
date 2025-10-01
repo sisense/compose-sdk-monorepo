@@ -133,10 +133,10 @@ When you put all the above code together, it looks like this:
 
 ```ts
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { QueryResultData } from '@sisense/sdk-data';
+import { QueryResultData } from '@ethings-os/sdk-data';
 import Plot from 'react-plotly.js';
 import { Datum, PlotSelectionEvent } from 'plotly.js';
-import { DataPointsEventHandler, MenuPosition } from '@sisense/sdk-ui';
+import { DataPointsEventHandler, MenuPosition } from '@ethings-os/sdk-ui';
 
 type Props = {
   rawData: QueryResultData;
@@ -295,8 +295,8 @@ When you put all the above code together, it looks like this:
 
 ```ts
 import * as DM from '../sample-ecommerce';
-import { DrilldownWidget, ExecuteQuery } from '@sisense/sdk-ui';
-import { measureFactory } from '@sisense/sdk-data';
+import { DrilldownWidget, ExecuteQuery } from '@ethings-os/sdk-ui';
+import { measureFactory } from '@ethings-os/sdk-data';
 import { CustomContextMenu } from './CustomContextMenu';
 import { CustomBreadCrumbs } from './CustomBreadCrumbs';
 import { PlotlyBarChart } from './PlotlyBarChart';

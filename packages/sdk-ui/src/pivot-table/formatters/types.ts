@@ -3,7 +3,7 @@ import type {
   JaqlRequest,
   PivotDataNode,
   PivotTreeNode,
-} from '@sisense/sdk-pivot-client';
+} from '@ethings-os/sdk-pivot-client';
 import { AnyColumn } from '@/chart-data-options/types';
 
 /**

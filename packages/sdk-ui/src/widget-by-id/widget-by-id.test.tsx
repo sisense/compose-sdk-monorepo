@@ -7,7 +7,7 @@ import { SisenseContextProvider } from '../sisense-context/sisense-context-provi
 import { http, HttpResponse } from 'msw';
 import { WidgetById } from './widget-by-id.js';
 import { DashboardDto } from '@/api/types/dashboard-dto.js';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import type { WidgetProps } from '@/props';
 

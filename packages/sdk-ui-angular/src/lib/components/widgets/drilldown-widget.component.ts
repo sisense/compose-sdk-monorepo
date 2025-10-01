@@ -20,7 +20,7 @@ import {
   DrilldownBreadcrumbsProps,
   DrilldownWidget as DrilldownWidgetPreact,
   type DrilldownWidgetProps,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -127,7 +127,7 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
   preactContentRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.drilldownPaths}
+   * {@inheritDoc @ethings-os/sdk-ui!DrilldownWidgetProps.drilldownPaths}
    *
    * @category Widget
    */
@@ -135,7 +135,7 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
   drilldownPaths: DrilldownWidgetProps['drilldownPaths'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.initialDimension}
+   * {@inheritDoc @ethings-os/sdk-ui!DrilldownWidgetProps.initialDimension}
    *
    * @category Widget
    */
@@ -143,7 +143,7 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
   initialDimension!: DrilldownWidgetProps['initialDimension'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DrilldownWidgetProps.config}
+   * {@inheritDoc @ethings-os/sdk-ui!DrilldownWidgetProps.config}
    *
    * @category Widget
    */

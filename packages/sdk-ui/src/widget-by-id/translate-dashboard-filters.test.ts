@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { FilterJaql } from '@sisense/sdk-data';
+import { FilterJaql } from '@ethings-os/sdk-data';
 import { CascadingFilterDto, DashboardDto, FilterDto } from '../api/types/dashboard-dto.js';
 import {
   extractCombinedFilters,

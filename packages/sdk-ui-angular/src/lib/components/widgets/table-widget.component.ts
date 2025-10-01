@@ -11,7 +11,7 @@ import {
   ComponentAdapter,
   TableWidget as TableWidgetPreact,
   type TableWidgetProps as TableWidgetPropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -45,8 +45,8 @@ export interface TableWidgetProps extends TableWidgetPropsPreact {}
  * ```
  * ```ts
  * import { Component } from '@angular/core';
- * import { ChartType } from '@sisense/sdk-ui-angular';
- * import { filterFactory, measureFactory } from '@sisense/sdk-data';
+ * import { ChartType } from '@ethings-os/sdk-ui-angular';
+ * import { filterFactory, measureFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../../assets/sample-healthcare-model';
  *
  * @Component({
@@ -81,7 +81,7 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.dataSource}
+   * {@inheritDoc @ethings-os/sdk-ui!TableWidgetProps.dataSource}
    *
    * @category Data
    */
@@ -89,7 +89,7 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   dataSource: TableWidgetProps['dataSource'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!TableWidgetProps.dataOptions}
    *
    * @category Data
    */
@@ -97,7 +97,7 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   dataOptions!: TableWidgetProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!TableWidgetProps.filters}
    *
    * @category Data
    */
@@ -105,7 +105,7 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   filters: TableWidgetProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!TableWidgetProps.styleOptions}
    *
    * @category Representation
    */
@@ -113,7 +113,7 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   styleOptions: TableWidgetProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.title}
+   * {@inheritDoc @ethings-os/sdk-ui!TableWidgetProps.title}
    *
    * @category Widget
    */
@@ -121,7 +121,7 @@ export class TableWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   title: TableWidgetProps['title'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableWidgetProps.description}
+   * {@inheritDoc @ethings-os/sdk-ui!TableWidgetProps.description}
    *
    * @category Widget
    */

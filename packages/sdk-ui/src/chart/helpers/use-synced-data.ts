@@ -6,7 +6,7 @@ import {
   FilterRelations,
   isDataSource,
   Measure,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { ChartDataOptionsInternal } from '../../chart-data-options/types';
 import { applyDateFormats } from '../../query/query-result-date-formatting';
@@ -18,7 +18,7 @@ import {
 } from '../../chart-data-options/validate-data-options';
 import { useSetError } from '../../error-boundary/use-set-error';
 import '../chart.css';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@ethings-os/sdk-data';
 import { deriveChartFamily } from './derive-chart-family';
 import { LoadDataFunction } from './get-load-data-function';
 

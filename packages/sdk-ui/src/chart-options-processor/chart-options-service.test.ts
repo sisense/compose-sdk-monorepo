@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { SeriesPieOptions } from '@sisense/sisense-charts';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { highchartsOptionsService, HighchartsOptionsInternal } from './chart-options-service';
 import { CartesianChartData, CategoricalChartData } from '../chart-data/types';
 import { cartesianData } from '../chart-data/cartesian-data';
@@ -16,7 +16,7 @@ import {
   StyledColumn,
 } from '../chart-data-options/types';
 import { ChartDesignOptions, DesignOptions } from './translations/types';
-import { DateLevels } from '@sisense/sdk-data';
+import { DateLevels } from '@ethings-os/sdk-data';
 import { formatDateValue } from '../query/date-formats/apply-date-format';
 import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
 import { describe } from 'vitest';

@@ -1,6 +1,6 @@
 import { getFilterCompareId } from '@/widget-by-id/utils';
 import { clearMembersFilter } from '@/utils/filters';
-import { CascadingFilter, Filter, filterFactory, isCascadingFilter } from '@sisense/sdk-data';
+import { CascadingFilter, Filter, filterFactory, isCascadingFilter } from '@ethings-os/sdk-data';
 import { FiltersIgnoringRules, PureFilter } from './types';
 import { isEqualMembersFilters } from './utils';
 import { TranslatableError } from '@/translation/translatable-error';

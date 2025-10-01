@@ -1,5 +1,5 @@
 import isNumber from 'lodash-es/isNumber';
-import { isNumber as isNumberType } from '@sisense/sdk-data';
+import { isNumber as isNumberType } from '@ethings-os/sdk-data';
 import { BoxplotChartData } from '../../../chart-data/types';
 import { Axis, AxisLabelsFormatterContextObject, AxisSettings } from '../axis-section';
 import { fontStyleDefault } from '../../defaults/cartesian';

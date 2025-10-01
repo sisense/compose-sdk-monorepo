@@ -1,6 +1,6 @@
 import { DashboardHeaderProps } from '@/dashboard/types';
 import { FiltersPanelProps } from '@/filters';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 import { fireEvent, render } from '@testing-library/react';
 import { DashboardContainer } from './dashboard-container';
 import * as DM from '../../__test-helpers__/sample-ecommerce';

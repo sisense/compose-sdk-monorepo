@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PivotClient } from './pivot-client.js';
-import { Authenticator } from '@sisense/sdk-rest-client';
+import { Authenticator } from '@ethings-os/sdk-rest-client';
 import { SocketBuilder } from './builders';
 
 vi.mock('./builders', () => ({

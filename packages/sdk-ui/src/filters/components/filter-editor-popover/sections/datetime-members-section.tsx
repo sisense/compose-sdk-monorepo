@@ -11,7 +11,7 @@ import {
   FilterConfig,
   filterFactory,
   Sort,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { convertDateToMemberString, isIncludeMembersFilter } from '../utils';
 import { SearchableSingleSelect } from '../common/select/searchable-single-select';
 import { usePrevious } from '@/common/hooks/use-previous';

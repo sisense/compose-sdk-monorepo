@@ -8,7 +8,7 @@ import {
   DimensionalLevelAttribute,
   RelativeDateFilter,
   filterFactory,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { RelativeDateFilterTile } from './relative-date-filter-tile.js';
 import { MockedSisenseContextProvider, setup } from '../../../../__test-helpers__/index.js';
 import { render, screen } from '@testing-library/react';

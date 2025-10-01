@@ -5,13 +5,13 @@ import type {
   CompleteThemeSettings,
   ThemeProviderProps as ThemeProviderPropsPreact,
   ThemeSettings,
-} from '@sisense/sdk-ui-preact';
-import { getThemeSettingsByOid } from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
+import { getThemeSettingsByOid } from '@ethings-os/sdk-ui-preact';
 import { getSisenseContext } from '../sisense-context-provider/sisense-context';
 import { getThemeContext, themeContextConfigKey } from './theme-context';
 
 /**
- * {@inheritDoc @sisense/sdk-ui!ThemeProviderProps}
+ * {@inheritDoc @ethings-os/sdk-ui!ThemeProviderProps}
  */
 export interface ThemeProviderProps extends Omit<ThemeProviderPropsPreact, 'children'> {}
 

@@ -9,7 +9,7 @@ import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
 import { MenuOptions } from '@/common/components/menu/types';
 import { MenuIds, MenuSectionIds } from '@/common/components/menu/menu-ids';
 import { DashboardProps } from './types.js';
-import { Filter, FilterRelations } from '@sisense/sdk-data';
+import { Filter, FilterRelations } from '@ethings-os/sdk-data';
 import { useSyncedState } from '@/common/hooks/use-synced-state.js';
 import { useWidgetsLayoutManagement } from '@/dashboard/hooks/use-widgets-layout';
 import { getDefaultWidgetsPanelLayout } from '@/dashboard/utils';

@@ -7,7 +7,7 @@ import {
   ScatterDataPoint,
   ScattermapDataPoint,
   TextWidgetDataPoint,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 export type DataPointEvent = {
   /** Data point that was clicked */

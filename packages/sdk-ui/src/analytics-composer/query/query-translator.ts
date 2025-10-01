@@ -12,7 +12,7 @@ import {
   MetadataItem,
   MetadataItemJaql,
   DataSourceField,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { capitalizeFirstLetter, sanitizeDimensionId, validateQueryModel } from '../common/utils.js';
 // .js is required for lodash import
 import cloneDeep from 'lodash-es/cloneDeep';

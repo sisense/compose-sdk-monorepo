@@ -1,6 +1,6 @@
 import merge from 'ts-deepmerge';
 import partition from 'lodash-es/partition';
-import { Attribute, isMembersFilter, MembersFilter, type Filter } from '@sisense/sdk-data';
+import { Attribute, isMembersFilter, MembersFilter, type Filter } from '@ethings-os/sdk-data';
 import { mergeFilters } from '@/widget-by-id/utils';
 import { WidgetHeaderClearSelectionButton } from './widget-header-clear-selection-button';
 import {
@@ -28,7 +28,7 @@ import { WidgetTypeInternal } from '@/models/widget/types';
 import { withCascadingFiltersConversion } from './cascading-utils';
 import { isSameAttribute, isIncludeAllFilter, clearMembersFilter } from '@/utils/filters';
 import { OpenMenuFn } from '@/common/components/menu/types';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { MenuIds } from '@/common/components/menu/menu-ids';
 
 type CommonFiltersConnectionProps = Pick<

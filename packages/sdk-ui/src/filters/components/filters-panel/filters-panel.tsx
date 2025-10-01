@@ -6,7 +6,7 @@ import {
   FilterRelations,
   isCascadingFilter,
   mergeFilters,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { FilterTile } from '@/filters/components/filter-tile';
 import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
@@ -86,8 +86,8 @@ export interface FiltersPanelProps {
  * Here's how to render a filters panel with a set of filters.
  * ```tsx
  * import { useState } from 'react';
- * import { FiltersPanel } from '@sisense/sdk-ui';
- * import { filterFactory, type Filter, type FilterRelations } from '@sisense/sdk-data';
+ * import { FiltersPanel } from '@ethings-os/sdk-ui';
+ * import { filterFactory, type Filter, type FilterRelations } from '@ethings-os/sdk-data';
  * import * as DM from './sample-ecommerce-model';
  *
  * export function Example() {

@@ -6,7 +6,7 @@ import { extractDataOptions } from './translate-widget-data-options.js';
 import { jaqlMock } from './__mocks__/jaql-mock.js';
 import { extractDrilldownOptions } from './translate-widget-drilldown-options.js';
 import { verifyColumn } from './translate-widget-data-options.test.js';
-import { Attribute } from '@sisense/sdk-data';
+import { Attribute } from '@ethings-os/sdk-data';
 import { Hierarchy } from '@/models';
 
 describe('translate widget drilldown options', () => {

@@ -1,4 +1,4 @@
-import { MetadataItem } from '@sisense/sdk-data';
+import { MetadataItem } from '@ethings-os/sdk-data';
 export const MOCK_METADATA = [
   {
     jaql: {

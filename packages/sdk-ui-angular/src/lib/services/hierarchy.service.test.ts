@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 /** @vitest-environment jsdom */
-import { Attribute } from '@sisense/sdk-data';
-import { type ClientApplication, getHierarchyModels } from '@sisense/sdk-ui-preact';
+import { Attribute } from '@ethings-os/sdk-data';
+import { type ClientApplication, getHierarchyModels } from '@ethings-os/sdk-ui-preact';
 import { Mock, Mocked } from 'vitest';
 
 import { HierarchyService } from './hierarchy.service';
@@ -11,7 +11,7 @@ vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,
 }));
 
-vi.mock('@sisense/sdk-ui-preact', () => ({
+vi.mock('@ethings-os/sdk-ui-preact', () => ({
   getHierarchyModels: vi.fn(),
 }));
 

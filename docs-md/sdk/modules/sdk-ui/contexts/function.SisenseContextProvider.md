@@ -28,9 +28,9 @@ Add SisenseContextProvider to the main component of your app as below and then w
 other SDK components inside this component.
 
 ```ts
-import { Chart, SisenseContextProvider } from '@sisense/sdk-ui';
+import { Chart, SisenseContextProvider } from '@ethings-os/sdk-ui';
 import * as DM from './sample-ecommerce';
-import { measures } from '@sisense/sdk-data';
+import { measures } from '@ethings-os/sdk-data';
 
 function App() {
   return (

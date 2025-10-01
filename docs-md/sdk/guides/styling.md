@@ -15,9 +15,9 @@ In this guide, we refer to the following charts to demonstrate the usage of them
 ![Unstyled Chart](../img/styling-guide/unstyled-chart.png 'Unstyled Chart')
 
 ```ts
-import { AreaChart, PieChart } from '@sisense/sdk-ui';
+import { AreaChart, PieChart } from '@ethings-os/sdk-ui';
 import * as DM from './sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 function App() {
   return (

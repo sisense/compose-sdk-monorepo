@@ -4,7 +4,7 @@ License report of third-party dependencies used by Compose SDK and related packa
 Date: 2024-10-01
 ## Compose SDK Packages
 
-### @sisense/sdk-cli
+### @ethings-os/sdk-cli
 
 | Name                  | License type | Link                                                   | Installed version | Remote version | Author                                             |
 | :-------------------- | :----------- | :----------------------------------------------------- | :---------------- | :------------- | :------------------------------------------------- |
@@ -22,7 +22,7 @@ Date: 2024-10-01
 | prettier              | MIT          | git+https://github.com/prettier/prettier.git           | 2.8.4             | 2.8.4          | James Long                                         |
 | typescript            | Apache-2.0   | git+https://github.com/Microsoft/TypeScript.git        | 4.8.4             | 4.8.4          | Microsoft Corp.                                    |
 
-### @sisense/sdk-common
+### @ethings-os/sdk-common
 
 | Name       | License type | Link                                            | Installed version | Remote version | Author                                                               |
 | :--------- | :----------- | :---------------------------------------------- | :---------------- | :------------- | :------------------------------------------------------------------- |
@@ -30,7 +30,7 @@ Date: 2024-10-01
 | typescript | Apache-2.0   | git+https://github.com/Microsoft/TypeScript.git | 4.8.4             | 4.8.4          | Microsoft Corp.                                                      |
 | vitest     | MIT          | git+https://github.com/vitest-dev/vitest.git    | 1.6.0             | 1.6.0          | Anthony Fu <anthonyfu117@hotmail.com>                                |
 
-### @sisense/sdk-data
+### @ethings-os/sdk-data
 
 | Name              | License type | Link                                                        | Installed version | Remote version | Author                                                          |
 | :---------------- | :----------- | :---------------------------------------------------------- | :---------------- | :------------- | :-------------------------------------------------------------- |
@@ -45,7 +45,7 @@ Date: 2024-10-01
 | prettier          | MIT          | git+https://github.com/prettier/prettier.git                | 2.8.4             | 2.8.4          | James Long                                                      |
 | typescript        | Apache-2.0   | git+https://github.com/Microsoft/TypeScript.git             | 4.8.4             | 4.8.4          | Microsoft Corp.                                                 |
 
-### @sisense/sdk-modeling
+### @ethings-os/sdk-modeling
 
 | Name              | License type | Link                                            | Installed version | Remote version | Author                                             |
 | :---------------- | :----------- | :---------------------------------------------- | :---------------- | :------------- | :------------------------------------------------- |
@@ -54,7 +54,7 @@ Date: 2024-10-01
 | @babel/preset-env | MIT          | https://github.com/babel/babel.git              | 7.24.5            | 7.25.4         | The Babel Team (https://babel.dev/team)            |
 | eslint            | MIT          | git+https://github.com/eslint/eslint.git        | 8.57.0            | 8.57.1         | Nicholas C. Zakas <nicholas+npm@nczconsulting.com> |
 
-### @sisense/sdk-pivot-client
+### @ethings-os/sdk-pivot-client
 
 | Name                           | License type | Link                                                                     | Installed version | Remote version | Author                                                          |
 | :----------------------------- | :----------- | :----------------------------------------------------------------------- | :---------------- | :------------- | :-------------------------------------------------------------- |
@@ -94,7 +94,7 @@ Date: 2024-10-01
 | react                          | MIT          | git+https://github.com/facebook/react.git                                | 18.3.1            | 18.3.1         | n/a                                                             |
 | react-dom                      | MIT          | git+https://github.com/facebook/react.git                                | 18.3.1            | 18.3.1         | n/a                                                             |
 
-### @sisense/sdk-query-client
+### @ethings-os/sdk-query-client
 
 | Name                             | License type | Link                                                           | Installed version | Remote version | Author                                                          |
 | :------------------------------- | :----------- | :------------------------------------------------------------- | :---------------- | :------------- | :-------------------------------------------------------------- |
@@ -111,7 +111,7 @@ Date: 2024-10-01
 | tar                              | ISC          | git+https://github.com/isaacs/node-tar.git                     | 6.2.1             | 6.2.1          | GitHub Inc.                                                     |
 | typescript                       | Apache-2.0   | git+https://github.com/Microsoft/TypeScript.git                | 4.9.5             | 4.9.5          | Microsoft Corp.                                                 |
 
-### @sisense/sdk-rest-client
+### @ethings-os/sdk-rest-client
 
 | Name              | License type | Link                                            | Installed version | Remote version | Author                                             |
 | :---------------- | :----------- | :---------------------------------------------- | :---------------- | :------------- | :------------------------------------------------- |
@@ -120,14 +120,14 @@ Date: 2024-10-01
 | prettier          | MIT          | git+https://github.com/prettier/prettier.git    | 2.8.4             | 2.8.4          | James Long                                         |
 | typescript        | Apache-2.0   | git+https://github.com/Microsoft/TypeScript.git | 4.8.4             | 4.8.4          | Microsoft Corp.                                    |
 
-### @sisense/sdk-tracking
+### @ethings-os/sdk-tracking
 
 | Name       | License type | Link                                            | Installed version | Remote version | Author                                |
 | :--------- | :----------- | :---------------------------------------------- | :---------------- | :------------- | :------------------------------------ |
 | typescript | Apache-2.0   | git+https://github.com/Microsoft/TypeScript.git | 4.8.4             | 4.8.4          | Microsoft Corp.                       |
 | vitest     | MIT          | git+https://github.com/vitest-dev/vitest.git    | 1.6.0             | 1.6.0          | Anthony Fu <anthonyfu117@hotmail.com> |
 
-### @sisense/sdk-ui
+### @ethings-os/sdk-ui
 
 | Name                           | License type            | Link                                                                     | Installed version | Remote version | Author                                                                  |
 | :----------------------------- | :---------------------- | :----------------------------------------------------------------------- | :---------------- | :------------- | :---------------------------------------------------------------------- |
@@ -214,7 +214,7 @@ Date: 2024-10-01
 | react                          | MIT                     | git+https://github.com/facebook/react.git                                | 18.3.1            | 18.3.1         | n/a                                                                     |
 | react-dom                      | MIT                     | git+https://github.com/facebook/react.git                                | 18.3.1            | 18.3.1         | n/a                                                                     |
 
-### @sisense/sdk-ui-angular
+### @ethings-os/sdk-ui-angular
 
 | Name                          | License type | Link                                                               | Installed version | Remote version | Author                                             |
 | :---------------------------- | :----------- | :----------------------------------------------------------------- | :---------------- | :------------- | :------------------------------------------------- |
@@ -237,7 +237,7 @@ Date: 2024-10-01
 | @angular/compiler             | MIT          | git+https://github.com/angular/angular.git                         | 15.2.10           | 18.2.6         | angular                                            |
 | @angular/core                 | MIT          | git+https://github.com/angular/angular.git                         | 15.2.10           | 18.2.6         | angular                                            |
 
-### @sisense/sdk-ui-preact
+### @ethings-os/sdk-ui-preact
 
 | Name                | License type | Link                                                   | Installed version | Remote version | Author                                             |
 | :------------------ | :----------- | :----------------------------------------------------- | :---------------- | :------------- | :------------------------------------------------- |
@@ -251,7 +251,7 @@ Date: 2024-10-01
 | vite                | MIT          | git+https://github.com/vitejs/vite.git                 | 4.1.4             | 4.1.4          | Evan You                                           |
 | vite-plugin-dts     | MIT          | git+https://github.com/qmhc/vite-plugin-dts.git        | 2.3.0             | 2.3.0          | qmhc                                               |
 
-### @sisense/sdk-ui-vue
+### @ethings-os/sdk-ui-vue
 
 | Name                          | License type | Link                                                      | Installed version | Remote version | Author                                             |
 | :---------------------------- | :----------- | :-------------------------------------------------------- | :---------------- | :------------- | :------------------------------------------------- |

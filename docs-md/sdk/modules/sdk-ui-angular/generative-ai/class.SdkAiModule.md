@@ -12,8 +12,8 @@ Example of importing [SdkAiModule](class.SdkAiModule.md) and injecting [AiContex
 along with importing dependency [SdkUiModule](../contexts/class.SdkUiModule.md) and injecting [SisenseContextConfig](../interfaces/interface.SisenseContextConfig.md) to connect to a Sisense instance:
 
 ```ts
-import { SdkUiModule, SisenseContextConfig } from '@sisense/sdk-ui-angular';
-import { SdkAiModule, AI_CONTEXT_CONFIG_TOKEN, AiContextConfig } from '@sisense/sdk-ui-angular/ai';
+import { SdkUiModule, SisenseContextConfig } from '@ethings-os/sdk-ui-angular';
+import { SdkAiModule, AI_CONTEXT_CONFIG_TOKEN, AiContextConfig } from '@ethings-os/sdk-ui-angular/ai';
 
 const AI_CONTEXT_CONFIG: AiContextConfig = {
   volatile: true,

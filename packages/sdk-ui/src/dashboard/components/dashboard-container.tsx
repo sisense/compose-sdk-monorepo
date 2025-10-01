@@ -10,7 +10,7 @@ import { useFiltersPanelCollapsedState } from '@/dashboard/hooks/use-filters-pan
 import { useCallback, useMemo, useState } from 'react';
 import { DashboardChangeType } from '@/dashboard/dashboard';
 import { WidgetProps } from '@/props';
-import { DataSource } from '@sisense/sdk-data';
+import { DataSource } from '@ethings-os/sdk-data';
 import { getDataSourceTitle } from '@/utils/data-sources-utils';
 import { Themable } from '@/theme-provider/types';
 import { EditableLayout } from '@/dashboard/components/editable-layout/editable-layout';

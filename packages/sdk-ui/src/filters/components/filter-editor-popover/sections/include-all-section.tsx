@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { SelectableSection } from '../common/selectable-section';
-import { Filter, filterFactory } from '@sisense/sdk-data';
+import { Filter, filterFactory } from '@ethings-os/sdk-data';
 import { useTranslation } from 'react-i18next';
 
 type IncludeAllSectionProps = {

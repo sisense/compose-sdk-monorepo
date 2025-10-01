@@ -1,6 +1,6 @@
 /** @vitest-environment jsdom */
 import { screen } from '@testing-library/react';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 import { http, HttpResponse } from 'msw';
 import { setup } from '@/__test-helpers__';
 import { FilterEditorPopover } from './filter-editor-popover';

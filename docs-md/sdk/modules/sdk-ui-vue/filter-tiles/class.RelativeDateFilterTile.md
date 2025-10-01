@@ -21,8 +21,8 @@ Vue example of configuring the date min max values and handling onUpdate event.
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { RelativeDateFilterTile, type RelativeDateFilterTileProps } from '@sisense/sdk-ui-vue';
-import { filterFactory } from '@sisense/sdk-data';
+import { RelativeDateFilterTile, type RelativeDateFilterTileProps } from '@ethings-os/sdk-ui-vue';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../assets/sample-retail-model';
 
 const relativeDateFilterValue = ref<Filter | null>(filterFactory.dateRelativeTo(DM.DimDate.Date.Months, 0, 18);

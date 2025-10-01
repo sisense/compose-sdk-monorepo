@@ -1,4 +1,4 @@
-import { Data } from '@sisense/sdk-data';
+import { Data } from '@ethings-os/sdk-data';
 import { useMemo, useState } from 'react';
 import { ChartData } from '../chart-data/types';
 import { ChartDesignOptions, DesignOptions } from '../chart-options-processor/translations/types';

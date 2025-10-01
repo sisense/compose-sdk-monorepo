@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { ScattermapChart as ScattermapChartPreact } from '@sisense/sdk-ui-preact';
-import type { ScattermapChartProps as ScattermapChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { ScattermapChart as ScattermapChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { ScattermapChartProps as ScattermapChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!ScattermapChart | `ScattermapChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!ScattermapChart | `ScattermapChart`} component.
  */
 export interface ScattermapChartProps extends ScattermapChartPropsPreact {}
 
@@ -26,9 +26,9 @@ export interface ScattermapChartProps extends ScattermapChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { ScattermapChart,type ScattermapChartProps } from '@sisense/sdk-ui-vue';
+ * import { ScattermapChart,type ScattermapChartProps } from '@ethings-os/sdk-ui-vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -50,7 +50,7 @@ export interface ScattermapChartProps extends ScattermapChartPropsPreact {}
 export const ScattermapChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -59,37 +59,37 @@ export const ScattermapChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<ScattermapChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<ScattermapChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<ScattermapChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.styleOptions}
      *
      * @category Chart
      */
     styleOptions: Object as PropType<ScattermapChartProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<ScattermapChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.onDataPointClick}
      *
      * @category Callbacks
      */

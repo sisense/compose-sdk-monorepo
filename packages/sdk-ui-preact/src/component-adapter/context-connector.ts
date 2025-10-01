@@ -1,4 +1,4 @@
-import { type CustomContextProviderProps } from '@sisense/sdk-ui';
+import { type CustomContextProviderProps } from '@ethings-os/sdk-ui';
 
 import { AnyComponentFunction } from './types';
 import { DataObserver } from './utils/data-observer';

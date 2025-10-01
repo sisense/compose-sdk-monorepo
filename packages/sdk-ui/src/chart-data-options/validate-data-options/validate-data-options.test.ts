@@ -6,7 +6,7 @@ import {
   validateDataOptionsAgainstData,
   validateDataOptions,
 } from './validate-data-options';
-import { Attribute, Data, Filter, Measure } from '@sisense/sdk-data';
+import { Attribute, Data, Filter, Measure } from '@ethings-os/sdk-data';
 
 describe('generateUniqueDataColumnsNames', () => {
   it('should generate unique names and return the mapping', () => {

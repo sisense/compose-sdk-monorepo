@@ -17,7 +17,7 @@ import {
   filterFactory,
   FilterRelationsModel,
   isCascadingFilter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 describe('filter-relations', () => {

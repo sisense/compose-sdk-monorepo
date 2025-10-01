@@ -3,7 +3,7 @@
 import { getChartOptions } from './get-widget-options';
 import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
 import { ChartRecommendations } from '@/analytics-composer/types';
-import { MetadataItem } from '@sisense/sdk-data';
+import { MetadataItem } from '@ethings-os/sdk-data';
 
 describe('getChartOptions', () => {
   const jaql: MetadataItem[] = [];

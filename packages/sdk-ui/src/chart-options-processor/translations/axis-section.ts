@@ -1,5 +1,5 @@
 import { TextStyle } from './types';
-import { DateLevels } from '@sisense/sdk-data';
+import { DateLevels } from '@ethings-os/sdk-data';
 import { CategoricalXValues } from '../../chart-data/types';
 
 export type Axis = {

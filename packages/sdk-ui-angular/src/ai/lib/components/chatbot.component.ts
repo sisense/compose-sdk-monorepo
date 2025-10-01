@@ -13,12 +13,12 @@ import {
   createThemeContextConnector,
   SisenseContextService,
   ThemeService,
-} from '@sisense/sdk-ui-angular';
-import { ComponentAdapter } from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-angular';
+import { ComponentAdapter } from '@ethings-os/sdk-ui-preact';
 import {
   Chatbot as ChatbotPreact,
   type ChatbotProps as ChatbotPropsPreact,
-} from '@sisense/sdk-ui-preact/ai';
+} from '@ethings-os/sdk-ui-preact/ai';
 
 import { createAiContextConnector, rootId, styles, template } from '../component-wrapper-helpers';
 import { AiService } from '../services/ai.service';
@@ -79,19 +79,19 @@ export class ChatbotComponent implements AfterViewInit, OnChanges, OnDestroy {
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChatbotProps.width}
+   * {@inheritDoc @ethings-os/sdk-ui!ChatbotProps.width}
    */
   @Input()
   width: ChatbotProps['width'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChatbotProps.height}
+   * {@inheritDoc @ethings-os/sdk-ui!ChatbotProps.height}
    */
   @Input()
   height: ChatbotProps['height'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChatbotProps.config}
+   * {@inheritDoc @ethings-os/sdk-ui!ChatbotProps.config}
    */
   @Input()
   config: ChatbotProps['config'];

@@ -8,7 +8,7 @@ import {
   isCascadingFilter,
   isMembersFilter,
   filterFactory,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { FilterEditorPopover } from '@/filters/components/filter-editor-popover/filter-editor-popover';
 import type { UseExistingFilterEditingConfig } from '../types';
 import clone from 'lodash-es/clone';

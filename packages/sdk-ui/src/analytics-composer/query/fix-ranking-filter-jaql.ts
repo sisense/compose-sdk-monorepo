@@ -1,4 +1,4 @@
-import { AnyObject, MetadataItem } from '@sisense/sdk-data';
+import { AnyObject, MetadataItem } from '@ethings-os/sdk-data';
 
 /**
  * Type guard to check if a filter is a possible ranking filter with top/bottom properties

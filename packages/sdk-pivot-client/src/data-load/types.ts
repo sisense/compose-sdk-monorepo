@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { type BaseJaql } from '@sisense/sdk-data';
+import { type BaseJaql } from '@ethings-os/sdk-data';
 import { LoggerI } from '../utils/types.js';
 import { MeasurePath } from '../data-handling/utils/jaqlProcessor.js';
 

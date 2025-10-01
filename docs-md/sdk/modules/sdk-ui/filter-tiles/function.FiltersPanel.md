@@ -23,8 +23,8 @@ Filters panel component that renders a list of filter tiles
 Here's how to render a filters panel with a set of filters.
 ```ts
 import { useState } from 'react';
-import { FiltersPanel } from '@sisense/sdk-ui';
-import { filterFactory, type Filter, type FilterRelations } from '@sisense/sdk-data';
+import { FiltersPanel } from '@ethings-os/sdk-ui';
+import { filterFactory, type Filter, type FilterRelations } from '@ethings-os/sdk-data';
 import * as DM from './sample-ecommerce-model';
 
 export function Example() {

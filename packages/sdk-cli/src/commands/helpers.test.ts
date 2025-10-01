@@ -1,6 +1,6 @@
-import { DataModel, DataSourceField } from '@sisense/sdk-data';
-import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { DataModel, DataSourceField } from '@ethings-os/sdk-data';
+import { writeJavascript, writeTypescript } from '@ethings-os/sdk-modeling';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import { Mocked } from 'vitest';
 
 import {
@@ -22,7 +22,7 @@ import {
   writeFile,
 } from './helpers.js';
 
-vi.mock('@sisense/sdk-modeling', () => ({
+vi.mock('@ethings-os/sdk-modeling', () => ({
   writeTypescript: vi.fn(),
   writeJavascript: vi.fn(),
 }));

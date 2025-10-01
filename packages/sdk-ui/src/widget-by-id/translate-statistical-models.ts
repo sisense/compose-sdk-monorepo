@@ -1,4 +1,4 @@
-import { ForecastFormulaOptions, TrendFormulaOptions } from '@sisense/sdk-data';
+import { ForecastFormulaOptions, TrendFormulaOptions } from '@ethings-os/sdk-data';
 import { StyledMeasureColumn } from '../types.js';
 import { StatisticalModels } from './types.js';
 

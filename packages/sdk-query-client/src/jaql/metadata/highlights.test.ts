@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { ExcludeFilter, MembersFilter } from '@sisense/sdk-data';
+import { ExcludeFilter, MembersFilter } from '@ethings-os/sdk-data';
 import {
   DateLevels,
   DimensionalAttribute,
   DimensionalDateDimension,
   DimensionalLevelAttribute,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 import {
   applyHighlightFilters,

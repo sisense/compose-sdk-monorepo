@@ -1,5 +1,5 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
-import { TrackingEventDetails, trackProductEvent } from '@sisense/sdk-tracking';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
+import { TrackingEventDetails, trackProductEvent } from '@ethings-os/sdk-tracking';
 
 import { PKG_VERSION } from './package-version.js';
 

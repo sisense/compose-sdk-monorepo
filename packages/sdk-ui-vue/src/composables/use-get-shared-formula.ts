@@ -1,18 +1,18 @@
 import { useReducer } from '../helpers/use-reducer';
 import { getSisenseContext } from '../providers';
 import { collectRefs, toPlainObject } from '../utils';
-import type { CalculatedMeasure, DimensionalCalculatedMeasure } from '@sisense/sdk-data';
+import type { CalculatedMeasure, DimensionalCalculatedMeasure } from '@ethings-os/sdk-data';
 import type {
   ClientApplication,
   DataState,
   UseGetSharedFormulaParams,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import {
   dataLoadStateReducer,
   fetchFormula,
   fetchFormulaByOid,
   translateToFormulaResponse,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { toRefs, watch } from 'vue';
 import { useTracking } from './use-tracking';
 import type { MaybeRefOrWithRefs } from '../types';
@@ -32,7 +32,7 @@ import type { MaybeRefOrWithRefs } from '../types';
  * ```vue
  * <script setup>
  * import { ref } from 'vue';
- * import { useGetSharedFormula } from '@sisense/sdk-ui-vue';
+ * import { useGetSharedFormula } from '@ethings-os/sdk-ui-vue';
  *
  * // To fetch by OID
  * const paramsByOid = ref({

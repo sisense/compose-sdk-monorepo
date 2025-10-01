@@ -1,6 +1,6 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { isNumber } from '@sisense/sdk-data';
+import { isNumber } from '@ethings-os/sdk-data';
 import {
   ScatterChartDataOptionsInternal,
   StyledColumn,

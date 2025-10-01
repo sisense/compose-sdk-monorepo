@@ -38,7 +38,7 @@ import {
  type DashboardProps,
  DashboardService,
  dashboardModelTranslator,
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 
 @Component({
  selector: 'app-dashboard',

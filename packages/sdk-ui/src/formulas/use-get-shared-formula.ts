@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from 'react';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
 import { fetchFormula, fetchFormulaByOid } from './fetch-formula.js';
-import { CalculatedMeasure, DimensionalCalculatedMeasure } from '@sisense/sdk-data';
+import { CalculatedMeasure, DimensionalCalculatedMeasure } from '@ethings-os/sdk-data';
 import { TranslatableError } from '../translation/translatable-error.js';
 import { UseGetSharedFormulaParams } from '../props.js';
 import { HookEnableParam } from '../common/hooks/types.js';

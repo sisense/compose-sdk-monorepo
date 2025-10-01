@@ -1,4 +1,4 @@
-import { DataSource } from '@sisense/sdk-data';
+import { DataSource } from '@ethings-os/sdk-data';
 import { useState } from 'react';
 
 export const useDataSourceSelection = (

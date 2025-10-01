@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { renderHook } from '@testing-library/react';
 import { usePivotDataService } from './use-pivot-data-service';
-import { DataService, PivotBuilder, PivotClient } from '@sisense/sdk-pivot-client';
+import { DataService, PivotBuilder, PivotClient } from '@ethings-os/sdk-pivot-client';
 import { describe, it, expect, vi } from 'vitest';
 
 const createDataServiceMock = (name = 'mockedDataService') => {

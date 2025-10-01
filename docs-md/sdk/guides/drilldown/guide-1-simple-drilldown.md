@@ -137,8 +137,8 @@ For your convenience, here is the full code for the simple drilldown chart:
 
 ```ts
 import * as DM from '../sample-ecommerce';
-import { Chart, DataPoint, DrilldownWidget } from '@sisense/sdk-ui';
-import { measureFactory } from '@sisense/sdk-data';
+import { Chart, DataPoint, DrilldownWidget } from '@ethings-os/sdk-ui';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 export const DrilldownChart = () => {
   return (

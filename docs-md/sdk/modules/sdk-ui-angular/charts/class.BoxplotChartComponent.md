@@ -23,8 +23,8 @@ variability, and center of a data set along an axis.
 
 ```ts
 import { Component } from '@angular/core';
-import { filterFactory } from '@sisense/sdk-data';
-import type { BoxplotChartDataOptions } from '@sisense/sdk-ui-angular';
+import { filterFactory } from '@ethings-os/sdk-data';
+import type { BoxplotChartDataOptions } from '@ethings-os/sdk-ui-angular';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({

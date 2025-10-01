@@ -1,4 +1,4 @@
-# @sisense/typedoc-plugin-diff-packages
+# @ethings-os/typedoc-plugin-diff-packages
 
 This TypeDoc plugin is to generate a feature parity report across UI frameworks.
 

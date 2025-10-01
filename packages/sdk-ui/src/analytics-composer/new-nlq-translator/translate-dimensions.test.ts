@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { JSONArray } from '@sisense/sdk-data';
+import { JSONArray } from '@ethings-os/sdk-data';
 import { translateDimensionsJSON } from './translate-dimensions.js';
 import { NlqTranslationResult } from '../types.js';
 

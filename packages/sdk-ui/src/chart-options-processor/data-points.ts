@@ -3,7 +3,7 @@ import {
   isNumber as isNumberType,
   isDatetime as isDatetimeType,
   Measure,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import isDate from 'lodash-es/isDate';
 import {
   DataPoint,

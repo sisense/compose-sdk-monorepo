@@ -1,4 +1,4 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import type {
   Chat,
   ChatRequest,

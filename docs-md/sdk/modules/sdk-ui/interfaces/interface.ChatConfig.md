@@ -52,7 +52,7 @@ false
 ```
 
 ::: warning Deprecated
-This flag is deprecated and will be removed in a future version. Use [@sisense/sdk-ui!AiContextProviderProps.volatile](interface.AiContextProviderProps.md#volatile) instead.
+This flag is deprecated and will be removed in a future version. Use [@ethings-os/sdk-ui!AiContextProviderProps.volatile](interface.AiContextProviderProps.md#volatile) instead.
 :::
 
 ***

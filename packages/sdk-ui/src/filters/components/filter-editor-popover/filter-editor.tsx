@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { DataSource, Filter, isDatetime, isNumber, isText } from '@sisense/sdk-data';
+import { DataSource, Filter, isDatetime, isNumber, isText } from '@ethings-os/sdk-data';
 import { FilterEditorTextual } from './filter-editor-textual';
 import { FilterEditorNumerical } from './filter-editor-numerical';
 import { FilterEditorDatetime } from './filter-editor-datetime';

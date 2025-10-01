@@ -18,9 +18,9 @@ Pivot Table with and pagination.
 ```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-ecommerce';
-import type { PivotTableDataOptions } from '@sisense/sdk-ui-angular';
+import type { PivotTableDataOptions } from '@ethings-os/sdk-ui-angular';
 
 @Component({
  selector: 'app-analytics',

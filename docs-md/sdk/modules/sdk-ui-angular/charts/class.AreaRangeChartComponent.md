@@ -23,9 +23,9 @@ the area between these values.
 ```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory, Filter } from '@sisense/sdk-data';
+import { measureFactory, filterFactory, Filter } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType, RangeChartDataOptions } from '@sisense/sdk-ui-angular';
+import type { ChartType, RangeChartDataOptions } from '@ethings-os/sdk-ui-angular';
 
 @Component({
  selector: 'app-analytics',

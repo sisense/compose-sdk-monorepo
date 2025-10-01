@@ -1,5 +1,5 @@
 import { PivotQueryDescription, QueryDescription } from '@/query/execute-query';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@ethings-os/sdk-data';
 import { ExecutePivotQueryParams, ExecuteQueryParams } from './types';
 
 export function convertToQueryDescription<T extends ExecuteQueryParams | ExecutePivotQueryParams>(

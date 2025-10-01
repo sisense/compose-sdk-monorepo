@@ -4,7 +4,7 @@ import {
 } from '@/filters/components/filter-editor-popover/common';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useGetFilterMembers } from '@/filters';
-import { Attribute, filterFactory } from '@sisense/sdk-data';
+import { Attribute, filterFactory } from '@ethings-os/sdk-data';
 import { useTranslation } from 'react-i18next';
 import { ScrollWrapperOnScrollEvent } from '@/filters/components/filter-editor-popover/common/scroll-wrapper';
 import debounce from 'lodash-es/debounce';

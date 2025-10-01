@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { Table as TablePreact } from '@sisense/sdk-ui-preact';
-import type { TableProps } from '@sisense/sdk-ui-preact';
+import { Table as TablePreact } from '@ethings-os/sdk-ui-preact';
+import type { TableProps } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 // Note: uses direct reexport as a temporary workaround for getting the correct API docs
@@ -20,9 +20,9 @@ export { TableProps };
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { Table, type TableProps } from '@sisense/sdk-ui-vue';
+ * import { Table, type TableProps } from '@ethings-os/sdk-ui-vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -48,7 +48,7 @@ export { TableProps };
 export const Table = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!TableProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!TableProps.dataOptions}
      *
      * @category Data
      */
@@ -57,13 +57,13 @@ export const Table = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!TableProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!TableProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<TableProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!TableProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!TableProps.filters}
      *
      * @category Data
      */
@@ -71,13 +71,13 @@ export const Table = defineComponent({
     /** @internal */
     refreshCounter: Number as PropType<TableProps['refreshCounter']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!TableProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!TableProps.styleOptions}
      *
      * @category Representation
      */
     styleOptions: Object as PropType<TableProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!TableProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!TableProps.onDataReady}
      *
      * @category Callbacks
      */

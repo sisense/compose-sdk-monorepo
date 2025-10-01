@@ -20,7 +20,7 @@ import {
   RelativeDateFilter,
   Sort,
   TextFilter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { MOCK_QUERY_MODEL_1, MOCK_QUERY_MODEL_2 } from '../__mocks__/mock-queries.js';
 import { widgetComposer } from '../index.js';
 import { CustomSuperJSON } from './custom-superjson.js';

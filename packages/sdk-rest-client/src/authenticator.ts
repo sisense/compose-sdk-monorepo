@@ -1,5 +1,5 @@
 /* eslint-disable max-params */
-import { normalizeUrl } from '@sisense/sdk-common';
+import { normalizeUrl } from '@ethings-os/sdk-common';
 
 import { BearerAuthenticator } from './bearer-authenticator.js';
 import { FusionAuthenticator } from './fusion-authenticator.js';

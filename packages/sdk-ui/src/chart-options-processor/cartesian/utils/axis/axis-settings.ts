@@ -10,7 +10,7 @@ import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from '../../../translations/number-format-config';
-import { isNumber } from '@sisense/sdk-data';
+import { isNumber } from '@ethings-os/sdk-data';
 import {
   ChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,

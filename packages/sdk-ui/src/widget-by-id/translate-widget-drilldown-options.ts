@@ -5,7 +5,7 @@ import {
   DimensionalLevelAttribute,
   IncludeMembersFilterJaql,
   isDatetime,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import uniqBy from 'lodash-es/uniqBy';
 import partition from 'lodash-es/partition';
 import { createDataColumn } from './translate-widget-data-options.js';

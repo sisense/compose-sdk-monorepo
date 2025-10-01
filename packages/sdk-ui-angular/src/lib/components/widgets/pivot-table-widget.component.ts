@@ -11,7 +11,7 @@ import {
   ComponentAdapter,
   PivotTableWidget as PivotTableWidgetPreact,
   type PivotTableWidgetProps as PivotTableWidgetPropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -46,8 +46,8 @@ export interface PivotTableWidgetProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { type PivotTableWidgetProps } from '@sisense/sdk-ui-angular';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { type PivotTableWidgetProps } from '@ethings-os/sdk-ui-angular';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-ecommerce';
 
 @Component({
@@ -98,7 +98,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.dataSource}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableWidgetProps.dataSource}
    *
    * @category Data
    */
@@ -106,7 +106,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   dataSource: PivotTableWidgetProps['dataSource'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableWidgetProps.dataOptions}
    *
    * @category Data
    */
@@ -114,7 +114,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   dataOptions!: PivotTableWidgetProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableWidgetProps.filters}
    *
    * @category Data
    */
@@ -122,7 +122,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   filters: PivotTableWidgetProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableWidgetProps.highlights}
    *
    * @category Data
    */
@@ -130,7 +130,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   highlights: PivotTableWidgetProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableWidgetProps.styleOptions}
    *
    * @category Representation
    */
@@ -138,7 +138,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   styleOptions: PivotTableWidgetProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.title}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableWidgetProps.title}
    *
    * @category Widget
    */
@@ -146,7 +146,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   title: PivotTableWidgetProps['title'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.title}
+   * {@inheritDoc @ethings-os/sdk-ui!PivotTableWidgetProps.title}
    *
    * @category Widget
    */

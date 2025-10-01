@@ -1,7 +1,7 @@
 import {
   type DashboardModel,
   dashboardModelTranslator as dashboardModelTranslatorPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import { type DashboardProps } from '../components';
 
@@ -27,7 +27,7 @@ import {
   type DashboardProps,
   DashboardService,
   dashboardModelTranslator,
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-dashboard',

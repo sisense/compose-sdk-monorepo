@@ -32,7 +32,7 @@ A new `DashboardProps` instance with all valid JTD configurations applied to the
 
 Apply a variety of Jump To Dashboard configuration options to multiple widgets in a single operation.
 ```ts
-import { dashboardHelpers } from '@sisense/sdk-ui';
+import { dashboardHelpers } from '@ethings-os/sdk-ui';
 
 const dashboard: DashboardProps = {
   title: 'Executive Dashboard',

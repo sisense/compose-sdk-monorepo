@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { DataTable } from './table-processor';
-import { simpleColumnType } from '@sisense/sdk-data';
+import { simpleColumnType } from '@ethings-os/sdk-data';
 import {
   periodCompareValueForNow,
   DatePeriod,

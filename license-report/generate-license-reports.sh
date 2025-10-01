@@ -15,7 +15,7 @@ echo "# License Report" > $report_name
 gen_report () {
   echo "Generating license report for $1"
     {
-      echo "### @sisense/$1"
+      echo "### @ethings-os/$1"
       echo " "
       license-report --config license-report-config.json --only "dev,prod,peer" --package="$2/package.json"
     } >> $report_name
@@ -33,6 +33,6 @@ echo "## Other Sisense Packages Used By Compose SDK Packages" >> $report_name
 echo "" >> $report_name
 for file_name in "sisense-charts" "task-manager"
 do
-  file_path="../node_modules/@sisense/$file_name"
+  file_path="../node_modules/@ethings-os/$file_name"
   gen_report "$file_name" "$file_path"
 done

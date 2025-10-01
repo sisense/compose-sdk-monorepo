@@ -1,7 +1,7 @@
 import {
   type WidgetModel,
   widgetModelTranslator as widgetModelTranslatorPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   ChartProps,
@@ -75,7 +75,7 @@ import {
   type ChartProps
   WidgetService,
   widgetModelTranslator,
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-example',
@@ -124,7 +124,7 @@ import {
   type TableProps
   WidgetService,
   widgetModelTranslator,
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-example',
@@ -174,7 +174,7 @@ import {
   type PivotTableProps
   WidgetService,
   widgetModelTranslator,
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-example',
@@ -226,7 +226,7 @@ import {
   type ChartWidgetProps
   WidgetService,
   widgetModelTranslator,
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-example',
@@ -274,7 +274,7 @@ import {
   type PivotTableWidgetProps
   WidgetService,
   widgetModelTranslator,
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-example',

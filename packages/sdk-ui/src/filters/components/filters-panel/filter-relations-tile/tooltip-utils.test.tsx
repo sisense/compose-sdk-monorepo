@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { generateTooltipLines, trimUnnecessaryBrackets } from './tooltip-utils';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { ReactNode } from 'react';
 import { FilterRelationsDescription } from '@/utils/filter-relations';
 

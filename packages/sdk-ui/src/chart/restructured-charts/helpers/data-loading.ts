@@ -1,7 +1,7 @@
 import { ClientApplication } from '@/app/client-application';
 import { QueryDescription } from '@/query/execute-query';
-import { QueryResultData } from '@sisense/sdk-data';
-import { QueryExecutionConfig } from '@sisense/sdk-query-client';
+import { QueryResultData } from '@ethings-os/sdk-data';
+import { QueryExecutionConfig } from '@ethings-os/sdk-query-client';
 import {
   executeQueryWithCache,
   executeQuery as executeQueryWithoutCache,

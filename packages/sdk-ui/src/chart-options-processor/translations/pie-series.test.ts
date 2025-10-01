@@ -2,7 +2,7 @@
 import { SeriesType } from '../chart-options-service';
 import { formatCategoricalChartData } from './pie-series';
 import { CategoricalChartData } from '../../chart-data/types';
-import { createAttribute } from '@sisense/sdk-data';
+import { createAttribute } from '@ethings-os/sdk-data';
 import { PieChartDesignOptions } from './design-options';
 import { BaseDesignOptions } from './base-design-options';
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';

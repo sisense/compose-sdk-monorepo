@@ -1,5 +1,5 @@
 {
-  "name": "@sisense/sdk-rest-client",
+  "name": "@ethings-os/sdk-rest-client",
   "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package for handling REST API calls to Sisense API endpoints including authentication and data queries",
   "repository": {
@@ -20,7 +20,7 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-common": "workspace:*"
+    "@ethings-os/sdk-common": "workspace:*"
   },
   "scripts": {
     "type-check": "tsc --noEmit",

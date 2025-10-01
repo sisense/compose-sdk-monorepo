@@ -10,7 +10,7 @@ import {
   FilterSubType,
   Filter,
 } from './data-table-filters';
-import { simpleColumnType } from '@sisense/sdk-data';
+import { simpleColumnType } from '@ethings-os/sdk-data';
 
 const locale = getBaseDateFnsLocale();
 

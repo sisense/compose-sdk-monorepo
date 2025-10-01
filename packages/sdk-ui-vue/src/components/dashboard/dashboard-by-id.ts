@@ -1,17 +1,17 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { DashboardById as DashboardByIdPreact } from '@sisense/sdk-ui-preact';
+import { DashboardById as DashboardByIdPreact } from '@ethings-os/sdk-ui-preact';
 import type {
   DashboardByIdProps as DashboardByIdPropsPreact,
   DashboardByIdConfig,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 // Re-exports related types
 export { DashboardByIdConfig };
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!DashboardById | `DashboardById`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!DashboardById | `DashboardById`} component.
  */
 export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
 
@@ -30,7 +30,7 @@ export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
  * </template>
  *
  * <script setup lang="ts">
- * import { DashboardById } from '@sisense/sdk-ui-vue';
+ * import { DashboardById } from '@ethings-os/sdk-ui-vue';
  *
  * const dashboardOid = '6441e728dac1920034bce737';
  * </script>
@@ -44,14 +44,14 @@ export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
 export const DashboardById = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.dashboardOid}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardByIdProps.dashboardOid}
      */
     dashboardOid: {
       type: String as PropType<DashboardByIdProps['dashboardOid']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
+     * {@inheritDoc @ethings-os/sdk-ui!DashboardByIdProps.config}
      */
     config: Object as PropType<DashboardByIdProps['config']>,
   },

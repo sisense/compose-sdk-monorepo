@@ -1,6 +1,6 @@
 import React from 'react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { Filter, filterFactory } from '@sisense/sdk-data';
+import { Filter, filterFactory } from '@ethings-os/sdk-data';
 import {
   getJtdClickHandler,
   getJtdClickHandlerForMultiplePoints,

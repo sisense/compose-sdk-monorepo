@@ -3,7 +3,7 @@ import {
   EVENT_PIVOT_ELEMENT_CHANGE,
   type PivotBuilder,
   type PivotTreeNode,
-} from '@sisense/sdk-pivot-client';
+} from '@ethings-os/sdk-pivot-client';
 import type { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
 import type { PivotTableDataOptionsInternal, StyledColumn } from '@/chart-data-options/types';
 import type { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';

@@ -1,4 +1,4 @@
-import { CascadingFilter, Filter } from '@sisense/sdk-data';
+import { CascadingFilter, Filter } from '@ethings-os/sdk-data';
 import { DeepRequired } from 'ts-essentials';
 
 /**

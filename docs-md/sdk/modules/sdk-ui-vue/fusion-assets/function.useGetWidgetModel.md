@@ -29,7 +29,7 @@ Retrieve a widget model and use it to populate a `Chart` component:
 
 ```vue
 <script setup lang="ts">
-import { Chart, useGetWidgetModel, widgetModelTranslator } from '@sisense/sdk-ui-vue';
+import { Chart, useGetWidgetModel, widgetModelTranslator } from '@ethings-os/sdk-ui-vue';
 const { data: widget } = useGetWidgetModel({
   dashboardOid: 'your_dashboard_oid',
   widgetOid: 'your_widget_oid',

@@ -1,7 +1,7 @@
 import { RestApi } from '@/api/rest-api.js';
 import { useSisenseContext } from '@/sisense-context/sisense-context.js';
 import { RestApiHookState } from '@/utils/utility-types';
-import { DataSource, DataSourceField, isDataSourceInfo } from '@sisense/sdk-data';
+import { DataSource, DataSourceField, isDataSourceInfo } from '@ethings-os/sdk-data';
 import { useQuery } from '@tanstack/react-query';
 
 /**

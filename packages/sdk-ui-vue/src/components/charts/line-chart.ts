@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { LineChart as LineChartPreact } from '@sisense/sdk-ui-preact';
-import type { LineChartProps as LineChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { LineChart as LineChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { LineChartProps as LineChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!LineChart | `LineChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!LineChart | `LineChart`} component.
  */
 export interface LineChartProps extends LineChartPropsPreact {}
 
@@ -26,9 +26,9 @@ export interface LineChartProps extends LineChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { LineChart, type LineChartProps } from '@sisense/sdk-ui-vue';
+ * import { LineChart, type LineChartProps } from '@ethings-os/sdk-ui-vue';
 
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -50,7 +50,7 @@ export interface LineChartProps extends LineChartPropsPreact {}
 export const LineChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!LineChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.dataOptions}
      *
      * @category Data
      */
@@ -59,55 +59,55 @@ export const LineChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!LineChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<LineChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!LineChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<LineChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!LineChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<LineChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!LineChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<LineChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<LineChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<LineChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<LineChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<LineChartProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!LineChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.styleOptions}
      *
      * @category Chart
      */

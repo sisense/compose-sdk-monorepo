@@ -11,7 +11,7 @@ import {
   isCascadingFilter,
   isDateRangeFilter,
   isNumericFilter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { MemberFilterTile } from './member-filter-tile';
 import { CriteriaFilterTile } from './criteria-filter-tile';
 import { DateRangeFilterTile, RelativeDateFilterTile } from './date-filter';

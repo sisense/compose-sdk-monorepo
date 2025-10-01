@@ -34,7 +34,7 @@ export {
   getFilterRelationsFromJaql,
   convertFilterRelationsModelToJaql,
   getFilterCompareId,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 const fusionWidgetTypeToChartType: Partial<Record<FusionWidgetType, ChartType>> = {
   'chart/line': 'line',

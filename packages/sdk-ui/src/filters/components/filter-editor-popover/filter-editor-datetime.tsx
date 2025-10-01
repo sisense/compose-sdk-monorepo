@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Stack from '@mui/material/Stack';
-import { DateLevels, Filter, isDateRangeFilter, LevelAttribute } from '@sisense/sdk-data';
+import { DateLevels, Filter, isDateRangeFilter, LevelAttribute } from '@ethings-os/sdk-data';
 import { IncludeAllSection } from './sections/include-all-section';
 import {
   isIncludeAllFilter,

@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { AreaRangeChart as AreaRangeChartPreact } from '@sisense/sdk-ui-preact';
-import type { AreaRangeChartProps as AreaRangeChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { AreaRangeChart as AreaRangeChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { AreaRangeChartProps as AreaRangeChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!AreaRangeChart | `AreaRangeChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!AreaRangeChart | `AreaRangeChart`} component.
  */
 export interface AreaRangeChartProps extends AreaRangeChartPropsPreact {}
 
@@ -27,9 +27,9 @@ export interface AreaRangeChartProps extends AreaRangeChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory } from '@sisense/sdk-data';
+ * import { measureFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { AreaRangeChart, type AreaRangeChartProps } from '@sisense/sdk-ui-vue';
+ * import { AreaRangeChart, type AreaRangeChartProps } from '@ethings-os/sdk-ui-vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const areaRangeChartProps = ref<AreaRangeChartProps>({
@@ -60,7 +60,7 @@ export interface AreaRangeChartProps extends AreaRangeChartPropsPreact {}
 export const AreaRangeChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -69,56 +69,56 @@ export const AreaRangeChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<AreaRangeChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<AreaRangeChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<AreaRangeChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<AreaRangeChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<AreaRangeChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
 
     onDataPointClick: Function as PropType<AreaRangeChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<AreaRangeChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<AreaRangeChartProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.styleOptions}
      *
      * @category Chart
      */

@@ -13,7 +13,7 @@ set -o errexit
 set -o xtrace
 
 # Build typedoc-plugin-diff-packages
-yarn nx run @sisense/typedoc-plugin-diff-packages:build
+yarn nx run @ethings-os/typedoc-plugin-diff-packages:build
 
 # Run TypeDoc with the typedoc-plugin-diff-packages plugin to create the report
 typedoc --options typedoc.diff.config.cjs

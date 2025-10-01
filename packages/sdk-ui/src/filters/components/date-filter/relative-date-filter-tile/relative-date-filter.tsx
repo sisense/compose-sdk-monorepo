@@ -8,7 +8,7 @@ import {
   DimensionalLevelAttribute,
   RelativeDateFilter as RelativeDateFilterType,
   filterFactory,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { BasicInput, DateRangeFieldButton, Dropdown, FilterVariant } from '../../common/index.js';
 import { FunctionComponent, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

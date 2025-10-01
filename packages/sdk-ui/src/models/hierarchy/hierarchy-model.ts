@@ -1,4 +1,4 @@
-import { type Attribute } from '@sisense/sdk-data';
+import { type Attribute } from '@ethings-os/sdk-data';
 
 /**
  * A unique identifier representing a hierarchy.

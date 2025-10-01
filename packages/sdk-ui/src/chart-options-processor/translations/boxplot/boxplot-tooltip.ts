@@ -1,4 +1,4 @@
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { BoxplotChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
 import { HighchartsDataPointContext, TooltipSettings, formatTooltipValue } from '../tooltip-utils';

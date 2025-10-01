@@ -7,7 +7,7 @@ import {
   CustomWidgetsProviderAdapter,
   CustomWidgetsProviderAdapterProps,
   DataObserver,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import { CustomWidgetsService } from '../services/custom-widgets.service';
 import { SisenseContextService } from '../services/sisense-context.service';

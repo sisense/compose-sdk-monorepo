@@ -1,4 +1,4 @@
-import { TrackingEventDetails, trackProductEvent } from '@sisense/sdk-tracking';
+import { TrackingEventDetails, trackProductEvent } from '@ethings-os/sdk-tracking';
 import { useEffect, useRef } from 'react';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
 import { ClientApplication } from '../../app/client-application';

@@ -14,7 +14,7 @@ import {
   FiltersPanel as FiltersPanelPreact,
   type FiltersPanelConfig,
   type FiltersPanelProps as FiltersPanelPropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -58,8 +58,8 @@ export interface FiltersPanelProps extends Omit<FiltersPanelPropsPreact, 'onFilt
  * ```ts
 // Component behavior in example.component.ts
 import { Component } from '@angular/core';
-import { type FiltersPanelProps } from '@sisense/sdk-ui-angular';
-import { filterFactory } from '@sisense/sdk-data';
+import { type FiltersPanelProps } from '@ethings-os/sdk-ui-angular';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({
@@ -95,19 +95,19 @@ export class FiltersPanelComponent implements AfterViewInit, OnChanges, OnDestro
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FiltersPanelProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!FiltersPanelProps.filters}
    */
   @Input()
   filters!: FiltersPanelProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FiltersPanelProps.defaultDataSource}
+   * {@inheritDoc @ethings-os/sdk-ui!FiltersPanelProps.defaultDataSource}
    */
   @Input()
   defaultDataSource: FiltersPanelProps['defaultDataSource'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FiltersPanelProps.dataSources}
+   * {@inheritDoc @ethings-os/sdk-ui!FiltersPanelProps.dataSources}
    *
    * @internal
    */
@@ -115,7 +115,7 @@ export class FiltersPanelComponent implements AfterViewInit, OnChanges, OnDestro
   dataSources: FiltersPanelProps['dataSources'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FiltersPanelProps.config}
+   * {@inheritDoc @ethings-os/sdk-ui!FiltersPanelProps.config}
    */
   @Input()
   config: FiltersPanelProps['config'];

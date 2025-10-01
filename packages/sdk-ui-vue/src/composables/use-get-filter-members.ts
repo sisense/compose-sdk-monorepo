@@ -9,15 +9,15 @@ import {
   type FilterMembersSuccessState,
   HookAdapter,
   useGetFilterMembers as useGetFilterMembersPreact,
-} from '@sisense/sdk-ui-preact';
-import { isMembersFilter } from '@sisense/sdk-data';
+} from '@ethings-os/sdk-ui-preact';
+import { isMembersFilter } from '@ethings-os/sdk-data';
 import { createSisenseContextConnector } from '../helpers/context-connectors';
 import type { MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
 import { useRefState } from '../helpers/use-ref-state';
 
-/** Reexport types from @sisense/sdk-ui-preact */
+/** Reexport types from @ethings-os/sdk-ui-preact */
 export {
   GetFilterMembersParams,
   GetFilterMembersData,
@@ -40,7 +40,7 @@ export {
  * ```vue
  * <script setup>
  * import { ref } from 'vue';
- * import { useGetFilterMembers, filterFactory } from '@sisense/sdk-ui-vue';
+ * import { useGetFilterMembers, filterFactory } from '@ethings-os/sdk-ui-vue';
  * import * as DM from './data-model';
  *
  * const filter = ref(filterFactory.members(DM.Country.Country, ['United States', 'Canada']));

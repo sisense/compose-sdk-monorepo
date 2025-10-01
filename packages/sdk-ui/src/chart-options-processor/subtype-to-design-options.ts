@@ -115,7 +115,7 @@ export type IndicatorSubtype = 'indicator/numeric' | 'indicator/gauge';
 
 /**
  *
- * Subtype of {@link @sisense/sdk-ui!TreemapChart | `TreemapChart`}
+ * Subtype of {@link @ethings-os/sdk-ui!TreemapChart | `TreemapChart`}
  *
  * **Values**
  *

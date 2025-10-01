@@ -9,7 +9,7 @@ import { stringifyFilters } from '../code/stringify-filters.js';
 import { CodeTemplateKey } from '../types.js';
 import { stringifyProps } from '../code/stringify-props.js';
 import { CODE_TEMPLATES_INDENT } from '../common/constants.js';
-import { type Filter } from '@sisense/sdk-data';
+import { type Filter } from '@ethings-os/sdk-data';
 import { checkIfMeasuresExist } from '../common/utils.js';
 import { isChartWidgetProps, isPivotTableWidgetProps } from '@/widget-by-id/utils.js';
 import { stringifyWidgets } from './stringify-widgets.js';

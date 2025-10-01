@@ -1,6 +1,6 @@
 import { inject, ref } from 'vue';
 import type { InjectionKey, Ref } from 'vue';
-import type { CustomWidgetsContextAdapter, CustomWidgetComponent } from '@sisense/sdk-ui-preact';
+import type { CustomWidgetsContextAdapter, CustomWidgetComponent } from '@ethings-os/sdk-ui-preact';
 
 export const defaultCustomWidgetsContext = {
   customWidgetsMap: new Map<string, CustomWidgetComponent<any>>(),

@@ -7,7 +7,7 @@ import {
   isWatAuthenticator,
   SsoAuthenticator,
   WatAuthenticator,
-} from '@sisense/sdk-rest-client';
+} from '@ethings-os/sdk-rest-client';
 import { SisenseSocket } from '../data-load/index.js';
 import TestSocket from '../data-load/sockets/TestSocket.js';
 
@@ -81,7 +81,7 @@ export class SocketBuilder {
       let query: SocketQueryOptions = {};
 
       // Do not use instanceof because it checks if the constructors are the same.
-      // However, when the class is imported from @sisense/sdk-rest-client,
+      // However, when the class is imported from @ethings-os/sdk-rest-client,
       // the code gets its own copy of the constructor from the code in the library,
       // so they are not the same instance anymore.
       // Reference: https://stackoverflow.com/a/63937850/2425556

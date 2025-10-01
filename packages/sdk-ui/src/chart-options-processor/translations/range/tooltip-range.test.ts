@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { getRangeTooltipSettings } from './tooltip-range';
 import { RangeChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { HighchartsDataPointContext } from '../tooltip-utils';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
 import { translation } from '../../../translation/resources/en';
 

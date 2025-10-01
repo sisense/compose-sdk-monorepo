@@ -6,9 +6,9 @@
     "entryFile": "./public-api.ts"
   },
   "allowedNonPeerDependencies": [
-    "@sisense/sdk-data",
+    "@ethings-os/sdk-data",
     "sisense/sdk-ui-preact",
-    "@sisense/sdk-tracking",
+    "@ethings-os/sdk-tracking",
     "rxjs",
     "ts-deepmerge"
   ]

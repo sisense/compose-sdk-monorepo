@@ -1,5 +1,5 @@
-import { Attribute, Measure, QueryResultData } from '@sisense/sdk-data';
-import { QueryExecutionConfig } from '@sisense/sdk-query-client';
+import { Attribute, Measure, QueryResultData } from '@ethings-os/sdk-data';
+import { QueryExecutionConfig } from '@ethings-os/sdk-query-client';
 import type {
   AreaStyleOptions,
   AreamapStyleOptions,

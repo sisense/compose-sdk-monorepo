@@ -1,6 +1,6 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
-import type { SisenseContextProviderProps as SisenseContextConfig } from '@sisense/sdk-ui-preact';
-import { ClientApplication, createClientApplication } from '@sisense/sdk-ui-preact';
+import type { SisenseContextProviderProps as SisenseContextConfig } from '@ethings-os/sdk-ui-preact';
+import { ClientApplication, createClientApplication } from '@ethings-os/sdk-ui-preact';
 import { concat, firstValueFrom, Observable, of, ReplaySubject } from 'rxjs';
 
 export { type SisenseContextConfig };

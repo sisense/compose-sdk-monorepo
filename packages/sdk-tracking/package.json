@@ -1,5 +1,5 @@
 {
-  "name": "@sisense/sdk-tracking",
+  "name": "@ethings-os/sdk-tracking",
   "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package for handling usage tracking",
   "repository": {
@@ -36,7 +36,7 @@
     "test:coverage": "run vitest run --coverage"
   },
   "dependencies": {
-    "@sisense/sdk-rest-client": "workspace:*"
+    "@ethings-os/sdk-rest-client": "workspace:*"
   },
   "devDependencies": {
     "typescript": "4.8.4",

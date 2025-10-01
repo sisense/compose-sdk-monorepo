@@ -5,7 +5,7 @@ import {
   Filter,
   isCascadingFilter,
   withoutGuids,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import {
   flattenCascadingFilters,
   reassembleCascadingFilters,

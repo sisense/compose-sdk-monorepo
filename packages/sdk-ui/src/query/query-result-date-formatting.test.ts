@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { applyDateFormats } from './query-result-date-formatting';
 import cloneDeep from 'lodash-es/cloneDeep';
-import type { Cell, Data, QueryResultData } from '@sisense/sdk-data';
+import type { Cell, Data, QueryResultData } from '@ethings-os/sdk-data';
 
 describe('applyDateFormats', () => {
   function newData(): QueryResultData {

@@ -7,15 +7,15 @@ import {
   PivotMeasure,
   PivotQueryResultData,
   QueryResultData,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import type {
   QueryDescription as InternalQueryDescription,
   PivotQueryDescription as InternalPivotQueryDescription,
   QueryExecutionConfig,
-} from '@sisense/sdk-query-client';
+} from '@ethings-os/sdk-query-client';
 import { ClientApplication } from '../app/client-application';
 import { TranslatableError } from '../translation/translatable-error';
-import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
+import { getJaqlQueryPayload } from '@ethings-os/sdk-query-client';
 
 /**
  * All the properties that fully describe a query you want to send.

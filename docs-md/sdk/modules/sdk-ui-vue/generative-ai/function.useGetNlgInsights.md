@@ -25,8 +25,8 @@ The composable load state that contains the status of the execution and a text s
 
 ```vue
 <script setup lang="ts">
-import { useGetNlgInsights, type GetNlgInsightsProps } from '@sisense/sdk-ui-vue/ai';
-import { measureFactory } from '@sisense/sdk-data';
+import { useGetNlgInsights, type GetNlgInsightsProps } from '@ethings-os/sdk-ui-vue/ai';
+import { measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../assets/sample-retail-model';
 
 const props: GetNlgInsightsProps = {

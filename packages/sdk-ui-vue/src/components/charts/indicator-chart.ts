@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { IndicatorChart as IndicatorChartPreact } from '@sisense/sdk-ui-preact';
-import type { IndicatorChartProps as IndicatorChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { IndicatorChart as IndicatorChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { IndicatorChartProps as IndicatorChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!IndicatorChart | `IndicatorChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!IndicatorChart | `IndicatorChart`} component.
  */
 export interface IndicatorChartProps extends IndicatorChartPropsPreact {}
 
@@ -25,9 +25,9 @@ export interface IndicatorChartProps extends IndicatorChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { IndicatorChart, type IndicatorChartProps } from '@sisense/sdk-ui-vue';
+ * import { IndicatorChart, type IndicatorChartProps } from '@ethings-os/sdk-ui-vue';
 
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -48,7 +48,7 @@ export interface IndicatorChartProps extends IndicatorChartPropsPreact {}
 export const IndicatorChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -57,37 +57,37 @@ export const IndicatorChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<IndicatorChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<IndicatorChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<IndicatorChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.styleOptions}
      *
      * @category Chart
      */
     styleOptions: Object as PropType<IndicatorChartProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<IndicatorChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.onDataReady}
      *
      * @category Callbacks
      */

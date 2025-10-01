@@ -1,5 +1,5 @@
 {
-  "name": "@sisense/sdk-query-client",
+  "name": "@ethings-os/sdk-query-client",
   "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package for handling data queries against Sisense data sources",
   "repository": {
@@ -20,10 +20,10 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-common": "workspace:*",
-    "@sisense/sdk-data": "workspace:*",
-    "@sisense/sdk-pivot-client": "workspace:*",
-    "@sisense/sdk-rest-client": "workspace:*",
+    "@ethings-os/sdk-common": "workspace:*",
+    "@ethings-os/sdk-data": "workspace:*",
+    "@ethings-os/sdk-pivot-client": "workspace:*",
+    "@ethings-os/sdk-rest-client": "workspace:*",
     "@sisense/task-manager": "^0.1.0",
     "numeral": "^2.0.6",
     "ts-deepmerge": "6.0.2",

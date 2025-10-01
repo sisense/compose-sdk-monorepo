@@ -2,7 +2,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { useFetch } from './use-fetch.js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useSisenseContextMock } from '@/sisense-context/__mocks__/sisense-context.js';
-import { type HttpClient } from '@sisense/sdk-rest-client';
+import { type HttpClient } from '@ethings-os/sdk-rest-client';
 import { Mock } from 'vitest';
 
 const HOST = 'https://my-sisense-instance.com';
@@ -10,9 +10,9 @@ const URL = '/api/v1/dashboards';
 
 vi.mock('@/sisense-context/sisense-context');
 
-vi.mock('@sisense/sdk-tracking', async () => {
-  const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
-    '@sisense/sdk-tracking',
+vi.mock('@ethings-os/sdk-tracking', async () => {
+  const actual: typeof import('@ethings-os/sdk-tracking') = await vi.importActual(
+    '@ethings-os/sdk-tracking',
   );
   return {
     ...actual,

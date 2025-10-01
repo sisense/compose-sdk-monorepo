@@ -1,4 +1,4 @@
-import { createAttribute } from '@sisense/sdk-data';
+import { createAttribute } from '@ethings-os/sdk-data';
 import { useWithDrilldown } from './use-with-drilldown.js';
 import { renderHook } from '@testing-library/react';
 import { CartesianChartDataOptions, ChartWidgetProps } from '@/index.js';

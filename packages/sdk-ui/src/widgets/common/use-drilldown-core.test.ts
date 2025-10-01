@@ -1,5 +1,5 @@
-import { Column, createAttribute } from '@sisense/sdk-data';
-import { type TFunction } from '@sisense/sdk-common';
+import { Column, createAttribute } from '@ethings-os/sdk-data';
+import { type TFunction } from '@ethings-os/sdk-common';
 import { processDrilldownSelections, useDrilldownCore } from './use-drilldown-core.js';
 import { act, renderHook } from '@testing-library/react';
 import get from 'lodash-es/get';

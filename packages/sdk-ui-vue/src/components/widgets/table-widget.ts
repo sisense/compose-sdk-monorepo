@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { TableWidget as TableWidgetPreact, type TableWidgetProps } from '@sisense/sdk-ui-preact';
+import { TableWidget as TableWidgetPreact, type TableWidgetProps } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 // Note: uses direct reexport as a temporary workaround for getting the correct API docs
@@ -18,7 +18,7 @@ export { TableWidgetProps };
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import TableWidget from '@sisense/sdk-ui-vue/TableWidget';
+ * import TableWidget from '@ethings-os/sdk-ui-vue/TableWidget';
  *
  * const tableWidgetProps = ref({
  *   // Configure your TableWidgetProps here

@@ -6,14 +6,14 @@ import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-cont
 import { Mock } from 'vitest';
 import { ClientApplication } from '../app/client-application.js';
 import { fetchFormula, fetchFormulaByOid } from './fetch-formula.js';
-import { DimensionalCalculatedMeasure } from '@sisense/sdk-data';
-import { trackProductEvent } from '@sisense/sdk-tracking';
+import { DimensionalCalculatedMeasure } from '@ethings-os/sdk-data';
+import { trackProductEvent } from '@ethings-os/sdk-tracking';
 
 vi.mock('../sisense-context/sisense-context');
 
-vi.mock('@sisense/sdk-tracking', async () => {
-  const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
-    '@sisense/sdk-tracking',
+vi.mock('@ethings-os/sdk-tracking', async () => {
+  const actual: typeof import('@ethings-os/sdk-tracking') = await vi.importActual(
+    '@ethings-os/sdk-tracking',
   );
   return {
     ...actual,

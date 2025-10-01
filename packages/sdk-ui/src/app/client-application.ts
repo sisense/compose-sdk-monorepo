@@ -3,12 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-params */
-import { HttpClient, getAuthenticator, isWatAuthenticator } from '@sisense/sdk-rest-client';
-import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
-import { DataSource } from '@sisense/sdk-data';
-import { PivotClient } from '@sisense/sdk-pivot-client';
-import { TrackingEventDetails } from '@sisense/sdk-tracking';
-import { normalizeUrl } from '@sisense/sdk-common';
+import { HttpClient, getAuthenticator, isWatAuthenticator } from '@ethings-os/sdk-rest-client';
+import { DimensionalQueryClient, QueryClient } from '@ethings-os/sdk-query-client';
+import { DataSource } from '@ethings-os/sdk-data';
+import { PivotClient } from '@ethings-os/sdk-pivot-client';
+import { TrackingEventDetails } from '@ethings-os/sdk-tracking';
+import { normalizeUrl } from '@ethings-os/sdk-common';
 import { DateConfig } from '../query/date-formats';
 import { AppSettings, getSettings } from './settings/settings';
 import { TranslatableError } from '../translation/translatable-error';

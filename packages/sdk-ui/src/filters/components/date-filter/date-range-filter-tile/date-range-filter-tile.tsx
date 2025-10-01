@@ -1,4 +1,4 @@
-import { LevelAttribute, DataSource, Filter, isDateRangeFilter } from '@sisense/sdk-data';
+import { LevelAttribute, DataSource, Filter, isDateRangeFilter } from '@ethings-os/sdk-data';
 import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component';
 import { FilterTileContainer, FilterTileDesignOptions } from '../../filter-tile-container';
 import { EditableDateRangeFilter } from './editable-date-range-filter';

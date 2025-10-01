@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Attribute } from '@sisense/sdk-data';
+import { Attribute } from '@ethings-os/sdk-data';
 import { StyledNextButton, StyledPrevButton } from './styled-buttons';
 import { useTranslation } from 'react-i18next';
 

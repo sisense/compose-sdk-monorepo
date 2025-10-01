@@ -1,4 +1,4 @@
-import { filterFactory, createAttribute } from '@sisense/sdk-data';
+import { filterFactory, createAttribute } from '@ethings-os/sdk-data';
 import { Chart } from '../chart';
 import { ChartStyleOptions } from '../types';
 import { templateForComponent } from './template';

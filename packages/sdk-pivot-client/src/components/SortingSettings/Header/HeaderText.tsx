@@ -1,6 +1,6 @@
 import React, { useState, useRef, useLayoutEffect, RefObject } from 'react';
 
-import { Tooltip } from '@sisense/sdk-shared-ui/Tooltip';
+import { Tooltip } from '@ethings-os/sdk-shared-ui/Tooltip';
 
 function wrapWithLeftSingleQuotationMark(str: string): string {
   return `\u2018${str}\u2019`;

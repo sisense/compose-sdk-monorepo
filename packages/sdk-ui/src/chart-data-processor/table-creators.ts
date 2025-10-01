@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable sonarjs/no-identical-functions */
-import { Cell, Data, isDatetime } from '@sisense/sdk-data';
+import { Cell, Data, isDatetime } from '@ethings-os/sdk-data';
 import { createCompareValue } from './row-comparator';
 import { ComparableData, DataTable } from './table-processor';
 import { NOT_AVAILABLE_DATA_VALUE } from '@/const';

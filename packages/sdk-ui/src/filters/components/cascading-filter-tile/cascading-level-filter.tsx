@@ -9,7 +9,7 @@ import {
   isTextFilter,
   isRankingFilter,
   isCustomFilter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { MemberFilterTile } from '../member-filter-tile/index.js';
 import { CriteriaFilterTile } from '../criteria-filter-tile/index.js';
 import { DateRangeFilterTile, RelativeDateFilterTile } from '../date-filter/index.js';

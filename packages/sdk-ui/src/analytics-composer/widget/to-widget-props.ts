@@ -5,7 +5,7 @@ import {
   Filter,
   FilterJaql,
   MetadataItem,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { ChartType, WidgetStyleOptions, WidgetProps } from '../../index.js';
 import { ChartRecommendations, ExpandedQueryModel, WidgetPropsConfig } from '../types.js';
 import { isEmptyQueryModel } from '../common/utils.js';

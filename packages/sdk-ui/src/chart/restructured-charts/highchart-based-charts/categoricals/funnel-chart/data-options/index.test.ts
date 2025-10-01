@@ -3,7 +3,7 @@ import { dataOptionsTranslators } from './index';
 import { FunnelChartDataOptions, FunnelChartDataOptionsInternal } from '../types';
 import { ChartDataOptions, ChartDataOptionsInternal } from '@/chart-data-options/types';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 // Mock console.warn for validation tests
 const consoleSpy = vi.spyOn(console, 'warn');

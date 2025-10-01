@@ -9,7 +9,7 @@ import {
   type ContextConnector,
   createWrapperElement,
   type AnyComponentFunction,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { isObject } from '../utils.js';
 
 export function createDefaultContextConnectors() {

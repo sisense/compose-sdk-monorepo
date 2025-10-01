@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { type Filter } from '@sisense/sdk-data';
+import { type Filter } from '@ethings-os/sdk-data';
 import { WidgetProps } from '@/props.js';
 import { OpenMenuFn } from '@/common/components/menu/types.js';
 import { CompleteThemeSettings, WidgetsOptions } from '@/index-typedoc';

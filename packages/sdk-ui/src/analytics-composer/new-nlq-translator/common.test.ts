@@ -1,4 +1,4 @@
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import { filterFactory, measureFactory } from '@ethings-os/sdk-data';
 import { getFactoryFunctionsMap, validateLikelyAttribute } from './common.js';
 import { MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE } from '../__mocks__/mock-data-sources.js';
 

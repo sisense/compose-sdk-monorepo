@@ -4,7 +4,7 @@ import {
   DateLevels,
   isDatetime,
   isDimensionalLevelAttribute,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import {
   CalendarHeatmapChartDataOptions,
   CalendarHeatmapChartDataOptionsInternal,

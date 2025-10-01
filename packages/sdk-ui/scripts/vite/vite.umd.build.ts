@@ -50,7 +50,7 @@ const buildUMD = async () => {
       cssCodeSplit: true,
       lib: {
         entry: resolve(currentDir, '../../src/index.umd.ts'),
-        name: '@sisense/sdk-ui',
+        name: '@ethings-os/sdk-ui',
         fileName: () => 'index.umd.js',
         formats: ['umd'],
       },

@@ -46,7 +46,7 @@ Let’s start by creating a React project and installing dependencies. We’ll u
 1. Select `TypeScript` as the variant
 1. Run `cd compose-sdk-charts-tutorial` to navigate to your project directory
 1. Run `npm install` to install your project and dependencies
-1. Run `npm i @sisense/sdk-ui @sisense/sdk-data` to install Sisense packages
+1. Run `npm i @ethings-os/sdk-ui @ethings-os/sdk-data` to install Sisense packages
 
 ## Generate data model
 
@@ -60,7 +60,7 @@ To generate the data model:
 1. Run the following command
 
 ```sh
-npx @sisense/sdk-cli@latest get-data-model --token <api-token> --output src/models/sample-retail.ts --dataSource "Sample Retail" --url <your-instance-url>
+npx @ethings-os/sdk-cli@latest get-data-model --token <api-token> --output src/models/sample-retail.ts --dataSource "Sample Retail" --url <your-instance-url>
 ```
 
 Be sure to replace the placeholders with your API token and the URL of your Sisense instance.
@@ -74,7 +74,7 @@ Since most of our Compose SDK functionality needs access to a Sisense instance, 
 In `main.tsx`, import the `SisenseContextProvider` from the `sdk-ui` module:
 
 ```ts
-import { SisenseContextProvider } from '@sisense/sdk-ui';
+import { SisenseContextProvider } from '@ethings-os/sdk-ui';
 ```
 
 Wrap the `<App>` component with a `<SisenseContextProvider>` like this:
@@ -110,8 +110,8 @@ In the `App.tsx` file, import the `<Chart>` component, the `measureFactory` name
 Note: From here on in we won’t mention imports anymore. Just know that you’ll need to add the appropriate imports as we continue to add code to our project.
 
 ```ts
-import { Chart } from '@sisense/sdk-ui';
-import { measureFactory } from '@sisense/sdk-data';
+import { Chart } from '@ethings-os/sdk-ui';
+import { measureFactory } from '@ethings-os/sdk-data';
 import * as DM from './models/sample-retail';
 ```
 

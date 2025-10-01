@@ -8,7 +8,7 @@ import { getTreemapTooltipSettings } from './treemap-tooltip';
 import { prepareTreemapLevels } from './treemap-labels';
 import { prepareTreemapDataItems } from './treemap-series';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 
 const DEFAULT_TREEMAP_SERIES_COLOR = 'rgb(0, 206, 230)';
 

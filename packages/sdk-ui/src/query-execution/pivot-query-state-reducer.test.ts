@@ -1,4 +1,4 @@
-import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@sisense/sdk-data';
+import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@ethings-os/sdk-data';
 import { pivotQueryStateReducer } from './pivot-query-state-reducer';
 import { PivotQueryState, PivotQueryAction } from './types';
 

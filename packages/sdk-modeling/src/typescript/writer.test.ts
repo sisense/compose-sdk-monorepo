@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { DataSourceInfo } from '@sisense/sdk-data';
+import { DataSourceInfo } from '@ethings-os/sdk-data';
 import { Writable } from 'stream';
 
 import { dimensionalModelECommerce } from '../__mocks__/data-model-ecommerce.js';

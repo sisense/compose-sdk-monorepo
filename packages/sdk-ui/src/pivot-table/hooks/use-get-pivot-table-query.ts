@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
-import { type JaqlRequest } from '@sisense/sdk-pivot-client';
-import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+import { type JaqlRequest } from '@ethings-os/sdk-pivot-client';
+import type { DataSource, Filter, FilterRelations } from '@ethings-os/sdk-data';
 
 import { normalizePivotSort } from '../sorting-utils';
 import isEqual from 'lodash-es/isEqual';

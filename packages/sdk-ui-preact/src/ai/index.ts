@@ -1,1 +1,1 @@
-export * from '@sisense/sdk-ui/ai';
+export * from '@ethings-os/sdk-ui/ai';

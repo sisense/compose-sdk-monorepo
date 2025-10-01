@@ -8,7 +8,7 @@ import {
   JaqlDataSource,
   getSortType,
   createDimensionalElementFromJaql,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,

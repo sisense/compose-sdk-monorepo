@@ -1,4 +1,4 @@
-import { type Column } from '@sisense/sdk-data';
+import { type Column } from '@ethings-os/sdk-data';
 import { getDataOptionGranularity, normalizeColumn } from '@/chart-data-options/utils';
 import {
   type PivotTableDataOptions,

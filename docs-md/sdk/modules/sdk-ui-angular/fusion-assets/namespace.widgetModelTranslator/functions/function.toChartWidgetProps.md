@@ -38,7 +38,7 @@ import {
  type ChartWidgetProps
  WidgetService,
  widgetModelTranslator,
-} from '@sisense/sdk-ui-angular';
+} from '@ethings-os/sdk-ui-angular';
 
 @Component({
  selector: 'app-example',

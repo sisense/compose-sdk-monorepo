@@ -8,7 +8,7 @@ import {
 } from '../types';
 import { ChartType } from '../../types';
 import merge from 'ts-deepmerge';
-import { Attribute, Data, Filter, Measure } from '@sisense/sdk-data';
+import { Attribute, Data, Filter, Measure } from '@ethings-os/sdk-data';
 import { TranslatableError } from '../../translation/translatable-error';
 import { DataTable } from '../../chart-data-processor/table-processor';
 import { validateCategoricalChartDataOptions } from './validate-categorical-data-options';

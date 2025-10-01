@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './error-boundary-box.module.scss';
 import { useTranslation } from 'react-i18next';
-import { AbstractTranslatableError } from '@sisense/sdk-common';
+import { AbstractTranslatableError } from '@ethings-os/sdk-common';
 import { TranslatableError } from '../translation/translatable-error';
 import ExclamationMarkIcon from '@/common/icons/exclamation-mark-icon';
 import { useThemeContext } from '@/theme-provider/theme-context';

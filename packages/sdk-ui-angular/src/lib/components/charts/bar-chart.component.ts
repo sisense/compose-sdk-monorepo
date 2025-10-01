@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type BarChartProps as BarChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type BarChartProps as BarChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -34,9 +34,9 @@ export interface BarChartProps
  *
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import type { ChartType } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-analytics',
@@ -90,7 +90,7 @@ export class AnalyticsComponent {
 })
 export class BarChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!BarChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.dataSet}
    *
    * @category Data
    */
@@ -98,7 +98,7 @@ export class BarChartComponent {
   dataSet: BarChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BarChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -106,7 +106,7 @@ export class BarChartComponent {
   dataOptions!: BarChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BarChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.filters}
    *
    * @category Data
    */
@@ -114,7 +114,7 @@ export class BarChartComponent {
   filters: BarChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BarChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.highlights}
    *
    * @category Data
    */
@@ -122,7 +122,7 @@ export class BarChartComponent {
   highlights: BarChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BarChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -130,7 +130,7 @@ export class BarChartComponent {
   styleOptions: BarChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BarChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -138,7 +138,7 @@ export class BarChartComponent {
   beforeRender: BarChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!BarChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!BarChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -146,7 +146,7 @@ export class BarChartComponent {
   dataReady: BarChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -154,7 +154,7 @@ export class BarChartComponent {
   dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -162,7 +162,7 @@ export class BarChartComponent {
   dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BarChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!BarChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

@@ -1,7 +1,7 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import { RestApi } from '../../api/rest-api.js';
 import { HierarchyModel, hierarchyModelTranslator } from '@/models';
-import { DataSource } from '@sisense/sdk-data';
+import { DataSource } from '@ethings-os/sdk-data';
 import { GetHierarchiesOptions } from './types.js';
 
 /**

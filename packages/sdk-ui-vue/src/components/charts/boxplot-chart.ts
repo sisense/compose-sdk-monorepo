@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { BoxplotChart as BoxplotChartPreact } from '@sisense/sdk-ui-preact';
-import type { BoxplotChartProps as BoxplotChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { BoxplotChart as BoxplotChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { BoxplotChartProps as BoxplotChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!BoxplotChart | `BoxplotChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!BoxplotChart | `BoxplotChart`} component.
  */
 export interface BoxplotChartProps extends BoxplotChartPropsPreact {}
 
@@ -26,9 +26,9 @@ export interface BoxplotChartProps extends BoxplotChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { BoxplotChart, type BoxplotChartProps } from '@sisense/sdk-ui-vue';
+ * import { BoxplotChart, type BoxplotChartProps } from '@ethings-os/sdk-ui-vue';
 
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -51,7 +51,7 @@ export interface BoxplotChartProps extends BoxplotChartPropsPreact {}
 export const BoxplotChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -60,55 +60,55 @@ export const BoxplotChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<BoxplotChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<BoxplotChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<BoxplotChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.styleOptions}
      *
      * @category Chart
      */
     styleOptions: Object as PropType<BoxplotChartProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<BoxplotChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<BoxplotChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<BoxplotChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<BoxplotChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */

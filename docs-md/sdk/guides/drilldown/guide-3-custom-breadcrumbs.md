@@ -169,7 +169,7 @@ For your convenience, here is the full code for our custom breadcrumbs component
 
 ```ts
 import { Breadcrumbs, Chip } from '@mui/material';
-import { DrilldownBreadcrumbsProps } from '@sisense/sdk-ui';
+import { DrilldownBreadcrumbsProps } from '@ethings-os/sdk-ui';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MoveDown from '@mui/icons-material/MoveDown';
 import { CollectionsBookmark } from '@mui/icons-material';

@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { ColumnChart as ColumnChartPreact } from '@sisense/sdk-ui-preact';
-import type { ColumnChartProps as ColumnChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { ColumnChart as ColumnChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { ColumnChartProps as ColumnChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!ColumnChart | `ColumnChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!ColumnChart | `ColumnChart`} component.
  */
 export interface ColumnChartProps extends ColumnChartPropsPreact {}
 
@@ -26,9 +26,9 @@ export interface ColumnChartProps extends ColumnChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { ColumnChart, type ColumnChartProps } from '@sisense/sdk-ui-vue';
+ * import { ColumnChart, type ColumnChartProps } from '@ethings-os/sdk-ui-vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -51,7 +51,7 @@ const columnChartProps = ref<ColumnChartProps>({
 export const ColumnChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -60,55 +60,55 @@ export const ColumnChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<ColumnChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<ColumnChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<ColumnChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<ColumnChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<ColumnChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<ColumnChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<ColumnChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<ColumnChartProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.styleOptions}
      *
      * @category Chart
      */

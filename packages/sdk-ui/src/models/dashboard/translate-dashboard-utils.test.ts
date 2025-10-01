@@ -13,7 +13,7 @@ import {
   sharedFormulasDictionary,
 } from '../__mocks__/dashboard-with-shared-formulas';
 import { WidgetDto } from '@/widget-by-id/types';
-import { Dimension } from '@sisense/sdk-data';
+import { Dimension } from '@ethings-os/sdk-data';
 
 describe('translate-dashboard-utils', () => {
   describe('translateLayout', () => {

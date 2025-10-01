@@ -4,7 +4,7 @@ import {
   Column,
   Measure,
   MeasureColumn,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import {
   ChartDataOptions,
   CategoricalChartDataOptions,

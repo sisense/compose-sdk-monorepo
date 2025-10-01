@@ -427,7 +427,7 @@ export const translation = {
  *
  * @example
  * ```typescript
- * import { TranslationDictionary } from '@sisense/sdk-ui';
+ * import { TranslationDictionary } from '@ethings-os/sdk-ui';
  *
  * const customTranslationResources: Partial<TranslationDictionary> = {
  * ```

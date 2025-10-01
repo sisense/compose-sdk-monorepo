@@ -1,5 +1,5 @@
 import { type HierarchyDto } from '@/widget-by-id/types';
-import { Attribute, createDimensionalElementFromJaql } from '@sisense/sdk-data';
+import { Attribute, createDimensionalElementFromJaql } from '@ethings-os/sdk-data';
 import { type HierarchyModel } from './hierarchy-model';
 
 /**

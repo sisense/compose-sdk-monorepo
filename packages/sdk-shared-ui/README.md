@@ -25,7 +25,7 @@ To use the sdk-shared-ui in your React components import the components you need
 
 ```tsx
 // Named import example
-import { DEPRECATED_Icon } from '@sisense/sdk-shared-ui';
+import { DEPRECATED_Icon } from '@ethings-os/sdk-shared-ui';
 
 const App = () => {
   return <DEPRECATED_Icon {...props} />;
@@ -36,7 +36,7 @@ export default App;
 
 ```tsx
 // Default import example from subpath
-import DEPRECATED_Icon from '@sisense/sdk-shared-ui/DEPRECATED_Icon';
+import DEPRECATED_Icon from '@ethings-os/sdk-shared-ui/DEPRECATED_Icon';
 
 const App = () => {
   return <DEPRECATED_Icon {...props} />;
@@ -55,37 +55,37 @@ export default App;
 - `yarn build:prod`
   Builds the library in production mode.
 
-- `yarn build -p @sisense/sdk-shared-ui --verbose`
-  Builds only the @sisense/sdk-shared-ui package in development mode.
-- `yarn build:prod -p @sisense/sdk-shared-ui --verbose`
-  Builds only the @sisense/sdk-shared-ui package in production mode.
+- `yarn build -p @ethings-os/sdk-shared-ui --verbose`
+  Builds only the @ethings-os/sdk-shared-ui package in development mode.
+- `yarn build:prod -p @ethings-os/sdk-shared-ui --verbose`
+  Builds only the @ethings-os/sdk-shared-ui package in production mode.
 
 ## Format
 
 - `yarn format:check`
   Checks the code formatting using Prettier and ESLint.
-- `yarn nx:format:check -p @sisense/sdk-shared-ui --verbose`
+- `yarn nx:format:check -p @ethings-os/sdk-shared-ui --verbose`
   Checks the code formatting using Prettier and ESLint for this package.
 - `yarn format`
   Automatically formats code using Prettier and fixes fixable issues with ESLint.
-- `yarn nx:format -p @sisense/sdk-shared-ui --verbose`
+- `yarn nx:format -p @ethings-os/sdk-shared-ui --verbose`
   Checks the code formatting using Prettier and ESLint for this package.
 
 ## Unit Tests
 
 - `yarn test`
   Runs [vitest](https://vitest.dev/) unit tests.
-- `yarn nx:test -p @sisense/sdk-shared-ui --verbose`
-  Runs unit tests for the @sisense/sdk-shared-ui package.
+- `yarn nx:test -p @ethings-os/sdk-shared-ui --verbose`
+  Runs unit tests for the @ethings-os/sdk-shared-ui package.
 
 - `yarn test:watch`
   Runs unit tests in watch mode using Vitest.
 
-- `yarn workspaces foreach --include @sisense/sdk-shared-ui run test:watch`
-  Runs unit tests in watch mode specifically for the @sisense/sdk-shared-ui package.
+- `yarn workspaces foreach --include @ethings-os/sdk-shared-ui run test:watch`
+  Runs unit tests in watch mode specifically for the @ethings-os/sdk-shared-ui package.
 
 - `yarn test:coverage`
   Runs unit tests with coverage reporting using Vitest.
 
-- `yarn nx:test:coverage -p @sisense/sdk-shared-ui --verbose`
-  Runs unit tests with coverage reporting specifically for the @sisense/sdk-shared-ui package.
+- `yarn nx:test:coverage -p @ethings-os/sdk-shared-ui --verbose`
+  Runs unit tests with coverage reporting specifically for the @ethings-os/sdk-shared-ui package.

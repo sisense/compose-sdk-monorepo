@@ -1,4 +1,4 @@
-import { Attribute, DataSource, Filter, filterFactory, MembersFilter } from '@sisense/sdk-data';
+import { Attribute, DataSource, Filter, filterFactory, MembersFilter } from '@ethings-os/sdk-data';
 import { FunctionComponent, useCallback } from 'react';
 import { Member, SelectedMember } from './members-reducer';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';

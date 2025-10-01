@@ -4,7 +4,7 @@ import {
   HookAdapter,
   useExecuteCsvQueryInternal,
   type CsvQueryState,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { createSisenseContextConnector } from '../helpers/context-connectors';
 import type { MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
@@ -24,7 +24,7 @@ import { useRefState } from '../helpers/use-ref-state';
  * ```vue
  * <script setup>
  * import { ref } from 'vue';
- * import { useExecuteCsvQuery } from '@sisense/sdk-ui-vue';
+ * import { useExecuteCsvQuery } from '@ethings-os/sdk-ui-vue';
  *
  * const dataSource = ref('your_data_source_id');
  * // Set up other query parameters as needed (dimensions, measures, filters, etc.)

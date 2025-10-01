@@ -1,4 +1,4 @@
-import { Attribute, Cell, Measure, QueryResultData } from '@sisense/sdk-data';
+import { Attribute, Cell, Measure, QueryResultData } from '@ethings-os/sdk-data';
 import { useExecuteQuery } from '@/query-execution/use-execute-query';
 import { GenericDataOptions, NumberFormatConfig } from '@/types';
 import { CustomWidgetComponentProps } from './types';

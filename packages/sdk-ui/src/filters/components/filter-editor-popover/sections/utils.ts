@@ -5,7 +5,7 @@ import {
   filterFactory,
   isMembersFilter,
   MembersFilterConfig,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { CRITERIA_FILTER_MAP } from '../../criteria-filter-tile/criteria-filter-operations.js';
 
 export function getCriteriaFilterBuilder(condition: keyof typeof CRITERIA_FILTER_MAP) {

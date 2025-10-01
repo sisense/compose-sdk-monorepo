@@ -3,11 +3,11 @@
  */
 import { PropsWithChildren, ReactElement } from 'react';
 import { render, RenderResult } from '@testing-library/react';
-import type { Cell, Data } from '@sisense/sdk-data';
+import type { Cell, Data } from '@ethings-os/sdk-data';
 import isObject from 'lodash-es/isObject';
 import userEvent from '@testing-library/user-event';
 import { SisenseContext, SisenseContextPayload } from '../sisense-context/sisense-context';
-import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
+import { Authenticator, HttpClient } from '@ethings-os/sdk-rest-client';
 import { ClientApplication } from '../app/client-application';
 import { DeepPartial } from 'ts-essentials';
 import { useTranslation } from 'react-i18next';

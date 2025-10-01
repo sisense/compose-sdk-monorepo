@@ -1,5 +1,5 @@
 import { FilterTileContainer } from '../filter-tile-container.js';
-import { CascadingFilter, DataSource, Filter } from '@sisense/sdk-data';
+import { CascadingFilter, DataSource, Filter } from '@ethings-os/sdk-data';
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component.js';
 import { FilterVariant } from '../common/filter-utils.js';
 import { CascadingLevelFilterTile } from './cascading-level-filter.js';

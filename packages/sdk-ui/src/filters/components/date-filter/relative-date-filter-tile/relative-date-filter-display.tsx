@@ -1,4 +1,4 @@
-import { LevelAttribute, RelativeDateFilter } from '@sisense/sdk-data';
+import { LevelAttribute, RelativeDateFilter } from '@ethings-os/sdk-data';
 import dayjs from 'dayjs';
 import { FunctionComponent, useMemo } from 'react';
 import { DATE_LEVELS_MAP, DATE_OPS_MAP } from './relative-date-filter.js';

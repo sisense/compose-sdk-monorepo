@@ -7,7 +7,7 @@ import {
   Jaql,
   JaqlDataSource,
   JaqlSortDirection,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { HierarchyId } from '@/models/hierarchy';
 import { JtdConfigDto } from '@/dashboard/hooks/jtd/jtd-types';
 

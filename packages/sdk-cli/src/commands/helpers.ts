@@ -1,13 +1,13 @@
-import { DataModel, DataSourceField, DataSourceMetadata, MetadataTypes } from '@sisense/sdk-data';
-import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';
-import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
+import { DataModel, DataSourceField, DataSourceMetadata, MetadataTypes } from '@ethings-os/sdk-data';
+import { writeJavascript, writeTypescript } from '@ethings-os/sdk-modeling';
+import { DimensionalQueryClient, QueryClient } from '@ethings-os/sdk-query-client';
 import {
   getAuthenticator,
   HttpClient,
   isBearerAuthenticator,
   isWatAuthenticator,
-} from '@sisense/sdk-rest-client';
-import { trackCliError } from '@sisense/sdk-tracking';
+} from '@ethings-os/sdk-rest-client';
+import { trackCliError } from '@ethings-os/sdk-tracking';
 import levenshtein from 'js-levenshtein';
 import path from 'path';
 

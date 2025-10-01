@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type AreaRangeChartProps as AreaRangeChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type AreaRangeChartProps as AreaRangeChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -34,9 +34,9 @@ export interface AreaRangeChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory, Filter } from '@sisense/sdk-data';
+import { measureFactory, filterFactory, Filter } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType, RangeChartDataOptions } from '@sisense/sdk-ui-angular';
+import type { ChartType, RangeChartDataOptions } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-analytics',
@@ -102,7 +102,7 @@ export class AnalyticsComponent {
 })
 export class AreaRangeChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.dataSet}
    *
    * @category Data
    */
@@ -110,7 +110,7 @@ export class AreaRangeChartComponent {
   dataSet: AreaRangeChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -118,7 +118,7 @@ export class AreaRangeChartComponent {
   dataOptions!: AreaRangeChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.filters}
    *
    * @category Data
    */
@@ -126,7 +126,7 @@ export class AreaRangeChartComponent {
   filters: AreaRangeChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.highlights}
    *
    * @category Data
    */
@@ -134,7 +134,7 @@ export class AreaRangeChartComponent {
   highlights: AreaRangeChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -142,7 +142,7 @@ export class AreaRangeChartComponent {
   styleOptions: AreaRangeChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -150,7 +150,7 @@ export class AreaRangeChartComponent {
   beforeRender: AreaRangeChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!AreaRangeChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!AreaRangeChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -158,7 +158,7 @@ export class AreaRangeChartComponent {
   dataReady: AreaRangeChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -166,7 +166,7 @@ export class AreaRangeChartComponent {
   dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -174,7 +174,7 @@ export class AreaRangeChartComponent {
   dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreaRangeChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!AreaRangeChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

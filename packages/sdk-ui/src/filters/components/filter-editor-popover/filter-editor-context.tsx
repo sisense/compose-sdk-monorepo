@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
-import { DataSource, Filter } from '@sisense/sdk-data';
+import { DataSource, Filter } from '@ethings-os/sdk-data';
 
 type FilterEditorContextValue = {
   defaultDataSource: DataSource | null;

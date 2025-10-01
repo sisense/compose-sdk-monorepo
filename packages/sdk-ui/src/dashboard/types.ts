@@ -6,7 +6,7 @@ import {
 } from '@/models';
 import { WidgetProps } from '@/props';
 import { DashboardChangeAction } from '@/dashboard/dashboard';
-import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+import { DataSource, Filter, FilterRelations } from '@ethings-os/sdk-data';
 import { FiltersPanelConfig } from '@/filters/components/filters-panel/types';
 import { ReactNode } from 'react';
 

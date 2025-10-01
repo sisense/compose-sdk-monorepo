@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { type IndicatorChartProps as IndicatorChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type IndicatorChartProps as IndicatorChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -28,9 +28,9 @@ export interface IndicatorChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { IndicatorStyleOptions } from '@sisense/sdk-ui-angular';
+import type { IndicatorStyleOptions } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-analytics',
@@ -89,7 +89,7 @@ export class AnalyticsComponent {
 })
 export class IndicatorChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.dataSet}
    *
    * @category Data
    */
@@ -97,7 +97,7 @@ export class IndicatorChartComponent {
   dataSet: IndicatorChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -105,7 +105,7 @@ export class IndicatorChartComponent {
   dataOptions!: IndicatorChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.filters}
    *
    * @category Data
    */
@@ -113,7 +113,7 @@ export class IndicatorChartComponent {
   filters: IndicatorChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.highlights}
    *
    * @category Data
    */
@@ -121,7 +121,7 @@ export class IndicatorChartComponent {
   highlights: IndicatorChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!IndicatorChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!IndicatorChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -129,7 +129,7 @@ export class IndicatorChartComponent {
   styleOptions: IndicatorChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!IndicatorChartProps.onBeforeRender}
+   * {@inheritDoc  @ethings-os/sdk-ui!IndicatorChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -137,7 +137,7 @@ export class IndicatorChartComponent {
   beforeRender: IndicatorChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!IndicatorChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!IndicatorChartProps.onDataReady}
    *
    * @category Callbacks
    */

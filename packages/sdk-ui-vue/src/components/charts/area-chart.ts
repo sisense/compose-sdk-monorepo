@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { AreaChart as AreaChartPreact } from '@sisense/sdk-ui-preact';
-import type { AreaChartProps as AreaChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { AreaChart as AreaChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { AreaChartProps as AreaChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!AreaChart | `AreaChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!AreaChart | `AreaChart`} component.
  */
 export interface AreaChartProps extends AreaChartPropsPreact {}
 
@@ -26,9 +26,9 @@ export interface AreaChartProps extends AreaChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { AreaChart, type AreaChartProps } from '@sisense/sdk-ui-vue';
+ * import { AreaChart, type AreaChartProps } from '@ethings-os/sdk-ui-vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -50,7 +50,7 @@ export interface AreaChartProps extends AreaChartPropsPreact {}
 export const AreaChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -59,55 +59,55 @@ export const AreaChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<AreaChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<AreaChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<AreaChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaChartProps.styleOptions}
      *
      * @category Chart
      */
     styleOptions: Object as PropType<AreaChartProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<AreaChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<AreaChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<AreaChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<AreaChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!AreaChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!AreaChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */

@@ -21,8 +21,8 @@ including a header, widget style options, and more.
 ```
 ```ts
 import { Component } from '@angular/core';
-import { type PivotTableWidgetProps } from '@sisense/sdk-ui-angular';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { type PivotTableWidgetProps } from '@ethings-os/sdk-ui-angular';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-ecommerce';
 
 @Component({

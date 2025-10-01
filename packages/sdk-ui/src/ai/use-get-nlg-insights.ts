@@ -12,10 +12,10 @@ import {
   getFilterListAndRelationsJaql,
   JaqlDataSource,
   Measure,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { GetNlgInsightsRequest } from './api/types';
 import { GetNlgInsightsProps } from './get-nlg-insights';
-import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
+import { getJaqlQueryPayload } from '@ethings-os/sdk-query-client';
 
 /**
  * Parameters for {@link useGetNlgInsights} hook.

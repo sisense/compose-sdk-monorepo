@@ -6,7 +6,7 @@ import { StackableChartDesignOptions } from '@/chart-options-processor/translati
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
 import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
 import { CompleteThemeSettings, SeriesLabels } from '@/types';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 
 // Mock the dependencies
 vi.mock('@/chart-options-processor/translations/number-format-config', () => ({

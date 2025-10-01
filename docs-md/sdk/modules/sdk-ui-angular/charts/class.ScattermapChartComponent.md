@@ -18,8 +18,8 @@ An Angular component that allows to visualize geographical data as data points o
 ```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import type { ScattermapStyleOptions,ScattermapChartDataOptions } from '@sisense/sdk-ui-angular';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
+import type { ScattermapStyleOptions,ScattermapChartDataOptions } from '@ethings-os/sdk-ui-angular';
 import * as DM from '../../assets/sample-ecommerce';
 
 @Component({

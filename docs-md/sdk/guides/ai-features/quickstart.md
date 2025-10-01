@@ -15,17 +15,17 @@ This guide offers examples for getting started with:
 
 This guide assumes you already have a React project working with Compose SDK. If you don't already have a working project, follow the [Compose SDK Quickstart](../../getting-started) before continuing here. The additional prerequsities for Generative AI are listed below:
 
-- `@sisense/sdk-ui` version `2.0.0` or higher
+- `@ethings-os/sdk-ui` version `2.0.0` or higher
 - Sisense Fusion version L2025.2 or higher, with Generative AI and LLM enabled per the [Sisense Documentation](https://docs.sisense.com/main/SisenseLinux/genai.htm)
 
 ## Project Setup
 
-To use AI features in Compose SDK, all AI related components or hooks imported from `@sisense/sdk-ui/ai` must be wrapped with an `AiContextProvider` component within your application code. For example:
+To use AI features in Compose SDK, all AI related components or hooks imported from `@ethings-os/sdk-ui/ai` must be wrapped with an `AiContextProvider` component within your application code. For example:
 
 ```ts
 import App from './App.tsx';
-import { SisenseContextProvider } from '@sisense/sdk-ui';
-import { AiContextProvider } from '@sisense/sdk-ui/ai';
+import { SisenseContextProvider } from '@ethings-os/sdk-ui';
+import { AiContextProvider } from '@ethings-os/sdk-ui/ai';
 
 const sisenseContextProps = { /* Sisense configuration */ };
 
@@ -48,7 +48,7 @@ Here are some examples of how to work with the [`<Chatbot>`](../../modules/sdk-u
 To display a chatbot with the default settings, simply add the [`<Chatbot />`](../../modules/sdk-ui/generative-ai/function.Chatbot.md) component to your code without specifying any props.
 
 ```ts
-import { Chatbot } from '@sisense/sdk-ui/ai';
+import { Chatbot } from '@ethings-os/sdk-ui/ai';
 
 // ...
 
@@ -127,7 +127,7 @@ There are different options for generating NLG insights using a Compose SDK quer
 To use the [`useGetNlgInsights()`](../../modules/sdk-ui/generative-ai/function.useGetNlgInsights.md) hook, call the hook with the query information and handle the returned result.
 
 ```ts
-import { useGetNlgInsights } from '@sisense/sdk-ui/ai';
+import { useGetNlgInsights } from '@ethings-os/sdk-ui/ai';
 
 // ...
 
@@ -150,7 +150,7 @@ return <p>{data}</p>;
 To use the [`<GetNlgInsights />`](../../modules/sdk-ui/generative-ai/function.GetNlgInsights.md) component, add it to your code with the query information.
 
 ```ts
-import { GetNlgInsights } from '@sisense/sdk-ui/ai';
+import { GetNlgInsights } from '@ethings-os/sdk-ui/ai';
 
 // ...
 
@@ -170,7 +170,7 @@ Generate properties for a [`<Widget>`](../../modules/sdk-ui/dashboards/function.
 Provide the question and datamodel name, and receive [`WidgetProps`](../../modules/sdk-ui/type-aliases/type-alias.WidgetProps.md) as a response, then render the result in a [`<Widget>`](../../modules/sdk-ui/dashboards/function.Widget.md) component.
 
 ```ts
-import { useGetNlqResult } from '@sisense/sdk-ui/ai';
+import { useGetNlqResult } from '@ethings-os/sdk-ui/ai';
 
 // ...
 
@@ -205,7 +205,7 @@ The hook returns `data` as an array of [`QueryRecommendation`](../../modules/sdk
 In this example, we simply show the list of suggested questions. In practice, the other propeties are then useful if/when a user selects one of the generated questions.
 
 ```ts
-import { useGetQueryRecommendations, QueryRecommendation } from '@sisense/sdk-ui/ai';
+import { useGetQueryRecommendations, QueryRecommendation } from '@ethings-os/sdk-ui/ai';
 
 // ...
 
@@ -230,7 +230,7 @@ return (
 In this example, both the generated question and the answer (widget) are shown at the same time.
 
 ```ts
-import { useGetQueryRecommendations, QueryRecommendation } from '@sisense/sdk-ui/ai';
+import { useGetQueryRecommendations, QueryRecommendation } from '@ethings-os/sdk-ui/ai';
 
 // ...
 

@@ -10,4 +10,4 @@ export {
   withoutFilters,
   withReplacedFilter,
   findFilter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';

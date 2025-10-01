@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type PolarChartProps as PolarChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type PolarChartProps as PolarChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -32,9 +32,9 @@ export interface PolarChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import type { ChartType } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-analytics',
@@ -88,7 +88,7 @@ export class AnalyticsComponent {
 })
 export class PolarChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.dataSet}
    *
    * @category Data
    */
@@ -96,7 +96,7 @@ export class PolarChartComponent {
   dataSet: PolarChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.dataOptions}
    *
    * @category Data
    */
@@ -104,7 +104,7 @@ export class PolarChartComponent {
   dataOptions!: PolarChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.filters}
    *
    * @category Data
    */
@@ -112,7 +112,7 @@ export class PolarChartComponent {
   filters: PolarChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.highlights}
    *
    * @category Data
    */
@@ -120,7 +120,7 @@ export class PolarChartComponent {
   highlights: PolarChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -128,7 +128,7 @@ export class PolarChartComponent {
   styleOptions: PolarChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -136,7 +136,7 @@ export class PolarChartComponent {
   beforeRender: PolarChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!PolarChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!PolarChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -144,7 +144,7 @@ export class PolarChartComponent {
   dataReady: PolarChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -152,7 +152,7 @@ export class PolarChartComponent {
   dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -160,7 +160,7 @@ export class PolarChartComponent {
   dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PolarChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!PolarChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { Widget as WidgetPreact } from '@sisense/sdk-ui-preact';
+import { Widget as WidgetPreact } from '@ethings-os/sdk-ui-preact';
 import type {
   ChartWidgetProps,
   PivotTableWidgetProps as PivotTableWidgetPropsPreact,
@@ -9,7 +9,7 @@ import type {
   TextWidgetProps,
   WidgetProps as WidgetPropsPreact,
   WithCommonWidgetProps,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 export { WithCommonWidgetProps, TextWidgetProps, CustomWidgetProps };
@@ -17,7 +17,7 @@ export { WithCommonWidgetProps, TextWidgetProps, CustomWidgetProps };
 export interface PivotTableWidgetProps extends PivotTableWidgetPropsPreact {}
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!Widget | `Widget`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!Widget | `Widget`} component.
  */
 export type WidgetProps = SoftUnion<
   | WithCommonWidgetProps<ChartWidgetProps, 'chart'>
@@ -32,8 +32,8 @@ export type WidgetProps = SoftUnion<
  * @example
  * ```vue
  * <script setup lang="ts">
- * import { Widget, type WidgetProps } from '@sisense/sdk-ui-vue';
- * import { measureFactory } from '@sisense/sdk-data';
+ * import { Widget, type WidgetProps } from '@ethings-os/sdk-ui-vue';
+ * import { measureFactory } from '@ethings-os/sdk-data';
  *
  * const widgetProps: WidgetProps = {
  *   id: 'widget-id',
@@ -87,80 +87,80 @@ export const Widget = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.chartType}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.chartType}
      *
      * @category Chart
      */
     chartType: String as PropType<WidgetProps['chartType']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CustomWidgetProps.customWidgetType}
+     * {@inheritDoc @ethings-os/sdk-ui!CustomWidgetProps.customWidgetType}
      *
      * @category Widget
      */
     customWidgetType: String as PropType<WidgetProps['customWidgetType']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataSource}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.dataSource}
      *
      * @category Data
      */
     dataSource: Object as PropType<WidgetProps['dataSource']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.dataOptions}
      *
      * @category Chart
      */
     dataOptions: Object as PropType<WidgetProps['dataOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.filters}
      *
      * @category Data
      */
     filters: Array as PropType<WidgetProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<WidgetProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.styleOptions}
      *
      * @category Widget
      */
     styleOptions: Object as PropType<WidgetProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.drilldownOptions}
      *
      * @category Widget
      */
     drilldownOptions: Object as PropType<WidgetProps['drilldownOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.title}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.title}
      *
      * @category Widget
      */
     title: String as PropType<WidgetProps['title']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.description}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.description}
      *
      * @category Widget
      */
     description: String as PropType<WidgetProps['description']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlightSelectionDisabled}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.highlightSelectionDisabled}
      *
      * @category Widget
      * @internal
      */
     highlightSelectionDisabled: Boolean as PropType<WidgetProps['highlightSelectionDisabled']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<WidgetProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onDataReady}
      *
      * @category Callbacks
      */
@@ -173,19 +173,19 @@ export const Widget = defineComponent({
      */
     onBeforeMenuOpen: Function as PropType<WidgetProps['onBeforeMenuOpen']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<WidgetProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<WidgetProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onDataPointsSelected}
      *
      * @category Callbacks
      */

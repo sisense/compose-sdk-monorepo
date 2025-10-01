@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { mergeFilters, type Filter } from '@sisense/sdk-data';
+import { mergeFilters, type Filter } from '@ethings-os/sdk-data';
 import deepMerge from 'ts-deepmerge';
 import { LoadingOverlay } from '@/common/components/loading-overlay';
 import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-translator';

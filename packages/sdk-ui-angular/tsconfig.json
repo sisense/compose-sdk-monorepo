@@ -21,7 +21,7 @@
     "useDefineForClassFields": false,
     "lib": ["dom", "es2018"],
     "paths": {
-      "@sisense/sdk-ui-angular": ["src/public-api.ts"]
+      "@ethings-os/sdk-ui-angular": ["src/public-api.ts"]
     }
   },
   "angularCompilerOptions": {

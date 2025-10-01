@@ -6,8 +6,8 @@ import type {
   GetHierarchyModelsParams,
   HierarchyModel,
   WidgetModel,
-} from '@sisense/sdk-ui-preact';
-import { dataLoadStateReducer, getHierarchyModels } from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
+import { dataLoadStateReducer, getHierarchyModels } from '@ethings-os/sdk-ui-preact';
 import { toRefs, watch } from 'vue';
 import { useTracking } from './use-tracking';
 import type { MaybeRefOrWithRefs } from '../types';
@@ -22,7 +22,7 @@ import type { MaybeRefOrWithRefs } from '../types';
  *
  * ```vue
  * <script setup lang="ts">
- * import { useGetHierarchyModels } from '@sisense/sdk-ui-vue';
+ * import { useGetHierarchyModels } from '@ethings-os/sdk-ui-vue';
  * const { data: hierarchyModels } = useGetHierarchyModels({
  *   dataSource: DM.DataSource,
  *   dimension: DM.DimCountries.Region,

@@ -6,7 +6,7 @@ import {
   isDatetime,
   isMembersFilter,
   isNumber,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { useMemo } from 'react';
 import { formatDateValue, getDefaultDateMask } from '@/query/date-formats/apply-date-format';
 import { useSisenseContext } from '@/sisense-context/sisense-context';

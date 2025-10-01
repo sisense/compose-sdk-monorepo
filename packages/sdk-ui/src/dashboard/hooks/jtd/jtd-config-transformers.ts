@@ -14,7 +14,7 @@ import type {
   Dimension,
   Measure,
   MeasureColumn,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import {
   isPivotTableWidgetProps,
   PivotTableDataOptions,

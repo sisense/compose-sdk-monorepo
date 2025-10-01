@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type SunburstChartProps as SunburstChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type SunburstChartProps as SunburstChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -33,9 +33,9 @@ export interface SunburstChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import type { ChartType } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-analytics',
@@ -89,7 +89,7 @@ export class AnalyticsComponent {
 })
 export class SunburstChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.dataSet}
    *
    * @category Data
    */
@@ -97,7 +97,7 @@ export class SunburstChartComponent {
   dataSet: SunburstChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -105,7 +105,7 @@ export class SunburstChartComponent {
   dataOptions!: SunburstChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.filters}
    *
    * @category Data
    */
@@ -113,7 +113,7 @@ export class SunburstChartComponent {
   filters: SunburstChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.highlights}
    *
    * @category Data
    */
@@ -121,7 +121,7 @@ export class SunburstChartComponent {
   highlights: SunburstChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -129,7 +129,7 @@ export class SunburstChartComponent {
   styleOptions: SunburstChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -137,7 +137,7 @@ export class SunburstChartComponent {
   beforeRender: SunburstChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!SunburstChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!SunburstChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -145,7 +145,7 @@ export class SunburstChartComponent {
   dataReady: SunburstChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -153,7 +153,7 @@ export class SunburstChartComponent {
   dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -161,7 +161,7 @@ export class SunburstChartComponent {
   dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

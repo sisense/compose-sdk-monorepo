@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { normalizeUrl } from '@sisense/sdk-common';
+import { normalizeUrl } from '@ethings-os/sdk-common';
 
 import { isSsoAuthenticator, SsoAuthenticator } from './sso-authenticator.js';
 

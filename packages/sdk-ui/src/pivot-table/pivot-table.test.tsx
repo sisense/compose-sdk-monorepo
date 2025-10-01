@@ -8,7 +8,7 @@ import { mockPivotTableProps } from './__mocks__/mocks';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { ClientApplication } from '../app/client-application';
 import { executePivotQueryMock } from '../query/__mocks__/execute-query';
-import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
+import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@ethings-os/sdk-data';
 import { SisenseContextPayload } from '@/sisense-context/sisense-context';
 import { createMockPivotClient } from '@/pivot-table/__mocks__/pivot-client-mock';
 

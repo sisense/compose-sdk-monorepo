@@ -1,4 +1,4 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import { RestApi } from '../../api/rest-api';
 import { fetchWidgetDtoModel } from '../../widget-by-id/use-fetch-widget-dto-model';
 import { WidgetModel } from './widget-model';

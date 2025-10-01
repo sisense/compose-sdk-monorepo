@@ -1,6 +1,6 @@
 import React, { MouseEventHandler } from 'react';
 
-import { Icon } from '@sisense/sdk-shared-ui/Icon';
+import { Icon } from '@ethings-os/sdk-shared-ui/Icon';
 
 import { HeaderText } from './HeaderText.js';
 

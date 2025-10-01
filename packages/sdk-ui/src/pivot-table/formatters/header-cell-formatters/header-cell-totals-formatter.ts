@@ -1,5 +1,5 @@
-import { TFunction } from '@sisense/sdk-common/src/i18n/i18next';
-import { PivotTreeNode, UserType, PanelType } from '@sisense/sdk-pivot-client';
+import { TFunction } from '@ethings-os/sdk-common/src/i18n/i18next';
+import { PivotTreeNode, UserType, PanelType } from '@ethings-os/sdk-pivot-client';
 import type { PivotTableDataOptions } from '@/chart-data-options/types';
 
 export function createHeaderCellTotalsFormatter(

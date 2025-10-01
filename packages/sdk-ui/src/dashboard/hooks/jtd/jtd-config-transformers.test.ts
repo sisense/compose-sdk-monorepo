@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { filterFactory, MetadataTypes } from '@sisense/sdk-data';
+import { filterFactory, MetadataTypes } from '@ethings-os/sdk-data';
 import {
   normalizeToJumpToDashboardConfig,
   normalizeToJtdConfig,

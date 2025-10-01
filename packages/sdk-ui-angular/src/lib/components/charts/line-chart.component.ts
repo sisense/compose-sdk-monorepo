@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type LineChartProps as LineChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type LineChartProps as LineChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -32,9 +32,9 @@ export interface LineChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory, Filter } from '@sisense/sdk-data';
+import { measureFactory, filterFactory, Filter } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import type { ChartType } from '@ethings-os/sdk-ui-angular';
 @Component({
   selector: 'app-analytics',
   templateUrl: './analytics.component.html',
@@ -87,7 +87,7 @@ export class AnalyticsComponent {
 })
 export class LineChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!LineChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.dataSet}
    *
    * @category Data
    */
@@ -95,7 +95,7 @@ export class LineChartComponent {
   dataSet: LineChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!LineChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.dataOptions}
    *
    * @category Data
    */
@@ -103,7 +103,7 @@ export class LineChartComponent {
   dataOptions!: LineChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!LineChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.filters}
    *
    * @category Data
    */
@@ -111,7 +111,7 @@ export class LineChartComponent {
   filters: LineChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!LineChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.highlights}
    *
    * @category Data
    */
@@ -119,7 +119,7 @@ export class LineChartComponent {
   highlights: LineChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!LineChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -127,7 +127,7 @@ export class LineChartComponent {
   styleOptions: LineChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!LineChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -135,7 +135,7 @@ export class LineChartComponent {
   beforeRender: LineChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!LineChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!LineChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -143,7 +143,7 @@ export class LineChartComponent {
   dataReady: LineChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -151,7 +151,7 @@ export class LineChartComponent {
   dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -159,7 +159,7 @@ export class LineChartComponent {
   dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!LineChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!LineChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

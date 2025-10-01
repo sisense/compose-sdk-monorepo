@@ -3,7 +3,7 @@ import {
   FilterJaql,
   IncludeAllFilterJaql,
   IncludeMembersFilterJaql,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { Panel, PanelItem } from './types.js';
 
 /**

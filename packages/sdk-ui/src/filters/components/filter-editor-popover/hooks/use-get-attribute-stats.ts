@@ -6,7 +6,7 @@ import {
   isText,
   measureFactory,
   QueryResultData,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { HookEnableParam } from '@/common/hooks/types';
 import { useExecuteQueryInternal } from '@/query-execution/use-execute-query';
 

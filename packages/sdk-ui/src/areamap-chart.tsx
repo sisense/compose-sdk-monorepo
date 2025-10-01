@@ -5,7 +5,7 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
 /**
  * A React component for visualizing geographical data as colored polygons on a map.
  *
- * For another way do display data on a map, see {@link @sisense/sdk-ui!ScattermapChart | `ScattermapChart`}.
+ * For another way do display data on a map, see {@link @ethings-os/sdk-ui!ScattermapChart | `ScattermapChart`}.
  *
  * ## Example
  *

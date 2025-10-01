@@ -10,7 +10,7 @@ import {
   JSONValue,
   Measure,
   DataType,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { NormalizedTable, NormalizedField } from '../types.js';
 
 const ATTRIBUTE_PREFIX = 'DM.';

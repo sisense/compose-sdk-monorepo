@@ -1,4 +1,4 @@
-import { Filter } from '@sisense/sdk-data';
+import { Filter } from '@ethings-os/sdk-data';
 import { FilterTileContainer, FilterTileDesignOptions } from './filter-tile-container';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { useTranslation } from 'react-i18next';

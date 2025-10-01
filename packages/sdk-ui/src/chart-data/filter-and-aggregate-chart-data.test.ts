@@ -1,4 +1,4 @@
-import { Column, MeasureColumn } from '@sisense/sdk-data';
+import { Column, MeasureColumn } from '@ethings-os/sdk-data';
 import {
   createSortableTable,
   rownumColumnName,

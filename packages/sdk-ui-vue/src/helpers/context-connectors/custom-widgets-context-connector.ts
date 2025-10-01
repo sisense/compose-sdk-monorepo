@@ -1,6 +1,6 @@
 import { watchEffect } from 'vue';
-import { CustomWidgetsProviderAdapter, DataObserver } from '@sisense/sdk-ui-preact';
-import type { ContextConnector, CustomWidgetsProviderAdapterProps } from '@sisense/sdk-ui-preact';
+import { CustomWidgetsProviderAdapter, DataObserver } from '@ethings-os/sdk-ui-preact';
+import type { ContextConnector, CustomWidgetsProviderAdapterProps } from '@ethings-os/sdk-ui-preact';
 import { getCustomWidgetsContext } from '../../providers';
 
 /**

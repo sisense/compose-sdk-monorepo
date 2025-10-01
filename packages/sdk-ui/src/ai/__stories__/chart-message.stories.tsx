@@ -4,7 +4,7 @@ import { SisenseContextProvider } from '../../sisense-context/sisense-context-pr
 import { SisenseContextProviderProps } from '../../props';
 import { AiContextProvider } from '@/ai';
 import { getDefaultThemeSettings, ThemeProvider } from '@/index';
-import { MetadataItemJaql } from '@sisense/sdk-data';
+import { MetadataItemJaql } from '@ethings-os/sdk-data';
 
 const sisenseContextProps: SisenseContextProviderProps = {
   url: import.meta.env.VITE_APP_SISENSE_URL ?? '',

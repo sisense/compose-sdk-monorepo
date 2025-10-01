@@ -5,7 +5,7 @@ import { ClientApplication } from '@/app/client-application';
 import { QueryDescription } from '@/query/execute-query';
 import { FunnelChartDataOptionsInternal } from '../types';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import { filterFactory, measureFactory } from '@ethings-os/sdk-data';
 
 // Mock the loadCategoricalData function
 vi.mock('../../helpers/data', () => ({

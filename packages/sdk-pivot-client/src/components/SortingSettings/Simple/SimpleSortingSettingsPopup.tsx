@@ -1,7 +1,7 @@
 import React from 'react';
 import { produce } from 'immer';
 
-import { CheckableList, type CheckableListProps } from '@sisense/sdk-shared-ui/CheckableList';
+import { CheckableList, type CheckableListProps } from '@ethings-os/sdk-shared-ui/CheckableList';
 
 import { Header } from '../Header/index.js';
 import { SortingDirection } from '../../../data-handling/constants.js';

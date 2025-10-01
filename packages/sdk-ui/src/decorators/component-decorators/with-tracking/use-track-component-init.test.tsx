@@ -1,11 +1,11 @@
 /** @vitest-environment jsdom */
 
-import { trackProductEvent } from '@sisense/sdk-tracking';
+import { trackProductEvent } from '@ethings-os/sdk-tracking';
 import { renderHook } from '@testing-library/react';
 import { TrackingContextProvider, useTrackComponentInit } from './use-track-component-init';
 import { MockedSisenseContextProvider } from '../../../__test-helpers__';
 
-vi.mock('@sisense/sdk-tracking');
+vi.mock('@ethings-os/sdk-tracking');
 vi.stubGlobal('__PACKAGE_VERSION__', 'unit-test-version');
 
 describe('useTrackComponentInit', () => {

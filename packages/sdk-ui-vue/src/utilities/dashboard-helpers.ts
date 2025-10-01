@@ -1,12 +1,12 @@
 import {
   dashboardHelpers as dashboardHelpersPreact,
   type DashboardProps as DashboardPropsPreact,
-} from '@sisense/sdk-ui-preact';
-import type { Filter, FilterRelations } from '@sisense/sdk-data';
+} from '@ethings-os/sdk-ui-preact';
+import type { Filter, FilterRelations } from '@ethings-os/sdk-data';
 import type { DashboardProps } from '../components/dashboard';
 
 /**
- * {@inheritDoc @sisense/sdk-ui!dashboardHelpers.replaceFilters}
+ * {@inheritDoc @ethings-os/sdk-ui!dashboardHelpers.replaceFilters}
  *
  * @example
  * Replace all filters on a dashboard with a new set of filters.
@@ -27,7 +27,7 @@ export const replaceFilters = (
 };
 
 /**
- * {@inheritDoc @sisense/sdk-ui!dashboardHelpers.addFilter}
+ * {@inheritDoc @ethings-os/sdk-ui!dashboardHelpers.addFilter}
  *
  * @example
  * Add a new filter to a dashboard.
@@ -45,7 +45,7 @@ export const addFilter = (dashboard: DashboardProps, newFilter: Filter): Dashboa
 };
 
 /**
- * {@inheritDoc @sisense/sdk-ui!dashboardHelpers.addFilters}
+ * {@inheritDoc @ethings-os/sdk-ui!dashboardHelpers.addFilters}
  *
  * @example
  * Add multiple new filters to a dashboard.
@@ -63,7 +63,7 @@ export const addFilters = (dashboard: DashboardProps, newFilters: Filter[]): Das
 };
 
 /**
- * {@inheritDoc @sisense/sdk-ui!dashboardHelpers.replaceFilter}
+ * {@inheritDoc @ethings-os/sdk-ui!dashboardHelpers.replaceFilter}
  *
  * @example
  * Replace a filter in a dashboard.
@@ -91,7 +91,7 @@ export const replaceFilter = (
 };
 
 /**
- * {@inheritDoc @sisense/sdk-ui!dashboardHelpers.removeFilter}
+ * {@inheritDoc @ethings-os/sdk-ui!dashboardHelpers.removeFilter}
  *
  * @example
  * Remove a filter from a dashboard.
@@ -109,7 +109,7 @@ export const removeFilter = (dashboard: DashboardProps, filterToRemove: Filter):
 };
 
 /**
- * {@inheritDoc @sisense/sdk-ui!dashboardHelpers.removeFilters}
+ * {@inheritDoc @ethings-os/sdk-ui!dashboardHelpers.removeFilters}
  *
  * @example
  * Remove multiple filters from a dashboard.

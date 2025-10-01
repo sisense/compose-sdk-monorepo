@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "@sisense/sdk-ui-angular": {
+    "@ethings-os/sdk-ui-angular": {
       "projectType": "library",
       "root": "",
       "sourceRoot": "src",

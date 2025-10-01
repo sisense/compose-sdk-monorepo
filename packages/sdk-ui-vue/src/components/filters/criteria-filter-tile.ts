@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { CriteriaFilterTile as CriteriaFilterTilePreact } from '@sisense/sdk-ui-preact';
-import type { CriteriaFilterTileProps as CriteriaFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
+import { CriteriaFilterTile as CriteriaFilterTilePreact } from '@ethings-os/sdk-ui-preact';
+import type { CriteriaFilterTileProps as CriteriaFilterTilePropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!CriteriaFilterTile | `CriteriaFilterTile`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!CriteriaFilterTile | `CriteriaFilterTile`} component.
  */
 export interface CriteriaFilterTileProps extends CriteriaFilterTilePropsPreact {}
 
@@ -28,8 +28,8 @@ export interface CriteriaFilterTileProps extends CriteriaFilterTilePropsPreact {
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { CriteriaFilterTile } from '@sisense/sdk-ui-vue';
- * import { filterFactory } from '@sisense/sdk-data';
+ * import { CriteriaFilterTile } from '@ethings-os/sdk-ui-vue';
+ * import { filterFactory } from '@ethings-os/sdk-data';
  *
  * const criteriaFilterTileProps = ref({
  *  title: 'Revenue',
@@ -49,40 +49,40 @@ export interface CriteriaFilterTileProps extends CriteriaFilterTilePropsPreact {
 export const CriteriaFilterTile = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.arrangement}
+     * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.arrangement}
      */
     arrangement: String as PropType<CriteriaFilterTileProps['arrangement']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.filter}
+     * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.filter}
      */
     filter: {
       type: Object as PropType<CriteriaFilterTileProps['filter']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.measures}
+     * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.measures}
      */
     measures: Array as PropType<CriteriaFilterTileProps['measures']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.onUpdate}
+     * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.onUpdate}
      */
     onUpdate: {
       type: Function as PropType<CriteriaFilterTileProps['onUpdate']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.title}
+     * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.title}
      */
     title: {
       type: String as PropType<CriteriaFilterTileProps['title']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.onDelete}
+     * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.onDelete}
      */
     onDelete: Function as PropType<CriteriaFilterTileProps['onDelete']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.onEdit}
+     * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.onEdit}
      */
     onEdit: Function as PropType<CriteriaFilterTileProps['onEdit']>,
   },

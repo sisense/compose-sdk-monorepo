@@ -1,4 +1,4 @@
-import { createAttribute, Measure, type Data, type QueryResultData } from '@sisense/sdk-data';
+import { createAttribute, Measure, type Data, type QueryResultData } from '@ethings-os/sdk-data';
 import { boxWhiskerProcessResult, executeBoxplotQuery } from './boxplot-utils.js';
 import isObject from 'lodash-es/isObject';
 import { executePivotQueryMock } from './query/__mocks__/execute-query';

@@ -3,8 +3,8 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import uniq from 'lodash-es/uniq';
 import partition from 'lodash-es/partition';
-import { Attribute, Column, MetadataTypes } from '@sisense/sdk-data';
-import { type TFunction } from '@sisense/sdk-common';
+import { Attribute, Column, MetadataTypes } from '@ethings-os/sdk-data';
+import { type TFunction } from '@ethings-os/sdk-common';
 import {
   StyledColumn,
   DrilldownSelection,

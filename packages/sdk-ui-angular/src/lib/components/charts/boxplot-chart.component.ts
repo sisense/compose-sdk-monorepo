@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type BoxplotChartProps as BoxplotChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type BoxplotChartProps as BoxplotChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -34,8 +34,8 @@ export interface BoxplotChartProps
  *
  * ```ts
 import { Component } from '@angular/core';
-import { filterFactory } from '@sisense/sdk-data';
-import type { BoxplotChartDataOptions } from '@sisense/sdk-ui-angular';
+import { filterFactory } from '@ethings-os/sdk-data';
+import type { BoxplotChartDataOptions } from '@ethings-os/sdk-ui-angular';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({
@@ -83,7 +83,7 @@ export class AnalyticsComponent {
 })
 export class BoxplotChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.dataSet}
    *
    * @category Data
    */
@@ -91,7 +91,7 @@ export class BoxplotChartComponent {
   dataSet: BoxplotChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -99,7 +99,7 @@ export class BoxplotChartComponent {
   dataOptions!: BoxplotChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.filters}
    *
    * @category Data
    */
@@ -107,7 +107,7 @@ export class BoxplotChartComponent {
   filters: BoxplotChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.highlights}
    *
    * @category Data
    */
@@ -115,7 +115,7 @@ export class BoxplotChartComponent {
   highlights: BoxplotChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -123,7 +123,7 @@ export class BoxplotChartComponent {
   styleOptions: BoxplotChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -131,7 +131,7 @@ export class BoxplotChartComponent {
   beforeRender: BoxplotChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!BoxplotChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!BoxplotChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -139,7 +139,7 @@ export class BoxplotChartComponent {
   dataReady: BoxplotChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -147,7 +147,7 @@ export class BoxplotChartComponent {
   dataPointClick = new EventEmitter<BoxplotDataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -155,7 +155,7 @@ export class BoxplotChartComponent {
   dataPointContextMenu = new EventEmitter<BoxplotDataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!BoxplotChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!BoxplotChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

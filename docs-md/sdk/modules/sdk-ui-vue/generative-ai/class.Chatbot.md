@@ -11,7 +11,7 @@ An Vue component that renders a chatbot with data topic selection.
 Here's how you can use the Chatbot component in a Vue application:
 ```vue
 <script setup lang="ts">
-import { Chatbot, type ChatbotProps } from '@sisense/sdk-ui-vue/ai';
+import { Chatbot, type ChatbotProps } from '@ethings-os/sdk-ui-vue/ai';
 
 const chatbotProps: ChatbotProps = {
  width: 500,

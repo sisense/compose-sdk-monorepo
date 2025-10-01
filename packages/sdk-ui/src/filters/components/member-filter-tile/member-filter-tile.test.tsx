@@ -4,7 +4,7 @@ import * as jaqlAgeRange from '@/__mocks__/data/mock-jaql-age-range.json';
 import * as jaqlCategoryId from '@/__mocks__/data/mock-jaql-category-id.json';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { mockToken, mockUrl, server } from '@/__mocks__/msw';
-import { filterFactory, type MembersFilter } from '@sisense/sdk-data';
+import { filterFactory, type MembersFilter } from '@ethings-os/sdk-data';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { MemberFilterTile } from './member-filter-tile';

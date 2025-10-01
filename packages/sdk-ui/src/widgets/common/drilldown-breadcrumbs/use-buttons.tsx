@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import React from 'react';
-import { Attribute } from '@sisense/sdk-data';
+import { Attribute } from '@ethings-os/sdk-data';
 import { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
 import { BREADCRUMBS_BORDER_COLOR } from './drilldown-breadcrumbs';

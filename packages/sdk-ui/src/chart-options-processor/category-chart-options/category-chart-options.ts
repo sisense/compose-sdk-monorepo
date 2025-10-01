@@ -14,7 +14,7 @@ import {
   CategoricalChartDataOptionsInternal,
 } from '../../chart-data-options/types';
 import { TranslatableError } from '@/translation/translatable-error';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 
 // Export individual chart option functions
 export { getPieChartOptions } from './pie-chart-options';

@@ -42,7 +42,7 @@ How to use `useGetDashboardModel` within a Vue component to fetch and display a 
 </template>
 
 <script setup lang="ts">
-import { dashboardModelTranslator, useGetDashboardModel } from '@sisense/sdk-ui-vue';
+import { dashboardModelTranslator, useGetDashboardModel } from '@ethings-os/sdk-ui-vue';
 
 const { dashboard } = useGetDashboardModel({
  dashboardOid: '6441e728dac1920034bce737',

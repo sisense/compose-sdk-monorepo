@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type PieChartProps as PieChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type PieChartProps as PieChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -33,9 +33,9 @@ export interface PieChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import type { ChartType } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-analytics',
@@ -89,7 +89,7 @@ export class AnalyticsComponent {
 })
 export class PieChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!PieChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!PieChartProps.dataSet}
    *
    * @category Data
    */
@@ -97,7 +97,7 @@ export class PieChartComponent {
   dataSet: PieChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PieChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!PieChartProps.dataOptions}
    *
    * @category Data
    */
@@ -105,7 +105,7 @@ export class PieChartComponent {
   dataOptions!: PieChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PieChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!PieChartProps.filters}
    *
    * @category Data
    */
@@ -113,7 +113,7 @@ export class PieChartComponent {
   filters: PieChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PieChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!PieChartProps.highlights}
    *
    * @category Data
    */
@@ -121,7 +121,7 @@ export class PieChartComponent {
   highlights: PieChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PieChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!PieChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -129,7 +129,7 @@ export class PieChartComponent {
   styleOptions: PieChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PieChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!PieChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -137,7 +137,7 @@ export class PieChartComponent {
   beforeRender: PieChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!PieChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!PieChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -145,7 +145,7 @@ export class PieChartComponent {
   dataReady: PieChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!PieChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -153,7 +153,7 @@ export class PieChartComponent {
   dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!PieChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -161,7 +161,7 @@ export class PieChartComponent {
   dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!PieChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!PieChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

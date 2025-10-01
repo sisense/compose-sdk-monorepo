@@ -6,7 +6,7 @@ import {
   splitFiltersAndRelations,
 } from '@/utils/filter-relations';
 import { mergeFilters } from '@/widget-by-id/utils';
-import { Filter, FilterRelations, isCascadingFilter, isFilterRelations } from '@sisense/sdk-data';
+import { Filter, FilterRelations, isCascadingFilter, isFilterRelations } from '@ethings-os/sdk-data';
 import { useCallback, useMemo } from 'react';
 import { reassembleCascadingFilters } from './cascading-utils';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@sisense/sdk-ui-vue",
+  "name": "@ethings-os/sdk-ui-vue",
   "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package containing general UI elements and related logic tailored for Vue development",
   "repository": {
@@ -56,7 +56,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@sisense/sdk-ui-preact": "workspace:*",
+    "@ethings-os/sdk-ui-preact": "workspace:*",
     "deepmerge": "^4.3.1",
     "lodash-es": "^4.17.21",
     "vue": "^3.3.2"

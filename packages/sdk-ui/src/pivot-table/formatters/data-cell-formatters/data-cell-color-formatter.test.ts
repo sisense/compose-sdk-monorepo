@@ -1,7 +1,7 @@
 import { beforeEach } from 'vitest';
 import { PivotTableDataOptions, type StyledMeasureColumn } from '@/chart-data-options/types';
 import { CompleteThemeSettings } from '@/types';
-import { JaqlPanel, PivotDataNode, PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
+import { JaqlPanel, PivotDataNode, PivotTreeNode, UserType } from '@ethings-os/sdk-pivot-client';
 import { createDataCellColorFormatter } from '@/pivot-table/formatters/data-cell-formatters/data-cell-color-formatter';
 
 describe('createDataCellColorFormatter', () => {

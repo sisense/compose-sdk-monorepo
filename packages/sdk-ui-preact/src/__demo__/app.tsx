@@ -4,8 +4,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import './app.css';
 
-import { measureFactory } from '@sisense/sdk-data';
-import { ExecuteQuery, SisenseContextProvider } from '@sisense/sdk-ui';
+import { measureFactory } from '@ethings-os/sdk-data';
+import { ExecuteQuery, SisenseContextProvider } from '@ethings-os/sdk-ui';
 import { useState } from 'preact/hooks';
 
 import viteLogo from '/vite.svg';

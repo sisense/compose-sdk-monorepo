@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { CalendarHeatmapChart as CalendarHeatmapChartPreact } from '@sisense/sdk-ui-preact';
-import type { CalendarHeatmapChartProps as CalendarHeatmapChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { CalendarHeatmapChart as CalendarHeatmapChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { CalendarHeatmapChartProps as CalendarHeatmapChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!CalendarHeatmapChart | `CalendarHeatmapChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!CalendarHeatmapChart | `CalendarHeatmapChart`} component.
  */
 export interface CalendarHeatmapChartProps extends CalendarHeatmapChartPropsPreact {}
 
@@ -27,9 +27,9 @@ export interface CalendarHeatmapChartProps extends CalendarHeatmapChartPropsPrea
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { CalendarHeatmapChart, type CalendarHeatmapChartProps } from '@sisense/sdk-ui-vue';
+ * import { CalendarHeatmapChart, type CalendarHeatmapChartProps } from '@ethings-os/sdk-ui-vue';
  *
  * const calendarChartProps = ref<CalendarHeatmapChartProps>({
  *   dataSet: DM.DataSource,
@@ -52,7 +52,7 @@ export interface CalendarHeatmapChartProps extends CalendarHeatmapChartPropsPrea
 export const CalendarHeatmapChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -61,49 +61,49 @@ export const CalendarHeatmapChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<CalendarHeatmapChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<CalendarHeatmapChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<CalendarHeatmapChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.styleOptions}
      *
      * @category Chart
      */
     styleOptions: Object as PropType<CalendarHeatmapChartProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<CalendarHeatmapChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<CalendarHeatmapChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<CalendarHeatmapChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
@@ -111,7 +111,7 @@ export const CalendarHeatmapChart = defineComponent({
       CalendarHeatmapChartProps['onDataPointContextMenu']
     >,
     /**
-     * {@inheritDoc @sisense/sdk-ui!CalendarHeatmapChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!CalendarHeatmapChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */

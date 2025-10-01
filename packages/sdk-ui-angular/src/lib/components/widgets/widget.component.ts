@@ -17,7 +17,7 @@ import {
   TextWidgetProps as TextWidgetPropsPreact,
   Widget as WidgetPreact,
   type WidgetProps as WidgetPropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -46,7 +46,7 @@ export interface TextWidgetProps
     TextWidgetEventProps {}
 
 /**
- * {@inheritDoc @sisense/sdk-ui!WithCommonWidgetProps}
+ * {@inheritDoc @ethings-os/sdk-ui!WithCommonWidgetProps}
  */
 export type WithCommonWidgetProps<BaseWidget, Type> = BaseWidget & {
   /**
@@ -95,7 +95,7 @@ export type WidgetProps = SoftUnion<
  * ```ts
 // Component behavior in example.component.ts
 import { Component } from '@angular/core';
-import { type WidgetProps } from '@sisense/sdk-ui-angular';
+import { type WidgetProps } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'example',
@@ -147,7 +147,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   widgetType!: WidgetProps['widgetType'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.chartType}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.chartType}
    *
    * @category Chart
    */
@@ -155,7 +155,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   chartType: WidgetProps['chartType'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CustomWidgetProps.customWidgetType}
+   * {@inheritDoc @ethings-os/sdk-ui!CustomWidgetProps.customWidgetType}
    *
    * @category Widget
    */
@@ -163,7 +163,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   customWidgetType: WidgetProps['customWidgetType'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataSource}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.dataSource}
    *
    * @category Data
    */
@@ -171,7 +171,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataSource: WidgetProps['dataSource'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.dataOptions}
    *
    * @category Chart
    */
@@ -179,7 +179,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataOptions: WidgetProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.filters}
    *
    * @category Data
    */
@@ -187,7 +187,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   filters: WidgetProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.highlights}
    *
    * @category Data
    */
@@ -195,7 +195,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   highlights: WidgetProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.styleOptions}
    *
    * @category Widget
    */
@@ -203,7 +203,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   styleOptions: WidgetProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.drilldownOptions}
    *
    * @category Widget
    */
@@ -211,7 +211,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   drilldownOptions: WidgetProps['drilldownOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.title}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.title}
    *
    * @category Widget
    */
@@ -219,7 +219,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   title: WidgetProps['title'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.description}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.description}
    *
    * @category Widget
    */
@@ -227,7 +227,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   description: WidgetProps['description'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.highlightSelectionDisabled}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.highlightSelectionDisabled}
    *
    * @category Widget
    * @internal
@@ -236,7 +236,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   highlightSelectionDisabled: WidgetProps['highlightSelectionDisabled'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -244,7 +244,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   beforeRender: WidgetProps['beforeRender'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataReady}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -261,7 +261,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   beforeMenuOpen: WidgetProps['beforeMenuOpen'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -269,7 +269,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataPointClick = new EventEmitter<ChartDataPointClickEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -277,7 +277,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataPointContextMenu = new EventEmitter<ChartDataPointContextMenuEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!ChartWidgetProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

@@ -22,7 +22,7 @@ Translates a [WidgetModel](../../interface.WidgetModel.md) to the parameters for
 
 ```vue
 <script setup lang="ts">
-import { widgetModelTranslator, useGetWidgetModel, useExecuteQuery } from '@sisense/sdk-ui-vue';
+import { widgetModelTranslator, useGetWidgetModel, useExecuteQuery } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { data: widgetModel } = useGetWidgetModel({

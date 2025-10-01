@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Popover, AlignPoints, type PopoverProps } from '@sisense/sdk-shared-ui/Popover';
+import { Popover, AlignPoints, type PopoverProps } from '@ethings-os/sdk-shared-ui/Popover';
 
 type Props = {
   onRequestClose: PopoverProps['onRequestClose'];
@@ -21,8 +21,8 @@ export const SortingSettingsIcon = (props: Props) => {
       level={0}
       mask
       placement="bottom"
-      onVisibleChange={(visible?: boolean) => {}}
       trigger={['click']}
+      overlayStyle={null}
       overlay={() => sortingPopup}
       onRequestClose={onRequestClose}
       getTooltipContainer={getTooltipContainer}

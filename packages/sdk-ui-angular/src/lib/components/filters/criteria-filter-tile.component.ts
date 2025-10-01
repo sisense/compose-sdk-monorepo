@@ -13,7 +13,7 @@ import {
   ComponentAdapter,
   CriteriaFilterTile as CriteriaFilterTilePreact,
   type CriteriaFilterTileProps as CriteriaFilterTilePropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -46,7 +46,7 @@ export interface CriteriaFilterTileProps extends Omit<CriteriaFilterTilePropsPre
  * ```
  * ```ts
  * import { Component } from '@angular/core';
- * import { Filter, filterFactory } from '@sisense/sdk-data';
+ * import { Filter, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../../assets/sample-healthcare-model';
  *
  * @Component({
@@ -82,25 +82,25 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.title}
+   * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.title}
    */
   @Input()
   title!: CriteriaFilterTileProps['title'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.filter}
+   * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.filter}
    */
   @Input()
   filter!: CriteriaFilterTileProps['filter'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.arrangement}
+   * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.arrangement}
    */
   @Input()
   arrangement: CriteriaFilterTileProps['arrangement'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.measures}
+   * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.measures}
    */
   @Input()
   measures: CriteriaFilterTileProps['measures'];
@@ -110,7 +110,7 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
   tileDesignOptions: CriteriaFilterTileProps['tileDesignOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.onUpdate}
+   * {@inheritDoc @ethings-os/sdk-ui!CriteriaFilterTileProps.onUpdate}
    */
   @Output()
   filterChange = new EventEmitter<

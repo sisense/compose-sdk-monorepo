@@ -1,4 +1,4 @@
-import { Element, CalculatedMeasure, Filter, Measure, MeasureContext } from '@sisense/sdk-data';
+import { Element, CalculatedMeasure, Filter, Measure, MeasureContext } from '@ethings-os/sdk-data';
 
 import isEqual from 'lodash-es/isEqual';
 

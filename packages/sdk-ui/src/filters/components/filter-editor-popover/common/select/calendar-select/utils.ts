@@ -1,4 +1,4 @@
-import { DateLevels } from '@sisense/sdk-data';
+import { DateLevels } from '@ethings-os/sdk-data';
 import { getDefaultDateMask } from '@/query/date-formats/apply-date-format';
 import { DatetimeFormatter } from '../../../hooks/use-datetime-formatter';
 import { CalendarSelectTypes } from './types';

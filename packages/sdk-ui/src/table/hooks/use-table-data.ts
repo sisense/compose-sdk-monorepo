@@ -6,7 +6,7 @@ import {
   FilterRelationsJaql,
   isDataSource,
   Measure,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { useEffect, useRef, useState } from 'react';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
 

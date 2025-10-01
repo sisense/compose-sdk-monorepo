@@ -11,7 +11,7 @@ import {
   ComponentAdapter,
   Table as TablePreact,
   type TableProps as TablePropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -39,7 +39,7 @@ export interface TableProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({
@@ -73,7 +73,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!TableProps.dataSet}
    *
    * @category Data
    */
@@ -81,7 +81,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataSet: TableProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!TableProps.dataOptions}
    *
    * @category Data
    */
@@ -89,7 +89,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataOptions!: TableProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!TableProps.filters}
    *
    * @category Data
    */
@@ -97,7 +97,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   filters: TableProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!TableProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!TableProps.styleOptions}
    *
    * @category Representation
    */
@@ -105,7 +105,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
   styleOptions: TableProps['styleOptions'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!TableProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!TableProps.onDataReady}
    *
    * @category Callbacks
    */

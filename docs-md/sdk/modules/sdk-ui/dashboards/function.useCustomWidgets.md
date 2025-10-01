@@ -63,7 +63,7 @@ Hook that provides API for configuring custom widgets.
 
 Example of registering a custom widget in a dashboard:
 ```ts
-import { useCustomWidgets, DashboardById } from '@sisense/sdk-ui';
+import { useCustomWidgets, DashboardById } from '@ethings-os/sdk-ui';
 import CustomHistogramWidget from './custom-histogram-widget';
 
 const Example = () => {

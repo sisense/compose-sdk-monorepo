@@ -10,8 +10,8 @@ Facade component that renders a widget within a dashboard based on the widget ty
 
 ```vue
 <script setup lang="ts">
-import { Widget, type WidgetProps } from '@sisense/sdk-ui-vue';
-import { measureFactory } from '@sisense/sdk-data';
+import { Widget, type WidgetProps } from '@ethings-os/sdk-ui-vue';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 const widgetProps: WidgetProps = {
   id: 'widget-id',

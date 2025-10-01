@@ -10,7 +10,7 @@ import {
   isRelativeDateFilter,
   RelativeDateFilter,
   isCustomFilter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 export function isSupportedByFilterEditor(filter: Filter): boolean {
   return !isRankingFilter(filter) && !isCustomFilter(filter);

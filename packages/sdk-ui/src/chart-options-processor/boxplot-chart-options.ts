@@ -1,4 +1,4 @@
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { BoxplotChartData } from '../chart-data/types';
 import { determineHighchartsChartType } from './translations/translations-to-highcharts';
 import { BoxplotChartDataOptionsInternal } from '../chart-data-options/types';

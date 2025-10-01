@@ -1,5 +1,5 @@
 /**
- * {@inheritDoc @sisense/sdk-ui!dashboardModelTranslator}
+ * {@inheritDoc @ethings-os/sdk-ui!dashboardModelTranslator}
  *
  * @group Fusion Assets
  * @fusionEmbed
@@ -8,7 +8,7 @@
 export * as dashboardModelTranslator from './dashboard-model-translator';
 
 /**
- * {@inheritDoc @sisense/sdk-ui!dashboardHelpers}
+ * {@inheritDoc @ethings-os/sdk-ui!dashboardHelpers}
  *
  * @group Dashboards
  * @shortDescription Utility functions to manipulate dashboard elements
@@ -16,7 +16,7 @@ export * as dashboardModelTranslator from './dashboard-model-translator';
 export * as dashboardHelpers from './dashboard-helpers';
 
 /**
- * {@inheritDoc @sisense/sdk-ui!widgetModelTranslator}
+ * {@inheritDoc @ethings-os/sdk-ui!widgetModelTranslator}
  *
  * @group Fusion Assets
  * @fusionEmbed

@@ -4,8 +4,8 @@ import {
   DataSourceMetadata,
   DataSourceSchema,
   getDataSourceName,
-} from '@sisense/sdk-data';
-import { HttpClient } from '@sisense/sdk-rest-client';
+} from '@ethings-os/sdk-data';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 
 import { TranslatableError } from '../translation/translatable-error.js';
 import { JaqlQueryPayload, JaqlResponse, QueryGuid } from '../types.js';

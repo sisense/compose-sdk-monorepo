@@ -3,7 +3,7 @@ import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
-import { isNumber } from '@sisense/sdk-data';
+import { isNumber } from '@ethings-os/sdk-data';
 import { ChartData, CartesianChartData, CategoricalXValues } from '../chart-data/types';
 import { onlyY, onlyYAndSeries } from '../chart-data/utils';
 import { PlotBand, getCategoricalCompareValue } from './translations/axis-section';

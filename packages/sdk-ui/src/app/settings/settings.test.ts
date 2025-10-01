@@ -1,4 +1,4 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import { getSettings } from './settings';
 import * as mockGlobals from '@/__mocks__/data/mock-globals.json';
 import { SYSTEM_TENANT_NAME } from '@/const';

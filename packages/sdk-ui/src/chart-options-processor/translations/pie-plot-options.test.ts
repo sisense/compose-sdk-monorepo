@@ -5,7 +5,7 @@ import {
   StyledMeasureColumn,
 } from '../../chart-data-options/types';
 import { getPiePlotOptions, DefaultPieLabels, DefaultPieType } from './pie-plot-options';
-import { createAttribute } from '@sisense/sdk-data';
+import { createAttribute } from '@ethings-os/sdk-data';
 
 describe('getPiePlotOptions', () => {
   it('should return the plotOptions with a formatter', () => {

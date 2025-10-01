@@ -1,5 +1,5 @@
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import { filterFactory, measureFactory } from '@ethings-os/sdk-data';
 import { PivotTableProps } from '../../props';
 
 export const mockPivotTableProps: PivotTableProps = {

@@ -1,10 +1,10 @@
-import { ClientApplication, createClientApplication } from '@sisense/sdk-ui-preact';
+import { ClientApplication, createClientApplication } from '@ethings-os/sdk-ui-preact';
 import { firstValueFrom, take, toArray } from 'rxjs';
 import { Mock } from 'vitest';
 
 import { SisenseContextConfig, SisenseContextService } from './sisense-context.service';
 
-vi.mock('@sisense/sdk-ui-preact', () => ({
+vi.mock('@ethings-os/sdk-ui-preact', () => ({
   createClientApplication: vi.fn().mockResolvedValue(undefined),
 }));
 

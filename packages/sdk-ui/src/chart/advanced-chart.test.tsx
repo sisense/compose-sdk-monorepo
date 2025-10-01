@@ -1,6 +1,6 @@
 import { render, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 import { Chart, HighchartsOptions, SisenseContextProviderProps } from '@/index';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
 import * as jaqlForecast from '@/__mocks__/data/mock-jaql-forecast.json';

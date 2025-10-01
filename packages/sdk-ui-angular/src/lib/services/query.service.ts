@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getFilterListAndRelationsJaql, QueryResultData } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql, QueryResultData } from '@ethings-os/sdk-data';
 import {
   type ExecuteCsvQueryParams as ExecuteCsvQueryParamsPreact,
   type ExecuteCustomWidgetQueryParams as ExecuteCustomWidgetQueryParamsPreact,
@@ -12,7 +12,7 @@ import {
   HookAdapter,
   useExecuteCsvQueryInternal,
   useExecuteCustomWidgetQueryInternal,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import { createSisenseContextConnector } from '../component-wrapper-helpers';
 import { TrackableService } from '../decorators/trackable.decorator';

@@ -9,7 +9,7 @@ import {
   normalizeColumn,
   normalizeMeasureColumn,
 } from '@/chart-data-options/utils';
-import { Attribute, Measure } from '@sisense/sdk-data';
+import { Attribute, Measure } from '@ethings-os/sdk-data';
 import isArray from 'lodash-es/isArray.js';
 import { ChartBuilder } from '../../types.js';
 

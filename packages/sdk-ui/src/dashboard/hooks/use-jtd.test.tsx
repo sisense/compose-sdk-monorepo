@@ -6,7 +6,7 @@ import { getJtdClickHandler } from './jtd/jtd-handlers';
 import { ChartWidgetProps } from '@/props';
 import { JtdConfig, JtdTarget, JumpToDashboardConfig } from './jtd/jtd-types';
 import { normalizeToJumpToDashboardConfig } from './jtd/jtd-config-transformers';
-import { filterFactory, type Attribute, Sort } from '@sisense/sdk-data';
+import { filterFactory, type Attribute, Sort } from '@ethings-os/sdk-data';
 
 // Mock filterFactory.members to return proper filter objects
 const createMockFilter = (attribute: any, members: string[]) => ({
@@ -51,8 +51,8 @@ const createMockFilter = (attribute: any, members: string[]) => ({
   toJSON: () => ({}),
 });
 
-vi.mock('@sisense/sdk-data', async () => {
-  const actual = await vi.importActual('@sisense/sdk-data');
+vi.mock('@ethings-os/sdk-data', async () => {
+  const actual = await vi.importActual('@ethings-os/sdk-data');
   return {
     ...(actual as any),
     filterFactory: {

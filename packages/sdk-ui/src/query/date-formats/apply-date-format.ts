@@ -18,7 +18,7 @@ import {
   newDateFormatWithExpandedQuartersMasks,
 } from './fiscal-date-format-replacers';
 import { getBaseDateFnsLocale } from '../../chart-data-processor/data-table-date-period';
-import { DateLevels } from '@sisense/sdk-data';
+import { DateLevels } from '@ethings-os/sdk-data';
 import { parseISOWithTimezoneCheck } from '../../utils/parseISOWithTimezoneCheck';
 import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
 

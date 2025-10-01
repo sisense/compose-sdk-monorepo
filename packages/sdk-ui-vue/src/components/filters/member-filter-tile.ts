@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { MemberFilterTile as MemberFilterTilePreact } from '@sisense/sdk-ui-preact';
-import type { MemberFilterTileProps as MemberFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
+import { MemberFilterTile as MemberFilterTilePreact } from '@ethings-os/sdk-ui-preact';
+import type { MemberFilterTileProps as MemberFilterTilePropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!MemberFilterTile | `MemberFilterTile`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!MemberFilterTile | `MemberFilterTile`} component.
  */
 export interface MemberFilterTileProps extends MemberFilterTilePropsPreact {}
 
@@ -28,7 +28,7 @@ export interface MemberFilterTileProps extends MemberFilterTilePropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { MemberFilterTile, type MemberFilterTileProps } from '@sisense/sdk-ui-vue';
+ * import { MemberFilterTile, type MemberFilterTileProps } from '@ethings-os/sdk-ui-vue';
  *
  * const memberFilterValue = ref<Filter | null>(null);
  *
@@ -54,47 +54,47 @@ export interface MemberFilterTileProps extends MemberFilterTilePropsPreact {}
 export const MemberFilterTile = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.attribute}
+     * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.attribute}
      */
     attribute: {
       type: Object as PropType<MemberFilterTileProps['attribute']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.dataSource}
+     * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.dataSource}
      */
     dataSource: [String, Object] as PropType<MemberFilterTileProps['dataSource']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.filter}
+     * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.filter}
      */
     filter: {
       type: [Object, null] as PropType<MemberFilterTileProps['filter']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onChange}
+     * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.onChange}
      */
     onChange: {
       type: Function as PropType<MemberFilterTileProps['onChange']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.parentFilters}
+     * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.parentFilters}
      */
     parentFilters: Object as PropType<MemberFilterTileProps['parentFilters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.title}
+     * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.title}
      */
     title: {
       type: String as PropType<MemberFilterTileProps['title']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onDelete}
+     * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.onDelete}
      */
     onDelete: Function as PropType<MemberFilterTileProps['onDelete']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onEdit}
+     * {@inheritDoc @ethings-os/sdk-ui!MemberFilterTileProps.onEdit}
      */
     onEdit: Function as PropType<MemberFilterTileProps['onEdit']>,
   },

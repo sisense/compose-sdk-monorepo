@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 import { setup } from '@/__test-helpers__';
 import { FilterEditorNumerical } from './filter-editor-numerical';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';

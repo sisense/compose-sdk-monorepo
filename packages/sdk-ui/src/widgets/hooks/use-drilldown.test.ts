@@ -1,4 +1,4 @@
-import { createAttribute } from '@sisense/sdk-data';
+import { createAttribute } from '@ethings-os/sdk-data';
 import { useDrilldown } from './use-drilldown.js';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';

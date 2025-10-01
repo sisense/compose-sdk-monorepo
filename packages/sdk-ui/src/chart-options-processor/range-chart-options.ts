@@ -8,7 +8,7 @@ import {
   RangeChartDataOptionsInternal,
   StyledMeasureColumn,
 } from '../chart-data-options/types';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { getCartesianChartOptions } from './cartesian/cartesian-chart-options';
 import { SeriesType } from './chart-options-service';
 import {

@@ -13,7 +13,7 @@ import {
   ComponentAdapter,
   RelativeDateFilterTile as RelativeDateFilterTilePreact,
   type RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -48,7 +48,7 @@ export interface RelativeDateFilterTileProps
  * ```
  * ```ts
  * import { Component } from '@angular/core';
- * import { Filter, filterFactory } from '@sisense/sdk-data';
+ * import { Filter, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../../assets/sample-healthcare-model';
  *
  * @Component({
@@ -88,31 +88,31 @@ export class RelativeDateFilterTileComponent implements AfterViewInit, OnChanges
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.title}
+   * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.title}
    */
   @Input()
   title!: RelativeDateFilterTileProps['title'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.filter}
+   * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.filter}
    */
   @Input()
   filter!: RelativeDateFilterTileProps['filter'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.arrangement}
+   * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.arrangement}
    */
   @Input()
   arrangement: RelativeDateFilterTileProps['arrangement'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.limit}
+   * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.limit}
    */
   @Input()
   limit: RelativeDateFilterTileProps['limit'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.onUpdate}
+   * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.onUpdate}
    */
   @Output()
   filterChange = new EventEmitter<

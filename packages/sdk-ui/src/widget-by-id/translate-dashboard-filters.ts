@@ -14,7 +14,7 @@ import {
   BaseJaql,
   createFilterFromJaql,
   IncludeAllFilterJaql,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 /**
  * Extracts and merges dashboard and widget filters. This consolidates all

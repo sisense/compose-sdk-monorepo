@@ -1,4 +1,4 @@
-import { DateLevels } from '@sisense/sdk-data';
+import { DateLevels } from '@ethings-os/sdk-data';
 
 export const dateLevelGranularities = [
   { value: DateLevels.Years, displayValue: 'filterEditor.datetimeLevels.year' },

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
-import { isDataSource } from '@sisense/sdk-data';
+import { isDataSource } from '@ethings-os/sdk-data';
 import { TableProps } from '../props';
 import { useThemeContext } from '../theme-provider';
 import { translateTableDataOptions } from '../chart-data-options/translate-data-options';
@@ -16,7 +16,7 @@ import { isDataTableEmpty } from '../chart-data-processor/table-creators';
 import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 import { LoadingIndicator } from '../common/components/loading-indicator';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@ethings-os/sdk-data';
 import { translateTableStyleOptionsToDesignOptions } from './translations/design-options';
 import { orderBy } from '../chart-data-processor/table-processor';
 import { isMeasureColumn, translateColumnToMeasure } from '@/chart-data-options/utils';

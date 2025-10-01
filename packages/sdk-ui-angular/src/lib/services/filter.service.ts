@@ -5,7 +5,7 @@ import {
   type GetFilterMembersResult as GetFilterMembersResultPreact,
   HookAdapter,
   useGetFilterMembers,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import { createSisenseContextConnector } from '../component-wrapper-helpers';
 import { TrackableService } from '../decorators/trackable.decorator';

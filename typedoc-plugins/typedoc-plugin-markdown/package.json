@@ -1,5 +1,5 @@
 {
-  "name": "@sisense/typedoc-plugin-markdown",
+  "name": "@ethings-os/typedoc-plugin-markdown",
   "private": true,
   "version": "0.0.0",
   "description": "TypeDoc plugin to generate API doc in Markdown. Forked from tgreyuk/typedoc-plugin-markdown 4.0.0-next.26. Customized for CSDK.",

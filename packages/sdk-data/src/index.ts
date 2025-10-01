@@ -60,8 +60,8 @@ export * from './dimensional-model/measures/measures.js';
  * plus show changes in data over time.
  *
  * Measures created with these functions can be used in the data options of UI components such as
- * {@link @sisense/sdk-ui!ChartProps | Chart}, {@link @sisense/sdk-ui!ChartWidgetProps | ChartWidget},
- * and {@link @sisense/sdk-ui!ExecuteQueryProps | ExecuteQuery}.
+ * {@link @ethings-os/sdk-ui!ChartProps | Chart}, {@link @ethings-os/sdk-ui!ChartWidgetProps | ChartWidget},
+ * and {@link @ethings-os/sdk-ui!ExecuteQueryProps | ExecuteQuery}.
  *
  * @example
  * Example of using React hook useExecuteQuery to query the `Sample ECommerce` data source.

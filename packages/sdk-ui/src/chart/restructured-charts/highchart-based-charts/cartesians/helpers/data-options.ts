@@ -19,7 +19,7 @@ import {
   Column,
   Measure,
   MeasureColumn,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 /**
  * Translates the data options for cartesian charts to internal format.

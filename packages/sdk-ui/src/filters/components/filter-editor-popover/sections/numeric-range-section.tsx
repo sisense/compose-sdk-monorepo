@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Filter, filterFactory, NumericFilter } from '@sisense/sdk-data';
+import { Filter, filterFactory, NumericFilter } from '@ethings-os/sdk-data';
 import isNumber from 'lodash-es/isNumber';
 import { Input, SelectableSection } from '../common';
 import { isNumericBetweenFilter } from '../utils';
 import { isNumericString } from '@/utils/is-numeric-string';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { useWasModified } from '@/common/hooks/use-was-modified';
 
 const NUMERIC_RANGE_INPUT_WIDTH = '136px';

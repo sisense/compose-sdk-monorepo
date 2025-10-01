@@ -1,4 +1,4 @@
-import type { Attribute, DataSource } from '@sisense/sdk-data';
+import type { Attribute, DataSource } from '@ethings-os/sdk-data';
 
 /**
  * Options for retrieving hierarchies.

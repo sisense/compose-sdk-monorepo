@@ -4,16 +4,16 @@ import { GetFilterMembersData, useGetFilterMembers } from './use-get-filter-memb
 import { translation } from '../../translation/resources/en.js';
 import { useSisenseContextMock } from '../../sisense-context/__mocks__/sisense-context.js';
 import { ClientApplication } from '../../app/client-application.js';
-import { QueryResultData, filterFactory } from '@sisense/sdk-data';
+import { QueryResultData, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../__test-helpers__/sample-ecommerce';
 import { executeQueryMock } from '../../query/__mocks__/execute-query';
 
 vi.mock('../../query/execute-query');
 vi.mock('../../sisense-context/sisense-context');
 
-vi.mock('@sisense/sdk-tracking', async () => {
-  const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
-    '@sisense/sdk-tracking',
+vi.mock('@ethings-os/sdk-tracking', async () => {
+  const actual: typeof import('@ethings-os/sdk-tracking') = await vi.importActual(
+    '@ethings-os/sdk-tracking',
   );
   return {
     ...actual,

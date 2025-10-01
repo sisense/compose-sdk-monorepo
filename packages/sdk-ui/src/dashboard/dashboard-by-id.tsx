@@ -18,7 +18,7 @@ import { DEFAULT_DASHBOARD_BY_ID_CONFIG } from './constants';
  * @example
  *
  * ```ts
- * import { DashboardById } from '@sisense/sdk-ui';
+ * import { DashboardById } from '@ethings-os/sdk-ui';
 
   const CodeExample = () => {
     return (

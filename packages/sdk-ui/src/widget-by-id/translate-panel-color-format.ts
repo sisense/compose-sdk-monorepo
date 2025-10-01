@@ -16,7 +16,7 @@ import {
   PanelItem,
   PanelMembersFormat,
 } from './types.js';
-import { normalizeName } from '@sisense/sdk-data';
+import { normalizeName } from '@ethings-os/sdk-data';
 import { getPaletteColor } from '../chart-data-options/coloring/utils.js';
 
 /**

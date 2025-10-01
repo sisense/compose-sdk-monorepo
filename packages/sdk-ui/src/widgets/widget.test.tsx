@@ -3,7 +3,7 @@ import { Widget } from './widget';
 import { CommonWidget } from './common-widget';
 import { WidgetProps } from '@/props';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 // Mock the CommonWidget component
 vi.mock('./common-widget', () => ({

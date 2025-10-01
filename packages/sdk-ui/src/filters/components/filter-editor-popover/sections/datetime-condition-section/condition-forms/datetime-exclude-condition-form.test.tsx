@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { screen, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { filterFactory, DateLevels } from '@sisense/sdk-data';
+import { filterFactory, DateLevels } from '@ethings-os/sdk-data';
 import { setup } from '@/__test-helpers__';
 import { DatetimeExcludeConditionForm } from './datetime-exclude-condition-form';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';

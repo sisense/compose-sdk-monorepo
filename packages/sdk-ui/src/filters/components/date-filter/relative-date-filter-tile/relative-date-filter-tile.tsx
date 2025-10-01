@@ -1,4 +1,4 @@
-import { Filter, RelativeDateFilter as RelativeDateFilterType } from '@sisense/sdk-data';
+import { Filter, RelativeDateFilter as RelativeDateFilterType } from '@ethings-os/sdk-data';
 import { FilterVariant } from '../../common/index.js';
 import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component.js';
 import { FilterTileContainer, FilterTileDesignOptions } from '../../filter-tile-container.js';

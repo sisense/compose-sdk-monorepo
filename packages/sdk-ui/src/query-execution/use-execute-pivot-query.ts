@@ -8,7 +8,7 @@ import { TranslatableError } from '../translation/translatable-error';
 import { withTracking } from '../decorators/hook-decorators';
 import { ExecutePivotQueryParams, PivotQueryState } from './types';
 import { pivotQueryStateReducer } from './pivot-query-state-reducer';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@ethings-os/sdk-data';
 import { useShouldLoad } from '../common/hooks/use-should-load';
 
 /**

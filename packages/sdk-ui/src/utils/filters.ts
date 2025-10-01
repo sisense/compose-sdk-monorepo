@@ -6,7 +6,7 @@ import {
   filterFactory,
   isMembersFilter,
   MembersFilter,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep.js';
 
 /**

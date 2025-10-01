@@ -1,5 +1,5 @@
-import { type JaqlPanel, type PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
-import { type Column } from '@sisense/sdk-data';
+import { type JaqlPanel, type PivotTreeNode, UserType } from '@ethings-os/sdk-pivot-client';
+import { type Column } from '@ethings-os/sdk-data';
 import type { StyledColumn, PivotTableDataOptions } from '@/chart-data-options/types.js';
 import type { HeaderCellFormatter } from '../types.js';
 import { applyFormatPlainText } from '@/chart-options-processor/translations/number-format-config.js';

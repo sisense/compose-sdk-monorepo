@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { SoftUnion, WidgetProps as WidgetPropsPreact } from '@sisense/sdk-ui-preact';
+import { SoftUnion, WidgetProps as WidgetPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { WidgetProps } from '../components/widgets';
 import {

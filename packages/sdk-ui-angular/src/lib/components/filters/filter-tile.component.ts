@@ -13,7 +13,7 @@ import {
   ComponentAdapter,
   FilterTile as FilterTilePreact,
   type FilterTileProps as FilterTilePropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createSisenseContextConnector,
@@ -56,8 +56,8 @@ export interface FilterTileProps
  * ```ts
 // Component behavior in example.component.ts
 import { Component } from '@angular/core';
-import { type FilterTileProps } from '@sisense/sdk-ui-angular';
-import { filterFactory } from '@sisense/sdk-data';
+import { type FilterTileProps } from '@ethings-os/sdk-ui-angular';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({
@@ -93,13 +93,13 @@ export class FilterTileComponent implements AfterViewInit, OnChanges, OnDestroy 
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FilterTileProps.filter}
+   * {@inheritDoc @ethings-os/sdk-ui!FilterTileProps.filter}
    */
   @Input()
   filter!: FilterTileProps['filter'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!FilterTileProps.defaultDataSource}
+   * {@inheritDoc @ethings-os/sdk-ui!FilterTileProps.defaultDataSource}
    */
   @Input()
   defaultDataSource: FilterTileProps['defaultDataSource'];

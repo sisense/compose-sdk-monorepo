@@ -1,11 +1,11 @@
 import { toRefs, watch } from 'vue';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@ethings-os/sdk-data';
 import {
   type ClientApplication,
   executeQuery,
   queryStateReducer,
   type ExecuteQueryParams,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { getSisenseContext } from '../providers/sisense-context-provider';
 import { useReducer } from '../helpers/use-reducer';
 import type { MaybeRefOrWithRefs } from '../types';
@@ -28,7 +28,7 @@ import { useTracking } from './use-tracking';
  * ```vue
  * <script setup>
  * import { ref } from 'vue';
- * import { useExecuteQuery } from '@sisense/sdk-ui-vue';
+ * import { useExecuteQuery } from '@ethings-os/sdk-ui-vue';
  *
  * const dataSource = ref('your_data_source_id');
  * // Set up other query parameters as needed (dimensions, measures, filters, etc.)

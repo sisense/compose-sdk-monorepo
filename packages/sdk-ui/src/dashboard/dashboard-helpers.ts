@@ -1,5 +1,5 @@
 import { DashboardProps } from './types';
-import { Filter, FilterRelations } from '@sisense/sdk-data';
+import { Filter, FilterRelations } from '@ethings-os/sdk-data';
 import {
   withAddedFilter,
   withAddedFilters,
@@ -224,7 +224,7 @@ export const applyJtdConfig = (
  * @example
  * Apply a variety of Jump To Dashboard configuration options to multiple widgets in a single operation.
  * ```ts
- * import { dashboardHelpers } from '@sisense/sdk-ui';
+ * import { dashboardHelpers } from '@ethings-os/sdk-ui';
  *
  * const dashboard: DashboardProps = {
  *   title: 'Executive Dashboard',

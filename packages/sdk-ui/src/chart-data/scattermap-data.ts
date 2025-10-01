@@ -10,7 +10,7 @@ import {
 } from '../chart-data-processor/table-processor.js';
 import { combineLocationNames } from '../charts/map-charts/scattermap/utils/location.js';
 import { ScattermapChartData } from './types.js';
-import { isNumber } from '@sisense/sdk-data';
+import { isNumber } from '@ethings-os/sdk-data';
 
 const LOCATION_DEFAULT_VALUE = 1;
 

@@ -16,7 +16,7 @@ To generate the data model:
 1. Run the following command
 
 ```sh
-npx @sisense/sdk-cli@latest get-data-model --token <api-token> --output src/models/sample-retail.ts --dataSource "Sample Retail" --url <your-instance-url>
+npx @ethings-os/sdk-cli@latest get-data-model --token <api-token> --output src/models/sample-retail.ts --dataSource "Sample Retail" --url <your-instance-url>
 ```
 
 Be sure to replace the placeholders with your API token and the URL of your Sisense instance.
@@ -30,8 +30,8 @@ We'll use the empty `App` component again as an example, but feel free to give y
 Go ahead and add the following to render a chart.
 
 ```ts
-import { Chart } from "@sisense/sdk-ui";
-import { measureFactory } from "@sisense/sdk-data";
+import { Chart } from "@ethings-os/sdk-ui";
+import { measureFactory } from "@ethings-os/sdk-data";
 import * as DM from "./models/sample-retail";
 
 function App() {
@@ -158,9 +158,9 @@ It's not the cleanest code, but we've effectively made all digits in the text su
 Here's the complete `App.tsx` file with all the code we've written in this lesson.
 
 ```ts
-import { Chart } from "@sisense/sdk-ui";
-import { GetNlgInsights, useGetNlgInsights } from "@sisense/sdk-ui/ai";
-import { measureFactory } from "@sisense/sdk-data";
+import { Chart } from "@ethings-os/sdk-ui";
+import { GetNlgInsights, useGetNlgInsights } from "@ethings-os/sdk-ui/ai";
+import { measureFactory } from "@ethings-os/sdk-data";
 import * as DM from "./models/sample-retail";
 
 function App() {

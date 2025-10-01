@@ -7,7 +7,7 @@ import type {
   PivotMeasure,
   PivotRowsSort,
   SortDirection,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 /**
  * Represents statistics about a pivot table metadata.

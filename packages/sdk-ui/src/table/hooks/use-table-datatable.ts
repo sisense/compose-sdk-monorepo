@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { createDataTableFromData } from '../../chart-data-processor/table-creators';
 import { filterAndAggregateChartData } from '../../chart-data/filter-and-aggregate-chart-data';
-import { Data } from '@sisense/sdk-data';
+import { Data } from '@ethings-os/sdk-data';
 import { tableData } from '../../chart-data/table-data';
 import {
   StyledColumn,

@@ -1,4 +1,4 @@
-import { Attribute, filterFactory, MembersFilter } from '@sisense/sdk-data';
+import { Attribute, filterFactory, MembersFilter } from '@ethings-os/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import {
   createCommonFiltersOverSelections,

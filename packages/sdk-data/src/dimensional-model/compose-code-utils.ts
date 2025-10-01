@@ -1,4 +1,4 @@
-import { escapeSingleQuotes } from '@sisense/sdk-common';
+import { escapeSingleQuotes } from '@ethings-os/sdk-common';
 
 import { DimensionalElement } from './base.js';
 

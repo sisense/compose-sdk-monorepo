@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable sonarjs/no-identical-functions */
 import React from 'react';
-import { PivotClient } from '@sisense/sdk-pivot-client';
+import { PivotClient } from '@ethings-os/sdk-pivot-client';
 
 // Mock of PivotBuilder class
 class MockPivotBuilder {

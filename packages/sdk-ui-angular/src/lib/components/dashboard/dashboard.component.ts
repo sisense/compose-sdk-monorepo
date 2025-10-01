@@ -13,7 +13,7 @@ import {
   type DashboardConfig,
   type DashboardFiltersPanelConfig,
   type DashboardProps as DashboardPropsPreact,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   createCustomWidgetsContextConnector,
@@ -37,7 +37,7 @@ export { DashboardConfig, DashboardFiltersPanelConfig };
  */
 export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.widgets}
    */
   widgets: WidgetProps[];
 }
@@ -66,7 +66,7 @@ export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
  *   type DashboardProps,
  *   DashboardService,
  *   dashboardModelTranslator,
- * } from '@sisense/sdk-ui-angular';
+ * } from '@ethings-os/sdk-ui-angular';
  *
  * @Component({
  *  selector: 'app-dashboard',
@@ -102,55 +102,55 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   preactRef!: ElementRef<HTMLDivElement>;
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.title}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.title}
    */
   @Input()
   title: DashboardProps['title'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.layoutOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.layoutOptions}
    */
   @Input()
   layoutOptions: DashboardProps['layoutOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.config}
    */
   @Input()
   config: DashboardProps['config'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.widgets}
    */
   @Input()
   widgets!: DashboardProps['widgets'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.filters}
    */
   @Input()
   filters: DashboardProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.defaultDataSource}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.defaultDataSource}
    */
   @Input()
   defaultDataSource: DashboardProps['defaultDataSource'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgetsOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.widgetsOptions}
    */
   @Input()
   widgetsOptions: DashboardProps['widgetsOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.styleOptions}
    */
   @Input()
   styleOptions: DashboardProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.tabbersOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!DashboardProps.tabbersOptions}
    *
    * @internal
    */

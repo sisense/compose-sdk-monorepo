@@ -4,7 +4,7 @@ import {
   FilterRelationsModel,
   FilterRelationsModelNode,
   JaqlDataSource,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { AnyObject } from '../../utils/utility-types';
 
 /** @internal */

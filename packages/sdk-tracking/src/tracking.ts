@@ -1,5 +1,5 @@
 /* eslint-disable max-params */
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 
 import { TrackingEventType } from './registry.js';
 

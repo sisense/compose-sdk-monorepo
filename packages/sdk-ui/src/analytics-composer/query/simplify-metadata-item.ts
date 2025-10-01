@@ -3,7 +3,7 @@ import {
   DimensionalBaseMeasure,
   MetadataItem,
   MetadataItemJaql,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 /**
  * Concatenates Aggregation Types.

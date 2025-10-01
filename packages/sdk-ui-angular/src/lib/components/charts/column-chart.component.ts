@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type ColumnChartProps as ColumnChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type ColumnChartProps as ColumnChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -33,9 +33,9 @@ export interface ColumnChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
-import type { ChartType } from '@sisense/sdk-ui-angular';
+import type { ChartType } from '@ethings-os/sdk-ui-angular';
 
 @Component({
   selector: 'app-analytics',
@@ -89,7 +89,7 @@ export class AnalyticsComponent {
 })
 export class ColumnChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.dataSet}
    *
    * @category Data
    */
@@ -97,7 +97,7 @@ export class ColumnChartComponent {
   dataSet: ColumnChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -105,7 +105,7 @@ export class ColumnChartComponent {
   dataOptions!: ColumnChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.filters}
    *
    * @category Data
    */
@@ -113,7 +113,7 @@ export class ColumnChartComponent {
   filters: ColumnChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.highlights}
    *
    * @category Data
    */
@@ -121,7 +121,7 @@ export class ColumnChartComponent {
   highlights: ColumnChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -129,7 +129,7 @@ export class ColumnChartComponent {
   styleOptions: ColumnChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onBeforeRender}
+   * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.onBeforeRender}
    *
    * @category Callbacks
    */
@@ -137,7 +137,7 @@ export class ColumnChartComponent {
   beforeRender: ColumnChartProps['beforeRender'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!ColumnChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!ColumnChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -145,7 +145,7 @@ export class ColumnChartComponent {
   dataReady: ColumnChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.onDataPointClick}
    *
    * @category Callbacks
    */
@@ -153,7 +153,7 @@ export class ColumnChartComponent {
   dataPointClick = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointContextMenu}
+   * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.onDataPointContextMenu}
    *
    * @category Callbacks
    */
@@ -161,7 +161,7 @@ export class ColumnChartComponent {
   dataPointContextMenu = new EventEmitter<DataPointEvent>();
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ColumnChartProps.onDataPointsSelected}
+   * {@inheritDoc @ethings-os/sdk-ui!ColumnChartProps.onDataPointsSelected}
    *
    * @category Callbacks
    */

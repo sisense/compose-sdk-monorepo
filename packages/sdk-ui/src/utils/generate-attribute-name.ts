@@ -1,5 +1,5 @@
-import { TFunction } from '@sisense/sdk-common';
-import { DateLevels } from '@sisense/sdk-data';
+import { TFunction } from '@ethings-os/sdk-common';
+import { DateLevels } from '@ethings-os/sdk-data';
 
 const datetimeTraslationKeysByGranularity = {
   [DateLevels.Years]: 'attribute.datetimeName.years',

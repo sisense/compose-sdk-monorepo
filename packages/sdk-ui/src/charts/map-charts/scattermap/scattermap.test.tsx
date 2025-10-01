@@ -5,7 +5,7 @@ import { scattermapData } from '@/chart-data/scattermap-data';
 import { ScattermapChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { DataTable } from '@/chart-data-processor/table-processor';
 import { SisenseContext } from '@/sisense-context/sisense-context';
-import { HttpClient } from '@sisense/sdk-rest-client/src/http-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client/src/http-client';
 import { ClientApplication } from '@/app/client-application';
 
 const dataSet = {

@@ -1,4 +1,4 @@
-import { JaqlDataSourceForDto, JSONArray, Measure } from '@sisense/sdk-data';
+import { JaqlDataSourceForDto, JSONArray, Measure } from '@ethings-os/sdk-data';
 import { NlqTranslationResult, NormalizedTable } from '../types.js';
 import {
   isMeasureElement,

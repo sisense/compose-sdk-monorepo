@@ -21,8 +21,8 @@ Here’s how to render a filter model as a filter tile.
 ```ts
 // Component behavior in example.component.ts
 import { Component } from '@angular/core';
-import { type FilterTileProps } from '@sisense/sdk-ui-angular';
-import { filterFactory } from '@sisense/sdk-data';
+import { type FilterTileProps } from '@ethings-os/sdk-ui-angular';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({

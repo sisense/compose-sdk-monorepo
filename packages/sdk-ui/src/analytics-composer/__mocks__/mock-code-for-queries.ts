@@ -1,6 +1,6 @@
-export const MOCK_CODE_REACT_1 = `import { ChartWidget } from '@sisense/sdk-ui';
-import { measureFactory } from '@sisense/sdk-data';
-import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+export const MOCK_CODE_REACT_1 = `import { ChartWidget } from '@ethings-os/sdk-ui';
+import { measureFactory } from '@ethings-os/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @ethings-os/sdk-cli
 
 export default function CodeExample() {
   return (
@@ -143,9 +143,9 @@ export default function CodeExample() {
 }`;
 
 export const MOCK_CODE_ANGULAR_1 = `import { Component } from '@angular/core';
-import { type ChartDataOptions, type ChartStyleOptions } from '@sisense/sdk-ui-angular';
-import { measureFactory } from '@sisense/sdk-data';
-import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+import { type ChartDataOptions, type ChartStyleOptions } from '@ethings-os/sdk-ui-angular';
+import { measureFactory } from '@ethings-os/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @ethings-os/sdk-cli
 
 @Component({
     selector: 'code-example',
@@ -297,9 +297,9 @@ export class CodeExample {
 
 export const MOCK_CODE_VUE_1 = `<script setup lang="ts">
   import { ref } from 'vue';
-  import { ChartWidget, type ChartStyleOptions } from '@sisense/sdk-ui-vue';
-  import { measureFactory } from '@sisense/sdk-data';
-  import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+  import { ChartWidget, type ChartStyleOptions } from '@ethings-os/sdk-ui-vue';
+  import { measureFactory } from '@ethings-os/sdk-data';
+  import * as DM from './sample-ecommerce'; // generated with @ethings-os/sdk-cli
 
   const dataOptions = ref({
         category: [{
@@ -482,9 +482,9 @@ metadata:
         fromNotEqual: 1000
     panel: scope`;
 
-export const MOCK_CODE_REACT_2 = `import { ChartWidget } from '@sisense/sdk-ui';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+export const MOCK_CODE_REACT_2 = `import { ChartWidget } from '@ethings-os/sdk-ui';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @ethings-os/sdk-cli
 
 export default function CodeExample() {
   return (
@@ -507,7 +507,7 @@ export default function CodeExample() {
   );
 }`;
 
-export const MOCK_CODE_REACT_3 = `import { WidgetById } from '@sisense/sdk-ui';
+export const MOCK_CODE_REACT_3 = `import { WidgetById } from '@ethings-os/sdk-ui';
 
 const CodeExample = () => {
     return (
@@ -544,7 +544,7 @@ export class CodeExample {
 }`;
 
 export const MOCK_CODE_VUE_2 = `<script setup lang="ts">
-import { WidgetById } from '@sisense/sdk-ui-vue';
+import { WidgetById } from '@ethings-os/sdk-ui-vue';
 </script>
 <template>
   <WidgetById
@@ -554,7 +554,7 @@ import { WidgetById } from '@sisense/sdk-ui-vue';
 </template>
 `;
 
-export const MOCK_CODE_EXECUTE_QUERY_REACT_1 = `import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui';
+export const MOCK_CODE_EXECUTE_QUERY_REACT_1 = `import { useExecuteQueryByWidgetId } from '@ethings-os/sdk-ui';
 
 const CodeExample = () => {
   const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
@@ -579,8 +579,8 @@ export default CodeExample;
 `;
 
 export const MOCK_CODE_EXECUTE_QUERY_ANGULAR_1 = `import { Component } from '@angular/core';
-import { QueryService } from '@sisense/sdk-ui-angular';
-import { type QueryResultData } from '@sisense/sdk-data';
+import { QueryService } from '@ethings-os/sdk-ui-angular';
+import { type QueryResultData } from '@ethings-os/sdk-data';
 
 @Component({
   selector: 'code-example',
@@ -614,7 +614,7 @@ export class CodeExample {
 `;
 
 export const MOCK_CODE_EXECUTE_QUERY_VUE_1 = `<script setup lang="ts">
-import { useExecuteQueryByWidgetId } from '@sisense/sdk-ui-vue';
+import { useExecuteQueryByWidgetId } from '@ethings-os/sdk-ui-vue';
 
 const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
   widgetOid: "SOME_WIDGET_BY_ID",
@@ -630,8 +630,8 @@ const { data, isLoading, isError, error } = useExecuteQueryByWidgetId({
 </template>
 `;
 
-export const MOCK_CODE_EXECUTE_QUERY_REACT_2 = `import { useExecuteQuery } from '@sisense/sdk-ui';
-import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+export const MOCK_CODE_EXECUTE_QUERY_REACT_2 = `import { useExecuteQuery } from '@ethings-os/sdk-ui';
+import * as DM from './sample-ecommerce'; // generated with @ethings-os/sdk-cli
 
 const CodeExample = () => {
   const queryProps = {
@@ -660,8 +660,8 @@ const CodeExample = () => {
 export default CodeExample;
 `;
 
-export const MOCK_CODE_EXECUTE_PIVOT_QUERY_REACT_1 = `import { useExecutePivotQuery, ExecutePivotQueryParams } from '@sisense/sdk-ui';
-import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+export const MOCK_CODE_EXECUTE_PIVOT_QUERY_REACT_1 = `import { useExecutePivotQuery, ExecutePivotQueryParams } from '@ethings-os/sdk-ui';
+import * as DM from './sample-ecommerce'; // generated with @ethings-os/sdk-cli
 
 const CodeExample = () => {
     const pivotQueryProps: ExecutePivotQueryParams = {

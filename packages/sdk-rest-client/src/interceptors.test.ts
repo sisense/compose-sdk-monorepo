@@ -1,4 +1,4 @@
-import { normalizeUrl } from '@sisense/sdk-common';
+import { normalizeUrl } from '@ethings-os/sdk-common';
 
 import { BearerAuthenticator } from './bearer-authenticator.js';
 import { errorInterceptor, getResponseInterceptor } from './interceptors.js';

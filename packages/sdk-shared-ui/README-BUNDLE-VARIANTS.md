@@ -1,6 +1,6 @@
 # SDK Shared UI Bundle Variants
 
-The `@sisense/sdk-shared-ui` library provides two bundle variants to accommodate different use cases:
+The `@ethings-os/sdk-shared-ui` library provides two bundle variants to accommodate different use cases:
 
 ## Bundle Variants
 
@@ -33,7 +33,7 @@ The lightweight variant excludes @mui/material and @emotion packages from the bu
 
 ## Configuration in Your App
 
-To use the lightweight variant, configure your bundler to resolve `@sisense/sdk-shared-ui` to the lightweight build:
+To use the lightweight variant, configure your bundler to resolve `@ethings-os/sdk-shared-ui` to the lightweight build:
 
 ### Webpack Configuration
 
@@ -41,9 +41,9 @@ To use the lightweight variant, configure your bundler to resolve `@sisense/sdk-
 module.exports = {
   resolve: {
     alias: {
-      '@sisense/sdk-shared-ui': path.resolve(
+      '@ethings-os/sdk-shared-ui': path.resolve(
         __dirname,
-        'node_modules/@sisense/sdk-shared-ui/dist/lightweight',
+        'node_modules/@ethings-os/sdk-shared-ui/dist/lightweight',
       ),
     },
   },
@@ -56,9 +56,9 @@ module.exports = {
 export default {
   resolve: {
     alias: {
-      '@sisense/sdk-shared-ui': path.resolve(
+      '@ethings-os/sdk-shared-ui': path.resolve(
         __dirname,
-        'node_modules/@sisense/sdk-shared-ui/dist/lightweight',
+        'node_modules/@ethings-os/sdk-shared-ui/dist/lightweight',
       ),
     },
   },
@@ -73,7 +73,7 @@ Add path mapping to your `tsconfig.json`:
 {
   "compilerOptions": {
     "paths": {
-      "@sisense/sdk-shared-ui": ["./node_modules/@sisense/sdk-shared-ui/dist/lightweight"]
+      "@ethings-os/sdk-shared-ui": ["./node_modules/@ethings-os/sdk-shared-ui/dist/lightweight"]
     }
   }
 }

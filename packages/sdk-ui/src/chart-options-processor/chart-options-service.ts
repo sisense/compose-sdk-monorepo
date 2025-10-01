@@ -4,7 +4,7 @@ import type {
   DrilldownOptions,
   SeriesLegendItemClickCallbackFunction,
 } from '@sisense/sisense-charts';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import { ChartData, RangeChartData } from '../chart-data/types';
 import { ChartDesignOptions } from './translations/types';
 import { LegendSettings } from './translations/legend-section';

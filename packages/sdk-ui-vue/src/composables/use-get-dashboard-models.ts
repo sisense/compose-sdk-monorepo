@@ -3,12 +3,12 @@ import type {
   DashboardModel,
   DataState,
   GetDashboardModelsParams,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import {
   getDashboardModels,
   dataLoadStateReducer,
   translateToDashboardsResponse,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import { useReducer } from '../helpers/use-reducer';
 import { toRefs, watch } from 'vue';
 import { getSisenseContext } from '../providers';
@@ -33,7 +33,7 @@ import type { MaybeRefOrWithRefs } from '../types';
  * ```vue
  * <script setup>
  * import { ref } from 'vue';
- * import { useGetDashboardModels } from '@sisense/sdk-ui-vue';
+ * import { useGetDashboardModels } from '@ethings-os/sdk-ui-vue';
  *
  * const params = ref({
  *   // Define your parameters here, such as pagination settings, filters, etc.

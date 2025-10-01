@@ -9,7 +9,7 @@ The following code examples and screenshots use the Sample ECommerce dashboard i
 ##### React
 
 ```ts
-import { DashboardById } from '@sisense/sdk-ui';
+import { DashboardById } from '@ethings-os/sdk-ui';
 
 const CodeExample = () => {
   return (
@@ -41,7 +41,7 @@ export class CodeExampleComponent {
 ##### Vue
 ```ts
 <script setup lang="ts">
-import { DashboardById } from '@sisense/sdk-ui-vue';
+import { DashboardById } from '@ethings-os/sdk-ui-vue';
 import { ref } from 'vue';
 
 const dashboardOid = ref<string>('your-dashboard-oid');
@@ -64,7 +64,7 @@ While `DashboardById` does not allow customizations, you can still use a `ThemeP
 The following React code example renders the dashboard in dark mode:
 
 ```ts
-import { DashboardById, ThemeProvider, getDefaultThemeSettings } from '@sisense/sdk-ui';
+import { DashboardById, ThemeProvider, getDefaultThemeSettings } from '@ethings-os/sdk-ui';
 
 const CodeExample = () => {
   const darkTheme = getDefaultThemeSettings(true);

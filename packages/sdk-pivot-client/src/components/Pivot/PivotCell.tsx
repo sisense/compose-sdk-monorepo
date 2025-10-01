@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
 import cn from 'classnames';
-import { Tooltip } from '@sisense/sdk-shared-ui/Tooltip';
+import { Tooltip } from '@ethings-os/sdk-shared-ui/Tooltip';
 
 import {
   CONTENT,

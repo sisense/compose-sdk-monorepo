@@ -60,7 +60,7 @@ Here's how to use the `DrilldownWidget` component:
 
 <script>
 import { ref } from 'vue';
-import { DrilldownWidget } from '@sisense/sdk-ui-vue';
+import { DrilldownWidget } from '@ethings-os/sdk-ui-vue';
 
 const chartProps = ref<ChartProps>({
  chartType: 'bar',

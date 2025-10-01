@@ -1,5 +1,5 @@
-import { Element, PivotQueryResultData, QueryResultData } from '@sisense/sdk-data';
-import { JaqlRequest, PivotClient } from '@sisense/sdk-pivot-client';
+import { Element, PivotQueryResultData, QueryResultData } from '@ethings-os/sdk-data';
+import { JaqlRequest, PivotClient } from '@ethings-os/sdk-pivot-client';
 import { AbstractTaskManager, Step, Task } from '@sisense/task-manager';
 
 import { EmptyObject } from '../helpers/utility-types.js';

@@ -1,5 +1,5 @@
 import { act } from 'react';
-import { filterFactory, MembersFilter } from '@sisense/sdk-data';
+import { filterFactory, MembersFilter } from '@ethings-os/sdk-data';
 import { render, renderHook, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useCommonFilters } from './use-common-filters';
 import * as DM from '@/__test-helpers__/sample-ecommerce';

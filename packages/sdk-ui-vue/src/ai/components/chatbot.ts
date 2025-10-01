@@ -1,12 +1,12 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { Chatbot as ChatbotPreact } from '@sisense/sdk-ui-preact/ai';
-import type { ChatbotProps as ChatbotPropsPreact } from '@sisense/sdk-ui-preact/ai';
+import { Chatbot as ChatbotPreact } from '@ethings-os/sdk-ui-preact/ai';
+import type { ChatbotProps as ChatbotPropsPreact } from '@ethings-os/sdk-ui-preact/ai';
 import { createDefaultContextConnectors, setupHelper } from '../../helpers/setup-helper';
 import { createAiContextConnector } from '../helpers/context-connectors';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!Chatbot | `Chatbot`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!Chatbot | `Chatbot`} component.
  */
 export interface ChatbotProps extends ChatbotPropsPreact {}
 
@@ -17,7 +17,7 @@ export interface ChatbotProps extends ChatbotPropsPreact {}
  * Here's how you can use the Chatbot component in a Vue application:
  * ```vue
 <script setup lang="ts">
-import { Chatbot, type ChatbotProps } from '@sisense/sdk-ui-vue/ai';
+import { Chatbot, type ChatbotProps } from '@ethings-os/sdk-ui-vue/ai';
 
 const chatbotProps: ChatbotProps = {
   width: 500,
@@ -45,15 +45,15 @@ const chatbotProps: ChatbotProps = {
 export const Chatbot = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChatbotProps.width}
+     * {@inheritDoc @ethings-os/sdk-ui!ChatbotProps.width}
      */
     width: [String, Number] as PropType<ChatbotProps['width']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChatbotProps.height}
+     * {@inheritDoc @ethings-os/sdk-ui!ChatbotProps.height}
      */
     height: [String, Number] as PropType<ChatbotProps['height']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChatbotProps.config}
+     * {@inheritDoc @ethings-os/sdk-ui!ChatbotProps.config}
      */
     config: Object as PropType<ChatbotProps['config']>,
   },

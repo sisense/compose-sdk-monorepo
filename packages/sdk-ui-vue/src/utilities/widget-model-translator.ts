@@ -5,7 +5,7 @@ import {
   type ExecutePivotQueryParams,
   type ExecuteQueryParams,
   type PivotTableWidgetProps,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 import type { ChartProps, PivotTableProps, TableProps } from '../components/charts';
 import type { ChartWidgetProps } from '../components/widgets';
 
@@ -15,7 +15,7 @@ import type { ChartWidgetProps } from '../components/widgets';
  * @example
  * ```vue
 <script setup lang="ts">
-import { widgetModelTranslator, useGetWidgetModel, useExecuteQuery } from '@sisense/sdk-ui-vue';
+import { widgetModelTranslator, useGetWidgetModel, useExecuteQuery } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { data: widgetModel } = useGetWidgetModel({
@@ -46,7 +46,7 @@ export const toExecuteQueryParams = (widgetModel: WidgetModel): ExecuteQueryPara
  * @example
  * ```vue
 <script setup lang="ts">
-import { widgetModelTranslator, useGetWidgetModel, useExecuteQuery } from '@sisense/sdk-ui-vue';
+import { widgetModelTranslator, useGetWidgetModel, useExecuteQuery } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { data: widgetModel } = useGetWidgetModel({
@@ -75,7 +75,7 @@ export const toExecutePivotQueryParams = (widgetModel: WidgetModel): ExecutePivo
  * @example
  * ```vue
 <script setup lang="ts">
-import { widgetModelTranslator, useGetWidgetModel, Chart } from '@sisense/sdk-ui-vue';
+import { widgetModelTranslator, useGetWidgetModel, Chart } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { data: widgetModel } = useGetWidgetModel({
@@ -114,7 +114,7 @@ export function toChartProps(widgetModel: WidgetModel): ChartProps {
  * @example
  * ```vue
 <script setup lang="ts">
-import { widgetModelTranslator, useGetWidgetModel, Table } from '@sisense/sdk-ui-vue';
+import { widgetModelTranslator, useGetWidgetModel, Table } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { data: widgetModel } = useGetWidgetModel({
@@ -152,7 +152,7 @@ export function toTableProps(widgetModel: WidgetModel): TableProps {
  * @example
  * ```vue
 <script setup lang="ts">
-import { widgetModelTranslator, useGetWidgetModel, PivotTable } from '@sisense/sdk-ui-vue';
+import { widgetModelTranslator, useGetWidgetModel, PivotTable } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { data: widgetModel } = useGetWidgetModel({
@@ -190,7 +190,7 @@ export function toPivotTableProps(widgetModel: WidgetModel): PivotTableProps {
  * @example
  * ```vue
 <script setup lang="ts">
-import { widgetModelTranslator, useGetWidgetModel, ChartWidget } from '@sisense/sdk-ui-vue';
+import { widgetModelTranslator, useGetWidgetModel, ChartWidget } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { data: widgetModel } = useGetWidgetModel({
@@ -228,7 +228,7 @@ export function toChartWidgetProps(widgetModel: WidgetModel): ChartWidgetProps {
  * @example
  * ```vue
 <script setup lang="ts">
-import { widgetModelTranslator, useGetWidgetModel } from '@sisense/sdk-ui-vue';
+import { widgetModelTranslator, useGetWidgetModel } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { data: widgetModel } = useGetWidgetModel({
@@ -255,7 +255,7 @@ export function toPivotTableWidgetProps(widgetModel: WidgetModel): PivotTableWid
  * @example
  * ```vue
 <script setup lang="ts">
-import { widgetModelTranslator, useGetWidgetModel } from '@sisense/sdk-ui-vue';
+import { widgetModelTranslator, useGetWidgetModel } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { data: widgetModel } = useGetWidgetModel({

@@ -1,12 +1,12 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { WidgetById as WidgetByIdPreact } from '@sisense/sdk-ui-preact';
-import type { WidgetByIdProps as WidgetByIdPropsPreact } from '@sisense/sdk-ui-preact';
+import { WidgetById as WidgetByIdPreact } from '@ethings-os/sdk-ui-preact';
+import type { WidgetByIdProps as WidgetByIdPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 import type { ChartWidget } from './chart-widget';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!WidgetById | `WidgetById`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!WidgetById | `WidgetById`} component.
  */
 export interface WidgetByIdProps extends WidgetByIdPropsPreact {}
 
@@ -28,7 +28,7 @@ export interface WidgetByIdProps extends WidgetByIdPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { WidgetById } from '@sisense/sdk-ui-vue';
+ * import { WidgetById } from '@ethings-os/sdk-ui-vue';
  *
  * </script>
  * ```
@@ -42,7 +42,7 @@ export const WidgetById = defineComponent({
     /** @internal */
     contextMenuItems: Array as PropType<WidgetByIdProps['contextMenuItems']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.dashboardOid}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.dashboardOid}
      *
      * @category Widget
      */
@@ -51,7 +51,7 @@ export const WidgetById = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.description}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.description}
      *
      * @category Widget
      */
@@ -59,37 +59,37 @@ export const WidgetById = defineComponent({
     /** @internal */
     drilldownOptions: Object as PropType<WidgetByIdProps['drilldownOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.filters}
      *
      * @category Data
      */
     filters: [Array, Object] as PropType<WidgetByIdProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.filtersMergeStrategy}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.filtersMergeStrategy}
      *
      * @category Data
      */
     filtersMergeStrategy: Object as PropType<WidgetByIdProps['filtersMergeStrategy']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.highlightSelectionDisabled}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.highlightSelectionDisabled}
      *
      * @category Widget
      */
     highlightSelectionDisabled: Boolean as PropType<WidgetByIdProps['highlightSelectionDisabled']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<WidgetByIdProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.includeDashboardFilters}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.includeDashboardFilters}
      *
      * @category Data
      */
     includeDashboardFilters: Boolean as PropType<WidgetByIdProps['includeDashboardFilters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.onBeforeRender}
      *
      * @category Callbacks
      */
@@ -97,31 +97,31 @@ export const WidgetById = defineComponent({
     /** @internal */
     onContextMenuClose: Function as PropType<WidgetByIdProps['onContextMenuClose']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<WidgetByIdProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<WidgetByIdProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<WidgetByIdProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.styleOptions}
      *
      * @category Widget
      */
     styleOptions: Object as PropType<WidgetByIdProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.title}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.title}
      *
      * @category Widget
      */
@@ -129,7 +129,7 @@ export const WidgetById = defineComponent({
     /** @internal */
     topSlot: Object as PropType<WidgetByIdProps['topSlot']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.widgetOid}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.widgetOid}
      *
      * @category Widget
      */
@@ -140,7 +140,7 @@ export const WidgetById = defineComponent({
     /** @internal */
     widgetStyleOptions: Object as PropType<WidgetByIdProps['styleOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!WidgetByIdProps.onDataReady}
      *
      * @category Callbacks
      */

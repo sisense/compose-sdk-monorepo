@@ -12,7 +12,7 @@ import {
   PivotMeasure,
   PivotQueryResultData,
   QueryResultData,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 /**
  * All the properties that fully describe a query you want to send.

@@ -1,4 +1,4 @@
-import { initI18next } from '@sisense/sdk-common';
+import { initI18next } from '@ethings-os/sdk-common';
 import { initReactI18next } from 'react-i18next';
 import { resources, PACKAGE_NAMESPACE } from './resources/index.js';
 

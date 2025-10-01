@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { Data, isDatetime } from '@sisense/sdk-data';
+import { Data, isDatetime } from '@ethings-os/sdk-data';
 import { getBaseDateFnsLocale } from '../chart-data-processor/data-table-date-period';
 import { defaultDateConfig } from './date-formats';
 import type { DateFormat, DateConfig } from './date-formats';
 import { StyledColumn } from '../chart-data-options/types';
-import type { Column, Cell, QueryResultData } from '@sisense/sdk-data';
+import type { Column, Cell, QueryResultData } from '@ethings-os/sdk-data';
 import { isCell } from '../chart-data-processor/table-creators';
 import { createCompareValue } from '../chart-data-processor/row-comparator';
 import { isMeasureColumn } from '@/chart-data-options/utils';

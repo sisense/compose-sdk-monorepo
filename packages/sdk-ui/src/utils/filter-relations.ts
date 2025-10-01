@@ -12,7 +12,7 @@ import {
   isRelationsRuleIdNode,
   mergeFiltersOrFilterRelations,
   UnknownRelationsNodeError,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep.js';
 
 export {
@@ -31,7 +31,7 @@ export {
   mergeFiltersOrFilterRelations,
   type FilterRelationsDescription,
   type FilterRelationsRules,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 /**
  * @internal

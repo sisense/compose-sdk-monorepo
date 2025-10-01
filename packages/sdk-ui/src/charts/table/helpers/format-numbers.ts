@@ -1,4 +1,4 @@
-import { isNumber } from '@sisense/sdk-data';
+import { isNumber } from '@ethings-os/sdk-data';
 
 import { TableDataOptionsInternal } from '@/chart-data-options/types';
 import { createCompareValue } from '@/chart-data-processor/row-comparator';

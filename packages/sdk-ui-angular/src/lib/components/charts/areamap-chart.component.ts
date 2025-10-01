@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   type AreamapChartProps as AreamapChartPropsPreact,
   type ChartType,
-} from '@sisense/sdk-ui-preact';
+} from '@ethings-os/sdk-ui-preact';
 
 import {
   AreamapChartEventProps,
@@ -32,7 +32,7 @@ export interface AreamapChartProps
  *
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-ecommerce';
 
 @Component({
@@ -77,7 +77,7 @@ export class AnalyticsComponent {
 })
 export class AreamapChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!AreamapChartProps.dataSet}
    *
    * @category Data
    */
@@ -85,7 +85,7 @@ export class AreamapChartComponent {
   dataSet: AreamapChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!AreamapChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -93,7 +93,7 @@ export class AreamapChartComponent {
   dataOptions!: AreamapChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!AreamapChartProps.filters}
    *
    * @category Data
    */
@@ -101,7 +101,7 @@ export class AreamapChartComponent {
   filters: AreamapChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!AreamapChartProps.highlights}
    *
    * @category Data
    */
@@ -109,7 +109,7 @@ export class AreamapChartComponent {
   highlights: AreamapChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!AreamapChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -117,7 +117,7 @@ export class AreamapChartComponent {
   styleOptions: AreamapChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!AreamapChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!AreamapChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -125,7 +125,7 @@ export class AreamapChartComponent {
   dataReady: AreamapChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!AreamapChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!AreamapChartProps.onDataPointClick}
    *
    * @category Callbacks
    */

@@ -4,7 +4,7 @@ import {
   DateOperators,
   DimensionalLevelAttribute,
   RelativeDateFilter as RelativeDateFilterType,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import dayjs, { ManipulateType } from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import { TranslatableError } from '@/translation/translatable-error';

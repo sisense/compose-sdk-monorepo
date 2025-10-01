@@ -1,7 +1,7 @@
 import { Chart } from '../chart';
 import { templateForComponent } from './template';
 import { BoxplotStyleOptions } from '../types';
-import { Data } from '@sisense/sdk-data';
+import { Data } from '@ethings-os/sdk-data';
 import { BoxplotChartProps } from '../props';
 import { withBlurredRows } from '../__test-helpers__';
 

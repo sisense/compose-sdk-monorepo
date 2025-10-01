@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { isNumber, isDatetime } from '@sisense/sdk-data';
+import { isNumber, isDatetime } from '@ethings-os/sdk-data';
 import isObject from 'lodash-es/isObject';
 import { Row, Column, Value, ComparableData, CompareValue } from './table-processor';
 import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';

@@ -2,7 +2,7 @@ import { generateCode } from './generate-code.js';
 
 const dataForTemplate: Record<string, string> = {
   componentString: 'Chart',
-  extraImportsString: `import { filterFactory, measureFactory } from '@sisense/sdk-data';`,
+  extraImportsString: `import { filterFactory, measureFactory } from '@ethings-os/sdk-data';`,
   dataSourceString: 'data-source',
   titleString: 'My Chart',
   chartTypeString: 'bar',

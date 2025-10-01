@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import Stack from '@mui/material/Stack';
-import { Filter } from '@sisense/sdk-data';
+import { Filter } from '@ethings-os/sdk-data';
 import { IncludeAllSection } from './sections/include-all-section';
 import { MembersSection } from './sections/members-section';
 import {

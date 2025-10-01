@@ -24,7 +24,7 @@ How to use `useExecuteCsvQuery` within a Vue component:
 ```vue
 <script setup>
 import { ref } from 'vue';
-import { useExecuteCsvQuery } from '@sisense/sdk-ui-vue';
+import { useExecuteCsvQuery } from '@ethings-os/sdk-ui-vue';
 
 const dataSource = ref('your_data_source_id');
 // Set up other query parameters as needed (dimensions, measures, filters, etc.)

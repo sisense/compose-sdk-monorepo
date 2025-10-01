@@ -300,9 +300,9 @@ export const MOCK_WIDGET_DTO_LINE_CHART = {
   },
 } as WidgetDto;
 
-export const MOCK_WIDGET_CODE_LINE_CHART = `import { ChartWidget } from '@sisense/sdk-ui';
-import { measureFactory } from '@sisense/sdk-data';
-import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+export const MOCK_WIDGET_CODE_LINE_CHART = `import { ChartWidget } from '@ethings-os/sdk-ui';
+import { measureFactory } from '@ethings-os/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @ethings-os/sdk-cli
 
 export default function CodeExample() {
   return (
@@ -604,9 +604,9 @@ export const MOCK_WIDGET_DTO_PIVOT_TABLE = {
   instanceType: 'owner',
 } as WidgetDto;
 
-export const MOCK_WIDGET_CODE_PIVOT_TABLE = `import { PivotTableWidget } from '@sisense/sdk-ui';
-import { measureFactory } from '@sisense/sdk-data';
-import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+export const MOCK_WIDGET_CODE_PIVOT_TABLE = `import { PivotTableWidget } from '@ethings-os/sdk-ui';
+import { measureFactory } from '@ethings-os/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @ethings-os/sdk-cli
 
 export default function CodeExample() {
   return (
@@ -1174,9 +1174,9 @@ export const MOCK_WIDGET_DTO_COMPLEX_CHART = {
   wasRendered: false,
 } as WidgetDto;
 
-export const MOCK_WIDGET_CODE_COMPLEX_CHART = `import { ChartWidget } from '@sisense/sdk-ui';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+export const MOCK_WIDGET_CODE_COMPLEX_CHART = `import { ChartWidget } from '@ethings-os/sdk-ui';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @ethings-os/sdk-cli
 
 export default function CodeExample() {
   return (

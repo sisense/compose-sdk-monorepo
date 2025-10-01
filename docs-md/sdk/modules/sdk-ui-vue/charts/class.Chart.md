@@ -12,10 +12,10 @@ An example of using the `Chart` component to
 plot a bar chart of the Sample Retail data source hosted in a Sisense instance:
 ```ts
 <script setup lang="ts">
-import { Chart } from '@sisense/sdk-ui-vue';
-import type { ChartProps } from '@sisense/sdk-ui-vue';
+import { Chart } from '@ethings-os/sdk-ui-vue';
+import type { ChartProps } from '@ethings-os/sdk-ui-vue';
 import * as DM from '../assets/sample-retail-model';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import { ref } from 'vue';
 
 const dimProductName = DM.DimProducts.ProductName;

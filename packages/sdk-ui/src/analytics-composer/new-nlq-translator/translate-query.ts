@@ -1,4 +1,4 @@
-import { convertDataSource, JaqlDataSourceForDto } from '@sisense/sdk-data';
+import { convertDataSource, JaqlDataSourceForDto } from '@ethings-os/sdk-data';
 import { NormalizedTable, NlqResponseJSON, NlqTranslationResult } from '../types.js';
 import { BaseQueryParams } from '@/query-execution';
 import { translateFiltersJSON, translateHighlightsJSON } from './translate-filters.js';

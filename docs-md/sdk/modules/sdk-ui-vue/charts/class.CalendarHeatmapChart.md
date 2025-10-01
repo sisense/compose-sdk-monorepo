@@ -22,9 +22,9 @@ Here's how you can use the CalendarHeatmapChart component in a Vue application:
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../assets/sample-retail-model';
-import { CalendarHeatmapChart, type CalendarHeatmapChartProps } from '@sisense/sdk-ui-vue';
+import { CalendarHeatmapChart, type CalendarHeatmapChartProps } from '@ethings-os/sdk-ui-vue';
 
 const calendarChartProps = ref<CalendarHeatmapChartProps>({
   dataSet: DM.DataSource,

@@ -4,7 +4,7 @@ import {
   LevelAttribute,
   convertDataSource,
   measureFactory,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { useSisenseContext } from '../../../../sisense-context/sisense-context';
 import { useEffect, useState } from 'react';
 import { executeQuery } from '../../../../query/execute-query';

@@ -1,7 +1,7 @@
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { TreemapChartDesignOptions } from '../design-options';
 import { treemapTooltipFormatter } from './treemap-tooltip';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 import get from 'lodash/get';
 import { translation as enTranslation } from '../../../translation/resources/en';
 import { HighchartsDataPointContext } from '../tooltip-utils';

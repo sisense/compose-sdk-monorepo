@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
-import { DataSource, type Filter } from '@sisense/sdk-data';
+import { DataSource, type Filter } from '@ethings-os/sdk-data';
 import { useTranslation } from 'react-i18next';
 import { Popover, PopoverAnchorPosition } from '@/common/components/popover';
 

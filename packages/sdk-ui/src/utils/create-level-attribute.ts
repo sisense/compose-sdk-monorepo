@@ -1,5 +1,5 @@
-import { TFunction } from '@sisense/sdk-common';
-import { DimensionalLevelAttribute, getColumnNameFromAttribute } from '@sisense/sdk-data';
+import { TFunction } from '@ethings-os/sdk-common';
+import { DimensionalLevelAttribute, getColumnNameFromAttribute } from '@ethings-os/sdk-data';
 import { generateAttributeName } from '@/utils/generate-attribute-name';
 
 /**

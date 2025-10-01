@@ -1,5 +1,5 @@
 {
-  "name": "@sisense/sdk-data",
+  "name": "@ethings-os/sdk-data",
   "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package for implementing the elements of dimensional modeling",
   "repository": {
@@ -27,8 +27,8 @@
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "@sisense/sdk-common": "workspace:*",
-    "@sisense/sdk-rest-client": "workspace:*",
+    "@ethings-os/sdk-common": "workspace:*",
+    "@ethings-os/sdk-rest-client": "workspace:*",
     "guid-typescript": "^1.0.9",
     "hash-it": "^6.0.0",
     "lodash-es": "^4.17.21",

@@ -1,4 +1,4 @@
-import { Attribute, Data, DataSource, isDataSource, Measure } from '@sisense/sdk-data';
+import { Attribute, Data, DataSource, isDataSource, Measure } from '@ethings-os/sdk-data';
 import { useMemo } from 'react';
 import { ChartDataOptionsInternal } from '@/chart-data-options/types';
 import { DataColumnNamesMapping } from '@/chart-data-options/validate-data-options';

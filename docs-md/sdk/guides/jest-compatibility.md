@@ -29,24 +29,24 @@ Here are suggested configurations for common frameworks:
 **React**
 ```
 "moduleNameMapper": {
-  "^@sisense/sdk-(common|data|modeling|query-client|rest-client|tracking)(.*)$": "<rootDir>/node_modules/@sisense/sdk-$1/dist/cjs$2",
-  "^@sisense/sdk-ui(.*)$": "<rootDir>/node_modules/@sisense/sdk-ui/dist$1",
+  "^@ethings-os/sdk-(common|data|modeling|query-client|rest-client|tracking)(.*)$": "<rootDir>/node_modules/@ethings-os/sdk-$1/dist/cjs$2",
+  "^@ethings-os/sdk-ui(.*)$": "<rootDir>/node_modules/@ethings-os/sdk-ui/dist$1",
   "^lodash-es(.*)$": "<rootDir>/node_modules/lodash$1"
 }
 ```
 **Angular**
 ```
 "moduleNameMapper": {
-  "^@sisense/sdk-(common|data|modeling|query-client|rest-client|tracking)(.*)$": "<rootDir>/node_modules/@sisense/sdk-$1/dist/cjs$2",
-  "^@sisense/sdk-ui-angular(.*)$": "<rootDir>/node_modules/@sisense/sdk-ui-angular/dist/fesm2020/sisense-sdk-ui-angular.mjs",
+  "^@ethings-os/sdk-(common|data|modeling|query-client|rest-client|tracking)(.*)$": "<rootDir>/node_modules/@ethings-os/sdk-$1/dist/cjs$2",
+  "^@ethings-os/sdk-ui-angular(.*)$": "<rootDir>/node_modules/@ethings-os/sdk-ui-angular/dist/fesm2020/sisense-sdk-ui-angular.mjs",
   "^lodash-es(.*)$": "<rootDir>/node_modules/lodash$1"
 }
 ```
 **Vue**:
 ```
 "moduleNameMapper": {
-  "^@sisense/sdk-(common|data|modeling|query-client|rest-client|tracking)(.*)$": "<rootDir>/node_modules/@sisense/sdk-$1/dist/cjs$2",
-  "^@sisense/sdk-ui-vue(.*)$": "<rootDir>/node_modules/@sisense/sdk-ui-vue/dist$1",
+  "^@ethings-os/sdk-(common|data|modeling|query-client|rest-client|tracking)(.*)$": "<rootDir>/node_modules/@ethings-os/sdk-$1/dist/cjs$2",
+  "^@ethings-os/sdk-ui-vue(.*)$": "<rootDir>/node_modules/@ethings-os/sdk-ui-vue/dist$1",
   "^lodash-es(.*)$": "<rootDir>/node_modules/lodash$1"
 }
 ```

@@ -28,7 +28,7 @@ The command takes the following parameters:
 For example, you can create a TypeScript representation of the Sample ECommerce data model like this:
 
 ```sh
-npx @sisense/sdk-cli@latest get-data-model --username sample@sample.com --output src/sample-ecommerce.ts --dataSource "Sample ECommerce" --url https://myinstanceurl.com
+npx @ethings-os/sdk-cli@latest get-data-model --username sample@sample.com --output src/sample-ecommerce.ts --dataSource "Sample ECommerce" --url https://myinstanceurl.com
 ```
 
 If prompted, enter your password to authenticate and generate the data model representation.
@@ -53,7 +53,7 @@ import {
   createAttribute,
   createDateDimension,
   createDimension,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 export const DataSource = 'Sample ECommerce';
 
@@ -87,7 +87,7 @@ For example here is a chart that uses an imported data model representation to d
 
 ```ts
 import * as DM from '../sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 //...
 
@@ -106,7 +106,7 @@ And here is an example of performing a query using a data model representation, 
 
 ```ts
 import * as DM from '../sample-ecommerce';
-import { Sort, measureFactory } from '@sisense/sdk-data';
+import { Sort, measureFactory } from '@ethings-os/sdk-data';
 
 //...
 

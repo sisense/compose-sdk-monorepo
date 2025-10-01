@@ -5,7 +5,7 @@ import {
   QueryResultData,
   DataSource,
   FilterRelationsJaql,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import isNull from 'lodash-es/isNull';
 import { ClientApplication } from './app/client-application.js';
 import { executeQuery as executeQueryFunction } from './query/execute-query.js';

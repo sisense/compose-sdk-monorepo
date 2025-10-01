@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { type ScattermapChartProps as ScattermapChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { type ScattermapChartProps as ScattermapChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 
 import { type ChartType } from '../../sdk-ui-core-exports';
 import {
@@ -29,8 +29,8 @@ export interface ScattermapChartProps
  * ```
  * ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
-import type { ScattermapStyleOptions,ScattermapChartDataOptions } from '@sisense/sdk-ui-angular';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
+import type { ScattermapStyleOptions,ScattermapChartDataOptions } from '@ethings-os/sdk-ui-angular';
 import * as DM from '../../assets/sample-ecommerce';
 
 @Component({
@@ -82,7 +82,7 @@ export class AnalyticsComponent {
 })
 export class ScattermapChartComponent {
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.dataSet}
+   * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.dataSet}
    *
    * @category Data
    */
@@ -90,7 +90,7 @@ export class ScattermapChartComponent {
   dataSet: ScattermapChartProps['dataSet'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.dataOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.dataOptions}
    *
    * @category Chart
    */
@@ -98,7 +98,7 @@ export class ScattermapChartComponent {
   dataOptions!: ScattermapChartProps['dataOptions'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.filters}
+   * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.filters}
    *
    * @category Data
    */
@@ -106,7 +106,7 @@ export class ScattermapChartComponent {
   filters: ScattermapChartProps['filters'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.highlights}
+   * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.highlights}
    *
    * @category Data
    */
@@ -114,7 +114,7 @@ export class ScattermapChartComponent {
   highlights: ScattermapChartProps['highlights'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.styleOptions}
+   * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.styleOptions}
    *
    * @category Chart
    */
@@ -122,7 +122,7 @@ export class ScattermapChartComponent {
   styleOptions: ScattermapChartProps['styleOptions'];
 
   /**
-   * {@inheritDoc  @sisense/sdk-ui!ScattermapChartProps.onDataReady}
+   * {@inheritDoc  @ethings-os/sdk-ui!ScattermapChartProps.onDataReady}
    *
    * @category Callbacks
    */
@@ -130,7 +130,7 @@ export class ScattermapChartComponent {
   dataReady: ScattermapChartProps['dataReady'];
 
   /**
-   * {@inheritDoc @sisense/sdk-ui!ScattermapChartProps.onDataPointClick}
+   * {@inheritDoc @ethings-os/sdk-ui!ScattermapChartProps.onDataPointClick}
    *
    * @category Callbacks
    */

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Filter } from '@sisense/sdk-data';
+import { Filter } from '@ethings-os/sdk-data';
 import { SelectableSection } from '../common/selectable-section.js';
 import { Input, SingleSelect } from '../common/index.js';
 import {

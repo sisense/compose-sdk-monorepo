@@ -1,4 +1,4 @@
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 import {
   Brand,

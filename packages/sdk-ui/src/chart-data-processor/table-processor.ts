@@ -5,7 +5,7 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { RowComparator, createCompareValue } from './row-comparator';
-import { isDatetime, isNumber } from '@sisense/sdk-data';
+import { isDatetime, isNumber } from '@ethings-os/sdk-data';
 import { Distribution } from './distribution';
 import { CategoricalDistribution } from './categorical-distribution';
 import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';

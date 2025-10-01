@@ -1,4 +1,4 @@
-import { Attribute, JaqlDataSourceForDto, JSONArray } from '@sisense/sdk-data';
+import { Attribute, JaqlDataSourceForDto, JSONArray } from '@ethings-os/sdk-data';
 import { NlqTranslationResult, NormalizedTable } from '../types.js';
 import { createAttribute } from './common.js';
 

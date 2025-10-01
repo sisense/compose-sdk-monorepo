@@ -1,8 +1,8 @@
 import { useReducer } from '../helpers/use-reducer';
 import { getSisenseContext } from '../providers';
 import { collectRefs, toPlainObject } from '../utils';
-import type { ClientApplication, GetWidgetModelParams, WidgetModel } from '@sisense/sdk-ui-preact';
-import { dataLoadStateReducer, getWidgetModel } from '@sisense/sdk-ui-preact';
+import type { ClientApplication, GetWidgetModelParams, WidgetModel } from '@ethings-os/sdk-ui-preact';
+import { dataLoadStateReducer, getWidgetModel } from '@ethings-os/sdk-ui-preact';
 import { toRefs, watch } from 'vue';
 import { useTracking } from './use-tracking';
 import type { MaybeRefOrWithRefs } from '../types';
@@ -24,7 +24,7 @@ import type { MaybeRefOrWithRefs } from '../types';
  *
  * ```vue
  * <script setup lang="ts">
- * import { Chart, useGetWidgetModel, widgetModelTranslator } from '@sisense/sdk-ui-vue';
+ * import { Chart, useGetWidgetModel, widgetModelTranslator } from '@ethings-os/sdk-ui-vue';
  * const { data: widget } = useGetWidgetModel({
  *   dashboardOid: 'your_dashboard_oid',
  *   widgetOid: 'your_widget_oid',

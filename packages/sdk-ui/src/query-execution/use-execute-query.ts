@@ -10,7 +10,7 @@ import { queryStateReducer } from './query-state-reducer';
 import { TranslatableError } from '../translation/translatable-error';
 import { withTracking } from '../decorators/hook-decorators';
 import { ExecuteQueryParams, ExecuteQueryResult } from './types';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { getFilterListAndRelationsJaql } from '@ethings-os/sdk-data';
 import { ClientApplication } from '@/app/client-application';
 import { CacheKey } from '@/utils/create-cache';
 import { useQueryParamsChanged } from '@/query-execution/query-params-comparator';

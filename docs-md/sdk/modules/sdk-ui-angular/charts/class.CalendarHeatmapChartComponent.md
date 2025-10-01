@@ -19,9 +19,9 @@ making it easy to identify daily patterns or anomalies
 ```
 ```ts
 import { Component } from '@angular/core';
-import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-ecommerce';
-import type { CalendarHeatmapChartProps } from '@sisense/sdk-ui-angular';
+import type { CalendarHeatmapChartProps } from '@ethings-os/sdk-ui-angular';
 
 @Component({
  selector: 'app-analytics',

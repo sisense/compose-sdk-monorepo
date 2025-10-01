@@ -24,8 +24,8 @@ The Chart Widget component extending [ChartComponent](../charts/class.ChartCompo
 ```
 ```ts
 import { Component } from '@angular/core';
-import { ChartType } from '@sisense/sdk-ui-angular';
-import { filterFactory } from '@sisense/sdk-data';
+import { ChartType } from '@ethings-os/sdk-ui-angular';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../../assets/sample-healthcare-model';
 
 @Component({

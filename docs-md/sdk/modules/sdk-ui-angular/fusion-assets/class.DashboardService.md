@@ -118,7 +118,7 @@ An example of using the `createComposedDashboard` to construct a composed dashbo
  // Component behavior in example.component.ts
  import { Component } from '@angular/core';
  import { BehaviorSubject } from 'rxjs';
- import { DashboardService, type DashboardProps } from '@sisense/sdk-ui-angular';
+ import { DashboardService, type DashboardProps } from '@ethings-os/sdk-ui-angular';
 
  @Component({
    selector: 'example',

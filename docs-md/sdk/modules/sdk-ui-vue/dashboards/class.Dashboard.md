@@ -24,7 +24,7 @@ Here's how you can use the Dashboard component in a Vue application:
 </template>
 
 <script setup lang="ts">
-import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@sisense/sdk-ui-vue';
+import { dashboardModelTranslator, useGetDashboardModel, Dashboard } from '@ethings-os/sdk-ui-vue';
 import { computed } from 'vue';
 
 const { dashboard } = useGetDashboardModel({

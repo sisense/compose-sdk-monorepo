@@ -1,4 +1,4 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
+import { HttpClient } from '@ethings-os/sdk-rest-client';
 import merge from 'ts-deepmerge';
 import { getBaseDateFnsLocale } from '../../chart-data-processor/data-table-date-period.js';
 

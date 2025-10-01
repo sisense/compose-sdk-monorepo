@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { RelativeDateFilterTile as RelativeDateFilterTilePreact } from '@sisense/sdk-ui-preact';
-import type { RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
+import { RelativeDateFilterTile as RelativeDateFilterTilePreact } from '@ethings-os/sdk-ui-preact';
+import type { RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!RelativeDateFilterTile | `RelativeDateFilterTile`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!RelativeDateFilterTile | `RelativeDateFilterTile`} component.
  */
 export interface RelativeDateFilterTileProps extends RelativeDateFilterTilePropsPreact {}
 
@@ -26,8 +26,8 @@ export interface RelativeDateFilterTileProps extends RelativeDateFilterTileProps
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { RelativeDateFilterTile, type RelativeDateFilterTileProps } from '@sisense/sdk-ui-vue';
- * import { filterFactory } from '@sisense/sdk-data';
+ * import { RelativeDateFilterTile, type RelativeDateFilterTileProps } from '@ethings-os/sdk-ui-vue';
+ * import { filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
  *
  * const relativeDateFilterValue = ref<Filter | null>(filterFactory.dateRelativeTo(DM.DimDate.Date.Months, 0, 18);
@@ -50,45 +50,45 @@ export interface RelativeDateFilterTileProps extends RelativeDateFilterTileProps
 export const RelativeDateFilterTile = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.title}
+     * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.title}
      */
     title: {
       type: String as PropType<RelativeDateFilterTileProps['title']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.filter}
+     * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.filter}
      */
     filter: {
       type: Object as PropType<RelativeDateFilterTileProps['filter']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.arrangement}
+     * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.arrangement}
      */
     arrangement: String as PropType<RelativeDateFilterTileProps['arrangement']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.onUpdate}
+     * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.onUpdate}
      */
     onUpdate: {
       type: Function as PropType<RelativeDateFilterTileProps['onUpdate']>,
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.limit}
+     * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.limit}
      */
     limit: Object as PropType<RelativeDateFilterTileProps['limit']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.tileDesignOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.tileDesignOptions}
      * @internal
      */
     tileDesignOptions: Object as PropType<RelativeDateFilterTileProps['tileDesignOptions']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.onDelete}
+     * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.onDelete}
      */
     onDelete: Function as PropType<RelativeDateFilterTileProps['onDelete']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.onEdit}
+     * {@inheritDoc @ethings-os/sdk-ui!RelativeDateFilterTileProps.onEdit}
      */
     onEdit: Function as PropType<RelativeDateFilterTileProps['onEdit']>,
   },

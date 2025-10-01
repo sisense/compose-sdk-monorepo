@@ -1,16 +1,16 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { DrilldownBreadcrumbs as DrilldownBreadcrumbsPreact } from '@sisense/sdk-ui-preact';
-import type { DrilldownBreadcrumbsProps as DrilldownBreadcrumbsPropsPreact } from '@sisense/sdk-ui-preact';
+import { DrilldownBreadcrumbs as DrilldownBreadcrumbsPreact } from '@ethings-os/sdk-ui-preact';
+import type { DrilldownBreadcrumbsProps as DrilldownBreadcrumbsPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelperWithChildren } from '../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!DrilldownBreadcrumbs | `DrilldownBreadcrumbs`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!DrilldownBreadcrumbs | `DrilldownBreadcrumbs`} component.
  */
 export interface DrilldownBreadcrumbsProps extends DrilldownBreadcrumbsPropsPreact {}
 
 /**
- * `DrilldownBreadcrumbs` component from the `@sisense/sdk-ui-vue` package.
+ * `DrilldownBreadcrumbs` component from the `@ethings-os/sdk-ui-vue` package.
  * This component provides a way to display and interact with the drilldown path in data visualization components,
  * allowing users to navigate through different levels of data drilldowns. It includes functionalities to clear selections
  * or slice through the drilldown selections for a more intuitive data exploration experience.
@@ -50,7 +50,7 @@ export interface DrilldownBreadcrumbsProps extends DrilldownBreadcrumbsPropsPrea
 export const DrilldownBreadcrumbs = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.clearDrilldownSelections}
+     * {@inheritDoc @ethings-os/sdk-ui!DrilldownBreadcrumbsProps.clearDrilldownSelections}
      *
      * @category Widget
      */
@@ -59,7 +59,7 @@ export const DrilldownBreadcrumbs = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.currentDimension}
+     * {@inheritDoc @ethings-os/sdk-ui!DrilldownBreadcrumbsProps.currentDimension}
      *
      * @category Widget
      */
@@ -68,7 +68,7 @@ export const DrilldownBreadcrumbs = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.sliceDrilldownSelections}
+     * {@inheritDoc @ethings-os/sdk-ui!DrilldownBreadcrumbsProps.sliceDrilldownSelections}
      *
      * @category Widget
      */
@@ -77,7 +77,7 @@ export const DrilldownBreadcrumbs = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!DrilldownBreadcrumbsProps.filtersDisplayValues}
+     * {@inheritDoc @ethings-os/sdk-ui!DrilldownBreadcrumbsProps.filtersDisplayValues}
      *
      * @category Widget
      */

@@ -21,7 +21,7 @@ import {
   TotalsCalculation,
   ForecastFormulaOptions,
   TrendFormulaOptions,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 
 /**
  * Styles for a category/column when visualized in a chart
@@ -45,7 +45,7 @@ export interface CategoryStyle {
   /**
    * Date granularity that works with continuous timeline.
    *
-   * Values from {@link @sisense/sdk-data!DateLevels | `DateLevels`}.
+   * Values from {@link @ethings-os/sdk-data!DateLevels | `DateLevels`}.
    *
    */
   granularity?: string;
@@ -87,7 +87,7 @@ export interface CategoryStyle {
 }
 
 /**
- * Wrapped {@link @sisense/sdk-data!Column | Column} with styles controlling how the column is visualized in a chart.
+ * Wrapped {@link @ethings-os/sdk-data!Column | Column} with styles controlling how the column is visualized in a chart.
  *
  * @example
  * An example of using `StyledColumn` to change the date format of the months displayed on the x-axis.
@@ -220,7 +220,7 @@ export type SeriesStyleOptions = {
 };
 
 /**
- * Wrapped {@link @sisense/sdk-data!MeasureColumn | Measure Column} with styles
+ * Wrapped {@link @ethings-os/sdk-data!MeasureColumn | Measure Column} with styles
  * controlling how the measure is visualized in a chart.
  *
  * @example

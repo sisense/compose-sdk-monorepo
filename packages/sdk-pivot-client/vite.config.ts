@@ -92,7 +92,7 @@ export default defineConfig(({ mode }) => ({
         replacement: resolve(__dirname, '../sdk-shared-ui/dist/lightweight/lib/$1/$1.js'),
       },
       {
-        find: '@sisense/sdk-shared-ui',
+        find: '@ethings-os/sdk-shared-ui',
         replacement: resolve(__dirname, '../sdk-shared-ui/dist/lightweight/index.js'),
       },
     ],

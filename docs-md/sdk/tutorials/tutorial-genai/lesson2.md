@@ -132,8 +132,8 @@ With this code, the two chatbots are spaced apart on the same row. The Sample EC
 Here's the complete `App.tsx` file after the past two lessons.
 
 ```ts
-import { ThemeProvider } from '@sisense/sdk-ui';
-import { Chatbot } from '@sisense/sdk-ui/ai';
+import { ThemeProvider } from '@ethings-os/sdk-ui';
+import { Chatbot } from '@ethings-os/sdk-ui/ai';
 
 function App() {
   return (

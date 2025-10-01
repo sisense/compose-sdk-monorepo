@@ -2,7 +2,7 @@
 import { TableProps } from '../props';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { TableComponent } from './table-component';
-import { Data } from '@sisense/sdk-data';
+import { Data } from '@ethings-os/sdk-data';
 
 /** Function to check if we should wait for sisense context for rendering the table */
 function shouldSkipSisenseContextWaiting(props: TableProps) {

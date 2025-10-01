@@ -1,6 +1,6 @@
 /// <reference lib="dom" />
 
-import { mergeUrlsWithParams, normalizeUrl } from '@sisense/sdk-common';
+import { mergeUrlsWithParams, normalizeUrl } from '@ethings-os/sdk-common';
 
 import { BaseAuthenticator } from './base-authenticator.js';
 import { addQueryParamsToUrl } from './helpers.js';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { ArrowIcon } from '@/common/icons/arrow-icon';
 import styled from '@emotion/styled';
-import { DataSource } from '@sisense/sdk-data';
+import { DataSource } from '@ethings-os/sdk-data';
 import { ElasticubeIcon } from '@/common/icons/elasticube-icon';
 import { ApprovalIcon } from '@/common/icons/approval-icon';
 import {

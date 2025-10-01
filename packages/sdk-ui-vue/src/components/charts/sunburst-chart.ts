@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { SunburstChart as SunburstChartPreact } from '@sisense/sdk-ui-preact';
-import type { SunburstChartProps as SunburstChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { SunburstChart as SunburstChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { SunburstChartProps as SunburstChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!SunburstChart | `SunburstChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!SunburstChart | `SunburstChart`} component.
  */
 export interface SunburstChartProps extends SunburstChartPropsPreact {}
 
@@ -26,9 +26,9 @@ export interface SunburstChartProps extends SunburstChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { SunburstChart,type SunburstChartProps } from '@sisense/sdk-ui-vue';
+ * import { SunburstChart,type SunburstChartProps } from '@ethings-os/sdk-ui-vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -49,7 +49,7 @@ export interface SunburstChartProps extends SunburstChartPropsPreact {}
 export const SunburstChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.dataOptions}
      *
      * @category Chart
      */
@@ -58,55 +58,55 @@ export const SunburstChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<SunburstChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<SunburstChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<SunburstChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<SunburstChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<SunburstChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<SunburstChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<SunburstChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<SunburstChartProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!SunburstChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!SunburstChartProps.styleOptions}
      *
      * @category Chart
      */

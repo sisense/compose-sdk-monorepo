@@ -1,4 +1,4 @@
-import type { HttpClient } from '@sisense/sdk-rest-client';
+import type { HttpClient } from '@ethings-os/sdk-rest-client';
 import { getThemeSettingsByOid } from './theme-loader';
 import { LegacyDesignSettings, LegacyPalette } from './legacy-design-settings';
 import {

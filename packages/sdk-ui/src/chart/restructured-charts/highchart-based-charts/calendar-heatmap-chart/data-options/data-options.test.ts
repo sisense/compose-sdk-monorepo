@@ -10,7 +10,7 @@ import {
   CalendarHeatmapChartDataOptions,
   CalendarHeatmapChartDataOptionsInternal,
 } from '@/chart-data-options/types';
-import { DateLevels, DimensionalLevelAttribute } from '@sisense/sdk-data';
+import { DateLevels, DimensionalLevelAttribute } from '@ethings-os/sdk-data';
 
 vi.mock('@/chart-options-processor/translations/axis-section', () => ({
   getDefaultDateFormat: vi.fn(() => 'MM/dd/yyyy'),
@@ -34,8 +34,8 @@ vi.mock('@/chart-data-options/utils', async () => {
   };
 });
 
-vi.mock('@sisense/sdk-data', async () => {
-  const actual = (await vi.importActual('@sisense/sdk-data')) as any;
+vi.mock('@ethings-os/sdk-data', async () => {
+  const actual = (await vi.importActual('@ethings-os/sdk-data')) as any;
   return {
     ...actual,
     isDimensionalLevelAttribute: (...args: any[]) => {

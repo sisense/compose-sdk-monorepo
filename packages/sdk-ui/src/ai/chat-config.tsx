@@ -94,7 +94,7 @@ export interface ChatConfig {
    *
    * @default false
    * @deprecated
-   * This flag is deprecated and will be removed in a future version. Use {@link @sisense/sdk-ui!AiContextProviderProps.volatile} instead.
+   * This flag is deprecated and will be removed in a future version. Use {@link @ethings-os/sdk-ui!AiContextProviderProps.volatile} instead.
    */
   hideHistory?: boolean;
 

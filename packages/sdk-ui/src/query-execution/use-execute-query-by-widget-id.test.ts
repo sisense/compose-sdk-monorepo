@@ -11,13 +11,13 @@ import {
   IncludeMembersFilterJaql,
   Filter,
   PivotQueryResultData,
-} from '@sisense/sdk-data';
+} from '@ethings-os/sdk-data';
 import { useExecuteQueryByWidgetId, useParamsChanged } from './use-execute-query-by-widget-id';
 import { executeQuery, executePivotQuery } from '../query/execute-query.js';
 import { ClientApplication } from '../app/client-application.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
 import { WidgetDashboardFilterMode, WidgetDto } from '../widget-by-id/types.js';
-import { trackProductEvent } from '@sisense/sdk-tracking';
+import { trackProductEvent } from '@ethings-os/sdk-tracking';
 import { ExecuteQueryByWidgetIdParams } from './types';
 
 vi.mock('../query/execute-query');
@@ -32,9 +32,9 @@ vi.mock('../api/rest-api', () => ({
   },
 }));
 
-vi.mock('@sisense/sdk-tracking', async () => {
-  const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(
-    '@sisense/sdk-tracking',
+vi.mock('@ethings-os/sdk-tracking', async () => {
+  const actual: typeof import('@ethings-os/sdk-tracking') = await vi.importActual(
+    '@ethings-os/sdk-tracking',
   );
   return {
     ...actual,

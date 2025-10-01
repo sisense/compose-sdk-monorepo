@@ -83,11 +83,11 @@ yarn dev
 
 Compose SDK contains three packages for public use:
 
--   [@sisense/sdk-ui](https://www.npmjs.com/package/@sisense/sdk-ui): React components and hooks for rendering charts and executing queries against a Sisense instance.
--   [@sisense/sdk-data](https://www.npmjs.com/package/@sisense/sdk-data): Implementations of dimensional modeling elements including dimensions, attributes, measures, and filters.
--   [@sisense/sdk-cli](https://www.npmjs.com/package/@sisense/sdk-cli): A command-line tool for generating TypeScript representation of a Sisense data model.
+-   [@ethings-os/sdk-ui](https://www.npmjs.com/package/@ethings-os/sdk-ui): React components and hooks for rendering charts and executing queries against a Sisense instance.
+-   [@ethings-os/sdk-data](https://www.npmjs.com/package/@ethings-os/sdk-data): Implementations of dimensional modeling elements including dimensions, attributes, measures, and filters.
+-   [@ethings-os/sdk-cli](https://www.npmjs.com/package/@ethings-os/sdk-cli): A command-line tool for generating TypeScript representation of a Sisense data model.
 
-The Compose SDK packages are deployed via public NPM Registry. To install `@sisense/sdk-ui` and `@sisense/sdk-data` for your app:
+The Compose SDK packages are deployed via public NPM Registry. To install `@ethings-os/sdk-ui` and `@ethings-os/sdk-data` for your app:
 
 <div style="display: flex; margin-right: 10px;">
   <div style="flex: 1; overflow-x: auto; max-width: calc(50% - 5px);">
@@ -95,7 +95,7 @@ The Compose SDK packages are deployed via public NPM Registry. To install `@sise
 For npm:
 
 ```sh
-npm i @sisense/sdk-ui @sisense/sdk-data
+npm i @ethings-os/sdk-ui @ethings-os/sdk-data
 ```
 
   </div>
@@ -104,13 +104,13 @@ npm i @sisense/sdk-ui @sisense/sdk-data
 For Yarn:
 
 ```sh
-yarn add @sisense/sdk-ui @sisense/sdk-data
+yarn add @ethings-os/sdk-ui @ethings-os/sdk-data
 ```
 
   </div>
 </div>
 
-Package `@sisense/sdk-cli` is not needed to run your app. It will be installed on the fly as you execute CLI commands using [npx](https://docs.npmjs.com/cli/v10/commands/npx).
+Package `@ethings-os/sdk-cli` is not needed to run your app. It will be installed on the fly as you execute CLI commands using [npx](https://docs.npmjs.com/cli/v10/commands/npx).
 
 ## Sisense Authentication and Security
 
@@ -123,7 +123,7 @@ There are a number different ways you can authenticate your application. To lear
 Here, we'll use an API Token that we retrieve using the Compose SDK tool. To do so, run the `get-api-token` command:
 
 ```sh
-npx @sisense/sdk-cli@latest get-api-token --url <your_instance_url> --username <username>
+npx @ethings-os/sdk-cli@latest get-api-token --url <your_instance_url> --username <username>
 ```
 
 Hold on to the API Token. You'll need it later when adding Compose SDK code to your application.
@@ -147,7 +147,7 @@ Once you have a TypeScript representation of your data model, you define measure
 Run the following command to create a `sample-ecommerce.ts` file in directory `src/` of the application. The file contains a TypeScript representation of the Sample ECommerce data model.
 
 ```sh
-npx @sisense/sdk-cli@latest get-data-model --username "<username>" --output src/sample-ecommerce.ts --dataSource "Sample ECommerce" --url <your_instance_url>
+npx @ethings-os/sdk-cli@latest get-data-model --username "<username>" --output src/sample-ecommerce.ts --dataSource "Sample ECommerce" --url <your_instance_url>
 ```
 
 Enter your password to complete the command and generate the data model representation.
@@ -158,8 +158,8 @@ Enter your password to complete the command and generate the data model represen
 The resulting file, which is created in the `src/` directory, should look something like below:
 
 ```ts
-import type { Dimension, DateDimension, Attribute } from '@sisense/sdk-data';
-import { createAttribute, createDateDimension, createDimension } from '@sisense/sdk-data';
+import type { Dimension, DateDimension, Attribute } from '@ethings-os/sdk-data';
+import { createAttribute, createDateDimension, createDimension } from '@ethings-os/sdk-data';
 
 export const DataSource = 'Sample ECommerce';
 
@@ -188,7 +188,7 @@ This works for any data model, including models you create. Just replace `"Sampl
 
 In this section, you will modify the main `app` component to embed a chart visualizing data from the Sample ECommerce data source.
 
-Use the two components, `SisenseContextProvider` and `Chart`, from `@sisense/sdk-ui` along with the `measureFactory` and `filterFactory` utilities from `@sisense/sdk-data`.
+Use the two components, `SisenseContextProvider` and `Chart`, from `@ethings-os/sdk-ui` along with the `measureFactory` and `filterFactory` utilities from `@ethings-os/sdk-data`.
 
 > **Note:**
 > The following assumptions are made about your application:
@@ -206,7 +206,7 @@ The following examples shows how to add `SisenseContextProvider` to `src/App.tsx
 ```ts
 // src/App.tsx
 
-import { SisenseContextProvider } from '@sisense/sdk-ui';
+import { SisenseContextProvider } from '@ethings-os/sdk-ui';
 
 function App() {
     return (
@@ -240,16 +240,16 @@ Use the `dataOptions` property (`ChartProps` interface) to assign table columns 
 ```
 
 > **Note**
-> Use `measureFactory.sum()` from the example above to specify the `sum` type aggregation on the `Revenue` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](../modules/sdk-data/factories/namespace.measureFactory/index.md) documentation for more information.
+> Use `measureFactory.sum()` from the example above to specify the `sum` type aggregation on the `Revenue` category. This `measureFactory` utility is exported from the `@ethings-os/sdk-data` library and supports other aggregation types. See the [`measureFactory`](../modules/sdk-data/factories/namespace.measureFactory/index.md) documentation for more information.
 
 The following is a complete example of a rendered chart in an application.
 
 ```ts
 // src/App.tsx
 
-import { Chart, SisenseContextProvider } from '@sisense/sdk-ui';
+import { Chart, SisenseContextProvider } from '@ethings-os/sdk-ui';
 import * as DM from './sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory } from '@ethings-os/sdk-data';
 
 function App() {
     return (

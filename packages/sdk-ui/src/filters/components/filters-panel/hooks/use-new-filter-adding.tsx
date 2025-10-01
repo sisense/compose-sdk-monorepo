@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { DataSource, Filter } from '@sisense/sdk-data';
+import { DataSource, Filter } from '@ethings-os/sdk-data';
 import { AddFilterPopover } from '@/data-browser/add-filter-popover';
 import { FilterEditorPopover } from '../../filter-editor-popover/filter-editor-popover';
 import { UseNewFilterCreationConfig } from '../types';

@@ -4,7 +4,7 @@ import { DashboardById } from './dashboard-by-id';
 import { render } from '@testing-library/react';
 import { MockedSisenseContextProvider } from '@/__test-helpers__';
 import { Dashboard, DashboardChangeType } from './dashboard';
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory } from '@ethings-os/sdk-data';
 import * as DM from '../__test-helpers__/sample-ecommerce';
 
 // Mock the Dashboard component completely

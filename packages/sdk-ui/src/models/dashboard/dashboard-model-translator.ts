@@ -10,7 +10,7 @@ import {
   translateTabbersOptions,
   translateWidgetsOptions,
 } from './translate-dashboard-utils.js';
-import { convertDataSource, DataSource } from '@sisense/sdk-data';
+import { convertDataSource, DataSource } from '@ethings-os/sdk-data';
 
 /**
  * Translates {@link DashboardModel} to {@link DashboardProps}.

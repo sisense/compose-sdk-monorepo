@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { ScatterChart as ScatterChartPreact } from '@sisense/sdk-ui-preact';
-import type { ScatterChartProps as ScatterChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { ScatterChart as ScatterChartPreact } from '@ethings-os/sdk-ui-preact';
+import type { ScatterChartProps as ScatterChartPropsPreact } from '@ethings-os/sdk-ui-preact';
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
- * Props of the {@link @sisense/sdk-ui-vue!ScatterChart | `ScatterChart`} component.
+ * Props of the {@link @ethings-os/sdk-ui-vue!ScatterChart | `ScatterChart`} component.
  */
 export interface ScatterChartProps extends ScatterChartPropsPreact {}
 
@@ -31,9 +31,9 @@ export interface ScatterChartProps extends ScatterChartPropsPreact {}
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { measureFactory, filterFactory } from '@sisense/sdk-data';
+ * import { measureFactory, filterFactory } from '@ethings-os/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
- * import { ScatterChart, type ScatterChartProps } from '@sisense/sdk-ui-vue';
+ * import { ScatterChart, type ScatterChartProps } from '@ethings-os/sdk-ui-vue';
  *
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
@@ -54,7 +54,7 @@ export interface ScatterChartProps extends ScatterChartPropsPreact {}
 export const ScatterChart = defineComponent({
   props: {
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.dataOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.dataOptions}
      *
      * @category Data
      */
@@ -63,55 +63,55 @@ export const ScatterChart = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.dataSet}
+     * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.dataSet}
      *
      * @category Data
      */
     dataSet: [String, Object] as PropType<ScatterChartProps['dataSet']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.filters}
+     * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.filters}
      *
      * @category Data
      */
     filters: [Object, Array] as PropType<ScatterChartProps['filters']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.highlights}
+     * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.highlights}
      *
      * @category Data
      */
     highlights: Array as PropType<ScatterChartProps['highlights']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onBeforeRender}
+     * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onBeforeRender}
      *
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<ScatterChartProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataReady}
+     * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataReady}
      *
      * @category Callbacks
      */
     onDataReady: Function as PropType<ScatterChartProps['onDataReady']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointClick}
+     * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointClick}
      *
      * @category Callbacks
      */
     onDataPointClick: Function as PropType<ScatterChartProps['onDataPointClick']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointContextMenu}
+     * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointContextMenu}
      *
      * @category Callbacks
      */
     onDataPointContextMenu: Function as PropType<ScatterChartProps['onDataPointContextMenu']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointsSelected}
+     * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.onDataPointsSelected}
      *
      * @category Callbacks
      */
     onDataPointsSelected: Function as PropType<ScatterChartProps['onDataPointsSelected']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.styleOptions}
+     * {@inheritDoc @ethings-os/sdk-ui!ScatterChartProps.styleOptions}
      *
      * @category Chart
      */

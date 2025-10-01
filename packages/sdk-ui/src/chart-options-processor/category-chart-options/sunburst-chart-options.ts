@@ -5,7 +5,7 @@ import { CategoricalChartData } from '../../chart-data/types';
 import { HighchartsOptionsInternal } from '../chart-options-service';
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
 import { prepareSunburstOptions } from '../translations/sunburst/sunburst-options';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 
 /**
  * Convert intermediate chart data, data options, and design options

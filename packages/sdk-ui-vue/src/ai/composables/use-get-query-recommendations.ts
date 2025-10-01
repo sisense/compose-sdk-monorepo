@@ -1,5 +1,5 @@
 import { type Ref, toRefs, watch } from 'vue';
-import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
+import { dataLoadStateReducer } from '@ethings-os/sdk-ui-preact';
 import {
   type UseGetQueryRecommendationsParams as UseGetQueryRecommendationsParamsPreact,
   type UseGetQueryRecommendationsState as UseGetQueryRecommendationsStatePreact,
@@ -7,7 +7,7 @@ import {
   type QueryRecommendation as QueryRecommendationPreact,
   DEFAULT_RECOMMENDATIONS_COUNT,
   widgetComposer,
-} from '@sisense/sdk-ui-preact/ai';
+} from '@ethings-os/sdk-ui-preact/ai';
 import { useReducer } from '../../helpers/use-reducer.js';
 import { getAiContext } from '../providers/index.js';
 import { collectRefs, toPlainObject } from '../../utils.js';
@@ -16,27 +16,27 @@ import type { MaybeRefOrWithRefs, ToRefsExceptFns } from '../../types';
 import type { WidgetProps } from '../../components/widgets';
 
 /**
- * Parameters for {@link @sisense/sdk-ui-vue!useGetQueryRecommendations | `useGetQueryRecommendations`} composable.
+ * Parameters for {@link @ethings-os/sdk-ui-vue!useGetQueryRecommendations | `useGetQueryRecommendations`} composable.
  */
 export interface UseGetQueryRecommendationsParams extends UseGetQueryRecommendationsParamsPreact {}
 
 /**
- * State for {@link @sisense/sdk-ui-vue!useGetQueryRecommendations | `useGetQueryRecommendations`} composable.
+ * State for {@link @ethings-os/sdk-ui-vue!useGetQueryRecommendations | `useGetQueryRecommendations`} composable.
  */
 export interface UseGetQueryRecommendationsState
   extends ToRefsExceptFns<Omit<UseGetQueryRecommendationsStatePreact, 'data'>, 'refetch'> {
   /**
-   * {@inheritDoc @sisense/sdk-ui!UseGetQueryRecommendationsState.data}
+   * {@inheritDoc @ethings-os/sdk-ui!UseGetQueryRecommendationsState.data}
    */
   data: Ref<QueryRecommendation[] | undefined>;
 }
 
 /**
- * {@inheritDoc @sisense/sdk-ui!QueryRecommendation}
+ * {@inheritDoc @ethings-os/sdk-ui!QueryRecommendation}
  */
 export interface QueryRecommendation extends Omit<QueryRecommendationPreact, 'widgetProps'> {
   /**
-   * {@inheritDoc @sisense/sdk-ui!QueryRecommendation.widgetProps}
+   * {@inheritDoc @ethings-os/sdk-ui!QueryRecommendation.widgetProps}
    */
   widgetProps?: WidgetProps;
 }
@@ -52,7 +52,7 @@ export interface QueryRecommendation extends Omit<QueryRecommendationPreact, 'wi
 import {
   useGetQueryRecommendations,
   type UseGetQueryRecommendationsParams,
-} from '@sisense/sdk-ui-vue/ai';
+} from '@ethings-os/sdk-ui-vue/ai';
 
 const params: UseGetQueryRecommendationsParams = {
   contextTitle: 'Sample Retail',

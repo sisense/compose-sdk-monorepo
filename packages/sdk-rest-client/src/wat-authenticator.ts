@@ -1,6 +1,6 @@
 /// <reference lib="dom" />
 
-import { normalizeUrl } from '@sisense/sdk-common';
+import { normalizeUrl } from '@ethings-os/sdk-common';
 
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';

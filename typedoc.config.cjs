@@ -13,7 +13,7 @@ if (process.env.TYPEDOC_FORMAT === 'MD') {
   baseConfig = {
     ...baseConfig,
     plugin: [
-      '@sisense/typedoc-plugin-markdown',
+      '@ethings-os/typedoc-plugin-markdown',
       'typedoc-plugin-vue',
       './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs',
     ],

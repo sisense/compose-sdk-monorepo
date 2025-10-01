@@ -3,7 +3,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { useTableData } from './use-table-data';
 import { executeQueryMock } from '../../query/__mocks__/execute-query';
-import { QueryResultData } from '@sisense/sdk-data';
+import { QueryResultData } from '@ethings-os/sdk-data';
 import { ClientApplication } from '../../app/client-application';
 import { useSisenseContextMock } from '../../sisense-context/__mocks__/sisense-context';
 import { SisenseContextPayload } from '@/sisense-context/sisense-context';

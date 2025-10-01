@@ -8,7 +8,7 @@ import { makeGetCaption } from '../getCaption.js';
 import { SortingSettingItem } from '../SortingSettingItem.js';
 import { detectElementOverflow } from '../detectElementOverflow.js';
 
-import { DEPRECATED_Button } from '@sisense/sdk-shared-ui';
+import { DEPRECATED_Button } from '@ethings-os/sdk-shared-ui';
 
 export type ComplexSortingSettingsPopupProps = {
   titleOfPopUp: string[];

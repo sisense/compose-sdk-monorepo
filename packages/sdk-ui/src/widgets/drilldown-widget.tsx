@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { Attribute } from '@sisense/sdk-data';
+import { Attribute } from '@ethings-os/sdk-data';
 import { DataPoint, MenuPosition, MenuItemSection, DrilldownSelection } from '../types';
 import { DrilldownBreadcrumbs } from './common/drilldown-breadcrumbs';
 import { useDrilldownCore } from './common/use-drilldown-core';

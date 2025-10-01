@@ -5,7 +5,7 @@ import { CategoricalChartData } from '../../chart-data/types';
 import { HighchartsOptionsInternal } from '../chart-options-service';
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
 import { prepareTreemapOptions } from '../translations/treemap/treemap-options';
-import { TFunction } from '@sisense/sdk-common';
+import { TFunction } from '@ethings-os/sdk-common';
 
 /**
  * Convert intermediate chart data, data options, and design options
