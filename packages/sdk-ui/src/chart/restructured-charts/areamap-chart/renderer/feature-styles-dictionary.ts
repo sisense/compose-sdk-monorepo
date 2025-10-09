@@ -1,5 +1,4 @@
 import { Feature as GeoJsonFeature } from 'geojson';
-import { PathOptions } from 'leaflet';
 import { AreamapType } from '@/types.js';
 import { GeoDataElement } from '../types.js';
 import { ALTERNATIVE_COUNTRY_NAMES_DICTIONARY } from './alternative-country-names-dictionary.js';
@@ -8,7 +7,7 @@ export type FeatureId = GeoJsonFeature['id'] & string; // all feature ids in geo
 export type FeatureInfo = {
   /** Corresponding GeoDataElement from GeoData */
   geoDataElement?: GeoDataElement;
-  style: PathOptions;
+  style: unknown;
   displayName: string;
 };
 export type FeaturesDictionary = Record<FeatureId, FeatureInfo>;

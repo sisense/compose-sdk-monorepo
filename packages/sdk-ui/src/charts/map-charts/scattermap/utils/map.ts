@@ -1,13 +1,8 @@
 import { CompleteThemeSettings } from '@/index';
-import leaflet, { type FitBoundsOptions } from 'leaflet';
 
 const DEFAULT_ANIMATION_DURATION = 250;
 
-type FitBoundsAnimationOptions = Pick<FitBoundsOptions, 'animate' | 'duration'>;
-
-export function prepareFitBoundsAnimationOptions(
-  themeSettings: CompleteThemeSettings,
-): FitBoundsAnimationOptions {
+export function prepareFitBoundsAnimationOptions(themeSettings: CompleteThemeSettings): unknown {
   const duration =
     themeSettings.chart.animation.init.duration === 'auto'
       ? DEFAULT_ANIMATION_DURATION
@@ -19,18 +14,7 @@ export function prepareFitBoundsAnimationOptions(
   };
 }
 
-export function fitMapToBounds(
-  map: leaflet.Map,
-  markers: leaflet.CircleMarker[],
-  options: FitBoundsOptions = {},
-) {
-  if (!markers.length) return;
-
-  map.fitBounds(
-    markers.map((marker) => [marker.getLatLng().lat, marker.getLatLng().lng]),
-    {
-      maxZoom: 4,
-      ...options,
-    },
-  );
+// eslint-disable-next-line no-unused-vars
+export function fitMapToBounds(map: unknown, markers: unknown, options: unknown) {
+  return;
 }
