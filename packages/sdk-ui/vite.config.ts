@@ -68,6 +68,8 @@ export default defineConfig(({ mode }) => ({
         /^react(?:\/[\w-]+)*$/,
         // React DOM + all submodules
         /^react-dom(?:\/[\w-]+)*$/,
+        'leaflet',
+        'proj4leaflet',
       ],
       plugins: [
         replaceReact18Hooks(),

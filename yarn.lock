@@ -6093,6 +6093,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-leaflet/core@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@react-leaflet/core@npm:2.1.0"
+  peerDependencies:
+    leaflet: ^1.9.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: c11a15fb71a9929b809f346d8f784d0f32afa373bc096aa1f0d0fa6a2ef0ce632a563c31876abf8b255a12a19d6e80ece31e2ef505f79a678bbf073e7a6c5c60
+  languageName: node
+  linkType: hard
+
 "@reduxjs/toolkit@npm:^1.5.1":
   version: 1.9.7
   resolution: "@reduxjs/toolkit@npm:1.9.7"
@@ -7205,6 +7216,7 @@ __metadata:
     react-grid-layout: ^1.4.4
     react-i18next: ^13.2.2
     react-json-view: ^1.21.3
+    react-leaflet: ^4.2.1
     react-number-format: ^5.4.0
     react-plotly.js: ^2.6.0
     rollup-plugin-re: ^1.0.7
@@ -7224,8 +7236,11 @@ __metadata:
     whatwg-fetch: ^3.6.2
     yaml: ^2.4.5
   peerDependencies:
+    leaflet: ^1.9.4
+    proj4leaflet: ^1.0.2
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-leaflet: ^4.2.1
   languageName: unknown
   linkType: soft
 
@@ -22489,6 +22504,19 @@ __metadata:
     react: ^17.0.0 || ^16.3.0 || ^15.5.4
     react-dom: ^17.0.0 || ^16.3.0 || ^15.5.4
   checksum: 5718bcd9210ad5b06eb9469cf8b9b44be9498845a7702e621343618e8251f26357e6e1c865532cf170db6165df1cb30202787e057309d8848c220bc600ec0d1a
+  languageName: node
+  linkType: hard
+
+"react-leaflet@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "react-leaflet@npm:4.2.1"
+  dependencies:
+    "@react-leaflet/core": ^2.1.0
+  peerDependencies:
+    leaflet: ^1.9.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: 79222c2ba0c62facaa3dfee18f7a692f917a4fb744ba8d22269a77f9779fc9634962230eb51265ff2563a1a5e3287d2ec16640ee7f5de459458027e05cd756ba
   languageName: node
   linkType: hard
 

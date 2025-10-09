@@ -87,10 +87,8 @@
     "highcharts-react-official": "^3.2.1",
     "highcharts-rounded-corners": "^1.0.7",
     "immer": "^10.0.2",
-    "leaflet": "^1.9.4",
     "lodash-es": "^4.17.21",
     "markdown-to-jsx": "^7.7.6",
-    "proj4leaflet": "^1.0.2",
     "react-datepicker": "^8.4.0",
     "react-error-boundary": "^4.0.11",
     "react-i18next": "^13.2.2",
@@ -158,16 +156,19 @@
     "d3": "^7.9.0",
     "eslint": "^8.40.0",
     "jsdom": "^22.1.0",
+    "leaflet": "^1.9.4",
     "msw": "2.2.1",
     "plotly.js": "^2.25.2",
     "postcss": "^8.4.31",
     "postcss-replace": "^2.0.1",
     "prettier": "2.8.4",
     "prismjs": "^1.30.0",
+    "proj4leaflet": "^1.0.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-grid-layout": "^1.4.4",
     "react-json-view": "^1.21.3",
+    "react-leaflet": "^4.2.1",
     "react-plotly.js": "^2.6.0",
     "rollup-plugin-re": "^1.0.7",
     "sass": "^1.90.0",
@@ -182,8 +183,11 @@
     "vitest-canvas-mock": "^0.3.2"
   },
   "peerDependencies": {
+    "leaflet": "^1.9.4",
+    "proj4leaflet": "^1.0.2",
     "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0"
+    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-leaflet": "^4.2.1"
   },
   "volta": {
     "extends": "../../package.json"

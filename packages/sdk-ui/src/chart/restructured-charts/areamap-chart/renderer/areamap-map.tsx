@@ -1,11 +1,10 @@
-import 'leaflet/dist/leaflet.css';
 import type {
   Feature as GeoJsonFeature,
   FeatureCollection as GeoJsonFeatureCollection,
 } from 'geojson';
-import Leaflet from 'leaflet';
-import * as proj4 from 'proj4leaflet';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo } from 'react';
+import { MapContainer, GeoJSON, useMap } from 'react-leaflet';
+import L from 'leaflet';
 import { scaleBrightness } from '@/utils/color/index.js';
 import { AreamapType } from '@/types.js';
 import { createFeatureStylesDictionary, FeaturesDictionary } from './feature-styles-dictionary.js';
@@ -15,9 +14,9 @@ import { GeoDataElement } from '../types.js';
 import '@/charts/map-charts/map-charts.scss';
 import { prepareFitBoundsAnimationOptions } from '@/charts/map-charts/scattermap/utils/map.js';
 
-// Using direct import instead of Leaflet.Proj namespace because the library doesn't properly attach to Leaflet in module builds.
-// This is a known Webpack/module issue: https://github.com/kartena/Proj4Leaflet/pull/147
-const Proj4CRS = (proj4 as unknown as { CRS: typeof Leaflet.Proj.CRS }).CRS;
+// Import proj4leaflet for CRS
+import * as proj4 from 'proj4leaflet';
+const Proj4CRS = (proj4 as unknown as { CRS: typeof L.Proj.CRS }).CRS;
 
 export type AreamapProps = {
   geoJson: GeoJsonFeatureCollection;
@@ -34,69 +33,54 @@ export type AreamapProps = {
  */
 export const AreamapMap: React.FC<AreamapProps> = ({ geoJson, geoData, dataOptions, mapType }) => {
   const { themeSettings } = useThemeContext();
-  const mapContainer = useRef<HTMLDivElement | null>(null);
-  const mapInstance = useRef<Leaflet.Map | null>(null);
-  const [mapLayerGroup] = useState<Leaflet.LayerGroup>(Leaflet.layerGroup());
   const featureStylesDictionary = useMemo(
     () => createFeatureStylesDictionary(geoJson.features, geoData, mapType),
     [geoJson, geoData, mapType],
   );
 
-  // create world
-  useEffect(() => {
-    if (mapContainer.current && !mapInstance.current) {
-      mapInstance.current = createMap(mapContainer.current, mapType);
-      mapLayerGroup.addTo(mapInstance.current);
-    }
-  }, [mapLayerGroup, mapType]);
+  const filteredGeoJson = useMemo(
+    () => excludeUselessAntarcticaFromGeoJson(geoJson, featureStylesDictionary),
+    [geoJson, featureStylesDictionary],
+  );
 
-  // add country shapes and highlighting of country shapes on hover
-  useEffect(() => {
-    const geoJsonLayer = Leaflet.geoJSON(
-      excludeUselessAntarcticaFromGeoJson(geoJson, featureStylesDictionary),
-      {
-        style: (geoJsonFeature) => featureStylesDictionary[geoJsonFeature!.id!].style,
-        onEachFeature: (feature, layer) => {
-          layer.bindTooltip(
-            getTooltipContent(feature, featureStylesDictionary, dataOptions.originalValueTitle),
-            { sticky: true },
-          );
-          layer.on({
-            mouseover: (e) => {
-              const layerPath: Leaflet.Path = e.target;
-              highlightArea(layerPath, feature.id!, featureStylesDictionary);
-            },
-            mouseout: (e) => {
-              const layerPath: Leaflet.Path = e.target;
-              revertAreaHighlighting(layerPath, feature.id!, featureStylesDictionary);
-            },
-          });
-          if (dataOptions.onAreaClick) {
-            layer.on({
-              click: (e) => {
-                const geoDataElement = featureStylesDictionary[feature.id!].geoDataElement;
-                if (geoDataElement) {
-                  dataOptions.onAreaClick!(geoDataElement, e.originalEvent);
-                }
-              },
-            });
-          }
-        },
-      },
-    );
-    if (mapInstance.current) {
-      mapLayerGroup.clearLayers();
-      mapLayerGroup.addLayer(geoJsonLayer);
-      mapInstance.current.fitBounds(
-        geoJsonLayer.getBounds(),
-        prepareFitBoundsAnimationOptions(themeSettings),
-      );
+  const mapProps = useMemo(() => {
+    if (mapType === 'world') {
+      return {
+        center: [0, 0] as [number, number],
+        zoom: 1,
+        maxZoom: 5,
+        minZoom: 1,
+      };
+    } else {
+      return {
+        crs: new Proj4CRS(
+          'EPSG:5070',
+          '+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 ' +
+            '+ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
+          {
+            resolutions: [16384, 10240, 8192, 4096],
+          },
+        ),
+        center: [35.96852047262865, -96.96520768859223] as [number, number],
+        zoom: 0.4,
+        maxZoom: 3,
+      };
     }
-  }, [dataOptions, featureStylesDictionary, geoJson, mapLayerGroup, themeSettings]);
+  }, [mapType]);
+
+  const FitBoundsComponent = () => {
+    const map = useMap();
+
+    useEffect(() => {
+      const bounds = L.geoJSON(filteredGeoJson).getBounds();
+      map.fitBounds(bounds, prepareFitBoundsAnimationOptions(themeSettings));
+    }, [map, filteredGeoJson, themeSettings]);
+
+    return null;
+  };
 
   return (
-    <div
-      ref={mapContainer}
+    <MapContainer
       className="csdk-map-container"
       style={{
         width: '100%',
@@ -105,32 +89,67 @@ export const AreamapMap: React.FC<AreamapProps> = ({ geoJson, geoData, dataOptio
         minHeight: '400px',
         backgroundColor: '#c2dbe9',
       }}
-    />
+      scrollWheelZoom={true}
+      attributionControl={false}
+      {...mapProps}
+    >
+      <GeoJSON
+        data={filteredGeoJson}
+        style={(feature) =>
+          feature ? featureStylesDictionary[feature.id as string]?.style || {} : {}
+        }
+        onEachFeature={(feature, layer) => {
+          layer.bindTooltip(
+            getTooltipContent(feature, featureStylesDictionary, dataOptions.originalValueTitle),
+            { sticky: true },
+          );
+          layer.on({
+            mouseover: (e) => {
+              const layerPath = e.target;
+              highlightArea(layerPath, feature.id as string, featureStylesDictionary);
+            },
+            mouseout: (e) => {
+              const layerPath = e.target;
+              revertAreaHighlighting(layerPath, feature.id as string, featureStylesDictionary);
+            },
+            click: (e) => {
+              const geoDataElement = featureStylesDictionary[feature.id as string]?.geoDataElement;
+              if (geoDataElement && dataOptions.onAreaClick) {
+                dataOptions.onAreaClick(geoDataElement, e.originalEvent);
+              }
+            },
+          });
+        }}
+      />
+      <FitBoundsComponent />
+    </MapContainer>
   );
 };
 
 function highlightArea(
-  areaPath: Leaflet.Path,
+  areaPath: L.Path,
   featureId: string | number,
   featureStylesDictionary: FeaturesDictionary,
 ) {
   const hasColorInfo = featureStylesDictionary[featureId];
   if (hasColorInfo) {
-    const basicFillColor = featureStylesDictionary[featureId].style.fillColor!;
-    areaPath.setStyle({
-      weight: 2,
-      color: scaleBrightness(basicFillColor, -0.2),
-      fillColor: scaleBrightness(basicFillColor, 0.05),
-      dashArray: '',
-      fillOpacity: 1,
-      opacity: 1,
-    });
-    areaPath.bringToFront();
+    const basicFillColor = featureStylesDictionary[featureId].style.fillColor;
+    if (basicFillColor) {
+      areaPath.setStyle({
+        weight: 2,
+        color: scaleBrightness(basicFillColor, -0.2),
+        fillColor: scaleBrightness(basicFillColor, 0.05),
+        dashArray: '',
+        fillOpacity: 1,
+        opacity: 1,
+      });
+      areaPath.bringToFront();
+    }
   }
 }
 
 function revertAreaHighlighting(
-  areaPath: Leaflet.Path,
+  areaPath: L.Path,
   featureId: string | number,
   featureStylesDictionary: FeaturesDictionary,
 ) {
@@ -142,7 +161,7 @@ function getTooltipContent(
   featureStylesDictionary: FeaturesDictionary,
   originalValueTitle: string,
 ): string {
-  const featureInfo = featureStylesDictionary[feature.id!];
+  const featureInfo = featureStylesDictionary[feature.id as string];
   const { formattedOriginalValue } = featureInfo.geoDataElement || {};
   return `
   <div>
@@ -153,35 +172,6 @@ function getTooltipContent(
         : ''
     }
   </div>`;
-}
-
-function createMap(element: HTMLElement, mapType: AreamapType): Leaflet.Map {
-  if (mapType === 'world') {
-    return Leaflet.map(element, {
-      attributionControl: false,
-      scrollWheelZoom: true,
-      minZoom: 1,
-      zoom: 1,
-      maxZoom: 5,
-      center: [0, 0],
-    });
-  } else {
-    // case usa map -> configuring Albers Projection, ref: http://epsg.io/5070
-    return Leaflet.map(element, {
-      crs: new Proj4CRS(
-        'EPSG:5070',
-        '+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 ' +
-          '+ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
-        {
-          resolutions: [16384, 10240, 8192, 4096],
-        },
-      ),
-      center: [35.96852047262865, -96.96520768859223],
-      zoom: 0.4,
-      maxZoom: 3,
-      attributionControl: false,
-    });
-  }
 }
 
 /**

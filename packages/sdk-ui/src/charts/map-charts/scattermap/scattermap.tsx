@@ -1,6 +1,5 @@
-import 'leaflet/dist/leaflet.css';
-import leaflet from 'leaflet';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
+import { MapContainer, TileLayer, CircleMarker, useMap, LayerGroup, Tooltip } from 'react-leaflet';
 import { useLocations } from './hooks/use-locations.js';
 import { ChartData, ScattermapChartData } from '../../../chart-data/types.js';
 import { ScattermapDataPointEventHandler } from '../../../props.js';
@@ -8,9 +7,7 @@ import { getLocationsMarkerSizes } from './utils/size.js';
 import { getScattermapDataPoint } from './utils/location.js';
 import { useGeoSettings } from './hooks/use-settings.js';
 import { getLocationsMarkerColors } from './utils/color.js';
-import { createMarker, removeMarkers } from './utils/markers.js';
-import { addCopyright } from './utils/copyright.js';
-import { fitMapToBounds, prepareFitBoundsAnimationOptions } from './utils/map.js';
+import { prepareFitBoundsAnimationOptions } from './utils/map.js';
 import {
   ChartDataOptionsInternal,
   ScattermapChartDataOptionsInternal,
@@ -29,6 +26,32 @@ import './scattermap.scss';
 import { DesignOptions } from '@/chart-options-processor/translations/types.js';
 import { ChartRendererProps } from '@/chart/types.js';
 import { useThemeContext } from '@/theme-provider';
+
+// Import utility functions
+function getFillStats(fill: any) {
+  return {
+    isFilled: ['filled', 'filled-light'].includes(fill),
+  };
+}
+
+function getAttributionString(mapUrl: string) {
+  const mapBoxCopyright = `
+      © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>
+      © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>
+      <strong>
+        <a href='https://www.mapbox.com/map-feedback/' target='_blank' aria-label='Improve this map (opens in a new tab)'>
+          Improve this map
+        </a>
+      </strong>`;
+  const openStreetMapCopyright = `© <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>`;
+
+  if (mapUrl.indexOf('mapbox') > -1) {
+    return mapBoxCopyright;
+  } else if (mapUrl.indexOf('openstreetmap') > -1) {
+    return openStreetMapCopyright;
+  }
+  return '';
+}
 
 export type ScattermapProps = {
   chartData: ScattermapChartData;
@@ -60,9 +83,6 @@ export const Scattermap = ({
     filters: filterList,
   });
 
-  const mapContainer = useRef(null);
-  const mapInstance = useRef<leaflet.Map | null>(null);
-
   const markerSizes = useMemo(
     () =>
       getLocationsMarkerSizes(
@@ -81,114 +101,117 @@ export const Scattermap = ({
     [locationsWithCoordinates, dataOptions],
   );
 
-  const markersRef = useRef<leaflet.CircleMarker[]>([]);
-  const markersLayerRef = useRef(leaflet.layerGroup([]));
+  const MarkersLayer = () => {
+    const map = useMap();
 
-  const tileLayer = useRef<leaflet.TileLayer | null>(null);
-  const copyrightRef = useRef<leaflet.Control.Attribution | null>(null);
-
-  useEffect(() => {
-    if (mapContainer.current && !mapInstance.current) {
-      mapInstance.current = leaflet.map(mapContainer.current, {
-        attributionControl: false,
-        scrollWheelZoom: true,
-        minZoom: 1,
-        worldCopyJump: true,
-      });
-
-      markersLayerRef.current.addTo(mapInstance.current);
-      mapInstance.current.fitWorld();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (markersRef.current) {
-      removeMarkers(markersRef.current);
-      markersRef.current = [];
-    }
-
-    if (locationsWithCoordinates) {
-      locationsWithCoordinates.forEach((locationWithCoordinates, index) => {
-        if (!locationWithCoordinates.coordinates) return;
-
-        const marker = createMarker({
-          coordinates: locationWithCoordinates.coordinates,
-          style: {
-            color: markerColors[index],
-            size: markerSizes[index],
-            fill: designOptions.markers.fill,
-            blur: !!locationWithCoordinates.blur,
-          },
-        });
-
-        markersRef.current.push(marker);
-        marker.addTo(markersLayerRef.current);
-
-        if (onDataPointClick) {
-          marker.on('click', (e) => {
-            onDataPointClick(
-              getScattermapDataPoint(locationWithCoordinates, dataOptions),
-              e.originalEvent,
-            );
-          });
+    useEffect(() => {
+      if (locationsWithCoordinates && locationsWithCoordinates.length > 0) {
+        const bounds = locationsWithCoordinates
+          .map((loc) =>
+            loc.coordinates
+              ? ([loc.coordinates.lat, loc.coordinates.lng] as [number, number])
+              : undefined,
+          )
+          .filter((b): b is [number, number] => !!b);
+        if (bounds.length > 0) {
+          map.fitBounds(bounds, prepareFitBoundsAnimationOptions(themeSettings));
         }
+      }
+    }, [map, themeSettings]);
 
-        marker.bindTooltip(() => {
-          const { content, postponedContent } = tooltipHandler(locationWithCoordinates);
+    return (
+      <LayerGroup>
+        {locationsWithCoordinates.map((locationWithCoordinates, index) => {
+          if (!locationWithCoordinates.coordinates) return null;
 
-          postponedContent?.then((updatedContent) => marker.setTooltipContent(updatedContent));
+          const { isFilled } = getFillStats(designOptions.markers.fill);
+          const markerOpacityMap = {
+            filled: 0.5,
+            'filled-light': 0.2,
+            hollow: 0.35,
+            'hollow-bold': 0.9,
+          };
+          const markerBlurOpacityMap = {
+            filled: 0.1,
+            'filled-light': 0.1,
+            hollow: 0.2,
+            'hollow-bold': 0.25,
+          };
 
-          return content;
-        });
-      });
+          const markerOpacity = locationWithCoordinates.blur
+            ? markerBlurOpacityMap[designOptions.markers.fill]
+            : markerOpacityMap[designOptions.markers.fill];
 
-      fitMapToBounds(
-        mapInstance.current!,
-        markersRef.current,
-        prepareFitBoundsAnimationOptions(themeSettings),
-      );
-    }
-  }, [
-    locationsWithCoordinates,
-    markerColors,
-    markerSizes,
-    designOptions,
-    themeSettings,
-    dataOptions,
-    tooltipHandler,
-    onDataPointClick,
-  ]);
+          return (
+            <CircleMarker
+              key={index}
+              center={[
+                locationWithCoordinates.coordinates.lat,
+                locationWithCoordinates.coordinates.lng,
+              ]}
+              radius={markerSizes[index]}
+              pathOptions={{
+                fillOpacity: markerOpacity,
+                opacity: markerOpacity,
+                fillColor: isFilled ? markerColors[index] : 'transparent',
+                color: isFilled ? 'transparent' : markerColors[index],
+                stroke: !isFilled,
+                weight: isFilled ? 0 : 2,
+              }}
+              eventHandlers={{
+                click: (e: any) => {
+                  if (onDataPointClick) {
+                    onDataPointClick(
+                      getScattermapDataPoint(locationWithCoordinates, dataOptions),
+                      e.originalEvent,
+                    );
+                  }
+                },
+              }}
+            >
+              <Tooltip>
+                {(() => {
+                  const { content } = tooltipHandler(locationWithCoordinates);
+                  return content;
+                })()}
+              </Tooltip>
+            </CircleMarker>
+          );
+        })}
+      </LayerGroup>
+    );
+  };
 
-  useEffect(() => {
-    if (!geoSettings) {
-      return;
-    }
-    if (tileLayer.current) {
-      tileLayer.current.remove();
-    }
+  const TileLayerComponent = () => {
+    if (!geoSettings) return null;
 
-    tileLayer.current = leaflet.tileLayer(geoSettings.maps_api_provider, {
-      zoomOffset: -1,
-      tileSize: 512,
-    });
-
-    if (mapInstance.current) {
-      tileLayer.current.addTo(mapInstance.current);
-
-      copyrightRef.current?.remove();
-      copyrightRef.current = addCopyright(mapInstance.current, geoSettings.maps_api_provider);
-    }
-  }, [geoSettings]);
+    return (
+      <TileLayer
+        url={geoSettings.maps_api_provider}
+        zoomOffset={-1}
+        tileSize={512}
+        attribution={getAttributionString(geoSettings.maps_api_provider)}
+      />
+    );
+  };
 
   return (
-    <div
+    <MapContainer
       className="csdk-map-container"
-      ref={mapContainer}
       style={{
         width: '100%',
         height: '100%',
       }}
-    />
+      center={[0, 0]}
+      zoom={1}
+      scrollWheelZoom={true}
+      minZoom={1}
+      worldCopyJump={true}
+      attributionControl={false}
+    >
+      <TileLayerComponent />
+      <MarkersLayer />
+    </MapContainer>
   );
 };
 

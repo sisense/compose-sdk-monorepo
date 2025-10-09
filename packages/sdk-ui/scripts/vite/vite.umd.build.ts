@@ -15,6 +15,8 @@ const external = [
   /^react(?:\/[\w-]+)*$/,
   // React DOM + all submodules
   /^react-dom(?:\/[\w-]+)*$/,
+  'leaflet',
+  'proj4leaflet',
 ];
 
 const buildUMD = async () => {
