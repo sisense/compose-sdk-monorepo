@@ -1,13 +1,14 @@
 /** @vitest-environment jsdom */
+import { Data } from '@sisense/sdk-data';
 import { fireEvent, render } from '@testing-library/react';
+import { setTimeout } from 'timers/promises';
+
 import { Chart } from '.';
 import { HighchartsOptions } from '../chart-options-processor/chart-options-service';
-import { IndicatorRenderOptions, IndicatorStyleOptions } from '../types';
+import { DataPointEventHandler, DataPointsEventHandler } from '../props';
 import { Table } from '../table';
 import { ThemeProvider } from '../theme-provider';
-import { DataPointEventHandler, DataPointsEventHandler } from '../props';
-import { Data } from '@sisense/sdk-data';
-import { setTimeout } from 'timers/promises';
+import { IndicatorRenderOptions, IndicatorStyleOptions } from '../types';
 
 const dataSet = {
   columns: [

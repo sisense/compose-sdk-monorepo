@@ -1,13 +1,15 @@
-import { describe, it, expect } from 'vitest';
-import {
-  buildRenderOptionsFromLegacyOptions,
-  applyIndicatorRenderOptions,
-  IndicatorRenderOptions,
-} from './indicator-render-options'; // <-- Update this import path to your actual file
+import { describe, expect, it } from 'vitest';
+
+// <-- Update this import path to your actual file
 import {
   legacyChartDataOptions as legacyChartDataOptionsMock,
   legacyChartOptions as legacyChartOptionsMock,
 } from './__mocks__/indicator-mocks';
+import {
+  applyIndicatorRenderOptions,
+  buildRenderOptionsFromLegacyOptions,
+  IndicatorRenderOptions,
+} from './indicator-render-options';
 
 describe('indicator-render-options', () => {
   describe('buildRenderOptionsFromLegacyOptions', () => {

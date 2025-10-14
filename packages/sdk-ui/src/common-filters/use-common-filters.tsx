@@ -1,24 +1,27 @@
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { type Filter, FilterRelations } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 import last from 'lodash-es/last';
-import { FilterRelations, type Filter } from '@sisense/sdk-data';
+
+import { BeforeMenuOpenHandler, OpenMenuFn } from '@/common/components/menu/types.js';
+import { WidgetProps } from '@/props.js';
+import { getFiltersArray } from '@/utils/filter-relations.js';
 import {
+  getInternalWidgetType,
   isTextWidgetProps,
   mergeFilters,
   registerDataPointClickHandler,
   registerDataPointContextMenuHandler,
   registerDataPointsSelectedHandler,
   registerRenderToolbarHandler,
-  getInternalWidgetType,
 } from '@/widget-by-id/utils.js';
-import { CommonFiltersOptions } from './types.js';
-import { prepareCommonFiltersConnectionProps } from './common-filters-connector.js';
-import { WidgetProps } from '@/props.js';
-import { BeforeMenuOpenHandler, OpenMenuFn } from '@/common/components/menu/types.js';
-import { useTranslation } from 'react-i18next';
 import { applyDrilldownDimension } from '@/widgets/common/drilldown-utils.js';
+
+import { prepareCommonFiltersConnectionProps } from './common-filters-connector.js';
+import { CommonFiltersOptions } from './types.js';
 import { useConvertFilterRelations } from './use-convert-filter-relations.js';
-import { getFiltersArray } from '@/utils/filter-relations.js';
 
 /** @internal */
 export const useCommonFilters = ({

@@ -1,6 +1,7 @@
-import { UseDashboardModelAction, UseDashboardModelActionType } from '@/models';
-import { DashboardChangeAction, DashboardChangeType } from '@/dashboard/dashboard';
 import { Authenticator } from '@sisense/sdk-rest-client';
+
+import { DashboardChangeAction, DashboardChangeType } from '@/dashboard/dashboard';
+import { UseDashboardModelAction, UseDashboardModelActionType } from '@/models';
 
 /**
  * Convert a dashboard change action to a use dashboard model action.

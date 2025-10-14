@@ -84,7 +84,7 @@ Unique identifier of the widget.
 
 ### styleOptions
 
-> **styleOptions**: `TextWidgetStyleOptions | CustomWidgetStyleOptions | ChartStyleOptions` & [`WidgetContainerStyleOptions`](../interfaces/interface.WidgetContainerStyleOptions.md)
+> **styleOptions**: `ChartStyleOptions | TextWidgetStyleOptions | CustomWidgetStyleOptions` & [`WidgetContainerStyleOptions`](../interfaces/interface.WidgetContainerStyleOptions.md)
 
 Widget style options.
 

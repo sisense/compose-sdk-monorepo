@@ -1,11 +1,13 @@
-import { render } from '@testing-library/react';
-import { TableWidget } from './table-widget';
-import { Table } from '@/table';
 import { filterFactory } from '@sisense/sdk-data';
-import { TableDataOptions } from '..';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { render } from '@testing-library/react';
 import { Mock } from 'vitest';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { Table } from '@/table';
+
+import { TableDataOptions } from '..';
+import { TableWidget } from './table-widget';
 
 vi.mock('@/sisense-context/sisense-context');
 vi.mock('@/table', () => ({

@@ -1,6 +1,7 @@
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service.js';
+
 import { BuildContext } from '../../../types.js';
-import { CALENDAR_TYPOGRAPHY, CALENDAR_HEATMAP_DEFAULTS } from '../../constants.js';
+import { CALENDAR_HEATMAP_DEFAULTS, CALENDAR_TYPOGRAPHY } from '../../constants.js';
 import { CalendarDayOfWeekEnum, getWeekdayLabels } from '../../utils/index.js';
 
 /**

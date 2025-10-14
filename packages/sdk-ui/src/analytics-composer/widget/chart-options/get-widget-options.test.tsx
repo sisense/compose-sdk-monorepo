@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { getChartOptions } from './get-widget-options';
-import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
-import { ChartRecommendations } from '@/analytics-composer/types';
 import { MetadataItem } from '@sisense/sdk-data';
+
+import { ChartRecommendations } from '@/analytics-composer/types';
+import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
+
+import { getChartOptions } from './get-widget-options';
 
 describe('getChartOptions', () => {
   const jaql: MetadataItem[] = [];

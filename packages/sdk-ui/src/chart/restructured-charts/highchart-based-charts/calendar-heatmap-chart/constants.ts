@@ -40,6 +40,8 @@ export const CALENDAR_HEATMAP_DEFAULTS = {
   WEEKEND_HIDE_VALUES: true,
   /** Default start of week */
   START_OF_WEEK: 'sunday',
+  /** Show pagination controls by default */
+  SHOW_PAGINATION: true,
 } as const;
 
 /**

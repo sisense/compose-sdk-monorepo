@@ -1,5 +1,5 @@
 import { useThemeContext } from '@/theme-provider';
-import { TRIANGLE_COLOR_ADJUSTMENT, getSlightlyDifferentColor } from '@/utils/color';
+import { getSlightlyDifferentColor, TRIANGLE_COLOR_ADJUSTMENT } from '@/utils/color';
 
 export const TriangleIndicator = () => {
   const { themeSettings } = useThemeContext();

@@ -1,8 +1,8 @@
-import { getColumnByName, getValue, DataTable } from '../chart-data-processor/table-processor';
 import {
   IndicatorChartDataOptionsInternal,
   StyledMeasureColumn,
 } from '../chart-data-options/types';
+import { DataTable, getColumnByName, getValue } from '../chart-data-processor/table-processor';
 import { IndicatorChartData } from './types';
 
 const valueFromFirstRow = (

@@ -1,13 +1,15 @@
-import { PropsWithChildren, type FunctionComponent } from 'react';
-import { ThemeProvider } from '../theme-provider';
-import { ErrorBoundary } from '../error-boundary/error-boundary';
-import { SisenseContext, SisenseContextPayload } from './sisense-context';
-import { I18nProvider } from '../translation/i18n-provider';
+import { type FunctionComponent, PropsWithChildren } from 'react';
+
 import { MenuProvider } from '@/common/components/menu/menu-provider';
 import { ModalProvider } from '@/common/components/modal/modal-provider';
-import { SisenseQueryClientProvider } from './sisense-query-client-provider';
-import { CustomContextProviderProps } from '../types';
 import { EmotionCacheProvider } from '@/emotion-cache-provider';
+
+import { ErrorBoundary } from '../error-boundary/error-boundary';
+import { ThemeProvider } from '../theme-provider';
+import { I18nProvider } from '../translation/i18n-provider';
+import { CustomContextProviderProps } from '../types';
+import { SisenseContext, SisenseContextPayload } from './sisense-context';
+import { SisenseQueryClientProvider } from './sisense-query-client-provider';
 
 /** @internal */
 export type CustomSisenseContext = SisenseContextPayload;

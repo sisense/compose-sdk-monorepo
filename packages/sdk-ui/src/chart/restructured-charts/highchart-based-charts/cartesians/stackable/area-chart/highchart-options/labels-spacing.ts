@@ -32,9 +32,9 @@ export function getAreaChartSpacingForTotalLabels(
   const rightSpacing = 0; // Area charts don't use right spacing for total labels
   let topSpacing = 0;
 
-  if (chartDesignOptions.showTotal && chartDesignOptions.stackType === 'stack100') {
+  if (chartDesignOptions.totalLabels?.enabled && chartDesignOptions.stackType === 'stack100') {
     const rotation =
-      Math.abs(chartDesignOptions.totalLabelRotation || 0) % ROTATION_CALCULATION.FULL_ROTATION;
+      Math.abs(chartDesignOptions.totalLabels.rotation || 0) % ROTATION_CALCULATION.FULL_ROTATION;
 
     if (rotation < LABEL_ROTATION_THRESHOLD.HORIZONTAL) {
       topSpacing = AreaTotalLabelVerticalSpacing.Small;

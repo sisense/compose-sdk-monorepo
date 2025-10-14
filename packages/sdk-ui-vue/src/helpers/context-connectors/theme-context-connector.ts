@@ -1,6 +1,7 @@
-import { watchEffect } from 'vue';
 import type { ContextConnector, CustomThemeProviderProps } from '@sisense/sdk-ui-preact';
 import { CustomThemeProvider, DataObserver } from '@sisense/sdk-ui-preact';
+import { watchEffect } from 'vue';
+
 import { getThemeContext } from '../../providers';
 
 /**

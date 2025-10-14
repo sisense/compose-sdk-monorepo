@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+
 import LightBulbIcon from '../icons/light-bulb-icon';
 import ClickableMessage from '../messages/clickable-message';
 

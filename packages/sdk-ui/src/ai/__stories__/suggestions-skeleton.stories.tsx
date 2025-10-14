@@ -1,5 +1,6 @@
-import { templateForComponent } from '../../__stories__/template';
 import { Meta } from '@storybook/react-vite';
+
+import { templateForComponent } from '../../__stories__/template';
 import { SuggestionListSkeleton } from '../suggestions';
 
 const template = templateForComponent(SuggestionListSkeleton);

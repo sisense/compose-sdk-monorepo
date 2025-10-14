@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 
-import { ArrowIcon } from '@/common/icons/arrow-icon';
 import styled from '@emotion/styled';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
 import { DataSource } from '@sisense/sdk-data';
-import { ElasticubeIcon } from '@/common/icons/elasticube-icon';
+
+import { Popover } from '@/common/components/popover';
 import { ApprovalIcon } from '@/common/icons/approval-icon';
+import { ArrowIcon } from '@/common/icons/arrow-icon';
+import { ElasticubeIcon } from '@/common/icons/elasticube-icon';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+import { getElementStateColor } from '@/theme-provider/utils';
+import { ElementStates } from '@/types';
+import { getSlightlyDifferentColor } from '@/utils/color';
 import {
-  toDataSourceObject,
   DataSourceObject,
   getDataSourceTitle,
+  toDataSourceObject,
 } from '@/utils/data-sources-utils';
-import ListItemButton from '@mui/material/ListItemButton';
-import Button from '@mui/material/Button';
-import { Popover } from '@/common/components/popover';
-import List from '@mui/material/List';
-import { Themable } from '@/theme-provider/types';
-import { useThemeContext } from '@/theme-provider';
-import { getSlightlyDifferentColor } from '@/utils/color';
-import { ElementStates } from '@/types';
-import { getElementStateColor } from '@/theme-provider/utils';
 
 export type DataSourceSelectorProps = {
   dataSources: DataSource[];

@@ -1,8 +1,10 @@
-import { renderHook, act } from '@testing-library/react';
-import { useEditModeToolbar } from './use-edit-mode-toolbar';
-import { WidgetsPanelLayout } from '@/models';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { act, renderHook } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { WidgetsPanelLayout } from '@/models';
+
+import { useEditModeToolbar } from './use-edit-mode-toolbar';
 
 // Mock functions
 const mockOnApply = vi.fn();

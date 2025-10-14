@@ -1,10 +1,18 @@
-import { describe, test, expect, vi } from 'vitest';
-import { areaHighchartsOptionsBuilder } from './highcharts-options-builder';
-import { BuildContext } from '../../../../types';
-import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
-import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
-import { CompleteThemeSettings } from '@/types';
 import { TFunction } from '@sisense/sdk-common';
+import omit from 'lodash-es/omit';
+import { describe, expect, test, vi } from 'vitest';
+
+import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
+import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { CompleteThemeSettings } from '@/types';
+
+import { BuildContext } from '../../../../types';
+// Import mocked functions
+import { getLegacyCartesianChartOptions } from '../../../helpers/highchart-options/get-legacy-cartesian-chart-options';
+import { getBasicCartesianLegend } from '../../../helpers/highchart-options/legend';
+import { getBasicCartesianTooltip } from '../../../helpers/highchart-options/tooltip';
+import { getAxes } from './axes';
+import { areaHighchartsOptionsBuilder } from './highcharts-options-builder';
 
 // Mock the dependencies
 vi.mock('../../../helpers/highchart-options/get-legacy-cartesian-chart-options', () => ({
@@ -30,13 +38,6 @@ vi.mock('lodash-es/omit', () => ({
 vi.mock('@/utils/__development-utils__/highcharts-options-builder-collector', () => ({
   withMethodsInputOutputCollection: vi.fn(() => (target: any) => target),
 }));
-
-// Import mocked functions
-import { getLegacyCartesianChartOptions } from '../../../helpers/highchart-options/get-legacy-cartesian-chart-options';
-import { getBasicCartesianLegend } from '../../../helpers/highchart-options/legend';
-import { getBasicCartesianTooltip } from '../../../helpers/highchart-options/tooltip';
-import { getAxes } from './axes';
-import omit from 'lodash-es/omit';
 
 describe('areaHighchartsOptionsBuilder', () => {
   const createMockBuildContext = (
@@ -72,8 +73,7 @@ describe('areaHighchartsOptionsBuilder', () => {
     } as CartesianChartDataOptionsInternal,
     designOptions: {
       stackType,
-      showTotal,
-      totalLabelRotation: 0,
+      totalLabels: { enabled: showTotal, rotation: 0 },
       seriesLabels: {},
       legend: {
         enabled: true,

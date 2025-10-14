@@ -1,12 +1,14 @@
-import { describe, test, expect, vi } from 'vitest';
-import { withStacking } from './stacking';
-import { BuildContext } from '../../../../types';
-import { StackableChartTypes } from '../../types';
-import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { TFunction } from '@sisense/sdk-common';
+import { describe, expect, test, vi } from 'vitest';
+
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
 import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
+import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { CompleteThemeSettings, SeriesLabels } from '@/types';
-import { TFunction } from '@sisense/sdk-common';
+
+import { BuildContext } from '../../../../types';
+import { StackableChartTypes } from '../../types';
+import { withStacking } from './stacking';
 
 // Mock the dependencies
 vi.mock('@/chart-options-processor/translations/number-format-config', () => ({
@@ -58,8 +60,10 @@ describe('stacking', () => {
       } as CartesianChartDataOptionsInternal,
       designOptions: {
         stackType,
-        showTotal,
-        totalLabelRotation,
+        totalLabels: {
+          enabled: showTotal,
+          rotation: totalLabelRotation,
+        },
         seriesLabels,
         legend: {
           enabled: true,
@@ -205,38 +209,6 @@ describe('stacking', () => {
         expect(result[1].stackLabels?.enabled).toBe(true);
         expect(result[1].stackLabels?.rotation).toBe(45);
         expect((result[1].stackLabels as any)?.formatter).toBeDefined();
-      });
-
-      test('should not show total when seriesLabels is undefined', () => {
-        // Create context with explicit undefined seriesLabels
-        const ctx: BuildContext<StackableChartTypes> = {
-          ...createMockBuildContext('stacked', true, 0),
-          designOptions: {
-            ...createMockBuildContext('stacked', true, 0).designOptions, // Explicitly set to undefined
-          },
-        };
-        const basicAxisSettings = createMockAxisSettings();
-        const result = withStacking(ctx)(basicAxisSettings);
-
-        expect(result[0].stackLabels?.enabled).toBe(false);
-        expect(result[1].stackLabels?.enabled).toBe(false);
-      });
-
-      test('should not show total when seriesLabels is false', () => {
-        const ctx: BuildContext<StackableChartTypes> = {
-          ...createMockBuildContext('stacked', true, 0),
-          designOptions: {
-            ...createMockBuildContext('stacked', true, 0).designOptions,
-            seriesLabels: {
-              enabled: false,
-            }, // Explicitly set to false
-          },
-        };
-        const basicAxisSettings = createMockAxisSettings();
-        const result = withStacking(ctx)(basicAxisSettings);
-
-        expect(result[0].stackLabels?.enabled).toBe(false);
-        expect(result[1].stackLabels?.enabled).toBe(false);
       });
 
       test('should not show total when seriesLabels is provided but showTotal is false', () => {

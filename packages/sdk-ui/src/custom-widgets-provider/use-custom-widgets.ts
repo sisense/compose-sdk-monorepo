@@ -1,4 +1,5 @@
-import { useContext, useCallback } from 'react';
+import { useCallback, useContext } from 'react';
+
 import { CustomWidgetsContext } from './custom-widgets-context';
 import { CustomWidgetComponent } from './types';
 

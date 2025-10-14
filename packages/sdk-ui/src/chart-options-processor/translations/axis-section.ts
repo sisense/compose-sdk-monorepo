@@ -1,6 +1,7 @@
-import { TextStyle } from './types';
 import { DateLevels } from '@sisense/sdk-data';
+
 import { CategoricalXValues } from '../../chart-data/types';
+import { TextStyle } from './types';
 
 export type Axis = {
   enabled?: boolean;
@@ -79,12 +80,22 @@ export type AxisSettings = {
 };
 
 export type StackLabel = {
-  style: TextStyle;
-  crop: boolean;
-  allowOverlap: boolean;
-  enabled: boolean;
-  rotation: number;
-  labelrank: number;
+  style?: TextStyle;
+  borderColor?: string;
+  borderRadius?: number;
+  borderWidth?: number;
+  backgroundColor?: string;
+  align?: 'center' | 'left' | 'right';
+  textAlign?: 'center' | 'left' | 'right';
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  animation?: {
+    defer?: number;
+  };
+  crop?: boolean;
+  allowOverlap?: boolean;
+  enabled?: boolean;
+  rotation?: number;
+  labelrank?: number;
   x?: number;
   y?: number;
 };

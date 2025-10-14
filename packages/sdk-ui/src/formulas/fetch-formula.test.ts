@@ -1,7 +1,7 @@
 /* eslint-disable vitest/no-conditional-expect */
 import { ClientApplication } from '../app/client-application';
-import { fetchFormula, fetchFormulaByOid } from './fetch-formula';
 import { translation } from './../translation/resources/en';
+import { fetchFormula, fetchFormulaByOid } from './fetch-formula';
 
 const formulaParamsMock = {
   name: 'mock formula',

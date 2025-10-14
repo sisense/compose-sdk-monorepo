@@ -1,5 +1,6 @@
+import React, { JSX } from 'react';
+
 import classNames from 'classnames';
-import React from 'react';
 
 import style from './LazyLoader.module.scss';
 

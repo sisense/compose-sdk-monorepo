@@ -1,13 +1,14 @@
 /** @vitest-environment jsdom */
-
+import { trackProductEvent } from '@sisense/sdk-tracking';
 import { renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
-import { trackProductEvent } from '@sisense/sdk-tracking';
-import { useGetDashboardModel } from './use-get-dashboard-model';
-import { getDashboardModel } from './get-dashboard-model';
-import { useSisenseContext } from '../../sisense-context/sisense-context';
-import { type ClientApplication } from '../../app/client-application';
+
 import { dashboardModelTranslator } from '@/models';
+
+import { type ClientApplication } from '../../app/client-application';
+import { useSisenseContext } from '../../sisense-context/sisense-context';
+import { getDashboardModel } from './get-dashboard-model';
+import { useGetDashboardModel } from './use-get-dashboard-model';
 
 vi.mock('@sisense/sdk-tracking', async () => {
   const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(

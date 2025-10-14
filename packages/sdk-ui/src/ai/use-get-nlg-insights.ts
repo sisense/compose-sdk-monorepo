@@ -1,8 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
-import { withTracking } from '@/decorators/hook-decorators';
-import { useChatApi } from './api/chat-api-provider';
 import {
   Attribute,
   convertJaqlDataSource,
@@ -13,9 +10,14 @@ import {
   JaqlDataSource,
   Measure,
 } from '@sisense/sdk-data';
+import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
+import { useQuery } from '@tanstack/react-query';
+
+import { withTracking } from '@/decorators/hook-decorators';
+
+import { useChatApi } from './api/chat-api-provider';
 import { GetNlgInsightsRequest } from './api/types';
 import { GetNlgInsightsProps } from './get-nlg-insights';
-import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
 
 /**
  * Parameters for {@link useGetNlgInsights} hook.

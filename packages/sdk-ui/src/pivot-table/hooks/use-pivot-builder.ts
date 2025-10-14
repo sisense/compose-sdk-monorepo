@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+
 import { PivotBuilder, PivotClient } from '@sisense/sdk-pivot-client';
 
 /**

@@ -1,18 +1,19 @@
-import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { TreemapChartDesignOptions } from '../design-options';
-import { CompleteThemeSettings } from '../../../types';
 import Highcharts, {
-  OptionsLayoutAlgorithmValue,
-  PlotTreegraphLevelsDataLabelsOptions,
-  PointLabelObject,
-  PlotTreegraphLevelsOptions,
-  PlotTreemapOptions,
-  PlotTreemapLevelsDataLabelsOptions,
-  PlotTreegraphLevelsColorVariationOptions,
   Chart,
+  OptionsLayoutAlgorithmValue,
+  PlotTreegraphLevelsColorVariationOptions,
+  PlotTreegraphLevelsDataLabelsOptions,
+  PlotTreegraphLevelsOptions,
+  PlotTreemapLevelsDataLabelsOptions,
+  PlotTreemapOptions,
   Point,
+  PointLabelObject,
 } from '@sisense/sisense-charts';
+
+import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
+import { CompleteThemeSettings } from '../../../types';
 import { getDarkFactor, toColor } from '../../../utils/color';
+import { TreemapChartDesignOptions } from '../design-options';
 import { LayoutPointResult, ParentValues, TreemapLayoutAlgorithmContext } from './types';
 
 const LIGHT_COLOR = 'rgb(255, 255, 255)';

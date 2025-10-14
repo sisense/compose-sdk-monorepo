@@ -1,24 +1,27 @@
 import { type FunctionComponent, useMemo } from 'react';
-import { WidgetByIdProps, WidgetProps } from '../props.js';
+
+import { Filter, getFiltersArray } from '@sisense/sdk-data';
+import flow from 'lodash-es/flow';
+import isUndefined from 'lodash-es/isUndefined';
+import omitBy from 'lodash-es/omitBy';
+
+import { LoadingOverlay } from '@/common/components/loading-overlay.js';
+import { DashboardProps } from '@/dashboard/types.js';
+import { useComposedDashboardInternal } from '@/dashboard/use-composed-dashboard.js';
+import { useDashboardThemeInternal } from '@/dashboard/use-dashboard-theme.js';
+import { ThemeProvider } from '@/theme-provider/index.js';
+import { TranslatableError } from '@/translation/translatable-error.js';
+import { DrilldownOptions } from '@/types.js';
+import { FiltersMergeStrategy, mergeFiltersByStrategy } from '@/utils/filter-relations.js';
+import { Widget } from '@/widgets/widget.js';
+
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component.js';
 import {
   DashboardModel,
   dashboardModelTranslator,
   useGetDashboardModelInternal,
 } from '../models/index.js';
-import flow from 'lodash-es/flow';
-import { Widget } from '@/widgets/widget.js';
-import { useComposedDashboardInternal } from '@/dashboard/use-composed-dashboard.js';
-import { FiltersMergeStrategy, mergeFiltersByStrategy } from '@/utils/filter-relations.js';
-import { Filter, getFiltersArray } from '@sisense/sdk-data';
-import isUndefined from 'lodash-es/isUndefined';
-import omitBy from 'lodash-es/omitBy';
-import { DrilldownOptions } from '@/types.js';
-import { LoadingOverlay } from '@/common/components/loading-overlay.js';
-import { TranslatableError } from '@/translation/translatable-error.js';
-import { ThemeProvider } from '@/theme-provider/index.js';
-import { useDashboardThemeInternal } from '@/dashboard/use-dashboard-theme.js';
-import { DashboardProps } from '@/dashboard/types.js';
+import { WidgetByIdProps, WidgetProps } from '../props.js';
 
 /**
  * The WidgetById component, which is a thin wrapper on the {@link ChartWidget} component,

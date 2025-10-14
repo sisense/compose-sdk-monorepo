@@ -1,13 +1,13 @@
 import { ChartBuilder } from '../../../types';
-import { dataOptionsTranslators } from './data-options';
-import { dataTranslators } from './data';
-import { designOptionsTranslators } from './design-options';
 import {
   createHighchartsBasedChartRenderer,
   isHighchartsBasedChartRendererProps,
 } from '../../highcharts-based-chart-renderer/highcharts-based-chart-renderer';
-import { funnelHighchartsOptionsBuilder } from './highchart-options/highcharts-options-builder';
 import { getFunnelChartAlerts } from './alerts';
+import { dataTranslators } from './data';
+import { dataOptionsTranslators } from './data-options';
+import { designOptionsTranslators } from './design-options';
+import { funnelHighchartsOptionsBuilder } from './highchart-options/highcharts-options-builder';
 
 export const funnelChartBuilder: ChartBuilder<'funnel'> = {
   dataOptions: dataOptionsTranslators,

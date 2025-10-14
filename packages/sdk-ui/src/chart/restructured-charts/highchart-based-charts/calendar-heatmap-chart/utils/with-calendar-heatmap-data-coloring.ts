@@ -1,9 +1,10 @@
+import { getPaletteColor } from '@/chart-data-options/coloring/utils.js';
 import { createDataColoringFunction } from '@/chart-data/data-coloring/create-data-coloring-function';
 import { CompleteThemeSettings, DataColorOptions, RangeDataColorOptions } from '@/types';
-import { CalendarHeatmapChartData, CalendarHeatmapDataValue } from '../data.js';
 import { scaleBrightness } from '@/utils/color/color-interpolation.js';
-import { getPaletteColor } from '@/chart-data-options/coloring/utils.js';
+
 import { CALENDAR_HEATMAP_COLORS } from '../constants.js';
+import { CalendarHeatmapChartData, CalendarHeatmapDataValue } from '../data.js';
 
 /**
  * Returns the default color options for calendar heatmap chart

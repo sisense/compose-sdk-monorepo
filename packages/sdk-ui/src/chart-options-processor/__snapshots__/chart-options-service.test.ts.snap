@@ -3375,10 +3375,10 @@ exports[`highchartsOptionsService - cartesian charts > labels > should prepare c
   {
     "allowOverlap": false,
     "crop": true,
-    "enabled": false,
+    "enabled": true,
     "formatter": [Function],
     "labelrank": 99999,
-    "rotation": 0,
+    "rotation": 45,
     "style": {
       "fontSize": "13px",
       "fontWeight": "bold",
@@ -3397,10 +3397,10 @@ exports[`highchartsOptionsService - cartesian charts > labels > should prepare c
   {
     "allowOverlap": false,
     "crop": true,
-    "enabled": false,
+    "enabled": true,
     "formatter": [Function],
     "labelrank": 99999,
-    "rotation": 0,
+    "rotation": 90,
     "style": {
       "fontSize": "13px",
       "fontWeight": "bold",
@@ -3419,7 +3419,7 @@ exports[`highchartsOptionsService - cartesian charts > labels > should prepare c
   {
     "allowOverlap": false,
     "crop": true,
-    "enabled": false,
+    "enabled": true,
     "formatter": [Function],
     "labelrank": 99999,
     "rotation": 0,

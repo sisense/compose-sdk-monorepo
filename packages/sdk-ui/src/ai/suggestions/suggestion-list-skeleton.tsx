@@ -1,6 +1,7 @@
+import styled from '@emotion/styled';
+
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
-import styled from '@emotion/styled';
 
 const Row = styled.div<Themable>`
   width: 283px;

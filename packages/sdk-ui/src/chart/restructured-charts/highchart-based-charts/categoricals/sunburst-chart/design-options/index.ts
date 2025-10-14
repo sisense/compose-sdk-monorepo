@@ -1,6 +1,7 @@
 import { getSunburstChartDesignOptions } from '@/chart-options-processor/style-to-design-options-translator/translate-to-highcharts-options';
 import { type ChartStyleOptions } from '@/types';
-import type { SunburstChartStyleOptions, SunburstChartDesignOptions } from '../types';
+
+import type { SunburstChartDesignOptions, SunburstChartStyleOptions } from '../types';
 
 export const designOptionsTranslators = {
   translateStyleOptionsToDesignOptions: (

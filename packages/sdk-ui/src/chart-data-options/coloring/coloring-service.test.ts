@@ -1,10 +1,10 @@
-import {
-  getColoringServiceByColorOptions,
-  StaticColoringFunction,
-  AbsoluteColoringFunction,
-  RelativeColoringFunction,
-} from './coloring-service';
 import { DataColorOptions } from '../../types';
+import {
+  AbsoluteColoringFunction,
+  getColoringServiceByColorOptions,
+  RelativeColoringFunction,
+  StaticColoringFunction,
+} from './coloring-service';
 
 describe('getColoringServiceByColorOptions', () => {
   it('should return a coloring service for uniform color options', () => {

@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import {
   ComponentAdapter,
-  DashboardById as DashboardByIdPreact,
   type DashboardByIdConfig,
+  DashboardById as DashboardByIdPreact,
   type DashboardByIdProps as DashboardByIdPropsPreact,
 } from '@sisense/sdk-ui-preact';
 

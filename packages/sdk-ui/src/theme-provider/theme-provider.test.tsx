@@ -1,12 +1,14 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { ThemeProvider } from './theme-provider';
-import { ThemeSettings } from '../types';
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { useThemeContext } from './theme-context';
-import { useSisenseContext } from '../sisense-context/sisense-context';
-import { CompleteThemeSettings, getDefaultThemeSettings } from '..';
-import { getThemeSettingsByOid } from '../themes/theme-loader';
 import React from 'react';
+
+import { render, screen, waitFor } from '@testing-library/react';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
+import { CompleteThemeSettings, getDefaultThemeSettings } from '..';
+import { useSisenseContext } from '../sisense-context/sisense-context';
+import { getThemeSettingsByOid } from '../themes/theme-loader';
+import { ThemeSettings } from '../types';
+import { useThemeContext } from './theme-context';
+import { ThemeProvider } from './theme-provider';
 
 vi.mock('../themes/theme-loader', () => ({
   getThemeSettingsByOid: vi.fn(),

@@ -20,10 +20,8 @@ module.exports = {
       excludedFiles: ['**/*.config.{ts,js}', '**/*.workspace.{ts,js}', 'eslint-rules/**/*'],
       extends: ['@sisense/eslint-config/typescript/react', 'plugin:i18next/recommended'],
       rules: {
-        'simple-import-sort/imports': 'error',
-        'simple-import-sort/exports': 'error',
+        // Import sorting is now handled by Prettier
       },
-      plugins: ['simple-import-sort'],
       overrides: [
         {
           // https://stackoverflow.com/questions/66773897/react-using-typescript-dont-use-as-a-type
@@ -158,18 +156,6 @@ module.exports = {
           files: ['packages/sdk-ui/analytics-composer/**/*.{ts,tsx}'],
           rules: {
             'import/extensions': ['error', 'ignorePackages'],
-          },
-        },
-        {
-          // Temporarily disable import sorting for the sdk-ui and sdk-pivot-client packages
-          files: [
-            'packages/sdk-ui/**/*.{ts,js,tsx,jsx}',
-            'packages/sdk-pivot-client/**/*.{ts,js,tsx,jsx}',
-            'e2e/**/*.{ts,js,tsx,jsx}',
-          ],
-          rules: {
-            'simple-import-sort/imports': 'off',
-            'simple-import-sort/exports': 'off',
           },
         },
       ],

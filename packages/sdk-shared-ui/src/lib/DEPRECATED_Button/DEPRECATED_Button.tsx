@@ -1,6 +1,7 @@
+import React from 'react';
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 import { DEPRECATED_Icon } from '../DEPRECATED_Icon';
 import styles from './DEPRECATED_Button.module.scss';

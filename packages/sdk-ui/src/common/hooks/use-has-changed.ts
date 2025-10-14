@@ -1,4 +1,5 @@
 import isEqual from 'lodash-es/isEqual';
+
 import { usePrevious } from './use-previous';
 
 /**

@@ -1,4 +1,5 @@
 import type { Ref } from 'vue';
+
 import { useRefState } from './use-ref-state';
 
 type State = Record<string, unknown>;

@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useCallback, useMemo } from 'react';
-import last from 'lodash-es/last';
-import { type TFunction } from '@sisense/sdk-common';
-import { Attribute, Column, MembersFilter, filterFactory, MetadataTypes } from '@sisense/sdk-data';
 import { useTranslation } from 'react-i18next';
-import { StyledColumn, DrilldownSelection, DataPoint, ChartDataPoint } from '../../types.js';
-import { isSameAttribute } from '@/utils/filters.js';
-import { translateColumnToAttribute } from '@/chart-data-options/utils.js';
-import { Hierarchy } from '@/models';
-import { useSyncedState } from '@/common/hooks/use-synced-state.js';
 
-import './drilldown.scss';
+import { type TFunction } from '@sisense/sdk-common';
+import { Attribute, Column, filterFactory, MembersFilter, MetadataTypes } from '@sisense/sdk-data';
+import last from 'lodash-es/last';
+
+import { translateColumnToAttribute } from '@/chart-data-options/utils.js';
+import { useSyncedState } from '@/common/hooks/use-synced-state.js';
+import { Hierarchy } from '@/models';
 import { TranslatableError } from '@/translation/translatable-error.js';
+import { isSameAttribute } from '@/utils/filters.js';
+
+import { ChartDataPoint, DataPoint, DrilldownSelection, StyledColumn } from '../../types.js';
+import './drilldown.scss';
 
 type UseDrilldownCoreParams = {
   drilldownPaths?: (Attribute | Hierarchy)[];

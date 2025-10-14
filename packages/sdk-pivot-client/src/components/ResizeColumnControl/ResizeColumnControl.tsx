@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { RESIZE_CONTROL } from './classes.js';
 
 type Props = {

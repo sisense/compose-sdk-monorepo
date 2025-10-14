@@ -1,5 +1,6 @@
-import { createMarker, MarkerConfig, removeMarkers } from './markers';
 import * as Leaflet from 'leaflet';
+
+import { createMarker, MarkerConfig, removeMarkers } from './markers';
 
 describe('createMarker', () => {
   it('should create a Leaflet.CircleMarker with correct coordinates and style', () => {

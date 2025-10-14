@@ -1,39 +1,43 @@
 /* eslint-disable @typescript-eslint/no-shadow */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
+
 /* eslint-disable max-params */
+
 /* eslint-disable sonarjs/no-ignored-return */
-import { type SortDirection } from '../types';
-import {
-  getColumnsByName,
-  separateBy,
-  getIndexedRows,
-  orderBy,
-  getColumnByName,
-  getValue,
-  Column,
-  DataTable,
-  getValues,
-  groupBy,
-  selectColumns,
-  ColumnMeasure,
-  isBlurred,
-  Row,
-} from '../chart-data-processor/table-processor';
-import { rownumColumnName } from '../chart-data-processor/table-creators';
-import { SeriesValueData, CartesianChartData, CategoricalXValues } from './types';
+import { isNumber } from '@sisense/sdk-data';
+
 import {
   CartesianChartDataOptionsInternal,
   StyledColumn,
   StyledMeasureColumn,
 } from '../chart-data-options/types';
-import { isEnabled } from './utils';
-import { isNumber } from '@sisense/sdk-data';
+import { getDataOptionTitle } from '../chart-data-options/utils';
+import { rownumColumnName } from '../chart-data-processor/table-creators';
+import {
+  Column,
+  ColumnMeasure,
+  DataTable,
+  getColumnByName,
+  getColumnsByName,
+  getIndexedRows,
+  getValue,
+  getValues,
+  groupBy,
+  isBlurred,
+  orderBy,
+  Row,
+  selectColumns,
+  separateBy,
+} from '../chart-data-processor/table-processor';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from '../chart-options-processor/translations/number-format-config';
+import { type SortDirection } from '../types';
 import { seriesDataColoringFunction } from './data-coloring';
-import { getDataOptionTitle } from '../chart-data-options/utils';
+import { CartesianChartData, CategoricalXValues, SeriesValueData } from './types';
+import { isEnabled } from './utils';
 
 export const validateCartesianChartDataOptions = (
   chartDataOptions: CartesianChartDataOptionsInternal,

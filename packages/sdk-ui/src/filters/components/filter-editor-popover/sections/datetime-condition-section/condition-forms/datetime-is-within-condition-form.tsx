@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
 import { TFunction } from '@sisense/sdk-common';
 import {
   DateLevels,
@@ -8,16 +10,17 @@ import {
   Filter,
   filterFactory,
 } from '@sisense/sdk-data';
-import { Input, SingleSelect } from '../../../common/index.js';
-import { isRelativeDateFilterWithAnchor } from '../../../utils.js';
-import { useThemeContext } from '@/index-typedoc.js';
-import { DatetimeLimits } from '../../types.js';
-import styled from '@emotion/styled';
+
+import { useThemeContext } from '@/theme-provider/theme-context.js';
 import { Themable } from '@/theme-provider/types.js';
+import { createLevelAttribute } from '@/utils/create-level-attribute.js';
+
+import { Input, SingleSelect } from '../../../common/index.js';
 import { CalendarSelect } from '../../../common/select/calendar-select/calendar-select.js';
 import { CalendarSelectTypes } from '../../../common/select/calendar-select/types.js';
+import { isRelativeDateFilterWithAnchor } from '../../../utils.js';
 import { dateLevelGranularities as granularities } from '../../common/granularities';
-import { createLevelAttribute } from '@/utils/create-level-attribute.js';
+import { DatetimeLimits } from '../../types.js';
 
 const CountInput = styled(Input)<Themable>`
   width: 64px;

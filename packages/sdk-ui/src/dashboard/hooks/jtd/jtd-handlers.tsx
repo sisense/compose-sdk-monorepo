@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   Attribute,
   type Filter,
@@ -6,9 +7,20 @@ import {
   isMembersFilter,
   mergeFilters,
 } from '@sisense/sdk-data';
-import { TranslatableError } from '@/translation/translatable-error';
+
+import { OpenModalFn } from '@/common/components/modal/modal-context';
+import { JtdDashboard } from '@/dashboard/components/jtd-dashboard';
 import { WidgetProps } from '@/props.js';
-import { PivotTableDataPoint, DataPoint } from '@/types';
+import { TranslatableError } from '@/translation/translatable-error';
+import { DataPoint, PivotTableDataPoint } from '@/types';
+
+import {
+  filterByAllowedDimensions,
+  getFiltersFromDataPoint,
+  getFormulaContextFilters,
+  handleFormulaDuplicateFilters,
+} from './jtd-filters';
+import { isPivotClickHandlerActionable } from './jtd-formatters';
 import {
   isJumpTargetWithId,
   JtdActions,
@@ -18,15 +30,6 @@ import {
   JtdCoreData,
   JtdDataPointClickEvent,
 } from './jtd-types';
-import { OpenModalFn } from '@/common/components/modal/modal-context';
-import { JtdDashboard } from '@/dashboard/components/jtd-dashboard';
-import {
-  filterByAllowedDimensions,
-  getFiltersFromDataPoint,
-  getFormulaContextFilters,
-  handleFormulaDuplicateFilters,
-} from './jtd-filters';
-import { isPivotClickHandlerActionable } from './jtd-formatters';
 
 const noJumpTargetsError = 'jumpToDashboard.noJumpTargets';
 

@@ -1,18 +1,21 @@
 import React, { useMemo } from 'react';
+
 import styled from '@emotion/styled';
-import { HighchartsBasedChartRendererProps } from '../../highcharts-based-chart-renderer/highcharts-based-chart-renderer.js';
-import { CalendarPagination } from './calendar-pagination/index.js';
-import { CalendarHeatmapChartsGrid } from './calendar-heatmap-charts-grid.js';
-import { useCalendarHeatmapChartOptions, useCalendarHeatmapNavigation } from './hooks/index.js';
+
 import { ChartRendererProps } from '@/chart/types.js';
+import { useDateFormatter } from '@/common/hooks/useDateFormatter.js';
+import { useThemeContext } from '@/theme-provider/index.js';
+import { Themable } from '@/theme-provider/types.js';
+import { CalendarHeatmapViewType } from '@/types.js';
+
+import { HighchartsBasedChartRendererProps } from '../../highcharts-based-chart-renderer/highcharts-based-chart-renderer.js';
 import { isCalendarHeatmapChartDataOptionsInternal } from '../data-options';
 import { isCalendarHeatmapChartData } from '../data.js';
-import { CalendarHeatmapViewType } from '@/types.js';
+import { CalendarHeatmapChartsGrid } from './calendar-heatmap-charts-grid.js';
+import { CalendarPagination } from './calendar-pagination/index.js';
 import { calculateCalendarSize } from './helpers/sizing-helpers.js';
-import { useDateFormatter } from '@/common/hooks/useDateFormatter.js';
 import { getAvailableMonths, shouldUseShortMonthNames } from './helpers/view-helpers.js';
-import { Themable } from '@/theme-provider/types.js';
-import { useThemeContext } from '@/theme-provider/index.js';
+import { useCalendarHeatmapChartOptions, useCalendarHeatmapPagination } from './hooks/index.js';
 
 export const ChartRootContainer = styled.div<Themable>`
   display: flex;
@@ -54,22 +57,16 @@ export function CalendarHeatmap({
     return calculateCalendarSize(size, viewType);
   }, [size, viewType]);
 
+  const { currentMonth, setCurrentMonth } = useCalendarHeatmapPagination({
+    chartData,
+    startMonth: designOptions.pagination?.startMonth,
+  });
+
   // Get available months from data (with short names if chart is small)
   const availableMonths = useMemo(() => {
     const useShortNames = shouldUseShortMonthNames(chartSize);
-    return getAvailableMonths(chartData, dateFormatter, useShortNames);
-  }, [chartData, dateFormatter, chartSize]);
-
-  // Initialize navigation
-  const {
-    currentViewIndex,
-    goToFirstView,
-    goToPreviousView,
-    goToNextView,
-    goToLastView,
-    goToPreviousGroup,
-    goToNextGroup,
-  } = useCalendarHeatmapNavigation(availableMonths, viewType);
+    return getAvailableMonths(chartData, dateFormatter, useShortNames, currentMonth, viewType);
+  }, [chartData, dateFormatter, chartSize, currentMonth, viewType]);
 
   // Generate chart options
   const chartOptionsPerMonth = useCalendarHeatmapChartOptions({
@@ -77,7 +74,7 @@ export function CalendarHeatmap({
     dataOptions,
     designOptions,
     availableMonths,
-    currentViewIndex,
+    currentMonth,
     viewType,
     chartSize,
     eventHandlers: {
@@ -90,17 +87,13 @@ export function CalendarHeatmap({
 
   return (
     <ChartRootContainer theme={themeSettings}>
-      {availableMonths.length > 0 && (
+      {availableMonths.length > 0 && designOptions.pagination?.enabled && (
         <CalendarPagination
-          currentViewIndex={currentViewIndex}
+          value={currentMonth}
           availableMonths={availableMonths}
           viewType={viewType}
-          onGoToFirst={goToFirstView}
-          onGoToPrevious={goToPreviousView}
-          onGoToNext={goToNextView}
-          onGoToLast={goToLastView}
-          onGoToPreviousGroup={goToPreviousGroup}
-          onGoToNextGroup={goToNextGroup}
+          onChange={setCurrentMonth}
+          labelStyle={designOptions.pagination?.style}
         />
       )}
 
@@ -108,7 +101,7 @@ export function CalendarHeatmap({
         <CalendarHeatmapChartsGrid
           monthCharts={chartOptionsPerMonth}
           availableMonths={availableMonths}
-          currentViewIndex={currentViewIndex}
+          currentMonth={currentMonth}
           viewType={viewType}
           monthLabels={designOptions.monthLabels}
           size={size}

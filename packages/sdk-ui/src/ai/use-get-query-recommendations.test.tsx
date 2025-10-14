@@ -1,8 +1,10 @@
-import { server } from '@/__mocks__/msw';
 import { renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { AiTestWrapper } from './__mocks__';
+
+import { server } from '@/__mocks__/msw';
 import { ChartWidgetProps, TableWidgetProps } from '@/props';
+
+import { AiTestWrapper } from './__mocks__';
 import {
   MOCK_QUERY_REC_PARAMS,
   MOCK_QUERY_REC_RESPONSE,

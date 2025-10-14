@@ -32,7 +32,31 @@ true
 
 Style configuration for calendar day numbers in cells
 
+::: warning Deprecated
+Please use `textStyle` instead
+:::
+
 > #### `style.color`
+>
+> **color**?: `"contrast"` \| `string`
+>
+> Color of the labels text
+>
+> The "contrast" color applies the maximum contrast between the background and the text
+>
+>
+
+***
+
+### `textStyle`
+
+**textStyle**?: `Omit`\< [`TextStyle`](type-alias.TextStyle.md), `"color"` \> & \{
+  `color`: `"contrast"` \| `string`;
+ }
+
+Style configuration for calendar day numbers in cells
+
+> #### `textStyle.color`
 >
 > **color**?: `"contrast"` \| `string`
 >

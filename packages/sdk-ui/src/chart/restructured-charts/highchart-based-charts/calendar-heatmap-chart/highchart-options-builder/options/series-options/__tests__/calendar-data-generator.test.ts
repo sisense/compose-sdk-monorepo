@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
-import { generateCalendarChartData } from '../calendar-data-generator.js';
+import { describe, expect, it, vi } from 'vitest';
+
 import { CalendarHeatmapChartData } from '../../../../data.js';
 import { CalendarDayOfWeekEnum } from '../../../../utils/index.js';
+import { generateCalendarChartData } from '../calendar-data-generator.js';
 
 describe('Calendar Data Generator', () => {
   const mockDateFormatter = vi.fn((date: Date, format: string) => {

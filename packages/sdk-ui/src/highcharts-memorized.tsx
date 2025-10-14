@@ -1,13 +1,15 @@
 import { memo, useCallback } from 'react';
-import isEqualWith from 'lodash-es/isEqualWith';
-import isFunction from 'lodash-es/isFunction';
-import cloneDeep from 'lodash-es/cloneDeep';
+
 import Highcharts from '@sisense/sisense-charts';
 import HighchartsReact from 'highcharts-react-official';
+import cloneDeep from 'lodash-es/cloneDeep';
+import isEqualWith from 'lodash-es/isEqualWith';
+import isFunction from 'lodash-es/isFunction';
+
 import { HighchartsEventOptions } from './chart-options-processor/apply-event-handlers';
 import {
-  HighchartsOptionsInternal,
   HighchartsOptions,
+  HighchartsOptionsInternal,
   SeriesType,
 } from './chart-options-processor/chart-options-service';
 import { usePrevious } from './common/hooks/use-previous';

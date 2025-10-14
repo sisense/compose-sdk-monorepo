@@ -1,6 +1,7 @@
+import { DataType } from '@sisense/sdk-data';
+
 import { dashboardModelTranslator } from '@/models';
 import { WidgetStyle } from '@/widget-by-id/types';
-import { DataType } from '@sisense/sdk-data';
 
 describe('DashboardModel', () => {
   it('should create a new dashboard model with minimum of arguments', async () => {

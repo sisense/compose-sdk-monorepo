@@ -1,11 +1,12 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { Dashboard as DashboardPreact } from '@sisense/sdk-ui-preact';
 import type {
-  DashboardProps as DashboardPropsPreact,
   DashboardConfig,
   DashboardFiltersPanelConfig,
+  DashboardProps as DashboardPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 import type { WidgetProps } from '../widgets';
 

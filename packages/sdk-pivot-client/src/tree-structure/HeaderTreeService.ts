@@ -1,6 +1,6 @@
 import { debug } from '../utils/index.js';
-import { TreeServiceI, TreeNode, TreeNodeMetadata } from './types.js';
 import { CloneFn, LoggerI } from '../utils/types.js';
+import { TreeNode, TreeNodeMetadata, TreeServiceI } from './types.js';
 
 export class HeaderTreeService implements TreeServiceI {
   logger: LoggerI;

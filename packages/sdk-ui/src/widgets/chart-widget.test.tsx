@@ -1,19 +1,21 @@
 /** @vitest-environment jsdom */
-import { render } from '@testing-library/react';
-import { measureFactory } from '@sisense/sdk-data';
 import { type TFunction } from '@sisense/sdk-common';
+import { measureFactory } from '@sisense/sdk-data';
+import { HttpClient, SsoAuthenticator } from '@sisense/sdk-rest-client';
+import { render } from '@testing-library/react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import get from 'lodash-es/get';
-import { mockChartWidgetPropsForTable, mockResolvedQuery } from './__mocks__/mocks';
-import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
-import { ClientApplication } from '../app/client-application';
-import { HttpClient, SsoAuthenticator } from '@sisense/sdk-rest-client';
-import { ChartWidget } from './chart-widget';
-import { executeQueryMock } from '@/query/__mocks__/execute-query';
-import * as DM from '../__test-helpers__/sample-ecommerce';
+
 import { MenuProvider } from '@/common/components/menu/menu-provider';
-import { translation } from '@/translation/resources/en';
+import { executeQueryMock } from '@/query/__mocks__/execute-query';
 import { SisenseContextPayload } from '@/sisense-context/sisense-context';
+import { translation } from '@/translation/resources/en';
+
+import * as DM from '../__test-helpers__/sample-ecommerce';
+import { ClientApplication } from '../app/client-application';
+import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
+import { mockChartWidgetPropsForTable, mockResolvedQuery } from './__mocks__/mocks';
+import { ChartWidget } from './chart-widget';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');

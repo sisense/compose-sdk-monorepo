@@ -1,10 +1,12 @@
-import { useStateWithHistory } from '@/common/hooks/use-state-with-history';
-import { WidgetsPanelLayout } from '@/models';
-import styled from '@emotion/styled';
 import { SVGProps, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useThemeContext } from '@/theme-provider';
+
+import styled from '@emotion/styled';
+
 import { Button } from '@/common/components/button';
+import { useStateWithHistory } from '@/common/hooks/use-state-with-history';
+import { WidgetsPanelLayout } from '@/models';
+import { useThemeContext } from '@/theme-provider';
 
 const ToolbarContainer = styled.div`
   display: flex;

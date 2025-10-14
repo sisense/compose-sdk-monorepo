@@ -1,5 +1,4 @@
 /// <reference lib="dom" />
-
 import { normalizeUrl } from '@sisense/sdk-common';
 
 import { BaseAuthenticator } from './base-authenticator.js';

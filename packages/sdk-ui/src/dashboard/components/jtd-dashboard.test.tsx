@@ -1,9 +1,12 @@
 import React from 'react';
+
 import { render, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { JtdDashboard } from './jtd-dashboard';
-import { DashboardConfig } from '@/dashboard/types';
 import deepMerge from 'ts-deepmerge';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { DashboardConfig } from '@/dashboard/types';
+
+import { JtdDashboard } from './jtd-dashboard';
 
 // Mock the Dashboard component to capture props
 vi.mock('@/dashboard/dashboard', () => ({

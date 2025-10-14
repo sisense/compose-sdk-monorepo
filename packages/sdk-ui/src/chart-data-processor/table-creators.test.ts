@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { DataTable, getValue } from './table-processor';
 import {
   createDataTableFromData,
   createSortableFromColumnsRows,
@@ -7,6 +6,7 @@ import {
   TableColumn,
   TableData,
 } from './table-creators';
+import { DataTable, getValue } from './table-processor';
 
 const tableData: TableData = {
   columns: [

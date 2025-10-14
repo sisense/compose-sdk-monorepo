@@ -1,8 +1,9 @@
+import { withPolarSpecificAxisSettings } from '@/chart-options-processor/cartesian/utils/axis/axis-transformers';
 import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
+
 import { BuildContext } from '../../../types';
 import { getCartesianXAxis } from '../../helpers/highchart-options/axis';
 import { getBasicYAxisSettings } from '../../helpers/highchart-options/y-axis';
-import { withPolarSpecificAxisSettings } from '@/chart-options-processor/cartesian/utils/axis/axis-transformers';
 
 export function getAxes(ctx: BuildContext<'polar'>): {
   xAxis: AxisSettings[];

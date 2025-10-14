@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { isNumber, isDatetime } from '@sisense/sdk-data';
+import { isDatetime, isNumber } from '@sisense/sdk-data';
 import isObject from 'lodash-es/isObject';
-import { Row, Column, Value, ComparableData, CompareValue } from './table-processor';
-import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';
+
 import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
+
+import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';
+import { Column, ComparableData, CompareValue, Row, Value } from './table-processor';
 
 export const createCompareValue = (
   displayValue: string | undefined | null,

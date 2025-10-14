@@ -5,6 +5,7 @@ export {
   useComposedDashboardInternal,
   type ComposableDashboardProps,
   type UseComposedDashboardOptions,
+  type ComposedDashboardResult,
 } from './use-composed-dashboard';
 export { useDashboardTheme, type DashboardThemeParams } from './use-dashboard-theme';
 

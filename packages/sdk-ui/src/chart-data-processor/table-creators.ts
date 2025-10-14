@@ -1,14 +1,22 @@
 /* eslint-disable security/detect-object-injection */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable sonarjs/no-identical-functions */
 import { Cell, Data, isDatetime } from '@sisense/sdk-data';
+
+import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
+
 import { createCompareValue } from './row-comparator';
 import { ComparableData, DataTable } from './table-processor';
-import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
 
 // for item table, index of original source of data is stored
 // in a column, and it is not changed by filtering or sorting

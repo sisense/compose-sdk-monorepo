@@ -1,15 +1,16 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { Widget as WidgetPreact } from '@sisense/sdk-ui-preact';
 import type {
   ChartWidgetProps,
-  PivotTableWidgetProps as PivotTableWidgetPropsPreact,
   CustomWidgetProps,
+  PivotTableWidgetProps as PivotTableWidgetPropsPreact,
   SoftUnion,
   TextWidgetProps,
   WidgetProps as WidgetPropsPreact,
   WithCommonWidgetProps,
 } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 export { WithCommonWidgetProps, TextWidgetProps, CustomWidgetProps };

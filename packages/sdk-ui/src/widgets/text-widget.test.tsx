@@ -1,8 +1,10 @@
 /** @vitest-environment jsdom */
-import { describe, it, expect, vi } from 'vitest';
-import { render, fireEvent } from '@testing-library/react';
-import { isTextWidgetProps, TextWidget } from './text-widget';
+import { fireEvent, render } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+
 import { TextWidgetProps } from '@/props';
+
+import { isTextWidgetProps, TextWidget } from './text-widget';
 
 vi.mock('@/decorators/component-decorators/as-sisense-component', () => ({
   asSisenseComponent: () => (Component: any) => Component,

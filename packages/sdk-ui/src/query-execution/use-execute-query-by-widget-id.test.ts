@@ -1,24 +1,25 @@
 /** @vitest-environment jsdom */
-import { renderHook, waitFor } from '@testing-library/react';
-import type { Mock } from 'vitest';
-import cloneDeep from 'lodash-es/cloneDeep';
 import {
-  QueryResultData,
-  filterFactory,
-  DimensionalAttribute,
   BaseJaql,
+  DimensionalAttribute,
+  Filter,
+  filterFactory,
   FilterJaql,
   IncludeMembersFilterJaql,
-  Filter,
   PivotQueryResultData,
+  QueryResultData,
 } from '@sisense/sdk-data';
-import { useExecuteQueryByWidgetId, useParamsChanged } from './use-execute-query-by-widget-id';
-import { executeQuery, executePivotQuery } from '../query/execute-query.js';
+import { trackProductEvent } from '@sisense/sdk-tracking';
+import { renderHook, waitFor } from '@testing-library/react';
+import cloneDeep from 'lodash-es/cloneDeep';
+import type { Mock } from 'vitest';
+
 import { ClientApplication } from '../app/client-application.js';
+import { executePivotQuery, executeQuery } from '../query/execute-query.js';
 import { useSisenseContext } from '../sisense-context/sisense-context.js';
 import { WidgetDashboardFilterMode, WidgetDto } from '../widget-by-id/types.js';
-import { trackProductEvent } from '@sisense/sdk-tracking';
 import { ExecuteQueryByWidgetIdParams } from './types';
+import { useExecuteQueryByWidgetId, useParamsChanged } from './use-execute-query-by-widget-id';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');

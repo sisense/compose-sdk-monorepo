@@ -1,24 +1,36 @@
 import { isDatetime } from '@sisense/sdk-data';
-import { ChartType, CompleteThemeSettings } from '../../../../types';
-import { CartesianChartData } from '../../../../chart-data/types';
+
 import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types';
+import { CartesianChartData } from '../../../../chart-data/types';
+import { ChartType, CompleteThemeSettings, TotalLabels } from '../../../../types';
+import { Stacking } from '../../../chart-options-service';
 import {
-  StackableChartDesignOptions,
-  PolarChartDesignOptions,
-} from '../../../translations/design-options';
-import { ChartDesignOptions } from '../../../translations/types';
+  applyNumberFormatToPlotBands,
+  getCategoriesIndexMapAndPlotBands,
+} from '../../../plot-bands';
 import {
   Axis,
-  getCategoricalCompareValue,
-  AxisSettings,
   AxisMinMax,
+  AxisSettings,
+  getCategoricalCompareValue,
   PlotBand,
 } from '../../../translations/axis-section';
 import {
+  PolarChartDesignOptions,
+  StackableChartDesignOptions,
+} from '../../../translations/design-options';
+import {
+  addStackingIfSpecified,
+  autoCalculateYAxisMinMax,
+  AxisClipped,
+  determineYAxisOptions,
+} from '../../../translations/translations-to-highcharts';
+import { ChartDesignOptions } from '../../../translations/types';
+import {
+  getXAxisDatetimeSettings,
   getXAxisSettings,
   getYAxisSettings,
   getYClippings,
-  getXAxisDatetimeSettings,
   withChartSpecificAxisSettings,
   withPolarSpecificAxisSettings,
   withStacking,
@@ -26,17 +38,6 @@ import {
 
 // Re-export transformer functions for external use
 export { withChartSpecificAxisSettings, withPolarSpecificAxisSettings, withStacking };
-import {
-  determineYAxisOptions,
-  autoCalculateYAxisMinMax,
-  addStackingIfSpecified,
-  AxisClipped,
-} from '../../../translations/translations-to-highcharts';
-import {
-  applyNumberFormatToPlotBands,
-  getCategoriesIndexMapAndPlotBands,
-} from '../../../plot-bands';
-import { Stacking } from '../../../chart-options-service';
 
 // ============================================================================
 // TYPES
@@ -84,7 +85,7 @@ export interface BuildXAxisSettingsParams {
  */
 export interface StackingMeta {
   stacking?: Stacking;
-  showTotal?: boolean;
+  totalLabels?: TotalLabels;
 }
 
 /**
@@ -299,7 +300,6 @@ export const buildYAxisSettings = (
   primaryMinMax: AxisMinMax,
   secondaryMinMax: AxisMinMax | undefined,
   stackingMeta: StackingMeta,
-  totalLabelRotation: number,
   dataOptions: CartesianChartDataOptionsInternal,
   themeSettings?: CompleteThemeSettings,
 ): YAxisSettingsResult => {
@@ -315,8 +315,7 @@ export const buildYAxisSettings = (
   return {
     settings: withStacking({
       stacking: stackingMeta.stacking,
-      showTotal: stackingMeta.showTotal ?? false,
-      totalLabelRotation,
+      totalLabels: stackingMeta.totalLabels,
       dataOptions,
       themeSettings,
     })(basicSettings),

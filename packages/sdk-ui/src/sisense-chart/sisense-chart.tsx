@@ -1,30 +1,30 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChartType } from '@/types';
-import { useThemeContext } from '@/theme-provider';
-import { ChartRendererProps } from '@/chart/types';
-import { applyEventHandlersToChart } from '@/chart-options-processor/apply-event-handlers';
 
+import AlertBox from '@/alert-box/alert-box';
+import { applyEventHandlersToChart } from '@/chart-options-processor/apply-event-handlers';
 import {
+  HighchartsOptions,
   HighchartsOptionsInternal,
   highchartsOptionsService,
-  HighchartsOptions,
 } from '@/chart-options-processor/chart-options-service';
-import { applyThemeToChart } from '@/chart-options-processor/theme-option-service';
 import { applyCommonHighchartsOptions } from '@/chart-options-processor/common-highcharts-option-service';
+import { applyThemeToChart } from '@/chart-options-processor/theme-option-service';
 import {
   BOXPLOT_CHART_TYPES,
   CARTESIAN_CHART_TYPES,
   CATEGORICAL_CHART_TYPES,
-  SCATTER_CHART_TYPES,
   RANGE_CHART_TYPES,
+  SCATTER_CHART_TYPES,
 } from '@/chart-options-processor/translations/types';
-
-import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { formatDateValue } from '@/query/date-formats';
-import AlertBox from '@/alert-box/alert-box';
+import { ChartRendererProps } from '@/chart/types';
 import { HighchartsReactMemoized } from '@/highcharts-memorized';
+import { formatDateValue } from '@/query/date-formats';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { useThemeContext } from '@/theme-provider';
+import { ChartType } from '@/types';
+
 import { SisenseChartProps, SisenseChartType } from './types';
 
 const defaultOnBeforeRender = (options: HighchartsOptions) => options;

@@ -1,11 +1,13 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
-import { RestApi } from '../../api/rest-api';
-import { fetchWidgetDtoModel } from '../../widget-by-id/use-fetch-widget-dto-model';
-import { WidgetModel } from './widget-model';
-import { CompleteThemeSettings } from '../../types';
+
 import { AppSettings } from '@/app/settings/settings';
 import { widgetModelTranslator } from '@/models/widget/';
 import { TranslatableError } from '@/translation/translatable-error';
+
+import { RestApi } from '../../api/rest-api';
+import { CompleteThemeSettings } from '../../types';
+import { fetchWidgetDtoModel } from '../../widget-by-id/use-fetch-widget-dto-model';
+import { WidgetModel } from './widget-model';
 
 /**
  * Retrieves a widget model by its OID.

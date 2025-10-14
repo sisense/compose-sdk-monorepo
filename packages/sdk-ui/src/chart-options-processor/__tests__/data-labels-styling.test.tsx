@@ -1,15 +1,16 @@
 /** @vitest-environment jsdom */
+import { Data } from '@sisense/sdk-data';
 import { render } from '@testing-library/react';
 import { vi } from 'vitest';
-import { data, attributes, measures } from '../../__mocks__/dataMocks';
-import { HighchartsOptions } from '../chart-options-service';
-import { LineChart } from '../../line-chart';
-import { ColumnChart } from '../../column-chart';
-import { BarChart } from '../../bar-chart';
+
+import { attributes, data, measures } from '../../__mocks__/dataMocks';
 import { AreaChart } from '../../area-chart';
 import { AreaRangeChart } from '../../area-range-chart';
+import { BarChart } from '../../bar-chart';
+import { ColumnChart } from '../../column-chart';
+import { LineChart } from '../../line-chart';
 import { PolarChart } from '../../polar-chart';
-import { Data } from '@sisense/sdk-data';
+import { HighchartsOptions } from '../chart-options-service';
 
 // Mock data for testing
 const mockData: Data = data;

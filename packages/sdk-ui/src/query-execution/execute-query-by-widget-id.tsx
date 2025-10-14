@@ -1,6 +1,7 @@
-import React, { useState, type FunctionComponent } from 'react';
-import { ExecuteQueryByWidgetIdProps } from '../props';
+import React, { type FunctionComponent, useState } from 'react';
+
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
+import { ExecuteQueryByWidgetIdProps } from '../props';
 import { useExecuteQueryByWidgetIdInternal } from './use-execute-query-by-widget-id';
 
 /**

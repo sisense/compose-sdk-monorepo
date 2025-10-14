@@ -1,7 +1,9 @@
-import { useThemeContext } from '@/theme-provider';
-import { Themable } from '@/theme-provider/types';
 import styled from '@emotion/styled';
 import Color from 'colorjs.io';
+
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+
 import ScrollToBottomIcon from '../icons/scroll-to-bottom-icon';
 
 const getRgba = (color: string, alpha: number) => {

@@ -1,6 +1,6 @@
 import { cloneObject } from '../../utils/index.js';
-import { TreeNode } from '../types.js';
 import { CloneFn } from '../../utils/types.js';
+import { TreeNode } from '../types.js';
 
 class ChunksList<T> extends Array<T> {
   isHandled?: boolean;

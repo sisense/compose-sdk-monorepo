@@ -1,49 +1,17 @@
 import {
-  MetadataTypes,
+  BaseJaql,
+  createDimensionalElementFromJaql,
   DimensionalAttribute,
   DimensionalCalculatedMeasure,
-  Sort,
-  BaseJaql,
-  PivotJaql,
-  JaqlDataSource,
   getSortType,
-  createDimensionalElementFromJaql,
+  JaqlDataSource,
+  MetadataTypes,
+  PivotJaql,
+  Sort,
 } from '@sisense/sdk-data';
-import {
-  CartesianChartDataOptions,
-  CategoricalChartDataOptions,
-  ScatterChartDataOptions,
-  IndicatorChartDataOptions,
-  StyledMeasureColumn,
-  StyledColumn,
-  NumberFormatConfig,
-  Color,
-} from '../types.js';
-import {
-  CartesianWidgetType,
-  CategoricalWidgetType,
-  Panel,
-  PanelItem,
-  FusionWidgetType,
-  NumericMask,
-  CurrencyPosition,
-  DatetimeMask,
-  WidgetStyle,
-  BoxplotWidgetStyle,
-  PivotWidgetStyle,
-} from './types.js';
-import {
-  createValueToColorMap,
-  createValueColorOptions,
-  createValueToColorMultiColumnsMap,
-  createPanelColorFormat,
-} from './translate-panel-color-format.js';
-import {
-  getEnabledPanelItems,
-  getRootPanelItem,
-  isTableFusionWidget,
-  isPivotTableFusionWidget,
-} from './utils.js';
+import camelCase from 'lodash-es/camelCase';
+import findKey from 'lodash-es/findKey';
+
 import {
   AreamapChartDataOptions,
   BoxplotChartDataOptions,
@@ -54,9 +22,42 @@ import {
 } from '../chart-data-options/types.js';
 import { WidgetDataOptions } from '../models/index.js';
 import { TranslatableError } from '../translation/translatable-error.js';
-import findKey from 'lodash-es/findKey';
-import camelCase from 'lodash-es/camelCase';
+import {
+  CartesianChartDataOptions,
+  CategoricalChartDataOptions,
+  Color,
+  IndicatorChartDataOptions,
+  NumberFormatConfig,
+  ScatterChartDataOptions,
+  StyledColumn,
+  StyledMeasureColumn,
+} from '../types.js';
+import {
+  createPanelColorFormat,
+  createValueColorOptions,
+  createValueToColorMap,
+  createValueToColorMultiColumnsMap,
+} from './translate-panel-color-format.js';
 import { applyStatisticalModels, createStatisticalModels } from './translate-statistical-models.js';
+import {
+  BoxplotWidgetStyle,
+  CartesianWidgetType,
+  CategoricalWidgetType,
+  CurrencyPosition,
+  DatetimeMask,
+  FusionWidgetType,
+  NumericMask,
+  Panel,
+  PanelItem,
+  PivotWidgetStyle,
+  WidgetStyle,
+} from './types.js';
+import {
+  getEnabledPanelItems,
+  getRootPanelItem,
+  isPivotTableFusionWidget,
+  isTableFusionWidget,
+} from './utils.js';
 
 function getNumberFormatName(mask: NumericMask) {
   if (mask.percent || mask.type === 'percent') {

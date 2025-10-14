@@ -1,8 +1,10 @@
-import { getScatterTooltipSettings, tooltipFormatter } from './scatter-tooltip';
-import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
-import { HighchartsDataPointContext } from './tooltip-utils';
 import { TooltipFormatterContextObject } from '@sisense/sisense-charts';
+
 import type { NumberFormatConfig } from '@/types';
+
+import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
+import { getScatterTooltipSettings, tooltipFormatter } from './scatter-tooltip';
+import { HighchartsDataPointContext } from './tooltip-utils';
 
 describe('Scatter tooltip', () => {
   it('should be enabled', () => {

@@ -1,22 +1,25 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import styled from '@emotion/styled';
-import { ArrowDownIcon } from '../../../icons';
-import { SelectItem } from './types';
-import { SelectField, SelectLabel } from './base';
-import { getSelectedItemsDisplayValue } from './utils';
-import { MultiSelectItem } from './multi-select-item';
 import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+
+import { Popper } from '@/common/components/popper';
+import { DEFAULT_TEXT_COLOR } from '@/const';
 import {
   ScrollWrapper,
   ScrollWrapperOnScrollEvent,
 } from '@/filters/components/filter-editor-popover/common/scroll-wrapper';
-import { DEFAULT_TEXT_COLOR } from '@/const';
-import { SmallLoader } from '@/filters/components/filter-editor-popover/common/small-loader';
-import { Popper } from '@/common/components/popper';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { StyledSearchInput } from '@/filters/components/filter-editor-popover/common/select/searchable-single-select';
+import { SmallLoader } from '@/filters/components/filter-editor-popover/common/small-loader';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
+
+import { ArrowDownIcon } from '../../../icons';
+import { SelectField, SelectLabel } from './base';
+import { MultiSelectItem } from './multi-select-item';
+import { SelectItem } from './types';
+import { getSelectedItemsDisplayValue } from './utils';
 
 const Content = styled.div<Themable>`
   max-height: 320px;

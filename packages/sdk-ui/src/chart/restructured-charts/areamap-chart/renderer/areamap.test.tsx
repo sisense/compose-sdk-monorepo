@@ -1,10 +1,10 @@
 /** @vitest-environment jsdom */
-
-import { countriesGeoJson } from './__mocks__/countries-geo-json.js';
-import { countriesGeoData } from './__mocks__/countries-geo-data.js';
 import { render } from '@testing-library/react';
-import { Areamap } from './areamap.js';
+
 import { AreamapChartDesignOptions } from '../types.js';
+import { countriesGeoData } from './__mocks__/countries-geo-data.js';
+import { countriesGeoJson } from './__mocks__/countries-geo-json.js';
+import { Areamap } from './areamap.js';
 
 // mock useGeoJson hook
 vi.mock('./use-geo-json.js', () => ({

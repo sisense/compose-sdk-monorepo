@@ -1,6 +1,7 @@
-import { FilterRelationsRules } from '@/utils/filter-relations';
 import { Filter, filterFactory } from '@sisense/sdk-data';
+
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { FilterRelationsRules } from '@/utils/filter-relations';
 
 const countryFilter = filterFactory.members(DM.Country.Country, []);
 const yearsFilter = filterFactory.members(DM.Commerce.Date.Years, []);

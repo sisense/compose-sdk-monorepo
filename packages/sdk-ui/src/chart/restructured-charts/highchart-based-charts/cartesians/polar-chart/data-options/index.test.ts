@@ -1,4 +1,3 @@
-import { dataOptionsTranslators } from './index';
 import {
   getCartesianAttributes,
   getCartesianMeasures,
@@ -6,6 +5,7 @@ import {
   isCartesianChartDataOptionsInternal,
   translateCartesianChartDataOptions,
 } from '../../helpers/data-options';
+import { dataOptionsTranslators } from './index';
 
 // Mock the helper functions
 vi.mock('../../helpers/data-options', () => ({

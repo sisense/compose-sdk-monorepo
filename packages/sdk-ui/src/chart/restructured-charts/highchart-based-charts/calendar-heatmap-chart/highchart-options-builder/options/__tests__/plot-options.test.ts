@@ -1,8 +1,10 @@
-import { describe, it, expect, vi } from 'vitest';
-import { getPlotOptions } from '../plot-options.js';
+import { describe, expect, it, vi } from 'vitest';
+
+import { HighchartsDataPointContext } from '@/chart-options-processor/tooltip.js';
+
 import { BuildContext } from '../../../../types.js';
 import { CalendarHeatmapChartData } from '../../../data.js';
-import { HighchartsDataPointContext } from '@/chart-options-processor/tooltip.js';
+import { getPlotOptions } from '../plot-options.js';
 
 describe('Calendar Heatmap Plot Options', () => {
   const mockDateFormatter = vi.fn((date: Date) => date.toISOString().split('T')[0]);
@@ -205,22 +207,6 @@ describe('Calendar Heatmap Plot Options', () => {
       } as HighchartsDataPointContext;
       const formattedValue = formatter?.call(mockThis);
       expect(formattedValue).toBe('');
-    });
-
-    it('should set correct y offset for data labels', () => {
-      const ctx = createMockContext({
-        designOptions: {
-          cellSize: 20,
-          cellLabels: {
-            enabled: true,
-          },
-        },
-      });
-      const result = getPlotOptions(ctx);
-
-      // Y offset should be calculated based on cell size
-      expect(result?.heatmap?.dataLabels?.y).toBeTypeOf('number');
-      expect(result?.heatmap?.dataLabels?.y).toBeGreaterThan(0);
     });
 
     it('should have basic plot options structure', () => {

@@ -1,14 +1,17 @@
 import { Filter, RelativeDateFilter as RelativeDateFilterType } from '@sisense/sdk-data';
-import { FilterVariant } from '../../common/index.js';
-import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component.js';
-import { FilterTileContainer, FilterTileDesignOptions } from '../../filter-tile-container.js';
-import { isVertical } from '../../common/filter-utils.js';
 import dayjs from 'dayjs';
-import { RelativeDateFilterDisplay } from './relative-date-filter-display.js';
 import isToday from 'dayjs/plugin/isToday';
-import { RelativeDateFilter } from './relative-date-filter.js';
-import { cloneFilterAndToggleDisabled } from '@/utils/filters.js';
+
 import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.js';
+import { cloneFilterAndToggleDisabled } from '@/utils/filters.js';
+
+import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component.js';
+import { isVertical } from '../../common/filter-utils.js';
+import { FilterVariant } from '../../common/index.js';
+import { FilterTileContainer, FilterTileDesignOptions } from '../../filter-tile-container.js';
+import { RelativeDateFilterDisplay } from './relative-date-filter-display.js';
+import { RelativeDateFilter } from './relative-date-filter.js';
+
 dayjs.extend(isToday);
 
 /**

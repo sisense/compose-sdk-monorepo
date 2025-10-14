@@ -1,8 +1,9 @@
+import React, { ForwardedRef } from 'react';
+
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import MuiTypography, {
   type TypographyProps as MuiTypographyProps,
 } from '@mui/material/Typography';
-import React, { ForwardedRef } from 'react';
 
 import { EmotionCacheProvider } from '../common/emotion-cache-provider';
 import { type TypographyTheme, typographyTheme } from './themes';

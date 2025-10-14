@@ -1,13 +1,13 @@
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
-import { PolarChartDesignOptions } from '@/chart-options-processor/translations/design-options';
-import { getCartesianChartStyle } from '@/chart-options-processor/style-to-design-options-translator/translate-to-highcharts-options';
+import { withYAxisNormalizationForPolar } from '@/chart-options-processor/cartesian/utils/axis/axis-builders';
+import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
 import {
   extendStyleOptionsWithDefaults,
   getDesignOptionsPerSeries,
 } from '@/chart-options-processor/style-to-design-options-translator/prepare-design-options';
-import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
+import { getCartesianChartStyle } from '@/chart-options-processor/style-to-design-options-translator/translate-to-highcharts-options';
 import { chartSubtypeToDesignOptions } from '@/chart-options-processor/subtype-to-design-options';
-import { withYAxisNormalizationForPolar } from '@/chart-options-processor/cartesian/utils/axis/axis-builders';
+import { PolarChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { ChartStyleOptions, PolarStyleOptions } from '@/types';
 
 /**

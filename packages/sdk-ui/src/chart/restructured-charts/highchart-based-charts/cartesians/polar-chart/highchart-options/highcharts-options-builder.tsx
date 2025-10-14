@@ -1,5 +1,6 @@
-import { HighchartsOptionsBuilder } from '../../../types';
 import omit from 'lodash-es/omit';
+
+import { HighchartsOptionsBuilder } from '../../../types';
 import { getLegacyCartesianChartOptions } from '../../helpers/highchart-options/get-legacy-cartesian-chart-options';
 import { getBasicCartesianLegend } from '../../helpers/highchart-options/legend';
 import { getBasicCartesianTooltip } from '../../helpers/highchart-options/tooltip';

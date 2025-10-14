@@ -42,6 +42,16 @@ Configuration for weekday names in the header
 >
 > Style configuration for calendar weekday names
 >
+> ::: warning Deprecated
+> Please use `textStyle` instead
+> :::
+>
+> ##### `dayLabels.textStyle`
+>
+> **textStyle**?: [`TextStyle`](../../sdk-ui/type-aliases/type-alias.TextStyle.md)
+>
+> Style configuration for calendar weekday names
+>
 >
 
 ***
@@ -83,6 +93,52 @@ Configuration for month names in multi-month view types
 > **style**?: [`TextStyle`](../../sdk-ui/type-aliases/type-alias.TextStyle.md)
 >
 > Style configuration for month names
+>
+> ::: warning Deprecated
+> Please use `textStyle` instead
+> :::
+>
+> ##### `monthLabels.textStyle`
+>
+> **textStyle**?: [`TextStyle`](../../sdk-ui/type-aliases/type-alias.TextStyle.md)
+>
+> Style configuration for month names
+>
+>
+
+***
+
+### pagination
+
+> **pagination**?: `object`
+
+Configuration for pagination controls in multi-month view types
+
+#### Type declaration
+
+> ##### `pagination.enabled`
+>
+> **enabled**?: `boolean`
+>
+> Boolean flag that defines if pagination controls should be shown
+>
+> ###### Default
+>
+> ```ts
+> true
+> ```
+>
+> ##### `pagination.startMonth`
+>
+> **startMonth**?: `Date`
+>
+> Start month to display when the chart is first rendered
+>
+> ##### `pagination.textStyle`
+>
+> **textStyle**?: [`TextStyle`](../../sdk-ui/type-aliases/type-alias.TextStyle.md)
+>
+> Style configuration for pagination controls text
 >
 >
 

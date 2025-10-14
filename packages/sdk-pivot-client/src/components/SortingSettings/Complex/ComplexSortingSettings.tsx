@@ -1,14 +1,16 @@
-import React, { useState, MouseEventHandler, useRef, useLayoutEffect } from 'react';
-import { produce } from 'immer';
-import { Header } from '../Header/index.js';
-import { SettingsItemComponent } from '../SettingsItem/index.js'; // TODO: rename folder to SettingsItemComponent
-import { SortingDirection } from '../../../data-handling/constants.js';
-import { TranslatedMessages } from '../../../builders/pivot-builder.js';
-import { makeGetCaption } from '../getCaption.js';
-import { SortingSettingItem } from '../SortingSettingItem.js';
-import { detectElementOverflow } from '../detectElementOverflow.js';
+import React, { MouseEventHandler, useLayoutEffect, useRef, useState } from 'react';
 
 import { DEPRECATED_Button } from '@sisense/sdk-shared-ui';
+import { produce } from 'immer';
+
+import { TranslatedMessages } from '../../../builders/pivot-builder.js';
+// TODO: rename folder to SettingsItemComponent
+import { SortingDirection } from '../../../data-handling/constants.js';
+import { detectElementOverflow } from '../detectElementOverflow.js';
+import { makeGetCaption } from '../getCaption.js';
+import { Header } from '../Header/index.js';
+import { SettingsItemComponent } from '../SettingsItem/index.js';
+import { SortingSettingItem } from '../SortingSettingItem.js';
 
 export type ComplexSortingSettingsPopupProps = {
   titleOfPopUp: string[];

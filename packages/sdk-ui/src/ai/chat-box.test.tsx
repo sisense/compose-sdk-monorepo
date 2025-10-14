@@ -1,13 +1,15 @@
-import { server } from '@/__mocks__/msw';
-import { setup } from '@/__test-helpers__';
 import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { Chat, ChatResponse, QueryRecommendation } from './api/types';
-import ChatBox from './chat-box';
+import { setTimeout } from 'timers/promises';
+
+import { server } from '@/__mocks__/msw';
+import { setup } from '@/__test-helpers__';
+
+import { translation } from '../translation/resources/en';
 import { AiTestWrapper } from './__mocks__';
 import { chat, contexts } from './__mocks__/data';
-import { setTimeout } from 'timers/promises';
-import { translation } from '../translation/resources/en';
+import { Chat, ChatResponse, QueryRecommendation } from './api/types';
+import ChatBox from './chat-box';
 
 beforeEach(() => {
   server.use(

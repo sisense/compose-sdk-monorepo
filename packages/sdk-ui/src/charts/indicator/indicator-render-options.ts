@@ -1,9 +1,11 @@
-import { IndicatorLegacyChartDataOptions } from './indicator-legacy-chart-data-options';
+import flow from 'lodash-es/flow';
+import get from 'lodash-es/get';
+import set from 'lodash-es/set';
+
 import { IndicatorLegacyChartOptions } from '@/indicator-canvas';
 import { overrideWithCustomSettings } from '@/utils/override-with-custom-settings';
-import set from 'lodash-es/set';
-import get from 'lodash-es/get';
-import flow from 'lodash-es/flow';
+
+import { IndicatorLegacyChartDataOptions } from './indicator-legacy-chart-data-options';
 import { LegacyIndicatorChartOptions } from './types';
 
 /**

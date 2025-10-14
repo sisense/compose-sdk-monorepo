@@ -1,4 +1,4 @@
-import { MenuPosition, MenuItemSection, MenuAlignment } from '@/types';
+import { MenuAlignment, MenuItemSection, MenuPosition } from '@/types';
 
 export type MenuOptions = {
   /** @internal */

@@ -1,7 +1,8 @@
-import { useThemeContext } from '@/theme-provider';
-import { Themable } from '@/theme-provider/types';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
 
 type Props = {
   children: string | JSX.Element;

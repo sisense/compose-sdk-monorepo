@@ -1,25 +1,27 @@
 import { useMemo } from 'react';
+
 import { CalendarHeatmapChartDataOptionsInternal } from '@/chart-data-options/types';
+import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
 import { CalendarHeatmapChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { BeforeRenderHandler } from '@/props';
-import { buildHighchartsOptions } from '../../../highcharts-based-chart-renderer/build-highchart-options.js';
-import { calendarHeatmapHighchartsOptionsBuilder } from '../../highchart-options-builder/index.js';
-import { filterChartDataForMonth } from '../helpers/data-helpers.js';
-import { MonthInfo, getDisplayMonths } from '../helpers/view-helpers.js';
-import { CalendarSize } from '../helpers/sizing-helpers.js';
-import { CalendarHeatmapViewType } from '@/types.js';
-import { useExtraConfig } from '../../../highcharts-based-chart-renderer/use-extra-config.js';
-import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
-import { CalendarHeatmapChartData } from '../../data.js';
 import { CalendarHeatmapChartEventProps } from '@/props.jsx';
 import {
   SisenseChartDataPointEventHandler,
   SisenseChartDataPointsEventHandler,
 } from '@/sisense-chart/types.js';
+import { CalendarHeatmapViewType } from '@/types.js';
+
+import { buildHighchartsOptions } from '../../../highcharts-based-chart-renderer/build-highchart-options.js';
+import { useExtraConfig } from '../../../highcharts-based-chart-renderer/use-extra-config.js';
+import { CalendarHeatmapChartData } from '../../data.js';
+import { calendarHeatmapHighchartsOptionsBuilder } from '../../highchart-options-builder/index.js';
 import {
   getCalendarHeatmapDefaultColorOptions,
   withCalendarHeatmapDataColoring,
 } from '../../utils/with-calendar-heatmap-data-coloring.js';
+import { filterChartDataForMonth } from '../helpers/data-helpers.js';
+import { CalendarSize } from '../helpers/sizing-helpers.js';
+import { getDisplayMonths, MonthData, MonthInfo } from '../helpers/view-helpers.js';
 
 /**
  * Custom hook for generating extra config for calendar heatmap chart.
@@ -55,7 +57,7 @@ export interface UseCalendarHeatmapChartOptionsParams {
   dataOptions: CalendarHeatmapChartDataOptionsInternal;
   designOptions: CalendarHeatmapChartDesignOptions;
   availableMonths: MonthInfo[];
-  currentViewIndex: number;
+  currentMonth: MonthData;
   viewType: CalendarHeatmapViewType;
   chartSize: CalendarSize;
   eventHandlers: Pick<
@@ -77,7 +79,7 @@ export interface UseCalendarHeatmapChartOptionsParams {
  * @param params.dataOptions - Internal data options configuration
  * @param params.designOptions - Design and styling options for the chart
  * @param params.availableMonths - Array of all available months
- * @param params.currentViewIndex - Current view index
+ * @param params.currentMonth - Current month
  * @param params.viewType - View type that determines how many months to display
  * @param params.chartSizes - Array of size configurations for each chart
  * @param params.eventHandlers - Event handlers for data point interactions
@@ -91,7 +93,7 @@ export interface UseCalendarHeatmapChartOptionsParams {
  *   dataOptions,
  *   designOptions,
  *   availableMonths,
- *   currentViewIndex,
+ *   currentMonth,
  *   viewType,
  *   chartSize,
  *   eventHandlers: { onDataPointClick: handleClick },
@@ -104,7 +106,7 @@ export function useCalendarHeatmapChartOptions({
   dataOptions,
   designOptions,
   availableMonths,
-  currentViewIndex,
+  currentMonth,
   viewType,
   chartSize,
   eventHandlers,
@@ -123,7 +125,7 @@ export function useCalendarHeatmapChartOptions({
   return useMemo(() => {
     if (availableMonths.length === 0) return [];
 
-    const monthsToDisplay = getDisplayMonths(availableMonths, currentViewIndex, viewType);
+    const monthsToDisplay = getDisplayMonths(availableMonths, currentMonth, viewType);
 
     return monthsToDisplay.map((month) => {
       const monthData = filterChartDataForMonth(chartDataWithColoring, month.year, month.month);
@@ -151,7 +153,7 @@ export function useCalendarHeatmapChartOptions({
     });
   }, [
     availableMonths,
-    currentViewIndex,
+    currentMonth,
     viewType,
     chartDataWithColoring,
     dataOptions,

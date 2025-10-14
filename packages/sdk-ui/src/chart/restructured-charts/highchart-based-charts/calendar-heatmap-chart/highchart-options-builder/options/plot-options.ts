@@ -1,7 +1,8 @@
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
-import { CALENDAR_HEATMAP_DEFAULTS, CALENDAR_TYPOGRAPHY } from '../../constants';
-import { BuildContext } from '../../../types';
 import { HighchartsDataPointContext } from '@/chart-options-processor/tooltip';
+
+import { BuildContext } from '../../../types';
+import { CALENDAR_HEATMAP_DEFAULTS, CALENDAR_TYPOGRAPHY } from '../../constants';
 
 /**
  * Calculates font size based on cell size
@@ -53,7 +54,6 @@ export function getPlotOptions(
           ...(cellLabels.style?.pointerEvents && { pointerEvents: cellLabels.style.pointerEvents }),
           ...(cellLabels.style?.textOverflow && { textOverflow: cellLabels.style.textOverflow }),
         },
-        y: cellSize * CALENDAR_TYPOGRAPHY.LABEL_Y_OFFSET_RATIO,
         formatter: function (this: HighchartsDataPointContext) {
           const point = this.point;
           return point.custom && point.custom.monthDay ? point.custom.monthDay.toString() : '';

@@ -1,7 +1,9 @@
-import { setup } from '@/__test-helpers__';
 import { screen } from '@testing-library/react';
-import ChatInput, { ChatInputProps } from './chat-input';
+
+import { setup } from '@/__test-helpers__';
+
 import { ChatConfigProvider } from './chat-config';
+import ChatInput, { ChatInputProps } from './chat-input';
 
 const onSendMessageMock = vi.fn();
 

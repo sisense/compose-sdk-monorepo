@@ -1,10 +1,11 @@
 import { createFilterMatcher } from '@sisense/sdk-data';
 import {
   type JaqlPanel,
+  type JaqlRequest,
   type PivotTreeNode,
   UserType,
-  type JaqlRequest,
 } from '@sisense/sdk-pivot-client';
+
 import type { HeaderCellFormatter } from '../types.js';
 
 export const createHeaderCellHighlightFormatter = (): HeaderCellFormatter => {

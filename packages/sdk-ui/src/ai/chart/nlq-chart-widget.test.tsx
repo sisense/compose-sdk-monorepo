@@ -1,14 +1,14 @@
 import { screen, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
+import { setTimeout } from 'timers/promises';
 
 import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
-import { AiTestWrapper } from '../__mocks__';
-
-import { GetNlgInsightsResponse, type NlqResponseData } from '../api/types';
 import { NlqChartWidget } from '@/ai';
 import MOCK_NLQ_RESPONSE from '@/ai/__mocks__/nlq-response';
-import { setTimeout } from 'timers/promises';
+
+import { AiTestWrapper } from '../__mocks__';
+import { GetNlgInsightsResponse, type NlqResponseData } from '../api/types';
 
 vi.mock(
   '@/widgets/chart-widget',

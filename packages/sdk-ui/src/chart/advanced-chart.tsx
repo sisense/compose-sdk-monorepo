@@ -1,20 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { CartesianChartDataOptions } from '@/index';
-import { RegularChartProps } from '../props.js';
-import './chart.css';
-import { RegularChart } from './regular-chart.js';
+import { useCallback, useEffect, useState } from 'react';
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+
 import { isDataSource } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
+
 import {
   extractForecastMeasures,
   extractTrendMeasures,
 } from '@/chart-options-processor/advanced-chart-options.js';
-import { useCallback, useEffect, useState } from 'react';
-import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
-import { useWidgetErrorsAndWarnings } from '@/widgets/common/widget-errors-and-warnings-context';
 import { useHasChanged } from '@/common/hooks/use-has-changed.js';
-import { TranslatableError } from '@/translation/translatable-error.js';
 import ErrorBoundaryBox from '@/error-boundary/error-boundary-box.js';
+import { CartesianChartDataOptions } from '@/index';
+import { TranslatableError } from '@/translation/translatable-error.js';
+import { useWidgetErrorsAndWarnings } from '@/widgets/common/widget-errors-and-warnings-context';
+
+import { RegularChartProps } from '../props.js';
+import './chart.css';
+import { RegularChart } from './regular-chart.js';
 
 const SINGLE_ANALYTICS_FUNCTION_ERROR_CODE = 'BE#081586';
 const MULTIPLE_ANALYTICS_FUNCTION_ERROR_CODE = 'BE#733473';

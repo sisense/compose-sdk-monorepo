@@ -1,7 +1,8 @@
 import DOMPurify from 'dompurify';
-import { HighchartsDataPointContext, TooltipSettings, formatTooltipValue } from './tooltip-utils';
+
 import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { getDataOptionTitle } from '../../chart-data-options/utils';
+import { formatTooltipValue, HighchartsDataPointContext, TooltipSettings } from './tooltip-utils';
 
 export interface ScatterTooltipElements {
   x: string;

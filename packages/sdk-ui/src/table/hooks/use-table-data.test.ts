@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { renderHook, waitFor } from '@testing-library/react';
-import { useTableData } from './use-table-data';
-import { executeQueryMock } from '../../query/__mocks__/execute-query';
 import { QueryResultData } from '@sisense/sdk-data';
-import { ClientApplication } from '../../app/client-application';
-import { useSisenseContextMock } from '../../sisense-context/__mocks__/sisense-context';
+import { renderHook, waitFor } from '@testing-library/react';
+
 import { SisenseContextPayload } from '@/sisense-context/sisense-context';
+
+import { ClientApplication } from '../../app/client-application';
 import { useSetErrorMock } from '../../error-boundary/__mocks__/use-set-error';
+import { executeQueryMock } from '../../query/__mocks__/execute-query';
+import { useSisenseContextMock } from '../../sisense-context/__mocks__/sisense-context';
+import { useTableData } from './use-table-data';
 
 vi.mock('../../query/execute-query');
 vi.mock('../../sisense-context/sisense-context');

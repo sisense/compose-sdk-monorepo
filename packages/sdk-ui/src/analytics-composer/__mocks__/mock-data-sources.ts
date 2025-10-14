@@ -1,4 +1,5 @@
 import { JaqlDataSourceForDto } from '@sisense/sdk-data';
+
 import { NormalizedTable } from '../types';
 
 export const MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE: JaqlDataSourceForDto = {

@@ -1,8 +1,9 @@
-import { createAttribute, Measure, type Data, type QueryResultData } from '@sisense/sdk-data';
-import { boxWhiskerProcessResult, executeBoxplotQuery } from './boxplot-utils.js';
+import { createAttribute, type Data, Measure, type QueryResultData } from '@sisense/sdk-data';
 import isObject from 'lodash-es/isObject';
+
+import { type ClientApplication } from './app/client-application.js';
+import { boxWhiskerProcessResult, executeBoxplotQuery } from './boxplot-utils.js';
 import { executePivotQueryMock } from './query/__mocks__/execute-query';
-import { type ClientApplication } from './index.js';
 
 vi.mock('./query/execute-query');
 

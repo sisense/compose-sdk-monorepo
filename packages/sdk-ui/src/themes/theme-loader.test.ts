@@ -1,13 +1,14 @@
 import type { HttpClient } from '@sisense/sdk-rest-client';
-import { getThemeSettingsByOid } from './theme-loader';
-import { LegacyDesignSettings, LegacyPalette } from './legacy-design-settings';
+import { Mocked } from 'vitest';
+
+import { ThemeOid, ThemeSettings } from '../types';
 import {
   corporatePalette,
   redLegacyDesignSettings,
   redThemeSettings,
 } from './__mocks__/legacy-design-settings.mock.js';
-import { ThemeOid, ThemeSettings } from '../types';
-import { Mocked } from 'vitest';
+import { LegacyDesignSettings, LegacyPalette } from './legacy-design-settings';
+import { getThemeSettingsByOid } from './theme-loader';
 
 describe('getThemeSettingsByOid', () => {
   const httpClientMock: Mocked<Pick<HttpClient, 'get' | 'url'>> = {

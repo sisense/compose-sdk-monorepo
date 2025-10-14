@@ -1,11 +1,13 @@
-import { UseDashboardModelActionType, useDashboardModelInternal } from '@/models';
-import { beforeEach, Mock } from 'vitest';
-import { DashboardById } from './dashboard-by-id';
-import { render } from '@testing-library/react';
-import { MockedSisenseContextProvider } from '@/__test-helpers__';
-import { Dashboard, DashboardChangeType } from './dashboard';
 import { filterFactory } from '@sisense/sdk-data';
+import { render } from '@testing-library/react';
+import { beforeEach, Mock } from 'vitest';
+
+import { MockedSisenseContextProvider } from '@/__test-helpers__';
+import { UseDashboardModelActionType, useDashboardModelInternal } from '@/models';
+
 import * as DM from '../__test-helpers__/sample-ecommerce';
+import { Dashboard, DashboardChangeType } from './dashboard';
+import { DashboardById } from './dashboard-by-id';
 
 // Mock the Dashboard component completely
 vi.mock('./dashboard', () => ({

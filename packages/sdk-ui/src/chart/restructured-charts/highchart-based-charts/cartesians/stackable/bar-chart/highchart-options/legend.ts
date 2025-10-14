@@ -2,6 +2,7 @@ import {
   isLegendOnRight,
   LegendSettings,
 } from '@/chart-options-processor/translations/legend-section';
+
 import { BuildContext } from '../../../../types';
 import { getBasicCartesianLegend } from '../../../helpers/highchart-options/legend';
 

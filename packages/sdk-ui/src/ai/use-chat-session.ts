@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { useGetChat } from '@/ai/use-get-chat';
+import { useLastNlqResponseFromHistory } from '@/ai/use-last-nlq-response-from-history';
+import { TranslatableError } from '@/translation/translatable-error';
+
+import { useChatHistory } from './api/chat-history';
 import { useSendChatMessage } from './api/hooks';
 import {
+  ChatContextDetails,
   ChatMessage,
   NlqMessage,
   NlqResponseData,
   TextMessage,
-  ChatContextDetails,
 } from './api/types';
-import { useChatHistory } from './api/chat-history';
-import { useTranslation } from 'react-i18next';
-import { TranslatableError } from '@/translation/translatable-error';
 import { useChatConfig } from './chat-config';
-import { useGetChat } from '@/ai/use-get-chat';
-import { useLastNlqResponseFromHistory } from '@/ai/use-last-nlq-response-from-history';
 
 /**
  * Result of the useChatSession hook.

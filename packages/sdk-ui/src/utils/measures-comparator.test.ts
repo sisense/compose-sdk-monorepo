@@ -1,6 +1,8 @@
-import { areMeasuresChanged } from './measures-comparator';
-import { Measure, CalculatedMeasure, measureFactory, filterFactory } from '@sisense/sdk-data';
+import { CalculatedMeasure, filterFactory, Measure, measureFactory } from '@sisense/sdk-data';
+
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+
+import { areMeasuresChanged } from './measures-comparator';
 
 const createCountriesBeginningWithAMeasure = (): CalculatedMeasure => {
   // This is a calculated measure that uses a filter in its context

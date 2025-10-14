@@ -1,17 +1,20 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
+
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import dayjs from 'dayjs';
-import { DateIcon } from '../../../../icons';
-import { CalendarRangeValue, CalendarSelectLimits, CalendarSelectTypes } from './types';
-import { getCalendarDateSelectorMode, getCalendarSelectedItemsDisplayValue } from './utils';
-import { SelectField, SelectLabel } from '../base';
+
+import { Popper } from '@/common/components/popper';
 import {
   CalendarDateSelector,
   DayjsDateRange,
 } from '@/filters/components/date-filter/date-filter/calendar-date-selector';
-import { useDatetimeFormatter } from '../../../hooks/use-datetime-formatter';
-import { Popper } from '@/common/components/popper';
 import { useThemeContext } from '@/theme-provider';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
+
+import { DateIcon } from '../../../../icons';
+import { useDatetimeFormatter } from '../../../hooks/use-datetime-formatter';
+import { SelectField, SelectLabel } from '../base';
+import { CalendarRangeValue, CalendarSelectLimits, CalendarSelectTypes } from './types';
+import { getCalendarDateSelectorMode, getCalendarSelectedItemsDisplayValue } from './utils';
 
 type BaseCalendarSelectProps = {
   limits?: CalendarSelectLimits;

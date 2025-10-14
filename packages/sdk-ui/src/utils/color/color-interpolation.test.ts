@@ -1,17 +1,18 @@
+import Color from 'colorjs.io';
+
 import {
+  getDarkFactor,
+  getExplicitColorSteps,
+  getRgbValuesFromColor,
+  getSlightlyDifferentColor,
+  hueDiff,
+  toAvg,
   toColor,
-  toString,
+  toGray,
   toRangeFn,
   toSteps,
-  toGray,
-  toAvg,
-  hueDiff,
-  getRgbValuesFromColor,
-  getDarkFactor,
-  getSlightlyDifferentColor,
-  getExplicitColorSteps,
+  toString,
 } from './color-interpolation';
-import Color from 'colorjs.io';
 
 test('toColor and toString', () => {
   expect(toString(toColor('red'))).toBe('#f00');

@@ -1,11 +1,14 @@
+import { useMemo } from 'react';
+
+import styled from '@emotion/styled';
+import isNumber from 'lodash-es/isNumber';
+import isUndefined from 'lodash-es/isUndefined';
+
 import { getDividerStyle } from '@/dashboard/utils';
 import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
-import styled from '@emotion/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Widget } from '@/widgets/widget';
-import isUndefined from 'lodash-es/isUndefined';
-import isNumber from 'lodash-es/isNumber';
 
 const SMALL_WIDTH = '600px';
 const MEDIUM_WIDTH = '900px';
@@ -124,9 +127,33 @@ export const ContentPanel = ({ layout, responsive, widgets }: ContentPanelProps)
 
   const colWidths = layout.columns.map((c) => c.widthPercentage);
 
+  const innerLayout = useMemo(() => {
+    return {
+      ...layout,
+      columns: layout.columns.map((c) => {
+        return {
+          ...c,
+          rows: c.rows
+            .map((r) => {
+              const visibleCells = r.cells.filter((c) => !c.hidden);
+              const equalWidthCells = visibleCells.length < r.cells.length;
+              return {
+                ...r,
+                cells: visibleCells.map((c) => ({
+                  ...c,
+                  widthPercentage: equalWidthCells ? 100 / visibleCells.length : c.widthPercentage,
+                })),
+              };
+            })
+            .filter((r) => r.cells.length > 0),
+        };
+      }),
+    };
+  }, [layout]);
+
   return (
     <GridContainer widths={colWidths}>
-      {layout.columns.map((column, columnIndex) => (
+      {innerLayout.columns.map((column, columnIndex) => (
         <Column
           key={columnIndex}
           colWidths={colWidths}

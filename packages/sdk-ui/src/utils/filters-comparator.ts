@@ -1,14 +1,15 @@
 import {
   Filter,
   FilterRelations,
-  FilterRelationsNode,
   FilterRelationsJaql,
   FilterRelationsJaqlIdNode,
   FilterRelationsJaqlNode,
+  FilterRelationsNode,
 } from '@sisense/sdk-data';
 import flow from 'lodash-es/flow';
 import isEqual from 'lodash-es/isEqual';
 import isEqualWith from 'lodash-es/isEqualWith';
+
 import { isSameAttribute } from './filters';
 
 /**

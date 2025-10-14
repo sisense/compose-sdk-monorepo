@@ -1,11 +1,12 @@
 /* eslint-disable max-params */
-import { TreemapChartDesignOptions } from '../translations/design-options';
-import { OptionsWithAlerts, CompleteThemeSettings } from '../../types';
-import { CategoricalChartData } from '../../chart-data/types';
-import { HighchartsOptionsInternal } from '../chart-options-service';
-import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
-import { prepareSunburstOptions } from '../translations/sunburst/sunburst-options';
 import { TFunction } from '@sisense/sdk-common';
+
+import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
+import { CategoricalChartData } from '../../chart-data/types';
+import { CompleteThemeSettings, OptionsWithAlerts } from '../../types';
+import { HighchartsOptionsInternal } from '../chart-options-service';
+import { TreemapChartDesignOptions } from '../translations/design-options';
+import { prepareSunburstOptions } from '../translations/sunburst/sunburst-options';
 
 /**
  * Convert intermediate chart data, data options, and design options

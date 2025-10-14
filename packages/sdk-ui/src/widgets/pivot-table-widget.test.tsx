@@ -1,15 +1,18 @@
 /** @vitest-environment jsdom */
-import { setupI18nMock } from '@/__test-helpers__';
-setupI18nMock();
+import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
 import { render } from '@testing-library/react';
-import { mockPivotTableWidgetProps } from './__mocks__/mocks';
-import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
+
+import { setupI18nMock } from '@/__test-helpers__';
+import { createMockPivotClient } from '@/pivot-table/__mocks__/pivot-client-mock';
+import { SisenseContextPayload } from '@/sisense-context/sisense-context';
+
 import { ClientApplication } from '../app/client-application';
 import { executePivotQueryMock } from '../query/__mocks__/execute-query';
-import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
+import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
+import { mockPivotTableWidgetProps } from './__mocks__/mocks';
 import { PivotTableWidget } from './pivot-table-widget';
-import { SisenseContextPayload } from '@/sisense-context/sisense-context';
-import { createMockPivotClient } from '@/pivot-table/__mocks__/pivot-client-mock';
+
+setupI18nMock();
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');

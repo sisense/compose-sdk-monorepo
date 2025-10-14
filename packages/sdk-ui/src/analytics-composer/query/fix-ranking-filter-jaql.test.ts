@@ -1,4 +1,5 @@
 import { MetadataItem } from '@sisense/sdk-data';
+
 import { fixRankingFilterJaql } from './fix-ranking-filter-jaql';
 
 describe('fixRankingFilterJaql', () => {

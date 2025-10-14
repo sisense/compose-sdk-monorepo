@@ -1,3 +1,9 @@
+import { ReactNode } from 'react';
+
+import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+
+import { DashboardChangeAction } from '@/dashboard/dashboard';
+import { FiltersPanelConfig } from '@/filters/components/filters-panel/types';
 import {
   DashboardStyleOptions,
   TabbersOptions,
@@ -5,10 +11,6 @@ import {
   WidgetsPanelLayout,
 } from '@/models';
 import { WidgetProps } from '@/props';
-import { DashboardChangeAction } from '@/dashboard/dashboard';
-import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
-import { FiltersPanelConfig } from '@/filters/components/filters-panel/types';
-import { ReactNode } from 'react';
 
 export type {
   DashboardStyleOptions,
@@ -75,6 +77,14 @@ export interface DashboardFiltersPanelConfig extends FiltersPanelConfig {
    * This state has a higher priority than `collapsedInitially` when enabled.
    */
   persistCollapsedStateToLocalStorage?: boolean;
+  /**
+   * If enabled, the expand/collapse arrow on the divider between the filters panel and the dashboard content will be replaced with a filter toggle icon on the dashboard toolbar.
+   *
+   * If the dashboard toolbar is configured to be not visible, this setting will be ignored.
+   *
+   * If not specified, the default value is `false`.
+   */
+  showFilterIconInToolbar?: boolean;
 }
 
 /**
@@ -165,7 +175,7 @@ export interface DashboardConfig {
     /**
      * Determines whether the toolbar is visible.
      *
-     * If not specified, the default value is `false`.
+     * If not specified, the default value is `true`.
      */
     visible: boolean;
   };

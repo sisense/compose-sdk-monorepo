@@ -1,7 +1,9 @@
-import { describe, it, expect } from 'vitest';
-import { translateCalendarHeatmapStyleOptionsToDesignOptions } from '../design-options.js';
+import { describe, expect, it } from 'vitest';
+
 import { CalendarHeatmapStyleOptions } from '@/types';
+
 import { CALENDAR_HEATMAP_DEFAULTS } from '../constants.js';
+import { translateCalendarHeatmapStyleOptionsToDesignOptions } from '../design-options.js';
 
 describe('Calendar Heatmap Design Options Translation', () => {
   describe('translateCalendarHeatmapStyleOptionsToDesignOptions', () => {
@@ -21,6 +23,11 @@ describe('Calendar Heatmap Design Options Translation', () => {
       expect(result.monthLabels).toEqual({
         enabled: CALENDAR_HEATMAP_DEFAULTS.SHOW_MONTH_LABEL,
         style: undefined,
+      });
+      expect(result.pagination).toEqual({
+        enabled: CALENDAR_HEATMAP_DEFAULTS.SHOW_PAGINATION,
+        style: undefined,
+        initialDate: undefined,
       });
     });
 
@@ -174,6 +181,45 @@ describe('Calendar Heatmap Design Options Translation', () => {
 
       expect(result.viewType).toBe(CALENDAR_HEATMAP_DEFAULTS.VIEW_TYPE);
       expect(result.startOfWeek).toBe(CALENDAR_HEATMAP_DEFAULTS.START_OF_WEEK);
+    });
+
+    it('should translate pagination style options correctly', () => {
+      const startMonth = new Date('2023-06-15');
+      const styleOptions: CalendarHeatmapStyleOptions = {
+        pagination: {
+          enabled: false,
+          textStyle: {
+            color: '#0066cc',
+            fontSize: '12px',
+            fontWeight: 'normal',
+          },
+          startMonth,
+        },
+      };
+
+      const result = translateCalendarHeatmapStyleOptionsToDesignOptions(styleOptions);
+
+      expect(result.pagination).toEqual({
+        enabled: false,
+        style: {
+          color: '#0066cc',
+          fontSize: '12px',
+          fontWeight: 'normal',
+        },
+        startMonth,
+      });
+    });
+
+    it('should use default values for pagination when not provided', () => {
+      const styleOptions: CalendarHeatmapStyleOptions = {};
+
+      const result = translateCalendarHeatmapStyleOptionsToDesignOptions(styleOptions);
+
+      expect(result.pagination).toEqual({
+        enabled: CALENDAR_HEATMAP_DEFAULTS.SHOW_PAGINATION,
+        style: undefined,
+        startMonth: undefined,
+      });
     });
   });
 });

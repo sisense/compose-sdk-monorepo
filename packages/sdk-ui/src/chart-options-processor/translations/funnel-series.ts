@@ -1,23 +1,25 @@
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { SeriesWithAlerts, CompleteThemeSettings, ValueToColorMap } from '../../types';
-import { SeriesType } from '../chart-options-service';
-import {
-  formatSeries,
-  getColorSetting,
-  HighchartsSeriesValues,
-  SeriesPointStructure,
-} from './translations-to-highcharts';
-import { FunnelChartDesignOptions } from './design-options';
+import { seriesSliceWarning } from '@/utils/data-limit-warning';
+
+import { getPaletteColor } from '../../chart-data-options/coloring/utils';
+import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
 import {
   CategoricalChartData,
   CategoricalSeriesValues,
   CategoricalXValues,
 } from '../../chart-data/types';
 import { fromFraction } from '../../chart-data/utils';
-import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
-import { getPaletteColor } from '../../chart-data-options/coloring/utils';
-import { seriesSliceWarning } from '@/utils/data-limit-warning';
+import { CompleteThemeSettings, SeriesWithAlerts, ValueToColorMap } from '../../types';
+import { SeriesType } from '../chart-options-service';
+import { FunnelChartDesignOptions } from './design-options';
+import {
+  formatSeries,
+  getColorSetting,
+  HighchartsSeriesValues,
+  SeriesPointStructure,
+} from './translations-to-highcharts';
 
 /**
  * Convert categorical chart data into renderable highcharts funnel series. *

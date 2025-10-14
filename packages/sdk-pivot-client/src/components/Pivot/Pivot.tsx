@@ -1,19 +1,21 @@
 import * as React from 'react';
+
 import cn from 'classnames';
 import debounce from 'lodash-es/debounce.js';
-import { PivotTable, DimensionsProps } from '../PivotTable/PivotTable.js';
-import { PaginationOptions, PaginationPanel } from '../PaginationPanel';
-import { debug, createCallbackMemoizer, getChangedProps } from '../../utils/index.js';
-import { getDefaultSortDirection } from '../../data-load/utils';
-import { PIVOT, PIVOT_MULTIGRID, PIVOT_OVERLAY } from './classes.js';
-import { LoggerI, Defer } from '../../utils/types.js';
-import { PivotI } from './types.js';
-import { PivotTreeNode, PivotCellEvent } from '../../data-handling';
-import { SortDetails } from '../../data-load/types.js';
-import { TreeServiceI } from '../../tree-structure';
+
+import { PivotCellEvent, PivotTreeNode } from '../../data-handling';
 import { Metadata } from '../../data-handling/utils/plugins/types.js';
-import { PivotStylingWrapper, PivotFillOptionsProps } from './PivotStylingWrapper';
+import { SortDetails } from '../../data-load/types.js';
+import { getDefaultSortDirection } from '../../data-load/utils';
 import { EmotionCacheProvider } from '../../emotion-cache-provider.js';
+import { TreeServiceI } from '../../tree-structure';
+import { createCallbackMemoizer, debug, getChangedProps } from '../../utils/index.js';
+import { Defer, LoggerI } from '../../utils/types.js';
+import { PaginationOptions, PaginationPanel } from '../PaginationPanel';
+import { DimensionsProps, PivotTable } from '../PivotTable/PivotTable.js';
+import { PIVOT, PIVOT_MULTIGRID, PIVOT_OVERLAY } from './classes.js';
+import { PivotFillOptionsProps, PivotStylingWrapper } from './PivotStylingWrapper';
+import { PivotI } from './types.js';
 
 type Props = {
   // global

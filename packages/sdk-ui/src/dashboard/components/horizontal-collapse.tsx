@@ -1,7 +1,12 @@
-import styled from '@emotion/styled';
 import { ReactNode } from 'react';
 
-const ArrowWrapper = styled.div<{ reversed: boolean }>`
+import styled from '@emotion/styled';
+
+import { ArrowCollapseIcon } from '@/common/icons/arrow-collapse-icon';
+
+const ArrowWrapper = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'reversed',
+})<{ reversed: boolean }>`
   background-color: #b6b6b6;
   width: 8px;
   height: 40px;
@@ -49,8 +54,11 @@ const Wrapper = styled.div`
   }
 `;
 
-const ContentWrapper = styled.div<{ collapsed: boolean }>`
-  width: ${({ collapsed }) => (collapsed ? '8px' : 'auto')};
+const ContentWrapper = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'collapsed' && prop !== 'hideCollapseArrow',
+})<{ collapsed: boolean; hideCollapseArrow: boolean }>`
+  width: ${({ collapsed, hideCollapseArrow }) =>
+    collapsed ? (hideCollapseArrow ? '0px' : '8px') : 'auto'};
   overflow: hidden;
   height: 100%;
 `;
@@ -59,23 +67,32 @@ export const HorizontalCollapse = ({
   collapsed = false,
   onCollapsedChange,
   children,
+  hideCollapseArrow = false,
 }: {
   collapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
   children: ReactNode;
+  hideCollapseArrow?: boolean;
 }) => {
   return (
     <Wrapper>
-      <ArrowWrapper
-        className="arrow-wrapper"
-        reversed={collapsed}
-        onClick={() => onCollapsedChange?.(!collapsed)}
+      {!hideCollapseArrow && (
+        <ArrowWrapper
+          className="arrow-wrapper"
+          reversed={collapsed}
+          data-reversed={collapsed}
+          onClick={() => onCollapsedChange?.(!collapsed)}
+        >
+          <ArrowCollapseIcon color="#fff" height={8} width={8} />
+        </ArrowWrapper>
+      )}
+      <ContentWrapper
+        collapsed={collapsed}
+        hideCollapseArrow={hideCollapseArrow}
+        aria-hidden={collapsed}
       >
-        <svg fill="#fff" height="8px" width="8px" viewBox="0 0 330 330">
-          <path d="M250.606,154.389l-150-149.996c-5.857-5.858-15.355-5.858-21.213,0.001  c-5.857,5.858-5.857,15.355,0.001,21.213l139.393,139.39L79.393,304.394c-5.857,5.858-5.857,15.355,0.001,21.213  C82.322,328.536,86.161,330,90,330s7.678-1.464,10.607-4.394l149.999-150.004c2.814-2.813,4.394-6.628,4.394-10.606  C255,161.018,253.42,157.202,250.606,154.389z" />
-        </svg>
-      </ArrowWrapper>
-      <ContentWrapper collapsed={collapsed}>{children}</ContentWrapper>
+        {children}
+      </ContentWrapper>
     </Wrapper>
   );
 };

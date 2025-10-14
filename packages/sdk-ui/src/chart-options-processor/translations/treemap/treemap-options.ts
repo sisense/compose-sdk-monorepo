@@ -1,14 +1,16 @@
 /* eslint-disable max-params */
-import { CategoricalChartData } from '../../../chart-data/types';
-import { HighchartsOptionsInternal } from '../../chart-options-service';
+import { TFunction } from '@sisense/sdk-common';
+
+import { getDataOptionTitle } from '@/chart-data-options/utils';
+
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
+import { CategoricalChartData } from '../../../chart-data/types';
 import { CompleteThemeSettings } from '../../../types';
+import { HighchartsOptionsInternal } from '../../chart-options-service';
 import { TreemapChartDesignOptions } from '../design-options';
-import { getTreemapTooltipSettings } from './treemap-tooltip';
 import { prepareTreemapLevels } from './treemap-labels';
 import { prepareTreemapDataItems } from './treemap-series';
-import { getDataOptionTitle } from '@/chart-data-options/utils';
-import { TFunction } from '@sisense/sdk-common';
+import { getTreemapTooltipSettings } from './treemap-tooltip';
 
 const DEFAULT_TREEMAP_SERIES_COLOR = 'rgb(0, 206, 230)';
 

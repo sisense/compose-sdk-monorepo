@@ -1,4 +1,5 @@
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service.js';
+
 import { BuildContext } from '../../../../types.js';
 import { CALENDAR_HEATMAP_DEFAULTS } from '../../../constants.js';
 import { generateCalendarChartData } from './calendar-data-generator.js';

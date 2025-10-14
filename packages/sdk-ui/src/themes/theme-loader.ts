@@ -1,12 +1,13 @@
 import type { HttpClient } from '@sisense/sdk-rest-client';
+
 import { TranslatableError } from '../translation/translatable-error';
-import type { ThemeOid, CompleteThemeSettings } from '../types';
+import type { CompleteThemeSettings, ThemeOid } from '../types';
 import {
+  convertToThemeSettings,
+  getPaletteName,
   type LegacyDesignSettings,
   type LegacyPalette,
   type LegacyPaletteError,
-  convertToThemeSettings,
-  getPaletteName,
 } from './legacy-design-settings';
 
 /**

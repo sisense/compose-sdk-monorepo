@@ -1,3 +1,5 @@
+import flow from 'lodash-es/flow';
+
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
 import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
 import {
@@ -6,14 +8,14 @@ import {
 } from '@/chart-options-processor/style-to-design-options-translator/prepare-design-options';
 import { getCartesianChartStyle } from '@/chart-options-processor/style-to-design-options-translator/translate-to-highcharts-options';
 import { AreaChartDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { Marker } from '@/chart-options-processor/translations/marker-section';
 import {
   LineType,
   StackType,
 } from '@/chart-options-processor/translations/translations-to-highcharts';
 import { AreaStyleOptions, AreaSubtype, ChartStyleOptions, LineWidth, Markers } from '@/types';
-import { Marker } from '@/chart-options-processor/translations/marker-section';
+
 import { shouldHaveY2Axis } from '../../../helpers/data-options';
-import flow from 'lodash-es/flow';
 
 /**
  * Area subtype to lineType and stackType mapping (from legacy chartSubtypeToDesignOptions)
@@ -126,8 +128,7 @@ const withStackingOptions =
   (styleOptions: AreaStyleOptions) =>
   (options: Partial<AreaChartDesignOptions>): Partial<AreaChartDesignOptions> => ({
     ...options,
-    showTotal: styleOptions.totalLabels?.enabled ?? false,
-    totalLabelRotation: styleOptions.totalLabels?.rotation ?? 0,
+    totalLabels: styleOptions.totalLabels ?? { enabled: false, rotation: 0 },
   });
 
 /**

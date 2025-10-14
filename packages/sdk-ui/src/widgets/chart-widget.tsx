@@ -1,17 +1,21 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { useCallback, useMemo, useState, type FunctionComponent } from 'react';
+import { type FunctionComponent, useCallback, useMemo, useState } from 'react';
+
+import { getDataSourceName } from '@sisense/sdk-data';
 import omit from 'lodash-es/omit';
+
 import { Chart } from '@/chart';
-import { ChartWidgetProps, HighchartsOptions } from '../props';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+
+import { ChartWidgetStyleOptions, DrilldownSelection } from '..';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
-import { getDataSourceName } from '@sisense/sdk-data';
-import { WidgetContainer } from './common/widget-container';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { useHighlightSelection } from './hooks/use-highlight-selection';
+import { ChartWidgetProps, HighchartsOptions } from '../props';
 import { combineHandlers } from '../utils/combine-handlers';
-import { ChartWidgetStyleOptions, DrilldownSelection } from '..';
+import { WidgetContainer } from './common/widget-container';
+import { useHighlightSelection } from './hooks/use-highlight-selection';
 import { useWithDrilldown } from './hooks/use-with-drilldown';
+
 /**
  * The Chart Widget component extending the {@link Chart} component to support widget style options.
  * It can be used along with the {@link DrilldownWidget} component to support advanced data drilldown.

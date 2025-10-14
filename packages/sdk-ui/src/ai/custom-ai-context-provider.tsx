@@ -1,9 +1,11 @@
 import { PropsWithChildren } from 'react';
-import { ChatApiContext } from './api/chat-api-provider';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ChatIdStorageProvider } from './chat-id-storage-provider';
-import { type ChatRestApi } from './api/chat-rest-api';
+
 import { CustomContextProviderProps } from '../types';
+import { ChatApiContext } from './api/chat-api-provider';
+import { type ChatRestApi } from './api/chat-rest-api';
+import { ChatIdStorageProvider } from './chat-id-storage-provider';
 
 /** @internal */
 export type CustomAiContext = {

@@ -1,13 +1,16 @@
-import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
-import { SelectorMode } from './calendar-date-selector';
-import { CalendarDateSelector } from './calendar-date-selector';
+import { useTranslation } from 'react-i18next';
+
+import dayjs from 'dayjs';
+
+import { Popover } from '@/common/components/popover';
+
+import { useThemeContext } from '../../../../theme-provider';
+import { DateRangeFieldButton, TriangleIndicator } from '../../common';
 import { DEFAULT_FORMAT } from '../consts';
 import { DateFilterRange } from '../types';
-import { DateRangeFieldButton, TriangleIndicator } from '../../common';
-import { useThemeContext } from '../../../../theme-provider';
-import { useTranslation } from 'react-i18next';
-import { Popover } from '@/common/components/popover';
+import { SelectorMode } from './calendar-date-selector';
+import { CalendarDateSelector } from './calendar-date-selector';
 
 const DATE_RANGE = 'date-range';
 

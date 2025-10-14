@@ -1,4 +1,5 @@
-import { type SortDirection } from '../types';
+import { BoxplotChartDataOptionsInternal } from '../chart-data-options/types.js';
+import { rownumColumnName } from '../chart-data-processor/table-creators.js';
 import {
   Column,
   DataTable,
@@ -7,15 +8,14 @@ import {
   getValue,
   isBlurred,
 } from '../chart-data-processor/table-processor.js';
+import { type SortDirection } from '../types';
+import { getOrderedXValues, sortDirection } from './cartesian-data.js';
 import {
   BoxplotChartData,
   BoxplotOutliersSeriesValueData,
   BoxplotSeriesValueData,
   ChartData,
 } from './types.js';
-import { BoxplotChartDataOptionsInternal } from '../chart-data-options/types.js';
-import { getOrderedXValues, sortDirection } from './cartesian-data.js';
-import { rownumColumnName } from '../chart-data-processor/table-creators.js';
 
 /**
  * Creates data for box plot charts given chart data table and data options

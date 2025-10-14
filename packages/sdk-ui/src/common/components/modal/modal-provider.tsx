@@ -1,6 +1,8 @@
-import { useCallback, useMemo, useState, useRef, useEffect } from 'react';
-import { ModalContext, useModalContext, ModalOptions, ModalInstance } from './modal-context';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 import { Popover } from '@/common/components/popover';
+
+import { ModalContext, ModalInstance, ModalOptions, useModalContext } from './modal-context';
 
 export interface ModalProviderProps {
   children?: React.ReactNode;

@@ -1,10 +1,10 @@
-import { CategoricalChartData } from '@/chart-data/types';
 import {
   CategoricalChartDataOptions,
   CategoricalChartDataOptionsInternal,
 } from '@/chart-data-options/types';
-import { SunburstStyleOptions } from '@/types';
+import { CategoricalChartData } from '@/chart-data/types';
 import { SunburstChartDesignOptions as SunburstDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { SunburstStyleOptions } from '@/types';
 
 /**
  * Sunburst chart specific type aliases for better readability.

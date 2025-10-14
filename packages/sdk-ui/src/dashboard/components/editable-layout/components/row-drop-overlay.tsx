@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
-import { DropType } from '../types';
+
 import { DroppableZone } from '@/dashboard/components/editable-layout/components/droppable-zone';
 import { Z_INDEX_ROW_DROPZONE } from '@/dashboard/components/editable-layout/const';
+
+import { DropType } from '../types';
 
 const Wrapper = styled.div<{ isLastRow?: boolean }>`
   height: ${({ isLastRow }) => (isLastRow ? '100%' : 0)};

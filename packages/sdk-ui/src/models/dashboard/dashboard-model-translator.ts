@@ -1,16 +1,18 @@
-import { DashboardProps } from '@/dashboard';
-import { DashboardModel } from './dashboard-model.js';
-import { widgetModelTranslator } from '@/models/widget/';
+import { convertDataSource, DataSource } from '@sisense/sdk-data';
+
 import { DashboardDto } from '@/api/types/dashboard-dto.js';
-import { CompleteThemeSettings } from '@/types.js';
 import { AppSettings } from '@/app/settings/settings.js';
+import { DashboardProps } from '@/dashboard';
+import { widgetModelTranslator } from '@/models/widget/';
+import { CompleteThemeSettings } from '@/types.js';
+
+import { DashboardModel } from './dashboard-model.js';
 import {
   extractDashboardFilters,
   translateLayout,
   translateTabbersOptions,
   translateWidgetsOptions,
 } from './translate-dashboard-utils.js';
-import { convertDataSource, DataSource } from '@sisense/sdk-data';
 
 /**
  * Translates {@link DashboardModel} to {@link DashboardProps}.
@@ -67,6 +69,7 @@ export function fromDashboardDto(
     filterRelations: filterRelationsDtoOptions,
     style,
     settings,
+    userAuth,
   } = dashboardDto;
 
   const dataSource: DataSource = convertDataSource(jaqlDataSource);
@@ -102,6 +105,7 @@ export function fromDashboardDto(
     widgetsOptions,
     tabbersOptions,
     settings,
+    userAuth,
   };
 
   return dashboardModel;

@@ -1,11 +1,14 @@
-import { useState, type FunctionComponent } from 'react';
-import { PivotTableWidgetProps } from '../props';
+import { type FunctionComponent, useState } from 'react';
+
+import { getDataSourceName } from '@sisense/sdk-data';
+
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
-import { getDataSourceName } from '@sisense/sdk-data';
-import { WidgetContainer } from './common/widget-container';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { PivotTable } from '../pivot-table';
+import { PivotTableWidgetProps } from '../props';
+import { WidgetContainer } from './common/widget-container';
 import { DEFAULT_WIDGET_HEADER_HEIGHT } from './constants';
 
 function calcPivotTableWidgetHeight(pivotTableHeight: number | undefined) {

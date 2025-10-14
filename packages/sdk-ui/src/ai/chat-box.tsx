@@ -1,28 +1,30 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import styled from '@emotion/styled';
 
+import { ChatContextDetails } from '@/ai/api/types';
+import { Themable } from '@/theme-provider/types';
+
+import { useThemeContext } from '..';
 import LoadingSpinner from '../common/components/loading-spinner';
+import AiDisclaimer from './ai-disclaimer';
 import { useClearChatHistory } from './api/chat-history';
 import { useChatConfig } from './chat-config';
 import ChatInput from './chat-input';
-import ChatWelcomeMessage from './messages/chat-welcome-message';
 import ErrorContainer from './common/error-container';
+import Toolbar from './common/toolbar';
 import LoadingDotsIcon from './icons/loading-dots-icon';
+import ChatWelcomeMessage from './messages/chat-welcome-message';
 import ClearHistoryMessage from './messages/clear-history-message';
+import ClickableMessage from './messages/clickable-message';
 import MessageListResolver from './messages/message-list-resolver';
 import TextMessage from './messages/text-message';
 import NavBackButton from './nav-back-button';
+import { ScrollToBottom } from './scroll-to-bottom';
 import { SuggestionsWithIntro } from './suggestions';
-import Toolbar from './common/toolbar';
 import { useChatSession } from './use-chat-session';
 import { useGetQueryRecommendationsInternal } from './use-get-query-recommendations';
-import { useThemeContext } from '..';
-import { Themable } from '@/theme-provider/types';
-import AiDisclaimer from './ai-disclaimer';
-import ClickableMessage from './messages/clickable-message';
-import { ScrollToBottom } from './scroll-to-bottom';
-import { useTranslation } from 'react-i18next';
-import { ChatContextDetails } from '@/ai/api/types';
 
 export type ChatBoxProps = {
   contextTitle: string;

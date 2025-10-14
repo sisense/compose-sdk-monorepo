@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+
 import { Themable } from '@/theme-provider/types.js';
 
 export const DimensionsBrowserContainer = styled.div<Themable>`

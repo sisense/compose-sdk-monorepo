@@ -1,7 +1,8 @@
-import { CalendarHeatmapChartProps } from './props';
 import { Chart } from './chart';
-import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
+import { CalendarHeatmapChartProps } from './props';
+
 /**
  * A React component that visualizes values over days in a calendar-like view,
  * making it easy to identify daily patterns or anomalies

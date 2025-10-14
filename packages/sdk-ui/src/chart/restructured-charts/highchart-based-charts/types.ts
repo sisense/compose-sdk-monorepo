@@ -1,6 +1,8 @@
-import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
-import { CompleteThemeSettings } from '@/index-typedoc';
 import { TFunction } from '@sisense/sdk-common';
+
+import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
+import { CompleteThemeSettings } from '@/types';
+
 import { TypedChartData, TypedDataOptionsInternal, TypedDesignOptions } from '../types';
 
 export type HighchartBasedChartTypes =

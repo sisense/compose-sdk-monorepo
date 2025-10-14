@@ -1,4 +1,5 @@
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+
 import { DataSource, Filter } from '@sisense/sdk-data';
 
 type FilterEditorContextValue = {

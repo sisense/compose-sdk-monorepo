@@ -1,12 +1,14 @@
+import { ReactNode } from 'react';
+
+import { TFunction } from '@sisense/sdk-common';
+
 import {
   FilterRelationsDescription,
-  isOpenBracketDescriptionNode,
-  isCloseBracketDescriptionNode,
   isAttributeDescriptionNode,
+  isCloseBracketDescriptionNode,
+  isOpenBracketDescriptionNode,
   isOperatorDescriptionNode,
 } from '@/utils/filter-relations';
-import { TFunction } from '@sisense/sdk-common';
-import { ReactNode } from 'react';
 
 export function generateTooltipLines(
   filterRelationsDescription: FilterRelationsDescription,

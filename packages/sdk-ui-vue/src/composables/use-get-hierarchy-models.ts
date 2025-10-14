@@ -1,6 +1,3 @@
-import { useReducer } from '../helpers/use-reducer';
-import { getSisenseContext } from '../providers';
-import { collectRefs, toPlainObject } from '../utils';
 import type {
   ClientApplication,
   GetHierarchyModelsParams,
@@ -9,8 +6,12 @@ import type {
 } from '@sisense/sdk-ui-preact';
 import { dataLoadStateReducer, getHierarchyModels } from '@sisense/sdk-ui-preact';
 import { toRefs, watch } from 'vue';
-import { useTracking } from './use-tracking';
+
+import { useReducer } from '../helpers/use-reducer';
+import { getSisenseContext } from '../providers';
 import type { MaybeRefOrWithRefs } from '../types';
+import { collectRefs, toPlainObject } from '../utils';
+import { useTracking } from './use-tracking';
 
 /**
  * A Vue composable function `useGetHierarchyModels` for retrieving hierarchy models from Sisense instance.

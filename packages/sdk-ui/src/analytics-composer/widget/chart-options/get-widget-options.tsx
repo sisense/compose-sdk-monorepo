@@ -1,23 +1,25 @@
+import {
+  createDimensionalElementFromMetadataItem,
+  DatetimeMask,
+  isDatetime,
+  MetadataItem,
+} from '@sisense/sdk-data';
 import merge from 'ts-deepmerge';
+
+import { AxesMapping, ChartRecommendations, ExpandedQueryModel } from '@/analytics-composer/types';
+import { normalizeAnyColumn } from '@/chart-data-options/utils';
+import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
+
+import { ScattermapChartDataOptions } from '../../../chart-data-options/types';
 import { ChartSubtype } from '../../../chart-options-processor/subtype-to-design-options';
 import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   ChartDataOptions,
-  ChartType,
   ChartStyleOptions,
+  ChartType,
   ScatterChartDataOptions,
 } from '../../../types';
-import { ScattermapChartDataOptions } from '../../../chart-data-options/types';
-import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
-import {
-  DatetimeMask,
-  MetadataItem,
-  createDimensionalElementFromMetadataItem,
-  isDatetime,
-} from '@sisense/sdk-data';
-import { AxesMapping, ChartRecommendations, ExpandedQueryModel } from '@/analytics-composer/types';
-import { normalizeAnyColumn } from '@/chart-data-options/utils';
 
 /**
  * @internal

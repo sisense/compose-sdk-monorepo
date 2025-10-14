@@ -1,7 +1,9 @@
 /** @vitest-environment jsdom */
-import { setup } from '@/__test-helpers__';
-import { FilterTileContainer } from './filter-tile-container';
 import { screen } from '@testing-library/react';
+
+import { setup } from '@/__test-helpers__';
+
+import { FilterTileContainer } from './filter-tile-container';
 
 describe('FilterTileContainer', () => {
   it('should render delete button', async () => {

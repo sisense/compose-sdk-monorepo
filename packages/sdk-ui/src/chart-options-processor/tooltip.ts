@@ -1,15 +1,15 @@
 /* eslint-disable sonarjs/no-nested-template-literals */
+import { colorChineseSilver, colorWhite } from '../chart-data-options/coloring/consts';
 import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
 import { applyFormat, getCompleteNumberFormatConfig } from './translations/number-format-config';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from './translations/scatter-tooltip';
-import { colorChineseSilver, colorWhite } from '../chart-data-options/coloring/consts';
 import {
-  TooltipSettings,
   HighchartsDataPointContext,
   HighchartsDataPointContextNode,
+  TooltipSettings,
 } from './translations/tooltip-utils';
 
 export type { TooltipSettings, HighchartsDataPointContext, HighchartsDataPointContextNode };

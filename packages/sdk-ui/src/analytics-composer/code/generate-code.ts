@@ -1,6 +1,6 @@
-import { CODE_TEMPLATES } from './code-templates.js';
-import { CodePlaceholderMap, CodeTemplateKey, UiFramework } from '../types.js';
 import { removeEmptyLineBeforeImport } from '../common/utils.js';
+import { CodePlaceholderMap, CodeTemplateKey, UiFramework } from '../types.js';
+import { CODE_TEMPLATES } from './code-templates.js';
 
 /**
  * Populates templates recursively.

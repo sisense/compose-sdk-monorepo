@@ -1,21 +1,21 @@
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { WidgetProps } from '@/props.js';
+import { DataPoint } from '@/types';
+
+// Import mocked functions
+import * as jtdHandlers from './jtd-handlers';
 import {
   getJumpToDashboardMenuItem,
   getJumpToDashboardMenuItemForMultiplePoints,
 } from './jtd-menu';
-import { JtdCoreData, JtdContext, JtdActions } from './jtd-types';
-import { JtdConfig, JtdTarget } from './jtd-types';
-import { WidgetProps } from '@/props.js';
-import { DataPoint } from '@/types';
+import { JtdActions, JtdConfig, JtdContext, JtdCoreData, JtdTarget } from './jtd-types';
 
 // Mock dependencies
 vi.mock('./jtd-handlers', () => ({
   getJtdClickHandler: vi.fn(),
   getJtdClickHandlerForMultiplePoints: vi.fn(),
 }));
-
-// Import mocked functions
-import * as jtdHandlers from './jtd-handlers';
 
 describe('jtd-menu', () => {
   const mockOpenModal = vi.fn();

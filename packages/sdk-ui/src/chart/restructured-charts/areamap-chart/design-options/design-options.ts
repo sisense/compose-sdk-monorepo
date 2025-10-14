@@ -1,5 +1,6 @@
 import { BaseDesignOptions } from '@/chart-options-processor/translations/base-design-options';
 import { AreamapStyleOptions, ChartStyleOptions } from '@/types';
+
 import { ChartBuilder } from '../../types';
 import { AreamapChartDesignOptions } from '../types';
 

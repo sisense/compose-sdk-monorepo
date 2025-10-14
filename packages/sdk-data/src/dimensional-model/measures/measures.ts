@@ -1,9 +1,15 @@
 /* eslint-disable max-params */
+
 /* eslint-disable no-underscore-dangle */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { createAttribute, DimensionalAttribute } from '../attributes.js';

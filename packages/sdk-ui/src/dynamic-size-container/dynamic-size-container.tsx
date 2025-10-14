@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+
 import isEqual from 'lodash-es/isEqual';
 
 export type ContainerSize = {

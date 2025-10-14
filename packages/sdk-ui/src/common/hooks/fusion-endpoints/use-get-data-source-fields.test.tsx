@@ -1,9 +1,11 @@
-import { server } from '@/__mocks__/msw';
 import { renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { useGetDataSourceFields } from './use-get-data-source-fields.js';
-import { ConfiguredSisenseContextProvider } from '@/__test-helpers__/configured-sisense-context-provider.js';
+
+import { server } from '@/__mocks__/msw';
 import { sampleEcommerceFields as MOCK_DATA_SOURCE_FIELDS } from '@/__mocks__/sample-ecommerce-fields.js';
+import { ConfiguredSisenseContextProvider } from '@/__test-helpers__/configured-sisense-context-provider.js';
+
+import { useGetDataSourceFields } from './use-get-data-source-fields.js';
 
 const mockDataSource = 'Sample ECommerce';
 

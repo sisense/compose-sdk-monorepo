@@ -1,8 +1,11 @@
-import styled from '@emotion/styled';
-import DataTopicItem from './data-topic-item';
-import { Themable } from '@/theme-provider/types';
-import { useThemeContext } from '@/theme-provider';
 import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+
+import DataTopicItem from './data-topic-item';
 
 export interface DataTopic {
   title: string;

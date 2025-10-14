@@ -1,27 +1,30 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 import Pagination from '@mui/material/Pagination';
 import { isDataSource } from '@sisense/sdk-data';
-import { TableProps } from '../props';
-import { useThemeContext } from '../theme-provider';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+
+import { isMeasureColumn, translateColumnToMeasure } from '@/chart-data-options/utils';
+import { isData } from '@/chart/regular-chart';
+import { TranslatableError } from '@/translation/translatable-error';
+
 import { translateTableDataOptions } from '../chart-data-options/translate-data-options';
-import { useTableData } from './hooks/use-table-data';
-import { useTableDataTable } from './hooks/use-table-datatable';
+import { StyledMeasureColumn, TableDataOptionsInternal } from '../chart-data-options/types';
+import { generateUniqueDataColumnsNames } from '../chart-data-options/validate-data-options';
+import { isDataTableEmpty } from '../chart-data-processor/table-creators';
 import { Column as DataTableColumn } from '../chart-data-processor/table-processor';
+import { orderBy } from '../chart-data-processor/table-processor';
 import { updateInnerDataOptionsSort } from '../chart-data/table-data';
 import { PureTable } from '../charts/table';
-import { getCustomPaginationStyles } from './styles/get-custom-pagination-styles';
-import { generateUniqueDataColumnsNames } from '../chart-data-options/validate-data-options';
-import { StyledMeasureColumn, TableDataOptionsInternal } from '../chart-data-options/types';
-import { isDataTableEmpty } from '../chart-data-processor/table-creators';
-import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
-import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 import { LoadingIndicator } from '../common/components/loading-indicator';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
+import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
+import { TableProps } from '../props';
+import { useThemeContext } from '../theme-provider';
+import { useTableData } from './hooks/use-table-data';
+import { useTableDataTable } from './hooks/use-table-datatable';
+import { getCustomPaginationStyles } from './styles/get-custom-pagination-styles';
 import { translateTableStyleOptionsToDesignOptions } from './translations/design-options';
-import { orderBy } from '../chart-data-processor/table-processor';
-import { isMeasureColumn, translateColumnToMeasure } from '@/chart-data-options/utils';
-import { TranslatableError } from '@/translation/translatable-error';
-import { isData } from '@/chart/regular-chart';
 
 export const DEFAULT_TABLE_ROWS_PER_PAGE = 25;
 

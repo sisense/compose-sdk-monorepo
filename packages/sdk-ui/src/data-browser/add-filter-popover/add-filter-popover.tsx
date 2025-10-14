@@ -1,12 +1,15 @@
+import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+import { DataSource, DateDimension, Filter, filterFactory, MetadataTypes } from '@sisense/sdk-data';
+
 import { Popover } from '@/common/components/popover';
 import { withErrorBoundary } from '@/decorators/component-decorators/with-error-boundary';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import { Themable } from '@/theme-provider/types';
 import { TranslatableError } from '@/translation/translatable-error';
-import styled from '@emotion/styled';
-import { DataSource, DateDimension, Filter, filterFactory, MetadataTypes } from '@sisense/sdk-data';
-import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { AttributiveElement } from '../dimensions-browser/types';
 import { AddFilterDataBrowser } from './add-filter-data-browser';
 import { PopoverHeader } from './popover-header';

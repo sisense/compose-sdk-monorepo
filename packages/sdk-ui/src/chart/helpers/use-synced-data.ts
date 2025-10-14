@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+
 import {
   Attribute,
   Data,
@@ -7,18 +9,18 @@ import {
   isDataSource,
   Measure,
 } from '@sisense/sdk-data';
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+
 import { ChartDataOptionsInternal } from '../../chart-data-options/types';
-import { applyDateFormats } from '../../query/query-result-date-formatting';
-import { ChartType } from '../../types';
-import { useSisenseContext } from '../../sisense-context/sisense-context';
 import {
   DataColumnNamesMapping,
   validateDataOptionsAgainstData,
 } from '../../chart-data-options/validate-data-options';
 import { useSetError } from '../../error-boundary/use-set-error';
+import { applyDateFormats } from '../../query/query-result-date-formatting';
+import { useSisenseContext } from '../../sisense-context/sisense-context';
+import { ChartType } from '../../types';
 import '../chart.css';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import { deriveChartFamily } from './derive-chart-family';
 import { LoadDataFunction } from './get-load-data-function';
 

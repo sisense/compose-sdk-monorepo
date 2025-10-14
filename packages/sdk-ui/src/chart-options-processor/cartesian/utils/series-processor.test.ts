@@ -1,9 +1,10 @@
-import { describe, it, expect } from 'vitest';
-import { processSeries, type SeriesProcessingConfig } from './series-processor';
-import { CategoricalSeriesValues } from '../../../chart-data/types';
+import { describe, expect, it } from 'vitest';
+
 import { CartesianChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { ChartDesignOptions, SeriesDesignOptions } from '../../translations/types';
+import { CategoricalSeriesValues } from '../../../chart-data/types';
 import { ChartType } from '../../../types';
+import { ChartDesignOptions, SeriesDesignOptions } from '../../translations/types';
+import { processSeries, type SeriesProcessingConfig } from './series-processor';
 
 /**
  * Mock data for testing

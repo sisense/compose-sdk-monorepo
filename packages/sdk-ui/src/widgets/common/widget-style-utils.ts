@@ -1,4 +1,5 @@
 import get from 'lodash-es/get';
+
 import { CompleteThemeSettings, WidgetContainerStyleOptions } from '../../types';
 
 export enum WidgetCornerRadius {

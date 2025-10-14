@@ -1,5 +1,3 @@
-import { WidgetContainerStyleOptions } from '../types';
-import { LEGACY_DESIGN_TYPES } from '../themes/legacy-design-settings';
 import {
   BaseJaql,
   FormulaContext,
@@ -8,8 +6,12 @@ import {
   JaqlDataSource,
   JaqlSortDirection,
 } from '@sisense/sdk-data';
-import { HierarchyId } from '@/models/hierarchy';
+
 import { JtdConfigDto } from '@/dashboard/hooks/jtd/jtd-types';
+import { HierarchyId } from '@/models/hierarchy';
+
+import { LEGACY_DESIGN_TYPES } from '../themes/legacy-design-settings';
+import { WidgetContainerStyleOptions } from '../types';
 
 /**
  * The type of a widget on a dashboard that is a variant of Cartesian widget.
@@ -663,6 +665,12 @@ export type CalendarHeatmapWidgetStyle = {
   'view/weekly'?: boolean;
   'week/monday'?: boolean;
   'week/sunday'?: boolean;
+  startMonth?:
+    | string
+    | {
+        year: number;
+        month: number;
+      };
 };
 
 export type WidgetStyle = { widgetDesign?: WidgetDesign; narration?: any } & (

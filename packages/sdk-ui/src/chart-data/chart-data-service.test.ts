@@ -1,8 +1,8 @@
 import { ChartDataOptionsInternal } from '../chart-data-options/types';
 import { DataTable } from '../chart-data-processor/table-processor';
+import { ChartType } from '../types';
 import { chartDataService } from './chart-data-service';
 import { indicatorData } from './indicator-data';
-import { ChartType } from '../types';
 
 vi.mock('./indicator-data'); // Mock the indicatorData module
 vi.mock('./table-data'); // Mock the tableData module

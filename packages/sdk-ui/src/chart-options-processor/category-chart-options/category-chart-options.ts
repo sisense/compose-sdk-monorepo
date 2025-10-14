@@ -1,32 +1,34 @@
 /* eslint-disable max-params */
+
 /* eslint-disable no-case-declarations */
-import { ChartDesignOptions } from '../translations/types';
+import { TFunction } from '@sisense/sdk-common';
+
+import { TranslatableError } from '@/translation/translatable-error';
+
 import {
-  PieChartDesignOptions,
-  FunnelChartDesignOptions,
-  TreemapChartDesignOptions,
-} from '../translations/design-options';
-import { ChartType, OptionsWithAlerts, CompleteThemeSettings } from '../../types';
+  CategoricalChartDataOptionsInternal,
+  ChartDataOptionsInternal,
+} from '../../chart-data-options/types';
 import { CategoricalChartData } from '../../chart-data/types';
+import { ChartType, CompleteThemeSettings, OptionsWithAlerts } from '../../types';
 import { HighchartsOptionsInternal } from '../chart-options-service';
 import {
-  ChartDataOptionsInternal,
-  CategoricalChartDataOptionsInternal,
-} from '../../chart-data-options/types';
-import { TranslatableError } from '@/translation/translatable-error';
-import { TFunction } from '@sisense/sdk-common';
+  FunnelChartDesignOptions,
+  PieChartDesignOptions,
+  TreemapChartDesignOptions,
+} from '../translations/design-options';
+import { ChartDesignOptions } from '../translations/types';
+import { getFunnelChartOptions } from './funnel-chart-options';
+// Import individual chart option functions for use in main function
+import { getPieChartOptions } from './pie-chart-options';
+import { getSunburstChartOptions } from './sunburst-chart-options';
+import { getTreemapChartOptions } from './treemap-chart-options';
 
 // Export individual chart option functions
 export { getPieChartOptions } from './pie-chart-options';
 export { getFunnelChartOptions } from './funnel-chart-options';
 export { getTreemapChartOptions } from './treemap-chart-options';
 export { getSunburstChartOptions } from './sunburst-chart-options';
-
-// Import individual chart option functions for use in main function
-import { getPieChartOptions } from './pie-chart-options';
-import { getFunnelChartOptions } from './funnel-chart-options';
-import { getTreemapChartOptions } from './treemap-chart-options';
-import { getSunburstChartOptions } from './sunburst-chart-options';
 
 /**
  * Convert intermediate chart data, data options, and design options

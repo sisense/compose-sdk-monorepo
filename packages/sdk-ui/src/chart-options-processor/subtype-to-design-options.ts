@@ -1,7 +1,7 @@
-import { LineType, StackType } from './translations/translations-to-highcharts';
-import { IndicatorStyleType, PolarType, BoxplotType } from './translations/design-options';
-import { PieType } from './translations/pie-plot-options';
 import { AreamapType } from '../types';
+import { BoxplotType, IndicatorStyleType, PolarType } from './translations/design-options';
+import { PieType } from './translations/pie-plot-options';
+import { LineType, StackType } from './translations/translations-to-highcharts';
 
 /**
  * Property of {@link LineStyleOptions}

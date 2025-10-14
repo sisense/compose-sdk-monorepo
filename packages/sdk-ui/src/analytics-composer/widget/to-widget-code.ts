@@ -1,30 +1,35 @@
 import { WidgetProps } from '@/props';
-import {
-  ByIdWidgetCodeParams,
-  ClientSideWidgetCodeParams,
-  UiFramework,
-  ChartWidgetCodeProps,
-  PivotTableWidgetCodeProps,
-  TemplateKeyMapByWidgetType,
-} from '../types.js';
+import { TranslatableError } from '@/translation/translatable-error';
+import { ChartType } from '@/types';
 import {
   isChartWidgetProps,
-  isPivotTableWidgetProps,
   isCustomWidgetProps,
+  isPivotTableWidgetProps,
 } from '@/widget-by-id/utils.js';
-import { TranslatableError } from '@/translation/translatable-error';
-import { validateChartType, checkIfMeasuresExist } from '../common/utils.js';
-import {
-  stringifyDataSource,
-  stringifyExtraImports,
-  stringifyDataOptions,
-} from '../code/stringify-props.js';
-import { ChartType } from '@/types';
+
 import { generateCode } from '../code/generate-code.js';
 import { stringifyFilters } from '../code/stringify-filters.js';
-import { CodeTemplateKey } from '../types.js';
-import { stringifyProps } from '../code/stringify-props.js';
+import {
+  removeDefaultDataOptionsProps,
+  removeDefaultStyleOptionsProps,
+  stringifyProps,
+} from '../code/stringify-props.js';
+import {
+  stringifyDataOptions,
+  stringifyDataSource,
+  stringifyExtraImports,
+} from '../code/stringify-props.js';
 import { CODE_TEMPLATES_INDENT } from '../common/constants.js';
+import { checkIfMeasuresExist, validateChartType } from '../common/utils.js';
+import {
+  ByIdWidgetCodeParams,
+  ChartWidgetCodeProps,
+  ClientSideWidgetCodeParams,
+  PivotTableWidgetCodeProps,
+  TemplateKeyMapByWidgetType,
+  UiFramework,
+} from '../types.js';
+import { CodeTemplateKey } from '../types.js';
 
 const widgetByIdTemplateKeys: CodeTemplateKey[] = ['executeQueryByWidgetIdTmpl', 'widgetByIdTmpl'];
 const widgetTemplateKey: CodeTemplateKey = 'chartWidgetTmpl';
@@ -51,6 +56,7 @@ export const getWidgetCode = (
   widgetProps: WidgetProps,
   uiFramework: UiFramework,
   templateKeyMap: TemplateKeyMapByWidgetType,
+  removeDefaultProps?: boolean,
 ): string => {
   if (isChartWidgetProps(widgetProps)) {
     validateChartType(widgetProps.chartType);
@@ -61,11 +67,20 @@ export const getWidgetCode = (
       titleString: widgetProps.title,
       dataSourceString: stringifyDataSource(widgetProps.dataSource),
       chartTypeString: stringifyChartType(widgetProps.chartType),
-      dataOptionsString: stringifyDataOptions(widgetProps.dataOptions),
+      dataOptionsString: stringifyDataOptions(
+        removeDefaultProps
+          ? removeDefaultDataOptionsProps(widgetProps.dataOptions, widgetProps.chartType)
+          : widgetProps.dataOptions,
+      ),
       filtersString: stringifyFilters(widgetProps.filters),
       componentString: 'ChartWidget',
       extraImportsString: stringifyExtraImports(widgetProps.filters || [], hasMeasures),
-      styleOptionsString: stringifyProps(widgetProps.styleOptions || {}, CODE_TEMPLATES_INDENT),
+      styleOptionsString: stringifyProps(
+        removeDefaultProps
+          ? removeDefaultStyleOptionsProps(widgetProps.styleOptions || {}, widgetProps.chartType)
+          : widgetProps.styleOptions || {},
+        CODE_TEMPLATES_INDENT,
+      ),
       drilldownOptionsString: stringifyProps(
         widgetProps.drilldownOptions || {},
         CODE_TEMPLATES_INDENT,
@@ -81,11 +96,20 @@ export const getWidgetCode = (
       widgetTypeString: 'pivot',
       titleString: widgetProps.title,
       dataSourceString: stringifyDataSource(widgetProps.dataSource),
-      dataOptionsString: stringifyProps(widgetProps.dataOptions),
+      dataOptionsString: stringifyProps(
+        removeDefaultProps
+          ? removeDefaultDataOptionsProps(widgetProps.dataOptions, widgetProps.widgetType)
+          : widgetProps.dataOptions,
+      ),
       filtersString: stringifyFilters(widgetProps.filters),
       componentString: 'PivotTableWidget',
       extraImportsString: stringifyExtraImports(widgetProps.filters || [], hasMeasures),
-      styleOptionsString: stringifyProps(widgetProps.styleOptions || {}, CODE_TEMPLATES_INDENT),
+      styleOptionsString: stringifyProps(
+        removeDefaultProps
+          ? removeDefaultStyleOptionsProps(widgetProps.styleOptions || {}, widgetProps.widgetType)
+          : widgetProps.styleOptions || {},
+        CODE_TEMPLATES_INDENT,
+      ),
     };
     return generateCode(templateKeyMap.pivot, codeProps, uiFramework);
   }
@@ -100,10 +124,11 @@ export const getWidgetCode = (
 export const toWidgetCodeClientSide = ({
   widgetProps,
   uiFramework = 'react',
+  removeDefaultProps = false,
 }: ClientSideWidgetCodeParams): string => {
   const templateKeyMap: TemplateKeyMapByWidgetType = {
     chart: widgetTemplateKey,
     pivot: pivotTableWidgetTemplateKey,
   };
-  return getWidgetCode(widgetProps, uiFramework, templateKeyMap);
+  return getWidgetCode(widgetProps, uiFramework, templateKeyMap, removeDefaultProps);
 };

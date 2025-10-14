@@ -1,5 +1,6 @@
-import { useSisenseContext } from '../../../../sisense-context/sisense-context.js';
 import { useCallback, useEffect, useState } from 'react';
+
+import { useSisenseContext } from '../../../../sisense-context/sisense-context.js';
 
 type GeoSettings = {
   maps_api_provider: string;

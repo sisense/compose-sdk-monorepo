@@ -2,6 +2,7 @@ import {
   type DashboardModel,
   dashboardModelTranslator as dashboardModelTranslatorPreact,
 } from '@sisense/sdk-ui-preact';
+
 import type { DashboardProps } from '../components/dashboard';
 
 /**

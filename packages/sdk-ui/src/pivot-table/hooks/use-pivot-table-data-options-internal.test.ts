@@ -1,7 +1,8 @@
 import { renderHook, waitFor } from '@testing-library/react';
+
+import { mockPivotTableProps } from '../__mocks__/mocks';
 import { PivotSortCriteria } from '../sorting-utils';
 import { usePivotTableDataOptionsInternal } from './use-pivot-table-data-options-internal';
-import { mockPivotTableProps } from '../__mocks__/mocks';
 
 describe('usePivotTableDataOptionsInternal', () => {
   it('should correctly translate dataOptions into internalDataOptions', async () => {

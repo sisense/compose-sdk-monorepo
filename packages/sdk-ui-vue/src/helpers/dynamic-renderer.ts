@@ -1,4 +1,4 @@
-import { createApp, type App } from 'vue';
+import { type App, createApp } from 'vue';
 import type { Component, DefineComponent } from 'vue';
 
 type AnyObject = Record<string, any>;

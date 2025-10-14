@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import io from 'socket.io-client';
+
 import { SocketI, SocketQueryOptions } from '../types.js';
 import { getCsrfResponseData } from './helpers';
 

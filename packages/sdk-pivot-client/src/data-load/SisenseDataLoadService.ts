@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import EventEmitter from 'events';
 import { v4 as uuid } from 'uuid';
-import { DataLoadService } from './DataLoadService.js';
-import { MessageType } from './constants.js';
+
 import { debug } from '../utils/index.js';
+import { MessageType } from './constants.js';
+import { DataLoadService } from './DataLoadService.js';
 import { DataLoadServiceI, SocketI } from './types.js';
 
 type Options = {

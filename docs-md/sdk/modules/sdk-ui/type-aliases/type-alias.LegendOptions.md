@@ -151,6 +151,14 @@ false
 
 ***
 
+### `shadow`
+
+**shadow**?: `boolean`
+
+Whether to show shadow on the legend
+
+***
+
 ### `symbols`
 
 **symbols**?: [`LegendSymbolsOptions`](../interfaces/interface.LegendSymbolsOptions.md)

@@ -1,3 +1,8 @@
+import { Attribute, Column, Filter, isMembersFilter, MembersFilter } from '@sisense/sdk-data';
+import groupBy from 'lodash-es/groupBy';
+import partition from 'lodash-es/partition';
+import uniq from 'lodash-es/uniq';
+
 import { isMeasureColumn, translateColumnToAttribute } from '@/chart-data-options/utils';
 import {
   isAreamap,
@@ -9,34 +14,30 @@ import {
   isScatter,
   isScattermap,
 } from '@/chart-options-processor/translations/types';
-import { Column, Attribute, Filter, isMembersFilter, MembersFilter } from '@sisense/sdk-data';
-import uniq from 'lodash-es/uniq';
-import groupBy from 'lodash-es/groupBy';
-import partition from 'lodash-es/partition';
+import { MenuSectionIds } from '@/common/components/menu/menu-ids.js';
+import { WidgetTypeInternal } from '@/models/widget/types.js';
 import {
   AreamapDataPoint,
   BoxplotDataPoint,
+  CalendarHeatmapChartDataOptions,
+  CalendarHeatmapDataPoint,
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   ChartDataOptions,
   ChartDataPoint,
   DataPoint,
   DataPointEntry,
-  PivotTableDataOptions,
+  MenuItemSection,
   ScatterChartDataOptions,
   ScatterDataPoint,
-  ScattermapChartDataOptions,
   ScattermapDataPoint,
   StyledColumn,
-  MenuItemSection,
-  CalendarHeatmapChartDataOptions,
-  CalendarHeatmapDataPoint,
-} from '../index.js';
-import { createCommonFilter, getFilterByAttribute, isEqualMembersFilters } from './utils.js';
-import { WidgetTypeInternal } from '@/models/widget/types.js';
-import { clearMembersFilter, isIncludeAllFilter } from '@/utils/filters.js';
-import { MenuSectionIds } from '@/common/components/menu/menu-ids.js';
+} from '@/types.js';
 import { haveSameAttribute } from '@/utils/filters-comparator.js';
+import { clearMembersFilter, isIncludeAllFilter } from '@/utils/filters.js';
+
+import { PivotTableDataOptions, ScattermapChartDataOptions } from '../chart-data-options/types.js';
+import { createCommonFilter, getFilterByAttribute, isEqualMembersFilters } from './utils.js';
 
 export const SELECTION_TITLE_MAXIMUM_ITEMS = 2;
 

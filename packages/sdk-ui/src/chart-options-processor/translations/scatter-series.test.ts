@@ -1,10 +1,11 @@
-import { ScatterDataTable } from '../../chart-data/types';
-import { createCategoriesMap } from '../../chart-data/scatter-data';
-import { buildScatterSeries } from './scatter-series';
-import { MarkerSettings } from './marker-section';
-import { SeriesType } from '../chart-options-service';
-import { SeriesPointStructure } from './translations-to-highcharts';
 import { StyledMeasureColumn } from '@/index';
+
+import { createCategoriesMap } from '../../chart-data/scatter-data';
+import { ScatterDataTable } from '../../chart-data/types';
+import { SeriesType } from '../chart-options-service';
+import { MarkerSettings } from './marker-section';
+import { buildScatterSeries } from './scatter-series';
+import { SeriesPointStructure } from './translations-to-highcharts';
 import { ChartDesignOptions } from './types';
 
 describe('Scatter series builder', () => {

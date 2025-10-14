@@ -1,14 +1,16 @@
 import flow from 'lodash-es/flow';
-import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
-import { BuildContext } from '../../../../types';
-import { getCartesianXAxis } from '../../../helpers/highchart-options/axis';
+
 import {
   withXAxisLabelPositioning,
   withYAxisLabelPositioning,
 } from '@/chart-options-processor/cartesian/utils/chart-configuration';
-import { getAreaChartSpacingForTotalLabels } from './labels-spacing';
+import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
+
+import { BuildContext } from '../../../../types';
+import { getCartesianXAxis } from '../../../helpers/highchart-options/axis';
 import { getBasicYAxisSettings } from '../../../helpers/highchart-options/y-axis';
 import { withStacking } from '../../helpers/highchart-options/stacking';
+import { getAreaChartSpacingForTotalLabels } from './labels-spacing';
 
 export const getAxes = (
   ctx: BuildContext<'area'>,
@@ -54,7 +56,8 @@ function withAreaChartYAxisLabelPositioning(
  */
 function calculateTopShift(ctx: BuildContext<'area'>): number {
   const stackOptions = ctx.designOptions;
-  const shouldApplyPositioning = stackOptions.showTotal && stackOptions.stackType === 'stack100';
+  const shouldApplyPositioning =
+    stackOptions.totalLabels?.enabled && stackOptions.stackType === 'stack100';
 
   if (!shouldApplyPositioning) {
     return 0;

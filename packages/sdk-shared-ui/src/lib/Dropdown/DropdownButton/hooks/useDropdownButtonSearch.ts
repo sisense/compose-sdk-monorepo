@@ -6,7 +6,7 @@ export const useDropdownButtonSearch = (
   isOpen: boolean,
   selectedItem?: DropdownItem,
   searchInputProps?: DropdownInputProps,
-  ref?: RefObject<HTMLDivElement>,
+  ref?: RefObject<HTMLDivElement | null>,
 ) => {
   const [inputProps, setInputProps] = useState({
     ...searchInputProps,

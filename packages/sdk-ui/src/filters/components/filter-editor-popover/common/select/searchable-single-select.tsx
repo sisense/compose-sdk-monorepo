@@ -1,22 +1,25 @@
 import React, { useCallback, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import styled from '@emotion/styled';
-import { ArrowDownIcon } from '../../../icons';
-import { SelectItem } from './types';
-import { SelectField, SelectLabel } from './base';
-import { getSelectedItemsDisplayValue } from './utils';
-import { SingleSelectItem } from './single-select-item';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+
+import { Popper } from '@/common/components/popper';
 import { DEFAULT_TEXT_COLOR } from '@/const';
+import { SearchInput } from '@/filters/components/filter-editor-popover/common';
 import {
   ScrollWrapper,
   ScrollWrapperOnScrollEvent,
 } from '@/filters/components/filter-editor-popover/common/scroll-wrapper';
 import { SmallLoader } from '@/filters/components/filter-editor-popover/common/small-loader';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { Popper } from '@/common/components/popper';
-import { SearchInput } from '@/filters/components/filter-editor-popover/common';
-import { useTranslation } from 'react-i18next';
-import { Themable } from '@/theme-provider/types';
 import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+
+import { ArrowDownIcon } from '../../../icons';
+import { SelectField, SelectLabel } from './base';
+import { SingleSelectItem } from './single-select-item';
+import { SelectItem } from './types';
+import { getSelectedItemsDisplayValue } from './utils';
 
 const Content = styled.div<Themable>`
   max-height: 294px;

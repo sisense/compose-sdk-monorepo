@@ -1,6 +1,6 @@
 import { Chart } from '../chart';
-import { templateForComponent } from './template';
 import { FunnelStyleOptions } from '../types';
+import { templateForComponent } from './template';
 
 const template = templateForComponent(Chart);
 

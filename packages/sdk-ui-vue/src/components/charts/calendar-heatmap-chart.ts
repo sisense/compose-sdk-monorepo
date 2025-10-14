@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { CalendarHeatmapChart as CalendarHeatmapChartPreact } from '@sisense/sdk-ui-preact';
 import type { CalendarHeatmapChartProps as CalendarHeatmapChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**

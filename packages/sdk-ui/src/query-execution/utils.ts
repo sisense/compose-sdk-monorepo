@@ -1,5 +1,7 @@
-import { PivotQueryDescription, QueryDescription } from '@/query/execute-query';
 import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+
+import { PivotQueryDescription, QueryDescription } from '@/query/execute-query';
+
 import { ExecutePivotQueryParams, ExecuteQueryParams } from './types';
 
 export function convertToQueryDescription<T extends ExecuteQueryParams | ExecutePivotQueryParams>(

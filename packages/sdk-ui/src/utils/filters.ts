@@ -1,4 +1,3 @@
-import { TranslatableError } from '@/translation/translatable-error';
 import {
   Attribute,
   DimensionalLevelAttribute,
@@ -8,6 +7,8 @@ import {
   MembersFilter,
 } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep.js';
+
+import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Clones a filter with a toggled 'disabled' state.

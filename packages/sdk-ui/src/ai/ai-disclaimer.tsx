@@ -1,7 +1,10 @@
-import { Themable } from '@/theme-provider/types';
-import styled from '@emotion/styled';
-import { CompleteThemeSettings } from '..';
 import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+
+import { Themable } from '@/theme-provider/types';
+
+import { CompleteThemeSettings } from '..';
 
 const AiDisclaimerContainer = styled.div<Themable>`
   text-align: center;

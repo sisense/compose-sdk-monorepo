@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
-import { DateRangeFilter } from '@sisense/sdk-data';
 import { useTranslation } from 'react-i18next';
+
+import { DateRangeFilter } from '@sisense/sdk-data';
+
 import { FilterContentDisplay } from '@/filters/components/common/filter-content-display';
 
 type DateRangeFilterDisplayProps = {

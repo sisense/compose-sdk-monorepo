@@ -1,3 +1,9 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+import IconButton from '@mui/material/IconButton';
+
 import { useDebouncedValue } from '@/common/hooks/use-debounced-value';
 import { CloseIcon } from '@/common/icons/close-icon';
 import { SearchIcon } from '@/common/icons/search-icon';
@@ -5,10 +11,6 @@ import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 import { getElementStateColor } from '@/theme-provider/utils';
 import { ElementStates } from '@/types';
-import styled from '@emotion/styled';
-import IconButton from '@mui/material/IconButton';
-import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 export type SearchInputProps = {
   onChange: (value: string) => void;

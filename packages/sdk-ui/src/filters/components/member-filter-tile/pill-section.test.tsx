@@ -1,6 +1,8 @@
-import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
 import { rgbToHex } from '@mui/system/colorManipulator';
 import { screen } from '@testing-library/react';
+
+import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
+
 import { setup } from '../../../__test-helpers__';
 import { PillSection, PillSectionProps } from './pill-section';
 

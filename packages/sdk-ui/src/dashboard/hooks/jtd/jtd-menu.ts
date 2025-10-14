@@ -1,5 +1,5 @@
 import { getJtdClickHandler, getJtdClickHandlerForMultiplePoints } from './jtd-handlers';
-import { JtdCoreData, JtdContext, JtdActions } from './jtd-types';
+import { JtdActions, JtdContext, JtdCoreData } from './jtd-types';
 
 export const jumpToDashboardMenuId = 'jump-to-dashboard-menu';
 

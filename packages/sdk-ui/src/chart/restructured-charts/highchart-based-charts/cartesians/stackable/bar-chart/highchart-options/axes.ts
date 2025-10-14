@@ -1,14 +1,16 @@
 import flow from 'lodash-es/flow';
-import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
-import { BuildContext } from '../../../../types';
-import { getCartesianXAxis } from '../../../helpers/highchart-options/axis';
+
 import {
   withXAxisLabelPositioning,
   withYAxisLabelPositioning,
 } from '@/chart-options-processor/cartesian/utils/chart-configuration';
-import { getBarChartSpacingForTotalLabels } from './labels-spacing';
+import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
+
+import { BuildContext } from '../../../../types';
+import { getCartesianXAxis } from '../../../helpers/highchart-options/axis';
 import { getBasicYAxisSettings } from '../../../helpers/highchart-options/y-axis';
 import { withStacking } from '../../helpers/highchart-options/stacking';
+import { getBarChartSpacingForTotalLabels } from './labels-spacing';
 
 export const getAxes = (
   ctx: BuildContext<'bar'>,
@@ -39,7 +41,8 @@ function withBarChartYAxisLabelPositioning(
 ): (yAxis: AxisSettings[]) => AxisSettings[] {
   // Calculate positioning based on whether total labels are shown with stack100
   const stackOptions = ctx.designOptions;
-  const shouldApplyPositioning = stackOptions.showTotal && stackOptions.stackType === 'stack100';
+  const shouldApplyPositioning =
+    stackOptions.totalLabels?.enabled && stackOptions.stackType === 'stack100';
   const rightShift = shouldApplyPositioning ? 0.1 : 0;
   const topShift = 0; // Bar charts use rightShift, not topShift
 

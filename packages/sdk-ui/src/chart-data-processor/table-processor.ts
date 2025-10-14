@@ -1,14 +1,20 @@
 /* eslint-disable no-underscore-dangle */
+
 /* eslint-disable @typescript-eslint/naming-convention */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
+
 /* eslint-disable @typescript-eslint/no-shadow */
+
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { RowComparator, createCompareValue } from './row-comparator';
 import { isDatetime, isNumber } from '@sisense/sdk-data';
-import { Distribution } from './distribution';
-import { CategoricalDistribution } from './categorical-distribution';
+
 import { parseISOWithTimezoneCheck } from '../utils/parseISOWithTimezoneCheck';
+import { CategoricalDistribution } from './categorical-distribution';
+import { Distribution } from './distribution';
+import { createCompareValue, RowComparator } from './row-comparator';
 
 export type FilterTypes = 'greater' | 'lesser' | 'equal' | 'contains' | 'not equal';
 

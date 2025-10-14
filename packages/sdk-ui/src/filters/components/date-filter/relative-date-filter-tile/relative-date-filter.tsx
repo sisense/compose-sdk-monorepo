@@ -1,26 +1,32 @@
 /* eslint-disable security/detect-object-injection */
+
 /* eslint-disable sonarjs/no-duplicate-string */
+
 /* eslint-disable @typescript-eslint/ban-types */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { FunctionComponent, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
   DateLevels,
   DateOperators,
   DimensionalLevelAttribute,
-  RelativeDateFilter as RelativeDateFilterType,
   filterFactory,
+  RelativeDateFilter as RelativeDateFilterType,
 } from '@sisense/sdk-data';
-import { BasicInput, DateRangeFieldButton, Dropdown, FilterVariant } from '../../common/index.js';
-import { FunctionComponent, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
+import isToday from 'dayjs/plugin/isToday';
+
+import { Popover } from '@/common/components/popover.js';
+import { TranslatableError } from '@/translation/translatable-error.js';
+
+import { useThemeContext } from '../../../../theme-provider/index.js';
 import { isVertical } from '../../common/filter-utils.js';
+import { BasicInput, DateRangeFieldButton, Dropdown, FilterVariant } from '../../common/index.js';
 import { DEFAULT_FORMAT } from '../consts.js';
 import { CalendarDateSelector } from '../date-filter/calendar-date-selector.js';
-import dayjs from 'dayjs';
-import { useThemeContext } from '../../../../theme-provider/index.js';
-import isToday from 'dayjs/plugin/isToday';
-import { TranslatableError } from '@/translation/translatable-error.js';
 import { createAnchorDateFromRelativeDateFilter } from './helpers';
-import { Popover } from '@/common/components/popover.js';
 
 dayjs.extend(isToday);
 

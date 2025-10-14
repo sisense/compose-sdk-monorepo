@@ -1,4 +1,5 @@
 import { WidgetProps } from '@/props';
+
 import { WidgetsPanelColumnLayout } from './types';
 
 export const getDividerStyle = (color: string, width: number) => `${width}px solid ${color}`;

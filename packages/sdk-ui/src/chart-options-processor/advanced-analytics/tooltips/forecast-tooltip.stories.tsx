@@ -1,4 +1,5 @@
 import { templateForComponent } from '@/__stories__/template';
+
 import { default as ForecastToolipComponent } from './forecast-tooltip.js';
 
 const template = templateForComponent(ForecastToolipComponent);

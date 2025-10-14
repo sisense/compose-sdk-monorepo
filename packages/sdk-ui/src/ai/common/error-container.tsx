@@ -1,7 +1,8 @@
+import styled from '@emotion/styled';
+
 import ExclamationMarkIcon from '@/common/icons/exclamation-mark-icon';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
-import styled from '@emotion/styled';
 
 type ErrorPageProps = {
   text: string;

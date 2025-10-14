@@ -1,7 +1,8 @@
 import { render } from '@testing-library/react';
+
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
-import { PieStyleOptions } from './types';
 import { PieChart } from './pie-chart';
+import { PieStyleOptions } from './types';
 
 // Mocks highcharts to prevent internal `sisense-charts` related error in testing environment
 vi.mock('highcharts-react-official', async () => {

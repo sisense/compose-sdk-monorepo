@@ -1,15 +1,17 @@
+import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
 import dayjs from 'dayjs';
-import { SecondaryButton } from '../../common/index.js';
+
+import { useThemeContext } from '../../../../theme-provider';
+import { CompleteThemeSettings } from '../../../../types';
+import { getSlightlyDifferentColor } from '../../../../utils/color/index.js';
 import {
   ButtonProps,
   ButtonWithTooltipProps,
   SecondaryButtonWithTooltip,
 } from '../../common/buttons';
-import styled from '@emotion/styled';
-import { CompleteThemeSettings } from '../../../../types';
-import { useThemeContext } from '../../../../theme-provider';
-import { useTranslation } from 'react-i18next';
-import { getSlightlyDifferentColor } from '../../../../utils/color/index.js';
+import { SecondaryButton } from '../../common/index.js';
 
 export type ButtonId = 'earliest' | 'today' | 'latest';
 type QuickDateSelectionButtonsProps = {

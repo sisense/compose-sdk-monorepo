@@ -1,3 +1,6 @@
+import { QueryResultData } from '@sisense/sdk-data';
+import { QueryExecutionConfig } from '@sisense/sdk-query-client';
+
 import { ClientApplication } from '@/app/client-application';
 import { executeBoxplotQuery } from '@/boxplot-utils';
 import {
@@ -6,8 +9,7 @@ import {
   QueryDescription,
 } from '@/query/execute-query';
 import { ChartType } from '@/types';
-import { QueryResultData } from '@sisense/sdk-data';
-import { QueryExecutionConfig } from '@sisense/sdk-query-client';
+
 import {
   BoxplotChartDataOptionsInternal,
   ChartDataOptionsInternal,

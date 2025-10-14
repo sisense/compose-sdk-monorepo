@@ -1,9 +1,11 @@
 import isBoolean from 'lodash-es/isBoolean';
 import isFunction from 'lodash-es/isFunction';
-import { ComponentDecorator, SisenseComponentConfig } from './as-sisense-component';
-import { TranslatableError } from '../../translation/translatable-error';
-import { useSisenseContext } from '../../sisense-context/sisense-context';
+
 import { LoadingIndicator } from '@/common/components/loading-indicator';
+
+import { useSisenseContext } from '../../sisense-context/sisense-context';
+import { TranslatableError } from '../../translation/translatable-error';
+import { ComponentDecorator, SisenseComponentConfig } from './as-sisense-component';
 
 type SisenseContextValidationConfig = Pick<
   SisenseComponentConfig,

@@ -1,9 +1,9 @@
-import { overrideWithThemeSettings } from './override-with-theme-settings';
 import { ThemeSettings } from '../../../types';
-import { defaultNumericSimpleOptions } from './default-options';
-import { darkThemeSettings } from './__mocks__/theme-settings';
 import { numericSimpleLegacyChartOptionsWithDarkTheme } from './__mocks__/legacy-chart-options';
+import { darkThemeSettings } from './__mocks__/theme-settings';
+import { defaultNumericSimpleOptions } from './default-options';
 import { legacyOptionsToThemeSettingsDictionary } from './legacy-chart-options-to-theme-settings-dictionary';
+import { overrideWithThemeSettings } from './override-with-theme-settings';
 
 describe('overrideWithThemeSettings', () => {
   const themeSettings: ThemeSettings = darkThemeSettings;

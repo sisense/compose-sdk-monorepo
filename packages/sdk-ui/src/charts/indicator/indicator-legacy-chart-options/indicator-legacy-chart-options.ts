@@ -1,3 +1,6 @@
+import isNumber from 'lodash-es/isNumber';
+
+import { IndicatorChartData } from '../../../chart-data/types';
 import {
   IndicatorStyleType,
   NumericIndicatorSubType,
@@ -9,11 +12,9 @@ import {
   defaultNumericBarOptions,
   defaultNumericSimpleOptions,
 } from './default-options.js';
-import { overrideWithThemeSettings } from './override-with-theme-settings';
 import { legacyOptionsToThemeSettingsDictionary } from './legacy-chart-options-to-theme-settings-dictionary';
-import { IndicatorChartData } from '../../../chart-data/types';
+import { overrideWithThemeSettings } from './override-with-theme-settings';
 import { getValueColorOptions, overrideWithValueColor } from './override-with-value-color';
-import isNumber from 'lodash-es/isNumber';
 
 export type ChartRenderingOptions = {
   chartData: IndicatorChartData;

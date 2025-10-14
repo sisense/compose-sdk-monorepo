@@ -1,8 +1,9 @@
 import merge from 'ts-deepmerge';
+
 import { CompleteThemeSettings } from '../types';
 import { HighchartsOptionsInternal } from './chart-options-service';
-import { LegendSettings } from './translations/legend-section';
 import { AxisPlotBand } from './translations/axis-section';
+import { LegendSettings } from './translations/legend-section';
 
 export const applyThemeToChart = (
   chartOptions: HighchartsOptionsInternal,
@@ -107,9 +108,9 @@ export const applyThemeToChart = (
     const mergedAxis = merge(axis, axisOptions);
     if (mergedAxis.stackLabels) {
       mergedAxis.stackLabels.style = {
-        ...mergedAxis.stackLabels.style,
         color: themeSettings.chart.textColor,
         fontFamily: themeSettings.typography.fontFamily,
+        ...mergedAxis.stackLabels.style,
       };
     }
     return mergedAxis;
@@ -126,9 +127,9 @@ export const applyThemeToChart = (
       const mergedAxis = merge(axis, axisOptions);
       if (mergedAxis.stackLabels) {
         mergedAxis.stackLabels.style = {
-          ...mergedAxis.stackLabels.style,
           color: themeSettings.chart.textColor,
           fontFamily: themeSettings.typography.fontFamily,
+          ...mergedAxis.stackLabels.style,
         };
       }
       return mergedAxis;

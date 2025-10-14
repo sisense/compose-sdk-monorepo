@@ -1,10 +1,10 @@
-import { CategoricalChartData } from '@/chart-data/types';
 import {
   CategoricalChartDataOptions,
   CategoricalChartDataOptionsInternal,
 } from '@/chart-data-options/types';
-import { FunnelStyleOptions } from '@/types';
+import { CategoricalChartData } from '@/chart-data/types';
 import { FunnelChartDesignOptions as FunnelDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { FunnelStyleOptions } from '@/types';
 
 /**
  * Funnel chart specific type aliases for better readability.

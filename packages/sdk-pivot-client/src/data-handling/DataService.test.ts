@@ -1,27 +1,28 @@
 /* eslint-disable no-unused-expressions, no-shadow, @typescript-eslint/unbound-method */
-import { createTypedPanels, createTestJaql, delay } from '../__test-helpers__/testUtils.js';
+import { describe } from 'vitest';
+
+import { createTestJaql, createTypedPanels, delay } from '../__test-helpers__/testUtils.js';
+import { MessageType } from '../data-load/constants.js';
+import { TestDataLoadService } from '../data-load/index.js';
+import { DataLoadServiceI, JaqlPanel, JaqlRequest } from '../data-load/types.js';
+import { LoadingCanceledError } from '../errors/index.js';
+import { debug } from '../index.js';
+import { TreeNode, TreeServiceI } from '../tree-structure/index.js';
+import { treeNode } from '../tree-structure/utils/index.js';
+import { LoggerI } from '../utils/types.js';
+import { PanelType, UserType } from './constants.js';
 import {
   DataService,
   DataServiceOptions,
-  NodesChunk,
   EVENT_DATA_CHUNK_LOADED,
+  EVENT_DATA_FINISH_CHUNK_LOADED,
+  EVENT_FINISH_CHUNK_LOADED,
   EVENT_HEADER_CELL_FORMAT,
   EVENT_TOTAL_COLUMNS_COUNT,
   EVENT_TOTAL_ROWS_COUNT,
-  EVENT_FINISH_CHUNK_LOADED,
-  EVENT_DATA_FINISH_CHUNK_LOADED,
+  NodesChunk,
 } from './DataService.js';
-import { TestDataLoadService } from '../data-load/index.js';
-import { MessageType } from '../data-load/constants.js';
-import { PanelType, UserType } from './constants.js';
-import { LoadingCanceledError } from '../errors/index.js';
 import { DataServiceI, PivotTreeNode } from './types.js';
-import { DataLoadServiceI, JaqlPanel, JaqlRequest } from '../data-load/types.js';
-import { LoggerI } from '../utils/types.js';
-import { treeNode } from '../tree-structure/utils/index.js';
-import { TreeNode, TreeServiceI } from '../tree-structure/index.js';
-import { debug } from '../index.js';
-import { describe } from 'vitest';
 
 describe('DataService', () => {
   let sut: DataServiceI;

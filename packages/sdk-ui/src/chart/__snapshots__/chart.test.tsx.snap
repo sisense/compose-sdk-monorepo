@@ -393,7 +393,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#000000",
+          "color": "#5B6372",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
@@ -818,7 +818,7 @@ exports[`Chart > change theme of a chart 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "red",
+          "color": "#5B6372",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
@@ -3305,7 +3305,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#000000",
+          "color": "#5B6372",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
@@ -3980,7 +3980,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#000000",
+          "color": "#5B6372",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
@@ -4940,7 +4940,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#000000",
+          "color": "#5B6372",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
@@ -5527,7 +5527,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#000000",
+          "color": "#5B6372",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
@@ -5952,7 +5952,7 @@ exports[`Chart > render a line chart 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#000000",
+          "color": "#5B6372",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
@@ -6377,7 +6377,7 @@ exports[`Chart > render a line chart with only category (x-axis) 1`] = `
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#000000",
+          "color": "#5B6372",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",
@@ -6936,7 +6936,7 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
         "labelrank": 99999,
         "rotation": 0,
         "style": {
-          "color": "#000000",
+          "color": "#5B6372",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
           "fontSize": "13px",
           "fontWeight": "bold",

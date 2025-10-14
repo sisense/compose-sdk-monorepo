@@ -1,10 +1,12 @@
+import { screen, waitFor } from '@testing-library/react';
+import { http, HttpResponse } from 'msw';
+
 import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
-import { screen, waitFor } from '@testing-library/react';
-import { Chatbot } from './chatbot';
+
 import { AiTestWrapper } from './__mocks__';
-import { http, HttpResponse } from 'msw';
 import { contexts } from './__mocks__/data';
+import { Chatbot } from './chatbot';
 
 beforeEach(() => {
   server.use(http.get('*/api/datasources', () => HttpResponse.json(contexts)));

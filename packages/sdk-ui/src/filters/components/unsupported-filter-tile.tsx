@@ -1,10 +1,12 @@
+import { useTranslation } from 'react-i18next';
+
+import { Filter } from '@sisense/sdk-data';
+
+import { FilterContentDisplay } from '@/filters/components/common';
 import {
   FilterTileContainer,
   FilterTileDesignOptions,
 } from '@/filters/components/filter-tile-container';
-import { Filter } from '@sisense/sdk-data';
-import { useTranslation } from 'react-i18next';
-import { FilterContentDisplay } from '@/filters/components/common';
 
 export type UnsupportedFilterTileProps = {
   filter: Filter;

@@ -1,18 +1,20 @@
-import { useEffect, useState, useMemo } from 'react';
-import { ChartWidget } from '@/widgets/chart-widget';
-import { widgetComposer } from '@/analytics-composer';
-import { ChartInsights } from '@/ai/chart/chart-insights';
-import { Filter, Data, MetadataItem, FilterRelations } from '@sisense/sdk-data';
-import type { GetNlgInsightsRequest, NlqResponseData } from '@/ai';
-import { isChartWidgetProps } from '@/widget-by-id/utils';
-import { useGetNlgInsightsInternal } from '@/ai/use-get-nlg-insights';
-import LoadingDotsIcon from '@/ai/icons/loading-dots-icon';
-import { useCommonFilters } from '@/common-filters/use-common-filters';
-import { ChartWidgetProps, WidgetProps } from '@/props';
-import { getFiltersArray } from '@/utils/filter-relations';
+import { useEffect, useMemo, useState } from 'react';
+
+import { Data, Filter, FilterRelations, MetadataItem } from '@sisense/sdk-data';
 import upperFirst from 'lodash-es/upperFirst';
 import merge from 'ts-deepmerge';
+
+import type { GetNlgInsightsRequest, NlqResponseData } from '@/ai';
+import { ChartInsights } from '@/ai/chart/chart-insights';
+import LoadingDotsIcon from '@/ai/icons/loading-dots-icon';
+import { useGetNlgInsightsInternal } from '@/ai/use-get-nlg-insights';
+import { widgetComposer } from '@/analytics-composer';
+import { useCommonFilters } from '@/common-filters/use-common-filters';
+import { ChartWidgetProps, WidgetProps } from '@/props';
 import { NlqChartWidgetStyleOptions } from '@/types';
+import { getFiltersArray } from '@/utils/filter-relations';
+import { isChartWidgetProps } from '@/widget-by-id/utils';
+import { ChartWidget } from '@/widgets/chart-widget';
 
 /**
  * Props for {@link NlqChartWidget} component.

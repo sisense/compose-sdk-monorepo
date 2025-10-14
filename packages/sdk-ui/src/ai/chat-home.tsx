@@ -1,13 +1,17 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
+
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+import { getDarkFactor, toColor } from '@/utils/color';
+
+import LoadingSpinner from '../common/components/loading-spinner';
+import { useChatConfig } from './chat-config';
+import Toolbar from './common/toolbar';
 import { DataTopicList } from './data-topics';
 import SisenseLogo from './icons/sisense-logo';
-import LoadingSpinner from '../common/components/loading-spinner';
-import Toolbar from './common/toolbar';
-import { useThemeContext } from '@/theme-provider';
-import { useChatConfig } from './chat-config';
-import { getDarkFactor, toColor } from '@/utils/color';
-import styled from '@emotion/styled';
 
 const LogoContainer = styled.div`
   margin-left: 14px;
@@ -23,8 +27,6 @@ const DataTopicsContainer = styled.div<Themable>`
 
   background-color: ${({ theme }) => theme.aiChat.dataTopics.backgroundColor};
 `;
-import { Themable } from '@/theme-provider/types';
-import { useTranslation } from 'react-i18next';
 
 type ChatHomeProps = {
   dataTopicsList: string[];

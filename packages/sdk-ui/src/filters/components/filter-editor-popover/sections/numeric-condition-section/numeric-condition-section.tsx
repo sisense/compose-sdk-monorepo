@@ -1,19 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { Filter } from '@sisense/sdk-data';
-import { SelectableSection } from '../../common/selectable-section.js';
-import { Input, SingleSelect } from '../../common/index.js';
-import { isExcludeMembersFilter } from '../../utils.js';
+
 import { usePrevious } from '@/common/hooks/use-previous.js';
+import { useWasModified } from '@/common/hooks/use-was-modified.js';
+import { MembersListSelect } from '@/filters/components/filter-editor-popover/common/select/members-list-select';
+
 import {
   EqualIcon,
+  GreaterThanIcon,
+  GreaterThanOrEqualIcon,
   NotEqualIcon,
   SmallerThanIcon,
   SmallerThanOrEqualIcon,
-  GreaterThanIcon,
-  GreaterThanOrEqualIcon,
 } from '../../../icons';
-import { useWasModified } from '@/common/hooks/use-was-modified.js';
+import { Input, SingleSelect } from '../../common/index.js';
+import { SelectableSection } from '../../common/selectable-section.js';
+import { useFilterEditorContext } from '../../filter-editor-context';
+import { isExcludeMembersFilter } from '../../utils.js';
+import { getMembersWithDeactivated } from '../utils.js';
 import { NumericCondition, NumericConditionFilterData, NumericConditionType } from './types.js';
 import {
   createConditionalFilter,
@@ -21,9 +27,6 @@ import {
   getNumericFilterValue,
   validateInputValue,
 } from './utils.js';
-import { MembersListSelect } from '@/filters/components/filter-editor-popover/common/select/members-list-select';
-import { getMembersWithDeactivated } from '../utils.js';
-import { useFilterEditorContext } from '../../filter-editor-context';
 
 const membersOnlyConditionItems = [
   { value: NumericCondition.EXCLUDE, displayValue: 'filterEditor.conditions.exclude' },

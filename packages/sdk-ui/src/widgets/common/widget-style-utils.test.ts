@@ -1,5 +1,6 @@
-import { getShadowValue } from './widget-style-utils';
 import { CompleteThemeSettings } from '@/types';
+
+import { getShadowValue } from './widget-style-utils';
 
 const themeSettings = {
   widget: {

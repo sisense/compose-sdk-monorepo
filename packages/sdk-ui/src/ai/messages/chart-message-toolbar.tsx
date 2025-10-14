@@ -1,8 +1,13 @@
-import { useThemeContext } from '@/theme-provider';
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import styled from '@emotion/styled';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useMemo, useState } from 'react';
+
+import { CompleteThemeSettings } from '@/index';
+import { useThemeContext } from '@/theme-provider';
+import { getSlightlyDifferentColor } from '@/utils/color';
 
 import { colors } from '../../themes/colors';
 import IconButton from '../common/icon-button';
@@ -11,9 +16,6 @@ import ExpandIcon from '../icons/expand-icon';
 import InfoIcon from '../icons/info-icon';
 import RefreshIcon from '../icons/refresh-icon';
 import ThreeDotsIcon from '../icons/three-dots-icon';
-import { getSlightlyDifferentColor } from '@/utils/color';
-import { CompleteThemeSettings } from '@/index';
-import { useTranslation } from 'react-i18next';
 
 const getHoverColor = (themeSettings: CompleteThemeSettings) =>
   getSlightlyDifferentColor(themeSettings.chart.backgroundColor);

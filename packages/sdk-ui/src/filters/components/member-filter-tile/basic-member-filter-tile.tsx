@@ -1,11 +1,13 @@
 import { FunctionComponent, useEffect, useMemo, useState } from 'react';
-import { PillSection } from './pill-section';
-import { MemberList } from './member-list';
-import { useMembers } from './use-members';
-import { FilterTileContainer } from '../filter-tile-container';
-import { Member, SelectedMember } from './members-reducer';
-import { useValidatedMembers } from './use-validate-members';
+
 import isEqual from 'lodash-es/isEqual';
+
+import { FilterTileContainer } from '../filter-tile-container';
+import { MemberList } from './member-list';
+import { Member, SelectedMember } from './members-reducer';
+import { PillSection } from './pill-section';
+import { useMembers } from './use-members';
+import { useValidatedMembers } from './use-validate-members';
 
 /**
  * Props for {@link BasicMemberFilterTile}

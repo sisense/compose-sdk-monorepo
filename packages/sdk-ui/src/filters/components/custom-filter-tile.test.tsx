@@ -1,9 +1,11 @@
-import { fireEvent, render } from '@testing-library/react';
-import { CustomFilterTile } from './custom-filter-tile';
 import { Filter } from '@sisense/sdk-data';
-import { SisenseContextProviderProps } from '@/props';
+import { fireEvent, render } from '@testing-library/react';
+
 import { mockToken, mockUrl } from '@/__mocks__/msw';
 import { MockedSisenseContextProvider } from '@/__test-helpers__';
+import { SisenseContextProviderProps } from '@/props';
+
+import { CustomFilterTile } from './custom-filter-tile';
 
 const filter = {
   attribute: { name: 'mockAttribute' },

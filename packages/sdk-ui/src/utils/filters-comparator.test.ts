@@ -1,6 +1,9 @@
-import { isFiltersChanged, isRelationsChanged } from './filters-comparator'; // Update with the correct path
+// Update with the correct path
 import { Filter, filterFactory, getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+
+import { isFiltersChanged, isRelationsChanged } from './filters-comparator';
 
 describe('isFiltersChanged', () => {
   const someFilter = filterFactory.greaterThan(DM.Commerce.Revenue, 1000);

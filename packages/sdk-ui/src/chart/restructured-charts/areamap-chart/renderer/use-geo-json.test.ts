@@ -2,11 +2,13 @@
 
 /* eslint-disable vitest/no-commented-out-tests */
 import { renderHook, waitFor } from '@testing-library/react';
-import { useGeoJson } from './use-geo-json.js';
-import { AreamapType } from '@/types.js';
 import { Mock } from 'vitest';
-import { useSisenseContext } from '@/sisense-context/sisense-context.js';
+
 import { ClientApplication } from '@/app/client-application.js';
+import { useSisenseContext } from '@/sisense-context/sisense-context.js';
+import { AreamapType } from '@/types.js';
+
+import { useGeoJson } from './use-geo-json.js';
 
 // Mock the sisense-context.js module
 

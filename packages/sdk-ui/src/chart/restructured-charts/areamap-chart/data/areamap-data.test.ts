@@ -1,5 +1,6 @@
 import { AreamapChartDataOptionsInternal } from '@/chart-data-options/types';
 import { DataTable } from '@/chart-data-processor/table-processor';
+
 import { getAreamapData } from './areamap-data';
 
 describe('areamap-data', () => {

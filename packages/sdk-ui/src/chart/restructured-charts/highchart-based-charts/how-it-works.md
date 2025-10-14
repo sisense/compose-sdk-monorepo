@@ -198,11 +198,11 @@ Following the same pattern as described in the [Creating a New Chart Type](../ho
 
 ```typescript
 // my-chart/my-chart-builder.ts
-import { ChartBuilder } from '../types';
 import {
   createHighchartsBasedChartRenderer,
   isHighchartsBasedChartRendererProps,
 } from '../highcharts-based-chart-renderer';
+import { ChartBuilder } from '../types';
 import { myChartHighchartsOptionsBuilder } from './highcharts-options-builder';
 
 export const myChartBuilder: ChartBuilder<'mychart'> = {

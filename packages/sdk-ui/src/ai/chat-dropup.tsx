@@ -1,10 +1,13 @@
-import LoadingSpinner from '@/common/components/loading-spinner';
-import Popper from '@mui/material/Popper';
-import DropupSection, { DropupSectionProps } from './common/dropup-section';
-import styled from '@emotion/styled';
-import { Themable } from '@/theme-provider/types';
-import { useThemeContext } from '@/theme-provider/theme-context';
 import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+import Popper from '@mui/material/Popper';
+
+import LoadingSpinner from '@/common/components/loading-spinner';
+import { useThemeContext } from '@/theme-provider/theme-context';
+import { Themable } from '@/theme-provider/types';
+
+import DropupSection, { DropupSectionProps } from './common/dropup-section';
 
 const PopupContent = styled.div<Themable>`
   font-family: ${({ theme }) => theme.typography.fontFamily};

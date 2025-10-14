@@ -1,4 +1,5 @@
 import { JaqlQueryPayload } from '@sisense/sdk-query-client';
+
 import { ExpandedQueryModel } from '@/analytics-composer';
 import { WidgetProps } from '@/props';
 

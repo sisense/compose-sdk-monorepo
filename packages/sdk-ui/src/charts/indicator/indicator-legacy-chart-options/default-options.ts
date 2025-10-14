@@ -1,6 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { NumericSimpleOptions, NumericBarOptions, GaugeOptions, TickerOptions } from '../types';
+import { GaugeOptions, NumericBarOptions, NumericSimpleOptions, TickerOptions } from '../types';
 
 export const defaultNumericSimpleOptions: NumericSimpleOptions = {
   fontFamily: 'opensansregular, sans-serif',

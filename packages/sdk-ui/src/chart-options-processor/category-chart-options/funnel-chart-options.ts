@@ -1,14 +1,14 @@
 /* eslint-disable max-params */
-import { getLegendSettings } from '../translations/legend-section';
-import { FunnelChartDesignOptions } from '../translations/design-options';
-import { determineHighchartsChartType } from '../translations/translations-to-highcharts';
+import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
+import { CategoricalChartData } from '../../chart-data/types';
+import { CompleteThemeSettings, OptionsWithAlerts } from '../../types';
+import { HighchartsOptionsInternal } from '../chart-options-service';
 import { getCategoryTooltipSettings } from '../tooltip';
+import { FunnelChartDesignOptions } from '../translations/design-options';
 import { getFunnelPlotOptions } from '../translations/funnel-plot-options';
 import { formatFunnelChartData } from '../translations/funnel-series';
-import { OptionsWithAlerts, CompleteThemeSettings } from '../../types';
-import { CategoricalChartData } from '../../chart-data/types';
-import { HighchartsOptionsInternal } from '../chart-options-service';
-import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
+import { getLegendSettings } from '../translations/legend-section';
+import { determineHighchartsChartType } from '../translations/translations-to-highcharts';
 
 /**
  * Convert intermediate chart data, data options, and design options

@@ -4,6 +4,7 @@ import type {
   PivotDataNode,
   PivotTreeNode,
 } from '@sisense/sdk-pivot-client';
+
 import { AnyColumn } from '@/chart-data-options/types';
 
 /**

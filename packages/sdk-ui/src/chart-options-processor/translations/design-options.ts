@@ -1,21 +1,23 @@
-import { Axis } from './axis-section';
-import { Marker } from './marker-section';
-import { LineType, StackType } from './translations-to-highcharts';
-import { PieType, PieLabels } from './pie-plot-options';
-import { FunnelSize, FunnelType, FunnelDirection, FunnelLabels } from './funnel-plot-options';
+import { CalendarDayOfWeek } from '@/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
+
 import {
   CalendarHeatmapViewType,
   Convolution,
-  LineOptions,
   LegendOptions,
-  SeriesLabels,
+  LineOptions,
   ScattermapMarkers,
+  SeriesLabels,
   SunburstStyleOptions,
+  TotalLabels,
   TreemapStyleOptions,
 } from '../../types';
+import { Axis } from './axis-section';
+import { FunnelDirection, FunnelLabels, FunnelSize, FunnelType } from './funnel-plot-options';
+import { Marker } from './marker-section';
+import { PieLabels, PieType } from './pie-plot-options';
 import { ScatterMarkerSize } from './scatter-plot-options';
+import { LineType, StackType } from './translations-to-highcharts';
 import { DesignPerSeries, TextStyle } from './types';
-import { CalendarDayOfWeek } from '@/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 
 type DataLimits = {
   seriesCapacity: number;
@@ -50,8 +52,7 @@ export type CartesianChartDesignOptions = BaseDesignOptionsType & DesignPerSerie
 export type StackableChartDesignOptions = CartesianChartDesignOptions & {
   line?: LineOptions;
   stackType: StackType;
-  showTotal?: boolean;
-  totalLabelRotation?: number;
+  totalLabels?: TotalLabels;
   itemPadding?: number;
   groupPadding?: number;
   borderRadius?: number | string;
@@ -94,11 +95,17 @@ export type CalendarHeatmapChartDesignOptions = BaseDesignOptionsType & {
     cellColor?: string;
     hideValues: boolean;
   };
+  pagination: {
+    enabled: boolean;
+    style?: TextStyle;
+    startMonth?: Date;
+  };
 };
 
 export type PolarType = 'line' | 'area' | 'column';
 export type PolarChartDesignOptions = CartesianChartDesignOptions & {
   polarType: PolarType;
+  totalLabels?: TotalLabels;
 };
 
 export function isPolarChartDesignOptions(

@@ -1,12 +1,13 @@
-import { HighchartsOptionsBuilder } from '../../../types';
-import { determineHighchartsChartType } from '@/chart-options-processor/translations/translations-to-highcharts';
+import { getCategoryTooltipSettings } from '@/chart-options-processor/tooltip';
 import { getLegendSettings } from '@/chart-options-processor/translations/legend-section';
 import { getPiePlotOptions } from '@/chart-options-processor/translations/pie-plot-options';
 import {
   getPieConvolutionSeries,
   getPieSeries,
 } from '@/chart-options-processor/translations/pie-series';
-import { getCategoryTooltipSettings } from '@/chart-options-processor/tooltip';
+import { determineHighchartsChartType } from '@/chart-options-processor/translations/translations-to-highcharts';
+
+import { HighchartsOptionsBuilder } from '../../../types';
 
 export const pieHighchartsOptionsBuilder: HighchartsOptionsBuilder<'pie'> = {
   getChart: function (ctx) {

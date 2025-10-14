@@ -1,10 +1,11 @@
-import { polarHighchartsOptionsBuilder } from './highcharts-options-builder';
+import omit from 'lodash-es/omit';
+
 import { BuildContext } from '../../../types';
 import { getLegacyCartesianChartOptions } from '../../helpers/highchart-options/get-legacy-cartesian-chart-options';
 import { getBasicCartesianLegend } from '../../helpers/highchart-options/legend';
 import { getBasicCartesianTooltip } from '../../helpers/highchart-options/tooltip';
 import { getAxes } from './axes';
-import omit from 'lodash-es/omit';
+import { polarHighchartsOptionsBuilder } from './highcharts-options-builder';
 
 // Mock dependencies
 vi.mock('../../helpers/highchart-options/get-legacy-cartesian-chart-options', () => ({

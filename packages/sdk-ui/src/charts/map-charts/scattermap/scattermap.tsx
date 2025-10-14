@@ -1,34 +1,36 @@
-import 'leaflet/dist/leaflet.css';
-import leaflet from 'leaflet';
 import { useEffect, useMemo, useRef } from 'react';
-import { useLocations } from './hooks/use-locations.js';
-import { ChartData, ScattermapChartData } from '../../../chart-data/types.js';
-import { ScattermapDataPointEventHandler } from '../../../props.js';
-import { getLocationsMarkerSizes } from './utils/size.js';
-import { getScattermapDataPoint } from './utils/location.js';
-import { useGeoSettings } from './hooks/use-settings.js';
-import { getLocationsMarkerColors } from './utils/color.js';
-import { createMarker, removeMarkers } from './utils/markers.js';
-import { addCopyright } from './utils/copyright.js';
-import { fitMapToBounds, prepareFitBoundsAnimationOptions } from './utils/map.js';
-import {
-  ChartDataOptionsInternal,
-  ScattermapChartDataOptionsInternal,
-} from '../../../chart-data-options/types.js';
-import { ScattermapChartDesignOptions } from '../../../chart-options-processor/translations/design-options.js';
-import { useTooltipHandler } from './hooks/use-tooltip-handler.js';
+
 import {
   DataSource,
   Filter,
   FilterRelations,
   getFilterListAndRelationsJaql,
 } from '@sisense/sdk-data';
+import leaflet from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-import '../map-charts.scss';
-import './scattermap.scss';
 import { DesignOptions } from '@/chart-options-processor/translations/types.js';
 import { ChartRendererProps } from '@/chart/types.js';
 import { useThemeContext } from '@/theme-provider';
+
+import {
+  ChartDataOptionsInternal,
+  ScattermapChartDataOptionsInternal,
+} from '../../../chart-data-options/types.js';
+import { ChartData, ScattermapChartData } from '../../../chart-data/types.js';
+import { ScattermapChartDesignOptions } from '../../../chart-options-processor/translations/design-options.js';
+import { ScattermapDataPointEventHandler } from '../../../props.js';
+import '../map-charts.scss';
+import { useLocations } from './hooks/use-locations.js';
+import { useGeoSettings } from './hooks/use-settings.js';
+import { useTooltipHandler } from './hooks/use-tooltip-handler.js';
+import './scattermap.scss';
+import { getLocationsMarkerColors } from './utils/color.js';
+import { addCopyright } from './utils/copyright.js';
+import { getScattermapDataPoint } from './utils/location.js';
+import { fitMapToBounds, prepareFitBoundsAnimationOptions } from './utils/map.js';
+import { createMarker, removeMarkers } from './utils/markers.js';
+import { getLocationsMarkerSizes } from './utils/size.js';
 
 export type ScattermapProps = {
   chartData: ScattermapChartData;

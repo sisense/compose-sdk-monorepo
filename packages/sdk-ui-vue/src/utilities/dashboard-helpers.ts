@@ -1,8 +1,9 @@
+import type { Filter, FilterRelations } from '@sisense/sdk-data';
 import {
   dashboardHelpers as dashboardHelpersPreact,
   type DashboardProps as DashboardPropsPreact,
 } from '@sisense/sdk-ui-preact';
-import type { Filter, FilterRelations } from '@sisense/sdk-data';
+
 import type { DashboardProps } from '../components/dashboard';
 
 /**

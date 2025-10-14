@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Page } from './Page.js';
 
 import { getChangedProps } from '../../utils/index.js';
 import { FONT_MAP, LAYOUT, POSITION_MAP } from './constants.js';
+import { Page } from './Page.js';
 
 type Props = {
   isFooterDisplayed: boolean;

@@ -1,6 +1,6 @@
 import { CompleteThemeSettings } from '../../../types';
-import { TableCustomStyles } from '../types';
 import { getSlightlyDifferentColor } from '../../../utils/color';
+import { TableCustomStyles } from '../types';
 
 const oddIndex = (rowIndex: number) => rowIndex % 2 === 1;
 

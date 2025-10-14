@@ -52,7 +52,7 @@ After setting all that up, we need to apply the changes in state to our chart. B
 ```ts
 const breakStringToColumn = (breakString: string) => {
   if (breakString === 'manager') {
-    return DM.DimEmployees.TeamManger;
+    return DM.DimEmployees.TeamManager;
   } else if (breakString === 'region') {
     return DM.DimCountries.Region;
   } else {

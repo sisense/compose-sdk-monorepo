@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import styled from '@emotion/styled';
 import type { FunctionComponent, InputHTMLAttributes } from 'react';
+
+import styled from '@emotion/styled';
 
 type RadioProps = { label?: string } & InputHTMLAttributes<HTMLInputElement>;
 

@@ -1,5 +1,7 @@
 import { DetailedHTMLProps, InputHTMLAttributes, useEffect, useRef } from 'react';
+
 import styled from '@emotion/styled';
+
 import { ERROR_COLOR } from '@/const';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';

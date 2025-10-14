@@ -1,25 +1,26 @@
 import merge from 'ts-deepmerge';
+
 import {
   DEFAULT_DASHBOARD_BORDER_COLOR,
   DEFAULT_DASHBOARD_BORDER_WIDTH,
-  DEFAULT_DIVIDER_COLOR,
-  DEFAULT_DIVIDER_WIDTH,
   DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_COLOR,
   DEFAULT_DASHBOARD_TOOLBAR_DIVIDER_LINE_WIDTH,
-  DEFAULT_FILTER_PANEL_DIVIDER_LINE_COLOR,
-  DEFAULT_FILTER_PANEL_DIVIDER_LINE_WIDTH,
+  DEFAULT_DIVIDER_COLOR,
+  DEFAULT_DIVIDER_WIDTH,
   DEFAULT_FILTER_PANEL_BORDER_COLOR,
   DEFAULT_FILTER_PANEL_BORDER_WIDTH,
+  DEFAULT_FILTER_PANEL_DIVIDER_LINE_COLOR,
+  DEFAULT_FILTER_PANEL_DIVIDER_LINE_WIDTH,
   DEFAULT_TITLE_FONT_SIZE,
   getDefaultThemeSettings,
 } from '../theme-provider/default-theme-settings';
 import {
-  ThemeOid,
+  AlignmentTypes,
   CompleteThemeSettings,
-  SpaceSizes,
   RadiusSizes,
   ShadowsTypes,
-  AlignmentTypes,
+  SpaceSizes,
+  ThemeOid,
   ThemeSettingsFont,
 } from '../types.js';
 

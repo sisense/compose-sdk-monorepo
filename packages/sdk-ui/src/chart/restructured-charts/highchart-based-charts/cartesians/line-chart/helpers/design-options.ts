@@ -1,3 +1,5 @@
+import flow from 'lodash-es/flow';
+
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
 import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
 import {
@@ -6,11 +8,11 @@ import {
 } from '@/chart-options-processor/style-to-design-options-translator/prepare-design-options';
 import { getCartesianChartStyle } from '@/chart-options-processor/style-to-design-options-translator/translate-to-highcharts-options';
 import { LineChartDesignOptions } from '@/chart-options-processor/translations/design-options';
-import { ChartStyleOptions, LineStyleOptions, LineWidth, Markers, LineSubtype } from '@/types';
 import { Marker } from '@/chart-options-processor/translations/marker-section';
 import { LineType } from '@/chart-options-processor/translations/translations-to-highcharts';
+import { ChartStyleOptions, LineStyleOptions, LineSubtype, LineWidth, Markers } from '@/types';
+
 import { shouldHaveY2Axis } from '../../helpers/data-options';
-import flow from 'lodash-es/flow';
 
 /**
  * Line subtype to lineType mapping (from legacy chartSubtypeToDesignOptions)

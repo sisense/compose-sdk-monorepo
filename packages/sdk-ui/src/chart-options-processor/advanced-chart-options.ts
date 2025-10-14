@@ -1,8 +1,10 @@
 import { Measure, measureFactory } from '@sisense/sdk-data';
+
+import { isCategoryStyle, isStyledColumn } from '@/chart-data-options/utils';
+
+import { CartesianChartDataOptions, StyledMeasureColumn } from '..';
 import { SeriesType } from './chart-options-service';
 import { AxisPlotBand, AxisSettings } from './translations/axis-section';
-import { CartesianChartDataOptions, StyledMeasureColumn } from '..';
-import { isCategoryStyle, isStyledColumn } from '@/chart-data-options/utils';
 
 export const FORECAST_PREFIX = '$forecast';
 export const TREND_PREFIX = '$trend';

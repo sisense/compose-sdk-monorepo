@@ -1,5 +1,6 @@
 /** @vitest-environment jsdom */
 import { render } from '@testing-library/react';
+
 import { Table } from './table';
 
 // Table tests

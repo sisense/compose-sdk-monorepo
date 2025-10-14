@@ -1,7 +1,7 @@
-import { AreaRangeChartProps } from './props';
 import { Chart } from './chart';
-import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
+import { AreaRangeChartProps } from './props';
 
 /**
  * A React component that displays a range of data over a given time period or across multiple categories.

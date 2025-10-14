@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { MetadataTypes } from '@sisense/sdk-data';
+
 import { extractWidgetFilters } from './translate-widget-filters.js';
 import { Panel } from './types.js';
 

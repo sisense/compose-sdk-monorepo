@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { filterFactory, measureFactory } from '@sisense/sdk-data';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { translation } from '@/translation/resources/en';
+
 import { type ClientApplication } from '..';
 import {
-  executeQuery,
-  executeCsvQuery,
   createExecuteQueryCacheKey,
+  executeCsvQuery,
   executePivotQuery,
+  executeQuery,
 } from './execute-query';
-import { translation } from '@/translation/resources/en';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
 
 const app = {
   queryClient: {

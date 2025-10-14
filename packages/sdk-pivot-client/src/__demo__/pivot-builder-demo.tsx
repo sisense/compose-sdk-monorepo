@@ -1,7 +1,8 @@
-import { PivotClient } from '../pivot-client';
-import { JaqlRequest } from '../data-load/types';
 import React, { useEffect, useMemo, useState } from 'react';
+
 import { EVENT_PIVOT_ELEMENT_CHANGE } from '../builders';
+import { JaqlRequest } from '../data-load/types';
+import { PivotClient } from '../pivot-client';
 
 export interface PivotBuilderDemoProps {
   jaql: JaqlRequest;

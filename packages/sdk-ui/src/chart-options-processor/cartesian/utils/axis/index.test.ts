@@ -1,19 +1,21 @@
 /* eslint-disable sonarjs/no-identical-functions */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types.js';
+import { CompleteThemeSettings, NumberFormatConfig } from '../../../../types.js';
+import { Axis, AxisMinMax } from '../../../translations/axis-section.js';
 import {
   getDateFormatter,
   getXAxisDatetimeSettings,
   getXAxisSettings,
   getYAxisSettings,
   getYClippings,
-  withPolarSpecificAxisSettings,
   withChartSpecificAxisSettings,
+  withPolarSpecificAxisSettings,
   withStacking,
 } from './';
-import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types.js';
-import { CompleteThemeSettings, NumberFormatConfig } from '../../../../types.js';
-import { Axis, AxisMinMax } from '../../../translations/axis-section.js';
 
 // Mock dependencies
 vi.mock('../../../translations/number-format-config', () => ({
@@ -95,8 +97,7 @@ describe('axis utils integration tests', () => {
 
       const axisSettings = withStacking({
         stacking: 'normal',
-        showTotal: true,
-        totalLabelRotation: 45,
+        totalLabels: { enabled: true, rotation: 45 },
         dataOptions,
         themeSettings: mockThemeSettings,
       })(basicAxisSettings);

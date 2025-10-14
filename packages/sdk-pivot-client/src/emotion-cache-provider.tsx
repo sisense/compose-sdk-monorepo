@@ -1,6 +1,7 @@
 import React, { ReactNode, useMemo } from 'react';
-import { CacheProvider } from '@emotion/react';
+
 import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
 
 /**
  * Creates an Emotion cache only if a nonce is present in the DOM.

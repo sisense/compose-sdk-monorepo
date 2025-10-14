@@ -1,10 +1,12 @@
-import { useComposedDashboardInternal } from '@/dashboard/use-composed-dashboard';
-import { DashboardContainer } from '@/dashboard/components/dashboard-container';
-import { beforeEach, Mock } from 'vitest';
-import { render } from '@testing-library/react';
-import { MockedSisenseContextProvider } from '@/__test-helpers__';
-import { Dashboard, DashboardChangeType } from '@/dashboard/dashboard';
 import { filterFactory } from '@sisense/sdk-data';
+import { render } from '@testing-library/react';
+import { beforeEach, Mock } from 'vitest';
+
+import { MockedSisenseContextProvider } from '@/__test-helpers__';
+import { DashboardContainer } from '@/dashboard/components/dashboard-container';
+import { Dashboard, DashboardChangeType } from '@/dashboard/dashboard';
+import { useComposedDashboardInternal } from '@/dashboard/use-composed-dashboard';
+
 import * as DM from '../__test-helpers__/sample-ecommerce';
 
 vi.mock('./use-composed-dashboard', () => ({

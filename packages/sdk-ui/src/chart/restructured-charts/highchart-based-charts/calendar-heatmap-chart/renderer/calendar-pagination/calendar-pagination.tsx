@@ -1,16 +1,24 @@
-import React from 'react';
-import styled from '@emotion/styled';
+import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useThemeContext } from '@/theme-provider/theme-context';
+
+import styled from '@emotion/styled';
+
+import { DoubleArrowEndIcon } from '@/common/icons/double-arrow-end-icon';
 import { ArrowIcon } from '@/filters/components/icons/arrow-icon';
 import { DoubleArrowIcon } from '@/filters/components/icons/double-arrow-icon';
-import { DoubleArrowEndIcon } from '@/common/icons/double-arrow-end-icon';
-import { MonthInfo, getMonthsPerView } from '../helpers/view-helpers.js';
-import { formatViewTitle } from './helpers.js';
-import { ViewType } from '../../types.js';
-import { CalendarHeatmapViewType } from '@/types.js';
+import { useThemeContext } from '@/theme-provider/theme-context';
 import { Themable } from '@/theme-provider/types.js';
+import { CalendarHeatmapViewType, TextStyle } from '@/types.js';
+
 import { CALENDAR_HEATMAP_SIZING } from '../../constants.js';
+import { ViewType } from '../../types.js';
+import {
+  compareMonthData,
+  getMonthsPerView,
+  MonthData,
+  MonthInfo,
+} from '../helpers/view-helpers.js';
+import { formatViewTitle } from './helpers.js';
 
 export const PaginationContainer = styled.div`
   display: flex;
@@ -53,32 +61,81 @@ export const ViewDisplay = styled.div<Themable>`
 `;
 
 interface CalendarPaginationProps {
-  currentViewIndex: number;
+  value: MonthData;
   availableMonths: MonthInfo[];
   viewType: CalendarHeatmapViewType;
-  onGoToFirst: () => void;
-  onGoToPrevious: () => void;
-  onGoToNext: () => void;
-  onGoToLast: () => void;
-  onGoToPreviousGroup?: () => void;
-  onGoToNextGroup?: () => void;
+  onChange: (month: MonthData) => void;
+  labelStyle?: TextStyle;
 }
 
 export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
-  currentViewIndex,
+  value: currentMonth,
   availableMonths,
   viewType,
-  onGoToFirst,
-  onGoToPrevious,
-  onGoToNext,
-  onGoToLast,
-  onGoToPreviousGroup,
-  onGoToNextGroup,
+  onChange,
+  labelStyle,
 }) => {
   const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
 
   const monthsPerView = getMonthsPerView(viewType);
+
+  // Calculate current view index based on currentMonth
+  const currentViewIndex = availableMonths.findIndex(
+    (month) => compareMonthData(month, currentMonth) === 0,
+  );
+
+  // Navigation functions that work with MonthData
+  const handleGoToFirst = () => {
+    const firstMonth = availableMonths[0];
+    if (firstMonth) {
+      onChange({ year: firstMonth.year, month: firstMonth.month });
+    }
+  };
+
+  const handleGoToPrevious = () => {
+    if (currentViewIndex > 0) {
+      const targetMonth = availableMonths[currentViewIndex - 1];
+      onChange({ year: targetMonth.year, month: targetMonth.month });
+    }
+  };
+
+  const handleGoToNext = () => {
+    if (currentViewIndex < availableMonths.length - 1) {
+      const targetMonth = availableMonths[currentViewIndex + 1];
+      onChange({ year: targetMonth.year, month: targetMonth.month });
+    }
+  };
+
+  const handleGoToLast = () => {
+    const targetIndex = Math.max(0, availableMonths.length - monthsPerView);
+    const targetMonth = availableMonths[targetIndex];
+
+    if (targetMonth) {
+      onChange({ year: targetMonth.year, month: targetMonth.month });
+    }
+  };
+
+  const handleGoToPreviousGroup = () => {
+    const targetIndex = Math.max(0, currentViewIndex - monthsPerView);
+    const targetMonth = availableMonths[targetIndex];
+
+    if (targetMonth) {
+      onChange({ year: targetMonth.year, month: targetMonth.month });
+    }
+  };
+
+  const handleGoToNextGroup = () => {
+    const targetIndex = Math.min(
+      availableMonths.length - monthsPerView,
+      currentViewIndex + monthsPerView,
+    );
+    const targetMonth = availableMonths[targetIndex];
+
+    if (targetMonth) {
+      onChange({ year: targetMonth.year, month: targetMonth.month });
+    }
+  };
 
   const isAtFirst = currentViewIndex === 0;
   // For multi-month views, we're at last when we can't show a full group anymore
@@ -91,7 +148,7 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
   const canGoToPrevMonth = currentViewIndex > 0;
   const canGoToNextMonth = currentViewIndex < maxViewIndex;
 
-  const viewTitle = formatViewTitle(availableMonths, currentViewIndex, viewType);
+  const viewTitle = formatViewTitle(availableMonths, currentMonth, viewType);
 
   // Translation keys for navigation buttons
   const firstMonthLabel = t('calendarHeatmap.navigation.firstMonth');
@@ -106,7 +163,7 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
       {/* First Button */}
       <NavigationButton
         disabled={isAtFirst}
-        onClick={onGoToFirst}
+        onClick={handleGoToFirst}
         title={firstMonthLabel}
         aria-label={firstMonthLabel}
         theme={themeSettings}
@@ -122,10 +179,10 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
       </NavigationButton>
 
       {/* Previous Group Button (only for multi-month views) */}
-      {viewType !== ViewType.MONTH && onGoToPreviousGroup && (
+      {viewType !== ViewType.MONTH && (
         <NavigationButton
           disabled={isAtFirst}
-          onClick={onGoToPreviousGroup}
+          onClick={handleGoToPreviousGroup}
           title={previousGroupLabel}
           aria-label={previousGroupLabel}
         >
@@ -143,7 +200,7 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
       {/* Previous Button - consolidated for both month and multi-month views */}
       <NavigationButton
         disabled={viewType === ViewType.MONTH ? isAtFirst : !canGoToPrevMonth}
-        onClick={onGoToPrevious}
+        onClick={handleGoToPrevious}
         title={previousMonthLabel}
         aria-label={previousMonthLabel}
       >
@@ -158,12 +215,14 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
       </NavigationButton>
 
       {/* Current View Display */}
-      <ViewDisplay theme={themeSettings}>{viewTitle}</ViewDisplay>
+      <ViewDisplay theme={themeSettings} style={labelStyle as CSSProperties}>
+        {viewTitle}
+      </ViewDisplay>
 
       {/* Next Button - consolidated for both month and multi-month views */}
       <NavigationButton
         disabled={viewType === ViewType.MONTH ? isAtLast : !canGoToNextMonth}
-        onClick={onGoToNext}
+        onClick={handleGoToNext}
         title={nextMonthLabel}
         aria-label={nextMonthLabel}
       >
@@ -178,10 +237,10 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
       </NavigationButton>
 
       {/* Next Group Button (only for multi-month views) */}
-      {viewType !== ViewType.MONTH && onGoToNextGroup && (
+      {viewType !== ViewType.MONTH && (
         <NavigationButton
           disabled={isAtLast}
-          onClick={onGoToNextGroup}
+          onClick={handleGoToNextGroup}
           title={nextGroupLabel}
           aria-label={nextGroupLabel}
         >
@@ -199,7 +258,7 @@ export const CalendarPagination: React.FC<CalendarPaginationProps> = ({
       {/* Last Button */}
       <NavigationButton
         disabled={isAtLast}
-        onClick={onGoToLast}
+        onClick={handleGoToLast}
         title={lastMonthLabel}
         aria-label={lastMonthLabel}
       >

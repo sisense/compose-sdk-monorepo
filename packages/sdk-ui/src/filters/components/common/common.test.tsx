@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { render, screen } from '@testing-library/react';
-import { Dropdown, DropdownProps } from './dropdown';
+
 import { MockedSisenseContextProvider, setup } from '../../../__test-helpers__/';
+import { Dropdown, DropdownProps } from './dropdown';
 import { RadioGroup, RadioGroupProps } from './radio';
 
 beforeEach(() => {

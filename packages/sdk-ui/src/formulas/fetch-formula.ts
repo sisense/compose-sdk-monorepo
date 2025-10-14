@@ -1,12 +1,13 @@
-import { ClientApplication } from '../app/client-application.js';
-import { TranslatableError } from '../translation/translatable-error.js';
 import {
+  createDimensionalElementFromJaql,
   DataSource,
   DimensionalCalculatedMeasure,
   FormulaJaql,
-  createDimensionalElementFromJaql,
   getDataSourceName,
 } from '@sisense/sdk-data';
+
+import { ClientApplication } from '../app/client-application.js';
+import { TranslatableError } from '../translation/translatable-error.js';
 
 /**
  * Fetch a formula by oid from the default Sisense instance

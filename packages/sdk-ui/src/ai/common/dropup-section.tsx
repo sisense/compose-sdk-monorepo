@@ -1,7 +1,9 @@
 import { useState } from 'react';
+
 import styled from '@emotion/styled';
-import { Themable } from '@/theme-provider/types';
+
 import { useThemeContext } from '@/theme-provider/theme-context';
+import { Themable } from '@/theme-provider/types';
 
 const Section = styled.div`
   display: flex;

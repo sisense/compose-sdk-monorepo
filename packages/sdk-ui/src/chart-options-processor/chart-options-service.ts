@@ -1,42 +1,44 @@
-import cloneDeep from 'lodash-es/cloneDeep';
+import { TFunction } from '@sisense/sdk-common';
 import type {
-  Options,
   DrilldownOptions,
+  Options,
   SeriesLegendItemClickCallbackFunction,
 } from '@sisense/sisense-charts';
-import { TFunction } from '@sisense/sdk-common';
-import { ChartData, RangeChartData } from '../chart-data/types';
-import { ChartDesignOptions } from './translations/types';
-import { LegendSettings } from './translations/legend-section';
-import { DataLabelsSettings } from './translations/value-label-section';
-import { MarkerSettings } from './translations/marker-section';
-import { AxisSettings } from './translations/axis-section';
-import { HighchartsType, HighchartsSeriesValues } from './translations/translations-to-highcharts';
-import { TooltipSettings } from './tooltip';
-import { PieOptions } from './translations/pie-plot-options';
-import { FunnelOptions } from './translations/funnel-plot-options';
+import cloneDeep from 'lodash-es/cloneDeep';
+
+import { createForecastDataOptions, isForecastChart } from '@/chart-data/advanced-analytics-data';
+import { TranslatableError } from '@/translation/translatable-error';
+
 import {
-  ChartType,
-  OptionsWithAlerts,
-  CompleteThemeSettings,
-  ChartStyleOptions,
-  HighchartsSelectEvent,
-} from '../types';
-import { getCartesianChartOptions } from './cartesian/cartesian-chart-options';
-import { getCategoricalChartOptions } from './category-chart-options/category-chart-options';
-import { getScatterChartOptions } from './scatter-chart-options';
-import {
-  RangeChartDataOptionsInternal,
   BoxplotChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
+  RangeChartDataOptionsInternal,
 } from '../chart-data-options/types';
-import { ScatterBubbleOptions } from './translations/scatter-plot-options';
-import { getBoxplotChartOptions } from './boxplot-chart-options';
-import { getRangeChartOptions } from './range-chart-options';
-import { createForecastDataOptions, isForecastChart } from '@/chart-data/advanced-analytics-data';
+import { ChartData, RangeChartData } from '../chart-data/types';
+import {
+  ChartStyleOptions,
+  ChartType,
+  CompleteThemeSettings,
+  HighchartsSelectEvent,
+  OptionsWithAlerts,
+} from '../types';
 import { formatAdvancedAnalyticsSeries } from './advanced-chart-options';
-import { TranslatableError } from '@/translation/translatable-error';
+import { getBoxplotChartOptions } from './boxplot-chart-options';
+import { getCartesianChartOptions } from './cartesian/cartesian-chart-options';
+import { getCategoricalChartOptions } from './category-chart-options/category-chart-options';
+import { getRangeChartOptions } from './range-chart-options';
+import { getScatterChartOptions } from './scatter-chart-options';
+import { TooltipSettings } from './tooltip';
+import { AxisSettings } from './translations/axis-section';
+import { FunnelOptions } from './translations/funnel-plot-options';
+import { LegendSettings } from './translations/legend-section';
+import { MarkerSettings } from './translations/marker-section';
+import { PieOptions } from './translations/pie-plot-options';
+import { ScatterBubbleOptions } from './translations/scatter-plot-options';
+import { HighchartsSeriesValues, HighchartsType } from './translations/translations-to-highcharts';
+import { ChartDesignOptions } from './translations/types';
+import { DataLabelsSettings } from './translations/value-label-section';
 
 // Notes: extends type by recreating it via `Pick` in order to force IntelliSense to use it as target type.
 /**

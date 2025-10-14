@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { numericFormatter } from 'react-number-format';
+
 import round from 'lodash-es/round';
-import { CompleteNumberFormatConfig, NumberFormatConfig } from '@/types';
+
 import { i18nextInstance } from '@/translation/initialize-i18n';
+import { CompleteNumberFormatConfig, NumberFormatConfig } from '@/types';
 
 const oneKilo = 1000;
 const oneMillion = oneKilo * 1000;

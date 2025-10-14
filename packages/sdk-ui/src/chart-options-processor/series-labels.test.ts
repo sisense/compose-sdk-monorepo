@@ -1,5 +1,5 @@
-import { prepareDataLabelsOptions } from './series-labels';
 import { SeriesLabels } from '../types';
+import { prepareDataLabelsOptions } from './series-labels';
 
 describe('prepareDataLabelsOptions', () => {
   describe('when seriesLabels is undefined', () => {

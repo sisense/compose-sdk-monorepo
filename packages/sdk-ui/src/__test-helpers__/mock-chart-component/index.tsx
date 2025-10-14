@@ -1,7 +1,7 @@
 // Mocks the Chart component and provides a way to access the rendered charts.
 // Use this to simulate user interactions with the chart while actual Chart component is mocked.
-
 import { ChartProps } from '@/props';
+
 import { RenderedChartModel } from './rendered-chart-model';
 
 export type ChartMocksManager = {

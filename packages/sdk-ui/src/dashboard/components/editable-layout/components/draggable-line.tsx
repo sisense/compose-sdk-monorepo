@@ -1,8 +1,10 @@
 import { useDraggable } from '@dnd-kit/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+
 import { RESIZE_LINE_SIZE, Z_INDEX_RESIZE_LINE } from '../const';
 
-const HorizontalLine = styled.div`
+const HorizontalLine = styled.div<{ disabled?: boolean }>`
   width: 100%;
   height: ${RESIZE_LINE_SIZE}px;
   background-color: #f2f2f2;
@@ -13,12 +15,17 @@ const HorizontalLine = styled.div`
   bottom: 0;
   left: 0;
   transition: transform 0.3s ease;
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      pointer-events: none;
+    `}
   &:hover {
     transform: scaleY(2);
   }
 `;
 
-const VerticalLine = styled.div`
+const VerticalLine = styled.div<{ disabled?: boolean }>`
   position: absolute;
   height: 100%;
   width: ${RESIZE_LINE_SIZE}px;
@@ -28,6 +35,11 @@ const VerticalLine = styled.div`
   right: -${RESIZE_LINE_SIZE}px;
   cursor: col-resize;
   transition: all 0.1s ease;
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      pointer-events: none;
+    `}
   &:hover {
     transform: scaleX(2);
   }
@@ -54,6 +66,10 @@ type DraggableLineProps = {
    * The aria-label of the draggable line
    */
   ariaLabel?: string;
+  /**
+   * Boolean flag to disable the draggable line
+   */
+  disabled?: boolean;
 };
 
 /**
@@ -65,13 +81,26 @@ export const DraggableLine = ({
   id,
   orientation = 'horizontal',
   ariaLabel,
+  disabled = false,
 }: DraggableLineProps) => {
   const { attributes, listeners, setNodeRef } = useDraggable({
     id,
   });
   return orientation === 'vertical' ? (
-    <VerticalLine ref={setNodeRef} {...listeners} {...attributes} aria-label={ariaLabel} />
+    <VerticalLine
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      aria-label={ariaLabel}
+      disabled={disabled}
+    />
   ) : (
-    <HorizontalLine ref={setNodeRef} {...listeners} {...attributes} aria-label={ariaLabel} />
+    <HorizontalLine
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      aria-label={ariaLabel}
+      disabled={disabled}
+    />
   );
 };

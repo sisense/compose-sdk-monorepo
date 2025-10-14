@@ -1,20 +1,20 @@
 /* eslint-disable max-params */
-import { ChartDesignOptions } from './translations/types';
-import { determineHighchartsChartType } from './translations/translations-to-highcharts';
-import { ChartType, OptionsWithAlerts, CompleteThemeSettings, LegendOptions } from '../types';
-import { ScatterChartData } from '../chart-data/types';
-import { HighchartsOptionsInternal } from './chart-options-service';
 import {
   ChartDataOptionsInternal,
   ScatterChartDataOptionsInternal,
 } from '../chart-data-options/types';
+import { createCategoriesMap } from '../chart-data/scatter-data';
+import { ScatterChartData } from '../chart-data/types';
+import { ChartType, CompleteThemeSettings, LegendOptions, OptionsWithAlerts } from '../types';
+import { categoriesSliceWarning } from '../utils/data-limit-warning';
+import { HighchartsOptionsInternal } from './chart-options-service';
 import { getLegendSettings, LegendSettings } from './translations/legend-section';
-import { getScatterPlotOptions } from './translations/scatter-plot-options';
 import { getScatterXAxisSettings, getScatterYAxisSettings } from './translations/scatter-axis';
+import { getScatterPlotOptions } from './translations/scatter-plot-options';
 import { buildScatterSeries } from './translations/scatter-series';
 import { getScatterTooltipSettings } from './translations/scatter-tooltip';
-import { categoriesSliceWarning } from '../utils/data-limit-warning';
-import { createCategoriesMap } from '../chart-data/scatter-data';
+import { determineHighchartsChartType } from './translations/translations-to-highcharts';
+import { ChartDesignOptions } from './translations/types';
 
 const SPACING = 20;
 const MARGIN_TOP = 30;

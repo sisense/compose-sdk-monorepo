@@ -1,9 +1,11 @@
-import { setup } from '@/__test-helpers__';
 import { BearerAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { screen, waitFor } from '@testing-library/react';
+
+import { setup } from '@/__test-helpers__';
+
 import { ChatApiContext } from '../api/chat-api-provider';
-import { SendFeedbackRequest } from '../api/types';
 import { ChatRestApi } from '../api/chat-rest-api';
+import { SendFeedbackRequest } from '../api/types';
 import FeedbackWrapper from './feedback-wrapper';
 
 vi.mock('@sisense/sdk-rest-client', async (importOriginal) => {

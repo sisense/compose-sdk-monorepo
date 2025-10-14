@@ -1,3 +1,10 @@
+// Import after mocking
+import { isHighchartsBasedChartRendererProps } from '../../highcharts-based-chart-renderer/highcharts-based-chart-renderer';
+import { dataTranslators } from './data';
+import { dataOptionsTranslators } from './data-options';
+import { designOptionsTranslators } from './design-options';
+import { polarChartBuilder } from './polar-chart-builder';
+
 // Mock dependencies first, before imports
 vi.mock('./data-options', () => ({
   dataOptionsTranslators: {
@@ -46,13 +53,6 @@ vi.mock('./highchart-options/highcharts-options-builder', () => ({
 vi.mock('../helpers/alerts', () => ({
   getCommonCartesianAlerts: vi.fn(),
 }));
-
-// Import after mocking
-import { polarChartBuilder } from './polar-chart-builder';
-import { dataOptionsTranslators } from './data-options';
-import { dataTranslators } from './data';
-import { designOptionsTranslators } from './design-options';
-import { isHighchartsBasedChartRendererProps } from '../../highcharts-based-chart-renderer/highcharts-based-chart-renderer';
 
 describe('polar-chart-builder', () => {
   beforeEach(() => {

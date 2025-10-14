@@ -1,35 +1,36 @@
+import { type FunctionComponent, type MouseEvent, useEffect, useRef } from 'react';
+
 import {
   ChartDataOptionsInternal,
   IndicatorChartDataOptionsInternal,
 } from './chart-data-options/types';
-import { useEffect, useRef, type FunctionComponent, type MouseEvent } from 'react';
 import { IndicatorChartData } from './chart-data/types';
+import { ChartData } from './chart-data/types';
+import { getDataPointMetadata } from './chart-options-processor/data-points';
 import {
   GaugeSpecificDesignOptions,
   IndicatorChartDesignOptions,
 } from './chart-options-processor/translations/design-options';
+import {
+  applyFormatPlainText,
+  getCompleteNumberFormatConfig,
+} from './chart-options-processor/translations/number-format-config';
+import { DesignOptions } from './chart-options-processor/translations/types';
+import { ChartRendererProps } from './chart/types';
 import { Indicator } from './charts/indicator/chart/indicator';
 import {
   createLegacyChartDataOptions,
   IndicatorLegacyChartDataOptions,
 } from './charts/indicator/indicator-legacy-chart-data-options';
 import { createIndicatorLegacyChartOptions } from './charts/indicator/indicator-legacy-chart-options';
-import { ChartData } from './chart-data/types';
-import { DesignOptions } from './chart-options-processor/translations/types';
-import { ChartRendererProps } from './chart/types';
-import { useThemeContext } from './theme-provider';
 import {
   applyIndicatorRenderOptions,
-  IndicatorRenderOptions,
   buildRenderOptionsFromLegacyOptions,
+  IndicatorRenderOptions,
 } from './charts/indicator/indicator-render-options';
-import { IndicatorDataPoint, DataPointEntry } from './types';
-import { getDataPointMetadata } from './chart-options-processor/data-points';
-import {
-  applyFormatPlainText,
-  getCompleteNumberFormatConfig,
-} from './chart-options-processor/translations/number-format-config';
 import { IndicatorDataPointEventHandler } from './props';
+import { useThemeContext } from './theme-provider';
+import { DataPointEntry, IndicatorDataPoint } from './types';
 
 export type IndicatorLegacyChartOptions = ReturnType<typeof createIndicatorLegacyChartOptions>;
 

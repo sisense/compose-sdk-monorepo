@@ -1,15 +1,16 @@
-import { TypedDataOptionsInternal, TypedDesignOptions } from '../../types.js';
-import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
-import { TypedChartData } from '../../types.js';
-
-import { BuildContext, HighchartBasedChartTypes, HighchartsOptionsBuilder } from '../types.js';
 import flow from 'lodash-es/flow';
-import { withCommonHighchartsOptions } from '@/chart-options-processor/common-highcharts-option-service';
+
 import { withEventHandlers } from '@/chart-options-processor/apply-event-handlers';
-import { SisenseChartDataPointsEventHandler } from '@/sisense-chart/types';
-import { SisenseChartDataPointEventHandler } from '@/sisense-chart/types';
+import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
+import { withCommonHighchartsOptions } from '@/chart-options-processor/common-highcharts-option-service';
 import { withThemeOptions } from '@/chart-options-processor/theme-option-service';
 import { BeforeRenderHandler } from '@/props';
+import { SisenseChartDataPointsEventHandler } from '@/sisense-chart/types';
+import { SisenseChartDataPointEventHandler } from '@/sisense-chart/types';
+
+import { TypedDataOptionsInternal, TypedDesignOptions } from '../../types.js';
+import { TypedChartData } from '../../types.js';
+import { BuildContext, HighchartBasedChartTypes, HighchartsOptionsBuilder } from '../types.js';
 
 export const buildHighchartsOptions = <CT extends HighchartBasedChartTypes>({
   highchartsOptionsBuilder: builder,

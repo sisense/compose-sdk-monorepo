@@ -1,11 +1,14 @@
 /* eslint-disable sonarjs/no-identical-functions */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { getDateFormatter, getXAxisDatetimeSettings, getInterval } from './date-utils';
-import { StyledColumn } from '../../../../chart-data-options/types';
-import { TranslatableError } from '@/translation/translatable-error';
-import { Axis } from '../../../translations/axis-section';
+
 import { getDataOptionGranularity } from '@/chart-data-options/utils';
+import { TranslatableError } from '@/translation/translatable-error';
+
+import { StyledColumn } from '../../../../chart-data-options/types';
+import { Axis } from '../../../translations/axis-section';
+import { getDateFormatter, getInterval, getXAxisDatetimeSettings } from './date-utils';
 
 // Mock dependencies
 vi.mock('@/chart-data-options/utils', () => ({

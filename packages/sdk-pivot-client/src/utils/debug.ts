@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { LoggerI, Console } from './types.js';
+import { Console, LoggerI } from './types.js';
 
 const excludedNames = ['S&PManager', 'Cache'];
 const includedNames = ['null'];

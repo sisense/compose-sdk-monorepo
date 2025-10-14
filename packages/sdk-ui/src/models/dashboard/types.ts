@@ -1,9 +1,9 @@
 import { CommonFiltersOptions } from '@/common-filters/types';
-import { ColorPaletteTheme, TabberConfig } from '@/types';
 import type {
   JumpToDashboardConfig,
   JumpToDashboardConfigForPivot,
 } from '@/dashboard/hooks/jtd/jtd-types';
+import { ColorPaletteTheme, TabberConfig } from '@/types';
 
 export type {
   CommonFiltersOptions,
@@ -15,6 +15,11 @@ export type {
  * Part of Dashboard layout, which describes how widgets are arranged in a cell
  */
 export interface WidgetsPanelCell {
+  /**
+   * Flag that indicates if the cell is hidden
+   * @internal
+   */
+  hidden?: boolean;
   widthPercentage: number;
   /**
    * @privateRemarks

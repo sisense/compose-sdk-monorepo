@@ -1,5 +1,7 @@
-import { type ChartDataOptions } from '@/types';
 import { translateCategoricalChartDataOptions } from '@/chart-data-options/translate-data-options';
+import { ChartDataOptionsInternal } from '@/chart-data-options/types';
+import { type ChartDataOptions } from '@/types';
+
 import {
   getCategoricalAttributes,
   getCategoricalMeasures,
@@ -7,7 +9,6 @@ import {
   isCategoricalChartDataOptionsInternal,
 } from '../../helpers/data-options';
 import type { TreemapChartDataOptions, TreemapChartDataOptionsInternal } from '../types';
-import { ChartDataOptionsInternal } from '@/chart-data-options/types';
 
 export const dataOptionsTranslators = {
   translateDataOptionsToInternal: (

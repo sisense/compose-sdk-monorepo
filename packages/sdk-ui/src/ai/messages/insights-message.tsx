@@ -1,9 +1,10 @@
-import { GetNlgInsightsRequest } from '../api/types';
-import LoadingDotsIcon from '../icons/loading-dots-icon';
-import TextMessage from './text-message';
-import { useGetNlgInsightsInternal } from '../use-get-nlg-insights';
-import Collapsible from '../common/collapsible';
 import { useTranslation } from 'react-i18next';
+
+import { GetNlgInsightsRequest } from '../api/types';
+import Collapsible from '../common/collapsible';
+import LoadingDotsIcon from '../icons/loading-dots-icon';
+import { useGetNlgInsightsInternal } from '../use-get-nlg-insights';
+import TextMessage from './text-message';
 
 type InsightsMessageProps = {
   nlgRequest: GetNlgInsightsRequest;

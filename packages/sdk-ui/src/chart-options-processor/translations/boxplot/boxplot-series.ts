@@ -1,9 +1,10 @@
-import { SeriesType } from '../../chart-options-service.js';
+import { getPaletteColor } from '@/chart-data-options/coloring/utils.js';
+import { applyOpacity, scaleBrightness } from '@/utils/color/color-interpolation.js';
+
 import { BoxplotChartData } from '../../../chart-data/types.js';
 import { Color, SeriesWithAlerts } from '../../../types.js';
+import { SeriesType } from '../../chart-options-service.js';
 import { BoxplotChartDesignOptions } from '../design-options.js';
-import { applyOpacity, scaleBrightness } from '@/utils/color/color-interpolation.js';
-import { getPaletteColor } from '@/chart-data-options/coloring/utils.js';
 
 // eslint-disable-next-line max-lines-per-function
 export const buildBoxplotSeries = (

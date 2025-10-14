@@ -1,3 +1,5 @@
+import { useCallback, useMemo } from 'react';
+
 import {
   convertDataSource,
   DataSource,
@@ -7,14 +9,15 @@ import {
   isMembersFilter,
   isNumber,
 } from '@sisense/sdk-data';
-import { useMemo } from 'react';
+
+import { HookEnableParam } from '@/common/hooks/types';
+import { withTracking } from '@/decorators/hook-decorators';
+import { useExecuteQueryInternal } from '@/query-execution/use-execute-query';
 import { formatDateValue, getDefaultDateMask } from '@/query/date-formats/apply-date-format';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { useExecuteQueryInternal } from '@/query-execution/use-execute-query';
-import { withTracking } from '@/decorators/hook-decorators';
-import { Member, SelectedMember } from '../components/member-filter-tile';
 import { TranslatableError } from '@/translation/translatable-error';
-import { HookEnableParam } from '@/common/hooks/types';
+
+import { Member, SelectedMember } from '../components/member-filter-tile';
 
 /**
  * Returns new `members` array with members transformed to required type.
@@ -41,6 +44,19 @@ export interface GetFilterMembersParams extends HookEnableParam {
    * @internal
    */
   count?: number;
+  /**
+   * Whether to allow original filter members to be included in the result even if they are not present in the loaded data
+   *
+   * When enabled, filter members that are not found in the queried results will still be included
+   * in the `selectedMembers` and `allMembers` arrays.
+   *
+   * Example case: there's no value for a specific date, but user still have to be able to select it in the filter
+   *
+   * If not specified, the default value is `false`
+   *
+   * @internal
+   */
+  allowMissingMembers?: boolean;
 }
 
 /**
@@ -145,6 +161,7 @@ export const useGetFilterMembersInternal = ({
   parentFilters = [],
   count,
   enabled,
+  allowMissingMembers = false,
 }: GetFilterMembersParams): GetFilterMembersResult => {
   if (!isMembersFilter(filter)) {
     throw new TranslatableError('errors.notAMembersFilter');
@@ -175,56 +192,83 @@ export const useGetFilterMembersInternal = ({
   });
 
   const { app } = useSisenseContext();
-  const formattedData = useMemo(() => {
-    if (!data) return;
-    if (isDatetime(filterAttribute.type)) {
-      return {
-        ...data,
-        rows: data.rows.map((cell) =>
-          cell.map((d) => ({
-            ...d,
-            text: formatDateValue(
-              d.data,
-              getDefaultDateMask((filterAttribute as DimensionalLevelAttribute).granularity),
-              app?.settings?.locale,
-            ),
-          })),
-        ),
-      };
-    }
-    return data;
-  }, [data, filterAttribute, app]);
 
-  const queriedMembers = useMemo(
-    () => (!formattedData ? [] : formattedData.rows.map((r) => r[0])),
-    [formattedData],
+  const formatDate = useCallback(
+    (value: Date | string) => {
+      return formatDateValue(
+        value,
+        getDefaultDateMask((filterAttribute as DimensionalLevelAttribute).granularity),
+        app?.settings?.locale,
+      );
+    },
+    [filterAttribute, app?.settings?.locale],
   );
 
-  const selectedMembers: SelectedMember[] = useMemo(() => {
-    const members = castMembersToType(filter.members, filterAttribute.type);
-    const deactivatedMembers = castMembersToType(
-      filter.config.deactivatedMembers,
-      filterAttribute.type,
-    );
-    return queriedMembers
-      .filter(
-        (queriedMember) =>
-          members.includes(queriedMember.data) || deactivatedMembers.includes(queriedMember.data),
-      )
-      .map((queriedMember) => ({
-        key: queriedMember.data.toString(),
-        title: queriedMember.text ?? queriedMember.data.toString(),
-        inactive: deactivatedMembers.includes(queriedMember.data),
+  const members = useMemo(
+    () => castMembersToType(filter.members, filterAttribute.type),
+    [filter.members, filterAttribute.type],
+  );
+
+  const deactivatedMembers = useMemo(
+    () => castMembersToType(filter.config.deactivatedMembers ?? [], filterAttribute.type),
+    [filter.config.deactivatedMembers, filterAttribute.type],
+  );
+
+  // Queried members with missing members when allowMissingMembers is enabled
+  const availableMembers = useMemo(() => {
+    // Queried members with applied date formatting
+    const queriedMembers = (data?.rows || []).map((row) => ({
+      data: row[0].data,
+      text: isDatetime(filterAttribute.type) ? formatDate(row[0].data) : row[0].data.toString(),
+    }));
+
+    if (!allowMissingMembers) {
+      return queriedMembers;
+    }
+
+    const queriedMemberData = queriedMembers.map((m) => m.data);
+
+    // Find members that are in the filter but not in the queried data
+    const missingMembers = members
+      .filter((member) => !queriedMemberData.includes(member))
+      .map((member) => ({
+        data: member,
+        text: isDatetime(filterAttribute.type) ? formatDate(member) : member.toString(),
       }));
-  }, [filter.config.deactivatedMembers, filter.members, queriedMembers, filterAttribute.type]);
+
+    // Find deactivated members that are not in the queried data
+    const missingDeactivatedMembers = deactivatedMembers
+      .filter((member) => !queriedMemberData.includes(member) && !members.includes(member))
+      .map((member) => ({
+        data: member,
+        text: isDatetime(filterAttribute.type) ? formatDate(member) : member.toString(),
+      }));
+
+    return [...missingMembers, ...missingDeactivatedMembers, ...queriedMembers];
+  }, [data, allowMissingMembers, members, deactivatedMembers, filterAttribute.type, formatDate]);
+
+  const selectedMembers: SelectedMember[] = useMemo(() => {
+    // Find members that exist in the available data (includes missing members when allowMissingMembers is enabled)
+    return availableMembers
+      .filter(
+        (availableMember) =>
+          members.includes(availableMember.data) ||
+          deactivatedMembers.includes(availableMember.data),
+      )
+      .map((availableMember) => ({
+        key: availableMember.data.toString(),
+        title: availableMember.text ?? availableMember.data.toString(),
+        inactive: deactivatedMembers.includes(availableMember.data),
+      }));
+  }, [deactivatedMembers, members, availableMembers]);
 
   const allMembers: Member[] = useMemo(
     () =>
-      queriedMembers.map((queriedMember) => ({
-        key: queriedMember.data.toString(),
-        title: queriedMember.text ?? queriedMember.data.toString(),
+      availableMembers.map((availableMember) => ({
+        key: availableMember.data.toString(),
+        title: availableMember.text ?? availableMember.data.toString(),
       })),
-    [queriedMembers],
+    [availableMembers],
   );
 
   const hasBackgroundFilter = !!backgroundFilter && parentFilters.length === 0;

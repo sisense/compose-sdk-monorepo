@@ -1,6 +1,8 @@
+import { DataSource } from '@sisense/sdk-data';
+
 import { ChartData } from '@/chart-data/types';
 import { DesignOptions } from '@/chart-options-processor/translations/types';
-import { DataSource } from '@sisense/sdk-data';
+
 import { ChartDataOptionsInternal, ChartProps, ChartType } from '..';
 
 /**

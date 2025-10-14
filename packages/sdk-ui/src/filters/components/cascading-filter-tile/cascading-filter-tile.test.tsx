@@ -1,13 +1,15 @@
+import { CascadingFilter, Filter, filterFactory, isCascadingFilter } from '@sisense/sdk-data';
 import { render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { CascadingFilter, Filter, filterFactory, isCascadingFilter } from '@sisense/sdk-data';
+import { setTimeout } from 'timers/promises';
+
+import * as jaqlAgeRange from '@/__mocks__/data/mock-jaql-age-range.json';
+import { mockToken, mockUrl, server } from '@/__mocks__/msw';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { SisenseContextProviderProps } from '@/index';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
-import * as jaqlAgeRange from '@/__mocks__/data/mock-jaql-age-range.json';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { mockToken, mockUrl, server } from '@/__mocks__/msw';
+
 import { CascadingFilterTile } from './cascading-filter-tile';
-import { setTimeout } from 'timers/promises';
 
 const contextProviderProps: SisenseContextProviderProps = {
   url: mockUrl,

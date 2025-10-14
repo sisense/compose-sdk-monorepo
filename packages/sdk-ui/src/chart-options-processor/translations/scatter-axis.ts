@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { isNumber } from '@sisense/sdk-data';
+
+import { isMeasureColumn } from '@/chart-data-options/utils';
+
 import { ScatterCategories } from '../../chart-data/types';
+import { fontStyleDefault } from '../defaults/cartesian';
 import {
   ScatterChartDataOptionsInternal,
   StyledColumn,
   StyledMeasureColumn,
 } from './../../chart-data-options/types';
 import { Axis, AxisSettings } from './axis-section';
-import { fontStyleDefault } from '../defaults/cartesian';
-import { isNumber } from '@sisense/sdk-data';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
-import { isMeasureColumn } from '@/chart-data-options/utils';
 
 export const commonColor = '#d1d1d7';
 

@@ -1,5 +1,5 @@
-import { translateStyleOptionsToDesignOptions } from './index';
 import { PieChartStyleOptions } from '../types';
+import { translateStyleOptionsToDesignOptions } from './index';
 
 describe('Pie Chart Design Options', () => {
   describe('translateStyleOptionsToDesignOptions', () => {

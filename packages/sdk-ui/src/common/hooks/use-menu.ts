@@ -1,4 +1,5 @@
 import { TranslatableError } from '@/translation/translatable-error.js';
+
 import { useMenuContext } from '../components/menu/menu-context.js';
 
 /**

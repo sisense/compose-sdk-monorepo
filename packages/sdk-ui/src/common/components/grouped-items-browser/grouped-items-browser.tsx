@@ -1,8 +1,10 @@
 import React, { useCallback } from 'react';
-import { GroupedItemsBrowserProps } from './types';
-import { Group } from './group';
-import List from '@mui/material/List';
+
 import styled from '@emotion/styled';
+import List from '@mui/material/List';
+
+import { Group } from './group';
+import { GroupedItemsBrowserProps } from './types';
 
 const GroupedItemsBrowserList = styled(List)`
   padding: 0;

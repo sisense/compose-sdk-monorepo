@@ -1,4 +1,4 @@
-import { seriesDataColoringFunction } from './index.js';
+import { seriesDataColoringFunction } from './series-data-coloring-function.js';
 
 const seriesYValues = [{ value: 1 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 5 }];
 

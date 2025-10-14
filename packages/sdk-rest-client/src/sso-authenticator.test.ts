@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { normalizeUrl } from '@sisense/sdk-common';
 
 import { isSsoAuthenticator, SsoAuthenticator } from './sso-authenticator.js';

@@ -1,7 +1,9 @@
-import { describe, it, expect } from 'vitest';
-import { withCalendarHeatmapDataColoring } from '../with-calendar-heatmap-data-coloring.js';
-import { CalendarHeatmapDataValue } from '../../data.js';
+import { describe, expect, it } from 'vitest';
+
 import { DataColorOptions } from '@/types.js';
+
+import { CalendarHeatmapDataValue } from '../../data.js';
+import { withCalendarHeatmapDataColoring } from '../with-calendar-heatmap-data-coloring.js';
 
 describe('withCalendarHeatmapDataColoring', () => {
   const mockDataValues: CalendarHeatmapDataValue[] = [

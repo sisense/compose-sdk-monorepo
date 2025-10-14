@@ -1,4 +1,13 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
+
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+
+import { ClientApplication } from '@/app/client-application';
+import { useQueryParamsChanged } from '@/query-execution/query-params-comparator';
+import { CacheKey } from '@/utils/create-cache';
+
+import { useShouldLoad } from '../common/hooks/use-should-load';
+import { withTracking } from '../decorators/hook-decorators';
 import {
   clearExecuteQueryCache,
   createExecuteQueryCacheKey,
@@ -6,15 +15,9 @@ import {
   executeQuery as executeQueryWithoutCache,
 } from '../query/execute-query';
 import { useSisenseContext } from '../sisense-context/sisense-context';
-import { queryStateReducer } from './query-state-reducer';
 import { TranslatableError } from '../translation/translatable-error';
-import { withTracking } from '../decorators/hook-decorators';
+import { queryStateReducer } from './query-state-reducer';
 import { ExecuteQueryParams, ExecuteQueryResult } from './types';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
-import { ClientApplication } from '@/app/client-application';
-import { CacheKey } from '@/utils/create-cache';
-import { useQueryParamsChanged } from '@/query-execution/query-params-comparator';
-import { useShouldLoad } from '../common/hooks/use-should-load';
 
 /**
  * React hook that executes a data query.

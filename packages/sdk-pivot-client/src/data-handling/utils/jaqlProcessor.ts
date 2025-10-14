@@ -1,15 +1,17 @@
 import isEqual from 'lodash-es/isEqual.js';
+
+import { JaqlPanel, JaqlRequest, SortDetails } from '../../data-load/types.js';
+import { treeNode } from '../../tree-structure/utils/index.js';
 import {
-  PanelType,
   JaqlDataType,
-  SortingDirection,
   ListOfJaqlDataTypes,
   ListOfSortingDirections,
+  PanelType,
+  SortingDirection,
 } from '../constants.js';
-import { treeNode } from '../../tree-structure/utils/index.js';
-import { createPivotTreeNode, jaqlProcessor } from './index.js';
-import { JaqlRequest, JaqlPanel, SortDetails } from '../../data-load/types.js';
 import { PivotTreeNode } from '../types.js';
+import createPivotTreeNode from './createPivotTreeNode.js';
+import * as jaqlProcessor from './jaqlProcessor.js';
 
 export type DataTypes = {
   [key: string]: string;

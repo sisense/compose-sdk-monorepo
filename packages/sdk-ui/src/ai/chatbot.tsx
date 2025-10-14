@@ -1,5 +1,7 @@
-import { useThemeContext } from '@/theme-provider';
 import { CSSProperties } from 'react';
+
+import { useThemeContext } from '@/theme-provider';
+
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
 import { ChatConfig, ChatConfigProvider } from './chat-config';
 import { ChatFrame } from './chat-frame';

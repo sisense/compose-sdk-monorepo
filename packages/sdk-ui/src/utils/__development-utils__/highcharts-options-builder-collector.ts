@@ -3,11 +3,11 @@
  * This enables comprehensive runtime data collection for all builder methods,
  * making it easier to generate unit tests and understand builder behavior.
  */
-
 import {
-  HighchartsOptionsBuilder,
   HighchartBasedChartTypes,
+  HighchartsOptionsBuilder,
 } from '@/chart/restructured-charts/highchart-based-charts/types';
+
 import { withInputOutputCollection } from './input-output-collector.js';
 
 /**

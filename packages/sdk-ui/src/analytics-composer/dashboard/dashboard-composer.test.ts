@@ -1,7 +1,8 @@
-import * as dashboardComposer from './dashboard-composer.js';
-import { DashboardCodeParams } from '../types.js';
 import { dashboardModelTranslator } from '@/index';
 import { sampleEcommerceDashboard } from '@/models/__mocks__/sample-ecommerce-dashboard.js';
+
+import { DashboardCodeParams } from '../types.js';
+import * as dashboardComposer from './dashboard-composer.js';
 
 describe('dashboardComposer', () => {
   describe('toDashboardCode Client Side', () => {

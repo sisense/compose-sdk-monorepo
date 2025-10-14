@@ -1,18 +1,20 @@
 import { Attribute, Measure } from '@sisense/sdk-data';
+import flow from 'lodash-es/flow';
+
 import { ChartDataOptions, ChartDataOptionsInternal } from '@/chart-data-options/types';
 import {
   withCategoryLimitation,
   withValueLimitation,
 } from '@/chart-data-options/validate-data-options/validate-categorical-data-options';
+
 import {
-  translateCategoricalDataOptionsToInternal,
   getCategoricalAttributes,
   getCategoricalMeasures,
   isCategoricalChartDataOptions,
   isCategoricalChartDataOptionsInternal,
+  translateCategoricalDataOptionsToInternal,
 } from '../../helpers/data-options';
 import { FunnelChartDataOptions, FunnelChartDataOptionsInternal } from '../types';
-import flow from 'lodash-es/flow';
 
 const MAX_CATEGORICAL_DATA_OPTIONS_LENGTHS = {
   category: 3,

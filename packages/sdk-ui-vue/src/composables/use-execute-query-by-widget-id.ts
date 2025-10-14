@@ -5,12 +5,13 @@ import type {
   QueryByWidgetIdState,
 } from '@sisense/sdk-ui-preact';
 import { executeQueryByWidgetId, queryStateReducer } from '@sisense/sdk-ui-preact';
-import { getSisenseContext } from '../providers/sisense-context-provider';
-import { ref, toRefs, watch, type ToRefs } from 'vue';
-import { collectRefs, toPlainValue, toPlainObject } from '../utils';
+import { ref, toRefs, type ToRefs, watch } from 'vue';
+
 import { useReducer } from '../helpers/use-reducer';
-import { useTracking } from './use-tracking';
+import { getSisenseContext } from '../providers/sisense-context-provider';
 import type { MaybeRefOrWithRefs } from '../types';
+import { collectRefs, toPlainObject, toPlainValue } from '../utils';
+import { useTracking } from './use-tracking';
 
 /**
  * A Vue composable function `useExecuteQueryByWidgetId` for executing queries by widget ID using the Sisense SDK.

@@ -1,9 +1,11 @@
+import { measureFactory } from '@sisense/sdk-data';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { IndicatorChartData } from '@/chart-data/types';
 import { IndicatorChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { IndicatorLegacyChartOptions } from '@/indicator-canvas';
 import { IndicatorChartDataOptions } from '@/types';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+
 import { IndicatorLegacyChartDataOptions } from '../indicator-legacy-chart-data-options';
 
 export const chartData: IndicatorChartData = {

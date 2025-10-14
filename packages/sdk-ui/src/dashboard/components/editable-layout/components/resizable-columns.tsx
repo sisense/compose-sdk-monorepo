@@ -1,8 +1,11 @@
 import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import styled from '@emotion/styled';
+
 import { DndContext, DragMoveEvent } from '@dnd-kit/core';
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
+import styled from '@emotion/styled';
+
 import { useSyncedState } from '@/common/hooks/use-synced-state';
+
 import {
   MAX_COLUMN_WIDTH,
   MIN_COLUMN_WIDTH,
@@ -67,6 +70,10 @@ interface ResizableColumnsProps {
    * The callback function to call when the widths change
    */
   onWidthsChange: (widths: number[]) => void;
+  /**
+   * Boolean flag to disable the resize of the columns
+   */
+  disableResize?: boolean;
 }
 
 /**
@@ -80,6 +87,7 @@ export const ResizableColumns = ({
   minColWidths,
   maxColWidths,
   onWidthsChange,
+  disableResize = false,
 }: ResizableColumnsProps) => {
   const [totalWidth, setTotalWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -210,6 +218,7 @@ export const ResizableColumns = ({
                 >
                   {columnIndex !== children.length - 1 && (
                     <DraggableLine
+                      disabled={disableResize}
                       orientation="vertical"
                       id={`${columnIndex}`}
                       ariaLabel={`column-resize-handle`}

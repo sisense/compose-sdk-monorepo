@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
+
 /* eslint-disable sonarjs/cognitive-complexity */
-import { DataTable } from '../chart-data-processor/table-processor';
-import { RangeChartData } from './types';
 import {
-  RangeChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
+  RangeChartDataOptionsInternal,
 } from '../chart-data-options/types';
+import { DataTable } from '../chart-data-processor/table-processor';
 import { cartesianData as getCartesianData } from './cartesian-data';
+import { RangeChartData } from './types';
 
 /**
  * Creates data for range charts given chart data table and data options

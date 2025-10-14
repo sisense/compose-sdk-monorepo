@@ -1,7 +1,9 @@
-import { createAttribute } from '@sisense/sdk-data';
-import { useDrilldown } from './use-drilldown.js';
-import { renderHook } from '@testing-library/react';
 import { act } from 'react';
+
+import { createAttribute } from '@sisense/sdk-data';
+import { renderHook } from '@testing-library/react';
+
+import { useDrilldown } from './use-drilldown.js';
 
 const ageRange = createAttribute({
   name: 'Age Range',

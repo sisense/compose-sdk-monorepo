@@ -1,7 +1,11 @@
 /* eslint-disable max-lines */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
 import { normalizeName } from '../base.js';

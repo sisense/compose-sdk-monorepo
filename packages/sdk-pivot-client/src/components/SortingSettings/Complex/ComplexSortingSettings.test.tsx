@@ -1,11 +1,11 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import '@testing-library/jest-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import {
   ComplexSortingSettingsPopup,
   type ComplexSortingSettingsPopupProps,
 } from './ComplexSortingSettings';
-
-import '@testing-library/jest-dom';
 
 describe('ComplexSortingSettingsPopup', () => {
   let props: ComplexSortingSettingsPopupProps;

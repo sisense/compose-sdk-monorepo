@@ -1,20 +1,23 @@
 import { useCallback, useMemo } from 'react';
-import {
-  FilterInfo,
-  CRITERIA_FILTER_MAP,
-  filterToOption,
-  CriteriaFilterValueType,
-  filterToDefaultValues,
-  valuesToDisplayValues,
-} from './criteria-filter-operations.js';
-import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container.js';
-import { CriteriaFilterMenu } from './criteria-filter-menu.js';
+
 import { Filter, Measure } from '@sisense/sdk-data';
-import { CriteriaFilterDisplay } from './criteria-filter-display.js';
+
+import { useSyncedState } from '@/common/hooks/use-synced-state.js';
+import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.js';
+
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
 import { FilterVariant, isVertical } from '../common/filter-utils.js';
-import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.js';
-import { useSyncedState } from '@/common/hooks/use-synced-state.js';
+import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container.js';
+import { CriteriaFilterDisplay } from './criteria-filter-display.js';
+import { CriteriaFilterMenu } from './criteria-filter-menu.js';
+import {
+  CRITERIA_FILTER_MAP,
+  CriteriaFilterValueType,
+  FilterInfo,
+  filterToDefaultValues,
+  filterToOption,
+  valuesToDisplayValues,
+} from './criteria-filter-operations.js';
 
 /**
  * Props of the {@link CriteriaFilterTile} component.

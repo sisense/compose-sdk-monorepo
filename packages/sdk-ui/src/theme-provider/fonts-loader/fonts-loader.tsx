@@ -1,7 +1,8 @@
-import { ThemeSettingsFont } from '@/types';
-import { useFontsLoader } from '@/theme-provider/fonts-loader/use-fonts-loader';
-import { useThemeContext } from '@/theme-provider';
 import { createContext, useContext } from 'react';
+
+import { useThemeContext } from '@/theme-provider';
+import { useFontsLoader } from '@/theme-provider/fonts-loader/use-fonts-loader';
+import { ThemeSettingsFont } from '@/types';
 
 const FontLoaderContext = createContext<{
   loadedFonts: string[];

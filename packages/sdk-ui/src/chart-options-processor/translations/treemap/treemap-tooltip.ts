@@ -1,15 +1,17 @@
+import { TFunction } from '@sisense/sdk-common';
+
+import { getDataOptionTitle } from '@/chart-data-options/utils';
+
+import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { TreemapChartDesignOptions } from '../design-options';
+import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config';
 import {
   HighchartsDataPointContext,
   HighchartsDataPointContextNode,
   TooltipSettings,
 } from '../tooltip-utils';
-import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
-import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config';
 import './treemap-tooltip.scss';
-import { getDataOptionTitle } from '@/chart-data-options/utils';
-import { TFunction } from '@sisense/sdk-common';
 
 type TooltipFormatterOptions = {
   displayTotalContribution: boolean;

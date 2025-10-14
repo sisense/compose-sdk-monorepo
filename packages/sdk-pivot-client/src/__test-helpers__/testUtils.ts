@@ -1,8 +1,9 @@
 import EventEmitter from 'events';
+import { v4 as uuid } from 'uuid';
+
+import { Jaql, JaqlPanel, JaqlRequest } from '../data-load/types.js';
 import { TreeNode } from '../tree-structure/index.js';
 import { treeNode } from '../tree-structure/utils/index.js';
-import { Jaql, JaqlPanel, JaqlRequest } from '../data-load/types.js';
-import { v4 as uuid } from 'uuid';
 
 /**
  * @param {Function} emitter - instance of EventEmitter (node-events)

@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
-import { SelectableSection } from '../common/selectable-section';
-import { Filter, filterFactory } from '@sisense/sdk-data';
 import { useTranslation } from 'react-i18next';
+
+import { Filter, filterFactory } from '@sisense/sdk-data';
+
+import { SelectableSection } from '../common/selectable-section';
 
 type IncludeAllSectionProps = {
   filter: Filter;

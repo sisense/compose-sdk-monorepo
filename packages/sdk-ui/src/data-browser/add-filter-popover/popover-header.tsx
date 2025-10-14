@@ -1,10 +1,12 @@
+import { ReactNode } from 'react';
+
 import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
-import { CloseIcon } from '@/common/icons/close-icon';
-import { ReactNode } from 'react';
+
 import { BreadcrumbsArrowsIcon } from '@/common/icons/breadcrumbs-arrows-arrow-icon';
-import { Themable } from '@/theme-provider/types';
+import { CloseIcon } from '@/common/icons/close-icon';
 import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
 
 /** A header for the popover with a title and a flow path. */
 export const PopoverHeader = (props: PopoverHeaderProps) => {

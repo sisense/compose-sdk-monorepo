@@ -1,11 +1,12 @@
+import { ScattermapChartDataOptionsInternal } from '@/index';
+
+import { ScattermapChartLocation } from '../../../../chart-data/types';
 import {
   combineLocationNames,
   getLocationGeoLevel,
   getScattermapDataPoint,
   splitLocationName,
 } from './location';
-import { ScattermapChartLocation } from '../../../../chart-data/types';
-import { ScattermapChartDataOptionsInternal } from '@/index';
 
 describe('combineLocationNames', () => {
   it('should combine location names with delimiter', () => {

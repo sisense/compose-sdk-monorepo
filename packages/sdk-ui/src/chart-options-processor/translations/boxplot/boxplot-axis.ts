@@ -1,11 +1,13 @@
-import isNumber from 'lodash-es/isNumber';
 import { isNumber as isNumberType } from '@sisense/sdk-data';
-import { BoxplotChartData } from '../../../chart-data/types';
-import { Axis, AxisLabelsFormatterContextObject, AxisSettings } from '../axis-section';
-import { fontStyleDefault } from '../../defaults/cartesian';
-import { applyFormatPlainText, getCompleteNumberFormatConfig } from '../number-format-config';
-import { StyledColumn, StyledMeasureColumn } from '../../../chart-data-options/types';
+import isNumber from 'lodash-es/isNumber';
+
 import { isMeasureColumn } from '@/chart-data-options/utils';
+
+import { StyledColumn, StyledMeasureColumn } from '../../../chart-data-options/types';
+import { BoxplotChartData } from '../../../chart-data/types';
+import { fontStyleDefault } from '../../defaults/cartesian';
+import { Axis, AxisLabelsFormatterContextObject, AxisSettings } from '../axis-section';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from '../number-format-config';
 
 export const commonColor = '#d1d1d7';
 

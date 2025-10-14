@@ -1,6 +1,6 @@
-import { filterFactory } from '../index.js';
 import { DimensionalAttribute } from './attributes.js';
 import { stringifyHelper } from './compose-code-utils.js';
+import * as filterFactory from './filters/factory.js';
 
 describe('stringifyHelper', () => {
   it('should stringify random argument', () => {

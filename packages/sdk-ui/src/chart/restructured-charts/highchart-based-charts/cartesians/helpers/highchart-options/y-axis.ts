@@ -1,12 +1,13 @@
-import { BuildContext } from '../../../types';
-import { CartesianChartTypes } from '../../types';
-import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
 import {
   buildYAxisMeta,
   buildYAxisMinMax,
   hasSecondaryYAxis,
 } from '@/chart-options-processor/cartesian/utils/axis/axis-builders';
 import { getYAxisSettings } from '@/chart-options-processor/cartesian/utils/axis/axis-utils';
+import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
+
+import { BuildContext } from '../../../types';
+import { CartesianChartTypes } from '../../types';
 
 /**
  * Creates basic Y-axis settings for cartesian charts with data-driven min/max calculation.

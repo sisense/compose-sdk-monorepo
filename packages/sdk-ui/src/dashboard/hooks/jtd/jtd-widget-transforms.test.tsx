@@ -1,17 +1,23 @@
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { WidgetProps } from '@/props.js';
+import { PivotTableDataPoint } from '@/types';
+import * as widgetUtils from '@/widget-by-id/utils';
+
+import * as jtdFormatters from './jtd-formatters';
+import * as jtdHandlers from './jtd-handlers';
+import * as jtdMenu from './jtd-menu';
+import { JtdWidgetTransformConfig } from './jtd-types';
 import {
+  addJtdIconToHeader,
   addPointerCursorToChart,
   applyClickNavigationForChart,
   applyClickNavigationForPivot,
   applyClickNavigationForText,
+  applyPivotLinkStyling,
   applyRightClickNavigation,
   applyRightClickNavigationForPivot,
-  applyPivotLinkStyling,
-  addJtdIconToHeader,
 } from './jtd-widget-transforms';
-import { WidgetProps } from '@/props.js';
-import { JtdWidgetTransformConfig } from './jtd-types';
-import { PivotTableDataPoint } from '@/types';
 
 // Mock dependencies
 vi.mock('@/widget-by-id/utils', async (importOriginal) => {
@@ -46,12 +52,6 @@ vi.mock('./jtd-formatters', () => ({
   createJtdHyperlinkDataCellFormatter: vi.fn(() => vi.fn()),
   createJtdHyperlinkHeaderCellFormatter: vi.fn(() => vi.fn()),
 }));
-
-// Import mocked functions
-import * as widgetUtils from '@/widget-by-id/utils';
-import * as jtdHandlers from './jtd-handlers';
-import * as jtdMenu from './jtd-menu';
-import * as jtdFormatters from './jtd-formatters';
 
 describe('jtd-widget-transforms', () => {
   const mockChartWidgetProps: WidgetProps = {

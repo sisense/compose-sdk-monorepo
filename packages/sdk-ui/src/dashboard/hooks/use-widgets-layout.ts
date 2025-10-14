@@ -1,6 +1,8 @@
-import { WidgetsPanelLayout } from '@/models';
 import { useState } from 'react';
+
 import flow from 'lodash-es/flow';
+
+import { WidgetsPanelLayout } from '@/models';
 
 export type WidgetPanelLayoutManager = {
   manageLayout: (layout: WidgetsPanelLayout) => WidgetsPanelLayout;

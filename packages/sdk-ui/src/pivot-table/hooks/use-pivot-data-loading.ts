@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
 import {
   EVENT_QUERY_END,
   EVENT_QUERY_START,
@@ -6,6 +7,7 @@ import {
   JaqlRequest,
   PivotBuilder,
 } from '@sisense/sdk-pivot-client';
+
 import { useHasChanged } from '@/common/hooks/use-has-changed';
 
 interface LoadingState {

@@ -1,5 +1,5 @@
-import { render, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { fireEvent, render } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AddFilterPopover } from '@/data-browser/add-filter-popover/add-filter-popover';
 

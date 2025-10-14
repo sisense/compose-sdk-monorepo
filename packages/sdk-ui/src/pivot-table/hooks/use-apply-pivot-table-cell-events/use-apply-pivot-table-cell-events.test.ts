@@ -1,14 +1,16 @@
 /* eslint-disable sonarjs/no-identical-functions */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { getDataPointMetadata } from '@/chart-options-processor/data-points';
-import { useApplyPivotTableCellEvents } from './use-apply-pivot-table-cell-events';
+
 import {
-  createMockDataOptions,
   createMockCellPayload,
+  createMockDataOptions,
   createMockTreeNode,
 } from './__test-helpers__/pivot-cell-payload-mock';
-import { PivotTableCellPayload, RowDataNode, ColumnDataNode, ValueDataNode } from './types';
+import { ColumnDataNode, PivotTableCellPayload, RowDataNode, ValueDataNode } from './types';
+import { useApplyPivotTableCellEvents } from './use-apply-pivot-table-cell-events';
 
 // Mock the getDataPointMetadata function
 vi.mock('@/chart-options-processor/data-points', () => ({

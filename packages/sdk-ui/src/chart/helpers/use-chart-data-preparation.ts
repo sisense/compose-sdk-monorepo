@@ -1,17 +1,20 @@
-import { Attribute, Data, DataSource, isDataSource, Measure } from '@sisense/sdk-data';
 import { useMemo } from 'react';
+
+import { Attribute, Data, DataSource, isDataSource, Measure } from '@sisense/sdk-data';
+
 import { ChartDataOptionsInternal } from '@/chart-data-options/types';
 import { DataColumnNamesMapping } from '@/chart-data-options/validate-data-options';
 import { createDataTableFromData } from '@/chart-data-processor/table-creators';
+import { DataTable } from '@/chart-data-processor/table-processor';
 import { chartDataService as legacyChartDataService } from '@/chart-data/chart-data-service';
 import { filterAndAggregateChartData } from '@/chart-data/filter-and-aggregate-chart-data';
 import { ChartData } from '@/chart-data/types';
-import { ChartType } from '@/types';
-import { isData } from '../regular-chart';
 import { TranslatableError } from '@/translation/translatable-error';
-import { DataTable } from '@/chart-data-processor/table-processor';
-import { isRestructuredChartType } from '../restructured-charts/utils';
+import { ChartType } from '@/types';
+
+import { isData } from '../regular-chart';
 import { getChartBuilder } from '../restructured-charts/chart-builder-factory';
+import { isRestructuredChartType } from '../restructured-charts/utils';
 
 type UseChartDataPreparationProps = {
   dataSet: DataSource | Data | undefined;

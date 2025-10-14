@@ -1,13 +1,14 @@
-import ReactDOM from 'react-dom';
 import * as React from 'react';
-import { PageConfigurationService } from '../printing/index.js';
-import { Props as PivotBuilderProps } from './pivot-builder.js';
-import { Layout } from '../components/PageForPrint/index.js';
-import { Pivot } from '../components/Pivot/index.js';
+import ReactDOM from 'react-dom';
+
 import { CONSTANTS } from '../components/PageForPrint/constants.js';
-import { AllDataInfo, DataServiceI, PivotTreeNode } from '../data-handling/types.js';
+import { Layout } from '../components/PageForPrint/index.js';
 import { DimensionFormat } from '../components/PageForPrint/types.js';
+import { Pivot } from '../components/Pivot/index.js';
+import { AllDataInfo, DataServiceI, PivotTreeNode } from '../data-handling/types.js';
+import { PageConfigurationService } from '../printing/index.js';
 import { Defer } from '../utils/types.js';
+import { Props as PivotBuilderProps } from './pivot-builder.js';
 
 type SettingsI = {
   title?: boolean;

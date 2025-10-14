@@ -1,6 +1,8 @@
+import isString from 'lodash-es/isString';
+
 import { seriesSliceWarning } from '@/utils/data-limit-warning';
 import { categoriesSliceWarning } from '@/utils/data-limit-warning';
-import isString from 'lodash-es/isString';
+
 import { BuildContext } from '../../types';
 import { CartesianChartTypes } from '../types';
 

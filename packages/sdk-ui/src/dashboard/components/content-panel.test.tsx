@@ -1,5 +1,7 @@
-import { WidgetProps } from '@/props';
 import { render } from '@testing-library/react';
+
+import { WidgetProps } from '@/props';
+
 import { ContentPanel } from './content-panel';
 
 vi.mock('@/widgets/widget', async () => {

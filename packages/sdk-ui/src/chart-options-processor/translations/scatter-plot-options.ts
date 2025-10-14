@@ -1,12 +1,13 @@
-import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
-import { PlotOptions } from '../chart-options-service';
-import { getRotationType, DataLabelsSettings } from './value-label-section';
-import { ScatterChartDesignOptions } from './design-options';
-import { HighchartsDataPointContext } from './tooltip-utils';
-import { ScatterCustomPointOptions } from './scatter-tooltip';
-import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { isMeasureColumn } from '@/chart-data-options/utils';
 import { SeriesLabels } from '@/types';
+
+import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
+import { PlotOptions } from '../chart-options-service';
+import { ScatterChartDesignOptions } from './design-options';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
+import { ScatterCustomPointOptions } from './scatter-tooltip';
+import { HighchartsDataPointContext } from './tooltip-utils';
+import { DataLabelsSettings, getRotationType } from './value-label-section';
 
 // TODO write API docs
 export type ScatterMarkerSize = {

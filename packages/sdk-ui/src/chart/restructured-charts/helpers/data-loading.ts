@@ -1,7 +1,8 @@
-import { ClientApplication } from '@/app/client-application';
-import { QueryDescription } from '@/query/execute-query';
 import { QueryResultData } from '@sisense/sdk-data';
 import { QueryExecutionConfig } from '@sisense/sdk-query-client';
+
+import { ClientApplication } from '@/app/client-application';
+import { QueryDescription } from '@/query/execute-query';
 import {
   executeQueryWithCache,
   executeQuery as executeQueryWithoutCache,

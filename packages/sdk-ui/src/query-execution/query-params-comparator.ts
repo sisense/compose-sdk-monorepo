@@ -1,8 +1,10 @@
-import { isFiltersChanged, isRelationsChanged } from '@/utils/filters-comparator';
 import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
-import { ExecuteQueryParams } from '../index.js';
-import { useHasChanged } from '../common/hooks/use-has-changed';
+
+import { isFiltersChanged, isRelationsChanged } from '@/utils/filters-comparator';
 import { areMeasuresChanged } from '@/utils/measures-comparator.js';
+
+import { useHasChanged } from '../common/hooks/use-has-changed';
+import { ExecuteQueryParams } from './types.js';
 
 /** List of parameters that can be compared by deep comparison */
 const simplySerializableParamNames: (keyof ExecuteQueryParams)[] = [

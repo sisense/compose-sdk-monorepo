@@ -1,7 +1,9 @@
 import React from 'react';
-import styles from '../styles/table-column-header.module.scss';
+
 import classnames from 'classnames';
+
 import { Column } from '../../../chart-data-processor/table-processor';
+import styles from '../styles/table-column-header.module.scss';
 import { FieldTypeIcon } from './field-type-icon';
 
 export const SortableTableColumnHeader: React.FunctionComponent<{

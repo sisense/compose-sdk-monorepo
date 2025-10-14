@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import React, { JSX } from 'react';
+
 import RcTooltip from '@rc-component/tooltip';
 import type { TooltipProps } from '@rc-component/tooltip/lib/Tooltip';
 import classnames from 'classnames';
-import React from 'react';
 
 import { styleguideConstants } from '../constants/styleguideConstants';
 import styles from './DEPRECATED_Tooltip.module.scss';

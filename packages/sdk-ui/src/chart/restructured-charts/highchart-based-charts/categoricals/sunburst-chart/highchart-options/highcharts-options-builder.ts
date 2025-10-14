@@ -1,9 +1,10 @@
-import { HighchartsOptionsBuilder } from '../../../types';
+import { getLegendSettings } from '@/chart-options-processor/translations/legend-section';
 import {
   prepareSunburstSeries,
   prepareSunburstTooltip,
 } from '@/chart-options-processor/translations/sunburst/sunburst-options';
-import { getLegendSettings } from '@/chart-options-processor/translations/legend-section';
+
+import { HighchartsOptionsBuilder } from '../../../types';
 
 export const sunburstHighchartsOptionsBuilder: HighchartsOptionsBuilder<'sunburst'> = {
   getChart: () => ({

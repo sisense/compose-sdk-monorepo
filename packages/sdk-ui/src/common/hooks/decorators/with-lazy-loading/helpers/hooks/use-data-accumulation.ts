@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
 import { DataChunk } from '../../types';
 
 export function useDataAccumulation({ shouldBeReset }: { shouldBeReset: boolean }): {

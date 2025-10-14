@@ -1,10 +1,12 @@
 import { DateLevels } from '@sisense/sdk-data';
-import { StyledColumn } from '../../../../chart-data-options/types';
+import merge from 'deepmerge';
+
 import { getDataOptionGranularity } from '@/chart-data-options/utils';
 import { TranslatableError } from '@/translation/translatable-error';
+
+import { StyledColumn } from '../../../../chart-data-options/types';
+import { fontStyleDefault, lineColorDefault, xAxisDefaults } from '../../../defaults/cartesian';
 import { Axis, AxisSettings, getDefaultDateFormat } from '../../../translations/axis-section';
-import { xAxisDefaults, fontStyleDefault, lineColorDefault } from '../../../defaults/cartesian';
-import merge from 'deepmerge';
 
 /**
  * Maps date granularity levels to their corresponding intervals in milliseconds

@@ -1,13 +1,14 @@
-import { MonthInfo, getDisplayMonths } from '../helpers/view-helpers.js';
 import { CalendarHeatmapViewType } from '@/types.js';
+
+import { getDisplayMonths, MonthData, MonthInfo } from '../helpers/view-helpers.js';
 
 // Helper function to format the title based on viewType and current months
 export function formatViewTitle(
   availableMonths: MonthInfo[],
-  currentViewIndex: number,
+  currentMonth: MonthData,
   viewType: CalendarHeatmapViewType,
 ): string {
-  const monthsToDisplay = getDisplayMonths(availableMonths, currentViewIndex, viewType);
+  const monthsToDisplay = getDisplayMonths(availableMonths, currentMonth, viewType);
 
   if (monthsToDisplay.length === 0) return '';
 

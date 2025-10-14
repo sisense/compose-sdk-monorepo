@@ -1,13 +1,15 @@
 import { useEffect, useReducer } from 'react';
-import { useHasChanged } from '../../common/hooks/use-has-changed.js';
-import { DataState, dataLoadStateReducer } from '../../common/hooks/data-load-state-reducer.js';
-import { useSisenseContext } from '../../sisense-context/sisense-context.js';
-import { HookEnableParam } from '../../common/hooks/types.js';
-import { TranslatableError } from '../../translation/translatable-error.js';
-import { withTracking } from '../../decorators/hook-decorators/index.js';
-import { useShouldLoad } from '../../common/hooks/use-should-load.js';
+
 import { HierarchyModel } from '@/models/hierarchy/hierarchy-model';
-import { GetHierarchyModelsOptions, getHierarchyModels } from './get-hierarchy-models.js';
+
+import { dataLoadStateReducer, DataState } from '../../common/hooks/data-load-state-reducer.js';
+import { HookEnableParam } from '../../common/hooks/types.js';
+import { useHasChanged } from '../../common/hooks/use-has-changed.js';
+import { useShouldLoad } from '../../common/hooks/use-should-load.js';
+import { withTracking } from '../../decorators/hook-decorators/index.js';
+import { useSisenseContext } from '../../sisense-context/sisense-context.js';
+import { TranslatableError } from '../../translation/translatable-error.js';
+import { getHierarchyModels, GetHierarchyModelsOptions } from './get-hierarchy-models.js';
 
 /**
  * Parameters for {@link useGetHierarchyModels} hook.

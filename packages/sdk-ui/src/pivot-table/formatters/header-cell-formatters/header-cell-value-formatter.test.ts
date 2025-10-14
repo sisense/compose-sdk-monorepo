@@ -1,6 +1,7 @@
-import { StyledColumn, type PivotTableDataOptions } from '../../../chart-data-options/types.js';
+import { type JaqlPanel, JaqlRequest, PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
+
+import { type PivotTableDataOptions, StyledColumn } from '../../../chart-data-options/types.js';
 import { createHeaderCellValueFormatter } from './header-cell-value-formatter.js';
-import { JaqlRequest, PivotTreeNode, UserType, type JaqlPanel } from '@sisense/sdk-pivot-client';
 
 const dateFormatterMock = vi.fn().mockReturnValue('formatted date');
 const jaqlMock = {} as JaqlRequest;

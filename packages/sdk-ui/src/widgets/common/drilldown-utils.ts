@@ -1,24 +1,26 @@
-import { DataPoint, ChartType, ChartDataOptions, ScatterChartDataOptions } from '../../types';
 import { Attribute, Column } from '@sisense/sdk-data';
+import { PointClickEventObject } from '@sisense/sisense-charts';
+import camelCase from 'lodash-es/camelCase';
+
+import { isMeasureColumn, translateColumnToAttribute } from '@/chart-data-options/utils';
+import { ScatterCustomPointOptions } from '@/chart-options-processor/translations/scatter-tooltip';
 import {
   BOXPLOT_CHART_TYPES,
   CARTESIAN_CHART_TYPES,
   CATEGORICAL_CHART_TYPES,
-  RANGE_CHART_TYPES,
-  SCATTER_CHART_TYPES,
   isBoxplot,
   isCartesian,
   isCategorical,
   isRange,
   isScatter,
+  RANGE_CHART_TYPES,
+  SCATTER_CHART_TYPES,
 } from '@/chart-options-processor/translations/types';
 import { getSelectableWidgetAttributes } from '@/common-filters/selection-utils';
-import { CartesianChartDataOptions, ScatterDataPoint, StyledColumn } from '../..';
-import { PointClickEventObject } from '@sisense/sisense-charts';
-import { ScatterCustomPointOptions } from '@/chart-options-processor/translations/scatter-tooltip';
-import camelCase from 'lodash-es/camelCase';
-import { isMeasureColumn, translateColumnToAttribute } from '@/chart-data-options/utils';
 import { isSameAttribute } from '@/utils/filters';
+
+import { CartesianChartDataOptions, ScatterDataPoint, StyledColumn } from '../..';
+import { ChartDataOptions, ChartType, DataPoint, ScatterChartDataOptions } from '../../types';
 
 export function getDrilldownInitialDimension(
   chartType: ChartType,

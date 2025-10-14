@@ -1,8 +1,10 @@
-import { describe, it, expect } from 'vitest';
-import { translateQueryToJaql } from './translate-query-to-jaql.js';
-import { BaseQueryParams } from '@/query-execution/types.js';
-import { MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE } from '../__mocks__/mock-data-sources.js';
 import { createAttribute, createMeasure, filterFactory } from '@sisense/sdk-data';
+import { describe, expect, it } from 'vitest';
+
+import { BaseQueryParams } from '@/query-execution/types.js';
+
+import { MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE } from '../__mocks__/mock-data-sources.js';
+import { translateQueryToJaql } from './translate-query-to-jaql.js';
 
 describe('translateQueryParamsToJaql', () => {
   it('should convert BaseQueryParams to JAQL payload', () => {

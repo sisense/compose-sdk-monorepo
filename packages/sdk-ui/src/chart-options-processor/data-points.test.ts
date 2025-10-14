@@ -1,5 +1,6 @@
 import uniqueId from 'lodash-es/uniqueId';
 import merge from 'ts-deepmerge';
+
 import {
   BoxplotChartDataOptionsInternal,
   CalendarHeatmapChartDataOptionsInternal,

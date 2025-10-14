@@ -1,10 +1,11 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { getAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { PivotClient } from '@sisense/sdk-pivot-client';
 import { DimensionalQueryClient } from '@sisense/sdk-query-client';
-import { getSettings } from './settings/settings';
-import { createClientApplication } from './client-application';
+import { getAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 import { TranslatableError } from '../translation/translatable-error';
+import { createClientApplication } from './client-application';
+import { getSettings } from './settings/settings';
 
 vi.mock('@sisense/sdk-rest-client', () => {
   return {

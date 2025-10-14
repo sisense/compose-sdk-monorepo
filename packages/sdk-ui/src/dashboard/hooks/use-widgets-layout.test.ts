@@ -1,6 +1,8 @@
-import { renderHook, act } from '@testing-library/react';
-import { useWidgetsLayoutManagement } from './use-widgets-layout';
+import { act, renderHook } from '@testing-library/react';
+
 import { WidgetsPanelLayout } from '@/models';
+
+import { useWidgetsLayoutManagement } from './use-widgets-layout';
 
 describe('useLayoutManagement layout modifications', () => {
   const initialLayout = {

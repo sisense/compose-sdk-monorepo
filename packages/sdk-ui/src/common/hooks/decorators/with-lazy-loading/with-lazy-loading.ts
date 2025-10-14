@@ -1,18 +1,19 @@
 import { AnyArray } from '@/utils/utility-types';
+
 import { useHasChanged } from '../../use-has-changed';
 import {
   useDataAccumulation,
-  useManageSliceToLoad,
-  useLoadDataFromInternalHook,
-  useGetLoadMoreFunction,
   useGetHookStateResult,
+  useGetLoadMoreFunction,
+  useLoadDataFromInternalHook,
+  useManageSliceToLoad,
 } from './helpers/hooks';
 import { calculateIfAllItemsLoaded } from './helpers/utils';
 import {
-  LazyLoadingConfig,
-  SliceableRestApiHook,
   HookWithLazyLoading,
+  LazyLoadingConfig,
   RestApiHookParams,
+  SliceableRestApiHook,
   UnsliceableParams,
 } from './types';
 

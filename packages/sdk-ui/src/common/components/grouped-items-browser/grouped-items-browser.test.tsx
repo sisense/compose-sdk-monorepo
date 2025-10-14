@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { GroupedItemsBrowser } from './grouped-items-browser';
 import type { Item, ItemsGroup } from './types';
 import type { ItemActionConfig, ItemSecondaryActionConfig } from './types';

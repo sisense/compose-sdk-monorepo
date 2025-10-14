@@ -1,43 +1,45 @@
+import { MouseEvent } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { DndContext, DragEndEvent, pointerWithin } from '@dnd-kit/core';
 import styled from '@emotion/styled';
 import isNumber from 'lodash-es/isNumber';
 import isUndefined from 'lodash-es/isUndefined';
-import { DndContext, DragEndEvent, pointerWithin } from '@dnd-kit/core';
-import { MouseEvent } from 'react';
 
+import { MenuButton } from '@/common/components/menu/menu-button';
+import { useMenu } from '@/common/hooks/use-menu';
+import { useSyncedState } from '@/common/hooks/use-synced-state';
+import { WIDGET_HEADER_HEIGHT } from '@/dashboard/components/editable-layout/const';
 import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
-import { useCallback, useMemo, useState } from 'react';
-import { Widget } from '@/widgets/widget';
-import { ResizableRow } from './components/resizable-row';
-import { ResizableColumns } from './components/resizable-columns';
-import {
-  deleteWidgetFromLayout,
-  distributeEqualWidthInRow,
-  getRowHeight,
-  getRowMinHeight,
-  getRowMaxHeight,
-  getColumnMinWidths,
-  getColumnMaxWidths,
-  updateLayoutAfterDragAndDrop,
-  updateLayoutWidths,
-  updateRowHeight,
-} from './helpers';
-import { useSyncedState } from '@/common/hooks/use-synced-state';
-import { CellDropOverlay } from './components/cell-drop-overlay';
-import { RowDropOverlay } from './components/row-drop-overlay';
-import { DraggableWidgetWrapper } from './components/draggable-widget-wrapper';
-import { getDraggingWidgetId, isEditableLayoutDragData, isEditableLayoutDropData } from './utils';
-import { WIDGET_HEADER_HEIGHT } from '@/dashboard/components/editable-layout/const';
 import { useThemeContext } from '@/theme-provider';
-import { useMenu } from '@/common/hooks/use-menu';
 import { MenuItemSection } from '@/types';
-import { useTranslation } from 'react-i18next';
-import { MenuButton } from '@/common/components/menu/menu-button';
 import {
   composeTextWidgetToolbarHandlers,
   composeTitleHandlers,
   composeToolbarHandlers,
 } from '@/utils/combine-handlers';
+import { Widget } from '@/widgets/widget';
+
+import { CellDropOverlay } from './components/cell-drop-overlay';
+import { DraggableWidgetWrapper } from './components/draggable-widget-wrapper';
+import { ResizableColumns } from './components/resizable-columns';
+import { ResizableRow } from './components/resizable-row';
+import { RowDropOverlay } from './components/row-drop-overlay';
+import {
+  deleteWidgetFromLayout,
+  distributeEqualWidthInRow,
+  getColumnMaxWidths,
+  getColumnMinWidths,
+  getRowHeight,
+  getRowMaxHeight,
+  getRowMinHeight,
+  updateLayoutAfterDragAndDrop,
+  updateLayoutWidths,
+  updateRowHeight,
+} from './helpers';
+import { getDraggingWidgetId, isEditableLayoutDragData, isEditableLayoutDropData } from './utils';
 
 const Wrapper = styled.div`
   overflow: hidden;
@@ -263,7 +265,17 @@ export const EditableLayout = ({
           {internalLayout.columns.map((column, columnIndex) => (
             <ColumnInner key={columnIndex}>
               {column.rows?.map((row, rowIndex) => {
-                const rowWidths = row.cells.map((sb) => sb.widthPercentage);
+                const visibleCells = row.cells.filter((c) => !c.hidden);
+                const skipRow = visibleCells.length === 0;
+                const equalWidthCells = visibleCells.length < row.cells.length;
+                const rowWidths = visibleCells.map((sb) =>
+                  equalWidthCells ? 100 / visibleCells.length : sb.widthPercentage,
+                );
+
+                if (skipRow) {
+                  return null;
+                }
+
                 return (
                   <ResizableRow
                     key={`${columnIndex},${rowIndex}`}
@@ -280,13 +292,15 @@ export const EditableLayout = ({
                         rowIndex={rowIndex}
                       />
                     )}
+
                     <ResizableColumns
+                      disableResize={equalWidthCells}
                       widths={rowWidths}
                       minColWidths={getColumnMinWidths(row)}
                       maxColWidths={getColumnMaxWidths(row)}
                       onWidthsChange={(widths) => onCellWidthChange(widths, columnIndex, rowIndex)}
                     >
-                      {row.cells.map((subcell) => {
+                      {visibleCells.map((subcell) => {
                         const widgetProps = widgets.find((w) => w.id === subcell.widgetId);
                         if (
                           widgetProps?.widgetType === 'pivot' &&

@@ -1,6 +1,8 @@
-import { ErrorEventOptions } from '@sisense/sdk-tracking';
-import { HttpClient } from '@sisense/sdk-rest-client';
 import { Component, ReactNode } from 'react';
+
+import { HttpClient } from '@sisense/sdk-rest-client';
+import { ErrorEventOptions } from '@sisense/sdk-tracking';
+
 import { SisenseContext, SisenseContextPayload } from '../../../sisense-context/sisense-context';
 
 type ErrorTrackerProps = {

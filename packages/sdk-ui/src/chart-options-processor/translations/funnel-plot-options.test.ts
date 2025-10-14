@@ -1,17 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { PlotOptions } from '../chart-options-service';
+import { createAttribute } from '@sisense/sdk-data';
+
 import {
   CategoricalChartDataOptionsInternal,
   StyledMeasureColumn,
 } from '../../chart-data-options/types';
+import { PlotOptions } from '../chart-options-service';
+import { BaseDesignOptions } from './base-design-options';
+import { FunnelChartDesignOptions } from './design-options';
 import {
-  getFunnelPlotOptions,
-  DefaultFunnelType,
-  DefaultFunnelSize,
   DefaultFunnelDirection,
   DefaultFunnelLabels,
+  DefaultFunnelSize,
+  DefaultFunnelType,
+  getFunnelPlotOptions,
 } from './funnel-plot-options';
-import { createAttribute } from '@sisense/sdk-data';
 import {
   funnelNeckHeight,
   funnelNeckWidth,
@@ -19,8 +22,6 @@ import {
   isFunnelReversed,
   MAX_FUNNEL_WIDTH,
 } from './funnel-plot-options';
-import { FunnelChartDesignOptions } from './design-options';
-import { BaseDesignOptions } from './base-design-options';
 
 describe('getFunnelPlotOptions', () => {
   it('should return the plotOptions with a formatter', () => {

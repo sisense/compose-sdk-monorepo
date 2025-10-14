@@ -1,8 +1,8 @@
 /* eslint-disable comma-dangle, react/no-array-index-key, react/jsx-filename-extension, max-len */
-
 import * as React from 'react';
-import { treeNode } from '../tree-structure/utils';
+
 import { TreeNode } from '../tree-structure';
+import { treeNode } from '../tree-structure/utils';
 
 export function getText(count = 1) {
   const style = {

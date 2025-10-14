@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { setup } from '@/__test-helpers__';
 import { screen, waitFor } from '@testing-library/react';
+
+import { setup } from '@/__test-helpers__';
+
 import { DateFilter, DateRangeFilterProps } from './date-filter';
 
 describe('DateFilter Component', () => {

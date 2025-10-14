@@ -1,18 +1,20 @@
-import { act, renderHook, waitFor } from '@testing-library/react';
 import { filterFactory } from '@sisense/sdk-data';
 import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
+import { act, renderHook, waitFor } from '@testing-library/react';
+import type { Mock } from 'vitest';
+
 import { ClientApplication } from '@/app/client-application';
-import { SisenseContextPayload, useSisenseContext } from '@/sisense-context/sisense-context';
 import {
+  DashboardModel,
   dashboardModelTranslator,
   UseDashboardModelActionType,
   widgetModelTranslator,
-  DashboardModel,
 } from '@/models';
-import { useDashboardPersistence } from './use-dashboard-persistence';
-import { sampleEcommerceDashboard } from '../../__mocks__/sample-ecommerce-dashboard';
+import { SisenseContextPayload, useSisenseContext } from '@/sisense-context/sisense-context';
+
 import * as DM from '../../../__test-helpers__/sample-ecommerce';
-import type { Mock } from 'vitest';
+import { sampleEcommerceDashboard } from '../../__mocks__/sample-ecommerce-dashboard';
+import { useDashboardPersistence } from './use-dashboard-persistence';
 
 vi.mock('@sisense/sdk-tracking', async () => {
   const actual: typeof import('@sisense/sdk-tracking') = await vi.importActual(

@@ -1,25 +1,32 @@
+import flow from 'lodash-es/flow';
+
+import { prepareStackLabels } from '@/chart-options-processor/stack-labels';
+import { isPolar } from '@/chart-options-processor/translations/types';
+
+import {
+  CartesianChartDataOptionsInternal,
+  ChartDataOptionsInternal,
+} from '../../../../chart-data-options/types';
+import {
+  ChartType,
+  CompleteNumberFormatConfig,
+  CompleteThemeSettings,
+  TotalLabels,
+} from '../../../../types';
+import { Stacking } from '../../../chart-options-service';
+import { stackTotalFontStyleDefault } from '../../../defaults/cartesian';
+import { AxisSettings } from '../../../translations/axis-section';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from '../../../translations/number-format-config';
-import { stackTotalFontStyleDefault } from '../../../defaults/cartesian';
-import { Stacking } from '../../../chart-options-service';
-import {
-  ChartDataOptionsInternal,
-  CartesianChartDataOptionsInternal,
-} from '../../../../chart-data-options/types';
-import { ChartType, CompleteNumberFormatConfig, CompleteThemeSettings } from '../../../../types';
-import { AxisSettings } from '../../../translations/axis-section';
-import { isPolar } from '@/chart-options-processor/translations/types';
-import flow from 'lodash-es/flow';
 
 /**
  * Configuration interface for stacking transformer
  */
 export interface StackingConfig {
   stacking?: Stacking;
-  showTotal?: boolean;
-  totalLabelRotation?: number;
+  totalLabels?: TotalLabels;
   dataOptions: ChartDataOptionsInternal;
   themeSettings?: CompleteThemeSettings;
 }
@@ -71,7 +78,7 @@ export const withPolarSpecificAxisSettings = flow(withTopTitle, withoutLabelsRot
  * This transformer adds stacking-related properties (stack labels, total labels, formatting)
  * to basic Y-axis settings for stackable charts.
  *
- * @param config - Stacking configuration containing stacking type, showTotal, rotation, and formatting options
+ * @param config - Stacking configuration containing stacking type, totalLabels options and formatting options
  * @returns A function that transforms basic Y-axis settings to include stacking support
  *
  * @example
@@ -79,22 +86,16 @@ export const withPolarSpecificAxisSettings = flow(withTopTitle, withoutLabelsRot
  * // Apply stacking enhancements to basic Y-axis
  * const stackedYAxis = flow(
  *   getYAxisSettings,
- *   withStacking({ stacking: 'normal', showTotal: true, totalLabelRotation: 0, dataOptions, themeSettings }),
+ *   withStacking({ stacking: 'normal', totalLabels: { enabled: true}, totalLabelRotation: 0, dataOptions, themeSettings }),
  * )(axis, axis2, axisMinMax, axis2MinMax, dataOptions, themeSettings);
  * ```
  */
 export const withStacking =
   (config: StackingConfig) =>
   (axisSettings: AxisSettings[]): AxisSettings[] => {
-    const {
-      stacking,
-      showTotal = false,
-      totalLabelRotation = 0,
-      dataOptions,
-      themeSettings,
-    } = config;
+    const { stacking, totalLabels = { enabled: false }, dataOptions, themeSettings } = config;
 
-    if (!showTotal && !stacking) {
+    if (!totalLabels.enabled && !stacking) {
       return axisSettings;
     }
 
@@ -134,16 +135,15 @@ export const withStacking =
               formatter: getStackingLabelsFormatter(numberFormatConfig, stacking),
             }
           : axisSettings.labels,
-        stackLabels: showTotal
+        stackLabels: totalLabels.enabled
           ? {
               ...axisSettings.stackLabels,
-              enabled: true,
+              ...prepareStackLabels(totalLabels),
               formatter: getStackingLabelsFormatter(numberFormatConfig, 'normal', true),
               style: {
                 ...stackTotalFontStyleDefault,
                 ...(themeSettings ? { color: themeSettings.typography.primaryTextColor } : null),
               },
-              rotation: totalLabelRotation,
               crop: true,
               allowOverlap: false,
               labelrank: 99999,

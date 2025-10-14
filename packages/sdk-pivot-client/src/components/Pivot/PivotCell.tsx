@@ -1,59 +1,61 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+
 /* eslint-disable sonarjs/prefer-single-boolean-return */
+
 /* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
-import cn from 'classnames';
+
 import { Tooltip } from '@sisense/sdk-shared-ui/Tooltip';
+import cn from 'classnames';
 
 import {
-  CONTENT,
-  CONTENT_WRAPPER,
-  CONTENT_INNER,
-  CELL_CORNER,
-  CELL_FIXED_WIDTH,
+  EmbedComponentProps,
+  PivotCellEvent,
+  PivotDataNode,
+  PivotTreeNode,
+} from '../../data-handling';
+import { SortingDirection, UserType } from '../../data-handling/constants.js';
+import { Metadata } from '../../data-handling/utils/plugins/types.js';
+import { getDefaultSortDirection } from '../../data-load/utils';
+import { EVENT_RANGEMINMAX_CHANGED, TableSize } from '../../sizing/index.js';
+import { TreeNodeMetadata } from '../../tree-structure/types.js';
+import { Defer, InputStyles, Styles } from '../../utils/types.js';
+import { DataBar } from '../DataBar';
+import {
+  clearCellContentStyles,
+  clearCellStyles,
+  clearDatabarsStyles,
+  getBorders,
+  getCellSize,
+  getMergeClasses,
+  getMergedCellOffset,
+  getMetadataClasses,
+  getRangeColor,
+  getStyleProp,
+  getTooltip,
+  getUserTypeClasses,
+} from '../PivotCell/helpers.js';
+import {
   CELL,
-  CELL_SELECTED,
+  CELL_CORNER,
+  CELL_DEFAULT_SORTED_ASC,
+  CELL_DEFAULT_SORTED_DESC,
   CELL_DRILLED,
+  CELL_FIXED_WIDTH,
+  CELL_SELECTED,
   CELL_SORTED,
   CELL_SORTED_ASC,
   CELL_SORTED_DESC,
-  CELL_DEFAULT_SORTED_ASC,
-  CELL_DEFAULT_SORTED_DESC,
+  CELL_SORTED_INACTIVE,
+  CONTENT,
+  CONTENT_INNER,
+  CONTENT_WRAPPER,
   ICON_SORTING_SETTINGS,
   ICON_SORTING_SETTINGS_PERSISTENT,
-  CELL_SORTED_INACTIVE,
 } from '../PivotTable/classes.js';
-import { SortingDirection, UserType } from '../../data-handling/constants.js';
-import { ResizeColumnControl } from '../ResizeColumnControl';
-import { DataBar } from '../DataBar';
 import { tableType as typeOfTable } from '../PivotTable/constants.js';
-import { getDefaultSortDirection } from '../../data-load/utils';
-import { TreeNodeMetadata } from '../../tree-structure/types.js';
-import {
-  PivotTreeNode,
-  PivotDataNode,
-  PivotCellEvent,
-  EmbedComponentProps,
-} from '../../data-handling';
-import { Metadata } from '../../data-handling/utils/plugins/types.js';
-import { Defer, Styles, InputStyles } from '../../utils/types.js';
-import { TableSize, EVENT_RANGEMINMAX_CHANGED } from '../../sizing/index.js';
-
+import { ResizeColumnControl } from '../ResizeColumnControl';
 import { EmbedImage } from './EmbedImage.js';
-import {
-  getMetadataClasses,
-  getBorders,
-  getUserTypeClasses,
-  getMergeClasses,
-  getMergedCellOffset,
-  getCellSize,
-  getStyleProp,
-  clearCellStyles,
-  clearCellContentStyles,
-  clearDatabarsStyles,
-  getRangeColor,
-  getTooltip,
-} from '../PivotCell/helpers.js';
 import { SortingSettingsIcon } from './SortingSettingsIcon.js';
 
 const MIN_RESIZE_WIDTH = 50;

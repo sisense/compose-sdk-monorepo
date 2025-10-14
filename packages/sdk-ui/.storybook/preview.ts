@@ -1,5 +1,7 @@
 import type { Preview } from '@storybook/react-vite';
+
 import './global.css';
+
 type CallbackArg = `on${string}`;
 const argsToExclude: CallbackArg[] = ['onBeforeRender', 'onDataReady'];
 

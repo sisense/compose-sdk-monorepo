@@ -1,17 +1,20 @@
-import { DashboardProps } from '@/dashboard/types';
-import { DashboardContainer } from '@/dashboard/components/dashboard-container';
-import { ThemeProvider } from '@/theme-provider';
-import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
-import { useDashboardThemeInternal } from './use-dashboard-theme';
-import { useComposedDashboardInternal } from './use-composed-dashboard';
-import { Filter, FilterRelations } from '@sisense/sdk-data';
 import { useCallback, useEffect } from 'react';
-import { useCustomWidgets } from '@/custom-widgets-provider';
-import { TabberWidget } from '@/widgets/tabber-widget';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
+
+import { Filter, FilterRelations } from '@sisense/sdk-data';
+
 import { useDefaults } from '@/common/hooks/use-defaults';
-import { DEFAULT_DASHBOARD_CONFIG } from './constants';
+import { useCustomWidgets } from '@/custom-widgets-provider';
+import { DashboardContainer } from '@/dashboard/components/dashboard-container';
+import { DashboardProps } from '@/dashboard/types';
+import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { WidgetsPanelLayout } from '@/models';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { ThemeProvider } from '@/theme-provider';
+import { TabberWidget } from '@/widgets/tabber-widget';
+
+import { DEFAULT_DASHBOARD_CONFIG } from './constants';
+import { useComposedDashboardInternal } from './use-composed-dashboard';
+import { useDashboardThemeInternal } from './use-dashboard-theme';
 
 export enum DashboardChangeType {
   /** Dashboard filters have been updated */

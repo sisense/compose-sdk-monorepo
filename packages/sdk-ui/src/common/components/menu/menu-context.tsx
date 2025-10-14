@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+
 import { OpenMenuFn } from './types';
 
 type MenuSettings = {

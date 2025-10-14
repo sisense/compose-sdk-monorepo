@@ -1,4 +1,5 @@
 import type { DeepRequired } from 'ts-essentials';
+
 import { FiltersPanelConfig } from './types';
 
 /**

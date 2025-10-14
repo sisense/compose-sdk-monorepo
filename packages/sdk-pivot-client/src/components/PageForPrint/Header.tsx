@@ -1,14 +1,15 @@
 /* eslint-disable jsx-a11y/tabindex-no-positive, react/no-array-index-key */
 import * as React from 'react';
-import { ControlButton } from './ControlButton.js';
+
 import {
-  HEADER,
-  FONT_SIZE,
-  JUSTIFY_CONTENT,
-  TEXT_ALIGN,
   FONT_MAP,
+  FONT_SIZE,
+  HEADER,
+  JUSTIFY_CONTENT,
   POSITION_MAP,
+  TEXT_ALIGN,
 } from './constants.js';
+import { ControlButton } from './ControlButton.js';
 
 type Props = {
   titleName: string;

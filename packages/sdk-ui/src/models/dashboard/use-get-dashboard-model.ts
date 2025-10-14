@@ -1,14 +1,15 @@
 import { useEffect, useReducer } from 'react';
+
+import { dataLoadStateReducer, DataState } from '../../common/hooks/data-load-state-reducer';
+import { HookEnableParam } from '../../common/hooks/types';
 import { useHasChanged } from '../../common/hooks/use-has-changed';
 import { useShouldLoad } from '../../common/hooks/use-should-load';
-import { DataState, dataLoadStateReducer } from '../../common/hooks/data-load-state-reducer';
+import { withTracking } from '../../decorators/hook-decorators';
 import { useSisenseContext } from '../../sisense-context/sisense-context';
+import { useThemeContext } from '../../theme-provider';
+import { TranslatableError } from '../../translation/translatable-error';
 import { DashboardModel } from './dashboard-model';
 import { getDashboardModel, GetDashboardModelOptions } from './get-dashboard-model';
-import { HookEnableParam } from '../../common/hooks/types';
-import { TranslatableError } from '../../translation/translatable-error';
-import { withTracking } from '../../decorators/hook-decorators';
-import { useThemeContext } from '../../theme-provider';
 
 /**
  * Parameters for {@link useGetDashboardModel} hook.
@@ -150,7 +151,8 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams): D
     if (shouldLoad(app)) {
       dispatch({ type: 'loading' });
 
-      const { dashboardOid, includeWidgets, includeFilters, sharedMode } = params;
+      const { dashboardOid, includeWidgets, includeFilters, sharedMode, useLegacyApiVersion } =
+        params;
       void getDashboardModel(
         app.httpClient,
         dashboardOid,
@@ -158,6 +160,7 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams): D
           includeWidgets,
           includeFilters,
           sharedMode,
+          useLegacyApiVersion,
         },
         themeSettings,
         app.settings,

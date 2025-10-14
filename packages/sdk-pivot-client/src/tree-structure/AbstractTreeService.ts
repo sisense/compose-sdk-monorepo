@@ -1,8 +1,8 @@
-import { TreeCellMap } from './TreeCellMap.js';
-import { treeNode } from './utils/index.js';
-import { Position } from './constants.js';
-import { TreeServiceI, TreeCellMapI, TreeNode, TreeNodeMetadata } from './types.js';
 import { CloneFn } from '../utils/types.js';
+import { Position } from './constants.js';
+import { TreeCellMap } from './TreeCellMap.js';
+import { TreeCellMapI, TreeNode, TreeNodeMetadata, TreeServiceI } from './types.js';
+import { treeNode } from './utils/index.js';
 
 type TreeCellMapCache = {
   [key: string]: TreeCellMapI;

@@ -1,25 +1,27 @@
 import {
-  ExpandedQueryModel,
-  EMPTY_SIMPLE_QUERY_MODEL,
-  SimpleQueryModel,
-  SimpleChartRecommendations,
-  ChartRecommendations,
-} from '../types.js';
-import YAML from 'yaml';
-import {
   AggregationTypes,
+  DataSourceField,
   DimensionalBaseMeasure,
   MetadataItem,
   MetadataItemJaql,
-  DataSourceField,
 } from '@sisense/sdk-data';
-import { capitalizeFirstLetter, sanitizeDimensionId, validateQueryModel } from '../common/utils.js';
 // .js is required for lodash import
 import cloneDeep from 'lodash-es/cloneDeep';
-import { QUERY_TEMPLATE } from './query-templates.js';
-import { populatePlaceholders } from '../code/generate-code.js';
-import { deriveChartFamily } from '@/chart/helpers/derive-chart-family.js';
+import YAML from 'yaml';
+
 import { normalizeAnyColumn } from '@/chart-data-options/utils.js';
+import { deriveChartFamily } from '@/chart/helpers/derive-chart-family.js';
+
+import { populatePlaceholders } from '../code/generate-code.js';
+import { capitalizeFirstLetter, sanitizeDimensionId, validateQueryModel } from '../common/utils.js';
+import {
+  ChartRecommendations,
+  EMPTY_SIMPLE_QUERY_MODEL,
+  ExpandedQueryModel,
+  SimpleChartRecommendations,
+  SimpleQueryModel,
+} from '../types.js';
+import { QUERY_TEMPLATE } from './query-templates.js';
 
 /**
  * A class that translates ExpandedQueryModel (Raw JAQL+Chart Recommendations)

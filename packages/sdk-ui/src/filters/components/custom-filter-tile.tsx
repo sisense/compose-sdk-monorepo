@@ -1,9 +1,12 @@
-import { Filter } from '@sisense/sdk-data';
-import { FilterTileContainer, FilterTileDesignOptions } from './filter-tile-container';
-import cloneDeep from 'lodash-es/cloneDeep';
 import { useTranslation } from 'react-i18next';
+
+import { Filter } from '@sisense/sdk-data';
+import cloneDeep from 'lodash-es/cloneDeep';
+
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { FilterContentDisplay } from '@/filters/components/common';
+
+import { FilterTileContainer, FilterTileDesignOptions } from './filter-tile-container';
 
 /**
  * Props for {@link CustomFilterTile}

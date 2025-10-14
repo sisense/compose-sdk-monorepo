@@ -1,19 +1,22 @@
 import { act } from 'react';
+
 import { filterFactory, MembersFilter } from '@sisense/sdk-data';
-import { render, renderHook, screen, fireEvent, waitFor } from '@testing-library/react';
-import { useCommonFilters } from './use-common-filters';
+import { fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
+
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { MenuOptions } from '@/common/components/menu/types';
+import { isChartWidgetProps, isTextWidgetProps } from '@/widget-by-id/utils';
+
 import {
   CartesianChartDataOptions,
+  ChartWidgetProps,
   DataPoint,
   DataPointEventHandler,
-  RenderToolbarHandler,
-  ChartWidgetProps,
-  WidgetProps,
   DataPointsEventHandler,
+  RenderToolbarHandler,
+  WidgetProps,
 } from '..';
-import { isChartWidgetProps, isTextWidgetProps } from '@/widget-by-id/utils';
-import { MenuOptions } from '@/common/components/menu/types';
+import { useCommonFilters } from './use-common-filters';
 
 describe('useCommonFilters', () => {
   it('should initialize with initial filters', () => {

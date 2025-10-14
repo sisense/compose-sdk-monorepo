@@ -388,4 +388,5 @@ export const samplePivotDashboard = {
       instanceType: 'owner',
     },
   ],
+  userAuth: expect.anything(),
 } as unknown as DashboardDto;

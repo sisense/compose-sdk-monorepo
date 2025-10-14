@@ -400,6 +400,8 @@ export const translation = {
       apply: 'Apply',
       editLayout: 'Edit Layout',
       viewMode: 'View mode',
+      showFilters: 'Show Filters',
+      hideFilters: 'Hide Filters',
     },
   },
   jumpToDashboard: {

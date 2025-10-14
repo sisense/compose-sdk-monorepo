@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 
-import { ChatApiProvider } from './api/chat-api-provider';
 import { ChatIdStorageProvider } from '@/ai/chat-id-storage-provider';
+
+import { ChatApiProvider } from './api/chat-api-provider';
 
 export interface AiContextProviderProps {
   children: ReactNode;

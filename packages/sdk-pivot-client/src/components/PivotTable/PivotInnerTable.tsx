@@ -1,11 +1,12 @@
 /* eslint-disable react/no-array-index-key */
 import * as React from 'react';
-import { AnchorCell } from './AnchorCell.js';
+
 import { TableSize } from '../../sizing/index.js';
-import { TABLE, COLGROUP, COLUMN, TBODY, ROW } from './classes.js';
-import { SizeMap } from './types.js';
-import { Styles } from '../../utils/types.js';
 import { TreeServiceI } from '../../tree-structure/types.js';
+import { Styles } from '../../utils/types.js';
+import { AnchorCell } from './AnchorCell.js';
+import { COLGROUP, COLUMN, ROW, TABLE, TBODY } from './classes.js';
+import { SizeMap } from './types.js';
 
 export type CellRenderProps = {
   clone: boolean;

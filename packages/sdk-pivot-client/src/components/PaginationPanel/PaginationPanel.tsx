@@ -1,7 +1,7 @@
 import * as React from 'react';
-import cn from 'classnames';
 
 import { TablePagination } from '@sisense/sdk-shared-ui/TablePagination';
+import cn from 'classnames';
 
 import {
   createCallbackMemoizer,
@@ -10,6 +10,7 @@ import {
   TemplateStringsMap,
 } from '../../utils/index.js';
 import { LoggerI } from '../../utils/types.js';
+import CustomScroll from '../CustomScroll/index.js';
 import {
   LIST_WRAPPER,
   NOTIFICATION_WRAPPER,
@@ -22,7 +23,6 @@ import {
   PANEL_SHOWED,
   PANEL_WRAPPER,
 } from './classes.js';
-import CustomScroll from '../CustomScroll/index.js';
 
 export type PaginationOptions = {
   isMobile: boolean;

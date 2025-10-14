@@ -1,9 +1,10 @@
 /** @vitest-environment jsdom */
 import { renderHook } from '@testing-library/react';
-import { describe, it, expect, Mock } from 'vitest';
-import { useLastNlqResponseFromHistory } from './use-last-nlq-response-from-history';
+import { describe, expect, it, Mock } from 'vitest';
+
 import { ChatMessage } from './api/types';
 import { isNlqMessage as isNlqMessageOriginal } from './use-chat-session';
+import { useLastNlqResponseFromHistory } from './use-last-nlq-response-from-history';
 
 vi.mock('./use-chat-session', () => ({
   isNlqMessage: vi.fn(),

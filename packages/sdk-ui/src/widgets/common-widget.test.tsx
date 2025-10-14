@@ -1,8 +1,10 @@
 import { render } from '@testing-library/react';
-import { CommonWidget } from './common-widget';
-import type { WidgetProps, CommonWidgetProps } from '@/props';
-import { ChartWidget } from '@/widgets/chart-widget';
+
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import type { CommonWidgetProps, WidgetProps } from '@/props';
+import { ChartWidget } from '@/widgets/chart-widget';
+
+import { CommonWidget } from './common-widget';
 
 // Mock child widgets:
 vi.mock('@/widgets/pivot-table-widget', () => ({

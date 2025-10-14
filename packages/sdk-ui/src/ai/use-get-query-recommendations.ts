@@ -1,11 +1,13 @@
-import { withTracking } from '@/decorators/hook-decorators';
-import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
+
+import { useQuery } from '@tanstack/react-query';
+
+import { widgetComposer } from '@/analytics-composer';
+import { HookEnableParam } from '@/common/hooks/types';
+import { withTracking } from '@/decorators/hook-decorators';
 
 import { useChatApi } from './api/chat-api-provider';
 import { QueryRecommendation } from './api/types';
-import { widgetComposer } from '@/analytics-composer';
-import { HookEnableParam } from '@/common/hooks/types';
 
 /** @internal */
 export const DEFAULT_RECOMMENDATIONS_COUNT = 4;

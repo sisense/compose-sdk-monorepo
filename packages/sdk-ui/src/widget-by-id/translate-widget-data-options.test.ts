@@ -1,23 +1,21 @@
 /* eslint-disable vitest/expect-expect */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
+  BaseJaql,
   DimensionalAttribute,
   DimensionalBaseMeasure,
   DimensionalCalculatedMeasure,
-  JaqlSortDirection,
   FilterJaql,
-  BaseJaql,
+  JaqlSortDirection,
   PivotJaql,
 } from '@sisense/sdk-data';
-import {
-  CartesianChartDataOptions,
-  CategoricalChartDataOptions,
-  IndicatorChartDataOptions,
-  ScatterChartDataOptions,
-} from '../types.js';
-import { BoxplotWidgetStyle, PanelItem } from './types.js';
+import isObject from 'lodash-es/isObject';
+
 import {
   AnyColumn,
   BoxplotChartDataOptions,
@@ -26,13 +24,19 @@ import {
   StyledMeasureColumn,
   TableDataOptions,
 } from '../chart-data-options/types.js';
-import { Panel, WidgetStyle } from './types.js';
+import {
+  CartesianChartDataOptions,
+  CategoricalChartDataOptions,
+  IndicatorChartDataOptions,
+  ScatterChartDataOptions,
+} from '../types.js';
+import { jaqlMock } from './__mocks__/jaql-mock.js';
 import {
   createDataOptionsFromPanels,
   extractDataOptions,
 } from './translate-widget-data-options.js';
-import { jaqlMock } from './__mocks__/jaql-mock.js';
-import isObject from 'lodash-es/isObject';
+import { BoxplotWidgetStyle, PanelItem } from './types.js';
+import { Panel, WidgetStyle } from './types.js';
 
 const styleMock = {} as WidgetStyle;
 

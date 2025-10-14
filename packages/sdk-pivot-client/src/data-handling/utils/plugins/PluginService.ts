@@ -1,18 +1,18 @@
 /* eslint-disable no-underscore-dangle */
-import { validate } from './validator.js';
-import { getDimensionMetadata, getMeasureMetadata } from './getters.js';
 import { clearGlobal } from '../../../components/PivotCell/helpers.js';
-import { PanelType, PluginsTypesFields, ListOfPanelTypes } from '../../constants.js';
 import { JaqlRequest } from '../../../data-load/types.js';
+import { ListOfPanelTypes, PanelType, PluginsTypesFields } from '../../constants.js';
 import { PivotTreeNode } from '../../types.js';
+import { getDimensionMetadata, getMeasureMetadata } from './getters.js';
 import {
-  DimensionMetadata,
-  Metadata,
   CellItem,
-  MeasureMetadata,
-  PluginConfig,
+  DimensionMetadata,
   GlobalStyles,
+  MeasureMetadata,
+  Metadata,
+  PluginConfig,
 } from './types.js';
+import { validate } from './validator.js';
 
 const DEFAULT_CONTENT_TYPE = 'text';
 

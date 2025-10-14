@@ -1,23 +1,25 @@
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { isNumber } from '@sisense/sdk-data';
+
+import { getPaletteColor } from '../../chart-data-options/coloring/utils';
 import {
   ScatterChartDataOptionsInternal,
   StyledColumn,
   StyledMeasureColumn,
 } from '../../chart-data-options/types';
-import { SeriesType } from '../chart-options-service';
-import { ScatterAxisCategoriesMap, ScatterDataRow, ScatterDataTable } from '../../chart-data/types';
-import { MarkerSettings } from './marker-section';
-import { ComparableData } from '../../chart-data-processor/table-processor';
-import { SeriesPointStructure } from './translations-to-highcharts';
-import { getPaletteColor } from '../../chart-data-options/coloring/utils';
-import { SeriesWithAlerts, CompleteThemeSettings } from '../../types';
-import { DataColorOptions, legendColor } from '../../chart-data/data-coloring';
-import { seriesSliceWarning } from '../../utils/data-limit-warning';
 import { getDataOptionTitle, isMeasureColumn } from '../../chart-data-options/utils';
 import { compareValues, SortDirectionValue } from '../../chart-data-processor/row-comparator';
+import { ComparableData } from '../../chart-data-processor/table-processor';
+import { DataColorOptions, legendColor } from '../../chart-data/data-coloring';
 import { createDataColoringFunction } from '../../chart-data/data-coloring/create-data-coloring-function';
+import { ScatterAxisCategoriesMap, ScatterDataRow, ScatterDataTable } from '../../chart-data/types';
+import { CompleteThemeSettings, SeriesWithAlerts } from '../../types';
+import { seriesSliceWarning } from '../../utils/data-limit-warning';
+import { SeriesType } from '../chart-options-service';
+import { MarkerSettings } from './marker-section';
+import { SeriesPointStructure } from './translations-to-highcharts';
 import { ChartDesignOptions } from './types';
 
 const defaultSeriesColor = '#00cee6';

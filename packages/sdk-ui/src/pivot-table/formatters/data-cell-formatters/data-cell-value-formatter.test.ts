@@ -1,6 +1,7 @@
+import { type JaqlPanel } from '@sisense/sdk-pivot-client';
+
 import { type PivotTableDataOptions } from '../../../chart-data-options/types.js';
 import { createDataCellValueFormatter } from './data-cell-value-formatter.js';
-import { type JaqlPanel } from '@sisense/sdk-pivot-client';
 
 describe('createDataCellValueFormatter', () => {
   it('should format data cell value by format from dataOptions', () => {

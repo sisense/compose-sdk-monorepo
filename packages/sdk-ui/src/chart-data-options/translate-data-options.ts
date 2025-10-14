@@ -1,53 +1,59 @@
 /* eslint-disable max-lines */
+
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Attribute, Measure } from '@sisense/sdk-data';
-import { isRange } from './../chart-options-processor/translations/types';
+
+import { updateStyledColumnSortForTable } from '@/chart-data/table-data';
+import { translateCartesianChartDataOptions } from '@/chart/restructured-charts/highchart-based-charts/cartesians/helpers/data-options';
+import { TranslatableError } from '@/translation/translatable-error';
+
 import {
+  isBoxplot,
   isCartesian,
   isCategorical,
-  isScatter,
   isIndicator,
-  isBoxplot,
+  isScatter,
   isScattermap,
 } from '../chart-options-processor/translations/types';
 import { ChartType } from '../types';
+import { isRange } from './../chart-options-processor/translations/types';
 import { translateBoxplotDataOptions } from './translate-boxplot-data-options';
+import { translateRangeChartDataOptions } from './translate-range-data-options';
+import { translateScattermapChartDataOptions } from './translate-scattermap-data-options';
 import {
-  ChartDataOptions,
+  BoxplotChartCustomDataOptions,
+  BoxplotChartDataOptions,
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   CategoricalChartDataOptionsInternal,
+  ChartDataOptions,
   ChartDataOptionsInternal,
-  IndicatorChartDataOptionsInternal,
-  ScatterChartDataOptions,
-  ScatterChartDataOptionsInternal,
   IndicatorChartDataOptions,
-  TableDataOptionsInternal,
-  TableDataOptions,
-  BoxplotChartDataOptions,
-  BoxplotChartCustomDataOptions,
-  ScattermapChartDataOptions,
+  IndicatorChartDataOptionsInternal,
   PivotTableDataOptions,
   PivotTableDataOptionsInternal,
   RangeChartDataOptions,
-  StyledMeasureColumn,
+  ScatterChartDataOptions,
+  ScatterChartDataOptionsInternal,
+  ScattermapChartDataOptions,
   StyledColumn,
+  StyledMeasureColumn,
+  TableDataOptions,
+  TableDataOptionsInternal,
 } from './types';
 import {
+  isMeasureColumn,
+  normalizeAnyColumn,
   normalizeColumn,
   normalizeMeasureColumn,
-  normalizeAnyColumn,
   safeMerge,
-  isMeasureColumn,
 } from './utils';
-import { translateScattermapChartDataOptions } from './translate-scattermap-data-options';
-import { translateRangeChartDataOptions } from './translate-range-data-options';
-import { TranslatableError } from '@/translation/translatable-error';
-import { translateCartesianChartDataOptions } from '@/chart/restructured-charts/highchart-based-charts/cartesians/helpers/data-options';
-import { updateStyledColumnSortForTable } from '@/chart-data/table-data';
 
 export function translateChartDataOptions(
   chartType: ChartType,

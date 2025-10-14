@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-/** @vitest-environment jsdom */
 
+/** @vitest-environment jsdom */
 import {
   ClientApplication,
   CompleteThemeSettings,

@@ -1,10 +1,17 @@
 /* eslint-disable vitest/expect-expect */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
+
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable vitest/no-identical-title */
 import { createAttribute, DimensionalAttribute } from '../attributes.js';
 import { normalizeName } from '../base.js';

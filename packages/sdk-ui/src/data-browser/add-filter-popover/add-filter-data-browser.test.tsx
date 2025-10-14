@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
+import type { Mock } from 'vitest';
 
-import { AddFilterDataBrowser } from '@/data-browser/add-filter-popover/add-filter-data-browser';
-import { useGetDataSourceFields } from '@/common/hooks/fusion-endpoints/use-get-data-source-fields';
 import { sampleEcommerceFields } from '@/__mocks__/sample-ecommerce-fields';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import type { Mock } from 'vitest';
+import { useGetDataSourceFields } from '@/common/hooks/fusion-endpoints/use-get-data-source-fields';
+import { AddFilterDataBrowser } from '@/data-browser/add-filter-popover/add-filter-data-browser';
 
 // Mock only the useGetDataSourceFields hook.
 vi.mock('@/common/hooks/fusion-endpoints/use-get-data-source-fields', () => {

@@ -1,5 +1,6 @@
+import { type ButtonHTMLAttributes, forwardRef, type FunctionComponent } from 'react';
+
 import Tooltip from '@mui/material/Tooltip';
-import { forwardRef, type ButtonHTMLAttributes, type FunctionComponent } from 'react';
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 export const PrimaryButton: FunctionComponent<ButtonProps> = (props) => {

@@ -1,11 +1,13 @@
-import * as DM from '@/__test-helpers__/sample-ecommerce';
 import {
-  filterFactory,
   CascadingFilter,
   Filter,
+  filterFactory,
   isCascadingFilter,
   withoutGuids,
 } from '@sisense/sdk-data';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+
 import {
   flattenCascadingFilters,
   reassembleCascadingFilters,

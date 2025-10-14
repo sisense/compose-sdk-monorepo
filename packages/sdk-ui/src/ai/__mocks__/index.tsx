@@ -1,7 +1,10 @@
-import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
-import { mockToken, mockUrl } from '@/__mocks__/msw';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+import { mockToken, mockUrl } from '@/__mocks__/msw';
+import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
+
 import AiContextProvider from '../ai-context-provider';
 
 /**

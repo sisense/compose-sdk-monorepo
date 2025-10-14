@@ -1,16 +1,16 @@
 /* eslint-disable max-params */
+import { Attribute, Data, Filter, Measure } from '@sisense/sdk-data';
+import merge from 'ts-deepmerge';
 
+import { DataTable } from '../../chart-data-processor/table-processor';
+import { TranslatableError } from '../../translation/translatable-error';
+import { ChartType } from '../../types';
 import {
   CategoricalChartDataOptions,
   CategoricalChartDataOptionsInternal,
   ChartDataOptions,
   ChartDataOptionsInternal,
 } from '../types';
-import { ChartType } from '../../types';
-import merge from 'ts-deepmerge';
-import { Attribute, Data, Filter, Measure } from '@sisense/sdk-data';
-import { TranslatableError } from '../../translation/translatable-error';
-import { DataTable } from '../../chart-data-processor/table-processor';
 import { validateCategoricalChartDataOptions } from './validate-categorical-data-options';
 
 export type DataColumnNamesMapping = Record<string, string>;

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { TableSize, EVENT_NOTIFY_SIZE } from '../../sizing/index.js';
+
+import { EVENT_NOTIFY_SIZE, TableSize } from '../../sizing/index.js';
 
 type Props = {
   type: string;

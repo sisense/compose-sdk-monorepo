@@ -1,13 +1,16 @@
 /* eslint-disable no-case-declarations */
+import { normalizeName } from '@sisense/sdk-data';
+
 import { DEFAULT_COLOR } from '../chart-data-options/coloring/consts.js';
 import { getUniformColorOptionsFromString } from '../chart-data-options/coloring/uniform-coloring.js';
+import { getPaletteColor } from '../chart-data-options/coloring/utils.js';
 import {
   ConditionalDataColorOptions,
   DataColorOptions,
   RangeDataColorOptions,
   UniformDataColorOptions,
 } from '../chart-data/data-coloring/index.js';
-import { ValueToColorMap, MultiColumnValueToColorMap, Color } from '../types.js';
+import { Color, MultiColumnValueToColorMap, ValueToColorMap } from '../types.js';
 import { scaleBrightness, toGray } from '../utils/color/index.js';
 import {
   PanelColorFormat,
@@ -16,8 +19,6 @@ import {
   PanelItem,
   PanelMembersFormat,
 } from './types.js';
-import { normalizeName } from '@sisense/sdk-data';
-import { getPaletteColor } from '../chart-data-options/coloring/utils.js';
 
 /**
  * Infers the range mode based on the provided colors and palette

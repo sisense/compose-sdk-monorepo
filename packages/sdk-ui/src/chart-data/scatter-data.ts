@@ -1,4 +1,17 @@
+import { isNumber } from '@sisense/sdk-data';
+
+import { isMeasureColumn } from '@/chart-data-options/utils';
+
+import {
+  ScatterChartDataOptionsInternal,
+  StyledColumn,
+  StyledMeasureColumn,
+} from '../chart-data-options/types';
 import { ComparableData, DataTable, Row } from '../chart-data-processor/table-processor';
+import {
+  applyFormatPlainText,
+  getCompleteNumberFormatConfig,
+} from '../chart-options-processor/translations/number-format-config';
 import {
   ScatterAxisCategoriesMap,
   ScatterCategories,
@@ -6,17 +19,6 @@ import {
   ScatterDataRow,
   ScatterDataTable,
 } from './types';
-import {
-  ScatterChartDataOptionsInternal,
-  StyledColumn,
-  StyledMeasureColumn,
-} from '../chart-data-options/types';
-import { isNumber } from '@sisense/sdk-data';
-import {
-  applyFormatPlainText,
-  getCompleteNumberFormatConfig,
-} from '../chart-options-processor/translations/number-format-config';
-import { isMeasureColumn } from '@/chart-data-options/utils';
 
 export const defaultScatterDataValue: ComparableData = { displayValue: '0' };
 

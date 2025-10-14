@@ -11,6 +11,7 @@ import {
 import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { StackType } from '@/chart-options-processor/translations/translations-to-highcharts';
 import { ChartStyleOptions, StackableStyleOptions, StackableSubtype } from '@/types';
+
 import { shouldHaveY2Axis } from '../../helpers/data-options';
 
 export function translateStackableStyleOptionsToDesignOptions(
@@ -37,8 +38,7 @@ export function translateStackableStyleOptionsToDesignOptions(
     stackType: styleOptions.subtype
       ? subtypeToStackTypeDictionary[styleOptions.subtype]
       : DefaultStackType,
-    showTotal: styleOptions.totalLabels?.enabled ?? false,
-    totalLabelRotation: styleOptions.totalLabels?.rotation ?? 0,
+    totalLabels: styleOptions.totalLabels,
     itemPadding: styleOptions.series?.padding ?? 0.01,
     groupPadding: styleOptions.series?.groupPadding ?? 0.1,
     borderRadius: styleOptions.series?.borderRadius ?? 0,

@@ -1,11 +1,14 @@
 import { ReactNode } from 'react';
+
 import { renderHook, waitFor } from '@testing-library/react';
-import { Chat, ChatContextDetails, ChatMessage } from './api/types';
-import { isNlqMessage, isTextMessage, useChatSession } from './use-chat-session';
+import { http, HttpResponse } from 'msw';
+
+import { server } from '@/__mocks__/msw';
+
 import { AiTestWrapper } from './__mocks__';
 import { contexts } from './__mocks__/data';
-import { http, HttpResponse } from 'msw';
-import { server } from '@/__mocks__/msw';
+import { Chat, ChatContextDetails, ChatMessage } from './api/types';
+import { isNlqMessage, isTextMessage, useChatSession } from './use-chat-session';
 
 const getWrapper =
   (volatile = false) =>

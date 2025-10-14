@@ -1,9 +1,10 @@
 import { WidgetProps } from '@/props.js';
+
 import {
   ExpandedQueryModel,
+  isByIdWidgetCodeParams,
   WidgetCodeParams,
   WidgetPropsConfig,
-  isByIdWidgetCodeParams,
 } from '../types.js';
 import { toWidgetCodeById, toWidgetCodeClientSide } from './to-widget-code.js';
 import { toWidgetPropsFromQuery } from './to-widget-props.js';

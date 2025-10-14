@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Header, OnChangesApplyProps } from './Header.js';
+
 import { LAYOUT } from './constants.js';
+import { Header, OnChangesApplyProps } from './Header.js';
 
 type Props = {
   total: number;

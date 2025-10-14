@@ -1,8 +1,9 @@
-import { CustomWidgetProps, WidgetProps } from '@/props';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { WidgetPanelLayoutManager } from '@/dashboard/hooks/use-widgets-layout';
-import { TabberTab } from '@/types';
-import { useCallback, useState, useEffect, useMemo } from 'react';
 import { TabbersOptions, WidgetsPanelColumnLayout } from '@/models';
+import { CustomWidgetProps, WidgetProps } from '@/props';
+import { TabberTab } from '@/types';
 
 /**
  * @internal
@@ -58,40 +59,33 @@ function isVisible(
 export const modifyLayout =
   (tabbersOptions: TabbersOptions, tabberState: Record<string, number>) =>
   (layout: WidgetsPanelColumnLayout): WidgetsPanelColumnLayout => {
+    const isAnyTabberConfig = Object.keys(tabbersOptions).length > 0;
+
     return {
       ...layout,
-      columns: layout.columns
-        .map((column) => {
-          return {
-            ...column,
-            rows: column.rows
-              .map((row) => {
-                const filteredCells = row.cells.filter((cell) => {
-                  return isVisible(cell.widgetId, tabbersOptions, tabberState);
-                });
-                if (filteredCells.length === row.cells.length) {
-                  return row;
-                }
-                return filteredCells.length === row.cells.length
-                  ? row
-                  : {
-                      cells: filteredCells.map((cell) => {
-                        return {
-                          ...cell,
-                          widthPercentage: 100 / filteredCells.length,
-                        };
-                      }),
-                    };
-              })
-              .filter((row) => row.cells.length > 0),
-          };
-        })
-        .filter((column) => column.rows.length > 0),
+      columns: layout.columns.map((column) => {
+        return {
+          ...column,
+          rows: column.rows.map((row) => {
+            return {
+              ...row,
+              cells: row.cells.map((cell) => {
+                return {
+                  ...cell,
+                  ...(isAnyTabberConfig
+                    ? { hidden: !isVisible(cell.widgetId, tabbersOptions, tabberState) }
+                    : null),
+                };
+              }),
+            };
+          }),
+        };
+      }),
     };
   };
 
 const getSelectedTabs = (config: TabbersOptions): Record<string, number> => {
-  return Object.keys(config).reduce((acc, key) => {
+  return Object.keys(config).reduce((acc: Record<string, number>, key) => {
     acc[key] = config[key].activeTab;
     return acc;
   }, {});
@@ -107,6 +101,7 @@ const getSelectedTabs = (config: TabbersOptions): Record<string, number> => {
 export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) => {
   const initialSelectedTabs = useMemo(() => getSelectedTabs(tabbersConfigs), [tabbersConfigs]);
   const [selectedTabs, setSelectedTabs] = useState<Record<string, number>>(initialSelectedTabs);
+  const isAnyTabberConfig = Object.keys(tabbersConfigs).length > 0;
 
   useEffect(() => {
     const newSelectedTabs = getSelectedTabs(tabbersConfigs);
@@ -140,31 +135,24 @@ export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) =
         columns: layout.columns.map((column) => {
           return {
             ...column,
-            rows: column.rows
-              .map((row) => {
-                const filteredCells = row.cells.filter((cell) => {
-                  return isVisible(cell.widgetId, tabbersConfigs, selectedTabs);
-                });
-                if (filteredCells.length === row.cells.length) {
-                  return row;
-                }
-                return filteredCells.length === row.cells.length
-                  ? row
-                  : {
-                      cells: filteredCells.map((cell) => {
-                        return {
-                          ...cell,
-                          widthPercentage: 100 / filteredCells.length,
-                        };
-                      }),
-                    };
-              })
-              .filter((row) => row.cells.length > 0),
+            rows: column.rows.map((row) => {
+              return {
+                ...row,
+                cells: row.cells.map((cell) => {
+                  return {
+                    ...cell,
+                    ...(isAnyTabberConfig
+                      ? { hidden: !isVisible(cell.widgetId, tabbersConfigs, selectedTabs) }
+                      : null),
+                  };
+                }),
+              };
+            }),
           };
         }),
       };
     },
-    [tabbersConfigs, selectedTabs],
+    [tabbersConfigs, selectedTabs, isAnyTabberConfig],
   );
 
   return {

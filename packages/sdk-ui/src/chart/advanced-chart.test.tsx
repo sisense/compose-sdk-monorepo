@@ -1,12 +1,13 @@
+import { measureFactory } from '@sisense/sdk-data';
 import { render, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { measureFactory } from '@sisense/sdk-data';
-import { Chart, HighchartsOptions, SisenseContextProviderProps } from '@/index';
-import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
+
 import * as jaqlForecast from '@/__mocks__/data/mock-jaql-forecast.json';
 import * as jaqlTrend from '@/__mocks__/data/mock-jaql-trend.json';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { mockToken, mockUrl, server } from '@/__mocks__/msw';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { Chart, HighchartsOptions, SisenseContextProviderProps } from '@/index';
+import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
 
 const contextProviderProps: SisenseContextProviderProps = {
   url: mockUrl,

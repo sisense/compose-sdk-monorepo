@@ -1,26 +1,8 @@
 import { Attribute, Measure, QueryResultData } from '@sisense/sdk-data';
 import { QueryExecutionConfig } from '@sisense/sdk-query-client';
-import type {
-  AreaStyleOptions,
-  AreamapStyleOptions,
-  CalendarHeatmapStyleOptions,
-  ChartDataOptions,
-  ChartStyleOptions,
-  LineStyleOptions,
-  PieStyleOptions,
-  PolarStyleOptions,
-  ScattermapStyleOptions,
-  StackableStyleOptions,
-  FunnelStyleOptions,
-  TreemapStyleOptions,
-  SunburstStyleOptions,
-} from '@/types';
+
+import { ClientApplication } from '@/app/client-application';
 import type { ChartRendererProps } from '@/chart';
-import type {
-  CartesianChartData,
-  CategoricalChartData,
-  ScattermapChartData,
-} from '@/chart-data/types';
 import {
   AreamapChartDataOptions,
   AreamapChartDataOptionsInternal,
@@ -34,17 +16,35 @@ import {
   ScattermapChartDataOptions,
   ScattermapChartDataOptionsInternal,
 } from '@/chart-data-options/types';
-import { DesignOptions } from '@/chart-options-processor/translations/types';
-
 import { DataTable } from '@/chart-data-processor/table-processor';
-
-import { ClientApplication } from '@/app/client-application';
+import type {
+  CartesianChartData,
+  CategoricalChartData,
+  ScattermapChartData,
+} from '@/chart-data/types';
+import { DesignOptions } from '@/chart-options-processor/translations/types';
 import { AreamapProps } from '@/chart/restructured-charts/areamap-chart/renderer';
 import { ScattermapProps } from '@/charts/map-charts/scattermap/scattermap';
-import { AreamapData } from './areamap-chart/types';
-import { HighchartsBasedChartRendererProps } from './highchart-based-charts/highcharts-based-chart-renderer/highcharts-based-chart-renderer';
 import { QueryDescription } from '@/query/execute-query';
+import type {
+  AreamapStyleOptions,
+  AreaStyleOptions,
+  CalendarHeatmapStyleOptions,
+  ChartDataOptions,
+  ChartStyleOptions,
+  FunnelStyleOptions,
+  LineStyleOptions,
+  PieStyleOptions,
+  PolarStyleOptions,
+  ScattermapStyleOptions,
+  StackableStyleOptions,
+  SunburstStyleOptions,
+  TreemapStyleOptions,
+} from '@/types';
+
+import { AreamapData } from './areamap-chart/types';
 import { CalendarHeatmapChartData } from './highchart-based-charts/calendar-heatmap-chart/data';
+import { HighchartsBasedChartRendererProps } from './highchart-based-charts/highcharts-based-chart-renderer/highcharts-based-chart-renderer';
 
 export type SupportedChartType =
   | 'areamap'

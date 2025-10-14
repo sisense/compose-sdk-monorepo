@@ -30,7 +30,6 @@ import { isDatetime, isNumber } from './dimensional-model/simple-column-types.js
 import {
   AggregationTypes,
   BaseJaql,
-  DataType,
   DateLevels,
   FilterJaql,
   FormulaJaql,
@@ -374,7 +373,7 @@ export const createAttributeHelper = ({
   const column = parseExpression(expression).column;
   const sortEnum = convertSort(sort);
 
-  const isDataTypeDatetime = dataType === DataType.DATETIME;
+  const isDataTypeDatetime = dataType !== undefined && isDatetime(dataType);
 
   if (isDataTypeDatetime) {
     const levelAttribute: LevelAttribute = new DimensionalLevelAttribute(

@@ -2,16 +2,17 @@ import {
   Attribute,
   CalculatedMeasureColumn,
   Column,
+  DateLevels,
+  DimensionalLevelAttribute,
+  isDatetime,
+  JaqlElement,
   LevelAttribute,
   Measure,
   MeasureColumn,
-  isDatetime,
-  DimensionalLevelAttribute,
-  JaqlElement,
-  DateLevels,
 } from '@sisense/sdk-data';
 import isUndefined from 'lodash-es/isUndefined';
-import { StyledColumn, StyledMeasureColumn, AnyColumn, CategoryStyle, ValueStyle } from './types';
+
+import { AnyColumn, CategoryStyle, StyledColumn, StyledMeasureColumn, ValueStyle } from './types';
 
 type AnyObject = Record<string, any>;
 

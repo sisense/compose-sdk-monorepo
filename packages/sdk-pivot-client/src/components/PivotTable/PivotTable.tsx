@@ -1,35 +1,36 @@
 import * as React from 'react';
-import { TableSize, EVENT_SIZE_CHANGED } from '../../sizing/index.js';
-import { PivotInnerTable, CellRenderProps } from './PivotInnerTable.js';
-import { PivotCell } from '../Pivot/index.js';
+
+import { PivotCellEvent, PivotDataNode, PivotTreeNode } from '../../data-handling';
+import { PanelType } from '../../data-handling/constants.js';
+import { createPivotTreeNode } from '../../data-handling/utils/index.js';
+import { Metadata } from '../../data-handling/utils/plugins/types.js';
+import { EVENT_SIZE_CHANGED, TableSize } from '../../sizing/index.js';
+import { TreeNodeMetadata, TreeServiceI } from '../../tree-structure/types.js';
+import { debug } from '../../utils/index.js';
+import { Defer, LoggerI, Styles } from '../../utils/types.js';
 import { CustomScroll } from '../CustomScroll/index.js';
 import { MouseWheelCatcher } from '../MouseWheelCatcher/index.js';
-import { createPivotTreeNode } from '../../data-handling/utils/index.js';
+import { PivotCell } from '../Pivot/index.js';
 import {
   MULTIGRID,
   MULTIGRID_NEW,
-  MULTIGRID_NO_ROWS,
   MULTIGRID_NO_COLUMNS,
   MULTIGRID_NO_CORNER,
   MULTIGRID_NO_FIXED_LEFT,
+  MULTIGRID_NO_ROWS,
   TABLEGRID,
-  TABLEGRID_FIXED,
-  TABLEGRID_DATA,
-  TABLEGRID_ROWS,
+  TABLEGRID_BOTTOM,
   TABLEGRID_COLUMNS,
   TABLEGRID_CORNER,
-  TABLEGRID_TOP,
-  TABLEGRID_RIGHT,
-  TABLEGRID_BOTTOM,
+  TABLEGRID_DATA,
+  TABLEGRID_FIXED,
   TABLEGRID_LEFT,
+  TABLEGRID_RIGHT,
+  TABLEGRID_ROWS,
+  TABLEGRID_TOP,
 } from './classes.js';
-import { debug } from '../../utils/index.js';
-import { PanelType } from '../../data-handling/constants.js';
 import { tableType as typeOfTable } from './constants.js';
-import { Defer, LoggerI, Styles } from '../../utils/types.js';
-import { TreeNodeMetadata, TreeServiceI } from '../../tree-structure/types.js';
-import { Metadata } from '../../data-handling/utils/plugins/types.js';
-import { PivotCellEvent, PivotDataNode, PivotTreeNode } from '../../data-handling';
+import { CellRenderProps, PivotInnerTable } from './PivotInnerTable.js';
 
 export type DimensionsProps = {
   width: Array<any>;

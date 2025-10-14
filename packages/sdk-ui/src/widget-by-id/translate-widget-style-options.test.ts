@@ -1,10 +1,18 @@
-import merge from 'lodash-es/merge';
 import cloneDeep from 'lodash-es/cloneDeep';
+import merge from 'lodash-es/merge';
+import { describe } from 'vitest';
+
+import {
+  AreaStyleOptions,
+  BaseAxisStyleOptions,
+  BaseStyleOptions,
+  StackableStyleOptions,
+} from '../types.js';
+import { jaqlMock } from './__mocks__/jaql-mock.js';
 import {
   extractStyleOptions,
   getIndicatorTypeSpecificOptions,
 } from './translate-widget-style-options.js';
-import { AreaStyleOptions, BaseAxisStyleOptions, BaseStyleOptions } from '../types.js';
 import {
   CartesianWidgetStyle,
   FunnelWidgetStyle,
@@ -16,8 +24,6 @@ import {
   WidgetDto,
   WidgetSubtype,
 } from './types.js';
-import { jaqlMock } from './__mocks__/jaql-mock.js';
-import { describe } from 'vitest';
 
 type BaseStyleOptionsWithAxes = BaseStyleOptions & BaseAxisStyleOptions;
 
@@ -422,7 +428,7 @@ describe('translate widget style options', () => {
       const styleOptions = extractStyleOptions(
         'chart/column',
         mockWidgetDto('column/stackedcolumn', widgetStyle, []),
-      ) as BaseStyleOptions;
+      ) as StackableStyleOptions;
 
       expect(styleOptions.seriesLabels).toEqual({
         enabled: true,
@@ -512,7 +518,7 @@ describe('translate widget style options', () => {
       const styleOptions = extractStyleOptions(
         'chart/column',
         mockWidgetDto('column/stackedcolumn100', widgetStyle, []),
-      ) as BaseStyleOptions;
+      ) as StackableStyleOptions;
 
       expect(styleOptions.seriesLabels).toEqual({
         enabled: true,

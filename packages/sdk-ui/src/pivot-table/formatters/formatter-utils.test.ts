@@ -1,15 +1,17 @@
+import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
+
+import type { PivotTableDataOptionsInternal } from '@/chart-data-options/types';
+
 import {
   applyCellFormattingResult,
   createUnifiedDataCellFormatter,
   createUnifiedHeaderCellFormatter,
 } from './formatter-utils.js';
 import type {
+  CellFormattingResult,
   CustomDataCellFormatter,
   CustomHeaderCellFormatter,
-  CellFormattingResult,
 } from './types.js';
-import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
-import type { PivotTableDataOptionsInternal } from '@/chart-data-options/types';
 import { getPivotDataOptionByJaqlIndex, getPivotDataOptionIdByJaqlIndex } from './utils.js';
 
 // Mock the utility functions

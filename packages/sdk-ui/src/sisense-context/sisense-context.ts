@@ -1,7 +1,9 @@
 import { createContext, useContext } from 'react';
-import { ClientApplication } from '../app/client-application';
+
 import { TrackingEventDetails } from '@sisense/sdk-tracking';
+
 import { SisenseContextProviderProps } from '..';
+import { ClientApplication } from '../app/client-application';
 
 export type SisenseContextPayload = {
   isInitialized: boolean;

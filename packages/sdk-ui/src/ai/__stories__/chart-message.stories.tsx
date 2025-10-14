@@ -1,10 +1,12 @@
+import { MetadataItemJaql } from '@sisense/sdk-data';
 import { Meta, StoryObj } from '@storybook/react-vite';
-import ChartMessage from '../messages/chart-message';
-import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
-import { SisenseContextProviderProps } from '../../props';
+
 import { AiContextProvider } from '@/ai';
 import { getDefaultThemeSettings, ThemeProvider } from '@/index';
-import { MetadataItemJaql } from '@sisense/sdk-data';
+
+import { SisenseContextProviderProps } from '../../props';
+import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
+import ChartMessage from '../messages/chart-message';
 
 const sisenseContextProps: SisenseContextProviderProps = {
   url: import.meta.env.VITE_APP_SISENSE_URL ?? '',

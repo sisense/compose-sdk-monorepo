@@ -1,16 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /** @vitest-environment jsdom */
+import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
 import { fireEvent, render } from '@testing-library/react';
-import { PivotTable } from './pivot-table';
-import { mockPivotTableProps } from './__mocks__/mocks';
-import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
+
+import { createMockPivotClient } from '@/pivot-table/__mocks__/pivot-client-mock';
+import { SisenseContextPayload } from '@/sisense-context/sisense-context';
+
 import { ClientApplication } from '../app/client-application';
 import { executePivotQueryMock } from '../query/__mocks__/execute-query';
-import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
-import { SisenseContextPayload } from '@/sisense-context/sisense-context';
-import { createMockPivotClient } from '@/pivot-table/__mocks__/pivot-client-mock';
+import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
+import { mockPivotTableProps } from './__mocks__/mocks';
+import { PivotTable } from './pivot-table';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');

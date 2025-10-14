@@ -10,6 +10,7 @@ import {
   PivotQueryResultData,
   QueryResultData,
 } from '@sisense/sdk-data';
+
 import { DataLoadAction } from '../common/hooks/data-load-state-reducer';
 import { FiltersMergeStrategy } from '../widget-by-id/types';
 

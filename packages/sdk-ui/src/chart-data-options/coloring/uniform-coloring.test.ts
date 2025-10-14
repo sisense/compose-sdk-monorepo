@@ -1,5 +1,5 @@
-import { getUniformColorOptionsFromString, getUniformColoringFunction } from './uniform-coloring';
 import { UniformDataColorOptions } from '../../types';
+import { getUniformColoringFunction, getUniformColorOptionsFromString } from './uniform-coloring';
 
 describe('getUniformColorOptionsFromString', () => {
   it('should return an object with the type "uniform" and the specified color', () => {

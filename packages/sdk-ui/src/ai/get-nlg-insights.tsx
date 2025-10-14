@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
+
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+
 import Collapsible from './common/collapsible';
 import { useGetNlgInsightsInternal, UseGetNlgInsightsParams } from './use-get-nlg-insights';
-import { useTranslation } from 'react-i18next';
 
 /**
  * Props for {@link GetNlgInsights} component.

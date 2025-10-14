@@ -1,21 +1,22 @@
 import { AreamapChartDesignOptions } from '@/chart/restructured-charts/areamap-chart/types';
+
 import { ChartType } from '../../types';
 import {
-  LineChartDesignOptions,
   AreaChartDesignOptions,
+  AreaRangeChartDesignOptions,
   BarChartDesignOptions,
-  ColumnChartDesignOptions,
+  BaseDesignOptionsType,
+  BoxplotChartDesignOptions,
   CalendarHeatmapChartDesignOptions,
-  PieChartDesignOptions,
+  ColumnChartDesignOptions,
   FunnelChartDesignOptions,
   IndicatorChartDesignOptions,
+  LineChartDesignOptions,
+  PieChartDesignOptions,
   PolarChartDesignOptions,
   ScatterChartDesignOptions,
-  TreemapChartDesignOptions,
-  BoxplotChartDesignOptions,
   ScattermapChartDesignOptions,
-  AreaRangeChartDesignOptions,
-  BaseDesignOptionsType,
+  TreemapChartDesignOptions,
 } from './design-options';
 
 /**

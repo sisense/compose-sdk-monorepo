@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react';
+
 import styled from '@emotion/styled';
 import {
   DataSource,
@@ -7,27 +8,29 @@ import {
   isCascadingFilter,
   mergeFilters,
 } from '@sisense/sdk-data';
-import { FilterTile } from '@/filters/components/filter-tile';
-import { Themable } from '@/theme-provider/types';
-import { useThemeContext } from '@/theme-provider';
-import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+
+import { useDefaults } from '@/common/hooks/use-defaults';
 import { DASHBOARD_HEADER_HEIGHT } from '@/dashboard/components/dashboard-header';
+import { getDividerStyle } from '@/dashboard/utils';
+import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+import { FilterTile } from '@/filters/components/filter-tile';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
 import {
   calculateNewRelations,
   combineFiltersAndRelations,
   splitFiltersAndRelations,
 } from '@/utils/filter-relations';
+
+import { DEFAULT_FILTERS_PANEL_CONFIG } from './constants';
 import { FilterRelationsTile } from './filter-relations-tile';
 import { FiltersPanelHeader } from './filters-panel-header';
-import { useNewFilterCreation } from './hooks/use-new-filter-adding';
 import {
   isFilterSupportEditing,
   useExistingFilterEditing,
 } from './hooks/use-existing-filter-editing';
+import { useNewFilterCreation } from './hooks/use-new-filter-adding';
 import { FiltersPanelConfig } from './types';
-import { useDefaults } from '@/common/hooks/use-defaults';
-import { DEFAULT_FILTERS_PANEL_CONFIG } from './constants';
-import { getDividerStyle } from '@/dashboard/utils';
 
 const PanelWrapper = styled.div<Themable>`
   background-color: ${({ theme }) => theme.filter.panel.backgroundColor};

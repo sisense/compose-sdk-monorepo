@@ -1,7 +1,8 @@
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { AreamapChartDataOptionsInternal } from '@/chart-data-options/types';
 import { AreamapStyleOptions } from '@/types';
+
 import { areamapDesignOptionsTranslators } from './design-options';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 describe('areamapDesignOptionsTranslators', () => {
   describe('translateStyleOptionsToDesignOptions', () => {

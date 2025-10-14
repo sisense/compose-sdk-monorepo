@@ -1,23 +1,25 @@
 import {
-  mergeFilters,
+  DateLevels,
   type Filter,
   filterFactory,
   isCascadingFilter,
   type LevelAttribute,
-  DateLevels,
+  mergeFilters,
   MetadataTypes,
 } from '@sisense/sdk-data';
-import { WidgetProps } from '@/props.js';
-import { DataPoint, ScatterDataPoint, DataPointEntry } from '@/types';
-import { isChartWidgetProps } from '@/widget-by-id/utils';
-import { JtdConfig } from './jtd-types';
+import { format } from 'date-fns';
+
 import {
   DatePeriod,
-  startOfPeriod,
-  parseDataTableDateValue,
   getBaseDateFnsLocale,
+  parseDataTableDateValue,
+  startOfPeriod,
 } from '@/chart-data-processor/data-table-date-period';
-import { format } from 'date-fns';
+import { WidgetProps } from '@/props.js';
+import { DataPoint, DataPointEntry, ScatterDataPoint } from '@/types';
+import { isChartWidgetProps } from '@/widget-by-id/utils';
+
+import { JtdConfig } from './jtd-types';
 
 /**
  * Jump To Dashboard (JTD) Filter Merging Logic:

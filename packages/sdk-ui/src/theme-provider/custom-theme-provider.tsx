@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
-import { CompleteThemeSettings, CustomContextProviderProps } from '../types';
+
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
+import { CompleteThemeSettings, CustomContextProviderProps } from '../types';
 import { ThemeContext } from './theme-context';
 
 /** @internal */

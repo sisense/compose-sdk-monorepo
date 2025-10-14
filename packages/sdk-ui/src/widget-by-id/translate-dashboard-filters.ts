@@ -1,20 +1,20 @@
-import { DashboardDto, FilterDto, CascadingFilterDto } from '../api/types/dashboard-dto.js';
-import { extractFilterModelFromJaql, extractWidgetFilters } from './translate-widget-filters.js';
-import {
-  FiltersIgnoringRules,
-  PanelItem,
-  WidgetDashboardFilterMode,
-  WidgetDto,
-  FusionWidgetType,
-} from './types.js';
-import { getEnabledPanelItems, mergeFilters } from './utils.js';
-
 import {
   BackgroundFilterJaql,
   BaseJaql,
   createFilterFromJaql,
   IncludeAllFilterJaql,
 } from '@sisense/sdk-data';
+
+import { CascadingFilterDto, DashboardDto, FilterDto } from '../api/types/dashboard-dto.js';
+import { extractFilterModelFromJaql, extractWidgetFilters } from './translate-widget-filters.js';
+import {
+  FiltersIgnoringRules,
+  FusionWidgetType,
+  PanelItem,
+  WidgetDashboardFilterMode,
+  WidgetDto,
+} from './types.js';
+import { getEnabledPanelItems, mergeFilters } from './utils.js';
 
 /**
  * Extracts and merges dashboard and widget filters. This consolidates all

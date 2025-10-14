@@ -1,7 +1,9 @@
-import { describe, it, expect } from 'vitest';
-import { dataTranslators } from './index';
-import { SunburstChartDataOptionsInternal } from '../types';
+import { describe, expect, it } from 'vitest';
+
 import { DataTable } from '@/chart-data-processor/table-processor';
+
+import { SunburstChartDataOptionsInternal } from '../types';
+import { dataTranslators } from './index';
 
 describe('Sunburst Data Translators', () => {
   it('should have loadData function', () => {

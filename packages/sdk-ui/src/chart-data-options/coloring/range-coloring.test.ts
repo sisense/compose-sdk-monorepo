@@ -1,6 +1,6 @@
-import { getRangeColoringFunction } from './range-coloring';
 import { RangeDataColorOptions } from '../../types';
 import { DEFAULT_COLOR } from './consts';
+import { getRangeColoringFunction } from './range-coloring';
 
 describe('getRangeColoringFunction', () => {
   it('should interpolate color based on the range when defined range wider the passed data', () => {

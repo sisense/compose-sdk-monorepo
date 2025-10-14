@@ -1,9 +1,11 @@
+import { CSSProperties } from 'react';
+
+import { DEFAULT_TEXT_COLOR } from '@/const';
 import { CheckIcon } from '@/filters/components/icons';
+import { useThemeContext } from '@/theme-provider';
+
 import { DropdownSelectLabel, SelectIconContainer, SelectItemContainer } from './base';
 import { SelectItem } from './types';
-import { CSSProperties } from 'react';
-import { DEFAULT_TEXT_COLOR } from '@/const';
-import { useThemeContext } from '@/theme-provider';
 
 type SingleSelectItemProps<Value> = SelectItem<Value> & {
   selected: boolean;

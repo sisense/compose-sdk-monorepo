@@ -1,14 +1,13 @@
 /* eslint-disable max-params */
+import { ExtendedDatePeriod, toPeriodCompareValue } from './data-table-date-period';
 import {
+  ComparableData,
   DataTable,
   getColumnByName,
   getColumnValues,
   groupBy,
   orderBy,
-  ComparableData,
 } from './table-processor';
-
-import { ExtendedDatePeriod, toPeriodCompareValue } from './data-table-date-period';
 
 export const filtersTopBottomValues = (
   dataTable: DataTable,

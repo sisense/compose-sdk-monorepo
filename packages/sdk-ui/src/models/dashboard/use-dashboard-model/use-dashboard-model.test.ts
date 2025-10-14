@@ -1,3 +1,9 @@
+import { filterFactory } from '@sisense/sdk-data';
+import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
+import { act, renderHook, waitFor } from '@testing-library/react';
+import type { Mock } from 'vitest';
+
+import { ClientApplication } from '@/app/client-application';
 import {
   dashboardModelTranslator,
   useDashboardModel,
@@ -5,13 +11,9 @@ import {
   widgetModelTranslator,
   WidgetsPanelColumnLayout,
 } from '@/models';
-import { act, renderHook, waitFor } from '@testing-library/react';
-import { filterFactory } from '@sisense/sdk-data';
-import * as DM from '../../../__test-helpers__/sample-ecommerce';
 import { SisenseContextPayload, useSisenseContext } from '@/sisense-context/sisense-context';
-import type { Mock } from 'vitest';
-import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
-import { ClientApplication } from '@/app/client-application';
+
+import * as DM from '../../../__test-helpers__/sample-ecommerce';
 import { sampleEcommerceDashboard } from '../../__mocks__/sample-ecommerce-dashboard';
 
 vi.mock('@sisense/sdk-tracking', async () => {

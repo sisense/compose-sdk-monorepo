@@ -1,5 +1,5 @@
-import { DataTable } from '../../../chart-data-processor/table-processor';
 import { TableDataOptions, TableDataOptionsInternal } from '../../../chart-data-options/types';
+import { DataTable } from '../../../chart-data-processor/table-processor';
 import { formatNumbers } from './format-numbers';
 
 describe('formatNumbers', () => {

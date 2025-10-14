@@ -1,6 +1,8 @@
 import { DataSource } from '@sisense/sdk-data';
 import { Meta } from '@storybook/react-vite';
-import { SisenseContextProviderProps } from '../index';
+
+import { SisenseContextProviderProps } from '@/props';
+
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
 import { ChartStyleOptions } from '../types';
 import { ChartWidget } from '../widgets/chart-widget';

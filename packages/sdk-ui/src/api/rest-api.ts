@@ -1,21 +1,24 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
 import { useMemo } from 'react';
-import { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
-import isUndefined from 'lodash-es/isUndefined';
+
 import {
+  type DataSource,
   DataSourceField,
   DimensionalLevelAttribute,
   getColumnNameFromAttribute,
   getDataSourceName,
   getTableNameFromAttribute,
-  type DataSource,
 } from '@sisense/sdk-data';
-import { useSisenseContext } from '../sisense-context/sisense-context';
-import { HierarchyDto, SharedFormulaDto, WidgetDto } from '../widget-by-id/types';
-import type { DashboardDto } from './types/dashboard-dto';
-import { TranslatableError } from '../translation/translatable-error';
+import { HttpClient } from '@sisense/sdk-rest-client';
+import { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
+import isUndefined from 'lodash-es/isUndefined';
+
 import { PaletteDto } from '@/api/types/palette-dto';
 import { GetHierarchiesOptions } from '@/models/hierarchy/types';
+
+import { useSisenseContext } from '../sisense-context/sisense-context';
+import { TranslatableError } from '../translation/translatable-error';
+import { HierarchyDto, SharedFormulaDto, WidgetDto } from '../widget-by-id/types';
+import type { DashboardDto } from './types/dashboard-dto';
 
 type GetDashboardsOptions = {
   searchByTitle?: string;
@@ -89,6 +92,17 @@ export class RestApi {
         // to remedy, catch error and throw a more informative error message
         throw new TranslatableError('errors.dashboardInvalidIdentifier');
       });
+  };
+
+  /**
+   * Get a specific dashboard using the legacy API version
+   */
+  public getDashboardLegacy = (dashboardOid: string) => {
+    return this.httpClient.get<DashboardDto>(`api/dashboards/${dashboardOid}`).catch(() => {
+      // when error is encountered, API may return only status code 422 without informative error message
+      // to remedy, catch error and throw a more informative error message
+      throw new TranslatableError('errors.dashboardInvalidIdentifier');
+    });
   };
 
   /**

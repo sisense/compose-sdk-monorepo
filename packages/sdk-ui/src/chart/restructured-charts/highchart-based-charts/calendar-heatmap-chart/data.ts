@@ -1,12 +1,13 @@
+import { CalendarHeatmapChartDataOptionsInternal } from '@/chart-data-options/types';
 import {
   DataTable,
-  getValue,
   getColumnByName,
+  getValue,
   getValues,
   isBlurred,
 } from '@/chart-data-processor/table-processor';
-import { CalendarHeatmapChartDataOptionsInternal } from '@/chart-data-options/types';
 import { ChartData } from '@/chart-data/types';
+
 import { CALENDAR_HEATMAP_DATA_TYPE } from './constants';
 
 export type CalendarHeatmapDataValue = {

@@ -1,10 +1,11 @@
-import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { TreemapChartDesignOptions } from '../design-options';
-import { treemapTooltipFormatter } from './treemap-tooltip';
 import { TFunction } from '@sisense/sdk-common';
 import get from 'lodash/get';
+
+import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { translation as enTranslation } from '../../../translation/resources/en';
+import { TreemapChartDesignOptions } from '../design-options';
 import { HighchartsDataPointContext } from '../tooltip-utils';
+import { treemapTooltipFormatter } from './treemap-tooltip';
 
 const translateMock = ((path: string) => {
   return get(enTranslation, path, '');

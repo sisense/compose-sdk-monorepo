@@ -1,5 +1,7 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { useLastDefined } from '@/common/hooks/use-last-defined';
-import { useMemo, useState, useCallback, useEffect } from 'react';
+
 import { DataChunk, Slice } from '../../types';
 import { calculateIfAllItemsLoaded } from '../utils';
 

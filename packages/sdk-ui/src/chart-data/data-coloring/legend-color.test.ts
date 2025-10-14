@@ -1,5 +1,5 @@
-import { legendColor } from './index.js';
 import { DEFAULT_COLOR } from '../../chart-data-options/coloring/consts.js';
+import { legendColor } from './legend-color.js';
 
 describe('legendColor', () => {
   test('string ColorOpts', () => {

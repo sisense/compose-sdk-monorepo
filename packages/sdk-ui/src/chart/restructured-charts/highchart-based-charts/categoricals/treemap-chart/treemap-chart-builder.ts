@@ -3,11 +3,11 @@ import {
   createHighchartsBasedChartRenderer,
   isHighchartsBasedChartRendererProps,
 } from '../../highcharts-based-chart-renderer/highcharts-based-chart-renderer';
-import { dataOptionsTranslators } from './data-options';
+import { getTreemapAlerts } from './alerts';
 import { dataTranslators } from './data';
+import { dataOptionsTranslators } from './data-options';
 import { designOptionsTranslators } from './design-options';
 import { treemapHighchartsOptionsBuilder } from './highchart-options/highcharts-options-builder';
-import { getTreemapAlerts } from './alerts';
 
 export const treemapChartBuilder: ChartBuilder<'treemap'> = {
   dataOptions: dataOptionsTranslators,

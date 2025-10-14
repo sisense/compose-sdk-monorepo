@@ -1,9 +1,11 @@
-import { Column, createAttribute } from '@sisense/sdk-data';
 import { type TFunction } from '@sisense/sdk-common';
-import { processDrilldownSelections, useDrilldownCore } from './use-drilldown-core.js';
+import { Column, createAttribute } from '@sisense/sdk-data';
 import { act, renderHook } from '@testing-library/react';
 import get from 'lodash-es/get';
+
 import { translation } from '@/translation/resources/en.js';
+
+import { processDrilldownSelections, useDrilldownCore } from './use-drilldown-core.js';
 
 const ageRange = createAttribute({
   name: 'Age Range',

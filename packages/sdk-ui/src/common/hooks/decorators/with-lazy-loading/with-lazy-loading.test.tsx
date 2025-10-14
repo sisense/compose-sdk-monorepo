@@ -1,6 +1,8 @@
+import { act } from 'react';
+
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { renderHook as originalRenderHook, waitFor } from '@testing-library/react';
-import { act } from 'react';
+
 import { SliceableRestApiHook } from './types';
 import { withLazyLoading } from './with-lazy-loading';
 

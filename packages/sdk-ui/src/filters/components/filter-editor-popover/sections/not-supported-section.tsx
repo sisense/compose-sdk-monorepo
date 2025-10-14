@@ -1,6 +1,7 @@
 import React from 'react';
-import { SelectableSection } from '../common/selectable-section';
 import { useTranslation } from 'react-i18next';
+
+import { SelectableSection } from '../common/selectable-section';
 
 type NotSupportedSectionProps = {
   selected: boolean;

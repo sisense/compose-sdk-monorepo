@@ -1,5 +1,5 @@
-import { translateStyleOptionsToDesignOptions } from './index';
 import { FunnelChartStyleOptions } from '../types';
+import { translateStyleOptionsToDesignOptions } from './index';
 
 describe('Funnel Chart Design Options', () => {
   describe('translateStyleOptionsToDesignOptions', () => {

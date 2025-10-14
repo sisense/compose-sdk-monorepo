@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import EventEmitter from 'events';
-import { debug, cloneObject } from '../utils/index.js';
-import { MessageType, MESSAGES_ORDER } from './constants.js';
+
 import { PanelType } from '../data-handling/constants.js';
-import { DataLoadServiceI, JaqlRequest } from './types.js';
+import { cloneObject, debug } from '../utils/index.js';
 import { LoggerI } from '../utils/types.js';
+import { MESSAGES_ORDER, MessageType } from './constants.js';
+import { DataLoadServiceI, JaqlRequest } from './types.js';
 
 const formattingProps = {
   INCLUDE: [

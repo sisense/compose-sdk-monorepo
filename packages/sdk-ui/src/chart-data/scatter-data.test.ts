@@ -1,7 +1,7 @@
+import { ScatterChartDataOptionsInternal } from '../chart-data-options/types';
+import { DataTable } from '../chart-data-processor/table-processor';
 import { buildCategories, defaultScatterDataValue, groupData } from './scatter-data';
 import { ScatterDataTable } from './types';
-import { DataTable } from '../chart-data-processor/table-processor';
-import { ScatterChartDataOptionsInternal } from '../chart-data-options/types';
 
 describe('Scatter Chart Data', () => {
   const mockData: DataTable = {

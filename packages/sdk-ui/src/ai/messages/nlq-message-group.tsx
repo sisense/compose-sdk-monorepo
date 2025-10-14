@@ -1,15 +1,18 @@
 /* eslint-disable complexity */
 import { useCallback, useState } from 'react';
+
+import styled from '@emotion/styled';
+import lowerFirst from 'lodash-es/lowerFirst';
+
+import { useThemeContext } from '@/theme-provider';
+
 import { GetNlgInsightsRequest, NlqResponseData } from '../api/types';
+import InsightsButton from '../buttons/insights-button';
 import { useChatConfig } from '../chat-config';
 import ChartMessage from './chart-message';
 import FeedbackWrapper from './feedback-wrapper';
 import InsightsMessage from './insights-message';
-import InsightsButton from '../buttons/insights-button';
 import { MessageContainer } from './text-message';
-import styled from '@emotion/styled';
-import { useThemeContext } from '@/theme-provider';
-import lowerFirst from 'lodash-es/lowerFirst';
 
 const FlexRow = styled.div`
   display: flex;

@@ -12,6 +12,7 @@ import {
   ScattermapStyleOptions,
   StackableStyleOptions,
 } from '@/types';
+
 import { prepareChartDesignOptions } from './prepare-design-options';
 
 describe('prepareChartDesignOptions', () => {

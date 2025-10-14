@@ -1,18 +1,20 @@
 /** @vitest-environment jsdom */
-import { findByLabelText, findByText, render } from '@testing-library/react';
 import {
-  DateRangeFilter,
-  RelativeDateFilter,
   createAttribute,
-  LevelAttribute,
-  filterFactory,
-  measureFactory,
+  DateRangeFilter,
   Filter,
+  filterFactory,
+  LevelAttribute,
+  measureFactory,
+  RelativeDateFilter,
 } from '@sisense/sdk-data';
+import { findByLabelText, findByText, render } from '@testing-library/react';
 import { vi } from 'vitest';
-import { FilterTile } from './filter-tile';
+
 import { MockedSisenseContextProvider } from '@/__test-helpers__';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+
+import { FilterTile } from './filter-tile';
 
 const mockOnChange = vi.fn();
 
@@ -169,7 +171,7 @@ describe('FilterTile', () => {
         <FilterTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByText(container, 'unsupportedFilterMessage');
+    const tile = await findByText(container, 'Unsupported Filter (applied to the data query)');
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });

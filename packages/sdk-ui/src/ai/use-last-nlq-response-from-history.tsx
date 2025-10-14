@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import type { NlqResponseData, ChatMessage } from './api/types';
+
+import type { ChatMessage, NlqResponseData } from './api/types';
 import { isNlqMessage } from './use-chat-session';
 
 /**

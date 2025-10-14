@@ -1,22 +1,23 @@
+import { DateLevels } from '@sisense/sdk-data';
+import { enUS, fr } from 'date-fns/locale';
+
 import {
-  formatDateValue,
+  DAYS,
   defaultDateConfig,
+  formatDateValue,
+  FRI,
+  getDefaultDateMask,
   JAN,
   JUL,
   MON,
-  TUE,
-  WED,
-  THU,
-  FRI,
   SAT,
   SUN,
+  THU,
+  TUE,
+  WED,
   YEARS,
-  DAYS,
-  getDefaultDateMask,
 } from './apply-date-format';
 import type { DateConfig } from './apply-date-format';
-import { enUS, fr } from 'date-fns/locale';
-import { DateLevels } from '@sisense/sdk-data';
 
 const zero = new Date(0);
 const dec292009 = new Date('2009-12-29T06:28:13.999Z');

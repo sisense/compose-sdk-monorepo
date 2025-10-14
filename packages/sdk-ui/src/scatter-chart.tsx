@@ -1,7 +1,8 @@
-import { ScatterChartProps } from './props';
 import { Chart } from './chart';
-import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
+import { ScatterChartProps } from './props';
+
 /**
  * A React component displaying the distribution of two variables on an X-Axis, Y-Axis,
  * and two additional fields of data that are shown as colored circles scattered across the chart.

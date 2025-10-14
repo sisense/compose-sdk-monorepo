@@ -1,7 +1,8 @@
 import { DataTable } from '@/chart-data-processor/table-processor';
-import { loadCategoricalData, getCategoricalChartDataFromTable } from '../../helpers/data';
-import { FunnelChartData, FunnelChartDataOptionsInternal } from '../types';
 import { SupportedChartType, TypedLoadDataFunction } from '@/chart/restructured-charts/types';
+
+import { getCategoricalChartDataFromTable, loadCategoricalData } from '../../helpers/data';
+import { FunnelChartData, FunnelChartDataOptionsInternal } from '../types';
 
 /**
  * Maximum number of data points allowed for funnel charts.

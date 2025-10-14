@@ -1,8 +1,8 @@
 import {
+  JaqlDataType,
   ListOfJaqlDataTypes,
   ListOfSortingDirections,
   SortingDirection,
-  JaqlDataType,
 } from '../../data-handling/constants.js';
 
 type MessageKeys = 'ascAZ' | 'descZA' | 'asc19' | 'desc91';

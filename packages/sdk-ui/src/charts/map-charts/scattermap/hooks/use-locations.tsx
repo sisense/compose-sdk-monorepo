@@ -1,9 +1,10 @@
-import { useSisenseContext } from '../../../../sisense-context/sisense-context.js';
-import { useCallback, useEffect, useState, useRef } from 'react';
-import { Location } from '../types.js';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { ScattermapLocationLevel } from '../../../../chart-data-options/types.js';
-import { getLocationGeoLevel } from '../utils/location.js';
 import { ScattermapChartLocation } from '../../../../chart-data/types';
+import { useSisenseContext } from '../../../../sisense-context/sisense-context.js';
+import { Location } from '../types.js';
+import { getLocationGeoLevel } from '../utils/location.js';
 
 const notSupportedLocationNameEncodeMap = Object.freeze({
   usa: 'united states',

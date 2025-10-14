@@ -1,6 +1,6 @@
 import { ChartBuilder } from '../types.js';
-import { dataOptionsTranslators } from './data-options';
 import { areamapDataTranslators } from './data';
+import { dataOptionsTranslators } from './data-options';
 import { areamapDesignOptionsTranslators } from './design-options';
 import { Areamap, isAreamapProps } from './renderer';
 

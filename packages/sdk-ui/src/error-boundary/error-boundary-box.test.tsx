@@ -1,7 +1,9 @@
-import ErrorBoundaryBox from './error-boundary-box';
 import { fireEvent, render } from '@testing-library/react';
+
 import { ThemeContext } from '@/theme-provider';
 import { CompleteThemeSettings } from '@/types';
+
+import ErrorBoundaryBox from './error-boundary-box';
 
 describe('ErrorBoundaryBox', () => {
   it('should render error correctly', () => {

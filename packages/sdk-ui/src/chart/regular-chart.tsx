@@ -1,36 +1,37 @@
-import { Data } from '@sisense/sdk-data';
 import { useMemo, useState } from 'react';
-import { ChartData } from '../chart-data/types';
-import { ChartDesignOptions, DesignOptions } from '../chart-options-processor/translations/types';
-import { RegularChartProps } from '../props';
-import { IndicatorCanvas, isIndicatorCanvasProps } from '../indicator-canvas';
 
+import { Data } from '@sisense/sdk-data';
+import isArray from 'lodash-es/isArray';
+
+import { isBoxplotChartData } from '@/chart-data/boxplot-data';
+import { ChartType } from '@/types';
+
+import { ChartData } from '../chart-data/types';
+import { prepareChartDesignOptions } from '../chart-options-processor/style-to-design-options-translator';
+import { ChartDesignOptions, DesignOptions } from '../chart-options-processor/translations/types';
 import {
   isScattermapData,
   isScattermapProps,
   Scattermap,
 } from '../charts/map-charts/scattermap/scattermap';
-import { useThemeContext } from '../theme-provider';
-import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
-import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 import { LoadingIndicator } from '../common/components/loading-indicator';
-import './chart.css';
-
-import { isAreamapData } from './restructured-charts/areamap-chart/renderer/areamap';
-import { prepareChartDesignOptions } from '../chart-options-processor/style-to-design-options-translator';
 import { LoadingOverlay } from '../common/components/loading-overlay';
-import { useSyncedData } from './helpers/use-synced-data';
-import { useTranslatedDataOptions } from './helpers/use-translated-data-options';
-import { ChartType } from '@/types';
-import { useChartRendererProps } from './helpers/use-chart-renderer-props';
-import { isBoxplotChartData } from '@/chart-data/boxplot-data';
-import isArray from 'lodash-es/isArray';
+import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
+import { IndicatorCanvas, isIndicatorCanvasProps } from '../indicator-canvas';
+import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
+import { RegularChartProps } from '../props';
+import { isSisenseChartProps, isSisenseChartType, SisenseChart } from '../sisense-chart';
+import { useThemeContext } from '../theme-provider';
+import './chart.css';
 import { getLoadDataFunction } from './helpers/get-load-data-function';
 import { useChartDataPreparation } from './helpers/use-chart-data-preparation';
-import { isRestructuredChartType, hasForecastOrTrend } from './restructured-charts/utils';
+import { useChartRendererProps } from './helpers/use-chart-renderer-props';
+import { useSyncedData } from './helpers/use-synced-data';
+import { useTranslatedDataOptions } from './helpers/use-translated-data-options';
+import { isAreamapData } from './restructured-charts/areamap-chart/renderer/areamap';
 import { getChartBuilder } from './restructured-charts/chart-builder-factory';
-import { isSisenseChartProps, isSisenseChartType, SisenseChart } from '../sisense-chart';
 import { isCalendarHeatmapChartData } from './restructured-charts/highchart-based-charts/calendar-heatmap-chart/data';
+import { hasForecastOrTrend, isRestructuredChartType } from './restructured-charts/utils';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:

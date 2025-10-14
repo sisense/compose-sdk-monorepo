@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-/** @vitest-environment jsdom */
 
+/** @vitest-environment jsdom */
 import { type ClientApplication, getWidgetModel } from '@sisense/sdk-ui-preact';
 import { Mock, Mocked } from 'vitest';
 

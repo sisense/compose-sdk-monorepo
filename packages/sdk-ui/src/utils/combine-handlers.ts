@@ -1,6 +1,7 @@
-import isFunction from 'lodash-es/isFunction';
 import flow from 'lodash-es/flow';
+import isFunction from 'lodash-es/isFunction';
 import over from 'lodash-es/over';
+
 import { RenderTitleHandler, RenderToolbarHandler, TextWidgetRenderToolbarHandler } from '@/types';
 
 type AnyFunction = (...args: any[]) => any;

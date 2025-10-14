@@ -1,15 +1,16 @@
-import { ColoringService } from '../../../chart-data-options/coloring';
-import { IndicatorChartDataOptions, DataColorOptions } from '../../../types';
-import { LegacyIndicatorChartOptions } from '../types';
-import {
-  getValueColorOptions,
-  overrideWithValueColor,
-  isAllowedIndicatorColorOptions,
-  AllowedIndicatorColoringTypes,
-} from './override-with-value-color';
-import { numericSimpleLegacyChartOptionsWithDarkTheme } from './__mocks__/legacy-chart-options';
 import cloneDeep from 'lodash-es/cloneDeep';
+
+import { ColoringService } from '../../../chart-data-options/coloring';
 import '../../../chart-data-options/coloring';
+import { DataColorOptions, IndicatorChartDataOptions } from '../../../types';
+import { LegacyIndicatorChartOptions } from '../types';
+import { numericSimpleLegacyChartOptionsWithDarkTheme } from './__mocks__/legacy-chart-options';
+import {
+  AllowedIndicatorColoringTypes,
+  getValueColorOptions,
+  isAllowedIndicatorColorOptions,
+  overrideWithValueColor,
+} from './override-with-value-color';
 
 const getColorMock = vi.fn().mockReturnValue('red');
 const coloringServiceMock: ColoringService<AllowedIndicatorColoringTypes> = {

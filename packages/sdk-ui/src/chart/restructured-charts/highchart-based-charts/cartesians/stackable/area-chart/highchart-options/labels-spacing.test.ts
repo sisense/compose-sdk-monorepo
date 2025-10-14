@@ -1,6 +1,8 @@
-import { describe, test, expect } from 'vitest';
-import { getAreaChartSpacingForTotalLabels } from './labels-spacing';
+import { describe, expect, test } from 'vitest';
+
 import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
+
+import { getAreaChartSpacingForTotalLabels } from './labels-spacing';
 
 describe('labels-spacing', () => {
   describe('getAreaChartSpacingForTotalLabels', () => {
@@ -9,9 +11,8 @@ describe('labels-spacing', () => {
       stackType: 'classic' | 'stacked' | 'stack100' = 'stack100',
       totalLabelRotation?: number,
     ): StackableChartDesignOptions => ({
-      showTotal,
+      totalLabels: { enabled: showTotal, rotation: totalLabelRotation },
       stackType,
-      totalLabelRotation,
       // Add other required properties with default values
       legend: {
         enabled: true,
@@ -418,7 +419,7 @@ describe('labels-spacing', () => {
     describe('type safety and parameter validation', () => {
       test('should handle missing optional properties gracefully', () => {
         const minimalDesignOptions = {
-          showTotal: true,
+          totalLabels: { enabled: true },
           stackType: 'stack100' as const,
           // totalLabelRotation is optional
         } as StackableChartDesignOptions;

@@ -1,16 +1,18 @@
-import { describe, it, expect } from 'vitest';
 import { UserType } from '@sisense/sdk-pivot-client';
 import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
+import { describe, expect, it } from 'vitest';
+
+import { AnyColumn } from '@/chart-data-options/types';
+import { PivotTableDataPoint } from '@/types';
+
 import {
   createJtdHyperlinkDataCellFormatter,
   createJtdHyperlinkHeaderCellFormatter,
   getPivotFormatterCellActionability,
-  isPivotClickHandlerActionable,
   getPivotTargetActionability,
+  isPivotClickHandlerActionable,
 } from './jtd-formatters';
-import { JtdConfig, isJumpTargetWithId, PivotDimId, JtdTarget } from './jtd-types';
-import { AnyColumn } from '@/chart-data-options/types';
-import { PivotTableDataPoint } from '@/types';
+import { isJumpTargetWithId, JtdConfig, JtdTarget, PivotDimId } from './jtd-types';
 
 describe('jtd-formatters', () => {
   const customHyperlinkColor = '#FF0000';

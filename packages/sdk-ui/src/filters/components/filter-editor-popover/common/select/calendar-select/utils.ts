@@ -1,8 +1,10 @@
 import { DateLevels } from '@sisense/sdk-data';
+
+import { SelectorMode } from '@/filters/components/date-filter/date-filter/calendar-date-selector';
 import { getDefaultDateMask } from '@/query/date-formats/apply-date-format';
+
 import { DatetimeFormatter } from '../../../hooks/use-datetime-formatter';
 import { CalendarSelectTypes } from './types';
-import { SelectorMode } from '@/filters/components/date-filter/date-filter/calendar-date-selector';
 
 const MAX_CALENDAR_DISPLAY_ITEMS = 1;
 

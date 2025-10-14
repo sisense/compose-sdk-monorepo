@@ -1,14 +1,15 @@
 import { useEffect, useReducer } from 'react';
-import { useHasChanged } from '../../common/hooks/use-has-changed';
-import { DataState, dataLoadStateReducer } from '../../common/hooks/data-load-state-reducer';
-import { useSisenseContext } from '../../sisense-context/sisense-context';
+
+import { dataLoadStateReducer, DataState } from '../../common/hooks/data-load-state-reducer';
 import { HookEnableParam } from '../../common/hooks/types';
-import { TranslatableError } from '../../translation/translatable-error';
-import { withTracking } from '../../decorators/hook-decorators';
-import { WidgetModel } from './widget-model';
-import { getWidgetModel } from './get-widget-model';
+import { useHasChanged } from '../../common/hooks/use-has-changed';
 import { useShouldLoad } from '../../common/hooks/use-should-load';
+import { withTracking } from '../../decorators/hook-decorators';
+import { useSisenseContext } from '../../sisense-context/sisense-context';
 import { useThemeContext } from '../../theme-provider';
+import { TranslatableError } from '../../translation/translatable-error';
+import { getWidgetModel } from './get-widget-model';
+import { WidgetModel } from './widget-model';
 
 /**
  * Parameters for {@link useGetWidgetModel} hook.

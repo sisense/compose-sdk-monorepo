@@ -1,12 +1,13 @@
-import { ChartType } from '@/index';
-import { chartBuildersMap } from './chart-builder-factory.js';
-import { SupportedChartType } from './types.js';
 import {
-  ChartDataOptions,
   CartesianChartDataOptions,
+  ChartDataOptions,
   StyledMeasureColumn,
 } from '@/chart-data-options/types';
 import { isCartesian } from '@/chart-options-processor/translations/types';
+import { ChartType } from '@/index';
+
+import { chartBuildersMap } from './chart-builder-factory.js';
+import { SupportedChartType } from './types.js';
 
 type ChartTypeWithAvailableBuilder = keyof typeof chartBuildersMap;
 

@@ -1,15 +1,17 @@
-import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
+
+import styled from '@emotion/styled';
+import Collapse from '@mui/material/Collapse';
+import List from '@mui/material/List';
+
+import { GroupHeader } from './group-header';
+import { ItemRow } from './item-row';
 import {
-  ItemsGroup,
   GroupSecondaryActionConfig,
   ItemActionConfig,
   ItemSecondaryActionConfig,
+  ItemsGroup,
 } from './types';
-import Collapse from '@mui/material/Collapse';
-import List from '@mui/material/List';
-import { ItemRow } from './item-row';
-import { GroupHeader } from './group-header';
 
 type GroupProps = {
   group: ItemsGroup;

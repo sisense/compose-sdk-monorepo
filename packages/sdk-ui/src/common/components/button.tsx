@@ -1,9 +1,11 @@
 import { ReactNode } from 'react';
+
 import ButtonMui from '@mui/material/Button';
+
 import { useThemeContext } from '@/theme-provider';
-import { getSlightlyDifferentColor } from '@/utils/color';
-import { ElementStates } from '@/types';
 import { getElementStateColor } from '@/theme-provider/utils';
+import { ElementStates } from '@/types';
+import { getSlightlyDifferentColor } from '@/utils/color';
 
 type ButtonProps = {
   children: ReactNode;

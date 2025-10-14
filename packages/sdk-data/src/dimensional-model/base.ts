@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+
 /* eslint-disable no-useless-escape */
 import { Element } from './interfaces.js';
 import { JaqlDataSource, JSONObject } from './types.js';

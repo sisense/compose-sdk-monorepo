@@ -1,4 +1,3 @@
-import { ChartDataOptions } from '@/types';
 import { escapeSingleQuotes } from '@sisense/sdk-common';
 import {
   DimensionalBaseMeasure,
@@ -7,10 +6,16 @@ import {
   MetadataItemJaql,
   normalizeAttributeName,
 } from '@sisense/sdk-data';
-
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
-import { toKebabCase, isNonEmptyArray, quoteUnsafeKeys } from '../common/utils';
+import isEqual from 'lodash-es/isEqual';
+
+import { DynamicChartType } from '@/chart-options-processor/translations/types';
+import { ChartDataOptions } from '@/types';
+
 import { CODE_TEMPLATES_INDENT } from '../common/constants';
+import { isNonEmptyArray, quoteUnsafeKeys, toKebabCase } from '../common/utils';
+import { getWidgetTypeDefaultDataOptions } from './default-options/data-options';
+import { getWidgetTypeDefaultStyleOptions } from './default-options/style-options';
 
 const NEW_LINE = '\n';
 const VALUE_UNKNOWN = 'UNKNOWN';
@@ -141,6 +146,79 @@ export const stringifyProps = (
 
   return s;
 };
+
+export function stripDefaultsDeep(obj: any, defaults: any): any {
+  if (defaults === undefined) return obj;
+
+  if (
+    defaults &&
+    typeof defaults === 'object' &&
+    !Array.isArray(defaults) &&
+    Object.keys(defaults).length === 0
+  ) {
+    return obj;
+  }
+
+  if (isEqual(obj, defaults)) return undefined;
+
+  if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+    const result: Record<string, any> = {};
+    for (const key of Object.keys(obj)) {
+      const pruned = stripDefaultsDeep(obj[key], defaults?.[key]);
+
+      const defaultHasKey = defaults && Object.prototype.hasOwnProperty.call(defaults, key);
+      const defaultValue = defaultHasKey ? defaults[key] : undefined;
+
+      const shouldKeep =
+        pruned !== undefined ||
+        !defaultHasKey ||
+        (obj[key] === undefined && defaultValue !== undefined);
+
+      if (shouldKeep) {
+        result[key] = pruned;
+      }
+    }
+    return Object.keys(result).length ? result : undefined;
+  }
+
+  return obj;
+}
+
+export function removeDefaultStyleOptionsProps(
+  styleOptions: Record<string, any>,
+  chartType: DynamicChartType | 'pivot' | 'pivot2',
+) {
+  if (!styleOptions || Object.keys(styleOptions).length === 0) {
+    return {};
+  }
+
+  const defaults = getWidgetTypeDefaultStyleOptions(chartType);
+
+  if (isEqual(styleOptions, defaults)) {
+    return {};
+  }
+
+  const stripped = stripDefaultsDeep(styleOptions, defaults);
+
+  // Return {} if all properties matched defaults and were removed
+  return stripped ?? {};
+}
+
+export function removeDefaultDataOptionsProps(
+  dataOptions: Record<string, any>,
+  chartType: DynamicChartType | 'pivot' | 'pivot2',
+) {
+  const defaults = getWidgetTypeDefaultDataOptions(chartType);
+
+  if (isEqual(dataOptions, defaults)) {
+    return dataOptions;
+  }
+
+  const stripped = stripDefaultsDeep(dataOptions, defaults);
+
+  // Return {} if all properties matched defaults and were removed
+  return stripped ?? {};
+}
 
 export function stringifyDataOptions(dataOptions: ChartDataOptions): string {
   return stringifyProps(dataOptions, CODE_TEMPLATES_INDENT);

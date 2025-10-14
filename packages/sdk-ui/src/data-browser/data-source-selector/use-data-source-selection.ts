@@ -1,5 +1,6 @@
-import { DataSource } from '@sisense/sdk-data';
 import { useState } from 'react';
+
+import { DataSource } from '@sisense/sdk-data';
 
 export const useDataSourceSelection = (
   initialDataSource: DataSource,

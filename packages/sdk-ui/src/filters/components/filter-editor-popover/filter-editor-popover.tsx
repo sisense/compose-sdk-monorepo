@@ -1,15 +1,17 @@
 import { useState } from 'react';
-import styled from '@emotion/styled';
-import { DataSource, type Filter } from '@sisense/sdk-data';
 import { useTranslation } from 'react-i18next';
-import { Popover, PopoverAnchorPosition } from '@/common/components/popover';
 
-import { CubeIcon } from '../icons';
+import styled from '@emotion/styled';
 import Stack from '@mui/material/Stack';
+import { DataSource, type Filter } from '@sisense/sdk-data';
+
 import { Button } from '@/common/components/button';
-import { FilterEditor } from './filter-editor';
+import { Popover, PopoverAnchorPosition } from '@/common/components/popover';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
+
+import { CubeIcon } from '../icons';
+import { FilterEditor } from './filter-editor';
 import { FilterEditorConfig } from './types';
 
 type FilterEditorPopoverPosition = Pick<PopoverAnchorPosition, 'anchorEl'>;

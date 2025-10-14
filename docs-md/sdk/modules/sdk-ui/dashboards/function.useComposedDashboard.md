@@ -4,53 +4,63 @@ title: useComposedDashboard
 
 # Function useComposedDashboard
 
-> **useComposedDashboard**<`D`>(...`args`): `object`
+> **useComposedDashboard**<`D`>(`initialDashboard`, `options`? = `{}`): [`ComposedDashboardResult`](../type-aliases/type-alias.ComposedDashboardResult.md)\< `D` \>
 
 React hook that takes in separate dashboard elements and
 composes them into a coordinated dashboard with change detection, cross filtering, and drill down.
 
 ## Type parameters
 
-| Parameter |
-| :------ |
-| `D` *extends* [`ComposableDashboardProps`](../type-aliases/type-alias.ComposableDashboardProps.md) \| [`DashboardProps`](../interfaces/interface.DashboardProps.md) |
+| Parameter | Description |
+| :------ | :------ |
+| `D` *extends* [`ComposableDashboardProps`](../type-aliases/type-alias.ComposableDashboardProps.md) \| [`DashboardProps`](../interfaces/interface.DashboardProps.md) | The type parameter for a dashboard properties, restricted to ComposableDashboardProps or DashboardProps |
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| ...`args` | [`D`, `UseComposedDashboardOptions?`] |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `initialDashboard` | `D` | set of properties for the Dashboard component |
+| `options`? | [`UseComposedDashboardOptions`](../type-aliases/type-alias.UseComposedDashboardOptions.md) | Options for the composable. |
 
 ## Returns
 
-### `dashboard`
+[`ComposedDashboardResult`](../type-aliases/type-alias.ComposedDashboardResult.md)\< `D` \>
 
-**dashboard**: `D`
+An object containing the composed dashboard and APIs to interact with it.
 
-### `setFilters`
+## Example
 
-**setFilters**: (`filters`) => `void`
+```ts
+import { useComposedDashboard } from '@sisense/sdk-ui/dashboard/use-composed-dashboard.js';
+import { Widget } from '@sisense/sdk-ui';
+import { DashboardProps } from '@/dashboard/types.js';
+import { FilterTile } from '@/filters';
 
-#### Parameters
+const CodeExample = () => {
+  const dashboardProps: DashboardProps = { ... };
 
-| Parameter | Type |
-| :------ | :------ |
-| `filters` | [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] |
+  const {
+    dashboard: { title, widgets, filters = [] }
+  } = useComposedDashboard(dashboardProps);
 
-#### Returns
+  return (
+    <div>
+      <span>{title}</span>
+      <div>
+        {widgets.map((widget) => (
+          <Widget key={widget.id} {...widget} />
+        ))}
+      </div>
 
-`void`
-
-### `setWidgetsLayout`
-
-**setWidgetsLayout**: (`newLayout`) => `void`
-
-#### Parameters
-
-| Parameter | Type |
-| :------ | :------ |
-| `newLayout` | [`WidgetsPanelColumnLayout`](../interfaces/interface.WidgetsPanelColumnLayout.md) |
-
-#### Returns
-
-`void`
+      {Array.isArray(filters) ? filters.map((filter) => (
+        <FilterTile
+          key={filter.name}
+          filter={filter}
+          onChange={(filter) => console.log('Updated filter', filter)}
+        />
+      )) : null}
+    </div>
+  );
+}
+  export default CodeExample;
+```

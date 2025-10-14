@@ -688,3 +688,342 @@ const CodeExample = () => {
 
 export default CodeExample;
 `;
+
+export const MOCK_CODE_REACT_LINE_WITHOUT_DEFAULT_PROPS = `import { ChartWidget } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+
+export default function CodeExample() {
+  return (
+    <ChartWidget
+      title={'REVENUE vs.UNITS SOLD'}
+      dataSource={DM.DataSource}
+      chartType={'line'}
+      dataOptions={ {
+        category: [{
+            column: DM.Commerce.Date.Months,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          },{
+            column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            showOnRightAxis: true,
+            sortType: 'sortNone',
+            chartType: 'column',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+      } }
+      filters={ [] }
+      styleOptions={ {
+        subtype: 'line/spline',
+        xAxis: {
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          title: {
+            text: 'MONTH',
+          },
+        },
+        yAxis: {
+          enabled: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          logarithmic: true,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+        },
+        y2Axis: {
+          isIntervalEnabled: undefined,
+          title: {
+            enabled: true,
+            text: 'QUANTITY',
+          },
+        },
+        markers: {
+          enabled: true,
+          fill: 'hollow',
+        },
+      } }
+      drilldownOptions={ {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      } }
+    />
+  );
+}`;
+
+export const MOCK_CODE_VUE_LINE_WITHOUT_DEFAULT_PROPS = `<script setup lang="ts">
+  import { ref } from 'vue';
+  import { ChartWidget, type ChartStyleOptions } from '@sisense/sdk-ui-vue';
+  import { measureFactory } from '@sisense/sdk-data';
+  import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+
+  const dataOptions = ref({
+        category: [{
+            column: DM.Commerce.Date.Months,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          },{
+            column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            showOnRightAxis: true,
+            sortType: 'sortNone',
+            chartType: 'column',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+      });
+  const filters = ref([]);
+  const styleOptions = ref<ChartStyleOptions>({
+        subtype: 'line/spline',
+        xAxis: {
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          title: {
+            text: 'MONTH',
+          },
+        },
+        yAxis: {
+          enabled: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          logarithmic: true,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+        },
+        y2Axis: {
+          isIntervalEnabled: undefined,
+          title: {
+            enabled: true,
+            text: 'QUANTITY',
+          },
+        },
+        markers: {
+          enabled: true,
+          fill: 'hollow',
+        },
+      });
+  const drilldownOptions = ref({
+        drilldownPaths: [],
+        drilldownSelections: [],
+      });
+</script>
+
+<template>
+  <ChartWidget
+    chartType="line"
+    :dataOptions="dataOptions"
+    :filters="filters"
+    :styleOptions="styleOptions"
+    :drilldownOptions="drilldownOptions"
+    :dataSource="DM.DataSource"
+    title="REVENUE vs.UNITS SOLD" />
+</template>`;
+
+export const MOCK_CODE_REACT_INDICATOR_WITHOUT_DEFAULT_PROPS = `import { ChartWidget } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+
+export default function CodeExample() {
+  return (
+    <ChartWidget
+      title={'TOTAL REVENUE'}
+      dataSource={DM.DataSource}
+      chartType={'indicator'}
+      dataOptions={ {
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+              colorIndex: 0,
+            },
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: false,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+        secondary: [],
+        min: [{
+            column: measureFactory.customFormula('0 (default)', '0'),
+            sortType: 'sortNone',
+          }
+        ],
+        max: [{
+            column: measureFactory.customFormula('125000000', '125000000'),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: false,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+      } }
+      filters={ [] }
+      styleOptions={ {
+        subtype: 'indicator/gauge',
+        skin: 1,
+        indicatorComponents: {
+          title: {
+            shouldBeShown: false,
+            text: 'Total Revenue',
+          },
+          ticks: {
+            shouldBeShown: true,
+          },
+          labels: {
+            shouldBeShown: true,
+          },
+        },
+      } }
+      drilldownOptions={ {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      } }
+    />
+  );
+}`;
+
+export const MOCK_CODE_REACT_PIVOT_WITHOUT_DEFAULT_PROPS = `import { PivotTableWidget } from '@sisense/sdk-ui';
+import { measureFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+
+export default function CodeExample() {
+  return (
+    <PivotTableWidget
+      title={'Simple Pivot Table'}
+      dataSource={DM.DataSource}
+      dataOptions={ {
+  rows: [{
+      column: DM.Brand.Brand,
+      isColored: false,
+      sortType: 'sortNone',
+    }
+  ],
+  columns: [{
+      column: DM.Commerce.Gender,
+      isColored: false,
+      sortType: 'sortNone',
+      panel: 'columns',
+    }
+  ],
+  values: [{
+      column: measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
+      color: {
+        type: 'uniform',
+        color: '#00cee6',
+      },
+      sortType: 'sortNone',
+      numberFormatConfig: {
+        decimalScale: 'auto',
+        kilo: undefined,
+        million: undefined,
+        billion: undefined,
+        trillion: undefined,
+        thousandSeparator: true,
+        prefix: false,
+        symbol: undefined,
+        name: 'Numbers',
+      },
+    }
+  ],
+  grandTotals: {
+    rows: undefined,
+    columns: undefined,
+  },
+} }
+      filters={ [] }
+      styleOptions={ {
+        rowHeight: undefined,
+      } }
+    />
+  );
+}`;

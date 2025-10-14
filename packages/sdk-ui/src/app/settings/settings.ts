@@ -1,20 +1,21 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 import merge from 'ts-deepmerge';
-import { getBaseDateFnsLocale } from '../../chart-data-processor/data-table-date-period.js';
 
+import { QUERY_DEFAULT_LIMIT, SYSTEM_TENANT_NAME } from '@/const';
+import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings.js';
+import { TranslatableError } from '@/translation/translatable-error.js';
+
+import { getBaseDateFnsLocale } from '../../chart-data-processor/data-table-date-period.js';
 import { defaultDateConfig } from '../../query/date-formats';
 import {
-  getPaletteName,
   convertToThemeSettings,
+  getPaletteName,
   LegacyPalette,
 } from '../../themes/legacy-design-settings.js';
 import { getLegacyPalette } from '../../themes/theme-loader';
 import { AppConfig, ThemeSettings } from '../../types';
 import { GlobalsObject } from './types';
-import { QUERY_DEFAULT_LIMIT, SYSTEM_TENANT_NAME } from '@/const';
-import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings.js';
-import { Features, FeatureMap } from './types/features.js';
-import { TranslatableError } from '@/translation/translatable-error.js';
+import { FeatureMap, Features } from './types/features.js';
 
 /**
  * Application settings

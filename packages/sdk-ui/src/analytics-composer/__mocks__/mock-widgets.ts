@@ -1295,3 +1295,290 @@ export default function CodeExample() {
     />
   );
 }`;
+
+export const MOCK_WIDGET_DTO_INDICATOR_CHART = {
+  _id: '68a6ceef0cb8b5f2340f1dc4',
+  title: 'TOTAL REVENUE',
+  type: 'indicator',
+  subtype: 'indicator/gauge',
+  oid: '68a6ceef0cb8b5f2340f1db1',
+  desc: null,
+  source: null,
+  owner: '686fd3df81e26bfd4ffe3a2b',
+  created: '2025-08-21T07:46:55.409Z',
+  lastUpdated: '2025-08-21T07:46:55.409Z',
+  datasource: {
+    address: 'LocalHost',
+    title: 'Sample ECommerce',
+    id: 'localhost_aSampleIAAaECommerce',
+    database: 'aSampleIAAaECommerce',
+  },
+  metadata: {
+    ignore: {
+      dimensions: [],
+      ids: [],
+      all: false,
+    },
+    panels: [
+      {
+        name: 'value',
+        items: [
+          {
+            jaql: {
+              table: 'Commerce',
+              column: 'Revenue',
+              dim: '[Commerce.Revenue]',
+              datatype: 'numeric',
+              agg: 'sum',
+              title: 'Total Revenue',
+            },
+            format: {
+              mask: {
+                type: 'number',
+                abbreviations: {
+                  t: true,
+                  b: true,
+                  m: true,
+                  k: false,
+                },
+                separated: true,
+                decimals: 'auto',
+                abbreviateAll: false,
+                isdefault: true,
+              },
+              color: {
+                color: '#00cee6',
+                colorIndex: 0,
+                type: 'color',
+              },
+            },
+          },
+        ],
+      },
+      {
+        name: 'secondary',
+        items: [],
+      },
+      {
+        name: 'min',
+        items: [
+          {
+            jaql: {
+              formula: '0',
+              title: '0 (default)',
+            },
+            format: {
+              mask: {
+                type: 'number',
+                abbreviations: {
+                  t: true,
+                  b: true,
+                  m: true,
+                  k: false,
+                },
+                separated: true,
+                decimals: 'auto',
+                abbreviateAll: false,
+                isdefault: true,
+              },
+            },
+          },
+        ],
+      },
+      {
+        name: 'max',
+        items: [
+          {
+            jaql: {
+              type: 'measure',
+              formula: '125000000',
+              context: {},
+              title: '125000000',
+            },
+            format: {
+              mask: {
+                type: 'number',
+                abbreviations: {
+                  t: true,
+                  b: true,
+                  m: true,
+                  k: false,
+                },
+                separated: true,
+                decimals: 'auto',
+                abbreviateAll: false,
+                isdefault: true,
+              },
+            },
+          },
+        ],
+      },
+      {
+        name: 'filters',
+        items: [],
+      },
+    ],
+  },
+  selection: null,
+  dashboardid: '68a6ceef0cb8b5f2340f1dab',
+  size: 'big',
+  style: {
+    'indicator/gauge': {
+      subtype: 'round',
+      skin: '1',
+      components: {
+        ticks: {
+          inactive: false,
+          enabled: true,
+        },
+        labels: {
+          inactive: false,
+          enabled: true,
+        },
+        title: {
+          inactive: false,
+          enabled: true,
+        },
+        secondaryTitle: {
+          inactive: true,
+          enabled: true,
+        },
+      },
+    },
+    'indicator/numeric': {
+      subtype: 'simple',
+      skin: '1',
+      components: {
+        title: {
+          inactive: false,
+          enabled: true,
+        },
+        icon: {
+          inactive: false,
+          enabled: true,
+        },
+        secondaryTitle: {
+          inactive: true,
+          enabled: true,
+        },
+      },
+    },
+    skin: '1',
+    subtype: 'round',
+    'indicator/pictogram': {},
+    components: {
+      ticks: {
+        inactive: false,
+        enabled: true,
+      },
+      labels: {
+        inactive: false,
+        enabled: true,
+      },
+      title: {
+        inactive: false,
+        enabled: false,
+      },
+      secondaryTitle: {
+        inactive: true,
+        enabled: true,
+      },
+    },
+  },
+  userId: '686fd3df81e26bfd4ffe3a2b',
+  instanceType: 'owner',
+  _dataSourcePermission: 'owner',
+  userAuth: {
+    dashboards: {
+      create: true,
+      delete: true,
+      move: true,
+      rename: true,
+      duplicate: true,
+      change_owner: true,
+      toggle_edit_mode: true,
+      edit_layout: true,
+      edit_script: true,
+      export_dash: true,
+      export_jpeg: true,
+      export_image: true,
+      export_pdf: true,
+      share: true,
+      restore: true,
+      copy_to_server: true,
+      import: true,
+      select_palette: true,
+      replace_datasource: true,
+      undo_import_dash: true,
+      toggleDataExploration: true,
+      filters: {
+        create: true,
+        delete: true,
+        save: true,
+        on_off: true,
+        toggle_expansion: true,
+        modify: true,
+        reorder: true,
+        modify_type: true,
+        toggle_auto_update: true,
+        set_defaults: true,
+        advanced: true,
+        use_starred: true,
+        modify_filter_relationship: true,
+      },
+    },
+    widgets: {
+      create: true,
+      delete: true,
+      rename: true,
+      duplicate: true,
+      copy_to_dashboard: true,
+      edit: true,
+      edit_script: true,
+      change_type: true,
+      export_csv: true,
+      export_png: true,
+      export_svg: true,
+      export_pdf: true,
+      modify_selection_attrs: true,
+      modify_selection_mode: true,
+      drill_to_anywhere: true,
+      add_to_pulse: true,
+      items: {
+        create: true,
+        delete: true,
+        rename: true,
+        modify: true,
+        reorder: true,
+        modify_type: true,
+        modify_format: true,
+        on_off: true,
+        select_hierarchies: true,
+      },
+      filters: {
+        create: true,
+        delete: true,
+        save: true,
+        on_off: true,
+        toggle_expansion: true,
+        modify: true,
+        modify_layout: true,
+        modify_type: true,
+        modify_dashboard_filters: true,
+        use_starred: true,
+      },
+      widgetViewOnly: false,
+    },
+    base: {
+      isConsumer: false,
+      isContributor: false,
+      isAdmin: false,
+      isSuper: true,
+    },
+  },
+  _toDisableOptionsList: {
+    widgets: {
+      duplicate: false,
+    },
+  },
+} as WidgetDto;

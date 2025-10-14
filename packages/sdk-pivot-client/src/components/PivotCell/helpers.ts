@@ -1,9 +1,9 @@
-import { TreeNodeMetadata } from '../../tree-structure/types.js';
-import { PivotDataNode, PivotTreeNode } from '../../data-handling/types.js';
-import { tableType as typeOfTable } from '../PivotTable/constants.js';
 import { UserType } from '../../data-handling/constants.js';
+import { PivotDataNode, PivotTreeNode } from '../../data-handling/types.js';
 import { Position } from '../../tree-structure/constants.js';
+import { TreeNodeMetadata } from '../../tree-structure/types.js';
 import { InputStyles, Styles } from '../../utils/types.js';
+import { tableType as typeOfTable } from '../PivotTable/constants.js';
 
 /*
   Generates className string according to TreeNodeMetadata object

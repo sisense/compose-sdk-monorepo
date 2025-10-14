@@ -1,12 +1,13 @@
-import { defineComponent, provide, ref, watchEffect } from 'vue';
-import type { PropType } from 'vue';
-import merge from 'ts-deepmerge';
 import type {
   CompleteThemeSettings,
   ThemeProviderProps as ThemeProviderPropsPreact,
   ThemeSettings,
 } from '@sisense/sdk-ui-preact';
 import { getThemeSettingsByOid } from '@sisense/sdk-ui-preact';
+import merge from 'ts-deepmerge';
+import { defineComponent, provide, ref, watchEffect } from 'vue';
+import type { PropType } from 'vue';
+
 import { getSisenseContext } from '../sisense-context-provider/sisense-context';
 import { getThemeContext, themeContextConfigKey } from './theme-context';
 

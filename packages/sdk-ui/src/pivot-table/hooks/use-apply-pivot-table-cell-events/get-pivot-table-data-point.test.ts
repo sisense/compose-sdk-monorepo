@@ -1,12 +1,14 @@
 /* eslint-disable sonarjs/no-identical-functions */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { getDataPointMetadata } from '@/chart-options-processor/data-points';
-import { getPivotTableDataPoint } from './get-pivot-table-data-point';
-import { PivotTableCellPayload, ValueDataNode, RowDataNode, ColumnDataNode } from './types';
+
 import {
   createMockDataOptions,
   createMockTreeNode,
 } from './__test-helpers__/pivot-cell-payload-mock';
+import { getPivotTableDataPoint } from './get-pivot-table-data-point';
+import { ColumnDataNode, PivotTableCellPayload, RowDataNode, ValueDataNode } from './types';
 
 // Mock the getDataPointMetadata function
 vi.mock('@/chart-options-processor/data-points', () => ({

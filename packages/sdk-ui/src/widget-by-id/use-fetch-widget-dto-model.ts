@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+
+import { TranslatableError } from '@/translation/translatable-error';
+
 import { RestApi, useRestApi } from '../api/rest-api.js';
 import { DashboardDto } from '../api/types/dashboard-dto.js';
 import { WidgetDto } from './types.js';
-import { TranslatableError } from '@/translation/translatable-error';
 
 /**
  * Fetches a Widget DTO model and, optionally, a Dashboard DTO model.

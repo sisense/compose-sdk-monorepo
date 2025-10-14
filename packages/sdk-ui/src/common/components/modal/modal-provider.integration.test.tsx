@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import { useState } from 'react';
 
-import { render, waitFor, screen, cleanup } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ModalProvider } from './index';
-import React, { useState } from 'react';
+
 import { useModal } from '@/common/hooks/use-modal';
+
+import { ModalProvider } from './modal-provider';
 
 describe('ModalProvider + useModal Integration', () => {
   const TestComponent = ({

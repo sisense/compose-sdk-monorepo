@@ -1,19 +1,21 @@
 /* eslint-disable security/detect-object-injection */
 import { CSSProperties, FunctionComponent } from 'react';
-import { BasicInput, RadioGroup } from '../common';
-import {
-  FilterOptionType,
-  CRITERIA_FILTER_MAP,
-  translatedMsgNoVal,
-  CriteriaFilterValueType,
-  filterTypeToInputType,
-} from './criteria-filter-operations';
-import { useThemeContext } from '../../../../src/theme-provider';
 import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
 import { FilterTypes, Measure } from '@sisense/sdk-data';
+
+import { useThemeContext } from '../../../../src/theme-provider';
+import { BasicInput, RadioGroup } from '../common';
 import { Dropdown } from '../common/dropdown';
 import { FilterVariant, isVertical } from '../common/filter-utils';
-import styled from '@emotion/styled';
+import {
+  CRITERIA_FILTER_MAP,
+  CriteriaFilterValueType,
+  FilterOptionType,
+  filterTypeToInputType,
+  translatedMsgNoVal,
+} from './criteria-filter-operations';
 
 /**
  * Props for {@link CriteriaFilterMenu}

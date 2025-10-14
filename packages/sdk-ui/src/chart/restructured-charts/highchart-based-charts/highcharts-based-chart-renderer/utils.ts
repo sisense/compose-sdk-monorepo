@@ -1,4 +1,5 @@
 import { ChartType } from '@/types';
+
 import { HighchartBasedChartTypes } from '../types';
 
 export const isHighchartsBasedChart = (

@@ -1,6 +1,6 @@
-import { dataTranslators } from './index';
 import { loadDataBySingleQuery } from '../../../../helpers/data-loading';
 import { getCartesianChartData } from '../../helpers/data';
+import { dataTranslators } from './index';
 
 // Mock the helper functions
 vi.mock('../../../../helpers/data-loading', () => ({

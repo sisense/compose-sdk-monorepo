@@ -1,5 +1,7 @@
 import { Filter, FilterJaql, FilterRelations } from '@sisense/sdk-data';
+
 import { stringifyProps } from './stringify-props.js';
+
 const NEW_LINE = '\n';
 
 type FilterJaqlWrapper = { jaql: FilterJaql };

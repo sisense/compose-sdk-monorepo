@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SelectableSection } from '../common/selectable-section';
-import { SearchableMultiSelect } from '../common/select/searchable-multi-select';
+
 import {
   Attribute,
   CompleteMembersFilterConfig,
@@ -12,27 +11,31 @@ import {
   filterFactory,
   Sort,
 } from '@sisense/sdk-data';
-import { convertDateToMemberString, isIncludeMembersFilter } from '../utils';
-import { SearchableSingleSelect } from '../common/select/searchable-single-select';
+
 import { usePrevious } from '@/common/hooks/use-previous';
-import { SingleSelect } from '../common';
-import { useDatetimeFormatter } from '../hooks/use-datetime-formatter';
-import { getDefaultDateMask } from '@/query/date-formats/apply-date-format';
 import { useGetFilterMembersInternal } from '@/filters/hooks/use-get-filter-members';
-import { LIST_SCROLL_LOAD_MORE_THRESHOLD, QUERY_MEMBERS_COUNT } from '../constants';
-import { ScrollWrapperOnScrollEvent } from '../common/scroll-wrapper';
+import { getDefaultDateMask } from '@/query/date-formats/apply-date-format';
+import { createLevelAttribute } from '@/utils/create-level-attribute';
 import { isSameAttribute } from '@/utils/filters';
+
+import { SingleSelect } from '../common';
+import { ScrollWrapperOnScrollEvent } from '../common/scroll-wrapper';
 import { CalendarSelect, CalendarSelectTypes } from '../common/select/calendar-select';
-import { DatetimeLimits } from './types';
-import { granularities } from './common/granularities';
+import { SearchableMultiSelect } from '../common/select/searchable-multi-select';
+import { SearchableSingleSelect } from '../common/select/searchable-single-select';
+import { SelectableSection } from '../common/selectable-section';
+import { LIST_SCROLL_LOAD_MORE_THRESHOLD, QUERY_MEMBERS_COUNT } from '../constants';
 import { useFilterEditorContext } from '../filter-editor-context';
+import { useDatetimeFormatter } from '../hooks/use-datetime-formatter';
+import { convertDateToMemberString, isIncludeMembersFilter } from '../utils';
+import { granularities } from './common/granularities';
+import { DatetimeLimits } from './types';
 import {
   getConfigWithUpdatedDeactivated,
   getMembersWithDeactivated,
   getMembersWithoutDeactivated,
   getRestrictedGranularities,
 } from './utils';
-import { createLevelAttribute } from '@/utils/create-level-attribute';
 
 function createMembersFilter(attribute: Attribute, members: string[], config?: FilterConfig) {
   return members.length || (config as CompleteMembersFilterConfig)?.deactivatedMembers?.length

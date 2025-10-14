@@ -1,9 +1,11 @@
-import { useThemeContext } from '@/theme-provider';
-import { Themable } from '@/theme-provider/types';
+import { FC, PropsWithChildren } from 'react';
+
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { FC, PropsWithChildren } from 'react';
 import Markdown from 'markdown-to-jsx';
+
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
 
 type Alignable = {
   align: 'left' | 'right' | 'full';

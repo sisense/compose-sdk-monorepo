@@ -1,31 +1,33 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { type Filter } from '@sisense/sdk-data';
-import { WidgetProps } from '@/props.js';
-import { OpenMenuFn } from '@/common/components/menu/types.js';
-import { CompleteThemeSettings, WidgetsOptions } from '@/index-typedoc';
-import { useModal } from '@/common/hooks/use-modal';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { useThemeContext } from '@/theme-provider';
-import {
-  isChartWidgetProps,
-  isTextWidgetProps,
-  isPivotTableWidgetProps,
-} from '@/widget-by-id/utils';
 
+import { type Filter } from '@sisense/sdk-data';
+
+import { OpenMenuFn } from '@/common/components/menu/types.js';
+import { useModal } from '@/common/hooks/use-modal';
+import { normalizeToJtdConfig } from '@/dashboard/hooks/jtd/jtd-config-transformers';
+import { type JtdActions, type JtdWidgetTransformConfig } from '@/dashboard/hooks/jtd/jtd-types';
+import { JtdConfig } from '@/dashboard/hooks/jtd/jtd-types';
 // Import JTD-specific functions and types
 import {
+  addJtdIconToHeader,
   applyClickNavigationForChart,
-  applyClickNavigationForText,
   applyClickNavigationForPivot,
+  applyClickNavigationForText,
+  applyPivotLinkStyling,
   applyRightClickNavigation,
   applyRightClickNavigationForPivot,
-  applyPivotLinkStyling,
-  addJtdIconToHeader,
 } from '@/dashboard/hooks/jtd/jtd-widget-transforms';
-import { type JtdWidgetTransformConfig, type JtdActions } from '@/dashboard/hooks/jtd/jtd-types';
-import { normalizeToJtdConfig } from '@/dashboard/hooks/jtd/jtd-config-transformers';
-import { JtdConfig } from '@/dashboard/hooks/jtd/jtd-types';
+import { WidgetsOptions } from '@/models/dashboard/types';
+import { WidgetProps } from '@/props.js';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { useThemeContext } from '@/theme-provider';
+import { CompleteThemeSettings } from '@/types';
+import {
+  isChartWidgetProps,
+  isPivotTableWidgetProps,
+  isTextWidgetProps,
+} from '@/widget-by-id/utils';
 
 /**
  * Shared function to apply JTD functionality to a widget.

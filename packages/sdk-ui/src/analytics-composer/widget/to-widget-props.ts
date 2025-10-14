@@ -6,13 +6,16 @@ import {
   FilterJaql,
   MetadataItem,
 } from '@sisense/sdk-data';
-import { ChartType, WidgetStyleOptions, WidgetProps } from '../../index.js';
-import { ChartRecommendations, ExpandedQueryModel, WidgetPropsConfig } from '../types.js';
-import { isEmptyQueryModel } from '../common/utils.js';
 import cloneDeep from 'lodash-es/cloneDeep.js';
-import { getChartOptions } from './chart-options/get-widget-options.js';
-import { simplifyMetadataItem } from '../query/index.js';
+
+import { WidgetProps } from '@/props';
+import { ChartType, WidgetStyleOptions } from '@/types.js';
+
+import { isEmptyQueryModel } from '../common/utils.js';
 import { fixRankingFilterJaql } from '../query/fix-ranking-filter-jaql.js';
+import { simplifyMetadataItem } from '../query/index.js';
+import { ChartRecommendations, ExpandedQueryModel, WidgetPropsConfig } from '../types.js';
+import { getChartOptions } from './chart-options/get-widget-options.js';
 
 /**
  * Gets chart recommendations or default to table.

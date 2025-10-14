@@ -1,10 +1,11 @@
-import { describe, it, expect, vi } from 'vitest';
-import { getRangeTooltipSettings } from './tooltip-range';
-import { RangeChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { HighchartsDataPointContext } from '../tooltip-utils';
 import { TFunction } from '@sisense/sdk-common';
+import { describe, expect, it, vi } from 'vitest';
+
 import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
+import { RangeChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { translation } from '../../../translation/resources/en';
+import { HighchartsDataPointContext } from '../tooltip-utils';
+import { getRangeTooltipSettings } from './tooltip-range';
 
 vi.mock('../tooltip', () => ({
   cartesianDataFormatter: vi.fn(() => 'cartesian formatted tooltip'),

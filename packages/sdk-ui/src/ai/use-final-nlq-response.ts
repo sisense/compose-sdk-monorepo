@@ -1,8 +1,10 @@
-import type { NlqResponseData, ChatContextDetails } from './api/types';
-import { useChatHistory } from './api/chat-history';
-import { useGetChat } from '@/ai/use-get-chat';
 import { useMemo } from 'react';
+
 import { isNlqMessage } from '@/ai/use-chat-session';
+import { useGetChat } from '@/ai/use-get-chat';
+
+import { useChatHistory } from './api/chat-history';
+import type { ChatContextDetails, NlqResponseData } from './api/types';
 
 /**
  * Parameters for the useFinalNlqResponse hook.

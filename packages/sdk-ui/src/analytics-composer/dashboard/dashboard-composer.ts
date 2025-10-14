@@ -1,5 +1,5 @@
 import { DashboardCodeParams, isByIdDashboardCodeParams } from '../types.js';
-import { toDashboardCodeClientSide, toDashboardCodeById } from './to-dashboard-code.js';
+import { toDashboardCodeById, toDashboardCodeClientSide } from './to-dashboard-code.js';
 
 /**
  * Converts dashboard props to CSDK code.

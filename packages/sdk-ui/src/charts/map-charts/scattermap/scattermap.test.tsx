@@ -1,12 +1,13 @@
+import { HttpClient } from '@sisense/sdk-rest-client/src/http-client';
 import { fireEvent, render, waitFor } from '@testing-library/react';
-import { Scattermap } from '@/charts/map-charts/scattermap/scattermap';
+
+import { ClientApplication } from '@/app/client-application';
 import { ScattermapChartDataOptionsInternal } from '@/chart-data-options/types';
+import { DataTable } from '@/chart-data-processor/table-processor';
 import { scattermapData } from '@/chart-data/scattermap-data';
 import { ScattermapChartDesignOptions } from '@/chart-options-processor/translations/design-options';
-import { DataTable } from '@/chart-data-processor/table-processor';
+import { Scattermap } from '@/charts/map-charts/scattermap/scattermap';
 import { SisenseContext } from '@/sisense-context/sisense-context';
-import { HttpClient } from '@sisense/sdk-rest-client/src/http-client';
-import { ClientApplication } from '@/app/client-application';
 
 const dataSet = {
   columns: [

@@ -1,13 +1,16 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { Attribute, filterFactory } from '@sisense/sdk-data';
+import debounce from 'lodash-es/debounce';
+
+import { useGetFilterMembers } from '@/filters';
 import {
   SearchableMultiSelect,
   SearchableSingleSelect,
 } from '@/filters/components/filter-editor-popover/common';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useGetFilterMembers } from '@/filters';
-import { Attribute, filterFactory } from '@sisense/sdk-data';
-import { useTranslation } from 'react-i18next';
 import { ScrollWrapperOnScrollEvent } from '@/filters/components/filter-editor-popover/common/scroll-wrapper';
-import debounce from 'lodash-es/debounce';
+
 import { useFilterEditorContext } from '../../filter-editor-context';
 
 type MembersListSelectProps = {

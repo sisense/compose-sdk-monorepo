@@ -1,5 +1,5 @@
-import { getCustomPaginationStyles } from './get-custom-pagination-styles';
 import { CompleteThemeSettings } from '../../types';
+import { getCustomPaginationStyles } from './get-custom-pagination-styles';
 
 describe('getCustomPaginationStyles', () => {
   it('should return the correct pagination styles based on the theme settings', () => {

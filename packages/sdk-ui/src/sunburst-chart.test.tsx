@@ -1,7 +1,8 @@
 import { render } from '@testing-library/react';
+
 import { HighchartsOptions } from './chart-options-processor/chart-options-service';
-import { SunburstChart } from './sunburst-chart';
 import { HighchartsSeriesValues } from './chart-options-processor/translations/translations-to-highcharts';
+import { SunburstChart } from './sunburst-chart';
 
 const dataSet = {
   columns: [

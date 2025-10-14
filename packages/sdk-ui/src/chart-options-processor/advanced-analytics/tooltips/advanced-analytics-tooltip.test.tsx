@@ -1,8 +1,10 @@
+import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/react';
+
+import { MockedSisenseContextProvider } from '@/__test-helpers__';
+
 import ForecastToolipComponent from './forecast-tooltip';
 import TrendToolipComponent from './trend-tooltip';
-import { screen } from '@testing-library/dom';
-import { MockedSisenseContextProvider } from '@/__test-helpers__';
 
 const forecastTooltipProps = {
   confidenceValue: '80%',
@@ -44,11 +46,11 @@ describe('ForecastTooltipComponent', () => {
 
   it('should contain translation keys', () => {
     render(withContext(<ForecastToolipComponent {...forecastTooltipProps} />));
-    expect(screen.getByText('advanced.tooltip.forecast')).toBeInTheDocument();
-    expect(screen.getByText('advanced.tooltip.forecastValue')).toBeInTheDocument();
-    expect(screen.getByText('advanced.tooltip.max')).toBeInTheDocument();
-    expect(screen.getByText('advanced.tooltip.min')).toBeInTheDocument();
-    expect(screen.getByText('advanced.tooltip.confidenceInterval')).toBeInTheDocument();
+    expect(screen.getByText('Forecast')).toBeInTheDocument();
+    expect(screen.getByText('Forecast Value')).toBeInTheDocument();
+    expect(screen.getByText('Upper Bound')).toBeInTheDocument();
+    expect(screen.getByText('Lower Bound')).toBeInTheDocument();
+    expect(screen.getByText('Confidence Interval')).toBeInTheDocument();
   });
   it('should match the snapshot', () => {
     const { container } = render(
@@ -62,14 +64,14 @@ describe('TrendTooltipComponent', () => {
   it('should render the title, model type, and trend data correctly including translation keys', () => {
     render(withContext(<TrendToolipComponent {...trendTooltipProps} />));
 
-    expect(screen.getByText('advanced.tooltip.trend')).toBeInTheDocument();
+    expect(screen.getByText('Trend')).toBeInTheDocument();
     expect(screen.getByText('Total Cost')).toBeInTheDocument();
-    expect(screen.getByText('advanced.tooltip.trendType')).toBeInTheDocument();
+    expect(screen.getByText('Type')).toBeInTheDocument();
     expect(screen.getByText('Logarithmic Trend')).toBeInTheDocument();
-    expect(screen.getByText('advanced.tooltip.trendData.min 190.0K')).toBeInTheDocument();
-    expect(screen.getByText('advanced.tooltip.trendData.max 4.84M')).toBeInTheDocument();
-    expect(screen.getByText('advanced.tooltip.trendData.median 2.28M')).toBeInTheDocument();
-    expect(screen.getByText('advanced.tooltip.trendData.average 2.15M')).toBeInTheDocument();
+    expect(screen.getByText('Min 190.0K')).toBeInTheDocument();
+    expect(screen.getByText('Max 4.84M')).toBeInTheDocument();
+    expect(screen.getByText('Median 2.28M')).toBeInTheDocument();
+    expect(screen.getByText('Average 2.15M')).toBeInTheDocument();
   });
 
   it('should render the local value and x1 value correctly', () => {

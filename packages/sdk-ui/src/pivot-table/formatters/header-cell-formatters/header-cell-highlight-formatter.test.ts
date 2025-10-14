@@ -1,4 +1,5 @@
 import { JaqlPanel, JaqlRequest, PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
+
 import { createHeaderCellHighlightFormatter } from './header-cell-highlight-formatter';
 
 describe('createHeaderCellHighlightFormatter', () => {

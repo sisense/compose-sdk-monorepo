@@ -1,11 +1,12 @@
 import omit from 'lodash-es/omit.js';
 
-import { Filter, FilterRelations, isFilterRelations } from '../../index.js';
+import { Filter, FilterRelations } from '../interfaces.js';
 import {
   calculateNewRelations,
   combineFiltersAndRelations,
   getFiltersArray,
   getRelationsWithReplacedFilter,
+  isFilterRelations,
   splitFiltersAndRelations,
 } from './filter-relations.js';
 

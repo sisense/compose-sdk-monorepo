@@ -1,10 +1,11 @@
 import { normalizeUrl } from '@sisense/sdk-common';
-import { Authenticator } from '@sisense/sdk-rest-client';
-import { PivotBuilder, PivotDataBuilder, SocketBuilder } from './builders';
-import { JaqlRequest } from './data-load/types.js';
 import { PivotQueryResultData } from '@sisense/sdk-data';
+import { Authenticator } from '@sisense/sdk-rest-client';
+
+import { PivotBuilder, PivotDataBuilder, SocketBuilder } from './builders';
 import { DataService } from './data-handling';
 import { SisenseDataLoadService } from './data-load';
+import { JaqlRequest } from './data-load/types.js';
 
 /**
  * A client helper for pivot that abstracts away from all the internal implementations

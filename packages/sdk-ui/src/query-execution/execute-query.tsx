@@ -1,9 +1,9 @@
-import { useExecuteQueryInternal } from './use-execute-query';
 import { type FunctionComponent } from 'react';
-import { ExecuteQueryProps } from '../props';
-import { usePrevious } from '../common/hooks/use-previous';
 
+import { usePrevious } from '../common/hooks/use-previous';
 import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
+import { ExecuteQueryProps } from '../props';
+import { useExecuteQueryInternal } from './use-execute-query';
 
 /**
  * Executes a query and renders a function as child component. The child

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { treeNode } from '../../tree-structure/utils/index.js';
-import { createPivotTreeNode, jaqlProcessor } from './index.js';
-import { PanelType, UserType, ColorFormatType } from '../constants.js';
+import { JaqlPanel, JaqlRequest } from '../../data-load/types.js';
 import { TreeNode } from '../../tree-structure/types.js';
-import { JaqlRequest, JaqlPanel } from '../../data-load/types.js';
-import { PivotTreeNode, PivotDataNode } from '../types.js';
+import { treeNode } from '../../tree-structure/utils/index.js';
+import { ColorFormatType, PanelType, UserType } from '../constants.js';
+import { PivotDataNode, PivotTreeNode } from '../types.js';
+import createPivotTreeNode from './createPivotTreeNode.js';
+import * as jaqlProcessor from './jaqlProcessor.js';
 
 /**
  * Helper for checking if tree has only one branch on all it's depth levels

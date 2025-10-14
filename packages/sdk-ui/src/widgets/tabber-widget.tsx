@@ -2,8 +2,9 @@
 import React from 'react';
 
 import styled from '@emotion/styled';
-import { TabberWidgetProps } from '@/props';
+
 import { withErrorBoundary } from '@/decorators/component-decorators/with-error-boundary';
+import { TabberWidgetProps } from '@/props';
 import { TranslatableError } from '@/translation/translatable-error';
 
 const defaultStyleOptions = {

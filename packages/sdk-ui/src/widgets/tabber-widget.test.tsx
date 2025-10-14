@@ -1,8 +1,11 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { TabberWidget, TabInterval, TabSize } from './tabber-widget';
-import type { TabberStyleProps, TabberTab } from '@/types';
+
+import { fireEvent, render, screen } from '@testing-library/react';
+
 import { TabberWidgetProps } from '@/props';
+import type { TabberStyleProps, TabberTab } from '@/types';
+
+import { TabberWidget, TabInterval, TabSize } from './tabber-widget';
 
 const sampleTabs: TabberTab[] = [
   { title: 'Tab One', displayWidgetIds: ['w1'] },

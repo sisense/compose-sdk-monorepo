@@ -1,8 +1,9 @@
 import { type PivotTableDataOptionsInternal } from '@/chart-data-options/types';
-import { DataPointEntry, PivotTableDataPoint } from '@/types';
 import { createFormatter, getDataPointMetadata } from '@/chart-options-processor/data-points';
-import { PivotTableCellPayload, RowDataNode, ColumnDataNode } from './types';
-import { getTreeNodeByLevel, isSubTotalTreeNode, isGrandTotalTreeNode, safeModulo } from './utils';
+import { DataPointEntry, PivotTableDataPoint } from '@/types';
+
+import { ColumnDataNode, PivotTableCellPayload, RowDataNode } from './types';
+import { getTreeNodeByLevel, isGrandTotalTreeNode, isSubTotalTreeNode, safeModulo } from './utils';
 
 export const getPivotTableDataPoint = (
   cellPayload: PivotTableCellPayload,

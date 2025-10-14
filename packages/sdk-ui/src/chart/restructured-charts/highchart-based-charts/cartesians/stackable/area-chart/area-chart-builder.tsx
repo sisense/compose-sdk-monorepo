@@ -1,23 +1,23 @@
-import {
-  translateCartesianChartDataOptions,
-  getCartesianAttributes,
-  getCartesianMeasures,
-  isCartesianChartDataOptions,
-  isCartesianChartDataOptionsInternal,
-} from '../../helpers/data-options.js';
-import { getCartesianChartData } from '../../helpers/data.js';
-import {
-  translateAreaStyleOptionsToDesignOptions,
-  isAreaStyleOptions,
-} from './helpers/design-options.js';
 import { loadDataBySingleQuery } from '../../../../helpers/data-loading.js';
+import { ChartBuilder } from '../../../../types.js';
 import {
   createHighchartsBasedChartRenderer,
   isHighchartsBasedChartRendererProps,
 } from '../../../highcharts-based-chart-renderer/highcharts-based-chart-renderer.js';
-import { areaHighchartsOptionsBuilder } from './highchart-options/highcharts-options-builder.js';
 import { getCommonCartesianAlerts } from '../../helpers/alerts.js';
-import { ChartBuilder } from '../../../../types.js';
+import {
+  getCartesianAttributes,
+  getCartesianMeasures,
+  isCartesianChartDataOptions,
+  isCartesianChartDataOptionsInternal,
+  translateCartesianChartDataOptions,
+} from '../../helpers/data-options.js';
+import { getCartesianChartData } from '../../helpers/data.js';
+import {
+  isAreaStyleOptions,
+  translateAreaStyleOptionsToDesignOptions,
+} from './helpers/design-options.js';
+import { areaHighchartsOptionsBuilder } from './highchart-options/highcharts-options-builder.js';
 
 export const areaChartBuilder: ChartBuilder<'area'> = {
   dataOptions: {

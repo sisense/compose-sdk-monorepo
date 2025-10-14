@@ -1,5 +1,6 @@
-import { LoadingDots } from '@/common/components/loading-dots';
 import styled from '@emotion/styled';
+
+import { LoadingDots } from '@/common/components/loading-dots';
 
 const Container = styled.div`
   display: flex;

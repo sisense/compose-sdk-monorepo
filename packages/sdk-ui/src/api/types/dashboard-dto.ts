@@ -1,11 +1,12 @@
-import { WidgetDto } from '../../widget-by-id/types';
 import {
   FilterJaql,
   FilterRelationsModel,
   FilterRelationsModelNode,
   JaqlDataSource,
 } from '@sisense/sdk-data';
+
 import { AnyObject } from '../../utils/utility-types';
+import { WidgetDto } from '../../widget-by-id/types';
 
 /** @internal */
 export type LayoutDto = {
@@ -82,4 +83,5 @@ export type DashboardDto = {
   layout?: LayoutDto;
   style?: DashboardStyleDto;
   settings?: DashboardSettings;
+  userAuth?: AnyObject;
 } & AnyObject;

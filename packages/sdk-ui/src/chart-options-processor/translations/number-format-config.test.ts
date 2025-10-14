@@ -1,7 +1,7 @@
 import {
   applyFormat,
-  applyFormatStaticMarkup,
   applyFormatPlainText,
+  applyFormatStaticMarkup,
   getCompleteNumberFormatConfig,
 } from './number-format-config';
 

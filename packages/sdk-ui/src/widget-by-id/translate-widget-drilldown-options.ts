@@ -6,16 +6,18 @@ import {
   IncludeMembersFilterJaql,
   isDatetime,
 } from '@sisense/sdk-data';
-import uniqBy from 'lodash-es/uniqBy';
 import partition from 'lodash-es/partition';
-import { createDataColumn } from './translate-widget-data-options.js';
-import { DatetimeMask, Panel, PanelItem, FusionWidgetType } from './types.js';
-import { getEnabledPanelItems, getRootPanelItem } from './utils.js';
-import { DataPoint, DrilldownOptions } from '../types.js';
-import { sliceFromMatched } from '@/utils/array-utils';
+import uniqBy from 'lodash-es/uniqBy';
+
 import { Column } from '@/chart-data/types';
 import { Hierarchy, HierarchyId } from '@/models/hierarchy';
 import { formatDateValue } from '@/query/date-formats/apply-date-format.js';
+import { sliceFromMatched } from '@/utils/array-utils';
+
+import { DataPoint, DrilldownOptions } from '../types.js';
+import { createDataColumn } from './translate-widget-data-options.js';
+import { DatetimeMask, FusionWidgetType, Panel, PanelItem } from './types.js';
+import { getEnabledPanelItems, getRootPanelItem } from './utils.js';
 
 const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
   item?.parent

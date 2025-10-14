@@ -1,11 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { dataTranslators } from './index';
-import { loadCategoricalData } from '../../helpers/data';
+import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { ClientApplication } from '@/app/client-application';
 import { QueryDescription } from '@/query/execute-query';
+
+import { loadCategoricalData } from '../../helpers/data';
 import { FunnelChartDataOptionsInternal } from '../types';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { filterFactory, measureFactory } from '@sisense/sdk-data';
+import { dataTranslators } from './index';
 
 // Mock the loadCategoricalData function
 vi.mock('../../helpers/data', () => ({

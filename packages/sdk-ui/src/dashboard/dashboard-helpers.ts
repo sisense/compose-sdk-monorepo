@@ -1,5 +1,5 @@
-import { DashboardProps } from './types';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
+
 import {
   withAddedFilter,
   withAddedFilters,
@@ -7,8 +7,10 @@ import {
   withoutFilters,
   withReplacedFilter,
 } from '@/filters/helpers';
-import type { JumpToDashboardConfig } from './hooks/jtd/jtd-types';
 import { WidgetsOptions } from '@/models/dashboard/types';
+
+import type { JumpToDashboardConfig } from './hooks/jtd/jtd-types';
+import { DashboardProps } from './types';
 
 /**
  * Creates a new dashboard instance with its filters replaced by a new set of filters.

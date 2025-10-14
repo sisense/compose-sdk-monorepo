@@ -1,8 +1,8 @@
+import { getDimensionsFromDataSourceFields } from '@sisense/sdk-data';
 import { render } from '@testing-library/react';
 
-import { DataSchemaBrowser } from '@/data-browser/data-schema-browser/data-schema-browser';
 import { sampleEcommerceFields } from '@/__mocks__/sample-ecommerce-fields';
-import { getDimensionsFromDataSourceFields } from '@sisense/sdk-data';
+import { DataSchemaBrowser } from '@/data-browser/data-schema-browser/data-schema-browser';
 
 const sampleEcommerceDimensions = getDimensionsFromDataSourceFields(
   sampleEcommerceFields,

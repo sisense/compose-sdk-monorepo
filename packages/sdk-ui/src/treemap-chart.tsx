@@ -1,7 +1,8 @@
-import { TreemapChartProps } from './props';
 import { Chart } from './chart';
-import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
+import { TreemapChartProps } from './props';
+
 /**
  * A React component displaying hierarchical data in the form of nested rectangles.
  *

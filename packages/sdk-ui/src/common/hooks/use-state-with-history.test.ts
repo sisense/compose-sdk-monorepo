@@ -1,4 +1,5 @@
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
+
 import { useStateWithHistory } from './use-state-with-history';
 
 describe('useStateWithHistory', () => {

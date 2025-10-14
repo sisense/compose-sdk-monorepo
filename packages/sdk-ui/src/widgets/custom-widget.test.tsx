@@ -1,15 +1,14 @@
 import { render } from '@testing-library/react';
+import { Mock } from 'vitest';
 
-import { CustomWidget } from './custom-widget';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-
 import { useCustomWidgets } from '@/custom-widgets-provider';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 
+import { CustomWidget } from './custom-widget';
+
 vi.mock('@/custom-widgets-provider');
 vi.mock('@/sisense-context/sisense-context');
-
-import { Mock } from 'vitest';
 
 describe('CustomWidget', () => {
   const mockUseCustomWidgets = useCustomWidgets as unknown as Mock;

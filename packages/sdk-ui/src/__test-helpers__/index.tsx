@@ -2,18 +2,21 @@
  * Common test utilities
  */
 import { PropsWithChildren, ReactElement } from 'react';
-import { render, RenderResult } from '@testing-library/react';
-import type { Cell, Data } from '@sisense/sdk-data';
-import isObject from 'lodash-es/isObject';
-import userEvent from '@testing-library/user-event';
-import { SisenseContext, SisenseContextPayload } from '../sisense-context/sisense-context';
-import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
-import { ClientApplication } from '../app/client-application';
-import { DeepPartial } from 'ts-essentials';
 import { useTranslation } from 'react-i18next';
-import { translation } from '../translation/resources/en';
-import { CustomWidgetsProvider } from '../custom-widgets-provider';
+
+import type { Cell, Data } from '@sisense/sdk-data';
+import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
+import { render, RenderResult } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import isObject from 'lodash-es/isObject';
+import { DeepPartial } from 'ts-essentials';
+
 import { MenuProvider } from '@/common/components/menu/menu-provider';
+
+import { ClientApplication } from '../app/client-application';
+import { CustomWidgetsProvider } from '../custom-widgets-provider';
+import { SisenseContext, SisenseContextPayload } from '../sisense-context/sisense-context';
+import { translation } from '../translation/resources/en';
 
 type UserSetupFn = (typeof userEvent)['setup'];
 interface SetupResult extends RenderResult {

@@ -1,5 +1,8 @@
 import { TFunction } from '@sisense/sdk-common';
 import { Filter } from '@sisense/sdk-data';
+
+import { isNumericString } from '@/utils/is-numeric-string.js';
+
 import {
   filterToDefaultValues,
   filterToOption,
@@ -10,14 +13,13 @@ import {
   isNumericBetweenFilter,
   isSupportedByFilterEditor,
 } from '../../utils.js';
-import { isNumericString } from '@/utils/is-numeric-string.js';
-import { NumericCondition, NumericConditionType, NumericConditionFilterData } from './types.js';
 import {
   createExcludeMembersFilter,
   getConfigWithUpdatedDeactivated,
   getCriteriaFilterBuilder,
   getMembersWithoutDeactivated,
 } from '../utils.js';
+import { NumericCondition, NumericConditionFilterData, NumericConditionType } from './types.js';
 
 export function validateInputValue(value: string, t: TFunction) {
   if (!isNumericString(value)) {

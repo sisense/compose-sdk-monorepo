@@ -1,9 +1,10 @@
-import { JaqlSortDirection, getSortType } from '@sisense/sdk-data';
+import { getSortType, JaqlSortDirection } from '@sisense/sdk-data';
 import { type SortingSettingsChangePayload } from '@sisense/sdk-pivot-client';
 import isEqual from 'lodash-es/isEqual';
 import isString from 'lodash-es/isString';
+
 import { PivotTableDataOptionsInternal } from '..';
-import type { SortDirection, PivotRowsSort } from '../types';
+import type { PivotRowsSort, SortDirection } from '../types';
 
 export type PivotRowsSortCriteria = {
   rowIndex: number;

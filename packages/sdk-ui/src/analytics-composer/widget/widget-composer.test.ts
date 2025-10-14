@@ -1,29 +1,37 @@
 /* eslint-disable vitest/expect-expect */
-import { MOCK_QUERY_MODEL_1, MOCK_QUERY_MODEL_2 } from '../__mocks__/mock-queries';
-import {
-  MOCK_CODE_REACT_1,
-  MOCK_CODE_ANGULAR_1,
-  MOCK_CODE_VUE_1,
-  MOCK_CODE_REACT_3,
-  MOCK_CODE_ANGULAR_2,
-  MOCK_CODE_VUE_2,
-  MOCK_CODE_EXECUTE_QUERY_REACT_1,
-  MOCK_CODE_EXECUTE_QUERY_ANGULAR_1,
-  MOCK_CODE_EXECUTE_QUERY_VUE_1,
-} from '../__mocks__/mock-code-for-queries';
-import { commonDataSources } from '../__mocks__/common-datasources';
-import * as widgetComposer from './widget-composer';
-import { ExpandedQueryModel, WidgetCodeParams } from '../types';
+import { ChartWidgetProps, WidgetDto, widgetModelTranslator } from '@/index';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
-import { widgetModelTranslator, ChartWidgetProps, WidgetDto } from '@/index';
+
+import { commonDataSources } from '../__mocks__/common-datasources';
+import {
+  MOCK_CODE_REACT_INDICATOR_WITHOUT_DEFAULT_PROPS,
+  MOCK_CODE_REACT_LINE_WITHOUT_DEFAULT_PROPS,
+  MOCK_CODE_REACT_PIVOT_WITHOUT_DEFAULT_PROPS,
+  MOCK_CODE_VUE_LINE_WITHOUT_DEFAULT_PROPS,
+} from '../__mocks__/mock-code-for-queries';
+import {
+  MOCK_CODE_ANGULAR_1,
+  MOCK_CODE_ANGULAR_2,
+  MOCK_CODE_EXECUTE_QUERY_ANGULAR_1,
+  MOCK_CODE_EXECUTE_QUERY_REACT_1,
+  MOCK_CODE_EXECUTE_QUERY_VUE_1,
+  MOCK_CODE_REACT_1,
+  MOCK_CODE_REACT_3,
+  MOCK_CODE_VUE_1,
+  MOCK_CODE_VUE_2,
+} from '../__mocks__/mock-code-for-queries';
+import { MOCK_QUERY_MODEL_1, MOCK_QUERY_MODEL_2 } from '../__mocks__/mock-queries';
 import {
   MOCK_WIDGET_CODE_COMPLEX_CHART,
   MOCK_WIDGET_CODE_LINE_CHART,
   MOCK_WIDGET_CODE_PIVOT_TABLE,
   MOCK_WIDGET_DTO_COMPLEX_CHART,
+  MOCK_WIDGET_DTO_INDICATOR_CHART,
   MOCK_WIDGET_DTO_LINE_CHART,
   MOCK_WIDGET_DTO_PIVOT_TABLE,
 } from '../__mocks__/mock-widgets';
+import { ExpandedQueryModel, WidgetCodeParams } from '../types';
+import * as widgetComposer from './widget-composer';
 
 describe('widgetComposer', () => {
   describe('toWidgetProps', () => {
@@ -110,6 +118,38 @@ describe('widgetComposer', () => {
       expect(widgetComposer.toWidgetCode({ ...widgetCodeParams, uiFramework: 'angular' })).toBe(
         'Not implemented yet',
       );
+    });
+    it('should compose client-side widget code without default props for line chart in React', () => {
+      expect(
+        widgetComposer.toWidgetCode({ ...widgetCodeParams, removeDefaultProps: true }),
+      ).toEqual(MOCK_CODE_REACT_LINE_WITHOUT_DEFAULT_PROPS);
+    });
+    it('should compose client-side widget code without default props for line chart in Vue', () => {
+      expect(
+        widgetComposer.toWidgetCode({
+          ...widgetCodeParams,
+          uiFramework: 'vue',
+          removeDefaultProps: true,
+        }),
+      ).toEqual(MOCK_CODE_VUE_LINE_WITHOUT_DEFAULT_PROPS);
+    });
+    it('should compose client-side widget code without default props for indicator chart in React', () => {
+      const widgetProps = widgetModelTranslator.toWidgetProps(
+        widgetModelTranslator.fromWidgetDto(MOCK_WIDGET_DTO_INDICATOR_CHART),
+      );
+      const widgetCodeParams = { widgetProps };
+      expect(
+        widgetComposer.toWidgetCode({ ...widgetCodeParams, removeDefaultProps: true }),
+      ).toEqual(MOCK_CODE_REACT_INDICATOR_WITHOUT_DEFAULT_PROPS);
+    });
+    it('should compose client-side widget code without default props for pivot chart in React', () => {
+      const widgetProps = widgetModelTranslator.toWidgetProps(
+        widgetModelTranslator.fromWidgetDto(MOCK_WIDGET_DTO_PIVOT_TABLE),
+      );
+      const widgetCodeParams = { widgetProps };
+      expect(
+        widgetComposer.toWidgetCode({ ...widgetCodeParams, removeDefaultProps: true }),
+      ).toEqual(MOCK_CODE_REACT_PIVOT_WITHOUT_DEFAULT_PROPS);
     });
   });
 

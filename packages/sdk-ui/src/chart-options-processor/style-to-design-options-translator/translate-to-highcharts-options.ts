@@ -1,68 +1,70 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import merge from 'ts-deepmerge';
+
+import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
 import {
-  AxisLabel,
-  Navigator,
-  LineWidth,
-  Markers,
-  PolarStyleOptions,
-  PieStyleOptions,
-  StackableStyleOptions,
-  LineStyleOptions,
   AreaStyleOptions,
-  FunnelStyleOptions,
-  ScatterStyleOptions,
-  BaseStyleOptions,
-  TreemapStyleOptions,
-  SunburstStyleOptions,
-  BoxplotStyleOptions,
-  ScattermapStyleOptions,
+  AxisLabel,
   BaseAxisStyleOptions,
+  BaseStyleOptions,
+  BoxplotStyleOptions,
   ChartStyleOptions,
   ChartType,
+  FunnelStyleOptions,
+  LineStyleOptions,
+  LineWidth,
+  Markers,
+  Navigator,
+  PieStyleOptions,
+  PolarStyleOptions,
+  ScattermapStyleOptions,
+  ScatterStyleOptions,
+  StackableStyleOptions,
+  SunburstStyleOptions,
+  TreemapStyleOptions,
 } from '@/types';
-import { Axis } from '../translations/axis-section';
+
+import { withYAxisNormalizationForPolar } from '../cartesian/utils/axis/axis-builders';
+import { getDefaultStyleOptions } from '../chart-options-service';
 import { chartSubtypeToDesignOptions } from '../subtype-to-design-options';
+import { Axis } from '../translations/axis-section';
 import {
   BaseDesignOptions,
   CATEGORIES_CAPACITY,
-  SCATTER_CATEGORIES_CAPACITY,
   PIE_SERIES_CAPACITY,
+  SCATTER_CATEGORIES_CAPACITY,
   SERIES_CAPACITY,
 } from '../translations/base-design-options';
 import {
-  StackableChartDesignOptions,
+  AreaChartDesignOptions,
+  BaseDesignOptionsType,
+  BoxplotChartDesignOptions,
+  FunnelChartDesignOptions,
   LineChartDesignOptions,
   PieChartDesignOptions,
-  FunnelChartDesignOptions,
   PolarChartDesignOptions,
   PolarType,
   ScatterChartDesignOptions,
-  AreaChartDesignOptions,
-  TreemapChartDesignOptions,
-  SunburstChartDesignOptions,
-  BoxplotChartDesignOptions,
   ScattermapChartDesignOptions,
-  BaseDesignOptionsType,
+  StackableChartDesignOptions,
+  SunburstChartDesignOptions,
+  TreemapChartDesignOptions,
 } from '../translations/design-options';
-import { Marker } from '../translations/marker-section';
-import { PieLabels, PieType } from '../translations/pie-plot-options';
 import {
+  DefaultFunnelDirection,
   DefaultFunnelLabels,
   DefaultFunnelSize,
   DefaultFunnelType,
-  DefaultFunnelDirection,
 } from '../translations/funnel-plot-options';
-import { StackType } from '../translations/translations-to-highcharts';
+import { Marker } from '../translations/marker-section';
+import { PieLabels, PieType } from '../translations/pie-plot-options';
 import { defaultScatterMarkerSize, ScatterMarkerSize } from '../translations/scatter-plot-options';
-import { getDefaultStyleOptions } from '../chart-options-service';
+import { StackType } from '../translations/translations-to-highcharts';
+import { CartesianChartType, SeriesDesignOptions } from '../translations/types';
 import {
   extendStyleOptionsWithDefaults,
   getDesignOptionsPerSeries,
 } from './prepare-design-options';
-import { CartesianChartType, SeriesDesignOptions } from '../translations/types';
-import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
-import { withYAxisNormalizationForPolar } from '../cartesian/utils/axis/axis-builders';
 
 const getAxisLabel = (axis: AxisLabel | undefined, defaultAxis: Axis): Axis => {
   if (!axis) return defaultAxis;
@@ -186,8 +188,7 @@ export const getStackableChartDesignOptions = (
     ...cartesianDesignOptions,
     designPerSeries,
     stackType: DefaultStackType,
-    showTotal: styleOptions.totalLabels?.enabled ?? false,
-    totalLabelRotation: styleOptions.totalLabels?.rotation ?? 0,
+    totalLabels: styleOptions.totalLabels,
   };
 };
 

@@ -1,29 +1,31 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import uniq from 'lodash-es/uniq';
-import partition from 'lodash-es/partition';
-import { Attribute, Column, MetadataTypes } from '@sisense/sdk-data';
+
 import { type TFunction } from '@sisense/sdk-common';
-import {
-  StyledColumn,
-  DrilldownSelection,
-  DataPoint,
-  MenuPosition,
-  MenuItemSection,
-} from '../../types.js';
-import { Hierarchy } from '@/models';
+import { Attribute, Column, MetadataTypes } from '@sisense/sdk-data';
+import partition from 'lodash-es/partition';
+import uniq from 'lodash-es/uniq';
+
+import { SELECTION_TITLE_MAXIMUM_ITEMS } from '@/common-filters/selection-utils.js';
+import { MenuIds, MenuSectionIds } from '@/common/components/menu/menu-ids.js';
 import { OpenMenuFn } from '@/common/components/menu/types.js';
+import { Hierarchy } from '@/models';
+import { isSameAttribute } from '@/utils/filters.js';
+
+import {
+  DataPoint,
+  DrilldownSelection,
+  MenuItemSection,
+  MenuPosition,
+  StyledColumn,
+} from '../../types.js';
 import { DrilldownBreadcrumbs } from '../common/drilldown-breadcrumbs/drilldown-breadcrumbs.js';
+import '../common/drilldown.scss';
 import {
   getDisplayMemberNameFromDataPoint,
   useDrilldownCore,
 } from '../common/use-drilldown-core.js';
-import { SELECTION_TITLE_MAXIMUM_ITEMS } from '@/common-filters/selection-utils.js';
-import { MenuIds, MenuSectionIds } from '@/common/components/menu/menu-ids.js';
-import { isSameAttribute } from '@/utils/filters.js';
-
-import '../common/drilldown.scss';
 
 type UseDrilldownParams = {
   initialDimension: Column | StyledColumn;

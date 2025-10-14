@@ -1,32 +1,35 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+
 /* eslint-disable @typescript-eslint/ban-types */
-import EventEmitter from 'events';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
+
+import EventEmitter from 'events';
 import isEqual from 'lodash-es/isEqual.js';
+
+import { PaginationOptions } from '../components/PaginationPanel';
+import { Pivot } from '../components/Pivot';
+import { PivotCell } from '../components/Pivot/PivotCell.js';
+import { PivotI } from '../components/Pivot/types.js';
+import {
+  ComplexSortingSettingsPopup,
+  SimpleSortingSettingsPopup,
+} from '../components/SortingSettings';
+import type { AllDataInfo, DataServiceI, InitPageData, PivotTreeNode } from '../data-handling';
 import {
   EVENT_DATA_CHUNK_LOADED,
   EVENT_GRAND_CHUNK_LOADED,
-  EVENT_TOTAL_ROWS_COUNT,
-  EVENT_TOTAL_COLUMNS_COUNT,
   EVENT_PROGRESS_ERROR,
+  EVENT_TOTAL_COLUMNS_COUNT,
+  EVENT_TOTAL_ROWS_COUNT,
 } from '../data-handling/DataService.js';
-import { Pivot } from '../components/Pivot';
-import { PivotCell } from '../components/Pivot/PivotCell.js';
-import { LoadingCanceledError } from '../errors/index.js';
-import { throttle, getChangedProps } from '../utils/index.js';
-import { PivotI } from '../components/Pivot/types.js';
-import { JaqlRequest, SortDetails } from '../data-load/types.js';
-import type { AllDataInfo, DataServiceI, InitPageData, PivotTreeNode } from '../data-handling';
-import { TreeServiceI, ColumnsCount, TreeNodeMetadata } from '../tree-structure/types.js';
 import { createPivotTreeNode, jaqlProcessor } from '../data-handling/utils/index.js';
-import { getDefaultSortDirection } from '../data-load/utils';
-import {
-  SimpleSortingSettingsPopup,
-  ComplexSortingSettingsPopup,
-} from '../components/SortingSettings';
 import { SortingSettingsItem } from '../data-handling/utils/jaqlProcessor.js';
-import { PaginationOptions } from '../components/PaginationPanel';
+import { JaqlRequest, SortDetails } from '../data-load/types.js';
+import { getDefaultSortDirection } from '../data-load/utils';
+import { LoadingCanceledError } from '../errors/index.js';
+import { ColumnsCount, TreeNodeMetadata, TreeServiceI } from '../tree-structure/types.js';
+import { getChangedProps, throttle } from '../utils/index.js';
 
 function getListOfColumnNamesForTitle(treeNode: PivotTreeNode) {
   let node = treeNode;

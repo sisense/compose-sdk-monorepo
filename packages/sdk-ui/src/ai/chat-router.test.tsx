@@ -3,11 +3,12 @@ import { http, HttpResponse } from 'msw';
 
 import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
-import ChatRouter from './chat-router';
+
 import { AiTestWrapper } from './__mocks__';
 import { contexts } from './__mocks__/data';
-import { ChatConfigProvider } from './chat-config';
 import { Chat, ChatContext } from './api/types';
+import { ChatConfigProvider } from './chat-config';
+import ChatRouter from './chat-router';
 
 const setupMockDataTopicsApi = (contexts: ChatContext[]) => {
   server.use(http.get('*/api/datasources/**', () => HttpResponse.json(contexts)));

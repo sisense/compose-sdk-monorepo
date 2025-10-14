@@ -1,5 +1,5 @@
 import { getBaseDateFnsLocale } from '@/chart-data-processor/data-table-date-period';
-import { defaultDateConfig, formatDateValue, DateConfig } from '@/query/date-formats';
+import { DateConfig, defaultDateConfig, formatDateValue } from '@/query/date-formats';
 
 export type DateFormatter = (date: Date, format: string) => string;
 

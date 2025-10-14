@@ -1,10 +1,10 @@
-import { CategoricalChartData } from '@/chart-data/types';
 import {
   CategoricalChartDataOptions,
   CategoricalChartDataOptionsInternal,
 } from '@/chart-data-options/types';
-import { PieStyleOptions } from '@/types';
+import { CategoricalChartData } from '@/chart-data/types';
 import { PieChartDesignOptions as PieDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { PieStyleOptions } from '@/types';
 
 /**
  * Pie chart specific type aliases for better readability.

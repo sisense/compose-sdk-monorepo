@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { renderHook } from '@testing-library/react';
 import { PivotBuilder, PivotClient } from '@sisense/sdk-pivot-client';
-import { describe, it, expect, vi } from 'vitest';
+import { renderHook } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+
 import { usePivotBuilder } from './use-pivot-builder';
 
 const createPivotBuilderMock = (name = 'mockedPivotBuilder') => {

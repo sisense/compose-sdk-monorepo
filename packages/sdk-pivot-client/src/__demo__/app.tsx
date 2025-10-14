@@ -1,11 +1,13 @@
-import './app.css';
-import '../styles';
 import React, { useMemo } from 'react';
+
 import { BearerAuthenticator } from '@sisense/sdk-rest-client';
-import { PivotClient } from '../pivot-client';
-import { PivotBuilderDemo } from './pivot-builder-demo';
-import { defaultQuery as defaultQuery1, defaultQuery2 } from './examples';
+
 import { JaqlRequest } from '../data-load/types';
+import { PivotClient } from '../pivot-client';
+import '../styles';
+import './app.css';
+import { defaultQuery as defaultQuery1, defaultQuery2 } from './examples';
+import { PivotBuilderDemo } from './pivot-builder-demo';
 
 export function App() {
   const { VITE_APP_SISENSE_URL, VITE_APP_SISENSE_TOKEN } = import.meta.env;

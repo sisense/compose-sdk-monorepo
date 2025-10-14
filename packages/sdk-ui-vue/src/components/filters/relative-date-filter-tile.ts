@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { RelativeDateFilterTile as RelativeDateFilterTilePreact } from '@sisense/sdk-ui-preact';
 import type { RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**

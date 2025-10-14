@@ -1,11 +1,11 @@
-import { render, fireEvent } from '@testing-library/react';
-
-import { DrilldownWidget } from './drilldown-widget';
-import { useMenu } from '@/common/hooks/use-menu';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { fireEvent, render } from '@testing-library/react';
 import { Mock } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { useMenu } from '@/common/hooks/use-menu';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+
+import { DrilldownWidget } from './drilldown-widget';
 
 vi.mock('@/common/hooks/use-menu', () => ({
   useMenu: vi.fn(),

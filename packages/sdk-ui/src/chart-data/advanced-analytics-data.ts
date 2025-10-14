@@ -1,17 +1,18 @@
-import { DataTable } from '../chart-data-processor/table-processor';
-import { CartesianChartData } from './types';
-import {
-  CartesianChartDataOptionsInternal,
-  RangeChartDataOptionsInternal,
-  StyledMeasureColumn,
-} from '../chart-data-options/types';
-import { rangeData } from './range-data';
+import { getDataOptionTitle, safeMerge } from '@/chart-data-options/utils';
 import {
   isForecastSeries,
   isTrendSeries,
   rangeTitle,
 } from '@/chart-options-processor/advanced-chart-options';
-import { getDataOptionTitle, safeMerge } from '@/chart-data-options/utils';
+
+import {
+  CartesianChartDataOptionsInternal,
+  RangeChartDataOptionsInternal,
+  StyledMeasureColumn,
+} from '../chart-data-options/types';
+import { DataTable } from '../chart-data-processor/table-processor';
+import { rangeData } from './range-data';
+import { CartesianChartData } from './types';
 
 export const isForecastChart = (dataOptions: CartesianChartDataOptionsInternal) => {
   const rangeOptions = dataOptions as unknown as RangeChartDataOptionsInternal;

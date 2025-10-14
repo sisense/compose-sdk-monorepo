@@ -1,5 +1,6 @@
-import { BuildContext } from '../../../types';
 import { getAlerts } from '@/chart-options-processor/translations/funnel-series';
+
+import { BuildContext } from '../../../types';
 
 /**
  * Funnel-specific alerts function that extracts alerts from the funnel series formatting.

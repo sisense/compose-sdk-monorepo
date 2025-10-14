@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+import { Attribute } from '@sisense/sdk-data';
+
+import { Hierarchy } from '@/models';
+
 import { CartesianChartDataOptions } from '../types.js';
+import { jaqlMock } from './__mocks__/jaql-mock.js';
+import { extractDataOptions } from './translate-widget-data-options.js';
+import { verifyColumn } from './translate-widget-data-options.test.js';
+import { extractDrilldownOptions } from './translate-widget-drilldown-options.js';
 import { DatetimeMask } from './types.js';
 import { Panel } from './types.js';
-import { extractDataOptions } from './translate-widget-data-options.js';
-import { jaqlMock } from './__mocks__/jaql-mock.js';
-import { extractDrilldownOptions } from './translate-widget-drilldown-options.js';
-import { verifyColumn } from './translate-widget-data-options.test.js';
-import { Attribute } from '@sisense/sdk-data';
-import { Hierarchy } from '@/models';
 
 describe('translate widget drilldown options', () => {
   describe('extractDrilldownOptions', () => {

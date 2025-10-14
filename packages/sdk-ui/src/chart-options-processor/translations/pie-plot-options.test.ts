@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { PlotOptions } from '../chart-options-service';
+import { createAttribute } from '@sisense/sdk-data';
+
 import {
   CategoricalChartDataOptionsInternal,
   StyledMeasureColumn,
 } from '../../chart-data-options/types';
-import { getPiePlotOptions, DefaultPieLabels, DefaultPieType } from './pie-plot-options';
-import { createAttribute } from '@sisense/sdk-data';
+import { PlotOptions } from '../chart-options-service';
+import { DefaultPieLabels, DefaultPieType, getPiePlotOptions } from './pie-plot-options';
 
 describe('getPiePlotOptions', () => {
   it('should return the plotOptions with a formatter', () => {

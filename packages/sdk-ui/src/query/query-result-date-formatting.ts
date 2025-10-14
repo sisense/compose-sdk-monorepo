@@ -1,18 +1,23 @@
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Data, isDatetime } from '@sisense/sdk-data';
-import { getBaseDateFnsLocale } from '../chart-data-processor/data-table-date-period';
-import { defaultDateConfig } from './date-formats';
-import type { DateFormat, DateConfig } from './date-formats';
-import { StyledColumn } from '../chart-data-options/types';
-import type { Column, Cell, QueryResultData } from '@sisense/sdk-data';
-import { isCell } from '../chart-data-processor/table-creators';
-import { createCompareValue } from '../chart-data-processor/row-comparator';
+import type { Cell, Column, QueryResultData } from '@sisense/sdk-data';
+
 import { isMeasureColumn } from '@/chart-data-options/utils';
-import { formatDateValue } from './date-formats/apply-date-format';
 import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
+
+import { StyledColumn } from '../chart-data-options/types';
+import { getBaseDateFnsLocale } from '../chart-data-processor/data-table-date-period';
+import { createCompareValue } from '../chart-data-processor/row-comparator';
+import { isCell } from '../chart-data-processor/table-creators';
+import { defaultDateConfig } from './date-formats';
+import type { DateConfig, DateFormat } from './date-formats';
+import { formatDateValue } from './date-formats/apply-date-format';
 
 //TODO: refactor this function
 // eslint-disable-next-line max-lines-per-function, sonarjs/cognitive-complexity

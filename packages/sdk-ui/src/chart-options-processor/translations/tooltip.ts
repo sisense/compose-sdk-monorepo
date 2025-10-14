@@ -1,20 +1,21 @@
+import { TFunction } from '@sisense/sdk-common';
+import { DimensionalCalculatedMeasure } from '@sisense/sdk-data';
+
+import { colorChineseSilver, colorWhite } from '../../chart-data-options/coloring/consts';
 import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../../chart-data-options/types';
-import { colorChineseSilver, colorWhite } from '../../chart-data-options/coloring/consts';
-import {
-  HighchartsDataPointContext,
-  TooltipSettings,
-  formatTooltipValue,
-  isTooltipPercentValueSupported,
-} from './tooltip-utils';
-import { spanSegment, tooltipSeparator, tooltipWrapper } from './scatter-tooltip';
-import { TFunction } from '@sisense/sdk-common';
-import { isForecastSeries, isTrendSeries } from '../advanced-chart-options';
-import { renderTrendTooltipString } from '../advanced-analytics/tooltips/trend-tooltip';
 import { renderForecastTooltipString } from '../advanced-analytics/tooltips/forecast-tooltip';
-import { DimensionalCalculatedMeasure } from '@sisense/sdk-data';
+import { renderTrendTooltipString } from '../advanced-analytics/tooltips/trend-tooltip';
+import { isForecastSeries, isTrendSeries } from '../advanced-chart-options';
+import { spanSegment, tooltipSeparator, tooltipWrapper } from './scatter-tooltip';
+import {
+  formatTooltipValue,
+  HighchartsDataPointContext,
+  isTooltipPercentValueSupported,
+  TooltipSettings,
+} from './tooltip-utils';
 
 export const cartesianDataFormatter = function (
   highchartsDataPoint: HighchartsDataPointContext,

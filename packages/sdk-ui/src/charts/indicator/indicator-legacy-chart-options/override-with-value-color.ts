@@ -1,12 +1,12 @@
 /* eslint-disable max-params */
 import {
-  getColoringServiceByColorOptions,
   ColoringService,
+  getColoringServiceByColorOptions,
 } from '../../../chart-data-options/coloring';
 import {
-  IndicatorChartDataOptions,
   ConditionalDataColorOptions,
   DataColorOptions,
+  IndicatorChartDataOptions,
   UniformDataColorOptions,
 } from '../../../types';
 import { LegacyIndicatorChartOptions } from '../types';

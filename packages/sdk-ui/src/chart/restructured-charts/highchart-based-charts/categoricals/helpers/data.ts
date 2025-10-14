@@ -1,8 +1,9 @@
-import { DataTable } from '@/chart-data-processor/table-processor';
-import { loadDataBySingleQuery } from '../../../helpers/data-loading';
 import { CategoricalChartDataOptionsInternal } from '@/chart-data-options/types';
-import { CategoricalChartData } from '@/chart-data/types';
+import { DataTable } from '@/chart-data-processor/table-processor';
 import { categoricalData } from '@/chart-data/categorical-data';
+import { CategoricalChartData } from '@/chart-data/types';
+
+import { loadDataBySingleQuery } from '../../../helpers/data-loading';
 
 /**
  * Default data loading function for categorical charts.

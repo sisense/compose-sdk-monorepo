@@ -1,4 +1,7 @@
+import { isNumber } from '@sisense/sdk-data';
+
 import { NOT_AVAILABLE_DATA_VALUE } from '@/const.js';
+
 import { ScattermapChartDataOptionsInternal } from '../chart-data-options/types.js';
 import {
   Column,
@@ -10,7 +13,6 @@ import {
 } from '../chart-data-processor/table-processor.js';
 import { combineLocationNames } from '../charts/map-charts/scattermap/utils/location.js';
 import { ScattermapChartData } from './types.js';
-import { isNumber } from '@sisense/sdk-data';
 
 const LOCATION_DEFAULT_VALUE = 1;
 

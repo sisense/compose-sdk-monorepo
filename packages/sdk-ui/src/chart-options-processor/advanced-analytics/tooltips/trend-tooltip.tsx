@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { useTranslation } from 'react-i18next';
+
 import { TFunction } from '@sisense/sdk-common';
-import AdvancedAnalyticsTooltipTitle from './tooltip-title';
-import AdvancedAnalyticsTooltipRow from './tooltip-row';
-import AdvancedAnalyticsTooltipFooter from './tooltip-footer';
+
 import { DEFAULT_TEXT_COLOR } from '@/const';
+
+import AdvancedAnalyticsTooltipFooter from './tooltip-footer';
+import AdvancedAnalyticsTooltipRow from './tooltip-row';
+import AdvancedAnalyticsTooltipTitle from './tooltip-title';
 
 const TrendTypesFromExpression = {
   smooth: 'Advanced Smoothing',

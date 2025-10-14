@@ -1,15 +1,17 @@
-import { RangeChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
-import {
-  HighchartsDataPointContext,
-  TooltipSettings,
-  formatTooltipValue,
-  isTooltipPercentValueSupported,
-} from '../tooltip-utils';
-import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
 import { TFunction } from '@sisense/sdk-common';
-import { cartesianDataFormatter } from '../tooltip';
+
 import { getDataOptionTitle } from '@/chart-data-options/utils';
+
+import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
+import { RangeChartDataOptionsInternal } from '../../../chart-data-options/types';
+import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
+import { cartesianDataFormatter } from '../tooltip';
+import {
+  formatTooltipValue,
+  HighchartsDataPointContext,
+  isTooltipPercentValueSupported,
+  TooltipSettings,
+} from '../tooltip-utils';
 
 export const getRangeTooltipSettings = (
   showDecimals: boolean | undefined,

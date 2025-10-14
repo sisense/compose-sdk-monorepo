@@ -1,6 +1,7 @@
-import { getFilterListAndRelationsJaql, type DataSource } from '@sisense/sdk-data';
+import { type DataSource, getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
 import type { JaqlQueryPayload } from '@sisense/sdk-query-client';
+
 import { BaseQueryParams } from '@/query-execution/types.js';
 import { prepareQueryParams, type QueryDescription } from '@/query/execute-query.js';
 

@@ -1,10 +1,12 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
-import { RestApi, useRestApi } from './rest-api';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { renderHook } from '@testing-library/react';
-import { useSisenseContext } from '../sisense-context/sisense-context';
 import { Mock } from 'vitest';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+
 import { ClientApplication } from '..';
+import { useSisenseContext } from '../sisense-context/sisense-context';
+import { RestApi, useRestApi } from './rest-api';
 
 const httpGetMock = vi.fn();
 const httpPostMock = vi.fn();

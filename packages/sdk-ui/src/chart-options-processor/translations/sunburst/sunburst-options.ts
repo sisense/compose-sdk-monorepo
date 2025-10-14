@@ -1,18 +1,20 @@
 /* eslint-disable max-params */
-import { CategoricalChartData } from '../../../chart-data/types';
-import { HighchartsOptionsInternal } from '../../chart-options-service';
-import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { CompleteThemeSettings, UniformDataColorOptions } from '../../../types';
-import { SunburstChartDesignOptions } from '../design-options';
-import { getTreemapTooltipSettings } from '../treemap/treemap-tooltip';
+import { TFunction } from '@sisense/sdk-common';
+
+import { getDataOptionTitle } from '@/chart-data-options/utils';
+
 import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
+import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
+import { CategoricalChartData } from '../../../chart-data/types';
+import { CompleteThemeSettings, UniformDataColorOptions } from '../../../types';
+import { HighchartsOptionsInternal } from '../../chart-options-service';
+import { SunburstChartDesignOptions } from '../design-options';
+import { getLegendSettings } from '../legend-section';
+import { HighchartsDataPointContext } from '../tooltip-utils';
+import { getTreemapTooltipSettings } from '../treemap/treemap-tooltip';
 import { prepareSunburstLevels } from './sunburst-levels';
 import { prepareSunburstDataItems, SUNBURST_ROOT_PARENT_ID } from './sunburst-series';
-import { getLegendSettings } from '../legend-section';
 import './sunburst.scss';
-import { getDataOptionTitle } from '@/chart-data-options/utils';
-import { TFunction } from '@sisense/sdk-common';
-import { HighchartsDataPointContext } from '../tooltip-utils';
 
 const DEFAULT_SUNBURST_SERIES = {
   type: 'sunburst',

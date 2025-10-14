@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { TFunction } from '@sisense/sdk-common';
 import {
   DateLevels,
@@ -8,35 +9,37 @@ import {
   filterFactory,
   Sort,
 } from '@sisense/sdk-data';
+
+import { usePrevious } from '@/common/hooks/use-previous.js';
+import { useGetFilterMembersInternal } from '@/filters/hooks/use-get-filter-members.js';
+import { getDefaultDateMask } from '@/query/date-formats/apply-date-format.js';
+import { createLevelAttribute } from '@/utils/create-level-attribute.js';
+import { isSameAttribute } from '@/utils/filters';
+
 import { SingleSelect } from '../../../common/index.js';
+import { ScrollWrapperOnScrollEvent } from '../../../common/scroll-wrapper.js';
+import {
+  CalendarSelect,
+  CalendarSelectTypes,
+} from '../../../common/select/calendar-select/index.js';
+import { SearchableMultiSelect } from '../../../common/select/searchable-multi-select.js';
+import { SearchableSingleSelect } from '../../../common/select/searchable-single-select.js';
+import { LIST_SCROLL_LOAD_MORE_THRESHOLD, QUERY_MEMBERS_COUNT } from '../../../constants.js';
+import { useFilterEditorContext } from '../../../filter-editor-context';
+import { useDatetimeFormatter } from '../../../hooks/use-datetime-formatter.js';
 import {
   convertDateToMemberString,
   isExcludeMembersFilter,
   isIncludeMembersFilter,
 } from '../../../utils.js';
-import { SearchableMultiSelect } from '../../../common/select/searchable-multi-select.js';
-import { SearchableSingleSelect } from '../../../common/select/searchable-single-select.js';
-import { usePrevious } from '@/common/hooks/use-previous.js';
-import { useDatetimeFormatter } from '../../../hooks/use-datetime-formatter.js';
-import { getDefaultDateMask } from '@/query/date-formats/apply-date-format.js';
-import {
-  CalendarSelect,
-  CalendarSelectTypes,
-} from '../../../common/select/calendar-select/index.js';
+import { granularities } from '../../common/granularities';
 import { DatetimeLimits } from '../../types.js';
-import { useGetFilterMembersInternal } from '@/filters/hooks/use-get-filter-members.js';
-import { LIST_SCROLL_LOAD_MORE_THRESHOLD, QUERY_MEMBERS_COUNT } from '../../../constants.js';
-import { ScrollWrapperOnScrollEvent } from '../../../common/scroll-wrapper.js';
-import { isSameAttribute } from '@/utils/filters';
 import {
   createExcludeMembersFilter,
   getConfigWithUpdatedDeactivated,
   getMembersWithDeactivated,
   getRestrictedGranularities,
 } from '../../utils.js';
-import { granularities } from '../../common/granularities';
-import { useFilterEditorContext } from '../../../filter-editor-context';
-import { createLevelAttribute } from '@/utils/create-level-attribute.js';
 
 function createExcludeConditionFilter(baseFilter: Filter, data: DatetimeConditionFilterData) {
   const { selectedMembers, multiSelectEnabled, attribute } = data;

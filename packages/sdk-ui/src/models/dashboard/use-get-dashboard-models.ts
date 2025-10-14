@@ -1,13 +1,15 @@
 import { useEffect, useReducer } from 'react';
+
+import { DashboardModel } from '@/models';
+
+import { dataLoadStateReducer, DataState } from '../../common/hooks/data-load-state-reducer.js';
+import { HookEnableParam } from '../../common/hooks/types.js';
 import { useHasChanged } from '../../common/hooks/use-has-changed';
 import { useShouldLoad } from '../../common/hooks/use-should-load';
-import { DataState, dataLoadStateReducer } from '../../common/hooks/data-load-state-reducer.js';
-import { useSisenseContext } from '../../sisense-context/sisense-context.js';
-import { HookEnableParam } from '../../common/hooks/types.js';
-import { GetDashboardModelsOptions, getDashboardModels } from './get-dashboard-models.js';
-import { TranslatableError } from '../../translation/translatable-error.js';
 import { withTracking } from '../../decorators/hook-decorators';
-import { DashboardModel } from '@/models';
+import { useSisenseContext } from '../../sisense-context/sisense-context.js';
+import { TranslatableError } from '../../translation/translatable-error.js';
+import { getDashboardModels, GetDashboardModelsOptions } from './get-dashboard-models.js';
 
 /**
  * Parameters for {@link useGetDashboardModels} hook.

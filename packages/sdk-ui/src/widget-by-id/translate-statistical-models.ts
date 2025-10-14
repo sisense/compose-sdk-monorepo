@@ -1,4 +1,5 @@
 import { ForecastFormulaOptions, TrendFormulaOptions } from '@sisense/sdk-data';
+
 import { StyledMeasureColumn } from '../types.js';
 import { StatisticalModels } from './types.js';
 

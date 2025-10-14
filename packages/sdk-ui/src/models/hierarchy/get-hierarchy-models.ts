@@ -1,7 +1,9 @@
-import { HttpClient } from '@sisense/sdk-rest-client';
-import { RestApi } from '../../api/rest-api.js';
-import { HierarchyModel, hierarchyModelTranslator } from '@/models';
 import { DataSource } from '@sisense/sdk-data';
+import { HttpClient } from '@sisense/sdk-rest-client';
+
+import { HierarchyModel, hierarchyModelTranslator } from '@/models';
+
+import { RestApi } from '../../api/rest-api.js';
 import { GetHierarchiesOptions } from './types.js';
 
 /**

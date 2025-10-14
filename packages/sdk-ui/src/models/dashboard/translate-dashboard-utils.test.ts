@@ -1,19 +1,21 @@
+import { Dimension } from '@sisense/sdk-data';
+import isEqual from 'lodash-es/isEqual';
+
 import { RestApi } from '@/api/rest-api';
 import {
+  convertDimensionsToDimIndexes,
+  extractPivotTargetsConfigFromWidgetDto,
+  findDimensionByInstanceId,
+  getJtdNavigateType,
   translateLayout,
   withSharedFormulas,
-  convertDimensionsToDimIndexes,
-  findDimensionByInstanceId,
-  extractPivotTargetsConfigFromWidgetDto,
-  getJtdNavigateType,
 } from '@/models/dashboard/translate-dashboard-utils';
-import isEqual from 'lodash-es/isEqual';
+import { WidgetDto } from '@/widget-by-id/types';
+
 import {
   dashboardWithSharedFormulas,
   sharedFormulasDictionary,
 } from '../__mocks__/dashboard-with-shared-formulas';
-import { WidgetDto } from '@/widget-by-id/types';
-import { Dimension } from '@sisense/sdk-data';
 
 describe('translate-dashboard-utils', () => {
   describe('translateLayout', () => {

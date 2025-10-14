@@ -1,10 +1,11 @@
-import { PlusIcon } from '@/common/icons/plus-icon';
-import { useThemeContext } from '@/theme-provider';
-import { Themable } from '@/theme-provider/types';
+import { useTranslation } from 'react-i18next';
+
 import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 
-import { useTranslation } from 'react-i18next';
+import { PlusIcon } from '@/common/icons/plus-icon';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
 
 const PanelHeader = styled.div<Themable>`
   background-color: transparent;

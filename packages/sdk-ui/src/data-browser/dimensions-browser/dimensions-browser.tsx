@@ -1,3 +1,9 @@
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+import { Attribute, DateDimension, Dimension, MetadataTypes } from '@sisense/sdk-data';
+
 import { GroupedItemsBrowser } from '@/common/components/grouped-items-browser/grouped-items-browser';
 import {
   GroupedItemsBrowserProps,
@@ -7,12 +13,13 @@ import {
   ItemSecondaryActionConfig,
   ItemsGroup,
 } from '@/common/components/grouped-items-browser/types';
-import { Attribute, DateDimension, Dimension, MetadataTypes } from '@sisense/sdk-data';
-import { useMemo } from 'react';
+import { LoadingDots } from '@/common/components/loading-dots.js';
 import { DateAttributeIcon } from '@/common/icons/date-attribute-icon.js';
 import { NumericAttributeIcon } from '@/common/icons/numeric-attribute-icon.js';
 import { TableIcon } from '@/common/icons/table-icon.js';
 import { TextAttributeIcon } from '@/common/icons/text-attribute-icon.js';
+import { TranslatableError } from '@/translation/translatable-error.js';
+
 import {
   AttributeActionConfig,
   AttributeSecondaryActionConfig,
@@ -20,10 +27,6 @@ import {
   DimensionsBrowserProps,
   DimensionSecondaryActionConfig,
 } from './types.js';
-import { TranslatableError } from '@/translation/translatable-error.js';
-import { LoadingDots } from '@/common/components/loading-dots.js';
-import styled from '@emotion/styled';
-import { useTranslation } from 'react-i18next';
 
 const attributeIconMapping: { [key: string]: React.ComponentType | undefined } = {
   'text-attribute': TextAttributeIcon,

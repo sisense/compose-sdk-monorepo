@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
-import { PluginConfig, GlobalStyles, Metadata } from './utils/plugins/types.js';
-import { Defer, LoggerI, InputStyles } from '../utils/types.js';
+
+import { JaqlPanel, JaqlRequest } from '../data-load/types.js';
 import { TreeNode, TreeServiceI } from '../tree-structure';
-import { JaqlRequest, JaqlPanel } from '../data-load/types.js';
+import { Defer, InputStyles, LoggerI } from '../utils/types.js';
+import { GlobalStyles, Metadata, PluginConfig } from './utils/plugins/types.js';
 
 export type EmbedComponentProps = {
   width?: number | string;

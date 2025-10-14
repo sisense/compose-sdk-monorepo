@@ -1,7 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Attribute } from '@sisense/sdk-data';
-import { StyledNextButton, StyledPrevButton } from './styled-buttons';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { Attribute } from '@sisense/sdk-data';
+
+import { StyledNextButton, StyledPrevButton } from './styled-buttons';
 
 interface DrilldownBreadcrumbsNavigationProps {
   currentDimension: Attribute;

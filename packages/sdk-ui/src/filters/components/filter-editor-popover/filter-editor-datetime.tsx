@@ -1,6 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import Stack from '@mui/material/Stack';
 import { DateLevels, Filter, isDateRangeFilter, LevelAttribute } from '@sisense/sdk-data';
+
+import {
+  DatetimeAttributeStats,
+  useGetAttributeStats,
+} from '@/filters/components/filter-editor-popover/hooks/use-get-attribute-stats';
+import { NotSupportedSection } from '@/filters/components/filter-editor-popover/sections/not-supported-section';
+import { useThemeContext } from '@/theme-provider';
+
+import { FilterEditorContainer } from './filter-editor-container';
+import { useFilterEditorContext } from './filter-editor-context';
+import { MultiSelectControl } from './multi-select-control';
+import { DatetimeConditionSection } from './sections/datetime-condition-section';
+import { DatetimeMembersSection } from './sections/datetime-members-section';
+import { DatetimeRangeSection } from './sections/datetime-range-section';
+import { DatetimeRelativeSection } from './sections/datetime-relative-section';
 import { IncludeAllSection } from './sections/include-all-section';
 import {
   isIncludeAllFilter,
@@ -8,19 +24,6 @@ import {
   isRelativeDateFilterWithoutAnchor,
   isSupportedByFilterEditor,
 } from './utils';
-import { MultiSelectControl } from './multi-select-control';
-import { FilterEditorContainer } from './filter-editor-container';
-import {
-  DatetimeAttributeStats,
-  useGetAttributeStats,
-} from '@/filters/components/filter-editor-popover/hooks/use-get-attribute-stats';
-import { useThemeContext } from '@/theme-provider';
-import { DatetimeMembersSection } from './sections/datetime-members-section';
-import { DatetimeRangeSection } from './sections/datetime-range-section';
-import { DatetimeConditionSection } from './sections/datetime-condition-section';
-import { DatetimeRelativeSection } from './sections/datetime-relative-section';
-import { NotSupportedSection } from '@/filters/components/filter-editor-popover/sections/not-supported-section';
-import { useFilterEditorContext } from './filter-editor-context';
 
 enum FilterSections {
   NOT_SUPPORTED = 'not-supported',

@@ -1,13 +1,15 @@
 import { type ReactNode } from 'react';
+
+import get from 'lodash-es/get';
+
 import { ThemeProvider, useThemeContext } from '../../theme-provider';
 import { WidgetContainerStyleOptions } from '../../types';
-import { getShadowValue, WidgetCornerRadius, WidgetSpaceAround } from './widget-style-utils';
-import { WidgetHeader } from './widget-header';
-import get from 'lodash-es/get';
 import {
   useWidgetErrorsAndWarnings,
   WidgetErrorsAndWarningsProvider,
 } from './widget-errors-and-warnings-context';
+import { WidgetHeader } from './widget-header';
+import { getShadowValue, WidgetCornerRadius, WidgetSpaceAround } from './widget-style-utils';
 
 interface WidgetContainerProps {
   dataSetName?: string;

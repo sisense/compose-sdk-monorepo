@@ -1,15 +1,18 @@
 import { FunctionComponent, useMemo } from 'react';
-import { DynamicSizeContainer, getWidgetDefaultSize } from '@/dynamic-size-container';
-import ErrorBoundaryBox from '@/error-boundary/error-boundary-box';
+import { useTranslation } from 'react-i18next';
+
+import { getDataSourceName } from '@sisense/sdk-data';
+
 import { useCustomWidgets } from '@/custom-widgets-provider';
 import { CustomWidgetComponentProps } from '@/custom-widgets-provider/types';
-import { CustomWidgetProps } from '@/props';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { getDataSourceName } from '@sisense/sdk-data';
-import { WidgetContainer } from './common/widget-container';
-import { useTranslation } from 'react-i18next';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { withErrorBoundary } from '@/decorators/component-decorators/with-error-boundary';
+import { DynamicSizeContainer, getWidgetDefaultSize } from '@/dynamic-size-container';
+import ErrorBoundaryBox from '@/error-boundary/error-boundary-box';
+import { CustomWidgetProps } from '@/props';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+
+import { WidgetContainer } from './common/widget-container';
 
 const withSize = (props: CustomWidgetComponentProps, size: { width: number; height: number }) => {
   return {

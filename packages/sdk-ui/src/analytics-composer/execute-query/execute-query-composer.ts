@@ -1,7 +1,7 @@
-import { ExecuteQueryCodeParams, ExecutePivotQueryCodeParams } from '../types.js';
+import { ExecutePivotQueryCodeParams, ExecuteQueryCodeParams } from '../types.js';
 import {
-  toExecuteQueryCode as importedToExecuteQueryCode,
   toExecutePivotQueryCode as importedToExecutePivotQueryCode,
+  toExecuteQueryCode as importedToExecuteQueryCode,
 } from './to-execute-query-code.js';
 
 /**

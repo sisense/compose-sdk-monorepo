@@ -1,12 +1,15 @@
-import { ArrowIcon } from '@/common/icons/arrow-icon';
-import { useThemeContext } from '@/theme-provider';
-import { Themable } from '@/theme-provider/types';
+import { useCallback, useState } from 'react';
+
 import styled from '@emotion/styled';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { useCallback, useState } from 'react';
-import { ItemsGroup, GroupSecondaryActionConfig } from './types';
 import Tooltip from '@mui/material/Tooltip';
+
+import { ArrowIcon } from '@/common/icons/arrow-icon';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+
+import { GroupSecondaryActionConfig, ItemsGroup } from './types';
 
 type GroupHeaderProps = {
   isOpen: boolean;

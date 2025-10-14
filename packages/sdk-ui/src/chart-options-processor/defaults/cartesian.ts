@@ -1,13 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { AxisSettings } from '../translations/axis-section';
-import { DeepPick } from 'ts-essentials';
-import { HighchartsOptionsInternal, Stacking } from '../chart-options-service';
-import { TextStyle } from '../translations/types';
-import { ChartType } from '../../types';
 import merge from 'deepmerge';
+import { DeepPick } from 'ts-essentials';
+
+import { ChartType } from '../../types';
+import { HighchartsOptionsInternal, Stacking } from '../chart-options-service';
+import { AxisSettings } from '../translations/axis-section';
 import { PolarType } from '../translations/design-options';
 import { getLegendSettings } from '../translations/legend-section';
+import { TextStyle } from '../translations/types';
 
 export const lineColorDefault = '#d1d1d7';
 const titleMargin = 25;

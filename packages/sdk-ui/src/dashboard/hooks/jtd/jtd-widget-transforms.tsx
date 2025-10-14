@@ -1,36 +1,40 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import Tooltip from '@mui/material/Tooltip';
-import { combineHandlers } from '@/utils/combine-handlers';
-import { WidgetProps, PivotTableDataPointEventHandler } from '@/props.js';
-import { DataPoint, PivotTableDataPoint } from '@/types';
+
+import { JtdJumpableIcon } from '@/common/icons/jtd-jumpable-icon';
 import { CustomDataCellFormatter, CustomHeaderCellFormatter } from '@/pivot-table/formatters/types';
+import { PivotTableDataPointEventHandler, WidgetProps } from '@/props.js';
+import { DEFAULT_HYPERLINK_COLOR } from '@/theme-provider/default-theme-settings';
+import { DataPoint, PivotTableDataPoint } from '@/types';
+import { combineHandlers } from '@/utils/combine-handlers';
 import {
   isChartWidgetProps,
-  isTextWidgetProps,
   isPivotTableWidgetProps,
+  isTextWidgetProps,
   registerDataPointContextMenuHandler,
   registerDataPointsSelectedHandler,
 } from '@/widget-by-id/utils';
-import { JtdJumpableIcon } from '@/common/icons/jtd-jumpable-icon';
-import {
-  handleDataPointClick,
-  handleTextWidgetClick,
-  handlePivotDataPointClick,
-  convertPivotToDataPoint,
-  getJtdClickHandler,
-} from './jtd-handlers';
+
 import {
   createJtdHyperlinkDataCellFormatter,
   createJtdHyperlinkHeaderCellFormatter,
   getPivotTargetActionability,
 } from './jtd-formatters';
 import {
+  convertPivotToDataPoint,
+  getJtdClickHandler,
+  handleDataPointClick,
+  handlePivotDataPointClick,
+  handleTextWidgetClick,
+} from './jtd-handlers';
+import {
   getJumpToDashboardMenuItem,
   getJumpToDashboardMenuItemForMultiplePoints,
 } from './jtd-menu';
 import { JtdActions, JtdWidgetTransformConfig } from './jtd-types';
-import { DEFAULT_HYPERLINK_COLOR } from '@/theme-provider/default-theme-settings';
 
 const jumpToDashboardMenuId = 'jump-to-dashboard-menu';
 

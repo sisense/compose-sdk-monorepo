@@ -1,9 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { IndicatorLegacyChartDataOptions } from '../indicator-legacy-chart-data-options';
 import {
@@ -15,6 +21,7 @@ import {
   NumericSimpleOptions,
 } from '../types';
 import { IndicatorHelper } from './indicator-helper';
+
 const $indicatorHelper = new IndicatorHelper();
 
 /**

@@ -1,6 +1,7 @@
 import { getTreemapChartDesignOptions } from '@/chart-options-processor/style-to-design-options-translator/translate-to-highcharts-options';
 import { type ChartStyleOptions } from '@/types';
-import type { TreemapChartStyleOptions, TreemapChartDesignOptions } from '../types';
+
+import type { TreemapChartDesignOptions, TreemapChartStyleOptions } from '../types';
 
 export const designOptionsTranslators = {
   translateStyleOptionsToDesignOptions: (

@@ -1,5 +1,6 @@
-import classnames from 'classnames';
 import React, { ChangeEvent, MouseEvent } from 'react';
+
+import classnames from 'classnames';
 
 import { DEPRECATED_Icon } from '../DEPRECATED_Icon';
 import style from './Checkbox.module.scss';

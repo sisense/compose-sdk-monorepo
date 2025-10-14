@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/** @vitest-environment jsdom */
 
-import { getDashboardModel, type GetDashboardModelOptions } from './get-dashboard-model';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+/** @vitest-environment jsdom */
 import { type HttpClient } from '@sisense/sdk-rest-client';
-import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import zipObject from 'lodash-es/zipObject';
+
+import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import { isWidgetModel } from '../widget';
+import { getDashboardModel, type GetDashboardModelOptions } from './get-dashboard-model';
 
 const getDashboardMock = vi.fn((): typeof dashboardMock | undefined => {
   // eslint-disable-next-line no-unused-vars
@@ -15,6 +17,11 @@ const getDashboardMock = vi.fn((): typeof dashboardMock | undefined => {
 });
 const getDashboardWidgetsMock = vi.fn(() => dashboardMock.widgets);
 const getWidgetMock = vi.fn((id) => dashboardMock.widgets?.find((w) => w.oid === id));
+const getDashboardLegacyMock = vi.fn((): typeof dashboardMock | undefined => {
+  // eslint-disable-next-line no-unused-vars
+  const { widgets, ...dashboardWithoutWidgets } = dashboardMock;
+  return dashboardWithoutWidgets;
+});
 vi.mock('../../api/rest-api', () => ({
   RestApi: class {
     getDashboard = getDashboardMock;
@@ -22,6 +29,8 @@ vi.mock('../../api/rest-api', () => ({
     getDashboardWidgets = getDashboardWidgetsMock;
 
     getWidget = getWidgetMock;
+
+    getDashboardLegacy = getDashboardLegacyMock;
   },
 }));
 
@@ -32,6 +41,7 @@ describe('getDashboardModel', () => {
     getDashboardMock.mockClear();
     getDashboardWidgetsMock.mockClear();
     getWidgetMock.mockClear();
+    getDashboardLegacyMock.mockClear();
   });
 
   it('should fetch a dashboard model', async () => {
@@ -57,6 +67,7 @@ describe('getDashboardModel', () => {
         },
       },
       settings: dashboardMock.settings,
+      userAuth: expect.anything(),
     });
   });
 
@@ -95,6 +106,7 @@ describe('getDashboardModel', () => {
         },
       },
       settings: dashboardMock.settings,
+      userAuth: expect.anything(),
     });
   });
 
@@ -142,6 +154,7 @@ describe('getDashboardModel', () => {
         },
       },
       settings: dashboardMock.settings,
+      userAuth: expect.anything(),
     });
   });
 
@@ -174,5 +187,80 @@ describe('getDashboardModel', () => {
 
     expect(result).toBeUndefined();
     expect(error).toEqual(new Error('Network error'));
+  });
+
+  describe('useLegacyApiVersion', () => {
+    it('should fetch a dashboard model using legacy API', async () => {
+      const options: GetDashboardModelOptions = {
+        useLegacyApiVersion: true,
+      };
+      const result = await getDashboardModel(httpClientMock, dashboardMock.oid, options);
+
+      expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid);
+      expect(getDashboardMock).not.toHaveBeenCalled();
+      expect(result).toEqual({
+        oid: dashboardMock.oid,
+        title: dashboardMock.title,
+        layoutOptions: expect.anything(),
+        filters: expect.anything(),
+        widgets: expect.anything(),
+        widgetsOptions: expect.anything(),
+        tabbersOptions: expect.anything(),
+        dataSource: {
+          id: dashboardMock.datasource.id,
+          address: dashboardMock.datasource.address,
+          title: dashboardMock.datasource.title,
+          type: 'elasticube',
+        },
+        styleOptions: {
+          palette: {
+            variantColors: dashboardMock.style!.palette!.colors,
+          },
+        },
+        settings: dashboardMock.settings,
+        userAuth: expect.anything(),
+      });
+    });
+
+    it("should throw an error if the dashboard doesn't exist with legacy API", async () => {
+      getDashboardLegacyMock.mockReturnValueOnce(undefined);
+
+      let result;
+      let error;
+      try {
+        result = await getDashboardModel(httpClientMock, dashboardMock.oid, {
+          useLegacyApiVersion: true,
+        });
+      } catch (e) {
+        error = e;
+      }
+
+      expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid);
+      expect(getDashboardMock).not.toHaveBeenCalled();
+      expect(result).toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect((error as Error).message).toContain(
+        `Dashboard with oid ${dashboardMock.oid} not found`,
+      );
+    });
+
+    it('should handle network error with legacy API', async () => {
+      getDashboardLegacyMock.mockRejectedValueOnce(new Error('Legacy API network error'));
+
+      let result;
+      let error;
+      try {
+        result = await getDashboardModel(httpClientMock, dashboardMock.oid, {
+          useLegacyApiVersion: true,
+        });
+      } catch (e) {
+        error = e;
+      }
+
+      expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid);
+      expect(getDashboardMock).not.toHaveBeenCalled();
+      expect(result).toBeUndefined();
+      expect(error).toEqual(new Error('Legacy API network error'));
+    });
   });
 });

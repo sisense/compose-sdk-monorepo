@@ -1,12 +1,14 @@
-import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useJtdInternal } from './use-jtd';
+import { type Attribute, filterFactory, Sort } from '@sisense/sdk-data';
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { ChartWidgetProps } from '@/props';
+
+import { normalizeToJumpToDashboardConfig } from './jtd/jtd-config-transformers';
 import { getFormulaContextFilters, handleFormulaDuplicateFilters } from './jtd/jtd-filters';
 import { getJtdClickHandler } from './jtd/jtd-handlers';
-import { ChartWidgetProps } from '@/props';
 import { JtdConfig, JtdTarget, JumpToDashboardConfig } from './jtd/jtd-types';
-import { normalizeToJumpToDashboardConfig } from './jtd/jtd-config-transformers';
-import { filterFactory, type Attribute, Sort } from '@sisense/sdk-data';
+import { useJtdInternal } from './use-jtd';
 
 // Mock filterFactory.members to return proper filter objects
 const createMockFilter = (attribute: any, members: string[]) => ({

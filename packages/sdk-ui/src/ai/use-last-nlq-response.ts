@@ -1,7 +1,8 @@
-import type { NlqResponseData, ChatContextDetails } from './api/types';
-import { useChatHistory } from './api/chat-history';
 import { useGetChat } from '@/ai/use-get-chat';
 import { useLastNlqResponseFromHistory } from '@/ai/use-last-nlq-response-from-history';
+
+import { useChatHistory } from './api/chat-history';
+import type { ChatContextDetails, NlqResponseData } from './api/types';
 
 /**
  * Parameters for the useLastNlqResponse hook.

@@ -1,9 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { useChatConfig } from '../chat-config';
 import { useChatApi } from './chat-api-provider';
 import type { ChatMessage } from './types';
-import { useChatConfig } from '../chat-config';
 
 export const CHAT_HISTORY_QUERY_KEY = 'chatHistory';
 

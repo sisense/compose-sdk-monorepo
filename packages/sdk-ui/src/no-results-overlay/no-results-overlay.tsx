@@ -1,9 +1,10 @@
-import styles from './no-results-overlay.module.scss';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { useThemeContext } from '../theme-provider';
 import { ChartType, TableType } from '../types';
 import { getNoResultOverlayImage } from './images';
-import { useTranslation } from 'react-i18next';
+import styles from './no-results-overlay.module.scss';
 
 /**
  * This component displays `No Results` overlay for visualization (e.g., Chart, Table) with no data

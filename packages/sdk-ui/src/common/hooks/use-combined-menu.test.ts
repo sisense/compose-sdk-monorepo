@@ -1,7 +1,8 @@
 /* eslint-disable vitest/no-commented-out-tests */
 import { renderHook } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { useCombinedMenu, CombineMenusFn } from './use-combined-menu';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
+import { CombineMenusFn, useCombinedMenu } from './use-combined-menu';
 import { useMenu } from './use-menu';
 
 // Mock the useMenu hook so we can spy on its return value

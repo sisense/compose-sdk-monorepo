@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.11.0",
+  "version": "2.12.0",
   "type": "module",
   "exports": {
     ".": {
@@ -64,6 +64,7 @@
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.11",
     "@mui/material": "^6.4.11",
     "@mui/system": "^6.4.11",
     "@sisense/sdk-common": "workspace:*",
@@ -72,7 +73,7 @@
     "@sisense/sdk-query-client": "workspace:*",
     "@sisense/sdk-rest-client": "workspace:*",
     "@sisense/sdk-tracking": "workspace:*",
-    "@sisense/sisense-charts": "5.2.0",
+    "@sisense/sisense-charts": "5.2.1",
     "@tanstack/react-query": "4.40.1",
     "classnames": "^2.3.2",
     "colorjs.io": "^0.4.3",
@@ -128,7 +129,6 @@
   ],
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
-    "@mui/icons-material": "^6.4.6",
     "@mui/x-data-grid": "^7.29.0",
     "@storybook/addon-docs": "9.1.6",
     "@storybook/addon-links": "9.1.6",

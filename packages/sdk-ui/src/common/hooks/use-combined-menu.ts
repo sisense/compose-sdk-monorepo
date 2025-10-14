@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react';
+
 import { MenuOptions } from '../components/menu/types.js';
 import { useMenu } from './use-menu.js';
 

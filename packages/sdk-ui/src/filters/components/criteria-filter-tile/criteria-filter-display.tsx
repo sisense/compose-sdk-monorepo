@@ -1,12 +1,14 @@
 /* eslint-disable security/detect-object-injection */
 import { FunctionComponent } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { FilterContentDisplay } from '@/filters/components/common';
+
 import {
-  FilterOptionType,
   CRITERIA_FILTER_MAP,
   CriteriaFilterValueType,
+  FilterOptionType,
 } from './criteria-filter-operations.js';
-import { useTranslation } from 'react-i18next';
-import { FilterContentDisplay } from '@/filters/components/common';
 
 /**
  * Props for {@link CriteriaFilterDisplay}

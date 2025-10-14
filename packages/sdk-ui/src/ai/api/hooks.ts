@@ -1,11 +1,13 @@
 import { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { ChatMessage, ChatResponse, ChatContextDetails } from './types';
+import { TranslatableError } from '@/translation/translatable-error';
+
 import { useChatApi } from './chat-api-provider';
 import { CHAT_HISTORY_QUERY_KEY } from './chat-history';
-import { useTranslation } from 'react-i18next';
-import { TranslatableError } from '@/translation/translatable-error';
+import type { ChatContextDetails, ChatMessage, ChatResponse } from './types';
 
 /**
  * @internal

@@ -1,5 +1,6 @@
-import { GetDashboardModelParams, useGetDashboardModelInternal } from '../use-get-dashboard-model';
 import { withTracking } from '@/decorators/hook-decorators';
+
+import { GetDashboardModelParams, useGetDashboardModelInternal } from '../use-get-dashboard-model';
 import {
   useDashboardPersistence,
   UseDashboardPersistenceResult,

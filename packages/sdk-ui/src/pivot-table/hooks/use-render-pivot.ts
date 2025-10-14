@@ -1,16 +1,19 @@
-import { useCallback, useMemo, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import {
   EVENT_PIVOT_ELEMENT_CHANGE,
   type PivotBuilder,
   type PivotTreeNode,
 } from '@sisense/sdk-pivot-client';
-import type { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
+
 import type { PivotTableDataOptionsInternal, StyledColumn } from '@/chart-data-options/types';
-import type { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
-import { preparePivotStylingProps } from '../helpers/prepare-pivot-styling-props';
 import { useSyncedState } from '@/common/hooks/use-synced-state';
+import type { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
+import { PivotTableDataPointEventHandler } from '@/props';
+import type { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
+
+import { preparePivotStylingProps } from '../helpers/prepare-pivot-styling-props';
 import { useApplyPivotTableCellEvents } from './use-apply-pivot-table-cell-events';
-import { PivotTableDataPointEventHandler } from '@/index-typedoc';
 
 const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
 

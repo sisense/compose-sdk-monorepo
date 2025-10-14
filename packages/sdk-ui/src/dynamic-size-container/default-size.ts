@@ -1,6 +1,7 @@
+import { DEFAULT_WIDGET_HEADER_HEIGHT } from '@/widgets/constants';
+
 import { isIndicator, isTable, TableType } from '../chart-options-processor/translations/types';
 import { ChartType } from '../types';
-import { DEFAULT_WIDGET_HEADER_HEIGHT } from '@/widgets/constants';
 
 export const DEFAULT_PIVOT_TABLE_SIZE = {
   width: 400,

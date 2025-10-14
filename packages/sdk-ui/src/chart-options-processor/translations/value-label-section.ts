@@ -1,12 +1,21 @@
 /* eslint-disable max-params */
 import type { DataLabelsOptions } from '@sisense/sisense-charts';
-import { TextStyle } from './types';
-import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
-import { AxisOrientation } from './axis-section';
-import { HighchartsDataPointContext } from './tooltip-utils';
-import { PolarType } from './design-options';
+
 import { NumberFormatConfig, SeriesLabels } from '@/types';
+
 import { prepareDataLabelsOptions } from '../series-labels';
+import { AxisOrientation } from './axis-section';
+import { PolarType } from './design-options';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
+import { HighchartsDataPointContext } from './tooltip-utils';
+import { TextStyle } from './types';
+
+export type ValueLabelOptions = {
+  enabled?: boolean;
+  rotation?: number;
+  showValue?: boolean;
+  showPercentage?: boolean;
+};
 
 export type RotationType = 'horizontal' | 'diagonal' | 'vertical';
 

@@ -1,11 +1,12 @@
-import { prepareTreemapDataItems } from '../treemap/treemap-series';
-import { CategoricalChartData } from '../../../chart-data/types';
-import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { CompleteThemeSettings, UniformDataColorOptions } from '../../../types';
-import { SeriesPointStructure } from '../translations-to-highcharts';
-import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
-import { getExplicitColorSteps, scaleBrightness } from '../../../utils/color';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
+
+import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
+import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
+import { CategoricalChartData } from '../../../chart-data/types';
+import { CompleteThemeSettings, UniformDataColorOptions } from '../../../types';
+import { getExplicitColorSteps, scaleBrightness } from '../../../utils/color';
+import { SeriesPointStructure } from '../translations-to-highcharts';
+import { prepareTreemapDataItems } from '../treemap/treemap-series';
 
 export const SUNBURST_ROOT_PARENT_ID = 'SUNBURST_ROOT_PARENT_ID';
 

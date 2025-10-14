@@ -1,26 +1,30 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable max-params */
-import {
-  orderBy,
-  filterBy,
-  Column,
-  FilterTypes,
-  groupBy,
-  getDistinctTable,
-  getValuesAsString,
-  getColumnsByName,
-  getIndexedRows,
-  selectColumns,
-  BooleanOperator,
-  DataTable,
-  innerJoin,
-  limitRows,
-} from './table-processor';
-import { createSortableTable, TableData } from './table-creators';
 import parseISO from 'date-fns/parseISO';
 import cloneDeep from 'lodash-es/cloneDeep';
+
+import { createSortableTable, TableData } from './table-creators';
+import {
+  BooleanOperator,
+  Column,
+  DataTable,
+  filterBy,
+  FilterTypes,
+  getColumnsByName,
+  getDistinctTable,
+  getIndexedRows,
+  getValuesAsString,
+  groupBy,
+  innerJoin,
+  limitRows,
+  orderBy,
+  selectColumns,
+} from './table-processor';
 
 const tableData: TableData = {
   columns: [

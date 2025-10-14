@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
 import { TFunction } from '@sisense/sdk-common';
 import {
   DateLevels,
@@ -9,15 +11,16 @@ import {
   FilterConfig,
   filterFactory,
 } from '@sisense/sdk-data';
+
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+import { createLevelAttribute } from '@/utils/create-level-attribute';
+
+import { Checkbox } from '../../common';
+import { Input, SingleSelect } from '../common';
 import { SelectableSection } from '../common/selectable-section';
 import { isRelativeDateFilterWithoutAnchor } from '../utils';
-import { useThemeContext } from '@/theme-provider';
-import { Input, SingleSelect } from '../common';
-import { Checkbox } from '../../common';
-import styled from '@emotion/styled';
-import { Themable } from '@/theme-provider/types';
 import { dateLevelGranularities as granularities } from './common/granularities';
-import { createLevelAttribute } from '@/utils/create-level-attribute';
 
 const IncludeCurrentCheckbox = styled(Checkbox)`
   margin-top: 0;

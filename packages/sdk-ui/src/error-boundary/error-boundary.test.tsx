@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+
 import { ErrorBoundary } from './error-boundary';
-import { beforeAll, afterAll, describe, it, expect, vi } from 'vitest';
 
 // Mock dependencies used by ErrorBoundary and ErrorBoundaryBox
 vi.mock('react-i18next', () => ({

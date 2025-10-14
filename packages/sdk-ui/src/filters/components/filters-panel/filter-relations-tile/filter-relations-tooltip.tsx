@@ -1,10 +1,13 @@
-import { useThemeContext } from '@/theme-provider';
-import { Themable } from '@/theme-provider/types';
-import { FilterRelationsRules, getFilterRelationsDescription } from '@/utils/filter-relations';
+import { useTranslation } from 'react-i18next';
+
 import styled from '@emotion/styled';
 import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
 import { Filter } from '@sisense/sdk-data';
-import { useTranslation } from 'react-i18next';
+
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+import { FilterRelationsRules, getFilterRelationsDescription } from '@/utils/filter-relations';
+
 import { generateTooltipLines } from './tooltip-utils';
 
 export function FilterRelationsTooltip({

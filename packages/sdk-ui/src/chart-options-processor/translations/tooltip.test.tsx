@@ -1,4 +1,5 @@
 import type { NumberFormatConfig } from '@/types';
+
 import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
 import { getCartesianTooltipSettings } from './tooltip';
 import { HighchartsDataPointContext } from './tooltip-utils';

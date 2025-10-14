@@ -1,7 +1,8 @@
-import { CalendarHeatmapStyleOptions, ChartStyleOptions } from '@/types';
-import { DesignOptions } from '@/chart-options-processor/translations/types';
-import { CALENDAR_HEATMAP_DEFAULTS } from './constants.js';
 import { BaseDesignOptions } from '@/chart-options-processor/translations/base-design-options.js';
+import { DesignOptions } from '@/chart-options-processor/translations/types';
+import { CalendarHeatmapStyleOptions, ChartStyleOptions } from '@/types';
+
+import { CALENDAR_HEATMAP_DEFAULTS } from './constants.js';
 
 /**
  * Translates calendar heatmap style options to design options
@@ -23,15 +24,15 @@ export function translateCalendarHeatmapStyleOptionsToDesignOptions(
     startOfWeek: styleOptions.startOfWeek || CALENDAR_HEATMAP_DEFAULTS.START_OF_WEEK,
     cellLabels: {
       enabled: styleOptions.cellLabels?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_CELL_LABEL,
-      style: styleOptions.cellLabels?.style,
+      style: styleOptions.cellLabels?.textStyle || styleOptions.cellLabels?.style,
     },
     dayLabels: {
       enabled: styleOptions.dayLabels?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_DAY_LABEL,
-      style: styleOptions.dayLabels?.style,
+      style: styleOptions.dayLabels?.textStyle || styleOptions.dayLabels?.style,
     },
     monthLabels: {
       enabled: styleOptions.monthLabels?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_MONTH_LABEL,
-      style: styleOptions.monthLabels?.style,
+      style: styleOptions.monthLabels?.textStyle || styleOptions.monthLabels?.style,
     },
     weekends: {
       enabled: styleOptions.weekends?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.WEEKEND_ENABLED,
@@ -39,6 +40,11 @@ export function translateCalendarHeatmapStyleOptionsToDesignOptions(
       cellColor: styleOptions.weekends?.cellColor ?? CALENDAR_HEATMAP_DEFAULTS.WEEKEND_CELL_COLOR,
       hideValues:
         styleOptions.weekends?.hideValues ?? CALENDAR_HEATMAP_DEFAULTS.WEEKEND_HIDE_VALUES,
+    },
+    pagination: {
+      enabled: styleOptions.pagination?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_PAGINATION,
+      style: styleOptions.pagination?.textStyle,
+      startMonth: styleOptions.pagination?.startMonth,
     },
   };
 }

@@ -1,10 +1,12 @@
-import { Meta, StoryObj } from '@storybook/react-vite';
-import GetNlgInsights from '../get-nlg-insights';
-import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
-import { SisenseContextProviderProps } from '../../props';
-import AiContextProvider from '../ai-context-provider';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { measureFactory } from '@sisense/sdk-data';
+import { Meta, StoryObj } from '@storybook/react-vite';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+
+import { SisenseContextProviderProps } from '../../props';
+import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
+import AiContextProvider from '../ai-context-provider';
+import GetNlgInsights from '../get-nlg-insights';
 
 const sisenseContextProps: SisenseContextProviderProps = {
   url: import.meta.env.VITE_APP_SISENSE_URL ?? '',

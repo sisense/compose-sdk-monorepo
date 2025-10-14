@@ -1,16 +1,16 @@
 /* eslint-disable max-params */
-/* eslint-disable @typescript-eslint/naming-convention */
 
+/* eslint-disable @typescript-eslint/naming-convention */
 // Date instances are never mutated; new Date instances are created if a different Date is needed
 // Functions in the `date-fns` library also do not mutate Date instances
 // and always return a new Date instance.
-
+import formatInTimeZone from 'date-fns-tz/formatInTimeZone';
 import addYears from 'date-fns/addYears';
 import setMonth from 'date-fns/setMonth';
 import subYears from 'date-fns/subYears';
-import formatInTimeZone from 'date-fns-tz/formatInTimeZone';
+
 import type { DateFormat, DateLevel, MonthOfYear } from './apply-date-format';
-import { JAN, YEARS, QUARTERS, MONTHS, WEEKS, DAYS } from './apply-date-format';
+import { DAYS, JAN, MONTHS, QUARTERS, WEEKS, YEARS } from './apply-date-format';
 import { newDateFormat } from './new-date-format';
 
 export function subtractYearForFiscal(

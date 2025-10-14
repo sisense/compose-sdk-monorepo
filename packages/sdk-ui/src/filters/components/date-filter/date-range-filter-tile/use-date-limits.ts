@@ -1,14 +1,16 @@
+import { useEffect, useState } from 'react';
+
 import {
+  convertDataSource,
   DataSource,
   Filter,
   LevelAttribute,
-  convertDataSource,
   measureFactory,
 } from '@sisense/sdk-data';
-import { useSisenseContext } from '../../../../sisense-context/sisense-context';
-import { useEffect, useState } from 'react';
-import { executeQuery } from '../../../../query/execute-query';
+
 import { useSetError } from '../../../../error-boundary/use-set-error';
+import { executeQuery } from '../../../../query/execute-query';
+import { useSisenseContext } from '../../../../sisense-context/sisense-context';
 
 export type DateLimits = {
   minDate?: string;

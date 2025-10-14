@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /*
  * Types
  */
-
 import type {
   ConditionFilterJaql,
   JaqlDataSource,
@@ -347,6 +349,32 @@ export const DateLevels = {
       DateLevels.Months,
       DateLevels.Weeks,
       DateLevels.Days,
+      DateLevels.Hours,
+      DateLevels.MinutesRoundTo30,
+      DateLevels.MinutesRoundTo15,
+      DateLevels.Minutes,
+      DateLevels.Seconds,
+      DateLevels.AggHours,
+      DateLevels.AggMinutesRoundTo30,
+      DateLevels.AggMinutesRoundTo15,
+      DateLevels.AggMinutesRoundTo1,
+    ];
+  },
+
+  /** @internal */
+  get dateOnly(): string[] {
+    return [
+      DateLevels.Years,
+      DateLevels.Quarters,
+      DateLevels.Months,
+      DateLevels.Weeks,
+      DateLevels.Days,
+    ];
+  },
+
+  /** @internal */
+  get timeOnly(): string[] {
+    return [
       DateLevels.Hours,
       DateLevels.MinutesRoundTo30,
       DateLevels.MinutesRoundTo15,

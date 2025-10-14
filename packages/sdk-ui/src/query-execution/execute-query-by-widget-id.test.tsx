@@ -1,12 +1,13 @@
 /** @vitest-environment jsdom */
-
 import { render, waitFor } from '@testing-library/react';
-import * as widgetDrilldown from '../__mocks__/data/mock-widget-drilldown.json';
-import * as jaqlDrilldown from '../__mocks__/data/mock-jaql-drilldown.json';
-import { ExecuteQueryByWidgetId } from './execute-query-by-widget-id';
-import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
-import { mockUrl, mockToken, mockDashboardId, mockWidgetId, server } from '@/__mocks__/msw';
 import { http, HttpResponse } from 'msw';
+
+import { mockDashboardId, mockToken, mockUrl, mockWidgetId, server } from '@/__mocks__/msw';
+
+import * as jaqlDrilldown from '../__mocks__/data/mock-jaql-drilldown.json';
+import * as widgetDrilldown from '../__mocks__/data/mock-widget-drilldown.json';
+import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
+import { ExecuteQueryByWidgetId } from './execute-query-by-widget-id';
 
 describe('ExecuteQueryByWidgetId', () => {
   beforeEach(() => {

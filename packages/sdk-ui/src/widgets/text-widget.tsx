@@ -1,12 +1,16 @@
-import styled from '@emotion/styled';
 import { FunctionComponent, type MouseEvent } from 'react';
+
+import styled from '@emotion/styled';
 import DOMPurify from 'dompurify';
-import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
-import { TextWidgetStyleOptions, CompleteThemeSettings, TextWidgetDataPoint } from '@/types';
-import { TextWidgetProps } from '@/props';
-import { WidgetSpaceAround } from './common/widget-style-utils';
-import { useThemeContext } from '../theme-provider';
 import get from 'lodash-es/get';
+
+import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+import { TextWidgetProps } from '@/props';
+import { CompleteThemeSettings, TextWidgetDataPoint, TextWidgetStyleOptions } from '@/types';
+
+import { useThemeContext } from '../theme-provider';
+import { WidgetSpaceAround } from './common/widget-style-utils';
+
 export function isTextWidgetProps(props: any): props is TextWidgetProps {
   return (
     props !== null &&

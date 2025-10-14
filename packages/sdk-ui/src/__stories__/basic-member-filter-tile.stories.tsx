@@ -1,10 +1,11 @@
 import type { Meta } from '@storybook/react-vite';
-import { ThemeProvider } from '../theme-provider';
+
 import { BasicMemberFilterTile } from '../filters';
 import type {
   Member,
   SelectedMember,
 } from '../filters/components/member-filter-tile/members-reducer';
+import { ThemeProvider } from '../theme-provider';
 import { templateForComponent } from './template';
 
 const template = templateForComponent(BasicMemberFilterTile);

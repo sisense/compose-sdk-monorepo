@@ -1,13 +1,15 @@
-import { server } from '@/__mocks__/msw';
-import { setup } from '@/__test-helpers__';
 import { screen, waitFor, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { GetNlgInsightsResponse } from '../api/types.js';
+import { setTimeout } from 'timers/promises';
+
+import { server } from '@/__mocks__/msw';
+import { setup } from '@/__test-helpers__';
+
 import { AiTestWrapper } from '../__mocks__/index.js';
 import MOCK_JAQL_RESPONSE from '../__mocks__/jaql-response.js';
 import MOCK_NLQ_RESPONSE from '../__mocks__/nlq-response.js';
+import { GetNlgInsightsResponse } from '../api/types.js';
 import NlqMessageGroup from './nlq-message-group.js';
-import { setTimeout } from 'timers/promises';
 
 vi.mock(
   'highcharts-react-official',

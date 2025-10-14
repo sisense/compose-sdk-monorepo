@@ -3,11 +3,11 @@ import {
   createHighchartsBasedChartRenderer,
   isHighchartsBasedChartRendererProps,
 } from '../../highcharts-based-chart-renderer/highcharts-based-chart-renderer';
-import { dataOptionsTranslators } from './data-options';
+import { getSunburstAlerts } from './alerts';
 import { dataTranslators } from './data';
+import { dataOptionsTranslators } from './data-options';
 import { designOptionsTranslators } from './design-options';
 import { sunburstHighchartsOptionsBuilder } from './highchart-options/highcharts-options-builder';
-import { getSunburstAlerts } from './alerts';
 
 export const sunburstChartBuilder: ChartBuilder<'sunburst'> = {
   dataOptions: dataOptionsTranslators,

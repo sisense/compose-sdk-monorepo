@@ -1,7 +1,9 @@
-import { describe, test, expect } from 'vitest';
-import { translateLineStyleOptionsToDesignOptions, isLineStyleOptions } from './design-options';
-import { LineStyleOptions, LineSubtype } from '@/types';
+import { describe, expect, test } from 'vitest';
+
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
+import { LineStyleOptions, LineSubtype } from '@/types';
+
+import { isLineStyleOptions, translateLineStyleOptionsToDesignOptions } from './design-options';
 
 // Mock data options for testing
 const mockDataOptions: CartesianChartDataOptionsInternal = {

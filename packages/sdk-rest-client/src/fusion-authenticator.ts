@@ -1,5 +1,4 @@
 /// <reference lib="dom" />
-
 import { BaseAuthenticator } from './base-authenticator.js';
 import { appendHeaders } from './helpers.js';
 import { Authenticator } from './interfaces.js';

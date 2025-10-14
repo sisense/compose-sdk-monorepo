@@ -1,14 +1,14 @@
+import { PluginsPanelFields } from '../../constants.js';
 import {
   DimensionMetadata,
-  DimensionTarget,
   DimensionOptions,
-  MeasureOptions,
+  DimensionTarget,
   MeasureMetadata,
+  MeasureOptions,
   Metadata,
   Target,
   ValueTarget,
 } from './types.js';
-import { PluginsPanelFields } from '../../constants.js';
 
 /**
  * Validate metadata by target type

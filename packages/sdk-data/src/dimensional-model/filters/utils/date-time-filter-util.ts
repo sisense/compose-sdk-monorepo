@@ -1,4 +1,5 @@
 import { DatetimeLevel } from './types.js';
+
 export const getCorrectTimeLevel = (level?: DatetimeLevel, bucket?: string): DatetimeLevel => {
   let newLevel = level ? (level.toLocaleLowerCase() as DatetimeLevel) : DatetimeLevel.YEARS;
 

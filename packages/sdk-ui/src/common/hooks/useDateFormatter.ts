@@ -1,5 +1,7 @@
-import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { useCallback } from 'react';
+
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+
 import { createDateFormatter, DateFormatter } from '../formatters/create-date-formatter';
 
 /**

@@ -2,8 +2,8 @@ import { DataColorOptions } from '../../types.js';
 import { getConditionalColoringFunction } from './conditional-coloring.js';
 import { getRangeColoringFunction } from './range-coloring.js';
 import {
-  getUniformColorOptionsFromString,
   getUniformColoringFunction,
+  getUniformColorOptionsFromString,
 } from './uniform-coloring.js';
 
 /**

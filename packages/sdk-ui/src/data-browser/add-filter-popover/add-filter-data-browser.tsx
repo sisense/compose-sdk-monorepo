@@ -1,6 +1,4 @@
-import { withLazyLoading } from '@/common/hooks/decorators/with-lazy-loading';
-import { useGetDataSourceFields } from '@/common/hooks/fusion-endpoints/use-get-data-source-fields';
-import { useThemeContext } from '@/theme-provider';
+import { useMemo, useState } from 'react';
 
 import {
   DataSource,
@@ -8,13 +6,17 @@ import {
   Dimension,
   getDimensionsFromDataSourceFields,
 } from '@sisense/sdk-data';
-import { useMemo, useState } from 'react';
+
+import { withLazyLoading } from '@/common/hooks/decorators/with-lazy-loading';
+import { useGetDataSourceFields } from '@/common/hooks/fusion-endpoints/use-get-data-source-fields';
+import { useThemeContext } from '@/theme-provider';
+
+import { DimensionsBrowserContainer } from '../data-schema-browser/data-schema-browser.styles.js';
 import { DataSourceSelector } from '../data-source-selector/data-source-selector.js';
 import { useDataSourceSelection } from '../data-source-selector/use-data-source-selection.js';
 import { DimensionsBrowser } from '../dimensions-browser/dimensions-browser.js';
 import { AttributiveElement } from '../dimensions-browser/types.js';
 import { SearchInput } from '../search-input/search-input.js';
-import { DimensionsBrowserContainer } from '../data-schema-browser/data-schema-browser.styles.js';
 
 type AddFilterDataBrowserProps = {
   dataSources: DataSource[];

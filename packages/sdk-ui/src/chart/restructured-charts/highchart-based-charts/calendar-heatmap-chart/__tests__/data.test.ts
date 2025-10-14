@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
-import { getCalendarHeatmapChartData } from '../data.js';
+import { describe, expect, it, vi } from 'vitest';
+
 import { CalendarHeatmapChartDataOptionsInternal } from '@/chart-data-options/types';
 import { DataTable } from '@/chart-data-processor/table-processor';
+
+import { getCalendarHeatmapChartData } from '../data.js';
 
 // Mock the withCalendarHeatmapDataColoring function
 vi.mock('../utils/index.js', () => ({

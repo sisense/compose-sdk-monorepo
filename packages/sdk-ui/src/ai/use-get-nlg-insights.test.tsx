@@ -1,9 +1,11 @@
-import { server } from '@/__mocks__/msw';
 import { renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
+
+import { server } from '@/__mocks__/msw';
+
 import { AiTestWrapper } from './__mocks__';
-import { useGetNlgInsights, UseGetNlgInsightsParams } from './use-get-nlg-insights';
 import { GetNlgInsightsResponse } from './api/types';
+import { useGetNlgInsights, UseGetNlgInsightsParams } from './use-get-nlg-insights';
 
 const mockNlgParams: UseGetNlgInsightsParams = {
   dataSource: 'My Data Source',

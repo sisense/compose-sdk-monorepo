@@ -1,5 +1,6 @@
-import { useThemeContext } from '../../../theme-provider';
 import { scaleBrightness } from '@/utils/color';
+
+import { useThemeContext } from '../../../theme-provider';
 
 export const useThemeForBreadcrumbs = () => {
   const {

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { widgetModelTranslator } from '.';
-import { WidgetDto, FusionWidgetType } from '../../widget-by-id/types';
-import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 import { getWidgetType } from '@/widget-by-id/utils';
+
+import { widgetModelTranslator } from '.';
+import { FusionWidgetType, WidgetDto } from '../../widget-by-id/types';
+import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
 
 describe('WidgetModel', () => {
   let mockWidgetDto: WidgetDto;

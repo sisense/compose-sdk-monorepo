@@ -1,18 +1,19 @@
-import { renderHook } from '@testing-library/react';
 import {
+  type DataService,
   EVENT_DATA_CELL_FORMAT,
   EVENT_HEADER_CELL_FORMAT,
-  type DataService,
 } from '@sisense/sdk-pivot-client';
+import { renderHook } from '@testing-library/react';
 
-import { useApplyPivotTableFormatting } from './use-apply-pivot-table-formatting';
-import { useSisenseContextMock } from '@/sisense-context/__mocks__/sisense-context';
-import type { PivotTableDataOptionsInternal } from '@/chart-data-options/types';
 import type { ClientApplication } from '@/app/client-application';
+import type { PivotTableDataOptionsInternal } from '@/chart-data-options/types';
 import type {
   CustomDataCellFormatter,
   CustomHeaderCellFormatter,
 } from '@/pivot-table/formatters/types';
+import { useSisenseContextMock } from '@/sisense-context/__mocks__/sisense-context';
+
+import { useApplyPivotTableFormatting } from './use-apply-pivot-table-formatting';
 
 vi.mock('@/sisense-context/sisense-context');
 

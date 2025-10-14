@@ -1,12 +1,12 @@
-import { DesignOptions } from './types';
-import { DefaultPieType, DefaultPieLabels } from './pie-plot-options';
+import { Merge } from '../../utils/utility-types';
 import {
-  DefaultFunnelType,
-  DefaultFunnelSize,
   DefaultFunnelDirection,
   DefaultFunnelLabels,
+  DefaultFunnelSize,
+  DefaultFunnelType,
 } from './funnel-plot-options';
-import { Merge } from '../../utils/utility-types';
+import { DefaultPieLabels, DefaultPieType } from './pie-plot-options';
+import { DesignOptions } from './types';
 
 export const SERIES_CAPACITY = 50;
 export const PIE_SERIES_CAPACITY = 1000;

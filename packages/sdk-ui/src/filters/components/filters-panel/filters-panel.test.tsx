@@ -1,8 +1,10 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { MockedSisenseContextProvider } from '@/__test-helpers__';
 import { Attribute, Filter, filterFactory } from '@sisense/sdk-data';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+
+import { MockedSisenseContextProvider } from '@/__test-helpers__';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+
 import { FiltersPanel } from './filters-panel';
 
 vi.mock('@/filters/components/filter-tile', () => {

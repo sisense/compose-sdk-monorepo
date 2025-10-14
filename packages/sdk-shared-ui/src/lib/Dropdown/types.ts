@@ -12,6 +12,6 @@ export type DropdownItem = {
   caption: string;
   iconName?: string;
   iconClass?: string;
-  tooltip?: string | React.ReactFragment;
+  tooltip?: string | React.ReactNode;
   disabled?: boolean;
 };

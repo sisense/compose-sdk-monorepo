@@ -1,7 +1,8 @@
-import { defineComponent, provide, ref, watchEffect } from 'vue';
-import type { PropType, Ref } from 'vue';
 import type { AiContextProviderProps as AiContextProviderPropsPreact } from '@sisense/sdk-ui-preact/ai';
 import { ChatRestApi, type CustomAiContext } from '@sisense/sdk-ui-preact/ai';
+import { defineComponent, provide, ref, watchEffect } from 'vue';
+import type { PropType, Ref } from 'vue';
+
 import { getSisenseContext } from '../../../providers';
 import { aiContextKey, defaultAiContext } from './ai-context';
 

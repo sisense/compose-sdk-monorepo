@@ -1,12 +1,12 @@
 import React from 'react';
-import { produce } from 'immer';
 
 import { CheckableList, type CheckableListProps } from '@sisense/sdk-shared-ui/CheckableList';
+import { produce } from 'immer';
 
-import { Header } from '../Header/index.js';
-import { SortingDirection } from '../../../data-handling/constants.js';
 import { TranslatedMessages } from '../../../builders/pivot-builder.js';
+import { SortingDirection } from '../../../data-handling/constants.js';
 import { makeGetCaption } from '../getCaption.js';
+import { Header } from '../Header/index.js';
 import { SortingSettingItem } from '../SortingSettingItem.js';
 
 type Props = {

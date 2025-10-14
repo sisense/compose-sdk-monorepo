@@ -1,10 +1,11 @@
-import { SeriesType } from '../chart-options-service';
-import { formatFunnelChartData } from './funnel-series';
-import { CategoricalChartData } from '../../chart-data/types';
 import { createAttribute } from '@sisense/sdk-data';
-import { FunnelChartDesignOptions } from './design-options';
-import { BaseDesignOptions } from './base-design-options';
+
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
+import { CategoricalChartData } from '../../chart-data/types';
+import { SeriesType } from '../chart-options-service';
+import { BaseDesignOptions } from './base-design-options';
+import { FunnelChartDesignOptions } from './design-options';
+import { formatFunnelChartData } from './funnel-series';
 
 describe('formatFunnelChartData', () => {
   const mockDesignOptions: FunnelChartDesignOptions = { ...BaseDesignOptions };

@@ -1,10 +1,7 @@
 import { Attribute, filterFactory, MembersFilter } from '@sisense/sdk-data';
+
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import {
-  createCommonFiltersOverSelections,
-  getSelectableWidgetAttributes,
-  getWidgetSelections,
-} from './selection-utils';
+
 import {
   AreamapDataPoint,
   BoxplotDataPoint,
@@ -13,6 +10,11 @@ import {
   ScatterDataPoint,
   ScattermapDataPoint,
 } from '..';
+import {
+  createCommonFiltersOverSelections,
+  getSelectableWidgetAttributes,
+  getWidgetSelections,
+} from './selection-utils';
 
 describe('createCommonFiltersOverSelections()', () => {
   const filters: MembersFilter[] = [

@@ -1,9 +1,11 @@
 import type { DataLabelsOptions } from '@sisense/sisense-charts';
+
+import { prepareDataLabelsOptions } from '@/chart-options-processor/series-labels.js';
+import { SeriesLabels } from '@/types.js';
+
 import { PlotOptions } from '../../chart-options-service.js';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from '../number-format-config.js';
 import { HighchartsDataPointContext } from '../tooltip-utils.js';
-import { SeriesLabels } from '@/types.js';
-import { prepareDataLabelsOptions } from '@/chart-options-processor/series-labels.js';
 
 const createDataLabelsFormatter = (seriesLabels: SeriesLabels | undefined) => {
   return function (

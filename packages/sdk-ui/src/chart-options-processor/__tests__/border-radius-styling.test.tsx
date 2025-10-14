@@ -1,7 +1,8 @@
 import { render } from '@testing-library/react';
 import { vi } from 'vitest';
-import { ColumnChart, BarChart } from '@/index';
+
 import type { HighchartsOptions } from '@/chart-options-processor/chart-options-service';
+import { BarChart, ColumnChart } from '@/index';
 
 // Mock data for testing
 const mockData = {

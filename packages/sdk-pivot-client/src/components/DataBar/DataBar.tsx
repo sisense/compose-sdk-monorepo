@@ -1,14 +1,15 @@
 import * as React from 'react';
+
+import { PivotDataNode } from '../../data-handling';
+import { EVENT_DATABARS_CHANGED, TableSize } from '../../sizing/index.js';
+import { Styles } from '../../utils/types.js';
 import {
   DATABAR,
+  DATABAR_BAR,
+  DATABAR_INNER,
   DATABAR_SHOW,
   DATABAR_SHOW_ACTIVE,
-  DATABAR_INNER,
-  DATABAR_BAR,
 } from './classes.js';
-import { TableSize, EVENT_DATABARS_CHANGED } from '../../sizing/index.js';
-import { PivotDataNode } from '../../data-handling';
-import { Styles } from '../../utils/types.js';
 import { calcDataDar } from './helpers.js';
 
 type Props = {

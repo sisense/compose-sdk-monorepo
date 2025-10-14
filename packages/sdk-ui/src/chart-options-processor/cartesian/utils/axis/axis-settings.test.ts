@@ -1,9 +1,10 @@
 /* eslint-disable sonarjs/no-identical-functions */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { getXAxisSettings, getYAxisSettings, getYClippings } from './axis-settings';
+
 import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types';
 import { NumberFormatConfig } from '../../../../types';
 import { Axis, AxisMinMax, PlotBand } from '../../../translations/axis-section';
+import { getXAxisSettings, getYAxisSettings, getYClippings } from './axis-settings';
 
 // Mock dependencies
 vi.mock('../../../translations/number-format-config', () => ({

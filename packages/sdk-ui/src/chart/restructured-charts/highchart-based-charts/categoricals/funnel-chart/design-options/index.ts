@@ -1,14 +1,15 @@
-import { ChartStyleOptions } from '@/types';
-import { FunnelChartStyleOptions, FunnelChartDesignOptions } from '../types';
 import { BaseDesignOptions } from '@/chart-options-processor/translations/base-design-options';
 import {
-  FunnelLabels,
+  DefaultFunnelDirection,
   DefaultFunnelLabels,
   DefaultFunnelSize,
   DefaultFunnelType,
-  DefaultFunnelDirection,
+  FunnelLabels,
 } from '@/chart-options-processor/translations/funnel-plot-options';
 import { getLegendSettings } from '@/chart-options-processor/translations/legend-section';
+import { ChartStyleOptions } from '@/types';
+
+import { FunnelChartDesignOptions, FunnelChartStyleOptions } from '../types';
 
 /**
  * Gets data limits for funnel charts.

@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
+
+import { Z_INDEX_CELL_DROPZONE } from '@/dashboard/components/editable-layout/const';
+
 import { DropType } from '../types';
 import { DroppableZone } from './droppable-zone';
-import { Z_INDEX_CELL_DROPZONE } from '@/dashboard/components/editable-layout/const';
 
 const Wrapper = styled.div`
   position: absolute;

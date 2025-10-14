@@ -1,12 +1,14 @@
+import { Stacking } from '@/chart-options-processor/chart-options-service';
+import { stackTotalFontStyleDefault } from '@/chart-options-processor/defaults/cartesian';
+import { prepareStackLabels } from '@/chart-options-processor/stack-labels';
 import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
-import { BuildContext } from '../../../../types';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from '@/chart-options-processor/translations/number-format-config';
-import { CompleteNumberFormatConfig } from '@/types';
-import { stackTotalFontStyleDefault } from '@/chart-options-processor/defaults/cartesian';
-import { Stacking } from '@/chart-options-processor/chart-options-service';
+import { CompleteNumberFormatConfig, TotalLabels } from '@/types';
+
+import { BuildContext } from '../../../../types';
 import { StackableChartTypes } from '../../types';
 
 /**
@@ -14,7 +16,7 @@ import { StackableChartTypes } from '../../types';
  */
 interface StackingMeta {
   stacking?: Stacking;
-  showTotal?: boolean;
+  totalLabels?: TotalLabels;
 }
 
 /**
@@ -23,26 +25,26 @@ interface StackingMeta {
  * stackable chart types (bar, column, area) use identical stacking logic.
  *
  * @param stackableOptions - Stackable chart design options
- * @returns Stacking metadata containing stacking type and showTotal flag
+ * @returns Stacking metadata containing stacking type and totalLabels options
  */
 const buildStackingMeta = (
   stackableOptions: BuildContext<StackableChartTypes>['designOptions'],
 ): StackingMeta => {
-  const showTotal = stackableOptions.seriesLabels?.enabled && stackableOptions.showTotal;
+  const defaultTotalLabels: TotalLabels = { enabled: false };
 
   switch (stackableOptions.stackType) {
     case 'stacked':
       return {
         stacking: 'normal',
-        showTotal,
+        totalLabels: stackableOptions.totalLabels ?? defaultTotalLabels,
       };
     case 'stack100':
       return {
         stacking: 'percent',
-        showTotal,
+        totalLabels: stackableOptions.totalLabels ?? defaultTotalLabels,
       };
     default:
-      return { showTotal: false };
+      return { totalLabels: defaultTotalLabels };
   }
 };
 
@@ -71,11 +73,10 @@ export const withStacking =
 
     // Build stacking metadata (chart-type independent)
     const stackingMeta: StackingMeta = buildStackingMeta(stackableOptions);
-    const { stacking, showTotal = false } = stackingMeta;
-    const totalLabelRotation = stackableOptions.totalLabelRotation ?? 0;
+    const { stacking, totalLabels } = stackingMeta;
 
     // Early return if no stacking features are needed
-    if (!showTotal && !stacking) {
+    if (!totalLabels?.enabled && !stacking) {
       return basicYAxisSettings;
     }
 
@@ -100,7 +101,8 @@ export const withStacking =
         const numericValue = typeof this.value === 'number' ? this.value : parseFloat(this.value);
         const valueToFormat = isTotal ? this.total || numericValue : numericValue;
         const formattedValue = applyFormatPlainText(numberFormatConfig, valueToFormat);
-        return stackingType === 'percent' ? `${formattedValue}%` : formattedValue;
+        const text = stackingType === 'percent' ? `${formattedValue}%` : formattedValue;
+        return isTotal ? `${totalLabels?.prefix ?? ''}${text}${totalLabels?.suffix ?? ''}` : text;
       };
     }
 
@@ -119,18 +121,18 @@ export const withStacking =
             }
           : axisSettings.labels,
         // Apply stack labels configuration matching legacy functionality exactly
-        stackLabels: showTotal
+        stackLabels: totalLabels?.enabled
           ? {
               ...axisSettings.stackLabels,
-              enabled: true,
+              ...prepareStackLabels(totalLabels),
               formatter: getStackingLabelsFormatter(numberFormatConfig, 'normal', true),
               style: {
                 ...stackTotalFontStyleDefault,
                 ...(ctx.extraConfig.themeSettings
                   ? { color: ctx.extraConfig.themeSettings.typography.primaryTextColor }
                   : null),
+                ...prepareStackLabels(totalLabels).style,
               },
-              rotation: totalLabelRotation,
               crop: true,
               allowOverlap: false,
               labelrank: 99999,

@@ -1,3 +1,6 @@
+import pick from 'lodash-es/pick';
+import merge from 'ts-deepmerge';
+
 import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
@@ -9,8 +12,7 @@ import { isRestructuredChartType } from '@/chart/restructured-charts/utils';
 import { TranslatableError } from '@/translation/translatable-error';
 import { ChartStyleOptions, ChartType } from '@/types';
 import { WithRequiredProp } from '@/utils/utility-types';
-import pick from 'lodash-es/pick';
-import merge from 'ts-deepmerge';
+
 import { getDefaultStyleOptions } from '../chart-options-service';
 import { CartesianChartType, DesignOptions, SeriesDesignOptions } from '../translations/types';
 import { translateStyleOptionsToDesignOptions as legacyTranslateStyleOptionsToDesignOptions } from './translate-style-to-design-options';

@@ -1,23 +1,24 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import EventEmitter from 'events';
+
 import { MessageType } from '../data-load/constants.js';
-import { PanelType, UserType } from './constants.js';
-import { TreeService } from '../tree-structure/index.js';
-import { treeNode } from '../tree-structure/utils/index.js';
+import { DataLoadServiceI, JaqlPanel, JaqlRequest } from '../data-load/types.js';
 import { LoadingCanceledError } from '../errors/index.js';
+import { TreeService } from '../tree-structure/index.js';
+import { HeaderTreeNode, TreeNode, TreeServiceI } from '../tree-structure/types.js';
+import { treeNode } from '../tree-structure/utils/index.js';
+import { cloneObject, debug, findIndex, throttle } from '../utils/index.js';
+import { LoggerI } from '../utils/types.js';
+import { PanelType, UserType } from './constants.js';
 import { DivergenceComparator } from './DivergenceComparator.js';
+import { AllDataInfo, DataServiceI, InitPageData, PivotDataNode, PivotTreeNode } from './types.js';
 import {
-  pivotTransforms,
-  jaqlProcessor,
   createPivotTreeNode,
+  jaqlProcessor,
+  pivotTransforms,
   PluginService,
 } from './utils/index.js';
-import { debug, cloneObject, throttle, findIndex } from '../utils/index.js';
-import { LoggerI } from '../utils/types.js';
-import { TreeServiceI, TreeNode, HeaderTreeNode } from '../tree-structure/types.js';
-import { DataLoadServiceI, JaqlRequest, JaqlPanel } from '../data-load/types.js';
 import { GlobalStyles, PluginConfig } from './utils/plugins/types';
-import { DataServiceI, PivotTreeNode, PivotDataNode, InitPageData, AllDataInfo } from './types.js';
 
 export type NodesChunk = {
   list: Array<TreeNode>;

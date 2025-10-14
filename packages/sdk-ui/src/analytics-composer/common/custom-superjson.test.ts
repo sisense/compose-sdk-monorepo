@@ -21,9 +21,11 @@ import {
   Sort,
   TextFilter,
 } from '@sisense/sdk-data';
+
 import { MOCK_QUERY_MODEL_1, MOCK_QUERY_MODEL_2 } from '../__mocks__/mock-queries.js';
-import { widgetComposer } from '../index.js';
+import * as widgetComposer from '../widget/widget-composer.js';
 import { CustomSuperJSON } from './custom-superjson.js';
+
 describe('CustomSuperJSON', () => {
   describe('queryModel', () => {
     it('should stringify and parse back to widget props', () => {

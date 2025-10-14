@@ -1,4 +1,3 @@
-import { CreateCacheKeyFn, createCache } from '@/utils/create-cache';
 import {
   Attribute,
   DataSource,
@@ -9,13 +8,16 @@ import {
   QueryResultData,
 } from '@sisense/sdk-data';
 import type {
-  QueryDescription as InternalQueryDescription,
   PivotQueryDescription as InternalPivotQueryDescription,
+  QueryDescription as InternalQueryDescription,
   QueryExecutionConfig,
 } from '@sisense/sdk-query-client';
+import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
+
+import { createCache, CreateCacheKeyFn } from '@/utils/create-cache';
+
 import { ClientApplication } from '../app/client-application';
 import { TranslatableError } from '../translation/translatable-error';
-import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
 
 /**
  * All the properties that fully describe a query you want to send.

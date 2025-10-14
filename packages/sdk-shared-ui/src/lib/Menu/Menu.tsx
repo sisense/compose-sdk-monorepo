@@ -1,8 +1,8 @@
-import 'simplebar-react/dist/simplebar.min.css';
+import React, { Component } from 'react';
 
 import classnames from 'classnames';
-import React, { Component } from 'react';
 import SimpleBar from 'simplebar-react';
+import 'simplebar-react/dist/simplebar.min.css';
 
 import { LazyLoader } from '../LazyLoader';
 import { Popover } from '../Popover';
@@ -34,7 +34,7 @@ export type MenuItemConfig = {
   separator?: boolean;
   subItems?: MenuItemConfig[];
   subItemScrollbarClassName?: string;
-  tooltip?: string | React.ReactFragment;
+  tooltip?: string | React.ReactNode;
   type: ItemType;
   value?: string;
   groupTitle?: boolean;

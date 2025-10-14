@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+
 import { debug } from '../utils/index.js';
 import { LoggerI } from '../utils/types.js';
 

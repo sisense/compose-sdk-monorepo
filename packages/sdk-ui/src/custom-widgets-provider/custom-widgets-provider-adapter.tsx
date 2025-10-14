@@ -1,7 +1,8 @@
 import { PropsWithChildren } from 'react';
+
+import { CustomContextProviderProps } from '../types.js';
 import { CustomWidgetsContext } from './custom-widgets-context.js';
 import { CustomWidgetComponent, CustomWidgetComponentProps } from './types.js';
-import { CustomContextProviderProps } from '../types.js';
 
 /** @internal */
 export type CustomWidgetsProviderAdapterProps = CustomContextProviderProps<

@@ -1,20 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   DateLevels,
   DimensionalLevelAttribute,
-  RelativeDateFilter,
   filterFactory,
+  RelativeDateFilter,
 } from '@sisense/sdk-data';
-import { RelativeDateFilterTile } from './relative-date-filter-tile.js';
-import { MockedSisenseContextProvider, setup } from '../../../../__test-helpers__/index.js';
 import { render, screen } from '@testing-library/react';
+import dayjs from 'dayjs';
+
+import { MockedSisenseContextProvider, setup } from '../../../../__test-helpers__/index.js';
 import { FilterVariant } from '../../common/index.js';
 import { DEFAULT_FORMAT } from '../consts.js';
-import dayjs from 'dayjs';
+import { RelativeDateFilterTile } from './relative-date-filter-tile.js';
 
 describe('RelativeDateFilterTile tests', () => {
   const mockAttributeDays = new DimensionalLevelAttribute(
@@ -40,7 +45,7 @@ describe('RelativeDateFilterTile tests', () => {
       </MockedSisenseContextProvider>,
     );
     expect(screen.getByText('Test Title')).toBeInTheDocument();
-    const displayText = `dateFilter.last 2 dateFilter.days dateFilter.from dateFilter.today`;
+    const displayText = `Last 2 Days From Today`;
     expect(screen.getByText(displayText)).toBeInTheDocument();
   });
   it('should render input fields when vertical and expanded', async () => {
@@ -56,7 +61,7 @@ describe('RelativeDateFilterTile tests', () => {
       </MockedSisenseContextProvider>,
     );
     expect(screen.getByText('Test Title')).toBeInTheDocument();
-    const displayText = `dateFilter.last 2 dateFilter.days dateFilter.from dateFilter.today`;
+    const displayText = `Last 2 Days From Today`;
     const displayTextElt = screen.getByText(displayText);
     expect(displayTextElt).toBeInTheDocument();
     await user.click(screen.getByLabelText('arrow-down'));
@@ -75,18 +80,18 @@ describe('RelativeDateFilterTile tests', () => {
         <RelativeDateFilterTile {...props} />
       </MockedSisenseContextProvider>,
     );
-    const dropdown = screen.getByText('dateFilter.next');
+    const dropdown = screen.getByText('Next');
     expect(dropdown).toBeInTheDocument();
     expect(screen.getByDisplayValue('1')).toBeInTheDocument();
-    expect(screen.getByText('dateFilter.years')).toBeInTheDocument();
-    expect(screen.getByText('dateFilter.from')).toBeInTheDocument();
+    expect(screen.getByText('Years')).toBeInTheDocument();
+    expect(screen.getByText('From')).toBeInTheDocument();
     const dateField = screen.getByText(dayjs().format(DEFAULT_FORMAT));
     expect(dateField).toBeInTheDocument();
 
     await user.click(dropdown);
     const menu = screen.getByRole('menu');
     expect(menu).toBeInTheDocument();
-    const last = screen.getByText('dateFilter.last');
+    const last = screen.getByText('Last');
     expect(last).toBeInTheDocument();
 
     await user.click(last);

@@ -1,11 +1,14 @@
-import { Themable } from '@/theme-provider/types';
-import { FilterRelationsRules } from '@/utils/filter-relations';
+import { useTranslation } from 'react-i18next';
+
 import styled from '@emotion/styled';
 import { Filter } from '@sisense/sdk-data';
+
 import { EditPencilIcon } from '@/common/icons/edit-pencil-icon';
-import { FilterRelationsTooltip } from './filter-relations-tooltip';
 import { useThemeContext } from '@/theme-provider';
-import { useTranslation } from 'react-i18next';
+import { Themable } from '@/theme-provider/types';
+import { FilterRelationsRules } from '@/utils/filter-relations';
+
+import { FilterRelationsTooltip } from './filter-relations-tooltip';
 
 /**
  * Filter relations tile component.

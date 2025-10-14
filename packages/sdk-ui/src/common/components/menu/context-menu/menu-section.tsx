@@ -1,7 +1,9 @@
 import { ReactNode } from 'react';
+
 import ListSubheader from '@mui/material/ListSubheader';
-import { useThemeContext } from '@/theme-provider/theme-context';
+
 import { DEFAULT_TEXT_COLOR } from '@/const';
+import { useThemeContext } from '@/theme-provider/theme-context';
 
 type MenuSectionProps = {
   children: ReactNode;

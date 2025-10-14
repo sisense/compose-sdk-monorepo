@@ -1,17 +1,18 @@
+import { ChartBuilder } from '@/chart/restructured-charts/types.js';
+
+import { loadDataBySingleQuery } from '../../helpers/data-loading.js';
 import {
-  translateCalendarHeatmapChartDataOptions,
   getCalendarHeatmapAttributes,
   getCalendarHeatmapMeasures,
   isCalendarHeatmapChartDataOptions,
   isCalendarHeatmapChartDataOptionsInternal,
+  translateCalendarHeatmapChartDataOptions,
 } from './data-options';
 import { getCalendarHeatmapChartData } from './data.js';
 import {
-  translateCalendarHeatmapStyleOptionsToDesignOptions,
   isCalendarHeatmapStyleOptions,
+  translateCalendarHeatmapStyleOptionsToDesignOptions,
 } from './design-options.js';
-import { loadDataBySingleQuery } from '../../helpers/data-loading.js';
-import { ChartBuilder } from '@/chart/restructured-charts/types.js';
 import { CalendarHeatmap, isCalendarHeatmapProps } from './renderer/index.js';
 
 /**

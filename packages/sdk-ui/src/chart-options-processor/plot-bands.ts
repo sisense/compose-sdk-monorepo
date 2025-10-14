@@ -1,19 +1,20 @@
 /* eslint-disable sonarjs/no-ignored-return */
+import { isNumber } from '@sisense/sdk-data';
+
 import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
-import { isNumber } from '@sisense/sdk-data';
-import { ChartData, CartesianChartData, CategoricalXValues } from '../chart-data/types';
+import { getDataOptionTitle } from '../chart-data-options/utils';
+import { CartesianChartData, CategoricalXValues, ChartData } from '../chart-data/types';
 import { onlyY, onlyYAndSeries } from '../chart-data/utils';
-import { PlotBand, getCategoricalCompareValue } from './translations/axis-section';
+import { getCategoricalCompareValue, PlotBand } from './translations/axis-section';
 import { StackableChartDesignOptions } from './translations/design-options';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from './translations/number-format-config';
 import { DesignOptions } from './translations/types';
-import { getDataOptionTitle } from '../chart-data-options/utils';
 
 type CategoryIndexMapPlotBands = {
   categories: string[];

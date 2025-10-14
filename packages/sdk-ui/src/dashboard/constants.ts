@@ -1,4 +1,5 @@
 import type { DeepRequired } from 'ts-essentials';
+
 import { DashboardByIdConfig, DashboardConfig, EditModeConfig, WidgetsPanelConfig } from './types';
 
 export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
@@ -12,6 +13,7 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
     visible: true,
     collapsedInitially: false,
     persistCollapsedStateToLocalStorage: false,
+    showFilterIconInToolbar: false,
     actions: {
       addFilter: {
         enabled: false,

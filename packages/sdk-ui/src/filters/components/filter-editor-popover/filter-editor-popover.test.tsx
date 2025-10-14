@@ -1,14 +1,16 @@
 /** @vitest-environment jsdom */
-import { screen } from '@testing-library/react';
 import { filterFactory } from '@sisense/sdk-data';
+import { screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { setup } from '@/__test-helpers__';
-import { FilterEditorPopover } from './filter-editor-popover';
-import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
-import { SisenseContextProviderProps } from '@/props';
-import { mockToken, mockUrl, server } from '@/__mocks__/msw';
+
 import * as jaqlAgeRange from '@/__mocks__/data/mock-jaql-age-range.json';
+import { mockToken, mockUrl, server } from '@/__mocks__/msw';
+import { setup } from '@/__test-helpers__';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { SisenseContextProviderProps } from '@/props';
+import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
+
+import { FilterEditorPopover } from './filter-editor-popover';
 
 const contextProviderProps: SisenseContextProviderProps = {
   url: mockUrl,

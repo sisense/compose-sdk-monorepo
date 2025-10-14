@@ -1,19 +1,20 @@
-import { DropType, EditableLayoutDropData } from './types';
+import { WidgetsPanelLayout, WidgetsPanelRow } from '@/models';
+import { WidgetProps } from '@/props';
+
 import {
-  updateLayoutAfterDragAndDrop,
-  updateRowHeight,
-  updateLayoutWidths,
-  findDeletedWidgetsFromLayout,
   deleteWidgetsFromLayout,
   distributeEqualWidthInRow,
+  findDeletedWidgetsFromLayout,
+  getColumnMaxWidths,
+  getColumnMinWidths,
   getRowHeight,
   getRowMaxHeight,
   getRowMinHeight,
-  getColumnMinWidths,
-  getColumnMaxWidths,
+  updateLayoutAfterDragAndDrop,
+  updateLayoutWidths,
+  updateRowHeight,
 } from './helpers';
-import { WidgetsPanelLayout, WidgetsPanelRow } from '@/models';
-import { WidgetProps } from '@/props';
+import { DropType, EditableLayoutDropData } from './types';
 
 describe('updateLayoutAfterDragAndDrop', () => {
   const mockLayout: WidgetsPanelLayout = {

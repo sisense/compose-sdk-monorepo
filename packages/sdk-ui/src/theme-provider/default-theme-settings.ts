@@ -1,6 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { CompleteThemeSettings } from '@/types';
 import cloneDeep from 'lodash-es/cloneDeep';
+
+import { CompleteThemeSettings } from '@/types';
 
 export const DEFAULT_DIVIDER_COLOR = '#F2F2F2';
 export const DEFAULT_DIVIDER_WIDTH = 4;

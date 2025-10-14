@@ -1,14 +1,17 @@
 import { CSSProperties, useCallback, useRef, useState } from 'react';
+
 import styled from '@emotion/styled';
-import { ArrowDownIcon } from '../../../icons';
-import { SelectItem } from './types';
-import { SelectField, SelectIconContainer, SelectLabel } from './base';
-import { SingleSelectItem } from './single-select-item';
-import { DEFAULT_TEXT_COLOR } from '@/const';
-import { Popper } from '@/common/components/popper';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+
+import { Popper } from '@/common/components/popper';
+import { DEFAULT_TEXT_COLOR } from '@/const';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
+
+import { ArrowDownIcon } from '../../../icons';
+import { SelectField, SelectIconContainer, SelectLabel } from './base';
+import { SingleSelectItem } from './single-select-item';
+import { SelectItem } from './types';
 
 const SelectContainer = styled.div`
   box-sizing: border-box;

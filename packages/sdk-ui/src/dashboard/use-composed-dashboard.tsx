@@ -1,22 +1,25 @@
 import { useCallback, useMemo } from 'react';
-import flow from 'lodash-es/flow';
-import { useCommonFilters } from '@/common-filters/use-common-filters';
-import { WidgetProps } from '@/props';
-import { defaultMerger, useWithChangeDetection } from '@/common/hooks/use-with-change-detection';
-import cloneDeep from 'lodash-es/cloneDeep';
-import { withTracking } from '@/decorators/hook-decorators';
-import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
-import { MenuOptions } from '@/common/components/menu/types';
-import { MenuIds, MenuSectionIds } from '@/common/components/menu/menu-ids';
-import { DashboardProps } from './types.js';
+
 import { Filter, FilterRelations } from '@sisense/sdk-data';
+import cloneDeep from 'lodash-es/cloneDeep';
+import flow from 'lodash-es/flow';
+
+import { useCommonFilters } from '@/common-filters/use-common-filters';
+import { MenuIds, MenuSectionIds } from '@/common/components/menu/menu-ids';
+import { MenuOptions } from '@/common/components/menu/types';
+import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
 import { useSyncedState } from '@/common/hooks/use-synced-state.js';
+import { defaultMerger, useWithChangeDetection } from '@/common/hooks/use-with-change-detection';
+import { useJtdInternal } from '@/dashboard/hooks/use-jtd';
+import { useTabber } from '@/dashboard/hooks/use-tabber';
 import { useWidgetsLayoutManagement } from '@/dashboard/hooks/use-widgets-layout';
 import { getDefaultWidgetsPanelLayout } from '@/dashboard/utils';
-import { useTabber } from '@/dashboard/hooks/use-tabber';
+import { withTracking } from '@/decorators/hook-decorators';
 import { WidgetsPanelLayout } from '@/models';
+import { WidgetProps } from '@/props';
 import { combineHandlers } from '@/utils/combine-handlers.js';
-import { useJtdInternal } from '@/dashboard/hooks/use-jtd';
+
+import { DashboardProps } from './types.js';
 
 export type ComposableDashboardProps = Pick<
   DashboardProps,
@@ -85,20 +88,28 @@ export type UseComposedDashboardOptions = {
 };
 
 /**
+ * Result of the {@link useComposedDashboard} hook.
+ */
+export type ComposedDashboardResult<D extends ComposableDashboardProps | DashboardProps> = {
+  /** The composable dashboard object containing the current state of the dashboard. */
+  dashboard: D;
+
+  /** API to set filters on the dashboard. */
+  setFilters: (filters: Filter[] | FilterRelations) => void;
+
+  /** API to set the layout of the widgets on the dashboard. */
+  setWidgetsLayout: (newLayout: WidgetsPanelLayout) => void;
+};
+
+/**
  * {@link useComposedDashboard} without tracking to be used inside other hooks or components in Compose SDK.
  *
- * @param params - Parameters of the composable dashboard props
  * @internal
  */
 export function useComposedDashboardInternal<D extends ComposableDashboardProps | DashboardProps>(
   initialDashboard: D,
   { onFiltersChange }: UseComposedDashboardOptions = {},
-): {
-  dashboard: D;
-  // APIs:
-  setFilters: (filters: Filter[] | FilterRelations) => void;
-  setWidgetsLayout: (newLayout: WidgetsPanelLayout) => void;
-} {
+): ComposedDashboardResult<D> {
   const { filters, widgets, widgetsOptions } = initialDashboard;
   // This state is needed to avoid losing the inner state when new widget objects are received from toDashboardProps.
   // Known issue: if the user forces an update with identical widgets as those already present in widgetsFromProps, it will be ignored.
@@ -203,8 +214,55 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
  * React hook that takes in separate dashboard elements and
  * composes them into a coordinated dashboard with change detection, cross filtering, and drill down.
  *
+ * @example
+ * ```ts
+ * import { useComposedDashboard } from '@sisense/sdk-ui/dashboard/use-composed-dashboard.js';
+ * import { Widget } from '@sisense/sdk-ui';
+ * import { DashboardProps } from '@/dashboard/types.js';
+ * import { FilterTile } from '@/filters';
+ *
+ * const CodeExample = () => {
+ *   const dashboardProps: DashboardProps = { ... };
+ *
+ *   const {
+ *     dashboard: { title, widgets, filters = [] }
+ *   } = useComposedDashboard(dashboardProps);
+ *
+ *   return (
+ *     <div>
+ *       <span>{title}</span>
+ *       <div>
+ *         {widgets.map((widget) => (
+ *           <Widget key={widget.id} {...widget} />
+ *         ))}
+ *       </div>
+ *
+ *       {Array.isArray(filters) ? filters.map((filter) => (
+ *         <FilterTile
+ *           key={filter.name}
+ *           filter={filter}
+ *           onChange={(filter) => console.log('Updated filter', filter)}
+ *         />
+ *       )) : null}
+ *     </div>
+ *   );
+ * }
+ *   export default CodeExample;
+ * ```
+ *
+ * @template {D extends ComposableDashboardProps | DashboardProps} D - The type parameter for a dashboard properties, restricted to ComposableDashboardProps or DashboardProps
+ * @param {D} initialDashboard - set of properties for the Dashboard component
+ * @param {UseComposedDashboardOptions} [options] - Options for the composable.
+ *
+ * @return {ComposedDashboardResult} An object containing the composed dashboard and APIs to interact with it.
  * @group Dashboards
  */
-export const useComposedDashboard = withTracking('useComposedDashboard')(
-  useComposedDashboardInternal,
-);
+export const useComposedDashboard = <D extends ComposableDashboardProps | DashboardProps>(
+  initialDashboard: D,
+  options: UseComposedDashboardOptions = {},
+): ComposedDashboardResult<D> => {
+  return withTracking('useComposedDashboard')(useComposedDashboardInternal)(
+    initialDashboard,
+    options,
+  );
+};

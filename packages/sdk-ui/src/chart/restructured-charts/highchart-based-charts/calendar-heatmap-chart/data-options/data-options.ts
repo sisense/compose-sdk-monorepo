@@ -1,23 +1,25 @@
 import {
   Attribute,
-  Measure,
   DateLevels,
   isDatetime,
   isDimensionalLevelAttribute,
+  Measure,
 } from '@sisense/sdk-data';
+
 import {
   CalendarHeatmapChartDataOptions,
   CalendarHeatmapChartDataOptionsInternal,
 } from '@/chart-data-options/types';
-import { ChartDataOptions } from '@/types';
 import { ChartDataOptionsInternal } from '@/chart-data-options/types';
 import {
   isMeasureColumn,
   normalizeColumn,
   normalizeMeasureColumn,
 } from '@/chart-data-options/utils';
-import { isAttributeColumn } from '../../cartesians/helpers/data-options.js';
+import { ChartDataOptions } from '@/types';
 import { createLevelAttribute } from '@/utils/create-level-attribute.js';
+
+import { isAttributeColumn } from '../../cartesians/helpers/data-options.js';
 
 /**
  * Translates calendar heatmap chart data options from user format to internal format

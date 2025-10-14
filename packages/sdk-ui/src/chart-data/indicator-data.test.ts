@@ -1,6 +1,6 @@
-import { indicatorData } from './indicator-data';
-import { DataTable } from '../chart-data-processor/table-processor';
 import { IndicatorChartDataOptionsInternal } from '../chart-data-options/types';
+import { DataTable } from '../chart-data-processor/table-processor';
+import { indicatorData } from './indicator-data';
 import { IndicatorChartData } from './types';
 
 describe('indicatorData', () => {

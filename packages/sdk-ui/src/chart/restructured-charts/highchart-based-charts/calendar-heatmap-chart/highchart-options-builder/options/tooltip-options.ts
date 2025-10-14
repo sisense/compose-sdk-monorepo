@@ -1,5 +1,7 @@
-import { BuildContext } from '../../../types.js';
 import { colorChineseSilver, colorWhite } from '@/chart-data-options/coloring/consts.js';
+import { getDataOptionGranularity } from '@/chart-data-options/utils.js';
+import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service.js';
+import { getDefaultDateFormat } from '@/chart-options-processor/translations/axis-section.js';
 import {
   applyFormat,
   getCompleteNumberFormatConfig,
@@ -8,10 +10,9 @@ import {
   tooltipSeparator,
   tooltipWrapper,
 } from '@/chart-options-processor/translations/scatter-tooltip.js';
-import { getDataOptionGranularity } from '@/chart-data-options/utils.js';
-import { getDefaultDateFormat } from '@/chart-options-processor/translations/axis-section.js';
-import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service.js';
 import { scaleBrightness } from '@/utils/color/color-interpolation.js';
+
+import { BuildContext } from '../../../types.js';
 import { CALENDAR_HEATMAP_COLORS, CALENDAR_HEATMAP_SIZING } from '../../constants.js';
 
 /**

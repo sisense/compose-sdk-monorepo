@@ -118,6 +118,15 @@ Subtype of stackable chart
 
 ***
 
+### totalLabels
+
+> **totalLabels**?: [`TotalLabels`](../../sdk-ui/type-aliases/type-alias.TotalLabels.md)
+
+Configuration for total labels
+Only supported for stacked chart subtypes
+
+***
+
 ### width
 
 > **width**?: `number`

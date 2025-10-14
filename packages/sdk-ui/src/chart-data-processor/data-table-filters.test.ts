@@ -1,16 +1,17 @@
-import { DataTable, Row } from './table-processor';
+import { simpleColumnType } from '@sisense/sdk-data';
+
 import { getBaseDateFnsLocale } from './data-table-date-period';
 import {
+  Filter,
+  filterBy,
   FilterGroup,
   FilterOperator,
-  FilterType,
-  filterBy,
-  filtersUpdatedForTable,
-  getAppliedFilters,
   FilterSubType,
-  Filter,
+  filtersUpdatedForTable,
+  FilterType,
+  getAppliedFilters,
 } from './data-table-filters';
-import { simpleColumnType } from '@sisense/sdk-data';
+import { DataTable, Row } from './table-processor';
 
 const locale = getBaseDateFnsLocale();
 

@@ -1,12 +1,13 @@
-import { BuildContext } from '../../../types';
-import { CartesianChartTypes } from '../../types';
-import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
 import {
   buildCategoriesMeta,
   buildXAxisSettings,
   isContinuousDatetimeXAxis,
   XAxisOrientation,
 } from '@/chart-options-processor/cartesian/utils/axis/axis-builders';
+import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
+
+import { BuildContext } from '../../../types';
+import { CartesianChartTypes } from '../../types';
 
 export const getCartesianXAxis = (
   ctx: BuildContext<CartesianChartTypes>,

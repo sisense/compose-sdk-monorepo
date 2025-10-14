@@ -1,14 +1,14 @@
+import React, { JSX } from 'react';
+import ReactDOM from 'react-dom';
+
 import type { TooltipProps } from '@rc-component/tooltip/lib/Tooltip';
 import classNames from 'classnames';
-import React from 'react';
-import ReactDOM from 'react-dom';
 
 import { DEPRECATED_Tooltip } from '../DEPRECATED_Tooltip';
 import type { PositioningConfig } from './align.interface';
+import styles from './Popover.module.scss';
 
 const noop = () => {};
-
-import styles from './Popover.module.scss';
 
 const DEFAULT_Z_INDEX = 1069;
 

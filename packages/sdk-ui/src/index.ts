@@ -1,5 +1,5 @@
-import './translation/initialize-i18n';
 import './index.css';
+import './translation/initialize-i18n';
 
 export { type ClientApplication, createClientApplication } from './app/client-application';
 export * from './chart-data-options/types';

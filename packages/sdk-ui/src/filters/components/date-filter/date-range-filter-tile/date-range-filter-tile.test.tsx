@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import * as jaqlDates from '@/__mocks__/data/mock-jaql-dates.json';
 
-import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { mockToken, mockUrl, server } from '@/__mocks__/msw';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { filterFactory } from '@sisense/sdk-data';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
+
+import * as jaqlDates from '@/__mocks__/data/mock-jaql-dates.json';
+import { mockToken, mockUrl, server } from '@/__mocks__/msw';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
+
 import { DateRangeFilterTile } from './date-range-filter-tile';
 
 describe('DateRangeFilterTile', () => {

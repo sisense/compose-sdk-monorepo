@@ -1,4 +1,5 @@
 import { templateForComponent } from '@/__stories__/template';
+
 import { default as TrendToolipComponent } from './trend-tooltip';
 
 const template = templateForComponent(TrendToolipComponent);

@@ -1,7 +1,9 @@
 import { CSSProperties, ReactNode } from 'react';
+
 import MuiMenuItem from '@mui/material/MenuItem';
-import { useThemeContext } from '@/theme-provider/theme-context';
+
 import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR } from '@/const';
+import { useThemeContext } from '@/theme-provider/theme-context';
 
 type MenuItemProps = {
   children: ReactNode;

@@ -1,15 +1,17 @@
 /* eslint-disable max-lines-per-function */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import styled from '@emotion/styled';
 import { Filter } from '@sisense/sdk-data';
-import { SelectableSection } from '../../common/selectable-section.js';
+
 import { SingleSelect } from '../../common/index.js';
+import { SelectableSection } from '../../common/selectable-section.js';
+import { useFilterEditorContext } from '../../filter-editor-context';
 import { isExcludeMembersFilter, isRelativeDateFilterWithAnchor } from '../../utils.js';
 import { DatetimeLimits } from '../types.js';
 import { DatetimeExcludeConditionForm } from './condition-forms/datetime-exclude-condition-form.js';
 import { DatetimeIsWithinConditionForm } from './condition-forms/datetime-is-within-condition-form.js';
-import { useFilterEditorContext } from '../../filter-editor-context';
 
 const ConditionSelect = styled(SingleSelect<DatetimeCondition>)`
   width: 128px;

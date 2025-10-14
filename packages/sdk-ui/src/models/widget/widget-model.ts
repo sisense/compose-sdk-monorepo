@@ -1,8 +1,9 @@
 import { DataSource, Filter } from '@sisense/sdk-data';
+import { EmptyObject } from '@sisense/sdk-query-client/src/helpers/utility-types';
+
 import { ChartDataOptions, PivotTableDataOptions } from '@/chart-data-options/types';
 import type { WidgetType } from '@/props';
 import { ChartType, DrilldownOptions, WidgetStyleOptions } from '@/types';
-import { EmptyObject } from '@sisense/sdk-query-client/src/helpers/utility-types';
 
 /**
  * Widget data options.

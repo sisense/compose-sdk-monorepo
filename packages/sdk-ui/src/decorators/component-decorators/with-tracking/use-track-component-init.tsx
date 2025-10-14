@@ -1,7 +1,10 @@
-import { TrackingEventDetails } from '@sisense/sdk-tracking';
-import { useSisenseContext } from '../../../sisense-context/sisense-context';
 import { createContext, ReactNode, useContext, useEffect, useRef } from 'react';
+
+import { TrackingEventDetails } from '@sisense/sdk-tracking';
+
 import { useTracking } from '@/common/hooks/use-tracking';
+
+import { useSisenseContext } from '../../../sisense-context/sisense-context';
 import { TrackingDecoratorConfig } from './with-tracking';
 
 const action = 'sdkComponentInit';

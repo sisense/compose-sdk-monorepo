@@ -1,5 +1,6 @@
-import { DataTable } from '../../../chart-data-processor/table-processor';
 import { simpleColumnType } from '@sisense/sdk-data';
+
+import { DataTable } from '../../../chart-data-processor/table-processor';
 import {
   DATA_PADDING,
   HEADER_PADDING,

@@ -1,16 +1,15 @@
 /* eslint-disable security/detect-object-injection */
+
 /* eslint-disable no-unused-vars */
-import { RangeChartData } from '../chart-data/types';
-import { ChartDesignOptions } from './translations/types';
-import { ChartType, CompleteThemeSettings } from '../types';
+import { TFunction } from '@sisense/sdk-common';
+
 import {
   CartesianChartDataOptionsInternal,
   RangeChartDataOptionsInternal,
   StyledMeasureColumn,
 } from '../chart-data-options/types';
-import { TFunction } from '@sisense/sdk-common';
-import { getCartesianChartOptions } from './cartesian/cartesian-chart-options';
-import { SeriesType } from './chart-options-service';
+import { RangeChartData } from '../chart-data/types';
+import { ChartType, CompleteThemeSettings } from '../types';
 import {
   formatForecastAdjustRangeStart,
   formatForecastPlotBands,
@@ -18,7 +17,10 @@ import {
   formatForecastSeries,
   isForecastSeries,
 } from './advanced-chart-options';
+import { getCartesianChartOptions } from './cartesian/cartesian-chart-options';
+import { SeriesType } from './chart-options-service';
 import { getRangeTooltipSettings } from './translations/range/tooltip-range';
+import { ChartDesignOptions } from './translations/types';
 
 /**
  * Convert intermediate chart data, data options, and design options

@@ -1,4 +1,5 @@
 import type { LegendOptions } from '@/types';
+
 import type { TextStyle } from './types';
 
 export type LegendPosition = 'top' | 'left' | 'right' | 'bottom' | null;

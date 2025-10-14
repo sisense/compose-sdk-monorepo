@@ -1,34 +1,36 @@
 import { ChartSubtype } from '@/chart-options-processor/subtype-to-design-options.js';
+import { WidgetModel } from '@/models';
+import { WidgetTypeInternal } from '@/models/widget/types';
+import {
+  ChartProps,
+  ChartWidgetProps,
+  CommonWidgetProps,
+  CustomWidgetProps,
+  PivotTableProps,
+  PivotTableWidgetProps,
+  TextWidgetProps,
+  WidgetProps,
+  WidgetType,
+  WithCommonWidgetProps,
+} from '@/props';
+import { TranslatableError } from '@/translation/translatable-error.js';
 import {
   ChartStyleOptions,
   ChartType,
   RenderToolbarHandler,
   WidgetContainerStyleOptions,
 } from '@/types.js';
+import { combineHandlers, composeToolbarHandlers } from '@/utils/combine-handlers';
+
 import {
+  FusionWidgetType,
   Panel,
   PanelItem,
   TextWidgetDtoStyle,
   WidgetStyle,
   WidgetSubtype,
-  FusionWidgetType,
 } from './types.js';
-import {
-  ChartProps,
-  ChartWidgetProps,
-  PivotTableWidgetProps,
-  CustomWidgetProps,
-  TextWidgetProps,
-  CommonWidgetProps,
-  WithCommonWidgetProps,
-  WidgetProps,
-  WidgetType,
-  PivotTableProps,
-} from '@/props';
-import { combineHandlers, composeToolbarHandlers } from '@/utils/combine-handlers';
-import { WidgetTypeInternal } from '@/models/widget/types';
-import { WidgetModel } from '@/models';
-import { TranslatableError } from '@/translation/translatable-error.js';
+
 export {
   mergeFilters,
   getFilterRelationsFromJaql,

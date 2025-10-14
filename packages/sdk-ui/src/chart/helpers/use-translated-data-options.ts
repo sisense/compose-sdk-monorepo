@@ -1,14 +1,16 @@
 import { useMemo } from 'react';
+
 import { getTranslatedDataOptions as legacyGetTranslatedDataOptions } from '@/chart-data-options/get-translated-data-options';
 import { generateUniqueDataColumnsNames } from '@/chart-data-options/validate-data-options';
 import { ChartDataOptions, ChartType } from '@/types';
-import { isRestructuredChartType } from '../restructured-charts/utils';
+
 import { getChartBuilder } from '../restructured-charts/chart-builder-factory';
 import {
   ChartBuilder,
   SupportedChartType,
   TypedChartDataOptions,
 } from '../restructured-charts/types';
+import { isRestructuredChartType } from '../restructured-charts/utils';
 
 export const useTranslatedDataOptions = (
   chartDataOptions: ChartDataOptions,

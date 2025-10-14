@@ -1,9 +1,10 @@
 // integration test of MenuProvider + useCombinedMenu
-
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MenuProvider } from './menu-provider';
+
 import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
+
+import { MenuProvider } from './menu-provider';
 import { MenuOptions } from './types';
 
 describe('MenuProvider + useCombinedMenu', () => {

@@ -1,14 +1,16 @@
 import { Filter, Jaql } from '@sisense/sdk-data';
-import {
-  getRootPanelItem,
-  getFilterRelationsFromJaql,
-  mergeFilters,
-  isTextWidgetDtoStyle,
-} from './utils.js';
-import { PanelItem } from './types.js';
+
+import { applyWidgetFiltersToRelations } from '@/utils/filter-relations.js';
+
 import { lineChartWidgetDTO } from './__mocks__/line-chart-widget-dto.js';
 import { textWidgetDTO } from './__mocks__/text-widget-dto.js';
-import { applyWidgetFiltersToRelations } from '@/utils/filter-relations.js';
+import { PanelItem } from './types.js';
+import {
+  getFilterRelationsFromJaql,
+  getRootPanelItem,
+  isTextWidgetDtoStyle,
+  mergeFilters,
+} from './utils.js';
 
 const mockFilter1 = {
   config: {

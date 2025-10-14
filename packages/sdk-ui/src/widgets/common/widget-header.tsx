@@ -1,8 +1,9 @@
 import Divider from '@mui/material/Divider';
+import get from 'lodash-es/get';
+
 import { useThemeContext } from '../../theme-provider';
 import { AlignmentTypes, WidgetContainerStyleOptions } from '../../types';
 import WidgetHeaderInfoButton from './widget-header-info-button';
-import get from 'lodash-es/get';
 
 interface WidgetHeaderProps {
   onRefresh: () => void;

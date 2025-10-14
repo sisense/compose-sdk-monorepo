@@ -1,20 +1,22 @@
-import { describe, it, expect } from 'vitest';
 import { filterFactory, MetadataTypes } from '@sisense/sdk-data';
+import { describe, expect, it } from 'vitest';
+
+import { WidgetProps } from '@/props';
+
 import {
-  normalizeToJumpToDashboardConfig,
-  normalizeToJtdConfig,
-  transformJumpToDashboardConfigToJtdConfigForPivot,
   dimensionToPivotDimId,
   mapTargetsToArrayTargets,
+  normalizeToJtdConfig,
+  normalizeToJumpToDashboardConfig,
+  transformJumpToDashboardConfigToJtdConfigForPivot,
 } from './jtd-config-transformers';
 import {
   JtdConfig,
+  JtdTarget,
   JumpToDashboardConfig,
   JumpToDashboardConfigForPivot,
-  JtdTarget,
   PivotDimId,
 } from './jtd-types';
-import { WidgetProps } from '@/index-typedoc';
 
 const panelItemJaqlWithFormula = {
   title: 'sum([Total Revenue])  - SUM ([Total Revenue])',

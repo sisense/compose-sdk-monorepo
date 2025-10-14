@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
-import { PivotTreeNode } from '../types.js';
 import { TreeNode } from '../../tree-structure';
+import { PivotTreeNode } from '../types.js';
 
 /**
  * Converts TreeNode to PivotTreeNode

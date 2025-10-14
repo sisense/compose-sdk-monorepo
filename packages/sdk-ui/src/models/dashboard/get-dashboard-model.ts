@@ -1,11 +1,15 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
-import { RestApi } from '../../api/rest-api';
-import { DashboardModel, dashboardModelTranslator } from '@/models/dashboard';
-import { CompleteThemeSettings } from '../../types';
+
+import { DashboardDto } from '@/api/types/dashboard-dto';
+import { PaletteDto } from '@/api/types/palette-dto';
 import { AppSettings } from '@/app/settings/settings';
+import { DashboardModel, dashboardModelTranslator } from '@/models/dashboard';
 import { TranslatableError } from '@/translation/translatable-error';
 import { getWidgetIdsFromDashboard } from '@/utils/extract-widget-ids';
 import { WidgetDto } from '@/widget-by-id/types';
+
+import { RestApi } from '../../api/rest-api';
+import { CompleteThemeSettings } from '../../types';
 import { withSharedFormulas } from './translate-dashboard-utils';
 
 export interface GetDashboardModelOptions {
@@ -30,6 +34,15 @@ export interface GetDashboardModelOptions {
    * @internal
    */
   sharedMode?: boolean;
+
+  /**
+   * Whether to use the legacy API version for the dashboard model
+   * For example, when 'expand' query parameter is needed to retrieve userAuth
+   *
+   * @default false
+   * @internal
+   */
+  useLegacyApiVersion?: boolean;
 }
 
 /**
@@ -50,58 +63,76 @@ export async function getDashboardModel(
   themeSettings?: CompleteThemeSettings,
   appSettings?: AppSettings,
 ): Promise<DashboardModel> {
-  const { includeWidgets, includeFilters, sharedMode } = options;
+  const { includeWidgets, includeFilters, sharedMode, useLegacyApiVersion } = options;
   const api = new RestApi(http);
-  const fields = ['oid', 'title', 'datasource', 'style', 'settings'];
 
-  const isWat = http.auth?.type === 'wat';
+  let dashboard: DashboardDto | undefined;
 
-  if (includeWidgets) {
-    fields.push('layout');
-  }
+  if (!useLegacyApiVersion) {
+    const fields = ['oid', 'title', 'datasource', 'style', 'settings', 'userId', 'shares'];
 
-  if (includeFilters) {
-    fields.push('filters');
-    fields.push('filterRelations');
-  }
+    const isWat = http.auth?.type === 'wat';
 
-  const dashboard = await api.getDashboard(dashboardOid, { fields, sharedMode });
-
-  if (!dashboard) {
-    throw new TranslatableError('errors.dashboardWithOidNotFound', { dashboardOid });
-  }
-
-  if (includeWidgets) {
-    let widgets: WidgetDto[];
-
-    if (isWat) {
-      // WAT (Web Access Token) authentication method restricts direct access to the
-      // API endpoint `api/v1/dashboards/${dashboardOid}/widgets`.
-      // As a workaround, widgets are fetched individually based on their references in the dashboard layout.
-      const widgetIds = getWidgetIdsFromDashboard(dashboard);
-      const fetchedWidgets = await Promise.all(
-        widgetIds.map((id) => api.getWidget(id, dashboard.oid)),
-      );
-      widgets = fetchedWidgets.filter((widget): widget is WidgetDto => widget !== undefined);
-    } else {
-      // Fetch all widgets at once
-      widgets = (await api.getDashboardWidgets(dashboardOid, sharedMode)) || [];
+    if (includeWidgets) {
+      fields.push('layout');
     }
 
-    dashboard.widgets = widgets;
-  }
+    if (includeFilters) {
+      fields.push('filters');
+      fields.push('filterRelations');
+    }
 
-  // Next could be replaced in future with expand 'style' in '/dashboards/' request
-  // when lowest supported Sisense API version will support it.
-  // Currently, expand 'style' work only from l2024.2.0 and cause crash in older.
-  if (dashboard.style?.paletteId && !dashboard.style.palette) {
-    const palettesDto = await api.getPalettes();
-    const paletteDto = palettesDto?.find(({ _id }) => _id === dashboard.style?.paletteId);
-    if (paletteDto) {
-      dashboard.style.palette = {
-        name: paletteDto.name,
-        colors: paletteDto.colors,
-      };
+    dashboard = await api.getDashboard(dashboardOid, { fields, sharedMode });
+
+    if (!dashboard) {
+      throw new TranslatableError('errors.dashboardWithOidNotFound', { dashboardOid });
+    }
+
+    if (includeWidgets) {
+      let widgets: WidgetDto[];
+
+      if (isWat) {
+        // WAT (Web Access Token) authentication method restricts direct access to the
+        // API endpoint `api/v1/dashboards/${dashboardOid}/widgets`.
+        // As a workaround, widgets are fetched individually based on their references in the dashboard layout.
+        const widgetIds = getWidgetIdsFromDashboard(dashboard);
+        const fetchedWidgets = await Promise.all(
+          widgetIds.map((id) => api.getWidget(id, dashboard!.oid)),
+        );
+        widgets = fetchedWidgets.filter((widget): widget is WidgetDto => widget !== undefined);
+      } else {
+        // Fetch all widgets at once
+        widgets = (await api.getDashboardWidgets(dashboardOid, sharedMode)) || [];
+      }
+
+      dashboard.widgets = widgets;
+    }
+
+    // Next could be replaced in future with expand 'style' in '/dashboards/' request
+    // when lowest supported Sisense API version will support it.
+    // Currently, expand 'style' work only from l2024.2.0 and cause crash in older.
+    if (dashboard.style?.paletteId && !dashboard.style.palette) {
+      let palettesDto: PaletteDto[] = [];
+      try {
+        palettesDto = (await api.getPalettes()) ?? [];
+      } catch (e) {
+        console.warn(
+          'Loading palettes failed, palettes will not be translated to dashboard model.',
+        );
+      }
+      const paletteDto = palettesDto.find(({ _id }) => _id === dashboard!.style?.paletteId);
+      if (paletteDto) {
+        dashboard.style.palette = {
+          name: paletteDto.name,
+          colors: paletteDto.colors,
+        };
+      }
+    }
+  } else {
+    dashboard = await api.getDashboardLegacy(dashboardOid);
+
+    if (!dashboard) {
+      throw new TranslatableError('errors.dashboardWithOidNotFound', { dashboardOid });
     }
   }
 

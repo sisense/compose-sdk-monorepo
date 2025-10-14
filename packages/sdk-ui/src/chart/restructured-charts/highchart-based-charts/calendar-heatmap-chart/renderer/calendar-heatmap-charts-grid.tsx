@@ -1,15 +1,18 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import React, { CSSProperties, useMemo } from 'react';
+
 import styled from '@emotion/styled';
-import { HighchartsReactMemoized } from '@/highcharts-memorized';
+
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
-import { MonthInfo, getDisplayMonths } from './helpers/view-helpers.js';
-import { ViewType } from '../types.js';
-import { CalendarHeatmapViewType, TextStyle } from '@/types';
-import { useThemeContext } from '@/theme-provider/theme-context';
-import { getViewGridInfo } from './helpers/sizing-helpers.js';
 import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
+import { HighchartsReactMemoized } from '@/highcharts-memorized';
+import { useThemeContext } from '@/theme-provider/theme-context';
+import { CalendarHeatmapViewType, TextStyle } from '@/types';
+
 import { CALENDAR_HEATMAP_SIZING } from '../constants.js';
+import { ViewType } from '../types.js';
+import { getViewGridInfo } from './helpers/sizing-helpers.js';
+import { getDisplayMonths, MonthData, MonthInfo } from './helpers/view-helpers.js';
 
 export const ChartsContainer = styled.div<{
   viewType: CalendarHeatmapViewType;
@@ -44,7 +47,7 @@ export const ChartTitle = styled.h3`
 interface CalendarHeatmapChartsGridProps {
   monthCharts: (HighchartsOptionsInternal | null)[];
   availableMonths: MonthInfo[];
-  currentViewIndex: number;
+  currentMonth: MonthData;
   viewType: CalendarHeatmapViewType;
   size: ContainerSize;
   monthLabels?: {
@@ -56,7 +59,7 @@ interface CalendarHeatmapChartsGridProps {
 export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps> = ({
   monthCharts,
   availableMonths,
-  currentViewIndex,
+  currentMonth,
   viewType,
   monthLabels,
   size,
@@ -70,7 +73,7 @@ export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps>
 
   if (availableMonths.length === 0) return null;
 
-  const monthsToDisplay = getDisplayMonths(availableMonths, currentViewIndex, viewType);
+  const monthsToDisplay = getDisplayMonths(availableMonths, currentMonth, viewType);
 
   return (
     <ChartsContainer viewType={viewType} gridCols={gridInfo.cols} gridRows={gridInfo.rows}>

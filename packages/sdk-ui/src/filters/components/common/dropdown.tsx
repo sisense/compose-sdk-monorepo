@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { useState, type FunctionComponent, useRef } from 'react';
-import MenuList from '@mui/material/MenuList';
+import { type FunctionComponent, useRef, useState } from 'react';
+
+import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
+import MenuList from '@mui/material/MenuList';
 import Popper from '@mui/material/Popper';
+
 import { useThemeContext } from '../../../theme-provider';
 import { getSlightlyDifferentColor } from '../../../utils/color';
 

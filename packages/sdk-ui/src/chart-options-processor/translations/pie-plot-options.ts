@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/default-param-last */
+import { CompleteThemeSettings } from '@/types';
+
+import {
+  CategoricalChartDataOptionsInternal,
+  ChartDataOptionsInternal,
+} from '../../chart-data-options/types';
 import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
-import { DataLabelsSettings } from './value-label-section';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
-import {
-  ChartDataOptionsInternal,
-  CategoricalChartDataOptionsInternal,
-} from '../../chart-data-options/types';
 import { HighchartsDataPointContext } from './tooltip-utils';
-import { CompleteThemeSettings } from '@/types';
+import { DataLabelsSettings } from './value-label-section';
 
 export const DefaultPieLabels: PieLabels = {
   enabled: true,

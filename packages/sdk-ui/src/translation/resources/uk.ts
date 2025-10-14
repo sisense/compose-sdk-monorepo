@@ -223,6 +223,8 @@ export const translation: TranslationDictionary = {
       apply: 'Застосувати',
       editLayout: 'Редагувати макет',
       viewMode: 'Режим перегляду',
+      showFilters: 'Показати фільтри',
+      hideFilters: 'Приховати фільтри',
     },
   },
   unsupportedFilterMessage: 'Непідтримуваний Фільтр (застосовано до запиту даних)',

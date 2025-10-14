@@ -1,27 +1,31 @@
-import { ContentPanel } from '@/dashboard/components/content-panel';
-import { DashboardContainerProps, WidgetsPanelLayout } from '@/dashboard/types';
-import { DashboardHeader } from '@/dashboard/components/dashboard-header';
-import { ThemeProvider, useThemeContext } from '@/theme-provider';
-import styled from '@emotion/styled';
-import { FiltersPanel } from '@/filters';
-import { getDividerStyle, getDefaultWidgetsPanelLayout } from '@/dashboard/utils';
-import { HorizontalCollapse } from '@/dashboard/components/horizontal-collapse';
-import { useFiltersPanelCollapsedState } from '@/dashboard/hooks/use-filters-panel-collapsed-state';
 import { useCallback, useMemo, useState } from 'react';
-import { DashboardChangeType } from '@/dashboard/dashboard';
-import { WidgetProps } from '@/props';
+import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
 import { DataSource } from '@sisense/sdk-data';
-import { getDataSourceTitle } from '@/utils/data-sources-utils';
-import { Themable } from '@/theme-provider/types';
-import { EditableLayout } from '@/dashboard/components/editable-layout/editable-layout';
+
 import { useSyncedState } from '@/common/hooks/use-synced-state';
-import { useEditModeToolbar } from '../hooks/use-edit-mode-toolbar';
+import { ContentPanel } from '@/dashboard/components/content-panel';
+import { DashboardHeader } from '@/dashboard/components/dashboard-header';
+import { EditableLayout } from '@/dashboard/components/editable-layout/editable-layout';
+import { HorizontalCollapse } from '@/dashboard/components/horizontal-collapse';
+import { DashboardChangeType } from '@/dashboard/dashboard';
+import { useFiltersPanelCollapsedState } from '@/dashboard/hooks/use-filters-panel-collapsed-state';
+import { DashboardContainerProps, WidgetsPanelLayout } from '@/dashboard/types';
+import { getDefaultWidgetsPanelLayout, getDividerStyle } from '@/dashboard/utils';
+import { FiltersPanel } from '@/filters';
+import { WidgetProps } from '@/props';
+import { ThemeProvider, useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+import { getDataSourceTitle } from '@/utils/data-sources-utils';
+
 import {
   DashboardHeaderToolbarMenuItem,
   useDashboardHeaderToolbar,
 } from '../hooks/use-dashboard-header-toolbar';
-import { useTranslation } from 'react-i18next';
+import { useEditModeToolbar } from '../hooks/use-edit-mode-toolbar';
 import { findDeletedWidgetsFromLayout } from './editable-layout/helpers';
+import { FilterToggle } from './toolbar/filter-toggle';
 
 enum DashboardMode {
   VIEW = 'view',
@@ -127,6 +131,25 @@ export const DashboardContainer = ({
     onCancel: () => handleModeChange(DashboardMode.VIEW),
   });
 
+  const isToolbarVisible = config?.toolbar?.visible !== false;
+  const isFiltersPanelVisible = config?.filtersPanel?.visible !== false;
+  const showFilterIconInToolbar =
+    !!config?.filtersPanel?.showFilterIconInToolbar && isToolbarVisible && isFiltersPanelVisible;
+
+  const isLayoutResponsive = config?.widgetsPanel?.responsive ?? false;
+
+  const [isFilterPanelCollapsed, setIsFilterPanelCollapsed] = useFiltersPanelCollapsedState(
+    config?.filtersPanel?.collapsedInitially,
+    config?.filtersPanel?.persistCollapsedStateToLocalStorage,
+  );
+  const handleFilterToggleClick = useCallback(() => {
+    setIsFilterPanelCollapsed(!isFilterPanelCollapsed);
+    onChange?.({
+      type: DashboardChangeType.UI_FILTERS_PANEL_COLLAPSE,
+      payload: !isFilterPanelCollapsed,
+    });
+  }, [onChange, setIsFilterPanelCollapsed, isFilterPanelCollapsed]);
+
   const headerToolbarMenuItems = useMemo(() => {
     const items: DashboardHeaderToolbarMenuItem[] = [];
 
@@ -149,25 +172,27 @@ export const DashboardContainer = ({
     return items;
   }, [t, isEditModeEnabled, isEditMode, isHistoryEnabled, handleModeChange]);
 
+  const headerToolbarComponents = useMemo(() => {
+    const components: JSX.Element[] = [];
+
+    // Add filter toggle component when showFilterIconInToolbar is enabled and both toolbar and filters panel are visible
+    if (showFilterIconInToolbar) {
+      components.push(
+        <FilterToggle
+          key="filter-toggle"
+          isFilterPanelCollapsed={isFilterPanelCollapsed}
+          onToggleClick={handleFilterToggleClick}
+        />,
+      );
+    }
+
+    return components;
+  }, [showFilterIconInToolbar, isFilterPanelCollapsed, handleFilterToggleClick]);
+
   const { toolbar: headerToolbar } = useDashboardHeaderToolbar({
     menuItems: headerToolbarMenuItems,
+    toolbarComponents: headerToolbarComponents,
   });
-
-  const [isFilterPanelCollapsed, setIsFilterPanelCollapsed] = useFiltersPanelCollapsedState(
-    config?.filtersPanel?.collapsedInitially,
-    config?.filtersPanel?.persistCollapsedStateToLocalStorage,
-  );
-  const setIsFilterPanelCollapsedAndFireEvent = useCallback(
-    (state: boolean) => {
-      setIsFilterPanelCollapsed(state);
-      onChange?.({ type: DashboardChangeType.UI_FILTERS_PANEL_COLLAPSE, payload: state });
-    },
-    [onChange, setIsFilterPanelCollapsed],
-  );
-
-  const isToolbarVisible = config?.toolbar?.visible !== false;
-  const isFiltersPanelVisible = config?.filtersPanel?.visible !== false;
-  const isLayoutResponsive = config?.widgetsPanel?.responsive ?? false;
 
   return (
     <DashboardWrapper theme={themeSettings}>
@@ -205,7 +230,8 @@ export const DashboardContainer = ({
       {isFiltersPanelVisible && (
         <HorizontalCollapse
           collapsed={isFilterPanelCollapsed}
-          onCollapsedChange={setIsFilterPanelCollapsedAndFireEvent}
+          onCollapsedChange={handleFilterToggleClick}
+          hideCollapseArrow={showFilterIconInToolbar}
         >
           <div className="csdk-w-[240px] csdk-h-[100%] csdk-flex">
             <ThemeProvider

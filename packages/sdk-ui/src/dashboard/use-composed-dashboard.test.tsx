@@ -1,21 +1,23 @@
+import { act, useMemo } from 'react';
+
 import { Attribute, filterFactory, Measure, measureFactory } from '@sisense/sdk-data';
 import { render, renderHook } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
 
+import { mockToken, mockUrl, server } from '@/__mocks__/msw';
+import { chartMocksManager } from '@/__test-helpers__/mock-chart-component';
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { MenuProvider } from '@/common/components/menu/menu-provider.js';
 import { ModalProvider } from '@/common/components/modal/modal-provider.js';
-import { isTextWidgetProps } from '@/widgets/text-widget.js';
-import { mockToken, mockUrl, server } from '@/__mocks__/msw';
-import { act, useMemo } from 'react';
-import { chartMocksManager } from '@/__test-helpers__/mock-chart-component';
-import type { ChartWidgetProps, SisenseContextProviderProps, WidgetProps } from '@/props';
-import { useComposedDashboard } from './use-composed-dashboard.js';
-import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
-import { Widget } from '@/widgets/widget';
 import { FilterTile } from '@/filters';
-import { totalCostByAgeRangeJaqlResult } from './__mocks__/jaql-responce-mock.js';
+import type { ChartWidgetProps, SisenseContextProviderProps, WidgetProps } from '@/props';
+import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
 import { CartesianChartDataOptions, DataPoint } from '@/types.js';
+import { isTextWidgetProps } from '@/widgets/text-widget.js';
+import { Widget } from '@/widgets/widget';
+
+import { totalCostByAgeRangeJaqlResult } from './__mocks__/jaql-responce-mock.js';
+import { useComposedDashboard } from './use-composed-dashboard.js';
 
 /**
  * Helper function to get property from widget props

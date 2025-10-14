@@ -1,8 +1,11 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { Themable } from '@/theme-provider/types';
-import { useThemeContext } from '../theme-provider';
 import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+
+import { Themable } from '@/theme-provider/types';
+
+import { useThemeContext } from '../theme-provider';
 
 const ClearSelectionButton = styled.button<Themable>`
   color: ${({ theme }) => theme.chart?.textColor};

@@ -1,19 +1,20 @@
-import { useMemo, useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { WidgetProps } from '@/props.js';
-import { JumpToDashboardConfig } from './jtd/jtd-types';
-import { useModal } from '@/common/hooks/use-modal';
-import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
-import { MenuOptions } from '@/common/components/menu/types';
+
 import { MenuIds } from '@/common/components/menu/menu-ids';
+import { MenuOptions } from '@/common/components/menu/types';
+import { useCombinedMenu } from '@/common/hooks/use-combined-menu';
+import { useModal } from '@/common/hooks/use-modal';
+import { withTracking } from '@/decorators/hook-decorators';
+import { WidgetProps } from '@/props.js';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { useThemeContext } from '@/theme-provider';
-import { normalizeToJtdConfig } from './jtd/jtd-config-transformers';
 import { combineHandlers } from '@/utils/combine-handlers';
 
+import { normalizeToJtdConfig } from './jtd/jtd-config-transformers';
+import { JumpToDashboardConfig } from './jtd/jtd-types';
 // Import the shared JTD application logic
 import { applyJtdToWidget, JumpToDashboardConfigForPivot } from './use-jtd';
-import { withTracking } from '@/decorators/hook-decorators';
 
 function isDrilldownMenu(options: MenuOptions): boolean {
   return options.id === MenuIds.WIDGET_POINTS_DRILLDOWN;

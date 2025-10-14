@@ -1,8 +1,13 @@
 /* eslint-disable max-params */
+
 /* eslint-disable no-underscore-dangle */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable sonarjs/no-nested-switch */
 import { parseExpression } from '../utils.js';
 import { DimensionalElement, normalizeName } from './base.js';
@@ -18,6 +23,7 @@ import {
   MetadataTypes,
   Sort,
 } from './types.js';
+
 /**
  * @internal
  */

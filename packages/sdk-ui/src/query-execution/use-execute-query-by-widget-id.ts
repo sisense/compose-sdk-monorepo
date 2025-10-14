@@ -1,32 +1,35 @@
 import { useEffect, useReducer, useRef } from 'react';
+
+import { Filter, getFilterListAndRelationsJaql, QueryResultData } from '@sisense/sdk-data';
+
+import { mergeFiltersByStrategy } from '@/utils/filter-relations';
+
+import { RestApi } from '../api/rest-api';
+import { ClientApplication } from '../app/client-application';
+import { useHasChanged } from '../common/hooks/use-has-changed';
+import { useShouldLoad } from '../common/hooks/use-should-load';
 import { withTracking } from '../decorators/hook-decorators';
-import { queryStateReducer } from './query-state-reducer';
-import { useSisenseContext } from '../sisense-context/sisense-context';
+import { widgetModelTranslator } from '../models';
 import { executePivotQuery, executeQuery } from '../query/execute-query';
+import { useSisenseContext } from '../sisense-context/sisense-context';
+import { TranslatableError } from '../translation/translatable-error';
+import { isFiltersChanged } from '../utils/filters-comparator';
+import { extractDashboardFiltersForWidget } from '../widget-by-id/translate-dashboard-filters';
+import { fetchWidgetDtoModel } from '../widget-by-id/use-fetch-widget-dto-model';
 import {
   convertFilterRelationsModelToJaql,
   isPivotWidget,
   mergeFilters,
 } from '../widget-by-id/utils';
-import { isFiltersChanged } from '../utils/filters-comparator';
-import { ClientApplication } from '../app/client-application';
-import { TranslatableError } from '../translation/translatable-error';
-import { RestApi } from '../api/rest-api';
-import { useHasChanged } from '../common/hooks/use-has-changed';
-import { extractDashboardFiltersForWidget } from '../widget-by-id/translate-dashboard-filters';
-import { fetchWidgetDtoModel } from '../widget-by-id/use-fetch-widget-dto-model';
+import { queryStateReducer } from './query-state-reducer';
 import {
   ExecutePivotQueryParams,
   ExecuteQueryByWidgetIdParams,
   ExecuteQueryParams,
-  QueryByWidgetIdState,
   QueryByWidgetIdQueryParams,
+  QueryByWidgetIdState,
 } from './types';
-import { Filter, getFilterListAndRelationsJaql, QueryResultData } from '@sisense/sdk-data';
-import { widgetModelTranslator } from '../models';
-import { useShouldLoad } from '../common/hooks/use-should-load';
 import { convertToQueryDescription } from './utils';
-import { mergeFiltersByStrategy } from '@/utils/filter-relations';
 
 /**
  * React hook that executes a data query extracted from an existing widget in the Sisense instance.

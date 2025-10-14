@@ -1,21 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable max-params */
-import { HttpClient, getAuthenticator, isWatAuthenticator } from '@sisense/sdk-rest-client';
-import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
+import { normalizeUrl } from '@sisense/sdk-common';
 import { DataSource } from '@sisense/sdk-data';
 import { PivotClient } from '@sisense/sdk-pivot-client';
+import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
+import { getAuthenticator, HttpClient, isWatAuthenticator } from '@sisense/sdk-rest-client';
 import { TrackingEventDetails } from '@sisense/sdk-tracking';
-import { normalizeUrl } from '@sisense/sdk-common';
-import { DateConfig } from '../query/date-formats';
-import { AppSettings, getSettings } from './settings/settings';
-import { TranslatableError } from '../translation/translatable-error';
-import { TranslationConfig, LoadingIndicatorConfig } from '../types';
-import { clearExecuteQueryCache } from '@/query/execute-query';
-import { SisenseContextProviderProps } from '@/props';
+
 import { SYSTEM_TENANT_NAME } from '@/const';
+import { SisenseContextProviderProps } from '@/props';
+import { clearExecuteQueryCache } from '@/query/execute-query';
+
+import { DateConfig } from '../query/date-formats';
+import { TranslatableError } from '../translation/translatable-error';
+import { LoadingIndicatorConfig, TranslationConfig } from '../types';
+import { AppSettings, getSettings } from './settings/settings';
 
 /**
  * Application configuration

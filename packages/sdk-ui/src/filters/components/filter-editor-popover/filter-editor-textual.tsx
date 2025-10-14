@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
+
 import Stack from '@mui/material/Stack';
 import { Filter } from '@sisense/sdk-data';
+
+import { NotSupportedSection } from '@/filters/components/filter-editor-popover/sections/not-supported-section';
+import { useThemeContext } from '@/theme-provider';
+
+import { FilterEditorContainer } from './filter-editor-container';
+import { MultiSelectControl } from './multi-select-control';
 import { IncludeAllSection } from './sections/include-all-section';
 import { MembersSection } from './sections/members-section';
 import { TextConditionSection } from './sections/text-condition-section';
 import { isIncludeAllFilter, isIncludeMembersFilter, isSupportedByFilterEditor } from './utils';
-import { MultiSelectControl } from './multi-select-control';
-import { FilterEditorContainer } from './filter-editor-container';
-import { useThemeContext } from '@/theme-provider';
-import { NotSupportedSection } from '@/filters/components/filter-editor-popover/sections/not-supported-section';
 
 enum FilterSections {
   NOT_SUPPORTED = 'not-supported',

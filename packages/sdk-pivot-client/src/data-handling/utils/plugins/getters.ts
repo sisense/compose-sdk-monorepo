@@ -1,6 +1,6 @@
-import { JaqlRequest, JaqlPanel } from '../../../data-load/types.js';
-import { PivotTreeNode } from '../../types.js';
+import { JaqlPanel, JaqlRequest } from '../../../data-load/types.js';
 import { PanelType, UserType } from '../../constants.js';
+import { PivotTreeNode } from '../../types.js';
 import { MeasureMetadata } from './types.js';
 
 const getJaqlItemByIndex = (jaql: JaqlRequest, index: number) =>

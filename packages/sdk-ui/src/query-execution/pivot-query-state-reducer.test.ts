@@ -1,6 +1,7 @@
 import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@sisense/sdk-data';
+
 import { pivotQueryStateReducer } from './pivot-query-state-reducer';
-import { PivotQueryState, PivotQueryAction } from './types';
+import { PivotQueryAction, PivotQueryState } from './types';
 
 describe('pivotQueryStateReducer', () => {
   let initialState: PivotQueryState;

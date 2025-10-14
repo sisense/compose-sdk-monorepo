@@ -1,5 +1,7 @@
-import { createAttribute, Filter, measureFactory } from '../../index.js';
+import { createAttribute } from '../attributes.js';
 import { createDateDimension } from '../dimensions/index.js';
+import { Filter } from '../interfaces.js';
+import * as measureFactory from '../measures/factory.js';
 import * as filterFactory from './factory.js';
 import {
   DateOperators,

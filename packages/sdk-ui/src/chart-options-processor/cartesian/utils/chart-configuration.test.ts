@@ -1,5 +1,5 @@
-import { withXAxisLabelPositioning, withYAxisLabelPositioning } from './chart-configuration';
 import { AxisSettings } from '../../translations/axis-section';
+import { withXAxisLabelPositioning, withYAxisLabelPositioning } from './chart-configuration';
 
 describe('withXAxisLabelPositioning', () => {
   it('should return a curried function that applies X-axis positioning', () => {
@@ -112,8 +112,8 @@ describe('withYAxisLabelPositioning', () => {
     // Assert
     expect(typeof positionLabels).toBe('function');
     expect(result).not.toBe(yAxisSettings);
-    expect(result[0].stackLabels?.x).toBe(100);
-    expect(result[0].stackLabels?.y).toBe(200);
+    expect(result[0].stackLabels?.x).toBe(110);
+    expect(result[0].stackLabels?.y).toBe(220);
   });
 
   it('should allow for composition with other functional operations', () => {

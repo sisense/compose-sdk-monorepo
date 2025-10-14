@@ -1,14 +1,17 @@
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { IndicatorHelper } from './indicator-helper.js';
-import { NumericSimple } from './numeric-simple.js';
-import { NumericBar } from './numeric-bar.js';
-import { Gauge } from './gauge.js';
-import { Ticker } from './ticker.js';
+import { prepareTickerOptions } from '@/charts/indicator/indicator-legacy-chart-options/prepare-ticker-options';
+import { TranslatableError } from '@/translation/translatable-error.js';
+
 import { IndicatorLegacyChartDataOptions } from '../indicator-legacy-chart-data-options.js';
 import {
   GaugeOptions,
@@ -17,8 +20,11 @@ import {
   NumericBarOptions,
   NumericSimpleOptions,
 } from '../types.js';
-import { prepareTickerOptions } from '@/charts/indicator/indicator-legacy-chart-options/prepare-ticker-options';
-import { TranslatableError } from '@/translation/translatable-error.js';
+import { Gauge } from './gauge.js';
+import { IndicatorHelper } from './indicator-helper.js';
+import { NumericBar } from './numeric-bar.js';
+import { NumericSimple } from './numeric-simple.js';
+import { Ticker } from './ticker.js';
 
 const $indicatorHelper = new IndicatorHelper();
 const $numericSimple = new NumericSimple();

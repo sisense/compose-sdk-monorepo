@@ -1,3 +1,7 @@
+import { analyticsFactory, Attribute, Column, Measure, MeasureColumn } from '@sisense/sdk-data';
+import { describe } from 'vitest';
+
+import { ChartType } from '../types';
 import {
   getAttributes,
   getMeasures,
@@ -5,21 +9,18 @@ import {
   translatePivotTableDataOptions,
 } from './translate-data-options';
 import {
+  AnyColumn,
+  BoxplotChartCustomDataOptions,
+  BoxplotChartDataOptions,
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
-  ScatterChartDataOptions,
+  ChartDataOptions,
   IndicatorChartDataOptions,
+  PivotTableDataOptions,
+  ScatterChartDataOptions,
   StyledColumn,
   StyledMeasureColumn,
-  ChartDataOptions,
-  AnyColumn,
-  BoxplotChartDataOptions,
-  BoxplotChartCustomDataOptions,
-  PivotTableDataOptions,
 } from './types';
-import { Attribute, Column, Measure, MeasureColumn, analyticsFactory } from '@sisense/sdk-data';
-import { ChartType } from '../types';
-import { describe } from 'vitest';
 import { normalizeColumn, normalizeMeasureColumn } from './utils';
 
 vi.mock('@sisense/sdk-data', async () => {

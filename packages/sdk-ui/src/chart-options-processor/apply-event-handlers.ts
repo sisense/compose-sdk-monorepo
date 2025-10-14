@@ -1,19 +1,21 @@
 /* eslint-disable import/no-extraneous-dependencies */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import merge from 'deepmerge';
 import isNull from 'lodash-es/isNull';
-import {
-  HighchartsPointerEvent,
-  HighchartsSelectEvent,
-  HighchartsPoint,
-  HighchartsSelectEventAxis,
-} from '../types';
+
+import { ChartDataOptionsInternal } from '..';
 import { HighchartsOptionsInternal } from '../chart-options-processor/chart-options-service';
 import {
   SisenseChartDataPointEventHandler,
   SisenseChartDataPointsEventHandler,
 } from '../sisense-chart/types';
-import { ChartDataOptionsInternal } from '..';
+import {
+  HighchartsPoint,
+  HighchartsPointerEvent,
+  HighchartsSelectEvent,
+  HighchartsSelectEventAxis,
+} from '../types';
 import { getDataPoint } from './data-points';
 
 export type HighchartsEventOptions = {

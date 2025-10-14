@@ -1,5 +1,6 @@
-import { useQueryCache } from './use-query-cache';
 import { useSisenseContextMock } from '@/sisense-context/__mocks__/sisense-context';
+
+import { useQueryCache } from './use-query-cache';
 
 vi.mock('../sisense-context/sisense-context');
 

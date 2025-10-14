@@ -85,6 +85,7 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
   "styleOptions": {},
   "tabbersOptions": {},
   "title": "test",
+  "userAuth": undefined,
   "widgets": [
     {
       "chartType": "pie",
@@ -149,6 +150,7 @@ exports[`DashboardModel > should create a new dashboard model with minimum of ar
   "styleOptions": {},
   "tabbersOptions": {},
   "title": "test",
+  "userAuth": undefined,
   "widgets": [],
   "widgetsOptions": {},
 }

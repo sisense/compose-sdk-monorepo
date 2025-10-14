@@ -1,25 +1,28 @@
 import { useCallback, useEffect, useState } from 'react';
+
 import Stack from '@mui/material/Stack';
 import { Filter } from '@sisense/sdk-data';
+
+import {
+  NumericAttributeStats,
+  useGetAttributeStats,
+} from '@/filters/components/filter-editor-popover/hooks/use-get-attribute-stats';
+import { NotSupportedSection } from '@/filters/components/filter-editor-popover/sections/not-supported-section';
+import { useThemeContext } from '@/theme-provider';
+
+import { FilterEditorContainer } from './filter-editor-container';
+import { useFilterEditorContext } from './filter-editor-context';
+import { MultiSelectControl } from './multi-select-control';
 import { IncludeAllSection } from './sections/include-all-section';
 import { MembersSection } from './sections/members-section';
+import { NumericConditionSection } from './sections/numeric-condition-section';
+import { NumericRangeSection } from './sections/numeric-range-section';
 import {
   isIncludeAllFilter,
   isIncludeMembersFilter,
   isNumericBetweenFilter,
   isSupportedByFilterEditor,
 } from './utils';
-import { MultiSelectControl } from './multi-select-control';
-import { FilterEditorContainer } from './filter-editor-container';
-import { NumericRangeSection } from './sections/numeric-range-section';
-import {
-  NumericAttributeStats,
-  useGetAttributeStats,
-} from '@/filters/components/filter-editor-popover/hooks/use-get-attribute-stats';
-import { NumericConditionSection } from './sections/numeric-condition-section';
-import { useThemeContext } from '@/theme-provider';
-import { NotSupportedSection } from '@/filters/components/filter-editor-popover/sections/not-supported-section';
-import { useFilterEditorContext } from './filter-editor-context';
 
 enum FilterSections {
   NOT_SUPPORTED = 'not-supported',

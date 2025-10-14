@@ -1,9 +1,12 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { SisenseSwitchButton } from '../common';
-import { useThemeContext } from '@/theme-provider';
 import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+
+import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
+
+import { SisenseSwitchButton } from '../common';
 
 const Container = styled.div`
   display: flex;

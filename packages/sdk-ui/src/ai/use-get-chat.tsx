@@ -1,7 +1,8 @@
-import { useGetAllChats, useMaybeCreateChat } from '@/ai/api/hooks';
-import { useChatIdStorage } from '@/ai/chat-id-storage-provider';
 import { useEffect } from 'react';
+
+import { useGetAllChats, useMaybeCreateChat } from '@/ai/api/hooks';
 import { ChatContextDetails } from '@/ai/api/types';
+import { useChatIdStorage } from '@/ai/chat-id-storage-provider';
 
 export const useGetChat = (
   contextTitle: string,

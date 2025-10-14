@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
+
 import { DashboardHeaderProps } from '@/dashboard/types';
-import { useThemeContext } from '@/theme-provider';
 import { getDividerStyle } from '@/dashboard/utils';
+import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 
 export const DASHBOARD_HEADER_HEIGHT = 48;
@@ -34,7 +35,9 @@ export const DashboardHeader = ({ title, toolbar }: DashboardHeaderProps) => {
   return (
     <DashboardHeaderContainer theme={themeSettings}>
       <DashboardHeaderTitle>{title}</DashboardHeaderTitle>
-      <div>{toolbar?.()}</div>
+      <div data-testid="dashboard-header-toolbar" className="csdk-flex">
+        {toolbar?.()}
+      </div>
     </DashboardHeaderContainer>
   );
 };

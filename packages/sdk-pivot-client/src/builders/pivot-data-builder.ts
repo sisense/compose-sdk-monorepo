@@ -1,8 +1,3 @@
-import { DataLoadServiceI, JaqlRequest, SocketI } from '../data-load/types.js';
-import { InitPageData } from '../data-handling';
-import { DataService } from '../data-handling/DataService.js';
-import { TreeNode } from '../tree-structure';
-import { SisenseDataLoadService } from '../data-load/index.js';
 import {
   Cell,
   Column,
@@ -10,6 +5,12 @@ import {
   PivotGrid,
   PivotQueryResultData,
 } from '@sisense/sdk-data';
+
+import { InitPageData } from '../data-handling';
+import { DataService } from '../data-handling/DataService.js';
+import { SisenseDataLoadService } from '../data-load/index.js';
+import { DataLoadServiceI, JaqlRequest, SocketI } from '../data-load/types.js';
+import { TreeNode } from '../tree-structure';
 
 export class PivotDataBuilder {
   /**

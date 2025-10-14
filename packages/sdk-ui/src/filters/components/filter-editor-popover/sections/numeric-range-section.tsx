@@ -1,12 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { TFunction } from '@sisense/sdk-common';
 import { Filter, filterFactory, NumericFilter } from '@sisense/sdk-data';
 import isNumber from 'lodash-es/isNumber';
+
+import { useWasModified } from '@/common/hooks/use-was-modified';
+import { isNumericString } from '@/utils/is-numeric-string';
+
 import { Input, SelectableSection } from '../common';
 import { isNumericBetweenFilter } from '../utils';
-import { isNumericString } from '@/utils/is-numeric-string';
-import { TFunction } from '@sisense/sdk-common';
-import { useWasModified } from '@/common/hooks/use-was-modified';
 
 const NUMERIC_RANGE_INPUT_WIDTH = '136px';
 

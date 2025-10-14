@@ -1,6 +1,7 @@
+import { renderHook } from '@testing-library/react';
+
 import { useDashboardTheme } from '@/dashboard/use-dashboard-theme';
 import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
-import { renderHook } from '@testing-library/react';
 
 vi.mock('@/theme-provider', () => ({
   useThemeContext: () => ({ themeSettings: getDefaultThemeSettings() }),

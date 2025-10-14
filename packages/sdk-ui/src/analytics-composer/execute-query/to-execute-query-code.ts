@@ -1,17 +1,18 @@
-import { ExecuteQueryParams, ExecutePivotQueryParams } from '@/query-execution';
-import { stringifyDataSource, stringifyExtraImports } from '../code/stringify-props';
-import {
-  ExecuteQueryCodeParams,
-  ExecutePivotQueryCodeParams,
-  CodeTemplateKey,
-  UiFramework,
-  ExecuteQueryCodeProps,
-  ExecutePivotQueryCodeProps,
-} from '../types.js';
+import { ExecutePivotQueryParams, ExecuteQueryParams } from '@/query-execution';
+
 import { generateCode } from '../code/generate-code.js';
 import { stringifyFilters } from '../code/stringify-filters.js';
+import { stringifyDataSource, stringifyExtraImports } from '../code/stringify-props';
 import { stringifyProps } from '../code/stringify-props.js';
 import { checkIfMeasuresExist } from '../common/utils.js';
+import {
+  CodeTemplateKey,
+  ExecutePivotQueryCodeParams,
+  ExecutePivotQueryCodeProps,
+  ExecuteQueryCodeParams,
+  ExecuteQueryCodeProps,
+  UiFramework,
+} from '../types.js';
 
 const executeQueryTemplateKey: CodeTemplateKey = 'executeQueryTmpl';
 const executePivotQueryTemplateKey: CodeTemplateKey = 'executePivotQueryTmpl';

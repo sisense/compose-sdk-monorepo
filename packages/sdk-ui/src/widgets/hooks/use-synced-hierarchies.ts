@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
+
 import { Attribute, DataSource } from '@sisense/sdk-data';
 import isString from 'lodash-es/isString';
 import partition from 'lodash-es/partition';
+
 import { Hierarchy, HierarchyId } from '@/models/hierarchy';
 import { useGetHierarchyModelsInternal } from '@/models/hierarchy/use-get-hierarchy-models';
 

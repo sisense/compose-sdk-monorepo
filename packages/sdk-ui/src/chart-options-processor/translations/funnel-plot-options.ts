@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import {
+  CategoricalChartDataOptionsInternal,
+  ChartDataOptionsInternal,
+} from '../../chart-data-options/types';
+import { fraction, fromFraction, withPercentSign } from '../../chart-data/utils';
+import { CompleteNumberFormatConfig, CompleteThemeSettings } from '../../types';
 import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
-import { DataLabelsSettings } from './value-label-section';
-import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
-import { CompleteNumberFormatConfig, CompleteThemeSettings } from '../../types';
-import { HighchartsDataPointContext } from './tooltip-utils';
 import { FunnelChartDesignOptions } from './design-options';
-import { withPercentSign, fraction, fromFraction } from '../../chart-data/utils';
-import {
-  ChartDataOptionsInternal,
-  CategoricalChartDataOptionsInternal,
-} from '../../chart-data-options/types';
+import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
+import { HighchartsDataPointContext } from './tooltip-utils';
+import { DataLabelsSettings } from './value-label-section';
 
 export const DefaultFunnelLabels: FunnelLabels = {
   enabled: true,

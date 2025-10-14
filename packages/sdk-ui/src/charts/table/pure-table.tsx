@@ -1,9 +1,10 @@
-import { useRef, useLayoutEffect, useMemo } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
+
+import { TableDesignOptions } from '../../chart-options-processor/translations/design-options';
 import { DataTableWrapper } from './data-table-wrapper';
+import { formatNumbers } from './helpers/format-numbers';
 import styles from './styles/table-chart.module.scss';
 import { TableProps } from './types';
-import { TableDesignOptions } from '../../chart-options-processor/translations/design-options';
-import { formatNumbers } from './helpers/format-numbers';
 
 /**
  * PureTable Component. Table without any data fetch or aggregation logic.

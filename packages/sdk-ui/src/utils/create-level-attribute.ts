@@ -1,5 +1,6 @@
 import { TFunction } from '@sisense/sdk-common';
 import { DimensionalLevelAttribute, getColumnNameFromAttribute } from '@sisense/sdk-data';
+
 import { generateAttributeName } from '@/utils/generate-attribute-name';
 
 /**

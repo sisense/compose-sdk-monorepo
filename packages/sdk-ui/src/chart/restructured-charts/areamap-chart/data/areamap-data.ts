@@ -1,13 +1,14 @@
-import { TranslatableError } from '@/translation/translatable-error.js';
-import { createValueColorOptions } from '@/widget-by-id/translate-panel-color-format.js';
+import { AreamapChartDataOptionsInternal } from '@/chart-data-options/types.js';
+import { DataTable, getColumnByName, getValue } from '@/chart-data-processor/table-processor';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from '@/chart-options-processor/translations/number-format-config.js';
-import { AreamapChartDataOptionsInternal } from '@/chart-data-options/types.js';
-import { DataTable, getColumnByName, getValue } from '@/chart-data-processor/table-processor';
-import { geoDataColoringFunction } from './geo-data-coloring-function';
+import { TranslatableError } from '@/translation/translatable-error.js';
+import { createValueColorOptions } from '@/widget-by-id/translate-panel-color-format.js';
+
 import { AreamapData, RawGeoDataElement } from '../types';
+import { geoDataColoringFunction } from './geo-data-coloring-function';
 
 const defaultAreamapColorOptions = createValueColorOptions({
   type: 'range',

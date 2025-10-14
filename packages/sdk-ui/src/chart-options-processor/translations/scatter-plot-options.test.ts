@@ -1,8 +1,8 @@
+import { ScatterChartDesignOptions } from './design-options';
 import {
   getScatterPlotOptions,
   type ScatterChartHighchartsDataPointContext,
 } from './scatter-plot-options';
-import { ScatterChartDesignOptions } from './design-options';
 
 const chartDesignOptions = {
   markerSize: {

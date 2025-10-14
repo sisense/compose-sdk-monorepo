@@ -7,6 +7,7 @@ import {
 } from '@sisense/sdk-data';
 import dayjs, { ManipulateType } from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
+
 import { TranslatableError } from '@/translation/translatable-error';
 
 dayjs.extend(quarterOfYear);

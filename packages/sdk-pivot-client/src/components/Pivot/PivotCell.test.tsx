@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 
-import PivotCell, { PivotCellProps } from './PivotCell';
-import * as helpers from '../PivotCell/helpers';
 import { PivotTreeNode } from '../../data-handling';
 import { TreeNodeMetadata } from '../../tree-structure/types';
+import * as helpers from '../PivotCell/helpers';
+import PivotCell, { PivotCellProps } from './PivotCell';
 
 const TEXT_CONTENT: string = 'test content';
 

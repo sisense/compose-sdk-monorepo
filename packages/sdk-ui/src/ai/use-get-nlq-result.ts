@@ -1,12 +1,14 @@
-import { withTracking } from '@/decorators/hook-decorators';
-import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
 
-import { useChatApi } from './api/chat-api-provider';
-import { widgetComposer } from '@/analytics-composer';
-import { WidgetProps } from '@/props';
 import { DataSource } from '@sisense/sdk-data';
+import { useQuery } from '@tanstack/react-query';
+
+import { widgetComposer } from '@/analytics-composer';
 import { HookEnableParam } from '@/common/hooks/types';
+import { withTracking } from '@/decorators/hook-decorators';
+import { WidgetProps } from '@/props';
+
+import { useChatApi } from './api/chat-api-provider';
 import { GetNlqResultRequest, NLQ_RESULT_CHART_TYPES, NlqResultChartType } from './api/types';
 
 export interface GetNlqResultParams {

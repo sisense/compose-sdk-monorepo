@@ -1,11 +1,23 @@
-import { describe, test, expect, vi } from 'vitest';
-import { getAxes } from './axes';
-import { BuildContext } from '../../../../types';
-import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
-import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
-import { CompleteThemeSettings } from '@/types';
 import { TFunction } from '@sisense/sdk-common';
+import flow from 'lodash-es/flow';
+import { describe, expect, test, vi } from 'vitest';
+
+import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
+import {
+  withXAxisLabelPositioning,
+  withYAxisLabelPositioning,
+} from '@/chart-options-processor/cartesian/utils/chart-configuration';
 import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
+import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { CompleteThemeSettings } from '@/types';
+
+import { BuildContext } from '../../../../types';
+// Import the mocked functions
+import { getCartesianXAxis } from '../../../helpers/highchart-options/axis';
+import { getBasicYAxisSettings } from '../../../helpers/highchart-options/y-axis';
+import { withStacking } from '../../helpers/highchart-options/stacking';
+import { getAxes } from './axes';
+import { getAreaChartSpacingForTotalLabels } from './labels-spacing';
 
 // Mock the dependencies
 vi.mock('../../../helpers/highchart-options/axis', () => ({
@@ -32,17 +44,6 @@ vi.mock('./labels-spacing', () => ({
 vi.mock('lodash-es/flow', () => ({
   default: vi.fn(),
 }));
-
-// Import the mocked functions
-import { getCartesianXAxis } from '../../../helpers/highchart-options/axis';
-import { getBasicYAxisSettings } from '../../../helpers/highchart-options/y-axis';
-import {
-  withXAxisLabelPositioning,
-  withYAxisLabelPositioning,
-} from '@/chart-options-processor/cartesian/utils/chart-configuration';
-import { withStacking } from '../../helpers/highchart-options/stacking';
-import { getAreaChartSpacingForTotalLabels } from './labels-spacing';
-import flow from 'lodash-es/flow';
 
 describe('axes', () => {
   describe('getAxes', () => {
@@ -76,8 +77,7 @@ describe('axes', () => {
       } as CartesianChartDataOptionsInternal,
       designOptions: {
         stackType,
-        showTotal,
-        totalLabelRotation,
+        totalLabels: { enabled: showTotal, rotation: totalLabelRotation },
         legend: {
           enabled: true,
           position: 'bottom',
@@ -484,7 +484,7 @@ describe('axes', () => {
 
       test('should handle null values in design options', () => {
         const ctx = createMockBuildContext();
-        ctx.designOptions.showTotal = null as any;
+        ctx.designOptions.totalLabels = null as any;
 
         expect(() => getAxes(ctx)).not.toThrow();
       });

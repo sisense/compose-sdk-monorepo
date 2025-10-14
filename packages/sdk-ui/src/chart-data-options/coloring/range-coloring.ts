@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+
 /* eslint-disable max-params */
 import { RelativeColoringFunction } from '.';
 import { RangeDataColorOptions } from '../../types';

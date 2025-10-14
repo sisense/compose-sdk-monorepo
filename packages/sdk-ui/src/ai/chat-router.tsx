@@ -1,12 +1,14 @@
+import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useState, useMemo } from 'react';
+
+import LoadingSpinner from '../common/components/loading-spinner';
 import { useGetDataTopics } from './api/hooks';
 import ChatBox from './chat-box';
 import { useChatConfig } from './chat-config';
 import ChatHome from './chat-home';
 import ErrorContainer from './common/error-container';
-import LoadingSpinner from '../common/components/loading-spinner';
-import { useTranslation } from 'react-i18next';
 
 export default function ChatRouter() {
   const [selectedContext, setSelectedContext] = useState<string>();

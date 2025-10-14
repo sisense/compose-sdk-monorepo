@@ -1,19 +1,22 @@
-import 'leaflet/dist/leaflet.css';
+import { useEffect, useMemo, useRef, useState } from 'react';
+
 import type {
   Feature as GeoJsonFeature,
   FeatureCollection as GeoJsonFeatureCollection,
 } from 'geojson';
 import Leaflet from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import * as proj4 from 'proj4leaflet';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { scaleBrightness } from '@/utils/color/index.js';
-import { AreamapType } from '@/types.js';
-import { createFeatureStylesDictionary, FeaturesDictionary } from './feature-styles-dictionary.js';
-import { useThemeContext } from '@/theme-provider';
-import { GeoDataElement } from '../types.js';
+
 // update this imports after moving both map charts (scattermap and areamap) to restructured charts
 import '@/charts/map-charts/map-charts.scss';
 import { prepareFitBoundsAnimationOptions } from '@/charts/map-charts/scattermap/utils/map.js';
+import { useThemeContext } from '@/theme-provider';
+import { AreamapType } from '@/types.js';
+import { scaleBrightness } from '@/utils/color/index.js';
+
+import { GeoDataElement } from '../types.js';
+import { createFeatureStylesDictionary, FeaturesDictionary } from './feature-styles-dictionary.js';
 
 // Using direct import instead of Leaflet.Proj namespace because the library doesn't properly attach to Leaflet in module builds.
 // This is a known Webpack/module issue: https://github.com/kartena/Proj4Leaflet/pull/147

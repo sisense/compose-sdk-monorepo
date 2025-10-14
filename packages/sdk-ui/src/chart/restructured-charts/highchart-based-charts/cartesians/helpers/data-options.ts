@@ -1,4 +1,12 @@
+import {
+  Attribute,
+  CalculatedMeasureColumn,
+  Column,
+  Measure,
+  MeasureColumn,
+} from '@sisense/sdk-data';
 import isArray from 'lodash-es/isArray';
+
 import {
   CartesianChartDataOptionsInternal,
   ChartDataOptions,
@@ -13,13 +21,6 @@ import {
   normalizeMeasureColumn,
 } from '@/chart-data-options/utils';
 import { CartesianChartDataOptions } from '@/types';
-import {
-  Attribute,
-  CalculatedMeasureColumn,
-  Column,
-  Measure,
-  MeasureColumn,
-} from '@sisense/sdk-data';
 
 /**
  * Translates the data options for cartesian charts to internal format.

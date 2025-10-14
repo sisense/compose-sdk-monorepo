@@ -1,29 +1,32 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { Filter } from '@sisense/sdk-data';
-import { SelectableSection } from '../common/selectable-section.js';
-import { Input, SingleSelect } from '../common/index.js';
+
+import { usePrevious } from '@/common/hooks/use-previous.js';
+
 import {
   CRITERIA_FILTER_MAP,
   FilterOption,
   filterToDefaultValues,
   filterToOption,
 } from '../../criteria-filter-tile/criteria-filter-operations.js';
+import { Input, SingleSelect } from '../common/index.js';
+import { ScrollWrapperOnScrollEvent } from '../common/scroll-wrapper';
+import { MembersListSelect } from '../common/select/members-list-select';
+import { SelectableSection } from '../common/selectable-section.js';
+import { useFilterEditorContext } from '../filter-editor-context';
 import {
   isConditionalFilter,
   isExcludeMembersFilter,
   isSupportedByFilterEditor,
 } from '../utils.js';
-import { usePrevious } from '@/common/hooks/use-previous.js';
-import { ScrollWrapperOnScrollEvent } from '../common/scroll-wrapper';
 import {
   createExcludeMembersFilter,
   getConfigWithUpdatedDeactivated,
   getMembersWithDeactivated,
   getMembersWithoutDeactivated,
 } from './utils.js';
-import { MembersListSelect } from '../common/select/members-list-select';
-import { useFilterEditorContext } from '../filter-editor-context';
 
 const TextCondition = {
   EXCLUDE: 'exclude',

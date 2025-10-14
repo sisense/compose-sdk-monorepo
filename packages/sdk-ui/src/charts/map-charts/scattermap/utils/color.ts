@@ -1,6 +1,6 @@
+import { createDataColoringFunction } from '../../../../chart-data/data-coloring/create-data-coloring-function.js';
 import { ScattermapChartLocation } from '../../../../chart-data/types.js';
 import { DataColorOptions } from '../../../../types.js';
-import { createDataColoringFunction } from '../../../../chart-data/data-coloring/create-data-coloring-function.js';
 
 const DEFAULT_COLOR = '#00cee6';
 

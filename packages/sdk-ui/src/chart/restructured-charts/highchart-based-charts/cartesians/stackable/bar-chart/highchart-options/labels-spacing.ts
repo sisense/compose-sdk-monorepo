@@ -31,9 +31,9 @@ export function getBarChartSpacingForTotalLabels(chartDesignOptions: StackableCh
   let rightSpacing = 0;
   const topSpacing = 0; // Bar charts don't use top spacing for total labels
 
-  if (chartDesignOptions.showTotal && chartDesignOptions.stackType === 'stack100') {
+  if (chartDesignOptions.totalLabels?.enabled && chartDesignOptions.stackType === 'stack100') {
     const rotation =
-      Math.abs(chartDesignOptions.totalLabelRotation || 0) % ROTATION_CALCULATION.FULL_ROTATION;
+      Math.abs(chartDesignOptions.totalLabels.rotation || 0) % ROTATION_CALCULATION.FULL_ROTATION;
 
     if (rotation < LABEL_ROTATION_THRESHOLD.HORIZONTAL) {
       rightSpacing = BarTotalLabelHorizontalSpacing.Large;

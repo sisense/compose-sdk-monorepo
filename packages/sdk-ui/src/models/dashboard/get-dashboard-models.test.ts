@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/** @vitest-environment jsdom */
 
-import { getDashboardModels, type GetDashboardModelsOptions } from './get-dashboard-models.js';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+/** @vitest-environment jsdom */
 import { type HttpClient } from '@sisense/sdk-rest-client';
+import zipObject from 'lodash-es/zipObject';
+
 import { DashboardDto } from '../../api/types/dashboard-dto.js';
 import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboard.js';
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';
 import { samplePivotDashboard } from '../__mocks__/sample-pivot-dashboard.js';
-import zipObject from 'lodash-es/zipObject';
 import { isWidgetModel } from '../widget/widget-model.js';
+import { getDashboardModels, type GetDashboardModelsOptions } from './get-dashboard-models.js';
 
 const dashboardsMock: DashboardDto[] = [
   sampleEcommerceDashboard,
@@ -104,6 +106,7 @@ describe('getDashboardModels', () => {
           }),
         },
         settings: dashboardMock.settings,
+        userAuth: expect.anything(),
       })),
     );
   });
@@ -147,6 +150,7 @@ describe('getDashboardModels', () => {
           }),
         },
         settings: dashboardMock.settings,
+        userAuth: expect.anything(),
       })),
     );
   });
@@ -183,6 +187,7 @@ describe('getDashboardModels', () => {
           : null),
       },
       settings: targetDashboardMock.settings,
+      userAuth: expect.anything(),
     });
   });
 

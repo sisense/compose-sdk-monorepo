@@ -1,4 +1,5 @@
 import { createAttribute, measureFactory } from '@sisense/sdk-data';
+
 import { QueryRecommendation } from '../api/types';
 import { UseGetNlqResultParams } from '../use-get-nlq-result';
 

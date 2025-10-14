@@ -1,9 +1,11 @@
 import { isNumber } from '@sisense/sdk-data';
-import { StyledMeasureColumn, StyledColumn } from '../../chart-data-options/types.js';
-import { applyFormat, getCompleteNumberFormatConfig } from './number-format-config.js';
-import type { SeriesChartType } from '@/types';
+import { CSSObject, TooltipFormatterContextObject } from '@sisense/sisense-charts';
+
 import { isMeasureColumn } from '@/chart-data-options/utils.js';
-import { TooltipFormatterContextObject, CSSObject } from '@sisense/sisense-charts';
+import type { SeriesChartType } from '@/types';
+
+import { StyledColumn, StyledMeasureColumn } from '../../chart-data-options/types.js';
+import { applyFormat, getCompleteNumberFormatConfig } from './number-format-config.js';
 
 export const isValueNumeric = (value: StyledMeasureColumn | StyledColumn | undefined) =>
   value ? isMeasureColumn(value) || (value.column.type && isNumber(value.column.type)) : false;

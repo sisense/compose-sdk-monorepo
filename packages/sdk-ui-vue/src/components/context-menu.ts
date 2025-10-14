@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { ContextMenu as ContextMenuPreact } from '@sisense/sdk-ui-preact';
 import type { ContextMenuProps as ContextMenuPropsPreact } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelperWithChildren } from '../helpers/setup-helper';
 
 /**

@@ -1,12 +1,13 @@
 <script lang="ts" setup>
-import { computed, ref, toRefs } from 'vue';
 import type { TFunction } from '@sisense/sdk-common';
-import { getSelectionTitleMenuItem, getDrilldownMenuItems } from '@sisense/sdk-ui-preact';
-import type { DataPoint, MenuPosition, Hierarchy } from '@sisense/sdk-ui-preact';
+import type { Attribute } from '@sisense/sdk-data';
+import { getDrilldownMenuItems, getSelectionTitleMenuItem } from '@sisense/sdk-ui-preact';
+import type { DataPoint, Hierarchy, MenuPosition } from '@sisense/sdk-ui-preact';
+import { computed, ref, toRefs } from 'vue';
+
 import { useCustomDrilldown } from '../composables/use-custom-drilldown';
 import { ContextMenu } from './context-menu';
 import { DrilldownBreadcrumbs } from './drilldown-breadcrumbs';
-import type { Attribute } from '@sisense/sdk-data';
 import { DrilldownWidgetTs } from './drilldown-widget';
 
 const props = defineProps(DrilldownWidgetTs.props);

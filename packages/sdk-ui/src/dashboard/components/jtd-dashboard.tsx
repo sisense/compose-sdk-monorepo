@@ -1,16 +1,18 @@
 import { useMemo } from 'react';
-import { mergeFilters, type Filter } from '@sisense/sdk-data';
+
+import { type Filter, mergeFilters } from '@sisense/sdk-data';
 import deepMerge from 'ts-deepmerge';
+
 import { LoadingOverlay } from '@/common/components/loading-overlay';
-import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-translator';
-import { useDashboardModel } from '@/models/dashboard/use-dashboard-model/use-dashboard-model';
 import { useDefaults } from '@/common/hooks/use-defaults';
 import { DEFAULT_DASHBOARD_BY_ID_CONFIG, DEFAULT_DASHBOARD_CONFIG } from '@/dashboard/constants';
 import { Dashboard } from '@/dashboard/dashboard';
 import { DashboardConfig, DashboardProps } from '@/dashboard/types';
-import { DashboardId } from '@/models/dashboard/types';
 import { withErrorBoundary } from '@/decorators/component-decorators/with-error-boundary';
 import { withTracking } from '@/decorators/component-decorators/with-tracking';
+import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-translator';
+import { DashboardId } from '@/models/dashboard/types';
+import { useDashboardModel } from '@/models/dashboard/use-dashboard-model/use-dashboard-model';
 
 interface JtdDashboardProps {
   dashboard: DashboardId | DashboardProps;

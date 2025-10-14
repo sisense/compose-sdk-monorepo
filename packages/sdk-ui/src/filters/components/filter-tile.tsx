@@ -1,23 +1,25 @@
 import {
   DataSource,
   Filter,
-  LevelAttribute,
+  isCascadingFilter,
   isCustomFilter,
-  isMembersFilter,
+  isDateRangeFilter,
   isMeasureFilter,
-  isTextFilter,
+  isMembersFilter,
+  isNumericFilter,
   isRankingFilter,
   isRelativeDateFilter,
-  isCascadingFilter,
-  isDateRangeFilter,
-  isNumericFilter,
+  isTextFilter,
+  LevelAttribute,
 } from '@sisense/sdk-data';
-import { MemberFilterTile } from './member-filter-tile';
-import { CriteriaFilterTile } from './criteria-filter-tile';
-import { DateRangeFilterTile, RelativeDateFilterTile } from './date-filter';
-import { CascadingFilterTile } from './cascading-filter-tile';
-import { CustomFilterTile } from './custom-filter-tile';
+
 import { UnsupportedFilterTile } from '@/filters/components/unsupported-filter-tile';
+
+import { CascadingFilterTile } from './cascading-filter-tile';
+import { CriteriaFilterTile } from './criteria-filter-tile';
+import { CustomFilterTile } from './custom-filter-tile';
+import { DateRangeFilterTile, RelativeDateFilterTile } from './date-filter';
+import { MemberFilterTile } from './member-filter-tile';
 
 /**
  * Props of the {@link FilterTile} component

@@ -1,14 +1,16 @@
 /* eslint-disable sonarjs/no-identical-functions */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  withStacking,
-  withPolarSpecificAxisSettings,
-  withChartSpecificAxisSettings,
-} from './axis-transformers';
+
 import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types';
 import { CompleteThemeSettings, NumberFormatConfig } from '../../../../types';
 import { AxisSettings } from '../../../translations/axis-section';
+import {
+  withChartSpecificAxisSettings,
+  withPolarSpecificAxisSettings,
+  withStacking,
+} from './axis-transformers';
 
 // Mock dependencies
 vi.mock('../../../translations/number-format-config', () => ({
@@ -75,13 +77,12 @@ describe('axis-transformers', () => {
       expect(stackedAxisSettings).toEqual(basicAxisSettings);
     });
 
-    it('should enable stack labels when showTotal is true', () => {
+    it('should enable stack labels when totalLabels enabled is true', () => {
       const dataOptions = createMockDataOptions();
       const basicAxisSettings = createMockAxisSettings();
 
       const stackedAxisSettings = withStacking({
-        showTotal: true,
-        totalLabelRotation: 45,
+        totalLabels: { enabled: true, rotation: 45 },
         dataOptions,
       })(basicAxisSettings);
 
@@ -111,8 +112,7 @@ describe('axis-transformers', () => {
 
       const stackedAxisSettings = withStacking({
         stacking: 'normal',
-        showTotal: true,
-        totalLabelRotation: 0,
+        totalLabels: { enabled: true, rotation: 0 },
         dataOptions,
       })(basicAxisSettings);
 
@@ -130,8 +130,7 @@ describe('axis-transformers', () => {
 
       const stackedAxisSettings = withStacking({
         stacking: undefined,
-        showTotal: true,
-        totalLabelRotation: 0,
+        totalLabels: { enabled: true, rotation: 0 },
         dataOptions,
         themeSettings: mockThemeSettings,
       })(basicAxisSettings);
@@ -145,8 +144,7 @@ describe('axis-transformers', () => {
 
       const stackedAxisSettings = withStacking({
         stacking: 'normal',
-        showTotal: true,
-        totalLabelRotation: 0,
+        totalLabels: { enabled: true, rotation: 0 },
         dataOptions,
       })(basicAxisSettings);
 

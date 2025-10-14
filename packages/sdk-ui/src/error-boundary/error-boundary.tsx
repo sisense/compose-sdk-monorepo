@@ -1,7 +1,9 @@
-import { Component, ReactNode, isValidElement } from 'react';
-import ErrorBoundaryBox from './error-boundary-box';
+import { Component, isValidElement, ReactNode } from 'react';
+
 import { AbstractTranslatableError } from '@sisense/sdk-common';
 import isEqual from 'lodash-es/isEqual';
+
+import ErrorBoundaryBox from './error-boundary-box';
 
 /**
  * @internal

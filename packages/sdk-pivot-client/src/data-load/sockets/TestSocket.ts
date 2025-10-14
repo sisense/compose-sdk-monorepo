@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+
 import { SocketI } from '../types.js';
 
 export class TestSocket implements SocketI {

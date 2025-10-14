@@ -1,32 +1,30 @@
 // @ts-ignore
-import raf, { cancel as caf } from 'raf';
-// @ts-ignore
-import css from 'dom-css';
 import * as React from 'react';
 
-import { isString, getScrollbarWidth, getInnerWidth, getInnerHeight } from './utils/index.js';
+// @ts-ignore
+import css from 'dom-css';
+import raf, { cancel as caf } from 'raf';
 
 import {
-  containerStyleDefault,
-  containerStyleAutoHeight,
-  viewStyleDefault,
-  viewStyleAutoHeight,
-  trackHorizontalStyleDefault,
-  trackVerticalStyleDefault,
-  thumbHorizontalStyleDefault,
-  thumbVerticalStyleDefault,
-  disableSelectStyle,
-  disableSelectStyleReset,
-} from './styles/index.js';
-
-import {
-  renderTrackHorizontalDefault,
-  renderTrackVerticalDefault,
   renderThumbHorizontalDefault,
   renderThumbVerticalDefault,
+  renderTrackHorizontalDefault,
+  renderTrackVerticalDefault,
 } from './defaultRenderElements.js';
-
+import {
+  containerStyleAutoHeight,
+  containerStyleDefault,
+  disableSelectStyle,
+  disableSelectStyleReset,
+  thumbHorizontalStyleDefault,
+  thumbVerticalStyleDefault,
+  trackHorizontalStyleDefault,
+  trackVerticalStyleDefault,
+  viewStyleAutoHeight,
+  viewStyleDefault,
+} from './styles/index.js';
 import { CustomScrollI } from './types.js';
+import { getInnerHeight, getInnerWidth, getScrollbarWidth, isString } from './utils/index.js';
 
 type TrackGetter = (options: any) => React.ReactNode | React.ReactPortal;
 
@@ -62,7 +60,7 @@ export class CustomScroll extends React.PureComponent<Props> implements CustomSc
 
   thumbVertical: HTMLDivElement = document.createElement('div');
 
-  requestFrame: Function | undefined;
+  requestFrame: number | undefined;
 
   prevPageX: number = 0;
 
@@ -113,7 +111,7 @@ export class CustomScroll extends React.PureComponent<Props> implements CustomSc
 
   componentWillUnmount() {
     this.removeListeners();
-    caf(this.requestFrame);
+    caf(this.requestFrame as number);
     if (this.hideTracksTimeout) {
       clearTimeout(this.hideTracksTimeout);
     }

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { type BaseJaql } from '@sisense/sdk-data';
-import { LoggerI } from '../utils/types.js';
+
 import { MeasurePath } from '../data-handling/utils/jaqlProcessor.js';
+import { LoggerI } from '../utils/types.js';
 
 export type SortDetails = {
   field?: number;

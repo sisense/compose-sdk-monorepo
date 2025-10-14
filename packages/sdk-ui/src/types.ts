@@ -1,4 +1,6 @@
 /* eslint-disable max-lines */
+import { CSSProperties, ReactNode } from 'react';
+
 import type {
   Attribute,
   CalculatedMeasureColumn,
@@ -8,14 +10,20 @@ import type {
   MembersFilter,
 } from '@sisense/sdk-data';
 import { DeepRequired } from 'ts-essentials';
+
+import { Coordinates } from '@/charts/map-charts/scattermap/types';
+import { TabCornerRadius, TabInterval, TabSize } from '@/widgets/tabber-widget';
+
+import { Hierarchy, HierarchyId, StyledColumn, StyledMeasureColumn } from '.';
+import { HighchartsOptionsInternal } from './chart-options-processor/chart-options-service';
 import {
+  AreaRangeSubtype,
   AreaSubtype,
   BoxplotSubtype,
   LineSubtype,
   PieSubtype,
   PolarSubtype,
   StackableSubtype,
-  AreaRangeSubtype,
 } from './chart-options-processor/subtype-to-design-options';
 import {
   IndicatorComponents,
@@ -26,31 +34,26 @@ import {
   FunnelSize,
   FunnelType,
 } from './chart-options-processor/translations/funnel-plot-options';
+import { LegendPosition } from './chart-options-processor/translations/legend-section';
 import { ScatterMarkerSize } from './chart-options-processor/translations/scatter-plot-options';
 import {
-  CartesianChartType,
-  ScatterChartType,
-  CategoricalChartType,
-  IndicatorChartType,
-  TableType,
   AreamapChartType,
   BoxplotChartType,
-  ScattermapChartType,
   CalendarHeatmapChartType,
+  CartesianChartType,
+  CategoricalChartType,
+  IndicatorChartType,
   RangeChartType,
+  ScatterChartType,
+  ScattermapChartType,
   TableChartType,
+  TableType,
   TextStyle,
 } from './chart-options-processor/translations/types';
-import { DataPointsEventHandler } from './props';
-import { LegendPosition } from './chart-options-processor/translations/legend-section';
-import { Coordinates } from '@/charts/map-charts/scattermap/types';
-import { StyledColumn, StyledMeasureColumn, Hierarchy, HierarchyId } from '.';
-import { HighchartsOptionsInternal } from './chart-options-processor/chart-options-service';
-import { CSSProperties, ReactNode } from 'react';
 import { GeoDataElement, RawGeoDataElement } from './chart/restructured-charts/areamap-chart/types';
-import { TabCornerRadius, TabInterval, TabSize } from '@/widgets/tabber-widget';
-import { SoftUnion } from './utils/utility-types';
 import { CalendarDayOfWeek } from './chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
+import { DataPointsEventHandler } from './props';
+import { SoftUnion } from './utils/utility-types';
 
 export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
 export type { AppConfig } from './app/client-application';
@@ -299,13 +302,83 @@ export type SeriesLabels = {
 };
 
 /**
- * @internal
+ * Text styling options for total labels.
+ *
+ * Extends the base TextStyle with additional alignment options specific to total labels.
+ */
+export type TotalLabelsTextStyle = Omit<TextStyle, 'pointerEvents' | 'textOverflow'> & {
+  /**
+   * Horizontal alignment of the total label text
+   */
+  align?: 'left' | 'center' | 'right';
+};
+
+/**
+ * Configuration options for total labels in stacked charts.
+ *
+ * Total labels display the sum of all series values at each data point in stacked charts.
+ * This configuration allows you to customize the appearance and positioning of these labels.
  */
 export type TotalLabels = {
-  /** Boolean flag that defines if total labels should be shown on the chart */
+  /**
+   * Boolean flag that defines if total labels should be shown on the chart
+   * Total labels are only supported for stacked chart subtypes (Column, Bar, Area)
+   * */
   enabled: boolean;
-  /** Rotation of total labels (in degrees) */
+  /**
+   * Rotation of total labels (in degrees)
+   * */
   rotation?: number;
+  /**
+   * The horizontal alignment of the total label compared to the point
+   */
+  align?: 'left' | 'center' | 'right';
+  /**
+   * The vertical alignment of the total label compared to the point
+   */
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  /**
+   * The animation delay time in milliseconds. Set to 0 to render the data labels immediately
+   */
+  delay?: number;
+  /**
+   * Background color of the labels. `auto` uses the same color as the data point
+   */
+  backgroundColor?: 'auto' | string;
+  /**
+   * Color of the labels border
+   */
+  borderColor?: string;
+  /**
+   * Border radius in pixels applied to the labels border, if visible
+   *
+   * @default 0
+   */
+  borderRadius?: number;
+  /**
+   * Border width of the series labels, in pixels
+   */
+  borderWidth?: number;
+  /**
+   * Styling for labels text
+   */
+  textStyle?: TotalLabelsTextStyle;
+  /**
+   * Horizontal offset of the total label in pixels, relative to its horizontal alignment specified via `align`
+   */
+  xOffset?: number;
+  /**
+   * Vertical offset of the total label in pixels, relative to its vertical alignment specified via `verticalAlign`
+   */
+  yOffset?: number;
+  /**
+   * Text to be shown before the total label
+   */
+  prefix?: string;
+  /**
+   * Text to be shown after the total label
+   */
+  suffix?: string;
 };
 
 /**
@@ -418,8 +491,6 @@ export type LegendOptions = {
   borderRadius?: number;
   /**
    * Whether to show shadow on the legend
-   *
-   * @internal
    */
   shadow?: boolean;
   /** If `true`, the order of legend items is reversed.
@@ -583,12 +654,6 @@ export interface BaseStyleOptions extends ReservedStyleOptions {
    * Configuration for series labels - titles/names identifying data series in a chart
    */
   seriesLabels?: SeriesLabels;
-  /**
-   * Configuration for total labels
-   *
-   * @internal
-   */
-  totalLabels?: TotalLabels;
   /** Data limit for series or categories that will be plotted */
   dataLimits?: DataLimits;
   /**
@@ -685,6 +750,11 @@ export interface AreaStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions
   line?: LineOptions;
   /** Subtype of AreaChart*/
   subtype?: AreaSubtype;
+  /**
+   * Configuration for total labels
+   * Only supported for stacked chart subtypes
+   */
+  totalLabels?: TotalLabels;
 }
 
 /** Configuration options that define functional style of the various elements of stackable charts, like Column or Bar */
@@ -695,6 +765,11 @@ export interface StackableStyleOptions extends BaseStyleOptions, BaseAxisStyleOp
    Bar chart with 'column/classic' subtype and Column chart with 'bar/classic' subtype
   */
   subtype?: StackableSubtype;
+  /**
+   * Configuration for total labels
+   * Only supported for stacked chart subtypes
+   */
+  totalLabels?: TotalLabels;
   /**
    * Configuration for series styling
    */
@@ -1045,6 +1120,19 @@ export type CalendarHeatmapCellLabels = {
    */
   enabled?: boolean;
   /** Style configuration for calendar day numbers in cells */
+  textStyle?: Omit<TextStyle, 'color'> & {
+    /**
+     * Color of the labels text
+     *
+     * The "contrast" color applies the maximum contrast between the background and the text
+     */
+    color?: string | 'contrast';
+  };
+  /**
+   * Style configuration for calendar day numbers in cells
+   *
+   * @deprecated Please use `textStyle` instead
+   */
   style?: Omit<TextStyle, 'color'> & {
     /**
      * Color of the labels text
@@ -1086,6 +1174,12 @@ export interface CalendarHeatmapStyleOptions extends Pick<BaseStyleOptions, 'wid
      */
     enabled?: boolean;
     /** Style configuration for calendar weekday names */
+    textStyle?: TextStyle;
+    /**
+     * Style configuration for calendar weekday names
+     *
+     * @deprecated Please use `textStyle` instead
+     */
     style?: TextStyle;
   };
 
@@ -1100,6 +1194,11 @@ export interface CalendarHeatmapStyleOptions extends Pick<BaseStyleOptions, 'wid
      */
     enabled?: boolean;
     /** Style configuration for month names */
+    textStyle?: TextStyle;
+    /**
+     * Style configuration for month names
+     * @deprecated Please use `textStyle` instead
+     */
     style?: TextStyle;
   };
 
@@ -1127,6 +1226,22 @@ export interface CalendarHeatmapStyleOptions extends Pick<BaseStyleOptions, 'wid
      * @default false
      */
     hideValues?: boolean;
+  };
+
+  /**
+   * Configuration for pagination controls in multi-month view types
+   */
+  pagination?: {
+    /**
+     * Boolean flag that defines if pagination controls should be shown
+     *
+     * @default true
+     */
+    enabled?: boolean;
+    /** Style configuration for pagination controls text */
+    textStyle?: TextStyle;
+    /** Start month to display when the chart is first rendered */
+    startMonth?: Date;
   };
 }
 

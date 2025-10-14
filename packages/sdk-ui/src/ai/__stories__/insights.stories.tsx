@@ -1,11 +1,11 @@
-import { templateForComponent } from '../../__stories__/template';
-
-import { Meta } from '@storybook/react-vite';
-import InsightsMessage from '../messages/insights-message';
-import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
-import { SisenseContextProviderProps } from '../../props';
-import AiContextProvider from '../ai-context-provider';
 import { MetadataItem } from '@sisense/sdk-data';
+import { Meta } from '@storybook/react-vite';
+
+import { templateForComponent } from '../../__stories__/template';
+import { SisenseContextProviderProps } from '../../props';
+import { SisenseContextProvider } from '../../sisense-context/sisense-context-provider';
+import AiContextProvider from '../ai-context-provider';
+import InsightsMessage from '../messages/insights-message';
 
 const template = templateForComponent(InsightsMessage);
 

@@ -1,4 +1,5 @@
-import { QueryTranslator } from './query-translator.js';
+import { sampleEcommerceFields as MOCK_DATA_SOURCE_FIELDS } from '@/__mocks__/sample-ecommerce-fields.js';
+
 import {
   MOCK_EXPANDED_QUERY_MODEL,
   MOCK_QUERY_MODEL_1,
@@ -7,10 +8,10 @@ import {
   MOCK_SIMPLE_QUERY_MODEL,
   MOCK_SIMPLE_QUERY_YAML,
 } from '../__mocks__/mock-queries.js';
-import { sampleEcommerceFields as MOCK_DATA_SOURCE_FIELDS } from '@/__mocks__/sample-ecommerce-fields.js';
 import { capitalizeFirstLetter } from '../common/utils.js';
-import { QUERY_TEMPLATE } from './query-templates.js';
 import { EMPTY_SIMPLE_QUERY_MODEL } from '../types.js';
+import { QUERY_TEMPLATE } from './query-templates.js';
+import { QueryTranslator } from './query-translator.js';
 
 describe('QueryTranslator', () => {
   let queryTranslator: QueryTranslator;

@@ -1,11 +1,12 @@
-import { CategoricalChartData } from '../../../chart-data/types';
 import { PointLabelObject } from '@sisense/sisense-charts';
-import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config';
+
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { tooltipSeparator } from '../scatter-tooltip';
-import { SunburstChartDesignOptions } from '../design-options';
-import { getDarkFactor, toColor } from '../../../utils/color';
+import { CategoricalChartData } from '../../../chart-data/types';
 import { CompleteThemeSettings } from '../../../types';
+import { getDarkFactor, toColor } from '../../../utils/color';
+import { SunburstChartDesignOptions } from '../design-options';
+import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config';
+import { tooltipSeparator } from '../scatter-tooltip';
 
 const ROOT_LEVEL_SIZE_PER_CATEGORIES = Object.freeze({
   1: 80,

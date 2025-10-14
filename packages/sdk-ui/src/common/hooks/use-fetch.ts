@@ -1,7 +1,8 @@
+import { type UseQueryResult as TanstackUseQueryResult, useQuery } from '@tanstack/react-query';
+
 import { withTracking } from '@/decorators/hook-decorators';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { TranslatableError } from '@/translation/translatable-error';
-import { useQuery, type UseQueryResult as TanstackUseQueryResult } from '@tanstack/react-query';
 
 /**
  * Additional request configuration options for the `useFetch` hook.

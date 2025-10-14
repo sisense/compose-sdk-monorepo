@@ -1,5 +1,5 @@
-import { TableStyleOptions } from '@/types';
 import { TableDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { TableStyleOptions } from '@/types';
 
 export const translateTableStyleOptionsToDesignOptions = (
   styleOptions: TableStyleOptions,

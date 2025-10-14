@@ -1,15 +1,17 @@
 /** @vitest-environment jsdom */
+import { DateLevels, filterFactory } from '@sisense/sdk-data';
 import { screen, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { filterFactory, DateLevels } from '@sisense/sdk-data';
-import { setup } from '@/__test-helpers__';
-import { DatetimeExcludeConditionForm } from './datetime-exclude-condition-form';
-import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
-import { SisenseContextProviderProps } from '@/props';
-import { mockToken, mockUrl, server } from '@/__mocks__/msw';
-import { FilterEditorContextProvider } from '../../../filter-editor-context';
+
 import * as jaqlDateYears from '@/__mocks__/data/mock-jaql-date-years.json';
+import { mockToken, mockUrl, server } from '@/__mocks__/msw';
+import { setup } from '@/__test-helpers__';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { SisenseContextProviderProps } from '@/props';
+import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
+
+import { FilterEditorContextProvider } from '../../../filter-editor-context';
+import { DatetimeExcludeConditionForm } from './datetime-exclude-condition-form';
 
 const contextProviderProps: SisenseContextProviderProps = {
   url: mockUrl,

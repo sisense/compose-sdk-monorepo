@@ -1,18 +1,20 @@
 import type { FunctionComponent, ReactNode } from 'react';
 import { useState } from 'react';
 
-import { SisenseSwitchButton, TriangleIndicator } from './common';
-import { ArrowDownIcon, LockIcon, PencilIcon, TrashIcon } from './icons';
-import { useThemeContext } from '../../theme-provider';
-import { getSlightlyDifferentColor } from '../../utils/color';
-import { FilterVariant, isVertical } from './common/filter-utils';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import IconButton from '@mui/material/IconButton';
 import merge from 'ts-deepmerge';
 import { DeepRequired } from 'ts-essentials';
-import { BackgroundFilterIcon } from '@/filters/components/icons/background-filter-icon';
-import { css } from '@emotion/react';
-import IconButton from '@mui/material/IconButton';
+
 import { DEFAULT_TEXT_COLOR } from '@/const';
+import { BackgroundFilterIcon } from '@/filters/components/icons/background-filter-icon';
+
+import { useThemeContext } from '../../theme-provider';
+import { getSlightlyDifferentColor } from '../../utils/color';
+import { SisenseSwitchButton, TriangleIndicator } from './common';
+import { FilterVariant, isVertical } from './common/filter-utils';
+import { ArrowDownIcon, LockIcon, PencilIcon, TrashIcon } from './icons';
 
 const BORDER_COLOR = '#dadada';
 const BORDER_THICKNESS = '1px';

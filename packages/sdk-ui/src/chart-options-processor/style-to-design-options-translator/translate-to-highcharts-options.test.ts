@@ -1,5 +1,6 @@
-import { getPieChartDesignOptions } from './translate-to-highcharts-options';
 import { PieStyleOptions } from '@/types';
+
+import { getPieChartDesignOptions } from './translate-to-highcharts-options';
 
 describe('Legacy Pie Chart Design Options', () => {
   describe('getPieChartDesignOptions', () => {

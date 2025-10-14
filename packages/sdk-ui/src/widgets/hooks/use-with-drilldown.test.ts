@@ -1,8 +1,10 @@
 import { createAttribute } from '@sisense/sdk-data';
-import { useWithDrilldown } from './use-with-drilldown.js';
 import { renderHook } from '@testing-library/react';
-import { CartesianChartDataOptions, ChartWidgetProps } from '@/index.js';
+
 import { MenuProvider } from '@/common/components/menu/menu-provider.js';
+import { CartesianChartDataOptions, ChartWidgetProps } from '@/index.js';
+
+import { useWithDrilldown } from './use-with-drilldown.js';
 
 vi.mock('./use-synced-hierarchies.js', async () => ({
   useSyncedDrilldownPaths: (params: any) => params.drilldownPaths,

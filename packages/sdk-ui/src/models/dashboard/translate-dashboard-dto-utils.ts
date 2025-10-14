@@ -16,15 +16,16 @@ import {
   RankingFilter,
   TurnOffMembersFilterJaql,
 } from '@sisense/sdk-data';
-import { CascadingFilterDto, FilterDto, LayoutDto } from '@/api/types/dashboard-dto';
 import { ConditionFilterJaql } from '@sisense/sdk-data/dist/dimensional-model/filters/utils/types';
-import { WidgetsPanelLayout } from '@/dashboard/types';
+
+import { CascadingFilterDto, FilterDto, LayoutDto } from '@/api/types/dashboard-dto';
 import {
   MAX_COLUMN_WIDTH,
-  MIN_COLUMN_WIDTH,
   MAX_ROW_HEIGHT,
+  MIN_COLUMN_WIDTH,
   MIN_ROW_HEIGHT,
 } from '@/dashboard/components/editable-layout/const';
+import { WidgetsPanelLayout } from '@/dashboard/types';
 
 /**
  * Translates a {@link Filter} to a {@link FilterDto}.

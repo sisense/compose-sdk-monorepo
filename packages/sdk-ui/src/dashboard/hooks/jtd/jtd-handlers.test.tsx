@@ -1,22 +1,26 @@
 import React from 'react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+
 import { Filter, filterFactory } from '@sisense/sdk-data';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { WidgetProps } from '@/props.js';
+import { DataPoint, PivotTableDataPoint } from '@/types';
+
+import * as jtdFilters from './jtd-filters';
 import {
+  convertPivotToDataPoint,
   getJtdClickHandler,
   getJtdClickHandlerForMultiplePoints,
   handleDataPointClick,
-  convertPivotToDataPoint,
   handlePivotDataPointClick,
   handleTextWidgetClick,
 } from './jtd-handlers';
-import { PivotTableDataPoint, DataPoint } from '@/types';
 import { JtdConfig, JtdTarget } from './jtd-types';
-import { WidgetProps } from '@/props.js';
 import {
-  JtdCoreData,
-  JtdContext,
   JtdActions,
   JtdClickHandlerData,
+  JtdContext,
+  JtdCoreData,
   JtdDataPointClickEvent,
 } from './jtd-types';
 
@@ -35,9 +39,6 @@ vi.mock('@/dashboard/components/jtd-dashboard', () => ({
     </div>
   )),
 }));
-
-// Import mocked functions
-import * as jtdFilters from './jtd-filters';
 
 describe('jtd-handlers', () => {
   const mockOpenModal = vi.fn(() => vi.fn()) as any; // Return a function

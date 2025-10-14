@@ -1,10 +1,12 @@
-import { getFilterCompareId } from '@/widget-by-id/utils';
-import { clearMembersFilter } from '@/utils/filters';
 import { CascadingFilter, Filter, filterFactory, isCascadingFilter } from '@sisense/sdk-data';
+
+import { TranslatableError } from '@/translation/translatable-error';
+import { clearMembersFilter } from '@/utils/filters';
+import { haveSameAttribute } from '@/utils/filters-comparator';
+import { getFilterCompareId } from '@/widget-by-id/utils';
+
 import { FiltersIgnoringRules, PureFilter } from './types';
 import { isEqualMembersFilters } from './utils';
-import { TranslatableError } from '@/translation/translatable-error';
-import { haveSameAttribute } from '@/utils/filters-comparator';
 
 /**
  * Flattens cascading filters into a single array of filters.

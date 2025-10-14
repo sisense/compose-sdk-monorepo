@@ -3,9 +3,10 @@ import { http, HttpResponse } from 'msw';
 
 import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
+
 import { AiTestWrapper } from '../__mocks__';
-import InsightsMessage from './insights-message';
 import { GetNlgInsightsRequest, GetNlgInsightsResponse } from '../api/types';
+import InsightsMessage from './insights-message';
 
 const mockNlgRequest: GetNlgInsightsRequest = {
   jaql: {

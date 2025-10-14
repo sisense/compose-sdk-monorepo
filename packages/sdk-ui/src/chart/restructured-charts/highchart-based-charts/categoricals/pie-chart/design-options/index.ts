@@ -1,8 +1,9 @@
-import { ChartStyleOptions } from '@/types';
-import { PieChartStyleOptions, PieChartDesignOptions } from '../types';
+import { chartSubtypeToDesignOptions } from '@/chart-options-processor/subtype-to-design-options';
 import { BaseDesignOptions } from '@/chart-options-processor/translations/base-design-options';
 import { PieLabels, PieType } from '@/chart-options-processor/translations/pie-plot-options';
-import { chartSubtypeToDesignOptions } from '@/chart-options-processor/subtype-to-design-options';
+import { ChartStyleOptions } from '@/types';
+
+import { PieChartDesignOptions, PieChartStyleOptions } from '../types';
 
 const DefaultPieType = 'classic';
 const DefaultPieLabels: PieLabels = {

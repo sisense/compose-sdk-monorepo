@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import cloneDeep from 'lodash-es/cloneDeep';
+
 import { WidgetDto } from '@/index';
 
-import {
-  toChartWidgetProps,
-  fromWidgetDto,
-  toWidgetDto,
-  fromChartWidgetProps,
-} from './widget-model-translator';
-import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
-import cloneDeep from 'lodash-es/cloneDeep';
 import { advancedLineChartWidgetDto } from '../__mocks__/advanced-line-chart-widget';
+import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
+import {
+  fromChartWidgetProps,
+  fromWidgetDto,
+  toChartWidgetProps,
+  toWidgetDto,
+} from './widget-model-translator';
 
 describe('WidgetModelTranslator', () => {
   const mockIndicatorWidgetDto = dashboardMock.widgets![0];

@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { DataTable } from './table-processor';
 import { simpleColumnType } from '@sisense/sdk-data';
+
 import {
-  periodCompareValueForNow,
   DatePeriod,
-  periodCompareValueForPastPeriod,
-  periodCompareValueForFuturePeriod,
-  periodCompareValueForSpecificDate,
   ExtendedDatePeriod,
   isPseudoDatePeriod,
+  periodCompareValueForFuturePeriod,
+  periodCompareValueForNow,
+  periodCompareValueForPastPeriod,
+  periodCompareValueForSpecificDate,
   toPeriodCompareValue,
 } from './data-table-date-period';
+import { DataTable } from './table-processor';
 
 export enum FilterOperator {
   BETWEEN = 'Between',

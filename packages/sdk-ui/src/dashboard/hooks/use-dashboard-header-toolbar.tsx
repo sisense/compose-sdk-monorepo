@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
+
+import { MenuButton } from '@/common/components/menu/menu-button';
 import { useMenu } from '@/common/hooks/use-menu';
 import { useThemeContext } from '@/theme-provider';
-import { MenuButton } from '@/common/components/menu/menu-button';
 
 /**
  * @internal
@@ -18,13 +19,17 @@ export interface DashboardHeaderToolbarMenuItem {
  */
 export interface UseDashboardHeaderToolbarProps {
   menuItems: DashboardHeaderToolbarMenuItem[];
+  toolbarComponents?: JSX.Element[];
 }
 
 /**
  * Hook that returns a toolbar element for dashboard header
  * @internal
  */
-export const useDashboardHeaderToolbar = ({ menuItems }: UseDashboardHeaderToolbarProps) => {
+export const useDashboardHeaderToolbar = ({
+  menuItems,
+  toolbarComponents = [],
+}: UseDashboardHeaderToolbarProps) => {
   const { themeSettings } = useThemeContext();
   const { openMenu, closeMenu } = useMenu();
 
@@ -60,6 +65,9 @@ export const useDashboardHeaderToolbar = ({ menuItems }: UseDashboardHeaderToolb
   const toolbar = useCallback(
     () => (
       <>
+        {toolbarComponents.map((component, index) => (
+          <div key={`csdk-toolbar-component-${index}`}>{component}</div>
+        ))}
         {menuItems.length > 0 && (
           <MenuButton
             onClick={handleMenuOpen}
@@ -70,7 +78,12 @@ export const useDashboardHeaderToolbar = ({ menuItems }: UseDashboardHeaderToolb
         )}
       </>
     ),
-    [handleMenuOpen, themeSettings.dashboard.toolbar.primaryTextColor, menuItems.length],
+    [
+      handleMenuOpen,
+      themeSettings.dashboard.toolbar.primaryTextColor,
+      menuItems.length,
+      toolbarComponents,
+    ],
   );
 
   return { toolbar };

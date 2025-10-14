@@ -1,9 +1,9 @@
 /** @vitest-environment jsdom */
-
 import { render, waitFor } from '@testing-library/react';
-import { AreamapMap } from './areamap-map.js';
-import { countriesGeoJson } from './__mocks__/countries-geo-json.js';
+
 import { countriesGeoData } from './__mocks__/countries-geo-data.js';
+import { countriesGeoJson } from './__mocks__/countries-geo-json.js';
+import { AreamapMap } from './areamap-map.js';
 
 describe('AreamapMap', () => {
   it('renders map container', () => {

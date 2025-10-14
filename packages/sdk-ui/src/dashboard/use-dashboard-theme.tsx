@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
+
+import { withTracking } from '@/decorators/hook-decorators';
 import { DashboardStyleOptions } from '@/models';
 import { useThemeContext } from '@/theme-provider';
-import { withTracking } from '@/decorators/hook-decorators';
 
 /**
  * @internal

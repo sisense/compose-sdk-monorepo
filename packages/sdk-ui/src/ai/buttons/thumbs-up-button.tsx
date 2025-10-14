@@ -1,8 +1,9 @@
-import ThumbsUpIcon from '@/ai/icons/thumbs-up-icon';
-import Tooltip from '@/ai/common/tooltip';
-import { useThemeContext } from '@/theme-provider/theme-context';
-import IconButton from '@/ai/common/icon-button';
 import { useTranslation } from 'react-i18next';
+
+import IconButton from '@/ai/common/icon-button';
+import Tooltip from '@/ai/common/tooltip';
+import ThumbsUpIcon from '@/ai/icons/thumbs-up-icon';
+import { useThemeContext } from '@/theme-provider/theme-context';
 
 type ThumbsUpButtonProps = {
   onClick?: () => void;

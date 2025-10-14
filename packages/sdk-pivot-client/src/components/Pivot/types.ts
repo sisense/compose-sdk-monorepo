@@ -1,5 +1,5 @@
-import { TreeServiceI } from '../../tree-structure';
 import { Metadata } from '../../data-handling/utils/plugins/types.js';
+import { TreeServiceI } from '../../tree-structure';
 
 export interface PivotI {
   initialize(

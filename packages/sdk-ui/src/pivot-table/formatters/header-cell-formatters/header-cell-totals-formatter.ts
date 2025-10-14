@@ -1,5 +1,6 @@
 import { TFunction } from '@sisense/sdk-common/src/i18n/i18next';
-import { PivotTreeNode, UserType, PanelType } from '@sisense/sdk-pivot-client';
+import { PanelType, PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
+
 import type { PivotTableDataOptions } from '@/chart-data-options/types';
 
 export function createHeaderCellTotalsFormatter(

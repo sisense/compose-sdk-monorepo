@@ -1,4 +1,5 @@
 import leaflet from 'leaflet';
+
 import { ScattermapMarkers } from '@/types';
 
 type MarkerStyle = {

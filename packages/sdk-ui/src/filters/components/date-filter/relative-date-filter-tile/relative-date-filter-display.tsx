@@ -1,12 +1,16 @@
+import { FunctionComponent, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { LevelAttribute, RelativeDateFilter } from '@sisense/sdk-data';
 import dayjs from 'dayjs';
-import { FunctionComponent, useMemo } from 'react';
-import { DATE_LEVELS_MAP, DATE_OPS_MAP } from './relative-date-filter.js';
-import { useTranslation } from 'react-i18next';
-import { DEFAULT_FORMAT } from '../consts.js';
 import isToday from 'dayjs/plugin/isToday';
-import { createAnchorDateFromRelativeDateFilter } from '@/filters/components/date-filter/relative-date-filter-tile/helpers';
+
 import { FilterContentDisplay } from '@/filters/components/common';
+import { createAnchorDateFromRelativeDateFilter } from '@/filters/components/date-filter/relative-date-filter-tile/helpers';
+
+import { DEFAULT_FORMAT } from '../consts.js';
+import { DATE_LEVELS_MAP, DATE_OPS_MAP } from './relative-date-filter.js';
+
 dayjs.extend(isToday);
 
 /**

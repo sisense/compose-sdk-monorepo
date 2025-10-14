@@ -48,7 +48,7 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
         <div
           class="css-1uvk1au"
         >
-          criteriaFilter.displayModePrefix criteriaFilter.greaterThan
+          All items greater than 100
         </div>
       </main>
       <footer
@@ -129,7 +129,7 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         <div
           class="css-1uvk1au"
         >
-          criteriaFilter.displayModePrefix criteriaFilter.top
+          All items top 10 by avg Test Revenue
         </div>
       </main>
       <footer
@@ -210,7 +210,7 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
         <div
           class="css-1uvk1au"
         >
-          criteriaFilter.displayModePrefix criteriaFilter.notStartsWith
+          All items doesn't start with 100
         </div>
       </main>
       <footer
@@ -269,7 +269,7 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
         <div
           class="css-1uvk1au"
         >
-          customFilterTileMessage
+          filtered with custom filter
         </div>
       </main>
       <footer
@@ -328,7 +328,7 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
         <div
           class="css-1uvk1au"
         >
-          unsupportedFilterMessage
+          Unsupported Filter (applied to the data query)
         </div>
       </main>
       <footer
@@ -409,7 +409,7 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
         <div
           class="css-1uvk1au"
         >
-          dateFilter.next 1 dateFilter.years dateFilter.from dateFilter.today
+          Next 1 Years From Today
         </div>
       </main>
       <footer
@@ -490,7 +490,7 @@ exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
         <div
           class="css-1uvk1au"
         >
-          criteriaFilter.displayModePrefix criteriaFilter.greaterThan
+          All items greater than 100
         </div>
         <div
           style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
@@ -552,7 +552,7 @@ exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
         <div
           class="css-1uvk1au"
         >
-          dateFilter.next 1 dateFilter.years dateFilter.from dateFilter.today
+          Next 1 Years From Today
         </div>
         <div
           style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"

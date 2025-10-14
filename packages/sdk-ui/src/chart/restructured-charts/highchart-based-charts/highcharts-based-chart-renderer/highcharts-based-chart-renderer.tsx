@@ -1,19 +1,21 @@
 import { useMemo } from 'react';
-import { BuildContext, HighchartBasedChartTypes, HighchartsOptionsBuilder } from '../types.js';
-import { TypedChartData, TypedDataOptionsInternal, TypedDesignOptions } from '../../types.js';
+
+import AlertBox from '@/alert-box/alert-box';
+import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
+import { ChartRendererProps } from '@/chart/types';
+import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container.js';
+import { HighchartsReactMemoized } from '@/highcharts-memorized';
+import { BeforeRenderHandler } from '@/props';
 import {
   SisenseChartDataPointEventHandler,
   SisenseChartDataPointsEventHandler,
 } from '@/sisense-chart/types';
-import { BeforeRenderHandler } from '@/props';
+
+import { TypedChartData, TypedDataOptionsInternal, TypedDesignOptions } from '../../types.js';
+import { BuildContext, HighchartBasedChartTypes, HighchartsOptionsBuilder } from '../types.js';
 import { buildHighchartsOptions } from './build-highchart-options.js';
-import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
-import { HighchartsReactMemoized } from '@/highcharts-memorized';
-import AlertBox from '@/alert-box/alert-box';
-import { ChartRendererProps } from '@/chart/types';
-import { isHighchartsBasedChart } from './utils';
 import { useExtraConfig } from './use-extra-config.js';
-import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container.js';
+import { isHighchartsBasedChart } from './utils';
 
 export type HighchartsBasedChartRendererProps<CT extends HighchartBasedChartTypes> = {
   chartData: TypedChartData<CT>;

@@ -1,4 +1,5 @@
-import { filterFactory, createAttribute } from '@sisense/sdk-data';
+import { createAttribute, filterFactory } from '@sisense/sdk-data';
+
 import { Chart } from '../chart';
 import { ChartStyleOptions } from '../types';
 import { templateForComponent } from './template';

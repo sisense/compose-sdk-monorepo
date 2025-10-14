@@ -1,5 +1,5 @@
-import { getConditionalColoringFunction } from './conditional-coloring';
 import { ConditionalDataColorOptions } from '../../types';
+import { getConditionalColoringFunction } from './conditional-coloring';
 
 describe('getConditionalColoringFunction', () => {
   it('should return a function that returns the color based on the conditions', () => {

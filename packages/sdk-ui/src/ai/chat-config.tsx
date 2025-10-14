@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext } from 'react';
-
-import { ChatMode, ChatContextDetails } from '@/ai/api/types';
 import { useTranslation } from 'react-i18next';
+
+import { ChatContextDetails, ChatMode } from '@/ai/api/types';
 
 export interface ChatConfig {
   /**

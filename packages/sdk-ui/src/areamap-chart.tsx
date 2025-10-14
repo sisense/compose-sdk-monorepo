@@ -1,7 +1,8 @@
-import { AreamapChartProps } from './props';
 import { Chart } from './chart';
-import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
 import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
+import { asSisenseComponent } from './decorators/component-decorators/as-sisense-component';
+import { AreamapChartProps } from './props';
+
 /**
  * A React component for visualizing geographical data as colored polygons on a map.
  *

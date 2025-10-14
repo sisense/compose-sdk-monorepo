@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
-import { getAxesOptions } from '../axes-options.js';
+import { describe, expect, it, vi } from 'vitest';
+
 import { BuildContext } from '../../../../types.js';
 import { CalendarHeatmapChartData } from '../../../data.js';
+import { getAxesOptions } from '../axes-options.js';
 
 // Mock the weekday labels function
 vi.mock('../../../utils/index.js', () => ({

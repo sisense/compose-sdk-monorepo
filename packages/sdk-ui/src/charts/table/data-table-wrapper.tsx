@@ -1,12 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Table, Column, Cell } from 'fixed-data-table-2';
-import 'fixed-data-table-2/dist/fixed-data-table.css';
-import styles from './styles/data-table-wrapper.module.scss';
+
+import Tooltip from '@mui/material/Tooltip';
 import { isNumber } from '@sisense/sdk-data';
-import { SortableTableColumnHeader } from './header/sortable-table-column-header';
 import classnames from 'classnames';
-import { DataTableWrapperProps } from './types';
+import { Cell, Column, Table } from 'fixed-data-table-2';
+import 'fixed-data-table-2/dist/fixed-data-table.css';
+
+import { getDataOptionTitle } from '@/chart-data-options/utils';
+import { getScrollbarWidth } from '@/utils/get-scrollbar-width';
+
+import { SortableTableColumnHeader } from './header/sortable-table-column-header';
 import { calcColumnWidths } from './helpers/calc-column-widths';
+import { getCellStyles } from './helpers/get-cell-styles';
+import styles from './styles/data-table-wrapper.module.scss';
 import {
   DATA_ELLIPSIZED_LENGTH,
   DATA_PADDING,
@@ -18,10 +24,7 @@ import {
   MAX_WIDTH,
   ROW_HEIGHT,
 } from './styles/style-constants';
-import { getCellStyles } from './helpers/get-cell-styles';
-import Tooltip from '@mui/material/Tooltip';
-import { getDataOptionTitle } from '@/chart-data-options/utils';
-import { getScrollbarWidth } from '@/utils/get-scrollbar-width';
+import { DataTableWrapperProps } from './types';
 
 const alignmentForColumnType = (columnType: string) => (isNumber(columnType) ? 'right' : 'left');
 

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
+  DataLabelsSettings,
   getDataLabelsSettings,
   getPolarDataLabelsSettings,
-  DataLabelsSettings,
 } from './value-label-section';
 
 const types = {

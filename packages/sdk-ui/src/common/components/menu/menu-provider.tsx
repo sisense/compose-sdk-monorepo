@@ -1,7 +1,9 @@
-import { ContextMenu } from '@/common/components/menu/context-menu';
 import { useCallback, useMemo, useState } from 'react';
+
+import { ContextMenu } from '@/common/components/menu/context-menu';
+
 import { MenuContext, useMenuContext } from './menu-context';
-import { MenuOptions, BeforeMenuOpenHandler } from './types';
+import { BeforeMenuOpenHandler, MenuOptions } from './types';
 
 export interface MenuProviderProps {
   /** Optional handler function to process menu options before opening the menu. */

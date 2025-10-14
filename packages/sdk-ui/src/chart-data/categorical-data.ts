@@ -1,16 +1,17 @@
+import { isNumber } from '@sisense/sdk-data';
+
 import {
-  CategoricalChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
+  CategoricalChartDataOptionsInternal,
 } from '../chart-data-options/types';
-import { cartesianData } from './cartesian-data';
 import { DataTable } from '../chart-data-processor/table-processor';
-import { isEnabled } from './utils';
-import { CategoricalChartData } from './types';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from '../chart-options-processor/translations/number-format-config';
-import { isNumber } from '@sisense/sdk-data';
+import { cartesianData } from './cartesian-data';
+import { CategoricalChartData } from './types';
+import { isEnabled } from './utils';
 
 export const validateCategoricalChartDataOptions = (
   chartDataOptions: CategoricalChartDataOptionsInternal,

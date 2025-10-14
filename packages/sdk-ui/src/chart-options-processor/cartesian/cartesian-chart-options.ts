@@ -1,61 +1,64 @@
 /* eslint-disable import/no-extraneous-dependencies */
+
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { ChartData } from '../../chart-data/types';
-import { ChartDesignOptions } from '../translations/types';
-import { getLegendSettings } from '../translations/legend-section';
-import {
-  getPolarDataLabelsSettings,
-  getDataLabelsSettings,
-} from '../translations/value-label-section';
-import { getMarkerSettings } from '../translations/marker-section';
-import {
-  StackableChartDesignOptions,
-  LineChartDesignOptions,
-} from '../translations/design-options';
-import { determineHighchartsChartType } from '../translations/translations-to-highcharts';
-import { getCartesianTooltipSettings } from '../translations/tooltip';
-import merge from 'deepmerge';
-import flow from 'lodash-es/flow';
-import { chartOptionsDefaults } from '../defaults/cartesian';
-import { ChartType, CompleteThemeSettings } from '../../types';
-import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
-import { HighchartsOptionsInternal, Stacking } from '../chart-options-service';
-import { getNavigator, setInitialScrollerPosition } from '../translations/navigator';
-import { categoriesSliceWarning, seriesSliceWarning } from '../../utils/data-limit-warning';
-import { OptionsWithAlerts } from '../../types';
 import { TFunction } from '@sisense/sdk-common';
 import { NavigatorOptions } from '@sisense/sisense-charts';
+import merge from 'deepmerge';
+import flow from 'lodash-es/flow';
+
 import { TranslatableError } from '@/translation/translatable-error';
 
+import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
+import { ChartData } from '../../chart-data/types';
+import { ChartType, CompleteThemeSettings } from '../../types';
+import { OptionsWithAlerts } from '../../types';
+import { categoriesSliceWarning, seriesSliceWarning } from '../../utils/data-limit-warning';
+import { HighchartsOptionsInternal, Stacking } from '../chart-options-service';
+import { chartOptionsDefaults } from '../defaults/cartesian';
+import {
+  LineChartDesignOptions,
+  StackableChartDesignOptions,
+} from '../translations/design-options';
+import { getLegendSettings } from '../translations/legend-section';
+import { getMarkerSettings } from '../translations/marker-section';
+import { getNavigator, setInitialScrollerPosition } from '../translations/navigator';
+import { getCartesianTooltipSettings } from '../translations/tooltip';
+import { determineHighchartsChartType } from '../translations/translations-to-highcharts';
+import { ChartDesignOptions } from '../translations/types';
+import {
+  getDataLabelsSettings,
+  getPolarDataLabelsSettings,
+} from '../translations/value-label-section';
+import {
+  buildCategoriesMeta,
+  buildStackingMeta,
+  buildXAxisSettings,
+  buildYAxisMeta,
+  buildYAxisMinMax,
+  buildYAxisSettings,
+  type CategoriesMeta,
+  getXAxisOrientation,
+  hasSecondaryYAxis,
+  isContinuousDatetimeXAxis,
+  type StackingMeta,
+  withChartSpecificAxisSettings,
+  type XAxisOrientation,
+  type YAxisMeta,
+} from './utils/axis/axis-builders';
+import {
+  determineChartState,
+  withXAxisLabelPositioning,
+  withYAxisLabelPositioning,
+} from './utils/chart-configuration';
 // Import our new utilities
 import {
   calculateChartSpacing,
   getAdditionalLegendSettings,
   getChartSpacingForTotalLabels,
 } from './utils/chart-spacing-calculator';
-import {
-  isContinuousDatetimeXAxis,
-  buildYAxisMeta,
-  getXAxisOrientation,
-  buildCategoriesMeta,
-  buildXAxisSettings,
-  buildYAxisMinMax,
-  buildStackingMeta,
-  buildYAxisSettings,
-  hasSecondaryYAxis,
-  type YAxisMeta,
-  type CategoriesMeta,
-  type StackingMeta,
-  type XAxisOrientation,
-  withChartSpecificAxisSettings,
-} from './utils/axis/axis-builders';
 import { processSeries } from './utils/series-processor';
-import {
-  withXAxisLabelPositioning,
-  withYAxisLabelPositioning,
-  determineChartState,
-} from './utils/chart-configuration';
 
 const DEFAULT_CHART_SPACING = 20;
 
@@ -146,17 +149,12 @@ export const getCartesianChartOptions = (
     chartDesignOptions as StackableChartDesignOptions,
   );
 
-  // specific to stackable charts
-  const totalLabelRotation =
-    (chartDesignOptions as StackableChartDesignOptions).totalLabelRotation ?? 0;
-
   const yAxisResult = buildYAxisSettings(
     chartDesignOptions.yAxis,
     chartDesignOptions.y2Axis,
     primaryMinMax,
     secondaryMinMax,
     stackingMeta,
-    totalLabelRotation,
     dataOptions,
     themeSettings,
   );
@@ -177,7 +175,7 @@ export const getCartesianChartOptions = (
 
   // Calculate spacing that should be applied specifically for total labels.
   const { rightSpacing: totalLabelRightSpacing, topSpacing: totalLabelTopSpacing } =
-    stackableDesignOptions.showTotal && stackableDesignOptions.stackType === 'stack100'
+    stackableDesignOptions.totalLabels?.enabled && stackableDesignOptions.stackType === 'stack100'
       ? getChartSpacingForTotalLabels(chartType, stackableDesignOptions)
       : { rightSpacing: 0, topSpacing: 0 };
 

@@ -1,15 +1,16 @@
-import { mockUrl, mockToken, server } from '../__mocks__/msw.js';
+import { filterFactory } from '@sisense/sdk-data';
+import { render, waitFor } from '@testing-library/react';
+import { http, HttpResponse } from 'msw';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { DashboardDto } from '@/api/types/dashboard-dto.js';
+import type { WidgetProps } from '@/props';
+
 import * as dashboardJSON from '../__mocks__/data/mock-dashboard.json';
 import * as jaqlDrilldown from '../__mocks__/data/mock-jaql-drilldown.json';
-
-import { render, waitFor } from '@testing-library/react';
+import { mockToken, mockUrl, server } from '../__mocks__/msw.js';
 import { SisenseContextProvider } from '../sisense-context/sisense-context-provider.js';
-import { http, HttpResponse } from 'msw';
 import { WidgetById } from './widget-by-id.js';
-import { DashboardDto } from '@/api/types/dashboard-dto.js';
-import { filterFactory } from '@sisense/sdk-data';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
-import type { WidgetProps } from '@/props';
 
 // Create a spy to capture Widget props
 const widgetSpy = vi.fn();

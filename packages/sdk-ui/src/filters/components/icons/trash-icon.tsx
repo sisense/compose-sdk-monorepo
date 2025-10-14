@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 import { DEFAULT_TEXT_COLOR } from '@/const';
 
 export const TrashIcon = (

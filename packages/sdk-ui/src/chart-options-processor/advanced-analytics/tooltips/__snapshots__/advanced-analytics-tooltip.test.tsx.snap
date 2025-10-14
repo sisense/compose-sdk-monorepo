@@ -11,7 +11,7 @@ exports[`ForecastTooltipComponent > should match the snapshot 1`] = `
       <div
         style="flex-shrink: 0;"
       >
-        advanced.tooltip.forecast
+        Forecast
       </div>
       <div
         style="margin-left: 5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
@@ -31,7 +31,7 @@ exports[`ForecastTooltipComponent > should match the snapshot 1`] = `
           <div
             style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
           >
-            advanced.tooltip.forecastValue
+            Forecast Value
           </div>
           <div
             style="display: table-cell; padding-left: 15px; font-weight: 600;"
@@ -51,7 +51,7 @@ exports[`ForecastTooltipComponent > should match the snapshot 1`] = `
           <div
             style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
           >
-            advanced.tooltip.max
+            Upper Bound
           </div>
           <div
             style="display: table-cell; padding-left: 15px; font-weight: 600;"
@@ -71,7 +71,7 @@ exports[`ForecastTooltipComponent > should match the snapshot 1`] = `
           <div
             style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
           >
-            advanced.tooltip.min
+            Lower Bound
           </div>
           <div
             style="display: table-cell; padding-left: 15px; font-weight: 600;"
@@ -91,7 +91,7 @@ exports[`ForecastTooltipComponent > should match the snapshot 1`] = `
           <div
             style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
           >
-            advanced.tooltip.confidenceInterval
+            Confidence Interval
           </div>
           <div
             style="display: table-cell; padding-left: 15px; font-weight: 600;"
@@ -127,7 +127,7 @@ exports[`TrendTooltipComponent > should match the snapshot 1`] = `
       <div
         style="flex-shrink: 0;"
       >
-        advanced.tooltip.trend
+        Trend
       </div>
       <div
         style="margin-left: 5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
@@ -147,7 +147,7 @@ exports[`TrendTooltipComponent > should match the snapshot 1`] = `
           <div
             style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
           >
-            advanced.tooltip.trendType
+            Type
           </div>
           <div
             style="display: table-cell; padding-left: 15px; font-weight: 600;"
@@ -167,7 +167,7 @@ exports[`TrendTooltipComponent > should match the snapshot 1`] = `
           <div
             style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
           >
-            advanced.tooltip.trendLocalValue
+            Local Value
           </div>
           <div
             style="display: table-cell; padding-left: 15px; font-weight: 600;"
@@ -187,22 +187,22 @@ exports[`TrendTooltipComponent > should match the snapshot 1`] = `
           <div
             style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
           >
-            advanced.tooltip.trendDataKey
+            Trend Data
           </div>
           <div
             style="display: table-cell; padding-left: 15px; font-weight: 600;"
           >
             <div>
-              advanced.tooltip.trendData.min 190.0K
+              Min 190.0K
             </div>
             <div>
-              advanced.tooltip.trendData.max 4.84M
+              Max 4.84M
             </div>
             <div>
-              advanced.tooltip.trendData.median 2.28M
+              Median 2.28M
             </div>
             <div>
-              advanced.tooltip.trendData.average 2.15M
+              Average 2.15M
             </div>
           </div>
         </div>

@@ -1,15 +1,14 @@
-import { ChartProps, RegularChartProps, TabularChartProps } from '../props';
-
-import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
-import './chart.css';
-
-import { RegularChart } from './regular-chart';
+import { isCartesian } from '@/chart-options-processor/translations/types';
 import { TableComponent } from '@/table/table-component';
 import { TranslatableError } from '@/translation/translatable-error';
-import { shouldSkipSisenseContextWaiting } from './helpers/should-skip-sisense-context-waiting';
-import { isCartesian } from '@/chart-options-processor/translations/types';
+
 import { CartesianChartDataOptions, StyledMeasureColumn } from '..';
+import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
+import { ChartProps, RegularChartProps, TabularChartProps } from '../props';
 import { AdvancedChart } from './advanced-chart';
+import './chart.css';
+import { shouldSkipSisenseContextWaiting } from './helpers/should-skip-sisense-context-waiting';
+import { RegularChart } from './regular-chart';
 
 /**
  * A React component used for easily switching chart types or rendering multiple series of different chart types.

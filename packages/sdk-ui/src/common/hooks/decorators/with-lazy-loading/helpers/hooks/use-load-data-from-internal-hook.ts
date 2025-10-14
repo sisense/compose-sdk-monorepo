@@ -1,11 +1,12 @@
 import { AnyArray, RestApiHookState } from '@/utils/utility-types';
+
 import {
-  RestApiHookParams,
-  SliceableRestApiHook,
-  UnsliceableParams,
-  Slice,
   DataChunk,
   HookExecutionStatus,
+  RestApiHookParams,
+  Slice,
+  SliceableRestApiHook,
+  UnsliceableParams,
 } from '../../types';
 
 type UseLoadDataFromInternalHookOptions<

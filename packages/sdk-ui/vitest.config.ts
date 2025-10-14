@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
 import { mergeConfig, ViteUserConfig } from 'vitest/config';
+
 import baseConfig from '../../vitest.config.js';
 
 const config: ViteUserConfig = {

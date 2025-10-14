@@ -1,17 +1,19 @@
+import { SeriesPieOptions } from '@sisense/sisense-charts';
+
 import { ContextfulTransformer } from '@/utils/utility-types/transformer';
-import { Convolution, SeriesWithAlerts, CompleteThemeSettings, ValueToColorMap } from '../../types';
+
+import { getPaletteColor } from '../../chart-data-options/coloring/utils';
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
-import { SeriesType } from '../chart-options-service';
-import { formatSeries, getColorSetting, SeriesPointStructure } from './translations-to-highcharts';
-import { PieChartDesignOptions } from './design-options';
 import {
   CategoricalChartData,
   CategoricalSeriesValues,
   CategoricalXValues,
 } from '../../chart-data/types';
+import { CompleteThemeSettings, Convolution, SeriesWithAlerts, ValueToColorMap } from '../../types';
 import { seriesSliceWarning } from '../../utils/data-limit-warning';
-import { getPaletteColor } from '../../chart-data-options/coloring/utils';
-import { SeriesPieOptions } from '@sisense/sisense-charts';
+import { SeriesType } from '../chart-options-service';
+import { PieChartDesignOptions } from './design-options';
+import { formatSeries, getColorSetting, SeriesPointStructure } from './translations-to-highcharts';
 
 const CONVOLUTION_OTHERS_NAME = 'Other';
 const CONVOLUTION_OTHERS_ID = 'Others';

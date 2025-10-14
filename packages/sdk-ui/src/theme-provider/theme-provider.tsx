@@ -1,8 +1,9 @@
-import { ThemeProviderProps } from '@/props';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
-import { useThemeSettings } from './use-theme-settings';
-import { ThemeContext } from './theme-context';
+import { ThemeProviderProps } from '@/props';
+
 import { FontsLoader } from './fonts-loader/fonts-loader';
+import { ThemeContext } from './theme-context';
+import { useThemeSettings } from './use-theme-settings';
 
 /**
  * Theme provider, which allows you to adjust the look and feel of child components.

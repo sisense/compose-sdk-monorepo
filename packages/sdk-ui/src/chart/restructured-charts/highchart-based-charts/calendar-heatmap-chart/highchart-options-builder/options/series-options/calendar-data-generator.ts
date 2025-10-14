@@ -1,13 +1,14 @@
-import { CALENDAR_HEATMAP_DEFAULTS } from '../../../constants.js';
-import { getWeekdayLabels } from '../../../utils/index.js';
-import { CalendarHeatmapChartData, CalendarHeatmapDataValue } from '../../../data.js';
+import { CalendarHeatmapChartDesignOptions } from '@/chart-options-processor/translations/design-options.js';
 import { DateFormatter } from '@/common/formatters/create-date-formatter.js';
+
+import { CALENDAR_HEATMAP_DEFAULTS } from '../../../constants.js';
+import { CalendarHeatmapChartData, CalendarHeatmapDataValue } from '../../../data.js';
 import {
   CalendarDayOfWeek,
   getDayOfWeek,
   getDayOfWeekIndex,
 } from '../../../utils/calendar-utils.js';
-import { CalendarHeatmapChartDesignOptions } from '@/chart-options-processor/translations/design-options.js';
+import { getWeekdayLabels } from '../../../utils/index.js';
 
 const CALENDAR_DATA_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
@@ -65,13 +66,18 @@ export function generateCalendarChartData(
 ): CalendarChartDataPoint[] {
   if (data.values.length === 0) return [];
 
+  // Check if this is an empty month (single date entry without value)
+  const isEmptyMonth = data.values.length === 1 && data.values[0].value === undefined;
+
   // Create a map of date strings to values for quick lookup
   const dataMap = new Map<string, CalendarHeatmapDataValue>();
-  data.values.forEach((item) => {
-    // Normalize date to common format for consistent lookup
-    const dataString = dateFormatter(item.date, CALENDAR_DATA_DATE_FORMAT);
-    dataMap.set(dataString, item);
-  });
+  if (!isEmptyMonth) {
+    data.values.forEach((item) => {
+      // Normalize date to common format for consistent lookup
+      const dataString = dateFormatter(item.date, CALENDAR_DATA_DATE_FORMAT);
+      dataMap.set(dataString, item);
+    });
+  }
 
   // Get the month and year from the first date
   const firstDataDate = new Date(data.values[0].date);

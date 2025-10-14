@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback } from 'react';
+
 import { type PivotTableDataOptionsInternal } from '@/chart-data-options/types';
-import { PivotTableDataPointEventHandler } from '@/index-typedoc';
-import { PivotTableCellPayload } from './types';
+import { PivotTableDataPointEventHandler } from '@/props';
+
 import { getPivotTableDataPoint } from './get-pivot-table-data-point';
+import { PivotTableCellPayload } from './types';
 
 type UseApplyPivotTableCellEventsProps = {
   dataOptions: PivotTableDataOptionsInternal;

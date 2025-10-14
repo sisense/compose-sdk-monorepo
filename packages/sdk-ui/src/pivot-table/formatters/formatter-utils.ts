@@ -1,14 +1,16 @@
-import type {
-  CustomDataCellFormatter,
-  CustomHeaderCellFormatter,
-  CellFormattingResult,
-} from './types.js';
 import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
+
 import type { PivotTableDataOptionsInternal } from '@/chart-data-options/types';
 import {
   getPivotDataOptionByJaqlIndex,
   getPivotDataOptionIdByJaqlIndex,
 } from '@/pivot-table/formatters/utils';
+
+import type {
+  CellFormattingResult,
+  CustomDataCellFormatter,
+  CustomHeaderCellFormatter,
+} from './types.js';
 
 /**
  * Applies a formatting result to a data cell, mutating the cell object

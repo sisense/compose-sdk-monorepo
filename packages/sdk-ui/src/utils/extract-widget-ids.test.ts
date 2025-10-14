@@ -1,5 +1,6 @@
-import { getWidgetIdsFromDashboard } from './extract-widget-ids';
 import type { DashboardDto } from '@/api/types/dashboard-dto';
+
+import { getWidgetIdsFromDashboard } from './extract-widget-ids';
 
 describe('getWidgetIdsFromDashboard', () => {
   it('should return an empty array if the dashboard has no layout', () => {

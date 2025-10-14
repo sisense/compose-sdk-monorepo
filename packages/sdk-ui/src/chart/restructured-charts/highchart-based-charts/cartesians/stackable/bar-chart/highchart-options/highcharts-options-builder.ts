@@ -1,9 +1,10 @@
 import omit from 'lodash-es/omit';
+
 import { HighchartsOptionsBuilder } from '../../../../types';
 import { getLegacyCartesianChartOptions } from '../../../helpers/highchart-options/get-legacy-cartesian-chart-options';
-import { getLegend } from './legend';
-import { getAxes } from './axes';
 import { getBasicCartesianTooltip } from '../../../helpers/highchart-options/tooltip';
+import { getAxes } from './axes';
+import { getLegend } from './legend';
 
 export const barHighchartsOptionsBuilder: HighchartsOptionsBuilder<'bar'> = {
   getChart: function (ctx) {

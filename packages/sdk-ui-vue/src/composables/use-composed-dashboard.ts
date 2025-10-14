@@ -1,19 +1,20 @@
-import { onBeforeUnmount, type Ref, watch } from 'vue';
+import type { Filter, FilterRelations } from '@sisense/sdk-data';
 import {
+  type ComposableDashboardProps as ComposableDashboardPropsPreact,
+  createHookApiFacade,
   HookAdapter,
   useComposedDashboardInternal,
-  type ComposableDashboardProps as ComposableDashboardPropsPreact,
   type UseComposedDashboardOptions,
   type WidgetsPanelLayout,
-  createHookApiFacade,
 } from '@sisense/sdk-ui-preact';
+import { onBeforeUnmount, type Ref, watch } from 'vue';
+
 import type { DashboardProps } from '../components/dashboard';
 import { createSisenseContextConnector } from '../helpers/context-connectors';
+import { useRefState } from '../helpers/use-ref-state';
 import type { MaybeRef } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
-import { useRefState } from '../helpers/use-ref-state';
-import type { Filter, FilterRelations } from '@sisense/sdk-data';
 
 export interface ComposableDashboardProps extends ComposableDashboardPropsPreact {}
 

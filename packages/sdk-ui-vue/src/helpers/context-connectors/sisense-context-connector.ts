@@ -1,6 +1,7 @@
-import { watchEffect } from 'vue';
 import type { ContextConnector, CustomSisenseContextProviderProps } from '@sisense/sdk-ui-preact';
 import { CustomSisenseContextProvider, DataObserver } from '@sisense/sdk-ui-preact';
+import { watchEffect } from 'vue';
+
 import { getSisenseContext } from '../../providers';
 
 /**

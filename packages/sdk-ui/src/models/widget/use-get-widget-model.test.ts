@@ -1,13 +1,14 @@
 /** @vitest-environment jsdom */
+import { trackProductEvent } from '@sisense/sdk-tracking';
 import { renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
-import { trackProductEvent } from '@sisense/sdk-tracking';
-import { useGetWidgetModel } from './use-get-widget-model';
-import { getWidgetModel } from './get-widget-model';
-import { useSisenseContext } from '../../sisense-context/sisense-context';
-import { type ClientApplication } from '../../app/client-application';
-import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
+
 import { isWidgetModel, widgetModelTranslator } from '.';
+import { type ClientApplication } from '../../app/client-application';
+import { useSisenseContext } from '../../sisense-context/sisense-context';
+import { sampleEcommerceDashboard as dashboardMock } from '../__mocks__/sample-ecommerce-dashboard';
+import { getWidgetModel } from './get-widget-model';
+import { useGetWidgetModel } from './use-get-widget-model';
 
 const widgetDtoMock = dashboardMock.widgets![0];
 

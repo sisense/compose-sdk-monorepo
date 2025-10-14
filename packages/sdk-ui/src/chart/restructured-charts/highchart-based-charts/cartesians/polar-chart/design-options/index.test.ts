@@ -1,17 +1,18 @@
-import {
-  translateStyleOptionsToDesignOptions,
-  isCorrectStyleOptions,
-  designOptionsTranslators,
-} from './index';
-import { getCartesianChartStyle } from '@/chart-options-processor/style-to-design-options-translator/translate-to-highcharts-options';
+import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
+import { withYAxisNormalizationForPolar } from '@/chart-options-processor/cartesian/utils/axis/axis-builders';
+import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
 import {
   extendStyleOptionsWithDefaults,
   getDesignOptionsPerSeries,
 } from '@/chart-options-processor/style-to-design-options-translator/prepare-design-options';
-import { getDefaultStyleOptions } from '@/chart-options-processor/chart-options-service';
-import { withYAxisNormalizationForPolar } from '@/chart-options-processor/cartesian/utils/axis/axis-builders';
-import { PolarStyleOptions, ChartStyleOptions } from '@/types';
-import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
+import { getCartesianChartStyle } from '@/chart-options-processor/style-to-design-options-translator/translate-to-highcharts-options';
+import { ChartStyleOptions, PolarStyleOptions } from '@/types';
+
+import {
+  designOptionsTranslators,
+  isCorrectStyleOptions,
+  translateStyleOptionsToDesignOptions,
+} from './index';
 
 // Mock dependencies
 vi.mock(

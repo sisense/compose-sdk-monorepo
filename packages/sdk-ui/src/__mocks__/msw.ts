@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+
 import * as mockGlobals from '@/__mocks__/data/mock-globals.json';
 import * as mockPalettes from '@/__mocks__/data/mock-palettes.json';
 

@@ -1,19 +1,20 @@
-import { filterFactory, DateLevels } from '@sisense/sdk-data';
+import { DateLevels, filterFactory } from '@sisense/sdk-data';
 import { Attribute } from '@sisense/sdk-data';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+import { WidgetProps } from '../../../props.js';
+import { DataPoint, DataPointEntry, ScatterDataPoint } from '../../../types.js';
 import {
+  filterByAllowedDimensions,
   getFiltersFromDataPoint,
-  isScatterDataPoint,
-  getFiltersFromScatterDataPoint,
   getFiltersFromRegularDataPoint,
+  getFiltersFromScatterDataPoint,
   getFormulaContextFilters,
   handleFormulaDuplicateFilters,
-  normalizeDateForGranularity,
-  filterByAllowedDimensions,
+  isScatterDataPoint,
   mergeJtdFilters,
+  normalizeDateForGranularity,
 } from './jtd-filters.js';
-import { DataPoint, DataPointEntry, ScatterDataPoint } from '../../../types.js';
-import { WidgetProps } from '../../../props.js';
 import { JtdConfig } from './jtd-types';
 
 // Helper function to compare filters without GUID

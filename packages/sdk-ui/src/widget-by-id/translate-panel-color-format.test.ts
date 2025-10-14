@@ -1,9 +1,14 @@
-import { Color } from '../types.js';
-
 import {
+  ConditionalDataColorOptions,
+  DataColorOptions,
+  RangeDataColorOptions,
+  UniformDataColorOptions,
+} from '../chart-data/data-coloring/index.js';
+import { Color } from '../types.js';
+import {
+  createPanelColorFormat,
   createValueColorOptions,
   createValueToColorMap,
-  createPanelColorFormat,
 } from './translate-panel-color-format.js';
 import {
   PanelColorFormat,
@@ -11,12 +16,6 @@ import {
   PanelColorFormatRange,
   PanelColorFormatSingle,
 } from './types.js';
-import {
-  ConditionalDataColorOptions,
-  DataColorOptions,
-  RangeDataColorOptions,
-  UniformDataColorOptions,
-} from '../chart-data/data-coloring/index.js';
 
 describe('createValueColorOptions', () => {
   const paletteColors = ['#00cee6'] as Color[];

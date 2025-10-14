@@ -2,25 +2,18 @@ import { describe } from 'vitest';
 
 import * as DM from './__test-helpers__/sample-ecommerce.js';
 import * as filterFactory from './dimensional-model/filters/factory.js';
+import { MembersFilter } from './dimensional-model/filters/filters.js';
 import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/attribute-measure-util.js';
+import { FilterRelations, SortDirection } from './dimensional-model/interfaces.js';
 import * as measureFactory from './dimensional-model/measures/factory.js';
-import {
-  AggregationTypes,
-  createFilterFromJaql,
-  DataSource,
-  DataSourceInfo,
-  DataType,
-  FilterRelations,
-  FormulaJaql,
-  MembersFilter,
-  Sort,
-  SortDirection,
-} from './index.js';
+import { AggregationTypes, DataType, FormulaJaql, Sort } from './dimensional-model/types.js';
+import { DataSource, DataSourceInfo } from './interfaces.js';
 import {
   convertJaqlDataSourceForDto,
   convertSortDirectionToSort,
   createAttributeHelper,
   createCalculatedMeasureHelper,
+  createFilterFromJaql,
   createMeasureHelper,
   getDataSourceName,
   getFilterListAndRelationsJaql,

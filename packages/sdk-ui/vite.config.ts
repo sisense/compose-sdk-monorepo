@@ -1,9 +1,10 @@
-import { resolve } from 'node:path';
 import react from '@vitejs/plugin-react-swc';
+import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import checker from 'vite-plugin-checker';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
+import dts from 'vite-plugin-dts';
+
 import { fixJsxRuntime } from './scripts/vite-plugins/fix-jsx-runtime';
 import { replaceReact18Hooks } from './scripts/vite-plugins/replace-react18-hooks';
 

@@ -1,21 +1,22 @@
 import {
   Attribute,
-  Measure,
-  Filter,
-  QueryResultData,
   DataSource,
+  Filter,
   FilterRelationsJaql,
+  Measure,
+  QueryResultData,
 } from '@sisense/sdk-data';
 import isNull from 'lodash-es/isNull';
+
 import { ClientApplication } from './app/client-application.js';
-import { executeQuery as executeQueryFunction } from './query/execute-query.js';
+import { translateBoxplotDataOptions } from './chart-data-options/translate-boxplot-data-options.js';
 import {
   BoxplotChartCustomDataOptions,
   BoxplotChartDataOptionsInternal,
   StyledColumn,
   StyledMeasureColumn,
 } from './chart-data-options/types.js';
-import { translateBoxplotDataOptions } from './chart-data-options/translate-boxplot-data-options.js';
+import { executeQuery as executeQueryFunction } from './query/execute-query.js';
 
 const OUTLIERS_LIMIT = 20000;
 

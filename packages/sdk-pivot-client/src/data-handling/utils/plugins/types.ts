@@ -1,4 +1,4 @@
-import { Defer, Styles, InputStyles } from '../../../utils/types.js';
+import { Defer, InputStyles, Styles } from '../../../utils/types.js';
 
 export type DimensionTarget = {
   index?: Array<number | any>;

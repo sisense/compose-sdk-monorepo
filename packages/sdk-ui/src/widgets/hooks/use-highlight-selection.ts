@@ -1,4 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
+
+import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
+import { isCartesian, isScatter } from '@/chart-options-processor/translations/types';
+
 import {
   CartesianChartDataOptions,
   ChartDataOptions,
@@ -9,8 +13,6 @@ import {
   HighchartsOptions,
   ScatterDataPoint,
 } from '../..';
-import { isCartesian, isScatter } from '@/chart-options-processor/translations/types';
-import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
 
 export function useHighlightSelection({
   chartType,

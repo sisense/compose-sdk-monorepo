@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { SelectableSection } from '../common/selectable-section';
+
 import {
   Attribute,
   CompleteMembersFilterConfig,
@@ -7,14 +7,17 @@ import {
   FilterConfig,
   filterFactory,
 } from '@sisense/sdk-data';
+
 import { usePrevious } from '@/common/hooks/use-previous';
 import { MembersListSelect } from '@/filters/components/filter-editor-popover/common/select/members-list-select';
+
+import { SelectableSection } from '../common/selectable-section';
+import { isIncludeMembersFilter } from '../utils';
 import {
   getConfigWithUpdatedDeactivated,
   getMembersWithDeactivated,
   getMembersWithoutDeactivated,
 } from './utils';
-import { isIncludeMembersFilter } from '../utils';
 
 function createMembersFilter(attribute: Attribute, members: string[], config?: FilterConfig) {
   return members.length || (config as CompleteMembersFilterConfig)?.deactivatedMembers?.length

@@ -1,14 +1,17 @@
-import { Attribute, DataSource, Filter, filterFactory, MembersFilter } from '@sisense/sdk-data';
 import { FunctionComponent, useCallback } from 'react';
-import { Member, SelectedMember } from './members-reducer';
+
+import { Attribute, DataSource, Filter, filterFactory, MembersFilter } from '@sisense/sdk-data';
+import merge from 'lodash-es/merge';
+
+import { useGetFilterMembersInternal } from '@/filters/hooks/use-get-filter-members';
+import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
+import { cloneFilterAndToggleDisabled } from '@/utils/filters';
+
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
 import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container';
-import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
-import { PillSection } from './pill-section';
 import { MemberList } from './member-list';
-import merge from 'lodash-es/merge';
-import { cloneFilterAndToggleDisabled } from '@/utils/filters';
-import { useGetFilterMembersInternal } from '@/filters/hooks/use-get-filter-members';
+import { Member, SelectedMember } from './members-reducer';
+import { PillSection } from './pill-section';
 
 /**
  * Props of the {@link MemberFilterTile} component.
@@ -88,6 +91,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     filter,
     defaultDataSource: dataSource,
     parentFilters,
+    allowMissingMembers: true,
   });
 
   if (isError) {

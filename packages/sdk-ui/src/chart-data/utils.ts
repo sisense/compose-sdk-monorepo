@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
   CartesianChartDataOptionsInternal,
-  StyledMeasureColumn,
   StyledColumn,
+  StyledMeasureColumn,
 } from '../chart-data-options/types';
 
 export const onlyY = ({ x, y, breakBy }: CartesianChartDataOptionsInternal): boolean =>

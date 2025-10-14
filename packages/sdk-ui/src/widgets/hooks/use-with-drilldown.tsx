@@ -1,19 +1,22 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useCallback, useMemo } from 'react';
+
 import { createAttribute } from '@sisense/sdk-data';
-import { DataPoint, DrilldownSelection, ScatterDataPoint } from '../../types.js';
-import { ChartWidgetProps } from '@/props.js';
+
 import { useMenu } from '@/common/hooks/use-menu.js';
-import { useDrilldown } from './use-drilldown.js';
-import { useSyncedDrilldownPaths } from './use-synced-hierarchies.js';
+import { ChartWidgetProps } from '@/props.js';
+import { combineHandlers } from '@/utils/combine-handlers.js';
+import { mergeFiltersOrFilterRelations } from '@/utils/filter-relations.js';
+
+import { DataPoint, DrilldownSelection, ScatterDataPoint } from '../../types.js';
 import {
   applyDrilldownDimension,
   getDrilldownInitialDimension,
   isDrilldownApplicableToChart,
   prepareDrilldownSelectionPoints,
 } from '../common/drilldown-utils.js';
-import { combineHandlers } from '@/utils/combine-handlers.js';
-import { mergeFiltersOrFilterRelations } from '@/utils/filter-relations.js';
+import { useDrilldown } from './use-drilldown.js';
+import { useSyncedDrilldownPaths } from './use-synced-hierarchies.js';
 
 type UseWithDrilldownParams = {
   propsToExtend: ChartWidgetProps;

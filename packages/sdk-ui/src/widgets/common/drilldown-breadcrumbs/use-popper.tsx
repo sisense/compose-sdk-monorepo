@@ -1,7 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import Popper from '@mui/material/Popper';
 import Typography from '@mui/material/Typography';
-import { useTranslation } from 'react-i18next';
 
 interface DrilldownBreadcrumbsThemeProps {
   popperParams?: {

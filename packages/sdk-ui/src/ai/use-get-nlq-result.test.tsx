@@ -1,10 +1,12 @@
-import { server } from '@/__mocks__/msw';
 import { renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { AiTestWrapper } from './__mocks__';
-import { useGetNlqResult, UseGetNlqResultParams } from './use-get-nlq-result';
+
+import { server } from '@/__mocks__/msw';
 import { ChartWidgetProps } from '@/props';
+
+import { AiTestWrapper } from './__mocks__';
 import { MOCK_NLQ_RESULT_PARAMS, MOCK_NLQ_RESULT_RESPONSE } from './__mocks__/get-nlq-result-mock';
+import { useGetNlqResult, UseGetNlqResultParams } from './use-get-nlq-result';
 
 const renderHookWithWrapper = (params: UseGetNlqResultParams) => {
   return renderHook(() => useGetNlqResult(params), { wrapper: AiTestWrapper });

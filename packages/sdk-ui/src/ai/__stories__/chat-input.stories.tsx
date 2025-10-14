@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
+
 import ChatInput from '../chat-input';
 
 const meta: Meta<typeof ChatInput> = {

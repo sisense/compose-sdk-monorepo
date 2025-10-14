@@ -1,11 +1,13 @@
+import { measureFactory } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
-import { getFunnelChartAlerts } from './index';
-import { BuildContext } from '../../../types';
-import { FunnelChartData, FunnelChartDataOptionsInternal } from '../types';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { FunnelChartDesignOptions } from '@/chart-options-processor/translations/design-options';
 import { seriesSliceWarning } from '@/utils/data-limit-warning';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { measureFactory } from '@sisense/sdk-data';
+
+import { BuildContext } from '../../../types';
+import { FunnelChartData, FunnelChartDataOptionsInternal } from '../types';
+import { getFunnelChartAlerts } from './index';
 
 // Test helper to create mock BuildContext for funnel charts
 const createMockBuildContext = (

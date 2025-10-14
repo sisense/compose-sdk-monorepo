@@ -1,3 +1,6 @@
+import isUndefined from 'lodash-es/isUndefined';
+
+import { getChartDefaultSize, getWidgetDefaultSize } from '@/dynamic-size-container';
 import {
   WidgetsPanelCell,
   WidgetsPanelColumn,
@@ -5,11 +8,11 @@ import {
   WidgetsPanelLayout,
   WidgetsPanelRow,
 } from '@/models';
-import isUndefined from 'lodash-es/isUndefined';
-import { EditableLayoutDropData, EditableLayoutDragData, DropType } from './types';
-import { getChartDefaultSize, getWidgetDefaultSize } from '@/dynamic-size-container';
-import { ChartType, WidgetProps } from '@/index-typedoc';
-import { MAX_ROW_HEIGHT, MIN_ROW_HEIGHT, MIN_COLUMN_WIDTH, MAX_COLUMN_WIDTH } from './const';
+import { WidgetProps } from '@/props';
+import { ChartType } from '@/types';
+
+import { MAX_COLUMN_WIDTH, MAX_ROW_HEIGHT, MIN_COLUMN_WIDTH, MIN_ROW_HEIGHT } from './const';
+import { DropType, EditableLayoutDragData, EditableLayoutDropData } from './types';
 
 /**
  * Updates the height of all cells in a specific row within a column layout.

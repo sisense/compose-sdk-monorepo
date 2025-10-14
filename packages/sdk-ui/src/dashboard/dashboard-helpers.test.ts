@@ -1,8 +1,10 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+import { JumpToDashboardConfig } from '@/dashboard/hooks/jtd/jtd-types';
+import { WidgetProps } from '@/props';
+
 import { applyJtdConfig, applyJtdConfigs } from './dashboard-helpers';
 import { DashboardProps } from './types';
-import { WidgetProps } from '@/props';
-import { JumpToDashboardConfig } from '@/dashboard/hooks/jtd/jtd-types';
 
 describe('Dashboard JTD Helpers', () => {
   const mockWidgets: WidgetProps[] = [

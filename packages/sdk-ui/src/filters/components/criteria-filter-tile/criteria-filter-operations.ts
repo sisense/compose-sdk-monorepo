@@ -1,3 +1,4 @@
+import { TFunction } from '@sisense/sdk-common';
 import {
   Attribute,
   ExcludeFilter,
@@ -13,8 +14,8 @@ import {
   TextFilter,
   TextOperators,
 } from '@sisense/sdk-data';
+
 import { TranslatableError } from '@/translation/translatable-error';
-import { TFunction } from '@sisense/sdk-common';
 
 /**
  * Collection of filter options for the {@link CriteriaFilterMenu},

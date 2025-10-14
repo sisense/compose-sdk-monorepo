@@ -1,6 +1,7 @@
 import { MeasureColumn } from '@sisense/sdk-data';
-import { createLegacyChartDataOptions } from './indicator-legacy-chart-data-options';
+
 import { chartData, chartDataOptions, chartDesignOptions } from './__mocks__/indicator-mocks';
+import { createLegacyChartDataOptions } from './indicator-legacy-chart-data-options';
 
 describe('indicator-legacy-chart-data-options', () => {
   describe('createLegacyChartDataOptions', () => {

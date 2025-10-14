@@ -1,21 +1,23 @@
 import {
   Filter,
-  FilterRelations,
-  isMembersFilter,
-  JaqlDataSourceForDto,
   filterFactory,
+  FilterRelations,
   isLevelAttribute,
+  isMembersFilter,
   mergeFiltersOrFilterRelations,
-  JSONArray,
 } from '@sisense/sdk-data';
-import { NlqTranslationResult, NormalizedTable } from '../types.js';
+
+import { NlqTranslationError, NlqTranslationErrorContext, NlqTranslationResult } from '../types.js';
+import { processNode } from './process-function/process-node.js';
 import {
+  FiltersFunctionCallInput,
+  FiltersInput,
+  HighlightsFunctionCallInput,
+  HighlightsInput,
   isFilterElement,
   isFilterRelationsElement,
-  isParsedFunctionCallArray,
-  ParsedFunctionCall,
-  processNode,
-} from './common.js';
+  isFunctionCallArray,
+} from './types.js';
 
 function postProcessFilter(filter: Filter) {
   const { attribute, config } = filter;
@@ -86,25 +88,33 @@ function postProcessFilters(filters: (Filter | FilterRelations)[]): Filter[] | F
  * @returns A Filter[] or FilterRelations object
  */
 export const translateFiltersFromJSONFunctionCall = (
-  filtersJSON: ParsedFunctionCall[],
-  dataSource: JaqlDataSourceForDto,
-  tables: NormalizedTable[],
+  input: FiltersFunctionCallInput,
 ): NlqTranslationResult<Filter[] | FilterRelations> => {
+  const { data: filtersJSON } = input;
+  const { dataSource, tables } = input.context;
   const filters: (Filter | FilterRelations)[] = [];
-  const errors: string[] = [];
+  const errors: NlqTranslationError[] = [];
 
   // Process each filter and collect errors instead of throwing
   filtersJSON.forEach((filterJSON, index) => {
+    const context: NlqTranslationErrorContext = {
+      category: 'filters',
+      index,
+      input: filterJSON,
+    };
     try {
-      const filter = processNode(filterJSON, dataSource, tables);
+      const filter = processNode({
+        data: filterJSON,
+        context: { dataSource, tables, pathPrefix: '' },
+      });
       if (!isFilterRelationsElement(filter) && !isFilterElement(filter)) {
-        errors.push(`Filter ${index + 1} (${filterJSON.function}): Invalid filter JSON`);
+        errors.push({ ...context, message: `Invalid filter JSON` });
       } else {
         filters.push(filter);
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      errors.push(`Filter ${index + 1} (${filterJSON.function}): ${errorMsg}`);
+      errors.push({ ...context, message: errorMsg });
     }
   });
 
@@ -115,70 +125,107 @@ export const translateFiltersFromJSONFunctionCall = (
   return { success: true, data: postProcessFilters(filters) };
 };
 
+/**
+ * Translate an array of JSON objects to filters
+ *
+ * @param input - FiltersInput object
+ * @returns NlqTranslationResult<Filter[] | FilterRelations>
+ */
 export const translateFiltersJSON = (
-  filtersJSON: JSONArray,
-  dataSource: JaqlDataSourceForDto,
-  tables: NormalizedTable[],
+  input: FiltersInput,
 ): NlqTranslationResult<Filter[] | FilterRelations> => {
+  const { data: filtersJSON } = input;
+  const { dataSource, tables } = input.context;
   if (!filtersJSON) {
     return { success: true, data: [] };
   }
 
-  if (!isParsedFunctionCallArray(filtersJSON)) {
+  if (!isFunctionCallArray(filtersJSON)) {
     return {
       success: false,
       errors: [
-        'Invalid filters JSON. Expected an array of function calls with "function" and "args" properties.',
+        {
+          category: 'filters',
+          index: -1,
+          input: filtersJSON,
+          message:
+            'Invalid filters JSON. Expected an array of function calls with "function" and "args" properties.',
+        },
       ],
     };
   }
 
-  return translateFiltersFromJSONFunctionCall(filtersJSON, dataSource, tables);
+  return translateFiltersFromJSONFunctionCall({
+    data: filtersJSON,
+    context: { dataSource, tables },
+  });
 };
 
 export const translateHighlightsFromJSONFunctionCall = (
-  highlightsJSON: ParsedFunctionCall[],
-  dataSource: JaqlDataSourceForDto,
-  tables: NormalizedTable[],
+  input: HighlightsFunctionCallInput,
 ): NlqTranslationResult<Filter[]> => {
+  const { data: highlightsJSON } = input;
+  const { dataSource, tables } = input.context;
   const results: Filter[] = [];
-  const errors: string[] = [];
+  const errors: NlqTranslationError[] = [];
 
   // Process each highlight and collect errors instead of throwing
   highlightsJSON.forEach((filterJSON, index) => {
+    const context: NlqTranslationErrorContext = {
+      category: 'highlights',
+      index,
+      input: filterJSON,
+    };
     try {
-      const filter = processNode(filterJSON, dataSource, tables);
+      const filter = processNode({
+        data: filterJSON,
+        context: { dataSource, tables, pathPrefix: '' },
+      });
       if (!isFilterElement(filter)) {
-        errors.push(`Highlight ${index + 1} (${filterJSON.function}): Invalid filter JSON`);
+        errors.push({ ...context, message: `Invalid filter JSON` });
       } else {
         results.push(postProcessFilter(filter));
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      errors.push(`Highlight ${index + 1} (${filterJSON.function}): ${errorMsg}`);
+      errors.push({ ...context, message: errorMsg });
     }
   });
 
   return errors.length > 0 ? { success: false, errors } : { success: true, data: results };
 };
 
-export const translateHighlightsJSON = (
-  highlightsJSON: JSONArray,
-  dataSource: JaqlDataSourceForDto,
-  tables: NormalizedTable[],
-): NlqTranslationResult<Filter[]> => {
+/**
+ * Translate an array of JSON objects to highlights
+ *
+ * @param input - HighlightsInput object
+ * @returns NlqTranslationResult<Filter[]>
+ */
+export const translateHighlightsJSON = (input: HighlightsInput): NlqTranslationResult<Filter[]> => {
+  const { data: highlightsJSON } = input;
+  const { dataSource, tables } = input.context;
+
   if (!highlightsJSON) {
     return { success: true, data: [] };
   }
 
-  if (!isParsedFunctionCallArray(highlightsJSON)) {
+  if (!isFunctionCallArray(highlightsJSON)) {
     return {
       success: false,
       errors: [
-        'Invalid highlights JSON. Expected an array of function calls with "function" and "args" properties.',
+        {
+          category: 'highlights',
+          index: -1,
+          input: highlightsJSON,
+          message:
+            'Invalid highlights JSON. Expected an array of function calls with "function" and "args" properties.',
+        },
       ],
     };
   }
 
-  return translateHighlightsFromJSONFunctionCall(highlightsJSON, dataSource, tables);
+  return translateHighlightsFromJSONFunctionCall({
+    data: highlightsJSON,
+    context: { dataSource, tables },
+  });
 };

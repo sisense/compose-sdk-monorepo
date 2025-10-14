@@ -1,4 +1,5 @@
 import { useSisenseContext } from '@/sisense-context/sisense-context';
+
 import { ErrorBoundary } from '../../error-boundary/error-boundary';
 import { ComponentDecorator } from './as-sisense-component';
 

@@ -1,20 +1,22 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
+
+import { ChatContextDetails } from '@/ai/api/types';
+
 import type {
   Chat,
+  ChatContext,
   ChatRequest,
   ChatResponse,
   ChatWithoutHistory,
-  ChatContext,
   GetNlgInsightsRequest,
   GetNlgInsightsResponse,
+  GetNlqResultRequest,
   LlmConfig,
+  NlqResult,
   QueryRecommendationConfig,
   QueryRecommendationResponse,
   SendFeedbackRequest,
-  GetNlqResultRequest,
-  NlqResult,
 } from './types';
-import { ChatContextDetails } from '@/ai/api/types';
 
 /** @internal */
 export class ChatRestApi {

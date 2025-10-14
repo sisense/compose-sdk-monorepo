@@ -1,8 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest';
-import { FilterRelationsTile } from './filter-relations-tile';
+import { describe, expect, it, vi } from 'vitest';
+
 import { filtersMock, relationsMock } from './__mocks__/filters-and-relations-mocks';
+import { FilterRelationsTile } from './filter-relations-tile';
 
 // Mock EditPencilIcon
 vi.mock('@/common/icons/edit-pencil-icon', () => ({

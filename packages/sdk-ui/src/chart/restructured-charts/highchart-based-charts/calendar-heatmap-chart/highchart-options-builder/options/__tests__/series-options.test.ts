@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
-import { getSeriesOptions } from '../series-options/series-options.js';
+import { describe, expect, it, vi } from 'vitest';
+
 import { BuildContext } from '../../../../types.js';
 import { CalendarHeatmapChartData } from '../../../data.js';
+import { getSeriesOptions } from '../series-options/series-options.js';
 
 // Mock the calendar data generator
 vi.mock('../series-options/calendar-data-generator.js', () => ({

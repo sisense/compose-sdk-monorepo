@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import {
-  useState,
-  type FunctionComponent,
-  type InputHTMLAttributes,
   createRef,
   CSSProperties,
+  type FunctionComponent,
+  type InputHTMLAttributes,
   useCallback,
+  useState,
 } from 'react';
+
 import styled from '@emotion/styled';
 import isNumber from 'lodash-es/isNumber';
+
 import { useThemeContext } from '@/theme-provider';
 
 const StyledBasicInput = styled.input`

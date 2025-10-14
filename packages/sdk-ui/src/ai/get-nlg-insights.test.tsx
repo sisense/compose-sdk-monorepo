@@ -1,10 +1,12 @@
+import { screen, waitFor } from '@testing-library/react';
+import { http, HttpResponse } from 'msw';
+
 import { server } from '@/__mocks__/msw';
 import { setup } from '@/__test-helpers__';
-import { screen, waitFor } from '@testing-library/react';
+
 import { AiTestWrapper } from './__mocks__';
-import { http, HttpResponse } from 'msw';
-import GetNlgInsights, { GetNlgInsightsProps } from './get-nlg-insights';
 import { GetNlgInsightsResponse } from './api/types';
+import GetNlgInsights, { GetNlgInsightsProps } from './get-nlg-insights';
 
 const nlgRequest: GetNlgInsightsProps = {
   dataSource: 'Sample ECommerce',

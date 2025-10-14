@@ -1,8 +1,11 @@
-import { describe, it, expect } from 'vitest';
-import { generateTooltipLines, trimUnnecessaryBrackets } from './tooltip-utils';
-import { TFunction } from '@sisense/sdk-common';
 import { ReactNode } from 'react';
+
+import { TFunction } from '@sisense/sdk-common';
+import { describe, expect, it } from 'vitest';
+
 import { FilterRelationsDescription } from '@/utils/filter-relations';
+
+import { generateTooltipLines, trimUnnecessaryBrackets } from './tooltip-utils';
 
 describe('tooltip-utils', () => {
   describe('generateTooltipLines', () => {

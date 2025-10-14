@@ -1,8 +1,9 @@
-import { render } from '@testing-library/react';
-import { HighchartsOptions, SeriesType } from './chart-options-processor/chart-options-service';
 import type { Data } from '@sisense/sdk-data';
-import { BoxplotChart } from './boxplot-chart';
+import { render } from '@testing-library/react';
+
 import { withBlurredRows } from './__test-helpers__';
+import { BoxplotChart } from './boxplot-chart';
+import { HighchartsOptions, SeriesType } from './chart-options-processor/chart-options-service';
 
 const dataSet: Data = {
   columns: [

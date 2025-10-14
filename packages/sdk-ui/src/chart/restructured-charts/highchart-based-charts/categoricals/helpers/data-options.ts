@@ -5,13 +5,14 @@ import {
   Measure,
   MeasureColumn,
 } from '@sisense/sdk-data';
+
 import {
-  ChartDataOptions,
   CategoricalChartDataOptions,
   CategoricalChartDataOptionsInternal,
-  StyledMeasureColumn,
-  StyledColumn,
+  ChartDataOptions,
   ChartDataOptionsInternal,
+  StyledColumn,
+  StyledMeasureColumn,
 } from '@/chart-data-options/types';
 import {
   isMeasureColumn,

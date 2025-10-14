@@ -1,48 +1,20 @@
-import { ExecutePivotQueryParams, ExecuteQueryParams } from '@/query-execution';
-import { WidgetModel } from './widget-model.js';
+import {
+  Attribute,
+  Column,
+  convertDataSource,
+  Filter,
+  JaqlDataSource,
+  JaqlDataSourceForDto,
+  Measure,
+  MeasureColumn,
+} from '@sisense/sdk-data';
+
+import { AppSettings } from '@/app/settings/settings.js';
 import { getTranslatedDataOptions } from '@/chart-data-options/get-translated-data-options';
 import {
   translatePivotTableDataOptions,
   translateTableDataOptions,
 } from '@/chart-data-options/translate-data-options';
-import {
-  getChartType,
-  getFusionWidgetType,
-  getWidgetType,
-  isChartFusionWidget,
-  isChartWidgetProps,
-  isPivotWidget,
-  isCustomWidget,
-  isSupportedWidgetType,
-  isTableWidgetModel,
-  isTextWidget,
-} from '@/widget-by-id/utils.js';
-import {
-  ChartProps,
-  ChartWidgetProps,
-  WidgetProps,
-  PivotTableProps,
-  PivotTableWidgetProps,
-  CustomWidgetProps,
-  TableProps,
-  TableWidgetProps,
-  TextWidgetProps,
-  CommonWidgetProps,
-} from '@/props';
-import { getTableAttributesAndMeasures } from '@/table/hooks/use-table-data';
-import { DEFAULT_TABLE_ROWS_PER_PAGE, PAGES_BATCH_SIZE } from '@/table/table-component';
-import {
-  Attribute,
-  Filter,
-  Measure,
-  MeasureColumn,
-  Column,
-  convertDataSource,
-  JaqlDataSource,
-  JaqlDataSourceForDto,
-} from '@sisense/sdk-data';
-import { TranslatableError } from '../../translation/translatable-error.js';
-import { getPivotQueryOptions } from '@/pivot-table/hooks/use-get-pivot-table-query.js';
 import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
@@ -54,35 +26,10 @@ import {
   TableDataOptionsInternal,
 } from '@/chart-data-options/types.js';
 import {
-  ChartStyleOptions,
-  CompleteThemeSettings,
-  GenericDataOptions,
-  PivotTableWidgetStyleOptions,
-  CustomWidgetStyleOptions,
-  TableStyleOptions,
-  TextWidgetStyleOptions,
-} from '@/types.js';
-import {
-  IndicatorWidgetStyle,
-  Panel,
-  PanelItem,
-  WidgetDto,
-  WidgetStyle,
-} from '@/widget-by-id/types.js';
-import { AppSettings } from '@/app/settings/settings.js';
-import {
-  attachDataSourceToPanels,
-  createDataOptionsFromPanels,
-  createPanelItem,
-  extractDataOptions,
-} from '@/widget-by-id/translate-widget-data-options.js';
-import {
-  extractStyleOptions,
-  getFlattenWidgetDesign,
-  getStyleWithWidgetDesign,
-} from '@/widget-by-id/translate-widget-style-options.js';
-import { extractDrilldownOptions } from '@/widget-by-id/translate-widget-drilldown-options.js';
-import { extractWidgetFilters } from '@/widget-by-id/translate-widget-filters.js';
+  normalizeAnyColumn,
+  normalizeColumn,
+  normalizeMeasureColumn,
+} from '@/chart-data-options/utils.js';
 import {
   isCartesian,
   isCategorical,
@@ -90,12 +37,66 @@ import {
   isScatter,
   isTable,
 } from '@/chart-options-processor/translations/types.js';
-
+import { getPivotQueryOptions } from '@/pivot-table/hooks/use-get-pivot-table-query.js';
 import {
-  normalizeAnyColumn,
-  normalizeColumn,
-  normalizeMeasureColumn,
-} from '@/chart-data-options/utils.js';
+  ChartProps,
+  ChartWidgetProps,
+  CommonWidgetProps,
+  CustomWidgetProps,
+  PivotTableProps,
+  PivotTableWidgetProps,
+  TableProps,
+  TableWidgetProps,
+  TextWidgetProps,
+  WidgetProps,
+} from '@/props';
+import { ExecutePivotQueryParams, ExecuteQueryParams } from '@/query-execution';
+import { getTableAttributesAndMeasures } from '@/table/hooks/use-table-data';
+import { DEFAULT_TABLE_ROWS_PER_PAGE, PAGES_BATCH_SIZE } from '@/table/table-component';
+import {
+  ChartStyleOptions,
+  CompleteThemeSettings,
+  CustomWidgetStyleOptions,
+  GenericDataOptions,
+  PivotTableWidgetStyleOptions,
+  TableStyleOptions,
+  TextWidgetStyleOptions,
+} from '@/types.js';
+import {
+  attachDataSourceToPanels,
+  createDataOptionsFromPanels,
+  createPanelItem,
+  extractDataOptions,
+} from '@/widget-by-id/translate-widget-data-options.js';
+import { extractDrilldownOptions } from '@/widget-by-id/translate-widget-drilldown-options.js';
+import { extractWidgetFilters } from '@/widget-by-id/translate-widget-filters.js';
+import {
+  extractStyleOptions,
+  getFlattenWidgetDesign,
+  getStyleWithWidgetDesign,
+} from '@/widget-by-id/translate-widget-style-options.js';
+import {
+  IndicatorWidgetStyle,
+  Panel,
+  PanelItem,
+  WidgetDto,
+  WidgetStyle,
+} from '@/widget-by-id/types.js';
+import {
+  getChartType,
+  getFusionWidgetType,
+  getWidgetType,
+  isChartFusionWidget,
+  isChartWidgetProps,
+  isCustomWidget,
+  isPivotWidget,
+  isSupportedWidgetType,
+  isTableWidgetModel,
+  isTextWidget,
+} from '@/widget-by-id/utils.js';
+
+import { TranslatableError } from '../../translation/translatable-error.js';
+import { WidgetModel } from './widget-model.js';
 
 /**
  * Translates a {@link WidgetModel} to the parameters for executing a query for the widget.

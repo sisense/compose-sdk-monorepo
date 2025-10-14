@@ -1,18 +1,21 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act } from 'react';
+
+import { QueryResultData } from '@sisense/sdk-data';
 import { trackProductEvent } from '@sisense/sdk-tracking';
-import { useExecuteQuery } from './use-execute-query';
+import { renderHook, waitFor } from '@testing-library/react';
+import type { Mock } from 'vitest';
+
+import { SisenseContextPayload } from '@/sisense-context/sisense-context';
+
+import { ClientApplication } from '../app/client-application';
 import {
+  createExecuteQueryCacheKeyMock,
   executeQueryMock,
   executeQueryWithCacheMock,
-  createExecuteQueryCacheKeyMock,
 } from '../query/__mocks__/execute-query';
-import type { Mock } from 'vitest';
-import { QueryResultData } from '@sisense/sdk-data';
-import { ClientApplication } from '../app/client-application';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { ExecuteQueryParams } from './types';
-import { SisenseContextPayload } from '@/sisense-context/sisense-context';
-import { act } from 'react';
+import { useExecuteQuery } from './use-execute-query';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');

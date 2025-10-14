@@ -1,11 +1,12 @@
 /** @vitest-environment jsdom */
 import { renderHook } from '@testing-library/react';
-import { describe, it, expect, Mock } from 'vitest';
-import { useFinalNlqResponse } from './use-final-nlq-response';
-import { ChatMessage } from './api/types';
+import { describe, expect, it, Mock } from 'vitest';
+
+import { useGetChat as originalUseGetChat } from '@/ai/use-get-chat';
 
 import { useChatHistory as originalUseChatHistory } from './api/chat-history';
-import { useGetChat as originalUseGetChat } from '@/ai/use-get-chat';
+import { ChatMessage } from './api/types';
+import { useFinalNlqResponse } from './use-final-nlq-response';
 
 vi.mock('./api/chat-history', () => ({
   useChatHistory: vi.fn(),

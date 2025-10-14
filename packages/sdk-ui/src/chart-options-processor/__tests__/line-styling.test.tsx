@@ -1,7 +1,9 @@
 import { render } from '@testing-library/react';
 import { vi } from 'vitest';
-import { LineChart, AreaChart, AreaRangeChart } from '@/index';
+
 import type { HighchartsOptions } from '@/chart-options-processor/chart-options-service';
+import { AreaChart, AreaRangeChart, LineChart } from '@/index';
+
 // Mock data for testing
 const mockData = {
   columns: [

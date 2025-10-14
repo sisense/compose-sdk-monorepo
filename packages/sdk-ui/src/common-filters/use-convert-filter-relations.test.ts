@@ -1,9 +1,12 @@
 // useConvertFilterRelations.spec.tsx
-import { useConvertFilterRelations } from './use-convert-filter-relations';
-import { filterFactory } from '@sisense/sdk-data';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { renderHook } from '@testing-library/react';
 import { act } from 'react';
+
+import { filterFactory } from '@sisense/sdk-data';
+import { renderHook } from '@testing-library/react';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+
+import { useConvertFilterRelations } from './use-convert-filter-relations';
 
 describe('useConvertFilterRelations', () => {
   const filter1 = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '25-34']);

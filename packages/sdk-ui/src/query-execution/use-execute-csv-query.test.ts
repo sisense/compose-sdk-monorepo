@@ -1,14 +1,14 @@
 /** @vitest-environment jsdom */
-
-import 'blob-polyfill';
-import { renderHook, waitFor } from '@testing-library/react';
 import { trackProductEvent } from '@sisense/sdk-tracking';
-import { useExecuteCsvQuery } from './use-execute-csv-query.js';
-import { executeCsvQueryMock } from '../query/__mocks__/execute-query.js';
+import { renderHook, waitFor } from '@testing-library/react';
+import 'blob-polyfill';
 import type { Mock } from 'vitest';
+
 import { ClientApplication } from '../app/client-application.js';
+import { executeCsvQueryMock } from '../query/__mocks__/execute-query.js';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context.js';
 import { ExecuteQueryParams } from './types';
+import { useExecuteCsvQuery } from './use-execute-csv-query.js';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');

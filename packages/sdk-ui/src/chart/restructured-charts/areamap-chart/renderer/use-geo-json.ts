@@ -1,10 +1,12 @@
+import { useEffect, useState } from 'react';
+
 import { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { useSisenseContext } from '@/sisense-context/sisense-context.js';
-import { useEffect, useState } from 'react';
+
 import { useRestApi } from '@/api/rest-api.js';
-import { AreamapType } from '@/types.js';
+import { useSisenseContext } from '@/sisense-context/sisense-context.js';
 import { TranslatableError } from '@/translation/translatable-error';
+import { AreamapType } from '@/types.js';
 
 /**
  * Hook to get geoJson from API or cache (LocalStorage)

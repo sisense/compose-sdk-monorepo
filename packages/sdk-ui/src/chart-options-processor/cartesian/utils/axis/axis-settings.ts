@@ -1,30 +1,31 @@
+import { isNumber } from '@sisense/sdk-data';
+import merge from 'deepmerge';
+
 import {
-  xAxisDefaults,
-  yAxisDefaults,
+  CartesianChartDataOptionsInternal,
+  ChartDataOptionsInternal,
+} from '../../../../chart-data-options/types';
+import { CompleteNumberFormatConfig, CompleteThemeSettings } from '../../../../types';
+import {
   fontStyleDefault,
   lineColorDefault,
   stackTotalFontStyleDefault,
+  xAxisDefaults,
+  yAxisDefaults,
 } from '../../../defaults/cartesian';
-import merge from 'deepmerge';
-import {
-  applyFormatPlainText,
-  getCompleteNumberFormatConfig,
-} from '../../../translations/number-format-config';
-import { isNumber } from '@sisense/sdk-data';
-import {
-  ChartDataOptionsInternal,
-  CartesianChartDataOptionsInternal,
-} from '../../../../chart-data-options/types';
-import { CompleteNumberFormatConfig, CompleteThemeSettings } from '../../../../types';
-import { AxisClipped } from '../../../translations/translations-to-highcharts';
 import {
   Axis,
   AxisMinMax,
   AxisOrientation,
+  AxisPlotLine,
   AxisSettings,
   PlotBand,
-  AxisPlotLine,
 } from '../../../translations/axis-section';
+import {
+  applyFormatPlainText,
+  getCompleteNumberFormatConfig,
+} from '../../../translations/number-format-config';
+import { AxisClipped } from '../../../translations/translations-to-highcharts';
 
 /**
  * Builds X-axis settings for categorical axes

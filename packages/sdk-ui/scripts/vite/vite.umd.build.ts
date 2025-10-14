@@ -1,10 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { build } from 'vite';
-import { resolve } from 'path';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import react from '@vitejs/plugin-react-swc';
-import { fileURLToPath } from 'url';
+import { resolve } from 'path';
 import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { build } from 'vite';
 
 import { replaceReact18Hooks } from '../vite-plugins/replace-react18-hooks';
 

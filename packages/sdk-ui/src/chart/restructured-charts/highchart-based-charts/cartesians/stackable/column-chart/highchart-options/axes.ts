@@ -1,14 +1,16 @@
 import flow from 'lodash-es/flow';
-import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
-import { BuildContext } from '../../../../types';
-import { getCartesianXAxis } from '../../../helpers/highchart-options/axis';
+
 import {
   withXAxisLabelPositioning,
   withYAxisLabelPositioning,
 } from '@/chart-options-processor/cartesian/utils/chart-configuration';
-import { getColumnChartSpacingForTotalLabels } from './labels-spacing';
+import { AxisSettings } from '@/chart-options-processor/translations/axis-section';
+
+import { BuildContext } from '../../../../types';
+import { getCartesianXAxis } from '../../../helpers/highchart-options/axis';
 import { getBasicYAxisSettings } from '../../../helpers/highchart-options/y-axis';
 import { withStacking } from '../../helpers/highchart-options/stacking';
+import { getColumnChartSpacingForTotalLabels } from './labels-spacing';
 
 export const getAxes = (
   ctx: BuildContext<'column'>,
@@ -40,7 +42,8 @@ function withColumnChartYAxisLabelPositioning(
 ): (yAxis: AxisSettings[]) => AxisSettings[] {
   // Calculate positioning based on whether total labels are shown with stack100
   const stackOptions = ctx.designOptions;
-  const shouldApplyPositioning = stackOptions.showTotal && stackOptions.stackType === 'stack100';
+  const shouldApplyPositioning =
+    stackOptions.totalLabels?.enabled && stackOptions.stackType === 'stack100';
 
   // Calculate topShift using the same logic as legacy system
   // For column charts, topShift = -1 * (topSpacing / 2) where topSpacing comes from total labels

@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
+
 import { SuggestionsWithIntro } from '../suggestions';
 
 const meta: Meta<typeof SuggestionsWithIntro> = {

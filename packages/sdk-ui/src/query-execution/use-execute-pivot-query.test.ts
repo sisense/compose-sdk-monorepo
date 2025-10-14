@@ -1,12 +1,12 @@
 /** @vitest-environment jsdom */
-
+import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@sisense/sdk-data';
+import { trackProductEvent } from '@sisense/sdk-tracking';
 import { renderHook, waitFor } from '@testing-library/react';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { trackProductEvent } from '@sisense/sdk-tracking';
-import { executePivotQueryMock } from '../query/__mocks__/execute-query';
 import type { Mock } from 'vitest';
-import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@sisense/sdk-data';
+
 import { ClientApplication } from '../app/client-application';
+import { executePivotQueryMock } from '../query/__mocks__/execute-query';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { ExecuteQueryParams } from './types';
 import { useExecutePivotQuery, usePivotQueryParamsChanged } from './use-execute-pivot-query';

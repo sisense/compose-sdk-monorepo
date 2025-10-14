@@ -1,11 +1,11 @@
-import { StackableChartDesignOptions, PolarChartDesignOptions } from './design-options';
+import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
+import { CartesianChartData, CategoricalSeriesValues, ChartData } from '../../chart-data/types';
+import { PolarChartDesignOptions, StackableChartDesignOptions } from './design-options';
 import {
-  formatSeries,
   addStackingIfSpecified,
   determineYAxisOptions,
+  formatSeries,
 } from './translations-to-highcharts';
-import { ChartData, CartesianChartData, CategoricalSeriesValues } from '../../chart-data/types';
-import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
 
 describe('formatSeries', () => {
   const series = {
@@ -206,21 +206,21 @@ describe('addStackingIfSpecified', () => {
     const result = addStackingIfSpecified('line', {
       stackType: 'stacked',
     } as StackableChartDesignOptions);
-    expect(result).toEqual({ showTotal: false });
+    expect(result).toEqual({ totalLabels: { enabled: false } });
   });
 
   it('should return stacking as normal and showTotal as false for polar column chart', () => {
     const result = addStackingIfSpecified('polar', {
       polarType: 'column',
     } as PolarChartDesignOptions);
-    expect(result).toEqual({ stacking: 'normal', showTotal: false });
+    expect(result).toEqual({ stacking: 'normal', totalLabels: { enabled: false } });
   });
 
   it('should return stacking as normal and showTotal as false for polar area chart', () => {
     const result = addStackingIfSpecified('polar', {
       polarType: 'area',
     } as PolarChartDesignOptions);
-    expect(result).toEqual({ stacking: 'normal', showTotal: false });
+    expect(result).toEqual({ stacking: 'normal', totalLabels: { enabled: false } });
   });
 
   it('should throw an error for polar chart with non-polar design options', () => {
@@ -241,9 +241,9 @@ describe('addStackingIfSpecified', () => {
       seriesLabels: {
         enabled: true,
       },
-      showTotal: true,
+      totalLabels: { enabled: true },
     } as unknown as StackableChartDesignOptions);
-    expect(result).toEqual({ stacking: 'normal', showTotal: true });
+    expect(result).toEqual({ stacking: 'normal', totalLabels: { enabled: true } });
   });
 
   it('should return stacking as percent and showTotal based on design options for stack100 chart types', () => {
@@ -252,23 +252,23 @@ describe('addStackingIfSpecified', () => {
       seriesLabels: {
         enabled: true,
       },
-      showTotal: true,
+      totalLabels: { enabled: true },
     } as unknown as StackableChartDesignOptions);
-    expect(result).toEqual({ stacking: 'percent', showTotal: true });
+    expect(result).toEqual({ stacking: 'percent', totalLabels: { enabled: true } });
   });
 
   it('should return showTotal as false if valueLabel is not present in design options', () => {
     const result = addStackingIfSpecified('area', {
       stackType: 'stacked',
     } as StackableChartDesignOptions);
-    expect(result).toEqual({ stacking: 'normal', showTotal: false });
+    expect(result).toEqual({ stacking: 'normal', totalLabels: { enabled: false } });
   });
 
   it('should return showTotal as false for default stack type', () => {
     const result = addStackingIfSpecified('column', {
       stackType: 'classic',
     } as StackableChartDesignOptions);
-    expect(result).toEqual({ showTotal: false });
+    expect(result).toEqual({ totalLabels: { enabled: false } });
   });
 });
 

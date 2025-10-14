@@ -1,6 +1,7 @@
-import { ComponentDecorator } from './as-sisense-component';
 import { useMenuContext } from '@/common/components/menu/menu-context';
 import { MenuProvider } from '@/common/components/menu/menu-provider';
+
+import { ComponentDecorator } from './as-sisense-component';
 
 type MenuConfig = {
   shouldHaveOwnMenuRoot?: boolean;

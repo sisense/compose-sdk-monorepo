@@ -1,5 +1,6 @@
-import { DEFAULT_PALETTE_COLORS } from './consts';
 import { Color } from '../../types';
+import { DEFAULT_PALETTE_COLORS } from './consts';
+
 /**
  * Returns a color from the given palette colors array based on index.
  * If no custom palette supplied, returns a color from the default palette.

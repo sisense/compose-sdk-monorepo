@@ -1,28 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
   type DataService,
   EVENT_DATA_CELL_FORMAT,
   EVENT_HEADER_CELL_FORMAT,
 } from '@sisense/sdk-pivot-client';
 import over from 'lodash-es/over';
+
 import { type PivotTableDataOptionsInternal } from '@/chart-data-options/types';
-import { formatDateValue } from '@/query/date-formats';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { createDataCellValueFormatter, createHeaderCellValueFormatter } from '../formatters';
-import { createHeaderCellHighlightFormatter } from '../formatters/header-cell-formatters/header-cell-highlight-formatter';
-import { createHeaderCellTotalsFormatter } from '@/pivot-table/formatters/header-cell-formatters/header-cell-totals-formatter';
-import { useTranslation } from 'react-i18next';
 import { createDataCellColorFormatter } from '@/pivot-table/formatters/data-cell-formatters/data-cell-color-formatter';
-import {
-  type CustomDataCellFormatter,
-  type CustomHeaderCellFormatter,
-} from '@/pivot-table/formatters/types';
 import {
   createUnifiedDataCellFormatter,
   createUnifiedHeaderCellFormatter,
 } from '@/pivot-table/formatters/formatter-utils';
+import { createHeaderCellTotalsFormatter } from '@/pivot-table/formatters/header-cell-formatters/header-cell-totals-formatter';
+import {
+  type CustomDataCellFormatter,
+  type CustomHeaderCellFormatter,
+} from '@/pivot-table/formatters/types';
+import { formatDateValue } from '@/query/date-formats';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { useThemeContext } from '@/theme-provider';
+
+import { createDataCellValueFormatter, createHeaderCellValueFormatter } from '../formatters';
+import { createHeaderCellHighlightFormatter } from '../formatters/header-cell-formatters/header-cell-highlight-formatter';
 
 /**
  * A hook that applies formatting over pivot table cells.

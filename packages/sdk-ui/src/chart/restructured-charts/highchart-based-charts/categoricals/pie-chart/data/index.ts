@@ -1,5 +1,6 @@
 import { DataTable } from '@/chart-data-processor/table-processor';
-import { loadCategoricalData, getCategoricalChartDataFromTable } from '../../helpers/data';
+
+import { getCategoricalChartDataFromTable, loadCategoricalData } from '../../helpers/data';
 import { PieChartData, PieChartDataOptionsInternal } from '../types';
 
 /**

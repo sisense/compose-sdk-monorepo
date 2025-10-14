@@ -1,9 +1,11 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach, beforeAll, afterAll } from 'vitest';
-import { EditableLayout, EditableLayoutProps } from './editable-layout';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
+
 import * as DM from '../../../__test-helpers__/sample-ecommerce';
+import { EditableLayout, EditableLayoutProps } from './editable-layout';
 
 // Mock dependencies
 vi.mock('@/widgets/widget', () => ({

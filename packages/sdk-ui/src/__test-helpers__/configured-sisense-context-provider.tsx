@@ -1,6 +1,6 @@
+import { mockToken, mockUrl } from '@/__mocks__/msw';
 import { SisenseContextProviderProps } from '@/props';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
-import { mockToken, mockUrl } from '@/__mocks__/msw';
 
 const contextProviderProps: SisenseContextProviderProps = {
   url: mockUrl,

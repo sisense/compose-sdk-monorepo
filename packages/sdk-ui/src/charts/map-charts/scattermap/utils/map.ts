@@ -1,5 +1,6 @@
-import { CompleteThemeSettings } from '@/index';
 import leaflet, { type FitBoundsOptions } from 'leaflet';
+
+import { CompleteThemeSettings } from '@/index';
 
 const DEFAULT_ANIMATION_DURATION = 250;
 

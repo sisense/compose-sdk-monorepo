@@ -1,8 +1,9 @@
-import { getAxes } from './axes';
+import { withPolarSpecificAxisSettings } from '@/chart-options-processor/cartesian/utils/axis/axis-transformers';
+
 import { BuildContext } from '../../../types';
 import { getCartesianXAxis } from '../../helpers/highchart-options/axis';
 import { getBasicYAxisSettings } from '../../helpers/highchart-options/y-axis';
-import { withPolarSpecificAxisSettings } from '@/chart-options-processor/cartesian/utils/axis/axis-transformers';
+import { getAxes } from './axes';
 
 // Mock dependencies
 vi.mock('../../helpers/highchart-options/axis', () => ({

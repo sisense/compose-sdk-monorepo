@@ -1,8 +1,8 @@
 import { IndicatorStyleOptions } from '../../types';
 import { BaseDesignOptions } from '../translations/base-design-options';
 import {
-  IndicatorChartDesignOptions,
   GaugeSpecificDesignOptions,
+  IndicatorChartDesignOptions,
   NumericSpecificDesignOptions,
 } from '../translations/design-options';
 

@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
+
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+
 import { GenericDataOptions } from '@/types';
 
 /**

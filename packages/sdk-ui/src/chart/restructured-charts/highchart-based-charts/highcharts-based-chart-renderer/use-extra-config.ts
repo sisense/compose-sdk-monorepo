@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useThemeContext } from '@/theme-provider/theme-context';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { BuildContext, HighchartBasedChartTypes } from '../types';
+
 import { useDateFormatter } from '@/common/hooks/useDateFormatter';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { useThemeContext } from '@/theme-provider/theme-context';
+
+import { BuildContext, HighchartBasedChartTypes } from '../types';
 
 export function useExtraConfig(): BuildContext<HighchartBasedChartTypes>['extraConfig'] {
   const { app } = useSisenseContext();

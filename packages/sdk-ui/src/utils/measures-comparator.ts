@@ -1,5 +1,4 @@
-import { Element, CalculatedMeasure, Filter, Measure, MeasureContext } from '@sisense/sdk-data';
-
+import { CalculatedMeasure, Element, Filter, Measure, MeasureContext } from '@sisense/sdk-data';
 import isEqual from 'lodash-es/isEqual';
 
 import { areFiltersEqual } from './filters-comparator';

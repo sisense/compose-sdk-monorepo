@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { Dimension, DimensionalDimension } from '@sisense/sdk-data';
+
 import { useThemeContext } from '@/theme-provider';
 
 import { DimensionsBrowser } from '../dimensions-browser/dimensions-browser.js';

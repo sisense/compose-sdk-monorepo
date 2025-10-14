@@ -1,16 +1,18 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useLayoutEffect, useRef, useState } from 'react';
-
-import MessageIcon from './icons/message-icon';
-import ClearChatIcon from './icons/clear-chat-icon';
-import { useChatConfig } from './chat-config';
-import styled from '@emotion/styled';
-import { Themable } from '@/theme-provider/types';
-import { useThemeContext } from '@/theme-provider';
-import { css } from '@emotion/react';
-import ChatDropup, { isCommand } from './chat-dropup';
-import Tooltip from './common/tooltip';
-import { CHAT_INPUT_MAX_LENGTH } from './common/constants';
 import { useTranslation } from 'react-i18next';
+
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+
+import { useChatConfig } from './chat-config';
+import ChatDropup, { isCommand } from './chat-dropup';
+import { CHAT_INPUT_MAX_LENGTH } from './common/constants';
+import Tooltip from './common/tooltip';
+import ClearChatIcon from './icons/clear-chat-icon';
+import MessageIcon from './icons/message-icon';
 
 const ChatInputContainer = styled.div<Themable>`
   display: flex;

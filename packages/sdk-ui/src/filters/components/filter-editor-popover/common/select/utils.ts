@@ -1,4 +1,5 @@
 import { PopoverAnchorPosition } from '@/common/components/popover';
+
 import { SelectItem } from './types';
 
 export const calculatePopoverPosition = (

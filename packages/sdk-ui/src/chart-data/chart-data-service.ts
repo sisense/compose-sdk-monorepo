@@ -1,38 +1,38 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 // Given generic data options and source data, translate into an intermediate
 // data format that is suitable for translation into renderable options via highcharts
+import { TranslatableError } from '@/translation/translatable-error';
+
 import {
-  ChartDataOptionsInternal,
+  BoxplotChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
-  ScatterChartDataOptionsInternal,
+  ChartDataOptionsInternal,
   IndicatorChartDataOptionsInternal,
-  BoxplotChartDataOptionsInternal,
-  ScattermapChartDataOptionsInternal,
   RangeChartDataOptionsInternal,
+  ScatterChartDataOptionsInternal,
+  ScattermapChartDataOptionsInternal,
 } from '../chart-data-options/types';
+import { DataTable } from '../chart-data-processor/table-processor';
 import {
+  isBoxplot,
   isCartesian,
   isCategorical,
-  isScatter,
   isIndicator,
-  isBoxplot,
-  isScattermap,
   isRange,
+  isScatter,
+  isScattermap,
 } from '../chart-options-processor/translations/types';
-import { DataTable } from '../chart-data-processor/table-processor';
 import type { ChartType } from '../types';
+import { advancedAnalyticsData, isForecastChart } from './advanced-analytics-data';
+import { boxplotData } from './boxplot-data';
 import { cartesianData } from './cartesian-data';
 import { categoricalData } from './categorical-data';
-import { scatterData } from './scatter-data';
 import { indicatorData } from './indicator-data';
-
-import { ChartData } from './types';
-import { boxplotData } from './boxplot-data';
-import { scattermapData } from './scattermap-data';
 import { rangeData as getRangeData } from './range-data';
-import { advancedAnalyticsData, isForecastChart } from './advanced-analytics-data';
-import { TranslatableError } from '@/translation/translatable-error';
+import { scatterData } from './scatter-data';
+import { scattermapData } from './scattermap-data';
+import { ChartData } from './types';
 
 export const chartDataService = (
   chartType: ChartType,

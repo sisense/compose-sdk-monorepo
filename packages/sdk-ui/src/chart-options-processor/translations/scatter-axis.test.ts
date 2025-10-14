@@ -1,11 +1,11 @@
+import { fontStyleDefault } from '../defaults/cartesian';
+import { Axis, AxisSettings } from './axis-section';
 import {
   commonColor,
   getScatterXAxisSettings,
   getScatterYAxisSettings,
   scatterFormatter,
 } from './scatter-axis';
-import { Axis, AxisSettings } from './axis-section';
-import { fontStyleDefault } from '../defaults/cartesian';
 
 describe('Scatter axis options', () => {
   const axis: Axis = {

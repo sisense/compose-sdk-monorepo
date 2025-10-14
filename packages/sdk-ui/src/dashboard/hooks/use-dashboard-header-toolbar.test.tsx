@@ -1,7 +1,8 @@
-import { renderHook, act, render, fireEvent } from '@testing-library/react';
-import { useDashboardHeaderToolbar } from './use-dashboard-header-toolbar';
 import '@testing-library/jest-dom';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { act, fireEvent, render, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { useDashboardHeaderToolbar } from './use-dashboard-header-toolbar';
 
 // Mock the theme context
 const mockUseThemeContext = vi.fn();

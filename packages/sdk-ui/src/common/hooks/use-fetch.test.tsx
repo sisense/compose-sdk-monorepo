@@ -1,9 +1,11 @@
-import { renderHook, waitFor } from '@testing-library/react';
-import { useFetch } from './use-fetch.js';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useSisenseContextMock } from '@/sisense-context/__mocks__/sisense-context.js';
 import { type HttpClient } from '@sisense/sdk-rest-client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react';
 import { Mock } from 'vitest';
+
+import { useSisenseContextMock } from '@/sisense-context/__mocks__/sisense-context.js';
+
+import { useFetch } from './use-fetch.js';
 
 const HOST = 'https://my-sisense-instance.com';
 const URL = '/api/v1/dashboards';

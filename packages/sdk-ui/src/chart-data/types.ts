@@ -1,9 +1,9 @@
-import { NumberFormatConfig } from '@/types';
-import { IndicatorChartType } from '@/chart-options-processor/translations/types';
 import { ComparableData, Value } from '@/chart-data-processor/table-processor';
-import { Coordinates } from '@/charts/map-charts/scattermap/types';
+import { IndicatorChartType } from '@/chart-options-processor/translations/types';
 import { AreamapData } from '@/chart/restructured-charts/areamap-chart/types';
 import { CalendarHeatmapChartData } from '@/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/data';
+import { Coordinates } from '@/charts/map-charts/scattermap/types';
+import { NumberFormatConfig } from '@/types';
 
 export type CategoricalXValues = {
   key: string;

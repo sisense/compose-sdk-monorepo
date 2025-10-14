@@ -1,24 +1,25 @@
-import { describe, it, expect } from 'vitest';
 import {
-  mergeFiltersOrFilterRelations,
-  splitFiltersAndRelations,
-  getFiltersArray,
-  combineFiltersAndRelations,
-  isTrivialSingleNodeRelations,
-  calculateNewRelations,
-  type FilterRelationsRules,
-  convertFilterRelationsModelToRelationRules,
-} from './filter-relations';
-
-import {
+  filterFactory,
   FilterRelations,
   FilterRelationsJaql,
   FilterRelationsJaqlIdNode,
-  filterFactory,
   FilterRelationsModel,
   isCascadingFilter,
 } from '@sisense/sdk-data';
+import { describe, expect, it } from 'vitest';
+
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+
+import {
+  calculateNewRelations,
+  combineFiltersAndRelations,
+  convertFilterRelationsModelToRelationRules,
+  type FilterRelationsRules,
+  getFiltersArray,
+  isTrivialSingleNodeRelations,
+  mergeFiltersOrFilterRelations,
+  splitFiltersAndRelations,
+} from './filter-relations';
 
 describe('filter-relations', () => {
   const filter1 = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '25-34']);

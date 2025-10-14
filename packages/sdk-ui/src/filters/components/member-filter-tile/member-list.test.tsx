@@ -1,5 +1,6 @@
 import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
 import { setup } from '../../../__test-helpers__';
 import { MemberList, MemberListProps } from './member-list';
 

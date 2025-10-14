@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { DataSource, DataSourceInfo } from '../interfaces.js';
 import { TranslatableError } from '../translation/translatable-error.js';

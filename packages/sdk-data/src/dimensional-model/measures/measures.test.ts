@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { DimensionalAttribute } from '../attributes.js';

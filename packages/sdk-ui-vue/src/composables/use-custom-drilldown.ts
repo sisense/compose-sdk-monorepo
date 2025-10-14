@@ -1,16 +1,16 @@
-import { MetadataTypes, type Attribute, type Column, type MembersFilter } from '@sisense/sdk-data';
+import type { TFunction } from '@sisense/sdk-common';
+import { type Attribute, type Column, type MembersFilter, MetadataTypes } from '@sisense/sdk-data';
 import {
-  updateDrilldownSelections,
-  isSameAttribute,
-  processDrilldownSelections,
-  translateColumnToAttribute,
   type DataPoint,
   type DrilldownSelection,
   type Hierarchy,
+  isSameAttribute,
+  processDrilldownSelections,
   type StyledColumn,
+  translateColumnToAttribute,
+  updateDrilldownSelections,
 } from '@sisense/sdk-ui-preact';
-import { ref, computed, type Ref } from 'vue';
-import type { TFunction } from '@sisense/sdk-common';
+import { computed, ref, type Ref } from 'vue';
 
 /**
  * @internal

@@ -6,22 +6,23 @@ import {
   LevelAttribute,
   MeasureColumn,
 } from '@sisense/sdk-data';
+
+import { CategoryStyle, StyledColumn, StyledMeasureColumn } from './types';
 import {
-  safeMerge,
-  safeCombine,
-  splitColumn,
-  isMeasureColumn,
-  getDataOptionTitle,
   getDataOptionGranularity,
-  translateColumnToAttribute,
-  translateColumnToMeasure,
-  isStyledColumn,
+  getDataOptionTitle,
   isCategoryStyle,
+  isMeasureColumn,
+  isStyledColumn,
+  normalizeAnyColumn,
   normalizeColumn,
   normalizeMeasureColumn,
-  normalizeAnyColumn,
+  safeCombine,
+  safeMerge,
+  splitColumn,
+  translateColumnToAttribute,
+  translateColumnToMeasure,
 } from './utils';
-import { CategoryStyle, StyledColumn, StyledMeasureColumn } from './types';
 
 const thisColumn: Column = {
   name: 'Years',

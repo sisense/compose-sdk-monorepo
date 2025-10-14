@@ -1,26 +1,28 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import isNumber from 'lodash-es/isNumber';
+
+import { NOT_AVAILABLE_TEXT } from '@/const';
+
 import {
-  applyFormatPlainText,
-  getCompleteNumberFormatConfig,
-} from '../../chart-options-processor/translations/number-format-config';
+  ColoringService,
+  getColoringServiceByColorOptions,
+} from '../../chart-data-options/coloring';
 import { IndicatorChartDataOptions } from '../../chart-data-options/types';
+import { IndicatorChartData } from '../../chart-data/types';
 import {
   IndicatorChartDesignOptions,
   NumericIndicatorSubType,
 } from '../../chart-options-processor/translations/design-options';
-import { IndicatorChartData } from '../../chart-data/types';
-import { LegacyIndicatorChartTypes } from './types';
+import {
+  applyFormatPlainText,
+  getCompleteNumberFormatConfig,
+} from '../../chart-options-processor/translations/number-format-config';
 import { CompleteNumberFormatConfig, NumberFormatConfig } from '../../types';
 import {
   AllowedIndicatorColoringTypes,
   getValueColorOptions,
 } from './indicator-legacy-chart-options/override-with-value-color';
-import {
-  ColoringService,
-  getColoringServiceByColorOptions,
-} from '../../chart-data-options/coloring';
-import isNumber from 'lodash-es/isNumber';
-import { NOT_AVAILABLE_TEXT } from '@/const';
+import { LegacyIndicatorChartTypes } from './types';
 
 export type IndicatorLegacyChartDataOptions = ReturnType<typeof createLegacyChartDataOptions>;
 

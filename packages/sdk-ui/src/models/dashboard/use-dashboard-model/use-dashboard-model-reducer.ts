@@ -1,11 +1,13 @@
-import { DashboardModel, WidgetModel, widgetModelTranslator, WidgetsPanelLayout } from '@/models';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
+
 import { RestApi } from '@/api/rest-api';
-import { filterToFilterDto, layoutToLayoutDto } from '../translate-dashboard-dto-utils';
+import { DashboardModel, WidgetModel, widgetModelTranslator, WidgetsPanelLayout } from '@/models';
 import {
   filterRelationRulesToFilterRelationsModel,
   splitFiltersAndRelations,
 } from '@/utils/filter-relations';
+
+import { filterToFilterDto, layoutToLayoutDto } from '../translate-dashboard-dto-utils';
 
 export type UseDashboardModelState = DashboardModel | null;
 

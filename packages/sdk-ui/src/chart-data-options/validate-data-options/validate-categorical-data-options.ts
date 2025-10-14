@@ -1,5 +1,7 @@
-import { Transformer } from '@/utils/utility-types/transformer';
 import flow from 'lodash-es/flow';
+
+import { Transformer } from '@/utils/utility-types/transformer';
+
 import { CategoricalChartType } from '../../types';
 import { CategoricalChartDataOptions } from '../types';
 

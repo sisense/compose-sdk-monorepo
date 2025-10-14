@@ -1,16 +1,19 @@
+import { useMemo, useState } from 'react';
+
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
-import { useMemo, useState } from 'react';
+
+import { widgetComposer } from '@/analytics-composer';
+import { isTable } from '@/chart-options-processor/translations/types';
+import { useThemeContext } from '@/theme-provider';
+import { TranslatableError } from '@/translation/translatable-error';
+import { isChartWidgetProps } from '@/widget-by-id/utils';
+
 import { WidgetContainerStyleOptions } from '../../types';
 import { ChartWidget } from '../../widgets/chart-widget';
 import { NlqResponseData } from '../api/types';
 import CloseDialogIcon from '../icons/close-dialog-icon';
 import ChartMessageToolbar from './chart-message-toolbar';
-import { widgetComposer } from '@/analytics-composer';
-import { isChartWidgetProps } from '@/widget-by-id/utils';
-import { TranslatableError } from '@/translation/translatable-error';
-import { isTable } from '@/chart-options-processor/translations/types';
-import { useThemeContext } from '@/theme-provider';
 
 type ChartMessageProps = {
   content: NlqResponseData;

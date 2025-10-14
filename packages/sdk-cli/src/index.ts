@@ -1,8 +1,8 @@
 #!/usr/bin/env node
+
 /**
  * @packageDocumentation
  */
-
 // Native fetch() is not available in Node.js until version 18.
 // Polyfill fetch() with cross-fetch for CLI commands if needed.
 // Somehow import 'cross-fetch/polyfill' does not work thus the following workaround
@@ -13,5 +13,6 @@ import 'cross-fetch/dist/node-polyfill.js';
 import 'node-window-polyfill/register.js';
 
 import { runCli } from './run-cli.js';
+
 export * from './types.js';
 runCli();

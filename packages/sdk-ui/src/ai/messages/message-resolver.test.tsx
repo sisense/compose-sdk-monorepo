@@ -1,12 +1,12 @@
 import { render } from '@testing-library/react';
-import { describe, it, expect, Mock } from 'vitest';
-import MessageResolver from './message-resolver';
-import { ChatMessage } from '../api/types';
+import { describe, expect, it, Mock } from 'vitest';
 
+import { ChatMessage } from '../api/types';
 import {
   isNlqMessage as isNlqMessageOriginal,
   isTextMessage as isTextMessageOriginal,
 } from '../use-chat-session';
+import MessageResolver from './message-resolver';
 
 vi.mock('./nlq-message-group', () => ({
   default: vi.fn(({ data: { mockedText, userMsg } }) => <div>{userMsg || mockedText}</div>),

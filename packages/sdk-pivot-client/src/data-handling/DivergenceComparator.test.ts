@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
-import { DivergenceComparator } from './DivergenceComparator.js';
 import { treeNode } from '../tree-structure/utils/index.js';
+import { DivergenceComparator } from './DivergenceComparator.js';
 
 describe('DivergenceComparator', () => {
   let sut: DivergenceComparator;

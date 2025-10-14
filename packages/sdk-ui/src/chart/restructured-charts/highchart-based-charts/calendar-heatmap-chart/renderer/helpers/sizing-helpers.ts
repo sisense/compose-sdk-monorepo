@@ -1,7 +1,8 @@
-import { CalendarHeatmapViewType } from '@/types.js';
-import { ViewType } from '../../types';
-import { CALENDAR_HEATMAP_SIZING } from '../../constants';
 import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
+import { CalendarHeatmapViewType } from '@/types.js';
+
+import { CALENDAR_HEATMAP_SIZING } from '../../constants';
+import { ViewType } from '../../types';
 
 export interface CalendarSize extends ContainerSize {
   cellSize: number;

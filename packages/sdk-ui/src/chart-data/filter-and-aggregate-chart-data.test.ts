@@ -1,4 +1,5 @@
 import { Column, MeasureColumn } from '@sisense/sdk-data';
+
 import {
   createSortableTable,
   rownumColumnName,

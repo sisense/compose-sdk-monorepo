@@ -1,5 +1,5 @@
-import { getLocationsMarkerSizes } from './size';
 import { ScattermapChartLocation } from '../../../../chart-data/types';
+import { getLocationsMarkerSizes } from './size';
 
 describe('getLocationsMarkerSizes', () => {
   it('should calculate marker sizes correctly', () => {

@@ -2,25 +2,26 @@
 //  In all the helper functions here, Date instances are never mutated.
 //  A new Date instance is created if a different Date is needed. Functions in the
 //  `date-fns` library also do not mutate Date instances and always return a new Date instance.
-
-import setYear from 'date-fns/setYear';
+import { DateLevels } from '@sisense/sdk-data';
 import formatInTimeZone from 'date-fns-tz/formatInTimeZone';
+import setYear from 'date-fns/setYear';
+
+import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
+
+import { getBaseDateFnsLocale } from '../../chart-data-processor/data-table-date-period';
+import { parseISOWithTimezoneCheck } from '../../utils/parseISOWithTimezoneCheck';
 import { newDateFormatWithExpandedAngularTextFormats } from './angular-text-date-format-replacers';
 import {
-  newDateFormatWithUnicodeMillisecondsMasks,
+  newDateFormatWithExpandedQuartersMasks,
+  newDateFormatWithExpandedYearsMasks,
+  shiftMonthForFiscal,
+  subtractYearForFiscal,
+} from './fiscal-date-format-replacers';
+import {
   newDateFormatWithExpandedAMPM,
   newDateFormatWithExpandedTimezoneOffset,
+  newDateFormatWithUnicodeMillisecondsMasks,
 } from './simple-date-format-replacers';
-import {
-  subtractYearForFiscal,
-  shiftMonthForFiscal,
-  newDateFormatWithExpandedYearsMasks,
-  newDateFormatWithExpandedQuartersMasks,
-} from './fiscal-date-format-replacers';
-import { getBaseDateFnsLocale } from '../../chart-data-processor/data-table-date-period';
-import { DateLevels } from '@sisense/sdk-data';
-import { parseISOWithTimezoneCheck } from '../../utils/parseISOWithTimezoneCheck';
-import { NOT_AVAILABLE_DATA_VALUE } from '@/const';
 
 export type DateFormat = string;
 

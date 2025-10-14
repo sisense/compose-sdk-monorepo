@@ -1,20 +1,22 @@
+import { useMemo } from 'react';
+import { useCallback } from 'react';
+
+import { getPaletteColor } from '@/chart-data-options/coloring/utils';
 import {
   AreamapChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '@/chart-data-options/types.js';
+import { getDataOptionTitle } from '@/chart-data-options/utils.js';
 import { ChartData } from '@/chart-data/types.js';
 import { DesignOptions } from '@/chart-options-processor/translations/types.js';
-import { AreamapMap } from './areamap-map.js';
-import { useGeoJson } from './use-geo-json.js';
-import { AreamapDataPointEventHandler } from '@/props.js';
 import { ChartRendererProps } from '@/chart/types.js';
+import { AreamapDataPointEventHandler } from '@/props.js';
 import { useThemeContext } from '@/theme-provider';
-import { useMemo } from 'react';
-import { getPaletteColor } from '@/chart-data-options/coloring/utils';
-import { useCallback } from 'react';
-import { getAreamapDataPoint } from './areamap-utils.js';
+
 import { AreamapChartDesignOptions, AreamapData, GeoDataElement } from '../types.js';
-import { getDataOptionTitle } from '@/chart-data-options/utils.js';
+import { AreamapMap } from './areamap-map.js';
+import { getAreamapDataPoint } from './areamap-utils.js';
+import { useGeoJson } from './use-geo-json.js';
 
 export type AreamapProps = {
   chartData: AreamapData;

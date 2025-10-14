@@ -1,27 +1,30 @@
 /** @vitest-environment jsdom */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type { SeriesPieOptions } from '@sisense/sisense-charts';
 import { TFunction } from '@sisense/sdk-common';
-import { highchartsOptionsService, HighchartsOptionsInternal } from './chart-options-service';
-import { CartesianChartData, CategoricalChartData } from '../chart-data/types';
-import { cartesianData } from '../chart-data/cartesian-data';
-import { categoricalData } from '../chart-data/categorical-data';
-import { BaseDesignOptions } from './translations/base-design-options';
-import { createDataTableFromData } from '../chart-data-processor/table-creators';
-import { applyNumberFormatToPlotBands } from './plot-bands';
+import { DateLevels } from '@sisense/sdk-data';
+import type { SeriesPieOptions } from '@sisense/sisense-charts';
+import { describe } from 'vitest';
+
+import { withYAxisNormalizationForPolar } from '@/chart-options-processor/cartesian/utils/axis/axis-builders';
+import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
+
 import {
   CartesianChartDataOptionsInternal,
-  ChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
+  ChartDataOptionsInternal,
   StyledColumn,
 } from '../chart-data-options/types';
-import { ChartDesignOptions, DesignOptions } from './translations/types';
-import { DateLevels } from '@sisense/sdk-data';
+import { createDataTableFromData } from '../chart-data-processor/table-creators';
+import { cartesianData } from '../chart-data/cartesian-data';
+import { categoricalData } from '../chart-data/categorical-data';
+import { CartesianChartData, CategoricalChartData } from '../chart-data/types';
 import { formatDateValue } from '../query/date-formats/apply-date-format';
-import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
-import { describe } from 'vitest';
-import { StackableChartDesignOptions } from '@/chart-options-processor/translations/design-options';
-import { withYAxisNormalizationForPolar } from '@/chart-options-processor/cartesian/utils/axis/axis-builders';
+import { HighchartsOptionsInternal, highchartsOptionsService } from './chart-options-service';
+import { applyNumberFormatToPlotBands } from './plot-bands';
+import { BaseDesignOptions } from './translations/base-design-options';
+import { ChartDesignOptions, DesignOptions } from './translations/types';
 
 const translateMock = ((key: string) => key) as TFunction;
 
@@ -1690,7 +1693,7 @@ describe('highchartsOptionsService - cartesian charts', () => {
         {
           ...baseChartDesignOptions,
           stackType: 'stacked',
-          showTotal: true,
+          totalLabels: { enabled: true },
         } as StackableChartDesignOptions,
         dataOptions,
         translateMock,
@@ -1705,8 +1708,7 @@ describe('highchartsOptionsService - cartesian charts', () => {
         {
           ...baseChartDesignOptions,
           stackType: 'stack100',
-          showTotal: true,
-          totalLabelRotation: 90,
+          totalLabels: { enabled: true, rotation: 90 },
         } as unknown as StackableChartDesignOptions,
         dataOptions,
         translateMock,
@@ -1722,8 +1724,7 @@ describe('highchartsOptionsService - cartesian charts', () => {
         {
           ...baseChartDesignOptions,
           stackType: 'stack100',
-          showTotal: true,
-          totalLabelRotation: 45,
+          totalLabels: { enabled: true, rotation: 45 },
         } as unknown as StackableChartDesignOptions,
         dataOptions,
         translateMock,

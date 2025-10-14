@@ -1,5 +1,7 @@
-import { I18NextInstance } from '@sisense/sdk-common';
 import { useEffect, useState } from 'react';
+
+import { I18NextInstance } from '@sisense/sdk-common';
+
 import { initializeI18n } from './initialize-i18n';
 
 export function useInitializedI18n(): I18NextInstance | null {

@@ -1,16 +1,19 @@
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { useMemo, useState } from 'react';
-import { useThemeContext } from '../../theme-provider';
-import { WidgetContainerStyleOptions } from '../../types';
-import { getSlightlyDifferentColor } from '@/utils/color';
-import { useTranslation } from 'react-i18next';
+
 import ExclamationMarkBrandIcon from '@/ai/icons/exclamation-mark-brand-icon';
 import { Popover } from '@/common/components/popover';
+import { getSlightlyDifferentColor } from '@/utils/color';
+
+import { useThemeContext } from '../../theme-provider';
+import { WidgetContainerStyleOptions } from '../../types';
 
 export default function WidgetHeaderInfoButton({
   title,

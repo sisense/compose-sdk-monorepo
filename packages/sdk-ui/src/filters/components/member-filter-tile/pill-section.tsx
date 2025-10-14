@@ -1,9 +1,12 @@
-import styled from '@emotion/styled';
 import type { FunctionComponent } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+
+import { FilterContentDisplay } from '@/filters/components/common';
+
 import { useThemeContext } from '../../../theme-provider';
 import { Member, SelectedMember } from './members-reducer';
-import { useTranslation } from 'react-i18next';
-import { FilterContentDisplay } from '@/filters/components/common';
 
 const StyledPillButton = styled.button<{
   backgroundColor: string;

@@ -4,6 +4,7 @@ import {
   IncludeAllFilterJaql,
   IncludeMembersFilterJaql,
 } from '@sisense/sdk-data';
+
 import { Panel, PanelItem } from './types.js';
 
 /**

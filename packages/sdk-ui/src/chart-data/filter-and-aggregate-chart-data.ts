@@ -1,6 +1,9 @@
 /* eslint-disable max-params */
 import { CalculatedMeasureColumn, Column, MeasureColumn } from '@sisense/sdk-data';
 import union from 'lodash-es/union';
+
+import { TranslatableError } from '@/translation/translatable-error';
+
 import { DataColumnNamesMapping } from '../chart-data-options/validate-data-options';
 import { rownumColumnName } from '../chart-data-processor/table-creators';
 import {
@@ -11,7 +14,6 @@ import {
   groupBy,
   orderBy,
 } from '../chart-data-processor/table-processor';
-import { TranslatableError } from '@/translation/translatable-error';
 
 // when user supplies chart data, ensure only
 // one measure value exists per row of unique attributes

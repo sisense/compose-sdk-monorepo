@@ -1,13 +1,16 @@
-import { CategoricalSeriesValues } from '../../../chart-data/types';
+import { prepareDataLabelsOptions } from '@/chart-options-processor/series-labels';
+
+import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 import { CartesianChartDataOptionsInternal } from '../../../chart-data-options/types';
+import { CategoricalSeriesValues } from '../../../chart-data/types';
+import { onlyY } from '../../../chart-data/utils';
+import { ChartType, CompleteThemeSettings } from '../../../types';
+import { AxisSettings } from '../../translations/axis-section';
 import {
   CartesianChartDesignOptions,
   LineChartDesignOptions,
 } from '../../translations/design-options';
-import { ChartDesignOptions, SeriesDesignOptions } from '../../translations/types';
-import { ChartType, CompleteThemeSettings } from '../../../types';
-import { AxisSettings } from '../../translations/axis-section';
-import { getDateFormatter } from './axis/axis-utils';
+import { getMarkerSettings } from '../../translations/marker-section';
 import { AxisClipped } from '../../translations/translations-to-highcharts';
 import {
   formatSeries,
@@ -15,11 +18,9 @@ import {
   getColorSetting,
   indexMapWhenOnlyY,
 } from '../../translations/translations-to-highcharts';
+import { ChartDesignOptions, SeriesDesignOptions } from '../../translations/types';
 import { createDataLabelsFormatter } from '../../translations/value-label-section';
-import { getMarkerSettings } from '../../translations/marker-section';
-import { onlyY } from '../../../chart-data/utils';
-import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
-import { prepareDataLabelsOptions } from '@/chart-options-processor/series-labels';
+import { getDateFormatter } from './axis/axis-utils';
 
 /**
  * Configuration for series processing

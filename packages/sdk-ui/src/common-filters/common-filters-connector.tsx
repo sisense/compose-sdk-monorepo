@@ -1,22 +1,18 @@
-import merge from 'ts-deepmerge';
+import { TFunction } from '@sisense/sdk-common';
+import { Attribute, type Filter, isMembersFilter, MembersFilter } from '@sisense/sdk-data';
 import partition from 'lodash-es/partition';
-import { Attribute, isMembersFilter, MembersFilter, type Filter } from '@sisense/sdk-data';
+import merge from 'ts-deepmerge';
+
+import { MenuIds } from '@/common/components/menu/menu-ids';
+import { OpenMenuFn } from '@/common/components/menu/types';
+import { WidgetTypeInternal } from '@/models/widget/types';
+import { ChartWidgetProps } from '@/props';
+import { ChartDataOptions, DataPoint, RenderToolbarHandler } from '@/types';
+import { clearMembersFilter, isIncludeAllFilter, isSameAttribute } from '@/utils/filters';
 import { mergeFilters } from '@/widget-by-id/utils';
-import { WidgetHeaderClearSelectionButton } from './widget-header-clear-selection-button';
-import {
-  ChartDataOptions,
-  ChartWidgetProps,
-  DataPoint,
-  PivotTableDataOptions,
-  RenderToolbarHandler,
-} from '../index.js';
-import { getAllowedFilters } from './utils.js';
-import {
-  CommonFiltersApplyMode,
-  CommonFiltersOptions,
-  CompleteCommonFiltersOptions,
-  PureFilter,
-} from './types.js';
+
+import { PivotTableDataOptions } from '../chart-data-options/types';
+import { withCascadingFiltersConversion } from './cascading-utils';
 import {
   createCommonFiltersOverSelections,
   getSelectableWidgetAttributes,
@@ -24,12 +20,14 @@ import {
   getWidgetSelections,
   getWidgetSelectionsTitleMenuItem,
 } from './selection-utils';
-import { WidgetTypeInternal } from '@/models/widget/types';
-import { withCascadingFiltersConversion } from './cascading-utils';
-import { isSameAttribute, isIncludeAllFilter, clearMembersFilter } from '@/utils/filters';
-import { OpenMenuFn } from '@/common/components/menu/types';
-import { TFunction } from '@sisense/sdk-common';
-import { MenuIds } from '@/common/components/menu/menu-ids';
+import {
+  CommonFiltersApplyMode,
+  CommonFiltersOptions,
+  CompleteCommonFiltersOptions,
+  PureFilter,
+} from './types.js';
+import { getAllowedFilters } from './utils.js';
+import { WidgetHeaderClearSelectionButton } from './widget-header-clear-selection-button';
 
 type CommonFiltersConnectionProps = Pick<
   ChartWidgetProps,

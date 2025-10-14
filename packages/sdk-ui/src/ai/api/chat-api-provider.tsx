@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useMemo } from 'react';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { useSisenseContext } from '../../sisense-context/sisense-context';

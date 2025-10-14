@@ -1,5 +1,6 @@
-import { Themable } from '@/theme-provider/types';
 import type { SVGProps } from 'react';
+
+import { Themable } from '@/theme-provider/types';
 
 export const DoubleArrowIcon = (
   props: Pick<SVGProps<SVGElement>, 'className' | 'width' | 'height' | 'fill' | 'onClick'> & {

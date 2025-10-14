@@ -1,6 +1,8 @@
 import { Feature as GeoJsonFeature } from 'geojson';
 import { PathOptions } from 'leaflet';
+
 import { AreamapType } from '@/types.js';
+
 import { GeoDataElement } from '../types.js';
 import { ALTERNATIVE_COUNTRY_NAMES_DICTIONARY } from './alternative-country-names-dictionary.js';
 

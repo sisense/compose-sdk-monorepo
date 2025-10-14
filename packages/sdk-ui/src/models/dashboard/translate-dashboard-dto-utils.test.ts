@@ -1,8 +1,10 @@
 import { filterFactory, measureFactory, MembersFilter } from '@sisense/sdk-data';
-import * as DM from '../../__test-helpers__/sample-ecommerce';
-import { filterToFilterDto } from '@/models/dashboard/translate-dashboard-dto-utils';
+
 import { CascadingFilterDto, FilterDto } from '@/api/types/dashboard-dto';
+import { filterToFilterDto } from '@/models/dashboard/translate-dashboard-dto-utils';
 import { layoutToLayoutDto } from '@/models/dashboard/translate-dashboard-dto-utils';
+
+import * as DM from '../../__test-helpers__/sample-ecommerce';
 
 describe('baseFilterToFilterDto', () => {
   it('should return correctly translated simple filter', () => {

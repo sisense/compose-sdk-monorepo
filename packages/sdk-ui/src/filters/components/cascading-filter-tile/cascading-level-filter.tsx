@@ -1,23 +1,25 @@
 import {
   DataSource,
   Filter,
-  LevelAttribute,
-  isMembersFilter,
-  isDateRangeFilter,
-  isRelativeDateFilter,
-  isMeasureFilter,
-  isTextFilter,
-  isRankingFilter,
   isCustomFilter,
+  isDateRangeFilter,
+  isMeasureFilter,
+  isMembersFilter,
+  isRankingFilter,
+  isRelativeDateFilter,
+  isTextFilter,
+  LevelAttribute,
 } from '@sisense/sdk-data';
-import { MemberFilterTile } from '../member-filter-tile/index.js';
+
+import { CustomFilterTile } from '@/filters';
+import { UnsupportedFilterTile } from '@/filters/components/unsupported-filter-tile';
+import { useThemeContext } from '@/theme-provider';
+import { getSlightlyDifferentColor, TRIANGLE_COLOR_ADJUSTMENT } from '@/utils/color';
+
 import { CriteriaFilterTile } from '../criteria-filter-tile/index.js';
 import { DateRangeFilterTile, RelativeDateFilterTile } from '../date-filter/index.js';
 import { CompleteFilterTileDesignOptions } from '../filter-tile-container.js';
-import { useThemeContext } from '@/theme-provider';
-import { TRIANGLE_COLOR_ADJUSTMENT, getSlightlyDifferentColor } from '@/utils/color';
-import { CustomFilterTile } from '@/filters';
-import { UnsupportedFilterTile } from '@/filters/components/unsupported-filter-tile';
+import { MemberFilterTile } from '../member-filter-tile/index.js';
 
 /**
  * Props of the {@link CascadingLevelFilterTile} component

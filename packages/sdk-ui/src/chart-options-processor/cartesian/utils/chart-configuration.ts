@@ -1,4 +1,5 @@
 import { ChartDesignOptions } from '@/chart-options-processor/translations/types';
+
 import { AxisSettings } from '../../translations/axis-section';
 
 /**
@@ -31,8 +32,8 @@ const withStackLabelPositioning =
       ...axis,
       stackLabels: {
         ...axis.stackLabels,
-        x: rightShift,
-        y: topShift,
+        x: (axis.stackLabels.x ?? 0) + rightShift,
+        y: (axis.stackLabels.y ?? 0) + topShift,
       },
     };
   };

@@ -1,27 +1,28 @@
 import {
+  CalculatedMeasureColumn,
+  Column,
+  ForecastFormulaOptions,
+  MeasureColumn,
+  PivotGrandTotals,
+  TotalsCalculation,
+  TrendFormulaOptions,
+} from '@sisense/sdk-data';
+
+import {
   ConditionalDataColorOptions,
   DataColorOptions,
   UniformDataColorOptions,
 } from '../chart-data/data-coloring';
 import type {
-  NumberFormatConfig,
-  SeriesChartType,
-  ValueToColorMap,
-  MultiColumnValueToColorMap,
   LineWidth,
   Markers,
-  SortDirection,
+  MultiColumnValueToColorMap,
+  NumberFormatConfig,
   PivotRowsSort,
+  SeriesChartType,
+  SortDirection,
+  ValueToColorMap,
 } from '../types';
-import {
-  Column,
-  MeasureColumn,
-  CalculatedMeasureColumn,
-  PivotGrandTotals,
-  TotalsCalculation,
-  ForecastFormulaOptions,
-  TrendFormulaOptions,
-} from '@sisense/sdk-data';
 
 /**
  * Styles for a category/column when visualized in a chart

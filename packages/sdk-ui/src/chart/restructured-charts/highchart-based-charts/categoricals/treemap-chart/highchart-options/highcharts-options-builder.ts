@@ -1,8 +1,9 @@
-import { HighchartsOptionsBuilder } from '../../../types';
 import { getDataOptionTitle } from '@/chart-data-options/utils';
-import { prepareTreemapDataItems } from '@/chart-options-processor/translations/treemap/treemap-series';
 import { prepareTreemapLevels } from '@/chart-options-processor/translations/treemap/treemap-labels';
+import { prepareTreemapDataItems } from '@/chart-options-processor/translations/treemap/treemap-series';
 import { getTreemapTooltipSettings } from '@/chart-options-processor/translations/treemap/treemap-tooltip';
+
+import { HighchartsOptionsBuilder } from '../../../types';
 
 const DEFAULT_TREEMAP_SERIES_COLOR = 'rgb(0, 206, 230)';
 

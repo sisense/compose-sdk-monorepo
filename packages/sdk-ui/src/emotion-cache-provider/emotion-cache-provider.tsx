@@ -1,7 +1,10 @@
 import React, { ReactNode, useMemo } from 'react';
-import { CacheProvider } from '@emotion/react';
+
 import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
+
 import { getNonceFromMetaTag } from './utils';
+
 /**
  * Creates an Emotion cache only if a nonce is present in the DOM.
  * This cache will be used to inject styles in a way that is compatible with Content Security Policy (CSP).

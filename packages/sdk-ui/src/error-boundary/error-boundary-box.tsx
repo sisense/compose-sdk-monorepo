@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import styles from './error-boundary-box.module.scss';
 import { useTranslation } from 'react-i18next';
+
 import { AbstractTranslatableError } from '@sisense/sdk-common';
-import { TranslatableError } from '../translation/translatable-error';
+
 import ExclamationMarkIcon from '@/common/icons/exclamation-mark-icon';
-import { useThemeContext } from '@/theme-provider/theme-context';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { DEFAULT_TEXT_COLOR } from '@/const';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+import { useThemeContext } from '@/theme-provider/theme-context';
+
+import { TranslatableError } from '../translation/translatable-error';
+import styles from './error-boundary-box.module.scss';
 
 /**
  * This component is used to display an error message when a component fails to render.

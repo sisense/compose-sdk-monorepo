@@ -1,6 +1,8 @@
-import { describe, it, expect } from 'vitest';
-import { dataOptionsTranslators } from './index';
+import { describe, expect, it } from 'vitest';
+
 import { CategoricalChartDataOptions } from '@/chart-data-options/types';
+
+import { dataOptionsTranslators } from './index';
 
 describe('Treemap Data Options Translators', () => {
   const sampleDataOptions: CategoricalChartDataOptions = {

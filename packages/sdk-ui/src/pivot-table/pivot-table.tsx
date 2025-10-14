@@ -1,27 +1,30 @@
 /* eslint-disable promise/catch-or-return */
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import {
   EVENT_SORTING_SETTINGS_CHANGED,
   type SortingSettingsChangePayload,
 } from '@sisense/sdk-pivot-client';
-import { PivotTableProps } from '../props';
-import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
-import { useSisenseContext } from '../sisense-context/sisense-context';
-import { preparePivotRowsSortCriteriaList } from './sorting-utils';
-import { DEFAULT_PIVOT_TABLE_SIZE, DynamicSizeContainer } from '@/dynamic-size-container';
-import { type ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
-import { useThemeContext } from '@/theme-provider';
+
 import { LoadingOverlay } from '@/common/components/loading-overlay';
 import { useHasChanged } from '@/common/hooks/use-has-changed';
+import { DEFAULT_PIVOT_TABLE_SIZE, DynamicSizeContainer } from '@/dynamic-size-container';
+import { type ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { NoResultsOverlay } from '@/no-results-overlay/no-results-overlay';
+import { useThemeContext } from '@/theme-provider';
+import { TranslatableError } from '@/translation/translatable-error';
+
+import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
+import { PivotTableProps } from '../props';
+import { useSisenseContext } from '../sisense-context/sisense-context';
+import { useApplyPivotTableFormatting } from './hooks/use-apply-pivot-table-formatting';
+import { usePivotTableQuery } from './hooks/use-get-pivot-table-query';
+import { usePivotBuilder } from './hooks/use-pivot-builder';
 import { usePivotDataLoading } from './hooks/use-pivot-data-loading';
 import { usePivotDataService } from './hooks/use-pivot-data-service';
 import { usePivotTableDataOptionsInternal } from './hooks/use-pivot-table-data-options-internal';
-import { useApplyPivotTableFormatting } from './hooks/use-apply-pivot-table-formatting';
-import { usePivotTableQuery } from './hooks/use-get-pivot-table-query';
 import { useRenderPivot } from './hooks/use-render-pivot';
-import { TranslatableError } from '@/translation/translatable-error';
-import { usePivotBuilder } from './hooks/use-pivot-builder';
+import { preparePivotRowsSortCriteriaList } from './sorting-utils';
 
 /**
  * Pivot table with pagination.

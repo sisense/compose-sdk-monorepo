@@ -1,9 +1,10 @@
+import { isLegendOnRight } from '@/chart-options-processor/translations/legend-section';
+
+import { CartesianChartDataOptionsInternal } from '../../../chart-data-options/types';
+import { CartesianChartData } from '../../../chart-data/types';
 import { ChartType } from '../../../types';
 import { StackableChartDesignOptions } from '../../translations/design-options';
-import { CartesianChartData } from '../../../chart-data/types';
-import { CartesianChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { ChartDesignOptions } from '../../translations/types';
-import { isLegendOnRight } from '@/chart-options-processor/translations/legend-section';
 
 const DEFAULT_CHART_SPACING = 20;
 
@@ -79,9 +80,9 @@ export function getChartSpacingForTotalLabels(
   let rightSpacing = 0;
   let topSpacing = 0;
 
-  if (chartDesignOptions.showTotal && chartDesignOptions.stackType === 'stack100') {
+  if (chartDesignOptions.totalLabels?.enabled && chartDesignOptions.stackType === 'stack100') {
     const rotation =
-      Math.abs(chartDesignOptions.totalLabelRotation || 0) % ROTATION_CALCULATION.FULL_ROTATION;
+      Math.abs(chartDesignOptions.totalLabels.rotation || 0) % ROTATION_CALCULATION.FULL_ROTATION;
 
     if (chartType === 'bar') {
       if (rotation < LABEL_ROTATION_THRESHOLD.HORIZONTAL) {

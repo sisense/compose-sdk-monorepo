@@ -1,12 +1,3 @@
-import { WidgetProps } from '@/props';
-import type {
-  JtdConfig,
-  JtdTarget,
-  JumpToDashboardConfig,
-  JumpToDashboardConfigForPivot,
-  PivotDimId,
-  PivotDimType,
-} from './jtd-types';
 import type {
   Attribute,
   CalculatedMeasureColumn,
@@ -15,14 +6,22 @@ import type {
   Measure,
   MeasureColumn,
 } from '@sisense/sdk-data';
-import {
-  isPivotTableWidgetProps,
-  PivotTableDataOptions,
-  StyledColumn,
-  StyledMeasureColumn,
-} from '@/index-typedoc';
-import type { Panel, PanelItem } from '@/widget-by-id/types';
+
+import { PivotTableDataOptions } from '@/chart-data-options/types';
+import { WidgetProps } from '@/props';
+import { StyledColumn, StyledMeasureColumn } from '@/types';
 import { createPanelItem } from '@/widget-by-id/translate-widget-data-options';
+import type { Panel, PanelItem } from '@/widget-by-id/types';
+import { isPivotTableWidgetProps } from '@/widget-by-id/utils';
+
+import type {
+  JtdConfig,
+  JtdTarget,
+  JumpToDashboardConfig,
+  JumpToDashboardConfigForPivot,
+  PivotDimId,
+  PivotDimType,
+} from './jtd-types';
 
 /**
  * Transform legacy JtdConfig to new JumpToDashboardConfig format

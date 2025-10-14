@@ -1,4 +1,5 @@
 import MuiTooltip, { type TooltipProps as MuiTooltipProps } from '@mui/material/Tooltip';
+
 import { useThemeContext } from '@/theme-provider';
 
 type TooltipProps = Pick<MuiTooltipProps, 'title' | 'placement' | 'children'>;

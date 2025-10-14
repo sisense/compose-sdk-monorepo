@@ -1,14 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { SearchIcon } from '@/common/icons/search-icon';
 import {
   createRef,
-  useEffect,
-  useState,
   type FunctionComponent,
   type InputHTMLAttributes,
+  useEffect,
+  useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { SearchIcon } from '@/common/icons/search-icon';
 
 type InputProps = {
   variant?: 'white' | 'grey';

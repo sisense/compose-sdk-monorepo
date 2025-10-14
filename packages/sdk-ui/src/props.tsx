@@ -1,95 +1,97 @@
 /* eslint-disable max-lines */
+import { ComponentType, PropsWithChildren, ReactNode } from 'react';
+
 import {
   Attribute,
-  Filter,
-  Measure,
-  DataSource,
   Data,
-  QueryResultData,
+  DataSource,
+  Filter,
   FilterRelations,
+  Measure,
+  QueryResultData,
 } from '@sisense/sdk-data';
+
+import { AppConfig } from './app/client-application';
 import {
-  ChartDataOptions,
-  CartesianChartDataOptions,
-  CategoricalChartDataOptions,
-  ThemeSettings,
-  PolarStyleOptions,
-  PieStyleOptions,
-  StackableStyleOptions,
-  LineStyleOptions,
-  AreaStyleOptions,
-  FunnelStyleOptions,
-  ScatterStyleOptions,
-  ChartStyleOptions,
-  ChartType,
-  IndicatorStyleOptions,
-  DrilldownOptions,
-  ThemeOid,
-  TreemapStyleOptions,
-  CustomDrilldownResult,
-  MenuPosition,
-  MenuAlignment,
-  MenuItemSection,
-  SunburstStyleOptions,
-  ChartWidgetStyleOptions,
-  TableWidgetStyleOptions,
-  WidgetByIdStyleOptions,
-  BoxplotStyleOptions,
-  ScattermapStyleOptions,
-  AreamapStyleOptions,
-  DataPoint,
-  ScatterDataPoint,
-  AreamapDataPoint,
-  BoxplotDataPoint,
-  ChartDataPoints,
-  ScattermapDataPoint,
-  PivotTableStyleOptions,
-  PivotTableWidgetStyleOptions,
-  RegularChartType,
-  RegularChartStyleOptions,
-  TabularChartStyleOptions,
-  TableStyleOptions,
-  AreaRangeStyleOptions,
-  DrilldownSelection,
-  TextWidgetStyleOptions,
-  GenericDataOptions,
-  IndicatorRenderOptions,
-  TabberStyleProps,
-  IndicatorDataPoint,
-  TextWidgetDataPoint,
-  CustomWidgetStyleOptions,
-  PivotTableDataPoint,
-  CalendarHeatmapStyleOptions,
-  CalendarHeatmapDataPoint,
-} from './types';
+  AreamapChartDataOptions,
+  BoxplotChartCustomDataOptions,
+  BoxplotChartDataOptions,
+  CalendarHeatmapChartDataOptions,
+  IndicatorChartDataOptions,
+  PivotTableDataOptions,
+  RangeChartDataOptions,
+  RegularChartDataOptions,
+  ScatterChartDataOptions,
+  ScattermapChartDataOptions,
+  TableDataOptions,
+  TabularChartDataOptions,
+} from './chart-data-options/types';
+import { HighchartsOptions } from './chart-options-processor/chart-options-service';
+import { BeforeMenuOpenHandler } from './common/components/menu/types';
+import { HookEnableParam } from './common/hooks/types';
+import { Hierarchy } from './models';
 import {
   type CustomDataCellFormatter,
   type CustomHeaderCellFormatter,
 } from './pivot-table/formatters/types';
-import { HighchartsOptions } from './chart-options-processor/chart-options-service';
-import { ComponentType, PropsWithChildren, ReactNode } from 'react';
-import {
-  IndicatorChartDataOptions,
-  BoxplotChartCustomDataOptions,
-  BoxplotChartDataOptions,
-  ScatterChartDataOptions,
-  TableDataOptions,
-  ScattermapChartDataOptions,
-  AreamapChartDataOptions,
-  PivotTableDataOptions,
-  RegularChartDataOptions,
-  TabularChartDataOptions,
-  RangeChartDataOptions,
-  CalendarHeatmapChartDataOptions,
-} from './chart-data-options/types';
-import { AppConfig } from './app/client-application';
 import { ExecuteQueryParams, QueryByWidgetIdState } from './query-execution';
-import { FiltersMergeStrategy } from './widget-by-id/types';
-import { HookEnableParam } from './common/hooks/types';
 import { ExecuteQueryResult } from './query-execution/types';
-import { Hierarchy } from './models';
-import { BeforeMenuOpenHandler } from './common/components/menu/types';
+import {
+  AreamapDataPoint,
+  AreamapStyleOptions,
+  AreaRangeStyleOptions,
+  AreaStyleOptions,
+  BoxplotDataPoint,
+  BoxplotStyleOptions,
+  CalendarHeatmapDataPoint,
+  CalendarHeatmapStyleOptions,
+  CartesianChartDataOptions,
+  CategoricalChartDataOptions,
+  ChartDataOptions,
+  ChartDataPoints,
+  ChartStyleOptions,
+  ChartType,
+  ChartWidgetStyleOptions,
+  CustomDrilldownResult,
+  CustomWidgetStyleOptions,
+  DataPoint,
+  DrilldownOptions,
+  DrilldownSelection,
+  FunnelStyleOptions,
+  GenericDataOptions,
+  IndicatorDataPoint,
+  IndicatorRenderOptions,
+  IndicatorStyleOptions,
+  LineStyleOptions,
+  MenuAlignment,
+  MenuItemSection,
+  MenuPosition,
+  PieStyleOptions,
+  PivotTableDataPoint,
+  PivotTableStyleOptions,
+  PivotTableWidgetStyleOptions,
+  PolarStyleOptions,
+  RegularChartStyleOptions,
+  RegularChartType,
+  ScatterDataPoint,
+  ScattermapDataPoint,
+  ScattermapStyleOptions,
+  ScatterStyleOptions,
+  StackableStyleOptions,
+  SunburstStyleOptions,
+  TabberStyleProps,
+  TableStyleOptions,
+  TableWidgetStyleOptions,
+  TabularChartStyleOptions,
+  TextWidgetDataPoint,
+  TextWidgetStyleOptions,
+  ThemeOid,
+  ThemeSettings,
+  TreemapStyleOptions,
+  WidgetByIdStyleOptions,
+} from './types';
 import { DistributiveOmit } from './utils/utility-types/distributive-omit';
+import { FiltersMergeStrategy } from './widget-by-id/types';
 
 export type { MenuItemSection, HighchartsOptions };
 

@@ -1,39 +1,39 @@
 import {
-  PolarStyleOptions,
-  PieStyleOptions,
-  LineStyleOptions,
-  FunnelStyleOptions,
-  ChartType,
-  ChartStyleOptions,
-  IndicatorStyleOptions,
-  ScatterStyleOptions,
-  AreaStyleOptions,
-  TreemapStyleOptions,
-  SunburstStyleOptions,
-  BoxplotStyleOptions,
-  ScattermapStyleOptions,
-} from '../../types';
-import { DesignOptions } from '../translations/types';
-import { chartSubtypeToDesignOptions } from '../subtype-to-design-options';
-import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
   ValueStyle,
 } from '../../chart-data-options/types';
-import { getIndicatorChartDesignOptions } from './translate-to-indicator-options';
+import { TranslatableError } from '../../translation/translatable-error';
 import {
+  AreaStyleOptions,
+  BoxplotStyleOptions,
+  ChartStyleOptions,
+  ChartType,
+  FunnelStyleOptions,
+  IndicatorStyleOptions,
+  LineStyleOptions,
+  PieStyleOptions,
+  PolarStyleOptions,
+  ScattermapStyleOptions,
+  ScatterStyleOptions,
+  SunburstStyleOptions,
+  TreemapStyleOptions,
+} from '../../types';
+import { chartSubtypeToDesignOptions } from '../subtype-to-design-options';
+import { DesignOptions } from '../translations/types';
+import {
+  getAreaChartDesignOptions,
+  getBoxplotChartDesignOptions,
+  getFunnelChartDesignOptions,
   getLineChartDesignOptions,
   getPieChartDesignOptions,
-  getFunnelChartDesignOptions,
   getPolarChartDesignOptions,
   getScatterChartDesignOptions,
-  getAreaChartDesignOptions,
-  getTreemapChartDesignOptions,
-  getSunburstChartDesignOptions,
-  getBoxplotChartDesignOptions,
   getScattermapChartDesignOptions,
+  getSunburstChartDesignOptions,
+  getTreemapChartDesignOptions,
 } from './translate-to-highcharts-options';
-import { TranslatableError } from '../../translation/translatable-error';
+import { getIndicatorChartDesignOptions } from './translate-to-indicator-options';
 
 export const translateStyleOptionsToDesignOptions = (
   chartType: ChartType,

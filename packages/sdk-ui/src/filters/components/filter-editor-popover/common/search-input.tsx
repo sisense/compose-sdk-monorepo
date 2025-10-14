@@ -1,5 +1,7 @@
-import { SearchIcon } from '@/common/icons/search-icon';
 import { CSSProperties } from 'react';
+
+import { SearchIcon } from '@/common/icons/search-icon';
+
 import { Input } from './input';
 
 type SearchInputProps = {

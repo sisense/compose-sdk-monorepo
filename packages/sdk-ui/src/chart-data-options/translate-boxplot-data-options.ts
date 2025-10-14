@@ -5,15 +5,16 @@ import {
   Column,
   MeasureColumn,
 } from '@sisense/sdk-data';
+
 import {
-  BoxplotChartDataOptions,
   BoxplotChartCustomDataOptions,
+  BoxplotChartDataOptions,
   BoxplotChartDataOptionsInternal,
-  StyledColumn,
   BoxWhiskerType,
+  StyledColumn,
   StyledMeasureColumn,
 } from './types';
-import { getDataOptionTitle, splitColumn, normalizeColumn, normalizeMeasureColumn } from './utils';
+import { getDataOptionTitle, normalizeColumn, normalizeMeasureColumn, splitColumn } from './utils';
 
 const boxWhiskerValues = (target: Attribute, type: BoxWhiskerType) => {
   switch (type) {

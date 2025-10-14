@@ -1,18 +1,15 @@
 import {
-  MetadataTypes,
-  isNumber as isNumberType,
   isDatetime as isDatetimeType,
+  isNumber as isNumberType,
   Measure,
+  MetadataTypes,
 } from '@sisense/sdk-data';
 import isDate from 'lodash-es/isDate';
-import {
-  DataPoint,
-  HighchartsPoint,
-  ScatterDataPoint,
-  BoxplotDataPoint,
-  CalendarHeatmapDataPoint,
-} from '../types';
-import { SisenseChartDataPoint } from '../sisense-chart/types';
+
+import { getDataOptionGranularity } from '@/chart-data-options/utils';
+import { formatDatetimeString } from '@/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
+import { formatDateValue } from '@/query/date-formats';
+
 import {
   BoxplotChartDataOptionsInternal,
   CalendarHeatmapChartDataOptionsInternal,
@@ -25,14 +22,19 @@ import {
   StyledColumn,
   StyledMeasureColumn,
 } from '..';
+import { SisenseChartDataPoint } from '../sisense-chart/types';
+import {
+  BoxplotDataPoint,
+  CalendarHeatmapDataPoint,
+  DataPoint,
+  HighchartsPoint,
+  ScatterDataPoint,
+} from '../types';
+import { getDefaultDateFormat } from './translations/axis-section';
 import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from './translations/number-format-config';
-import { formatDatetimeString } from '@/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
-import { getDefaultDateFormat } from './translations/axis-section';
-import { formatDateValue } from '@/query/date-formats';
-import { getDataOptionGranularity } from '@/chart-data-options/utils';
 
 type FormatterFn = (value: any) => string;
 

@@ -1,4 +1,5 @@
-import { useEffect, useRef, type FunctionComponent, type InputHTMLAttributes } from 'react';
+import { type FunctionComponent, type InputHTMLAttributes, useEffect, useRef } from 'react';
+
 import classNames from 'classnames';
 
 type CheckboxProps = {

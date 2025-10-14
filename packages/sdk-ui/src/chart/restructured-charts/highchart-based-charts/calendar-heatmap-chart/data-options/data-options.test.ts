@@ -1,16 +1,18 @@
-import { describe, it, expect, vi } from 'vitest';
-import {
-  translateCalendarHeatmapChartDataOptions,
-  getCalendarHeatmapAttributes,
-  getCalendarHeatmapMeasures,
-  isCalendarHeatmapChartDataOptions,
-  isCalendarHeatmapChartDataOptionsInternal,
-} from './data-options.js';
+import { DateLevels, DimensionalLevelAttribute } from '@sisense/sdk-data';
+import { describe, expect, it, vi } from 'vitest';
+
 import {
   CalendarHeatmapChartDataOptions,
   CalendarHeatmapChartDataOptionsInternal,
 } from '@/chart-data-options/types';
-import { DateLevels, DimensionalLevelAttribute } from '@sisense/sdk-data';
+
+import {
+  getCalendarHeatmapAttributes,
+  getCalendarHeatmapMeasures,
+  isCalendarHeatmapChartDataOptions,
+  isCalendarHeatmapChartDataOptionsInternal,
+  translateCalendarHeatmapChartDataOptions,
+} from './data-options.js';
 
 vi.mock('@/chart-options-processor/translations/axis-section', () => ({
   getDefaultDateFormat: vi.fn(() => 'MM/dd/yyyy'),

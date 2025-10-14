@@ -1,11 +1,12 @@
-import { TranslatableError } from '@/translation/translatable-error';
-import { ExpandedQueryModel, SimpleQueryModel } from '../types.js';
 import { ChartWidgetProps, PivotTableWidgetProps } from '@/props';
-import { ExecuteQueryParams, ExecutePivotQueryParams } from '@/query-execution';
+import { ExecutePivotQueryParams, ExecuteQueryParams } from '@/query-execution';
+import { TranslatableError } from '@/translation/translatable-error';
+
 import {
   ALL_CHART_TYPES,
   DynamicChartType,
 } from '../../chart-options-processor/translations/types.js';
+import { ExpandedQueryModel, SimpleQueryModel } from '../types.js';
 
 export function toKebabCase(str: string): string {
   return str

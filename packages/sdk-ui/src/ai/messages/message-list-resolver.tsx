@@ -1,9 +1,9 @@
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+import { useTranslation } from 'react-i18next';
 
 import { ChatMessage } from '../api/types';
 import MessageResolver from './message-resolver';
 import TextMessage from './text-message';
-import { useTranslation } from 'react-i18next';
 
 const unexpectedErrorHandler = ({
   error,

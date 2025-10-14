@@ -1,11 +1,11 @@
-import { resolve } from 'node:path';
 import react from '@vitejs/plugin-react-swc';
-import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
-import checker from 'vite-plugin-checker';
-import replace from 'rollup-plugin-re';
+import { resolve } from 'node:path';
 import { OutputChunk } from 'rollup';
+import replace from 'rollup-plugin-re';
+import { defineConfig } from 'vite';
+import checker from 'vite-plugin-checker';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
+import dts from 'vite-plugin-dts';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({

@@ -1,14 +1,16 @@
-import { Dashboard, DashboardChangeAction } from './dashboard';
-import { DashboardByIdProps, DashboardConfig } from './types';
+import { useCallback, useMemo } from 'react';
+
 import { LoadingOverlay } from '@/common/components/loading-overlay';
+import { useDefaults } from '@/common/hooks/use-defaults';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-translator';
-import { useDashboardModelInternal } from '@/models/dashboard/use-dashboard-model/use-dashboard-model';
-import { useCallback, useMemo } from 'react';
 import { dashboardChangeActionToUseDashboardModelAction } from '@/models/dashboard/use-dashboard-model/use-dasboard-model-utils';
+import { useDashboardModelInternal } from '@/models/dashboard/use-dashboard-model/use-dashboard-model';
 import { TranslatableError } from '@/translation/translatable-error';
-import { useDefaults } from '@/common/hooks/use-defaults';
+
 import { DEFAULT_DASHBOARD_BY_ID_CONFIG } from './constants';
+import { Dashboard, DashboardChangeAction } from './dashboard';
+import { DashboardByIdProps, DashboardConfig } from './types';
 
 /**
  * React component that renders a dashboard created in Sisense Fusion by its ID.

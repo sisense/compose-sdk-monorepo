@@ -1,7 +1,7 @@
-import { prepareSunburstDataItems } from '@/chart-options-processor/translations/sunburst/sunburst-series';
-import { mockedSunburstSeriesProps } from '@/chart-options-processor/translations/sunburst/mock/sunburst-series-props';
-import { CategoricalChartData } from '@/chart-data/types';
 import { CategoricalChartDataOptionsInternal } from '@/chart-data-options/types';
+import { CategoricalChartData } from '@/chart-data/types';
+import { mockedSunburstSeriesProps } from '@/chart-options-processor/translations/sunburst/mock/sunburst-series-props';
+import { prepareSunburstDataItems } from '@/chart-options-processor/translations/sunburst/sunburst-series';
 import { CompleteThemeSettings } from '@/types';
 
 describe('prepareSunburstDataItems', () => {

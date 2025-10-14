@@ -1,7 +1,8 @@
-import { getBasicCategoricalTooltip } from './tooltip';
-import { BuildContext } from '../../../types';
-import { TooltipSettings } from '@/chart-options-processor/translations/tooltip-utils';
 import { getCategoryTooltipSettings } from '@/chart-options-processor/tooltip';
+import { TooltipSettings } from '@/chart-options-processor/translations/tooltip-utils';
+
+import { BuildContext } from '../../../types';
+import { getBasicCategoricalTooltip } from './tooltip';
 
 // Mock the getCategoryTooltipSettings function
 vi.mock('@/chart-options-processor/tooltip', () => ({

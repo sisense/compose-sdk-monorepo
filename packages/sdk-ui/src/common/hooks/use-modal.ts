@@ -1,5 +1,5 @@
-import { TranslatableError } from '@/translation/translatable-error.js';
 import { useModalContext } from '@/common/components/modal';
+import { TranslatableError } from '@/translation/translatable-error.js';
 
 /**
  * Hook to access modal API.

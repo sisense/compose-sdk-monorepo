@@ -1,15 +1,17 @@
 /* eslint-disable max-lines-per-function */
 import { useEffect, useReducer } from 'react';
+
+import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
+
 import { useHasChanged } from '../common/hooks/use-has-changed';
+import { useShouldLoad } from '../common/hooks/use-should-load';
+import { withTracking } from '../decorators/hook-decorators';
 import { executePivotQuery } from '../query/execute-query';
-import { isFiltersChanged } from '../utils/filters-comparator';
 import { useSisenseContext } from '../sisense-context/sisense-context';
 import { TranslatableError } from '../translation/translatable-error';
-import { withTracking } from '../decorators/hook-decorators';
-import { ExecutePivotQueryParams, PivotQueryState } from './types';
+import { isFiltersChanged } from '../utils/filters-comparator';
 import { pivotQueryStateReducer } from './pivot-query-state-reducer';
-import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
-import { useShouldLoad } from '../common/hooks/use-should-load';
+import { ExecutePivotQueryParams, PivotQueryState } from './types';
 
 /**
  * React hook that executes a data query for a pivot table.

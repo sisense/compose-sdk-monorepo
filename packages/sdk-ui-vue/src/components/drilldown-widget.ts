@@ -1,8 +1,8 @@
-import type { Component, PropType } from 'vue';
 import type {
   ContextMenuProps,
   DrilldownWidgetProps as DrilldownWidgetPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import type { Component, PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 export type DrilldownWidgetConfig = {

@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { GetNlgInsights as GetNlgInsightsPreact } from '@sisense/sdk-ui-preact/ai';
 import type { GetNlgInsightsProps as GetNlgInsightsPropsPreact } from '@sisense/sdk-ui-preact/ai';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { createDefaultContextConnectors, setupHelper } from '../../helpers/setup-helper';
 import { createAiContextConnector } from '../helpers/context-connectors';
 

@@ -1,26 +1,27 @@
 import {
-  type LayoutDto,
-  type FilterDto,
-  type CascadingFilterDto,
-  isCascadingFilterDto,
-  DashboardDto,
-} from '../../api/types/dashboard-dto';
-import type { WidgetsPanelColumnLayout, WidgetsOptions, TabbersOptions } from './types';
-import {
   CascadingFilter,
-  Filter,
+  createDimensionalElementFromJaql,
   createFilterFromJaql,
+  Dimension,
+  Filter,
   FilterRelations,
   FilterRelationsModel,
   FilterRelationsModelNode,
-  FormulaJaql,
   FormulaContext,
+  FormulaJaql,
   Measure,
-  Dimension,
-  createDimensionalElementFromJaql,
   MetadataTypes,
 } from '@sisense/sdk-data';
+
+import { RestApi } from '@/api/rest-api';
 import { CommonFiltersApplyMode } from '@/common-filters/types';
+import {
+  JtdTarget,
+  JumpToDashboardConfig,
+  JumpToDashboardConfigForPivot,
+  TriggerMethod,
+} from '@/dashboard/hooks/jtd/jtd-types';
+import { TabberConfig, TabberDtoStyle } from '@/types';
 import {
   combineFiltersAndRelations,
   convertFilterRelationsModelToRelationRules,
@@ -35,14 +36,6 @@ import {
   WidgetDto,
 } from '@/widget-by-id/types';
 import {
-  TriggerMethod,
-  JtdTarget,
-  JumpToDashboardConfig,
-  JumpToDashboardConfigForPivot,
-} from '@/dashboard/hooks/jtd/jtd-types';
-import { RestApi } from '@/api/rest-api';
-import { TabberConfig, TabberDtoStyle } from '@/types';
-import {
   isChartTypeFusionWidget,
   isIndicatorFusionWidget,
   isPieChartFusionWidget,
@@ -51,11 +44,20 @@ import {
   widgetTypeSupportsJtd,
 } from '@/widget-by-id/utils';
 
+import {
+  type CascadingFilterDto,
+  DashboardDto,
+  type FilterDto,
+  isCascadingFilterDto,
+  type LayoutDto,
+} from '../../api/types/dashboard-dto';
+import type { TabbersOptions, WidgetsOptions, WidgetsPanelColumnLayout } from './types';
+
 export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => ({
   columns: (layout.columns || []).map((c) => ({
     widthPercentage: c.width,
     rows: (c.cells || []).map((cell) => {
-      const totalWidth = cell.subcells.reduce((acc, subcell) => acc + subcell.width, 0);
+      const totalWidth = cell.subcells.reduce((acc, subcell) => +acc + +subcell.width, 0);
 
       return {
         cells: cell.subcells.map((subcell) => ({

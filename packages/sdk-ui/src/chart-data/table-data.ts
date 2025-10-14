@@ -1,17 +1,4 @@
 import {
-  Column as DataTableColumn,
-  DataTable,
-  emptyTable,
-  getColumnByName,
-  getColumnsByName,
-  selectColumns,
-} from '../chart-data-processor/table-processor';
-import {
-  StyledColumn,
-  StyledMeasureColumn,
-  TableDataOptionsInternal,
-} from '../chart-data-options/types';
-import {
   Attribute,
   CalculatedMeasureColumn,
   Column,
@@ -20,7 +7,22 @@ import {
   SortDirection,
 } from '@sisense/sdk-data';
 import { convertSortDirectionToSort } from '@sisense/sdk-data';
+
 import { isMeasureColumn } from '@/chart-data-options/utils';
+
+import {
+  StyledColumn,
+  StyledMeasureColumn,
+  TableDataOptionsInternal,
+} from '../chart-data-options/types';
+import {
+  DataTable,
+  Column as DataTableColumn,
+  emptyTable,
+  getColumnByName,
+  getColumnsByName,
+  selectColumns,
+} from '../chart-data-processor/table-processor';
 
 const flatResults = (dimensions: string[], sourceTable: DataTable): DataTable => {
   if (emptyTable(sourceTable)) {

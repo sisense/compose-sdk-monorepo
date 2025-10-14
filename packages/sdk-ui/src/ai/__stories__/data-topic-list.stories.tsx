@@ -1,5 +1,6 @@
-import { templateForComponent } from '../../__stories__/template';
 import { Meta } from '@storybook/react-vite';
+
+import { templateForComponent } from '../../__stories__/template';
 import { DataTopicList as DataTopicListComponent } from '../data-topics';
 
 const template = templateForComponent(DataTopicListComponent);

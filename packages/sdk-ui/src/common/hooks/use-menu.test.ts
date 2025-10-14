@@ -1,8 +1,10 @@
-import { describe, it, expect, Mock } from 'vitest';
-import { useMenu } from './use-menu';
-import { useMenuContext } from '../components/menu/menu-context';
-import { TranslatableError } from '@/translation/translatable-error.js';
 import { renderHook } from '@testing-library/react';
+import { describe, expect, it, Mock } from 'vitest';
+
+import { TranslatableError } from '@/translation/translatable-error.js';
+
+import { useMenuContext } from '../components/menu/menu-context';
+import { useMenu } from './use-menu';
 
 vi.mock('../components/menu/menu-context');
 

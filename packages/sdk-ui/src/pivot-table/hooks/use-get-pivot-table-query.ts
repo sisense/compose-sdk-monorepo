@@ -1,19 +1,21 @@
 import { useCallback, useMemo, useState } from 'react';
-import { type JaqlRequest } from '@sisense/sdk-pivot-client';
-import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
-import { normalizePivotSort } from '../sorting-utils';
+import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+import { type JaqlRequest } from '@sisense/sdk-pivot-client';
 import isEqual from 'lodash-es/isEqual';
-import { ExecutePivotQueryParams } from '@/query-execution';
-import { translateColumnToAttribute, translateColumnToMeasure } from '@/chart-data-options/utils';
+
 import {
   PivotTableDataOptionsInternal,
   StyledColumn,
   StyledMeasureColumn,
 } from '@/chart-data-options/types';
-import { useExecutePivotQueryInternal } from '@/query-execution/use-execute-pivot-query';
+import { translateColumnToAttribute, translateColumnToMeasure } from '@/chart-data-options/utils';
 import { RangeDataColorOptions } from '@/chart-data/data-coloring';
 import { useDebouncedValue } from '@/common/hooks/use-debounced-value';
+import { ExecutePivotQueryParams } from '@/query-execution';
+import { useExecutePivotQueryInternal } from '@/query-execution/use-execute-pivot-query';
+
+import { normalizePivotSort } from '../sorting-utils';
 
 const PIVOT_JAQL_UPDATE_DEBOUNCE = 200;
 

@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.12.0] - 2025-10-14
+
+### Added
+- Add pagination configuration for `CalendarHeatmapChart`
+- Add filter panel toggle button in dashboard toolbar to show/hide filter panel
+- Add styling support for total labels in stacked charts (Column, Bar, Area)
+- Add `shadow` property to `LegendOptions` for controlling shadow effects on chart legends
+
+### Changed
+- Improve Tabber widget integration with editable dashboard layouts
+- Improve `MemberFilterTile` to display values which do not exist in the dataset (when applied externally)
+- Enhance NLQ translator with comprehensive function processing, validation, and error handling
+- Improve analytics composer code generation to exclude default values from generated style and data options
+- Fix hover interaction issue on Pie chart legend items
+- Fix forbidden (403) palette requests preventing charts from rendering with WAT authentication
+
 ## [2.11.0] - 2025-09-30
 
 ### Added

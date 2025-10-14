@@ -1,8 +1,9 @@
 import { CompleteThemeSettings, RangeDataColorOptions, UniformDataColorOptions } from '@/types';
+
 import { CalendarHeatmapChartData } from '../data';
 import {
-  withCalendarHeatmapDataColoring,
   getCalendarHeatmapDefaultColorOptions,
+  withCalendarHeatmapDataColoring,
 } from './with-calendar-heatmap-data-coloring';
 
 describe('getCalendarHeatmapDefaultColorOptions', () => {

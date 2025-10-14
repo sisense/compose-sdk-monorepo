@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
 /* eslint-disable @typescript-eslint/no-shadow */
 import type { DateFormat } from './apply-date-format';
 

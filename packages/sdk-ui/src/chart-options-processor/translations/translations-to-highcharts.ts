@@ -1,32 +1,37 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
+
 /* eslint-disable @typescript-eslint/no-shadow */
+
 /* eslint-disable sonarjs/no-ignored-return */
-import { ChartType, ValueToColorMap } from '../../types';
+import { colorChineseSilver } from '@/chart-data-options/coloring/consts';
+import { TranslatableError } from '@/translation/translatable-error';
+
 import {
-  ChartDataOptionsInternal,
-  CategoricalChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
+  CategoricalChartDataOptionsInternal,
+  ChartDataOptionsInternal,
   StyledMeasureColumn,
 } from '../../chart-data-options/types';
+import { legendColor } from '../../chart-data/data-coloring';
 import {
-  SeriesValueData,
+  CartesianChartData,
   CategoricalSeriesValues,
   ChartData,
-  CartesianChartData,
+  SeriesValueData,
 } from '../../chart-data/types';
-import { legendColor } from '../../chart-data/data-coloring';
+import { ChartType, TotalLabels, ValueToColorMap } from '../../types';
+import { Stacking } from '../chart-options-service';
+import { AxisMinMax, AxisSettings } from './axis-section';
 import {
   isPolarChartDesignOptions,
   PolarChartDesignOptions,
   StackableChartDesignOptions,
 } from './design-options';
-import { AxisMinMax, AxisSettings } from './axis-section';
-import { Stacking } from '../chart-options-service';
 import { DesignOptions, isPolar } from './types';
-import { colorChineseSilver } from '@/chart-data-options/coloring/consts';
-import { TranslatableError } from '@/translation/translatable-error';
 
 export type LineType = 'straight' | 'smooth';
 export type StackType = 'classic' | 'stacked' | 'stack100';
@@ -105,14 +110,15 @@ export const determineHighchartsChartType = (
 export const addStackingIfSpecified = (
   chartType: ChartType,
   designOptions: StackableChartDesignOptions | PolarChartDesignOptions,
-): { stacking?: Stacking; showTotal: boolean } => {
+): { stacking?: Stacking; totalLabels?: TotalLabels } => {
+  const defaultStackLabels = { totalLabels: { enabled: false } };
   if (
     chartType !== 'area' &&
     chartType !== 'bar' &&
     chartType !== 'column' &&
     chartType !== 'polar'
   ) {
-    return { showTotal: false };
+    return defaultStackLabels;
   }
 
   if (chartType === 'polar') {
@@ -122,7 +128,7 @@ export const addStackingIfSpecified = (
           designOptions.polarType === 'column' || designOptions.polarType === 'area'
             ? 'normal'
             : undefined,
-        showTotal: false,
+        totalLabels: { enabled: false },
       };
     }
     throw new TranslatableError('errors.polarChartDesignOptionsExpected');
@@ -132,20 +138,19 @@ export const addStackingIfSpecified = (
     throw new TranslatableError('errors.polarChartDesignOptionsNotExpected');
   }
 
-  const showTotal = Boolean(designOptions.seriesLabels?.enabled && designOptions.showTotal);
   switch (designOptions.stackType) {
     case 'stacked':
       return {
         stacking: 'normal',
-        showTotal,
+        totalLabels: designOptions.totalLabels ?? defaultStackLabels.totalLabels,
       };
     case 'stack100':
       return {
         stacking: 'percent',
-        showTotal,
+        totalLabels: designOptions.totalLabels ?? defaultStackLabels.totalLabels,
       };
     default:
-      return { showTotal: false };
+      return defaultStackLabels;
   }
 };
 

@@ -1,8 +1,9 @@
-import { dataOptionsTranslators } from './data-options';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { measureFactory } from '@sisense/sdk-data';
 
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { AreamapChartDataOptions, AreamapChartDataOptionsInternal } from '@/index';
+
+import { dataOptionsTranslators } from './data-options';
 
 describe('areamap - data options translators', () => {
   describe('translateDataOptionsToInternal', () => {

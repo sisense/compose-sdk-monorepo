@@ -1,11 +1,13 @@
 import type { FunctionComponent } from 'react';
+
 import flow from 'lodash-es/flow';
-import { withTracking } from './with-tracking';
-import { withErrorBoundary } from './with-error-boundary';
-import { withSisenseContextValidation } from './with-sisense-context-validation';
+
 import { withDefaultTranslations } from './with-default-translations';
+import { withErrorBoundary } from './with-error-boundary';
 import { withMenu } from './with-menu';
 import { withModal } from './with-modal';
+import { withSisenseContextValidation } from './with-sisense-context-validation';
+import { withTracking } from './with-tracking';
 
 /**
  * Configuration for the {@link asSisenseComponent} decorator

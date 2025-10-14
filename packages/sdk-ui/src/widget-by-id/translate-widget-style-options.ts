@@ -1,77 +1,80 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+
 /* eslint-disable max-params */
 import isString from 'lodash-es/isString';
-import { LEGACY_DESIGN_TYPES } from '../themes/legacy-design-settings';
-import { CALENDAR_HEATMAP_DEFAULTS } from '@/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/constants';
-import { TranslatableError } from '../translation/translatable-error';
-import {
-  ChartStyleOptions,
-  AxisLabel,
-  PolarStyleOptions,
-  ScatterStyleOptions,
-  FunnelStyleOptions,
-  TableStyleOptions,
-  IndicatorStyleOptions,
-  NumericBarIndicatorStyleOptions,
-  NumericSimpleIndicatorStyleOptions,
-  GaugeIndicatorStyleOptions,
-  TreemapStyleOptions,
-  BaseAxisStyleOptions,
-  SunburstStyleOptions,
-  BoxplotStyleOptions,
-  ScattermapStyleOptions,
-  AreamapStyleOptions,
-  AreamapType,
-  PivotTableStyleOptions,
-  SpaceSizes,
-  RadiusSizes,
-  ShadowsTypes,
-  AlignmentTypes,
-  WidgetStyleOptions,
-  TextWidgetStyleOptions,
-  CartesianStyleOptions,
-  PieStyleOptions,
-  LineWidth,
-  Markers,
-  BaseStyleOptions,
-  LegendPosition,
-  LineStyleOptions,
-  Labels,
-  StackableStyleOptions,
-  CalendarHeatmapStyleOptions,
-  CalendarHeatmapViewType,
-  CalendarDayOfWeek,
-} from '../types';
-import {
-  Panel,
-  WidgetStyle,
-  WidgetSubtype,
-  FusionWidgetType,
-  CartesianWidgetStyle,
-  PolarWidgetStyle,
-  FunnelWidgetStyle,
-  ScatterWidgetStyle,
-  TableWidgetStyle,
-  IndicatorWidgetStyle,
-  TreemapWidgetStyle,
-  AxisStyle,
-  SunburstWidgetStyle,
-  BoxplotWidgetStyle,
-  ScattermapWidgetStyle,
-  PivotWidgetStyle,
-  WidgetDesign,
-  WidgetDto,
-  TextWidgetDtoStyle,
-  isValidScrollerLocation,
-  PieWidgetStyle,
-  CalendarHeatmapWidgetStyle,
-} from './types';
-import { getEnabledPanelItems, getChartSubtype } from './utils';
+
 import {
   FunnelDirection,
   FunnelSize,
   FunnelType,
 } from '@/chart-options-processor/translations/funnel-plot-options';
+import { CALENDAR_HEATMAP_DEFAULTS } from '@/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/constants';
+import {
+  AlignmentTypes,
+  AreamapStyleOptions,
+  AreamapType,
+  AxisLabel,
+  BaseAxisStyleOptions,
+  BaseStyleOptions,
+  BoxplotStyleOptions,
+  CalendarDayOfWeek,
+  CalendarHeatmapStyleOptions,
+  CalendarHeatmapViewType,
+  CartesianStyleOptions,
+  ChartStyleOptions,
+  FunnelStyleOptions,
+  GaugeIndicatorStyleOptions,
+  IndicatorStyleOptions,
+  Labels,
+  LegendPosition,
+  LineStyleOptions,
+  LineWidth,
+  Markers,
+  NumericBarIndicatorStyleOptions,
+  NumericSimpleIndicatorStyleOptions,
+  PieStyleOptions,
+  PivotTableStyleOptions,
+  PolarStyleOptions,
+  RadiusSizes,
+  ScattermapStyleOptions,
+  ScatterStyleOptions,
+  ShadowsTypes,
+  SpaceSizes,
+  StackableStyleOptions,
+  SunburstStyleOptions,
+  TableStyleOptions,
+  TextWidgetStyleOptions,
+  TreemapStyleOptions,
+  WidgetStyleOptions,
+} from '@/types';
+
+import { LEGACY_DESIGN_TYPES } from '../themes/legacy-design-settings';
+import { TranslatableError } from '../translation/translatable-error';
+import {
+  AxisStyle,
+  BoxplotWidgetStyle,
+  CalendarHeatmapWidgetStyle,
+  CartesianWidgetStyle,
+  FunnelWidgetStyle,
+  FusionWidgetType,
+  IndicatorWidgetStyle,
+  isValidScrollerLocation,
+  Panel,
+  PieWidgetStyle,
+  PivotWidgetStyle,
+  PolarWidgetStyle,
+  ScattermapWidgetStyle,
+  ScatterWidgetStyle,
+  SunburstWidgetStyle,
+  TableWidgetStyle,
+  TextWidgetDtoStyle,
+  TreemapWidgetStyle,
+  WidgetDesign,
+  WidgetDto,
+  WidgetStyle,
+  WidgetSubtype,
+} from './types';
+import { getChartSubtype, getEnabledPanelItems } from './utils';
 
 /**
  * Helper function to extract axis style options from WidgetDto
@@ -836,6 +839,17 @@ function extractCalendarHeatmapChartStyleOptions(
     startOfWeek = 'sunday';
   }
 
+  let startMonth: Date | undefined;
+  if (widgetStyle.startMonth) {
+    if (typeof widgetStyle.startMonth === 'object') {
+      // Create date from object containing year and month values
+      startMonth = new Date(widgetStyle.startMonth.year, widgetStyle.startMonth.month);
+    } else {
+      // Create date from date string
+      startMonth = new Date(widgetStyle.startMonth);
+    }
+  }
+
   return {
     viewType,
     startOfWeek,
@@ -853,6 +867,10 @@ function extractCalendarHeatmapChartStyleOptions(
       days: widgetStyle.grayoutEnabled ? [...CALENDAR_HEATMAP_DEFAULTS.WEEKEND_DAYS] : [],
       cellColor: CALENDAR_HEATMAP_DEFAULTS.WEEKEND_CELL_COLOR,
       hideValues: true,
+    },
+    pagination: {
+      enabled: CALENDAR_HEATMAP_DEFAULTS.SHOW_PAGINATION,
+      startMonth,
     },
   };
 }

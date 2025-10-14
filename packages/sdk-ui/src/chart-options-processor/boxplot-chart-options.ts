@@ -1,21 +1,22 @@
 import { TFunction } from '@sisense/sdk-common';
-import { BoxplotChartData } from '../chart-data/types';
-import { determineHighchartsChartType } from './translations/translations-to-highcharts';
+import { NavigatorOptions } from '@sisense/sisense-charts';
+
 import { BoxplotChartDataOptionsInternal } from '../chart-data-options/types';
-import { HighchartsOptionsInternal } from './chart-options-service';
+import { BoxplotChartData } from '../chart-data/types';
 import { CompleteThemeSettings, HighchartsSelectEvent, OptionsWithAlerts } from '../types';
-import { buildBoxplotSeries } from './translations/boxplot/boxplot-series';
+import { HighchartsOptionsInternal } from './chart-options-service';
 import {
   getBoxplotXAxisSettings,
   getBoxplotYAxisSettings,
 } from './translations/boxplot/boxplot-axis';
 import { getBoxplotPlotOptions } from './translations/boxplot/boxplot-plot-options';
+import { buildBoxplotSeries } from './translations/boxplot/boxplot-series';
+import { getBoxplotTooltipSettings } from './translations/boxplot/boxplot-tooltip';
 import { BoxplotChartDesignOptions } from './translations/design-options';
 import { getLegendSettings } from './translations/legend-section';
 import { getNavigator, setInitialScrollerPosition } from './translations/navigator';
-import { getBoxplotTooltipSettings } from './translations/boxplot/boxplot-tooltip';
+import { determineHighchartsChartType } from './translations/translations-to-highcharts';
 import { ChartDesignOptions } from './translations/types';
-import { NavigatorOptions } from '@sisense/sisense-charts';
 
 /**
  * Convert intermediate chart data, data options, and design options

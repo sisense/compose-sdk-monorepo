@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { useInitializedI18n } from './use-initialized-i18n';
+
 import { CustomTranslationObject } from '../types';
+import { useInitializedI18n } from './use-initialized-i18n';
 
 type I18nProviderProps = {
   children: React.ReactNode;

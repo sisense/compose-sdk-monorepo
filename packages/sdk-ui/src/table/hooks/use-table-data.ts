@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react';
+
 import {
   Attribute,
   Data,
@@ -7,21 +9,21 @@ import {
   isDataSource,
   Measure,
 } from '@sisense/sdk-data';
-import { useEffect, useRef, useState } from 'react';
-import { useSisenseContext } from '../../sisense-context/sisense-context';
 
-import {
-  executeQueryWithCache,
-  executeQuery as executeQueryWithoutCache,
-} from '../../query/execute-query';
-import { TableDataOptionsInternal } from '../../chart-data-options/types';
-import { useSetError } from '../../error-boundary/use-set-error';
-import { TranslatableError } from '../../translation/translatable-error';
 import {
   isMeasureColumn,
   translateColumnToAttribute,
   translateColumnToMeasure,
 } from '@/chart-data-options/utils';
+
+import { TableDataOptionsInternal } from '../../chart-data-options/types';
+import { useSetError } from '../../error-boundary/use-set-error';
+import {
+  executeQueryWithCache,
+  executeQuery as executeQueryWithoutCache,
+} from '../../query/execute-query';
+import { useSisenseContext } from '../../sisense-context/sisense-context';
+import { TranslatableError } from '../../translation/translatable-error';
 
 type UseDataProps = {
   dataSet: Data | DataSource | undefined;

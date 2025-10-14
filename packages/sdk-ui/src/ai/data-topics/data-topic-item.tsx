@@ -1,8 +1,10 @@
-import { useThemeContext } from '@/theme-provider';
-import ArrowLeftIcon from '../icons/arrow-left-icon';
 import styled from '@emotion/styled';
+
+import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 import { getSlightlyDifferentColor } from '@/utils/color';
+
+import ArrowLeftIcon from '../icons/arrow-left-icon';
 
 const Container = styled.button<Themable>`
   font-family: ${({ theme }) => theme.typography.fontFamily};

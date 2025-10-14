@@ -4,7 +4,7 @@ import {
   ScattermapLocationLevel,
   StyledColumn,
 } from './types';
-import { normalizeColumn, normalizeMeasureColumn, normalizeAnyColumn } from './utils';
+import { normalizeAnyColumn, normalizeColumn, normalizeMeasureColumn } from './utils';
 
 const locationLevelPriorityMap = {
   city: 4,

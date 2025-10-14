@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
-import { render, waitFor, screen } from '@testing-library/react';
-import { FontFaceMock } from '@/__mocks__/font-face-polyfill';
+import { render, screen, waitFor } from '@testing-library/react';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { FontFaceMock } from '@/__mocks__/font-face-polyfill';
 import { FontsLoader } from '@/theme-provider/fonts-loader/fonts-loader';
 import { ThemeSettingsFont } from '@/types';
 

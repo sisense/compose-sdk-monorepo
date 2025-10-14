@@ -1,6 +1,8 @@
-import { initI18next } from '@sisense/sdk-common';
 import { initReactI18next } from 'react-i18next';
-import { resources, PACKAGE_NAMESPACE } from './resources/index.js';
+
+import { initI18next } from '@sisense/sdk-common';
+
+import { PACKAGE_NAMESPACE, resources } from './resources/index.js';
 
 export function initializeI18n() {
   return initI18next({

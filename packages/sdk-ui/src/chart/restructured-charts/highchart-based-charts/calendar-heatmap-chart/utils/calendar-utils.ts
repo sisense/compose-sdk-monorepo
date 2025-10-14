@@ -1,5 +1,7 @@
 import invert from 'lodash-es/invert';
+
 import type { DateFormatter } from '@/common/formatters/create-date-formatter.js';
+
 import {
   CALENDAR_HEATMAP_DEFAULTS,
   REFERENCE_SUNDAY_DATE,

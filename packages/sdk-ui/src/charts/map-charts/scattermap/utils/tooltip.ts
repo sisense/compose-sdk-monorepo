@@ -1,6 +1,6 @@
-import { ScattermapChartLocation } from '@/chart-data/types';
 import { ScattermapChartDataOptionsInternal } from '@/chart-data-options/types.js';
 import { getDataOptionTitle, isMeasureColumn } from '@/chart-data-options/utils.js';
+import { ScattermapChartLocation } from '@/chart-data/types';
 import { formatTooltipValue } from '@/chart-options-processor/translations/tooltip-utils.js';
 import { NOT_AVAILABLE_TEXT } from '@/const';
 

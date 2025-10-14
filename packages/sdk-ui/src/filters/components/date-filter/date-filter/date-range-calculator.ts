@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+
 import { SelectorMode } from './calendar-date-selector.js';
 
 type DayjsDateRange = {

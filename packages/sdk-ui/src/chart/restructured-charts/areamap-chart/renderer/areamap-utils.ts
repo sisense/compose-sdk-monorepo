@@ -1,6 +1,7 @@
 import { AreamapChartDataOptionsInternal } from '@/chart-data-options/types';
 import { getDataPointMetadata } from '@/chart-options-processor/data-points';
 import { AreamapDataPoint } from '@/types';
+
 import { GeoDataElement } from '../types';
 
 export function getAreamapDataPoint(

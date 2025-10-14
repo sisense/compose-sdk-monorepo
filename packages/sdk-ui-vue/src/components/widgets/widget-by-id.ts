@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { WidgetById as WidgetByIdPreact } from '@sisense/sdk-ui-preact';
 import type { WidgetByIdProps as WidgetByIdPropsPreact } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 import type { ChartWidget } from './chart-widget';
 

@@ -1,4 +1,3 @@
-import { SocketI, SocketQueryOptions } from '../data-load/types.js';
 import {
   Authenticator,
   BearerAuthenticator,
@@ -8,8 +7,10 @@ import {
   SsoAuthenticator,
   WatAuthenticator,
 } from '@sisense/sdk-rest-client';
+
 import { SisenseSocket } from '../data-load/index.js';
 import TestSocket from '../data-load/sockets/TestSocket.js';
+import { SocketI, SocketQueryOptions } from '../data-load/types.js';
 
 /**
  * Builder to create a web socket client on demand to communicate with a Sisense web socket server.

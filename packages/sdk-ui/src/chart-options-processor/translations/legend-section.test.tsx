@@ -1,19 +1,20 @@
 /** @vitest-environment jsdom */
 import { render } from '@testing-library/react';
-import { Chart } from '../../chart';
-import { HighchartsOptions } from '../chart-options-service';
-import { LegendOptions } from '../../types';
-import { getLegendSettings } from './legend-section';
-import { LineChart } from '../../line-chart';
+
 import { AreaChart } from '../../area-chart';
 import { AreaRangeChart } from '../../area-range-chart';
-import { ColumnChart } from '../../column-chart';
 import { BarChart } from '../../bar-chart';
-import { PieChart } from '../../pie-chart';
+import { Chart } from '../../chart';
+import { ColumnChart } from '../../column-chart';
 import { FunnelChart } from '../../funnel-chart';
+import { LineChart } from '../../line-chart';
+import { PieChart } from '../../pie-chart';
 import { PolarChart } from '../../polar-chart';
 import { ScatterChart } from '../../scatter-chart';
 import { SunburstChart } from '../../sunburst-chart';
+import { LegendOptions } from '../../types';
+import { HighchartsOptions } from '../chart-options-service';
+import { getLegendSettings } from './legend-section';
 
 // Mock Highcharts
 vi.mock('highcharts-react-official', () => ({

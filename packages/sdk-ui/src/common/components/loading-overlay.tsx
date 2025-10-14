@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
-import { LoadingDots } from './loading-dots';
+
 import { useThemeContext } from '@/theme-provider';
+
+import { LoadingDots } from './loading-dots';
 
 /**
  * Component that displays a loading overlay.

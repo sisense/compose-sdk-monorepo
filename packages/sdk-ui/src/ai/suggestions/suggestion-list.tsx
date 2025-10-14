@@ -1,9 +1,12 @@
 import { useMemo, useState } from 'react';
-import SuggestedItem from './suggestion-item';
-import styled from '@emotion/styled';
-import { Themable } from '@/theme-provider/types';
-import { useThemeContext } from '@/theme-provider';
 import { useTranslation } from 'react-i18next';
+
+import styled from '@emotion/styled';
+
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
+
+import SuggestedItem from './suggestion-item';
 
 const ListContainer = styled.div<Themable>`
   display: flex;

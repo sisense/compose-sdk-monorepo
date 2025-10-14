@@ -1,17 +1,19 @@
+import { type Filter } from '@sisense/sdk-data';
+
+import { isChartWidgetProps, isPivotTableWidgetProps } from '@/widget-by-id/utils.js';
+
+import { generateCode } from '../code/generate-code.js';
+import { stringifyFilters } from '../code/stringify-filters.js';
+import { stringifyDataSource, stringifyExtraImports } from '../code/stringify-props.js';
+import { stringifyProps } from '../code/stringify-props.js';
+import { CODE_TEMPLATES_INDENT } from '../common/constants.js';
+import { checkIfMeasuresExist } from '../common/utils.js';
 import {
   ByIdDashboardCodeParams,
   ClientSideDashboardCodeParams,
   DashboardCodeProps,
 } from '../types.js';
-import { stringifyDataSource, stringifyExtraImports } from '../code/stringify-props.js';
-import { generateCode } from '../code/generate-code.js';
-import { stringifyFilters } from '../code/stringify-filters.js';
 import { CodeTemplateKey } from '../types.js';
-import { stringifyProps } from '../code/stringify-props.js';
-import { CODE_TEMPLATES_INDENT } from '../common/constants.js';
-import { type Filter } from '@sisense/sdk-data';
-import { checkIfMeasuresExist } from '../common/utils.js';
-import { isChartWidgetProps, isPivotTableWidgetProps } from '@/widget-by-id/utils.js';
 import { stringifyWidgets } from './stringify-widgets.js';
 
 const dashboardByIdTemplateKey: CodeTemplateKey = 'dashboardByIdTmpl';

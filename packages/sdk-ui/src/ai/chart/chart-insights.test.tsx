@@ -1,8 +1,9 @@
 import { screen, waitFor } from '@testing-library/react';
+
 import { setup } from '@/__test-helpers__';
-import { AiTestWrapper } from '../__mocks__';
 import { ChartInsights } from '@/ai/chart/chart-insights';
 
+import { AiTestWrapper } from '../__mocks__';
 import { GetNlgInsightsRequest } from '../api/types';
 
 const mockNlgRequest: GetNlgInsightsRequest = {

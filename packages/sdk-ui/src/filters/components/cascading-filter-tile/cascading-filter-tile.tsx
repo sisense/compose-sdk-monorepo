@@ -1,10 +1,12 @@
-import { FilterTileContainer } from '../filter-tile-container.js';
 import { CascadingFilter, DataSource, Filter } from '@sisense/sdk-data';
-import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component.js';
-import { FilterVariant } from '../common/filter-utils.js';
-import { CascadingLevelFilterTile } from './cascading-level-filter.js';
+
 import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter.js';
 import { clearMembersFilter, cloneFilterAndToggleDisabled } from '@/utils/filters.js';
+
+import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component.js';
+import { FilterVariant } from '../common/filter-utils.js';
+import { FilterTileContainer } from '../filter-tile-container.js';
+import { CascadingLevelFilterTile } from './cascading-level-filter.js';
 
 /**
  * Props for {@link CascadingFilterTile}

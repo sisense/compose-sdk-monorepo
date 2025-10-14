@@ -1,5 +1,6 @@
-import { useThemeContext } from '@/theme-provider/theme-context';
 import styled from '@emotion/styled';
+
+import { useThemeContext } from '@/theme-provider/theme-context';
 
 const Dot = styled.div<{ color?: string }>`
   width: 5px;

@@ -1,11 +1,11 @@
-import {
-  isContinuousDatetimeXAxis,
-  getXAxisOrientation,
-  withYAxisNormalizationForPolar,
-  hasSecondaryYAxis,
-} from './axis-builders';
 import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types';
 import { PolarChartDesignOptions } from '../../../translations/design-options';
+import {
+  getXAxisOrientation,
+  hasSecondaryYAxis,
+  isContinuousDatetimeXAxis,
+  withYAxisNormalizationForPolar,
+} from './axis-builders';
 
 describe('axis-builders', () => {
   describe('isContinuousDatetimeXAxis', () => {

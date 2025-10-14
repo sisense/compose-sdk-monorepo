@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect, RefObject } from 'react';
+import React, { RefObject, useLayoutEffect, useRef, useState } from 'react';
 
 import { Tooltip } from '@sisense/sdk-shared-ui/Tooltip';
 

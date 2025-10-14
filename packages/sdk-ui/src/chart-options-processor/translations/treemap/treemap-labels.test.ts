@@ -1,5 +1,6 @@
-import { treemapLabelFormatter } from './treemap-labels';
 import { PointLabelObject } from '@sisense/sisense-charts';
+
+import { treemapLabelFormatter } from './treemap-labels';
 
 describe('Treemap Chart labels formatter', () => {
   it('should prepare small label', () => {

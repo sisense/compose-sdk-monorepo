@@ -1,14 +1,17 @@
 /** @vitest-environment jsdom */
-import { renderHook, waitFor } from '@testing-library/react';
 import { trackProductEvent } from '@sisense/sdk-tracking';
+import { renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
-import { useGetDashboardModels } from './use-get-dashboard-models.js';
-import { getDashboardModels } from './get-dashboard-models.js';
-import { useSisenseContext } from '../../sisense-context/sisense-context.js';
+
+import { DashboardModel, dashboardModelTranslator } from '@/models';
+
 import { type ClientApplication } from '../../app/client-application.js';
+import { useSisenseContext } from '../../sisense-context/sisense-context.js';
 import { sampleEcommerceDashboard } from '../__mocks__/sample-ecommerce-dashboard.js';
 import { sampleHealthcareDashboard } from '../__mocks__/sample-healthcare-dashboard.js';
-import { DashboardModel, dashboardModelTranslator } from '@/models';
+import { getDashboardModels } from './get-dashboard-models.js';
+import { useGetDashboardModels } from './use-get-dashboard-models.js';
+
 const dashboardModelsMock: DashboardModel[] = [
   sampleEcommerceDashboard,
   sampleHealthcareDashboard,

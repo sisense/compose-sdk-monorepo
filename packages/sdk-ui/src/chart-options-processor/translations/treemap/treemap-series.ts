@@ -1,8 +1,8 @@
-import { CategoricalChartData } from '../../../chart-data/types';
-import { getColorSetting, SeriesPointStructure } from '../translations-to-highcharts';
-import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { CompleteThemeSettings } from '../../../types';
 import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
+import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
+import { CategoricalChartData } from '../../../chart-data/types';
+import { CompleteThemeSettings } from '../../../types';
+import { getColorSetting, SeriesPointStructure } from '../translations-to-highcharts';
 
 export function prepareTreemapDataItems(
   chartData: CategoricalChartData,

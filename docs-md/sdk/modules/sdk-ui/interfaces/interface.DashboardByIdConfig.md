@@ -44,7 +44,7 @@ Configuration for the toolbar
 >
 > Determines whether the toolbar is visible.
 >
-> If not specified, the default value is `false`.
+> If not specified, the default value is `true`.
 >
 >
 

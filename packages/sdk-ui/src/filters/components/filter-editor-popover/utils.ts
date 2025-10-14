@@ -1,15 +1,15 @@
 import {
   Filter,
-  isMembersFilter,
-  MembersFilter,
+  isCustomFilter,
   isMeasureFilter,
+  isMembersFilter,
   isNumericFilter,
   isRankingFilter,
-  isTextFilter,
-  NumericOperators,
   isRelativeDateFilter,
+  isTextFilter,
+  MembersFilter,
+  NumericOperators,
   RelativeDateFilter,
-  isCustomFilter,
 } from '@sisense/sdk-data';
 
 export function isSupportedByFilterEditor(filter: Filter): boolean {

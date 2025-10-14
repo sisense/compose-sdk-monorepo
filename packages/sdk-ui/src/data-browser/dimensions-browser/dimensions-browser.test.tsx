@@ -1,8 +1,11 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
-import { DimensionsBrowser } from '@/data-browser/dimensions-browser/dimensions-browser';
+
+import { fireEvent, render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { DimensionsBrowser } from '@/data-browser/dimensions-browser/dimensions-browser';
+
 import {
   AttributeActionConfig,
   AttributeSecondaryActionConfig,

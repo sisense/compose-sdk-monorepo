@@ -1,17 +1,20 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+
 import {
-  Filter,
-  isText as isTextAttributeType,
-  isNumber as isNumberAttributeType,
-  isDatetime as isDatetimeAttributeType,
   DataSource,
-  isCascadingFilter,
-  isMembersFilter,
+  Filter,
   filterFactory,
+  isCascadingFilter,
+  isDatetime as isDatetimeAttributeType,
+  isMembersFilter,
+  isNumber as isNumberAttributeType,
+  isText as isTextAttributeType,
 } from '@sisense/sdk-data';
-import { FilterEditorPopover } from '@/filters/components/filter-editor-popover/filter-editor-popover';
-import type { UseExistingFilterEditingConfig } from '../types';
 import clone from 'lodash-es/clone';
+
+import { FilterEditorPopover } from '@/filters/components/filter-editor-popover/filter-editor-popover';
+
+import type { UseExistingFilterEditingConfig } from '../types';
 
 type UseExistingFilterEditingParams = {
   onFilterChanged: (filter: Filter) => void;

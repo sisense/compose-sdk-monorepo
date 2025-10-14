@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { PivotTable as PivotTablePreact } from '@sisense/sdk-ui-preact';
 import type { PivotTableProps } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 // Note: uses direct reexport as a temporary workaround for getting the correct API docs

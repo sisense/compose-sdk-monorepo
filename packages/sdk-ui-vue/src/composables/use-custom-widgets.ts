@@ -5,8 +5,9 @@ import {
   type GenericDataOptions,
 } from '@sisense/sdk-ui-preact';
 import type { Component, DefineComponent } from 'vue';
-import { getCustomWidgetsContext } from '../providers/custom-widgets-provider';
+
 import { renderComponent } from '../helpers/dynamic-renderer';
+import { getCustomWidgetsContext } from '../providers/custom-widgets-provider';
 
 /** Re-export related types */
 export type { CustomWidgetComponentProps, GenericDataOptions };

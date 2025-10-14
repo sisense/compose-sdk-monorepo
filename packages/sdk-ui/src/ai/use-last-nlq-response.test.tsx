@@ -1,9 +1,11 @@
-import { Mock } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { useLastNlqResponse } from './use-last-nlq-response';
+import { Mock } from 'vitest';
+
 import { useGetChat } from '@/ai/use-get-chat';
-import { useChatHistory } from './api/chat-history';
 import { useLastNlqResponseFromHistory } from '@/ai/use-last-nlq-response-from-history';
+
+import { useChatHistory } from './api/chat-history';
+import { useLastNlqResponse } from './use-last-nlq-response';
 
 vi.mock('@/ai/use-get-chat');
 vi.mock('./api/chat-history');

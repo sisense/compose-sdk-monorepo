@@ -1,8 +1,10 @@
+import { CSSProperties } from 'react';
+
+import { useThemeContext } from '@/theme-provider';
+
+import { Checkbox } from '../../../common';
 import { DropdownSelectLabel, SelectItemContainer } from './base';
 import { SelectItem } from './types';
-import { Checkbox } from '../../../common';
-import { CSSProperties } from 'react';
-import { useThemeContext } from '@/theme-provider';
 
 type MultiSelectItemProps<Value> = SelectItem<Value> & {
   selected: boolean;

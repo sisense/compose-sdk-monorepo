@@ -1,9 +1,10 @@
-import { Attribute, Measure, type Filter } from '@sisense/sdk-data';
+import { Attribute, type Filter, Measure } from '@sisense/sdk-data';
+
+import { OpenMenuFn } from '@/common/components/menu/types.js';
+import { OpenModalFn } from '@/common/components/modal/modal-context';
+import { DashboardConfig, DashboardProps } from '@/dashboard/types';
 import { WidgetProps } from '@/props.js';
 import { DataPoint } from '@/types';
-import { DashboardConfig, DashboardProps } from '@/dashboard/types';
-import { OpenModalFn } from '@/common/components/modal/modal-context';
-import { OpenMenuFn } from '@/common/components/menu/types.js';
 
 /**
  * Menu item structure for JTD navigation

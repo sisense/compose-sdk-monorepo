@@ -1,10 +1,10 @@
+import { TableDataOptionsInternal } from '../../chart-data-options/types';
 import { Column, DataTable } from '../../chart-data-processor/table-processor';
 import {
   TableColorOptions,
   TableDesignOptions,
 } from '../../chart-options-processor/translations/design-options';
 import { CompleteThemeSettings } from '../../types';
-import { TableDataOptionsInternal } from '../../chart-data-options/types';
 
 /**
  * Properties needed to setup Table

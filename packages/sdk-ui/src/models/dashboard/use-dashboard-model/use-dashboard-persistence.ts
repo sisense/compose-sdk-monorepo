@@ -1,21 +1,23 @@
 import { useCallback, useEffect, useMemo, useReducer } from 'react';
+
 import { RestApiNotReadyError, useRestApi } from '@/api/rest-api';
-import {
-  dashboardReducer,
-  UseDashboardModelAction,
-  UseDashboardModelInternalAction,
-  UseDashboardModelActionTypeInternal,
-  persistDashboardModelMiddleware,
-  UseDashboardModelActionType,
-} from './use-dashboard-model-reducer';
-import { checkPersistenceSupport } from './use-dasboard-model-utils';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
-import { DashboardModel } from '@/models';
 import { usePrevious } from '@/common/hooks/use-previous';
 import {
   deleteWidgetsFromLayout,
   findDeletedWidgetsFromLayout,
 } from '@/dashboard/components/editable-layout/helpers';
+import { DashboardModel } from '@/models';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
+
+import { checkPersistenceSupport } from './use-dasboard-model-utils';
+import {
+  dashboardReducer,
+  persistDashboardModelMiddleware,
+  UseDashboardModelAction,
+  UseDashboardModelActionType,
+  UseDashboardModelActionTypeInternal,
+  UseDashboardModelInternalAction,
+} from './use-dashboard-model-reducer';
 
 export interface UseDashboardPersistenceParams {
   /**

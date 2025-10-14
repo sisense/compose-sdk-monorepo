@@ -1,10 +1,11 @@
 /**
  * @fileoverview Unit tests for calendar utilities
  */
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { CalendarDayOfWeekEnum, getWeekdayLabels } from '../calendar-utils.js';
 import type { DateFormatter } from '@/common/formatters/create-date-formatter.js';
+
+import { CalendarDayOfWeekEnum, getWeekdayLabels } from '../calendar-utils.js';
 
 describe('Calendar Utils', () => {
   // Mock date formatter for testing

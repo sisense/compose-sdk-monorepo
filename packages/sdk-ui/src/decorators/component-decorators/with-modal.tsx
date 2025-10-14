@@ -1,6 +1,7 @@
-import { ComponentDecorator } from './as-sisense-component';
 import { useModalContext } from '@/common/components/modal/modal-context';
 import { ModalProvider } from '@/common/components/modal/modal-provider';
+
+import { ComponentDecorator } from './as-sisense-component';
 
 type ModalConfig = {
   shouldHaveOwnModalRoot?: boolean;

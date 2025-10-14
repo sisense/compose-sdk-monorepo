@@ -1,9 +1,11 @@
-import { render } from '@testing-library/react';
-import { Widget } from './widget';
-import { CommonWidget } from './common-widget';
-import { WidgetProps } from '@/props';
-import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { measureFactory } from '@sisense/sdk-data';
+import { render } from '@testing-library/react';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { WidgetProps } from '@/props';
+
+import { CommonWidget } from './common-widget';
+import { Widget } from './widget';
 
 // Mock the CommonWidget component
 vi.mock('./common-widget', () => ({

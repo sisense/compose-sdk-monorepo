@@ -1,11 +1,12 @@
 import trim from 'lodash-es/trim';
+
 import {
-  ScattermapLocationLevel,
   ScattermapChartDataOptionsInternal,
+  ScattermapLocationLevel,
 } from '@/chart-data-options/types';
-import { DataPointEntry, ScattermapDataPoint } from '@/types';
 import { ScattermapChartLocation } from '@/chart-data/types';
 import { getDataPointMetadata } from '@/chart-options-processor/data-points';
+import { DataPointEntry, ScattermapDataPoint } from '@/types';
 
 export const LOCATION_DELIMITER = ',';
 

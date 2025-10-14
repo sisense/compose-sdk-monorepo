@@ -1,7 +1,9 @@
+import { useCallback, useEffect, useState } from 'react';
+
+import { Filter } from '@sisense/sdk-data';
+
 import { usePrevious } from '@/common/hooks/use-previous';
 import { TranslatableError } from '@/translation/translatable-error';
-import { Filter } from '@sisense/sdk-data';
-import { useEffect, useState, useCallback } from 'react';
 
 /**
  * Filter tiles supposed to be Controlled components (stateless) and to react on passed `filter`.

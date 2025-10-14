@@ -1,16 +1,19 @@
-import { ClientApplication, createClientApplication } from '../app/client-application';
-import { PropsWithChildren, useEffect, useState, type FunctionComponent } from 'react';
-import { SisenseContextProviderProps } from '../props';
-import { ThemeProvider } from '../theme-provider';
-import { ErrorBoundary } from '../error-boundary/error-boundary';
-import { SisenseContext } from './sisense-context';
-import { I18nProvider } from '../translation/i18n-provider';
-import { SisenseQueryClientProvider } from './sisense-query-client-provider';
+import { type FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
+
 import { isAuthTokenPending } from '@sisense/sdk-rest-client';
-import { CustomWidgetsProvider } from '@/custom-widgets-provider';
+
 import { MenuProvider } from '@/common/components/menu/menu-provider';
 import { ModalProvider } from '@/common/components/modal/modal-provider';
+import { CustomWidgetsProvider } from '@/custom-widgets-provider';
 import { EmotionCacheProvider } from '@/emotion-cache-provider';
+
+import { ClientApplication, createClientApplication } from '../app/client-application';
+import { ErrorBoundary } from '../error-boundary/error-boundary';
+import { SisenseContextProviderProps } from '../props';
+import { ThemeProvider } from '../theme-provider';
+import { I18nProvider } from '../translation/i18n-provider';
+import { SisenseContext } from './sisense-context';
+import { SisenseQueryClientProvider } from './sisense-query-client-provider';
 
 /**
  * Sisense Context Provider Component allowing you to connect to

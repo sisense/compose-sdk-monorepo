@@ -1,8 +1,9 @@
-import { getBasicCategoricalLegend } from './legend';
 import {
   LegendPosition,
   LegendSettings,
 } from '@/chart-options-processor/translations/legend-section';
+
+import { getBasicCategoricalLegend } from './legend';
 
 describe('legend.ts', () => {
   describe('getBasicCategoricalLegend', () => {

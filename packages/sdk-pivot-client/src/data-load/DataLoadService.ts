@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import EventEmitter from 'events';
+
+import { cloneObject, debug } from '../utils/index.js';
+import { LoggerI } from '../utils/types.js';
 import { AbstractDataLoadService } from './AbstractDataLoadService.js';
-import { debug, cloneObject } from '../utils/index.js';
 import { MessageType } from './constants.js';
 import { DataLoadServiceI, SocketI } from './types.js';
-import { LoggerI } from '../utils/types.js';
 
 export class DataLoadService extends AbstractDataLoadService implements DataLoadServiceI {
   /**

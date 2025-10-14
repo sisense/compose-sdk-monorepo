@@ -1,9 +1,10 @@
 import { TFunction } from '@sisense/sdk-common';
-import { BoxplotChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
-import { HighchartsDataPointContext, TooltipSettings, formatTooltipValue } from '../tooltip-utils';
-import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
 import isUndefined from 'lodash-es/isUndefined';
+
+import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
+import { BoxplotChartDataOptionsInternal } from '../../../chart-data-options/types';
+import { spanSegment, tooltipSeparator, tooltipWrapper } from '../scatter-tooltip';
+import { formatTooltipValue, HighchartsDataPointContext, TooltipSettings } from '../tooltip-utils';
 import './boxplot-tooltip.scss';
 
 // eslint-disable-next-line max-lines-per-function

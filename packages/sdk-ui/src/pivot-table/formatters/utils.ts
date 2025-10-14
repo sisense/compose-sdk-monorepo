@@ -1,12 +1,13 @@
 import { type Column } from '@sisense/sdk-data';
-import { getDataOptionGranularity, normalizeColumn } from '@/chart-data-options/utils';
+
 import {
+  type AnyColumn,
   type PivotTableDataOptions,
   type StyledColumn,
-  type AnyColumn,
 } from '@/chart-data-options/types';
-import { getCompleteNumberFormatConfig } from '@/chart-options-processor/translations/number-format-config';
+import { getDataOptionGranularity, normalizeColumn } from '@/chart-data-options/utils';
 import { getDefaultDateFormat } from '@/chart-options-processor/translations/axis-section';
+import { getCompleteNumberFormatConfig } from '@/chart-options-processor/translations/number-format-config';
 
 export const getPivotDataOptionByJaqlIndex = (
   dataOptions: PivotTableDataOptions,

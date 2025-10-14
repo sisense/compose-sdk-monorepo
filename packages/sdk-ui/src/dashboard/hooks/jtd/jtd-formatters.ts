@@ -1,13 +1,15 @@
 import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
 import { UserType } from '@sisense/sdk-pivot-client';
+
+import { AnyColumn } from '@/chart-data-options/types';
 import type {
   CellFormattingResult,
   CustomDataCellFormatter,
   CustomHeaderCellFormatter,
 } from '@/pivot-table/formatters/types';
-import { JtdConfig, JtdTarget, JtdTargetInner, PivotDimId } from './jtd-types';
-import { AnyColumn } from '@/chart-data-options/types';
 import { PivotTableDataPoint } from '@/types';
+
+import { JtdConfig, JtdTarget, JtdTargetInner, PivotDimId } from './jtd-types';
 
 // Type guard to check if a jump target has pivot dimensions (for backward compatibility)
 function isPivotJumpTarget(

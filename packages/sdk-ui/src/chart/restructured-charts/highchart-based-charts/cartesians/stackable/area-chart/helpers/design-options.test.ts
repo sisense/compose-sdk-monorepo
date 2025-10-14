@@ -1,7 +1,9 @@
-import { describe, test, expect } from 'vitest';
-import { translateAreaStyleOptionsToDesignOptions, isAreaStyleOptions } from './design-options';
+import { describe, expect, test } from 'vitest';
+
 import { CartesianChartDataOptionsInternal } from '@/chart-data-options/types';
 import { AreaStyleOptions, AreaSubtype, ChartStyleOptions } from '@/types';
+
+import { isAreaStyleOptions, translateAreaStyleOptionsToDesignOptions } from './design-options';
 
 describe('Area Chart Design Options', () => {
   const mockDataOptions: CartesianChartDataOptionsInternal = {
@@ -178,8 +180,8 @@ describe('Area Chart Design Options', () => {
 
         const result = translateAreaStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
 
-        expect(result.showTotal).toBe(true);
-        expect(result.totalLabelRotation).toBe(45);
+        expect(result.totalLabels?.enabled).toBe(true);
+        expect(result.totalLabels?.rotation).toBe(45);
       });
 
       test('defaults showTotal to false when totalLabels not provided', () => {
@@ -187,8 +189,8 @@ describe('Area Chart Design Options', () => {
 
         const result = translateAreaStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
 
-        expect(result.showTotal).toBe(false);
-        expect(result.totalLabelRotation).toBe(0);
+        expect(result.totalLabels?.enabled).toBe(false);
+        expect(result.totalLabels?.rotation).toBe(0);
       });
     });
 
@@ -211,8 +213,8 @@ describe('Area Chart Design Options', () => {
           fill: 'hollow',
           size: 'large',
         });
-        expect(result.showTotal).toBe(true);
-        expect(result.totalLabelRotation).toBe(90);
+        expect(result.totalLabels?.enabled).toBe(true);
+        expect(result.totalLabels?.rotation).toBe(90);
       });
     });
 

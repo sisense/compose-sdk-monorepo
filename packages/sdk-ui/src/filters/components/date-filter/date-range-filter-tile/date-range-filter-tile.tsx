@@ -1,12 +1,14 @@
-import { LevelAttribute, DataSource, Filter, isDateRangeFilter } from '@sisense/sdk-data';
+import { DataSource, Filter, isDateRangeFilter, LevelAttribute } from '@sisense/sdk-data';
+
+import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
+import { TranslatableError } from '@/translation/translatable-error';
+import { cloneFilterAndToggleDisabled } from '@/utils/filters';
+
 import { asSisenseComponent } from '../../../../decorators/component-decorators/as-sisense-component';
 import { FilterTileContainer, FilterTileDesignOptions } from '../../filter-tile-container';
-import { EditableDateRangeFilter } from './editable-date-range-filter';
 import { DateRangeFilterDisplay } from './date-range-filter-display';
-import { TranslatableError } from '@/translation/translatable-error';
+import { EditableDateRangeFilter } from './editable-date-range-filter';
 import { useDateLimits } from './use-date-limits';
-import { cloneFilterAndToggleDisabled } from '@/utils/filters';
-import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
 
 /**
  * Props of the {@link DateRangeFilterTile} component.

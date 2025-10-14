@@ -1,8 +1,7 @@
-import { Attribute, Cell, Measure, QueryResultData } from '@sisense/sdk-data';
-import { useExecuteQuery } from '@/query-execution/use-execute-query';
-import { GenericDataOptions, NumberFormatConfig } from '@/types';
-import { CustomWidgetComponentProps } from './types';
 import { useMemo } from 'react';
+
+import { Attribute, Cell, Measure, QueryResultData } from '@sisense/sdk-data';
+
 import {
   isMeasureColumn,
   translateColumnToAttribute,
@@ -12,9 +11,13 @@ import {
   applyFormatPlainText,
   getCompleteNumberFormatConfig,
 } from '@/chart-options-processor/translations/number-format-config';
+import { HookEnableParam } from '@/common/hooks/types';
+import { useExecuteQuery } from '@/query-execution/use-execute-query';
+import { GenericDataOptions, NumberFormatConfig } from '@/types';
+
 import { withTracking } from '../decorators/hook-decorators';
 import { ExecuteQueryParams, QueryState } from '../query-execution/types';
-import { HookEnableParam } from '@/common/hooks/types';
+import { CustomWidgetComponentProps } from './types';
 
 /**
  * State of a query execution retrieving data of a custom widget.

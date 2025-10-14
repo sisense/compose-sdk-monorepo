@@ -1,19 +1,21 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import {
   DimensionalLevelAttribute,
   Filter,
   filterFactory,
   isDateRangeFilter,
 } from '@sisense/sdk-data';
+
 import { SelectableSection } from '../common';
-import { DatetimeLimits } from './types';
 import {
   CalendarRangeValue,
   CalendarSelect,
   CalendarSelectTypes,
 } from '../common/select/calendar-select';
 import { useDatetimeFormatter } from '../hooks/use-datetime-formatter';
+import { DatetimeLimits } from './types';
 
 const DATETIME_RANGE_FORMAT = 'yyyy-MM-dd';
 

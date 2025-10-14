@@ -1,7 +1,9 @@
-import { Themable } from '@/theme-provider/types';
+import { CSSProperties } from 'react';
+
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { CSSProperties } from 'react';
+
+import { Themable } from '@/theme-provider/types';
 
 const MIN_ALLOWED_WIDTH = 500;
 const MIN_ALLOWED_HEIGHT = 500;

@@ -1,12 +1,13 @@
-import { renderHook, waitFor } from '@testing-library/react';
-import { usePivotDataLoading } from './use-pivot-data-loading';
 import {
-  PivotBuilder,
-  EVENT_QUERY_START,
   EVENT_QUERY_END,
-  JaqlRequest,
+  EVENT_QUERY_START,
   JaqlPanel,
+  JaqlRequest,
+  PivotBuilder,
 } from '@sisense/sdk-pivot-client';
+import { renderHook, waitFor } from '@testing-library/react';
+
+import { usePivotDataLoading } from './use-pivot-data-loading';
 
 type AnyFunction = (...args: any[]) => any;
 

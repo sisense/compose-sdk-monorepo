@@ -1,12 +1,14 @@
-import { usePivotTableQuery } from './use-get-pivot-table-query';
 import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
-import { renderHook, waitFor } from '@testing-library/react';
-import { ClientApplication } from '../../app/client-application';
-import { useSisenseContextMock } from '../../sisense-context/__mocks__/sisense-context';
-import { executePivotQueryMock } from '../../query/__mocks__/execute-query';
-import { mockPivotTableProps } from '../__mocks__/mocks';
-import { translatePivotTableDataOptions } from '@/chart-data-options/translate-data-options';
 import { type JaqlQueryPayload, type QueryExecutionConfig } from '@sisense/sdk-query-client';
+import { renderHook, waitFor } from '@testing-library/react';
+
+import { translatePivotTableDataOptions } from '@/chart-data-options/translate-data-options';
+
+import { ClientApplication } from '../../app/client-application';
+import { executePivotQueryMock } from '../../query/__mocks__/execute-query';
+import { useSisenseContextMock } from '../../sisense-context/__mocks__/sisense-context';
+import { mockPivotTableProps } from '../__mocks__/mocks';
+import { usePivotTableQuery } from './use-get-pivot-table-query';
 
 vi.mock('@/query/execute-query');
 vi.mock('@/sisense-context/sisense-context');

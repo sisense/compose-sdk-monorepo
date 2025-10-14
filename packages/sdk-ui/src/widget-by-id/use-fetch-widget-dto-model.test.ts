@@ -1,4 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
+
 import { useFetchWidgetDtoModel } from './use-fetch-widget-dto-model.js';
 
 // Mock the api/rest-api.js module

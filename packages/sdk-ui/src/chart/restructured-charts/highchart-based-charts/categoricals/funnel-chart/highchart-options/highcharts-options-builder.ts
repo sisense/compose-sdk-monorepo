@@ -1,9 +1,10 @@
-import { HighchartsOptionsBuilder } from '../../../types';
-import { determineHighchartsChartType } from '@/chart-options-processor/translations/translations-to-highcharts';
-import { getLegendSettings } from '@/chart-options-processor/translations/legend-section';
+import { getCategoryTooltipSettings } from '@/chart-options-processor/tooltip';
 import { getFunnelPlotOptions } from '@/chart-options-processor/translations/funnel-plot-options';
 import { formatFunnelChartData } from '@/chart-options-processor/translations/funnel-series';
-import { getCategoryTooltipSettings } from '@/chart-options-processor/tooltip';
+import { getLegendSettings } from '@/chart-options-processor/translations/legend-section';
+import { determineHighchartsChartType } from '@/chart-options-processor/translations/translations-to-highcharts';
+
+import { HighchartsOptionsBuilder } from '../../../types';
 
 export const funnelHighchartsOptionsBuilder: HighchartsOptionsBuilder<'funnel'> = {
   getChart: function (ctx) {
