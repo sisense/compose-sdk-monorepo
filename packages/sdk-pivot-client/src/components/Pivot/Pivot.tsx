@@ -71,6 +71,7 @@ type Props = {
   columnsCount: number;
   totalColumnsCount: number;
   itemsPerPage: number;
+  itemsPerPageOptions: number[];
   activePage: number;
   isAllDataLoaded?: boolean;
   allowHtml?: boolean;
@@ -402,6 +403,7 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
       overlay,
       itemsCount,
       itemsPerPage,
+      itemsPerPageOptions,
       paginationOptions,
       totalItemsCount,
       totalRecordsCount,
@@ -462,6 +464,7 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
                 ref={this.paginationPanelRef}
                 itemsCount={itemsCount}
                 itemsPerPage={itemsPerPage}
+                itemsPerPageOptions={itemsPerPageOptions}
                 options={paginationOptions}
                 totalItemsCount={totalItemsCount}
                 limitReached={limitReached}

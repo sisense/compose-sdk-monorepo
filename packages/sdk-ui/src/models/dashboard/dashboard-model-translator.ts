@@ -30,7 +30,7 @@ export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps
     layoutOptions,
     filters,
     widgetsOptions,
-    tabbersOptions,
+    config,
     styleOptions,
   } = dashboardModel;
   return {
@@ -38,11 +38,12 @@ export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps
     defaultDataSource: dataSource,
     widgets: widgetModels.map(widgetModelTranslator.toWidgetProps),
     layoutOptions,
-    config: {},
+    config: {
+      tabbers: config.tabbers,
+    },
     filters,
     widgetsOptions,
     styleOptions,
-    tabbersOptions,
   };
 }
 
@@ -85,14 +86,14 @@ export function fromDashboardDto(
       }
     : themeSettings;
   const widgets =
-    widgetDtoList?.map((widget) =>
-      widgetModelTranslator.fromWidgetDto(widget, mergedThemeSettings, appSettings),
+    widgetDtoList?.map((widgetDto) =>
+      widgetModelTranslator.fromWidgetDto(widgetDto, mergedThemeSettings, appSettings),
     ) || [];
   const widgetsPanelLayout = layoutDto ? translateLayout(layoutDto) : { columns: [] };
   const filterRelationsModel = filterRelationsDtoOptions?.[0]?.filterRelations;
   const filters = extractDashboardFilters(filterDtoList || [], filterRelationsModel);
   const widgetsOptions = translateWidgetsOptions(widgetDtoList);
-  const tabbersOptions = translateTabbersOptions(widgetDtoList);
+  const tabbersConfig = translateTabbersOptions(widgetDtoList);
 
   const dashboardModel: DashboardModel = {
     oid,
@@ -103,7 +104,9 @@ export function fromDashboardDto(
     layoutOptions: { widgetsPanel: widgetsPanelLayout },
     filters,
     widgetsOptions,
-    tabbersOptions,
+    config: {
+      tabbers: tabbersConfig,
+    },
     settings,
     userAuth,
   };

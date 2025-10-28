@@ -47,14 +47,17 @@ export const pieHighchartsOptionsBuilder: HighchartsOptionsBuilder<'pie'> = {
   getPlotOptions: function (ctx) {
     return getPiePlotOptions(
       ctx.designOptions.pieType,
-      ctx.designOptions.pieLabels,
+      ctx.designOptions.seriesLabels,
       ctx.dataOptions,
       ctx.extraConfig.themeSettings,
     );
   },
 
   getTooltip: function (ctx) {
-    return getCategoryTooltipSettings(ctx.designOptions.pieLabels?.showDecimals, ctx.dataOptions);
+    return getCategoryTooltipSettings(
+      ctx.designOptions.seriesLabels?.percentageLabels?.showDecimals,
+      ctx.dataOptions,
+    );
   },
 
   getExtras: function (ctx) {

@@ -1,9 +1,15 @@
-import type { CustomWidgetComponent, CustomWidgetsContextAdapter } from '@sisense/sdk-ui-preact';
+import {
+  type CustomWidgetComponent,
+  type CustomWidgetsContextAdapter,
+  TabberButtonsWidget,
+} from '@sisense/sdk-ui-preact';
 import { inject, ref } from 'vue';
 import type { InjectionKey, Ref } from 'vue';
 
 export const defaultCustomWidgetsContext = {
-  customWidgetsMap: new Map<string, CustomWidgetComponent<any>>(),
+  customWidgetsMap: new Map<string, CustomWidgetComponent<any>>([
+    ['tabber-buttons', TabberButtonsWidget],
+  ]),
 };
 
 export const customWidgetsContextKey = Symbol('customWidgetsContextKey') as InjectionKey<

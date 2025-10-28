@@ -7,6 +7,12 @@ import { attributes, data, measures } from '../../__mocks__/dataMocks';
 import { AreaChart } from '../../area-chart';
 import { BarChart } from '../../bar-chart';
 import { ColumnChart } from '../../column-chart';
+import {
+  createLinearGradient,
+  createRadialGradient,
+  GradientDirections,
+  RadialGradientPresets,
+} from '../../utils/gradient';
 import { HighchartsOptions } from '../chart-options-service';
 
 // Mock data for testing
@@ -561,6 +567,233 @@ describe('Total Labels Styling Tests', () => {
         expect(await findByLabelText('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
+
+      it('should apply linear gradient backgroundColor to total labels', async () => {
+        const linearGradient = createLinearGradient(GradientDirections.topToBottom, [
+          { position: 0, color: '#ff0000' },
+          { position: 1, color: '#0000ff' },
+        ]);
+
+        const onBeforeRender = vi.fn((options: HighchartsOptions) => {
+          const stackLabels = getStackLabels(options);
+          expect(stackLabels?.backgroundColor).toEqual({
+            linearGradient: {
+              x1: 0,
+              y1: 0,
+              x2: 0,
+              y2: 1,
+            },
+            stops: [
+              [0, '#ff0000'],
+              [1, '#0000ff'],
+            ],
+          });
+          return options;
+        });
+
+        const { findByLabelText } = render(
+          <BarChart
+            dataSet={mockData}
+            dataOptions={mockDataOptions}
+            styleOptions={{
+              subtype: 'bar/stacked',
+              totalLabels: {
+                enabled: true,
+                backgroundColor: linearGradient,
+              },
+            }}
+            onBeforeRender={onBeforeRender}
+          />,
+        );
+
+        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(onBeforeRender).toHaveBeenCalled();
+      });
+
+      it('should apply radial gradient backgroundColor to total labels', async () => {
+        const radialGradient = createRadialGradient(RadialGradientPresets.center, [
+          { position: 0, color: '#ffffff' },
+          { position: 0.5, color: '#cccccc' },
+          { position: 1, color: '#000000' },
+        ]);
+
+        const onBeforeRender = vi.fn((options: HighchartsOptions) => {
+          const stackLabels = getStackLabels(options);
+          expect(stackLabels?.backgroundColor).toEqual({
+            radialGradient: {
+              cx: 0.5,
+              cy: 0.5,
+              r: 0.8,
+            },
+            stops: [
+              [0, '#ffffff'],
+              [0.5, '#cccccc'],
+              [1, '#000000'],
+            ],
+          });
+          return options;
+        });
+
+        const { findByLabelText } = render(
+          <BarChart
+            dataSet={mockData}
+            dataOptions={mockDataOptions}
+            styleOptions={{
+              subtype: 'bar/stacked100',
+              totalLabels: {
+                enabled: true,
+                backgroundColor: radialGradient,
+              },
+            }}
+            onBeforeRender={onBeforeRender}
+          />,
+        );
+
+        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(onBeforeRender).toHaveBeenCalled();
+      });
+
+      it('should apply linear gradient borderColor to total labels', async () => {
+        const linearGradient = createLinearGradient(GradientDirections.leftToRight, [
+          { position: 0, color: '#00ff00' },
+          { position: 1, color: '#ff00ff' },
+        ]);
+
+        const onBeforeRender = vi.fn((options: HighchartsOptions) => {
+          const stackLabels = getStackLabels(options);
+          expect(stackLabels?.borderColor).toEqual({
+            linearGradient: {
+              x1: 0,
+              y1: 0,
+              x2: 1,
+              y2: 0,
+            },
+            stops: [
+              [0, '#00ff00'],
+              [1, '#ff00ff'],
+            ],
+          });
+          return options;
+        });
+
+        const { findByLabelText } = render(
+          <BarChart
+            dataSet={mockData}
+            dataOptions={mockDataOptions}
+            styleOptions={{
+              subtype: 'bar/stacked',
+              totalLabels: {
+                enabled: true,
+                borderColor: linearGradient,
+              },
+            }}
+            onBeforeRender={onBeforeRender}
+          />,
+        );
+
+        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(onBeforeRender).toHaveBeenCalled();
+      });
+
+      it('should apply radial gradient borderColor to total labels', async () => {
+        const radialGradient = createRadialGradient(RadialGradientPresets.topLeft, [
+          { position: 0, color: '#ffff00' },
+          { position: 1, color: '#00ffff' },
+        ]);
+
+        const onBeforeRender = vi.fn((options: HighchartsOptions) => {
+          const stackLabels = getStackLabels(options);
+          expect(stackLabels?.borderColor).toEqual({
+            radialGradient: {
+              cx: 0,
+              cy: 0,
+              r: 1,
+            },
+            stops: [
+              [0, '#ffff00'],
+              [1, '#00ffff'],
+            ],
+          });
+          return options;
+        });
+
+        const { findByLabelText } = render(
+          <BarChart
+            dataSet={mockData}
+            dataOptions={mockDataOptions}
+            styleOptions={{
+              subtype: 'bar/stacked100',
+              totalLabels: {
+                enabled: true,
+                borderColor: radialGradient,
+              },
+            }}
+            onBeforeRender={onBeforeRender}
+          />,
+        );
+
+        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(onBeforeRender).toHaveBeenCalled();
+      });
+
+      it('should apply both gradient backgroundColor and borderColor to total labels', async () => {
+        const linearGradient = createLinearGradient(GradientDirections.diagonalTopLeft, [
+          { position: 0, color: '#ff0000' },
+          { position: 1, color: '#0000ff' },
+        ]);
+
+        const radialGradient = createRadialGradient(RadialGradientPresets.bottomRight, [
+          { position: 0, color: '#ffffff' },
+          { position: 1, color: '#000000' },
+        ]);
+
+        const onBeforeRender = vi.fn((options: HighchartsOptions) => {
+          const stackLabels = getStackLabels(options);
+          expect(stackLabels?.backgroundColor).toEqual({
+            linearGradient: {
+              x1: 0,
+              y1: 0,
+              x2: 1,
+              y2: 1,
+            },
+            stops: [
+              [0, '#ff0000'],
+              [1, '#0000ff'],
+            ],
+          });
+          expect(stackLabels?.borderColor).toEqual({
+            radialGradient: {
+              cx: 1,
+              cy: 1,
+              r: 1,
+            },
+            stops: [
+              [0, '#ffffff'],
+              [1, '#000000'],
+            ],
+          });
+          return options;
+        });
+
+        const { findByLabelText } = render(
+          <BarChart
+            dataSet={mockData}
+            dataOptions={mockDataOptions}
+            styleOptions={{
+              subtype: 'bar/stacked',
+              totalLabels: {
+                enabled: true,
+                backgroundColor: linearGradient,
+                borderColor: radialGradient,
+              },
+            }}
+            onBeforeRender={onBeforeRender}
+          />,
+        );
+
+        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(onBeforeRender).toHaveBeenCalled();
+      });
     });
 
     describe('stacked stack type', () => {
@@ -797,6 +1030,89 @@ describe('Total Labels Styling Tests', () => {
         expect(await findByLabelText('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
+
+      it('should apply linear gradient backgroundColor to total labels', async () => {
+        const linearGradient = createLinearGradient(GradientDirections.bottomToTop, [
+          { position: 0, color: '#00ff00' },
+          { position: 1, color: '#ff0000' },
+        ]);
+
+        const onBeforeRender = vi.fn((options: HighchartsOptions) => {
+          const stackLabels = getStackLabels(options);
+          expect(stackLabels?.backgroundColor).toEqual({
+            linearGradient: {
+              x1: 0,
+              y1: 1,
+              x2: 0,
+              y2: 0,
+            },
+            stops: [
+              [0, '#00ff00'],
+              [1, '#ff0000'],
+            ],
+          });
+          return options;
+        });
+
+        const { findByLabelText } = render(
+          <ColumnChart
+            dataSet={mockData}
+            dataOptions={mockDataOptions}
+            styleOptions={{
+              subtype: 'column/stackedcolumn',
+              totalLabels: {
+                enabled: true,
+                backgroundColor: linearGradient,
+              },
+            }}
+            onBeforeRender={onBeforeRender}
+          />,
+        );
+
+        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(onBeforeRender).toHaveBeenCalled();
+      });
+
+      it('should apply radial gradient borderColor to total labels', async () => {
+        const radialGradient = createRadialGradient(RadialGradientPresets.topRight, [
+          { position: 0, color: '#ffffff' },
+          { position: 1, color: '#000000' },
+        ]);
+
+        const onBeforeRender = vi.fn((options: HighchartsOptions) => {
+          const stackLabels = getStackLabels(options);
+          expect(stackLabels?.borderColor).toEqual({
+            radialGradient: {
+              cx: 1,
+              cy: 0,
+              r: 1,
+            },
+            stops: [
+              [0, '#ffffff'],
+              [1, '#000000'],
+            ],
+          });
+          return options;
+        });
+
+        const { findByLabelText } = render(
+          <ColumnChart
+            dataSet={mockData}
+            dataOptions={mockDataOptions}
+            styleOptions={{
+              subtype: 'column/stackedcolumn100',
+              totalLabels: {
+                enabled: true,
+                borderColor: radialGradient,
+              },
+            }}
+            onBeforeRender={onBeforeRender}
+          />,
+        );
+
+        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(onBeforeRender).toHaveBeenCalled();
+      });
     });
 
     describe('stackedcolumn stack type', () => {
@@ -1024,6 +1340,93 @@ describe('Total Labels Styling Tests', () => {
                   fontStyle: 'oblique',
                   textOutline: '3px solid #000',
                 },
+              },
+            }}
+            onBeforeRender={onBeforeRender}
+          />,
+        );
+
+        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(onBeforeRender).toHaveBeenCalled();
+      });
+
+      it('should apply linear gradient backgroundColor to total labels', async () => {
+        const linearGradient = createLinearGradient(GradientDirections.rightToLeft, [
+          { position: 0, color: '#ff00ff' },
+          { position: 0.5, color: '#00ffff' },
+          { position: 1, color: '#ffff00' },
+        ]);
+
+        const onBeforeRender = vi.fn((options: HighchartsOptions) => {
+          const stackLabels = getStackLabels(options);
+          expect(stackLabels?.backgroundColor).toEqual({
+            linearGradient: {
+              x1: 1,
+              y1: 0,
+              x2: 0,
+              y2: 0,
+            },
+            stops: [
+              [0, '#ff00ff'],
+              [0.5, '#00ffff'],
+              [1, '#ffff00'],
+            ],
+          });
+          return options;
+        });
+
+        const { findByLabelText } = render(
+          <AreaChart
+            dataSet={mockData}
+            dataOptions={mockDataOptions}
+            styleOptions={{
+              subtype: 'area/stacked',
+              totalLabels: {
+                enabled: true,
+                backgroundColor: linearGradient,
+              },
+            }}
+            onBeforeRender={onBeforeRender}
+          />,
+        );
+
+        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(onBeforeRender).toHaveBeenCalled();
+      });
+
+      it('should apply radial gradient borderColor to total labels', async () => {
+        const radialGradient = createRadialGradient(RadialGradientPresets.bottomLeft, [
+          { position: 0, color: '#ffffff' },
+          { position: 0.5, color: '#cccccc' },
+          { position: 1, color: '#000000' },
+        ]);
+
+        const onBeforeRender = vi.fn((options: HighchartsOptions) => {
+          const stackLabels = getStackLabels(options);
+          expect(stackLabels?.borderColor).toEqual({
+            radialGradient: {
+              cx: 0,
+              cy: 1,
+              r: 1,
+            },
+            stops: [
+              [0, '#ffffff'],
+              [0.5, '#cccccc'],
+              [1, '#000000'],
+            ],
+          });
+          return options;
+        });
+
+        const { findByLabelText } = render(
+          <AreaChart
+            dataSet={mockData}
+            dataOptions={mockDataOptions}
+            styleOptions={{
+              subtype: 'area/stacked100',
+              totalLabels: {
+                enabled: true,
+                borderColor: radialGradient,
               },
             }}
             onBeforeRender={onBeforeRender}

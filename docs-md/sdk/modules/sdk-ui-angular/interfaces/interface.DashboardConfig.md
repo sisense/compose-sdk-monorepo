@@ -16,6 +16,14 @@ Configuration for the filters panel
 
 ***
 
+### tabbers
+
+> **tabbers**?: [`TabbersConfig`](../../sdk-ui/type-aliases/type-alias.TabbersConfig.md)
+
+Configuration for tabber widgets in the dashboard
+
+***
+
 ### toolbar
 
 > **toolbar**?: `object`

@@ -155,9 +155,8 @@ Query limit (max rows count that will be fetched in query)
 
 **tabberConfig**?: `object`
 
-Configuration of the tabber widget
+Configuration of the tabber widgets feature
 
-Set the `tabberConfig.enabled` property to `true` to enable the tabber widget support. Otherwise, the tabber widget will be treated as 'unknown custom widget type'.
 Only tabber widgets that are configured using the Fusion UI as documented [here](https://docs.sisense.com/main/SisenseLinux/tabber.htm#Creating) are supported.
 
 > #### `tabberConfig.enabled`
@@ -167,6 +166,10 @@ Only tabber widgets that are configured using the Fusion UI as documented [here]
 > Whether to enable tabber widget support
 >
 > If not specified, the default value is `true`
+>
+> ::: warning Deprecated
+> Tabber widgets are now supported by default and this property is no longer needed.
+> :::
 >
 >
 

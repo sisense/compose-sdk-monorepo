@@ -6,7 +6,6 @@ import {
   DefaultFunnelType,
   FunnelLabels,
 } from '@/chart-options-processor/translations/funnel-plot-options';
-import { getLegendSettings } from '@/chart-options-processor/translations/legend-section';
 import { ChartStyleOptions } from '@/types';
 
 import { FunnelChartDesignOptions, FunnelChartStyleOptions } from '../types';
@@ -56,7 +55,7 @@ export function translateStyleOptionsToDesignOptions(
     funnelType,
     funnelDirection,
     funnelLabels,
-    legend: getLegendSettings(legend),
+    legend,
     dataLimits,
   };
 }

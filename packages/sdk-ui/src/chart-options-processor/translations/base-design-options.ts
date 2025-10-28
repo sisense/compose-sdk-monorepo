@@ -5,7 +5,7 @@ import {
   DefaultFunnelSize,
   DefaultFunnelType,
 } from './funnel-plot-options';
-import { DefaultPieLabels, DefaultPieType } from './pie-plot-options';
+import { DefaultPieType } from './pie-plot-options';
 import { DesignOptions } from './types';
 
 export const SERIES_CAPACITY = 50;
@@ -48,7 +48,6 @@ export const BaseDesignOptions: Merge<DesignOptions> = {
     enabled: true,
   },
   pieType: DefaultPieType,
-  pieLabels: DefaultPieLabels,
   funnelType: DefaultFunnelType,
   funnelSize: DefaultFunnelSize,
   funnelDirection: DefaultFunnelDirection,

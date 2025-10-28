@@ -14,6 +14,7 @@ import {
   JaqlElement,
   LogicalAttributeFilter,
   MeasureFilter,
+  MeasureRankingFilter,
   MembersFilter,
   NumericFilter,
   RankingFilter,
@@ -223,6 +224,16 @@ describe('CustomSuperJSON', () => {
       'some-ranking-filter-compose-code',
     );
 
+    const measureRankingFilter = new MeasureRankingFilter(
+      baseMeasure,
+      'some-operator',
+      1,
+      {
+        guid: 'some-guid',
+      },
+      'some-measure-ranking-filter-compose-code',
+    );
+
     const numericFilter = new NumericFilter(
       attribute,
       'some-operator-a',
@@ -281,6 +292,7 @@ describe('CustomSuperJSON', () => {
       expect(excludeFilter.id).toBeDefined();
       expect(measureFilter1.id).toBeDefined();
       expect(rankingFilter.id).toBeDefined();
+      expect(measureRankingFilter.id).toBeDefined();
       expect(numericFilter.id).toBeDefined();
       expect(dateRangeFilter.id).toBeDefined();
       expect(relativeDateFilter.id).toBeDefined();
@@ -374,6 +386,12 @@ describe('CustomSuperJSON', () => {
       );
     });
 
+    it('should stringify and parse back MeasureRankingFilter', () => {
+      expect(CustomSuperJSON.parse(CustomSuperJSON.stringify(measureRankingFilter))).toStrictEqual(
+        measureRankingFilter,
+      );
+    });
+
     it('should stringify and parse back NumericFilter', () => {
       expect(CustomSuperJSON.parse(CustomSuperJSON.stringify(numericFilter))).toStrictEqual(
         numericFilter,
@@ -413,6 +431,7 @@ describe('CustomSuperJSON', () => {
           measureFilter2,
           measureFilter3,
           rankingFilter,
+          measureRankingFilter,
           numericFilter,
           dateRangeFilter,
           relativeDateFilter,

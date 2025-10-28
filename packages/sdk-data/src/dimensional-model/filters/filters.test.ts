@@ -17,6 +17,7 @@ import {
   isExcludeFilter,
   isLogicalAttributeFilter,
   isMeasureFilter,
+  isMeasureRankingFilter,
   isMembersFilter,
   isNumericFilter,
   isRankingFilter,
@@ -24,6 +25,7 @@ import {
   isTextFilter,
   LogicalAttributeFilter,
   MeasureFilter,
+  MeasureRankingFilter,
   MembersFilter,
   NumericFilter,
   NumericOperators,
@@ -331,6 +333,34 @@ describe('Filters jaql preparations', () => {
     );
 
     expect(isRankingFilter(filter)).toBe(true);
+
+    const jaql = filter.jaql();
+
+    expect(jaql).toStrictEqual(result);
+  });
+
+  it('must prepare measure ranking filter jaql', () => {
+    const result = {
+      jaql: {
+        type: 'measure',
+        title: 'Cost',
+        agg: 'sum',
+        dim: '[Commerce.Cost]',
+        datatype: 'numeric',
+        filter: {
+          top: 2,
+        },
+      },
+      panel: 'scope',
+    };
+    const measure = new DimensionalBaseMeasure(
+      'Cost',
+      new DimensionalAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute'),
+      'sum',
+    );
+    const filter = new MeasureRankingFilter(measure, RankingOperators.Top, 2);
+
+    expect(isMeasureRankingFilter(filter)).toBe(true);
 
     const jaql = filter.jaql();
 

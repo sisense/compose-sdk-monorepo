@@ -229,6 +229,11 @@ export interface ChartBuilder<CT extends SupportedChartType = SupportedChartType
     isCorrectStyleOptions: (
       styleOptions: ChartStyleOptions,
     ) => styleOptions is TypedChartStyleOptions<CT>;
+
+    /**
+     * Returns the default style options for the current chart type.
+     */
+    getDefaultStyleOptions?: () => TypedChartStyleOptions<CT>;
   };
 
   /**

@@ -5,6 +5,7 @@ import {
   type CustomWidgetComponentProps,
   type GenericDataOptions,
 } from '@sisense/sdk-ui-preact';
+import { TabberButtonsWidget } from '@sisense/sdk-ui-preact';
 import { BehaviorSubject } from 'rxjs';
 
 import { DynamicRenderer } from './dynamic-renderer.service';
@@ -36,7 +37,7 @@ export class CustomWidgetsService {
     private dynamicRenderer: DynamicRenderer,
   ) {
     this.customWidgetsMap$ = new BehaviorSubject(
-      new Map<string, CustomWidgetComponentPreact<any>>(),
+      new Map<string, CustomWidgetComponentPreact<any>>([['tabber-buttons', TabberButtonsWidget]]),
     );
   }
 

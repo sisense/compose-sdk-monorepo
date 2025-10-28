@@ -20,7 +20,6 @@ Do this:
   create(context) {
     return {
       ImportDeclaration(node) {
-        console.log('[lodash rule] checking import from:', node.source.value);
         const source = node.source.value;
 
         if (source === 'lodash' || source === 'lodash-es') {

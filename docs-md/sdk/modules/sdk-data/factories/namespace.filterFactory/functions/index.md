@@ -62,11 +62,13 @@ greater than 1000.
 - [like](function.like.md)
 - [measureBetween](function.measureBetween.md)
 - [measureBetweenNotEqual](function.measureBetweenNotEqual.md)
+- [measureBottomRanking](function.measureBottomRanking.md)
 - [measureEquals](function.measureEquals.md)
 - [measureGreaterThan](function.measureGreaterThan.md)
 - [measureGreaterThanOrEqual](function.measureGreaterThanOrEqual.md)
 - [measureLessThan](function.measureLessThan.md)
 - [measureLessThanOrEqual](function.measureLessThanOrEqual.md)
+- [measureTopRanking](function.measureTopRanking.md)
 - [members](function.members.md) - Creates filter on attribute to match certain string values
 - [numeric](function.numeric.md)
 - [startsWith](function.startsWith.md)

@@ -42,7 +42,7 @@ export class FiltersComponent {
   };
 }
 ```
-<img src="../../../img/angular-relative-date-filter-tile-example.png" width="600px" />
+<img src="../../../img/angular-relative-date-filter-tile-example.png" width="225px" />
 
 ## Implements
 

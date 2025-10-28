@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import styled from '@emotion/styled';
 import { DataSource } from '@sisense/sdk-data';
@@ -25,6 +24,7 @@ import {
 } from '../hooks/use-dashboard-header-toolbar';
 import { useEditModeToolbar } from '../hooks/use-edit-mode-toolbar';
 import { findDeletedWidgetsFromLayout } from './editable-layout/helpers';
+import { EditToggle } from './toolbar/edit-toggle';
 import { FilterToggle } from './toolbar/filter-toggle';
 
 enum DashboardMode {
@@ -72,7 +72,6 @@ export const DashboardContainer = ({
   onChange,
 }: DashboardContainerProps) => {
   const { themeSettings } = useThemeContext();
-  const { t } = useTranslation();
   const [internalLayout, setInternalLayout] = useSyncedState(layoutOptions?.widgetsPanel);
   const updatedLayout = useMemo(() => {
     return internalLayout ?? getDefaultWidgetsPanelLayout(widgets);
@@ -153,27 +152,26 @@ export const DashboardContainer = ({
   const headerToolbarMenuItems = useMemo(() => {
     const items: DashboardHeaderToolbarMenuItem[] = [];
 
-    if (isEditModeEnabled) {
-      if (isHistoryEnabled || !isEditMode) {
-        items.push({
-          title: t('dashboard.toolbar.editLayout'),
-          onClick: () => handleModeChange(DashboardMode.EDIT),
-          ariaLabel: 'edit layout button',
-        });
-      } else {
-        items.push({
-          title: t('dashboard.toolbar.viewMode'),
-          onClick: () => handleModeChange(DashboardMode.VIEW),
-          ariaLabel: 'view layout button',
-        });
-      }
-    }
+    // placeholder for menu items
 
     return items;
-  }, [t, isEditModeEnabled, isEditMode, isHistoryEnabled, handleModeChange]);
+  }, []);
 
   const headerToolbarComponents = useMemo(() => {
     const components: JSX.Element[] = [];
+
+    if (isEditModeEnabled) {
+      components.push(
+        <EditToggle
+          key="edit-toggle"
+          isEditMode={isEditMode}
+          isHistoryEnabled={isHistoryEnabled}
+          onToggleClick={() =>
+            handleModeChange(isEditMode ? DashboardMode.VIEW : DashboardMode.EDIT)
+          }
+        />,
+      );
+    }
 
     // Add filter toggle component when showFilterIconInToolbar is enabled and both toolbar and filters panel are visible
     if (showFilterIconInToolbar) {
@@ -187,7 +185,15 @@ export const DashboardContainer = ({
     }
 
     return components;
-  }, [showFilterIconInToolbar, isFilterPanelCollapsed, handleFilterToggleClick]);
+  }, [
+    showFilterIconInToolbar,
+    isFilterPanelCollapsed,
+    handleFilterToggleClick,
+    handleModeChange,
+    isEditMode,
+    isEditModeEnabled,
+    isHistoryEnabled,
+  ]);
 
   const { toolbar: headerToolbar } = useDashboardHeaderToolbar({
     menuItems: headerToolbarMenuItems,

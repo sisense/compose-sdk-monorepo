@@ -2,7 +2,6 @@
 
 /* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
-import ReactDOM from 'react-dom';
 
 import EventEmitter from 'events';
 import isEqual from 'lodash-es/isEqual.js';
@@ -80,6 +79,7 @@ export type Props = {
   columnsCount: number;
   totalColumnsCount: number;
   itemsPerPage: number;
+  itemsPerPageOptions: number[];
   isAllDataLoaded: boolean;
   activePage: number;
   className?: string;
@@ -208,6 +208,12 @@ export class PivotBuilder {
   /** builder appearance state */
   private appearanceState: AppearanceState = { ...INITIAL_APPEARANCE_STATE };
 
+  /** Available options for page size */
+  private readonly itemsPerPageOptions = [10, 25, 50, 75];
+
+  /** Default page size */
+  public readonly defaultPageSize = 25;
+
   /** Current component properties */
   private props: Props;
 
@@ -242,7 +248,8 @@ export class PivotBuilder {
       limitReached: false,
       totalColumnsCount: 0,
       columnsCount: 0,
-      itemsPerPage: 25,
+      itemsPerPage: this.defaultPageSize,
+      itemsPerPageOptions: this.itemsPerPageOptions,
       activePage: DEFAULT_ACTIVE_PAGE,
       isFullWidth: false,
       isFixedEnabled: true,
@@ -429,9 +436,6 @@ export class PivotBuilder {
    * @returns {void}
    */
   private updateProps(newProps: Record<string, any>) {
-    if (!this.pivotElement) {
-      return;
-    }
     const nextProps = {
       ...this.props,
       ...newProps,
@@ -439,19 +443,29 @@ export class PivotBuilder {
       ref: (ref: Pivot) => (this.pivot = ref),
     };
     const changedProps = getChangedProps(this.props, nextProps);
-    if (
+
+    const paginatedChanged =
       typeof changedProps.isPaginated !== 'undefined' ||
-      typeof changedProps.itemsPerPage !== 'undefined'
-    ) {
+      typeof changedProps.itemsPerPage !== 'undefined';
+
+    this.props = nextProps;
+
+    if (paginatedChanged) {
       this.totalItemsCount = 0;
       this.totalRecordsCount = 0;
       this.loadedItemsCount = undefined;
-      this.loadInitData(undefined, nextProps as Props);
     }
 
-    this.pivotElement = React.createElement(Pivot, this.withHandlers(nextProps), null);
+    if (!this.pivotElement) {
+      return;
+    }
+
+    if (paginatedChanged) {
+      this.loadInitData();
+    }
+
+    this.pivotElement = React.createElement(Pivot, this.withHandlers(this.props), null);
     this.events.emit(EVENT_PIVOT_ELEMENT_CHANGE, this.pivotElement);
-    this.props = nextProps;
   }
 
   /**
@@ -462,16 +476,13 @@ export class PivotBuilder {
    * @returns {void}
    * @private
    */
-  loadInitData(jaql?: JaqlRequest, props: Props = this.props) {
+  loadInitData(jaql?: JaqlRequest) {
     // Workaround to prevent double loading of the same data in React Strict mode
     if (this.dataService?.getJaql()?.queryGuid === jaql?.queryGuid) {
       return;
     }
 
     const { dataService } = this;
-    const { isPaginated, itemsPerPage } = props;
-    const pageSize = isPaginated ? itemsPerPage : undefined;
-
     // @ts-ignore
     this.onDataChunkReceivedThrottle.cancel();
 
@@ -505,7 +516,7 @@ export class PivotBuilder {
     this.events.emit(EVENT_QUERY_START);
 
     dataService
-      .loadData(jaql, { pageSize, isPaginated })
+      .loadData(jaql, { pageSize: this.pageSize, isPaginated: this.props.isPaginated })
       .then(
         ({ rowsTreeService, columnsTreeService, cornerTreeService, isLastPage, cellsMetadata }) => {
           this.events.emit(EVENT_QUERY_END, { cellsMetadata });
@@ -557,6 +568,27 @@ export class PivotBuilder {
         }
         throw err;
       });
+  }
+
+  /**
+   * Updates the page size
+   *
+   * @param {number} pageSize - new page size
+   * @returns {void}
+   */
+  updatePageSize(pageSize?: number) {
+    this.updateProps({
+      itemsPerPage: pageSize,
+    });
+  }
+
+  /**
+   * Page size getter
+   *
+   * @type {number}
+   */
+  get pageSize() {
+    return this.props.itemsPerPage;
   }
 
   /**

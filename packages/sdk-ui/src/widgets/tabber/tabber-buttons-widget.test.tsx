@@ -2,51 +2,48 @@ import React from 'react';
 
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { TabberWidgetProps } from '@/props';
-import type { TabberStyleProps, TabberTab } from '@/types';
+import { TabberButtonsWidgetProps } from '@/props';
 
-import { TabberWidget, TabInterval, TabSize } from './tabber-widget';
+import { TabberButtonsWidget } from './tabber-buttons-widget';
+import type { TabberButtonsWidgetCustomOptions, TabberButtonsWidgetStyleOptions } from './types';
 
-const sampleTabs: TabberTab[] = [
-  { title: 'Tab One', displayWidgetIds: ['w1'] },
-  { title: 'Tab Two', displayWidgetIds: ['w2'] },
-  { title: 'Tab Three', displayWidgetIds: ['w3'] },
-];
+vi.mock('@/decorators/component-decorators/as-sisense-component', () => ({
+  asSisenseComponent: () => (Component: any) => Component,
+}));
 
-const baseStyleOptions: TabberStyleProps = {
-  showTitle: false,
+const baseTabsConfig: TabberButtonsWidgetCustomOptions = {
+  tabNames: ['Tab One', 'Tab Two', 'Tab Three'],
+};
+
+const baseStyleOptions: TabberButtonsWidgetStyleOptions = {
   showSeparators: true,
   showDescription: false,
-  useSelectedBkg: false,
-  useUnselectedBkg: false,
   selectedColor: '#FFCB05',
   unselectedColor: '#9EA2AB',
   descriptionColor: '#9EA2AB',
-  selectedBkgColor: '#FFFFFF',
-  unselectedBkgColor: '#FFFFFF',
-  tabsSize: 'MEDIUM',
-  tabsInterval: 'MEDIUM',
-  tabsAlignment: 'CENTER',
-  tabCornerRadius: 'NONE',
-  tabs: sampleTabs,
-  activeTab: 0,
+  tabsSize: 'medium',
+  tabsInterval: 'medium',
+  tabsAlignment: 'center',
+  tabCornerRadius: 'none',
 };
 
-const baseProps: TabberWidgetProps = {
+const baseProps: TabberButtonsWidgetProps = {
+  id: 'tabber1',
+  widgetType: 'custom',
+  dataOptions: {},
+  customWidgetType: 'tabber-buttons',
   styleOptions: baseStyleOptions,
+  customOptions: { ...baseTabsConfig, activeTab: 0 },
   description: '',
-  selectedTab: 0,
-  onTabSelected: vi.fn(),
-  width: '100%',
 };
 
-describe('TabberWidget Component Comprehensive Tests', () => {
+describe('TabberButtonsWidget Component Comprehensive Tests', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders all tab items with correct text and no description by default', () => {
-    render(<TabberWidget {...baseProps} />);
+    render(<TabberButtonsWidget {...baseProps} />);
     // Check that all tab titles are rendered
     expect(screen.getByText('Tab One')).toBeInTheDocument();
     expect(screen.getByText('Tab Two')).toBeInTheDocument();
@@ -54,31 +51,42 @@ describe('TabberWidget Component Comprehensive Tests', () => {
   });
 
   it('renders description when showDescription is true and description prop is provided', () => {
-    const customStyle: TabberStyleProps = {
+    const customStyle: TabberButtonsWidgetStyleOptions = {
       ...baseStyleOptions,
       showDescription: true,
     };
     const descriptionText = 'This is a tab description';
     render(
-      <TabberWidget {...baseProps} styleOptions={customStyle} description={descriptionText} />,
+      <TabberButtonsWidget
+        {...baseProps}
+        styleOptions={customStyle}
+        description={descriptionText}
+      />,
     );
     expect(screen.getByText(descriptionText)).toBeInTheDocument();
   });
 
   it('calls onTabSelected with the correct index when a tab is clicked', () => {
     const onTabSelectedMock = vi.fn();
-    render(<TabberWidget {...baseProps} selectedTab={0} onTabSelected={onTabSelectedMock} />);
+    const propsWithCallback: TabberButtonsWidgetProps = {
+      ...baseProps,
+      customOptions: {
+        ...baseProps.customOptions,
+        onTabSelected: onTabSelectedMock,
+      },
+    };
+    render(<TabberButtonsWidget {...propsWithCallback} />);
     const tabTwo = screen.getByText('Tab Two');
     fireEvent.click(tabTwo);
     expect(onTabSelectedMock).toHaveBeenCalledWith(1);
   });
 
   it('does not render separators when showSeparators is false', () => {
-    const customStyle: TabberStyleProps = {
+    const customStyle: TabberButtonsWidgetStyleOptions = {
       ...baseStyleOptions,
       showSeparators: false,
     };
-    const { container } = render(<TabberWidget {...baseProps} styleOptions={customStyle} />);
+    const { container } = render(<TabberButtonsWidget {...baseProps} styleOptions={customStyle} />);
     // Separator is a styled div with a right border. Verify no element has such a border.
     const divs = Array.from(container.querySelectorAll('div'));
     const hasSeparator = divs.some((div) => {
@@ -89,24 +97,27 @@ describe('TabberWidget Component Comprehensive Tests', () => {
 
   it('applies custom colors and background styles for active and inactive tabs', () => {
     // Define custom style options:
-    const customStyle: TabberStyleProps = {
+    const customStyle: TabberButtonsWidgetStyleOptions = {
       ...baseStyleOptions,
       // Active tab should have red text and pink background.
       selectedColor: 'red', // red → rgb(255, 0, 0)
-      selectedBkgColor: 'pink', // pink → rgb(255, 192, 203)
+      selectedBackgroundColor: 'pink', // pink → rgb(255, 192, 203)
       // Inactive tab should have blue text and lightblue background.
       unselectedColor: 'blue', // blue → rgb(0, 0, 255)
-      useSelectedBkg: true,
-      useUnselectedBkg: true,
-      unselectedBkgColor: 'lightblue', // lightblue → rgb(173, 216, 230)
-      tabCornerRadius: 'SMALL', // SMALL maps to 5px border-radius
+      unselectedBackgroundColor: 'lightblue', // lightblue → rgb(173, 216, 230)
+      tabCornerRadius: 'small', // small maps to 5px border-radius
+    };
+
+    const customTabsConfig = {
+      ...baseTabsConfig,
+      activeTab: 1,
     };
 
     render(
-      <TabberWidget
+      <TabberButtonsWidget
         {...baseProps}
         styleOptions={customStyle}
-        selectedTab={1}
+        customOptions={customTabsConfig}
         description={'desc'}
       />,
     );
@@ -127,20 +138,15 @@ describe('TabberWidget Component Comprehensive Tests', () => {
     expect(inactiveStyles.backgroundColor).toBe('rgb(173, 216, 230)');
   });
 
-  it('renders transparent backgrounds when useSelectedBkg and useUnselectedBkg are false', () => {
-    // Even though default baseStyleOptions has useSelectedBkg/unselectedBkg false,
-    // we explicitly set them to false and provide non-transparent colors.
-    const customStyle: TabberStyleProps = {
+  it('renders transparent backgrounds when background colors are not provided', () => {
+    // When background colors are not provided, both tabs should have transparent backgrounds
+    const customStyle: TabberButtonsWidgetStyleOptions = {
       ...baseStyleOptions,
-      useSelectedBkg: false,
-      useUnselectedBkg: false,
-      selectedBkgColor: 'pink', // these should be ignored
-      unselectedBkgColor: 'lightblue', // these should be ignored
-      tabs: sampleTabs,
+      // No selectedBackgroundColor or unselectedBackgroundColor provided
     };
 
     // Active tab is index 0 (Tab One) in this case.
-    render(<TabberWidget {...baseProps} styleOptions={customStyle} selectedTab={0} />);
+    render(<TabberButtonsWidget {...baseProps} styleOptions={customStyle} />);
     const activeTabElement = screen.getByText('Tab One').parentElement;
     const inactiveTabElement = screen.getByText('Tab Two').parentElement;
     const activeStyles = window.getComputedStyle(activeTabElement!);
@@ -152,16 +158,38 @@ describe('TabberWidget Component Comprehensive Tests', () => {
     expect(inactiveStyles.backgroundColor).toBe('rgba(0, 0, 0, 0)');
   });
 
+  it('applies unselectedBackgroundColor only to unselected tabs when selectedBackgroundColor is not specified', () => {
+    const customStyle: TabberButtonsWidgetStyleOptions = {
+      ...baseStyleOptions,
+      unselectedBackgroundColor: 'lightblue', // lightblue → rgb(173, 216, 230)
+      // No selectedBackgroundColor provided
+    };
+
+    render(<TabberButtonsWidget {...baseProps} styleOptions={customStyle} />);
+    const activeTabElement = screen.getByText('Tab One').parentElement;
+    const inactiveTabElement = screen.getByText('Tab Two').parentElement;
+    const activeStyles = window.getComputedStyle(activeTabElement!);
+    const inactiveStyles = window.getComputedStyle(inactiveTabElement!);
+
+    // Active tab should be transparent since selectedBackgroundColor is not provided
+    expect(activeStyles.backgroundColor).toBe('rgba(0, 0, 0, 0)');
+    // Inactive tab should have lightblue background
+    expect(inactiveStyles.backgroundColor).toBe('rgb(173, 216, 230)');
+  });
+
   it('applies custom descriptionColor to the description text', () => {
-    const customStyle: TabberStyleProps = {
+    const customStyle: TabberButtonsWidgetStyleOptions = {
       ...baseStyleOptions,
       showDescription: true,
       descriptionColor: 'purple',
-      tabs: sampleTabs,
     };
     const descriptionText = 'Custom description';
     render(
-      <TabberWidget {...baseProps} styleOptions={customStyle} description={descriptionText} />,
+      <TabberButtonsWidget
+        {...baseProps}
+        styleOptions={customStyle}
+        description={descriptionText}
+      />,
     );
     const descriptionElement = screen.getByText(descriptionText);
     const descriptionStyles = window.getComputedStyle(descriptionElement);
@@ -170,12 +198,11 @@ describe('TabberWidget Component Comprehensive Tests', () => {
   });
 
   it('applies correct text alignment based on tabsAlignment', () => {
-    const customStyle: TabberStyleProps = {
+    const customStyle: TabberButtonsWidgetStyleOptions = {
       ...baseStyleOptions,
-      tabsAlignment: 'RIGHT',
-      tabs: sampleTabs,
+      tabsAlignment: 'right',
     };
-    const { container } = render(<TabberWidget {...baseProps} styleOptions={customStyle} />);
+    const { container } = render(<TabberButtonsWidget {...baseProps} styleOptions={customStyle} />);
     // The List container is the first child inside the ContentWrapper.
     const contentWrapper = container.firstChild;
     const listElement = contentWrapper?.firstChild as HTMLElement;
@@ -184,22 +211,21 @@ describe('TabberWidget Component Comprehensive Tests', () => {
   });
 
   it('applies correct padding based on tabsInterval', () => {
-    // For SMALL: expect padding "0px 6px"
-    // For MEDIUM: expect padding "0px 12px"
-    // For LARGE: expect padding "0px 24px"
-    const intervals: { interval: TabInterval; expectedPadding: string }[] = [
-      { interval: 'SMALL', expectedPadding: '0px 6px' },
-      { interval: 'MEDIUM', expectedPadding: '0px 12px' },
-      { interval: 'LARGE', expectedPadding: '0px 24px' },
+    // For small: expect padding "0px 6px"
+    // For medium: expect padding "0px 12px"
+    // For large: expect padding "0px 24px"
+    const intervals: { interval: 'small' | 'medium' | 'large'; expectedPadding: string }[] = [
+      { interval: 'small', expectedPadding: '0px 6px' },
+      { interval: 'medium', expectedPadding: '0px 12px' },
+      { interval: 'large', expectedPadding: '0px 24px' },
     ];
     intervals.forEach(({ interval, expectedPadding }) => {
-      const customStyle: TabberStyleProps = {
+      const customStyle: TabberButtonsWidgetStyleOptions = {
         ...baseStyleOptions,
         tabsInterval: interval,
-        tabs: sampleTabs,
       };
       const { container, unmount } = render(
-        <TabberWidget {...baseProps} styleOptions={customStyle} />,
+        <TabberButtonsWidget {...baseProps} styleOptions={customStyle} />,
       );
       const contentWrapper = container.firstChild;
       const listElement = contentWrapper?.firstChild as HTMLElement;
@@ -211,16 +237,19 @@ describe('TabberWidget Component Comprehensive Tests', () => {
 
   it('applies different font-size based on tabsSize', () => {
     // We test that different tabsSize values yield different computed font-size values.
-    const sizes: { size: TabSize }[] = [{ size: 'SMALL' }, { size: 'MEDIUM' }, { size: 'LARGE' }];
+    const sizes: { size: 'small' | 'medium' | 'large' }[] = [
+      { size: 'small' },
+      { size: 'medium' },
+      { size: 'large' },
+    ];
     const fontSizes: Record<string, string> = {};
     sizes.forEach(({ size }) => {
-      const customStyle: TabberStyleProps = {
+      const customStyle: TabberButtonsWidgetStyleOptions = {
         ...baseStyleOptions,
         tabsSize: size,
-        tabs: sampleTabs,
       };
       const { container, unmount } = render(
-        <TabberWidget {...baseProps} styleOptions={customStyle} />,
+        <TabberButtonsWidget {...baseProps} styleOptions={customStyle} />,
       );
       const contentWrapper = container.firstChild;
       const listElement = contentWrapper?.firstChild as HTMLElement;
@@ -229,7 +258,7 @@ describe('TabberWidget Component Comprehensive Tests', () => {
       unmount();
     });
     // Assert that font sizes are distinct for each tabsSize value.
-    expect(fontSizes.SMALL).not.toBe(fontSizes.MEDIUM);
-    expect(fontSizes.MEDIUM).not.toBe(fontSizes.LARGE);
+    expect(fontSizes.small).not.toBe(fontSizes.medium);
+    expect(fontSizes.medium).not.toBe(fontSizes.large);
   });
 });

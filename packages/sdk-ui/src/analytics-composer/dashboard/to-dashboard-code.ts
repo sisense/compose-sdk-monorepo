@@ -53,8 +53,12 @@ export const toDashboardCodeClientSide = ({
         [],
       hasMeasures,
     ),
-    tabbersOptionsString: stringifyProps(
-      dashboardProps.tabbersOptions || {},
+    configString: stringifyProps(
+      {
+        toolbar: { isVisible: true },
+        filtersPanel: { isVisible: true },
+        tabbers: dashboardProps.config?.tabbers || {},
+      },
       CODE_TEMPLATES_INDENT,
     ),
     layoutOptionsString: stringifyProps(dashboardProps.layoutOptions || {}, CODE_TEMPLATES_INDENT),

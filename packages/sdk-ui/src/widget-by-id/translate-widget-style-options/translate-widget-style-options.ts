@@ -1,6 +1,4 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-
-/* eslint-disable max-params */
 import isString from 'lodash-es/isString';
 
 import {
@@ -9,6 +7,8 @@ import {
   FunnelType,
 } from '@/chart-options-processor/translations/funnel-plot-options';
 import { CALENDAR_HEATMAP_DEFAULTS } from '@/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/constants';
+import { LEGACY_DESIGN_TYPES } from '@/themes/legacy-design-settings';
+import { TranslatableError } from '@/translation/translatable-error.js';
 import {
   AlignmentTypes,
   AreamapStyleOptions,
@@ -42,14 +42,13 @@ import {
   SpaceSizes,
   StackableStyleOptions,
   SunburstStyleOptions,
+  TabberButtonsWidgetStyleOptions,
   TableStyleOptions,
   TextWidgetStyleOptions,
   TreemapStyleOptions,
   WidgetStyleOptions,
-} from '@/types';
+} from '@/types.js';
 
-import { LEGACY_DESIGN_TYPES } from '../themes/legacy-design-settings';
-import { TranslatableError } from '../translation/translatable-error';
 import {
   AxisStyle,
   BoxplotWidgetStyle,
@@ -66,6 +65,7 @@ import {
   ScattermapWidgetStyle,
   ScatterWidgetStyle,
   SunburstWidgetStyle,
+  TabberWidgetDtoStyle,
   TableWidgetStyle,
   TextWidgetDtoStyle,
   TreemapWidgetStyle,
@@ -73,8 +73,9 @@ import {
   WidgetDto,
   WidgetStyle,
   WidgetSubtype,
-} from './types';
-import { getChartSubtype, getEnabledPanelItems } from './utils';
+} from '../types.js';
+import { getChartSubtype, getEnabledPanelItems } from '../utils.js';
+import { extractTabberButtonsWidgetStyleOptions } from './tabber.js';
 
 /**
  * Helper function to extract axis style options from WidgetDto
@@ -899,7 +900,11 @@ export function extractPivotTableStyleOptions(
 export function extractStyleOptions<WType extends FusionWidgetType>(
   widgetType: WType,
   widget: WidgetDto,
-): ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions {
+):
+  | ChartStyleOptions
+  | TableStyleOptions
+  | TextWidgetStyleOptions
+  | TabberButtonsWidgetStyleOptions {
   const {
     subtype: widgetSubtype,
     style,
@@ -948,6 +953,8 @@ export function extractStyleOptions<WType extends FusionWidgetType>(
       return extractCalendarHeatmapChartStyleOptions(style as CalendarHeatmapWidgetStyle);
     case 'richtexteditor':
       return (style as TextWidgetDtoStyle).content;
+    case 'WidgetsTabber': // DTO type from Fusion (maps to 'tabber-buttons' in CSDK)
+      return extractTabberButtonsWidgetStyleOptions(style as TabberWidgetDtoStyle);
     default:
       throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
   }
@@ -980,7 +987,11 @@ export const getFlattenWidgetDesign = (widgetDesign: WidgetDesign) => {
  * @returns The merged widget style
  */
 export function getStyleWithWidgetDesign(
-  widgetStyle: ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions,
+  widgetStyle:
+    | ChartStyleOptions
+    | TableStyleOptions
+    | TextWidgetStyleOptions
+    | TabberButtonsWidgetStyleOptions,
   widgetDesign?: WidgetDesign,
   isWidgetDesignStyleEnabled?: boolean,
 ): WidgetStyleOptions {

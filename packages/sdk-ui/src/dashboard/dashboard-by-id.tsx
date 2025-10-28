@@ -6,6 +6,7 @@ import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense
 import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-translator';
 import { dashboardChangeActionToUseDashboardModelAction } from '@/models/dashboard/use-dashboard-model/use-dasboard-model-utils';
 import { useDashboardModelInternal } from '@/models/dashboard/use-dashboard-model/use-dashboard-model';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { TranslatableError } from '@/translation/translatable-error';
 
 import { DEFAULT_DASHBOARD_BY_ID_CONFIG } from './constants';
@@ -44,6 +45,7 @@ export const DashboardById = asSisenseComponent({
   componentName: 'DashboardById',
 })(({ dashboardOid, config: propConfig }: DashboardByIdProps) => {
   const config = useDefaults(propConfig, DEFAULT_DASHBOARD_BY_ID_CONFIG);
+  const { app } = useSisenseContext();
 
   const { dashboard, isLoading, isError, error, dispatchChanges } = useDashboardModelInternal({
     dashboardOid,
@@ -70,8 +72,25 @@ export const DashboardById = asSisenseComponent({
     return dashboard && dashboardModelTranslator.toDashboardProps(dashboard);
   }, [dashboard]);
 
+  const propsConfigInternal: DashboardConfig = useMemo(
+    () => ({
+      ...propConfig,
+      widgetsPanel: {
+        ...propConfig?.widgetsPanel,
+        editMode: {
+          ...propConfig?.widgetsPanel?.editMode,
+          enabled: Boolean(
+            app?.settings?.user?.permissions?.dashboards?.edit_layout &&
+              propConfig?.widgetsPanel?.editMode?.enabled,
+          ),
+        },
+      },
+    }),
+    [propConfig, app?.settings?.user?.permissions?.dashboards?.edit_layout],
+  );
+
   const dashboardConfig = useDefaults<DashboardConfig>(
-    propConfig,
+    propsConfigInternal,
     useDefaults(dashboardProps?.config, DEFAULT_DASHBOARD_BY_ID_CONFIG),
   );
 

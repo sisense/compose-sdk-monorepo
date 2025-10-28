@@ -4,28 +4,18 @@
   "parallel": 8,
   "targetDefaults": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "{projectRoot}/dist",
-        "{projectRoot}/public"
-      ],
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
       "cache": true
     },
     "build:prod": {
-      "dependsOn": [
-        "^build:prod"
-      ],
+      "dependsOn": ["^build:prod"],
       "options": {
         "env": {
           "NX_VERBOSE_LOGGING": "true"
         }
       },
-      "outputs": [
-        "{projectRoot}/dist",
-        "{projectRoot}/public"
-      ],
+      "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
       "cache": true
     },
     "format": {
@@ -35,36 +25,48 @@
       "cache": true
     },
     "test": {
+      "dependsOn": ["^build"],
       "cache": true
     },
     "test:unit": {
-      "dependsOn": [
-        "^test"
-      ],
+      "dependsOn": ["^build"],
       "cache": true
     },
     "component:tests": {
-      "dependsOn": [
-        "^build:prod"
-      ],
+      "dependsOn": ["^build:prod"],
       "cache": true
     },
     "lint": {
+      "dependsOn": ["^build"],
       "options": {
         "args": ["--quiet"]
       },
-      "dependsOn": [
-        "^build:prod"
-      ],
       "cache": true
     },
     "test:coverage": {
-      "dependsOn": [
-        "^build:prod"
-      ],
-      "outputs": [
-        "{projectRoot}/coverage"
-      ],
+      "dependsOn": ["^build:prod"],
+      "outputs": ["{projectRoot}/coverage"],
+      "cache": true
+    },
+    "type-check": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "test:ct": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "test:visual": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "storybook:dev": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "build-storybook": {
+      "dependsOn": ["^build:prod"],
+      "outputs": ["{projectRoot}/storybook-static"],
       "cache": true
     }
   },

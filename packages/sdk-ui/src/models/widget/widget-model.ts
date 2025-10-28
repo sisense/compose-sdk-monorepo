@@ -60,6 +60,13 @@ export interface WidgetModel {
   styleOptions: WidgetStyleOptions;
 
   /**
+   * Custom widget options. Only present for custom widgets.
+   *
+   * Contains widget-specific configuration that doesn't fit into standard style or data options.
+   */
+  customOptions?: Record<string, any>;
+
+  /**
    * Widget filters.
    */
   filters: Filter[];

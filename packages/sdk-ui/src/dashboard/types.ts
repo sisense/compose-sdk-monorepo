@@ -3,13 +3,9 @@ import { ReactNode } from 'react';
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
 import { DashboardChangeAction } from '@/dashboard/dashboard';
+import { TabbersConfig } from '@/dashboard/hooks/use-tabber';
 import { FiltersPanelConfig } from '@/filters/components/filters-panel/types';
-import {
-  DashboardStyleOptions,
-  TabbersOptions,
-  WidgetsOptions,
-  WidgetsPanelLayout,
-} from '@/models';
+import { DashboardStyleOptions, WidgetsOptions, WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
 
 export type {
@@ -20,6 +16,8 @@ export type {
   WidgetsPanelRow,
   WidgetsPanelColumn,
 } from '@/models';
+
+export type { TabbersConfig, TabberConfig, TabberTabConfig } from '@/dashboard/hooks/use-tabber';
 
 /**
  * Props of the {@link DashboardById} component.
@@ -183,6 +181,10 @@ export interface DashboardConfig {
    * Configuration for the widgets panel
    */
   widgetsPanel?: WidgetsPanelConfig;
+  /**
+   * Configuration for tabber widgets in the dashboard
+   */
+  tabbers?: TabbersConfig;
 }
 
 /**
@@ -247,12 +249,6 @@ export interface DashboardProps {
   defaultDataSource?: DataSource;
   /** The options for each of the widgets */
   widgetsOptions?: WidgetsOptions;
-  /**
-   * The Tabber widgets configurations as a single dashboard config
-   *
-   * @internal
-   */
-  tabbersOptions?: TabbersOptions;
   /** The style options for the dashboard */
   styleOptions?: DashboardStyleOptions;
   /**

@@ -4,6 +4,7 @@ import { beforeEach, Mock } from 'vitest';
 
 import { MockedSisenseContextProvider } from '@/__test-helpers__';
 import { UseDashboardModelActionType, useDashboardModelInternal } from '@/models';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
 
 import * as DM from '../__test-helpers__/sample-ecommerce';
 import { Dashboard, DashboardChangeType } from './dashboard';
@@ -24,13 +25,50 @@ vi.mock('@/models/dashboard/use-dashboard-model/use-dashboard-model', () => ({
   useDashboardModelInternal: vi.fn(),
 }));
 
+// Mock the useSisenseContext hook
+vi.mock('@/sisense-context/sisense-context', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/sisense-context/sisense-context')>();
+  return {
+    ...actual,
+    useSisenseContext: vi.fn(),
+  };
+});
+
 const useDashboardModelInternalMock = useDashboardModelInternal as Mock;
+const useSisenseContextMock = useSisenseContext as Mock;
 const DashboardMock = Dashboard as Mock;
 
 describe('DashboardById', () => {
   beforeEach(() => {
     useDashboardModelInternalMock.mockClear();
+    useSisenseContextMock.mockClear();
     DashboardMock.mockClear();
+
+    // Set up default mock for useSisenseContext
+    useSisenseContextMock.mockReturnValue({
+      isInitialized: true,
+      app: {
+        httpClient: {
+          post: vi.fn().mockResolvedValue({}),
+        } as any, // Mock httpClient
+        settings: {
+          user: {
+            permissions: {
+              dashboards: {
+                edit_layout: false,
+              },
+            },
+          },
+        },
+      },
+      errorBoundary: {
+        showErrorBox: true,
+      },
+      tracking: {
+        enabled: true,
+        packageName: 'sdk-ui',
+      },
+    });
   });
 
   it('should render Dashboard', () => {
@@ -39,11 +77,15 @@ describe('DashboardById', () => {
         oid: 'test-oid',
         widgets: [],
         filters: [],
+        config: {
+          tabbers: [],
+        },
       },
       isLoading: false,
       isError: false,
       error: undefined,
       dispatchChanges: vi.fn(),
+      config: {},
     });
 
     const { getByTestId } = render(
@@ -100,6 +142,9 @@ describe('DashboardById', () => {
         oid: 'test-oid',
         widgets: [],
         filters: [],
+        config: {
+          tabbers: [],
+        },
       },
       isLoading: false,
       isError: false,
@@ -124,6 +169,228 @@ describe('DashboardById', () => {
     expect(dispatchChangesMock).toHaveBeenCalledWith({
       type: UseDashboardModelActionType.FILTERS_UPDATE,
       payload: filters,
+    });
+  });
+
+  describe('dashboard edit mode permissions', () => {
+    const mockDashboardData = {
+      dashboard: {
+        oid: 'test-oid',
+        widgets: [],
+        filters: [],
+        config: {},
+      },
+      isLoading: false,
+      isError: false,
+      error: undefined,
+      dispatchChanges: vi.fn(),
+    };
+
+    it('should enable edit mode when user has edit_layout permission and prop config enables it', () => {
+      useDashboardModelInternalMock.mockReturnValue(mockDashboardData);
+      useSisenseContextMock.mockReturnValue({
+        isInitialized: true,
+        app: {
+          httpClient: {
+            post: vi.fn().mockResolvedValue({}),
+          } as any,
+          settings: {
+            user: {
+              permissions: {
+                dashboards: {
+                  edit_layout: true,
+                },
+              },
+            },
+          },
+        },
+        errorBoundary: {
+          showErrorBox: true,
+        },
+        tracking: {
+          enabled: true,
+          packageName: 'sdk-ui',
+        },
+      });
+
+      const configWithEditMode = {
+        widgetsPanel: {
+          editMode: {
+            enabled: true,
+          },
+        },
+      };
+
+      render(
+        <MockedSisenseContextProvider>
+          <DashboardById dashboardOid="test-oid" config={configWithEditMode} />
+        </MockedSisenseContextProvider>,
+      );
+
+      expect(DashboardMock).toHaveBeenCalled();
+      const dashboardCall = DashboardMock.mock.calls[0][0];
+      expect(dashboardCall.config.widgetsPanel.editMode.enabled).toBe(true);
+    });
+
+    it('should disable edit mode when user lacks edit_layout permission even if prop config enables it', () => {
+      useDashboardModelInternalMock.mockReturnValue(mockDashboardData);
+      useSisenseContextMock.mockReturnValue({
+        isInitialized: true,
+        app: {
+          httpClient: {
+            post: vi.fn().mockResolvedValue({}),
+          } as any,
+          settings: {
+            user: {
+              permissions: {
+                dashboards: {
+                  edit_layout: false,
+                },
+              },
+            },
+          },
+        },
+        errorBoundary: {
+          showErrorBox: true,
+        },
+        tracking: {
+          enabled: true,
+          packageName: 'sdk-ui',
+        },
+      });
+
+      const configWithEditMode = {
+        widgetsPanel: {
+          editMode: {
+            enabled: true,
+          },
+        },
+      };
+
+      render(
+        <MockedSisenseContextProvider>
+          <DashboardById dashboardOid="test-oid" config={configWithEditMode} />
+        </MockedSisenseContextProvider>,
+      );
+
+      expect(DashboardMock).toHaveBeenCalled();
+      const dashboardCall = DashboardMock.mock.calls[0][0];
+      expect(dashboardCall.config.widgetsPanel.editMode.enabled).toBe(false);
+    });
+
+    it('should disable edit mode when prop config disables it regardless of user permissions', () => {
+      useDashboardModelInternalMock.mockReturnValue(mockDashboardData);
+      useSisenseContextMock.mockReturnValue({
+        isInitialized: true,
+        app: {
+          httpClient: {
+            post: vi.fn().mockResolvedValue({}),
+          } as any,
+          settings: {
+            user: {
+              permissions: {
+                dashboards: {
+                  edit_layout: true,
+                },
+              },
+            },
+          },
+        },
+        errorBoundary: {
+          showErrorBox: true,
+        },
+        tracking: {
+          enabled: true,
+          packageName: 'sdk-ui',
+        },
+      });
+
+      const configWithEditModeDisabled = {
+        widgetsPanel: {
+          editMode: {
+            enabled: false,
+          },
+        },
+      };
+
+      render(
+        <MockedSisenseContextProvider>
+          <DashboardById dashboardOid="test-oid" config={configWithEditModeDisabled} />
+        </MockedSisenseContextProvider>,
+      );
+
+      expect(DashboardMock).toHaveBeenCalled();
+      const dashboardCall = DashboardMock.mock.calls[0][0];
+      expect(dashboardCall.config.widgetsPanel.editMode.enabled).toBe(false);
+    });
+
+    it('should disable edit mode when user permissions are undefined', () => {
+      useDashboardModelInternalMock.mockReturnValue(mockDashboardData);
+      useSisenseContextMock.mockReturnValue({
+        isInitialized: true,
+        app: {
+          httpClient: {
+            post: vi.fn().mockResolvedValue({}),
+          } as any,
+        },
+        errorBoundary: {
+          showErrorBox: true,
+        },
+        tracking: {
+          enabled: true,
+          packageName: 'sdk-ui',
+        },
+      });
+
+      const configWithEditMode = {
+        widgetsPanel: {
+          editMode: {
+            enabled: true,
+          },
+        },
+      };
+
+      render(
+        <MockedSisenseContextProvider>
+          <DashboardById dashboardOid="test-oid" config={configWithEditMode} />
+        </MockedSisenseContextProvider>,
+      );
+
+      expect(DashboardMock).toHaveBeenCalled();
+      const dashboardCall = DashboardMock.mock.calls[0][0];
+      expect(dashboardCall.config.widgetsPanel.editMode.enabled).toBe(false);
+    });
+
+    it('should disable edit mode when app settings are undefined', () => {
+      useDashboardModelInternalMock.mockReturnValue(mockDashboardData);
+      useSisenseContextMock.mockReturnValue({
+        isInitialized: true,
+        app: undefined,
+        errorBoundary: {
+          showErrorBox: true,
+        },
+        tracking: {
+          enabled: true,
+          packageName: 'sdk-ui',
+        },
+      });
+
+      const configWithEditMode = {
+        widgetsPanel: {
+          editMode: {
+            enabled: true,
+          },
+        },
+      };
+
+      render(
+        <MockedSisenseContextProvider>
+          <DashboardById dashboardOid="test-oid" config={configWithEditMode} />
+        </MockedSisenseContextProvider>,
+      );
+
+      // When app is undefined, the component should not render the Dashboard at all
+      expect(DashboardMock).not.toHaveBeenCalled();
     });
   });
 });

@@ -4,6 +4,7 @@ import { dashboardModelTranslator } from '@/models';
 import { dedupe } from '@/utils/dedupe.js';
 
 import { RestApi } from '../../api/rest-api.js';
+import { withSharedFormulas } from './translate-dashboard-utils.js';
 
 export interface GetDashboardModelsOptions {
   /**
@@ -56,5 +57,9 @@ export async function getDashboardModels(
     );
   }
 
-  return dedupedDashboards.map((dashboard) => dashboardModelTranslator.fromDashboardDto(dashboard));
+  return Promise.all(
+    dedupedDashboards.map((dashboard) =>
+      withSharedFormulas(dashboard, api).then(dashboardModelTranslator.fromDashboardDto),
+    ),
+  );
 }

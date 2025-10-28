@@ -20,7 +20,7 @@ Horizontal alignment of the legend
 
 ### `backgroundColor`
 
-**backgroundColor**?: `string`
+**backgroundColor**?: [`GradientColor`](type-alias.GradientColor.md) \| `string`
 
 Background color of the legend
 
@@ -28,7 +28,7 @@ Background color of the legend
 
 ### `borderColor`
 
-**borderColor**?: `string`
+**borderColor**?: [`GradientColor`](type-alias.GradientColor.md) \| `string`
 
 Color of the legend border
 

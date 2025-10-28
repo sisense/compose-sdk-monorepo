@@ -13,6 +13,12 @@ import { PolarChart } from '../../polar-chart';
 import { ScatterChart } from '../../scatter-chart';
 import { SunburstChart } from '../../sunburst-chart';
 import { LegendOptions } from '../../types';
+import {
+  createLinearGradient,
+  createRadialGradient,
+  GradientDirections,
+  RadialGradientPresets,
+} from '../../utils/gradient';
 import { HighchartsOptions } from '../chart-options-service';
 import { getLegendSettings } from './legend-section';
 
@@ -366,6 +372,240 @@ describe('getLegendSettings', () => {
       expect(result.x).toBe(20);
       expect(result.y).toBe(30);
     });
+
+    it('should handle linear gradient in backgroundColor', () => {
+      const linearGradient = createLinearGradient(GradientDirections.topToBottom, [
+        { position: 0, color: '#003399' },
+        { position: 0.5, color: '#ffffff' },
+        { position: 1, color: '#3366AA' },
+      ]);
+
+      const legendOptions: LegendOptions = {
+        enabled: true,
+        backgroundColor: linearGradient,
+      };
+
+      const result = getLegendSettings(legendOptions);
+
+      expect(result.enabled).toBe(true);
+      expect(result.backgroundColor).toEqual({
+        linearGradient: {
+          x1: 0,
+          y1: 0,
+          x2: 0,
+          y2: 1,
+        },
+        stops: [
+          [0, '#003399'],
+          [0.5, '#ffffff'],
+          [1, '#3366AA'],
+        ],
+      });
+    });
+
+    it('should handle radial gradient in backgroundColor', () => {
+      const radialGradient = createRadialGradient(RadialGradientPresets.center, [
+        { position: 0, color: '#ff0000' },
+        { position: 1, color: '#0000ff' },
+      ]);
+
+      const legendOptions: LegendOptions = {
+        enabled: true,
+        backgroundColor: radialGradient,
+      };
+
+      const result = getLegendSettings(legendOptions);
+
+      expect(result.enabled).toBe(true);
+      expect(result.backgroundColor).toEqual({
+        radialGradient: {
+          cx: 0.5,
+          cy: 0.5,
+          r: 0.8,
+        },
+        stops: [
+          [0, '#ff0000'],
+          [1, '#0000ff'],
+        ],
+      });
+    });
+
+    it('should handle linear gradient in borderColor', () => {
+      const linearGradient = createLinearGradient(GradientDirections.leftToRight, [
+        { position: 0, color: '#ff6b6b' },
+        { position: 1, color: '#4ecdc4' },
+      ]);
+
+      const legendOptions: LegendOptions = {
+        enabled: true,
+        borderColor: linearGradient,
+        borderWidth: 3,
+      };
+
+      const result = getLegendSettings(legendOptions);
+
+      expect(result.enabled).toBe(true);
+      expect(result.borderWidth).toBe(3);
+      expect(result.borderColor).toEqual({
+        linearGradient: {
+          x1: 0,
+          y1: 0,
+          x2: 1,
+          y2: 0,
+        },
+        stops: [
+          [0, '#ff6b6b'],
+          [1, '#4ecdc4'],
+        ],
+      });
+    });
+
+    it('should handle radial gradient in borderColor', () => {
+      const radialGradient = createRadialGradient(RadialGradientPresets.topLeft, [
+        { position: 0, color: '#667eea' },
+        { position: 0.5, color: '#764ba2' },
+        { position: 1, color: '#f093fb' },
+      ]);
+
+      const legendOptions: LegendOptions = {
+        enabled: true,
+        borderColor: radialGradient,
+        borderWidth: 2,
+      };
+
+      const result = getLegendSettings(legendOptions);
+
+      expect(result.enabled).toBe(true);
+      expect(result.borderWidth).toBe(2);
+      expect(result.borderColor).toEqual({
+        radialGradient: {
+          cx: 0,
+          cy: 0,
+          r: 1,
+        },
+        stops: [
+          [0, '#667eea'],
+          [0.5, '#764ba2'],
+          [1, '#f093fb'],
+        ],
+      });
+    });
+
+    it('should handle both gradient backgroundColor and borderColor', () => {
+      const linearBgGradient = createLinearGradient(GradientDirections.diagonalTopLeft, [
+        { position: 0, color: '#ff9a9e' },
+        { position: 1, color: '#fecfef' },
+      ]);
+
+      const radialBorderGradient = createRadialGradient(RadialGradientPresets.bottomRight, [
+        { position: 0, color: '#a8edea' },
+        { position: 1, color: '#fed6e3' },
+      ]);
+
+      const legendOptions: LegendOptions = {
+        enabled: true,
+        backgroundColor: linearBgGradient,
+        borderColor: radialBorderGradient,
+        borderWidth: 4,
+        borderRadius: 8,
+      };
+
+      const result = getLegendSettings(legendOptions);
+
+      expect(result.enabled).toBe(true);
+      expect(result.borderWidth).toBe(4);
+      expect(result.borderRadius).toBe(8);
+      expect(result.backgroundColor).toEqual({
+        linearGradient: {
+          x1: 0,
+          y1: 0,
+          x2: 1,
+          y2: 1,
+        },
+        stops: [
+          [0, '#ff9a9e'],
+          [1, '#fecfef'],
+        ],
+      });
+      expect(result.borderColor).toEqual({
+        radialGradient: {
+          cx: 1,
+          cy: 1,
+          r: 1,
+        },
+        stops: [
+          [0, '#a8edea'],
+          [1, '#fed6e3'],
+        ],
+      });
+    });
+
+    it('should handle custom gradient directions', () => {
+      const customLinearGradient = createLinearGradient({ x1: 0.2, y1: 0.3, x2: 0.8, y2: 0.7 }, [
+        { position: 0, color: '#ff0000' },
+        { position: 0.3, color: '#00ff00' },
+        { position: 0.7, color: '#0000ff' },
+        { position: 1, color: '#ffff00' },
+      ]);
+
+      const customRadialGradient = createRadialGradient(
+        { centerX: 0.3, centerY: 0.7, radius: 0.6 },
+        [
+          { position: 0, color: '#purple' },
+          { position: 1, color: '#orange' },
+        ],
+      );
+
+      const legendOptions: LegendOptions = {
+        enabled: true,
+        backgroundColor: customLinearGradient,
+        borderColor: customRadialGradient,
+        borderWidth: 5,
+      };
+
+      const result = getLegendSettings(legendOptions);
+
+      expect(result.backgroundColor).toEqual({
+        linearGradient: {
+          x1: 0.2,
+          y1: 0.3,
+          x2: 0.8,
+          y2: 0.7,
+        },
+        stops: [
+          [0, '#ff0000'],
+          [0.3, '#00ff00'],
+          [0.7, '#0000ff'],
+          [1, '#ffff00'],
+        ],
+      });
+      expect(result.borderColor).toEqual({
+        radialGradient: {
+          cx: 0.3,
+          cy: 0.7,
+          r: 0.6,
+        },
+        stops: [
+          [0, '#purple'],
+          [1, '#orange'],
+        ],
+      });
+    });
+
+    it('should preserve string colors when not gradients', () => {
+      const legendOptions: LegendOptions = {
+        enabled: true,
+        backgroundColor: '#f0f0f0',
+        borderColor: '#333333',
+        borderWidth: 2,
+      };
+
+      const result = getLegendSettings(legendOptions);
+
+      expect(result.backgroundColor).toBe('#f0f0f0');
+      expect(result.borderColor).toBe('#333333');
+      expect(result.borderWidth).toBe(2);
+    });
   });
 
   describe('Chart rendering tests with onBeforeRender verification', () => {
@@ -717,6 +957,226 @@ describe('getLegendSettings', () => {
 
       expect(await findByLabelText('chart-root')).toBeInTheDocument();
     });
+
+    it('should apply linear gradient backgroundColor to legend', async () => {
+      const linearGradient = createLinearGradient(GradientDirections.topToBottom, [
+        { position: 0, color: '#667eea' },
+        { position: 1, color: '#764ba2' },
+      ]);
+
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'line'}
+          dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
+          styleOptions={{
+            legend: {
+              enabled: true,
+              backgroundColor: linearGradient,
+              borderWidth: 2,
+            },
+          }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options.legend).toBeDefined();
+            expect(options.legend?.enabled).toBe(true);
+            expect(options.legend?.backgroundColor).toEqual({
+              linearGradient: {
+                x1: 0,
+                y1: 0,
+                x2: 0,
+                y2: 1,
+              },
+              stops: [
+                [0, '#667eea'],
+                [1, '#764ba2'],
+              ],
+            });
+            expect(options.legend?.borderWidth).toBe(2);
+            return options;
+          }}
+        />,
+      );
+
+      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    });
+
+    it('should apply radial gradient borderColor to legend', async () => {
+      const radialGradient = createRadialGradient(RadialGradientPresets.center, [
+        { position: 0, color: '#ff6b6b' },
+        { position: 0.5, color: '#4ecdc4' },
+        { position: 1, color: '#45b7d1' },
+      ]);
+
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'line'}
+          dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
+          styleOptions={{
+            legend: {
+              enabled: true,
+              borderColor: radialGradient,
+              borderWidth: 3,
+              borderRadius: 10,
+            },
+          }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options.legend).toBeDefined();
+            expect(options.legend?.enabled).toBe(true);
+            expect(options.legend?.borderColor).toEqual({
+              radialGradient: {
+                cx: 0.5,
+                cy: 0.5,
+                r: 0.8,
+              },
+              stops: [
+                [0, '#ff6b6b'],
+                [0.5, '#4ecdc4'],
+                [1, '#45b7d1'],
+              ],
+            });
+            expect(options.legend?.borderWidth).toBe(3);
+            expect(options.legend?.borderRadius).toBe(10);
+            return options;
+          }}
+        />,
+      );
+
+      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    });
+
+    it('should apply both gradient backgroundColor and borderColor to legend', async () => {
+      const linearBgGradient = createLinearGradient(GradientDirections.diagonalTopRight, [
+        { position: 0, color: '#a8edea' },
+        { position: 1, color: '#fed6e3' },
+      ]);
+
+      const radialBorderGradient = createRadialGradient(RadialGradientPresets.topRight, [
+        { position: 0, color: '#ff9a9e' },
+        { position: 1, color: '#fecfef' },
+      ]);
+
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'line'}
+          dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
+          styleOptions={{
+            legend: {
+              enabled: true,
+              backgroundColor: linearBgGradient,
+              borderColor: radialBorderGradient,
+              borderWidth: 4,
+              borderRadius: 12,
+              padding: 15,
+            },
+          }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options.legend).toBeDefined();
+            expect(options.legend?.enabled).toBe(true);
+            expect(options.legend?.backgroundColor).toEqual({
+              linearGradient: {
+                x1: 1,
+                y1: 0,
+                x2: 0,
+                y2: 1,
+              },
+              stops: [
+                [0, '#a8edea'],
+                [1, '#fed6e3'],
+              ],
+            });
+            expect(options.legend?.borderColor).toEqual({
+              radialGradient: {
+                cx: 1,
+                cy: 0,
+                r: 1,
+              },
+              stops: [
+                [0, '#ff9a9e'],
+                [1, '#fecfef'],
+              ],
+            });
+            expect(options.legend?.borderWidth).toBe(4);
+            expect(options.legend?.borderRadius).toBe(12);
+            expect(options.legend?.padding).toBe(15);
+            return options;
+          }}
+        />,
+      );
+
+      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    });
+
+    it('should apply custom gradient directions to legend', async () => {
+      const customLinearGradient = createLinearGradient({ x1: 0.1, y1: 0.2, x2: 0.9, y2: 0.8 }, [
+        { position: 0, color: '#667eea' },
+        { position: 0.3, color: '#764ba2' },
+        { position: 0.7, color: '#f093fb' },
+        { position: 1, color: '#f5576c' },
+      ]);
+
+      const customRadialGradient = createRadialGradient(
+        { centerX: 0.4, centerY: 0.6, radius: 0.5 },
+        [
+          { position: 0, color: '#4facfe' },
+          { position: 1, color: '#00f2fe' },
+        ],
+      );
+
+      const { findByLabelText } = render(
+        <Chart
+          dataSet={dataSet}
+          chartType={'line'}
+          dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
+          styleOptions={{
+            legend: {
+              enabled: true,
+              backgroundColor: customLinearGradient,
+              borderColor: customRadialGradient,
+              borderWidth: 5,
+              position: 'right',
+            },
+          }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options.legend).toBeDefined();
+            expect(options.legend?.enabled).toBe(true);
+            expect(options.legend?.backgroundColor).toEqual({
+              linearGradient: {
+                x1: 0.1,
+                y1: 0.2,
+                x2: 0.9,
+                y2: 0.8,
+              },
+              stops: [
+                [0, '#667eea'],
+                [0.3, '#764ba2'],
+                [0.7, '#f093fb'],
+                [1, '#f5576c'],
+              ],
+            });
+            expect(options.legend?.borderColor).toEqual({
+              radialGradient: {
+                cx: 0.4,
+                cy: 0.6,
+                r: 0.5,
+              },
+              stops: [
+                [0, '#4facfe'],
+                [1, '#00f2fe'],
+              ],
+            });
+            expect(options.legend?.borderWidth).toBe(5);
+            expect(options.legend?.align).toBe('right');
+            expect(options.legend?.verticalAlign).toBe('middle');
+            expect(options.legend?.layout).toBe('vertical');
+            return options;
+          }}
+        />,
+      );
+
+      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    });
   });
 
   describe('Individual chart type tests with legend options', () => {
@@ -1029,6 +1489,93 @@ describe('getLegendSettings', () => {
             expect(options.legend?.layout).toBe('vertical');
             expect(options.legend?.reversed).toBe(true);
             expect(options.legend?.rtl).toBe(false);
+            return options;
+          }}
+        />,
+      );
+
+      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    });
+
+    it('should apply gradient legend options to PieChart', async () => {
+      const linearGradient = createLinearGradient(GradientDirections.leftToRight, [
+        { position: 0, color: '#ff9a9e' },
+        { position: 1, color: '#fecfef' },
+      ]);
+
+      const { findByLabelText } = render(
+        <PieChart
+          dataSet={dataSet}
+          dataOptions={{ category: [cat1], value: [meas1] }}
+          styleOptions={{
+            legend: {
+              enabled: true,
+              backgroundColor: linearGradient,
+              borderWidth: 3,
+              borderRadius: 15,
+            },
+          }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options.legend).toBeDefined();
+            expect(options.legend?.enabled).toBe(true);
+            expect(options.legend?.backgroundColor).toEqual({
+              linearGradient: {
+                x1: 0,
+                y1: 0,
+                x2: 1,
+                y2: 0,
+              },
+              stops: [
+                [0, '#ff9a9e'],
+                [1, '#fecfef'],
+              ],
+            });
+            expect(options.legend?.borderWidth).toBe(3);
+            expect(options.legend?.borderRadius).toBe(15);
+            return options;
+          }}
+        />,
+      );
+
+      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    });
+
+    it('should apply gradient legend options to BarChart', async () => {
+      const radialGradient = createRadialGradient(RadialGradientPresets.bottomLeft, [
+        { position: 0, color: '#667eea' },
+        { position: 1, color: '#764ba2' },
+      ]);
+
+      const { findByLabelText } = render(
+        <BarChart
+          dataSet={dataSet}
+          dataOptions={{ category: [cat1], value: [meas1], breakBy: [cat2] }}
+          styleOptions={{
+            legend: {
+              enabled: true,
+              borderColor: radialGradient,
+              borderWidth: 4,
+              position: 'top',
+            },
+          }}
+          onBeforeRender={(options: HighchartsOptions) => {
+            expect(options.legend).toBeDefined();
+            expect(options.legend?.enabled).toBe(true);
+            expect(options.legend?.borderColor).toEqual({
+              radialGradient: {
+                cx: 0,
+                cy: 1,
+                r: 1,
+              },
+              stops: [
+                [0, '#667eea'],
+                [1, '#764ba2'],
+              ],
+            });
+            expect(options.legend?.borderWidth).toBe(4);
+            expect(options.legend?.align).toBe('center');
+            expect(options.legend?.verticalAlign).toBe('top');
+            expect(options.legend?.layout).toBe('horizontal');
             return options;
           }}
         />,

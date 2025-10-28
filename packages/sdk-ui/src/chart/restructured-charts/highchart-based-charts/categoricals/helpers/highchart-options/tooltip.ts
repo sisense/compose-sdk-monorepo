@@ -4,5 +4,8 @@ import { TooltipSettings } from '@/chart-options-processor/translations/tooltip-
 import { BuildContext } from '../../../types';
 
 export const getBasicCategoricalTooltip = (ctx: BuildContext<'pie'>): TooltipSettings => {
-  return getCategoryTooltipSettings(ctx.designOptions.pieLabels?.showDecimals, ctx.dataOptions);
+  return getCategoryTooltipSettings(
+    ctx.designOptions.seriesLabels?.percentageLabels?.showDecimals,
+    ctx.dataOptions,
+  );
 };

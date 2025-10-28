@@ -9,7 +9,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: false,
-        style: {},
       });
     });
   });
@@ -21,7 +20,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: {},
       });
     });
 
@@ -31,7 +29,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: false,
-        style: {},
       });
     });
   });
@@ -47,7 +44,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         rotation: 45,
-        style: {},
       });
     });
 
@@ -60,7 +56,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: {},
       });
       expect(result).not.toHaveProperty('rotation');
     });
@@ -77,7 +72,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         align: 'left',
-        style: {},
       });
     });
 
@@ -91,7 +85,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         verticalAlign: 'top',
-        style: {},
       });
     });
 
@@ -104,7 +97,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: {},
       });
       expect(result).not.toHaveProperty('align');
     });
@@ -118,7 +110,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: {},
       });
       expect(result).not.toHaveProperty('verticalAlign');
     });
@@ -135,7 +126,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         animation: { defer: 1000 },
-        style: {},
       });
     });
 
@@ -148,7 +138,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: {},
       });
       expect(result).not.toHaveProperty('animation');
     });
@@ -165,7 +154,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         backgroundColor: '#ff0000',
-        style: {},
       });
     });
 
@@ -179,7 +167,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         borderColor: '#00ff00',
-        style: {},
       });
     });
 
@@ -193,7 +180,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         borderRadius: 5,
-        style: {},
       });
     });
 
@@ -207,7 +193,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         borderWidth: 2,
-        style: {},
       });
     });
 
@@ -223,7 +208,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: {},
       });
       expect(result).not.toHaveProperty('backgroundColor');
       expect(result).not.toHaveProperty('borderColor');
@@ -286,7 +270,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: {},
       });
       expect(result).not.toHaveProperty('textAlign');
     });
@@ -303,7 +286,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         x: 15,
-        style: {},
       });
     });
 
@@ -317,7 +299,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         y: -10,
-        style: {},
       });
     });
 
@@ -331,7 +312,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: {},
       });
       expect(result).not.toHaveProperty('x');
       expect(result).not.toHaveProperty('y');
@@ -397,7 +377,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: {},
       });
 
       // Verify that undefined properties are not included
@@ -437,7 +416,6 @@ describe('prepareStackLabels', () => {
         x: 0,
         y: 0,
         animation: { defer: 0 },
-        style: {},
       });
     });
 
@@ -458,7 +436,6 @@ describe('prepareStackLabels', () => {
         x: -10,
         y: -20,
         animation: { defer: -100 },
-        style: {},
       });
     });
 
@@ -473,7 +450,6 @@ describe('prepareStackLabels', () => {
       expect(result).toEqual({
         enabled: true,
         backgroundColor: 'auto',
-        style: {},
       });
     });
 
@@ -488,7 +464,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: textStyle,
       });
     });
 
@@ -503,7 +478,6 @@ describe('prepareStackLabels', () => {
 
       expect(result).toEqual({
         enabled: true,
-        style: {},
         textAlign: 'left',
       });
     });
@@ -523,7 +497,6 @@ describe('prepareStackLabels', () => {
         expect(result).toEqual({
           enabled: true,
           align,
-          style: {},
         });
       });
     });
@@ -541,7 +514,6 @@ describe('prepareStackLabels', () => {
         expect(result).toEqual({
           enabled: true,
           verticalAlign,
-          style: {},
         });
       });
     });
@@ -559,7 +531,6 @@ describe('prepareStackLabels', () => {
 
         expect(result).toEqual({
           enabled: true,
-          style: {},
           textAlign: align,
         });
       });

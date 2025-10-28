@@ -8,6 +8,7 @@ import {
 
 import { LoadingOverlay } from '@/common/components/loading-overlay';
 import { useHasChanged } from '@/common/hooks/use-has-changed';
+import { useSyncedState } from '@/common/hooks/use-synced-state';
 import { DEFAULT_PIVOT_TABLE_SIZE, DynamicSizeContainer } from '@/dynamic-size-container';
 import { type ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { NoResultsOverlay } from '@/no-results-overlay/no-results-overlay';
@@ -152,6 +153,16 @@ export const PivotTable = asSisenseComponent({
   const isJaqlChanged = useHasChanged(jaql);
   const isForceReload = refreshCounter > 0 && useHasChanged(refreshCounter);
 
+  const [pageSize, setPageSize] = useSyncedState(
+    typeof styleOptions?.rowsPerPage === 'number' && !isNaN(styleOptions?.rowsPerPage)
+      ? styleOptions?.rowsPerPage
+      : pivotBuilder.defaultPageSize,
+  );
+
+  if (pageSize !== pivotBuilder.pageSize) {
+    pivotBuilder.updatePageSize(pageSize);
+  }
+
   const dataService = usePivotDataService({
     pivotClient,
     pivotBuilder,
@@ -181,6 +192,8 @@ export const PivotTable = asSisenseComponent({
     onTotalHeightChange: handlePivotHeightChange,
     onDataPointClick,
     onDataPointContextMenu,
+    pageSize: pageSize,
+    onPageSizeChange: setPageSize,
   });
 
   // The pivot data layer depends on the pivot's render props.

@@ -43,6 +43,10 @@ Total height of the component, which is considered in the following order of pri
 
 Configuration that defines behavior of data labels on Pie chart
 
+::: warning Deprecated
+Use seriesLabels instead
+:::
+
 ***
 
 ### legend
@@ -50,6 +54,14 @@ Configuration that defines behavior of data labels on Pie chart
 > **legend**?: [`LegendOptions`](../type-aliases/type-alias.LegendOptions.md)
 
 Configuration for legend - a key that provides information about the data series or colors used in chart
+
+***
+
+### seriesLabels
+
+> **seriesLabels**?: [`PieSeriesLabels`](../type-aliases/type-alias.PieSeriesLabels.md)
+
+Configuration for series labels - titles/names identifying data series in a chart
 
 ***
 

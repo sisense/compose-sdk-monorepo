@@ -190,13 +190,9 @@ export default function CodeExample() {
       title: '{{titleString}}',
       widgets,
       filters,
-      config: {
-        toolbar: { isVisible: true },
-        filtersPanel: { isVisible: true },
-      },
+      config: {{configString}},
       widgetsOptions: {{widgetsOptionsString}},
       layoutOptions: {{layoutOptionsString}},
-      tabbersOptions: {{tabbersOptionsString}},
       styleOptions: {{styleOptionsString}},
     };
   }, []);

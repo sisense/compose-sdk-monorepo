@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
+import { useSyncedState } from '@/common/hooks/use-synced-state';
 import { WidgetPanelLayoutManager } from '@/dashboard/hooks/use-widgets-layout';
-import { TabbersOptions, WidgetsPanelColumnLayout } from '@/models';
-import { CustomWidgetProps, WidgetProps } from '@/props';
-import { TabberTab } from '@/types';
+import { WidgetId, WidgetsPanelColumnLayout } from '@/models';
+import { CustomWidgetProps, TabberButtonsWidgetProps, WidgetProps } from '@/props';
 
 /**
  * @internal
@@ -13,22 +13,40 @@ export type UseTabber = ({
   config,
 }: {
   widgets: WidgetProps[];
-  config?: TabbersOptions | undefined;
+  config?: TabbersConfig | undefined;
 }) => {
   layoutManager: WidgetPanelLayoutManager;
   widgets: WidgetProps[];
 };
 
 /**
- * @internal
+ * Configuration for a single tab in a tabber widget.
  */
-export type SingleTabberConfig = {
-  tabs: TabberTab[];
-  activeTab: number;
+export type TabberTabConfig = {
+  /**
+   * Widget IDs from the dashboard to display in the tab.
+   */
+  displayWidgetIds: string[];
 };
 
-export const isTabberWidget = (widget: WidgetProps): boolean => {
-  return (widget as CustomWidgetProps).customWidgetType === 'WidgetsTabber';
+/**
+ * Configuration for a tabber widget.
+ */
+export type TabberConfig = {
+  /**
+   * Tabs configuration for the tabber widget.
+   */
+  tabs: TabberTabConfig[];
+};
+
+/**
+ * Configuration for tabbers in a dashboard.
+ * It includes separate configuration for each tabber.
+ */
+export type TabbersConfig = Record<WidgetId, TabberConfig>;
+
+export const isTabberButtonsWidget = (widget: WidgetProps): widget is TabberButtonsWidgetProps => {
+  return (widget as CustomWidgetProps).customWidgetType === 'tabber-buttons';
 };
 
 /**
@@ -36,13 +54,14 @@ export const isTabberWidget = (widget: WidgetProps): boolean => {
  */
 function isVisible(
   widgetId: string,
-  tabbersOptions: TabbersOptions,
+  tabbersOptions: TabbersConfig,
   tabberState: Record<string, number>,
 ): boolean {
   for (const tabberOid of Object.keys(tabbersOptions)) {
     const tabberConfig = tabbersOptions[tabberOid];
-    const activeTab = tabberConfig.tabs[tabberState[tabberOid]];
-    const currentConfigAffectsWidget = tabberConfig.tabs.some((tab) =>
+    const activeIndex = tabberState[tabberOid] ?? 0;
+    const activeTab = tabberConfig.tabs[activeIndex];
+    const currentConfigAffectsWidget = tabberConfig.tabs.some((tab: TabberTabConfig) =>
       tab.displayWidgetIds.includes(widgetId),
     );
     if (!currentConfigAffectsWidget) {
@@ -57,7 +76,7 @@ function isVisible(
 }
 
 export const modifyLayout =
-  (tabbersOptions: TabbersOptions, tabberState: Record<string, number>) =>
+  (tabbersOptions: TabbersConfig, tabberState: Record<string, number>) =>
   (layout: WidgetsPanelColumnLayout): WidgetsPanelColumnLayout => {
     const isAnyTabberConfig = Object.keys(tabbersOptions).length > 0;
 
@@ -84,11 +103,36 @@ export const modifyLayout =
     };
   };
 
-const getSelectedTabs = (config: TabbersOptions): Record<string, number> => {
-  return Object.keys(config).reduce((acc: Record<string, number>, key) => {
-    acc[key] = config[key].activeTab;
+/**
+ * Gets the selected tabs from the list of widget props.
+ * Returns a record of widget IDs and the index of the selected tab for each tabber widget.
+ * @param widgets - The list of widget props.
+ * @returns A record of widget IDs and the index of the selected tab for each tabber widget.
+ */
+const getSelectedTabsFromWidgets = (widgets: WidgetProps[]): Record<string, number> => {
+  return widgets.reduce((acc: Record<string, number>, widget) => {
+    if (isTabberButtonsWidget(widget) && widget.customOptions) {
+      acc[widget.id] = widget.customOptions.activeTab ?? 0;
+    }
     return acc;
   }, {});
+};
+
+/**
+ * Hook that manages the selected tabs state for tabber widgets.
+ * Synchronizes internal state with widget props and provides a setter for tab changes.
+ * @param widgets - The list of widget props.
+ * @returns A tuple of [selectedTabs, setSelectedTabs] where selectedTabs is a record of widget IDs to tab indices.
+ * @internal
+ */
+const useSelectedTabs = (
+  widgets: WidgetProps[],
+): [Record<string, number>, React.Dispatch<React.SetStateAction<Record<string, number>>>] => {
+  // Extract activeTab values from widget props
+  const widgetTabs = useMemo(() => getSelectedTabsFromWidgets(widgets), [widgets]);
+
+  // Sync internal state with widget props using the built-in hook
+  return useSyncedState(widgetTabs);
 };
 
 /**
@@ -99,34 +143,30 @@ const getSelectedTabs = (config: TabbersOptions): Record<string, number> => {
  * @internal
  */
 export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) => {
-  const initialSelectedTabs = useMemo(() => getSelectedTabs(tabbersConfigs), [tabbersConfigs]);
-  const [selectedTabs, setSelectedTabs] = useState<Record<string, number>>(initialSelectedTabs);
+  const [selectedTabs, setSelectedTabs] = useSelectedTabs(widgets);
   const isAnyTabberConfig = Object.keys(tabbersConfigs).length > 0;
 
-  useEffect(() => {
-    const newSelectedTabs = getSelectedTabs(tabbersConfigs);
-    setSelectedTabs((prevSelectedTabs) => {
-      const shouldUpdate = Object.keys(newSelectedTabs).some(
-        (key) => prevSelectedTabs[key] !== newSelectedTabs[key],
-      );
-      return shouldUpdate ? newSelectedTabs : prevSelectedTabs;
-    });
-  }, [tabbersConfigs]);
-
-  const widgetsWithTabberSubscription = widgets.map((widget) => {
-    if (isTabberWidget(widget)) {
-      return {
-        ...widget,
-        onTabSelected: (tab: number) => {
-          setSelectedTabs((prev) => {
-            return { ...prev, [widget.id]: tab };
-          });
-        },
-        selectedTab: selectedTabs[widget.id] || 0,
-      };
-    }
-    return widget;
-  });
+  const widgetsWithTabberSubscription = useMemo(
+    () =>
+      widgets.map((widget): WidgetProps => {
+        if (isTabberButtonsWidget(widget) && widget.customOptions) {
+          return {
+            ...widget,
+            customOptions: {
+              ...widget.customOptions,
+              activeTab: selectedTabs[widget.id] ?? widget.customOptions.activeTab ?? 0,
+              onTabSelected: (tab: number) => {
+                setSelectedTabs((prev) => {
+                  return { ...prev, [widget.id]: tab };
+                });
+              },
+            },
+          };
+        }
+        return widget;
+      }),
+    [widgets, selectedTabs, setSelectedTabs],
+  );
 
   const layoutModifier = useCallback(
     (layout: WidgetsPanelColumnLayout): WidgetsPanelColumnLayout => {
@@ -156,7 +196,7 @@ export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) =
   );
 
   return {
-    layoutManager: { manageLayout: layoutModifier, name: 'TabberWidget' },
+    layoutManager: { manageLayout: layoutModifier, name: 'tabber-buttons' },
     widgets: widgetsWithTabberSubscription,
   };
 };

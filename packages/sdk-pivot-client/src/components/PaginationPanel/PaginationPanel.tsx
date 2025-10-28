@@ -76,6 +76,7 @@ type Props = {
   columnsCount: number;
   totalColumnsCount: number;
   itemsPerPage: number;
+  itemsPerPageOptions: number[];
   activePage: number;
   width: number;
   isAllDataLoaded?: boolean;
@@ -371,7 +372,14 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { className, activePage, itemsPerPage, itemsCount, totalItemsCount } = this.props;
+    const {
+      className,
+      activePage,
+      itemsPerPage,
+      itemsPerPageOptions,
+      itemsCount,
+      totalItemsCount,
+    } = this.props;
     const { pagesCount, options } = this.state;
     const {
       isMobile,
@@ -434,7 +442,7 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
                     conjunction: conjunctionLabel,
                     result: resultLabel,
                   }}
-                  rowsPerPageOptions={[10, 25, 50, 75]}
+                  rowsPerPageOptions={itemsPerPageOptions}
                   labelRowsPerPage={rowsPerPageLabel}
                   labelRowsPerPageShort={rowsPerPageLabelShort}
                   dataTestId="TablePagination"

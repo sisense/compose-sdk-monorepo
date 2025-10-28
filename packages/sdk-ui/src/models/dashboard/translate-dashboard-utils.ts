@@ -21,7 +21,7 @@ import {
   JumpToDashboardConfigForPivot,
   TriggerMethod,
 } from '@/dashboard/hooks/jtd/jtd-types';
-import { TabberConfig, TabberDtoStyle } from '@/types';
+import { TabberConfig, TabbersConfig } from '@/dashboard/hooks/use-tabber';
 import {
   combineFiltersAndRelations,
   convertFilterRelationsModelToRelationRules,
@@ -35,6 +35,7 @@ import {
   SharedFormulaReferenceContext,
   WidgetDto,
 } from '@/widget-by-id/types';
+import { TabberWidgetDtoStyle } from '@/widget-by-id/types';
 import {
   isChartTypeFusionWidget,
   isIndicatorFusionWidget,
@@ -51,13 +52,13 @@ import {
   isCascadingFilterDto,
   type LayoutDto,
 } from '../../api/types/dashboard-dto';
-import type { TabbersOptions, WidgetsOptions, WidgetsPanelColumnLayout } from './types';
+import type { WidgetsOptions, WidgetsPanelColumnLayout } from './types';
 
 export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => ({
   columns: (layout.columns || []).map((c) => ({
     widthPercentage: c.width,
     rows: (c.cells || []).map((cell) => {
-      const totalWidth = cell.subcells.reduce((acc, subcell) => +acc + +subcell.width, 0);
+      const totalWidth = cell.subcells.reduce((acc, subcell) => acc + subcell.width, 0);
 
       return {
         cells: cell.subcells.map((subcell) => ({
@@ -111,7 +112,14 @@ export function extractDashboardFilters(
   return combineFiltersAndRelations(filters, filterRelations);
 }
 
-const isTabberWidgetDto = (widget: WidgetDto): widget is WidgetDto & { style: TabberDtoStyle } => {
+/**
+ * Type guard to check if a widget DTO is a Tabber widget.
+ * Checks the DTO subtype which is 'WidgetsTabber' in Fusion.
+ * Note: This is the DTO type, not the CSDK component type ('tabber-buttons').
+ */
+const isTabberWidgetDto = (
+  widget: WidgetDto,
+): widget is WidgetDto & { style: TabberWidgetDtoStyle } => {
   return widget.subtype === 'WidgetsTabber';
 };
 
@@ -356,14 +364,16 @@ export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptio
   return widgetsOptionsMap;
 }
 
-export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersOptions {
+export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersConfig {
   const tabberOptionsMap: Record<string, TabberConfig> = {};
 
   widgets.forEach((widget: WidgetDto) => {
     if (isTabberWidgetDto(widget)) {
+      const dtoTabs = widget.style.tabs || [];
       tabberOptionsMap[widget.oid] = {
-        tabs: widget.style.tabs || [],
-        activeTab: parseInt(widget.style.activeTab || '1', 10),
+        tabs: dtoTabs.map((tab) => ({
+          displayWidgetIds: tab.displayWidgetIds,
+        })),
       };
     }
   });

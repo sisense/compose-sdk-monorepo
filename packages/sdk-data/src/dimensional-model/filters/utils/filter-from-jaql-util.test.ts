@@ -538,6 +538,58 @@ describe('filter-from-jaql-util', () => {
       });
     });
 
+    describe('MeasureRankingFilter', () => {
+      it('should handle top', () => {
+        const jaql = {
+          table: 'Commerce',
+          column: 'Revenue',
+          datatype: 'numeric',
+          title: 'Top 5 by Total Revenue',
+          dim: '[Commerce.Revenue]',
+          type: 'measure',
+          agg: 'sum',
+          filter: {
+            top: 5,
+            // Note: NO 'by' clause - this is measure ranking
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const measure = createMeasureFromFilterJaql(jaql);
+        expect(measure).toBeDefined();
+        if (!measure) return;
+        const expectedFilter = filterFactory.measureTopRanking(measure, jaql.filter.top, {
+          guid,
+        });
+        expectEqualFilters(filter, expectedFilter);
+      });
+
+      it('should handle bottom', () => {
+        const jaql = {
+          table: 'Commerce',
+          column: 'Revenue',
+          datatype: 'numeric',
+          title: 'Bottom 5 by Total Revenue',
+          dim: '[Commerce.Revenue]',
+          type: 'measure',
+          agg: 'sum',
+          filter: {
+            bottom: 5,
+            // Note: NO 'by' clause - this is measure ranking
+          },
+        };
+
+        const filter = createFilterFromJaqlInternal(jaql, guid);
+        const measure = createMeasureFromFilterJaql(jaql);
+        expect(measure).toBeDefined();
+        if (!measure) return;
+        const expectedFilter = filterFactory.measureBottomRanking(measure, jaql.filter.bottom, {
+          guid,
+        });
+        expectEqualFilters(filter, expectedFilter);
+      });
+    });
+
     describe('LogicalAttributeFilter', () => {
       it('should handle or', () => {
         const jaql = {

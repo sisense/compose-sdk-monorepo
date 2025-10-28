@@ -4,13 +4,15 @@ title: Formula Functions
 
 # Formula Functions
 
-Functions you can use in queries.
+For the most up to date formula functions reference, please check the [Sisense Fusion documentation](https://docs.sisense.com/main/SisenseLinux/dashboard-functions-reference.htm)
+
+For convenience, a reference of functions you may use within [`measureFactory.customFormula()`](../modules/sdk-data/factories/namespace.measureFactory/functions/function.customFormula.md) of Compose SDK is also included below.
 
 ## Overview
 
 The following functions are available:
 
-- [Universal Functions](#universal-functions)
+- [Universal Functions)](#universal-functions)
   - [Aggregative Functions](#aggregative-functions)
     - [Average (`AVG`)](#average-avg)
     - [Count Unique (`COUNT`)](#count-unique-count)
@@ -54,7 +56,7 @@ The following functions are available:
     - [Minute Difference (`MNDIFF`)](#minute-difference-mndiff)
     - [Hour Difference (`HDIFF`)](#hour-difference-hdiff)
     - [Day Difference (`DDIFF`)](#day-difference-ddiff)
-    - [MOnth Difference (`MDIFF`)](#month-difference-mdiff)
+    - [Month Difference (`MDIFF`)](#month-difference-mdiff)
     - [Quarter Difference (`QDIFF`)](#quarter-difference-qdiff)
     - [Year Difference (`YDIFF`)](#year-difference-ydiff)
     - [Past Week Difference (`DIFFPASTWEEK`)](#past-week-difference-diffpastweek)
@@ -93,7 +95,7 @@ The following functions are available:
     - [Now (`NOW`)](#now-now-1)
     - [Running Average (`RAVG`)](#running-average-ravg)
     - [Running Sum (`RSUM`)](#running-sum-rsum)
-- [Fusion Assets ElastiCube-only Functions](#fusion-embed-elasticube-only-functions)
+- [Elasticube-only Functions](#fusion-elasticube-only-functions)
   - [Aggregative Functions](#aggregative-functions-1)
     - [Correlation (`CORREL`)](#correlation-correl)
     - [Covariance - Population (`COVARP`)](#covariance---population-covarp)
@@ -128,6 +130,7 @@ Multi-pass aggregations take the following form, where `INNER` is a function, `<
 
 ```
 OUTER(<group_by_field>, INNER(<field>))
+
 ```
 
 This concept is a bit easier to understand after seeing it in practice, so let's take a look how you might calculate something like the average total revenue per product.
@@ -136,6 +139,7 @@ Consider the following multi-pass call:
 
 ```
 AVG([Product], SUM(Revenue));
+
 ```
 
 This call calculates the average total revenue per product. It does so by calculating the total revenue per product and then taking the average of all those totals.
@@ -194,7 +198,7 @@ However, if you query that same data model for difference in total cost and you 
 
 ## Universal Functions
 
-Universal functions are functions that can be used all across the Sisense Fusion platform, including projects that use Fusion Assets or Fusion Forge.
+These functions may be used for both Live and ElastiCube models within the Sisense Fusion platform.
 
 ### Aggregative Functions
 
@@ -210,6 +214,7 @@ Gets the average of given values.
 
 ```
 AVG(<numeric_field>)
+
 ```
 
 | Argument          | Description       |
@@ -222,6 +227,7 @@ Calculate the average revenue.
 
 ```
 AVG([Revenue]);
+
 ```
 
 ---
@@ -234,6 +240,7 @@ Counts the number of unique values.
 
 ```
 COUNT(<numeric_field>)
+
 ```
 
 ##### Example (`COUNT`)
@@ -242,6 +249,7 @@ Count the number of different category IDs.
 
 ```
 COUNT([Category ID])
+
 ```
 
 ---
@@ -254,6 +262,7 @@ Counts the number of values, including duplicates.
 
 ```
 DUPCOUNT(<numeric_field>)
+
 ```
 
 ##### Example (`DUPCOUNT`)
@@ -262,6 +271,7 @@ Count the number of category IDs.
 
 ```
 DUPCOUNT([Category ID])
+
 ```
 
 ---
@@ -274,6 +284,7 @@ Gets the nth largest of the given values.
 
 ```
 LARGEST(<numeric_field>, <n>)
+
 ```
 
 - `numeric_field`: Field to find the largest from.
@@ -285,6 +296,7 @@ Gets the third largest sales value.
 
 ```
 LARGEST([Sales], 3);
+
 ```
 
 ---
@@ -297,6 +309,7 @@ Gets the largest of the given values.
 
 ```
 MAX(<numeric_field>)
+
 ```
 
 ##### Example
@@ -305,6 +318,7 @@ Get the maximum revenue value.
 
 ```
 MAX([Revenue]);
+
 ```
 
 ---
@@ -317,6 +331,7 @@ Gets the median value of the given values.
 
 ```
 MEDIAN(<numeric_field>)
+
 ```
 
 ##### Example (`MEDIAN`)
@@ -325,6 +340,7 @@ Get the median revenue value.
 
 ```
 MEDIAN([Revenue]);
+
 ```
 
 ---
@@ -337,6 +353,7 @@ Gets the smallest of the given values.
 
 ```
 MIN(<numeric_field>)
+
 ```
 
 ##### Example (`MIN`)
@@ -345,6 +362,7 @@ Get the minimum revenue value.
 
 ```
 MIN([Revenue]);
+
 ```
 
 ---
@@ -357,6 +375,7 @@ Gets the mode of the given values. The mode is the most frequently occurring val
 
 ```
 MODE(<numeric_field>)
+
 ```
 
 ##### Example (`MODE`)
@@ -365,6 +384,7 @@ Get the mode revenue value.
 
 ```
 MODE([Revenue]);
+
 ```
 
 ---
@@ -377,6 +397,7 @@ Calculates the total of the given values.
 
 ```
 SUM(<numeric_field>)
+
 ```
 
 ##### Example (`SUM`)
@@ -385,6 +406,7 @@ Calculates the total cost across all items.
 
 ```
 SUM([Cost]);
+
 ```
 
 ---
@@ -403,6 +425,7 @@ Calculates the contribution, in percentage, of a value towards the total.
 
 ```
 CONTRIBUTION(<numeric_field>)
+
 ```
 
 ##### Example (`CONTRIBUTION`)
@@ -411,6 +434,7 @@ Calculate the percentage of total sales per group out of total sales for all gro
 
 ```
 CONTRIBUTION([Total Sales])
+
 ```
 
 ---
@@ -423,6 +447,7 @@ Gets the nth percentile value of the given values.
 
 ```
 PERCENTILE(<numeric_field>, <n>)
+
 ```
 
 - `numeric_field`: Field to find the percentile from.
@@ -434,6 +459,7 @@ Gets the 90th percentile of total sales.
 
 ```
 PERCENTILE([Total Sales], 0.9)
+
 ```
 
 ---
@@ -446,13 +472,14 @@ Gets the nth quartile value of the given values. Can return minimum value, first
 
 ```
 QUARTILE(<numeric_field>, <n>)
+
 ```
 
 - `numeric_field`: Field to find the quartile from.
 - `n`: A number between `0` and `4` (inclusive) to indicate the quartile.
   - `0`: Minimum value
   - `1`: First quartile (25th percentile)
-  - `2`: Thirst quartile (50th percentile)
+  - `2`: Third quartile (50th percentile)
   - `3`: First quartile (75th percentile)
   - `4`: Maximum value
 
@@ -462,6 +489,7 @@ Gets the first quartile of a given item.
 
 ```
 QUARTILE([Item], 1);
+
 ```
 
 ---
@@ -474,13 +502,14 @@ Gets the rank of a value from the given values.
 
 ```
 RANK(<numeric_field>, [sort_order], [rank_type], [<group-by field 1>,... , <group-by field n>])
+
 ```
 
 - `numeric_field`: Field to rank by.
 - `sort_order`: Optional sort order. Either `DESC` or `ASC`. Defaults to ascending order.
 - `rank_type`: Optional ranking type. Defaults to `1224` ranking.
   - `1224`: Standard competition, meaning items that rank equally receive the same ranking number, and then a gap is left after the equally ranked items in the ranking numbers.
-  - `1334`: Modified competition ranking, meaning items that rank equally receive the same ranking number, and a gap is left before the equally ranked items in the ranking numbers. Only supported for Fusion Assets Elasticubes.
+  - `1334`: Modified competition ranking, meaning items that rank equally receive the same ranking number, and a gap is left before the equally ranked items in the ranking numbers. Only supported for Fusion Datamodels.
   - `1223`: Dense ranking, meaning items that rank equally receive the same ranking number, and the next items receive the immediately following ranking number.
   - `1234`: Ordinal ranking, meaning all items receive distinct ordinal numbers, including items that rank equally. The assignment of distinct ordinal numbers for equal-ranking items is arbitrary.
 - `[<group-by field 1>,... , <group-by field n>]`: Optional fields to group by.
@@ -491,6 +520,7 @@ Gets the rank of the total annual cost per product, sorted in ascending order.
 
 ```
 RANK([Total Cost], "ASC", "1224", [Product], [Years])
+
 ```
 
 ---
@@ -503,6 +533,7 @@ Gets the standard deviation of the given values (population). Standard deviation
 
 ```
 STDEVP(<numeric_field>)
+
 ```
 
 ##### Example (`STDEVP`)
@@ -511,6 +542,7 @@ Get the standard deviation of the values in a given population.
 
 ```
 STDEVP([Score])
+
 ```
 
 ---
@@ -523,6 +555,7 @@ Gets the standard deviation of the given values (sample). Standard deviation is 
 
 ```
 STDEV(<numeric_field>)
+
 ```
 
 ##### Example (`STDEV`)
@@ -531,6 +564,7 @@ Get the standard deviation of the given values in a given sample.
 
 ```
 STDEV([Score])
+
 ```
 
 ---
@@ -543,6 +577,7 @@ Gets the variance of the given values (population). Variance (population) is the
 
 ```
 VARP(<numeric_field>)
+
 ```
 
 ##### Example (`VARP`)
@@ -551,6 +586,7 @@ Get the variance of grades in a student population.
 
 ```
 VARP([Grade]);
+
 ```
 
 ---
@@ -563,6 +599,7 @@ Gets the variance of the given values (sample). Variance (sample) is the average
 
 ```
 VAR(<numeric_field>)
+
 ```
 
 ##### Example (`VAR`)
@@ -571,6 +608,7 @@ Gets the variance of grades in a random sample.
 
 ```
 VAR([Grade]);
+
 ```
 
 ---
@@ -589,6 +627,7 @@ Gets the absolute value of a given value.
 
 ```
 ABS(<numeric_field>)
+
 ```
 
 ##### Example (`ABS`)
@@ -597,6 +636,7 @@ Get the absolute cost value.
 
 ```
 ABS([Cost]);
+
 ```
 
 ---
@@ -609,6 +649,7 @@ Gets the angle, in radians, whose cosine is a given numeric expression. Also ref
 
 ```
 ACOS(<numeric_field>)
+
 ```
 
 #### Examples (`ACOS`)
@@ -617,6 +658,7 @@ Get the angle, in radians, whose cosine is a given total revenue.
 
 ```
 ACOS([Total Revenue])
+
 ```
 
 ---
@@ -629,6 +671,7 @@ Gets the angle, in radians, whose sine is a given numeric expression. Also refer
 
 ```
 ASIN(<numeric_field>)
+
 ```
 
 ##### Example (`ASIN`)
@@ -637,6 +680,7 @@ Get the angle, in radians, whose sine is a given total revenue.
 
 ```
 ASIN([Total Revenue])
+
 ```
 
 ---
@@ -649,6 +693,7 @@ Gets the angle in radians whose tangent is a given numeric expression. Also refe
 
 ```
 ATAN(<numeric_field>)
+
 ```
 
 ##### Example (`ATAN`)
@@ -657,6 +702,7 @@ Get the angle in radians whose tangent is a given total revenue.
 
 ```
 ATAN([Total Revenue])
+
 ```
 
 ---
@@ -669,6 +715,7 @@ Calculates a number rounded up to the nearest multiple of significance.
 
 ```
 CEILING(<numeric_field>)
+
 ```
 
 ##### Example (`CEILING`)
@@ -677,6 +724,7 @@ Calculate the rounded up total cost. For example, when the cost is 83.2 it is ro
 
 ```
 CEILING([Total Cost])
+
 ```
 
 ---
@@ -689,6 +737,7 @@ Calculates the trigonometric cosine of a given angle (in radians).
 
 ```
 COS(<numeric_field>)
+
 ```
 
 ##### Example (`COS`)
@@ -697,6 +746,7 @@ Calculate the trigonometric cosine of the average angle.
 
 ```
 COS([Average Angle])
+
 ```
 
 ---
@@ -709,6 +759,7 @@ Calculates the trigonometric cotangent of a given angle (in radians).
 
 ```
 COT(<numeric_field>)
+
 ```
 
 ##### Example (`COT`)
@@ -717,6 +768,7 @@ Calculate the trigonometric cotangent of the average angle.
 
 ```
 COT([Average Angle])
+
 ```
 
 ---
@@ -729,6 +781,7 @@ Calculates the exponential value of a given value.
 
 ```
 EXP(<numeric_field>)
+
 ```
 
 ##### Example (`EXP`)
@@ -737,6 +790,7 @@ Calculate the exponential value of sales.
 
 ```
 EXP([Sales]);
+
 ```
 
 ---
@@ -749,6 +803,7 @@ Calculates a number rounded down to the nearest multiple of 1.
 
 ```
 FLOOR(<numeric_field>)
+
 ```
 
 ##### Example (`FLOOR`)
@@ -757,6 +812,7 @@ Calculate the rounded down total cost. For example, when the cost is 83.2 it is 
 
 ```
 CEILING([Total Cost])
+
 ```
 
 ---
@@ -769,6 +825,7 @@ Calculates the base-e logarithm of a given value.
 
 ```
 LN(<numeric_field>)
+
 ```
 
 ##### Example (`LN`)
@@ -777,6 +834,7 @@ Returns the base e-logarithm of the interest rate.
 
 ```
 LN([Interest Rate])
+
 ```
 
 ---
@@ -789,6 +847,7 @@ Calculates the base-10 logarithm of a given value.
 
 ```
 LOG10(<numeric_field>)
+
 ```
 
 ##### Example (`LOG10`)
@@ -797,6 +856,7 @@ Calculates the base-10 logarithm of the interest rate.
 
 ```
 LOG10([Interest Rate])
+
 ```
 
 ---
@@ -809,6 +869,7 @@ Calculates the remainder (modulo) after a given value is divided by a number.
 
 ```
 MOD(<numeric_field>)
+
 ```
 
 ##### Example (`MOD`)
@@ -817,6 +878,7 @@ Calculate the remainder of the cost divided by 10. For example, if the cost is 2
 
 ```
 MOD([Cost], 10);
+
 ```
 
 ---
@@ -829,6 +891,7 @@ Calculates a given value raised to a specified power.
 
 ```
 POWER(<numeric_field>)
+
 ```
 
 ##### Example (`POWER`)
@@ -837,6 +900,7 @@ Calculate the value of the revenue squared.
 
 ```
 POWER([Revenue], 2);
+
 ```
 
 ---
@@ -849,6 +913,7 @@ Calculates the integer portion of a division.
 
 ```
 QUOTIENT(<numeric_field>)
+
 ```
 
 ##### Example (`QUOTIENT`)
@@ -857,6 +922,7 @@ Calculate the cost divided by 10. For example, if the cost is 25, the quotient i
 
 ```
 QUOTIENT([Cost], 10);
+
 ```
 
 ---
@@ -869,6 +935,7 @@ Calculates a given value rounded to a specified number of digits.
 
 ```
 ROUND(<numeric_field>, <decimal_places>)
+
 ```
 
 - `numeric_field`: Field to round.
@@ -880,6 +947,7 @@ Calculate the revenue rounded to two decimal places.
 
 ```
 ROUND([Revenue], 2);
+
 ```
 
 ---
@@ -892,6 +960,7 @@ Calculates the trigonometric sine of a given angle (in radians).
 
 ```
 SIN(<numeric_field>)
+
 ```
 
 ##### Example (`SIN`)
@@ -900,6 +969,7 @@ Calculate the trigonometric sine of the average angle.
 
 ```
 SIN([Average Angle])
+
 ```
 
 ---
@@ -912,6 +982,7 @@ Calculates the square root of a given value. The given values must be positive n
 
 ```
 SQRT(<numeric_field>)
+
 ```
 
 ##### Example (`SQRT`)
@@ -920,6 +991,7 @@ Calculate the square root of the cost.
 
 ```
 SQRT([Cost]);
+
 ```
 
 ---
@@ -932,6 +1004,7 @@ Calculates the trigonometric tangent of a given angle (in radians).
 
 ```
 TAN(<numeric_field>)
+
 ```
 
 ##### Example (`TAN`)
@@ -940,6 +1013,7 @@ Calculate the trigonometric tangent of the average angle.
 
 ```
 TAN([Average Angle])
+
 ```
 
 ---
@@ -958,9 +1032,10 @@ Calculates the difference between an end time and start time in seconds.
 
 ```
 SDIFF(<end_datetime_field>, <start_datetime_field>)
+
 ```
 
-- `end_datetime_filed`: Ending time to take the difference from
+- `end_datetime_field`: Ending time to take the difference from
 - `start_datetime_field`: Starting time to take the difference from
 
 ##### Example (`SDIFF`)
@@ -969,6 +1044,7 @@ Calculate the difference in seconds from the time of entering to the time of lea
 
 ```
 SDIFF([Leave Time], [Enter Time])
+
 ```
 
 ---
@@ -981,9 +1057,10 @@ Calculates the difference between an end time and start time in whole minutes.
 
 ```
 MNDIFF(<end_datetime_field>, <start_datetime_field>)
+
 ```
 
-- `end_datetime_filed`: Ending time to take the difference from
+- `end_datetime_field`: Ending time to take the difference from
 - `start_datetime_field`: Starting time to take the difference from
 
 ##### Example (`MNDIFF`)
@@ -992,6 +1069,7 @@ Calculate the difference in minutes from the time of entering to the time of lea
 
 ```
 MNDIFF([Leave Time], [Enter Time])
+
 ```
 
 ---
@@ -1004,9 +1082,10 @@ Calculates the difference between an end time and start time in whole hours.
 
 ```
 HDIFF(<end_datetime_field>, <start_datetime_field>)
+
 ```
 
-- `end_datetime_filed`: Ending time to take the difference from
+- `end_datetime_field`: Ending time to take the difference from
 - `start_datetime_field`: Starting time to take the difference from
 
 ##### Example (`HDIFF`)
@@ -1015,6 +1094,7 @@ Calculate the difference in hours from the time of entering to the time of leavi
 
 ```
 HDIFF([Leave Time], [Enter Time])
+
 ```
 
 ---
@@ -1027,9 +1107,10 @@ Calculates the difference between an end time and start time in whole days.
 
 ```
 DDIFF(<end_datetime_field>, <start_datetime_field>)
+
 ```
 
-- `end_datetime_filed`: Ending time to take the difference from
+- `end_datetime_field`: Ending time to take the difference from
 - `start_datetime_field`: Starting time to take the difference from
 
 ##### Example (`DDIFF`)
@@ -1038,6 +1119,7 @@ Calculate the difference in days from the time of entering to the time of leavin
 
 ```
 DDIFF([Leave Time], [Enter Time])
+
 ```
 
 ---
@@ -1050,6 +1132,7 @@ Calculates the difference between an end time and start time in whole months.
 
 ```
 MDIFF(<end_datetime_field>, <start_datetime_field>)
+
 ```
 
 - `end_datetime_filed`: Ending time to take the difference from
@@ -1061,6 +1144,7 @@ Calculate the difference in months from the time of entering to the time of leav
 
 ```
 MDIFF([Leave Time], [Enter Time])
+
 ```
 
 ---
@@ -1073,6 +1157,7 @@ Calculates the difference between an end time and start time in whole quarters.
 
 ```
 QDIFF(<end_datetime_field>, <start_datetime_field>)
+
 ```
 
 - `end_datetime_filed`: Ending time to take the difference from
@@ -1084,6 +1169,7 @@ Calculate the difference in quarters from the time of entering to the time of le
 
 ```
 QDIFF([Leave Time], [Enter Time])
+
 ```
 
 ---
@@ -1096,6 +1182,7 @@ Calculates the difference between an end time and start time in whole years.
 
 ```
 YDIFF(<end_datetime_field>, <start_datetime_field>)
+
 ```
 
 - `end_datetime_filed`: Ending time to take the difference from
@@ -1107,6 +1194,7 @@ Calculate the difference in years from the time of entering to the time of leavi
 
 ```
 YDIFF([Leave Time], [Enter Time])
+
 ```
 
 ---
@@ -1124,6 +1212,7 @@ Use this function when the [date resolution](#date-resolution) used in your quer
 
 ```
 DIFFPASTWEEK(<numeric_field>)
+
 ```
 
 ##### Example (`DIFFPASTWEEK`)
@@ -1132,6 +1221,7 @@ Calculate the difference between this week's sales and the previous week's sales
 
 ```
 DIFFPASTWEEK([Total Sales])
+
 ```
 
 ---
@@ -1150,6 +1240,7 @@ Use this function when the [date resolution](#date-resolution) used in your quer
 
 ```
 DIFFPASTMONTH(<numeric_field>)
+
 ```
 
 ##### Example (`DIFFPASTMONTH`)
@@ -1158,6 +1249,7 @@ Calculate the difference between this month's sales and the previous month's sal
 
 ```
 DIFFPASTMONTH([Total Sales])
+
 ```
 
 ---
@@ -1177,6 +1269,7 @@ Use this function when the [date resolution](#date-resolution) used in your quer
 
 ```
 DIFFPASTQUARTER(<numeric_field>)
+
 ```
 
 ##### Example (`DIFFPASTQUARTER`)
@@ -1185,6 +1278,7 @@ Calculate the difference between this quarter's sales and the previous quarter's
 
 ```
 DIFFPASTQUARTER([Total Sales])
+
 ```
 
 ---
@@ -1205,6 +1299,7 @@ You can use this function with any [date resolution](#date-resolution) (day, wee
 
 ```
 DIFFPASTYEAR(<numeric_field>)
+
 ```
 
 ##### Example (`DIFFPASTYEAR`)
@@ -1213,6 +1308,7 @@ Calculate the difference between this year's sales and the previous year's sales
 
 ```
 DIFFPASTYEAR([Total Sales])
+
 ```
 
 ---
@@ -1227,6 +1323,7 @@ You can use this function with any [date resolution](#time-related-functions) (d
 
 ```
 DIFFPASTPERIOD(<numeric_field>)
+
 ```
 
 ##### Example (`DIFFPASTPERIOD`)
@@ -1235,6 +1332,7 @@ Calculate the difference between this period's sales and the previous period's s
 
 ```
 DIFFPASTPERIOD([Total Sales])
+
 ```
 
 ---
@@ -1256,6 +1354,7 @@ For example:
 
 ```
 GROWTH(<numeric_field>)
+
 ```
 
 ##### Example (`GROWTH`)
@@ -1264,6 +1363,7 @@ Calculate the growth of total sales over a period of time.
 
 ```
 GROWTH([Total Sales])
+
 ```
 
 ---
@@ -1285,6 +1385,7 @@ For example:
 
 ```
 GROWTHRATE(<numeric_field>)
+
 ```
 
 ##### Example (`GROWTHRATE`)
@@ -1293,6 +1394,7 @@ Calculate the growth rate of total sales over a period of time.
 
 ```
 GROWTHRATE([Total Sales])
+
 ```
 
 ---
@@ -1317,6 +1419,7 @@ For example:
 
 ```
 GROWTHPASTWEEK(<numeric_field>)
+
 ```
 
 ##### Example (`GROWTHPASTWEEK`)
@@ -1325,6 +1428,7 @@ Calculate the growth of total sales over the past week.
 
 ```
 GROWTHPASTWEEK([Total Sales])
+
 ```
 
 ---
@@ -1350,6 +1454,7 @@ For example:
 
 ```
 GROWTHPASTMONTH(<numeric_field>)
+
 ```
 
 ##### Example (`GROWTHPASTMONTH`)
@@ -1358,6 +1463,7 @@ Calculate the growth of total sales over the past month.
 
 ```
 GROWTHPASTMONTH([Total Sales])
+
 ```
 
 ---
@@ -1384,6 +1490,7 @@ For example:
 
 ```
 GROWTHPASTQUARTER(<numeric_field>)
+
 ```
 
 ##### Example (`GROWTHPASTQUARTER`)
@@ -1392,6 +1499,7 @@ Calculate the growth of total sales over the past quarter.
 
 ```
 GROWTHPASTQUARTER([Total Sales])
+
 ```
 
 ---
@@ -1419,6 +1527,7 @@ For example:
 
 ```
 GROWTHPASTYEAR(<numeric_field>)
+
 ```
 
 ##### Example (`GROWTHPASTYEAR`)
@@ -1427,6 +1536,7 @@ Calculate the growth of total sales over the past year.
 
 ```
 GROWTHPASTYEAR([Total Sales])
+
 ```
 
 ---
@@ -1441,6 +1551,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 PASTDAY(<numeric_field>, [<number_of_periods>])
+
 ```
 
 - `numeric_field`: Field to get the value from.
@@ -1452,12 +1563,14 @@ Get the total sales value for yesterday.
 
 ```
 PASTDAY([Total Sales])
+
 ```
 
 Get the total sales value for 2 days ago.
 
 ```
 PASTDAY([Total Sales], 2)
+
 ```
 
 ---
@@ -1475,6 +1588,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 PASTWEEK(<numeric_field>, [<number_of_periods>])
+
 ```
 
 - `numeric_field`: Field to get the value from.
@@ -1486,12 +1600,14 @@ Get the total sales value from last week.
 
 ```
 PASTWEEK([Total Sales])
+
 ```
 
 Get the total sales value from two weeks ago.
 
 ```
 PASTWEEK([Total Sales], 2)
+
 ```
 
 ---
@@ -1510,6 +1626,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 PASTMONTH(<numeric_field>, [<number_of_periods>])
+
 ```
 
 - `numeric_field`: Field to get the value from.
@@ -1521,12 +1638,14 @@ Get the total sales value from last month.
 
 ```
 PASTMONTH([Total Sales])
+
 ```
 
 Get the total sales value from two months ago.
 
 ```
 PASTMONTH([Total Sales], 2)
+
 ```
 
 ---
@@ -1546,6 +1665,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 PASTQUARTER(<numeric_field>, [<number_of_periods>])
+
 ```
 
 - `numeric_field`: Field to get the value from.
@@ -1557,12 +1677,14 @@ Get the total sales value from last quarter.
 
 ```
 PASTQUARTER([Total Sales])
+
 ```
 
 Get the total sales value from two quarters ago.
 
 ```
 PASTQUARTER([Total Sales], 2)
+
 ```
 
 ---
@@ -1583,6 +1705,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 PASTYEAR(<numeric_field>, [<number_of_periods>])
+
 ```
 
 - `numeric_field`: Field to get the value from.
@@ -1594,12 +1717,14 @@ Get the total sales value from last year.
 
 ```
 PASTYEAR([Total Sales])
+
 ```
 
 Get the total sales value from two years ago.
 
 ```
 PASTYEAR([Total Sales], 2)
+
 ```
 
 ---
@@ -1614,6 +1739,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 WTDAVG(<numeric_field>)
+
 ```
 
 ##### Example (`WTDAVG`)
@@ -1622,6 +1748,7 @@ Calculate the running average of total sales starting from the beginning of the 
 
 ```
 WTDAVG([Total Sales])
+
 ```
 
 ---
@@ -1636,6 +1763,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 WTDSUM(<numeric_field>)
+
 ```
 
 ##### Example (`WTDSUM`)
@@ -1644,6 +1772,7 @@ Calculate the running sum of total sales starting from the beginning of the week
 
 ```
 WTDSUM([Total Sales])
+
 ```
 
 ---
@@ -1661,6 +1790,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 MTDAVG(<numeric_field>)
+
 ```
 
 ##### Example (`MTDAVG`)
@@ -1669,6 +1799,7 @@ Calculate the running average of total sales starting from the beginning of the 
 
 ```
 MTDAVG([Total Sales])
+
 ```
 
 ---
@@ -1686,6 +1817,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 MTDSUM(<numeric_field>)
+
 ```
 
 ##### Example (`MTDSUM`)
@@ -1694,6 +1826,7 @@ Calculate the running average of total sales starting from the beginning of the 
 
 ```
 MTDSUM([Total Sales])
+
 ```
 
 ---
@@ -1712,6 +1845,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 QTDAVG(<numeric_field>)
+
 ```
 
 ##### Example (`QTDAVG`)
@@ -1720,6 +1854,7 @@ Calculate the running average of total sales starting from the beginning of the 
 
 ```
 QTDAVG([Total Sales])
+
 ```
 
 ---
@@ -1738,6 +1873,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 QTDSUM(<numeric_field>)
+
 ```
 
 ##### Example (`QTDSUM`)
@@ -1746,6 +1882,7 @@ Calculate the running sum of total sales starting from the beginning of the quar
 
 ```
 QTDSUM([Total Sales])
+
 ```
 
 ---
@@ -1765,6 +1902,7 @@ You can use this function when the [date resolution](#date-resolution) in your q
 
 ```
 YTDAVG(<numeric_field>)
+
 ```
 
 ##### Example (`YTDAVG`)
@@ -1773,6 +1911,7 @@ Calculate the running average of total sales starting from the beginning of the 
 
 ```
 YTDAVG([Total Sales])
+
 ```
 
 ---
@@ -1794,6 +1933,7 @@ Calculate the running sum of total sales starting from the beginning of the year
 
 ```
 YTDSUM([Total Sales])
+
 ```
 
 ---
@@ -1817,6 +1957,7 @@ Changes the scope of a measure calculation to ignore grouping and filters while 
 
 ```
 ALL(<any_field_type>)
+
 ```
 
 - `any_field_type`: Any groupable field.
@@ -1827,6 +1968,7 @@ Calculates the total revenue for all years together, despite any grouping or fil
 
 ```
 SUM([Revenue]), ALL([Years in Date]);
+
 ```
 
 ---
@@ -1841,6 +1983,7 @@ This function works will all [date resolutions](#date-resolution). However, the 
 
 ```
 PREV(<datetime_field>, [<n>])
+
 ```
 
 - `datetime_field`: Any field containing a datetime.
@@ -1852,12 +1995,14 @@ Get the total quantity for the previous month when grouping by month.
 
 ```
 (SUM([Quantity]), PREV([Months in Date]))
+
 ```
 
 Get the total quantity for 2 months proir when grouping by month.
 
 ```
 (SUM([Quantity]), PREV([Months in Date], 2))
+
 ```
 
 ---
@@ -1872,6 +2017,7 @@ This function works will all [date resolutions](#date-resolution). However, the 
 
 ```
 PREV(<datetime_field>, [<n>])
+
 ```
 
 - `datetime_field`: Any field containing a datetime.
@@ -1883,12 +2029,14 @@ Get the total quantity for the next month when grouping by month.
 
 ```
 (SUM([Quantity]), NEXT([Months in Date]))
+
 ```
 
 Get the total quantity for 2 months later when grouping by month.
 
 ```
 (SUM([Quantity]), NEXT([Months in Date], 2))
+
 ```
 
 ---
@@ -1903,6 +2051,7 @@ This function works will all [date resolutions](#date-resolution). However, the 
 
 ```
 NOW(<datetime_field>)
+
 ```
 
 ##### Example (`NOW`)
@@ -1911,6 +2060,7 @@ Get the total quantity for the current month when grouping by month.
 
 ```
 (SUM([Quantity]), NOW([Months in Date]))
+
 ```
 
 ---
@@ -1927,6 +2077,7 @@ Returns the result expression of the first condition that evaluates as true. If 
 
 ```
 (WHEN <condition> THEN <result_expression_true> [...] [ELSE <result expression_false>] END)
+
 ```
 
 - `condition`: Boolean expression.
@@ -1939,12 +2090,14 @@ Return 1 when the total sales is less than 100. Return 2 if total sales value is
 
 ```
 CASE WHEN SUM([Sales]) < 100 THEN 1 ELSE 2 END
+
 ```
 
 Return 1 when the total sales is less than 100. Return 2 if total sales value is between 100 and 1000. Return 3 in when total sales are above 1000.
 
 ```
 CASE WHEN SUM([Sales]) < 100 THEN 1 WHEN SUM ([Sales]) < 1000 THEN 2 ELSE 3 END
+
 ```
 
 ---
@@ -1957,6 +2110,7 @@ Returns the first expression when the condition is true and it returns the secon
 
 ```
 IF(<condition>, <numeric_expression_true>, <numeric_expression_false>)
+
 ```
 
 - `condition`: Boolean expression.
@@ -1969,6 +2123,7 @@ If total sales is larger than 100, return the Total Sales x 1.1 (sales increase 
 
 ```
 IF(SUM([Sales]) > 100, SUM([Sales]) * 1.1, SUM([Sales]))
+
 ```
 
 ---
@@ -1981,12 +2136,14 @@ Returns true if the expression does not contain data.
 
 ```
 ISNULL(<numeric_field>)
+
 ```
 
 ##### Example (`ISNULL`)
 
 ```
 If (ISNULL(SUM([Sales])), 0, SUM([Sales]) )
+
 ```
 
 ---
@@ -1999,6 +2156,7 @@ Returns the current execution time.
 
 ```
 NOW()
+
 ```
 
 ##### Example (`NOW`)
@@ -2007,6 +2165,7 @@ Get the hour difference from enter time until now.
 
 ```
 HDiff(NOW(), [Enter Time])
+
 ```
 
 #### Running Average (`RAVG`)
@@ -2021,6 +2180,7 @@ You can specify a boolean value to indicate whether to calculate the average con
 
 ```
 RAVG(<numeric_field>, [<continuous>])
+
 ```
 
 - `numeric_field`: Field to calculate the running average for.
@@ -2032,6 +2192,7 @@ Get the running average of the total revenue.
 
 ```
 RAVG([Total Revenue])
+
 ```
 
 ---
@@ -2048,6 +2209,7 @@ You can specify a boolean value to indicate whether to accumulate the sum contin
 
 ```
 RSUM(<numeric_field>, [<continuous>])
+
 ```
 
 - `numeric_field`: Field to calculate the running sum for.
@@ -2059,13 +2221,14 @@ Get the running total of the total revenue.
 
 ```
 RSUM([Total Revenue])
+
 ```
 
 ---
 
-## Fusion Assets ElastiCube-only Functions
+## Fusion Elasticube-only Functions
 
-Fusion Assets ElastiCube-only functions are functions that can be only be used with Fusion Assets and only with ElastiCube data models.
+These functions can **only** be used with Fusion ElastiCube datamodels (see [documentation](https://docs.sisense.com/main/SisenseLinux/data-sources.htm?tocpath=Data%20Sources%7C_____1#DataSourceConnectionTypes) for further details).
 
 ### Aggregative Functions
 
@@ -2081,10 +2244,12 @@ Calculates the correlation coefficient of two numeric fields.
 
 ```
 CORREL(<numeric_field_a>, <numeric_field_b>)
+
 ```
 
 ```
 CORREL(<group_by_field>, <aggregation_a>, <aggregation_b>)
+
 ```
 
 ##### Examples (`CORREL`)
@@ -2093,12 +2258,14 @@ Calculate the correlation between revenue and cost.
 
 ```
 CORREL([Revenue], [Cost]);
+
 ```
 
 Calculate the correlation between the average revenue and average cost per product.
 
 ```
 CORREL([Products], AVG([Revenue]), AVG([Cost]));
+
 ```
 
 ---
@@ -2111,10 +2278,12 @@ Calculates the population covariance of two numeric fields.
 
 ```
 COVARP(<numeric_field_a>, <numeric_field_b>)
+
 ```
 
 ```
 COVARP(<group_by_field>, <aggregation_a>, <aggregation_b>)
+
 ```
 
 ##### Examples (`COVARP`)
@@ -2123,12 +2292,14 @@ Calculate the population covariance of revenue and cost.
 
 ```
 COVARP([Revenue], [Cost]);
+
 ```
 
 Calculate the population covariance of the average revenue and the average cost per product.
 
 ```
 COVARP([Products], AVG([Revenue]), AVG([Cost]));
+
 ```
 
 ---
@@ -2141,10 +2312,12 @@ Calculates the sample covariance of two numeric fields.
 
 ```
 COVAR(<numeric_field_a>, <numeric_field_b>)
+
 ```
 
 ```
 COVAR(<group_by_field>, <aggregation_a>, <aggregation_b>)
+
 ```
 
 ##### Examples (`COVAR`)
@@ -2153,12 +2326,14 @@ Calculate the sample covariance of revenue and cost.
 
 ```
 COVAR([Revenue], [Cost]);
+
 ```
 
 Calculate the sample covariance of the average revenue and the average cost per product.
 
 ```
 COVAR([Products], AVG([Revenue]), AVG([Cost]));
+
 ```
 
 ---
@@ -2171,6 +2346,7 @@ Calculates the skewness of the distribution of a given value in a population.
 
 ```
 SKEWP(<numeric_field>)
+
 ```
 
 ##### Example (`SKEWP`)
@@ -2179,6 +2355,7 @@ Calculate the skewness of the distribution of scores in a population.
 
 ```
 SKEWP([Score]);
+
 ```
 
 ---
@@ -2191,6 +2368,7 @@ Calculates the skewness of the distribution of a given value in a sample.
 
 ```
 SKEW(<numeric_field>)
+
 ```
 
 ##### Example (`SKEW`)
@@ -2199,6 +2377,7 @@ Calculate the skewness of the distribution of scores in a sample.
 
 ```
 SKEW([Score]);
+
 ```
 
 ---
@@ -2211,6 +2390,7 @@ Calculates the slope of a linear regression line through the provided series of 
 
 ```
 SKEW(<numeric_field>, <numeric_field>)
+
 ```
 
 ##### Example (`SLOPE`)
@@ -2219,6 +2399,7 @@ Calculate the slope of the regression line that represents a trend of items sold
 
 ```
 SLOPE([month.int], [Total Sales])
+
 ```
 
 ---
@@ -2237,6 +2418,7 @@ Calculates the exponential distribution for a given value and a supplied distrib
 
 ```
 EXPONDIST(<numeric_field>, <lambda>, <cumulative>)
+
 ```
 
 - `<numeric_field>`: Any numeric field.
@@ -2249,12 +2431,14 @@ Calculate the cumulative exponential distribution density of the number of leads
 
 ```
 EXPONDIST(COUNT([Leads]), 2, TRUE);
+
 ```
 
 Calculate the probability exponential distribution density of the number of leads per country where lambda is 2.
 
 ```
 EXPONDIST(COUNT([Leads]), 2, FALSE);
+
 ```
 
 ---
@@ -2267,6 +2451,7 @@ Calculates the intercept of a linear regression line through the provided series
 
 ```
 INTERCEPT(<numeric_field>, <numeric_field>)
+
 ```
 
 ##### Example (`INTERCEPT`)
@@ -2275,6 +2460,7 @@ Calculate the intercept of the regression line that represents the trend of item
 
 ```
 INTERCEPT([month.int], [Total Sales])
+
 ```
 
 ---
@@ -2288,6 +2474,7 @@ Calculates the standard normal distribution for a given value, a supplied distri
 ```
 NORMDIST(SUM<numeric_field>, (Mean(<numeric_field>), All(<numeric_field>)),
 (standard_deviation(<numeric_field>), All(<numeric field>)), <cumulative>)
+
 ```
 
 - `numeric_field`: Any numeric field.
@@ -2301,6 +2488,7 @@ Calculate the normal probability density of a given student score.
 
 ```
 NORMDIST([Score], (MEAN([Score]), ALL([Score])), (STDEV([Score]), ALL([Score])), FALSE);
+
 ```
 
 ---
@@ -2313,6 +2501,7 @@ Calculates the Poisson distribution for a given value and a supplied distributio
 
 ```
 POISSONDIST(<numeric_field>, <mean>, <cumulative>)
+
 ```
 
 - `numeric_field`: Any numeric field.
@@ -2325,6 +2514,7 @@ Calculate the Poisson probability density of a given number of scores.
 
 ```
 POISSONDIST([Score], (MEAN([Score]), ALL([Score])), (STDEV([Score]), ALL([Score])), FALSE);
+
 ```
 
 ---
@@ -2337,6 +2527,7 @@ Calculates the T-distribution for a given value and a supplied number of degrees
 
 ```
 TDIST(<numeric field>, <degrees_freedom>, <cumulative>)
+
 ```
 
 - `<numeric_field>`: Any numeric field.
@@ -2349,6 +2540,7 @@ Calculate a student's T-distribution of a given score, with 3 degrees of freedom
 
 ```
 TDIST([Score], 3, TRUE);
+
 ```
 
 ---
@@ -2365,6 +2557,7 @@ Calculates the hyperbolic cosine of a given value.
 
 ```
 COSH(<numeric_field>)
+
 ```
 
 ##### Example (`COSH`)
@@ -2373,6 +2566,7 @@ Calculates the hyperbolic cosine of the total revenue.
 
 ```
 COSH([Total Revenue])
+
 ```
 
 ---
@@ -2385,6 +2579,7 @@ Calculates the hyperbolic sine of a given value.
 
 ```
 SINH(<numeric_field>)
+
 ```
 
 ##### Example (`SINH`)
@@ -2393,6 +2588,7 @@ Calculates the hyperbolic sine of the total revenue.
 
 ```
 SINH([Total Revenue])
+
 ```
 
 ---
@@ -2405,6 +2601,7 @@ Calculates the hyperbolic tangent of a given value.
 
 ```
 TANH(<numeric_field>)
+
 ```
 
 ##### Example (`TANH`)
@@ -2413,6 +2610,7 @@ Calculates the hyperbolic tangent of the total revenue.
 
 ```
 TANH([Total Revenue])
+
 ```
 
 ---
@@ -2431,6 +2629,7 @@ Calculates the numeric order position of rows sorted into ascending or descendin
 
 ```
 ORDERING(MIN([Sales Person Name]), MIN([Days in Transaction_Date]), -1 * SUM([Sales]))
+
 ```
 
 ---
@@ -2444,6 +2643,7 @@ Syntax:
 ```
 RDOUBLE(<R expression>, [<ordering>], <numeric value 1>, [<numeric value 2>, ..., <numeric value n>])
 RDOUBLE(<recycle>, <R expression>, [<ordering>], <numeric value 1>, [<numeric value 2>, ..., <numeric value n>])
+
 ```
 
 Arguments:
@@ -2463,6 +2663,7 @@ Returns the k-means cluster (R expression) of the total cost and total revenue.
 
 ```
 RDOUBLE("m <-log(matrix(unlist(args), ncol=2)); kmeans (m,3)$cluster", [Total Cost], [Total Revenue])
+
 ```
 
 For additional discussion on using `RDOUBLE` and how to do advanced forecasting with R, see [this community post](https://community.sisense.com/kb/faqs/so-how-exactly-does-r-work-with-sisense/8817).
@@ -2478,6 +2679,7 @@ Syntax:
 ```
 RINT(<R expression>, [<ordering>], <numeric value 1>, [<numeric value 2>, ..., <numeric value n>])
 RINT(<recycle>, <R expression>, [<ordering>], <numeric value 1>, [<numeric value 2>, ..., <numeric value n>])
+
 ```
 
 Arguments:
@@ -2497,6 +2699,7 @@ Returns the k-means cluster (R expression) of the total cost and total revenue.
 
 ```
 RINT("m <-log(matrix(unlist(args), ncol=2)); kmeans (m,3)$cluster", [Total Cost], [Total Revenue])
+
 ```
 
 For additional discussion on using `RINT` and how to do advanced forecasting with R, see [this community post](https://community.sisense.com/kb/faqs/so-how-exactly-does-r-work-with-sisense/8817).

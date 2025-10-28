@@ -399,7 +399,7 @@ export const translation = {
       cancel: 'Cancel',
       apply: 'Apply',
       editLayout: 'Edit Layout',
-      viewMode: 'View mode',
+      viewMode: 'Switch to View mode',
       showFilters: 'Show Filters',
       hideFilters: 'Hide Filters',
     },

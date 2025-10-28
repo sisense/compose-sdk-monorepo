@@ -160,7 +160,7 @@ In this section, you will add a new component and modify the main app module to 
 > The following assumptions are made about your application:
 >
 > -   The `sample-healthcare.ts` file generated earlier resides in `src/`.
-> -   The URL to your application (f.e. http://localhost:4200) is already added as an entry to CORS Allowed Origins section on your Sisense instance
+> -   The URL to your application (e.g. http://localhost:4200) is already added as an entry to CORS Allowed Origins section on your Sisense instance
 
 ### Connecting to a Sisense Instance
 

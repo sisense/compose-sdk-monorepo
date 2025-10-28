@@ -71,7 +71,7 @@ export interface DateRangeFilterTileProps extends Omit<DateRangeFilterTilePropsP
  *   };
  * }
  * ```
- * <img src="media://angular-date-range-filter-tile-example.png" width="600px" />
+ * <img src="media://angular-date-range-filter-tile-example.png" width="450px" />
  * @group Filter Tiles
  */
 @Component({

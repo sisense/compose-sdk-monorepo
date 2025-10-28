@@ -28,6 +28,51 @@ export type AppSettings = Required<ConfigurableAppSettings> & ServerSettings;
 type ConfigurableAppSettings = AppConfig;
 
 /**
+ * User role permissions
+ * @internal
+ */
+type RoleManifest = {
+  dashboards?: {
+    create: boolean;
+    delete: boolean;
+    move: boolean;
+    rename: boolean;
+    duplicate: boolean;
+    change_owner: boolean;
+    toggle_edit_mode: boolean;
+    edit_layout: boolean;
+    edit_script: boolean;
+    export_dash: boolean;
+    export_jpeg: boolean;
+    export_image: boolean;
+    export_pdf: boolean;
+    share: boolean;
+    restore: boolean;
+    copy_to_server: boolean;
+    import: boolean;
+    select_palette: boolean;
+    replace_datasource: boolean;
+    undo_import_dash: boolean;
+    toggleDataExploration: boolean;
+    filters: {
+      create: boolean;
+      delete: boolean;
+      save: boolean;
+      on_off: boolean;
+      toggle_expansion: boolean;
+      modify: boolean;
+      reorder: boolean;
+      modify_type: boolean;
+      toggle_auto_update: boolean;
+      set_defaults: boolean;
+      advanced: boolean;
+      use_starred: boolean;
+      modify_filter_relationship: boolean;
+    };
+  };
+};
+
+/**
  * Fusion platform settings
  */
 type ServerSettings = {
@@ -39,6 +84,11 @@ type ServerSettings = {
     tenant: {
       name: string;
     };
+    /**
+     * User role permissions
+     * @internal
+     */
+    permissions: RoleManifest;
   };
 };
 
@@ -140,6 +190,9 @@ async function loadServerSettings(
     user: {
       tenant: {
         name: globals.user?.tenant?.name || SYSTEM_TENANT_NAME,
+      },
+      permissions: {
+        dashboards: globals?.user?.userAuth?.dashboards,
       },
     },
   };

@@ -23,12 +23,12 @@ export function prepareChartDesignOptions(
   dataOptionsInternal: ChartDataOptionsInternal,
   styleOptions?: ChartStyleOptions,
 ): DesignOptions {
-  const styleOptionsWithDefaults = extendStyleOptionsWithDefaults(
-    styleOptions ?? {},
-    getDefaultStyleOptions(),
-  );
   if (isRestructuredChartType(chartType)) {
     const chartBuilder = getChartBuilder(chartType);
+    const styleOptionsWithDefaults = extendStyleOptionsWithDefaults(
+      styleOptions ?? {},
+      chartBuilder.designOptions.getDefaultStyleOptions?.() ?? getDefaultStyleOptions(),
+    );
     if (!chartBuilder.designOptions.isCorrectStyleOptions(styleOptionsWithDefaults)) {
       throw new TranslatableError('errors.optionsTranslation.invalidStyleOptions', { chartType });
     }
@@ -42,6 +42,10 @@ export function prepareChartDesignOptions(
       dataOptionsInternal,
     );
   } else {
+    const styleOptionsWithDefaults = extendStyleOptionsWithDefaults(
+      styleOptions ?? {},
+      getDefaultStyleOptions(),
+    );
     return legacyTranslateStyleOptionsToDesignOptions(
       chartType,
       styleOptionsWithDefaults,

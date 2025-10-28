@@ -1,22 +1,56 @@
-import { SeriesLabels } from '..';
+import { HighchartsGradientColorObject, withGradientConversion } from '@/utils/gradient';
+import { omitUndefinedAndEmpty } from '@/utils/omit-undefined';
 
-export const prepareDataLabelsOptions = (seriesLabels?: SeriesLabels) => {
-  return {
+import { SeriesLabels, TextStyle } from '..';
+
+type DataLabelsOptions = {
+  enabled: boolean;
+  rotation?: number;
+  inside?: boolean;
+  align?: 'left' | 'center' | 'right';
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  style?: TextStyle;
+  backgroundColor?: string | HighchartsGradientColorObject;
+  borderColor?: string | HighchartsGradientColorObject;
+  borderRadius?: number;
+  borderWidth?: number;
+  padding?: number;
+  x?: number;
+  y?: number;
+  animation?: { defer?: number };
+};
+
+export const prepareDataLabelsOptions = (seriesLabels?: SeriesLabels): DataLabelsOptions => {
+  const {
+    rotation,
+    alignInside,
+    align,
+    verticalAlign,
+    textStyle,
+    backgroundColor,
+    borderColor,
+    borderRadius,
+    borderWidth,
+    padding,
+    xOffset,
+    yOffset,
+    delay,
+  } = seriesLabels ?? {};
+
+  return omitUndefinedAndEmpty<DataLabelsOptions>({
     enabled: seriesLabels?.enabled ?? false,
-    ...(seriesLabels?.rotation !== undefined && { rotation: seriesLabels.rotation }),
-    ...(seriesLabels?.alignInside !== undefined && { inside: seriesLabels.alignInside }),
-    ...(seriesLabels?.align !== undefined && { align: seriesLabels.align }),
-    ...(seriesLabels?.verticalAlign !== undefined && { verticalAlign: seriesLabels.verticalAlign }),
-    ...(seriesLabels?.textStyle !== undefined && { style: seriesLabels.textStyle }),
-    ...(seriesLabels?.backgroundColor !== undefined && {
-      backgroundColor: seriesLabels.backgroundColor,
-    }),
-    ...(seriesLabels?.borderColor !== undefined && { borderColor: seriesLabels.borderColor }),
-    ...(seriesLabels?.borderRadius !== undefined && { borderRadius: seriesLabels.borderRadius }),
-    ...(seriesLabels?.borderWidth !== undefined && { borderWidth: seriesLabels.borderWidth }),
-    ...(seriesLabels?.padding !== undefined && { padding: seriesLabels.padding }),
-    ...(seriesLabels?.xOffset !== undefined && { x: seriesLabels.xOffset }),
-    ...(seriesLabels?.yOffset !== undefined && { y: seriesLabels.yOffset }),
-    ...(seriesLabels?.delay !== undefined && { animation: { defer: seriesLabels.delay } }),
-  };
+    rotation,
+    inside: alignInside,
+    align,
+    verticalAlign,
+    style: textStyle,
+    backgroundColor: withGradientConversion(backgroundColor),
+    borderColor: withGradientConversion(borderColor),
+    borderRadius,
+    borderWidth,
+    padding,
+    x: xOffset,
+    y: yOffset,
+    animation: { defer: delay },
+  });
 };

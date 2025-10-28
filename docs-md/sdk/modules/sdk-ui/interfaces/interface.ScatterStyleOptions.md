@@ -58,6 +58,12 @@ Configuration for navigator - zoom/pan tool for large datasets in a chart
 
 ***
 
+### seriesLabels
+
+> **seriesLabels**?: `Omit`\< [`SeriesLabels`](../type-aliases/type-alias.SeriesLabels.md), `"showPercentDecimals"` \| `"showPercentage"` \| `"showValue"` \>
+
+***
+
 ### subtype
 
 > **subtype**?: `undefined`

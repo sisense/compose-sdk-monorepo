@@ -118,3 +118,11 @@ For more information on requirements for enabling Generative AI features, please
 - [useGetNlgInsights](generative-ai/function.useGetNlgInsights.md)
 - [useGetNlqResult](generative-ai/function.useGetNlqResult.md) <Badge type="beta" text="Beta" />
 - [useGetQueryRecommendations](generative-ai/function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />
+
+## Functions
+
+- [createLinearGradient](functions/function.createLinearGradient.md)
+- [createRadialGradient](functions/function.createRadialGradient.md)
+- [isGradient](functions/function.isGradient.md)
+- [isLinearGradient](functions/function.isLinearGradient.md)
+- [isRadialGradient](functions/function.isRadialGradient.md)

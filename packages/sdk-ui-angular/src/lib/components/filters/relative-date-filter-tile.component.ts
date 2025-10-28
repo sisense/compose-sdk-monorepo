@@ -72,7 +72,7 @@ export interface RelativeDateFilterTileProps
  *   };
  * }
  * ```
- * <img src="media://angular-relative-date-filter-tile-example.png" width="600px" />
+ * <img src="media://angular-relative-date-filter-tile-example.png" width="225px" />
  * @group Filter Tiles
  */
 @Component({

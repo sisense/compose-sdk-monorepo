@@ -1,16 +1,13 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 
 import { useDefaults } from '@/common/hooks/use-defaults';
-import { useCustomWidgets } from '@/custom-widgets-provider';
 import { DashboardContainer } from '@/dashboard/components/dashboard-container';
 import { DashboardProps } from '@/dashboard/types';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { WidgetsPanelLayout } from '@/models';
-import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { ThemeProvider } from '@/theme-provider';
-import { TabberWidget } from '@/widgets/tabber-widget';
 
 import { DEFAULT_DASHBOARD_CONFIG } from './constants';
 import { useComposedDashboardInternal } from './use-composed-dashboard';
@@ -98,21 +95,11 @@ export const Dashboard = asSisenseComponent({
     filters,
     defaultDataSource,
     widgetsOptions,
-    tabbersOptions,
     styleOptions,
     onChange,
   }: DashboardProps) => {
     const { themeSettings } = useDashboardThemeInternal({ styleOptions });
-    const { registerCustomWidget } = useCustomWidgets();
-    const app = useSisenseContext().app;
     const config = useDefaults(propConfig, DEFAULT_DASHBOARD_CONFIG);
-
-    useEffect(() => {
-      const tabberEnabled = app?.settings?.tabberConfig?.enabled || false;
-      if (tabberEnabled) {
-        registerCustomWidget('WidgetsTabber', TabberWidget);
-      }
-    }, [app?.settings?.tabberConfig?.enabled, registerCustomWidget]);
     const {
       dashboard: {
         filters: dashboardFilters = [],
@@ -126,7 +113,7 @@ export const Dashboard = asSisenseComponent({
         widgets,
         widgetsOptions,
         layoutOptions,
-        tabbersOptions,
+        config: propConfig,
       },
       {
         onFiltersChange: useCallback(

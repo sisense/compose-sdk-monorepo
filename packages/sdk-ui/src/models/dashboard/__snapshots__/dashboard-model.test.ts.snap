@@ -2,6 +2,9 @@
 
 exports[`DashboardModel > should create a new dashboard model with all arguments 1`] = `
 {
+  "config": {
+    "tabbers": {},
+  },
   "dataSource": {
     "address": undefined,
     "id": "test",
@@ -83,12 +86,12 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
     "useAcceleration": true,
   },
   "styleOptions": {},
-  "tabbersOptions": {},
   "title": "test",
   "userAuth": undefined,
   "widgets": [
     {
       "chartType": "pie",
+      "customOptions": undefined,
       "customWidgetType": "",
       "dataOptions": {
         "category": [],
@@ -133,6 +136,9 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
 
 exports[`DashboardModel > should create a new dashboard model with minimum of arguments 1`] = `
 {
+  "config": {
+    "tabbers": {},
+  },
   "dataSource": {
     "address": undefined,
     "id": "test",
@@ -148,7 +154,6 @@ exports[`DashboardModel > should create a new dashboard model with minimum of ar
   "oid": "test",
   "settings": undefined,
   "styleOptions": {},
-  "tabbersOptions": {},
   "title": "test",
   "userAuth": undefined,
   "widgets": [],

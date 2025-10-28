@@ -316,6 +316,18 @@ export const createMeasureFilterFromConditionFilterJaql = (
         undefined,
         { guid },
       );
+    case ConditionFilterType.TOP:
+      return filterFactory.measureTopRanking(
+        measure,
+        conditionFilterJaql[ConditionFilterType.TOP] as number,
+        { guid },
+      );
+    case ConditionFilterType.BOTTOM:
+      return filterFactory.measureBottomRanking(
+        measure,
+        conditionFilterJaql[ConditionFilterType.BOTTOM] as number,
+        { guid },
+      );
   }
   throw new TranslatableError('errors.filter.unsupportedConditionFilter', {
     filter: JSON.stringify(conditionFilterJaql),

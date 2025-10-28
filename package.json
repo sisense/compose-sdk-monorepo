@@ -1,5 +1,5 @@
 {
-  "version": "2.12.0",
+  "version": "2.13.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -34,6 +34,26 @@
         ],
         "outputs": [
           "{workspaceRoot}/coverage"
+        ],
+        "cache": true
+      },
+      "test:coverage:collect": {
+        "dependsOn": [
+          "^build:prod"
+        ],
+        "cache": true
+      },
+      "test:coverage:report": {
+        "dependsOn": [
+          "test:coverage:collect"
+        ],
+        "cache": true
+      },
+      "test:coverage:combine": {
+        "dependsOn": [
+          "test:coverage",
+          "test:coverage:collect",
+          "test:coverage:report"
         ],
         "cache": true
       }
@@ -97,13 +117,13 @@
     "nx:lint": "nx run-many --exclude @sisense/root -t lint",
     "nx:lint:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t lint",
     "nx:format": "nx run-many --exclude @sisense/root -t format",
-    "nx:format:af": "nx nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t format",
+    "nx:format:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t format",
     "nx:format:check": "nx run-many --exclude @sisense/root -t format:check",
     "nx:format:check:af": "nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t format:check",
     "nx:build:prod": "nx run-many --exclude @sisense/root -t build:prod",
     "nx:build:prod:af": "nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t build:prod",
     "nx:component:tests": "nx run-many --exclude @sisense/root -t component:tests",
-    "nx:component:tests:af": "nx affected --exclude @sisense/root -t component:tests",
+    "nx:component:tests:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t component:tests",
     "nx:test:coverage:collect:report": "nx run @sisense/root:nx:test:coverage && nx run @sisense/root:test:coverage:collect && nx run @sisense/root:test:coverage:report"
   },
   "files": [
@@ -139,10 +159,7 @@
     "vitest": "^3.2.4"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write"
-    ],
-    "*.{json,yaml,yml,md}": [
+    "*.{js,jsx,ts,tsx,json,yaml,yml,md}": [
       "prettier --write"
     ]
   }

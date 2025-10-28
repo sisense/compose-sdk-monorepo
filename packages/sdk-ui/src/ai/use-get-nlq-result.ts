@@ -9,7 +9,13 @@ import { withTracking } from '@/decorators/hook-decorators';
 import { WidgetProps } from '@/props';
 
 import { useChatApi } from './api/chat-api-provider';
-import { GetNlqResultRequest, NLQ_RESULT_CHART_TYPES, NlqResultChartType } from './api/types';
+import { ChatRestApi } from './api/chat-rest-api';
+import {
+  GetNlqResultRequest,
+  NLQ_RESULT_CHART_TYPES,
+  NlqResult,
+  NlqResultChartType,
+} from './api/types';
 
 export interface GetNlqResultParams {
   /** Data source for queries to run against */
@@ -31,6 +37,18 @@ export interface GetNlqResultParams {
   enableAxisTitlesInWidgetProps?: boolean;
 }
 
+/**
+ * Result type for NLQ request execution
+ *
+ * @internal
+ */
+export interface ExecuteGetNlqResult {
+  /** Raw NLQ response from API for additional processing */
+  nlqResult: NlqResult | undefined;
+  /** Processed widget props ready for rendering */
+  widgetProps: WidgetProps | undefined;
+}
+
 /** @internal */
 export function prepareGetNlqResultPayload(params: GetNlqResultParams): {
   contextTitle: string;
@@ -47,6 +65,34 @@ export function prepareGetNlqResultPayload(params: GetNlqResultParams): {
       timezone: 'UTC',
       chartTypes: chartTypes ?? [...NLQ_RESULT_CHART_TYPES],
     },
+  };
+}
+
+/**
+ * Executes a natural language query request and returns processed widget props along with the raw response.
+ *
+ * @param params - NLQ query parameters
+ * @param api - Chat REST API instance
+ * @returns Promise resolving to processed widget props and raw response
+ * @internal
+ */
+export async function executeGetNlqResult(
+  params: GetNlqResultParams,
+  api: ChatRestApi,
+): Promise<ExecuteGetNlqResult> {
+  const { contextTitle, request } = prepareGetNlqResultPayload(params);
+
+  const nlqResult = await api.ai.getNlqResult(contextTitle, request);
+
+  const widgetProps = nlqResult
+    ? widgetComposer.toWidgetProps(nlqResult, {
+        useCustomizedStyleOptions: params.enableAxisTitlesInWidgetProps || false,
+      })
+    : undefined;
+
+  return {
+    widgetProps: widgetProps,
+    nlqResult: nlqResult,
   };
 }
 
@@ -81,23 +127,20 @@ export const useGetNlqResultInternal = (params: UseGetNlqResultParams): UseGetNl
   const { contextTitle, request } = prepareGetNlqResultPayload(params);
   const api = useChatApi();
 
+  const cacheKey = ['getNlqResult', contextTitle, request, api];
   const { isLoading, isError, isSuccess, data, error, refetch } = useQuery({
-    queryKey: ['getNlqResult', contextTitle, request, api],
-    queryFn: () => api?.ai.getNlqResult(contextTitle, request),
+    queryKey: cacheKey,
+    queryFn: () =>
+      api
+        ? executeGetNlqResult(params, api).then((result) => result.widgetProps)
+        : Promise.reject('No API available'),
     enabled: !!api && params.enabled,
   });
-
-  const widgetProps = data
-    ? widgetComposer.toWidgetProps(data, {
-        useCustomizedStyleOptions: params.enableAxisTitlesInWidgetProps || false,
-      })
-    : undefined;
-
   return {
     isLoading,
     isError,
     isSuccess,
-    data: widgetProps,
+    data,
     error,
     refetch: useCallback(() => {
       refetch();

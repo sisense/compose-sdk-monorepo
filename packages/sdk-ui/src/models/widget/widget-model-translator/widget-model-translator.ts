@@ -61,6 +61,7 @@ import {
   PivotTableWidgetStyleOptions,
   TableStyleOptions,
   TextWidgetStyleOptions,
+  WidgetStyleOptions,
 } from '@/types.js';
 import {
   attachDataSourceToPanels,
@@ -74,8 +75,9 @@ import {
   extractStyleOptions,
   getFlattenWidgetDesign,
   getStyleWithWidgetDesign,
-} from '@/widget-by-id/translate-widget-style-options.js';
+} from '@/widget-by-id/translate-widget-style-options/index.js';
 import {
+  FusionWidgetType,
   IndicatorWidgetStyle,
   Panel,
   PanelItem,
@@ -90,13 +92,15 @@ import {
   isChartWidgetProps,
   isCustomWidget,
   isPivotWidget,
+  isSupportedPluginFusionWidget,
   isSupportedWidgetType,
   isTableWidgetModel,
   isTextWidget,
 } from '@/widget-by-id/utils.js';
 
-import { TranslatableError } from '../../translation/translatable-error.js';
-import { WidgetModel } from './widget-model.js';
+import { TranslatableError } from '../../../translation/translatable-error.js';
+import { WidgetDataOptions, WidgetModel } from '../widget-model.js';
+import { processTabberWidget } from './tabber.js';
 
 /**
  * Translates a {@link WidgetModel} to the parameters for executing a query for the widget.
@@ -329,16 +333,16 @@ export function toTableWidgetProps(widgetModel: WidgetModel): TableWidgetProps {
 }
 
 /**
- * Translates a {@link WidgetModel} to the props for rendering a pivot table widget.
- *
- * @example
- * ```tsx
- * <PivotTableWidget {...widgetModelTranslator.toPivotTableWidgetProps(widgetModel)} />
- * ```
+   * Translates a {@link WidgetModel} to the props for rendering a pivot table widget.
+   *
+   * @example
+   * ```tsx
+   * <PivotTableWidget {...widgetModelTranslator.toPivotTableWidgetProps(widgetModel)} />
+   * ```
 
- * Note: this method is not supported for chart or table widgets.
- * Use {@link toChartWidgetProps} instead for getting props for the <ChartWidget> component.
- */
+   * Note: this method is not supported for chart or table widgets.
+   * Use {@link toChartWidgetProps} instead for getting props for the <ChartWidget> component.
+   */
 export function toPivotTableWidgetProps(widgetModel: WidgetModel): PivotTableWidgetProps {
   if (!isPivotWidget(widgetModel.widgetType)) {
     throw new TranslatableError('errors.widgetModel.onlyPivotWidgetSupported', {
@@ -388,6 +392,7 @@ export function toCustomWidgetProps(widgetModel: WidgetModel): CustomWidgetProps
       methodName: 'toCustomWidgetProps',
     });
   }
+
   return {
     customWidgetType: widgetModel.customWidgetType,
     dataOptions: widgetModel.dataOptions as GenericDataOptions,
@@ -397,6 +402,7 @@ export function toCustomWidgetProps(widgetModel: WidgetModel): CustomWidgetProps
     highlights: widgetModel.highlights,
     title: widgetModel.title,
     description: widgetModel.description || '',
+    customOptions: widgetModel.customOptions,
   };
 }
 
@@ -442,10 +448,304 @@ const DEFAULT_WIDGET_MODEL: WidgetModel = {
   customWidgetType: '',
   dataOptions: {},
   styleOptions: {},
+  customOptions: undefined,
   drilldownOptions: {},
   filters: [],
   highlights: [],
   chartType: undefined,
+};
+
+/**
+ * Widget category discriminated union for type-safe processing
+ */
+type WidgetCategory =
+  | { type: 'unsupported-custom'; originalType: string }
+  | { type: 'official-custom'; originalType: string }
+  | { type: 'standard'; fusionType: FusionWidgetType };
+
+/**
+ * Determines the category of a widget based on its type.
+ * Pure function that classifies widgets into three categories.
+ *
+ * @param fusionWidgetType - The fusion widget type string from DTO
+ * @returns The widget category
+ */
+const categorizeWidget = (fusionWidgetType: string): WidgetCategory => {
+  // Check for officially supported custom widgets (e.g., 'WidgetsTabber' from DTO)
+  if (isSupportedPluginFusionWidget(fusionWidgetType)) {
+    return { type: 'official-custom', originalType: fusionWidgetType };
+  }
+
+  if (isSupportedWidgetType(fusionWidgetType)) {
+    return { type: 'standard', fusionType: fusionWidgetType };
+  }
+
+  return { type: 'unsupported-custom', originalType: fusionWidgetType };
+};
+
+/**
+ * Extracts variant colors from theme settings.
+ * Pure function with default fallback that filters out null values.
+ *
+ * @param themeSettings - Optional theme settings
+ * @returns Array of variant colors as strings (nulls filtered out)
+ */
+const getVariantColors = (themeSettings?: CompleteThemeSettings): string[] => {
+  const colors = themeSettings?.palette.variantColors ?? [];
+  return colors.filter((color): color is string => color !== null);
+};
+
+/**
+ * Checks if widget design style is enabled.
+ * Pure function with default fallback.
+ *
+ * @param appSettings - Optional application settings
+ * @returns True if widget design is enabled
+ */
+const isWidgetDesignEnabled = (appSettings?: AppSettings): boolean =>
+  appSettings?.serverFeatures?.widgetDesignStyle?.active ?? true;
+
+/**
+ * Processes unsupported custom widgets.
+ * Pure function that creates data and style options for unknown widget types.
+ *
+ * @param params - Parameters for processing unsupported custom widget
+ * @returns Object containing fusion type, custom type, data options, and style options
+ */
+const processUnsupportedCustomWidget = (params: {
+  originalType: string;
+  panels: Panel[];
+  widgetStyle: WidgetStyle;
+  variantColors: string[];
+}): {
+  fusionWidgetType: FusionWidgetType;
+  customWidgetType: string;
+  dataOptions: GenericDataOptions;
+  styleOptions: CustomWidgetStyleOptions;
+} => {
+  const { originalType, panels, widgetStyle, variantColors } = params;
+  const { widgetDesign, ...styleRest } = widgetStyle;
+
+  return {
+    fusionWidgetType: 'custom',
+    customWidgetType: originalType,
+    dataOptions: createDataOptionsFromPanels(panels, variantColors),
+    styleOptions: {
+      ...styleRest,
+      ...(widgetDesign ? getFlattenWidgetDesign(widgetDesign) : {}),
+    },
+  };
+};
+
+/**
+ * Processes officially supported custom widgets.
+ * Pure function that creates data and style options for official custom widgets like TabberButtonsWidget.
+ * These widgets use the custom widget infrastructure but have official support.
+ * Maps from DTO widget type (e.g., 'WidgetsTabber') to CSDK widget type (e.g., 'tabber-buttons').
+ *
+ * @param params - Parameters for processing official custom widget
+ * @returns Object containing fusion type, custom type, data options, and style options
+ */
+const processOfficialCustomWidget = (params: {
+  originalType: string;
+  panels: Panel[];
+  widgetDto: WidgetDto;
+  variantColors: string[];
+}): {
+  fusionWidgetType: FusionWidgetType;
+  customWidgetType: string;
+  dataOptions: GenericDataOptions;
+  styleOptions: CustomWidgetStyleOptions;
+  customOptions?: Record<string, any>;
+} => {
+  const { originalType, panels, widgetDto, variantColors } = params;
+
+  // for now only Tabber is officially supported custom widget
+  if (originalType === 'WidgetsTabber') {
+    return processTabberWidget({ panels, widgetDto, variantColors });
+  }
+
+  throw new TranslatableError('errors.unsupportedWidgetType', { widgetType: originalType });
+};
+/**
+ * Processes standard supported widgets.
+ * Pure function that extracts data and style options for standard widgets.
+ *
+ * @param params - Parameters for processing standard widget
+ * @returns Object containing fusion type, custom type, data options, and style options
+ */
+const processStandardWidget = (params: {
+  fusionType: FusionWidgetType;
+  panels: Panel[];
+  widgetStyle: WidgetStyle;
+  widgetDto: WidgetDto;
+  variantColors: string[];
+}): {
+  fusionWidgetType: FusionWidgetType;
+  customWidgetType: string;
+  dataOptions: ChartDataOptions | PivotTableDataOptions | TableDataOptions;
+  styleOptions:
+    | ChartStyleOptions
+    | TableStyleOptions
+    | TextWidgetStyleOptions
+    | PivotTableWidgetStyleOptions;
+} => {
+  const { fusionType, panels, widgetStyle, widgetDto, variantColors } = params;
+
+  return {
+    fusionWidgetType: fusionType,
+    customWidgetType: '',
+    dataOptions: extractDataOptions(fusionType, panels, widgetStyle, variantColors),
+    styleOptions: extractStyleOptions(fusionType, widgetDto) as
+      | ChartStyleOptions
+      | TableStyleOptions
+      | TextWidgetStyleOptions
+      | PivotTableWidgetStyleOptions,
+  };
+};
+
+/**
+ * Applies widget design to style options based on feature flag.
+ * Pure function that conditionally merges widget design.
+ *
+ * @param params - Parameters for applying widget design
+ * @returns Updated style options
+ */
+const applyWidgetDesign = (params: {
+  styleOptions:
+    | ChartStyleOptions
+    | TableStyleOptions
+    | TextWidgetStyleOptions
+    | CustomWidgetStyleOptions
+    | PivotTableWidgetStyleOptions;
+  widgetStyle: WidgetStyle;
+  isEnabled: boolean;
+}): WidgetStyleOptions => {
+  const { styleOptions, widgetStyle, isEnabled } = params;
+
+  return getStyleWithWidgetDesign(styleOptions, widgetStyle.widgetDesign, isEnabled);
+};
+
+/**
+ * Processes widget based on its category.
+ * Pure function that delegates to category-specific processors.
+ *
+ * @param params - Parameters for processing widget
+ * @returns Processed widget data
+ */
+const processWidgetByCategory = (params: {
+  category: WidgetCategory;
+  panels: Panel[];
+  widgetDto: WidgetDto;
+  variantColors: string[];
+  isWidgetDesignEnabled: boolean;
+}): {
+  fusionWidgetType: FusionWidgetType;
+  customWidgetType: string;
+  dataOptions: WidgetDataOptions;
+  styleOptions: WidgetStyleOptions;
+  customOptions?: Record<string, any>;
+} => {
+  const { category, panels, widgetDto, variantColors, isWidgetDesignEnabled } = params;
+
+  switch (category.type) {
+    case 'unsupported-custom':
+      // Widget design is already applied in processUnsupportedCustomWidget
+      return processUnsupportedCustomWidget({
+        originalType: category.originalType,
+        panels,
+        widgetStyle: widgetDto.style,
+        variantColors,
+      });
+
+    case 'official-custom': {
+      const result = processOfficialCustomWidget({
+        originalType: category.originalType,
+        panels,
+        widgetDto,
+        variantColors,
+      });
+      // Apply widget design for official custom widgets
+      const styleOptionsWithDesign = applyWidgetDesign({
+        styleOptions: result.styleOptions,
+        widgetStyle: widgetDto.style,
+        isEnabled: isWidgetDesignEnabled,
+      });
+      return {
+        ...result,
+        styleOptions: styleOptionsWithDesign,
+      };
+    }
+
+    case 'standard': {
+      const result = processStandardWidget({
+        fusionType: category.fusionType,
+        panels,
+        widgetStyle: widgetDto.style,
+        widgetDto,
+        variantColors,
+      });
+      // Apply widget design for standard widgets
+      const styleOptionsWithDesign = applyWidgetDesign({
+        styleOptions: result.styleOptions,
+        widgetStyle: widgetDto.style,
+        isEnabled: isWidgetDesignEnabled,
+      });
+      return {
+        ...result,
+        styleOptions: styleOptionsWithDesign,
+      };
+    }
+  }
+};
+
+/**
+ * Builds the final widget model from processed data.
+ * Pure function that constructs the widget model.
+ *
+ * @param params - Parameters for building widget model
+ * @returns Complete widget model
+ */
+const buildWidgetModel = (params: {
+  widgetDto: WidgetDto;
+  fusionWidgetType: FusionWidgetType;
+  customWidgetType: string;
+  dataOptions: WidgetDataOptions;
+  styleOptions: WidgetStyleOptions;
+  customOptions?: Record<string, any>;
+  panels: Panel[];
+}): WidgetModel => {
+  const {
+    widgetDto,
+    fusionWidgetType,
+    customWidgetType,
+    dataOptions,
+    styleOptions,
+    customOptions,
+    panels,
+  } = params;
+
+  const drilldownOptions = extractDrilldownOptions(fusionWidgetType, panels);
+  const filters = extractWidgetFilters(panels);
+  const chartType = isChartFusionWidget(fusionWidgetType)
+    ? getChartType(fusionWidgetType)
+    : undefined;
+
+  return {
+    ...DEFAULT_WIDGET_MODEL,
+    oid: widgetDto.oid,
+    title: widgetDto.title,
+    dataSource: convertDataSource(widgetDto.datasource),
+    description: widgetDto.desc || '',
+    widgetType: getWidgetType(fusionWidgetType),
+    chartType,
+    customWidgetType,
+    dataOptions,
+    styleOptions,
+    customOptions,
+    drilldownOptions,
+    filters,
+  };
 };
 
 /**
@@ -463,62 +763,24 @@ export function fromWidgetDto(
   themeSettings?: CompleteThemeSettings,
   appSettings?: AppSettings,
 ): WidgetModel {
-  let fusionWidgetType, customWidgetType, dataOptions, styleOptions;
-
   const panels = attachDataSourceToPanels(widgetDto.metadata.panels, widgetDto.datasource);
+  const category = categorizeWidget(widgetDto.type);
+  const variantColors = getVariantColors(themeSettings);
+  const widgetDesignEnabled = isWidgetDesignEnabled(appSettings);
 
-  fusionWidgetType = widgetDto.type;
-  if (!isSupportedWidgetType(fusionWidgetType)) {
-    // unknown types are assumed to be custom widgets
-    customWidgetType = fusionWidgetType;
-    fusionWidgetType = 'custom' as const;
-    dataOptions = createDataOptionsFromPanels(panels, themeSettings?.palette.variantColors ?? []);
-    const { widgetDesign, ...rest } = widgetDto.style;
-    styleOptions = { ...rest, ...(widgetDesign ? getFlattenWidgetDesign(widgetDesign) : {}) };
-  } else {
-    dataOptions = extractDataOptions(
-      fusionWidgetType,
-      panels,
-      widgetDto.style,
-      themeSettings?.palette.variantColors,
-    );
+  const processed = processWidgetByCategory({
+    category,
+    panels,
+    widgetDto,
+    variantColors,
+    isWidgetDesignEnabled: widgetDesignEnabled,
+  });
 
-    styleOptions = extractStyleOptions(fusionWidgetType, widgetDto);
-
-    // take into account widget design style feature flag
-    const isWidgetDesignStyleEnabled =
-      appSettings?.serverFeatures?.widgetDesignStyle?.active ?? true;
-
-    styleOptions = getStyleWithWidgetDesign(
-      styleOptions,
-      widgetDto.style.widgetDesign,
-      isWidgetDesignStyleEnabled,
-    );
-  }
-
-  // does not handle custom widget type
-  const drilldownOptions = extractDrilldownOptions(fusionWidgetType, panels);
-  const filters = extractWidgetFilters(panels);
-  const chartType = isChartFusionWidget(fusionWidgetType)
-    ? getChartType(fusionWidgetType)
-    : undefined;
-
-  const widgetModel: WidgetModel = {
-    ...DEFAULT_WIDGET_MODEL,
-    oid: widgetDto.oid,
-    title: widgetDto.title,
-    dataSource: convertDataSource(widgetDto.datasource),
-    description: widgetDto.desc || '',
-    widgetType: getWidgetType(fusionWidgetType),
-    chartType: chartType,
-    customWidgetType: customWidgetType || '',
-    dataOptions: dataOptions || {},
-    styleOptions: styleOptions || {},
-    drilldownOptions: drilldownOptions,
-    filters: filters,
-  };
-
-  return widgetModel;
+  return buildWidgetModel({
+    widgetDto,
+    panels,
+    ...processed,
+  });
 }
 
 /**

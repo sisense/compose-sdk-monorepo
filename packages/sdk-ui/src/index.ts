@@ -31,6 +31,7 @@ export { TableWidget } from './widgets/table-widget';
 export { PivotTableWidget } from './widgets/pivot-table-widget';
 export { TextWidget } from './widgets/text-widget';
 export { Widget } from './widgets/widget';
+export { TabberButtonsWidget } from './widgets/tabber/tabber-buttons-widget';
 export { ContextMenu } from './common/components/menu/context-menu/context-menu';
 export { DrilldownBreadcrumbs } from './widgets/common/drilldown-breadcrumbs';
 export * from './line-chart';
@@ -189,3 +190,5 @@ export {
   type TranslationDictionary,
   PACKAGE_NAMESPACE as translationNamespace,
 } from '@/translation/resources';
+
+export * from './utils/gradient';

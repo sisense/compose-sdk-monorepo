@@ -1,4 +1,6 @@
 import type { LegendOptions } from '@/types';
+import { HighchartsGradientColorObject, withGradientConversion } from '@/utils/gradient';
+import { omitUndefinedAndEmpty } from '@/utils/omit-undefined';
 
 import type { TextStyle } from './types';
 
@@ -9,9 +11,9 @@ export type LegendSettings = {
   align?: 'center' | 'left' | 'right';
   verticalAlign?: 'top' | 'middle' | 'bottom';
   borderWidth?: number;
-  borderColor?: string;
+  borderColor?: string | HighchartsGradientColorObject;
   borderRadius?: number;
-  backgroundColor?: string;
+  backgroundColor?: string | HighchartsGradientColorObject;
   margin?: number;
   padding?: number;
   maxHeight?: number;
@@ -102,8 +104,8 @@ const transformLegendTitleOptionsToLegendSettings = (title: LegendOptions['title
 
   return {
     title: {
-      ...(text !== undefined && { text }),
-      ...(textStyle !== undefined && { style: textStyle }),
+      text,
+      style: textStyle,
     },
   };
 };
@@ -122,14 +124,14 @@ const transformLegendItemsOptionsToLegendSettings = (items: LegendOptions['items
   } = items || {};
 
   return {
-    ...(layout !== undefined && { layout }),
-    ...(textStyle !== undefined && { itemStyle: textStyle }),
-    ...(marginBottom !== undefined && { itemMarginBottom: marginBottom }),
-    ...(marginTop !== undefined && { itemMarginTop: marginTop }),
-    ...(distance !== undefined && { itemDistance: distance }),
-    ...(width !== undefined && { itemWidth: width }),
-    ...(hoverTextStyle !== undefined && { itemHoverStyle: hoverTextStyle }),
-    ...(hiddenTextStyle !== undefined && { itemHiddenStyle: hiddenTextStyle }),
+    layout,
+    itemStyle: textStyle,
+    itemMarginBottom: marginBottom,
+    itemMarginTop: marginTop,
+    itemDistance: distance,
+    itemWidth: width,
+    itemHoverStyle: hoverTextStyle,
+    itemHiddenStyle: hiddenTextStyle,
   };
 };
 
@@ -139,24 +141,35 @@ const transformLegendSymbolsOptionsToLegendSettings = (symbols: LegendOptions['s
   const { radius, height, width, padding, squared } = symbols;
 
   return {
-    ...(radius !== undefined && { symbolRadius: radius }),
-    ...(height !== undefined && { symbolHeight: height }),
-    ...(width !== undefined && { symbolWidth: width }),
-    ...(padding !== undefined && { symbolPadding: padding }),
-    ...(squared !== undefined && { squareSymbol: squared }),
+    symbolRadius: radius,
+    symbolHeight: height,
+    symbolWidth: width,
+    symbolPadding: padding,
+    squareSymbol: squared,
   };
 };
 
 const transformLegendOptionsToLegendSettings = (legend: LegendOptions): LegendSettings => {
-  const { title, items, symbols, xOffset, yOffset, ...restLegendOptions } = legend;
-  return {
+  const {
+    title,
+    items,
+    symbols,
+    xOffset,
+    yOffset,
+    backgroundColor,
+    borderColor,
+    ...restLegendOptions
+  } = legend;
+  return omitUndefinedAndEmpty({
     ...restLegendOptions,
     ...transformLegendTitleOptionsToLegendSettings(title),
     ...transformLegendItemsOptionsToLegendSettings(items),
     ...transformLegendSymbolsOptionsToLegendSettings(symbols),
-    ...(xOffset !== undefined && { x: xOffset }),
-    ...(yOffset !== undefined && { y: yOffset }),
-  };
+    x: xOffset,
+    y: yOffset,
+    backgroundColor: withGradientConversion(backgroundColor),
+    borderColor: withGradientConversion(borderColor),
+  });
 };
 
 export const getLegendSettings = (legend?: LegendOptions): LegendSettings => {
@@ -180,7 +193,7 @@ export const getLegendSettings = (legend?: LegendOptions): LegendSettings => {
   const positionSettings = transformDeprecatedLegendPositionToLegendSettings(position || null);
   const legendSettings = transformLegendOptionsToLegendSettings(restLegendOptions);
 
-  return {
+  return omitUndefinedAndEmpty({
     ...defaultSettings,
     ...positionSettings,
     ...legendSettings,
@@ -188,7 +201,7 @@ export const getLegendSettings = (legend?: LegendOptions): LegendSettings => {
       ...legendItemStyleDefault,
       ...legendSettings.itemStyle,
     },
-  };
+  });
 };
 
 export const isLegendOnRight = (legend?: LegendOptions) => {

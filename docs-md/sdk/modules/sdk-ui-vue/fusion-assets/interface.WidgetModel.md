@@ -16,6 +16,16 @@ Widget chart type.
 
 ***
 
+### customOptions
+
+> **customOptions**?: `Record`\< `string`, `any` \>
+
+Custom widget options. Only present for custom widgets.
+
+Contains widget-specific configuration that doesn't fit into standard style or data options.
+
+***
+
 ### customWidgetType
 
 > **customWidgetType**: `string`

@@ -44,7 +44,7 @@ export interface DateRangeFilterTileProps extends DateRangeFilterTilePropsPreact
  * });
  * </script>
  * ```
- * <img src="media://vue-date-range-filter-tile-example.png" width="800px" />
+ * <img src="media://vue-date-range-filter-tile-example.png" width="600px" />
  * @param props - DateRangeFilterTile props
  * @returns DateRangeFilterTile component
  * @group Filter Tiles

@@ -30,16 +30,15 @@ describe('tooltip.ts', () => {
       },
       dataOptions: dataOptionsOverride,
       designOptions: {
-        pieLabels:
-          showDecimals !== undefined
-            ? {
-                enabled: true,
-                showCategories: true,
-                showValue: true,
-                showPercent: true,
-                showDecimals,
-              }
-            : undefined,
+        seriesLabels: {
+          enabled: true,
+          showCategory: true,
+          showValue: true,
+          percentageLabels: {
+            enabled: true,
+            showDecimals: showDecimals ?? false,
+          },
+        },
         pieType: 'classic' as const,
         legend: 'bottom' as const,
         valueLabel: {},
@@ -117,7 +116,7 @@ describe('tooltip.ts', () => {
       const ctx = createMockBuildContext(undefined);
       const result = getBasicCategoricalTooltip(ctx);
 
-      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(undefined, mockDataOptions);
+      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(false, mockDataOptions);
       expect(result).toEqual(expectedTooltipSettings);
     });
 
@@ -142,13 +141,15 @@ describe('tooltip.ts', () => {
         },
         dataOptions: mockDataOptions,
         designOptions: {
-          pieLabels: {
+          seriesLabels: {
             enabled: true,
-            showCategories: true,
+            showCategory: true,
             showValue: true,
-            showPercent: true,
-            showDecimals: false,
-          }, // pieLabels exists with showDecimals being false
+            percentageLabels: {
+              enabled: true,
+              showDecimals: false,
+            },
+          },
           pieType: 'classic' as const,
           legend: 'bottom' as const,
           valueLabel: {},

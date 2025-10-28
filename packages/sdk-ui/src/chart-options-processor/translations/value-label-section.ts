@@ -2,6 +2,7 @@
 import type { DataLabelsOptions } from '@sisense/sisense-charts';
 
 import { NumberFormatConfig, SeriesLabels } from '@/types';
+import { HighchartsGradientColorObject } from '@/utils/gradient';
 
 import { prepareDataLabelsOptions } from '../series-labels';
 import { AxisOrientation } from './axis-section';
@@ -33,8 +34,8 @@ export type DataLabelsSettings = {
   verticalAlign?: 'bottom' | 'middle' | 'top';
   padding?: number;
   color?: 'contrast' | string;
-  backgroundColor?: string;
-  borderColor?: string;
+  backgroundColor?: string | HighchartsGradientColorObject;
+  borderColor?: string | HighchartsGradientColorObject;
   borderRadius?: number;
   borderWidth?: number;
   animation?: {

@@ -10,6 +10,8 @@ export {
 export {
   useGetNlqResult,
   prepareGetNlqResultPayload,
+  executeGetNlqResult,
+  type ExecuteGetNlqResult,
   type UseGetNlqResultParams,
   type UseGetNlqResultState,
   type GetNlqResultParams,

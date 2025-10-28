@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.13.0] - 2025-10-28
+
+### Added
+- Add `measureTopRanking` and `measureBottomRanking` filters
+- Add `tabbers` configuration to `Dashboard` and `DashboardById` configs
+- Add check if user is allowed to use edit mode in `DashboardById`
+- Extend charts styling options:
+  - Add `GradientColor` to color options
+  - Extend `seriesLabels` for `PieChart` and `ScatterChart`
+
+### Changed
+- Fixed shared formulas references resolution in `useGetDashboardModels` hook
+- Fixed paging initialization in `PivotTable` for React 19
+
 ## [2.12.0] - 2025-10-14
 
 ### Added

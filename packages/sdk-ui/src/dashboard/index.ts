@@ -21,4 +21,7 @@ export type {
   WidgetsPanelConfig,
   EditModeConfig,
   DashboardFiltersPanelConfig,
+  TabbersConfig,
+  TabberConfig,
+  TabberTabConfig,
 } from './types';

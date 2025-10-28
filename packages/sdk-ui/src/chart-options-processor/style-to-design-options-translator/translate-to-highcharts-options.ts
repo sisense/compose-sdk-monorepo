@@ -15,6 +15,7 @@ import {
   LineWidth,
   Markers,
   Navigator,
+  PieSeriesLabels,
   PieStyleOptions,
   PolarStyleOptions,
   ScattermapStyleOptions,
@@ -57,7 +58,7 @@ import {
   DefaultFunnelType,
 } from '../translations/funnel-plot-options';
 import { Marker } from '../translations/marker-section';
-import { PieLabels, PieType } from '../translations/pie-plot-options';
+import { PieType } from '../translations/pie-plot-options';
 import { defaultScatterMarkerSize, ScatterMarkerSize } from '../translations/scatter-plot-options';
 import { StackType } from '../translations/translations-to-highcharts';
 import { CartesianChartType, SeriesDesignOptions } from '../translations/types';
@@ -315,26 +316,41 @@ function getCartesianDataLimits(): {
   };
 }
 
-const DefaultPieLabels: PieLabels = {
+const DefaultPieSeriesLabels: PieSeriesLabels = {
   enabled: true,
-  showCategories: true,
+  showCategory: true,
   showValue: true,
-  showPercent: true,
-  showDecimals: false,
+  percentageLabels: {
+    enabled: true,
+    showDecimals: false,
+  },
 };
+
 export const DefaultPieType = 'classic';
 export const getPieChartDesignOptions = (styleOptions: PieStyleOptions): PieChartDesignOptions => {
-  const { legend, labels, subtype } = styleOptions;
+  const { legend, labels, subtype, seriesLabels } = styleOptions;
 
-  let pieLabels: PieLabels = DefaultPieLabels;
-  if (labels) {
-    pieLabels = {
-      ...pieLabels,
-      showCategories: labels.categories ?? false,
-      showDecimals: labels.decimals ?? false,
-      enabled: labels.enabled ?? false,
-      showPercent: labels.percent ?? false,
-      showValue: labels.value ?? false,
+  let pieSeriesLabels: PieSeriesLabels = DefaultPieSeriesLabels;
+  if (seriesLabels || labels) {
+    pieSeriesLabels = {
+      ...seriesLabels,
+      enabled: seriesLabels?.enabled ?? labels?.enabled ?? DefaultPieSeriesLabels.enabled,
+      showCategory:
+        seriesLabels?.showCategory ?? labels?.categories ?? DefaultPieSeriesLabels.showCategory,
+      showValue: seriesLabels?.showValue ?? labels?.value ?? DefaultPieSeriesLabels.showValue,
+      percentageLabels: {
+        ...seriesLabels?.percentageLabels,
+        enabled:
+          seriesLabels?.percentageLabels?.enabled ??
+          labels?.percent ??
+          DefaultPieSeriesLabels.percentageLabels?.enabled ??
+          false,
+        showDecimals:
+          seriesLabels?.percentageLabels?.showDecimals ??
+          labels?.decimals ??
+          DefaultPieSeriesLabels.percentageLabels?.showDecimals ??
+          false,
+      },
     };
   }
 
@@ -348,7 +364,7 @@ export const getPieChartDesignOptions = (styleOptions: PieStyleOptions): PieChar
 
   return {
     ...BaseDesignOptions,
-    pieLabels,
+    seriesLabels: pieSeriesLabels,
     pieType,
     convolution,
     legend,

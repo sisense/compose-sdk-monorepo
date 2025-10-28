@@ -79,7 +79,6 @@ import {
   ScatterStyleOptions,
   StackableStyleOptions,
   SunburstStyleOptions,
-  TabberStyleProps,
   TableStyleOptions,
   TableWidgetStyleOptions,
   TabularChartStyleOptions,
@@ -93,6 +92,7 @@ import {
 import { DistributiveOmit } from './utils/utility-types/distributive-omit';
 import { FiltersMergeStrategy } from './widget-by-id/types';
 
+export type { TabberButtonsWidgetProps } from './widgets/tabber/types';
 export type { MenuItemSection, HighchartsOptions };
 
 /**
@@ -1701,6 +1701,13 @@ export interface CustomWidgetProps {
    * @category Widget
    */
   description?: string;
+
+  /**
+   * Specific options for the custom widget.
+   *
+   * @category Widget
+   */
+  customOptions?: Record<string, any>;
 }
 
 /**
@@ -2044,27 +2051,6 @@ export interface DrilldownWidgetProps {
    */
   children: (customDrilldownResult: CustomDrilldownResult) => ReactNode;
 }
-
-/**
- * Tabber widget props designed to be a current state and is provided by use-tabber hook
- *
- * @internal
- */
-export type TabberWidgetExtraProps = {
-  onTabSelected: (tab: number) => void;
-  selectedTab: number;
-};
-
-/**
- * Tabber widget props
- *
- * @internal
- */
-export type TabberWidgetProps = {
-  styleOptions?: TabberStyleProps;
-  description?: string;
-  width?: string;
-} & TabberWidgetExtraProps;
 
 /**
  * Params of the {@link useGetSharedFormula} hook

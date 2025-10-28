@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { ChartSubtype } from '@/chart-options-processor/subtype-to-design-options.js';
 import { WidgetModel } from '@/models';
 import { WidgetTypeInternal } from '@/models/widget/types';
@@ -23,6 +24,8 @@ import {
 import { combineHandlers, composeToolbarHandlers } from '@/utils/combine-handlers';
 
 import {
+  CsdkPluginWidgetType,
+  FusionPluginWidgetType,
   FusionWidgetType,
   Panel,
   PanelItem,
@@ -150,9 +153,9 @@ export function getChartSubtype(widgetSubtype: WidgetSubtype): ChartSubtype | un
 }
 
 export function isSupportedWidgetType(
-  fusionWidgetType: FusionWidgetType,
+  fusionWidgetType: string,
 ): fusionWidgetType is FusionWidgetType {
-  const supportedWidgetTypes: FusionWidgetType[] = [
+  const supportedWidgetTypes: string[] = [
     'chart/line',
     'chart/area',
     'chart/bar',
@@ -175,6 +178,64 @@ export function isSupportedWidgetType(
     'heatmap',
   ];
   return supportedWidgetTypes.includes(fusionWidgetType);
+}
+
+/**
+ * Check if the given fusion widget type is a supported plugin widget (in DTO format).
+ * @param fusionWidgetType - The fusion widget type from DTO
+ * @returns True if it's a supported plugin widget
+ * @internal
+ */
+export function isSupportedPluginFusionWidget(fusionWidgetType: string): boolean {
+  return fusionWidgetType === 'WidgetsTabber';
+}
+
+/**
+ * Check if the given CSDK widget type is a supported plugin widget (in CSDK format).
+ * @param csdkWidgetType - The CSDK custom widget type
+ * @returns True if it's a supported plugin widget
+ * @internal
+ */
+export function isSupportedPluginCsdkWidget(csdkWidgetType: string): boolean {
+  return csdkWidgetType === 'tabber-buttons';
+}
+
+/**
+ * Map a Fusion plugin widget type (DTO) to CSDK plugin widget type.
+ * @param fusionType - The Fusion plugin widget type from DTO
+ * @returns The corresponding CSDK plugin widget type
+ * @internal
+ */
+export function fusionPluginWidgetTypeToCsdk(
+  fusionType: FusionPluginWidgetType,
+): CsdkPluginWidgetType {
+  // Currently only one mapping, but structured for future plugin widgets
+  // eslint-disable-next-line sonarjs/no-small-switch
+  switch (fusionType) {
+    case 'WidgetsTabber':
+      return 'tabber-buttons';
+    default:
+      throw new TranslatableError('errors.unsupportedPluginWidgetType', { widgetType: fusionType });
+  }
+}
+
+/**
+ * Map a CSDK plugin widget type to Fusion plugin widget type (DTO).
+ * @param csdkType - The CSDK plugin widget type
+ * @returns The corresponding Fusion plugin widget type for DTO
+ * @internal
+ */
+export function csdkPluginWidgetTypeToFusion(
+  csdkType: CsdkPluginWidgetType,
+): FusionPluginWidgetType {
+  // Currently only one mapping, but structured for future plugin widgets
+  // eslint-disable-next-line sonarjs/no-small-switch
+  switch (csdkType) {
+    case 'tabber-buttons':
+      return 'WidgetsTabber';
+    default:
+      throw new TranslatableError('errors.unsupportedPluginWidgetType', { widgetType: csdkType });
+  }
 }
 
 /**

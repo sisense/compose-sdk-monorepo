@@ -23,7 +23,7 @@ import { DashboardProps } from './types.js';
 
 export type ComposableDashboardProps = Pick<
   DashboardProps,
-  'filters' | 'widgets' | 'widgetsOptions' | 'layoutOptions' | 'tabbersOptions'
+  'filters' | 'widgets' | 'widgetsOptions' | 'layoutOptions' | 'config'
 >;
 
 const isCommonFiltersMenu = (options: MenuOptions): boolean => {
@@ -184,7 +184,7 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
 
   const { layoutManager: tabberLayoutManager, widgets: widgetsWithTabberConfigs } = useTabber({
     widgets: widgetsWithCommonFilters,
-    config: initialDashboard.tabbersOptions,
+    config: initialDashboard.config?.tabbers,
   });
 
   const { layout: widgetsLayout, setLayout: setWidgetsLayout } = useWidgetsLayoutManagement({

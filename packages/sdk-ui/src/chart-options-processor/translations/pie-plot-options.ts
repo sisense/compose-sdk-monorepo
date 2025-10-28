@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/default-param-last */
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettings, PieSeriesLabels } from '@/types';
 
 import {
   CategoricalChartDataOptionsInternal,
@@ -7,16 +7,19 @@ import {
 } from '../../chart-data-options/types';
 import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
+import { prepareDataLabelsOptions } from '../series-labels';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { HighchartsDataPointContext } from './tooltip-utils';
 import { DataLabelsSettings } from './value-label-section';
 
-export const DefaultPieLabels: PieLabels = {
+export const DefaultPieSeriesLabels: PieSeriesLabels = {
   enabled: true,
-  showCategories: true,
+  showCategory: true,
   showValue: true,
-  showPercent: true,
-  showDecimals: false,
+  percentageLabels: {
+    enabled: true,
+    showDecimals: false,
+  },
 };
 
 export type PieLabels = {
@@ -73,7 +76,7 @@ const defaultSeriesOptions = (): PlotOptions['series'] => ({
 
 export const getPiePlotOptions = (
   pieType: PieType = DefaultPieType,
-  pieLabels: PieLabels = DefaultPieLabels,
+  seriesLabels: PieSeriesLabels = DefaultPieSeriesLabels,
   chartDataOptions: ChartDataOptionsInternal,
   themeSettings?: CompleteThemeSettings,
   // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -90,29 +93,41 @@ export const getPiePlotOptions = (
     };
   }
 
-  if (pieLabels.enabled) {
-    const dataLabelsEnabled = pieLabels.showCategories || pieLabels.showValue;
-    const { dataLabels: pieDataLabels } = pieOptions;
-    pieDataLabels.enabled = dataLabelsEnabled;
-    // custom options applicable only by `@sisense/sisense-charts`
-    pieDataLabels.showPercentLabels = pieLabels.showPercent;
-    pieDataLabels.showDecimals = pieLabels.showDecimals;
-
+  if (seriesLabels.enabled) {
     const numberFormatConfig = getCompleteNumberFormatConfig(
       (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig,
     );
-    pieDataLabels.formatter = function (this: HighchartsDataPointContext) {
-      const name = this.point.name || this.series.name;
-      const value = this.y;
-      return `<div>
-          ${pieLabels.showCategories ? name : ''}
-          ${pieLabels.showCategories && pieLabels.showValue ? '<br />' : ''}
-          ${pieLabels.showValue ? applyFormatPlainText(numberFormatConfig, value) : ''}
-        </div>`;
+    const shouldEnableDataLabels =
+      seriesLabels.enabled && (seriesLabels.showCategory || seriesLabels.showValue);
+    const dataLabelsOptions = prepareDataLabelsOptions(seriesLabels);
+    pieOptions.dataLabels = {
+      ...pieOptions.dataLabels,
+      ...dataLabelsOptions,
+      enabled: shouldEnableDataLabels,
+      style: {
+        ...pieOptions.dataLabels.style,
+        ...dataLabelsOptions.style,
+      },
+      formatter: function (this: HighchartsDataPointContext) {
+        const name = this.point.name || this.series.name;
+        const value = this.y;
+        return (
+          '<div>' +
+          (seriesLabels.prefix ?? '') +
+          (seriesLabels.showCategory ? name : '') +
+          (seriesLabels.showCategory && seriesLabels.showValue ? '<br />' : '') +
+          (seriesLabels.showValue ? applyFormatPlainText(numberFormatConfig, value) : '') +
+          (seriesLabels.suffix ?? '') +
+          '</div>'
+        );
+      },
+      // custom options applicable only by `@sisense/sisense-charts`
+      showPercentLabels: seriesLabels?.percentageLabels?.enabled ?? false,
+      showDecimals: seriesLabels?.percentageLabels?.showDecimals ?? false,
     };
-
-    if (seriesOptions.dataLabels) seriesOptions.dataLabels.enabled = dataLabelsEnabled;
   }
+
+  if (seriesOptions.dataLabels) seriesOptions.dataLabels.enabled = seriesLabels.enabled;
 
   return {
     pie: pieOptions,

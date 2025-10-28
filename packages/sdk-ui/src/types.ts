@@ -12,7 +12,6 @@ import type {
 import { DeepRequired } from 'ts-essentials';
 
 import { Coordinates } from '@/charts/map-charts/scattermap/types';
-import { TabCornerRadius, TabInterval, TabSize } from '@/widgets/tabber-widget';
 
 import { Hierarchy, HierarchyId, StyledColumn, StyledMeasureColumn } from '.';
 import { HighchartsOptionsInternal } from './chart-options-processor/chart-options-service';
@@ -53,6 +52,7 @@ import {
 import { GeoDataElement, RawGeoDataElement } from './chart/restructured-charts/areamap-chart/types';
 import { CalendarDayOfWeek } from './chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 import { DataPointsEventHandler } from './props';
+import { GradientColor } from './utils/gradient';
 import { SoftUnion } from './utils/utility-types';
 
 export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
@@ -109,7 +109,12 @@ export type {
 
 export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
 
-export type { IndicatorRenderOptions } from './charts/indicator/indicator-render-options';
+export type { IndicatorRenderOptions } from '@/charts/indicator/indicator-render-options';
+
+export type {
+  TabberButtonsWidgetStyleOptions,
+  TabberButtonsWidgetCustomOptions,
+} from '@/widgets/tabber/types';
 
 /**
  * @internal
@@ -227,7 +232,7 @@ export type SeriesLabels = {
   rotation?: number;
   /**
    * Boolean flag that defines if value should be shown in series labels
-   * (if not specified, value will be shown by default)
+   * (if not specified, default is determined by chart type)
    */
   showValue?: boolean;
   /**
@@ -235,6 +240,11 @@ export type SeriesLabels = {
    * (only applicable for subtypes that support percentage, like "stacked100")
    */
   showPercentage?: boolean;
+  /**
+   * Boolean flag that defines if percentage should be shown with decimals
+   * (will work only if `showPercentage` is `true`)
+   */
+  showPercentDecimals?: boolean;
   /**
    * Text to be shown before the series labels
    */
@@ -262,11 +272,11 @@ export type SeriesLabels = {
   /**
    * Background color of the labels. `auto` uses the same color as the data point
    */
-  backgroundColor?: 'auto' | string;
+  backgroundColor?: 'auto' | string | GradientColor;
   /**
    * Color of the labels border
    */
-  borderColor?: string;
+  borderColor?: string | GradientColor;
   /**
    * Border radius in pixels applied to the labels border, if visible
    *
@@ -344,11 +354,11 @@ export type TotalLabels = {
   /**
    * Background color of the labels. `auto` uses the same color as the data point
    */
-  backgroundColor?: 'auto' | string;
+  backgroundColor?: 'auto' | string | GradientColor;
   /**
    * Color of the labels border
    */
-  borderColor?: string;
+  borderColor?: string | GradientColor;
   /**
    * Border radius in pixels applied to the labels border, if visible
    *
@@ -478,11 +488,11 @@ export type LegendOptions = {
   /** Padding inside the legend, in pixels */
   padding?: number;
   /** Background color of the legend */
-  backgroundColor?: string;
+  backgroundColor?: string | GradientColor;
   /** Width of the legend border in pixels */
   borderWidth?: number;
   /** Color of the legend border */
-  borderColor?: string;
+  borderColor?: string | GradientColor;
   /**
    * Border radius in pixels applied to the legend border, if visible.
    *
@@ -797,17 +807,62 @@ export interface StackableStyleOptions extends BaseStyleOptions, BaseAxisStyleOp
   };
 }
 
+/**
+ * Configuration for percentage labels
+ * Percentage labels are shown on top of series slices
+ */
+export type PiePercentageLabels = {
+  /**
+   * Boolean flag that defines if percentage label should be shown
+   */
+  enabled: boolean;
+  /**
+   * Boolean flag that defines if percentage label should be shown with decimals
+   */
+  showDecimals?: boolean;
+};
+
+export type PieSeriesLabels = Omit<
+  SeriesLabels,
+  'showPercentage' | 'showPercentDecimals' | 'alignInside' | 'align' | 'verticalAlign'
+> & {
+  /**
+   * Boolean flag that defines if the category should be shown
+   * @default `true`
+   */
+  showCategory?: boolean;
+  /**
+   * Configuration for percentage labels
+   * Percentage labels are shown on top of series slices
+   * Styling from series labels are not applied to percentage labels
+   */
+  percentageLabels?: PiePercentageLabels;
+  /**
+   * Styling for labels text
+   */
+  textStyle?: Omit<TextStyle, 'pointerEvents' | 'textOverflow'>;
+};
+
 /** Configuration options that define functional style of the various elements of Pie chart */
-export interface PieStyleOptions extends Omit<BaseStyleOptions, 'seriesLabels'> {
+export interface PieStyleOptions extends BaseStyleOptions {
   /**
    * Configuration that defines the ability of the Pie chart to collapse (convolve) and
    * hide part of the data under the single category "Others".
    */
   convolution?: Convolution;
-  /** Configuration that defines behavior of data labels on Pie chart */
+  /**
+   * Configuration that defines behavior of data labels on Pie chart
+   *
+   * @deprecated
+   * Use seriesLabels instead
+   */
   labels?: Labels;
   /** Subtype of Pie chart*/
   subtype?: PieSubtype;
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: PieSeriesLabels;
 }
 
 /** Configuration options that define functional style of the various elements of FunnelChart */
@@ -1031,6 +1086,7 @@ export interface ScatterStyleOptions
   /** Subtype of ScatterChart*/
   subtype?: never;
   markerSize?: ScatterMarkerSize;
+  seriesLabels?: Omit<SeriesLabels, 'showValue' | 'showPercentage' | 'showPercentDecimals'>;
 }
 
 /** Configuration options that define functional style of the various elements of TreemapChart */
@@ -2682,64 +2738,6 @@ export type TranslationConfig = {
    * ```
    */
   customTranslations?: CustomTranslationObject[];
-};
-
-/**
- * Single Tabber Widget tab object without styling
- *
- * @internal
- */
-export type TabberTab = {
-  displayWidgetIds: string[];
-  title: string;
-};
-
-/**
- * Tabber widget DTO style property
- *
- * @internal
- */
-export type TabberDtoStyle = Partial<TabberStyleProps> & {
-  activeTab?: string;
-};
-
-/**
- * Configuration options that define style of the various elements of the Tabber component.
- *
- * @internal
- */
-export type TabberStyleOptions = {
-  descriptionColor: string;
-  selectedBkgColor: string;
-  selectedColor: string;
-  showDescription: boolean;
-  showSeparators: boolean;
-  showTitle: boolean;
-  tabCornerRadius: TabCornerRadius;
-  tabsAlignment: string;
-  tabsInterval: TabInterval;
-  tabsSize: TabSize;
-  unselectedBkgColor: string;
-  unselectedColor: string;
-  useSelectedBkg: boolean;
-  useUnselectedBkg: boolean;
-};
-
-/**
- * Configuration options that defined tabber look and feel, including tabs and active tab.
- *
- * @internal
- */
-export type TabberStyleProps = TabberStyleOptions & TabberConfig;
-
-/**
- * Tabber business logic configuration
- *
- * @internal
- */
-export type TabberConfig = {
-  tabs: TabberTab[];
-  activeTab: number;
 };
 
 /** @internal */

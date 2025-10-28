@@ -9,9 +9,9 @@ import {
 
 import { JtdConfigDto } from '@/dashboard/hooks/jtd/jtd-types';
 import { HierarchyId } from '@/models/hierarchy';
+import { WidgetContainerStyleOptions } from '@/types';
 
 import { LEGACY_DESIGN_TYPES } from '../themes/legacy-design-settings';
-import { WidgetContainerStyleOptions } from '../types';
 
 /**
  * The type of a widget on a dashboard that is a variant of Cartesian widget.
@@ -39,6 +39,17 @@ export type TabularWidgetType = 'tablewidget' | 'tablewidgetagg' | 'pivot' | 'pi
 export type TextWidgetType = 'richtexteditor';
 
 /**
+ * The type of a widget on a dashboard that is a variant of plugin widget.
+ * This represents the widget type in Fusion/DTO layer.
+ */
+export type FusionPluginWidgetType = 'WidgetsTabber';
+
+/**
+ * The type of a plugin widget in Compose SDK.
+ * This represents the widget type used internally in CSDK components.
+ */
+export type CsdkPluginWidgetType = 'tabber-buttons';
+/**
  * The type of a widget on a dashboard.
  */
 export type FusionWidgetType =
@@ -52,6 +63,7 @@ export type FusionWidgetType =
   | 'map/area'
   | 'heatmap'
   | TextWidgetType
+  | FusionPluginWidgetType
   | 'custom';
 
 export type WidgetSubtype =
@@ -689,6 +701,7 @@ export type WidgetStyle = { widgetDesign?: WidgetDesign; narration?: any } & (
   | PivotWidgetStyle
   | CalendarHeatmapWidgetStyle
   | TextWidgetDtoStyle
+  | TabberWidgetDtoStyle
 );
 
 export enum FiltersMergeStrategyEnum {
@@ -721,4 +734,30 @@ export type TextWidgetDtoStyle = {
     bgColor: string;
     textAlign: 'center';
   };
+};
+
+/**
+ * The data transfer object (DTO) containing info of a tabber widget style.
+ */
+export type TabberWidgetDtoStyle = {
+  tabs: {
+    displayWidgetIds: string[];
+    hideWidgetIds: string[];
+    title: string;
+  }[];
+  activeTab: string;
+  descriptionColor: string;
+  selectedBkgColor: string;
+  selectedColor: string;
+  showDescription: boolean;
+  showSeparators: boolean;
+  showTitle: boolean;
+  tabCornerRadius: 'SMALL' | 'MEDIUM' | 'LARGE' | 'NONE';
+  tabsAlignment: 'LEFT' | 'CENTER' | 'RIGHT';
+  tabsInterval: 'SMALL' | 'MEDIUM' | 'LARGE';
+  tabsSize: 'SMALL' | 'MEDIUM' | 'LARGE';
+  unselectedBkgColor: string;
+  unselectedColor: string;
+  useSelectedBkg: boolean;
+  useUnselectedBkg: boolean;
 };

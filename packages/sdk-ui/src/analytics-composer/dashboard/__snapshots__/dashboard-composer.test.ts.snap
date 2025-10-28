@@ -1047,8 +1047,14 @@ export default function CodeExample() {
       widgets,
       filters,
       config: {
-        toolbar: { isVisible: true },
-        filtersPanel: { isVisible: true },
+        toolbar: {
+          isVisible: true,
+        },
+        filtersPanel: {
+          isVisible: true,
+        },
+        tabbers: {
+        },
       },
       widgetsOptions: {
         '6560ce3b6f1df500326a069d': {
@@ -1331,8 +1337,6 @@ export default function CodeExample() {
             }
           ],
         },
-      },
-      tabbersOptions: {
       },
       styleOptions: {
         palette: {

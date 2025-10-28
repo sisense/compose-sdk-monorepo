@@ -222,7 +222,7 @@ export const translation: TranslationDictionary = {
       cancel: 'Відмінити',
       apply: 'Застосувати',
       editLayout: 'Редагувати макет',
-      viewMode: 'Режим перегляду',
+      viewMode: 'Перейти до режиму перегляду',
       showFilters: 'Показати фільтри',
       hideFilters: 'Приховати фільтри',
     },

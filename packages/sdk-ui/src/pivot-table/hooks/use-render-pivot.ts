@@ -7,15 +7,12 @@ import {
 } from '@sisense/sdk-pivot-client';
 
 import type { PivotTableDataOptionsInternal, StyledColumn } from '@/chart-data-options/types';
-import { useSyncedState } from '@/common/hooks/use-synced-state';
 import type { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { PivotTableDataPointEventHandler } from '@/props';
 import type { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
 
 import { preparePivotStylingProps } from '../helpers/prepare-pivot-styling-props';
 import { useApplyPivotTableCellEvents } from './use-apply-pivot-table-cell-events';
-
-const DEFAULT_TABLE_ROWS_PER_PAGE = 25 as const;
 
 type PivotRenderOptions = {
   /** The pivot builder instance. */
@@ -34,6 +31,10 @@ type PivotRenderOptions = {
   onDataPointClick?: PivotTableDataPointEventHandler;
   /** Callback to handle data point context menu. */
   onDataPointContextMenu?: PivotTableDataPointEventHandler;
+  /** The page size */
+  pageSize: number;
+  /** Callback to handle page size. */
+  onPageSizeChange: (newPageSize: number) => void;
 };
 
 /**
@@ -48,13 +49,13 @@ export function useRenderPivot({
   onTotalHeightChange,
   onDataPointClick,
   onDataPointContextMenu,
+  pageSize,
+  onPageSizeChange,
 }: PivotRenderOptions): {
   pivotElement: JSX.Element | null;
 } {
   const [pivotElement, setPivotElement] = useState<React.ReactElement | null>(null);
-  const [rowsPerPage, setRowsPerPage] = useSyncedState<number>(
-    styleOptions?.rowsPerPage || DEFAULT_TABLE_ROWS_PER_PAGE,
-  );
+
   const { handlePivotTableCellClick } = useApplyPivotTableCellEvents({
     dataOptions,
     onDataPointClick,
@@ -96,13 +97,6 @@ export function useRenderPivot({
     [dataOptions],
   );
 
-  const onItemsPerPageChange = useCallback(
-    (newRowsPerPage: number) => {
-      setRowsPerPage(newRowsPerPage);
-    },
-    [setRowsPerPage],
-  );
-
   const pivotStylingProps = useMemo(
     () => preparePivotStylingProps(styleOptions, themeSettings),
     [styleOptions, themeSettings],
@@ -114,10 +108,10 @@ export function useRenderPivot({
         width: size.width,
         height: size.height,
         isPaginated: true,
-        itemsPerPage: rowsPerPage,
+        itemsPerPage: pageSize,
         isSelectedMode: true,
         onUpdatePredefinedColumnWidth,
-        onItemsPerPageChange,
+        onItemsPerPageChange: onPageSizeChange,
         onTotalHeightChange,
         onCellClick: handlePivotTableCellClick,
         ...pivotStylingProps,
@@ -126,11 +120,11 @@ export function useRenderPivot({
     return null;
   }, [
     size,
-    rowsPerPage,
+    pageSize,
     onUpdatePredefinedColumnWidth,
     pivotStylingProps,
     onTotalHeightChange,
-    onItemsPerPageChange,
+    onPageSizeChange,
     handlePivotTableCellClick,
   ]);
 

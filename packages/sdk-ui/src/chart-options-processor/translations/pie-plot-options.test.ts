@@ -6,7 +6,7 @@ import {
   StyledMeasureColumn,
 } from '../../chart-data-options/types';
 import { PlotOptions } from '../chart-options-service';
-import { DefaultPieLabels, DefaultPieType, getPiePlotOptions } from './pie-plot-options';
+import { DefaultPieSeriesLabels, DefaultPieType, getPiePlotOptions } from './pie-plot-options';
 
 describe('getPiePlotOptions', () => {
   it('should return the plotOptions with a formatter', () => {
@@ -28,7 +28,7 @@ describe('getPiePlotOptions', () => {
     };
     const piePlotOptions: PlotOptions = getPiePlotOptions(
       DefaultPieType,
-      DefaultPieLabels,
+      DefaultPieSeriesLabels,
       chartDataOptions,
     );
     expect(piePlotOptions).toEqual({

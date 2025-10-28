@@ -99,12 +99,6 @@ export const Dashboard = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!DashboardProps.styleOptions}
      */
     styleOptions: Object as PropType<DashboardProps['styleOptions']>,
-    /**
-     * {@inheritDoc @sisense/sdk-ui!DashboardProps.tabbersOptions}
-     *
-     * @internal
-     */
-    tabbersOptions: Object as PropType<DashboardProps['tabbersOptions']>,
   },
   setup: (props) => setupHelper(DashboardPreact, props),
 });

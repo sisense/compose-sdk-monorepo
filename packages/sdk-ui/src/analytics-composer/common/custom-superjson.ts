@@ -24,6 +24,7 @@ import {
   isJaqlElement,
   isLogicalAttributeFilter,
   isMeasureFilter,
+  isMeasureRankingFilter,
   isMembersFilter,
   isNumericFilter,
   isRankingFilter,
@@ -33,6 +34,7 @@ import {
   JSONObject,
   LogicalAttributeFilter,
   MeasureFilter,
+  MeasureRankingFilter,
   MembersFilter,
   NumericFilter,
   RankingFilter,
@@ -248,6 +250,14 @@ const deserializeFilter = (v: any): any => {
         v.config,
         v.composeCode,
       );
+    case 'MeasureRankingFilter':
+      return new MeasureRankingFilter(
+        deserializeMeasure(v.measure),
+        v.operator,
+        v.count,
+        v.config,
+        v.composeCode,
+      );
     case 'NumericFilter':
       return new NumericFilter(
         deserializeAttribute(v.attribute),
@@ -425,6 +435,15 @@ SuperJSON.registerCustom<RankingFilter, any>(
     deserialize: (v) => deserializeFilter(v),
   },
   'RankingFilter',
+);
+
+SuperJSON.registerCustom<MeasureRankingFilter, any>(
+  {
+    isApplicable: isMeasureRankingFilter,
+    serialize: (v) => v.serialize(),
+    deserialize: (v) => deserializeFilter(v),
+  },
+  'MeasureRankingFilter',
 );
 
 SuperJSON.registerCustom<NumericFilter, any>(

@@ -5,6 +5,7 @@ import {
   Convolution,
   LegendOptions,
   LineOptions,
+  PieSeriesLabels,
   ScattermapMarkers,
   SeriesLabels,
   SunburstStyleOptions,
@@ -14,7 +15,7 @@ import {
 import { Axis } from './axis-section';
 import { FunnelDirection, FunnelLabels, FunnelSize, FunnelType } from './funnel-plot-options';
 import { Marker } from './marker-section';
-import { PieLabels, PieType } from './pie-plot-options';
+import { PieType } from './pie-plot-options';
 import { ScatterMarkerSize } from './scatter-plot-options';
 import { LineType, StackType } from './translations-to-highcharts';
 import { DesignPerSeries, TextStyle } from './types';
@@ -116,8 +117,8 @@ export function isPolarChartDesignOptions(
 
 export type PieChartDesignOptions = BaseDesignOptionsType & {
   pieType?: PieType;
-  pieLabels?: PieLabels;
   convolution?: Convolution;
+  seriesLabels?: PieSeriesLabels;
 };
 
 export type FunnelChartDesignOptions = BaseDesignOptionsType & {

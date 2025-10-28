@@ -23,7 +23,7 @@ The horizontal alignment of the total label compared to the point
 
 ### `backgroundColor`
 
-**backgroundColor**?: `"auto"` \| `string`
+**backgroundColor**?: `"auto"` \| [`GradientColor`](type-alias.GradientColor.md) \| `string`
 
 Background color of the labels. `auto` uses the same color as the data point
 
@@ -31,7 +31,7 @@ Background color of the labels. `auto` uses the same color as the data point
 
 ### `borderColor`
 
-**borderColor**?: `string`
+**borderColor**?: [`GradientColor`](type-alias.GradientColor.md) \| `string`
 
 Color of the labels border
 

@@ -1,0 +1,4740 @@
+{
+  "graph": {
+    "nodes": {
+      "@sisense/typedoc-plugin-diff-packages": {
+        "name": "@sisense/typedoc-plugin-diff-packages",
+        "type": "lib",
+        "data": {
+          "root": "typedoc-plugins/typedoc-plugin-diff-packages",
+          "sourceRoot": "typedoc-plugins/typedoc-plugin-diff-packages",
+          "name": "@sisense/typedoc-plugin-diff-packages",
+          "tags": ["npm:private", "npm:typedoc", "npm:typedoc-plugin", "npm:diff-packages"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "lint",
+                "build",
+                "build:prod",
+                "test",
+                "clean",
+                "reset",
+                "format",
+                "format:check",
+                "docs:diff-csdk"
+              ]
+            },
+            "description": "TypeDoc plugin to generate doc differences among packages"
+          },
+          "targets": {
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "echo 'eslint TODO'",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build tsconfig.json",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "tsc --project tsconfig.prod.json",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "echo 'test TODO'",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "echo 'clean TODO'",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "reset": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "reset"
+              },
+              "metadata": {
+                "scriptContent": "echo 'reset TODO'",
+                "runCommand": "yarn reset"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "echo 'format TODO'",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "echo 'format:check TODO'",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "docs:diff-csdk": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "docs:diff-csdk"
+              },
+              "metadata": {
+                "scriptContent": "run -T typedoc --options ../__mocks__/csdk-minirepo/typedoc.diff.config.cjs --out ../__mocks__/csdk-minirepo/docs-diff",
+                "runCommand": "yarn docs:diff-csdk"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/typedoc-plugin-markdown": {
+        "name": "@sisense/typedoc-plugin-markdown",
+        "type": "lib",
+        "data": {
+          "root": "typedoc-plugins/typedoc-plugin-markdown",
+          "sourceRoot": "typedoc-plugins/typedoc-plugin-markdown",
+          "name": "@sisense/typedoc-plugin-markdown",
+          "tags": [
+            "npm:private",
+            "npm:markdown",
+            "npm:typescript",
+            "npm:documentation",
+            "npm:api",
+            "npm:typedoc-plugin",
+            "npm:typedoc"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "lint",
+                "build",
+                "build:prod",
+                "test",
+                "clean",
+                "reset",
+                "format",
+                "format:check",
+                "docs:md-csdk"
+              ]
+            },
+            "description": "TypeDoc plugin to generate API doc in Markdown. Forked from tgreyuk/typedoc-plugin-markdown 4.0.0-next.26. Customized for CSDK."
+          },
+          "targets": {
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "echo 'eslint TODO'",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build tsconfig.json",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "tsc --project tsconfig.prod.json",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "echo 'test TODO'",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "echo 'clean TODO'",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "reset": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "reset"
+              },
+              "metadata": {
+                "scriptContent": "echo 'reset TODO'",
+                "runCommand": "yarn reset"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "echo 'format TODO'",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "echo 'format:check TODO'",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "docs:md-csdk": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "docs:md-csdk"
+              },
+              "metadata": {
+                "scriptContent": "run -T typedoc --options ../__mocks__/csdk-minirepo/typedoc.config.cjs --out ../__mocks__/csdk-minirepo/docs-md",
+                "runCommand": "yarn docs:md-csdk"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-pivot-client": {
+        "name": "@sisense/sdk-pivot-client",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-pivot-client",
+          "sourceRoot": "packages/sdk-pivot-client",
+          "name": "@sisense/sdk-pivot-client",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "type-check",
+                "build",
+                "build:prod",
+                "clean",
+                "lint",
+                "lint:fix",
+                "format",
+                "format:check",
+                "vitest",
+                "test",
+                "test:watch",
+                "test:coverage"
+              ]
+            },
+            "description": "Compose SDK package for interfacing with the pivot backend service in Sisense"
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "yarn dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "tsc --noEmit",
+                "runCommand": "yarn type-check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "run type-check && vite build --mode development",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "run type-check && vite build",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "echo 'eslint disabled for now.'",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "vitest"
+              },
+              "metadata": {
+                "scriptContent": "run -T vitest",
+                "runCommand": "yarn vitest"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "run vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-query-client": {
+        "name": "@sisense/sdk-query-client",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-query-client",
+          "sourceRoot": "packages/sdk-query-client",
+          "name": "@sisense/sdk-query-client",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "type-check",
+                "build",
+                "build:watch",
+                "build:prod",
+                "clean",
+                "lint",
+                "lint:fix",
+                "format",
+                "format:check",
+                "vitest",
+                "test",
+                "test:watch",
+                "test:coverage"
+              ]
+            },
+            "description": "Compose SDK package for handling data queries against Sisense data sources"
+          },
+          "targets": {
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "tsc --noEmit",
+                "runCommand": "yarn type-check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build tsconfig.build.json",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:watch"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build tsconfig.build.json --watch",
+                "runCommand": "yarn build:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "tsc --project tsconfig.prod.json && tsc --project tsconfig.prod.cjs.json && cp package.cjs.json ./dist/cjs/package.json",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "vitest"
+              },
+              "metadata": {
+                "scriptContent": "run -T vitest",
+                "runCommand": "yarn vitest"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "run vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-rest-client": {
+        "name": "@sisense/sdk-rest-client",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-rest-client",
+          "sourceRoot": "packages/sdk-rest-client",
+          "name": "@sisense/sdk-rest-client",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "type-check",
+                "build",
+                "build:prod",
+                "clean",
+                "lint",
+                "lint:fix",
+                "format",
+                "format:check",
+                "vitest",
+                "test",
+                "test:watch",
+                "test:coverage"
+              ]
+            },
+            "description": "Compose SDK package for handling REST API calls to Sisense API endpoints including authentication and data queries"
+          },
+          "targets": {
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "tsc --noEmit",
+                "runCommand": "yarn type-check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build tsconfig.build.json",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "tsc --project tsconfig.prod.json && tsc --project tsconfig.prod.cjs.json && cp package.cjs.json ./dist/cjs/package.json",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "vitest"
+              },
+              "metadata": {
+                "scriptContent": "run -T vitest",
+                "runCommand": "yarn vitest"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "run vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-ui-angular": {
+        "name": "@sisense/sdk-ui-angular",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-ui-angular",
+          "sourceRoot": "packages/sdk-ui-angular",
+          "name": "@sisense/sdk-ui-angular",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "ng",
+                "build",
+                "build:prod",
+                "prebuild",
+                "postbuild",
+                "watch",
+                "lint",
+                "lint:fix",
+                "format",
+                "format:check",
+                "test",
+                "test:update",
+                "test:watch",
+                "test:coverage",
+                "sync-version"
+              ]
+            },
+            "description": "Compose SDK package containing general UI elements and related logic tailored for Angular development"
+          },
+          "targets": {
+            "ng": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "ng"
+              },
+              "metadata": {
+                "scriptContent": "ng",
+                "runCommand": "yarn ng"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "yarn prebuild && ng build && yarn postbuild",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "yarn prebuild && ng build && yarn postbuild",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "prebuild": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prebuild"
+              },
+              "metadata": {
+                "scriptContent": "yarn sync-version && node ./scripts/generate-build-package-config.cjs",
+                "runCommand": "yarn prebuild"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "postbuild": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "postbuild"
+              },
+              "metadata": {
+                "scriptContent": "rm ./src/package.json",
+                "runCommand": "yarn postbuild"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "watch"
+              },
+              "metadata": {
+                "scriptContent": "ng build --watch --configuration development",
+                "runCommand": "yarn watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "TZ=utc run vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:update": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:update"
+              },
+              "metadata": {
+                "scriptContent": "TZ=utc run vitest -u",
+                "runCommand": "yarn test:update"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "TZ=utc run vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "TZ=utc run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "sync-version": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "sync-version"
+              },
+              "metadata": {
+                "scriptContent": "node ./scripts/sync-version.cjs",
+                "runCommand": "yarn sync-version"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/react-ts-demo": {
+        "name": "@sisense/react-ts-demo",
+        "type": "lib",
+        "data": {
+          "root": "examples/react-ts-demo",
+          "sourceRoot": "examples/react-ts-demo",
+          "name": "@sisense/react-ts-demo",
+          "tags": ["npm:private"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": ["dev", "build", "build:prod", "preview", "lint", "lint:fix"]
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "yarn dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc && vite build",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "tsc && vite build",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "preview": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "preview"
+              },
+              "metadata": {
+                "scriptContent": "vite preview",
+                "runCommand": "yarn preview"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-shared-ui": {
+        "name": "@sisense/sdk-shared-ui",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-shared-ui",
+          "sourceRoot": "packages/sdk-shared-ui",
+          "name": "@sisense/sdk-shared-ui",
+          "projectType": "library",
+          "tags": ["npm:public"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "type-check",
+                "lint",
+                "lint:fix",
+                "build",
+                "build:prod",
+                "build:lightweight",
+                "build:lightweight:prod",
+                "build:umd",
+                "build:umd:prod",
+                "clean",
+                "format",
+                "format:check",
+                "vitest",
+                "test",
+                "test:watch",
+                "test:coverage",
+                "storybook:dev"
+              ]
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "yarn dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "tsc --noEmit",
+                "runCommand": "yarn type-check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint src/ --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "run type-check && vite build --mode development && run build:umd && run build:lightweight",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "run type-check && vite build && run build:umd:prod && run build:lightweight:prod",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:lightweight": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:lightweight"
+              },
+              "metadata": {
+                "scriptContent": "BUILD_VARIANT=lightweight vite build --mode development",
+                "runCommand": "yarn build:lightweight"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:lightweight:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:lightweight:prod"
+              },
+              "metadata": {
+                "scriptContent": "BUILD_VARIANT=lightweight vite build",
+                "runCommand": "yarn build:lightweight:prod"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:umd": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:umd"
+              },
+              "metadata": {
+                "scriptContent": "tsx ./scripts/vite/vite.umd.build.ts --mode development",
+                "runCommand": "yarn build:umd"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:umd:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:umd:prod"
+              },
+              "metadata": {
+                "scriptContent": "tsx ./scripts/vite/vite.umd.build.ts --mode production",
+                "runCommand": "yarn build:umd:prod"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "vitest"
+              },
+              "metadata": {
+                "scriptContent": "run -T vitest",
+                "runCommand": "yarn vitest"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "storybook:dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "storybook:dev"
+              },
+              "metadata": {
+                "scriptContent": "storybook dev",
+                "runCommand": "yarn storybook:dev"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-ui-preact": {
+        "name": "@sisense/sdk-ui-preact",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-ui-preact",
+          "sourceRoot": "packages/sdk-ui-preact",
+          "name": "@sisense/sdk-ui-preact",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "build:prod",
+                "clean",
+                "lint",
+                "lint:fix",
+                "publish:prepare"
+              ]
+            },
+            "description": "Compose SDK package containing general UI elements and related logic tailored for Preact development"
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite dev",
+                "runCommand": "yarn dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc --noEmit && vite build --mode development",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "tsc --noEmit && vite build",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "publish:prepare": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "publish:prepare"
+              },
+              "metadata": {
+                "scriptContent": "node ./scripts/prepare-publish.cjs",
+                "runCommand": "yarn publish:prepare"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/angular-demo": {
+        "name": "@sisense/angular-demo",
+        "type": "lib",
+        "data": {
+          "root": "examples/angular-demo",
+          "sourceRoot": "examples/angular-demo",
+          "name": "@sisense/angular-demo",
+          "tags": ["npm:private"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": ["ng", "start", "build", "build:prod", "watch", "test"]
+            }
+          },
+          "targets": {
+            "ng": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "ng"
+              },
+              "metadata": {
+                "scriptContent": "ng",
+                "runCommand": "yarn ng"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "start": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start"
+              },
+              "metadata": {
+                "scriptContent": "ng serve",
+                "runCommand": "yarn start"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "ng build",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "ng build",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "watch"
+              },
+              "metadata": {
+                "scriptContent": "ng build --watch --configuration development",
+                "runCommand": "yarn watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "echo 'Tests disabled for now.'",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-modeling": {
+        "name": "@sisense/sdk-modeling",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-modeling",
+          "sourceRoot": "packages/sdk-modeling",
+          "name": "@sisense/sdk-modeling",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "type-check",
+                "build",
+                "build:prod",
+                "clean",
+                "lint",
+                "lint:fix",
+                "format",
+                "format:check",
+                "vitest",
+                "test",
+                "test:watch",
+                "test:coverage"
+              ]
+            },
+            "description": "Compose SDK package for generating programmatic interface from Sisense data model"
+          },
+          "targets": {
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "tsc --noEmit",
+                "runCommand": "yarn type-check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build tsconfig.build.json",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "tsc --project tsconfig.prod.json && tsc --project tsconfig.prod.cjs.json && cp package.cjs.json ./dist/cjs/package.json",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "vitest"
+              },
+              "metadata": {
+                "scriptContent": "run -T vitest",
+                "runCommand": "yarn vitest"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "run vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-tracking": {
+        "name": "@sisense/sdk-tracking",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-tracking",
+          "sourceRoot": "packages/sdk-tracking",
+          "name": "@sisense/sdk-tracking",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "build",
+                "build:prod",
+                "build.watch",
+                "clean",
+                "format",
+                "format:check",
+                "lint",
+                "lint:fix",
+                "vitest",
+                "test",
+                "test:watch",
+                "test:coverage"
+              ]
+            },
+            "description": "Compose SDK package for handling usage tracking"
+          },
+          "targets": {
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build tsconfig.json",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "tsc --project tsconfig.prod.json && tsc --project tsconfig.prod.cjs.json && cp package.cjs.json ./dist/cjs/package.json",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build.watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build.watch"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build --watch",
+                "runCommand": "yarn build.watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist coverage tsconfig.tsbuildinfo tsconfig.prod.tsbuildinfo",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "run -T prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "run -T prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "run -T eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "vitest"
+              },
+              "metadata": {
+                "scriptContent": "run -T vitest",
+                "runCommand": "yarn vitest"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "run vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/vue-ts-demo": {
+        "name": "@sisense/vue-ts-demo",
+        "type": "lib",
+        "data": {
+          "root": "examples/vue-ts-demo",
+          "sourceRoot": "examples/vue-ts-demo",
+          "name": "@sisense/vue-ts-demo",
+          "tags": ["npm:private"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "build:prod",
+                "preview",
+                "build-only",
+                "type-check",
+                "lint",
+                "lint:fix",
+                "format"
+              ]
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "yarn dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "run-p type-check build-only",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "run-p type-check build-only",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "preview": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "preview"
+              },
+              "metadata": {
+                "scriptContent": "vite preview",
+                "runCommand": "yarn preview"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-only": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build-only"
+              },
+              "metadata": {
+                "scriptContent": "vite build",
+                "runCommand": "yarn build-only"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "vue-tsc --noEmit",
+                "runCommand": "yarn type-check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write src/",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-common": {
+        "name": "@sisense/sdk-common",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-common",
+          "sourceRoot": "packages/sdk-common",
+          "name": "@sisense/sdk-common",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "build",
+                "build:prod",
+                "build.watch",
+                "clean",
+                "format",
+                "format:check",
+                "lint",
+                "lint:fix",
+                "vitest",
+                "test",
+                "test:watch",
+                "test:coverage"
+              ]
+            },
+            "description": "Compose SDK package for common functionalities"
+          },
+          "targets": {
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build tsconfig.json",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "tsc --project tsconfig.prod.json && tsc --project tsconfig.prod.cjs.json && cp package.cjs.json ./dist/cjs/package.json",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build.watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build.watch"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build --watch",
+                "runCommand": "yarn build.watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist coverage tsconfig.tsbuildinfo tsconfig.prod.tsbuildinfo",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "run -T prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "run -T prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "run -T eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "vitest"
+              },
+              "metadata": {
+                "scriptContent": "run -T vitest",
+                "runCommand": "yarn vitest"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "run vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-ui-vue": {
+        "name": "@sisense/sdk-ui-vue",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-ui-vue",
+          "sourceRoot": "packages/sdk-ui-vue",
+          "name": "@sisense/sdk-ui-vue",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "build:prod",
+                "preview",
+                "build-only",
+                "build-only:prod",
+                "type-check",
+                "lint",
+                "lint:fix",
+                "format",
+                "format:check"
+              ]
+            },
+            "description": "Compose SDK package containing general UI elements and related logic tailored for Vue development"
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "yarn dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "run-p type-check build-only",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "run-p type-check build-only:prod",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "preview": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "preview"
+              },
+              "metadata": {
+                "scriptContent": "vite preview",
+                "runCommand": "yarn preview"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-only": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build-only"
+              },
+              "metadata": {
+                "scriptContent": "vite build --mode development",
+                "runCommand": "yarn build-only"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-only:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build-only:prod"
+              },
+              "metadata": {
+                "scriptContent": "vite build",
+                "runCommand": "yarn build-only:prod"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "vue-tsc --noEmit",
+                "runCommand": "yarn type-check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --ext .vue,.js,.jsx,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-data": {
+        "name": "@sisense/sdk-data",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-data",
+          "sourceRoot": "packages/sdk-data",
+          "name": "@sisense/sdk-data",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "type-check",
+                "build",
+                "build:prod",
+                "build.watch",
+                "clean",
+                "lint",
+                "lint:fix",
+                "format",
+                "format:check",
+                "vitest",
+                "test",
+                "test:watch",
+                "test:coverage"
+              ]
+            },
+            "description": "Compose SDK package for implementing the elements of dimensional modeling"
+          },
+          "targets": {
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "tsc --noEmit",
+                "runCommand": "yarn type-check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build tsconfig.build.json",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "tsc --project tsconfig.prod.json && tsc --project tsconfig.prod.cjs.json && cp package.cjs.json ./dist/cjs/package.json",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build.watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build.watch"
+              },
+              "metadata": {
+                "scriptContent": "tsc --build --watch",
+                "runCommand": "yarn build.watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "vitest"
+              },
+              "metadata": {
+                "scriptContent": "run -T vitest",
+                "runCommand": "yarn vitest"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "run vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-cli": {
+        "name": "@sisense/sdk-cli",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-cli",
+          "sourceRoot": "packages/sdk-cli",
+          "name": "@sisense/sdk-cli",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "cli",
+                "prebuild",
+                "type-check",
+                "build",
+                "build:prod",
+                "clean",
+                "lint",
+                "lint:fix",
+                "format",
+                "format:check",
+                "vitest",
+                "test",
+                "test:watch",
+                "test:coverage"
+              ]
+            },
+            "description": "Compose SDK package for interacting with Sisense via CLI"
+          },
+          "targets": {
+            "cli": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "cli"
+              },
+              "metadata": {
+                "scriptContent": "node ./dist/index.js",
+                "runCommand": "yarn cli"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prebuild": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prebuild"
+              },
+              "metadata": {
+                "scriptContent": "node -p \"'export const PKG_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/package-version.ts",
+                "runCommand": "yarn prebuild"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "run prebuild && tsc --noEmit",
+                "runCommand": "yarn type-check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "run prebuild && tsc --build tsconfig.build.json",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "run prebuild && tsc --project tsconfig.prod.json",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist coverage tsconfig.build.tsbuildinfo tsconfig.prod.tsbuildinfo",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "vitest"
+              },
+              "metadata": {
+                "scriptContent": "run -T vitest",
+                "runCommand": "yarn vitest"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "run vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/sdk-ui": {
+        "name": "@sisense/sdk-ui",
+        "type": "lib",
+        "data": {
+          "root": "packages/sdk-ui",
+          "sourceRoot": "packages/sdk-ui",
+          "name": "@sisense/sdk-ui",
+          "projectType": "library",
+          "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "type-check",
+                "build",
+                "build:prod",
+                "build:umd",
+                "build:umd:prod",
+                "clean",
+                "lint",
+                "lint:fix",
+                "format",
+                "format:check",
+                "vitest",
+                "test",
+                "test:update",
+                "test:watch",
+                "test:coverage",
+                "test:restructuring",
+                "storybook",
+                "build-storybook"
+              ]
+            },
+            "description": "Compose SDK package containing general UI elements and related logic tailored for React development"
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "yarn dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "type-check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "type-check"
+              },
+              "metadata": {
+                "scriptContent": "tsc --noEmit",
+                "runCommand": "yarn type-check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "run type-check && vite build --mode development && run build:umd",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "run type-check && vite build && run build:umd:prod",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:umd": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:umd"
+              },
+              "metadata": {
+                "scriptContent": "tsx ./scripts/vite/vite.umd.build.ts --mode development",
+                "runCommand": "yarn build:umd"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:umd:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:umd:prod"
+              },
+              "metadata": {
+                "scriptContent": "tsx ./scripts/vite/vite.umd.build.ts --mode production",
+                "runCommand": "yarn build:umd:prod"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf ./dist && rm -rf ./coverage && rm -rf tsconfig.tsbuildinfo  && rm -rf node_modules/.vite/deps",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "eslint . --quiet",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "run lint --fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write .",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check .",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "vitest": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "vitest"
+              },
+              "metadata": {
+                "scriptContent": "TZ=utc run -T vitest",
+                "runCommand": "yarn vitest"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:update": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:update"
+              },
+              "metadata": {
+                "scriptContent": "run vitest -u",
+                "runCommand": "yarn test:update"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "run vitest watch",
+                "runCommand": "yarn test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run --coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "test:restructuring": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:restructuring"
+              },
+              "metadata": {
+                "scriptContent": "run vitest run **/*.snapshot.test.ts",
+                "runCommand": "yarn test:restructuring"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "storybook": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "storybook"
+              },
+              "metadata": {
+                "scriptContent": "storybook dev -p 6006",
+                "runCommand": "yarn storybook"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-storybook": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build-storybook"
+              },
+              "metadata": {
+                "scriptContent": "storybook build",
+                "runCommand": "yarn build-storybook"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/storybook-static"],
+              "cache": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": ["^nx-release-publish"],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/e2e": {
+        "name": "@sisense/e2e",
+        "type": "lib",
+        "data": {
+          "root": "e2e",
+          "sourceRoot": "e2e",
+          "name": "@sisense/e2e",
+          "tags": ["npm:private"],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "start-docker",
+                "test:ct",
+                "test:ct:ui",
+                "test:ct:debug",
+                "test:visual:ui",
+                "test:visual:update",
+                "test:visual:report"
+              ]
+            }
+          },
+          "targets": {
+            "start-docker": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start-docker"
+              },
+              "metadata": {
+                "scriptContent": "docker run -p 5400:5400 --add-host=host.docker.internal:host-gateway --rm -it -v $PWD/../:/monorepo -w /monorepo mcr.microsoft.com/playwright:v1.44.1-jammy /bin/bash",
+                "runCommand": "yarn start-docker"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:ct": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:ct"
+              },
+              "metadata": {
+                "scriptContent": "playwright test -c playwright-ct.config.ts",
+                "runCommand": "yarn test:ct"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:ct:ui": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:ct:ui"
+              },
+              "metadata": {
+                "scriptContent": "playwright test -c playwright-ct.config.ts --ui",
+                "runCommand": "yarn test:ct:ui"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:ct:debug": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:ct:debug"
+              },
+              "metadata": {
+                "scriptContent": "playwright test -c playwright-ct.config.ts --project=chromium --debug",
+                "runCommand": "yarn test:ct:debug"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:visual:ui": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:visual:ui"
+              },
+              "metadata": {
+                "scriptContent": "yarn run test:visual --ui --ui-port=5400 --ui-host=0.0.0.0",
+                "runCommand": "yarn test:visual:ui"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:visual:update": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:visual:update"
+              },
+              "metadata": {
+                "scriptContent": "yarn run test:visual --update-snapshots",
+                "runCommand": "yarn test:visual:update"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:visual:report": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:visual:report"
+              },
+              "metadata": {
+                "scriptContent": "yarn playwright show-report --host localhost --port 5400",
+                "runCommand": "yarn test:visual:report"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "playwright-test": {
+              "executor": "nx:run-commands",
+              "dependsOn": ["^build:prod"],
+              "outputs": [
+                "{projectRoot}/playwright-report",
+                "{projectRoot}/test-results",
+                "{projectRoot}/results.xml"
+              ],
+              "options": {
+                "cwd": "e2e",
+                "command": "playwright test -c ./playwright-visual-tests.config.ts --project chromium"
+              },
+              "cache": true,
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:visual": {
+              "executor": "nx:run-commands",
+              "dependsOn": ["^build"],
+              "outputs": [
+                "{projectRoot}/playwright-report",
+                "{projectRoot}/test-results",
+                "{projectRoot}/results.xml"
+              ],
+              "options": {
+                "cwd": "e2e",
+                "command": "./scripts/start-servers.sh ./scripts/run-under-docker.sh yarn run playwright test -c playwright-visual-tests.config.ts --project chromium"
+              },
+              "cache": true,
+              "configurations": {},
+              "parallelism": true
+            },
+            "components:test": {
+              "executor": "nx:run-commands",
+              "dependsOn": ["^build:prod"],
+              "outputs": [
+                "{projectRoot}/playwright-report",
+                "{projectRoot}/test-results",
+                "{projectRoot}/results.xml"
+              ],
+              "options": {
+                "cwd": "e2e",
+                "command": "playwright test -c playwright-ct.config.ts"
+              },
+              "cache": true,
+              "configurations": {},
+              "parallelism": true
+            },
+            "components:test:ui": {
+              "executor": "nx:run-commands",
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/playwright-report"],
+              "options": {
+                "cwd": "e2e",
+                "command": "playwright test -c playwright-ct.config.ts --ui"
+              },
+              "cache": true,
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@sisense/root": {
+        "name": "@sisense/root",
+        "type": "lib",
+        "data": {
+          "root": ".",
+          "sourceRoot": ".",
+          "name": "@sisense/root",
+          "tags": ["npm:private"],
+          "implicitDependencies": [
+            "@sisense/sdk-data",
+            "@sisense/sdk-ui",
+            "@sisense/sdk-ui-preact",
+            "@sisense/sdk-ui-angular",
+            "@sisense/sdk-ui-vue"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "demo",
+                "demo:vue",
+                "demo:angular",
+                "build",
+                "build:packages",
+                "storybook",
+                "storybook:dev",
+                "build:prod",
+                "build:changed:prod",
+                "clean",
+                "reset",
+                "lint",
+                "lint:fix",
+                "lint:changed",
+                "format",
+                "format:check",
+                "test",
+                "test:coverage",
+                "test:coverage:collect",
+                "test:coverage:report",
+                "test:coverage:combine",
+                "test:collect:report",
+                "test:ct",
+                "test:visual",
+                "g:cli",
+                "version-and-publish",
+                "version:current",
+                "release-git-log",
+                "update-external-branch",
+                "publish",
+                "docs:gen",
+                "docs:serve",
+                "docs:gen:internal",
+                "docs:serve:internal",
+                "docs:gen:md",
+                "docs:check:md",
+                "docs:frameworks:diff",
+                "docs:frameworks:diff:full",
+                "prepare",
+                "nx:build",
+                "nx:build:af",
+                "nx:test",
+                "nx:test:af",
+                "nx:test:coverage",
+                "nx:test:coverage:af",
+                "nx:lint",
+                "nx:lint:af",
+                "nx:format",
+                "nx:format:af",
+                "nx:format:check",
+                "nx:format:check:af",
+                "nx:build:prod",
+                "nx:build:prod:af",
+                "nx:component:tests",
+                "nx:component:tests:af",
+                "nx:test:coverage:collect:report"
+              ]
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspace @sisense/sdk-ui dev",
+                "runCommand": "yarn dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "demo": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "demo"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspace @sisense/react-ts-demo dev",
+                "runCommand": "yarn demo"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "demo:vue": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "demo:vue"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspace @sisense/vue-ts-demo dev",
+                "runCommand": "yarn demo:vue"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "demo:angular": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "demo:angular"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspace @sisense/angular-demo start",
+                "runCommand": "yarn demo:angular"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "yarn nx:build",
+                "runCommand": "yarn build"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:packages": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:packages"
+              },
+              "metadata": {
+                "scriptContent": "yarn nx run-many --target=build --projects='packages/*'",
+                "runCommand": "yarn build:packages"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "storybook": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "storybook"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspace @sisense/sdk-ui storybook",
+                "runCommand": "yarn storybook"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "storybook:dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "storybook:dev"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --exclude @sisense/root -t  storybook:dev",
+                "runCommand": "yarn storybook:dev"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:prod",
+                "env": {
+                  "NX_VERBOSE_LOGGING": "true"
+                }
+              },
+              "metadata": {
+                "scriptContent": "yarn nx:build:prod",
+                "runCommand": "yarn build:prod"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/dist", "{projectRoot}/public"],
+              "cache": true
+            },
+            "build:changed:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:changed:prod"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach --since=origin/master --verbose  --verbose --topological --no-private -R run build:prod",
+                "runCommand": "yarn build:changed:prod"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach run clean && rm -rf ./coverage && rm -rf ./.nyc_output && nx reset",
+                "runCommand": "yarn clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "reset": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "reset"
+              },
+              "metadata": {
+                "scriptContent": "yarn clean && rm -rf ./node_modules",
+                "runCommand": "yarn reset"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint",
+                "args": ["--quiet"]
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach -p --verbose run lint",
+                "runCommand": "yarn lint"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "lint:fix": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:fix"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach -p --verbose run lint:fix",
+                "runCommand": "yarn lint:fix"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint:changed": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:changed"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach --since run lint",
+                "runCommand": "yarn lint:changed"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach -p run format",
+                "runCommand": "yarn format"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach -p run format:check",
+                "runCommand": "yarn format:check"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach -p --verbose run test",
+                "runCommand": "yarn test"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "yarn nx:test:coverage",
+                "runCommand": "yarn test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{projectRoot}/coverage"],
+              "cache": true
+            },
+            "test:coverage:collect": {
+              "executor": "nx:run-script",
+              "metadata": {
+                "scriptContent": "mkdir -p .nyc_output && node ./ci/collect-coverage-files.cjs collectFiles --pattern='packages/**/coverage-final.json' --target='.nyc_output'",
+                "runCommand": "yarn test:coverage:collect"
+              },
+              "dependsOn": ["^build:prod"],
+              "cache": true,
+              "options": {
+                "script": "test:coverage:collect"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage:report": {
+              "executor": "nx:run-script",
+              "metadata": {
+                "scriptContent": "nyc report --reporter lcov --reporter text-summary --reporter cobertura",
+                "runCommand": "yarn test:coverage:report"
+              },
+              "dependsOn": ["test:coverage:collect"],
+              "cache": true,
+              "options": {
+                "script": "test:coverage:report"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage:combine": {
+              "executor": "nx:run-script",
+              "metadata": {
+                "scriptContent": "yarn test:coverage && yarn test:coverage:collect && yarn test:coverage:report",
+                "runCommand": "yarn test:coverage:combine"
+              },
+              "dependsOn": ["test:coverage", "test:coverage:collect", "test:coverage:report"],
+              "cache": true,
+              "options": {
+                "script": "test:coverage:combine"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:collect:report": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:collect:report"
+              },
+              "metadata": {
+                "scriptContent": "yarn test:coverage:collect && yarn test:coverage:report",
+                "runCommand": "yarn test:collect:report"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:ct": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:ct"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach --verbose run test:ct",
+                "runCommand": "yarn test:ct"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "test:visual": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:visual"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach --verbose run test:visual",
+                "runCommand": "yarn test:visual"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": ["^build"],
+              "cache": true
+            },
+            "g:cli": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "g:cli"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspace @sisense/sdk-cli run cli",
+                "runCommand": "yarn g:cli"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "version-and-publish": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "version-and-publish"
+              },
+              "metadata": {
+                "scriptContent": "./ci/version-and-publish.sh",
+                "runCommand": "yarn version-and-publish"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "version:current": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "version:current"
+              },
+              "metadata": {
+                "scriptContent": "node ./scripts/current-version.cjs",
+                "runCommand": "yarn version:current"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "release-git-log": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "release-git-log"
+              },
+              "metadata": {
+                "scriptContent": "./scripts/release-git-log.sh",
+                "runCommand": "yarn release-git-log"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "update-external-branch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "update-external-branch"
+              },
+              "metadata": {
+                "scriptContent": "./scripts/update-external-branch.sh",
+                "runCommand": "yarn update-external-branch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "publish": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "publish"
+              },
+              "metadata": {
+                "scriptContent": "yarn workspaces foreach --no-private npm publish --tolerate-republish",
+                "runCommand": "yarn publish"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "docs:gen": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "docs:gen"
+              },
+              "metadata": {
+                "scriptContent": "TYPEDOC_MODE=PUBLIC typedoc --options typedoc.config.cjs",
+                "runCommand": "yarn docs:gen"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "docs:serve": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "docs:serve"
+              },
+              "metadata": {
+                "scriptContent": "node ./scripts/serve-static.cjs docs",
+                "runCommand": "yarn docs:serve"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "docs:gen:internal": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "docs:gen:internal"
+              },
+              "metadata": {
+                "scriptContent": "TYPEDOC_MODE=INTERNAL typedoc --options typedoc.config.cjs",
+                "runCommand": "yarn docs:gen:internal"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "docs:serve:internal": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "docs:serve:internal"
+              },
+              "metadata": {
+                "scriptContent": "node ./scripts/serve-static.cjs docs-internal",
+                "runCommand": "yarn docs:serve:internal"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "docs:gen:md": {
+              "executor": "nx:run-script",
+              "metadata": {
+                "scriptContent": "./scripts/gen-docs-md.sh",
+                "runCommand": "yarn docs:gen:md"
+              },
+              "outputs": ["{workspaceRoot}/docs-md"],
+              "cache": true,
+              "dependsOn": ["^build:prod"],
+              "options": {
+                "script": "docs:gen:md"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "docs:check:md": {
+              "executor": "nx:run-script",
+              "metadata": {
+                "scriptContent": "./scripts/check-docs-md.sh",
+                "runCommand": "yarn docs:check:md"
+              },
+              "cache": true,
+              "dependsOn": ["^build:prod"],
+              "options": {
+                "script": "docs:check:md"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "docs:frameworks:diff": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "docs:frameworks:diff"
+              },
+              "metadata": {
+                "scriptContent": "./scripts/diff-docs-ui.sh",
+                "runCommand": "yarn docs:frameworks:diff"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "docs:frameworks:diff:full": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "docs:frameworks:diff:full"
+              },
+              "metadata": {
+                "scriptContent": "FULL_DIFF_REPORT=true ./scripts/diff-docs-ui.sh",
+                "runCommand": "yarn docs:frameworks:diff:full"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepare": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepare"
+              },
+              "metadata": {
+                "scriptContent": "husky install",
+                "runCommand": "yarn prepare"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:build"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --exclude @sisense/root -t build",
+                "runCommand": "yarn nx:build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:build:af": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:build:af"
+              },
+              "metadata": {
+                "scriptContent": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t build",
+                "runCommand": "yarn nx:build:af"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:test"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --exclude @sisense/root -t test",
+                "runCommand": "yarn nx:test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:test:af": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:test:af"
+              },
+              "metadata": {
+                "scriptContent": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t test",
+                "runCommand": "yarn nx:test:af"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --exclude @sisense/root -t test:coverage",
+                "runCommand": "yarn nx:test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:test:coverage:af": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:test:coverage:af"
+              },
+              "metadata": {
+                "scriptContent": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t test:coverage",
+                "runCommand": "yarn nx:test:coverage:af"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:lint"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --exclude @sisense/root -t lint",
+                "runCommand": "yarn nx:lint"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:lint:af": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:lint:af"
+              },
+              "metadata": {
+                "scriptContent": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t lint",
+                "runCommand": "yarn nx:lint:af"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:format"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --exclude @sisense/root -t format",
+                "runCommand": "yarn nx:format"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:format:af": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:format:af"
+              },
+              "metadata": {
+                "scriptContent": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t format",
+                "runCommand": "yarn nx:format:af"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:format:check"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --exclude @sisense/root -t format:check",
+                "runCommand": "yarn nx:format:check"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:format:check:af": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:format:check:af"
+              },
+              "metadata": {
+                "scriptContent": "nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t format:check",
+                "runCommand": "yarn nx:format:check:af"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:build:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:build:prod"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --exclude @sisense/root -t build:prod",
+                "runCommand": "yarn nx:build:prod"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:build:prod:af": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:build:prod:af"
+              },
+              "metadata": {
+                "scriptContent": "nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t build:prod",
+                "runCommand": "yarn nx:build:prod:af"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:component:tests": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:component:tests"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --exclude @sisense/root -t component:tests",
+                "runCommand": "yarn nx:component:tests"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:component:tests:af": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "nx:component:tests:af"
+              },
+              "metadata": {
+                "scriptContent": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t component:tests",
+                "runCommand": "yarn nx:component:tests:af"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx:test:coverage:collect:report": {
+              "executor": "nx:run-script",
+              "metadata": {
+                "scriptContent": "nx run @sisense/root:nx:test:coverage && nx run @sisense/root:test:coverage:collect && nx run @sisense/root:test:coverage:report",
+                "runCommand": "yarn nx:test:coverage:collect:report"
+              },
+              "dependsOn": ["^build:prod"],
+              "outputs": ["{workspaceRoot}/coverage"],
+              "cache": true,
+              "options": {
+                "script": "nx:test:coverage:collect:report"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "@sisense/typedoc-plugin-diff-packages": [],
+      "@sisense/typedoc-plugin-markdown": [],
+      "@sisense/sdk-pivot-client": [
+        {
+          "source": "@sisense/sdk-pivot-client",
+          "target": "@sisense/sdk-data",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-pivot-client",
+          "target": "@sisense/sdk-rest-client",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-pivot-client",
+          "target": "@sisense/sdk-shared-ui",
+          "type": "static"
+        }
+      ],
+      "@sisense/sdk-query-client": [
+        {
+          "source": "@sisense/sdk-query-client",
+          "target": "@sisense/sdk-common",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-query-client",
+          "target": "@sisense/sdk-data",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-query-client",
+          "target": "@sisense/sdk-pivot-client",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-query-client",
+          "target": "@sisense/sdk-rest-client",
+          "type": "static"
+        }
+      ],
+      "@sisense/sdk-rest-client": [
+        {
+          "source": "@sisense/sdk-rest-client",
+          "target": "@sisense/sdk-common",
+          "type": "static"
+        }
+      ],
+      "@sisense/sdk-ui-angular": [
+        {
+          "source": "@sisense/sdk-ui-angular",
+          "target": "@sisense/sdk-data",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-ui-angular",
+          "target": "@sisense/sdk-tracking",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-ui-angular",
+          "target": "@sisense/sdk-ui-preact",
+          "type": "static"
+        }
+      ],
+      "@sisense/react-ts-demo": [
+        {
+          "source": "@sisense/react-ts-demo",
+          "target": "@sisense/sdk-data",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/react-ts-demo",
+          "target": "@sisense/sdk-ui",
+          "type": "static"
+        }
+      ],
+      "@sisense/sdk-shared-ui": [],
+      "@sisense/sdk-ui-preact": [
+        {
+          "source": "@sisense/sdk-ui-preact",
+          "target": "@sisense/sdk-data",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-ui-preact",
+          "target": "@sisense/sdk-ui",
+          "type": "static"
+        }
+      ],
+      "@sisense/angular-demo": [
+        {
+          "source": "@sisense/angular-demo",
+          "target": "@sisense/sdk-data",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/angular-demo",
+          "target": "@sisense/sdk-ui-angular",
+          "type": "static"
+        }
+      ],
+      "@sisense/sdk-modeling": [
+        {
+          "source": "@sisense/sdk-modeling",
+          "target": "@sisense/sdk-data",
+          "type": "static"
+        }
+      ],
+      "@sisense/sdk-tracking": [
+        {
+          "source": "@sisense/sdk-tracking",
+          "target": "@sisense/sdk-rest-client",
+          "type": "static"
+        }
+      ],
+      "@sisense/vue-ts-demo": [
+        {
+          "source": "@sisense/vue-ts-demo",
+          "target": "@sisense/sdk-ui-vue",
+          "type": "static"
+        }
+      ],
+      "@sisense/sdk-common": [],
+      "@sisense/sdk-ui-vue": [
+        {
+          "source": "@sisense/sdk-ui-vue",
+          "target": "@sisense/sdk-ui-preact",
+          "type": "static"
+        }
+      ],
+      "@sisense/sdk-data": [
+        {
+          "source": "@sisense/sdk-data",
+          "target": "@sisense/sdk-common",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-data",
+          "target": "@sisense/sdk-rest-client",
+          "type": "static"
+        }
+      ],
+      "@sisense/sdk-cli": [
+        {
+          "source": "@sisense/sdk-cli",
+          "target": "@sisense/sdk-common",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-cli",
+          "target": "@sisense/sdk-data",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-cli",
+          "target": "@sisense/sdk-modeling",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-cli",
+          "target": "@sisense/sdk-query-client",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-cli",
+          "target": "@sisense/sdk-rest-client",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-cli",
+          "target": "@sisense/sdk-tracking",
+          "type": "static"
+        }
+      ],
+      "@sisense/sdk-ui": [
+        {
+          "source": "@sisense/sdk-ui",
+          "target": "@sisense/sdk-common",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-ui",
+          "target": "@sisense/sdk-data",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-ui",
+          "target": "@sisense/sdk-pivot-client",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-ui",
+          "target": "@sisense/sdk-query-client",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-ui",
+          "target": "@sisense/sdk-rest-client",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/sdk-ui",
+          "target": "@sisense/sdk-tracking",
+          "type": "static"
+        }
+      ],
+      "@sisense/e2e": [
+        {
+          "source": "@sisense/e2e",
+          "target": "@sisense/sdk-data",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/e2e",
+          "target": "@sisense/sdk-ui",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/e2e",
+          "target": "@sisense/sdk-ui-vue",
+          "type": "static"
+        }
+      ],
+      "@sisense/root": [
+        {
+          "source": "@sisense/root",
+          "target": "@sisense/sdk-data",
+          "type": "implicit"
+        },
+        {
+          "source": "@sisense/root",
+          "target": "@sisense/sdk-ui",
+          "type": "implicit"
+        },
+        {
+          "source": "@sisense/root",
+          "target": "@sisense/sdk-ui-preact",
+          "type": "implicit"
+        },
+        {
+          "source": "@sisense/root",
+          "target": "@sisense/sdk-ui-angular",
+          "type": "implicit"
+        },
+        {
+          "source": "@sisense/root",
+          "target": "@sisense/sdk-ui-vue",
+          "type": "implicit"
+        },
+        {
+          "source": "@sisense/root",
+          "target": "@sisense/typedoc-plugin-diff-packages",
+          "type": "static"
+        },
+        {
+          "source": "@sisense/root",
+          "target": "@sisense/typedoc-plugin-markdown",
+          "type": "static"
+        }
+      ]
+    }
+  }
+}

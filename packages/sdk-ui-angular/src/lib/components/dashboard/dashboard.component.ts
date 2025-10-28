@@ -149,14 +149,6 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input()
   styleOptions: DashboardProps['styleOptions'];
 
-  /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.tabbersOptions}
-   *
-   * @internal
-   */
-  @Input()
-  tabbersOptions: DashboardProps['tabbersOptions'];
-
   private componentAdapter: ComponentAdapter<typeof DashboardPreact>;
 
   /**
@@ -219,7 +211,6 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
       defaultDataSource: this.defaultDataSource,
       widgetsOptions: this.widgetsOptions,
       styleOptions: this.styleOptions,
-      tabbersOptions: this.tabbersOptions,
     });
   }
 

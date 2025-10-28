@@ -430,6 +430,16 @@ export const FACTORY_FUNCTION_SCHEMAS: Record<string, ArgSchema[]> = {
     { type: 'number', required: true },
     { type: 'BaseFilterConfig', required: false },
   ],
+  'filterFactory.measureTopRanking': [
+    { type: 'BaseMeasure', required: true },
+    { type: 'number', required: true },
+    { type: 'BaseFilterConfig', required: false },
+  ],
+  'filterFactory.measureBottomRanking': [
+    { type: 'BaseMeasure', required: true },
+    { type: 'number', required: true },
+    { type: 'BaseFilterConfig', required: false },
+  ],
 
   // Advanced filters
   'filterFactory.cascading': [

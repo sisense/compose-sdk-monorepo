@@ -54,7 +54,7 @@ describe('getDashboardModel', () => {
       filters: expect.anything(),
       widgets: expect.anything(),
       widgetsOptions: expect.anything(),
-      tabbersOptions: expect.anything(),
+      config: expect.anything(),
       dataSource: {
         id: dashboardMock.datasource.id,
         address: dashboardMock.datasource.address,
@@ -99,7 +99,7 @@ describe('getDashboardModel', () => {
           dashboardMock.widgets!.map(() => expect.anything()),
         ),
       ),
-      tabbersOptions: expect.anything(),
+      config: expect.anything(),
       styleOptions: {
         palette: {
           variantColors: dashboardMock.style!.palette!.colors,
@@ -147,7 +147,7 @@ describe('getDashboardModel', () => {
       ),
       widgets: expect.anything(),
       widgetsOptions: expect.anything(),
-      tabbersOptions: expect.anything(),
+      config: expect.anything(),
       styleOptions: {
         palette: {
           variantColors: dashboardMock.style!.palette!.colors,
@@ -205,7 +205,7 @@ describe('getDashboardModel', () => {
         filters: expect.anything(),
         widgets: expect.anything(),
         widgetsOptions: expect.anything(),
-        tabbersOptions: expect.anything(),
+        config: expect.anything(),
         dataSource: {
           id: dashboardMock.datasource.id,
           address: dashboardMock.datasource.address,

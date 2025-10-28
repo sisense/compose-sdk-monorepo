@@ -42,9 +42,9 @@ export const FilterToggle = memo<FilterToggleProps>(({ isFilterPanelCollapsed, o
       }}
     >
       {isFilterPanelCollapsed ? (
-        <FilterAltIcon fontSize="small" />
+        <FilterAltIcon fontSize="medium" />
       ) : (
-        <FilterAltOffIcon fontSize="small" />
+        <FilterAltOffIcon fontSize="medium" />
       )}
     </IconButton>
   );

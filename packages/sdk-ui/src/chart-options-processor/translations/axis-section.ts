@@ -1,6 +1,7 @@
 import { DateLevels } from '@sisense/sdk-data';
 
 import { CategoricalXValues } from '../../chart-data/types';
+import { HighchartsGradientColorObject } from '../../utils/gradient';
 import { TextStyle } from './types';
 
 export type Axis = {
@@ -81,10 +82,10 @@ export type AxisSettings = {
 
 export type StackLabel = {
   style?: TextStyle;
-  borderColor?: string;
+  borderColor?: string | HighchartsGradientColorObject;
   borderRadius?: number;
   borderWidth?: number;
-  backgroundColor?: string;
+  backgroundColor?: string | HighchartsGradientColorObject;
   align?: 'center' | 'left' | 'right';
   textAlign?: 'center' | 'left' | 'right';
   verticalAlign?: 'top' | 'middle' | 'bottom';

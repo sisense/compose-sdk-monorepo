@@ -52,11 +52,14 @@ export const getPieChartOptions = (
     series: categoricalSeries,
     plotOptions: getPiePlotOptions(
       chartDesignOptions.pieType,
-      chartDesignOptions.pieLabels,
+      chartDesignOptions.seriesLabels,
       dataOptions,
       themeSettings,
     ),
-    tooltip: getCategoryTooltipSettings(chartDesignOptions.pieLabels?.showDecimals, dataOptions),
+    tooltip: getCategoryTooltipSettings(
+      chartDesignOptions.seriesLabels?.percentageLabels?.showDecimals,
+      dataOptions,
+    ),
     drilldown: {
       activeDataLabelStyle: {
         cursor: 'pointer',

@@ -44,6 +44,14 @@ Configurations for how to interpret and present the data passed to the table
 
 ### Widget
 
+#### customOptions
+
+> **customOptions**?: `Record`\< `string`, `any` \>
+
+Specific options for the custom widget.
+
+***
+
 #### customWidgetType
 
 > **customWidgetType**: `string`

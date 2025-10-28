@@ -3,7 +3,7 @@ import type {
   JumpToDashboardConfig,
   JumpToDashboardConfigForPivot,
 } from '@/dashboard/hooks/jtd/jtd-types';
-import { ColorPaletteTheme, TabberConfig } from '@/types';
+import { ColorPaletteTheme } from '@/types';
 
 export type {
   CommonFiltersOptions,
@@ -99,15 +99,6 @@ export type WidgetsOptions = Record<
     jtdConfig?: JumpToDashboardConfig | JumpToDashboardConfigForPivot;
   }
 >;
-/**
- * Options for TabberWidets in a dashboard
- *
- * This property actually moves responsibility on the layout management from the tabber widgets to the dashboard,
- * storing all the tabbers configs in the single place
- *
- * @internal
- */
-export type TabbersOptions = Record<WidgetId, TabberConfig>;
 
 /**
  * Style options for the dashboard.

@@ -1,23 +1,52 @@
-import { TotalLabels } from '@/types';
+import { TextStyle, TotalLabels } from '@/types';
+import { HighchartsGradientColorObject, withGradientConversion } from '@/utils/gradient';
+import { omitUndefinedAndEmpty } from '@/utils/omit-undefined';
 
-export const prepareStackLabels = (totalLabels: TotalLabels) => {
-  const { align, ...style } = totalLabels.textStyle ?? {};
-  return {
-    enabled: totalLabels?.enabled ?? false,
-    ...(totalLabels?.rotation !== undefined && { rotation: totalLabels.rotation }),
-    ...(totalLabels?.align !== undefined && { align: totalLabels.align }),
-    ...(totalLabels?.verticalAlign !== undefined && { verticalAlign: totalLabels.verticalAlign }),
-    ...(totalLabels?.delay !== undefined && { animation: { defer: totalLabels.delay } }),
-    ...(totalLabels?.backgroundColor !== undefined && {
-      backgroundColor: totalLabels.backgroundColor,
-    }),
-    ...(totalLabels?.borderColor !== undefined && { borderColor: totalLabels.borderColor }),
-    ...(totalLabels?.borderRadius !== undefined && { borderRadius: totalLabels.borderRadius }),
-    ...(totalLabels?.borderWidth !== undefined && { borderWidth: totalLabels.borderWidth }),
-    ...(totalLabels?.textStyle !== undefined && { style: totalLabels.textStyle }),
-    ...(totalLabels?.xOffset !== undefined && { x: totalLabels.xOffset }),
-    ...(totalLabels?.yOffset !== undefined && { y: totalLabels.yOffset }),
-    ...(style !== undefined && { style }),
-    ...(align !== undefined && { textAlign: align }),
-  };
+type StackLabelsOptions = {
+  enabled: boolean;
+  rotation?: number;
+  align?: 'left' | 'center' | 'right';
+  textAlign?: 'left' | 'center' | 'right';
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  animation?: { defer: number };
+  backgroundColor?: string | HighchartsGradientColorObject;
+  borderColor?: string | HighchartsGradientColorObject;
+  borderRadius?: number;
+  borderWidth?: number;
+  style?: TextStyle;
+  x?: number;
+  y?: number;
+};
+
+export const prepareStackLabels = (totalLabels: TotalLabels): StackLabelsOptions => {
+  const {
+    enabled,
+    rotation,
+    align,
+    verticalAlign,
+    delay,
+    backgroundColor,
+    borderColor,
+    borderRadius,
+    borderWidth,
+    textStyle,
+    xOffset,
+    yOffset,
+  } = totalLabels ?? {};
+  const { align: textAlign, ...style } = textStyle ?? {};
+  return omitUndefinedAndEmpty<StackLabelsOptions>({
+    enabled: enabled ?? false,
+    rotation,
+    align,
+    textAlign,
+    verticalAlign,
+    animation: delay !== undefined ? { defer: delay } : undefined,
+    backgroundColor: withGradientConversion(backgroundColor),
+    borderColor: withGradientConversion(borderColor),
+    borderRadius,
+    borderWidth,
+    style,
+    x: xOffset,
+    y: yOffset,
+  });
 };

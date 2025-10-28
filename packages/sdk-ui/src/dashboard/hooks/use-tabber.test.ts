@@ -1,18 +1,18 @@
 import { act, renderHook } from '@testing-library/react';
 
-import { TabberWidgetExtraProps, WidgetProps } from '@/props';
+import { TabberButtonsWidgetProps, WidgetProps } from '@/props';
 
-import { isTabberWidget, modifyLayout, useTabber } from './use-tabber';
+import { isTabberButtonsWidget, modifyLayout, useTabber } from './use-tabber';
 
-describe('isTabberWidget', () => {
-  it('should return true for widget with customWidgetType "WidgetsTabber"', () => {
+describe('isTabberButtonsWidget', () => {
+  it('should return true for widget with customWidgetType "tabber-buttons"', () => {
     const widget: WidgetProps = {
       id: 'w1',
       widgetType: 'custom',
-      customWidgetType: 'WidgetsTabber',
+      customWidgetType: 'tabber-buttons',
       dataOptions: {},
     };
-    expect(isTabberWidget(widget)).toBe(true);
+    expect(isTabberButtonsWidget(widget)).toBe(true);
   });
 
   it('should return false for widget with any other customWidgetType', () => {
@@ -22,14 +22,13 @@ describe('isTabberWidget', () => {
       customWidgetType: 'OtherWidget',
       dataOptions: {},
     };
-    expect(isTabberWidget(widget)).toBe(false);
+    expect(isTabberButtonsWidget(widget)).toBe(false);
   });
 });
 
 describe('modifyLayout', () => {
   const dashboardTabberConfig = {
     tabber1: {
-      activeTab: 0,
       tabs: [
         { displayWidgetIds: ['w1', 'w2'], hideWidgetIds: [], title: 'Tab 0' },
         { displayWidgetIds: ['w3'], hideWidgetIds: [], title: 'Tab 1' },
@@ -118,7 +117,6 @@ describe('modifyLayout', () => {
 describe('useTabber hook', () => {
   const dashboardTabberConfig = {
     tabber1: {
-      activeTab: 0,
       tabs: [
         { displayWidgetIds: ['w1', 'w2'], title: 'Tab 0' },
         { displayWidgetIds: ['w3'], title: 'Tab 1' },
@@ -130,8 +128,28 @@ describe('useTabber hook', () => {
     {
       id: 'tabber1',
       widgetType: 'custom',
-      customWidgetType: 'WidgetsTabber',
+      customWidgetType: 'tabber-buttons',
       dataOptions: {},
+      customOptions: {
+        tabNames: ['Tab 0', 'Tab 1'],
+        activeTab: 0,
+      },
+      styleOptions: {
+        showTitle: false,
+        showSeparators: true,
+        showDescription: false,
+        useSelectedBkg: false,
+        useUnselectedBkg: false,
+        selectedColor: '#FFCB05',
+        unselectedColor: '#9EA2AB',
+        descriptionColor: '#9EA2AB',
+        selectedBackgroundColor: '#FFFFFF',
+        unselectedBackgroundColor: '#FFFFFF',
+        tabsSize: 'medium',
+        tabsInterval: 'medium',
+        tabsAlignment: 'center',
+        tabCornerRadius: 'none',
+      },
       title: 'Tabber Widget',
     },
     {
@@ -143,36 +161,35 @@ describe('useTabber hook', () => {
     },
   ];
 
-  it('should augment tabber widgets with onTabSelected callback and selectedTab property', () => {
+  it('should augment tabber widgets with onTabSelected callback and activeTab property', () => {
     const { result } = renderHook(() => useTabber({ widgets, config: dashboardTabberConfig }));
 
     const returnedWidgets = result.current.widgets;
     // Find the tabber widget.
-    const tabberWidget = returnedWidgets.find((w) => w.id === 'tabber1');
+    const tabberWidget: TabberButtonsWidgetProps = returnedWidgets.find(
+      (w) => w.id === 'tabber1',
+    )! as unknown as TabberButtonsWidgetProps;
     expect(tabberWidget).toBeDefined();
-    // Should include a callback and a selectedTab property.
-    expect((tabberWidget as unknown as TabberWidgetExtraProps).onTabSelected).toBeInstanceOf(
-      Function,
-    );
-    expect((tabberWidget as unknown as TabberWidgetExtraProps)?.selectedTab).toBe(0);
+    // Should include a callback and activeTab in customOptions.
+    expect(tabberWidget.customOptions.onTabSelected).toBeInstanceOf(Function);
+    expect(tabberWidget.customOptions.activeTab).toBe(0);
 
     // The non-tabber widget should remain unchanged.
-    const nonTabberWidget = returnedWidgets.find((w) => w.id === 'wX');
-    expect(nonTabberWidget).not.toHaveProperty('onTabSelected');
-    expect(nonTabberWidget).not.toHaveProperty('selectedTab');
+    const nonTabberButtonsWidget = returnedWidgets.find((w) => w.id === 'wX');
+    expect(nonTabberButtonsWidget).not.toHaveProperty('customOptions.onTabSelected');
   });
 
-  it('should update the selectedTab state when onTabSelected is called', () => {
+  it('should update the activeTab state when onTabSelected is called', () => {
     const { result } = renderHook(() => useTabber({ widgets, config: dashboardTabberConfig }));
 
     // Get the tabber widget and call its onTabSelected to change active tab to 1.
     let tabberWidget = result.current.widgets.find((w) => w.id === 'tabber1') as any;
     act(() => {
-      tabberWidget.onTabSelected(1);
+      tabberWidget.customOptions.onTabSelected(1);
     });
     // Re-read the hook's result.
     tabberWidget = result.current.widgets.find((w) => w.id === 'tabber1') as any;
-    expect(tabberWidget.selectedTab).toBe(1);
+    expect(tabberWidget.customOptions.activeTab).toBe(1);
   });
 
   it('should mark cells as hidden using the current tab selection state', () => {
@@ -226,7 +243,7 @@ describe('useTabber hook', () => {
     // Now update the tab selection for "tabber1" to 1.
     const tabberWidget = result.current.widgets.find((w) => w.id === 'tabber1') as any;
     act(() => {
-      tabberWidget.onTabSelected(1);
+      tabberWidget.customOptions.onTabSelected(1);
     });
     // Rerender to update the hook state.
     rerender({ widgets, config: dashboardTabberConfig });
@@ -307,14 +324,12 @@ describe('useTabber hook', () => {
     //   - Tab 1 shows widget "w4"
     const dashboardTabberConfig = {
       tabber1: {
-        activeTab: 0,
         tabs: [
           { displayWidgetIds: ['w1'], hideWidgetIds: [], title: 'Tab 0 for tabber1' },
           { displayWidgetIds: ['w2'], hideWidgetIds: [], title: 'Tab 1 for tabber1' },
         ],
       },
       tabber2: {
-        activeTab: 0,
         tabs: [
           { displayWidgetIds: ['w3'], hideWidgetIds: [], title: 'Tab 0 for tabber2' },
           { displayWidgetIds: ['w4'], hideWidgetIds: [], title: 'Tab 1 for tabber2' },
@@ -326,15 +341,55 @@ describe('useTabber hook', () => {
       {
         id: 'tabber1',
         widgetType: 'custom',
-        customWidgetType: 'WidgetsTabber',
+        customWidgetType: 'tabber-buttons',
         dataOptions: {},
+        customOptions: {
+          tabNames: ['Tab 0 for tabber1', 'Tab 1 for tabber1'],
+          activeTab: 0,
+        },
+        styleOptions: {
+          showTitle: false,
+          showSeparators: true,
+          showDescription: false,
+          useSelectedBkg: false,
+          useUnselectedBkg: false,
+          selectedColor: '#FFCB05',
+          unselectedColor: '#9EA2AB',
+          descriptionColor: '#9EA2AB',
+          selectedBackgroundColor: '#FFFFFF',
+          unselectedBackgroundColor: '#FFFFFF',
+          tabsSize: 'medium',
+          tabsInterval: 'medium',
+          tabsAlignment: 'center',
+          tabCornerRadius: 'none',
+        },
         title: 'Tabber 1',
       },
       {
         id: 'tabber2',
         widgetType: 'custom',
-        customWidgetType: 'WidgetsTabber',
+        customWidgetType: 'tabber-buttons',
         dataOptions: {},
+        customOptions: {
+          tabNames: ['Tab 0 for tabber2', 'Tab 1 for tabber2'],
+          activeTab: 0,
+        },
+        styleOptions: {
+          showTitle: false,
+          showSeparators: true,
+          showDescription: false,
+          useSelectedBkg: false,
+          useUnselectedBkg: false,
+          selectedColor: '#FFCB05',
+          unselectedColor: '#9EA2AB',
+          descriptionColor: '#9EA2AB',
+          selectedBackgroundColor: '#FFFFFF',
+          unselectedBackgroundColor: '#FFFFFF',
+          tabsSize: 'medium',
+          tabsInterval: 'medium',
+          tabsAlignment: 'center',
+          tabCornerRadius: 'none',
+        },
         title: 'Tabber 2',
       },
       {
@@ -390,8 +445,8 @@ describe('useTabber hook', () => {
     const tabberWidget1 = result.current.widgets.find((w) => w.id === 'tabber1') as any;
     const tabberWidget2 = result.current.widgets.find((w) => w.id === 'tabber2') as any;
     act(() => {
-      tabberWidget1.onTabSelected(1);
-      tabberWidget2.onTabSelected(1);
+      tabberWidget1.customOptions.onTabSelected(1);
+      tabberWidget2.customOptions.onTabSelected(1);
     });
     // Rerender to update state.
     rerender({ widgets: widgetsWithTwoTabbers, config: dashboardTabberConfig });
@@ -430,7 +485,6 @@ describe('useTabber hook', () => {
   it('should initialize selectedTabs based on initial tabbersConfigs', () => {
     const initialConfig = {
       tabber1: {
-        activeTab: 0,
         tabs: [
           { displayWidgetIds: ['w1', 'w2'], title: 'Tab 0' },
           { displayWidgetIds: ['w3'], title: 'Tab 1' },
@@ -440,14 +494,13 @@ describe('useTabber hook', () => {
     const { result } = renderHook(() => useTabber({ widgets: widgets, config: initialConfig }));
 
     const tabberWidget = result.current.widgets.find((w) => w.id === 'tabber1') as any;
-    expect(tabberWidget.selectedTab).toBe(0);
+    expect(tabberWidget.customOptions.activeTab).toBe(0);
   });
 
   it('should update selectedTabs when tabbersConfigs is updated', async () => {
     const initialProps: { config: Record<string, any>; widgets: WidgetProps[] } = {
       config: {
         tabber1: {
-          activeTab: 0,
           tabs: [
             { displayWidgetIds: ['w1', 'w2'], title: 'Tab 0' },
             { displayWidgetIds: ['w3'], title: 'Tab 1' },
@@ -458,8 +511,28 @@ describe('useTabber hook', () => {
         {
           id: 'tabber1',
           widgetType: 'custom',
-          customWidgetType: 'WidgetsTabber',
+          customWidgetType: 'tabber-buttons',
           dataOptions: {},
+          customOptions: {
+            tabNames: ['Tab 0', 'Tab 1'],
+            activeTab: 0,
+          },
+          styleOptions: {
+            showTitle: false,
+            showSeparators: true,
+            showDescription: false,
+            useSelectedBkg: false,
+            useUnselectedBkg: false,
+            selectedColor: '#FFCB05',
+            unselectedColor: '#9EA2AB',
+            descriptionColor: '#9EA2AB',
+            selectedBackgroundColor: '#FFFFFF',
+            unselectedBackgroundColor: '#FFFFFF',
+            tabsSize: 'MEDIUM',
+            tabsInterval: 'MEDIUM',
+            tabsAlignment: 'CENTER',
+            tabCornerRadius: 'NONE',
+          },
           title: 'Tabber Widget',
         },
         {
@@ -478,12 +551,11 @@ describe('useTabber hook', () => {
     );
 
     let tabberWidget = result.current.widgets.find((w) => w.id === 'tabber1') as any;
-    expect(tabberWidget.selectedTab).toBe(0);
+    expect(tabberWidget.customOptions.activeTab).toBe(0);
 
     const updatedProps: { config: Record<string, any>; widgets: WidgetProps[] } = {
       config: {
         tabber2: {
-          activeTab: 1,
           tabs: [
             { displayWidgetIds: ['w1', 'w2'], title: 'Tab 0' },
             { displayWidgetIds: ['w3'], title: 'Tab 1' },
@@ -494,8 +566,28 @@ describe('useTabber hook', () => {
         {
           id: 'tabber2',
           widgetType: 'custom',
-          customWidgetType: 'WidgetsTabber',
+          customWidgetType: 'tabber-buttons',
           dataOptions: {},
+          customOptions: {
+            tabNames: ['Tab 0', 'Tab 1'],
+            activeTab: 1,
+          },
+          styleOptions: {
+            showTitle: false,
+            showSeparators: true,
+            showDescription: false,
+            useSelectedBkg: false,
+            useUnselectedBkg: false,
+            selectedColor: '#FFCB05',
+            unselectedColor: '#9EA2AB',
+            descriptionColor: '#9EA2AB',
+            selectedBackgroundColor: '#FFFFFF',
+            unselectedBackgroundColor: '#FFFFFF',
+            tabsSize: 'MEDIUM',
+            tabsInterval: 'MEDIUM',
+            tabsAlignment: 'CENTER',
+            tabCornerRadius: 'NONE',
+          },
           title: 'Tabber Widget',
         },
         {
@@ -511,6 +603,6 @@ describe('useTabber hook', () => {
     rerender(updatedProps);
 
     tabberWidget = result.current.widgets.find((w) => w.id === 'tabber2') as any;
-    expect(tabberWidget.selectedTab).toBe(1);
+    expect(tabberWidget.customOptions.activeTab).toBe(1);
   });
 });

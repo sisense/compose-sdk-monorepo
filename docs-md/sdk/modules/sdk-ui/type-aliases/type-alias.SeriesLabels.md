@@ -28,7 +28,7 @@ If `true`, series labels appear inside bars/columns instead of at the datapoints
 
 ### `backgroundColor`
 
-**backgroundColor**?: `"auto"` \| `string`
+**backgroundColor**?: `"auto"` \| [`GradientColor`](type-alias.GradientColor.md) \| `string`
 
 Background color of the labels. `auto` uses the same color as the data point
 
@@ -36,7 +36,7 @@ Background color of the labels. `auto` uses the same color as the data point
 
 ### `borderColor`
 
-**borderColor**?: `string`
+**borderColor**?: [`GradientColor`](type-alias.GradientColor.md) \| `string`
 
 Color of the labels border
 
@@ -106,12 +106,21 @@ Boolean flag that defines if percentage should be shown in series labels
 
 ***
 
+### `showPercentDecimals`
+
+**showPercentDecimals**?: `boolean`
+
+Boolean flag that defines if percentage should be shown with decimals
+(will work only if `showPercentage` is `true`)
+
+***
+
 ### `showValue`
 
 **showValue**?: `boolean`
 
 Boolean flag that defines if value should be shown in series labels
-(if not specified, value will be shown by default)
+(if not specified, default is determined by chart type)
 
 ***
 

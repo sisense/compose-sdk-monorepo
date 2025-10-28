@@ -55,12 +55,14 @@ describe('Pie Chart Design Options', () => {
 
       const result = translateStyleOptionsToDesignOptions(styleOptions);
 
-      expect(result.pieLabels).toEqual({
+      expect(result.seriesLabels).toEqual({
         enabled: true,
-        showCategories: true,
+        showCategory: true,
         showValue: true,
-        showPercent: true,
-        showDecimals: true,
+        percentageLabels: {
+          enabled: true,
+          showDecimals: true,
+        },
       });
       expect(result.pieType).toBe('donut');
     });

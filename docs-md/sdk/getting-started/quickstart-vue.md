@@ -224,7 +224,7 @@ In this section, you will add a new component and modify the main app to embed a
 >
 > -   The `src/App.vue` file is the main Vue component.
 > -   The `sample-retail.ts` file generated earlier resides in `src/`.
-> -   The URL to your application (f.e. http://localhost:5173) is already added as an entry to CORS Allowed Origins section on your Sisense instance
+> -   The URL to your application (e.g. http://localhost:5173) is already added as an entry to CORS Allowed Origins section on your Sisense instance
 
 ### Connecting to a Sisense Instance
 

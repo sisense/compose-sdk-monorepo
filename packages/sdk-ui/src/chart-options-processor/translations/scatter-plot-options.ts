@@ -3,6 +3,7 @@ import { SeriesLabels } from '@/types';
 
 import { ScatterChartDataOptionsInternal } from '../../chart-data-options/types';
 import { PlotOptions } from '../chart-options-service';
+import { prepareDataLabelsOptions } from '../series-labels';
 import { ScatterChartDesignOptions } from './design-options';
 import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
 import { ScatterCustomPointOptions } from './scatter-tooltip';
@@ -41,10 +42,9 @@ const getScatterDataLabelsSettings = (
   if (!seriesLabels?.enabled) {
     return { enabled: false };
   }
-
+  const translatedDataLabelsSettings = prepareDataLabelsOptions(seriesLabels);
   const rotation = seriesLabels.rotation ?? 0;
   const settings: DataLabelsSettings = {
-    enabled: true,
     align: 'center',
     verticalAlign: 'middle',
     types: {
@@ -54,6 +54,12 @@ const getScatterDataLabelsSettings = (
     },
     rotation,
     ...(getRotationType(rotation) === 'horizontal' ? { y: -1 } : null),
+    ...translatedDataLabelsSettings,
+    style: {
+      fontWeight: '',
+      textOutline: '',
+      ...translatedDataLabelsSettings.style,
+    },
   };
 
   settings.formatter = function () {
@@ -83,14 +89,12 @@ const getScatterDataLabelsSettings = (
       return pointValue;
     }
     const numberFormatConfig = getCompleteNumberFormatConfig(usedDataItem?.numberFormatConfig);
-    return applyFormatPlainText(numberFormatConfig, parseFloat(pointValue));
+    return `${seriesLabels?.prefix ?? ''}${applyFormatPlainText(
+      numberFormatConfig,
+      parseFloat(pointValue),
+    )}${seriesLabels?.suffix ?? ''}`;
   };
 
-  settings.style = {
-    ...settings.style,
-    fontWeight: '',
-    textOutline: '',
-  };
   return settings;
 };
 

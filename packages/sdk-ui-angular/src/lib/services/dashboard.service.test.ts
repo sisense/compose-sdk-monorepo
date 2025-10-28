@@ -53,6 +53,7 @@ describe('DashboardService', () => {
         filters: [],
         widgetsOptions: {},
         styleOptions: {},
+        config: {},
       };
 
       const expectedDashboardModel = {
@@ -83,6 +84,7 @@ describe('DashboardService', () => {
         filters: [],
         widgetsOptions: {},
         styleOptions: {},
+        config: {},
       };
 
       const expectedDashboardModel = {
