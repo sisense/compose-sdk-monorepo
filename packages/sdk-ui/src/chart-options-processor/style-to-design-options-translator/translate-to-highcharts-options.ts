@@ -20,6 +20,7 @@ import {
   PolarStyleOptions,
   ScattermapStyleOptions,
   ScatterStyleOptions,
+  SeriesLabels,
   StackableStyleOptions,
   SunburstStyleOptions,
   TreemapStyleOptions,
@@ -53,7 +54,7 @@ import {
 } from '../translations/design-options';
 import {
   DefaultFunnelDirection,
-  DefaultFunnelLabels,
+  DefaultFunnelSeriesLabels,
   DefaultFunnelSize,
   DefaultFunnelType,
 } from '../translations/funnel-plot-options';
@@ -116,7 +117,7 @@ const getLineWidth = (lineWidth: LineWidth): number => {
 
 export const DefaultStackType: StackType = 'classic';
 export const getCartesianChartStyle = (
-  styleOptions: BaseStyleOptions & BaseAxisStyleOptions,
+  styleOptions: BaseStyleOptions & BaseAxisStyleOptions & { seriesLabels?: SeriesLabels },
   shouldHaveY2Axis: boolean,
 ): BaseDesignOptionsType => {
   const dataLimits = getCartesianDataLimits();
@@ -381,19 +382,8 @@ export const getFunnelChartDesignOptions = (
     funnelDirection = DefaultFunnelDirection,
     legend,
     labels,
+    seriesLabels,
   } = styleOptions;
-
-  let funnelLabels = DefaultFunnelLabels;
-  if (labels) {
-    funnelLabels = {
-      ...funnelLabels,
-      showCategories: labels.categories ?? false,
-      showDecimals: labels.decimals ?? false,
-      enabled: labels.enabled ?? false,
-      showPercent: labels.percent ?? false,
-      showValue: labels.value ?? false,
-    };
-  }
 
   const dataLimits = getDataLimits(styleOptions, 'categorical');
 
@@ -402,9 +392,21 @@ export const getFunnelChartDesignOptions = (
     funnelSize,
     funnelType,
     funnelDirection,
-    funnelLabels,
     legend,
     dataLimits,
+    seriesLabels: {
+      ...(seriesLabels ?? {}),
+      enabled: seriesLabels?.enabled ?? labels?.enabled ?? DefaultFunnelSeriesLabels.enabled,
+      showCategory:
+        seriesLabels?.showCategory ?? labels?.categories ?? DefaultFunnelSeriesLabels.showCategory,
+      showValue: seriesLabels?.showValue ?? labels?.value ?? DefaultFunnelSeriesLabels.showValue,
+      showPercentage:
+        seriesLabels?.showPercentage ?? labels?.percent ?? DefaultFunnelSeriesLabels.showPercentage,
+      showPercentDecimals:
+        seriesLabels?.showPercentDecimals ??
+        labels?.decimals ??
+        DefaultFunnelSeriesLabels.showPercentDecimals,
+    },
   };
 };
 

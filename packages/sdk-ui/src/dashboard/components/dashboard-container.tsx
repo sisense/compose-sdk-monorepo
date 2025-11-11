@@ -1,29 +1,30 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import styled from '@emotion/styled';
 import { DataSource } from '@sisense/sdk-data';
 
+import { CONTEXT_MENU_SELECTED_WITH_DOT_CLASS } from '@/common/components/menu/context-menu/context-menu';
 import { useSyncedState } from '@/common/hooks/use-synced-state';
 import { ContentPanel } from '@/dashboard/components/content-panel';
 import { DashboardHeader } from '@/dashboard/components/dashboard-header';
 import { EditableLayout } from '@/dashboard/components/editable-layout/editable-layout';
 import { HorizontalCollapse } from '@/dashboard/components/horizontal-collapse';
-import { DashboardChangeType } from '@/dashboard/dashboard';
 import { useFiltersPanelCollapsedState } from '@/dashboard/hooks/use-filters-panel-collapsed-state';
 import { DashboardContainerProps, WidgetsPanelLayout } from '@/dashboard/types';
 import { getDefaultWidgetsPanelLayout, getDividerStyle } from '@/dashboard/utils';
 import { FiltersPanel } from '@/filters';
-import { WidgetProps } from '@/props';
+import { MenuItemSection, WidgetProps } from '@/props';
 import { ThemeProvider, useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 import { getDataSourceTitle } from '@/utils/data-sources-utils';
 
-import {
-  DashboardHeaderToolbarMenuItem,
-  useDashboardHeaderToolbar,
-} from '../hooks/use-dashboard-header-toolbar';
+import { useDashboardHeaderToolbar } from '../hooks/use-dashboard-header-toolbar';
 import { useEditModeToolbar } from '../hooks/use-edit-mode-toolbar';
-import { findDeletedWidgetsFromLayout } from './editable-layout/helpers';
+import {
+  findDeletedWidgetsFromLayout,
+  updateColumnsCountInLayout,
+} from './editable-layout/helpers';
 import { EditToggle } from './toolbar/edit-toggle';
 import { FilterToggle } from './toolbar/filter-toggle';
 
@@ -72,6 +73,7 @@ export const DashboardContainer = ({
   onChange,
 }: DashboardContainerProps) => {
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
   const [internalLayout, setInternalLayout] = useSyncedState(layoutOptions?.widgetsPanel);
   const updatedLayout = useMemo(() => {
     return internalLayout ?? getDefaultWidgetsPanelLayout(widgets);
@@ -90,7 +92,7 @@ export const DashboardContainer = ({
     (newMode: DashboardMode) => {
       if (!isModeStateForced) setMode(newMode);
       onChange?.({
-        type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_IS_EDITING_CHANGE,
+        type: 'widgetsPanel/editMode/isEditing/changed',
         payload: newMode === DashboardMode.EDIT,
       });
     },
@@ -103,12 +105,12 @@ export const DashboardContainer = ({
       setInternalLayout(changedLayout);
 
       onChange?.({
-        type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_UPDATE,
+        type: 'widgetsPanel/layout/updated',
         payload: changedLayout,
       });
       if (deletedWidgets.length > 0) {
         onChange?.({
-          type: DashboardChangeType.WIDGETS_DELETE,
+          type: 'widgets/deleted',
           payload: deletedWidgets,
         });
       }
@@ -130,6 +132,9 @@ export const DashboardContainer = ({
     onCancel: () => handleModeChange(DashboardMode.VIEW),
   });
 
+  const currentColumnsCount = isHistoryEnabled
+    ? editModeLayout.columns.length
+    : updatedLayout.columns.length;
   const isToolbarVisible = config?.toolbar?.visible !== false;
   const isFiltersPanelVisible = config?.filtersPanel?.visible !== false;
   const showFilterIconInToolbar =
@@ -144,18 +149,55 @@ export const DashboardContainer = ({
   const handleFilterToggleClick = useCallback(() => {
     setIsFilterPanelCollapsed(!isFilterPanelCollapsed);
     onChange?.({
-      type: DashboardChangeType.UI_FILTERS_PANEL_COLLAPSE,
+      type: 'filtersPanel/collapse/changed',
       payload: !isFilterPanelCollapsed,
     });
   }, [onChange, setIsFilterPanelCollapsed, isFilterPanelCollapsed]);
 
-  const headerToolbarMenuItems = useMemo(() => {
-    const items: DashboardHeaderToolbarMenuItem[] = [];
+  const editingLayout = isHistoryEnabled ? editModeLayout : updatedLayout;
+  const layoutChangeHandler = useCallback(
+    (updatedLayout: WidgetsPanelLayout) => {
+      if (isHistoryEnabled) {
+        setEditModeLayout(updatedLayout);
+      } else {
+        handleLayoutChange(updatedLayout);
+      }
+    },
+    [isHistoryEnabled, setEditModeLayout, handleLayoutChange],
+  );
 
-    // placeholder for menu items
+  const headerToolbarMenuItemSections = useMemo(() => {
+    const sections: MenuItemSection[] = [];
+    if (mode === DashboardMode.EDIT) {
+      sections.push({
+        items: [
+          {
+            caption: t('dashboard.toolbar.columns'),
+            subItems: [
+              {
+                items: Array.from({ length: 4 }, (_, index) => {
+                  const columnCount = index + 1;
+                  const translationKey =
+                    columnCount === 1 ? 'dashboard.toolbar.column' : 'dashboard.toolbar.columns';
 
-    return items;
-  }, []);
+                  return {
+                    caption: `${columnCount} ${t(translationKey)}`,
+                    class:
+                      currentColumnsCount === columnCount
+                        ? CONTEXT_MENU_SELECTED_WITH_DOT_CLASS
+                        : '',
+                    onClick: () =>
+                      layoutChangeHandler(updateColumnsCountInLayout(editingLayout, columnCount)),
+                  };
+                }),
+              },
+            ],
+          },
+        ],
+      });
+    }
+    return sections;
+  }, [mode, currentColumnsCount, layoutChangeHandler, editingLayout, t]);
 
   const headerToolbarComponents = useMemo(() => {
     const components: JSX.Element[] = [];
@@ -196,7 +238,7 @@ export const DashboardContainer = ({
   ]);
 
   const { toolbar: headerToolbar } = useDashboardHeaderToolbar({
-    menuItems: headerToolbarMenuItems,
+    menuItemSections: headerToolbarMenuItemSections,
     toolbarComponents: headerToolbarComponents,
   });
 
@@ -206,19 +248,20 @@ export const DashboardContainer = ({
         {isToolbarVisible && (
           <DashboardHeader
             title={title}
-            toolbar={isEditMode && isHistoryEnabled ? editModeToolbar : headerToolbar}
+            toolbar={() => (
+              <>
+                {isEditMode && isHistoryEnabled && editModeToolbar()}
+                {headerToolbar()}
+              </>
+            )}
           />
         )}
         <ContentPanelWrapper responsive={isLayoutResponsive}>
           {isEditMode ? (
             <EditableLayout
-              layout={isHistoryEnabled ? editModeLayout : updatedLayout}
+              layout={editingLayout}
               widgets={widgets}
-              onLayoutChange={(updatedLayout) =>
-                isHistoryEnabled
-                  ? setEditModeLayout(updatedLayout)
-                  : handleLayoutChange(updatedLayout)
-              }
+              onLayoutChange={layoutChangeHandler}
               config={{
                 showDragHandleIcon: editMode?.showDragHandleIcon,
               }}

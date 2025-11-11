@@ -29,6 +29,7 @@ TypeScript type aliases for components and services listed above
 - [CalendarHeatmapDataPointEventHandler](type-alias.CalendarHeatmapDataPointEventHandler.md)
 - [CalendarHeatmapDataPointsEvent](type-alias.CalendarHeatmapDataPointsEvent.md)
 - [CalendarHeatmapDataPointsEventHandler](type-alias.CalendarHeatmapDataPointsEventHandler.md)
+- [CalendarHeatmapSubtype](type-alias.CalendarHeatmapSubtype.md)
 - [CalendarHeatmapViewType](type-alias.CalendarHeatmapViewType.md)
 - [CartesianChartType](type-alias.CartesianChartType.md)
 - [CartesianWidgetType](type-alias.CartesianWidgetType.md)

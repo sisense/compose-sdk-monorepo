@@ -50,8 +50,11 @@ export const getFunnelChartOptions = (
     // level animation only disables initial or subsequent paints
     legend: getLegendSettings(chartDesignOptions.legend),
     series: funnelSeries,
-    plotOptions: getFunnelPlotOptions(chartDesignOptions, dataOptions, themeSettings),
-    tooltip: getCategoryTooltipSettings(chartDesignOptions.funnelLabels?.showDecimals, dataOptions),
+    plotOptions: getFunnelPlotOptions(chartDesignOptions, dataOptions),
+    tooltip: getCategoryTooltipSettings(
+      chartDesignOptions.seriesLabels?.showPercentDecimals,
+      dataOptions,
+    ),
   };
 
   return { options: funnelOptions, alerts };

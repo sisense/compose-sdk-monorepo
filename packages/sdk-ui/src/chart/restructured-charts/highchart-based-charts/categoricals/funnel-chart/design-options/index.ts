@@ -1,12 +1,14 @@
+import { DeepPartial } from 'ts-essentials';
+
 import { BaseDesignOptions } from '@/chart-options-processor/translations/base-design-options';
 import {
   DefaultFunnelDirection,
-  DefaultFunnelLabels,
+  DefaultFunnelSeriesLabels,
   DefaultFunnelSize,
   DefaultFunnelType,
-  FunnelLabels,
 } from '@/chart-options-processor/translations/funnel-plot-options';
 import { ChartStyleOptions } from '@/types';
+import { omitUndefinedAndEmpty } from '@/utils/omit-undefined';
 
 import { FunnelChartDesignOptions, FunnelChartStyleOptions } from '../types';
 
@@ -32,20 +34,8 @@ export function translateStyleOptionsToDesignOptions(
     funnelSize = DefaultFunnelSize,
     funnelDirection = DefaultFunnelDirection,
     legend,
-    labels,
+    seriesLabels,
   } = styleOptions;
-
-  let funnelLabels: FunnelLabels = DefaultFunnelLabels;
-  if (labels) {
-    funnelLabels = {
-      ...funnelLabels,
-      showCategories: labels.categories ?? funnelLabels.showCategories,
-      showDecimals: labels.decimals ?? funnelLabels.showDecimals,
-      enabled: labels.enabled ?? funnelLabels.enabled,
-      showPercent: labels.percent ?? funnelLabels.showPercent,
-      showValue: labels.value ?? funnelLabels.showValue,
-    };
-  }
 
   const dataLimits = getDataLimits(styleOptions);
 
@@ -54,9 +44,17 @@ export function translateStyleOptionsToDesignOptions(
     funnelSize,
     funnelType,
     funnelDirection,
-    funnelLabels,
     legend,
     dataLimits,
+    seriesLabels: {
+      ...(seriesLabels ?? {}),
+      enabled: seriesLabels?.enabled ?? DefaultFunnelSeriesLabels.enabled,
+      showCategory: seriesLabels?.showCategory ?? DefaultFunnelSeriesLabels.showCategory,
+      showValue: seriesLabels?.showValue ?? DefaultFunnelSeriesLabels.showValue,
+      showPercentage: seriesLabels?.showPercentage ?? DefaultFunnelSeriesLabels.showPercentage,
+      showPercentDecimals:
+        seriesLabels?.showPercentDecimals ?? DefaultFunnelSeriesLabels.showPercentDecimals,
+    },
   };
 }
 
@@ -71,9 +69,51 @@ export function isCorrectStyleOptions(
 }
 
 /**
+ * Gets default style options for funnel charts.
+ */
+export function getDefaultStyleOptions(): FunnelChartStyleOptions {
+  return {
+    legend: {
+      enabled: true,
+      position: 'bottom',
+    },
+    funnelType: DefaultFunnelType,
+    funnelSize: DefaultFunnelSize,
+    funnelDirection: DefaultFunnelDirection,
+    seriesLabels: DefaultFunnelSeriesLabels,
+  };
+}
+
+/**
+ * Translates legacy style options (with deprecated labels property) to modern style options (with seriesLabels).
+ *
+ * @param legacyStyleOptions - The legacy style options containing the deprecated properties
+ * @returns The modern style options without deprecated properties
+ */
+export function translateLegacyStyleOptionsToModern(
+  legacyStyleOptions: DeepPartial<FunnelChartStyleOptions> = {},
+): DeepPartial<FunnelChartStyleOptions> {
+  const { labels, seriesLabels, ...rest } = legacyStyleOptions;
+
+  return omitUndefinedAndEmpty({
+    ...rest,
+    seriesLabels: {
+      ...(seriesLabels ?? {}),
+      enabled: seriesLabels?.enabled ?? labels?.enabled,
+      showCategory: seriesLabels?.showCategory ?? labels?.categories,
+      showValue: seriesLabels?.showValue ?? labels?.value,
+      showPercentage: seriesLabels?.showPercentage ?? labels?.percent,
+      showPercentDecimals: seriesLabels?.showPercentDecimals ?? labels?.decimals,
+    },
+  });
+}
+
+/**
  * Design options translators for funnel charts.
  */
 export const designOptionsTranslators = {
   translateStyleOptionsToDesignOptions,
   isCorrectStyleOptions,
+  getDefaultStyleOptions,
+  translateLegacyStyleOptionsToModern,
 };

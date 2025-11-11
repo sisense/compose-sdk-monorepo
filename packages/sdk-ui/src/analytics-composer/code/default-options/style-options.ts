@@ -2,6 +2,7 @@ import cloneDeep from 'lodash-es/cloneDeep';
 import merge from 'lodash-es/merge';
 
 import { DynamicChartType } from '../../../chart-options-processor/translations/types.js';
+import { CALENDAR_HEATMAP_DEFAULTS } from '../../../chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/constants.js';
 import {
   AreamapStyleOptions,
   AreaRangeStyleOptions,
@@ -203,12 +204,12 @@ export const FUNNEL_DEFAULT_STYLE_OPTIONS: FunnelStyleOptions = {
     enabled: false,
     position: 'left',
   },
-  labels: {
+  seriesLabels: {
     enabled: true,
-    categories: true,
-    percent: true,
-    decimals: false,
-    value: true,
+    showCategory: true,
+    showPercentage: true,
+    showPercentDecimals: false,
+    showValue: true,
   },
   funnelSize: 'regular',
   funnelType: 'regular',
@@ -246,6 +247,7 @@ export const TREEMAP_DEFAULT_STYLE_OPTIONS: TreemapStyleOptions = {
 };
 
 export const CALENDAR_HEATMAP_DEFAULT_STYLE_OPTIONS: CalendarHeatmapStyleOptions = {
+  subtype: CALENDAR_HEATMAP_DEFAULTS.SUBTYPE,
   viewType: 'month',
   startOfWeek: 'sunday',
   cellLabels: {

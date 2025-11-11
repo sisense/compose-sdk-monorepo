@@ -2,11 +2,12 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { BuildContext } from '../../../../types.js';
 import { CalendarHeatmapChartData } from '../../../data.js';
-import { getAxesOptions } from '../axes-options.js';
+import { getSplitAxesOptions } from '../axes-options';
 
 // Mock the weekday labels function
 vi.mock('../../../utils/index.js', () => ({
   getWeekdayLabels: vi.fn(() => ['S', 'M', 'T', 'W', 'T', 'F', 'S']),
+  getDayOfWeekIndex: vi.fn((dayOfWeek: string) => (dayOfWeek === 'sunday' ? 0 : 1)),
   CalendarDayOfWeekEnum: {
     SUNDAY: 'sunday',
     MONDAY: 'monday',
@@ -81,10 +82,10 @@ describe('Calendar Heatmap Axes Options', () => {
     };
   };
 
-  describe('getAxesOptions', () => {
+  describe('getSplitAxesOptions', () => {
     it('should create axes options with dayLabels enabled', () => {
       const ctx = createMockContext();
-      const result = getAxesOptions(ctx);
+      const result = getSplitAxesOptions(ctx);
 
       expect(result.xAxis).toHaveLength(1);
       expect(result.xAxis?.[0]).toMatchObject({
@@ -109,7 +110,7 @@ describe('Calendar Heatmap Axes Options', () => {
           },
         },
       });
-      const result = getAxesOptions(ctx);
+      const result = getSplitAxesOptions(ctx);
 
       expect(result.xAxis?.[0]).toMatchObject({
         categories: [],
@@ -139,7 +140,7 @@ describe('Calendar Heatmap Axes Options', () => {
           },
         },
       });
-      const result = getAxesOptions(ctx);
+      const result = getSplitAxesOptions(ctx);
 
       expect(result.xAxis?.[0]?.labels?.style).toMatchObject(customStyle);
     });
@@ -148,21 +149,21 @@ describe('Calendar Heatmap Axes Options', () => {
       // Test Monday start
       const mondayCtx = createMockContext();
       mondayCtx.designOptions.startOfWeek = 'monday';
-      const mondayResult = getAxesOptions(mondayCtx);
+      const mondayResult = getSplitAxesOptions(mondayCtx);
       expect(mondayResult.xAxis).toHaveLength(1);
       expect(mondayResult.yAxis).toHaveLength(1);
 
       // Test Sunday start
       const sundayCtx = createMockContext();
       sundayCtx.designOptions.startOfWeek = 'sunday';
-      const sundayResult = getAxesOptions(sundayCtx);
+      const sundayResult = getSplitAxesOptions(sundayCtx);
       expect(sundayResult.xAxis).toHaveLength(1);
       expect(sundayResult.yAxis).toHaveLength(1);
     });
 
     it('should have correct axis configuration properties', () => {
       const ctx = createMockContext();
-      const result = getAxesOptions(ctx);
+      const result = getSplitAxesOptions(ctx);
 
       expect(result.xAxis?.[0]).toMatchObject({
         opposite: true,
@@ -178,7 +179,7 @@ describe('Calendar Heatmap Axes Options', () => {
     it('should calculate correct label positioning based on cellSize', () => {
       const ctx = createMockContext();
       ctx.designOptions.cellSize = 40;
-      const result = getAxesOptions(ctx);
+      const result = getSplitAxesOptions(ctx);
 
       // Should have calculated offset and y position
       expect(typeof result.xAxis?.[0]?.offset).toBe('number');

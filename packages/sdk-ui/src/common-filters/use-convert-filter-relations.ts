@@ -1,6 +1,7 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 
 import { Filter, FilterRelations, isCascadingFilter, isFilterRelations } from '@sisense/sdk-data';
+import isEqual from 'lodash-es/isEqual';
 
 import { useSyncedState } from '@/common/hooks/use-synced-state';
 import {
@@ -46,6 +47,9 @@ export function useConvertFilterRelations(
   initialFiltersOrFilterRelations: Filter[] | FilterRelations,
   onFiltersChange?: (filters: Filter[] | FilterRelations) => void,
 ): UseFilterRelationsConversionResult {
+  // Track the last notified value to prevent double-firing
+  const lastNotifiedValueRef = useRef<Filter[] | FilterRelations | undefined>(undefined);
+
   // keep single state for filters and relations
   const [filtersAndRelations, setFiltersAndRelations] = useSyncedState<FiltersAndRelations>(
     useMemo(
@@ -57,7 +61,13 @@ export function useConvertFilterRelations(
         (newFiltersAndFilterRelations: FiltersAndRelations) => {
           const { filters, relations } = newFiltersAndFilterRelations;
           if (onFiltersChange) {
-            onFiltersChange(combineFiltersAndRelations(filters, relations));
+            const newValue = combineFiltersAndRelations(filters, relations);
+            // Only call onFiltersChange if the value has actually changed
+            // This prevents double-firing when React batches state updates
+            if (!isEqual(lastNotifiedValueRef.current, newValue)) {
+              lastNotifiedValueRef.current = newValue;
+              onFiltersChange(newValue);
+            }
           }
         },
         [onFiltersChange],

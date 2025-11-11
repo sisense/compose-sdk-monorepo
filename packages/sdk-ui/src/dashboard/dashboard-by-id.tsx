@@ -4,14 +4,14 @@ import { LoadingOverlay } from '@/common/components/loading-overlay';
 import { useDefaults } from '@/common/hooks/use-defaults';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import * as dashboardModelTranslator from '@/models/dashboard/dashboard-model-translator';
-import { dashboardChangeActionToUseDashboardModelAction } from '@/models/dashboard/use-dashboard-model/use-dasboard-model-utils';
+import { dashboardChangeEventToUseDashboardModelAction } from '@/models/dashboard/use-dashboard-model/use-dasboard-model-utils';
 import { useDashboardModelInternal } from '@/models/dashboard/use-dashboard-model/use-dashboard-model';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { TranslatableError } from '@/translation/translatable-error';
 
 import { DEFAULT_DASHBOARD_BY_ID_CONFIG } from './constants';
-import { Dashboard, DashboardChangeAction } from './dashboard';
-import { DashboardByIdProps, DashboardConfig } from './types';
+import { Dashboard } from './dashboard';
+import { DashboardByIdProps, DashboardChangeEvent, DashboardConfig } from './types';
 
 /**
  * React component that renders a dashboard created in Sisense Fusion by its ID.
@@ -56,8 +56,8 @@ export const DashboardById = asSisenseComponent({
   });
 
   const handleChange = useCallback(
-    (action: DashboardChangeAction) => {
-      const useDashModelAction = dashboardChangeActionToUseDashboardModelAction(action);
+    (event: DashboardChangeEvent) => {
+      const useDashModelAction = dashboardChangeEventToUseDashboardModelAction(event);
       if (useDashModelAction) {
         dispatchChanges(useDashModelAction);
       }

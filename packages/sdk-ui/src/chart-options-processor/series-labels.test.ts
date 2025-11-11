@@ -221,34 +221,6 @@ describe('prepareDataLabelsOptions', () => {
     });
   });
 
-  describe('animation property', () => {
-    it('should map delay to animation.defer', () => {
-      const seriesLabels: SeriesLabels = {
-        enabled: true,
-        delay: 1000,
-      };
-      const result = prepareDataLabelsOptions(seriesLabels);
-
-      expect(result).toEqual({
-        enabled: true,
-        animation: { defer: 1000 },
-      });
-    });
-
-    it('should not include animation when delay is undefined', () => {
-      const seriesLabels: SeriesLabels = {
-        enabled: true,
-        delay: undefined,
-      };
-      const result = prepareDataLabelsOptions(seriesLabels);
-
-      expect(result).toEqual({
-        enabled: true,
-      });
-      expect(result).not.toHaveProperty('animation');
-    });
-  });
-
   describe('combined properties', () => {
     it('should handle multiple properties correctly', () => {
       const textStyle = { fontSize: '14px', fontWeight: 'bold' };
@@ -266,7 +238,6 @@ describe('prepareDataLabelsOptions', () => {
         padding: 8,
         xOffset: 5,
         yOffset: -5,
-        delay: 500,
       };
 
       const result = prepareDataLabelsOptions(seriesLabels);
@@ -285,7 +256,6 @@ describe('prepareDataLabelsOptions', () => {
         padding: 8,
         x: 5,
         y: -5,
-        animation: { defer: 500 },
       });
     });
   });
@@ -306,7 +276,6 @@ describe('prepareDataLabelsOptions', () => {
         padding: undefined,
         xOffset: undefined,
         yOffset: undefined,
-        delay: undefined,
       };
 
       const result = prepareDataLabelsOptions(seriesLabels);
@@ -342,7 +311,6 @@ describe('prepareDataLabelsOptions', () => {
         padding: 0,
         xOffset: 0,
         yOffset: 0,
-        delay: 0,
       };
 
       const result = prepareDataLabelsOptions(seriesLabels);
@@ -355,7 +323,6 @@ describe('prepareDataLabelsOptions', () => {
         padding: 0,
         x: 0,
         y: 0,
-        animation: { defer: 0 },
       });
     });
 
@@ -365,7 +332,6 @@ describe('prepareDataLabelsOptions', () => {
         rotation: -45,
         xOffset: -10,
         yOffset: -20,
-        delay: -100,
       };
 
       const result = prepareDataLabelsOptions(seriesLabels);
@@ -375,7 +341,6 @@ describe('prepareDataLabelsOptions', () => {
         rotation: -45,
         x: -10,
         y: -20,
-        animation: { defer: -100 },
       });
     });
   });

@@ -20,6 +20,7 @@ export function translateCalendarHeatmapStyleOptionsToDesignOptions(
     ...BaseDesignOptions,
     width: styleOptions.width,
     height: styleOptions.height,
+    subtype: styleOptions.subtype || CALENDAR_HEATMAP_DEFAULTS.SUBTYPE,
     viewType: styleOptions.viewType || CALENDAR_HEATMAP_DEFAULTS.VIEW_TYPE,
     startOfWeek: styleOptions.startOfWeek || CALENDAR_HEATMAP_DEFAULTS.START_OF_WEEK,
     cellLabels: {

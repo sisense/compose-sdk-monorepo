@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
-import { DashboardChangeAction } from '@/dashboard/dashboard';
 import { TabbersConfig } from '@/dashboard/hooks/use-tabber';
 import { FiltersPanelConfig } from '@/filters/components/filters-panel/types';
 import { DashboardStyleOptions, WidgetsOptions, WidgetsPanelLayout } from '@/models';
@@ -18,6 +17,87 @@ export type {
 } from '@/models';
 
 export type { TabbersConfig, TabberConfig, TabberTabConfig } from '@/dashboard/hooks/use-tabber';
+
+/**
+ * Event triggered when dashboard filters are updated.
+ */
+export interface DashboardFiltersUpdatedEvent {
+  /** Event type */
+  type: 'filters/updated';
+  /** New filters or filter relations after the update*/
+  payload: Filter[] | FilterRelations;
+}
+
+/**
+ * Event triggered when the filters panel collapsed state changes.
+ */
+export interface DashboardFiltersPanelCollapseChangedEvent {
+  /** Event type */
+  type: 'filtersPanel/collapse/changed';
+  /** Is the filters panel collapsed? */
+  payload: boolean;
+}
+
+/**
+ * Event triggered when the widgets panel layout is updated.
+ *
+ * @remarks
+ * When `config.widgetsPanel.editMode.applyChangesAsBatch.enabled` is `true` (default),
+ * this event is only triggered when the user applies changes (clicks "Apply"),
+ * not during the editing process. When `false`, this event is triggered immediately
+ * after each layout change.
+ */
+export interface DashboardWidgetsPanelLayoutUpdatedEvent {
+  /** Event type */
+  type: 'widgetsPanel/layout/updated';
+  /** The new widgets panel layout */
+  payload: WidgetsPanelLayout;
+}
+
+/**
+ * Event triggered when the edit mode state changes.
+ */
+export interface DashboardWidgetsPanelIsEditingChangedEvent {
+  /** Event type */
+  type: 'widgetsPanel/editMode/isEditing/changed';
+  /** Is the widgets panel layout in editing state? */
+  payload: boolean;
+}
+
+/**
+ * Event triggered when widgets are deleted from the dashboard.
+ *
+ * @remarks
+ * When `config.widgetsPanel.editMode.applyChangesAsBatch.enabled` is `true` (default),
+ * this event is only triggered when the user applies changes (clicks "Apply"),
+ * not during the editing process. When `false`, this event is triggered immediately
+ * after widgets are deleted.
+ */
+export interface DashboardWidgetsDeletedEvent {
+  /**
+   * Event type */
+  type: 'widgets/deleted';
+  /** The oids of the widgets deleted */
+  payload: string[];
+}
+
+/**
+ * Events that can be triggered by the Dashboard component
+ *
+ * @example
+ *
+ * Example of a filters update event:
+ *
+ * ```ts
+ * { type: 'filters/updated', payload: filters }
+ * ```
+ */
+export type DashboardChangeEvent =
+  | DashboardFiltersUpdatedEvent
+  | DashboardFiltersPanelCollapseChangedEvent
+  | DashboardWidgetsPanelLayoutUpdatedEvent
+  | DashboardWidgetsPanelIsEditingChangedEvent
+  | DashboardWidgetsDeletedEvent;
 
 /**
  * Props of the {@link DashboardById} component.
@@ -50,7 +130,7 @@ export interface DashboardContainerProps {
    *
    * @internal
    */
-  onChange?: (action: DashboardChangeAction) => void;
+  onChange?: (event: DashboardChangeEvent) => void;
 }
 
 /**
@@ -254,9 +334,12 @@ export interface DashboardProps {
   /**
    * Callback to receive changes
    *
-   * @internal
+   * This callback is invoked when the dashboard state changes, such as filter updates,
+   * layout changes, or widget deletions. See {@link DashboardChangeEvent} for all possible event types.
+   *
+   * @param event The event that occurred
    */
-  onChange?: (action: DashboardChangeAction) => void;
+  onChange?: (event: DashboardChangeEvent) => void;
 }
 
 /**

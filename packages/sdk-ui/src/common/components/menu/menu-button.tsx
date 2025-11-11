@@ -1,5 +1,6 @@
 import { MouseEventHandler, useCallback } from 'react';
 
+import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
 
 import ThreeDotsIcon from '@/ai/icons/three-dots-icon';
@@ -11,13 +12,18 @@ type MenuButtonProps = {
   ariaLabel?: string;
 };
 
+const StyledIconButton = styled(IconButton)`
+  min-width: 28px;
+  min-height: 28px;
+`;
+
 export const MenuButton = ({ color, onClick, ariaLabel, ...restProps }: MenuButtonProps) => {
   const getHoverColor = useCallback(() => {
     return getSlightlyDifferentColor(color ?? '', undefined, 0.1);
   }, [color]);
 
   return (
-    <IconButton
+    <StyledIconButton
       sx={{
         padding: 0,
         '&:hover': {
@@ -29,6 +35,6 @@ export const MenuButton = ({ color, onClick, ariaLabel, ...restProps }: MenuButt
       {...restProps}
     >
       <ThreeDotsIcon fill={color} />
-    </IconButton>
+    </StyledIconButton>
   );
 };

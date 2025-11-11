@@ -20,6 +20,15 @@ Wrapped attribute with additional options for pivot table
 
 ***
 
+### name
+
+> **name**?: `string`
+
+Custom name to override the default attribute name in pivot table headers.
+If provided, this will be used as the display title in the pivot table.
+
+***
+
 ### sort
 
 > **sort**?: [`PivotRowsSort`](../type-aliases/type-alias.PivotRowsSort.md)

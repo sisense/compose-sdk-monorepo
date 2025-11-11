@@ -189,6 +189,7 @@ export const PivotTable = asSisenseComponent({
     styleOptions,
     themeSettings,
     size,
+    allowHtml: app?.settings?.serverFeatures?.pivot?.allowHtml,
     onTotalHeightChange: handlePivotHeightChange,
     onDataPointClick,
     onDataPointContextMenu,

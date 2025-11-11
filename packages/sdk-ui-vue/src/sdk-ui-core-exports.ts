@@ -21,6 +21,7 @@ export type {
   PolarSubtype,
   StackableSubtype,
   BoxplotSubtype,
+  CalendarHeatmapSubtype,
   WidgetType,
   CartesianWidgetType,
   CategoricalWidgetType,

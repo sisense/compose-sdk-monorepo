@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { MenuButton } from '@/common/components/menu/menu-button';
 import { useMenu } from '@/common/hooks/use-menu';
+import { MenuItemSection } from '@/index';
 import { useThemeContext } from '@/theme-provider';
 
 /**
@@ -18,7 +19,7 @@ export interface DashboardHeaderToolbarMenuItem {
  * @internal
  */
 export interface UseDashboardHeaderToolbarProps {
-  menuItems: DashboardHeaderToolbarMenuItem[];
+  menuItemSections: MenuItemSection[];
   toolbarComponents?: JSX.Element[];
 }
 
@@ -27,39 +28,26 @@ export interface UseDashboardHeaderToolbarProps {
  * @internal
  */
 export const useDashboardHeaderToolbar = ({
-  menuItems,
+  menuItemSections = [],
   toolbarComponents = [],
 }: UseDashboardHeaderToolbarProps) => {
   const { themeSettings } = useThemeContext();
-  const { openMenu, closeMenu } = useMenu();
+  const { openMenu } = useMenu();
 
   const handleMenuOpen = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
-      if (!menuItems.length) return;
+      if (!menuItemSections.length) return;
       const rect = (event.target as HTMLElement).getBoundingClientRect();
       openMenu({
         position: {
           left: rect.left + rect.width / 2,
           top: rect.bottom,
         },
-        itemSections: [
-          {
-            items: menuItems.map((item) => ({
-              caption: item.title,
-              icon: item.icon,
-              class: '',
-              ariaLabel: item.ariaLabel,
-              onClick: () => {
-                item.onClick();
-                closeMenu();
-              },
-            })),
-          },
-        ],
+        itemSections: menuItemSections,
         alignment: { horizontal: 'right' },
       });
     },
-    [menuItems, openMenu, closeMenu],
+    [menuItemSections, openMenu],
   );
 
   const toolbar = useCallback(
@@ -68,7 +56,7 @@ export const useDashboardHeaderToolbar = ({
         {toolbarComponents.map((component, index) => (
           <div key={`csdk-toolbar-component-${index}`}>{component}</div>
         ))}
-        {menuItems.length > 0 && (
+        {menuItemSections.length > 0 && (
           <MenuButton
             onClick={handleMenuOpen}
             aria-label="dashboard toolbar menu"
@@ -81,7 +69,7 @@ export const useDashboardHeaderToolbar = ({
     [
       handleMenuOpen,
       themeSettings.dashboard.toolbar.primaryTextColor,
-      menuItems.length,
+      menuItemSections.length,
       toolbarComponents,
     ],
   );

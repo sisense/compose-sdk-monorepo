@@ -1,6 +1,6 @@
 import { PointLabelObject } from '@sisense/sisense-charts';
 
-import { treemapLabelFormatter } from './treemap-labels';
+import { prepareTreemapLabelFormatter } from './treemap-labels';
 
 describe('Treemap Chart labels formatter', () => {
   it('should prepare small label', () => {
@@ -21,7 +21,7 @@ describe('Treemap Chart labels formatter', () => {
       },
     } as unknown as PointLabelObject;
 
-    expect(treemapLabelFormatter.call(point)).toMatchSnapshot();
+    expect(prepareTreemapLabelFormatter(3, { enabled: true }).call(point)).toMatchSnapshot();
   });
 
   it('should prepare small label with light label text', () => {
@@ -42,7 +42,7 @@ describe('Treemap Chart labels formatter', () => {
       },
     } as unknown as PointLabelObject;
 
-    expect(treemapLabelFormatter.call(point)).toMatchSnapshot();
+    expect(prepareTreemapLabelFormatter(3, { enabled: true }).call(point)).toMatchSnapshot();
   });
 
   it('should prepare big label', () => {
@@ -64,7 +64,7 @@ describe('Treemap Chart labels formatter', () => {
       },
     } as unknown as PointLabelObject;
 
-    expect(treemapLabelFormatter.call(point)).toMatchSnapshot();
+    expect(prepareTreemapLabelFormatter(1, { enabled: true }).call(point)).toMatchSnapshot();
   });
 
   it('should skip big label in case of point small size', () => {
@@ -86,7 +86,7 @@ describe('Treemap Chart labels formatter', () => {
       },
     } as unknown as PointLabelObject;
 
-    expect(treemapLabelFormatter.call(point)).toMatchSnapshot();
+    expect(prepareTreemapLabelFormatter(1, { enabled: true }).call(point)).toMatchSnapshot();
   });
 
   it('should skip small label in case of point small size', () => {
@@ -107,6 +107,6 @@ describe('Treemap Chart labels formatter', () => {
       },
     } as unknown as PointLabelObject;
 
-    expect(treemapLabelFormatter.call(point)).toMatchSnapshot();
+    expect(prepareTreemapLabelFormatter(3, { enabled: true }).call(point)).toMatchSnapshot();
   });
 });

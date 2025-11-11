@@ -1,8 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
 
-import { CalendarHeatmapChartData } from '../../../data.js';
-import { MonthData } from '../../helpers/view-helpers.js';
-import { useCalendarHeatmapPagination } from '../use-calendar-heatmap-pagination.js';
+import { CalendarHeatmapChartData } from '../../data.js';
+import { MonthData } from '../helpers/view-helpers.js';
+import { useCalendarHeatmapPagination } from './use-calendar-heatmap-pagination.js';
 
 describe('useCalendarHeatmapPagination', () => {
   const mockChartData: CalendarHeatmapChartData = {

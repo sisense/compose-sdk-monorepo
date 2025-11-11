@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.14.0] - 2025-11-11
+
+### Added
+- Add `onChange` property for `Dashboard` and `DashboardById`
+- Add support for continuous subtype for `CalendarHeatmapChart`
+- Add possibility to change column count in `Dashboard` edit mode
+- Add support for `isHtml` data option in `PivotTable`
+- Extend `seriesLabels` for `TreemapChart` and `FunnelChart`
+
+### Changed
+- Fix `PivotTable` to use column headings from `name`, if provided via dataOptions
+- Fix `PivotTable` scroll issue
+
 ## [2.13.0] - 2025-10-28
 
 ### Added

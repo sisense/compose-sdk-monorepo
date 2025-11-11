@@ -10,7 +10,7 @@ import { BaseDesignOptions } from './base-design-options';
 import { FunnelChartDesignOptions } from './design-options';
 import {
   DefaultFunnelDirection,
-  DefaultFunnelLabels,
+  DefaultFunnelSeriesLabels,
   DefaultFunnelSize,
   DefaultFunnelType,
   getFunnelPlotOptions,
@@ -30,7 +30,7 @@ describe('getFunnelPlotOptions', () => {
       funnelType: DefaultFunnelType,
       funnelSize: DefaultFunnelSize,
       funnelDirection: DefaultFunnelDirection,
-      funnelLabels: DefaultFunnelLabels,
+      seriesLabels: DefaultFunnelSeriesLabels,
     };
 
     const measure = {
@@ -76,11 +76,7 @@ describe('getFunnelPlotOptions', () => {
         showInLegend: true,
         width: '66.6%',
       },
-      series: {
-        dataLabels: {
-          enabled: true,
-        },
-      },
+      series: {},
     });
   });
 });

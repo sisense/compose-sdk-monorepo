@@ -26,6 +26,9 @@ const getPivotAttribute = (dataOption: StyledColumn) => {
     ...(dataOption.sortType && {
       sort: normalizePivotSort(dataOption.sortType),
     }),
+    ...(dataOption.name && {
+      name: dataOption.name,
+    }),
   };
 };
 

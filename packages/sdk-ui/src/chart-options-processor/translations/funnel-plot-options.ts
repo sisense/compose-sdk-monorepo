@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import merge from 'ts-deepmerge';
+import { DeepPartial } from 'ts-essentials';
+
+import { prepareDataLabelsOptions } from '@/chart-options-processor/series-labels';
+
 import {
   CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../../chart-data-options/types';
 import { fraction, fromFraction, withPercentSign } from '../../chart-data/utils';
-import { CompleteNumberFormatConfig, CompleteThemeSettings } from '../../types';
+import { CompleteNumberFormatConfig, FunnelSeriesLabels } from '../../types';
 import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
 import { FunnelChartDesignOptions } from './design-options';
@@ -12,21 +17,17 @@ import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-fo
 import { HighchartsDataPointContext } from './tooltip-utils';
 import { DataLabelsSettings } from './value-label-section';
 
-export const DefaultFunnelLabels: FunnelLabels = {
+/**
+ * Default configuration for funnel chart series labels.
+ * Enables all label components (category, value, percentage) by default.
+ */
+export const DefaultFunnelSeriesLabels: FunnelSeriesLabels = {
   enabled: true,
-  showCategories: true,
+  showCategory: true,
   showValue: true,
-  showPercent: true,
-  showDecimals: false,
-};
-
-export type FunnelLabels = {
-  enabled: boolean;
-  showCategories: boolean;
-  showValue: boolean;
-  showPercent: boolean;
-  showDecimals: boolean;
-};
+  showPercentage: true,
+  showPercentDecimals: false,
+} as const;
 
 export const DefaultFunnelSize: FunnelSize = 'regular';
 export const funnelSizes = ['wide', 'regular', 'narrow'] as const;
@@ -42,14 +43,15 @@ export const DefaultFunnelDirection: FunnelDirection = 'regular';
 export const funnelDirections = ['regular', 'inverted'] as const;
 /** Direction of Funnel chart narrowing */
 export type FunnelDirection = (typeof funnelDirections)[number];
+/** Funnel-specific data labels settings extending the base data labels configuration. */
+export type FunnelDataLabelsSettings = DataLabelsSettings & {
+  funnelMinimumFontSizeToTextLabel: number;
+};
 
 export type FunnelOptions = {
   allowPointSelect: boolean;
   cursor: 'pointer';
-  dataLabels: DataLabelsSettings & {
-    funnelMinimumFontSizeToTextLabel: number;
-    formatter?: () => string;
-  };
+  dataLabels: FunnelDataLabelsSettings;
   showInLegend: boolean;
   reversed: boolean;
   neckWidth: string | number;
@@ -75,42 +77,38 @@ const defaultFunnelOptions = (): FunnelOptions => ({
   width: MAX_FUNNEL_WIDTH,
 });
 
-const defaultSeriesOptions = (): PlotOptions['series'] => ({
-  dataLabels: {
-    enabled: false,
-  },
-});
-
-export const seriesDataLabels = (labels: FunnelLabels): { enabled: boolean } => {
-  const { enabled, showCategories, showValue, showPercent } = labels;
-
+const prepareFunnelDataLabelsOptions = (
+  seriesLabels: FunnelSeriesLabels,
+): Partial<FunnelDataLabelsSettings> => {
+  const { enabled, showCategory, showValue, showPercentage } = seriesLabels;
   return {
-    enabled: enabled && [showCategories, showValue, showPercent].find(Boolean) !== undefined,
+    ...prepareDataLabelsOptions(seriesLabels),
+    enabled: enabled && [showCategory, showValue, showPercentage].find(Boolean) !== undefined,
   };
 };
 
-const getCategory = (ctx: HighchartsDataPointContext, labels: FunnelLabels): string => {
-  if (!labels.showCategories) return '';
+const getCategory = (ctx: HighchartsDataPointContext, labels: FunnelSeriesLabels): string => {
+  if (!labels.showCategory) return '';
 
   return ctx.point.name || ctx.series.name;
 };
 
 const getValue = (
   ctx: HighchartsDataPointContext,
-  labels: FunnelLabels,
+  labels: FunnelSeriesLabels,
   numberFormatConfig: CompleteNumberFormatConfig,
 ): string => {
   if (!labels.showValue) return '';
   const value = applyFormatPlainText(numberFormatConfig, ctx.y);
-  if (labels.showValue && labels.showCategories) return `<br />${value}`;
+  if (labels.showValue && labels.showCategory) return `<br />${value}`;
 
   return value;
 };
 
-const getPercent = (ctx: HighchartsDataPointContext, labels: FunnelLabels): string => {
-  if (!labels.showPercent) return '';
+const getPercent = (ctx: HighchartsDataPointContext, labels: FunnelSeriesLabels): string => {
+  if (!labels.showPercentage) return '';
   const percent = ctx.point?.custom?.number1 || 0;
-  const percentString = labels.showDecimals ? percent.toFixed(1) : `${Math.round(percent)}`;
+  const percentString = labels.showPercentDecimals ? percent.toFixed(1) : `${Math.round(percent)}`;
 
   return ` <b>${withPercentSign(percentString)}</b>`;
 };
@@ -149,19 +147,13 @@ export const funnelNeckHeight = (type: FunnelType): number => (type === 'pinched
 export const getFunnelPlotOptions = (
   funnelDesignOptions: FunnelChartDesignOptions,
   chartDataOptions: ChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
 ): PlotOptions => {
   const {
     funnelType = DefaultFunnelType,
     funnelSize = DefaultFunnelSize,
     funnelDirection = DefaultFunnelDirection,
-    funnelLabels = DefaultFunnelLabels,
+    seriesLabels = DefaultFunnelSeriesLabels,
   } = funnelDesignOptions;
-
-  const seriesOptions = {
-    ...defaultSeriesOptions(),
-    dataLabels: seriesDataLabels(funnelLabels),
-  };
 
   const numberFormatConfig = getCompleteNumberFormatConfig(
     (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig,
@@ -170,27 +162,18 @@ export const getFunnelPlotOptions = (
 
   const funnelWidth = funnelWidthPercentage(renderTo);
 
-  const funnelOptions = {
-    ...defaultFunnelOptions(),
+  const preparedOptions: DeepPartial<FunnelOptions> = {
     dataLabels: {
-      ...defaultFunnelOptions().dataLabels,
-      ...(themeSettings
-        ? {
-            color: themeSettings.chart.textColor,
-            style: {
-              fontFamily: themeSettings.typography.fontFamily,
-            },
-          }
-        : null),
-      enabled:
-        funnelLabels.enabled &&
-        (funnelLabels.showCategories || funnelLabels.showValue || funnelLabels.showPercent),
-      formatter: function (this: HighchartsDataPointContext) {
-        const category = getCategory(this, funnelLabels);
-        const value = getValue(this, funnelLabels, numberFormatConfig);
-        const percent = getPercent(this, funnelLabels);
+      ...prepareFunnelDataLabelsOptions(seriesLabels),
 
-        return `${category}${value}${percent}`;
+      formatter: function (this: HighchartsDataPointContext) {
+        const category = getCategory(this, seriesLabels);
+        const value = getValue(this, seriesLabels, numberFormatConfig);
+        const percent = getPercent(this, seriesLabels);
+
+        return `${seriesLabels?.prefix ?? ''}${category}${value}${percent}${
+          seriesLabels?.suffix ?? ''
+        }`;
       },
     },
     reversed: isFunnelReversed(funnelDirection),
@@ -199,8 +182,10 @@ export const getFunnelPlotOptions = (
     width: withPercentSign(funnelWidth),
   };
 
+  const funnelOptions = merge(defaultFunnelOptions(), preparedOptions) as FunnelOptions;
+
   return {
     funnel: funnelOptions,
-    series: seriesOptions,
+    series: {},
   };
 };

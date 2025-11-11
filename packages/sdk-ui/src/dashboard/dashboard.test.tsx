@@ -4,7 +4,7 @@ import { beforeEach, Mock } from 'vitest';
 
 import { MockedSisenseContextProvider } from '@/__test-helpers__';
 import { DashboardContainer } from '@/dashboard/components/dashboard-container';
-import { Dashboard, DashboardChangeType } from '@/dashboard/dashboard';
+import { Dashboard } from '@/dashboard/dashboard';
 import { useComposedDashboardInternal } from '@/dashboard/use-composed-dashboard';
 
 import * as DM from '../__test-helpers__/sample-ecommerce';
@@ -56,7 +56,7 @@ describe('Dashboard', () => {
     );
 
     expect(onChangeMock).toHaveBeenCalledWith({
-      type: DashboardChangeType.FILTERS_UPDATE,
+      type: 'filters/updated',
       payload: filters,
     });
   });

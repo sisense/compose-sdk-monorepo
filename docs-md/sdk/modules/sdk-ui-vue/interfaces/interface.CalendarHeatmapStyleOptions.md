@@ -158,6 +158,20 @@ Determines which day of the week to start the calendar with
 
 ***
 
+### subtype
+
+> **subtype**?: [`CalendarHeatmapSubtype`](../type-aliases/type-alias.CalendarHeatmapSubtype.md)
+
+Calendar heatmap chart subtype
+
+#### Default
+
+```ts
+'calendar-heatmap/split'
+```
+
+***
+
 ### viewType
 
 > **viewType**?: [`CalendarHeatmapViewType`](../type-aliases/type-alias.CalendarHeatmapViewType.md)

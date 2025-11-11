@@ -30,23 +30,23 @@ describe('Funnel Chart Design Options', () => {
     it('should handle labels configuration correctly', () => {
       const styleOptions: FunnelChartStyleOptions = {
         funnelType: 'pinched',
-        labels: {
+        seriesLabels: {
           enabled: true,
-          categories: true,
-          value: true,
-          percent: true,
-          decimals: true,
+          showCategory: true,
+          showValue: true,
+          showPercentage: true,
+          showPercentDecimals: true,
         },
       };
 
       const result = translateStyleOptionsToDesignOptions(styleOptions);
 
-      expect(result.funnelLabels).toEqual({
+      expect(result.seriesLabels).toEqual({
         enabled: true,
-        showCategories: true,
+        showCategory: true,
         showValue: true,
-        showPercent: true,
-        showDecimals: true,
+        showPercentage: true,
+        showPercentDecimals: true,
       });
       expect(result.funnelType).toBe('pinched');
     });

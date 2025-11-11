@@ -19,6 +19,7 @@ import {
   BoxplotStyleOptions,
   CalendarDayOfWeek,
   CalendarHeatmapStyleOptions,
+  CalendarHeatmapSubtype,
   CalendarHeatmapViewType,
   CartesianStyleOptions,
   ChartStyleOptions,
@@ -821,6 +822,11 @@ function extractCalendarHeatmapChartStyleOptions(
   widgetStyle: CalendarHeatmapWidgetStyle,
 ): CalendarHeatmapStyleOptions {
   let viewType: CalendarHeatmapViewType = CALENDAR_HEATMAP_DEFAULTS.VIEW_TYPE;
+  let subtype: CalendarHeatmapSubtype = CALENDAR_HEATMAP_DEFAULTS.SUBTYPE;
+
+  if (widgetStyle['view/weekly']) {
+    subtype = 'calendar-heatmap/continuous';
+  }
 
   if (widgetStyle['domain/year']) {
     viewType = 'year';
@@ -852,6 +858,7 @@ function extractCalendarHeatmapChartStyleOptions(
   }
 
   return {
+    subtype,
     viewType,
     startOfWeek,
     cellLabels: {

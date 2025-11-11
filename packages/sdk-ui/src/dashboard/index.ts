@@ -24,4 +24,10 @@ export type {
   TabbersConfig,
   TabberConfig,
   TabberTabConfig,
+  DashboardChangeEvent,
+  DashboardFiltersUpdatedEvent,
+  DashboardFiltersPanelCollapseChangedEvent,
+  DashboardWidgetsPanelLayoutUpdatedEvent,
+  DashboardWidgetsPanelIsEditingChangedEvent,
+  DashboardWidgetsDeletedEvent,
 } from './types';

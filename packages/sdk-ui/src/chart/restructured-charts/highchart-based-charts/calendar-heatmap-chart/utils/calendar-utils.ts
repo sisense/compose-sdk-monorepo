@@ -77,7 +77,8 @@ export function getDayOfWeek(index: number): CalendarDayOfWeek {
 export function getWeekdayLabels(
   startOfWeek: CalendarDayOfWeek,
   dateFormatter: DateFormatter,
-): readonly string[] {
+  format: string = SINGLE_LETTER_DAY_DATE_FORMAT,
+): string[] {
   // Create a reference date (any Sunday will work)
   const referenceDate = new Date(REFERENCE_SUNDAY_DATE);
   const startOfWeekIndex = getDayOfWeekIndex(startOfWeek);
@@ -91,8 +92,7 @@ export function getWeekdayLabels(
   ) {
     const day = new Date(referenceDate);
     day.setDate(referenceDate.getDate() + i);
-    // Format as single letter abbreviation (e.g., 'S', 'M', 'T')
-    const abbreviation = dateFormatter(day, SINGLE_LETTER_DAY_DATE_FORMAT);
+    const abbreviation = dateFormatter(day, format);
     weekdays.push(abbreviation);
   }
 

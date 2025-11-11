@@ -7,17 +7,12 @@ import { UseDashboardModelActionType, useDashboardModelInternal } from '@/models
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 
 import * as DM from '../__test-helpers__/sample-ecommerce';
-import { Dashboard, DashboardChangeType } from './dashboard';
+import { Dashboard } from './dashboard';
 import { DashboardById } from './dashboard-by-id';
 
 // Mock the Dashboard component completely
 vi.mock('./dashboard', () => ({
   Dashboard: vi.fn(() => <div data-testid="dashboard" />),
-  DashboardChangeType: {
-    FILTERS_UPDATE: 'FILTERS_UPDATE',
-    WIDGETS_UPDATE: 'WIDGETS_UPDATE',
-    LAYOUT_UPDATE: 'LAYOUT_UPDATE',
-  },
 }));
 
 // Mock the useDashboardModel hook
@@ -155,7 +150,7 @@ describe('DashboardById', () => {
     DashboardMock.mockImplementation(({ onChange }) => {
       // Trigger the onChange immediately to simulate user interaction
       if (onChange) {
-        onChange({ type: DashboardChangeType.FILTERS_UPDATE, payload: filters });
+        onChange({ type: 'filters/updated', payload: filters });
       }
       return <div data-testid="dashboard" />;
     });

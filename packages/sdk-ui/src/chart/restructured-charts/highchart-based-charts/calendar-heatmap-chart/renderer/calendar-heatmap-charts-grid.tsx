@@ -7,12 +7,17 @@ import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-optio
 import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { HighchartsReactMemoized } from '@/highcharts-memorized';
 import { useThemeContext } from '@/theme-provider/theme-context';
-import { CalendarHeatmapViewType, TextStyle } from '@/types';
+import { CalendarHeatmapSubtype, CalendarHeatmapViewType, TextStyle } from '@/types';
 
 import { CALENDAR_HEATMAP_SIZING } from '../constants.js';
 import { ViewType } from '../types.js';
 import { getViewGridInfo } from './helpers/sizing-helpers.js';
-import { getDisplayMonths, MonthData, MonthInfo } from './helpers/view-helpers.js';
+import {
+  getDisplayMonths,
+  MonthData,
+  MonthInfo,
+  shouldUseShortMonthNames,
+} from './helpers/view-helpers.js';
 
 export const ChartsContainer = styled.div<{
   viewType: CalendarHeatmapViewType;
@@ -48,6 +53,7 @@ interface CalendarHeatmapChartsGridProps {
   monthCharts: (HighchartsOptionsInternal | null)[];
   availableMonths: MonthInfo[];
   currentMonth: MonthData;
+  subtype: CalendarHeatmapSubtype;
   viewType: CalendarHeatmapViewType;
   size: ContainerSize;
   monthLabels?: {
@@ -60,6 +66,7 @@ export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps>
   monthCharts,
   availableMonths,
   currentMonth,
+  subtype,
   viewType,
   monthLabels,
   size,
@@ -68,8 +75,8 @@ export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps>
 
   // Calculate responsive grid layout
   const gridInfo = useMemo(() => {
-    return getViewGridInfo(viewType, size);
-  }, [viewType, size]);
+    return getViewGridInfo(viewType, size, subtype);
+  }, [viewType, subtype, size]);
 
   if (availableMonths.length === 0) return null;
 
@@ -83,22 +90,27 @@ export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps>
         const month = monthsToDisplay[index];
         if (!month) return null;
 
+        // Determine whether to use short month names based on chart width
+        const shouldUseShortMonthName = shouldUseShortMonthNames(chartOptions.chart.width ?? 0);
+
         return (
           <ChartWrapper key={`${month.year}-${month.month}`}>
-            {monthLabels?.enabled && viewType !== ViewType.MONTH && (
-              <ChartTitle
-                style={
-                  {
-                    ...monthLabels.style,
-                    color: monthLabels.style?.color || themeSettings?.chart.textColor,
-                    fontFamily:
-                      monthLabels.style?.fontFamily || themeSettings?.typography.fontFamily,
-                  } as CSSProperties
-                }
-              >
-                {month.monthName}
-              </ChartTitle>
-            )}
+            {monthLabels?.enabled &&
+              viewType !== ViewType.MONTH &&
+              subtype === 'calendar-heatmap/split' && (
+                <ChartTitle
+                  style={
+                    {
+                      ...monthLabels.style,
+                      color: monthLabels.style?.color || themeSettings?.chart.textColor,
+                      fontFamily:
+                        monthLabels.style?.fontFamily || themeSettings?.typography.fontFamily,
+                    } as CSSProperties
+                  }
+                >
+                  {shouldUseShortMonthName ? month.shortMonthName : month.monthName}
+                </ChartTitle>
+              )}
             <HighchartsReactMemoized options={chartOptions} />
           </ChartWrapper>
         );

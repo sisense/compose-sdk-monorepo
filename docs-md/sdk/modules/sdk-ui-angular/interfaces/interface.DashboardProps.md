@@ -40,6 +40,27 @@ Dashboard layout options
 
 ***
 
+### onChange
+
+> **onChange**?: (`event`) => `void`
+
+Callback to receive changes
+
+This callback is invoked when the dashboard state changes, such as filter updates,
+layout changes, or widget deletions. See [DashboardChangeEvent](../../sdk-ui/type-aliases/type-alias.DashboardChangeEvent.md) for all possible event types.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `event` | [`DashboardChangeEvent`](../../sdk-ui/type-aliases/type-alias.DashboardChangeEvent.md) | The event that occurred |
+
+#### Returns
+
+`void`
+
+***
+
 ### styleOptions
 
 > **styleOptions**?: [`DashboardStyleOptions`](../../sdk-ui/type-aliases/type-alias.DashboardStyleOptions.md)

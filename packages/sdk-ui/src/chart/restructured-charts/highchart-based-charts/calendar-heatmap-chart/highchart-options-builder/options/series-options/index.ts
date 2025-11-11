@@ -1,1 +1,1 @@
-export { getSeriesOptions } from './series-options.js';
+export { getSplitSeriesOptions, getContinuousSeriesOptions } from './series-options.js';

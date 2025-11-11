@@ -25,6 +25,8 @@ type PivotRenderOptions = {
   themeSettings: CompleteThemeSettings;
   /** The size of the pivot table container. */
   size: ContainerSize | null;
+  /** Allow html in pivot table cells */
+  allowHtml?: boolean;
   /** Callback to handle total height change. */
   onTotalHeightChange?: (totalHeight: number) => void;
   /** Callback to handle data point click. */
@@ -46,6 +48,7 @@ export function useRenderPivot({
   styleOptions,
   themeSettings,
   size,
+  allowHtml,
   onTotalHeightChange,
   onDataPointClick,
   onDataPointContextMenu,
@@ -110,6 +113,7 @@ export function useRenderPivot({
         isPaginated: true,
         itemsPerPage: pageSize,
         isSelectedMode: true,
+        allowHtml,
         onUpdatePredefinedColumnWidth,
         onItemsPerPageChange: onPageSizeChange,
         onTotalHeightChange,
@@ -121,6 +125,7 @@ export function useRenderPivot({
   }, [
     size,
     pageSize,
+    allowHtml,
     onUpdatePredefinedColumnWidth,
     pivotStylingProps,
     onTotalHeightChange,

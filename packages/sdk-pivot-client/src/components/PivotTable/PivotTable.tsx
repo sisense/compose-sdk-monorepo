@@ -889,14 +889,15 @@ export class PivotTable extends React.PureComponent<Props, State> {
   render() {
     const { widths, heights, borderWidth, rowsTreeService, columnsTreeService, cornerTreeService } =
       this.state;
-    const { width, height, borderColor, scrollBarsMargin, className, isFixedEnabled, isMobile } =
-      this.props;
+    const { width, height, borderColor, className, isFixedEnabled, isMobile } = this.props;
     const { rowsCount, colsCount, fixRowsCount, fixColsCount } = this;
 
-    const scrollStyle = { width, height };
-
-    const tableHeight = scrollStyle.height - scrollBarsMargin;
-    const tableWidth = scrollStyle.width - scrollBarsMargin;
+    const tableWidth = width;
+    const tableHeight = height;
+    const scrollStyle = {
+      width: tableWidth + (borderWidth ?? 1),
+      height: tableHeight + (borderWidth ?? 1),
+    };
 
     let fWidth = 0;
     let fHeight = 0;
@@ -929,12 +930,7 @@ export class PivotTable extends React.PureComponent<Props, State> {
         onMouseScroll={this.onMouseScroll}
         className={`${MULTIGRID} ${MULTIGRID_NEW} ${noFixedLeftCN} ${noClasses} ${className}`}
       >
-        <CustomScroll
-          ref={this.scrollContainerRef}
-          style={scrollStyle}
-          scrollOffset={scrollBarsMargin}
-          onScroll={this.onScroll}
-        >
+        <CustomScroll ref={this.scrollContainerRef} style={scrollStyle} onScroll={this.onScroll}>
           <div className={`${TABLEGRID} ${TABLEGRID_DATA} ${TABLEGRID_BOTTOM} ${TABLEGRID_RIGHT}`}>
             <PivotInnerTable
               type={typeOfTable.DATA}

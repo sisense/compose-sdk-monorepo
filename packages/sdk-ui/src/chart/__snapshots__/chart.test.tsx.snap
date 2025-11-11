@@ -922,12 +922,14 @@ exports[`Chart > funnel chart > render funnel chart with cat and no value 1`] = 
       "cursor": "pointer",
       "dataLabels": {
         "align": "center",
-        "color": "#000000",
         "enabled": true,
         "formatter": [Function],
         "funnelMinimumFontSizeToTextLabel": 8,
         "style": {
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
         },
       },
       "neckHeight": "0%",
@@ -941,7 +943,6 @@ exports[`Chart > funnel chart > render funnel chart with cat and no value 1`] = 
         "duration": 600,
       },
       "dataLabels": {
-        "enabled": true,
         "style": {
           "color": "#000000",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
@@ -1160,12 +1161,14 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
       "cursor": "pointer",
       "dataLabels": {
         "align": "center",
-        "color": "#000000",
         "enabled": true,
         "formatter": [Function],
         "funnelMinimumFontSizeToTextLabel": 8,
         "style": {
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
         },
       },
       "neckHeight": "0%",
@@ -1179,7 +1182,6 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
         "duration": 600,
       },
       "dataLabels": {
-        "enabled": true,
         "style": {
           "color": "#000000",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
@@ -1398,12 +1400,14 @@ exports[`Chart > funnel chart > render funnel chart with two values 1`] = `
       "cursor": "pointer",
       "dataLabels": {
         "align": "center",
-        "color": "#000000",
         "enabled": true,
         "formatter": [Function],
         "funnelMinimumFontSizeToTextLabel": 8,
         "style": {
-          "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "normal",
+          "pointerEvents": "none",
+          "textOutline": "none",
         },
       },
       "neckHeight": "0%",
@@ -1417,7 +1421,6 @@ exports[`Chart > funnel chart > render funnel chart with two values 1`] = `
         "duration": 600,
       },
       "dataLabels": {
-        "enabled": true,
         "style": {
           "color": "#000000",
           "fontFamily": ""Open Sans","Roboto","Helvetica","Arial",sans-serif",

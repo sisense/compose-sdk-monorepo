@@ -6,6 +6,8 @@ import { ViewType } from './types';
 export const CALENDAR_HEATMAP_DEFAULTS = {
   /** Default view type */
   VIEW_TYPE: ViewType.MONTH,
+  /** Default subtype */
+  SUBTYPE: 'calendar-heatmap/split',
   /** Default color for days without data */
   NO_DATA_COLOR: '#f5f5f5',
   /** Default border width for cells */
@@ -24,12 +26,14 @@ export const CALENDAR_HEATMAP_DEFAULTS = {
   SHOW_DAY_LABEL: true,
   /** Show month labels by default */
   SHOW_MONTH_LABEL: true,
-  /** Minimum сhart size threshold for using short month names */
-  SHORT_MONTH_NAME_CHART_SIZE_THRESHOLD: 120,
+  /** Maximum width for using short month names in split layout */
+  SHORT_MONTH_NAME_SPLIT_LAYOUT_WIDTH_THRESHOLD: 120,
+  /** Maximum width for using short month names in continues layout */
+  SHORT_MONTH_NAME_CONTINUES_LAYOUT_WIDTH_THRESHOLD: 70,
   /** Minimum сhart size threshold for showing day labels */
   SHOW_DAY_LABEL_CHART_SIZE_THRESHOLD: 120,
-  /** Minimum сhart size threshold for showing cell labels */
-  SHOW_CELL_LABEL_CHART_SIZE_THRESHOLD: 120,
+  /** Minimum сhart cell size threshold for showing cell labels */
+  SHOW_CELL_LABEL_SIZE_THRESHOLD: 16,
   /** Default weekend enabled state */
   WEEKEND_ENABLED: false,
   /** Default weekend days */
@@ -122,6 +126,11 @@ export const SHORT_MONTH_DATE_FORMAT = 'MMM';
  * Single letter day abbreviation format
  */
 export const SINGLE_LETTER_DAY_DATE_FORMAT = 'EEEEE';
+
+/**
+ * Three letter day abbreviation format
+ */
+export const THREE_LETTER_DAY_DATE_FORMAT = 'EEE';
 
 /**
  * Reference Sunday date

@@ -214,12 +214,12 @@ describe('prepareChartDesignOptions', () => {
         enabled: true,
         position: 'left',
       },
-      labels: {
-        categories: true,
-        decimals: true,
+      seriesLabels: {
+        showCategory: true,
+        showPercentage: true,
+        showPercentDecimals: true,
         enabled: true,
-        percent: true,
-        value: true,
+        showValue: true,
       },
       funnelDirection: 'regular',
       dataLimits: {

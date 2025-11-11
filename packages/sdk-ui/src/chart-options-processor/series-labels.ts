@@ -17,7 +17,6 @@ type DataLabelsOptions = {
   padding?: number;
   x?: number;
   y?: number;
-  animation?: { defer?: number };
 };
 
 export const prepareDataLabelsOptions = (seriesLabels?: SeriesLabels): DataLabelsOptions => {
@@ -34,7 +33,6 @@ export const prepareDataLabelsOptions = (seriesLabels?: SeriesLabels): DataLabel
     padding,
     xOffset,
     yOffset,
-    delay,
   } = seriesLabels ?? {};
 
   return omitUndefinedAndEmpty<DataLabelsOptions>({
@@ -51,6 +49,5 @@ export const prepareDataLabelsOptions = (seriesLabels?: SeriesLabels): DataLabel
     padding,
     x: xOffset,
     y: yOffset,
-    animation: { defer: delay },
   });
 };

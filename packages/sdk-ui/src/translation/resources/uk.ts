@@ -225,6 +225,8 @@ export const translation: TranslationDictionary = {
       viewMode: 'Перейти до режиму перегляду',
       showFilters: 'Показати фільтри',
       hideFilters: 'Приховати фільтри',
+      columns: 'Стовпці',
+      column: 'Стовпець',
     },
   },
   unsupportedFilterMessage: 'Непідтримуваний Фільтр (застосовано до запиту даних)',

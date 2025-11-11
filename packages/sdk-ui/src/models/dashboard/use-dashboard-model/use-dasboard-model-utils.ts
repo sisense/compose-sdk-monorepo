@@ -1,27 +1,27 @@
 import { Authenticator } from '@sisense/sdk-rest-client';
 
-import { DashboardChangeAction, DashboardChangeType } from '@/dashboard/dashboard';
+import { DashboardChangeEvent } from '@/dashboard/types';
 import { UseDashboardModelAction, UseDashboardModelActionType } from '@/models';
 
 /**
- * Convert a dashboard change action to a use dashboard model action.
+ * Convert a dashboard change event to a use dashboard model action.
  *
- * @param action - The dashboard change action to convert
- * @returns The useDashboardModel action or null if the action is not supported
+ * @param event - The dashboard change event to convert
+ * @returns The useDashboardModel action or null if the event is not supported
  * @internal
  */
-export function dashboardChangeActionToUseDashboardModelAction(
-  action: DashboardChangeAction,
+export function dashboardChangeEventToUseDashboardModelAction(
+  event: DashboardChangeEvent,
 ): UseDashboardModelAction | null {
-  if (action.type === DashboardChangeType.FILTERS_UPDATE) {
+  if (event.type === 'filters/updated') {
     return {
       type: UseDashboardModelActionType.FILTERS_UPDATE,
-      payload: action.payload,
+      payload: event.payload,
     };
-  } else if (action.type === DashboardChangeType.WIDGETS_PANEL_LAYOUT_UPDATE) {
+  } else if (event.type === 'widgetsPanel/layout/updated') {
     return {
       type: UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE,
-      payload: action.payload,
+      payload: event.payload,
     };
   }
 

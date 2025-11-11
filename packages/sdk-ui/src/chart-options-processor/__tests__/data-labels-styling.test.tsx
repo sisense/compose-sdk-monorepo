@@ -343,30 +343,6 @@ describe('Series Labels Styling Tests', () => {
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
-    it('should apply delay property to series labels animation', async () => {
-      const onBeforeRender = vi.fn((options: HighchartsOptions) => {
-        expect((options.plotOptions?.series?.dataLabels as any)?.animation?.defer).toBe(500);
-        return options;
-      });
-
-      const { findByLabelText } = render(
-        <LineChart
-          dataSet={mockData}
-          dataOptions={mockDataOptions}
-          styleOptions={{
-            seriesLabels: {
-              enabled: true,
-              delay: 500,
-            },
-          }}
-          onBeforeRender={onBeforeRender}
-        />,
-      );
-
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
-      expect(onBeforeRender).toHaveBeenCalled();
-    });
-
     it('should apply all seriesLabels properties together', async () => {
       const onBeforeRender = vi.fn((options: HighchartsOptions) => {
         const dataLabels = options.plotOptions?.series?.dataLabels as any;
@@ -383,7 +359,6 @@ describe('Series Labels Styling Tests', () => {
         expect(dataLabels?.padding).toBe(5);
         expect(dataLabels?.x).toBe(0);
         expect(dataLabels?.y).toBe(0);
-        expect(dataLabels?.animation?.defer).toBe(200);
         return options;
       });
 
@@ -408,7 +383,6 @@ describe('Series Labels Styling Tests', () => {
               padding: 5,
               xOffset: 0,
               yOffset: 0,
-              delay: 200,
             },
           }}
           onBeforeRender={onBeforeRender}
@@ -1830,30 +1804,6 @@ describe('Series Labels Styling Tests', () => {
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
-    it('should apply delay property to series labels animation', async () => {
-      const onBeforeRender = vi.fn((options: HighchartsOptions) => {
-        expect((options.plotOptions?.series?.dataLabels as any)?.animation?.defer).toBe(750);
-        return options;
-      });
-
-      const { findByLabelText } = render(
-        <ScatterChart
-          dataSet={mockData}
-          dataOptions={scatterDataOptions}
-          styleOptions={{
-            seriesLabels: {
-              enabled: true,
-              delay: 750,
-            },
-          }}
-          onBeforeRender={onBeforeRender}
-        />,
-      );
-
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
-      expect(onBeforeRender).toHaveBeenCalled();
-    });
-
     it('should apply all seriesLabels properties together', async () => {
       const onBeforeRender = vi.fn((options: HighchartsOptions) => {
         const dataLabels = options.plotOptions?.series?.dataLabels as any;
@@ -1870,7 +1820,6 @@ describe('Series Labels Styling Tests', () => {
         expect(dataLabels?.padding).toBe(8);
         expect(dataLabels?.x).toBe(5);
         expect(dataLabels?.y).toBe(-5);
-        expect(dataLabels?.animation?.defer).toBe(300);
         return options;
       });
 
@@ -1895,7 +1844,6 @@ describe('Series Labels Styling Tests', () => {
               padding: 8,
               xOffset: 5,
               yOffset: -5,
-              delay: 300,
             },
           }}
           onBeforeRender={onBeforeRender}

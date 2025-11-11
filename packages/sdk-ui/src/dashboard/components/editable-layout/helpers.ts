@@ -597,6 +597,56 @@ export function updateLayoutAfterDragAndDrop(
   }
 }
 
+/**
+ * Updates the layout based on column change.
+ *
+ * @param layout - The current layout to modify
+ * @param columnCount - The number of columns to update
+ *
+ * @returns A new layout with the columns updated
+ *
+ * @internal
+ */
+export function updateColumnsCountInLayout(layout: WidgetsPanelLayout, columnCount: number) {
+  const currentCount = layout.columns.length;
+  const normalizedCount = Math.max(1, columnCount);
+
+  if (normalizedCount === currentCount) {
+    return layout;
+  }
+
+  const isGrowing = normalizedCount > currentCount;
+  const newWidth = 100 / normalizedCount;
+
+  if (isGrowing) {
+    return {
+      ...layout,
+      columns: [
+        ...layout.columns.map((column) => ({
+          ...column,
+          widthPercentage: newWidth,
+        })),
+        ...Array.from({ length: normalizedCount - currentCount }, () => ({
+          widthPercentage: newWidth,
+          rows: [],
+        })),
+      ],
+    };
+  } else {
+    return {
+      ...layout,
+      columns: layout.columns.reduce((acc, column, index) => {
+        if (index < normalizedCount) {
+          acc.push({ ...column, widthPercentage: newWidth });
+        } else {
+          acc[acc.length - 1].rows = [...acc[acc.length - 1].rows, ...column.rows];
+        }
+        return acc;
+      }, [] as WidgetsPanelColumn[]),
+    };
+  }
+}
+
 export function getRowHeight(row: WidgetsPanelRow, widgets: WidgetProps[]) {
   return row.cells.reduce((acc, cell) => {
     if ('height' in cell && cell.height !== undefined) {

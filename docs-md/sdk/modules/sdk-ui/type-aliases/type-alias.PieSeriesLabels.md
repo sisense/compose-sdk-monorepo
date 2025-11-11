@@ -4,9 +4,10 @@ title: PieSeriesLabels
 
 # Type alias PieSeriesLabels
 
-> **PieSeriesLabels**: `Omit`\< [`SeriesLabels`](type-alias.SeriesLabels.md), `"align"` \| `"alignInside"` \| `"showPercentDecimals"` \| `"showPercentage"` \| `"verticalAlign"` \> & \{
+> **PieSeriesLabels**: [`SeriesLabelsBase`](type-alias.SeriesLabelsBase.md) & \{
   `percentageLabels`: [`PiePercentageLabels`](type-alias.PiePercentageLabels.md);
   `showCategory`: `boolean`;
+  `showValue`: `boolean`;
   `textStyle`: `Omit`\< [`TextStyle`](type-alias.TextStyle.md), `"pointerEvents"` \| `"textOverflow"` \>;
  }
 
@@ -27,6 +28,13 @@ title: PieSeriesLabels
 > ### Default
 >
 > `true`
+>
+> ## `PieSeriesLabels.showValue`
+>
+> **showValue**?: `boolean`
+>
+> Boolean flag that defines if value should be shown in series labels
+> (if not specified, default is determined by chart type)
 >
 > ## `PieSeriesLabels.textStyle`
 >

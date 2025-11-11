@@ -26,7 +26,9 @@ export function prepareChartDesignOptions(
   if (isRestructuredChartType(chartType)) {
     const chartBuilder = getChartBuilder(chartType);
     const styleOptionsWithDefaults = extendStyleOptionsWithDefaults(
-      styleOptions ?? {},
+      chartBuilder.designOptions.translateLegacyStyleOptionsToModern?.(styleOptions) ??
+        styleOptions ??
+        {},
       chartBuilder.designOptions.getDefaultStyleOptions?.() ?? getDefaultStyleOptions(),
     );
     if (!chartBuilder.designOptions.isCorrectStyleOptions(styleOptionsWithDefaults)) {

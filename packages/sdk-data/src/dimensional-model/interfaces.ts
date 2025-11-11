@@ -576,6 +576,11 @@ export interface PivotAttribute {
   attribute: Attribute;
   includeSubTotals?: boolean;
   sort?: PivotRowsSort;
+  /**
+   * Custom name to override the default attribute name in pivot table headers.
+   * If provided, this will be used as the display title in the pivot table.
+   */
+  name?: string;
 }
 
 /**

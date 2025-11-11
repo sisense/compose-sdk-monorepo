@@ -402,6 +402,8 @@ export const translation = {
       viewMode: 'Switch to View mode',
       showFilters: 'Show Filters',
       hideFilters: 'Hide Filters',
+      columns: 'Columns',
+      column: 'Column',
     },
   },
   jumpToDashboard: {

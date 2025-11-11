@@ -5,7 +5,6 @@ import { describe } from 'vitest';
 import {
   AreaStyleOptions,
   BaseAxisStyleOptions,
-  BaseStyleOptions,
   CalendarHeatmapStyleOptions,
   StackableStyleOptions,
 } from '@/types.js';
@@ -28,7 +27,7 @@ import {
   getIndicatorTypeSpecificOptions,
 } from './translate-widget-style-options.js';
 
-type BaseStyleOptionsWithAxes = BaseStyleOptions & BaseAxisStyleOptions;
+type BaseStyleOptionsWithAxes = StackableStyleOptions & BaseAxisStyleOptions;
 
 function generateWidgetAxisOptions(options = {}) {
   const defaultOptions = {
@@ -294,7 +293,7 @@ describe('translate widget style options', () => {
       const styleOptions = extractStyleOptions(
         'chart/funnel',
         mockWidgetDto('', widgetStyle, []),
-      ) as BaseStyleOptions;
+      ) as StackableStyleOptions;
 
       expect(styleOptions).toEqual({
         // Only extract supported properties, not all widget style properties
@@ -320,7 +319,7 @@ describe('translate widget style options', () => {
       const styleOptions = extractStyleOptions(
         'chart/column',
         mockWidgetDto('', widgetStyle, []),
-      ) as BaseStyleOptions;
+      ) as StackableStyleOptions;
 
       expect(styleOptions.seriesLabels).toEqual({
         enabled: true,
@@ -347,7 +346,7 @@ describe('translate widget style options', () => {
       const styleOptions = extractStyleOptions(
         'chart/column',
         mockWidgetDto('', widgetStyle, []),
-      ) as BaseStyleOptions;
+      ) as StackableStyleOptions;
 
       expect(styleOptions.seriesLabels).toEqual({
         enabled: true,
@@ -375,7 +374,7 @@ describe('translate widget style options', () => {
       const styleOptions = extractStyleOptions(
         'chart/column',
         mockWidgetDto('column/stackedcolumn', widgetStyle, []),
-      ) as BaseStyleOptions;
+      ) as StackableStyleOptions;
 
       expect(styleOptions.seriesLabels).toEqual({
         enabled: true,
@@ -403,7 +402,7 @@ describe('translate widget style options', () => {
       const styleOptions = extractStyleOptions(
         'chart/column',
         mockWidgetDto('column/stackedcolumn', widgetStyle, []),
-      ) as BaseStyleOptions;
+      ) as StackableStyleOptions;
 
       expect(styleOptions.seriesLabels).toEqual({
         enabled: true,
@@ -464,7 +463,7 @@ describe('translate widget style options', () => {
       const styleOptions = extractStyleOptions(
         'chart/column',
         mockWidgetDto('column/stackedcolumn100', widgetStyle, []),
-      ) as BaseStyleOptions;
+      ) as StackableStyleOptions;
 
       expect(styleOptions.seriesLabels).toEqual({
         enabled: true,
@@ -492,7 +491,7 @@ describe('translate widget style options', () => {
       const styleOptions = extractStyleOptions(
         'chart/column',
         mockWidgetDto('column/stackedcolumn100', widgetStyle, []),
-      ) as BaseStyleOptions;
+      ) as StackableStyleOptions;
 
       expect(styleOptions.seriesLabels).toEqual({
         enabled: true,
@@ -600,7 +599,7 @@ describe('translate widget style options', () => {
             ],
           },
         ]),
-      ) as BaseStyleOptions;
+      ) as StackableStyleOptions;
 
       expect(styleOptions).toStrictEqual({
         indicatorComponents: {

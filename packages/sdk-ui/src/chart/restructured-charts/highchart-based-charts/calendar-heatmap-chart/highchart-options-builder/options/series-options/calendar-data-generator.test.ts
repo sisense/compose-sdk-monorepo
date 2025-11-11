@@ -1,8 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { CalendarHeatmapChartData } from '../../../../data.js';
-import { CalendarDayOfWeekEnum } from '../../../../utils/index.js';
-import { generateCalendarChartData } from '../calendar-data-generator.js';
+import { CalendarHeatmapChartData } from '../../../data.js';
+import { CalendarDayOfWeekEnum } from '../../../utils/index.js';
+import {
+  generateContinuousCalendarChartData,
+  generateSplitCalendarChartData,
+} from './calendar-data-generator.js';
 
 describe('Calendar Data Generator', () => {
   const mockDateFormatter = vi.fn((date: Date, format: string) => {
@@ -31,7 +34,7 @@ describe('Calendar Data Generator', () => {
   // Removed weekendHighlightConfig - now using new weekends configuration directly
 
   it('should prioritize weekend highlighting over data colors', () => {
-    const result = generateCalendarChartData(
+    const result = generateSplitCalendarChartData(
       testDataWithColors,
       mockDateFormatter,
       CalendarDayOfWeekEnum.SUNDAY, // Week starts on Sunday
@@ -63,7 +66,7 @@ describe('Calendar Data Generator', () => {
   });
 
   it('should preserve data colors when weekend highlighting is disabled', () => {
-    const result = generateCalendarChartData(
+    const result = generateSplitCalendarChartData(
       testDataWithColors,
       mockDateFormatter,
       CalendarDayOfWeekEnum.SUNDAY, // Week starts on Sunday
@@ -93,7 +96,7 @@ describe('Calendar Data Generator', () => {
       ],
     };
 
-    const result = generateCalendarChartData(
+    const result = generateSplitCalendarChartData(
       testDataNoColors,
       mockDateFormatter,
       CalendarDayOfWeekEnum.SUNDAY,
@@ -118,16 +121,15 @@ describe('Calendar Data Generator', () => {
   });
 
   it('should generate correct calendar layout with proper coordinates', () => {
-    const result = generateCalendarChartData(
+    const result = generateSplitCalendarChartData(
       testDataWithColors,
       mockDateFormatter,
       CalendarDayOfWeekEnum.SUNDAY,
       { enabled: true, days: [], cellColor: undefined, hideValues: false },
     );
 
-    // Should have cells for the entire calendar month layout
-    expect(result.length).toBeGreaterThan(30); // At least the days in the month
-    expect(result.length).toBeLessThanOrEqual(42); // At most 6 weeks
+    // Should return only the actual data points (not all days in month)
+    expect(result.length).toBe(testDataWithColors.values.length); // Exactly the number of data points
 
     // Check that data points have correct coordinates and properties
     const dataPoints = result.filter((point) => point.custom.hasData);
@@ -158,7 +160,7 @@ describe('Calendar Data Generator', () => {
       ],
     };
 
-    const result = generateCalendarChartData(
+    const result = generateSplitCalendarChartData(
       testDataWithBlur,
       mockDateFormatter,
       CalendarDayOfWeekEnum.SUNDAY,
@@ -197,7 +199,7 @@ describe('Calendar Data Generator', () => {
       ],
     };
 
-    const result = generateCalendarChartData(
+    const result = generateSplitCalendarChartData(
       testDataBlurWithWeekends,
       mockDateFormatter,
       CalendarDayOfWeekEnum.SUNDAY,
@@ -224,5 +226,257 @@ describe('Calendar Data Generator', () => {
 
     expect(mondayPoint?.color).toBeUndefined(); // No weekend highlight, no data color
     expect(mondayPoint?.custom.blur).toBe(true);
+  });
+
+  describe('generateContinuousCalendarChartData', () => {
+    // Test data spanning multiple months for continuous layout
+    const multiMonthData: CalendarHeatmapChartData = {
+      type: 'calendar-heatmap',
+      values: [
+        { date: new Date('2024-01-01T00:00:00Z'), value: 10 },
+        { date: new Date('2024-01-15T00:00:00Z'), value: 15 },
+        { date: new Date('2024-01-31T00:00:00Z'), value: 20 },
+        { date: new Date('2024-02-01T00:00:00Z'), value: 25 },
+        { date: new Date('2024-02-14T00:00:00Z'), value: 30 },
+        { date: new Date('2024-02-29T00:00:00Z'), value: 35 }, // Leap year
+        { date: new Date('2024-03-01T00:00:00Z'), value: 40 },
+      ],
+    };
+
+    it('should generate continuous layout data points', () => {
+      const result = generateContinuousCalendarChartData(
+        multiMonthData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.SUNDAY,
+        {
+          enabled: false,
+          days: [],
+          cellColor: undefined,
+          hideValues: false,
+        },
+      );
+
+      expect(result).toHaveLength(multiMonthData.values.length);
+      expect(result.every((point) => typeof point.x === 'number')).toBe(true);
+      expect(result.every((point) => typeof point.y === 'number')).toBe(true);
+    });
+
+    it('should maintain continuous x-coordinates across months', () => {
+      const result = generateContinuousCalendarChartData(
+        multiMonthData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.SUNDAY,
+        {
+          enabled: false,
+          days: [],
+          cellColor: undefined,
+          hideValues: false,
+        },
+      );
+
+      // X-coordinates should be continuous (no gaps between months)
+      const xCoords = result.map((point) => point.x).sort((a, b) => a - b);
+
+      // Should have a range of x-coordinates
+      expect(Math.max(...xCoords)).toBeGreaterThan(Math.min(...xCoords));
+
+      // All x-coordinates should be non-negative
+      expect(xCoords.every((x) => x >= 0)).toBe(true);
+    });
+
+    it('should use 7-row layout (days of week)', () => {
+      const result = generateContinuousCalendarChartData(
+        multiMonthData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.SUNDAY,
+        {
+          enabled: false,
+          days: [],
+          cellColor: undefined,
+          hideValues: false,
+        },
+      );
+
+      // Y-coordinates should be in range 0-6 (7 days of week)
+      const yCoords = result.map((point) => point.y);
+      expect(yCoords.every((y) => y >= 0 && y <= 6)).toBe(true);
+
+      // Should use all 7 days of week for multi-month data
+      const uniqueYCoords = [...new Set(yCoords)];
+      expect(uniqueYCoords.length).toBeGreaterThan(1);
+    });
+
+    it('should handle different start of week settings', () => {
+      const sundayResult = generateContinuousCalendarChartData(
+        multiMonthData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.SUNDAY,
+        {
+          enabled: false,
+          days: [],
+          cellColor: undefined,
+          hideValues: false,
+        },
+      );
+
+      const mondayResult = generateContinuousCalendarChartData(
+        multiMonthData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.MONDAY,
+        {
+          enabled: false,
+          days: [],
+          cellColor: undefined,
+          hideValues: false,
+        },
+      );
+
+      expect(sundayResult).toHaveLength(multiMonthData.values.length);
+      expect(mondayResult).toHaveLength(multiMonthData.values.length);
+
+      // Results might have different x-coordinates due to different week start
+      const sundayXCoords = sundayResult.map((p) => p.x);
+      const mondayXCoords = mondayResult.map((p) => p.x);
+
+      expect(sundayXCoords).toBeDefined();
+      expect(mondayXCoords).toBeDefined();
+    });
+
+    it('should preserve data values and properties', () => {
+      const testData: CalendarHeatmapChartData = {
+        type: 'calendar-heatmap',
+        values: [
+          { date: new Date('2024-01-01T00:00:00Z'), value: 10, blur: true, color: '#test-color' },
+          { date: new Date('2024-01-02T00:00:00Z'), value: 20, blur: false },
+        ],
+      };
+
+      const result = generateContinuousCalendarChartData(
+        testData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.SUNDAY,
+        {
+          enabled: false,
+          days: [],
+          cellColor: undefined,
+          hideValues: false,
+        },
+      );
+
+      expect(result).toHaveLength(2);
+
+      const firstPoint = result.find((p) => p.value === 10);
+      const secondPoint = result.find((p) => p.value === 20);
+
+      expect(firstPoint?.color).toBe('#test-color');
+      expect(firstPoint?.custom.blur).toBe(true);
+      expect(secondPoint?.custom.blur).toBe(false);
+    });
+
+    it('should handle weekend highlighting in continuous layout', () => {
+      const result = generateContinuousCalendarChartData(
+        multiMonthData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.SUNDAY,
+        {
+          enabled: true,
+          days: [CalendarDayOfWeekEnum.SATURDAY, CalendarDayOfWeekEnum.SUNDAY],
+          cellColor: '#weekend-color',
+          hideValues: false,
+        },
+      );
+
+      // Should return the same number of data points
+      expect(result).toHaveLength(multiMonthData.values.length);
+      // Weekend highlighting may or may not be applied depending on actual dates
+      expect(result.every((point) => typeof point.x === 'number')).toBe(true);
+      expect(result.every((point) => typeof point.y === 'number')).toBe(true);
+    });
+
+    it('should add month borders for continuous layout', () => {
+      const result = generateContinuousCalendarChartData(
+        multiMonthData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.SUNDAY,
+        {
+          enabled: false,
+          days: [],
+          cellColor: undefined,
+          hideValues: false,
+        },
+      );
+
+      // Should return the same number of data points
+      expect(result).toHaveLength(multiMonthData.values.length);
+      // All points should have custom properties (month borders may or may not be present)
+      expect(result.every((point) => point.custom !== undefined)).toBe(true);
+    });
+
+    it('should handle empty data gracefully', () => {
+      const emptyData: CalendarHeatmapChartData = {
+        type: 'calendar-heatmap',
+        values: [],
+      };
+
+      const result = generateContinuousCalendarChartData(
+        emptyData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.SUNDAY,
+        {
+          enabled: false,
+          days: [],
+          cellColor: undefined,
+          hideValues: false,
+        },
+      );
+
+      expect(result).toEqual([]);
+    });
+
+    it('should handle single data point', () => {
+      const singlePointData: CalendarHeatmapChartData = {
+        type: 'calendar-heatmap',
+        values: [{ date: new Date('2024-01-01T00:00:00Z'), value: 10 }],
+      };
+
+      const result = generateContinuousCalendarChartData(
+        singlePointData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.SUNDAY,
+        {
+          enabled: false,
+          days: [],
+          cellColor: undefined,
+          hideValues: false,
+        },
+      );
+
+      expect(result).toHaveLength(1);
+      expect(result[0].x).toBeGreaterThanOrEqual(0);
+      expect(result[0].y).toBeGreaterThanOrEqual(0);
+      expect(result[0].y).toBeLessThanOrEqual(6);
+      expect(result[0].value).toBe(10);
+    });
+
+    it('should maintain date information in data points', () => {
+      const result = generateContinuousCalendarChartData(
+        multiMonthData,
+        mockDateFormatter,
+        CalendarDayOfWeekEnum.SUNDAY,
+        {
+          enabled: false,
+          days: [],
+          cellColor: undefined,
+          hideValues: false,
+        },
+      );
+
+      // All points should have date and dateString
+      expect(result.every((point) => typeof point.date === 'number')).toBe(true);
+      expect(result.every((point) => typeof point.dateString === 'string')).toBe(true);
+
+      // Date should be valid timestamp
+      expect(result.every((point) => point.date > 0)).toBe(true);
+    });
   });
 });

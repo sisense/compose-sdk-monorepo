@@ -19,6 +19,10 @@ export const createDataCellValueFormatter = (
     const numberFormatConfig = getNumberFormatConfig(dataOption);
     const isEmptyCell = cell.value === null || typeof cell.value === 'undefined';
 
+    if (dataOption && 'isHtml' in dataOption && dataOption.isHtml) {
+      cell.contentType = 'html';
+    }
+
     cell.content = isEmptyCell ? '' : applyFormatPlainText(numberFormatConfig, cell.value);
   };
 };

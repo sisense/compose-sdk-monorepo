@@ -49,6 +49,10 @@ export const createHeaderCellValueFormatter = (
         cell.content = cell.value;
     }
 
+    if (dataOption && 'isHtml' in dataOption && dataOption.isHtml) {
+      cell.contentType = 'html';
+    }
+
     if (cell.content === '') {
       cell.content = NOT_AVAILABLE_DATA_VALUE;
     }

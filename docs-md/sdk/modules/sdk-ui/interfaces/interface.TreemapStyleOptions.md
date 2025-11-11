@@ -34,6 +34,10 @@ Total height of the component, which is considered in the following order of pri
 
 Labels options object
 
+::: warning Deprecated
+Please use `seriesLabels` instead
+:::
+
 #### Type declaration
 
 > ##### `labels.category`
@@ -53,6 +57,14 @@ Labels options object
 > **legend**?: [`LegendOptions`](../type-aliases/type-alias.LegendOptions.md)
 
 Configuration for legend - a key that provides information about the data series or colors used in chart
+
+***
+
+### seriesLabels
+
+> **seriesLabels**?: [`TreemapSeriesLabels`](../type-aliases/type-alias.TreemapSeriesLabels.md)
+
+Configuration for series labels - titles/names identifying data series in a chart
 
 ***
 

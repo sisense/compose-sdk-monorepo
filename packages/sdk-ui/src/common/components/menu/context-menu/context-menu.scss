@@ -1,0 +1,13 @@
+.csdk-context-menu-selected-with-dot {
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: calc(50% - 3px);
+    width: 6px;
+    height: 6px;
+    background-color: #000;
+    border-radius: 50%;
+  }
+}

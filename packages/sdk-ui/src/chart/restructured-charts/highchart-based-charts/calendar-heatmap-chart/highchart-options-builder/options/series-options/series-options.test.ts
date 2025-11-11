@@ -2,11 +2,25 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { BuildContext } from '../../../../types.js';
 import { CalendarHeatmapChartData } from '../../../data.js';
-import { getSeriesOptions } from '../series-options/series-options.js';
+import { getSplitSeriesOptions } from '../series-options/series-options.js';
 
 // Mock the calendar data generator
 vi.mock('../series-options/calendar-data-generator.js', () => ({
-  generateCalendarChartData: vi.fn(() => [
+  generateSplitCalendarChartData: vi.fn(() => [
+    {
+      x: 0,
+      y: 0,
+      value: 100,
+      custom: { displayText: '1', dateString: '2024-01-01' },
+    },
+    {
+      x: 1,
+      y: 0,
+      value: 200,
+      custom: { displayText: '2', dateString: '2024-01-02' },
+    },
+  ]),
+  generateContinuousCalendarChartData: vi.fn(() => [
     {
       x: 0,
       y: 0,
@@ -92,10 +106,10 @@ describe('Calendar Heatmap Series Options', () => {
     };
   };
 
-  describe('getSeriesOptions', () => {
+  describe('getSplitSeriesOptions', () => {
     it('should create basic heatmap series configuration', () => {
       const ctx = createMockContext();
-      const result = getSeriesOptions(ctx);
+      const result = getSplitSeriesOptions(ctx);
 
       expect(result).toHaveLength(1);
       expect(result[0]).toMatchObject({
@@ -112,7 +126,7 @@ describe('Calendar Heatmap Series Options', () => {
 
     it('should include generated calendar data', () => {
       const ctx = createMockContext();
-      const result = getSeriesOptions(ctx);
+      const result = getSplitSeriesOptions(ctx);
 
       expect(result[0].data).toEqual([
         {
@@ -130,15 +144,15 @@ describe('Calendar Heatmap Series Options', () => {
       ]);
     });
 
-    it('should call generateCalendarChartData with correct parameters', async () => {
-      const { generateCalendarChartData } = vi.mocked(
+    it('should call generateSplitCalendarChartData with correct parameters', async () => {
+      const { generateSplitCalendarChartData } = vi.mocked(
         await import('../series-options/calendar-data-generator.js'),
       );
 
       const ctx = createMockContext();
-      getSeriesOptions(ctx);
+      getSplitSeriesOptions(ctx);
 
-      expect(generateCalendarChartData).toHaveBeenCalledWith(
+      expect(generateSplitCalendarChartData).toHaveBeenCalledWith(
         ctx.chartData,
         ctx.extraConfig.dateFormatter,
         'sunday',

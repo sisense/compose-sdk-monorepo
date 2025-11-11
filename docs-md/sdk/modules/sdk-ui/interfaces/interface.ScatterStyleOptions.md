@@ -60,7 +60,7 @@ Configuration for navigator - zoom/pan tool for large datasets in a chart
 
 ### seriesLabels
 
-> **seriesLabels**?: `Omit`\< [`SeriesLabels`](../type-aliases/type-alias.SeriesLabels.md), `"showPercentDecimals"` \| `"showPercentage"` \| `"showValue"` \>
+> **seriesLabels**?: [`ScatterSeriesLabels`](../type-aliases/type-alias.ScatterSeriesLabels.md)
 
 ***
 

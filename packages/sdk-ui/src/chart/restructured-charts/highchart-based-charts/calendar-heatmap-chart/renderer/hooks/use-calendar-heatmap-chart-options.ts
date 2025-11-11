@@ -3,24 +3,25 @@ import { useMemo } from 'react';
 import { CalendarHeatmapChartDataOptionsInternal } from '@/chart-data-options/types';
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
 import { CalendarHeatmapChartDesignOptions } from '@/chart-options-processor/translations/design-options';
+import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { BeforeRenderHandler } from '@/props';
 import { CalendarHeatmapChartEventProps } from '@/props.jsx';
 import {
   SisenseChartDataPointEventHandler,
   SisenseChartDataPointsEventHandler,
 } from '@/sisense-chart/types.js';
-import { CalendarHeatmapViewType } from '@/types.js';
+import { CalendarHeatmapSubtype, CalendarHeatmapViewType } from '@/types.js';
 
 import { buildHighchartsOptions } from '../../../highcharts-based-chart-renderer/build-highchart-options.js';
 import { useExtraConfig } from '../../../highcharts-based-chart-renderer/use-extra-config.js';
 import { CalendarHeatmapChartData } from '../../data.js';
-import { calendarHeatmapHighchartsOptionsBuilder } from '../../highchart-options-builder/index.js';
+import { getCalendarHeatmapHighchartsOptionsBuilder } from '../../highchart-options-builder/index.js';
 import {
   getCalendarHeatmapDefaultColorOptions,
   withCalendarHeatmapDataColoring,
 } from '../../utils/with-calendar-heatmap-data-coloring.js';
-import { filterChartDataForMonth } from '../helpers/data-helpers.js';
-import { CalendarSize } from '../helpers/sizing-helpers.js';
+import { getDataPerChartInstance } from '../helpers/data-per-chart-instance.js';
+import { calculateChartInstanceSize } from '../helpers/sizing-helpers.js';
 import { getDisplayMonths, MonthData, MonthInfo } from '../helpers/view-helpers.js';
 
 /**
@@ -58,8 +59,9 @@ export interface UseCalendarHeatmapChartOptionsParams {
   designOptions: CalendarHeatmapChartDesignOptions;
   availableMonths: MonthInfo[];
   currentMonth: MonthData;
+  subtype: CalendarHeatmapSubtype;
   viewType: CalendarHeatmapViewType;
-  chartSize: CalendarSize;
+  containerSize: ContainerSize;
   eventHandlers: Pick<
     CalendarHeatmapChartEventProps,
     'onDataPointClick' | 'onDataPointContextMenu' | 'onDataPointsSelected'
@@ -81,7 +83,7 @@ export interface UseCalendarHeatmapChartOptionsParams {
  * @param params.availableMonths - Array of all available months
  * @param params.currentMonth - Current month
  * @param params.viewType - View type that determines how many months to display
- * @param params.chartSizes - Array of size configurations for each chart
+ * @param params.containerSize - Container size for calculating optimal chart dimensions
  * @param params.eventHandlers - Event handlers for data point interactions
  * @param params.onBeforeRender - Optional callback executed before chart rendering
  * @returns Array of Highcharts options objects, one for each month in the current view
@@ -95,7 +97,7 @@ export interface UseCalendarHeatmapChartOptionsParams {
  *   availableMonths,
  *   currentMonth,
  *   viewType,
- *   chartSize,
+ *   containerSize,
  *   eventHandlers: { onDataPointClick: handleClick },
  *   onBeforeRender
  * });
@@ -107,8 +109,9 @@ export function useCalendarHeatmapChartOptions({
   designOptions,
   availableMonths,
   currentMonth,
+  subtype,
   viewType,
-  chartSize,
+  containerSize,
   eventHandlers,
   onBeforeRender,
 }: UseCalendarHeatmapChartOptionsParams): HighchartsOptionsInternal[] {
@@ -121,18 +124,33 @@ export function useCalendarHeatmapChartOptions({
     return withCalendarHeatmapDataColoring(colorOptions)(chartData);
   }, [chartData, dataOptions.value.color, extraConfig.themeSettings]);
 
-  // Generate chart options for each month to display
+  // Generate chart options for each chart instance
   return useMemo(() => {
     if (availableMonths.length === 0) return [];
 
     const monthsToDisplay = getDisplayMonths(availableMonths, currentMonth, viewType);
+    const dataPerChartInstance = getDataPerChartInstance(
+      subtype,
+      viewType,
+      monthsToDisplay,
+      chartDataWithColoring,
+    );
 
-    return monthsToDisplay.map((month) => {
-      const monthData = filterChartDataForMonth(chartDataWithColoring, month.year, month.month);
+    return dataPerChartInstance.map((data) => {
+      // Calculate chart size for this specific chart instance
+      const chartSize = calculateChartInstanceSize(
+        containerSize,
+        subtype,
+        viewType,
+        data,
+        designOptions.startOfWeek,
+      );
+
+      const highchartsOptionsBuilder = getCalendarHeatmapHighchartsOptionsBuilder(subtype);
 
       return buildHighchartsOptions({
-        highchartsOptionsBuilder: calendarHeatmapHighchartsOptionsBuilder,
-        chartData: monthData,
+        highchartsOptionsBuilder,
+        chartData: data,
         dataOptions,
         designOptions: {
           ...designOptions,
@@ -155,10 +173,11 @@ export function useCalendarHeatmapChartOptions({
     availableMonths,
     currentMonth,
     viewType,
+    subtype,
     chartDataWithColoring,
     dataOptions,
     designOptions,
-    chartSize,
+    containerSize,
     eventHandlers.onDataPointClick,
     eventHandlers.onDataPointContextMenu,
     eventHandlers.onDataPointsSelected,

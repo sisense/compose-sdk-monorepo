@@ -28,6 +28,7 @@ export type {
   CalendarHeatmapChartType,
   CalendarHeatmapDataPoint,
   CalendarHeatmapStyleOptions,
+  CalendarHeatmapSubtype,
   CalendarHeatmapViewType,
   CartesianChartDataOptions,
   CartesianChartType,

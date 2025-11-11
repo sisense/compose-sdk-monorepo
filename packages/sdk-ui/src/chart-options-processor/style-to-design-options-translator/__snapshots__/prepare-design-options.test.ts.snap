@@ -10,13 +10,6 @@ exports[`prepareChartDesignOptions > should return design options for areamap ch
     "seriesCapacity": 50,
   },
   "funnelDirection": "regular",
-  "funnelLabels": {
-    "enabled": true,
-    "showCategories": true,
-    "showDecimals": false,
-    "showPercent": true,
-    "showValue": true,
-  },
   "funnelSize": "regular",
   "funnelType": "regular",
   "indicatorComponents": {
@@ -96,13 +89,6 @@ exports[`prepareChartDesignOptions > should return design options for combo "lin
     },
   },
   "funnelDirection": "regular",
-  "funnelLabels": {
-    "enabled": true,
-    "showCategories": true,
-    "showDecimals": false,
-    "showPercent": true,
-    "showValue": true,
-  },
   "funnelSize": "regular",
   "funnelType": "regular",
   "indicatorComponents": {
@@ -181,13 +167,6 @@ exports[`prepareChartDesignOptions > should return design options for funnel cha
     "seriesCapacity": 3,
   },
   "funnelDirection": "regular",
-  "funnelLabels": {
-    "enabled": true,
-    "showCategories": true,
-    "showDecimals": true,
-    "showPercent": true,
-    "showValue": true,
-  },
   "funnelSize": "regular",
   "funnelType": "regular",
   "indicatorComponents": {
@@ -219,6 +198,13 @@ exports[`prepareChartDesignOptions > should return design options for funnel cha
   },
   "numericSubtype": "numericSimple",
   "pieType": "classic",
+  "seriesLabels": {
+    "enabled": true,
+    "showCategory": true,
+    "showPercentDecimals": true,
+    "showPercentage": true,
+    "showValue": true,
+  },
   "skin": "vertical",
   "stackType": "classic",
   "xAxis": {
@@ -256,13 +242,6 @@ exports[`prepareChartDesignOptions > should return design options for scattermap
     "seriesCapacity": 50,
   },
   "funnelDirection": "regular",
-  "funnelLabels": {
-    "enabled": true,
-    "showCategories": true,
-    "showDecimals": false,
-    "showPercent": true,
-    "showValue": true,
-  },
   "funnelSize": "regular",
   "funnelType": "regular",
   "indicatorComponents": {

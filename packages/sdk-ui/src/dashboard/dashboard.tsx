@@ -6,47 +6,11 @@ import { useDefaults } from '@/common/hooks/use-defaults';
 import { DashboardContainer } from '@/dashboard/components/dashboard-container';
 import { DashboardProps } from '@/dashboard/types';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
-import { WidgetsPanelLayout } from '@/models';
 import { ThemeProvider } from '@/theme-provider';
 
 import { DEFAULT_DASHBOARD_CONFIG } from './constants';
 import { useComposedDashboardInternal } from './use-composed-dashboard';
 import { useDashboardThemeInternal } from './use-dashboard-theme';
-
-export enum DashboardChangeType {
-  /** Dashboard filters have been updated */
-  FILTERS_UPDATE = 'FILTERS.UPDATE',
-  /** Filters panel collapsed state changed */
-  UI_FILTERS_PANEL_COLLAPSE = 'UI.FILTERS.PANEL.COLLAPSE',
-  /** Widgets panel layout updated */
-  WIDGETS_PANEL_LAYOUT_UPDATE = 'WIDGETS_PANEL_LAYOUT.UPDATE',
-  /** Edit mode isEditing changed */
-  WIDGETS_PANEL_LAYOUT_IS_EDITING_CHANGE = 'WIDGETS_PANEL.EDIT_MODE.IS_EDITING.CHANGE',
-  /** Widgets deleted from the dashboard */
-  WIDGETS_DELETE = 'WIDGETS.DELETE',
-}
-
-export type DashboardChangeAction =
-  | {
-      type: DashboardChangeType.FILTERS_UPDATE;
-      payload: Filter[] | FilterRelations;
-    }
-  | {
-      type: DashboardChangeType.UI_FILTERS_PANEL_COLLAPSE;
-      payload: boolean;
-    }
-  | {
-      type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_UPDATE;
-      payload: WidgetsPanelLayout;
-    }
-  | {
-      type: DashboardChangeType.WIDGETS_PANEL_LAYOUT_IS_EDITING_CHANGE;
-      payload: boolean;
-    }
-  | {
-      type: DashboardChangeType.WIDGETS_DELETE;
-      payload: string[];
-    };
 
 /**
  * React component that renders a dashboard whose elements are customizable. It includes internal logic of applying common filters to widgets.
@@ -118,7 +82,7 @@ export const Dashboard = asSisenseComponent({
       {
         onFiltersChange: useCallback(
           (filters: Filter[] | FilterRelations) => {
-            onChange?.({ type: DashboardChangeType.FILTERS_UPDATE, payload: filters });
+            onChange?.({ type: 'filters/updated', payload: filters });
           },
           [onChange],
         ),

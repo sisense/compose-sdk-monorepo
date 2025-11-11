@@ -1,3 +1,5 @@
+import { DeepPartial } from 'ts-essentials';
+
 import { getTreemapChartDesignOptions } from '@/chart-options-processor/style-to-design-options-translator/translate-to-highcharts-options';
 import { type ChartStyleOptions } from '@/types';
 
@@ -8,6 +10,32 @@ export const designOptionsTranslators = {
     styleOptions: TreemapChartStyleOptions,
   ): TreemapChartDesignOptions => {
     return getTreemapChartDesignOptions(styleOptions);
+  },
+
+  getDefaultStyleOptions: (): TreemapChartStyleOptions => {
+    return {
+      seriesLabels: {
+        enabled: true,
+      },
+      tooltip: {
+        mode: 'value',
+      },
+    };
+  },
+
+  translateLegacyStyleOptionsToModern: (
+    styleOptions?: DeepPartial<TreemapChartStyleOptions>,
+  ): DeepPartial<TreemapChartStyleOptions> => {
+    const styleOptionsWithDefaults = styleOptions ?? {};
+    if (styleOptionsWithDefaults?.labels && !styleOptionsWithDefaults?.seriesLabels) {
+      return {
+        ...styleOptionsWithDefaults,
+        seriesLabels: styleOptionsWithDefaults.labels.category?.map((label) => ({
+          enabled: label?.enabled ?? true,
+        })),
+      };
+    }
+    return styleOptionsWithDefaults;
   },
 
   isCorrectStyleOptions: (

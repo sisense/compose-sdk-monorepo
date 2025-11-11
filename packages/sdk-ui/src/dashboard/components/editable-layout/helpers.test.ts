@@ -10,6 +10,7 @@ import {
   getRowHeight,
   getRowMaxHeight,
   getRowMinHeight,
+  updateColumnsCountInLayout,
   updateLayoutAfterDragAndDrop,
   updateLayoutWidths,
   updateRowHeight,
@@ -2064,5 +2065,561 @@ describe('getColumnMaxWidths', () => {
     const result = getColumnMaxWidths(row);
 
     expect(result).toEqual([]);
+  });
+});
+
+describe('updateColumnsCountInLayout', () => {
+  const mockLayoutWithOneColumn: WidgetsPanelLayout = {
+    columns: [
+      {
+        widthPercentage: 100,
+        rows: [
+          {
+            cells: [
+              {
+                widgetId: 'widget1',
+                widthPercentage: 100,
+                height: 200,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+
+  const mockLayoutWithTwoColumns: WidgetsPanelLayout = {
+    columns: [
+      {
+        widthPercentage: 50,
+        rows: [
+          {
+            cells: [
+              {
+                widgetId: 'widget1',
+                widthPercentage: 100,
+                height: 200,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        widthPercentage: 50,
+        rows: [
+          {
+            cells: [
+              {
+                widgetId: 'widget2',
+                widthPercentage: 100,
+                height: 200,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+
+  const mockLayoutWithThreeColumns: WidgetsPanelLayout = {
+    columns: [
+      {
+        widthPercentage: 33.33,
+        rows: [
+          {
+            cells: [
+              {
+                widgetId: 'widget1',
+                widthPercentage: 100,
+                height: 200,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        widthPercentage: 33.33,
+        rows: [
+          {
+            cells: [
+              {
+                widgetId: 'widget2',
+                widthPercentage: 100,
+                height: 200,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        widthPercentage: 33.34,
+        rows: [
+          {
+            cells: [
+              {
+                widgetId: 'widget3',
+                widthPercentage: 100,
+                height: 200,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+
+  it('should return original layout when column count equals current count', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithTwoColumns, 2);
+
+    expect(result).toEqual(mockLayoutWithTwoColumns);
+  });
+
+  it('should add new empty columns when growing from 1 to 2', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithOneColumn, 2);
+
+    expect(result.columns).toHaveLength(2);
+    expect(result.columns[0].widthPercentage).toBe(50);
+    expect(result.columns[0].rows).toHaveLength(1);
+    expect(result.columns[0].rows[0].cells[0].widgetId).toBe('widget1');
+    expect(result.columns[1].widthPercentage).toBe(50);
+    expect(result.columns[1].rows).toHaveLength(0);
+  });
+
+  it('should add new empty columns when growing from 2 to 3', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithTwoColumns, 3);
+
+    expect(result.columns).toHaveLength(3);
+    expect(result.columns[0].widthPercentage).toBeCloseTo(33.33, 1);
+    expect(result.columns[0].rows).toHaveLength(1);
+    expect(result.columns[0].rows[0].cells[0].widgetId).toBe('widget1');
+    expect(result.columns[1].widthPercentage).toBeCloseTo(33.33, 1);
+    expect(result.columns[1].rows).toHaveLength(1);
+    expect(result.columns[1].rows[0].cells[0].widgetId).toBe('widget2');
+    expect(result.columns[2].widthPercentage).toBeCloseTo(33.33, 1);
+    expect(result.columns[2].rows).toHaveLength(0);
+  });
+
+  it('should add new empty columns when growing from 2 to 4', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithTwoColumns, 4);
+
+    expect(result.columns).toHaveLength(4);
+    expect(result.columns[0].widthPercentage).toBe(25);
+    expect(result.columns[0].rows).toHaveLength(1);
+    expect(result.columns[1].widthPercentage).toBe(25);
+    expect(result.columns[1].rows).toHaveLength(1);
+    expect(result.columns[2].widthPercentage).toBe(25);
+    expect(result.columns[2].rows).toHaveLength(0);
+    expect(result.columns[3].widthPercentage).toBe(25);
+    expect(result.columns[3].rows).toHaveLength(0);
+  });
+
+  it('should merge rows from removed columns when shrinking from 3 to 2', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithThreeColumns, 2);
+
+    expect(result.columns).toHaveLength(2);
+    expect(result.columns[0].widthPercentage).toBe(50);
+    expect(result.columns[0].rows).toHaveLength(1);
+    expect(result.columns[0].rows[0].cells[0].widgetId).toBe('widget1');
+    expect(result.columns[1].widthPercentage).toBe(50);
+    expect(result.columns[1].rows).toHaveLength(2);
+    expect(result.columns[1].rows[0].cells[0].widgetId).toBe('widget2');
+    expect(result.columns[1].rows[1].cells[0].widgetId).toBe('widget3');
+  });
+
+  it('should merge rows from removed columns when shrinking from 3 to 1', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithThreeColumns, 1);
+
+    expect(result.columns).toHaveLength(1);
+    expect(result.columns[0].widthPercentage).toBe(100);
+    expect(result.columns[0].rows).toHaveLength(3);
+    expect(result.columns[0].rows[0].cells[0].widgetId).toBe('widget1');
+    expect(result.columns[0].rows[1].cells[0].widgetId).toBe('widget2');
+    expect(result.columns[0].rows[2].cells[0].widgetId).toBe('widget3');
+  });
+
+  it('should merge rows from removed columns when shrinking from 2 to 1', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithTwoColumns, 1);
+
+    expect(result.columns).toHaveLength(1);
+    expect(result.columns[0].widthPercentage).toBe(100);
+    expect(result.columns[0].rows).toHaveLength(2);
+    expect(result.columns[0].rows[0].cells[0].widgetId).toBe('widget1');
+    expect(result.columns[0].rows[1].cells[0].widgetId).toBe('widget2');
+  });
+
+  it('should normalize count to 1 when given 0', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithTwoColumns, 0);
+
+    expect(result.columns).toHaveLength(1);
+    expect(result.columns[0].widthPercentage).toBe(100);
+    expect(result.columns[0].rows).toHaveLength(2);
+    expect(result.columns[0].rows[0].cells[0].widgetId).toBe('widget1');
+    expect(result.columns[0].rows[1].cells[0].widgetId).toBe('widget2');
+  });
+
+  it('should normalize count to 1 when given negative number', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithTwoColumns, -5);
+
+    expect(result.columns).toHaveLength(1);
+    expect(result.columns[0].widthPercentage).toBe(100);
+    expect(result.columns[0].rows).toHaveLength(2);
+  });
+
+  it('should preserve existing column data when growing', () => {
+    const layoutWithComplexColumns: WidgetsPanelLayout = {
+      columns: [
+        {
+          widthPercentage: 50,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget1',
+                  widthPercentage: 50,
+                  height: 200,
+                },
+                {
+                  widgetId: 'widget2',
+                  widthPercentage: 50,
+                  height: 200,
+                },
+              ],
+            },
+            {
+              cells: [
+                {
+                  widgetId: 'widget3',
+                  widthPercentage: 100,
+                  height: 300,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = updateColumnsCountInLayout(layoutWithComplexColumns, 3);
+
+    expect(result.columns).toHaveLength(3);
+    expect(result.columns[0].widthPercentage).toBeCloseTo(33.33, 1);
+    expect(result.columns[0].rows).toHaveLength(2);
+    expect(result.columns[0].rows[0].cells).toHaveLength(2);
+    expect(result.columns[0].rows[0].cells[0].widgetId).toBe('widget1');
+    expect(result.columns[0].rows[0].cells[1].widgetId).toBe('widget2');
+    expect(result.columns[0].rows[1].cells[0].widgetId).toBe('widget3');
+    expect(result.columns[1].widthPercentage).toBeCloseTo(33.33, 1);
+    expect(result.columns[1].rows).toHaveLength(0);
+    expect(result.columns[2].widthPercentage).toBeCloseTo(33.33, 1);
+    expect(result.columns[2].rows).toHaveLength(0);
+  });
+
+  it('should correctly merge multiple rows when shrinking', () => {
+    const layoutWithMultipleRows: WidgetsPanelLayout = {
+      columns: [
+        {
+          widthPercentage: 33.33,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget1',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+            {
+              cells: [
+                {
+                  widgetId: 'widget2',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 33.33,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget3',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 33.34,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget4',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+            {
+              cells: [
+                {
+                  widgetId: 'widget5',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = updateColumnsCountInLayout(layoutWithMultipleRows, 1);
+
+    expect(result.columns).toHaveLength(1);
+    expect(result.columns[0].widthPercentage).toBe(100);
+    expect(result.columns[0].rows).toHaveLength(5);
+    expect(result.columns[0].rows[0].cells[0].widgetId).toBe('widget1');
+    expect(result.columns[0].rows[1].cells[0].widgetId).toBe('widget2');
+    expect(result.columns[0].rows[2].cells[0].widgetId).toBe('widget3');
+    expect(result.columns[0].rows[3].cells[0].widgetId).toBe('widget4');
+    expect(result.columns[0].rows[4].cells[0].widgetId).toBe('widget5');
+  });
+
+  it('should handle layout with empty columns', () => {
+    const layoutWithEmptyColumn: WidgetsPanelLayout = {
+      columns: [
+        {
+          widthPercentage: 50,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget1',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 50,
+          rows: [],
+        },
+      ],
+    };
+
+    const result = updateColumnsCountInLayout(layoutWithEmptyColumn, 3);
+
+    expect(result.columns).toHaveLength(3);
+    expect(result.columns[0].widthPercentage).toBeCloseTo(33.33, 1);
+    expect(result.columns[0].rows).toHaveLength(1);
+    expect(result.columns[1].widthPercentage).toBeCloseTo(33.33, 1);
+    expect(result.columns[1].rows).toHaveLength(0);
+    expect(result.columns[2].widthPercentage).toBeCloseTo(33.33, 1);
+    expect(result.columns[2].rows).toHaveLength(0);
+  });
+
+  it('should ensure width percentages sum to 100 when growing', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithOneColumn, 4);
+
+    const totalWidth = result.columns.reduce((sum, column) => sum + column.widthPercentage, 0);
+
+    expect(totalWidth).toBeCloseTo(100, 1);
+    expect(result.columns.every((col) => col.widthPercentage === 25)).toBe(true);
+  });
+
+  it('should ensure width percentages sum to 100 when shrinking', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithThreeColumns, 2);
+
+    const totalWidth = result.columns.reduce((sum, column) => sum + column.widthPercentage, 0);
+
+    expect(totalWidth).toBeCloseTo(100, 1);
+    expect(result.columns[0].widthPercentage).toBe(50);
+    expect(result.columns[1].widthPercentage).toBe(50);
+  });
+
+  it('should handle very large column counts', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithOneColumn, 10);
+
+    expect(result.columns).toHaveLength(10);
+    expect(result.columns.every((col) => col.widthPercentage === 10)).toBe(true);
+    expect(result.columns[0].rows).toHaveLength(1);
+    expect(result.columns.slice(1).every((col) => col.rows.length === 0)).toBe(true);
+  });
+
+  it('should preserve cell properties when merging rows', () => {
+    const layoutWithCellProperties: WidgetsPanelLayout = {
+      columns: [
+        {
+          widthPercentage: 50,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget1',
+                  widthPercentage: 100,
+                  height: 200,
+                  minHeight: 100,
+                  maxHeight: 500,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 50,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget2',
+                  widthPercentage: 100,
+                  height: 300,
+                  minWidth: 100,
+                  maxWidth: 800,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = updateColumnsCountInLayout(layoutWithCellProperties, 1);
+
+    expect(result.columns).toHaveLength(1);
+    expect(result.columns[0].rows).toHaveLength(2);
+    expect(result.columns[0].rows[0].cells[0].widgetId).toBe('widget1');
+    expect(result.columns[0].rows[0].cells[0].height).toBe(200);
+    expect(result.columns[0].rows[0].cells[0].minHeight).toBe(100);
+    expect(result.columns[0].rows[0].cells[0].maxHeight).toBe(500);
+    expect(result.columns[0].rows[1].cells[0].widgetId).toBe('widget2');
+    expect(result.columns[0].rows[1].cells[0].height).toBe(300);
+    expect(result.columns[0].rows[1].cells[0].minWidth).toBe(100);
+    expect(result.columns[0].rows[1].cells[0].maxWidth).toBe(800);
+  });
+
+  it('should handle empty layout (no columns)', () => {
+    const emptyLayout: WidgetsPanelLayout = {
+      columns: [],
+    };
+
+    const result = updateColumnsCountInLayout(emptyLayout, 2);
+
+    expect(result.columns).toHaveLength(2);
+    expect(result.columns[0].widthPercentage).toBe(50);
+    expect(result.columns[0].rows).toHaveLength(0);
+    expect(result.columns[1].widthPercentage).toBe(50);
+    expect(result.columns[1].rows).toHaveLength(0);
+  });
+
+  it('should maintain immutability (return new object)', () => {
+    const result = updateColumnsCountInLayout(mockLayoutWithTwoColumns, 3);
+
+    expect(result).not.toBe(mockLayoutWithTwoColumns);
+    expect(result.columns).not.toBe(mockLayoutWithTwoColumns.columns);
+    expect(result.columns[0]).not.toBe(mockLayoutWithTwoColumns.columns[0]);
+  });
+
+  it('should handle complex layout with multiple rows per column when shrinking', () => {
+    const complexLayout: WidgetsPanelLayout = {
+      columns: [
+        {
+          widthPercentage: 25,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget1',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+            {
+              cells: [
+                {
+                  widgetId: 'widget2',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 25,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget3',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 25,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget4',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+            {
+              cells: [
+                {
+                  widgetId: 'widget5',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          widthPercentage: 25,
+          rows: [
+            {
+              cells: [
+                {
+                  widgetId: 'widget6',
+                  widthPercentage: 100,
+                  height: 200,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = updateColumnsCountInLayout(complexLayout, 2);
+
+    expect(result.columns).toHaveLength(2);
+    expect(result.columns[0].widthPercentage).toBe(50);
+    expect(result.columns[0].rows).toHaveLength(2);
+    expect(result.columns[1].widthPercentage).toBe(50);
+    // Last column should have merged rows from columns 1, 2, 3 (indices 1, 2, 3)
+    expect(result.columns[1].rows).toHaveLength(4);
+    expect(result.columns[1].rows[0].cells[0].widgetId).toBe('widget3');
+    expect(result.columns[1].rows[1].cells[0].widgetId).toBe('widget4');
+    expect(result.columns[1].rows[2].cells[0].widgetId).toBe('widget5');
+    expect(result.columns[1].rows[3].cells[0].widgetId).toBe('widget6');
   });
 });

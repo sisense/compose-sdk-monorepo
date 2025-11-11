@@ -74,6 +74,7 @@ div#idk {
 
     .scroll-elem__horizontal-track {
       margin-top: 2px;
+      z-index: 10000;
     }
 
     .scroll-elem__vertical-track {

@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.13.0",
+  "version": "2.14.0",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -44,6 +44,7 @@
     "@sisense/sdk-shared-ui": "workspace:*",
     "classnames": "2.3.2",
     "dom-css": "2.1.0",
+    "dompurify": "^3.3.0",
     "immer": "^10.0.2",
     "lodash-es": "^4.17.21",
     "raf": "3.4.0",

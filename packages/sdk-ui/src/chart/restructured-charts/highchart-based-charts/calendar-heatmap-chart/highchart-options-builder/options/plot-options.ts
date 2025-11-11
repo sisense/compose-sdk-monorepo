@@ -42,8 +42,8 @@ export function getPlotOptions(
       dataLabels: {
         enabled:
           cellLabels.enabled &&
-          (ctx.designOptions?.width ?? 0) >=
-            CALENDAR_HEATMAP_DEFAULTS.SHOW_CELL_LABEL_CHART_SIZE_THRESHOLD,
+          (ctx.designOptions?.cellSize ?? 0) >=
+            CALENDAR_HEATMAP_DEFAULTS.SHOW_CELL_LABEL_SIZE_THRESHOLD,
         style: {
           color,
           fontSize,

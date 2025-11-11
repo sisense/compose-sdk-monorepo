@@ -7,7 +7,6 @@ import {
 } from '../../constants';
 import { CalendarHeatmapChartData } from '../../data';
 import { ViewType } from '../../types';
-import { CalendarSize } from './sizing-helpers';
 
 export interface MonthData {
   year: number;
@@ -16,6 +15,7 @@ export interface MonthData {
 
 export interface MonthInfo extends MonthData {
   monthName: string;
+  shortMonthName: string;
 }
 
 /**
@@ -56,16 +56,6 @@ function isMonthInRange(target: MonthData, start: MonthData, end: MonthData): bo
 }
 
 /**
- * Creates a month date formatter with pre-applied format
- */
-function createMonthDateFormatter(
-  dateFormatter: (date: Date, format: string) => string,
-  monthFormat: string,
-): (date: Date) => string {
-  return (date: Date) => dateFormatter(date, monthFormat);
-}
-
-/**
  * Adds/subtracts a specified number of months to a MonthData object
  * Use negative `monthsToAdd` number to subtract months
  */
@@ -94,7 +84,7 @@ function addMonthsToMonthData(monthData: MonthData, monthsToAdd: number): MonthD
 function ensureMinimumMonths(
   months: MonthInfo[],
   minMonths: number,
-  monthDateFormatter: (date: Date) => string,
+  dateFormatter: (date: Date, format: string) => string,
 ): MonthInfo[] {
   if (months.length >= minMonths) {
     return months;
@@ -105,7 +95,7 @@ function ensureMinimumMonths(
     const now = new Date();
     const startMonth: MonthData = { year: now.getFullYear(), month: now.getMonth() };
     const endMonth = addMonthsToMonthData(startMonth, minMonths - 1);
-    return generateMonthSequence(startMonth, endMonth, monthDateFormatter);
+    return generateMonthSequence(startMonth, endMonth, dateFormatter);
   }
 
   // Extend after the last month to reach minimum
@@ -116,7 +106,7 @@ function ensureMinimumMonths(
   const additionalMonths = generateMonthSequence(
     addMonthsToMonthData(lastMonth, 1),
     endMonth,
-    monthDateFormatter,
+    dateFormatter,
   );
 
   return [...months, ...additionalMonths];
@@ -128,7 +118,7 @@ function ensureMinimumMonths(
 function generateMonthSequence(
   start: MonthData,
   end: MonthData,
-  monthDateFormatter: (date: Date) => string,
+  dateFormatter: (date: Date, format: string) => string,
 ): MonthInfo[] {
   const months: MonthInfo[] = [];
   const current: MonthData = { year: start.year, month: start.month };
@@ -138,7 +128,8 @@ function generateMonthSequence(
     months.push({
       year: current.year,
       month: current.month,
-      monthName: monthDateFormatter(monthDate),
+      monthName: dateFormatter(monthDate, FULL_MONTH_DATE_FORMAT),
+      shortMonthName: dateFormatter(monthDate, SHORT_MONTH_DATE_FORMAT),
     });
 
     current.month++;
@@ -157,10 +148,10 @@ function generateMonthSequence(
 function addMonthsBefore(
   existingMonths: MonthInfo[],
   target: MonthData,
-  monthDateFormatter: (date: Date) => string,
+  dateFormatter: (date: Date, format: string) => string,
 ): MonthInfo[] {
   if (existingMonths.length === 0) {
-    return generateMonthSequence(target, target, monthDateFormatter);
+    return generateMonthSequence(target, target, dateFormatter);
   }
 
   const firstMonth: MonthData = existingMonths[0];
@@ -176,7 +167,7 @@ function addMonthsBefore(
     month: firstMonth.month === 0 ? 11 : firstMonth.month - 1,
   };
 
-  const newMonths = generateMonthSequence(target, end, monthDateFormatter);
+  const newMonths = generateMonthSequence(target, end, dateFormatter);
 
   return [...newMonths, ...existingMonths];
 }
@@ -187,10 +178,10 @@ function addMonthsBefore(
 function addMonthsAfter(
   existingMonths: MonthInfo[],
   target: MonthData,
-  monthDateFormatter: (date: Date) => string,
+  dateFormatter: (date: Date, format: string) => string,
 ): MonthInfo[] {
   if (existingMonths.length === 0) {
-    return generateMonthSequence(target, target, monthDateFormatter);
+    return generateMonthSequence(target, target, dateFormatter);
   }
 
   const lastMonth: MonthData = existingMonths[existingMonths.length - 1];
@@ -206,20 +197,20 @@ function addMonthsAfter(
     month: lastMonth.month === 11 ? 0 : lastMonth.month + 1,
   };
 
-  const newMonths = generateMonthSequence(start, target, monthDateFormatter);
+  const newMonths = generateMonthSequence(start, target, dateFormatter);
 
   return [...existingMonths, ...newMonths];
 }
 
 // Helper function to determine if short month names should be used based on calendar size
-export function shouldUseShortMonthNames(calendarSize: CalendarSize): boolean {
-  return calendarSize.width <= CALENDAR_HEATMAP_DEFAULTS.SHORT_MONTH_NAME_CHART_SIZE_THRESHOLD;
+export function shouldUseShortMonthNames(width: number): boolean {
+  return width <= CALENDAR_HEATMAP_DEFAULTS.SHORT_MONTH_NAME_SPLIT_LAYOUT_WIDTH_THRESHOLD;
 }
 
 // Helper function to generates available months from chart data
 export function generateAvailableMonthsFromData(
   chartData: CalendarHeatmapChartData,
-  monthDateFormatter: (date: Date) => string,
+  dateFormatter: (date: Date, format: string) => string,
 ): MonthInfo[] {
   if (!chartData.values || chartData.values.length === 0) return [];
 
@@ -236,7 +227,8 @@ export function generateAvailableMonthsFromData(
       months.push({
         year,
         month,
-        monthName: monthDateFormatter(dataPoint.date),
+        monthName: dateFormatter(dataPoint.date, FULL_MONTH_DATE_FORMAT),
+        shortMonthName: dateFormatter(dataPoint.date, SHORT_MONTH_DATE_FORMAT),
       });
     }
   });
@@ -249,24 +241,20 @@ export function generateAvailableMonthsFromData(
 export function getAvailableMonths(
   chartData: CalendarHeatmapChartData,
   dateFormatter: (date: Date, format: string) => string,
-  useShortMonthNames?: boolean,
   initialMonth?: MonthData,
   viewType?: CalendarHeatmapViewType,
 ): MonthInfo[] {
-  const monthFormat = useShortMonthNames ? SHORT_MONTH_DATE_FORMAT : FULL_MONTH_DATE_FORMAT;
-  const monthDateFormatter = createMonthDateFormatter(dateFormatter, monthFormat);
-
-  const dataMonths = generateAvailableMonthsFromData(chartData, monthDateFormatter);
+  const dataMonths = generateAvailableMonthsFromData(chartData, dateFormatter);
   const monthsPerView = viewType ? getMonthsPerView(viewType) : 1;
 
   if (!initialMonth) {
-    return ensureMinimumMonths(dataMonths, monthsPerView, monthDateFormatter);
+    return ensureMinimumMonths(dataMonths, monthsPerView, dateFormatter);
   }
 
   // If no data months, create months starting from initialMonth
   if (dataMonths.length === 0) {
     const endMonth = addMonthsToMonthData(initialMonth, monthsPerView - 1);
-    return generateMonthSequence(initialMonth, endMonth, monthDateFormatter);
+    return generateMonthSequence(initialMonth, endMonth, dateFormatter);
   }
 
   const firstDataMonth: MonthData = dataMonths[0];
@@ -274,24 +262,24 @@ export function getAvailableMonths(
 
   // Check if initialMonth is already within the data range
   if (isMonthInRange(initialMonth, firstDataMonth, lastDataMonth)) {
-    return ensureMinimumMonths(dataMonths, monthsPerView, monthDateFormatter);
+    return ensureMinimumMonths(dataMonths, monthsPerView, dateFormatter);
   }
 
   let extendedMonths: MonthInfo[];
 
   // Add months before the data range if initialMonth is earlier
   if (compareMonthData(initialMonth, firstDataMonth) < 0) {
-    extendedMonths = addMonthsBefore(dataMonths, initialMonth, monthDateFormatter);
+    extendedMonths = addMonthsBefore(dataMonths, initialMonth, dateFormatter);
   }
   // Add months after the data range if initialMonth is later
   else {
     // For multi-month views, ensure initialMonth is positioned as the first month
     // by adding enough months after it to complete the view
     const targetEndMonth = addMonthsToMonthData(initialMonth, monthsPerView - 1);
-    extendedMonths = addMonthsAfter(dataMonths, targetEndMonth, monthDateFormatter);
+    extendedMonths = addMonthsAfter(dataMonths, targetEndMonth, dateFormatter);
   }
 
-  return ensureMinimumMonths(extendedMonths, monthsPerView, monthDateFormatter);
+  return ensureMinimumMonths(extendedMonths, monthsPerView, dateFormatter);
 }
 
 // Helper function to find the initial view index based on initialDate

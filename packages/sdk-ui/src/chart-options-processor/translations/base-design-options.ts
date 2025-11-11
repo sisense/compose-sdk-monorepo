@@ -1,7 +1,6 @@
 import { Merge } from '../../utils/utility-types';
 import {
   DefaultFunnelDirection,
-  DefaultFunnelLabels,
   DefaultFunnelSize,
   DefaultFunnelType,
 } from './funnel-plot-options';
@@ -51,7 +50,6 @@ export const BaseDesignOptions: Merge<DesignOptions> = {
   funnelType: DefaultFunnelType,
   funnelSize: DefaultFunnelSize,
   funnelDirection: DefaultFunnelDirection,
-  funnelLabels: DefaultFunnelLabels,
   indicatorType: 'numeric',
   numericSubtype: 'numericSimple',
   skin: 'vertical',

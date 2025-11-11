@@ -10,8 +10,10 @@ import Highcharts, {
   PointLabelObject,
 } from '@sisense/sisense-charts';
 
+import { prepareDataLabelsOptions } from '@/chart-options-processor/series-labels';
+
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
-import { CompleteThemeSettings } from '../../../types';
+import { CompleteThemeSettings, TreemapSeriesLabels } from '../../../types';
 import { getDarkFactor, toColor } from '../../../utils/color';
 import { TreemapChartDesignOptions } from '../design-options';
 import { LayoutPointResult, ParentValues, TreemapLayoutAlgorithmContext } from './types';
@@ -64,16 +66,6 @@ export function prepareTreemapLevels(
 ) {
   const levels = createDefaultTreemapLevels();
 
-  levels.forEach((level, index) => {
-    const datalabels = level.dataLabels as PlotTreegraphLevelsDataLabelsOptions;
-    if (chartDesignOptions?.labels?.category) {
-      datalabels.enabled = chartDesignOptions.labels?.category?.[index]?.enabled ?? true;
-    }
-    if (themeSettings?.typography?.fontFamily) {
-      datalabels.style!.fontFamily = themeSettings?.typography?.fontFamily;
-    }
-  });
-
   if (dataOptions.breakBy.length === 1) {
     levels[0].borderWidth = SMALL_SPACING;
     levels[0].borderColor = 'black';
@@ -90,37 +82,96 @@ export function prepareTreemapLevels(
     levels[2].colorVariation = DEFAULT_COLOR_VARIATION;
   }
 
+  levels.forEach((level, index) => {
+    const datalabels = level.dataLabels as PlotTreegraphLevelsDataLabelsOptions;
+    if (chartDesignOptions?.labels?.category) {
+      datalabels.enabled = chartDesignOptions.labels?.category?.[index]?.enabled ?? true;
+    }
+    if (themeSettings?.typography?.fontFamily) {
+      datalabels.style = {
+        ...datalabels.style,
+        fontFamily: themeSettings?.typography?.fontFamily,
+      };
+    }
+    if (chartDesignOptions.seriesLabels) {
+      const seriesLabels = Array.isArray(chartDesignOptions.seriesLabels)
+        ? chartDesignOptions.seriesLabels[index]
+        : chartDesignOptions.seriesLabels;
+      const isBigLabelCase =
+        level.layoutAlgorithm === ('squarifiedWithTopSpacing' as OptionsLayoutAlgorithmValue);
+      const dataLabelsOptions = isBigLabelCase
+        ? prepareDataLabelsOptions({ enabled: seriesLabels?.enabled })
+        : prepareDataLabelsOptions(seriesLabels);
+      level.dataLabels = {
+        ...datalabels,
+        ...dataLabelsOptions,
+        style: {
+          ...datalabels.style,
+          ...dataLabelsOptions.style,
+        },
+        formatter: prepareTreemapLabelFormatter(index, chartDesignOptions.seriesLabels),
+      };
+    }
+  });
+
   return levels;
 }
 
-export function treemapLabelFormatter(this: PointLabelObject): string {
-  const isDarkBG =
-    getDarkFactor(toColor(this.color as string)) > 0.4 && !this.point.options?.custom?.blur;
-  const { width } = getPointSize(this.point);
+export function prepareTreemapLabelFormatter(level: number, seriesLabels: TreemapSeriesLabels) {
+  const seriesLabelsOptions = Array.isArray(seriesLabels) ? seriesLabels[level] : seriesLabels;
+  const {
+    prefix = '',
+    suffix = '',
+    backgroundColor = '#e6e6e6',
+    textStyle,
+    align,
+    borderColor,
+    borderWidth,
+    padding,
+    rotation = 0,
+    xOffset = 0,
+    yOffset = 0,
+  } = seriesLabelsOptions ?? {};
 
-  if (!isEnoughSpaceForLabel(this.point)) {
-    return '';
-  }
+  return function treemapLabelFormatter(this: PointLabelObject): string {
+    const isDarkBG =
+      getDarkFactor(toColor(this.color as string)) > 0.4 && !this.point.options?.custom?.blur;
+    const { width } = getPointSize(this.point);
 
-  if (isBigLabelCase(this.point)) {
-    return `<div
+    if (!isEnoughSpaceForLabel(this.point)) {
+      return '';
+    }
+
+    if (isBigLabelCase(this.point)) {
+      return `<div
               style="
-                width:${width - BIG_SPACING}px;
-                height: ${BIG_LABEL_HEIGHT}px;
-                background: #e6e6e6;
-                color: ${DARK_COLOR};
-                padding: 3px;
+                box-sizing: border-box;
                 position: absolute;
-                top: -${BIG_LABEL_HEIGHT}px;
-                text-align: center;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                left: ${BIG_SPACING / 2}px;
+                padding: ${padding ?? 3}px;
+                width:${width - BIG_SPACING}px;
+                max-width:${width - BIG_SPACING}px;
+                max-height: ${BIG_LABEL_HEIGHT}px;
+                height: ${BIG_LABEL_HEIGHT}px;
+                background: ${backgroundColor};
+                color: ${textStyle?.color ?? DARK_COLOR};
+                top: ${-BIG_LABEL_HEIGHT + yOffset}px;
+                left: ${BIG_SPACING / 2 + xOffset}px;
+                text-align: ${align ?? 'center'};
+                transform: rotate(${rotation}deg);
+                border: ${borderColor ?? 'none'} ${borderWidth ?? 0}px solid;
+                ${textStyle?.fontSize ? `font-size: ${textStyle.fontSize}px;` : ''}
+                ${textStyle?.fontWeight ? `font-weight: ${textStyle.fontWeight};` : ''}
+                ${textStyle?.fontFamily ? `font-family: ${textStyle.fontFamily};` : ''}
+                ${textStyle?.fontStyle ? `font-style: ${textStyle.fontStyle};` : ''}
                 "
-           >${this.key}</div>`;
-  }
+           >${prefix}${this.key}${suffix}</div>`;
+    }
 
-  return `<div style="fill:${isDarkBG ? LIGHT_COLOR : DARK_COLOR};">${this.key}</div>`;
+    const color = textStyle?.color ?? (isDarkBG ? LIGHT_COLOR : DARK_COLOR);
+    return `<div style="fill:${color};">${prefix}${this.key}${suffix}</div>`;
+  };
 }
 
 function createDefaultTreemapLevels(): PlotTreegraphLevelsOptions[] {
@@ -140,7 +191,6 @@ function createDefaultTreemapLevels(): PlotTreegraphLevelsOptions[] {
         style: {
           fontSize: '14px',
         },
-        formatter: treemapLabelFormatter,
       },
     },
     {
@@ -154,7 +204,6 @@ function createDefaultTreemapLevels(): PlotTreegraphLevelsOptions[] {
         style: {
           fontSize: '14px',
         },
-        formatter: treemapLabelFormatter,
       },
     },
     {
@@ -168,7 +217,6 @@ function createDefaultTreemapLevels(): PlotTreegraphLevelsOptions[] {
         style: {
           fontSize: '13px',
         },
-        formatter: treemapLabelFormatter,
       },
     },
   ];

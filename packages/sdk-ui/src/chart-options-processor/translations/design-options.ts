@@ -1,8 +1,10 @@
 import { CalendarDayOfWeek } from '@/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 
 import {
+  CalendarHeatmapSubtype,
   CalendarHeatmapViewType,
   Convolution,
+  FunnelSeriesLabels,
   LegendOptions,
   LineOptions,
   PieSeriesLabels,
@@ -13,7 +15,7 @@ import {
   TreemapStyleOptions,
 } from '../../types';
 import { Axis } from './axis-section';
-import { FunnelDirection, FunnelLabels, FunnelSize, FunnelType } from './funnel-plot-options';
+import { FunnelDirection, FunnelSize, FunnelType } from './funnel-plot-options';
 import { Marker } from './marker-section';
 import { PieType } from './pie-plot-options';
 import { ScatterMarkerSize } from './scatter-plot-options';
@@ -75,6 +77,7 @@ export type ColumnChartDesignOptions = StackableChartDesignOptions;
 export type CalendarHeatmapChartDesignOptions = BaseDesignOptionsType & {
   width?: number;
   height?: number;
+  subtype: CalendarHeatmapSubtype;
   viewType: CalendarHeatmapViewType;
   cellSize?: number;
   startOfWeek: CalendarDayOfWeek;
@@ -121,11 +124,11 @@ export type PieChartDesignOptions = BaseDesignOptionsType & {
   seriesLabels?: PieSeriesLabels;
 };
 
-export type FunnelChartDesignOptions = BaseDesignOptionsType & {
+export type FunnelChartDesignOptions = Omit<BaseDesignOptionsType, 'seriesLabels'> & {
   funnelSize?: FunnelSize;
   funnelType?: FunnelType;
   funnelDirection?: FunnelDirection;
-  funnelLabels?: FunnelLabels;
+  seriesLabels?: FunnelSeriesLabels;
 };
 
 export type TreemapChartDesignOptions = BaseDesignOptionsType & TreemapStyleOptions;

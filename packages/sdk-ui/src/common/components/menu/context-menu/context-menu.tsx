@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { ContextMenuProps, MenuItemSection } from '../../../../props';
+import './context-menu.scss';
 import { Menu } from './menu';
 import { MenuItem } from './menu-item';
 import { MenuSection } from './menu-section';
 import { NestedMenuItem } from './nested-menu-item';
+
+export const CONTEXT_MENU_SELECTED_WITH_DOT_CLASS = 'csdk-context-menu-selected-with-dot';
 
 /**
  * Context menu

@@ -68,76 +68,86 @@ const meas1 = {
 
 describe('Treemap Chart', () => {
   it('render a treemap with single category', async () => {
+    let highchartsOptions: HighchartsOptions | undefined;
     const { findByLabelText } = render(
       <TreemapChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1], value: [meas1] }}
         onBeforeRender={(options: HighchartsOptions) => {
-          expect(options).toMatchSnapshot();
+          highchartsOptions = options;
           return options;
         }}
       />,
     );
 
     expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(highchartsOptions).toMatchSnapshot();
   });
 
   it('render a treemap with two categories', async () => {
+    let highchartsOptions: HighchartsOptions | undefined;
     const { findByLabelText } = render(
       <TreemapChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, cat2], value: [meas1] }}
         onBeforeRender={(options: HighchartsOptions) => {
-          expect(options).toMatchSnapshot();
+          highchartsOptions = options;
           return options;
         }}
       />,
     );
 
     expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(highchartsOptions).toMatchSnapshot();
   });
 
   it('render a treemap with three categories', async () => {
+    let highchartsOptions: HighchartsOptions | undefined;
     const { findByLabelText } = render(
       <TreemapChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, cat2, cat3], value: [meas1] }}
         onBeforeRender={(options: HighchartsOptions) => {
-          expect(options).toMatchSnapshot();
+          highchartsOptions = options;
           return options;
         }}
       />,
     );
 
     expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(highchartsOptions).toMatchSnapshot();
   });
 
   it('render a treemap with coloring', async () => {
+    let highchartsOptions: HighchartsOptions | undefined;
     const { findByLabelText } = render(
       <TreemapChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, { column: cat2, isColored: true }, cat3], value: [meas1] }}
         onBeforeRender={(options: HighchartsOptions) => {
-          expect(options).toMatchSnapshot();
+          highchartsOptions = options;
           return options;
         }}
       />,
     );
 
     expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(highchartsOptions).toMatchSnapshot();
   });
   it('render a treemap with highlights', async () => {
+    let highchartsOptions: HighchartsOptions | undefined;
     const { findByLabelText } = render(
       <TreemapChart
         dataSet={withBlurredRows(dataSet, [0, 1, 2, 3, 4])}
         dataOptions={{ category: [cat1, { column: cat2 }, cat3], value: [meas1] }}
         onBeforeRender={(options: HighchartsOptions) => {
-          expect(options).toMatchSnapshot();
+          highchartsOptions = options;
           return options;
         }}
       />,
     );
 
     expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(highchartsOptions).toMatchSnapshot();
   });
 });

@@ -3,17 +3,26 @@
 exports[`Treemap Chart labels formatter > should prepare big label 1`] = `
 "<div
               style="
+                box-sizing: border-box;
+                position: absolute;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 3px;
                 width:96px;
+                max-width:96px;
+                max-height: 20px;
                 height: 20px;
                 background: #e6e6e6;
                 color: rgb(43, 51, 66);
-                padding: 3px;
-                position: absolute;
                 top: -20px;
-                text-align: center;
-                overflow: hidden;
-                text-overflow: ellipsis;
                 left: 2px;
+                text-align: center;
+                transform: rotate(0deg);
+                border: none 0px solid;
+
+
+
+
                 "
            >Test</div>"
 `;

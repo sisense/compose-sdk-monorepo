@@ -1,5 +1,6 @@
 import { Attribute, Measure, QueryResultData } from '@sisense/sdk-data';
 import { QueryExecutionConfig } from '@sisense/sdk-query-client';
+import { DeepPartial } from 'ts-essentials';
 
 import { ClientApplication } from '@/app/client-application';
 import type { ChartRendererProps } from '@/chart';
@@ -234,6 +235,13 @@ export interface ChartBuilder<CT extends SupportedChartType = SupportedChartType
      * Returns the default style options for the current chart type.
      */
     getDefaultStyleOptions?: () => TypedChartStyleOptions<CT>;
+
+    /**
+     * Translates legacy style options to modern style options.
+     */
+    translateLegacyStyleOptionsToModern?: (
+      styleOptions?: DeepPartial<TypedChartStyleOptions<CT>>,
+    ) => DeepPartial<TypedChartStyleOptions<CT>>;
   };
 
   /**

@@ -2,9 +2,9 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { HighchartsDataPointContext } from '@/chart-options-processor/tooltip.js';
 
-import { BuildContext } from '../../../../types.js';
-import { CalendarHeatmapChartData } from '../../../data.js';
-import { getPlotOptions } from '../plot-options.js';
+import { BuildContext } from '../../../types.js';
+import { CalendarHeatmapChartData } from '../../data.js';
+import { getPlotOptions } from './plot-options.js';
 
 describe('Calendar Heatmap Plot Options', () => {
   const mockDateFormatter = vi.fn((date: Date) => date.toISOString().split('T')[0]);

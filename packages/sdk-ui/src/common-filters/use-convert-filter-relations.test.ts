@@ -181,4 +181,121 @@ describe('useConvertFilterRelations', () => {
       expect(newFiltersOrRelations).toEqual([filter1, filter2, filter3, filter4]);
     });
   });
+
+  describe('onFiltersChange callback - double-fire prevention', () => {
+    it('should call onFiltersChange exactly once when filters are changed', () => {
+      const initialFilters = [filter1];
+      const onFiltersChange = vi.fn();
+
+      const { result } = renderHook(() =>
+        useConvertFilterRelations(initialFilters, onFiltersChange),
+      );
+
+      // onFiltersChange should not be called on initialization
+      expect(onFiltersChange).not.toHaveBeenCalled();
+
+      const newFilters = [filter1, filter2];
+      act(() => {
+        result.current.setFilters(newFilters);
+      });
+
+      // Should be called exactly once after the change
+      expect(onFiltersChange).toHaveBeenCalledTimes(1);
+      expect(onFiltersChange).toHaveBeenCalledWith(newFilters);
+    });
+
+    it('should not call onFiltersChange when setting the same filters again', () => {
+      const initialFilters = [filter1, filter2];
+      const onFiltersChange = vi.fn();
+
+      const { result } = renderHook(() =>
+        useConvertFilterRelations(initialFilters, onFiltersChange),
+      );
+
+      // Change to new filters
+      const newFilters = [filter1, filter2, filter3];
+      act(() => {
+        result.current.setFilters(newFilters);
+      });
+
+      expect(onFiltersChange).toHaveBeenCalledTimes(1);
+
+      // Try to set the same filters again
+      act(() => {
+        result.current.setFilters(newFilters);
+      });
+
+      // Should still be called only once (no additional call)
+      expect(onFiltersChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onFiltersChange exactly once when adding a filter', () => {
+      const initialFilters = [filter1];
+      const onFiltersChange = vi.fn();
+
+      const { result } = renderHook(() =>
+        useConvertFilterRelations(initialFilters, onFiltersChange),
+      );
+
+      act(() => {
+        result.current.addFilter(filter2);
+      });
+
+      // Should be called exactly once
+      expect(onFiltersChange).toHaveBeenCalledTimes(1);
+      expect(onFiltersChange).toHaveBeenCalledWith([filter1, filter2]);
+    });
+
+    it('should call onFiltersChange exactly once when replacing with setFiltersOrFilterRelations', () => {
+      const initialFilters = [filter1];
+      const onFiltersChange = vi.fn();
+
+      const { result } = renderHook(() =>
+        useConvertFilterRelations(initialFilters, onFiltersChange),
+      );
+
+      const newFilterRelations = filterFactory.logic.or(filter2, filter3);
+      act(() => {
+        result.current.setFiltersOrFilterRelations(newFilterRelations);
+      });
+
+      // Should be called exactly once
+      expect(onFiltersChange).toHaveBeenCalledTimes(1);
+      expect(onFiltersChange).toHaveBeenCalledWith(newFilterRelations);
+    });
+
+    it('should not call onFiltersChange when callback is not provided', () => {
+      const initialFilters = [filter1];
+
+      const { result } = renderHook(() => useConvertFilterRelations(initialFilters));
+
+      // Should not throw error when changing filters without callback
+      expect(() => {
+        act(() => {
+          result.current.setFilters([filter1, filter2]);
+        });
+      }).not.toThrow();
+    });
+
+    it('should call onFiltersChange with correct relations when filters change', () => {
+      const initialRelations = filterFactory.logic.or(filter1, filter2);
+      const onFiltersChange = vi.fn();
+
+      const { result } = renderHook(() =>
+        useConvertFilterRelations(initialRelations, onFiltersChange),
+      );
+
+      // Add a new filter to existing relations
+      const newFilters = [filter1, filter2, filter3];
+      act(() => {
+        result.current.setFilters(newFilters);
+      });
+
+      // Should be called exactly once with the new filter relations
+      expect(onFiltersChange).toHaveBeenCalledTimes(1);
+      expect(onFiltersChange).toHaveBeenCalledWith(
+        filterFactory.logic.and(filterFactory.logic.or(filter1, filter2), filter3),
+      );
+    });
+  });
 });

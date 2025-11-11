@@ -20,6 +20,7 @@ TypeScript type aliases for components and composables listed above
 - [CalendarDayOfWeek](type-alias.CalendarDayOfWeek.md)
 - [CalendarHeatmapChartType](type-alias.CalendarHeatmapChartType.md)
 - [CalendarHeatmapDataPoint](type-alias.CalendarHeatmapDataPoint.md)
+- [CalendarHeatmapSubtype](type-alias.CalendarHeatmapSubtype.md)
 - [CalendarHeatmapViewType](type-alias.CalendarHeatmapViewType.md)
 - [CartesianChartType](type-alias.CartesianChartType.md)
 - [CartesianWidgetType](type-alias.CartesianWidgetType.md)

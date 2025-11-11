@@ -126,7 +126,7 @@ describe('DashboardContainer', () => {
 
     expect(onChangeMock).toHaveBeenCalledWith({
       payload: true,
-      type: 'UI.FILTERS.PANEL.COLLAPSE',
+      type: 'filtersPanel/collapse/changed',
     });
   });
 
@@ -185,7 +185,7 @@ describe('DashboardContainer', () => {
 
     expect(onChangeMock).toHaveBeenCalledWith({
       payload: true,
-      type: 'UI.FILTERS.PANEL.COLLAPSE',
+      type: 'filtersPanel/collapse/changed',
     });
   });
 

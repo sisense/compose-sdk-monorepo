@@ -7,6 +7,7 @@ import * as React from 'react';
 
 import { Tooltip } from '@sisense/sdk-shared-ui/Tooltip';
 import cn from 'classnames';
+import DOMPurify from 'dompurify';
 
 import {
   EmbedComponentProps,
@@ -838,9 +839,10 @@ export class PivotCell extends React.PureComponent<PivotCellProps, State> {
 
   createMarkup = (data: any) => {
     if (!this.cachedHtml || data !== this.cachedHtml.data) {
+      const html = DOMPurify.sanitize(data);
       this.cachedHtml = {
-        data,
-        html: { __html: data },
+        data: html,
+        html: { __html: html },
       };
     }
     return this.cachedHtml.html;

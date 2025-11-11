@@ -221,8 +221,7 @@ export type SeriesLabelsTextStyle = Omit<TextStyle, 'pointerEvents' | 'textOverf
   color?: 'contrast' | string;
 };
 
-/** Options that define series labels - titles/names identifying data series in a chart. */
-export type SeriesLabels = {
+export type SeriesLabelsBase = {
   /** Boolean flag that defines if series labels should be shown on the chart */
   enabled: boolean;
   /**
@@ -230,41 +229,6 @@ export type SeriesLabels = {
    * Note that due to a more complex structure, backgrounds, borders and padding will be lost on a rotated data label
    * */
   rotation?: number;
-  /**
-   * Boolean flag that defines if value should be shown in series labels
-   * (if not specified, default is determined by chart type)
-   */
-  showValue?: boolean;
-  /**
-   * Boolean flag that defines if percentage should be shown in series labels
-   * (only applicable for subtypes that support percentage, like "stacked100")
-   */
-  showPercentage?: boolean;
-  /**
-   * Boolean flag that defines if percentage should be shown with decimals
-   * (will work only if `showPercentage` is `true`)
-   */
-  showPercentDecimals?: boolean;
-  /**
-   * Text to be shown before the series labels
-   */
-  prefix?: string;
-  /**
-   * Text to be shown after the series labels
-   */
-  suffix?: string;
-  /**
-   * If `true`, series labels appear inside bars/columns instead of at the datapoints. Not applicable for some chart types e.g. line, area
-   */
-  alignInside?: boolean;
-  /**
-   * The horizontal alignment of the data label compared to the point
-   */
-  align?: 'left' | 'center' | 'right';
-  /**
-   * The vertical alignment of the data label
-   */
-  verticalAlign?: 'top' | 'middle' | 'bottom';
   /**
    * Styling for labels text
    */
@@ -304,12 +268,53 @@ export type SeriesLabels = {
    */
   yOffset?: number;
   /**
-   * The animation delay time in milliseconds. Set to 0 to render the data labels immediately
-   *
-   * @internal
+   * Text to be shown before the series labels
    */
-  delay?: number;
+  prefix?: string;
+  /**
+   * Text to be shown after the series labels
+   */
+  suffix?: string;
 };
+
+export type SeriesLabelsAligning = {
+  /**
+   * If `true`, series labels appear inside bars/columns instead of at the datapoints. Not applicable for some chart types e.g. line, area
+   */
+  alignInside?: boolean;
+  /**
+   * The horizontal alignment of the data label compared to the point
+   *
+   * For some chart types, this will only apply when `alignInside` is `true`.
+   */
+  align?: 'left' | 'center' | 'right';
+  /**
+   * The vertical alignment of the data label
+   *
+   * For some chart types, this will only apply when `alignInside` is `true`.
+   */
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+};
+
+/** Options that define series labels - titles/names identifying data series in a chart. */
+export type SeriesLabels = SeriesLabelsBase &
+  SeriesLabelsAligning & {
+    /**
+     * Boolean flag that defines if value should be shown in series labels
+     * (if not specified, default is determined by chart type)
+     */
+    showValue?: boolean;
+    /**
+     * Boolean flag that defines if percentage should be shown in series labels
+     * (only applicable for subtypes that support percentage, like "stacked100")
+     */
+    showPercentage?: boolean;
+    /**
+     * Boolean flag that defines if percentage should be shown with decimals
+     * (will work only if `showPercentage` is `true`)
+     */
+    showPercentDecimals?: boolean;
+  };
 
 /**
  * Text styling options for total labels.
@@ -660,10 +665,6 @@ export interface BaseStyleOptions extends ReservedStyleOptions {
    * Configuration for legend - a key that provides information about the data series or colors used in chart
    * */
   legend?: LegendOptions;
-  /**
-   * Configuration for series labels - titles/names identifying data series in a chart
-   */
-  seriesLabels?: SeriesLabels;
   /** Data limit for series or categories that will be plotted */
   dataLimits?: DataLimits;
   /**
@@ -730,6 +731,10 @@ export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions
    * - `right` - step occurs after the point
    */
   stepPosition?: 'left' | 'center' | 'right';
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
 }
 
 /** Configuration options that define functional style of the various elements of AreaRangeChart */
@@ -745,6 +750,10 @@ export interface AreaRangeStyleOptions extends BaseStyleOptions, BaseAxisStyleOp
   line?: LineOptions;
   /** Subtype of AreaRangeChart */
   subtype?: AreaRangeSubtype;
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
 }
 
 /** Configuration options that define functional style of the various elements of AreaChart */
@@ -761,6 +770,10 @@ export interface AreaStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions
   /** Subtype of AreaChart*/
   subtype?: AreaSubtype;
   /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
+  /**
    * Configuration for total labels
    * Only supported for stacked chart subtypes
    */
@@ -775,6 +788,10 @@ export interface StackableStyleOptions extends BaseStyleOptions, BaseAxisStyleOp
    Bar chart with 'column/classic' subtype and Column chart with 'bar/classic' subtype
   */
   subtype?: StackableSubtype;
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
   /**
    * Configuration for total labels
    * Only supported for stacked chart subtypes
@@ -822,10 +839,12 @@ export type PiePercentageLabels = {
   showDecimals?: boolean;
 };
 
-export type PieSeriesLabels = Omit<
-  SeriesLabels,
-  'showPercentage' | 'showPercentDecimals' | 'alignInside' | 'align' | 'verticalAlign'
-> & {
+export type PieSeriesLabels = SeriesLabelsBase & {
+  /**
+   * Boolean flag that defines if value should be shown in series labels
+   * (if not specified, default is determined by chart type)
+   */
+  showValue?: boolean;
   /**
    * Boolean flag that defines if the category should be shown
    * @default `true`
@@ -865,22 +884,37 @@ export interface PieStyleOptions extends BaseStyleOptions {
   seriesLabels?: PieSeriesLabels;
 }
 
+export interface FunnelSeriesLabels extends SeriesLabels {
+  /** Boolean flag that defines if category names should be shown in series labels */
+  showCategory?: boolean;
+}
+
 /** Configuration options that define functional style of the various elements of FunnelChart */
-export interface FunnelStyleOptions extends Omit<BaseStyleOptions, 'seriesLabels'> {
+export interface FunnelStyleOptions extends BaseStyleOptions {
   /** Visual size of the lowest slice (degree of funnel narrowing from highest to lowest slices)*/
   funnelSize?: FunnelSize;
   /** Visual type of the lowest slice of FunnelChart */
   funnelType?: FunnelType;
   /** Direction of FunnelChart narrowing */
   funnelDirection?: FunnelDirection;
-  /** Configuration that defines behavior of data labels on FunnelChart */
+  /**
+   * Configuration that defines behavior of data labels on FunnelChart
+   *
+   * @deprecated Use seriesLabels instead
+   */
   labels?: Labels;
   /** Subtype of FunnelChart*/
   subtype?: never;
+  /** Configuration for series labels */
+  seriesLabels?: FunnelSeriesLabels;
 }
 
 /** Configuration options that define functional style of the various elements of PolarChart */
 export interface PolarStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
   /** Subtype of PolarChart*/
   subtype?: PolarSubtype;
 }
@@ -1079,19 +1113,26 @@ export interface GaugeIndicatorStyleOptions extends BaseIndicatorStyleOptions {
   tickerBarHeight?: number;
 }
 
+export type ScatterSeriesLabels = SeriesLabelsBase & SeriesLabelsAligning;
+
 /** Configuration options that define functional style of the various elements of ScatterChart */
-export interface ScatterStyleOptions
-  extends Omit<BaseStyleOptions, 'seriesLabels'>,
-    BaseAxisStyleOptions {
+export interface ScatterStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Subtype of ScatterChart*/
   subtype?: never;
   markerSize?: ScatterMarkerSize;
-  seriesLabels?: Omit<SeriesLabels, 'showValue' | 'showPercentage' | 'showPercentDecimals'>;
+  seriesLabels?: ScatterSeriesLabels;
 }
 
+export type TreemapSeriesLabels =
+  | (SeriesLabelsBase & SeriesLabelsAligning)
+  | (SeriesLabelsBase & SeriesLabelsAligning)[];
+
 /** Configuration options that define functional style of the various elements of TreemapChart */
-export interface TreemapStyleOptions extends Omit<BaseStyleOptions, 'seriesLabels'> {
-  /** Labels options object */
+export interface TreemapStyleOptions extends BaseStyleOptions {
+  /**
+   * Labels options object
+   * @deprecated Please use `seriesLabels` instead
+   */
   labels?: {
     /** Array with single label options objects (order of items relative to dataOptions.category) */
     category?: {
@@ -1099,6 +1140,10 @@ export interface TreemapStyleOptions extends Omit<BaseStyleOptions, 'seriesLabel
       enabled?: boolean;
     }[];
   };
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: TreemapSeriesLabels;
   /** Tooltip options object */
   tooltip?: {
     /** Define mode of data showing */
@@ -1107,7 +1152,7 @@ export interface TreemapStyleOptions extends Omit<BaseStyleOptions, 'seriesLabel
 }
 
 /** Configuration options that define functional style of the various elements of the SunburstChart component */
-export interface SunburstStyleOptions extends Omit<BaseStyleOptions, 'seriesLabels'> {
+export interface SunburstStyleOptions extends BaseStyleOptions {
   /** Labels options object */
   labels?: {
     /** Array with single label options objects (order of items relative to dataOptions.category) */
@@ -1127,6 +1172,10 @@ export interface SunburstStyleOptions extends Omit<BaseStyleOptions, 'seriesLabe
 export interface BoxplotStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Subtype of the BoxplotChart component*/
   subtype?: BoxplotSubtype;
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
 }
 
 /**
@@ -1200,9 +1249,20 @@ export type CalendarHeatmapCellLabels = {
 };
 
 /**
+ * Calendar heatmap chart subtype
+ */
+export type CalendarHeatmapSubtype = 'calendar-heatmap/split' | 'calendar-heatmap/continuous';
+
+/**
  * Configuration options that define functional style of the various elements of calendar-heatmap chart
  */
 export interface CalendarHeatmapStyleOptions extends Pick<BaseStyleOptions, 'width' | 'height'> {
+  /**
+   * {@inheritDoc CalendarHeatmapSubtype}
+   *
+   * @default 'calendar-heatmap/split'
+   */
+  subtype?: CalendarHeatmapSubtype;
   /**
    * {@inheritDoc CalendarHeatmapViewType}
    */
