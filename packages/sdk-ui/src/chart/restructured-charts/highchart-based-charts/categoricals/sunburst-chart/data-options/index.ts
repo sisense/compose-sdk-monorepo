@@ -7,6 +7,7 @@ import {
   getCategoricalMeasures,
   isCategoricalChartDataOptions,
   isCategoricalChartDataOptionsInternal,
+  withDataOptionsLimitations,
 } from '../../helpers/data-options';
 import type { SunburstChartDataOptions, SunburstChartDataOptionsInternal } from '../types';
 
@@ -14,7 +15,12 @@ export const dataOptionsTranslators = {
   translateDataOptionsToInternal: (
     dataOptions: SunburstChartDataOptions,
   ): SunburstChartDataOptionsInternal => {
-    return translateCategoricalChartDataOptions(dataOptions);
+    return translateCategoricalChartDataOptions(
+      withDataOptionsLimitations({
+        maxCategories: 6,
+        maxValues: 1,
+      })(dataOptions),
+    );
   },
 
   getAttributes: getCategoricalAttributes,

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { TablePagination } from '@sisense/sdk-shared-ui/TablePagination';
+import { Tooltip } from '@sisense/sdk-shared-ui/Tooltip';
 import cn from 'classnames';
 
 import {
@@ -30,23 +31,13 @@ export type PaginationOptions = {
   resultLabel: string;
   rowsPerPageLabel: string;
   rowsPerPageLabelShort: string;
+  notifyLimitsBaseNote: string;
   notifyRowsLimitLabel: string;
   notifyColumnsLimitLabel: string;
   notifyRowsAndColumnsLimitLabel: string;
-  alertIcon: string;
+  notifyTooltipStyle?: React.CSSProperties;
+  alertIcon: React.ReactElement;
   numberFormatter?: ((value: number, options: {}) => number) | null;
-  onNotificationMoreClick?:
-    | ((
-        e: React.MouseEvent | React.KeyboardEvent,
-        data: {
-          rowsCount: number;
-          rowsLimitReached: boolean;
-          columnsCount: number;
-          columnsLimitReached: boolean;
-          recordsCount: number;
-        },
-      ) => void)
-    | null;
   style?: {
     fontFamily?: string;
   };
@@ -58,13 +49,14 @@ const defaultOptions: PaginationOptions = {
   resultLabel: 'Results',
   rowsPerPageLabel: 'Results per page',
   rowsPerPageLabelShort: 'Rows',
+  notifyLimitsBaseNote:
+    'Totals may refer to the complete data if set by the dashboard owner. If available, you can use filters to display fewer rows and columns. To view all your data, download the table to CSV.',
   notifyRowsLimitLabel: 'The Pivot table is limited to {{recordsCount}} records',
   notifyColumnsLimitLabel: 'The Pivot table is limited to {{columnsCount}} columns',
   notifyRowsAndColumnsLimitLabel:
     'The Pivot table is limited to {{recordsCount}} records and {{columnsCount}} columns',
-  alertIcon: '<div>!</div>',
+  alertIcon: <div>!</div>,
   numberFormatter: null,
-  onNotificationMoreClick: null,
 };
 
 type Props = {
@@ -349,22 +341,6 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
     }
   };
 
-  onNotificationMoreClick = (e: React.MouseEvent | React.KeyboardEvent) => {
-    const { columnsCount, itemsCount, limitCount } = this.props;
-    if (this.props.options) {
-      const { onNotificationMoreClick } = this.props.options;
-      if (onNotificationMoreClick) {
-        onNotificationMoreClick(e, {
-          columnsCount,
-          columnsLimitReached: this.isColumnsLimitReached(this.props),
-          rowsCount: itemsCount,
-          rowsLimitReached: this.isRowsLimitReached(this.props),
-          recordsCount: limitCount,
-        });
-      }
-    }
-  };
-
   panelRef = (elem: HTMLDivElement | null) => {
     if (elem) {
       this.panel = elem;
@@ -388,6 +364,8 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
       resultLabel,
       rowsPerPageLabel,
       rowsPerPageLabelShort,
+      notifyLimitsBaseNote,
+      notifyTooltipStyle,
     } = options;
 
     const isOnlyTotalRowsVisible = totalItemsCount > itemsCount && pagesCount === 1;
@@ -418,16 +396,32 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
             <div className={PANEL_WRAPPER}>
               {notificationStr ? (
                 <div className={NOTIFICATION_WRAPPER} title={notificationStr}>
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    onClick={this.onNotificationMoreClick}
-                    onKeyPress={this.onNotificationMoreClick}
-                    dangerouslySetInnerHTML={{
-                      __html: alertIcon,
+                  <Tooltip
+                    title={
+                      <p>
+                        <b>{notificationStr}</b>
+                        <br />
+                        <span>{notifyLimitsBaseNote}</span>
+                      </p>
+                    }
+                    placement="top-start"
+                    slotProps={{
+                      tooltip: {
+                        sx: {
+                          borderRadius: 0,
+                          ...notifyTooltipStyle,
+                        },
+                      },
+                      arrow: {
+                        sx: {
+                          color: notifyTooltipStyle?.backgroundColor,
+                        },
+                      },
                     }}
-                    aria-label="alert"
-                  />
+                    arrow
+                  >
+                    {alertIcon}
+                  </Tooltip>
                 </div>
               ) : (
                 notificationFallback

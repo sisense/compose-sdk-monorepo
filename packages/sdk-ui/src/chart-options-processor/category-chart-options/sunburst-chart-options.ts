@@ -5,7 +5,7 @@ import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/ty
 import { CategoricalChartData } from '../../chart-data/types';
 import { CompleteThemeSettings, OptionsWithAlerts } from '../../types';
 import { HighchartsOptionsInternal } from '../chart-options-service';
-import { TreemapChartDesignOptions } from '../translations/design-options';
+import { SunburstChartDesignOptions } from '../translations/design-options';
 import { prepareSunburstOptions } from '../translations/sunburst/sunburst-options';
 
 /**
@@ -20,7 +20,7 @@ import { prepareSunburstOptions } from '../translations/sunburst/sunburst-option
  */
 export const getSunburstChartOptions = (
   chartData: CategoricalChartData,
-  chartDesignOptions: TreemapChartDesignOptions,
+  chartDesignOptions: SunburstChartDesignOptions,
   dataOptions: CategoricalChartDataOptionsInternal,
   translate: TFunction,
   themeSettings?: CompleteThemeSettings,

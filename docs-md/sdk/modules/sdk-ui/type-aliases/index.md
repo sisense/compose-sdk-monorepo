@@ -180,6 +180,8 @@ TypeScript type aliases for components and hooks listed above
 - [SortDirection](type-alias.SortDirection.md)
 - [SpaceSizes](type-alias.SpaceSizes.md)
 - [StackableSubtype](type-alias.StackableSubtype.md)
+- [SunburstSeriesLabels](type-alias.SunburstSeriesLabels.md)
+- [SunburstSeriesLabelsBase](type-alias.SunburstSeriesLabelsBase.md)
 - [TabberButtonsWidgetCustomOptions](type-alias.TabberButtonsWidgetCustomOptions.md)
 - [TabberButtonsWidgetStyleOptions](type-alias.TabberButtonsWidgetStyleOptions.md)
 - [TabberConfig](type-alias.TabberConfig.md)

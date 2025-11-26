@@ -617,6 +617,11 @@ export function extractTableChartStyleOptions(widgetStyle: TableWidgetStyle): Ta
       alternatingColor: {
         enabled: widgetStyle['colors/columns'],
       },
+      width: widgetStyle['width/content']
+        ? 'content'
+        : widgetStyle['width/window']
+        ? 'auto'
+        : undefined,
     },
   };
 }

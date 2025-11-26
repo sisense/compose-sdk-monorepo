@@ -881,6 +881,7 @@ export default function CodeExample() {
           alternatingColor: {
             enabled: false,
           },
+          width: 'content',
         },
       },
       drilldownOptions: {

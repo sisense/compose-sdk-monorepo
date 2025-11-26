@@ -69,14 +69,14 @@ const createMockInternalDataOptions = (
 describe('dataOptionsTranslators', () => {
   describe('translateDataOptionsToInternal', () => {
     it('should translate basic funnel chart data options to internal format', () => {
-      const dataOptions = createMockFunnelDataOptions(2, 1);
+      const dataOptions = createMockFunnelDataOptions(1, 1);
       const result = dataOptionsTranslators.translateDataOptionsToInternal(dataOptions);
 
       expect(result).toBeDefined();
       expect(result).toHaveProperty('y');
       expect(result).toHaveProperty('breakBy');
       expect(result.y).toHaveLength(1);
-      expect(result.breakBy).toHaveLength(2);
+      expect(result.breakBy).toHaveLength(1);
     });
 
     it('should handle empty categories', () => {
@@ -99,8 +99,8 @@ describe('dataOptionsTranslators', () => {
       const dataOptions = createMockFunnelDataOptions(3, 2);
       const result = dataOptionsTranslators.translateDataOptionsToInternal(dataOptions);
 
-      expect(result.breakBy).toHaveLength(3);
-      expect(result.y).toHaveLength(2);
+      expect(result.breakBy).toHaveLength(1); // Limited to 1 category
+      expect(result.y).toHaveLength(1); // Limited to 1 value
     });
 
     it('should preserve data structure and properties', () => {
@@ -201,24 +201,24 @@ describe('dataOptionsTranslators', () => {
     });
   });
 
-  describe('validateAndCleanDataOptions', () => {
-    it('should enforce category limitation (max 3)', () => {
-      const dataOptions = createMockFunnelDataOptions(5, 1); // Exceeds limit
-      const result = dataOptionsTranslators.validateAndCleanDataOptions(dataOptions);
+  describe('translateDataOptionsToInternal with validation', () => {
+    it('should enforce category limitation (max 1)', () => {
+      const dataOptions = createMockFunnelDataOptions(3, 1); // Exceeds limit
+      const result = dataOptionsTranslators.translateDataOptionsToInternal(dataOptions);
 
-      expect(result.category).toHaveLength(3); // Limited to 3
-      expect(result.value).toHaveLength(1);
+      expect(result.breakBy).toHaveLength(1); // Limited to 1
+      expect(result.y).toHaveLength(1);
       expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining("Maximum 'category' length is limited to 3"),
+        expect.stringContaining("Maximum 'category' length is limited to 1"),
       );
     });
 
     it('should enforce value limitation (max 1) when categories are present', () => {
-      const dataOptions = createMockFunnelDataOptions(2, 3); // Exceeds value limit
-      const result = dataOptionsTranslators.validateAndCleanDataOptions(dataOptions);
+      const dataOptions = createMockFunnelDataOptions(1, 3); // Exceeds value limit
+      const result = dataOptionsTranslators.translateDataOptionsToInternal(dataOptions);
 
-      expect(result.category).toHaveLength(2);
-      expect(result.value).toHaveLength(1); // Limited to 1
+      expect(result.breakBy).toHaveLength(1);
+      expect(result.y).toHaveLength(1); // Limited to 1
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining("Maximum 'value' length is limited to 1"),
       );
@@ -226,37 +226,37 @@ describe('dataOptionsTranslators', () => {
 
     it('should not apply value limitation when no categories are present', () => {
       const dataOptions = createMockFunnelDataOptions(0, 3); // No categories
-      const result = dataOptionsTranslators.validateAndCleanDataOptions(dataOptions);
+      const result = dataOptionsTranslators.translateDataOptionsToInternal(dataOptions);
 
-      expect(result.category).toHaveLength(0);
-      expect(result.value).toHaveLength(3); // Not limited
+      expect(result.breakBy).toHaveLength(0);
+      expect(result.y).toHaveLength(3); // Not limited
       expect(consoleSpy).not.toHaveBeenCalled();
     });
 
     it('should not modify data options within limits', () => {
-      const dataOptions = createMockFunnelDataOptions(2, 1); // Within limits
-      const result = dataOptionsTranslators.validateAndCleanDataOptions(dataOptions);
+      const dataOptions = createMockFunnelDataOptions(1, 1); // Within limits
+      const result = dataOptionsTranslators.translateDataOptionsToInternal(dataOptions);
 
-      expect(result.category).toHaveLength(2);
-      expect(result.value).toHaveLength(1);
+      expect(result.breakBy).toHaveLength(1);
+      expect(result.y).toHaveLength(1);
       expect(consoleSpy).not.toHaveBeenCalled();
     });
 
     it('should handle edge case with exactly the limit', () => {
-      const dataOptions = createMockFunnelDataOptions(3, 1); // Exactly at limit
-      const result = dataOptionsTranslators.validateAndCleanDataOptions(dataOptions);
+      const dataOptions = createMockFunnelDataOptions(1, 1); // Exactly at limit
+      const result = dataOptionsTranslators.translateDataOptionsToInternal(dataOptions);
 
-      expect(result.category).toHaveLength(3);
-      expect(result.value).toHaveLength(1);
+      expect(result.breakBy).toHaveLength(1);
+      expect(result.y).toHaveLength(1);
       expect(consoleSpy).not.toHaveBeenCalled();
     });
 
     it('should apply both limitations when necessary', () => {
-      const dataOptions = createMockFunnelDataOptions(5, 3); // Both exceed limits
-      const result = dataOptionsTranslators.validateAndCleanDataOptions(dataOptions);
+      const dataOptions = createMockFunnelDataOptions(3, 3); // Both exceed limits
+      const result = dataOptionsTranslators.translateDataOptionsToInternal(dataOptions);
 
-      expect(result.category).toHaveLength(3);
-      expect(result.value).toHaveLength(1);
+      expect(result.breakBy).toHaveLength(1);
+      expect(result.y).toHaveLength(1);
       expect(consoleSpy).toHaveBeenCalledTimes(2);
     });
 
@@ -269,9 +269,10 @@ describe('dataOptionsTranslators', () => {
         },
       };
 
-      const result = dataOptionsTranslators.validateAndCleanDataOptions(dataOptions);
+      const result = dataOptionsTranslators.translateDataOptionsToInternal(dataOptions);
 
-      expect(result.seriesToColorMap).toEqual(dataOptions.seriesToColorMap);
+      expect(result.breakBy).toHaveLength(1); // Limited to 1 category
+      expect(result.y).toHaveLength(1);
     });
   });
 
@@ -367,20 +368,15 @@ describe('dataOptionsTranslators', () => {
   describe('integration tests for complete data options flow', () => {
     it('should handle complete data options workflow', () => {
       // Start with external data options
-      const externalDataOptions = createMockFunnelDataOptions(2, 1);
-
-      // Validate and clean
-      const cleanedOptions =
-        dataOptionsTranslators.validateAndCleanDataOptions(externalDataOptions);
-      expect(cleanedOptions.category).toHaveLength(2);
-      expect(cleanedOptions.value).toHaveLength(1);
+      const externalDataOptions = createMockFunnelDataOptions(1, 1);
 
       // Check if correct format
-      expect(dataOptionsTranslators.isCorrectDataOptions(cleanedOptions)).toBe(true);
+      expect(dataOptionsTranslators.isCorrectDataOptions(externalDataOptions)).toBe(true);
 
-      // Translate to internal
-      const internalOptions = dataOptionsTranslators.translateDataOptionsToInternal(cleanedOptions);
-      expect(internalOptions.breakBy).toHaveLength(2);
+      // Translate to internal (validation happens here)
+      const internalOptions =
+        dataOptionsTranslators.translateDataOptionsToInternal(externalDataOptions);
+      expect(internalOptions.breakBy).toHaveLength(1);
       expect(internalOptions.y).toHaveLength(1);
 
       // Check if correct internal format
@@ -390,26 +386,28 @@ describe('dataOptionsTranslators', () => {
       const attributes = dataOptionsTranslators.getAttributes(internalOptions);
       const measures = dataOptionsTranslators.getMeasures(internalOptions);
 
-      expect(attributes).toHaveLength(2);
+      expect(attributes).toHaveLength(1);
       expect(measures).toHaveLength(1);
     });
 
     it('should handle workflow with excessive data options', () => {
       // Start with data options that exceed limits
-      const excessiveDataOptions = createMockFunnelDataOptions(5, 3);
+      const excessiveDataOptions = createMockFunnelDataOptions(3, 3);
 
-      // Validate and clean should limit them
-      const cleanedOptions =
-        dataOptionsTranslators.validateAndCleanDataOptions(excessiveDataOptions);
-      expect(cleanedOptions.category).toHaveLength(3); // Limited
-      expect(cleanedOptions.value).toHaveLength(1); // Limited
+      // Check if correct format (before validation)
+      expect(dataOptionsTranslators.isCorrectDataOptions(excessiveDataOptions)).toBe(true);
+
+      // Translate to internal (validation happens here and limits them)
+      const internalOptions =
+        dataOptionsTranslators.translateDataOptionsToInternal(excessiveDataOptions);
+      expect(internalOptions.breakBy).toHaveLength(1); // Limited
+      expect(internalOptions.y).toHaveLength(1); // Limited
 
       // Rest of the workflow should work normally
-      const internalOptions = dataOptionsTranslators.translateDataOptionsToInternal(cleanedOptions);
       const attributes = dataOptionsTranslators.getAttributes(internalOptions);
       const measures = dataOptionsTranslators.getMeasures(internalOptions);
 
-      expect(attributes).toHaveLength(3);
+      expect(attributes).toHaveLength(1);
       expect(measures).toHaveLength(1);
     });
 
@@ -424,7 +422,7 @@ describe('dataOptionsTranslators', () => {
       const attributes = dataOptionsTranslators.getAttributes(internalOptions);
       const measures = dataOptionsTranslators.getMeasures(internalOptions);
 
-      expect(attributes).toHaveLength(2);
+      expect(attributes).toHaveLength(1); // Limited to 1 category
       expect(measures).toHaveLength(1);
       expect(attributes[0]).toHaveProperty('name');
       expect(measures[0]).toHaveProperty('name');
@@ -441,27 +439,23 @@ describe('dataOptionsTranslators', () => {
       };
 
       expect(() => {
-        dataOptionsTranslators.validateAndCleanDataOptions(dataOptionsWithUndefined);
-      }).not.toThrow();
-
-      expect(() => {
         dataOptionsTranslators.translateDataOptionsToInternal(dataOptionsWithUndefined);
       }).not.toThrow();
     });
 
     it('should maintain immutability - not modify original data options', () => {
-      const originalDataOptions = createMockFunnelDataOptions(5, 3);
+      const originalDataOptions = createMockFunnelDataOptions(3, 3);
       const originalCategoryLength = originalDataOptions.category.length;
       const originalValueLength = originalDataOptions.value.length;
 
-      // Validation should not modify original
-      const cleanedOptions =
-        dataOptionsTranslators.validateAndCleanDataOptions(originalDataOptions);
+      // Translation should not modify original
+      const internalOptions =
+        dataOptionsTranslators.translateDataOptionsToInternal(originalDataOptions);
 
       expect(originalDataOptions.category.length).toBe(originalCategoryLength);
       expect(originalDataOptions.value.length).toBe(originalValueLength);
-      expect(cleanedOptions.category.length).toBe(3); // Limited copy
-      expect(cleanedOptions.value.length).toBe(1); // Limited copy
+      expect(internalOptions.breakBy.length).toBe(1); // Limited during translation
+      expect(internalOptions.y.length).toBe(1); // Limited during translation
     });
   });
 });

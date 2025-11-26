@@ -4,6 +4,9 @@ indexTopics:
   - title: CLI Troubleshooting
     description: Troubleshoot issues that arise when using the Compose SDK CLI
     link: ./troubleshooting-cli
+  - title: Dependency Version Troubleshooting
+    description: Troubleshoot dependency version conflicts (for example, MUI) when using Compose SDK
+    link: ./troubleshooting-dependencies
   - title: Runtime Troubleshooting
     description: Troubleshoot issues that arise when executing Compose SDK code
     link: ./troubleshooting-runtime

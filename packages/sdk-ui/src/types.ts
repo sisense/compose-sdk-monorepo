@@ -1079,6 +1079,20 @@ export interface PivotTableStyleOptions {
    * Color of highlighted cells. If not specified, default value is light yellow (`#ffff9c`).
    */
   highlightColor?: string;
+  /**
+   * Boolean flag whether the widths of each vertical column of table cells should be automatically calculated
+   * to fit the width of the component, which defaults to '100%' if `width` is not specified.
+   *
+   * If `true`, all vertical columns of table cells will be resized to fit within the component width without requiring horizontal scroll.
+   * If a width is also specified in the `dataOptions` item, this will be used to calculate the width in proportion to the total width of the component.
+   * Using `isAutoContentWidth: true` with a large number of columns displayed may result in very narrow columns, and is not recommended.
+   *
+   * If `false`, each vertical column of table cells will be calculated to fit the contents, or if specified, the width provided in the corresponding `dataOptions` item.
+   * Horizontal scroll will be shown automatically if required.
+   *
+   * @default false
+   */
+  isAutoContentWidth?: boolean;
 }
 
 /**
@@ -1142,6 +1156,33 @@ export interface TreemapStyleOptions extends BaseStyleOptions {
   };
   /**
    * Configuration for series labels - titles/names identifying data series in a chart
+   * Single label options object would be applied to all levels.
+   * Array of label options objects would be applied to each level.
+   *
+   * @example
+   * Single label options object would enable labels for all levels.
+   * ```typescript
+   * {
+   *   seriesLabels: {
+   *       enabled: true,
+   *   },
+   * }
+   * ```
+   *
+   * @example
+   * Array of label options objects would disable labels for first level and enable labels for second level.
+   * ```typescript
+   * {
+   *   seriesLabels: [
+   *     {
+   *       enabled: false,
+   *     },
+   *     {
+   *       enabled: true,
+   *     },
+   *   ],
+   * }
+   * ```
    */
   seriesLabels?: TreemapSeriesLabels;
   /** Tooltip options object */
@@ -1151,9 +1192,26 @@ export interface TreemapStyleOptions extends BaseStyleOptions {
   };
 }
 
+export type SunburstSeriesLabelsBase = SeriesLabelsBase & {
+  /**
+   * Color of the labels border
+   */
+  borderColor?: string;
+  /**
+   * Background color of the labels.
+   */
+  backgroundColor?: string;
+};
+
+export type SunburstSeriesLabels = SunburstSeriesLabelsBase | SunburstSeriesLabelsBase[];
+
 /** Configuration options that define functional style of the various elements of the SunburstChart component */
 export interface SunburstStyleOptions extends BaseStyleOptions {
-  /** Labels options object */
+  /**
+   * Labels options object
+   *
+   * @deprecated Please use `seriesLabels` instead
+   */
   labels?: {
     /** Array with single label options objects (order of items relative to dataOptions.category) */
     category?: {
@@ -1161,6 +1219,37 @@ export interface SunburstStyleOptions extends BaseStyleOptions {
       enabled?: boolean;
     }[];
   };
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   * Single label options object would be applied to all levels.
+   * Array of label options objects would be applied to each level.
+   *
+   * @example
+   * Single label options object would enable labels for all levels.
+   * ```typescript
+   * {
+   *   seriesLabels: {
+   *       enabled: true,
+   *   },
+   * }
+   * ```
+   *
+   * @example
+   * Array of label options objects would disable labels for first level and enable labels for second level.
+   * ```typescript
+   * {
+   *   seriesLabels: [
+   *     {
+   *       enabled: false,
+   *     },
+   *     {
+   *       enabled: true,
+   *     },
+   *   ],
+   * }
+   * ```
+   */
+  seriesLabels?: SunburstSeriesLabels;
   /** Tooltip options object */
   tooltip?: {
     /** Define mode of data showing */

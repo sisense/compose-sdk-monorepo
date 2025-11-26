@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   EVENT_PIVOT_ELEMENT_CHANGE,
@@ -7,6 +8,7 @@ import {
 } from '@sisense/sdk-pivot-client';
 
 import type { PivotTableDataOptionsInternal, StyledColumn } from '@/chart-data-options/types';
+import { AlertIcon } from '@/common/icons/alert-icon';
 import type { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { PivotTableDataPointEventHandler } from '@/props';
 import type { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
@@ -27,6 +29,10 @@ type PivotRenderOptions = {
   size: ContainerSize | null;
   /** Allow html in pivot table cells */
   allowHtml?: boolean;
+  /** Sanitize html in pivot table cells */
+  sanitizeHtml?: boolean;
+  /** Whether the pivot table should take the full width of its container */
+  isFullWidth?: boolean;
   /** Callback to handle total height change. */
   onTotalHeightChange?: (totalHeight: number) => void;
   /** Callback to handle data point click. */
@@ -49,14 +55,17 @@ export function useRenderPivot({
   themeSettings,
   size,
   allowHtml,
+  sanitizeHtml,
   onTotalHeightChange,
   onDataPointClick,
   onDataPointContextMenu,
   pageSize,
   onPageSizeChange,
+  isFullWidth,
 }: PivotRenderOptions): {
   pivotElement: JSX.Element | null;
 } {
+  const { t } = useTranslation();
   const [pivotElement, setPivotElement] = useState<React.ReactElement | null>(null);
 
   const { handlePivotTableCellClick } = useApplyPivotTableCellEvents({
@@ -105,6 +114,25 @@ export function useRenderPivot({
     [styleOptions, themeSettings],
   );
 
+  const paginationOptions = useMemo(() => {
+    return {
+      alertIcon: React.createElement(AlertIcon, {
+        fill: themeSettings.general.brandColor,
+        style: { marginLeft: 7 },
+      }),
+      notifyLimitsBaseNote: t('pivotTable.limits.baseNote'),
+      notifyRowsLimitLabel: t('pivotTable.limits.rowsLimit'),
+      notifyColumnsLimitLabel: t('pivotTable.limits.columnsLimit'),
+      notifyRowsAndColumnsLimitLabel: t('pivotTable.limits.columnsAndRowsLimit'),
+      notifyTooltipStyle: {
+        fontFamily: themeSettings.typography.fontFamily,
+        color: themeSettings.typography.secondaryTextColor,
+        backgroundColor: themeSettings.chart.backgroundColor,
+        fontSize: 13,
+      },
+    };
+  }, [themeSettings, t]);
+
   const props = useMemo(() => {
     if (size) {
       return {
@@ -114,10 +142,13 @@ export function useRenderPivot({
         itemsPerPage: pageSize,
         isSelectedMode: true,
         allowHtml,
+        isFullWidth,
+        sanitizeHtml,
         onUpdatePredefinedColumnWidth,
         onItemsPerPageChange: onPageSizeChange,
         onTotalHeightChange,
         onCellClick: handlePivotTableCellClick,
+        paginationOptions,
         ...pivotStylingProps,
       };
     }
@@ -126,11 +157,14 @@ export function useRenderPivot({
     size,
     pageSize,
     allowHtml,
+    isFullWidth,
+    sanitizeHtml,
     onUpdatePredefinedColumnWidth,
     pivotStylingProps,
     onTotalHeightChange,
     onPageSizeChange,
     handlePivotTableCellClick,
+    paginationOptions,
   ]);
 
   useEffect(() => {

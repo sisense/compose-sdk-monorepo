@@ -4,7 +4,7 @@ import AlertBox from '@/alert-box/alert-box';
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
 import { ChartRendererProps } from '@/chart/types';
 import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container.js';
-import { HighchartsReactMemoized } from '@/highcharts-memorized';
+import { HighchartsRenderer } from '@/highcharts-renderer';
 import { BeforeRenderHandler } from '@/props';
 import {
   SisenseChartDataPointEventHandler,
@@ -120,7 +120,7 @@ export function createHighchartsBasedChartRenderer<CT extends HighchartBasedChar
           }}
         >
           {!!alerts.length && <AlertBox alerts={alerts} />}
-          <HighchartsReactMemoized options={highchartsOptionsWithSize} />
+          <HighchartsRenderer options={highchartsOptionsWithSize} />
         </div>
       )
     );

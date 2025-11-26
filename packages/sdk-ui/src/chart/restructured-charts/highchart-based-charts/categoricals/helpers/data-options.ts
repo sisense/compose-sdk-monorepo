@@ -5,6 +5,7 @@ import {
   Measure,
   MeasureColumn,
 } from '@sisense/sdk-data';
+import flow from 'lodash-es/flow';
 
 import {
   CategoricalChartDataOptions,
@@ -20,6 +21,10 @@ import {
   normalizeColumn,
   normalizeMeasureColumn,
 } from '@/chart-data-options/utils';
+import {
+  withCategoryLimitation,
+  withValueLimitation,
+} from '@/chart-data-options/validate-data-options/validate-categorical-data-options';
 
 /**
  * Translates categorical chart data options to internal format.
@@ -99,4 +104,14 @@ function isAttributeColumn(
   column: MeasureColumn | CalculatedMeasureColumn | Column,
 ): column is Column {
   return !isMeasureColumn(column);
+}
+
+export function withDataOptionsLimitations({
+  maxCategories,
+  maxValues,
+}: {
+  maxCategories: number;
+  maxValues: number;
+}): (dataOptions: CategoricalChartDataOptions) => CategoricalChartDataOptions {
+  return flow(withCategoryLimitation(maxCategories), withValueLimitation(maxValues));
 }

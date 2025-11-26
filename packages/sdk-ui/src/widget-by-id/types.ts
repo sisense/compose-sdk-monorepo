@@ -555,6 +555,8 @@ export type TableWidgetStyle = {
   'colors/columns': boolean;
   'colors/headers': boolean;
   'colors/rows': boolean;
+  'width/content': boolean;
+  'width/window': boolean;
 };
 
 export type IndicatorWidgetStyle = WidgetContainerStyleOptions & {

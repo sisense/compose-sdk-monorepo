@@ -15,6 +15,7 @@ import { HighchartsOptionsInternal } from '../chart-options-service';
 import {
   FunnelChartDesignOptions,
   PieChartDesignOptions,
+  SunburstChartDesignOptions,
   TreemapChartDesignOptions,
 } from '../translations/design-options';
 import { ChartDesignOptions } from '../translations/types';
@@ -74,7 +75,7 @@ export const getCategoricalChartOptions = (
     case 'sunburst':
       return getSunburstChartOptions(
         chartData,
-        chartDesignOptions as TreemapChartDesignOptions,
+        chartDesignOptions as SunburstChartDesignOptions,
         dataOptions as CategoricalChartDataOptionsInternal,
         translate,
         themeSettings,

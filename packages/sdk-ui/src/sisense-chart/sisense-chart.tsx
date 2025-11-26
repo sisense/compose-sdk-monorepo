@@ -19,7 +19,7 @@ import {
   SCATTER_CHART_TYPES,
 } from '@/chart-options-processor/translations/types';
 import { ChartRendererProps } from '@/chart/types';
-import { HighchartsReactMemoized } from '@/highcharts-memorized';
+import { HighchartsRenderer } from '@/highcharts-renderer';
 import { formatDateValue } from '@/query/date-formats';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { useThemeContext } from '@/theme-provider';
@@ -132,7 +132,7 @@ export const SisenseChart = ({
         }}
       >
         {!!alerts.length && <AlertBox alerts={alerts} />}
-        <HighchartsReactMemoized options={optionsWithSize} />
+        <HighchartsRenderer options={optionsWithSize} />
       </div>
     )
   );

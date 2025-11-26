@@ -121,6 +121,14 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
   jumpToDashboardConfig: {
     enabled: true,
   },
+  chartConfig: {
+    tabular: {
+      htmlContent: {
+        enabled: true,
+        sanitizeContents: true,
+      },
+    },
+  },
 };
 
 /**

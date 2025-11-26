@@ -90,6 +90,8 @@ export type PivotCellProps = {
   borderColor?: string;
   /** allow render any html */
   allowHtml?: boolean;
+  /** Sanitize html in pivot table cells */
+  sanitizeHtml?: boolean;
   /** reference to PivotTable component */
   parent?: Record<any, any>;
   /** on cell click event */
@@ -649,7 +651,12 @@ export class PivotCell extends React.PureComponent<PivotCellProps, State> {
       typeof data === 'string' &&
       (contentType === ContentTypes.HTML || (this.props.allowHtml && htmlExp.test(data)))
     ) {
-      return <div className={CONTENT_INNER} dangerouslySetInnerHTML={this.createMarkup(data)} />;
+      return (
+        <div
+          className={CONTENT_INNER}
+          dangerouslySetInnerHTML={this.createMarkup(data, this.props.sanitizeHtml)}
+        />
+      );
     }
     // change content to image
     if (this.state.isEmbedImage) {
@@ -837,9 +844,9 @@ export class PivotCell extends React.PureComponent<PivotCellProps, State> {
     this.props.onSortingSettingsChanged(this.props.treeNode, this.props.metadata, this);
   };
 
-  createMarkup = (data: any) => {
+  createMarkup = (data: any, sanitizeHtml?: boolean) => {
     if (!this.cachedHtml || data !== this.cachedHtml.data) {
-      const html = DOMPurify.sanitize(data);
+      const html = sanitizeHtml ? DOMPurify.sanitize(data) : data;
       this.cachedHtml = {
         data: html,
         html: { __html: html },

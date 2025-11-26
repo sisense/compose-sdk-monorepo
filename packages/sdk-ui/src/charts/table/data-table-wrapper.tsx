@@ -3,10 +3,12 @@ import { useEffect, useMemo, useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import { isNumber } from '@sisense/sdk-data';
 import classnames from 'classnames';
+import DOMPurify from 'dompurify';
 import { Cell, Column, Table } from 'fixed-data-table-2';
 import 'fixed-data-table-2/dist/fixed-data-table.css';
 
 import { getDataOptionTitle } from '@/chart-data-options/utils';
+import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { getScrollbarWidth } from '@/utils/get-scrollbar-width';
 
 import { SortableTableColumnHeader } from './header/sortable-table-column-header';
@@ -28,7 +30,19 @@ import { DataTableWrapperProps } from './types';
 
 const alignmentForColumnType = (columnType: string) => (isNumber(columnType) ? 'right' : 'left');
 
-const renderDisplayValue = ({
+const htmlExp = new RegExp('<\\/?[\\w\\s="/.\':;#-\\/\\?]+>');
+
+/**
+ * Renders a table cell value, optionally as HTML and/or with ellipsis and tooltip for long content.
+ * If HTML rendering is enabled and the value contains HTML, it can be sanitized before rendering.
+ *
+ * @param displayValue - The string value to display in the cell.
+ * @param width - The width of the cell in pixels.
+ * @param padding - The padding to apply inside the cell.
+ * @param ellipsizedLength - The maximum length before the value is truncated and shown with a tooltip.
+ * @param isHtml - Optional flag to force HTML rendering for the value.
+ */
+const CellDisplayValue = ({
   displayValue,
   width,
   padding,
@@ -41,7 +55,20 @@ const renderDisplayValue = ({
   ellipsizedLength: number;
   isHtml?: boolean;
 }) => {
-  const maybeEllipsizedLength = displayValue.length > ellipsizedLength;
+  const { app } = useSisenseContext();
+  const allowHtml = app?.settings?.chartConfig?.tabular?.htmlContent?.enabled;
+  const sanitizeContents = app?.settings?.chartConfig?.tabular?.htmlContent?.sanitizeContents;
+
+  const { isHtmlValue, value } = useMemo(() => {
+    let isHtmlValue = isHtml;
+    if (allowHtml && typeof isHtmlValue === 'undefined') {
+      isHtmlValue = htmlExp.test(displayValue);
+    }
+    const value = isHtmlValue && sanitizeContents ? DOMPurify.sanitize(displayValue) : displayValue;
+    return { isHtmlValue, value };
+  }, [allowHtml, isHtml, displayValue, sanitizeContents]);
+
+  const maybeEllipsizedLength = value.length > ellipsizedLength;
   return (
     <div
       className={styles.tableCellContent}
@@ -49,14 +76,14 @@ const renderDisplayValue = ({
         maxWidth: `${width - padding}px`,
       }}
     >
-      {isHtml ? (
-        <div dangerouslySetInnerHTML={{ __html: displayValue }} />
+      {isHtmlValue ? (
+        <div dangerouslySetInnerHTML={{ __html: value }} />
       ) : maybeEllipsizedLength ? (
-        <Tooltip title={displayValue}>
-          <div>{displayValue}</div>
+        <Tooltip title={value}>
+          <div>{value}</div>
         </Tooltip>
       ) : (
-        <div>{displayValue}</div>
+        <div>{value}</div>
       )}
     </div>
   );
@@ -140,12 +167,12 @@ export const DataTableWrapper = ({
                   showFieldTypeIcon={showFieldTypeIcon}
                   sortIcon={customStyles?.sortIcon || 'standard'}
                 >
-                  {renderDisplayValue({
-                    displayValue: getDataOptionTitle(columnOptions),
-                    width: columnWidth,
-                    padding: headerPadding,
-                    ellipsizedLength: HEADER_ELLIPSIZED_LENGTH,
-                  })}
+                  <CellDisplayValue
+                    displayValue={getDataOptionTitle(columnOptions)}
+                    width={columnWidth}
+                    padding={headerPadding}
+                    ellipsizedLength={HEADER_ELLIPSIZED_LENGTH}
+                  />
                 </SortableTableColumnHeader>
               </Cell>
             }
@@ -160,14 +187,14 @@ export const DataTableWrapper = ({
                 })}
                 {...props}
               >
-                {renderDisplayValue({
+                <CellDisplayValue
                   // eslint-disable-next-line security/detect-object-injection
-                  displayValue: dataTable.rows[rowIndex][colIndex].displayValue,
-                  width: columnWidth,
-                  padding: DATA_PADDING,
-                  ellipsizedLength: DATA_ELLIPSIZED_LENGTH,
-                  isHtml: 'isHtml' in columnOptions && columnOptions.isHtml,
-                })}
+                  displayValue={dataTable.rows[rowIndex][colIndex].displayValue}
+                  width={columnWidth}
+                  padding={DATA_PADDING}
+                  ellipsizedLength={DATA_ELLIPSIZED_LENGTH}
+                  isHtml={'isHtml' in columnOptions ? columnOptions.isHtml : undefined}
+                />
               </Cell>
             )}
             align={alignmentForColumnType(column.type)}

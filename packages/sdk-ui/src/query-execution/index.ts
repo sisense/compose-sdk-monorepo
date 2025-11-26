@@ -6,7 +6,7 @@ export {
   useExecuteQueryByWidgetId,
   executeQueryByWidgetId,
 } from './use-execute-query-by-widget-id';
-export { useExecutePivotQuery } from './use-execute-pivot-query';
+export { useExecutePivotQuery, useExecutePivotQueryInternal } from './use-execute-pivot-query';
 export { useQueryCache } from './use-query-cache';
 export type {
   QueryState,

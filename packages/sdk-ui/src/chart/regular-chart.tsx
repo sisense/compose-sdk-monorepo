@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { Data } from '@sisense/sdk-data';
 import isArray from 'lodash-es/isArray';
 
 import { isBoxplotChartData } from '@/chart-data/boxplot-data';
+import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { ChartType } from '@/types';
 
 import { ChartData } from '../chart-data/types';
@@ -53,7 +54,7 @@ const shouldRerenderOnResize = (chartType: ChartType) => {
   return chartType === 'indicator';
 };
 
-/** Functoin to check if chart type has results */
+/** Function to check if chart type has results */
 const hasNoResults = (chartType: ChartType, chartData: ChartData) => {
   if (chartType === 'scatter' && 'scatterDataTable' in chartData) {
     return chartData.scatterDataTable.length === 0;
@@ -93,10 +94,19 @@ export const RegularChart = (props: RegularChartProps) => {
     onBeforeRender,
     onDataReady,
   } = props;
+  const { width, height } = styleOptions || {};
 
   const [isLoading, setIsLoading] = useState(false);
   const defaultSize = getChartDefaultSize(chartType);
   const { themeSettings } = useThemeContext();
+
+  const size = useMemo(
+    () => ({
+      width,
+      height,
+    }),
+    [width, height],
+  );
 
   /** Indicates if the chart is a forecast or trend chart for routing between legacy and restructured charts processing */
   const isForecastOrTrendChart = hasForecastOrTrend(chartDataOptions, chartType);
@@ -162,6 +172,77 @@ export const RegularChart = (props: RegularChartProps) => {
     filters,
   });
 
+  const renderChartWithSize = useCallback(
+    (size: ContainerSize) => {
+      if (!chartRendererProps) {
+        return null;
+      }
+
+      if (!chartData && isLoading) {
+        return <LoadingIndicator themeSettings={themeSettings} />;
+      }
+      if ((chartData && hasNoResults(chartType, chartData)) || hasNoDimensions) {
+        return <NoResultsOverlay iconType={chartType} />;
+      }
+
+      // Check if chart should use restructured architecture
+      const shouldUseRestructured = isRestructuredChartType(chartType) && !isForecastOrTrendChart;
+
+      if (shouldUseRestructured) {
+        const chartBuilder = getChartBuilder(chartType);
+        if (chartBuilder.renderer.isCorrectRendererProps(chartRendererProps)) {
+          return (
+            <LoadingOverlay isVisible={isLoading}>
+              <chartBuilder.renderer.ChartRendererComponent {...chartRendererProps} size={size} />
+            </LoadingOverlay>
+          );
+        }
+        return null;
+      }
+
+      if (chartType === 'scattermap' && isScattermapProps(chartRendererProps)) {
+        return (
+          <LoadingOverlay isVisible={isLoading}>
+            <Scattermap {...chartRendererProps} />
+          </LoadingOverlay>
+        );
+      }
+
+      if (chartType === 'indicator' && isIndicatorCanvasProps(chartRendererProps)) {
+        return (
+          <LoadingOverlay isVisible={isLoading}>
+            <IndicatorCanvas {...chartRendererProps} />
+          </LoadingOverlay>
+        );
+      }
+
+      if (isSisenseChartType(chartType) && isSisenseChartProps(chartRendererProps)) {
+        return (
+          <LoadingOverlay isVisible={isLoading}>
+            <SisenseChart
+              {...chartRendererProps}
+              designOptions={{
+                ...chartRendererProps.designOptions,
+              }}
+              size={size}
+            />
+          </LoadingOverlay>
+        );
+      }
+
+      return null;
+    },
+    [
+      chartData,
+      isLoading,
+      themeSettings,
+      chartType,
+      hasNoDimensions,
+      isForecastOrTrendChart,
+      chartRendererProps,
+    ],
+  );
+
   if (!chartRendererProps) {
     return null;
   }
@@ -169,67 +250,10 @@ export const RegularChart = (props: RegularChartProps) => {
   return (
     <DynamicSizeContainer
       defaultSize={defaultSize}
-      size={{
-        width: styleOptions?.width,
-        height: styleOptions?.height,
-      }}
+      size={size}
       rerenderOnResize={shouldRerenderOnResize(chartType)}
     >
-      {(size) => {
-        if (!chartData && isLoading) {
-          return <LoadingIndicator themeSettings={themeSettings} />;
-        }
-        if ((chartData && hasNoResults(chartType, chartData)) || hasNoDimensions) {
-          return <NoResultsOverlay iconType={chartType} />;
-        }
-
-        // Check if chart should use restructured architecture
-        const shouldUseRestructured = isRestructuredChartType(chartType) && !isForecastOrTrendChart;
-
-        if (shouldUseRestructured) {
-          const chartBuilder = getChartBuilder(chartType);
-          if (chartBuilder.renderer.isCorrectRendererProps(chartRendererProps)) {
-            return (
-              <LoadingOverlay isVisible={isLoading}>
-                <chartBuilder.renderer.ChartRendererComponent {...chartRendererProps} size={size} />
-              </LoadingOverlay>
-            );
-          }
-          return null;
-        }
-
-        if (chartType === 'scattermap' && isScattermapProps(chartRendererProps)) {
-          return (
-            <LoadingOverlay isVisible={isLoading}>
-              <Scattermap {...chartRendererProps} />
-            </LoadingOverlay>
-          );
-        }
-
-        if (chartType === 'indicator' && isIndicatorCanvasProps(chartRendererProps)) {
-          return (
-            <LoadingOverlay isVisible={isLoading}>
-              <IndicatorCanvas {...chartRendererProps} />
-            </LoadingOverlay>
-          );
-        }
-
-        if (isSisenseChartType(chartType) && isSisenseChartProps(chartRendererProps)) {
-          return (
-            <LoadingOverlay isVisible={isLoading}>
-              <SisenseChart
-                {...chartRendererProps}
-                designOptions={{
-                  ...chartRendererProps.designOptions,
-                }}
-                size={size}
-              />
-            </LoadingOverlay>
-          );
-        }
-
-        return null;
-      }}
+      {renderChartWithSize}
     </DynamicSizeContainer>
   );
 };

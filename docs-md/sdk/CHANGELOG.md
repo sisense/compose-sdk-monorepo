@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.15.0] - 2025-11-25
+
+### Added
+- Add `PivotTableWidget` component for Vue
+- Add `useExecutePivotQuery` composable for Vue
+- Add `isAutoContentWidth` pivot style option to automatically adjust column widths to fit the component size
+- Add `AppConfig.chartConfig.tabular.htmlContent` configuration to allow html content in `Table` and `PivotTable` components
+- Add troubleshooting guide for dependency conflict resolution (includes MUI example)
+- Extend `seriesLabels` for `SunburstChart`
+
+### Changed
+- Fix missing data limits notification in `PivotTable` component
+- Fix `TableStyleOptions.columns.width` option in table widget translation layer
+- Fix missing updates of handler props in Highcharts-based chart components
+- Prevent categorical chart misconfiguration by restricting its data options
+
 ## [2.14.0] - 2025-11-11
 
 ### Added

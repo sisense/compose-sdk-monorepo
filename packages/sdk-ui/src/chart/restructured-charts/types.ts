@@ -173,13 +173,6 @@ export interface ChartBuilder<CT extends SupportedChartType = SupportedChartType
     getMeasures: (internalDataOptions: TypedDataOptionsInternal<CT>) => Measure[];
 
     /**
-     * Validates and cleans the data options if needed.
-     */
-    validateAndCleanDataOptions?: (
-      dataOptions: TypedChartDataOptions<CT>,
-    ) => TypedChartDataOptions<CT>;
-
-    /**
      * Checks if the data options are correct for the current chart type.
      */
     isCorrectDataOptions: (

@@ -458,3 +458,71 @@ export const withGradientConversion = <T>(
   color: T,
 ): Exclude<T, GradientColor> | HighchartsGradientColorObject =>
   isGradient(color) ? toGradientHighchartsFormat(color) : (color as Exclude<T, GradientColor>);
+
+/**
+ * Converts a GradientColor to a valid CSS gradient string.
+ *
+ * For linear gradients, calculates the angle from the direction coordinates.
+ * For radial gradients, uses the center position and radius.
+ *
+ * @param gradient - The gradient color to convert
+ * @returns A valid CSS gradient string (e.g., "linear-gradient(90deg, #fff 0%, #000 100%)")
+ *
+ * @example
+ * ```ts
+ * const linearGradient: GradientColor = {
+ *   type: 'linear',
+ *   direction: { x1: 0, y1: 0, x2: 0, y2: 1 },
+ *   stops: [
+ *     { position: 0, color: '#003399' },
+ *     { position: 1, color: '#3366AA' }
+ *   ]
+ * };
+ * const css = toCSSGradientFormat(linearGradient);
+ * // Returns: "linear-gradient(180deg, #003399 0%, #3366AA 100%)"
+ *
+ * const radialGradient: GradientColor = {
+ *   type: 'radial',
+ *   center: { centerX: 0.5, centerY: 0.5, radius: 0.8 },
+ *   stops: [
+ *     { position: 0, color: '#ff0000' },
+ *     { position: 1, color: '#0000ff' }
+ *   ]
+ * };
+ * const css = toCSSGradientFormat(radialGradient);
+ * // Returns: "radial-gradient(circle 80% at 50% 50%, #ff0000 0%, #0000ff 100%)"
+ * ```
+ *
+ * @internal
+ */
+export const toCSSGradientFormat = (gradient: GradientColor): string => {
+  // Sort stops by position to ensure correct order
+  const sortedStops = [...gradient.stops].sort((a, b) => a.position - b.position);
+
+  // Format stops as "color position%"
+  const formattedStops = sortedStops
+    .map((stop) => `${stop.color} ${stop.position * 100}%`)
+    .join(', ');
+
+  if (gradient.type === 'linear') {
+    const { direction } = gradient;
+    const dx = direction.x2 - direction.x1;
+    const dy = direction.y2 - direction.y1;
+
+    // Calculate angle in degrees
+    // CSS: 0deg = to top, 90deg = to right, 180deg = to bottom, 270deg = to left
+    // Math.atan2 returns angle in radians, with 0 pointing right, positive counter-clockwise
+    const angleRad = Math.atan2(dy, dx);
+    // Convert to CSS angle: CSS 0deg = to top (which is -90deg in standard math)
+    const angleDeg = (angleRad * 180) / Math.PI + 90;
+
+    return `linear-gradient(${angleDeg}deg, ${formattedStops})`;
+  } else {
+    const { center } = gradient;
+    const centerXPercent = center.centerX * 100;
+    const centerYPercent = center.centerY * 100;
+    const radiusPercent = center.radius * 100;
+
+    return `radial-gradient(circle ${radiusPercent}% at ${centerXPercent}% ${centerYPercent}%, ${formattedStops})`;
+  }
+};

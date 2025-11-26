@@ -391,6 +391,14 @@ export const translation = {
   pivotTable: {
     grandTotal: 'Grand Total',
     subTotal: '{{value}} Total',
+    limits: {
+      baseNote:
+        'Totals may refer to the complete data if set by the dashboard owner. If available, you can use filters to display fewer rows and columns. To view all your data, download the table to CSV.',
+      rowsLimit: 'The Pivot table is limited to {{recordsCount}} records',
+      columnsLimit: 'The Pivot table is limited to {{columnsCount}} columns',
+      columnsAndRowsLimit:
+        'The Pivot table is limited to {{recordsCount}} records and {{columnsCount}} columns',
+    },
   },
   dashboard: {
     toolbar: {

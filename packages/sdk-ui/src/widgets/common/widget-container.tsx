@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, useMemo } from 'react';
 
 import get from 'lodash-es/get';
 
@@ -44,6 +44,16 @@ export const RawWidgetContainer: React.FC<WidgetContainerProps> = ({
 }: WidgetContainerProps) => {
   const { errors, warnings } = useWidgetErrorsAndWarnings();
   const { themeSettings } = useThemeContext();
+
+  const contentTheme = useMemo(
+    () => ({
+      chart: {
+        backgroundColor: styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
+      },
+    }),
+    [styleOptions?.backgroundColor, themeSettings.chart?.backgroundColor],
+  );
+
   return (
     <div className="csdk-w-full csdk-h-full csdk-overflow-hidden csdk-accessible">
       <div
@@ -80,14 +90,7 @@ export const RawWidgetContainer: React.FC<WidgetContainerProps> = ({
             />
           )}
           {topSlot}
-          <ThemeProvider
-            theme={{
-              chart: {
-                backgroundColor:
-                  styleOptions?.backgroundColor || themeSettings.chart?.backgroundColor,
-              },
-            }}
-          >
+          <ThemeProvider theme={contentTheme}>
             <div
               style={{
                 flexGrow: 1,

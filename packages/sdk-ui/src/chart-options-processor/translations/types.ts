@@ -16,6 +16,7 @@ import {
   PolarChartDesignOptions,
   ScatterChartDesignOptions,
   ScattermapChartDesignOptions,
+  SunburstChartDesignOptions,
   TreemapChartDesignOptions,
 } from './design-options';
 
@@ -165,7 +166,7 @@ export type DesignOptions<SpecificChartType extends ChartType = ChartType> =
     : SpecificChartType extends 'treemap'
     ? TreemapChartDesignOptions
     : SpecificChartType extends 'sunburst'
-    ? TreemapChartDesignOptions
+    ? SunburstChartDesignOptions
     : SpecificChartType extends 'boxplot'
     ? BoxplotChartDesignOptions
     : SpecificChartType extends 'areamap'

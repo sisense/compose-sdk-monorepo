@@ -7,6 +7,7 @@ import {
   getCategoricalMeasures,
   isCategoricalChartDataOptions,
   isCategoricalChartDataOptionsInternal,
+  withDataOptionsLimitations,
 } from '../../helpers/data-options';
 import type { TreemapChartDataOptions, TreemapChartDataOptionsInternal } from '../types';
 
@@ -14,7 +15,12 @@ export const dataOptionsTranslators = {
   translateDataOptionsToInternal: (
     dataOptions: TreemapChartDataOptions,
   ): TreemapChartDataOptionsInternal => {
-    return translateCategoricalChartDataOptions(dataOptions);
+    return translateCategoricalChartDataOptions(
+      withDataOptionsLimitations({
+        maxCategories: 3,
+        maxValues: 1,
+      })(dataOptions),
+    );
   },
 
   getAttributes: getCategoricalAttributes,

@@ -65,6 +65,35 @@ Configuration for legend - a key that provides information about the data series
 > **seriesLabels**?: [`TreemapSeriesLabels`](../../sdk-ui/type-aliases/type-alias.TreemapSeriesLabels.md)
 
 Configuration for series labels - titles/names identifying data series in a chart
+Single label options object would be applied to all levels.
+Array of label options objects would be applied to each level.
+
+#### Example
+
+Single label options object would enable labels for all levels.
+```typescript
+{
+  seriesLabels: {
+      enabled: true,
+  },
+}
+```
+
+#### Example
+
+Array of label options objects would disable labels for first level and enable labels for second level.
+```typescript
+{
+  seriesLabels: [
+    {
+      enabled: false,
+    },
+    {
+      enabled: true,
+    },
+  ],
+}
+```
 
 ***
 

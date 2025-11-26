@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { Data, DataSource, isDataSource } from '@sisense/sdk-data';
 
 import { ChartDataOptionsInternal } from '@/chart-data-options/types';
@@ -43,18 +45,30 @@ export function useChartRendererProps(
     onDataPointContextMenu,
     onDataPointsSelected,
   } = internalProps;
-  if (!internalDataOptions || !designOptions) {
-    return null;
-  }
-  return {
-    dataSource: isDataSource(dataSet) ? dataSet : null,
+  return useMemo(() => {
+    if (!internalDataOptions || !designOptions) {
+      return null;
+    }
+    return {
+      dataSource: isDataSource(dataSet) ? dataSet : null,
+      chartType,
+      chartData,
+      dataOptions: internalDataOptions,
+      designOptions,
+      onBeforeRender,
+      onDataPointClick,
+      onDataPointContextMenu,
+      onDataPointsSelected,
+    };
+  }, [
+    dataSet,
     chartType,
     chartData,
-    dataOptions: internalDataOptions,
+    internalDataOptions,
     designOptions,
     onBeforeRender,
     onDataPointClick,
     onDataPointContextMenu,
     onDataPointsSelected,
-  };
+  ]);
 }

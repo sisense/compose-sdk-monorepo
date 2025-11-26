@@ -1,5 +1,7 @@
 import { PointLabelObject } from '@sisense/sisense-charts';
 
+import { prepareDataLabelsOptions } from '@/chart-options-processor/series-labels';
+
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CategoricalChartData } from '../../../chart-data/types';
 import { CompleteThemeSettings } from '../../../types';
@@ -58,18 +60,45 @@ export function prepareSunburstLevels(
     },
   };
 
-  const secondaryLevelOptions = Array.from(new Array(chartData.xAxisCount)).map((_, i) => ({
-    level: i + 2,
-    dataLabels: {
-      enabled: designOptions?.labels?.category?.[i]?.enabled ?? false,
-      formatter(this: PointLabelObject) {
-        const isDarkBG = getDarkFactor(toColor(this.color as string)) > 0.4;
-        const color = isDarkBG ? 'white' : 'rgb(43, 51, 66)';
+  const secondaryLevelOptions = Array.from(new Array(chartData.xAxisCount)).map((_, i) => {
+    const seriesLabelsOptions = Array.isArray(designOptions.seriesLabels)
+      ? designOptions.seriesLabels[i]
+      : designOptions.seriesLabels;
+    const dataLabelsOptions = prepareDataLabelsOptions(seriesLabelsOptions);
+    const { prefix, suffix } = seriesLabelsOptions ?? {};
+    return {
+      level: i + 2,
+      dataLabels: {
+        useHTML: true,
+        ...dataLabelsOptions,
+        formatter(this: PointLabelObject) {
+          const isDarkBG = getDarkFactor(toColor(this.color as string)) > 0.4;
+          let color = isDarkBG ? 'white' : 'rgb(43, 51, 66)';
 
-        return `<span style="color: ${color}">${this.point.name}</span>`;
+          if (dataLabelsOptions.style?.color && dataLabelsOptions.style.color !== 'contrast') {
+            color = dataLabelsOptions.style.color;
+          }
+
+          return `<div
+          style="
+          display: inline;
+          color: ${color};
+          background-color: ${dataLabelsOptions.backgroundColor ?? ''};
+          padding: ${dataLabelsOptions.padding ?? 0}px;
+          font-size: ${dataLabelsOptions.style?.fontSize ?? ''}px;
+          font-weight: ${dataLabelsOptions.style?.fontWeight ?? ''};
+          font-style: ${dataLabelsOptions.style?.fontStyle ?? ''};
+          font-family: ${dataLabelsOptions.style?.fontFamily ?? ''};
+          border-width: ${dataLabelsOptions.borderWidth ?? 0}px;
+          border-style: solid;
+          border-color: ${dataLabelsOptions.borderColor ?? ''};
+          border-radius: ${dataLabelsOptions.borderRadius ?? 0}px;
+          text-overflow: ${dataLabelsOptions.style?.textOverflow ?? ''};"
+          >${prefix ?? ''}${this.point.name}${suffix ?? ''}</div>`;
+        },
       },
-    },
-  }));
+    };
+  });
 
   return [rootLevelOptions, ...secondaryLevelOptions];
 }

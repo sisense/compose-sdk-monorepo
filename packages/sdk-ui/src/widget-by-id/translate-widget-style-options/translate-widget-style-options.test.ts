@@ -556,6 +556,33 @@ describe('translate widget style options', () => {
         expectedOptions,
       );
     });
+    it('should extract table column auto width correctly', () => {
+      const widgetStyleAutoWidth = {
+        'width/window': true,
+        'width/content': false,
+      };
+
+      const widgetStyleContentWidth = {
+        'width/window': false,
+        'width/content': true,
+      };
+
+      expect(
+        extractStyleOptions('tablewidget', mockWidgetDto('', widgetStyleAutoWidth, [])),
+      ).toMatchObject({
+        columns: { alternatingColor: { enabled: undefined }, width: 'auto' },
+      });
+
+      expect(
+        extractStyleOptions('tablewidget', mockWidgetDto('', widgetStyleContentWidth, [])),
+      ).toMatchObject({
+        columns: { alternatingColor: { enabled: undefined }, width: 'content' },
+      });
+
+      expect(extractStyleOptions('tablewidget', mockWidgetDto('', {}, []))).toMatchObject({
+        columns: { alternatingColor: { enabled: undefined }, width: undefined },
+      });
+    });
   });
 
   describe('style options for indicator chart', () => {

@@ -1,5 +1,5 @@
 {
-  "version": "2.14.0",
+  "version": "2.15.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -132,6 +132,9 @@
   "packageManager": "yarn@3.2.3",
   "volta": {
     "node": "18.16.0"
+  },
+  "resolutions": {
+    "form-data": "4.0.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",

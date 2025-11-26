@@ -49,6 +49,7 @@ type Props = {
   isFixedEnabled?: boolean;
   isMobile?: boolean;
   allowHtml?: boolean;
+  sanitizeHtml?: boolean;
   dataBars?: Array<[string, string]>;
   rangeMinMax?: Array<[string, string]>;
   getSortingPopupContainer?: () => HTMLElement;
@@ -839,6 +840,7 @@ export class PivotTable extends React.PureComponent<Props, State> {
         tableSize={this.state.tableSize}
         isSelectedMode={this.props.isSelectedMode}
         allowHtml={this.props.allowHtml}
+        sanitizeHtml={this.props.sanitizeHtml}
         onCellClick={this.props.onCellClick}
         onCellEnter={this.props.onCellEnter}
         onCellLeave={this.props.onCellLeave}

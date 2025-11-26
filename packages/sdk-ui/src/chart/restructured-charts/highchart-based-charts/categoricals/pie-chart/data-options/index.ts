@@ -1,11 +1,6 @@
 import { Attribute, Measure } from '@sisense/sdk-data';
-import flow from 'lodash-es/flow';
 
 import { ChartDataOptions, ChartDataOptionsInternal } from '@/chart-data-options/types';
-import {
-  withCategoryLimitation,
-  withValueLimitation,
-} from '@/chart-data-options/validate-data-options/validate-categorical-data-options';
 
 import {
   getCategoricalAttributes,
@@ -13,13 +8,9 @@ import {
   isCategoricalChartDataOptions,
   isCategoricalChartDataOptionsInternal,
   translateCategoricalDataOptionsToInternal,
+  withDataOptionsLimitations,
 } from '../../helpers/data-options';
 import { PieChartDataOptions, PieChartDataOptionsInternal } from '../types';
-
-const MAX_CATEGORICAL_DATA_OPTIONS_LENGTHS = {
-  category: 3,
-  value: 1,
-} as const;
 
 /**
  * Data options translators for pie charts.
@@ -31,7 +22,15 @@ export const dataOptionsTranslators = {
   translateDataOptionsToInternal: (
     dataOptions: PieChartDataOptions,
   ): PieChartDataOptionsInternal => {
-    return translateCategoricalDataOptionsToInternal(dataOptions);
+    // [categories:1, values:1] || [categories:0, values:any]
+    const limitedDataOptions =
+      dataOptions.category.length > 0
+        ? withDataOptionsLimitations({
+            maxCategories: 1,
+            maxValues: 1,
+          })(dataOptions)
+        : dataOptions;
+    return translateCategoricalDataOptionsToInternal(limitedDataOptions);
   },
 
   /**
@@ -46,18 +45,6 @@ export const dataOptionsTranslators = {
    */
   getMeasures: (internalDataOptions: PieChartDataOptionsInternal): Measure[] => {
     return getCategoricalMeasures(internalDataOptions);
-  },
-
-  /**
-   * Validates and cleans pie chart data options.
-   */
-  validateAndCleanDataOptions: (dataOptions: PieChartDataOptions): PieChartDataOptions => {
-    return flow(
-      withCategoryLimitation(MAX_CATEGORICAL_DATA_OPTIONS_LENGTHS.category),
-      dataOptions.category.length > 0
-        ? withValueLimitation(MAX_CATEGORICAL_DATA_OPTIONS_LENGTHS.value)
-        : (data: PieChartDataOptions) => data,
-    )(dataOptions);
   },
 
   /**

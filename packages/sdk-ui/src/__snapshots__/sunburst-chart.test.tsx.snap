@@ -321,6 +321,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
           "dataLabels": {
             "enabled": false,
             "formatter": [Function],
+            "useHTML": true,
           },
           "level": 2,
         },
@@ -865,6 +866,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "dataLabels": {
             "enabled": false,
             "formatter": [Function],
+            "useHTML": true,
           },
           "level": 2,
         },
@@ -872,6 +874,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
           "dataLabels": {
             "enabled": false,
             "formatter": [Function],
+            "useHTML": true,
           },
           "level": 3,
         },
@@ -1427,6 +1430,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "dataLabels": {
             "enabled": false,
             "formatter": [Function],
+            "useHTML": true,
           },
           "level": 2,
         },
@@ -1434,6 +1438,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
           "dataLabels": {
             "enabled": false,
             "formatter": [Function],
+            "useHTML": true,
           },
           "level": 3,
         },

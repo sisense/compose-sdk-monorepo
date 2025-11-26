@@ -42,7 +42,24 @@ import {
 import { DataSource, DataSourceInfo } from './interfaces.js';
 
 /**
+ * Generates a cryptographically secure random number between 0 and 1.
+ * Uses Web Crypto API which is available in both browser and Node.js environments.
+ *
+ * @returns A random number between 0 (inclusive) and 1 (exclusive)
+ * @internal
+ */
+export function secureRandom(): number {
+  // Use Web Crypto API for cryptographically secure random numbers
+  // Available in both browser and Node.js (Node.js 15.0.0+)
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  // Convert to 0-1 range by dividing by max Uint32 value
+  return array[0] / (0xffffffff + 1);
+}
+
+/**
  * A more performant, but slightly bulkier, RFC4122v4 implementation. Performance is improved by minimizing calls to random()
+ * Uses cryptographically secure random number generation.
  *
  * @internal
  */
@@ -63,7 +80,7 @@ export const guidFast = function (len?: number) {
     }
 
     if (rnd <= 0x02) {
-      rnd = (0x2000000 + Math.random() * 0x1000000) | 0;
+      rnd = (0x2000000 + secureRandom() * 0x1000000) | 0;
     }
 
     r = rnd & 0xf;

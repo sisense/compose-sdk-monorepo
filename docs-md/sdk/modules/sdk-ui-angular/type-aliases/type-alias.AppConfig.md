@@ -34,6 +34,58 @@ This feature is in alpha.
 
 ***
 
+### `chartConfig`
+
+**chartConfig**?: `object`
+
+Global configuration for some specific aspects of data visualizations.
+
+> #### `chartConfig.tabular`
+>
+> **tabular**?: `object`
+>
+> `Table` and `PivotTable` configuration
+>
+> > ##### `tabular.htmlContent`
+> >
+> > **htmlContent**?: `object`
+> >
+> > Configuration for HTML content in `Table` and `PivotTable`
+> >
+> > > ###### `htmlContent.enabled`
+> > >
+> > > **enabled**?: `boolean`
+> > >
+> > > If true, the contents of table and pivot table cells are rendered as HTML instead of text.
+> > >
+> > > **Note**: The [StyledColumn.isHtml](../interfaces/interface.StyledColumn.md#ishtml) property of columns in `dataOptions` are of higher precedence, and will therefore override this setting.
+> > >
+> > > ###### Default
+> > >
+> > > ```ts
+> > > true
+> > > ```
+> > >
+> > > ###### `htmlContent.sanitizeContents`
+> > >
+> > > **sanitizeContents**?: `boolean`
+> > >
+> > > Enables sanitization of HTML content before rendering to prevent XSS attacks.
+> > >
+> > > ###### Default
+> > >
+> > > ```ts
+> > > true
+> > > ```
+> > >
+> > >
+> >
+> >
+>
+>
+
+***
+
 ### `dateConfig`
 
 **dateConfig**?: [`DateConfig`](type-alias.DateConfig.md)

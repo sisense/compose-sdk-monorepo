@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
 import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
-import { HighchartsReactMemoized } from '@/highcharts-memorized';
+import { HighchartsRenderer } from '@/highcharts-renderer';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import { CalendarHeatmapSubtype, CalendarHeatmapViewType, TextStyle } from '@/types';
 
@@ -111,7 +111,7 @@ export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps>
                   {shouldUseShortMonthName ? month.shortMonthName : month.monthName}
                 </ChartTitle>
               )}
-            <HighchartsReactMemoized options={chartOptions} />
+            <HighchartsRenderer options={chartOptions} />
           </ChartWrapper>
         );
       })}

@@ -64,7 +64,7 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
                   style="width: 100%; height: 100%;"
                 >
                   <div
-                    style="width: 400px; height: 532px; position: relative;"
+                    style="width: 400px; height: 500px; position: relative;"
                   >
                     <div
                       style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"

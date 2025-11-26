@@ -55,9 +55,20 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     onChange,
   } = props;
   const { width, height } = styleOptions || {};
-  const defaultSize = getWidgetDefaultSize(chartType, {
-    hasHeader: !styleOptions?.header?.hidden,
-  });
+  const defaultSize = useMemo(
+    () =>
+      getWidgetDefaultSize(chartType, {
+        hasHeader: !styleOptions?.header?.hidden,
+      }),
+    [chartType, styleOptions?.header?.hidden],
+  );
+  const size = useMemo(
+    () => ({
+      width,
+      height,
+    }),
+    [width, height],
+  );
 
   const [refreshCounter, setRefreshCounter] = useState(0);
 
@@ -147,13 +158,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
   };
 
   return (
-    <DynamicSizeContainer
-      defaultSize={defaultSize}
-      size={{
-        width,
-        height,
-      }}
-    >
+    <DynamicSizeContainer defaultSize={defaultSize} size={size}>
       <WidgetContainer
         {...props}
         topSlot={

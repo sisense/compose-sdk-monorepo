@@ -52,6 +52,28 @@ Color of highlighted cells. If not specified, default value is light yellow (`#f
 
 ***
 
+### isAutoContentWidth
+
+> **isAutoContentWidth**?: `boolean`
+
+Boolean flag whether the widths of each vertical column of table cells should be automatically calculated
+to fit the width of the component, which defaults to '100%' if `width` is not specified.
+
+If `true`, all vertical columns of table cells will be resized to fit within the component width without requiring horizontal scroll.
+If a width is also specified in the `dataOptions` item, this will be used to calculate the width in proportion to the total width of the component.
+Using `isAutoContentWidth: true` with a large number of columns displayed may result in very narrow columns, and is not recommended.
+
+If `false`, each vertical column of table cells will be calculated to fit the contents, or if specified, the width provided in the corresponding `dataOptions` item.
+Horizontal scroll will be shown automatically if required.
+
+#### Default
+
+```ts
+false
+```
+
+***
+
 ### isAutoHeight
 
 > **isAutoHeight**?: `boolean`

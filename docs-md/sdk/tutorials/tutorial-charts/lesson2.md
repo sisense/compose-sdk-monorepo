@@ -137,7 +137,7 @@ Our chart is looking pretty good except for the incongruity between the column c
 
 We can easily fix this using a series-to-color map. This map does exactly what its name implies. It maps series of data to colors on a chart. In our case, we want each of our product colors to be represented by a corresponding hex color in the chart.
 
-We can do that by adding a `seriesToColorMap` object to our `dataOptions`, where the object’s properties are the series we broke our data by and their values are corresponding color hex codes or [named colors](https://developer.mozilla.org/en-US/docs/Web/CSS/named-color)::
+We can do that by adding a `seriesToColorMap` object to our `dataOptions`, where the object’s properties are the series we broke our data by and their values are corresponding color hex codes or [named colors](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/named-color)::
 
 ```ts
 dataOptions={{

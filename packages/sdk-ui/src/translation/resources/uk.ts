@@ -397,6 +397,14 @@ export const translation: TranslationDictionary = {
   pivotTable: {
     grandTotal: 'Загальний підсумок',
     subTotal: 'Усього {{value}}',
+    limits: {
+      baseNote:
+        'Загальні підсумки можуть відноситися до всіх даних, якщо вони встановлені власником дашборду. Якщо доступні, ви можете використовувати фільтри для відображення меншої кількості рядків і стовпців. Щоб побачити всі ваші дані, завантажте таблицю в CSV.',
+      rowsLimit: 'Таблиця Pivot обмежена до {{recordsCount}} рядків',
+      columnsLimit: 'Таблиця Pivot обмежена до {{columnsCount}} стовпців',
+      columnsAndRowsLimit:
+        'Таблиця Pivot обмежена до {{recordsCount}} рядків і {{columnsCount}} стовпців',
+    },
   },
   dataBrowser: {
     addFilter: 'Додати фільтр',

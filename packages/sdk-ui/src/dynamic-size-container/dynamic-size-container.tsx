@@ -177,12 +177,17 @@ export const DynamicSizeContainer = ({
 
   const contentKey = rerenderOnResize ? `${contentSize?.width}${contentSize?.height}` : '';
 
+  const renderedChildren = useMemo(() => {
+    if (typeof children === 'function') {
+      return children(contentSize);
+    }
+    return children;
+  }, [children, contentSize]);
+
   return (
     <div style={containerStyle} ref={containerRef}>
       <div style={contentStyle} key={contentKey}>
-        <div style={detachedContentStyle}>
-          {contentSize && (typeof children === 'function' ? children(contentSize) : children)}
-        </div>
+        <div style={detachedContentStyle}>{renderedChildren}</div>
       </div>
     </div>
   );

@@ -170,6 +170,30 @@ export type AppConfig = {
      */
     enabled?: boolean;
   };
+
+  /**
+   * Global configuration for some specific aspects of data visualizations.
+   */
+  chartConfig?: {
+    /** `Table` and `PivotTable` configuration */
+    tabular?: {
+      /** Configuration for HTML content in `Table` and `PivotTable` */
+      htmlContent?: {
+        /**
+         * If true, the contents of table and pivot table cells are rendered as HTML instead of text.
+         *
+         * **Note**: The {@link StyledColumn.isHtml} property of columns in `dataOptions` are of higher precedence, and will therefore override this setting.
+         * @default true
+         * */
+        enabled?: boolean;
+        /**
+         * Enables sanitization of HTML content before rendering to prevent XSS attacks.
+         * @default true
+         * */
+        sanitizeContents?: boolean;
+      };
+    };
+  };
 };
 
 /**

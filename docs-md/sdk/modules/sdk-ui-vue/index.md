@@ -67,6 +67,7 @@ Vue composables for working with queries
 
 - [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
 - [useExecuteCustomWidgetQuery](queries/function.useExecuteCustomWidgetQuery.md)
+- [useExecutePivotQuery](queries/function.useExecutePivotQuery.md)
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 
 ## Dashboards
@@ -77,6 +78,7 @@ Vue components and utilities for working with dashboards
 - [Dashboard](dashboards/class.Dashboard.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md)
+- [PivotTableWidget](dashboards/class.PivotTableWidget.md) <Badge type="beta" text="Beta" />
 - [useComposedDashboard](dashboards/function.useComposedDashboard.md)
 - [useCustomWidgets](dashboards/function.useCustomWidgets.md)
 - [Widget](dashboards/class.Widget.md)
