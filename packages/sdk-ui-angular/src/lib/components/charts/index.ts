@@ -14,6 +14,7 @@ export * from './pivot-table.component';
 export * from './polar-chart.component';
 export * from './scatter-chart.component';
 export * from './scattermap-chart.component';
+export * from './streamgraph-chart.component';
 export * from './sunburst-chart.component';
 export * from './table.component';
 export * from './treemap-chart.component';

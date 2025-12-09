@@ -2,9 +2,9 @@ import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 're
 
 import { DndContext, DragMoveEvent } from '@dnd-kit/core';
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
-import styled from '@emotion/styled';
 
 import { useSyncedState } from '@/common/hooks/use-synced-state';
+import styled from '@/styled';
 
 import {
   MAX_COLUMN_WIDTH,

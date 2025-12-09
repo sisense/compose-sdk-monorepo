@@ -1,6 +1,5 @@
 import { useCallback, useRef } from 'react';
 
-import styled from '@emotion/styled';
 import {
   DataSource,
   Filter,
@@ -14,6 +13,7 @@ import { DASHBOARD_HEADER_HEIGHT } from '@/dashboard/components/dashboard-header
 import { getDividerStyle } from '@/dashboard/utils';
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { FilterTile } from '@/filters/components/filter-tile';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 import {
@@ -58,7 +58,7 @@ const PanelBody = styled.div`
 `;
 
 const PanelBodyInner = styled.div`
-  padding: 0px 12px 12px;
+  padding: 0px 12px 8px 10px;
 `;
 
 /**

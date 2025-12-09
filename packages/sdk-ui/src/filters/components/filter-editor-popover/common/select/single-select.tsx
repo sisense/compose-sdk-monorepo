@@ -1,10 +1,10 @@
 import { CSSProperties, useCallback, useRef, useState } from 'react';
 
-import styled from '@emotion/styled';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 import { Popper } from '@/common/components/popper';
 import { DEFAULT_TEXT_COLOR } from '@/const';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 

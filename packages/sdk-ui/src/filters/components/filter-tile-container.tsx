@@ -2,23 +2,20 @@ import type { FunctionComponent, ReactNode } from 'react';
 import { useState } from 'react';
 
 import { css } from '@emotion/react';
-import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
 import merge from 'ts-deepmerge';
 import { DeepRequired } from 'ts-essentials';
 
 import { DEFAULT_TEXT_COLOR } from '@/const';
 import { BackgroundFilterIcon } from '@/filters/components/icons/background-filter-icon';
+import styled from '@/styled';
 
 import { useThemeContext } from '../../theme-provider';
 import { getSlightlyDifferentColor } from '../../utils/color';
 import { SisenseSwitchButton, TriangleIndicator } from './common';
 import { FilterVariant, isVertical } from './common/filter-utils';
+import { BORDER_COLOR, BORDER_THICKNESS, FILTER_TILE_MIN_WIDTH } from './filters-panel/constants';
 import { ArrowDownIcon, LockIcon, PencilIcon, TrashIcon } from './icons';
-
-const BORDER_COLOR = '#dadada';
-const BORDER_THICKNESS = '1px';
-const FILTER_TILE_MIN_WIDTH = 213;
 
 const BaseContainer = styled.div<{ shouldShowBorder: boolean }>`
   width: min-content;
@@ -33,7 +30,6 @@ const BaseContainer = styled.div<{ shouldShowBorder: boolean }>`
       border-bottom: ${BORDER_THICKNESS} solid ${BORDER_COLOR};
       box-shadow: -${BORDER_THICKNESS} 0 0 0 ${BORDER_COLOR},
         ${BORDER_THICKNESS} 0 0 0 ${BORDER_COLOR};
-      margin-left: 1px;
     `}
 `;
 
@@ -215,12 +211,11 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
               >
                 {title}
               </span>
-              {onEdit && !disabled && (
+              {onEdit && !disabled && !locked && (
                 <IconButton
                   className="csdk-filter-edit-button"
                   onClick={onEdit}
-                  sx={{ p: 0, mr: 'auto' }}
-                  disabled={locked}
+                  sx={{ p: 0, mr: '2px' }}
                   data-testid="filter-edit-button"
                 >
                   <PencilIcon color={themeSettings.typography.primaryTextColor} aria-label="edit" />

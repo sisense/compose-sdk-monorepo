@@ -13,16 +13,6 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react({
       jsxImportSource: '@emotion/react', // This tells SWC to use Emotion for JSX
-      plugins: [
-        [
-          '@swc/plugin-emotion',
-          {
-            sourceMap: mode !== 'production', // Enable source maps only in development
-            autoLabel: 'always', // Add labels for debugging
-            labelFormat: '[local]', // Use the component's variable name in class names
-          },
-        ],
-      ],
     }),
     cssInjectedByJsPlugin({
       topExecutionPriority: false,

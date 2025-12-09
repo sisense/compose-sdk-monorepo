@@ -98,6 +98,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -6490,6 +6493,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
           "pointerEvents": "none",
           "textOutline": "none",
         },
+      },
+      "label": {
+        "enabled": false,
       },
       "marker": {
         "enabled": false,

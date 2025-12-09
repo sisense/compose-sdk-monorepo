@@ -58,8 +58,8 @@ get_next_index() {
   local suffix="$2"
   local dist_tag="$3"
 
-  version_line=$(npm dist-tag ls "$ref_pkg_name" 2>/dev/null | grep "^$dist_tag:" || true)
-  existing_version=$(echo "$version_line" | awk '{print $2}' || true)
+  version_line=$(yarn npm tag list "$ref_pkg_name" 2>/dev/null | grep "@${dist_tag} →" || true)
+  existing_version=$(echo "$version_line" | awk -F'→' '{gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}' || true)
 
   if [[ "$existing_version" =~ ^$base-$suffix\.([0-9]+)$ ]]; then
     echo $((BASH_REMATCH[1] + 1))
@@ -86,7 +86,7 @@ main() {
   yarn nx:build:prod
 
   yarn workspace @sisense/sdk-ui-preact publish:prepare
-  yarn workspaces foreach --all --no-private npm publish --tolerate-republish --tag "$dist_tag"
+  yarn workspaces foreach --all --no-private npm publish --tag "$dist_tag" --tolerate-republish
 
   echo -e "\n✅ Fusion release complete. Published versions:"
   yarn workspaces foreach --all --no-private exec node -p "require('./package.json').name + ' - ' + require('./package.json').version"

@@ -8,6 +8,7 @@ exports[`translateFilters > should translate filter relations 1`] = `
     "left": {
       "__serializable": "MembersFilter",
       "_name": "filter",
+      "_title": "filter",
       "attribute": {
         "__serializable": "DimensionalAttribute",
         "composeCode": "DM.Country.Country",
@@ -43,6 +44,7 @@ exports[`translateFilters > should translate filter relations 1`] = `
     "right": {
       "__serializable": "MembersFilter",
       "_name": "filter",
+      "_title": "filter",
       "attribute": {
         "__serializable": "DimensionalAttribute",
         "composeCode": "DM.Brand.Brand",
@@ -79,6 +81,7 @@ exports[`translateFilters > should translate filter relations 1`] = `
   "right": {
     "__serializable": "MeasureFilter",
     "_name": "filter",
+    "_title": "filter",
     "attribute": {
       "__serializable": "DimensionalAttribute",
       "composeCode": "DM.Commerce.Revenue",
@@ -137,6 +140,7 @@ exports[`translateFilters > should translate filters 1`] = `
   {
     "__serializable": "MembersFilter",
     "_name": "filter",
+    "_title": "filter",
     "attribute": {
       "__serializable": "DimensionalLevelAttribute",
       "composeCode": "DM.Commerce.Date.Years",
@@ -173,6 +177,7 @@ exports[`translateFilters > should translate filters 1`] = `
   {
     "__serializable": "MembersFilter",
     "_name": "filter",
+    "_title": "filter",
     "attribute": {
       "__serializable": "DimensionalAttribute",
       "composeCode": "DM.Country.Country",
@@ -211,6 +216,7 @@ exports[`translateFilters > translateHighlightsFromJSONFunctionCall > should tra
   {
     "__serializable": "MembersFilter",
     "_name": "filter",
+    "_title": "filter",
     "attribute": {
       "__serializable": "DimensionalAttribute",
       "composeCode": "DM.Country.Country",
@@ -244,6 +250,7 @@ exports[`translateFilters > translateHighlightsFromJSONFunctionCall > should tra
   {
     "__serializable": "MembersFilter",
     "_name": "filter",
+    "_title": "filter",
     "attribute": {
       "__serializable": "DimensionalAttribute",
       "composeCode": "DM.Brand.Brand",

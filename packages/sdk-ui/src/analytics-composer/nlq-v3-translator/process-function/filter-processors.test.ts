@@ -1,9 +1,10 @@
-import { Attribute } from '@sisense/sdk-data';
+import { Attribute, Filter } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
 import { FunctionContext } from '../types.js';
 import {
   processDateFilter,
+  processExcludeFilter,
   processNumericFilter,
   processStringFilter,
   processStringOrNumericFilter,
@@ -12,6 +13,7 @@ import {
 // Mock attribute objects for testing
 const createMockAttribute = (type: string): Attribute => ({
   name: 'TestAttribute',
+  title: 'TestAttribute',
   type,
   description: 'Test attribute',
   id: 'test-id',
@@ -29,6 +31,29 @@ const createMockContext = (pathPrefix = ''): FunctionContext => ({
   tables: [],
   pathPrefix,
 });
+
+// Mock filter objects for testing
+const createMockMembersFilter = (): Filter =>
+  ({
+    attribute: createMockAttribute('text-attribute'),
+    __serializable: 'MembersFilter',
+    members: ['value1', 'value2'],
+    config: {},
+  } as unknown as Filter);
+
+const createMockDateRangeFilter = (): Filter =>
+  ({
+    attribute: createMockAttribute('datelevel'),
+    __serializable: 'DateRangeFilter',
+    config: {},
+  } as unknown as Filter);
+
+const createMockTextFilter = (): Filter =>
+  ({
+    attribute: createMockAttribute('text-attribute'),
+    __serializable: 'TextFilter',
+    config: {},
+  } as unknown as Filter);
 
 describe('filter-processors', () => {
   describe('processStringOrNumericFilter', () => {
@@ -144,6 +169,35 @@ describe('filter-processors', () => {
       expect(() => {
         processDateFilter([numericAttr, 123], context);
       }).toThrow('args[0]: Attribute must be date/datetime type, got numeric attribute');
+    });
+  });
+
+  describe('processExcludeFilter', () => {
+    it('should not throw for members filter', () => {
+      const membersFilter = createMockMembersFilter();
+      const context = createMockContext();
+
+      expect(() => {
+        processExcludeFilter([membersFilter], context);
+      }).not.toThrow();
+    });
+
+    it('should throw for dateRange filter', () => {
+      const dateRangeFilter = createMockDateRangeFilter();
+      const context = createMockContext();
+
+      expect(() => {
+        processExcludeFilter([dateRangeFilter], context);
+      }).toThrow('args[0]: exclude filter only accepts members filter, got DateRangeFilter filter');
+    });
+
+    it('should throw for text filter', () => {
+      const textFilter = createMockTextFilter();
+      const context = createMockContext();
+
+      expect(() => {
+        processExcludeFilter([textFilter], context);
+      }).toThrow('args[0]: exclude filter only accepts members filter, got TextFilter filter');
     });
   });
 });

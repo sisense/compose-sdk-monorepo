@@ -1,9 +1,9 @@
 import { MouseEventHandler, useCallback } from 'react';
 
-import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
 
 import ThreeDotsIcon from '@/ai/icons/three-dots-icon';
+import styled from '@/styled';
 import { getSlightlyDifferentColor } from '@/utils/color';
 
 type MenuButtonProps = {

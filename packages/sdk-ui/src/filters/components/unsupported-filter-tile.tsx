@@ -31,7 +31,7 @@ export const UnsupportedFilterTile = ({
   const { t } = useTranslation();
   return (
     <FilterTileContainer
-      title={filter.attribute.name ?? ''}
+      title={filter.attribute.title ?? ''}
       renderContent={() => (
         <FilterContentDisplay>{t('unsupportedFilterMessage')}</FilterContentDisplay>
       )}

@@ -45,12 +45,13 @@ export const pieHighchartsOptionsBuilder: HighchartsOptionsBuilder<'pie'> = {
   },
 
   getPlotOptions: function (ctx) {
-    return getPiePlotOptions(
-      ctx.designOptions.pieType,
-      ctx.designOptions.seriesLabels,
-      ctx.dataOptions,
-      ctx.extraConfig.themeSettings,
-    );
+    return getPiePlotOptions({
+      pieType: ctx.designOptions.pieType,
+      seriesLabels: ctx.designOptions.seriesLabels,
+      chartDataOptions: ctx.dataOptions,
+      themeSettings: ctx.extraConfig.themeSettings,
+      semiCircle: ctx.designOptions.semiCircle,
+    });
   },
 
   getTooltip: function (ctx) {

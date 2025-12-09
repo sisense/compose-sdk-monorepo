@@ -43,7 +43,6 @@ describe('useDrilldown', () => {
             nextDimension: category,
           },
         ],
-        drilldownPaths: [ageRange],
         initialDimension: gender,
         openMenu: openMenuMock,
       }),
@@ -73,7 +72,6 @@ describe('useDrilldown', () => {
             nextDimension: category,
           },
         ],
-        drilldownPaths: [ageRange],
         initialDimension: gender,
         openMenu: openMenuMock,
       }),
@@ -81,7 +79,7 @@ describe('useDrilldown', () => {
 
     const { openDrilldownMenu } = result.current;
 
-    act(() => openDrilldownMenu(menuPosition, []));
+    act(() => openDrilldownMenu(menuPosition, [], [ageRange]));
 
     const lastCall = openMenuMock.mock.lastCall as any;
 
@@ -110,7 +108,6 @@ describe('useDrilldown', () => {
           nextDimension: category,
         },
       ],
-      drilldownPaths: [ageRange],
       initialDimension: gender,
       openMenu: openMenuMock,
       onDrilldownSelectionsChange,
@@ -120,11 +117,15 @@ describe('useDrilldown', () => {
     const { openDrilldownMenu } = result.current;
 
     act(() =>
-      openDrilldownMenu(menuPosition, [
-        {
-          categoryValue: 'Cell Phones',
-        },
-      ]),
+      openDrilldownMenu(
+        menuPosition,
+        [
+          {
+            categoryValue: 'Cell Phones',
+          },
+        ],
+        [ageRange],
+      ),
     );
 
     const lastCall = openMenuMock.mock.lastCall as any;

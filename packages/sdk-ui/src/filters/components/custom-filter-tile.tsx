@@ -76,7 +76,7 @@ export const CustomFilterTile = asSisenseComponent({
 
   return (
     <FilterTileContainer
-      title={filter.attribute.name}
+      title={filter.attribute.title}
       renderContent={(collapsed) => (
         <FilterContentDisplay>
           {collapsed ? t('customFilterTileMessage') : JSON.stringify(filterJaql, null, 4)}

@@ -1,4 +1,5 @@
 import { getCartesianChartOptions } from '@/chart-options-processor/cartesian/cartesian-chart-options';
+import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
 
 import { BuildContext } from '../../../types';
 import { CartesianChartTypes } from '../../types';
@@ -6,7 +7,7 @@ import { CartesianChartTypes } from '../../types';
 export const getLegacyCartesianChartOptions = (
   ctx: BuildContext<CartesianChartTypes>,
   chartType: CartesianChartTypes,
-) => {
+): HighchartsOptionsInternal => {
   const cartesianChartOptions = getCartesianChartOptions(
     ctx.chartData,
     chartType,

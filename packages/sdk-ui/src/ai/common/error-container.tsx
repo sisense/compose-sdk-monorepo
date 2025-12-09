@@ -1,6 +1,5 @@
-import styled from '@emotion/styled';
-
 import ExclamationMarkIcon from '@/common/icons/exclamation-mark-icon';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 

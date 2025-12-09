@@ -3,14 +3,14 @@
 exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-14uctox"
   >
     <div
-      class="csdk-accessible css-1bejpym"
-      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
-        class="css-3aw1ep"
+        class="css-7gwy1f"
         style="color: rgb(91, 99, 114);"
       >
         <button
@@ -46,16 +46,16 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="css-1uvk1au"
+          class="css-8tok9u"
         >
           All items greater than 100
         </div>
       </main>
       <footer
-        class="css-1wpi5bx"
+        class="css-wrzzga"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -84,14 +84,14 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
 exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-14uctox"
   >
     <div
-      class="csdk-accessible css-1bejpym"
-      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
-        class="css-3aw1ep"
+        class="css-7gwy1f"
         style="color: rgb(91, 99, 114);"
       >
         <button
@@ -127,16 +127,16 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="css-1uvk1au"
+          class="css-8tok9u"
         >
           All items top 10 by avg Test Revenue
         </div>
       </main>
       <footer
-        class="css-1wpi5bx"
+        class="css-wrzzga"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -165,14 +165,14 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
 exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-14uctox"
   >
     <div
-      class="csdk-accessible css-1bejpym"
-      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
-        class="css-3aw1ep"
+        class="css-7gwy1f"
         style="color: rgb(91, 99, 114);"
       >
         <button
@@ -208,16 +208,16 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="css-1uvk1au"
+          class="css-8tok9u"
         >
           All items doesn't start with 100
         </div>
       </main>
       <footer
-        class="css-1wpi5bx"
+        class="css-wrzzga"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -246,14 +246,14 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
 exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-14uctox"
   >
     <div
-      class="csdk-accessible css-1bejpym"
-      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
-        class="css-3aw1ep"
+        class="css-7gwy1f"
         style="color: rgb(91, 99, 114);"
       >
         <span
@@ -267,16 +267,16 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="css-1uvk1au"
+          class="css-8tok9u"
         >
           filtered with custom filter
         </div>
       </main>
       <footer
-        class="css-1wpi5bx"
+        class="css-wrzzga"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -305,14 +305,14 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
 exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-14uctox"
   >
     <div
-      class="csdk-accessible css-1bejpym"
-      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
-        class="css-3aw1ep"
+        class="css-7gwy1f"
         style="color: rgb(91, 99, 114);"
       >
         <span
@@ -326,16 +326,16 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="css-1uvk1au"
+          class="css-8tok9u"
         >
           Unsupported Filter (applied to the data query)
         </div>
       </main>
       <footer
-        class="css-1wpi5bx"
+        class="css-wrzzga"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -364,14 +364,14 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
 exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-14uctox"
   >
     <div
-      class="csdk-accessible css-1bejpym"
-      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
-        class="css-3aw1ep"
+        class="css-7gwy1f"
         style="color: rgb(91, 99, 114);"
       >
         <button
@@ -407,16 +407,16 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="css-1uvk1au"
+          class="css-8tok9u"
         >
           Next 1 Years From Today
         </div>
       </main>
       <footer
-        class="css-1wpi5bx"
+        class="css-wrzzga"
       >
         <span
-          class="MuiSwitch-root MuiSwitch-sizeSmall css-99c79-MuiSwitch-root"
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
         >
           <span
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
@@ -445,14 +445,14 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
 exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-14uctox"
   >
     <div
-      class="csdk-accessible css-1bejpym"
-      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
-        class="css-3aw1ep"
+        class="css-7gwy1f"
         style="color: rgb(91, 99, 114);"
       >
         <svg
@@ -488,7 +488,7 @@ exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="css-1uvk1au"
+          class="css-8tok9u"
         >
           All items greater than 100
         </div>
@@ -497,7 +497,7 @@ exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
         />
       </main>
       <footer
-        class="css-1wpi5bx"
+        class="css-wrzzga"
       />
     </div>
   </div>
@@ -507,14 +507,14 @@ exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
 exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-14uctox"
   >
     <div
-      class="csdk-accessible css-1bejpym"
-      style="min-width: 213px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
     >
       <header
-        class="css-3aw1ep"
+        class="css-7gwy1f"
         style="color: rgb(91, 99, 114);"
       >
         <svg
@@ -550,7 +550,7 @@ exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
         style="color: rgb(91, 99, 114); position: relative;"
       >
         <div
-          class="css-1uvk1au"
+          class="css-8tok9u"
         >
           Next 1 Years From Today
         </div>
@@ -559,7 +559,7 @@ exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
         />
       </main>
       <footer
-        class="css-1wpi5bx"
+        class="css-wrzzga"
       />
     </div>
   </div>

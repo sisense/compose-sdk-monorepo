@@ -167,6 +167,10 @@ export function prepareCommonFiltersConnectionProps(
       }
 
       const selections = getWidgetSelections(widgetType, dataOptions, [point]);
+      if (!selections.length) {
+        return;
+      }
+
       const { filters: selectedFilters, isSelection } = createCommonFiltersOverSelections(
         selections,
         pureFilters,

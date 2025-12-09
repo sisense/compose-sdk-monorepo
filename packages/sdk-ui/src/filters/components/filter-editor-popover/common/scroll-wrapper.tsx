@@ -1,7 +1,8 @@
 import { CSSProperties, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 
-import styled from '@emotion/styled';
 import throttle from 'lodash-es/throttle';
+
+import styled from '@/styled';
 
 export type ScrollWrapperOnScrollEvent = {
   top: number;

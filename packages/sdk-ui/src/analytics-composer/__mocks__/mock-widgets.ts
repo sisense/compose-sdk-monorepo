@@ -662,6 +662,7 @@ export default function CodeExample() {
         headersColor: false,
         membersColor: false,
         totalsColor: false,
+        imageColumns: undefined,
       } }
     />
   );

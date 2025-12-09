@@ -1,9 +1,8 @@
-import styled from '@emotion/styled';
-
 import { GetNlgInsightsRequest } from '@/ai';
 import Collapsible from '@/ai/common/collapsible';
 import AiIcon from '@/ai/icons/ai-icon';
 import FeedbackWrapper from '@/ai/messages/feedback-wrapper';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 

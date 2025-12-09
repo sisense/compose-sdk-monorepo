@@ -891,9 +891,8 @@ function extractCalendarHeatmapChartStyleOptions(
 /**
  * Helper function to extract pivot table chart style options from WidgetDto
  */
-export function extractPivotTableStyleOptions(
-  widgetStyle: PivotWidgetStyle,
-): PivotTableStyleOptions {
+export function extractPivotTableStyleOptions(widget: WidgetDto): PivotTableStyleOptions {
+  const widgetStyle = widget.style as PivotWidgetStyle;
   return {
     rowsPerPage: parseInt(`${widgetStyle.pageSize}`),
     isAutoHeight: widgetStyle.automaticHeight,
@@ -903,6 +902,7 @@ export function extractPivotTableStyleOptions(
     headersColor: widgetStyle.colors?.headers,
     membersColor: widgetStyle.colors?.members,
     totalsColor: widgetStyle.colors?.totals,
+    imageColumns: widget.options?.imageColumns,
   };
 }
 
@@ -948,7 +948,7 @@ export function extractStyleOptions<WType extends FusionWidgetType>(
       return extractTableChartStyleOptions(style as TableWidgetStyle);
     case 'pivot':
     case 'pivot2':
-      return extractPivotTableStyleOptions(style as PivotWidgetStyle);
+      return extractPivotTableStyleOptions(widget);
     case 'indicator':
       return extractIndicatorChartStyleOptions(
         widgetSubtype,

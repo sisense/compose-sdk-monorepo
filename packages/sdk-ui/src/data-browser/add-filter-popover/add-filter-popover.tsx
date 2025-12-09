@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import { DataSource, DateDimension, Filter, filterFactory, MetadataTypes } from '@sisense/sdk-data';
 
 import { Popover } from '@/common/components/popover';
 import { withErrorBoundary } from '@/decorators/component-decorators/with-error-boundary';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import { Themable } from '@/theme-provider/types';
 import { TranslatableError } from '@/translation/translatable-error';

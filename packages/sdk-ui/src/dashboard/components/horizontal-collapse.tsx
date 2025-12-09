@@ -1,8 +1,7 @@
 import { ReactNode } from 'react';
 
-import styled from '@emotion/styled';
-
 import { ArrowCollapseIcon } from '@/common/icons/arrow-collapse-icon';
+import styled from '@/styled';
 
 const ArrowWrapper = styled('div', {
   shouldForwardProp: (prop) => prop !== 'reversed',

@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
 
 import { css } from '@emotion/react';
-import styled from '@emotion/styled';
 
+import styled from '@/styled';
 import { Themable } from '@/theme-provider/types';
 
 const MIN_ALLOWED_WIDTH = 500;

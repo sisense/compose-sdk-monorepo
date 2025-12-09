@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
-
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 
@@ -15,7 +14,6 @@ const Container = styled.div`
 
 const Label = styled.span<Themable>`
   padding-right: 5px;
-  font-family: 'Open Sans';
   color: ${({ theme }) => theme.general.popover.content.textColor};
 `;
 

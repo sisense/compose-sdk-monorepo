@@ -830,10 +830,8 @@ export function toWidgetDto(
 ): WidgetDto {
   const datasource = dataSource || widgetModel.dataSource;
   if (typeof datasource === 'string') throw new IncompleteWidgetTypeError('dataSource');
-  if (
-    !datasource.id ||
-    (!(datasource as JaqlDataSource).live && !(datasource as JaqlDataSource).address)
-  )
+  const isLive = (datasource as JaqlDataSource).live || datasource.type === 'live';
+  if (!datasource.id || (!isLive && !(datasource as JaqlDataSource).address))
     throw new IncompleteWidgetTypeError('dataSource');
 
   const chartType = widgetModel.chartType;

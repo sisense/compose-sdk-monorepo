@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { type TFunction } from '@sisense/sdk-common';
-import { Attribute, Column, filterFactory, MembersFilter, MetadataTypes } from '@sisense/sdk-data';
+import { Attribute, Column, filterFactory, MembersFilter } from '@sisense/sdk-data';
 import last from 'lodash-es/last';
 
 import { translateColumnToAttribute } from '@/chart-data-options/utils.js';
@@ -13,6 +13,7 @@ import { TranslatableError } from '@/translation/translatable-error.js';
 import { isSameAttribute } from '@/utils/filters.js';
 
 import { ChartDataPoint, DataPoint, DrilldownSelection, StyledColumn } from '../../types.js';
+import { getAvailableDrilldownPaths, getSelectedDrilldownAttributes } from './drilldown-utils.js';
 import './drilldown.scss';
 
 type UseDrilldownCoreParams = {
@@ -41,30 +42,14 @@ export const useDrilldownCore = (params: UseDrilldownCoreParams) => {
   );
 
   const selectedAttributes = useMemo(
-    () => [
-      translateColumnToAttribute(initialDimension),
-      ...drilldownSelections.map(({ nextDimension }) => nextDimension),
-    ],
+    () => getSelectedDrilldownAttributes(initialDimension, drilldownSelections),
     [initialDimension, drilldownSelections],
   );
 
-  const availableDrilldownPaths = useMemo(() => {
-    return drilldownPaths.filter((drilldownPath) => {
-      const isAttribute = MetadataTypes.isAttribute(drilldownPath);
-
-      if (isAttribute) {
-        const dimension = drilldownPath;
-        return selectedAttributes.every(
-          (selectedAttribute) => !isSameAttribute(selectedAttribute, dimension),
-        );
-      }
-
-      const hierarchy = drilldownPath;
-      return selectedAttributes.every((attribute, index) =>
-        isSameAttribute(attribute, hierarchy.levels[index]),
-      );
-    });
-  }, [drilldownPaths, selectedAttributes]);
+  const availableDrilldownPaths = useMemo(
+    () => getAvailableDrilldownPaths(drilldownPaths, selectedAttributes),
+    [drilldownPaths, selectedAttributes],
+  );
 
   const selectDrilldown = useCallback(
     (points: DataPoint[], nextDimension: Attribute, hierarchy?: Hierarchy) => {

@@ -28,6 +28,11 @@ Set up your Sisense instance to authenticate users with SSO using one of the fol
 - [Security Assertion Markup Language 2.0 (SAML)](https://docs.sisense.com/main/SisenseLinux/single-sign-on-using-security-assertion-markup-language-20.htm?tocpath=Security%7CImplementing%20Single%20Sign-On%7C_____2)
 - [OpenID Connect](https://docs.sisense.com/main/SisenseLinux/single-sign-on-using-openid-connect.htm?tocpath=Security%7CImplementing%20Single%20Sign-On%7C_____4)
 
+##### Using the SSO Router Addon with JWT
+If your Sisense instance is configured to use the [SSO Router addon](https://www.sisense.com/marketplace/add-on/sso-router/) in order to support dynamic routing to various JWT endpoints, please use Compose SDK 2.6.0 or later.
+
+For more information on configuring SSO Router check [this knowledge base article](https://community.sisense.com/kb/add-ons_and_plug-ins/sso-router-plugin-usage-with-examples/4805), or contact Sisense support.
+
 ::: tip Note
 If you're experiencing difficulties or unexpected behavior when using SSO, the cause may be a hidden feature configuration. To resolve the issue, you can:
 

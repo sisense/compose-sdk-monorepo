@@ -26,11 +26,11 @@ describe('getPiePlotOptions', () => {
       y: [meas],
       breakBy: [category],
     };
-    const piePlotOptions: PlotOptions = getPiePlotOptions(
-      DefaultPieType,
-      DefaultPieSeriesLabels,
+    const piePlotOptions: PlotOptions = getPiePlotOptions({
+      pieType: DefaultPieType,
+      seriesLabels: DefaultPieSeriesLabels,
       chartDataOptions,
-    );
+    });
     expect(piePlotOptions).toEqual({
       pie: {
         allowPointSelect: false,

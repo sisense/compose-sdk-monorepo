@@ -1,4 +1,4 @@
-import { Attribute, Column } from '@sisense/sdk-data';
+import { Attribute, Column, MetadataTypes } from '@sisense/sdk-data';
 import { PointClickEventObject } from '@sisense/sisense-charts';
 import camelCase from 'lodash-es/camelCase';
 
@@ -19,7 +19,13 @@ import {
 import { getSelectableWidgetAttributes } from '@/common-filters/selection-utils';
 import { isSameAttribute } from '@/utils/filters';
 
-import { CartesianChartDataOptions, ScatterDataPoint, StyledColumn } from '../..';
+import {
+  CartesianChartDataOptions,
+  DrilldownSelection,
+  Hierarchy,
+  ScatterDataPoint,
+  StyledColumn,
+} from '../..';
 import { ChartDataOptions, ChartType, DataPoint, ScatterChartDataOptions } from '../../types';
 
 export function getDrilldownInitialDimension(
@@ -138,4 +144,49 @@ export function prepareDrilldownSelectionPoints(
 
     return point as DataPoint;
   });
+}
+
+/**
+ * Collects the available drilldown paths based on the provided paths and currently selected attributes.
+ * @param drilldownPaths - The available drilldown paths (attributes or hierarchies)
+ * @param selectedAttributes - The currently selected attributes in the drilldown chain
+ * @returns Filtered drilldown paths that are still available for selection
+ * @internal
+ */
+export function getAvailableDrilldownPaths(
+  drilldownPaths: (Attribute | Hierarchy)[],
+  selectedAttributes: Attribute[],
+): (Attribute | Hierarchy)[] {
+  return drilldownPaths.filter((drilldownPath) => {
+    const isAttribute = MetadataTypes.isAttribute(drilldownPath);
+
+    if (isAttribute) {
+      const dimension = drilldownPath;
+      return selectedAttributes.every(
+        (selectedAttribute) => !isSameAttribute(selectedAttribute, dimension),
+      );
+    }
+
+    const hierarchy = drilldownPath;
+    return selectedAttributes.every(
+      (attribute, index) =>
+        hierarchy.levels[index] && isSameAttribute(attribute, hierarchy.levels[index]),
+    );
+  });
+}
+
+/**
+ * Collects the currently selected attributes in the drilldown chain.
+ * @param initialDimension - The initial dimension
+ * @param drilldownSelections - The drilldown selections
+ * @returns The currently selected attributes in the drilldown chain
+ */
+export function getSelectedDrilldownAttributes(
+  initialDimension: Attribute | Column | StyledColumn,
+  drilldownSelections: DrilldownSelection[],
+): Attribute[] {
+  return [
+    translateColumnToAttribute(initialDimension),
+    ...drilldownSelections.map(({ nextDimension }) => nextDimension),
+  ];
 }

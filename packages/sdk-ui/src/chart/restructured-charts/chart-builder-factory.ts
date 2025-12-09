@@ -5,6 +5,7 @@ import { polarChartBuilder } from './highchart-based-charts/cartesians/polar-cha
 import { areaChartBuilder } from './highchart-based-charts/cartesians/stackable/area-chart/area-chart-builder.js';
 import { barChartBuilder } from './highchart-based-charts/cartesians/stackable/bar-chart/bar-chart-builder.js';
 import { columnChartBuilder } from './highchart-based-charts/cartesians/stackable/column-chart/column-chart-builder.js';
+import { streamgraphChartBuilder } from './highchart-based-charts/cartesians/stackable/streamgraph-chart/streamgraph-chart-builder.js';
 import { funnelChartBuilder } from './highchart-based-charts/categoricals/funnel-chart/funnel-chart-builder.js';
 import { pieChartBuilder } from './highchart-based-charts/categoricals/pie-chart/pie-chart-builder.js';
 import { sunburstChartBuilder } from './highchart-based-charts/categoricals/sunburst-chart/sunburst-chart-builder.js';
@@ -18,6 +19,7 @@ export const chartBuildersMap: { [K in SupportedChartType]: ChartBuilder<K> } = 
   bar: barChartBuilder,
   line: lineChartBuilder,
   polar: polarChartBuilder,
+  streamgraph: streamgraphChartBuilder,
   pie: pieChartBuilder,
   funnel: funnelChartBuilder,
   treemap: treemapChartBuilder,

@@ -2,8 +2,8 @@ import { ChangeEvent, KeyboardEvent, useCallback, useLayoutEffect, useRef, useSt
 import { useTranslation } from 'react-i18next';
 
 import { css } from '@emotion/react';
-import styled from '@emotion/styled';
 
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 

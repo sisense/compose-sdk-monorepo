@@ -1,11 +1,10 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import React, { CSSProperties, useMemo } from 'react';
 
-import styled from '@emotion/styled';
-
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
 import { ContainerSize } from '@/dynamic-size-container/dynamic-size-container';
 import { HighchartsRenderer } from '@/highcharts-renderer';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import { CalendarHeatmapSubtype, CalendarHeatmapViewType, TextStyle } from '@/types';
 

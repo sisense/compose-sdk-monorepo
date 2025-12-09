@@ -39,6 +39,7 @@ import type {
   PolarStyleOptions,
   ScattermapStyleOptions,
   StackableStyleOptions,
+  StreamgraphStyleOptions,
   SunburstStyleOptions,
   TreemapStyleOptions,
 } from '@/types';
@@ -58,7 +59,8 @@ export type SupportedChartType =
   | 'funnel'
   | 'calendar-heatmap'
   | 'treemap'
-  | 'sunburst';
+  | 'sunburst'
+  | 'streamgraph';
 
 export type TypedChartDataOptions<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapChartDataOptions
@@ -66,7 +68,7 @@ export type TypedChartDataOptions<CT extends SupportedChartType> = CT extends 'a
   ? ScattermapChartDataOptions
   : CT extends 'pie' | 'funnel' | 'treemap' | 'sunburst'
   ? CategoricalChartDataOptions
-  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
+  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar' | 'streamgraph'
   ? CartesianChartDataOptions
   : CT extends 'calendar-heatmap'
   ? CalendarHeatmapChartDataOptions
@@ -78,7 +80,7 @@ export type TypedDataOptionsInternal<CT extends SupportedChartType> = CT extends
   ? ScattermapChartDataOptionsInternal
   : CT extends 'pie' | 'funnel' | 'treemap' | 'sunburst'
   ? CategoricalChartDataOptionsInternal
-  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
+  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar' | 'streamgraph'
   ? CartesianChartDataOptionsInternal
   : CT extends 'calendar-heatmap'
   ? CalendarHeatmapChartDataOptionsInternal
@@ -106,6 +108,8 @@ export type TypedChartStyleOptions<CT extends SupportedChartType> = CT extends '
   ? PolarStyleOptions
   : CT extends 'calendar-heatmap'
   ? CalendarHeatmapStyleOptions
+  : CT extends 'streamgraph'
+  ? StreamgraphStyleOptions
   : never;
 
 export type TypedDesignOptions<CT extends SupportedChartType> = DesignOptions<CT>;
@@ -116,7 +120,7 @@ export type TypedChartData<CT extends SupportedChartType> = CT extends 'areamap'
   ? ScattermapChartData
   : CT extends 'pie' | 'funnel' | 'treemap' | 'sunburst'
   ? CategoricalChartData
-  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar'
+  : CT extends 'column' | 'bar' | 'line' | 'area' | 'polar' | 'streamgraph'
   ? CartesianChartData
   : CT extends 'calendar-heatmap'
   ? CalendarHeatmapChartData
@@ -144,6 +148,7 @@ export type TypedChartRendererProps<CT extends SupportedChartType> = CT extends 
       | 'calendar-heatmap'
       | 'treemap'
       | 'sunburst'
+      | 'streamgraph'
   ? HighchartsBasedChartRendererProps<CT>
   : never;
 

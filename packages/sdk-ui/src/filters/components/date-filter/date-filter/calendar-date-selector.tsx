@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import styled from '@emotion/styled';
 import dayjs from 'dayjs';
 
+import styled from '@/styled';
 import { Themable } from '@/theme-provider/types';
 
 import { useThemeContext } from '../../../../theme-provider/index.js';

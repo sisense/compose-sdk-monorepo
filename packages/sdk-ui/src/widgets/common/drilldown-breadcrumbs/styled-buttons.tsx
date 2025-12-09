@@ -1,5 +1,6 @@
-import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
+
+import styled from '@/styled';
 
 export const StyledPrevButton = styled(IconButton)`
   && {

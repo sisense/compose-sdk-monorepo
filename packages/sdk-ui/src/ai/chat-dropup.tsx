@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import Popper from '@mui/material/Popper';
 
 import LoadingSpinner from '@/common/components/loading-spinner';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import { Themable } from '@/theme-provider/types';
 

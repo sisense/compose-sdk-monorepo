@@ -1,6 +1,5 @@
-import styled from '@emotion/styled';
-
 import { DEFAULT_TEXT_COLOR } from '@/const';
+import styled from '@/styled';
 import { Themable } from '@/theme-provider/types';
 import { getElementStateColor } from '@/theme-provider/utils';
 import { ElementStates } from '@/types';
@@ -65,6 +64,7 @@ export const SelectLabel = styled.span<Themable>`
 
 export const DropdownSelectLabel = styled(SelectLabel)<Themable>`
   color: ${({ theme }) => theme.general.popover.input.dropdownList.textColor};
+  font-family: ${({ theme }) => theme.typography.fontFamily};
 `;
 
 export const SelectIconContainer = styled.span`

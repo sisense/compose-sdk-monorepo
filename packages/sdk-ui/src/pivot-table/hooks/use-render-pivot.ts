@@ -43,6 +43,10 @@ type PivotRenderOptions = {
   pageSize: number;
   /** Callback to handle page size. */
   onPageSizeChange: (newPageSize: number) => void;
+  /** The list of image columns */
+  imageColumns?: number[];
+  /** Boolean flag whether to always show the results per page select */
+  alwaysShowResultsPerPage?: boolean;
 };
 
 /**
@@ -62,6 +66,8 @@ export function useRenderPivot({
   pageSize,
   onPageSizeChange,
   isFullWidth,
+  imageColumns,
+  alwaysShowResultsPerPage,
 }: PivotRenderOptions): {
   pivotElement: JSX.Element | null;
 } {
@@ -140,10 +146,12 @@ export function useRenderPivot({
         height: size.height,
         isPaginated: true,
         itemsPerPage: pageSize,
+        alwaysShowItemsPerPageSelect: alwaysShowResultsPerPage,
         isSelectedMode: true,
         allowHtml,
         isFullWidth,
         sanitizeHtml,
+        imageColumns,
         onUpdatePredefinedColumnWidth,
         onItemsPerPageChange: onPageSizeChange,
         onTotalHeightChange,
@@ -165,6 +173,8 @@ export function useRenderPivot({
     onPageSizeChange,
     handlePivotTableCellClick,
     paginationOptions,
+    imageColumns,
+    alwaysShowResultsPerPage,
   ]);
 
   useEffect(() => {

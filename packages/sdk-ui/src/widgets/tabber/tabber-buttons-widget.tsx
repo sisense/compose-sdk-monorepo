@@ -1,8 +1,7 @@
 import React from 'react';
 
-import styled from '@emotion/styled';
-
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+import styled from '@/styled';
 import { TranslatableError } from '@/translation/translatable-error';
 
 import { TabberButtonsWidgetProps, TabberButtonsWidgetStyleOptions } from './types';

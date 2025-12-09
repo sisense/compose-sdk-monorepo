@@ -46,10 +46,9 @@ import {
   ScatterChartType,
   ScattermapChartType,
   TableChartType,
-  TableType,
   TextStyle,
 } from './chart-options-processor/translations/types';
-import { GeoDataElement, RawGeoDataElement } from './chart/restructured-charts/areamap-chart/types';
+import { GeoDataElement } from './chart/restructured-charts/areamap-chart/types';
 import { CalendarDayOfWeek } from './chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 import { DataPointsEventHandler } from './props';
 import { GradientColor } from './utils/gradient';
@@ -89,6 +88,19 @@ export type {
   CalendarHeatmapChartType,
   TableType,
   TableChartType,
+  RangeChartType,
+  TextStyle,
+} from './chart-options-processor/translations/types';
+export type { IndicatorComponents } from './chart-options-processor/translations/design-options';
+export type { ScatterMarkerSize } from './chart-options-processor/translations/scatter-plot-options';
+export type { LegendPosition } from './chart-options-processor/translations/legend-section';
+export type {
+  GeoDataElement,
+  RawGeoDataElement,
+} from './chart/restructured-charts/areamap-chart/types';
+export type { Coordinates } from './charts/map-charts/scattermap/types';
+export type { TableColorOptions } from './chart-options-processor/translations/design-options';
+export type {
   AreaSubtype,
   AreaRangeSubtype,
   LineSubtype,
@@ -96,16 +108,7 @@ export type {
   PolarSubtype,
   StackableSubtype,
   BoxplotSubtype,
-  IndicatorComponents,
-  ScatterMarkerSize,
-  LegendPosition,
-  GeoDataElement,
-  RawGeoDataElement,
-  Coordinates,
-  RangeChartType,
-  TableColorOptions,
-  TextStyle,
-};
+} from './chart-options-processor/subtype-to-design-options';
 
 export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
 
@@ -780,6 +783,49 @@ export interface AreaStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions
   totalLabels?: TotalLabels;
 }
 
+/**
+ * Configuration options that define the visual style of a Streamgraph chart.
+ *
+ * Streamgraphs are centered stacked area charts that emphasize flowing patterns
+ * and overall trends. The Y-axis is typically hidden or minimal, and series labels
+ * are often displayed directly on the areas for identification.
+ */
+export interface StreamgraphStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
+  /**
+   * Configuration that defines line style for area boundaries.
+   */
+  line?: LineOptions;
+
+  /**
+   * Configuration that defines line width for area boundaries.
+   *
+   * @deprecated
+   * Use line.width instead
+   */
+  lineWidth?: LineWidth;
+
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart.
+   */
+  seriesLabels?: SeriesLabels;
+
+  /**
+   * Configuration for titles of series
+   * @internal
+   **/
+  seriesTitles?: {
+    /** Boolean flag that defines if titles of series should be shown */
+    enabled: boolean;
+
+    /**
+     * Text style for series titles
+     *
+     * Font size and weight are calculated automatically
+     * */
+    textStyle?: Omit<TextStyle, 'pointerEvents' | 'textOverflow' | 'fontSize' | 'fontWeight'>;
+  };
+}
+
 /** Configuration options that define functional style of the various elements of stackable charts, like Column or Bar */
 export interface StackableStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Subtype of stackable chart */
@@ -878,6 +924,10 @@ export interface PieStyleOptions extends BaseStyleOptions {
   labels?: Labels;
   /** Subtype of Pie chart*/
   subtype?: PieSubtype;
+  /**
+   * Boolean flag that defines if the pie chart should be displayed as a semi-circle
+   */
+  semiCircle?: boolean;
   /**
    * Configuration for series labels - titles/names identifying data series in a chart
    */
@@ -1093,6 +1143,22 @@ export interface PivotTableStyleOptions {
    * @default false
    */
   isAutoContentWidth?: boolean;
+  /**
+   * Array of column indexes where images are displayed in table cells
+   *
+   * todo Raw interface only for Fusion parity, should be changed before goes public
+   * @internal
+   */
+  imageColumns?: number[];
+
+  /**
+   * Boolean flag whether to always show the results per page select
+   *
+   * If `true`, the results per page select will be shown even if there is only one page of results.
+   *
+   * @default false
+   */
+  alwaysShowResultsPerPage?: boolean;
 }
 
 /**
@@ -1476,7 +1542,8 @@ export type RegularChartStyleOptions =
   | AreamapStyleOptions
   | ScattermapStyleOptions
   | AreaRangeStyleOptions
-  | CalendarHeatmapStyleOptions;
+  | CalendarHeatmapStyleOptions
+  | StreamgraphStyleOptions;
 
 /** Mapping of each of the chart value series to colors. */
 export type ValueToColorMap = {
@@ -1837,6 +1904,8 @@ export interface TypographyThemeSettings {
   secondaryTextColor?: string;
   /** Hyperlink color */
   hyperlinkColor?: string;
+  /** Hyperlink hover color */
+  hyperlinkHoverColor?: string;
   /** Settings for font loading */
   fontsLoader?: FontsLoaderSettings;
 }
@@ -2104,6 +2173,13 @@ export type PopoverThemeSettings = {
  * @internal
  */
 export type ButtonsThemeSettings = {
+  /** Theme settings for primary button */
+  primary?: {
+    /** Background color */
+    backgroundColor?: string | ElementStateColors;
+    /** Text color */
+    textColor?: string;
+  };
   /** Theme settings for cancel button */
   cancel?: {
     /** Background color */
@@ -2154,6 +2230,14 @@ export interface ThemeSettings {
 export type CompleteThemeSettings = DeepRequired<Omit<ThemeSettings, 'typography'>> & {
   typography: DeepRequired<Omit<TypographyThemeSettings, 'fontsLoader'>> & {
     fontsLoader?: FontsLoaderSettings;
+  };
+};
+
+/** @internal */
+export type ThemeConfig = {
+  cssSelectorPrefix?: {
+    enabled?: boolean;
+    value?: string;
   };
 };
 

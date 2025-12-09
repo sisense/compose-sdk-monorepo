@@ -24,3 +24,14 @@ export const DEFAULT_FILTERS_PANEL_CONFIG: DeepRequired<FiltersPanelConfig> = {
     },
   },
 };
+
+/**
+ * Border settings for the filters panel
+ */
+export const BORDER_COLOR = '#dadada';
+export const BORDER_THICKNESS = '1px';
+
+/**
+ * Minimum width for filter tiles in the filters panel
+ */
+export const FILTER_TILE_MIN_WIDTH = 214;

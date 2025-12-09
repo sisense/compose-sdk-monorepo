@@ -1,21 +1,15 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { filtersMock, relationsMock } from './__mocks__/filters-and-relations-mocks';
 import { FilterRelationsTile } from './filter-relations-tile';
-
-// Mock EditPencilIcon
-vi.mock('@/common/icons/edit-pencil-icon', () => ({
-  EditPencilIcon: () => <svg data-testid="edit-pencil-icon" />,
-}));
 
 describe('FilterRelationsTile Component', () => {
   it('should render the component with the correct text', () => {
     render(<FilterRelationsTile relations={relationsMock} filters={filtersMock} />);
 
     expect(screen.getByText('filterRelations.andOrFormulaApplied')).toBeInTheDocument();
-    expect(screen.getByTestId('edit-pencil-icon')).toBeInTheDocument();
   });
 
   it('should render tooltip on hover', async () => {

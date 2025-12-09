@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-import styled from '@emotion/styled';
-
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import { Themable } from '@/theme-provider/types';
 

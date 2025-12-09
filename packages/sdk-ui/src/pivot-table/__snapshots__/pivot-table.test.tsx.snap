@@ -17,6 +17,7 @@ exports[`PivotTable > should render empty pivot table 1`] = `
         >
           <div
             aria-label="pivot-table-root"
+            style="padding: 8px 8px 0px 8px;"
           />
         </div>
       </div>

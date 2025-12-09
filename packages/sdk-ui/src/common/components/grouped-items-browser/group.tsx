@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import styled from '@emotion/styled';
 import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
+
+import styled from '@/styled';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types';
 
 import { GroupHeader } from './group-header';
 import { ItemRow } from './item-row';
@@ -29,7 +32,7 @@ export const Group: React.FC<GroupProps> = ({
   collapsed,
 }) => {
   const [isOpen, setIsOpen] = useState(!collapsed);
-
+  const { themeSettings } = useThemeContext();
   useEffect(() => {
     setIsOpen(!collapsed);
   }, [collapsed]);
@@ -44,7 +47,7 @@ export const Group: React.FC<GroupProps> = ({
       />
 
       <Collapse in={isOpen} timeout="auto" unmountOnExit>
-        <GroupList>
+        <GroupList theme={themeSettings}>
           {group.items.map((item) => (
             <ItemRow
               key={item.id}
@@ -61,7 +64,8 @@ export const Group: React.FC<GroupProps> = ({
 
 const GroupContainer = styled.div``;
 
-const GroupList = styled(List)`
+const GroupList = styled(List)<Themable>`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
   gap: 4px;
   padding: 0;
 `;

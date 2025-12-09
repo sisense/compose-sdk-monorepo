@@ -3,7 +3,6 @@ import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DndContext, DragEndEvent, pointerWithin } from '@dnd-kit/core';
-import styled from '@emotion/styled';
 import isNumber from 'lodash-es/isNumber';
 import isUndefined from 'lodash-es/isUndefined';
 
@@ -13,6 +12,7 @@ import { useSyncedState } from '@/common/hooks/use-synced-state';
 import { WIDGET_HEADER_HEIGHT } from '@/dashboard/components/editable-layout/const';
 import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { MenuItemSection } from '@/types';
 import {

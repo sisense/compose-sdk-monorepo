@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 
-import styled from '@emotion/styled';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 
 import { ArrowIcon } from '@/common/icons/arrow-icon';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 
@@ -48,7 +48,7 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
                 <group.Icon />
               </GroupIconContainer>
             )}
-            <GroupTitle>{group.title}</GroupTitle>
+            <GroupTitle theme={themeSettings}>{group.title}</GroupTitle>
           </GroupHeaderLeftContent>
           {secondaryAction && isHovered && (
             <div
@@ -111,8 +111,9 @@ const GroupIconContainer = styled.div`
   align-items: center;
 `;
 
-const GroupTitle = styled(ListItemText)`
+const GroupTitle = styled(ListItemText)<Themable>`
   span {
+    font-family: ${({ theme }) => theme.typography.fontFamily};
     font-size: 13px;
     font-style: normal;
     font-weight: 600;

@@ -28,6 +28,7 @@ import {
   DataPoint,
   DataPointEntry,
   MenuItemSection,
+  PivotTableDataPoint,
   ScatterChartDataOptions,
   ScatterDataPoint,
   ScattermapDataPoint,
@@ -131,10 +132,32 @@ function getCalendarHeatmapChartSelections(points: CalendarHeatmapDataPoint[]): 
   return getSelectionsFromPoints(points, ['date']);
 }
 
+function getPivotTableSelections(points: PivotTableDataPoint[]): DataSelection[] {
+  const selectablePoints = points.filter((point) => point.isDataCell && !point.isTotalCell);
+  return getSelectionsFromPoints(
+    selectablePoints.map((point) => {
+      // if values available, pivot pick all entries
+      if (point.entries?.values?.length) {
+        return point;
+      }
+      // if no values available, pivot pick only row or column that was selected
+      return {
+        ...point,
+        entries: {
+          rows: point.entries.rows?.slice(-1) ?? [],
+          columns: point.entries.columns?.slice(-1) ?? [],
+          values: [],
+        },
+      };
+    }),
+    ['rows', 'columns', 'values'],
+  );
+}
+
 export function getWidgetSelections(
   widgetType: WidgetTypeInternal,
   dataOptions: ChartDataOptions | PivotTableDataOptions,
-  points: Array<ChartDataPoint>,
+  points: Array<ChartDataPoint | PivotTableDataPoint>,
 ) {
   if (widgetType === 'custom') {
     // no custom widgets support
@@ -143,8 +166,7 @@ export function getWidgetSelections(
     // no text support
     return [];
   } else if (widgetType === 'pivot') {
-    // todo: add pivot support after extending pivot with click/select handlers
-    return [];
+    return getPivotTableSelections(points as PivotTableDataPoint[]);
   } else if (widgetType === 'treemap' || widgetType === 'sunburst') {
     return getTreemapChartSelections(
       points as DataPoint[],

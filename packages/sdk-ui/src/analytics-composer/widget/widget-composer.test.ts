@@ -1,4 +1,6 @@
 /* eslint-disable vitest/expect-expect */
+import { JaqlDataSourceForDto } from '@sisense/sdk-data';
+
 import { ChartWidgetProps, WidgetDto, widgetModelTranslator } from '@/index';
 import { isChartWidgetProps } from '@/widget-by-id/utils';
 
@@ -64,7 +66,7 @@ describe('widgetComposer', () => {
       );
 
       expect(widgetFromChart.chartType).toBe('bar');
-      const dataSource = {
+      const dataSource: JaqlDataSourceForDto = {
         ...commonDataSources[0],
         type: commonDataSources[0].live ? 'live' : 'elasticube',
       };

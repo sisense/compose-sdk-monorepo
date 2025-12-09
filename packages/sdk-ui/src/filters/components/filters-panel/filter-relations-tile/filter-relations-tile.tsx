@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import { Filter } from '@sisense/sdk-data';
 
-import { EditPencilIcon } from '@/common/icons/edit-pencil-icon';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 import { FilterRelationsRules } from '@/utils/filter-relations';
 
+import { FILTER_TILE_MIN_WIDTH } from '../constants';
 import { FilterRelationsTooltip } from './filter-relations-tooltip';
 
 /**
@@ -27,7 +27,6 @@ export function FilterRelationsTile({
       <TileContainer theme={themeSettings}>
         <TileContent>
           <TileText>{t('filterRelations.andOrFormulaApplied')}</TileText>
-          <EditPencilIcon color={themeSettings.general.primaryButtonTextColor} />
         </TileContent>
       </TileContainer>
     </FilterRelationsTooltip>
@@ -43,20 +42,21 @@ const TileContainer = styled.div<Themable>`
     background-color: ${({ theme }) => theme.general.primaryButtonHoverColor};
     cursor: pointer;
   }
-
   border-radius: 6px;
   margin-top: 6px;
+  min-width: ${FILTER_TILE_MIN_WIDTH}px;
+  width: min-content;
 `;
 
 const TileContent = styled.div`
-  width: 100%;
   height: 47px;
   position: relative;
-  padding: 0 6px 0 12px;
+  padding: 0 6px;
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 const TileText = styled.span`
-  padding-right: 8px;
+  padding: 4px;
 `;

@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import { Attribute, DateDimension, Dimension, MetadataTypes } from '@sisense/sdk-data';
 
 import { GroupedItemsBrowser } from '@/common/components/grouped-items-browser/grouped-items-browser';
@@ -18,6 +17,9 @@ import { DateAttributeIcon } from '@/common/icons/date-attribute-icon.js';
 import { NumericAttributeIcon } from '@/common/icons/numeric-attribute-icon.js';
 import { TableIcon } from '@/common/icons/table-icon.js';
 import { TextAttributeIcon } from '@/common/icons/text-attribute-icon.js';
+import styled from '@/styled';
+import { useThemeContext } from '@/theme-provider';
+import { Themable } from '@/theme-provider/types.js';
 import { TranslatableError } from '@/translation/translatable-error.js';
 
 import {
@@ -126,7 +128,7 @@ function convertDimensionsToGroupedItems(
   return dimensions.map((dimension) => {
     const attributiveElements = getAttributiveElements(dimension);
     return {
-      title: dimension.name,
+      title: dimension.title,
       id: dimension.name,
       description: dimension.description,
       items: attributiveElements.map((attribute) => {
@@ -138,7 +140,7 @@ function convertDimensionsToGroupedItems(
         );
         return {
           id: attribute.id,
-          title: attribute.name,
+          title: attribute.title,
           Icon: attributeIconMapping[attribute.type],
           isDisabled,
           hoverTooltip: isDisabled
@@ -239,12 +241,16 @@ const LoadingContainer = styled.div`
   justify-content: center;
 `;
 
-const NoResultsContainer = styled.div`
+const NoResultsContainer = styled.div<Themable>`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
   display: flex;
   justify-content: center;
 `;
 
 const NoResults = () => {
   const { t } = useTranslation();
-  return <NoResultsContainer>{t('dataBrowser.noResults')}</NoResultsContainer>;
+  const { themeSettings } = useThemeContext();
+  return (
+    <NoResultsContainer theme={themeSettings}>{t('dataBrowser.noResults')}</NoResultsContainer>
+  );
 };

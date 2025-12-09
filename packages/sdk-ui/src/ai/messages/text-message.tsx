@@ -1,9 +1,9 @@
 import { FC, PropsWithChildren } from 'react';
 
 import { css } from '@emotion/react';
-import styled from '@emotion/styled';
 import Markdown from 'markdown-to-jsx';
 
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 

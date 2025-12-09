@@ -29,7 +29,6 @@ import {
 
 type UseDrilldownParams = {
   initialDimension: Column | StyledColumn;
-  drilldownPaths?: (Attribute | Hierarchy)[];
   drilldownSelections?: DrilldownSelection[];
   /**
    * todo: make it optional when we will have a public `MenuProvider`.
@@ -41,7 +40,6 @@ type UseDrilldownParams = {
 
 export const useDrilldown = ({
   initialDimension,
-  drilldownPaths,
   drilldownSelections,
   openMenu,
   onDrilldownSelectionsChange,
@@ -49,7 +47,6 @@ export const useDrilldown = ({
   const { t: translate } = useTranslation();
 
   const {
-    availableDrilldownPaths,
     drilldownFilters,
     drilldownFiltersDisplayValues,
     drilldownDimension,
@@ -58,13 +55,16 @@ export const useDrilldown = ({
     clearDrilldownSelections,
   } = useDrilldownCore({
     initialDimension,
-    drilldownPaths,
     drilldownSelections,
     onDrilldownSelectionsChange,
   });
 
   const openDrilldownMenu = useCallback(
-    (position: MenuPosition, points: DataPoint[]) => {
+    (
+      position: MenuPosition,
+      points: DataPoint[],
+      availableDrilldownPaths: (Attribute | Hierarchy)[] = [],
+    ) => {
       const menuItems = [
         getSelectionTitleMenuItem(points, drilldownDimension),
         getDrilldownMenuItems(
@@ -79,7 +79,7 @@ export const useDrilldown = ({
 
       openMenu({ id: MenuIds.WIDGET_POINTS_DRILLDOWN, position, itemSections: menuItems });
     },
-    [drilldownDimension, availableDrilldownPaths, translate, selectDrilldown, openMenu],
+    [drilldownDimension, translate, selectDrilldown, openMenu],
   );
 
   const breadcrumbs = useMemo(() => {

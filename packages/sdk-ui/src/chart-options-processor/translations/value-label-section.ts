@@ -103,7 +103,6 @@ export const getRotationType = (rotation: number): RotationType => {
   }
 };
 
-/* eslint-disable-next-line max-params */
 export const getDataLabelsSettings = (
   xAxisOrientation: AxisOrientation,
   seriesLabels?: SeriesLabels,

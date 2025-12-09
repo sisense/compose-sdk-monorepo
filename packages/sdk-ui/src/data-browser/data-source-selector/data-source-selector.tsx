@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -10,6 +9,7 @@ import { Popover } from '@/common/components/popover';
 import { ApprovalIcon } from '@/common/icons/approval-icon';
 import { ArrowIcon } from '@/common/icons/arrow-icon';
 import { ElasticubeIcon } from '@/common/icons/elasticube-icon';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 import { getElementStateColor } from '@/theme-provider/utils';
@@ -60,7 +60,7 @@ export function DataSourceSelector({
         endIcon={<ArrowIcon direction="down" />}
         theme={themeSettings}
       >
-        <ShrinkableText>
+        <ShrinkableText theme={themeSettings}>
           {selectedDataSource ? getDataSourceTitle(selectedDataSource) : 'Select data source'}
         </ShrinkableText>
       </SelectorButton>
@@ -126,10 +126,11 @@ const DataSourceItem = ({
   dataSourceTitle: string;
   isSelected: boolean;
 }) => {
+  const { themeSettings } = useThemeContext();
   return (
     <DataSourceItemContainer isSelected={isSelected}>
       <ElasticubeIcon />
-      <ShrinkableText>{dataSourceTitle}</ShrinkableText>
+      <ShrinkableText theme={themeSettings}>{dataSourceTitle}</ShrinkableText>
       <ApprovalIcon />
     </DataSourceItemContainer>
   );
@@ -221,7 +222,8 @@ const SelectorButton = styled(Button)<Themable>`
   }
 `;
 
-const ShrinkableText = styled.span`
+const ShrinkableText = styled.span<Themable>`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
   width: 100%;
   text-transform: none;
   white-space: nowrap;
@@ -241,6 +243,7 @@ const DataSourcesList = styled(List)<Themable>`
   max-height: 250px;
   overflow-y: auto;
   padding: 4px 0 8px;
+  margin: 0 6px;
   color: ${({ theme }) =>
     getElementStateColor(
       theme.general.popover.input.dropdownList.textColor,

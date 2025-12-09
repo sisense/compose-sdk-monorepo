@@ -57,6 +57,14 @@ Configuration for legend - a key that provides information about the data series
 
 ***
 
+### semiCircle
+
+> **semiCircle**?: `boolean`
+
+Boolean flag that defines if the pie chart should be displayed as a semi-circle
+
+***
+
 ### seriesLabels
 
 > **seriesLabels**?: [`PieSeriesLabels`](../type-aliases/type-alias.PieSeriesLabels.md)

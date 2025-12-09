@@ -1,7 +1,7 @@
 // fixed-data-table2 vertical definitions
 export const HEADER_HEIGHT = 26;
 export const ROW_HEIGHT = 26;
-export const DEFAULT_PADDING = 20;
+export const DEFAULT_PADDING = 8;
 
 // configurations for column width calculations
 export const HEADER_PADDING = 36;

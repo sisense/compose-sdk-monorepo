@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import dayjs from 'dayjs';
+
+import styled from '@/styled';
 
 import { useThemeContext } from '../../../../theme-provider';
 import { CompleteThemeSettings } from '../../../../types';

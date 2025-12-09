@@ -46,6 +46,21 @@ Global configuration for some specific aspects of data visualizations.
 >
 > `Table` and `PivotTable` configuration
 >
+> > ##### `tabular.alwaysShowResultsPerPage`
+> >
+> > **alwaysShowResultsPerPage**?: `boolean`
+> >
+> > Boolean flag whether to always show the results per page select
+> >
+> > If `true`, the results per page select will be shown even if there is only one page of results.
+> > Currently only supported for `PivotTable`.
+> >
+> > ###### Default
+> >
+> > ```ts
+> > false
+> > ```
+> >
 > > ##### `tabular.htmlContent`
 > >
 > > **htmlContent**?: `object`

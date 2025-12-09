@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 
 import { PlusIcon } from '@/common/icons/plus-icon';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 

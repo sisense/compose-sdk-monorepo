@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
 import Color from 'colorjs.io';
 
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 

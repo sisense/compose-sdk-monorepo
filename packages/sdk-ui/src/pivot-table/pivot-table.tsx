@@ -27,6 +27,8 @@ import { usePivotTableDataOptionsInternal } from './hooks/use-pivot-table-data-o
 import { useRenderPivot } from './hooks/use-render-pivot';
 import { preparePivotRowsSortCriteriaList } from './sorting-utils';
 
+export const PIVOT_WIDGET_PADDING = 8;
+
 /**
  * Pivot table with pagination.
  *
@@ -196,7 +198,12 @@ export const PivotTable = asSisenseComponent({
     onDataPointClick,
     onDataPointContextMenu,
     pageSize: pageSize,
+    imageColumns: styleOptions.imageColumns,
     onPageSizeChange: setPageSize,
+    alwaysShowResultsPerPage:
+      styleOptions.alwaysShowResultsPerPage ??
+      app?.settings?.chartConfig?.tabular?.alwaysShowResultsPerPage ??
+      false,
   });
 
   // The pivot data layer depends on the pivot's render props.
@@ -226,8 +233,10 @@ export const PivotTable = asSisenseComponent({
 
   const updateSize = useCallback(
     (containerSize: ContainerSize) => {
-      if (containerSize.width !== size?.width || containerSize.height !== size?.height) {
-        setSize(containerSize);
+      const height = containerSize.height - PIVOT_WIDGET_PADDING;
+      const width = containerSize.width - 2 * PIVOT_WIDGET_PADDING;
+      if (width !== size?.width || height !== size?.height) {
+        setSize({ width, height });
       }
     },
     [size, setSize],
@@ -248,7 +257,14 @@ export const PivotTable = asSisenseComponent({
       <LoadingOverlay isVisible={isLoading}>
         <>
           {isNoResults && <NoResultsOverlay iconType="table" />}
-          <div aria-label="pivot-table-root">{pivotElement}</div>
+          <div
+            aria-label="pivot-table-root"
+            style={{
+              padding: `${PIVOT_WIDGET_PADDING}px ${PIVOT_WIDGET_PADDING}px 0 ${PIVOT_WIDGET_PADDING}px`,
+            }}
+          >
+            {pivotElement}
+          </div>
         </>
       </LoadingOverlay>
     </DynamicSizeContainer>

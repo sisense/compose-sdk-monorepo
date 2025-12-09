@@ -2,8 +2,9 @@
 import { CSSProperties, FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import { FilterTypes, Measure } from '@sisense/sdk-data';
+
+import styled from '@/styled';
 
 import { useThemeContext } from '../../../../src/theme-provider';
 import { BasicInput, RadioGroup } from '../common';

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { HighchartsOptionsInternal } from '@/chart-options-processor/chart-options-service';
 import { isCartesian, isScatter } from '@/chart-options-processor/translations/types';
@@ -14,6 +14,23 @@ import {
   ScatterDataPoint,
 } from '../..';
 
+/**
+ * Checks if selection is allowed for the given chart type and data options.
+ * @param chartType - The type of the chart.
+ * @param dataOptions - The data options for the chart.
+ * @param enabled - Whether selection is enabled.
+ * @returns Whether selection is allowed.
+ */
+const isSelectionAllowedForChart = (
+  chartType: ChartType,
+  dataOptions: ChartDataOptions,
+): boolean => {
+  return (
+    (isCartesian(chartType) && (dataOptions as CartesianChartDataOptions).category?.length === 1) ||
+    isScatter(chartType)
+  );
+};
+
 export function useHighlightSelection({
   chartType,
   dataOptions,
@@ -24,14 +41,14 @@ export function useHighlightSelection({
   enabled: boolean;
 }) {
   const [selectedDataPoints, setSelectedDataPoints] = useState<ChartDataPoints>([]);
+  // Use a ref to avoid handlers updating (chart re-rendering) when the enabled flag changes
+  const isSelectionAllowedRef = useRef<boolean>(
+    enabled && isSelectionAllowedForChart(chartType, dataOptions),
+  );
 
-  const isSelectionAllowed = useMemo(() => {
-    const isSupportedChart =
-      (isCartesian(chartType) &&
-        (dataOptions as CartesianChartDataOptions).category?.length === 1) ||
-      isScatter(chartType);
-    return enabled && isSupportedChart;
-  }, [enabled, chartType, dataOptions]);
+  useEffect(() => {
+    isSelectionAllowedRef.current = enabled && isSelectionAllowedForChart(chartType, dataOptions);
+  }, [chartType, dataOptions, enabled]);
 
   const applyPointSelections = useMemo(() => {
     if (selectedDataPoints.length === 0) {
@@ -108,32 +125,26 @@ export function useHighlightSelection({
 
   const onBeforeRender = useCallback(
     (options: HighchartsOptions) => {
-      if (isSelectionAllowed) {
+      if (isSelectionAllowedRef.current) {
         options = applyPointSelections(options as HighchartsOptionsInternal) as HighchartsOptions;
         options = setOnClickOutside(options);
       }
       return options;
     },
-    [applyPointSelections, setOnClickOutside, isSelectionAllowed],
+    [applyPointSelections, setOnClickOutside],
   );
 
-  const onDataPointsSelected = useCallback(
-    (dataPoints: ChartDataPoints): void => {
-      if (isSelectionAllowed) {
-        setSelectedDataPoints(dataPoints);
-      }
-    },
-    [isSelectionAllowed],
-  );
+  const onDataPointsSelected = useCallback((dataPoints: ChartDataPoints): void => {
+    if (isSelectionAllowedRef.current) {
+      setSelectedDataPoints(dataPoints);
+    }
+  }, []);
 
-  const onDataPointClick = useCallback(
-    (dataPoint: ChartDataPoint) => {
-      if (isSelectionAllowed) {
-        setSelectedDataPoints([dataPoint] as ChartDataPoints);
-      }
-    },
-    [isSelectionAllowed],
-  );
+  const onDataPointClick = useCallback((dataPoint: ChartDataPoint) => {
+    if (isSelectionAllowedRef.current) {
+      setSelectedDataPoints([dataPoint] as ChartDataPoints);
+    }
+  }, []);
 
   return {
     onBeforeRender,

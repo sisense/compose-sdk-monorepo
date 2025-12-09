@@ -66,6 +66,9 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
             "textOutline": "none",
           },
         },
+        "label": {
+          "enabled": false,
+        },
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -740,6 +743,9 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
             "pointerEvents": "none",
             "textOutline": "none",
           },
+        },
+        "label": {
+          "enabled": false,
         },
         "marker": {
           "enabled": false,
@@ -1423,6 +1429,9 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
             "textOutline": "none",
           },
         },
+        "label": {
+          "enabled": false,
+        },
         "marker": {
           "enabled": false,
           "fillColor": null,
@@ -2097,6 +2106,9 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
             "pointerEvents": "none",
             "textOutline": "none",
           },
+        },
+        "label": {
+          "enabled": false,
         },
         "marker": {
           "enabled": false,
@@ -2778,6 +2790,9 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -3121,6 +3136,9 @@ exports[`cartesianData > timeseries with one data point 1`] = `
             "pointerEvents": "none",
             "textOutline": "none",
           },
+        },
+        "label": {
+          "enabled": false,
         },
         "marker": {
           "enabled": false,
@@ -3500,6 +3518,9 @@ exports[`renders a categorical line chart 1`] = `
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -3875,6 +3896,9 @@ exports[`renders a categorical line chart with two x axes 1`] = `
           "pointerEvents": "none",
           "textOutline": "none",
         },
+      },
+      "label": {
+        "enabled": false,
       },
       "marker": {
         "enabled": false,
@@ -4465,6 +4489,9 @@ exports[`renders a time series chart with break by 1`] = `
           "pointerEvents": "none",
           "textOutline": "none",
         },
+      },
+      "label": {
+        "enabled": false,
       },
       "marker": {
         "enabled": false,
@@ -5101,6 +5128,9 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -5736,6 +5766,9 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -6341,6 +6374,9 @@ exports[`renders a time series with granularity Month 1`] = `
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -6945,6 +6981,9 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
           "pointerEvents": "none",
           "textOutline": "none",
         },
+      },
+      "label": {
+        "enabled": false,
       },
       "marker": {
         "enabled": false,

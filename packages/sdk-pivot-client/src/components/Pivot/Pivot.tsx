@@ -12,8 +12,11 @@ import { TreeServiceI } from '../../tree-structure';
 import { createCallbackMemoizer, debug, getChangedProps } from '../../utils/index.js';
 import { Defer, LoggerI } from '../../utils/types.js';
 import { PaginationOptions, PaginationPanel } from '../PaginationPanel';
+import { OVERLAY_ROWS_PER_PAGE_SELECT } from '../PaginationPanel/classes';
+import { defaultPaginationOptions } from '../PaginationPanel/PaginationPanel';
 import { DimensionsProps, PivotTable } from '../PivotTable/PivotTable.js';
-import { PIVOT, PIVOT_MULTIGRID, PIVOT_OVERLAY } from './classes.js';
+import SelectWithLabel from '../SelectWithLabel.tsx/SelectWithLabel';
+import { PIVOT, PIVOT_MULTIGRID, PIVOT_OVERLAY, PIVOT_WITH_BOTTOM_PADDING } from './classes.js';
 import { PivotFillOptionsProps, PivotStylingWrapper } from './PivotStylingWrapper';
 import { PivotI } from './types.js';
 
@@ -72,6 +75,7 @@ type Props = {
   totalColumnsCount: number;
   itemsPerPage: number;
   itemsPerPageOptions: number[];
+  alwaysShowItemsPerPageSelect?: boolean;
   activePage: number;
   isAllDataLoaded?: boolean;
   allowHtml?: boolean;
@@ -83,6 +87,7 @@ type Props = {
   fallbackImageUrl?: string;
   addCellDomReadyPromise?: (defer?: Defer) => void;
   removeCellDomReadyPromise?: (defer?: Defer) => void;
+  onItemsPerPageChange?: (itemsPerPage: number) => void;
 };
 
 type State = {
@@ -304,8 +309,9 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
     pivotTableHeight?: number;
     paginationPanelHeight?: number;
   }): number {
-    const { scrollBarsMargin = 0 } = this.props;
-    const initialHeight = holderHeight - paginationPanelHeight;
+    const { scrollBarsMargin = 0, itemsPerPage, itemsCount } = this.props;
+    const isSinglePage = itemsCount <= itemsPerPage;
+    const initialHeight = isSinglePage ? holderHeight : holderHeight - paginationPanelHeight;
     const initialAutoHeight = initialHeight ? initialHeight - scrollBarsMargin : 1;
     return isAutoHeight ? pivotTableHeight || initialAutoHeight : initialHeight;
   }
@@ -404,6 +410,7 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
       itemsCount,
       itemsPerPage,
       itemsPerPageOptions,
+      alwaysShowItemsPerPageSelect,
       paginationOptions,
       totalItemsCount,
       totalRecordsCount,
@@ -419,9 +426,13 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
       isMobile,
       addCellDomReadyPromise,
       removeCellDomReadyPromise,
+      onItemsPerPageChange,
       ...rest
     } = this.props;
     const { pivotHeight } = this.state;
+    const isSinglePage = itemsCount <= itemsPerPage;
+    const showOverlayItemsPerPageSelect = isSinglePage && alwaysShowItemsPerPageSelect;
+    const showPaginationPanel = isPaginated && !isSinglePage;
 
     return (
       <EmotionCacheProvider>
@@ -440,7 +451,10 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
             {this.pivotContainer && (
               <PivotTable
                 {...rest}
-                className={PIVOT_MULTIGRID}
+                className={cn(
+                  PIVOT_MULTIGRID,
+                  showOverlayItemsPerPageSelect ? PIVOT_WITH_BOTTOM_PADDING : '',
+                )}
                 rowHeight={rowHeight}
                 imageColumns={imageColumns}
                 fallbackImageUrl={fallbackImageUrl}
@@ -458,13 +472,32 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
                 onDomReady={this.onPivotDomReady}
               />
             )}
-            {isPaginated ? (
+
+            {showOverlayItemsPerPageSelect && (
+              <SelectWithLabel
+                dataTestId="overlay-rows-per-page-select"
+                className={OVERLAY_ROWS_PER_PAGE_SELECT}
+                label={
+                  paginationOptions?.rowsPerPageLabel ?? defaultPaginationOptions.rowsPerPageLabel
+                }
+                value={itemsPerPage}
+                options={itemsPerPageOptions}
+                onChange={onItemsPerPageChange}
+                theme={{
+                  primaryColor: textColor,
+                  backgroundColor: backgroundColor,
+                }}
+              />
+            )}
+
+            {showPaginationPanel && (
               <PaginationPanel
                 {...rest}
                 ref={this.paginationPanelRef}
                 itemsCount={itemsCount}
                 itemsPerPage={itemsPerPage}
                 itemsPerPageOptions={itemsPerPageOptions}
+                onItemsPerPageChange={onItemsPerPageChange}
                 options={paginationOptions}
                 totalItemsCount={totalItemsCount}
                 limitReached={limitReached}
@@ -476,7 +509,8 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
                   fontFamily,
                 }}
               />
-            ) : null}
+            )}
+
             {overlay ? <div className={PIVOT_OVERLAY} /> : null}
           </div>
         </PivotStylingWrapper>

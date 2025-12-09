@@ -10,6 +10,7 @@ export type HighchartBasedChartTypes =
   | 'bar'
   | 'line'
   | 'area'
+  | 'streamgraph'
   | 'polar'
   | 'pie'
   | 'funnel'

@@ -4,7 +4,6 @@
 
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { TFunction } from '@sisense/sdk-common';
-import { NavigatorOptions } from '@sisense/sisense-charts';
 import merge from 'deepmerge';
 import flow from 'lodash-es/flow';
 
@@ -242,14 +241,14 @@ export const getCartesianChartOptions = (
               chartData.xValues.length,
               chartType === 'bar' ? chartHeight : chartWidth,
               chartType === 'bar',
-            ) as NavigatorOptions;
+            );
 
             if (navigator.enabled && chartDesignOptions.autoZoom?.scrollerLocation) {
               const { min, max } = chartDesignOptions.autoZoom.scrollerLocation;
               setInitialScrollerPosition(chart, min, max);
             }
 
-            chart.update({ navigator }, true);
+            chart.update({ navigator: navigator as Highcharts.NavigatorOptions }, true);
           },
         },
       },
@@ -276,6 +275,10 @@ export const getCartesianChartOptions = (
             (chartDesignOptions as LineChartDesignOptions).step && {
               step: (chartDesignOptions as LineChartDesignOptions).step,
             }),
+          // Disable series labels by default for non-streamgraph charts
+          label: {
+            enabled: false,
+          },
         },
       },
       tooltip: getCartesianTooltipSettings(dataOptions, translate),

@@ -347,7 +347,10 @@ describe('useCommonFilters', () => {
               ],
             },
           } as DataPoint,
-          {} as PointerEvent,
+          {
+            preventDefault: vi.fn(),
+            stopPropagation: vi.fn(),
+          } as unknown as PointerEvent,
         );
       });
       connectedWidget = result.current.connectToWidgetProps(widgetPropsMock, {

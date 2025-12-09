@@ -21,6 +21,11 @@ export abstract class DimensionalElement implements Element {
   /**
    * @internal
    */
+  private _title: string;
+
+  /**
+   * @internal
+   */
   private readonly _dataSource: JaqlDataSource;
 
   /**
@@ -32,6 +37,22 @@ export abstract class DimensionalElement implements Element {
 
   set name(value: string) {
     this._name = value;
+  }
+
+  /**
+   * Gets the element's title
+   * @internal
+   */
+  get title(): string {
+    return this._title;
+  }
+
+  /**
+   * Sets the element's title
+   * @internal
+   */
+  set title(value: string) {
+    this._title = value;
   }
 
   /**
@@ -49,6 +70,8 @@ export abstract class DimensionalElement implements Element {
     composeCode?: string,
   ) {
     this._name = name;
+    // default title to name to retain the original name in the data model
+    this._title = name;
     this.type = type;
     this.description = desc || '';
 

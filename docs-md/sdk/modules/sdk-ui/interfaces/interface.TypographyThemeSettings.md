@@ -32,6 +32,14 @@ Hyperlink color
 
 ***
 
+### hyperlinkHoverColor
+
+> **hyperlinkHoverColor**?: `string`
+
+Hyperlink hover color
+
+***
+
 ### primaryTextColor
 
 > **primaryTextColor**?: `string`

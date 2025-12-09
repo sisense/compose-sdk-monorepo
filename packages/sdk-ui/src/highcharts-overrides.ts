@@ -5,8 +5,18 @@
 // inside @sisense/sisense-charts
 import Highcharts from '@sisense/sisense-charts';
 import highchartsRoundedCorners from 'highcharts-rounded-corners';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import HighchartsSeriesLabel from 'highcharts/modules/series-label';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import HighchartsStreamgraph from 'highcharts/modules/streamgraph';
 
 export const applyHighchartOverrides = () => {
+  // Initialize Highcharts modules
+  if (typeof Highcharts === 'object') {
+    HighchartsSeriesLabel(Highcharts);
+    HighchartsStreamgraph(Highcharts);
+  }
+
   (function (H: any) {
     // Use the legend drawing method from area
     // Based off of https://stackoverflow.com/a/17990505

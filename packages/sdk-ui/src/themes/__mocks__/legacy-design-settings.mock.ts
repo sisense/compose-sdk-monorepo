@@ -74,6 +74,7 @@ export const redThemeSettings: CompleteThemeSettings = {
     primaryTextColor: '#ff0000',
     secondaryTextColor: '#f9a8a8',
     hyperlinkColor: '#1FAFF3',
+    hyperlinkHoverColor: '#0F8FD3',
     fontsLoader: {
       fonts: [
         {
@@ -220,6 +221,14 @@ export const redThemeSettings: CompleteThemeSettings = {
       },
     },
     buttons: {
+      primary: {
+        backgroundColor: {
+          default: '#ff0505',
+          focus: '#F2B900',
+          hover: '#F2B900',
+        },
+        textColor: '#3A4356',
+      },
       cancel: {
         backgroundColor: {
           default: '#EDEEF1',

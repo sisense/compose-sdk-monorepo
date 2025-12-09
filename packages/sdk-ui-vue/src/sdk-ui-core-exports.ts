@@ -83,6 +83,7 @@ export type {
   GaugeIndicatorStyleOptions,
   ScatterStyleOptions,
   TreemapStyleOptions,
+  StreamgraphStyleOptions,
   SunburstStyleOptions,
   BoxplotStyleOptions,
   CalendarHeatmapStyleOptions,

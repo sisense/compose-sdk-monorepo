@@ -18,6 +18,7 @@ const createMockFilter = (attribute: any, members: string[]) => ({
   filterType: 'members',
   // Properties required by Element interface
   name: `${attribute.expression}_filter`,
+  title: `${attribute.expression}_filter`,
   type: 'filter',
   description: `Filter for ${attribute.expression}`,
   id: `${attribute.expression}_${members.join(',')}`,
@@ -71,6 +72,7 @@ const createTestAttribute = (expression: string): Attribute => {
   return {
     expression,
     name: expression,
+    title: expression,
     type: 'dimension',
     description: '',
     id: expression,
@@ -802,6 +804,7 @@ describe('useJtdInternal', () => {
         {
           attribute: { expression: '[WidgetDim]' },
           filterType: 'members',
+          title: '[WidgetDim]_filter',
           // Mock the jaql function to avoid errors
           jaql: () => ({ filter: { members: ['value1'] } }),
         },

@@ -37,6 +37,7 @@ export { DrilldownBreadcrumbs } from './widgets/common/drilldown-breadcrumbs';
 export * from './line-chart';
 export * from './column-chart';
 export * from './area-chart';
+export * from './streamgraph-chart';
 export * from './pie-chart';
 export * from './bar-chart';
 export * from './funnel-chart';

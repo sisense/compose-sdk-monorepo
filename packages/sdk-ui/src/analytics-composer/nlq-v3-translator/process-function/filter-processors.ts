@@ -4,7 +4,7 @@
  * These processors validate that attribute types are compatible with the expected
  * value types for specific filter functions.
  */
-import { Attribute } from '@sisense/sdk-data';
+import { Attribute, Filter, isMembersFilter } from '@sisense/sdk-data';
 
 import {
   getAttributeTypeDisplayString,
@@ -123,6 +123,47 @@ export function processDateFilter(processedArgs: ProcessedArg[], context: Functi
       }args[0]: Attribute must be date/datetime type, got ${getAttributeTypeDisplayString(
         attribute,
       )} attribute`,
+    );
+  }
+}
+
+/**
+ * Safely extracts the first argument as a Filter from processed args
+ *
+ * @param processedArgs - Array of processed arguments
+ * @param context - Processing context for error messages
+ * @returns The first argument as a Filter
+ * @throws Error if the first argument is not a Filter
+ */
+function extractFilter(processedArgs: ProcessedArg[], context: FunctionContext): Filter {
+  const filter = processedArgs[0];
+
+  if (!filter || typeof filter !== 'object' || !('attribute' in filter)) {
+    throw new Error(`${context.pathPrefix}args[0]: Expected filter as first argument`);
+  }
+
+  return filter as Filter;
+}
+
+/**
+ * Processes exclude filter to validate that it only accepts members filters
+ * Used by: exclude
+ *
+ * @param processedArgs - [filter, inputFilter?, config?]
+ * @param context - Processing context with error prefix and other metadata
+ * @throws Error with descriptive message if validation fails
+ */
+export function processExcludeFilter(
+  processedArgs: ProcessedArg[],
+  context: FunctionContext,
+): void {
+  const filter = extractFilter(processedArgs, context);
+
+  if (!isMembersFilter(filter)) {
+    throw new Error(
+      `${context.pathPrefix}args[0]: exclude filter only accepts members filter, got ${
+        filter.__serializable || 'unknown'
+      } filter`,
     );
   }
 }

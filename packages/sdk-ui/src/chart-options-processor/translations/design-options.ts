@@ -122,6 +122,7 @@ export type PieChartDesignOptions = BaseDesignOptionsType & {
   pieType?: PieType;
   convolution?: Convolution;
   seriesLabels?: PieSeriesLabels;
+  semiCircle?: boolean;
 };
 
 export type FunnelChartDesignOptions = Omit<BaseDesignOptionsType, 'seriesLabels'> & {

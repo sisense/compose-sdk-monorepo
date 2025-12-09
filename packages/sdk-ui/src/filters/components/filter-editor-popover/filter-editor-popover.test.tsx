@@ -55,7 +55,7 @@ describe('FilterEditorPopover', () => {
     );
     const headerAttribute = await screen.findByTestId('filter-editor-popover-header-attribute');
     const headerDatasource = await screen.findByTestId('filter-editor-popover-header-datasource');
-    expect(headerAttribute).toHaveTextContent(filter.attribute.name);
+    expect(headerAttribute).toHaveTextContent(filter.attribute.title);
     expect(headerDatasource).toHaveTextContent(filter.attribute.dataSource!.title);
   });
 

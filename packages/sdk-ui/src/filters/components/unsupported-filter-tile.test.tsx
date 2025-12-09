@@ -8,7 +8,7 @@ import { SisenseContextProviderProps } from '@/props';
 import { UnsupportedFilterTile } from './unsupported-filter-tile';
 
 const filter = {
-  attribute: { name: 'mockAttribute' },
+  attribute: { name: 'mockAttribute', title: 'mockAttribute' },
   config: { disabled: false },
 } as Filter;
 

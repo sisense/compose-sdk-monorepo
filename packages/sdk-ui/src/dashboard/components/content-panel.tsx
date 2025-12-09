@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 
-import styled from '@emotion/styled';
 import isNumber from 'lodash-es/isNumber';
 import isUndefined from 'lodash-es/isUndefined';
 
 import { getDividerStyle } from '@/dashboard/utils';
 import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Widget } from '@/widgets/widget';
 

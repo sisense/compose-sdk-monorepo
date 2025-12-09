@@ -6,6 +6,7 @@ import { CustomFunctionProcessor } from '../types.js';
 import { processCustomFormula } from './custom-formula/process-custom-formula.js';
 import {
   processDateFilter,
+  processExcludeFilter,
   processNumericFilter,
   processStringFilter,
   processStringOrNumericFilter,
@@ -60,6 +61,9 @@ export const FUNCTION_PROCESSORS: Record<string, CustomFunctionProcessor> = {
   'filterFactory.thisMonth': processDateFilter,
   'filterFactory.thisQuarter': processDateFilter,
   'filterFactory.today': processDateFilter,
+
+  // Exclude filter
+  'filterFactory.exclude': processExcludeFilter,
 };
 
 /**

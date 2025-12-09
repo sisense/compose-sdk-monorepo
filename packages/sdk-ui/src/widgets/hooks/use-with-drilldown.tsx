@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { createAttribute } from '@sisense/sdk-data';
 
@@ -11,7 +11,9 @@ import { mergeFiltersOrFilterRelations } from '@/utils/filter-relations.js';
 import { DataPoint, DrilldownSelection, ScatterDataPoint } from '../../types.js';
 import {
   applyDrilldownDimension,
+  getAvailableDrilldownPaths,
   getDrilldownInitialDimension,
+  getSelectedDrilldownAttributes,
   isDrilldownApplicableToChart,
   prepareDrilldownSelectionPoints,
 } from '../common/drilldown-utils.js';
@@ -44,6 +46,7 @@ export const useWithDrilldown = ({
     return getDrilldownInitialDimension(chartType, dataOptions) || dummyAttribute;
   }, [chartType, dataOptions]);
 
+  // Includes the available drilldown paths (hierarchies) from Sisense instance
   const drilldownPaths = useSyncedDrilldownPaths({
     attribute: initialDimension,
     dataSource: dataSource,
@@ -51,9 +54,15 @@ export const useWithDrilldown = ({
     enabled: isDrilldownApplicable,
   });
 
+  // Store drilldown paths in a ref to avoid triggering rerenders when they update
+  const drilldownPathsRef = useRef(drilldownPaths);
+  useEffect(() => {
+    drilldownPathsRef.current = drilldownPaths;
+  }, [drilldownPaths]);
+
   const isDrilldownEnabled = useMemo(() => {
     const hasDrilldownConfig =
-      drilldownOptions?.drilldownSelections?.length || drilldownPaths?.length;
+      !!drilldownOptions?.drilldownSelections?.length || !!drilldownPaths?.length;
 
     return hasDrilldownConfig && isDrilldownApplicable;
   }, [drilldownOptions, isDrilldownApplicable, drilldownPaths]);
@@ -61,7 +70,6 @@ export const useWithDrilldown = ({
   const { drilldownDimension, drilldownFilters, breadcrumbs, openDrilldownMenu } = useDrilldown({
     initialDimension,
     drilldownSelections,
-    drilldownPaths,
     openMenu,
     onDrilldownSelectionsChange,
   });
@@ -69,29 +77,49 @@ export const useWithDrilldown = ({
   const drilldownOnDataPointsSelected = useCallback(
     (points: (DataPoint | ScatterDataPoint)[], event: MouseEvent) => {
       const drilldownSelectionPoints = prepareDrilldownSelectionPoints(points, event, dataOptions);
+      const selectedAttributes = getSelectedDrilldownAttributes(
+        initialDimension,
+        drilldownSelections || [],
+      );
+      const availableDrilldownPaths = getAvailableDrilldownPaths(
+        drilldownPathsRef.current,
+        selectedAttributes,
+      );
+
       openDrilldownMenu(
         {
           left: event.clientX,
           top: event.clientY,
         },
         drilldownSelectionPoints,
+        availableDrilldownPaths,
       );
     },
-    [dataOptions, openDrilldownMenu],
+    [dataOptions, initialDimension, drilldownSelections, openDrilldownMenu],
   );
 
   const drilldownOnDataPointContextMenu = useCallback(
     (point: DataPoint, event: MouseEvent) => {
       const drilldownSelectionPoints = prepareDrilldownSelectionPoints([point], event, dataOptions);
+      const selectedAttributes = getSelectedDrilldownAttributes(
+        initialDimension,
+        drilldownSelections || [],
+      );
+      const availableDrilldownPaths = getAvailableDrilldownPaths(
+        drilldownPathsRef.current,
+        selectedAttributes,
+      );
+
       openDrilldownMenu(
         {
           left: event.clientX,
           top: event.clientY,
         },
         drilldownSelectionPoints,
+        availableDrilldownPaths,
       );
     },
-    [dataOptions, openDrilldownMenu],
+    [dataOptions, initialDimension, drilldownSelections, openDrilldownMenu],
   );
 
   /**
@@ -119,12 +147,12 @@ export const useWithDrilldown = ({
 
   const propsWithDrilldown = {
     ...propsToExtend,
-    ...(isDrilldownEnabled && {
+    ...{
       dataOptions: dataOptionsWithDrilldown,
       filters: filtersWithDrilldown,
       onDataPointsSelected: onDataPointsSelectedWithDrilldown,
       onDataPointContextMenu: onDataPointContextMenuWithDrilldown,
-    }),
+    },
   } as ChartWidgetProps;
 
   return {

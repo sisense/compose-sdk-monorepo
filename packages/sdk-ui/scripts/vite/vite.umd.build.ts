@@ -30,16 +30,6 @@ const buildUMD = async () => {
     plugins: [
       react({
         jsxImportSource: '@emotion/react',
-        plugins: [
-          [
-            '@swc/plugin-emotion',
-            {
-              sourceMap: true,
-              autoLabel: 'always',
-              labelFormat: '[local]',
-            },
-          ],
-        ],
       }),
     ],
     build: {

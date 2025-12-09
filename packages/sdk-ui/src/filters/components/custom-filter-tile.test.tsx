@@ -8,7 +8,7 @@ import { SisenseContextProviderProps } from '@/props';
 import { CustomFilterTile } from './custom-filter-tile';
 
 const filter = {
-  attribute: { name: 'mockAttribute' },
+  attribute: { name: 'mockAttribute', title: 'mockAttribute' },
   jaql: () => ({ jaql: { filter: 'mockJaql' } }),
   config: { disabled: false },
 } as Filter;

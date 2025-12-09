@@ -78,12 +78,14 @@ import {
   ScattermapStyleOptions,
   ScatterStyleOptions,
   StackableStyleOptions,
+  StreamgraphStyleOptions,
   SunburstStyleOptions,
   TableStyleOptions,
   TableWidgetStyleOptions,
   TabularChartStyleOptions,
   TextWidgetDataPoint,
   TextWidgetStyleOptions,
+  ThemeConfig,
   ThemeOid,
   ThemeSettings,
   TreemapStyleOptions,
@@ -289,6 +291,9 @@ export type ThemeProviderProps = PropsWithChildren<{
    * @internal
    */
   skipTracking?: boolean;
+
+  /** @internal */
+  config?: ThemeConfig;
 }>;
 
 /**
@@ -894,6 +899,40 @@ export interface AreaChartProps
    * @category Chart
    */
   styleOptions?: AreaStyleOptions;
+}
+
+/**
+ * Props of the {@link StreamgraphChart} component.
+ *
+ * A streamgraph is a type of stacked area chart where areas are displaced around
+ * a central axis. It is often used for displaying compound volume across different
+ * categories or over time with a relative scale that emphasizes overall patterns
+ * and trends.
+ */
+export interface StreamgraphChartProps
+  extends BaseChartProps,
+    RegularChartEventProps,
+    HighchartsBasedChartEventProps {
+  /**
+   * Configurations for how to interpret and present a chart's data.
+   *
+   * Streamgraph requires at least one category (X-axis) and one or more value measures.
+   * Multiple series can be created using the `breakBy` property or by providing multiple
+   * value measures.
+   *
+   * To learn more about using data options,
+   * see the [Compose SDK Charts Guide](/guides/sdk/guides/charts/guide-compose-sdk-charts.html#dataoptions).
+   *
+   * @category Chart
+   */
+  dataOptions: CartesianChartDataOptions;
+
+  /**
+   * Configurations for how to style and present a chart's data.
+   *
+   * @category Chart
+   */
+  styleOptions?: StreamgraphStyleOptions;
 }
 
 /**

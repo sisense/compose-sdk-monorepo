@@ -43,7 +43,7 @@ export type PaginationOptions = {
   };
 };
 
-const defaultOptions: PaginationOptions = {
+export const defaultPaginationOptions: PaginationOptions = {
   isMobile: false,
   conjunctionLabel: 'of',
   resultLabel: 'Results',
@@ -117,7 +117,7 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
     activePage: 0,
     disableInitialCallback: true,
     className: '',
-    options: { ...defaultOptions },
+    options: { ...defaultPaginationOptions },
     onHeightChange: null,
     onPageChange: null,
   };
@@ -127,7 +127,7 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
     const { itemsCount, itemsPerPage, options, style } = this.props;
     this.logger = debug.create('PaginationPanel');
     const pagesCount = Math.ceil(itemsCount / itemsPerPage) || 0;
-    const finalOptions: PaginationOptions = { ...defaultOptions, ...options, style };
+    const finalOptions: PaginationOptions = { ...defaultPaginationOptions, ...options, style };
 
     this.state = {
       pagesCount,
@@ -171,7 +171,7 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
 
     if (nextProps.options !== this.props.options) {
       nextState = nextState || {};
-      const options: PaginationOptions = { ...defaultOptions, ...nextProps.options };
+      const options: PaginationOptions = { ...defaultPaginationOptions, ...nextProps.options };
       nextState.options = options;
     }
 
@@ -420,7 +420,15 @@ export class PaginationPanel extends React.PureComponent<Props, State> {
                     }}
                     arrow
                   >
-                    {alertIcon}
+                    {/*
+                      Wrapping alertIcon in a span is required for MUI Tooltip to work correctly
+                      when using Preact bridges (Angular/Vue). MUI Tooltip needs to attach refs
+                      and DOM event listeners to its child element. Without a native HTML element
+                      wrapper, the ref may point to a Preact virtual node instead of a real DOM
+                      element, causing "getAttribute is not a function" errors.
+                      See: https://mui.com/material-ui/react-tooltip/#custom-child-element
+                    */}
+                    <span>{alertIcon}</span>
                   </Tooltip>
                 </div>
               ) : (

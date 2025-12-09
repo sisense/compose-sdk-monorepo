@@ -525,7 +525,15 @@ export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeas
     return jaqlContextValue && createDimensionalElementFromJaql(jaqlContextValue);
   });
 
-  return measureFactory.customFormula(jaql.title, jaql.formula, context);
+  const measure = measureFactory.customFormula(jaql.title, jaql.formula, context);
+
+  // Apply sort if present in the JAQL
+  if (jaql.sort) {
+    const sortEnum = convertSort(jaql.sort);
+    return measure.sort(sortEnum) as CalculatedMeasure;
+  }
+
+  return measure;
 };
 
 /**

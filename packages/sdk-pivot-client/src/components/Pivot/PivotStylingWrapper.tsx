@@ -1,6 +1,10 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
+import { OVERLAY_ROWS_PER_PAGE_SELECT } from '../PaginationPanel/classes';
+import { TABLEGRID_DATA } from '../PivotTable/classes';
+import { PIVOT_WITH_BOTTOM_PADDING } from './classes';
+
 export type PivotFillOptionsProps = {
   alternatingRows?: boolean;
   alternatingColumns?: boolean;
@@ -216,7 +220,38 @@ export const PivotStylingWrapper = styled.div<{
       color: ${(props) => props.navigationSecondaryColor};
     }
   }
+
   .table-grid__cell--selected {
+    background-color: ${(props) => props.selectionColor};
+  }
+
+  .${OVERLAY_ROWS_PER_PAGE_SELECT} {
+    position: absolute;
+    bottom: 11px;
+    right: 12px;
+    height: 30px;
+    z-index: 2;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .${PIVOT_WITH_BOTTOM_PADDING} .${TABLEGRID_DATA} {
+    padding-bottom: 40px;
+  }
+
+  .table-grid__cell:not(.table-grid__cell--user-type-subTotal):hover:not(
+      .table-grid__cell--col-user-type-subTotal
+    ):hover:not(.table-grid__cell--user-type-measureTop):hover:not(
+      .table-grid__cell--row-user-type-subTotal
+    ):hover:not(.table-grid__cell--row-user-type-grandTotal):hover:not(
+      .table-grid__cell--col-user-type-grandTotal
+    ):hover:not(.table-grid__cell--user-type-grandTotal):hover:not(
+      .table-grid__cell--user-type-corner
+    ):hover {
     background-color: ${(props) => props.selectionColor};
   }
 `;

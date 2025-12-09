@@ -1,6 +1,7 @@
 import { DataSource } from '../../interfaces.js';
 import { isDataSourceInfo } from '../../utils.js';
 import { createAttribute } from '../attributes.js';
+import { normalizeName } from '../base.js';
 import { Attribute, Dimension } from '../interfaces.js';
 import { DataSourceField } from '../types.js';
 import { createDateDimension, createDimension } from './dimensions.js';
@@ -97,11 +98,16 @@ const groupAttributesByDimension = (
       expression: dimension.id,
       description: dimension.description,
     };
+
+    const safeAttributeName = ['id', 'name', 'expression'].includes(attribute.name)
+      ? attribute.expression
+      : normalizeName(attribute.name);
+
     return {
       ...acc,
       [dimension.name]: {
         ...dimensionConfig,
-        [attribute.name]: attribute,
+        [safeAttributeName]: attribute,
       },
     };
   }, {});

@@ -1,5 +1,4 @@
 import { TFunction } from '@sisense/sdk-common';
-import { NavigatorOptions } from '@sisense/sisense-charts';
 
 import { BoxplotChartDataOptionsInternal } from '../chart-data-options/types';
 import { BoxplotChartData } from '../chart-data/types';
@@ -56,14 +55,14 @@ export const getBoxplotChartOptions = (
             chartDesignOptions.autoZoom.enabled,
             chartData.xValues.length,
             chartWidth,
-          ) as NavigatorOptions;
+          );
 
           if (navigator.enabled && chartDesignOptions.autoZoom?.scrollerLocation) {
             const { min, max } = chartDesignOptions.autoZoom.scrollerLocation;
             setInitialScrollerPosition(chart, min, max);
           }
 
-          chart.update({ navigator }, true);
+          chart.update({ navigator: navigator as Highcharts.NavigatorOptions }, true);
         },
         // disables default zooming
         selection: (nativeEvent: HighchartsSelectEvent) => {

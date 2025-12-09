@@ -1,4 +1,5 @@
 import { AreamapChartDesignOptions } from '@/chart/restructured-charts/areamap-chart/types';
+import { StreamgraphChartDesignOptions } from '@/chart/restructured-charts/highchart-based-charts/cartesians/stackable/streamgraph-chart/types';
 
 import { ChartType } from '../../types';
 import {
@@ -78,6 +79,7 @@ export const CARTESIAN_CHART_TYPES = [
   'area',
   'bar',
   'column',
+  'streamgraph',
   ...POLAR_CHART_TYPES,
 ] as const;
 /** Cartesian family of chart types @expandType */
@@ -153,6 +155,8 @@ export type DesignOptions<SpecificChartType extends ChartType = ChartType> =
     ? BarChartDesignOptions
     : SpecificChartType extends 'column'
     ? ColumnChartDesignOptions
+    : SpecificChartType extends 'streamgraph'
+    ? StreamgraphChartDesignOptions
     : SpecificChartType extends 'pie'
     ? PieChartDesignOptions
     : SpecificChartType extends 'funnel'

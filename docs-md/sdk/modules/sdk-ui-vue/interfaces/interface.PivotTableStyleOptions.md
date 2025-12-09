@@ -24,6 +24,22 @@ Boolean flag whether to apply background color to alternate rows.
 
 ***
 
+### alwaysShowResultsPerPage
+
+> **alwaysShowResultsPerPage**?: `boolean`
+
+Boolean flag whether to always show the results per page select
+
+If `true`, the results per page select will be shown even if there is only one page of results.
+
+#### Default
+
+```ts
+false
+```
+
+***
+
 ### headersColor
 
 > **headersColor**?: `boolean`

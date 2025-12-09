@@ -161,9 +161,11 @@ describe('useComposedDashboard', () => {
     // imitate opening context menu on some data point on the chart
     act(() => {
       chartMocksManager.renderedCharts[0].emitDataPointContextMenuOpen(dataPoint, {
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
         clientX: 927,
         clientY: 433,
-      } as PointerEvent);
+      } as unknown as PointerEvent);
     });
 
     const menu = await result.findByRole('menu');

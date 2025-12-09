@@ -66,5 +66,33 @@ describe('Pie Chart Design Options', () => {
       });
       expect(result.pieType).toBe('donut');
     });
+
+    it('should pass through semiCircle flag when enabled', () => {
+      const styleOptions: PieChartStyleOptions = {
+        semiCircle: true,
+      };
+
+      const result = translateStyleOptionsToDesignOptions(styleOptions);
+
+      expect(result.semiCircle).toBe(true);
+    });
+
+    it('should not set semiCircle when not provided', () => {
+      const styleOptions: PieChartStyleOptions = {};
+
+      const result = translateStyleOptionsToDesignOptions(styleOptions);
+
+      expect(result.semiCircle).toBeUndefined();
+    });
+
+    it('should handle semiCircle false', () => {
+      const styleOptions: PieChartStyleOptions = {
+        semiCircle: false,
+      };
+
+      const result = translateStyleOptionsToDesignOptions(styleOptions);
+
+      expect(result.semiCircle).toBe(false);
+    });
   });
 });

@@ -1,5 +1,4 @@
-import styled from '@emotion/styled';
-
+import styled from '@/styled';
 import { Themable } from '@/theme-provider/types';
 
 export const FilterEditorContainer = styled.div<Themable>`

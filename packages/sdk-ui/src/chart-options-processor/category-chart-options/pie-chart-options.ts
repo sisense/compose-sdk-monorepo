@@ -50,12 +50,13 @@ export const getPieChartOptions = (
     // level animation only disables initial or subsequent paints
     legend: getLegendSettings(chartDesignOptions.legend),
     series: categoricalSeries,
-    plotOptions: getPiePlotOptions(
-      chartDesignOptions.pieType,
-      chartDesignOptions.seriesLabels,
-      dataOptions,
+    plotOptions: getPiePlotOptions({
+      pieType: chartDesignOptions.pieType,
+      seriesLabels: chartDesignOptions.seriesLabels,
+      chartDataOptions: dataOptions,
       themeSettings,
-    ),
+      semiCircle: chartDesignOptions.semiCircle,
+    }),
     tooltip: getCategoryTooltipSettings(
       chartDesignOptions.seriesLabels?.percentageLabels?.showDecimals,
       dataOptions,

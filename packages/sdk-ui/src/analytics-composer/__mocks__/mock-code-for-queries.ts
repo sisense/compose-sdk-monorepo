@@ -1023,6 +1023,7 @@ export default function CodeExample() {
       filters={ [] }
       styleOptions={ {
         rowHeight: undefined,
+        imageColumns: undefined,
       } }
     />
   );

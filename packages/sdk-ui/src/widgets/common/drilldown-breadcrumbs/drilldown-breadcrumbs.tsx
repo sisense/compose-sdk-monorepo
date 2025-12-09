@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import React from 'react';
 
-import styled from '@emotion/styled';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Button from '@mui/material/Button';
 
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
+import styled from '@/styled';
 
 import { DrilldownBreadcrumbsProps } from '../../../props';
 import { DrilldownBreadcrumbsNavigation } from './drilldown-breadcrumbs-navigation';

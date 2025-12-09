@@ -37,6 +37,7 @@ export function isRestructuredChartType(chartType: ChartType): chartType is Supp
     'calendar-heatmap',
     'treemap',
     'sunburst',
+    'streamgraph',
   ];
   return restructuredChartTypes.includes(chartType as SupportedChartType);
 }

@@ -1,8 +1,8 @@
-import styled, { CreateStyled } from '@emotion/styled';
 import MuiIconButton, {
   type IconButtonProps as MuiIconButtonProps,
 } from '@mui/material/IconButton';
 
+import styled, { CreateStyled } from '@/styled';
 import { colors } from '@/themes/colors';
 
 // https://github.com/emotion-js/emotion/issues/2193#issuecomment-958381691

@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 import { Popper } from '@/common/components/popper';
@@ -12,6 +11,7 @@ import {
 } from '@/filters/components/filter-editor-popover/common/scroll-wrapper';
 import { StyledSearchInput } from '@/filters/components/filter-editor-popover/common/select/searchable-single-select';
 import { SmallLoader } from '@/filters/components/filter-editor-popover/common/small-loader';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 
@@ -39,11 +39,14 @@ const ContentToolbar = styled.div`
   height: 32px;
 `;
 
-const ContentToolbarButton = styled.button`
-  font-family: 'Open Sans', sans-serif;
+const ContentToolbarButton = styled.button<Themable>`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
   border: none;
   background: none;
-  color: #1eaff3;
+  color: ${({ theme }) => theme.typography.hyperlinkColor};
+  &:hover {
+    color: ${({ theme }) => theme.typography.hyperlinkHoverColor};
+  }
   padding: 0;
   font-size: 11px;
   &:disabled {
@@ -51,7 +54,10 @@ const ContentToolbarButton = styled.button`
   }
 `;
 
-const ContentList = styled.div``;
+const ContentList = styled.div<Themable>`
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  color: ${({ theme }) => theme.general.popover.content.clickableList.item.textColor};
+`;
 
 type SearchableMultiSelectProps<Value> = {
   values?: Value[];
@@ -178,14 +184,19 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
                   style={{ marginRight: '8px' }}
                   disabled={items.length === values.length}
                   onClick={handleSelectAll}
+                  theme={themeSettings}
                 >
                   {t('filterEditor.buttons.selectAll')}
                 </ContentToolbarButton>
-                <ContentToolbarButton disabled={!values.length} onClick={handleClearAll}>
+                <ContentToolbarButton
+                  disabled={!values.length}
+                  onClick={handleClearAll}
+                  theme={themeSettings}
+                >
                   {t('filterEditor.buttons.clearAll')}
                 </ContentToolbarButton>
               </ContentToolbar>
-              <ContentList aria-label="List">
+              <ContentList aria-label="List" theme={themeSettings}>
                 {items.map((item, index) => (
                   <MultiSelectItem
                     key={index}

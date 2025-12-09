@@ -100,6 +100,9 @@ exports[`Chart > add handlers to a chart 1`] = `
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -525,6 +528,9 @@ exports[`Chart > change theme of a chart 1`] = `
           "pointerEvents": "none",
           "textOutline": "none",
         },
+      },
+      "label": {
+        "enabled": false,
       },
       "marker": {
         "enabled": false,
@@ -2287,6 +2293,9 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -3441,6 +3450,9 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -4119,6 +4131,9 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
           "pointerEvents": "none",
           "textOutline": "none",
         },
+      },
+      "label": {
+        "enabled": false,
       },
       "marker": {
         "enabled": false,
@@ -5080,6 +5095,9 @@ exports[`Chart > render a column chart with breakBy 1`] = `
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -5663,6 +5681,9 @@ exports[`Chart > render a line chart 1`] = `
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -6088,6 +6109,9 @@ exports[`Chart > render a line chart with only category (x-axis) 1`] = `
           "textOutline": "none",
         },
       },
+      "label": {
+        "enabled": false,
+      },
       "marker": {
         "enabled": false,
         "fillColor": null,
@@ -6512,6 +6536,9 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
           "pointerEvents": "none",
           "textOutline": "none",
         },
+      },
+      "label": {
+        "enabled": false,
       },
       "marker": {
         "enabled": false,

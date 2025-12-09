@@ -23,6 +23,13 @@ export interface Element {
   name: string;
 
   /**
+   * Element title
+   *
+   * @internal
+   */
+  title: string;
+
+  /**
    * Element type
    */
   readonly type: string;

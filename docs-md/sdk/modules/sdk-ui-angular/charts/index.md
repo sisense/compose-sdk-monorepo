@@ -22,5 +22,6 @@ Angular components and utilities for working with charts
 - [PolarChartComponent](class.PolarChartComponent.md)
 - [ScatterChartComponent](class.ScatterChartComponent.md)
 - [ScattermapChartComponent](class.ScattermapChartComponent.md)
+- [StreamgraphChartComponent](class.StreamgraphChartComponent.md)
 - [SunburstChartComponent](class.SunburstChartComponent.md)
 - [TreemapChartComponent](class.TreemapChartComponent.md)

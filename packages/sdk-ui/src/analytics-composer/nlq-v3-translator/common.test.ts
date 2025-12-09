@@ -110,6 +110,7 @@ describe('attribute-validators', () => {
   // Mock attribute objects for testing
   const createMockAttribute = (type: string): Attribute => ({
     name: 'TestAttribute',
+    title: 'TestAttribute',
     type,
     description: 'Test attribute',
     id: 'test-id',

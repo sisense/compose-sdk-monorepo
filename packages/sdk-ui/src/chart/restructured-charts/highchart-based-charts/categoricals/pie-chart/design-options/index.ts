@@ -33,7 +33,7 @@ const getDataLimits = (styleOptions: PieChartStyleOptions) => {
 export function translateStyleOptionsToDesignOptions(
   styleOptions: PieChartStyleOptions,
 ): PieChartDesignOptions {
-  const { legend, labels, subtype, seriesLabels } = styleOptions;
+  const { legend, labels, subtype, seriesLabels, semiCircle } = styleOptions;
 
   // Determine pie type from subtype, falling back to default
   const subtypeDesignOptions = subtype ? chartSubtypeToDesignOptions[subtype] : undefined;
@@ -67,6 +67,7 @@ export function translateStyleOptionsToDesignOptions(
     convolution,
     legend,
     dataLimits,
+    semiCircle,
   };
 }
 

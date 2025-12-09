@@ -42,6 +42,7 @@ exports[`translateQuery > should translate query json 1`] = `
     {
       "__serializable": "RankingFilter",
       "_name": "filter",
+      "_title": "filter",
       "attribute": {
         "__serializable": "DimensionalAttribute",
         "composeCode": "DM.Brand.Brand",
@@ -95,6 +96,7 @@ exports[`translateQuery > should translate query json 1`] = `
     {
       "__serializable": "MembersFilter",
       "_name": "filter",
+      "_title": "filter",
       "attribute": {
         "__serializable": "DimensionalLevelAttribute",
         "composeCode": "DM.Commerce.Date.Years",

@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
-
+import styled from '@/styled';
 import { Themable } from '@/theme-provider/types';
 
 import { useThemeContext } from '../theme-provider';

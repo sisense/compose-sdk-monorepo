@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import React, { ReactElement } from 'react';
 
-import styled from '@emotion/styled';
 import ListItemButton from '@mui/material/ListItemButton';
 import Tooltip from '@mui/material/Tooltip';
 
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 

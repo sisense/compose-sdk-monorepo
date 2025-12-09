@@ -34,7 +34,7 @@ describe('FilterTile', () => {
         <FilterTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByLabelText(container, mockAttribute.name);
+    const tile = await findByLabelText(container, mockAttribute.title);
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
@@ -52,7 +52,7 @@ describe('FilterTile', () => {
         <FilterTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByText(container, mockAttribute.name);
+    const tile = await findByText(container, mockAttribute.title);
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
@@ -91,7 +91,7 @@ describe('FilterTile', () => {
         <FilterTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByLabelText(container, mockAttribute.name);
+    const tile = await findByLabelText(container, mockAttribute.title);
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
@@ -103,7 +103,7 @@ describe('FilterTile', () => {
         <FilterTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByText(container, mockAttribute.name);
+    const tile = await findByText(container, mockAttribute.title);
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
@@ -116,7 +116,7 @@ describe('FilterTile', () => {
         <FilterTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByText(container, mockAttribute.name);
+    const tile = await findByText(container, mockAttribute.title);
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
@@ -128,7 +128,7 @@ describe('FilterTile', () => {
         <FilterTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByText(container, mockAttribute.name);
+    const tile = await findByText(container, mockAttribute.title);
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
@@ -144,7 +144,7 @@ describe('FilterTile', () => {
         <FilterTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByText(container, mockAttribute.name);
+    const tile = await findByText(container, mockAttribute.title);
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
@@ -156,14 +156,14 @@ describe('FilterTile', () => {
         <FilterTile filter={mockFilter} onChange={mockOnChange} />
       </MockedSisenseContextProvider>,
     );
-    const tile = await findByText(container, mockAttribute.name);
+    const tile = await findByText(container, mockAttribute.title);
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
 
   it('renders Filter Tile for unsupported filter type', async () => {
     const mockFilter = {
-      attribute: { name: 'Unsupported Filter' },
+      attribute: { name: 'Unsupported Filter', title: 'Unsupported Filter' },
       config: { disabled: false, locked: false },
     } as Filter;
     const { container } = render(

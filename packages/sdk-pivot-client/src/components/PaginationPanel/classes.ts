@@ -10,3 +10,4 @@ export const LIST_WRAPPER = 'sisense-pivot__pagination-panel-list-wrapper';
 export const ROWS_COUNT = 'sisense-pivot__pagination-panel-rows-count';
 export const NOTIFICATION_WRAPPER = 'sisense-pivot__pagination-panel-notification';
 export const NOTIFICATION_MORE_WRAPPER = 'sisense-pivot__pagination-panel-notification-more';
+export const OVERLAY_ROWS_PER_PAGE_SELECT = 'sisense-pivot__overlay-rows-per-page-select';

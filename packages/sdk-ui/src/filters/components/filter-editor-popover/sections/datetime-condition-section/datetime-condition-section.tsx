@@ -2,8 +2,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import { Filter } from '@sisense/sdk-data';
+
+import styled from '@/styled';
 
 import { SingleSelect } from '../../common/index.js';
 import { SelectableSection } from '../../common/selectable-section.js';

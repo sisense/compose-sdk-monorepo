@@ -55,7 +55,7 @@ export const FilterTile: React.FC<FilterTileProps> = ({
   defaultDataSource,
 }: FilterTileProps) => {
   const attribute = filter.attribute;
-  const title = attribute.name;
+  const title = attribute.title;
   const props = {
     attribute,
     title,

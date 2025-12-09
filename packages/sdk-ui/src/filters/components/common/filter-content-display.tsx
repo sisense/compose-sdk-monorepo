@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from '@/styled';
 
 export const FilterContentDisplay = styled.div`
   padding: 12px;

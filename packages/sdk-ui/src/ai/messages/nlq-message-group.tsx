@@ -1,9 +1,9 @@
 /* eslint-disable complexity */
 import { useCallback, useState } from 'react';
 
-import styled from '@emotion/styled';
 import lowerFirst from 'lodash-es/lowerFirst';
 
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 
 import { GetNlgInsightsRequest, NlqResponseData } from '../api/types';

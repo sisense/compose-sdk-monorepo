@@ -79,7 +79,7 @@ export const CascadingLevelFilterTile = ({
   const triangleColor = getSlightlyDifferentColor(bgColor, TRIANGLE_COLOR_ADJUSTMENT);
 
   const attribute = filter.attribute;
-  const title = attribute.name;
+  const title = attribute.title;
   const props = {
     attribute,
     dataSource,

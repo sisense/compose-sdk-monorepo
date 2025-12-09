@@ -36,6 +36,9 @@ export const useApplyPivotTableCellEvents = ({
       }
 
       if (payload.event.type === 'contextmenu') {
+        payload.event.preventDefault();
+        payload.event.stopPropagation();
+
         onDataPointContextMenu?.(dataPoint, payload.event);
       }
     },

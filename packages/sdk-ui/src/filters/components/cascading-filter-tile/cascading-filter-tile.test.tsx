@@ -52,7 +52,7 @@ describe('CascadingFilterTile', () => {
 
     await Promise.all(
       cascadingFilter.filters.map(async (filter) =>
-        expect(await screen.findByText(filter.attribute.name)).toBeInTheDocument(),
+        expect(await screen.findByText(filter.attribute.title)).toBeInTheDocument(),
       ),
     );
   });
@@ -90,7 +90,7 @@ describe('CascadingFilterTile', () => {
 
     await Promise.all(
       cascadingFilter.filters.map(async (filter) =>
-        expect(await screen.findByText(filter.attribute.name)).toBeInTheDocument(),
+        expect(await screen.findByText(filter.attribute.title)).toBeInTheDocument(),
       ),
     );
     expect(container).toMatchSnapshot();

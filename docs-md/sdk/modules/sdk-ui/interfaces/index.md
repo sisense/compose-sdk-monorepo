@@ -123,6 +123,8 @@ TypeScript interfaces for components and hooks listed above
 - [SelectedMember](interface.SelectedMember.md)
 - [SisenseContextProviderProps](interface.SisenseContextProviderProps.md)
 - [StackableStyleOptions](interface.StackableStyleOptions.md)
+- [StreamgraphChartProps](interface.StreamgraphChartProps.md)
+- [StreamgraphStyleOptions](interface.StreamgraphStyleOptions.md)
 - [StyledColumn](interface.StyledColumn.md)
 - [StyledMeasureColumn](interface.StyledMeasureColumn.md)
 - [SunburstChartProps](interface.SunburstChartProps.md)

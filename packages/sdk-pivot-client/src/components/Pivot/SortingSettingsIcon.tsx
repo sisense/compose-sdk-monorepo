@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { AlignPoints, Popover, type PopoverProps } from '@sisense/sdk-shared-ui/Popover';
 
@@ -15,30 +15,37 @@ export const SortingSettingsIcon = (props: Props) => {
   const { onRequestClose, onClick, onKeyPress, sortingPopup, className, getTooltipContainer } =
     props;
 
+  const preventEventBubble = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+  }, []);
+
   return (
-    <Popover
-      bubbleMouseEvents
-      level={0}
-      mask
-      placement="bottom"
-      onVisibleChange={(visible?: boolean) => {}}
-      trigger={['click']}
-      overlay={() => sortingPopup}
-      onRequestClose={onRequestClose}
-      getTooltipContainer={getTooltipContainer}
-      visible={sortingPopup !== null}
-      align={{
-        points: [AlignPoints.topLeft, AlignPoints.bottomRight],
-      }}
-    >
-      <span
-        role="button"
-        aria-label="Show sorting settings pop-up"
-        tabIndex={0}
-        onClick={onClick}
-        onKeyPress={onKeyPress}
-        className={className}
-      />
-    </Popover>
+    <div onClick={preventEventBubble}>
+      <Popover
+        bubbleMouseEvents
+        level={0}
+        mask
+        placement="bottom"
+        onVisibleChange={(visible?: boolean) => {}}
+        trigger={['click']}
+        overlay={() => sortingPopup}
+        onRequestClose={onRequestClose}
+        getTooltipContainer={getTooltipContainer}
+        visible={sortingPopup !== null}
+        align={{
+          points: [AlignPoints.topLeft, AlignPoints.bottomRight],
+        }}
+      >
+        <span
+          role="button"
+          aria-label="Show sorting settings pop-up"
+          tabIndex={0}
+          onClick={onClick}
+          onKeyPress={onKeyPress}
+          className={className}
+        />
+      </Popover>
+    </div>
   );
 };

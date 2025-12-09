@@ -2,9 +2,10 @@ import React from 'react';
 import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 import { Attribute } from '@sisense/sdk-data';
+
+import styled from '@/styled';
 
 import { BREADCRUMBS_BORDER_COLOR } from './drilldown-breadcrumbs';
 

@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 import { Popper } from '@/common/components/popper';
@@ -12,6 +11,7 @@ import {
   ScrollWrapperOnScrollEvent,
 } from '@/filters/components/filter-editor-popover/common/scroll-wrapper';
 import { SmallLoader } from '@/filters/components/filter-editor-popover/common/small-loader';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 

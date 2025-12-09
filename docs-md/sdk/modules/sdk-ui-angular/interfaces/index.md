@@ -89,6 +89,8 @@ TypeScript interfaces for components and services listed above
 - [ScatterStyleOptions](interface.ScatterStyleOptions.md)
 - [SisenseContextConfig](interface.SisenseContextConfig.md)
 - [StackableStyleOptions](interface.StackableStyleOptions.md)
+- [StreamgraphChartProps](interface.StreamgraphChartProps.md)
+- [StreamgraphStyleOptions](interface.StreamgraphStyleOptions.md)
 - [StyledColumn](interface.StyledColumn.md)
 - [StyledMeasureColumn](interface.StyledMeasureColumn.md)
 - [SunburstChartProps](interface.SunburstChartProps.md)

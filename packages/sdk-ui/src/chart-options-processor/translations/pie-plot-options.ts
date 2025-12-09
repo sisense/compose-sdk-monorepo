@@ -45,6 +45,9 @@ export type PieOptions = {
   };
   showInLegend: boolean;
   innerSize?: InnerSize;
+  startAngle?: number;
+  endAngle?: number;
+  center?: [string | number, string | number];
 };
 
 type InnerSize = '0%' | '40%' | '80%';
@@ -74,13 +77,21 @@ const defaultSeriesOptions = (): PlotOptions['series'] => ({
   },
 });
 
-export const getPiePlotOptions = (
-  pieType: PieType = DefaultPieType,
-  seriesLabels: PieSeriesLabels = DefaultPieSeriesLabels,
-  chartDataOptions: ChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-): PlotOptions => {
+export type GetPiePlotOptionsParams = {
+  pieType?: PieType;
+  seriesLabels?: PieSeriesLabels;
+  chartDataOptions: ChartDataOptionsInternal;
+  themeSettings?: CompleteThemeSettings;
+  semiCircle?: boolean;
+};
+
+export const getPiePlotOptions = ({
+  pieType = DefaultPieType,
+  seriesLabels = DefaultPieSeriesLabels,
+  chartDataOptions,
+  themeSettings,
+  semiCircle,
+}: GetPiePlotOptionsParams): PlotOptions => {
   const pieOptions = defaultPieOptions();
   const seriesOptions = defaultSeriesOptions();
   pieOptions.innerSize = pieTypeToInnerSize[pieType];
@@ -128,6 +139,14 @@ export const getPiePlotOptions = (
   }
 
   if (seriesOptions.dataLabels) seriesOptions.dataLabels.enabled = seriesLabels.enabled;
+
+  // Apply semicircle angles and center positioning if enabled
+  if (semiCircle) {
+    pieOptions.startAngle = -90;
+    pieOptions.endAngle = 90;
+    // Position the center lower to better utilize vertical space
+    pieOptions.center = ['50%', '75%'];
+  }
 
   return {
     pie: pieOptions,

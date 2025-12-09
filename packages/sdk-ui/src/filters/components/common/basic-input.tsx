@@ -8,9 +8,9 @@ import {
   useState,
 } from 'react';
 
-import styled from '@emotion/styled';
 import isNumber from 'lodash-es/isNumber';
 
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 
 const StyledBasicInput = styled.input`

@@ -7208,13 +7208,12 @@ __metadata:
     "@sisense/sdk-query-client": "workspace:*"
     "@sisense/sdk-rest-client": "workspace:*"
     "@sisense/sdk-tracking": "workspace:*"
-    "@sisense/sisense-charts": 5.2.1
+    "@sisense/sisense-charts": 5.2.5
     "@storybook/addon-docs": 9.1.6
     "@storybook/addon-links": 9.1.6
     "@storybook/react-vite": 9.1.6
     "@storybook/testing-library": 0.2.2
     "@swc-node/register": ^1.6.5
-    "@swc/plugin-emotion": ^9.0.0
     "@tanstack/react-query": 4.40.1
     "@testing-library/dom": 10.4.0
     "@testing-library/jest-dom": ^6.4.2
@@ -7292,14 +7291,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sisense-charts@npm:5.2.1":
-  version: 5.2.1
-  resolution: "@sisense/sisense-charts@npm:5.2.1"
+"@sisense/sisense-charts@npm:5.2.5":
+  version: 5.2.5
+  resolution: "@sisense/sisense-charts@npm:5.2.5"
   dependencies:
     "@emotion/css": ^11.9.0
     highcharts: 10.3.3
     lodash-es: ^4.17.21
-  checksum: 60f76a655798c670f009d2a32086b3f38e816b7e12f296f3adaab191d8f21325dd5bb4793fb504715a1bad898462a4536cf8ddd375344b1436b65fb60121f43f
+  checksum: 7dabee791925cda880954b6a7552bc65f3ceb2dd433209c8d4775d8f736b6e03eb248c70357a83f7bedc5de33be39eebf819f3062039685e366929c072e1fff8
   languageName: node
   linkType: hard
 
@@ -7965,15 +7964,6 @@ __metadata:
   version: 0.1.3
   resolution: "@swc/counter@npm:0.1.3"
   checksum: df8f9cfba9904d3d60f511664c70d23bb323b3a0803ec9890f60133954173047ba9bdeabce28cd70ba89ccd3fd6c71c7b0bd58be85f611e1ffbe5d5c18616598
-  languageName: node
-  linkType: hard
-
-"@swc/plugin-emotion@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@swc/plugin-emotion@npm:9.0.0"
-  dependencies:
-    "@swc/counter": ^0.1.3
-  checksum: 6c5c734af39bfbe204ee88a0d829a8d5d4ef63268594785780e80b5b071a65aea0c6735663a8f43db8109503766fb97517ee051a92ca0194c4dc612ab2118116
   languageName: node
   linkType: hard
 

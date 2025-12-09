@@ -1,11 +1,10 @@
 import { SVGProps, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
-
 import { Button } from '@/common/components/button';
 import { useStateWithHistory } from '@/common/hooks/use-state-with-history';
 import { WidgetsPanelLayout } from '@/models';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 
 const ToolbarContainer = styled.div`

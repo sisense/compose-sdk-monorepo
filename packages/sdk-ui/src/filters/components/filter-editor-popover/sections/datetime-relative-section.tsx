@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import { TFunction } from '@sisense/sdk-common';
 import {
   DateLevels,
@@ -12,6 +11,7 @@ import {
   filterFactory,
 } from '@sisense/sdk-data';
 
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 import { createLevelAttribute } from '@/utils/create-level-attribute';

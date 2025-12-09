@@ -16,5 +16,6 @@ export const isHighchartsBasedChart = (
     'treemap',
     'calendar-heatmap',
     'sunburst',
+    'streamgraph',
   ].includes(chartType);
 };

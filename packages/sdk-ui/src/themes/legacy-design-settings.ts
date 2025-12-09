@@ -149,6 +149,7 @@ export function convertToThemeSettings(
       primaryTextColor: legacyDesignSettings.typography.primaryTextColor,
       secondaryTextColor: legacyDesignSettings.typography.secondaryTextColor,
       hyperlinkColor: legacyDesignSettings.typography.hyperlinkColor,
+      hyperlinkHoverColor: legacyDesignSettings.typography.hyperlinkHoverColor,
       fontsLoader: {
         fonts: prepareLegacyThemeSettingsFonts(
           legacyDesignSettings.typography.fontFamily,
@@ -167,6 +168,14 @@ export function convertToThemeSettings(
       primaryButtonHoverColor: legacyDesignSettings.general.primaryButtonHoverColor,
       popover: getDefaultThemeSettings().general.popover,
       buttons: {
+        primary: {
+          backgroundColor: {
+            default: legacyDesignSettings.general.brandColor,
+            hover: legacyDesignSettings.general.primaryButtonHoverColor,
+            focus: legacyDesignSettings.general.primaryButtonHoverColor,
+          },
+          textColor: legacyDesignSettings.general.primaryButtonTextColor,
+        },
         cancel: {
           backgroundColor: {
             default: legacyDesignSettings.general.secondaryButtonBaseColor,

@@ -398,9 +398,9 @@ export function registerDataPointClickHandler(
   widgetProps: WidgetProps,
   handler: NonNullable<ChartProps['onDataPointClick']>,
 ): void {
-  if (!isChartWidgetProps(widgetProps)) return;
-
-  widgetProps.onDataPointClick = combineHandlers([widgetProps.onDataPointClick, handler]);
+  if (isChartWidgetProps(widgetProps) || isPivotTableWidgetProps(widgetProps)) {
+    widgetProps.onDataPointClick = combineHandlers([widgetProps.onDataPointClick, handler]);
+  }
 }
 
 /**

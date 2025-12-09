@@ -194,7 +194,7 @@ type ChartPlotOptions = {
   tooltip?: TooltipSettings;
 };
 
-export type Stacking = 'normal' | 'percent';
+export type Stacking = 'normal' | 'percent' | 'stream';
 
 export type PlotOptions = {
   series: {
@@ -222,6 +222,17 @@ export type PlotOptions = {
     animation?: {
       duration?: number;
     };
+    /** Series labels are automatically placed as close to the series as possible. */
+    label?: {
+      enabled?: boolean;
+      minFontSize?: number;
+      maxFontSize?: number;
+      style?: {
+        color?: string;
+        fontWeight?: string;
+        fontSize?: string;
+      };
+    };
   };
   line?: ChartPlotOptions;
   area?: ChartPlotOptions;
@@ -235,6 +246,21 @@ export type PlotOptions = {
   scatter?: ChartPlotOptions;
   arearange?: ChartPlotOptions;
   heatmap?: ChartPlotOptions;
+  streamgraph?: {
+    lineWidth?: number;
+    fillOpacity?: number;
+    label?: {
+      enabled?: boolean;
+      minFontSize?: number;
+      maxFontSize?: number;
+      style?: {
+        color?: string;
+        fontWeight?: string;
+        fontSize?: string;
+      };
+    };
+    dataLabels?: DataLabelsSettings;
+  };
 };
 
 /**

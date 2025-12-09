@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import { DataSource } from '@sisense/sdk-data';
 
 import { CONTEXT_MENU_SELECTED_WITH_DOT_CLASS } from '@/common/components/menu/context-menu/context-menu';
@@ -15,6 +14,7 @@ import { DashboardContainerProps, WidgetsPanelLayout } from '@/dashboard/types';
 import { getDefaultWidgetsPanelLayout, getDividerStyle } from '@/dashboard/utils';
 import { FiltersPanel } from '@/filters';
 import { MenuItemSection, WidgetProps } from '@/props';
+import styled from '@/styled';
 import { ThemeProvider, useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 import { getDataSourceTitle } from '@/utils/data-sources-utils';

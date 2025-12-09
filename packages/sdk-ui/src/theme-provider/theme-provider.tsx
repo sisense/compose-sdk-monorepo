@@ -1,8 +1,13 @@
+import { useMemo } from 'react';
+
+import merge from 'ts-deepmerge';
+
 import { asSisenseComponent } from '@/decorators/component-decorators/as-sisense-component';
 import { ThemeProviderProps } from '@/props';
 
+import { ThemeConfig } from '..';
 import { FontsLoader } from './fonts-loader/fonts-loader';
-import { ThemeContext } from './theme-context';
+import { ThemeContext, useThemeContext } from './theme-context';
 import { useThemeSettings } from './use-theme-settings';
 
 /**
@@ -51,8 +56,24 @@ export const ThemeProvider = asSisenseComponent({
   },
   shouldSkipSisenseContextWaiting: true,
 })((props: ThemeProviderProps) => {
-  const { theme, children } = props;
+  const { theme, children, config: userConfig } = props;
   const [themeSettings, error] = useThemeSettings(theme);
+  const parentThemeConfig = useThemeContext().config;
+
+  // Merges the user config with the parent config
+  const config = useMemo(() => {
+    if (userConfig && parentThemeConfig) {
+      return merge.withOptions(
+        { mergeArrays: false },
+        parentThemeConfig,
+        userConfig,
+      ) as ThemeConfig;
+    }
+    if (userConfig) {
+      return userConfig;
+    }
+    return parentThemeConfig;
+  }, [parentThemeConfig, userConfig]);
 
   if (error) {
     throw error;
@@ -60,7 +81,7 @@ export const ThemeProvider = asSisenseComponent({
   return (
     <>
       {themeSettings && (
-        <ThemeContext.Provider value={{ themeSettings: themeSettings }}>
+        <ThemeContext.Provider value={{ themeSettings: themeSettings, config }}>
           <FontsLoader>{children}</FontsLoader>
         </ThemeContext.Provider>
       )}

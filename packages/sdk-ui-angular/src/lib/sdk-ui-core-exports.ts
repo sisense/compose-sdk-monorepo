@@ -124,6 +124,7 @@ export type {
   StackableSubtype,
   StyledColumn,
   StyledMeasureColumn,
+  StreamgraphStyleOptions,
   SunburstStyleOptions,
   TableDataOptions,
   TableStyleOptions,

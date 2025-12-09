@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import Stack from '@mui/material/Stack';
 import { DataSource, type Filter } from '@sisense/sdk-data';
 
 import { Button } from '@/common/components/button';
 import { Popover, PopoverAnchorPosition } from '@/common/components/popover';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 
@@ -127,7 +127,7 @@ export const FilterEditorPopover = ({
       <Container theme={themeSettings}>
         <ModalHeader theme={themeSettings}>
           <ModalHeaderTitle data-testid="filter-editor-popover-header-attribute">
-            {filter?.attribute.name}
+            {filter?.attribute.title}
           </ModalHeaderTitle>
           <ModalHeaderVerticalDivider />
           <ModalHeaderInfo theme={themeSettings}>

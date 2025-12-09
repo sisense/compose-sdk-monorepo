@@ -15,6 +15,7 @@ export const DEFAULT_FILTER_PANEL_BORDER_COLOR = '#DADADA';
 export const DEFAULT_FILTER_PANEL_BORDER_WIDTH = 1;
 export const DEFAULT_TITLE_FONT_SIZE = 15;
 export const DEFAULT_HYPERLINK_COLOR = '#1FAFF3';
+export const DEFAULT_HYPERLINK_HOVER_COLOR = '#1FCCF3';
 
 const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
   chart: {
@@ -35,6 +36,7 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
     primaryTextColor: '#5B6372',
     secondaryTextColor: '#9EA2AB',
     hyperlinkColor: DEFAULT_HYPERLINK_COLOR,
+    hyperlinkHoverColor: DEFAULT_HYPERLINK_HOVER_COLOR,
   },
   palette: {
     variantColors: ['#00cee6', '#9b9bd7', '#6eda55', '#fc7570', '#fbb755', '#218a8c'],
@@ -114,6 +116,14 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
       },
     },
     buttons: {
+      primary: {
+        backgroundColor: {
+          default: '#FFCB05',
+          focus: '#F2B900',
+          hover: '#F2B900',
+        },
+        textColor: '#3A4356',
+      },
       cancel: {
         backgroundColor: {
           default: '#EDEEF1',
@@ -279,6 +289,7 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
     primaryTextColor: '#FFFFFF',
     secondaryTextColor: '#C5C8CF',
     hyperlinkColor: DEFAULT_HYPERLINK_COLOR,
+    hyperlinkHoverColor: DEFAULT_HYPERLINK_HOVER_COLOR,
   },
   palette: {
     variantColors: ['#00cee6', '#9b9bd7', '#6eda55', '#fc7570', '#fbb755', '#218a8c'], // Variant colors remain the same
@@ -358,6 +369,14 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
       },
     },
     buttons: {
+      primary: {
+        backgroundColor: {
+          default: '#FFCB05',
+          focus: '#F2B900',
+          hover: '#F2B900',
+        },
+        textColor: '#3A4356',
+      },
       cancel: {
         backgroundColor: {
           default: '#EDEEF1',

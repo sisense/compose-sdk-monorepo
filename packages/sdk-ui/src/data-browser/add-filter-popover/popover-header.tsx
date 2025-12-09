@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 
-import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
 
 import { BreadcrumbsArrowsIcon } from '@/common/icons/breadcrumbs-arrows-arrow-icon';
 import { CloseIcon } from '@/common/icons/close-icon';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider';
 import { Themable } from '@/theme-provider/types';
 
@@ -40,6 +40,7 @@ const HeaderContainer = styled.div<Themable>`
   align-items: center;
   background: ${({ theme }) => theme.general.popover.header.backgroundColor};
   color: ${({ theme }) => theme.general.popover.header.textColor};
+  font-family: ${({ theme }) => theme.typography.fontFamily};
   display: flex;
   padding: 12px 16px 12px 24px;
 `;

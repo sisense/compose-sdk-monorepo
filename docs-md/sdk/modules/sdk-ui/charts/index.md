@@ -22,5 +22,6 @@ React components and utilities for working with charts
 - [PolarChart](function.PolarChart.md)
 - [ScatterChart](function.ScatterChart.md)
 - [ScattermapChart](function.ScattermapChart.md)
+- [StreamgraphChart](function.StreamgraphChart.md)
 - [SunburstChart](function.SunburstChart.md)
 - [TreemapChart](function.TreemapChart.md)

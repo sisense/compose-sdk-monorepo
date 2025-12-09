@@ -294,6 +294,7 @@ describe('stacking', () => {
             primaryTextColor: '#ff0000',
             secondaryTextColor: '#666666',
             hyperlinkColor: '#0000ff',
+            hyperlinkHoverColor: '#0000aa',
           },
         };
         const ctx = createMockBuildContext('stacked', true, 0, { enabled: true }, themeSettings);

@@ -1,12 +1,15 @@
 import { createContext, useContext } from 'react';
 
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettings, ThemeConfig } from '@/types';
 
 import { getDefaultThemeSettings } from './default-theme-settings';
 
 export const ThemeContext = createContext<{
   themeSettings: CompleteThemeSettings;
-}>({ themeSettings: getDefaultThemeSettings() });
+  config?: ThemeConfig;
+}>({
+  themeSettings: getDefaultThemeSettings(),
+});
 
 /**
  * Hook to get the current theme settings.

@@ -1,12 +1,12 @@
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
-import styled from '@emotion/styled';
 import debounce from 'lodash-es/debounce';
 
 import { useChatApi } from '@/ai/api/chat-api-provider';
 import ThumbsDownButton from '@/ai/buttons/thumbs-down-button';
 import ThumbsUpButton from '@/ai/buttons/thumbs-up-button';
 import { useHover } from '@/common/hooks/use-hover';
+import styled from '@/styled';
 import { useThemeContext } from '@/theme-provider/theme-context';
 import { Themable } from '@/theme-provider/types';
 

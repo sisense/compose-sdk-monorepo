@@ -143,6 +143,7 @@ export interface WidgetDto {
     disallowSelector?: boolean;
     disallowWidgetTitle?: boolean;
     supportsHierarchies?: boolean;
+    imageColumns?: number[];
   };
   source?: any;
   owner?: string;

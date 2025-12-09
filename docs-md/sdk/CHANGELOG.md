@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.16.0] - 2025-12-09
+
+### Added
+- Add `StreamgraphChart` component for React, Angular, and Vue
+- Add `semiCircle` boolean to style options for `PieChart`
+- Add cross-filtering support for `PivotTable` interactions
+- Add `alwaysShowResultsPerPage` to `PivotTable` for 'Rows per page' to be visible on single-page results
+- Add `imageColumns` style option to translate image cells in PivotTable
+
+
+### Changed
+- Fix DataSourceFieldsBrowser error when a column is named `name`
+- Fix pivot sorting popup interactions triggering cell click handlers
+- Fix pivot tooltip wrapper to avoid Angular/Vue bridge errors when showing result limit alert icons
+- Adjust table/pivot default padding for consistent layout
+- Fix polar and scatter rendering inconsistencies after drilldown selection, stabilize highlight handling
+- Ensure live datasource type detection in widget translator, require address only for non-live sources
+- Fix filter panel horizontal scroll when vertical scrollbar appears
+- Apply JAQL sort instructions to custom formula measures during creation
+- Improve filter editor theming with hyperlink hover color and button theme settings
+- Enhance analytics composer translator to handle exclude filters and preserve original column names
+
 ## [2.15.0] - 2025-11-25
 
 ### Added
