@@ -339,26 +339,29 @@ export const FACTORY_FUNCTION_SCHEMAS: Record<string, ArgSchema[]> = {
   ],
   'filterFactory.dateRange': [
     { type: 'LevelAttribute', required: true },
-    { type: 'Date | string', required: true }, // from
-    { type: 'Date | string', required: true }, // to
+    { type: 'Date | string', required: false }, // from
+    { type: 'Date | string', required: false }, // to
     { type: 'BaseFilterConfig', required: false },
   ],
   'filterFactory.dateRelative': [
     { type: 'LevelAttribute', required: true },
     { type: 'number', required: true }, // offset
-    { type: 'string', required: true }, // anchor
+    { type: 'number', required: true }, // count
+    { type: 'Date | string', required: false }, // anchor
     { type: 'BaseFilterConfig', required: false },
   ],
   'filterFactory.dateRelativeFrom': [
     { type: 'LevelAttribute', required: true },
     { type: 'number', required: true }, // offset
-    { type: 'string', required: true }, // anchor
+    { type: 'number', required: true }, // count
+    { type: 'Date | string', required: false }, // anchor
     { type: 'BaseFilterConfig', required: false },
   ],
   'filterFactory.dateRelativeTo': [
     { type: 'LevelAttribute', required: true },
     { type: 'number', required: true }, // offset
-    { type: 'string', required: true }, // anchor
+    { type: 'number', required: true }, // count
+    { type: 'Date | string', required: false }, // anchor
     { type: 'BaseFilterConfig', required: false },
   ],
   'filterFactory.thisYear': [

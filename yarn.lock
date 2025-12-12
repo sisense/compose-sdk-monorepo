@@ -6976,6 +6976,7 @@ __metadata:
     "@emotion/cache": ^11.14.0
     "@emotion/react": ^11.14.0
     "@emotion/styled": ^11.14.0
+    "@sisense/sdk-common": "workspace:*"
     "@sisense/sdk-data": "workspace:*"
     "@sisense/sdk-rest-client": "workspace:*"
     "@sisense/sdk-shared-ui": "workspace:*"

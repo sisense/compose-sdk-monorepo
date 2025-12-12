@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.16.0",
+  "version": "2.16.1",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -39,6 +39,7 @@
     "esm/**/*"
   ],
   "dependencies": {
+    "@sisense/sdk-common": "workspace:*",
     "@sisense/sdk-data": "workspace:*",
     "@sisense/sdk-rest-client": "workspace:*",
     "@sisense/sdk-shared-ui": "workspace:*",

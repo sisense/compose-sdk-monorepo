@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { normalizeUrl } from '@sisense/sdk-common';
 import io from 'socket.io-client';
 
 import { SocketI, SocketQueryOptions } from '../types.js';
@@ -17,9 +18,16 @@ export class SisenseSocket implements SocketI {
     @private */
   onMessageCallback?: (type: string, data: any) => void;
 
-  constructor(data: string | SocketIOClient.Socket, query: SocketQueryOptions) {
+  /**
+   * Creates a new SisenseSocket instance.
+   *
+   * @param data - Either a URL string or an existing SocketIOClient.Socket instance
+   * @param query - Socket query options for authentication
+   * @param namespace - Optional socket.io namespace to connect to (e.g., 'pivot2')
+   */
+  constructor(data: string | SocketIOClient.Socket, query: SocketQueryOptions, namespace?: string) {
     if (typeof data === 'string') {
-      this.socket = SisenseSocket.createNewSocket(data, query);
+      this.socket = SisenseSocket.createNewSocket(data, query, namespace);
       this.subcribeOnSocketReadiness();
     } else {
       this.socket = data;
@@ -130,9 +138,23 @@ export class SisenseSocket implements SocketI {
     }
   }
 
-  static createNewSocket(url: string, query: SocketQueryOptions) {
-    const socket = io.connect(url, {
-      path: '/gateway',
+  /**
+   * Creates and configures a new socket.io connection.
+   *
+   * @param url - Base URL of the Sisense instance
+   * @param query - Socket query options for authentication
+   * @param namespace - Optional socket.io namespace to connect to (e.g., 'pivot2')
+   * @returns Configured SocketIOClient.Socket instance
+   */
+  static createNewSocket(
+    url: string,
+    query: SocketQueryOptions,
+    namespace?: string,
+  ): SocketIOClient.Socket {
+    const gatewayUrl = new URL('./gateway', new URL(normalizeUrl(url)));
+    const uri = gatewayUrl.origin + (namespace ? `/${namespace}` : '');
+    const socket = io.connect(uri, {
+      path: gatewayUrl.pathname,
       transports: ['websocket'],
       reconnection: true,
       query,

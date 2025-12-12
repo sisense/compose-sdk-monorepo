@@ -17,7 +17,7 @@ import { SocketI, SocketQueryOptions } from '../data-load/types.js';
  *
  * @internal
  */
-const ENDPOINT_PIVOT = 'pivot2';
+const PIVOT_NAMESPACE = 'pivot2';
 export class SocketBuilder {
   private _socket: SocketI;
 
@@ -93,8 +93,7 @@ export class SocketBuilder {
       } else if (isSsoAuthenticator(auth)) {
         query = this.getQueryOptionsSso(auth);
       }
-
-      this._socket = new SisenseSocket(url + ENDPOINT_PIVOT, query);
+      this._socket = new SisenseSocket(url, query, PIVOT_NAMESPACE);
     }
 
     return this._socket;

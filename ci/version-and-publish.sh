@@ -37,12 +37,15 @@ yarn version apply --all
 
 new_tag="v$(yarn version:current)"
 
+yarn nx:build:prod
+yarn workspace @sisense/sdk-ui-preact publish:prepare
+yarn publish
+
+# clean yarn registry configuration before committing
+git checkout -- ".yarnrc.yml"
 git add .
 git commit -m "chore(release): bump all packages to ${new_tag} [skip ci]"
 
-yarn build:prod
-yarn workspace @sisense/sdk-ui-preact publish:prepare
-yarn publish
 
 git push origin HEAD:${CI_COMMIT_BRANCH}
 git tag ${new_tag}

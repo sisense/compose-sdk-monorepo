@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.16.1] - 2025-12-12
+
+### Changed
+- Fix pivot web socket connection when the Sisense instance is configured with a proxy url
+
 ## [2.16.0] - 2025-12-09
 
 ### Added
@@ -8,7 +13,6 @@
 - Add cross-filtering support for `PivotTable` interactions
 - Add `alwaysShowResultsPerPage` to `PivotTable` for 'Rows per page' to be visible on single-page results
 - Add `imageColumns` style option to translate image cells in PivotTable
-
 
 ### Changed
 - Fix DataSourceFieldsBrowser error when a column is named `name`

@@ -14,3 +14,6 @@ docs-md/
 # Ignore changelog files:
 CHANGELOG.md
 CHANGELOG_INTERNAL.md
+
+# Ignore yarn configuration file:
+.yarnrc.yml
