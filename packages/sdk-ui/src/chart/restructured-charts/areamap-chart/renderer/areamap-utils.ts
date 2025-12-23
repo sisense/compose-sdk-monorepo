@@ -13,7 +13,7 @@ export function getAreamapDataPoint(
   if (dataOptions.geo) {
     entries.geo = [
       {
-        ...getDataPointMetadata(`geo.0`, dataOptions.geo),
+        ...getDataPointMetadata(dataOptions.geo),
         value: geoDataElement.geoName,
       },
     ];
@@ -22,7 +22,7 @@ export function getAreamapDataPoint(
   if (dataOptions.color) {
     entries.color = [
       {
-        ...getDataPointMetadata(`color.0`, dataOptions.color),
+        ...getDataPointMetadata(dataOptions.color),
         value: geoDataElement.originalValue,
       },
     ];

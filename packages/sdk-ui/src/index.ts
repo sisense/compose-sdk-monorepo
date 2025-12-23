@@ -177,7 +177,15 @@ export { useThemeContext } from './theme-provider';
 export { LoadingIndicator } from './common/components/loading-indicator';
 export { LoadingOverlay } from './common/components/loading-overlay';
 export { useFetch, type RequestConfig, type UseQueryResult } from './common/hooks/use-fetch';
-export { useGetDataSourceFields } from './common/hooks/fusion-endpoints/use-get-data-source-fields';
+export {
+  useGetDataSourceDimensions,
+  useGetDataSourceFields,
+  type GetDataSourceDimensionsParams,
+  type DataSourceDimensionsState,
+  type DataSourceDimensionsLoadingState,
+  type DataSourceDimensionsErrorState,
+  type DataSourceDimensionsSuccessState,
+} from './data-source-dimensional-model';
 export { useJtdWidget } from './dashboard/hooks/use-jtd-widget';
 export type { EmptyObject } from './utils/utility-types';
 export { translateColumnToAttribute } from './chart-data-options/utils';

@@ -2,7 +2,6 @@ import { useCallback, useMemo } from 'react';
 
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
-import flow from 'lodash-es/flow';
 
 import { useCommonFilters } from '@/common-filters/use-common-filters';
 import { MenuIds, MenuSectionIds } from '@/common/components/menu/menu-ids';
@@ -174,23 +173,23 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   // Connect common filters to widgets
   const widgetsWithCommonFilters = useMemo(() => {
     return widgetsWithChangeDetection.map((widget) =>
-      flow(
-        (widget: WidgetProps) =>
-          connectToWidgetProps(widget, widgetsOptions?.[widget.id]?.filtersOptions),
-        connectToWidgetPropsJtd,
-      )(widget),
+      connectToWidgetProps(widget, widgetsOptions?.[widget.id]?.filtersOptions),
     );
-  }, [widgetsWithChangeDetection, widgetsOptions, connectToWidgetProps, connectToWidgetPropsJtd]);
+  }, [widgetsWithChangeDetection, widgetsOptions, connectToWidgetProps]);
+
+  const widgetsWithFilterAndJtd = useMemo(() => {
+    return widgetsWithCommonFilters.map((widget: WidgetProps) => connectToWidgetPropsJtd(widget));
+  }, [widgetsWithCommonFilters, connectToWidgetPropsJtd]);
 
   const { layoutManager: tabberLayoutManager, widgets: widgetsWithTabberConfigs } = useTabber({
-    widgets: widgetsWithCommonFilters,
+    widgets: widgetsWithFilterAndJtd,
     config: initialDashboard.config?.tabbers,
   });
 
   const { layout: widgetsLayout, setLayout: setWidgetsLayout } = useWidgetsLayoutManagement({
     layout:
       initialDashboard.layoutOptions?.widgetsPanel ||
-      getDefaultWidgetsPanelLayout(widgetsWithCommonFilters),
+      getDefaultWidgetsPanelLayout(widgetsWithFilterAndJtd),
     layoutManagers: [tabberLayoutManager],
   });
 

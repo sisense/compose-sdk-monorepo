@@ -1,5 +1,6 @@
-import { JaqlPanel, PivotDataNode, PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
-import { InputStyles } from '@sisense/sdk-pivot-client/dist/utils/types';
+import { type JaqlPanel, UserType } from '@sisense/sdk-pivot-query-client';
+import { PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-ui';
+import { InputStyles } from '@sisense/sdk-pivot-ui/dist/utils/types';
 
 import { getColoringServiceByColorOptions } from '@/chart-data-options/coloring';
 import { getInterpolatorFn } from '@/chart-data-options/coloring/range-coloring';

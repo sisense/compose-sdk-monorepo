@@ -68,7 +68,7 @@ export class AnalyticsComponent {
         dataBars: true,
       },
     ],
-    grandTotals: { title: 'Grand Total', rows: true, columns: true },
+    grandTotals: { rows: true, columns: true },
   };
 
   pivotTable = {
@@ -81,8 +81,13 @@ export class AnalyticsComponent {
 }
  * ```
  * <img src="media://angular-pivot-table-example.png" width="800px" />
+ *
+ * @remarks
+ * Configuration options can also be applied within the scope of a `<SisenseContextProvider>` to control the default behavior of PivotTable, by changing available settings within `appConfig.chartConfig.tabular.*`
+ *
+ * Follow the link to {@link AppConfig} for more details on the available settings.
+ *
  * @group Data Grids
- * @beta
  */
 @Component({
   selector: 'csdk-pivot-table',

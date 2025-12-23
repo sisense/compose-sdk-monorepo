@@ -1,4 +1,5 @@
-import { type JaqlPanel, JaqlRequest, PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
+import { type JaqlPanel, type JaqlRequest, UserType } from '@sisense/sdk-pivot-query-client';
+import { type PivotTreeNode } from '@sisense/sdk-pivot-ui';
 
 import { type PivotTableDataOptions, StyledColumn } from '../../../chart-data-options/types.js';
 import { createHeaderCellValueFormatter } from './header-cell-value-formatter.js';

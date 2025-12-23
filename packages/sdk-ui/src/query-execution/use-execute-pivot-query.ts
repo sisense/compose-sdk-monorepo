@@ -30,7 +30,6 @@ import { ExecutePivotQueryParams, PivotQueryState } from './types';
  *
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred
  * @group Queries
- * @beta
  */
 export const useExecutePivotQuery = withTracking('useExecutePivotQuery')(
   useExecutePivotQueryInternal,

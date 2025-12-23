@@ -14,3 +14,4 @@ Utility functions to translate a Fusion widget model from and to other widget da
 - [toPivotTableWidgetProps](function.toPivotTableWidgetProps.md)
 - [toTableProps](function.toTableProps.md)
 - [toTextWidgetProps](function.toTextWidgetProps.md)
+- [toWidgetProps](function.toWidgetProps.md)

@@ -82,6 +82,9 @@ export const DimensionsBrowser: React.FC<DimensionsBrowserProps> = ({
   );
 };
 
+/**
+ * Converts the props for the DimensionsBrowser component to the props for the generic GroupedItemsBrowser component.
+ */
 const convertDimensionsBrowserProps = ({
   dimensions,
   attributeActionConfig,

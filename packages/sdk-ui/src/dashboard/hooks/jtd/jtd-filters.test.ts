@@ -111,7 +111,6 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           breakByColor: {
-            id: 'breakByColor.0',
             dataOption: {} as any,
             attribute: mockGenderAttribute,
             value: 'Male',
@@ -129,7 +128,6 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           breakByPoint: {
-            id: 'breakByPoint.0',
             dataOption: {} as any,
             attribute: mockCategoryAttribute,
             value: 'PDAs',
@@ -147,14 +145,12 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           breakByColor: {
-            id: 'breakByColor.0',
             dataOption: {} as any,
             attribute: mockGenderAttribute,
             value: 'Male',
             displayValue: 'Male',
           } as DataPointEntry,
           breakByPoint: {
-            id: 'breakByPoint.0',
             dataOption: {} as any,
             attribute: mockCategoryAttribute,
             value: 'PDAs',
@@ -172,7 +168,6 @@ describe('jtd-filters', () => {
         entries: {
           category: [
             {
-              id: 'category.0',
               dataOption: {} as any,
               attribute: mockAttribute,
               value: 'Test Value',
@@ -194,7 +189,6 @@ describe('jtd-filters', () => {
           value: [],
           breakBy: [
             {
-              id: 'breakBy.0',
               dataOption: {} as any,
               attribute: mockGenderAttribute,
               value: 'Male',
@@ -235,7 +229,6 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           breakByColor: {
-            id: 'breakByColor.0',
             dataOption: {} as any,
             attribute: mockGenderAttribute,
             value: 'Female',
@@ -256,7 +249,6 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           breakByPoint: {
-            id: 'breakByPoint.0',
             dataOption: {} as any,
             attribute: mockCategoryAttribute,
             value: 'Laptops',
@@ -277,14 +269,12 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           breakByColor: {
-            id: 'breakByColor.0',
             dataOption: {} as any,
             attribute: mockGenderAttribute,
             value: 'Male',
             displayValue: 'Male',
           } as DataPointEntry,
           breakByPoint: {
-            id: 'breakByPoint.0',
             dataOption: {} as any,
             attribute: mockCategoryAttribute,
             value: 'PDAs',
@@ -306,7 +296,6 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           breakByColor: {
-            id: 'breakByColor.0',
             dataOption: {} as any,
             attribute: mockGenderAttribute,
             value: null,
@@ -326,7 +315,6 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           breakByPoint: {
-            id: 'breakByPoint.0',
             dataOption: {} as any,
             attribute: mockCategoryAttribute,
             value: undefined,
@@ -346,7 +334,6 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           breakByColor: {
-            id: 'breakByColor.0',
             dataOption: {} as any,
             value: 'Male',
             displayValue: 'Male',
@@ -365,7 +352,6 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           x: {
-            id: 'x.0',
             dataOption: {} as any,
             value: 100,
             displayValue: '100',
@@ -384,7 +370,6 @@ describe('jtd-filters', () => {
         y: 200,
         entries: {
           breakByColor: {
-            id: 'breakByColor.0',
             dataOption: {} as any,
             attribute: mockGenderAttribute,
             value: 123,
@@ -407,7 +392,6 @@ describe('jtd-filters', () => {
         entries: {
           category: [
             {
-              id: 'category.0',
               dataOption: {} as any,
               attribute: mockAttribute,
               value: 'Test Value',
@@ -432,7 +416,6 @@ describe('jtd-filters', () => {
           value: [],
           breakBy: [
             {
-              id: 'breakBy.0',
               dataOption: {} as any,
               attribute: mockGenderAttribute,
               value: 'Male',
@@ -454,7 +437,6 @@ describe('jtd-filters', () => {
         entries: {
           category: [
             {
-              id: 'category.0',
               dataOption: {} as any,
               attribute: mockAgeRangeAttribute,
               value: '25-34',
@@ -464,7 +446,6 @@ describe('jtd-filters', () => {
           value: [],
           breakBy: [
             {
-              id: 'breakBy.0',
               dataOption: {} as any,
               attribute: mockGenderAttribute,
               value: 'Female',
@@ -487,14 +468,12 @@ describe('jtd-filters', () => {
         entries: {
           category: [
             {
-              id: 'category.0',
               dataOption: {} as any,
               attribute: mockAttribute,
               value: 'First Value',
               displayValue: 'First Value',
             } as DataPointEntry,
             {
-              id: 'category.1',
               dataOption: {} as any,
               attribute: mockAgeRangeAttribute,
               value: '35-44',
@@ -520,14 +499,12 @@ describe('jtd-filters', () => {
           value: [],
           breakBy: [
             {
-              id: 'breakBy.0',
               dataOption: {} as any,
               attribute: mockGenderAttribute,
               value: 'Male',
               displayValue: 'Male',
             } as DataPointEntry,
             {
-              id: 'breakBy.1',
               dataOption: {} as any,
               attribute: mockCategoryAttribute,
               value: 'Electronics',
@@ -553,14 +530,12 @@ describe('jtd-filters', () => {
         entries: {
           category: [
             {
-              id: 'category.0',
               dataOption: {} as any,
               attribute: mockAttribute,
               value: null,
               displayValue: null,
             } as unknown as DataPointEntry,
             {
-              id: 'category.1',
               dataOption: {} as any,
               attribute: mockAgeRangeAttribute,
               value: '25-34',
@@ -583,7 +558,6 @@ describe('jtd-filters', () => {
         entries: {
           category: [
             {
-              id: 'category.0',
               dataOption: {} as any,
               value: 'Test Value',
               displayValue: 'Test Value',
@@ -605,7 +579,6 @@ describe('jtd-filters', () => {
           category: [],
           value: [
             {
-              id: 'value.0',
               dataOption: {} as any,
               value: 100,
               displayValue: '100',
@@ -625,7 +598,6 @@ describe('jtd-filters', () => {
         entries: {
           category: [
             {
-              id: 'category.0',
               dataOption: {} as any,
               attribute: mockAttribute,
               value: 456,
@@ -719,7 +691,6 @@ describe('jtd-filters', () => {
           entries: {
             category: [
               {
-                id: 'category.0',
                 dataOption: {} as any,
                 attribute: mockAttribute,
                 value: 'Test Value',
@@ -743,14 +714,12 @@ describe('jtd-filters', () => {
           entries: {
             category: [
               {
-                id: 'category.0',
                 dataOption: {} as any,
                 attribute: mockAttribute,
                 value: null,
                 displayValue: 'Test Value',
               } as unknown as DataPointEntry,
               {
-                id: 'category.1',
                 dataOption: {} as any,
                 attribute: mockAttribute,
                 value: undefined,
@@ -775,7 +744,6 @@ describe('jtd-filters', () => {
           entries: {
             category: [
               {
-                id: 'category.0',
                 dataOption: {} as any,
                 attribute: mockAgeRangeAttribute,
                 value: '45-54',
@@ -785,7 +753,6 @@ describe('jtd-filters', () => {
             value: [],
             breakBy: [
               {
-                id: 'breakBy.0',
                 dataOption: {} as any,
                 attribute: mockGenderAttribute,
                 value: 'Male',
@@ -811,32 +778,27 @@ describe('jtd-filters', () => {
           breakByColor: 'Male',
           entries: {
             x: {
-              id: 'x',
               dataOption: {} as any,
               value: '2772.223388671875',
               displayValue: '2772.223388671875',
             } as DataPointEntry,
             y: {
-              id: 'y',
               dataOption: {} as any,
               value: '6',
               displayValue: '6',
             } as DataPointEntry,
             size: {
-              id: 'size',
               dataOption: {} as any,
               value: '5881.611423492432',
               displayValue: '5881.611423492432',
             } as DataPointEntry,
             breakByPoint: {
-              id: 'breakByPoint',
               dataOption: {} as any,
               attribute: mockCategoryAttribute,
               value: 'PDAs',
               displayValue: 'PDAs',
             } as DataPointEntry,
             breakByColor: {
-              id: 'breakByColor',
               dataOption: {} as any,
               attribute: mockGenderAttribute,
               value: 'Male',
@@ -858,7 +820,6 @@ describe('jtd-filters', () => {
           entries: {
             category: [
               {
-                id: 'category.0',
                 dataOption: {} as any,
                 attribute: mockAgeRangeAttribute,
                 value: '25-34',
@@ -868,7 +829,6 @@ describe('jtd-filters', () => {
             value: [],
             breakBy: [
               {
-                id: 'breakBy.0',
                 dataOption: {} as any,
                 attribute: mockGenderAttribute,
                 value: 'Female',
@@ -876,7 +836,6 @@ describe('jtd-filters', () => {
               } as DataPointEntry,
             ],
             breakByPoint: {
-              id: 'breakByPoint',
               dataOption: {} as any,
               attribute: mockCategoryAttribute,
               value: 'Laptops',
@@ -900,7 +859,6 @@ describe('jtd-filters', () => {
           entries: {
             category: [
               {
-                id: 'category.0',
                 dataOption: {} as any,
                 attribute: mockAttribute,
                 value: 'Test Value',
@@ -926,7 +884,6 @@ describe('jtd-filters', () => {
             value: [],
             breakBy: [
               {
-                id: 'breakBy.0',
                 dataOption: {} as any,
                 attribute: mockGenderAttribute,
                 value: null,
@@ -934,7 +891,6 @@ describe('jtd-filters', () => {
               } as unknown as DataPointEntry,
             ],
             breakByColor: {
-              id: 'breakByColor',
               dataOption: {} as any,
               attribute: mockCategoryAttribute,
               value: undefined,
@@ -956,7 +912,6 @@ describe('jtd-filters', () => {
           breakByColor: 'Male',
           entries: {
             breakByColor: {
-              id: 'breakByColor.0',
               dataOption: {} as any,
               attribute: mockGenderAttribute,
               value: 'Male',
@@ -970,7 +925,6 @@ describe('jtd-filters', () => {
           entries: {
             category: [
               {
-                id: 'category.0',
                 dataOption: {} as any,
                 attribute: mockAttribute,
                 value: 'Test Value',
@@ -1001,7 +955,6 @@ describe('jtd-filters', () => {
           entries: {
             // Scatter-specific properties
             breakByColor: {
-              id: 'breakByColor.0',
               dataOption: {} as any,
               attribute: mockGenderAttribute,
               value: 'Male',
@@ -1010,7 +963,6 @@ describe('jtd-filters', () => {
             // This would exist in regular charts but should be ignored for scatter charts
             category: [
               {
-                id: 'category.0',
                 dataOption: {} as any,
                 attribute: mockAttribute,
                 value: 'Should Not Process',
@@ -1034,7 +986,6 @@ describe('jtd-filters', () => {
             // Regular chart properties
             category: [
               {
-                id: 'category.0',
                 dataOption: {} as any,
                 attribute: mockAttribute,
                 value: 'Test Value',
@@ -1044,7 +995,6 @@ describe('jtd-filters', () => {
             value: [],
             // Scatter chart property mixed with regular properties
             breakByColor: {
-              id: 'breakByColor.0',
               dataOption: {} as any,
               attribute: mockGenderAttribute,
               value: 'Male',
@@ -1070,14 +1020,12 @@ describe('jtd-filters', () => {
           breakByPoint: 'PDAs',
           entries: {
             breakByColor: {
-              id: 'breakByColor.0',
               dataOption: {} as any,
               attribute: mockGenderAttribute,
               value: 'Male',
               displayValue: 'Male',
             } as DataPointEntry,
             breakByPoint: {
-              id: 'breakByPoint.0',
               dataOption: {} as any,
               attribute: mockCategoryAttribute,
               value: 'PDAs',
@@ -1100,7 +1048,6 @@ describe('jtd-filters', () => {
           breakByColor: 'Female',
           entries: {
             breakByColor: {
-              id: 'breakByColor.0',
               dataOption: {} as any,
               attribute: mockGenderAttribute,
               value: 'Female',
@@ -1122,7 +1069,6 @@ describe('jtd-filters', () => {
           breakByPoint: 'Laptops',
           entries: {
             breakByPoint: {
-              id: 'breakByPoint.0',
               dataOption: {} as any,
               attribute: mockCategoryAttribute,
               value: 'Laptops',
@@ -1145,7 +1091,6 @@ describe('jtd-filters', () => {
           entries: {
             category: [
               {
-                id: 'category.0',
                 dataOption: {} as any,
                 attribute: mockAgeRangeAttribute,
                 value: '25-34',
@@ -1155,7 +1100,6 @@ describe('jtd-filters', () => {
             value: [],
             breakBy: [
               {
-                id: 'breakBy.0',
                 dataOption: {} as any,
                 attribute: mockGenderAttribute,
                 value: 'Female',
@@ -1178,13 +1122,11 @@ describe('jtd-filters', () => {
           y: 200,
           entries: {
             x: {
-              id: 'x.0',
               dataOption: {} as any,
               value: 100,
               displayValue: '100',
             } as DataPointEntry,
             y: {
-              id: 'y.0',
               dataOption: {} as any,
               value: 200,
               displayValue: '200',
@@ -1204,7 +1146,6 @@ describe('jtd-filters', () => {
             category: [],
             value: [
               {
-                id: 'value.0',
                 dataOption: {} as any,
                 value: 100,
                 displayValue: '100',
@@ -1248,7 +1189,6 @@ describe('jtd-filters', () => {
           entries: {
             category: [
               {
-                id: 'category.0',
                 dataOption: {} as any,
                 attribute: mockAttribute,
                 value: 123, // Number value

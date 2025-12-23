@@ -688,6 +688,8 @@ export type MetadataItemJaql = {
 };
 
 /**
+ * Legacy Fusion data structure to describe a column (attribute) in a data source.
+ * Better use {@link Attribute} instead if possible.
  * @internal
  */
 export type DataSourceField = {

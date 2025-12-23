@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "target": "es6",
+    "module": "es2020",
+    "moduleResolution": "node",
+    "lib": ["es2017", "dom"],
+    "jsx": "react-jsx",
+    "paths": {
+      "@sisense/sdk-shared-ui": ["../sdk-shared-ui/dist/lightweight"],
+      "@sisense/sdk-shared-ui/*": ["../sdk-shared-ui/dist/lightweight/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["src/builders/pivot-print-builder.tsx"],
+  "references": [
+    { "path": "../sdk-rest-client" },
+    { "path": "../sdk-data" },
+    { "path": "../sdk-pivot-query-client" },
+    { "path": "../sdk-shared-ui" }
+  ]
+}

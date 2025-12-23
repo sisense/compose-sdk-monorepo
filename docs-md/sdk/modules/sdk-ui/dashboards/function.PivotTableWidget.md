@@ -2,7 +2,7 @@
 title: PivotTableWidget
 ---
 
-# Function PivotTableWidget <Badge type="beta" text="Beta" />
+# Function PivotTableWidget
 
 > **PivotTableWidget**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
@@ -31,5 +31,23 @@ plot a pivot table over the `Sample ECommerce` data source hosted in a Sisense i
     rows: [DM.Category.Category],
     values: [measureFactory.sum(DM.Commerce.Cost, 'Total Cost')]
   }}
+  title="Pivot Table Widget Example"
+  styleOptions={{
+    spaceAround: 'Medium',
+    cornerRadius: 'Large',
+    shadow: 'Light',
+    border: true,
+    borderColor: '#e0e0e0',
+    backgroundColor: '#ffffff',
+    header: {
+      hidden: false,
+      titleTextColor: '#333333',
+      titleAlignment: 'Center',
+      dividerLine: true,
+      dividerLineColor: '#e0e0e0',
+      backgroundColor: '#f5f5f5'
+    }
+  }}
 />
 ```
+<img src="../../../img/pivot-widget-example.png" width="800px" />

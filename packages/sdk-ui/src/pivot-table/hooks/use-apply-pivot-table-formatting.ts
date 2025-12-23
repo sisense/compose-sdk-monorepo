@@ -6,7 +6,7 @@ import {
   type DataService,
   EVENT_DATA_CELL_FORMAT,
   EVENT_HEADER_CELL_FORMAT,
-} from '@sisense/sdk-pivot-client';
+} from '@sisense/sdk-pivot-query-client';
 import over from 'lodash-es/over';
 
 import { type PivotTableDataOptionsInternal } from '@/chart-data-options/types';

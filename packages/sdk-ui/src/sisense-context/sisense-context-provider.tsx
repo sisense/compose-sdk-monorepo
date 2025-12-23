@@ -64,6 +64,7 @@ export const SisenseContextProvider: FunctionComponent<
   useFusionAuth = false,
   onError,
   alternativeSsoHost = '',
+  disableFusionPalette = false,
 }) => {
   const tracking = {
     // if tracking is configured in appConfig, use it
@@ -96,6 +97,7 @@ export const SisenseContextProvider: FunctionComponent<
       enableSilentPreAuth,
       useFusionAuth,
       alternativeSsoHost,
+      disableFusionPalette,
     })
       .then((newApp) => {
         if (!ignore) {
@@ -122,6 +124,7 @@ export const SisenseContextProvider: FunctionComponent<
     useFusionAuth,
     onError,
     alternativeSsoHost,
+    disableFusionPalette,
   ]);
 
   const userLanguage = app?.settings.translationConfig.language || app?.settings.serverLanguage;

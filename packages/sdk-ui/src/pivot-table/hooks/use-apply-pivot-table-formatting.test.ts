@@ -2,7 +2,7 @@ import {
   type DataService,
   EVENT_DATA_CELL_FORMAT,
   EVENT_HEADER_CELL_FORMAT,
-} from '@sisense/sdk-pivot-client';
+} from '@sisense/sdk-pivot-query-client';
 import { renderHook } from '@testing-library/react';
 
 import type { ClientApplication } from '@/app/client-application';

@@ -72,18 +72,15 @@ describe('getScattermapDataPoint', () => {
       entries: {
         geo: [
           {
-            id: 'geo.0',
             dataOption: { column: { name: 'Country' } },
             value: 'USA',
           },
           {
-            id: 'geo.1',
             dataOption: { column: { name: 'City' } },
             value: 'New York',
           },
         ],
         size: {
-          id: 'size',
           dataOption: { column: { name: 'Revenue' } },
           value: 100,
         },

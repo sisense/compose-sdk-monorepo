@@ -8,7 +8,6 @@ import { Attribute, Filter, isMembersFilter } from '@sisense/sdk-data';
 
 import {
   getAttributeTypeDisplayString,
-  isDateLevelAttribute,
   isNumericAttribute,
   isTextAttribute,
   isTextOrNumericAttribute,
@@ -99,28 +98,6 @@ export function processStringFilter(processedArgs: ProcessedArg[], context: Func
       `${
         context.pathPrefix
       }args[0]: Attribute must be string type, got ${getAttributeTypeDisplayString(
-        attribute,
-      )} attribute`,
-    );
-  }
-}
-
-/**
- * Processes filters that only accept datetime values
- * Used by: dateFrom, dateTo, dateRange, etc.
- *
- * @param processedArgs - [attribute, value, config?]
- * @param context - Processing context with error prefix and other metadata
- * @throws Error with descriptive message if validation fails
- */
-export function processDateFilter(processedArgs: ProcessedArg[], context: FunctionContext): void {
-  const attribute = extractAttribute(processedArgs, context);
-
-  if (!isDateLevelAttribute(attribute)) {
-    throw new Error(
-      `${
-        context.pathPrefix
-      }args[0]: Attribute must be date/datetime type, got ${getAttributeTypeDisplayString(
         attribute,
       )} attribute`,
     );

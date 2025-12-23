@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
-import { type JaqlRequest } from '@sisense/sdk-pivot-client';
+import { type JaqlRequest } from '@sisense/sdk-pivot-query-client';
 import isEqual from 'lodash-es/isEqual';
 
 import {

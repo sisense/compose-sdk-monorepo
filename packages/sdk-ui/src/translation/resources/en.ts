@@ -97,7 +97,7 @@ export const translation = {
     synchronizedFilterInvalidProps:
       '`useSynchronizedFilter` hook must take at least one of [non-null `filterFromProps`] or [`createEmptyFilter` function]',
     methodNotImplemented: 'Method not implemented.',
-    noPivotClient: 'Pivot client not initialized',
+    noPivotQueryClient: 'Pivot query client not initialized',
     unexpectedCacheValue: 'Unexpected cache value',
     notAMembersFilter: 'Filter is not a MembersFilter',
     drilldownNoInitialDimension:

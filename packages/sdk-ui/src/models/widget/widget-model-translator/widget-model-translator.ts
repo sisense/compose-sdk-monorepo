@@ -428,7 +428,10 @@ export function toCommonWidgetProps(widgetModel: WidgetModel): CommonWidgetProps
 /**
  * Translates {@link WidgetModel} to {@link WidgetProps}.
  *
- * @internal
+ * @example
+ * ```tsx
+ * <Widget {...widgetModelTranslator.toWidgetProps(widgetModel)} />
+ * ```
  */
 export function toWidgetProps(widgetModel: WidgetModel): WidgetProps {
   const { oid } = widgetModel;

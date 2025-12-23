@@ -152,7 +152,7 @@ export const useJtdWidget = withTracking('useJtdWidget')(
         originalWidgetFilters: [],
         extraFilters: config.filtering?.extraFilters || normalizedJtdConfig.extraFilters,
         actions: { openModal, openMenu, translate },
-        themeSettings,
+        hyperlinkColor: themeSettings.typography?.hyperlinkColor,
       });
 
       // Add the menu interceptor for drilldown menu combination
@@ -174,7 +174,7 @@ export const useJtdWidget = withTracking('useJtdWidget')(
       openModal,
       openMenu,
       translate,
-      themeSettings,
+      themeSettings.typography?.hyperlinkColor,
       onBeforeInnerWidgetMenuOpen,
       app?.settings.jumpToDashboardConfig?.enabled,
     ]);

@@ -47,4 +47,8 @@ export {
   type CustomAiContextProviderProps,
 } from './custom-ai-context-provider';
 export { prepareGetNlgInsightsPayload } from './use-get-nlg-insights';
+export {
+  getNlgInsightsFromWidget,
+  type GetNlgInsightsFromWidgetOptions,
+} from './get-nlg-insights-from-widget';
 export { widgetComposer } from '@/analytics-composer';

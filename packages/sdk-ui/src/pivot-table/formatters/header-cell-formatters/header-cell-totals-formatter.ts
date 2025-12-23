@@ -1,5 +1,6 @@
 import { TFunction } from '@sisense/sdk-common/src/i18n/i18next';
-import { PanelType, PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
+import { PanelType, UserType } from '@sisense/sdk-pivot-query-client';
+import type { PivotTreeNode } from '@sisense/sdk-pivot-ui';
 
 import type { PivotTableDataOptions } from '@/chart-data-options/types';
 

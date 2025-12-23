@@ -9,9 +9,9 @@
 /* eslint-disable max-params */
 import { normalizeUrl } from '@sisense/sdk-common';
 import { DataSource } from '@sisense/sdk-data';
-import { PivotClient } from '@sisense/sdk-pivot-client';
+import { PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
-import { getAuthenticator, HttpClient, isWatAuthenticator } from '@sisense/sdk-rest-client';
+import { getAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { TrackingEventDetails } from '@sisense/sdk-tracking';
 
 import { SYSTEM_TENANT_NAME } from '@/const';
@@ -217,9 +217,9 @@ export interface ClientApplication {
   readonly httpClient: HttpClient;
 
   /**
-   * Gets the underlying Pivot Client
+   * Gets the underlying Pivot Query Client
    */
-  readonly pivotClient: PivotClient;
+  readonly pivotQueryClient: PivotQueryClient;
 
   /**
    * Gets the underlying Query Client
@@ -258,6 +258,7 @@ type ClientApplicationParams = Pick<
   | 'enableSilentPreAuth'
   | 'useFusionAuth'
   | 'alternativeSsoHost'
+  | 'disableFusionPalette'
 >;
 
 function getBaseUrl(url: string, tenantName: string) {
@@ -287,6 +288,7 @@ export const createClientApplication = async ({
   enableSilentPreAuth,
   useFusionAuth,
   alternativeSsoHost,
+  disableFusionPalette,
 }: ClientApplicationParams): Promise<ClientApplication> => {
   if (rawUrl === undefined) {
     throw new TranslatableError('errors.sisenseContextNoAuthentication');
@@ -320,12 +322,11 @@ export const createClientApplication = async ({
 
   // do not fetch palette settings from server if login failed
   // SSO redirect is considered failed login as there will be another login attempt
-  // TODO: Remove WAT check once the server will be able to return the palette under the WAT
-  const useDefaultPalette = isWatAuthenticator(auth) || !loginSuccess;
+  const useDefaultPalette = disableFusionPalette || !loginSuccess;
   const settings = await getSettings(appConfig || {}, httpClient, useDefaultPalette);
 
-  const pivotClient = new PivotClient(getBaseUrl(url, settings.user.tenant.name), auth);
-  const queryClient = new DimensionalQueryClient(httpClient, pivotClient);
+  const pivotQueryClient = new PivotQueryClient(getBaseUrl(url, settings.user.tenant.name), auth);
+  const queryClient = new DimensionalQueryClient(httpClient, pivotQueryClient);
 
   const queryCache = {
     clear: clearExecuteQueryCache,
@@ -333,7 +334,7 @@ export const createClientApplication = async ({
 
   return {
     httpClient,
-    pivotClient,
+    pivotQueryClient,
     queryClient,
     settings,
     // todo: make it optional (incorrect previous implementation)

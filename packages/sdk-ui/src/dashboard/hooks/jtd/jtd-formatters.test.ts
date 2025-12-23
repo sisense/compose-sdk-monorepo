@@ -1,5 +1,6 @@
-import { UserType } from '@sisense/sdk-pivot-client';
-import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
+import { UserType } from '@sisense/sdk-pivot-query-client';
+import type { JaqlPanel } from '@sisense/sdk-pivot-query-client';
+import type { PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-ui';
 import { describe, expect, it } from 'vitest';
 
 import { AnyColumn } from '@/chart-data-options/types';
@@ -378,10 +379,12 @@ describe('jtd-formatters', () => {
     };
 
     // Helper function to create mock pivot points
+    // Note: Since id is no longer part of DataPointEntry, the dimension ID is generated
+    // from the array position (e.g., values.0, values.1, etc.)
     const createMockPivotPoint = (
-      rows: Array<{ id: string; value: any }> = [],
-      columns: Array<{ id: string; value: any }> = [],
-      values: Array<{ id: string; value: any }> = [],
+      rows: Array<{ dataOption: any; value: any }> = [],
+      columns: Array<{ dataOption: any; value: any }> = [],
+      values: Array<{ dataOption: any; value: any }> = [],
     ): PivotTableDataPoint =>
       ({
         isDataCell: values.length > 0,
@@ -423,10 +426,11 @@ describe('jtd-formatters', () => {
 
     describe('using pivotPoint (click handler path)', () => {
       it('should return actionable for matching values cell', () => {
+        // Position 0 in each array generates IDs: rows.0, columns.0, values.0
         const mockPivotPoint = createMockPivotPoint(
-          [{ id: 'rows.0', value: 'Category1' }],
-          [{ id: 'columns.0', value: 'Year2023' }],
-          [{ id: 'values.0', value: 1000 }],
+          [{ dataOption: {}, value: 'Category1' }],
+          [{ dataOption: {}, value: 'Year2023' }],
+          [{ dataOption: {}, value: 1000 }],
         );
 
         const result = isPivotClickHandlerActionable(mockJtdConfigWithPivotTargets, mockPivotPoint);
@@ -435,7 +439,7 @@ describe('jtd-formatters', () => {
       });
 
       it('should return not actionable for row header (headers not clickable)', () => {
-        const mockPivotPoint = createMockPivotPoint([{ id: 'rows.0', value: 'Category1' }]);
+        const mockPivotPoint = createMockPivotPoint([{ dataOption: {}, value: 'Category1' }]);
 
         const result = isPivotClickHandlerActionable(mockJtdConfigWithPivotTargets, mockPivotPoint);
         expect(result.isActionable).toBe(false);
@@ -443,7 +447,7 @@ describe('jtd-formatters', () => {
       });
 
       it('should return not actionable for column header (headers not clickable)', () => {
-        const mockPivotPoint = createMockPivotPoint([], [{ id: 'columns.0', value: 'Year2023' }]);
+        const mockPivotPoint = createMockPivotPoint([], [{ dataOption: {}, value: 'Year2023' }]);
 
         const result = isPivotClickHandlerActionable(mockJtdConfigWithPivotTargets, mockPivotPoint);
         expect(result.isActionable).toBe(false);
@@ -451,9 +455,11 @@ describe('jtd-formatters', () => {
       });
 
       it('should return not actionable for non-matching cells', () => {
-        const mockPivotPoint = createMockPivotPoint(
-          [{ id: 'rows.1', value: 'Category2' }], // rows.1 not in any target
-        );
+        // Entry at position 1 generates ID rows.1 which is not in any target
+        const mockPivotPoint = createMockPivotPoint([
+          { dataOption: {}, value: 'Category1' },
+          { dataOption: {}, value: 'Category2' },
+        ]);
 
         const result = isPivotClickHandlerActionable(mockJtdConfigWithPivotTargets, mockPivotPoint);
         expect(result.isActionable).toBe(false);
@@ -461,9 +467,10 @@ describe('jtd-formatters', () => {
       });
 
       it('should handle deepest entry selection correctly (row headers not clickable)', () => {
+        // Two entries generate IDs: rows.0 and rows.1 (deepest)
         const mockPivotPoint = createMockPivotPoint([
-          { id: 'rows.0', value: 'Category1' },
-          { id: 'rows.1', value: 'SubCategory1' }, // deepest row
+          { dataOption: {}, value: 'Category1' },
+          { dataOption: {}, value: 'SubCategory1' }, // deepest row at position 1
         ]);
 
         // Configure target that matches the deepest row
@@ -534,47 +541,43 @@ describe('jtd-formatters', () => {
       });
 
       // Click handlers have different behavior - only data cells are actionable
+      // The dimension ID is now generated from array position, not from entry.id
       const handlerTestCases = [
         {
           dimType: 'rows',
-          id: 'rows.0',
+          position: 0, // generates rows.0
           shouldBeActionable: false,
           description: 'row header (not clickable)',
         },
         {
           dimType: 'columns',
-          id: 'columns.0',
+          position: 0, // generates columns.0
           shouldBeActionable: false,
           description: 'column header (not clickable)',
         },
         {
           dimType: 'values',
-          id: 'values.0',
+          position: 0, // generates values.0
           shouldBeActionable: true,
           expectedTarget: 'target-2',
           description: 'data cell (clickable)',
         },
         {
           dimType: 'values',
-          id: 'some-other-value',
+          position: 1, // generates values.1 which is not in any target
           shouldBeActionable: false,
-          description: 'non-matching data cell with different ID',
-          createAtPosition: 1,
+          description: 'non-matching data cell at position 1',
         },
       ];
 
       handlerTestCases.forEach(
-        ({ dimType, id, shouldBeActionable, expectedTarget, description, createAtPosition }) => {
+        ({ dimType, position, shouldBeActionable, expectedTarget, description }) => {
           it(`handler should handle ${description}`, () => {
-            // For non-matching test, create entry at position 1 instead of 0
-            const position = createAtPosition ?? 0;
-            const entries =
-              dimType === 'values' && position === 1
-                ? [
-                    { id: 'values.0', value: 'FirstValue' },
-                    { id, value: 'TestValue' },
-                  ] // Put target at position 1
-                : [{ id, value: 'TestValue' }];
+            // Create entries up to the target position
+            const entries = Array.from({ length: position + 1 }, (_, i) => ({
+              dataOption: {},
+              value: `Value${i}`,
+            }));
 
             const mockPivotPoint = createMockPivotPoint(
               dimType === 'rows' ? entries : [],
@@ -626,7 +629,8 @@ describe('jtd-formatters', () => {
       };
 
       it('should return multiple targets for matching dimension', () => {
-        const mockPivotPoint = createMockPivotPoint([], [], [{ id: 'values.0', value: 1000 }]);
+        // Entry at position 0 generates values.0
+        const mockPivotPoint = createMockPivotPoint([], [], [{ dataOption: {}, value: 1000 }]);
 
         const result = getPivotTargetActionability(
           mockJtdConfigWithMultipleTargets,
@@ -639,7 +643,8 @@ describe('jtd-formatters', () => {
       });
 
       it('should return single target for unique dimension', () => {
-        const mockPivotPoint = createMockPivotPoint([{ id: 'rows.0', value: 'Category1' }]);
+        // Entry at position 0 generates rows.0
+        const mockPivotPoint = createMockPivotPoint([{ dataOption: {}, value: 'Category1' }]);
 
         const result = getPivotTargetActionability(
           mockJtdConfigWithMultipleTargets,
@@ -666,7 +671,8 @@ describe('jtd-formatters', () => {
           ],
         };
 
-        const mockPivotPoint = createMockPivotPoint([], [], [{ id: 'values.0', value: 1000 }]);
+        // Entry at position 0 generates values.0
+        const mockPivotPoint = createMockPivotPoint([], [], [{ dataOption: {}, value: 1000 }]);
 
         const result = getPivotTargetActionability(mockJtdConfigNoDimensions, mockPivotPoint);
 
@@ -676,7 +682,8 @@ describe('jtd-formatters', () => {
       });
 
       it('should return empty array for non-data cells', () => {
-        const mockPivotPoint = createMockPivotPoint([{ id: 'rows.0', value: 'Category1' }]);
+        // Entry at position 0 generates rows.0
+        const mockPivotPoint = createMockPivotPoint([{ dataOption: {}, value: 'Category1' }]);
 
         const result = getPivotTargetActionability(
           mockJtdConfigWithMultipleTargets,
@@ -693,7 +700,8 @@ describe('jtd-formatters', () => {
           enabled: false,
         };
 
-        const mockPivotPoint = createMockPivotPoint([], [], [{ id: 'values.0', value: 1000 }]);
+        // Entry at position 0 generates values.0
+        const mockPivotPoint = createMockPivotPoint([], [], [{ dataOption: {}, value: 1000 }]);
 
         const result = getPivotTargetActionability(disabledConfig, mockPivotPoint);
 
@@ -701,7 +709,7 @@ describe('jtd-formatters', () => {
         expect(result.matchingTargets).toHaveLength(0);
       });
 
-      it('should handle direct PivotDimId matching (values.1 at position 0)', () => {
+      it('should handle position-based ID generation (values.1 target requires 2 entries)', () => {
         const mockJtdConfigWithValues1: JtdConfig = {
           enabled: true,
           navigateType: 'click',
@@ -714,11 +722,14 @@ describe('jtd-formatters', () => {
           ],
         };
 
-        // Create pivot point with values.1 at position 0 in the array
+        // Create pivot point with 2 entries to generate values.1 as the deepest
         const mockPivotPoint = createMockPivotPoint(
           [],
           [],
-          [{ id: 'values.1', value: 65.9 }], // Entry ID is values.1 but at array position 0
+          [
+            { dataOption: {}, value: 100 },
+            { dataOption: {}, value: 65.9 },
+          ], // Position 1 generates values.1
         );
 
         const result = getPivotTargetActionability(mockJtdConfigWithValues1, mockPivotPoint);
@@ -751,8 +762,8 @@ describe('jtd-formatters', () => {
           ],
         };
 
-        // Click on values.0 - doesn't match the rows.0 dimension-specific target
-        const mockPivotPoint = createMockPivotPoint([], [], [{ id: 'values.0', value: 100 }]);
+        // Entry at position 0 generates values.0 - doesn't match rows.0 target
+        const mockPivotPoint = createMockPivotPoint([], [], [{ dataOption: {}, value: 100 }]);
 
         const result = getPivotTargetActionability(mockJtdConfigMixed, mockPivotPoint);
 
@@ -779,8 +790,8 @@ describe('jtd-formatters', () => {
           ],
         };
 
-        // Click on values.0 - doesn't match any dimension-specific targets
-        const mockPivotPoint = createMockPivotPoint([], [], [{ id: 'values.0', value: 100 }]);
+        // Entry at position 0 generates values.0 - doesn't match any targets
+        const mockPivotPoint = createMockPivotPoint([], [], [{ dataOption: {}, value: 100 }]);
 
         const result = getPivotTargetActionability(
           mockJtdConfigOnlyDimensionSpecific,

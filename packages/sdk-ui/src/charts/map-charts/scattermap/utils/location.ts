@@ -39,7 +39,7 @@ export function getScattermapDataPoint(
 
   const geoEntries: DataPointEntry[] = dataOptions.locations.map((item, index) => {
     return {
-      ...getDataPointMetadata(`geo.${index}`, item),
+      ...getDataPointMetadata(item),
       value: rawName[index],
     };
   });
@@ -50,20 +50,20 @@ export function getScattermapDataPoint(
 
   if (dataOptions.size) {
     entries.size = {
-      ...getDataPointMetadata(`size`, dataOptions.size),
+      ...getDataPointMetadata(dataOptions.size),
       value: value,
     };
   }
 
   if (dataOptions.colorBy) {
     entries.colorBy = {
-      ...getDataPointMetadata(`colorBy`, dataOptions.colorBy),
+      ...getDataPointMetadata(dataOptions.colorBy),
       value: colorValue as number,
     };
   }
 
   if (dataOptions.details) {
-    const metadata = getDataPointMetadata(`details`, dataOptions.details);
+    const metadata = getDataPointMetadata(dataOptions.details);
     // Supports only measure "details" that already part of a map data
     if (metadata.measure) {
       entries.details = {

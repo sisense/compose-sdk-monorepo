@@ -51,6 +51,8 @@ vi.mock('./jtd-menu', () => ({
 vi.mock('./jtd-formatters', () => ({
   createJtdHyperlinkDataCellFormatter: vi.fn(() => vi.fn()),
   createJtdHyperlinkHeaderCellFormatter: vi.fn(() => vi.fn()),
+  isPivotClickHandlerActionable: vi.fn(),
+  getPivotTargetActionability: vi.fn(),
 }));
 
 describe('jtd-widget-transforms', () => {
@@ -108,11 +110,6 @@ describe('jtd-widget-transforms', () => {
     originalWidgetFilters: [],
   };
 
-  const mockContext = {
-    dashboardFilters: [],
-    originalWidgetFilters: [],
-  };
-
   const mockActions = {
     openModal: vi.fn(),
     openMenu: vi.fn(),
@@ -133,6 +130,11 @@ describe('jtd-widget-transforms', () => {
     vi.mocked(jtdMenu.getJumpToDashboardMenuItemForMultiplePoints).mockReturnValue(null);
     vi.mocked(jtdFormatters.createJtdHyperlinkDataCellFormatter).mockReturnValue(vi.fn());
     vi.mocked(jtdFormatters.createJtdHyperlinkHeaderCellFormatter).mockReturnValue(vi.fn());
+    vi.mocked(jtdFormatters.isPivotClickHandlerActionable).mockReturnValue({ isActionable: false });
+    vi.mocked(jtdFormatters.getPivotTargetActionability).mockReturnValue({
+      isActionable: false,
+      matchingTargets: [],
+    });
   });
 
   describe('addPointerCursorToChart', () => {
@@ -276,6 +278,14 @@ describe('jtd-widget-transforms', () => {
 
     it('should handle pivot data point click correctly', () => {
       vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(true);
+      const mockMatchingTarget = {
+        id: 'target-dashboard-1',
+        caption: 'Target Dashboard',
+      };
+      vi.mocked(jtdFormatters.isPivotClickHandlerActionable).mockReturnValue({
+        isActionable: true,
+        matchingTarget: mockMatchingTarget,
+      });
 
       const result = applyClickNavigationForPivot(mockPivotWidgetProps, mockConfig, mockActions);
 
@@ -284,17 +294,24 @@ describe('jtd-widget-transforms', () => {
         isCaptionCell: false,
         isTotalCell: false,
         entries: {
-          rows: [{ id: 'row1', dataOption: { name: 'Category' } as any, value: 'Electronics' }],
-          columns: [{ id: 'col1', dataOption: { name: 'Quarter' } as any, value: 'Q1' }],
-          values: [{ id: 'val1', dataOption: { name: 'Revenue' } as any, value: 100 }],
+          rows: [{ dataOption: { name: 'Category' } as any, value: 'Electronics' }],
+          columns: [{ dataOption: { name: 'Quarter' } as any, value: 'Q1' }],
+          values: [{ dataOption: { name: 'Revenue' } as any, value: 100 }],
         },
       };
 
       (result as any).onDataPointClick?.(mockPivotPoint, {} as any);
 
       expect(jtdHandlers.handlePivotDataPointClick).toHaveBeenCalledWith(
-        expect.any(Object),
-        mockContext,
+        expect.objectContaining({
+          jtdConfig: mockConfig.jtdConfig,
+          widgetProps: mockPivotWidgetProps,
+          point: mockPivotPoint,
+        }),
+        expect.objectContaining({
+          dashboardFilters: [],
+          originalWidgetFilters: [],
+        }),
         mockActions,
       );
     });

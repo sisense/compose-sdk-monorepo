@@ -36,9 +36,7 @@ describe('factory-function-processors', () => {
       expect(functions).toContain('filterFactory.equals');
       expect(functions).toContain('filterFactory.greaterThan');
       expect(functions).toContain('filterFactory.contains');
-      expect(functions).toContain('filterFactory.dateFrom');
-      // Should have at least 25+ functions now (1 measure + 24+ filter functions)
-      expect(functions.length).toBeGreaterThan(25);
+      expect(functions).toContain('filterFactory.exclude');
     });
   });
 

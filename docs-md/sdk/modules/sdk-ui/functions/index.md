@@ -9,3 +9,4 @@ title: Functions
 - [isGradient](function.isGradient.md)
 - [isLinearGradient](function.isLinearGradient.md)
 - [isRadialGradient](function.isRadialGradient.md)
+- [useGetDataSourceDimensions](function.useGetDataSourceDimensions.md)

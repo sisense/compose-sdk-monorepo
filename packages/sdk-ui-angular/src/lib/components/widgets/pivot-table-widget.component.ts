@@ -74,7 +74,7 @@ export class AnalyticsComponent {
           dataBars: true,
         },
       ],
-      grandTotals: { title: 'Grand Total', rows: true, columns: true },
+      grandTotals: { rows: true, columns: true },
     },
     filters: [filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])],
     styleOptions: { width: 1400, height: 600, rowsPerPage: 25 },
@@ -85,7 +85,6 @@ export class AnalyticsComponent {
  * ```
  * <img src="media://angular-pivot-table-widget-example.png" width="800px" />
  * @group Dashboards
- * @beta
  */
 @Component({
   selector: 'csdk-pivot-table-widget',

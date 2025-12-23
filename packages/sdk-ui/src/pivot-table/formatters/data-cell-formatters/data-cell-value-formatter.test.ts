@@ -1,4 +1,4 @@
-import { type JaqlPanel } from '@sisense/sdk-pivot-client';
+import { type JaqlPanel } from '@sisense/sdk-pivot-query-client';
 
 import { type PivotTableDataOptions } from '../../../chart-data-options/types.js';
 import { createDataCellValueFormatter } from './data-cell-value-formatter.js';

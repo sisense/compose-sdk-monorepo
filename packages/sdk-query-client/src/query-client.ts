@@ -1,5 +1,5 @@
 import { DataSource, MetadataTypes } from '@sisense/sdk-data';
-import { PivotClient } from '@sisense/sdk-pivot-client';
+import { PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { ExecutionResultStatus } from '@sisense/task-manager';
 
@@ -33,14 +33,14 @@ export class DimensionalQueryClient implements QueryClient {
 
   constructor(
     httpClient: HttpClient,
-    pivotClient: PivotClient = new PivotClient(httpClient.url, httpClient.auth),
+    pivotQueryClient: PivotQueryClient = new PivotQueryClient(httpClient.url, httpClient.auth),
     shouldSkipHighlightsWithoutAttributes?: boolean,
   ) {
     validateHttpClient(httpClient);
 
     this.queryApi = new QueryApiDispatcher(httpClient);
 
-    this.taskManager = new QueryTaskManager(this.queryApi, pivotClient);
+    this.taskManager = new QueryTaskManager(this.queryApi, pivotQueryClient);
     this.shouldSkipHighlightsWithoutAttributes = shouldSkipHighlightsWithoutAttributes ?? false;
   }
 

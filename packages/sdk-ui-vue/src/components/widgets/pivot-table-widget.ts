@@ -16,15 +16,45 @@ export { PivotTableWidgetProps };
  * Here's how you can use the PivotTableWidget component in a Vue application:
  * ```vue
  * <template>
- *   <PivotTableWidget :props="pivotTableWidgetProps" />
+ *   <PivotTableWidget
+ *      :dataSource="pivotTableWidgetProps.dataSource"
+ *      :filters="pivotTableWidgetProps.filters"
+ *      :dataOptions="pivotTableWidgetProps.dataOptions"
+ *      :styleOptions="pivotTableWidgetProps.styleOptions"
+ *      :title="pivotTableWidgetProps.title"
+ *   />
  * </template>
  *
  * <script setup lang="ts">
  * import { ref } from 'vue';
- * import { PivotTableWidget } from '@sisense/sdk-ui-vue';
+ * import { measureFactory } from '@sisense/sdk-data';
+ * import { PivotTableWidget, type PivotTableWidgetProps } from '@sisense/sdk-ui-vue';
+ * import * as DM from '../assets/sample-ecommerce-model';
  *
- * const pivotTableWidgetProps = ref({
- *   // Configure your PivotTableWidget here
+ * const pivotTableWidgetProps = ref<PivotTableWidgetProps>({
+ *   dataSource: DM.DataSource,
+ *   dataOptions: {
+ *     rows: [DM.Category.Category],
+ *     values: [measureFactory.sum(DM.Commerce.Cost, 'Total Cost')],
+ *   },
+ *   filters: [],
+ *   title: 'Pivot Table Widget Example',
+ *   styleOptions: {
+ *     spaceAround: 'Medium',
+ *     cornerRadius: 'Large',
+ *     shadow: 'Light',
+ *     border: true,
+ *     borderColor: '#e0e0e0',
+ *     backgroundColor: '#ffffff',
+ *     header: {
+ *       hidden: false,
+ *       titleTextColor: '#333333',
+ *       titleAlignment: 'Center',
+ *       dividerLine: true,
+ *       dividerLineColor: '#e0e0e0',
+ *       backgroundColor: '#f5f5f5',
+ *     },
+ *   },
  * });
  * </script>
  * ```
@@ -32,7 +62,6 @@ export { PivotTableWidgetProps };
  * @param props - Pivot Table Widget properties
  * @returns Widget component representing a pivot table
  * @group Dashboards
- * @beta
  */
 export const PivotTableWidget = defineComponent({
   props: {

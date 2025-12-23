@@ -5,7 +5,7 @@ import {
   EVENT_PIVOT_ELEMENT_CHANGE,
   type PivotBuilder,
   type PivotTreeNode,
-} from '@sisense/sdk-pivot-client';
+} from '@sisense/sdk-pivot-ui';
 
 import type { PivotTableDataOptionsInternal, StyledColumn } from '@/chart-data-options/types';
 import { AlertIcon } from '@/common/icons/alert-icon';
@@ -157,6 +157,7 @@ export function useRenderPivot({
         onTotalHeightChange,
         onCellClick: handlePivotTableCellClick,
         paginationOptions,
+        isSelectable: styleOptions.highlightClickableCells,
         ...pivotStylingProps,
       };
     }
@@ -175,6 +176,7 @@ export function useRenderPivot({
     paginationOptions,
     imageColumns,
     alwaysShowResultsPerPage,
+    styleOptions.highlightClickableCells,
   ]);
 
   useEffect(() => {

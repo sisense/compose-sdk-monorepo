@@ -360,7 +360,7 @@ export type DashboardCodeProps = Stringify<DashboardProps> & ExtraWidgetCodeProp
 /**
  * @internal
  */
-export type NormalizedField = {
+export type NormalizedColumn = {
   name: string;
   dataType: string;
   expression: string;
@@ -372,7 +372,7 @@ export type NormalizedField = {
  */
 export type NormalizedTable = {
   name: string;
-  columns: NormalizedField[];
+  columns: NormalizedColumn[];
 };
 
 /**

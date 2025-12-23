@@ -1024,6 +1024,7 @@ export default function CodeExample() {
       styleOptions={ {
         rowHeight: undefined,
         imageColumns: undefined,
+        highlightClickableCells: false,
       } }
     />
   );

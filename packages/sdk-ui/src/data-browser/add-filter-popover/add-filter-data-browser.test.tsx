@@ -3,11 +3,11 @@ import type { Mock } from 'vitest';
 
 import { sampleEcommerceFields } from '@/__mocks__/sample-ecommerce-fields';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { useGetDataSourceFields } from '@/common/hooks/fusion-endpoints/use-get-data-source-fields';
 import { AddFilterDataBrowser } from '@/data-browser/add-filter-popover/add-filter-data-browser';
+import { useGetDataSourceFields } from '@/data-source-dimensional-model/hooks/use-get-data-source-fields';
 
 // Mock only the useGetDataSourceFields hook.
-vi.mock('@/common/hooks/fusion-endpoints/use-get-data-source-fields', () => {
+vi.mock('@/data-source-dimensional-model/hooks/use-get-data-source-fields', () => {
   return {
     useGetDataSourceFields: vi.fn(),
   };

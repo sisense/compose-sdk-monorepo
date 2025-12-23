@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { PivotBuilder, PivotClient } from '@sisense/sdk-pivot-client';
+import { PivotBuilder, PivotClient } from '@sisense/sdk-pivot-ui';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 

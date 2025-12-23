@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 
 import { FunctionContext } from '../types.js';
 import {
-  processDateFilter,
   processExcludeFilter,
   processNumericFilter,
   processStringFilter,
@@ -140,35 +139,6 @@ describe('filter-processors', () => {
       expect(() => {
         processStringFilter([dateAttr, '2023-01-01'], context);
       }).toThrow('args[0]: Attribute must be string type, got date/datetime attribute');
-    });
-  });
-
-  describe('processDateFilter', () => {
-    it('should not throw for date attributes', () => {
-      const dateAttr = createMockAttribute('datelevel');
-      const context = createMockContext();
-
-      expect(() => {
-        processDateFilter([dateAttr, '2023-01-01'], context);
-      }).not.toThrow();
-    });
-
-    it('should throw for string attributes', () => {
-      const stringAttr = createMockAttribute('text-attribute');
-      const context = createMockContext();
-
-      expect(() => {
-        processDateFilter([stringAttr, 'test'], context);
-      }).toThrow('args[0]: Attribute must be date/datetime type, got text attribute');
-    });
-
-    it('should throw for numeric attributes', () => {
-      const numericAttr = createMockAttribute('numeric-attribute');
-      const context = createMockContext();
-
-      expect(() => {
-        processDateFilter([numericAttr, 123], context);
-      }).toThrow('args[0]: Attribute must be date/datetime type, got numeric attribute');
     });
   });
 

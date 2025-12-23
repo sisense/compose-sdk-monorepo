@@ -1,4 +1,5 @@
-import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
+import { type JaqlPanel } from '@sisense/sdk-pivot-query-client';
+import type { PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-ui';
 
 import { type PivotTableDataOptions } from '@/chart-data-options/types.js';
 import { applyFormatPlainText } from '@/chart-options-processor/translations/number-format-config.js';

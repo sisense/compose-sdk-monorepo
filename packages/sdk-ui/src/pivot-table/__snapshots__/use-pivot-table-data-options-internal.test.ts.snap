@@ -14,7 +14,6 @@ exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptio
   "grandTotals": {
     "columns": true,
     "rows": true,
-    "title": "Grand Total",
   },
   "rows": [
     {

@@ -1,10 +1,6 @@
 import { createFilterMatcher } from '@sisense/sdk-data';
-import {
-  type JaqlPanel,
-  type JaqlRequest,
-  type PivotTreeNode,
-  UserType,
-} from '@sisense/sdk-pivot-client';
+import { type JaqlPanel, type JaqlRequest, UserType } from '@sisense/sdk-pivot-query-client';
+import { type PivotTreeNode } from '@sisense/sdk-pivot-ui';
 
 import type { HeaderCellFormatter } from '../types.js';
 

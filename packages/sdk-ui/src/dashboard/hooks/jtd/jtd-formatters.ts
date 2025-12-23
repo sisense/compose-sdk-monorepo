@@ -1,5 +1,5 @@
-import type { JaqlPanel, PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-client';
-import { UserType } from '@sisense/sdk-pivot-client';
+import { type JaqlPanel, UserType } from '@sisense/sdk-pivot-query-client';
+import type { PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-ui';
 
 import { AnyColumn } from '@/chart-data-options/types';
 import type {
@@ -105,13 +105,14 @@ function findAllMatchingPivotTargets(
   const entries = pivotPoint.entries || { rows: [], columns: [], values: [] };
 
   // Extract dimension ID with priority: values > columns > rows
+  // Generate the dimension ID based on the array position (e.g., "values.0", "columns.1", "rows.2")
   let targetDimensionId: string | undefined;
   if (entries.values?.length) {
-    targetDimensionId = entries.values[entries.values.length - 1]?.id;
+    targetDimensionId = `values.${entries.values.length - 1}`;
   } else if (entries.columns?.length) {
-    targetDimensionId = entries.columns[entries.columns.length - 1]?.id;
+    targetDimensionId = `columns.${entries.columns.length - 1}`;
   } else if (entries.rows?.length) {
-    targetDimensionId = entries.rows[entries.rows.length - 1]?.id;
+    targetDimensionId = `rows.${entries.rows.length - 1}`;
   }
 
   if (!targetDimensionId) {

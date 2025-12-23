@@ -119,7 +119,6 @@ describe('IndicatorCanvas', () => {
             value: expect.objectContaining({
               value: 12345.67,
               displayValue: '12.35K',
-              id: 'value',
               dataOption: expect.objectContaining({
                 column: expect.objectContaining({
                   name: 'Revenue',
@@ -130,7 +129,6 @@ describe('IndicatorCanvas', () => {
             secondary: expect.objectContaining({
               value: 6789.12,
               displayValue: '6.79K',
-              id: 'secondary',
               dataOption: expect.objectContaining({
                 column: expect.objectContaining({
                   name: 'Cost',
@@ -141,7 +139,6 @@ describe('IndicatorCanvas', () => {
             min: expect.objectContaining({
               value: 0,
               displayValue: '0',
-              id: 'min',
               dataOption: expect.objectContaining({
                 column: expect.objectContaining({
                   name: 'Min',
@@ -152,7 +149,6 @@ describe('IndicatorCanvas', () => {
             max: expect.objectContaining({
               value: 50000,
               displayValue: '50K',
-              id: 'max',
               dataOption: expect.objectContaining({
                 column: expect.objectContaining({
                   name: 'Max',
@@ -215,7 +211,6 @@ describe('IndicatorCanvas', () => {
             value: expect.objectContaining({
               value: 12345.67,
               displayValue: '12.35K',
-              id: 'value',
               dataOption: expect.objectContaining({
                 column: expect.objectContaining({
                   name: 'Revenue',

@@ -1,10 +1,5 @@
-import {
-  EVENT_QUERY_END,
-  EVENT_QUERY_START,
-  JaqlPanel,
-  JaqlRequest,
-  PivotBuilder,
-} from '@sisense/sdk-pivot-client';
+import type { JaqlPanel, JaqlRequest } from '@sisense/sdk-pivot-query-client';
+import { EVENT_QUERY_END, EVENT_QUERY_START, PivotBuilder } from '@sisense/sdk-pivot-ui';
 import { renderHook, waitFor } from '@testing-library/react';
 
 import { usePivotDataLoading } from './use-pivot-data-loading';

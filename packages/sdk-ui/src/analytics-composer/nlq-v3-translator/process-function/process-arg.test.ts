@@ -1,11 +1,31 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import * as commonModule from '../common.js';
 import { ArgInput, FunctionContext } from '../types.js';
 import { processArg } from './process-arg.js';
 
 // Mock dependencies
 vi.mock('../common.js', () => ({
-  createAttributeFromName: vi.fn().mockReturnValue({ __serializable: 'DimensionalAttribute' }),
+  createAttributeFromName: vi.fn((attributeName: string) => {
+    // Check if attribute has a date level (4 parts when split by '.')
+    const parts = attributeName.split('.');
+    const hasDateLevel = parts.length === 4;
+
+    if (hasDateLevel) {
+      return { __serializable: 'DimensionalAttribute', type: 'datelevel' };
+    }
+    return { __serializable: 'DimensionalAttribute' };
+  }),
+  createDateDimensionFromName: vi
+    .fn()
+    .mockReturnValue({ __serializable: 'DimensionalDateDimension' }),
+  isDateLevelAttribute: vi.fn((attribute: any) => attribute?.type === 'datelevel'),
+  getAttributeTypeDisplayString: vi.fn((attribute: any) => {
+    if (attribute?.type === 'text-attribute') return 'text';
+    if (attribute?.type === 'numeric-attribute') return 'numeric';
+    if (attribute?.type === 'datelevel') return 'date/datetime';
+    return 'unknown';
+  }),
 }));
 
 vi.mock('./process-node.js', () => ({
@@ -20,6 +40,8 @@ const createMockContext = (pathPrefix = 'test'): FunctionContext => ({
 });
 
 describe('processArg', () => {
+  const { createAttributeFromName, createDateDimensionFromName } = commonModule;
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -230,6 +252,9 @@ describe('processArg', () => {
         '2024-01-01T10:30:00-05:00',
         '2024-01-01T10:30:00.123+05:00',
         '2024-01-01T10:30:00.123-05:00',
+        // Test timezone-less dates that previously failed validation
+        '2013-01-01T00:00:00',
+        '2013-12-31T23:59:59',
       ];
 
       validDateStrings.forEach((dateString) => {
@@ -578,9 +603,9 @@ describe('processArg', () => {
   });
 
   describe('Special attribute types', () => {
-    it('should process DateDimension type', () => {
+    it('should process DateDimension type without level', () => {
       const input: ArgInput = {
-        data: 'DM.Commerce.Date.Years',
+        data: 'DM.Commerce.Date',
         context: {
           argSchema: { type: 'DateDimension', required: true },
           ...createMockContext(),
@@ -588,20 +613,30 @@ describe('processArg', () => {
       };
 
       const result = processArg(input);
-      expect(result).toEqual({ __serializable: 'DimensionalAttribute' });
+      expect(result).toEqual({ __serializable: 'DimensionalDateDimension' });
+      expect(createDateDimensionFromName).toHaveBeenCalledWith(
+        'DM.Commerce.Date',
+        expect.any(Object),
+        expect.any(Array),
+      );
     });
 
-    it('should process LevelAttribute type', () => {
+    it('should throw error for DateDimension type with level', () => {
+      vi.mocked(createDateDimensionFromName).mockImplementation(() => {
+        throw new Error(
+          'Invalid DateDimension attribute "DM.Commerce.Date.Years". DateDimension should not include a level. Use "DM.TableName.ColumnName" format.',
+        );
+      });
+
       const input: ArgInput = {
         data: 'DM.Commerce.Date.Years',
         context: {
-          argSchema: { type: 'LevelAttribute', required: true },
-          ...createMockContext(),
+          argSchema: { type: 'DateDimension', required: true },
+          ...createMockContext('testArg'),
         },
       };
 
-      const result = processArg(input);
-      expect(result).toEqual({ __serializable: 'DimensionalAttribute' });
+      expect(() => processArg(input)).toThrow(/DateDimension should not include a level/);
     });
 
     it('should throw error for DateDimension type with non-string', () => {
@@ -614,7 +649,158 @@ describe('processArg', () => {
       };
 
       expect(() => processArg(input)).toThrow(
-        'testArg: Expected date attribute string, got number. Example: "DM.Commerce.Date.Years"',
+        'testArg: Expected date dimension string, got number. Example: "DM.Commerce.Date"',
+      );
+    });
+
+    it('should throw error for DateDimension when table not found', () => {
+      vi.mocked(createDateDimensionFromName).mockImplementation(() => {
+        throw new Error('Table "NonExistentTable" not found in the data model');
+      });
+
+      const input: ArgInput = {
+        data: 'DM.NonExistentTable.Date',
+        context: {
+          argSchema: { type: 'DateDimension', required: true },
+          ...createMockContext('testArg'),
+          tables: [], // Empty tables array
+        },
+      };
+
+      expect(() => processArg(input)).toThrow(/Table "NonExistentTable" not found/);
+    });
+
+    it('should throw error for DateDimension with non-datetime column', () => {
+      vi.mocked(createDateDimensionFromName).mockImplementation(() => {
+        throw new Error(
+          'Invalid DateDimension attribute "DM.Commerce.TextColumn". Column "Commerce.TextColumn" is not a datetime column (got text).',
+        );
+      });
+
+      const input: ArgInput = {
+        data: 'DM.Commerce.TextColumn',
+        context: {
+          argSchema: { type: 'DateDimension', required: true },
+          ...createMockContext('testArg'),
+        },
+      };
+
+      expect(() => processArg(input)).toThrow(/is not a datetime column/);
+    });
+
+    it('should process LevelAttribute type with level', () => {
+      const input: ArgInput = {
+        data: 'DM.Commerce.Date.Years',
+        context: {
+          argSchema: { type: 'LevelAttribute', required: true },
+          ...createMockContext(),
+        },
+      };
+
+      const result = processArg(input);
+      expect(result).toEqual({ __serializable: 'DimensionalAttribute', type: 'datelevel' });
+      expect(createAttributeFromName).toHaveBeenCalledWith(
+        'DM.Commerce.Date.Years',
+        expect.any(Object),
+        expect.any(Array),
+      );
+    });
+
+    it('should handle DateDimension and LevelAttribute differently', () => {
+      // Reset mock to default implementation (return mock DateDimension)
+      vi.mocked(createDateDimensionFromName).mockReturnValue({
+        __serializable: 'DimensionalDateDimension',
+      } as any);
+
+      const dateDimInput: ArgInput = {
+        data: 'DM.Commerce.Date',
+        context: {
+          argSchema: { type: 'DateDimension', required: true },
+          ...createMockContext(),
+        },
+      };
+
+      const levelAttrInput: ArgInput = {
+        data: 'DM.Commerce.Date.Years',
+        context: {
+          argSchema: { type: 'LevelAttribute', required: true },
+          ...createMockContext(),
+        },
+      };
+
+      const dateDimResult = processArg(dateDimInput);
+      const levelAttrResult = processArg(levelAttrInput);
+
+      expect(dateDimResult).toEqual({ __serializable: 'DimensionalDateDimension' });
+      expect(levelAttrResult).toEqual({
+        __serializable: 'DimensionalAttribute',
+        type: 'datelevel',
+      });
+      expect(createDateDimensionFromName).toHaveBeenCalledTimes(1);
+      expect(createAttributeFromName).toHaveBeenCalledTimes(1);
+    });
+
+    it('should process LevelAttribute type with valid date level attribute', () => {
+      // Mock createAttributeFromName to return a date level attribute
+      vi.mocked(createAttributeFromName).mockReturnValue({
+        __serializable: 'DimensionalAttribute',
+        type: 'datelevel',
+      } as any);
+
+      const input: ArgInput = {
+        data: 'DM.Commerce.Date.Years',
+        context: {
+          argSchema: { type: 'LevelAttribute', required: true },
+          ...createMockContext(),
+        },
+      };
+
+      const result = processArg(input);
+      expect(result).toEqual({ __serializable: 'DimensionalAttribute', type: 'datelevel' });
+      expect(createAttributeFromName).toHaveBeenCalledWith(
+        'DM.Commerce.Date.Years',
+        expect.any(Object),
+        expect.any(Array),
+      );
+    });
+
+    it('should throw error for LevelAttribute type with text attribute', () => {
+      // Mock createAttributeFromName to return a text attribute
+      vi.mocked(createAttributeFromName).mockReturnValue({
+        __serializable: 'DimensionalAttribute',
+        type: 'text-attribute',
+      } as any);
+
+      const input: ArgInput = {
+        data: 'DM.Commerce.Category',
+        context: {
+          argSchema: { type: 'LevelAttribute', required: true },
+          ...createMockContext('testArg'),
+        },
+      };
+
+      expect(() => processArg(input)).toThrow(
+        'testArg: Attribute must be date/datetime type, got text attribute',
+      );
+    });
+
+    it('should throw error for LevelAttribute type with numeric attribute', () => {
+      // Mock createAttributeFromName to return a numeric attribute
+      vi.mocked(createAttributeFromName).mockReturnValue({
+        __serializable: 'DimensionalAttribute',
+        type: 'numeric-attribute',
+      } as any);
+
+      const input: ArgInput = {
+        data: 'DM.Commerce.Revenue',
+        context: {
+          argSchema: { type: 'LevelAttribute', required: true },
+          ...createMockContext('testArg'),
+        },
+      };
+
+      expect(() => processArg(input)).toThrow(
+        'testArg: Attribute must be date/datetime type, got numeric attribute',
       );
     });
   });

@@ -1,5 +1,5 @@
 import { Element, PivotQueryResultData, QueryResultData } from '@sisense/sdk-data';
-import { JaqlRequest, PivotClient } from '@sisense/sdk-pivot-client';
+import { JaqlRequest, PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { AbstractTaskManager, Step, Task } from '@sisense/task-manager';
 
 import { EmptyObject } from '../helpers/utility-types.js';
@@ -23,12 +23,12 @@ export class QueryTaskManager extends AbstractTaskManager {
   /**
    * Client for handling pivot data
    */
-  private pivotClient: PivotClient;
+  private pivotQueryClient: PivotQueryClient;
 
-  constructor(queryApi: QueryApiDispatcher, pivotClient: PivotClient) {
+  constructor(queryApi: QueryApiDispatcher, pivotQueryClient: PivotQueryClient) {
     super();
     this.queryApi = queryApi;
-    this.pivotClient = pivotClient;
+    this.pivotQueryClient = pivotQueryClient;
   }
 
   private async prepareJaqlPayload(task: QueryTask): Promise<JaqlQueryPayload> {
@@ -125,7 +125,7 @@ export class QueryTaskManager extends AbstractTaskManager {
     jaqlPayload: JaqlQueryPayload,
   ): Promise<PivotQueryResultData> {
     const { pivotQueryDescription } = task.passport;
-    return this.pivotClient.queryData(
+    return this.pivotQueryClient.queryData(
       jaqlPayload as unknown as JaqlRequest,
       true,
       pivotQueryDescription.count ?? QUERY_DEFAULT_LIMIT,

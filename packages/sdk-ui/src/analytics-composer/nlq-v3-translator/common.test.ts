@@ -69,7 +69,7 @@ describe('createAttributeFromName', () => {
         expect(() => {
           createAttributeFromName(`DM.TestTable.DateColumn.${level}`, mockDataSource, mockTables);
         }).toThrow(
-          `Invalid level "${level}" in attribute "DM.TestTable.DateColumn.${level}". Column "TestTable.DateColumn" is only a date column, not a datetime column`,
+          `Invalid level "${level}" in dimensional element "DM.TestTable.DateColumn.${level}". Column "TestTable.DateColumn" is only a date column, not a datetime column`,
         );
       }
     });

@@ -32,7 +32,7 @@ Vue components and utilities for working with charts
 
 Vue components for data grids
 
-- [PivotTable](data-grids/class.PivotTable.md) <Badge type="beta" text="Beta" />
+- [PivotTable](data-grids/class.PivotTable.md)
 - [Table](data-grids/class.Table.md)
 
 ## Drilldown
@@ -79,7 +79,7 @@ Vue components and utilities for working with dashboards
 - [Dashboard](dashboards/class.Dashboard.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md)
-- [PivotTableWidget](dashboards/class.PivotTableWidget.md) <Badge type="beta" text="Beta" />
+- [PivotTableWidget](dashboards/class.PivotTableWidget.md)
 - [useComposedDashboard](dashboards/function.useComposedDashboard.md)
 - [useCustomWidgets](dashboards/function.useCustomWidgets.md)
 - [Widget](dashboards/class.Widget.md)

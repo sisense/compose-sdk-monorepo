@@ -286,7 +286,7 @@ export class RestApi {
   };
 
   /**
-   * Get datasource fields
+   * Get legacy Fusion datasource fields
    *
    * @param dataSource - A datasource name
    * @param options - An object with offset and count
@@ -295,7 +295,7 @@ export class RestApi {
   public getDataSourceFields = (
     dataSource: string,
     options?: { offset?: number; count?: number; searchValue?: string },
-  ) => {
+  ): Promise<DataSourceField[] | undefined> => {
     const { offset = 0, count = 9999 } = options || {};
     return this.httpClient.post<DataSourceField[]>(
       `api/datasources/${encodeURIComponent(dataSource)}/fields/search`,

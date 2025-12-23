@@ -663,6 +663,7 @@ export default function CodeExample() {
         membersColor: false,
         totalsColor: false,
         imageColumns: undefined,
+        highlightClickableCells: false,
       } }
     />
   );

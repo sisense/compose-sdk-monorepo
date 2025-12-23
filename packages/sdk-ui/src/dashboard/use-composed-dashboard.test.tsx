@@ -1,7 +1,7 @@
-import { act, useMemo } from 'react';
+import React, { act, useMemo } from 'react';
 
-import { Attribute, filterFactory, Measure, measureFactory } from '@sisense/sdk-data';
-import { render, renderHook } from '@testing-library/react';
+import { Attribute, Filter, filterFactory, Measure, measureFactory } from '@sisense/sdk-data';
+import { render, renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 
 import { mockToken, mockUrl, server } from '@/__mocks__/msw';
@@ -12,6 +12,8 @@ import { ModalProvider } from '@/common/components/modal/modal-provider.js';
 import { FilterTile } from '@/filters';
 import type { ChartWidgetProps, SisenseContextProviderProps, WidgetProps } from '@/props';
 import { SisenseContextProvider } from '@/sisense-context/sisense-context-provider';
+import { ThemeProvider } from '@/theme-provider';
+import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
 import { CartesianChartDataOptions, DataPoint } from '@/types.js';
 import { isTextWidgetProps } from '@/widgets/text-widget.js';
 import { Widget } from '@/widgets/widget';
@@ -138,7 +140,6 @@ describe('useComposedDashboard', () => {
       entries: {
         category: [
           {
-            id: 'category.0',
             dataOption: firstChartDataOptions.category[0],
             attribute: firstChartDataOptions.category[0] as Attribute,
             value: '45-54',
@@ -147,7 +148,6 @@ describe('useComposedDashboard', () => {
         ],
         value: [
           {
-            id: 'value.0',
             dataOption: firstChartDataOptions.value[0],
             measure: firstChartDataOptions.value[0] as Measure,
             value: 4736826.749279762,
@@ -263,7 +263,6 @@ describe('useComposedDashboard', () => {
         entries: {
           category: [
             {
-              id: 'category.0',
               dataOption: firstChartDataOptions.category[0],
               attribute: firstChartDataOptions.category[0] as Attribute,
               value: '45-54',
@@ -272,7 +271,6 @@ describe('useComposedDashboard', () => {
           ],
           value: [
             {
-              id: 'value.0',
               dataOption: firstChartDataOptions.value[0],
               measure: firstChartDataOptions.value[0] as Measure,
               value: 4736826.749279762,
@@ -293,6 +291,128 @@ describe('useComposedDashboard', () => {
 
       // drilldown breadcrumbs should be still visible
       expect(await result.findAllByLabelText('drilldown-breadcrumbs')).toHaveLength(1);
+    });
+  });
+
+  describe('filter reference stability', () => {
+    it('should not recreate filters when JTD-related props change (themeSettings)', async () => {
+      // Use stable references for all props to isolate the theme change
+      const stableInitialFilters = [filterFactory.members(DM.Commerce.AgeRange, ['35-44'])];
+
+      const stableWidgetWithJtd = {
+        ...widgetPropsMock,
+        filters: [filterFactory.members(DM.Commerce.Gender, ['Female'])],
+      } as WidgetProps;
+
+      const stableWidgets = [stableWidgetWithJtd];
+
+      const stableWidgetsOptions = {
+        'widget-1': {
+          jtdConfig: {
+            enabled: true,
+            targets: [{ id: 'test-dashboard', caption: 'Test Dashboard' }],
+            interaction: { triggerMethod: 'rightclick' as const },
+          },
+        },
+      };
+
+      // Track widget and filter references across renders
+      let capturedRefs: {
+        widgetFilters: Filter[];
+        dashboardFilters: Filter[];
+        widgetHighlights: Filter[];
+      } | null = null;
+
+      const TestComponent = () => {
+        const { dashboard } = useComposedDashboard({
+          widgets: stableWidgets,
+          filters: stableInitialFilters,
+          widgetsOptions: stableWidgetsOptions,
+        });
+
+        // Capture filter references
+        if (dashboard.widgets && dashboard.widgets.length > 0) {
+          capturedRefs = {
+            widgetFilters: getProperty(dashboard.widgets[0], 'filters'),
+            dashboardFilters: dashboard.filters,
+            widgetHighlights: getProperty(dashboard.widgets[0], 'highlights'),
+          };
+        }
+
+        return <div data-testid="test-component">Test</div>;
+      };
+
+      // Use ThemeProvider to control themeSettings changes
+      const initialTheme = getDefaultThemeSettings();
+      let currentTheme = initialTheme;
+
+      const ThemeWrapper = ({
+        children,
+        theme,
+      }: {
+        children: React.ReactNode;
+        theme: typeof initialTheme;
+      }) => (
+        <ThemeProvider theme={theme} skipTracking>
+          {children}
+        </ThemeProvider>
+      );
+
+      const result = render(
+        <SisenseContextProvider {...contextProviderProps}>
+          <ThemeWrapper theme={currentTheme}>
+            <CombinedProvider>
+              <TestComponent />
+            </CombinedProvider>
+          </ThemeWrapper>
+        </SisenseContextProvider>,
+      );
+
+      // Wait for initial render
+      await waitFor(() => {
+        expect(result.getByTestId('test-component')).toBeInTheDocument();
+        expect(capturedRefs).not.toBeNull();
+      });
+
+      const initialRefs = capturedRefs!;
+
+      // Change themeSettings (this affects connectToWidgetPropsJtd but NOT connectToWidgetProps)
+      // The fix separates filter calculation (widgetsWithCommonFilters) from JTD application (widgetsWithFilterAndJtd)
+      // So changing theme should only affect JTD handlers/styling, not filters
+      currentTheme = {
+        ...initialTheme,
+        typography: {
+          ...initialTheme.typography,
+          hyperlinkColor: '#ff0000', // Change hyperlink color
+        },
+      };
+
+      result.rerender(
+        <SisenseContextProvider {...contextProviderProps}>
+          <ThemeWrapper theme={currentTheme}>
+            <CombinedProvider>
+              <TestComponent />
+            </CombinedProvider>
+          </ThemeWrapper>
+        </SisenseContextProvider>,
+      );
+
+      // Wait for rerender
+      await waitFor(() => {
+        expect(capturedRefs).not.toBeNull();
+      });
+
+      const afterThemeChangeRefs = capturedRefs!;
+
+      // KEY ASSERTIONS:
+      // Filters should maintain the SAME REFERENCE (not just equal content)
+      // This proves that widgetsWithCommonFilters did not recalculate
+      //
+      // Note: If this test fails, it means something in the dependency chain is still changing.
+      // The fix requires that widgetsOptions, widgets, and filters remain stable across renders.
+      expect(afterThemeChangeRefs.widgetFilters).toBe(initialRefs.widgetFilters);
+      expect(afterThemeChangeRefs.dashboardFilters).toBe(initialRefs.dashboardFilters);
+      expect(afterThemeChangeRefs.widgetHighlights).toBe(initialRefs.widgetHighlights);
     });
   });
 });

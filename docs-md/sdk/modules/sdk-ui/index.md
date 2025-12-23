@@ -32,7 +32,7 @@ React components and utilities for working with charts
 
 React components for data grids
 
-- [PivotTable](data-grids/function.PivotTable.md) <Badge type="beta" text="Beta" />
+- [PivotTable](data-grids/function.PivotTable.md)
 - [Table](data-grids/function.Table.md)
 
 ## Drilldown
@@ -69,7 +69,7 @@ React components and hooks for working with queries
 - [ExecuteQuery](queries/function.ExecuteQuery.md)
 - [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
 - [useExecuteCustomWidgetQuery](queries/function.useExecuteCustomWidgetQuery.md)
-- [useExecutePivotQuery](queries/function.useExecutePivotQuery.md) <Badge type="beta" text="Beta" />
+- [useExecutePivotQuery](queries/function.useExecutePivotQuery.md)
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 - [useQueryCache](queries/function.useQueryCache.md) <Badge type="alpha" text="Alpha" />
 
@@ -81,7 +81,7 @@ React components and utilities for working with dashboards
 - [Dashboard](dashboards/function.Dashboard.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md)
-- [PivotTableWidget](dashboards/function.PivotTableWidget.md) <Badge type="beta" text="Beta" />
+- [PivotTableWidget](dashboards/function.PivotTableWidget.md)
 - [useComposedDashboard](dashboards/function.useComposedDashboard.md)
 - [useCustomWidgets](dashboards/function.useCustomWidgets.md)
 - [useJtdWidget](dashboards/function.useJtdWidget.md)
@@ -127,3 +127,4 @@ For more information on requirements for enabling Generative AI features, please
 - [isGradient](functions/function.isGradient.md)
 - [isLinearGradient](functions/function.isLinearGradient.md)
 - [isRadialGradient](functions/function.isRadialGradient.md)
+- [useGetDataSourceDimensions](functions/function.useGetDataSourceDimensions.md)

@@ -2,7 +2,7 @@ import { JSONValue } from '@sisense/sdk-data';
 
 import { createAttributeFromName } from '../../common.js';
 import {
-  ATTRIBUTE_PREFIX,
+  DIMENSIONAL_NAME_PREFIX,
   FunctionCall,
   FunctionContext,
   isFunctionCall,
@@ -58,7 +58,7 @@ export function processCustomFormula(
           pathPrefix: fullArgPath,
         },
       });
-    } else if (typeof value === 'string' && value.startsWith(ATTRIBUTE_PREFIX)) {
+    } else if (typeof value === 'string' && value.startsWith(DIMENSIONAL_NAME_PREFIX)) {
       // Attribute string - process using createAttributeFromName
       try {
         processedContext[`${key}`] = createAttributeFromName(
@@ -77,7 +77,7 @@ export function processCustomFormula(
       // Invalid context value type
       throw new Error(
         `${fullArgPath}: Invalid context value for key '${key}'. ` +
-          `Expected a function call or attribute reference (${ATTRIBUTE_PREFIX}...), ` +
+          `Expected a function call or attribute reference (${DIMENSIONAL_NAME_PREFIX}...), ` +
           `but got: ${typeof value}`,
       );
     }

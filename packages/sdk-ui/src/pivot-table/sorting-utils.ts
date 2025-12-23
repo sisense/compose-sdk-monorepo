@@ -1,5 +1,5 @@
 import { getSortType, JaqlSortDirection } from '@sisense/sdk-data';
-import { type SortingSettingsChangePayload } from '@sisense/sdk-pivot-client';
+import { type SortingSettingsChangePayload } from '@sisense/sdk-pivot-ui';
 import isEqual from 'lodash-es/isEqual';
 import isString from 'lodash-es/isString';
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { DataService, PivotBuilder, PivotClient } from '@sisense/sdk-pivot-client';
+import type { DataService } from '@sisense/sdk-pivot-query-client';
+import { PivotBuilder, PivotClient } from '@sisense/sdk-pivot-ui';
 
 /**
  * Hook that recreates a new data service when new jaql request is needed to sent

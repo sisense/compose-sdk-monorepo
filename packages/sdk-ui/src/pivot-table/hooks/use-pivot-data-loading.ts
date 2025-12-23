@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import {
-  EVENT_QUERY_END,
-  EVENT_QUERY_START,
-  InitPageData,
-  JaqlRequest,
-  PivotBuilder,
-} from '@sisense/sdk-pivot-client';
+import type { InitPageData, JaqlRequest } from '@sisense/sdk-pivot-query-client';
+import { EVENT_QUERY_END, EVENT_QUERY_START, PivotBuilder } from '@sisense/sdk-pivot-ui';
 
 import { useHasChanged } from '@/common/hooks/use-has-changed';
 

@@ -26,6 +26,34 @@ Categorical value of the data point
 
 ***
 
+### `entries`
+
+**entries**?: `object`
+
+A collection of data point entries that represents values for all related `dataOptions`.
+
+> #### `entries.breakBy`
+>
+> **breakBy**?: [`DataPointEntry`](../../sdk-ui/type-aliases/type-alias.DataPointEntry.md)[]
+>
+> Data point entries for the `breakBy` data options
+>
+> #### `entries.category`
+>
+> **category**: [`DataPointEntry`](../../sdk-ui/type-aliases/type-alias.DataPointEntry.md)[]
+>
+> Data point entries for the `category` data options
+>
+> #### `entries.value`
+>
+> **value**: [`DataPointEntry`](../../sdk-ui/type-aliases/type-alias.DataPointEntry.md)[]
+>
+> Data point entries for the `value` data options
+>
+>
+
+***
+
 ### `seriesValue`
 
 **seriesValue**?: `number` \| `string`

@@ -22,29 +22,38 @@ export { PivotTableProps };
  * <script setup lang="ts">
  * import { ref } from 'vue';
  * import { measureFactory, filterFactory } from '@sisense/sdk-data';
- * import * as DM from '../assets/sample-retail-model';
  * import { PivotTable, type PivotTableProps } from '@sisense/sdk-ui-vue';
+ * import * as DM from '../assets/sample-retail-model';
  *
+ * const dimCategoryName = DM.DimProducts.CategoryName;
+ * const dimColor = DM.DimProducts.Color;
  * const dimProductName = DM.DimProducts.ProductName;
  * const measureTotalRevenue = measureFactory.sum(DM.Fact_Sale_orders.OrderRevenue, 'Total Revenue');
-const pivotTableProps = ref<PivotTableProps>({
-  dataSet: DM.DataSource,
-  dataOptions: {
-    rows: [dimProductName, dimColor],
-    columns: [dimCategoryName],
-    values: [measureTotalRevenue],
-  },
-  styleOptions: {
-    width: 1200,
-    height: 500,
-  },
-  filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 1000)],
-});
+ *
+ * const pivotTableProps = ref<PivotTableProps>({
+ *   dataSet: DM.DataSource,
+ *   dataOptions: {
+ *     rows: [dimProductName, dimColor],
+ *     columns: [dimCategoryName],
+ *     values: [measureTotalRevenue],
+ *   },
+ *   styleOptions: {
+ *     width: 1200,
+ *     height: 500,
+ *   },
+ *   filters: [filterFactory.topRanking(dimProductName, measureTotalRevenue, 1000)],
+ * });
+ *
  * </script>
  * ```
  * <img src="media://vue-pivot-table-example.png" width="800px" />
+ *
+ * @remarks
+ * Configuration options can also be applied within the scope of a `<SisenseContextProvider>` to control the default behavior of PivotTable, by changing available settings within `appConfig.chartConfig.tabular.*`
+ *
+ * Follow the link to {@link AppConfig} for more details on the available settings.
+ *
  * @group Data Grids
- * @beta
  */
 export const PivotTable = defineComponent({
   props: {

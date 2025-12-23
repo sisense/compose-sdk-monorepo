@@ -221,7 +221,6 @@ describe('useCommonFilters', () => {
             entries: {
               category: [
                 {
-                  id: 'category.0',
                   attribute: DM.Commerce.AgeRange,
                   value: '65+',
                 },
@@ -274,7 +273,6 @@ describe('useCommonFilters', () => {
               entries: {
                 category: [
                   {
-                    id: 'category.0',
                     attribute: DM.Commerce.AgeRange,
                     value: '19-24',
                     displayValue: '19-24',
@@ -286,7 +284,6 @@ describe('useCommonFilters', () => {
               entries: {
                 category: [
                   {
-                    id: 'category.0',
                     attribute: DM.Commerce.AgeRange,
                     value: '65+',
                     displayValue: '65+',
@@ -339,7 +336,6 @@ describe('useCommonFilters', () => {
             entries: {
               category: [
                 {
-                  id: 'category.0',
                   attribute: DM.Commerce.AgeRange,
                   value: '65+',
                   displayValue: '65+',
@@ -527,7 +523,6 @@ describe('useCommonFilters', () => {
             entries: {
               category: [
                 {
-                  id: 'category.0',
                   attribute: DM.Commerce.AgeRange,
                   value: '19-24',
                 },

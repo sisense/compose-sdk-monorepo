@@ -22,6 +22,7 @@ import {
   createJtdHyperlinkDataCellFormatter,
   createJtdHyperlinkHeaderCellFormatter,
   getPivotTargetActionability,
+  isPivotClickHandlerActionable,
 } from './jtd-formatters';
 import {
   convertPivotToDataPoint,
@@ -171,7 +172,17 @@ export const applyClickNavigationForPivot = (
     return widgetProps;
   }
 
-  const pivotHandler: PivotTableDataPointEventHandler = (point: PivotTableDataPoint) => {
+  const pivotHandler: PivotTableDataPointEventHandler = (
+    point: PivotTableDataPoint,
+    nativeEvent: MouseEvent,
+  ) => {
+    const { isActionable, matchingTarget } = isPivotClickHandlerActionable(config.jtdConfig, point);
+
+    if (!isActionable || !matchingTarget) {
+      widgetProps.onDataPointClick?.(point, nativeEvent);
+      return;
+    }
+
     handlePivotDataPointClick(
       {
         jtdConfig: config.jtdConfig,
@@ -189,7 +200,7 @@ export const applyClickNavigationForPivot = (
 
   return {
     ...widgetProps,
-    onDataPointClick: combineHandlers([widgetProps.onDataPointClick, pivotHandler]),
+    onDataPointClick: pivotHandler,
   };
 };
 

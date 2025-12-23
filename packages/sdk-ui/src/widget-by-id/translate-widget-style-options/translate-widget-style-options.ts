@@ -70,6 +70,7 @@ import {
   TableWidgetStyle,
   TextWidgetDtoStyle,
   TreemapWidgetStyle,
+  WidgetDashboardFilterMode,
   WidgetDesign,
   WidgetDto,
   WidgetStyle,
@@ -903,6 +904,9 @@ export function extractPivotTableStyleOptions(widget: WidgetDto): PivotTableStyl
     membersColor: widgetStyle.colors?.members,
     totalsColor: widgetStyle.colors?.totals,
     imageColumns: widget.options?.imageColumns,
+    highlightClickableCells:
+      widget.options?.selector &&
+      widget.options?.dashboardFiltersMode === WidgetDashboardFilterMode.SELECT,
   };
 }
 

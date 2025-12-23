@@ -52,32 +52,83 @@ type AbstractDataPointWithEntries = {
   entries?: Record<string, DataPointEntry | DataPointEntry[]>;
 };
 
+/**
+ * Extracts entries from a data point's entries object for a specific path.
+ * Normalizes single entries to arrays.
+ *
+ * @param entries - The entries object from a data point
+ * @param path - The path key to extract entries from
+ * @returns Array of entries
+ */
+function extractEntriesFromPath(
+  entries: Record<string, DataPointEntry | DataPointEntry[]>,
+  path: string,
+): DataPointEntry[] {
+  const entriesByPath = entries[path];
+
+  if (!entriesByPath) {
+    return [];
+  }
+
+  return Array.isArray(entriesByPath) ? entriesByPath : [entriesByPath];
+}
+
+/**
+ * Converts chart data points into filter selections by extracting attribute information
+ * from specified entry paths and grouping by attribute expression.
+ *
+ * @param points - Array of data points with entries
+ * @param selectablePaths - Array of entry path keys to extract (e.g., ['category'], ['x', 'y'])
+ * @returns Array of data selections grouped by attribute
+ */
 function getSelectionsFromPoints(
   points: AbstractDataPointWithEntries[],
   selectablePaths: string[],
-) {
+): DataSelection[] {
+  // Early return for empty inputs
+  if (!points.length || !selectablePaths.length) {
+    return [];
+  }
+
+  // Extract all entries from selectable paths across all points
   const selectableEntriesArray = points.flatMap(({ entries = {} }) =>
-    selectablePaths.flatMap((selectablePath) => {
-      const entriesByPath = entries[selectablePath];
-
-      if (!entriesByPath) {
-        return [];
-      }
-
-      const entriesArray = Array.isArray(entriesByPath) ? entriesByPath : [entriesByPath];
-      return entriesArray.filter(({ attribute }) => !!attribute);
-    }),
+    selectablePaths
+      .flatMap((selectablePath) => extractEntriesFromPath(entries, selectablePath))
+      .filter((entry): entry is DataPointEntry => !!entry.attribute),
   );
 
-  const groupedEntries = groupBy(selectableEntriesArray, ({ id }) => id);
+  // Group entries by attribute expression
+  const groupedEntries = groupBy(selectableEntriesArray, ({ attribute }) => attribute?.expression);
 
-  return Object.values(groupedEntries).map((entries) => {
-    return {
-      attribute: entries[0].attribute,
-      values: uniq(entries.map(({ value }) => value)),
-      displayValues: uniq(entries.map(({ displayValue }) => displayValue)),
-    } as DataSelection;
-  });
+  // Convert grouped entries to DataSelection objects
+  return Object.values(groupedEntries)
+    .filter((entries): entries is DataPointEntry[] => {
+      // Ensure we have entries with valid attributes
+      return entries.length > 0 && !!entries[0].attribute;
+    })
+    .map((entries) => {
+      // At this point, we know entries[0].attribute exists due to the filter above
+      const attribute = entries[0].attribute!;
+
+      // Filter out undefined values and get unique values
+      const values = uniq(
+        entries
+          .map(({ value }) => value)
+          .filter((value): value is string | number => value !== undefined && value !== null),
+      );
+
+      const displayValues = uniq(
+        entries
+          .map(({ displayValue }) => displayValue)
+          .filter((displayValue): displayValue is string => displayValue !== undefined),
+      );
+
+      return {
+        attribute,
+        values,
+        displayValues,
+      };
+    });
 }
 
 function getCartesianChartSelections(points: DataPoint[]): DataSelection[] {

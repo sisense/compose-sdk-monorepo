@@ -1,26 +1,28 @@
 import {
   Attribute,
   createAttributeHelper,
+  createDateDimension,
+  DateDimension,
   DateLevels,
   isDatetime,
   JaqlDataSourceForDto,
   MetadataTypes,
 } from '@sisense/sdk-data';
 
-import { NlqTranslationResult, NormalizedField, NormalizedTable } from '../types.js';
-import { ATTRIBUTE_PREFIX } from './types.js';
+import { NlqTranslationResult, NormalizedColumn, NormalizedTable } from '../types.js';
+import { DIMENSIONAL_NAME_PREFIX } from './types.js';
 
-function parseAttributeName(attributeName: string): {
+function parseDimensionalName(dimensionalName: string): {
   tableName: string;
   columnName: string;
   level?: string;
 } {
   // Parse "DM.Commerce.Date.Years" -> tableName: "Commerce", columnName: "Date", level: "Years"
   // Parse "DM.Brand.Brand" -> tableName: "Brand", columnName: "Brand", level: undefined
-  const parts = attributeName.split('.');
-  if (parts.length < 3 || `${parts[0]}.` !== ATTRIBUTE_PREFIX) {
+  const parts = dimensionalName.split('.');
+  if (parts.length < 3 || `${parts[0]}.` !== DIMENSIONAL_NAME_PREFIX) {
     throw new Error(
-      `Invalid attribute name format: "${attributeName}". Expected format: "${ATTRIBUTE_PREFIX}TableName.ColumnName[.Level]"`,
+      `Invalid dimensional element name format: "${dimensionalName}". Expected format: "${DIMENSIONAL_NAME_PREFIX}TableName.ColumnName[.Level]"`,
     );
   }
 
@@ -36,32 +38,40 @@ function parseAttributeName(attributeName: string): {
   return { tableName, columnName, level };
 }
 
-function findDataFieldAndLevel(
-  attributeName: string,
+function findTableAndColumn(
+  tableName: string,
+  columnName: string,
   tables: NormalizedTable[],
-): { field: NormalizedField; level?: string } {
-  const { tableName, columnName, level } = parseAttributeName(attributeName);
-
+): { table: NormalizedTable; column: NormalizedColumn } {
   const table = tables.find((t) => t.name === tableName);
   if (!table) {
     throw new Error(`Table "${tableName}" not found in the data model`);
   }
-
-  const field = table.columns.find((column) => column.name === columnName);
-  if (!field) {
+  const column = table.columns.find((col) => col.name === columnName);
+  if (!column) {
     throw new Error(`Column "${columnName}" not found in table "${tableName}"`);
   }
+  return { table, column };
+}
+
+function findColumnAndLevel(
+  dimensionalName: string,
+  tables: NormalizedTable[],
+): { column: NormalizedColumn; level?: string } {
+  const { tableName, columnName, level } = parseDimensionalName(dimensionalName);
+
+  const { column } = findTableAndColumn(tableName, columnName, tables);
 
   if (level) {
-    if (!isDatetime(field.dataType)) {
+    if (!isDatetime(column.dataType)) {
       throw new Error(
-        `Invalid date level "${level}" in attribute "${attributeName}". Column "${tableName}.${columnName}" is not a datetime column`,
+        `Invalid date level "${level}" in dimensional element "${dimensionalName}". Column "${tableName}.${columnName}" is not a datetime column`,
       );
     }
     const validLevels = DateLevels.all;
     if (!validLevels.includes(level)) {
       throw new Error(
-        `Invalid date level "${level}" in attribute "${attributeName}". Valid levels are: ${validLevels.join(
+        `Invalid date level "${level}" in dimensional element "${dimensionalName}". Valid levels are: ${validLevels.join(
           ', ',
         )}`,
       );
@@ -69,22 +79,22 @@ function findDataFieldAndLevel(
 
     // throw error for time levels on date only column
     const dateOnlyLevels = DateLevels.dateOnly;
-    if (field.dataType === 'date' && !dateOnlyLevels.includes(level)) {
+    if (column.dataType === 'date' && !dateOnlyLevels.includes(level)) {
       throw new Error(
-        `Invalid level "${level}" in attribute "${attributeName}". Column "${tableName}.${columnName}" is only a date column, not a datetime column`,
+        `Invalid level "${level}" in dimensional element "${dimensionalName}". Column "${tableName}.${columnName}" is only a date column, not a datetime column`,
       );
     }
 
     // throw error for date levels on time only column
     const timeOnlyLevels = DateLevels.timeOnly;
-    if (field.dataType === 'time' && !timeOnlyLevels.includes(level)) {
+    if (column.dataType === 'time' && !timeOnlyLevels.includes(level)) {
       throw new Error(
-        `Invalid level "${level}" in attribute "${attributeName}". Column "${tableName}.${columnName}" is only a time column, not a date column`,
+        `Invalid level "${level}" in dimensional element "${dimensionalName}". Column "${tableName}.${columnName}" is only a time column, not a date column`,
       );
     }
   }
 
-  return { field, level };
+  return { column, level };
 }
 
 /**
@@ -160,14 +170,44 @@ export function createAttributeFromName(
   dataSource: JaqlDataSourceForDto,
   tables: NormalizedTable[],
 ) {
-  const { field, level } = findDataFieldAndLevel(attributeName, tables);
+  const { column, level } = findColumnAndLevel(attributeName, tables);
 
   return createAttributeHelper({
-    expression: field.expression,
-    dataType: field.dataType,
+    expression: column.expression,
+    dataType: column.dataType,
     granularity: level,
     format: undefined,
     sort: undefined,
+    dataSource,
+  });
+}
+
+export function createDateDimensionFromName(
+  dateDimensionName: string,
+  dataSource: JaqlDataSourceForDto,
+  tables: NormalizedTable[],
+): DateDimension {
+  const { tableName, columnName, level } = parseDimensionalName(dateDimensionName);
+
+  // Reject if level is present - DateDimension should not have a level
+  if (level) {
+    throw new Error(
+      `Invalid DateDimension name format: "${dateDimensionName}". Expected format: "${DIMENSIONAL_NAME_PREFIX}TableName.ColumnName"`,
+    );
+  }
+
+  const { column } = findTableAndColumn(tableName, columnName, tables);
+
+  // Validate that the field is a datetime type
+  if (!isDatetime(column.dataType)) {
+    throw new Error(
+      `Invalid DateDimension name "${dateDimensionName}". Column "${tableName}.${columnName}" is not a datetime column (got ${column.dataType}).`,
+    );
+  }
+
+  return createDateDimension({
+    name: columnName,
+    expression: column.expression,
     dataSource,
   });
 }

@@ -2,7 +2,7 @@ import { Filter, FilterRelations, JSONArray, JSONValue, Measure } from '@sisense
 
 import { DataSchemaContext, NlqTranslationInput } from '../types';
 
-export const ATTRIBUTE_PREFIX = 'DM.';
+export const DIMENSIONAL_NAME_PREFIX = 'DM.';
 
 // Argument types for function validation
 export type ArgType =

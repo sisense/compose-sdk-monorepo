@@ -76,7 +76,7 @@ Promise resolving to query result with formatted data
 
 ***
 
-### executePivotQuery <Badge type="beta" text="Beta" />
+### executePivotQuery
 
 > **executePivotQuery**(`params`): `Promise`\< \{
   `data`: [`PivotQueryResultData`](../../sdk-data/interfaces/interface.PivotQueryResultData.md);

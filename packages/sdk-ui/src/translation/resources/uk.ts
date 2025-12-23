@@ -97,7 +97,7 @@ export const translation: TranslationDictionary = {
     synchronizedFilterInvalidProps:
       '`useSynchronizedFilter` хук потребує одне з [non-null `filterFromProps`] чи [`createEmptyFilter` function]',
     methodNotImplemented: 'Метод не реалізовано.',
-    noPivotClient: 'Pivot client не ініціалізовано',
+    noPivotQueryClient: 'Pivot query client не ініціалізовано',
     unexpectedCacheValue: 'Неочікуване значення кешу',
     notAMembersFilter: 'Фільтр не є MembersFilter',
     drilldownNoInitialDimension:

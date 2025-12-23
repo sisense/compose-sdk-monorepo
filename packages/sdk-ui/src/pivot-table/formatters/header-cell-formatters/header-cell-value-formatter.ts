@@ -1,5 +1,6 @@
 import { type Column } from '@sisense/sdk-data';
-import { type JaqlPanel, type PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
+import { type JaqlPanel, UserType } from '@sisense/sdk-pivot-query-client';
+import { type PivotTreeNode } from '@sisense/sdk-pivot-ui';
 
 import type { PivotTableDataOptions, StyledColumn } from '@/chart-data-options/types.js';
 import { applyFormatPlainText } from '@/chart-options-processor/translations/number-format-config.js';

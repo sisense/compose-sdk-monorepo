@@ -8,7 +8,7 @@ import {
 } from '@sisense/sdk-data';
 
 import { withLazyLoading } from '@/common/hooks/decorators/with-lazy-loading';
-import { useGetDataSourceFields } from '@/common/hooks/fusion-endpoints/use-get-data-source-fields';
+import { useGetDataSourceFields } from '@/data-source-dimensional-model/hooks/use-get-data-source-fields';
 import { useThemeContext } from '@/theme-provider';
 
 import { DimensionsBrowserContainer } from '../data-schema-browser/data-schema-browser.styles.js';
@@ -57,9 +57,7 @@ export const AddFilterDataBrowser = ({
     searchValue,
   });
 
-  const dimensions = useGetDimensionsFromDataSourceFields(dataSourceFields, {
-    selectedDataSource,
-  });
+  const dimensions = useGetDimensionsFromDataSourceFields(dataSourceFields, selectedDataSource);
 
   return (
     <DimensionsBrowserContainer theme={themeSettings}>
@@ -90,16 +88,13 @@ export const AddFilterDataBrowser = ({
 
 const useGetDimensionsFromDataSourceFields = (
   dataSourceFields: DataSourceField[] | undefined,
-  options: {
-    selectedDataSource: DataSource;
-  },
+  dataSource: DataSource,
 ): Dimension[] => {
-  const { selectedDataSource } = options;
   return useMemo(
     () =>
       dataSourceFields && dataSourceFields.length
-        ? getDimensionsFromDataSourceFields(dataSourceFields, selectedDataSource)
+        ? getDimensionsFromDataSourceFields(dataSourceFields, dataSource)
         : [],
-    [dataSourceFields, selectedDataSource],
+    [dataSourceFields, dataSource],
   );
 };

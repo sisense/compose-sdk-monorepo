@@ -220,6 +220,18 @@ export interface SisenseContextProviderProps {
    * @internal
    */
   alternativeSsoHost?: string;
+
+  /**
+   * Boolean flag to use the default palette from Compose SDK.
+   * Set to true in case of WAT authentication causing errors for the `/api/palettes` endpoint on older versions of Fusion (pre 2024.3)
+   *
+   * If not specified, the default value is `false`.
+   *
+   * @category Sisense App
+   *
+   * @internal
+   */
+  disableFusionPalette?: boolean;
 }
 
 /**

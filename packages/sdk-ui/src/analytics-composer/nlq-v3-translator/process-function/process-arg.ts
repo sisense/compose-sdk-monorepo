@@ -1,9 +1,14 @@
 /* eslint-disable max-lines */
-import { JaqlDataSourceForDto } from '@sisense/sdk-data';
+import { JaqlDataSourceForDto, LevelAttribute } from '@sisense/sdk-data';
 
 import { NormalizedTable } from '../../types.js';
-import { createAttributeFromName } from '../common.js';
-import { ArgInput, ATTRIBUTE_PREFIX, isFunctionCall, ProcessedArg } from '../types.js';
+import {
+  createAttributeFromName,
+  createDateDimensionFromName,
+  getAttributeTypeDisplayString,
+  isDateLevelAttribute,
+} from '../common.js';
+import { ArgInput, DIMENSIONAL_NAME_PREFIX, isFunctionCall, ProcessedArg } from '../types.js';
 import { processNode } from './process-node.js';
 
 /**
@@ -14,17 +19,26 @@ function isValidIsoDateString(value: string): boolean {
     return false;
   }
 
-  // Check ISO 8601 format - use Date.parse for validation
-  const timestamp = Date.parse(value);
-  const isValidFormat = !isNaN(timestamp) && value.length >= 10;
-
-  if (!isValidFormat) {
+  // Basic format check: ensure string starts with YYYY-MM-DD pattern
+  // This catches obviously malformed strings before parsing
+  const datePattern = /^\d{4}-\d{2}-\d{2}/;
+  if (!datePattern.test(value)) {
     return false;
   }
 
-  // Try to parse it as a Date and check if it's valid
+  // Check ISO 8601 format - use Date.parse for validation
+  // Date.parse already validates:
+  // - The string is parseable as a date
+  // - Date components are valid (rejects '2024-13-01', '2024-01-32', etc.)
+  // - The format is acceptable to JavaScript's Date parser
+  const timestamp = Date.parse(value);
+  if (isNaN(timestamp) || value.length < 10) {
+    return false;
+  }
+
+  // Verify the parsed date is valid
   const date = new Date(value);
-  return !isNaN(date.getTime()) && date.toISOString().startsWith(value.substring(0, 10));
+  return !isNaN(date.getTime());
 }
 
 /**
@@ -37,7 +51,7 @@ function processAttributeString(
   errorPrefix: string,
 ): ProcessedArg {
   // Already has DM prefix - validate and create attribute
-  if (attrStr.startsWith(ATTRIBUTE_PREFIX)) {
+  if (attrStr.startsWith(DIMENSIONAL_NAME_PREFIX)) {
     try {
       return createAttributeFromName(attrStr, dataSource, tables);
     } catch (error) {
@@ -47,7 +61,27 @@ function processAttributeString(
   }
 
   throw new Error(
-    `${errorPrefix}: Invalid attribute "${attrStr}". Expected format: "${ATTRIBUTE_PREFIX}TableName.ColumnName[.Level]"`,
+    `${errorPrefix}: Invalid attribute "${attrStr}". Expected format: "${DIMENSIONAL_NAME_PREFIX}TableName.ColumnName[.Level]"`,
+  );
+}
+
+function processDateDimensionString(
+  dateDimensionStr: string,
+  dataSource: JaqlDataSourceForDto,
+  tables: NormalizedTable[],
+  errorPrefix: string,
+): ProcessedArg {
+  if (dateDimensionStr.startsWith(DIMENSIONAL_NAME_PREFIX)) {
+    try {
+      return createDateDimensionFromName(dateDimensionStr, dataSource, tables);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`${errorPrefix}: ${errorMessage}`);
+    }
+  }
+
+  throw new Error(
+    `${errorPrefix}: Invalid date dimension string "${dateDimensionStr}". Expected format: "${DIMENSIONAL_NAME_PREFIX}TableName.ColumnName"`,
   );
 }
 
@@ -222,13 +256,35 @@ export function processArg(input: ArgInput): ProcessedArg {
       }
 
     case 'DateDimension':
-    case 'LevelAttribute':
+      if (typeof rawArg !== 'string') {
+        throw new Error(
+          `${errorPrefix}: Expected date dimension string, got ${typeof rawArg}. Example: "DM.Commerce.Date"`,
+        );
+      }
+      return processDateDimensionString(rawArg, dataSource, tables, errorPrefix);
+
+    case 'LevelAttribute': {
       if (typeof rawArg !== 'string') {
         throw new Error(
           `${errorPrefix}: Expected date attribute string, got ${typeof rawArg}. Example: "DM.Commerce.Date.Years"`,
         );
       }
-      return processAttributeString(rawArg, dataSource, tables, errorPrefix);
+      const levelAttribute = processAttributeString(
+        rawArg,
+        dataSource,
+        tables,
+        errorPrefix,
+      ) as LevelAttribute;
+      // Validate that the attribute is actually a date level attribute
+      if (!isDateLevelAttribute(levelAttribute)) {
+        throw new Error(
+          `${errorPrefix}: Attribute must be date/datetime type, got ${getAttributeTypeDisplayString(
+            levelAttribute,
+          )} attribute`,
+        );
+      }
+      return levelAttribute;
+    }
 
     case 'Measure | number':
       if (typeof rawArg === 'number') {

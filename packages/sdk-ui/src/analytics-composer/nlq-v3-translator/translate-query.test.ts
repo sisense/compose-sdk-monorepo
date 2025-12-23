@@ -363,7 +363,7 @@ describe('translateQuery', () => {
         category: 'dimensions',
         index: 0,
         input: 'DM.Category',
-        message: expect.stringContaining('Invalid attribute name format'),
+        message: expect.stringContaining('Invalid dimensional element name format'),
       });
     });
 

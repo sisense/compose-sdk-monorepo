@@ -78,27 +78,22 @@ describe('getDataPoint', () => {
 
     expect(entries).toMatchObject({
       x: {
-        id: 'x',
         value: '1',
         dataOption: dataOptions.x,
       },
       y: {
-        id: 'y',
         value: '2',
         dataOption: dataOptions.y,
       },
       breakByPoint: {
-        id: 'breakByPoint',
         value: '3',
         dataOption: dataOptions.breakByPoint,
       },
       breakByColor: {
-        id: 'breakByColor',
         value: '4',
         dataOption: dataOptions.breakByColor,
       },
       size: {
-        id: 'size',
         value: '5',
         dataOption: dataOptions.size,
       },
@@ -122,14 +117,12 @@ describe('getDataPoint', () => {
     expect(entries).toMatchObject({
       category: [
         {
-          id: 'category.0',
           value: 1,
           dataOption: dataOptions.breakBy[0],
         },
       ],
       value: [
         {
-          id: 'value.0',
           value: 2,
           dataOption: dataOptions.y[0],
         },
@@ -154,14 +147,12 @@ describe('getDataPoint', () => {
     expect(entries).toMatchObject({
       category: [
         {
-          id: 'category.0',
           value: 1,
           dataOption: dataOptions.breakBy[0],
         },
       ],
       value: [
         {
-          id: 'value.0',
           value: 2,
           dataOption: dataOptions.y[0],
         },
@@ -191,14 +182,12 @@ describe('getDataPoint', () => {
     expect(entries).toMatchObject({
       category: [
         {
-          id: 'category.0',
           value: 1,
           dataOption: dataOptions.breakBy[0],
         },
       ],
       value: [
         {
-          id: 'value.0',
           value: 2,
           dataOption: dataOptions.y[0],
         },
@@ -233,34 +222,28 @@ describe('getDataPoint', () => {
     expect(entries).toMatchObject({
       category: [
         {
-          id: 'category.0',
           value: 6,
           dataOption: dataOptions.category,
         },
       ],
       value: [
         {
-          id: 'value.0.boxMin',
           value: 1,
           dataOption: dataOptions.boxMin,
         },
         {
-          id: 'value.0.boxMedian',
           value: 2,
           dataOption: dataOptions.boxMedian,
         },
         {
-          id: 'value.0.boxMax',
           value: 3,
           dataOption: dataOptions.boxMax,
         },
         {
-          id: 'value.0.whiskerMin',
           value: 4,
           dataOption: dataOptions.whiskerMin,
         },
         {
-          id: 'value.0.whiskerMax',
           value: 5,
           dataOption: dataOptions.whiskerMax,
         },
@@ -297,26 +280,22 @@ describe('getDataPoint', () => {
     expect(entries).toMatchObject({
       category: [
         {
-          id: 'category.0',
           value: 1,
           dataOption: dataOptions.x[0],
         },
       ],
       value: [
         {
-          id: 'value.0.lowerBound',
           value: 2,
           dataOption: dataOptions.rangeValues[0][0],
         },
         {
-          id: 'value.0.upperBound',
           value: 3,
           dataOption: dataOptions.rangeValues[0][1],
         },
       ],
       breakBy: [
         {
-          id: 'breakBy.0',
           value: 4,
           dataOption: dataOptions.breakBy[0],
         },
@@ -350,21 +329,18 @@ describe('getDataPoint', () => {
     expect(entries).toMatchObject({
       category: [
         {
-          id: 'category.0',
           value: 1,
           dataOption: dataOptions.x[0],
         },
       ],
       value: [
         {
-          id: 'value.0',
           value: 2,
           dataOption: dataOptions.y[0],
         },
       ],
       breakBy: [
         {
-          id: 'breakBy.0',
           value: 3,
           dataOption: dataOptions.breakBy[0],
         },
@@ -392,12 +368,10 @@ describe('getDataPoint', () => {
 
     expect(entries).toMatchObject({
       date: {
-        id: 'date',
         value: '2023-01-15',
         dataOption: dataOptions.date,
       },
       value: {
-        id: 'value',
         value: 1500,
         dataOption: dataOptions.value,
       },
@@ -424,7 +398,6 @@ describe('getDataPoint', () => {
 
     expect(entries).toMatchObject({
       date: {
-        id: 'date',
         value: '2023-01-15',
         dataOption: dataOptions.date,
       },
@@ -451,7 +424,6 @@ describe('getDataPoint', () => {
 
     expect(entries).toMatchObject({
       date: {
-        id: 'date',
         value: '2023-01-15',
         dataOption: dataOptions.date,
       },

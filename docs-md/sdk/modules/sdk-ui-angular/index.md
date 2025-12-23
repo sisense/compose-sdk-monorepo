@@ -32,7 +32,7 @@ Angular components and utilities for working with charts
 
 Angular components for data grids
 
-- [PivotTableComponent](data-grids/class.PivotTableComponent.md) <Badge type="beta" text="Beta" />
+- [PivotTableComponent](data-grids/class.PivotTableComponent.md)
 - [TableComponent](data-grids/class.TableComponent.md)
 
 ## Drilldown
@@ -79,7 +79,7 @@ Angular components and utilities for working with dashboards
 - [DashboardComponent](dashboards/class.DashboardComponent.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md)
-- [PivotTableWidgetComponent](dashboards/class.PivotTableWidgetComponent.md) <Badge type="beta" text="Beta" />
+- [PivotTableWidgetComponent](dashboards/class.PivotTableWidgetComponent.md)
 - [WidgetComponent](dashboards/class.WidgetComponent.md)
 
 ## Fusion Assets

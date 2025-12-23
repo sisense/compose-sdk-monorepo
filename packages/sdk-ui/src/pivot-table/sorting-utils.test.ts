@@ -1,4 +1,4 @@
-import { SortingSettingsChangePayload } from '@sisense/sdk-pivot-client';
+import { SortingSettingsChangePayload } from '@sisense/sdk-pivot-ui';
 
 import { PivotTableDataOptionsInternal } from '..';
 import { preparePivotRowsSortCriteriaList } from './sorting-utils';

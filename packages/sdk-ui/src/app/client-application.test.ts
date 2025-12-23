@@ -1,4 +1,4 @@
-import { PivotClient } from '@sisense/sdk-pivot-client';
+import { PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { DimensionalQueryClient } from '@sisense/sdk-query-client';
 import { getAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
@@ -19,8 +19,8 @@ vi.mock('@sisense/sdk-query-client', () => ({
   DimensionalQueryClient: vi.fn(),
 }));
 
-vi.mock('@sisense/sdk-pivot-client', () => ({
-  PivotClient: vi.fn(),
+vi.mock('@sisense/sdk-pivot-query-client', () => ({
+  PivotQueryClient: vi.fn(),
 }));
 
 vi.mock('./settings/settings', () => ({
@@ -72,7 +72,7 @@ describe('createClientApplication', () => {
     });
   });
 
-  it('should create HttpClient, PivotClient, and QueryClient instances', async () => {
+  it('should create HttpClient, PivotQueryClient, and QueryClient instances', async () => {
     const authMock = {};
     (HttpClient as Mock).mockReturnValue({ login: vi.fn().mockResolvedValue(true) });
     (getSettings as Mock).mockResolvedValue({ user: { tenant: { name: 'system' } } });
@@ -85,10 +85,13 @@ describe('createClientApplication', () => {
       authMock,
       expect.stringContaining('sdk-ui'),
     );
-    expect(PivotClient).toHaveBeenCalledWith(expect.stringContaining(defaultParams.url), authMock);
+    expect(PivotQueryClient).toHaveBeenCalledWith(
+      expect.stringContaining(defaultParams.url),
+      authMock,
+    );
     expect(DimensionalQueryClient).toHaveBeenCalledWith(expect.anything(), expect.anything());
     expect(clientApp).toHaveProperty('httpClient');
-    expect(clientApp).toHaveProperty('pivotClient');
+    expect(clientApp).toHaveProperty('pivotQueryClient');
     expect(clientApp).toHaveProperty('queryClient');
   });
 
@@ -101,6 +104,6 @@ describe('createClientApplication', () => {
 
     await createClientApplication({ ...defaultParams, url: `${defaultParams.url}${tenantName}/` });
 
-    expect(PivotClient).toHaveBeenCalledWith(defaultParams.url, authMock);
+    expect(PivotQueryClient).toHaveBeenCalledWith(defaultParams.url, authMock);
   });
 });

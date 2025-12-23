@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { type ComponentType, forwardRef, useMemo } from 'react';
 
 import type { CreateStyled, Interpolation } from '@emotion/styled';
 
@@ -6,7 +6,8 @@ import { useThemeContext } from '@/theme-provider/theme-context';
 import { AnyObject } from '@/utils/utility-types';
 
 type StyledHtmlTag = keyof React.JSX.IntrinsicElements;
-type ComponentOrTag = React.ComponentType<any> | StyledHtmlTag;
+type Component = ComponentType<any>;
+type ComponentOrTag = Component | StyledHtmlTag;
 interface TemplateStringsArray extends Array<string> {
   raw: string[];
 }
@@ -38,7 +39,7 @@ function createPrefixedStyledComponentBuilder(
     template: TemplateStringsArray,
     ...interpolations: Array<Interpolation<Props>>
   ) {
-    const PrefixedStyledComponent = (props: Props) => {
+    const PrefixedStyledComponent = forwardRef<Component, Props>((props, ref) => {
       const { config } = useThemeContext();
       const cssSelectorPrefix = config?.cssSelectorPrefix?.enabled
         ? config?.cssSelectorPrefix?.value
@@ -48,14 +49,11 @@ function createPrefixedStyledComponentBuilder(
         const finalTemplate = cssSelectorPrefix
           ? wrapWithPrefix(template, cssSelectorPrefix)
           : template;
-        return baseStyled(componentOrTagName as React.ComponentType<any>)(
-          finalTemplate,
-          ...interpolations,
-        );
+        return baseStyled(componentOrTagName as Component)(finalTemplate, ...interpolations);
       }, [cssSelectorPrefix]);
 
-      return <StyledComponent {...props} />;
-    };
+      return <StyledComponent ref={ref} {...props} />;
+    });
 
     // Wraps the custom prefixed styled component with the base styled component to prevent broken emotion internals
     return baseStyled(PrefixedStyledComponent, { shouldForwardProp: () => true })``;

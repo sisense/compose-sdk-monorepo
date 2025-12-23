@@ -6941,7 +6941,6 @@ __metadata:
   dependencies:
     "@babel/preset-env": ^7.20.2
     "@sisense/sdk-common": "workspace:*"
-    "@sisense/sdk-rest-client": "workspace:*"
     "@types/lodash": ^4.14.201
     "@types/lodash-es": ^4.17.12
     "@types/numeral": 2.0.2
@@ -6968,9 +6967,27 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sisense/sdk-pivot-client@workspace:*, @sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client":
+"@sisense/sdk-pivot-query-client@workspace:*, @sisense/sdk-pivot-query-client@workspace:packages/sdk-pivot-query-client":
   version: 0.0.0-use.local
-  resolution: "@sisense/sdk-pivot-client@workspace:packages/sdk-pivot-client"
+  resolution: "@sisense/sdk-pivot-query-client@workspace:packages/sdk-pivot-query-client"
+  dependencies:
+    "@sisense/sdk-data": "workspace:*"
+    "@sisense/sdk-rest-client": "workspace:*"
+    "@types/lodash-es": ^4.17.12
+    "@types/socket.io-client": ^1.4.36
+    eslint: ^8.40.0
+    lodash-es: ^4.17.21
+    prettier: 2.8.4
+    raf: 3.4.0
+    socket.io-client: ^2.5.0
+    typescript: 4.8.4
+    uuid: ^9.0.0
+  languageName: unknown
+  linkType: soft
+
+"@sisense/sdk-pivot-ui@workspace:*, @sisense/sdk-pivot-ui@workspace:packages/sdk-pivot-ui":
+  version: 0.0.0-use.local
+  resolution: "@sisense/sdk-pivot-ui@workspace:packages/sdk-pivot-ui"
   dependencies:
     "@babel/preset-env": ^7.20.2
     "@emotion/cache": ^11.14.0
@@ -6978,6 +6995,7 @@ __metadata:
     "@emotion/styled": ^11.14.0
     "@sisense/sdk-common": "workspace:*"
     "@sisense/sdk-data": "workspace:*"
+    "@sisense/sdk-pivot-query-client": "workspace:*"
     "@sisense/sdk-rest-client": "workspace:*"
     "@sisense/sdk-shared-ui": "workspace:*"
     "@types/lodash-es": ^4.17.12
@@ -7020,7 +7038,7 @@ __metadata:
   dependencies:
     "@sisense/sdk-common": "workspace:*"
     "@sisense/sdk-data": "workspace:*"
-    "@sisense/sdk-pivot-client": "workspace:*"
+    "@sisense/sdk-pivot-query-client": "workspace:*"
     "@sisense/sdk-rest-client": "workspace:*"
     "@sisense/task-manager": ^0.1.0
     "@types/tar": ^6.1.4
@@ -7205,7 +7223,8 @@ __metadata:
     "@mui/x-data-grid": ^7.29.0
     "@sisense/sdk-common": "workspace:*"
     "@sisense/sdk-data": "workspace:*"
-    "@sisense/sdk-pivot-client": "workspace:*"
+    "@sisense/sdk-pivot-query-client": "workspace:*"
+    "@sisense/sdk-pivot-ui": "workspace:*"
     "@sisense/sdk-query-client": "workspace:*"
     "@sisense/sdk-rest-client": "workspace:*"
     "@sisense/sdk-tracking": "workspace:*"

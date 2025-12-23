@@ -22,7 +22,7 @@ import { WidgetsOptions } from '@/models/dashboard/types';
 import { WidgetProps } from '@/props.js';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 import { useThemeContext } from '@/theme-provider';
-import { CompleteThemeSettings } from '@/types';
+import { getDefaultThemeSettings } from '@/theme-provider/default-theme-settings';
 import {
   isChartWidgetProps,
   isPivotTableWidgetProps,
@@ -46,7 +46,7 @@ export const applyJtdToWidget = (
     originalWidgetFilters: Filter[];
     extraFilters?: Filter[];
     actions: JtdActions;
-    themeSettings: CompleteThemeSettings;
+    hyperlinkColor?: string;
   },
 ): WidgetProps => {
   const {
@@ -55,7 +55,7 @@ export const applyJtdToWidget = (
     originalWidgetFilters,
     extraFilters,
     actions,
-    themeSettings,
+    hyperlinkColor = getDefaultThemeSettings().typography.hyperlinkColor,
   } = config;
 
   if (!normalizedJtdConfig.enabled || !normalizedJtdConfig.jumpTargets?.length) {
@@ -91,7 +91,6 @@ export const applyJtdToWidget = (
   ) {
     updatedProps = applyClickNavigationForPivot(updatedProps, jtdTransformConfig, actions);
 
-    const { hyperlinkColor } = themeSettings.typography;
     updatedProps = applyPivotLinkStyling(updatedProps, jtdTransformConfig, hyperlinkColor);
   }
 
@@ -165,7 +164,7 @@ export const useJtdInternal = ({
         originalWidgetFilters,
         extraFilters: extraFilters || normalizedJtdConfig.extraFilters,
         actions,
-        themeSettings,
+        hyperlinkColor: themeSettings?.typography?.hyperlinkColor,
       });
     },
     [
@@ -176,7 +175,7 @@ export const useJtdInternal = ({
       dashboardFilters,
       widgetFilters,
       translate,
-      themeSettings,
+      themeSettings.typography.hyperlinkColor,
       app?.settings.jumpToDashboardConfig?.enabled,
     ],
   );

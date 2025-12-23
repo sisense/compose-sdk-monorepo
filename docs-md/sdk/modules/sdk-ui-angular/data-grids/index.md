@@ -6,5 +6,5 @@ title: Data Grids
 
 Angular components for data grids
 
-- [PivotTableComponent](class.PivotTableComponent.md) <Badge type="beta" text="Beta" />
+- [PivotTableComponent](class.PivotTableComponent.md)
 - [TableComponent](class.TableComponent.md)

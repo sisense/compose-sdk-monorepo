@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.16.1",
+  "version": "2.17.0",
   "type": "module",
   "exports": {
     ".": {
@@ -69,7 +69,8 @@
     "@mui/system": "^6.4.11",
     "@sisense/sdk-common": "workspace:*",
     "@sisense/sdk-data": "workspace:*",
-    "@sisense/sdk-pivot-client": "workspace:*",
+    "@sisense/sdk-pivot-query-client": "workspace:*",
+    "@sisense/sdk-pivot-ui": "workspace:*",
     "@sisense/sdk-query-client": "workspace:*",
     "@sisense/sdk-rest-client": "workspace:*",
     "@sisense/sdk-tracking": "workspace:*",

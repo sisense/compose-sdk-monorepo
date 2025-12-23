@@ -14,7 +14,7 @@
     "@sisense/sdk-modeling",
     "@sisense/sdk-query-client",
     "@sisense/sdk-rest-client",
-    "@sisense/sdk-pivot-client",
+    "@sisense/sdk-pivot-ui",
     "@sisense/sdk-ui",
     "@sisense/sdk-ui-angular",
     "@sisense/sdk-ui-preact",

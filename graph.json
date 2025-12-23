@@ -313,13 +313,13 @@
           "implicitDependencies": []
         }
       },
-      "@sisense/sdk-pivot-client": {
-        "name": "@sisense/sdk-pivot-client",
+      "@sisense/sdk-pivot-ui": {
+        "name": "@sisense/sdk-pivot-ui",
         "type": "lib",
         "data": {
-          "root": "packages/sdk-pivot-client",
-          "sourceRoot": "packages/sdk-pivot-client",
-          "name": "@sisense/sdk-pivot-client",
+          "root": "packages/sdk-pivot-ui",
+          "sourceRoot": "packages/sdk-pivot-ui",
+          "name": "@sisense/sdk-pivot-ui",
           "projectType": "library",
           "tags": ["npm:public", "npm:Sisense", "npm:Compose SDK"],
           "metadata": {
@@ -4476,19 +4476,19 @@
     "dependencies": {
       "@sisense/typedoc-plugin-diff-packages": [],
       "@sisense/typedoc-plugin-markdown": [],
-      "@sisense/sdk-pivot-client": [
+      "@sisense/sdk-pivot-ui": [
         {
-          "source": "@sisense/sdk-pivot-client",
+          "source": "@sisense/sdk-pivot-ui",
           "target": "@sisense/sdk-data",
           "type": "static"
         },
         {
-          "source": "@sisense/sdk-pivot-client",
+          "source": "@sisense/sdk-pivot-ui",
           "target": "@sisense/sdk-rest-client",
           "type": "static"
         },
         {
-          "source": "@sisense/sdk-pivot-client",
+          "source": "@sisense/sdk-pivot-ui",
           "target": "@sisense/sdk-shared-ui",
           "type": "static"
         }
@@ -4506,7 +4506,7 @@
         },
         {
           "source": "@sisense/sdk-query-client",
-          "target": "@sisense/sdk-pivot-client",
+          "target": "@sisense/sdk-pivot-ui",
           "type": "static"
         },
         {
@@ -4662,7 +4662,7 @@
         },
         {
           "source": "@sisense/sdk-ui",
-          "target": "@sisense/sdk-pivot-client",
+          "target": "@sisense/sdk-pivot-ui",
           "type": "static"
         },
         {

@@ -299,13 +299,11 @@ describe('jtd-handlers', () => {
         entries: {
           rows: [
             {
-              id: 'row1',
               dataOption: { name: 'Category' } as any,
               attribute: mockAttribute1,
               value: 'Electronics',
             },
             {
-              id: 'row2',
               dataOption: { name: 'Product' } as any,
               attribute: mockAttribute1,
               value: 'Laptop',
@@ -313,13 +311,12 @@ describe('jtd-handlers', () => {
           ],
           columns: [
             {
-              id: 'col1',
               dataOption: { name: 'Quarter' } as any,
               attribute: mockAttribute2,
               value: 'Q1',
             },
           ],
-          values: [{ id: 'val1', dataOption: { name: 'Revenue' } as any, value: 1000 }],
+          values: [{ dataOption: { name: 'Revenue' } as any, value: 1000 }],
         },
       };
 
@@ -360,7 +357,6 @@ describe('jtd-handlers', () => {
         entries: {
           rows: [
             {
-              id: 'row1',
               dataOption: { name: 'Category' } as any,
               attribute: mockAttribute1,
               value: 'Electronics',
@@ -368,13 +364,12 @@ describe('jtd-handlers', () => {
           ],
           columns: [
             {
-              id: 'col1',
               dataOption: { name: 'Quarter' } as any,
               attribute: mockAttribute2,
               value: 'Q1',
             },
           ],
-          values: [{ id: 'val1', dataOption: { name: 'Revenue' } as any, value: 150 }],
+          values: [{ dataOption: { name: 'Revenue' } as any, value: 150 }],
         },
       };
 
@@ -399,7 +394,6 @@ describe('jtd-handlers', () => {
         entries: {
           rows: [
             {
-              id: 'unsupported-dimension-id',
               dataOption: { name: 'Unsupported' } as any,
               attribute: mockAttribute1,
               value: 'Some Value',
@@ -448,7 +442,6 @@ describe('jtd-handlers', () => {
         entries: {
           rows: [
             {
-              id: 'any-dimension-id',
               dataOption: { name: 'Any Dimension' } as any,
               attribute: mockAttribute1,
               value: 'Some Value',
@@ -496,7 +489,6 @@ describe('jtd-handlers', () => {
         entries: {
           rows: [
             {
-              id: 'rows.0',
               dataOption: { name: 'Category' } as any,
               attribute: mockAttribute1,
               value: 'Electronics',
@@ -505,12 +497,10 @@ describe('jtd-handlers', () => {
           columns: [], // No columns
           values: [
             {
-              id: 'values.0',
               dataOption: { name: 'Revenue' } as any,
               value: 1500,
             },
             {
-              id: 'values.0',
               dataOption: { name: 'Profit' } as any,
               value: 300,
             },
@@ -519,18 +509,20 @@ describe('jtd-handlers', () => {
       };
 
       // Create a JTD config with value-specific targets
+      // Note: The dimension ID is generated from array position (values.length - 1)
+      // With 2 values entries, the deepest is at position 1, so the ID is 'values.1'
       const jtdConfigWithValueTargets: JtdConfig = {
         ...mockJtdConfig,
         jumpTargets: [
           {
             id: 'value-target-1',
             caption: 'Revenue Target',
-            pivotDimensions: ['values.0'],
+            pivotDimensions: ['values.1'],
           },
           {
             id: 'value-target-2',
             caption: 'Profit Target',
-            pivotDimensions: ['values.0'], // This should match the deepest value
+            pivotDimensions: ['values.1'], // This should match the deepest value
           },
         ],
       };
@@ -557,13 +549,11 @@ describe('jtd-handlers', () => {
           rows: [],
           columns: [
             {
-              id: 'columns.0',
               dataOption: { name: 'Year' } as any,
               attribute: mockAttribute1,
               value: '2023',
             },
             {
-              id: 'columns.1',
               dataOption: { name: 'Quarter' } as any,
               attribute: mockAttribute2,
               value: 'Q1',
@@ -611,7 +601,6 @@ describe('jtd-handlers', () => {
         entries: {
           rows: [
             {
-              id: 'rows.0',
               dataOption: { name: 'Category' } as any,
               attribute: mockAttribute1,
               value: 'Electronics',
@@ -619,7 +608,6 @@ describe('jtd-handlers', () => {
           ],
           columns: [
             {
-              id: 'columns.0',
               dataOption: { name: 'Year' } as any,
               attribute: mockAttribute1,
               value: '2023',
@@ -627,7 +615,6 @@ describe('jtd-handlers', () => {
           ],
           values: [
             {
-              id: 'values.0',
               dataOption: { name: 'Revenue' } as any,
               value: 1000,
             },
@@ -674,7 +661,6 @@ describe('jtd-handlers', () => {
           rows: [],
           columns: [
             {
-              id: 'columns.0',
               dataOption: { name: 'Year' } as any,
               attribute: mockAttribute1,
               value: '2023',
@@ -716,7 +702,6 @@ describe('jtd-handlers', () => {
         entries: {
           rows: [
             {
-              id: 'rows.0',
               dataOption: { name: 'Category' } as any,
               attribute: mockAttribute1,
               value: 'Electronics',
@@ -725,7 +710,6 @@ describe('jtd-handlers', () => {
           columns: [],
           values: [
             {
-              id: 'values.0',
               dataOption: { name: 'Revenue' } as any,
               value: 1500,
             },
@@ -765,19 +749,16 @@ describe('jtd-handlers', () => {
           rows: [],
           columns: [
             {
-              id: 'columns.0',
               dataOption: { name: 'Year' } as any,
               attribute: mockAttribute1,
               value: '2023',
             },
             {
-              id: 'columns.1',
               dataOption: { name: 'Quarter' } as any,
               attribute: mockAttribute2,
               value: 'Q1',
             },
             {
-              id: 'columns.2',
               dataOption: { name: 'Month' } as any,
               attribute: mockAttribute1,
               value: 'January',
@@ -829,7 +810,6 @@ describe('jtd-handlers', () => {
         entries: {
           rows: [
             {
-              id: 'rows.0',
               dataOption: { name: 'Category' } as any,
               attribute: mockAttribute1,
               value: 'Electronics',
@@ -838,17 +818,14 @@ describe('jtd-handlers', () => {
           columns: [],
           values: [
             {
-              id: 'values.0',
               dataOption: { name: 'Revenue' } as any,
               value: 1000,
             },
             {
-              id: 'values.1',
               dataOption: { name: 'Profit' } as any,
               value: 200,
             },
             {
-              id: 'values.2',
               dataOption: { name: 'Margin' } as any,
               value: 0.2,
             },
@@ -1451,7 +1428,6 @@ describe('jtd-handlers', () => {
         entries: {
           rows: [
             {
-              id: 'rows.0',
               dataOption: { name: 'Category' } as any,
               attribute: mockAttribute1,
               value: 'Electronics',
@@ -1460,7 +1436,6 @@ describe('jtd-handlers', () => {
           columns: [],
           values: [
             {
-              id: 'values.0',
               dataOption: { name: 'Revenue' } as any,
               value: 1000,
             },

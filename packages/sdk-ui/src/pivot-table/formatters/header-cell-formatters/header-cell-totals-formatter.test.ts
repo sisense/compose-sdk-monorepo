@@ -1,5 +1,5 @@
 import { TFunction } from '@sisense/sdk-common/dist/i18n/i18next';
-import { PanelType, UserType } from '@sisense/sdk-pivot-client';
+import { PanelType, UserType } from '@sisense/sdk-pivot-query-client';
 import get from 'lodash-es/get';
 
 import { PivotTableDataOptions } from '@/chart-data-options/types';

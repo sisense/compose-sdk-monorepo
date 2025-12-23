@@ -3,7 +3,10 @@ import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
 import { render } from '@testing-library/react';
 
 import { setupI18nMock } from '@/__test-helpers__';
-import { createMockPivotClient } from '@/pivot-table/__mocks__/pivot-client-mock';
+import { usePivotBuilderMock, usePivotClientMock } from '@/pivot-table/__mocks__/pivot-hooks';
+import { createMockPivotQueryClient } from '@/pivot-table/__mocks__/pivot-query-client-mock';
+import { usePivotBuilder } from '@/pivot-table/hooks/use-pivot-builder';
+import { usePivotClient } from '@/pivot-table/hooks/use-pivot-client';
 import { SisenseContextPayload } from '@/sisense-context/sisense-context';
 
 import { ClientApplication } from '../app/client-application';
@@ -16,14 +19,16 @@ setupI18nMock();
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');
+vi.mock('../pivot-table/hooks/use-pivot-client');
+vi.mock('../pivot-table/hooks/use-pivot-builder');
 
 describe('PivotTableWidget', () => {
   beforeEach(() => {
-    const mockPivotClient = createMockPivotClient();
+    const mockPivotQueryClient = createMockPivotQueryClient();
 
     const contextMock: SisenseContextPayload = {
       app: {
-        pivotClient: mockPivotClient,
+        pivotQueryClient: mockPivotQueryClient,
         settings: {
           trackingConfig: {
             enabled: false,
@@ -40,6 +45,10 @@ describe('PivotTableWidget', () => {
       },
     };
     useSisenseContextMock.mockReturnValue(contextMock);
+
+    // Mock the pivot hooks to return mock instances
+    vi.mocked(usePivotClient).mockImplementation(usePivotClientMock);
+    vi.mocked(usePivotBuilder).mockImplementation(usePivotBuilderMock);
   });
 
   it('should render empty pivot table widget', async () => {

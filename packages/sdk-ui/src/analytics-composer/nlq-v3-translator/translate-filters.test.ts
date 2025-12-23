@@ -161,7 +161,7 @@ describe('translateFilters', () => {
 
     expect(result.success).toBe(false);
     expect(getErrors(result)[0]).toContain(
-      'Invalid attribute name format: "DM.Country". Expected format: "DM.TableName.ColumnName[.Level]"',
+      'Invalid dimensional element name format: "DM.Country". Expected format: "DM.TableName.ColumnName[.Level]"',
     );
   });
 
@@ -180,7 +180,7 @@ describe('translateFilters', () => {
 
     expect(result.success).toBe(false);
     expect(getErrors(result)[0]).toContain(
-      'Invalid attribute name format: "DM.". Expected format: "DM.TableName.ColumnName[.Level]"',
+      'Invalid dimensional element name format: "DM.". Expected format: "DM.TableName.ColumnName[.Level]"',
     );
   });
 
@@ -244,7 +244,7 @@ describe('translateFilters', () => {
 
     expect(result.success).toBe(false);
     expect(getErrors(result)[0]).toContain(
-      'Invalid date level "Years" in attribute "DM.Country.Country.Years". Column "Country.Country" is not a datetime column',
+      'Invalid date level "Years" in dimensional element "DM.Country.Country.Years". Column "Country.Country" is not a datetime column',
     );
   });
 
@@ -266,7 +266,7 @@ describe('translateFilters', () => {
 
     expect(result.success).toBe(false);
     expect(getErrors(result)[0]).toContain(
-      'Invalid date level "InvalidLevel" in attribute "DM.Commerce.Date.InvalidLevel".',
+      'Invalid date level "InvalidLevel" in dimensional element "DM.Commerce.Date.InvalidLevel"',
     );
   });
 

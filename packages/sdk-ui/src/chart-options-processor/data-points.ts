@@ -6,30 +6,30 @@ import {
 } from '@sisense/sdk-data';
 import isDate from 'lodash-es/isDate';
 
-import { getDataOptionGranularity } from '@/chart-data-options/utils';
-import { formatDatetimeString } from '@/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
-import { formatDateValue } from '@/query/date-formats';
-
 import {
   BoxplotChartDataOptionsInternal,
   CalendarHeatmapChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
-  DataPointEntry,
   RangeChartDataOptionsInternal,
   ScatterChartDataOptionsInternal,
-  StyledColumn,
-  StyledMeasureColumn,
-} from '..';
-import { SisenseChartDataPoint } from '../sisense-chart/types';
+} from '@/chart-data-options/types';
+import { getDataOptionGranularity } from '@/chart-data-options/utils';
+import { formatDatetimeString } from '@/pivot-table/formatters/header-cell-formatters/header-cell-value-formatter';
+import { formatDateValue } from '@/query/date-formats';
+import { SisenseChartDataPoint } from '@/sisense-chart/types';
 import {
   BoxplotDataPoint,
   CalendarHeatmapDataPoint,
   DataPoint,
+  DataPointEntry,
   HighchartsPoint,
   ScatterDataPoint,
-} from '../types';
+  StyledColumn,
+  StyledMeasureColumn,
+} from '@/types';
+
 import { getDefaultDateFormat } from './translations/axis-section';
 import {
   applyFormatPlainText,
@@ -66,12 +66,8 @@ export function createFormatter(dataOption: StyledColumn | StyledMeasureColumn) 
   };
 }
 
-export function getDataPointMetadata(
-  dataOptionPath: string,
-  dataOption: StyledColumn | StyledMeasureColumn,
-) {
+export function getDataPointMetadata(dataOption: StyledColumn | StyledMeasureColumn) {
   return {
-    id: dataOptionPath,
     dataOption,
     ...(MetadataTypes.isAttribute(dataOption.column) && {
       attribute: dataOption.column,
@@ -96,7 +92,7 @@ const getCartesianDataPoint = (
   const categoryEntries: DataPointEntry[] = dataOptions.x.map((item, index) => {
     const value = point.custom?.xValue?.[index];
     return {
-      ...getDataPointMetadata(`category.${index}`, item),
+      ...getDataPointMetadata(item),
       value,
       displayValue: createFormatter(item)(value),
     } as DataPointEntry;
@@ -108,16 +104,16 @@ const getCartesianDataPoint = (
     .flatMap((item) => {
       const value = point.custom?.rawValue;
       return {
-        ...getDataPointMetadata(`value.${point.series.index}`, item),
+        ...getDataPointMetadata(item),
         value,
         displayValue: createFormatter(item)(value),
-      } as DataPointEntry;
+      };
     });
 
-  const breakByEntries: DataPointEntry[] = dataOptions.breakBy.map((item, index) => {
+  const breakByEntries: DataPointEntry[] = dataOptions.breakBy.map((item) => {
     const value = point.series?.options.custom?.rawValue?.[0];
     return {
-      ...getDataPointMetadata(`breakBy.${index}`, item),
+      ...getDataPointMetadata(item),
       value,
       displayValue: createFormatter(item)(value),
     } as DataPointEntry;
@@ -142,7 +138,7 @@ const getRangeDataPoint = (
   const categoryEntries: DataPointEntry[] = dataOptions.x.map((item, index) => {
     const value = point.custom?.xValue?.[index];
     return {
-      ...getDataPointMetadata(`category.${index}`, item),
+      ...getDataPointMetadata(item),
       value,
       displayValue: createFormatter(item)(value),
     } as DataPointEntry;
@@ -154,22 +150,19 @@ const getRangeDataPoint = (
     .flatMap((item) => {
       return item.map((boundItem, boundIndex) => {
         const isLowerBound = boundIndex === 0;
-        const dataOptionPath = `value.${point.series.index}.${
-          isLowerBound ? 'lowerBound' : 'upperBound'
-        }`;
         const value = isLowerBound ? point.options?.low : point.options?.high;
         return {
-          ...getDataPointMetadata(dataOptionPath, boundItem),
+          ...getDataPointMetadata(boundItem),
           value,
           displayValue: createFormatter(boundItem)(value),
         } as DataPointEntry;
       });
     });
 
-  const breakByEntries: DataPointEntry[] = dataOptions.breakBy.map((item, index) => {
+  const breakByEntries: DataPointEntry[] = dataOptions.breakBy.map((item) => {
     const value = point.series?.options.custom?.rawValue?.[0];
     return {
-      ...getDataPointMetadata(`breakBy.${index}`, item),
+      ...getDataPointMetadata(item),
       value,
       displayValue: createFormatter(item)(value),
     } as DataPointEntry;
@@ -196,7 +189,7 @@ const getScatterDataPoint = (
   if (dataOptions.x) {
     const value = point.custom.maskedX;
     entries.x = {
-      ...getDataPointMetadata(`x`, dataOptions.x),
+      ...getDataPointMetadata(dataOptions.x),
       value,
       // todo: add formatter after fixing scatter option to contain raw value.
       displayValue: value,
@@ -206,7 +199,7 @@ const getScatterDataPoint = (
   if (dataOptions.y) {
     const value = point.custom.maskedY;
     entries.y = {
-      ...getDataPointMetadata(`y`, dataOptions.y),
+      ...getDataPointMetadata(dataOptions.y),
       value,
       displayValue: value,
     } as DataPointEntry;
@@ -215,7 +208,7 @@ const getScatterDataPoint = (
   if (dataOptions.breakByPoint) {
     const value = point.custom?.maskedBreakByPoint;
     entries.breakByPoint = {
-      ...getDataPointMetadata(`breakByPoint`, dataOptions.breakByPoint),
+      ...getDataPointMetadata(dataOptions.breakByPoint),
       value: point.custom?.maskedBreakByPoint,
       displayValue: value,
     } as DataPointEntry;
@@ -224,7 +217,7 @@ const getScatterDataPoint = (
   if (dataOptions.breakByColor) {
     const value = point.custom?.maskedBreakByColor;
     entries.breakByColor = {
-      ...getDataPointMetadata(`breakByColor`, dataOptions.breakByColor),
+      ...getDataPointMetadata(dataOptions.breakByColor),
       value,
       displayValue: value,
     } as DataPointEntry;
@@ -233,7 +226,7 @@ const getScatterDataPoint = (
   if (dataOptions.size) {
     const value = point.custom.maskedSize;
     entries.size = {
-      ...getDataPointMetadata(`size`, dataOptions.size),
+      ...getDataPointMetadata(dataOptions.size),
       value,
       displayValue: value,
     } as DataPointEntry;
@@ -256,16 +249,16 @@ const getFunnelDataPoint = (
   const categoryEntries: DataPointEntry[] = dataOptions.breakBy.map((item, index) => {
     const value = point.custom?.xValue?.[index];
     return {
-      ...getDataPointMetadata(`category.${index}`, item),
+      ...getDataPointMetadata(item),
       value,
       displayValue: createFormatter(item)(value),
     } as DataPointEntry;
   });
 
-  const valueEntries: DataPointEntry[] = dataOptions.y.map((item, index) => {
+  const valueEntries: DataPointEntry[] = dataOptions.y.map((item) => {
     const value = point.custom?.rawValue;
     return {
-      ...getDataPointMetadata(`value.${index}`, item),
+      ...getDataPointMetadata(item),
       value,
       displayValue: createFormatter(item)(value),
     } as DataPointEntry;
@@ -291,7 +284,7 @@ const getPieDataPoint = (
   const categoryEntries: DataPointEntry[] = dataOptions.breakBy.map((item, index) => {
     const value = point.custom?.xValue?.[index];
     return {
-      ...getDataPointMetadata(`category.${index}`, item),
+      ...getDataPointMetadata(item),
       value,
       displayValue: createFormatter(item)(value),
     } as DataPointEntry;
@@ -300,10 +293,10 @@ const getPieDataPoint = (
   const hasMultipleValues = dataOptions.y.length >= 2;
   const valueEntries: DataPointEntry[] = dataOptions.y
     .filter((item, index) => !hasMultipleValues || point.series.index === index)
-    .map((item, index) => {
+    .map((item) => {
       const value = point.custom?.rawValue;
       return {
-        ...getDataPointMetadata(`value.${index}`, item),
+        ...getDataPointMetadata(item),
         value,
         displayValue: createFormatter(item)(value),
       } as DataPointEntry;
@@ -332,7 +325,7 @@ const getTreemapDataPoint = (
     .map((item, index) => {
       const value = isParent ? point.custom?.rawValues?.[index] : point.custom?.xValue?.[index];
       return {
-        ...getDataPointMetadata(`category.${index}`, item),
+        ...getDataPointMetadata(item),
         value,
         // todo: add formatter after fixing formatting on chart UI level. Currently it aligned.
         displayValue: value,
@@ -342,10 +335,10 @@ const getTreemapDataPoint = (
   const hasMultipleValues = dataOptions.y.length >= 2;
   const valueEntries: DataPointEntry[] = dataOptions.y
     .filter((item, index) => !hasMultipleValues || point.series.index === index)
-    .map((item, index) => {
+    .map((item) => {
       const value = isParent ? point.value : point.custom?.rawValue;
       return {
-        ...getDataPointMetadata(`value.${index}`, item),
+        ...getDataPointMetadata(item),
         value,
         displayValue: createFormatter(item)(value),
       } as DataPointEntry;
@@ -373,7 +366,7 @@ const getBoxplotDataPoint = (
     const value = point.options.y;
     entries.value = [
       {
-        ...getDataPointMetadata(`value.0.outlier`, dataOptions.outliers!),
+        ...getDataPointMetadata(dataOptions.outliers!),
         value,
         displayValue: createFormatter(dataOptions.outliers!)(value),
       } as DataPointEntry,
@@ -381,27 +374,27 @@ const getBoxplotDataPoint = (
   } else {
     entries.value = [
       {
-        ...getDataPointMetadata(`value.0.boxMin`, dataOptions.boxMin),
+        ...getDataPointMetadata(dataOptions.boxMin),
         value: point.options.q1!,
         displayValue: createFormatter(dataOptions.boxMin)(point.options.q1),
       },
       {
-        ...getDataPointMetadata(`value.0.boxMedian`, dataOptions.boxMedian),
+        ...getDataPointMetadata(dataOptions.boxMedian),
         value: point.options.median!,
         displayValue: createFormatter(dataOptions.boxMedian)(point.options.median),
       },
       {
-        ...getDataPointMetadata(`value.0.boxMax`, dataOptions.boxMax),
+        ...getDataPointMetadata(dataOptions.boxMax),
         value: point.options.q3!,
         displayValue: createFormatter(dataOptions.boxMax)(point.options.q3),
       },
       {
-        ...getDataPointMetadata(`value.0.whiskerMin`, dataOptions.whiskerMin),
+        ...getDataPointMetadata(dataOptions.whiskerMin),
         value: point.options.low!,
         displayValue: createFormatter(dataOptions.whiskerMin)(point.options.low),
       },
       {
-        ...getDataPointMetadata(`value.0.whiskerMax`, dataOptions.whiskerMax),
+        ...getDataPointMetadata(dataOptions.whiskerMax),
         value: point.options.high!,
         displayValue: createFormatter(dataOptions.whiskerMax)(point.options.high),
       },
@@ -412,7 +405,7 @@ const getBoxplotDataPoint = (
     const value = point.custom.xValue?.[0];
     entries.category = [
       {
-        ...getDataPointMetadata(`category.0`, dataOptions.category),
+        ...getDataPointMetadata(dataOptions.category),
         value,
         displayValue: createFormatter(dataOptions.category)(value),
       } as DataPointEntry,
@@ -441,7 +434,7 @@ const getCalendarHeatmapDataPoint = (
   const value = point.options.value!;
 
   const dateEntry: DataPointEntry = {
-    ...getDataPointMetadata('date', dataOptions.date),
+    ...getDataPointMetadata(dataOptions.date),
     value: dateString,
     displayValue: createFormatter(dataOptions.date)(date),
   };
@@ -450,7 +443,7 @@ const getCalendarHeatmapDataPoint = (
   const valueEntry: DataPointEntry | undefined =
     dataOptions.value && hasValue
       ? {
-          ...getDataPointMetadata('value', dataOptions.value),
+          ...getDataPointMetadata(dataOptions.value),
           value: typeof value === 'number' ? value : 0,
           displayValue: createFormatter(dataOptions.value)(value),
         }

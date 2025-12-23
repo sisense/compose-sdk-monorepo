@@ -62,7 +62,7 @@ const createIndicatorDataPoint = (
   // Create entries for each available data option
   if (dataOptions.value && dataOptions.value.length > 0) {
     entries.value = {
-      ...getDataPointMetadata('value', dataOptions.value[0]),
+      ...getDataPointMetadata(dataOptions.value[0]),
       value: chartData.value ?? 0,
       displayValue: createDisplayValue(chartData.value, dataOptions.value[0]),
     } as DataPointEntry;
@@ -74,7 +74,7 @@ const createIndicatorDataPoint = (
     chartData.secondary !== undefined
   ) {
     entries.secondary = {
-      ...getDataPointMetadata('secondary', dataOptions.secondary[0]),
+      ...getDataPointMetadata(dataOptions.secondary[0]),
       value: chartData.secondary,
       displayValue: createDisplayValue(chartData.secondary, dataOptions.secondary[0]),
     } as DataPointEntry;
@@ -82,7 +82,7 @@ const createIndicatorDataPoint = (
 
   if (dataOptions.min && dataOptions.min.length > 0 && chartData.min !== undefined) {
     entries.min = {
-      ...getDataPointMetadata('min', dataOptions.min[0]),
+      ...getDataPointMetadata(dataOptions.min[0]),
       value: chartData.min,
       displayValue: createDisplayValue(chartData.min, dataOptions.min[0]),
     } as DataPointEntry;
@@ -90,7 +90,7 @@ const createIndicatorDataPoint = (
 
   if (dataOptions.max && dataOptions.max.length > 0 && chartData.max !== undefined) {
     entries.max = {
-      ...getDataPointMetadata('max', dataOptions.max[0]),
+      ...getDataPointMetadata(dataOptions.max[0]),
       value: chartData.max,
       displayValue: createDisplayValue(chartData.max, dataOptions.max[0]),
     } as DataPointEntry;

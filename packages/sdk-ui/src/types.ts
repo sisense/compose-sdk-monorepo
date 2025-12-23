@@ -1159,6 +1159,14 @@ export interface PivotTableStyleOptions {
    * @default false
    */
   alwaysShowResultsPerPage?: boolean;
+
+  /**
+   * Boolean flag whether to highlight clickable cells with a background color
+   *
+   * @default false
+   * @internal
+   */
+  highlightClickableCells?: boolean;
 }
 
 /**
@@ -2497,27 +2505,21 @@ export type DataPoint = {
   seriesValue?: string | number;
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entries for the `category` data options */
     category: DataPointEntry[];
+    /** Data point entries for the `value` data options */
     value: DataPointEntry[];
+    /** Data point entries for the `breakBy` data options */
     breakBy?: DataPointEntry[];
   };
 };
 
 /**
  * A data point entry that represents a single dimension within a multi-dimensional data point.
- *
- * @internal
  */
 export type DataPointEntry = {
-  /**
-   * The unique identifier of the data point entry.
-   * It represents the path within the `dataOptions` object that identifies the related option.
-   */
-  readonly id: string;
   /** The data option associated with this entry */
   dataOption: Column | StyledColumn | MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
   /** The attribute associated with this data point entry */
@@ -2525,28 +2527,36 @@ export type DataPointEntry = {
   /** The measure associated with this data point entry */
   measure?: Measure;
   /** The raw value of the data point */
-  value: string | number;
-  /** The formated value of the data point */
+  value?: string | number;
+  /** The formatted value of the data point */
   displayValue?: string;
 };
 
 /** Data point in a Scatter chart. */
 export type ScatterDataPoint = {
+  /** Value of the x axis */
   x?: string | number;
+  /** Value of the y axis */
   y?: string | number;
+  /** Size of the data point */
   size?: number;
+  /** Value of the break by point */
   breakByPoint?: string;
+  /** Value of the break by color */
   breakByColor?: string;
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entry for the `x` data options */
     x?: DataPointEntry;
+    /** Data point entry for the `y` data options */
     y?: DataPointEntry;
+    /** Data point entry for the `size` data options */
     size?: DataPointEntry;
+    /** Data point entry for the `breakByPoint` data options */
     breakByPoint?: DataPointEntry;
+    /** Data point entry for the `breakByColor` data options */
     breakByColor?: DataPointEntry;
   };
 };
@@ -2571,12 +2581,13 @@ export type BoxplotDataPoint = {
   outlier?: number;
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entries for the `category` data options */
     category: DataPointEntry[];
+    /** Data point entries for the `value` data options */
     value: DataPointEntry[];
+    /** Data point entries for the `outliers` data options */
     outliers: DataPointEntry[];
   };
 };
@@ -2585,13 +2596,15 @@ export type BoxplotDataPoint = {
 export type IndicatorDataPoint = {
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entry for the `value` data options */
     value?: DataPointEntry;
+    /** Data point entry for the `secondary` data options */
     secondary?: DataPointEntry;
+    /** Data point entry for the `min` data options */
     min?: DataPointEntry;
+    /** Data point entry for the `max` data options */
     max?: DataPointEntry;
   };
 };
@@ -2602,11 +2615,11 @@ export type IndicatorDataPoint = {
 export type CalendarHeatmapDataPoint = {
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entry for the `date` data options */
     date: DataPointEntry;
+    /** Data point entry for the `value` data options */
     value?: DataPointEntry;
   };
 };
@@ -2643,12 +2656,13 @@ export type PivotTableDataPoint = {
   isTotalCell: boolean;
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries: {
+    /** Data point entries for the `rows` data options */
     rows?: DataPointEntry[];
+    /** Data point entries for the `columns` data options */
     columns?: DataPointEntry[];
+    /** Data point entries for the `values` data options */
     values?: DataPointEntry[];
   };
 };
@@ -2659,11 +2673,11 @@ export type PivotTableDataPoint = {
 export type AreamapDataPoint = GeoDataElement & {
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entries for the `geo` data options */
     geo: DataPointEntry[];
+    /** Data point entries for the `color` data options */
     color: DataPointEntry[];
   };
 };
@@ -2682,13 +2696,15 @@ export type ScattermapDataPoint = {
   coordinates: Coordinates;
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entries for the `geo` data options */
     geo: DataPointEntry[];
+    /** Data point entry for the `size` data options */
     size?: DataPointEntry;
+    /** Data point entry for the `colorBy` data options */
     colorBy?: DataPointEntry;
+    /** Data point entry for the `details` data options */
     details?: DataPointEntry;
   };
 };

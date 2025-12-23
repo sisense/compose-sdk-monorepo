@@ -20,8 +20,7 @@ describe('getPivotTableDataPoint', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockGetDataPointMetadata.mockImplementation((id, dataOption) => ({
-      id,
+    mockGetDataPointMetadata.mockImplementation((dataOption) => ({
       dataOption,
     }));
   });

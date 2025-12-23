@@ -1,4 +1,5 @@
-import { JaqlPanel, PivotDataNode, PivotTreeNode, UserType } from '@sisense/sdk-pivot-client';
+import { type JaqlPanel, UserType } from '@sisense/sdk-pivot-query-client';
+import { PivotDataNode, PivotTreeNode } from '@sisense/sdk-pivot-ui';
 import { beforeEach } from 'vitest';
 
 import { PivotTableDataOptions, type StyledMeasureColumn } from '@/chart-data-options/types';

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   EVENT_SORTING_SETTINGS_CHANGED,
   type SortingSettingsChangePayload,
-} from '@sisense/sdk-pivot-client';
+} from '@sisense/sdk-pivot-ui';
 
 import { LoadingOverlay } from '@/common/components/loading-overlay';
 import { useHasChanged } from '@/common/hooks/use-has-changed';
@@ -21,6 +21,7 @@ import { useSisenseContext } from '../sisense-context/sisense-context';
 import { useApplyPivotTableFormatting } from './hooks/use-apply-pivot-table-formatting';
 import { usePivotTableQuery } from './hooks/use-get-pivot-table-query';
 import { usePivotBuilder } from './hooks/use-pivot-builder';
+import { usePivotClient } from './hooks/use-pivot-client';
 import { usePivotDataLoading } from './hooks/use-pivot-data-loading';
 import { usePivotDataService } from './hooks/use-pivot-data-service';
 import { usePivotTableDataOptionsInternal } from './hooks/use-pivot-table-data-options-internal';
@@ -56,12 +57,13 @@ export const PIVOT_WIDGET_PADDING = 8;
  *         totalsCalculation: 'sum',
  *       },
  *     ],
- *     grandTotals: { title: 'Grand Total', rows: true, columns: true },
+ *     grandTotals: { rows: true, columns: true },
  *   }}
  *   filters={[filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])]}
  *   styleOptions={{ width: 1000, height: 600, rowsPerPage: 50 }}
  * />
  * ```
+ * <img src="media://pivot-example-1.png" width="800px" />
  *
  * (2) Example of PivotTable with the predefined sorting configuration:
  * - Sort "Condition" row by its values in Ascending order. This is equivalent to users clicking on the "Condition" row heading and hit Sort Ascending (A-Z)
@@ -104,12 +106,40 @@ export const PIVOT_WIDGET_PADDING = 8;
  * ```
  *
  * <img src="media://pivot-sorting-example-1.png" width="800px" />
+ *
+ * (3) Example of PivotTable with auto content width enabled:
+ * When {@link PivotTableStyleOptions.isAutoContentWidth | `isAutoContentWidth: true`} is set, all vertical columns will be resized to fit within the component width without requiring horizontal scroll.
+ *
+ * ```tsx
+ * <PivotTable
+ *   dataSet={DM.DataSource}
+ *   dataOptions={{
+ *     rows: [DM.Category.Category],
+ *     columns: [DM.Commerce.Gender],
+ *     values: [
+ *       measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
+ *       measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+ *     ],
+ *   }}
+ *   styleOptions={{
+ *     width: 800,
+ *     height: 600,
+ *     isAutoContentWidth: true,
+ *     rowsPerPage: 50,
+ *   }}
+ * />
+ * ```
+ * <img src="media://pivot-auto-content-width-true.png" width="800px" />
+ *
+ * @remarks
+ * Configuration options can also be applied within the scope of a `<SisenseContextProvider>` to control the default behavior of PivotTable, by changing available settings within `appConfig.chartConfig.tabular.*`
+ *
+ * Follow the link to {@link AppConfig} for more details on the available settings.
+ *
  * @param props - Pivot Table properties
  * @returns Pivot Table component
  * @group Data Grids
- * @beta
  */
-
 export const PivotTable = asSisenseComponent({
   componentName: 'PivotTable',
 })((pivotTableProps: PivotTableProps) => {
@@ -132,9 +162,9 @@ export const PivotTable = asSisenseComponent({
   // retrieve and validate the pivot client
   const { app } = useSisenseContext();
   const { themeSettings } = useThemeContext();
-  const pivotClient = app?.pivotClient;
+  const pivotQueryClient = app?.pivotQueryClient;
 
-  if (!pivotClient) {
+  if (!pivotQueryClient) {
     throw new TranslatableError('errors.noPivotClient');
   }
 
@@ -151,6 +181,7 @@ export const PivotTable = asSisenseComponent({
     throw error;
   }
 
+  const pivotClient = usePivotClient({ pivotQueryClient });
   const pivotBuilder = usePivotBuilder({ pivotClient });
   const isJaqlChanged = useHasChanged(jaql);
   const isForceReload = refreshCounter > 0 && useHasChanged(refreshCounter);

@@ -28,12 +28,30 @@ function calcPivotTableWidgetHeight(pivotTableHeight: number | undefined) {
  *     rows: [DM.Category.Category],
  *     values: [measureFactory.sum(DM.Commerce.Cost, 'Total Cost')]
  *   }}
+ *   title="Pivot Table Widget Example"
+ *   styleOptions={{
+ *     spaceAround: 'Medium',
+ *     cornerRadius: 'Large',
+ *     shadow: 'Light',
+ *     border: true,
+ *     borderColor: '#e0e0e0',
+ *     backgroundColor: '#ffffff',
+ *     header: {
+ *       hidden: false,
+ *       titleTextColor: '#333333',
+ *       titleAlignment: 'Center',
+ *       dividerLine: true,
+ *       dividerLineColor: '#e0e0e0',
+ *       backgroundColor: '#f5f5f5'
+ *     }
+ *   }}
  * />
  * ```
+ * <img src="media://pivot-widget-example.png" width="800px" />
+ *
  * @param props - Pivot Table Widget properties
  * @returns Widget component representing a pivot table
  * @group Dashboards
- * @beta
  */
 export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSisenseComponent({
   componentName: 'PivotTableWidget',

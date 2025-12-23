@@ -5,7 +5,6 @@
 import { CustomFunctionProcessor } from '../types.js';
 import { processCustomFormula } from './custom-formula/process-custom-formula.js';
 import {
-  processDateFilter,
   processExcludeFilter,
   processNumericFilter,
   processStringFilter,
@@ -49,18 +48,6 @@ export const FUNCTION_PROCESSORS: Record<string, CustomFunctionProcessor> = {
   'filterFactory.endsWith': processStringFilter,
   'filterFactory.doesntEndWith': processStringFilter,
   'filterFactory.like': processStringFilter,
-
-  // Date filters
-  'filterFactory.dateFrom': processDateFilter,
-  'filterFactory.dateTo': processDateFilter,
-  'filterFactory.dateRange': processDateFilter,
-  'filterFactory.dateRelative': processDateFilter,
-  'filterFactory.dateRelativeFrom': processDateFilter,
-  'filterFactory.dateRelativeTo': processDateFilter,
-  'filterFactory.thisYear': processDateFilter,
-  'filterFactory.thisMonth': processDateFilter,
-  'filterFactory.thisQuarter': processDateFilter,
-  'filterFactory.today': processDateFilter,
 
   // Exclude filter
   'filterFactory.exclude': processExcludeFilter,

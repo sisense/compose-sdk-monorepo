@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.17.0] - 2025-12-22
+
+### Added
+- Add `widgetModelTranslator.toWidgetProps` transformer to be able to use widget models in the `Widget` component.
+- Extend DataPoint with `entries` - additional `dataOptions` context of the interacted DataPoint.
+- Add `useGetDataSourceDimensions` hook for loading the datamodel at runtime.
+
+### Changed
+- Split `sdk-pivot-client` into 2 separate packages - `sdk-pivot-query-client` (pure data layer) and `sdk-pivot-ui` (ui components)
+- Move component `PivotTable` from beta to General Availability (GA)
+- Fix overlap of cross-filtering and JTD in Pivot
+- Load Fusion palette by default when using WAT (Web Access Token) authentication
+- Fix redundant JAQL requests in Jump to Dashboard functionality
+- Accept ISO date strings without timezone in NLQ (Natural Language Query) translator
+- Fix issue with opening "add filter popup"
+
 ## [2.16.1] - 2025-12-12
 
 ### Changed

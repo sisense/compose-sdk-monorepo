@@ -8,25 +8,30 @@
 import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
 import { fireEvent, render } from '@testing-library/react';
 
-import { createMockPivotClient } from '@/pivot-table/__mocks__/pivot-client-mock';
 import { SisenseContextPayload } from '@/sisense-context/sisense-context';
 
 import { ClientApplication } from '../app/client-application';
 import { executePivotQueryMock } from '../query/__mocks__/execute-query';
 import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
 import { mockPivotTableProps } from './__mocks__/mocks';
+import { usePivotBuilderMock, usePivotClientMock } from './__mocks__/pivot-hooks';
+import { createMockPivotQueryClient } from './__mocks__/pivot-query-client-mock';
+import { usePivotBuilder } from './hooks/use-pivot-builder';
+import { usePivotClient } from './hooks/use-pivot-client';
 import { PivotTable } from './pivot-table';
 
 vi.mock('../query/execute-query');
 vi.mock('../sisense-context/sisense-context');
+vi.mock('./hooks/use-pivot-client');
+vi.mock('./hooks/use-pivot-builder');
 
 describe('PivotTable', () => {
   beforeEach(() => {
-    const mockPivotClient = createMockPivotClient();
+    const mockPivotQueryClient = createMockPivotQueryClient();
 
     const contextMock: SisenseContextPayload = {
       app: {
-        pivotClient: mockPivotClient,
+        pivotQueryClient: mockPivotQueryClient,
         settings: {
           trackingConfig: { enabled: false },
         },
@@ -41,6 +46,10 @@ describe('PivotTable', () => {
       },
     };
     useSisenseContextMock.mockReturnValue(contextMock);
+
+    // Mock the pivot hooks to return mock instances
+    vi.mocked(usePivotClient).mockImplementation(usePivotClientMock);
+    vi.mocked(usePivotBuilder).mockImplementation(usePivotBuilderMock);
   });
   it('should render empty pivot table', async () => {
     executePivotQueryMock.mockResolvedValue(EMPTY_PIVOT_QUERY_RESULT_DATA);
