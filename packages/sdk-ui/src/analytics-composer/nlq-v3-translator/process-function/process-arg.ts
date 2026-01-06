@@ -1,12 +1,12 @@
 /* eslint-disable max-lines */
 import { JaqlDataSourceForDto, LevelAttribute } from '@sisense/sdk-data';
 
-import { NormalizedTable } from '../../types.js';
 import {
   createAttributeFromName,
   createDateDimensionFromName,
   getAttributeTypeDisplayString,
   isDateLevelAttribute,
+  type SchemaIndex,
 } from '../common.js';
 import { ArgInput, DIMENSIONAL_NAME_PREFIX, isFunctionCall, ProcessedArg } from '../types.js';
 import { processNode } from './process-node.js';
@@ -47,13 +47,13 @@ function isValidIsoDateString(value: string): boolean {
 function processAttributeString(
   attrStr: string,
   dataSource: JaqlDataSourceForDto,
-  tables: NormalizedTable[],
+  schemaIndex: SchemaIndex,
   errorPrefix: string,
 ): ProcessedArg {
   // Already has DM prefix - validate and create attribute
   if (attrStr.startsWith(DIMENSIONAL_NAME_PREFIX)) {
     try {
-      return createAttributeFromName(attrStr, dataSource, tables);
+      return createAttributeFromName(attrStr, dataSource, schemaIndex);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(`${errorPrefix}: ${errorMessage}`);
@@ -68,12 +68,12 @@ function processAttributeString(
 function processDateDimensionString(
   dateDimensionStr: string,
   dataSource: JaqlDataSourceForDto,
-  tables: NormalizedTable[],
+  schemaIndex: SchemaIndex,
   errorPrefix: string,
 ): ProcessedArg {
   if (dateDimensionStr.startsWith(DIMENSIONAL_NAME_PREFIX)) {
     try {
-      return createDateDimensionFromName(dateDimensionStr, dataSource, tables);
+      return createDateDimensionFromName(dateDimensionStr, dataSource, schemaIndex);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(`${errorPrefix}: ${errorMessage}`);
@@ -93,7 +93,7 @@ function processDateDimensionString(
  */
 export function processArg(input: ArgInput): ProcessedArg {
   const rawArg = input.data;
-  const { argSchema, dataSource, tables, pathPrefix } = input.context;
+  const { argSchema, dataSource, schemaIndex, pathPrefix } = input.context;
   const errorPrefix = pathPrefix;
 
   // Handle undefined arguments
@@ -155,7 +155,7 @@ export function processArg(input: ArgInput): ProcessedArg {
           `${errorPrefix}: Expected attribute string, got ${typeof rawArg}. Example: "DM.Commerce.Revenue"`,
         );
       }
-      return processAttributeString(rawArg, dataSource, tables, errorPrefix);
+      return processAttributeString(rawArg, dataSource, schemaIndex, errorPrefix);
 
     case 'Attribute[]':
       if (!Array.isArray(rawArg)) {
@@ -167,7 +167,7 @@ export function processArg(input: ArgInput): ProcessedArg {
         if (typeof item !== 'string') {
           throw new Error(`${errorPrefix}[${i}]: Expected attribute string, got ${typeof item}`);
         }
-        return processAttributeString(item, dataSource, tables, `${errorPrefix}[${i}]`);
+        return processAttributeString(item, dataSource, schemaIndex, `${errorPrefix}[${i}]`);
       });
 
     case 'Measure':
@@ -179,7 +179,7 @@ export function processArg(input: ArgInput): ProcessedArg {
       }
       return processNode({
         data: rawArg,
-        context: { dataSource, tables, pathPrefix: errorPrefix },
+        context: { dataSource, schemaIndex, pathPrefix: errorPrefix },
       });
 
     case 'Measure[]':
@@ -196,7 +196,7 @@ export function processArg(input: ArgInput): ProcessedArg {
         }
         return processNode({
           data: item,
-          context: { dataSource, tables, pathPrefix: `${errorPrefix}[${i}]: ` },
+          context: { dataSource, schemaIndex, pathPrefix: `${errorPrefix}[${i}]: ` },
         });
       });
 
@@ -208,7 +208,7 @@ export function processArg(input: ArgInput): ProcessedArg {
       }
       return processNode({
         data: rawArg,
-        context: { dataSource, tables, pathPrefix: errorPrefix },
+        context: { dataSource, schemaIndex, pathPrefix: errorPrefix },
       });
 
     case 'Filter[]':
@@ -225,7 +225,7 @@ export function processArg(input: ArgInput): ProcessedArg {
         }
         return processNode({
           data: item,
-          context: { dataSource, tables, pathPrefix: `${errorPrefix}[${i}]: ` },
+          context: { dataSource, schemaIndex, pathPrefix: `${errorPrefix}[${i}]: ` },
         });
       });
 
@@ -241,13 +241,13 @@ export function processArg(input: ArgInput): ProcessedArg {
           }
           return processNode({
             data: item,
-            context: { dataSource, tables, pathPrefix: `${errorPrefix}[${i}]: ` },
+            context: { dataSource, schemaIndex, pathPrefix: `${errorPrefix}[${i}]: ` },
           });
         });
       } else if (isFunctionCall(rawArg)) {
         return processNode({
           data: rawArg,
-          context: { dataSource, tables, pathPrefix: errorPrefix },
+          context: { dataSource, schemaIndex, pathPrefix: errorPrefix },
         });
       } else {
         throw new Error(
@@ -261,7 +261,7 @@ export function processArg(input: ArgInput): ProcessedArg {
           `${errorPrefix}: Expected date dimension string, got ${typeof rawArg}. Example: "DM.Commerce.Date"`,
         );
       }
-      return processDateDimensionString(rawArg, dataSource, tables, errorPrefix);
+      return processDateDimensionString(rawArg, dataSource, schemaIndex, errorPrefix);
 
     case 'LevelAttribute': {
       if (typeof rawArg !== 'string') {
@@ -272,7 +272,7 @@ export function processArg(input: ArgInput): ProcessedArg {
       const levelAttribute = processAttributeString(
         rawArg,
         dataSource,
-        tables,
+        schemaIndex,
         errorPrefix,
       ) as LevelAttribute;
       // Validate that the attribute is actually a date level attribute
@@ -292,7 +292,7 @@ export function processArg(input: ArgInput): ProcessedArg {
       } else if (isFunctionCall(rawArg)) {
         return processNode({
           data: rawArg,
-          context: { dataSource, tables, pathPrefix: errorPrefix },
+          context: { dataSource, schemaIndex, pathPrefix: errorPrefix },
         });
       } else {
         throw new Error(

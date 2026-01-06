@@ -56,6 +56,7 @@ export type {
   DataColorOptions,
   // Style related:
   DataLimits,
+  DataOptionLocation,
   DataPoint,
   DateConfig,
   DateLevel,
@@ -100,6 +101,9 @@ export type {
   PieSubtype,
   PivotRowsSort,
   PivotTableDataOptions,
+  PivotTableDrilldownOptions,
+  PivotTableNonSelectableDrilldownOptions,
+  PivotTableSelectableDrilldownOptions,
   PivotTableStyleOptions,
   PivotTableWidgetStyleOptions,
   PolarStyleOptions,
@@ -139,6 +143,8 @@ export type {
   WidgetByIdStyleOptions,
   WidgetDataOptions,
   WidgetId,
+  JumpToDashboardConfig,
+  JumpToDashboardConfigForPivot,
   // Models:
   WidgetModel,
   WidgetsOptions,

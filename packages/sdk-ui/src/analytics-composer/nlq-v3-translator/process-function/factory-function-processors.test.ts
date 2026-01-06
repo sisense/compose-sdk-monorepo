@@ -3,6 +3,7 @@
  */
 import { describe, expect, it, vi } from 'vitest';
 
+import { createSchemaIndex } from '../common.js';
 import { FunctionContext } from '../types.js';
 import {
   FUNCTION_PROCESSORS,
@@ -12,11 +13,15 @@ import {
 } from './factory-function-processors.js';
 
 // Mock the createAttributeFromName function
-vi.mock('../common.js', () => ({
-  createAttributeFromName: vi
-    .fn()
-    .mockReturnValue({ kind: 'attribute', name: 'mockProcessedAttribute' }),
-}));
+vi.mock('../common.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../common.js')>();
+  return {
+    ...actual,
+    createAttributeFromName: vi
+      .fn()
+      .mockReturnValue({ kind: 'attribute', name: 'mockProcessedAttribute' }),
+  };
+});
 
 describe('factory-function-processors', () => {
   describe('processing registry', () => {
@@ -44,7 +49,7 @@ describe('factory-function-processors', () => {
     it('should be easy to add new processors', () => {
       const testContext: FunctionContext = {
         dataSource: {} as any,
-        tables: [] as any,
+        schemaIndex: createSchemaIndex([]),
         pathPrefix: 'test',
       };
 

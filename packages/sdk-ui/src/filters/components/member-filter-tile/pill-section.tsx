@@ -1,11 +1,12 @@
 import type { FunctionComponent } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { FilterContentDisplay } from '@/filters/components/common';
 import styled from '@/styled';
 
 import { useThemeContext } from '../../../theme-provider';
-import { Member, SelectedMember } from './members-reducer';
+import { SelectedMember } from './members-reducer';
 
 const StyledPillButton = styled.button<{
   backgroundColor: string;
@@ -71,7 +72,6 @@ const IncludeAllPill = ({ disabled }: { disabled: boolean }) => {
 };
 
 export interface PillSectionProps {
-  members: Member[];
   selectedMembers: SelectedMember[];
   onToggleSelectedMember: (key: string) => void;
   excludeMembers: boolean;
@@ -79,21 +79,22 @@ export interface PillSectionProps {
 }
 
 export const PillSection: FunctionComponent<PillSectionProps> = ({
-  members,
   selectedMembers,
   onToggleSelectedMember,
   excludeMembers,
   disabled,
 }) => {
-  const showIncludeAll =
-    (selectedMembers.length === 0 || selectedMembers.length === members.length) &&
-    selectedMembers.every((m) => !m.inactive);
+  const sortedSelectedMembers = useMemo(() => {
+    return [...selectedMembers].sort((a, b) => a.title.localeCompare(b.title));
+  }, [selectedMembers]);
+
+  const showIncludeAll = selectedMembers.length === 0;
   return (
     <FilterContentDisplay>
       <PillsContainer>
         {showIncludeAll && <IncludeAllPill disabled={disabled} />}
         {!showIncludeAll &&
-          selectedMembers.map((m) => {
+          sortedSelectedMembers.map((m) => {
             return (
               <Pill
                 key={m.key}

@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.18.0] - 2026-01-06
+
+### Added
+- Add lazy loading for `MembersFilterTile` list
+- Add `useJtdWidget` equivalent for Angular (`createJtdWidget`) and Vue (`useJtdWidget`)
+- Add support for specifying `tabInterval` and `tabsSize` in pixels for `TabberButtonsWidget`
+- Add `onDataPointClick` and `onDataPointContextMenu` callbacks for `PivotTable` components
+- Handle legacy Tabber configuration if used by existing Fusion widgets
+- `PivotTable` improvements:
+  - Add support for the `autoHeight` style option inside the `Dashboard`
+  - Add drilldown support
+
+### Changed
+- Fix drilldown functionality for widgets where the same category is added multiple times
+- Fix continuous timeline translation from Fusion widgets
+- Fix timezone shift in quarters formatting
+- Improve row limit message in Pivot
+
 ## [2.17.0] - 2025-12-22
 
 ### Added

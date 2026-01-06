@@ -1,11 +1,14 @@
-import { CSSProperties, FunctionComponent, useMemo, useState } from 'react';
-
-import debounce from 'lodash-es/debounce';
+import { CSSProperties, FunctionComponent, useMemo } from 'react';
 
 import { MemberRadio } from '@/filters/components/common/member-radio';
 import styled from '@/styled';
 
 import { Checkbox } from '../common';
+import {
+  ScrollWrapper,
+  ScrollWrapperOnScrollEvent,
+} from '../filter-editor-popover/common/scroll-wrapper';
+import { SmallLoader } from '../filter-editor-popover/common/small-loader';
 import { Member, SelectedMember } from './members-reducer';
 
 const SearchInput = styled.input`
@@ -34,22 +37,18 @@ const SearchInput = styled.input`
   }
 `;
 
-const SEARCH_DELAY_MS = 300;
 const SearchBox: FunctionComponent<{
+  value?: string;
   onChange: (searchString: string) => void;
-  delayMs?: number;
   disabled: boolean;
   style?: CSSProperties;
-}> = ({ onChange, delayMs = SEARCH_DELAY_MS, disabled, style }) => {
-  const debouncedOnChange = debounce((v: string) => onChange(v), delayMs);
-
+}> = ({ onChange, disabled, style, value }) => {
   return (
     <SearchInput
       placeholder="Start typing to search..."
       disabled={disabled}
-      onChange={(e) => {
-        debouncedOnChange(e.target.value);
-      }}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
       type="search"
       style={style}
     />
@@ -90,6 +89,7 @@ const MemberRow: FunctionComponent<{
 
 export interface MemberListProps {
   members: Member[];
+  isMembersLoading?: boolean;
   selectedMembers: SelectedMember[];
   onSelectMember: (member: Member, isSelected: boolean) => void;
   checkAllMembers: () => void;
@@ -97,10 +97,14 @@ export interface MemberListProps {
   excludeMembers: boolean;
   enableMultiSelection: boolean;
   disabled: boolean;
+  onListScroll?: (event: ScrollWrapperOnScrollEvent) => void;
+  searchValue?: string;
+  onSearchValueChange?: (searchString: string) => void;
 }
 
 export const MemberList: FunctionComponent<MemberListProps> = ({
   members,
+  isMembersLoading,
   selectedMembers,
   onSelectMember,
   checkAllMembers,
@@ -108,15 +112,17 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
   excludeMembers,
   enableMultiSelection,
   disabled,
+  onListScroll,
+  searchValue,
+  onSearchValueChange,
 }) => {
-  const [searchString, setSearchString] = useState('');
   const filteredMembers = useMemo(() => {
-    if (searchString && searchString.trim().length > 0) {
-      return members.filter((m) => m.title.toLowerCase().includes(searchString.toLowerCase()));
+    if (searchValue && searchValue.trim().length > 0) {
+      return members.filter((m) => m.title.toLowerCase().includes(searchValue.toLowerCase()));
     }
 
     return members;
-  }, [members, searchString]);
+  }, [members, searchValue]);
 
   const allChecked = excludeMembers
     ? selectedMembers.length === 0
@@ -140,7 +146,7 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
         {enableMultiSelection && (
           <Checkbox
             aria-label="change-all"
-            checked={allChecked}
+            checked={allChecked && selectedMembers.length === 0}
             onChange={(e) => {
               if (e.target.checked) {
                 checkAllMembers();
@@ -158,12 +164,13 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
           />
         )}
         <SearchBox
-          onChange={(s) => setSearchString(s)}
+          value={searchValue}
+          onChange={(s) => onSearchValueChange?.(s)}
           disabled={disabled}
           style={enableMultiSelection ? {} : { paddingLeft: 6 }}
         />
       </div>
-      <div className="csdk-max-h-[150px] csdk-overflow-auto">
+      <ScrollWrapper style={{ maxHeight: 150 }} onScroll={onListScroll}>
         {filteredMembers.map((member) => (
           <MemberRow
             key={member.key}
@@ -188,7 +195,8 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
             inactive={inactiveMembersMap.has(member.key)}
           />
         ))}
-      </div>
+        {isMembersLoading && <SmallLoader />}
+      </ScrollWrapper>
     </div>
   );
 };

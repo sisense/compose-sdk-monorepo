@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import { type Filter, FilterRelations } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
-import last from 'lodash-es/last';
 
 import { BeforeMenuOpenHandler, OpenMenuFn } from '@/common/components/menu/types.js';
 import { WidgetProps } from '@/props.js';
@@ -17,11 +16,11 @@ import {
   registerDataPointsSelectedHandler,
   registerRenderToolbarHandler,
 } from '@/widget-by-id/utils.js';
-import { applyDrilldownDimension } from '@/widgets/common/drilldown-utils.js';
 
 import { prepareCommonFiltersConnectionProps } from './common-filters-connector.js';
 import { CommonFiltersOptions } from './types.js';
 import { useConvertFilterRelations } from './use-convert-filter-relations.js';
+import { getWidgetDataOptionsWithDrilldown } from './utils.js';
 
 /** @internal */
 export const useCommonFilters = ({
@@ -57,16 +56,7 @@ export const useCommonFilters = ({
 
       const initialWidgetProps = widgetProps;
       const connectedWidgetProps = cloneDeep(widgetProps);
-      const hasDrilldownSelection =
-        'drilldownOptions' in widgetProps &&
-        widgetProps.drilldownOptions?.drilldownSelections?.length;
-      const dataOptions = hasDrilldownSelection
-        ? applyDrilldownDimension(
-            widgetProps.chartType,
-            widgetProps.dataOptions,
-            last(widgetProps.drilldownOptions!.drilldownSelections)!.nextDimension,
-          )
-        : widgetProps.dataOptions;
+      const dataOptions = getWidgetDataOptionsWithDrilldown(widgetProps);
 
       const commonFiltersConnectionProps = prepareCommonFiltersConnectionProps(
         regularCommonFilters,

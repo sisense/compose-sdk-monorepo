@@ -12,6 +12,7 @@ import type {
   DataPointEventHandler,
   DataPointsEventHandler,
   IndicatorDataPointEventHandler,
+  PivotTableDataPointEventHandler,
   ScatterDataPointEventHandler,
   ScatterDataPointsEventHandler,
   ScattermapDataPointEventHandler,
@@ -185,6 +186,21 @@ export interface CalendarHeatmapChartEventProps
    * @category Callbacks
    */
   dataPointsSelect?: CalendarHeatmapDataPointsEventHandler;
+}
+
+export interface PivotTableEventProps {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
+  dataPointClick?: PivotTableDataPointEventHandler;
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.onDataPointContextMenu}
+   *
+   * @category Callbacks
+   */
+  dataPointContextMenu?: PivotTableDataPointEventHandler;
 }
 
 export interface ChartEventProps extends BaseChartEventProps {

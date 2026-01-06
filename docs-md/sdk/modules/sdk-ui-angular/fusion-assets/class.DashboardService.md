@@ -48,11 +48,21 @@ with cross filtering, and change detection.
 
 #### Returns
 
-Reactive composed dashboard object and API methods for interacting with it
+Reactive composed dashboard object and API methods for interacting with it.
+The returned object includes a `destroy()` method that should be called when
+the dashboard is no longer needed to prevent memory leaks (e.g., in `ngOnDestroy`).
 
 ##### `dashboard$`
 
 **dashboard$**: `BehaviorSubject`\< `D` \>
+
+##### `destroy`
+
+**destroy**: () => `void`
+
+###### Returns
+
+`void`
 
 ##### `setFilters`
 
@@ -116,7 +126,7 @@ An example of using the `createComposedDashboard` to construct a composed dashbo
 
 ```ts
  // Component behavior in example.component.ts
- import { Component } from '@angular/core';
+ import { Component, OnDestroy } from '@angular/core';
  import { BehaviorSubject } from 'rxjs';
  import { DashboardService, type DashboardProps } from '@sisense/sdk-ui-angular';
 
@@ -125,15 +135,20 @@ An example of using the `createComposedDashboard` to construct a composed dashbo
    templateUrl: './example.component.html',
    styleUrls: ['./example.component.scss'],
  })
- export class ExampleComponent {
+ export class ExampleComponent implements OnDestroy {
    dashboard$: BehaviorSubject<DashboardProps> | undefined;
+   private composedDashboard: ReturnType<DashboardService['createComposedDashboard']> | undefined;
 
    constructor(private dashboardService: DashboardService) {}
 
    ngOnInit() {
      const initialDashboard: DashboardProps = { ... };
-     const composedDashboard = this.dashboardService.createComposedDashboard(initialDashboard);
-     this.dashboard$ = composedDashboard.dashboard$;
+     this.composedDashboard = this.dashboardService.createComposedDashboard(initialDashboard);
+     this.dashboard$ = this.composedDashboard.dashboard$;
+   }
+
+   ngOnDestroy() {
+     this.composedDashboard?.destroy();
    }
 
    trackByIndex = (index: number) => index;

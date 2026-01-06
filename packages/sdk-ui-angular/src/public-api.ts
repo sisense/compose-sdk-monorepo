@@ -38,8 +38,15 @@ export type {
   ScatterDataPointEventHandler,
   ScatterDataPointsEvent,
   ScatterDataPointsEventHandler,
+  WidgetDataPointClickEventHandler,
+  WidgetDataPointContextMenuEventHandler,
   ScattermapDataPointEvent,
   ScattermapDataPointEventHandler,
+  PivotTableDataPointEvent,
+  PivotTableDataPointEventHandler,
+  WidgetDataPointClickEvent,
+  WidgetDataPointContextMenuEvent,
+  TextWidgetDataPointEvent,
 } from './lib/types';
 export * from './lib/utilities';
 

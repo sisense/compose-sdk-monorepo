@@ -107,7 +107,7 @@ Description of the widget
 
 #### drilldownOptions
 
-> **`readonly`** **drilldownOptions**?: [`DrilldownOptions`](../type-aliases/type-alias.DrilldownOptions.md)
+> **`readonly`** **drilldownOptions**?: [`DrilldownOptions`](../type-aliases/type-alias.DrilldownOptions.md) \| [`PivotTableDrilldownOptions`](../type-aliases/type-alias.PivotTableDrilldownOptions.md)
 
 List of categories to allow drilldowns on
 

@@ -4,8 +4,12 @@ import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../__mocks__/mock-data-sources.js';
-import { getErrors, getSuccessData } from './common.js';
+import { createSchemaIndex, getErrors, getSuccessData } from './common.js';
 import { translateDimensionsJSON } from './translate-dimensions.js';
+
+const MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE = createSchemaIndex(
+  MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+);
 
 describe('translateDimensions', () => {
   it('should translate dimensions from JSON array of strings', () => {
@@ -15,7 +19,7 @@ describe('translateDimensions', () => {
       data: mockDimensionsJSON,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
 
@@ -32,7 +36,7 @@ describe('translateDimensions', () => {
       data: mockDimensionsJSON,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
 
@@ -47,7 +51,7 @@ describe('translateDimensions', () => {
       data: null as unknown as JSONArray,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
     expect(result.success).toBe(true);
@@ -59,7 +63,7 @@ describe('translateDimensions', () => {
       data: undefined as unknown as JSONArray,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
     expect(result.success).toBe(true);
@@ -71,7 +75,7 @@ describe('translateDimensions', () => {
       data: false as unknown as JSONArray,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
     expect(result.success).toBe(true);
@@ -83,7 +87,7 @@ describe('translateDimensions', () => {
       data: 0 as unknown as JSONArray,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
     expect(result.success).toBe(true);
@@ -95,7 +99,7 @@ describe('translateDimensions', () => {
       data: '' as unknown as JSONArray,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
     expect(result.success).toBe(true);
@@ -107,7 +111,7 @@ describe('translateDimensions', () => {
       data: [],
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
     expect(result.success).toBe(true);
@@ -125,7 +129,7 @@ describe('translateDimensions', () => {
       data: mockDimensionsJSON,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
 
@@ -144,7 +148,7 @@ describe('translateDimensions', () => {
       data: mockDimensionsJSON,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
 
@@ -163,7 +167,7 @@ describe('translateDimensions', () => {
       data: mockDimensionsJSON,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
 
@@ -182,7 +186,7 @@ describe('translateDimensions', () => {
       data: mockDimensionsJSON,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
 
@@ -201,7 +205,7 @@ describe('translateDimensions', () => {
       data: mockDimensionsJSON,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
       },
     });
 

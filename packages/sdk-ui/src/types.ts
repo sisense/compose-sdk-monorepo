@@ -2442,12 +2442,93 @@ export type DrilldownOptions = {
   drilldownSelections?: DrilldownSelection[];
 };
 
+/** Configuration for the pivot table drilldown */
+export type PivotTableDrilldownOptions =
+  | PivotTableSelectableDrilldownOptions
+  | PivotTableNonSelectableDrilldownOptions;
+
+/** Configuration for the pivot table drilldown with initial target and selections defined */
+export type PivotTableSelectableDrilldownOptions = {
+  /** Dimensions and hierarchies available for drilldown on */
+  drilldownPaths?: (Attribute | Hierarchy | HierarchyId)[];
+  /** Current selections for multiple drilldowns */
+  drilldownSelections: DrilldownSelection[];
+  /**
+   * Current pivot table data option target for the drilldown
+   *
+   * Can be either:
+   * - An `Attribute` directly (when you know the specific attribute to target)
+   * - A `DataOptionLocation` (when you need to reference a data option by its position in the data options structure)
+   */
+  drilldownTarget: Attribute | DataOptionLocation;
+};
+
+/** Configuration for the pivot table drilldown without initial target and selections */
+export type PivotTableNonSelectableDrilldownOptions = {
+  /** Dimensions and hierarchies available for drilldown on */
+  drilldownPaths?: (Attribute | Hierarchy | HierarchyId)[];
+  /** Current selections for multiple drilldowns */
+  drilldownSelections?: never;
+  /** Current pivot table data option target for the drilldown */
+  drilldownTarget?: never;
+};
+
 /** Selection for the drilldown */
 export type DrilldownSelection = {
   /** Points selected for drilldown */
   points: ChartDataPoint[];
   /** Dimension to drilldown to */
   nextDimension: Attribute;
+};
+
+/**
+ * Location within component data options that identifies a specific data option.
+ *
+ * @example
+ * ```typescript
+ * { dataOptionName: 'category', dataOptionIndex: 0 } // First category
+ * { dataOptionName: 'value', dataOptionIndex: 1 }    // Second value measure
+ * ```
+ */
+export type DataOptionLocation = {
+  /**
+   * Data option location name that identifies the property containing the data option.
+   *
+   * Examples:
+   * - PivotTable: `'rows'` | `'columns'` | `'values'`
+   * - Cartesian charts: `'category'` | `'value'` | `'breakBy'`
+   * - Scatter charts: `'x'` | `'y'` | `'breakByPoint'` | `'breakByColor'` | `'size'`
+   */
+  dataOptionName:
+    | 'rows'
+    | 'columns'
+    | 'values'
+    | 'category'
+    | 'value'
+    | 'breakBy'
+    | 'x'
+    | 'y'
+    | 'breakByPoint'
+    | 'breakByColor'
+    | 'size'
+    | 'date'
+    | 'geo'
+    | 'color'
+    | 'colorBy'
+    | 'details'
+    | 'outliers'
+    | 'secondary'
+    | 'min'
+    | 'max';
+  /**
+   * Data option location zero-based index.
+   *
+   * Required for array-based locations (e.g., `rows`, `columns`, `values`, `category`).
+   * Optional for single-value locations (e.g., `x`, `y`, `date`).
+   *
+   * @default 0
+   */
+  dataOptionIndex?: number;
 };
 
 /**
@@ -2522,12 +2603,17 @@ export type DataPoint = {
 export type DataPointEntry = {
   /** The data option associated with this entry */
   dataOption: Column | StyledColumn | MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
+  /**
+   * The location of the data option in the data options structure
+   * @internal
+   */
+  dataOptionLocation?: DataOptionLocation;
   /** The attribute associated with this data point entry */
   attribute?: Attribute;
   /** The measure associated with this data point entry */
   measure?: Measure;
   /** The raw value of the data point */
-  value?: string | number;
+  value: string | number;
   /** The formatted value of the data point */
   displayValue?: string;
 };
@@ -2638,20 +2724,14 @@ export type TextWidgetDataPoint = {
 export type PivotTableDataPoint = {
   /**
    * Boolean flag that defines if the data point is a data cell
-   *
-   * @internal
    */
   isDataCell: boolean;
   /**
    * Boolean flag that defines if the data point is a caption cell
-   *
-   * @internal
    */
   isCaptionCell: boolean;
   /**
    * Boolean flag that defines if the data point is a total cell (subtotal or grandtotal)
-   *
-   * @internal
    */
   isTotalCell: boolean;
   /**
@@ -2774,7 +2854,7 @@ export type HighchartsPoint = {
     maskedBreakByPoint?: string;
     maskedBreakByColor?: string;
     maskedSize?: string;
-    rawValue?: string | number;
+    rawValue: string | number;
     xValue?: (string | number)[];
     xDisplayValue?: string[];
     rawValues?: (string | number)[];

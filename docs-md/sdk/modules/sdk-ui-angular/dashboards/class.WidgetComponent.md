@@ -134,7 +134,7 @@ Description of the widget
 
 #### drilldownOptions
 
-> **drilldownOptions**: [`DrilldownOptions`](../type-aliases/type-alias.DrilldownOptions.md) \| `undefined`
+> **drilldownOptions**: [`DrilldownOptions`](../type-aliases/type-alias.DrilldownOptions.md) \| [`PivotTableDrilldownOptions`](../type-aliases/type-alias.PivotTableDrilldownOptions.md) \| `undefined`
 
 List of categories to allow drilldowns on
 
@@ -184,7 +184,7 @@ This callback is not supported for Areamap Chart, Scattermap Chart, Table, and P
 
 #### dataPointClick
 
-> **dataPointClick**: `EventEmitter`\< [`ChartDataPointClickEvent`](../type-aliases/type-alias.ChartDataPointClickEvent.md) \>
+> **dataPointClick**: `EventEmitter`\< [`WidgetDataPointClickEvent`](../type-aliases/type-alias.WidgetDataPointClickEvent.md) \>
 
 Click handler callback for a data point
 
@@ -192,7 +192,7 @@ Click handler callback for a data point
 
 #### dataPointContextMenu
 
-> **dataPointContextMenu**: `EventEmitter`\< [`ChartDataPointContextMenuEvent`](../type-aliases/type-alias.ChartDataPointContextMenuEvent.md) \>
+> **dataPointContextMenu**: `EventEmitter`\< [`WidgetDataPointContextMenuEvent`](../type-aliases/type-alias.WidgetDataPointContextMenuEvent.md) \>
 
 Context menu handler callback for a data point
 

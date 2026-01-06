@@ -87,7 +87,7 @@ export const DrilldownWidget = asSisenseComponent({
   } = useDrilldownCore({
     drilldownPaths,
     initialDimension,
-    drilldownSelections,
+    initialDrilldownSelections: drilldownSelections,
     onDrilldownSelectionsChange,
   });
 

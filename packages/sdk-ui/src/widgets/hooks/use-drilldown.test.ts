@@ -33,7 +33,7 @@ describe('useDrilldown', () => {
   it('should return correct initial drilldown props', () => {
     const { result } = renderHook(() =>
       useDrilldown({
-        drilldownSelections: [
+        initialDrilldownSelections: [
           {
             points: [
               {
@@ -62,7 +62,7 @@ describe('useDrilldown', () => {
     };
     const { result } = renderHook(() =>
       useDrilldown({
-        drilldownSelections: [
+        initialDrilldownSelections: [
           {
             points: [
               {
@@ -98,7 +98,7 @@ describe('useDrilldown', () => {
       top: 20,
     };
     const params = {
-      drilldownSelections: [
+      initialDrilldownSelections: [
         {
           points: [
             {
@@ -136,7 +136,7 @@ describe('useDrilldown', () => {
     const lastCallDrilldown = onDrilldownSelectionsChange.mock.lastCall as any;
     expect(lastCallDrilldown).toBeDefined();
 
-    expect(lastCallDrilldown[0][0]).toMatchObject(params.drilldownSelections[0]);
+    expect(lastCallDrilldown[0][0]).toMatchObject(params.initialDrilldownSelections[0]);
     expect(lastCallDrilldown[0][1]).toMatchObject({
       points: [
         {

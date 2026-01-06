@@ -294,6 +294,12 @@ export type ExecuteQueryResult = QueryState & {
    * @internal
    */
   loadMore: (count: number) => void;
+  /**
+   * Flag indicating whether all items have been loaded
+   *
+   * @internal
+   */
+  isAllItemsLoaded: boolean;
 };
 
 /** Configuration for {@link useExecuteCsvQuery} hook. */

@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import { TabberButtonsWidgetProps } from '@/props';
 
-import { TabberButtonsWidget } from './tabber-buttons-widget';
+import { TabberButtonsWidget, tabsIntervalToCss, tabsSizeToCss } from './tabber-buttons-widget';
 import type { TabberButtonsWidgetCustomOptions, TabberButtonsWidgetStyleOptions } from './types';
 
 vi.mock('@/decorators/component-decorators/as-sisense-component', () => ({
@@ -260,5 +260,79 @@ describe('TabberButtonsWidget Component Comprehensive Tests', () => {
     // Assert that font sizes are distinct for each tabsSize value.
     expect(fontSizes.small).not.toBe(fontSizes.medium);
     expect(fontSizes.medium).not.toBe(fontSizes.large);
+  });
+
+  it('applies custom tabsInterval with number values', () => {
+    const customStyle: TabberButtonsWidgetStyleOptions = {
+      ...baseStyleOptions,
+      tabsInterval: 20,
+    };
+    const { container } = render(<TabberButtonsWidget {...baseProps} styleOptions={customStyle} />);
+    const contentWrapper = container.firstChild;
+    const listElement = contentWrapper?.firstChild as HTMLElement;
+    const listStyles = window.getComputedStyle(listElement);
+    expect(listStyles.padding).toBe('0px 20px');
+  });
+
+  it('applies custom tabsSize with number values', () => {
+    const customStyle: TabberButtonsWidgetStyleOptions = {
+      ...baseStyleOptions,
+      tabsSize: 14,
+    };
+    const { container } = render(<TabberButtonsWidget {...baseProps} styleOptions={customStyle} />);
+    const contentWrapper = container.firstChild;
+    const listElement = contentWrapper?.firstChild as HTMLElement;
+    const listStyles = window.getComputedStyle(listElement);
+    expect(listStyles.fontSize).toBe('14px');
+  });
+});
+
+describe('tabsIntervalToCss', () => {
+  it('should convert string literals to CSS values', () => {
+    expect(tabsIntervalToCss('small')).toBe('6px');
+    expect(tabsIntervalToCss('medium')).toBe('12px');
+    expect(tabsIntervalToCss('large')).toBe('24px');
+  });
+
+  it('should convert numbers to pixel values', () => {
+    expect(tabsIntervalToCss(0)).toBe('0px');
+    expect(tabsIntervalToCss(16)).toBe('16px');
+    expect(tabsIntervalToCss(24)).toBe('24px');
+    expect(tabsIntervalToCss(100)).toBe('100px');
+  });
+
+  it('should handle incorrect number values', () => {
+    expect(tabsIntervalToCss(-5)).toBe('12px');
+    expect(tabsIntervalToCss(NaN)).toBe('12px');
+    expect(tabsIntervalToCss(-Infinity)).toBe('12px');
+  });
+
+  it('should handle undefined with default fallback', () => {
+    expect(tabsIntervalToCss(undefined)).toBe('12px');
+  });
+});
+
+describe('tabsSizeToCss', () => {
+  it('should convert string literals to CSS values', () => {
+    expect(tabsSizeToCss('small')).toBe('1.0em');
+    expect(tabsSizeToCss('medium')).toBe('1.3em');
+    expect(tabsSizeToCss('large')).toBe('1.7em');
+  });
+
+  it('should convert numbers to pixel values', () => {
+    expect(tabsSizeToCss(0)).toBe('0px');
+    expect(tabsSizeToCss(12)).toBe('12px');
+    expect(tabsSizeToCss(16)).toBe('16px');
+    expect(tabsSizeToCss(20)).toBe('20px');
+  });
+
+  it('should handle undefined with default fallback', () => {
+    expect(tabsSizeToCss(undefined)).toBe('1.3em');
+  });
+
+  it('should handle incorrect number values', () => {
+    expect(tabsSizeToCss(-5)).toBe('1.3em');
+    expect(tabsSizeToCss(NaN)).toBe('1.3em');
+    expect(tabsSizeToCss(-Infinity)).toBe('1.3em');
   });
 });

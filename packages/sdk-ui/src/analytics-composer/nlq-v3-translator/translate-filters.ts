@@ -91,7 +91,7 @@ export const translateFiltersFromJSONFunctionCall = (
   input: FiltersFunctionCallInput,
 ): NlqTranslationResult<Filter[] | FilterRelations> => {
   const { data: filtersJSON } = input;
-  const { dataSource, tables } = input.context;
+  const { dataSource, schemaIndex } = input.context;
   const filters: (Filter | FilterRelations)[] = [];
   const errors: NlqTranslationError[] = [];
 
@@ -105,7 +105,7 @@ export const translateFiltersFromJSONFunctionCall = (
     try {
       const filter = processNode({
         data: filterJSON,
-        context: { dataSource, tables, pathPrefix: '' },
+        context: { dataSource, schemaIndex, pathPrefix: '' },
       });
       if (!isFilterRelationsElement(filter) && !isFilterElement(filter)) {
         errors.push({ ...context, message: `Invalid filter JSON` });
@@ -135,7 +135,7 @@ export const translateFiltersJSON = (
   input: FiltersInput,
 ): NlqTranslationResult<Filter[] | FilterRelations> => {
   const { data: filtersJSON } = input;
-  const { dataSource, tables } = input.context;
+  const { dataSource, schemaIndex } = input.context;
   if (!filtersJSON) {
     return { success: true, data: [] };
   }
@@ -157,7 +157,7 @@ export const translateFiltersJSON = (
 
   return translateFiltersFromJSONFunctionCall({
     data: filtersJSON,
-    context: { dataSource, tables },
+    context: { dataSource, schemaIndex },
   });
 };
 
@@ -165,7 +165,7 @@ export const translateHighlightsFromJSONFunctionCall = (
   input: HighlightsFunctionCallInput,
 ): NlqTranslationResult<Filter[]> => {
   const { data: highlightsJSON } = input;
-  const { dataSource, tables } = input.context;
+  const { dataSource, schemaIndex } = input.context;
   const results: Filter[] = [];
   const errors: NlqTranslationError[] = [];
 
@@ -179,7 +179,7 @@ export const translateHighlightsFromJSONFunctionCall = (
     try {
       const filter = processNode({
         data: filterJSON,
-        context: { dataSource, tables, pathPrefix: '' },
+        context: { dataSource, schemaIndex, pathPrefix: '' },
       });
       if (!isFilterElement(filter)) {
         errors.push({ ...context, message: `Invalid filter JSON` });
@@ -203,7 +203,7 @@ export const translateHighlightsFromJSONFunctionCall = (
  */
 export const translateHighlightsJSON = (input: HighlightsInput): NlqTranslationResult<Filter[]> => {
   const { data: highlightsJSON } = input;
-  const { dataSource, tables } = input.context;
+  const { dataSource, schemaIndex } = input.context;
 
   if (!highlightsJSON) {
     return { success: true, data: [] };
@@ -226,6 +226,6 @@ export const translateHighlightsJSON = (input: HighlightsInput): NlqTranslationR
 
   return translateHighlightsFromJSONFunctionCall({
     data: highlightsJSON,
-    context: { dataSource, tables },
+    context: { dataSource, schemaIndex },
   });
 };

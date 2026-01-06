@@ -9,18 +9,21 @@ import { usePivotBuilder } from '@/pivot-table/hooks/use-pivot-builder';
 import { usePivotClient } from '@/pivot-table/hooks/use-pivot-client';
 import { SisenseContextPayload } from '@/sisense-context/sisense-context';
 
-import { ClientApplication } from '../app/client-application';
-import { executePivotQueryMock } from '../query/__mocks__/execute-query';
-import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
-import { mockPivotTableWidgetProps } from './__mocks__/mocks';
+import { ClientApplication } from '../../app/client-application';
+import { executePivotQueryMock } from '../../query/__mocks__/execute-query';
+import { useSisenseContextMock } from '../../sisense-context/__mocks__/sisense-context';
+import { mockPivotTableWidgetProps } from '../__mocks__/mocks';
 import { PivotTableWidget } from './pivot-table-widget';
 
 setupI18nMock();
 
-vi.mock('../query/execute-query');
-vi.mock('../sisense-context/sisense-context');
-vi.mock('../pivot-table/hooks/use-pivot-client');
-vi.mock('../pivot-table/hooks/use-pivot-builder');
+vi.mock('../../query/execute-query');
+vi.mock('../../sisense-context/sisense-context');
+vi.mock('../../pivot-table/hooks/use-pivot-client');
+vi.mock('../../pivot-table/hooks/use-pivot-builder');
+vi.mock('./use-with-pivot-table-widget-drilldown.js', async () => ({
+  useWithPivotTableWidgetDrilldown: (params: any) => ({ propsWithDrilldown: params.propsToExtend }),
+}));
 
 describe('PivotTableWidget', () => {
   beforeEach(() => {

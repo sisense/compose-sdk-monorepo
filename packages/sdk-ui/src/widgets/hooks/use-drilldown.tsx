@@ -29,7 +29,7 @@ import {
 
 type UseDrilldownParams = {
   initialDimension: Column | StyledColumn;
-  drilldownSelections?: DrilldownSelection[];
+  initialDrilldownSelections?: DrilldownSelection[];
   /**
    * todo: make it optional when we will have a public `MenuProvider`.
    * Without provided function, it should open internal menu with the help of `useMenu` hook
@@ -40,7 +40,7 @@ type UseDrilldownParams = {
 
 export const useDrilldown = ({
   initialDimension,
-  drilldownSelections,
+  initialDrilldownSelections,
   openMenu,
   onDrilldownSelectionsChange,
 }: UseDrilldownParams) => {
@@ -50,12 +50,13 @@ export const useDrilldown = ({
     drilldownFilters,
     drilldownFiltersDisplayValues,
     drilldownDimension,
+    drilldownSelections,
     selectDrilldown,
     sliceDrilldownSelections,
     clearDrilldownSelections,
   } = useDrilldownCore({
     initialDimension,
-    drilldownSelections,
+    initialDrilldownSelections,
     onDrilldownSelectionsChange,
   });
 
@@ -64,6 +65,7 @@ export const useDrilldown = ({
       position: MenuPosition,
       points: DataPoint[],
       availableDrilldownPaths: (Attribute | Hierarchy)[] = [],
+      onSelect?: (nextDimension: Attribute, hierarchy?: Hierarchy) => void,
     ) => {
       const menuItems = [
         getSelectionTitleMenuItem(points, drilldownDimension),
@@ -71,6 +73,7 @@ export const useDrilldown = ({
           availableDrilldownPaths,
           drilldownDimension,
           (nextDimension: Attribute, hierarchy?: Hierarchy) => {
+            onSelect?.(nextDimension, hierarchy);
             selectDrilldown(points, nextDimension, hierarchy);
           },
           translate,
@@ -102,6 +105,7 @@ export const useDrilldown = ({
 
   return {
     drilldownDimension,
+    drilldownSelections,
     drilldownFilters,
     breadcrumbs,
     openDrilldownMenu,

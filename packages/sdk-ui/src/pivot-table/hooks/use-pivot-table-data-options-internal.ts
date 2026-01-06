@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { safeCombine } from '@/chart-data-options/utils.js';
 
@@ -27,6 +27,10 @@ export const usePivotTableDataOptionsInternal = ({
   const [dataOptionsInternal, setDataOptionsInternal] = useState<PivotTableDataOptionsInternal>(
     translatePivotTableDataOptions(dataOptions),
   );
+
+  useEffect(() => {
+    setDataOptionsInternal(translatePivotTableDataOptions(dataOptions));
+  }, [dataOptions]);
 
   return {
     dataOptionsInternal,

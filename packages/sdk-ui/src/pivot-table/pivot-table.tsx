@@ -29,6 +29,7 @@ import { useRenderPivot } from './hooks/use-render-pivot';
 import { preparePivotRowsSortCriteriaList } from './sorting-utils';
 
 export const PIVOT_WIDGET_PADDING = 8;
+const NO_RESULTS_HEIGHT = 200;
 
 /**
  * Pivot table with pagination.
@@ -272,6 +273,12 @@ export const PivotTable = asSisenseComponent({
     },
     [size, setSize],
   );
+
+  useEffect(() => {
+    if (styleOptions?.isAutoHeight && isNoResults) {
+      onHeightChange?.(NO_RESULTS_HEIGHT);
+    }
+  }, [pivotTotalHeight, styleOptions?.isAutoHeight, isNoResults, onHeightChange]);
 
   return (
     <DynamicSizeContainer

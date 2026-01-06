@@ -21,6 +21,7 @@ export {
   type GenericDataOptions,
 } from './use-custom-widgets.js';
 export { useComposedDashboard, type ComposableDashboardProps } from './use-composed-dashboard.js';
+export { useJtdWidget } from './use-jtd-widget.js';
 export type { UseFetchOptions } from './use-fetch.js';
 export type {
   GetFilterMembersParams,

@@ -7,14 +7,14 @@ import omit from 'lodash-es/omit';
 import { Chart } from '@/chart';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 
-import { ChartWidgetStyleOptions, DrilldownSelection } from '..';
-import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
-import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
-import { ChartWidgetProps, HighchartsOptions } from '../props';
-import { combineHandlers } from '../utils/combine-handlers';
-import { WidgetContainer } from './common/widget-container';
-import { useHighlightSelection } from './hooks/use-highlight-selection';
-import { useWithDrilldown } from './hooks/use-with-drilldown';
+import { asSisenseComponent } from '../../decorators/component-decorators/as-sisense-component';
+import { DynamicSizeContainer, getWidgetDefaultSize } from '../../dynamic-size-container';
+import { ChartWidgetProps, HighchartsOptions } from '../../props';
+import { ChartWidgetStyleOptions, DrilldownSelection } from '../../types';
+import { combineHandlers } from '../../utils/combine-handlers';
+import { WidgetContainer } from '../common/widget-container';
+import { useHighlightSelection } from '../hooks/use-highlight-selection';
+import { useWithChartWidgetDrilldown } from './use-with-chart-widget-drilldown';
 
 /**
  * The Chart Widget component extending the {@link Chart} component to support widget style options.
@@ -80,14 +80,15 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     (selections: DrilldownSelection[]) => {
       onChange?.({
         drilldownOptions: {
+          ...props.drilldownOptions,
           drilldownSelections: selections,
         },
       });
     },
-    [onChange],
+    [onChange, props.drilldownOptions],
   );
 
-  const { propsWithDrilldown, isDrilldownEnabled, breadcrumbs } = useWithDrilldown({
+  const { propsWithDrilldown, isDrilldownEnabled, breadcrumbs } = useWithChartWidgetDrilldown({
     propsToExtend: props,
     onDrilldownSelectionsChange,
   });

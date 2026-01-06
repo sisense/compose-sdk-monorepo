@@ -4,6 +4,7 @@ import { BaseQueryParams } from '@/query-execution';
 
 import { NlqTranslationError, NlqTranslationResult } from '../types.js';
 import { QueryInput } from '../types.js';
+import { createSchemaIndex } from './common.js';
 import { translateDimensionsJSON } from './translate-dimensions.js';
 import { translateFiltersJSON, translateHighlightsJSON } from './translate-filters.js';
 import { translateMeasuresJSON } from './translate-measures.js';
@@ -229,6 +230,10 @@ import { translateMeasuresJSON } from './translate-measures.js';
 export const translateQueryJSON = (input: QueryInput): NlqTranslationResult<BaseQueryParams> => {
   const { data: queryJSON } = input;
   const { dataSource, tables } = input.context;
+
+  // Create schema index once from tables for efficient lookups
+  const schemaIndex = createSchemaIndex(tables);
+
   const translationErrors: NlqTranslationError[] = [];
 
   // Helper to collect structured errors from translation operations
@@ -245,21 +250,21 @@ export const translateQueryJSON = (input: QueryInput): NlqTranslationResult<Base
   const dimensions = collectTranslationErrors<Attribute[]>(() =>
     translateDimensionsJSON({
       data: queryJSON.dimensions || [],
-      context: { dataSource, tables },
+      context: { dataSource, schemaIndex },
     }),
   );
 
   const measures = collectTranslationErrors<Measure[]>(() =>
     translateMeasuresJSON({
       data: queryJSON.measures || [],
-      context: { dataSource, tables },
+      context: { dataSource, schemaIndex },
     }),
   );
 
   const filters = collectTranslationErrors<Filter[] | FilterRelations>(() =>
     translateFiltersJSON({
       data: queryJSON.filters || [],
-      context: { dataSource, tables },
+      context: { dataSource, schemaIndex },
     }),
   );
 
@@ -268,7 +273,7 @@ export const translateQueryJSON = (input: QueryInput): NlqTranslationResult<Base
     highlights = collectTranslationErrors<Filter[]>(() =>
       translateHighlightsJSON({
         data: queryJSON.highlights || [],
-        context: { dataSource, tables },
+        context: { dataSource, schemaIndex },
       }),
     );
   }

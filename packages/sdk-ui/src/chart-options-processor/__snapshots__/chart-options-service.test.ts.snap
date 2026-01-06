@@ -2836,6 +2836,10 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
               "2020-01-01T00:00:00.000Z",
             ],
           },
+          "marker": {
+            "enabled": true,
+            "isIsolatedPoint": true,
+          },
           "selected": false,
           "x": 1577836800000,
           "y": 6781,
@@ -4561,7 +4565,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-03",
             ],
@@ -4589,7 +4593,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-06",
             ],
@@ -4621,7 +4625,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-08",
             ],
@@ -4653,7 +4657,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-10",
             ],
@@ -4667,7 +4671,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-11",
             ],
@@ -4722,7 +4726,7 @@ exports[`renders a time series chart with break by 1`] = `
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-01",
             ],
@@ -4740,7 +4744,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-02",
             ],
@@ -4796,7 +4800,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-07",
             ],
@@ -4828,7 +4832,7 @@ exports[`renders a time series chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-09",
             ],
@@ -5199,7 +5203,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-03",
             ],
@@ -5227,7 +5231,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-06",
             ],
@@ -5259,7 +5263,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-08",
             ],
@@ -5291,7 +5295,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-10",
             ],
@@ -5305,7 +5309,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-11",
             ],
@@ -5360,7 +5364,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-01",
             ],
@@ -5378,7 +5382,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-02",
             ],
@@ -5434,7 +5438,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-07",
             ],
@@ -5466,7 +5470,7 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xDisplayValue": [
               "2020-09",
             ],

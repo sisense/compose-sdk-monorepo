@@ -54,7 +54,7 @@ export function processCustomFormula(
         data: value as FunctionCall,
         context: {
           dataSource: context.dataSource,
-          tables: context.tables,
+          schemaIndex: context.schemaIndex,
           pathPrefix: fullArgPath,
         },
       });
@@ -64,7 +64,7 @@ export function processCustomFormula(
         processedContext[`${key}`] = createAttributeFromName(
           value,
           context.dataSource,
-          context.tables,
+          context.schemaIndex,
         );
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';

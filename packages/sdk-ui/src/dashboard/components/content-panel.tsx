@@ -3,7 +3,11 @@ import { useMemo } from 'react';
 import isNumber from 'lodash-es/isNumber';
 import isUndefined from 'lodash-es/isUndefined';
 
-import { getDividerStyle } from '@/dashboard/utils';
+import {
+  checkForAutoHeight,
+  getDividerStyle,
+  withOptionallyDisabledAutoHeight,
+} from '@/dashboard/utils';
 import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
 import styled from '@/styled';
@@ -163,27 +167,27 @@ export const ContentPanel = ({ layout, responsive, widgets }: ContentPanelProps)
         >
           {column.rows?.map((row, cellIndex) => {
             const rowWidths = row.cells.map((sb) => sb.widthPercentage);
+            const rowWidgets = widgets.filter((w) => row.cells.some((c) => c.widgetId === w.id));
+            const rowWithAutoHeight = checkForAutoHeight(rowWidgets);
+
             return (
               <Row key={`${columnIndex},${cellIndex}`} widths={rowWidths}>
                 {row.cells.map((subcell) => {
-                  const widgetProps = widgets.find((w) => w.id === subcell.widgetId);
-                  if (
-                    widgetProps?.widgetType === 'pivot' &&
-                    subcell.height &&
-                    widgetProps?.styleOptions?.isAutoHeight
-                  ) {
-                    widgetProps.styleOptions.isAutoHeight = false;
-                  }
+                  const widgetProps = rowWidgets.find((w) => w.id === subcell.widgetId);
                   return (
                     <Subcell
                       key={`${subcell.widgetId},${subcell.widthPercentage}`}
                       responsive={responsive}
                       rowWidths={rowWidths}
-                      height={subcell.height}
+                      height={rowWithAutoHeight ? 'auto' : subcell.height}
                       dividerWidth={themeSettings.dashboard.dividerLineWidth}
                       dividerColor={themeSettings.dashboard.dividerLineColor}
                     >
-                      {widgetProps && <Widget {...widgetProps} />}
+                      {widgetProps && (
+                        <Widget
+                          {...withOptionallyDisabledAutoHeight(widgetProps, !rowWithAutoHeight)}
+                        />
+                      )}
                     </Subcell>
                   );
                 })}

@@ -10,6 +10,7 @@ import { MenuButton } from '@/common/components/menu/menu-button';
 import { useMenu } from '@/common/hooks/use-menu';
 import { useSyncedState } from '@/common/hooks/use-synced-state';
 import { WIDGET_HEADER_HEIGHT } from '@/dashboard/components/editable-layout/const';
+import { withOptionallyDisabledAutoHeight } from '@/dashboard/utils';
 import { WidgetsPanelLayout } from '@/models';
 import { WidgetProps } from '@/props';
 import styled from '@/styled';
@@ -24,17 +25,14 @@ import { Widget } from '@/widgets/widget';
 
 import { CellDropOverlay } from './components/cell-drop-overlay';
 import { DraggableWidgetWrapper } from './components/draggable-widget-wrapper';
+import { EditableLayoutRow } from './components/editable-layout-row';
 import { ResizableColumns } from './components/resizable-columns';
-import { ResizableRow } from './components/resizable-row';
 import { RowDropOverlay } from './components/row-drop-overlay';
 import {
   deleteWidgetFromLayout,
   distributeEqualWidthInRow,
   getColumnMaxWidths,
   getColumnMinWidths,
-  getRowHeight,
-  getRowMaxHeight,
-  getRowMinHeight,
   updateLayoutAfterDragAndDrop,
   updateLayoutWidths,
   updateRowHeight,
@@ -277,129 +275,135 @@ export const EditableLayout = ({
                 }
 
                 return (
-                  <ResizableRow
+                  <EditableLayoutRow
+                    row={row}
+                    widgets={widgets}
+                    onHeightChange={(height) => onRowHeightChange(height, columnIndex, rowIndex)}
                     key={`${columnIndex},${rowIndex}`}
                     id={`${columnIndex},${rowIndex}`}
-                    height={getRowHeight(row, widgets) + WIDGET_HEADER_HEIGHT}
-                    minHeight={getRowMinHeight(row)}
-                    maxHeight={getRowMaxHeight(row)}
-                    onHeightChange={(height) => onRowHeightChange(height, columnIndex, rowIndex)}
                   >
-                    {isDragging && (
-                      <RowDropOverlay
-                        id={`${columnIndex}-${rowIndex}`}
-                        columnIndex={columnIndex}
-                        rowIndex={rowIndex}
-                      />
-                    )}
+                    {(isAutoHeightRow) => (
+                      <>
+                        {isDragging && (
+                          <RowDropOverlay
+                            id={`${columnIndex}-${rowIndex}`}
+                            columnIndex={columnIndex}
+                            rowIndex={rowIndex}
+                          />
+                        )}
 
-                    <ResizableColumns
-                      disableResize={equalWidthCells}
-                      widths={rowWidths}
-                      minColWidths={getColumnMinWidths(row)}
-                      maxColWidths={getColumnMaxWidths(row)}
-                      onWidthsChange={(widths) => onCellWidthChange(widths, columnIndex, rowIndex)}
-                    >
-                      {visibleCells.map((subcell) => {
-                        const widgetProps = widgets.find((w) => w.id === subcell.widgetId);
-                        if (
-                          widgetProps?.widgetType === 'pivot' &&
-                          subcell.height &&
-                          widgetProps?.styleOptions?.isAutoHeight
-                        ) {
-                          widgetProps.styleOptions.isAutoHeight = false;
-                        }
-                        return (
-                          widgetProps && (
-                            <DraggableWidgetWrapper
-                              key={`${subcell.widgetId}`}
-                              id={`${subcell.widgetId}`}
-                              data={{
-                                columnIndex,
-                                rowIndex: rowIndex,
-                                widgetId: subcell.widgetId,
-                              }}
-                              dragHandleOptions={{
-                                icon: {
-                                  visible: showDragHandleIcon,
-                                  color: themeSettings.widget.header.titleTextColor,
-                                },
-                              }}
-                            >
-                              {(withDragHandle) => (
-                                <>
-                                  <Cell
-                                    height={subcell.height}
-                                    isDragging={draggingWidgetId === subcell.widgetId}
-                                    isDropping={isDragging && draggingWidgetId !== subcell.widgetId}
-                                  >
-                                    {widgetProps.widgetType === 'text' ? (
-                                      <Widget
-                                        {...{
-                                          ...widgetProps,
-                                          styleOptions: {
-                                            ...widgetProps?.styleOptions,
-                                            header: {
-                                              ...widgetProps?.styleOptions?.header,
-                                              renderTitle: composeTitleHandlers(
-                                                withDragHandle,
-                                                widgetProps?.styleOptions?.header?.renderTitle,
-                                              ),
-                                              renderToolbar: composeTextWidgetToolbarHandlers(
-                                                widgetProps?.styleOptions?.header?.renderToolbar,
-                                                (defaultToolbar) =>
+                        <ResizableColumns
+                          disableResize={equalWidthCells}
+                          widths={rowWidths}
+                          minColWidths={getColumnMinWidths(row)}
+                          maxColWidths={getColumnMaxWidths(row)}
+                          onWidthsChange={(widths) =>
+                            onCellWidthChange(widths, columnIndex, rowIndex)
+                          }
+                        >
+                          {visibleCells.map((subcell) => {
+                            const foundWidgetProps = widgets.find((w) => w.id === subcell.widgetId);
+                            if (!foundWidgetProps) {
+                              return null;
+                            }
+
+                            const widgetProps = !isAutoHeightRow
+                              ? withOptionallyDisabledAutoHeight(foundWidgetProps, true)
+                              : foundWidgetProps;
+
+                            return (
+                              <DraggableWidgetWrapper
+                                key={`${subcell.widgetId}`}
+                                id={`${subcell.widgetId}`}
+                                data={{
+                                  columnIndex,
+                                  rowIndex: rowIndex,
+                                  widgetId: subcell.widgetId,
+                                }}
+                                dragHandleOptions={{
+                                  icon: {
+                                    visible: showDragHandleIcon,
+                                    color: themeSettings.widget.header.titleTextColor,
+                                  },
+                                }}
+                              >
+                                {(withDragHandle) => (
+                                  <>
+                                    <Cell
+                                      height={isAutoHeightRow ? 'auto' : subcell.height}
+                                      isDragging={draggingWidgetId === subcell.widgetId}
+                                      isDropping={
+                                        isDragging && draggingWidgetId !== subcell.widgetId
+                                      }
+                                    >
+                                      {widgetProps.widgetType === 'text' ? (
+                                        <Widget
+                                          {...{
+                                            ...widgetProps,
+                                            styleOptions: {
+                                              ...widgetProps?.styleOptions,
+                                              header: {
+                                                ...widgetProps?.styleOptions?.header,
+                                                renderTitle: composeTitleHandlers(
+                                                  withDragHandle,
+                                                  widgetProps?.styleOptions?.header?.renderTitle,
+                                                ),
+                                                renderToolbar: composeTextWidgetToolbarHandlers(
+                                                  widgetProps?.styleOptions?.header?.renderToolbar,
+                                                  (defaultToolbar) =>
+                                                    addWidgetContextMenu(
+                                                      columnIndex,
+                                                      rowIndex,
+                                                      subcell.widgetId,
+                                                    )(() => {}, <>{defaultToolbar}</>),
+                                                ),
+                                              },
+                                            },
+                                          }}
+                                        />
+                                      ) : (
+                                        <Widget
+                                          {...{
+                                            ...widgetProps,
+                                            styleOptions: {
+                                              ...widgetProps?.styleOptions,
+                                              header: {
+                                                ...widgetProps?.styleOptions?.header,
+                                                renderTitle: composeTitleHandlers(
+                                                  withDragHandle,
+                                                  widgetProps?.styleOptions?.header?.renderTitle,
+                                                ),
+                                                renderToolbar: composeToolbarHandlers(
+                                                  widgetProps?.styleOptions?.header?.renderToolbar,
                                                   addWidgetContextMenu(
                                                     columnIndex,
                                                     rowIndex,
                                                     subcell.widgetId,
-                                                  )(() => {}, <>{defaultToolbar}</>),
-                                              ),
-                                            },
-                                          },
-                                        }}
-                                      />
-                                    ) : (
-                                      <Widget
-                                        {...{
-                                          ...widgetProps,
-                                          styleOptions: {
-                                            ...widgetProps?.styleOptions,
-                                            header: {
-                                              ...widgetProps?.styleOptions?.header,
-                                              renderTitle: composeTitleHandlers(
-                                                withDragHandle,
-                                                widgetProps?.styleOptions?.header?.renderTitle,
-                                              ),
-                                              renderToolbar: composeToolbarHandlers(
-                                                widgetProps?.styleOptions?.header?.renderToolbar,
-                                                addWidgetContextMenu(
-                                                  columnIndex,
-                                                  rowIndex,
-                                                  subcell.widgetId,
+                                                  ),
                                                 ),
-                                              ),
+                                              },
                                             },
-                                          },
-                                        }}
+                                          }}
+                                        />
+                                      )}
+                                    </Cell>
+                                    {isDragging && draggingWidgetId !== subcell.widgetId && (
+                                      <CellDropOverlay
+                                        id={`${subcell.widgetId}`}
+                                        widgetId={subcell.widgetId}
+                                        columnIndex={columnIndex}
+                                        rowIndex={rowIndex}
                                       />
                                     )}
-                                  </Cell>
-                                  {isDragging && draggingWidgetId !== subcell.widgetId && (
-                                    <CellDropOverlay
-                                      id={`${subcell.widgetId}`}
-                                      widgetId={subcell.widgetId}
-                                      columnIndex={columnIndex}
-                                      rowIndex={rowIndex}
-                                    />
-                                  )}
-                                </>
-                              )}
-                            </DraggableWidgetWrapper>
-                          )
-                        );
-                      })}
-                    </ResizableColumns>
-                  </ResizableRow>
+                                  </>
+                                )}
+                              </DraggableWidgetWrapper>
+                            );
+                          })}
+                        </ResizableColumns>
+                      </>
+                    )}
+                  </EditableLayoutRow>
                 );
               })}
               {isDragging && (

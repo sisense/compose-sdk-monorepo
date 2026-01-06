@@ -13,4 +13,5 @@ Vue components and utilities for working with dashboards
 - [PivotTableWidget](class.PivotTableWidget.md)
 - [useComposedDashboard](function.useComposedDashboard.md)
 - [useCustomWidgets](function.useCustomWidgets.md)
+- [useJtdWidget](function.useJtdWidget.md)
 - [Widget](class.Widget.md)

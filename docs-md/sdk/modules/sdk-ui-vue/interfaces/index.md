@@ -65,6 +65,8 @@ TypeScript interfaces for components and composables listed above
 - [GetWidgetModelParams](interface.GetWidgetModelParams.md)
 - [IndicatorChartDataOptions](interface.IndicatorChartDataOptions.md)
 - [IndicatorChartProps](interface.IndicatorChartProps.md)
+- [JumpToDashboardConfig](interface.JumpToDashboardConfig.md)
+- [JumpToDashboardConfigForPivot](interface.JumpToDashboardConfigForPivot.md)
 - [LineChartProps](interface.LineChartProps.md)
 - [LineStyleOptions](interface.LineStyleOptions.md)
 - [Member](interface.Member.md)

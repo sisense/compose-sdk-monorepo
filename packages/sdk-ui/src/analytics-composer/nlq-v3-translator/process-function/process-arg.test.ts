@@ -1,32 +1,37 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as commonModule from '../common.js';
+import { createSchemaIndex } from '../common.js';
 import { ArgInput, FunctionContext } from '../types.js';
 import { processArg } from './process-arg.js';
 
 // Mock dependencies
-vi.mock('../common.js', () => ({
-  createAttributeFromName: vi.fn((attributeName: string) => {
-    // Check if attribute has a date level (4 parts when split by '.')
-    const parts = attributeName.split('.');
-    const hasDateLevel = parts.length === 4;
+vi.mock('../common.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../common.js')>();
+  return {
+    ...actual,
+    createAttributeFromName: vi.fn((attributeName: string) => {
+      // Check if attribute has a date level (4 parts when split by '.')
+      const parts = attributeName.split('.');
+      const hasDateLevel = parts.length === 4;
 
-    if (hasDateLevel) {
-      return { __serializable: 'DimensionalAttribute', type: 'datelevel' };
-    }
-    return { __serializable: 'DimensionalAttribute' };
-  }),
-  createDateDimensionFromName: vi
-    .fn()
-    .mockReturnValue({ __serializable: 'DimensionalDateDimension' }),
-  isDateLevelAttribute: vi.fn((attribute: any) => attribute?.type === 'datelevel'),
-  getAttributeTypeDisplayString: vi.fn((attribute: any) => {
-    if (attribute?.type === 'text-attribute') return 'text';
-    if (attribute?.type === 'numeric-attribute') return 'numeric';
-    if (attribute?.type === 'datelevel') return 'date/datetime';
-    return 'unknown';
-  }),
-}));
+      if (hasDateLevel) {
+        return { __serializable: 'DimensionalAttribute', type: 'datelevel' };
+      }
+      return { __serializable: 'DimensionalAttribute' };
+    }),
+    createDateDimensionFromName: vi
+      .fn()
+      .mockReturnValue({ __serializable: 'DimensionalDateDimension' }),
+    isDateLevelAttribute: vi.fn((attribute: any) => attribute?.type === 'datelevel'),
+    getAttributeTypeDisplayString: vi.fn((attribute: any) => {
+      if (attribute?.type === 'text-attribute') return 'text';
+      if (attribute?.type === 'numeric-attribute') return 'numeric';
+      if (attribute?.type === 'datelevel') return 'date/datetime';
+      return 'unknown';
+    }),
+  };
+});
 
 vi.mock('./process-node.js', () => ({
   processNode: vi.fn().mockReturnValue({ __serializable: 'ProcessedNode' }),
@@ -35,7 +40,7 @@ vi.mock('./process-node.js', () => ({
 // Mock context for testing
 const createMockContext = (pathPrefix = 'test'): FunctionContext => ({
   dataSource: { id: 'test', title: 'Test', address: 'localhost' } as any,
-  tables: [],
+  schemaIndex: createSchemaIndex([]),
   pathPrefix,
 });
 
@@ -617,7 +622,7 @@ describe('processArg', () => {
       expect(createDateDimensionFromName).toHaveBeenCalledWith(
         'DM.Commerce.Date',
         expect.any(Object),
-        expect.any(Array),
+        expect.any(Object),
       );
     });
 
@@ -663,7 +668,7 @@ describe('processArg', () => {
         context: {
           argSchema: { type: 'DateDimension', required: true },
           ...createMockContext('testArg'),
-          tables: [], // Empty tables array
+          schemaIndex: createSchemaIndex([]), // Empty tables array
         },
       };
 
@@ -702,7 +707,7 @@ describe('processArg', () => {
       expect(createAttributeFromName).toHaveBeenCalledWith(
         'DM.Commerce.Date.Years',
         expect.any(Object),
-        expect.any(Array),
+        expect.any(Object),
       );
     });
 
@@ -760,7 +765,7 @@ describe('processArg', () => {
       expect(createAttributeFromName).toHaveBeenCalledWith(
         'DM.Commerce.Date.Years',
         expect.any(Object),
-        expect.any(Array),
+        expect.any(Object),
       );
     });
 

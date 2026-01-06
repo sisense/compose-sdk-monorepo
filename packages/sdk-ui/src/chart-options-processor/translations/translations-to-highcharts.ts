@@ -276,7 +276,7 @@ const translateNumbersContinuousXAxis = (
     }
   });
 
-  return seriesDataWithNulls;
+  return handleIsolatedYAxisPointsMarker(seriesDataWithNulls);
 };
 
 export const formatSeries = (
@@ -640,3 +640,23 @@ export const getColorSetting = (
     return (dataOptions.seriesToColorMap as ValueToColorMap)?.[key];
   }
 };
+
+/**
+ * Handles the case when there are isolated points in the y axis
+ * @param series - Series data
+ * @returns Series data with visible marker for isolated points
+ */
+function handleIsolatedYAxisPointsMarker(series: SeriesPointStructure[]) {
+  return series.map((dataPoint, index) => {
+    const previousDataPoint = series[index - 1];
+    const nextDataPoint = series[index + 1];
+    const isIsolatedPoint =
+      (previousDataPoint === undefined || previousDataPoint.y === null) &&
+      (nextDataPoint === undefined || nextDataPoint.y === null);
+
+    if (isIsolatedPoint) {
+      return { ...dataPoint, marker: { enabled: true, isIsolatedPoint: true } };
+    }
+    return dataPoint;
+  });
+}

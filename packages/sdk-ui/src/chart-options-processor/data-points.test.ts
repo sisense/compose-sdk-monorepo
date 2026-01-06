@@ -64,6 +64,7 @@ describe('getDataPoint', () => {
         maskedBreakByPoint: '3',
         maskedBreakByColor: '4',
         maskedSize: '5',
+        rawValue: '6',
       },
     });
     const dataOptions = {

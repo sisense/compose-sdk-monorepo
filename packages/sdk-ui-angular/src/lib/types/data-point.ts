@@ -4,6 +4,7 @@ import {
   CalendarHeatmapDataPoint,
   DataPoint,
   IndicatorDataPoint,
+  PivotTableDataPoint,
   ScatterDataPoint,
   ScattermapDataPoint,
   TextWidgetDataPoint,
@@ -81,13 +82,20 @@ export type ChartDataPointClickEvent =
   | IndicatorDataPointEvent
   | CalendarHeatmapDataPointEvent;
 
-export type WidgetDataPointClickEvent = ChartDataPointClickEvent | TextWidgetDataPointEvent;
+export type WidgetDataPointClickEvent =
+  | ChartDataPointClickEvent
+  | TextWidgetDataPointEvent
+  | PivotTableDataPointEvent;
 
 export type ChartDataPointContextMenuEvent =
   | DataPointEvent
   | ScatterDataPointEvent
   | BoxplotDataPointEvent
   | CalendarHeatmapDataPointEvent;
+
+export type WidgetDataPointContextMenuEvent =
+  | ChartDataPointContextMenuEvent
+  | PivotTableDataPointEvent;
 
 export type DataPointsEvent = {
   /** Data points that were selected */
@@ -106,6 +114,13 @@ export type ScatterDataPointsEvent = {
 export type BoxplotDataPointsEvent = {
   /** Data point that were selected */
   points: BoxplotDataPoint[];
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent;
+};
+
+export type PivotTableDataPointEvent = {
+  /** Data point that was clicked */
+  point: PivotTableDataPoint;
   /** Native MouseEvent */
   nativeEvent: MouseEvent;
 };
@@ -158,6 +173,11 @@ export type WidgetDataPointClickEventHandler = (event: WidgetDataPointClickEvent
  */
 export type ChartDataPointContextMenuEventHandler = (event: ChartDataPointContextMenuEvent) => void;
 
+/** Context menu handler for when a data point on Widget is right-clicked. */
+export type WidgetDataPointContextMenuEventHandler = (
+  event: WidgetDataPointContextMenuEvent,
+) => void;
+
 /** Click handler for when multiple scatter data points are selected. */
 export type ScatterDataPointsEventHandler = (event: ScatterDataPointsEvent) => void;
 
@@ -176,3 +196,6 @@ export type CalendarHeatmapDataPointsEventHandler = (event: CalendarHeatmapDataP
 
 /** Click handler for when multiple data points on Chart are selected. */
 export type ChartDataPointsEventHandler = (event: ChartDataPointsEvent) => void;
+
+/** Click handler for when a pivot table data point is clicked. */
+export type PivotTableDataPointEventHandler = (event: PivotTableDataPointEvent) => void;

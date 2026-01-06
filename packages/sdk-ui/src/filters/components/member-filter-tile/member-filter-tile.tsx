@@ -1,6 +1,7 @@
-import { FunctionComponent, useCallback } from 'react';
+import { FunctionComponent, useCallback, useMemo, useState } from 'react';
 
 import { Attribute, DataSource, Filter, filterFactory, MembersFilter } from '@sisense/sdk-data';
+import debounce from 'lodash-es/debounce';
 import merge from 'lodash-es/merge';
 
 import { useGetFilterMembersInternal } from '@/filters/hooks/use-get-filter-members';
@@ -8,10 +9,15 @@ import { useSynchronizedFilter } from '@/filters/hooks/use-synchronized-filter';
 import { cloneFilterAndToggleDisabled } from '@/utils/filters';
 
 import { asSisenseComponent } from '../../../decorators/component-decorators/as-sisense-component';
+import { ScrollWrapperOnScrollEvent } from '../filter-editor-popover/common/scroll-wrapper';
 import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container';
 import { MemberList } from './member-list';
 import { Member, SelectedMember } from './members-reducer';
 import { PillSection } from './pill-section';
+
+const LIST_SCROLL_LOAD_MORE_THRESHOLD = 0.75;
+const QUERY_MEMBERS_COUNT = 50;
+const SEARCH_VALUE_UPDATE_DELAY = 300;
 
 /**
  * Props of the {@link MemberFilterTile} component.
@@ -81,17 +87,43 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     tileDesignOptions,
   } = props;
 
+  const [searchValue, setSearchValue] = useState('');
+  const [searchFilter, setSearchFilter] = useState<Filter>(filterFactory.contains(attribute, ''));
+  const debouncedSetSearchFilter = useMemo(
+    () =>
+      debounce(
+        (search: string) => setSearchFilter(filterFactory.contains(attribute, search)),
+        SEARCH_VALUE_UPDATE_DELAY,
+      ),
+    [attribute],
+  );
+  const onSearchValueChange = useCallback(
+    (search: string) => {
+      setSearchValue(search);
+      debouncedSetSearchFilter(search);
+    },
+    [debouncedSetSearchFilter],
+  );
+
   const { filter, updateFilter } = useSynchronizedFilter<MembersFilter>(
     filterFromProps as MembersFilter | null,
     updateFilterFromProps,
     () => filterFactory.members(attribute, []) as MembersFilter,
   );
 
-  const { isError, error, data } = useGetFilterMembersInternal({
+  const {
+    isError,
+    error,
+    data,
+    loadMore: loadMoreMembers,
+    isLoading: membersLoading,
+    isAllItemsLoaded: membersAllItemsLoaded,
+  } = useGetFilterMembersInternal({
     filter,
     defaultDataSource: dataSource,
-    parentFilters,
+    parentFilters: useMemo(() => [...parentFilters, searchFilter], [searchFilter, parentFilters]),
     allowMissingMembers: true,
+    count: QUERY_MEMBERS_COUNT,
   });
 
   if (isError) {
@@ -108,17 +140,43 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
           ? addSelectedMember(selectedMembers, member)
           : removeSelectedMember(selectedMembers, member);
 
+        const isAllMembersSelected =
+          newSelectedMembers.length === allMembers.length && membersAllItemsLoaded;
+        const isNoSearchValue = searchValue.length === 0;
+        const isAnyDisabledMember = newSelectedMembers.some(
+          (selectedMember) => selectedMember.inactive,
+        );
+        const shouldResetFilter = isAllMembersSelected && isNoSearchValue && !isAnyDisabledMember;
+
         updateFilter(
-          // if all members are excluded, we should reset the filter to exclude none to match the behavior in Fusion
-          newSelectedMembers.length === allMembers.length && excludeMembers
-            ? withSelectedMembers(filter, [], false)
+          // If all members are selected, we should reset the filter to match the behavior in Fusion
+          shouldResetFilter
+            ? withSelectedMembers(filter, [], !excludeMembers)
             : withSelectedMembers(filter, newSelectedMembers, excludeMembers),
         );
       } else {
         updateFilter(withSelectedMembers(filter, [member], excludeMembers));
       }
     },
-    [enableMultiSelection, selectedMembers, allMembers, excludeMembers, filter, updateFilter],
+    [
+      enableMultiSelection,
+      selectedMembers,
+      allMembers,
+      excludeMembers,
+      filter,
+      updateFilter,
+      membersAllItemsLoaded,
+      searchValue,
+    ],
+  );
+
+  const handleMembersListScroll = useCallback(
+    ({ top, direction }: ScrollWrapperOnScrollEvent) => {
+      if (!membersLoading && top > LIST_SCROLL_LOAD_MORE_THRESHOLD && direction === 'down') {
+        loadMoreMembers(QUERY_MEMBERS_COUNT);
+      }
+    },
+    [loadMoreMembers, membersLoading],
   );
 
   return (
@@ -129,7 +187,6 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
           if (collapsed) {
             return (
               <PillSection
-                members={allMembers}
                 selectedMembers={selectedMembers}
                 onToggleSelectedMember={(memberKey) => {
                   const newSelectedMembers = toggleActivationInSelectedMemberByMemberKey(
@@ -146,6 +203,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
           return (
             <MemberList
               members={allMembers}
+              isMembersLoading={membersLoading}
               selectedMembers={selectedMembers}
               onSelectMember={updateFilterFromMembersList}
               checkAllMembers={() => updateFilter(withSelectedMembers(filter, [], true))}
@@ -153,6 +211,9 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
               excludeMembers={excludeMembers}
               enableMultiSelection={enableMultiSelection}
               disabled={tileDisabled}
+              onListScroll={handleMembersListScroll}
+              searchValue={searchValue}
+              onSearchValueChange={onSearchValueChange}
             />
           );
         }}

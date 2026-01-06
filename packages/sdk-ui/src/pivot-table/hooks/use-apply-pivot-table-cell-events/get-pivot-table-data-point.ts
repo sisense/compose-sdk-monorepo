@@ -79,7 +79,7 @@ export const getPivotTableDataPoint = (
       const displayValue = rowNode.content ?? createFormatter(item)(value);
 
       return {
-        ...getDataPointMetadata(item),
+        ...getDataPointMetadata(item, { dataOptionName: 'rows', dataOptionIndex: index }),
         value,
         displayValue,
       } as DataPointEntry;
@@ -103,7 +103,7 @@ export const getPivotTableDataPoint = (
       const displayValue = columnNode.content;
 
       return {
-        ...getDataPointMetadata(item),
+        ...getDataPointMetadata(item, { dataOptionName: 'columns', dataOptionIndex: index }),
         value,
         displayValue,
       } as DataPointEntry;
@@ -113,13 +113,19 @@ export const getPivotTableDataPoint = (
       ? safeModulo(cellPayload.columnTreeNode?.index, dataOptions.values?.length)
       : safeModulo(cellPayload.measureTreeNode?.index, dataOptions.values?.length);
     const valueDataOption = dataOptions.values?.[valueIndex];
-    valuesEntries = [
-      {
-        ...getDataPointMetadata(valueDataOption!),
-        value: cellPayload.dataNode.value,
-        displayValue: cellPayload.dataNode.content,
-      } as DataPointEntry,
-    ];
+
+    if (valueDataOption) {
+      valuesEntries = [
+        {
+          ...getDataPointMetadata(valueDataOption, {
+            dataOptionName: 'values',
+            dataOptionIndex: valueIndex,
+          }),
+          value: cellPayload.dataNode.value,
+          displayValue: cellPayload.dataNode.content,
+        } as DataPointEntry,
+      ];
+    }
   }
 
   if (isDataRowCell) {
@@ -131,7 +137,7 @@ export const getPivotTableDataPoint = (
         const displayValue = rowNode.content;
 
         return {
-          ...getDataPointMetadata(item),
+          ...getDataPointMetadata(item, { dataOptionName: 'rows', dataOptionIndex: index }),
           value,
           displayValue,
         } as DataPointEntry;
@@ -152,7 +158,7 @@ export const getPivotTableDataPoint = (
         const displayValue = columnNode.content;
 
         return {
-          ...getDataPointMetadata(item),
+          ...getDataPointMetadata(item, { dataOptionName: 'columns', dataOptionIndex: index }),
           value,
           displayValue,
         } as DataPointEntry;
@@ -165,7 +171,10 @@ export const getPivotTableDataPoint = (
     const rowDataOption = dataOptions.rows?.[dataOptionIndex];
     rowsEntries = [
       {
-        ...getDataPointMetadata(rowDataOption!),
+        ...getDataPointMetadata(rowDataOption!, {
+          dataOptionName: 'rows',
+          dataOptionIndex: dataOptionIndex,
+        }),
         value: rowDataNode.value,
         displayValue: rowDataNode.content,
       } as DataPointEntry,
@@ -178,7 +187,10 @@ export const getPivotTableDataPoint = (
     const columnDataOption = dataOptions.columns?.[dataOptionIndex];
     columnsEntries = [
       {
-        ...getDataPointMetadata(columnDataOption!),
+        ...getDataPointMetadata(columnDataOption!, {
+          dataOptionName: 'columns',
+          dataOptionIndex: dataOptionIndex,
+        }),
         value: columnDataNode.value,
         displayValue: columnDataNode.content,
       } as DataPointEntry,
@@ -191,7 +203,10 @@ export const getPivotTableDataPoint = (
     const valueDataOption = dataOptions.values?.[index];
     valuesEntries = [
       {
-        ...getDataPointMetadata(valueDataOption!),
+        ...getDataPointMetadata(valueDataOption!, {
+          dataOptionName: 'values',
+          dataOptionIndex: index,
+        }),
         value: columnDataNode.value,
         displayValue: columnDataNode.content,
       } as DataPointEntry,
@@ -204,7 +219,7 @@ export const getPivotTableDataPoint = (
         const displayValue = columnNode.content;
 
         return {
-          ...getDataPointMetadata(item),
+          ...getDataPointMetadata(item, { dataOptionName: 'columns', dataOptionIndex: index }),
           value,
           displayValue,
         } as DataPointEntry;

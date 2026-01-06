@@ -104,7 +104,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": undefined,
             "level": 1,
             "levelsCount": 1,
-            "rawValue": undefined,
+            "rawValue": 936,
             "value": 936,
             "xCompareValue": [
               1514764800000,
@@ -126,7 +126,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": undefined,
             "level": 1,
             "levelsCount": 1,
-            "rawValue": undefined,
+            "rawValue": 2045,
             "value": 2045,
             "xCompareValue": [
               1356998400000,
@@ -148,7 +148,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": undefined,
             "level": 1,
             "levelsCount": 1,
-            "rawValue": undefined,
+            "rawValue": 3010,
             "value": 3010,
             "xCompareValue": [
               1388534400000,
@@ -170,7 +170,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": undefined,
             "level": 1,
             "levelsCount": 1,
-            "rawValue": undefined,
+            "rawValue": 3056,
             "value": 3056,
             "xCompareValue": [
               1293840000000,
@@ -192,7 +192,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": undefined,
             "level": 1,
             "levelsCount": 1,
-            "rawValue": undefined,
+            "rawValue": 4242,
             "value": 4242,
             "xCompareValue": [
               1451606400000,
@@ -214,7 +214,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": undefined,
             "level": 1,
             "levelsCount": 1,
-            "rawValue": undefined,
+            "rawValue": 5447,
             "value": 5447,
             "xCompareValue": [
               1420070400000,
@@ -236,7 +236,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": undefined,
             "level": 1,
             "levelsCount": 1,
-            "rawValue": undefined,
+            "rawValue": 6814,
             "value": 6814,
             "xCompareValue": [
               1262304000000,
@@ -258,7 +258,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": undefined,
             "level": 1,
             "levelsCount": 1,
-            "rawValue": undefined,
+            "rawValue": 8103,
             "value": 8103,
             "xCompareValue": [
               1230768000000,
@@ -280,7 +280,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
             "blur": undefined,
             "level": 1,
             "levelsCount": 1,
-            "rawValue": undefined,
+            "rawValue": 8423,
             "value": 8423,
             "xCompareValue": [
               1325376000000,
@@ -622,7 +622,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 8103,
             "value": 8103,
             "xCompareValue": [
               1230768000000,
@@ -647,7 +647,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 6814,
             "value": 6814,
             "xCompareValue": [
               1262304000000,
@@ -672,7 +672,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 3056,
             "value": 3056,
             "xCompareValue": [
               1293840000000,
@@ -697,7 +697,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 8423,
             "value": 8423,
             "xCompareValue": [
               1325376000000,
@@ -722,7 +722,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 2045,
             "value": 2045,
             "xCompareValue": [
               1356998400000,
@@ -747,7 +747,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 3010,
             "value": 3010,
             "xCompareValue": [
               1388534400000,
@@ -772,7 +772,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 5447,
             "value": 5447,
             "xCompareValue": [
               1420070400000,
@@ -797,7 +797,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 4242,
             "value": 4242,
             "xCompareValue": [
               1451606400000,
@@ -822,7 +822,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 936,
             "value": 936,
             "xCompareValue": [
               1514764800000,
@@ -1186,7 +1186,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 8103,
             "value": 8103,
             "xCompareValue": [
               1230768000000,
@@ -1211,7 +1211,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 6814,
             "value": 6814,
             "xCompareValue": [
               1262304000000,
@@ -1236,7 +1236,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 3056,
             "value": 3056,
             "xCompareValue": [
               1293840000000,
@@ -1261,7 +1261,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 8423,
             "value": 8423,
             "xCompareValue": [
               1325376000000,
@@ -1286,7 +1286,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 2045,
             "value": 2045,
             "xCompareValue": [
               1356998400000,
@@ -1311,7 +1311,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 3010,
             "value": 3010,
             "xCompareValue": [
               1388534400000,
@@ -1336,7 +1336,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 5447,
             "value": 5447,
             "xCompareValue": [
               1420070400000,
@@ -1361,7 +1361,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 4242,
             "value": 4242,
             "xCompareValue": [
               1451606400000,
@@ -1386,7 +1386,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
             "blur": undefined,
             "level": 2,
             "levelsCount": 2,
-            "rawValue": undefined,
+            "rawValue": 936,
             "value": 936,
             "xCompareValue": [
               1514764800000,

@@ -99,6 +99,12 @@ export const PivotTableWidget = defineComponent({
      */
     styleOptions: Object as PropType<PivotTableWidgetProps['styleOptions']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.drilldownOptions}
+     *
+     * @category Widget
+     */
+    drilldownOptions: Object as PropType<PivotTableWidgetProps['drilldownOptions']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.title}
      *
      * @category Widget
@@ -128,14 +134,12 @@ export const PivotTableWidget = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.onDataPointClick}
      *
      * @category Callbacks
-     * @internal
      */
     onDataPointClick: Function as PropType<PivotTableWidgetProps['onDataPointClick']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.onDataPointContextMenu}
      *
      * @category Callbacks
-     * @internal
      */
     onDataPointContextMenu: Function as PropType<PivotTableWidgetProps['onDataPointContextMenu']>,
     /**

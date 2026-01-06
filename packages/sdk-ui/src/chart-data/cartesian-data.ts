@@ -237,13 +237,15 @@ const getSingleSeriesValue = (
   // use a small value instead of 0 so pie chart can render
   const value = yAggColumn ? (getValue(row, yAggColumn) as number) : 0.00001;
   const { color, rawValue } = row[yAggColumn?.index ?? 0] ?? {};
+  const normalizedValue = value === undefined ? NaN : value;
 
   return {
-    rawValue,
+    // Fallback to computed value when rawValue is not available (e.g., sparse data)
+    rawValue: rawValue ?? normalizedValue,
     xValue: xValue.rawValues,
     xDisplayValue: xValue.xValues,
     xCompareValue: xValue.compareValues,
-    value: value === undefined ? NaN : value,
+    value: normalizedValue,
     blur: yAggColumn ? isBlurred(row, yAggColumn) : undefined,
     ...(color && { color }),
   };

@@ -35,3 +35,27 @@ A collection of data point entries that represents values for all related `dataO
 > Data point entries for the `values` data options
 >
 >
+
+***
+
+### `isCaptionCell`
+
+**isCaptionCell**: `boolean`
+
+Boolean flag that defines if the data point is a caption cell
+
+***
+
+### `isDataCell`
+
+**isDataCell**: `boolean`
+
+Boolean flag that defines if the data point is a data cell
+
+***
+
+### `isTotalCell`
+
+**isTotalCell**: `boolean`
+
+Boolean flag that defines if the data point is a total cell (subtotal or grandtotal)

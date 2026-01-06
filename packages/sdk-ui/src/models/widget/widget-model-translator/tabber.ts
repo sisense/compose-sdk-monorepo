@@ -2,7 +2,7 @@ import { GenericDataOptions, TabberButtonsWidgetStyleOptions } from '@/types.js'
 import { createDataOptionsFromPanels } from '@/widget-by-id/translate-widget-data-options.js';
 import { extractStyleOptions } from '@/widget-by-id/translate-widget-style-options';
 import { extractTabberButtonsWidgetCustomOptions } from '@/widget-by-id/translate-widget-style-options/tabber.js';
-import { Panel, TabberWidgetDtoStyle, WidgetDto } from '@/widget-by-id/types.js';
+import { Panel, TabberWidgetDto, WidgetDto } from '@/widget-by-id/types.js';
 
 /**
  * Processes officially supported tabber custom widgets (WidgetsTabber).
@@ -26,9 +26,7 @@ export const processTabberWidget = (params: {
   const { panels, widgetDto, variantColors } = params;
 
   // Extract customOptions for tabber-buttons (DTO type is 'WidgetsTabber')
-  const customOptions = extractTabberButtonsWidgetCustomOptions(
-    widgetDto.style as TabberWidgetDtoStyle,
-  );
+  const customOptions = extractTabberButtonsWidgetCustomOptions(widgetDto as TabberWidgetDto);
 
   return {
     fusionWidgetType: 'custom',

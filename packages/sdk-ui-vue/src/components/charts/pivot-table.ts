@@ -92,6 +92,18 @@ export const PivotTable = defineComponent({
      * @category Representation
      */
     styleOptions: Object as PropType<PivotTableProps['styleOptions']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.onDataPointClick}
+     *
+     * @category Callbacks
+     */
+    onDataPointClick: Function as PropType<PivotTableProps['onDataPointClick']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!PivotTableProps.onDataPointContextMenu}
+     *
+     * @category Callbacks
+     */
+    onDataPointContextMenu: Function as PropType<PivotTableProps['onDataPointContextMenu']>,
   },
   setup: (props) => setupHelper(PivotTablePreact, props),
 });

@@ -1,6 +1,25 @@
-import { Filter, FilterRelations, JSONArray, JSONValue, Measure } from '@sisense/sdk-data';
+import {
+  Filter,
+  FilterRelations,
+  JaqlDataSourceForDto,
+  JSONArray,
+  JSONValue,
+  Measure,
+} from '@sisense/sdk-data';
 
-import { DataSchemaContext, NlqTranslationInput } from '../types';
+import { NlqTranslationInput } from '../types.js';
+import type { SchemaIndex } from './common.js';
+
+/**
+ * Internal context type that uses schemaIndex for efficient lookups
+ * @internal
+ */
+export interface InternalDataSchemaContext {
+  /** The data source being used for the query */
+  dataSource: JaqlDataSourceForDto;
+  /** Schema index for efficient table/column lookups */
+  schemaIndex: SchemaIndex;
+}
 
 export const DIMENSIONAL_NAME_PREFIX = 'DM.';
 
@@ -59,8 +78,9 @@ export type FunctionCall = {
 /**
  * Context object passed to all custom processors containing runtime information
  * needed for processing.
+ * @internal
  */
-export interface FunctionContext extends DataSchemaContext {
+export interface FunctionContext extends InternalDataSchemaContext {
   /** Path prefix for error messages (e.g., 'args[0].function') */
   pathPrefix: string;
 }
@@ -69,18 +89,27 @@ export interface ArgContext extends FunctionContext {
   argSchema: ArgSchema;
 }
 
-// Translation input types
-export type DimensionsInput = NlqTranslationInput<JSONArray, DataSchemaContext>;
-export type MeasuresInput = NlqTranslationInput<JSONArray, DataSchemaContext>;
-export type FiltersInput = NlqTranslationInput<JSONArray, DataSchemaContext>;
-export type HighlightsInput = NlqTranslationInput<JSONArray, DataSchemaContext>;
+// Translation input types (internal - use schemaIndex)
+export type DimensionsInput = NlqTranslationInput<JSONArray, InternalDataSchemaContext>;
+export type MeasuresInput = NlqTranslationInput<JSONArray, InternalDataSchemaContext>;
+export type FiltersInput = NlqTranslationInput<JSONArray, InternalDataSchemaContext>;
+export type HighlightsInput = NlqTranslationInput<JSONArray, InternalDataSchemaContext>;
 
-// Function call input types
-export type MeasuresFunctionCallInput = NlqTranslationInput<FunctionCall[], DataSchemaContext>;
-export type FiltersFunctionCallInput = NlqTranslationInput<FunctionCall[], DataSchemaContext>;
-export type HighlightsFunctionCallInput = NlqTranslationInput<FunctionCall[], DataSchemaContext>;
+// Function call input types (internal - use schemaIndex)
+export type MeasuresFunctionCallInput = NlqTranslationInput<
+  FunctionCall[],
+  InternalDataSchemaContext
+>;
+export type FiltersFunctionCallInput = NlqTranslationInput<
+  FunctionCall[],
+  InternalDataSchemaContext
+>;
+export type HighlightsFunctionCallInput = NlqTranslationInput<
+  FunctionCall[],
+  InternalDataSchemaContext
+>;
 
-// Core processing input types
+// Core processing input types (internal - use schemaIndex)
 export type NodeInput = NlqTranslationInput<FunctionCall, FunctionContext>;
 export type ArgInput = NlqTranslationInput<Arg, ArgContext>;
 

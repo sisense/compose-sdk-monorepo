@@ -17,20 +17,26 @@ import {
   isDrilldownApplicableToChart,
   prepareDrilldownSelectionPoints,
 } from '../common/drilldown-utils.js';
-import { useDrilldown } from './use-drilldown.js';
-import { useSyncedDrilldownPaths } from './use-synced-hierarchies.js';
+import { useDrilldown } from '../hooks/use-drilldown.js';
+import { useSyncedDrilldownPaths } from '../hooks/use-synced-drilldown-paths.js';
 
-type UseWithDrilldownParams = {
+type UseWithChartWidgetDrilldownParams = {
   propsToExtend: ChartWidgetProps;
   onDrilldownSelectionsChange?: (selections: DrilldownSelection[]) => void;
 };
 
-export const useWithDrilldown = ({
+type UseWithChartWidgetDrilldownResult = {
+  propsWithDrilldown: ChartWidgetProps;
+  isDrilldownEnabled: boolean;
+  breadcrumbs: JSX.Element;
+};
+
+export const useWithChartWidgetDrilldown = ({
   propsToExtend,
   onDrilldownSelectionsChange,
-}: UseWithDrilldownParams) => {
+}: UseWithChartWidgetDrilldownParams): UseWithChartWidgetDrilldownResult => {
   const { chartType, dataOptions, dataSource, drilldownOptions } = propsToExtend;
-  const { drilldownSelections } = drilldownOptions || {};
+  const { drilldownSelections: initialDrilldownSelections } = drilldownOptions || {};
   const { openMenu } = useMenu();
 
   const isDrilldownApplicable = useMemo(
@@ -69,7 +75,7 @@ export const useWithDrilldown = ({
 
   const { drilldownDimension, drilldownFilters, breadcrumbs, openDrilldownMenu } = useDrilldown({
     initialDimension,
-    drilldownSelections,
+    initialDrilldownSelections,
     openMenu,
     onDrilldownSelectionsChange,
   });
@@ -79,7 +85,7 @@ export const useWithDrilldown = ({
       const drilldownSelectionPoints = prepareDrilldownSelectionPoints(points, event, dataOptions);
       const selectedAttributes = getSelectedDrilldownAttributes(
         initialDimension,
-        drilldownSelections || [],
+        initialDrilldownSelections || [],
       );
       const availableDrilldownPaths = getAvailableDrilldownPaths(
         drilldownPathsRef.current,
@@ -95,7 +101,7 @@ export const useWithDrilldown = ({
         availableDrilldownPaths,
       );
     },
-    [dataOptions, initialDimension, drilldownSelections, openDrilldownMenu],
+    [dataOptions, initialDimension, initialDrilldownSelections, openDrilldownMenu],
   );
 
   const drilldownOnDataPointContextMenu = useCallback(
@@ -103,7 +109,7 @@ export const useWithDrilldown = ({
       const drilldownSelectionPoints = prepareDrilldownSelectionPoints([point], event, dataOptions);
       const selectedAttributes = getSelectedDrilldownAttributes(
         initialDimension,
-        drilldownSelections || [],
+        initialDrilldownSelections || [],
       );
       const availableDrilldownPaths = getAvailableDrilldownPaths(
         drilldownPathsRef.current,
@@ -119,7 +125,7 @@ export const useWithDrilldown = ({
         availableDrilldownPaths,
       );
     },
-    [dataOptions, initialDimension, drilldownSelections, openDrilldownMenu],
+    [dataOptions, initialDimension, initialDrilldownSelections, openDrilldownMenu],
   );
 
   /**

@@ -214,8 +214,13 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().
   if (queryState.data && isParamsChanged) {
-    return { ...queryStateReducer(queryState, { type: 'loading' }), refetch, loadMore };
+    return {
+      ...queryStateReducer(queryState, { type: 'loading' }),
+      refetch,
+      loadMore,
+      isAllItemsLoaded,
+    };
   }
 
-  return { ...queryState, refetch, loadMore };
+  return { ...queryState, refetch, loadMore, isAllItemsLoaded };
 }

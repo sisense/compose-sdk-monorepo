@@ -309,6 +309,7 @@ export type StatisticalModels = {
 export type PanelItem = {
   instanceid?: string;
   format?: {
+    continuous?: boolean;
     color?: PanelColorFormat;
     colorSecond?: PanelColorFormat;
     mask?: DatetimeMask | NumericMask;
@@ -739,15 +740,21 @@ export type TextWidgetDtoStyle = {
   };
 };
 
+export type TabberWidgetDtoTab = {
+  displayWidgetIds: string[];
+  hideWidgetIds: string[];
+  title: string;
+};
+
+export type TabberWidgetDto = WidgetDto & { style: TabberWidgetDtoStyle } & {
+  tabs?: TabberWidgetDtoTab[];
+};
+
 /**
  * The data transfer object (DTO) containing info of a tabber widget style.
  */
 export type TabberWidgetDtoStyle = {
-  tabs: {
-    displayWidgetIds: string[];
-    hideWidgetIds: string[];
-    title: string;
-  }[];
+  tabs?: TabberWidgetDtoTab[];
   activeTab: string;
   descriptionColor: string;
   selectedBkgColor: string;
@@ -757,8 +764,28 @@ export type TabberWidgetDtoStyle = {
   showTitle: boolean;
   tabCornerRadius: 'SMALL' | 'MEDIUM' | 'LARGE' | 'NONE';
   tabsAlignment: 'LEFT' | 'CENTER' | 'RIGHT';
-  tabsInterval: 'SMALL' | 'MEDIUM' | 'LARGE';
-  tabsSize: 'SMALL' | 'MEDIUM' | 'LARGE';
+  /**
+   * The spacing interval between tabs.
+   * Can be a predefined size ('SMALL', 'MEDIUM', 'LARGE') or a number (treated as pixels).
+   *
+   * @example
+   * ```typescript
+   * tabsInterval: 'SMALL'
+   * tabsInterval: 16  // treated as 16px
+   * ```
+   */
+  tabsInterval: 'SMALL' | 'MEDIUM' | 'LARGE' | number;
+  /**
+   * The size of the tabs.
+   * Can be a predefined size ('SMALL', 'MEDIUM', 'LARGE') or a number (treated as pixels).
+   *
+   * @example
+   * ```typescript
+   * tabsSize: 'MEDIUM'
+   * tabsSize: 14  // treated as 14px
+   * ```
+   */
+  tabsSize: 'SMALL' | 'MEDIUM' | 'LARGE' | number;
   unselectedBkgColor: string;
   unselectedColor: string;
   useSelectedBkg: boolean;

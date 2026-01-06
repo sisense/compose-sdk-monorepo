@@ -68,6 +68,7 @@ export type {
   StyledColumn,
   StyledMeasureColumn,
   PivotRowsSort,
+  DataOptionLocation,
 
   // Style Options:
   ChartStyleOptions,
@@ -134,6 +135,8 @@ export type {
   WidgetsPanelLayout,
   WidgetsPanelColumnLayout,
   WidgetId,
+  JumpToDashboardConfig,
+  JumpToDashboardConfigForPivot,
   WidgetsOptions,
 
   // General (Others)
@@ -154,6 +157,9 @@ export type {
   Navigator,
   DrilldownOptions,
   DrilldownSelection,
+  PivotTableDrilldownOptions,
+  PivotTableSelectableDrilldownOptions,
+  PivotTableNonSelectableDrilldownOptions,
   Member,
   FilterVariant,
   TranslationConfig,

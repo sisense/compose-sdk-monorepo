@@ -123,6 +123,22 @@ Filters that will slice query results
 
 Filters that will highlight query results
 
+### Callbacks
+
+#### dataPointClick
+
+> **dataPointClick**: `EventEmitter`\< [`PivotTableDataPointEvent`](../type-aliases/type-alias.PivotTableDataPointEvent.md) \>
+
+Callback function that is called when the pivot table cell is clicked
+
+***
+
+#### dataPointContextMenu
+
+> **dataPointContextMenu**: `EventEmitter`\< [`PivotTableDataPointEvent`](../type-aliases/type-alias.PivotTableDataPointEvent.md) \>
+
+Callback function that is called when the pivot table cell is right-clicked
+
 ### Representation
 
 #### styleOptions

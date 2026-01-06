@@ -144,7 +144,7 @@ exports[`Chart > add handlers to a chart 1`] = `
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 6781,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
             ],
@@ -154,7 +154,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4471,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
             ],
@@ -164,7 +164,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 1812,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
             ],
@@ -174,7 +174,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5001,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
             ],
@@ -184,7 +184,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 2045,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
             ],
@@ -194,7 +194,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 3010,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
             ],
@@ -204,7 +204,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5447,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
             ],
@@ -214,7 +214,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4242,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
             ],
@@ -224,7 +224,7 @@ exports[`Chart > add handlers to a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 936,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
             ],
@@ -572,7 +572,7 @@ exports[`Chart > change theme of a chart 1`] = `
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 6781,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
             ],
@@ -582,7 +582,7 @@ exports[`Chart > change theme of a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4471,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
             ],
@@ -592,7 +592,7 @@ exports[`Chart > change theme of a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 1812,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
             ],
@@ -602,7 +602,7 @@ exports[`Chart > change theme of a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5001,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
             ],
@@ -612,7 +612,7 @@ exports[`Chart > change theme of a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 2045,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
             ],
@@ -622,7 +622,7 @@ exports[`Chart > change theme of a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 3010,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
             ],
@@ -632,7 +632,7 @@ exports[`Chart > change theme of a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5447,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
             ],
@@ -642,7 +642,7 @@ exports[`Chart > change theme of a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4242,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
             ],
@@ -652,7 +652,7 @@ exports[`Chart > change theme of a chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 936,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
             ],
@@ -1208,7 +1208,7 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
           "color": "#00cee6",
           "custom": {
             "number1": 100,
-            "rawValue": undefined,
+            "rawValue": 6781,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
             ],
@@ -1220,7 +1220,7 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
           "color": "#9b9bd7",
           "custom": {
             "number1": 65.93422798997199,
-            "rawValue": undefined,
+            "rawValue": 4471,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
             ],
@@ -1232,7 +1232,7 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
           "color": "#6eda55",
           "custom": {
             "number1": 26.721722459814185,
-            "rawValue": undefined,
+            "rawValue": 1812,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
             ],
@@ -1244,7 +1244,7 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
           "color": "#fc7570",
           "custom": {
             "number1": 73.75018433859313,
-            "rawValue": undefined,
+            "rawValue": 5001,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
             ],
@@ -1256,7 +1256,7 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
           "color": "#fbb755",
           "custom": {
             "number1": 30.157793835717445,
-            "rawValue": undefined,
+            "rawValue": 2045,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
             ],
@@ -1268,7 +1268,7 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
           "color": "#218a8c",
           "custom": {
             "number1": 44.38873322518803,
-            "rawValue": undefined,
+            "rawValue": 3010,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
             ],
@@ -1280,7 +1280,7 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
           "color": "#00cee6",
           "custom": {
             "number1": 80.32738534139507,
-            "rawValue": undefined,
+            "rawValue": 5447,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
             ],
@@ -1292,7 +1292,7 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
           "color": "#9b9bd7",
           "custom": {
             "number1": 62.55714496386964,
-            "rawValue": undefined,
+            "rawValue": 4242,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
             ],
@@ -1304,7 +1304,7 @@ exports[`Chart > funnel chart > render funnel chart with cat and value 1`] = `
           "color": "#6eda55",
           "custom": {
             "number1": 13.80327385341395,
-            "rawValue": undefined,
+            "rawValue": 936,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
             ],
@@ -1447,7 +1447,7 @@ exports[`Chart > funnel chart > render funnel chart with two values 1`] = `
           "color": "#00cee6",
           "custom": {
             "number1": 100,
-            "rawValue": undefined,
+            "rawValue": 33745,
             "xValue": [],
           },
           "name": "Quantity",
@@ -1457,7 +1457,7 @@ exports[`Chart > funnel chart > render funnel chart with two values 1`] = `
           "color": "#9b9bd7",
           "custom": {
             "number1": 1.4520669728848719,
-            "rawValue": undefined,
+            "rawValue": 490,
             "xValue": [],
           },
           "name": "Units",
@@ -1912,7 +1912,7 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
         {
           "color": "#00cee6",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 6781,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
             ],
@@ -1924,7 +1924,7 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4471,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
             ],
@@ -1936,7 +1936,7 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
         {
           "color": "#6eda55",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 1812,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
             ],
@@ -1948,7 +1948,7 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
         {
           "color": "#fc7570",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5001,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
             ],
@@ -1960,7 +1960,7 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
         {
           "color": "#fbb755",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 2045,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
             ],
@@ -1972,7 +1972,7 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
         {
           "color": "#218a8c",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 3010,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
             ],
@@ -1984,7 +1984,7 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
         {
           "color": "#00cee6",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5447,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
             ],
@@ -1996,7 +1996,7 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4242,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
             ],
@@ -2008,7 +2008,7 @@ exports[`Chart > pie chart > render pie chart with cat and value 1`] = `
         {
           "color": "#6eda55",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 936,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
             ],
@@ -2153,7 +2153,7 @@ exports[`Chart > pie chart > render pie chart with two values 1`] = `
         {
           "color": "#00cee6",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 33745,
             "xValue": [],
           },
           "name": "Quantity",
@@ -2163,7 +2163,7 @@ exports[`Chart > pie chart > render pie chart with two values 1`] = `
         {
           "color": "#9b9bd7",
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 490,
             "xValue": [],
           },
           "name": "Units",
@@ -2336,7 +2336,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 9000,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
               "A",
@@ -2362,7 +2362,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 8500,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
               "A",
@@ -2388,7 +2388,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 1500,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
               "C",
@@ -2414,7 +2414,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5300,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
               "C",
@@ -2440,7 +2440,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 2200,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
               "A",
@@ -2466,7 +2466,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 3200,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
               "A",
@@ -2492,7 +2492,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5800,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
               "C",
@@ -2518,7 +2518,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4400,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
               "C",
@@ -2544,7 +2544,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 2900,
             "xValue": [
               "2017-01-01T00:00:00.000Z",
               "A",
@@ -2570,7 +2570,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 1100,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
               "C",
@@ -2624,7 +2624,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 20000,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
               "A",
@@ -2650,7 +2650,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 19000,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
               "A",
@@ -2676,7 +2676,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 18000,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
               "C",
@@ -2702,7 +2702,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 22000,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
               "C",
@@ -2728,7 +2728,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 23000,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
               "A",
@@ -2754,7 +2754,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 24000,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
               "A",
@@ -2780,7 +2780,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 20000,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
               "C",
@@ -2806,7 +2806,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 19000,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
               "C",
@@ -2832,7 +2832,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 22000,
             "xValue": [
               "2017-01-01T00:00:00.000Z",
               "A",
@@ -2858,7 +2858,7 @@ exports[`Chart > range charts > render a area range chart two y and two x 1`] = 
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 24000,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
               "C",
@@ -3498,7 +3498,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 9000,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
             ],
@@ -3512,7 +3512,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 8500,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
             ],
@@ -3526,7 +3526,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
             ],
@@ -3540,7 +3540,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
             ],
@@ -3554,7 +3554,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 2200,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
             ],
@@ -3568,7 +3568,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 3200,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
             ],
@@ -3582,7 +3582,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
             ],
@@ -3596,7 +3596,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
             ],
@@ -3610,7 +3610,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 2900,
             "xValue": [
               "2017-01-01T00:00:00.000Z",
             ],
@@ -3628,7 +3628,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
             ],
@@ -3682,7 +3682,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
             ],
@@ -3700,7 +3700,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
             ],
@@ -3714,7 +3714,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 1500,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
             ],
@@ -3728,7 +3728,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5300,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
             ],
@@ -3742,7 +3742,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
             ],
@@ -3756,7 +3756,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
             ],
@@ -3770,7 +3770,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5800,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
             ],
@@ -3784,7 +3784,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4400,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
             ],
@@ -3798,7 +3798,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2017-01-01T00:00:00.000Z",
             ],
@@ -3812,7 +3812,7 @@ exports[`Chart > range charts > render a area range chart with break by 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 1100,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
             ],
@@ -4176,7 +4176,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 6781,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
               "A",
@@ -4194,7 +4194,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4471,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
               "A",
@@ -4212,7 +4212,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 1812,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
               "B",
@@ -4230,7 +4230,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5001,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
               "B",
@@ -4248,7 +4248,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 2045,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
               "A",
@@ -4266,7 +4266,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 3010,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
               "B",
@@ -4284,7 +4284,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5447,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
               "A",
@@ -4302,7 +4302,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4242,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
               "B",
@@ -4320,7 +4320,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 936,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
               "B",
@@ -4371,7 +4371,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 10,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
               "A",
@@ -4389,7 +4389,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 70,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
               "A",
@@ -4407,7 +4407,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 50,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
               "B",
@@ -4425,7 +4425,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 60,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
               "B",
@@ -4443,7 +4443,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 40,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
               "A",
@@ -4461,7 +4461,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 90,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
               "B",
@@ -4479,7 +4479,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 80,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
               "A",
@@ -4497,7 +4497,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 70,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
               "B",
@@ -4515,7 +4515,7 @@ exports[`Chart > render a bar chart with breakBy and two x-axes 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 20,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
               "B",
@@ -5144,7 +5144,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 6781,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
             ],
@@ -5154,7 +5154,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4471,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
             ],
@@ -5164,7 +5164,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
             ],
@@ -5174,7 +5174,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
             ],
@@ -5184,7 +5184,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 2045,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
             ],
@@ -5198,7 +5198,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
             ],
@@ -5208,7 +5208,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5447,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
             ],
@@ -5222,7 +5222,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
             ],
@@ -5232,7 +5232,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
             ],
@@ -5287,7 +5287,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
             ],
@@ -5301,7 +5301,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
             ],
@@ -5311,7 +5311,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 1812,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
             ],
@@ -5321,7 +5321,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5001,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
             ],
@@ -5331,7 +5331,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
             ],
@@ -5341,7 +5341,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 3010,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
             ],
@@ -5355,7 +5355,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": NaN,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
             ],
@@ -5365,7 +5365,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4242,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
             ],
@@ -5375,7 +5375,7 @@ exports[`Chart > render a column chart with breakBy 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 936,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
             ],
@@ -5724,7 +5724,7 @@ exports[`Chart > render a line chart 1`] = `
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 6781,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
             ],
@@ -5734,7 +5734,7 @@ exports[`Chart > render a line chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4471,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
             ],
@@ -5744,7 +5744,7 @@ exports[`Chart > render a line chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 1812,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
             ],
@@ -5754,7 +5754,7 @@ exports[`Chart > render a line chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5001,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
             ],
@@ -5764,7 +5764,7 @@ exports[`Chart > render a line chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 2045,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
             ],
@@ -5774,7 +5774,7 @@ exports[`Chart > render a line chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 3010,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
             ],
@@ -5784,7 +5784,7 @@ exports[`Chart > render a line chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 5447,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
             ],
@@ -5794,7 +5794,7 @@ exports[`Chart > render a line chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 4242,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
             ],
@@ -5804,7 +5804,7 @@ exports[`Chart > render a line chart 1`] = `
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 936,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
             ],
@@ -6605,7 +6605,7 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 0.00001,
             "xValue": [
               "2011-01-01T00:00:00.000Z",
             ],
@@ -6615,7 +6615,7 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 0.00001,
             "xValue": [
               "2012-01-01T00:00:00.000Z",
             ],
@@ -6635,7 +6635,7 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 0.00001,
             "xValue": [
               "2014-01-01T00:00:00.000Z",
             ],
@@ -6655,7 +6655,7 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 0.00001,
             "xValue": [
               "2016-01-01T00:00:00.000Z",
             ],
@@ -6665,7 +6665,7 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 0.00001,
             "xValue": [
               "2018-01-01T00:00:00.000Z",
             ],
@@ -6714,7 +6714,7 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
       "data": [
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 0.00001,
             "xValue": [
               "2009-01-01T00:00:00.000Z",
             ],
@@ -6724,7 +6724,7 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 0.00001,
             "xValue": [
               "2010-01-01T00:00:00.000Z",
             ],
@@ -6754,7 +6754,7 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 0.00001,
             "xValue": [
               "2013-01-01T00:00:00.000Z",
             ],
@@ -6774,7 +6774,7 @@ exports[`Chart > render a line chart with only category (x-axis) and breakBy 1`]
         },
         {
           "custom": {
-            "rawValue": undefined,
+            "rawValue": 0.00001,
             "xValue": [
               "2015-01-01T00:00:00.000Z",
             ],

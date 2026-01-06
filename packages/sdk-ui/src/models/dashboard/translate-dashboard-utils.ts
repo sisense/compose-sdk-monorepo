@@ -33,9 +33,9 @@ import {
   Panel,
   PanelItem,
   SharedFormulaReferenceContext,
+  TabberWidgetDto,
   WidgetDto,
 } from '@/widget-by-id/types';
-import { TabberWidgetDtoStyle } from '@/widget-by-id/types';
 import {
   isChartTypeFusionWidget,
   isIndicatorFusionWidget,
@@ -117,9 +117,7 @@ export function extractDashboardFilters(
  * Checks the DTO subtype which is 'WidgetsTabber' in Fusion.
  * Note: This is the DTO type, not the CSDK component type ('tabber-buttons').
  */
-const isTabberWidgetDto = (
-  widget: WidgetDto,
-): widget is WidgetDto & { style: TabberWidgetDtoStyle } => {
+const isTabberWidgetDto = (widget: WidgetDto): widget is TabberWidgetDto => {
   return widget.subtype === 'WidgetsTabber';
 };
 
@@ -369,7 +367,8 @@ export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersConfi
 
   widgets.forEach((widget: WidgetDto) => {
     if (isTabberWidgetDto(widget)) {
-      const dtoTabs = widget.style.tabs || [];
+      // legacy tabber config can have tabs stored directly in widget.tabs
+      const dtoTabs = widget.style.tabs || widget.tabs || [];
       tabberOptionsMap[widget.oid] = {
         tabs: dtoTabs.map((tab) => ({
           displayWidgetIds: tab.displayWidgetIds,

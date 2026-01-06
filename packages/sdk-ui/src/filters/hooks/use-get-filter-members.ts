@@ -147,6 +147,12 @@ export type GetFilterMembersResult = FilterMembersState & {
    * @internal
    */
   loadMore: (count: number) => void;
+  /**
+   * Flag indicating whether all items have been loaded
+   *
+   * @internal
+   */
+  isAllItemsLoaded: boolean;
 };
 
 /**
@@ -180,7 +186,7 @@ export const useGetFilterMembersInternal = ({
   if (backgroundFilter) {
     queryFilters.push(backgroundFilter);
   }
-  const { data, loadMore, ...loadState } = useExecuteQueryInternal({
+  const { data, loadMore, isAllItemsLoaded, ...loadState } = useExecuteQueryInternal({
     // prioritize attribute dataSource for the use case of multi-source dashboard
     dataSource: filterAttribute.dataSource
       ? convertDataSource(filterAttribute.dataSource)
@@ -285,6 +291,7 @@ export const useGetFilterMembersInternal = ({
       ...loadState,
       data: undefined,
       loadMore,
+      isAllItemsLoaded,
     };
   }
 
@@ -292,6 +299,7 @@ export const useGetFilterMembersInternal = ({
     ...loadState,
     data: resultData,
     loadMore,
+    isAllItemsLoaded,
   };
 };
 

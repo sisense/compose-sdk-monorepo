@@ -24,3 +24,37 @@ export const getDefaultWidgetsPanelLayout = (widgets: WidgetProps[]): WidgetsPan
     ],
   };
 };
+
+/**
+ * With optionally disabled auto height.
+ *
+ * @param widgetProps - The widget props to disable the auto height for.
+ * @param shouldDisable - Whether to disable the auto height.
+ * @returns The widget props with the auto height disabled if applicable.
+ */
+export const withOptionallyDisabledAutoHeight = (
+  widgetProps: WidgetProps,
+  shouldDisable: boolean,
+): WidgetProps => {
+  if (
+    widgetProps.widgetType === 'pivot' &&
+    widgetProps.styleOptions?.isAutoHeight &&
+    shouldDisable
+  ) {
+    return {
+      ...widgetProps,
+      styleOptions: { ...widgetProps.styleOptions, isAutoHeight: false },
+    };
+  }
+  return widgetProps;
+};
+
+/**
+ * Checks if all widgets have auto height and supports dynamic height.
+ *
+ * @param widgetProps - The widget props to check for auto height.
+ * @returns True if all widgets have auto height, false otherwise.
+ */
+export const checkForAutoHeight = (widgetProps: WidgetProps[]): boolean => {
+  return widgetProps.every((w) => w.widgetType === 'pivot' && w.styleOptions?.isAutoHeight);
+};

@@ -19,7 +19,7 @@ import './drilldown.scss';
 type UseDrilldownCoreParams = {
   drilldownPaths?: (Attribute | Hierarchy)[];
   initialDimension: Column | StyledColumn;
-  drilldownSelections?: DrilldownSelection[];
+  initialDrilldownSelections?: DrilldownSelection[];
   onDrilldownSelectionsChange?: (selections: DrilldownSelection[]) => void;
 };
 
@@ -27,8 +27,8 @@ export const useDrilldownCore = (params: UseDrilldownCoreParams) => {
   const { initialDimension, onDrilldownSelectionsChange } = params;
   const drilldownPaths = useMemo(() => params.drilldownPaths || [], [params.drilldownPaths]);
   const initialDrilldownSelections = useMemo(
-    () => params.drilldownSelections || [],
-    [params.drilldownSelections],
+    () => params.initialDrilldownSelections || [],
+    [params.initialDrilldownSelections],
   );
   const { t: translate } = useTranslation();
 

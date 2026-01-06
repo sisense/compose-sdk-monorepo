@@ -68,6 +68,7 @@ import {
   MenuPosition,
   PieStyleOptions,
   PivotTableDataPoint,
+  PivotTableDrilldownOptions,
   PivotTableStyleOptions,
   PivotTableWidgetStyleOptions,
   PolarStyleOptions,
@@ -1204,14 +1205,14 @@ export interface PivotTableProps {
   /**
    * Callback function that is called when the pivot table cell is clicked
    *
-   * @internal
+   * @category Callbacks
    */
   onDataPointClick?: PivotTableDataPointEventHandler;
 
   /**
    * Callback function that is called when the pivot table cell is right-clicked
    *
-   * @internal
+   * @category Callbacks
    */
   onDataPointContextMenu?: PivotTableDataPointEventHandler;
 
@@ -1287,7 +1288,10 @@ export interface ScatterChartProps
  * Props for the {@link WidgetById} component
  */
 export interface WidgetByIdProps
-  extends Omit<ChartWidgetProps, 'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions'> {
+  extends Omit<
+    ChartWidgetProps,
+    'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions' | 'drilldownOptions'
+  > {
   /**
    * Identifier of the widget
    *
@@ -1354,7 +1358,7 @@ export interface WidgetByIdProps
    * @category Widget
    * @internal
    */
-  drilldownOptions?: DrilldownOptions;
+  drilldownOptions?: DrilldownOptions | PivotTableDrilldownOptions;
 }
 
 /**
@@ -1609,17 +1613,25 @@ export interface PivotTableWidgetProps {
    * @category Widget
    */
   description?: string;
+
+  /**
+   * Configuration for the pivot table drilldown
+   *
+   * @category Widget
+   */
+  drilldownOptions?: PivotTableDrilldownOptions;
+
   /**
    * Callback function that is called when the pivot table cell is clicked
    *
-   * @internal
+   * @category Callbacks
    */
   onDataPointClick?: PivotTableDataPointEventHandler;
 
   /**
    * Callback function that is called when the pivot table cell is right-clicked
    *
-   * @internal
+   * @category Callbacks
    */
   onDataPointContextMenu?: PivotTableDataPointEventHandler;
 
@@ -1668,6 +1680,8 @@ export interface PivotTableWidgetProps {
    * @internal
    */
   onHeaderCellFormat?: CustomHeaderCellFormatter;
+  /** @internal */
+  onChange?: (props: Partial<PivotTableWidgetProps>) => void;
 }
 
 /**

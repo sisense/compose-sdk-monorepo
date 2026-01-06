@@ -18,7 +18,7 @@ import { processArg } from './process-arg.js';
  */
 export function processNode(input: NodeInput): QueryElement {
   const { data: parsedObject } = input;
-  const { dataSource, tables, pathPrefix } = input.context;
+  const { dataSource, schemaIndex, pathPrefix } = input.context;
   const { function: functionPath, args } = parsedObject;
   const actualPathPrefix = pathPrefix ? `${pathPrefix}.` : '';
 
@@ -73,7 +73,7 @@ export function processNode(input: NodeInput): QueryElement {
         data: rawArg,
         context: {
           dataSource,
-          tables,
+          schemaIndex,
           pathPrefix: fullArgPath,
           argSchema: argSchema,
         },
@@ -99,7 +99,7 @@ export function processNode(input: NodeInput): QueryElement {
     try {
       const processingContext: FunctionContext = {
         dataSource,
-        tables,
+        schemaIndex,
         pathPrefix: actualPathPrefix,
       };
 

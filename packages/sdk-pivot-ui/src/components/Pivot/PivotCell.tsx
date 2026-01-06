@@ -711,10 +711,23 @@ export class PivotCell extends React.PureComponent<PivotCellProps, State> {
       node = treeNode;
     }
 
+    const isDataCellWithinGrandTotalRow =
+      !!rowTreeNode &&
+      rowTreeNode.metadataType === 'rows' &&
+      rowTreeNode.userType === UserType.GRAND_TOTAL;
+    // If the cell is an empty data cell within a grand total row, create a dummy node
+    if (!node && isDataCellWithinGrandTotalRow) {
+      node = {
+        value: null,
+        content: '',
+        contentType: 'text',
+      };
+    }
+
     if (onCellClick) {
       const cell: PivotCellEvent = {
         event,
-        isDataCell,
+        isDataCell: isDataCell || isDataCellWithinGrandTotalRow,
         dataNode: node,
         rowTreeNode,
         columnTreeNode,

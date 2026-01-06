@@ -13,6 +13,8 @@ import type { DateFormat, DateLevel, MonthOfYear } from './apply-date-format';
 import { DAYS, JAN, MONTHS, QUARTERS, WEEKS, YEARS } from './apply-date-format';
 import { newDateFormat } from './new-date-format';
 
+const EARLIEST_TIMEZONE = 'Etc/GMT-14';
+
 export function subtractYearForFiscal(
   date: Date,
   selectedDateLevel: DateLevel,
@@ -109,7 +111,7 @@ export function newDateFormatWithExpandedYearsMasks(
   // compensate for this potential shift by converting the date to the earliest timezone
   // for any format that includes year masks
   if (['yyyy', 'yy', 'y', 'yp', 'yyyp'].some((format) => oldFormat.includes(format))) {
-    timeZone = 'Etc/GMT-14';
+    timeZone = EARLIEST_TIMEZONE;
   }
   if (oldFormat.includes('yp')) {
     const prevYearDate: Date = subYears(dateWithMaybeOneYearAddedForFiscal, 1);
@@ -142,6 +144,7 @@ export function newDateFormatWithExpandedYearsMasks(
  * Takes into consideration:
  * - the configured start month of the customer's fiscal year
  * - the currently selected date level for this particular column of data
+ * - avoid timezone shifts
  *
  * @param oldFormat
  * @param date
@@ -158,7 +161,9 @@ export function newDateFormatWithExpandedQuartersMasks(
     return oldFormat;
   }
 
-  let month: number = date.getMonth();
+  // Avoid timezone shifts by using the earliest timezone - same approach as for years in newDateFormatWithExpandedYearsMasks
+  const monthInTimezone: string = formatInTimeZone(date, EARLIEST_TIMEZONE, 'M');
+  let month: number = parseInt(monthInTimezone, 10) - 1; // Convert to zero-based format (from 1-12 to 0-11)
 
   if (fiscalMonth && [QUARTERS, MONTHS, WEEKS, DAYS].includes(selectedDateLevel)) {
     month -= fiscalMonth > month ? fiscalMonth - 12 : fiscalMonth;

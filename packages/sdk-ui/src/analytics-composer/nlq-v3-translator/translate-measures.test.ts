@@ -4,12 +4,16 @@ import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../__mocks__/mock-data-sources.js';
-import { getErrors, getSuccessData } from './common.js';
+import { createSchemaIndex, getErrors, getSuccessData } from './common.js';
 import {
   translateMeasuresFromJSONFunctionCall,
   translateMeasuresJSON,
 } from './translate-measures.js';
 import { FunctionCall } from './types.js';
+
+const MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE = createSchemaIndex(
+  MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+);
 
 describe('translateMeasures', () => {
   describe('translateMeasuresFromJSONFunctionCall', () => {
@@ -23,7 +27,7 @@ describe('translateMeasures', () => {
         data: mockMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 
@@ -42,7 +46,7 @@ describe('translateMeasures', () => {
         data: mockMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 
@@ -61,7 +65,7 @@ describe('translateMeasures', () => {
         data: mockMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 
@@ -90,7 +94,7 @@ describe('translateMeasures', () => {
         data: mockMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 
@@ -105,7 +109,7 @@ describe('translateMeasures', () => {
         data: null as unknown as JSONArray,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
       expect(result.success).toBe(true);
@@ -117,7 +121,7 @@ describe('translateMeasures', () => {
         data: undefined as unknown as JSONArray,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
       expect(result.success).toBe(true);
@@ -129,7 +133,7 @@ describe('translateMeasures', () => {
         data: false as unknown as JSONArray,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
       expect(result.success).toBe(true);
@@ -141,7 +145,7 @@ describe('translateMeasures', () => {
         data: 0 as unknown as JSONArray,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
       expect(result.success).toBe(true);
@@ -153,7 +157,7 @@ describe('translateMeasures', () => {
         data: '' as unknown as JSONArray,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
       expect(result.success).toBe(true);
@@ -165,7 +169,7 @@ describe('translateMeasures', () => {
         data: [],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
       expect(result.success).toBe(true);
@@ -182,7 +186,7 @@ describe('translateMeasures', () => {
         data: invalidMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 
@@ -201,7 +205,7 @@ describe('translateMeasures', () => {
         data: invalidMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 
@@ -218,7 +222,7 @@ describe('translateMeasures', () => {
         data: invalidMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 
@@ -238,7 +242,7 @@ describe('translateMeasures', () => {
         data: invalidMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 
@@ -258,7 +262,7 @@ describe('translateMeasures', () => {
         data: invalidMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 
@@ -278,7 +282,7 @@ describe('translateMeasures', () => {
         data: invalidMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 
@@ -298,7 +302,7 @@ describe('translateMeasures', () => {
         data: validMeasuresJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
         },
       });
 

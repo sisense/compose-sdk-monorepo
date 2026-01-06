@@ -36,20 +36,6 @@ describe('"change all" checkbox', () => {
     await user.click(changeAllCheckbox);
     expect(props.checkAllMembers).toHaveBeenCalledTimes(1);
   });
-
-  it('renders checked and executes the correct callback when clicked', async () => {
-    const propsWithAllSelected: MemberListProps = {
-      ...props,
-      selectedMembers: [...props.selectedMembers, { key: '2014-01-01T00:00:00', title: '2014' }],
-    };
-    const { user } = setup(<MemberList {...propsWithAllSelected} />);
-
-    const changeAllCheckbox = screen.getByRole('checkbox', { name: 'change-all' });
-    expect(changeAllCheckbox).toBeChecked();
-
-    await user.click(changeAllCheckbox);
-    expect(props.uncheckAllMembers).toHaveBeenCalledTimes(1);
-  });
 });
 
 it('renders unchecked and checked member rows', () => {
@@ -127,15 +113,7 @@ describe('when enabled', () => {
   });
 
   it('renders searchable search box that filters members', async () => {
-    const { user } = setup(<MemberList {...props} />, true);
-
-    const searchBox = screen.getByRole('searchbox');
-
-    await user.click(searchBox);
-    await user.type(searchBox, '2014');
-
-    expect(searchBox).toHaveFocus();
-    expect(searchBox).toHaveValue('2014');
+    setup(<MemberList searchValue="2014" {...props} />, true);
 
     // We need to trigger the debounced onChange by advancing timers by the
     // specified delay. This will in turn cause an update to the searchString

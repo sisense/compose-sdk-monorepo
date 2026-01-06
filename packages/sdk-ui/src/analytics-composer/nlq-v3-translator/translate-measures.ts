@@ -38,7 +38,7 @@ export const translateMeasuresFromJSONFunctionCall = (
   input: MeasuresFunctionCallInput,
 ): NlqTranslationResult<Measure[]> => {
   const { data: measuresJSON } = input;
-  const { dataSource, tables } = input.context;
+  const { dataSource, schemaIndex } = input.context;
   const results: Measure[] = [];
   const errors: NlqTranslationError[] = [];
 
@@ -52,7 +52,7 @@ export const translateMeasuresFromJSONFunctionCall = (
     try {
       const measure = processNode({
         data: measureJSON,
-        context: { dataSource, tables, pathPrefix: '' },
+        context: { dataSource, schemaIndex, pathPrefix: '' },
       });
       if (!isMeasureElement(measure)) {
         errors.push({ ...context, message: `Invalid measure JSON` });
@@ -76,7 +76,7 @@ export const translateMeasuresFromJSONFunctionCall = (
  */
 export const translateMeasuresJSON = (input: MeasuresInput): NlqTranslationResult<Measure[]> => {
   const { data: measuresJSON } = input;
-  const { dataSource, tables } = input.context;
+  const { dataSource, schemaIndex } = input.context;
 
   if (!measuresJSON) {
     return { success: true, data: [] };
@@ -99,6 +99,6 @@ export const translateMeasuresJSON = (input: MeasuresInput): NlqTranslationResul
 
   return translateMeasuresFromJSONFunctionCall({
     data: measuresJSON,
-    context: { dataSource, tables },
+    context: { dataSource, schemaIndex },
   });
 };

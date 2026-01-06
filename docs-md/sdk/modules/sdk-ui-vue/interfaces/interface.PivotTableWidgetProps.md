@@ -52,6 +52,14 @@ Description of the widget
 
 ***
 
+#### drilldownOptions
+
+> **drilldownOptions**?: [`PivotTableDrilldownOptions`](../type-aliases/type-alias.PivotTableDrilldownOptions.md)
+
+Configuration for the pivot table drilldown
+
+***
+
 #### styleOptions
 
 > **styleOptions**?: [`PivotTableWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PivotTableWidgetStyleOptions.md)
@@ -65,3 +73,19 @@ Style options for both the table and widget including the widget header
 > **title**?: `string`
 
 Title of the widget
+
+### Callbacks
+
+#### onDataPointClick
+
+> **onDataPointClick**?: [`PivotTableDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.PivotTableDataPointEventHandler.md)
+
+Callback function that is called when the pivot table cell is clicked
+
+***
+
+#### onDataPointContextMenu
+
+> **onDataPointContextMenu**?: [`PivotTableDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.PivotTableDataPointEventHandler.md)
+
+Callback function that is called when the pivot table cell is right-clicked

@@ -249,7 +249,7 @@ describe('useComposedDashboard', () => {
 
       expect(filterTiles).toHaveLength(1);
       expect(drilldownBreadcrumbs).toHaveLength(1);
-      expect(chartMocksManager.renderedCharts).toHaveLength(2);
+      expect(chartMocksManager.renderedCharts).toHaveLength(1);
       expect(chartMocks).toHaveLength(1);
 
       // prepare data point mock
@@ -333,9 +333,9 @@ describe('useComposedDashboard', () => {
         // Capture filter references
         if (dashboard.widgets && dashboard.widgets.length > 0) {
           capturedRefs = {
-            widgetFilters: getProperty(dashboard.widgets[0], 'filters'),
+            widgetFilters: getProperty(dashboard.widgets[0], 'filters') as Filter[],
             dashboardFilters: dashboard.filters,
-            widgetHighlights: getProperty(dashboard.widgets[0], 'highlights'),
+            widgetHighlights: getProperty(dashboard.widgets[0], 'highlights') as Filter[],
           };
         }
 

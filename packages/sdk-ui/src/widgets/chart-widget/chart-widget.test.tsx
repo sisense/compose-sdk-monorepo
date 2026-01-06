@@ -11,14 +11,14 @@ import { executeQueryMock } from '@/query/__mocks__/execute-query';
 import { SisenseContextPayload } from '@/sisense-context/sisense-context';
 import { translation } from '@/translation/resources/en';
 
-import * as DM from '../__test-helpers__/sample-ecommerce';
-import { ClientApplication } from '../app/client-application';
-import { useSisenseContextMock } from '../sisense-context/__mocks__/sisense-context';
-import { mockChartWidgetPropsForTable, mockResolvedQuery } from './__mocks__/mocks';
+import * as DM from '../../__test-helpers__/sample-ecommerce';
+import { ClientApplication } from '../../app/client-application';
+import { useSisenseContextMock } from '../../sisense-context/__mocks__/sisense-context';
+import { mockChartWidgetPropsForTable, mockResolvedQuery } from '../__mocks__/mocks';
 import { ChartWidget } from './chart-widget';
 
-vi.mock('../query/execute-query');
-vi.mock('../sisense-context/sisense-context');
+vi.mock('../../query/execute-query');
+vi.mock('../../sisense-context/sisense-context');
 
 const translateMock = vi.fn((key: string) => get(translation, key)) as unknown as TFunction;
 

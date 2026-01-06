@@ -98,6 +98,7 @@ export const useGetFilterMembers = (
     status: 'loading',
     error: undefined,
     data: initialData,
+    isAllItemsLoaded: false,
   });
 
   hookAdapter.subscribe((result) => {

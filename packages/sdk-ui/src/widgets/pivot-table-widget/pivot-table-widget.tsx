@@ -1,18 +1,24 @@
-import { type FunctionComponent, useState } from 'react';
+import { type FunctionComponent, useCallback, useState } from 'react';
 
-import { getDataSourceName } from '@sisense/sdk-data';
+import { Attribute, getDataSourceName } from '@sisense/sdk-data';
 
+import { DataOptionLocation, DrilldownSelection } from '@/index';
 import { useSisenseContext } from '@/sisense-context/sisense-context';
 
-import { asSisenseComponent } from '../decorators/component-decorators/as-sisense-component';
-import { DynamicSizeContainer, getWidgetDefaultSize } from '../dynamic-size-container';
-import { PivotTable } from '../pivot-table';
-import { PivotTableWidgetProps } from '../props';
-import { WidgetContainer } from './common/widget-container';
-import { DEFAULT_WIDGET_HEADER_HEIGHT } from './constants';
+import { asSisenseComponent } from '../../decorators/component-decorators/as-sisense-component';
+import { DynamicSizeContainer, getWidgetDefaultSize } from '../../dynamic-size-container';
+import { PivotTable } from '../../pivot-table';
+import { PivotTableWidgetProps } from '../../props';
+import { WidgetContainer } from '../common/widget-container';
+import { DEFAULT_WIDGET_HEADER_HEIGHT } from '../constants';
+import { useWithPivotTableWidgetDrilldown } from './use-with-pivot-table-widget-drilldown';
+
+const MIN_PIVOT_HEIGHT = 100;
 
 function calcPivotTableWidgetHeight(pivotTableHeight: number | undefined) {
-  return pivotTableHeight ? pivotTableHeight + DEFAULT_WIDGET_HEADER_HEIGHT : undefined;
+  return pivotTableHeight
+    ? Math.max(MIN_PIVOT_HEIGHT, pivotTableHeight + DEFAULT_WIDGET_HEADER_HEIGHT)
+    : undefined;
 }
 
 /**
@@ -60,12 +66,30 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
   const [pivotTableHeight, setPivotTableHeight] = useState<number | undefined>();
   const { app } = useSisenseContext();
 
-  const { styleOptions, dataSource = app?.defaultDataSource, dataOptions } = props;
+  const { styleOptions, dataSource = app?.defaultDataSource, dataOptions, onChange } = props;
 
   const defaultSize = getWidgetDefaultSize('pivot', {
     hasHeader: !styleOptions?.header?.hidden,
   });
   const { width, height, ...styleOptionsWithoutSizing } = props.styleOptions || {};
+
+  const onDrilldownSelectionsChange = useCallback(
+    (target: Attribute | DataOptionLocation, selections: DrilldownSelection[]) => {
+      onChange?.({
+        drilldownOptions: {
+          ...props.drilldownOptions,
+          drilldownTarget: target,
+          drilldownSelections: selections,
+        },
+      });
+    },
+    [onChange, props.drilldownOptions],
+  );
+
+  const { propsWithDrilldown, breadcrumbs } = useWithPivotTableWidgetDrilldown({
+    propsToExtend: props,
+    onDrilldownSelectionsChange,
+  });
 
   if (!dataOptions) {
     return null;
@@ -81,21 +105,27 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     >
       <WidgetContainer
         {...props}
+        topSlot={
+          <>
+            {props.topSlot}
+            {breadcrumbs}
+          </>
+        }
         dataSetName={dataSource && getDataSourceName(dataSource)}
         onRefresh={() => setRefreshCounter(refreshCounter + 1)}
       >
         <PivotTable
-          dataSet={props.dataSource}
-          dataOptions={props.dataOptions}
+          dataSet={propsWithDrilldown.dataSource}
+          dataOptions={propsWithDrilldown.dataOptions}
           styleOptions={styleOptionsWithoutSizing}
-          filters={props.filters}
-          highlights={props.highlights}
+          filters={propsWithDrilldown.filters}
+          highlights={propsWithDrilldown.highlights}
           refreshCounter={refreshCounter}
           onHeightChange={setPivotTableHeight}
-          onDataPointClick={props.onDataPointClick}
-          onDataPointContextMenu={props.onDataPointContextMenu}
-          onDataCellFormat={props.onDataCellFormat}
-          onHeaderCellFormat={props.onHeaderCellFormat}
+          onDataPointClick={propsWithDrilldown.onDataPointClick}
+          onDataPointContextMenu={propsWithDrilldown.onDataPointContextMenu}
+          onDataCellFormat={propsWithDrilldown.onDataCellFormat}
+          onHeaderCellFormat={propsWithDrilldown.onHeaderCellFormat}
         />
       </WidgetContainer>
     </DynamicSizeContainer>

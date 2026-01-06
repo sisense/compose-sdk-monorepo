@@ -1,6 +1,7 @@
 import { Attribute, Filter } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
+import { createSchemaIndex } from '../common.js';
 import { FunctionContext } from '../types.js';
 import {
   processExcludeFilter,
@@ -27,7 +28,7 @@ const createMockAttribute = (type: string): Attribute => ({
 
 const createMockContext = (pathPrefix = ''): FunctionContext => ({
   dataSource: {} as any,
-  tables: [],
+  schemaIndex: createSchemaIndex([]),
   pathPrefix,
 });
 

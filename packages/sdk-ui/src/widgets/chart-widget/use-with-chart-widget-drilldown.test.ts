@@ -4,9 +4,9 @@ import { renderHook } from '@testing-library/react';
 import { MenuProvider } from '@/common/components/menu/menu-provider.js';
 import { CartesianChartDataOptions, ChartWidgetProps } from '@/index.js';
 
-import { useWithDrilldown } from './use-with-drilldown.js';
+import { useWithChartWidgetDrilldown } from './use-with-chart-widget-drilldown.js';
 
-vi.mock('./use-synced-hierarchies.js', async () => ({
+vi.mock('../hooks/use-synced-drilldown-paths.js', async () => ({
   useSyncedDrilldownPaths: (params: any) => params.drilldownPaths,
 }));
 
@@ -38,7 +38,7 @@ describe('useWithDrilldown', () => {
   it('should extend ChartWidget props with drilldown', () => {
     const { result } = renderHook(
       () =>
-        useWithDrilldown({
+        useWithChartWidgetDrilldown({
           propsToExtend: {
             chartType: 'column',
             dataOptions: {

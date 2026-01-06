@@ -10,6 +10,7 @@ import {
   PivotTableWidgetProps,
   TableProps,
   type TextWidgetProps,
+  type WidgetProps,
 } from '../components';
 import { ExecutePivotQueryParams, ExecuteQueryParams } from '../services';
 
@@ -321,4 +322,56 @@ const textWidgetProps = widgetModelTranslator.toTextWidgetProps(widgetModel);
  */
 export function toTextWidgetProps(widgetModel: WidgetModel): TextWidgetProps {
   return widgetModelTranslatorPreact.toTextWidgetProps(widgetModel);
+}
+
+/**
+ * Translates {@link WidgetModel} to {@link WidgetProps}.
+ *
+ * @example
+ * ```html
+ * <csdk-widget
+ *   *ngIf="widgetProps"
+ *   [id]="widgetProps.id"
+ *   [widgetType]="widgetProps.widgetType"
+ *   [chartType]="widgetProps.chartType"
+ *   [dataSource]="widgetProps.dataSource"
+ *   [dataOptions]="widgetProps.dataOptions"
+ *   [filters]="widgetProps.filters"
+ *   [highlights]="widgetProps.highlights"
+ *   [styleOptions]="widgetProps.styleOptions"
+ *   [title]="widgetProps.title"
+ *   [description]="widgetProps.description"
+ * />
+ * ```
+ *
+ * ```ts
+ * import { Component } from '@angular/core';
+ * import {
+ *   type WidgetProps,
+ *   WidgetService,
+ *   widgetModelTranslator,
+ * } from '@sisense/sdk-ui-angular';
+ *
+ * @Component({
+ *   selector: 'app-example',
+ *   templateUrl: './example.component.html',
+ *   styleUrls: ['./example.component.scss'],
+ * })
+ * export class ExampleComponent {
+ *   widgetProps: WidgetProps | null = null;
+ *
+ *   constructor(private widgetService: WidgetService) {}
+ *
+ *   async ngOnInit(): Promise<void> {
+ *     const widgetModel = await widgetService.getWidgetModel({
+ *       dashboardOid: 'your-dashboard-oid',
+ *       widgetOid: 'your-widget-oid'
+ *     });
+ *     this.widgetProps = widgetModelTranslator.toWidgetProps(widgetModel);
+ *   }
+ * }
+ * ```
+ */
+export function toWidgetProps(widgetModel: WidgetModel): WidgetProps {
+  return widgetModelTranslatorPreact.toWidgetProps(widgetModel);
 }

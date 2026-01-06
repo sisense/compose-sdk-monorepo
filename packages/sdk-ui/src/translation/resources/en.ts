@@ -393,7 +393,7 @@ export const translation = {
     subTotal: '{{value}} Total',
     limits: {
       baseNote:
-        'Totals may refer to the complete data if set by the dashboard owner. If available, you can use filters to display fewer rows and columns. To view all your data, download the table to CSV.',
+        'Totals may refer to the complete data if set by the dashboard owner. If available, you can use filters to display fewer rows and columns.',
       rowsLimit: 'The Pivot table is limited to {{recordsCount}} records',
       columnsLimit: 'The Pivot table is limited to {{columnsCount}} columns',
       columnsAndRowsLimit:

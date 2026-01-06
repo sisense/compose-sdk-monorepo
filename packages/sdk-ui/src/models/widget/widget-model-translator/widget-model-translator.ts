@@ -57,7 +57,9 @@ import {
   ChartStyleOptions,
   CompleteThemeSettings,
   CustomWidgetStyleOptions,
+  DrilldownOptions,
   GenericDataOptions,
+  PivotTableDrilldownOptions,
   PivotTableWidgetStyleOptions,
   TableStyleOptions,
   TextWidgetStyleOptions,
@@ -300,7 +302,7 @@ export function toChartWidgetProps(widgetModel: WidgetModel): ChartWidgetProps {
     highlights: widgetModel.highlights,
     title: widgetModel.title,
     description: widgetModel.description || '',
-    drilldownOptions: widgetModel.drilldownOptions,
+    drilldownOptions: widgetModel.drilldownOptions as DrilldownOptions,
   };
 }
 
@@ -355,6 +357,7 @@ export function toPivotTableWidgetProps(widgetModel: WidgetModel): PivotTableWid
     dataSource: widgetModel.dataSource,
     filters: widgetModel.filters,
     highlights: widgetModel.highlights,
+    drilldownOptions: widgetModel.drilldownOptions as PivotTableDrilldownOptions,
     title: widgetModel.title,
     description: widgetModel.description || '',
   };

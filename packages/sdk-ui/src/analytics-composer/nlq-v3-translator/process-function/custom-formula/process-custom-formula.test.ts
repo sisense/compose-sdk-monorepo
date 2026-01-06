@@ -3,6 +3,7 @@
  */
 import { describe, expect, it, vi } from 'vitest';
 
+import { createSchemaIndex } from '../../common.js';
 import { type FunctionContext } from '../../types.js';
 import { processCustomFormula } from './process-custom-formula.js';
 
@@ -16,7 +17,7 @@ vi.mock('../common.js', () => ({
 describe('processCustomFormula', () => {
   const mockProcessingContext: FunctionContext = {
     dataSource: { id: 'test', title: 'Test', address: 'localhost' } as any,
-    tables: [
+    schemaIndex: createSchemaIndex([
       {
         name: 'Commerce',
         columns: [
@@ -34,7 +35,7 @@ describe('processCustomFormula', () => {
           },
         ],
       },
-    ] as any,
+    ] as any),
     pathPrefix: 'test',
   };
 

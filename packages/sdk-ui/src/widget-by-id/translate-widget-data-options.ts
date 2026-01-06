@@ -121,6 +121,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
   const numberFormatConfig = extractNumberFormat(item);
   const subtotal = item.format?.subtotal;
   const width = item.format?.width;
+  const isContinuous = item.format?.continuous;
   let color = createValueColorOptions(item.format?.color, customPaletteColors);
   const colorSecondary = createValueColorOptions(item.format?.colorSecond, customPaletteColors);
   // panel is not needed in most cases, this is to support break by columns functionality
@@ -170,6 +171,7 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
     ...(width && { width }),
     ...(color && { color }),
     ...(panel && { panel }),
+    ...(isContinuous && { continuous: isContinuous }),
   } as StyledColumn;
 }
 

@@ -129,11 +129,35 @@ Title of the widget
 
 ***
 
+#### drilldownOptions
+
+> **drilldownOptions**: [`PivotTableDrilldownOptions`](../type-aliases/type-alias.PivotTableDrilldownOptions.md) \| `undefined`
+
+Configuration for the pivot table drilldown
+
+***
+
 #### title
 
 > **title**: `string` \| `undefined`
 
 Title of the widget
+
+### Callbacks
+
+#### dataPointClick
+
+> **dataPointClick**: `EventEmitter`\< [`PivotTableDataPointEvent`](../type-aliases/type-alias.PivotTableDataPointEvent.md) \>
+
+Callback function that is called when the pivot table cell is clicked
+
+***
+
+#### dataPointContextMenu
+
+> **dataPointContextMenu**: `EventEmitter`\< [`PivotTableDataPointEvent`](../type-aliases/type-alias.PivotTableDataPointEvent.md) \>
+
+Callback function that is called when the pivot table cell is right-clicked
 
 ### Representation
 

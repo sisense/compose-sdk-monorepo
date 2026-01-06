@@ -1,8 +1,23 @@
 import { Attribute, Filter, filterFactory, MembersFilter } from '@sisense/sdk-data';
 import isEqual from 'lodash-es/isEqual';
+import last from 'lodash-es/last';
 
+import {
+  ChartDataOptions,
+  ChartType,
+  DrilldownOptions,
+  GenericDataOptions,
+  PivotTableDataOptions,
+  PivotTableDrilldownOptions,
+  WidgetType,
+} from '@/index.js';
 import { haveSameAttribute } from '@/utils/filters-comparator.js';
 import { isSameAttribute } from '@/utils/filters.js';
+import { applyDrilldownDimension } from '@/widgets/common/drilldown-utils.js';
+import {
+  applyDrilldownDimensionToPivot,
+  getInitialDimensionLocation,
+} from '@/widgets/pivot-table-widget/utils.js';
 
 import { FiltersIgnoringRules, PureFilter } from './types.js';
 
@@ -46,4 +61,72 @@ export function isEqualMembersFilters(filterA: Filter, filterB: Filter) {
     'members' in filterB &&
     isEqual((filterA as MembersFilter).members, (filterB as MembersFilter).members)
   );
+}
+
+type GetWidgetDataOptionsWithDrilldownParams = {
+  widgetType?: WidgetType;
+  chartType?: ChartType;
+  dataOptions: ChartDataOptions | PivotTableDataOptions | GenericDataOptions;
+  drilldownOptions?: DrilldownOptions | PivotTableDrilldownOptions;
+};
+
+/**
+ * Applies drilldown to the widget data options.
+ *
+ * @param params - The parameters for the function.
+ * @param params.widgetType - The type of the widget.
+ * @param params.chartType - The type of the chart.
+ * @param params.dataOptions - The data options of the widget.
+ * @param params.drilldownOptions - The drilldown options of the widget.
+ * @returns The widget data options with drilldown applied.
+ */
+export function getWidgetDataOptionsWithDrilldown({
+  widgetType,
+  chartType,
+  dataOptions,
+  drilldownOptions,
+}: GetWidgetDataOptionsWithDrilldownParams) {
+  if (widgetType === 'pivot') {
+    const pivotDrilldownOptions = drilldownOptions as PivotTableDrilldownOptions | undefined;
+    const pivotDataOptions = dataOptions as PivotTableDataOptions;
+    const drilldownSelections = pivotDrilldownOptions?.drilldownSelections;
+    const drilldownTarget = pivotDrilldownOptions?.drilldownTarget;
+
+    if (drilldownSelections && drilldownSelections.length && drilldownTarget) {
+      const initialDimensionLocation = getInitialDimensionLocation(
+        pivotDataOptions,
+        drilldownTarget,
+        drilldownSelections,
+      );
+      const lastSelection = last(drilldownSelections);
+
+      if (initialDimensionLocation && lastSelection?.nextDimension) {
+        return applyDrilldownDimensionToPivot(
+          pivotDataOptions,
+          initialDimensionLocation,
+          lastSelection.nextDimension,
+        );
+      }
+    }
+  }
+
+  if (chartType) {
+    const chartWidgetDrilldownOptions = drilldownOptions as DrilldownOptions | undefined;
+    const chartWidgetDataOptions = dataOptions as ChartDataOptions;
+    const drilldownSelections = chartWidgetDrilldownOptions?.drilldownSelections;
+
+    if (drilldownSelections && drilldownSelections.length) {
+      const lastSelection = last(drilldownSelections);
+
+      if (lastSelection?.nextDimension) {
+        return applyDrilldownDimension(
+          chartType,
+          chartWidgetDataOptions,
+          lastSelection.nextDimension,
+        );
+      }
+    }
+  }
+
+  return dataOptions;
 }

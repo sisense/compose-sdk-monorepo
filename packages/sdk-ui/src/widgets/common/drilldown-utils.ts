@@ -51,8 +51,9 @@ function isValidChartConfigurationForDrilldown(
   chartType: ChartType,
   dataOptions: ChartDataOptions,
 ) {
-  // Drilldown requires the chart to have only one "selectable" attribute (target category)
-  return getSelectableWidgetAttributes(chartType, dataOptions).length === 1;
+  // Drilldown requires the chart to have at least one "selectable" attribute (target category)
+  // When multiple selectable attributes exist, the first one is used
+  return getSelectableWidgetAttributes(chartType, dataOptions).length >= 1;
 }
 
 export function isDrilldownApplicableToChart(chartType: ChartType, dataOptions: ChartDataOptions) {

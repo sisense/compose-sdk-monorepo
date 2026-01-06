@@ -3,7 +3,12 @@ import { EmptyObject } from '@sisense/sdk-query-client/src/helpers/utility-types
 
 import { ChartDataOptions, PivotTableDataOptions } from '@/chart-data-options/types';
 import type { WidgetType } from '@/props';
-import { ChartType, DrilldownOptions, WidgetStyleOptions } from '@/types';
+import {
+  ChartType,
+  DrilldownOptions,
+  PivotTableDrilldownOptions,
+  WidgetStyleOptions,
+} from '@/types';
 
 /**
  * Widget data options.
@@ -84,7 +89,7 @@ export interface WidgetModel {
   /**
    * Widget drilldown options.
    */
-  drilldownOptions: DrilldownOptions;
+  drilldownOptions: DrilldownOptions | PivotTableDrilldownOptions;
 }
 
 export const isWidgetModel = (widget: any): widget is WidgetModel => {

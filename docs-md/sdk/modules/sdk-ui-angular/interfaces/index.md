@@ -64,6 +64,8 @@ TypeScript interfaces for components and services listed above
 - [HierarchyModel](interface.HierarchyModel.md)
 - [IndicatorChartDataOptions](interface.IndicatorChartDataOptions.md)
 - [IndicatorChartProps](interface.IndicatorChartProps.md)
+- [JumpToDashboardConfig](interface.JumpToDashboardConfig.md)
+- [JumpToDashboardConfigForPivot](interface.JumpToDashboardConfigForPivot.md)
 - [LineChartProps](interface.LineChartProps.md)
 - [LineStyleOptions](interface.LineStyleOptions.md)
 - [Member](interface.Member.md)

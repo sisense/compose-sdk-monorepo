@@ -2,9 +2,11 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
+  Output,
   ViewChild,
 } from '@angular/core';
 import {
@@ -22,11 +24,19 @@ import {
 } from '../../component-wrapper-helpers';
 import { SisenseContextService } from '../../services';
 import { ThemeService } from '../../services';
+import type {
+  Arguments,
+  PivotTableDataPointEvent,
+  PivotTableEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types';
 
 /**
  * Props of the {@link PivotTableComponent}.
  */
-export interface PivotTableProps extends PivotTablePropsPreact {}
+export interface PivotTableProps
+  extends WithoutPreactChartEventProps<PivotTablePropsPreact>,
+    PivotTableEventProps {}
 
 /**
  * Pivot Table with and pagination.
@@ -139,6 +149,22 @@ export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input()
   styleOptions: PivotTableProps['styleOptions'];
 
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
+  @Output()
+  dataPointClick = new EventEmitter<PivotTableDataPointEvent>();
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.onDataPointContextMenu}
+   *
+   * @category Callbacks
+   */
+  @Output()
+  dataPointContextMenu = new EventEmitter<PivotTableDataPointEvent>();
+
   private componentAdapter: ComponentAdapter<typeof PivotTablePreact>;
 
   constructor(
@@ -170,6 +196,12 @@ export class PivotTableComponent implements AfterViewInit, OnChanges, OnDestroy 
       filters: this.filters,
       highlights: this.highlights,
       styleOptions: this.styleOptions,
+      onDataPointClick: (
+        ...[point, nativeEvent]: Arguments<PivotTablePropsPreact['onDataPointClick']>
+      ) => this.dataPointClick.emit({ point, nativeEvent } as PivotTableDataPointEvent),
+      onDataPointContextMenu: (
+        ...[point, nativeEvent]: Arguments<PivotTablePropsPreact['onDataPointContextMenu']>
+      ) => this.dataPointContextMenu.emit({ point, nativeEvent } as PivotTableDataPointEvent),
     };
   }
 

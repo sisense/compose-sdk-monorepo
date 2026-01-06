@@ -109,11 +109,9 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
 
   paginationPanel?: PaginationPanel;
 
-  forceNotifyAboutHeightChange = false;
-
   onEmptyChangeMemoizer = createCallbackMemoizer();
 
-  onTotalHeightChangeMemoizer = createCallbackMemoizer();
+  totalHeight: number = 0;
 
   pivotContainer?: HTMLElement;
 
@@ -179,7 +177,6 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
       typeof changedProps.itemsCount !== 'undefined' ||
       typeof changedProps.itemsPerPage !== 'undefined'
     ) {
-      this.forceNotifyAboutHeightChange = true;
       this.setState({
         pivotHeight: this.calculatePivotHeight({
           isAutoHeight: nextProps.isAutoHeight,
@@ -204,36 +201,13 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
       });
     }
 
-    if (onTotalHeightChange && this.isPaginationReady()) {
-      const { pivotTableHeight, paginationPanelHeight } = this.state;
-      if (this.forceNotifyAboutHeightChange) {
-        this.forceNotifyAboutHeightChange = false;
-        if (
-          typeof pivotTableHeight !== 'undefined' &&
-          typeof paginationPanelHeight !== 'undefined'
-        ) {
-          const total = pivotTableHeight + paginationPanelHeight + scrollBarsMargin;
-          onTotalHeightChange(total);
-        }
-      } else {
-        this.onTotalHeightChangeMemoizer({
-          callback: (
-            {
-              tableHeight,
-              paginationHeight,
-            }: {
-              tableHeight: number;
-              paginationHeight: number;
-            } = { tableHeight: 0, paginationHeight: 0 },
-          ) => {
-            const total = tableHeight + paginationHeight + scrollBarsMargin;
-            onTotalHeightChange(total);
-          },
-          indices: {
-            tableHeight: pivotTableHeight,
-            paginationHeight: paginationPanelHeight,
-          },
-        });
+    if (onTotalHeightChange) {
+      const { pivotTableHeight = 0, paginationPanelHeight = 0 } = this.state;
+      const total = pivotTableHeight + paginationPanelHeight + scrollBarsMargin;
+
+      if (this.totalHeight !== total) {
+        this.totalHeight = total;
+        onTotalHeightChange(total);
       }
     }
   }

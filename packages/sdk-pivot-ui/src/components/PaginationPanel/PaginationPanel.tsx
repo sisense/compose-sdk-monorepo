@@ -50,7 +50,7 @@ export const defaultPaginationOptions: PaginationOptions = {
   rowsPerPageLabel: 'Results per page',
   rowsPerPageLabelShort: 'Rows',
   notifyLimitsBaseNote:
-    'Totals may refer to the complete data if set by the dashboard owner. If available, you can use filters to display fewer rows and columns. To view all your data, download the table to CSV.',
+    'Totals may refer to the complete data if set by the dashboard owner. If available, you can use filters to display fewer rows and columns.',
   notifyRowsLimitLabel: 'The Pivot table is limited to {{recordsCount}} records',
   notifyColumnsLimitLabel: 'The Pivot table is limited to {{columnsCount}} columns',
   notifyRowsAndColumnsLimitLabel:

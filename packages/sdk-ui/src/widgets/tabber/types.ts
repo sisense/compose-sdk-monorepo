@@ -45,14 +45,31 @@ export type TabberButtonsWidgetStyleOptions = {
   tabsAlignment?: 'left' | 'center' | 'right';
 
   /**
-   * Spacing interval between tabs
+   * Spacing interval between tabs.
+   * Can be a predefined size ('small', 'medium', 'large') or a number (treated as pixels).
+   *
+   * @default 'medium'
+   *
+   * @example
+   * ```typescript
+   * tabsInterval: 'small'
+   * tabsInterval: 16  // treated as 16px
+   * ```
    */
-  tabsInterval?: 'small' | 'medium' | 'large';
+  tabsInterval?: 'small' | 'medium' | 'large' | number;
 
   /**
-   * Size of the tabs
+   * Size of the tabs.
+   * Can be a predefined size ('small', 'medium', 'large') or a number (treated as pixels).
+   *
+   * @default 'medium'
+   * @example
+   * ```typescript
+   * tabsSize: 'medium'
+   * tabsSize: 14  // treated as 14px
+   * ```
    */
-  tabsSize?: 'small' | 'medium' | 'large';
+  tabsSize?: 'small' | 'medium' | 'large' | number;
 
   /**
    * Background color of unselected tabs

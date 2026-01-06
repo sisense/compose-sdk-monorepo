@@ -14,7 +14,7 @@ export const translateDimensionsJSON = (
   input: DimensionsInput,
 ): NlqTranslationResult<Attribute[]> => {
   const { data: dimensionsJSON } = input;
-  const { dataSource, tables } = input.context;
+  const { dataSource, schemaIndex } = input.context;
 
   if (!dimensionsJSON) {
     return { success: true, data: [] };
@@ -45,7 +45,7 @@ export const translateDimensionsJSON = (
       input: dimensionString,
     };
     try {
-      const attribute = createAttributeFromName(dimensionString, dataSource, tables);
+      const attribute = createAttributeFromName(dimensionString, dataSource, schemaIndex);
       results.push(attribute);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';

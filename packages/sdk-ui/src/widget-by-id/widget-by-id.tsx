@@ -11,7 +11,7 @@ import { useComposedDashboardInternal } from '@/dashboard/use-composed-dashboard
 import { useDashboardThemeInternal } from '@/dashboard/use-dashboard-theme.js';
 import { ThemeProvider } from '@/theme-provider/index.js';
 import { TranslatableError } from '@/translation/translatable-error.js';
-import { DrilldownOptions } from '@/types.js';
+import { DrilldownOptions, PivotTableDrilldownOptions } from '@/types.js';
 import { FiltersMergeStrategy, mergeFiltersByStrategy } from '@/utils/filter-relations.js';
 import { Widget } from '@/widgets/widget.js';
 
@@ -239,7 +239,7 @@ function withHighlightsFromProps(
  * @returns The widget props with the merged drilldown options.
  */
 function withDrilldownOptionsFromProps(
-  drilldownOptions?: DrilldownOptions,
+  drilldownOptions?: DrilldownOptions | PivotTableDrilldownOptions,
 ): WidgetPropsTransformer {
   return (widgetProps: WidgetProps) => {
     if (!drilldownOptions || !('drilldownOptions' in widgetProps)) {
@@ -251,7 +251,7 @@ function withDrilldownOptionsFromProps(
         ...widgetProps.drilldownOptions,
         ...drilldownOptions,
       },
-    };
+    } as WidgetProps;
   };
 }
 

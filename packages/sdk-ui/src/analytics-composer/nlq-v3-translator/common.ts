@@ -12,60 +12,213 @@ import {
 import { NlqTranslationResult, NormalizedColumn, NormalizedTable } from '../types.js';
 import { DIMENSIONAL_NAME_PREFIX } from './types.js';
 
-function parseDimensionalName(dimensionalName: string): {
-  tableName: string;
-  columnName: string;
+/**
+ * Schema index for efficient table/column lookups and greedy matching
+ * @internal
+ */
+export interface SchemaIndex {
+  /** Tables sorted by name length (descending) for greedy matching */
+  sortedTables: NormalizedTable[];
+  /** Columns sorted by name length (descending) per table for greedy matching */
+  tableColumnMap: Map<string, NormalizedColumn[]>;
+  /** O(1) table lookup by exact name */
+  tableMap: Map<string, NormalizedTable>;
+  /** O(1) column lookup: table name → (column name → column) */
+  columnMap: Map<string, Map<string, NormalizedColumn>>;
+}
+
+/**
+ * Creates a schema index with pre-sorted arrays and Maps for efficient lookups
+ *
+ * @param tables - Array of normalized tables
+ * @returns SchemaIndex with sorted arrays and Maps
+ * @internal
+ */
+export function createSchemaIndex(tables: NormalizedTable[]): SchemaIndex {
+  // Sort tables by name length (descending) for greedy matching
+  const sortedTables = [...tables].sort((a, b) => b.name.length - a.name.length);
+
+  // Create Maps for O(1) lookups
+  const tableMap = new Map<string, NormalizedTable>();
+  const columnMap = new Map<string, Map<string, NormalizedColumn>>();
+  const tableColumnMap = new Map<string, NormalizedColumn[]>();
+
+  for (const table of tables) {
+    // Add to table map
+    tableMap.set(table.name, table);
+
+    // Sort columns by name length (descending) for greedy matching
+    const sortedColumns = [...table.columns].sort((a, b) => b.name.length - a.name.length);
+    tableColumnMap.set(table.name, sortedColumns);
+
+    // Create column map for this table
+    const tableColumnMapInner = new Map<string, NormalizedColumn>();
+    for (const column of table.columns) {
+      tableColumnMapInner.set(column.name, column);
+    }
+    columnMap.set(table.name, tableColumnMapInner);
+  }
+
+  return {
+    sortedTables,
+    tableColumnMap,
+    tableMap,
+    columnMap,
+  };
+}
+
+/**
+ * Parses a dimensional name using schema-aware greedy matching to handle dots in table/column names
+ *
+ * @param dimensionalName - The dimensional name (e.g., "DM.Brand.io.Brand" or "DM.Commerce.Date.Years")
+ * @param schemaIndex - The schema index for efficient matching
+ * @returns Parsed result with matched table, column, and optional level
+ */
+function parseDimensionalName(
+  dimensionalName: string,
+  schemaIndex: SchemaIndex,
+): {
+  table: NormalizedTable;
+  column: NormalizedColumn;
   level?: string;
 } {
-  // Parse "DM.Commerce.Date.Years" -> tableName: "Commerce", columnName: "Date", level: "Years"
-  // Parse "DM.Brand.Brand" -> tableName: "Brand", columnName: "Brand", level: undefined
-  const parts = dimensionalName.split('.');
-  if (parts.length < 3 || `${parts[0]}.` !== DIMENSIONAL_NAME_PREFIX) {
+  // Validate prefix
+  if (!dimensionalName.startsWith(DIMENSIONAL_NAME_PREFIX)) {
     throw new Error(
       `Invalid dimensional element name format: "${dimensionalName}". Expected format: "${DIMENSIONAL_NAME_PREFIX}TableName.ColumnName[.Level]"`,
     );
   }
 
-  const tableName = parts[1];
-  const columnName = parts[2];
-  let level: string | undefined;
-
-  // extract level if present (4th part)
-  if (parts.length === 4) {
-    level = parts[3];
+  // Remove DM. prefix
+  const remaining = dimensionalName.slice(DIMENSIONAL_NAME_PREFIX.length);
+  if (!remaining) {
+    throw new Error(
+      `Invalid dimensional element name format: "${dimensionalName}". Expected format: "${DIMENSIONAL_NAME_PREFIX}TableName.ColumnName[.Level]"`,
+    );
   }
 
-  return { tableName, columnName, level };
-}
+  // Greedy matching: try longest table names first
+  let matchedTable: NormalizedTable | undefined;
+  let matchedTableAfter: string | undefined;
 
-function findTableAndColumn(
-  tableName: string,
-  columnName: string,
-  tables: NormalizedTable[],
-): { table: NormalizedTable; column: NormalizedColumn } {
-  const table = tables.find((t) => t.name === tableName);
-  if (!table) {
-    throw new Error(`Table "${tableName}" not found in the data model`);
+  for (const table of schemaIndex.sortedTables) {
+    if (remaining.startsWith(table.name + '.')) {
+      const afterTable = remaining.slice(table.name.length + 1);
+      if (!afterTable) {
+        throw new Error(
+          `Invalid dimensional element name format: "${dimensionalName}". Expected format: "${DIMENSIONAL_NAME_PREFIX}TableName.ColumnName[.Level]"`,
+        );
+      }
+
+      matchedTable = table;
+      matchedTableAfter = afterTable;
+      break; // Found matching table, now try columns
+    }
   }
-  const column = table.columns.find((col) => col.name === columnName);
-  if (!column) {
-    throw new Error(`Column "${columnName}" not found in table "${tableName}"`);
+
+  // If no table matched, try to extract potential table name for better error message
+  if (!matchedTable) {
+    const firstDotIndex = remaining.indexOf('.');
+    if (firstDotIndex === -1) {
+      // No dots after DM., invalid format
+      throw new Error(
+        `Invalid dimensional element name format: "${dimensionalName}". Expected format: "${DIMENSIONAL_NAME_PREFIX}TableName.ColumnName[.Level]"`,
+      );
+    }
+    const potentialTableName = remaining.slice(0, firstDotIndex);
+    throw new Error(`Table "${potentialTableName}" not found in the data model`);
   }
-  return { table, column };
+
+  // Get sorted columns for this table (longest first)
+  const sortedColumns = schemaIndex.tableColumnMap.get(matchedTable.name);
+  if (!sortedColumns) {
+    // Should not happen, but handle gracefully
+    throw new Error(`Table "${matchedTable.name}" found but has no columns`);
+  }
+
+  // Try matching columns (longest first)
+  let matchedColumnWithInvalidLevel: NormalizedColumn | undefined;
+  let matchedColumnAfterInvalid: string | undefined;
+  const validLevels = DateLevels.all;
+
+  for (const column of sortedColumns) {
+    if (matchedTableAfter === column.name) {
+      // Exact match, no level
+      return { table: matchedTable, column };
+    }
+
+    if (!matchedTableAfter!.startsWith(column.name + '.')) {
+      continue;
+    }
+
+    const afterColumn = matchedTableAfter!.slice(column.name.length + 1);
+    if (!afterColumn) {
+      // Should not happen (would be exact match above)
+      continue;
+    }
+
+    const isValidDateLevel = validLevels.includes(afterColumn);
+    const isDatetimeColumn = isDatetime(column.dataType);
+
+    // Handle valid date level
+    if (isValidDateLevel) {
+      if (isDatetimeColumn) {
+        // Valid date level on datetime column
+        return { table: matchedTable, column, level: afterColumn };
+      }
+      // Valid date level but column is not datetime - store for error
+      if (!matchedColumnWithInvalidLevel) {
+        matchedColumnWithInvalidLevel = column;
+        matchedColumnAfterInvalid = afterColumn;
+      }
+      continue;
+    }
+
+    // Handle invalid date level on datetime column
+    if (isDatetimeColumn && !matchedColumnWithInvalidLevel) {
+      matchedColumnWithInvalidLevel = column;
+      matchedColumnAfterInvalid = afterColumn;
+    }
+
+    // Not a date level and not a datetime column, so it must be part of the column name
+    // Continue to try longer column names (loop will naturally continue)
+  }
+
+  // If we found a column match with a potential date level issue, throw specific error
+  // (only if no exact column match was found)
+  if (matchedColumnWithInvalidLevel && matchedColumnAfterInvalid) {
+    if (validLevels.includes(matchedColumnAfterInvalid)) {
+      // Valid date level but column is not datetime
+      throw new Error(
+        `Invalid date level "${matchedColumnAfterInvalid}" in dimensional element "${dimensionalName}". Column "${matchedTable.name}.${matchedColumnWithInvalidLevel.name}" is not a datetime column`,
+      );
+    }
+    // Invalid date level on datetime column
+    throw new Error(
+      `Invalid date level "${matchedColumnAfterInvalid}" in dimensional element "${dimensionalName}". Valid levels are: ${validLevels.join(
+        ', ',
+      )}`,
+    );
+  }
+
+  // Table matched but no column matched
+  // Try to extract potential column name for better error message
+  const firstDotIndex = matchedTableAfter!.indexOf('.');
+  const potentialColumnName =
+    firstDotIndex === -1 ? matchedTableAfter! : matchedTableAfter!.slice(0, firstDotIndex);
+  throw new Error(`Column "${potentialColumnName}" not found in table "${matchedTable.name}"`);
 }
 
 function findColumnAndLevel(
   dimensionalName: string,
-  tables: NormalizedTable[],
+  schemaIndex: SchemaIndex,
 ): { column: NormalizedColumn; level?: string } {
-  const { tableName, columnName, level } = parseDimensionalName(dimensionalName);
-
-  const { column } = findTableAndColumn(tableName, columnName, tables);
+  const { table, column, level } = parseDimensionalName(dimensionalName, schemaIndex);
 
   if (level) {
     if (!isDatetime(column.dataType)) {
       throw new Error(
-        `Invalid date level "${level}" in dimensional element "${dimensionalName}". Column "${tableName}.${columnName}" is not a datetime column`,
+        `Invalid date level "${level}" in dimensional element "${dimensionalName}". Column "${table.name}.${column.name}" is not a datetime column`,
       );
     }
     const validLevels = DateLevels.all;
@@ -81,7 +234,7 @@ function findColumnAndLevel(
     const dateOnlyLevels = DateLevels.dateOnly;
     if (column.dataType === 'date' && !dateOnlyLevels.includes(level)) {
       throw new Error(
-        `Invalid level "${level}" in dimensional element "${dimensionalName}". Column "${tableName}.${columnName}" is only a date column, not a datetime column`,
+        `Invalid level "${level}" in dimensional element "${dimensionalName}". Column "${table.name}.${column.name}" is only a date column, not a datetime column`,
       );
     }
 
@@ -89,7 +242,7 @@ function findColumnAndLevel(
     const timeOnlyLevels = DateLevels.timeOnly;
     if (column.dataType === 'time' && !timeOnlyLevels.includes(level)) {
       throw new Error(
-        `Invalid level "${level}" in dimensional element "${dimensionalName}". Column "${tableName}.${columnName}" is only a time column, not a date column`,
+        `Invalid level "${level}" in dimensional element "${dimensionalName}". Column "${table.name}.${column.name}" is only a time column, not a date column`,
       );
     }
   }
@@ -168,9 +321,9 @@ export function getAttributeTypeDisplayString(attribute: Attribute): string {
 export function createAttributeFromName(
   attributeName: string,
   dataSource: JaqlDataSourceForDto,
-  tables: NormalizedTable[],
+  schemaIndex: SchemaIndex,
 ) {
-  const { column, level } = findColumnAndLevel(attributeName, tables);
+  const { column, level } = findColumnAndLevel(attributeName, schemaIndex);
 
   return createAttributeHelper({
     expression: column.expression,
@@ -185,9 +338,9 @@ export function createAttributeFromName(
 export function createDateDimensionFromName(
   dateDimensionName: string,
   dataSource: JaqlDataSourceForDto,
-  tables: NormalizedTable[],
+  schemaIndex: SchemaIndex,
 ): DateDimension {
-  const { tableName, columnName, level } = parseDimensionalName(dateDimensionName);
+  const { column, level } = parseDimensionalName(dateDimensionName, schemaIndex);
 
   // Reject if level is present - DateDimension should not have a level
   if (level) {
@@ -196,17 +349,15 @@ export function createDateDimensionFromName(
     );
   }
 
-  const { column } = findTableAndColumn(tableName, columnName, tables);
-
   // Validate that the field is a datetime type
   if (!isDatetime(column.dataType)) {
     throw new Error(
-      `Invalid DateDimension name "${dateDimensionName}". Column "${tableName}.${columnName}" is not a datetime column (got ${column.dataType}).`,
+      `Invalid DateDimension name "${dateDimensionName}". Column "${column.name}" is not a datetime column (got ${column.dataType}).`,
     );
   }
 
   return createDateDimension({
-    name: columnName,
+    name: column.name,
     expression: column.expression,
     dataSource,
   });

@@ -22,6 +22,7 @@ import { SisenseChartDataPoint } from '@/sisense-chart/types';
 import {
   BoxplotDataPoint,
   CalendarHeatmapDataPoint,
+  DataOptionLocation,
   DataPoint,
   DataPointEntry,
   HighchartsPoint,
@@ -66,9 +67,13 @@ export function createFormatter(dataOption: StyledColumn | StyledMeasureColumn) 
   };
 }
 
-export function getDataPointMetadata(dataOption: StyledColumn | StyledMeasureColumn) {
+export function getDataPointMetadata(
+  dataOption: StyledColumn | StyledMeasureColumn,
+  dataOptionLocation?: DataOptionLocation,
+) {
   return {
     dataOption,
+    ...(dataOptionLocation && { dataOptionLocation }),
     ...(MetadataTypes.isAttribute(dataOption.column) && {
       attribute: dataOption.column,
     }),
@@ -102,7 +107,7 @@ const getCartesianDataPoint = (
   const valueEntries: DataPointEntry[] = dataOptions.y
     .filter((item, index) => !hasMultipleValues || point.series.index === index)
     .flatMap((item) => {
-      const value = point.custom?.rawValue;
+      const value = point.custom.rawValue;
       return {
         ...getDataPointMetadata(item),
         value,

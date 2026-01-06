@@ -2,7 +2,7 @@ import omit from 'lodash-es/omit';
 
 import { TabberButtonsWidgetStyleOptions } from '@/types.js';
 
-import { TabberWidgetDtoStyle } from '../types.js';
+import { TabberWidgetDto, TabberWidgetDtoStyle } from '../types.js';
 
 /**
  * Maps TabberWidgetDtoStyle tab corner radius to TabberButtonsWidgetStyleOptions format.
@@ -62,6 +62,11 @@ function mapTabberDtoTabsInterval(
       return 'medium';
     case 'LARGE':
       return 'large';
+    default:
+      if (typeof tabsInterval === 'number') {
+        return tabsInterval;
+      }
+      return 'small';
   }
 }
 
@@ -82,6 +87,11 @@ function mapTabberDtoTabsSize(
       return 'medium';
     case 'LARGE':
       return 'large';
+    default:
+      if (typeof tabsSize === 'number') {
+        return tabsSize;
+      }
+      return 'medium';
   }
 }
 
@@ -131,14 +141,15 @@ export function extractTabberButtonsWidgetStyleOptions(
  * Extracts custom options from TabberWidgetDtoStyle.
  * Pure function that extracts tab names and active tab index from DTO style.
  *
- * @param tabberStyleDto - The tabber widget style from DTO
+ * @param tabberDto - The tabber widget props DTO
  * @returns Object containing tab names and active tab index
  */
-export function extractTabberButtonsWidgetCustomOptions(tabberStyleDto: TabberWidgetDtoStyle): {
+export function extractTabberButtonsWidgetCustomOptions(tabberDto: TabberWidgetDto): {
   tabNames: string[];
   activeTab: number;
 } {
-  const { tabs, activeTab } = tabberStyleDto;
+  const tabs = tabberDto.style.tabs || tabberDto.tabs || [];
+  const { activeTab } = tabberDto.style;
   return {
     tabNames: tabs.map((tab) => tab.title),
     // Default to 0 (first tab) if activeTab is missing or invalid

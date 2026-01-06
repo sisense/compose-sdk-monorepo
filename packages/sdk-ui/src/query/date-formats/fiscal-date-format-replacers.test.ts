@@ -64,12 +64,12 @@ describe('newDateFormatWithExpandedQuartersMasks', () => {
       fiscalMonth,
     );
 
-    expect(newFormat).toBe(`'Quarter '4`);
+    expect(newFormat).toBe(`'Quarter '1`);
   });
 
   it('should substitute "Q" masks with quarter number', () => {
     const oldFormat = 'Q';
-    const date = new Date('Fri Oct 02 2020 00:00:00 GMT+0700');
+    const date = new Date('Fri Oct 02 2020 00:00:00 GMT-0800');
     const selectedDateLevel = 'days';
     const fiscalMonth = 0;
 

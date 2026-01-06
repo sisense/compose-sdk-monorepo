@@ -14,7 +14,7 @@ import { Hierarchy, HierarchyId } from '@/models/hierarchy';
 import { formatDateValue } from '@/query/date-formats/apply-date-format.js';
 import { sliceFromMatched } from '@/utils/array-utils';
 
-import { DataPoint, DrilldownOptions } from '../types.js';
+import { DataPoint, DrilldownOptions, PivotTableDrilldownOptions } from '../types.js';
 import { createDataColumn } from './translate-widget-data-options.js';
 import { DatetimeMask, FusionWidgetType, Panel, PanelItem } from './types.js';
 import { getEnabledPanelItems, getRootPanelItem } from './utils.js';
@@ -23,6 +23,22 @@ const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
   item?.parent
     ? [...getAvailableDrilldowns(item.parent), createDataColumn(item).column as Attribute]
     : [];
+
+/**
+ * Checks if the item has a drilldown selection.
+ *
+ * @param {PanelItem} item - The item to check.
+ * @returns {boolean} True if the item has a drilldown selection, false otherwise.
+ */
+const hasDrilldownSelection = (item?: PanelItem): boolean => {
+  if (item?.parent && item.through && 'filter' in item.through.jaql) {
+    return true;
+  }
+  if (item?.parent) {
+    return hasDrilldownSelection(item.parent);
+  }
+  return false;
+};
 
 /* eslint complexity: ['error', 9] */
 const getDrilldownSelections = (
@@ -63,15 +79,14 @@ function getDrilldownAllowedPanelNames(widgetType: FusionWidgetType) {
       return ['category'];
     case 'chart/scatter':
       return ['x-axis', 'y-axis', 'point', 'Break By / Color'];
+    case 'pivot2':
+      return ['rows', 'columns'];
     default:
       return ['categories'];
   }
 }
 
-const findDrillableItem = (
-  widgetType: FusionWidgetType,
-  panels: Panel[],
-): PanelItem | undefined => {
+const findDrillableItems = (widgetType: FusionWidgetType, panels: Panel[]): PanelItem[] => {
   const drillableItems = getDrilldownAllowedPanelNames(widgetType)
     .map((name) => getEnabledPanelItems(panels, name))
     .flat()
@@ -80,10 +95,13 @@ const findDrillableItem = (
       const isFormula = 'formula' in item.jaql && item.jaql.formula;
       return !isMeasure && !isFormula;
     });
-  // Note: drilldown is allowed only if the widget has a single drillable item.
-  const isDrilldownAllowed = drillableItems.length === 1;
 
-  return isDrilldownAllowed ? drillableItems[0] : undefined;
+  if (widgetType === 'pivot2') {
+    return drillableItems;
+  }
+
+  // Only first drillable item is allowed for drilldown for other widgets than pivot table
+  return drillableItems.slice(0, 1);
 };
 
 const DATE_CALENDAR_HIERARCHY_ID = 'calendar';
@@ -173,18 +191,37 @@ export const extractDrilldownOptions = (
   panels: Panel[],
   drillHistory: PanelItem[] = [],
   enableDrillToAnywhere?: boolean,
-): DrilldownOptions => {
-  const drillableItem = findDrillableItem(widgetType, panels);
-  const rootItem = drillableItem && getRootPanelItem(drillableItem);
-  const drilldownSelections = getDrilldownSelections(drillableItem);
-  const drilldownHierarchies = extractDrilldownHierarchies(rootItem);
+): DrilldownOptions | PivotTableDrilldownOptions => {
+  const drillableItems = findDrillableItems(widgetType, panels);
+  // Only single item from drillableItems array can have drilldown selections
+  const drillableItemWithSelections = drillableItems.find(hasDrilldownSelection);
+  const drilldownSelections = getDrilldownSelections(drillableItemWithSelections);
+  const drilldownHierarchies = drillableItems
+    .map((item) => getRootPanelItem(item))
+    .map((rootItem) => extractDrilldownHierarchies(rootItem))
+    .flat();
   const drilldownDimensions = uniqBy(
     [
-      ...(drillableItem ? getAvailableDrilldowns(drillableItem) : []),
+      ...(drillableItemWithSelections ? getAvailableDrilldowns(drillableItemWithSelections) : []),
       ...(enableDrillToAnywhere ? drillHistory.map(getAvailableDrilldowns).flat() : []),
     ],
     ({ expression }) => expression,
   );
+
+  if (widgetType === 'pivot2') {
+    const rootItemWithSelections =
+      drillableItemWithSelections && getRootPanelItem(drillableItemWithSelections);
+    const drilldownTarget =
+      rootItemWithSelections && (createDataColumn(rootItemWithSelections).column as Attribute);
+    return {
+      drilldownPaths: [...drilldownDimensions, ...drilldownHierarchies],
+      ...(drilldownTarget &&
+        drilldownSelections.length && {
+          drilldownTarget: drilldownTarget,
+          drilldownSelections: drilldownSelections,
+        }),
+    };
+  }
 
   return {
     drilldownPaths: [...drilldownDimensions, ...drilldownHierarchies],

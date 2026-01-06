@@ -80,17 +80,45 @@ Horizontal alignment of tabs within the widget
 
 ### `tabsInterval`
 
-**tabsInterval**?: `"large"` \| `"medium"` \| `"small"`
+**tabsInterval**?: `"large"` \| `"medium"` \| `"small"` \| `number`
 
-Spacing interval between tabs
+Spacing interval between tabs.
+Can be a predefined size ('small', 'medium', 'large') or a number (treated as pixels).
+
+#### Default
+
+```ts
+'medium'
+```
+
+#### Example
+
+```typescript
+tabsInterval: 'small'
+tabsInterval: 16  // treated as 16px
+```
 
 ***
 
 ### `tabsSize`
 
-**tabsSize**?: `"large"` \| `"medium"` \| `"small"`
+**tabsSize**?: `"large"` \| `"medium"` \| `"small"` \| `number`
 
-Size of the tabs
+Size of the tabs.
+Can be a predefined size ('small', 'medium', 'large') or a number (treated as pixels).
+
+#### Default
+
+```ts
+'medium'
+```
+
+#### Example
+
+```typescript
+tabsSize: 'medium'
+tabsSize: 14  // treated as 14px
+```
 
 ***
 

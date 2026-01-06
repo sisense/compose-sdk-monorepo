@@ -1,18 +1,15 @@
 import { useCallback, useMemo } from 'react';
 
 import cloneDeep from 'lodash-es/cloneDeep';
-import mergeWith from 'lodash-es/mergeWith';
 
 import { AnyObject } from '@/utils/utility-types';
 
 // A default merger function that merges a delta object into an existing object.
 export const defaultMerger = <P extends AnyObject>(existingValue: P, delta: Partial<P>) => {
-  return mergeWith(cloneDeep(existingValue), delta, (objValue, srcValue) => {
-    if (Array.isArray(srcValue)) {
-      return srcValue;
-    }
-    return undefined;
-  });
+  return {
+    ...cloneDeep(existingValue),
+    ...delta,
+  };
 };
 
 type UseWithChangeDetectionParams<P extends AnyObject> = {

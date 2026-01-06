@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { createSchemaIndex } from '../common.js';
 import { FunctionContext } from '../types.js';
 import { executeFunction } from './execute-function.js';
 import { getCustomProcessor } from './factory-function-processors.js';
@@ -34,7 +35,7 @@ vi.mock('./process-arg.js', () => ({
 describe('processNode', () => {
   const mockContext: FunctionContext = {
     dataSource: { id: 'test', title: 'Test', address: 'localhost' } as any,
-    tables: [],
+    schemaIndex: createSchemaIndex([]),
     pathPrefix: 'test',
   };
 

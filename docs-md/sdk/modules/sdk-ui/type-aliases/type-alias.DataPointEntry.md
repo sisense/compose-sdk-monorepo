@@ -44,6 +44,6 @@ The measure associated with this data point entry
 
 ### `value`
 
-**value**?: `number` \| `string`
+**value**: `number` \| `string`
 
 The raw value of the data point
