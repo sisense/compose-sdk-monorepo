@@ -1,6 +1,6 @@
 import { DashboardProps as DashboardPropsPreact } from '@sisense/sdk-ui-preact';
 
-import { DashboardProps } from '../components/dashboard';
+import type { DashboardProps } from '../components/dashboard';
 import {
   translateFromPreactWidgetProps,
   translateToPreactWidgetProps,

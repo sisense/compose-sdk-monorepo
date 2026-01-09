@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { SisenseContextService } from '../services';
+import { SisenseContextService } from '../services/sisense-context.service';
 
 @NgModule({
   declarations: [],

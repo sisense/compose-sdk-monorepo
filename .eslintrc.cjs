@@ -75,6 +75,19 @@ module.exports = {
           },
         },
         {
+          // Specific configuration for sdk-ui-angular to catch circular deps
+          files: ['packages/sdk-ui-angular/src/**/*.{ts,tsx}'],
+          rules: {
+            'import/no-cycle': [
+              'error',
+              {
+                maxDepth: 10,
+                ignoreExternal: true,
+              },
+            ],
+          },
+        },
+        {
           // Disable the translation rule for files in the /examples folder
           files: ['examples/**/*'],
           rules: {

@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.18.1] - 2026-01-09
+
+### Changed
+- Fix a build issue in the `@sisense/sdk-ui-angular` package when used in environments with restricted build setups
+
 ## [2.18.0] - 2026-01-06
 
 ### Added
