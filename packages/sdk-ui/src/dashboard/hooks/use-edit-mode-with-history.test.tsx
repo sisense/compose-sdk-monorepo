@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { WidgetsPanelLayout } from '@/models';
 
-import { useEditModeToolbar } from './use-edit-mode-toolbar';
+import { useEditModeWithHistory } from './use-edit-mode-with-history.js';
 
 // Mock functions
 const mockOnApply = vi.fn();
@@ -21,7 +21,7 @@ describe('useEditModeToolbar', () => {
 
   it('should initialize with the provided layout', () => {
     const { result } = renderHook(() =>
-      useEditModeToolbar({
+      useEditModeWithHistory({
         initialLayout: mockInitialLayout,
       }),
     );
@@ -32,7 +32,7 @@ describe('useEditModeToolbar', () => {
 
   it('should update layout and track changes', () => {
     const { result } = renderHook(() =>
-      useEditModeToolbar({
+      useEditModeWithHistory({
         initialLayout: mockInitialLayout,
       }),
     );
@@ -65,7 +65,7 @@ describe('useEditModeToolbar', () => {
 
   it('should handle undo/redo operations', async () => {
     const { result } = renderHook(() =>
-      useEditModeToolbar({
+      useEditModeWithHistory({
         initialLayout: mockInitialLayout,
       }),
     );
@@ -119,7 +119,7 @@ describe('useEditModeToolbar', () => {
 
   it('should call onApply when applying changes', () => {
     const { result } = renderHook(() =>
-      useEditModeToolbar({
+      useEditModeWithHistory({
         initialLayout: mockInitialLayout,
         onApply: mockOnApply,
       }),
@@ -158,7 +158,7 @@ describe('useEditModeToolbar', () => {
 
   it('should call onCancel and reset layout when canceling', () => {
     const { result } = renderHook(() =>
-      useEditModeToolbar({
+      useEditModeWithHistory({
         initialLayout: mockInitialLayout,
         onCancel: mockOnCancel,
       }),
@@ -199,7 +199,7 @@ describe('useEditModeToolbar', () => {
   it('should reset layout when initialLayout changes', () => {
     const { result, rerender } = renderHook(
       ({ layout }) =>
-        useEditModeToolbar({
+        useEditModeWithHistory({
           initialLayout: layout,
         }),
       { initialProps: { layout: mockInitialLayout } },

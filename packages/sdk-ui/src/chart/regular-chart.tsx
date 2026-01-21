@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { Data } from '@sisense/sdk-data';
 import isArray from 'lodash-es/isArray';
@@ -15,14 +15,12 @@ import {
   isScattermapProps,
   Scattermap,
 } from '../charts/map-charts/scattermap/scattermap';
-import { LoadingIndicator } from '../common/components/loading-indicator';
 import { LoadingOverlay } from '../common/components/loading-overlay';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 import { IndicatorCanvas, isIndicatorCanvasProps } from '../indicator-canvas';
 import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
 import { RegularChartProps } from '../props';
 import { isSisenseChartProps, isSisenseChartType, SisenseChart } from '../sisense-chart';
-import { useThemeContext } from '../theme-provider';
 import './chart.css';
 import { getLoadDataFunction } from './helpers/get-load-data-function';
 import { useChartDataPreparation } from './helpers/use-chart-data-preparation';
@@ -96,9 +94,7 @@ export const RegularChart = (props: RegularChartProps) => {
   } = props;
   const { width, height } = styleOptions || {};
 
-  const [isLoading, setIsLoading] = useState(false);
   const defaultSize = getChartDefaultSize(chartType);
-  const { themeSettings } = useThemeContext();
 
   const size = useMemo(
     () => ({
@@ -124,7 +120,8 @@ export const RegularChart = (props: RegularChartProps) => {
   const loadData = useMemo(() => {
     return getLoadDataFunction(chartType, isForecastOrTrendChart);
   }, [chartType, isForecastOrTrendChart]);
-  const [data, dataOptions] = useSyncedData({
+
+  const { data, dataOptions, isLoading } = useSyncedData({
     dataSet,
     chartDataOptions: syncDataOptions,
     chartType,
@@ -134,7 +131,6 @@ export const RegularChart = (props: RegularChartProps) => {
     filters,
     highlights,
     refreshCounter,
-    setIsLoading,
     enabled: !hasNoDimensions,
     loadData,
   });
@@ -179,7 +175,7 @@ export const RegularChart = (props: RegularChartProps) => {
       }
 
       if (!chartData && isLoading) {
-        return <LoadingIndicator themeSettings={themeSettings} />;
+        return <LoadingOverlay />;
       }
       if ((chartData && hasNoResults(chartType, chartData)) || hasNoDimensions) {
         return <NoResultsOverlay iconType={chartType} />;
@@ -232,15 +228,7 @@ export const RegularChart = (props: RegularChartProps) => {
 
       return null;
     },
-    [
-      chartData,
-      isLoading,
-      themeSettings,
-      chartType,
-      hasNoDimensions,
-      isForecastOrTrendChart,
-      chartRendererProps,
-    ],
+    [chartData, isLoading, chartType, hasNoDimensions, isForecastOrTrendChart, chartRendererProps],
   );
 
   if (!chartRendererProps) {

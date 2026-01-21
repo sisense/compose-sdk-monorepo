@@ -14,8 +14,10 @@ import { validateCustomFormula } from './validate-custom-formula.js';
 /**
  * Custom processor for measureFactory.customFormula that:
  * - Validates formula bracket references match context keys
- * - Validates all context keys are used in the formula
- * - Validates context is not empty and formula is not empty
+ * - Validates all context keys are used in the formula (when context is provided)
+ * - Validates context is not empty only when formula contains bracket references
+ * - Allows empty context when formula has no bracket references (e.g., MOD(10, 7))
+ * - Validates formula is not empty
  * - Transforms context items by executing nested function calls
  * - Converts attribute strings to actual attribute objects
  *

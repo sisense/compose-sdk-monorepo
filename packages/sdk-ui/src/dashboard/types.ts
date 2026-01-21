@@ -121,16 +121,25 @@ export interface DashboardContainerProps {
   title: string;
   layoutOptions?: DashboardLayoutOptions;
   config?: DashboardConfig;
+  editMode: boolean;
   widgets: WidgetProps[];
   filters: Filter[] | FilterRelations;
   onFiltersChange: (filters: Filter[] | FilterRelations) => void;
   defaultDataSource?: DataSource;
+  filterPanelCollapsed: boolean;
+  onFilterPanelCollapsedChange: (collapsed: boolean) => void;
   /**
-   * Callback to receive changes
+   * Callback to receive layout changes
    *
    * @internal
    */
-  onChange?: (event: DashboardChangeEvent) => void;
+  onLayoutChange: (layout: WidgetsPanelLayout) => void;
+  /**
+   * Render the toolbar
+   *
+   * @internal
+   */
+  renderToolbar?: () => ReactNode;
 }
 
 /**

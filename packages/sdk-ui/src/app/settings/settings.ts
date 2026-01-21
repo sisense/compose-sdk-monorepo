@@ -92,7 +92,10 @@ type ServerSettings = {
   };
 };
 
-const defaultLoadingIndicatorConfig = { enabled: true, delay: 500 };
+const defaultLoadingIndicatorConfig = {
+  enabled: true,
+  delay: 500, // default value is 500 to avoid flickering between re-renders
+};
 
 const defaultAppConfig: Required<ConfigurableAppSettings> = {
   locale: getBaseDateFnsLocale(),

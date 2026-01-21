@@ -196,7 +196,7 @@ export function processArg(input: ArgInput): ProcessedArg {
         }
         return processNode({
           data: item,
-          context: { dataSource, schemaIndex, pathPrefix: `${errorPrefix}[${i}]: ` },
+          context: { dataSource, schemaIndex, pathPrefix: `${errorPrefix}[${i}]` },
         });
       });
 
@@ -225,7 +225,7 @@ export function processArg(input: ArgInput): ProcessedArg {
         }
         return processNode({
           data: item,
-          context: { dataSource, schemaIndex, pathPrefix: `${errorPrefix}[${i}]: ` },
+          context: { dataSource, schemaIndex, pathPrefix: `${errorPrefix}[${i}]` },
         });
       });
 
@@ -241,7 +241,7 @@ export function processArg(input: ArgInput): ProcessedArg {
           }
           return processNode({
             data: item,
-            context: { dataSource, schemaIndex, pathPrefix: `${errorPrefix}[${i}]: ` },
+            context: { dataSource, schemaIndex, pathPrefix: `${errorPrefix}[${i}]` },
           });
         });
       } else if (isFunctionCall(rawArg)) {

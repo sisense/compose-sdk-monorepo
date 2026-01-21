@@ -15,7 +15,9 @@ exports[`Boxplot Chart > render boxplot with custom data options that allow to p
     },
     "backgroundColor": "#FFFFFF",
     "events": {
+      "drilldown": [Function],
       "load": [Function],
+      "redraw": [Function],
       "selection": [Function],
     },
     "polar": false,
@@ -391,7 +393,9 @@ exports[`Boxplot Chart > render boxplot with single value in data options 1`] = 
     },
     "backgroundColor": "#FFFFFF",
     "events": {
+      "drilldown": [Function],
       "load": [Function],
+      "redraw": [Function],
       "selection": [Function],
     },
     "polar": false,

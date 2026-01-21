@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.19.0] - 2026-01-20
+
+### Changed
+- Optimize NLQ chart: performance upgrade, minor improvements
+- Improve dashboard layout adjustment upon tabber widget deletion
+- Improve configuration for loading indicator behaviour
+- Improve dashboard layout editing history
+- Fix issues related to 'Other' section in `PieChart` component
+- Fix `PivotTable` subtotals formatting issues
+- Fix inconsistent dashboard toolbar icon theming
+
 ## [2.18.1] - 2026-01-09
 
 ### Changed

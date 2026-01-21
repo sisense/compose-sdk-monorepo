@@ -15,7 +15,10 @@ exports[`Treemap Chart > render a treemap with coloring 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "drilldown": [Function],
+      "redraw": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -831,7 +834,10 @@ exports[`Treemap Chart > render a treemap with highlights 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "drilldown": [Function],
+      "redraw": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -1726,7 +1732,10 @@ exports[`Treemap Chart > render a treemap with single category 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "drilldown": [Function],
+      "redraw": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -2072,7 +2081,10 @@ exports[`Treemap Chart > render a treemap with three categories 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "drilldown": [Function],
+      "redraw": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -2871,7 +2883,10 @@ exports[`Treemap Chart > render a treemap with two categories 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "drilldown": [Function],
+      "redraw": [Function],
+    },
     "polar": false,
     "spacing": [
       20,

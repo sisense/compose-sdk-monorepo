@@ -16,7 +16,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
     },
     "backgroundColor": "#FFFFFF",
     "events": {
+      "drilldown": [Function],
       "load": [Function],
+      "redraw": [Function],
     },
     "polar": false,
     "spacing": [
@@ -6412,7 +6414,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
     },
     "backgroundColor": "#FFFFFF",
     "events": {
+      "drilldown": [Function],
       "load": [Function],
+      "redraw": [Function],
     },
     "polar": false,
     "spacing": [

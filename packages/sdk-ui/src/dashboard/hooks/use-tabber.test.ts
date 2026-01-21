@@ -605,4 +605,360 @@ describe('useTabber hook', () => {
     tabberWidget = result.current.widgets.find((w) => w.id === 'tabber2') as any;
     expect(tabberWidget.customOptions.activeTab).toBe(1);
   });
+
+  describe('tabber deletion handling', () => {
+    const dashboardTabberConfig = {
+      tabber1: {
+        tabs: [
+          { displayWidgetIds: ['w1', 'w2'], title: 'Tab 0' },
+          { displayWidgetIds: ['w3'], title: 'Tab 1' },
+        ],
+      },
+      tabber2: {
+        tabs: [
+          { displayWidgetIds: ['w4'], title: 'Tab 0' },
+          { displayWidgetIds: ['w5'], title: 'Tab 1' },
+        ],
+      },
+    };
+
+    const widgets: WidgetProps[] = [
+      {
+        id: 'tabber1',
+        widgetType: 'custom',
+        customWidgetType: 'tabber-buttons',
+        dataOptions: {},
+        customOptions: {
+          tabNames: ['Tab 0', 'Tab 1'],
+          activeTab: 0,
+        },
+        styleOptions: {
+          showTitle: false,
+          showSeparators: true,
+          showDescription: false,
+          useSelectedBkg: false,
+          useUnselectedBkg: false,
+          selectedColor: '#FFCB05',
+          unselectedColor: '#9EA2AB',
+          descriptionColor: '#9EA2AB',
+          selectedBackgroundColor: '#FFFFFF',
+          unselectedBackgroundColor: '#FFFFFF',
+          tabsSize: 'medium',
+          tabsInterval: 'medium',
+          tabsAlignment: 'center',
+          tabCornerRadius: 'none',
+        },
+        title: 'Tabber 1',
+      },
+      {
+        id: 'tabber2',
+        widgetType: 'custom',
+        customWidgetType: 'tabber-buttons',
+        dataOptions: {},
+        customOptions: {
+          tabNames: ['Tab 0', 'Tab 1'],
+          activeTab: 0,
+        },
+        styleOptions: {
+          showTitle: false,
+          showSeparators: true,
+          showDescription: false,
+          useSelectedBkg: false,
+          useUnselectedBkg: false,
+          selectedColor: '#FFCB05',
+          unselectedColor: '#9EA2AB',
+          descriptionColor: '#9EA2AB',
+          selectedBackgroundColor: '#FFFFFF',
+          unselectedBackgroundColor: '#FFFFFF',
+          tabsSize: 'medium',
+          tabsInterval: 'medium',
+          tabsAlignment: 'center',
+          tabCornerRadius: 'none',
+        },
+        title: 'Tabber 2',
+      },
+    ];
+
+    it('should unhide widgets controlled by a deleted tabber', () => {
+      // Layout after tabber1 is deleted
+      const layoutWithoutTabber = {
+        columns: [
+          {
+            widthPercentage: 100,
+            rows: [
+              {
+                cells: [
+                  { widgetId: 'w1', widthPercentage: 25, height: '100px', hidden: true },
+                  { widgetId: 'w2', widthPercentage: 25, height: '100px', hidden: true },
+                  { widgetId: 'w3', widthPercentage: 25, height: '100px', hidden: true },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const { result } = renderHook(() => useTabber({ widgets, config: dashboardTabberConfig }));
+
+      const layoutManager = result.current.layoutManager;
+      const filteredLayout = layoutManager.manageLayout(layoutWithoutTabber);
+
+      // All widgets controlled by deleted tabber1 should be visible
+      const w1Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w1');
+      const w2Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w2');
+      const w3Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w3');
+
+      expect(w1Cell?.hidden).toBe(false);
+      expect(w2Cell?.hidden).toBe(false);
+      expect(w3Cell?.hidden).toBe(false);
+    });
+
+    it('should only unhide widgets controlled by the deleted tabber, not others', () => {
+      // Layout after tabber1 is deleted (but tabber2 remains)
+      const layoutWithOnlyTabber2 = {
+        columns: [
+          {
+            widthPercentage: 100,
+            rows: [
+              {
+                cells: [
+                  { widgetId: 'w1', widthPercentage: 20, height: '100px', hidden: true },
+                  { widgetId: 'w2', widthPercentage: 20, height: '100px', hidden: true },
+                ],
+              },
+              {
+                cells: [
+                  { widgetId: 'tabber2', widthPercentage: 20, height: '100px' },
+                  { widgetId: 'w4', widthPercentage: 20, height: '100px', hidden: false },
+                  { widgetId: 'w5', widthPercentage: 20, height: '100px', hidden: true },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const { result } = renderHook(() => useTabber({ widgets, config: dashboardTabberConfig }));
+
+      const layoutManager = result.current.layoutManager;
+      const filteredLayout = layoutManager.manageLayout(layoutWithOnlyTabber2);
+
+      // Widgets controlled by deleted tabber1 should be visible
+      const w1Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w1');
+      const w2Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w2');
+
+      expect(w1Cell?.hidden).toBe(false);
+      expect(w2Cell?.hidden).toBe(false);
+
+      // Widgets controlled by remaining tabber2 should still respect tabber2's visibility
+      const w4Cell = filteredLayout.columns[0].rows[1].cells.find((c: any) => c.widgetId === 'w4');
+      const w5Cell = filteredLayout.columns[0].rows[1].cells.find((c: any) => c.widgetId === 'w5');
+
+      // w4 is in tabber2's active tab (tab 0), so it should be visible
+      expect(w4Cell?.hidden).toBe(false);
+      // w5 is not in tabber2's active tab (tab 0), so it should be hidden
+      expect(w5Cell?.hidden).toBe(true);
+    });
+
+    it('should handle deletion of multiple tabbers', () => {
+      // Layout after both tabbers are deleted
+      const layoutWithoutTabbers = {
+        columns: [
+          {
+            widthPercentage: 100,
+            rows: [
+              {
+                cells: [
+                  { widgetId: 'w1', widthPercentage: 20, height: '100px', hidden: true },
+                  { widgetId: 'w2', widthPercentage: 20, height: '100px', hidden: true },
+                ],
+              },
+              {
+                cells: [
+                  { widgetId: 'w4', widthPercentage: 20, height: '100px', hidden: true },
+                  { widgetId: 'w5', widthPercentage: 20, height: '100px', hidden: true },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const { result } = renderHook(() => useTabber({ widgets, config: dashboardTabberConfig }));
+
+      const layoutManager = result.current.layoutManager;
+      const filteredLayout = layoutManager.manageLayout(layoutWithoutTabbers);
+
+      // All widgets controlled by deleted tabbers should be visible
+      const w1Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w1');
+      const w2Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w2');
+      const w4Cell = filteredLayout.columns[0].rows[1].cells.find((c: any) => c.widgetId === 'w4');
+      const w5Cell = filteredLayout.columns[0].rows[1].cells.find((c: any) => c.widgetId === 'w5');
+
+      expect(w1Cell?.hidden).toBe(false);
+      expect(w2Cell?.hidden).toBe(false);
+      expect(w4Cell?.hidden).toBe(false);
+      expect(w5Cell?.hidden).toBe(false);
+    });
+
+    it('should return layout unchanged when no tabbers config exists', () => {
+      const layoutWithHiddenWidgets = {
+        columns: [
+          {
+            widthPercentage: 100,
+            rows: [
+              {
+                cells: [
+                  { widgetId: 'w1', widthPercentage: 33, height: '100px', hidden: true },
+                  { widgetId: 'w2', widthPercentage: 33, height: '100px', hidden: true },
+                  { widgetId: 'w3', widthPercentage: 34, height: '100px', hidden: true },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const { result } = renderHook(() => useTabber({ widgets, config: {} }));
+
+      const layoutManager = result.current.layoutManager;
+      const filteredLayout = layoutManager.manageLayout(layoutWithHiddenWidgets);
+
+      // When no tabber config exists, layout should be returned unchanged
+      expect(filteredLayout).toEqual(layoutWithHiddenWidgets);
+
+      const w1Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w1');
+      const w2Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w2');
+      const w3Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w3');
+
+      // Layout should remain unchanged
+      expect(w1Cell?.hidden).toBe(true);
+      expect(w2Cell?.hidden).toBe(true);
+      expect(w3Cell?.hidden).toBe(true);
+    });
+
+    it('should preserve other cell properties when unhiding widgets', () => {
+      const layoutWithoutTabber = {
+        columns: [
+          {
+            widthPercentage: 100,
+            rows: [
+              {
+                cells: [
+                  {
+                    widgetId: 'w1',
+                    widthPercentage: 20,
+                    height: '100px',
+                    hidden: true,
+                    minWidth: 100,
+                    maxWidth: 500,
+                    minHeight: 50,
+                    maxHeight: 300,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const { result } = renderHook(() => useTabber({ widgets, config: dashboardTabberConfig }));
+
+      const layoutManager = result.current.layoutManager;
+      const filteredLayout = layoutManager.manageLayout(layoutWithoutTabber);
+
+      const w1Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w1');
+
+      expect(w1Cell?.hidden).toBe(false);
+      expect(w1Cell?.widthPercentage).toBe(20);
+      expect(w1Cell?.height).toBe('100px');
+      expect(w1Cell?.minWidth).toBe(100);
+      expect(w1Cell?.maxWidth).toBe(500);
+      expect(w1Cell?.minHeight).toBe(50);
+      expect(w1Cell?.maxHeight).toBe(300);
+    });
+
+    it('should handle complex layout with widgets controlled by multiple tabs of deleted tabber', () => {
+      // Layout after tabber1 is deleted
+      // tabber1 had two tabs: tab 0 with [w1, w2] and tab 1 with [w3]
+      const layoutWithoutTabber = {
+        columns: [
+          {
+            widthPercentage: 100,
+            rows: [
+              {
+                cells: [
+                  { widgetId: 'w1', widthPercentage: 25, height: '100px', hidden: true },
+                  { widgetId: 'w2', widthPercentage: 25, height: '100px', hidden: true },
+                  { widgetId: 'w3', widthPercentage: 25, height: '100px', hidden: true },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const { result } = renderHook(() => useTabber({ widgets, config: dashboardTabberConfig }));
+
+      const layoutManager = result.current.layoutManager;
+      const filteredLayout = layoutManager.manageLayout(layoutWithoutTabber);
+
+      // All widgets from all tabs of deleted tabber1 should be visible
+      const w1Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w1');
+      const w2Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w2');
+      const w3Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w3');
+
+      expect(w1Cell?.hidden).toBe(false);
+      expect(w2Cell?.hidden).toBe(false);
+      expect(w3Cell?.hidden).toBe(false);
+    });
+
+    it('should handle empty layout gracefully', () => {
+      const emptyLayout = {
+        columns: [],
+      };
+
+      const { result } = renderHook(() => useTabber({ widgets, config: dashboardTabberConfig }));
+
+      const layoutManager = result.current.layoutManager;
+      const filteredLayout = layoutManager.manageLayout(emptyLayout);
+
+      expect(filteredLayout.columns).toEqual([]);
+    });
+
+    it('should handle tabber config with tabber not in widgets array', () => {
+      // Config references a tabber that doesn't exist in widgets
+      const configWithNonExistentTabber = {
+        nonExistentTabber: {
+          tabs: [{ displayWidgetIds: ['w1'], title: 'Tab 0' }],
+        },
+      };
+
+      const layout = {
+        columns: [
+          {
+            widthPercentage: 100,
+            rows: [
+              {
+                cells: [{ widgetId: 'w1', widthPercentage: 100, height: '100px', hidden: true }],
+              },
+            ],
+          },
+        ],
+      };
+
+      const { result } = renderHook(() =>
+        useTabber({ widgets, config: configWithNonExistentTabber }),
+      );
+
+      const layoutManager = result.current.layoutManager;
+      const filteredLayout = layoutManager.manageLayout(layout);
+
+      // Since the tabber doesn't exist in the layout, its config should be ignored
+      // and widgets should be visible
+      const w1Cell = filteredLayout.columns[0].rows[0].cells.find((c: any) => c.widgetId === 'w1');
+
+      expect(w1Cell?.hidden).toBe(false);
+    });
+  });
 });

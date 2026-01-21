@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import { Data, Filter, FilterRelations, MetadataItem } from '@sisense/sdk-data';
 import upperFirst from 'lodash-es/upperFirst';
@@ -57,6 +57,14 @@ export interface NlqChartWidgetProps {
 }
 
 /**
+ * Compares NlqChartWidgetProps based on timestamp for memoization.
+ * Only re-renders when nlqResponse.timestamp changes.
+ */
+const arePropsEqual = (prevProps: NlqChartWidgetProps, nextProps: NlqChartWidgetProps): boolean => {
+  return prevProps.nlqResponse.timestamp === nextProps.nlqResponse.timestamp;
+};
+
+/**
  * React component that renders a chart widget based on NLQ response data.
  *
  * @example
@@ -78,14 +86,24 @@ export interface NlqChartWidgetProps {
  * @group Generative AI
  * @internal
  */
-export const NlqChartWidget = ({
+export const NlqChartWidget = memo(function NlqChartWidget({
   nlqResponse,
   onDataReady,
   styleOptions,
   widgetProps,
   filters = [],
-}: NlqChartWidgetProps) => {
-  nlqResponse.queryTitle = upperFirst(nlqResponse.queryTitle);
+}: NlqChartWidgetProps) {
+  const timestamp = nlqResponse.timestamp;
+
+  const normalizedNlqResponse = useMemo(
+    () => ({
+      ...nlqResponse,
+      queryTitle: upperFirst(nlqResponse.queryTitle),
+    }),
+    // Memoize based on timestamp to prevent unnecessary recomputations
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [timestamp],
+  );
 
   const { connectToWidgetProps } = useCommonFilters({
     initialFilters: filters,
@@ -93,40 +111,47 @@ export const NlqChartWidget = ({
   const [chartWidgetProps, setChartWidgetProps] = useState<WidgetProps | null>(null);
 
   useEffect(() => {
-    const widgetProps = widgetComposer.toWidgetProps(nlqResponse, {
+    const widgetPropsFromComposer = widgetComposer.toWidgetProps(normalizedNlqResponse, {
       useCustomizedStyleOptions: true,
     });
-    if (!widgetProps) setChartWidgetProps(null);
+    if (!widgetPropsFromComposer) setChartWidgetProps(null);
     else {
-      if (styleOptions && widgetProps.styleOptions) {
-        widgetProps.styleOptions = merge(widgetProps.styleOptions, styleOptions);
+      if (styleOptions && widgetPropsFromComposer.styleOptions) {
+        widgetPropsFromComposer.styleOptions = merge(
+          widgetPropsFromComposer.styleOptions,
+          styleOptions,
+        );
       }
 
-      const connectedProps = connectToWidgetProps(widgetProps, {
+      const connectedProps = connectToWidgetProps(widgetPropsFromComposer, {
         shouldAffectFilters: false,
         applyMode: 'filter',
       });
 
       setChartWidgetProps(connectedProps);
     }
-  }, [nlqResponse, connectToWidgetProps, styleOptions]);
+  }, [normalizedNlqResponse, connectToWidgetProps, styleOptions]);
 
   const nlqResponseWithFilters: GetNlgInsightsRequest = useMemo(() => {
-    const filters =
+    const filtersArray =
       chartWidgetProps && isChartWidgetProps(chartWidgetProps)
         ? getFiltersArray(chartWidgetProps?.filters)
         : [];
 
-    const metadata = nlqResponse.jaql.metadata
+    const metadata = normalizedNlqResponse.jaql.metadata
       .filter((meta) => !meta.jaql.filter)
       .concat(
-        filters
+        filtersArray
           .filter((filter) => !filter.config.disabled)
           .map((filter) => filter.jaql() as MetadataItem),
       );
 
-    return { ...nlqResponse, jaql: { ...nlqResponse.jaql, metadata }, verbosity: 'Low' };
-  }, [nlqResponse, chartWidgetProps]);
+    return {
+      ...normalizedNlqResponse,
+      jaql: { ...normalizedNlqResponse.jaql, metadata },
+      verbosity: 'Low',
+    };
+  }, [normalizedNlqResponse, chartWidgetProps]);
 
   const { data: summary, isLoading, isError } = useGetNlgInsightsInternal(nlqResponseWithFilters);
 
@@ -155,4 +180,5 @@ export const NlqChartWidget = ({
       }
     ></ChartWidget>
   );
-};
+},
+arePropsEqual);

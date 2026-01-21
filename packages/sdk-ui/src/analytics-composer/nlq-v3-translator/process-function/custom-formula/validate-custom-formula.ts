@@ -35,6 +35,9 @@ const BRACKET_REFERENCE_PATTERN = /\[([a-zA-Z_][a-zA-Z0-9_.-]*)\]/g;
  * Validates that all bracket references in a custom formula exist in the provided context
  * and provides helpful error messages for debugging.
  *
+ * Empty context is allowed when the formula contains no bracket references (e.g., MOD(10, 7)).
+ * Context is required only when the formula contains bracket references.
+ *
  * @example
  * ```typescript
  * const result = validateFormulaReferences(
@@ -46,6 +49,14 @@ const BRACKET_REFERENCE_PATTERN = /\[([a-zA-Z_][a-zA-Z0-9_.-]*)\]/g;
  *   throw new Error(result.errors.join('; '));
  * }
  * ```
+ *
+ * @example
+ * ```typescript
+ * // Empty context is allowed when no bracket references exist
+ * const result = validateFormulaReferences('MOD(10, 7)', {});
+ * // result.isValid === true
+ * ```
+ *
  * @param formula - The formula string containing bracket references
  * @param context - The context object mapping keys to attributes/measures/filters
  * @param options - Additional validation options
@@ -80,16 +91,6 @@ export function validateFormulaReferences(
     return result;
   }
 
-  // Validate context is not empty - custom formulas should have context
-  const contextKeys = Object.keys(context);
-  if (contextKeys.length === 0) {
-    result.errors.push(
-      `${errorPrefix}args[2]: Context cannot be empty - custom formulas require context definitions`,
-    );
-    result.isValid = false;
-    return result;
-  }
-
   // Extract bracket references using shared regex pattern
   const bracketPattern = BRACKET_REFERENCE_PATTERN;
   const references = new Set<string>();
@@ -102,11 +103,25 @@ export function validateFormulaReferences(
 
   result.references = Array.from(references);
 
-  // If no references found, that might be valid but worth noting
+  const contextKeys = Object.keys(context);
+
+  // If no references found, empty context is allowed
   if (result.references.length === 0) {
     result.warnings.push(
       `${errorPrefix}args[1]: No bracket references found in formula - ensure this is intentional`,
     );
+    // Allow empty context when there are no bracket references
+    // Skip further context validation
+    return result;
+  }
+
+  // If references exist, context is required
+  if (contextKeys.length === 0) {
+    result.errors.push(
+      `${errorPrefix}args[2]: Context cannot be empty - custom formulas require context definitions`,
+    );
+    result.isValid = false;
+    return result;
   }
 
   // Check each reference exists in context

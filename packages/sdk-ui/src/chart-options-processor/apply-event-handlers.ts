@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import Highcharts from '@sisense/sisense-charts';
 import merge from 'deepmerge';
 import isNull from 'lodash-es/isNull';
 
@@ -18,8 +19,31 @@ import {
 } from '../types';
 import { getDataPoint } from './data-points';
 
+type HighchartsChartWithCustomProperties = Highcharts.Chart & {
+  /**
+   * Custom property that indicates that redraw was triggered by drill action,
+
+   * @internal
+   */
+  isDrillingDownAction?: boolean;
+  /**
+   * Method to drill up
+   * Exposed Highchart internal method
+   *
+   * @internal
+   */
+  drillUp: () => void;
+};
+
 export type HighchartsEventOptions = {
-  chart: { zoomType?: string; events: { selection?: (ev: HighchartsSelectEvent) => void } };
+  chart: {
+    zoomType?: string;
+    events: {
+      selection?: (ev: HighchartsSelectEvent) => void;
+      drilldown?: (this: HighchartsChartWithCustomProperties) => void;
+      redraw?: (this: HighchartsChartWithCustomProperties) => void;
+    };
+  };
   plotOptions: {
     series: {
       point: {
@@ -46,7 +70,24 @@ export const applyEventHandlersToChart = (
   } = {},
 ): HighchartsOptionsInternal => {
   const eventOptions: HighchartsEventOptions = {
-    chart: { events: {} },
+    chart: {
+      events: {
+        drilldown: function () {
+          if (this.options?.chart?.type === 'pie') {
+            this.isDrillingDownAction = true; // Set custom flag
+          }
+        },
+        redraw: function () {
+          if (this.options?.chart?.type === 'pie') {
+            if (!this.isDrillingDownAction) {
+              this.drillUp();
+            } else {
+              delete this.isDrillingDownAction;
+            }
+          }
+        },
+      },
+    },
     plotOptions: {
       series: {
         point: {
@@ -84,8 +125,11 @@ export const applyEventHandlersToChart = (
 
   if (onDataPointClick) {
     eventOptions.plotOptions.series.point.events.click = (nativeEvent: HighchartsPointerEvent) => {
-      nativeEvent.point.state = 'hover';
-      onDataPointClick(getDataPoint(nativeEvent.point, dataOptions), nativeEvent);
+      const isValidPoint = !!nativeEvent.point.options; // any valid point should contain `options` property
+      if (isValidPoint) {
+        nativeEvent.point.state = 'hover';
+        onDataPointClick(getDataPoint(nativeEvent.point, dataOptions), nativeEvent);
+      }
     };
   }
 

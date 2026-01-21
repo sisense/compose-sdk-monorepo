@@ -15,7 +15,10 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "drilldown": [Function],
+      "redraw": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -380,7 +383,10 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "drilldown": [Function],
+      "redraw": [Function],
+    },
     "polar": false,
     "spacing": [
       20,
@@ -944,7 +950,10 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
       "duration": 300,
     },
     "backgroundColor": "#FFFFFF",
-    "events": {},
+    "events": {
+      "drilldown": [Function],
+      "redraw": [Function],
+    },
     "polar": false,
     "spacing": [
       20,

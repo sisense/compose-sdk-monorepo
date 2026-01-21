@@ -126,12 +126,24 @@ describe('processCustomFormula', () => {
     }).toThrow('Context keys [unusedCost] are defined but not used');
   });
 
-  it('should throw for customFormula with empty context', () => {
+  it('should throw for customFormula with empty context when formula has bracket references', () => {
     const processedArgs = ['Invalid Formula', '[revenue]', {}];
 
     expect(() => {
       processCustomFormula(processedArgs, mockProcessingContext);
     }).toThrow('Context cannot be empty');
+  });
+
+  it('should allow customFormula with empty context when formula has no bracket references', () => {
+    const processedArgs = ['Remainder of 10 / 7', 'MOD(10, 7)', {}];
+
+    expect(() => {
+      processCustomFormula(processedArgs, mockProcessingContext);
+    }).not.toThrow();
+
+    // Verify that empty context is preserved
+    const transformedContext = processedArgs[2] as Record<string, any>;
+    expect(transformedContext).toEqual({});
   });
 
   it('should throw for customFormula with empty formula', () => {

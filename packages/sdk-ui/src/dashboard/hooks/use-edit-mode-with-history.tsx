@@ -106,7 +106,7 @@ export interface UseEditModeToolbarResult {
  * @returns Layout state and toolbar component
  * @internal
  */
-export function useEditModeToolbar({
+export function useEditModeWithHistory({
   initialLayout,
   onApply,
   onCancel,

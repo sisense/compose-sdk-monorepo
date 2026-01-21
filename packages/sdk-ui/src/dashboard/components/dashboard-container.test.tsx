@@ -32,6 +32,23 @@ vi.mock('@/filters', () => {
   };
 });
 
+const ToolbarFilterToggleButton = ({
+  collapsed,
+  onToggleClick,
+}: {
+  collapsed: boolean;
+  onToggleClick: () => void;
+}) => {
+  return (
+    <button
+      aria-label="Toggle filters panel"
+      aria-expanded={!collapsed}
+      title={collapsed ? 'Show Filters' : 'Hide Filters'}
+      onClick={onToggleClick}
+    />
+  );
+};
+
 describe('DashboardContainer', () => {
   it('should render with header and filters panel', () => {
     const DASHBOARD_TITLE = 'Test Dashboard';
@@ -39,12 +56,15 @@ describe('DashboardContainer', () => {
       <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
+          editMode={false}
           layoutOptions={{}}
           config={{}}
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
-          defaultDataSource={''}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={vi.fn()}
         />
       </MockedSisenseContextProvider>,
     );
@@ -60,6 +80,7 @@ describe('DashboardContainer', () => {
       <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
+          editMode={false}
           layoutOptions={{}}
           config={{
             toolbar: {
@@ -72,7 +93,9 @@ describe('DashboardContainer', () => {
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
-          defaultDataSource={''}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={vi.fn()}
         />
       </MockedSisenseContextProvider>,
     );
@@ -89,12 +112,15 @@ describe('DashboardContainer', () => {
       <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
+          editMode={false}
           layoutOptions={{}}
           config={{}}
           widgets={[]}
           filters={filters}
           onFiltersChange={onFiltersChangeMock}
-          defaultDataSource={''}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={vi.fn()}
         />
       </MockedSisenseContextProvider>,
     );
@@ -105,29 +131,28 @@ describe('DashboardContainer', () => {
   });
 
   it('should trigger onChange when filters panel collapse state changed', () => {
-    const onChangeMock = vi.fn();
+    const onFilterPanelCollapsedChangeMock = vi.fn();
     const DASHBOARD_TITLE = 'Test Dashboard';
     const { container } = render(
       <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
+          editMode={false}
           layoutOptions={{}}
           config={{}}
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
-          defaultDataSource={''}
-          onChange={onChangeMock}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={onFilterPanelCollapsedChangeMock}
         />
       </MockedSisenseContextProvider>,
     );
 
     fireEvent.click(container.querySelector('.arrow-wrapper') as Element);
 
-    expect(onChangeMock).toHaveBeenCalledWith({
-      payload: true,
-      type: 'filtersPanel/collapse/changed',
-    });
+    expect(onFilterPanelCollapsedChangeMock).toHaveBeenCalledWith(true);
   });
 
   it('should render filter toggle button in header when showFilterIconInToolbar is enabled', () => {
@@ -136,16 +161,22 @@ describe('DashboardContainer', () => {
       <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
+          editMode={false}
           layoutOptions={{}}
           config={{
             filtersPanel: {
               showFilterIconInToolbar: true,
             },
           }}
+          renderToolbar={() => (
+            <ToolbarFilterToggleButton collapsed={false} onToggleClick={vi.fn()} />
+          )}
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
-          defaultDataSource={''}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={vi.fn()}
         />
       </MockedSisenseContextProvider>,
     );
@@ -157,23 +188,31 @@ describe('DashboardContainer', () => {
   });
 
   it('should toggle filters panel when filter icon button is clicked', () => {
-    const onChangeMock = vi.fn();
+    const onFilterPanelCollapsedChangeMock = vi.fn();
     const DASHBOARD_TITLE = 'Test Dashboard';
     const { container } = render(
       <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
+          editMode={false}
           layoutOptions={{}}
           config={{
             filtersPanel: {
               showFilterIconInToolbar: true,
             },
           }}
+          renderToolbar={() => (
+            <ToolbarFilterToggleButton
+              collapsed={false}
+              onToggleClick={() => onFilterPanelCollapsedChangeMock(true)}
+            />
+          )}
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
-          defaultDataSource={''}
-          onChange={onChangeMock}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={vi.fn()}
         />
       </MockedSisenseContextProvider>,
     );
@@ -183,10 +222,7 @@ describe('DashboardContainer', () => {
 
     fireEvent.click(filterToggleButton as Element);
 
-    expect(onChangeMock).toHaveBeenCalledWith({
-      payload: true,
-      type: 'filtersPanel/collapse/changed',
-    });
+    expect(onFilterPanelCollapsedChangeMock).toHaveBeenCalledWith(true);
   });
 
   it('should hide collapse arrow when showFilterIconInToolbar is enabled', () => {
@@ -195,6 +231,7 @@ describe('DashboardContainer', () => {
       <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
+          editMode={false}
           layoutOptions={{}}
           config={{
             filtersPanel: {
@@ -204,7 +241,9 @@ describe('DashboardContainer', () => {
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
-          defaultDataSource={''}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={vi.fn()}
         />
       </MockedSisenseContextProvider>,
     );
@@ -219,6 +258,7 @@ describe('DashboardContainer', () => {
       <MockedSisenseContextProvider>
         <DashboardContainer
           title="Test Dashboard"
+          editMode={false}
           layoutOptions={{}}
           config={{
             toolbar: { visible: false },
@@ -227,7 +267,9 @@ describe('DashboardContainer', () => {
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
-          defaultDataSource={''}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={vi.fn()}
         />
       </MockedSisenseContextProvider>,
     );
@@ -244,17 +286,22 @@ describe('DashboardContainer', () => {
       <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
+          editMode={false}
           layoutOptions={{}}
           config={{
             filtersPanel: {
               showFilterIconInToolbar: true,
-              collapsedInitially: false,
             },
           }}
+          renderToolbar={() => (
+            <ToolbarFilterToggleButton collapsed={false} onToggleClick={vi.fn()} />
+          )}
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
-          defaultDataSource={''}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={vi.fn()}
         />
       </MockedSisenseContextProvider>,
     );
@@ -268,17 +315,22 @@ describe('DashboardContainer', () => {
       <MockedSisenseContextProvider>
         <DashboardContainer
           title={DASHBOARD_TITLE}
+          editMode={false}
           layoutOptions={{}}
           config={{
             filtersPanel: {
               showFilterIconInToolbar: true,
-              collapsedInitially: true,
             },
           }}
+          renderToolbar={() => (
+            <ToolbarFilterToggleButton collapsed={true} onToggleClick={vi.fn()} />
+          )}
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
-          defaultDataSource={''}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={true}
+          onFilterPanelCollapsedChange={vi.fn()}
         />
       </MockedSisenseContextProvider>,
     );

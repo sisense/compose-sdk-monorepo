@@ -50,6 +50,38 @@ export const isTabberButtonsWidget = (widget: WidgetProps): widget is TabberButt
 };
 
 /**
+ * Checks if a widget ID exists in the layout.
+ * @param layout - The layout to search in
+ * @param widgetId - The widget ID to check for
+ * @returns true if the widget exists in the layout, false otherwise
+ */
+function widgetExistsInLayout(layout: WidgetsPanelColumnLayout, widgetId: string): boolean {
+  return layout.columns.some((column) =>
+    column.rows.some((row) => row.cells.some((cell) => cell.widgetId === widgetId)),
+  );
+}
+
+/**
+ * Filters tabber config to only include tabbers that exist in the layout.
+ * This ensures that deleted tabber widgets don't affect widget visibility.
+ * @param tabbersConfig - The full tabber configuration
+ * @param layout - The current layout
+ * @returns Filtered tabber config containing only tabbers present in the layout
+ */
+function filterTabbersConfigByLayout(
+  tabbersConfig: TabbersConfig,
+  layout: WidgetsPanelColumnLayout,
+): TabbersConfig {
+  const filteredConfig: TabbersConfig = {};
+  for (const tabberId of Object.keys(tabbersConfig)) {
+    if (widgetExistsInLayout(layout, tabberId)) {
+      filteredConfig[tabberId] = tabbersConfig[tabberId];
+    }
+  }
+  return filteredConfig;
+}
+
+/**
  * For each tabber widget config, the tab is visible in case it is either visible or not controlled by the tabber config at all.
  */
 function isVisible(
@@ -144,7 +176,6 @@ const useSelectedTabs = (
  */
 export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) => {
   const [selectedTabs, setSelectedTabs] = useSelectedTabs(widgets);
-  const isAnyTabberConfig = Object.keys(tabbersConfigs).length > 0;
 
   const widgetsWithTabberSubscription = useMemo(
     () =>
@@ -170,6 +201,15 @@ export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) =
 
   const layoutModifier = useCallback(
     (layout: WidgetsPanelColumnLayout): WidgetsPanelColumnLayout => {
+      // If no tabbersOptions exist, don't touch the layout at all
+      if (Object.keys(tabbersConfigs).length === 0) {
+        return layout;
+      }
+
+      // Filter out tabber configs for tabbers that no longer exist in the layout
+      // This handles the case when a tabber widget is deleted
+      const activeTabbersConfig = filterTabbersConfigByLayout(tabbersConfigs, layout);
+
       return {
         ...layout,
         columns: layout.columns.map((column) => {
@@ -179,11 +219,14 @@ export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) =
               return {
                 ...row,
                 cells: row.cells.map((cell) => {
+                  const shouldBeVisible = isVisible(
+                    cell.widgetId,
+                    activeTabbersConfig,
+                    selectedTabs,
+                  );
                   return {
                     ...cell,
-                    ...(isAnyTabberConfig
-                      ? { hidden: !isVisible(cell.widgetId, tabbersConfigs, selectedTabs) }
-                      : null),
+                    hidden: !shouldBeVisible,
                   };
                 }),
               };
@@ -192,7 +235,7 @@ export const useTabber: UseTabber = ({ widgets, config: tabbersConfigs = {} }) =
         }),
       };
     },
-    [tabbersConfigs, selectedTabs, isAnyTabberConfig],
+    [tabbersConfigs, selectedTabs],
   );
 
   return {

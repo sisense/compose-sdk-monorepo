@@ -65,17 +65,16 @@ describe('formula-validation', () => {
       expect(result.errors).toEqual([]);
     });
 
-    it('should fail when no references found but context provided', () => {
+    it('should allow formulas with no references even when context is provided', () => {
       const formula = 'SUM(Revenue) + 100';
       const result = validateFormulaReferences(formula, mockContext);
 
-      expect(result.isValid).toBe(false); // Now fails due to unused context
-      expect(result.errors).toHaveLength(1);
-      expect(result.errors[0]).toContain(
-        'Context keys [totalRevenue, cost, categoryFilter] are defined but not used',
-      );
-      expect(result.warnings).toHaveLength(1); // Only warning about no references
+      // When no bracket references exist, empty context is allowed and unused context is not checked
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toEqual([]);
+      expect(result.warnings).toHaveLength(1); // Warning about no references
       expect(result.warnings[0]).toContain('No bracket references found');
+      expect(result.references).toEqual([]);
     });
 
     it('should use warning mode instead of errors when configured', () => {
@@ -114,7 +113,7 @@ describe('formula-validation', () => {
       expect(result.errors[0]).toContain('Custom Prefix');
     });
 
-    it('should reject empty context', () => {
+    it('should reject empty context when formula has bracket references', () => {
       const formula = '[totalRevenue]';
       const result = validateFormulaReferences(formula, {});
 
@@ -122,6 +121,17 @@ describe('formula-validation', () => {
       expect(result.errors).toHaveLength(1);
       expect(result.errors[0]).toContain('Context cannot be empty');
       expect(result.errors[0]).toContain('custom formulas require context definitions');
+    });
+
+    it('should allow empty context when formula has no bracket references', () => {
+      const formula = 'MOD(10, 7)';
+      const result = validateFormulaReferences(formula, {});
+
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toEqual([]);
+      expect(result.references).toEqual([]);
+      expect(result.warnings).toHaveLength(1);
+      expect(result.warnings[0]).toContain('No bracket references found');
     });
 
     it('should validate complex nested formula with all context used', () => {
@@ -218,11 +228,18 @@ describe('formula-validation', () => {
       }).toThrow('Custom Test Error');
     });
 
-    it('should throw for empty context', () => {
+    it('should throw for empty context when formula has bracket references', () => {
       const formula = '[totalRevenue]';
       expect(() => {
         validateCustomFormula(formula, {});
       }).toThrow('Context cannot be empty');
+    });
+
+    it('should not throw for empty context when formula has no bracket references', () => {
+      const formula = 'MOD(10, 7)';
+      expect(() => {
+        validateCustomFormula(formula, {});
+      }).not.toThrow();
     });
   });
 

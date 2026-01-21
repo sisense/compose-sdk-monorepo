@@ -89,6 +89,12 @@ export interface NlqResponseData extends ExpandedQueryModel {
   userMsg: string;
   /** @internal */
   clarification?: string;
+  /**
+   * Unique timestamp identifier for the response, used for memoization
+   *
+   * @internal
+   */
+  timestamp?: string;
 }
 export interface NlqResponse {
   data: NlqResponseData;

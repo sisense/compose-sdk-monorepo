@@ -22,6 +22,10 @@ export interface EditToggleProps {
    */
   isHistoryEnabled: boolean;
   /**
+   * Color of the edit toggle button
+   */
+  color?: string;
+  /**
    * Callback function called when the edit toggle button is clicked
    */
   onToggleClick: () => void;
@@ -32,7 +36,7 @@ export interface EditToggleProps {
  * Displays appropriate icon and tooltip based on edit mode state.
  */
 export const EditToggle = memo<EditToggleProps>(
-  ({ isEditMode, isHistoryEnabled, onToggleClick }) => {
+  ({ isEditMode, isHistoryEnabled, color, onToggleClick }) => {
     const { t } = useTranslation();
     const { themeSettings } = useThemeContext();
 
@@ -46,7 +50,7 @@ export const EditToggle = memo<EditToggleProps>(
         aria-expanded={isEditMode}
         title={isEditMode ? t('dashboard.toolbar.viewMode') : t('dashboard.toolbar.editLayout')}
         sx={{
-          color: themeSettings.dashboard.toolbar.secondaryTextColor,
+          color: color ?? themeSettings.typography.primaryTextColor,
         }}
       >
         {isEditMode ? <EditOffIcon fontSize="medium" /> : <EditIcon fontSize="medium" />}

@@ -6,6 +6,7 @@ import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 
 import { isMeasureColumn, translateColumnToMeasure } from '@/chart-data-options/utils';
 import { isData } from '@/chart/regular-chart';
+import { LoadingOverlay } from '@/common/components/loading-overlay';
 import { TranslatableError } from '@/translation/translatable-error';
 
 import { translateTableDataOptions } from '../chart-data-options/translate-data-options';
@@ -16,7 +17,6 @@ import { Column as DataTableColumn } from '../chart-data-processor/table-process
 import { orderBy } from '../chart-data-processor/table-processor';
 import { updateInnerDataOptionsSort } from '../chart-data/table-data';
 import { PureTable } from '../charts/table';
-import { LoadingIndicator } from '../common/components/loading-indicator';
 import { DynamicSizeContainer, getChartDefaultSize } from '../dynamic-size-container';
 import { NoResultsOverlay } from '../no-results-overlay/no-results-overlay';
 import { TableProps } from '../props';
@@ -173,7 +173,7 @@ export const TableComponent = ({
     >
       {(size) => {
         if (!dataTable || !paginatedTable) {
-          return <LoadingIndicator themeSettings={themeSettings} />;
+          return <LoadingOverlay />;
         }
 
         if (isDataTableEmpty(dataTable)) {

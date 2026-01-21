@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
   Attribute,
@@ -42,7 +42,6 @@ type UseSyncedDataProps = {
   filters?: Filter[] | FilterRelations;
   highlights?: Filter[];
   refreshCounter?: number;
-  setIsLoading?: Dispatch<SetStateAction<boolean>>;
   enabled?: boolean;
   loadData: LoadDataFunction;
 };
@@ -56,11 +55,11 @@ export const useSyncedData = ({
   filters,
   highlights,
   refreshCounter,
-  setIsLoading,
   enabled = true,
   loadData,
 }: UseSyncedDataProps) => {
   const setError = useSetError();
+  const [isLoading, setIsLoading] = useState(false);
 
   const chartFamily = useMemo(() => chartDataOptionsFamily(chartType), [chartType]);
   const undefinedSynchedData = useMemo(() => [undefined, chartDataOptions], [chartDataOptions]);
@@ -81,6 +80,7 @@ export const useSyncedData = ({
       if (!app) {
         return;
       }
+      setIsLoading(true);
 
       const executeQueryPromise = loadData({
         app,
@@ -96,13 +96,6 @@ export const useSyncedData = ({
         },
       });
 
-      const loadingIndicatorConfig = app?.settings.loadingIndicatorConfig;
-
-      const isLoadingTimeout = setTimeout(() => {
-        if (loadingIndicatorConfig?.enabled) {
-          setIsLoading?.(true);
-        }
-      }, loadingIndicatorConfig?.delay);
       // eslint-disable-next-line promise/catch-or-return
       executeQueryPromise
         .then((queryResultData) => {
@@ -122,10 +115,7 @@ export const useSyncedData = ({
           setError(asyncError);
         })
         .finally(() => {
-          clearTimeout(isLoadingTimeout);
-          if (loadingIndicatorConfig?.enabled) {
-            setIsLoading?.(false);
-          }
+          setIsLoading(false);
         });
     } else {
       // Issues related to queried data such as data access permission, non-existent data source,
@@ -159,5 +149,11 @@ export const useSyncedData = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartType, chartDataOptions, dataSet, filters, highlights, app, refreshCounter, enabled]);
 
-  return synchedData[chartFamily] || undefinedSynchedData;
+  const [data, dataOptions] = synchedData[chartFamily] || undefinedSynchedData;
+
+  return {
+    isLoading,
+    data: data,
+    dataOptions: dataOptions,
+  };
 };

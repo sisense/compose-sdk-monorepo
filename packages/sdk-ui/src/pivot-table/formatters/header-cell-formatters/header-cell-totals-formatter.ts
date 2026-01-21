@@ -10,7 +10,10 @@ export function createHeaderCellTotalsFormatter(
 ) {
   return (cell: PivotTreeNode) => {
     if (cell.userType === UserType.SUB_TOTAL) {
-      cell.content = translate('pivotTable.subTotal', { value: cell.content ?? '' });
+      cell.content = translate('pivotTable.subTotal', {
+        value: cell.content ?? '',
+        interpolation: { escapeValue: false },
+      });
     }
 
     if (cell.userType === UserType.GRAND_TOTAL) {
