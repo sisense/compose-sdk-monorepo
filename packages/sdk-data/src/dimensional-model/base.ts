@@ -150,3 +150,41 @@ export function normalizeName(name: string): string {
 
   return normalizedName;
 }
+
+/**
+ * Checks if a name contains characters that would be modified by normalizeName().
+ * Includes: spaces, special chars (!@#$%^&*), dots, brackets, or starts with number.
+ *
+ * @example
+ * needsNormalization("Age Range")  // true (space)
+ * needsNormalization("Cost ($)")   // true (special chars)
+ * needsNormalization("Rev.2024")   // true (dot)
+ * needsNormalization("2024Data")   // true (starts with number)
+ * needsNormalization("Revenue")    // false
+ *
+ * @param name - The name to check
+ * @returns true if the name would be modified by normalizeName()
+ * @internal
+ */
+export function needsNormalization(name: string): boolean {
+  // Check for invalid characters (anything not a-zA-Z0-9_)
+  // Note: dots are also "invalid" as they get replaced with underscores
+  // Check if starts with a number (gets prefixed with _)
+  return /[^a-zA-Z0-9_]/.test(name) || /^[0-9]/.test(name);
+}
+
+/**
+ * Wraps name in [[delimiters]] if it would be modified by normalizeName().
+ * Used to preserve original names in composeCode while marking them for transformation.
+ *
+ * @example
+ * wrapIfNeedsNormalization("Age Range")  // "[[Age Range]]"
+ * wrapIfNeedsNormalization("Revenue")    // "Revenue" (unchanged)
+ *
+ * @param name - The name to potentially wrap
+ * @returns The name wrapped in [[]] if it needs normalization, otherwise unchanged
+ * @internal
+ */
+export function wrapIfNeedsNormalization(name: string): string {
+  return needsNormalization(name) ? `[[${name}]]` : name;
+}

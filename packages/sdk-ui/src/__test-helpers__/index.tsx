@@ -11,12 +11,15 @@ import userEvent from '@testing-library/user-event';
 import isObject from 'lodash-es/isObject';
 import { DeepPartial } from 'ts-essentials';
 
-import { MenuProvider } from '@/common/components/menu/menu-provider';
+import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
 
-import { ClientApplication } from '../app/client-application';
-import { CustomWidgetsProvider } from '../custom-widgets-provider';
-import { SisenseContext, SisenseContextPayload } from '../sisense-context/sisense-context';
-import { translation } from '../translation/resources/en';
+import { ClientApplication } from '../infra/app/client-application';
+import { CustomWidgetsProvider } from '../infra/contexts/custom-widgets-provider';
+import {
+  SisenseContext,
+  SisenseContextPayload,
+} from '../infra/contexts/sisense-context/sisense-context';
+import { translation } from '../infra/translation/resources/en';
 
 type UserSetupFn = (typeof userEvent)['setup'];
 interface SetupResult extends RenderResult {

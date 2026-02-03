@@ -7,7 +7,9 @@ title: customFormula
 > **customFormula**(
   `title`,
   `formula`,
-  `context`): [`CalculatedMeasure`](../../../interfaces/interface.CalculatedMeasure.md)
+  `context`,
+  `format`?,
+  `description`?): [`CalculatedMeasure`](../../../interfaces/interface.CalculatedMeasure.md)
 
 Creates a calculated measure for a valid custom formula built from [base functions](/guides/sdk/reference/functions.html#measured-value-functions).
 
@@ -26,6 +28,8 @@ from a Fusion instance, you must fetch them first using [useGetSharedFormula](..
 | `title` | `string` | Title of the measure to be displayed in legend |
 | `formula` | `string` | Formula to be used for the measure |
 | `context` | [`CustomFormulaContext`](../../../interfaces/interface.CustomFormulaContext.md) | Formula context as a map of strings to attributes, measures, or filters |
+| `format`? | `string` | Optional format string for the measure |
+| `description`? | `string` | Optional description of the measure |
 
 ## Returns
 

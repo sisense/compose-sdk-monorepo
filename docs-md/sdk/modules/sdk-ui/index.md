@@ -127,4 +127,5 @@ For more information on requirements for enabling Generative AI features, please
 - [isGradient](functions/function.isGradient.md)
 - [isLinearGradient](functions/function.isLinearGradient.md)
 - [isRadialGradient](functions/function.isRadialGradient.md)
+- [LoadingOverlay](functions/function.LoadingOverlay.md)
 - [useGetDataSourceDimensions](functions/function.useGetDataSourceDimensions.md)

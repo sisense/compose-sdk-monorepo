@@ -36,9 +36,9 @@ const config: ViteUserConfig = {
         '**/*.test.tsx',
         '**/*.test.ts',
         'src/@types',
-        'src/widgets/common/drilldown-breadcrumbs',
-        'src/charts/indicator/chart/*', // legacy indicator's code, copy-pasted from PWC
-        'src/utils/__development-utils__',
+        'src/domains/drilldown/components/drilldown-breadcrumbs',
+        'src/domains/visualizations/components/chart/components/indicator/chart/*', // legacy indicator's code, copy-pasted from PWC
+        'src/**/__development-utils__',
       ],
     },
   },

@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CustomWidget > renders custom widget when custom widget is found 1`] = `
+[
+  {
+    "customWidgetType": "my-custom-widget",
+    "dataOptions": {
+      "someProp": [],
+    },
+    "dataSource": "Sample ECommerce",
+    "description": undefined,
+    "filters": [],
+    "highlights": [],
+    "styleOptions": {
+      "height": 400,
+      "someStyle": "value",
+      "width": 400,
+    },
+    "title": "My awesome custom widget",
+  },
+]
+`;

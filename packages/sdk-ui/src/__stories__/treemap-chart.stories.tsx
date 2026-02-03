@@ -1,4 +1,4 @@
-import { Chart } from '../chart';
+import { Chart } from '../domains/visualizations/components/chart';
 import { TreemapChartProps } from '../props';
 import { TreemapStyleOptions } from '../types';
 import { templateForComponent } from './template';

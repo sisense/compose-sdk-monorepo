@@ -1,6 +1,6 @@
 import { createAttribute, filterFactory } from '@sisense/sdk-data';
 
-import { Chart } from '../chart';
+import { Chart } from '../domains/visualizations/components/chart';
 import { ChartStyleOptions } from '../types';
 import { templateForComponent } from './template';
 

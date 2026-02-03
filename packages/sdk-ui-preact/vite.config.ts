@@ -1,7 +1,23 @@
+import { readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import preact from '@preact/preset-vite';
+
+/**
+ * Discovers translation files and generates Vite entry points.
+ * Each .ts file in the external translations directory becomes a separate bundle entry.
+ */
+const getTranslationEntries = (): Record<string, string> => {
+  const translationsDir = resolve(__dirname, 'src/translation/__external__');
+  return readdirSync(translationsDir)
+    .filter((file) => file.endsWith('.ts'))
+    .reduce<Record<string, string>>((entries, file) => {
+      const name = file.replace(/\.ts$/, '');
+      entries[`translations/${name}`] = resolve(translationsDir, file);
+      return entries;
+    }, {});
+};
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -18,6 +34,7 @@ export default defineConfig(({ mode }) => ({
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         ai: resolve(__dirname, 'src/ai/index.ts'),
+        ...getTranslationEntries(),
       },
       name: '@sisense/sdk-ui-preact',
       formats: ['es', 'cjs'],

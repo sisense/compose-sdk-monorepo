@@ -10,9 +10,9 @@ export const translation = {
       'Invalid filter "{{filterName}}". Hint: filters for the query can be constructed using the "filterFactory" functions.',
     invalidHighlight:
       'Invalid highlight "{{highlightName}}". Hint: highlights for the query can be constructed using the "filterFactory" functions.',
-    invalidCountNegative: 'Invalid count "{{count}}". Count should be non-negative.',
-    invalidOffset: 'Invalid offset "{{offset}}". Offset should be non-negative.',
-    missingHttpClient: 'Query requires httpClient to work properly.',
+    invalidCountNegative: 'Invalid count "{{count}}" in query. Count should be non-negative.',
+    invalidOffset: 'Invalid offset "{{offset}}" in query. Offset should be non-negative.',
+    missingHttpClient: 'Query was unable to load httpClient.',
     missingPostMethod: 'httpClient must provide "post" method.',
     noJaqlResponse: 'No jaql response received from the server',
     dataSourceNotFound:

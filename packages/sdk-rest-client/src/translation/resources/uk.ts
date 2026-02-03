@@ -11,12 +11,10 @@ export const translation: TranslationDictionary = {
     authFailed: 'Автентифікація не вдалася.',
     ssoNotEnabled:
       'SSO не ввімкнено на цьому сервері, будь ласка, виберіть інший метод аутентифікації',
-    ssoNoLoginUrl: 'Неможливо отримати loginUrl з сервера. Перевірте налаштування SSO.',
+    ssoNoLoginUrl: 'Неможливо отримати SSO login URL з сервера. Перевірте налаштування SSO.',
     passwordAuthFailed:
       '$t(errorPrefix) Помилка автентифікації за допомогою імені користувача та пароля. Перевірте дані для входу.',
     tokenAuthFailed:
       '$t(errorPrefix) Помилка автентифікації за допомогою токена. Перевірте дані для входу.',
-    responseError_onlyStatus: '$t(errorPrefix) Статус: {{status}}',
-    responseError_withStatusText: '$t(errorPrefix) Статус: {{status}} - {{statusText}}',
   },
 };

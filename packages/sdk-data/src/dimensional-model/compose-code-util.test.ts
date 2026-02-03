@@ -12,7 +12,7 @@ describe('stringifyHelper', () => {
   it('should stringify common argument', () => {
     const arg = new DimensionalAttribute('AgeRange', '[Commerce.Age Range]', 'text-attribute');
     const result = stringifyHelper(arg);
-    expect(result).toBe('DM.Commerce.AgeRange');
+    expect(result).toBe('DM.Commerce.[[Age Range]]');
   });
 
   it('should stringify null', () => {

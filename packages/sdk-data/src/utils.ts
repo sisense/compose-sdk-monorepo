@@ -525,7 +525,13 @@ export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeas
     return jaqlContextValue && createDimensionalElementFromJaql(jaqlContextValue);
   });
 
-  const measure = measureFactory.customFormula(jaql.title, jaql.formula, context);
+  const measure = measureFactory.customFormula(
+    jaql.title,
+    jaql.formula,
+    context,
+    undefined,
+    jaql.description,
+  );
 
   // Apply sort if present in the JAQL
   if (jaql.sort) {
@@ -600,4 +606,31 @@ export function getGranularityFromJaql(
   return jaql?.datatype && isDatetime(jaql.datatype)
     ? DimensionalLevelAttribute.translateJaqlToGranularity(jaql)
     : undefined;
+}
+
+/**
+ * Translates Fusion FormulaJaql structures to CSDK CalculatedMeasure array.
+ *
+ * This is a pure Node.js function that converts Fusion structures to CSDK structures.
+ *
+ * @param formulas - Array of Fusion FormulaJaql structures
+ * @returns Array of CSDK CalculatedMeasure objects
+ * @throws Error if any formula cannot be converted (includes formula title in error message)
+ * @internal
+ */
+export function translateSharedFormulas(formulas: FormulaJaql[]): CalculatedMeasure[] {
+  return formulas.map((formula) => {
+    try {
+      const result = createDimensionalElementFromJaql(formula);
+      if (!('expression' in result && 'context' in result)) {
+        throw new Error(
+          `Expected CalculatedMeasure but got ${result.__serializable || 'unknown type'}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Failed to translate shared formula "${formula.title}": ${msg}`);
+    }
+  });
 }

@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.19.0",
+  "version": "2.20.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -28,12 +28,21 @@
       "import": "./dist/ai.js",
       "types": "./dist/ai.d.ts",
       "default": "./dist/ai.js"
+    },
+    "./translations/*": {
+      "types": "./dist/translations/*.d.ts",
+      "require": "./dist/translations/*.cjs",
+      "import": "./dist/translations/*.js",
+      "default": "./dist/translations/*.js"
     }
   },
   "typesVersions": {
     "*": {
       "ai": [
         "./dist/ai.d.ts"
+      ],
+      "translations/*": [
+        "./dist/translations/*.d.ts"
       ]
     }
   },

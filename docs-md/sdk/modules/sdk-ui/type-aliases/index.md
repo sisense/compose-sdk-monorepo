@@ -124,6 +124,7 @@ TypeScript type aliases for components and hooks listed above
 - [LineSubtype](type-alias.LineSubtype.md)
 - [LineWidth](type-alias.LineWidth.md)
 - [LoadingIndicatorConfig](type-alias.LoadingIndicatorConfig.md)
+- [LoadingOverlayProps](type-alias.LoadingOverlayProps.md)
 - [Markers](type-alias.Markers.md)
 - [MenuItemSection](type-alias.MenuItemSection.md)
 - [MenuPosition](type-alias.MenuPosition.md)

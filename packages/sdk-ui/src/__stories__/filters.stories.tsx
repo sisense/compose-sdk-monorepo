@@ -1,4 +1,4 @@
-import { DateFilter } from '../filters';
+import { DateFilter } from '../domains/filters';
 import { templateForComponent } from './template';
 
 const template = templateForComponent(DateFilter);

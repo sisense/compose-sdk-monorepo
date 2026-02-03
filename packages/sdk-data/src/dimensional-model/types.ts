@@ -454,6 +454,7 @@ export type FormulaJaql = {
   formula: string;
   context?: Record<FormulaID, FormulaContext>;
   datasource?: JaqlDataSource;
+  description?: string;
 };
 
 /** @internal */

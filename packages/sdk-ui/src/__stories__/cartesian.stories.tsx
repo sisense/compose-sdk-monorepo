@@ -1,7 +1,7 @@
 import { Data } from '@sisense/sdk-data';
 
 import { HighchartsOptions } from '..';
-import { Chart } from '../chart';
+import { Chart } from '../domains/visualizations/components/chart';
 import { ChartStyleOptions, NumberFormatConfig } from '../types';
 import { templateForComponent } from './template';
 

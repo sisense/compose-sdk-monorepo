@@ -663,7 +663,9 @@ export function getFilterRelationsFromJaql(
     if ('instanceid' in node) {
       const filter = filters.find((filter) => filter.config.guid === node.instanceid);
       if (!filter) {
-        throw new TranslatableError('errors.unknownFilterInFilterRelations');
+        throw new TranslatableError('errors.unknownFilterInFilterRelations', {
+          filterGuid: node.instanceid,
+        });
       }
       return filter;
     }

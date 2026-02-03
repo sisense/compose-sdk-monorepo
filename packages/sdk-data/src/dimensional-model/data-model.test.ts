@@ -173,7 +173,7 @@ describe('DimensionalDataModel', () => {
 
       expect(() => DimensionalDataModel.fromConfig(configWithoutName)).toThrow(TranslatableError);
       expect(() => DimensionalDataModel.fromConfig(configWithoutName)).toThrow(
-        'errors.dataModel.noName',
+        new TranslatableError('errors.dataModel.noName'),
       );
     });
 
@@ -187,7 +187,7 @@ describe('DimensionalDataModel', () => {
         TranslatableError,
       );
       expect(() => DimensionalDataModel.fromConfig(configWithoutMetadata)).toThrow(
-        'errors.dataModel.noMetadata',
+        new TranslatableError('errors.dataModel.noMetadata'),
       );
     });
 

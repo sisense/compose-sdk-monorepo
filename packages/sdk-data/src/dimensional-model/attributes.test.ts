@@ -133,7 +133,7 @@ describe('attributes', () => {
       it('should generate composeCode from expression when not provided', () => {
         const attribute = new DimensionalAttribute('Brand', '[Brand.Brand ID]', 'text-attribute');
 
-        expect(attribute.composeCode).toBe('DM.Brand.BrandID');
+        expect(attribute.composeCode).toBe('DM.Brand.[[Brand ID]]');
       });
 
       it('should not generate composeCode when expression is empty', () => {

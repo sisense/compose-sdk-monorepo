@@ -1,7 +1,7 @@
 import { Data } from '@sisense/sdk-data';
 
 import { withBlurredRows } from '../__test-helpers__';
-import { Chart } from '../chart';
+import { Chart } from '../domains/visualizations/components/chart';
 import { BoxplotChartProps } from '../props';
 import { BoxplotStyleOptions } from '../types';
 import { templateForComponent } from './template';

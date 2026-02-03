@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.20.0] - 2026-02-03
+
+### Added
+- Add Angular v21 support
+- Add `LoadingOverlay` component for React
+- Add translation files for all Fusion languages as submodules for React, Angular, and Vue
+
+### Changed
+- Fix `TableStyleOptions.rowsPerPage` configuration for table widgets loaded from Fusion
+- Fix `RelativeDateFilterTile` and `DateRangeFilterTile` behavior in the dashboard filters panel
+- Fix forecast and trend visibility when series are hidden via the legend
+- Fix language and locale configuration loaded from Fusion
+- Improve translations and error messages across packages
+
 ## [2.19.0] - 2026-01-20
 
 ### Changed

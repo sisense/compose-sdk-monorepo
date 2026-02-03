@@ -1,4 +1,4 @@
-import ErrorBoundaryBox from '../error-boundary/error-boundary-box';
+import ErrorBoundaryBox from '../infra/error-boundary/error-boundary-box';
 import { templateForComponent } from './template';
 
 const template = templateForComponent(ErrorBoundaryBox);

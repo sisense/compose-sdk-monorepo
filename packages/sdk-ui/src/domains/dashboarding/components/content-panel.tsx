@@ -1,0 +1,201 @@
+import { useMemo } from 'react';
+
+import isNumber from 'lodash-es/isNumber';
+import isUndefined from 'lodash-es/isUndefined';
+
+import { WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
+import {
+  checkForAutoHeight,
+  getDividerStyle,
+  withOptionallyDisabledAutoHeight,
+} from '@/domains/dashboarding/utils';
+import { Widget } from '@/domains/widgets/components/widget';
+import { useThemeContext } from '@/infra/contexts/theme-provider';
+import styled from '@/infra/styled';
+import { WidgetProps } from '@/props';
+
+const SMALL_WIDTH = '600px';
+const MEDIUM_WIDTH = '900px';
+
+const GridContainer = styled.div<{ widths: number[] }>`
+  display: grid;
+  grid-template-columns: ${({ widths }) => widths.map((w) => `${w}%`).join(' ')};
+  @container content-panel-container (max-width: ${SMALL_WIDTH}) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  @container content-panel-container ((min-width: ${SMALL_WIDTH}) and (max-width: ${MEDIUM_WIDTH})) {
+    grid-template-columns: ${({ widths }) =>
+      widths.length > 1 ? 'repeat(2, 1fr)' : 'repeat(1, 1fr)'};
+  }
+`;
+
+const Column = styled.div<{
+  responsive?: boolean;
+  colWidths: number[];
+  dividerWidth: number;
+  dividerColor: string;
+}>`
+  container-name: content-panel-column;
+  container-type: ${({ responsive }) => (responsive ? 'inline-size' : 'unset')};
+  &:not(:first-of-type) {
+    border-left: ${({ dividerWidth, dividerColor }) => getDividerStyle(dividerColor, dividerWidth)};
+  }
+  @container content-panel-container ((min-width: ${SMALL_WIDTH}) and (max-width: ${MEDIUM_WIDTH})) {
+    &:last-of-type {
+      grid-column-end: ${({ colWidths }) => (colWidths.length % 2 === 0 ? 'span 1' : 'span 2')};
+    }
+  }
+  @container content-panel-container (max-width: ${SMALL_WIDTH}) {
+    &:not(:first-of-type) {
+      border-left: none;
+    }
+  }
+`;
+
+const Row = styled.div<{ widths: number[] }>`
+  display: grid;
+  grid-template-columns: ${({ widths }) => widths.map((w) => `${w}%`).join(' ')};
+  @container content-panel-column (max-width: ${SMALL_WIDTH}) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  @container content-panel-column ((min-width: ${SMALL_WIDTH}) and (max-width: ${MEDIUM_WIDTH})) {
+    grid-template-columns: ${({ widths }) =>
+      widths.length === 1 ? 'repeat(1, 1fr)' : 'repeat(2, 1fr)'};
+  }
+`;
+
+const Subcell = styled.div<{
+  responsive?: boolean;
+  rowWidths: number[];
+  height?: string | number;
+  dividerWidth: number;
+  dividerColor: string;
+}>`
+  border-bottom: ${({ dividerWidth, dividerColor }) => getDividerStyle(dividerColor, dividerWidth)};
+  &:not(:first-of-type) {
+    border-left: ${({ dividerWidth, dividerColor }) => getDividerStyle(dividerColor, dividerWidth)};
+  }
+
+  height: ${({ height }) =>
+    isUndefined(height)
+      ? 'auto'
+      : isNumber(height)
+      ? `calc(${height}px + 32px)`
+      : `calc(${height} + 32px)`};
+  @container ((min-width: ${SMALL_WIDTH}) and (max-width: ${MEDIUM_WIDTH})) {
+    &:last-of-type {
+      grid-column-end: ${({ rowWidths }) => (rowWidths.length % 2 === 0 ? 'span 1' : 'span 2')};
+    }
+  }
+  @container (max-width: ${SMALL_WIDTH}) {
+    &:not(:first-of-type) {
+      border-left: none;
+    }
+  }
+`;
+
+/**
+ * Props for the {@link ContentPanel} component.
+ *
+ * @internal
+ */
+export interface ContentPanelProps {
+  /**
+   * An object defining how the widgets should be laid out.
+   */
+  layout: WidgetsPanelLayout;
+
+  /**
+   * If true adjust layout based on available width of content panel.
+   *
+   * If not specified, the default value is `false`.
+   *
+   * @internal
+   */
+  responsive?: boolean;
+
+  /**
+   * A list of widget props to render.
+   */
+  widgets: WidgetProps[];
+}
+
+/**
+ * A React component used for rendering a layout of widgets.
+ *
+ * @param props - {@link ContentPanelProps}
+ * @internal
+ */
+export const ContentPanel = ({ layout, responsive, widgets }: ContentPanelProps) => {
+  const { themeSettings } = useThemeContext();
+
+  const colWidths = layout.columns.map((c) => c.widthPercentage);
+
+  const innerLayout = useMemo(() => {
+    return {
+      ...layout,
+      columns: layout.columns.map((c) => {
+        return {
+          ...c,
+          rows: c.rows
+            .map((r) => {
+              const visibleCells = r.cells.filter((c) => !c.hidden);
+              const equalWidthCells = visibleCells.length < r.cells.length;
+              return {
+                ...r,
+                cells: visibleCells.map((c) => ({
+                  ...c,
+                  widthPercentage: equalWidthCells ? 100 / visibleCells.length : c.widthPercentage,
+                })),
+              };
+            })
+            .filter((r) => r.cells.length > 0),
+        };
+      }),
+    };
+  }, [layout]);
+
+  return (
+    <GridContainer widths={colWidths}>
+      {innerLayout.columns.map((column, columnIndex) => (
+        <Column
+          key={columnIndex}
+          colWidths={colWidths}
+          responsive={responsive}
+          dividerWidth={themeSettings.dashboard.dividerLineWidth}
+          dividerColor={themeSettings.dashboard.dividerLineColor}
+        >
+          {column.rows?.map((row, cellIndex) => {
+            const rowWidths = row.cells.map((sb) => sb.widthPercentage);
+            const rowWidgets = widgets.filter((w) => row.cells.some((c) => c.widgetId === w.id));
+            const rowWithAutoHeight = checkForAutoHeight(rowWidgets);
+
+            return (
+              <Row key={`${columnIndex},${cellIndex}`} widths={rowWidths}>
+                {row.cells.map((subcell) => {
+                  const widgetProps = rowWidgets.find((w) => w.id === subcell.widgetId);
+                  return (
+                    <Subcell
+                      key={`${subcell.widgetId},${subcell.widthPercentage}`}
+                      responsive={responsive}
+                      rowWidths={rowWidths}
+                      height={rowWithAutoHeight ? 'auto' : subcell.height}
+                      dividerWidth={themeSettings.dashboard.dividerLineWidth}
+                      dividerColor={themeSettings.dashboard.dividerLineColor}
+                    >
+                      {widgetProps && (
+                        <Widget
+                          {...withOptionallyDisabledAutoHeight(widgetProps, !rowWithAutoHeight)}
+                        />
+                      )}
+                    </Subcell>
+                  );
+                })}
+              </Row>
+            );
+          })}
+        </Column>
+      ))}
+    </GridContainer>
+  );
+};

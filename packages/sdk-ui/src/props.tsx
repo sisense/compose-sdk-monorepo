@@ -11,7 +11,13 @@ import {
   QueryResultData,
 } from '@sisense/sdk-data';
 
-import { AppConfig } from './app/client-application';
+import { Hierarchy } from './domains/drilldown/hierarchy-model';
+import { ExecuteQueryParams, QueryByWidgetIdState } from './domains/query-execution';
+import { ExecuteQueryResult } from './domains/query-execution/types';
+import {
+  type CustomDataCellFormatter,
+  type CustomHeaderCellFormatter,
+} from './domains/visualizations/components/pivot-table/formatters/types';
 import {
   AreamapChartDataOptions,
   BoxplotChartCustomDataOptions,
@@ -25,17 +31,13 @@ import {
   ScattermapChartDataOptions,
   TableDataOptions,
   TabularChartDataOptions,
-} from './chart-data-options/types';
-import { HighchartsOptions } from './chart-options-processor/chart-options-service';
-import { BeforeMenuOpenHandler } from './common/components/menu/types';
-import { HookEnableParam } from './common/hooks/types';
-import { Hierarchy } from './models';
-import {
-  type CustomDataCellFormatter,
-  type CustomHeaderCellFormatter,
-} from './pivot-table/formatters/types';
-import { ExecuteQueryParams, QueryByWidgetIdState } from './query-execution';
-import { ExecuteQueryResult } from './query-execution/types';
+} from './domains/visualizations/core/chart-data-options/types';
+import { HighchartsOptions } from './domains/visualizations/core/chart-options-processor/chart-options-service';
+import { FiltersMergeStrategy } from './domains/widgets/components/widget-by-id/types';
+import { AppConfig } from './infra/app/client-application';
+import { BeforeMenuOpenHandler } from './infra/contexts/menu-provider/types';
+import { HookEnableParam } from './shared/hooks/types';
+import { DistributiveOmit } from './shared/utils/utility-types/distributive-omit';
 import {
   AreamapDataPoint,
   AreamapStyleOptions,
@@ -92,10 +94,8 @@ import {
   TreemapStyleOptions,
   WidgetByIdStyleOptions,
 } from './types';
-import { DistributiveOmit } from './utils/utility-types/distributive-omit';
-import { FiltersMergeStrategy } from './widget-by-id/types';
 
-export type { TabberButtonsWidgetProps } from './widgets/tabber/types';
+export type { TabberButtonsWidgetProps } from './domains/widgets/components/tabber-buttons-widget/types';
 export type { MenuItemSection, HighchartsOptions };
 
 /**

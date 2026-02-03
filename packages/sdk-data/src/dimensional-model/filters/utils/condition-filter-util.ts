@@ -250,6 +250,7 @@ export const createAttributeFilterFromConditionFilterJaql = (
 
   throw new TranslatableError('errors.filter.unsupportedConditionFilter', {
     filter: JSON.stringify(conditionFilterJaql),
+    attributeName: attribute.name,
   });
 };
 
@@ -331,5 +332,6 @@ export const createMeasureFilterFromConditionFilterJaql = (
   }
   throw new TranslatableError('errors.filter.unsupportedConditionFilter', {
     filter: JSON.stringify(conditionFilterJaql),
+    attributeName: measure.name,
   });
 };

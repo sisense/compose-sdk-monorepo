@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.19.0",
+  "version": "2.20.0",
   "type": "module",
   "exports": {
     ".": {
@@ -37,6 +37,12 @@
       "require": "./dist/analytics-composer/node.cjs",
       "import": "./dist/analytics-composer/node.js",
       "default": "./dist/analytics-composer/node.js"
+    },
+    "./translations/*": {
+      "types": "./dist/translations/*.d.ts",
+      "require": "./dist/translations/*.cjs",
+      "import": "./dist/translations/*.js",
+      "default": "./dist/translations/*.js"
     }
   },
   "main": "./dist/index.cjs",
@@ -52,6 +58,9 @@
       ],
       "analytics-composer/node": [
         "./dist/analytics-composer/node.d.ts"
+      ],
+      "translations/*": [
+        "./dist/translations/*.d.ts"
       ]
     }
   },
@@ -117,6 +126,7 @@
     "format:check": "prettier --check .",
     "vitest": "TZ=utc run -T vitest",
     "test": "run vitest run",
+    "test:stop-on-fail": "run vitest run --bail 1",
     "test:update": "run vitest -u",
     "test:watch": "run vitest watch",
     "test:coverage": "run vitest run --coverage",
@@ -168,6 +178,7 @@
     "react-dom": "19.1.0",
     "react-grid-layout": "^1.4.4",
     "react-json-view": "^1.21.3",
+    "react-multi-carousel": "^2.8.6",
     "react-plotly.js": "^2.6.0",
     "rollup-plugin-re": "^1.0.7",
     "sass": "^1.90.0",

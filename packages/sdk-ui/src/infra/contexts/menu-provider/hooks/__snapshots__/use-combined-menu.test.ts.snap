@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`useCombinedMenu > should open the menu with currentMenuOptions when openMenu is called 1`] = `
+[
+  {
+    "itemSections": [
+      {
+        "items": [],
+        "sectionTitle": "Some Section",
+      },
+    ],
+    "onClose": [Function],
+    "position": {
+      "left": 42,
+      "top": 69,
+    },
+  },
+]
+`;

@@ -7,7 +7,7 @@ import {
   RelativeDateFilter,
 } from '@sisense/sdk-data';
 
-import { RelativeDateFilterTile } from '../filters/components/date-filter/relative-date-filter-tile/index.js';
+import { RelativeDateFilterTile } from '../domains/filters/components/date-filter/relative-date-filter-tile/index.js';
 import { templateForComponent } from './template.js';
 
 const template = templateForComponent(RelativeDateFilterTile);

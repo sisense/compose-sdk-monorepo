@@ -214,6 +214,7 @@ export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid: str
       // generic pass-through JAQL filter will be used instead
       throw new TranslatableError('errors.filter.formulaFiltersNotSupported', {
         filter: JSON.stringify(jaql),
+        attributeName: jaql.title ?? jaql.column ?? jaql.dim,
       });
     }
     const filterJaqlWrapperWithType = extractFilterTypeFromFilterJaql(

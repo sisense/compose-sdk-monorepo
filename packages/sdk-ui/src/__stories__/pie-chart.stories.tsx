@@ -1,4 +1,4 @@
-import { Chart } from '../chart';
+import { Chart } from '../domains/visualizations/components/chart';
 import { PieChartProps } from '../props';
 import { NumberFormatConfig, PieStyleOptions } from '../types';
 import { templateForComponent } from './template';

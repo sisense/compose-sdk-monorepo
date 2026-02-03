@@ -1,6 +1,6 @@
 import { DataSourceField } from '@sisense/sdk-data';
 
-import { AnyObject } from '@/utils/utility-types';
+import { AnyObject } from '@/shared/utils/utility-types';
 
 /**
  * Actual fields from the Sample ECommerce datasource returned by server.

@@ -1,0 +1,1424 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`dashboardComposer > toDashboardCode By ID > should compose By ID dashboard code in React 1`] = `
+"import { DashboardById } from '@sisense/sdk-ui';
+
+const CodeExample = () => {
+  return (
+    <>
+      <DashboardById
+        dashboardOid="SOME_DASHBOARD_OID"
+        config={ {} }
+      />
+    </>
+  );
+};
+
+export default CodeExample;"
+`;
+
+exports[`dashboardComposer > toDashboardCode By ID > should compose By ID widget code in Angular 1`] = `
+"import { Component } from '@angular/core';
+
+@Component({
+  selector: 'code-example',
+  template: \`
+    <csdk-dashboard-by-id
+      [dashboardOid]="dashboardOid"
+      [config]="config"
+    />
+  \`,
+})
+export class CodeExample {
+  dashboardOid = "SOME_DASHBOARD_OID";
+  config = {};
+}"
+`;
+
+exports[`dashboardComposer > toDashboardCode By ID > should compose By ID widget code in Vue 1`] = `
+"<script setup lang="ts">
+import { DashboardById } from '@sisense/sdk-ui-vue';
+
+const config = {};
+</script>
+
+<template>
+  <DashboardById :dashboardOid="'SOME_DASHBOARD_OID'" :config="config" />
+</template>"
+`;
+
+exports[`dashboardComposer > toDashboardCode By ID > should hide filters when visible=false in Angular 1`] = `
+"import { Component } from '@angular/core';
+
+@Component({
+  selector: 'code-example',
+  template: \`
+    <csdk-dashboard-by-id
+      [dashboardOid]="dashboardOid"
+      [config]="config"
+    />
+  \`,
+})
+export class CodeExample {
+  dashboardOid = "SOME_DASHBOARD_OID";
+  config = {
+        filtersPanel: {
+          visible: false,
+        },
+      };
+}"
+`;
+
+exports[`dashboardComposer > toDashboardCode By ID > should hide filters when visible=false in React 1`] = `
+"import { DashboardById } from '@sisense/sdk-ui';
+
+const CodeExample = () => {
+  return (
+    <>
+      <DashboardById
+        dashboardOid="SOME_DASHBOARD_OID"
+        config={ {
+        filtersPanel: {
+          visible: false,
+        },
+      } }
+      />
+    </>
+  );
+};
+
+export default CodeExample;"
+`;
+
+exports[`dashboardComposer > toDashboardCode By ID > should hide filters when visible=false in Vue 1`] = `
+"<script setup lang="ts">
+import { DashboardById } from '@sisense/sdk-ui-vue';
+
+const config = {
+        filtersPanel: {
+          visible: false,
+        },
+      };
+</script>
+
+<template>
+  <DashboardById :dashboardOid="'SOME_DASHBOARD_OID'" :config="config" />
+</template>"
+`;
+
+exports[`dashboardComposer > toDashboardCode Client Side > should compose client-side dashboard code in Angular 1`] = `"/** COMING SOON */"`;
+
+exports[`dashboardComposer > toDashboardCode Client Side > should compose client-side dashboard code in React 1`] = `
+"import { useMemo } from 'react';
+import { Dashboard, DashboardProps, WidgetProps } from '@sisense/sdk-ui';
+import { Filter, FilterRelations } from '@sisense/sdk-data';
+import { measureFactory, filterFactory } from '@sisense/sdk-data';
+import * as DM from './sample-ecommerce'; // generated with @sisense/sdk-cli
+
+export default function CodeExample() {
+  const dashboardProps: DashboardProps = useMemo(() => {
+    const widgets: WidgetProps[] = [
+    {
+      id: '6560ce3b6f1df500326a069d',
+      widgetType: 'chart',
+      title: 'TOTAL BRANDS',
+      dataSource: DM.DataSource,
+      chartType: 'indicator',
+      dataOptions: {
+        value: [{
+            column: measureFactory.countDistinct(DM.Commerce.BrandID, '# of unique Brand ID'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: false,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+        secondary: [],
+        min: [{
+            column: measureFactory.customFormula('0 (default)', '0'),
+            sortType: 'sortNone',
+          }
+        ],
+        max: [{
+            column: measureFactory.customFormula('2500', '2500'),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: false,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+      },
+      filters: [],
+      styleOptions: {
+        subtype: 'indicator/gauge',
+        skin: 1,
+        indicatorComponents: {
+          title: {
+            shouldBeShown: false,
+            text: '# of unique Brand ID',
+          },
+          secondaryTitle: {
+            text: '',
+          },
+          ticks: {
+            shouldBeShown: true,
+          },
+          labels: {
+            shouldBeShown: true,
+          },
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '6560ce3b6f1df500326a069e',
+      widgetType: 'chart',
+      title: 'TOTAL UNITS SOLD',
+      dataSource: DM.DataSource,
+      chartType: 'indicator',
+      dataOptions: {
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: false,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+        secondary: [],
+        min: [{
+            column: measureFactory.customFormula('0 (default)', '0'),
+            sortType: 'sortNone',
+          }
+        ],
+        max: [{
+            column: measureFactory.customFormula('250000', '250000'),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+      },
+      filters: [],
+      styleOptions: {
+        subtype: 'indicator/gauge',
+        skin: 1,
+        indicatorComponents: {
+          title: {
+            shouldBeShown: false,
+            text: 'Total Quantity',
+          },
+          secondaryTitle: {
+            text: '',
+          },
+          ticks: {
+            shouldBeShown: true,
+          },
+          labels: {
+            shouldBeShown: true,
+          },
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '6560ce3b6f1df500326a069f',
+      widgetType: 'chart',
+      title: 'AGE RANGE BREAKDOWN',
+      dataSource: DM.DataSource,
+      chartType: 'pie',
+      dataOptions: {
+        category: [{
+            column: DM.Commerce.AgeRange,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+      },
+      filters: [
+        filterFactory.members(DM.Commerce.Gender, ['Unspecified'], { excludeMembers: true })
+        ],
+      styleOptions: {
+        subtype: 'pie/classic',
+        legend: {
+          enabled: false,
+          position: 'bottom',
+        },
+        labels: {
+          enabled: true,
+          categories: true,
+          percent: true,
+          decimals: false,
+          value: false,
+        },
+        dataLimits: {
+          seriesCapacity: 100000,
+          categoriesCapacity: undefined,
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '6560ce3b6f1df500326a06a0',
+      widgetType: 'chart',
+      title: 'TOTAL SALES',
+      dataSource: DM.DataSource,
+      chartType: 'indicator',
+      dataOptions: {
+        value: [{
+            column: measureFactory.count(DM.Commerce.VisitID, '# of Visit ID'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: false,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+        secondary: [],
+        min: [{
+            column: measureFactory.customFormula('0 (default)', '0'),
+            sortType: 'sortNone',
+          }
+        ],
+        max: [{
+            column: measureFactory.customFormula('100000', '100000'),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: false,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+      },
+      filters: [],
+      styleOptions: {
+        subtype: 'indicator/gauge',
+        skin: 1,
+        indicatorComponents: {
+          title: {
+            shouldBeShown: false,
+            text: '# of Visit ID',
+          },
+          secondaryTitle: {
+            text: '',
+          },
+          ticks: {
+            shouldBeShown: true,
+          },
+          labels: {
+            shouldBeShown: true,
+          },
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '6560ce3b6f1df500326a06a1',
+      widgetType: 'chart',
+      title: 'GENDER BREAKDOWN',
+      dataSource: DM.DataSource,
+      chartType: 'pie',
+      dataOptions: {
+        category: [{
+            column: DM.Commerce.Gender,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+      },
+      filters: [
+        filterFactory.members(DM.Commerce.Gender, ['Unspecified'], { excludeMembers: true })
+        ],
+      styleOptions: {
+        subtype: 'pie/classic',
+        legend: {
+          enabled: false,
+          position: 'left',
+        },
+        labels: {
+          enabled: true,
+          categories: true,
+          percent: true,
+          decimals: false,
+          value: false,
+        },
+        dataLimits: {
+          seriesCapacity: 100000,
+          categoriesCapacity: undefined,
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '6560ce3b6f1df500326a06a2',
+      widgetType: 'chart',
+      title: 'TOTAL REVENUE',
+      dataSource: DM.DataSource,
+      chartType: 'indicator',
+      dataOptions: {
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: false,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+        secondary: [],
+        min: [{
+            column: measureFactory.customFormula('0 (default)', '0'),
+            sortType: 'sortNone',
+          }
+        ],
+        max: [{
+            column: measureFactory.customFormula('125000000', '125000000'),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: false,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+      },
+      filters: [],
+      styleOptions: {
+        subtype: 'indicator/gauge',
+        skin: 1,
+        indicatorComponents: {
+          title: {
+            shouldBeShown: false,
+            text: 'Total Revenue',
+          },
+          secondaryTitle: {
+            text: '',
+          },
+          ticks: {
+            shouldBeShown: true,
+          },
+          labels: {
+            shouldBeShown: true,
+          },
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '6560ce3b6f1df500326a06a3',
+      widgetType: 'chart',
+      title: 'TOP CATEGORIES BY REVENUE, UNITS SOLD AND GENDER',
+      dataSource: DM.DataSource,
+      chartType: 'scatter',
+      dataOptions: {
+        x: {
+          column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+          sortType: 'sortNone',
+          numberFormatConfig: {
+            decimalScale: 'auto',
+            kilo: true,
+            million: true,
+            billion: true,
+            trillion: true,
+            thousandSeparator: true,
+            prefix: false,
+            symbol: undefined,
+            name: 'Numbers',
+          },
+        },
+        y: {
+          column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),
+          sortType: 'sortNone',
+          numberFormatConfig: {
+            decimalScale: 'auto',
+            kilo: true,
+            million: true,
+            billion: true,
+            trillion: true,
+            thousandSeparator: true,
+            prefix: false,
+            symbol: undefined,
+            name: 'Numbers',
+          },
+        },
+        breakByPoint: {
+          column: DM.Category.Category,
+          isColored: false,
+          sortType: 'sortNone',
+        },
+        breakByColor: {
+          column: DM.Commerce.Gender,
+          isColored: false,
+          sortType: 'sortNone',
+        },
+        size: {
+          column: measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
+          sortType: 'sortNone',
+          numberFormatConfig: {
+            decimalScale: 'auto',
+            kilo: true,
+            million: true,
+            billion: true,
+            trillion: true,
+            thousandSeparator: true,
+            prefix: false,
+            symbol: undefined,
+            name: 'Numbers',
+          },
+        },
+      },
+      filters: [
+        filterFactory.members(DM.Commerce.Gender, ['Unspecified'], { excludeMembers: true }),
+        filterFactory.topRanking(DM.Category.Category, measureFactory.sum(DM.Commerce.Revenue, 'sum Revenue'), 10)
+        ],
+      styleOptions: {
+        legend: {
+          enabled: true,
+          position: 'right',
+        },
+        xAxis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: true,
+          title: {
+            enabled: false,
+            text: 'SALES',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        yAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: true,
+          title: {
+            enabled: true,
+            text: 'QUANTITY',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        dataLimits: {
+          seriesCapacity: 50,
+          categoriesCapacity: undefined,
+        },
+        seriesLabels: {
+          enabled: false,
+          rotation: 0,
+          showValue: false,
+          showPercentage: false,
+        },
+        markerSize: {
+          scatterDefaultSize: 10,
+          scatterBubbleMinSize: 12,
+          scatterBubbleMaxSize: 48,
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '6560ce3b6f1df500326a06a4',
+      widgetType: 'chart',
+      title: 'REVENUE vs.UNITS SOLD',
+      dataSource: DM.DataSource,
+      chartType: 'line',
+      dataOptions: {
+        category: [{
+            column: DM.Commerce.Date.Months,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          },{
+            column: measureFactory.sum(DM.Commerce.Quantity, 'Total Quantity'),
+            color: {
+              type: 'uniform',
+              color: '#00cee6',
+            },
+            showOnRightAxis: true,
+            sortType: 'sortNone',
+            chartType: 'column',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+        breakBy: [],
+      },
+      filters: [],
+      styleOptions: {
+        subtype: 'line/spline',
+        legend: {
+          enabled: true,
+          position: 'bottom',
+        },
+        xAxis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: undefined,
+          title: {
+            enabled: false,
+            text: 'MONTH',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        yAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: true,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        y2Axis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          title: {
+            enabled: true,
+            text: 'QUANTITY',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        seriesLabels: {
+          enabled: false,
+          rotation: 0,
+          showValue: false,
+          showPercentage: false,
+        },
+        dataLimits: {
+          seriesCapacity: 50,
+          categoriesCapacity: 100000,
+        },
+        navigator: {
+          enabled: true,
+        },
+        lineWidth: {
+          width: 'bold',
+        },
+        markers: {
+          enabled: true,
+          size: 'small',
+          fill: 'hollow',
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '6560ce3b6f1df500326a06a5',
+      widgetType: 'chart',
+      title: 'TOP 3 CATEGORIES BY REVENUE AND AGE',
+      dataSource: DM.DataSource,
+      chartType: 'bar',
+      dataOptions: {
+        category: [{
+            column: DM.Commerce.AgeRange,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+        breakBy: [{
+            column: DM.Category.Category,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+      },
+      filters: [
+        filterFactory.topRanking(DM.Category.Category, measureFactory.sum(DM.Commerce.Revenue, 'sum Revenue'), 3)
+        ],
+      styleOptions: {
+        subtype: 'bar/stacked',
+        legend: {
+          enabled: true,
+          position: 'bottom',
+        },
+        xAxis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: undefined,
+          title: {
+            enabled: true,
+            text: 'AGE RANGE',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        yAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          title: {
+            enabled: true,
+            text: 'SALES',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        y2Axis: {
+          enabled: true,
+          gridLines: false,
+          intervalJumps: undefined,
+          isIntervalEnabled: undefined,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          title: {
+            enabled: false,
+            text: undefined,
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        seriesLabels: {
+          enabled: false,
+          rotation: 0,
+          showValue: false,
+          showPercentage: false,
+        },
+        dataLimits: {
+          seriesCapacity: 50,
+          categoriesCapacity: 100000,
+        },
+        navigator: {
+          enabled: true,
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '67111cb76ab71f0032d8599d',
+      widgetType: 'chart',
+      title: '',
+      dataSource: DM.DataSource,
+      chartType: 'table',
+      dataOptions: {
+        columns: [{
+            column: DM.Commerce.BrandID,
+            isColored: false,
+            sortType: 'sortNone',
+          },{
+            column: DM.Brand.Brand,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+      },
+      filters: [],
+      styleOptions: {
+        rowsPerPage: 25,
+        header: {
+          color: {
+            enabled: true,
+          },
+        },
+        rows: {
+          alternatingColor: {
+            enabled: true,
+          },
+        },
+        columns: {
+          alternatingColor: {
+            enabled: false,
+          },
+          width: 'content',
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '672352d827ea67002bdcf485',
+      widgetType: 'chart',
+      title: 'Revenue by age in Ukraine,France and Israel',
+      dataSource: DM.DataSource,
+      chartType: 'polar',
+      dataOptions: {
+        category: [{
+            column: DM.Country.Country,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        value: [{
+            column: measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+        breakBy: [{
+            column: DM.Commerce.AgeRange,
+            isColored: false,
+            sortType: 'sortNone',
+            panel: 'columns',
+          }
+        ],
+        seriesToColorMap: {
+        },
+      },
+      filters: [
+        filterFactory.members(DM.Country.Country, ['France', 'Israel', 'Ukraine'])
+        ],
+      styleOptions: {
+        subtype: 'polar/area',
+        legend: {
+          enabled: true,
+          position: 'bottom',
+        },
+        xAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: false,
+          min: undefined,
+          max: undefined,
+          logarithmic: undefined,
+          title: {
+            enabled: false,
+            text: 'Country',
+          },
+          labels: {
+            enabled: true,
+          },
+        },
+        yAxis: {
+          enabled: true,
+          gridLines: true,
+          intervalJumps: undefined,
+          isIntervalEnabled: true,
+          min: undefined,
+          max: undefined,
+          logarithmic: false,
+          labels: {
+            enabled: true,
+          },
+          title: {
+            enabled: false,
+          },
+        },
+        dataLimits: {
+          seriesCapacity: 50,
+          categoriesCapacity: 200,
+        },
+        seriesLabels: {
+          enabled: false,
+          rotation: 0,
+          showValue: false,
+          showPercentage: false,
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    },
+
+    {
+      id: '6742206527ea67002bdcf6ac',
+      widgetType: 'chart',
+      title: 'total of Revenue by Country',
+      dataSource: DM.DataSource,
+      chartType: 'treemap',
+      dataOptions: {
+        category: [{
+            column: DM.Country.Country,
+            isColored: false,
+            sortType: 'sortNone',
+          }
+        ],
+        value: [{
+            column: measureFactory.customFormula('total of Revenue', 'sum([d6fb])', { '[d6fb]': DM.Commerce.Revenue }),
+            sortType: 'sortNone',
+            numberFormatConfig: {
+              decimalScale: 'auto',
+              kilo: true,
+              million: true,
+              billion: true,
+              trillion: true,
+              thousandSeparator: true,
+              prefix: false,
+              symbol: undefined,
+              name: 'Numbers',
+            },
+          }
+        ],
+      },
+      filters: [],
+      styleOptions: {
+        labels: {
+          category: [{
+              enabled: true,
+            },{
+              enabled: true,
+            },{
+              enabled: true,
+            }
+          ],
+        },
+        tooltip: {
+          mode: 'value',
+        },
+      },
+      drilldownOptions: {
+        drilldownPaths: [],
+        drilldownSelections: [],
+      },
+    }];
+    const filters: Filter[] | FilterRelations = [
+        filterFactory.members(DM.Country.Country, []),
+        filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
+        filterFactory.greaterThan(DM.Commerce.Revenue, 0)
+        ];
+
+    return {
+      title: 'Sample - Ecommerce',
+      widgets,
+      filters,
+      config: {
+        toolbar: {
+          isVisible: true,
+        },
+        filtersPanel: {
+          isVisible: true,
+        },
+        tabbers: {
+        },
+      },
+      widgetsOptions: {
+        '6560ce3b6f1df500326a069d': {
+          'filtersOptions': {
+            'applyMode': 'filter',
+            'shouldAffectFilters': false,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '6560ce3b6f1df500326a069e': {
+          'filtersOptions': {
+            'applyMode': 'filter',
+            'shouldAffectFilters': false,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '6560ce3b6f1df500326a069f': {
+          'filtersOptions': {
+            'applyMode': 'highlight',
+            'shouldAffectFilters': true,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '6560ce3b6f1df500326a06a0': {
+          'filtersOptions': {
+            'applyMode': 'filter',
+            'shouldAffectFilters': false,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '6560ce3b6f1df500326a06a1': {
+          'filtersOptions': {
+            'applyMode': 'highlight',
+            'shouldAffectFilters': true,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '6560ce3b6f1df500326a06a2': {
+          'filtersOptions': {
+            'applyMode': 'filter',
+            'shouldAffectFilters': false,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '6560ce3b6f1df500326a06a3': {
+          'filtersOptions': {
+            'applyMode': 'highlight',
+            'shouldAffectFilters': false,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '6560ce3b6f1df500326a06a4': {
+          'filtersOptions': {
+            'applyMode': 'filter',
+            'shouldAffectFilters': true,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '6560ce3b6f1df500326a06a5': {
+          'filtersOptions': {
+            'applyMode': 'filter',
+            'shouldAffectFilters': true,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '67111cb76ab71f0032d8599d': {
+          'filtersOptions': {
+            'applyMode': 'filter',
+            'shouldAffectFilters': false,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '672352d827ea67002bdcf485': {
+          'filtersOptions': {
+            'applyMode': 'highlight',
+            'shouldAffectFilters': true,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+        '6742206527ea67002bdcf6ac': {
+          'filtersOptions': {
+            'applyMode': 'highlight',
+            'shouldAffectFilters': true,
+            'ignoreFilters': {
+              'all': false,
+              'ids': [],
+            },
+            'forceApplyBackgroundFilters': true,
+          },
+        },
+      },
+      layoutOptions: {
+        widgetsPanel: {
+          columns: [{
+              widthPercentage: 16.869192280200142,
+              rows: [{
+                  cells: [{
+                      widthPercentage: 100,
+                      height: '184px',
+                      widgetId: '6560ce3b6f1df500326a06a2',
+                      minWidth: 48,
+                      maxWidth: 1028,
+                      minHeight: 48,
+                      maxHeight: 1028,
+                    }
+                  ],
+                },{
+                  cells: [{
+                      widthPercentage: 100,
+                      height: '172px',
+                      widgetId: '6560ce3b6f1df500326a069e',
+                      minWidth: 48,
+                      maxWidth: 1028,
+                      minHeight: 48,
+                      maxHeight: 1028,
+                    }
+                  ],
+                },{
+                  cells: [{
+                      widthPercentage: 100,
+                      height: '172px',
+                      widgetId: '6560ce3b6f1df500326a06a0',
+                      minWidth: 48,
+                      maxWidth: 1028,
+                      minHeight: 48,
+                      maxHeight: 1028,
+                    }
+                  ],
+                },{
+                  cells: [{
+                      widthPercentage: 100,
+                      height: '184px',
+                      widgetId: '6560ce3b6f1df500326a069d',
+                      minWidth: 48,
+                      maxWidth: 1028,
+                      minHeight: 48,
+                      maxHeight: 1028,
+                    }
+                  ],
+                }
+              ],
+            },{
+              widthPercentage: 43.9921530161844,
+              rows: [{
+                  cells: [{
+                      widthPercentage: 100,
+                      height: '392px',
+                      widgetId: '6560ce3b6f1df500326a06a4',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
+                    }
+                  ],
+                },{
+                  cells: [{
+                      widthPercentage: 50.25466893039049,
+                      height: '384px',
+                      widgetId: '6560ce3b6f1df500326a06a1',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
+                    },{
+                      widthPercentage: 49.745331069609506,
+                      height: '384px',
+                      widgetId: '6560ce3b6f1df500326a069f',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
+                    }
+                  ],
+                }
+              ],
+            },{
+              widthPercentage: 39.13865470361545,
+              rows: [{
+                  cells: [{
+                      widthPercentage: 100,
+                      height: '392px',
+                      widgetId: '6560ce3b6f1df500326a06a3',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
+                    }
+                  ],
+                },{
+                  cells: [{
+                      widthPercentage: 100,
+                      height: '384px',
+                      widgetId: '6560ce3b6f1df500326a06a5',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
+                    }
+                  ],
+                }
+              ],
+            },{
+              widthPercentage: 43.9921530161844,
+              rows: [{
+                  cells: [{
+                      widthPercentage: 100,
+                      height: '392px',
+                      widgetId: '67111cb76ab71f0032d8599d',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
+                    }
+                  ],
+                },{
+                  cells: [{
+                      widthPercentage: 50.25466893039049,
+                      height: '384px',
+                      widgetId: '672352d827ea67002bdcf485',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
+                    },{
+                      widthPercentage: 49.745331069609506,
+                      height: '384px',
+                      widgetId: '6742206527ea67002bdcf6ac',
+                      minWidth: 128,
+                      maxWidth: 2048,
+                      minHeight: 96,
+                      maxHeight: 2048,
+                    }
+                  ],
+                }
+              ],
+            }
+          ],
+        },
+      },
+      styleOptions: {
+        palette: {
+          variantColors: ['#117899','#60B8CC','#5CA793','#A2B86C','#EBC844','#ECAA38','#EF8B2C','#F16C20','#D94E1F','#C02E1D','#893B32','#0D3C55','#0F5B78'
+          ],
+        },
+      },
+    };
+  }, []);
+
+  return (
+    <Dashboard {...dashboardProps} />
+  );
+}"
+`;
+
+exports[`dashboardComposer > toDashboardCode Client Side > should compose client-side dashboard code in Vue 1`] = `"/** COMING SOON */"`;

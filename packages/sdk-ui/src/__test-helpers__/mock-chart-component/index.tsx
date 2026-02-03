@@ -30,8 +30,10 @@ const mockingConfig = {
   shouldChartBeMocked: false,
 };
 
-vi.mock('@/chart', async () => {
-  const actualModule = await vi.importActual<typeof import('@/chart')>('@/chart');
+vi.mock('@/domains/visualizations/components/chart', async () => {
+  const actualModule = await vi.importActual<
+    typeof import('@/domains/visualizations/components/chart')
+  >('@/domains/visualizations/components/chart');
 
   return {
     ...actualModule,

@@ -3,7 +3,7 @@ import React from 'react';
 import type { StoryContext, StoryFn, StoryObj } from '@storybook/react';
 
 import { ThemeProvider, type ThemeSettings } from '..';
-import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
+import { SisenseContextProvider } from '../infra/contexts/sisense-context/sisense-context-provider';
 
 const url = import.meta.env.VITE_APP_SISENSE_URL ?? '';
 const token = import.meta.env.VITE_APP_SISENSE_TOKEN;

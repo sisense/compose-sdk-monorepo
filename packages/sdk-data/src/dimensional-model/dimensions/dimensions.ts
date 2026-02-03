@@ -4,9 +4,8 @@ import {
   DimensionalAttribute,
   DimensionalLevelAttribute,
   jaqlSimpleColumnType,
-  normalizeAttributeName,
 } from '../attributes.js';
-import { DimensionalElement, normalizeName } from '../base.js';
+import { DimensionalElement, normalizeName, wrapIfNeedsNormalization } from '../base.js';
 import { DATA_MODEL_MODULE_NAME } from '../consts.js';
 import { Attribute, DateDimension, Dimension, LevelAttribute } from '../interfaces.js';
 import {
@@ -74,9 +73,12 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
     super(name, type || MetadataTypes.Dimension, desc, dataSource, composeCode);
 
     // if composeCode is not explicitly set by the caller, extract it from expression
+    // Use [[delimiters]] to preserve original names that need normalization
     if (!composeCode && expression) {
       const { table, column } = parseExpression(expression);
-      this.composeCode = normalizeAttributeName(table, column, '', DATA_MODEL_MODULE_NAME);
+      this.composeCode = `${DATA_MODEL_MODULE_NAME}.${wrapIfNeedsNormalization(
+        table,
+      )}.${wrapIfNeedsNormalization(column)}`;
     }
 
     this._sort = sort || Sort.None;

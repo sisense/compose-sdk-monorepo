@@ -11,10 +11,12 @@ import type {
 } from '@sisense/sdk-data';
 import { DeepRequired } from 'ts-essentials';
 
-import { Coordinates } from '@/charts/map-charts/scattermap/types';
+import { Coordinates } from '@/domains/visualizations/components/chart/components/scattermap/types';
 
 import { Hierarchy, HierarchyId, StyledColumn, StyledMeasureColumn } from '.';
-import { HighchartsOptionsInternal } from './chart-options-processor/chart-options-service';
+import { GeoDataElement } from './domains/visualizations/components/chart/restructured-charts/areamap-chart/types';
+import { CalendarDayOfWeek } from './domains/visualizations/components/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
+import { HighchartsOptionsInternal } from './domains/visualizations/core/chart-options-processor/chart-options-service';
 import {
   AreaRangeSubtype,
   AreaSubtype,
@@ -23,18 +25,18 @@ import {
   PieSubtype,
   PolarSubtype,
   StackableSubtype,
-} from './chart-options-processor/subtype-to-design-options';
+} from './domains/visualizations/core/chart-options-processor/subtype-to-design-options';
 import {
   IndicatorComponents,
   TableColorOptions,
-} from './chart-options-processor/translations/design-options';
+} from './domains/visualizations/core/chart-options-processor/translations/design-options';
 import {
   FunnelDirection,
   FunnelSize,
   FunnelType,
-} from './chart-options-processor/translations/funnel-plot-options';
-import { LegendPosition } from './chart-options-processor/translations/legend-section';
-import { ScatterMarkerSize } from './chart-options-processor/translations/scatter-plot-options';
+} from './domains/visualizations/core/chart-options-processor/translations/funnel-plot-options';
+import { LegendPosition } from './domains/visualizations/core/chart-options-processor/translations/legend-section';
+import { ScatterMarkerSize } from './domains/visualizations/core/chart-options-processor/translations/scatter-plot-options';
 import {
   AreamapChartType,
   BoxplotChartType,
@@ -47,17 +49,15 @@ import {
   ScattermapChartType,
   TableChartType,
   TextStyle,
-} from './chart-options-processor/translations/types';
-import { GeoDataElement } from './chart/restructured-charts/areamap-chart/types';
-import { CalendarDayOfWeek } from './chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
+} from './domains/visualizations/core/chart-options-processor/translations/types';
 import { DataPointsEventHandler } from './props';
-import { GradientColor } from './utils/gradient';
-import { SoftUnion } from './utils/utility-types';
+import { GradientColor } from './shared/utils/gradient';
+import { SoftUnion } from './shared/utils/utility-types';
 
 export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
-export type { AppConfig } from './app/client-application';
-export type { DateConfig } from './query/date-formats';
-export type { CalendarDayOfWeek } from './chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
+export type { AppConfig } from './infra/app/client-application';
+export type { DateConfig } from './domains/query-execution/core/date-formats';
+export type { CalendarDayOfWeek } from './domains/visualizations/components/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 
 export type {
   CartesianChartDataOptions,
@@ -68,14 +68,14 @@ export type {
   CalendarHeatmapChartDataOptions,
   StyledColumn,
   StyledMeasureColumn,
-} from './chart-data-options/types';
+} from './domains/visualizations/core/chart-data-options/types';
 export type {
   DataColorCondition,
   ConditionalDataColorOptions,
   DataColorOptions,
   RangeDataColorOptions,
   UniformDataColorOptions,
-} from './chart-data/data-coloring/types';
+} from './domains/visualizations/core/chart-data/data-coloring/types';
 // export the following types for TSDoc
 export type {
   CartesianChartType,
@@ -90,16 +90,16 @@ export type {
   TableChartType,
   RangeChartType,
   TextStyle,
-} from './chart-options-processor/translations/types';
-export type { IndicatorComponents } from './chart-options-processor/translations/design-options';
-export type { ScatterMarkerSize } from './chart-options-processor/translations/scatter-plot-options';
-export type { LegendPosition } from './chart-options-processor/translations/legend-section';
+} from './domains/visualizations/core/chart-options-processor/translations/types';
+export type { IndicatorComponents } from './domains/visualizations/core/chart-options-processor/translations/design-options';
+export type { ScatterMarkerSize } from './domains/visualizations/core/chart-options-processor/translations/scatter-plot-options';
+export type { LegendPosition } from './domains/visualizations/core/chart-options-processor/translations/legend-section';
 export type {
   GeoDataElement,
   RawGeoDataElement,
-} from './chart/restructured-charts/areamap-chart/types';
-export type { Coordinates } from './charts/map-charts/scattermap/types';
-export type { TableColorOptions } from './chart-options-processor/translations/design-options';
+} from './domains/visualizations/components/chart/restructured-charts/areamap-chart/types';
+export type { Coordinates } from './domains/visualizations/components/chart/components/scattermap/types';
+export type { TableColorOptions } from './domains/visualizations/core/chart-options-processor/translations/design-options';
 export type {
   AreaSubtype,
   AreaRangeSubtype,
@@ -108,16 +108,20 @@ export type {
   PolarSubtype,
   StackableSubtype,
   BoxplotSubtype,
-} from './chart-options-processor/subtype-to-design-options';
+} from './domains/visualizations/core/chart-options-processor/subtype-to-design-options';
 
-export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
+export type {
+  MonthOfYear,
+  DayOfWeek,
+  DateLevel,
+} from './domains/query-execution/core/date-formats/apply-date-format';
 
-export type { IndicatorRenderOptions } from '@/charts/indicator/indicator-render-options';
+export type { IndicatorRenderOptions } from '@/domains/visualizations/components/chart/components/indicator/indicator-render-options';
 
 export type {
   TabberButtonsWidgetStyleOptions,
   TabberButtonsWidgetCustomOptions,
-} from '@/widgets/tabber/types';
+} from '@/domains/widgets/components/tabber-buttons-widget/types';
 
 /**
  * @internal
@@ -3066,7 +3070,7 @@ export type TranslationConfig = {
    * ]
    * ```
    */
-  customTranslations?: CustomTranslationObject[];
+  customTranslations?: (CustomTranslationObject | CustomTranslationObject[])[];
 };
 
 /** @internal */

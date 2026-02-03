@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss';
 
-import colorsConfig from './src/themes/tailwind.colors';
+import colorsConfig from './src/infra/themes/tailwind.colors.js';
 
 const config: Config = {
   prefix: 'csdk-',

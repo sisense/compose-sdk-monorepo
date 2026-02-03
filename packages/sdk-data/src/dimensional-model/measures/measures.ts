@@ -631,7 +631,9 @@ export function createMeasure(json: any): Measure | BaseMeasure {
 
   if (MetadataTypes.isCalculatedMeasure(json)) {
     if (json.context === undefined) {
-      throw new TranslatableError('errors.measure.dimensionalCalculatedMeasure.noContext');
+      throw new TranslatableError('errors.measure.dimensionalCalculatedMeasure.noContext', {
+        measureName: name,
+      });
     }
 
     const context = {};
@@ -650,22 +652,30 @@ export function createMeasure(json: any): Measure | BaseMeasure {
     );
   } else if (MetadataTypes.isMeasureTemplate(json)) {
     if (att === undefined) {
-      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAttributeDimExpression');
+      throw new TranslatableError(
+        'errors.measure.dimensionalBaseMeasure.noAttributeDimExpression',
+        { measureName: name },
+      );
     }
 
     return new DimensionalMeasureTemplate(name, att, format, desc, sort);
   } else if (MetadataTypes.isBaseMeasure(json)) {
     if (att === undefined) {
-      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAttributeDimExpression');
+      throw new TranslatableError(
+        'errors.measure.dimensionalBaseMeasure.noAttributeDimExpression',
+        { measureName: name },
+      );
     }
 
     const agg = json.agg || json.aggregation;
     if (!agg) {
-      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAggAggregation');
+      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAggAggregation', {
+        measureName: name,
+      });
     }
 
     return new DimensionalBaseMeasure(name, att, agg, format, desc, sort);
   }
 
-  throw new TranslatableError('errors.measure.unsupportedType');
+  throw new TranslatableError('errors.measure.unsupportedType', { measureName: name });
 }
