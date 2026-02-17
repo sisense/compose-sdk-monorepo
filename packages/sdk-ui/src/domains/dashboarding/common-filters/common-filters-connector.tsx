@@ -4,11 +4,11 @@ import partition from 'lodash-es/partition';
 import merge from 'ts-deepmerge';
 
 import { PivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { mergeFilters } from '@/domains/widgets/components/widget-by-id/utils';
 import { WidgetTypeInternal } from '@/domains/widgets/widget-model/types';
 import { MenuIds } from '@/infra/contexts/menu-provider/menu-ids';
 import { OpenMenuFn } from '@/infra/contexts/menu-provider/types';
-import { ChartWidgetProps } from '@/props';
 import { clearMembersFilter, isIncludeAllFilter, isSameAttribute } from '@/shared/utils/filters';
 import { ChartDataOptions, DataPoint, RenderToolbarHandler } from '@/types';
 

@@ -8,7 +8,7 @@ import {
 } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep.js';
 
-import { WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { ChartType, WidgetStyleOptions } from '@/types.js';
 
 import { isEmptyQueryModel } from '../common/utils.js';

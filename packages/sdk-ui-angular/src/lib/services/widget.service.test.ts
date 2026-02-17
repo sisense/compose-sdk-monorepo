@@ -12,10 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Mock, Mocked } from 'vitest';
 
 import { type WidgetProps } from '../components/widgets/widget.component';
-import {
-  translateFromPreactWidgetProps,
-  translateToPreactWidgetProps,
-} from '../helpers/widget-props-preact-translator';
+import { toPreactWidgetProps, toWidgetProps } from '../helpers/widget-props-preact-translator';
 import { type WidgetModel } from '../sdk-ui-core-exports';
 import { SisenseContextService } from './sisense-context.service';
 import { ThemeService } from './theme.service';
@@ -40,8 +37,8 @@ vi.mock('@sisense/sdk-ui-preact', async (importOriginal) => {
 });
 
 vi.mock('../helpers/widget-props-preact-translator', () => ({
-  translateToPreactWidgetProps: vi.fn((props) => props),
-  translateFromPreactWidgetProps: vi.fn((props) => props),
+  toPreactWidgetProps: vi.fn((props) => props),
+  toWidgetProps: vi.fn((props) => props),
 }));
 
 vi.mock('../component-wrapper-helpers', () => ({
@@ -51,8 +48,8 @@ vi.mock('../component-wrapper-helpers', () => ({
 
 const getWidgetModelMock = getWidgetModel as Mock<typeof getWidgetModel>;
 const MockHookAdapter = vi.mocked(HookAdapter);
-const translateToPreactMock = vi.mocked(translateToPreactWidgetProps);
-const translateFromPreactMock = vi.mocked(translateFromPreactWidgetProps);
+const toPreactWidgetPropsMock = vi.mocked(toPreactWidgetProps);
+const toWidgetPropsMock = vi.mocked(toWidgetProps);
 
 describe('WidgetService', () => {
   let sisenseContextService: Mocked<SisenseContextService>;
@@ -134,8 +131,8 @@ describe('WidgetService', () => {
           } as any),
       );
 
-      translateToPreactMock.mockReturnValue(mockWidgetProps);
-      translateFromPreactMock.mockReturnValue(mockWidgetProps);
+      toPreactWidgetPropsMock.mockReturnValue(mockWidgetProps);
+      toWidgetPropsMock.mockReturnValue(mockWidgetProps);
 
       const widgetService = new WidgetService(sisenseContextService, themeService);
       const result = widgetService.createJtdWidget(mockWidgetProps, mockJtdConfig);
@@ -164,12 +161,12 @@ describe('WidgetService', () => {
           } as any),
       );
 
-      translateToPreactMock.mockReturnValue(mockPreactProps as any);
+      toPreactWidgetPropsMock.mockReturnValue(mockPreactProps);
 
       const widgetService = new WidgetService(sisenseContextService, themeService);
       widgetService.createJtdWidget(mockWidgetProps, mockJtdConfig);
 
-      expect(translateToPreactMock).toHaveBeenCalledWith(mockWidgetProps);
+      expect(toPreactWidgetPropsMock).toHaveBeenCalledWith(mockWidgetProps);
       expect(mockRun).toHaveBeenCalledWith(mockPreactProps, mockJtdConfig);
     });
 
@@ -183,7 +180,7 @@ describe('WidgetService', () => {
         ...mockWidgetProps,
         dataPointClick: vi.fn(),
         dataPointContextMenu: vi.fn(),
-      };
+      } as WidgetProps;
 
       let subscribeCallback: ((props: any) => void) | null = null;
 
@@ -206,8 +203,8 @@ describe('WidgetService', () => {
           } as any),
       );
 
-      translateToPreactMock.mockReturnValue(mockWidgetProps as any);
-      translateFromPreactMock.mockReturnValue(enhancedAngularProps as any);
+      toPreactWidgetPropsMock.mockReturnValue(mockWidgetProps);
+      toWidgetPropsMock.mockReturnValue(enhancedAngularProps);
 
       const widgetService = new WidgetService(sisenseContextService, themeService);
       const result = widgetService.createJtdWidget(mockWidgetProps, mockJtdConfig);
@@ -219,7 +216,7 @@ describe('WidgetService', () => {
       await new Promise((resolve) => setTimeout(resolve, 10));
 
       expect(result.widget$.value).toEqual(enhancedAngularProps);
-      expect(translateFromPreactMock).toHaveBeenCalledWith(enhancedPreactProps);
+      expect(toWidgetPropsMock).toHaveBeenCalledWith(enhancedPreactProps);
     });
 
     it('should handle null enhanced props from hook adapter', async () => {
@@ -243,7 +240,7 @@ describe('WidgetService', () => {
           } as any),
       );
 
-      translateToPreactMock.mockReturnValue(mockWidgetProps as any);
+      toPreactWidgetPropsMock.mockReturnValue(mockWidgetProps);
 
       const widgetService = new WidgetService(sisenseContextService, themeService);
       const result = widgetService.createJtdWidget(mockWidgetProps, mockJtdConfig);
@@ -263,7 +260,7 @@ describe('WidgetService', () => {
           } as any),
       );
 
-      translateToPreactMock.mockReturnValue(mockWidgetProps as any);
+      toPreactWidgetPropsMock.mockReturnValue(mockWidgetProps);
 
       const widgetService = new WidgetService(sisenseContextService, themeService);
       const result = widgetService.createJtdWidget(mockWidgetProps, mockJtdConfig);
@@ -285,7 +282,7 @@ describe('WidgetService', () => {
           } as any),
       );
 
-      translateToPreactMock.mockReturnValue(mockWidgetProps as any);
+      toPreactWidgetPropsMock.mockReturnValue(mockWidgetProps);
 
       const widgetService = new WidgetService(sisenseContextService, themeService);
       const result = widgetService.createJtdWidget(mockWidgetProps, mockJtdConfig);

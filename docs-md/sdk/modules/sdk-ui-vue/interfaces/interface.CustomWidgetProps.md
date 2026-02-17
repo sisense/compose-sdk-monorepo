@@ -81,3 +81,27 @@ Style options for the custom widget.
 > **title**?: `string`
 
 Title of the widget
+
+### Callbacks
+
+#### onDataPointClick
+
+> **onDataPointClick**?: [`CustomWidgetDataPointEventHandler`](../../sdk-ui/type-aliases/type-alias.CustomWidgetDataPointEventHandler.md)\< [`AbstractDataPointWithEntries`](../../sdk-ui/type-aliases/type-alias.AbstractDataPointWithEntries.md) \>
+
+Click handler callback for a data point
+
+***
+
+#### onDataPointContextMenu
+
+> **onDataPointContextMenu**?: [`CustomWidgetDataPointContextMenuHandler`](../../sdk-ui/type-aliases/type-alias.CustomWidgetDataPointContextMenuHandler.md)\< [`AbstractDataPointWithEntries`](../../sdk-ui/type-aliases/type-alias.AbstractDataPointWithEntries.md) \>
+
+Context menu handler callback for a data point
+
+***
+
+#### onDataPointsSelected
+
+> **onDataPointsSelected**?: [`CustomWidgetDataPointsEventHandler`](../../sdk-ui/type-aliases/type-alias.CustomWidgetDataPointsEventHandler.md)\< [`AbstractDataPointWithEntries`](../../sdk-ui/type-aliases/type-alias.AbstractDataPointWithEntries.md) \>
+
+Handler callback for selection of multiple data points

@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
-import { WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 import * as DM from '../../../../__test-helpers__/sample-ecommerce.js';
 import { EditableLayout, EditableLayoutProps } from './editable-layout.js';

@@ -15,6 +15,12 @@ export type UnsupportedFilterTileProps = {
   onDelete?: () => void;
   /** Filter edit callback */
   onEdit?: () => void;
+  /**
+   * Render header title
+   *
+   * @internal
+   */
+  renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
 };
 
 /**
@@ -27,11 +33,13 @@ export const UnsupportedFilterTile = ({
   design,
   onDelete,
   onEdit,
+  renderHeaderTitle,
 }: UnsupportedFilterTileProps) => {
   const { t } = useTranslation();
   return (
     <FilterTileContainer
       title={filter.attribute.title ?? ''}
+      renderHeaderTitle={renderHeaderTitle}
       renderContent={() => (
         <FilterContentDisplay>{t('unsupportedFilterMessage')}</FilterContentDisplay>
       )}

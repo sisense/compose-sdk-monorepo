@@ -6,7 +6,6 @@ import { PivotTable } from '@/domains/visualizations/components/pivot-table';
 import { DataOptionLocation, DrilldownSelection } from '@/index';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
-import { PivotTableWidgetProps } from '@/props';
 import {
   DynamicSizeContainer,
   getWidgetDefaultSize,
@@ -14,6 +13,7 @@ import {
 
 import { DEFAULT_WIDGET_HEADER_HEIGHT } from '../../constants';
 import { WidgetContainer } from '../../shared/widget-container';
+import { PivotTableWidgetProps } from './types';
 import { useWithPivotTableWidgetDrilldown } from './use-with-pivot-table-widget-drilldown';
 
 const MIN_PIVOT_HEIGHT = 100;
@@ -108,6 +108,7 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     >
       <WidgetContainer
         {...props}
+        headerConfig={props.config?.header}
         topSlot={
           <>
             {props.topSlot}

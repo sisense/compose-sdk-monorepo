@@ -43,6 +43,13 @@ export type CascadingLevelFilterTileProps = {
 
   /** Whether the filter is the last in the list */
   isLast?: boolean;
+
+  /**
+   * Render header title
+   *
+   * @internal
+   */
+  renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
 };
 
 const cascadingLevelTileDesign: CompleteFilterTileDesignOptions = {
@@ -73,6 +80,7 @@ export const CascadingLevelFilterTile = ({
   onChange,
   isLast,
   onEdit,
+  renderHeaderTitle,
 }: CascadingLevelFilterTileProps) => {
   const { themeSettings } = useThemeContext();
   const { backgroundColor: bgColor } = themeSettings.general;
@@ -88,6 +96,7 @@ export const CascadingLevelFilterTile = ({
     onUpdate: onChange,
     onEdit,
     tileDesignOptions: cascadingLevelTileDesign,
+    renderHeaderTitle,
   };
 
   const filterTile = isMembersFilter(filter) ? (

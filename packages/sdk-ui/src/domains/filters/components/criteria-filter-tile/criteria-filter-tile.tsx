@@ -43,6 +43,13 @@ export interface CriteriaFilterTileProps {
    * @internal
    */
   tileDesignOptions?: FilterTileDesignOptions;
+
+  /**
+   * Render header title
+   *
+   * @internal
+   */
+  renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
 }
 
 /**
@@ -81,6 +88,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
       onEdit,
       measures,
       tileDesignOptions,
+      renderHeaderTitle,
     } = props;
 
     const { filter, updateFilter } = useSynchronizedFilter(filterFromProps, updateFilterFromProps);
@@ -125,6 +133,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
     return (
       <FilterTileContainer
         title={title}
+        renderHeaderTitle={renderHeaderTitle}
         renderContent={(collapsed) => {
           return collapsed && isVertical(arrangement) ? (
             <CriteriaFilterDisplay

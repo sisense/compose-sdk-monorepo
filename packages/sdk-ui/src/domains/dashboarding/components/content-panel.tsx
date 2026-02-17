@@ -10,9 +10,9 @@ import {
   withOptionallyDisabledAutoHeight,
 } from '@/domains/dashboarding/utils';
 import { Widget } from '@/domains/widgets/components/widget';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import styled from '@/infra/styled';
-import { WidgetProps } from '@/props';
 
 const SMALL_WIDTH = '600px';
 const MEDIUM_WIDTH = '900px';

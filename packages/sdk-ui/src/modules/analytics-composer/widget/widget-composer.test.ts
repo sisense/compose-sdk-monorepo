@@ -1,8 +1,9 @@
 /* eslint-disable vitest/expect-expect */
 import { JaqlDataSourceForDto } from '@sisense/sdk-data';
 
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { isChartWidgetProps } from '@/domains/widgets/components/widget-by-id/utils';
-import { ChartWidgetProps, WidgetDto, widgetModelTranslator } from '@/index';
+import { WidgetDto, widgetModelTranslator } from '@/index';
 
 import { commonDataSources } from '../__mocks__/common-datasources';
 import {

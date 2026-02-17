@@ -25,12 +25,12 @@ import {
   isPivotTableWidgetProps,
   isTextWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { OpenMenuFn } from '@/infra/contexts/menu-provider/types.js';
 import { useModal } from '@/infra/contexts/modal-provider/use-modal';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
-import { WidgetProps } from '@/props.js';
 
 /**
  * Shared function to apply JTD functionality to a widget.

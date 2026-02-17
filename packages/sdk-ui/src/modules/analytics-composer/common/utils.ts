@@ -3,8 +3,9 @@ import {
   ALL_CHART_TYPES,
   DynamicChartType,
 } from '@/domains/visualizations/core/chart-options-processor/translations/types.js';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
+import { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
 import { TranslatableError } from '@/infra/translation/translatable-error';
-import { ChartWidgetProps, PivotTableWidgetProps } from '@/props';
 
 import { ExpandedQueryModel, SimpleQueryModel } from '../types.js';
 

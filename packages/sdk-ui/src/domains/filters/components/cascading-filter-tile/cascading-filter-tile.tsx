@@ -30,6 +30,12 @@ export interface CascadingFilterTileProps {
   onDelete?: () => void;
   /** Filter edit callback */
   onEdit?: (levelIndex: number) => void;
+  /**
+   * Render header title (first cascading level filter only)
+   *
+   * @internal
+   */
+  renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
 }
 
 /**
@@ -49,6 +55,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
       onDelete,
       dataSource,
       onEdit,
+      renderHeaderTitle,
     } = props;
 
     const { filter, updateFilter } = useSynchronizedFilter<CascadingFilter>(
@@ -102,6 +109,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
                 }}
                 isLast={index === levelFilters.length - 1}
                 onEdit={onEdit ? () => onEdit?.(index) : undefined}
+                renderHeaderTitle={index === 0 ? renderHeaderTitle : undefined}
               />
             );
           });

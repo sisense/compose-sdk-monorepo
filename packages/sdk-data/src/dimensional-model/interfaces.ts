@@ -738,8 +738,20 @@ export type FilterRelationsModelCascadeNode = {
   levels: FilterRelationsModelIdNode[];
 };
 
-/** Sorting direction, either in Ascending order, Descending order, or None */
+/**
+ * Sorting direction, either in Ascending order, Descending order, or None
+ */
 export type SortDirection = 'sortAsc' | 'sortDesc' | 'sortNone';
+
+/**
+ * @internal
+ */
+export function isSortDirection(sortDirection: unknown): sortDirection is SortDirection {
+  const SORT_DIRECTIONS: readonly SortDirection[] = ['sortAsc', 'sortDesc', 'sortNone'] as const;
+  return (
+    typeof sortDirection === 'string' && SORT_DIRECTIONS.includes(sortDirection as SortDirection)
+  );
+}
 
 /**
  * Sorting configuration for pivot "rows".

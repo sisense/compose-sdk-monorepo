@@ -13,14 +13,16 @@ import { useGetDashboardModelInternal } from '@/domains/dashboarding/dashboard-m
 import { DashboardProps } from '@/domains/dashboarding/types.js';
 import { useComposedDashboardInternal } from '@/domains/dashboarding/use-composed-dashboard.js';
 import { useDashboardThemeInternal } from '@/domains/dashboarding/use-dashboard-theme.js';
-import { Widget } from '@/domains/widgets/components/widget.js';
+import { Widget } from '@/domains/widgets/components/widget';
 import { ThemeProvider } from '@/infra/contexts/theme-provider/index.js';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component.js';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
-import { WidgetByIdProps, WidgetProps } from '@/props.js';
+import { WidgetByIdProps } from '@/props.js';
 import { LoadingOverlay } from '@/shared/components/loading-overlay.js';
 import { FiltersMergeStrategy, mergeFiltersByStrategy } from '@/shared/utils/filter-relations.js';
 import { DrilldownOptions, PivotTableDrilldownOptions } from '@/types.js';
+
+import { WidgetProps } from '../widget/types';
 
 /**
  * The WidgetById component, which is a thin wrapper on the {@link ChartWidget} component,

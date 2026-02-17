@@ -259,6 +259,24 @@ export function convertSortDirectionToSort(sortDirection: SortDirection): Sort {
 }
 
 /**
+ * Converts Sort enum to SortDirection string.
+ *
+ * @param sort - Sort enum value
+ * @returns SortDirection string
+ * @internal
+ */
+export function convertSortToSortDirection(sort: Sort): SortDirection {
+  switch (sort) {
+    case Sort.Ascending:
+      return 'sortAsc';
+    case Sort.Descending:
+      return 'sortDesc';
+    default:
+      return 'sortNone';
+  }
+}
+
+/**
  * Creates a filter from a JAQL object.
  *
  * @param jaql - The filter JAQL object.

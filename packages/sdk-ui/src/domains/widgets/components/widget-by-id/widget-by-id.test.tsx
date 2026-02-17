@@ -8,17 +8,17 @@ import { mockToken, mockUrl, server } from '@/__mocks__/msw.js';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { DashboardDto } from '@/infra/api/types/dashboard-dto.js';
 import { SisenseContextProvider } from '@/infra/contexts/sisense-context/sisense-context-provider.js';
-import type { WidgetProps } from '@/props';
 
+import type { WidgetProps } from '../widget/types';
 import { WidgetById } from './widget-by-id.js';
 
 // Create a spy to capture Widget props
 const widgetSpy = vi.fn();
 
 // Mock the Widget component to spy on props while allowing actual rendering
-vi.mock('@/domains/widgets/components/widget.js', async () => {
-  const actual = await vi.importActual<typeof import('@/domains/widgets/components/widget.js')>(
-    '@/domains/widgets/components/widget.js',
+vi.mock('@/domains/widgets/components/widget', async () => {
+  const actual = await vi.importActual<typeof import('@/domains/widgets/components/widget')>(
+    '@/domains/widgets/components/widget',
   );
   return {
     Widget: vi.fn((props: WidgetProps) => {

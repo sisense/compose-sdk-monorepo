@@ -8,6 +8,7 @@ import { setup } from '@/__test-helpers__';
 import { AiTestWrapper } from '../__mocks__/index.js';
 import MOCK_JAQL_RESPONSE from '../__mocks__/jaql-response.js';
 import MOCK_NLQ_RESPONSE from '../__mocks__/nlq-response.js';
+import { LEGACY_NARRATION_ENDPOINT, UNIFIED_NARRATION_ENDPOINT } from '../api/narration-endpoints';
 import { GetNlgInsightsResponse } from '../api/types.js';
 import NlqMessageGroup from './nlq-message-group.js';
 
@@ -39,7 +40,8 @@ const mockJaqlApi = () => {
 
 const mockNlgApi = (text: string) => {
   server.use(
-    http.post('*/api/v2/ai/nlg/queryResult', () =>
+    http.post(`*/${UNIFIED_NARRATION_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
+    http.post(`*/${LEGACY_NARRATION_ENDPOINT}`, () =>
       HttpResponse.json<GetNlgInsightsResponse>({
         responseType: 'Text',
         data: {

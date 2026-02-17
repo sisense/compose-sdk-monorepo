@@ -9,10 +9,10 @@ import { HorizontalCollapse } from '@/domains/dashboarding/components/horizontal
 import { DashboardContainerProps } from '@/domains/dashboarding/types';
 import { getDefaultWidgetsPanelLayout, getDividerStyle } from '@/domains/dashboarding/utils';
 import { FiltersPanel } from '@/domains/filters';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { ThemeProvider, useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
 import styled from '@/infra/styled';
-import { WidgetProps } from '@/props';
 import { getDataSourceTitle } from '@/shared/utils/data-sources-utils';
 
 const DashboardWrapper = styled.div<Themable>`

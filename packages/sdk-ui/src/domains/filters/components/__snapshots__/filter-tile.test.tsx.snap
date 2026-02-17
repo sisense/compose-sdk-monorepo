@@ -35,12 +35,16 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
             />
           </svg>
         </button>
-        <span
-          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-          style="color: rgb(91, 99, 114); flex-grow: 1;"
+        <div
+          style="flex-grow: 1;"
         >
-          Test Revenue
-        </span>
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Test Revenue
+          </span>
+        </div>
       </header>
       <main
         style="color: rgb(91, 99, 114); position: relative;"
@@ -116,12 +120,16 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
             />
           </svg>
         </button>
-        <span
-          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-          style="color: rgb(91, 99, 114); flex-grow: 1;"
+        <div
+          style="flex-grow: 1;"
         >
-          Test Revenue
-        </span>
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Test Revenue
+          </span>
+        </div>
       </header>
       <main
         style="color: rgb(91, 99, 114); position: relative;"
@@ -197,12 +205,16 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
             />
           </svg>
         </button>
-        <span
-          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-          style="color: rgb(91, 99, 114); flex-grow: 1;"
+        <div
+          style="flex-grow: 1;"
         >
-          Test Revenue
-        </span>
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Test Revenue
+          </span>
+        </div>
       </header>
       <main
         style="color: rgb(91, 99, 114); position: relative;"
@@ -256,12 +268,16 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
         class="css-7gwy1f"
         style="color: rgb(91, 99, 114);"
       >
-        <span
-          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-          style="color: rgb(91, 99, 114); flex-grow: 1;"
+        <div
+          style="flex-grow: 1;"
         >
-          Test Revenue
-        </span>
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Test Revenue
+          </span>
+        </div>
       </header>
       <main
         style="color: rgb(91, 99, 114); position: relative;"
@@ -315,12 +331,16 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
         class="css-7gwy1f"
         style="color: rgb(91, 99, 114);"
       >
-        <span
-          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-          style="color: rgb(91, 99, 114); flex-grow: 1;"
+        <div
+          style="flex-grow: 1;"
         >
-          Unsupported Filter
-        </span>
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Unsupported Filter
+          </span>
+        </div>
       </header>
       <main
         style="color: rgb(91, 99, 114); position: relative;"
@@ -396,12 +416,16 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
             />
           </svg>
         </button>
-        <span
-          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-          style="color: rgb(91, 99, 114); flex-grow: 1;"
+        <div
+          style="flex-grow: 1;"
         >
-          Years
-        </span>
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Years
+          </span>
+        </div>
       </header>
       <main
         style="color: rgb(91, 99, 114); position: relative;"
@@ -477,12 +501,16 @@ exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
             />
           </g>
         </svg>
-        <span
-          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-          style="color: rgb(91, 99, 114); flex-grow: 1;"
+        <div
+          style="flex-grow: 1;"
         >
-          Test Revenue
-        </span>
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Test Revenue
+          </span>
+        </div>
       </header>
       <main
         style="color: rgb(91, 99, 114); position: relative;"
@@ -539,12 +567,16 @@ exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
             />
           </g>
         </svg>
-        <span
-          class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-          style="color: rgb(91, 99, 114); flex-grow: 1;"
+        <div
+          style="flex-grow: 1;"
         >
-          Years
-        </span>
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Years
+          </span>
+        </div>
       </header>
       <main
         style="color: rgb(91, 99, 114); position: relative;"

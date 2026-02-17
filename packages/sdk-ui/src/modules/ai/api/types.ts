@@ -1,7 +1,7 @@
 import { JaqlQueryPayload } from '@sisense/sdk-query-client';
 
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { ExpandedQueryModel } from '@/modules/analytics-composer';
-import { WidgetProps } from '@/props';
 
 export interface ChatContext {
   title: string;

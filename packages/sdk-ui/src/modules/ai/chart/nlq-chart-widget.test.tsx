@@ -8,6 +8,7 @@ import { NlqChartWidget } from '@/modules/ai';
 import MOCK_NLQ_RESPONSE from '@/modules/ai/__mocks__/nlq-response';
 
 import { AiTestWrapper } from '../__mocks__';
+import { LEGACY_NARRATION_ENDPOINT, UNIFIED_NARRATION_ENDPOINT } from '../api/narration-endpoints';
 import { GetNlgInsightsResponse, type NlqResponseData } from '../api/types';
 
 vi.mock(
@@ -34,7 +35,8 @@ const mockNlqResponseText = 'nlg response text';
 describe('NlqChartWidget', () => {
   beforeEach(() => {
     server.use(
-      http.post('*/api/v2/ai/nlg/queryResult', () =>
+      http.post(`*/${UNIFIED_NARRATION_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
+      http.post(`*/${LEGACY_NARRATION_ENDPOINT}`, () =>
         HttpResponse.json<GetNlgInsightsResponse>({
           responseType: 'Text',
           data: {
@@ -62,7 +64,7 @@ describe('NlqChartWidget', () => {
   });
 
   it('renders loading icon, then default text if API call returns empty response', async () => {
-    server.use(http.post('*/api/v2/ai/nlg/queryResult', () => HttpResponse.json({})));
+    server.use(http.post(`*/${LEGACY_NARRATION_ENDPOINT}`, () => HttpResponse.json({})));
 
     setup(
       <AiTestWrapper>
@@ -76,7 +78,10 @@ describe('NlqChartWidget', () => {
   });
 
   it('renders loading icon, then error text if API call fails', async () => {
-    server.use(http.post('*/api/v2/ai/nlg/queryResult', () => HttpResponse.error()));
+    server.use(
+      http.post(`*/${UNIFIED_NARRATION_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
+      http.post(`*/${LEGACY_NARRATION_ENDPOINT}`, () => HttpResponse.error()),
+    );
 
     setup(
       <AiTestWrapper>

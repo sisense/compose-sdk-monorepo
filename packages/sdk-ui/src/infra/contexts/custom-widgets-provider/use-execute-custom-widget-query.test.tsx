@@ -77,7 +77,6 @@ describe('useExecuteCustomWidgetQuery', () => {
         dataOptions,
         filters: [],
         highlights: [],
-        styleOptions: {},
       }),
     );
 
@@ -122,7 +121,6 @@ describe('useExecuteCustomWidgetQuery', () => {
         dataOptions,
         filters: [],
         highlights: [],
-        styleOptions: {},
       }),
     );
 

@@ -1,9 +1,9 @@
 import { Attribute, type Filter, Measure } from '@sisense/sdk-data';
 
 import { DashboardConfig, DashboardProps } from '@/domains/dashboarding/types';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { OpenMenuFn } from '@/infra/contexts/menu-provider/types.js';
 import { OpenModalFn } from '@/infra/contexts/modal-provider/modal-context';
-import { WidgetProps } from '@/props.js';
 import { DataPoint } from '@/types';
 
 /**

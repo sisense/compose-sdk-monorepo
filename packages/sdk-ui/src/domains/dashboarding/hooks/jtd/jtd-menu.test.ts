@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { WidgetProps } from '@/props.js';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { DataPoint } from '@/types';
 
 // Import mocked functions

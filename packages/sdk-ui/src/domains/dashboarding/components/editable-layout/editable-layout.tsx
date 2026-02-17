@@ -1,8 +1,8 @@
-import { MouseEvent } from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DndContext, DragEndEvent, pointerWithin } from '@dnd-kit/core';
+import flow from 'lodash-es/flow';
 import isNumber from 'lodash-es/isNumber';
 import isUndefined from 'lodash-es/isUndefined';
 
@@ -10,18 +10,13 @@ import { WIDGET_HEADER_HEIGHT } from '@/domains/dashboarding/components/editable
 import { WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
 import { withOptionallyDisabledAutoHeight } from '@/domains/dashboarding/utils';
 import { Widget } from '@/domains/widgets/components/widget';
-import { useMenu } from '@/infra/contexts/menu-provider/hooks/use-menu';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import { withHeaderMenuItem } from '@/domains/widgets/helpers/header-menu-utils';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import styled from '@/infra/styled';
-import { WidgetProps } from '@/props';
-import { MenuButton } from '@/shared/components/menu/menu-button';
 import { useSyncedState } from '@/shared/hooks/use-synced-state';
-import {
-  composeTextWidgetToolbarHandlers,
-  composeTitleHandlers,
-  composeToolbarHandlers,
-} from '@/shared/utils/combine-handlers';
-import { MenuItemSection } from '@/types';
+import { composeTitleHandlers } from '@/shared/utils/combine-handlers';
+import type { RenderTitleHandler } from '@/types';
 
 import { CellDropOverlay } from './components/cell-drop-overlay';
 import { DraggableWidgetWrapper } from './components/draggable-widget-wrapper';
@@ -38,6 +33,26 @@ import {
   updateRowHeight,
 } from './helpers';
 import { getDraggingWidgetId, isEditableLayoutDragData, isEditableLayoutDropData } from './utils';
+
+/**
+ * Adds the drag-handle renderTitle handler before the widget's existing one.
+ * Order matters: drag handle runs first so the title area is wrapped for DnD.
+ * @param withDragHandle - The renderTitle handler to add before the widget's existing one.
+ * @returns A function that adds the drag-handle renderTitle handler before the widget's existing one.
+ */
+const withDragHandleInTitle =
+  (withDragHandle: RenderTitleHandler) =>
+  (props: Readonly<WidgetProps>): WidgetProps => {
+    const existingHeader = props.styleOptions?.header;
+    const styleOptions = {
+      ...props.styleOptions,
+      header: {
+        ...(existingHeader ?? {}),
+        renderTitle: composeTitleHandlers(withDragHandle, existingHeader?.renderTitle),
+      },
+    };
+    return { ...props, styleOptions } as WidgetProps;
+  };
 
 const Wrapper = styled.div`
   overflow: hidden;
@@ -112,7 +127,6 @@ export const EditableLayout = ({
   config,
 }: EditableLayoutProps) => {
   const { themeSettings } = useThemeContext();
-  const { openMenu } = useMenu();
   const { t } = useTranslation();
   const { showDragHandleIcon = true } = useMemo(() => config ?? {}, [config]);
 
@@ -193,60 +207,6 @@ export const EditableLayout = ({
       setInternalLayout(changedLayout);
     },
     [internalLayout, setInternalLayout, onLayoutChange],
-  );
-
-  const addWidgetContextMenu = useCallback(
-    (columnIndex: number, rowIndex: number, widgetId: string) => {
-      return (onRefresh: () => void, defaultToolbar: JSX.Element) => {
-        const handleMenuClick = (event: MouseEvent<HTMLButtonElement>) => {
-          event.stopPropagation();
-
-          const menuItems: MenuItemSection[] = [
-            {
-              items: [
-                {
-                  caption: t('widgetHeader.menu.deleteWidget'),
-                  onClick: () => onCellDelete(columnIndex, rowIndex, widgetId),
-                },
-                {
-                  caption: t('widgetHeader.menu.distributeEqualWidth'),
-                  onClick: () => onCellDistributeEqualWidth(columnIndex, rowIndex),
-                },
-              ],
-            },
-          ];
-
-          openMenu({
-            position: {
-              left: event.clientX,
-              top: event.clientY,
-            },
-            alignment: {
-              horizontal: 'right',
-            },
-            itemSections: menuItems,
-          });
-        };
-
-        return (
-          <div className="csdk-flex csdk-items-center">
-            {defaultToolbar}
-            <MenuButton
-              color={themeSettings.widget.header.titleTextColor}
-              onClick={handleMenuClick}
-              ariaLabel={'widget menu'}
-            />
-          </div>
-        );
-      };
-    },
-    [
-      onCellDelete,
-      onCellDistributeEqualWidth,
-      openMenu,
-      themeSettings.widget.header.titleTextColor,
-      t,
-    ],
   );
 
   return (
@@ -336,56 +296,24 @@ export const EditableLayout = ({
                                         isDragging && draggingWidgetId !== subcell.widgetId
                                       }
                                     >
-                                      {widgetProps.widgetType === 'text' ? (
-                                        <Widget
-                                          {...{
-                                            ...widgetProps,
-                                            styleOptions: {
-                                              ...widgetProps?.styleOptions,
-                                              header: {
-                                                ...widgetProps?.styleOptions?.header,
-                                                renderTitle: composeTitleHandlers(
-                                                  withDragHandle,
-                                                  widgetProps?.styleOptions?.header?.renderTitle,
-                                                ),
-                                                renderToolbar: composeTextWidgetToolbarHandlers(
-                                                  widgetProps?.styleOptions?.header?.renderToolbar,
-                                                  (defaultToolbar) =>
-                                                    addWidgetContextMenu(
-                                                      columnIndex,
-                                                      rowIndex,
-                                                      subcell.widgetId,
-                                                    )(() => {}, <>{defaultToolbar}</>),
-                                                ),
-                                              },
-                                            },
-                                          }}
-                                        />
-                                      ) : (
-                                        <Widget
-                                          {...{
-                                            ...widgetProps,
-                                            styleOptions: {
-                                              ...widgetProps?.styleOptions,
-                                              header: {
-                                                ...widgetProps?.styleOptions?.header,
-                                                renderTitle: composeTitleHandlers(
-                                                  withDragHandle,
-                                                  widgetProps?.styleOptions?.header?.renderTitle,
-                                                ),
-                                                renderToolbar: composeToolbarHandlers(
-                                                  widgetProps?.styleOptions?.header?.renderToolbar,
-                                                  addWidgetContextMenu(
-                                                    columnIndex,
-                                                    rowIndex,
-                                                    subcell.widgetId,
-                                                  ),
-                                                ),
-                                              },
-                                            },
-                                          }}
-                                        />
-                                      )}
+                                      {(() => {
+                                        const customizedProps = flow(
+                                          withHeaderMenuItem({
+                                            id: 'editable-layout-delete',
+                                            caption: t('widgetHeader.menu.deleteWidget'),
+                                            onClick: () =>
+                                              onCellDelete(columnIndex, rowIndex, subcell.widgetId),
+                                          }),
+                                          withHeaderMenuItem({
+                                            id: 'editable-layout-distribute',
+                                            caption: t('widgetHeader.menu.distributeEqualWidth'),
+                                            onClick: () =>
+                                              onCellDistributeEqualWidth(columnIndex, rowIndex),
+                                          }),
+                                          withDragHandleInTitle(withDragHandle),
+                                        )(widgetProps);
+                                        return <Widget {...customizedProps} />;
+                                      })()}
                                     </Cell>
                                     {isDragging && draggingWidgetId !== subcell.widgetId && (
                                       <CellDropOverlay

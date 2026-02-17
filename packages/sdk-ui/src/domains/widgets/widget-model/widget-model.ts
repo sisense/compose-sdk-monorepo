@@ -5,13 +5,14 @@ import {
   ChartDataOptions,
   PivotTableDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/types';
-import type { WidgetType } from '@/props';
 import {
   ChartType,
   DrilldownOptions,
   PivotTableDrilldownOptions,
   WidgetStyleOptions,
 } from '@/types';
+
+import type { WidgetType } from '../components/widget/types';
 
 /**
  * Widget data options.

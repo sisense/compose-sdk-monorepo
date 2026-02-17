@@ -23,7 +23,7 @@ import {
   styles,
   template,
 } from '../../component-wrapper-helpers';
-import { translateToPreactDashboardProps } from '../../helpers/dashboard-props-preact-translator';
+import { toPreactDashboardProps } from '../../helpers/dashboard-props-preact-translator';
 import { CustomWidgetsService } from '../../services/custom-widgets.service';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
@@ -202,7 +202,7 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private getPreactComponentProps(): DashboardPropsPreact {
-    return translateToPreactDashboardProps({
+    return toPreactDashboardProps({
       title: this.title,
       layoutOptions: this.layoutOptions,
       config: this.config,

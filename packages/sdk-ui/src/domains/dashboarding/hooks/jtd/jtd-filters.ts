@@ -16,7 +16,7 @@ import {
   startOfPeriod,
 } from '@/domains/visualizations/core/chart-data-processor/data-table-date-period';
 import { isChartWidgetProps } from '@/domains/widgets/components/widget-by-id/utils';
-import { WidgetProps } from '@/props.js';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { DataPoint, DataPointEntry, ScatterDataPoint } from '@/types';
 
 import { JtdConfig } from './jtd-types.js';
@@ -252,7 +252,7 @@ export const normalizeDateForGranularity = (value: string, granularity: string):
  * @internal
  */
 const createFilterFromEntry = (entry: DataPointEntry): Filter | null => {
-  if (!entry.attribute || entry.value === undefined || entry.value === null) {
+  if (!('attribute' in entry) || entry.value === undefined || entry.value === null) {
     return null;
   }
 

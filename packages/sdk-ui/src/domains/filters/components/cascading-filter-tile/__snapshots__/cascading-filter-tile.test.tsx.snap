@@ -52,12 +52,16 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
                       />
                     </g>
                   </svg>
-                  <span
-                    class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-                    style="color: rgb(91, 99, 114); flex-grow: 1;"
+                  <div
+                    style="flex-grow: 1;"
                   >
-                    Gender
-                  </span>
+                    <span
+                      class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+                      style="color: rgb(91, 99, 114); display: inline-block;"
+                    >
+                      Gender
+                    </span>
+                  </div>
                 </header>
                 <main
                   style="color: rgb(91, 99, 114); position: relative;"
@@ -109,12 +113,16 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
                   class="css-evq256"
                   style="color: rgb(91, 99, 114);"
                 >
-                  <span
-                    class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
-                    style="color: rgb(91, 99, 114); flex-grow: 1;"
+                  <div
+                    style="flex-grow: 1;"
                   >
-                    Age Range
-                  </span>
+                    <span
+                      class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+                      style="color: rgb(91, 99, 114); display: inline-block;"
+                    >
+                      Age Range
+                    </span>
+                  </div>
                 </header>
                 <main
                   style="color: rgb(91, 99, 114); position: relative;"

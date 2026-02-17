@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { JumpToDashboardConfig } from '@/domains/dashboarding/hooks/jtd/jtd-types';
-import { WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 import { applyJtdConfig, applyJtdConfigs } from './dashboard-helpers';
 import { DashboardProps } from './types';

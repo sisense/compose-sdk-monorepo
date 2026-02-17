@@ -2,7 +2,9 @@ import { useCallback, useMemo } from 'react';
 
 import { WidgetId, WidgetsPanelColumnLayout } from '@/domains/dashboarding/dashboard-model';
 import { WidgetPanelLayoutManager } from '@/domains/dashboarding/hooks/use-widgets-layout';
-import { CustomWidgetProps, TabberButtonsWidgetProps, WidgetProps } from '@/props';
+import { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import { TabberButtonsWidgetProps } from '@/props';
 import { useSyncedState } from '@/shared/hooks/use-synced-state';
 
 /**

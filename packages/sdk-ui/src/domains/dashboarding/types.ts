@@ -9,7 +9,7 @@ import {
 } from '@/domains/dashboarding/dashboard-model';
 import { TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import { FiltersPanelConfig } from '@/domains/filters/components/filters-panel/types';
-import { WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 export type {
   DashboardStyleOptions,

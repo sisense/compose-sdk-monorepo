@@ -1,5 +1,5 @@
 {
-  "version": "2.20.0",
+  "version": "2.21.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -134,7 +134,8 @@
     "node": "18.16.0"
   },
   "resolutions": {
-    "form-data": "4.0.4"
+    "form-data": "4.0.4",
+    "socket.io-parser": "3.4.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",

@@ -45,7 +45,21 @@ export interface FiltersPanelConfig {
       /**
        * Determines whether the possibility to delete a filter is enabled.
        *
-       * If not specified, the default value is `true`.
+       * If not specified, the default value is `false`.
+       */
+      enabled?: boolean;
+    };
+
+    /**
+     * Configuration for drag and drop reordering filters.
+     *
+     * @internal
+     */
+    reorderFilters?: {
+      /**
+       * Determines whether the possibility to reorder a filter is enabled.
+       *
+       * If not specified, the default value is `false`.
        */
       enabled?: boolean;
     };

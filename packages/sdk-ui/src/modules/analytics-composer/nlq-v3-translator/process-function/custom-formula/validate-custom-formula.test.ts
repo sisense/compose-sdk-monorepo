@@ -238,7 +238,10 @@ describe('formula-validation', () => {
 
       it('should pass for ALL([revenue]) - operator has parentheses', () => {
         const formula = 'ALL([revenue])';
-        const context = { revenue: 'DM.Commerce.Revenue' };
+        // Use a measure so the formula satisfies the aggregative requirement (ALL is not aggregative)
+        const context = {
+          revenue: { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue'] },
+        };
         const result = validateFormulaReferences(formula, context);
 
         expect(result.isValid).toBe(true);
@@ -254,9 +257,7 @@ describe('formula-validation', () => {
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toHaveLength(1);
-        expect(result.errors[0]).toContain(
-          'Formulas with bracket references must contain aggregate function calls',
-        );
+        expect(result.errors[0]).toContain('aggregative function');
       });
 
       it('should fail for [revenue] - [cost] - no function calls', () => {
@@ -266,7 +267,7 @@ describe('formula-validation', () => {
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toHaveLength(1);
-        expect(result.errors[0]).toContain('must contain aggregate function calls');
+        expect(result.errors[0]).toContain('aggregative function');
       });
 
       it('should fail for [field] - single bracket reference without function call', () => {
@@ -276,7 +277,23 @@ describe('formula-validation', () => {
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toHaveLength(1);
-        expect(result.errors[0]).toContain('must contain aggregate function calls');
+        expect(result.errors[0]).toContain('aggregative function');
+      });
+
+      it('should fail when any ref is raw attribute and no aggregative call - mix of measure and raw', () => {
+        const formula = '([totalRevenue] - [cost]) / [totalRevenue]';
+        const context = {
+          totalRevenue: { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue'] },
+          cost: 'DM.Commerce.Cost',
+        };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(false);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toContain('aggregative function');
+        expect(result.errors[0]).toContain('[cost]');
+        expect(result.errors[0]).toContain('raw attributes');
+        expect(result.errors[0]).toContain('aggregative function');
       });
 
       it('should pass for SUM([revenue]) - has function call', () => {
@@ -306,17 +323,62 @@ describe('formula-validation', () => {
         expect(result.errors.filter((e) => e.includes('aggregate function calls'))).toHaveLength(0);
       });
 
-      it('should pass for CustomFunc([revenue]) - custom function call', () => {
+      // Only known Sisense aggregative functions (SUM, AVG, etc.) satisfy the rule; unknown
+      // function names do not count as aggregative.
+      it('should fail for CustomFunc([revenue]) - unknown function is not aggregative', () => {
         const formula = 'CustomFunc([revenue])';
         const context = { revenue: 'DM.Commerce.Revenue' };
         const result = validateFormulaReferences(formula, context);
 
-        expect(result.isValid).toBe(true);
-        expect(result.errors.filter((e) => e.includes('aggregate function calls'))).toHaveLength(0);
+        expect(result.isValid).toBe(false);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toContain('aggregative function');
       });
 
-      it('should pass for CustomFunc1(CustomFunc2([revenue])) - nested custom function calls', () => {
+      it('should fail for CustomFunc1(CustomFunc2([revenue])) - nested unknown functions', () => {
         const formula = 'CustomFunc1(CustomFunc2([revenue]))';
+        const context = { revenue: 'DM.Commerce.Revenue' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(false);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toContain('aggregative function');
+      });
+
+      it('should fail for ABS([revenue]) - non-aggregative function with raw attribute ref', () => {
+        const formula = 'ABS([revenue])';
+        const context = { revenue: 'DM.Commerce.Revenue' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(false);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toContain('ABS is not an aggregative function');
+        expect(result.errors[0]).toContain('[revenue]');
+        expect(result.errors[0]).toContain('raw attributes');
+      });
+
+      it('should fail for IF([x] > 0, 1, 0) - non-aggregative function with raw attribute ref', () => {
+        const formula = 'IF([x] > 0, 1, 0)';
+        const context = { x: 'DM.Some.Attr' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(false);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toContain('aggregative function');
+      });
+
+      it('should fail for ROUND([cost], 2) - non-aggregative function with raw attribute ref', () => {
+        const formula = 'ROUND([cost], 2)';
+        const context = { cost: 'DM.Commerce.Cost' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(false);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toContain('aggregative function');
+      });
+
+      it('should pass for ABS(SUM([revenue])) - aggregative call wraps raw attribute ref', () => {
+        const formula = 'ABS(SUM([revenue]))';
         const context = { revenue: 'DM.Commerce.Revenue' };
         const result = validateFormulaReferences(formula, context);
 

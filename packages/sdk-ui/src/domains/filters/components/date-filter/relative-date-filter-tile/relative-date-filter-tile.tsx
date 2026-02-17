@@ -47,6 +47,13 @@ export interface RelativeDateFilterTileProps {
    * @internal
    */
   tileDesignOptions?: FilterTileDesignOptions;
+
+  /**
+   * Render header title
+   *
+   * @internal
+   */
+  renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
 }
 
 /**
@@ -70,6 +77,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
     onEdit,
     limit,
     tileDesignOptions,
+    renderHeaderTitle,
   } = props;
 
   const { filter, updateFilter } = useSynchronizedFilter<RelativeDateFilterType>(
@@ -81,6 +89,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
   return (
     <FilterTileContainer
       title={title}
+      renderHeaderTitle={renderHeaderTitle}
       renderContent={(collapsed) => {
         return collapsed && isVertical(arrangement) ? (
           <RelativeDateFilterDisplay filter={filter} />

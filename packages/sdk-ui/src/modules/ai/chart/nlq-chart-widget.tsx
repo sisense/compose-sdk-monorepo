@@ -6,13 +6,14 @@ import merge from 'ts-deepmerge';
 
 import { useCommonFilters } from '@/domains/dashboarding/common-filters/use-common-filters';
 import { ChartWidget } from '@/domains/widgets/components/chart-widget';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { isChartWidgetProps } from '@/domains/widgets/components/widget-by-id/utils';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import type { GetNlgInsightsRequest, NlqResponseData } from '@/modules/ai';
 import { ChartInsights } from '@/modules/ai/chart/chart-insights';
 import LoadingDotsIcon from '@/modules/ai/icons/loading-dots-icon';
 import { useGetNlgInsightsInternal } from '@/modules/ai/use-get-nlg-insights';
 import { widgetComposer } from '@/modules/analytics-composer';
-import { ChartWidgetProps, WidgetProps } from '@/props';
 import { getFiltersArray } from '@/shared/utils/filter-relations';
 import { NlqChartWidgetStyleOptions } from '@/types';
 
@@ -35,7 +36,7 @@ export interface NlqChartWidgetProps {
 
   /**
    * A callback that allows to modify data immediately after it has been retrieved.
-   * Can be used to inject modification of queried data.
+   * It can be used to inject modification of queried data.
    */
   onDataReady?: (data: Data) => Data;
 

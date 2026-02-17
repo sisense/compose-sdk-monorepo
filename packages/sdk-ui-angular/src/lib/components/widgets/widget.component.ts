@@ -26,7 +26,7 @@ import {
   styles,
   template,
 } from '../../component-wrapper-helpers';
-import { translateToPreactWidgetProps } from '../../helpers/widget-props-preact-translator';
+import { toPreactWidgetProps } from '../../helpers/widget-props-preact-translator';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import { TextWidgetEventProps, WithoutPreactChartEventProps } from '../../types';
@@ -321,7 +321,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private getPreactComponentProps(): WidgetPropsPreact {
-    return translateToPreactWidgetProps({
+    return toPreactWidgetProps({
       id: this.id,
       widgetType: this.widgetType,
       chartType: this.chartType,

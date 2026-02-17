@@ -134,7 +134,9 @@ describe('translateDimensions', () => {
     });
 
     expect(result.success).toBe(false);
-    expect(getErrors(result)).toContain('Invalid dimensions JSON. Expected an array of strings.');
+    expect(getErrors(result)).toContain(
+      'Invalid dimension item. Expected a string (composeCode) or object with "column" and optional "sortType".',
+    );
   });
 
   it('should return error for array containing object values', () => {
@@ -153,7 +155,9 @@ describe('translateDimensions', () => {
     });
 
     expect(result.success).toBe(false);
-    expect(getErrors(result)).toContain('Invalid dimensions JSON. Expected an array of strings.');
+    expect(getErrors(result)).toContain(
+      'Invalid dimension item. Expected a string (composeCode) or object with "column" and optional "sortType".',
+    );
   });
 
   it('should return error for array containing null values', () => {
@@ -172,7 +176,9 @@ describe('translateDimensions', () => {
     });
 
     expect(result.success).toBe(false);
-    expect(getErrors(result)).toContain('Invalid dimensions JSON. Expected an array of strings.');
+    expect(getErrors(result)).toContain(
+      'Invalid dimension item. Expected a string (composeCode) or object with "column" and optional "sortType".',
+    );
   });
 
   it('should return error for array containing boolean values', () => {
@@ -191,7 +197,9 @@ describe('translateDimensions', () => {
     });
 
     expect(result.success).toBe(false);
-    expect(getErrors(result)).toContain('Invalid dimensions JSON. Expected an array of strings.');
+    expect(getErrors(result)).toContain(
+      'Invalid dimension item. Expected a string (composeCode) or object with "column" and optional "sortType".',
+    );
   });
 
   it('should return error for array containing array values', () => {
@@ -210,6 +218,8 @@ describe('translateDimensions', () => {
     });
 
     expect(result.success).toBe(false);
-    expect(getErrors(result)).toContain('Invalid dimensions JSON. Expected an array of strings.');
+    expect(getErrors(result)).toContain(
+      'Invalid dimension item. Expected a string (composeCode) or object with "column" and optional "sortType".',
+    );
   });
 });

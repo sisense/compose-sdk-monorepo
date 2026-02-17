@@ -1,7 +1,7 @@
 import { filterFactory, MetadataTypes } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
-import { WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 import {
   dimensionToPivotDimId,

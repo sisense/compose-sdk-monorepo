@@ -27,6 +27,7 @@ import { haveSameAttribute } from '@/shared/utils/filters-comparator.js';
 import { clearMembersFilter, isIncludeAllFilter } from '@/shared/utils/filters.js';
 import {
   AreamapDataPoint,
+  AttributeDataPointEntry,
   BoxplotDataPoint,
   CalendarHeatmapChartDataOptions,
   CalendarHeatmapDataPoint,
@@ -36,6 +37,7 @@ import {
   ChartDataPoint,
   DataPoint,
   DataPointEntry,
+  GenericDataOptions,
   MenuItemSection,
   PivotTableDataPoint,
   ScatterChartDataOptions,
@@ -44,6 +46,7 @@ import {
   StyledColumn,
 } from '@/types.js';
 
+import { AbstractDataPointWithEntries } from './types.js';
 import { createCommonFilter, getFilterByAttribute, isEqualMembersFilters } from './utils.js';
 
 export const SELECTION_TITLE_MAXIMUM_ITEMS = 2;
@@ -52,10 +55,6 @@ type DataSelection = {
   attribute: Attribute;
   values: (string | number)[];
   displayValues: string[];
-};
-
-type AbstractDataPointWithEntries = {
-  entries?: Record<string, DataPointEntry | DataPointEntry[]>;
 };
 
 /**
@@ -100,7 +99,9 @@ function getSelectionsFromPoints(
   const selectableEntriesArray = points.flatMap(({ entries = {} }) =>
     selectablePaths
       .flatMap((selectablePath) => extractEntriesFromPath(entries, selectablePath))
-      .filter((entry): entry is DataPointEntry => !!entry.attribute),
+      .filter(
+        (entry): entry is AttributeDataPointEntry => 'attribute' in entry && !!entry.attribute,
+      ),
   );
 
   // Group entries by attribute expression
@@ -108,13 +109,13 @@ function getSelectionsFromPoints(
 
   // Convert grouped entries to DataSelection objects
   return Object.values(groupedEntries)
-    .filter((entries): entries is DataPointEntry[] => {
+    .filter((entries): entries is AttributeDataPointEntry[] => {
       // Ensure we have entries with valid attributes
       return entries.length > 0 && !!entries[0].attribute;
     })
     .map((entries) => {
       // At this point, we know entries[0].attribute exists due to the filter above
-      const attribute = entries[0].attribute!;
+      const attribute = entries[0].attribute;
 
       // Filter out undefined values and get unique values
       const values = uniq(
@@ -211,14 +212,37 @@ function getPivotTableSelections(points: PivotTableDataPoint[]): DataSelection[]
   );
 }
 
+/**
+ * Gets selections from custom widget data points.
+ * Custom widgets can have arbitrary data option keys, so we extract all
+ * non-measure column keys and use them as selectable paths.
+ *
+ * @param points - Array of custom widget data points with entries
+ * @param dataOptions - The GenericDataOptions defining the data structure
+ * @returns Array of data selections
+ */
+function getCustomWidgetSelections(
+  points: AbstractDataPointWithEntries[],
+  dataOptions: GenericDataOptions,
+): DataSelection[] {
+  // Get all keys from dataOptions that contain non-measure columns (attributes)
+  const selectablePaths = Object.entries(dataOptions)
+    .filter(([, columns]) => columns.some((column) => !isMeasureColumn(column)))
+    .map(([key]) => key);
+
+  return getSelectionsFromPoints(points, selectablePaths);
+}
+
 export function getWidgetSelections(
   widgetType: WidgetTypeInternal,
-  dataOptions: ChartDataOptions | PivotTableDataOptions,
-  points: Array<ChartDataPoint | PivotTableDataPoint>,
+  dataOptions: ChartDataOptions | PivotTableDataOptions | GenericDataOptions,
+  points: Array<ChartDataPoint | PivotTableDataPoint | AbstractDataPointWithEntries>,
 ) {
   if (widgetType === 'custom') {
-    // no custom widgets support
-    return [];
+    return getCustomWidgetSelections(
+      points as AbstractDataPointWithEntries[],
+      dataOptions as GenericDataOptions,
+    );
   } else if (widgetType === 'text') {
     // no text support
     return [];
@@ -248,12 +272,12 @@ export function getWidgetSelections(
 
 export function getSelectableWidgetAttributes(
   widgetType: WidgetTypeInternal,
-  dataOptions: ChartDataOptions | PivotTableDataOptions,
+  dataOptions: ChartDataOptions | PivotTableDataOptions | GenericDataOptions,
 ) {
   let targetDataOptions: (Column | StyledColumn)[] = [];
 
   if (widgetType === 'custom') {
-    targetDataOptions = [];
+    targetDataOptions = getAllSelectableColumnsForCustomWidget(dataOptions as GenericDataOptions);
   } else if (widgetType === 'text') {
     targetDataOptions = [];
   } else if (widgetType === 'pivot') {
@@ -282,6 +306,19 @@ export function getSelectableWidgetAttributes(
   }
 
   return targetDataOptions.map(translateColumnToAttribute);
+}
+
+/**
+ * Returns all selectable columns for a custom widget.
+ * @param dataOptions - The data options for the custom widget.
+ * @returns All selectable columns for the custom widget.
+ */
+function getAllSelectableColumnsForCustomWidget(
+  dataOptions: GenericDataOptions,
+): (Column | StyledColumn)[] {
+  return Object.values(dataOptions).flatMap((columns) =>
+    columns.filter((column): column is StyledColumn => !isMeasureColumn(column)),
+  );
 }
 
 /**

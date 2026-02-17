@@ -4,6 +4,7 @@ import { http, HttpResponse } from 'msw';
 import { server } from '@/__mocks__/msw';
 
 import { AiTestWrapper } from './__mocks__/index.js';
+import { LEGACY_NARRATION_ENDPOINT, UNIFIED_NARRATION_ENDPOINT } from './api/narration-endpoints';
 import { GetNlgInsightsResponse } from './api/types.js';
 import { useGetNlgInsights, UseGetNlgInsightsParams } from './use-get-nlg-insights.js';
 
@@ -25,7 +26,10 @@ const renderHookWithWrapper = (params: UseGetNlgInsightsParams) => {
 
 describe('useGetNlgInsights', () => {
   beforeEach(() => {
-    server.use(http.post('*/api/v2/ai/nlg/queryResult', () => HttpResponse.json(mockNlgResponse)));
+    server.use(
+      http.post(`*/${UNIFIED_NARRATION_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
+      http.post(`*/${LEGACY_NARRATION_ENDPOINT}`, () => HttpResponse.json(mockNlgResponse)),
+    );
   });
 
   it('returns data when successful', async () => {
@@ -56,7 +60,10 @@ describe('useGetNlgInsights', () => {
   });
 
   it('returns error when unsuccessful', async () => {
-    server.use(http.post('*/api/v2/ai/nlg/queryResult', () => HttpResponse.error()));
+    server.use(
+      http.post(`*/${UNIFIED_NARRATION_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
+      http.post(`*/${LEGACY_NARRATION_ENDPOINT}`, () => HttpResponse.error()),
+    );
 
     const { result } = renderHookWithWrapper(mockNlgParams);
 

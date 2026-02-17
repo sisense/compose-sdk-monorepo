@@ -3,7 +3,7 @@ import React from 'react';
 import { Filter, filterFactory } from '@sisense/sdk-data';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { WidgetProps } from '@/props.js';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { DataPoint, PivotTableDataPoint } from '@/types';
 
 import * as jtdFilters from './jtd-filters.js';

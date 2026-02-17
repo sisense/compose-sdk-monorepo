@@ -1,25 +1,23 @@
-import { JSONValue, Measure } from '@sisense/sdk-data';
+import { convertSortToSortDirection, JSONArray, JSONValue, Measure, Sort } from '@sisense/sdk-data';
 
 import { NlqTranslationError, NlqTranslationResult } from '../types.js';
 import { parseComposeCodeToFunctionCall } from './parse-compose-code.js';
-import { FunctionCall } from './types.js';
 
 /**
- * Translates CSDK Measure array to NLQ JSON format (FunctionCall array).
+ * Translates CSDK Measure array to NLQ JSON format (FunctionCall or StyledMeasureColumnJSON array).
  *
- * Parses composeCode directly to FunctionCall format. The composeCode contains [[delimiters]]
- * around names that need normalization, which are stripped at the final step in translateQueryToJSON.
+ * When a measure has sort applied, outputs StyledMeasureColumnJSON with column and sortType;
+ * otherwise outputs the parsed FunctionCall. Delimiters are stripped at the final step in translateQueryToJSON.
  *
  * @param measures - Array of CSDK Measure objects
- * @returns NlqTranslationResult<FunctionCall[]> with array of FunctionCall objects or structured errors
+ * @returns NlqTranslationResult<JSONArray> - JSON array output for NLQ measures
  * @internal
  */
-export function translateMeasuresToJSON(measures: Measure[]): NlqTranslationResult<FunctionCall[]> {
-  const results: FunctionCall[] = [];
+export function translateMeasuresToJSON(measures: Measure[]): NlqTranslationResult<JSONArray> {
+  const results: JSONArray = [];
   const errors: NlqTranslationError[] = [];
 
   measures.forEach((measure, index) => {
-    // Helper to safely get JSON representation
     const getInputJson = () =>
       typeof measure.toJSON === 'function' ? measure.toJSON() : (measure as unknown as JSONValue);
 
@@ -34,9 +32,17 @@ export function translateMeasuresToJSON(measures: Measure[]): NlqTranslationResu
     }
 
     try {
-      // Parse composeCode directly - delimiters stripped at end in translateQueryToJSON
       const functionCall = parseComposeCodeToFunctionCall(measure.composeCode);
-      results.push(functionCall);
+      const sort = measure.getSort();
+      if (sort !== undefined && sort !== Sort.None) {
+        const styled: JSONValue = {
+          column: functionCall,
+          sortType: convertSortToSortDirection(sort),
+        };
+        results.push(styled);
+      } else {
+        results.push(functionCall);
+      }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       errors.push({

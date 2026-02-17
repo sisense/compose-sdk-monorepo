@@ -28,6 +28,13 @@ export interface CustomFilterTileProps {
   onEdit?: () => void;
   /** Design options for the tile @internal */
   tileDesignOptions?: FilterTileDesignOptions;
+
+  /**
+   * Render header title
+   *
+   * @internal
+   */
+  renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
 }
 
 /**
@@ -60,7 +67,7 @@ export const CustomFilterTile = asSisenseComponent({
 })((props: CustomFilterTileProps) => {
   const { t } = useTranslation();
 
-  const { filter, onUpdate, onDelete, onEdit, tileDesignOptions } = props;
+  const { filter, onUpdate, onDelete, onEdit, tileDesignOptions, renderHeaderTitle } = props;
   const filterJaql = filter.jaql().jaql.filter;
   // Remove internal properties from the filter jaql
   delete filterJaql.custom;
@@ -77,6 +84,7 @@ export const CustomFilterTile = asSisenseComponent({
   return (
     <FilterTileContainer
       title={filter.attribute.title}
+      renderHeaderTitle={renderHeaderTitle}
       renderContent={(collapsed) => (
         <FilterContentDisplay>
           {collapsed ? t('customFilterTileMessage') : JSON.stringify(filterJaql, null, 4)}

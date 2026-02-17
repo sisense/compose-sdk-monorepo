@@ -35,6 +35,80 @@ export interface FormulaValidationOptions {
 const BRACKET_REFERENCE_PATTERN = /\[([a-zA-Z_][a-zA-Z0-9_.-]*)\]/g;
 
 /**
+ * Sisense formula function names that create aggregations (per functions.md).
+ * Only these satisfy the "every measure must be aggregative" rule when formulas
+ * contain bracket references to raw attributes.
+ */
+const AGGREGATIVE_FORMULA_FUNCTIONS = new Set([
+  // Universal – Aggregative (per Sisense doc: (A) only; Statistical CONTRIBUTION, PERCENTILE, etc. are non-aggregative)
+  'AVG',
+  'COUNT',
+  'DUPCOUNT',
+  'LARGEST',
+  'MAX',
+  'MEDIAN',
+  'MIN',
+  'MODE',
+  'SUM',
+  // Universal – Time-to-date (WTD/MTD/QTD/YTD)
+  'WTDAVG',
+  'WTDSUM',
+  'MTDAVG',
+  'MTDSUM',
+  'QTDAVG',
+  'QTDSUM',
+  'YTDAVG',
+  'YTDSUM',
+  // RAVG, RSUM are non-aggregative per Sisense doc (Other Functions, not (A))
+  // Elasticube – Aggregative
+  'CORREL',
+  'COVARP',
+  'COVAR',
+  'SKEWP',
+  'SKEW',
+  'SLOPE',
+]);
+
+/** Regex matching a call to any known aggregative function (e.g. SUM(, AVG(). Case-insensitive. */
+const AGGREGATIVE_FUNCTION_CALL_PATTERN = new RegExp(
+  `\\b(${Array.from(AGGREGATIVE_FORMULA_FUNCTIONS).join('|')})\\s*\\(`,
+  'i',
+);
+
+function isContextValueMeasure(value: unknown): boolean {
+  if (isFunctionCall(value as JSONValue)) return true;
+  if (typeof value === 'string' && value.startsWith(DIMENSIONAL_NAME_PREFIX)) return false;
+  if (value && typeof value === 'object' && 'kind' in value) {
+    return (value as { kind: string }).kind === 'measure';
+  }
+  return true; // unknown: treat as measure (lenient)
+}
+
+function getNonAggregativeFunctionNames(formula: string): string[] {
+  const re = /\b(\w+)\s*\(/g;
+  const names = new Set<string>();
+  let match;
+  while ((match = re.exec(formula)) !== null) {
+    const name = match[1];
+    if (!AGGREGATIVE_FORMULA_FUNCTIONS.has(name.toUpperCase())) {
+      names.add(name);
+    }
+  }
+  return Array.from(names);
+}
+
+function formatBracketRefList(refs: string[]): string {
+  return refs.length === 1 ? `[${refs[0]}]` : refs.map((r) => `[${r}]`).join(', ');
+}
+
+function formatNonAggregativePhrase(names: string[]): string {
+  if (names.length === 0) return '';
+  return names.length === 1
+    ? `${names[0]} is not an aggregative function. `
+    : `${names.join(', ')} are not aggregative functions. `;
+}
+
+/**
  * Validates that all bracket references in a custom formula exist in the provided context
  * and provides helpful error messages for debugging.
  *
@@ -105,77 +179,24 @@ export function validateFormulaReferences(
     result.isValid = false;
   }
 
-  // Extract bracket references using shared regex pattern
-  const bracketPattern = BRACKET_REFERENCE_PATTERN;
-  const references = new Set<string>();
-  let match;
-
-  while ((match = bracketPattern.exec(formula)) !== null) {
-    const reference = match[1];
-    references.add(reference);
-  }
-
-  result.references = Array.from(references);
+  // Extract bracket references (matchAll avoids mutable regex state)
+  result.references = [
+    ...new Set(
+      [...formula.matchAll(new RegExp(BRACKET_REFERENCE_PATTERN.source, 'g'))].map((m) => m[1]),
+    ),
+  ];
 
   const contextKeys = Object.keys(context);
 
-  // Validate aggregate function requirement: formulas with bracket references must contain function calls
-  // OR all bracket references must point to measures (function calls) in the context
-  if (result.references.length > 0) {
-    const functionCallPattern = /\b\w+\s*\(/gi;
-    const hasFunctionCalls = functionCallPattern.test(formula);
-
-    // If formula has function calls, it's valid
-    if (!hasFunctionCalls) {
-      // Check if all bracket references point to raw attributes
-      const allReferencesAreAttributes = result.references.every((ref) => {
-        // Skip if reference doesn't exist in context (already handled by missing reference check)
-        if (!(ref in context)) {
-          return false; // Don't count missing references as attributes
-        }
-
-        const contextValue = context[ref];
-
-        // Function call → measure (already aggregated)
-        if (isFunctionCall(contextValue as JSONValue)) {
-          return false;
-        }
-
-        // Attribute string (DM. prefix) → raw attribute (needs aggregation)
-        if (typeof contextValue === 'string' && contextValue.startsWith(DIMENSIONAL_NAME_PREFIX)) {
-          return true;
-        }
-
-        // QueryElement with kind → check if it's a measure
-        if (contextValue && typeof contextValue === 'object' && 'kind' in contextValue) {
-          return (contextValue as { kind: string }).kind !== 'measure';
-        }
-
-        // Unknown type → be lenient, don't assume it needs aggregation
-        // This handles test mocks and other edge cases
-        return false;
-      });
-
-      if (allReferencesAreAttributes) {
-        result.errors.push(
-          `${errorPrefix}args[1]: Formulas with bracket references must contain aggregate function calls`,
-        );
-        result.isValid = false;
-      }
-    }
-  }
-
-  // If no references found, empty context is allowed
+  // No references: allow empty context and skip further context validation
   if (result.references.length === 0) {
     result.warnings.push(
       `${errorPrefix}args[1]: No bracket references found in formula - ensure this is intentional`,
     );
-    // Allow empty context when there are no bracket references
-    // Skip further context validation
     return result;
   }
 
-  // If references exist, context is required
+  // References exist: context is required
   if (contextKeys.length === 0) {
     result.errors.push(
       `${errorPrefix}args[2]: Context cannot be empty - custom formulas require context definitions`,
@@ -184,19 +205,10 @@ export function validateFormulaReferences(
     return result;
   }
 
-  // Check each reference exists in context
-  const missingReferences: string[] = [];
-
-  for (const reference of result.references) {
-    if (!contextKeys.includes(reference)) {
-      missingReferences.push(reference);
-    }
-  }
-
-  // Report missing references as errors
+  // Missing references
+  const missingReferences = result.references.filter((ref) => !contextKeys.includes(ref));
   if (missingReferences.length > 0) {
     result.isValid = false;
-
     if (missingReferences.length === 1) {
       result.errors.push(
         `${errorPrefix}args[1]: Reference [${missingReferences[0]}] not found in context. ` +
@@ -211,16 +223,32 @@ export function validateFormulaReferences(
     }
   }
 
-  // Check for unused context keys (warnings or errors)
+  // Aggregate requirement: when there's no aggregative call, refs in context must point to measures
+  const hasAggregativeFunctionCall = AGGREGATIVE_FUNCTION_CALL_PATTERN.test(formula);
+  if (!hasAggregativeFunctionCall) {
+    const refsPointingToRawAttributes = result.references.filter(
+      (ref) => ref in context && !isContextValueMeasure(context[ref]),
+    );
+    if (refsPointingToRawAttributes.length > 0) {
+      result.errors.push(
+        `${errorPrefix}args[1]: ${formatNonAggregativePhrase(
+          getNonAggregativeFunctionNames(formula),
+        )}Bracket reference(s) ${formatBracketRefList(
+          refsPointingToRawAttributes,
+        )} point to raw attributes and must be wrapped in an aggregative function (e.g. SUM, AVG)`,
+      );
+      result.isValid = false;
+    }
+  }
+
+  // Unused context keys (warnings or errors)
   if ((warnUnusedContext || errorOnUnusedContext) && contextKeys.length > 0) {
     const unusedKeys = contextKeys.filter((key) => !result.references.includes(key));
     result.unusedContextKeys = unusedKeys;
-
     if (unusedKeys.length > 0) {
       const message = `${errorPrefix}args[2]: Context keys [${unusedKeys.join(
         ', ',
       )}] are defined but not used in formula`;
-
       if (errorOnUnusedContext) {
         result.errors.push(message);
         result.isValid = false;

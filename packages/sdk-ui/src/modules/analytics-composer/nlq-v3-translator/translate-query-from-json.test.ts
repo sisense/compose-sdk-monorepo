@@ -1,4 +1,4 @@
-import { withoutGuids } from '@sisense/sdk-data';
+import { Sort, withoutGuids } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -85,9 +85,11 @@ describe('translateQueryFromJSON', () => {
       expect(errorResponse.errors).toHaveLength(1);
       expect(errorResponse.errors[0]).toMatchObject({
         category: 'dimensions',
-        index: -1,
-        input: mockQueryJSON.dimensions,
-        message: expect.stringContaining('Invalid dimensions JSON. Expected an array of strings'),
+        index: 0,
+        input: 123,
+        message: expect.stringContaining(
+          'Invalid dimension item. Expected a string (composeCode) or object with "column" and optional "sortType".',
+        ),
       });
     });
 
@@ -114,10 +116,10 @@ describe('translateQueryFromJSON', () => {
       expect(errorResponse.errors).toHaveLength(1);
       expect(errorResponse.errors[0]).toMatchObject({
         category: 'measures',
-        index: -1,
-        input: mockQueryJSON.measures,
+        index: 0,
+        input: 'invalid-measure',
         message: expect.stringContaining(
-          'Invalid measures JSON. Expected an array of function calls',
+          'Invalid measure item. Expected a function call (function/args) or object with "column" and optional "sortType".',
         ),
       });
     });
@@ -228,9 +230,11 @@ describe('translateQueryFromJSON', () => {
       expect(dimensionError).toBeDefined();
       expect(dimensionError).toMatchObject({
         category: 'dimensions',
-        index: -1,
-        input: mockQueryJSON.dimensions,
-        message: expect.stringContaining('Invalid dimensions JSON. Expected an array of strings'),
+        index: 0,
+        input: null,
+        message: expect.stringContaining(
+          'Invalid dimension item. Expected a string (composeCode) or object with "column" and optional "sortType".',
+        ),
       });
 
       // Check measures error
@@ -401,6 +405,196 @@ describe('translateQueryFromJSON', () => {
         input: invalidFilter,
         message: expect.stringMatching(/Invalid date level "Years".*not a datetime column/),
       });
+    });
+  });
+
+  describe('styled columns', () => {
+    it('should translate styled dimension columns with sortType', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Category.Category', { column: 'DM.Brand.Brand', sortType: 'sortAsc' }],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+        ],
+        filters: [],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(true);
+      expect(result).toHaveProperty('data');
+      const query = (result as { success: true; data: any }).data;
+      expect(query.dimensions).toHaveLength(2);
+      expect(query.dimensions[0].composeCode).toBe('DM.Category.Category');
+      expect(query.dimensions[0].getSort()).toBe(0); // Sort.None
+      expect(query.dimensions[1].composeCode).toBe('DM.Brand.Brand');
+      expect(query.dimensions[1].getSort()).toBe(1); // Sort.Ascending
+    });
+
+    it('should translate styled dimension columns without sortType', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Category.Category', { column: 'DM.Brand.Brand' }],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+        ],
+        filters: [],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(true);
+      expect(result).toHaveProperty('data');
+      const query = (result as { success: true; data: any }).data;
+      expect(query.dimensions).toHaveLength(2);
+      expect(query.dimensions[0].composeCode).toBe('DM.Category.Category');
+      expect(query.dimensions[0].getSort()).toBe(Sort.None);
+      expect(query.dimensions[1].composeCode).toBe('DM.Brand.Brand');
+      expect(query.dimensions[1].getSort()).toBe(Sort.None); // no sortType provided
+    });
+
+    it('should translate styled measure columns with sortType', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Category.Category'],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+          {
+            column: {
+              function: 'measureFactory.sum',
+              args: ['DM.Commerce.Cost', 'Total Cost'],
+            },
+            sortType: 'sortDesc',
+          },
+        ],
+        filters: [],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(true);
+      expect(result).toHaveProperty('data');
+      const query = (result as { success: true; data: any }).data;
+      expect(query.measures).toHaveLength(2);
+      expect(query.measures[0].composeCode).toBe(
+        "measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')",
+      );
+      expect(query.measures[0].getSort()).toBe(Sort.None);
+      expect(query.measures[1].composeCode).toBe(
+        "measureFactory.sum(DM.Commerce.Cost, 'Total Cost')",
+      );
+      expect(query.measures[1].getSort()).toBe(Sort.Descending);
+    });
+
+    it('should translate styled measure columns without sortType', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Category.Category'],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+          {
+            column: {
+              function: 'measureFactory.sum',
+              args: ['DM.Commerce.Cost', 'Total Cost'],
+            },
+          },
+        ],
+        filters: [],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(true);
+      expect(result).toHaveProperty('data');
+      const query = (result as { success: true; data: any }).data;
+      expect(query.measures).toHaveLength(2);
+      expect(query.measures[0].composeCode).toBe(
+        "measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')",
+      );
+      expect(query.measures[0].getSort()).toBe(Sort.None);
+      expect(query.measures[1].composeCode).toBe(
+        "measureFactory.sum(DM.Commerce.Cost, 'Total Cost')",
+      );
+      expect(query.measures[1].getSort()).toBe(Sort.None); // no sortType provided
+    });
+
+    it('should translate mixed styled and non-styled columns', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Category.Category', { column: 'DM.Brand.Brand', sortType: 'sortAsc' }],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+          {
+            column: {
+              function: 'measureFactory.sum',
+              args: ['DM.Commerce.Cost', 'Total Cost'],
+            },
+            sortType: 'sortDesc',
+          },
+        ],
+        filters: [],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(true);
+      expect(result).toHaveProperty('data');
+      const query = (result as { success: true; data: any }).data;
+      expect(query.dimensions).toHaveLength(2);
+      expect(query.dimensions[0].composeCode).toBe('DM.Category.Category');
+      expect(query.dimensions[0].getSort()).toBe(Sort.None);
+      expect(query.dimensions[1].composeCode).toBe('DM.Brand.Brand');
+      expect(query.dimensions[1].getSort()).toBe(Sort.Ascending);
+
+      expect(query.measures).toHaveLength(2);
+      expect(query.measures[0].composeCode).toBe(
+        "measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')",
+      );
+      expect(query.measures[0].getSort()).toBe(Sort.None);
+      expect(query.measures[1].composeCode).toBe(
+        "measureFactory.sum(DM.Commerce.Cost, 'Total Cost')",
+      );
+      expect(query.measures[1].getSort()).toBe(Sort.Descending);
     });
   });
 });

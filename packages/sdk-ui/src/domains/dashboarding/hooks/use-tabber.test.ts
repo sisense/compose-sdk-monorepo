@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 
-import { TabberButtonsWidgetProps, WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import { TabberButtonsWidgetProps } from '@/props';
 
 import { isTabberButtonsWidget, modifyLayout, useTabber } from './use-tabber.js';
 

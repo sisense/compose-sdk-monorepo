@@ -20,8 +20,8 @@ import { type DashboardProps } from '../components/dashboard/dashboard.component
 import { type WidgetProps } from '../components/widgets/widget.component';
 import { TrackableService } from '../decorators/trackable.decorator';
 import {
-  translateFromPreactDashboardProps,
-  translateToPreactDashboardProps,
+  toDashboardProps,
+  toPreactDashboardProps,
 } from '../helpers/dashboard-props-preact-translator';
 import { SisenseContextService } from './sisense-context.service';
 
@@ -156,11 +156,11 @@ export class DashboardService {
     const dashboard$ = new BehaviorSubject<D>(initialDashboard);
 
     hookAdapter.subscribe(({ dashboard }) => {
-      dashboard$.next(translateFromPreactDashboardProps(dashboard) as D);
+      dashboard$.next(toDashboardProps(dashboard) as D);
     });
 
     hookAdapter.run(
-      translateToPreactDashboardProps(initialDashboard) as
+      toPreactDashboardProps(initialDashboard) as
         | ComposableDashboardPropsPreact
         | DashboardPropsPreact,
       options,

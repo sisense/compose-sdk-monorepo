@@ -43,6 +43,12 @@ import {
   isScatter,
   isTable,
 } from '@/domains/visualizations/core/chart-options-processor/translations/types.js';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
+import { CommonWidgetProps } from '@/domains/widgets/components/common-widget/types';
+import { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
+import { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
+import { TableWidgetProps } from '@/domains/widgets/components/table-widget/types';
+import { TextWidgetProps } from '@/domains/widgets/components/text-widget/types';
 import {
   attachDataSourceToPanels,
   createDataOptionsFromPanels,
@@ -77,20 +83,10 @@ import {
   isTableWidgetModel,
   isTextWidget,
 } from '@/domains/widgets/components/widget-by-id/utils.js';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { AppSettings } from '@/infra/app/settings/settings.js';
 import { TranslatableError } from '@/infra/translation/translatable-error';
-import {
-  ChartProps,
-  ChartWidgetProps,
-  CommonWidgetProps,
-  CustomWidgetProps,
-  PivotTableProps,
-  PivotTableWidgetProps,
-  TableProps,
-  TableWidgetProps,
-  TextWidgetProps,
-  WidgetProps,
-} from '@/props';
+import { ChartProps, PivotTableProps, TableProps } from '@/props';
 import {
   ChartStyleOptions,
   CompleteThemeSettings,

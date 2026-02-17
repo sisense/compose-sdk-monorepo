@@ -7,7 +7,7 @@ import {
   WidgetsPanelLayout,
   WidgetsPanelRow,
 } from '@/domains/dashboarding/dashboard-model';
-import { WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import {
   getChartDefaultSize,
   getWidgetDefaultSize,

@@ -7,7 +7,7 @@ import omit from 'lodash-es/omit';
 import { Chart } from '@/domains/visualizations/components/chart';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
-import { ChartWidgetProps, HighchartsOptions } from '@/props';
+import { HighchartsOptions } from '@/props';
 import {
   DynamicSizeContainer,
   getWidgetDefaultSize,
@@ -17,6 +17,7 @@ import { ChartWidgetStyleOptions, DrilldownSelection } from '@/types';
 
 import { useHighlightSelection } from '../../hooks/use-highlight-selection';
 import { WidgetContainer } from '../../shared/widget-container';
+import { ChartWidgetProps } from './types';
 import { useWithChartWidgetDrilldown } from './use-with-chart-widget-drilldown';
 
 /**
@@ -165,6 +166,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     <DynamicSizeContainer defaultSize={defaultSize} size={size}>
       <WidgetContainer
         {...props}
+        headerConfig={props.config?.header}
         topSlot={
           <>
             {props.topSlot}

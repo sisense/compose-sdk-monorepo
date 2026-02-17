@@ -3,8 +3,8 @@ import {
   isCustomWidgetProps,
   isPivotTableWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils.js';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { TranslatableError } from '@/infra/translation/translatable-error';
-import { WidgetProps } from '@/props';
 import { ChartType } from '@/types';
 
 import { generateCode } from '../code/generate-code.js';

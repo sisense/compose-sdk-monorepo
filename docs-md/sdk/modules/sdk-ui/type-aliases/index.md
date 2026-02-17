@@ -6,6 +6,7 @@ title: Type Aliases
 
 TypeScript type aliases for components and hooks listed above
 
+- [AbstractDataPointWithEntries](type-alias.AbstractDataPointWithEntries.md)
 - [AlignmentTypes](type-alias.AlignmentTypes.md)
 - [AppConfig](type-alias.AppConfig.md)
 - [AreamapChartType](type-alias.AreamapChartType.md)
@@ -59,6 +60,10 @@ TypeScript type aliases for components and hooks listed above
 - [CustomDrilldownResult](type-alias.CustomDrilldownResult.md)
 - [CustomTranslationObject](type-alias.CustomTranslationObject.md)
 - [CustomWidgetComponent](type-alias.CustomWidgetComponent.md)
+- [CustomWidgetDataPoint](type-alias.CustomWidgetDataPoint.md)
+- [CustomWidgetDataPointContextMenuHandler](type-alias.CustomWidgetDataPointContextMenuHandler.md)
+- [CustomWidgetDataPointEventHandler](type-alias.CustomWidgetDataPointEventHandler.md)
+- [CustomWidgetDataPointsEventHandler](type-alias.CustomWidgetDataPointsEventHandler.md)
 - [CustomWidgetQueryState](type-alias.CustomWidgetQueryState.md)
 - [CustomWidgetStyleOptions](type-alias.CustomWidgetStyleOptions.md)
 - [DashboardChangeEvent](type-alias.DashboardChangeEvent.md)

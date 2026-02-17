@@ -12,7 +12,7 @@ For convenience, a reference of functions you may use within [`measureFactory.cu
 
 The following functions are available:
 
-- [Universal Functions)](#universal-functions)
+- [Universal Functions](#universal-functions)
   - [Aggregative Functions](#aggregative-functions)
     - [Average (`AVG`)](#average-avg)
     - [Count Unique (`COUNT`)](#count-unique-count)
@@ -2389,7 +2389,7 @@ Calculates the slope of a linear regression line through the provided series of 
 ##### Syntax (`SLOPE`)
 
 ```
-SKEW(<numeric_field>, <numeric_field>)
+SLOPE(<numeric_field>, <numeric_field>)
 
 ```
 

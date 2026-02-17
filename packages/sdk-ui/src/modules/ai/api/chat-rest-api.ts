@@ -2,6 +2,7 @@ import { HttpClient } from '@sisense/sdk-rest-client';
 
 import { ChatContextDetails } from '@/modules/ai/api/types';
 
+import { getNarrations } from './narration-endpoints.js';
 import type {
   Chat,
   ChatContext,
@@ -9,7 +10,6 @@ import type {
   ChatResponse,
   ChatWithoutHistory,
   GetNlgInsightsRequest,
-  GetNlgInsightsResponse,
   GetNlqResultRequest,
   LlmConfig,
   NlqResult,
@@ -22,8 +22,15 @@ import type {
 export class ChatRestApi {
   private httpClient: HttpClient;
 
-  constructor(httpClient: HttpClient, private readonly volatile = false) {
+  private readonly isUnifiedNarrationEnabled: boolean | undefined;
+
+  constructor(
+    httpClient: HttpClient,
+    private readonly volatile = false,
+    isUnifiedNarrationEnabled?: boolean,
+  ) {
     this.httpClient = httpClient;
+    this.isUnifiedNarrationEnabled = isUnifiedNarrationEnabled;
   }
 
   public getChatContexts = async () => {
@@ -34,9 +41,10 @@ export class ChatRestApi {
   };
 
   // ==== /v2/ai endpoints ====
-  private getNlgInsights = (request: GetNlgInsightsRequest) => {
-    return this.httpClient.post<GetNlgInsightsResponse>('api/v2/ai/nlg/queryResult', request);
-  };
+  private getNlgInsights = (request: GetNlgInsightsRequest) =>
+    getNarrations(this.httpClient, request, {
+      isUnifiedNarrationEnabled: this.isUnifiedNarrationEnabled,
+    });
 
   private getQueryRecommendations = (contextTitle: string, config: QueryRecommendationConfig) => {
     return this.httpClient.get<QueryRecommendationResponse>(

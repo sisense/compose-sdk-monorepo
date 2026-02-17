@@ -4,17 +4,14 @@ import { filterFactory, MembersFilter } from '@sisense/sdk-data';
 import { fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import {
   isChartWidgetProps,
   isTextWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { MenuOptions } from '@/infra/contexts/menu-provider/types';
-import {
-  ChartWidgetProps,
-  DataPointEventHandler,
-  DataPointsEventHandler,
-  WidgetProps,
-} from '@/props';
+import { DataPointEventHandler, DataPointsEventHandler } from '@/props';
 import { CartesianChartDataOptions, DataPoint, RenderToolbarHandler } from '@/types';
 
 import { useCommonFilters } from './use-common-filters.js';

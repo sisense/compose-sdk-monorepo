@@ -59,6 +59,7 @@ TypeScript interfaces for components and services listed above
 - [GetNlgInsightsProps](interface.GetNlgInsightsProps.md)
 - [GetNlqResultParams](interface.GetNlqResultParams.md)
 - [GetQueryRecommendationsParams](interface.GetQueryRecommendationsParams.md)
+- [GetSharedFormulaParams](interface.GetSharedFormulaParams.md)
 - [GetWidgetModelParams](interface.GetWidgetModelParams.md)
 - [Hierarchy](interface.Hierarchy.md)
 - [HierarchyModel](interface.HierarchyModel.md)

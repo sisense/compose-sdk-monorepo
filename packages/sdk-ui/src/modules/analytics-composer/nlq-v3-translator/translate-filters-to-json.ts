@@ -1,4 +1,10 @@
-import { Filter, FilterRelations, isFilterRelations, JSONValue } from '@sisense/sdk-data';
+import {
+  Filter,
+  FilterRelations,
+  isFilterRelations,
+  JSONArray,
+  JSONValue,
+} from '@sisense/sdk-data';
 
 import { NlqTranslationError, NlqTranslationResult } from '../types.js';
 import { parseComposeCodeToFunctionCall } from './parse-compose-code.js';
@@ -18,7 +24,7 @@ const UNKNOWN_ERROR_MESSAGE = 'Unknown error';
  */
 export function translateFiltersToJSON(
   filters: Filter[] | FilterRelations | undefined,
-): NlqTranslationResult<FunctionCall[]> {
+): NlqTranslationResult<JSONArray> {
   if (!filters) {
     return { success: true, data: [] };
   }
@@ -109,12 +115,12 @@ export function translateFiltersToJSON(
  */
 export function translateHighlightsToJSON(
   highlights: Filter[] | undefined,
-): NlqTranslationResult<FunctionCall[]> {
+): NlqTranslationResult<JSONArray> {
   if (!highlights) {
     return { success: true, data: [] };
   }
 
-  const results: FunctionCall[] = [];
+  const results: JSONArray = [];
   const errors: NlqTranslationError[] = [];
 
   highlights.forEach((filter, index) => {

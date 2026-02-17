@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { useCombinedMenu } from '@/infra/contexts/menu-provider/hooks/use-combined-menu';
 import { MenuIds } from '@/infra/contexts/menu-provider/menu-ids';
 import { MenuOptions } from '@/infra/contexts/menu-provider/types';
@@ -8,7 +9,6 @@ import { useModal } from '@/infra/contexts/modal-provider/use-modal';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { withTracking } from '@/infra/decorators/hook-decorators';
-import { WidgetProps } from '@/props.js';
 import { combineHandlers } from '@/shared/utils/combine-handlers';
 
 import { normalizeToJtdConfig } from './jtd/jtd-config-transformers.js';

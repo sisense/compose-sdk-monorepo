@@ -7,6 +7,7 @@ export type DeploymentProps = {
   sessionMethod: 'client';
   sessionOnlyCookie: null;
   isNarration: boolean;
+  narrationUnified?: boolean;
   isNLQ: boolean;
   isCustomCode: boolean;
   isForecast: boolean;

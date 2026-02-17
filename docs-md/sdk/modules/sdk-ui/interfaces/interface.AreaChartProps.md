@@ -176,7 +176,7 @@ To learn more about callbacks, see the [Compose SDK Charts Guide](/guides/sdk/gu
 > **onDataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
 A callback that allows to modify data immediately after it has been retrieved.
-Can be used to inject modification of queried data.
+It can be used to inject modification of queried data.
 
 ##### Parameters
 

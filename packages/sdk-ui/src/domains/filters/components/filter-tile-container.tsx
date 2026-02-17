@@ -93,6 +93,12 @@ interface FilterTileContainerProps {
   onDelete?: () => void;
   onEdit?: () => void;
   locked?: boolean;
+  /**
+   * Render header title
+   *
+   * @internal
+   */
+  renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
 }
 
 const defaultDesign: CompleteFilterTileDesignOptions = {
@@ -154,6 +160,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
     onDelete,
     onEdit,
     locked = false,
+    renderHeaderTitle = (title) => title,
   } = props;
   const design = merge.withOptions(
     { mergeArrays: false },
@@ -203,14 +210,18 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
               )}
               {design.header.hasBackgroundFilterIcon && <BackgroundFilterIcon />}
               {locked && !isDependent && <LockIcon />}
-              <span
-                className={
-                  'csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]'
-                }
-                style={{ color: textColor, flexGrow: 1 }}
-              >
-                {title}
-              </span>
+              <div style={{ flexGrow: 1 }}>
+                {renderHeaderTitle(
+                  <span
+                    className={
+                      'csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]'
+                    }
+                    style={{ color: textColor, display: 'inline-block' }}
+                  >
+                    {title}
+                  </span>,
+                )}
+              </div>
               {onEdit && !disabled && !locked && (
                 <IconButton
                   className="csdk-filter-edit-button"

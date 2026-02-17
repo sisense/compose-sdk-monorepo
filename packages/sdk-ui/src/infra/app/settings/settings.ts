@@ -80,6 +80,7 @@ type ServerSettings = {
   serverLanguage: string;
   serverVersion: string;
   serverFeatures: FeatureMap;
+  isUnifiedNarrationEnabled?: boolean;
   user: {
     tenant: {
       name: string;
@@ -203,6 +204,7 @@ async function loadServerSettings(
     serverLanguage: globals.language,
     serverVersion: globals.version,
     serverFeatures: mapFeatures(globals.features),
+    isUnifiedNarrationEnabled: globals.props?.narrationUnified === true,
     user: {
       tenant: {
         name: globals.user?.tenant?.name || SYSTEM_TENANT_NAME,

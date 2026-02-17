@@ -40,8 +40,6 @@ export const WidgetById = defineComponent({
   props: {
     /** @internal */
     bottomSlot: Object as PropType<WidgetByIdProps['bottomSlot']>,
-    /** @internal */
-    contextMenuItems: Array as PropType<WidgetByIdProps['contextMenuItems']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.dashboardOid}
      *
@@ -95,8 +93,6 @@ export const WidgetById = defineComponent({
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<WidgetByIdProps['onBeforeRender']>,
-    /** @internal */
-    onContextMenuClose: Function as PropType<WidgetByIdProps['onContextMenuClose']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.onDataPointClick}
      *

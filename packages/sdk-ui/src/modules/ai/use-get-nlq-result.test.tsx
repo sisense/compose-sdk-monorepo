@@ -2,7 +2,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 
 import { server } from '@/__mocks__/msw';
-import { ChartWidgetProps } from '@/props';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 
 import {
   MOCK_NLQ_RESULT_PARAMS,

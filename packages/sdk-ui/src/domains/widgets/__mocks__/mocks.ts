@@ -2,7 +2,8 @@ import { QueryResultData } from '@sisense/sdk-data';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { mockPivotTableProps } from '@/domains/visualizations/components/pivot-table/__mocks__/mocks';
-import { ChartWidgetProps, PivotTableWidgetProps } from '@/props';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
+import { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
 
 export const mockPivotTableWidgetProps: PivotTableWidgetProps = {
   ...mockPivotTableProps,

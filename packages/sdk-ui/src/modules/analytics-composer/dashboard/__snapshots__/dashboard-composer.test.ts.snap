@@ -1116,10 +1116,10 @@ export default function CodeExample() {
       filters,
       config: {
         toolbar: {
-          isVisible: true,
+          visible: true,
         },
         filtersPanel: {
-          isVisible: true,
+          visible: true,
         },
         tabbers: {
         },

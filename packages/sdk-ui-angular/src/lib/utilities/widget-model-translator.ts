@@ -12,6 +12,8 @@ import {
   type TextWidgetProps,
   type WidgetProps,
 } from '../components';
+import * as fromPreactChart from '../helpers/chart-props-preact-translator';
+import * as fromPreactWidget from '../helpers/widget-props-preact-translator';
 import { ExecutePivotQueryParams, ExecuteQueryParams } from '../services';
 
 /**
@@ -102,7 +104,7 @@ export class ExampleComponent {
  * Use {@link toPivotTableProps} instead for getting props for the {@link PivotTableComponent}.
  */
 export function toChartProps(widgetModel: WidgetModel): ChartProps {
-  return widgetModelTranslatorPreact.toChartProps(widgetModel);
+  return fromPreactChart.toChartProps(widgetModelTranslatorPreact.toChartProps(widgetModel));
 }
 
 /**
@@ -152,7 +154,7 @@ export class ExampleComponent {
  * Use {@link toPivotTableProps} instead for getting props for the {@link PivotTableComponent}.
  */
 export function toTableProps(widgetModel: WidgetModel): TableProps {
-  return widgetModelTranslatorPreact.toTableProps(widgetModel);
+  return fromPreactChart.toTableProps(widgetModelTranslatorPreact.toTableProps(widgetModel));
 }
 
 /**
@@ -202,7 +204,9 @@ export class ExampleComponent {
  * Use {@link toTableProps} instead for getting props for the {@link TableComponent}.
  */
 export function toPivotTableProps(widgetModel: WidgetModel): PivotTableProps {
-  return widgetModelTranslatorPreact.toPivotTableProps(widgetModel);
+  return fromPreactChart.toPivotTableProps(
+    widgetModelTranslatorPreact.toPivotTableProps(widgetModel),
+  );
 }
 
 /**
@@ -252,7 +256,9 @@ export class ExampleComponent {
  * Note: this method is not supported for pivot widgets.
  */
 export function toChartWidgetProps(widgetModel: WidgetModel): ChartWidgetProps {
-  return widgetModelTranslatorPreact.toChartWidgetProps(widgetModel);
+  return fromPreactWidget.toChartWidgetProps(
+    widgetModelTranslatorPreact.toChartWidgetProps(widgetModel),
+  );
 }
 
 /**
@@ -301,7 +307,9 @@ export class ExampleComponent {
  * Use {@link toChartWidgetProps} instead for getting props for the {@link ChartWidgetComponent}.
  */
 export function toPivotTableWidgetProps(widgetModel: WidgetModel): PivotTableWidgetProps {
-  return widgetModelTranslatorPreact.toPivotTableWidgetProps(widgetModel);
+  return fromPreactWidget.toPivotTableWidgetProps(
+    widgetModelTranslatorPreact.toPivotTableWidgetProps(widgetModel),
+  );
 }
 
 /**
@@ -321,7 +329,9 @@ const textWidgetProps = widgetModelTranslator.toTextWidgetProps(widgetModel);
  * Use {@link toPivotTableWidgetProps} instead for getting props for the pivot table widget.
  */
 export function toTextWidgetProps(widgetModel: WidgetModel): TextWidgetProps {
-  return widgetModelTranslatorPreact.toTextWidgetProps(widgetModel);
+  return fromPreactWidget.toTextWidgetProps(
+    widgetModelTranslatorPreact.toTextWidgetProps(widgetModel),
+  );
 }
 
 /**
@@ -373,5 +383,5 @@ export function toTextWidgetProps(widgetModel: WidgetModel): TextWidgetProps {
  * ```
  */
 export function toWidgetProps(widgetModel: WidgetModel): WidgetProps {
-  return widgetModelTranslatorPreact.toWidgetProps(widgetModel);
+  return fromPreactWidget.toWidgetProps(widgetModelTranslatorPreact.toWidgetProps(widgetModel));
 }

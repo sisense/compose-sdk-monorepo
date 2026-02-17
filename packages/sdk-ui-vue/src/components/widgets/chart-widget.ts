@@ -84,13 +84,6 @@ export const ChartWidget = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.contextMenuItems}
-     *
-     * @category Widget
-     * @internal
-     */
-    contextMenuItems: Array as PropType<ChartWidgetProps['contextMenuItems']>,
-    /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataOptions}
      *
      * @category Chart
@@ -142,13 +135,6 @@ export const ChartWidget = defineComponent({
      * @category Callbacks
      */
     onBeforeRender: Function as PropType<ChartWidgetProps['onBeforeRender']>,
-    /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenuClose}
-     *
-     * @category Callbacks
-     * @internal
-     */
-    onContextMenuClose: Function as PropType<ChartWidgetProps['onContextMenuClose']>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
      *

@@ -1,4 +1,4 @@
-import { WidgetProps } from '@/props.js';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 import {
   ExpandedQueryModel,

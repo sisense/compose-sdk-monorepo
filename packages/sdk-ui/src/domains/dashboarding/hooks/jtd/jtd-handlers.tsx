@@ -9,9 +9,9 @@ import {
 } from '@sisense/sdk-data';
 
 import { JtdDashboard } from '@/domains/dashboarding/components/jtd-dashboard';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { OpenModalFn } from '@/infra/contexts/modal-provider/modal-context';
 import { TranslatableError } from '@/infra/translation/translatable-error';
-import { WidgetProps } from '@/props.js';
 import { DataPoint, PivotTableDataPoint } from '@/types';
 
 import {

@@ -5,7 +5,9 @@ import { DashboardProps } from '@/domains/dashboarding/types.js';
 import { ExecutePivotQueryParams, ExecuteQueryParams } from '@/domains/query-execution/index.js';
 import { AnyColumn } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { DynamicChartType } from '@/domains/visualizations/core/chart-options-processor/translations/types.js';
-import { ChartWidgetProps, PivotTableWidgetProps, WidgetProps } from '@/props';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
+import { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { ChartDataOptions, ChartStyleOptions } from '@/types';
 
 type Stringify<T> = {

@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.21.0] - 2026-02-17
+
+### Added
+- Enable cross-filtering for `CustomWidget` in dashboard
+- Add support for Angular `FormulaService.getSharedFormula`
+- Add drag and drop filters reordering on filters panel (internal testing)
+- Add configurable widget toolbar menu (internal testing)
+
+### Changed
+- Fix `sdk-ui-angular` dependency installation freeze in npm
+- Fix shared formulas issues in `DashboardById`
+- Improve aggregate functions validation in analytics composer and `nlqTranslator` custom formulas
+
 ## [2.20.0] - 2026-02-03
 
 ### Added

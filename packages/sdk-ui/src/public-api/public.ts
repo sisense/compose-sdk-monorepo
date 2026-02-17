@@ -93,11 +93,19 @@ export * from '../infra/contexts/theme-provider/custom-theme-provider';
 
 // Widgets
 export { DrilldownWidget } from '../domains/drilldown/components/drilldown-widget';
-export { ChartWidget } from '../domains/widgets/components/chart-widget';
-export { TableWidget } from '../domains/widgets/components/table-widget';
-export { PivotTableWidget } from '../domains/widgets/components/pivot-table-widget';
-export { TextWidget } from '../domains/widgets/components/text-widget';
-export { Widget } from '../domains/widgets/components/widget';
+export { ChartWidget, type ChartWidgetProps } from '../domains/widgets/components/chart-widget';
+export {
+  PivotTableWidget,
+  type PivotTableWidgetProps,
+} from '../domains/widgets/components/pivot-table-widget';
+export { TextWidget, type TextWidgetProps } from '../domains/widgets/components/text-widget';
+export {
+  Widget,
+  type WidgetProps,
+  type WidgetType,
+  type WithCommonWidgetProps,
+} from '../domains/widgets/components/widget';
+export { type CustomWidgetProps } from '../domains/widgets/components/custom-widget';
 export { TabberButtonsWidget } from '../domains/widgets/components/tabber-buttons-widget';
 export { DrilldownBreadcrumbs } from '../domains/drilldown/components/drilldown-breadcrumbs';
 

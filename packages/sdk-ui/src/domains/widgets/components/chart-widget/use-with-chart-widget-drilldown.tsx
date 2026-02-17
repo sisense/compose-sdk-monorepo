@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { createAttribute } from '@sisense/sdk-data';
 
 import { useMenu } from '@/infra/contexts/menu-provider/hooks/use-menu.js';
-import { ChartWidgetProps } from '@/props.js';
 import { combineHandlers } from '@/shared/utils/combine-handlers.js';
 import { mergeFiltersOrFilterRelations } from '@/shared/utils/filter-relations.js';
 import { DataPoint, DrilldownSelection, ScatterDataPoint } from '@/types.js';
@@ -19,6 +18,7 @@ import {
 } from '../../../drilldown/drilldown-utils.js';
 import { useDrilldown } from '../../../drilldown/hooks/use-drilldown.js';
 import { useSyncedDrilldownPaths } from '../../../drilldown/hooks/use-synced-drilldown-paths.js';
+import { ChartWidgetProps } from './types';
 
 type UseWithChartWidgetDrilldownParams = {
   propsToExtend: ChartWidgetProps;

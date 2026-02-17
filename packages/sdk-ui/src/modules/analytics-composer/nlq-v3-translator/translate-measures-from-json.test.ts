@@ -5,104 +5,13 @@ import {
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../__mocks__/mock-data-sources.js';
 import { createSchemaIndex, getErrors, getSuccessData } from './common.js';
-import {
-  translateMeasuresFromJSON,
-  translateMeasuresFromJSONFunctionCall,
-} from './translate-measures-from-json.js';
-import { FunctionCall } from './types.js';
+import { translateMeasuresFromJSON } from './translate-measures-from-json.js';
 
 const MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE = createSchemaIndex(
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 );
 
 describe('translateMeasures', () => {
-  describe('translateMeasuresFromJSONFunctionCall', () => {
-    it('should translate measures from parsed function calls', () => {
-      const mockMeasuresJSON: FunctionCall[] = [
-        { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Total Revenue'] },
-        { function: 'measureFactory.count', args: ['DM.Commerce.Revenue', 'Revenue Count'] },
-      ];
-
-      const result = translateMeasuresFromJSONFunctionCall({
-        data: mockMeasuresJSON,
-        context: {
-          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
-        },
-      });
-
-      expect(result.success).toBe(true);
-      const data = getSuccessData(result);
-      expect(data).toHaveLength(2);
-      expect(data).toMatchSnapshot();
-    });
-
-    it('should translate single measure', () => {
-      const mockMeasuresJSON: FunctionCall[] = [
-        { function: 'measureFactory.average', args: ['DM.Commerce.Revenue'] },
-      ];
-
-      const result = translateMeasuresFromJSONFunctionCall({
-        data: mockMeasuresJSON,
-        context: {
-          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
-        },
-      });
-
-      expect(result.success).toBe(true);
-      const data = getSuccessData(result);
-      expect(data).toHaveLength(1);
-      expect(data).toMatchSnapshot();
-    });
-
-    it('should return error when trying to use filter function as measure', () => {
-      const mockMeasuresJSON: FunctionCall[] = [
-        { function: 'filterFactory.members', args: ['DM.Country.Country', ['United States']] },
-      ];
-
-      const result = translateMeasuresFromJSONFunctionCall({
-        data: mockMeasuresJSON,
-        context: {
-          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
-        },
-      });
-
-      expect(result.success).toBe(false);
-      expect(getErrors(result)[0]).toContain('Invalid measure JSON');
-    });
-
-    it('should return error when trying to use filter relation as measure', () => {
-      const mockMeasuresJSON: FunctionCall[] = [
-        {
-          function: 'filterFactory.logic.and',
-          args: [
-            {
-              function: 'filterFactory.members',
-              args: ['DM.Country.Country', ['United States']],
-            },
-            {
-              function: 'filterFactory.members',
-              args: ['DM.Brand.Brand', ['Brand A']],
-            },
-          ],
-        },
-      ];
-
-      const result = translateMeasuresFromJSONFunctionCall({
-        data: mockMeasuresJSON,
-        context: {
-          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
-          schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
-        },
-      });
-
-      expect(result.success).toBe(false);
-      expect(getErrors(result)[0]).toContain('Invalid measure JSON');
-    });
-  });
-
   describe('translateMeasuresFromJSON', () => {
     it('should return empty array when measuresJSON is null', () => {
       const result = translateMeasuresFromJSON({
@@ -192,7 +101,7 @@ describe('translateMeasures', () => {
 
       expect(result.success).toBe(false);
       expect(getErrors(result)).toContain(
-        'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
+        'Invalid measure item. Expected a function call (function/args) or object with "column" and optional "sortType".',
       );
     });
 
@@ -211,7 +120,7 @@ describe('translateMeasures', () => {
 
       expect(result.success).toBe(false);
       expect(getErrors(result)).toContain(
-        'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
+        'Invalid measure item. Expected a function call (function/args) or object with "column" and optional "sortType".',
       );
     });
 
@@ -228,7 +137,7 @@ describe('translateMeasures', () => {
 
       expect(result.success).toBe(false);
       expect(getErrors(result)).toContain(
-        'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
+        'Invalid measure item. Expected a function call (function/args) or object with "column" and optional "sortType".',
       );
     });
 
@@ -248,7 +157,7 @@ describe('translateMeasures', () => {
 
       expect(result.success).toBe(false);
       expect(getErrors(result)).toContain(
-        'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
+        'Invalid measure item. Expected a function call (function/args) or object with "column" and optional "sortType".',
       );
     });
 
@@ -268,7 +177,7 @@ describe('translateMeasures', () => {
 
       expect(result.success).toBe(false);
       expect(getErrors(result)).toContain(
-        'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
+        'Invalid measure item. Expected a function call (function/args) or object with "column" and optional "sortType".',
       );
     });
 
@@ -288,7 +197,7 @@ describe('translateMeasures', () => {
 
       expect(result.success).toBe(false);
       expect(getErrors(result)).toContain(
-        'Invalid measures JSON. Expected an array of function calls with "function" and "args" properties.',
+        'Invalid measure item. Expected a function call (function/args) or object with "column" and optional "sortType".',
       );
     });
 

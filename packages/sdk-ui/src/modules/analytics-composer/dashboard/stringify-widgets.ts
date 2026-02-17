@@ -1,4 +1,4 @@
-import { WidgetProps } from '@/props.js';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 import { TemplateKeyMapByWidgetType, UiFramework } from '../types.js';
 import { getWidgetCode } from '../widget/to-widget-code.js';

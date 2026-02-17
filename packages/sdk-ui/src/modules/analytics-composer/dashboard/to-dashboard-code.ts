@@ -66,8 +66,8 @@ export const toDashboardCodeClientSide = ({
     ),
     configString: stringifyProps(
       {
-        toolbar: { isVisible: true },
-        filtersPanel: { isVisible: true },
+        toolbar: { visible: true },
+        filtersPanel: { visible: true },
         tabbers: dashboardProps.config?.tabbers || {},
       },
       CODE_TEMPLATES_INDENT,

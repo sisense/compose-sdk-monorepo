@@ -283,13 +283,14 @@ export class RestApi {
   };
 
   /**
-   * Get a shared formula by id
+   * Get a shared formula by id.
+   * Uses flat=true so nested formula references are inlined in the response context.
    *
    * @param sharedFormulaId - A shared formula id
    * @returns A shared formula
    */
   public getSharedFormula = async (sharedFormulaId: string) => {
-    return this.httpClient.get<SharedFormulaDto>(`api/v1/formulas/${sharedFormulaId}`);
+    return this.httpClient.get<SharedFormulaDto>(`api/v1/formulas/${sharedFormulaId}?flat=true`);
   };
 
   /**

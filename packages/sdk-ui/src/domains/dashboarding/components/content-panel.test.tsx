@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 import { ContentPanel } from './content-panel.js';
 

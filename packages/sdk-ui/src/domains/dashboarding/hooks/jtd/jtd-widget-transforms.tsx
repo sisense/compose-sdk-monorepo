@@ -15,8 +15,9 @@ import {
   registerDataPointContextMenuHandler,
   registerDataPointsSelectedHandler,
 } from '@/domains/widgets/components/widget-by-id/utils';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { DEFAULT_HYPERLINK_COLOR } from '@/infra/contexts/theme-provider/default-theme-settings';
-import { PivotTableDataPointEventHandler, WidgetProps } from '@/props.js';
+import { PivotTableDataPointEventHandler } from '@/props.js';
 import { JtdJumpableIcon } from '@/shared/icons/jtd-jumpable-icon';
 import { combineHandlers } from '@/shared/utils/combine-handlers';
 import { DataPoint, PivotTableDataPoint } from '@/types';

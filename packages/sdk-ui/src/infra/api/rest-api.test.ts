@@ -178,10 +178,10 @@ describe('Rest API', () => {
   });
 
   describe('getSharedFormula', () => {
-    it('should send correct request to fetch shared formula', async () => {
+    it('should send correct request to fetch shared formula with flat=true', async () => {
       httpGetMock.mockResolvedValueOnce({ oid: '1' });
       const sharedFormula = await restApi.getSharedFormula('sharedFormulaId');
-      expect(httpGetMock).toHaveBeenCalledWith('api/v1/formulas/sharedFormulaId');
+      expect(httpGetMock).toHaveBeenCalledWith('api/v1/formulas/sharedFormulaId?flat=true');
       expect(sharedFormula).toEqual({ oid: '1' });
     });
   });
@@ -190,8 +190,8 @@ describe('Rest API', () => {
     it('should send correct request to fetch shared formulas', async () => {
       httpGetMock.mockResolvedValueOnce({ oid: '1' }).mockResolvedValueOnce({ oid: '2' });
       const sharedFormulas = await restApi.getSharedFormulas(['1', '2']);
-      expect(httpGetMock).toHaveBeenCalledWith('api/v1/formulas/1');
-      expect(httpGetMock).toHaveBeenCalledWith('api/v1/formulas/2');
+      expect(httpGetMock).toHaveBeenCalledWith('api/v1/formulas/1?flat=true');
+      expect(httpGetMock).toHaveBeenCalledWith('api/v1/formulas/2?flat=true');
       expect(sharedFormulas).toEqual({ 1: { oid: '1' }, 2: { oid: '2' } });
     });
   });

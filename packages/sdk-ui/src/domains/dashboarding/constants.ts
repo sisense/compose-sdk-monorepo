@@ -35,6 +35,9 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
       deleteFilter: {
         enabled: false,
       },
+      reorderFilters: {
+        enabled: false,
+      },
     },
   },
   toolbar: {

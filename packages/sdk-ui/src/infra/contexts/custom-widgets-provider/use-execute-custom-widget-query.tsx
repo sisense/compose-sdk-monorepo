@@ -1,6 +1,14 @@
 import { useMemo } from 'react';
 
-import { Attribute, Cell, Measure, QueryResultData } from '@sisense/sdk-data';
+import {
+  Attribute,
+  Cell,
+  DataSource,
+  Filter,
+  FilterRelations,
+  Measure,
+  QueryResultData,
+} from '@sisense/sdk-data';
 
 import { useExecuteQuery } from '@/domains/query-execution/hooks/use-execute-query';
 import { ExecuteQueryParams, QueryState } from '@/domains/query-execution/types';
@@ -17,7 +25,6 @@ import { HookEnableParam } from '@/shared/hooks/types';
 import { GenericDataOptions, NumberFormatConfig } from '@/types';
 
 import { withTracking } from '../../decorators/hook-decorators';
-import { CustomWidgetComponentProps } from './types';
 
 /**
  * State of a query execution retrieving data of a custom widget.
@@ -26,11 +33,21 @@ export type CustomWidgetQueryState = QueryState;
 
 /**
  * Parameters for executing a query for a custom widget.
+ * Contains only data-related properties needed for query execution,
+ * excluding event handlers and other non-query props.
  */
 export interface ExecuteCustomWidgetQueryParams
-  extends CustomWidgetComponentProps,
-    HookEnableParam,
-    Pick<ExecuteQueryParams, 'onBeforeQuery' | 'count' | 'offset' | 'ungroup'> {}
+  extends HookEnableParam,
+    Pick<ExecuteQueryParams, 'onBeforeQuery' | 'count' | 'offset' | 'ungroup'> {
+  /** Data source for the query */
+  dataSource?: DataSource;
+  /** Data options defining dimensions and measures */
+  dataOptions: GenericDataOptions;
+  /** Filters to apply to the query */
+  filters?: Filter[] | FilterRelations;
+  /** Highlight filters */
+  highlights?: Filter[];
+}
 
 /**
  * Utility function for converting data options to parameters for executing a query.

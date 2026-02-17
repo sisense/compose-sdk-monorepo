@@ -70,7 +70,7 @@ Filters that will slice query results
 > **dataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
 A callback that allows to modify data immediately after it has been retrieved.
-Can be used to inject modification of queried data.
+It can be used to inject modification of queried data.
 
 ##### Parameters
 

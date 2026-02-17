@@ -1,4 +1,4 @@
-import { CustomWidgetProps } from '@/props';
+import { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
 
 /**
  * Configuration options that define style of the various elements of the tabbers buttons widget.

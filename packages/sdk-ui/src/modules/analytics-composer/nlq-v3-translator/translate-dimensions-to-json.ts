@@ -1,28 +1,34 @@
-import { Attribute } from '@sisense/sdk-data';
+import {
+  Attribute,
+  convertSortToSortDirection,
+  JSONArray,
+  JSONValue,
+  Sort,
+} from '@sisense/sdk-data';
 
 import { NlqTranslationError, NlqTranslationResult } from '../types.js';
 import { DIMENSIONAL_NAME_PREFIX } from './types.js';
 
 /**
- * Translates CSDK Attribute array to NLQ JSON format (string array).
+ * Translates CSDK Attribute array to NLQ JSON format (string or StyledColumnJSON array).
  *
- * Returns composeCode from each attribute directly. The composeCode contains [[delimiters]]
- * around names that need normalization, which are stripped at the final step in translateQueryToJSON.
+ * When an attribute has sort applied, outputs StyledColumnJSON with column and sortType;
+ * otherwise outputs composeCode string. Delimiters are stripped at the final step in translateQueryToJSON.
  *
  * @param dimensions - Array of CSDK Attribute objects
- * @returns NlqTranslationResult<string[]> with array of composeCode strings or structured errors
+ * @returns NlqTranslationResult<JSONArray> - JSON array output for NLQ dimensions
  * @internal
  */
-export function translateDimensionsToJSON(dimensions: Attribute[]): NlqTranslationResult<string[]> {
-  const results: string[] = [];
+export function translateDimensionsToJSON(
+  dimensions: Attribute[],
+): NlqTranslationResult<JSONArray> {
+  const results: JSONArray = [];
   const errors: NlqTranslationError[] = [];
 
   dimensions.forEach((dimension, index) => {
-    // Helper to safely get JSON representation
     const getInputJson = () =>
       typeof dimension.toJSON === 'function' ? dimension.toJSON() : (dimension as any);
 
-    // Check if composeCode exists
     if (!dimension.composeCode) {
       errors.push({
         category: 'dimensions',
@@ -35,7 +41,6 @@ export function translateDimensionsToJSON(dimensions: Attribute[]): NlqTranslati
       return;
     }
 
-    // Validate composeCode format
     if (!dimension.composeCode.startsWith(DIMENSIONAL_NAME_PREFIX)) {
       errors.push({
         category: 'dimensions',
@@ -48,8 +53,16 @@ export function translateDimensionsToJSON(dimensions: Attribute[]): NlqTranslati
       return;
     }
 
-    // Use composeCode directly - delimiters stripped at end in translateQueryToJSON
-    results.push(dimension.composeCode);
+    const sort = dimension.getSort();
+    if (sort !== undefined && sort !== Sort.None) {
+      const styled: JSONValue = {
+        column: dimension.composeCode,
+        sortType: convertSortToSortDirection(sort),
+      };
+      results.push(styled);
+    } else {
+      results.push(dimension.composeCode);
+    }
   });
 
   return errors.length > 0 ? { success: false, errors } : { success: true, data: results };

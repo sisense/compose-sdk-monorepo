@@ -44,6 +44,9 @@ export {
   getDrilldownMenuItems,
 } from '../domains/drilldown/hooks/use-drilldown';
 export { processDrilldownSelections } from '../domains/drilldown/hooks/use-drilldown-core';
+//Widgets
+export { CommonWidget, type CommonWidgetProps } from '../domains/widgets/components/common-widget';
+export { TableWidget, type TableWidgetProps } from '../domains/widgets/components/table-widget';
 
 // Context Adapters
 export * from '../infra/contexts/custom-widgets-provider/custom-widgets-provider-adapter';
@@ -61,3 +64,6 @@ export { getChartType } from '../domains/widgets/components/widget-by-id/utils';
 export type { SoftUnion } from '@/shared/utils/utility-types';
 export type { BeforeMenuOpenHandler } from '../infra/contexts/menu-provider/types';
 export * from '../shared/hooks/data-load-state-reducer';
+
+// Widget helpers
+export * from '../domains/widgets/helpers';

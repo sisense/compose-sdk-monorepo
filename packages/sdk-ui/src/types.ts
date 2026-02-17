@@ -11,6 +11,7 @@ import type {
 } from '@sisense/sdk-data';
 import { DeepRequired } from 'ts-essentials';
 
+import { AbstractDataPointWithEntries } from '@/domains/dashboarding/common-filters/types';
 import { Coordinates } from '@/domains/visualizations/components/chart/components/scattermap/types';
 
 import { Hierarchy, HierarchyId, StyledColumn, StyledMeasureColumn } from '.';
@@ -2298,12 +2299,14 @@ export interface WidgetContainerStyleOptions {
      * Custom toolbar to render to the right of the title
      *
      * @internal
+     * @deprecated - should be moved out from StyleOptions
      */
     renderToolbar?: RenderToolbarHandler;
     /**
      * Custom title to render in widget header
      *
      * @internal
+     * @deprecated - should be moved out from StyleOptions
      */
     renderTitle?: RenderTitleHandler;
   };
@@ -2604,7 +2607,12 @@ export type DataPoint = {
 /**
  * A data point entry that represents a single dimension within a multi-dimensional data point.
  */
-export type DataPointEntry = {
+export type DataPointEntry = BasicDataPointEntry | AttributeDataPointEntry | MeasureDataPointEntry;
+
+/**
+ * A basic data point entry that represents a single dimension within a multi-dimensional data point.
+ */
+export interface BasicDataPointEntry {
   /** The data option associated with this entry */
   dataOption: Column | StyledColumn | MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
   /**
@@ -2612,15 +2620,27 @@ export type DataPointEntry = {
    * @internal
    */
   dataOptionLocation?: DataOptionLocation;
-  /** The attribute associated with this data point entry */
-  attribute?: Attribute;
-  /** The measure associated with this data point entry */
-  measure?: Measure;
   /** The raw value of the data point */
   value: string | number;
   /** The formatted value of the data point */
   displayValue?: string;
-};
+}
+
+/**
+ * A data point entry that represents a single attribute within a multi-dimensional data point.
+ */
+export interface AttributeDataPointEntry extends BasicDataPointEntry {
+  /** The attribute associated with this data point entry */
+  attribute: Attribute;
+}
+
+/**
+ * A data point entry that represents a single measure within a multi-dimensional data point.
+ */
+export interface MeasureDataPointEntry extends BasicDataPointEntry {
+  /** The measure associated with this data point entry */
+  measure: Measure;
+}
 
 /** Data point in a Scatter chart. */
 export type ScatterDataPoint = {
@@ -2792,6 +2812,116 @@ export type ScattermapDataPoint = {
     details?: DataPointEntry;
   };
 };
+
+/**
+ * Represents a single data point in a custom widget.
+ *
+ * This type is used to define the structure of a data point that is passed to event handlers
+ * like `onDataPointClick`. It typically extends `AbstractDataPointWithEntries` to include
+ * specific entries for categories, values, or other dimensions used in the widget.
+ *
+ * @example
+ * ```typescript
+ * interface MyWidgetDataPoint extends CustomWidgetDataPoint {
+ *   entries: {
+ *     category: DataPointEntry[];
+ *     value: DataPointEntry[];
+ *   };
+ * }
+ *
+ * const onDataPointClick = (point: MyWidgetDataPoint) => {
+ *   console.log('Clicked category:', point.entries.category[0].value);
+ * };
+ * ```
+ */
+export type CustomWidgetDataPoint<
+  T extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+> = T;
+
+/**
+ * Generic event handler for custom widget data point click.
+ *
+ * @typeParam T - The shape of the data point
+ * @example
+ * ```tsx
+ * const handleClick: CustomWidgetDataPointEventHandler<MyDataPoint> = (point, event) => {
+ *   console.log('Clicked:', point.label, point.value);
+ * };
+ * ```
+ */
+export type CustomWidgetDataPointEventHandler<
+  T extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+> = (
+  /** Data point that was clicked */
+  point: CustomWidgetDataPoint<T>,
+  /** Native browser event */
+  nativeEvent: PointerEvent | MouseEvent,
+) => void;
+
+/**
+ * Generic event handler for custom widget data point context menu.
+ *
+ * @typeParam T - The shape of the data point
+ */
+export type CustomWidgetDataPointContextMenuHandler<
+  T extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+> = (
+  /** Data point that triggered the context menu */
+  point: CustomWidgetDataPoint<T>,
+  /** Native browser event */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
+ * Generic event handler for custom widget data points selection.
+ *
+ * @typeParam T - The shape of the data point
+ * @example
+ * ```tsx
+ * const handleSelect: CustomWidgetDataPointsEventHandler<MyDataPoint> = (points, event) => {
+ *   console.log('Selected:', points.length, 'points');
+ * };
+ * ```
+ */
+export type CustomWidgetDataPointsEventHandler<
+  T extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+> = (
+  /** Data points that were selected */
+  points: CustomWidgetDataPoint<T>[],
+  /** Native browser event */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
+ * Event props for custom widgets with generic data point type.
+ *
+ * @typeParam DataPoint - The shape of data points for this custom widget
+ */
+export interface CustomWidgetEventProps<
+  DataPoint extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+> {
+  /**
+   * Click handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointClick?: CustomWidgetDataPointEventHandler<DataPoint>;
+
+  /**
+   * Context menu handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointContextMenu?: CustomWidgetDataPointContextMenuHandler<DataPoint>;
+
+  /**
+   * Handler callback for selection of multiple data points
+   *
+   * @category Callbacks
+   */
+  onDataPointsSelected?: CustomWidgetDataPointsEventHandler<DataPoint>;
+}
+export type { AbstractDataPointWithEntries } from '@/domains/dashboarding/common-filters/types';
 
 /**
  * This is the minimum definition of Highcharts

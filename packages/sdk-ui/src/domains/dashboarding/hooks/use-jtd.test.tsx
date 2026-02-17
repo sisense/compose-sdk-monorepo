@@ -2,7 +2,7 @@ import { type Attribute, filterFactory, Sort } from '@sisense/sdk-data';
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ChartWidgetProps } from '@/props';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 
 import { normalizeToJumpToDashboardConfig } from './jtd/jtd-config-transformers.js';
 import { getFormulaContextFilters, handleFormulaDuplicateFilters } from './jtd/jtd-filters.js';

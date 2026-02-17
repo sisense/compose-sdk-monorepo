@@ -73,6 +73,13 @@ export interface DateRangeFilterTileProps {
    * @internal
    */
   tileDesignOptions?: FilterTileDesignOptions;
+
+  /**
+   * Render header title
+   *
+   * @internal
+   */
+  renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
 }
 
 /**
@@ -116,6 +123,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
     parentFilters,
     tiled = false,
     tileDesignOptions,
+    renderHeaderTitle,
   }: DateRangeFilterTileProps) => {
     const { filter, updateFilter } = useSynchronizedFilter(filterFromProps, updateFilterFromProps);
 
@@ -152,6 +160,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
     return (
       <FilterTileContainer
         title={title}
+        renderHeaderTitle={renderHeaderTitle}
         renderContent={(collapsed) => {
           return collapsed || !dateLimits ? (
             <DateRangeFilterDisplay filter={filter} />

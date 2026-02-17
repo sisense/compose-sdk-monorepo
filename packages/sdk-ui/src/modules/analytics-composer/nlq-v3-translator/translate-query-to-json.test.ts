@@ -1,4 +1,4 @@
-import { createAttribute, filterFactory, measureFactory } from '@sisense/sdk-data';
+import { createAttribute, filterFactory, measureFactory, Sort } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
 import { BaseQueryParams } from '@/domains/query-execution/types.js';
@@ -356,6 +356,131 @@ describe('translateQueryToJSON', () => {
       expect(result.errors).toHaveLength(2);
       expect(result.errors[0].category).toBe('dimensions');
       expect(result.errors[1].category).toBe('measures');
+    });
+  });
+
+  describe('styled columns', () => {
+    it('should translate styled dimension columns with sortType', () => {
+      const sortedCategory = Category.sort(Sort.Ascending);
+      const query: BaseQueryParams = {
+        dimensions: [sortedCategory, Brand],
+        measures: [measureFactory.sum(Revenue)],
+        filters: [],
+      };
+
+      const result = translateQueryToJSON(query);
+
+      expect(result.success).toBe(true);
+      if (!result.success) return;
+
+      expect(result.data.dimensions).toEqual([
+        { column: 'DM.Category.Category', sortType: 'sortAsc' },
+        'DM.Brand.Brand',
+      ]);
+    });
+
+    it('should translate styled dimension columns without sortType', () => {
+      const query: BaseQueryParams = {
+        dimensions: [Category, Brand],
+        measures: [measureFactory.sum(Revenue)],
+        filters: [],
+      };
+
+      const result = translateQueryToJSON(query);
+
+      expect(result.success).toBe(true);
+      if (!result.success) return;
+
+      expect(result.data.dimensions).toEqual(['DM.Category.Category', 'DM.Brand.Brand']);
+    });
+
+    it('should translate styled measure columns with sortType', () => {
+      const sortedMeasure = measureFactory.sum(Revenue, 'Total Revenue').sort(Sort.Descending);
+      const query: BaseQueryParams = {
+        dimensions: [Category],
+        measures: [measureFactory.sum(Cost, 'Total Cost'), sortedMeasure],
+        filters: [],
+      };
+
+      const result = translateQueryToJSON(query);
+
+      expect(result.success).toBe(true);
+      if (!result.success) return;
+
+      expect(result.data.measures).toEqual([
+        {
+          function: 'measureFactory.sum',
+          args: ['DM.Commerce.Cost', 'Total Cost'],
+        },
+        {
+          column: {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+          sortType: 'sortDesc',
+        },
+      ]);
+    });
+
+    it('should translate styled measure columns without sortType', () => {
+      const query: BaseQueryParams = {
+        dimensions: [Category],
+        measures: [
+          measureFactory.sum(Revenue, 'Total Revenue'),
+          measureFactory.sum(Cost, 'Total Cost'),
+        ],
+        filters: [],
+      };
+
+      const result = translateQueryToJSON(query);
+
+      expect(result.success).toBe(true);
+      if (!result.success) return;
+
+      expect(result.data.measures).toEqual([
+        {
+          function: 'measureFactory.sum',
+          args: ['DM.Commerce.Revenue', 'Total Revenue'],
+        },
+        {
+          function: 'measureFactory.sum',
+          args: ['DM.Commerce.Cost', 'Total Cost'],
+        },
+      ]);
+    });
+
+    it('should translate mixed styled and non-styled columns', () => {
+      const sortedCategory = Category.sort(Sort.Ascending);
+      const sortedMeasure = measureFactory.sum(Revenue, 'Total Revenue').sort(Sort.Descending);
+      const query: BaseQueryParams = {
+        dimensions: [sortedCategory, Brand],
+        measures: [measureFactory.sum(Cost, 'Total Cost'), sortedMeasure],
+        filters: [],
+      };
+
+      const result = translateQueryToJSON(query);
+
+      expect(result.success).toBe(true);
+      if (!result.success) return;
+
+      expect(result.data.dimensions).toEqual([
+        { column: 'DM.Category.Category', sortType: 'sortAsc' },
+        'DM.Brand.Brand',
+      ]);
+
+      expect(result.data.measures).toEqual([
+        {
+          function: 'measureFactory.sum',
+          args: ['DM.Commerce.Cost', 'Total Cost'],
+        },
+        {
+          column: {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+          sortType: 'sortDesc',
+        },
+      ]);
     });
   });
 

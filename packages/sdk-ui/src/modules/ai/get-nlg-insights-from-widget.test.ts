@@ -3,8 +3,9 @@ import { HttpClient } from '@sisense/sdk-rest-client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
+import { LEGACY_NARRATION_ENDPOINT, UNIFIED_NARRATION_ENDPOINT } from './api/narration-endpoints';
 import { GetNlgInsightsResponse } from './api/types.js';
 import { getNlgInsightsFromWidget } from './get-nlg-insights-from-widget.js';
 
@@ -33,7 +34,11 @@ const mockNlgResponse: GetNlgInsightsResponse = {
 
 describe('getNlgInsightsFromWidget', () => {
   beforeEach(() => {
-    mockHttpClientPost.mockResolvedValue(mockNlgResponse);
+    mockHttpClientPost.mockImplementation((endpoint: string) =>
+      endpoint === UNIFIED_NARRATION_ENDPOINT
+        ? Promise.reject({ status: '404' })
+        : Promise.resolve(mockNlgResponse),
+    );
   });
 
   afterEach(() => {
@@ -44,9 +49,10 @@ describe('getNlgInsightsFromWidget', () => {
     const result = await getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient);
 
     expect(result).toBe('This is a summary of the chart data');
-    expect(mockHttpClientPost).toHaveBeenCalledTimes(1);
-    expect(mockHttpClientPost).toHaveBeenCalledWith(
-      'api/v2/ai/nlg/queryResult',
+    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
+    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
+      2,
+      LEGACY_NARRATION_ENDPOINT,
       expect.objectContaining({
         jaql: expect.objectContaining({
           datasource: expect.any(Object),
@@ -99,7 +105,7 @@ describe('getNlgInsightsFromWidget', () => {
     });
 
     expect(result).toBe('This is a summary of the chart data');
-    expect(mockHttpClientPost).toHaveBeenCalledTimes(1);
+    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
   });
 
   it('passes verbosity option to the request', async () => {
@@ -107,8 +113,9 @@ describe('getNlgInsightsFromWidget', () => {
       verbosity: 'High',
     });
 
-    expect(mockHttpClientPost).toHaveBeenCalledWith(
-      'api/v2/ai/nlg/queryResult',
+    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
+      2,
+      LEGACY_NARRATION_ENDPOINT,
       expect.objectContaining({
         verbosity: 'High',
       }),
@@ -164,8 +171,9 @@ describe('getNlgInsightsFromWidget', () => {
 
     await getNlgInsightsFromWidget(propsWithFilters, mockHttpClient);
 
-    expect(mockHttpClientPost).toHaveBeenCalledWith(
-      'api/v2/ai/nlg/queryResult',
+    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
+      2,
+      LEGACY_NARRATION_ENDPOINT,
       expect.objectContaining({
         jaql: expect.objectContaining({
           metadata: expect.arrayContaining([
@@ -191,7 +199,7 @@ describe('getNlgInsightsFromWidget', () => {
     const result = await getNlgInsightsFromWidget(propsWithDataSourceObject, mockHttpClient);
 
     expect(result).toBe('This is a summary of the chart data');
-    expect(mockHttpClientPost).toHaveBeenCalledTimes(1);
+    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
   });
 
   it('handles table chart type with columns containing attributes and measures', async () => {
@@ -212,15 +220,28 @@ describe('getNlgInsightsFromWidget', () => {
     const result = await getNlgInsightsFromWidget(tableWidgetProps, mockHttpClient);
 
     expect(result).toBe('This is a summary of the chart data');
-    expect(mockHttpClientPost).toHaveBeenCalledTimes(1);
-    expect(mockHttpClientPost).toHaveBeenCalledWith(
-      'api/v2/ai/nlg/queryResult',
+    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
+    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
+      2,
+      LEGACY_NARRATION_ENDPOINT,
       expect.objectContaining({
         jaql: expect.objectContaining({
           datasource: expect.any(Object),
           metadata: expect.any(Array),
         }),
       }),
+    );
+  });
+
+  it('falls back to legacy endpoint when unified returns 404', async () => {
+    const result = await getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient);
+
+    expect(result).toBe('This is a summary of the chart data');
+    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
+    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
+      2,
+      LEGACY_NARRATION_ENDPOINT,
+      expect.objectContaining({ jaql: expect.any(Object) }),
     );
   });
 });

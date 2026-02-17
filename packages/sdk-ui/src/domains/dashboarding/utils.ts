@@ -1,4 +1,4 @@
-import { WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 import { WidgetsPanelColumnLayout } from './types.js';
 

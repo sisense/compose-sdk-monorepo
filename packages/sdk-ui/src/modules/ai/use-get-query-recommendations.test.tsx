@@ -2,7 +2,8 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 
 import { server } from '@/__mocks__/msw';
-import { ChartWidgetProps, TableWidgetProps } from '@/props';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
+import { TableWidgetProps } from '@/domains/widgets/components/table-widget/types';
 
 import { AiTestWrapper } from './__mocks__/index.js';
 import {

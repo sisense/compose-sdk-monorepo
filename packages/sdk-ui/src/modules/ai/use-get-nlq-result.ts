@@ -3,9 +3,9 @@ import { useCallback } from 'react';
 import { DataSource } from '@sisense/sdk-data';
 import { useQuery } from '@tanstack/react-query';
 
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { withTracking } from '@/infra/decorators/hook-decorators';
 import { widgetComposer } from '@/modules/analytics-composer';
-import { WidgetProps } from '@/props';
 import { HookEnableParam } from '@/shared/hooks/types';
 
 import { useChatApi } from './api/chat-api-provider.js';

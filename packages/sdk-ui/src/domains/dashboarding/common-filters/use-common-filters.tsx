@@ -13,8 +13,8 @@ import {
   registerDataPointsSelectedHandler,
   registerRenderToolbarHandler,
 } from '@/domains/widgets/components/widget-by-id/utils.js';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { BeforeMenuOpenHandler, OpenMenuFn } from '@/infra/contexts/menu-provider/types.js';
-import { WidgetProps } from '@/props.js';
 import { getFiltersArray } from '@/shared/utils/filter-relations.js';
 
 import { prepareCommonFiltersConnectionProps } from './common-filters-connector.js';

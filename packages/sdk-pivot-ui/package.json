@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.20.0",
+  "version": "2.21.0",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -77,7 +77,7 @@
     "vite-plugin-dts": "^4.5.4"
   },
   "resolutions": {
-    "socket.io-parser": "3.3.4"
+    "socket.io-parser": "3.4.1"
   },
   "peerDependencies": {
     "@emotion/cache": "^11.0.0",

@@ -90,6 +90,7 @@ Angular components, services, and utilities for working with Fusion dashboards, 
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [dashboardModelTranslator](fusion-assets/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
 - [DashboardService](fusion-assets/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [FormulaService](fusion-assets/class.FormulaService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [HierarchyService](fusion-assets/class.HierarchyService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetByIdComponent](fusion-assets/class.WidgetByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />

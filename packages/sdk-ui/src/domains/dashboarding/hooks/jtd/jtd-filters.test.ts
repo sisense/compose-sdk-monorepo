@@ -2,7 +2,8 @@ import { DateLevels, filterFactory } from '@sisense/sdk-data';
 import { Attribute } from '@sisense/sdk-data';
 import { describe, expect, it, vi } from 'vitest';
 
-import { WidgetProps } from '../../../../props.js';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
+
 import { DataPoint, DataPointEntry, ScatterDataPoint } from '../../../../types.js';
 import {
   filterByAllowedDimensions,

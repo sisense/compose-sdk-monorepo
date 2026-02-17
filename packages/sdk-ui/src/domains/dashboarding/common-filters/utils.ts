@@ -7,6 +7,7 @@ import {
   applyDrilldownDimensionToPivot,
   getInitialDimensionLocation,
 } from '@/domains/widgets/components/pivot-table-widget/utils.js';
+import { WidgetType } from '@/domains/widgets/components/widget/types';
 import {
   ChartDataOptions,
   ChartType,
@@ -14,7 +15,6 @@ import {
   GenericDataOptions,
   PivotTableDataOptions,
   PivotTableDrilldownOptions,
-  WidgetType,
 } from '@/index.js';
 import { haveSameAttribute } from '@/shared/utils/filters-comparator.js';
 import { isSameAttribute } from '@/shared/utils/filters.js';

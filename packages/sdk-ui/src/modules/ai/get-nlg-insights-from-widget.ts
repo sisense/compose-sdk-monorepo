@@ -6,10 +6,11 @@ import { getTranslatedDataOptions } from '@/domains/visualizations/core/chart-da
 import { translateTableDataOptions } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
 import { TableDataOptions } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { isTable } from '@/domains/visualizations/core/chart-options-processor/translations/types.js';
+import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { isChartWidgetProps } from '@/domains/widgets/components/widget-by-id/utils.js';
-import { ChartWidgetProps, WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
-import { GetNlgInsightsResponse } from './api/types.js';
+import { getNarrations } from './api/narration-endpoints.js';
 import { UseGetNlgInsightsParams } from './use-get-nlg-insights.js';
 import { prepareGetNlgInsightsPayload } from './use-get-nlg-insights.js';
 
@@ -73,6 +74,8 @@ export interface GetNlgInsightsFromWidgetOptions {
   defaultDataSource?: DataSource;
   /** The verbosity of the NLG summarization */
   verbosity?: 'Low' | 'High';
+  /** When false, legacy narration endpoint only; when true or undefined, try unified then fallback. From props.isUnifiedNarrationEnabled. */
+  isUnifiedNarrationEnabled?: boolean;
 }
 
 /**
@@ -123,11 +126,9 @@ export async function getNlgInsightsFromWidget(
   );
 
   const request = prepareGetNlgInsightsPayload(params);
-
-  const response = await httpClient.post<GetNlgInsightsResponse>(
-    'api/v2/ai/nlg/queryResult',
-    request,
-  );
+  const response = await getNarrations(httpClient, request, {
+    isUnifiedNarrationEnabled: options?.isUnifiedNarrationEnabled,
+  });
 
   if (!response?.data?.answer) {
     throw new Error('Invalid response from NLG insights API');

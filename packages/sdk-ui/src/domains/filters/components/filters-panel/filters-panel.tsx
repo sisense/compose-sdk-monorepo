@@ -1,5 +1,6 @@
 import { useCallback, useRef } from 'react';
 
+import { arrayMove } from '@dnd-kit/sortable';
 import {
   DataSource,
   Filter,
@@ -22,7 +23,8 @@ import {
   splitFiltersAndRelations,
 } from '@/shared/utils/filter-relations';
 
-import { DEFAULT_FILTERS_PANEL_CONFIG } from './constants';
+import { ReorderableList } from '../common/reorderable-list';
+import { BORDER_COLOR, BORDER_THICKNESS, DEFAULT_FILTERS_PANEL_CONFIG } from './constants';
 import { FilterRelationsTile } from './filter-relations-tile';
 import { FiltersPanelHeader } from './filters-panel-header';
 import {
@@ -49,16 +51,29 @@ const PanelWrapper = styled.div<Themable>`
   max-height: 100%;
   overflow: hidden;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 `;
 
 const PanelBody = styled.div`
   background-color: transparent;
   max-height: calc(100% - ${DASHBOARD_HEADER_HEIGHT}px);
   overflow-y: auto;
+  flex-grow: 1;
 `;
 
 const PanelBodyInner = styled.div`
   padding: 0px 12px 8px 10px;
+`;
+
+const FilterDraggingElement = styled.div<Themable>`
+  background-color: ${({ theme }) => theme.general.backgroundColor};
+  border: ${BORDER_THICKNESS} solid ${BORDER_COLOR};
+  color: ${({ theme }) => theme.typography.primaryTextColor};
+  padding: 4px 4px 4px 27px;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 /**
@@ -143,6 +158,15 @@ export const FiltersPanel = asSisenseComponent({
       [filters, relations, onFiltersChange],
     );
 
+    const handleFilterReorder = useCallback(
+      (fromIndex: number, toIndex: number) => {
+        const newFilters = arrayMove(filters, fromIndex, toIndex);
+        const newRelations = calculateNewRelations(filters, relations, newFilters);
+        onFiltersChange(combineFiltersAndRelations(newFilters, newRelations));
+      },
+      [onFiltersChange, filters, relations],
+    );
+
     const handleFilterAdd = useCallback(
       (newFilter: Filter) => {
         if (!filters) return;
@@ -193,35 +217,55 @@ export const FiltersPanel = asSisenseComponent({
         <PanelBody>
           <PanelBodyInner>
             {relations && <FilterRelationsTile relations={relations} filters={filters} />}
-            {filters?.map((filter, index) => (
-              <div
-                className="csdk-mt-[6px]"
-                key={filter.config.guid}
-                ref={(el) => {
-                  filterTilesRef.current[index] = el!;
-                }}
-              >
-                <FilterTile
-                  onDelete={
-                    config?.actions?.deleteFilter?.enabled
-                      ? () => handleFilterDelete(filter)
-                      : undefined
-                  }
-                  key={filter.config.guid}
-                  filter={filter}
-                  onChange={(newFilter) => handleFilterChange(newFilter!)}
-                  defaultDataSource={defaultDataSource}
-                  onEdit={
-                    config?.actions?.editFilter?.enabled && isFilterSupportEditing(filter)
-                      ? (levelIndex) =>
-                          startEditingFilter(filterTilesRef.current[index], filter, levelIndex)
-                      : undefined
-                  }
-                />
-              </div>
-            ))}
             {<ExistingFilterEditor />}
             {<NewFilterCreator />}
+            <ReorderableList
+              disabled={!config?.actions?.reorderFilters?.enabled}
+              items={filters.map((filter) => filter.config.guid)}
+              onReorder={handleFilterReorder}
+              renderItem={({ index, withDragHandle, isDragging }) => {
+                const filter = filters[index];
+
+                if (filter && isDragging) {
+                  return withDragHandle(
+                    <FilterDraggingElement theme={themeSettings}>
+                      {isCascadingFilter(filter)
+                        ? filter.filters
+                            .map((levelFilter) => levelFilter.attribute.title)
+                            .join(', ')
+                        : filter.attribute.title}
+                    </FilterDraggingElement>,
+                  );
+                }
+
+                return filter ? (
+                  <div
+                    className="csdk-mt-[6px]"
+                    ref={(el) => {
+                      filterTilesRef.current[index] = el!;
+                    }}
+                  >
+                    <FilterTile
+                      onDelete={
+                        config?.actions?.deleteFilter?.enabled
+                          ? () => handleFilterDelete(filter)
+                          : undefined
+                      }
+                      filter={filter}
+                      onChange={(newFilter) => handleFilterChange(newFilter!)}
+                      defaultDataSource={defaultDataSource}
+                      renderHeaderTitle={withDragHandle}
+                      onEdit={
+                        config?.actions?.editFilter?.enabled && isFilterSupportEditing(filter)
+                          ? (levelIndex) =>
+                              startEditingFilter(filterTilesRef.current[index], filter, levelIndex)
+                          : undefined
+                      }
+                    />
+                  </div>
+                ) : null;
+              }}
+            />
           </PanelBodyInner>
         </PanelBody>
       </PanelWrapper>

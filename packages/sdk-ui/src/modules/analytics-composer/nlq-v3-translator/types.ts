@@ -7,6 +7,8 @@ import {
   Measure,
 } from '@sisense/sdk-data';
 
+import { CategoryStyle, SeriesStyle, ValueStyle } from '@/public-api/index.js';
+
 import { NlqTranslationInput } from '../types.js';
 import type { SchemaIndex } from './common.js';
 
@@ -149,4 +151,68 @@ export function isMeasureElement(arg: QueryElement): arg is Measure {
 
 export function isStringArray(value: JSONArray): value is string[] {
   return value.every((item) => typeof item === 'string');
+}
+
+/**
+ * JSON-facing type for a styled dimension/attribute.
+ * Reusable for query JSON and future chart JSON (translateChartFromJSON).
+ *
+ * @internal
+ */
+export interface StyledColumnJSON extends CategoryStyle {
+  /** Attribute reference (composeCode), e.g. "DM.Commerce.Gender" */
+  column: string;
+}
+
+/**
+ * JSON-facing type for a styled measure.
+ * Reusable for query JSON and future chart JSON (translateChartFromJSON).
+ *
+ * @internal
+ */
+export interface StyledMeasureColumnJSON extends ValueStyle, SeriesStyle {
+  /** Measure definition (function/args), e.g. { function: "measureFactory.sum", args: [...] } */
+  column: FunctionCall;
+}
+
+/**
+ * Dimension item in query JSON: plain composeCode string or styled column.
+ *
+ * @internal
+ */
+export type DimensionItemJSON = string | StyledColumnJSON;
+
+/**
+ * Measure item in query JSON: plain function call or styled measure.
+ *
+ * @internal
+ */
+export type MeasureItemJSON = FunctionCall | StyledMeasureColumnJSON;
+
+/**
+ * Type guard: value is StyledColumnJSON (object with column, not a FunctionCall).
+ *
+ * @internal
+ */
+export function isStyledColumnJSON(value: unknown): value is StyledColumnJSON {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'column' in value &&
+    typeof (value as Record<string, unknown>).column === 'string' &&
+    !('function' in value && 'args' in value)
+  );
+}
+
+/**
+ * Type guard: value is StyledMeasureColumnJSON (object with column containing a measure definition).
+ *
+ * @internal
+ */
+export function isStyledMeasureColumnJSON(value: unknown): value is StyledMeasureColumnJSON {
+  const obj = value as Record<string, unknown> | null;
+  if (typeof value !== 'object' || value === null || obj === null || !('column' in obj)) {
+    return false;
+  }
+  return isFunctionCall(obj.column as JSONValue);
 }

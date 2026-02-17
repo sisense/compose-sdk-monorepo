@@ -12,53 +12,60 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
         style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"
       >
         <div
-          class="csdk-w-full csdk-h-full csdk-overflow-hidden csdk-accessible"
+          class="csdk-accessible css-i1ycqm"
+          data-component="widget-container-root"
         >
           <div
-            class="csdk-h-full"
-            style="padding: 0px;"
+            class="css-1f0f6z6"
+            data-component="widget-container-layout"
           >
             <div
-              class="csdk-h-full csdk-overflow-hidden"
-              style="border-width: 1px; border-color: lightgrey; border-radius: 0; box-shadow: none; display: flex; flex-direction: column;"
+              class="css-ei3g9r"
+              data-component="widget-container-card"
             >
               <div
-                class="csdk-flex csdk-flex-row csdk-items-center csdk-px-2 csdk-min-h-[32px]"
-                style="background-color: rgb(255, 255, 255);"
+                data-component="widget-header"
               >
                 <div
-                  class="csdk-w-full csdk-whitespace-nowrap csdk-overflow-hidden"
-                  style="text-align: left; color: rgb(91, 99, 114); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif; font-size: 15px;"
+                  class="css-1p6ds3l"
+                  data-component="header-container"
                 >
-                  Pivot table widget title
-                </div>
-                <div
-                  class="csdk-ml-auto csdk-flex csdk-items-center"
-                >
-                  <button
-                    aria-label="Click to view full details"
-                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1avsmgh-MuiButtonBase-root-MuiIconButton-root"
-                    data-mui-internal-clone-element="true"
-                    style="color: rgb(0, 0, 0); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
-                    tabindex="0"
-                    type="button"
+                  <div
+                    class="css-mdfanr"
+                    data-component="title"
                   >
-                    <svg
-                      height="24"
-                      viewBox="0 0 24 24"
-                      width="24"
-                      xmlns="http://www.w3.org/2000/svg"
+                    Pivot table widget title
+                  </div>
+                  <div
+                    class="css-15r4p8k"
+                    data-component="toolbar-container"
+                  >
+                    <button
+                      aria-label="Click to view full details"
+                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1avsmgh-MuiButtonBase-root-MuiIconButton-root"
+                      data-mui-internal-clone-element="true"
+                      style="color: rgb(0, 0, 0); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+                      tabindex="0"
+                      type="button"
                     >
-                      <path
-                        d="M11.5 20a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zm0-1a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zm-.5-8h1v5h-1v-5zm0-1v-.998h1V10h-1z"
-                        fill="#5B6372"
-                      />
-                    </svg>
-                  </button>
+                      <svg
+                        height="24"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.5 20a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zm0-1a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zm-.5-8h1v5h-1v-5zm0-1v-.998h1V10h-1z"
+                          fill="#5B6372"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
               <div
-                style="flex-grow: 1; min-width: 0; min-height: 0; background-color: rgb(255, 255, 255);"
+                class="css-1220o1q"
+                data-component="widget-container-content"
               >
                 <div
                   style="width: 100%; height: 100%;"

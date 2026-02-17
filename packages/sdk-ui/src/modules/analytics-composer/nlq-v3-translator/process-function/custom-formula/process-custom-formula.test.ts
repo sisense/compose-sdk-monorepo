@@ -57,7 +57,7 @@ describe('processCustomFormula', () => {
   it('should process customFormula with function calls and attribute strings', () => {
     const processedArgs = [
       'Profit Ratio',
-      '[revenue] - [cost]',
+      '[revenue] - SUM([cost])',
       {
         revenue: { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue'] },
         cost: 'DM.Commerce.Cost',

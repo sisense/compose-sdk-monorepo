@@ -45,6 +45,13 @@ export interface MemberFilterTileProps {
   parentFilters?: Filter[];
   /** Design options for the tile @internal */
   tileDesignOptions?: FilterTileDesignOptions;
+
+  /**
+   * Render header title
+   *
+   * @internal
+   */
+  renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
 }
 
 /**
@@ -85,6 +92,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     onChange: updateFilterFromProps,
     parentFilters = [],
     tileDesignOptions,
+    renderHeaderTitle,
   } = props;
 
   const [searchValue, setSearchValue] = useState('');
@@ -183,6 +191,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     <div aria-label="member-filter-tile">
       <FilterTileContainer
         title={title}
+        renderHeaderTitle={renderHeaderTitle}
         renderContent={(collapsed, tileDisabled) => {
           if (collapsed) {
             return (

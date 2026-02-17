@@ -39,6 +39,12 @@ export interface FilterTileProps {
   ) => void;
   /** Default data source used for filter tiles */
   defaultDataSource?: DataSource;
+  /**
+   * Render header title
+   *
+   * @internal
+   */
+  renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
 }
 
 /**
@@ -53,6 +59,7 @@ export const FilterTile: React.FC<FilterTileProps> = ({
   onDelete,
   onEdit,
   defaultDataSource,
+  renderHeaderTitle,
 }: FilterTileProps) => {
   const attribute = filter.attribute;
   const title = attribute.title;
@@ -63,6 +70,7 @@ export const FilterTile: React.FC<FilterTileProps> = ({
     onUpdate: onChange,
     onDelete,
     onEdit,
+    renderHeaderTitle,
     ...(defaultDataSource ? { dataSource: defaultDataSource } : null),
   };
   // checking for custom filters first to prevent conversion attempts
@@ -105,6 +113,7 @@ export const FilterTile: React.FC<FilterTileProps> = ({
   return (
     <UnsupportedFilterTile
       filter={filter}
+      renderHeaderTitle={renderHeaderTitle}
       design={{ header: { isCollapsible: false } }}
       onDelete={onDelete}
     />

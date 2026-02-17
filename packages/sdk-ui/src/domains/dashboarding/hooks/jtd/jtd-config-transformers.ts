@@ -11,7 +11,7 @@ import { PivotTableDataOptions } from '@/domains/visualizations/core/chart-data-
 import { createPanelItem } from '@/domains/widgets/components/widget-by-id/translate-widget-data-options';
 import type { Panel, PanelItem } from '@/domains/widgets/components/widget-by-id/types';
 import { isPivotTableWidgetProps } from '@/domains/widgets/components/widget-by-id/utils';
-import { WidgetProps } from '@/props';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { StyledColumn, StyledMeasureColumn } from '@/types';
 
 import type {

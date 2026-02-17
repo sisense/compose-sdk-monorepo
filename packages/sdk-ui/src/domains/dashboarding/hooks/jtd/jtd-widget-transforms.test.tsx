@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as widgetUtils from '@/domains/widgets/components/widget-by-id/utils';
-import { WidgetProps } from '@/props.js';
+import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { PivotTableDataPoint } from '@/types';
 
 import * as jtdFormatters from './jtd-formatters.js';

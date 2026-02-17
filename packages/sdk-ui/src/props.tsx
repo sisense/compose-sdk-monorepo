@@ -33,11 +33,10 @@ import {
   TabularChartDataOptions,
 } from './domains/visualizations/core/chart-data-options/types';
 import { HighchartsOptions } from './domains/visualizations/core/chart-options-processor/chart-options-service';
+import type { ChartWidgetProps } from './domains/widgets/components/chart-widget/types';
 import { FiltersMergeStrategy } from './domains/widgets/components/widget-by-id/types';
 import { AppConfig } from './infra/app/client-application';
-import { BeforeMenuOpenHandler } from './infra/contexts/menu-provider/types';
 import { HookEnableParam } from './shared/hooks/types';
-import { DistributiveOmit } from './shared/utils/utility-types/distributive-omit';
 import {
   AreamapDataPoint,
   AreamapStyleOptions,
@@ -53,14 +52,11 @@ import {
   ChartDataPoints,
   ChartStyleOptions,
   ChartType,
-  ChartWidgetStyleOptions,
   CustomDrilldownResult,
-  CustomWidgetStyleOptions,
   DataPoint,
   DrilldownOptions,
   DrilldownSelection,
   FunnelStyleOptions,
-  GenericDataOptions,
   IndicatorDataPoint,
   IndicatorRenderOptions,
   IndicatorStyleOptions,
@@ -72,7 +68,6 @@ import {
   PivotTableDataPoint,
   PivotTableDrilldownOptions,
   PivotTableStyleOptions,
-  PivotTableWidgetStyleOptions,
   PolarStyleOptions,
   RegularChartStyleOptions,
   RegularChartType,
@@ -84,10 +79,8 @@ import {
   StreamgraphStyleOptions,
   SunburstStyleOptions,
   TableStyleOptions,
-  TableWidgetStyleOptions,
   TabularChartStyleOptions,
   TextWidgetDataPoint,
-  TextWidgetStyleOptions,
   ThemeConfig,
   ThemeOid,
   ThemeSettings,
@@ -96,6 +89,11 @@ import {
 } from './types';
 
 export type { TabberButtonsWidgetProps } from './domains/widgets/components/tabber-buttons-widget/types';
+export type {
+  WidgetProps,
+  WidgetType,
+  WithCommonWidgetProps,
+} from './domains/widgets/components/widget/types';
 export type { MenuItemSection, HighchartsOptions };
 
 /**
@@ -514,7 +512,7 @@ interface HighchartsBasedChartEventProps {
 interface BaseChartEventProps {
   /**
    * A callback that allows to modify data immediately after it has been retrieved.
-   * Can be used to inject modification of queried data.
+   * It can be used to inject modification of queried data.
    *
    * @category Callbacks
    */
@@ -780,7 +778,7 @@ export interface BaseChartProps extends BaseChartEventProps {
 /**
  * Chart props to be able to react on chart events.
  */
-interface ChartEventProps extends BaseChartEventProps {
+export interface ChartEventProps extends BaseChartEventProps {
   /**
    * Click handler callback for a data point
    *
@@ -1353,470 +1351,13 @@ export interface WidgetByIdProps
    */
   styleOptions?: WidgetByIdStyleOptions;
   /**
-   * {@inheritDoc ChartWidgetProps.drilldownOptions}
+   * Drilldown options for the widget
    *
    * @category Widget
    * @internal
    */
   drilldownOptions?: DrilldownOptions | PivotTableDrilldownOptions;
 }
-
-/**
- * Props for the {@link ChartWidget} component
- *
- */
-export interface ChartWidgetProps extends ChartEventProps {
-  /**
-   * Data source the query is run against - e.g. `Sample ECommerce`
-   *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
-   *
-   * @category Data
-   */
-  dataSource?: DataSource;
-
-  /**
-   * Filters that will slice query results
-   *
-   * @category Data
-   */
-  filters?: Filter[] | FilterRelations;
-
-  /**
-   * Highlight filters that will highlight results that pass filter criteria
-   *
-   * @category Data
-   */
-  highlights?: Filter[];
-
-  /**
-   * Default chart type of each series
-   *
-   * @category Chart
-   */
-  chartType: ChartType;
-
-  /**
-   * Configurations for how to interpret and present the data passed to the chart
-   *
-   * @category Chart
-   */
-  dataOptions: ChartDataOptions;
-
-  /**
-   * Style options for both the chart and widget including the widget header
-   *
-   * @category Widget
-   */
-  styleOptions?: ChartWidgetStyleOptions;
-
-  /**
-   * List of categories to allow drilldowns on
-   *
-   * @category Widget
-   */
-  drilldownOptions?: DrilldownOptions;
-
-  /**
-   * React nodes to be rendered at the top of component, before the chart
-   *
-   * @category Widget
-   * @internal
-   */
-  topSlot?: ReactNode;
-
-  /**
-   * React nodes to be rendered at the bottom of component, after the chart
-   *
-   * @category Widget
-   * @internal
-   */
-  bottomSlot?: ReactNode;
-
-  /**
-   * ContextMenu items for when data points are selected or right-clicked
-   *
-   * @category Widget
-   * @internal
-   */
-  contextMenuItems?: MenuItemSection[];
-
-  /**
-   * Callback for when context menu is closed
-   *
-   * @category Widget
-   * @internal
-   */
-  onContextMenuClose?: () => void;
-
-  /**
-   * Title of the widget
-   *
-   * @category Widget
-   */
-  title?: string;
-
-  /**
-   *  Description of the widget
-   *
-   * @category Widget
-   */
-  description?: string;
-
-  /**
-   * Boolean flag whether selecting data points triggers highlight filter of the selected data
-   *
-   * Recommended to turn on when the Chart Widget component is enhanced with data drilldown by the Drilldown Widget component
-   *
-   * If not specified, the default value is `false`
-   *
-   * @category Widget
-   */
-  highlightSelectionDisabled?: boolean;
-
-  /** @internal */
-  onChange?: (props: Partial<ChartWidgetProps>) => void;
-}
-
-/**
- * Props for the {@link TableWidget} component
- *
- * @internal
- */
-export interface TableWidgetProps {
-  /**
-   * Data source the query is run against - e.g. `Sample ECommerce`
-   *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
-   *
-   * @category Data
-   */
-  dataSource?: DataSource;
-
-  /**
-   * Filters that will slice query results
-   *
-   * @category Data
-   */
-  filters?: Filter[] | FilterRelations;
-
-  /**
-   * Configurations for how to interpret and present the data passed to the table
-   *
-   * @category Chart
-   */
-  dataOptions: TableDataOptions;
-
-  /**
-   * Style options for both the table and widget including the widget header
-   *
-   * @category Widget
-   */
-  styleOptions?: TableWidgetStyleOptions;
-
-  /**
-   * React nodes to be rendered at the top of component, before the table
-   *
-   * @category Widget
-   */
-  topSlot?: ReactNode;
-
-  /**
-   * React nodes to be rendered at the bottom of component, after the table
-   *
-   * @category Widget
-   */
-  bottomSlot?: ReactNode;
-
-  /**
-   * Title of the widget
-   *
-   * @category Widget
-   */
-  title?: string;
-
-  /**
-   *  Description of the widget
-   *
-   * @category Widget
-   */
-  description?: string;
-}
-
-/**
- * Props for the {@link PivotTableWidget} component
- */
-export interface PivotTableWidgetProps {
-  /**
-   * Data source the query is run against - e.g. `Sample ECommerce`
-   *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
-   *
-   * @category Data
-   */
-  dataSource?: DataSource;
-
-  /**
-   * Filters that will slice query results
-   *
-   * @category Data
-   */
-  filters?: Filter[] | FilterRelations;
-
-  /**
-   * Filters that will highlight query results
-   *
-   * @category Data
-   */
-  highlights?: Filter[];
-
-  /**
-   * Configurations for how to interpret and present the data passed to the table
-   *
-   * @category Chart
-   */
-  dataOptions: PivotTableDataOptions;
-
-  /**
-   * Style options for both the table and widget including the widget header
-   *
-   * @category Widget
-   */
-  styleOptions?: PivotTableWidgetStyleOptions;
-
-  /**
-   * React nodes to be rendered at the top of component, before the table
-   *
-   * @category Widget
-   * @internal
-   */
-  topSlot?: ReactNode;
-
-  /**
-   * React nodes to be rendered at the bottom of component, after the table
-   *
-   * @category Widget
-   * @internal
-   */
-  bottomSlot?: ReactNode;
-
-  /**
-   * Title of the widget
-   *
-   * @category Widget
-   */
-  title?: string;
-
-  /**
-   *  Description of the widget
-   *
-   * @category Widget
-   */
-  description?: string;
-
-  /**
-   * Configuration for the pivot table drilldown
-   *
-   * @category Widget
-   */
-  drilldownOptions?: PivotTableDrilldownOptions;
-
-  /**
-   * Callback function that is called when the pivot table cell is clicked
-   *
-   * @category Callbacks
-   */
-  onDataPointClick?: PivotTableDataPointEventHandler;
-
-  /**
-   * Callback function that is called when the pivot table cell is right-clicked
-   *
-   * @category Callbacks
-   */
-  onDataPointContextMenu?: PivotTableDataPointEventHandler;
-
-  /**
-   * Applies custom styling and behavior to pivot table data cells.
-   *
-   * This formatter function returns formatting objects instead of mutating parameters,
-   * following functional programming principles. Use this single callback to combine
-   * multiple handlers and control the call sequence from outside the pivot.
-   *
-   * @example
-   * ```typescript
-   * const customDataFormatter: CustomDataCellFormatter = (cell, jaqlPanelItem, dataOption, id) => {
-   *   if (cell.value > 1000) {
-   *     return {
-   *       style: { backgroundColor: 'lightgreen' },
-   *       content: `${cell.value} (High)`
-   *     };
-   *   }
-   * };
-   * ```
-   *
-   * @internal
-   */
-  onDataCellFormat?: CustomDataCellFormatter;
-
-  /**
-   * Applies custom styling and behavior to pivot table row and column headers.
-   *
-   * This formatter function returns formatting objects instead of mutating parameters,
-   * following functional programming principles. Use this single callback to combine
-   * multiple handlers and control the call sequence from outside the pivot.
-   *
-   * @example
-   * ```typescript
-   * const customHeaderFormatter: CustomHeaderCellFormatter = (cell, jaqlPanelItem, dataOption, id) => {
-   *   if (cell.content === 'Total') {
-   *     return {
-   *       style: { fontWeight: 'bold', color: 'blue' },
-   *       className: 'total-header'
-   *     };
-   *   }
-   * };
-   * ```
-   *
-   * @internal
-   */
-  onHeaderCellFormat?: CustomHeaderCellFormatter;
-  /** @internal */
-  onChange?: (props: Partial<PivotTableWidgetProps>) => void;
-}
-
-/**
- * Props for the `TextWidget` component.
- */
-export interface TextWidgetProps {
-  /**
-   * Style options for the text widget.
-   *
-   * @category Widget
-   */
-  styleOptions: TextWidgetStyleOptions;
-
-  /**
-   * A callback that allows you to customize what happens when a text widget is clicked.
-   * Since TextWidget doesn't have specific data points, this fires when clicking anywhere on the widget.
-   *
-   * @category Callbacks
-   * @internal
-   */
-  onDataPointClick?: TextWidgetDataPointEventHandler;
-}
-
-/**
- * Props for the Custom Widget component
- */
-export interface CustomWidgetProps {
-  /**
-   * Custom widget type. This is typically the name/ID of the custom widget.
-   *
-   * @category Widget
-   */
-  customWidgetType: string;
-
-  /**
-   * Data source the query is run against - e.g. `Sample ECommerce`
-   *
-   * If not specified, the query will use the `defaultDataSource` specified in the parent Sisense Context.
-   *
-   * @category Data
-   */
-  dataSource?: DataSource;
-
-  /**
-   * Filters that will slice query results
-   *
-   * @category Data
-   */
-  filters?: Filter[] | FilterRelations;
-
-  /**
-   * Filters that will highlight query results
-   *
-   * @category Data
-   */
-  highlights?: Filter[];
-
-  /**
-   * Configurations for how to interpret and present the data passed to the table
-   *
-   * @category Chart
-   */
-  dataOptions: GenericDataOptions;
-
-  /**
-   * Style options for the custom widget.
-   *
-   * @category Widget
-   */
-  styleOptions?: CustomWidgetStyleOptions;
-
-  /**
-   * Title of the widget
-   *
-   * @category Widget
-   */
-  title?: string;
-
-  /**
-   *  Description of the widget
-   *
-   * @category Widget
-   */
-  description?: string;
-
-  /**
-   * Specific options for the custom widget.
-   *
-   * @category Widget
-   */
-  customOptions?: Record<string, any>;
-}
-
-/**
- * A utility type that combines widget-specific properties (`BaseWidget`)
- * with a common widget props including corresponding widget type (`Type`).
- */
-export type WithCommonWidgetProps<BaseWidget, Type extends WidgetType> = BaseWidget & {
-  /**
-   * Unique identifier of the widget within the container component (dashboard)
-   *
-   */
-  readonly id: string;
-  /**
-   * Widget type
-   */
-  widgetType: Type;
-  /**
-   * Optional handler function to process menu options before opening the context menu.
-   *
-   * @internal
-   */
-  onBeforeMenuOpen?: BeforeMenuOpenHandler;
-};
-
-/**
- * Type of the widget component.
- */
-export type WidgetType = 'chart' | 'pivot' | 'text' | 'custom';
-
-/**
- * Props for the widget component within a container component like dashboard.
- */
-export type WidgetProps =
-  | WithCommonWidgetProps<ChartWidgetProps, 'chart'>
-  | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>
-  | WithCommonWidgetProps<TextWidgetProps, 'text'>
-  | WithCommonWidgetProps<CustomWidgetProps, 'custom'>;
-
-/**
- * Props for the facade widget component.
- *
- * @internal
- */
-export type CommonWidgetProps = DistributiveOmit<WidgetProps, 'id'>;
 
 /**
  * Props for {@link ExecuteQueryByWidgetId} component.

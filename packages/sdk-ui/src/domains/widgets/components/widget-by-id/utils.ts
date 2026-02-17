@@ -3,26 +3,22 @@ import { ChartSubtype } from '@/domains/visualizations/core/chart-options-proces
 import { WidgetModel } from '@/domains/widgets/widget-model';
 import { WidgetTypeInternal } from '@/domains/widgets/widget-model/types.js';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
-import {
-  ChartProps,
-  ChartWidgetProps,
-  CommonWidgetProps,
-  CustomWidgetProps,
-  PivotTableProps,
-  PivotTableWidgetProps,
-  TextWidgetProps,
-  WidgetProps,
-  WidgetType,
-  WithCommonWidgetProps,
-} from '@/props';
+import { ChartProps, PivotTableProps } from '@/props';
 import { combineHandlers, composeToolbarHandlers } from '@/shared/utils/combine-handlers';
 import {
   ChartStyleOptions,
   ChartType,
+  CustomWidgetEventProps,
   RenderToolbarHandler,
   WidgetContainerStyleOptions,
 } from '@/types.js';
 
+import { ChartWidgetProps } from '../chart-widget/types';
+import { CommonWidgetProps } from '../common-widget/types';
+import { CustomWidgetProps } from '../custom-widget/types';
+import { PivotTableWidgetProps } from '../pivot-table-widget/types';
+import { TextWidgetProps } from '../text-widget/types';
+import { WidgetProps, WidgetType, WithCommonWidgetProps } from '../widget/types';
 import {
   CsdkPluginWidgetType,
   FusionPluginWidgetType,
@@ -396,9 +392,17 @@ export function getInternalWidgetType(widgetProps: CommonWidgetProps): WidgetTyp
  */
 export function registerDataPointClickHandler(
   widgetProps: WidgetProps,
-  handler: NonNullable<ChartProps['onDataPointClick']>,
+  handler: NonNullable<
+    | ChartProps['onDataPointClick']
+    | PivotTableProps['onDataPointClick']
+    | CustomWidgetEventProps['onDataPointClick']
+  >,
 ): void {
-  if (isChartWidgetProps(widgetProps) || isPivotTableWidgetProps(widgetProps)) {
+  if (
+    isChartWidgetProps(widgetProps) ||
+    isPivotTableWidgetProps(widgetProps) ||
+    isCustomWidgetProps(widgetProps)
+  ) {
     widgetProps.onDataPointClick = combineHandlers([widgetProps.onDataPointClick, handler]);
   }
 }
@@ -411,15 +415,21 @@ export function registerDataPointClickHandler(
 export function registerDataPointContextMenuHandler(
   widgetProps: WidgetProps,
   handler: NonNullable<
-    ChartProps['onDataPointContextMenu'] | PivotTableProps['onDataPointContextMenu']
+    | ChartProps['onDataPointContextMenu']
+    | PivotTableProps['onDataPointContextMenu']
+    | CustomWidgetProps['onDataPointContextMenu']
   >,
 ): void {
-  if (!isChartWidgetProps(widgetProps) && !isPivotTableWidgetProps(widgetProps)) return;
-
-  widgetProps.onDataPointContextMenu = combineHandlers([
-    widgetProps.onDataPointContextMenu,
-    handler,
-  ]);
+  if (
+    isChartWidgetProps(widgetProps) ||
+    isPivotTableWidgetProps(widgetProps) ||
+    isCustomWidgetProps(widgetProps)
+  ) {
+    widgetProps.onDataPointContextMenu = combineHandlers([
+      widgetProps.onDataPointContextMenu,
+      handler,
+    ]);
+  }
 }
 
 /**
@@ -429,11 +439,13 @@ export function registerDataPointContextMenuHandler(
  */
 export function registerDataPointsSelectedHandler(
   widgetProps: WidgetProps,
-  handler: NonNullable<ChartProps['onDataPointsSelected']>,
+  handler: NonNullable<
+    ChartProps['onDataPointsSelected'] | CustomWidgetProps['onDataPointsSelected']
+  >,
 ): void {
-  if (!isChartWidgetProps(widgetProps)) return;
-
-  widgetProps.onDataPointsSelected = combineHandlers([widgetProps.onDataPointsSelected, handler]);
+  if (isChartWidgetProps(widgetProps) || isCustomWidgetProps(widgetProps)) {
+    widgetProps.onDataPointsSelected = combineHandlers([widgetProps.onDataPointsSelected, handler]);
+  }
 }
 
 /**

@@ -6,7 +6,6 @@ import isEqual from 'lodash-es/isEqual';
 import { StyledColumn } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { translateColumnToAttribute } from '@/domains/visualizations/core/chart-data-options/utils.js';
 import { useMenu } from '@/infra/contexts/menu-provider/hooks/use-menu.js';
-import { PivotTableWidgetProps } from '@/props.js';
 import { combineHandlers } from '@/shared/utils/combine-handlers.js';
 import { getDataOptionByLocation } from '@/shared/utils/data-option-location';
 import { mergeFiltersOrFilterRelations } from '@/shared/utils/filter-relations.js';
@@ -18,6 +17,7 @@ import {
 } from '../../../drilldown/drilldown-utils.js';
 import { useDrilldown } from '../../../drilldown/hooks/use-drilldown.js';
 import { useSyncedDrilldownPathsManager } from '../../../drilldown/hooks/use-synced-drilldown-paths-manager.js';
+import { PivotTableWidgetProps } from './types';
 import {
   applyDrilldownDimensionToPivot,
   getInitialDimensionLocation,

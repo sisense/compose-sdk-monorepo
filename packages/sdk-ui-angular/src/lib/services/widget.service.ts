@@ -15,10 +15,7 @@ import {
 } from '../component-wrapper-helpers';
 import { type WidgetProps } from '../components/widgets/widget.component';
 import { TrackableService } from '../decorators/trackable.decorator';
-import {
-  translateFromPreactWidgetProps,
-  translateToPreactWidgetProps,
-} from '../helpers/widget-props-preact-translator';
+import { toPreactWidgetProps, toWidgetProps } from '../helpers/widget-props-preact-translator';
 import { SisenseContextService } from './sisense-context.service';
 import { ThemeService } from './theme.service';
 
@@ -168,13 +165,13 @@ export class WidgetService {
     ]);
 
     // Convert Angular props to preact props
-    const preactProps = translateToPreactWidgetProps(widgetProps);
+    const preactProps = toPreactWidgetProps(widgetProps);
 
     // Subscribe to hook adapter results and capture the subscription
     const hookAdapterSubscription = hookAdapter.subscribe((enhancedPreactProps) => {
       if (enhancedPreactProps) {
         // Convert back to Angular props
-        const angularProps = translateFromPreactWidgetProps(enhancedPreactProps);
+        const angularProps = toWidgetProps(enhancedPreactProps);
         enhancedProps$.next(angularProps);
       } else {
         enhancedProps$.next(null);

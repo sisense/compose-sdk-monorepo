@@ -8,10 +8,78 @@ The Compose SDK utilizes the [i18next](https://www.i18next.com/) internationaliz
 ## Changing the language
 To facilitate language changes, the `AppConfig` of `SisenseContextProvider` includes a `translationConfig` property where you can easily set your desired language. For example, to set the language to **French**, use the following code:
 ```
-<SisenseContextProvider appConfig={{ translationConfig: { language: 'fr' }}}>
+<SisenseContextProvider appConfig={{ translationConfig: { language: 'fr-FR' }}}>
 ```
 ## Loading Additional Translations
 By default, the Compose SDK offers a limited number of translation resources. You can utilize `translationConfig` to load additional translation resources into the internationalization framework.
+
+### Pre-built translation submodules (`@sisense/sdk-ui/translations/*`)
+The `@sisense/sdk-ui` package exposes pre-built translation bundles as subpath exports. Each submodule exports an array of translation objects (language, namespace, resources) ready to use in `customTranslations`.
+
+| Submodule | Code | Language |
+|-----------|------|----------|
+| `@sisense/sdk-ui/translations/en-us` | `en-US` | English (US) |
+| `@sisense/sdk-ui/translations/de-de` | `de-DE` | German |
+| `@sisense/sdk-ui/translations/es-ar` | `es-AR` | Spanish (Argentina) |
+| `@sisense/sdk-ui/translations/es-es` | `es-ES` | Spanish (Spain) |
+| `@sisense/sdk-ui/translations/fr-fr` | `fr-FR` | French |
+| `@sisense/sdk-ui/translations/it-it` | `it-IT` | Italian |
+| `@sisense/sdk-ui/translations/ja-jp` | `ja-JP` | Japanese |
+| `@sisense/sdk-ui/translations/ko-kr` | `ko-KR` | Korean |
+| `@sisense/sdk-ui/translations/nl-nl` | `nl-NL` | Dutch |
+| `@sisense/sdk-ui/translations/pt-br` | `pt-BR` | Portuguese (Brazil) |
+| `@sisense/sdk-ui/translations/ru-ru` | `ru-RU` | Russian |
+| `@sisense/sdk-ui/translations/tr-tr` | `tr-TR` | Turkish |
+| `@sisense/sdk-ui/translations/zh-cn` | `zh-CN` | Chinese (Simplified) |
+
+**Example: using a pre-built translation**
+
+```tsx
+import { SisenseContextProvider } from '@sisense/sdk-ui';
+import sdkUiFrench from '@sisense/sdk-ui/translations/fr-fr';
+
+<SisenseContextProvider
+  appConfig={{
+    translationConfig: {
+      language: 'fr-FR',
+      customTranslations: [sdkUiFrench],
+    },
+  }}
+>
+  {/* Your app */}
+</SisenseContextProvider>
+```
+
+**Example: combining pre-built translations with custom overrides**
+
+```tsx
+import { SisenseContextProvider, TranslationDictionary } from '@sisense/sdk-ui';
+import sdkUiGerman from '@sisense/sdk-ui/translations/de-de';
+
+const myOverrides: Partial<TranslationDictionary> = {
+  chartNoData: 'Keine Daten in dieser Ansicht',
+};
+
+<SisenseContextProvider
+  appConfig={{
+    translationConfig: {
+      language: 'de-DE',
+      customTranslations: [
+        sdkUiGerman,
+        {
+          language: 'de-DE',
+          namespace: 'sdkUi',
+          resources: myOverrides,
+        },
+      ],
+    },
+  }}
+>
+  {/* Your app */}
+</SisenseContextProvider>
+```
+
+Later bundles for the same language and namespace extend or override earlier ones, so custom keys will take precedence when registered after the pre-built bundle.
 
 ### Preparing Translation Resources
 A translation resource consists of translation keys paired with their corresponding string values. This resource is typically structured as a nested object, making it easier to manage different translations. You can register multiple languages by creating separate translation resources for each language and then adding them to your configuration.
@@ -68,13 +136,13 @@ import { translationNamespace as sdkDataNamespace } from '@sisense/sdk-data';
 <SisenseContextProvider
   appConfig={{
     translationConfig: {
-      language: 'fr',
+      language: 'fr-FR',
       customTranslations: [{
-        language: 'fr',
+        language: 'fr-FR',
         resources: frenchTranslationResources,
       },
       {
-        language: 'es',
+        language: 'es-ES',
         namespace: sdkDataNamespace, // 'sdkData'
         resources: spanishTranslationResources,
       }]
@@ -102,7 +170,7 @@ const MyComponent = () => {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-	const frenchTranslationResourse = i18n.getResourceBundle('fr', 'sdkUi');
+	const frenchTranslationResourse = i18n.getResourceBundle('fr-FR', 'sdkUi');
 	console.log(`Loaded French translation ${JSON.stringify(frenchTranslationResourse)}`)
   }, [i18n]);
 

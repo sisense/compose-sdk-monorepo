@@ -1,4 +1,4 @@
-import { JSONValue } from '@sisense/sdk-data';
+import { JSONArray, JSONValue } from '@sisense/sdk-data';
 
 import { BaseQueryParams } from '@/domains/query-execution/index.js';
 
@@ -90,24 +90,24 @@ export function translateQueryToJSON(
   const translationErrors: NlqTranslationError[] = [];
 
   // Process each translation category
-  const dimensions = collectTranslationErrors<string[]>(
+  const dimensions = collectTranslationErrors<JSONArray>(
     () => translateDimensionsToJSON(query.dimensions || []),
     translationErrors,
   );
 
-  const measures = collectTranslationErrors(
+  const measures = collectTranslationErrors<JSONArray>(
     () => translateMeasuresToJSON(query.measures || []),
     translationErrors,
   );
 
-  const filters = collectTranslationErrors(
+  const filters = collectTranslationErrors<JSONArray>(
     () => translateFiltersToJSON(query.filters),
     translationErrors,
   );
 
   let highlights = null;
   if (query.highlights && query.highlights.length > 0) {
-    highlights = collectTranslationErrors(
+    highlights = collectTranslationErrors<JSONArray>(
       () => translateHighlightsToJSON(query.highlights),
       translationErrors,
     );
