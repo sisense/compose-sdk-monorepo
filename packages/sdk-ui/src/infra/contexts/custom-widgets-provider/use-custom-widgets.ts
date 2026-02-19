@@ -72,8 +72,22 @@ export const useCustomWidgets = () => {
     [customWidgets],
   );
 
+  /**
+   * Unregister a custom widget, from the context.
+   *
+   * @param customWidgetType - The type of the custom widget.
+   */
+  const unregisterCustomWidget = useCallback((customWidgetType: string) => {
+      if (customWidgets.has(customWidgetType)) {
+        customWidgets.delete(customWidgetType);
+      }
+    },
+    [customWidgets],
+  );
+
   return {
     registerCustomWidget,
+    unregisterCustomWidget,
     hasCustomWidget,
     getCustomWidget,
   };

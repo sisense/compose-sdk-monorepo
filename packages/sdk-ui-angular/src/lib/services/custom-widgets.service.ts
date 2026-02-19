@@ -90,6 +90,19 @@ export class CustomWidgetsService {
     }
   }
 
+    /**
+     * Unregisters a custom widget.
+     *
+     * @param customWidgetType - The unique identifier for the custom widget type.
+     */
+    unregisterCustomWidget(customWidgetType: string): void {
+      const customWidgetsMap = this.customWidgetsMap$.value;
+      if (customWidgetsMap.has(customWidgetType)) {
+        customWidgetsMap.delete(customWidgetType);
+        this.customWidgetsMap$.next(customWidgetsMap);
+      }
+    }
+
   /**
    * Checks if a custom widget is registered.
    *
