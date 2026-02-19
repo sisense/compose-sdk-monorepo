@@ -68,6 +68,16 @@ export const useCustomWidgets = () => {
         );
       }
     },
+      /**
+       * Unregisters a custom widget.
+       *
+       * @param customWidgetType - The unique identifier for the custom widget type.
+       */
+      unregisterCustomWidget: (customWidgetType: string): void => {
+        if (context.value.customWidgetsMap.has(customWidgetType)) {
+          context.value.customWidgetsMap.delete(customWidgetType);
+        }
+      },
     /**
      * Checks if a custom widget is registered.
      *
