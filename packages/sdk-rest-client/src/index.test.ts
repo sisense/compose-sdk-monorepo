@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { HttpClient } from './http-client.js';
+import { PasswordAuthenticator } from './password-authenticator.js';
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { HttpClient, PasswordAuthenticator } from './index.js';
 
 describe('Authenticator and HttpClient', () => {
   const auth = new PasswordAuthenticator('https://10.0.0.1', 'username', 'password');

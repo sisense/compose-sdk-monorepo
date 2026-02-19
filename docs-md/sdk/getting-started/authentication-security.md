@@ -28,6 +28,11 @@ Set up your Sisense instance to authenticate users with SSO using one of the fol
 - [Security Assertion Markup Language 2.0 (SAML)](https://docs.sisense.com/main/SisenseLinux/single-sign-on-using-security-assertion-markup-language-20.htm?tocpath=Security%7CImplementing%20Single%20Sign-On%7C_____2)
 - [OpenID Connect](https://docs.sisense.com/main/SisenseLinux/single-sign-on-using-openid-connect.htm?tocpath=Security%7CImplementing%20Single%20Sign-On%7C_____4)
 
+##### Using the SSO Router Addon with JWT
+If your Sisense instance is configured to use the [SSO Router addon](https://www.sisense.com/marketplace/add-on/sso-router/) in order to support dynamic routing to various JWT endpoints, please use Compose SDK 2.6.0 or later.
+
+For more information on configuring SSO Router check [this knowledge base article](https://community.sisense.com/kb/add-ons_and_plug-ins/sso-router-plugin-usage-with-examples/4805), or contact Sisense support.
+
 ::: tip Note
 If you're experiencing difficulties or unexpected behavior when using SSO, the cause may be a hidden feature configuration. To resolve the issue, you can:
 
@@ -81,7 +86,7 @@ Before creating a WAT, you need to [create a token configuration](https://docs.s
 Once you have a token secret and key ID, you can generate a WAT to use in your application in one of the following ways:
 
 - [Go to Web Access Tokens in the Sisense UI](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm?tocpath=Security%7CSecuring%20Users%7C_____4#OptionsforCreatingWebAccessTokens)
-- Send a request to the [wat/generate](https://sisense.dev/guides/restApi/v1/?platform=linux&spec=L2023.6#/web-access-tokens/generateWebAccessToken) endpoint of the Sisense REST API
+- Send a request to the [wat/generate](https://developer.sisense.com/guides/restApi/v1/?platform=linux&spec=L2025.2#/web-access-tokens/generateWebAccessToken) endpoint of the Sisense REST API
 - [Use self-hosted token generation](https://docs.sisense.com/main/SisenseLinux/using-web-access-token.htm?tocpath=Security%7CSecuring%20Users%7C_____4#OptionsforCreatingWebAccessTokens)
 
 #### Authenticate with a WAT
@@ -127,8 +132,8 @@ Be sure to use API tokens in a secure manner. Typically, API tokens are not a go
 
 You can get an API Token to use in your application in one of the following ways:
 
-- [Go to a user profile in the Sisense UI](https://sisense.dev/guides/restApi/using-rest-api.html#getting-the-api-token-from-user-profiles)
-- Send a request to the [authentication/login](https://sisense.dev/guides/restApi/v1/?platform=linux&spec=L2023.6#/authentication/login) endpoint of the Sisense REST API
+- [Go to a user profile in the Sisense UI](https://developer.sisense.com/guides/restApi/using-rest-api.html#getting-the-api-token-from-user-profiles)
+- Send a request to the [authentication/login](https://developer.sisense.com/guides/restApi/v1/?platform=linux&spec=L2025.2#/authentication/login) endpoint of the Sisense REST API
 - Run the following command using the Compose SDK CLI tool:
 
 ```sh
@@ -182,7 +187,7 @@ To get around this problem, you enable [CORS](https://developer.mozilla.org/en-U
 Set up CORS on your Sisense instance using one of the following:
 
 - [Add your application's domain to the **CORS Allowed Origins** in the Sisense UI](https://docs.sisense.com/main/SisenseLinux/cross-origin-resource-sharing.htm?Highlight=cors#EnablingCORS)
-- Send a request to the [settings/system](https://sisense.dev/guides/restApi/v1/?platform=linux&spec=L2023.6#/settings/setSystemSettings) endpoint of the Sisense REST API and include your application's domain in the `allowedOrigins` array:
+- Send a request to the [settings/system](https://developer.sisense.com/guides/restApi/v1/?platform=linux&spec=L2025.2#/settings/setSystemSettings) endpoint of the Sisense REST API and include your application's domain in the `allowedOrigins` array:
 
 ```json
 "cors": {

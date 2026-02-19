@@ -1,9 +1,10 @@
-import { Chart } from '../chart';
-import { templateForComponent } from './template';
-import { BoxplotStyleOptions } from '../types';
 import { Data } from '@sisense/sdk-data';
-import { BoxplotChartProps } from '../props';
+
 import { withBlurredRows } from '../__test-helpers__';
+import { Chart } from '../domains/visualizations/components/chart';
+import { BoxplotChartProps } from '../props';
+import { BoxplotStyleOptions } from '../types';
+import { templateForComponent } from './template';
 
 const template = templateForComponent(Chart);
 

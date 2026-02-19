@@ -1,0 +1,2131 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`WidgetById > should exclude dashboard filters when includeDashboardFilters is false > widget-props-with-dashboard-filters-excluded 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should handle complex prop combinations correctly > widget-props-complex-combination 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [
+      null,
+    ],
+    "drilldownSelections": [],
+  },
+  "filters": [
+    {
+      "__serializable": "MembersFilter",
+      "attribute": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.[[Age Range]]",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Age Range]",
+        "name": "Age Range",
+        "type": "text-attribute",
+      },
+      "composeCode": "filterFactory.members(DM.Commerce.[[Age Range]], ['25-34'])",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": false,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+      },
+      "description": "",
+      "filterType": "members",
+      "members": [
+        "25-34",
+      ],
+      "name": "2a1903b20bd",
+      "type": "filter",
+    },
+    {
+      "__serializable": "MembersFilter",
+      "attribute": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.country.Country",
+        "dataSource": {
+          "address": "LocalHost",
+          "database": "aSampleIAAaECommerce",
+          "fullname": "LocalHost/Sample ECommerce",
+          "id": "localhost_aSampleIAAaECommerce",
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[country.Country]",
+        "name": "COUNTRY",
+        "type": "text-attribute",
+      },
+      "composeCode": "filterFactory.members(DM.country.Country, [], { excludeMembers: true })",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": true,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+        "originalFilterJaql": {
+          "column": "Country",
+          "datasource": {
+            "address": "LocalHost",
+            "database": "aSampleIAAaECommerce",
+            "fullname": "LocalHost/Sample ECommerce",
+            "id": "localhost_aSampleIAAaECommerce",
+            "title": "Sample ECommerce",
+          },
+          "datatype": "text",
+          "dim": "[country.Country]",
+          "filter": {
+            "exclude": {
+              "members": [],
+            },
+            "multiSelection": true,
+          },
+          "table": "country",
+          "title": "COUNTRY",
+        },
+      },
+      "description": "",
+      "filterType": "members",
+      "members": [],
+      "name": "4711f977358",
+      "type": "filter",
+    },
+    {
+      "__serializable": "MembersFilter",
+      "attribute": {
+        "__serializable": "DimensionalLevelAttribute",
+        "composeCode": "DM.Commerce.Date.Years",
+        "dataSource": {
+          "address": "LocalHost",
+          "database": "aSampleIAAaECommerce",
+          "fullname": "LocalHost/Sample ECommerce",
+          "id": "localhost_aSampleIAAaECommerce",
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Date (Calendar)]",
+        "format": "yyyy",
+        "granularity": "Years",
+        "name": "YEARS",
+        "type": "datelevel",
+      },
+      "composeCode": "filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00'])",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": false,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+        "originalFilterJaql": {
+          "column": "Date",
+          "datasource": {
+            "address": "LocalHost",
+            "database": "aSampleIAAaECommerce",
+            "fullname": "LocalHost/Sample ECommerce",
+            "id": "localhost_aSampleIAAaECommerce",
+            "title": "Sample ECommerce",
+          },
+          "datatype": "datetime",
+          "dim": "[Commerce.Date (Calendar)]",
+          "filter": {
+            "members": [
+              "2013-01-01T00:00:00",
+            ],
+            "multiSelection": true,
+          },
+          "level": "years",
+          "table": "Commerce",
+          "title": "YEARS",
+        },
+      },
+      "description": "",
+      "filterType": "members",
+      "members": [
+        "2013-01-01T00:00:00",
+      ],
+      "name": "97472e6fe59",
+      "type": "filter",
+    },
+  ],
+  "highlights": [
+    {
+      "__serializable": "MembersFilter",
+      "attribute": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Gender",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Gender]",
+        "name": "Gender",
+        "type": "text-attribute",
+      },
+      "composeCode": "filterFactory.members(DM.Commerce.Gender, ['Female'])",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": false,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+      },
+      "description": "",
+      "filterType": "members",
+      "members": [
+        "Female",
+      ],
+      "name": "6765f4132d6",
+      "type": "filter",
+    },
+  ],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "header": {
+      "backgroundColor": "#e0e0e0",
+    },
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+    "width": 1000,
+  },
+  "title": "Complex Test Widget",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should handle filters merge strategy correctly > widget-props-with-filters-merge-strategy 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [
+    {
+      "__serializable": "MembersFilter",
+      "attribute": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.[[Age Range]]",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Age Range]",
+        "name": "Age Range",
+        "type": "text-attribute",
+      },
+      "composeCode": "filterFactory.members(DM.Commerce.[[Age Range]], ['18-24'])",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": false,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+      },
+      "description": "",
+      "filterType": "members",
+      "members": [
+        "18-24",
+      ],
+      "name": "84fa8d5c2b2",
+      "type": "filter",
+    },
+  ],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should include dashboard filters when includeDashboardFilters is true > widget-props-with-dashboard-filters-included 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [
+    {
+      "__serializable": "MembersFilter",
+      "attribute": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.country.Country",
+        "dataSource": {
+          "address": "LocalHost",
+          "database": "aSampleIAAaECommerce",
+          "fullname": "LocalHost/Sample ECommerce",
+          "id": "localhost_aSampleIAAaECommerce",
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[country.Country]",
+        "name": "COUNTRY",
+        "type": "text-attribute",
+      },
+      "composeCode": "filterFactory.members(DM.country.Country, [], { excludeMembers: true })",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": true,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+        "originalFilterJaql": {
+          "column": "Country",
+          "datasource": {
+            "address": "LocalHost",
+            "database": "aSampleIAAaECommerce",
+            "fullname": "LocalHost/Sample ECommerce",
+            "id": "localhost_aSampleIAAaECommerce",
+            "title": "Sample ECommerce",
+          },
+          "datatype": "text",
+          "dim": "[country.Country]",
+          "filter": {
+            "exclude": {
+              "members": [],
+            },
+            "multiSelection": true,
+          },
+          "table": "country",
+          "title": "COUNTRY",
+        },
+      },
+      "description": "",
+      "filterType": "members",
+      "members": [],
+      "name": "4711f977358",
+      "type": "filter",
+    },
+    {
+      "__serializable": "MembersFilter",
+      "attribute": {
+        "__serializable": "DimensionalLevelAttribute",
+        "composeCode": "DM.Commerce.Date.Years",
+        "dataSource": {
+          "address": "LocalHost",
+          "database": "aSampleIAAaECommerce",
+          "fullname": "LocalHost/Sample ECommerce",
+          "id": "localhost_aSampleIAAaECommerce",
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Date (Calendar)]",
+        "format": "yyyy",
+        "granularity": "Years",
+        "name": "YEARS",
+        "type": "datelevel",
+      },
+      "composeCode": "filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00'])",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": false,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+        "originalFilterJaql": {
+          "column": "Date",
+          "datasource": {
+            "address": "LocalHost",
+            "database": "aSampleIAAaECommerce",
+            "fullname": "LocalHost/Sample ECommerce",
+            "id": "localhost_aSampleIAAaECommerce",
+            "title": "Sample ECommerce",
+          },
+          "datatype": "datetime",
+          "dim": "[Commerce.Date (Calendar)]",
+          "filter": {
+            "members": [
+              "2013-01-01T00:00:00",
+            ],
+            "multiSelection": true,
+          },
+          "level": "years",
+          "table": "Commerce",
+          "title": "YEARS",
+        },
+      },
+      "description": "",
+      "filterType": "members",
+      "members": [
+        "2013-01-01T00:00:00",
+      ],
+      "name": "97472e6fe59",
+      "type": "filter",
+    },
+  ],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should merge external style options with widget style options > widget-props-with-style-options 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "header": {
+      "backgroundColor": "#f0f0f0",
+      "titleTextColor": "#333333",
+    },
+    "height": 600,
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+    "width": 800,
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should omit undefined values from external props > widget-props-with-undefined-values-omitted 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should override widget title and description > widget-props-with-title-description 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "Custom widget description for testing",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "Custom Widget Title",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should pass drilldown options to Widget component > widget-props-with-drilldown-options 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [
+      {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.[[Age Range]]",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Age Range]",
+        "name": "Age Range",
+        "type": "text-attribute",
+      },
+      {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Gender",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Gender]",
+        "name": "Gender",
+        "type": "text-attribute",
+      },
+    ],
+    "drilldownSelections": [
+      {
+        "nextDimension": {
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.Gender",
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
+          "description": "",
+          "expression": "[Commerce.Gender]",
+          "name": "Gender",
+          "type": "text-attribute",
+        },
+        "points": [
+          {
+            "categoryDisplayValue": "18-24",
+            "categoryValue": "18-24",
+          },
+        ],
+      },
+    ],
+  },
+  "filters": [],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should pass external filters to Widget component > widget-props-with-filters 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [
+    {
+      "__serializable": "MembersFilter",
+      "attribute": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.[[Age Range]]",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Age Range]",
+        "name": "Age Range",
+        "type": "text-attribute",
+      },
+      "composeCode": "filterFactory.members(DM.Commerce.[[Age Range]], ['18-24', '25-34'])",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": false,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+      },
+      "description": "",
+      "filterType": "members",
+      "members": [
+        "18-24",
+        "25-34",
+      ],
+      "name": "fd4ba343680",
+      "type": "filter",
+    },
+    {
+      "__serializable": "NumericFilter",
+      "attribute": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Revenue",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Revenue]",
+        "name": "Revenue",
+        "type": "numeric-attribute",
+      },
+      "composeCode": "filterFactory.greaterThan(DM.Commerce.Revenue, 1000)",
+      "config": {
+        "disabled": false,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+      },
+      "description": "",
+      "filterType": "numeric",
+      "name": "2ecf6937d5f",
+      "operatorA": "fromNotEqual",
+      "type": "filter",
+      "valueA": 1000,
+    },
+  ],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should pass external highlights to Widget component > widget-props-with-highlights 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [],
+  "highlights": [
+    {
+      "__serializable": "MembersFilter",
+      "attribute": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Gender",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Gender]",
+        "name": "Gender",
+        "type": "text-attribute",
+      },
+      "composeCode": "filterFactory.members(DM.Commerce.Gender, ['Male'])",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": false,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+      },
+      "description": "",
+      "filterType": "members",
+      "members": [
+        "Male",
+      ],
+      "name": "9d2957eadd5",
+      "type": "filter",
+    },
+    {
+      "__serializable": "NumericFilter",
+      "attribute": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Cost",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Cost]",
+        "name": "Cost",
+        "type": "numeric-attribute",
+      },
+      "composeCode": "filterFactory.lessThan(DM.Commerce.Cost, 500)",
+      "config": {
+        "disabled": false,
+        "guid": "STABLE-GUID-PLACEHOLDER",
+        "locked": false,
+      },
+      "description": "",
+      "filterType": "numeric",
+      "name": "f37da1b1826",
+      "operatorA": "toNotEqual",
+      "type": "filter",
+      "valueA": 500,
+    },
+  ],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should pass through additional widget props > widget-props-with-additional-props 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should preserve widget id from dashboard configuration > widget-props-with-preserved-id 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;
+
+exports[`WidgetById > should render widget by id > basic-widget-props 1`] = `
+{
+  "chartType": "indicator",
+  "dataOptions": {
+    "max": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('2500', '2500')",
+          "context": {},
+          "description": "",
+          "expression": "2500",
+          "name": "2500",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "min": [
+      {
+        "column": {
+          "__serializable": "DimensionalCalculatedMeasure",
+          "composeCode": "measureFactory.customFormula('0 (default)', '0')",
+          "context": {},
+          "description": "",
+          "expression": "0",
+          "name": "0 (default)",
+          "sort": 0,
+          "type": "calculatedmeasure",
+        },
+        "sortType": "sortNone",
+      },
+    ],
+    "secondary": [],
+    "value": [
+      {
+        "color": {
+          "color": "#00cee6",
+          "type": "uniform",
+        },
+        "column": {
+          "__serializable": "DimensionalBaseMeasure",
+          "aggregation": "countDistinct",
+          "attribute": {
+            "__serializable": "DimensionalAttribute",
+            "composeCode": "DM.Commerce.[[Brand ID]]",
+            "dataSource": {
+              "address": "LocalHost",
+              "database": "aSampleIAAaECommerce",
+              "id": "localhost_aSampleIAAaECommerce",
+              "title": "Sample ECommerce",
+            },
+            "description": "",
+            "expression": "[Commerce.Brand ID]",
+            "name": "# of unique Brand ID",
+            "type": "numeric-attribute",
+          },
+          "composeCode": "measureFactory.countDistinct(DM.Commerce.[[Brand ID]], '# of unique Brand ID')",
+          "description": "",
+          "name": "# of unique Brand ID",
+          "sort": 0,
+          "type": "basemeasure",
+        },
+        "numberFormatConfig": {
+          "billion": true,
+          "decimalScale": "auto",
+          "kilo": false,
+          "million": true,
+          "name": "Numbers",
+          "prefix": false,
+          "thousandSeparator": true,
+          "trillion": true,
+        },
+        "sortType": "sortNone",
+      },
+    ],
+  },
+  "dataSource": {
+    "address": "LocalHost",
+    "id": "localhost_aSampleIAAaECommerce",
+    "title": "Sample ECommerce",
+    "type": "elasticube",
+  },
+  "description": "",
+  "drilldownOptions": {
+    "drilldownPaths": [],
+    "drilldownSelections": [],
+  },
+  "filters": [],
+  "highlights": [],
+  "id": "682b70452d7f147f883dd0f6",
+  "styleOptions": {
+    "indicatorComponents": {
+      "labels": {
+        "shouldBeShown": true,
+      },
+      "secondaryTitle": {
+        "text": "",
+      },
+      "ticks": {
+        "shouldBeShown": true,
+      },
+      "title": {
+        "shouldBeShown": false,
+        "text": "# of unique Brand ID",
+      },
+    },
+    "skin": 1,
+    "subtype": "indicator/gauge",
+  },
+  "title": "TOTAL BRANDS",
+  "widgetType": "chart",
+}
+`;

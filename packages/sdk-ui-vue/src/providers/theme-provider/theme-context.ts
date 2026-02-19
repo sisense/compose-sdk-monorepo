@@ -1,6 +1,6 @@
+import { type CompleteThemeSettings, getDefaultThemeSettings } from '@sisense/sdk-ui-preact';
 import { inject, ref } from 'vue';
 import type { InjectionKey, Ref } from 'vue';
-import { getDefaultThemeSettings, type CompleteThemeSettings } from '@sisense/sdk-ui-preact';
 
 export const themeContextConfigKey = Symbol('themeContextConfigKey') as InjectionKey<
   Ref<CompleteThemeSettings>

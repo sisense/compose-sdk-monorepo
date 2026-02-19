@@ -9,6 +9,7 @@ import { create } from '../factory.js';
 import {
   Attribute,
   BaseFilterConfig,
+  BaseMeasure,
   CompleteBaseFilterConfig,
   CompleteMembersFilterConfig,
   Filter,
@@ -97,6 +98,7 @@ export const FilterTypes = {
   exclude: 'exclude',
   measure: 'measure',
   ranking: 'ranking',
+  measureRanking: 'measure-ranking',
   text: 'text',
   numeric: 'numeric',
   dateRange: 'dateRange',
@@ -743,6 +745,85 @@ export class RankingFilter extends AbstractFilter {
 /**
  * @internal
  */
+export class MeasureRankingFilter extends AbstractFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'MeasureRankingFilter';
+
+  count: number;
+
+  operator: string;
+
+  measure: BaseMeasure;
+
+  constructor(
+    measure: BaseMeasure,
+    operator: string,
+    count: number,
+    config?: BaseFilterConfig,
+    composeCode?: string,
+  ) {
+    super(measure.attribute, FilterTypes.measureRanking, config, composeCode);
+
+    this.count = count;
+    this.operator = operator;
+    this.measure = measure;
+  }
+
+  /**
+   * gets the element's ID
+   */
+  get id(): string {
+    return `${this.operator}_${this.count}_measure_${this.measure.id}`;
+  }
+
+  /**
+   * Gets a serializable representation of the element
+   */
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.measure = this.measure.serialize();
+    result.count = this.count;
+    result.operator = this.operator;
+
+    return result;
+  }
+
+  /**
+   * Gets JAQL representing this Filter instance
+   */
+  filterJaql(): any {
+    const result = <any>{};
+
+    result[this.operator] = this.count;
+
+    return result;
+  }
+
+  jaql(nested?: boolean | undefined) {
+    if (this.config.disabled) {
+      return AbstractFilter.disabledJaql(nested);
+    }
+
+    const result = super.jaql(nested);
+
+    if (isDimensionalBaseMeasure(this.measure)) {
+      Object.entries(this.measure.jaql().jaql).forEach(([key, value]) => {
+        result.jaql[key] = value;
+      });
+    }
+
+    // Add type: 'measure' for measure-based filters
+    result.jaql.type = 'measure';
+
+    return result;
+  }
+}
+
+/**
+ * @internal
+ */
 export class NumericFilter extends DoubleOperatorFilter<number> {
   /**
    * @internal
@@ -1043,6 +1124,16 @@ export function isRankingFilter(filter: Filter & AnyObject): filter is RankingFi
 }
 
 /**
+ * Checks if a filter is a MeasureRankingFilter.
+ *
+ * @param filter - The filter to check.
+ * @internal
+ */
+export function isMeasureRankingFilter(filter: Filter & AnyObject): filter is MeasureRankingFilter {
+  return filter && filter.__serializable === 'MeasureRankingFilter';
+}
+
+/**
  * Checks if a filter is a MeasureFilter.
  *
  * @param filter - The filter to check.
@@ -1130,15 +1221,12 @@ export function createFilter(json: any): Filter {
         json.filters.map((f: any) => createFilter(f)),
         json.operator,
       );
-      break;
 
     case FilterTypes.members:
       return new MembersFilter(create(json.attribute) as Attribute, json.members);
-      break;
 
     case FilterTypes.exclude:
       return new ExcludeFilter(createFilter(json.filter), json.input && createFilter(json.input));
-      break;
 
     case FilterTypes.measure:
       return new MeasureFilter(
@@ -1149,7 +1237,6 @@ export function createFilter(json: any): Filter {
         json.operatorB,
         json.valueB,
       );
-      break;
 
     case FilterTypes.ranking:
       return new RankingFilter(
@@ -1158,7 +1245,13 @@ export function createFilter(json: any): Filter {
         json.operator,
         json.count,
       );
-      break;
+
+    case FilterTypes.measureRanking:
+      return new MeasureRankingFilter(
+        create(json.measure) as BaseMeasure,
+        json.operator,
+        json.count,
+      );
 
     case FilterTypes.numeric:
       return new NumericFilter(
@@ -1168,11 +1261,9 @@ export function createFilter(json: any): Filter {
         json.operatorB,
         json.valueB,
       );
-      break;
 
     case FilterTypes.text:
       return new TextFilter(create(json.attribute) as Attribute, json.operatorA, json.valueA);
-      break;
 
     case FilterTypes.relativeDate:
       return new RelativeDateFilter(
@@ -1182,7 +1273,6 @@ export function createFilter(json: any): Filter {
         json.operator,
         json.anchor,
       );
-      break;
 
     case FilterTypes.dateRange:
       return new DateRangeFilter(
@@ -1190,7 +1280,6 @@ export function createFilter(json: any): Filter {
         json.valueA,
         json.valueB,
       );
-      break;
   }
 
   throw new TranslatableError('errors.filter.unsupportedType', {

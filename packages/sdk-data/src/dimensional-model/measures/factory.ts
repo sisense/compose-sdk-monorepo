@@ -1,7 +1,11 @@
 /* eslint-disable max-lines */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { ForecastFormulaOptions, TrendFormulaOptions } from '../../interfaces.js';
 import { normalizeName } from '../base.js';
@@ -148,6 +152,8 @@ function measureFunction(
  * @param title - Title of the measure to be displayed in legend
  * @param formula - Formula to be used for the measure
  * @param context - Formula context as a map of strings to attributes, measures, or filters
+ * @param format - Optional format string for the measure
+ * @param description - Optional description of the measure
  * @returns A calculated measure instance
  * @group Advanced Analytics
  */
@@ -155,14 +161,19 @@ export const customFormula: (
   title: string,
   formula: string,
   context: CustomFormulaContext,
-) => CalculatedMeasure = withComposeCodeForMeasure((title, formula, context) => {
-  // context keys must be in brackets
-  const newContext = Object.fromEntries(
-    Object.entries(context).map(([key, val]) => [key.startsWith('[') ? key : `[${key}]`, val]),
-  );
+  format?: string,
+  description?: string,
+) => CalculatedMeasure = withComposeCodeForMeasure(
+  (title, formula, context, format, description) => {
+    // context keys must be in brackets
+    const newContext = Object.fromEntries(
+      Object.entries(context).map(([key, val]) => [key.startsWith('[') ? key : `[${key}]`, val]),
+    );
 
-  return new DimensionalCalculatedMeasure(title, formula, newContext);
-}, 'customFormula');
+    return new DimensionalCalculatedMeasure(title, formula, newContext, format, description);
+  },
+  'customFormula',
+);
 
 function arithmetic(
   operand1: Measure | number,

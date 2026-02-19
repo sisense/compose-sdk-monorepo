@@ -52,7 +52,7 @@ Purely for the **simplicity** of this guide, we have chosen to define a custom w
 
 This guide also aims to demonstrate the flexibility of the `registerCustomWidget` interface - as long as you provide a functional component that matches the shape of [`CustomWidgetComponent`](../../modules/sdk-ui/type-aliases/type-alias.CustomWidgetComponent.md), Compose SDK will render that component as a replacement for the designated Fusion plugin.
 
-A note on the `dataOptions` prop that is passed to our component: For those familiar with the Fusion plugin / add-on architecture, `dataOptions` is the Compose SDK equivalent of `panels` on the [WidgetMetadata](https://sisense.dev/guides/customJs/jsApiRef/widgetClass/widget-metadata.html) object.
+A note on the `dataOptions` prop that is passed to our component: For those familiar with the Fusion plugin / add-on architecture, `dataOptions` is the Compose SDK equivalent of `panels` on the [WidgetMetadata](https://developer.sisense.com/guides/customJs/jsApiRef/widgetClass/widget-metadata.html) object.
 
 Compose SDK translates all widget metadata and filters to Compose SDK data structures (e.g. values inside [`dataOptions`](../../modules/sdk-ui/type-aliases/type-alias.ChartDataOptions.md) are of type [`StyledColumn`](../../modules/sdk-ui/interfaces/interface.StyledColumn.md) and [`StyledMeasureColumn`](../../modules/sdk-ui/interfaces/interface.StyledMeasureColumn.md), the same types you'd expect for [`dataOptions`](../../modules/sdk-ui/type-aliases/type-alias.ChartDataOptions.md) into the [`Chart`](../../modules/sdk-ui/charts/function.Chart.md) component).
 
@@ -136,11 +136,11 @@ Here's what we accomplished:
 - Created a React component that uses its props to execute a data query and display the results in a table
 - Registered that table component as a custom widget to be shown in place of the `histogramwidget` Fusion plugin when it is rendered inside of a `DashboardById` component
 
-Obviously, we didn't end up with a new histogram component in React (yet), but hopefully the simplicity of this guide gives you the tools to you need to make that, or anything else, happen!
+Obviously, we didn't end up with a new histogram component in React (yet), but hopefully the simplicity of this guide gives you the tools you need to make that, or anything else, happen!
 
 ## Migration from previous Plugin Interface to Custom Widget Interface
 
-If you have existing code that uses the [previous Compose SDK "plugin" interface](https://sisense.dev/guides/sdkPrevious/v1/guides/chart-plugins.html), here's how to migrate to the new "custom widget" interface.
+If you have existing code that uses the [previous Compose SDK "plugin" interface](https://developer.sisense.com/guides/sdkPrevious/v1/guides/chart-plugins.html), here's how to migrate to the new "custom widget" interface.
 
 ### API Changes
 

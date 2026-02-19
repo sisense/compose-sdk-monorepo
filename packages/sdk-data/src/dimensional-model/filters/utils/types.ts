@@ -23,6 +23,7 @@ export type JaqlDataSource = {
   fullname?: string;
   lastBuildTime?: string;
   revisionId?: string;
+  type?: 'live' | 'elasticube';
 };
 
 /**

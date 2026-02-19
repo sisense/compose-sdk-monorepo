@@ -1,15 +1,16 @@
-import { onBeforeUnmount, toRefs, watch } from 'vue';
 import {
+  type CsvQueryState,
   type ExecuteCsvQueryParams,
   HookAdapter,
   useExecuteCsvQueryInternal,
-  type CsvQueryState,
 } from '@sisense/sdk-ui-preact';
+import { onBeforeUnmount, toRefs, watch } from 'vue';
+
 import { createSisenseContextConnector } from '../helpers/context-connectors';
+import { useRefState } from '../helpers/use-ref-state';
 import type { MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
-import { useRefState } from '../helpers/use-ref-state';
 
 /**
  * A Vue composable function `useExecuteCsvQuery` that executes a CSV data query.

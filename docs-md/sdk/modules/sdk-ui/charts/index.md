@@ -12,6 +12,7 @@ React components and utilities for working with charts
 - [BarChart](function.BarChart.md)
 - [BoxplotChart](function.BoxplotChart.md)
 - [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [CalendarHeatmapChart](function.CalendarHeatmapChart.md)
 - [Chart](function.Chart.md) - Common component for rendering charts of different types including table
 - [ColumnChart](function.ColumnChart.md)
 - [FunnelChart](function.FunnelChart.md)
@@ -21,5 +22,6 @@ React components and utilities for working with charts
 - [PolarChart](function.PolarChart.md)
 - [ScatterChart](function.ScatterChart.md)
 - [ScattermapChart](function.ScattermapChart.md)
+- [StreamgraphChart](function.StreamgraphChart.md)
 - [SunburstChart](function.SunburstChart.md)
 - [TreemapChart](function.TreemapChart.md)

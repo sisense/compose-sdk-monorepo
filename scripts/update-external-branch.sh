@@ -51,6 +51,7 @@ git diff ${last_published_tag} ${1:-$diff_target} --binary | git apply --whitesp
 
 # Remove sensitive or irrelevant information
 rm -f CONTRIBUTING.md
+rm -f CODEOWNERS
 rm -f CHANGELOG_INTERNAL.md
 
 # Remove internal scripts

@@ -1,8 +1,9 @@
-import { defineComponent, type PropType } from 'vue';
 import {
   PolarChart as PolarChartPreact,
   type PolarChartProps as PolarChartPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { defineComponent, type PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**

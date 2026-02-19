@@ -12,6 +12,7 @@ Vue components and utilities for working with charts
 - [BarChart](class.BarChart.md)
 - [BoxplotChart](class.BoxplotChart.md)
 - [boxWhiskerProcessResult](function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [CalendarHeatmapChart](class.CalendarHeatmapChart.md)
 - [Chart](class.Chart.md) - Common component for rendering charts of different types including table
 - [ColumnChart](class.ColumnChart.md)
 - [FunnelChart](class.FunnelChart.md)
@@ -21,5 +22,6 @@ Vue components and utilities for working with charts
 - [PolarChart](class.PolarChart.md)
 - [ScatterChart](class.ScatterChart.md)
 - [ScattermapChart](class.ScattermapChart.md)
+- [StreamgraphChart](class.StreamgraphChart.md)
 - [SunburstChart](class.SunburstChart.md)
 - [TreemapChart](class.TreemapChart.md)

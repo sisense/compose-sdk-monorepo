@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { ColumnChart as ColumnChartPreact } from '@sisense/sdk-ui-preact';
 import type { ColumnChartProps as ColumnChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**

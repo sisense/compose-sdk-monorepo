@@ -1,11 +1,11 @@
 ## What is this directory, `docs-md`, for?
-This directory contains the source files for the Compose SDK documentation on `sisense.dev`.
+This directory contains the source files for the Compose SDK documentation on `developer.sisense.com`.
 
 This includes the CHANGELOG (`docs-md/sdk/CHANGELOG.md`), Quickstart guides for React (`docs-md/sdk/quickstart.md`),
 Angular (`docs-md/sdk/quickstart-angular.md`), Vue (`docs-md/sdk/quickstart-vue.md`), other guides, tutorials, and the generated API reference (`docs-md/sdk/modules`).
 
 All changes to the Compose SDK documentation should be made here and then moved to the repo
-for the `sisense.dev` site.
+for the `developer.sisense.com` site.
 
 ## How to update the guides and tutorials?
 To update the quickstart guides, open `docs-md/sdk/quickstart.md`, `docs-md/sdk/quickstart-angular.md`, or (`docs-md/sdk/quickstart-vue.md`)
@@ -34,11 +34,11 @@ yarn docs:gen:md
 
 The process will copy `./CHANGELOG.md` to `docs-md/sdk/CHANGELOG.md`.
 
-## How to move the changes to the repo for `sisense.dev`?
+## How to move the changes to the repo for `developer.sisense.com`?
 From the root directory of this monorepo, run
-`rm -Rf <path to sisense.dev repo>/docs/guides/sdk/ && cp -Rf docs-md/sdk <path to sisense.dev repo>/docs/guides/`.
+`rm -Rf <path to developer.sisense.com repo>/docs/guides/sdk/ && cp -Rf docs-md/sdk <path to developer.sisense.com repo>/docs/guides/`.
 
-For example, if the `sisense.dev` repo is cloned to `~/dev/dev-docs`,
+For example, if the `developer.sisense.com` repo is cloned to `~/dev/dev-docs`,
 run
 
 ```sh

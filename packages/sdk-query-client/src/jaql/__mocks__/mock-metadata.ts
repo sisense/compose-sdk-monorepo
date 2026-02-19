@@ -1,4 +1,5 @@
 import { MetadataItem } from '@sisense/sdk-data';
+
 export const MOCK_METADATA = [
   {
     jaql: {

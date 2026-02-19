@@ -1,6 +1,6 @@
-import { filterFactory } from '../index.js';
 import { DimensionalAttribute } from './attributes.js';
 import { stringifyHelper } from './compose-code-utils.js';
+import * as filterFactory from './filters/factory.js';
 
 describe('stringifyHelper', () => {
   it('should stringify random argument', () => {
@@ -12,7 +12,7 @@ describe('stringifyHelper', () => {
   it('should stringify common argument', () => {
     const arg = new DimensionalAttribute('AgeRange', '[Commerce.Age Range]', 'text-attribute');
     const result = stringifyHelper(arg);
-    expect(result).toBe('DM.Commerce.AgeRange');
+    expect(result).toBe('DM.Commerce.[[Age Range]]');
   });
 
   it('should stringify null', () => {

@@ -34,6 +34,73 @@ This feature is in alpha.
 
 ***
 
+### `chartConfig`
+
+**chartConfig**?: `object`
+
+Global configuration for some specific aspects of data visualizations.
+
+> #### `chartConfig.tabular`
+>
+> **tabular**?: `object`
+>
+> `Table` and `PivotTable` configuration
+>
+> > ##### `tabular.alwaysShowResultsPerPage`
+> >
+> > **alwaysShowResultsPerPage**?: `boolean`
+> >
+> > Boolean flag whether to always show the results per page select
+> >
+> > If `true`, the results per page select will be shown even if there is only one page of results.
+> > Currently only supported for `PivotTable`.
+> >
+> > ###### Default
+> >
+> > ```ts
+> > false
+> > ```
+> >
+> > ##### `tabular.htmlContent`
+> >
+> > **htmlContent**?: `object`
+> >
+> > Configuration for HTML content in `Table` and `PivotTable`
+> >
+> > > ###### `htmlContent.enabled`
+> > >
+> > > **enabled**?: `boolean`
+> > >
+> > > If true, the contents of table and pivot table cells are rendered as HTML instead of text.
+> > >
+> > > **Note**: The [StyledColumn.isHtml](../interfaces/interface.StyledColumn.md#ishtml) property of columns in `dataOptions` are of higher precedence, and will therefore override this setting.
+> > >
+> > > ###### Default
+> > >
+> > > ```ts
+> > > true
+> > > ```
+> > >
+> > > ###### `htmlContent.sanitizeContents`
+> > >
+> > > **sanitizeContents**?: `boolean`
+> > >
+> > > Enables sanitization of HTML content before rendering to prevent XSS attacks.
+> > >
+> > > ###### Default
+> > >
+> > > ```ts
+> > > true
+> > > ```
+> > >
+> > >
+> >
+> >
+>
+>
+
+***
+
 ### `dateConfig`
 
 **dateConfig**?: [`DateConfig`](type-alias.DateConfig.md)
@@ -64,7 +131,7 @@ Configuration of the component that is rendered in case of an error
 
 **jumpToDashboardConfig**?: `object`
 
-Configuration of the Jump to Dashboard feature
+Configuration of the Jump To Dashboard feature
 
 This feature is currently in Beta.
 
@@ -93,7 +160,7 @@ The following Jump To Dashboard configuration is supported:
 >
 > **enabled**?: `boolean`
 >
-> Whether to enable or disable the jump to dashboard feature
+> Whether to enable or disable the Jump To Dashboard feature
 >
 > If not specified, the default value is `true`
 >
@@ -155,9 +222,8 @@ Query limit (max rows count that will be fetched in query)
 
 **tabberConfig**?: `object`
 
-Configuration of the tabber widget
+Configuration of the tabber widgets feature
 
-Set the `tabberConfig.enabled` property to `true` to enable the tabber widget support. Otherwise, the tabber widget will be treated as 'unknown custom widget type'.
 Only tabber widgets that are configured using the Fusion UI as documented [here](https://docs.sisense.com/main/SisenseLinux/tabber.htm#Creating) are supported.
 
 > #### `tabberConfig.enabled`
@@ -167,6 +233,10 @@ Only tabber widgets that are configured using the Fusion UI as documented [here]
 > Whether to enable tabber widget support
 >
 > If not specified, the default value is `true`
+>
+> ::: warning Deprecated
+> Tabber widgets are now supported by default and this property is no longer needed.
+> :::
 >
 >
 

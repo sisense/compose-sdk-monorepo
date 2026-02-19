@@ -12,7 +12,7 @@ Translation Configuration
 
 ### `customTranslations`
 
-**customTranslations**?: [`CustomTranslationObject`](type-alias.CustomTranslationObject.md)[]
+**customTranslations**?: ([`CustomTranslationObject`](type-alias.CustomTranslationObject.md) \| [`CustomTranslationObject`](type-alias.CustomTranslationObject.md)[])[]
 
 Additional translation resources to be loaded.
 

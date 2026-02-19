@@ -1,8 +1,9 @@
-import { Chart } from '../chart';
-import { templateForComponent } from './template';
-import { NumberFormatConfig, ChartStyleOptions } from '../types';
 import { Data } from '@sisense/sdk-data';
+
 import { HighchartsOptions } from '..';
+import { Chart } from '../domains/visualizations/components/chart';
+import { ChartStyleOptions, NumberFormatConfig } from '../types';
+import { templateForComponent } from './template';
 
 const template = templateForComponent(Chart);
 

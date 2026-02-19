@@ -1,5 +1,7 @@
 /* eslint-disable max-lines */
+
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-shadow */
 import {
   withComposeCodeForFilter,
@@ -26,6 +28,7 @@ import {
   LogicalAttributeFilter,
   LogicalOperators,
   MeasureFilter,
+  MeasureRankingFilter,
   MembersFilter,
   NumericFilter,
   NumericOperators,
@@ -1165,19 +1168,163 @@ export const bottomRanking: (
   'bottomRanking',
 );
 
-const relate = (node: FilterRelationsNode): FilterRelationsNode => {
-  if (Array.isArray(node)) {
-    const [first, ...rest] = node;
-    return rest.length === 0
-      ? relate(first)
-      : {
-          operator: 'AND',
-          left: relate(first),
-          right: relate(rest),
-        };
-  }
-  return node;
-};
+/**
+ * Creates a filter that returns the top N values of the last dimension,
+ * independently for each unique combination of all preceding dimensions.
+ *
+ * This filter applies ranking within groups rather than globally. It shows the top N values
+ * of the rightmost dimension for every unique combination of the other dimensions to its left.
+ * The order of dimensions in your query determines the grouping behavior.
+ *
+ * **Key Differences from {@link topRanking}:**
+ * - `topRanking`: Filters a specific dimension globally (you specify which dimension)
+ * - `measureTopRanking`: Always filters the last/rightmost dimension, grouped by all others
+ *
+ * **How it works:**
+ * - With 1 dimension: Returns the top N values of that dimension
+ * - With 2+ dimensions: Returns the top N values of the LAST dimension for each combination of the others
+ *
+ * @example
+ * **Example 1: Single dimension (equivalent to topRanking) - Query with one dimension [Category]**
+ * ```ts
+ * // Returns top 5 Categories by total revenue
+ * filterFactory.measureTopRanking(
+ *   measureFactory.sum(DM.Commerce.Revenue),
+ *   5
+ * )
+ * ```
+ * Result: 5 categories (e.g., Cell Phones, Computers, TVs, etc.)
+ *
+ * This produces the same result as:
+ * ```ts
+ * filterFactory.topRanking(
+ *   DM.Commerce.Category,
+ *   measureFactory.sum(DM.Commerce.Revenue),
+ *   5
+ * )
+ * ```
+ *
+ * **Note:** With only one dimension, there are no groups to rank within,
+ * so the behavior is identical to `topRanking`.
+ *
+ * @example
+ * **Example 2: Two dimensions - Query with dimensions [Gender, Category]**
+ * ```ts
+ * // Returns top 2 Categories for each Gender
+ * filterFactory.measureTopRanking(
+ *   measureFactory.sum(DM.Commerce.Revenue),
+ *   2
+ * )
+ * ```
+ * Result: 3 genders × 2 categories each = 6 rows
+ * - Male: Top 2 categories by revenue
+ * - Female: Top 2 categories by revenue
+ * - Unspecified: Top 2 categories by revenue
+ *
+ * @example
+ * **Example 3: Three dimensions - Query with dimensions [Gender, Age Range, Category]**
+ * ```ts
+ * // Returns top 2 Categories for each (Gender, Age Range) combination
+ * filterFactory.measureTopRanking(
+ *   measureFactory.sum(DM.Commerce.Revenue),
+ *   2
+ * )
+ * ```
+ * Result: 3 genders × 7 age ranges × 2 categories per combination = ~42 rows
+ *
+ * @param measure - Base measure to rank by
+ * @param count - Number of items to return per group (applies to the last dimension)
+ * @param config - Optional configuration for the filter
+ * @returns A filter instance
+ */
+export const measureTopRanking: (
+  measure: BaseMeasure,
+  count: number,
+  config?: BaseFilterConfig,
+) => Filter = withComposeCodeForFilter(
+  (measure, count, config) =>
+    new MeasureRankingFilter(measure, RankingOperators.Top, count, config),
+  'measureTopRanking',
+);
+
+/**
+ * Creates a filter that returns the bottom N values of the last dimension,
+ * independently for each unique combination of all preceding dimensions.
+ *
+ * This filter applies ranking within groups rather than globally. It shows the bottom N values
+ * of the rightmost dimension for every unique combination of the other dimensions to its left.
+ * The order of dimensions in your query determines the grouping behavior.
+ *
+ * **Key Differences from {@link bottomRanking}:**
+ * - `bottomRanking`: Filters a specific dimension globally (you specify which dimension)
+ * - `measureBottomRanking`: Always filters the last/rightmost dimension, grouped by all others
+ *
+ * **How it works:**
+ * - With 1 dimension: Returns the bottom N values of that dimension
+ * - With 2+ dimensions: Returns the bottom N values of the LAST dimension for each combination of the others
+ *
+ * @example
+ * **Example 1: Single dimension (equivalent to bottomRanking) - Query with one dimension [Category]**
+ * ```ts
+ * // Returns bottom 5 Categories by revenue
+ * filterFactory.measureBottomRanking(
+ *   measureFactory.sum(DM.Commerce.Revenue),
+ *   5
+ * )
+ * ```
+ * Result: 5 categories with lowest revenue (e.g., Accessories, Cables, etc.)
+ *
+ * This produces the same result as:
+ * ```ts
+ * filterFactory.bottomRanking(
+ *   DM.Commerce.Category,
+ *   measureFactory.sum(DM.Commerce.Revenue),
+ *   5
+ * )
+ * ```
+ *
+ * **Note:** With only one dimension, there are no groups to rank within,
+ * so the behavior is identical to `bottomRanking`.
+ *
+ * @example
+ * **Example 2: Two dimensions - Query with dimensions [Gender, Category]**
+ * ```ts
+ * // Returns bottom 2 Categories for each Gender
+ * filterFactory.measureBottomRanking(
+ *   measureFactory.sum(DM.Commerce.Revenue),
+ *   2
+ * )
+ * ```
+ * Result: 3 genders × 2 categories each = 6 rows
+ * - Male: Bottom 2 categories by revenue
+ * - Female: Bottom 2 categories by revenue
+ * - Unspecified: Bottom 2 categories by revenue
+ *
+ * @example
+ * **Example 3: Three dimensions - Query with dimensions [Gender, Age Range, Category]**
+ * ```ts
+ * // Returns bottom 2 Categories for each (Gender, Age Range) combination
+ * filterFactory.measureBottomRanking(
+ *   measureFactory.sum(DM.Commerce.Revenue),
+ *   2
+ * )
+ * ```
+ * Result: 3 genders × 7 age ranges × 2 categories per combination = ~42 rows
+ *
+ * @param measure - Base measure to rank by
+ * @param count - Number of items to return per group (applies to the last dimension)
+ * @param config - Optional configuration for the filter
+ * @returns A filter instance
+ */
+export const measureBottomRanking: (
+  measure: BaseMeasure,
+  count: number,
+  config?: BaseFilterConfig,
+) => Filter = withComposeCodeForFilter(
+  (measure, count, config) =>
+    new MeasureRankingFilter(measure, RankingOperators.Bottom, count, config),
+  'measureBottomRanking',
+);
 
 // CASCADING FILTERS
 
@@ -1237,6 +1384,27 @@ export const cascading: (filters: Filter[], config?: BaseFilterConfig) => Filter
  */
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace logic {
+  /**
+   * Relates a filter or filter relations node
+   *
+   * @param node - Filter or filter relations node
+   * @returns Related filter or filter relations node
+   * @internal
+   */
+  const relate = (node: FilterRelationsNode): FilterRelationsNode => {
+    if (Array.isArray(node)) {
+      const [first, ...rest] = node;
+      return rest.length === 0
+        ? relate(first)
+        : {
+            operator: 'AND',
+            left: relate(first),
+            right: relate(rest),
+          };
+    }
+    return node;
+  };
+
   /**
    * Creates an 'AND' filter relations
    *

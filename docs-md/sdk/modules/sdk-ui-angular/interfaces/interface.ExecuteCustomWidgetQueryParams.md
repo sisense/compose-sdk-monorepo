@@ -40,17 +40,15 @@ If not specified, the default value is `20000`
 
 > **dataOptions**: [`GenericDataOptions`](../type-aliases/type-alias.GenericDataOptions.md)
 
+Data options defining dimensions and measures
+
 ***
 
 ### dataSource
 
 > **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
-***
-
-### description
-
-> **description**?: `string`
+Data source for the query
 
 ***
 
@@ -58,11 +56,15 @@ If not specified, the default value is `20000`
 
 > **filters**?: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
+Filters to apply to the query
+
 ***
 
 ### highlights
 
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+
+Highlight filters
 
 ***
 
@@ -73,12 +75,6 @@ If not specified, the default value is `20000`
 Offset of the first row to return
 
 If not specified, the default value is `0`
-
-***
-
-### styleOptions
-
-> **styleOptions**: `any`
 
 ***
 

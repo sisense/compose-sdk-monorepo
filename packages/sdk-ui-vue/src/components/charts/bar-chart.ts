@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { BarChart as BarChartPreact } from '@sisense/sdk-ui-preact';
 import type { BarChartProps as BarChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**

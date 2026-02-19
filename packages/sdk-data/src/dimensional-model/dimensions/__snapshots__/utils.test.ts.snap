@@ -19,7 +19,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
       },
       {
         "__serializable": "DimensionalAttribute",
-        "composeCode": "DM.Brand.BrandID",
+        "composeCode": "DM.Brand.[[Brand ID]]",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
@@ -56,7 +56,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
       },
       {
         "__serializable": "DimensionalAttribute",
-        "composeCode": "DM.Category.CategoryID",
+        "composeCode": "DM.Category.[[Category ID]]",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
@@ -81,7 +81,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
     "attributes": [
       {
         "__serializable": "DimensionalAttribute",
-        "composeCode": "DM.Commerce.AgeRange",
+        "composeCode": "DM.Commerce.[[Age Range]]",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
@@ -93,7 +93,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
       },
       {
         "__serializable": "DimensionalAttribute",
-        "composeCode": "DM.Commerce.BrandID",
+        "composeCode": "DM.Commerce.[[Brand ID]]",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
@@ -105,7 +105,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
       },
       {
         "__serializable": "DimensionalAttribute",
-        "composeCode": "DM.Commerce.CategoryID",
+        "composeCode": "DM.Commerce.[[Category ID]]",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
@@ -141,7 +141,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
       },
       {
         "__serializable": "DimensionalAttribute",
-        "composeCode": "DM.Commerce.CountryID",
+        "composeCode": "DM.Commerce.[[Country ID]]",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
@@ -189,7 +189,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
       },
       {
         "__serializable": "DimensionalAttribute",
-        "composeCode": "DM.Commerce.VisitID",
+        "composeCode": "DM.Commerce.[[Visit ID]]",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",
@@ -439,7 +439,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
       },
       {
         "__serializable": "DimensionalAttribute",
-        "composeCode": "DM.Country.CountryID",
+        "composeCode": "DM.Country.[[Country ID]]",
         "dataSource": {
           "live": false,
           "title": "Sample ECommerce",

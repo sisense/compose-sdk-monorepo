@@ -4,4 +4,4 @@ title: ChartDataPointsEvent
 
 # Type alias ChartDataPointsEvent
 
-> **ChartDataPointsEvent**: [`DataPointsEvent`](type-alias.DataPointsEvent.md) \| [`ScatterDataPointsEvent`](type-alias.ScatterDataPointsEvent.md)
+> **ChartDataPointsEvent**: [`CalendarHeatmapDataPointsEvent`](type-alias.CalendarHeatmapDataPointsEvent.md) \| [`DataPointsEvent`](type-alias.DataPointsEvent.md) \| [`ScatterDataPointsEvent`](type-alias.ScatterDataPointsEvent.md)

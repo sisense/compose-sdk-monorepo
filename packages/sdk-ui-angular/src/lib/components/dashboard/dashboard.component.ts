@@ -9,9 +9,9 @@ import {
 } from '@angular/core';
 import {
   ComponentAdapter,
-  Dashboard as DashboardPreact,
   type DashboardConfig,
   type DashboardFiltersPanelConfig,
+  Dashboard as DashboardPreact,
   type DashboardProps as DashboardPropsPreact,
 } from '@sisense/sdk-ui-preact';
 
@@ -23,7 +23,7 @@ import {
   styles,
   template,
 } from '../../component-wrapper-helpers';
-import { translateToPreactDashboardProps } from '../../helpers/dashboard-props-preact-translator';
+import { toPreactDashboardProps } from '../../helpers/dashboard-props-preact-translator';
 import { CustomWidgetsService } from '../../services/custom-widgets.service';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
@@ -149,14 +149,6 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input()
   styleOptions: DashboardProps['styleOptions'];
 
-  /**
-   * {@inheritDoc @sisense/sdk-ui!DashboardProps.tabbersOptions}
-   *
-   * @internal
-   */
-  @Input()
-  tabbersOptions: DashboardProps['tabbersOptions'];
-
   private componentAdapter: ComponentAdapter<typeof DashboardPreact>;
 
   /**
@@ -210,7 +202,7 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private getPreactComponentProps(): DashboardPropsPreact {
-    return translateToPreactDashboardProps({
+    return toPreactDashboardProps({
       title: this.title,
       layoutOptions: this.layoutOptions,
       config: this.config,
@@ -219,7 +211,6 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
       defaultDataSource: this.defaultDataSource,
       widgetsOptions: this.widgetsOptions,
       styleOptions: this.styleOptions,
-      tabbersOptions: this.tabbersOptions,
     });
   }
 

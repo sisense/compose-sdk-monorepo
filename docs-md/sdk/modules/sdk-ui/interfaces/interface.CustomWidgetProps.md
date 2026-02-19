@@ -44,6 +44,14 @@ Configurations for how to interpret and present the data passed to the table
 
 ### Widget
 
+#### customOptions
+
+> **customOptions**?: `Record`\< `string`, `any` \>
+
+Specific options for the custom widget.
+
+***
+
 #### customWidgetType
 
 > **customWidgetType**: `string`
@@ -73,3 +81,27 @@ Style options for the custom widget.
 > **title**?: `string`
 
 Title of the widget
+
+### Callbacks
+
+#### onDataPointClick
+
+> **onDataPointClick**?: [`CustomWidgetDataPointEventHandler`](../type-aliases/type-alias.CustomWidgetDataPointEventHandler.md)\< [`AbstractDataPointWithEntries`](../type-aliases/type-alias.AbstractDataPointWithEntries.md) \>
+
+Click handler callback for a data point
+
+***
+
+#### onDataPointContextMenu
+
+> **onDataPointContextMenu**?: [`CustomWidgetDataPointContextMenuHandler`](../type-aliases/type-alias.CustomWidgetDataPointContextMenuHandler.md)\< [`AbstractDataPointWithEntries`](../type-aliases/type-alias.AbstractDataPointWithEntries.md) \>
+
+Context menu handler callback for a data point
+
+***
+
+#### onDataPointsSelected
+
+> **onDataPointsSelected**?: [`CustomWidgetDataPointsEventHandler`](../type-aliases/type-alias.CustomWidgetDataPointsEventHandler.md)\< [`AbstractDataPointWithEntries`](../type-aliases/type-alias.AbstractDataPointWithEntries.md) \>
+
+Handler callback for selection of multiple data points

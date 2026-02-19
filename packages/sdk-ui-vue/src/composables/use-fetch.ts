@@ -1,12 +1,13 @@
-import { useReducer } from '../helpers/use-reducer';
-import { getSisenseContext } from '../providers';
-import { collectRefs, toPlainValue, toPlainObject } from '../utils';
+import type { HttpClient } from '@sisense/sdk-rest-client';
 import type { DataState, RequestConfig } from '@sisense/sdk-ui-preact';
 import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
-import { toRefs, watch, type ToRefs } from 'vue';
-import { useTracking } from './use-tracking';
+import { toRefs, type ToRefs, watch } from 'vue';
+
+import { useReducer } from '../helpers/use-reducer';
+import { getSisenseContext } from '../providers';
 import type { MaybeRef, MaybeRefOrWithRefs } from '../types';
-import type { HttpClient } from '@sisense/sdk-rest-client';
+import { collectRefs, toPlainObject, toPlainValue } from '../utils';
+import { useTracking } from './use-tracking';
 
 /**
  * The options for the `useFetch` composable function.

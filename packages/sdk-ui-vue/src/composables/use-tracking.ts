@@ -1,6 +1,7 @@
 import { trackHook } from '@sisense/sdk-ui-preact';
-import { getSisenseContext } from '../providers/sisense-context-provider';
 import { ref, watchEffect } from 'vue';
+
+import { getSisenseContext } from '../providers/sisense-context-provider';
 
 /**
  * A Vue composable function `useTracking` designed to track the usage of composables within Vue applications

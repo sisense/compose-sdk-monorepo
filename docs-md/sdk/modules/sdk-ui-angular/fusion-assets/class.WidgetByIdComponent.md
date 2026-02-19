@@ -8,7 +8,7 @@ The `WidgetById` component, which is a thin wrapper on [ChartWidgetComponent](..
 is used to render a widget created in a Sisense Fusion instance.
 
 To learn more about using Sisense Fusion Widgets in Compose SDK, see
-[Sisense Fusion Widgets](https://sisense.dev/guides/sdk/guides/charts/guide-fusion-widgets.html).
+[Sisense Fusion Widgets](https://developer.sisense.com/guides/sdk/guides/charts/guide-fusion-widgets.html).
 
 ## Example
 
@@ -163,4 +163,4 @@ Identifier of the widget
 > **dataReady**: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md) \| `undefined`
 
 A callback that allows to modify data immediately after it has been retrieved.
-Can be used to inject modification of queried data.
+It can be used to inject modification of queried data.

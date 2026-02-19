@@ -1,4 +1,4 @@
-import { Table } from '../table/table';
+import { Table } from '../domains/visualizations/components/table/table';
 import { TableStyleOptions } from '../types';
 
 export default {

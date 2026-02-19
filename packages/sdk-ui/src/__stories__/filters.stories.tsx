@@ -1,5 +1,5 @@
+import { DateFilter } from '../domains/filters';
 import { templateForComponent } from './template';
-import { DateFilter } from '../filters';
 
 const template = templateForComponent(DateFilter);
 const minDate = '2020-01-01';

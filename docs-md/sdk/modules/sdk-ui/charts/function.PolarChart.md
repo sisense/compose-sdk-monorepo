@@ -6,7 +6,7 @@ title: PolarChart
 
 > **PolarChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
-A React component comparing multiple categories/variables with a spacial perspective in a radial chart.
+A React component comparing multiple categories/variables with a spatial perspective in a radial chart.
 
 ## Example
 

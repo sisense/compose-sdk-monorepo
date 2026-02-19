@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
+
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';

@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { Chatbot as ChatbotPreact } from '@sisense/sdk-ui-preact/ai';
 import type { ChatbotProps as ChatbotPropsPreact } from '@sisense/sdk-ui-preact/ai';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { createDefaultContextConnectors, setupHelper } from '../../helpers/setup-helper';
 import { createAiContextConnector } from '../helpers/context-connectors';
 

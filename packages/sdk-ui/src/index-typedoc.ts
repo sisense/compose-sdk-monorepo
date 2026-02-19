@@ -28,8 +28,8 @@
  */
 
 export * from './index';
-export * from './analytics-composer/index';
-export * from './ai/index';
+export * from './modules/analytics-composer/index';
+export * from './modules/ai/index';
 
 // Main entry point for typedoc documentation generation
 // Combine both the main and submodule paths, for example, ai

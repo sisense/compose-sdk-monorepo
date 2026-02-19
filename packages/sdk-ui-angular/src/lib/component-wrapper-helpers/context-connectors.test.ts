@@ -29,7 +29,9 @@ describe('createSisenseContextConnector', () => {
   beforeEach(() => {
     sisenseContextService = {
       getApp: vi.fn().mockResolvedValue(appMock),
+      getApp$: vi.fn().mockReturnValue(of({ app: appMock })),
       getConfig: vi.fn().mockReturnValue(sisenseContextConfigMock),
+      isInitialized: true,
     } as unknown as Mocked<SisenseContextService>;
   });
 

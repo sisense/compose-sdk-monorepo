@@ -26,14 +26,17 @@ import {
   styles,
   template,
 } from '../../component-wrapper-helpers';
-import { translateToPreactWidgetProps } from '../../helpers/widget-props-preact-translator';
+import { toPreactWidgetProps } from '../../helpers/widget-props-preact-translator';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import { TextWidgetEventProps, WithoutPreactChartEventProps } from '../../types';
 import {
-  ChartDataPointClickEvent,
-  ChartDataPointContextMenuEvent,
   ChartDataPointsEvent,
+  ChartDataPointsEventHandler,
+  WidgetDataPointClickEvent,
+  WidgetDataPointClickEventHandler,
+  WidgetDataPointContextMenuEvent,
+  WidgetDataPointContextMenuEventHandler,
 } from '../../types/data-point';
 import { ChartWidgetProps } from './chart-widget.component';
 import { PivotTableWidgetProps } from './pivot-table-widget.component';
@@ -74,7 +77,16 @@ export type WidgetProps = SoftUnion<
   | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>
   | WithCommonWidgetProps<TextWidgetProps, 'text'>
   | WithCommonWidgetProps<CustomWidgetProps, 'custom'>
->;
+> & {
+  // Explicitly declare event handlers to prevent Angular's template type checker
+  // from inferring intersection types when accessing these properties on WidgetProps.
+  // This is needed because WidgetProps is a SoftUnion, and Angular's template compiler
+  // dynamically accesses properties at usage time, causing TypeScript to create
+  // intersections that are incompatible with CalendarHeatmap's unique event structure.
+  dataPointClick?: WidgetDataPointClickEventHandler;
+  dataPointContextMenu?: WidgetDataPointContextMenuEventHandler;
+  dataPointsSelect?: ChartDataPointsEventHandler;
+};
 
 /**
  * Facade component that renders a widget within a dashboard based on the widget type.
@@ -266,7 +278,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
    * @category Callbacks
    */
   @Output()
-  dataPointClick = new EventEmitter<ChartDataPointClickEvent>();
+  dataPointClick = new EventEmitter<WidgetDataPointClickEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointContextMenu}
@@ -274,7 +286,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
    * @category Callbacks
    */
   @Output()
-  dataPointContextMenu = new EventEmitter<ChartDataPointContextMenuEvent>();
+  dataPointContextMenu = new EventEmitter<WidgetDataPointContextMenuEvent>();
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.onDataPointsSelected}
@@ -309,7 +321,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private getPreactComponentProps(): WidgetPropsPreact {
-    return translateToPreactWidgetProps({
+    return toPreactWidgetProps({
       id: this.id,
       widgetType: this.widgetType,
       chartType: this.chartType,

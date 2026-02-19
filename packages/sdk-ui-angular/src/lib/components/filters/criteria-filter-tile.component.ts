@@ -66,7 +66,7 @@ export interface CriteriaFilterTileProps extends Omit<CriteriaFilterTilePropsPre
  *   },
  * }
  * ```
- * <img src="media://angular-criteria-filter-tile-example.png" width="400px" />
+ * <img src="media://angular-criteria-filter-tile-example.png" width="225px" />
  * @group Filter Tiles
  */
 @Component({

@@ -239,18 +239,38 @@ function jaqlPivotAttribute(
   index: number,
   metadataStats: PivotMetadataStats,
 ): MetadataItem {
-  const isSortedRowAttribute =
-    panel === 'rows' && isPivotAttribute(a) && a.sort && a.sort.direction !== 'sortNone';
-  const jaql = {
-    ...(isPivotAttribute(a) ? a.attribute.jaql(true) : a.jaql(true)),
-    ...(isSortedRowAttribute && preparePivotRowJaqlSortOptions(a.sort!, index, metadataStats)),
-  };
-  return {
-    jaql,
-    ...(isPivotAttribute(a) && a.includeSubTotals ? { format: { subtotal: true } } : {}),
-    panel,
-    field: { index: index, id: `${panel}-${index}` },
-  } as MetadataItem;
+  if (isPivotAttribute(a)) {
+    const isSortedRowAttribute = panel === 'rows' && a.sort && a.sort.direction !== 'sortNone';
+
+    const jaql = {
+      ...a.attribute.jaql(true),
+      ...(isSortedRowAttribute
+        ? preparePivotRowJaqlSortOptions(a.sort!, index, metadataStats)
+        : {}),
+    };
+
+    if (a.name) {
+      jaql.title = a.name;
+    }
+
+    const result: MetadataItem = {
+      jaql,
+      panel,
+      field: { index: index, id: `${panel}-${index}` },
+    };
+
+    if (a.includeSubTotals) {
+      result.format = { subtotal: true };
+    }
+
+    return result;
+  } else {
+    return {
+      jaql: a.jaql(true),
+      panel,
+      field: { index: index, id: `${panel}-${index}` },
+    };
+  }
 }
 
 function jaqlPivotMeasure(m: Measure | PivotMeasure, panel: string, index: number): MetadataItem {

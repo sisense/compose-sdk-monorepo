@@ -2,30 +2,30 @@ import { describe } from 'vitest';
 
 import * as DM from './__test-helpers__/sample-ecommerce.js';
 import * as filterFactory from './dimensional-model/filters/factory.js';
+import { MembersFilter } from './dimensional-model/filters/filters.js';
 import { createAttributeFromFilterJaql } from './dimensional-model/filters/utils/attribute-measure-util.js';
+import { FilterRelations, SortDirection } from './dimensional-model/interfaces.js';
 import * as measureFactory from './dimensional-model/measures/factory.js';
 import {
   AggregationTypes,
-  createFilterFromJaql,
-  DataSource,
-  DataSourceInfo,
   DataType,
-  FilterRelations,
   FormulaJaql,
-  MembersFilter,
+  JaqlSortDirection,
   Sort,
-  SortDirection,
-} from './index.js';
+} from './dimensional-model/types.js';
+import { DataSource, DataSourceInfo } from './interfaces.js';
 import {
   convertJaqlDataSourceForDto,
   convertSortDirectionToSort,
   createAttributeHelper,
   createCalculatedMeasureHelper,
+  createFilterFromJaql,
   createMeasureHelper,
   getDataSourceName,
   getFilterListAndRelationsJaql,
   guidFast,
   isDataSourceInfo,
+  translateSharedFormulas,
 } from './utils.js';
 
 const filter1 = filterFactory.members(DM.Category.Category, ['Cell Phones', 'GPS Devices']);
@@ -323,6 +323,154 @@ describe('utils', () => {
           '[042C4-365]': attribute,
         }),
       );
+    });
+  });
+
+  describe('translateSharedFormulas', () => {
+    const createTestFormula = (
+      title: string,
+      formula: string,
+      context: FormulaJaql['context'],
+    ) => ({
+      title,
+      formula,
+      context,
+    });
+
+    it('should translate a single FormulaJaql in array to CalculatedMeasure', () => {
+      const formulaJaql: FormulaJaql = createTestFormula('Test Formula', '[M1] + 10', {
+        '[M1]': {
+          dim: '[Commerce.Revenue]',
+          datatype: 'numeric',
+          title: 'Revenue',
+          agg: 'sum',
+          table: 'Commerce',
+          column: 'Revenue',
+        },
+      });
+
+      const results = translateSharedFormulas([formulaJaql]);
+      const result = results[0];
+
+      expect(results).toHaveLength(1);
+      expect(result.name).toBe('Test Formula');
+      expect(result.expression).toBe('[M1] + 10');
+      expect(result.context['[M1]']).toBeDefined();
+    });
+
+    it('should translate multiple FormulaJaql to CalculatedMeasure array', () => {
+      const formulas: FormulaJaql[] = [
+        createTestFormula('Formula 1', '[M1] + 10', {
+          '[M1]': {
+            dim: '[Commerce.Revenue]',
+            datatype: 'numeric',
+            title: 'Revenue',
+            agg: 'sum',
+            table: 'Commerce',
+            column: 'Revenue',
+          },
+        }),
+        createTestFormula('Formula 2', '[M2] * 2', {
+          '[M2]': {
+            dim: '[Commerce.Cost]',
+            datatype: 'numeric',
+            title: 'Cost',
+            agg: 'sum',
+            table: 'Commerce',
+            column: 'Cost',
+          },
+        }),
+      ];
+
+      const results = translateSharedFormulas(formulas);
+
+      expect(results).toHaveLength(2);
+      expect(results[0].name).toBe('Formula 1');
+      expect(results[1].name).toBe('Formula 2');
+    });
+
+    it('should preserve formula properties (description, sort)', () => {
+      const formulaJaql: FormulaJaql = {
+        title: 'Sorted Formula',
+        formula: '[M1] * 2',
+        description: 'Test description',
+        sort: JaqlSortDirection.DESC,
+        context: {
+          '[M1]': {
+            dim: '[Commerce.Revenue]',
+            datatype: 'numeric',
+            title: 'Revenue',
+            agg: 'sum',
+            table: 'Commerce',
+            column: 'Revenue',
+          },
+        },
+      };
+
+      const results = translateSharedFormulas([formulaJaql]);
+      const result = results[0];
+
+      expect(result.name).toBe('Sorted Formula');
+      expect(result.description).toBe('Test description');
+      const jaql = result.jaql();
+      expect(jaql.jaql.sort).toBe('desc');
+    });
+
+    it('should handle nested calculated measures in context', () => {
+      const baseMeasure = measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue');
+      const nestedFormula = measureFactory.customFormula('Nested', '[M1] + 5', {
+        '[M1]': baseMeasure,
+      });
+
+      const formulaJaql: FormulaJaql = {
+        title: 'Parent Formula',
+        formula: '[Nested] * 2',
+        context: {
+          '[Nested]': nestedFormula.jaql(true) as FormulaJaql,
+        },
+      };
+
+      const results = translateSharedFormulas([formulaJaql]);
+      const result = results[0];
+
+      expect(result.name).toBe('Parent Formula');
+      expect(result.expression).toBe('[Nested] * 2');
+      expect(result.context['[Nested]']).toBeDefined();
+    });
+
+    it('should handle empty array', () => {
+      const results = translateSharedFormulas([]);
+      expect(results).toHaveLength(0);
+    });
+
+    it('should include formula title in error message when translation fails', () => {
+      const formulas: FormulaJaql[] = [
+        createTestFormula('Valid Formula', '[M1] + 10', {
+          '[M1]': {
+            dim: '[Commerce.Revenue]',
+            datatype: 'numeric',
+            title: 'Revenue',
+            agg: 'sum',
+            table: 'Commerce',
+            column: 'Revenue',
+          },
+        }),
+        {
+          title: 'Invalid Formula',
+          // Missing formula field
+        } as unknown as FormulaJaql,
+      ];
+
+      expect(() => translateSharedFormulas(formulas)).toThrow('Invalid Formula');
+    });
+
+    it('should throw error for invalid formula structure in array', () => {
+      const invalidFormula = {
+        title: 'Invalid',
+        // Missing formula field
+      } as unknown as FormulaJaql;
+
+      expect(() => translateSharedFormulas([invalidFormula])).toThrow('Invalid');
     });
   });
 });

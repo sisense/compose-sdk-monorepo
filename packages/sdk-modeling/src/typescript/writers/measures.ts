@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-useless-constructor */
-/* eslint-disable sonarjs/no-nested-template-literals */
 
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+/* eslint-disable @typescript-eslint/no-useless-constructor */
+
+/* eslint-disable sonarjs/no-nested-template-literals */
 import { BaseMeasure, MeasureTemplate, normalizeName } from '@sisense/sdk-data';
 
 import { prepareDescription } from '../utils/prepare-description.js';
@@ -58,18 +60,12 @@ export class BaseMeasureWriter extends MeasureWriter<BaseMeasure> {
 }
 
 // class SCalculatedMeasure extends SMeasure{
-
 //     private measure:CalculatedMeasure;
-
 //     constructor(measure:CalculatedMeasure, isNested:boolean) {
-
 //         super(normalizeName(measure.name), isNested);
-
 //         this.measure = measure;
 //     }
-
 //     writeDef(stream:WriteStream, ident:number) : void {
-
 //         writeIndented(stream, `<CalculatedMeasure>createMeasure({name: "${this.name}", expression: "${this.measure.attribute.expression}", agg: "${this.measure.aggregation}" })`, ident);
 //     }
 // }

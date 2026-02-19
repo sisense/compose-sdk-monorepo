@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-/** @vitest-environment jsdom */
 
+/** @vitest-environment jsdom */
 import {
   ClientApplication,
   CompleteThemeSettings,
   getDefaultThemeSettings,
   getThemeSettingsByOid,
 } from '@sisense/sdk-ui-preact';
-import { firstValueFrom, take, toArray } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, take, toArray } from 'rxjs';
 import { Mock, Mocked } from 'vitest';
 
 import { ThemeService } from '.';
@@ -26,13 +26,31 @@ const getDefaultThemeSettingsMock = getDefaultThemeSettings as Mock<typeof getDe
 
 const getThemeSettingsByOidMock = getThemeSettingsByOid as Mock<typeof getThemeSettingsByOid>;
 
+/**
+ * Helper utility to create delays in async tests.
+ *
+ * @param ms - Milliseconds to delay (default: 10ms)
+ * @returns Promise that resolves after the specified delay
+ */
+const delay = (ms = 10): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
 describe('ThemeService', () => {
   let themeService: ThemeService;
   let sisenseContextServiceMock: Mocked<SisenseContextService>;
+  let appStateSubject: BehaviorSubject<any>;
 
   beforeEach(() => {
     getDefaultThemeSettingsMock.mockClear();
     getThemeSettingsByOidMock.mockClear();
+
+    // Create a BehaviorSubject to simulate app state changes
+    appStateSubject = new BehaviorSubject({
+      app: {
+        settings: {
+          serverThemeSettings: {},
+        },
+      },
+    });
 
     sisenseContextServiceMock = {
       getApp: vi.fn().mockResolvedValue({
@@ -40,6 +58,7 @@ describe('ThemeService', () => {
           serverThemeSettings: {},
         },
       }),
+      getApp$: vi.fn().mockReturnValue(appStateSubject.asObservable()),
     } as unknown as Mocked<SisenseContextService>;
   });
 
@@ -205,7 +224,7 @@ describe('ThemeService', () => {
       themeService = new ThemeService(sisenseContextServiceMock);
 
       // Wait for initialization to complete
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await delay(0);
 
       const themeSettingsObservable = themeService.getThemeSettings();
 
@@ -219,6 +238,173 @@ describe('ThemeService', () => {
         palette: 'palette-settings',
         typography: 'manual-typography-settings',
         general: 'manual-general-settings',
+      });
+    });
+  });
+
+  describe('app state changes', () => {
+    it('should trigger theme update when sisenseContextService app changes', async () => {
+      const defaultThemeSettingsMock: CompleteThemeSettings = {
+        chart: 'chart-settings',
+        palette: 'palette-settings',
+        typography: 'typography-settings',
+        general: 'general-settings',
+      } as unknown as CompleteThemeSettings;
+
+      const initialServerThemeSettings = {
+        chart: 'initial-server-chart-settings',
+        palette: 'initial-server-palette-settings',
+      } as unknown as CompleteThemeSettings;
+
+      const newServerThemeSettings = {
+        chart: 'new-server-chart-settings',
+        palette: 'new-server-palette-settings',
+        typography: 'new-server-typography-settings',
+      } as unknown as CompleteThemeSettings;
+
+      getDefaultThemeSettingsMock.mockReturnValue(defaultThemeSettingsMock);
+
+      // Set initial app state
+      appStateSubject.next({
+        app: {
+          settings: {
+            serverThemeSettings: initialServerThemeSettings,
+          },
+        },
+      });
+
+      sisenseContextServiceMock.getApp.mockResolvedValue({
+        settings: {
+          serverThemeSettings: initialServerThemeSettings,
+        },
+      } as ClientApplication);
+
+      themeService = new ThemeService(sisenseContextServiceMock);
+
+      const themeSettingsObservable = themeService.getThemeSettings();
+
+      // Wait for initial theme to be applied
+      await delay(0);
+
+      // Verify initial theme settings (default + initial server settings)
+      const initialThemeSettings = await firstValueFrom(themeSettingsObservable);
+      expect(initialThemeSettings).toEqual({
+        chart: 'initial-server-chart-settings',
+        palette: 'initial-server-palette-settings',
+        typography: 'typography-settings',
+        general: 'general-settings',
+      });
+
+      // Mock getApp to return new app with different server theme settings
+      sisenseContextServiceMock.getApp.mockResolvedValue({
+        settings: {
+          serverThemeSettings: newServerThemeSettings,
+        },
+      } as ClientApplication);
+
+      // Simulate app change by emitting new app state (this triggers the skip(1) subscription)
+      appStateSubject.next({
+        app: {
+          settings: {
+            serverThemeSettings: newServerThemeSettings,
+          },
+        },
+      });
+
+      // Wait for theme update to be processed
+      await delay();
+
+      // Verify that theme settings were updated with new server settings
+      const updatedThemeSettings = await firstValueFrom(themeSettingsObservable);
+      expect(updatedThemeSettings).toEqual({
+        chart: 'new-server-chart-settings',
+        palette: 'new-server-palette-settings',
+        typography: 'new-server-typography-settings',
+        general: 'general-settings',
+      });
+
+      // Verify that getApp was called for initial setup and theme update
+      expect(sisenseContextServiceMock.getApp).toHaveBeenCalledTimes(3);
+    });
+
+    it('should handle postponed updateThemeSettings when app changes during manual update', async () => {
+      const defaultThemeSettingsMock: CompleteThemeSettings = {
+        chart: 'chart-settings',
+        palette: 'palette-settings',
+        typography: 'typography-settings',
+        general: 'general-settings',
+      } as unknown as CompleteThemeSettings;
+
+      const serverThemeSettings = {
+        chart: 'server-chart-settings',
+      } as unknown as CompleteThemeSettings;
+
+      const newServerThemeSettings = {
+        chart: 'new-server-chart-settings',
+        palette: 'new-server-palette-settings',
+      } as unknown as CompleteThemeSettings;
+
+      const manualThemeSettings = {
+        typography: 'manual-typography-settings',
+      } as unknown as CompleteThemeSettings;
+
+      getDefaultThemeSettingsMock.mockReturnValue(defaultThemeSettingsMock);
+
+      // Set initial app state
+      appStateSubject.next({
+        app: {
+          settings: {
+            serverThemeSettings,
+          },
+        },
+      });
+
+      sisenseContextServiceMock.getApp.mockResolvedValue({
+        settings: {
+          serverThemeSettings,
+        },
+      } as ClientApplication);
+
+      themeService = new ThemeService(sisenseContextServiceMock);
+
+      // Wait for initial theme setup
+      await delay(0);
+
+      // Start a manual theme update
+      const manualUpdatePromise = themeService.updateThemeSettings(manualThemeSettings);
+
+      // While manual update is in progress, simulate app change
+      sisenseContextServiceMock.getApp.mockResolvedValue({
+        settings: {
+          serverThemeSettings: newServerThemeSettings,
+        },
+      } as ClientApplication);
+
+      appStateSubject.next({
+        app: {
+          settings: {
+            serverThemeSettings: newServerThemeSettings,
+          },
+        },
+      });
+
+      // Wait for both updates to complete
+      await manualUpdatePromise;
+      await delay();
+
+      // Verify final theme settings include both manual and new server settings
+      const themeSettingsObservable = themeService.getThemeSettings();
+      const finalThemeSettings = await firstValueFrom(themeSettingsObservable);
+
+      // The final result should have:
+      // - Manual typography setting
+      // - New server chart and palette settings
+      // - Default general settings
+      expect(finalThemeSettings).toEqual({
+        chart: 'new-server-chart-settings',
+        palette: 'new-server-palette-settings',
+        typography: 'manual-typography-settings',
+        general: 'general-settings',
       });
     });
   });

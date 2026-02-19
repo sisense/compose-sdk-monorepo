@@ -20,7 +20,7 @@ component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
 retrieve the data source name from a data model you create using the `get-data-model`
-[command](https://sisense.dev/guides/sdk/guides/cli.html) of the Compose SDK CLI. Under the hood, the chart
+[command](https://developer.sisense.com/guides/sdk/guides/cli.html) of the Compose SDK CLI. The chart
 connects to the data source, executes a query, and loads the data as specified in
 `dataOptions`, `filters`, and `highlights`.
 
@@ -148,7 +148,7 @@ This callback is not supported for Areamap Chart, Scattermap Chart, Table, and P
 
 #### onDataPointClick
 
-> **onDataPointClick**?: [`AreamapDataPointEventHandler`](../type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`IndicatorDataPointEventHandler`](../type-aliases/type-alias.IndicatorDataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../type-aliases/type-alias.ScattermapDataPointEventHandler.md)
+> **onDataPointClick**?: [`AreamapDataPointEventHandler`](../type-aliases/type-alias.AreamapDataPointEventHandler.md) \| [`BoxplotDataPointEventHandler`](../type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`CalendarHeatmapDataPointEventHandler`](../type-aliases/type-alias.CalendarHeatmapDataPointEventHandler.md) \| [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`IndicatorDataPointEventHandler`](../type-aliases/type-alias.IndicatorDataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md) \| [`ScattermapDataPointEventHandler`](../type-aliases/type-alias.ScattermapDataPointEventHandler.md)
 
 Click handler callback for a data point
 
@@ -156,7 +156,7 @@ Click handler callback for a data point
 
 #### onDataPointContextMenu
 
-> **onDataPointContextMenu**?: [`BoxplotDataPointEventHandler`](../type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
+> **onDataPointContextMenu**?: [`BoxplotDataPointEventHandler`](../type-aliases/type-alias.BoxplotDataPointEventHandler.md) \| [`CalendarHeatmapDataPointEventHandler`](../type-aliases/type-alias.CalendarHeatmapDataPointEventHandler.md) \| [`DataPointEventHandler`](../type-aliases/type-alias.DataPointEventHandler.md) \| [`ScatterDataPointEventHandler`](../type-aliases/type-alias.ScatterDataPointEventHandler.md)
 
 Context menu handler callback for a data point
 
@@ -164,7 +164,7 @@ Context menu handler callback for a data point
 
 #### onDataPointsSelected
 
-> **onDataPointsSelected**?: [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../type-aliases/type-alias.ScatterDataPointsEventHandler.md)
+> **onDataPointsSelected**?: [`CalendarHeatmapDataPointsEventHandler`](../type-aliases/type-alias.CalendarHeatmapDataPointsEventHandler.md) \| [`DataPointsEventHandler`](../type-aliases/type-alias.DataPointsEventHandler.md) \| [`ScatterDataPointsEventHandler`](../type-aliases/type-alias.ScatterDataPointsEventHandler.md)
 
 Handler callback for selection of multiple data points
 
@@ -175,7 +175,7 @@ Handler callback for selection of multiple data points
 > **onDataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
 A callback that allows to modify data immediately after it has been retrieved.
-Can be used to inject modification of queried data.
+It can be used to inject modification of queried data.
 
 ##### Parameters
 

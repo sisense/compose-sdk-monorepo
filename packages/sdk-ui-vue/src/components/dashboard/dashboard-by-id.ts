@@ -1,10 +1,11 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { DashboardById as DashboardByIdPreact } from '@sisense/sdk-ui-preact';
 import type {
-  DashboardByIdProps as DashboardByIdPropsPreact,
   DashboardByIdConfig,
+  DashboardByIdProps as DashboardByIdPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 // Re-exports related types

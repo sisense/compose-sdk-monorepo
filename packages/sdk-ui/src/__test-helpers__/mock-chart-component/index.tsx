@@ -1,7 +1,7 @@
 // Mocks the Chart component and provides a way to access the rendered charts.
 // Use this to simulate user interactions with the chart while actual Chart component is mocked.
-
 import { ChartProps } from '@/props';
+
 import { RenderedChartModel } from './rendered-chart-model';
 
 export type ChartMocksManager = {
@@ -30,8 +30,10 @@ const mockingConfig = {
   shouldChartBeMocked: false,
 };
 
-vi.mock('@/chart', async () => {
-  const actualModule = await vi.importActual<typeof import('@/chart')>('@/chart');
+vi.mock('@/domains/visualizations/components/chart', async () => {
+  const actualModule = await vi.importActual<
+    typeof import('@/domains/visualizations/components/chart')
+  >('@/domains/visualizations/components/chart');
 
   return {
     ...actualModule,

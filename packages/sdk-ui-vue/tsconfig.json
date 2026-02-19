@@ -9,5 +9,5 @@
     },
     "jsxImportSource": "vue"
   },
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [{ "path": "../sdk-ui-preact" }, { "path": "./tsconfig.node.json" }]
 }

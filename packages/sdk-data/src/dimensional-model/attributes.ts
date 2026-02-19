@@ -1,11 +1,16 @@
 /* eslint-disable max-params */
+
 /* eslint-disable no-underscore-dangle */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable sonarjs/no-nested-switch */
 import { parseExpression } from '../utils.js';
-import { DimensionalElement, normalizeName } from './base.js';
+import { DimensionalElement, normalizeName, wrapIfNeedsNormalization } from './base.js';
 import { DATA_MODEL_MODULE_NAME } from './consts.js';
 import { Attribute, LevelAttribute } from './interfaces.js';
 import { simpleColumnType } from './simple-column-types.js';
@@ -18,6 +23,7 @@ import {
   MetadataTypes,
   Sort,
 } from './types.js';
+
 /**
  * @internal
  */
@@ -53,9 +59,12 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
     this.expression = expression;
 
     // if composeCode is not explicitly set by the caller, extract it from expression
+    // Use [[delimiters]] to preserve original names that need normalization
     if (!composeCode && expression) {
       const { table, column } = parseExpression(expression);
-      this.composeCode = normalizeAttributeName(table, column, '', DATA_MODEL_MODULE_NAME);
+      this.composeCode = `${DATA_MODEL_MODULE_NAME}.${wrapIfNeedsNormalization(
+        table,
+      )}.${wrapIfNeedsNormalization(column)}`;
     }
 
     // panel is not needed in most cases, this is to support break by columns functionality
@@ -179,9 +188,13 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
     this.granularity = granularity;
 
     // if composeCode is not explicitly set by the caller, extract it from expression and granularity
+    // Use [[delimiters]] to preserve original names that need normalization
     if (!composeCode && expression) {
       const { table, column } = parseExpression(expression);
-      this.composeCode = normalizeAttributeName(table, column, granularity, DATA_MODEL_MODULE_NAME);
+      const granularityPart = granularity ? `.${granularity}` : '';
+      this.composeCode = `${DATA_MODEL_MODULE_NAME}.${wrapIfNeedsNormalization(
+        table,
+      )}.${wrapIfNeedsNormalization(column)}${granularityPart}`;
     }
 
     // panel is not needed in most cases, this is to support break by columns functionality

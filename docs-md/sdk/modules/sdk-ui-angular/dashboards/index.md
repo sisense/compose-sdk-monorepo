@@ -11,5 +11,5 @@ Angular components and utilities for working with dashboards
 - [DashboardComponent](class.DashboardComponent.md)
 - [dashboardHelpers](namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](function.extractDimensionsAndMeasures.md)
-- [PivotTableWidgetComponent](class.PivotTableWidgetComponent.md) <Badge type="beta" text="Beta" />
+- [PivotTableWidgetComponent](class.PivotTableWidgetComponent.md)
 - [WidgetComponent](class.WidgetComponent.md)

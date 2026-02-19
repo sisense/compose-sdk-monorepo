@@ -1,15 +1,12 @@
-import { dirname, join } from 'path';
-import type { StorybookConfig } from '@storybook/react-vite';
 import { withoutVitePlugins } from '@storybook/builder-vite';
+import type { StorybookConfig } from '@storybook/react-vite';
+import { dirname, join } from 'path';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: [
-    getAbsolutePath('@storybook/addon-links'),
-    getAbsolutePath('@storybook/addon-essentials'),
-    getAbsolutePath('@storybook/addon-interactions'),
-    getAbsolutePath('@storybook/addon-storysource'),
-  ],
+
+  addons: [getAbsolutePath('@storybook/addon-links'), getAbsolutePath('@storybook/addon-docs')],
+
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {},
@@ -26,11 +23,15 @@ const config: StorybookConfig = {
       'vite-plugin-css-injected-by-js',
       'vite:dts',
     ]);
+
+    config.server = {
+      ...config.server,
+      allowedHosts: true,
+    };
+
     return config;
   },
-  docs: {
-    autodocs: true,
-  },
+
   typescript: {
     reactDocgen: false,
   },

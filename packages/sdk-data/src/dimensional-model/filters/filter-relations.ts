@@ -2,10 +2,10 @@
 import cloneDeep from 'lodash-es/cloneDeep.js';
 import isArray from 'lodash-es/isArray.js';
 
+import { TranslatableError } from '../../translation/translatable-error.js';
+import { DimensionalLevelAttribute } from '../attributes.js';
 import {
-  DimensionalLevelAttribute,
   Filter,
-  filterFactory,
   FilterRelations,
   FilterRelationsJaql,
   FilterRelationsJaqlNode,
@@ -15,9 +15,9 @@ import {
   FilterRelationsModelIdNode,
   FilterRelationsModelNode,
   FilterRelationsNode,
-  isCascadingFilter,
-} from '../../index.js';
-import { TranslatableError } from '../../translation/translatable-error.js';
+} from '../interfaces.js';
+import * as filterFactory from './factory.js';
+import { isCascadingFilter } from './filters.js';
 
 /**
  * Type guard for checking if the provided filters are FilterRelations.
@@ -663,7 +663,9 @@ export function getFilterRelationsFromJaql(
     if ('instanceid' in node) {
       const filter = filters.find((filter) => filter.config.guid === node.instanceid);
       if (!filter) {
-        throw new TranslatableError('errors.unknownFilterInFilterRelations');
+        throw new TranslatableError('errors.unknownFilterInFilterRelations', {
+          filterGuid: node.instanceid,
+        });
       }
       return filter;
     }

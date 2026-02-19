@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptions into internalDataOptions 1`] = `
+{
+  "columns": [
+    {
+      "__serializable": "DimensionalElement",
+      "desc": "",
+      "expression": "[Commerce.Gender]",
+      "name": "Gender",
+      "type": "text-attribute",
+    },
+  ],
+  "grandTotals": {
+    "columns": true,
+    "rows": true,
+  },
+  "rows": [
+    {
+      "__serializable": "DimensionalElement",
+      "desc": "",
+      "expression": "[Category.Category]",
+      "name": "Category",
+      "type": "text-attribute",
+    },
+    {
+      "__serializable": "DimensionalElement",
+      "desc": "",
+      "expression": "[Commerce.Age Range]",
+      "name": "AgeRange",
+      "type": "text-attribute",
+    },
+    {
+      "__serializable": "DimensionalElement",
+      "desc": "",
+      "expression": "[Commerce.Condition]",
+      "name": "Condition",
+      "type": "text-attribute",
+    },
+  ],
+  "values": [
+    {
+      "__serializable": "DimensionalElement",
+      "aggregation": "sum",
+      "attribute": {
+        "__serializable": "DimensionalElement",
+        "desc": "",
+        "expression": "[Commerce.Cost]",
+        "name": "Cost",
+        "type": "numeric-attribute",
+      },
+      "desc": "",
+      "name": "Total Cost",
+      "sort": 0,
+      "type": "basemeasure",
+    },
+    {
+      "__serializable": "DimensionalElement",
+      "aggregation": "sum",
+      "attribute": {
+        "__serializable": "DimensionalElement",
+        "desc": "",
+        "expression": "[Commerce.Revenue]",
+        "name": "Revenue",
+        "type": "numeric-attribute",
+      },
+      "desc": "",
+      "name": "Total Revenue",
+      "sort": 0,
+      "type": "basemeasure",
+    },
+  ],
+}
+`;

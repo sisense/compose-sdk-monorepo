@@ -1,5 +1,6 @@
-import classNames from 'classnames';
 import React, { MouseEventHandler, useState } from 'react';
+
+import classNames from 'classnames';
 
 import styles from './DEPRECATED_Icon.module.scss';
 

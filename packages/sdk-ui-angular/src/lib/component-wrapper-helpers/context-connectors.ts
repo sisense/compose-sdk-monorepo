@@ -47,18 +47,10 @@ export const createThemeContextConnector = (
   };
 };
 
-/**
- * Creates Sisense context connector
- *
- * @param sisenseContextService - The Sisense context service
- * @internal
- */
-export const createSisenseContextConnector = (
-  sisenseContextService: SisenseContextService,
-): ContextConnector<CustomSisenseContextProviderProps> => {
-  const { showRuntimeErrors, appConfig } = sisenseContextService.getConfig();
-  const defaultSisenseContext = {
-    isInitialized: true,
+function getBaseSisenseContext(sisenseContextService: SisenseContextService) {
+  const { showRuntimeErrors, appConfig } = sisenseContextService.getConfig() ?? {};
+  return {
+    isInitialized: sisenseContextService.isInitialized,
     tracking: {
       // if tracking is configured in appConfig, use it
       // if none is set, default to true
@@ -69,25 +61,42 @@ export const createSisenseContextConnector = (
       showErrorBox: showRuntimeErrors ?? true,
     },
   };
+}
+
+/**
+ * Creates Sisense context connector
+ *
+ * @param sisenseContextService - The Sisense context service
+ * @internal
+ */
+export const createSisenseContextConnector = (
+  sisenseContextService: SisenseContextService,
+): ContextConnector<CustomSisenseContextProviderProps> => {
   const propsObserver = new DataObserver<CustomSisenseContextProviderProps>({
-    context: defaultSisenseContext,
+    context: getBaseSisenseContext(sisenseContextService),
   });
 
-  sisenseContextService
-    .getApp()
-    .then((app) =>
+  sisenseContextService.getApp$().subscribe({
+    next: ({ app, error }) => {
+      if (error) {
+        propsObserver.setValue({
+          error,
+        });
+        return;
+      }
       propsObserver.setValue({
         context: {
-          ...defaultSisenseContext,
+          ...getBaseSisenseContext(sisenseContextService),
           app,
         },
-      }),
-    )
-    .catch((error) =>
+      });
+    },
+    error: (error: Error) => {
       propsObserver.setValue({
         error,
-      }),
-    );
+      });
+    },
+  });
 
   return {
     propsObserver,

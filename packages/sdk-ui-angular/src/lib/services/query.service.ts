@@ -140,7 +140,6 @@ export class QueryService {
    *
    * @param params - Pivot query parameters
    * @return Pivot query result
-   * @beta
    */
   async executePivotQuery(params: ExecutePivotQueryParams) {
     const {

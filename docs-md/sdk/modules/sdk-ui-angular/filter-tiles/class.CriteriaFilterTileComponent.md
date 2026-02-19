@@ -37,7 +37,7 @@ export class FiltersComponent {
   },
 }
 ```
-<img src="../../../img/angular-criteria-filter-tile-example.png" width="400px" />
+<img src="../../../img/angular-criteria-filter-tile-example.png" width="225px" />
 
 ## Implements
 

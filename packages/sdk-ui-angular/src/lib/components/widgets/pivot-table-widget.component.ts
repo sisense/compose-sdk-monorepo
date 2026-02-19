@@ -2,9 +2,11 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
+  Output,
   ViewChild,
 } from '@angular/core';
 import {
@@ -22,12 +24,19 @@ import {
 } from '../../component-wrapper-helpers';
 import { SisenseContextService } from '../../services';
 import { ThemeService } from '../../services';
+import type {
+  Arguments,
+  PivotTableDataPointEvent,
+  PivotTableEventProps,
+  WithoutPreactChartEventProps,
+} from '../../types';
 
 /**
  * Props of the {@link PivotTableWidgetComponent}.
  */
 export interface PivotTableWidgetProps
-  extends Omit<PivotTableWidgetPropsPreact, 'onDataPointClick' | 'onDataPointContextMenu'> {}
+  extends WithoutPreactChartEventProps<PivotTableWidgetPropsPreact>,
+    PivotTableEventProps {}
 
 /**
  * The Pivot Table Widget component extends the {@link PivotTableComponent} component to support widget features,
@@ -74,7 +83,7 @@ export class AnalyticsComponent {
           dataBars: true,
         },
       ],
-      grandTotals: { title: 'Grand Total', rows: true, columns: true },
+      grandTotals: { rows: true, columns: true },
     },
     filters: [filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])],
     styleOptions: { width: 1400, height: 600, rowsPerPage: 25 },
@@ -85,7 +94,6 @@ export class AnalyticsComponent {
  * ```
  * <img src="media://angular-pivot-table-widget-example.png" width="800px" />
  * @group Dashboards
- * @beta
  */
 @Component({
   selector: 'csdk-pivot-table-widget',
@@ -138,6 +146,14 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   styleOptions: PivotTableWidgetProps['styleOptions'];
 
   /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.drilldownOptions}
+   *
+   * @category Widget
+   */
+  @Input()
+  drilldownOptions: PivotTableWidgetProps['drilldownOptions'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.title}
    *
    * @category Widget
@@ -152,6 +168,22 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
    */
   @Input()
   description: PivotTableWidgetProps['description'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
+  @Output()
+  dataPointClick = new EventEmitter<PivotTableDataPointEvent>();
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.onDataPointContextMenu}
+   *
+   * @category Callbacks
+   */
+  @Output()
+  dataPointContextMenu = new EventEmitter<PivotTableDataPointEvent>();
 
   private componentAdapter: ComponentAdapter<typeof PivotTableWidgetPreact>;
 
@@ -184,8 +216,15 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
       filters: this.filters,
       highlights: this.highlights,
       styleOptions: this.styleOptions,
+      drilldownOptions: this.drilldownOptions,
       title: this.title,
       description: this.description,
+      onDataPointClick: (
+        ...[point, nativeEvent]: Arguments<PivotTableWidgetPropsPreact['onDataPointClick']>
+      ) => this.dataPointClick.emit({ point, nativeEvent } as PivotTableDataPointEvent),
+      onDataPointContextMenu: (
+        ...[point, nativeEvent]: Arguments<PivotTableWidgetPropsPreact['onDataPointContextMenu']>
+      ) => this.dataPointContextMenu.emit({ point, nativeEvent } as PivotTableDataPointEvent),
     };
   }
 

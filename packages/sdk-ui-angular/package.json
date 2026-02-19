@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-ui-angular",
-  "homepage": "https://sisense.dev/guides/sdk/",
+  "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package containing general UI elements and related logic tailored for Angular development",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.9.0",
+  "version": "2.21.0",
   "author": "Sisense",
   "license": "SEE LICENSE IN LICENSE.md",
   "main": "dist",
@@ -41,12 +41,23 @@
       "es2015": "./dist/fesm2015/sisense-sdk-ui-angular-ai.mjs",
       "node": "./dist/fesm2015/sisense-sdk-ui-angular-ai.mjs",
       "default": "./dist/fesm2020/sisense-sdk-ui-angular-ai.mjs"
+    },
+    "./translations/*": {
+      "types": "./dist/translations/*/index.d.ts",
+      "esm2020": "./dist/esm2020/translations/*/index.mjs",
+      "es2020": "./dist/esm2020/translations/*/index.mjs",
+      "es2015": "./dist/esm2020/translations/*/index.mjs",
+      "node": "./dist/esm2020/translations/*/index.mjs",
+      "default": "./dist/esm2020/translations/*/index.mjs"
     }
   },
   "typesVersions": {
     "*": {
       "ai": [
         "./dist/ai/index.d.ts"
+      ],
+      "translations/*": [
+        "./dist/translations/*/index.d.ts"
       ]
     }
   },
@@ -71,9 +82,9 @@
     "sync-version": "node ./scripts/sync-version.cjs"
   },
   "peerDependencies": {
-    "@angular/common": "^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0",
-    "@angular/compiler": "^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0",
-    "@angular/core": "^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0"
+    "@angular/common": "^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/compiler": "^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/core": "^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0"
   },
   "dependencies": {
     "@sisense/sdk-data": "workspace:*",

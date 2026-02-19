@@ -44,7 +44,7 @@ Configures the available actions within the filters panel.
 > >
 > > Determines whether the possibility to delete a filter is enabled.
 > >
-> > If not specified, the default value is `true`.
+> > If not specified, the default value is `false`.
 > >
 > >
 >

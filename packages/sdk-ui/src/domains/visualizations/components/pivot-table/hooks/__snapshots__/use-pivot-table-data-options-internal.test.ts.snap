@@ -1,0 +1,138 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`usePivotTableDataOptionsInternal > should correctly translate dataOptions into internalDataOptions 1`] = `
+{
+  "columns": [
+    {
+      "column": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Gender",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Gender]",
+        "name": "Gender",
+        "type": "text-attribute",
+      },
+      "includeSubTotals": true,
+    },
+  ],
+  "grandTotals": {
+    "columns": true,
+    "rows": true,
+  },
+  "rows": [
+    {
+      "column": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Category.Category",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Category.Category]",
+        "name": "Category",
+        "type": "text-attribute",
+      },
+      "includeSubTotals": true,
+      "sortType": "sortAsc",
+    },
+    {
+      "column": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.[[Age Range]]",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Age Range]",
+        "name": "Age Range",
+        "type": "text-attribute",
+      },
+      "includeSubTotals": true,
+      "sortType": {
+        "by": {
+          "columnsMembersPath": [
+            "Male",
+          ],
+          "valuesIndex": 0,
+        },
+        "direction": "sortDesc",
+      },
+    },
+    {
+      "column": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Condition",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Condition]",
+        "name": "Condition",
+        "type": "text-attribute",
+      },
+    },
+  ],
+  "values": [
+    {
+      "column": {
+        "__serializable": "DimensionalBaseMeasure",
+        "aggregation": "sum",
+        "attribute": {
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.Cost",
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
+          "description": "",
+          "expression": "[Commerce.Cost]",
+          "name": "Cost",
+          "type": "numeric-attribute",
+        },
+        "composeCode": "measureFactory.sum(DM.Commerce.Cost, 'Total Cost')",
+        "dataSource": undefined,
+        "description": "",
+        "name": "Total Cost",
+        "sort": 0,
+        "type": "basemeasure",
+      },
+      "dataBars": true,
+      "enabled": true,
+      "totalsCalculation": "sum",
+    },
+    {
+      "column": {
+        "__serializable": "DimensionalBaseMeasure",
+        "aggregation": "sum",
+        "attribute": {
+          "__serializable": "DimensionalAttribute",
+          "composeCode": "DM.Commerce.Revenue",
+          "dataSource": {
+            "live": false,
+            "title": "Sample ECommerce",
+          },
+          "description": "",
+          "expression": "[Commerce.Revenue]",
+          "name": "Revenue",
+          "type": "numeric-attribute",
+        },
+        "composeCode": "measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')",
+        "dataSource": undefined,
+        "description": "",
+        "name": "Total Revenue",
+        "sort": 0,
+        "type": "basemeasure",
+      },
+      "enabled": true,
+      "totalsCalculation": "sum",
+    },
+  ],
+}
+`;

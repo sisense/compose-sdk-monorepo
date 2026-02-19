@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { DataSource, DataSourceInfo } from '../interfaces.js';
 import { TranslatableError } from '../translation/translatable-error.js';
+import { secureRandom } from '../utils.js';
 import { DimensionalElement } from './base.js';
 import { create } from './factory.js';
 import { DataModel, Element } from './interfaces.js';
@@ -38,7 +40,7 @@ export class DimensionalDataModel implements DataModel {
       key = metadata[i].name;
 
       if (this[metadata[i].name]) {
-        key = `${key} (${Math.random()})`;
+        key = `${key} (${secureRandom()})`;
       }
 
       this[key] = metadata[i];

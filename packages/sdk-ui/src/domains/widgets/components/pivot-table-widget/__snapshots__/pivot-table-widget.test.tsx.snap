@@ -1,0 +1,99 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
+<div>
+  <div
+    style="width: 800px; height: 100%;"
+  >
+    <div
+      style="width: 800px; height: 532px; position: relative;"
+    >
+      <div
+        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"
+      >
+        <div
+          class="csdk-accessible css-i1ycqm"
+          data-component="widget-container-root"
+        >
+          <div
+            class="css-1f0f6z6"
+            data-component="widget-container-layout"
+          >
+            <div
+              class="css-ei3g9r"
+              data-component="widget-container-card"
+            >
+              <div
+                data-component="widget-header"
+              >
+                <div
+                  class="css-1p6ds3l"
+                  data-component="header-container"
+                >
+                  <div
+                    class="css-mdfanr"
+                    data-component="title"
+                  >
+                    Pivot table widget title
+                  </div>
+                  <div
+                    class="css-15r4p8k"
+                    data-component="toolbar-container"
+                  >
+                    <button
+                      aria-label="Click to view full details"
+                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1avsmgh-MuiButtonBase-root-MuiIconButton-root"
+                      data-mui-internal-clone-element="true"
+                      style="color: rgb(0, 0, 0); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        height="24"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.5 20a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zm0-1a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zm-.5-8h1v5h-1v-5zm0-1v-.998h1V10h-1z"
+                          fill="#5B6372"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="css-1220o1q"
+                data-component="widget-container-content"
+              >
+                <div
+                  style="width: 100%; height: 100%;"
+                >
+                  <div
+                    style="width: 400px; height: 500px; position: relative;"
+                  >
+                    <div
+                      style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"
+                    >
+                      <div
+                        class="csdk-relative csdk-h-full"
+                        id="overlay"
+                      >
+                        <div
+                          aria-label="pivot-table-root"
+                          style="padding: 8px 8px 0px 8px;"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

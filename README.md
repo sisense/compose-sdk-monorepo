@@ -15,7 +15,7 @@ Compose SDK is a Software Development Kit that enables a composable, code-driven
 
 ## Documentation
 
-You can find documentation for Compose SDK on the [Sisense Developer Portal](https://sisense.dev).
+You can find documentation for Compose SDK on the [Sisense Developer Portal](https://developer.sisense.com).
 
 Demo applications for Compose SDK + Typescript are available at https://csdk-react.sisense.com/ (React), https://csdk-angular.sisense.com/ (Angular), and
 https://csdk-vue.sisense.com/ (Vue). The source code repos are at [compose-sdk-react-demo](https://github.com/sisense/compose-sdk-react-demo),

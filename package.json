@@ -1,5 +1,5 @@
 {
-  "version": "2.9.0",
+  "version": "2.21.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -34,6 +34,26 @@
         ],
         "outputs": [
           "{workspaceRoot}/coverage"
+        ],
+        "cache": true
+      },
+      "test:coverage:collect": {
+        "dependsOn": [
+          "^build:prod"
+        ],
+        "cache": true
+      },
+      "test:coverage:report": {
+        "dependsOn": [
+          "test:coverage:collect"
+        ],
+        "cache": true
+      },
+      "test:coverage:combine": {
+        "dependsOn": [
+          "test:coverage",
+          "test:coverage:collect",
+          "test:coverage:report"
         ],
         "cache": true
       }
@@ -77,6 +97,7 @@
     "version-and-publish": "./ci/version-and-publish.sh",
     "version:current": "node ./scripts/current-version.cjs",
     "release-git-log": "./scripts/release-git-log.sh",
+    "update-external-branch": "./scripts/update-external-branch.sh",
     "publish": "yarn workspaces foreach --no-private npm publish --tolerate-republish",
     "docs:gen": "TYPEDOC_MODE=PUBLIC typedoc --options typedoc.config.cjs",
     "docs:serve": "node ./scripts/serve-static.cjs docs",
@@ -96,13 +117,13 @@
     "nx:lint": "nx run-many --exclude @sisense/root -t lint",
     "nx:lint:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t lint",
     "nx:format": "nx run-many --exclude @sisense/root -t format",
-    "nx:format:af": "nx nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t format",
+    "nx:format:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t format",
     "nx:format:check": "nx run-many --exclude @sisense/root -t format:check",
     "nx:format:check:af": "nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t format:check",
     "nx:build:prod": "nx run-many --exclude @sisense/root -t build:prod",
     "nx:build:prod:af": "nx affected  --base=origin/master --head=HEAD --exclude @sisense/root -t build:prod",
     "nx:component:tests": "nx run-many --exclude @sisense/root -t component:tests",
-    "nx:component:tests:af": "nx affected --exclude @sisense/root -t component:tests",
+    "nx:component:tests:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t component:tests",
     "nx:test:coverage:collect:report": "nx run @sisense/root:nx:test:coverage && nx run @sisense/root:test:coverage:collect && nx run @sisense/root:test:coverage:report"
   },
   "files": [
@@ -112,6 +133,10 @@
   "volta": {
     "node": "18.16.0"
   },
+  "resolutions": {
+    "form-data": "4.0.4",
+    "socket.io-parser": "3.4.1"
+  },
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",
     "@sisense/commitlint-config": "^1.9.9",
@@ -119,11 +144,11 @@
     "@sisense/prettier-config": "^1.9.9",
     "@sisense/typedoc-plugin-diff-packages": "0.1.0",
     "@sisense/typedoc-plugin-markdown": "0.0.0",
+    "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "@vitest/coverage-v8": "^3.2.4",
     "eslint": "^8.40.0",
     "eslint-plugin-i18next": "^6.1.0",
     "eslint-plugin-rulesdir": "^0.2.2",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-tsdoc": "0.2.17",
     "eslint-plugin-vitest": "0.2.8",
     "express": "^4.18.2",
@@ -132,15 +157,13 @@
     "nx": "20.0.0",
     "nyc": "^17.1.0",
     "prettier": "^2.8.8",
+    "storybook": "^9.1.6",
     "typedoc": "0.26.10",
     "typedoc-plugin-vue": "^1.2.0",
     "vitest": "^3.2.4"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write"
-    ],
-    "*.{json,yaml,yml,md}": [
+    "*.{js,jsx,ts,tsx,json,yaml,yml,md}": [
       "prettier --write"
     ]
   }

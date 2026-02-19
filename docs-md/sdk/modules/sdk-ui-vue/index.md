@@ -14,6 +14,7 @@ Vue components and utilities for working with charts
 - [BarChart](charts/class.BarChart.md)
 - [BoxplotChart](charts/class.BoxplotChart.md)
 - [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [CalendarHeatmapChart](charts/class.CalendarHeatmapChart.md)
 - [Chart](charts/class.Chart.md) - Common component for rendering charts of different types including table
 - [ColumnChart](charts/class.ColumnChart.md)
 - [FunnelChart](charts/class.FunnelChart.md)
@@ -23,6 +24,7 @@ Vue components and utilities for working with charts
 - [PolarChart](charts/class.PolarChart.md)
 - [ScatterChart](charts/class.ScatterChart.md)
 - [ScattermapChart](charts/class.ScattermapChart.md)
+- [StreamgraphChart](charts/class.StreamgraphChart.md)
 - [SunburstChart](charts/class.SunburstChart.md)
 - [TreemapChart](charts/class.TreemapChart.md)
 
@@ -30,7 +32,7 @@ Vue components and utilities for working with charts
 
 Vue components for data grids
 
-- [PivotTable](data-grids/class.PivotTable.md) <Badge type="beta" text="Beta" />
+- [PivotTable](data-grids/class.PivotTable.md)
 - [Table](data-grids/class.Table.md)
 
 ## Drilldown
@@ -66,6 +68,7 @@ Vue composables for working with queries
 
 - [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
 - [useExecuteCustomWidgetQuery](queries/function.useExecuteCustomWidgetQuery.md)
+- [useExecutePivotQuery](queries/function.useExecutePivotQuery.md)
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 
 ## Dashboards
@@ -76,8 +79,10 @@ Vue components and utilities for working with dashboards
 - [Dashboard](dashboards/class.Dashboard.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md)
+- [PivotTableWidget](dashboards/class.PivotTableWidget.md)
 - [useComposedDashboard](dashboards/function.useComposedDashboard.md)
 - [useCustomWidgets](dashboards/function.useCustomWidgets.md)
+- [useJtdWidget](dashboards/function.useJtdWidget.md)
 - [Widget](dashboards/class.Widget.md)
 
 ## Fusion Assets

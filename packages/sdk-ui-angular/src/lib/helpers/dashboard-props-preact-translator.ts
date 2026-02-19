@@ -1,25 +1,18 @@
 import { DashboardProps as DashboardPropsPreact } from '@sisense/sdk-ui-preact';
 
-import { DashboardProps } from '../components/dashboard';
-import {
-  translateFromPreactWidgetProps,
-  translateToPreactWidgetProps,
-} from './widget-props-preact-translator';
+import type { DashboardProps } from '../components/dashboard';
+import { toPreactWidgetProps, toWidgetProps } from './widget-props-preact-translator';
 
-export function translateToPreactDashboardProps(
-  dashboardProps: DashboardProps,
-): DashboardPropsPreact {
+export function toPreactDashboardProps(angularProps: DashboardProps): DashboardPropsPreact {
   return {
-    ...dashboardProps,
-    widgets: dashboardProps.widgets.map(translateToPreactWidgetProps),
+    ...angularProps,
+    widgets: angularProps.widgets.map(toPreactWidgetProps),
   };
 }
 
-export function translateFromPreactDashboardProps(
-  dashboardProps: DashboardPropsPreact,
-): DashboardProps {
+export function toDashboardProps(preactProps: DashboardPropsPreact): DashboardProps {
   return {
-    ...dashboardProps,
-    widgets: dashboardProps.widgets.map(translateFromPreactWidgetProps),
+    ...preactProps,
+    widgets: preactProps.widgets.map(toWidgetProps),
   };
 }

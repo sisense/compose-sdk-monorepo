@@ -1,13 +1,14 @@
-import { toRefs, watch } from 'vue';
 import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 import {
   type ClientApplication,
   executeQuery,
-  queryStateReducer,
   type ExecuteQueryParams,
+  queryStateReducer,
 } from '@sisense/sdk-ui-preact';
-import { getSisenseContext } from '../providers/sisense-context-provider';
+import { toRefs, watch } from 'vue';
+
 import { useReducer } from '../helpers/use-reducer';
+import { getSisenseContext } from '../providers/sisense-context-provider';
 import type { MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject, toPlainValue } from '../utils';
 import { useTracking } from './use-tracking';

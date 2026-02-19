@@ -8,5 +8,5 @@
     "lib": ["ES2017", "dom", "ES2020.String"]
   },
   "include": ["src/**/*.ts"],
-  "references": [{ "path": "../sdk-rest-client" }]
+  "references": [{ "path": "../sdk-common" }, { "path": "../sdk-rest-client" }]
 }

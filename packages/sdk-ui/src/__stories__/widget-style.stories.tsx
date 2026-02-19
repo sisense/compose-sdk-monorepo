@@ -1,9 +1,11 @@
 import { DataSource } from '@sisense/sdk-data';
-import { Meta } from '@storybook/react';
-import { SisenseContextProviderProps } from '../index';
-import { SisenseContextProvider } from '../sisense-context/sisense-context-provider';
+import { Meta } from '@storybook/react-vite';
+
+import { ChartWidget } from '@/domains/widgets/components/chart-widget';
+import { SisenseContextProviderProps } from '@/props';
+
+import { SisenseContextProvider } from '../infra/contexts/sisense-context/sisense-context-provider';
 import { ChartStyleOptions } from '../types';
-import { ChartWidget } from '../widgets/chart-widget';
 import { templateForComponent } from './template';
 
 const sisenseContextProps: SisenseContextProviderProps = {

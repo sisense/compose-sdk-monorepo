@@ -8,5 +8,10 @@
     "outDir": "./dist"
   },
   "include": ["src/**/*.ts", "src/**/*.json"],
-  "references": [{ "path": "../sdk-data" }, { "path": "../sdk-pivot-client" }]
+  "references": [
+    { "path": "../sdk-common" },
+    { "path": "../sdk-data" },
+    { "path": "../sdk-pivot-query-client" },
+    { "path": "../sdk-rest-client" }
+  ]
 }

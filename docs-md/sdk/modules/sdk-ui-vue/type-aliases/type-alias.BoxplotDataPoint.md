@@ -50,6 +50,34 @@ Value of the category for the data point
 
 ***
 
+### `entries`
+
+**entries**?: `object`
+
+A collection of data point entries that represents values for all related `dataOptions`.
+
+> #### `entries.category`
+>
+> **category**: [`DataPointEntry`](../../sdk-ui/type-aliases/type-alias.DataPointEntry.md)[]
+>
+> Data point entries for the `category` data options
+>
+> #### `entries.outliers`
+>
+> **outliers**: [`DataPointEntry`](../../sdk-ui/type-aliases/type-alias.DataPointEntry.md)[]
+>
+> Data point entries for the `outliers` data options
+>
+> #### `entries.value`
+>
+> **value**: [`DataPointEntry`](../../sdk-ui/type-aliases/type-alias.DataPointEntry.md)[]
+>
+> Data point entries for the `value` data options
+>
+>
+
+***
+
 ### `outlier`
 
 **outlier**?: `number`

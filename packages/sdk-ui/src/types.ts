@@ -1,4 +1,6 @@
 /* eslint-disable max-lines */
+import { CSSProperties, ReactNode } from 'react';
+
 import type {
   Attribute,
   CalculatedMeasureColumn,
@@ -8,59 +10,55 @@ import type {
   MembersFilter,
 } from '@sisense/sdk-data';
 import { DeepRequired } from 'ts-essentials';
+
+import { AbstractDataPointWithEntries } from '@/domains/dashboarding/common-filters/types';
+import { Coordinates } from '@/domains/visualizations/components/chart/components/scattermap/types';
+
+import { Hierarchy, HierarchyId, StyledColumn, StyledMeasureColumn } from '.';
+import { GeoDataElement } from './domains/visualizations/components/chart/restructured-charts/areamap-chart/types';
+import { CalendarDayOfWeek } from './domains/visualizations/components/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
+import { HighchartsOptionsInternal } from './domains/visualizations/core/chart-options-processor/chart-options-service';
 import {
+  AreaRangeSubtype,
   AreaSubtype,
   BoxplotSubtype,
   LineSubtype,
   PieSubtype,
   PolarSubtype,
   StackableSubtype,
-  AreaRangeSubtype,
-} from './chart-options-processor/subtype-to-design-options';
+} from './domains/visualizations/core/chart-options-processor/subtype-to-design-options';
 import {
   IndicatorComponents,
   TableColorOptions,
-} from './chart-options-processor/translations/design-options';
+} from './domains/visualizations/core/chart-options-processor/translations/design-options';
 import {
   FunnelDirection,
   FunnelSize,
   FunnelType,
-} from './chart-options-processor/translations/funnel-plot-options';
-import { ScatterMarkerSize } from './chart-options-processor/translations/scatter-plot-options';
+} from './domains/visualizations/core/chart-options-processor/translations/funnel-plot-options';
+import { LegendPosition } from './domains/visualizations/core/chart-options-processor/translations/legend-section';
+import { ScatterMarkerSize } from './domains/visualizations/core/chart-options-processor/translations/scatter-plot-options';
 import {
-  CartesianChartType,
-  ScatterChartType,
-  CategoricalChartType,
-  IndicatorChartType,
-  TableType,
   AreamapChartType,
   BoxplotChartType,
-  ScattermapChartType,
+  CalendarHeatmapChartType,
+  CartesianChartType,
+  CategoricalChartType,
+  IndicatorChartType,
   RangeChartType,
+  ScatterChartType,
+  ScattermapChartType,
   TableChartType,
-} from './chart-options-processor/translations/types';
+  TextStyle,
+} from './domains/visualizations/core/chart-options-processor/translations/types';
 import { DataPointsEventHandler } from './props';
-import { LegendPosition } from './chart-options-processor/translations/legend-section';
-import { Coordinates } from '@/charts/map-charts/scattermap/types';
-import { StyledColumn, StyledMeasureColumn, Hierarchy, HierarchyId } from '.';
-import { HighchartsOptionsInternal } from './chart-options-processor/chart-options-service';
-import { CSSProperties, ReactNode } from 'react';
-import { GeoDataElement, RawGeoDataElement } from './chart/restructured-charts/areamap-chart/types';
-import { TabCornerRadius, TabInterval, TabSize } from '@/widgets/tabber-widget';
-import { SoftUnion } from './utils/utility-types';
+import { GradientColor } from './shared/utils/gradient';
+import { SoftUnion } from './shared/utils/utility-types';
 
 export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
-export type { AppConfig } from './app/client-application';
-export type { DateConfig } from './query/date-formats';
-
-/**
- * @internal
- * Enum for size measurement units
- */
-export enum SizeMeasurement {
-  PERCENT = '%',
-  PIXEL = 'px',
-}
+export type { AppConfig } from './infra/app/client-application';
+export type { DateConfig } from './domains/query-execution/core/date-formats';
+export type { CalendarDayOfWeek } from './domains/visualizations/components/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 
 export type {
   CartesianChartDataOptions,
@@ -68,16 +66,17 @@ export type {
   ChartDataOptions,
   ScatterChartDataOptions,
   IndicatorChartDataOptions,
+  CalendarHeatmapChartDataOptions,
   StyledColumn,
   StyledMeasureColumn,
-} from './chart-data-options/types';
+} from './domains/visualizations/core/chart-data-options/types';
 export type {
   DataColorCondition,
   ConditionalDataColorOptions,
   DataColorOptions,
   RangeDataColorOptions,
   UniformDataColorOptions,
-} from './chart-data/data-coloring/types';
+} from './domains/visualizations/core/chart-data/data-coloring/types';
 // export the following types for TSDoc
 export type {
   CartesianChartType,
@@ -87,8 +86,22 @@ export type {
   BoxplotChartType,
   ScattermapChartType,
   AreamapChartType,
+  CalendarHeatmapChartType,
   TableType,
   TableChartType,
+  RangeChartType,
+  TextStyle,
+} from './domains/visualizations/core/chart-options-processor/translations/types';
+export type { IndicatorComponents } from './domains/visualizations/core/chart-options-processor/translations/design-options';
+export type { ScatterMarkerSize } from './domains/visualizations/core/chart-options-processor/translations/scatter-plot-options';
+export type { LegendPosition } from './domains/visualizations/core/chart-options-processor/translations/legend-section';
+export type {
+  GeoDataElement,
+  RawGeoDataElement,
+} from './domains/visualizations/components/chart/restructured-charts/areamap-chart/types';
+export type { Coordinates } from './domains/visualizations/components/chart/components/scattermap/types';
+export type { TableColorOptions } from './domains/visualizations/core/chart-options-processor/translations/design-options';
+export type {
   AreaSubtype,
   AreaRangeSubtype,
   LineSubtype,
@@ -96,19 +109,20 @@ export type {
   PolarSubtype,
   StackableSubtype,
   BoxplotSubtype,
-  IndicatorComponents,
-  ScatterMarkerSize,
-  LegendPosition,
-  GeoDataElement,
-  RawGeoDataElement,
-  Coordinates,
-  RangeChartType,
-  TableColorOptions,
-};
+} from './domains/visualizations/core/chart-options-processor/subtype-to-design-options';
 
-export type { MonthOfYear, DayOfWeek, DateLevel } from './query/date-formats/apply-date-format';
+export type {
+  MonthOfYear,
+  DayOfWeek,
+  DateLevel,
+} from './domains/query-execution/core/date-formats/apply-date-format';
 
-export type { IndicatorRenderOptions } from './charts/indicator/indicator-render-options';
+export type { IndicatorRenderOptions } from '@/domains/visualizations/components/chart/components/indicator/indicator-render-options';
+
+export type {
+  TabberButtonsWidgetStyleOptions,
+  TabberButtonsWidgetCustomOptions,
+} from '@/domains/widgets/components/tabber-buttons-widget/types';
 
 /**
  * @internal
@@ -133,6 +147,59 @@ export type LineWidth = {
   width: 'thin' | 'bold' | 'thick';
 };
 
+/** Configuration that defines line dash type */
+export type DashStyle =
+  | 'Solid'
+  | 'ShortDash'
+  | 'ShortDot'
+  | 'ShortDashDot'
+  | 'ShortDashDotDot'
+  | 'Dot'
+  | 'Dash'
+  | 'LongDash'
+  | 'DashDot'
+  | 'LongDashDot'
+  | 'LongDashDotDot';
+
+/** Configuration that defines line end cap type */
+export type EndCapType = 'Round' | 'Square';
+
+/**
+ * Configuration options for styling lines in charts.
+ *
+ * This type is used to customize the visual appearance of lines in various chart types
+ * including Line charts, Area charts, and AreaRange charts.
+ */
+export type LineOptions = {
+  /**
+   * Width of the line in pixels.
+   */
+  width?: number;
+
+  /**
+   * Dash pattern for the line.
+   *
+   * Defines the visual pattern of the line.
+   */
+  dashStyle?: DashStyle;
+
+  /**
+   * Style of the line end caps.
+   *
+   * Controls how the ends of lines are rendered:
+   * - `'Round'`: Rounded ends for a softer appearance
+   * - `'Square'`: Sharp, flat ends for a crisp appearance
+   */
+  endCap?: EndCapType;
+
+  /**
+   * Whether to apply a shadow effect to the line.
+   *
+   * When enabled, adds a subtle shadow behind the line for enhanced.
+   */
+  shadow?: boolean;
+};
+
 /** Options that define  markers - symbols or data points that highlight specific values. */
 export type Markers = {
   /** Boolean flag that defines if markers should be shown on the chart */
@@ -152,41 +219,348 @@ export type X2Title = {
   text?: string;
 };
 
-/** Options that define series labels - titles/names identifying data series in a chart. */
-export type SeriesLabels = {
+export type SeriesLabelsTextStyle = Omit<TextStyle, 'pointerEvents' | 'textOverflow' | 'color'> & {
+  /**
+   * Color of the labels text
+   * The default color setting is "contrast", which applies the maximum contrast between the background and the text
+   *
+   * @default 'contrast'
+   */
+  color?: 'contrast' | string;
+};
+
+export type SeriesLabelsBase = {
   /** Boolean flag that defines if series labels should be shown on the chart */
   enabled: boolean;
-  /** Rotation of series labels (in degrees) */
+  /**
+   * Rotation of series labels (in degrees)
+   * Note that due to a more complex structure, backgrounds, borders and padding will be lost on a rotated data label
+   * */
   rotation?: number;
   /**
-   * Boolean flag that defines if value should be shown in series labels
-   * (if not specified, value will be shown by default)
+   * Styling for labels text
    */
-  showValue?: boolean;
+  textStyle?: SeriesLabelsTextStyle;
   /**
-   * Boolean flag that defines if percentage should be shown in series labels
-   * (only applicable for subtypes that support percentage, like "stacked100")
+   * Background color of the labels. `auto` uses the same color as the data point
    */
-  showPercentage?: boolean;
+  backgroundColor?: 'auto' | string | GradientColor;
+  /**
+   * Color of the labels border
+   */
+  borderColor?: string | GradientColor;
+  /**
+   * Border radius in pixels applied to the labels border, if visible
+   *
+   * @default 0
+   */
+  borderRadius?: number;
+  /**
+   * Border width of the series labels, in pixels
+   */
+  borderWidth?: number;
+  /**
+   * Padding of the series labels, in pixels
+   */
+  padding?: number;
+  /**
+   * Horizontal offset of the labels in pixels, relative to its horizontal alignment specified via `align`
+   *
+   * @default 0
+   */
+  xOffset?: number;
+  /**
+   * Vertical offset of the labels in pixels, relative to its vertical alignment specified via `verticalAlign`
+   *
+   * @default 0
+   */
+  yOffset?: number;
+  /**
+   * Text to be shown before the series labels
+   */
+  prefix?: string;
+  /**
+   * Text to be shown after the series labels
+   */
+  suffix?: string;
+};
+
+export type SeriesLabelsAligning = {
+  /**
+   * If `true`, series labels appear inside bars/columns instead of at the datapoints. Not applicable for some chart types e.g. line, area
+   */
+  alignInside?: boolean;
+  /**
+   * The horizontal alignment of the data label compared to the point
+   *
+   * For some chart types, this will only apply when `alignInside` is `true`.
+   */
+  align?: 'left' | 'center' | 'right';
+  /**
+   * The vertical alignment of the data label
+   *
+   * For some chart types, this will only apply when `alignInside` is `true`.
+   */
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+};
+
+/** Options that define series labels - titles/names identifying data series in a chart. */
+export type SeriesLabels = SeriesLabelsBase &
+  SeriesLabelsAligning & {
+    /**
+     * Boolean flag that defines if value should be shown in series labels
+     * (if not specified, default is determined by chart type)
+     */
+    showValue?: boolean;
+    /**
+     * Boolean flag that defines if percentage should be shown in series labels
+     * (only applicable for subtypes that support percentage, like "stacked100")
+     */
+    showPercentage?: boolean;
+    /**
+     * Boolean flag that defines if percentage should be shown with decimals
+     * (will work only if `showPercentage` is `true`)
+     */
+    showPercentDecimals?: boolean;
+  };
+
+/**
+ * Text styling options for total labels.
+ *
+ * Extends the base TextStyle with additional alignment options specific to total labels.
+ */
+export type TotalLabelsTextStyle = Omit<TextStyle, 'pointerEvents' | 'textOverflow'> & {
+  /**
+   * Horizontal alignment of the total label text
+   */
+  align?: 'left' | 'center' | 'right';
 };
 
 /**
- * @internal
+ * Configuration options for total labels in stacked charts.
+ *
+ * Total labels display the sum of all series values at each data point in stacked charts.
+ * This configuration allows you to customize the appearance and positioning of these labels.
  */
 export type TotalLabels = {
-  /** Boolean flag that defines if total labels should be shown on the chart */
+  /**
+   * Boolean flag that defines if total labels should be shown on the chart
+   * Total labels are only supported for stacked chart subtypes (Column, Bar, Area)
+   * */
   enabled: boolean;
-  /** Rotation of total labels (in degrees) */
+  /**
+   * Rotation of total labels (in degrees)
+   * */
   rotation?: number;
+  /**
+   * The horizontal alignment of the total label compared to the point
+   */
+  align?: 'left' | 'center' | 'right';
+  /**
+   * The vertical alignment of the total label compared to the point
+   */
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  /**
+   * The animation delay time in milliseconds. Set to 0 to render the data labels immediately
+   */
+  delay?: number;
+  /**
+   * Background color of the labels. `auto` uses the same color as the data point
+   */
+  backgroundColor?: 'auto' | string | GradientColor;
+  /**
+   * Color of the labels border
+   */
+  borderColor?: string | GradientColor;
+  /**
+   * Border radius in pixels applied to the labels border, if visible
+   *
+   * @default 0
+   */
+  borderRadius?: number;
+  /**
+   * Border width of the series labels, in pixels
+   */
+  borderWidth?: number;
+  /**
+   * Styling for labels text
+   */
+  textStyle?: TotalLabelsTextStyle;
+  /**
+   * Horizontal offset of the total label in pixels, relative to its horizontal alignment specified via `align`
+   */
+  xOffset?: number;
+  /**
+   * Vertical offset of the total label in pixels, relative to its vertical alignment specified via `verticalAlign`
+   */
+  yOffset?: number;
+  /**
+   * Text to be shown before the total label
+   */
+  prefix?: string;
+  /**
+   * Text to be shown after the total label
+   */
+  suffix?: string;
 };
 
-/** Options that define legend - a key that provides information about the data series or colors used in chart. */
-export type Legend = {
+/**
+ * Configuration for the legend title
+ */
+export interface LegendTitleOptions {
+  /** Whether the legend title is enabled */
+  enabled?: boolean;
+  /** The text content of the legend title */
+  text?: string;
+  /** Styling for the legend title */
+  textStyle?: TextStyle;
+}
+
+/**
+ * Configuration for individual legend items
+ */
+export interface LegendItemsOptions {
+  /**
+   * Layout direction for legend items
+   *
+   * Can be one of 'horizontal' or 'vertical' or 'proximate'.
+   * When 'proximate', the legend items will be placed as close as possible to the graphs they're representing, except in inverted charts or when the legend position doesn't allow it.
+   */
+  layout?: 'horizontal' | 'vertical' | 'proximate';
+  /** Distance between legend items in pixels */
+  distance?: number;
+  /** Top margin applied to each legend item, in pixels */
+  marginTop?: number;
+  /** Bottom margin applied to each legend item, in pixels */
+  marginBottom?: number;
+  /**
+   * Width of legend items, in pixels.
+   *
+   * @default undefined
+   */
+  width?: number;
+  /** Styling for legend items text */
+  textStyle?: TextStyle;
+  /**
+   * Styling for legend items on hover
+   *
+   * @internal
+   */
+  hoverTextStyle?: TextStyle;
+  /**
+   * Styling for hidden legend items
+   *
+   * @internal
+   */
+  hiddenTextStyle?: TextStyle;
+}
+
+/**
+ * Configuration for legend symbols
+ */
+export interface LegendSymbolsOptions {
+  /** Width of the legend symbol in pixels */
+  width?: number;
+  /** Height of the legend symbol in pixels */
+  height?: number;
+  /**
+   * If true, the `width` of the symbol will be the same as the `height`.
+   *
+   * @default true
+   */
+  squared?: boolean;
+  /** Border radius applied to symbols. Set to half of the `height` value to create a circle*/
+  radius?: number;
+  /** Padding between the symbol and text of each legend item, in pixels */
+  padding?: number;
+}
+
+/**
+ * Options that define legend - a key that provides information about the data series or colors used in chart.
+ */
+export type LegendOptions = {
   /** Boolean flag that defines if legend should be shown on the chart */
   enabled: boolean;
-  /** Position of the legend */
+  /**
+   * Position of the legend
+   *
+   * @deprecated Please use `align`, `verticalAlign` and `items.layout` properties instead
+   */
   position?: LegendPosition;
+  /** Horizontal alignment of the legend */
+  align?: 'left' | 'center' | 'right';
+  /** Vertical alignment of the legend */
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  /**
+   * Maximum height of the legend in pixels.
+   * When the maximum height is exceeded by the number of items in the legend, scroll navigation arrows will appear
+   */
+  maxHeight?: number;
+  /** Margin in pixels between the legend and the axis labels or plot area */
+  margin?: number;
+  /** Padding inside the legend, in pixels */
+  padding?: number;
+  /** Background color of the legend */
+  backgroundColor?: string | GradientColor;
+  /** Width of the legend border in pixels */
+  borderWidth?: number;
+  /** Color of the legend border */
+  borderColor?: string | GradientColor;
+  /**
+   * Border radius in pixels applied to the legend border, if visible.
+   *
+   * @default 0
+   */
+  borderRadius?: number;
+  /**
+   * Whether to show shadow on the legend
+   */
+  shadow?: boolean;
+  /** If `true`, the order of legend items is reversed.
+   *
+   * @default false
+   */
+  reversed?: boolean;
+  /**
+   * If `true`, legend items are displayed right-to-left.
+   *
+   * @default false
+   */
+  rtl?: boolean;
+  /**
+   * If `true`, the legend can float over the chart.
+   *
+   * @default false
+   */
+  floating?: boolean;
+  /** Width of the legend, specified in pixels e.g. `200` or percentage of the chart width e.g. `'30%'` */
+  width?: number | string;
+  /** Configuration for the legend title */
+  title?: LegendTitleOptions;
+  /** Configuration for legend items */
+  items?: LegendItemsOptions;
+  /** Configuration for legend symbols in pixels */
+  symbols?: LegendSymbolsOptions;
+  /**
+   * Horizontal offset of the legend in pixels, relative to its horizontal alignment specified via `align`.
+   *
+   * @default 0
+   */
+  xOffset?: number;
+  /**
+   * Vertical offset of the legend in pixels, relative to its vertical alignment specified via `verticalAlign`.
+   *
+   * @default 0
+   */
+  yOffset?: number;
 };
+
+/**
+ * Alias for LegendOptions for backward compatibility
+ *
+ * @deprecated Please use {@link LegendOptions} instead
+ */
+export type Legend = LegendOptions;
 
 /** Configuration that defines behavior of data labels on chart */
 export type Labels = {
@@ -295,20 +669,10 @@ export interface DataLimits {
  * @internal
  */
 export interface BaseStyleOptions extends ReservedStyleOptions {
-  /** Configuration for legend - a key that provides information about the data series or colors used in chart */
-  legend?: Legend;
   /**
-   * Configuration for series labels - titles/names identifying data series in a chart
-   *
-   * @internal
-   */
-  seriesLabels?: SeriesLabels;
-  /**
-   * Configuration for total labels
-   *
-   * @internal
-   */
-  totalLabels?: TotalLabels;
+   * Configuration for legend - a key that provides information about the data series or colors used in chart
+   * */
+  legend?: LegendOptions;
   /** Data limit for series or categories that will be plotted */
   dataLimits?: DataLimits;
   /**
@@ -353,8 +717,15 @@ export type CartesianStyleOptions = LineStyleOptions | AreaStyleOptions | Stacka
 
 /** Configuration options that define functional style of the various elements of LineChart */
 export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
-  /** Configuration that defines line width */
+  /**
+   * Configuration that defines line width
+   *
+   * @deprecated
+   * Use line.width instead
+   */
   lineWidth?: LineWidth;
+  /** Configuration that defines line style */
+  line?: LineOptions;
   /** Subtype of LineChart */
   subtype?: LineSubtype;
   /**
@@ -368,22 +739,96 @@ export interface LineStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions
    * - `right` - step occurs after the point
    */
   stepPosition?: 'left' | 'center' | 'right';
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
 }
 
 /** Configuration options that define functional style of the various elements of AreaRangeChart */
 export interface AreaRangeStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
-  /** Configuration that defines line width */
+  /**
+   * Configuration that defines line width
+   *
+   * @deprecated
+   * Use line.width instead
+   */
   lineWidth?: LineWidth;
+  /** Configuration that defines line style */
+  line?: LineOptions;
   /** Subtype of AreaRangeChart */
   subtype?: AreaRangeSubtype;
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
 }
 
 /** Configuration options that define functional style of the various elements of AreaChart */
 export interface AreaStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
-  /** Configuration that defines line width */
+  /**
+   * Configuration that defines line width
+   *
+   * @deprecated
+   * Use line.width instead
+   */
   lineWidth?: LineWidth;
+  /** Configuration that defines line style */
+  line?: LineOptions;
   /** Subtype of AreaChart*/
   subtype?: AreaSubtype;
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
+  /**
+   * Configuration for total labels
+   * Only supported for stacked chart subtypes
+   */
+  totalLabels?: TotalLabels;
+}
+
+/**
+ * Configuration options that define the visual style of a Streamgraph chart.
+ *
+ * Streamgraphs are centered stacked area charts that emphasize flowing patterns
+ * and overall trends. The Y-axis is typically hidden or minimal, and series labels
+ * are often displayed directly on the areas for identification.
+ */
+export interface StreamgraphStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
+  /**
+   * Configuration that defines line style for area boundaries.
+   */
+  line?: LineOptions;
+
+  /**
+   * Configuration that defines line width for area boundaries.
+   *
+   * @deprecated
+   * Use line.width instead
+   */
+  lineWidth?: LineWidth;
+
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart.
+   */
+  seriesLabels?: SeriesLabels;
+
+  /**
+   * Configuration for titles of series
+   * @internal
+   **/
+  seriesTitles?: {
+    /** Boolean flag that defines if titles of series should be shown */
+    enabled: boolean;
+
+    /**
+     * Text style for series titles
+     *
+     * Font size and weight are calculated automatically
+     * */
+    textStyle?: Omit<TextStyle, 'pointerEvents' | 'textOverflow' | 'fontSize' | 'fontWeight'>;
+  };
 }
 
 /** Configuration options that define functional style of the various elements of stackable charts, like Column or Bar */
@@ -394,7 +839,79 @@ export interface StackableStyleOptions extends BaseStyleOptions, BaseAxisStyleOp
    Bar chart with 'column/classic' subtype and Column chart with 'bar/classic' subtype
   */
   subtype?: StackableSubtype;
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
+  /**
+   * Configuration for total labels
+   * Only supported for stacked chart subtypes
+   */
+  totalLabels?: TotalLabels;
+  /**
+   * Configuration for series styling
+   */
+  series?: {
+    /**
+     * Padding between each column or bar, in x axis units.
+     *
+     * @default 0.01
+     */
+    padding?: number;
+    /**
+     * Padding between each value groups, in x axis units.
+     *
+     * @default 0.1
+     */
+    groupPadding?: number;
+    /**
+     * The corner radius of the border surrounding each column or bar.
+     * A number signifies pixels.
+     * A percentage string, like for example 50%, signifies a relative size.
+     *
+     * @default 0
+     */
+    borderRadius?: number | string;
+  };
 }
+
+/**
+ * Configuration for percentage labels
+ * Percentage labels are shown on top of series slices
+ */
+export type PiePercentageLabels = {
+  /**
+   * Boolean flag that defines if percentage label should be shown
+   */
+  enabled: boolean;
+  /**
+   * Boolean flag that defines if percentage label should be shown with decimals
+   */
+  showDecimals?: boolean;
+};
+
+export type PieSeriesLabels = SeriesLabelsBase & {
+  /**
+   * Boolean flag that defines if value should be shown in series labels
+   * (if not specified, default is determined by chart type)
+   */
+  showValue?: boolean;
+  /**
+   * Boolean flag that defines if the category should be shown
+   * @default `true`
+   */
+  showCategory?: boolean;
+  /**
+   * Configuration for percentage labels
+   * Percentage labels are shown on top of series slices
+   * Styling from series labels are not applied to percentage labels
+   */
+  percentageLabels?: PiePercentageLabels;
+  /**
+   * Styling for labels text
+   */
+  textStyle?: Omit<TextStyle, 'pointerEvents' | 'textOverflow'>;
+};
 
 /** Configuration options that define functional style of the various elements of Pie chart */
 export interface PieStyleOptions extends BaseStyleOptions {
@@ -403,10 +920,28 @@ export interface PieStyleOptions extends BaseStyleOptions {
    * hide part of the data under the single category "Others".
    */
   convolution?: Convolution;
-  /** Configuration that defines behavior of data labels on Pie chart */
+  /**
+   * Configuration that defines behavior of data labels on Pie chart
+   *
+   * @deprecated
+   * Use seriesLabels instead
+   */
   labels?: Labels;
   /** Subtype of Pie chart*/
   subtype?: PieSubtype;
+  /**
+   * Boolean flag that defines if the pie chart should be displayed as a semi-circle
+   */
+  semiCircle?: boolean;
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: PieSeriesLabels;
+}
+
+export interface FunnelSeriesLabels extends SeriesLabels {
+  /** Boolean flag that defines if category names should be shown in series labels */
+  showCategory?: boolean;
 }
 
 /** Configuration options that define functional style of the various elements of FunnelChart */
@@ -417,14 +952,24 @@ export interface FunnelStyleOptions extends BaseStyleOptions {
   funnelType?: FunnelType;
   /** Direction of FunnelChart narrowing */
   funnelDirection?: FunnelDirection;
-  /** Configuration that defines behavior of data labels on FunnelChart */
+  /**
+   * Configuration that defines behavior of data labels on FunnelChart
+   *
+   * @deprecated Use seriesLabels instead
+   */
   labels?: Labels;
   /** Subtype of FunnelChart*/
   subtype?: never;
+  /** Configuration for series labels */
+  seriesLabels?: FunnelSeriesLabels;
 }
 
 /** Configuration options that define functional style of the various elements of PolarChart */
 export interface PolarStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
   /** Subtype of PolarChart*/
   subtype?: PolarSubtype;
 }
@@ -589,6 +1134,44 @@ export interface PivotTableStyleOptions {
    * Color of highlighted cells. If not specified, default value is light yellow (`#ffff9c`).
    */
   highlightColor?: string;
+  /**
+   * Boolean flag whether the widths of each vertical column of table cells should be automatically calculated
+   * to fit the width of the component, which defaults to '100%' if `width` is not specified.
+   *
+   * If `true`, all vertical columns of table cells will be resized to fit within the component width without requiring horizontal scroll.
+   * If a width is also specified in the `dataOptions` item, this will be used to calculate the width in proportion to the total width of the component.
+   * Using `isAutoContentWidth: true` with a large number of columns displayed may result in very narrow columns, and is not recommended.
+   *
+   * If `false`, each vertical column of table cells will be calculated to fit the contents, or if specified, the width provided in the corresponding `dataOptions` item.
+   * Horizontal scroll will be shown automatically if required.
+   *
+   * @default false
+   */
+  isAutoContentWidth?: boolean;
+  /**
+   * Array of column indexes where images are displayed in table cells
+   *
+   * todo Raw interface only for Fusion parity, should be changed before goes public
+   * @internal
+   */
+  imageColumns?: number[];
+
+  /**
+   * Boolean flag whether to always show the results per page select
+   *
+   * If `true`, the results per page select will be shown even if there is only one page of results.
+   *
+   * @default false
+   */
+  alwaysShowResultsPerPage?: boolean;
+
+  /**
+   * Boolean flag whether to highlight clickable cells with a background color
+   *
+   * @default false
+   * @internal
+   */
+  highlightClickableCells?: boolean;
 }
 
 /**
@@ -623,16 +1206,26 @@ export interface GaugeIndicatorStyleOptions extends BaseIndicatorStyleOptions {
   tickerBarHeight?: number;
 }
 
+export type ScatterSeriesLabels = SeriesLabelsBase & SeriesLabelsAligning;
+
 /** Configuration options that define functional style of the various elements of ScatterChart */
 export interface ScatterStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Subtype of ScatterChart*/
   subtype?: never;
   markerSize?: ScatterMarkerSize;
+  seriesLabels?: ScatterSeriesLabels;
 }
+
+export type TreemapSeriesLabels =
+  | (SeriesLabelsBase & SeriesLabelsAligning)
+  | (SeriesLabelsBase & SeriesLabelsAligning)[];
 
 /** Configuration options that define functional style of the various elements of TreemapChart */
 export interface TreemapStyleOptions extends BaseStyleOptions {
-  /** Labels options object */
+  /**
+   * Labels options object
+   * @deprecated Please use `seriesLabels` instead
+   */
   labels?: {
     /** Array with single label options objects (order of items relative to dataOptions.category) */
     category?: {
@@ -640,6 +1233,37 @@ export interface TreemapStyleOptions extends BaseStyleOptions {
       enabled?: boolean;
     }[];
   };
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   * Single label options object would be applied to all levels.
+   * Array of label options objects would be applied to each level.
+   *
+   * @example
+   * Single label options object would enable labels for all levels.
+   * ```typescript
+   * {
+   *   seriesLabels: {
+   *       enabled: true,
+   *   },
+   * }
+   * ```
+   *
+   * @example
+   * Array of label options objects would disable labels for first level and enable labels for second level.
+   * ```typescript
+   * {
+   *   seriesLabels: [
+   *     {
+   *       enabled: false,
+   *     },
+   *     {
+   *       enabled: true,
+   *     },
+   *   ],
+   * }
+   * ```
+   */
+  seriesLabels?: TreemapSeriesLabels;
   /** Tooltip options object */
   tooltip?: {
     /** Define mode of data showing */
@@ -647,9 +1271,26 @@ export interface TreemapStyleOptions extends BaseStyleOptions {
   };
 }
 
+export type SunburstSeriesLabelsBase = SeriesLabelsBase & {
+  /**
+   * Color of the labels border
+   */
+  borderColor?: string;
+  /**
+   * Background color of the labels.
+   */
+  backgroundColor?: string;
+};
+
+export type SunburstSeriesLabels = SunburstSeriesLabelsBase | SunburstSeriesLabelsBase[];
+
 /** Configuration options that define functional style of the various elements of the SunburstChart component */
 export interface SunburstStyleOptions extends BaseStyleOptions {
-  /** Labels options object */
+  /**
+   * Labels options object
+   *
+   * @deprecated Please use `seriesLabels` instead
+   */
   labels?: {
     /** Array with single label options objects (order of items relative to dataOptions.category) */
     category?: {
@@ -657,6 +1298,37 @@ export interface SunburstStyleOptions extends BaseStyleOptions {
       enabled?: boolean;
     }[];
   };
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   * Single label options object would be applied to all levels.
+   * Array of label options objects would be applied to each level.
+   *
+   * @example
+   * Single label options object would enable labels for all levels.
+   * ```typescript
+   * {
+   *   seriesLabels: {
+   *       enabled: true,
+   *   },
+   * }
+   * ```
+   *
+   * @example
+   * Array of label options objects would disable labels for first level and enable labels for second level.
+   * ```typescript
+   * {
+   *   seriesLabels: [
+   *     {
+   *       enabled: false,
+   *     },
+   *     {
+   *       enabled: true,
+   *     },
+   *   ],
+   * }
+   * ```
+   */
+  seriesLabels?: SunburstSeriesLabels;
   /** Tooltip options object */
   tooltip?: {
     /** Define mode of data showing */
@@ -668,6 +1340,10 @@ export interface SunburstStyleOptions extends BaseStyleOptions {
 export interface BoxplotStyleOptions extends BaseStyleOptions, BaseAxisStyleOptions {
   /** Subtype of the BoxplotChart component*/
   subtype?: BoxplotSubtype;
+  /**
+   * Configuration for series labels - titles/names identifying data series in a chart
+   */
+  seriesLabels?: SeriesLabels;
 }
 
 /**
@@ -707,6 +1383,158 @@ export interface ScattermapStyleOptions extends Pick<BaseStyleOptions, 'width' |
 }
 
 /**
+ * Configuration for day numbers (1-31) labels in calendar-heatmap cells
+ */
+export type CalendarHeatmapCellLabels = {
+  /**
+   * Boolean flag that defines if calendar day numbers should be shown in cells
+   *
+   * @default true
+   */
+  enabled?: boolean;
+  /** Style configuration for calendar day numbers in cells */
+  textStyle?: Omit<TextStyle, 'color'> & {
+    /**
+     * Color of the labels text
+     *
+     * The "contrast" color applies the maximum contrast between the background and the text
+     */
+    color?: string | 'contrast';
+  };
+  /**
+   * Style configuration for calendar day numbers in cells
+   *
+   * @deprecated Please use `textStyle` instead
+   */
+  style?: Omit<TextStyle, 'color'> & {
+    /**
+     * Color of the labels text
+     *
+     * The "contrast" color applies the maximum contrast between the background and the text
+     */
+    color?: string | 'contrast';
+  };
+};
+
+/**
+ * Calendar heatmap chart subtype
+ */
+export type CalendarHeatmapSubtype = 'calendar-heatmap/split' | 'calendar-heatmap/continuous';
+
+/**
+ * Configuration options that define functional style of the various elements of calendar-heatmap chart
+ */
+export interface CalendarHeatmapStyleOptions extends Pick<BaseStyleOptions, 'width' | 'height'> {
+  /**
+   * {@inheritDoc CalendarHeatmapSubtype}
+   *
+   * @default 'calendar-heatmap/split'
+   */
+  subtype?: CalendarHeatmapSubtype;
+  /**
+   * {@inheritDoc CalendarHeatmapViewType}
+   */
+  viewType?: CalendarHeatmapViewType;
+
+  /**
+   * Determines which day of the week to start the calendar with
+   * @default 'sunday'
+   */
+  startOfWeek?: CalendarDayOfWeek;
+
+  /**
+   * Configuration for day numbers (1-31) in calendar cells
+   */
+  cellLabels?: CalendarHeatmapCellLabels;
+
+  /**
+   * Configuration for weekday names in the header
+   */
+  dayLabels?: {
+    /**
+     * Boolean flag that defines if calendar weekday names should be shown
+     *
+     * @default true
+     */
+    enabled?: boolean;
+    /** Style configuration for calendar weekday names */
+    textStyle?: TextStyle;
+    /**
+     * Style configuration for calendar weekday names
+     *
+     * @deprecated Please use `textStyle` instead
+     */
+    style?: TextStyle;
+  };
+
+  /**
+   * Configuration for month names in multi-month view types
+   */
+  monthLabels?: {
+    /**
+     * Boolean flag that defines if month names should be shown
+     *
+     * @default true
+     */
+    enabled?: boolean;
+    /** Style configuration for month names */
+    textStyle?: TextStyle;
+    /**
+     * Style configuration for month names
+     * @deprecated Please use `textStyle` instead
+     */
+    style?: TextStyle;
+  };
+
+  /**
+   * Configuration for weekend days
+   */
+  weekends?: {
+    /**
+     * Boolean flag that enables/disables weekend highlighting
+     *
+     * @default false
+     */
+    enabled?: boolean;
+    /** Weekend days - defaults to ['saturday', 'sunday'] */
+    days?: CalendarDayOfWeek[];
+    /**
+     * Calendar cell color for weekend days
+     *
+     * @default '#e6e6e6'
+     */
+    cellColor?: string;
+    /**
+     * Whether to hide values in tooltip for weekend days
+     *
+     * @default false
+     */
+    hideValues?: boolean;
+  };
+
+  /**
+   * Configuration for pagination controls in multi-month view types
+   */
+  pagination?: {
+    /**
+     * Boolean flag that defines if pagination controls should be shown
+     *
+     * @default true
+     */
+    enabled?: boolean;
+    /** Style configuration for pagination controls text */
+    textStyle?: TextStyle;
+    /** Start month to display when the chart is first rendered */
+    startMonth?: Date;
+  };
+}
+
+/**
+ * View type determines how many months to display: 'month' (1), 'quarter' (3), 'half-year' (6), 'year' (12)
+ */
+export type CalendarHeatmapViewType = 'month' | 'quarter' | 'half-year' | 'year';
+
+/**
  * Configuration options that define functional style of the various elements of chart.
  */
 export type ChartStyleOptions = RegularChartStyleOptions | TabularChartStyleOptions;
@@ -726,7 +1554,9 @@ export type RegularChartStyleOptions =
   | BoxplotStyleOptions
   | AreamapStyleOptions
   | ScattermapStyleOptions
-  | AreaRangeStyleOptions;
+  | AreaRangeStyleOptions
+  | CalendarHeatmapStyleOptions
+  | StreamgraphStyleOptions;
 
 /** Mapping of each of the chart value series to colors. */
 export type ValueToColorMap = {
@@ -749,6 +1579,7 @@ export type ChartType =
   | AreamapChartType
   | BoxplotChartType
   | ScattermapChartType
+  | CalendarHeatmapChartType
   | RangeChartType
   | TableChartType;
 
@@ -1084,6 +1915,10 @@ export interface TypographyThemeSettings {
   primaryTextColor?: string;
   /** Secondary text color */
   secondaryTextColor?: string;
+  /** Hyperlink color */
+  hyperlinkColor?: string;
+  /** Hyperlink hover color */
+  hyperlinkHoverColor?: string;
   /** Settings for font loading */
   fontsLoader?: FontsLoaderSettings;
 }
@@ -1351,6 +2186,13 @@ export type PopoverThemeSettings = {
  * @internal
  */
 export type ButtonsThemeSettings = {
+  /** Theme settings for primary button */
+  primary?: {
+    /** Background color */
+    backgroundColor?: string | ElementStateColors;
+    /** Text color */
+    textColor?: string;
+  };
   /** Theme settings for cancel button */
   cancel?: {
     /** Background color */
@@ -1404,6 +2246,14 @@ export type CompleteThemeSettings = DeepRequired<Omit<ThemeSettings, 'typography
   };
 };
 
+/** @internal */
+export type ThemeConfig = {
+  cssSelectorPrefix?: {
+    enabled?: boolean;
+    value?: string;
+  };
+};
+
 /** Complete set of configuration options that define functional style of the various elements of the charts as well as the look and feel of widget itself and widget header. */
 export type WidgetStyleOptions =
   | (ChartStyleOptions | TableStyleOptions | TextWidgetStyleOptions | CustomWidgetStyleOptions) &
@@ -1449,12 +2299,14 @@ export interface WidgetContainerStyleOptions {
      * Custom toolbar to render to the right of the title
      *
      * @internal
+     * @deprecated - should be moved out from StyleOptions
      */
     renderToolbar?: RenderToolbarHandler;
     /**
      * Custom title to render in widget header
      *
      * @internal
+     * @deprecated - should be moved out from StyleOptions
      */
     renderTitle?: RenderTitleHandler;
   };
@@ -1597,12 +2449,93 @@ export type DrilldownOptions = {
   drilldownSelections?: DrilldownSelection[];
 };
 
+/** Configuration for the pivot table drilldown */
+export type PivotTableDrilldownOptions =
+  | PivotTableSelectableDrilldownOptions
+  | PivotTableNonSelectableDrilldownOptions;
+
+/** Configuration for the pivot table drilldown with initial target and selections defined */
+export type PivotTableSelectableDrilldownOptions = {
+  /** Dimensions and hierarchies available for drilldown on */
+  drilldownPaths?: (Attribute | Hierarchy | HierarchyId)[];
+  /** Current selections for multiple drilldowns */
+  drilldownSelections: DrilldownSelection[];
+  /**
+   * Current pivot table data option target for the drilldown
+   *
+   * Can be either:
+   * - An `Attribute` directly (when you know the specific attribute to target)
+   * - A `DataOptionLocation` (when you need to reference a data option by its position in the data options structure)
+   */
+  drilldownTarget: Attribute | DataOptionLocation;
+};
+
+/** Configuration for the pivot table drilldown without initial target and selections */
+export type PivotTableNonSelectableDrilldownOptions = {
+  /** Dimensions and hierarchies available for drilldown on */
+  drilldownPaths?: (Attribute | Hierarchy | HierarchyId)[];
+  /** Current selections for multiple drilldowns */
+  drilldownSelections?: never;
+  /** Current pivot table data option target for the drilldown */
+  drilldownTarget?: never;
+};
+
 /** Selection for the drilldown */
 export type DrilldownSelection = {
   /** Points selected for drilldown */
   points: ChartDataPoint[];
   /** Dimension to drilldown to */
   nextDimension: Attribute;
+};
+
+/**
+ * Location within component data options that identifies a specific data option.
+ *
+ * @example
+ * ```typescript
+ * { dataOptionName: 'category', dataOptionIndex: 0 } // First category
+ * { dataOptionName: 'value', dataOptionIndex: 1 }    // Second value measure
+ * ```
+ */
+export type DataOptionLocation = {
+  /**
+   * Data option location name that identifies the property containing the data option.
+   *
+   * Examples:
+   * - PivotTable: `'rows'` | `'columns'` | `'values'`
+   * - Cartesian charts: `'category'` | `'value'` | `'breakBy'`
+   * - Scatter charts: `'x'` | `'y'` | `'breakByPoint'` | `'breakByColor'` | `'size'`
+   */
+  dataOptionName:
+    | 'rows'
+    | 'columns'
+    | 'values'
+    | 'category'
+    | 'value'
+    | 'breakBy'
+    | 'x'
+    | 'y'
+    | 'breakByPoint'
+    | 'breakByColor'
+    | 'size'
+    | 'date'
+    | 'geo'
+    | 'color'
+    | 'colorBy'
+    | 'details'
+    | 'outliers'
+    | 'secondary'
+    | 'min'
+    | 'max';
+  /**
+   * Data option location zero-based index.
+   *
+   * Required for array-based locations (e.g., `rows`, `columns`, `values`, `category`).
+   * Optional for single-value locations (e.g., `x`, `y`, `date`).
+   *
+   * @default 0
+   */
+  dataOptionIndex?: number;
 };
 
 /**
@@ -1613,7 +2546,8 @@ export type ChartDataPoints =
   | ScatterDataPoint[]
   | BoxplotDataPoint[]
   | AreamapDataPoint[]
-  | ScattermapDataPoint[];
+  | ScattermapDataPoint[]
+  | CalendarHeatmapDataPoint[];
 
 /**
  * Abstract data point in a chart - union of all types of data points.
@@ -1623,14 +2557,19 @@ export type ChartDataPoint =
   | ScatterDataPoint
   | BoxplotDataPoint
   | AreamapDataPoint
-  | ScattermapDataPoint;
+  | ScattermapDataPoint
+  | CalendarHeatmapDataPoint;
 
 /**
  * Abstract data point in a chart that based on Highcharts.
  *
  * @internal
  */
-export type HighchartsBasedChartDataPoint = DataPoint | ScatterDataPoint | BoxplotDataPoint;
+export type HighchartsBasedChartDataPoint =
+  | DataPoint
+  | ScatterDataPoint
+  | BoxplotDataPoint
+  | CalendarHeatmapDataPoint;
 
 /**
  * Abstract event handler for data point click event
@@ -1654,56 +2593,80 @@ export type DataPoint = {
   seriesValue?: string | number;
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entries for the `category` data options */
     category: DataPointEntry[];
+    /** Data point entries for the `value` data options */
     value: DataPointEntry[];
+    /** Data point entries for the `breakBy` data options */
     breakBy?: DataPointEntry[];
   };
 };
 
 /**
  * A data point entry that represents a single dimension within a multi-dimensional data point.
- *
- * @internal
  */
-export type DataPointEntry = {
-  /**
-   * The unique identifier of the data point entry.
-   * It represents the path within the `dataOptions` object that identifies the related option.
-   */
-  readonly id: string;
+export type DataPointEntry = BasicDataPointEntry | AttributeDataPointEntry | MeasureDataPointEntry;
+
+/**
+ * A basic data point entry that represents a single dimension within a multi-dimensional data point.
+ */
+export interface BasicDataPointEntry {
   /** The data option associated with this entry */
   dataOption: Column | StyledColumn | MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
-  /** The attribute associated with this data point entry */
-  attribute?: Attribute;
-  /** The measure associated with this data point entry */
-  measure?: Measure;
+  /**
+   * The location of the data option in the data options structure
+   * @internal
+   */
+  dataOptionLocation?: DataOptionLocation;
   /** The raw value of the data point */
   value: string | number;
-  /** The formated value of the data point */
+  /** The formatted value of the data point */
   displayValue?: string;
-};
+}
+
+/**
+ * A data point entry that represents a single attribute within a multi-dimensional data point.
+ */
+export interface AttributeDataPointEntry extends BasicDataPointEntry {
+  /** The attribute associated with this data point entry */
+  attribute: Attribute;
+}
+
+/**
+ * A data point entry that represents a single measure within a multi-dimensional data point.
+ */
+export interface MeasureDataPointEntry extends BasicDataPointEntry {
+  /** The measure associated with this data point entry */
+  measure: Measure;
+}
 
 /** Data point in a Scatter chart. */
 export type ScatterDataPoint = {
+  /** Value of the x axis */
   x?: string | number;
+  /** Value of the y axis */
   y?: string | number;
+  /** Size of the data point */
   size?: number;
+  /** Value of the break by point */
   breakByPoint?: string;
+  /** Value of the break by color */
   breakByColor?: string;
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entry for the `x` data options */
     x?: DataPointEntry;
+    /** Data point entry for the `y` data options */
     y?: DataPointEntry;
+    /** Data point entry for the `size` data options */
     size?: DataPointEntry;
+    /** Data point entry for the `breakByPoint` data options */
     breakByPoint?: DataPointEntry;
+    /** Data point entry for the `breakByColor` data options */
     breakByColor?: DataPointEntry;
   };
 };
@@ -1728,12 +2691,13 @@ export type BoxplotDataPoint = {
   outlier?: number;
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entries for the `category` data options */
     category: DataPointEntry[];
+    /** Data point entries for the `value` data options */
     value: DataPointEntry[];
+    /** Data point entries for the `outliers` data options */
     outliers: DataPointEntry[];
   };
 };
@@ -1742,14 +2706,31 @@ export type BoxplotDataPoint = {
 export type IndicatorDataPoint = {
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entry for the `value` data options */
     value?: DataPointEntry;
+    /** Data point entry for the `secondary` data options */
     secondary?: DataPointEntry;
+    /** Data point entry for the `min` data options */
     min?: DataPointEntry;
+    /** Data point entry for the `max` data options */
     max?: DataPointEntry;
+  };
+};
+
+/**
+ * Data point in a CalendarHeatmap chart.
+ */
+export type CalendarHeatmapDataPoint = {
+  /**
+   * A collection of data point entries that represents values for all related `dataOptions`.
+   */
+  entries?: {
+    /** Data point entry for the `date` data options */
+    date: DataPointEntry;
+    /** Data point entry for the `value` data options */
+    value?: DataPointEntry;
   };
 };
 
@@ -1767,30 +2748,25 @@ export type TextWidgetDataPoint = {
 export type PivotTableDataPoint = {
   /**
    * Boolean flag that defines if the data point is a data cell
-   *
-   * @internal
    */
   isDataCell: boolean;
   /**
    * Boolean flag that defines if the data point is a caption cell
-   *
-   * @internal
    */
   isCaptionCell: boolean;
   /**
    * Boolean flag that defines if the data point is a total cell (subtotal or grandtotal)
-   *
-   * @internal
    */
   isTotalCell: boolean;
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries: {
+    /** Data point entries for the `rows` data options */
     rows?: DataPointEntry[];
+    /** Data point entries for the `columns` data options */
     columns?: DataPointEntry[];
+    /** Data point entries for the `values` data options */
     values?: DataPointEntry[];
   };
 };
@@ -1801,11 +2777,11 @@ export type PivotTableDataPoint = {
 export type AreamapDataPoint = GeoDataElement & {
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entries for the `geo` data options */
     geo: DataPointEntry[];
+    /** Data point entries for the `color` data options */
     color: DataPointEntry[];
   };
 };
@@ -1824,16 +2800,128 @@ export type ScattermapDataPoint = {
   coordinates: Coordinates;
   /**
    * A collection of data point entries that represents values for all related `dataOptions`.
-   *
-   * @internal
    */
   entries?: {
+    /** Data point entries for the `geo` data options */
     geo: DataPointEntry[];
+    /** Data point entry for the `size` data options */
     size?: DataPointEntry;
+    /** Data point entry for the `colorBy` data options */
     colorBy?: DataPointEntry;
+    /** Data point entry for the `details` data options */
     details?: DataPointEntry;
   };
 };
+
+/**
+ * Represents a single data point in a custom widget.
+ *
+ * This type is used to define the structure of a data point that is passed to event handlers
+ * like `onDataPointClick`. It typically extends `AbstractDataPointWithEntries` to include
+ * specific entries for categories, values, or other dimensions used in the widget.
+ *
+ * @example
+ * ```typescript
+ * interface MyWidgetDataPoint extends CustomWidgetDataPoint {
+ *   entries: {
+ *     category: DataPointEntry[];
+ *     value: DataPointEntry[];
+ *   };
+ * }
+ *
+ * const onDataPointClick = (point: MyWidgetDataPoint) => {
+ *   console.log('Clicked category:', point.entries.category[0].value);
+ * };
+ * ```
+ */
+export type CustomWidgetDataPoint<
+  T extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+> = T;
+
+/**
+ * Generic event handler for custom widget data point click.
+ *
+ * @typeParam T - The shape of the data point
+ * @example
+ * ```tsx
+ * const handleClick: CustomWidgetDataPointEventHandler<MyDataPoint> = (point, event) => {
+ *   console.log('Clicked:', point.label, point.value);
+ * };
+ * ```
+ */
+export type CustomWidgetDataPointEventHandler<
+  T extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+> = (
+  /** Data point that was clicked */
+  point: CustomWidgetDataPoint<T>,
+  /** Native browser event */
+  nativeEvent: PointerEvent | MouseEvent,
+) => void;
+
+/**
+ * Generic event handler for custom widget data point context menu.
+ *
+ * @typeParam T - The shape of the data point
+ */
+export type CustomWidgetDataPointContextMenuHandler<
+  T extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+> = (
+  /** Data point that triggered the context menu */
+  point: CustomWidgetDataPoint<T>,
+  /** Native browser event */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
+ * Generic event handler for custom widget data points selection.
+ *
+ * @typeParam T - The shape of the data point
+ * @example
+ * ```tsx
+ * const handleSelect: CustomWidgetDataPointsEventHandler<MyDataPoint> = (points, event) => {
+ *   console.log('Selected:', points.length, 'points');
+ * };
+ * ```
+ */
+export type CustomWidgetDataPointsEventHandler<
+  T extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+> = (
+  /** Data points that were selected */
+  points: CustomWidgetDataPoint<T>[],
+  /** Native browser event */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
+ * Event props for custom widgets with generic data point type.
+ *
+ * @typeParam DataPoint - The shape of data points for this custom widget
+ */
+export interface CustomWidgetEventProps<
+  DataPoint extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+> {
+  /**
+   * Click handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointClick?: CustomWidgetDataPointEventHandler<DataPoint>;
+
+  /**
+   * Context menu handler callback for a data point
+   *
+   * @category Callbacks
+   */
+  onDataPointContextMenu?: CustomWidgetDataPointContextMenuHandler<DataPoint>;
+
+  /**
+   * Handler callback for selection of multiple data points
+   *
+   * @category Callbacks
+   */
+  onDataPointsSelected?: CustomWidgetDataPointsEventHandler<DataPoint>;
+}
+export type { AbstractDataPointWithEntries } from '@/domains/dashboarding/common-filters/types';
 
 /**
  * This is the minimum definition of Highcharts
@@ -1884,6 +2972,9 @@ export type HighchartsPoint = {
       level?: number;
       levelsCount?: number;
     };
+    date?: number;
+    dateString?: string;
+    value?: number;
     q1?: number;
     median?: number;
     q3?: number;
@@ -1897,7 +2988,7 @@ export type HighchartsPoint = {
     maskedBreakByPoint?: string;
     maskedBreakByColor?: string;
     maskedSize?: string;
-    rawValue?: string | number;
+    rawValue: string | number;
     xValue?: (string | number)[];
     xDisplayValue?: string[];
     rawValues?: (string | number)[];
@@ -2109,65 +3200,7 @@ export type TranslationConfig = {
    * ]
    * ```
    */
-  customTranslations?: CustomTranslationObject[];
-};
-
-/**
- * Single Tabber Widget tab object without styling
- *
- * @internal
- */
-export type TabberTab = {
-  displayWidgetIds: string[];
-  title: string;
-};
-
-/**
- * Tabber widget DTO style property
- *
- * @internal
- */
-export type TabberDtoStyle = Partial<TabberStyleProps> & {
-  activeTab?: string;
-};
-
-/**
- * Configuration options that define style of the various elements of the Tabber component.
- *
- * @internal
- */
-export type TabberStyleOptions = {
-  descriptionColor: string;
-  selectedBkgColor: string;
-  selectedColor: string;
-  showDescription: boolean;
-  showSeparators: boolean;
-  showTitle: boolean;
-  tabCornerRadius: TabCornerRadius;
-  tabsAlignment: string;
-  tabsInterval: TabInterval;
-  tabsSize: TabSize;
-  unselectedBkgColor: string;
-  unselectedColor: string;
-  useSelectedBkg: boolean;
-  useUnselectedBkg: boolean;
-};
-
-/**
- * Configuration options that defined tabber look and feel, including tabs and active tab.
- *
- * @internal
- */
-export type TabberStyleProps = TabberStyleOptions & TabberConfig;
-
-/**
- * Tabber business logic configuration
- *
- * @internal
- */
-export type TabberConfig = {
-  tabs: TabberTab[];
-  activeTab: number;
+  customTranslations?: (CustomTranslationObject | CustomTranslationObject[])[];
 };
 
 /** @internal */

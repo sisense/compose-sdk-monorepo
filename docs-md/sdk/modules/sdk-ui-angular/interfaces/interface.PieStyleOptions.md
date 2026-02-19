@@ -43,13 +43,33 @@ Total height of the component, which is considered in the following order of pri
 
 Configuration that defines behavior of data labels on Pie chart
 
+::: warning Deprecated
+Use seriesLabels instead
+:::
+
 ***
 
 ### legend
 
-> **legend**?: [`Legend`](../type-aliases/type-alias.Legend.md)
+> **legend**?: [`LegendOptions`](../../sdk-ui/type-aliases/type-alias.LegendOptions.md)
 
 Configuration for legend - a key that provides information about the data series or colors used in chart
+
+***
+
+### semiCircle
+
+> **semiCircle**?: `boolean`
+
+Boolean flag that defines if the pie chart should be displayed as a semi-circle
+
+***
+
+### seriesLabels
+
+> **seriesLabels**?: [`PieSeriesLabels`](../../sdk-ui/type-aliases/type-alias.PieSeriesLabels.md)
+
+Configuration for series labels - titles/names identifying data series in a chart
 
 ***
 

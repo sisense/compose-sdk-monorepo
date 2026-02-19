@@ -1,5 +1,7 @@
-import { createAttribute, Filter, measureFactory } from '../../index.js';
+import { createAttribute } from '../attributes.js';
 import { createDateDimension } from '../dimensions/index.js';
+import { Filter } from '../interfaces.js';
+import * as measureFactory from '../measures/factory.js';
 import * as filterFactory from './factory.js';
 import {
   DateOperators,
@@ -8,6 +10,7 @@ import {
   LogicalAttributeFilter,
   LogicalOperators,
   MeasureFilter,
+  MeasureRankingFilter,
   MembersFilter,
   NumericFilter,
   NumericOperators,
@@ -577,6 +580,35 @@ describe('filterFactory', () => {
       `filterFactory.bottomRanking(DM.Table.Text, measureFactory.sum(DM.Table.Num), 3, { disabled: true, locked: true })`,
     );
   });
+
+  test('filterFactory.measureTopRanking()', () => {
+    const f = filterFactory.measureTopRanking(measureFactory.sum(numAttr), 3);
+    expect(f).toBeInstanceOf(MeasureRankingFilter);
+    expect(f).toHaveProperty('measure', measureFactory.sum(numAttr));
+    expect(f).toHaveProperty('operator', RankingOperators.Top);
+    expect(f).toHaveProperty('count', 3);
+
+    const f2 = filterFactory.measureTopRanking(measureFactory.sum(numAttr), 3, config);
+    testConfig(
+      f2,
+      `filterFactory.measureTopRanking(measureFactory.sum(DM.Table.Num), 3, { disabled: true, locked: true })`,
+    );
+  });
+
+  test('filterFactory.measureBottomRanking()', () => {
+    const f = filterFactory.measureBottomRanking(measureFactory.sum(numAttr), 3);
+    expect(f).toBeInstanceOf(MeasureRankingFilter);
+    expect(f).toHaveProperty('measure', measureFactory.sum(numAttr));
+    expect(f).toHaveProperty('operator', RankingOperators.Bottom);
+    expect(f).toHaveProperty('count', 3);
+
+    const f2 = filterFactory.measureBottomRanking(measureFactory.sum(numAttr), 3, config);
+    testConfig(
+      f2,
+      `filterFactory.measureBottomRanking(measureFactory.sum(DM.Table.Num), 3, { disabled: true, locked: true })`,
+    );
+  });
+
   test('filterFactory.logic.and()', () => {
     const f = filterFactory.logic.and(filter1, filter2);
     expect(f).toHaveProperty('operator', 'AND');

@@ -14,6 +14,7 @@ Angular components and utilities for working with charts
 - [BarChartComponent](charts/class.BarChartComponent.md)
 - [BoxplotChartComponent](charts/class.BoxplotChartComponent.md)
 - [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [CalendarHeatmapChartComponent](charts/class.CalendarHeatmapChartComponent.md)
 - [ChartComponent](charts/class.ChartComponent.md) - Common component for rendering charts of different types including table
 - [ColumnChartComponent](charts/class.ColumnChartComponent.md)
 - [FunnelChartComponent](charts/class.FunnelChartComponent.md)
@@ -23,6 +24,7 @@ Angular components and utilities for working with charts
 - [PolarChartComponent](charts/class.PolarChartComponent.md)
 - [ScatterChartComponent](charts/class.ScatterChartComponent.md)
 - [ScattermapChartComponent](charts/class.ScattermapChartComponent.md)
+- [StreamgraphChartComponent](charts/class.StreamgraphChartComponent.md)
 - [SunburstChartComponent](charts/class.SunburstChartComponent.md)
 - [TreemapChartComponent](charts/class.TreemapChartComponent.md)
 
@@ -30,7 +32,7 @@ Angular components and utilities for working with charts
 
 Angular components for data grids
 
-- [PivotTableComponent](data-grids/class.PivotTableComponent.md) <Badge type="beta" text="Beta" />
+- [PivotTableComponent](data-grids/class.PivotTableComponent.md)
 - [TableComponent](data-grids/class.TableComponent.md)
 
 ## Drilldown
@@ -77,7 +79,7 @@ Angular components and utilities for working with dashboards
 - [DashboardComponent](dashboards/class.DashboardComponent.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md)
-- [PivotTableWidgetComponent](dashboards/class.PivotTableWidgetComponent.md) <Badge type="beta" text="Beta" />
+- [PivotTableWidgetComponent](dashboards/class.PivotTableWidgetComponent.md)
 - [WidgetComponent](dashboards/class.WidgetComponent.md)
 
 ## Fusion Assets
@@ -88,6 +90,7 @@ Angular components, services, and utilities for working with Fusion dashboards, 
 - [DashboardModel](fusion-assets/interface.DashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [dashboardModelTranslator](fusion-assets/namespace.dashboardModelTranslator/index.md) <Badge type="fusionEmbed" text="Fusion Embed" /> - Utility functions to translate a Fusion dashboard model from and to other dashboard data structures
 - [DashboardService](fusion-assets/class.DashboardService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [FormulaService](fusion-assets/class.FormulaService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [HierarchyService](fusion-assets/class.HierarchyService.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetByIdComponent](fusion-assets/class.WidgetByIdComponent.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [WidgetModel](fusion-assets/interface.WidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />

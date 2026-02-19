@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { DrilldownBreadcrumbs as DrilldownBreadcrumbsPreact } from '@sisense/sdk-ui-preact';
 import type { DrilldownBreadcrumbsProps as DrilldownBreadcrumbsPropsPreact } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelperWithChildren } from '../helpers/setup-helper';
 
 /**

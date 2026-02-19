@@ -5,16 +5,17 @@ import type {
   GetDashboardModelsParams,
 } from '@sisense/sdk-ui-preact';
 import {
-  getDashboardModels,
   dataLoadStateReducer,
+  getDashboardModels,
   translateToDashboardsResponse,
 } from '@sisense/sdk-ui-preact';
-import { useReducer } from '../helpers/use-reducer';
 import { toRefs, watch } from 'vue';
+
+import { useReducer } from '../helpers/use-reducer';
 import { getSisenseContext } from '../providers';
+import type { MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
-import type { MaybeRefOrWithRefs } from '../types';
 
 /**
  * A Vue composable function `useGetDashboardModels` for fetching multiple Sisense dashboard models.

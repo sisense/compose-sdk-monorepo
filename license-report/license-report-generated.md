@@ -1,7 +1,9 @@
 # License Report
+
 License report of third-party dependencies used by Compose SDK and related packages.
 
 Date: 2024-10-01
+
 ## Compose SDK Packages
 
 ### @sisense/sdk-cli
@@ -54,7 +56,7 @@ Date: 2024-10-01
 | @babel/preset-env | MIT          | https://github.com/babel/babel.git              | 7.24.5            | 7.25.4         | The Babel Team (https://babel.dev/team)            |
 | eslint            | MIT          | git+https://github.com/eslint/eslint.git        | 8.57.0            | 8.57.1         | Nicholas C. Zakas <nicholas+npm@nczconsulting.com> |
 
-### @sisense/sdk-pivot-client
+### @sisense/sdk-pivot-ui
 
 | Name                           | License type | Link                                                                     | Installed version | Remote version | Author                                                          |
 | :----------------------------- | :----------- | :----------------------------------------------------------------------- | :---------------- | :------------- | :-------------------------------------------------------------- |

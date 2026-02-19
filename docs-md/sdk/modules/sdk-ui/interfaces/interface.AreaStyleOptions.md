@@ -30,9 +30,17 @@ Total height of the component, which is considered in the following order of pri
 
 ### legend
 
-> **legend**?: [`Legend`](../type-aliases/type-alias.Legend.md)
+> **legend**?: [`LegendOptions`](../type-aliases/type-alias.LegendOptions.md)
 
 Configuration for legend - a key that provides information about the data series or colors used in chart
+
+***
+
+### line
+
+> **line**?: [`LineOptions`](../type-aliases/type-alias.LineOptions.md)
+
+Configuration that defines line style
 
 ***
 
@@ -41,6 +49,10 @@ Configuration for legend - a key that provides information about the data series
 > **lineWidth**?: [`LineWidth`](../type-aliases/type-alias.LineWidth.md)
 
 Configuration that defines line width
+
+::: warning Deprecated
+Use line.width instead
+:::
 
 ***
 
@@ -60,11 +72,28 @@ Configuration for navigator - zoom/pan tool for large datasets in a chart
 
 ***
 
+### seriesLabels
+
+> **seriesLabels**?: [`SeriesLabels`](../type-aliases/type-alias.SeriesLabels.md)
+
+Configuration for series labels - titles/names identifying data series in a chart
+
+***
+
 ### subtype
 
 > **subtype**?: [`AreaSubtype`](../type-aliases/type-alias.AreaSubtype.md)
 
 Subtype of AreaChart
+
+***
+
+### totalLabels
+
+> **totalLabels**?: [`TotalLabels`](../type-aliases/type-alias.TotalLabels.md)
+
+Configuration for total labels
+Only supported for stacked chart subtypes
 
 ***
 

@@ -65,7 +65,7 @@ Set to `true` to use SSO authentication. When `true`, this overrides any other a
 
 > **token**?: `null` \| `string`
 
-Token for [bearer authentication](https://sisense.dev/guides/restApi/using-rest-api.html).
+Token for [bearer authentication](https://developer.sisense.com/guides/restApi/using-rest-api.html).
 
 To signify that the token is pending (e.g., being generated), set the value to `null`. This is supported for React and Vue only.
 

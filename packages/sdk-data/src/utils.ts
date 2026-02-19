@@ -30,7 +30,6 @@ import { isDatetime, isNumber } from './dimensional-model/simple-column-types.js
 import {
   AggregationTypes,
   BaseJaql,
-  DataType,
   DateLevels,
   FilterJaql,
   FormulaJaql,
@@ -43,7 +42,24 @@ import {
 import { DataSource, DataSourceInfo } from './interfaces.js';
 
 /**
+ * Generates a cryptographically secure random number between 0 and 1.
+ * Uses Web Crypto API which is available in both browser and Node.js environments.
+ *
+ * @returns A random number between 0 (inclusive) and 1 (exclusive)
+ * @internal
+ */
+export function secureRandom(): number {
+  // Use Web Crypto API for cryptographically secure random numbers
+  // Available in both browser and Node.js (Node.js 15.0.0+)
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  // Convert to 0-1 range by dividing by max Uint32 value
+  return array[0] / (0xffffffff + 1);
+}
+
+/**
  * A more performant, but slightly bulkier, RFC4122v4 implementation. Performance is improved by minimizing calls to random()
+ * Uses cryptographically secure random number generation.
  *
  * @internal
  */
@@ -64,7 +80,7 @@ export const guidFast = function (len?: number) {
     }
 
     if (rnd <= 0x02) {
-      rnd = (0x2000000 + Math.random() * 0x1000000) | 0;
+      rnd = (0x2000000 + secureRandom() * 0x1000000) | 0;
     }
 
     r = rnd & 0xf;
@@ -243,6 +259,24 @@ export function convertSortDirectionToSort(sortDirection: SortDirection): Sort {
 }
 
 /**
+ * Converts Sort enum to SortDirection string.
+ *
+ * @param sort - Sort enum value
+ * @returns SortDirection string
+ * @internal
+ */
+export function convertSortToSortDirection(sort: Sort): SortDirection {
+  switch (sort) {
+    case Sort.Ascending:
+      return 'sortAsc';
+    case Sort.Descending:
+      return 'sortDesc';
+    default:
+      return 'sortNone';
+  }
+}
+
+/**
  * Creates a filter from a JAQL object.
  *
  * @param jaql - The filter JAQL object.
@@ -374,7 +408,7 @@ export const createAttributeHelper = ({
   const column = parseExpression(expression).column;
   const sortEnum = convertSort(sort);
 
-  const isDataTypeDatetime = dataType === DataType.DATETIME;
+  const isDataTypeDatetime = dataType !== undefined && isDatetime(dataType);
 
   if (isDataTypeDatetime) {
     const levelAttribute: LevelAttribute = new DimensionalLevelAttribute(
@@ -509,7 +543,21 @@ export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeas
     return jaqlContextValue && createDimensionalElementFromJaql(jaqlContextValue);
   });
 
-  return measureFactory.customFormula(jaql.title, jaql.formula, context);
+  const measure = measureFactory.customFormula(
+    jaql.title,
+    jaql.formula,
+    context,
+    undefined,
+    jaql.description,
+  );
+
+  // Apply sort if present in the JAQL
+  if (jaql.sort) {
+    const sortEnum = convertSort(jaql.sort);
+    return measure.sort(sortEnum) as CalculatedMeasure;
+  }
+
+  return measure;
 };
 
 /**
@@ -576,4 +624,31 @@ export function getGranularityFromJaql(
   return jaql?.datatype && isDatetime(jaql.datatype)
     ? DimensionalLevelAttribute.translateJaqlToGranularity(jaql)
     : undefined;
+}
+
+/**
+ * Translates Fusion FormulaJaql structures to CSDK CalculatedMeasure array.
+ *
+ * This is a pure Node.js function that converts Fusion structures to CSDK structures.
+ *
+ * @param formulas - Array of Fusion FormulaJaql structures
+ * @returns Array of CSDK CalculatedMeasure objects
+ * @throws Error if any formula cannot be converted (includes formula title in error message)
+ * @internal
+ */
+export function translateSharedFormulas(formulas: FormulaJaql[]): CalculatedMeasure[] {
+  return formulas.map((formula) => {
+    try {
+      const result = createDimensionalElementFromJaql(formula);
+      if (!('expression' in result && 'context' in result)) {
+        throw new Error(
+          `Expected CalculatedMeasure but got ${result.__serializable || 'unknown type'}`,
+        );
+      }
+      return result;
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Failed to translate shared formula "${formula.title}": ${msg}`);
+    }
+  });
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-/** @vitest-environment jsdom */
 
+/** @vitest-environment jsdom */
 import {
   type ClientApplication,
   getDashboardModel,
@@ -53,6 +53,7 @@ describe('DashboardService', () => {
         filters: [],
         widgetsOptions: {},
         styleOptions: {},
+        config: {},
       };
 
       const expectedDashboardModel = {
@@ -83,6 +84,7 @@ describe('DashboardService', () => {
         filters: [],
         widgetsOptions: {},
         styleOptions: {},
+        config: {},
       };
 
       const expectedDashboardModel = {

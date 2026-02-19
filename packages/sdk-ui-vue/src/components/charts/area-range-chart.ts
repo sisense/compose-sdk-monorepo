@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { AreaRangeChart as AreaRangeChartPreact } from '@sisense/sdk-ui-preact';
 import type { AreaRangeChartProps as AreaRangeChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**

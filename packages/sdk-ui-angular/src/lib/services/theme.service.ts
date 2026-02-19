@@ -5,7 +5,7 @@ import {
   getThemeSettingsByOid,
   type ThemeProviderProps as ThemeConfig,
 } from '@sisense/sdk-ui-preact';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, skip } from 'rxjs';
 import merge from 'ts-deepmerge';
 
 import { track, TrackableService } from '../decorators/trackable.decorator';
@@ -72,6 +72,18 @@ export class ThemeService {
   ) {
     this.themeSettings$ = new BehaviorSubject<CompleteThemeSettings>(getDefaultThemeSettings());
     this.initializationPromise = this.initThemeSettings(themeConfig?.theme);
+    this.sisenseContextService
+      .getApp$()
+      // Skip current app value
+      .pipe(skip(1))
+      // Subscribe to new app values
+      .subscribe({
+        next: ({ app }) => {
+          if (app) {
+            this.initializationPromise = this.applyThemeSettings(app.settings.serverThemeSettings);
+          }
+        },
+      });
   }
 
   private async initThemeSettings(theme: ThemeConfig['theme']) {

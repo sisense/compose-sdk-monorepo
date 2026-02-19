@@ -1,16 +1,17 @@
-import { h, ref, toRaw, isReactive, type Slots, onBeforeUnmount } from 'vue';
+import {
+  type AnyComponentFunction,
+  ComponentAdapter,
+  type ContextConnector,
+  createWrapperElement,
+} from '@sisense/sdk-ui-preact';
+import { h, isReactive, onBeforeUnmount, ref, type Slots, toRaw } from 'vue';
+
+import { isObject } from '../utils.js';
 import {
   createCustomWidgetsContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
 } from './context-connectors';
-import {
-  ComponentAdapter,
-  type ContextConnector,
-  createWrapperElement,
-  type AnyComponentFunction,
-} from '@sisense/sdk-ui-preact';
-import { isObject } from '../utils.js';
 
 export function createDefaultContextConnectors() {
   return [

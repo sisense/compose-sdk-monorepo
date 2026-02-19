@@ -1,6 +1,6 @@
-import { Chart } from '../chart';
-import { templateForComponent } from './template';
+import { Chart } from '../domains/visualizations/components/chart';
 import { FunnelStyleOptions } from '../types';
+import { templateForComponent } from './template';
 
 const template = templateForComponent(Chart);
 
@@ -18,12 +18,12 @@ const styleOptions: FunnelStyleOptions = {
     enabled: true,
     position: 'left',
   },
-  labels: {
-    categories: true,
-    decimals: true,
+  seriesLabels: {
+    showCategory: true,
+    showPercentage: true,
+    showPercentDecimals: true,
     enabled: true,
-    percent: true,
-    value: true,
+    showValue: true,
   },
   funnelDirection: 'regular',
 };

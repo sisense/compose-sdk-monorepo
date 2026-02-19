@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
+
 /* eslint-disable @typescript-eslint/unbound-method */
 import {
   Attribute,
@@ -9,7 +10,7 @@ import {
   Measure,
   QueryResultData,
 } from '@sisense/sdk-data';
-import { PivotClient } from '@sisense/sdk-pivot-client';
+import { PivotClient } from '@sisense/sdk-pivot-query-client';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import type { Mocked } from 'vitest';
 

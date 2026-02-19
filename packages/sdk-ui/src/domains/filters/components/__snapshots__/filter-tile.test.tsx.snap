@@ -1,0 +1,599 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
+<div>
+  <div
+    class="css-14uctox"
+  >
+    <div
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+    >
+      <header
+        class="css-7gwy1f"
+        style="color: rgb(91, 99, 114);"
+      >
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-label="arrow-down"
+            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            data-testid="expand-collapse-button"
+            fill="#5B6372"
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+              fill="#5B6372"
+              fill-rule="nonzero"
+            />
+          </svg>
+        </button>
+        <div
+          style="flex-grow: 1;"
+        >
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Test Revenue
+          </span>
+        </div>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114); position: relative;"
+      >
+        <div
+          class="css-8tok9u"
+        >
+          All items greater than 100
+        </div>
+      </main>
+      <footer
+        class="css-wrzzga"
+      >
+        <span
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
+        >
+          <span
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+          >
+            <input
+              checked=""
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+              name="tile-switch"
+              role="switch"
+              type="checkbox"
+            />
+            <span
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
+            />
+          </span>
+          <span
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
+          />
+        </span>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
+<div>
+  <div
+    class="css-14uctox"
+  >
+    <div
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+    >
+      <header
+        class="css-7gwy1f"
+        style="color: rgb(91, 99, 114);"
+      >
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-label="arrow-down"
+            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            data-testid="expand-collapse-button"
+            fill="#5B6372"
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+              fill="#5B6372"
+              fill-rule="nonzero"
+            />
+          </svg>
+        </button>
+        <div
+          style="flex-grow: 1;"
+        >
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Test Revenue
+          </span>
+        </div>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114); position: relative;"
+      >
+        <div
+          class="css-8tok9u"
+        >
+          All items top 10 by avg Test Revenue
+        </div>
+      </main>
+      <footer
+        class="css-wrzzga"
+      >
+        <span
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
+        >
+          <span
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+          >
+            <input
+              checked=""
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+              name="tile-switch"
+              role="switch"
+              type="checkbox"
+            />
+            <span
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
+            />
+          </span>
+          <span
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
+          />
+        </span>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
+<div>
+  <div
+    class="css-14uctox"
+  >
+    <div
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+    >
+      <header
+        class="css-7gwy1f"
+        style="color: rgb(91, 99, 114);"
+      >
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-label="arrow-down"
+            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            data-testid="expand-collapse-button"
+            fill="#5B6372"
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+              fill="#5B6372"
+              fill-rule="nonzero"
+            />
+          </svg>
+        </button>
+        <div
+          style="flex-grow: 1;"
+        >
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Test Revenue
+          </span>
+        </div>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114); position: relative;"
+      >
+        <div
+          class="css-8tok9u"
+        >
+          All items doesn't start with 100
+        </div>
+      </main>
+      <footer
+        class="css-wrzzga"
+      >
+        <span
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
+        >
+          <span
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+          >
+            <input
+              checked=""
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+              name="tile-switch"
+              role="switch"
+              type="checkbox"
+            />
+            <span
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
+            />
+          </span>
+          <span
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
+          />
+        </span>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
+<div>
+  <div
+    class="css-14uctox"
+  >
+    <div
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+    >
+      <header
+        class="css-7gwy1f"
+        style="color: rgb(91, 99, 114);"
+      >
+        <div
+          style="flex-grow: 1;"
+        >
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Test Revenue
+          </span>
+        </div>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114); position: relative;"
+      >
+        <div
+          class="css-8tok9u"
+        >
+          filtered with custom filter
+        </div>
+      </main>
+      <footer
+        class="css-wrzzga"
+      >
+        <span
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
+        >
+          <span
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+          >
+            <input
+              checked=""
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+              name="tile-switch"
+              role="switch"
+              type="checkbox"
+            />
+            <span
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
+            />
+          </span>
+          <span
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
+          />
+        </span>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
+<div>
+  <div
+    class="css-14uctox"
+  >
+    <div
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+    >
+      <header
+        class="css-7gwy1f"
+        style="color: rgb(91, 99, 114);"
+      >
+        <div
+          style="flex-grow: 1;"
+        >
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Unsupported Filter
+          </span>
+        </div>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114); position: relative;"
+      >
+        <div
+          class="css-8tok9u"
+        >
+          Unsupported Filter (applied to the data query)
+        </div>
+      </main>
+      <footer
+        class="css-wrzzga"
+      >
+        <span
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
+        >
+          <span
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+          >
+            <input
+              checked=""
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+              name="tile-switch"
+              role="switch"
+              type="checkbox"
+            />
+            <span
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
+            />
+          </span>
+          <span
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
+          />
+        </span>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] = `
+<div>
+  <div
+    class="css-14uctox"
+  >
+    <div
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+    >
+      <header
+        class="css-7gwy1f"
+        style="color: rgb(91, 99, 114);"
+      >
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-label="arrow-down"
+            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            data-testid="expand-collapse-button"
+            fill="#5B6372"
+            height="16"
+            viewBox="0 0 24 24"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.589 10L7 10.777 11.99 15 17 10.777 16.413 10l-4.422 3.727z"
+              fill="#5B6372"
+              fill-rule="nonzero"
+            />
+          </svg>
+        </button>
+        <div
+          style="flex-grow: 1;"
+        >
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Years
+          </span>
+        </div>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114); position: relative;"
+      >
+        <div
+          class="css-8tok9u"
+        >
+          Next 1 Years From Today
+        </div>
+      </main>
+      <footer
+        class="css-wrzzga"
+      >
+        <span
+          class="MuiSwitch-root MuiSwitch-sizeSmall css-1ky1wph-MuiSwitch-root"
+        >
+          <span
+            class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+          >
+            <input
+              checked=""
+              class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+              name="tile-switch"
+              role="switch"
+              type="checkbox"
+            />
+            <span
+              class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
+            />
+          </span>
+          <span
+            class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
+          />
+        </span>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
+<div>
+  <div
+    class="css-14uctox"
+  >
+    <div
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+    >
+      <header
+        class="css-7gwy1f"
+        style="color: rgb(91, 99, 114);"
+      >
+        <svg
+          fill="#b4b4b4"
+          height="22"
+          viewBox="0 0 22 22"
+          width="22"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            transform="translate(5.000000,5.000000) scale(.70, 0.6)"
+          >
+            <path
+              d="m3,9v11h14V9M4,9V6c0-3.3 2.7-6 6-6c3.3,0 6,2.7 6,6v3H14V6c0-2.2-1.8-4-4-4-2.2,0-4,1.8-4,4v3"
+            />
+            <rect
+              fill="#dcdcdc"
+              height="9"
+              width="12"
+              x="4"
+              y="10"
+            />
+          </g>
+        </svg>
+        <div
+          style="flex-grow: 1;"
+        >
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Test Revenue
+          </span>
+        </div>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114); position: relative;"
+      >
+        <div
+          class="css-8tok9u"
+        >
+          All items greater than 100
+        </div>
+        <div
+          style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
+        />
+      </main>
+      <footer
+        class="css-wrzzga"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
+<div>
+  <div
+    class="css-14uctox"
+  >
+    <div
+      class="csdk-accessible css-koy7gn"
+      style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+    >
+      <header
+        class="css-7gwy1f"
+        style="color: rgb(91, 99, 114);"
+      >
+        <svg
+          fill="#b4b4b4"
+          height="22"
+          viewBox="0 0 22 22"
+          width="22"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            transform="translate(5.000000,5.000000) scale(.70, 0.6)"
+          >
+            <path
+              d="m3,9v11h14V9M4,9V6c0-3.3 2.7-6 6-6c3.3,0 6,2.7 6,6v3H14V6c0-2.2-1.8-4-4-4-2.2,0-4,1.8-4,4v3"
+            />
+            <rect
+              fill="#dcdcdc"
+              height="9"
+              width="12"
+              x="4"
+              y="10"
+            />
+          </g>
+        </svg>
+        <div
+          style="flex-grow: 1;"
+        >
+          <span
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            style="color: rgb(91, 99, 114); display: inline-block;"
+          >
+            Years
+          </span>
+        </div>
+      </header>
+      <main
+        style="color: rgb(91, 99, 114); position: relative;"
+      >
+        <div
+          class="css-8tok9u"
+        >
+          Next 1 Years From Today
+        </div>
+        <div
+          style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
+        />
+      </main>
+      <footer
+        class="css-wrzzga"
+      />
+    </div>
+  </div>
+</div>
+`;

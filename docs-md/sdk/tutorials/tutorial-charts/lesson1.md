@@ -31,7 +31,7 @@ To work with the code from the repository:
 1. Run `npm install` to install all dependencies
 1. Rename the `env.local.example` file to `env.local`
 1. In the `env.local` file, enter the URL and API Token you’ll use to connect to your Sisense instance
-1. Run `npm start`
+1. Run `npm run dev`
 
 From here on, we’ll assume that you’re writing the code on your own. But always know that you can use the code from the project if you get stuck, to skip ahead, or if you’re just too lazy to write the code yourself. Don’t worry, we won’t tell anybody.
 

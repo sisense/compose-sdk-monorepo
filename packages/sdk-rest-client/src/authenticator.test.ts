@@ -1,4 +1,5 @@
 import { getAuthenticator } from './authenticator.js';
+
 describe('getAuthenticator', () => {
   const fakeUsername = 'username';
   const fakePassword = 'password';

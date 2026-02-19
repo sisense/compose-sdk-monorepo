@@ -1,10 +1,11 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { FiltersPanel as FiltersPanelPreact } from '@sisense/sdk-ui-preact';
 import type {
-  FiltersPanelProps as FiltersPanelPropsPreact,
   FiltersPanelConfig,
+  FiltersPanelProps as FiltersPanelPropsPreact,
 } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 /** Reexport related types */

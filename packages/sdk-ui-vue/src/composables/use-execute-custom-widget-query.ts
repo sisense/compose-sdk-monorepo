@@ -1,14 +1,15 @@
-import { watch, onBeforeUnmount, toRefs } from 'vue';
 import {
+  type CustomWidgetQueryState,
+  type ExecuteCustomWidgetQueryParams as ExecuteCustomWidgetQueryParamsPreact,
   HookAdapter,
   useExecuteCustomWidgetQueryInternal,
-  type ExecuteCustomWidgetQueryParams as ExecuteCustomWidgetQueryParamsPreact,
-  type CustomWidgetQueryState,
 } from '@sisense/sdk-ui-preact';
+import { onBeforeUnmount, toRefs, watch } from 'vue';
+
 import { createSisenseContextConnector } from '../helpers/context-connectors';
+import { useRefState } from '../helpers/use-ref-state';
 import type { MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
-import { useRefState } from '../helpers/use-ref-state';
 import { useTracking } from './use-tracking';
 
 export type { CustomWidgetQueryState };

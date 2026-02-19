@@ -1,0 +1,27 @@
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it } from 'vitest';
+
+import { filtersMock, relationsMock } from './__mocks__/filters-and-relations-mocks.js';
+import { FilterRelationsTile } from './filter-relations-tile.js';
+
+describe('FilterRelationsTile Component', () => {
+  it('should render the component with the correct text', () => {
+    render(<FilterRelationsTile relations={relationsMock} filters={filtersMock} />);
+
+    expect(screen.getByText('filterRelations.andOrFormulaApplied')).toBeInTheDocument();
+  });
+
+  it('should render tooltip on hover', async () => {
+    render(<FilterRelationsTile relations={relationsMock} filters={filtersMock} />);
+
+    const container = screen.getByText('filterRelations.andOrFormulaApplied').closest('div');
+
+    await userEvent.hover(container as HTMLElement);
+
+    // Wait for the tooltip to appear
+    await waitFor(() => {
+      expect(screen.getByTestId('filter-relations-tooltip')).toBeInTheDocument();
+    });
+  });
+});

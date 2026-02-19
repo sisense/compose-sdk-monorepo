@@ -7,6 +7,6 @@
     "target": "es6",
     "lib": ["es2017"]
   },
-
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "references": [{ "path": "../sdk-common" }]
 }

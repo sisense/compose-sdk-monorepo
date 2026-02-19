@@ -2,7 +2,7 @@
 title: PivotTableComponent
 ---
 
-# Class PivotTableComponent <Badge type="beta" text="Beta" />
+# Class PivotTableComponent
 
 Pivot Table with and pagination.
 
@@ -44,7 +44,7 @@ export class AnalyticsComponent {
        dataBars: true,
      },
    ],
-   grandTotals: { title: 'Grand Total', rows: true, columns: true },
+   grandTotals: { rows: true, columns: true },
  };
 
  pivotTable = {
@@ -57,6 +57,12 @@ export class AnalyticsComponent {
 }
 ```
 <img src="../../../img/angular-pivot-table-example.png" width="800px" />
+
+## Remarks
+
+Configuration options can also be applied within the scope of a `<SisenseContextProvider>` to control the default behavior of PivotTable, by changing available settings within `appConfig.chartConfig.tabular.*`
+
+Follow the link to [AppConfig](../type-aliases/type-alias.AppConfig.md) for more details on the available settings.
 
 ## Implements
 
@@ -116,6 +122,22 @@ Filters that will slice query results
 > **highlights**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[] \| `undefined`
 
 Filters that will highlight query results
+
+### Callbacks
+
+#### dataPointClick
+
+> **dataPointClick**: `EventEmitter`\< [`PivotTableDataPointEvent`](../type-aliases/type-alias.PivotTableDataPointEvent.md) \>
+
+Callback function that is called when the pivot table cell is clicked
+
+***
+
+#### dataPointContextMenu
+
+> **dataPointContextMenu**: `EventEmitter`\< [`PivotTableDataPointEvent`](../type-aliases/type-alias.PivotTableDataPointEvent.md) \>
+
+Callback function that is called when the pivot table cell is right-clicked
 
 ### Representation
 

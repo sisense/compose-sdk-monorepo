@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { ScattermapChart as ScattermapChartPreact } from '@sisense/sdk-ui-preact';
 import type { ScattermapChartProps as ScattermapChartPropsPreact } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**

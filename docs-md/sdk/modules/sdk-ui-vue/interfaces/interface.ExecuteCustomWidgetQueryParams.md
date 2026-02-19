@@ -22,17 +22,15 @@ If not specified, the default value is `20000`
 
 > **dataOptions**: [`GenericDataOptions`](../type-aliases/type-alias.GenericDataOptions.md)
 
+Data options defining dimensions and measures
+
 ***
 
 ### dataSource
 
 > **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)
 
-***
-
-### description
-
-> **description**?: `string`
+Data source for the query
 
 ***
 
@@ -50,11 +48,15 @@ If not specified, the default value is `true`
 
 > **filters**?: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
+Filters to apply to the query
+
 ***
 
 ### highlights
 
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+
+Highlight filters
 
 ***
 
@@ -91,12 +93,6 @@ const onBeforeQuery = useCallback((jaql) => {
 #### Returns
 
 `any`
-
-***
-
-### styleOptions
-
-> **styleOptions**: `any`
 
 ***
 

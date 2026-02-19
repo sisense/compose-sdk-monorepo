@@ -1,5 +1,6 @@
-import classnames from 'classnames';
 import React, { Component } from 'react';
+
+import classnames from 'classnames';
 
 import { styleguideConstants } from '../../constants/styleguideConstants';
 import { DEPRECATED_Checkbox } from '../../DEPRECATED_Checkbox';
@@ -33,7 +34,7 @@ export type MenuItemProps = {
   caption: string;
   subCaption?: string;
   level?: number;
-  tooltip?: string | React.ReactFragment;
+  tooltip?: string | React.ReactNode;
   classNameTooltip?: string;
   type: ItemType;
   selected?: boolean;

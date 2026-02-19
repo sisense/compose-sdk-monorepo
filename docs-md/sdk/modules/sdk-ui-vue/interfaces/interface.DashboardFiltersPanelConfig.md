@@ -44,7 +44,7 @@ Configures the available actions within the filters panel.
 > >
 > > Determines whether the possibility to delete a filter is enabled.
 > >
-> > If not specified, the default value is `true`.
+> > If not specified, the default value is `false`.
 > >
 > >
 >
@@ -85,6 +85,18 @@ If not specified, the default value is `false`.
 Setting this to `true` will use the isCollapsed state from local storage, if available, and store any changes to local storage.
 This state is shared across all dashboards.
 This state has a higher priority than `collapsedInitially` when enabled.
+
+***
+
+### showFilterIconInToolbar
+
+> **showFilterIconInToolbar**?: `boolean`
+
+If enabled, the expand/collapse arrow on the divider between the filters panel and the dashboard content will be replaced with a filter toggle icon on the dashboard toolbar.
+
+If the dashboard toolbar is configured to be not visible, this setting will be ignored.
+
+If not specified, the default value is `false`.
 
 ***
 

@@ -15,6 +15,8 @@ to a [Categorical chart](../type-aliases/type-alias.CategoricalChartType.md).
 
 Columns (or attributes) whose values represent categories in the chart.
 
+For funnel charts, only the first 50 categories will be used.
+
 ***
 
 ### seriesToColorMap

@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 import { normalizeUrl } from '@sisense/sdk-common';
 
-import { addQueryParamsToUrl } from './helpers.js';
+import { addQueryParamsToUrl, validateUrl } from './helpers.js';
 import { errorInterceptor, getResponseInterceptor } from './interceptors.js';
 import { Authenticator } from './interfaces.js';
 import { isSsoAuthenticator } from './sso-authenticator.js';
@@ -52,6 +52,8 @@ export class HttpClient {
       : addQueryParamsToUrl(url, {
           trc: this.env,
         });
+
+    validateUrl(fetchUrl, this.url);
 
     const response = await fetch(fetchUrl, config)
       .then(getResponseInterceptor(this.auth))

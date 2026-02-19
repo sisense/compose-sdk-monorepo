@@ -1,7 +1,8 @@
+import React, { forwardRef } from 'react';
+
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import MuiTooltip, { type TooltipProps as MuiTooltipProps } from '@mui/material/Tooltip';
 import classnames from 'classnames';
-import React, { forwardRef } from 'react';
 
 import { EmotionCacheProvider } from '../common/emotion-cache-provider';
 import { styleguideConstants } from '../constants/styleguideConstants';

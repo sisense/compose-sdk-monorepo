@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { RelativeDateFilterTile as RelativeDateFilterTilePreact } from '@sisense/sdk-ui-preact';
 import type { RelativeDateFilterTileProps as RelativeDateFilterTilePropsPreact } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 
 /**
@@ -30,7 +31,7 @@ export interface RelativeDateFilterTileProps extends RelativeDateFilterTileProps
  * import { filterFactory } from '@sisense/sdk-data';
  * import * as DM from '../assets/sample-retail-model';
  *
- * const relativeDateFilterValue = ref<Filter | null>(filterFactory.dateRelativeTo(DM.DimDate.Date.Months, 0, 18);
+ * const relativeDateFilterValue = ref<Filter | null>(filterFactory.dateRelativeTo(DM.DimDate.Date.Months, 0, 18));
  *
  * const relativeDateFilter = ref<RelativeDateFilterTileProps>({
  *   title: 'Relative Date Filter Tile',
@@ -42,7 +43,7 @@ export interface RelativeDateFilterTileProps extends RelativeDateFilterTileProps
  * });
  * </script>
  * ```
- * <img src="media://vue-relative-date-filter-tile-example.png" width="800px" />
+ * <img src="media://vue-relative-date-filter-tile-example.png" width="225px" />
  * @param props - RelativeDateFilterTile props
  * @returns RelativeDateFilterTile component
  * @group Filter Tiles

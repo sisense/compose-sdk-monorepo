@@ -1,18 +1,19 @@
-import { type Ref, toRefs, watch } from 'vue';
 import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
 import {
+  type ChatRestApi,
+  prepareGetNlqResultPayload,
   type UseGetNlqResultParams as UseGetNlqResultParamsPreact,
   type UseGetNlqResultState as UseGetNlqResultStatePreact,
-  type ChatRestApi,
   widgetComposer,
-  prepareGetNlqResultPayload,
 } from '@sisense/sdk-ui-preact/ai';
-import { useReducer } from '../../helpers/use-reducer.js';
-import { getAiContext } from '../providers/index.js';
-import { collectRefs, toPlainObject } from '../../utils.js';
-import { useTracking } from '../../composables/use-tracking.js';
-import type { MaybeRefOrWithRefs, ToRefsExceptFns } from '../../types';
+import { type Ref, toRefs, watch } from 'vue';
+
 import type { WidgetProps } from '../../components/widgets';
+import { useTracking } from '../../composables/use-tracking.js';
+import { useReducer } from '../../helpers/use-reducer.js';
+import type { MaybeRefOrWithRefs, ToRefsExceptFns } from '../../types';
+import { collectRefs, toPlainObject } from '../../utils.js';
+import { getAiContext } from '../providers/index.js';
 
 /**
  * Parameters for {@link @sisense/sdk-ui-vue!useGetNlqResult | `useGetNlqResult`} composable.

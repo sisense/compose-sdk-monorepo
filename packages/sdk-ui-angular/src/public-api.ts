@@ -11,6 +11,10 @@ export type {
   BoxplotDataPointEvent,
   BoxplotDataPointEventHandler,
   BoxplotDataPointsEvent,
+  CalendarHeatmapDataPointEvent,
+  CalendarHeatmapDataPointEventHandler,
+  CalendarHeatmapDataPointsEvent,
+  CalendarHeatmapDataPointsEventHandler,
   ChartDataPointClickEvent,
   ChartDataPointClickEventHandler,
   ChartDataPointContextMenuEvent,
@@ -34,8 +38,15 @@ export type {
   ScatterDataPointEventHandler,
   ScatterDataPointsEvent,
   ScatterDataPointsEventHandler,
+  WidgetDataPointClickEventHandler,
+  WidgetDataPointContextMenuEventHandler,
   ScattermapDataPointEvent,
   ScattermapDataPointEventHandler,
+  PivotTableDataPointEvent,
+  PivotTableDataPointEventHandler,
+  WidgetDataPointClickEvent,
+  WidgetDataPointContextMenuEvent,
+  TextWidgetDataPointEvent,
 } from './lib/types';
 export * from './lib/utilities';
 

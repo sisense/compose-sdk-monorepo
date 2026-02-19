@@ -1,10 +1,17 @@
 /* eslint-disable vitest/expect-expect */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
+
 /* eslint-disable max-params */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 /* eslint-disable vitest/no-identical-title */
 import { createAttribute, DimensionalAttribute } from '../attributes.js';
 import { normalizeName } from '../base.js';
@@ -477,7 +484,7 @@ describe('measureFactory', () => {
           '[AgeRange]': groupByAttribute,
         },
         undefined,
-        `measureFactory.rank(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name', 'DESC', '1223', [DM.Commerce.AgeRange])`,
+        `measureFactory.rank(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), 'measure name', 'DESC', '1223', [DM.Commerce.[[Age Range]]])`,
       );
     });
   });
@@ -498,7 +505,7 @@ describe('measureFactory', () => {
           [getContextName(filter)]: filter,
         },
         undefined,
-        `measureFactory.measuredValue(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), [filterFactory.equals(DM.Commerce.AgeRange, '65+')], 'measure name')`,
+        `measureFactory.measuredValue(measureFactory.sum(DM.Commerce.Cost, 'measure 1', '00.00'), [filterFactory.equals(DM.Commerce.[[Age Range]], '65+')], 'measure name')`,
       );
     });
   });
@@ -802,6 +809,136 @@ describe('measureFactory', () => {
       });
       expect(m.composeCode).toBe(
         `measureFactory.customFormula('Nested formula', 'RANK([Nested], "ASC", "1224")', { Nested: measureFactory.customFormula('Total Attribute', 'SUM([Attribute]) - [Average Measure]', { Attribute: DM.Commerce.Cost, 'Average Measure': measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00') }) })`,
+      );
+    });
+
+    test('with format parameter', () => {
+      const m = measureFactory.customFormula(
+        'Total Attribute',
+        'SUM([Attribute]) - [Average Measure]',
+        {
+          Attribute: sampleAttribute,
+          'Average Measure': sampleMeasure2,
+        },
+        '0.00%',
+      );
+
+      expect(m.getFormat()).toBe('0.00%');
+      expect(m.jaql()).toStrictEqual({
+        jaql: {
+          context: {
+            '[Attribute]': {
+              datatype: 'numeric',
+              dim: '[Commerce.Cost]',
+              title: 'Cost',
+            },
+            '[Average Measure]': {
+              agg: 'avg',
+              datatype: 'numeric',
+              dim: '[Commerce.Cost]',
+              title: 'measure 2',
+            },
+          },
+          formula: 'SUM([Attribute]) - [Average Measure]',
+          title: 'Total Attribute',
+        },
+        format: { number: '0.00%' },
+      });
+      expect(m.composeCode).toBe(
+        `measureFactory.customFormula('Total Attribute', 'SUM([Attribute]) - [Average Measure]', { Attribute: DM.Commerce.Cost, 'Average Measure': measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00') }, '0.00%')`,
+      );
+    });
+
+    test('with format and description parameters', () => {
+      const m = measureFactory.customFormula(
+        'Total Attribute',
+        'SUM([Attribute]) - [Average Measure]',
+        {
+          Attribute: sampleAttribute,
+          'Average Measure': sampleMeasure2,
+        },
+        '0.00%',
+        'This is a custom formula description',
+      );
+
+      expect(m.getFormat()).toBe('0.00%');
+      expect(m.description).toBe('This is a custom formula description');
+      expect(m.jaql()).toStrictEqual({
+        jaql: {
+          context: {
+            '[Attribute]': {
+              datatype: 'numeric',
+              dim: '[Commerce.Cost]',
+              title: 'Cost',
+            },
+            '[Average Measure]': {
+              agg: 'avg',
+              datatype: 'numeric',
+              dim: '[Commerce.Cost]',
+              title: 'measure 2',
+            },
+          },
+          formula: 'SUM([Attribute]) - [Average Measure]',
+          title: 'Total Attribute',
+        },
+        format: { number: '0.00%' },
+      });
+      expect(m.composeCode).toBe(
+        `measureFactory.customFormula('Total Attribute', 'SUM([Attribute]) - [Average Measure]', { Attribute: DM.Commerce.Cost, 'Average Measure': measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00') }, '0.00%', 'This is a custom formula description')`,
+      );
+    });
+
+    test('with description parameter only', () => {
+      const m = measureFactory.customFormula(
+        'Total Attribute',
+        'SUM([Attribute]) - [Average Measure]',
+        {
+          Attribute: sampleAttribute,
+          'Average Measure': sampleMeasure2,
+        },
+        undefined,
+        'This is a custom formula description',
+      );
+
+      expect(m.description).toBe('This is a custom formula description');
+      expect(m.jaql()).toStrictEqual({
+        jaql: {
+          context: {
+            '[Attribute]': {
+              datatype: 'numeric',
+              dim: '[Commerce.Cost]',
+              title: 'Cost',
+            },
+            '[Average Measure]': {
+              agg: 'avg',
+              datatype: 'numeric',
+              dim: '[Commerce.Cost]',
+              title: 'measure 2',
+            },
+          },
+          formula: 'SUM([Attribute]) - [Average Measure]',
+          title: 'Total Attribute',
+        },
+      });
+      expect(m.composeCode).toBe(
+        `measureFactory.customFormula('Total Attribute', 'SUM([Attribute]) - [Average Measure]', { Attribute: DM.Commerce.Cost, 'Average Measure': measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00') }, undefined, 'This is a custom formula description')`,
+      );
+    });
+
+    test('without format or description parameters (backward compatibility)', () => {
+      const m = measureFactory.customFormula(
+        'Total Attribute',
+        'SUM([Attribute]) - [Average Measure]',
+        {
+          Attribute: sampleAttribute,
+          'Average Measure': sampleMeasure2,
+        },
+      );
+
+      expect(m.getFormat()).toBeUndefined();
+      expect(m.description).toBe('');
+      expect(m.composeCode).toBe(
+        `measureFactory.customFormula('Total Attribute', 'SUM([Attribute]) - [Average Measure]', { Attribute: DM.Commerce.Cost, 'Average Measure': measureFactory.average(DM.Commerce.Cost, 'measure 2', '00.00') })`,
       );
     });
   });

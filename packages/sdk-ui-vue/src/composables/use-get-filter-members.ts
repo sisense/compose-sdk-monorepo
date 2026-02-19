@@ -1,21 +1,22 @@
-import { onBeforeUnmount, type ToRefs, toRefs, watch } from 'vue';
+import { isMembersFilter } from '@sisense/sdk-data';
 import {
+  type FilterMembersErrorState,
+  type FilterMembersLoadingState,
+  type FilterMembersState,
+  type FilterMembersSuccessState,
+  type GetFilterMembersData,
   type GetFilterMembersParams,
   type GetFilterMembersResult as GetFilterMembersResultPreact,
-  type GetFilterMembersData,
-  type FilterMembersState,
-  type FilterMembersLoadingState,
-  type FilterMembersErrorState,
-  type FilterMembersSuccessState,
   HookAdapter,
   useGetFilterMembers as useGetFilterMembersPreact,
 } from '@sisense/sdk-ui-preact';
-import { isMembersFilter } from '@sisense/sdk-data';
+import { onBeforeUnmount, type ToRefs, toRefs, watch } from 'vue';
+
 import { createSisenseContextConnector } from '../helpers/context-connectors';
+import { useRefState } from '../helpers/use-ref-state';
 import type { MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
-import { useRefState } from '../helpers/use-ref-state';
 
 /** Reexport types from @sisense/sdk-ui-preact */
 export {
@@ -97,6 +98,7 @@ export const useGetFilterMembers = (
     status: 'loading',
     error: undefined,
     data: initialData,
+    isAllItemsLoaded: false,
   });
 
   hookAdapter.subscribe((result) => {

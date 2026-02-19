@@ -11,9 +11,9 @@ custom widget with `registerCustomWidget` from the `useCustomWidgets` hook.
 
 ## Type parameters
 
-| Parameter | Default |
-| :------ | :------ |
-| `Props` | [`CustomWidgetComponentProps`](../interfaces/interface.CustomWidgetComponentProps.md) |
+| Parameter | Default | Description |
+| :------ | :------ | :------ |
+| `Props` | [`CustomWidgetComponentProps`](../interfaces/interface.CustomWidgetComponentProps.md) | The props type for the custom widget component |
 
 ## Parameters
 

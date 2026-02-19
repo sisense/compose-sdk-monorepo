@@ -6,6 +6,14 @@ title: ComposableDashboardProps
 
 ## Properties
 
+### config
+
+> **config**?: [`DashboardConfig`](interface.DashboardConfig.md)
+
+The configuration for the dashboard
+
+***
+
 ### filters
 
 > **filters**?: [`FilterRelations`](../../sdk-data/interfaces/interface.FilterRelations.md) \| [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]

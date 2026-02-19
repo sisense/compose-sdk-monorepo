@@ -1,6 +1,7 @@
 export { useExecuteQuery } from './use-execute-query.js';
 export { useExecuteQueryByWidgetId } from './use-execute-query-by-widget-id.js';
 export { useExecuteCsvQuery } from './use-execute-csv-query.js';
+export { useExecutePivotQuery } from './use-execute-pivot-query.js';
 export {
   useExecuteCustomWidgetQuery,
   type ExecuteCustomWidgetQueryParams,
@@ -20,6 +21,7 @@ export {
   type GenericDataOptions,
 } from './use-custom-widgets.js';
 export { useComposedDashboard, type ComposableDashboardProps } from './use-composed-dashboard.js';
+export { useJtdWidget } from './use-jtd-widget.js';
 export type { UseFetchOptions } from './use-fetch.js';
 export type {
   GetFilterMembersParams,

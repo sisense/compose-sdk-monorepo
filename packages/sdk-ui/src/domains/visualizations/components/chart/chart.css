@@ -1,0 +1,7 @@
+.highcharts-series.highcharts-area-series.area-series--without-pointer-events .highcharts-area {
+  pointer-events: none;
+}
+
+.highcharts-heatmap-series .highcharts-point.csdk-highcharts-point-blured {
+  opacity: 0.5;
+}

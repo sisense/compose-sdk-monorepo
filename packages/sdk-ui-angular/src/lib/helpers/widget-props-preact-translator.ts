@@ -1,7 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { SoftUnion, WidgetProps as WidgetPropsPreact } from '@sisense/sdk-ui-preact';
+/* eslint-disable sonarjs/no-identical-functions */
+import type {
+  ChartWidgetProps as ChartWidgetPropsPreact,
+  PivotTableWidgetProps as PivotTableWidgetPropsPreact,
+  SoftUnion,
+  TextWidgetProps as TextWidgetPropsPreact,
+  WidgetProps as WidgetPropsPreact,
+} from '@sisense/sdk-ui-preact';
 
-import { WidgetProps } from '../components/widgets';
+import type {
+  ChartWidgetProps,
+  PivotTableWidgetProps,
+  TextWidgetProps,
+  WidgetProps,
+} from '../components/widgets';
 import {
   Arguments,
   ChartDataPointClickEvent,
@@ -9,11 +20,12 @@ import {
   ChartDataPointsEvent,
   WidgetDataPointClickEvent,
   WidgetDataPointClickEventHandler,
+  WidgetDataPointContextMenuEvent,
 } from '../types';
 
 type SoftWidgetPropsPreact = SoftUnion<WidgetPropsPreact>;
 
-export function translateToPreactWidgetProps(widgetProps: WidgetProps): WidgetPropsPreact {
+export function toPreactWidgetProps(angularProps: WidgetProps): WidgetPropsPreact {
   const {
     beforeRender,
     dataReady,
@@ -22,7 +34,7 @@ export function translateToPreactWidgetProps(widgetProps: WidgetProps): WidgetPr
     dataPointContextMenu,
     dataPointsSelect,
     ...commonWidgetProps
-  } = widgetProps;
+  } = angularProps;
   return {
     ...commonWidgetProps,
     onBeforeRender: beforeRender,
@@ -37,7 +49,10 @@ export function translateToPreactWidgetProps(widgetProps: WidgetProps): WidgetPr
       : undefined,
     onDataPointContextMenu: dataPointContextMenu
       ? (...[point, nativeEvent]: Arguments<SoftWidgetPropsPreact['onDataPointContextMenu']>) =>
-          dataPointContextMenu({ point, nativeEvent } as ChartDataPointContextMenuEvent)
+          (dataPointContextMenu as WidgetDataPointClickEventHandler)({
+            point,
+            nativeEvent,
+          } as WidgetDataPointContextMenuEvent)
       : undefined,
     onDataPointsSelected: dataPointsSelect
       ? (...[points, nativeEvent]: Arguments<SoftWidgetPropsPreact['onDataPointsSelected']>) =>
@@ -46,7 +61,7 @@ export function translateToPreactWidgetProps(widgetProps: WidgetProps): WidgetPr
   } as WidgetPropsPreact;
 }
 
-export function translateFromPreactWidgetProps(widgetProps: WidgetPropsPreact): WidgetProps {
+export function toWidgetProps(preactProps: WidgetPropsPreact): WidgetProps {
   const {
     onBeforeRender,
     onDataReady,
@@ -55,7 +70,7 @@ export function translateFromPreactWidgetProps(widgetProps: WidgetPropsPreact): 
     onDataPointContextMenu,
     onDataPointsSelected,
     ...commonWidgetProps
-  } = widgetProps as SoftWidgetPropsPreact;
+  } = preactProps as SoftWidgetPropsPreact;
   return {
     ...commonWidgetProps,
     beforeRender: onBeforeRender,
@@ -74,4 +89,32 @@ export function translateFromPreactWidgetProps(widgetProps: WidgetPropsPreact): 
           onDataPointsSelected(points as any, nativeEvent as any)
       : undefined,
   } as WidgetProps;
+}
+
+export function toChartWidgetProps(preactProps: ChartWidgetPropsPreact): ChartWidgetProps {
+  const { onBeforeRender, onDataReady, ...rest } = preactProps;
+
+  return {
+    ...rest,
+    beforeRender: onBeforeRender,
+    dataReady: onDataReady,
+  };
+}
+
+export function toPivotTableWidgetProps(
+  preactProps: PivotTableWidgetPropsPreact,
+): PivotTableWidgetProps {
+  const { ...rest } = preactProps;
+
+  return {
+    ...rest,
+  };
+}
+
+export function toTextWidgetProps(preactProps: TextWidgetPropsPreact): TextWidgetProps {
+  const { ...rest } = preactProps;
+
+  return {
+    ...rest,
+  };
 }

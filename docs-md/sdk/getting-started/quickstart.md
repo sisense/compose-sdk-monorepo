@@ -195,7 +195,7 @@ Use the two components, `SisenseContextProvider` and `Chart`, from `@sisense/sdk
 >
 > -   The `src/App.tsx` file is the main React component.
 > -   The `sample-ecommerce.ts` file generated earlier resides in `src/`.
-> -   The URL to your application (f.e. http://localhost:5173) is already added as an entry to CORS Allowed Origins section on your Sisense instance. If not, you can do so on your Sisense instance by going to _Admin_, then _Security Settings_.
+> -   The URL to your application (e.g. http://localhost:5173) is already added as an entry to CORS Allowed Origins section on your Sisense instance. If not, you can do so on your Sisense instance by going to _Admin_, then _Security Settings_.
 
 ### Connecting to a Sisense Instance
 

@@ -122,7 +122,7 @@ export interface CalculatedMeasureColumn {
   type: string;
   /** Measure context */
   context: MeasureContext;
-  /** Expression representing the element in a {@link https://sisense.dev/guides/querying/useJaql/ | JAQL query}. */
+  /** Expression representing the element in a {@link https://developer.sisense.com/guides/querying/useJaql/ | JAQL query}. */
   expression: string;
   /**
    * Aggregate function description

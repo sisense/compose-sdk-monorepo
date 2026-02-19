@@ -1,0 +1,105 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FiltersPanel > FiltersPanel — basic > renders filters and triggers onFiltersChange 1`] = `
+[
+  {
+    "__serializable": "MembersFilter",
+    "attribute": {
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Brand.[[Brand ID]]",
+      "dataSource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "description": "",
+      "expression": "[Brand.Brand ID]",
+      "name": "Brand ID",
+      "type": "numeric-attribute",
+    },
+    "composeCode": "filterFactory.members(DM.Brand.[[Brand ID]], ['1', '2'])",
+    "config": {
+      "deactivatedMembers": [],
+      "disabled": false,
+      "enableMultiSelection": true,
+      "excludeMembers": false,
+      "guid": "test-id-1",
+      "locked": false,
+    },
+    "dataSource": undefined,
+    "description": "",
+    "filterType": "members",
+    "members": [
+      "1",
+      "2",
+    ],
+    "name": "e0b6f65ae7c",
+    "type": "filter",
+  },
+  {
+    "__serializable": "NumericFilter",
+    "attribute": {
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Commerce.Cost",
+      "dataSource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "description": "",
+      "expression": "[Commerce.Cost]",
+      "name": "Cost",
+      "type": "numeric-attribute",
+    },
+    "composeCode": "filterFactory.greaterThan(DM.Commerce.Cost, 100)",
+    "config": {
+      "disabled": false,
+      "guid": "test-id-2",
+      "locked": false,
+    },
+    "dataSource": undefined,
+    "description": "",
+    "filterType": "numeric",
+    "name": "bf69f7fc38f",
+    "operatorA": "fromNotEqual",
+    "type": "filter",
+    "valueA": 100,
+  },
+]
+`;
+
+exports[`FiltersPanel > editing existing filter > opens filter editor, and after applying updates the filters list 1`] = `
+[
+  {
+    "__serializable": "MembersFilter",
+    "attribute": {
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Brand.[[Brand ID]]",
+      "dataSource": {
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "description": "",
+      "expression": "[Brand.Brand ID]",
+      "name": "Brand ID",
+      "type": "numeric-attribute",
+    },
+    "composeCode": "filterFactory.members(DM.Brand.[[Brand ID]], ['1', '2'])",
+    "config": {
+      "deactivatedMembers": [],
+      "disabled": false,
+      "enableMultiSelection": true,
+      "excludeMembers": false,
+      "guid": "test-id",
+      "locked": false,
+    },
+    "dataSource": undefined,
+    "description": "",
+    "filterType": "members",
+    "members": [
+      "1",
+      "2",
+    ],
+    "name": "e0b6f65ae7c",
+    "type": "filter",
+  },
+]
+`;

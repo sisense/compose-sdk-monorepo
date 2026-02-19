@@ -4,12 +4,15 @@ import type { BeforeRenderHandler, IndicatorBeforeRenderHandler } from '@sisense
 import type {
   AreamapDataPointEventHandler,
   BoxplotDataPointEventHandler,
+  CalendarHeatmapDataPointEventHandler,
+  CalendarHeatmapDataPointsEventHandler,
   ChartDataPointClickEventHandler,
   ChartDataPointContextMenuEventHandler,
   ChartDataPointsEventHandler,
   DataPointEventHandler,
   DataPointsEventHandler,
   IndicatorDataPointEventHandler,
+  PivotTableDataPointEventHandler,
   ScatterDataPointEventHandler,
   ScatterDataPointsEventHandler,
   ScattermapDataPointEventHandler,
@@ -156,6 +159,48 @@ export interface IndicatorChartEventProps extends BaseChartEventProps {
    * @internal
    */
   dataPointClick?: IndicatorDataPointEventHandler;
+}
+
+/**
+ * Event props for CalendarHeatmap chart which uses CalendarHeatmapDataPoint type
+ * to describe data points for events.
+ */
+export interface CalendarHeatmapChartEventProps
+  extends BaseChartEventProps,
+    HighchartsBasedChartEventProps {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
+  dataPointClick?: CalendarHeatmapDataPointEventHandler;
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointContextMenu}
+   *
+   * @category Callbacks
+   */
+  dataPointContextMenu?: CalendarHeatmapDataPointEventHandler;
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ScatterChartProps.onDataPointsSelected}
+   *
+   * @category Callbacks
+   */
+  dataPointsSelect?: CalendarHeatmapDataPointsEventHandler;
+}
+
+export interface PivotTableEventProps {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
+  dataPointClick?: PivotTableDataPointEventHandler;
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableProps.onDataPointContextMenu}
+   *
+   * @category Callbacks
+   */
+  dataPointContextMenu?: PivotTableDataPointEventHandler;
 }
 
 export interface ChartEventProps extends BaseChartEventProps {

@@ -24,6 +24,22 @@ Settings for font loading
 
 ***
 
+### hyperlinkColor
+
+> **hyperlinkColor**?: `string`
+
+Hyperlink color
+
+***
+
+### hyperlinkHoverColor
+
+> **hyperlinkHoverColor**?: `string`
+
+Hyperlink hover color
+
+***
+
 ### primaryTextColor
 
 > **primaryTextColor**?: `string`

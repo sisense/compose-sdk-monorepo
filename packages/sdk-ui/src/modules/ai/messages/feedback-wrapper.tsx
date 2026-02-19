@@ -1,0 +1,101 @@
+import { ReactNode, useCallback, useMemo, useState } from 'react';
+
+import debounce from 'lodash-es/debounce';
+
+import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context';
+import { Themable } from '@/infra/contexts/theme-provider/types';
+import styled from '@/infra/styled';
+import { useChatApi } from '@/modules/ai/api/chat-api-provider';
+import ThumbsDownButton from '@/modules/ai/buttons/thumbs-down-button';
+import ThumbsUpButton from '@/modules/ai/buttons/thumbs-up-button';
+import { useHover } from '@/shared/hooks/use-hover';
+
+const Container = styled.div<Themable>`
+  display: flex;
+  flex-direction: column;
+  row-gap: ${({ theme }) => theme.aiChat.body.gapBetweenMessages};
+`;
+
+function FeedbackRow({ visible, onSend }: { visible: boolean; onSend: (rating: -1 | 1) => void }) {
+  const [clicked, setClicked] = useState(false);
+
+  const onClick = useCallback(
+    (type: 'up' | 'down') => {
+      setClicked(true);
+
+      onSend(type === 'up' ? 1 : -1);
+    },
+    [onSend],
+  );
+
+  const styles = `csdk-transition-opacity csdk-delay-150 csdk-duration-500 ${
+    clicked ? 'csdk-opacity-0' : 'csdk-opacity-100'
+  }`;
+
+  if (!visible) {
+    return null;
+  }
+
+  return (
+    <div className={`csdk-flex csdk-items-center ${styles}`}>
+      <ThumbsUpButton onClick={() => onClick('up')} disabled={clicked} />
+      <ThumbsDownButton onClick={() => onClick('down')} disabled={clicked} />
+    </div>
+  );
+}
+
+type FeedbackWrapperProps = {
+  sourceId: string;
+  data: object;
+  type: string;
+  buttonVisibility?: 'onHover' | 'always' | 'never';
+  renderContent: (buttonRow: JSX.Element) => ReactNode;
+};
+
+export default function FeedbackWrapper({
+  sourceId,
+  data,
+  type,
+  buttonVisibility = 'onHover',
+  renderContent,
+}: FeedbackWrapperProps) {
+  const api = useChatApi();
+  const sendFeedback = debounce(
+    useCallback(
+      (rating: -1 | 1) => {
+        if (!api) {
+          return;
+        }
+
+        api.ai.sendFeedback({
+          sourceId,
+          type,
+          data,
+          rating,
+        });
+      },
+      [api, sourceId, data, type],
+    ),
+    200,
+  );
+
+  const [ref, hovering] = useHover<HTMLDivElement>();
+
+  const areButtonsVisible = useMemo(() => {
+    if (buttonVisibility === 'onHover') {
+      return hovering;
+    } else if (buttonVisibility === 'never') {
+      return false;
+    }
+
+    return true;
+  }, [hovering, buttonVisibility]);
+
+  const { themeSettings } = useThemeContext();
+
+  return (
+    <Container ref={ref} theme={themeSettings}>
+      {renderContent(<FeedbackRow onSend={sendFeedback} visible={areButtonsVisible} />)}
+    </Container>
+  );
+}

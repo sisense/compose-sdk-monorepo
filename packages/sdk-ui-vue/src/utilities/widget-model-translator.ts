@@ -1,13 +1,14 @@
 import {
-  widgetModelTranslator as widgetModelTranslatorPreact,
-  type WidgetModel,
-  type TextWidgetProps,
   type ExecutePivotQueryParams,
   type ExecuteQueryParams,
   type PivotTableWidgetProps,
+  type TextWidgetProps,
+  type WidgetModel,
+  widgetModelTranslator as widgetModelTranslatorPreact,
 } from '@sisense/sdk-ui-preact';
+
 import type { ChartProps, PivotTableProps, TableProps } from '../components/charts';
-import type { ChartWidgetProps } from '../components/widgets';
+import type { ChartWidgetProps, WidgetProps } from '../components/widgets';
 
 /**
  * Translates a {@link WidgetModel} to the parameters for executing a query for the widget.
@@ -275,4 +276,32 @@ const textWidgetProps = computed(() =>
  */
 export function toTextWidgetProps(widgetModel: WidgetModel): TextWidgetProps {
   return widgetModelTranslatorPreact.toTextWidgetProps(widgetModel);
+}
+
+/**
+ * Translates {@link WidgetModel} to {@link WidgetProps}.
+ *
+ * @example
+ * ```vue
+ * <script setup lang="ts">
+ * import { widgetModelTranslator, useGetWidgetModel, Widget } from '@sisense/sdk-ui-vue';
+ * import { computed } from 'vue';
+ *
+ * const { data: widgetModel } = useGetWidgetModel({
+ *   dashboardOid: 'your-dashboard-oid',
+ *   widgetOid: 'your-widget-oid',
+ * });
+ *
+ * const widgetProps = computed(() =>
+ *   widgetModel.value ? widgetModelTranslator.toWidgetProps(widgetModel.value) : null,
+ * );
+ * </script>
+ *
+ * <template>
+ *   <Widget v-if="widgetProps" v-bind="widgetProps" />
+ * </template>
+ * ```
+ */
+export function toWidgetProps(widgetModel: WidgetModel): WidgetProps {
+  return widgetModelTranslatorPreact.toWidgetProps(widgetModel);
 }

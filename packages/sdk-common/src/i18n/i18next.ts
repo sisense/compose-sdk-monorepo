@@ -4,7 +4,7 @@
  */
 import i18next, { type i18n, type Module, type Resource } from 'i18next';
 
-import { PACKAGE_NAMESPACE, resources as defaultResources } from './resources/index.js';
+import { resources as defaultResources, PACKAGE_NAMESPACE } from './resources/index.js';
 
 type I18NextInstanceConfig = {
   resource: Resource;

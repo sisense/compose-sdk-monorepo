@@ -1,16 +1,17 @@
-import { toRefs, watch } from 'vue';
 import { dataLoadStateReducer } from '@sisense/sdk-ui-preact';
 import {
+  type ChatRestApi,
   prepareGetNlgInsightsPayload,
   type UseGetNlgInsightsParams as UseGetNlgInsightsParamsPreact,
   type UseGetNlgInsightsState as UseGetNlgInsightsStatePreact,
-  type ChatRestApi,
 } from '@sisense/sdk-ui-preact/ai';
-import { useReducer } from '../../helpers/use-reducer.js';
-import { getAiContext } from '../providers/index.js';
-import { collectRefs, toPlainObject } from '../../utils.js';
+import { toRefs, watch } from 'vue';
+
 import { useTracking } from '../../composables/use-tracking.js';
+import { useReducer } from '../../helpers/use-reducer.js';
 import type { MaybeRefOrWithRefs, ToRefsExceptFns } from '../../types';
+import { collectRefs, toPlainObject } from '../../utils.js';
+import { getAiContext } from '../providers/index.js';
 
 /**
  * Parameters of the {@link @sisense/sdk-ui-vue!useGetNlgInsights | `useGetNlgInsights`} composable.

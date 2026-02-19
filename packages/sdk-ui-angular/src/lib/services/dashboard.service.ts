@@ -20,8 +20,8 @@ import { type DashboardProps } from '../components/dashboard/dashboard.component
 import { type WidgetProps } from '../components/widgets/widget.component';
 import { TrackableService } from '../decorators/trackable.decorator';
 import {
-  translateFromPreactDashboardProps,
-  translateToPreactDashboardProps,
+  toDashboardProps,
+  toPreactDashboardProps,
 } from '../helpers/dashboard-props-preact-translator';
 import { SisenseContextService } from './sisense-context.service';
 
@@ -104,7 +104,7 @@ export class DashboardService {
    *
    * ```ts
     // Component behavior in example.component.ts
-    import { Component } from '@angular/core';
+    import { Component, OnDestroy } from '@angular/core';
     import { BehaviorSubject } from 'rxjs';
     import { DashboardService, type DashboardProps } from '@sisense/sdk-ui-angular';
 
@@ -113,15 +113,20 @@ export class DashboardService {
       templateUrl: './example.component.html',
       styleUrls: ['./example.component.scss'],
     })
-    export class ExampleComponent {
+    export class ExampleComponent implements OnDestroy {
       dashboard$: BehaviorSubject<DashboardProps> | undefined;
+      private composedDashboard: ReturnType<DashboardService['createComposedDashboard']> | undefined;
 
       constructor(private dashboardService: DashboardService) {}
 
       ngOnInit() {
         const initialDashboard: DashboardProps = { ... };
-        const composedDashboard = this.dashboardService.createComposedDashboard(initialDashboard);
-        this.dashboard$ = composedDashboard.dashboard$;
+        this.composedDashboard = this.dashboardService.createComposedDashboard(initialDashboard);
+        this.dashboard$ = this.composedDashboard.dashboard$;
+      }
+
+      ngOnDestroy() {
+        this.composedDashboard?.destroy();
       }
 
       trackByIndex = (index: number) => index;
@@ -131,7 +136,9 @@ export class DashboardService {
    * ```
    * @param initialDashboard - Initial dashboard
    * @param options - Configuration options
-   * @returns Reactive composed dashboard object and API methods for interacting with it
+   * @returns Reactive composed dashboard object and API methods for interacting with it.
+   * The returned object includes a `destroy()` method that should be called when
+   * the dashboard is no longer needed to prevent memory leaks (e.g., in `ngOnDestroy`).
    */
   createComposedDashboard<D extends ComposableDashboardProps | DashboardProps>(
     initialDashboard: D,
@@ -140,6 +147,7 @@ export class DashboardService {
     dashboard$: BehaviorSubject<D>;
     setFilters: (filters: Filter[] | FilterRelations) => Promise<void>;
     setWidgetsLayout: (newLayout: WidgetsPanelLayout) => Promise<void>;
+    destroy: () => void;
   } {
     const hookAdapter = new HookAdapter(
       useComposedDashboardInternal<ComposableDashboardPropsPreact | DashboardPropsPreact>,
@@ -148,11 +156,11 @@ export class DashboardService {
     const dashboard$ = new BehaviorSubject<D>(initialDashboard);
 
     hookAdapter.subscribe(({ dashboard }) => {
-      dashboard$.next(translateFromPreactDashboardProps(dashboard) as D);
+      dashboard$.next(toDashboardProps(dashboard) as D);
     });
 
     hookAdapter.run(
-      translateToPreactDashboardProps(initialDashboard) as
+      toPreactDashboardProps(initialDashboard) as
         | ComposableDashboardPropsPreact
         | DashboardPropsPreact,
       options,
@@ -161,10 +169,16 @@ export class DashboardService {
     const setFilters = createHookApiFacade(hookAdapter, 'setFilters', true);
     const setWidgetsLayout = createHookApiFacade(hookAdapter, 'setWidgetsLayout', true);
 
+    const destroy = () => {
+      hookAdapter.destroy();
+      dashboard$.complete();
+    };
+
     return {
       dashboard$,
       setFilters,
       setWidgetsLayout,
+      destroy,
     };
   }
 }

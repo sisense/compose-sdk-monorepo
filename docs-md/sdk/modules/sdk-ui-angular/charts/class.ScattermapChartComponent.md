@@ -77,7 +77,7 @@ component.
 
 (1) Sisense data source name as a string. For example, `'Sample ECommerce'`. Typically, you
 retrieve the data source name from a data model you create using the `get-data-model`
-[command](https://sisense.dev/guides/sdk/guides/cli.html) of the Compose SDK CLI. Under the hood, the chart
+[command](https://developer.sisense.com/guides/sdk/guides/cli.html) of the Compose SDK CLI. The chart
 connects to the data source, executes a query, and loads the data as specified in
 `dataOptions`, `filters`, and `highlights`.
 
@@ -192,4 +192,4 @@ Click handler callback for a data point
 > **dataReady**: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md) \| `undefined`
 
 A callback that allows to modify data immediately after it has been retrieved.
-Can be used to inject modification of queried data.
+It can be used to inject modification of queried data.

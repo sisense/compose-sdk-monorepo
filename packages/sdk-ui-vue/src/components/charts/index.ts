@@ -1,5 +1,6 @@
 export { AreaChart, type AreaChartProps } from './area-chart';
 export { BarChart, type BarChartProps } from './bar-chart';
+export { CalendarHeatmapChart, type CalendarHeatmapChartProps } from './calendar-heatmap-chart';
 export { ColumnChart, type ColumnChartProps } from './column-chart';
 export { FunnelChart, type FunnelChartProps } from './funnel-chart';
 export { LineChart, type LineChartProps } from './line-chart';
@@ -15,4 +16,5 @@ export { Chart, type ChartProps } from './chart';
 export { BoxplotChart, type BoxplotChartProps } from './boxplot-chart';
 export { AreamapChart, type AreamapChartProps } from './areamap-chart';
 export { ScattermapChart, type ScattermapChartProps } from './scattermap-chart';
+export { StreamgraphChart, type StreamgraphChartProps } from './streamgraph-chart';
 export { AreaRangeChart, type AreaRangeChartProps } from './area-range-chart';

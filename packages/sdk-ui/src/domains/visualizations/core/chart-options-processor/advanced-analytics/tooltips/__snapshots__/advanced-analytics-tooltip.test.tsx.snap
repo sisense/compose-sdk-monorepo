@@ -1,0 +1,222 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ForecastTooltipComponent > should match the snapshot 1`] = `
+<div>
+  <div
+    style="color: rgb(91, 99, 114); font-size: 13px; line-height: 18px; margin: 4px 6px;"
+  >
+    <div
+      style="display: flex; margin-bottom: 5px;"
+    >
+      <div
+        style="flex-shrink: 0;"
+      >
+        Forecast
+      </div>
+      <div
+        style="margin-left: 5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
+      >
+        Total Cost
+      </div>
+    </div>
+    <div
+      style="display: table;"
+    >
+      <div
+        style="display: table-row-group;"
+      >
+        <div
+          style="display: table-row; height: 18px;"
+        >
+          <div
+            style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
+          >
+            Forecast Value
+          </div>
+          <div
+            style="display: table-cell; padding-left: 15px; font-weight: 600;"
+          >
+            <div>
+              2.01M
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="display: table-row-group;"
+      >
+        <div
+          style="display: table-row; height: 18px;"
+        >
+          <div
+            style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
+          >
+            Upper Bound
+          </div>
+          <div
+            style="display: table-cell; padding-left: 15px; font-weight: 600;"
+          >
+            <div>
+              3.01M
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="display: table-row-group;"
+      >
+        <div
+          style="display: table-row; height: 18px;"
+        >
+          <div
+            style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
+          >
+            Lower Bound
+          </div>
+          <div
+            style="display: table-cell; padding-left: 15px; font-weight: 600;"
+          >
+            <div>
+              1.01M
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="display: table-row-group;"
+      >
+        <div
+          style="display: table-row; height: 18px;"
+        >
+          <div
+            style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
+          >
+            Confidence Interval
+          </div>
+          <div
+            style="display: table-cell; padding-left: 15px; font-weight: 600;"
+          >
+            <div>
+              80%
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      style="font-size: 10px; color: rgb(102, 102, 102); margin-top: 6px;"
+    >
+      <hr
+        class="csdk-border-t"
+        style="margin: 7px 0px;"
+      />
+    </div>
+    2.01k
+  </div>
+</div>
+`;
+
+exports[`TrendTooltipComponent > should match the snapshot 1`] = `
+<div>
+  <div
+    style="color: rgb(91, 99, 114); font-size: 13px; line-height: 18px; margin: 4px 6px;"
+  >
+    <div
+      style="display: flex; margin-bottom: 5px;"
+    >
+      <div
+        style="flex-shrink: 0;"
+      >
+        Trend
+      </div>
+      <div
+        style="margin-left: 5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
+      >
+        Total Cost
+      </div>
+    </div>
+    <div
+      style="display: table;"
+    >
+      <div
+        style="display: table-row-group;"
+      >
+        <div
+          style="display: table-row; height: 18px;"
+        >
+          <div
+            style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
+          >
+            Type
+          </div>
+          <div
+            style="display: table-cell; padding-left: 15px; font-weight: 600;"
+          >
+            <div>
+              Logarithmic Trend
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="display: table-row-group;"
+      >
+        <div
+          style="display: table-row; height: 18px;"
+        >
+          <div
+            style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
+          >
+            Local Value
+          </div>
+          <div
+            style="display: table-cell; padding-left: 15px; font-weight: 600;"
+          >
+            <div>
+              2.01M
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="display: table-row-group;"
+      >
+        <div
+          style="display: table-row; height: 18px;"
+        >
+          <div
+            style="display: table-cell; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; word-break: keep-all; white-space: nowrap;"
+          >
+            Trend Data
+          </div>
+          <div
+            style="display: table-cell; padding-left: 15px; font-weight: 600;"
+          >
+            <div>
+              Min 190.0K
+            </div>
+            <div>
+              Max 4.84M
+            </div>
+            <div>
+              Median 2.28M
+            </div>
+            <div>
+              Average 2.15M
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      style="font-size: 10px; color: rgb(102, 102, 102); margin-top: 6px;"
+    >
+      <hr
+        class="csdk-border-t"
+        style="margin: 7px 0px;"
+      />
+    </div>
+    2.01k
+  </div>
+</div>
+`;

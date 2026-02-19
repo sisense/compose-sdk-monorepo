@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/translations/nl-nl",
+  "deleteDestPath": false,
+  "lib": {
+    "entryFile": "index.ts"
+  }
+}

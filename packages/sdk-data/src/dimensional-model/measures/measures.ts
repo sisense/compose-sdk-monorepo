@@ -1,9 +1,15 @@
 /* eslint-disable max-params */
+
 /* eslint-disable no-underscore-dangle */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { createAttribute, DimensionalAttribute } from '../attributes.js';
@@ -305,7 +311,7 @@ export const isDimensionalBaseMeasure = (v: AnyObject): v is DimensionalBaseMeas
 /**
  * Stands for a Calculated Measure
  *
- * @see {https://sisense.dev/guides/querying/useJaql/#step-7-adding-a-formula}
+ * @see {https://developer.sisense.com/guides/querying/useJaql/#step-7-adding-a-formula}
  * @internal
  */
 export class DimensionalCalculatedMeasure extends AbstractMeasure implements CalculatedMeasure {
@@ -625,7 +631,9 @@ export function createMeasure(json: any): Measure | BaseMeasure {
 
   if (MetadataTypes.isCalculatedMeasure(json)) {
     if (json.context === undefined) {
-      throw new TranslatableError('errors.measure.dimensionalCalculatedMeasure.noContext');
+      throw new TranslatableError('errors.measure.dimensionalCalculatedMeasure.noContext', {
+        measureName: name,
+      });
     }
 
     const context = {};
@@ -644,22 +652,30 @@ export function createMeasure(json: any): Measure | BaseMeasure {
     );
   } else if (MetadataTypes.isMeasureTemplate(json)) {
     if (att === undefined) {
-      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAttributeDimExpression');
+      throw new TranslatableError(
+        'errors.measure.dimensionalBaseMeasure.noAttributeDimExpression',
+        { measureName: name },
+      );
     }
 
     return new DimensionalMeasureTemplate(name, att, format, desc, sort);
   } else if (MetadataTypes.isBaseMeasure(json)) {
     if (att === undefined) {
-      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAttributeDimExpression');
+      throw new TranslatableError(
+        'errors.measure.dimensionalBaseMeasure.noAttributeDimExpression',
+        { measureName: name },
+      );
     }
 
     const agg = json.agg || json.aggregation;
     if (!agg) {
-      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAggAggregation');
+      throw new TranslatableError('errors.measure.dimensionalBaseMeasure.noAggAggregation', {
+        measureName: name,
+      });
     }
 
     return new DimensionalBaseMeasure(name, att, agg, format, desc, sort);
   }
 
-  throw new TranslatableError('errors.measure.unsupportedType');
+  throw new TranslatableError('errors.measure.unsupportedType', { measureName: name });
 }

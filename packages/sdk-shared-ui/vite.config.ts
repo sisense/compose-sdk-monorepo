@@ -1,15 +1,13 @@
 /// <reference types='vitest' />
-
-import { defineConfig, PluginOption } from 'vite';
 import react from '@vitejs/plugin-react';
-import dts from 'vite-plugin-dts';
-import copy from 'rollup-plugin-copy';
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
-import { configDefaults } from 'vitest/config';
-
 import * as fs from 'fs';
-import { join, resolve, relative } from 'path';
+import { join, relative, resolve } from 'path';
 import { env } from 'process';
+import copy from 'rollup-plugin-copy';
+import { defineConfig, PluginOption } from 'vite';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
+import dts from 'vite-plugin-dts';
+import { configDefaults } from 'vitest/config';
 
 const THRESHOLD_LINES = parseInt(env.DEV_APP_THRESHOLD_LINES || '70', 10);
 const THRESHOLD_FUNCTIONS = parseInt(env.DEV_APP_THRESHOLD_FUNCTIONS || '50', 10);
@@ -129,7 +127,7 @@ export default defineConfig(({ mode }) => ({
   css: {
     modules: {
       scopeBehaviour: 'local',
-      generateScopedName: '[name]__[local]___[hash:base64:5]',
+      generateScopedName: 'csdk_[name]__[local]___[hash:base64:5]',
     },
   },
   test: {

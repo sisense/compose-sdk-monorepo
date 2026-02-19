@@ -1,5 +1,6 @@
-import classNames from 'classnames';
 import React, { FC, useRef } from 'react';
+
+import classNames from 'classnames';
 
 import type { DropdownInputProps, DropdownItem } from '../types';
 import style from './DropdownButton.module.scss';
@@ -37,7 +38,7 @@ export const DropdownButton: FC<DropdownButtonProps> = ({
   isOpen = false,
 }) => {
   const selectedItem = items.find((item) => item.id === selectedItemId);
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const {
     inputProps,

@@ -1,6 +1,6 @@
 {
   "name": "@sisense/sdk-common",
-  "homepage": "https://sisense.dev/guides/sdk/",
+  "homepage": "https://developer.sisense.com/guides/sdk/",
   "description": "Compose SDK package for common functionalities",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.9.0",
+  "version": "2.21.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js"

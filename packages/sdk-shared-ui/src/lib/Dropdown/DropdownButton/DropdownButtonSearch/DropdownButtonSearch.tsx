@@ -1,5 +1,6 @@
-import classNames from 'classnames';
 import React, { forwardRef, MouseEventHandler } from 'react';
+
+import classNames from 'classnames';
 
 import { Input } from '../../../Input';
 import type { DropdownInputProps } from '../../types';

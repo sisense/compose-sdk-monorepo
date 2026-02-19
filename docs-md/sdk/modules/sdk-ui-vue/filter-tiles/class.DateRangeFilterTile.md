@@ -38,7 +38,7 @@ const dateRangeFilter = ref<DateRangeFilterTileProps>({
 });
 </script>
 ```
-<img src="../../../img/vue-date-range-filter-tile-example.png" width="800px" />
+<img src="../../../img/vue-date-range-filter-tile-example.png" width="600px" />
 
 ## Param
 

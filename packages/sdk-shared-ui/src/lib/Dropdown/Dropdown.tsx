@@ -1,5 +1,6 @@
-import classNames from 'classnames';
 import React, { forwardRef } from 'react';
+
+import classNames from 'classnames';
 
 import { styleguideConstants } from '../constants/styleguideConstants';
 import type { MenuItemConfig, ScrollbarProps } from '../Menu';

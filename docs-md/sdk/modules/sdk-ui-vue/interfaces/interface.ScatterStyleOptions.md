@@ -30,7 +30,7 @@ Total height of the component, which is considered in the following order of pri
 
 ### legend
 
-> **legend**?: [`Legend`](../type-aliases/type-alias.Legend.md)
+> **legend**?: [`LegendOptions`](../../sdk-ui/type-aliases/type-alias.LegendOptions.md)
 
 Configuration for legend - a key that provides information about the data series or colors used in chart
 
@@ -55,6 +55,12 @@ Configuration for markers - symbols or data points that highlight specific value
 > **navigator**?: [`Navigator`](../type-aliases/type-alias.Navigator.md)
 
 Configuration for navigator - zoom/pan tool for large datasets in a chart
+
+***
+
+### seriesLabels
+
+> **seriesLabels**?: [`ScatterSeriesLabels`](../../sdk-ui/type-aliases/type-alias.ScatterSeriesLabels.md)
 
 ***
 

@@ -2,7 +2,7 @@
 title: PivotTable
 ---
 
-# Function PivotTable <Badge type="beta" text="Beta" />
+# Function PivotTable
 
 > **PivotTable**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
 
@@ -45,12 +45,13 @@ Pivot Table component
         totalsCalculation: 'sum',
       },
     ],
-    grandTotals: { title: 'Grand Total', rows: true, columns: true },
+    grandTotals: { rows: true, columns: true },
   }}
   filters={[filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])]}
   styleOptions={{ width: 1000, height: 600, rowsPerPage: 50 }}
 />
 ```
+<img src="../../../img/pivot-example-1.png" width="800px" />
 
 (2) Example of PivotTable with the predefined sorting configuration:
 - Sort "Condition" row by its values in Ascending order. This is equivalent to users clicking on the "Condition" row heading and hit Sort Ascending (A-Z)
@@ -93,3 +94,33 @@ This is equivalent to users clicking on the "Total Cost" value heading under "Fe
 ```
 
 <img src="../../../img/pivot-sorting-example-1.png" width="800px" />
+
+(3) Example of PivotTable with auto content width enabled:
+When [`isAutoContentWidth: true`](../interfaces/interface.PivotTableStyleOptions.md#isautocontentwidth) is set, all vertical columns will be resized to fit within the component width without requiring horizontal scroll.
+
+```ts
+<PivotTable
+  dataSet={DM.DataSource}
+  dataOptions={{
+    rows: [DM.Category.Category],
+    columns: [DM.Commerce.Gender],
+    values: [
+      measureFactory.sum(DM.Commerce.Cost, 'Total Cost'),
+      measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
+    ],
+  }}
+  styleOptions={{
+    width: 800,
+    height: 600,
+    isAutoContentWidth: true,
+    rowsPerPage: 50,
+  }}
+/>
+```
+<img src="../../../img/pivot-auto-content-width-true.png" width="800px" />
+
+## Remarks
+
+Configuration options can also be applied within the scope of a `<SisenseContextProvider>` to control the default behavior of PivotTable, by changing available settings within `appConfig.chartConfig.tabular.*`
+
+Follow the link to [AppConfig](../type-aliases/type-alias.AppConfig.md) for more details on the available settings.

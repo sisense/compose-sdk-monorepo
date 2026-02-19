@@ -14,6 +14,7 @@ React components and utilities for working with charts
 - [BarChart](charts/function.BarChart.md)
 - [BoxplotChart](charts/function.BoxplotChart.md)
 - [boxWhiskerProcessResult](charts/function.boxWhiskerProcessResult.md) - Utility function that combines box whisker data and outliers data
+- [CalendarHeatmapChart](charts/function.CalendarHeatmapChart.md)
 - [Chart](charts/function.Chart.md) - Common component for rendering charts of different types including table
 - [ColumnChart](charts/function.ColumnChart.md)
 - [FunnelChart](charts/function.FunnelChart.md)
@@ -23,6 +24,7 @@ React components and utilities for working with charts
 - [PolarChart](charts/function.PolarChart.md)
 - [ScatterChart](charts/function.ScatterChart.md)
 - [ScattermapChart](charts/function.ScattermapChart.md)
+- [StreamgraphChart](charts/function.StreamgraphChart.md)
 - [SunburstChart](charts/function.SunburstChart.md)
 - [TreemapChart](charts/function.TreemapChart.md)
 
@@ -30,7 +32,7 @@ React components and utilities for working with charts
 
 React components for data grids
 
-- [PivotTable](data-grids/function.PivotTable.md) <Badge type="beta" text="Beta" />
+- [PivotTable](data-grids/function.PivotTable.md)
 - [Table](data-grids/function.Table.md)
 
 ## Drilldown
@@ -67,7 +69,7 @@ React components and hooks for working with queries
 - [ExecuteQuery](queries/function.ExecuteQuery.md)
 - [useExecuteCsvQuery](queries/function.useExecuteCsvQuery.md)
 - [useExecuteCustomWidgetQuery](queries/function.useExecuteCustomWidgetQuery.md)
-- [useExecutePivotQuery](queries/function.useExecutePivotQuery.md) <Badge type="beta" text="Beta" />
+- [useExecutePivotQuery](queries/function.useExecutePivotQuery.md)
 - [useExecuteQuery](queries/function.useExecuteQuery.md)
 - [useQueryCache](queries/function.useQueryCache.md) <Badge type="alpha" text="Alpha" />
 
@@ -79,9 +81,10 @@ React components and utilities for working with dashboards
 - [Dashboard](dashboards/function.Dashboard.md)
 - [dashboardHelpers](dashboards/namespace.dashboardHelpers/index.md) - Utility functions to manipulate dashboard elements
 - [extractDimensionsAndMeasures](dashboards/function.extractDimensionsAndMeasures.md)
-- [PivotTableWidget](dashboards/function.PivotTableWidget.md) <Badge type="beta" text="Beta" />
+- [PivotTableWidget](dashboards/function.PivotTableWidget.md)
 - [useComposedDashboard](dashboards/function.useComposedDashboard.md)
 - [useCustomWidgets](dashboards/function.useCustomWidgets.md)
+- [useJtdWidget](dashboards/function.useJtdWidget.md)
 - [Widget](dashboards/function.Widget.md)
 
 ## Fusion Assets
@@ -116,3 +119,13 @@ For more information on requirements for enabling Generative AI features, please
 - [useGetNlgInsights](generative-ai/function.useGetNlgInsights.md)
 - [useGetNlqResult](generative-ai/function.useGetNlqResult.md) <Badge type="beta" text="Beta" />
 - [useGetQueryRecommendations](generative-ai/function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />
+
+## Functions
+
+- [createLinearGradient](functions/function.createLinearGradient.md)
+- [createRadialGradient](functions/function.createRadialGradient.md)
+- [isGradient](functions/function.isGradient.md)
+- [isLinearGradient](functions/function.isLinearGradient.md)
+- [isRadialGradient](functions/function.isRadialGradient.md)
+- [LoadingOverlay](functions/function.LoadingOverlay.md)
+- [useGetDataSourceDimensions](functions/function.useGetDataSourceDimensions.md)

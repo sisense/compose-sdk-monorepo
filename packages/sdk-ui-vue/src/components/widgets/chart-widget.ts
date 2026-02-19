@@ -1,7 +1,8 @@
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { ChartWidget as ChartWidgetPreact } from '@sisense/sdk-ui-preact';
 import type { ChartWidgetProps } from '@sisense/sdk-ui-preact';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+
 import { setupHelper } from '../../helpers/setup-helper';
 import type { Chart } from '../charts';
 
@@ -83,13 +84,6 @@ export const ChartWidget = defineComponent({
       required: true,
     },
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.contextMenuItems}
-     *
-     * @category Widget
-     * @internal
-     */
-    contextMenuItems: Array as PropType<ChartWidgetProps['contextMenuItems']>,
-    /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.dataOptions}
      *
      * @category Chart
@@ -142,13 +136,6 @@ export const ChartWidget = defineComponent({
      */
     onBeforeRender: Function as PropType<ChartWidgetProps['onBeforeRender']>,
     /**
-     * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointContextMenuClose}
-     *
-     * @category Callbacks
-     * @internal
-     */
-    onContextMenuClose: Function as PropType<ChartWidgetProps['onContextMenuClose']>,
-    /**
      * {@inheritDoc @sisense/sdk-ui!ChartProps.onDataPointClick}
      *
      * @category Callbacks
@@ -185,7 +172,7 @@ export const ChartWidget = defineComponent({
      * @internal
      */
     topSlot: Object as PropType<ChartWidgetProps['topSlot']>,
-    // TODO Remove this prop as part of https://sisense.dev/guides/sdk/guides/migration-guide-1.0.0.html#removed
+    // TODO Remove this prop as part of https://developer.sisense.com/guides/sdk/guides/migration-guide-1.0.0.html#removed
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.styleOptions}
      * @category Widget

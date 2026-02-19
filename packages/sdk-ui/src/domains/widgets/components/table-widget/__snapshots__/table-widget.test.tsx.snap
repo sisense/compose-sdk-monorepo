@@ -1,0 +1,51 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TableWidget Component > renders Table with correct props 1`] = `
+{
+  "dataOptions": {
+    "columns": [],
+  },
+  "dataSet": "Sample ECommerce",
+  "filters": [
+    {
+      "__serializable": "MembersFilter",
+      "attribute": {
+        "__serializable": "DimensionalAttribute",
+        "composeCode": "DM.Commerce.Condition",
+        "dataSource": {
+          "live": false,
+          "title": "Sample ECommerce",
+        },
+        "description": "",
+        "expression": "[Commerce.Condition]",
+        "name": "Condition",
+        "type": "text-attribute",
+      },
+      "composeCode": "filterFactory.members(DM.Commerce.Condition, ['Used', 'Refurbished'])",
+      "config": {
+        "deactivatedMembers": [],
+        "disabled": false,
+        "enableMultiSelection": true,
+        "excludeMembers": false,
+        "guid": "test-id",
+        "locked": false,
+      },
+      "dataSource": undefined,
+      "description": "",
+      "filterType": "members",
+      "members": [
+        "Used",
+        "Refurbished",
+      ],
+      "name": "af21c794bcf",
+      "type": "filter",
+    },
+  ],
+  "refreshCounter": 0,
+  "styleOptions": {
+    "header": {
+      "hidden": false,
+    },
+  },
+}
+`;

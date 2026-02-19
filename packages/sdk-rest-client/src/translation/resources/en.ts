@@ -8,12 +8,10 @@ export const translation = {
     authFailed: 'Failed to authenticate.',
     ssoNotEnabled:
       'SSO is not enabled on target instance, please choose another authentication method.',
-    ssoNoLoginUrl: 'Can not fetch login URL on target instance. Check SSO settings.',
+    ssoNoLoginUrl: 'Unable to fetch SSO login URL from target instance. Check SSO settings.',
     passwordAuthFailed:
       '$t(errorPrefix) Username and password authentication was not successful. Check credentials.',
     tokenAuthFailed: '$t(errorPrefix) Token authentication was not successful. Check credentials.',
-    responseError_onlyStatus: '$t(errorPrefix) Status: {{status}}',
-    responseError_withStatusText: '$t(errorPrefix) Status: {{status}} - {{statusText}}',
   },
 };
 /**

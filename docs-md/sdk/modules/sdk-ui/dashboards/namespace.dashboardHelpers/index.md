@@ -8,6 +8,11 @@ Utility functions to manipulate `DashboardProps`
 
 ## Index
 
+### Dashboard Utilities
+
+- [applyJtdConfig](functions/function.applyJtdConfig.md)
+- [applyJtdConfigs](functions/function.applyJtdConfigs.md)
+
 ### Functions
 
 - [addFilter](functions/function.addFilter.md)

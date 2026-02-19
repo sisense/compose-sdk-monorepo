@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import {
   ComponentAdapter,
-  FiltersPanel as FiltersPanelPreact,
   type FiltersPanelConfig,
+  FiltersPanel as FiltersPanelPreact,
   type FiltersPanelProps as FiltersPanelPropsPreact,
 } from '@sisense/sdk-ui-preact';
 

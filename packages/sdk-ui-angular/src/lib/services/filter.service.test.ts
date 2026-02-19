@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { DimensionalAttribute, filterFactory } from '@sisense/sdk-data';
 import { HookAdapter } from '@sisense/sdk-ui-preact';
+import { of } from 'rxjs';
 
 import { FilterService, GetFilterMembersParams } from './filter.service';
 import { SisenseContextService } from './sisense-context.service';
@@ -38,6 +39,7 @@ describe('FilterService', () => {
 
     sisenseContextServiceMock = {
       getApp: vi.fn().mockResolvedValue({}),
+      getApp$: vi.fn().mockReturnValue(of({ app: {} })),
       getConfig: vi.fn().mockReturnValue({
         showRuntimeErrors: false,
         appConfig: {

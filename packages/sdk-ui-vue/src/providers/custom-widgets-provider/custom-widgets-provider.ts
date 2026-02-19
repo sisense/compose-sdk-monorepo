@@ -1,5 +1,6 @@
 import { defineComponent, provide, ref } from 'vue';
-import { defaultCustomWidgetsContext, customWidgetsContextKey } from './custom-widgets-context';
+
+import { customWidgetsContextKey, defaultCustomWidgetsContext } from './custom-widgets-context';
 
 /**
  * Provider for working with custom widgets fetched from an external environment.

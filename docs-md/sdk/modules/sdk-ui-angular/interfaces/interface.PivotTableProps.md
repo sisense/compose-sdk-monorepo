@@ -34,6 +34,22 @@ Filters that will slice query results
 
 Filters that will highlight query results
 
+### Callbacks
+
+#### dataPointClick
+
+> **dataPointClick**?: [`PivotTableDataPointEventHandler`](../type-aliases/type-alias.PivotTableDataPointEventHandler.md)
+
+Callback function that is called when the pivot table cell is clicked
+
+***
+
+#### dataPointContextMenu
+
+> **dataPointContextMenu**?: [`PivotTableDataPointEventHandler`](../type-aliases/type-alias.PivotTableDataPointEventHandler.md)
+
+Callback function that is called when the pivot table cell is right-clicked
+
 ### Representation
 
 #### dataOptions

@@ -1,6 +1,7 @@
+import React, { forwardRef } from 'react';
+
 import MuiCheckbox, { CheckboxProps as MuiCheckboxProps } from '@mui/material/Checkbox';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
-import React, { forwardRef } from 'react';
 
 import { EmotionCacheProvider } from '../common/emotion-cache-provider';
 import { type CheckboxTheme, checkboxTheme } from './themes';

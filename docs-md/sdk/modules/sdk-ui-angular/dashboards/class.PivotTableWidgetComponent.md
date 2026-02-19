@@ -2,7 +2,7 @@
 title: PivotTableWidgetComponent
 ---
 
-# Class PivotTableWidgetComponent <Badge type="beta" text="Beta" />
+# Class PivotTableWidgetComponent
 
 The Pivot Table Widget component extends the [PivotTableComponent](../data-grids/class.PivotTableComponent.md) component to support widget features,
 including a header, widget style options, and more.
@@ -49,7 +49,7 @@ export class AnalyticsComponent {
          dataBars: true,
        },
      ],
-     grandTotals: { title: 'Grand Total', rows: true, columns: true },
+     grandTotals: { rows: true, columns: true },
    },
    filters: [filterFactory.members(DM.Commerce.Gender, ['Female', 'Male'])],
    styleOptions: { width: 1400, height: 600, rowsPerPage: 25 },
@@ -129,11 +129,35 @@ Title of the widget
 
 ***
 
+#### drilldownOptions
+
+> **drilldownOptions**: [`PivotTableDrilldownOptions`](../type-aliases/type-alias.PivotTableDrilldownOptions.md) \| `undefined`
+
+Configuration for the pivot table drilldown
+
+***
+
 #### title
 
 > **title**: `string` \| `undefined`
 
 Title of the widget
+
+### Callbacks
+
+#### dataPointClick
+
+> **dataPointClick**: `EventEmitter`\< [`PivotTableDataPointEvent`](../type-aliases/type-alias.PivotTableDataPointEvent.md) \>
+
+Callback function that is called when the pivot table cell is clicked
+
+***
+
+#### dataPointContextMenu
+
+> **dataPointContextMenu**: `EventEmitter`\< [`PivotTableDataPointEvent`](../type-aliases/type-alias.PivotTableDataPointEvent.md) \>
+
+Callback function that is called when the pivot table cell is right-clicked
 
 ### Representation
 

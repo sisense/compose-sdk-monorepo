@@ -4,6 +4,11 @@ title: Functions
 
 Utility functions to manipulate `DashboardProps`
 
+# Dashboard Utilities
+
+- [applyJtdConfig](function.applyJtdConfig.md)
+- [applyJtdConfigs](function.applyJtdConfigs.md)
+
 # Functions
 
 - [addFilter](function.addFilter.md)

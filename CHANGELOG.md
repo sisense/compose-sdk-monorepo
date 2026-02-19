@@ -1,5 +1,196 @@
 # Changelog
 
+## [2.21.0] - 2026-02-17
+
+### Added
+- Enable cross-filtering for `CustomWidget` in dashboard
+- Add support for Angular `FormulaService.getSharedFormula`
+- Add drag and drop filters reordering on filters panel (internal testing)
+- Add configurable widget toolbar menu (internal testing)
+
+### Changed
+- Fix `sdk-ui-angular` dependency installation freeze in npm
+- Fix shared formulas issues in `DashboardById`
+- Improve aggregate functions validation in analytics composer and `nlqTranslator` custom formulas
+
+## [2.20.0] - 2026-02-03
+
+### Added
+- Add Angular v21 support
+- Add `LoadingOverlay` component for React
+- Add translation files for all Fusion languages as submodules for React, Angular, and Vue
+
+### Changed
+- Fix `TableStyleOptions.rowsPerPage` configuration for table widgets loaded from Fusion
+- Fix `RelativeDateFilterTile` and `DateRangeFilterTile` behavior in the dashboard filters panel
+- Fix forecast and trend visibility when series are hidden via the legend
+- Fix language and locale configuration loaded from Fusion
+- Improve translations and error messages across packages
+
+## [2.19.0] - 2026-01-20
+
+### Changed
+- Optimize NLQ chart: performance upgrade, minor improvements
+- Improve dashboard layout adjustment upon tabber widget deletion
+- Improve configuration for loading indicator behaviour
+- Improve dashboard layout editing history
+- Fix issues related to 'Other' section in `PieChart` component
+- Fix `PivotTable` subtotals formatting issues
+- Fix inconsistent dashboard toolbar icon theming
+
+## [2.18.1] - 2026-01-09
+
+### Changed
+- Fix a build issue in the `@sisense/sdk-ui-angular` package when used in environments with restricted build setups
+
+## [2.18.0] - 2026-01-06
+
+### Added
+- Add lazy loading for `MembersFilterTile` list
+- Add `useJtdWidget` equivalent for Angular (`createJtdWidget`) and Vue (`useJtdWidget`)
+- Add support for specifying `tabInterval` and `tabsSize` in pixels for `TabberButtonsWidget`
+- Add `onDataPointClick` and `onDataPointContextMenu` callbacks for `PivotTable` components
+- Handle legacy Tabber configuration if used by existing Fusion widgets
+- `PivotTable` improvements:
+  - Add support for the `autoHeight` style option inside the `Dashboard`
+  - Add drilldown support
+
+### Changed
+- Fix drilldown functionality for widgets where the same category is added multiple times
+- Fix continuous timeline translation from Fusion widgets
+- Fix timezone shift in quarters formatting
+- Improve row limit message in Pivot
+
+## [2.17.0] - 2025-12-22
+
+### Added
+- Add `widgetModelTranslator.toWidgetProps` transformer to be able to use widget models in the `Widget` component.
+- Extend DataPoint with `entries` - additional `dataOptions` context of the interacted DataPoint.
+- Add `useGetDataSourceDimensions` hook for loading the datamodel at runtime.
+
+### Changed
+- Split `sdk-pivot-client` into 2 separate packages - `sdk-pivot-query-client` (pure data layer) and `sdk-pivot-ui` (ui components)
+- Move component `PivotTable` from beta to General Availability (GA)
+- Fix overlap of cross-filtering and JTD in Pivot
+- Load Fusion palette by default when using WAT (Web Access Token) authentication
+- Fix redundant JAQL requests in Jump to Dashboard functionality
+- Accept ISO date strings without timezone in NLQ (Natural Language Query) translator
+- Fix issue with opening "add filter popup"
+
+## [2.16.1] - 2025-12-12
+
+### Changed
+- Fix pivot web socket connection when the Sisense instance is configured with a proxy url
+
+## [2.16.0] - 2025-12-09
+
+### Added
+- Add `StreamgraphChart` component for React, Angular, and Vue
+- Add `semiCircle` boolean to style options for `PieChart`
+- Add cross-filtering support for `PivotTable` interactions
+- Add `alwaysShowResultsPerPage` to `PivotTable` for 'Rows per page' to be visible on single-page results
+- Add `imageColumns` style option to translate image cells in PivotTable
+
+### Changed
+- Fix DataSourceFieldsBrowser error when a column is named `name`
+- Fix pivot sorting popup interactions triggering cell click handlers
+- Fix pivot tooltip wrapper to avoid Angular/Vue bridge errors when showing result limit alert icons
+- Adjust table/pivot default padding for consistent layout
+- Fix polar and scatter rendering inconsistencies after drilldown selection, stabilize highlight handling
+- Ensure live datasource type detection in widget translator, require address only for non-live sources
+- Fix filter panel horizontal scroll when vertical scrollbar appears
+- Apply JAQL sort instructions to custom formula measures during creation
+- Improve filter editor theming with hyperlink hover color and button theme settings
+- Enhance analytics composer translator to handle exclude filters and preserve original column names
+
+## [2.15.0] - 2025-11-25
+
+### Added
+- Add `PivotTableWidget` component for Vue
+- Add `useExecutePivotQuery` composable for Vue
+- Add `isAutoContentWidth` pivot style option to automatically adjust column widths to fit the component size
+- Add `AppConfig.chartConfig.tabular.htmlContent` configuration to allow html content in `Table` and `PivotTable` components
+- Add troubleshooting guide for dependency conflict resolution (includes MUI example)
+- Extend `seriesLabels` for `SunburstChart`
+
+### Changed
+- Fix missing data limits notification in `PivotTable` component
+- Fix `TableStyleOptions.columns.width` option in table widget translation layer
+- Fix missing updates of handler props in Highcharts-based chart components
+- Prevent categorical chart misconfiguration by restricting its data options
+
+## [2.14.0] - 2025-11-11
+
+### Added
+- Add `onChange` property for `Dashboard` and `DashboardById`
+- Add support for continuous subtype for `CalendarHeatmapChart`
+- Add possibility to change column count in `Dashboard` edit mode
+- Add support for `isHtml` data option in `PivotTable`
+- Extend `seriesLabels` for `TreemapChart` and `FunnelChart`
+
+### Changed
+- Fix `PivotTable` to use column headings from `name`, if provided via dataOptions
+- Fix `PivotTable` scroll issue
+
+## [2.13.0] - 2025-10-28
+
+### Added
+- Add `measureTopRanking` and `measureBottomRanking` filters
+- Add `tabbers` configuration to `Dashboard` and `DashboardById` configs
+- Add check if user is allowed to use edit mode in `DashboardById`
+- Extend charts styling options:
+  - Add `GradientColor` to color options
+  - Extend `seriesLabels` for `PieChart` and `ScatterChart`
+
+### Changed
+- Fixed shared formulas references resolution in `useGetDashboardModels` hook
+- Fixed paging initialization in `PivotTable` for React 19
+
+## [2.12.0] - 2025-10-14
+
+### Added
+- Add pagination configuration for `CalendarHeatmapChart`
+- Add filter panel toggle button in dashboard toolbar to show/hide filter panel
+- Add styling support for total labels in stacked charts (Column, Bar, Area)
+- Add `shadow` property to `LegendOptions` for controlling shadow effects on chart legends
+
+### Changed
+- Improve Tabber widget integration with editable dashboard layouts
+- Improve `MemberFilterTile` to display values which do not exist in the dataset (when applied externally)
+- Enhance NLQ translator with comprehensive function processing, validation, and error handling
+- Improve analytics composer code generation to exclude default values from generated style and data options
+- Fix hover interaction issue on Pie chart legend items
+- Fix forbidden (403) palette requests preventing charts from rendering with WAT authentication
+
+## [2.11.0] - 2025-09-30
+
+### Added
+- Add `CalendarHeatmapChart` component for React, Angular, and Vue
+- Extend widget, dashboard components and hooks to support calendar-heatmap chart type
+- Add code-first `Jump to Dashboard` configuration support, `applyJtdConfig` and `applyJtdConfigs` helper utilities
+- Add `useJtdWidget` hook to enable `Jump to Dashboard` capabilities for a specific widget
+- Extend charts styling options:
+  - Add `seriesLabels` prop for data point labels styling
+  - Add `series` prop for better control over group padding (column and bar charts)
+
+### Changed
+- Improve `Jump to Dashboard`: fix multiple bugs
+- Improve `useExecuteQueryByWidgetId` hook: add `ungroup` to query for table widget
+- Rename `Legend` type to `LegendOptions`
+
+## [2.10.0] - 2025-09-16
+
+### Added
+- Add `SisenseContextService.setConfig` method for runtime configuration in Angular
+- Add calendar-heatmap chart support for internal testing
+- Improve `Jump to Dashboard`: add jump from pivot widget support
+- Extend charts line styling options
+- Extend charts legend styling options
+
+### Changed
+- Fix redundant JAQL queries in the dashboard cross-filtering behavior
+- Fix Treemap chart error when only category is provided in `dataOptions`
+
 ## [2.9.0] - 2025-09-02
 
 ### Added
@@ -951,7 +1142,7 @@ in hooks `useGetDashboardModel`, `useGetDashboardModels`, `useExecuteQueryByWidg
 - Add prefix `csdk-` to all Tailwind CSS classes to avoid conflicts with user-defined classes
 - Refactor common logic behind data-driven UI components into a higher-order component, `asSisenseComponent`
 - Improve validation of data options for `Table` component
-- Reorganize API reference (on sisense.dev) by splitting API items into individual files
+- Reorganize API reference (on developer.sisense.com) by splitting API items into individual files
   and group individual files by modules and types.
 
 ## [0.8.0] - 2023-08-15

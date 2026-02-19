@@ -6,5 +6,5 @@ title: Data Grids
 
 React components for data grids
 
-- [PivotTable](function.PivotTable.md) <Badge type="beta" text="Beta" />
+- [PivotTable](function.PivotTable.md)
 - [Table](function.Table.md)

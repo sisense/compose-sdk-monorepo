@@ -1,13 +1,14 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { templateForComponent } from './template.js';
-import { RelativeDateFilterTile } from '../filters/components/date-filter/relative-date-filter-tile/index.js';
 import {
   DateLevels,
   DimensionalLevelAttribute,
   Filter,
-  RelativeDateFilter,
   filterFactory,
+  RelativeDateFilter,
 } from '@sisense/sdk-data';
+
+import { RelativeDateFilterTile } from '../domains/filters/components/date-filter/relative-date-filter-tile/index.js';
+import { templateForComponent } from './template.js';
 
 const template = templateForComponent(RelativeDateFilterTile);
 

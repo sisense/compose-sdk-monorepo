@@ -20,10 +20,8 @@ module.exports = {
       excludedFiles: ['**/*.config.{ts,js}', '**/*.workspace.{ts,js}', 'eslint-rules/**/*'],
       extends: ['@sisense/eslint-config/typescript/react', 'plugin:i18next/recommended'],
       rules: {
-        'simple-import-sort/imports': 'error',
-        'simple-import-sort/exports': 'error',
+        // Import sorting is now handled by Prettier
       },
-      plugins: ['simple-import-sort'],
       overrides: [
         {
           // https://stackoverflow.com/questions/66773897/react-using-typescript-dont-use-as-a-type
@@ -74,6 +72,19 @@ module.exports = {
             'rulesdir/no-lodash-whole-import': 'error',
             'rulesdir/no-mui-barrel-import': 'error',
             'rulesdir/prefer-custom-popover': 'error',
+          },
+        },
+        {
+          // Specific configuration for sdk-ui-angular to catch circular deps
+          files: ['packages/sdk-ui-angular/src/**/*.{ts,tsx}'],
+          rules: {
+            'import/no-cycle': [
+              'error',
+              {
+                maxDepth: 10,
+                ignoreExternal: true,
+              },
+            ],
           },
         },
         {
@@ -158,18 +169,6 @@ module.exports = {
           files: ['packages/sdk-ui/analytics-composer/**/*.{ts,tsx}'],
           rules: {
             'import/extensions': ['error', 'ignorePackages'],
-          },
-        },
-        {
-          // Temporarily disable import sorting for the sdk-ui and sdk-pivot-client packages
-          files: [
-            'packages/sdk-ui/**/*.{ts,js,tsx,jsx}',
-            'packages/sdk-pivot-client/**/*.{ts,js,tsx,jsx}',
-            'e2e/**/*.{ts,js,tsx,jsx}',
-          ],
-          rules: {
-            'simple-import-sort/imports': 'off',
-            'simple-import-sort/exports': 'off',
           },
         },
       ],

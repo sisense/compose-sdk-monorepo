@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { DataSourceInfo } from '@sisense/sdk-data';
 import { Writable } from 'stream';
@@ -31,7 +33,7 @@ class WriteMemory extends Writable {
 let mockWriteStream = new WriteMemory();
 
 vi.mock('fs', async () => {
-  const originalModule = await vi.importActual<typeof import('fs')>('fs');
+  const originalModule = await vi.importActual('fs');
 
   // Mock named export 'createWriteStream'
   return {

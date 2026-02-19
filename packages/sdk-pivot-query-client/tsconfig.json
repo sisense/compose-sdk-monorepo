@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "target": "es6",
+    "lib": ["es2017"]
+  },
+  "include": ["src/**/*.ts"],
+  "references": [{ "path": "../sdk-rest-client" }, { "path": "../sdk-data" }]
+}
