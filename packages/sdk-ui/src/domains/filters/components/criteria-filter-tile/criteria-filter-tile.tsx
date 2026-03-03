@@ -6,8 +6,10 @@ import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-
 import { useSyncedState } from '@/shared/hooks/use-synced-state.js';
 
 import { asSisenseComponent } from '../../../../infra/decorators/component-decorators/as-sisense-component';
+import { useFilterTileMenuItems } from '../../shared/use-filter-tile-menu-items/use-filter-tile-menu-items.js';
 import { FilterVariant, isVertical } from '../common/filter-utils.js';
 import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container.js';
+import type { FilterTileConfig } from '../filter-tile/types.js';
 import { CriteriaFilterDisplay } from './criteria-filter-display.js';
 import { CriteriaFilterMenu } from './criteria-filter-menu.js';
 import {
@@ -43,6 +45,12 @@ export interface CriteriaFilterTileProps {
    * @internal
    */
   tileDesignOptions?: FilterTileDesignOptions;
+  /**
+   * Config for the filter tile
+   *
+   * @internal
+   */
+  config?: FilterTileConfig;
 
   /**
    * Render header title
@@ -88,10 +96,13 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
       onEdit,
       measures,
       tileDesignOptions,
+      config,
       renderHeaderTitle,
     } = props;
 
     const { filter, updateFilter } = useSynchronizedFilter(filterFromProps, updateFilterFromProps);
+
+    const menuItems = useFilterTileMenuItems(filter, config, updateFilter);
 
     const disabled = filter.config.disabled;
 
@@ -160,6 +171,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
         }}
         design={tileDesignOptions}
         locked={filter.config.locked}
+        menuItems={menuItems}
         onDelete={onDelete}
         onEdit={onEdit}
       />

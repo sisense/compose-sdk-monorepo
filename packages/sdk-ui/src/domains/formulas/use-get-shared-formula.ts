@@ -1,16 +1,35 @@
 import { useEffect, useReducer } from 'react';
 
-import { CalculatedMeasure, DimensionalCalculatedMeasure } from '@sisense/sdk-data';
+import { CalculatedMeasure, DataSource, DimensionalCalculatedMeasure } from '@sisense/sdk-data';
 
 import { useSisenseContext } from '../../infra/contexts/sisense-context/sisense-context';
 import { withTracking } from '../../infra/decorators/hook-decorators/with-tracking';
 import { TranslatableError } from '../../infra/translation/translatable-error';
-import { UseGetSharedFormulaParams } from '../../props';
 import { dataLoadStateReducer, DataState } from '../../shared/hooks/data-load-state-reducer';
 import { HookEnableParam } from '../../shared/hooks/types';
 import { useHasChanged } from '../../shared/hooks/use-has-changed';
 import { useShouldLoad } from '../../shared/hooks/use-should-load';
 import { fetchFormula, fetchFormulaByOid } from './fetch-formula';
+
+/**
+ * Params of the {@link useGetSharedFormula} hook
+ *
+ * Can consist either of an oid or a name/dataSource pair
+ */
+export interface UseGetSharedFormulaParams extends HookEnableParam {
+  /**
+   * Formula identifier
+   */
+  oid?: string;
+  /**
+   * Formula name
+   */
+  name?: string;
+  /**
+   * Data source - e.g. `Sample ECommerce`
+   */
+  dataSource?: DataSource;
+}
 
 /**
  * Parameters for {@link useGetSharedFormula} hook.
@@ -170,10 +189,7 @@ export function useGetSharedFormulaInternal(params: UseGetSharedFormulaParams) {
   return translateToFormulaResponse(dataState);
 }
 
-/**
- * @internal
- */
-export function translateToFormulaResponse(dataState: DataState<CalculatedMeasure | null>) {
+function translateToFormulaResponse(dataState: DataState<CalculatedMeasure | null>) {
   const { data, ...rest } = dataState;
 
   return {

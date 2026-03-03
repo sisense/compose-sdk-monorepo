@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import {
   DataSource,
   Filter,
@@ -14,6 +16,7 @@ import {
 import { UnsupportedFilterTile } from '@/domains/filters/components/unsupported-filter-tile.js';
 import { CustomFilterTile } from '@/domains/filters/index.js';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
+import { MenuItem } from '@/shared/types/menu-item.js';
 import { getSlightlyDifferentColor, TRIANGLE_COLOR_ADJUSTMENT } from '@/shared/utils/color';
 
 import { CriteriaFilterTile } from '../criteria-filter-tile/index.js';
@@ -43,6 +46,9 @@ export type CascadingLevelFilterTileProps = {
 
   /** Whether the filter is the last in the list */
   isLast?: boolean;
+
+  /** Menu items to be displayed in the cascading level filter header */
+  menuItems: MenuItem[];
 
   /**
    * Render header title
@@ -80,11 +86,29 @@ export const CascadingLevelFilterTile = ({
   onChange,
   isLast,
   onEdit,
+  menuItems,
   renderHeaderTitle,
 }: CascadingLevelFilterTileProps) => {
   const { themeSettings } = useThemeContext();
   const { backgroundColor: bgColor } = themeSettings.general;
   const triangleColor = getSlightlyDifferentColor(bgColor, TRIANGLE_COLOR_ADJUSTMENT);
+  const filterTileConfig = useMemo(
+    () => ({
+      actions: {
+        lockFilter: {
+          // Disables the default filter tile "lock/unlock" menu item
+          enabled: false,
+        },
+      },
+      header: {
+        menu: {
+          // Injects the cascadding filter tile menu items
+          items: menuItems,
+        },
+      },
+    }),
+    [menuItems],
+  );
 
   const attribute = filter.attribute;
   const title = attribute.title;
@@ -96,6 +120,7 @@ export const CascadingLevelFilterTile = ({
     onUpdate: onChange,
     onEdit,
     tileDesignOptions: cascadingLevelTileDesign,
+    config: filterTileConfig,
     renderHeaderTitle,
   };
 
@@ -113,7 +138,11 @@ export const CascadingLevelFilterTile = ({
   ) : isCustomFilter(filter) ? (
     <CustomFilterTile {...props} filter={filter} />
   ) : (
-    <UnsupportedFilterTile filter={filter} design={cascadingLevelTileDesign} />
+    <UnsupportedFilterTile
+      filter={filter}
+      design={cascadingLevelTileDesign}
+      config={filterTileConfig}
+    />
   );
 
   return (

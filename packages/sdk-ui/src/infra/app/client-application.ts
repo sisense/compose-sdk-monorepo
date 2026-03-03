@@ -116,6 +116,24 @@ export type AppConfig = {
   };
 
   /**
+   * Custom HTTP headers to attach to every request made by the SDK.
+   *
+   * Useful for forwarding tracking-related headers (e.g. `x-request-id`, `x-correlation-id`)
+   * so that downstream services can correlate SDK traffic.
+   *
+   * @example
+   * ```tsx
+   * appConfig={{
+   *   customHttpHeaders: {
+   *     'x-correlation-id': '550e8400-e29b-41d4-a716-446655440000',
+   *   },
+   * }}
+   * ```
+   * @internal
+   */
+  customHttpHeaders?: Record<string, string>;
+
+  /**
    * Tracking configuration
    */
   trackingConfig?: {
@@ -317,6 +335,7 @@ export const createClientApplication = async ({
     url,
     auth,
     'sdk-ui' + (__PACKAGE_VERSION__ ? `-${__PACKAGE_VERSION__}` : ''),
+    appConfig?.customHttpHeaders,
   );
   const loginSuccess = await httpClient.login();
 

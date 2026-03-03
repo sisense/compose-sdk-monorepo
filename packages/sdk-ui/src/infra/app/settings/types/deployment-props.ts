@@ -33,6 +33,6 @@ export type DeploymentProps = {
   internalMonitoring: boolean;
   isManagedService: boolean;
   licenseState: 'valid';
-  narrationProvider: 'arria';
+  narrationProvider: 'arria' | 'sisenseAI';
   InfusionApps: boolean;
 };

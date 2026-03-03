@@ -1,0 +1,183 @@
+.alert {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box; // Ensure padding and border are included in width
+  display: grid;
+
+  &[data-dismiss-on-click='true'] {
+    cursor: pointer;
+  }
+  grid-template-columns: 0 1fr;
+  gap: 0.5rem;
+  align-items: start;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+
+  &.hasIcon {
+    grid-template-columns: 1rem 1fr;
+    gap: 0.75rem;
+  }
+
+  &.error {
+    background-color: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+
+    .icon {
+      color: #ef4444;
+    }
+
+    // Dark mode styles - theme-aware via data attribute
+    &[data-dark-mode='true'] {
+      background-color: #4a1f1f;
+      border-color: #5a2a2a;
+      color: #fca5a5;
+
+      .icon {
+        color: #f87171;
+      }
+    }
+  }
+
+  &.warning {
+    background-color: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+
+    .icon {
+      color: #f59e0b;
+    }
+
+    // Dark mode styles - theme-aware via data attribute
+    &[data-dark-mode='true'] {
+      background-color: #4a3a1f;
+      border-color: #5a4a2a;
+      color: #fbbf24;
+
+      .icon {
+        color: #f59e0b;
+      }
+    }
+  }
+
+  &.info {
+    background-color: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1e40af;
+
+    .icon {
+      color: #3b82f6;
+    }
+  }
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.title {
+  font-weight: 600;
+  line-height: 1.5;
+  color: inherit;
+}
+
+.description {
+  color: inherit;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.dismissButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:focus {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+// Dark mode fallbacks using media query and global class selector
+@media (prefers-color-scheme: dark) {
+  .alert {
+    &.error {
+      background-color: #4a1f1f;
+      border-color: #5a2a2a;
+      color: #fca5a5;
+
+      .icon {
+        color: #f87171;
+      }
+    }
+
+    &.warning {
+      background-color: #4a3a1f;
+      border-color: #5a4a2a;
+      color: #fbbf24;
+
+      .icon {
+        color: #f59e0b;
+      }
+    }
+  }
+}
+
+// Fallback: when parent app adds .dark class to documentElement
+:global(.dark) {
+  .alert {
+    &.error {
+      background-color: #4a1f1f;
+      border-color: #5a2a2a;
+      color: #fca5a5;
+
+      .icon {
+        color: #f87171;
+      }
+    }
+
+    &.warning {
+      background-color: #4a3a1f;
+      border-color: #5a4a2a;
+      color: #fbbf24;
+
+      .icon {
+        color: #f59e0b;
+      }
+    }
+  }
+}

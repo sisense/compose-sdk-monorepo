@@ -244,4 +244,14 @@ describe('criteria tests', () => {
       expect(caughtError?.message).toBe('errors.unsupportedFilter');
     });
   });
+
+  it('shows menu in tile when lock action is enabled in config', async () => {
+    const config = { actions: { lockFilter: { enabled: true } } };
+    render(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsBetween} config={config} />
+      </MockedSisenseContextProvider>,
+    );
+    expect(await screen.findByLabelText('Filter tile menu')).toBeInTheDocument();
+  });
 });

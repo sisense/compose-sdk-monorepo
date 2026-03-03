@@ -32,7 +32,9 @@ describe('formula-validation', () => {
       expect(result.isValid).toBe(false);
       expect(result.errors).toHaveLength(2); // Missing reference + unused context
       expect(result.errors[0]).toContain('missingRef');
-      expect(result.errors[0]).toContain('Available keys: totalRevenue, cost, categoryFilter');
+      expect(result.errors[0]).toContain(
+        'Available keys: [totalRevenue], [cost], [categoryFilter]',
+      );
       expect(result.errors[1]).toContain('Context keys [categoryFilter] are defined but not used');
       expect(result.references).toEqual(['totalRevenue', 'missingRef', 'cost']);
     });
@@ -46,7 +48,7 @@ describe('formula-validation', () => {
       expect(result.errors[0]).toContain('missing1], [missing2');
       expect(result.errors[0]).toContain('Available keys');
       expect(result.errors[1]).toContain(
-        'Context keys [cost, categoryFilter] are defined but not used',
+        'Context keys [cost], [categoryFilter] are defined but not used',
       );
     });
 
@@ -87,7 +89,7 @@ describe('formula-validation', () => {
       expect(result.isValid).toBe(true); // Valid when using warnings
       expect(result.warnings).toHaveLength(1);
       expect(result.warnings[0]).toContain(
-        'Context keys [cost, categoryFilter] are defined but not used',
+        'Context keys [cost], [categoryFilter] are defined but not used',
       );
       expect(result.errors).toEqual([]);
     });
@@ -164,6 +166,40 @@ describe('formula-validation', () => {
       expect(result.unusedContextKeys).toEqual(['profitMargin']);
       expect(result.errors).toHaveLength(1);
       expect(result.errors[0]).toContain('Context keys [profitMargin] are defined but not used');
+    });
+
+    it('should accept context keys with brackets (consistent with measureFactory.customFormula)', () => {
+      const contextWithBrackets = {
+        '[revenue]': { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue'] },
+        '[cost]': { function: 'measureFactory.sum', args: ['DM.Commerce.Cost'] },
+      };
+
+      const formula = '[revenue] - [cost]';
+      const result = validateFormulaReferences(formula, contextWithBrackets, {
+        errorOnUnusedContext: false,
+        warnUnusedContext: false,
+      });
+
+      expect(result.isValid).toBe(true);
+      expect(result.references).toEqual(['revenue', 'cost']);
+      expect(result.errors).toEqual([]);
+    });
+
+    it('should match identifiers starting with numbers (e.g. Fusion IDs like 124E5-B6F)', () => {
+      const context = {
+        '[F328F-D01]': { function: 'measureFactory.customFormula', args: [] },
+        '[124E5-B6F]': { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue'] },
+      };
+
+      const formula = '[F328F-D01]/[124E5-B6F]';
+      const result = validateFormulaReferences(formula, context, {
+        errorOnUnusedContext: false,
+        warnUnusedContext: false,
+      });
+
+      expect(result.isValid).toBe(true);
+      expect(result.references).toEqual(['F328F-D01', '124E5-B6F']);
+      expect(result.errors).toEqual([]);
     });
 
     describe('operator syntax validation', () => {

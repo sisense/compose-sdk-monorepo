@@ -80,6 +80,7 @@ export const Dashboard = asSisenseComponent({
     widgetsOptions,
     styleOptions,
     onChange,
+    persistence,
   }: DashboardProps) => {
     const { themeSettings } = useDashboardThemeInternal({ styleOptions });
     const config = useDefaults(propConfig, DEFAULT_DASHBOARD_CONFIG);
@@ -282,6 +283,8 @@ export const Dashboard = asSisenseComponent({
           },
           [onChange],
         ),
+        persistence,
+        isEditing: isEditMode,
       },
     );
 

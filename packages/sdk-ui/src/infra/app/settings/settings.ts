@@ -17,8 +17,14 @@ import { getLegacyPalette } from '../../themes/theme-loader';
 import { GlobalsObject } from './types';
 import { FeatureMap, Features } from './types/features.js';
 
+type AiSettingsResponse = {
+  narration?: { enabled?: boolean; sisenseAIEnabled?: boolean };
+};
+
 /**
  * Application settings
+ *
+ * @internal
  */
 export type AppSettings = Required<ConfigurableAppSettings> & ServerSettings;
 
@@ -81,6 +87,7 @@ type ServerSettings = {
   serverVersion: string;
   serverFeatures: FeatureMap;
   isUnifiedNarrationEnabled?: boolean;
+  isSisenseAiEnabled?: boolean;
   user: {
     tenant: {
       name: string;
@@ -119,6 +126,7 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
   errorBoundaryConfig: {
     alwaysShowErrorText: false,
   },
+  customHttpHeaders: {},
   trackingConfig: {
     enabled: true,
   },
@@ -181,6 +189,17 @@ function mapFeatures(features: Features): FeatureMap {
   return map as FeatureMap;
 }
 
+async function loadAiSettings(
+  httpClient: Pick<HttpClient, 'get'>,
+): Promise<{ isSisenseAiEnabled: boolean }> {
+  try {
+    const ai = await httpClient.get<AiSettingsResponse>('api/v2/settings/ai');
+    return { isSisenseAiEnabled: ai?.narration?.sisenseAIEnabled === true };
+  } catch {
+    return { isSisenseAiEnabled: false };
+  }
+}
+
 /**
  * Loads the server settings
  *
@@ -199,12 +218,16 @@ async function loadServerSettings(
   const palette = useDefaultPalette
     ? ({ colors: getDefaultThemeSettings().palette.variantColors } as LegacyPalette)
     : await getLegacyPalette(getPaletteName(globals.designSettings), httpClient);
+  const { isSisenseAiEnabled } = await loadAiSettings(httpClient);
+  const props = globals.props;
   const serverSettings: ServerSettings = {
     serverThemeSettings: convertToThemeSettings(globals.designSettings, palette, httpClient.url),
     serverLanguage: globals.language,
     serverVersion: globals.version,
     serverFeatures: mapFeatures(globals.features),
-    isUnifiedNarrationEnabled: globals.props?.narrationUnified === true,
+    isUnifiedNarrationEnabled: props?.narrationUnified === true,
+    isSisenseAiEnabled:
+      !props?.isNarration || props?.narrationProvider === 'sisenseAI' || isSisenseAiEnabled,
     user: {
       tenant: {
         name: globals.user?.tenant?.name || SYSTEM_TENANT_NAME,

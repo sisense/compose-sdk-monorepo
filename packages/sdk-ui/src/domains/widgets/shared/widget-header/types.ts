@@ -1,3 +1,5 @@
+import { MenuItem } from '@/shared/types/menu-item';
+
 /**
  * Config for the info button (data passed into the header/toolbar API)
  */
@@ -41,22 +43,4 @@ export type ToolbarMenuConfig = {
    * List of menu items to be injected into the toolbar additional to the default ones
    */
   items?: MenuItem[];
-};
-
-/**
- * Menu item in the toolbar
- */
-export type MenuItem = {
-  /**
-   * Unique identifier for the menu item
-   */
-  id: string;
-  /**
-   * Handler function to be called when the menu item is clicked
-   */
-  onClick: () => void;
-  /**
-   * Caption of the menu item
-   */
-  caption: string;
 };

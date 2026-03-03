@@ -9,8 +9,10 @@ import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-
 import { cloneFilterAndToggleDisabled } from '@/shared/utils/filters';
 
 import { asSisenseComponent } from '../../../../infra/decorators/component-decorators/as-sisense-component';
+import { useFilterTileMenuItems } from '../../shared/use-filter-tile-menu-items/use-filter-tile-menu-items';
 import { ScrollWrapperOnScrollEvent } from '../filter-editor-popover/common/scroll-wrapper';
 import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container';
+import { FilterTileConfig } from '../filter-tile/types';
 import { MemberList } from './member-list';
 import { Member, SelectedMember } from './members-reducer';
 import { PillSection } from './pill-section';
@@ -45,6 +47,12 @@ export interface MemberFilterTileProps {
   parentFilters?: Filter[];
   /** Design options for the tile @internal */
   tileDesignOptions?: FilterTileDesignOptions;
+  /**
+   * Config for the filter tile
+   *
+   * @internal
+   */
+  config?: FilterTileConfig;
 
   /**
    * Render header title
@@ -92,6 +100,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     onChange: updateFilterFromProps,
     parentFilters = [],
     tileDesignOptions,
+    config,
     renderHeaderTitle,
   } = props;
 
@@ -118,6 +127,8 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     updateFilterFromProps,
     () => filterFactory.members(attribute, []) as MembersFilter,
   );
+
+  const menuItems = useFilterTileMenuItems(filter, config, updateFilter);
 
   const {
     isError,
@@ -236,6 +247,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
           header: { hasBackgroundFilter },
         })}
         locked={filter.config.locked}
+        menuItems={menuItems}
         onDelete={onDelete}
         onEdit={onEdit}
       />

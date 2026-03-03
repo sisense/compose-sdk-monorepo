@@ -930,6 +930,17 @@ describe('processArg', () => {
       expect(processArg(input)).toBeUndefined();
     });
 
+    it('should accept null for optional string argument', () => {
+      const input: ArgInput = {
+        data: null as any,
+        context: {
+          argSchema: { type: 'string', required: false },
+          ...createMockContext(),
+        },
+      };
+      expect(processArg(input)).toBeUndefined();
+    });
+
     it('should throw error for undefined argument when required', () => {
       const input: ArgInput = {
         data: undefined as any,

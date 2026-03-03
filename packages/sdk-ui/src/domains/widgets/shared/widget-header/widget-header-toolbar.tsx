@@ -52,15 +52,18 @@ export function WidgetHeaderToolbar({
         warningMessages={infoButtonConfig.warningMessages}
         onRefresh={onRefresh}
       />
+    </>
+  );
+
+  // Note: menu button is rendered after the toolbar to ensure it is fixed on the right side
+  return (
+    <>
+      {styleOptions?.renderToolbar
+        ? styleOptions.renderToolbar(onRefresh, defaultToolbar)
+        : defaultToolbar}
       {isMenuEnabled && config?.menu?.items && config?.menu?.items.length > 0 && (
         <WidgetMenuButton menuItems={config?.menu?.items} />
       )}
     </>
   );
-
-  if (styleOptions?.renderToolbar) {
-    return styleOptions.renderToolbar(onRefresh, defaultToolbar);
-  }
-
-  return defaultToolbar;
 }

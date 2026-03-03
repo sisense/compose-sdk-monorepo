@@ -1,11 +1,13 @@
 import { DataSource, Filter, isDateRangeFilter, LevelAttribute } from '@sisense/sdk-data';
 
 import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-filter';
+import { useFilterTileMenuItems } from '@/domains/filters/shared/use-filter-tile-menu-items/use-filter-tile-menu-items';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { cloneFilterAndToggleDisabled } from '@/shared/utils/filters';
 
 import { asSisenseComponent } from '../../../../../infra/decorators/component-decorators/as-sisense-component';
 import { FilterTileContainer, FilterTileDesignOptions } from '../../filter-tile-container';
+import type { FilterTileConfig } from '../../filter-tile/types';
 import { DateRangeFilterDisplay } from './date-range-filter-display';
 import { EditableDateRangeFilter } from './editable-date-range-filter';
 import { useDateLimits } from './use-date-limits';
@@ -73,6 +75,12 @@ export interface DateRangeFilterTileProps {
    * @internal
    */
   tileDesignOptions?: FilterTileDesignOptions;
+  /**
+   * Config for the filter tile
+   *
+   * @internal
+   */
+  config?: FilterTileConfig;
 
   /**
    * Render header title
@@ -123,9 +131,12 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
     parentFilters,
     tiled = false,
     tileDesignOptions,
+    config,
     renderHeaderTitle,
   }: DateRangeFilterTileProps) => {
     const { filter, updateFilter } = useSynchronizedFilter(filterFromProps, updateFilterFromProps);
+
+    const menuItems = useFilterTileMenuItems(filter, config, updateFilter);
 
     if (!isDateRangeFilter(filter)) {
       throw new TranslatableError('errors.invalidFilterType', { filterType: 'DateRangeFilter' });
@@ -184,6 +195,7 @@ export const DateRangeFilterTile = asSisenseComponent({ componentName: 'DateRang
         disabled={filter.config.disabled}
         design={tileDesignOptions}
         locked={filter.config.locked}
+        menuItems={menuItems}
         onDelete={onDelete}
         onEdit={onEdit}
       />

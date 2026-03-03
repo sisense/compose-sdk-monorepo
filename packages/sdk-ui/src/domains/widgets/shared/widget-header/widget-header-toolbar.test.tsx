@@ -2,7 +2,9 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { InfoButtonConfig, MenuItem } from './types';
+import { MenuItem } from '@/shared/types/menu-item';
+
+import type { InfoButtonConfig } from './types';
 import { WidgetHeaderToolbar } from './widget-header-toolbar';
 
 vi.mock('./widget-header-info-button', () => ({

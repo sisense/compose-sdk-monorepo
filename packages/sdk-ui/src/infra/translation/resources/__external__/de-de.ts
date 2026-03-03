@@ -319,6 +319,14 @@ const translation: TranslationDictionary = {
       invalidInput: 'Ungültige Eingabe',
       noAvailableDataTopics:
         'Keines der bereitgestellten Datenmodelle oder Perspektiven ist verfügbar',
+      failedToFetchCreditBalance: 'Kreditguthaben konnte nicht abgerufen werden',
+    },
+    quota: {
+      exceededErrorTitle: 'KI-Antworten sind derzeit nicht verfügbar.',
+      exceededErrorDescription:
+        'Sie haben Ihr monatliches Unternehmens-KI-Kontingent erreicht. Das Kontingent wird automatisch erneuert, wenn Ihr nächster monatlicher Nutzungszyklus beginnt.',
+      warningDescription:
+        'Sie haben {{usagePercentage}}% Ihres monatlichen Unternehmens-KI-Kontingents verbraucht.',
     },
   },
   attribute: {
@@ -438,6 +446,14 @@ const translation: TranslationDictionary = {
       nextMonth: 'Nächster Monat',
       previousGroup: 'Vorherige Gruppe',
       nextGroup: 'Nächste Gruppe',
+    },
+  },
+  filterTile: {
+    menu: {
+      lock: 'Sperren',
+      unlock: 'Entsperren',
+      lockGroup: 'Gruppe sperren',
+      unlockGroup: 'Gruppe entsperren',
     },
   },
 };

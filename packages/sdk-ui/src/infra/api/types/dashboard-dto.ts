@@ -15,7 +15,8 @@ export type LayoutDto = {
     width: number;
     cells?: {
       subcells: {
-        width: number;
+        /** Omitted by Fusion for single-widget layouts; defaults to 100 during translation. */
+        width?: number;
         elements: {
           height: number | string;
           widgetid: string;

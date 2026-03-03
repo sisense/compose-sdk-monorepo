@@ -314,6 +314,13 @@ const translation: TranslationDictionary = {
       unknownResponse: '不明なresponseTypeを受信しました。生の応答=',
       invalidInput: '無効な入力',
       noAvailableDataTopics: '提供されたデータモデルまたはパースペクティブのいずれも利用できません',
+      failedToFetchCreditBalance: 'クレジット残高の取得に失敗しました',
+    },
+    quota: {
+      exceededErrorTitle: 'AIの応答は現在利用できません。',
+      exceededErrorDescription:
+        '会社の月次AIクォータに達しました。クォータは次の月次使用サイクルで自動的に更新されます。',
+      warningDescription: '会社の月次AIクォータの{{usagePercentage}}%を使用しました。',
     },
   },
   attribute: {
@@ -433,6 +440,14 @@ const translation: TranslationDictionary = {
       nextMonth: '次の月',
       previousGroup: '前のグループ',
       nextGroup: '次のグループ',
+    },
+  },
+  filterTile: {
+    menu: {
+      lock: 'ロック',
+      unlock: 'ロック解除',
+      lockGroup: 'グループをロック',
+      unlockGroup: 'グループのロック解除',
     },
   },
 };

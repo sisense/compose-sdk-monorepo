@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { MenuItem } from '@/shared/types/menu-item';
+
 import type { WidgetProps } from '../components/widget/types';
-import type { MenuItem } from '../shared/widget-header/types';
 import { withHeaderMenuItem } from './header-menu-utils.js';
 
 const createMinimalWidgetProps = (overrides?: Partial<WidgetProps>): WidgetProps =>

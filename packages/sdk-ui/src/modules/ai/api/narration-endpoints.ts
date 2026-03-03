@@ -3,7 +3,7 @@ import type { HttpClient } from '@sisense/sdk-rest-client';
 import type { GetNlgInsightsRequest, GetNlgInsightsResponse } from './types.js';
 
 /** Unified narrative endpoint. Try first; fall back to legacy on 404. */
-export const UNIFIED_NARRATION_ENDPOINT = 'api/v2/ai/widget/narrative';
+export const UNIFIED_NARRATION_ENDPOINT = 'api/v2/ai/narrative';
 
 /** Legacy endpoint (used when unified narrative returns 404). */
 export const LEGACY_NARRATION_ENDPOINT = 'api/v2/ai/nlg/queryResult';
@@ -23,7 +23,29 @@ function isUnifiedNarrationEndpointMissing(error: unknown): boolean {
  */
 export type GetNarrationsOptions = {
   isUnifiedNarrationEnabled?: boolean;
+  isSisenseAiEnabled?: boolean;
 };
+
+async function fetchUnifiedNarrationsWithFallback(
+  httpClient: HttpClient,
+  request: GetNlgInsightsRequest,
+): Promise<GetNlgInsightsResponse> {
+  try {
+    const response = await httpClient.post<GetNlgInsightsResponse>(
+      UNIFIED_NARRATION_ENDPOINT,
+      request,
+    );
+    return response as GetNlgInsightsResponse;
+  } catch (err) {
+    if (!isUnifiedNarrationEndpointMissing(err)) throw err;
+
+    const response = await httpClient.post<GetNlgInsightsResponse>(
+      LEGACY_NARRATION_ENDPOINT,
+      request,
+    );
+    return response as GetNlgInsightsResponse;
+  }
+}
 
 /**
  * Fetches narrations. Single place for endpoint logic: isUnifiedNarrationEnabled === false → legacy only;
@@ -40,21 +62,10 @@ export async function getNarrations(
   request: GetNlgInsightsRequest,
   options?: GetNarrationsOptions,
 ): Promise<GetNlgInsightsResponse> {
-  const useUnifiedNarrationEndpoint = options?.isUnifiedNarrationEnabled !== false;
+  const { isUnifiedNarrationEnabled = false, isSisenseAiEnabled = false } = options ?? {};
 
-  if (useUnifiedNarrationEndpoint) {
-    try {
-      const response = await httpClient.post<GetNlgInsightsResponse>(
-        UNIFIED_NARRATION_ENDPOINT,
-        request,
-      );
-      return response as GetNlgInsightsResponse;
-    } catch (narrativeError) {
-      // Fall back to legacy endpoint only when unified endpoint is missing (404)
-      if (!isUnifiedNarrationEndpointMissing(narrativeError)) {
-        throw narrativeError;
-      }
-    }
+  if (isUnifiedNarrationEnabled && isSisenseAiEnabled) {
+    return fetchUnifiedNarrationsWithFallback(httpClient, request);
   }
 
   const response = await httpClient.post<GetNlgInsightsResponse>(

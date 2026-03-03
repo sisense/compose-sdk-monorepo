@@ -2,7 +2,10 @@ import cloneDeep from 'lodash-es/cloneDeep';
 
 import { advancedLineChartWidgetDto } from '@/domains/dashboarding/dashboard-model/__mocks__/advanced-line-chart-widget.js';
 import { sampleEcommerceDashboard as dashboardMock } from '@/domains/dashboarding/dashboard-model/__mocks__/sample-ecommerce-dashboard.js';
-import { TabberWidgetDtoStyle } from '@/domains/widgets/components/widget-by-id/types';
+import {
+  CartesianWidgetStyle,
+  TabberWidgetDtoStyle,
+} from '@/domains/widgets/components/widget-by-id/types';
 import { WidgetDto } from '@/index';
 import { AppSettings } from '@/infra/app/settings/settings';
 import { CompleteThemeSettings } from '@/types';
@@ -40,11 +43,19 @@ describe('WidgetModelTranslator', () => {
 
       resWidgetDto = toWidgetDto(widgetFromChart);
 
-      // console.log(JSON.stringify(resWidgetDto, null, 2));
-
       expect(resWidgetDto.type).toBe(mockLineWidgetDto.type);
       expect(resWidgetDto.metadata.panels[0].name).toBe('x-axis');
       expect(resWidgetDto.metadata.panels[1].name).toBe('values');
+
+      const expectedStyle = mockLineWidgetDto.style as CartesianWidgetStyle;
+      expect(resWidgetDto.style).toMatchObject({
+        legend: expectedStyle.legend,
+        navigator: expectedStyle.navigator,
+        seriesLabels: expectedStyle.seriesLabels,
+        lineWidth: expectedStyle.lineWidth,
+        markers: expectedStyle.markers,
+        dataLimits: expectedStyle.dataLimits,
+      });
     });
 
     it('should create a valid WidgetDto for the "line" chart with advanced analytics', () => {
@@ -54,7 +65,6 @@ describe('WidgetModelTranslator', () => {
       resWidgetDto = toWidgetDto(widgetFromChart);
 
       expect(resWidgetDto.type).toBe(advancedLineChartWidgetDto.type);
-      // values
 
       resWidgetDto.metadata.panels[1].items.forEach((actualItem, index) => {
         const expectedItem = advancedLineChartWidgetDto.metadata.panels[1].items[index];
@@ -62,6 +72,16 @@ describe('WidgetModelTranslator', () => {
         expect(actualItem.y2).toBe(expectedItem.y2);
         expect(actualItem.statisticalModels).toStrictEqual(expectedItem.statisticalModels);
         expect(actualItem.format?.color).toStrictEqual(expectedItem.format?.color);
+      });
+
+      const expectedStyle = advancedLineChartWidgetDto.style as CartesianWidgetStyle;
+      expect(resWidgetDto.style).toMatchObject({
+        legend: expectedStyle.legend,
+        navigator: expectedStyle.navigator,
+        seriesLabels: expectedStyle.seriesLabels,
+        lineWidth: expectedStyle.lineWidth,
+        markers: expectedStyle.markers,
+        dataLimits: expectedStyle.dataLimits,
       });
     });
 

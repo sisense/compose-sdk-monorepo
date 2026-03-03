@@ -924,6 +924,15 @@
     {
       "key": "modelStatistics",
       "active": false
+    },
+    {
+      "key": "aiAssistant",
+      "active": true,
+      "unified": true,
+      "nlqV3Enabled": true,
+      "aiAccessControl": "automatically",
+      "quotaNotification": true,
+      "featureModelType": "sisense_managed"
     }
   ],
   "favicon": "/resources/base/images/favicon.ico",

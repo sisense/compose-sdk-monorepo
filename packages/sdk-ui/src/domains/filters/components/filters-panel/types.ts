@@ -63,6 +63,20 @@ export interface FiltersPanelConfig {
        */
       enabled?: boolean;
     };
+
+    /**
+     * Configuration for locking a filter.
+     *
+     * @internal
+     */
+    lockFilter?: {
+      /**
+       * Determines whether the possibility to lock a filter is enabled.
+       *
+       * If not specified, the default value is `false`.
+       */
+      enabled?: boolean;
+    };
   };
 }
 

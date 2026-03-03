@@ -4,8 +4,8 @@ import { describe, expect, it, Mock, vi } from 'vitest';
 
 import { useMenu } from '@/infra/contexts/menu-provider/hooks/use-menu';
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context';
+import { MenuItem } from '@/shared/types/menu-item';
 
-import type { MenuItem } from './types';
 import { WidgetMenuButton } from './widget-menu-button';
 
 vi.mock('@/infra/contexts/menu-provider/hooks/use-menu', () => ({
@@ -91,14 +91,17 @@ describe('WidgetMenuButton', () => {
     ];
     const { getByTestId } = render(<WidgetMenuButton menuItems={menuItems} />);
 
-    fireEvent.click(getByTestId('widget-menu-button'), {
-      clientX: 100,
-      clientY: 200,
-    });
+    const button = getByTestId('widget-menu-button');
+    vi.spyOn(button, 'getBoundingClientRect').mockReturnValue({
+      right: 100,
+      bottom: 50,
+    } as DOMRect);
+
+    fireEvent.click(button);
 
     expect(mockOpenMenu).toHaveBeenCalledTimes(1);
     expect(mockOpenMenu).toHaveBeenCalledWith({
-      position: { left: 100, top: 200 },
+      position: { left: 100, top: 50 },
       alignment: { horizontal: 'right' },
       itemSections: [{ items: menuItems }],
     });

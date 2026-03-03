@@ -317,6 +317,14 @@ const translation: TranslationDictionary = {
       invalidInput: 'Ongeldige invoer',
       noAvailableDataTopics:
         'Geen van de opgegeven gegevensmodellen of perspectieven is beschikbaar',
+      failedToFetchCreditBalance: 'Kredietbalans kon niet worden opgehaald',
+    },
+    quota: {
+      exceededErrorTitle: 'AI-antwoorden zijn momenteel niet beschikbaar.',
+      exceededErrorDescription:
+        'U heeft de maandelijkse AI-quota van uw bedrijf bereikt. Het quota wordt automatisch vernieuwd bij uw volgende maandelijkse gebruikscyclus.',
+      warningDescription:
+        'U heeft {{usagePercentage}}% van de maandelijkse AI-quota van uw bedrijf gebruikt.',
     },
   },
   attribute: {
@@ -436,6 +444,14 @@ const translation: TranslationDictionary = {
       nextMonth: 'Volgende maand',
       previousGroup: 'Vorige groep',
       nextGroup: 'Volgende groep',
+    },
+  },
+  filterTile: {
+    menu: {
+      lock: 'Vergrendelen',
+      unlock: 'Ontgrendelen',
+      lockGroup: 'Groep vergrendelen',
+      unlockGroup: 'Groep ontgrendelen',
     },
   },
 };

@@ -43,6 +43,7 @@ describe('createClientApplication', () => {
     appConfig: {},
     enableSilentPreAuth: false,
     useFusionAuth: false,
+    customHttpHeaders: {},
   } as ClientApplicationParams;
 
   beforeEach(() => {
@@ -84,6 +85,7 @@ describe('createClientApplication', () => {
       defaultParams.url,
       authMock,
       expect.stringContaining('sdk-ui'),
+      defaultParams.appConfig?.customHttpHeaders,
     );
     expect(PivotQueryClient).toHaveBeenCalledWith(
       expect.stringContaining(defaultParams.url),

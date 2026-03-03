@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 
 import { arrayMove } from '@dnd-kit/sortable';
 import {
@@ -146,6 +146,17 @@ export const FiltersPanel = asSisenseComponent({
     const { filters, relations } = splitFiltersAndRelations(filtersOrFilterRelations);
     const config = useDefaults(propConfig, DEFAULT_FILTERS_PANEL_CONFIG);
 
+    const filterTileConfig = useMemo(
+      () => ({
+        actions: {
+          lockFilter: {
+            enabled: config?.actions?.lockFilter?.enabled,
+          },
+        },
+      }),
+      [config?.actions?.lockFilter?.enabled],
+    );
+
     const handleFilterChange = useCallback(
       (changedFilter: Filter) => {
         if (!filters) return;
@@ -261,6 +272,7 @@ export const FiltersPanel = asSisenseComponent({
                               startEditingFilter(filterTilesRef.current[index], filter, levelIndex)
                           : undefined
                       }
+                      config={filterTileConfig}
                     />
                   </div>
                 ) : null;

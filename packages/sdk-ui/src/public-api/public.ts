@@ -139,6 +139,7 @@ export {
   type WidgetId,
   type DashboardId,
   type WidgetsOptions,
+  type SpecificWidgetOptions,
   type CommonFiltersOptions,
   type CommonFiltersApplyMode,
   type FiltersIgnoringRules,
@@ -170,7 +171,15 @@ export {
 export * from '../domains/filters';
 
 // Formulas
-export * from '../domains/formulas';
+export {
+  useGetSharedFormula,
+  type GetSharedFormulaParams,
+  type UseGetSharedFormulaParams,
+  type SharedFormulaState,
+  type SharedFormulaLoadingState,
+  type SharedFormulaErrorState,
+  type SharedFormulaSuccessState,
+} from '../domains/formulas';
 
 // Data Browser & Data Source
 export { DataSchemaBrowser } from '../domains/data-browser/data-schema-browser/data-schema-browser';

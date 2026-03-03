@@ -39,7 +39,12 @@ export const ChatApiProvider = ({
   const api = useMemo(
     () =>
       app
-        ? new ChatRestApi(app.httpClient, volatile, app.settings?.isUnifiedNarrationEnabled)
+        ? new ChatRestApi(
+            app.httpClient,
+            volatile,
+            app.settings?.isUnifiedNarrationEnabled,
+            app.settings?.isSisenseAiEnabled,
+          )
         : undefined,
     [app, volatile],
   );

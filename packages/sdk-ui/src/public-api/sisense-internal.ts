@@ -17,3 +17,17 @@ export { trackHook } from '../infra/decorators/hook-decorators';
 export { useThemeContext } from '../infra/contexts/theme-provider';
 export { type DashboardDto } from '../infra/api/types/dashboard-dto';
 export { type WidgetDto } from '../domains/widgets/components/widget-by-id/types';
+
+// App settings hook and type
+export { useAppSettings } from '../shared/hooks/use-app-settings';
+export type { AppSettings } from '../infra/app/settings/settings';
+
+// QuotaNotification component and hooks
+export { QuotaNotification } from '../shared/components/quota-notification/quota-notification.js';
+export type { QuotaNotificationProps } from '../shared/components/quota-notification/quota-notification.js';
+export { useQuotaNotification } from '../shared/hooks/use-quota-notification.js';
+export type {
+  QuotaNotificationOptions,
+  QuotaApiResponse,
+  QuotaState,
+} from '../shared/hooks/use-quota-notification.js';

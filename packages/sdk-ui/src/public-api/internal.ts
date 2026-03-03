@@ -51,6 +51,9 @@ export { TableWidget, type TableWidgetProps } from '../domains/widgets/component
 // Context Adapters
 export * from '../infra/contexts/custom-widgets-provider/custom-widgets-provider-adapter';
 
+// Formulas
+export { useGetSharedFormulaInternal } from '../domains/formulas/use-get-shared-formula';
+
 // Utilities
 export { translateColumnToAttribute } from '../domains/visualizations/core/chart-data-options/utils';
 export { isSameAttribute } from '@/shared/utils/filters';

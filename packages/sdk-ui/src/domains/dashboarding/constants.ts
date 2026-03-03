@@ -38,6 +38,9 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
       reorderFilters: {
         enabled: false,
       },
+      lockFilter: {
+        enabled: false,
+      },
     },
   },
   toolbar: {
@@ -46,6 +49,7 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
   widgetsPanel: {
     responsive: false,
     editMode: {
+      duplicateWidget: { enabled: false },
       enabled: false,
       showDragHandleIcon: true,
       applyChangesAsBatch: {

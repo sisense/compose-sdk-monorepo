@@ -20,6 +20,7 @@ import {
   JumpToDashboardConfigForPivot,
   TriggerMethod,
 } from '@/domains/dashboarding/hooks/jtd/jtd-types';
+import type { JtdConfigDto, JtdTargetDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import { TabberConfig, TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import {
   isJaqlWithFormula,
@@ -28,6 +29,7 @@ import {
   PanelItem,
   SharedFormulaReferenceContext,
   TabberWidgetDto,
+  WidgetDashboardFilterMode,
   WidgetDto,
 } from '@/domains/widgets/components/widget-by-id/types';
 import {
@@ -52,25 +54,37 @@ import {
   isTrivialSingleNodeRelations,
 } from '@/shared/utils/filter-relations';
 
-import type { WidgetsOptions, WidgetsPanelColumnLayout } from './types';
+import type { SpecificWidgetOptions, WidgetsOptions, WidgetsPanelColumnLayout } from './types';
+
+/** Default width (100%) when Fusion omits it for a single-widget subcell. */
+const DEFAULT_SUBCELL_WIDTH = 100;
 
 export const translateLayout = (layout: LayoutDto): WidgetsPanelColumnLayout => ({
   columns: (layout.columns || []).map((c) => ({
     widthPercentage: c.width,
     rows: (c.cells || []).map((cell) => {
-      const totalWidth = cell.subcells.reduce((acc, subcell) => acc + subcell.width, 0);
+      const totalWidth = cell.subcells.reduce(
+        (acc, subcell) => acc + (subcell.width ?? DEFAULT_SUBCELL_WIDTH),
+        0,
+      );
 
       return {
-        cells: cell.subcells.map((subcell) => ({
-          // If the total width of the subcells is less than 100, we increase width percentage to make the subcells fill the column
-          widthPercentage: totalWidth < 100 ? subcell.width / (totalWidth / 100) : subcell.width,
-          height: subcell.elements[0].height,
-          widgetId: subcell.elements[0].widgetid,
-          minWidth: subcell.elements[0].minWidth,
-          maxWidth: subcell.elements[0].maxWidth,
-          minHeight: subcell.elements[0].minHeight,
-          maxHeight: subcell.elements[0].maxHeight,
-        })),
+        cells: cell.subcells.map((subcell) => {
+          const effectiveWidth = subcell.width ?? DEFAULT_SUBCELL_WIDTH;
+          return {
+            // If the total width of the subcells is less than 100, we increase width percentage to make the subcells fill the column
+            widthPercentage:
+              totalWidth > 0 && totalWidth < 100
+                ? effectiveWidth / (totalWidth / 100)
+                : effectiveWidth,
+            height: subcell.elements[0].height,
+            widgetId: subcell.elements[0].widgetid,
+            minWidth: subcell.elements[0].minWidth,
+            maxWidth: subcell.elements[0].maxWidth,
+            minHeight: subcell.elements[0].minHeight,
+            maxHeight: subcell.elements[0].maxHeight,
+          };
+        }),
       };
     }),
   })),
@@ -360,6 +374,128 @@ export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptio
   });
 
   return widgetsOptionsMap;
+}
+
+/** Default JTD config DTO values used when persisting JumpToDashboardConfig. */
+const DEFAULT_JTD_CONFIG_DTO: JtdConfigDto = {
+  drilledDashboardPrefix: '_drill',
+  drilledDashboardsFolderPrefix: '',
+  displayFilterPane: true,
+  displayDashboardsPane: true,
+  displayToolbarRow: true,
+  displayHeaderRow: true,
+  volatile: false,
+  hideDrilledDashboards: true,
+  hideSharedDashboardsForNonOwner: true,
+  drillToDashboardRightMenuCaption: 'Jump to ',
+  drillToDashboardNavigateType: 1,
+  drillToDashboardNavigateTypePivot: 2,
+  drillToDashboardNavigateTypeCharts: 1,
+  drillToDashboardNavigateTypeOthers: 3,
+  drilledDashboardDisplayType: 2,
+  dashboardIds: [],
+  modalWindowResize: false,
+  modalWindowMeasurement: '%',
+  modalWindowWidth: 85,
+  modalWindowHeight: 85,
+  showFolderNameOnMenuSelection: false,
+  resetDashFiltersAfterJTD: false,
+  sameCubeRestriction: true,
+  showJTDIcon: true,
+  sendPieChartMeasureFiltersOnClick: true,
+  forceZeroInsteadNull: false,
+  mergeTargetDashboardFilters: false,
+  drillToDashboardByName: false,
+  sendBreakByValueFilter: true,
+  ignoreFiltersSource: false,
+  sendFormulaFiltersDuplicate: 'none',
+};
+
+const triggerMethodToNavigateType = (method: TriggerMethod): number =>
+  method === 'rightclick' ? 1 : 3;
+
+/**
+ * Translates {@link JumpToDashboardConfig} to {@link JtdConfigDto}.
+ * Supports only non-pivot config (array targets). Pivot config (Map-based targets) is not persisted.
+ */
+function jtdConfigToDto(config: JumpToDashboardConfig): JtdConfigDto {
+  const triggerMethod = config.interaction?.triggerMethod ?? 'rightclick';
+  return {
+    ...DEFAULT_JTD_CONFIG_DTO,
+    enabled: config.enabled ?? true,
+    dashboardIds: config.targets.map(
+      (t): JtdTargetDto => ({
+        caption: t.caption,
+        id: 'id' in t ? t.id : undefined,
+        oid: 'id' in t ? t.id : undefined,
+      }),
+    ),
+    drillToDashboardRightMenuCaption: config.interaction?.captionPrefix ?? 'Jump to ',
+    drillToDashboardNavigateType: triggerMethodToNavigateType(triggerMethod),
+    drillToDashboardNavigateTypeCharts: triggerMethodToNavigateType(triggerMethod),
+    drillToDashboardNavigateTypePivot: 2,
+    drillToDashboardNavigateTypeOthers: triggerMethodToNavigateType(triggerMethod),
+    displayToolbarRow: config.targetDashboardConfig?.toolbar?.visible ?? true,
+    displayFilterPane: config.targetDashboardConfig?.filtersPanel?.visible ?? true,
+    modalWindowHeight: config.modal?.height,
+    modalWindowWidth: config.modal?.width,
+    modalWindowMeasurement: config.modal?.measurementUnit ?? '%',
+    showJTDIcon: config.interaction?.showIcon ?? true,
+    mergeTargetDashboardFilters: config.filtering?.mergeWithTargetFilters ?? false,
+    includeDashFilterDims: config.filtering?.includeDashboardFilters,
+    includeWidgetFilterDims: config.filtering?.includeWidgetFilters,
+  };
+}
+
+/**
+ * Applies {@link SpecificWidgetOptions} to a {@link WidgetDto}.
+ * Merges filtersOptions and jtdConfig into the DTO for persistence.
+ *
+ * @internal
+ */
+export function withSpecificWidgetOptions(
+  widgetOptions?: SpecificWidgetOptions,
+): (widgetDto: WidgetDto) => WidgetDto {
+  return (widgetDto: WidgetDto) => {
+    if (!widgetOptions) {
+      return widgetDto;
+    }
+    const { filtersOptions, jtdConfig } = widgetOptions;
+
+    const options = filtersOptions
+      ? {
+          ...widgetDto.options,
+          dashboardFiltersMode:
+            filtersOptions.applyMode === CommonFiltersApplyMode.FILTER
+              ? (WidgetDashboardFilterMode.FILTER as `${WidgetDashboardFilterMode}`)
+              : (WidgetDashboardFilterMode.SELECT as `${WidgetDashboardFilterMode}`),
+          selector: filtersOptions.shouldAffectFilters ?? true,
+        }
+      : widgetDto.options;
+
+    const metadata =
+      filtersOptions?.ignoreFilters != null
+        ? {
+            ...widgetDto.metadata,
+            ignore: {
+              all: filtersOptions.ignoreFilters.all ?? false,
+              ids: filtersOptions.ignoreFilters.ids ?? [],
+            },
+          }
+        : widgetDto.metadata;
+
+    const drillToDashboardConfig =
+      jtdConfig && !(jtdConfig.targets instanceof Map)
+        ? jtdConfigToDto(jtdConfig as JumpToDashboardConfig)
+        : widgetDto.drillToDashboardConfig;
+
+    return {
+      ...widgetDto,
+      ...(options && { options }),
+      metadata,
+      ...(drillToDashboardConfig && { drillToDashboardConfig }),
+    };
+  };
 }
 
 export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersConfig {

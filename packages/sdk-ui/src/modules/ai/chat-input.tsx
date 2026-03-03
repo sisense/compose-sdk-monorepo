@@ -217,6 +217,7 @@ export default function ChatInput({
         value={text}
         onKeyDown={onKeyDownInput}
         theme={themeSettings}
+        disabled={disabled}
       />
       <SendMessageButton
         aria-label="send chat message"

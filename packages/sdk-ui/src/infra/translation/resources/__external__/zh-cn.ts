@@ -285,6 +285,12 @@ const translation: TranslationDictionary = {
       unknownResponse: '收到未知的responseType，原始响应=',
       invalidInput: '无效输入',
       noAvailableDataTopics: '提供的任何数据模型或透视都不可用',
+      failedToFetchCreditBalance: '无法获取信用余额',
+    },
+    quota: {
+      exceededErrorTitle: 'AI 响应当前不可用。',
+      exceededErrorDescription: '您已达到公司的月度 AI 配额。配额将在下一个月度使用周期自动续期。',
+      warningDescription: '您已使用公司月度 AI 配额的 {{usagePercentage}}%。',
     },
   },
   attribute: {
@@ -403,6 +409,14 @@ const translation: TranslationDictionary = {
       nextMonth: '下一个月',
       previousGroup: '上一组',
       nextGroup: '下一组',
+    },
+  },
+  filterTile: {
+    menu: {
+      lock: '锁定',
+      unlock: '解锁',
+      lockGroup: '锁定组',
+      unlockGroup: '解锁组',
     },
   },
 };

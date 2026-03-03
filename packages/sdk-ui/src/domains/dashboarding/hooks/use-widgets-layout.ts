@@ -25,6 +25,7 @@ export const useWidgetsLayoutManagement: UseWidgetPanelLayoutManagement = ({
   layoutManagers,
 }) => {
   const [forcedLayout, setForcedLayout] = useState<WidgetsPanelLayout | null>(null);
+
   return {
     layout: forcedLayout || flow(...layoutManagers.map((manager) => manager.manageLayout))(layout),
     setLayout: setForcedLayout,

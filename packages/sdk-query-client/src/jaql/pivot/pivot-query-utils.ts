@@ -70,8 +70,8 @@ export function preparePivotRowJaqlSortOptions(
     sortDetails.sortingLastDimension = true;
   }
 
-  if (sort.by) {
-    sortDetails.measurePath = (sort.by.columnsMembersPath || []).reduce(
+  if (sort.by?.columnsMembersPath?.length) {
+    sortDetails.measurePath = sort.by.columnsMembersPath.reduce(
       (path, columnMember, columnIndex) => ({
         ...path,
         [metadataStats.rowsCount + columnIndex]: columnMember,

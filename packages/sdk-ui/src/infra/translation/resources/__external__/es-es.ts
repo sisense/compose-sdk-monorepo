@@ -322,6 +322,14 @@ const translation: TranslationDictionary = {
       invalidInput: 'Entrada no válida',
       noAvailableDataTopics:
         'Ninguno de los modelos de datos o perspectivas proporcionados está disponible',
+      failedToFetchCreditBalance: 'No se pudo obtener el saldo de créditos',
+    },
+    quota: {
+      exceededErrorTitle: 'Las respuestas de IA no están disponibles actualmente.',
+      exceededErrorDescription:
+        'Ha alcanzado la cuota mensual de IA de su empresa. La cuota se renovará automáticamente en su próximo ciclo de uso mensual.',
+      warningDescription:
+        'Ha utilizado el {{usagePercentage}}% de la cuota mensual de IA de su empresa.',
     },
   },
   attribute: {
@@ -441,6 +449,14 @@ const translation: TranslationDictionary = {
       nextMonth: 'Mes siguiente',
       previousGroup: 'Grupo anterior',
       nextGroup: 'Grupo siguiente',
+    },
+  },
+  filterTile: {
+    menu: {
+      lock: 'Bloquear',
+      unlock: 'Desbloquear',
+      lockGroup: 'Bloquear grupo',
+      unlockGroup: 'Desbloquear grupo',
     },
   },
 };

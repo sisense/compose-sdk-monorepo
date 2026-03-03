@@ -7360,7 +7360,6 @@ __metadata:
     "@types/lodash-es": ^4.17.12
     "@types/numeral": 2.0.2
     eslint: ^8.40.0
-    guid-typescript: ^1.0.9
     hash-it: ^6.0.0
     lodash-es: ^4.17.21
     numeral: ^2.0.6
@@ -7396,7 +7395,7 @@ __metadata:
     raf: 3.4.0
     socket.io-client: ^2.5.0
     typescript: 4.8.4
-    uuid: ^9.0.0
+    uuid: ^13.0.0
   languageName: unknown
   linkType: soft
 
@@ -7433,7 +7432,7 @@ __metadata:
     rollup-plugin-re: ^1.0.7
     socket.io-client: ^2.5.0
     typescript: 4.8.4
-    uuid: ^9.0.0
+    uuid: ^13.0.0
     vite: 4.5.2
     vite-plugin-checker: ^0.6.1
     vite-plugin-css-injected-by-js: 3.0.1
@@ -7457,7 +7456,6 @@ __metadata:
     "@sisense/sdk-rest-client": "workspace:*"
     "@sisense/task-manager": ^0.1.0
     "@types/tar": ^6.1.4
-    "@types/uuid": ^9.0.0
     "@typescript-eslint/eslint-plugin": ^5.39.0
     "@typescript-eslint/parser": ^5.39.0
     eslint: ^8.40.0
@@ -7466,7 +7464,7 @@ __metadata:
     tar: ^6.1.13
     ts-deepmerge: 6.0.2
     typescript: ^4.8.4
-    uuid: ^9.0.0
+    uuid: ^13.0.0
   languageName: unknown
   linkType: soft
 
@@ -7688,7 +7686,6 @@ __metadata:
     eslint: ^8.40.0
     fixed-data-table-2: ^2.0.21
     geojson: ^0.5.0
-    guid-typescript: ^1.0.9
     highcharts-react-official: ^3.2.1
     highcharts-rounded-corners: ^1.0.7
     immer: ^10.0.2
@@ -7715,6 +7712,7 @@ __metadata:
     react-plotly.js: ^2.6.0
     rollup-plugin-re: ^1.0.7
     sass: ^1.90.0
+    semver: ^7.7.4
     storybook: 9.1.6
     superjson: ^2.2.2
     tailwindcss: ^3.3.1
@@ -7722,6 +7720,7 @@ __metadata:
     ts-essentials: ^9.3.0
     tsx: ^4.19.4
     typescript: 4.8.4
+    uuid: ^13.0.0
     vite: 5.4.19
     vite-plugin-checker: ^0.6.1
     vite-plugin-css-injected-by-js: 3.0.1
@@ -9808,13 +9807,6 @@ __metadata:
   version: 3.0.3
   resolution: "@types/unist@npm:3.0.3"
   checksum: 96e6453da9e075aaef1dc22482463898198acdc1eeb99b465e65e34303e2ec1e3b1ed4469a9118275ec284dc98019f63c3f5d49422f0e4ac707e5ab90fb3b71a
-  languageName: node
-  linkType: hard
-
-"@types/uuid@npm:^9.0.0":
-  version: 9.0.8
-  resolution: "@types/uuid@npm:9.0.8"
-  checksum: b8c60b7ba8250356b5088302583d1704a4e1a13558d143c549c408bf8920535602ffc12394ede77f8a8083511b023704bc66d1345792714002bfa261b17c5275
   languageName: node
   linkType: hard
 
@@ -17641,13 +17633,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"guid-typescript@npm:^1.0.9":
-  version: 1.0.9
-  resolution: "guid-typescript@npm:1.0.9"
-  checksum: 829dd87866800a5138aafa0873994028bbc446eb20ff4cae6452d471a2a3d26f7025bed3eb980692c0f022fd22f95ea7396122b46b45a4b5084958505a4fc50c
-  languageName: node
-  linkType: hard
-
 "handle-thing@npm:^2.0.0":
   version: 2.0.1
   resolution: "handle-thing@npm:2.0.1"
@@ -25402,6 +25387,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"semver@npm:^7.7.4":
+  version: 7.7.4
+  resolution: "semver@npm:7.7.4"
+  bin:
+    semver: bin/semver.js
+  checksum: 9b4a6a58e98b9723fafcafa393c9d4e8edefaa60b8dfbe39e30892a3604cf1f45f52df9cfb1ae1a22b44c8b3d57fec8a9bb7b3e1645431587cb272399ede152e
+  languageName: node
+  linkType: hard
+
 "send@npm:0.18.0":
   version: 0.18.0
   resolution: "send@npm:0.18.0"
@@ -27883,21 +27877,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "uuid@npm:13.0.0"
+  bin:
+    uuid: dist-node/bin/uuid
+  checksum: 7510ee1ab371be5339ef26ff8cabc2f4a2c60640ff880652968f758072f53bd4f4af1c8b0e671a8c9bb29ef926a24dec3ef0e3861d78183b39291a85743a9f96
+  languageName: node
+  linkType: hard
+
 "uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^9.0.0":
-  version: 9.0.1
-  resolution: "uuid@npm:9.0.1"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 39931f6da74e307f51c0fb463dc2462807531dc80760a9bff1e35af4316131b4fc3203d16da60ae33f07fdca5b56f3f1dd662da0c99fea9aaeab2004780cc5f4
   languageName: node
   linkType: hard
 

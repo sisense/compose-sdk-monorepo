@@ -9,7 +9,6 @@ import { RestApiNotReadyError, useRestApi } from '@/infra/api/rest-api';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { usePrevious } from '@/shared/hooks/use-previous';
 
-import { checkPersistenceSupport } from './use-dasboard-model-utils';
 import {
   dashboardReducer,
   persistDashboardModelMiddleware,
@@ -17,7 +16,8 @@ import {
   UseDashboardModelActionType,
   UseDashboardModelActionTypeInternal,
   UseDashboardModelInternalAction,
-} from './use-dashboard-model-reducer';
+} from './dashboard-model-reducer';
+import { checkPersistenceSupport } from './use-dashboard-model-utils';
 
 export interface UseDashboardPersistenceParams {
   /**
@@ -45,11 +45,91 @@ export interface UseDashboardPersistenceResult {
    */
   dashboard: DashboardModel | null;
   /**
-   * Function to dispatch changes to the dashboard model with optional persistence
-   * Returns a promise when persistence is enabled to allow error handling
+   * Function to dispatch changes to the dashboard model with optional persistence.
+   * Returns a promise that resolves to the processed (or transformed) action.
    */
-  dispatchChanges: (action: UseDashboardModelAction) => Promise<void> | void;
+  dispatchChanges: (action: UseDashboardModelAction) => Promise<UseDashboardModelInternalAction>;
 }
+
+/**
+ * Transforms a WIDGETS_DELETE action to UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE
+ * when widgetsPanel exists in the dashboard.
+ *
+ * @param action - The action to potentially transform
+ * @param dashboard - The current dashboard model
+ * @returns The transformed action or the original action
+ */
+const transformWidgetsDeleteAction = (
+  action: UseDashboardModelInternalAction,
+  dashboard: DashboardModel | null,
+): UseDashboardModelInternalAction => {
+  if (
+    dashboard &&
+    action.type === UseDashboardModelActionType.WIDGETS_DELETE &&
+    dashboard.layoutOptions.widgetsPanel
+  ) {
+    const updatedWidgetsPanel = deleteWidgetsFromLayout(
+      dashboard.layoutOptions.widgetsPanel,
+      action.payload,
+    );
+    return {
+      type: UseDashboardModelActionTypeInternal.UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE,
+      payload: {
+        widgetsPanel: updatedWidgetsPanel,
+        widgets: action.payload,
+      },
+    };
+  }
+  return action;
+};
+
+/**
+ * Transforms a WIDGETS_PANEL_LAYOUT_UPDATE action to UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE
+ * when widgets need to be deleted as a result of the layout update.
+ *
+ * @param action - The action to potentially transform
+ * @param dashboard - The current dashboard model
+ * @returns The transformed action or the original action
+ */
+const transformLayoutUpdateAction = (
+  action: UseDashboardModelInternalAction,
+  dashboard: DashboardModel | null,
+): UseDashboardModelInternalAction => {
+  if (
+    dashboard &&
+    action.type === UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE &&
+    dashboard.layoutOptions.widgetsPanel
+  ) {
+    const widgetsToDelete = findDeletedWidgetsFromLayout(
+      dashboard.layoutOptions.widgetsPanel,
+      action.payload,
+    );
+    if (widgetsToDelete.length > 0) {
+      return {
+        type: UseDashboardModelActionTypeInternal.UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE,
+        payload: {
+          widgetsPanel: action.payload,
+          widgets: widgetsToDelete,
+        },
+      };
+    }
+  }
+  return action;
+};
+
+/**
+ * Applies action transformations in a pipeline.
+ *
+ * @param action - The initial action
+ * @param dashboard - The current dashboard model
+ * @returns The final transformed action
+ */
+const transformAction = (
+  action: UseDashboardModelInternalAction,
+  dashboard: DashboardModel | null,
+): UseDashboardModelInternalAction => {
+  return transformLayoutUpdateAction(transformWidgetsDeleteAction(action, dashboard), dashboard);
+};
 
 /**
  * Hook that provides persistence capabilities for an already loaded dashboard model.
@@ -77,59 +157,26 @@ export function useDashboardPersistence({
   const [localDashboard, dispatch] = useReducer(dashboardReducer, dashboard);
 
   const persistentDispatch = useCallback(
-    async (action: UseDashboardModelInternalAction): Promise<void> => {
+    async (action: UseDashboardModelInternalAction): Promise<UseDashboardModelInternalAction> => {
       if (!apiIsReady || !api) {
         throw new RestApiNotReadyError();
       }
 
-      if (
-        localDashboard &&
-        action.type === UseDashboardModelActionType.WIDGETS_DELETE &&
-        localDashboard.layoutOptions.widgetsPanel
-      ) {
-        const updatedWidgetsPanel = deleteWidgetsFromLayout(
-          localDashboard.layoutOptions.widgetsPanel,
-          action.payload,
-        );
-        action = {
-          type: UseDashboardModelActionTypeInternal.UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE,
-          payload: {
-            widgetsPanel: updatedWidgetsPanel,
-            widgets: action.payload,
-          },
-        };
-      }
-      if (
-        localDashboard &&
-        action.type === UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE &&
-        localDashboard.layoutOptions.widgetsPanel
-      ) {
-        const widgetsToDelete = findDeletedWidgetsFromLayout(
-          localDashboard.layoutOptions.widgetsPanel,
-          action.payload,
-        );
-        if (widgetsToDelete.length > 0) {
-          action = {
-            type: UseDashboardModelActionTypeInternal.UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE,
-            payload: {
-              widgetsPanel: action.payload,
-              widgets: widgetsToDelete,
-            },
-          };
-        }
-      }
+      // Transform the action to handle layout updates and widget deletions
+      const transformedAction = transformAction(action, localDashboard);
 
       if (shouldEnablePersist) {
         const processedAction = await persistDashboardModelMiddleware(
           localDashboard?.oid,
-          action,
+          transformedAction,
           api,
           sharedMode,
         );
         dispatch(processedAction);
-      } else {
-        dispatch(action);
+        return processedAction;
       }
+      dispatch(transformedAction);
+      return transformedAction;
     },
     [shouldEnablePersist, localDashboard, api, apiIsReady, dispatch, sharedMode],
   );

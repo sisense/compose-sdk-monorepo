@@ -175,4 +175,16 @@ describe('FilterTile', () => {
     expect(tile).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
+
+  it('renders filter tile with menu when lock action is enabled in config', async () => {
+    const mockFilter = new RelativeDateFilter(DM.Commerce.Date.Years, 0, 1);
+    const config = { actions: { lockFilter: { enabled: true } } };
+    const { container } = render(
+      <MockedSisenseContextProvider>
+        <FilterTile filter={mockFilter} onChange={mockOnChange} config={config} />
+      </MockedSisenseContextProvider>,
+    );
+    const menuButton = await findByLabelText(container, 'Filter tile menu');
+    expect(menuButton).toBeInTheDocument();
+  });
 });

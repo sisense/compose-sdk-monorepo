@@ -4,10 +4,7 @@ title: WidgetsOptions
 
 # Type alias WidgetsOptions
 
-> **WidgetsOptions**: `Record`\< [`WidgetId`](type-alias.WidgetId.md), \{
-  `filtersOptions`: [`CommonFiltersOptions`](../../sdk-ui/type-aliases/type-alias.CommonFiltersOptions.md);
-  `jtdConfig`: [`JumpToDashboardConfig`](../interfaces/interface.JumpToDashboardConfig.md) \| [`JumpToDashboardConfigForPivot`](../interfaces/interface.JumpToDashboardConfigForPivot.md);
- } \>
+> **WidgetsOptions**: `Record`\< [`WidgetId`](type-alias.WidgetId.md), [`SpecificWidgetOptions`](../../sdk-ui/type-aliases/type-alias.SpecificWidgetOptions.md) \>
 
 Options for widgets in a dashboard
 

@@ -221,4 +221,31 @@ describe('DateRangeFilterTile', () => {
     fireEvent.click(editButton);
     expect(onEditMock).toHaveBeenCalled();
   });
+
+  it('shows menu in tile when lock action is enabled in config', async () => {
+    server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlDates)));
+
+    const dateRangeFilter = filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01-01');
+    const config = { actions: { lockFilter: { enabled: true } } };
+
+    render(
+      <SisenseContextProvider
+        url={mockUrl}
+        token={mockToken}
+        appConfig={{ trackingConfig: { enabled: false } }}
+      >
+        <DateRangeFilterTile
+          title="Date Range"
+          attribute={DM.Commerce.Date.Years}
+          dataSource={DM.DataSource}
+          filter={dateRangeFilter}
+          onChange={() => {}}
+          tiled
+          config={config}
+        />
+      </SisenseContextProvider>,
+    );
+
+    expect(await screen.findByLabelText('Filter tile menu')).toBeInTheDocument();
+  });
 });

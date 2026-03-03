@@ -318,6 +318,13 @@ const translation: TranslationDictionary = {
       unknownResponse: 'Получен неизвестный responseType, необработанный ответ=',
       invalidInput: 'Недопустимый ввод',
       noAvailableDataTopics: 'Ни одна из предоставленных моделей данных или перспектив недоступна',
+      failedToFetchCreditBalance: 'Не удалось получить баланс кредитов',
+    },
+    quota: {
+      exceededErrorTitle: 'Ответы ИИ в настоящее время недоступны.',
+      exceededErrorDescription:
+        'Вы достигли месячной квоты ИИ вашей компании. Квота будет автоматически обновлена в следующем месячном цикле использования.',
+      warningDescription: 'Вы использовали {{usagePercentage}}% месячной квоты ИИ вашей компании.',
     },
   },
   attribute: {
@@ -437,6 +444,14 @@ const translation: TranslationDictionary = {
       nextMonth: 'Следующий месяц',
       previousGroup: 'Предыдущая группа',
       nextGroup: 'Следующая группа',
+    },
+  },
+  filterTile: {
+    menu: {
+      lock: 'Заблокировать',
+      unlock: 'Разблокировать',
+      lockGroup: 'Заблокировать группу',
+      unlockGroup: 'Разблокировать группу',
     },
   },
 };

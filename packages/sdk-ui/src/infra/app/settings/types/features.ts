@@ -128,6 +128,31 @@ type DimensionalModelingFeature = {
 
 type CloudCDNFeature = Feature<'cloudCDN'>;
 type OnboardingFeature = Feature<'onboarding'>;
+type AiAssistantFeature = Feature<
+  'aiAssistant',
+  {
+    unified?: boolean;
+    nlqV3Enabled?: boolean;
+    isNlqV3Enabled?: boolean;
+    naturalResponseEnabled?: boolean;
+    sharedFormulasEnabled?: boolean;
+    aiAccessControl?: string;
+    quotaNotification?: boolean;
+    featureModelType?: string;
+  }
+>;
+
+type AiStudioFeature = Feature<
+  'aiStudio',
+  {
+    realtime?: boolean;
+    usageDisplay?: boolean;
+    isRealtimeEnabled?: boolean;
+    isUsageDisplayEnabled?: boolean;
+  }
+>;
+
+type NewNavigationBetaFeature = Feature<'newNavigationBeta'>;
 
 export type Features = (
   | AlertingFeature
@@ -186,6 +211,9 @@ export type Features = (
   | DimensionalModelingFeature
   | CloudCDNFeature
   | OnboardingFeature
+  | AiAssistantFeature
+  | AiStudioFeature
+  | NewNavigationBetaFeature
 )[];
 
 export type FeatureByKey<K extends string> = Extract<Features[number], { key: K }>;

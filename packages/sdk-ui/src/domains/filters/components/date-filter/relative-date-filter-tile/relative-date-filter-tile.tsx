@@ -3,12 +3,14 @@ import dayjs from 'dayjs';
 import isToday from 'dayjs/plugin/isToday';
 
 import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-filter.js';
+import { useFilterTileMenuItems } from '@/domains/filters/shared/use-filter-tile-menu-items/use-filter-tile-menu-items.js';
 import { cloneFilterAndToggleDisabled } from '@/shared/utils/filters.js';
 
 import { asSisenseComponent } from '../../../../../infra/decorators/component-decorators/as-sisense-component.js';
 import { isVertical } from '../../common/filter-utils.js';
 import { FilterVariant } from '../../common/index.js';
 import { FilterTileContainer, FilterTileDesignOptions } from '../../filter-tile-container.js';
+import type { FilterTileConfig } from '../../filter-tile/types.js';
 import { RelativeDateFilterDisplay } from './relative-date-filter-display.js';
 import { RelativeDateFilter } from './relative-date-filter.js';
 
@@ -47,6 +49,12 @@ export interface RelativeDateFilterTileProps {
    * @internal
    */
   tileDesignOptions?: FilterTileDesignOptions;
+  /**
+   * Config for the filter tile
+   *
+   * @internal
+   */
+  config?: FilterTileConfig;
 
   /**
    * Render header title
@@ -77,6 +85,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
     onEdit,
     limit,
     tileDesignOptions,
+    config,
     renderHeaderTitle,
   } = props;
 
@@ -85,6 +94,8 @@ export const RelativeDateFilterTile = asSisenseComponent({
     updateFilterFromProps,
   );
   const disabled = filter.config.disabled;
+
+  const menuItems = useFilterTileMenuItems(filter, config, updateFilter);
 
   return (
     <FilterTileContainer
@@ -111,6 +122,7 @@ export const RelativeDateFilterTile = asSisenseComponent({
       arrangement={arrangement}
       design={tileDesignOptions}
       locked={filter.config.locked}
+      menuItems={menuItems}
       onDelete={onDelete}
       onEdit={onEdit}
     />

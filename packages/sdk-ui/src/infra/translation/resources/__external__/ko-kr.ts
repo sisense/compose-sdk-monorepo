@@ -313,6 +313,13 @@ const translation: TranslationDictionary = {
       unknownResponse: '알 수 없는 responseType을 받았습니다. 원시 응답=',
       invalidInput: '잘못된 입력',
       noAvailableDataTopics: '제공된 데이터 모델 또는 관점 중 사용 가능한 것이 없습니다',
+      failedToFetchCreditBalance: '크레딧 잔액을 가져오지 못했습니다',
+    },
+    quota: {
+      exceededErrorTitle: 'AI 응답을 현재 사용할 수 없습니다.',
+      exceededErrorDescription:
+        '회사 월간 AI 할당량에 도달했습니다. 할당량은 다음 월간 사용 주기에 자동으로 갱신됩니다.',
+      warningDescription: '회사 월간 AI 할당량의 {{usagePercentage}}%를 사용했습니다.',
     },
   },
   attribute: {
@@ -432,6 +439,14 @@ const translation: TranslationDictionary = {
       nextMonth: '다음 월',
       previousGroup: '이전 그룹',
       nextGroup: '다음 그룹',
+    },
+  },
+  filterTile: {
+    menu: {
+      lock: '잠금',
+      unlock: '잠금 해제',
+      lockGroup: '그룹 잠금',
+      unlockGroup: '그룹 잠금 해제',
     },
   },
 };

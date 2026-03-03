@@ -319,6 +319,14 @@ const translation: TranslationDictionary = {
       unknownResponse: 'Ricevuto responseType sconosciuto, risposta non elaborata=',
       invalidInput: 'Input non valido',
       noAvailableDataTopics: 'Nessuno dei modelli di dati o prospettive forniti è disponibile',
+      failedToFetchCreditBalance: 'Impossibile recuperare il saldo dei crediti',
+    },
+    quota: {
+      exceededErrorTitle: 'Le risposte IA non sono attualmente disponibili.',
+      exceededErrorDescription:
+        'Hai raggiunto la quota mensile di IA della tua azienda. La quota verrà rinnovata automaticamente al prossimo ciclo di utilizzo mensile.',
+      warningDescription:
+        'Hai utilizzato il {{usagePercentage}}% della quota mensile di IA della tua azienda.',
     },
   },
   attribute: {
@@ -438,6 +446,14 @@ const translation: TranslationDictionary = {
       nextMonth: 'Mese successivo',
       previousGroup: 'Gruppo precedente',
       nextGroup: 'Gruppo successivo',
+    },
+  },
+  filterTile: {
+    menu: {
+      lock: 'Blocca',
+      unlock: 'Sblocca',
+      lockGroup: 'Blocca gruppo',
+      unlockGroup: 'Sblocca gruppo',
     },
   },
 };

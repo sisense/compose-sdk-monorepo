@@ -76,6 +76,7 @@ export interface GetNlgInsightsFromWidgetOptions {
   verbosity?: 'Low' | 'High';
   /** When false, legacy narration endpoint only; when true or undefined, try unified then fallback. From props.isUnifiedNarrationEnabled. */
   isUnifiedNarrationEnabled?: boolean;
+  isSisenseAiEnabled?: boolean;
 }
 
 /**
@@ -128,6 +129,7 @@ export async function getNlgInsightsFromWidget(
   const request = prepareGetNlgInsightsPayload(params);
   const response = await getNarrations(httpClient, request, {
     isUnifiedNarrationEnabled: options?.isUnifiedNarrationEnabled,
+    isSisenseAiEnabled: options?.isSisenseAiEnabled,
   });
 
   if (!response?.data?.answer) {

@@ -29,10 +29,10 @@ export interface FormulaValidationOptions {
 
 /**
  * Regular expression pattern for matching bracket references in formulas.
- * Matches [identifier] where identifier can contain letters, numbers, underscores, dots, dashes
- * and must start with a letter or underscore.
+ * Matches [identifier] where identifier can contain letters, numbers, underscores, dots, dashes.
+ * Allows identifiers starting with numbers (e.g. [124E5-B6F]) for Fusion/generated IDs.
  */
-const BRACKET_REFERENCE_PATTERN = /\[([a-zA-Z_][a-zA-Z0-9_.-]*)\]/g;
+const BRACKET_REFERENCE_PATTERN = /\[(\w[\w.-]*)\]/g;
 
 /**
  * Sisense formula function names that create aggregations (per functions.md).
@@ -107,6 +107,12 @@ function formatNonAggregativePhrase(names: string[]): string {
     ? `${names[0]} is not an aggregative function. `
     : `${names.join(', ')} are not aggregative functions. `;
 }
+
+/** Normalizes key to bracket format, consistent with measureFactory.customFormula. */
+const toBracketKey = (k: string) => (k.startsWith('[') ? k : `[${k}]`);
+
+/** Strips brackets for display to avoid [[key]] in error messages. */
+const toDisplayKey = (k: string) => (k.startsWith('[') && k.endsWith(']') ? k.slice(1, -1) : k);
 
 /**
  * Validates that all bracket references in a custom formula exist in the provided context
@@ -206,19 +212,23 @@ export function validateFormulaReferences(
   }
 
   // Missing references
-  const missingReferences = result.references.filter((ref) => !contextKeys.includes(ref));
+  const canonicalContextKeys = new Set(contextKeys.map(toBracketKey));
+  const missingReferences = result.references.filter(
+    (ref) => !canonicalContextKeys.has(toBracketKey(ref)),
+  );
   if (missingReferences.length > 0) {
     result.isValid = false;
+    const availableKeysDisplay = contextKeys.map((k) => `[${toDisplayKey(k)}]`).join(', ');
     if (missingReferences.length === 1) {
       result.errors.push(
         `${errorPrefix}args[1]: Reference [${missingReferences[0]}] not found in context. ` +
-          `Available keys: ${contextKeys.join(', ')}`,
+          `Available keys: ${availableKeysDisplay}`,
       );
     } else {
       result.errors.push(
         `${errorPrefix}args[1]: References [${missingReferences.join(
           '], [',
-        )}] not found in context. ` + `Available keys: ${contextKeys.join(', ')}`,
+        )}] not found in context. ` + `Available keys: ${availableKeysDisplay}`,
       );
     }
   }
@@ -226,9 +236,10 @@ export function validateFormulaReferences(
   // Aggregate requirement: when there's no aggregative call, refs in context must point to measures
   const hasAggregativeFunctionCall = AGGREGATIVE_FUNCTION_CALL_PATTERN.test(formula);
   if (!hasAggregativeFunctionCall) {
-    const refsPointingToRawAttributes = result.references.filter(
-      (ref) => ref in context && !isContextValueMeasure(context[ref]),
-    );
+    const refsPointingToRawAttributes = result.references.filter((ref) => {
+      const value = context[toBracketKey(ref)] ?? context[ref];
+      return value !== undefined && !isContextValueMeasure(value);
+    });
     if (refsPointingToRawAttributes.length > 0) {
       result.errors.push(
         `${errorPrefix}args[1]: ${formatNonAggregativePhrase(
@@ -243,12 +254,12 @@ export function validateFormulaReferences(
 
   // Unused context keys (warnings or errors)
   if ((warnUnusedContext || errorOnUnusedContext) && contextKeys.length > 0) {
-    const unusedKeys = contextKeys.filter((key) => !result.references.includes(key));
+    const canonicalRefs = new Set(result.references.map(toBracketKey));
+    const unusedKeys = contextKeys.filter((key) => !canonicalRefs.has(toBracketKey(key)));
     result.unusedContextKeys = unusedKeys;
     if (unusedKeys.length > 0) {
-      const message = `${errorPrefix}args[2]: Context keys [${unusedKeys.join(
-        ', ',
-      )}] are defined but not used in formula`;
+      const unusedKeysDisplay = unusedKeys.map((k) => `[${toDisplayKey(k)}]`).join(', ');
+      const message = `${errorPrefix}args[2]: Context keys ${unusedKeysDisplay} are defined but not used in formula`;
       if (errorOnUnusedContext) {
         result.errors.push(message);
         result.isValid = false;

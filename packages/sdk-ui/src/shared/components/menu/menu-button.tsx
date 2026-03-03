@@ -10,20 +10,28 @@ type MenuButtonProps = {
   color?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   ariaLabel?: string;
+  size?: number;
 };
 
-const StyledIconButton = styled(IconButton)`
-  min-width: 28px;
-  min-height: 28px;
+type SizableIcon = {
+  iconSize?: number;
+};
+
+const DEFAULT_SIZE = 28;
+
+const StyledIconButton = styled(IconButton)<SizableIcon>`
+  min-width: ${({ iconSize }) => iconSize ?? DEFAULT_SIZE}px;
+  min-height: ${({ iconSize }) => iconSize ?? DEFAULT_SIZE}px;
 `;
 
-export const MenuButton = ({ color, onClick, ariaLabel, ...restProps }: MenuButtonProps) => {
+export const MenuButton = ({ color, onClick, ariaLabel, size, ...restProps }: MenuButtonProps) => {
   const getHoverColor = useCallback(() => {
     return getSlightlyDifferentColor(color ?? '', undefined, 0.1);
   }, [color]);
 
   return (
     <StyledIconButton
+      iconSize={size}
       sx={{
         padding: 0,
         '&:hover': {

@@ -1,0 +1,121 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`QuotaNotification > shows error banner when credit is exceeded 1`] = `
+<div>
+  <div
+    class="_container_170496 "
+  >
+    <div
+      class="_bannerWrapper_170496"
+      data-variant="error"
+    >
+      <div
+        class="_alert_af20a0 _error_af20a0 _hasIcon_af20a0 "
+        data-dark-mode="false"
+        role="alert"
+      >
+        <div
+          class="_icon_af20a0"
+        >
+          <svg
+            fill="none"
+            height="16"
+            viewBox="15 20 18 18"
+            width="16"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M23.5 20.5C28.1944 20.5 32 24.3056 32 29C32 33.6944 28.1944 37.5 23.5 37.5C18.8056 37.5 15 33.6944 15 29C15 24.3056 18.8056 20.5 23.5 20.5ZM26.707 25.793C26.3165 25.4024 25.6835 25.4024 25.293 25.793L23.5 27.5859L21.707 25.793C21.3165 25.4024 20.6835 25.4024 20.293 25.793C19.9024 26.1835 19.9024 26.8165 20.293 27.207L22.0859 29L20.293 30.793C19.9024 31.1835 19.9024 31.8165 20.293 32.207C20.6835 32.5976 21.3165 32.5976 21.707 32.207L23.5 30.4141L25.293 32.207C25.6835 32.5976 26.3165 32.5976 26.707 32.207C27.0976 31.8165 27.0976 31.1835 26.707 30.793L24.9141 29L26.707 27.207C27.0976 26.8165 27.0976 26.1835 26.707 25.793Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <div
+          class="_content_af20a0"
+        >
+          <div
+            class="_title_af20a0"
+          >
+            AI responses are currently unavailable.
+          </div>
+          <div
+            class="_description_af20a0"
+          >
+            You've reached your company monthly AI quota. The quota will automatically renew on your next monthly usage cycle.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`QuotaNotification > shows warning banner when credit usage >= 85% 1`] = `
+<div>
+  <div
+    class="_container_170496 _containerClickable_170496 "
+  >
+    <div
+      class="_bannerWrapper_170496"
+      data-variant="warning"
+    >
+      <button
+        aria-label="Dismiss alert"
+        class="_alert_af20a0 _warning_af20a0 _hasIcon_af20a0 "
+        data-dark-mode="false"
+        data-dismiss-on-click="true"
+        type="button"
+      >
+        <div
+          class="_icon_af20a0"
+        >
+          <svg
+            fill="none"
+            height="16"
+            viewBox="15 15 18 18"
+            width="16"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M23.5 15C28.1944 15 32 18.8056 32 23.5C32 28.1944 28.1944 32 23.5 32C18.8056 32 15 28.1944 15 23.5C15 18.8056 18.8056 15 23.5 15ZM23.5 27C22.9477 27 22.5 27.4477 22.5 28C22.5 28.5523 22.9477 29 23.5 29C24.0523 29 24.5 28.5523 24.5 28C24.5 27.4477 24.0523 27 23.5 27ZM23.5049 18C22.5019 18.0299 22 18.6804 22 19.9502C22 20.6869 22.1705 21.5976 22.5107 22.6816C22.6419 23.0885 22.7476 23.4147 22.8281 23.6602C22.9087 23.9057 22.9671 24.0742 23.0029 24.1641C23.1998 24.6966 23.379 24.9748 23.54 24.999C23.6893 25.017 23.8541 24.7503 24.0332 24.1992C24.1167 23.9418 24.194 23.687 24.2656 23.4355C24.3372 23.1842 24.4117 22.9329 24.4893 22.6816C24.8296 21.5616 25 20.6266 25 19.8779C25 18.6084 24.5016 17.9822 23.5049 18Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <div
+          class="_content_af20a0"
+          role="alert"
+        >
+          <div
+            class="_description_af20a0"
+          >
+            You've used 90% of your company monthly AI quota.
+          </div>
+        </div>
+        <span
+          aria-hidden="true"
+          class="_dismissButton_af20a0"
+        >
+          <svg
+            fill="none"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M11.4309 12L6.28445 6.85355C6.08918 6.65829 6.08918 6.34171 6.28445 6.14645C6.47971 5.95118 6.79629 5.95118 6.99155 6.14645L12.138 11.2929L17.2844 6.14645C17.4797 5.95118 17.7963 5.95118 17.9916 6.14645C18.1868 6.34171 18.1868 6.65829 17.9916 6.85355L12.8451 12L17.9916 17.1464C18.1868 17.3417 18.1868 17.6583 17.9916 17.8536C17.7963 18.0488 17.4797 18.0488 17.2844 17.8536L12.138 12.7071L6.99155 17.8536C6.79629 18.0488 6.47971 18.0488 6.28445 17.8536C6.08918 17.6583 6.08918 17.3417 6.28445 17.1464L11.4309 12Z"
+              fill="#262E3D"
+              fill-opacity="0.67"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;

@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 import { normalizeUrl } from '@sisense/sdk-common';
 
-import { addQueryParamsToUrl, validateUrl } from './helpers.js';
+import { addQueryParamsToUrl, appendHeaders, validateUrl } from './helpers.js';
 import { errorInterceptor, getResponseInterceptor } from './interceptors.js';
 import { Authenticator } from './interfaces.js';
 import { isSsoAuthenticator } from './sso-authenticator.js';
@@ -19,10 +19,18 @@ export class HttpClient {
 
   readonly env: string;
 
-  constructor(url: string, auth: Authenticator, env: string) {
+  readonly customHeaders: Record<string, string>;
+
+  constructor(
+    url: string,
+    auth: Authenticator,
+    env: string,
+    customHeaders: Record<string, string> = {},
+  ) {
     this.url = normalizeUrl(url);
     this.auth = auth;
     this.env = env;
+    this.customHeaders = customHeaders;
   }
 
   login() {
@@ -46,6 +54,7 @@ export class HttpClient {
     }
 
     this.auth.applyHeaders(config.headers);
+    appendHeaders(config.headers, this.customHeaders);
 
     const fetchUrl = requestConfig?.skipTrackingParam
       ? url

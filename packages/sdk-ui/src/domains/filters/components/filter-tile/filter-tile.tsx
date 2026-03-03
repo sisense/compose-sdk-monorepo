@@ -15,11 +15,12 @@ import {
 
 import { UnsupportedFilterTile } from '@/domains/filters/components/unsupported-filter-tile';
 
-import { CascadingFilterTile } from './cascading-filter-tile';
-import { CriteriaFilterTile } from './criteria-filter-tile';
-import { CustomFilterTile } from './custom-filter-tile';
-import { DateRangeFilterTile, RelativeDateFilterTile } from './date-filter';
-import { MemberFilterTile } from './member-filter-tile';
+import { CascadingFilterTile } from '../cascading-filter-tile/index.js';
+import { CriteriaFilterTile } from '../criteria-filter-tile/index.js';
+import { CustomFilterTile } from '../custom-filter-tile.js';
+import { DateRangeFilterTile, RelativeDateFilterTile } from '../date-filter/index.js';
+import { MemberFilterTile } from '../member-filter-tile/index.js';
+import { FilterTileConfig } from './types.js';
 
 /**
  * Props of the {@link FilterTile} component
@@ -40,6 +41,12 @@ export interface FilterTileProps {
   /** Default data source used for filter tiles */
   defaultDataSource?: DataSource;
   /**
+   * Configurations for the filter tile
+   *
+   * @internal
+   */
+  config?: FilterTileConfig;
+  /**
    * Render header title
    *
    * @internal
@@ -59,6 +66,7 @@ export const FilterTile: React.FC<FilterTileProps> = ({
   onDelete,
   onEdit,
   defaultDataSource,
+  config,
   renderHeaderTitle,
 }: FilterTileProps) => {
   const attribute = filter.attribute;
@@ -70,6 +78,7 @@ export const FilterTile: React.FC<FilterTileProps> = ({
     onUpdate: onChange,
     onDelete,
     onEdit,
+    config,
     renderHeaderTitle,
     ...(defaultDataSource ? { dataSource: defaultDataSource } : null),
   };
@@ -113,9 +122,11 @@ export const FilterTile: React.FC<FilterTileProps> = ({
   return (
     <UnsupportedFilterTile
       filter={filter}
+      config={config}
       renderHeaderTitle={renderHeaderTitle}
       design={{ header: { isCollapsible: false } }}
       onDelete={onDelete}
+      onChange={onChange}
     />
   );
 };

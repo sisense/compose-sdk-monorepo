@@ -4,6 +4,7 @@ import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
 import {
   DashboardStyleOptions,
+  SpecificWidgetOptions,
   WidgetsOptions,
   WidgetsPanelLayout,
 } from '@/domains/dashboarding/dashboard-model';
@@ -13,6 +14,7 @@ import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 export type {
   DashboardStyleOptions,
+  SpecificWidgetOptions,
   WidgetsPanelColumnLayout,
   WidgetsPanelLayout,
   WidgetsPanelCell,
@@ -253,6 +255,23 @@ export interface EditModeConfig {
    * @default true
    */
   showDragHandleIcon?: boolean;
+  /**
+   * Configuration for the widget duplication feature.
+   *
+   * @internal
+   */
+  duplicateWidget?: {
+    /**
+     * When `true`, adds a "Duplicate widget" menu item to each widget header.
+     * On click, clones the widget and updates the layout.
+     * Only has effect when edit mode is also enabled (`editMode.enabled`) and batch mode is disabled (`editMode.applyChangesAsBatch.enabled`).
+     * If batch mode is enabled, "Duplicate widget" menu item won't be applied because it would not be possible to undo/redo the duplication.
+     *
+     * If not specified, the default value is `false`.
+     * @internal
+     */
+    enabled: boolean;
+  };
 }
 
 /**
@@ -319,6 +338,31 @@ export interface DashboardLayoutOptions {
 }
 
 /**
+ * Interface for persisting dashboard changes from the composition layer (e.g. add widget).
+ *
+ * @internal
+ */
+export type DashboardPersistenceManager = {
+  /**
+   * Adds a widget to the dashboard.
+   *
+   * @param widget - The widget to add.
+   * @param widgetsPanelLayout - The layout to add the widget to.
+   * @param widgetOptions - The options for the widget.
+   * @returns The persisted widget (possibly modified by the server, e.g. new id), the new widgets panel layout and the widget options.
+   */
+  addWidget: (
+    widget: WidgetProps,
+    widgetsPanelLayout: WidgetsPanelLayout,
+    widgetOptions?: SpecificWidgetOptions,
+  ) => Promise<{
+    widget: WidgetProps;
+    widgetsPanelLayout: WidgetsPanelLayout;
+    widgetOptions?: SpecificWidgetOptions;
+  }>;
+};
+
+/**
  * Props for the Dashboard component
  */
 export interface DashboardProps {
@@ -357,6 +401,10 @@ export interface DashboardProps {
    * @param event The event that occurred
    */
   onChange?: (event: DashboardChangeEvent) => void;
+  /**
+   * @internal
+   */
+  persistence?: DashboardPersistenceManager;
 }
 
 /**

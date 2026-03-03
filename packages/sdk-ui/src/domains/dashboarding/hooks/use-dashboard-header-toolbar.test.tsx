@@ -114,7 +114,7 @@ describe('useDashboardHeaderToolbar', () => {
 
     expect(mockOpenMenu).toHaveBeenCalledTimes(1);
     const callArgs = mockOpenMenu.mock.calls[0][0];
-    expect(callArgs.position).toEqual({ left: 20, top: 30 });
+    expect(callArgs.position).toEqual({ left: 30, top: 30 });
     expect(callArgs.itemSections).toEqual(mockMenuItemSections);
     expect(callArgs.alignment).toEqual({ horizontal: 'right' });
     expect(callArgs.itemSections[0].items?.length).toBe(2);

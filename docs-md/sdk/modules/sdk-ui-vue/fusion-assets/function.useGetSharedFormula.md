@@ -40,16 +40,23 @@ const paramsByName = ref({
   dataSource: 'your_data_source_id',
 });
 
-const { data: formula, isLoading, isError, error } = useGetSharedFormula(paramsByOid);
+const { formula, isLoading, isError, isSuccess, error } = useGetSharedFormula(paramsByOid);
 // Or use `paramsByName` instead of `paramsByOid` depending on the fetching method
 </script>
+
+<template>
+  <div v-if="isLoading">Loading...</div>
+  <div v-else-if="isError">Error: {{ error?.message }}</div>
+  <div v-else-if="formula">{{ formula }}</div>
+</template>
 ```
 
 The composable returns an object with reactive properties to manage the state of the shared formula fetching process:
-- `data`: The fetched shared formula, which is `undefined` until the operation completes successfully. It can be either a `CalculatedMeasure` or `DimensionalCalculatedMeasure` based on the fetch result.
+- `formula`: The fetched shared formula, which is `undefined` until the operation completes successfully, or `null` if not found. It can be either a `CalculatedMeasure` or `DimensionalCalculatedMeasure` based on the fetch result.
 - `isLoading`: Indicates whether the fetch operation is currently in progress.
 - `isError`: Indicates whether an error occurred during the fetch operation.
 - `isSuccess`: Indicates whether the fetch operation completed successfully without any errors.
 - `error`: Contains the error object if an error occurred during the fetch.
+- `status`: The status of the fetch operation ('loading', 'success', or 'error').
 
 This composable provides a streamlined, reactive approach to fetching shared formulas from Sisense, facilitating their integration into Vue applications for enhanced data analytics capabilities.

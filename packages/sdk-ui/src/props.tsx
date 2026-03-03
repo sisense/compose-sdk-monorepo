@@ -36,7 +36,7 @@ import { HighchartsOptions } from './domains/visualizations/core/chart-options-p
 import type { ChartWidgetProps } from './domains/widgets/components/chart-widget/types';
 import { FiltersMergeStrategy } from './domains/widgets/components/widget-by-id/types';
 import { AppConfig } from './infra/app/client-application';
-import { HookEnableParam } from './shared/hooks/types';
+import type { Plugin } from './infra/contexts/plugin-provider/types';
 import {
   AreamapDataPoint,
   AreamapStyleOptions,
@@ -231,6 +231,19 @@ export interface SisenseContextProviderProps {
    * @internal
    */
   disableFusionPalette?: boolean;
+
+  /**
+   * Array of plugins to register.
+   *
+   * Plugins should satisfy the following conditions:
+   * - Name uniqueness (duplicates are skipped with a warning)
+   * - Version compatibility with the current SDK version
+   *
+   * @category Sisense App
+   *
+   * @internal
+   */
+  plugins?: Plugin[];
 }
 
 /**
@@ -1656,26 +1669,6 @@ export interface DrilldownWidgetProps {
    * @category Widget
    */
   children: (customDrilldownResult: CustomDrilldownResult) => ReactNode;
-}
-
-/**
- * Params of the {@link useGetSharedFormula} hook
- *
- * Can consist either of an oid or a name/dataSource pair
- */
-export interface UseGetSharedFormulaParams extends HookEnableParam {
-  /**
-   * Formula identifier
-   */
-  oid?: string;
-  /**
-   * Formula name
-   */
-  name?: string;
-  /**
-   * Data source - e.g. `Sample ECommerce`
-   */
-  dataSource?: DataSource;
 }
 
 /**

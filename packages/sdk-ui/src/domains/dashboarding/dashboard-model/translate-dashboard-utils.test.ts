@@ -413,6 +413,59 @@ describe('translate-dashboard-utils', () => {
       });
     });
 
+    it('should default widthPercentage to 100 when Fusion omits subcell width (single-widget layout)', () => {
+      const dashboardDtoLayout = {
+        columns: [
+          {
+            width: 100,
+            cells: [
+              {
+                subcells: [
+                  {
+                    elements: [
+                      {
+                        minHeight: 64,
+                        maxHeight: 1028,
+                        height: 192,
+                        minWidth: 48,
+                        maxWidth: 1028,
+                        widgetid: '69a19b29777b09581e66da7c',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const result = translateLayout(dashboardDtoLayout);
+
+      expect(result).toEqual({
+        columns: [
+          {
+            widthPercentage: 100,
+            rows: [
+              {
+                cells: [
+                  {
+                    widthPercentage: 100,
+                    height: 192,
+                    widgetId: '69a19b29777b09581e66da7c',
+                    minWidth: 48,
+                    maxWidth: 1028,
+                    minHeight: 64,
+                    maxHeight: 1028,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+    });
+
     it('should correctly translate layout with mixed present and missing min/max properties', () => {
       const dashboardDtoLayout = {
         columns: [

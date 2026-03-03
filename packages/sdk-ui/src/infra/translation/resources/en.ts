@@ -308,6 +308,13 @@ export const translation = {
       unknownResponse: 'Received unknown responseType, raw response=',
       invalidInput: 'Invalid input',
       noAvailableDataTopics: 'None of the provided data models or perspectives are available',
+      failedToFetchCreditBalance: 'Failed to fetch credit balance',
+    },
+    quota: {
+      exceededErrorTitle: 'AI responses are currently unavailable.',
+      exceededErrorDescription:
+        "You've reached your company monthly AI quota. The quota will automatically renew on your next monthly usage cycle.",
+      warningDescription: "You've used {{usagePercentage}}% of your company monthly AI quota.",
     },
   },
   attribute: {
@@ -427,6 +434,14 @@ export const translation = {
       nextMonth: 'Next Month',
       previousGroup: 'Previous Group',
       nextGroup: 'Next Group',
+    },
+  },
+  filterTile: {
+    menu: {
+      lock: 'Lock',
+      unlock: 'Unlock',
+      lockGroup: 'Lock Group',
+      unlockGroup: 'Unlock Group',
     },
   },
 };

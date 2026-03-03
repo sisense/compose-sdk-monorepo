@@ -118,4 +118,18 @@ describe('CascadingFilterTile', () => {
       expect(filter.config.disabled).toBe(true);
     });
   });
+
+  it('shows menu in tile when lock action is enabled in config', async () => {
+    const config = { actions: { lockFilter: { enabled: true } } };
+    render(
+      <SisenseContextProvider {...contextProviderProps}>
+        <CascadingFilterTile filter={cascadingFilter} onChange={() => {}} config={config} />
+      </SisenseContextProvider>,
+    );
+
+    await setTimeout(200);
+
+    const menuButtons = await screen.findAllByLabelText('Filter tile menu');
+    expect(menuButtons.length).toBeGreaterThanOrEqual(1);
+  });
 });

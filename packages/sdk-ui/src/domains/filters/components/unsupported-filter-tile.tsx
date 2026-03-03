@@ -7,6 +7,8 @@ import {
   FilterTileContainer,
   FilterTileDesignOptions,
 } from '@/domains/filters/components/filter-tile-container';
+import type { FilterTileConfig } from '@/domains/filters/components/filter-tile/types';
+import { useFilterTileMenuItems } from '@/domains/filters/shared/use-filter-tile-menu-items/use-filter-tile-menu-items';
 
 export type UnsupportedFilterTileProps = {
   filter: Filter;
@@ -15,6 +17,14 @@ export type UnsupportedFilterTileProps = {
   onDelete?: () => void;
   /** Filter edit callback */
   onEdit?: () => void;
+  /** Callback to handle filter change (used for lock toggle) */
+  onChange?: (filter: Filter) => void;
+  /**
+   * Config for the filter tile
+   *
+   * @internal
+   */
+  config?: FilterTileConfig;
   /**
    * Render header title
    *
@@ -33,9 +43,13 @@ export const UnsupportedFilterTile = ({
   design,
   onDelete,
   onEdit,
+  onChange,
+  config,
   renderHeaderTitle,
 }: UnsupportedFilterTileProps) => {
   const { t } = useTranslation();
+  const menuItems = useFilterTileMenuItems(filter, config, onChange);
+
   return (
     <FilterTileContainer
       title={filter.attribute.title ?? ''}
@@ -45,6 +59,7 @@ export const UnsupportedFilterTile = ({
       )}
       design={design}
       locked={filter.config.locked}
+      menuItems={menuItems}
       onDelete={onDelete}
       onEdit={onEdit}
     />

@@ -288,4 +288,26 @@ describe('MemberFilterTile', () => {
 
     expect(onEditMock).toHaveBeenCalled();
   });
+
+  it('shows menu in tile when lock action is enabled in config', async () => {
+    server.use(
+      http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlAgeRange)),
+    );
+    const filterTitle = 'Member Filter Title';
+    const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '65+']) as MembersFilter;
+    const config = { actions: { lockFilter: { enabled: true } } };
+    render(
+      <SisenseContextProvider {...contextProviderProps}>
+        <MemberFilterTile
+          title={filterTitle}
+          dataSource={'Some datasource'}
+          attribute={DM.Commerce.AgeRange}
+          filter={filter}
+          onChange={() => {}}
+          config={config}
+        />
+      </SisenseContextProvider>,
+    );
+    expect(await screen.findByLabelText('Filter tile menu')).toBeInTheDocument();
+  });
 });

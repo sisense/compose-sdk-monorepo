@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.21.0",
+  "version": "2.22.0",
   "type": "module",
   "exports": {
     ".": {
@@ -95,7 +95,6 @@
     "dompurify": "^3.1.6",
     "fixed-data-table-2": "^2.0.21",
     "geojson": "^0.5.0",
-    "guid-typescript": "^1.0.9",
     "highcharts-react-official": "^3.2.1",
     "highcharts-rounded-corners": "^1.0.7",
     "immer": "^10.0.2",
@@ -107,9 +106,11 @@
     "react-error-boundary": "^4.0.11",
     "react-i18next": "^13.2.2",
     "react-number-format": "^5.4.0",
+    "semver": "^7.7.4",
     "superjson": "^2.2.2",
     "ts-deepmerge": "6.0.2",
     "ts-essentials": "^9.3.0",
+    "uuid": "^13.0.0",
     "whatwg-fetch": "^3.6.2",
     "yaml": "^2.4.5"
   },

@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.22.0] - 2026-03-03
+
+### Added
+- Add "Duplicate widget" functionality to the dashboard
+- Add lock/unlock menu for filter tiles
+- Add basic plugins infrastructure for internal testing
+- Extend the AI `Chatbot` component with quota limits notification
+
+### Changed
+- Fix bracket handling in custom formula
+- Fix menu positioning for elements located near the right edge of the page
+- Fix pivot sorting logic for formulas
+
 ## [2.21.0] - 2026-02-17
 
 ### Added

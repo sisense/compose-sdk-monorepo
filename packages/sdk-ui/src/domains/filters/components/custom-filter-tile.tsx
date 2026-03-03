@@ -4,6 +4,8 @@ import { Filter } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 
 import { FilterContentDisplay } from '@/domains/filters/components/common';
+import type { FilterTileConfig } from '@/domains/filters/components/filter-tile/types';
+import { useFilterTileMenuItems } from '@/domains/filters/shared/use-filter-tile-menu-items/use-filter-tile-menu-items';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 
 import { FilterTileContainer, FilterTileDesignOptions } from './filter-tile-container';
@@ -28,6 +30,12 @@ export interface CustomFilterTileProps {
   onEdit?: () => void;
   /** Design options for the tile @internal */
   tileDesignOptions?: FilterTileDesignOptions;
+  /**
+   * Config for the filter tile
+   *
+   * @internal
+   */
+  config?: FilterTileConfig;
 
   /**
    * Render header title
@@ -67,12 +75,15 @@ export const CustomFilterTile = asSisenseComponent({
 })((props: CustomFilterTileProps) => {
   const { t } = useTranslation();
 
-  const { filter, onUpdate, onDelete, onEdit, tileDesignOptions, renderHeaderTitle } = props;
+  const { filter, onUpdate, onDelete, onEdit, tileDesignOptions, config, renderHeaderTitle } =
+    props;
   const filterJaql = filter.jaql().jaql.filter;
   // Remove internal properties from the filter jaql
   delete filterJaql.custom;
   delete filterJaql.isAdvanced;
   delete filterJaql.filterType;
+
+  const menuItems = useFilterTileMenuItems(filter, config, onUpdate);
 
   const getFilterWithToggledDisabled = (filter: Filter): Filter => {
     const newFilter = cloneDeep(filter);
@@ -94,6 +105,7 @@ export const CustomFilterTile = asSisenseComponent({
       onToggleDisabled={() => onUpdate(getFilterWithToggledDisabled(filter))}
       design={tileDesignOptions || { header: { isCollapsible: false } }}
       locked={filter.config.locked}
+      menuItems={menuItems}
       onDelete={onDelete}
       onEdit={onEdit}
     />

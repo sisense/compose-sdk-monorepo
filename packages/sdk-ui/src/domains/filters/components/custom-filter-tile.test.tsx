@@ -90,4 +90,14 @@ describe('CustomFilterTile', () => {
     fireEvent.click(editButton);
     expect(onEditMock).toHaveBeenCalled();
   });
+
+  it('shows menu in tile when lock action is enabled in config', async () => {
+    const config = { actions: { lockFilter: { enabled: true } } };
+    const { findByLabelText } = render(
+      <MockedSisenseContextProvider {...contextProviderProps}>
+        <CustomFilterTile filter={filter} onUpdate={() => {}} config={config} />
+      </MockedSisenseContextProvider>,
+    );
+    expect(await findByLabelText('Filter tile menu')).toBeInTheDocument();
+  });
 });

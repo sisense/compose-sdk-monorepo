@@ -4,11 +4,13 @@ import {
   DimensionalAttribute,
   DimensionalCalculatedMeasure,
   getSortType,
+  isSortDirection,
   JaqlDataSource,
   MetadataTypes,
   PivotJaql,
   Sort,
 } from '@sisense/sdk-data';
+import type { SortDirection } from '@sisense/sdk-data';
 import camelCase from 'lodash-es/camelCase';
 import findKey from 'lodash-es/findKey';
 
@@ -102,6 +104,40 @@ function extractNumberFormat(item: PanelItem): NumberFormatConfig | null {
   return null;
 }
 
+function numberFormatConfigToNumericMask(config: NumberFormatConfig): NumericMask {
+  return {
+    abbreviations: {
+      k: config.kilo ?? false,
+      m: config.million ?? false,
+      b: config.billion ?? false,
+      t: config.trillion ?? false,
+    },
+    decimals: config.decimalScale ?? 'auto',
+    ...(config.thousandSeparator !== undefined && {
+      number: { separated: config.thousandSeparator },
+      separated: config.thousandSeparator,
+    }),
+    ...(config.name === 'Currency' && {
+      currency: {
+        symbol: config.symbol ?? '',
+        position: config.prefix ? CurrencyPosition.PRE : CurrencyPosition.POST,
+      },
+    }),
+    ...(config.name === 'Percent' && { percent: true, type: 'percent' }),
+  };
+}
+
+function sortDirectionToJaqlSort(sortType: SortDirection): 'asc' | 'desc' | undefined {
+  switch (sortType) {
+    case 'sortAsc':
+      return 'asc';
+    case 'sortDesc':
+      return 'desc';
+    default:
+      return undefined;
+  }
+}
+
 const extractDatetimeFormat = (item: PanelItem) => {
   if (item.jaql && 'level' in item.jaql) {
     return (
@@ -190,28 +226,65 @@ export function createPanelItem(column: StyledColumn | StyledMeasureColumn): Pan
 
   const baseItem: PanelItem = jaql.jaql ? jaql : { jaql };
 
-  // Only extend measure columns with additional properties
+  // Common enrichment: sort and number format (all columns)
+  if (column.sortType !== undefined && isSortDirection(column.sortType)) {
+    const jaqlSort = sortDirectionToJaqlSort(column.sortType);
+    if (jaqlSort !== undefined && baseItem.jaql) {
+      baseItem.jaql = { ...baseItem.jaql, sort: jaqlSort } as PanelItem['jaql'];
+    }
+  }
+  if (column.numberFormatConfig) {
+    baseItem.format = {
+      ...baseItem.format,
+      mask: numberFormatConfigToNumericMask(column.numberFormatConfig),
+    };
+  }
+
   if (MetadataTypes.isMeasure(element)) {
     const measureColumn = column as StyledMeasureColumn;
 
-    // panel
     baseItem.panel = 'measures';
-
-    // y2
     baseItem.y2 = measureColumn.showOnRightAxis ?? undefined;
 
-    // color
     const colorFormat = createPanelColorFormat(measureColumn.color);
     baseItem.format = {
       ...baseItem.format,
       ...(colorFormat && { color: colorFormat }),
     };
 
-    // Add statistical models if present
+    if (measureColumn.chartType)
+      baseItem.singleSeriesType = measureColumn.chartType as PanelItem['singleSeriesType'];
+    if (measureColumn.totalsCalculation && baseItem.jaql) {
+      baseItem.jaql = { ...baseItem.jaql, subtotalAgg: measureColumn.totalsCalculation };
+    }
+    if (measureColumn.dataBars)
+      baseItem.format = { ...baseItem.format, databars: measureColumn.dataBars };
+    const dataBarsColorFormat = createPanelColorFormat(measureColumn.dataBarsColor);
+    if (dataBarsColorFormat)
+      baseItem.format = { ...baseItem.format, colorSecond: dataBarsColorFormat };
+    if (measureColumn.width !== undefined)
+      baseItem.format = { ...baseItem.format, width: measureColumn.width };
+
     const statisticalModels = createStatisticalModels(measureColumn);
     if (statisticalModels) {
       baseItem.statisticalModels = statisticalModels;
     }
+  } else {
+    const attributeColumn = column as StyledColumn;
+
+    if (attributeColumn.isColored) baseItem.isColored = true;
+    if (attributeColumn.includeSubTotals !== undefined) {
+      baseItem.format = { ...baseItem.format, subtotal: attributeColumn.includeSubTotals };
+    }
+    if (attributeColumn.width !== undefined)
+      baseItem.format = { ...baseItem.format, width: attributeColumn.width };
+    if (attributeColumn.continuous !== undefined) {
+      baseItem.format = { ...baseItem.format, continuous: attributeColumn.continuous };
+    }
+    const attrColorFormat = createPanelColorFormat(attributeColumn.color);
+    if (attrColorFormat) baseItem.format = { ...baseItem.format, color: attrColorFormat };
+    const attrPanel = (attributeColumn as StyledColumn & { panel?: string }).panel;
+    if (attrPanel) baseItem.panel = attrPanel;
   }
 
   return baseItem;

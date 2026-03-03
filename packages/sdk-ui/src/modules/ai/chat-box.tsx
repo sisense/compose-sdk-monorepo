@@ -7,6 +7,8 @@ import { ChatContextDetails } from '@/modules/ai/api/types';
 
 import { useThemeContext } from '../..';
 import LoadingSpinner from '../../shared/components/loading-spinner';
+import { QuotaNotification } from '../../shared/components/quota-notification/quota-notification.js';
+import { useQuotaNotification } from '../../shared/hooks/use-quota-notification.js';
 import AiDisclaimer from './ai-disclaimer';
 import { useClearChatHistory } from './api/chat-history';
 import { useChatConfig } from './chat-config';
@@ -70,6 +72,7 @@ export default function ChatBox({ contextTitle, onGoBack, contextDetails }: Chat
     customPrompt,
   } = useChatConfig();
   const { themeSettings } = useThemeContext();
+  const { quotaState } = useQuotaNotification();
   const {
     data: queryRecommendations,
     isLoading: recommendationsLoading,
@@ -93,6 +96,8 @@ export default function ChatBox({ contextTitle, onGoBack, contextDetails }: Chat
     chatId,
     lastError,
   } = useChatSession(contextTitle, contextDetails);
+
+  const isChatInputDisabled = isAwaitingResponse || isLoading || (quotaState?.isExceeded ?? false);
 
   const { mutate: clearHistory, isLoading: isClearingHistory } = useClearChatHistory(chatId);
 
@@ -168,6 +173,7 @@ export default function ChatBox({ contextTitle, onGoBack, contextDetails }: Chat
   return (
     <>
       {header}
+      <QuotaNotification />
       <ChatBody ref={chatContainerRef} theme={themeSettings} onScroll={handleScroll}>
         <ScrollToBottom
           isVisible={isScrollToBottomVisible}
@@ -216,7 +222,7 @@ export default function ChatBox({ contextTitle, onGoBack, contextDetails }: Chat
       <ChatFooter ref={chatFooterRef} theme={themeSettings}>
         <ChatInput
           onSendMessage={sendMessage}
-          disabled={isAwaitingResponse || isLoading}
+          disabled={isChatInputDisabled}
           onClearHistoryClick={showClearHistoryOptions}
           suggestions={questions || []}
           recentPrompts={uniqueRecentPrompts}

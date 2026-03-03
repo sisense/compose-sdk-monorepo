@@ -194,6 +194,7 @@ TypeScript type aliases for components and hooks listed above
 - [SharedFormulaSuccessState](type-alias.SharedFormulaSuccessState.md)
 - [SortDirection](type-alias.SortDirection.md)
 - [SpaceSizes](type-alias.SpaceSizes.md)
+- [SpecificWidgetOptions](type-alias.SpecificWidgetOptions.md)
 - [StackableSubtype](type-alias.StackableSubtype.md)
 - [SunburstSeriesLabels](type-alias.SunburstSeriesLabels.md)
 - [SunburstSeriesLabelsBase](type-alias.SunburstSeriesLabelsBase.md)

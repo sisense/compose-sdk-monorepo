@@ -1,0 +1,53 @@
+.container {
+  width: 100%;
+  box-sizing: border-box; /* Include padding in width so we don't overflow */
+  overflow: visible;
+  padding: 4px;
+}
+
+.containerClickable {
+  cursor: pointer;
+}
+
+.bannerWrapper {
+  width: 100%;
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: visible;
+
+  /* Target outer container for both error (div) and warning (button) variants */
+  > div[role='alert'],
+  > button {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgb(9 9 10 / 10%);
+    padding: 16px 20px;
+  }
+
+  &[data-variant='error'] > div[role='alert'] {
+    background-color: #fdede9;
+    color: #5c6372;
+
+    > div:first-child {
+      color: #fa5656;
+    }
+  }
+
+  &[data-variant='warning'] > button {
+    background-color: #fef8e5;
+    color: #4f4f4f;
+    gap: 0.5rem; /* Tighter spacing between icon and text */
+    padding-right: 2.5rem; /* Reserve space for dismiss button */
+    text-align: left;
+
+    /* Align content to the left, next to the icon (not centered in the middle) */
+    > div:nth-child(2) {
+      justify-self: start;
+    }
+
+    > div:first-child {
+      color: #ffcb05;
+    }
+  }
+}

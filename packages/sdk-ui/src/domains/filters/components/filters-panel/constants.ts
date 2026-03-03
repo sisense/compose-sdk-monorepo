@@ -25,6 +25,9 @@ export const DEFAULT_FILTERS_PANEL_CONFIG: DeepRequired<FiltersPanelConfig> = {
     reorderFilters: {
       enabled: false,
     },
+    lockFilter: {
+      enabled: false,
+    },
   },
 };
 

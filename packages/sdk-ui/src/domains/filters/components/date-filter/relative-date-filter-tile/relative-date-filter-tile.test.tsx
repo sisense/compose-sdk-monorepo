@@ -174,4 +174,20 @@ describe('RelativeDateFilterTile tests', () => {
     editButton.click();
     expect(onEditMock).toHaveBeenCalled();
   });
+
+  it('shows menu in tile when lock action is enabled in config', async () => {
+    const props = {
+      title: 'Test Title',
+      filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
+      arrangement: 'vertical' as FilterVariant,
+      onUpdate: vi.fn(),
+    };
+    const config = { actions: { lockFilter: { enabled: true } } };
+    render(
+      <MockedSisenseContextProvider>
+        <RelativeDateFilterTile {...props} config={config} />
+      </MockedSisenseContextProvider>,
+    );
+    expect(await screen.findByLabelText('Filter tile menu')).toBeInTheDocument();
+  });
 });

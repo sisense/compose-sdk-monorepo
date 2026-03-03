@@ -4,7 +4,8 @@ import { Filter, FilterRelations } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 
 import { useCommonFilters } from '@/domains/dashboarding/common-filters/use-common-filters.js';
-import { WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
+import type { WidgetsOptions, WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
+import { useDuplicateWidgetMenuItem } from '@/domains/dashboarding/hooks/duplicate-widget/use-duplicate-widget-menu-item.js';
 import { useJtdInternal } from '@/domains/dashboarding/hooks/use-jtd.js';
 import { useTabber } from '@/domains/dashboarding/hooks/use-tabber.js';
 import { useWidgetsLayoutManagement } from '@/domains/dashboarding/hooks/use-widgets-layout.js';
@@ -18,7 +19,7 @@ import { useSyncedState } from '@/shared/hooks/use-synced-state.js';
 import { defaultMerger, useWithChangeDetection } from '@/shared/hooks/use-with-change-detection.js';
 import { combineHandlers } from '@/shared/utils/combine-handlers.js';
 
-import { DashboardProps } from './types.js';
+import { DashboardPersistenceManager, DashboardProps } from './types.js';
 
 export type ComposableDashboardProps = Pick<
   DashboardProps,
@@ -84,6 +85,18 @@ export type UseComposedDashboardOptions = {
    * @internal
    */
   onFiltersChange?: (filters: Filter[] | FilterRelations) => void;
+  /**
+   * @internal
+   */
+  persistence?: DashboardPersistenceManager;
+  /**
+   * Runtime edit mode state. When provided (e.g. by Dashboard), used for duplicate-widget visibility
+   * instead of only config.widgetsPanel.editMode.isEditing.
+   * @internal
+   *
+   * @deprecated Temporal workaround. Edit mode (with history management) should be managed by the `useComposedDashboard` hook instead of the Dashboard component.
+   */
+  isEditing?: boolean;
 };
 
 /**
@@ -107,7 +120,7 @@ export type ComposedDashboardResult<D extends ComposableDashboardProps | Dashboa
  */
 export function useComposedDashboardInternal<D extends ComposableDashboardProps | DashboardProps>(
   initialDashboard: D,
-  { onFiltersChange }: UseComposedDashboardOptions = {},
+  { onFiltersChange, persistence, isEditing: isEditingRuntime }: UseComposedDashboardOptions = {},
 ): ComposedDashboardResult<D> {
   const { filters, widgets, widgetsOptions } = initialDashboard;
   // This state is needed to avoid losing the inner state when new widget objects are received from toDashboardProps.
@@ -115,6 +128,15 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   const [widgetsFromProps] = useSyncedState<WidgetProps[]>(widgets);
   // Internal widget state
   const [innerWidgets, setInnerWidgets] = useSyncedState<WidgetProps[]>(widgetsFromProps);
+  // Internal widgets layout state
+  const [innerWidgetsLayout, setInnerWidgetsLayout] = useSyncedState<WidgetsPanelLayout>(
+    initialDashboard.layoutOptions?.widgetsPanel || getDefaultWidgetsPanelLayout(widgetsFromProps),
+  );
+  // Internal widgets options state
+  const [innerWidgetsOptions, setInnerWidgetsOptions] = useSyncedState<WidgetsOptions>(
+    widgetsOptions ?? {},
+  );
+
   // Combined menu logic
   const { openMenu } = useCombinedMenu({
     combineMenus: combineWidgetMenus,
@@ -149,7 +171,7 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   }, [innerWidgets]);
 
   const { connectToWidgetProps: connectToWidgetPropsJtd } = useJtdInternal({
-    widgetOptions: widgetsOptions || {},
+    widgetOptions: innerWidgetsOptions ?? {},
     dashboardFilters: Array.isArray(commonFilters) ? commonFilters : [],
     widgetFilters: widgetFiltersMap,
     openMenu,
@@ -170,42 +192,62 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     ),
   }) as WidgetProps[];
 
+  // Widget duplication: only when editMode is enabled, (runtime) isEditing is true, batch mode is disabled, and duplicateWidget is enabled.
+  // If batch mode is enabled, the duplicate widget feature is disabled because it would not be possible to undo/redo the duplication.
+  const isEditing = isEditingRuntime ?? initialDashboard.config?.widgetsPanel?.editMode?.isEditing;
+  const shouldEnableWidgetDuplication = Boolean(
+    initialDashboard.config?.widgetsPanel?.editMode?.enabled &&
+      isEditing &&
+      !initialDashboard.config?.widgetsPanel?.editMode.applyChangesAsBatch?.enabled &&
+      initialDashboard.config?.widgetsPanel?.editMode?.duplicateWidget?.enabled,
+  );
+  const { widgets: widgetsWithDuplicate } = useDuplicateWidgetMenuItem({
+    widgets: widgetsWithChangeDetection,
+    setWidgets: setInnerWidgets,
+    widgetsLayout: innerWidgetsLayout,
+    setWidgetsLayout: setInnerWidgetsLayout,
+    enabled: shouldEnableWidgetDuplication,
+    widgetsOptions: innerWidgetsOptions,
+    setWidgetsOptions: setInnerWidgetsOptions,
+    persistence,
+  });
+
   // Connect common filters to widgets
   const widgetsWithCommonFilters = useMemo(() => {
-    return widgetsWithChangeDetection.map((widget) =>
-      connectToWidgetProps(widget, widgetsOptions?.[widget.id]?.filtersOptions),
+    return widgetsWithDuplicate.map((widget) =>
+      connectToWidgetProps(widget, innerWidgetsOptions?.[widget.id]?.filtersOptions),
     );
-  }, [widgetsWithChangeDetection, widgetsOptions, connectToWidgetProps]);
+  }, [widgetsWithDuplicate, innerWidgetsOptions, connectToWidgetProps]);
 
   const widgetsWithFilterAndJtd = useMemo(() => {
     return widgetsWithCommonFilters.map((widget: WidgetProps) => connectToWidgetPropsJtd(widget));
   }, [widgetsWithCommonFilters, connectToWidgetPropsJtd]);
 
-  const { layoutManager: tabberLayoutManager, widgets: widgetsWithTabberConfigs } = useTabber({
+  const { layoutManager: tabberLayoutManager, widgets: finalWidgets } = useTabber({
     widgets: widgetsWithFilterAndJtd,
     config: initialDashboard.config?.tabbers,
   });
 
-  const { layout: widgetsLayout, setLayout: setWidgetsLayout } = useWidgetsLayoutManagement({
-    layout:
-      initialDashboard.layoutOptions?.widgetsPanel ||
-      getDefaultWidgetsPanelLayout(widgetsWithFilterAndJtd),
-    layoutManagers: [tabberLayoutManager],
-  });
+  const { layout: finalWidgetsLayout, setLayout: setFinalWidgetsLayout } =
+    useWidgetsLayoutManagement({
+      layout: innerWidgetsLayout,
+      layoutManagers: [tabberLayoutManager],
+    });
 
-  const resultLayout = useMemo(() => {
-    return { ...initialDashboard.layoutOptions, widgetsPanel: widgetsLayout };
-  }, [widgetsLayout, initialDashboard.layoutOptions]);
+  const finalLayoutOptions = useMemo(() => {
+    return { ...initialDashboard.layoutOptions, widgetsPanel: finalWidgetsLayout };
+  }, [finalWidgetsLayout, initialDashboard.layoutOptions]);
 
   return {
     dashboard: {
       ...initialDashboard,
       filters: commonFilters,
-      widgets: widgetsWithTabberConfigs,
-      layoutOptions: resultLayout,
+      widgets: finalWidgets,
+      layoutOptions: finalLayoutOptions,
+      widgetsOptions: innerWidgetsOptions,
     },
     setFilters,
-    setWidgetsLayout,
+    setWidgetsLayout: setFinalWidgetsLayout,
   };
 }
 

@@ -37,10 +37,10 @@ export const useDashboardHeaderToolbar = ({
   const handleMenuOpen = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       if (!menuItemSections.length) return;
-      const rect = (event.target as HTMLElement).getBoundingClientRect();
+      const rect = event.currentTarget.getBoundingClientRect();
       openMenu({
         position: {
-          left: rect.left + rect.width / 2,
+          left: rect.right,
           top: rect.bottom,
         },
         itemSections: menuItemSections,

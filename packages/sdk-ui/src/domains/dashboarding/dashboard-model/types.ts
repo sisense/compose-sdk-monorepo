@@ -89,16 +89,21 @@ export type DashboardId = string;
  *
  * For example, how common filters defined at the dashboard level should be applied to widgets.
  */
-export type WidgetsOptions = Record<
-  WidgetId,
-  {
-    filtersOptions?: CommonFiltersOptions;
-    /**
-     * Jump To Dashboard config for widgets.
-     */
-    jtdConfig?: JumpToDashboardConfig | JumpToDashboardConfigForPivot;
-  }
->;
+export type WidgetsOptions = Record<WidgetId, SpecificWidgetOptions>;
+
+/**
+ * Options for a specific widget
+ */
+export type SpecificWidgetOptions = {
+  /**
+   * Options for common filters defined at the dashboard level to be applied to certain widgets.
+   */
+  filtersOptions?: CommonFiltersOptions;
+  /**
+   * Jump To Dashboard config for widgets.
+   */
+  jtdConfig?: JumpToDashboardConfig | JumpToDashboardConfigForPivot;
+};
 
 /**
  * Style options for the dashboard.

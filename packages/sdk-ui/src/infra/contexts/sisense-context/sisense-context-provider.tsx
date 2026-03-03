@@ -11,6 +11,7 @@ import { SisenseContextProviderProps } from '../../../props';
 import { ClientApplication, createClientApplication } from '../../app/client-application';
 import { ErrorBoundary } from '../../error-boundary/error-boundary';
 import { I18nProvider } from '../../translation/i18n-provider';
+import { PluginProvider } from '../plugin-provider';
 import { ThemeProvider } from '../theme-provider';
 import { SisenseContext } from './sisense-context';
 import { SisenseQueryClientProvider } from './sisense-query-client-provider';
@@ -65,6 +66,7 @@ export const SisenseContextProvider: FunctionComponent<
   onError,
   alternativeSsoHost = '',
   disableFusionPalette = false,
+  plugins = [],
 }) => {
   const tracking = {
     // if tracking is configured in appConfig, use it
@@ -150,11 +152,13 @@ export const SisenseContextProvider: FunctionComponent<
           >
             <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
               <SisenseQueryClientProvider>
-                <CustomWidgetsProvider>
-                  <MenuProvider>
-                    <ModalProvider>{children}</ModalProvider>
-                  </MenuProvider>
-                </CustomWidgetsProvider>
+                <PluginProvider plugins={plugins}>
+                  <CustomWidgetsProvider>
+                    <MenuProvider>
+                      <ModalProvider>{children}</ModalProvider>
+                    </MenuProvider>
+                  </CustomWidgetsProvider>
+                </PluginProvider>
               </SisenseQueryClientProvider>
             </ThemeProvider>
           </SisenseContext.Provider>

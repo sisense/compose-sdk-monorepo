@@ -9,9 +9,11 @@ import { DeepRequired } from 'ts-essentials';
 import { BackgroundFilterIcon } from '@/domains/filters/components/icons/background-filter-icon';
 import styled from '@/infra/styled';
 import { DEFAULT_TEXT_COLOR } from '@/shared/const';
+import type { MenuItem } from '@/shared/types/menu-item';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
 
 import { useThemeContext } from '../../../infra/contexts/theme-provider';
+import { FilterTileMenuButton } from '../shared/filter-tile-menu-button';
 import { SisenseSwitchButton, TriangleIndicator } from './common';
 import { FilterVariant, isVertical } from './common/filter-utils';
 import { BORDER_COLOR, BORDER_THICKNESS, FILTER_TILE_MIN_WIDTH } from './filters-panel/constants';
@@ -94,6 +96,11 @@ interface FilterTileContainerProps {
   onEdit?: () => void;
   locked?: boolean;
   /**
+   * Header menu items.
+   * When provided, the menu button is shown with these items.
+   */
+  menuItems?: MenuItem[];
+  /**
    * Render header title
    *
    * @internal
@@ -160,6 +167,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
     onDelete,
     onEdit,
     locked = false,
+    menuItems,
     renderHeaderTitle = (title) => title,
   } = props;
   const design = merge.withOptions(
@@ -232,6 +240,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
                   <PencilIcon color={themeSettings.typography.primaryTextColor} aria-label="edit" />
                 </IconButton>
               )}
+              {menuItems && menuItems.length > 0 && <FilterTileMenuButton menuItems={menuItems} />}
             </Header>
           </>
         )}
@@ -254,11 +263,10 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
         </main>
         {isVertical(arrangement) && design.footer.shouldBeShown && (
           <Footer>
-            {onDelete && (
+            {onDelete && !locked && (
               <IconButton
                 onClick={onDelete}
                 sx={{ p: 0, mr: 'auto' }}
-                disabled={locked}
                 data-testid="filter-delete-button"
               >
                 <TrashIcon

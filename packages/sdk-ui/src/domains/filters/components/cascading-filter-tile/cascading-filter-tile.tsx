@@ -6,7 +6,9 @@ import { clearMembersFilter, cloneFilterAndToggleDisabled } from '@/shared/utils
 import { asSisenseComponent } from '../../../../infra/decorators/component-decorators/as-sisense-component.js';
 import { FilterVariant } from '../common/filter-utils.js';
 import { FilterTileContainer } from '../filter-tile-container.js';
+import type { FilterTileConfig } from '../filter-tile/types.js';
 import { CascadingLevelFilterTile } from './cascading-level-filter.js';
+import { useCascadingFilterTileMenuItems } from './use-cascadding-filter-tile-menu-items/use-cascadding-filter-tile-menu-items.js';
 
 /**
  * Props for {@link CascadingFilterTile}
@@ -30,6 +32,12 @@ export interface CascadingFilterTileProps {
   onDelete?: () => void;
   /** Filter edit callback */
   onEdit?: (levelIndex: number) => void;
+  /**
+   * Config for the filter tile
+   *
+   * @internal
+   */
+  config?: FilterTileConfig;
   /**
    * Render header title (first cascading level filter only)
    *
@@ -55,6 +63,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
       onDelete,
       dataSource,
       onEdit,
+      config,
       renderHeaderTitle,
     } = props;
 
@@ -62,6 +71,8 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
       filterFromProps as CascadingFilter,
       updateFilterFromProps,
     );
+
+    const menuItems = useCascadingFilterTileMenuItems(filter, config, updateFilter);
 
     const levelFilters = filter.filters;
 
@@ -110,6 +121,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
                 isLast={index === levelFilters.length - 1}
                 onEdit={onEdit ? () => onEdit?.(index) : undefined}
                 renderHeaderTitle={index === 0 ? renderHeaderTitle : undefined}
+                menuItems={menuItems}
               />
             );
           });

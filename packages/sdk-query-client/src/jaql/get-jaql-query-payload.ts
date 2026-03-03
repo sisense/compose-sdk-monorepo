@@ -13,7 +13,6 @@ import {
   PivotGrandTotals,
   PivotMeasure,
 } from '@sisense/sdk-data';
-import merge from 'ts-deepmerge';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -274,21 +273,39 @@ function jaqlPivotAttribute(
 }
 
 function jaqlPivotMeasure(m: Measure | PivotMeasure, panel: string, index: number): MetadataItem {
+  const field = { index: index, id: `${panel}-${index}` };
+
+  if (isPivotMeasure(m)) {
+    const base = m.measure.jaql();
+    return {
+      ...base,
+      jaql: {
+        ...base.jaql,
+        subtotalAgg: m.totalsCalculation,
+        datatype: 'numeric',
+      },
+      format: {
+        ...base.format,
+        databars: m.dataBars || false,
+        ...(m.shouldRequestMinMax && {
+          color: { type: 'range' },
+        }),
+      },
+      panel,
+      field,
+    };
+  }
+
+  const base = m.jaql();
   return {
-    ...(isPivotMeasure(m)
-      ? merge(m.measure.jaql(), {
-          jaql: { subtotalAgg: m.totalsCalculation },
-          format: {
-            databars: m.dataBars || false,
-            ...(m.shouldRequestMinMax && {
-              color: { type: 'range' },
-            }),
-          },
-        })
-      : m.jaql()),
+    ...base,
+    jaql: {
+      ...base.jaql,
+      datatype: 'numeric',
+    },
     panel,
-    field: { index: index, id: `${panel}-${index}` },
-  } as MetadataItem;
+    field,
+  };
 }
 
 /**

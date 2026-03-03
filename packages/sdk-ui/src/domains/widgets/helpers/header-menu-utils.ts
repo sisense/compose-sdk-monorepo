@@ -1,5 +1,6 @@
+import { MenuItem } from '@/shared/types/menu-item';
+
 import { WidgetProps } from '../components/widget/types';
-import { MenuItem } from '../shared/widget-header/types';
 
 /**
  * Adds a menu item to the widget header.

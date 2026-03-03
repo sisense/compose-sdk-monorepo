@@ -104,6 +104,11 @@ export function processArg(input: ArgInput): ProcessedArg {
     return undefined;
   }
 
+  // Handle null for optional arguments (JSON/LLM often use null for missing optional fields)
+  if (rawArg === null && !argSchema.required) {
+    return undefined;
+  }
+
   switch (argSchema.type) {
     case 'string':
       if (typeof rawArg !== 'string') {

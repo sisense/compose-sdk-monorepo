@@ -24,13 +24,17 @@ export class ChatRestApi {
 
   private readonly isUnifiedNarrationEnabled: boolean | undefined;
 
+  private readonly isSisenseAiEnabled: boolean | undefined;
+
   constructor(
     httpClient: HttpClient,
     private readonly volatile = false,
     isUnifiedNarrationEnabled?: boolean,
+    isSisenseAiEnabled?: boolean,
   ) {
     this.httpClient = httpClient;
     this.isUnifiedNarrationEnabled = isUnifiedNarrationEnabled;
+    this.isSisenseAiEnabled = isSisenseAiEnabled;
   }
 
   public getChatContexts = async () => {
@@ -44,6 +48,7 @@ export class ChatRestApi {
   private getNlgInsights = (request: GetNlgInsightsRequest) =>
     getNarrations(this.httpClient, request, {
       isUnifiedNarrationEnabled: this.isUnifiedNarrationEnabled,
+      isSisenseAiEnabled: this.isSisenseAiEnabled,
     });
 
   private getQueryRecommendations = (contextTitle: string, config: QueryRecommendationConfig) => {

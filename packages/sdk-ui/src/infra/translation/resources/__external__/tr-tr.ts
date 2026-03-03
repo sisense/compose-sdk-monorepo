@@ -316,6 +316,13 @@ const translation: TranslationDictionary = {
       invalidInput: 'Geçersiz giriş',
       noAvailableDataTopics:
         'Sağlanan veri modellerinden veya perspektiflerden hiçbiri kullanılabilir değil',
+      failedToFetchCreditBalance: 'Kredi bakiyesi alınamadı',
+    },
+    quota: {
+      exceededErrorTitle: 'AI yanıtları şu anda kullanılamıyor.',
+      exceededErrorDescription:
+        'Şirketinizin aylık AI kotasına ulaştınız. Kota bir sonraki aylık kullanım döngünüzde otomatik olarak yenilenecektir.',
+      warningDescription: "Şirketinizin aylık AI kotasının %{{usagePercentage}}'ini kullandınız.",
     },
   },
   attribute: {
@@ -435,6 +442,14 @@ const translation: TranslationDictionary = {
       nextMonth: 'Sonraki ay',
       previousGroup: 'Önceki grup',
       nextGroup: 'Sonraki grup',
+    },
+  },
+  filterTile: {
+    menu: {
+      lock: 'Kilitle',
+      unlock: 'Kilidi Aç',
+      lockGroup: 'Grubu Kilitle',
+      unlockGroup: 'Grup Kilidini Aç',
     },
   },
 };

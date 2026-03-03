@@ -61,6 +61,7 @@ import {
   extractStyleOptions,
   getFlattenWidgetDesign,
   getStyleWithWidgetDesign,
+  toLineWidgetStyle,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/index.js';
 import {
   FusionWidgetType,
@@ -93,6 +94,7 @@ import {
   CustomWidgetStyleOptions,
   DrilldownOptions,
   GenericDataOptions,
+  LineStyleOptions,
   PivotTableDrilldownOptions,
   PivotTableWidgetStyleOptions,
   TableStyleOptions,
@@ -815,10 +817,17 @@ export function fromChartWidgetProps(chartWidgetProps: ChartWidgetProps): Widget
  */
 export function fromWidgetProps(widgetProps: WidgetProps): WidgetModel {
   if (isChartWidgetProps(widgetProps)) {
-    return fromChartWidgetProps(widgetProps);
+    return withOid(widgetProps.id)(fromChartWidgetProps(widgetProps));
   }
 
   throw new TranslatableError('errors.otherWidgetTypesNotSupported');
+}
+
+function withOid(oid: string): (widgetModel: WidgetModel) => WidgetModel {
+  return (widgetModel: WidgetModel) => ({
+    ...widgetModel,
+    oid,
+  });
 }
 
 /**
@@ -889,7 +898,9 @@ export function toWidgetDto(
       subtype = subtype || 'line/basic';
     }
 
-    // Styling: TBD
+    if (chartType === 'line') {
+      style = toLineWidgetStyle(widgetModel.styleOptions as LineStyleOptions);
+    }
   } else if (isTable(chartType)) {
     const { attributes, measures } = getTableAttributesAndMeasures(
       widgetModel.dataOptions as TableDataOptionsInternal,

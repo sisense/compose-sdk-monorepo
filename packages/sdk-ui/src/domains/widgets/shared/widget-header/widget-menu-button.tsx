@@ -3,8 +3,7 @@ import { type MouseEvent, useCallback } from 'react';
 import { useMenu } from '@/infra/contexts/menu-provider/hooks/use-menu';
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context.js';
 import { MenuButton } from '@/shared/components/menu/menu-button.js';
-
-import { MenuItem } from './types';
+import { MenuItem } from '@/shared/types/menu-item';
 
 export interface WidgetMenuButtonProps {
   menuItems: MenuItem[];
@@ -16,12 +15,13 @@ export const WidgetMenuButton = ({ menuItems }: WidgetMenuButtonProps) => {
   const handleClick = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
+      const menuButtonRect = event.currentTarget.getBoundingClientRect();
 
       if (!menuItems.length) return;
       openMenu({
         position: {
-          left: event.clientX,
-          top: event.clientY,
+          left: menuButtonRect.right,
+          top: menuButtonRect.bottom,
         },
         alignment: {
           horizontal: 'right',
