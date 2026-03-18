@@ -130,7 +130,11 @@ export function useConvertFilterRelations(
       const alignedOtherFilters = areCascadingFiltersPresent
         ? reassembleCascadingFilters(otherFilters, filters)
         : otherFilters;
-      const otherRelations = calculateNewRelations(filters, relations, alignedOtherFilters);
+
+      const otherRelations = calculateNewRelations(filters, relations, alignedOtherFilters, {
+        shouldReplaceSameAttributeFilters: true,
+      });
+
       return combineFiltersAndRelations(alignedOtherFilters, otherRelations);
     },
     [areCascadingFiltersPresent, filters, relations],

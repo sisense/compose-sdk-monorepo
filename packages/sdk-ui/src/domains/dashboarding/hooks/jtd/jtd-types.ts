@@ -214,7 +214,7 @@ export interface JumpToDashboardConfigForPivot extends Omit<JumpToDashboardConfi
   /**
    * Map of target dashboards for different dimensions/measures
    *
-   * @alpha
+   * @beta
    * @example
    *
    * const FormulaMeasure = dashboardProps.widgets[0].dataOptions.values[0];

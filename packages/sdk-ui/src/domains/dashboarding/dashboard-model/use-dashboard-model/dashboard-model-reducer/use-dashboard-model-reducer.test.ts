@@ -47,6 +47,35 @@ describe('dashboardReducer', () => {
     });
   });
 
+  describe('PATCH_WIDGET', () => {
+    it('should merge patch into matching widget', () => {
+      const widget1 = createWidgetModel('w1');
+      const widget2 = createWidgetModel('w2');
+      const model = { ...baseModel, widgets: [widget1, widget2] };
+
+      const result = dashboardReducer(model, {
+        type: UseDashboardModelActionType.PATCH_WIDGET,
+        payload: { widgetOid: 'w2', patch: { title: 'Updated Title' } },
+      });
+
+      expect(result?.widgets).toHaveLength(2);
+      expect(result?.widgets[0]).toEqual(widget1);
+      expect(result?.widgets[1]).toEqual({ ...widget2, title: 'Updated Title' });
+    });
+
+    it('should not mutate non-matching widgets', () => {
+      const widget1 = createWidgetModel('w1');
+      const model = { ...baseModel, widgets: [widget1] };
+
+      const result = dashboardReducer(model, {
+        type: UseDashboardModelActionType.PATCH_WIDGET,
+        payload: { widgetOid: 'non-existent', patch: { title: 'No Effect' } },
+      });
+
+      expect(result?.widgets).toEqual([widget1]);
+    });
+  });
+
   describe('WIDGETS_PANEL_LAYOUT_UPDATE', () => {
     it('should update layout', () => {
       const newLayout: WidgetsPanelColumnLayout = {

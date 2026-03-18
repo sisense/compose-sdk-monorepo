@@ -39,9 +39,15 @@ export type GroupSecondaryActionConfig = {
 
 export type ItemActionConfig = {
   onClick(this: void, item: Item): void;
+  getLabel?: (this: void, item: Item) => string;
 };
 
 export type ItemSecondaryActionConfig = {
   SecondaryActionButtonIcon: React.ComponentType<{ item: Item }>;
-  onClick(this: void, item: Item): void;
+  /**
+   * When true, the row keeps hover/focus style after the secondary action is clicked (e.g. while a menu is open).
+   * The row is cleared when the consumer calls the `onSubmit` callback passed to `onClick`.
+   */
+  keepFocusedOnClick?: boolean;
+  onClick(this: void, item: Item, event: React.MouseEvent, onSubmit: () => void): void;
 };

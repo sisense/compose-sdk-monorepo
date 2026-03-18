@@ -3,7 +3,7 @@ import { useCallback, useEffect, useReducer, useState } from 'react';
 import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 
 import { useQueryParamsChanged } from '@/domains/query-execution/hooks/shared/query-params-comparator';
-import { ClientApplication } from '@/infra/app/client-application';
+import { type ClientApplication } from '@/infra/app/types';
 import { CacheKey } from '@/shared/utils/create-cache';
 
 import { useSisenseContext } from '../../../../infra/contexts/sisense-context/sisense-context';

@@ -3,7 +3,7 @@ import { filterFactory, QueryResultData } from '@sisense/sdk-data';
 import { renderHook, waitFor } from '@testing-library/react';
 
 import * as DM from '../../../__test-helpers__/sample-ecommerce';
-import { ClientApplication } from '../../../infra/app/client-application.js';
+import { type ClientApplication } from '../../../infra/app/types.js';
 import { useSisenseContextMock } from '../../../infra/contexts/sisense-context/__mocks__/sisense-context.js';
 import { translation } from '../../../infra/translation/resources/en.js';
 import { executeQueryMock } from '../../query-execution/core/__mocks__/execute-query';

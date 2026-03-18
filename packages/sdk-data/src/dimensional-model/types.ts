@@ -49,7 +49,13 @@ export const AggregationTypes = {
 
   /** Standard deviation aggregation type */
   StandardDeviation: 'stdev',
-};
+} as const;
+
+const aggTypes = Object.values(AggregationTypes);
+/**
+ * @internal
+ */
+export type AggregationType = (typeof aggTypes)[number];
 
 /**
  * Different sort types.
@@ -436,6 +442,7 @@ export type BaseJaql = {
       jaql: FilterJaql;
     };
   };
+  indexed?: boolean;
   merged?: boolean;
   panel?: 'rows' | 'columns';
 };

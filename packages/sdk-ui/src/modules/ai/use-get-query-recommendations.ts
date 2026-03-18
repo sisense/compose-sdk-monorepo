@@ -146,6 +146,7 @@ export const useGetQueryRecommendationsInternal = (
  * ```
  * @returns An array of objects, each containing recommended question text and its corresponding `widgetProps`
  * @group Generative AI
+ *
  * @beta
  */
 export const useGetQueryRecommendations = withTracking('useGetQueryRecommendations')(

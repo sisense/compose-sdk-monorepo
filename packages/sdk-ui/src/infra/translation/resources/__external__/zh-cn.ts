@@ -229,12 +229,14 @@ const translation: TranslationDictionary = {
     },
   },
   widgetHeader: {
+    addTitle: '添加标题',
     info: {
       details: '小部件详细信息',
       tooltip: '单击以查看完整详细信息',
     },
     menu: {
       deleteWidget: '删除小部件',
+      renameWidget: '重命名小部件',
       distributeEqualWidth: '在此行中平均分配',
     },
   },
@@ -371,6 +373,9 @@ const translation: TranslationDictionary = {
     configureFilter: '配置筛选器',
     noResults: '无结果',
     searchPlaceholder: '搜索',
+    more: '更多...',
+    filter: '筛选',
+    addMeasure: '添加度量',
   },
   pivotTable: {
     grandTotal: '总计',
@@ -418,6 +423,18 @@ const translation: TranslationDictionary = {
       lockGroup: '锁定组',
       unlockGroup: '解锁组',
     },
+  },
+  measures: {
+    countShort: '{{level}}数量',
+    countDistinct: '唯一计数',
+    count: '全部计数',
+    average: '平均值',
+    sum: '求和',
+    min: '最小值',
+    max: '最大值',
+    stdev: '标准差',
+    median: '中位数',
+    variance: '方差',
   },
 };
 

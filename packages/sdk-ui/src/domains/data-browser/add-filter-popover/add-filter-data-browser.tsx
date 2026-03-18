@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   DataSource,
@@ -48,6 +49,7 @@ export const AddFilterDataBrowser = ({
   onAttributeClick,
 }: AddFilterDataBrowserProps) => {
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
 
   const { selectedDataSource, selectDataSource } = useDataSourceSelection(initialDataSource);
   const [searchValue, setSearchValue] = useState<string>('');
@@ -71,6 +73,7 @@ export const AddFilterDataBrowser = ({
         dimensions={dimensions}
         attributeActionConfig={{
           onClick: onAttributeClick,
+          getLabel: () => t('dataBrowser.filter'),
         }}
         onScrolledToBottom={loadMore}
         isLoading={isLoading}
@@ -86,15 +89,13 @@ export const AddFilterDataBrowser = ({
   );
 };
 
-const useGetDimensionsFromDataSourceFields = (
+export const useGetDimensionsFromDataSourceFields = (
   dataSourceFields: DataSourceField[] | undefined,
   dataSource: DataSource,
 ): Dimension[] => {
-  return useMemo(
-    () =>
-      dataSourceFields && dataSourceFields.length
-        ? getDimensionsFromDataSourceFields(dataSourceFields, dataSource)
-        : [],
-    [dataSourceFields, dataSource],
-  );
+  return useMemo(() => {
+    return dataSourceFields?.length
+      ? getDimensionsFromDataSourceFields(dataSourceFields, dataSource)
+      : [];
+  }, [dataSourceFields, dataSource]);
 };

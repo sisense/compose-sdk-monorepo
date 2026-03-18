@@ -26,7 +26,7 @@ import type {
   ScattermapChartData,
 } from '@/domains/visualizations/core/chart-data/types';
 import { DesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/types';
-import { ClientApplication } from '@/infra/app/client-application';
+import { type ClientApplication } from '@/infra/app/types';
 import type {
   AreamapStyleOptions,
   AreaStyleOptions,

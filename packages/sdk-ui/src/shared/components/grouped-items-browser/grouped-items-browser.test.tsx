@@ -40,6 +40,7 @@ const DummyItemSecondaryActionButton: React.FC<{
 // Dummy action props
 const dummyItemAction: ItemActionConfig = {
   onClick: vi.fn(),
+  getLabel: vi.fn(),
 };
 
 const dummyItemSecondaryAction: ItemSecondaryActionConfig = {
@@ -103,9 +104,11 @@ describe('GroupedItemsBrowser', () => {
     // Click the secondary action button.
     fireEvent.click(secBtn);
 
-    // Verify that the itemSecondaryActionConfig.onClick callback is called with the item.
+    // Verify that the itemSecondaryActionConfig.onClick callback is called with the item, the click event, and onSubmit callback.
     expect(dummyItemSecondaryAction.onClick).toHaveBeenCalledWith(
       expect.objectContaining({ id: 'item2', title: 'Item Two' }),
+      expect.anything(),
+      expect.any(Function),
     );
   });
 
@@ -130,6 +133,24 @@ describe('GroupedItemsBrowser', () => {
     expect(dummyGroupSecondaryAction.onClick).toHaveBeenCalledWith(
       expect.objectContaining({ id: 'group1', title: 'Group One' }),
     );
+  });
+
+  it('shows action label on hover when getLabel is provided', () => {
+    const getLabel = vi.fn((item: Item) => `Filter ${item.title}`);
+    render(
+      <GroupedItemsBrowser
+        groupedItems={groupedItems}
+        itemActionConfig={{ getLabel, onClick: vi.fn() }}
+      />,
+    );
+
+    const itemOne = screen.getByText('Item One');
+    fireEvent.mouseEnter(itemOne);
+
+    expect(getLabel).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'item1', title: 'Item One' }),
+    );
+    expect(screen.getByText('Filter Item One')).toBeInTheDocument();
   });
 
   it('toggles group collapse on header click', async () => {

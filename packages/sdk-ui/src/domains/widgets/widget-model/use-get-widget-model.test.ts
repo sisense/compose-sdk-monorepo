@@ -4,7 +4,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
 
 import { sampleEcommerceDashboard as dashboardMock } from '@/domains/dashboarding/dashboard-model/__mocks__/sample-ecommerce-dashboard';
-import { type ClientApplication } from '@/infra/app/client-application';
+import { type ClientApplication } from '@/infra/app/types';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 
 import { getWidgetModel } from './get-widget-model';

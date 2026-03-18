@@ -127,7 +127,7 @@ export const SisenseContextProvider = defineComponent({
         enabled: props.appConfig?.trackingConfig?.enabled ?? true,
       },
     });
-    createClientApplication(props).then((newApp) => {
+    createClientApplication({ ...props, packageName: 'sdk-ui-vue' }).then((newApp) => {
       context.value = {
         ...context.value,
         app: newApp,

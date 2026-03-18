@@ -75,7 +75,11 @@ describe('createClientApplication', () => {
 
   it('should create HttpClient, PivotQueryClient, and QueryClient instances', async () => {
     const authMock = {};
-    (HttpClient as Mock).mockReturnValue({ login: vi.fn().mockResolvedValue(true) });
+    const getMock = vi.fn().mockResolvedValue({ tracking: { apiTelemetry: false } });
+    (HttpClient as Mock).mockReturnValue({
+      login: vi.fn().mockResolvedValue(true),
+      get: getMock,
+    });
     (getSettings as Mock).mockResolvedValue({ user: { tenant: { name: 'system' } } });
     (getAuthenticator as Mock).mockReturnValue(authMock);
 
@@ -85,8 +89,8 @@ describe('createClientApplication', () => {
       defaultParams.url,
       authMock,
       expect.stringContaining('sdk-ui'),
-      defaultParams.appConfig?.customHttpHeaders,
     );
+    expect(getMock).toHaveBeenCalledWith('api/v1/settings/system');
     expect(PivotQueryClient).toHaveBeenCalledWith(
       expect.stringContaining(defaultParams.url),
       authMock,
@@ -100,7 +104,10 @@ describe('createClientApplication', () => {
   it('should create PivotClient with URL without tenant sub path', async () => {
     const tenantName = 'tenant1';
     const authMock = {};
-    (HttpClient as Mock).mockReturnValue({ login: vi.fn().mockResolvedValue(true) });
+    (HttpClient as Mock).mockReturnValue({
+      login: vi.fn().mockResolvedValue(true),
+      get: vi.fn().mockResolvedValue({ tracking: { apiTelemetry: false } }),
+    });
     (getSettings as Mock).mockResolvedValue({ user: { tenant: { name: tenantName } } });
     (getAuthenticator as Mock).mockReturnValue(authMock);
 

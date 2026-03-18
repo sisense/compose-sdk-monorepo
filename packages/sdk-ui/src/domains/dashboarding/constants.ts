@@ -50,6 +50,7 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
     responsive: false,
     editMode: {
       duplicateWidget: { enabled: false },
+      renameWidget: { enabled: false },
       enabled: false,
       showDragHandleIcon: true,
       applyChangesAsBatch: {

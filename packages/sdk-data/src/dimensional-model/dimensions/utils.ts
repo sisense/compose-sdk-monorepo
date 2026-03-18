@@ -50,6 +50,8 @@ const createAttributeEntry = (
           expression: attributeId,
           dataSource: dataSourceConfig,
           description: field.description,
+          indexed: field.indexed,
+          merged: field.merged,
         })
       : createAttribute({
           name: attributeName,
@@ -57,6 +59,8 @@ const createAttributeEntry = (
           expression: attributeId,
           dataSource: dataSourceConfig,
           description: field.description,
+          indexed: field.indexed,
+          merged: field.merged,
         });
 
   return {

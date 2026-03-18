@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.23.0] - 2026-03-17
+
+### Added
+- Add widget renaming (title change)
+- Add aggregations in data browser for internal testing
+- Add `CalculatedMeasure` support in measure filter functions
+
+### Changed
+- Fix error related to `iconSize` prop forwarding
+- Fix dashboard filter relation logic when widget has overlapping filters
+- Fix scatter chart discrepancy caused by invalid data options
+- Fix double toggle on the checkbox in multi-selection filters
+- Improve forecast error handling related to formulas
+
 ## [2.22.0] - 2026-03-03
 
 ### Added

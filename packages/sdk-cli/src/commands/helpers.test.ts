@@ -27,6 +27,19 @@ vi.mock('@sisense/sdk-modeling', () => ({
   writeJavascript: vi.fn(),
 }));
 
+vi.mock('@sisense/sdk-rest-client', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('@sisense/sdk-rest-client')>();
+  const { HttpClient: BaseHttpClient } = mod;
+  return {
+    ...mod,
+    HttpClient: class MockHttpClient extends BaseHttpClient {
+      login = vi.fn().mockResolvedValue(true);
+
+      get = vi.fn().mockResolvedValue(undefined);
+    },
+  };
+});
+
 describe('helpers', () => {
   describe('createDataModel', () => {
     let httpClient: Mocked<HttpClient>;
@@ -86,8 +99,8 @@ describe('helpers', () => {
     const fakePassword = 'password';
     const fakeDeploymentUrl = 'https://10.0.0.1';
 
-    it('should return HttpClient', () => {
-      const httpClient = getHttpClient({
+    it('should return HttpClient', async () => {
+      const httpClient = await getHttpClient({
         url: fakeDeploymentUrl,
         username: fakeUsername,
         password: fakePassword,
@@ -95,10 +108,10 @@ describe('helpers', () => {
       expect(httpClient).toBeInstanceOf(HttpClient);
     });
 
-    it('should throw error', () => {
-      expect(() => {
-        getHttpClient({ url: fakeDeploymentUrl });
-      }).toThrow();
+    it('should throw error', async () => {
+      await expect(getHttpClient({ url: fakeDeploymentUrl })).rejects.toThrow(
+        'Invalid authentication method',
+      );
     });
   });
 

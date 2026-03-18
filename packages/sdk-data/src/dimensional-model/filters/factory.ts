@@ -11,6 +11,7 @@ import {
   Attribute,
   BaseFilterConfig,
   BaseMeasure,
+  CalculatedMeasure,
   DateDimension,
   Filter,
   FilterRelations,
@@ -835,6 +836,32 @@ export const today: (dimension: DateDimension, config?: BaseFilterConfig) => Fil
 // MEASURE-RELATED FILTERS
 
 /**
+ * Gets the attribute from a measure, resolving through nested CalculatedMeasures.
+ * @param measure - Measure to get the attribute from
+ * @returns Attribute from the first BaseMeasure found in the measure tree
+ */
+function getMeasureAttribute(measure: BaseMeasure | CalculatedMeasure): Attribute {
+  if ('attribute' in measure) {
+    return measure.attribute;
+  }
+  for (const contextMeasure of Object.values(measure.context)) {
+    if (typeof contextMeasure !== 'object' || contextMeasure === null) {
+      continue;
+    }
+    if ('attribute' in contextMeasure) {
+      return (contextMeasure as BaseMeasure).attribute;
+    }
+    if (
+      'context' in contextMeasure &&
+      typeof (contextMeasure as CalculatedMeasure).context === 'object'
+    ) {
+      return getMeasureAttribute(contextMeasure as CalculatedMeasure);
+    }
+  }
+  throw new Error('Cannot determine attribute from measure');
+}
+
+/**
  * Creates a filter on all measure values matching the provided criteria.
  *
  * @param attribute - Attribute to filter
@@ -876,13 +903,13 @@ export function measureBase(
  * @returns A filter instance
  */
 export const measureEquals: (
-  measure: BaseMeasure,
+  measure: BaseMeasure | CalculatedMeasure,
   value: number,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, value, config) =>
     measureBase(
-      measure.attribute,
+      getMeasureAttribute(measure),
       measure,
       NumericOperators.Equals,
       value,
@@ -911,13 +938,13 @@ export const measureEquals: (
  * @returns A filter instance
  */
 export const measureGreaterThan: (
-  measure: BaseMeasure,
+  measure: BaseMeasure | CalculatedMeasure,
   value: number,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, value, config) =>
     measureBase(
-      measure.attribute,
+      getMeasureAttribute(measure),
       measure,
       NumericOperators.FromNotEqual,
       value,
@@ -946,13 +973,13 @@ export const measureGreaterThan: (
  * @returns A filter instance
  */
 export const measureGreaterThanOrEqual: (
-  measure: BaseMeasure,
+  measure: BaseMeasure | CalculatedMeasure,
   value: number,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, value, config) =>
     measureBase(
-      measure.attribute,
+      getMeasureAttribute(measure),
       measure,
       NumericOperators.From,
       value,
@@ -981,13 +1008,13 @@ export const measureGreaterThanOrEqual: (
  * @returns A filter instance
  */
 export const measureLessThanOrEqual: (
-  measure: BaseMeasure,
+  measure: BaseMeasure | CalculatedMeasure,
   value: number,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, value, config) =>
     measureBase(
-      measure.attribute,
+      getMeasureAttribute(measure),
       measure,
       NumericOperators.To,
       value,
@@ -1015,13 +1042,13 @@ export const measureLessThanOrEqual: (
  * @returns A filter instance
  */
 export const measureLessThan: (
-  measure: BaseMeasure,
+  measure: BaseMeasure | CalculatedMeasure,
   value: number,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, value, config) =>
     measureBase(
-      measure.attribute,
+      getMeasureAttribute(measure),
       measure,
       NumericOperators.ToNotEqual,
       value,
@@ -1052,14 +1079,14 @@ export const measureLessThan: (
  * @returns A filter instance
  */
 export const measureBetween: (
-  measure: BaseMeasure,
+  measure: BaseMeasure | CalculatedMeasure,
   valueA: number,
   valueB: number,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, valueA, valueB, config) =>
     measureBase(
-      measure.attribute,
+      getMeasureAttribute(measure),
       measure,
       NumericOperators.From,
       valueA,
@@ -1090,14 +1117,14 @@ export const measureBetween: (
  * @returns A filter instance
  */
 export const measureBetweenNotEqual: (
-  measure: BaseMeasure,
+  measure: BaseMeasure | CalculatedMeasure,
   valueA: number,
   valueB: number,
   config?: BaseFilterConfig,
 ) => Filter = withComposeCodeForFilter(
   (measure, valueA, valueB, config) =>
     measureBase(
-      measure.attribute,
+      getMeasureAttribute(measure),
       measure,
       NumericOperators.FromNotEqual,
       valueA,

@@ -24,6 +24,7 @@ import {
   MeasureTemplate,
 } from '../interfaces.js';
 import {
+  AggregationType,
   AggregationTypes,
   AnyObject,
   JaqlDataSource,
@@ -129,7 +130,7 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
    */
   readonly __serializable: string = 'DimensionalBaseMeasure';
 
-  static aggregationFromJAQL(agg: string): string {
+  static aggregationFromJAQL(agg: string): AggregationType {
     switch (agg) {
       case 'sum':
         return AggregationTypes.Sum;
@@ -417,9 +418,12 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
       },
     };
 
-    const context = {};
+    const context: Record<string, any> = {};
     const keys = Object.getOwnPropertyNames(this.context);
-    keys.forEach((k) => (context[k] = this.context[k].jaql(true)));
+    keys.forEach((k) => {
+      const v = this.context[k];
+      context[k] = v && typeof v.jaql === 'function' ? v.jaql(true) : v;
+    });
 
     r.jaql.context = context;
 
@@ -636,7 +640,7 @@ export function createMeasure(json: any): Measure | BaseMeasure {
       });
     }
 
-    const context = {};
+    const context: Record<string, any> = {};
 
     Object.getOwnPropertyNames(json.context).forEach((pname) => {
       context[pname] = create(json.context[pname]);

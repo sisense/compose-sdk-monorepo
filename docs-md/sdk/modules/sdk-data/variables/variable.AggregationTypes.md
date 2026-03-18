@@ -12,7 +12,7 @@ Different aggregation types
 
 ### `Average`
 
-**Average**: `string` = `'avg'`
+**`readonly`** **Average**: `"avg"` = `'avg'`
 
 Average aggregation type
 
@@ -20,7 +20,7 @@ Average aggregation type
 
 ### `Count`
 
-**Count**: `string` = `'count'`
+**`readonly`** **Count**: `"count"` = `'count'`
 
 Count aggregation type
 
@@ -28,7 +28,7 @@ Count aggregation type
 
 ### `CountDistinct`
 
-**CountDistinct**: `string` = `'countDistinct'`
+**`readonly`** **CountDistinct**: `"countDistinct"` = `'countDistinct'`
 
 Count distinct aggregation type
 
@@ -36,7 +36,7 @@ Count distinct aggregation type
 
 ### `Max`
 
-**Max**: `string` = `'max'`
+**`readonly`** **Max**: `"max"` = `'max'`
 
 Max aggregation type
 
@@ -44,7 +44,7 @@ Max aggregation type
 
 ### `Median`
 
-**Median**: `string` = `'median'`
+**`readonly`** **Median**: `"median"` = `'median'`
 
 Median aggregation type
 
@@ -52,7 +52,7 @@ Median aggregation type
 
 ### `Min`
 
-**Min**: `string` = `'min'`
+**`readonly`** **Min**: `"min"` = `'min'`
 
 Min aggregation type
 
@@ -60,7 +60,7 @@ Min aggregation type
 
 ### `StandardDeviation`
 
-**StandardDeviation**: `string` = `'stdev'`
+**`readonly`** **StandardDeviation**: `"stdev"` = `'stdev'`
 
 Standard deviation aggregation type
 
@@ -68,7 +68,7 @@ Standard deviation aggregation type
 
 ### `Sum`
 
-**Sum**: `string` = `'sum'`
+**`readonly`** **Sum**: `"sum"` = `'sum'`
 
 Sum aggregation type
 
@@ -76,6 +76,6 @@ Sum aggregation type
 
 ### `Variance`
 
-**Variance**: `string` = `'var'`
+**`readonly`** **Variance**: `"var"` = `'var'`
 
 Variance aggregation type

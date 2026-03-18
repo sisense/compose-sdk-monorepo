@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { DimensionalAttribute } from '../attributes.js';
-import { AggregationTypes, Sort } from '../types.js';
+import { AggregationType, AggregationTypes, Sort } from '../types.js';
 import {
   createMeasure,
   DimensionalBaseMeasure,
@@ -26,7 +26,7 @@ const createTestAttribute = (
 const createTestBaseMeasure = (
   name = 'Total Cost',
   attribute = createTestAttribute(),
-  aggregation = AggregationTypes.Sum,
+  aggregation: AggregationType = AggregationTypes.Sum,
   format?: string,
   sort = Sort.None,
 ) => new DimensionalBaseMeasure(name, attribute, aggregation, format, undefined, sort);

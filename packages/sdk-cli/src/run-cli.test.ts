@@ -20,6 +20,10 @@ const flushPromises = () => new Promise(setImmediate);
 // Reference: https://kgajera.com/blog/how-to-test-yargs-cli-with-jest/
 const COMMAND_GET_DATA_MODEL = 'get-data-model';
 const HTTP_CLIENT_ENV = `sdk-cli-${PKG_VERSION as string}`;
+const TELEMETRY_HEADERS = {
+  'x-sisense-origin': 'sdk-cli',
+  'x-sisense-sdk': 'csdk-sdk-cli',
+};
 
 /**
  * Programmatically set arguments and execute the CLI script
@@ -66,6 +70,24 @@ describe('CLI', () => {
     );
     handleHttpClientLoginSpy.mockImplementation(() => Promise.resolve());
     trackExecutionSpy.mockImplementation(() => {});
+
+    // MSW handlers so getHttpClient can complete (login + api/globals) without real network
+    server.use(
+      http.post('*/api/v1/authentication/login', () =>
+        HttpResponse.json({ access_token: 'fake-access-token' }),
+      ),
+      http.get('*/api/globals', () => HttpResponse.json({})),
+      http.get('*/api/v1/settings/system', () =>
+        HttpResponse.json({
+          tracking: {
+            apiTelemetry: true,
+          },
+        }),
+      ),
+      http.post('*/api/v1/wat/sessionToken', () =>
+        HttpResponse.json({ access_token: 'wat-token' }),
+      ),
+    );
   });
 
   afterEach(() => {
@@ -82,7 +104,7 @@ describe('CLI', () => {
     const a: Authenticator = getAuthenticatorSpy.mock.results[0].value;
     expect(a.type).toBe(type);
 
-    const expectedHttpClient = new HttpClient(fakeUrl, a, HTTP_CLIENT_ENV);
+    const expectedHttpClient = new HttpClient(fakeUrl, a, HTTP_CLIENT_ENV, TELEMETRY_HEADERS);
 
     expect(trackExecutionSpy).toHaveBeenCalled();
     expect(createDataModelSpy).toHaveBeenCalledWith(expectedHttpClient, fakeDataSource);
@@ -177,6 +199,17 @@ describe('CLI', () => {
       consoleLogSpy.mockClear();
 
       server.use(
+        http.post('*/api/v1/authentication/login', () =>
+          HttpResponse.json({ access_token: 'fake-access-token' }),
+        ),
+        http.get('*/api/globals', () => HttpResponse.json({})),
+        http.get('*/api/v1/settings/system', () =>
+          HttpResponse.json({
+            tracking: {
+              apiTelemetry: false,
+            },
+          }),
+        ),
         http.get('*/api/v1/authentication/tokens/api', () => {
           return HttpResponse.json({ token: 'fake-token' });
         }),
@@ -184,7 +217,7 @@ describe('CLI', () => {
     });
 
     it('gets a token with password provided as parameter and sends a tracking event', async () => {
-      expect.assertions(4);
+      expect.assertions(3);
 
       runCommand(
         'get-api-token',
@@ -198,8 +231,7 @@ describe('CLI', () => {
 
       await flushPromises();
 
-      expect(consoleLogSpy).toHaveBeenCalledOnce();
-      expect(consoleLogSpy).toHaveBeenCalledWith({
+      expect(consoleLogSpy).toHaveBeenLastCalledWith({
         token: 'fake-token',
       });
       expect(trackExecutionSpy).toHaveBeenCalledOnce();
@@ -215,7 +247,7 @@ describe('CLI', () => {
     });
 
     it('gets a token with password provided through answered prompt and sends a tracking event', async () => {
-      expect.assertions(4);
+      expect.assertions(3);
 
       vi.spyOn(prompts, 'promptPasswordInteractive').mockResolvedValueOnce({
         maskedPassword: fakePassword,
@@ -225,8 +257,7 @@ describe('CLI', () => {
 
       await flushPromises();
 
-      expect(consoleLogSpy).toHaveBeenCalledOnce();
-      expect(consoleLogSpy).toHaveBeenCalledWith({
+      expect(consoleLogSpy).toHaveBeenLastCalledWith({
         token: 'fake-token',
       });
       expect(trackExecutionSpy).toHaveBeenCalledOnce();

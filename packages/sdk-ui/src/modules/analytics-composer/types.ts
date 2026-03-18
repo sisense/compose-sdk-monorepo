@@ -1,4 +1,4 @@
-import { JaqlDataSourceForDto, JSONArray, JSONValue, MetadataItem } from '@sisense/sdk-data';
+import { JaqlDataSourceForDto, JSONArray, MetadataItem } from '@sisense/sdk-data';
 
 import type { DashboardByIdConfig } from '@/domains/dashboarding';
 import { DashboardProps } from '@/domains/dashboarding/types.js';
@@ -425,12 +425,19 @@ export type QueryInput = NlqTranslationInput<NlqResponseJSON, DataSchemaContext>
  * @internal
  */
 export type NlqTranslationErrorContext = {
-  /** The category of the query element that failed (dimensions, measures, filters, highlights) */
-  category: 'dimensions' | 'measures' | 'filters' | 'highlights';
-  /** The index of the element within its category array */
-  index: number;
+  /** The category of the query/chart element that failed (dimensions, measures, filters, highlights, dataOptions, chartType, styleOptions) */
+  category:
+    | 'dimensions'
+    | 'measures'
+    | 'filters'
+    | 'highlights'
+    | 'dataOptions'
+    | 'chartType'
+    | 'styleOptions';
+  /** The index of the element within its category array, or axis key for dataOptions (e.g. "category", "value") */
+  index: number | string;
   /** The complete original input that caused the error */
-  input: JSONValue;
+  input: unknown;
 };
 
 /**

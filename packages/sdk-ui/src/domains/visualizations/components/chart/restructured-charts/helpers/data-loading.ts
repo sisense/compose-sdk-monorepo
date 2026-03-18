@@ -6,7 +6,7 @@ import {
   executeQueryWithCache,
   executeQuery as executeQueryWithoutCache,
 } from '@/domains/query-execution/core/execute-query.js';
-import { ClientApplication } from '@/infra/app/client-application';
+import { type ClientApplication } from '@/infra/app/types.js';
 
 /**
  * Load data by a regular single query execution.

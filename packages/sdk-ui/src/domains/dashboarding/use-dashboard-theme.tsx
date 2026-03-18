@@ -39,7 +39,7 @@ export const useDashboardThemeInternal = ({ styleOptions }: DashboardThemeParams
  * React hook that returns dashboard theme settings
  *
  * @group Dashboards
+ *
  * @alpha
- * @internal
  */
 export const useDashboardTheme = withTracking('useDashboardTheme')(useDashboardThemeInternal);

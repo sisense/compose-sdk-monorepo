@@ -251,12 +251,14 @@ const translation: TranslationDictionary = {
     },
   },
   widgetHeader: {
+    addTitle: 'Добавить заголовок',
     info: {
       details: 'Детали виджета',
       tooltip: 'Нажмите, чтобы просмотреть полные детали',
     },
     menu: {
       deleteWidget: 'Удалить виджет',
+      renameWidget: 'Переименовать виджет',
       distributeEqualWidth: 'Равномерно распределить в этой строке',
     },
   },
@@ -405,6 +407,9 @@ const translation: TranslationDictionary = {
     configureFilter: 'Настроить фильтр',
     noResults: 'Нет результатов',
     searchPlaceholder: 'Поиск',
+    more: 'Ещё...',
+    filter: 'Фильтр',
+    addMeasure: 'Добавить показатель',
   },
   pivotTable: {
     grandTotal: 'Общий итог',
@@ -453,6 +458,18 @@ const translation: TranslationDictionary = {
       lockGroup: 'Заблокировать группу',
       unlockGroup: 'Разблокировать группу',
     },
+  },
+  measures: {
+    countShort: 'Кол-во {{level}}',
+    countDistinct: 'Количество уникальных',
+    count: 'Количество',
+    average: 'Среднее',
+    sum: 'Сумма',
+    min: 'Мин',
+    max: 'Макс',
+    stdev: 'Стандартное отклонение',
+    median: 'Медиана',
+    variance: 'Дисперсия',
   },
 };
 

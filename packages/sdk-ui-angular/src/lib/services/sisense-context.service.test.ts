@@ -57,10 +57,13 @@ describe('SisenseContextService', () => {
       await sisenseContextService.setConfig(sisenseConfigMock);
 
       expect(sisenseContextService.isInitialized).toBe(true);
-      expect(createClientApplicationMock).toHaveBeenCalledWith({
-        ...sisenseConfigMock,
-        showRuntimeErrors: true,
-      });
+      expect(createClientApplicationMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ...sisenseConfigMock,
+          showRuntimeErrors: true,
+          packageName: 'sdk-ui-angular',
+        }),
+      );
 
       const app = await sisenseContextService.getApp();
       expect(app).toBe(mockApp);
@@ -86,10 +89,13 @@ describe('SisenseContextService', () => {
 
       await sisenseContextService.setConfig(configWithoutRuntimeErrors);
 
-      expect(createClientApplicationMock).toHaveBeenCalledWith({
-        ...configWithoutRuntimeErrors,
-        showRuntimeErrors: true,
-      });
+      expect(createClientApplicationMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ...configWithoutRuntimeErrors,
+          showRuntimeErrors: true,
+          packageName: 'sdk-ui-angular',
+        }),
+      );
     });
 
     it('should preserve explicit showRuntimeErrors setting', async () => {
@@ -100,7 +106,12 @@ describe('SisenseContextService', () => {
 
       await sisenseContextService.setConfig(configWithRuntimeErrors);
 
-      expect(createClientApplicationMock).toHaveBeenCalledWith(configWithRuntimeErrors);
+      expect(createClientApplicationMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ...configWithRuntimeErrors,
+          packageName: 'sdk-ui-angular',
+        }),
+      );
     });
 
     it('should allow reconfiguration', async () => {

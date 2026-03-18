@@ -1,12 +1,23 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { DndContext, DragEndEvent, pointerWithin } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  pointerWithin,
+  rectIntersection,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import flow from 'lodash-es/flow';
 import isNumber from 'lodash-es/isNumber';
 import isUndefined from 'lodash-es/isUndefined';
 
-import { WIDGET_HEADER_HEIGHT } from '@/domains/dashboarding/components/editable-layout/const';
+import {
+  DRAG_ACTIVATION_DISTANCE_PX,
+  WIDGET_HEADER_HEIGHT,
+} from '@/domains/dashboarding/components/editable-layout/const';
 import { WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
 import { withOptionallyDisabledAutoHeight } from '@/domains/dashboarding/utils';
 import { Widget } from '@/domains/widgets/components/widget';
@@ -32,6 +43,7 @@ import {
   updateLayoutWidths,
   updateRowHeight,
 } from './helpers';
+import { SmartPointerSensor } from './smart-pointer-sensor';
 import { getDraggingWidgetId, isEditableLayoutDragData, isEditableLayoutDropData } from './utils';
 
 /**
@@ -134,6 +146,13 @@ export const EditableLayout = ({
   const [draggingWidgetId, setDraggingWidgetId] = useState<string | null>(null);
   const [internalLayout, setInternalLayout] = useSyncedState<WidgetsPanelLayout>(layout);
 
+  const sensors = useSensors(
+    useSensor(SmartPointerSensor, {
+      activationConstraint: { distance: DRAG_ACTIVATION_DISTANCE_PX },
+    }),
+    useSensor(KeyboardSensor),
+  );
+
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       setIsDragging(false);
@@ -212,7 +231,11 @@ export const EditableLayout = ({
   return (
     <Wrapper>
       <DndContext
-        collisionDetection={pointerWithin}
+        sensors={sensors}
+        collisionDetection={(args) => {
+          const pointer = pointerWithin(args);
+          return pointer.length > 0 ? pointer : rectIntersection(args);
+        }}
         onDragStart={(event) => {
           setDraggingWidgetId(getDraggingWidgetId(event));
           setIsDragging(true);

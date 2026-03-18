@@ -5,6 +5,7 @@ import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import {
   DashboardStyleOptions,
   SpecificWidgetOptions,
+  WidgetPatch,
   WidgetsOptions,
   WidgetsPanelLayout,
 } from '@/domains/dashboarding/dashboard-model';
@@ -272,6 +273,22 @@ export interface EditModeConfig {
      */
     enabled: boolean;
   };
+  /**
+   * Configuration for the widget renaming feature.
+   *
+   * @internal
+   */
+  renameWidget?: {
+    /**
+     * When `true`, adds a "Rename widget" menu item to each widget header.
+     * On click, triggers inline title editing of the widget.
+     * Only has effect when edit mode is also enabled (`editMode.enabled`).
+     *
+     * If not specified, the default value is `false`.
+     * @internal
+     */
+    enabled: boolean;
+  };
 }
 
 /**
@@ -360,6 +377,12 @@ export type DashboardPersistenceManager = {
     widgetsPanelLayout: WidgetsPanelLayout;
     widgetOptions?: SpecificWidgetOptions;
   }>;
+  /**
+   * Patch a single field (e.g. title) on an existing widget.
+   *
+   * @internal
+   */
+  patchWidget: (widgetOid: string, patch: WidgetPatch) => Promise<void>;
 };
 
 /**

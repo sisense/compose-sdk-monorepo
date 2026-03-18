@@ -22,14 +22,25 @@ export enum UseDashboardModelActionTypeInternal {
 /**
  * Action types for the dashboard model state used in {@link useDashboardModel}.
  *
- * @internal
+ * @sisenseInternal
  */
 export enum UseDashboardModelActionType {
   FILTERS_UPDATE = 'FILTERS.UPDATE',
   ADD_WIDGET = 'WIDGETS.ADD',
+  PATCH_WIDGET = 'WIDGETS.PATCH',
   WIDGETS_PANEL_LAYOUT_UPDATE = 'WIDGETS_PANEL_LAYOUT.UPDATE',
   WIDGETS_DELETE = 'WIDGETS.DELETE',
 }
+
+/**
+ * Fields that can be safely patched on a widget without full DTO reconstruction.
+ * Intentionally narrow — extend only when lossless roundtrip is guaranteed.
+ *
+ * @internal
+ */
+export type WidgetPatch = {
+  title?: string;
+};
 
 /**
  * Internal actions for the dashboard model state used in {@link useDashboardModel}.
@@ -58,6 +69,7 @@ export type UseDashboardModelInternalAction =
 export type UseDashboardModelAction =
   | UseDashboardModelFilterUpdateAction
   | UseDashboardModelAddWidgetAction
+  | UseDashboardModelPatchWidgetAction
   | UseDashboardModelLayoutUpdateAction
   | UseDashboardWidgetsDeleteAction;
 
@@ -92,6 +104,19 @@ export type UseDashboardModelAddWidgetAction = {
         widgetsPanelLayout?: WidgetsPanelLayout;
         widgetOptions?: SpecificWidgetOptions;
       };
+};
+
+/**
+ * Patch widget action for the dashboard model state used in {@link useDashboardModel}.
+ *
+ * @internal
+ */
+export type UseDashboardModelPatchWidgetAction = {
+  type: UseDashboardModelActionType.PATCH_WIDGET;
+  payload: {
+    widgetOid: string;
+    patch: WidgetPatch;
+  };
 };
 
 /**

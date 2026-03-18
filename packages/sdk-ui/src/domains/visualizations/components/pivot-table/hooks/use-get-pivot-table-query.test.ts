@@ -4,7 +4,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 
 import { executePivotQueryMock } from '@/domains/query-execution/core/__mocks__/execute-query';
 import { translatePivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/translate-data-options';
-import { ClientApplication } from '@/infra/app/client-application';
+import { type ClientApplication } from '@/infra/app/types';
 import { useSisenseContextMock } from '@/infra/contexts/sisense-context/__mocks__/sisense-context';
 
 import { mockPivotTableProps } from '../__mocks__/mocks';

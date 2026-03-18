@@ -110,7 +110,7 @@ export enum WidgetDashboardFilterMode {
  * This is the (not-comprehensive) structure of the response from the
  * `/api/v1/dashboards/${dashboardOid}/widgets/${widgetOid}` endpoint.
  *
- * @internal
+ * @sisenseInternal
  */
 export interface WidgetDto {
   oid: string;

@@ -248,12 +248,14 @@ const translation: TranslationDictionary = {
     },
   },
   widgetHeader: {
+    addTitle: 'タイトルを追加',
     info: {
       details: 'ウィジェットの詳細',
       tooltip: 'クリックして詳細を表示',
     },
     menu: {
       deleteWidget: 'ウィジェットを削除',
+      renameWidget: 'ウィジェットの名前を変更',
       distributeEqualWidth: 'この行で均等に配分',
     },
   },
@@ -401,6 +403,9 @@ const translation: TranslationDictionary = {
     configureFilter: 'フィルターを設定',
     noResults: '結果なし',
     searchPlaceholder: '検索',
+    more: 'もっと...',
+    filter: 'フィルター',
+    addMeasure: 'メジャーを追加',
   },
   pivotTable: {
     grandTotal: '合計',
@@ -449,6 +454,18 @@ const translation: TranslationDictionary = {
       lockGroup: 'グループをロック',
       unlockGroup: 'グループのロック解除',
     },
+  },
+  measures: {
+    countShort: '{{level}}の件数',
+    countDistinct: 'ユニーク数',
+    count: '全件数',
+    average: '平均',
+    sum: '合計',
+    min: '最小',
+    max: '最大',
+    stdev: '標準偏差',
+    median: '中央値',
+    variance: '分散',
   },
 };
 

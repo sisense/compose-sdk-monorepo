@@ -8,7 +8,7 @@ import type { Mock } from 'vitest';
 import { SisenseContextPayload } from '@/infra/contexts/sisense-context/sisense-context';
 
 import { useExecuteQuery } from '.';
-import { ClientApplication } from '../../../../infra/app/client-application';
+import { type ClientApplication } from '../../../../infra/app/types';
 import { useSisenseContextMock } from '../../../../infra/contexts/sisense-context/__mocks__/sisense-context';
 import {
   createExecuteQueryCacheKeyMock,

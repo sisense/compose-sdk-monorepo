@@ -13,7 +13,7 @@ export const DEFAULT_EXCEEDED_THRESHOLD = 100;
 /**
  * Response from the quota/credit balance API
  *
- * @internal
+ * @sisenseInternal
  */
 export interface QuotaApiResponse {
   balance: number;
@@ -25,7 +25,7 @@ export interface QuotaApiResponse {
 /**
  * Calculated quota state from API response
  *
- * @internal
+ * @sisenseInternal
  */
 export interface QuotaState {
   initialBalance: number;
@@ -38,7 +38,7 @@ export interface QuotaState {
 /**
  * Options for useQuotaNotification
  *
- * @internal
+ * @sisenseInternal
  */
 export interface QuotaNotificationOptions {
   /** Whether to fetch. When false, skips API calls and polling. Defaults to feature-flag value. */
@@ -91,7 +91,7 @@ function calculateQuota(
  *
  * @param options - Quota notification options. When enabled is false, skips fetching and polling.
  * @returns Quota state, enabled flag, loading status, and error
- * @internal
+ * @sisenseInternal
  */
 export const useQuotaNotification = (options: QuotaNotificationOptions = {}) => {
   const {

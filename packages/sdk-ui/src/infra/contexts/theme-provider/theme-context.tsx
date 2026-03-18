@@ -15,6 +15,7 @@ export const ThemeContext = createContext<{
  * Hook to get the current theme settings.
  *
  * @returns The current theme settings
- * @internal
+ *
+ * @sisenseInternal
  */
 export const useThemeContext = () => useContext(ThemeContext);

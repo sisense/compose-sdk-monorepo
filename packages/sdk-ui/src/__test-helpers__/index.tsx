@@ -13,7 +13,7 @@ import { DeepPartial } from 'ts-essentials';
 
 import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
 
-import { ClientApplication } from '../infra/app/client-application';
+import { ClientApplication } from '../infra/app/types';
 import { CustomWidgetsProvider } from '../infra/contexts/custom-widgets-provider';
 import {
   SisenseContext,

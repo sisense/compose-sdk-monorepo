@@ -4,7 +4,11 @@ let baseConfig = {
   // To allow TypeDoc to resolve references across packages,
   // "declaration" and "declarationMap" in tsconfig.json must be set to true
   entryPointStrategy: 'packages',
-  plugin: ['typedoc-plugin-vue', './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs'],
+  plugin: [
+    './typedoc-plugins/typedoc-plugin-public-exclude-tags/index.cjs',
+    'typedoc-plugin-vue',
+    './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs',
+  ],
   readme: 'none',
   out: 'docs',
 };
@@ -13,6 +17,7 @@ if (process.env.TYPEDOC_FORMAT === 'MD') {
   baseConfig = {
     ...baseConfig,
     plugin: [
+      './typedoc-plugins/typedoc-plugin-public-exclude-tags/index.cjs',
       '@sisense/typedoc-plugin-markdown',
       'typedoc-plugin-vue',
       './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs',

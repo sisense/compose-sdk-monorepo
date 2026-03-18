@@ -106,6 +106,11 @@ export async function persistDashboardModelMiddleware(
         payload: { widget: serverWidget, widgetOptions },
       };
     }
+    case UseDashboardModelActionType.PATCH_WIDGET: {
+      const { widgetOid, patch } = action.payload;
+      await restApi.patchWidgetInDashboard(dashboardOid, widgetOid, patch, sharedMode);
+      break;
+    }
     case UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE:
       await restApi.patchDashboard(
         dashboardOid,

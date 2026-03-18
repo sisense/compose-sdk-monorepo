@@ -5,7 +5,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import cloneDeep from 'lodash-es/cloneDeep';
 import type { Mock } from 'vitest';
 
-import { ClientApplication } from '../../../../infra/app/client-application';
+import { type ClientApplication } from '../../../../infra/app/types';
 import { useSisenseContextMock } from '../../../../infra/contexts/sisense-context/__mocks__/sisense-context';
 import { executePivotQueryMock } from '../../core/__mocks__/execute-query';
 import { ExecuteQueryParams } from '../../types';

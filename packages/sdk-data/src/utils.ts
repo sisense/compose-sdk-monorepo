@@ -28,6 +28,7 @@ import * as measureFactory from './dimensional-model/measures/factory.js';
 import { DimensionalBaseMeasure } from './dimensional-model/measures/measures.js';
 import { isDatetime, isNumber } from './dimensional-model/simple-column-types.js';
 import {
+  AggregationType,
   AggregationTypes,
   BaseJaql,
   DateLevels,
@@ -387,6 +388,8 @@ export const createAttributeHelper = ({
   title,
   panel,
   dataSource,
+  indexed,
+  merged,
 }: {
   /** Dimension expression */
   expression: string;
@@ -404,6 +407,10 @@ export const createAttributeHelper = ({
   panel?: string;
   /** Jaql data source */
   dataSource?: JaqlDataSource;
+  /** Indexed */
+  indexed?: boolean;
+  /** Merged */
+  merged?: boolean;
 }): Attribute | LevelAttribute => {
   const column = parseExpression(expression).column;
   const sortEnum = convertSort(sort);
@@ -422,6 +429,8 @@ export const createAttributeHelper = ({
       dataSource,
       undefined,
       panel,
+      indexed,
+      merged,
     );
 
     return levelAttribute;
@@ -439,6 +448,8 @@ export const createAttributeHelper = ({
     dataSource,
     undefined,
     panel,
+    indexed,
+    merged,
   );
 
   return attribute;
@@ -459,6 +470,8 @@ export const createMeasureHelper = ({
   sort,
   title,
   dataSource,
+  indexed,
+  merged,
 }: {
   /** Dimension expression */
   expression: string;
@@ -476,6 +489,10 @@ export const createMeasureHelper = ({
   title?: string;
   /** Jaql data source */
   dataSource?: JaqlDataSource;
+  /** Indexed */
+  indexed?: boolean;
+  /** Merged */
+  merged?: boolean;
 }): BaseMeasure => {
   const attribute = createAttributeHelper({
     expression,
@@ -485,13 +502,28 @@ export const createMeasureHelper = ({
     sort,
     title,
     dataSource,
+    indexed,
+    merged,
   });
 
   const tranformedAgg = DimensionalBaseMeasure.aggregationFromJAQL(agg);
   const column = parseExpression(expression).column;
   const updatedTitle = title ?? `${tranformedAgg} ${column}`;
 
-  switch (tranformedAgg) {
+  return createMeasureByAggType(tranformedAgg, attribute, updatedTitle, format);
+};
+
+/**
+ * @returns measure
+ * @internal
+ */
+export function createMeasureByAggType(
+  agg: AggregationType,
+  attribute: Attribute | LevelAttribute,
+  updatedTitle?: string,
+  format?: string,
+): BaseMeasure {
+  switch (agg) {
     case AggregationTypes.Sum:
       return measureFactory.sum(attribute, updatedTitle, format);
 
@@ -527,7 +559,7 @@ export const createMeasureHelper = ({
     default:
       return measureFactory.sum(attribute, updatedTitle, format);
   }
-};
+}
 
 /**
  * Creates a measure from the provided parameters
@@ -608,6 +640,8 @@ export function createDimensionalElementFromJaql(
     title: jaql.title,
     panel: panel,
     dataSource,
+    indexed: jaql.indexed,
+    merged: jaql.merged,
   });
 }
 

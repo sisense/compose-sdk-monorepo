@@ -339,7 +339,8 @@ export function isTextWidgetProps(
  *
  * @param widgetProps - The widget props to check.
  * @returns whether the widget props is for a pivot table widget
- * @internal
+ *
+ * @sisenseInternal
  */
 export function isPivotTableWidgetProps(
   widgetProps: CommonWidgetProps,
@@ -365,7 +366,7 @@ export function isCustomWidgetProps(
  *
  * @param widgetProps - The widget props to check.
  * @returns whether the widget props is for a chart widget
- * @internal
+ * @sisenseInternal
  */
 export function isChartWidgetProps(
   widgetProps: CommonWidgetProps,

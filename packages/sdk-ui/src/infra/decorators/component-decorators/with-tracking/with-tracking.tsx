@@ -25,7 +25,7 @@ export type TrackingDecoratorConfig = {
 /**
  * Adds tracking to the component
  *
- * @internal
+ * @sisenseInternal
  */
 export const withTracking: ComponentDecorator<TrackingDecoratorConfig> = ({
   componentName,

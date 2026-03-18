@@ -7323,13 +7323,11 @@ __metadata:
     "@sisense/sdk-rest-client": "workspace:*"
     "@sisense/sdk-tracking": "workspace:*"
     "@types/inquirer": 8.2.6
-    "@types/js-levenshtein": ^1.1.3
     "@types/yargs": ^17.0.22
     "@vitest/coverage-istanbul": 3.2.4
     cross-fetch: ^4.0.0
     eslint: ^8.40.0
     inquirer: ^8.1.2
-    js-levenshtein: ^1.1.6
     msw: 2.2.1
     node-window-polyfill: ^1.0.2
     prettier: 2.8.4
@@ -7710,6 +7708,7 @@ __metadata:
     react-multi-carousel: ^2.8.6
     react-number-format: ^5.4.0
     react-plotly.js: ^2.6.0
+    react-simple-code-editor: ^0.13.1
     rollup-plugin-re: ^1.0.7
     sass: ^1.90.0
     semver: ^7.7.4
@@ -9391,13 +9390,6 @@ __metadata:
   version: 2.2.7
   resolution: "@types/js-cookie@npm:2.2.7"
   checksum: 851f47e94ca1fc43661d8f51614d67a613e7810c91b876d0a3b311ce72f7df800107fd02a08cb6948184e12c120b4f058edca2f50424d8798bdcffd6627281e3
-  languageName: node
-  linkType: hard
-
-"@types/js-levenshtein@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "@types/js-levenshtein@npm:1.1.3"
-  checksum: eb338696da976925ea8448a42d775d7615a14323dceeb08909f187d0b3d3b4c1f67a1c36ef586b1c2318b70ab141bba8fc58311ba1c816711704605aec09db8b
   languageName: node
   linkType: hard
 
@@ -19236,13 +19228,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-levenshtein@npm:^1.1.6":
-  version: 1.1.6
-  resolution: "js-levenshtein@npm:1.1.6"
-  checksum: 409f052a7f1141be4058d97da7860e08efd97fc588b7a4c5cfa0548bc04f6d576644dae65ab630266dff685d56fb90d494e03d4d79cb484c287746b4f1bf0694
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -24031,6 +24016,16 @@ __metadata:
   peerDependencies:
     react: ">= 16.3"
   checksum: 616a10205acfaf8cc3aa0824b60f6d037eef87143d8f338cf826deb74a353db9b9baad67a65dc8535fe90840bfc3e1b8a901f9c247033ffeec2f30405ac7528e
+  languageName: node
+  linkType: hard
+
+"react-simple-code-editor@npm:^0.13.1":
+  version: 0.13.1
+  resolution: "react-simple-code-editor@npm:0.13.1"
+  peerDependencies:
+    react: "*"
+    react-dom: "*"
+  checksum: 1d223e34ccac5d7f91318f28d5edab6ccb13c51b1afb502094b8475214321263bb44258d355978e1714e9360c9081fb9f38d3ae89071a06628407627c362cc45
   languageName: node
   linkType: hard
 

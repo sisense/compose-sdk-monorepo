@@ -1,16 +1,18 @@
 import {
+  Attribute,
   Filter,
   FilterRelations,
   JaqlDataSourceForDto,
   JSONArray,
-  JSONValue,
   Measure,
+  PivotGrandTotals,
 } from '@sisense/sdk-data';
 
 import { CategoryStyle, SeriesStyle, ValueStyle } from '@/public-api/index.js';
+import type { PivotTableStyleOptions } from '@/types.js';
 
-import { NlqTranslationInput } from '../types.js';
-import type { SchemaIndex } from './common.js';
+import { DataSchemaContext, NlqTranslationInput } from '../types.js';
+import type { SchemaIndex } from './shared/utils/schema-index.js';
 
 /**
  * Internal context type that uses schemaIndex for efficient lookups
@@ -21,6 +23,8 @@ export interface InternalDataSchemaContext {
   dataSource: JaqlDataSourceForDto;
   /** Schema index for efficient table/column lookups */
   schemaIndex: SchemaIndex;
+  /** Chart type for axis-specific translation (e.g., pivot columns, boxplot value) */
+  chartType?: string;
 }
 
 export const DIMENSIONAL_NAME_PREFIX = 'DM.';
@@ -127,7 +131,15 @@ export type CustomFunctionProcessor = (
   context: FunctionContext,
 ) => void;
 
-export function isFunctionCall(value: JSONValue): value is FunctionCall {
+/**
+ * Type guard: value is a non-null object (Record<string, unknown>).
+ * @internal
+ */
+export function isRecordStringUnknown(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+export function isFunctionCall(value: unknown): value is FunctionCall {
   return typeof value === 'object' && value !== null && 'function' in value && 'args' in value;
 }
 
@@ -152,6 +164,26 @@ export function isMeasureElement(arg: QueryElement): arg is Measure {
 export function isStringArray(value: JSONArray): value is string[] {
   return value.every((item) => typeof item === 'string');
 }
+
+/**
+ * Enriched dimension translation result. Style uses CategoryStyle (same as StyledColumn).
+ *
+ * @internal
+ */
+export type DimensionTranslationItem = {
+  attribute: Attribute;
+  style?: CategoryStyle;
+};
+
+/**
+ * Enriched measure translation result. Style uses ValueStyle & SeriesStyle (same as StyledMeasureColumn).
+ *
+ * @internal
+ */
+export type MeasureTranslationItem = {
+  measure: Measure;
+  style?: ValueStyle & SeriesStyle;
+};
 
 /**
  * JSON-facing type for a styled dimension/attribute.
@@ -196,10 +228,9 @@ export type MeasureItemJSON = FunctionCall | StyledMeasureColumnJSON;
  */
 export function isStyledColumnJSON(value: unknown): value is StyledColumnJSON {
   return (
-    typeof value === 'object' &&
-    value !== null &&
+    isRecordStringUnknown(value) &&
     'column' in value &&
-    typeof (value as Record<string, unknown>).column === 'string' &&
+    typeof value.column === 'string' &&
     !('function' in value && 'args' in value)
   );
 }
@@ -210,9 +241,120 @@ export function isStyledColumnJSON(value: unknown): value is StyledColumnJSON {
  * @internal
  */
 export function isStyledMeasureColumnJSON(value: unknown): value is StyledMeasureColumnJSON {
-  const obj = value as Record<string, unknown> | null;
-  if (typeof value !== 'object' || value === null || obj === null || !('column' in obj)) {
+  if (!isRecordStringUnknown(value) || !('column' in value)) {
     return false;
   }
-  return isFunctionCall(obj.column as JSONValue);
+  return isFunctionCall(value.column);
 }
+
+/**
+ * JSON representation of chart data options.
+ * Maps axis names to arrays of dimension or measure items.
+ * Supports all chart types (cartesian, categorical, scatter, etc.).
+ *
+ * @internal
+ */
+export interface DataOptionsJSON {
+  // Cartesian charts (column, line, bar, area, polar)
+  category?: DimensionItemJSON[];
+  /** Array for cartesian/categorical; single for calendar-heatmap */
+  value?: MeasureItemJSON[] | MeasureItemJSON;
+  breakBy?: DimensionItemJSON[];
+
+  // Scatter charts
+  x?: DimensionItemJSON | MeasureItemJSON;
+  y?: DimensionItemJSON | MeasureItemJSON;
+  breakByPoint?: DimensionItemJSON;
+  breakByColor?: DimensionItemJSON | MeasureItemJSON;
+  size?: MeasureItemJSON;
+
+  // Categorical charts (pie, funnel, treemap, sunburst) - use category/value
+
+  // Boxplot
+  boxType?: MeasureItemJSON;
+  outliers?: MeasureItemJSON[];
+
+  // Scattermap
+  geo?: DimensionItemJSON[];
+  colorBy?: MeasureItemJSON;
+  details?: DimensionItemJSON;
+
+  // Areamap
+  color?: MeasureItemJSON[];
+
+  // Calendar heatmap
+  date?: DimensionItemJSON;
+
+  // Table/Pivot
+  columns?: (DimensionItemJSON | MeasureItemJSON)[];
+  rows?: DimensionItemJSON[];
+  values?: MeasureItemJSON[];
+
+  // Indicator
+  secondary?: MeasureItemJSON[];
+  min?: MeasureItemJSON[];
+  max?: MeasureItemJSON[];
+}
+
+/**
+ * JSON representation of a chart configuration from NLQ API.
+ * Matches the structure returned by NLQ v3 for chart recommendations.
+ * Reusable for chart JSON translation (translateChartFromJSON/translateChartToJSON).
+ *
+ * @internal
+ */
+export interface ChartJSON {
+  /** Chart type (e.g., 'column', 'line', 'bar', 'pie', 'scatter') */
+  chartType: string;
+
+  /** Data options mapping chart axes to dimensions/measures */
+  dataOptions: DataOptionsJSON;
+
+  /** Optional style options for chart appearance (colors, legend, axes, etc.) */
+  styleOptions?: Record<string, unknown>;
+
+  /** Optional filters to apply to the chart data */
+  filters?: FunctionCall[];
+
+  /** Optional highlights (filter criteria) to apply to the chart */
+  highlights?: FunctionCall[];
+}
+
+/**
+ * Input type for chart translation (JSON → CSDK).
+ * Combines chartJSON with data schema context.
+ *
+ * @internal
+ */
+export type ChartInput = NlqTranslationInput<ChartJSON, DataSchemaContext>;
+
+/**
+ * JSON representation of pivot table data options.
+ *
+ * @internal
+ */
+export interface PivotTableDataOptionsJSON {
+  rows?: DimensionItemJSON[];
+  columns?: DimensionItemJSON[];
+  values?: MeasureItemJSON[];
+  grandTotals?: PivotGrandTotals;
+}
+
+/**
+ * JSON representation of pivot table config from NLQ API.
+ *
+ * @internal
+ */
+export interface PivotTableJSON {
+  dataOptions: PivotTableDataOptionsJSON;
+  styleOptions?: PivotTableStyleOptions;
+  filters?: FunctionCall[];
+  highlights?: FunctionCall[];
+}
+
+/**
+ * Input type for pivot table translation (JSON → CSDK).
+ *
+ * @internal
+ */
+export type PivotTableInput = NlqTranslationInput<PivotTableJSON, DataSchemaContext>;

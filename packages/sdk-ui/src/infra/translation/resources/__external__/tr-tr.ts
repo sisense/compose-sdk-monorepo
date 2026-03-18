@@ -248,12 +248,14 @@ const translation: TranslationDictionary = {
     },
   },
   widgetHeader: {
+    addTitle: 'Başlık ekle',
     info: {
       details: 'Widget ayrıntıları',
       tooltip: 'Tam ayrıntıları görmek için tıklayın',
     },
     menu: {
       deleteWidget: "Widget'ı sil",
+      renameWidget: "Widget'ı yeniden adlandır",
       distributeEqualWidth: 'Bu satırda eşit olarak dağıt',
     },
   },
@@ -403,6 +405,9 @@ const translation: TranslationDictionary = {
     configureFilter: 'Filtreyi yapılandır',
     noResults: 'Sonuç yok',
     searchPlaceholder: 'Ara',
+    more: 'Daha fazla...',
+    filter: 'Filtre',
+    addMeasure: 'Ölçüm ekle',
   },
   pivotTable: {
     grandTotal: 'Genel toplam',
@@ -451,6 +456,18 @@ const translation: TranslationDictionary = {
       lockGroup: 'Grubu Kilitle',
       unlockGroup: 'Grup Kilidini Aç',
     },
+  },
+  measures: {
+    countShort: '{{level}} sayısı',
+    countDistinct: 'Benzersiz say',
+    count: 'Tümünü say',
+    average: 'Ortalama',
+    sum: 'Toplam',
+    min: 'Min',
+    max: 'Maks',
+    stdev: 'Standart sapma',
+    median: 'Medyan',
+    variance: 'Varyans',
   },
 };
 

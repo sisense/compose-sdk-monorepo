@@ -2,10 +2,16 @@ import { ReactNode } from 'react';
 
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
+import type {
+  ChartWidgetChangeEvent,
+  ChartWidgetDrilldownSelectionsChangedEvent,
+} from '@/domains/widgets/change-events';
 import type { ChartEventProps } from '@/props';
 import { ChartDataOptions, ChartType, ChartWidgetStyleOptions, DrilldownOptions } from '@/types';
 
 import { WidgetConfig } from '../widget/types';
+
+export type { ChartWidgetChangeEvent, ChartWidgetDrilldownSelectionsChangedEvent };
 
 /**
  * Props for the {@link ChartWidget} component
@@ -112,6 +118,14 @@ export interface ChartWidgetProps extends ChartEventProps {
    */
   highlightSelectionDisabled?: boolean;
 
-  /** @internal */
-  onChange?: (props: Partial<ChartWidgetProps>) => void;
+  /**
+   * Callback to receive widget change events.
+   *
+   * Invoked when the widget state changes (e.g. drilldown selections).
+   * See {@link ChartWidgetChangeEvent} for event types.
+   *
+   * @param event - The change event that occurred
+   * @internal
+   */
+  onChange?: (event: ChartWidgetChangeEvent) => void;
 }

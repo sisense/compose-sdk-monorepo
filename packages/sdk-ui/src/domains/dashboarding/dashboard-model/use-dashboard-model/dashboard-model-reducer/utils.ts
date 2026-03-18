@@ -20,7 +20,8 @@ import { AddWidgetPayload } from './types.js';
  *
  * @param filtersOrFilterRelations - The filters or filter relations to translate
  * @returns The translated filters and relations DTOs for Fusion
- * @internal
+ *
+ * @sisenseInternal
  */
 export function translateFiltersAndRelationsToDto(
   filtersOrFilterRelations: Filter[] | FilterRelations,

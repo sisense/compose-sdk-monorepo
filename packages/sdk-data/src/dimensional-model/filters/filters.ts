@@ -17,7 +17,7 @@ import {
   Measure,
   MembersFilterConfig,
 } from '../interfaces.js';
-import { isDimensionalBaseMeasure } from '../measures/measures.js';
+import { isDimensionalBaseMeasure, isDimensionalCalculatedMeasure } from '../measures/measures.js';
 import { AnyObject, DateLevels, JSONObject, JSONValue, MetadataTypes } from '../types.js';
 import {
   getDefaultBaseFilterConfig,
@@ -669,7 +669,7 @@ export class MeasureFilter extends DoubleOperatorFilter<number> {
 
     const result = super.jaql(nested);
 
-    if (isDimensionalBaseMeasure(this.measure)) {
+    if (isDimensionalBaseMeasure(this.measure) || isDimensionalCalculatedMeasure(this.measure)) {
       Object.entries(this.measure.jaql().jaql).forEach(([key, value]) => {
         result.jaql[key] = value;
       });
@@ -808,7 +808,7 @@ export class MeasureRankingFilter extends AbstractFilter {
 
     const result = super.jaql(nested);
 
-    if (isDimensionalBaseMeasure(this.measure)) {
+    if (isDimensionalBaseMeasure(this.measure) || isDimensionalCalculatedMeasure(this.measure)) {
       Object.entries(this.measure.jaql().jaql).forEach(([key, value]) => {
         result.jaql[key] = value;
       });

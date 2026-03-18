@@ -14,7 +14,7 @@ import styles from './quota-notification.module.scss';
 /**
  * Props for QuotaNotification component
  *
- * @internal
+ * @sisenseInternal
  */
 export interface QuotaNotificationProps extends QuotaNotificationOptions {
   /**
@@ -40,7 +40,7 @@ export interface QuotaNotificationProps extends QuotaNotificationOptions {
  *
  * @param props - QuotaNotification props
  * @returns QuotaNotification component or null
- * @internal
+ * @sisenseInternal
  */
 export function QuotaNotification({
   className = '',

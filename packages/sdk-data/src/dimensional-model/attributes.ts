@@ -45,6 +45,16 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
 
   protected _sort: Sort = Sort.None;
 
+  /**
+   * @internal
+   */
+  readonly merged?: boolean;
+
+  /**
+   * @internal
+   */
+  readonly indexed?: boolean;
+
   constructor(
     name: string,
     expression: string,
@@ -54,6 +64,8 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
     dataSource?: JaqlDataSource,
     composeCode?: string,
     panel?: string,
+    indexed?: boolean,
+    merged?: boolean,
   ) {
     super(name, type || MetadataTypes.Attribute, desc, dataSource, composeCode);
     this.expression = expression;
@@ -72,6 +84,8 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
       this.panel = panel;
     }
     this._sort = sort || Sort.None;
+    this.merged = merged;
+    this.indexed = indexed;
   }
 
   /**
@@ -106,6 +120,8 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
       this.dataSource,
       this.composeCode,
       this.panel,
+      this.indexed,
+      this.merged,
     );
   }
 
@@ -181,8 +197,21 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
     dataSource?: JaqlDataSource,
     composeCode?: string,
     panel?: string,
+    indexed?: boolean,
+    merged?: boolean,
   ) {
-    super(name, expression, MetadataTypes.DateLevel, desc, sort, dataSource, composeCode);
+    super(
+      name,
+      expression,
+      MetadataTypes.DateLevel,
+      desc,
+      sort,
+      dataSource,
+      composeCode,
+      undefined,
+      indexed,
+      merged,
+    );
 
     this._format = format;
     this.granularity = granularity;
@@ -244,6 +273,9 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       sort,
       this.dataSource,
       this.composeCode,
+      undefined,
+      this.indexed,
+      this.merged,
     );
   }
 
@@ -272,6 +304,9 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       this._sort,
       this.dataSource,
       this.composeCode,
+      undefined,
+      this.indexed,
+      this.merged,
     );
   }
 
@@ -291,6 +326,9 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       this._sort,
       this.dataSource,
       this.composeCode,
+      undefined,
+      this.indexed,
+      this.merged,
     );
   }
 
@@ -528,6 +566,10 @@ export function createAttribute(json: any): Attribute {
     json.desc || json.description,
     json.sort,
     json.dataSource,
+    undefined,
+    undefined,
+    json.indexed,
+    json.merged,
   );
 }
 
@@ -546,6 +588,10 @@ export function createLevel(json: any): LevelAttribute {
     json.desc || json.description,
     json.sort,
     json.dataSource,
+    undefined,
+    undefined,
+    json.indexed,
+    json.merged,
   );
 }
 

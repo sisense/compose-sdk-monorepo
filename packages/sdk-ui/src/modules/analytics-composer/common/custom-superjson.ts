@@ -111,6 +111,8 @@ const deserializeDimensionalDateDimension = (v: any) =>
     normalizeSort(v.sort),
     v.dataSource,
     v.composeCode,
+    v.indexed,
+    v.merged,
   );
 
 const deserializeDimension = (v: any) => {

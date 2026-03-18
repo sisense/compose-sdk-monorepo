@@ -34,5 +34,8 @@ export type DeploymentProps = {
   isManagedService: boolean;
   licenseState: 'valid';
   narrationProvider: 'arria' | 'sisenseAI';
+  aiNarrative?: boolean;
+  SisenseManagedLLM?: boolean;
+  llmBYOK?: boolean;
   InfusionApps: boolean;
 };

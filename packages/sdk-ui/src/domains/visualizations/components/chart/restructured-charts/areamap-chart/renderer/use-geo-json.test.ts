@@ -4,7 +4,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { Mock } from 'vitest';
 
-import { ClientApplication } from '@/infra/app/client-application.js';
+import { type ClientApplication } from '@/infra/app/types.js';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context.js';
 import { AreamapType } from '@/types.js';
 

@@ -18,7 +18,8 @@ type DataSchemaBrowserProps = {
  *
  * @param params DataSchemaBrowserProps
  * @returns ReactElement
- * @internal
+ *
+ * @sisenseInternal
  */
 export const DataSchemaBrowser = ({ dimensions, collapseAll }: DataSchemaBrowserProps) => {
   const [searchValue, setSearchValue] = useState<string>('');

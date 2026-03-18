@@ -217,7 +217,7 @@ This configuration will be merged with target dashboard config, having higher pr
 
 ***
 
-### targets <Badge type="alpha" text="Alpha" />
+### targets <Badge type="beta" text="Beta" />
 
 > **targets**: `Map`\< [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md) \| [`Measure`](../../sdk-data/interfaces/interface.Measure.md) \| \{
   `dimension`: [`Attribute`](../../sdk-data/interfaces/interface.Attribute.md);

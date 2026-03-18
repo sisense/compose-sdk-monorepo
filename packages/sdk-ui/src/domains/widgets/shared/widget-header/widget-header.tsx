@@ -1,12 +1,15 @@
+import { useTranslation } from 'react-i18next';
+
 import Divider from '@mui/material/Divider';
 import get from 'lodash-es/get';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
 import styled from '@/infra/styled';
+import { InlineTextEditor } from '@/shared/components/inline-text-editor/inline-text-editor.js';
 import { AlignmentTypes, WidgetContainerStyleOptions } from '@/types';
 
-import { InfoButtonConfig, WidgetHeaderConfig } from './types.js';
+import { InfoButtonConfig, TitleEditorConfig, WidgetHeaderConfig } from './types.js';
 import { WidgetHeaderToolbar } from './widget-header-toolbar.js';
 
 export interface WidgetHeaderProps {
@@ -18,6 +21,8 @@ export interface WidgetHeaderProps {
   styleOptions?: WidgetContainerStyleOptions['header'];
   /** Header/toolbar configuration (e.g. toolbar menu). */
   config?: WidgetHeaderConfig;
+  /** Inline title editor config (injected at runtime when rename is enabled). */
+  titleEditor?: TitleEditorConfig;
 }
 
 function getTextAlignment(type: AlignmentTypes): 'left' | 'center' | 'right' {
@@ -34,9 +39,24 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
   styleOptions,
   onRefresh,
   config,
+  titleEditor,
 }: WidgetHeaderProps) => {
   const { themeSettings } = useThemeContext();
+  const { t } = useTranslation();
   const showDivider = get(styleOptions, 'dividerLine', themeSettings.widget.header.dividerLine);
+
+  const titleContent = titleEditor ? (
+    <InlineTextEditor
+      value={title ?? ''}
+      isEditing={titleEditor.isEditing}
+      onEditingChange={titleEditor.onEditingChange}
+      onCommit={titleEditor.onCommit}
+      onCancel={titleEditor.onCancel}
+      placeholder={t('widgetHeader.addTitle')}
+    />
+  ) : (
+    title
+  );
 
   return (
     <div data-component="widget-header">
@@ -46,7 +66,7 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
         data-component="header-container"
       >
         <Title styleOptions={styleOptions} theme={themeSettings} data-component="title">
-          {styleOptions?.renderTitle?.(title) ?? title}
+          {styleOptions?.renderTitle?.(titleContent) ?? titleContent}
         </Title>
         <ToolbarContainer data-component="toolbar-container">
           <WidgetHeaderToolbar

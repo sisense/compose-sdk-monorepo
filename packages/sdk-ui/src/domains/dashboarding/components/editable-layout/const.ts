@@ -1,3 +1,4 @@
+export const DRAG_ACTIVATION_DISTANCE_PX = 5;
 export const RESIZE_LINE_SIZE = 4;
 
 export const MIN_ROW_HEIGHT = 60;

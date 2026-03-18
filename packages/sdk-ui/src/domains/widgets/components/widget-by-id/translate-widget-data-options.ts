@@ -290,7 +290,7 @@ export function createPanelItem(column: StyledColumn | StyledMeasureColumn): Pan
   return baseItem;
 }
 
-/** @internal */
+/** @sisenseInternal */
 export const createDataOptionsFromPanels = (panels: Panel[], variantColors: Color[]) => {
   const dataOptions: { [key: string]: any[] } = {};
   panels.forEach((panel) => {

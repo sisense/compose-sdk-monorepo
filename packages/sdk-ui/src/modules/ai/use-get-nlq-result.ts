@@ -171,6 +171,7 @@ export const useGetNlqResultInternal = (params: UseGetNlqResultParams): UseGetNl
  * ```
  * @returns NLQ load state that contains the status of the execution, the result (data) as WidgetProps
  * @group Generative AI
+ *
  * @beta
  */
 export const useGetNlqResult = withTracking('useGetNlqResult')(useGetNlqResultInternal);

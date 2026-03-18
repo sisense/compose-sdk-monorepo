@@ -7,10 +7,16 @@ import type {
   CustomHeaderCellFormatter,
 } from '@/domains/visualizations/components/pivot-table/formatters/types';
 import { PivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
+import type {
+  PivotTableWidgetChangeEvent,
+  PivotTableWidgetDrilldownSelectionsChangedEvent,
+} from '@/domains/widgets/change-events';
 import type { PivotTableDataPointEventHandler } from '@/props';
 import { PivotTableDrilldownOptions, PivotTableWidgetStyleOptions } from '@/types';
 
 import { WidgetConfig } from '../widget/types';
+
+export type { PivotTableWidgetChangeEvent, PivotTableWidgetDrilldownSelectionsChangedEvent };
 
 /**
  * Props for the {@link PivotTableWidget} component
@@ -157,6 +163,14 @@ export interface PivotTableWidgetProps {
    * @internal
    */
   onHeaderCellFormat?: CustomHeaderCellFormatter;
-  /** @internal */
-  onChange?: (props: Partial<PivotTableWidgetProps>) => void;
+  /**
+   * Callback to receive widget change events.
+   *
+   * Invoked when the widget state changes (e.g. drilldown selections).
+   * See {@link PivotTableWidgetChangeEvent} for event types.
+   *
+   * @param event - The change event that occurred
+   * @internal
+   */
+  onChange?: (event: PivotTableWidgetChangeEvent) => void;
 }

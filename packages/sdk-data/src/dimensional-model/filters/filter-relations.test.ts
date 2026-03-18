@@ -325,6 +325,94 @@ describe('filter-relations', () => {
         right: { instanceid: memberGenderFilter.config.guid },
       });
     });
+
+    describe('shouldReplaceSameAttributeFilters option', () => {
+      // A second Gender filter with different members (same attribute, new GUID).
+      const memberGenderFilterV2 = filterFactory.members(
+        new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
+        ['Male'],
+      );
+
+      it('should replace a same-attribute filter in-place in the relation tree', () => {
+        // relations: genderFilter AND (costFilter OR quantityFilter)
+        const prev: FilterRelationsRule = {
+          operator: 'AND',
+          left: { instanceid: memberGenderFilter.config.guid },
+          right: {
+            operator: 'OR',
+            left: { instanceid: memberCostFilter.config.guid },
+            right: { instanceid: memberQuantityFilter.config.guid },
+          },
+        };
+        // Widget overrides genderFilter → genderFilterV2; costFilter and quantityFilter unchanged.
+        const newFilters = [memberGenderFilterV2, memberCostFilter, memberQuantityFilter];
+        const result = calculateNewRelations(
+          [memberGenderFilter, memberCostFilter, memberQuantityFilter],
+          prev,
+          newFilters,
+          { shouldReplaceSameAttributeFilters: true },
+        );
+        // Expect same structure with genderFilter node swapped to genderFilterV2.
+        expect(result).toEqual({
+          operator: 'AND',
+          left: { instanceid: memberGenderFilterV2.config.guid },
+          right: {
+            operator: 'OR',
+            left: { instanceid: memberCostFilter.config.guid },
+            right: { instanceid: memberQuantityFilter.config.guid },
+          },
+        });
+      });
+
+      it('should append a filter with AND when there is no same-attribute match in prev filters', () => {
+        // relations: costFilter OR quantityFilter
+        const prev: FilterRelationsRule = {
+          operator: 'OR',
+          left: { instanceid: memberCostFilter.config.guid },
+          right: { instanceid: memberQuantityFilter.config.guid },
+        };
+        // memberGenderFilter is new — no Gender filter in prev.
+        const newFilters = [memberCostFilter, memberQuantityFilter, memberGenderFilter];
+        const result = calculateNewRelations(
+          [memberCostFilter, memberQuantityFilter],
+          prev,
+          newFilters,
+          { shouldReplaceSameAttributeFilters: true },
+        );
+        expect(result).toEqual({
+          operator: 'AND',
+          left: prev,
+          right: { instanceid: memberGenderFilter.config.guid },
+        });
+      });
+
+      it('should append (not replace) when the matching prev filter is disabled', () => {
+        const disabledGenderFilter = filterFactory.members(
+          new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
+          ['Female'],
+          { disabled: true },
+        );
+        // relations: disabledGenderFilter AND costFilter
+        const prev: FilterRelationsRule = {
+          operator: 'AND',
+          left: { instanceid: disabledGenderFilter.config.guid },
+          right: { instanceid: memberCostFilter.config.guid },
+        };
+        const newFilters = [disabledGenderFilter, memberCostFilter, memberGenderFilterV2];
+        const result = calculateNewRelations(
+          [disabledGenderFilter, memberCostFilter],
+          prev,
+          newFilters,
+          { shouldReplaceSameAttributeFilters: true },
+        );
+        // disabledGenderFilter stays in-place; memberGenderFilterV2 is appended with AND.
+        expect(result).toEqual({
+          operator: 'AND',
+          left: prev,
+          right: { instanceid: memberGenderFilterV2.config.guid },
+        });
+      });
+    });
   });
 
   describe('getRelationsWithReplacedFilter', () => {

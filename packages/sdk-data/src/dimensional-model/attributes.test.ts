@@ -130,6 +130,24 @@ describe('attributes', () => {
         expect(attribute.panel).toBeUndefined();
       });
 
+      it('should create attribute with indexed and merged', () => {
+        const attribute = new DimensionalAttribute(
+          'Brand',
+          '[Brand.Brand ID]',
+          'text-attribute',
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          true,
+          true,
+        );
+
+        expect(attribute.indexed).toBe(true);
+        expect(attribute.merged).toBe(true);
+      });
+
       it('should generate composeCode from expression when not provided', () => {
         const attribute = new DimensionalAttribute('Brand', '[Brand.Brand ID]', 'text-attribute');
 
@@ -195,6 +213,27 @@ describe('attributes', () => {
           dim: '[Brand.Brand ID]',
           datatype: 'text',
         });
+      });
+    });
+
+    describe('sort method', () => {
+      it('should preserve indexed and merged when sorting', () => {
+        const attribute = new DimensionalAttribute(
+          'Brand',
+          '[Brand.Brand ID]',
+          'text-attribute',
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          true,
+          true,
+        );
+
+        const sortedAttribute = attribute.sort(Sort.Ascending);
+        expect(sortedAttribute.indexed).toBe(true);
+        expect(sortedAttribute.merged).toBe(true);
       });
     });
 
@@ -276,6 +315,25 @@ describe('attributes', () => {
 
         expect(level.composeCode).toBeUndefined();
       });
+
+      it('should create level attribute with indexed and merged', () => {
+        const level = new DimensionalLevelAttribute(
+          'Years',
+          '[Commerce.Date (Calendar)]',
+          DateLevels.Years,
+          'yyyy',
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          true,
+          true,
+        );
+
+        expect(level.indexed).toBe(true);
+        expect(level.merged).toBe(true);
+      });
     });
 
     describe('id property', () => {
@@ -337,6 +395,26 @@ describe('attributes', () => {
         expect(newLevel.expression).toBe('[Commerce.Date (Calendar)]');
         expect(newLevel.getFormat()).toBe('yyyy');
         expect(newLevel.getSort()).toBe(Sort.Ascending);
+      });
+
+      it('should preserve indexed and merged when creating new level with setGranularity', () => {
+        const level = new DimensionalLevelAttribute(
+          'Years',
+          '[Commerce.Date (Calendar)]',
+          DateLevels.Years,
+          'yyyy',
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          true,
+          true,
+        );
+
+        const newLevel = level.setGranularity(DateLevels.Months);
+        expect(newLevel.indexed).toBe(true);
+        expect(newLevel.merged).toBe(true);
       });
     });
 
@@ -611,6 +689,19 @@ describe('attributes', () => {
 
       expect(attribute.description).toBe('Brand description');
     });
+
+    it('should create attribute with indexed and merged from json', () => {
+      const attribute = createAttribute({
+        name: 'Brand',
+        expression: '[Brand.Brand ID]',
+        type: 'text-attribute',
+        indexed: true,
+        merged: true,
+      });
+
+      expect(attribute.indexed).toBe(true);
+      expect(attribute.merged).toBe(true);
+    });
   });
 
   describe('createLevel', () => {
@@ -671,6 +762,19 @@ describe('attributes', () => {
       });
 
       expect(levelAttribute.description).toBe('Years description');
+    });
+
+    it('should create level attribute with indexed and merged from json', () => {
+      const levelAttribute = createLevel({
+        name: 'Years',
+        expression: '[Commerce.Date]',
+        granularity: DateLevels.Years,
+        indexed: true,
+        merged: true,
+      });
+
+      expect(levelAttribute.indexed).toBe(true);
+      expect(levelAttribute.merged).toBe(true);
     });
   });
 

@@ -95,18 +95,21 @@ export function applyDrilldownDimension(
     }
   } else if (isScatter(chartType)) {
     const scatterDataOptions = dataOptions as ScatterChartDataOptions;
-    const scatterTargetKeys = ['x', 'y', 'breakByPoint', 'breakByColor'];
+    const scatterTargetKeys = ['x', 'y', 'breakByPoint', 'breakByColor'] as const;
+    const drilldownTargetDataOptionKey = scatterTargetKeys.find((key) => {
+      const dataOption = scatterDataOptions[key];
+      return dataOption && !isMeasureColumn(dataOption);
+    })!;
 
-    for (const key of scatterTargetKeys) {
-      const targetDataOption = scatterDataOptions[key];
-      if (
-        targetDataOption &&
-        !isMeasureColumn(targetDataOption) &&
-        shouldUpdateDataOption(targetDataOption)
-      ) {
+    if (drilldownTargetDataOptionKey) {
+      const targetDataOption = scatterDataOptions[drilldownTargetDataOptionKey] as
+        | Column
+        | StyledColumn
+        | undefined;
+      if (shouldUpdateDataOption(targetDataOption)) {
         return {
           ...scatterDataOptions,
-          [key]: drilldownDimension,
+          [drilldownTargetDataOptionKey]: drilldownDimension,
         } as ScatterChartDataOptions;
       }
     }

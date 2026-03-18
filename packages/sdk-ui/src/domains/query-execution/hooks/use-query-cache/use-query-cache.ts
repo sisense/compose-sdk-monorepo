@@ -7,7 +7,8 @@ import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-cont
  *
  * @returns QueryCacheClient instance
  * @group Queries
- * @alpha
+ *
+ * @beta
  */
 export function useQueryCache() {
   const app = useSisenseContext().app;

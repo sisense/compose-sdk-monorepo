@@ -60,6 +60,7 @@ export type AttributiveElement = Attribute | DateDimension;
  */
 export type AttributeActionConfig = {
   onClick(this: void, attribute: AttributiveElement): void;
+  getLabel?: (this: void, attribute: AttributiveElement) => string;
 };
 
 /**
@@ -73,9 +74,21 @@ export type AttributeSecondaryActionConfig = {
     attribute: AttributiveElement;
   }>;
   /**
-   * Callback to be executed when the secondary action button is clicked.
+   * When true, the row keeps hover/focus style after the secondary action is clicked (e.g. while a menu is open).
+   * Call the `onSubmit` callback passed to `onClick` to clear the focus (e.g. when the menu closes).
    */
-  onClick(this: void, attribute: AttributiveElement): void;
+  keepFocusedOnClick?: boolean;
+  /**
+   * Callback to be executed when the secondary action button is clicked.
+   * The optional event provides the click position for positioning menus.
+   * When keepFocusedOnClick is true, `onSubmit` is provided; call it to clear the focused state (e.g. in menu onClose).
+   */
+  onClick(
+    this: void,
+    attribute: AttributiveElement,
+    event: React.MouseEvent,
+    onSubmit: () => void,
+  ): void;
 };
 
 /**

@@ -4,7 +4,7 @@ import { Mock } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
-import { ClientApplication } from '../app/client-application';
+import { type ClientApplication } from '../app/types';
 import { useSisenseContext } from '../contexts/sisense-context/sisense-context';
 import { RestApi, useRestApi } from './rest-api';
 

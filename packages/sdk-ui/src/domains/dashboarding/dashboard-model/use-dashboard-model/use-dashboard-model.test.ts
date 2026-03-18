@@ -11,7 +11,7 @@ import {
   WidgetsPanelColumnLayout,
 } from '@/domains/dashboarding/dashboard-model';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
-import { ClientApplication } from '@/infra/app/client-application';
+import { ClientApplication } from '@/infra/app/types';
 import {
   SisenseContextPayload,
   useSisenseContext,

@@ -8,6 +8,8 @@ import cloneDeep from 'lodash-es/cloneDeep';
 import {
   extractForecastMeasures,
   extractTrendMeasures,
+  FORECAST_PREFIX,
+  TREND_PREFIX,
 } from '@/domains/visualizations/core/chart-options-processor/advanced-chart-options.js';
 import { useWidgetErrorsAndWarnings } from '@/domains/widgets/shared/widget-errors-and-warnings-context.js';
 import { CartesianChartDataOptions } from '@/index';
@@ -70,13 +72,15 @@ export const AdvancedChart = (props: RegularChartProps) => {
       const extractedErrors = extractErrorMessages(error.toString());
       filteredDataOptions.value = filteredDataOptions.value.filter((measure) => {
         const name = 'column' in measure ? measure.column.name : measure.name;
-
-        return !(
+        const isTrendOrForecastMeasure =
           'column' in measure &&
           'type' in measure.column &&
           measure.column.type === 'calculatedmeasure' &&
-          extractedErrors.some((error) => error.includes(name))
-        );
+          [TREND_PREFIX, FORECAST_PREFIX].some((prefix) => name.includes(prefix));
+        const isFailedTrendOrForecastMeasure =
+          isTrendOrForecastMeasure && extractedErrors.some((error) => error.includes(name));
+
+        return !isFailedTrendOrForecastMeasure;
       });
 
       return (

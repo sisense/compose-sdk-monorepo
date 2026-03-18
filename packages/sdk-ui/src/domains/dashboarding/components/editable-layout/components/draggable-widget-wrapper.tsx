@@ -73,7 +73,7 @@ export const DraggableWidgetWrapper = ({
   children,
   dragHandleOptions,
 }: DraggableWidgetWrapperProps) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform } = useDraggable({
     id: `DraggableWidgetWrapper/${id}`,
     data,
   });
@@ -81,14 +81,14 @@ export const DraggableWidgetWrapper = ({
   const shouldShowDragHandleIcon = dragHandleOptions?.icon?.visible ?? true;
   const withDragHandle = useCallback(
     (element: ReactNode) => (
-      <DragHandleWrapper {...listeners}>
+      <DragHandleWrapper ref={setActivatorNodeRef} {...listeners}>
         {shouldShowDragHandleIcon && (
           <DragHandleIcon aria-label="drag-handle" color={dragHandleOptions?.icon?.color} />
         )}
         <div>{element}</div>
       </DragHandleWrapper>
     ),
-    [listeners, dragHandleOptions, shouldShowDragHandleIcon],
+    [listeners, dragHandleOptions, shouldShowDragHandleIcon, setActivatorNodeRef],
   );
 
   return (

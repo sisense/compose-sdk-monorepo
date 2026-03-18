@@ -182,7 +182,7 @@ export class SisenseContextService {
     this.isInitialized = true;
 
     try {
-      const app = await createClientApplication(this.config);
+      const app = await createClientApplication({ ...this.config, packageName: 'sdk-ui-angular' });
       this.app$.next({ app } as const);
     } catch (error) {
       this.app$.next({ error: error as Error } as const);

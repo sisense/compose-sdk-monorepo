@@ -1,7 +1,7 @@
 /* eslint-disable vitest/no-conditional-expect */
 import { TranslatableError } from '@/infra/translation/translatable-error';
 
-import { ClientApplication } from '../../infra/app/client-application';
+import { type ClientApplication } from '../../infra/app/types';
 import { translation } from '../../infra/translation/resources/en';
 import { fetchFormula, fetchFormulaByOid } from './fetch-formula';
 

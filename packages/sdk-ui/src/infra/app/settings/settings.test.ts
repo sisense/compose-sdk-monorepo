@@ -1,6 +1,7 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 
 import * as mockGlobals from '@/__mocks__/data/mock-globals.json';
+import * as mockSystemSettings from '@/__mocks__/data/mock-system-settings.json';
 import { SYSTEM_TENANT_NAME } from '@/shared/const';
 
 import { getSettings } from './settings';
@@ -9,6 +10,8 @@ const mockGet = vi.fn().mockImplementation((url) => {
   switch (url) {
     case 'api/globals':
       return Promise.resolve(mockGlobals);
+    case 'api/v1/settings/system':
+      return Promise.resolve(mockSystemSettings);
     case 'api/palettes/Vivid':
       return Promise.resolve({
         colors: ['mockColor1', 'mockColor2'],

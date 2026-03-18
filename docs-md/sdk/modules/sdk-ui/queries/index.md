@@ -11,4 +11,4 @@ React components and hooks for working with queries
 - [useExecuteCustomWidgetQuery](function.useExecuteCustomWidgetQuery.md)
 - [useExecutePivotQuery](function.useExecutePivotQuery.md)
 - [useExecuteQuery](function.useExecuteQuery.md)
-- [useQueryCache](function.useQueryCache.md) <Badge type="alpha" text="Alpha" />
+- [useQueryCache](function.useQueryCache.md) <Badge type="beta" text="Beta" />

@@ -2,7 +2,7 @@
 title: useQueryCache
 ---
 
-# Function useQueryCache <Badge type="alpha" text="Alpha" />
+# Function useQueryCache <Badge type="beta" text="Beta" />
 
 > **useQueryCache**(): \{
   `clear`: () => `void`;

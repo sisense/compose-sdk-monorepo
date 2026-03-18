@@ -63,7 +63,10 @@ export type FilterRelationsRuleNode = FilterRelationsRule | FilterRelationsRuleI
  *
  * @internal
  */
-export type FilterAction = { type: 'add'; payload: Filter } | { type: 'remove'; payload: Filter };
+export type FilterAction =
+  | { type: 'add'; payload: Filter }
+  | { type: 'remove'; payload: Filter }
+  | { type: 'replace'; payload: { prevFilter: Filter; newFilter: Filter } };
 
 /**
  * Merges source filters with target filters and recalculates relations.
@@ -188,18 +191,32 @@ export function isTrivialSingleNodeRelations(
 /**
  * Calculates new relations based on the changes in filters.
  *
+ * @param prevFilters - The previous array of filters that the relations were built for.
+ * @param prevRelations - The previous relation rules.
+ * @param newFilters - The updated array of filters to build new relations for.
+ * @param options - Optional flags controlling how the diff is computed:
+ *   - `shouldReplaceSameAttributeFilters`: when `true`, a new filter on the same attribute as
+ *     an existing one (but with a different GUID) is treated as an in-place replacement rather
+ *     than a remove + add pair, preserving the original relation tree structure.
  * @internal
  */
 export function calculateNewRelations(
   prevFilters: Filter[],
   prevRelations: FilterRelationsRules,
   newFilters: Filter[],
+  options: {
+    shouldReplaceSameAttributeFilters?: boolean;
+  } = {},
 ): FilterRelationsRules {
   // If there are no previous relations - no need to recalculate them
   if (prevRelations === null) {
     return null;
   }
-  const performedActions = diffFilters(prevFilters, newFilters);
+  const performedActions = diffFilters(
+    prevFilters,
+    newFilters,
+    options.shouldReplaceSameAttributeFilters,
+  );
   if (performedActions.length === 0) {
     return prevRelations;
   }
@@ -209,6 +226,12 @@ export function calculateNewRelations(
         return addFilterToRelations(action.payload, relations);
       case 'remove':
         return removeFilterFromRelations(action.payload, relations);
+      case 'replace':
+        return getRelationsWithReplacedFilter(
+          relations,
+          action.payload.prevFilter,
+          action.payload.newFilter,
+        );
     }
   }, prevRelations);
 }
@@ -258,21 +281,56 @@ export function getRelationsWithReplacedFilter(
  * Compares two arrays of Filter objects and determines the actions needed
  * to transform prevFilters into newFilters.
  *
+ * When `shouldReplaceSameAttributeFilters` is enabled, a new filter whose attribute matches
+ * an existing one (same `getFilterCompareId`) but has a different GUID is emitted as a single
+ * `replace` action instead of a `remove` + `add` pair. This preserves the relation tree node
+ * at the original position rather than appending the new filter with AND at the root.
+ * The disabled existing filters are excluded from the same-attribute replacement check
+ * and will therefore never be replaced in-place.
+ *
  * @param prevFilters - The original array of filters.
  * @param newFilters - The updated array of filters.
- * @param isEqualFilters - A function to determine if two filters are equal.
+ * @param shouldReplaceSameAttributeFilters - Optional flag to enable same-attribute filter replacement.
  * @returns An array of FilterAction objects representing the changes.
  */
-function diffFilters(prevFilters: Filter[], newFilters: Filter[]): FilterAction[] {
+function diffFilters(
+  prevFilters: Filter[],
+  newFilters: Filter[],
+  shouldReplaceSameAttributeFilters = false,
+): FilterAction[] {
   const actions: FilterAction[] = [];
 
-  // Clone the arrays to avoid mutating the original data
-  const prevFiltersCopy = [...prevFilters];
-  const newFiltersCopy = [...newFilters];
+  // Track which filters from each side have already been matched to avoid double-counting.
+  const matchedPrevFilters = new Set<number>();
+  const matchedNewFilters = new Set<number>();
 
-  // Determine removals
-  prevFiltersCopy.forEach((prevFilter) => {
-    const existsInNew = newFiltersCopy.some((newFilter) =>
+  if (shouldReplaceSameAttributeFilters) {
+    prevFilters.forEach((prevFilter, prevIdx) => {
+      // Disabled filters are never eligible for in-place replacement.
+      if (prevFilter.config.disabled) {
+        return;
+      }
+
+      // Look for a new filter on the same attribute with a different GUID.
+      const newIdx = newFilters.findIndex(
+        (newFilter, idx) =>
+          !matchedNewFilters.has(idx) &&
+          !areFiltersEqualForRelations(prevFilter, newFilter) &&
+          getFilterCompareId(prevFilter) === getFilterCompareId(newFilter),
+      );
+
+      if (newIdx !== -1) {
+        actions.push({ type: 'replace', payload: { prevFilter, newFilter: newFilters[newIdx] } });
+        matchedPrevFilters.add(prevIdx);
+        matchedNewFilters.add(newIdx);
+      }
+    });
+  }
+
+  // Removals: prev filters not matched by GUID in new filters (and not already handled as replace).
+  prevFilters.forEach((prevFilter, prevIdx) => {
+    if (matchedPrevFilters.has(prevIdx)) return;
+    const existsInNew = newFilters.some((newFilter) =>
       areFiltersEqualForRelations(prevFilter, newFilter),
     );
     if (!existsInNew) {
@@ -280,9 +338,10 @@ function diffFilters(prevFilters: Filter[], newFilters: Filter[]): FilterAction[
     }
   });
 
-  // Determine additions
-  newFiltersCopy.forEach((newFilter) => {
-    const existsInPrev = prevFiltersCopy.some((prevFilter) =>
+  // Additions: new filters not matched by GUID in prev filters (and not already handled as replace).
+  newFilters.forEach((newFilter, newIdx) => {
+    if (matchedNewFilters.has(newIdx)) return;
+    const existsInPrev = prevFilters.some((prevFilter) =>
       areFiltersEqualForRelations(newFilter, prevFilter),
     );
     if (!existsInPrev) {

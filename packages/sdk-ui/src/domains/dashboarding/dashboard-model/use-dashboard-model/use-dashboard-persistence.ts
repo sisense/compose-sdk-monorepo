@@ -137,7 +137,8 @@ const transformAction = (
  *
  * @param params - Parameters for dashboard persistence
  * @returns Dashboard persistence state and dispatch function
- * @internal
+ *
+ * @sisenseInternal
  */
 export function useDashboardPersistence({
   dashboard,

@@ -49,7 +49,7 @@ export const DimensionsBrowser: React.FC<DimensionsBrowserProps> = ({
   disabledAttributesConfig,
   collapseAll,
 }) => {
-  const hasDimesions = dimensions.length > 0;
+  const hasDimensions = dimensions.length > 0;
   const groupedItemsBrowserProps = useMemo(() => {
     return convertDimensionsBrowserProps({
       dimensions,
@@ -71,8 +71,8 @@ export const DimensionsBrowser: React.FC<DimensionsBrowserProps> = ({
   ]);
   return (
     <>
-      {hasDimesions && <GroupedItemsBrowser {...groupedItemsBrowserProps} />}
-      {!isLoading && !hasDimesions && <NoResults />}
+      {hasDimensions && <GroupedItemsBrowser {...groupedItemsBrowserProps} />}
+      {!isLoading && !hasDimensions && <NoResults />}
       {isLoading && (
         <LoadingContainer>
           <LoadingDots />
@@ -164,12 +164,13 @@ function convertAttributeActionConfig(
     onClick: (item) => {
       attributeActionConfig.onClick(findAttribute(item));
     },
+    getLabel: (item) => attributeActionConfig.getLabel?.(findAttribute(item)) ?? '',
   };
 }
 
 function convertAttributeSecondaryActionConfig(
   attributeSecondaryActionConfig: AttributeSecondaryActionConfig,
-  findAttribute: (item: Item) => Attribute,
+  findAttribute: (item: Item) => AttributiveElement,
 ): ItemSecondaryActionConfig {
   return {
     SecondaryActionButtonIcon: ({ item }) => {
@@ -177,8 +178,9 @@ function convertAttributeSecondaryActionConfig(
         <attributeSecondaryActionConfig.SecondaryActionButtonIcon attribute={findAttribute(item)} />
       );
     },
-    onClick: (item) => {
-      attributeSecondaryActionConfig.onClick(findAttribute(item));
+    keepFocusedOnClick: attributeSecondaryActionConfig.keepFocusedOnClick,
+    onClick: (item, event, onSubmit) => {
+      attributeSecondaryActionConfig.onClick(findAttribute(item), event, onSubmit);
     },
   };
 }

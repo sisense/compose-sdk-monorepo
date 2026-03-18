@@ -11,7 +11,7 @@ import {
 import { createMockPivotQueryClient } from '@/domains/visualizations/components/pivot-table/__mocks__/pivot-query-client-mock';
 import { usePivotBuilder } from '@/domains/visualizations/components/pivot-table/hooks/use-pivot-builder';
 import { usePivotClient } from '@/domains/visualizations/components/pivot-table/hooks/use-pivot-client';
-import { ClientApplication } from '@/infra/app/client-application';
+import { type ClientApplication } from '@/infra/app/types';
 import { useSisenseContextMock } from '@/infra/contexts/sisense-context/__mocks__/sisense-context';
 import { SisenseContextPayload } from '@/infra/contexts/sisense-context/sisense-context';
 

@@ -33,6 +33,7 @@ export const Group: React.FC<GroupProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(!collapsed);
   const { themeSettings } = useThemeContext();
+
   useEffect(() => {
     setIsOpen(!collapsed);
   }, [collapsed]);

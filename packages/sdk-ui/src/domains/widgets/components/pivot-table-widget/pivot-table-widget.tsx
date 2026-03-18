@@ -3,6 +3,7 @@ import { type FunctionComponent, useCallback, useState } from 'react';
 import { Attribute, getDataSourceName } from '@sisense/sdk-data';
 
 import { PivotTable } from '@/domains/visualizations/components/pivot-table';
+import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
 import { DataOptionLocation, DrilldownSelection } from '@/index';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
@@ -12,6 +13,7 @@ import {
 } from '@/shared/components/dynamic-size-container';
 
 import { DEFAULT_WIDGET_HEADER_HEIGHT } from '../../constants';
+import { useWidgetHeaderManagement } from '../../hooks/use-widget-header-management';
 import { WidgetContainer } from '../../shared/widget-container';
 import { PivotTableWidgetProps } from './types';
 import { useWithPivotTableWidgetDrilldown } from './use-with-pivot-table-widget-drilldown';
@@ -71,6 +73,12 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
 
   const { styleOptions, dataSource = app?.defaultDataSource, dataOptions, onChange } = props;
 
+  const { headerConfig, titleEditor } = useWidgetHeaderManagement({
+    title: props.title,
+    onChange: props.onChange as (event: WidgetChangeEvent) => void,
+    headerConfig: props.config?.header,
+  });
+
   const defaultSize = getWidgetDefaultSize('pivot', {
     hasHeader: !styleOptions?.header?.hidden,
   });
@@ -79,14 +87,11 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
   const onDrilldownSelectionsChange = useCallback(
     (target: Attribute | DataOptionLocation, selections: DrilldownSelection[]) => {
       onChange?.({
-        drilldownOptions: {
-          ...props.drilldownOptions,
-          drilldownTarget: target,
-          drilldownSelections: selections,
-        },
+        type: 'drilldownSelections/changed',
+        payload: { target, selections },
       });
     },
-    [onChange, props.drilldownOptions],
+    [onChange],
   );
 
   const { propsWithDrilldown, breadcrumbs } = useWithPivotTableWidgetDrilldown({
@@ -108,7 +113,8 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     >
       <WidgetContainer
         {...props}
-        headerConfig={props.config?.header}
+        headerConfig={headerConfig}
+        titleEditor={titleEditor}
         topSlot={
           <>
             {props.topSlot}

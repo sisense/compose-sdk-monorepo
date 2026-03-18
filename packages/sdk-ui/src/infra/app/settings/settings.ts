@@ -24,7 +24,7 @@ type AiSettingsResponse = {
 /**
  * Application settings
  *
- * @internal
+ * @sisenseInternal
  */
 export type AppSettings = Required<ConfigurableAppSettings> & ServerSettings;
 
@@ -126,7 +126,7 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
   errorBoundaryConfig: {
     alwaysShowErrorText: false,
   },
-  customHttpHeaders: {},
+  apiTelemetryHeaders: {},
   trackingConfig: {
     enabled: true,
   },
@@ -220,14 +220,20 @@ async function loadServerSettings(
     : await getLegacyPalette(getPaletteName(globals.designSettings), httpClient);
   const { isSisenseAiEnabled } = await loadAiSettings(httpClient);
   const props = globals.props;
+  const unlimitedNarrativesEnabled =
+    isSisenseAiEnabled || (props?.isNarration && props?.narrationProvider === 'sisenseAI');
+  const creditNarrativesEnabled = !!(
+    props?.isNarration === false &&
+    props?.aiNarrative &&
+    (props?.SisenseManagedLLM || props?.llmBYOK)
+  );
   const serverSettings: ServerSettings = {
     serverThemeSettings: convertToThemeSettings(globals.designSettings, palette, httpClient.url),
     serverLanguage: globals.language,
     serverVersion: globals.version,
     serverFeatures: mapFeatures(globals.features),
     isUnifiedNarrationEnabled: props?.narrationUnified === true,
-    isSisenseAiEnabled:
-      !props?.isNarration || props?.narrationProvider === 'sisenseAI' || isSisenseAiEnabled,
+    isSisenseAiEnabled: unlimitedNarrativesEnabled || creditNarrativesEnabled,
     user: {
       tenant: {
         name: globals.user?.tenant?.name || SYSTEM_TENANT_NAME,

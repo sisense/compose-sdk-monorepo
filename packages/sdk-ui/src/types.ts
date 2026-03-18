@@ -56,7 +56,7 @@ import { GradientColor } from './shared/utils/gradient';
 import { SoftUnion } from './shared/utils/utility-types';
 
 export type { SortDirection, PivotRowsSort } from '@sisense/sdk-data';
-export type { AppConfig } from './infra/app/client-application';
+export type { AppConfig } from './infra/app/types';
 export type { DateConfig } from './domains/query-execution/core/date-formats';
 export type { CalendarDayOfWeek } from './domains/visualizations/components/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 
@@ -2315,7 +2315,7 @@ export interface WidgetContainerStyleOptions {
 /**
  * Configuration options that define functional style of the various elements of the Nlq Chart Widget
  *
- * @internal
+ * @sisenseInternal
  */
 export type NlqChartWidgetStyleOptions = {
   header?: {
@@ -2329,7 +2329,7 @@ export type RenderToolbarHandler = (
   defaultToolbar: JSX.Element,
 ) => JSX.Element | null;
 
-/** @internal */
+/** @sisenseInternal */
 export type RenderTitleHandler = (defaultHeaderTitle: ReactNode) => ReactNode;
 
 /** @internal */

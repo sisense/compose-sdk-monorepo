@@ -2,7 +2,7 @@ import { Arguments, Argv, CommandModule } from 'yargs';
 
 import { trackExecution } from '../tracking.js';
 import { Command, GetApiTokenOptions } from '../types.js';
-import { getHttpClient, handleHttpClientLogin } from './helpers.js';
+import { getHttpClient } from './helpers.js';
 import { promptPasswordInteractive } from './prompts.js';
 
 const command: Command = 'get-api-token';
@@ -41,10 +41,9 @@ const handler = async (options: Arguments<GetApiTokenOptions>) => {
     ({ maskedPassword: password } = await promptPasswordInteractive(username));
   }
 
-  const httpClient = getHttpClient({ url, username, password });
-
   try {
-    await handleHttpClientLogin(httpClient);
+    const httpClient = await getHttpClient({ url, username, password });
+
     trackExecution(httpClient, command, options);
     const response = await httpClient.get<{ token: string }>('/api/v1/authentication/tokens/api');
     console.log(response);

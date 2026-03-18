@@ -27,7 +27,8 @@ import { getEnabledPanelItems, mergeFilters } from './utils.js';
  * @param dashboard - The dashboard containing the filters.
  * @param widget - The widget containing the filters.
  * @returns An object containing an array of filters and an array of highlights.
- * @internal
+ *
+ * @sisenseInternal
  */
 export function extractCombinedFilters(dashboard: DashboardDto, widget: WidgetDto) {
   const { filters: dashboardFilters, highlights } = extractDashboardFiltersForWidget(

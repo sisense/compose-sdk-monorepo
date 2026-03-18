@@ -143,7 +143,6 @@ export {
   type CommonFiltersOptions,
   type CommonFiltersApplyMode,
   type FiltersIgnoringRules,
-  UseDashboardModelActionType,
 } from '../domains/dashboarding/dashboard-model';
 export {
   useGetWidgetModel,

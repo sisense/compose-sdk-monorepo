@@ -6,11 +6,14 @@ import cloneDeep from 'lodash-es/cloneDeep';
 import { useCommonFilters } from '@/domains/dashboarding/common-filters/use-common-filters.js';
 import type { WidgetsOptions, WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
 import { useDuplicateWidgetMenuItem } from '@/domains/dashboarding/hooks/duplicate-widget/use-duplicate-widget-menu-item.js';
+import { useWidgetRenaming } from '@/domains/dashboarding/hooks/rename-widget/use-widget-renaming.js';
 import { useJtdInternal } from '@/domains/dashboarding/hooks/use-jtd.js';
 import { useTabber } from '@/domains/dashboarding/hooks/use-tabber.js';
 import { useWidgetsLayoutManagement } from '@/domains/dashboarding/hooks/use-widgets-layout.js';
 import { getDefaultWidgetsPanelLayout } from '@/domains/dashboarding/utils.js';
+import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import { widgetChangeEventToDelta } from '@/domains/widgets/event-to-delta';
 import { useCombinedMenu } from '@/infra/contexts/menu-provider/hooks/use-combined-menu.js';
 import { MenuIds, MenuSectionIds } from '@/infra/contexts/menu-provider/menu-ids';
 import { MenuOptions } from '@/infra/contexts/menu-provider/types.js';
@@ -178,13 +181,23 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   });
 
   // Change detection logic
-  const widgetsWithChangeDetection = useWithChangeDetection({
+  const widgetsWithChangeDetection = useWithChangeDetection<WidgetProps, WidgetChangeEvent>({
     target: innerWidgets,
     onChange: useCallback(
-      (delta: Partial<WidgetProps>, index?: number) => {
+      (event: WidgetChangeEvent, index?: number) => {
         setInnerWidgets((existingInnerWidgets) => {
+          const isValidIndex =
+            index != null &&
+            Number.isInteger(index) &&
+            index >= 0 &&
+            index < existingInnerWidgets.length;
+          if (!isValidIndex) {
+            return existingInnerWidgets;
+          }
+          const currentWidget = existingInnerWidgets[index];
+          const delta = widgetChangeEventToDelta(event, currentWidget);
           const newInnerWidgets = cloneDeep(existingInnerWidgets);
-          newInnerWidgets[index!] = defaultMerger(existingInnerWidgets[index!], delta);
+          newInnerWidgets[index] = defaultMerger(currentWidget, delta);
           return newInnerWidgets;
         });
       },
@@ -212,12 +225,25 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     persistence,
   });
 
+  // Widget renaming: only when editMode is enabled, (runtime) isEditing is true, batch mode is disabled, and renameWidget is enabled.
+  const shouldEnableWidgetRenaming = Boolean(
+    initialDashboard.config?.widgetsPanel?.editMode?.enabled &&
+      isEditing &&
+      !initialDashboard.config?.widgetsPanel?.editMode.applyChangesAsBatch?.enabled &&
+      initialDashboard.config?.widgetsPanel?.editMode?.renameWidget?.enabled,
+  );
+  const { widgets: widgetsWithRename } = useWidgetRenaming({
+    widgets: widgetsWithDuplicate,
+    enabled: shouldEnableWidgetRenaming,
+    persistence,
+  });
+
   // Connect common filters to widgets
   const widgetsWithCommonFilters = useMemo(() => {
-    return widgetsWithDuplicate.map((widget) =>
+    return widgetsWithRename.map((widget) =>
       connectToWidgetProps(widget, innerWidgetsOptions?.[widget.id]?.filtersOptions),
     );
-  }, [widgetsWithDuplicate, innerWidgetsOptions, connectToWidgetProps]);
+  }, [widgetsWithRename, innerWidgetsOptions, connectToWidgetProps]);
 
   const widgetsWithFilterAndJtd = useMemo(() => {
     return widgetsWithCommonFilters.map((widget: WidgetProps) => connectToWidgetPropsJtd(widget));

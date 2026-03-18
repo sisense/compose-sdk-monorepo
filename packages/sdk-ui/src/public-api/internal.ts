@@ -6,7 +6,8 @@
  */
 
 // App
-export { type ClientApplication, createClientApplication } from '../infra/app/client-application';
+export { type ClientApplication } from '../infra/app/types';
+export { createClientApplication } from '../infra/app/client-application';
 
 // Queries
 export { queryStateReducer } from '../domains/query-execution/hooks/shared/query-state-reducer';
@@ -28,7 +29,6 @@ export {
   getDashboardModels,
   translateToDashboardResponse,
   translateToDashboardsResponse,
-  translateFiltersAndRelationsToDto,
 } from '../domains/dashboarding/dashboard-model';
 export { getWidgetModel } from '@/domains/widgets/widget-model';
 export { getHierarchyModels } from '@/domains/drilldown/hierarchy-model';
@@ -44,12 +44,17 @@ export {
   getDrilldownMenuItems,
 } from '../domains/drilldown/hooks/use-drilldown';
 export { processDrilldownSelections } from '../domains/drilldown/hooks/use-drilldown-core';
-//Widgets
+
+// Widgets
 export { CommonWidget, type CommonWidgetProps } from '../domains/widgets/components/common-widget';
 export { TableWidget, type TableWidgetProps } from '../domains/widgets/components/table-widget';
 
 // Context Adapters
-export * from '../infra/contexts/custom-widgets-provider/custom-widgets-provider-adapter';
+export {
+  CustomWidgetsProviderAdapter,
+  type CustomWidgetsContextAdapter,
+  type CustomWidgetsProviderAdapterProps,
+} from '../infra/contexts/custom-widgets-provider/custom-widgets-provider-adapter';
 
 // Formulas
 export { useGetSharedFormulaInternal } from '../domains/formulas/use-get-shared-formula';
@@ -58,15 +63,20 @@ export { useGetSharedFormulaInternal } from '../domains/formulas/use-get-shared-
 export { translateColumnToAttribute } from '../domains/visualizations/core/chart-data-options/utils';
 export { isSameAttribute } from '@/shared/utils/filters';
 export {
-  isChartWidgetProps,
-  isPivotTableWidgetProps,
   isTextWidgetProps,
   isCustomWidgetProps,
 } from '../domains/widgets/components/widget-by-id/utils';
 export { getChartType } from '../domains/widgets/components/widget-by-id/utils';
 export type { SoftUnion } from '@/shared/utils/utility-types';
 export type { BeforeMenuOpenHandler } from '../infra/contexts/menu-provider/types';
-export * from '../shared/hooks/data-load-state-reducer';
+export {
+  type DataState,
+  type DataLoadingState,
+  type DataErrorState,
+  type DataSuccessState,
+  dataLoadStateReducer,
+} from '../shared/hooks/data-load-state-reducer';
+export { trackHook } from '../infra/decorators/hook-decorators/with-tracking';
 
 // Widget helpers
-export * from '../domains/widgets/helpers';
+export { widgetHelpers } from '../domains/widgets/helpers';

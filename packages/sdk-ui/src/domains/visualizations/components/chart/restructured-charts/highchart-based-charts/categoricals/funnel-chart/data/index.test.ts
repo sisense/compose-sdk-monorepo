@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { QueryDescription } from '@/domains/query-execution/core/execute-query.js';
-import { ClientApplication } from '@/infra/app/client-application';
+import { type ClientApplication } from '@/infra/app/types';
 
 import { loadCategoricalData } from '../../helpers/data.js';
 import { FunnelChartDataOptionsInternal } from '../types.js';

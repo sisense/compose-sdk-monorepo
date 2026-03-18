@@ -4,7 +4,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import 'blob-polyfill';
 import type { Mock } from 'vitest';
 
-import { ClientApplication } from '../../../../infra/app/client-application.js';
+import { type ClientApplication } from '../../../../infra/app/types.js';
 import { useSisenseContextMock } from '../../../../infra/contexts/sisense-context/__mocks__/sisense-context.js';
 import { executeCsvQueryMock } from '../../core/__mocks__/execute-query.js';
 import { ExecuteQueryParams } from '../../types.js';

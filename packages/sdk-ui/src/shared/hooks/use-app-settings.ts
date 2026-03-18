@@ -8,7 +8,8 @@ import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-cont
  * when customizing components wrapped inside SisenseContextProvider.
  *
  * @returns AppSettings when app is initialized, undefined otherwise
- * @internal
+ *
+ * @sisenseInternal
  */
 export const useAppSettings = (): AppSettings | undefined => {
   const { app } = useSisenseContext();

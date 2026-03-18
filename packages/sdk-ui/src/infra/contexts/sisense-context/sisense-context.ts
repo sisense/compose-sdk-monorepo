@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react';
 import { TrackingEventDetails } from '@sisense/sdk-tracking';
 
 import { SisenseContextProviderProps } from '../../..';
-import { ClientApplication } from '../../app/client-application';
+import { type ClientApplication } from '../../app/types';
 
 export type SisenseContextPayload = {
   isInitialized: boolean;

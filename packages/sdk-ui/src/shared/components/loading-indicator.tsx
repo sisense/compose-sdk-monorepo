@@ -12,7 +12,8 @@ import { LoadingDots } from './loading-dots.js';
  * @returns A loading indicator with optional cancel.
  *
  * @deprecated Use LoadingOverlay instead.
- * @internal
+ *
+ * @sisenseInternal
  */
 export const LoadingIndicator = ({
   themeSettings,

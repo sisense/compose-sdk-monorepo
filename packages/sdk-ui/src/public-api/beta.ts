@@ -5,4 +5,4 @@
  * Not recommended for production use.
  */
 
-export {};
+export { useQueryCache } from '../domains/query-execution/hooks/use-query-cache/use-query-cache';

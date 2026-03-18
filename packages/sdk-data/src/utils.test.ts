@@ -19,7 +19,9 @@ import {
   convertSortDirectionToSort,
   createAttributeHelper,
   createCalculatedMeasureHelper,
+  createDimensionalElementFromJaql,
   createFilterFromJaql,
+  createMeasureByAggType,
   createMeasureHelper,
   getDataSourceName,
   getFilterListAndRelationsJaql,
@@ -256,6 +258,89 @@ describe('utils', () => {
         const result = convertSortDirectionToSort(sortDirection as SortDirection);
         expect(result).toBe(expected);
       });
+    });
+  });
+
+  describe('createAttributeHelper', () => {
+    test('should create attribute with indexed and merged', () => {
+      const attribute = createAttributeHelper({
+        expression: '[Commerce.Revenue]',
+        dataType: 'numeric',
+        indexed: true,
+        merged: true,
+      });
+
+      expect(attribute.indexed).toBe(true);
+      expect(attribute.merged).toBe(true);
+    });
+  });
+
+  describe('createMeasureByAggType', () => {
+    test('should create sum measure for Sum aggregation type', () => {
+      const attribute = createAttributeHelper({
+        expression: '[Commerce.Revenue]',
+        dataType: 'numeric',
+      });
+      const measure = createMeasureByAggType(
+        AggregationTypes.Sum,
+        attribute,
+        'Total Revenue',
+        undefined,
+      );
+
+      expect(measure).toBeDefined();
+      expect(measure.name).toBe('Total Revenue');
+    });
+
+    test('should create count distinct measure for CountDistinct aggregation type', () => {
+      const attribute = createAttributeHelper({
+        expression: '[Commerce.Category]',
+        dataType: 'text',
+      });
+      const measure = createMeasureByAggType(
+        AggregationTypes.CountDistinct,
+        attribute,
+        'Distinct Category',
+        undefined,
+      );
+
+      expect(measure).toBeDefined();
+      expect(measure.name).toBe('Distinct Category');
+    });
+
+    test('should default to sum for unknown aggregation type', () => {
+      const attribute = createAttributeHelper({
+        expression: '[Commerce.Revenue]',
+        dataType: 'numeric',
+      });
+      const measure = createMeasureByAggType(
+        'unknown-agg' as Parameters<typeof createMeasureByAggType>[0],
+        attribute,
+        'Default Measure',
+        undefined,
+      );
+
+      expect(measure).toBeDefined();
+      expect(measure.name).toBe('Default Measure');
+    });
+  });
+
+  describe('createDimensionalElementFromJaql', () => {
+    test('should pass indexed and merged from jaql to attribute', () => {
+      const jaql = {
+        dim: '[Commerce.Revenue]',
+        datatype: 'numeric',
+        title: 'Revenue',
+        table: 'Commerce',
+        column: 'Revenue',
+        indexed: true,
+        merged: true,
+      } as const;
+
+      const element = createDimensionalElementFromJaql(jaql);
+
+      expect(element.indexed).toBe(true);
+      expect(element.merged).toBe(true);
     });
   });
 

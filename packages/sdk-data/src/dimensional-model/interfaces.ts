@@ -95,6 +95,20 @@ export interface Element {
    * @internal
    */
   composeCode?: string;
+
+  /**
+   * Merged from DataSourceField. It is used for the aggregation filtering
+   *
+   * @internal
+   */
+  readonly merged?: boolean;
+
+  /**
+   * Indexed from DataSourceField. It is used for the aggregation filtering
+   *
+   * @internal
+   */
+  readonly indexed?: boolean;
 }
 
 /**

@@ -207,6 +207,36 @@ describe('persistDashboardModelMiddleware', () => {
     });
   });
 
+  it('should patch widget for PATCH_WIDGET', async () => {
+    const restApi = {
+      patchDashboard: vi.fn(),
+      addWidgetToDashboard: vi.fn(),
+      deleteWidgetFromDashboard: vi.fn(),
+      patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+    };
+
+    const result = await persistDashboardModelMiddleware(
+      dashboardOid,
+      {
+        type: UseDashboardModelActionType.PATCH_WIDGET,
+        payload: { widgetOid: 'widget-123', patch: { title: 'New Title' } },
+      },
+      restApi as never,
+      false,
+    );
+
+    expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+      dashboardOid,
+      'widget-123',
+      { title: 'New Title' },
+      false,
+    );
+    expect(result).toEqual({
+      type: UseDashboardModelActionType.PATCH_WIDGET,
+      payload: { widgetOid: 'widget-123', patch: { title: 'New Title' } },
+    });
+  });
+
   it('should delete widgets for WIDGETS_DELETE', async () => {
     const restApi = {
       patchDashboard: vi.fn(),

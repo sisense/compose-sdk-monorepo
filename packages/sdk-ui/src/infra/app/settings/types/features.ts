@@ -154,6 +154,8 @@ type AiStudioFeature = Feature<
 
 type NewNavigationBetaFeature = Feature<'newNavigationBeta'>;
 
+type ApiTelemetryFeature = Feature<'apiTelemetry'>;
+
 export type Features = (
   | AlertingFeature
   | LiveQueryFeature
@@ -214,6 +216,7 @@ export type Features = (
   | AiAssistantFeature
   | AiStudioFeature
   | NewNavigationBetaFeature
+  | ApiTelemetryFeature
 )[];
 
 export type FeatureByKey<K extends string> = Extract<Features[number], { key: K }>;

@@ -7,7 +7,7 @@ import { mergeFiltersByStrategy } from '@/shared/utils/filter-relations';
 import { isFiltersChanged } from '@/shared/utils/filters-comparator';
 
 import { RestApi } from '../../../../infra/api/rest-api';
-import { ClientApplication } from '../../../../infra/app/client-application';
+import { type ClientApplication } from '../../../../infra/app/types';
 import { useSisenseContext } from '../../../../infra/contexts/sisense-context/sisense-context';
 import { withTracking } from '../../../../infra/decorators/hook-decorators';
 import { TranslatableError } from '../../../../infra/translation/translatable-error';

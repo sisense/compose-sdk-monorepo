@@ -15,7 +15,7 @@ Creates a filter to isolate a measure value less than a given number.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `measure` | [`BaseMeasure`](../../../interfaces/interface.BaseMeasure.md) | Measure to filter by |
+| `measure` | [`BaseMeasure`](../../../interfaces/interface.BaseMeasure.md) \| [`CalculatedMeasure`](../../../interfaces/interface.CalculatedMeasure.md) | Measure to filter by |
 | `value` | `number` | Value |
 | `config`? | [`BaseFilterConfig`](../../../interfaces/interface.BaseFilterConfig.md) | Optional configuration for the filter |
 

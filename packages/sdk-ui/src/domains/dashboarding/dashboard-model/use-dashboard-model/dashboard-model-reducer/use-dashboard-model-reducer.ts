@@ -30,6 +30,16 @@ export function dashboardReducer(
         ...(state as DashboardModel),
         filters: action.payload,
       };
+    case UseDashboardModelActionType.PATCH_WIDGET: {
+      const model = state as DashboardModel;
+      const { widgetOid, patch } = action.payload;
+      return {
+        ...model,
+        widgets: model.widgets.map((widget) =>
+          widget.oid === widgetOid ? { ...widget, ...patch } : widget,
+        ),
+      };
+    }
     case UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE:
       return {
         ...(state as DashboardModel),

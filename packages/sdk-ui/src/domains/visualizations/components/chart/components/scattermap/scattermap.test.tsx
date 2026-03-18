@@ -6,7 +6,7 @@ import { ScattermapChartDataOptionsInternal } from '@/domains/visualizations/cor
 import { DataTable } from '@/domains/visualizations/core/chart-data-processor/table-processor';
 import { scattermapData } from '@/domains/visualizations/core/chart-data/scattermap-data';
 import { ScattermapChartDesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/design-options';
-import { ClientApplication } from '@/infra/app/client-application';
+import { type ClientApplication } from '@/infra/app/types';
 import { SisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 
 const dataSet = {

@@ -16,7 +16,7 @@ import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
 
 import { createCache, CreateCacheKeyFn } from '@/shared/utils/create-cache';
 
-import { ClientApplication } from '../../../infra/app/client-application.js';
+import { type ClientApplication } from '../../../infra/app/types.js';
 import { TranslatableError } from '../../../infra/translation/translatable-error.js';
 
 /**

@@ -1,30 +1,43 @@
-import { MenuItem } from '@/shared/types/menu-item';
+import type { MenuItem } from '@/shared/types/menu-item';
 
-import { WidgetProps } from '../components/widget/types';
+import type { WidgetProps } from '../components/widget/types';
+import type { WidgetHeaderConfig } from '../shared/widget-header/types';
 
 /**
- * Adds a menu item to the widget header.
+ * Transformer: adds a menu item to a header config (pure, non-mutating).
+ *
+ * @param menuItem - The menu item to append to toolbar.menu.items.
+ * @returns A transformer that maps WidgetHeaderConfig to WidgetHeaderConfig with the menu item appended.
+ * @internal
+ */
+export function withMenuItemInHeaderConfig(
+  menuItem: MenuItem,
+): (headerConfig: WidgetHeaderConfig) => WidgetHeaderConfig {
+  return (headerConfig) => ({
+    ...headerConfig,
+    toolbar: {
+      ...headerConfig.toolbar,
+      menu: {
+        ...(headerConfig.toolbar?.menu ?? {}),
+        items: [...(headerConfig.toolbar?.menu?.items ?? []), menuItem],
+      },
+    },
+  });
+}
+
+/**
+ * Adds a menu item to the widget header (transforms full WidgetProps).
+ *
  * @param menuItem - The menu item to add.
- * @returns A function that adds a menu item to the widget header.
+ * @returns A transformer that maps WidgetProps to WidgetProps with the item in config.header.toolbar.menu.items.
  * @internal
  */
 export function withHeaderMenuItem(menuItem: MenuItem): (widget: WidgetProps) => WidgetProps {
-  return (props) => {
-    return {
-      ...props,
-      config: {
-        ...props.config,
-        header: {
-          ...props.config?.header,
-          toolbar: {
-            ...props.config?.header?.toolbar,
-            menu: {
-              ...(props.config?.header?.toolbar?.menu ?? {}),
-              items: [...(props.config?.header?.toolbar?.menu?.items ?? []), menuItem],
-            },
-          },
-        },
-      },
-    };
-  };
+  return (props) => ({
+    ...props,
+    config: {
+      ...props.config,
+      header: withMenuItemInHeaderConfig(menuItem)(props.config?.header ?? {}),
+    },
+  });
 }

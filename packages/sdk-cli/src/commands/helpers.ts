@@ -1,3 +1,4 @@
+import { levenshtein } from '@sisense/sdk-common';
 import { DataModel, DataSourceField, DataSourceMetadata, MetadataTypes } from '@sisense/sdk-data';
 import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';
 import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
@@ -8,7 +9,6 @@ import {
   isWatAuthenticator,
 } from '@sisense/sdk-rest-client';
 import { trackCliError } from '@sisense/sdk-tracking';
-import levenshtein from 'js-levenshtein';
 import path from 'path';
 
 import { PKG_VERSION } from '../package-version.js';
@@ -22,12 +22,31 @@ type HttpClientConfig = {
   wat?: string;
 };
 
-function getHttpClient({ url, username, password, token, wat }: HttpClientConfig) {
+type SystemSettings = {
+  tracking?: {
+    apiTelemetry?: boolean;
+  };
+};
+
+async function getHttpClient({ url, username, password, token, wat }: HttpClientConfig) {
   const auth = getAuthenticator({ url, username, password, token, wat });
   if (!auth) {
     throw new Error('Invalid authentication method');
   }
-  return new HttpClient(url, auth, 'sdk-cli' + (PKG_VERSION ? `-${PKG_VERSION}` : ''));
+  const env = 'sdk-cli' + (PKG_VERSION ? `-${PKG_VERSION}` : '');
+  let httpClient: HttpClient = new HttpClient(url, auth, env);
+  await handleHttpClientLogin(httpClient);
+
+  const systemSettings = await httpClient.get<SystemSettings>('api/v1/settings/system');
+  if (systemSettings?.tracking?.apiTelemetry) {
+    httpClient = new HttpClient(url, auth, env, {
+      'x-sisense-origin': 'sdk-cli',
+      'x-sisense-sdk': 'csdk-sdk-cli',
+    });
+    await handleHttpClientLogin(httpClient);
+  }
+
+  return httpClient;
 }
 
 export const handleHttpClientLogin = async (httpClient: HttpClient) => {

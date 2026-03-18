@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 
-import { ClientApplication } from '../../infra/app/client-application.js';
+import { ClientApplication } from '../../infra/app/types.js';
 
 /**
  * Hook that generates a function for testing whether or not load

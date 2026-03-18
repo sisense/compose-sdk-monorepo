@@ -113,14 +113,12 @@ describe('AddFilterDataBrowser component', () => {
     // other attributes should be shown
     expect(getByText(DM.Commerce.Gender.name)).toBeInTheDocument();
     expect(getByText(DM.Commerce.Quantity.name)).toBeInTheDocument();
-    // restricted attributes should be disabled
-    expect(queryByText(DM.Commerce.AgeRange.name)?.parentElement?.parentElement).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    );
-    expect(queryByText(DM.Commerce.Condition.name)?.parentElement?.parentElement).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    );
+    // restricted attributes should be disabled (ListItemButton is 3 levels up from the text span)
+    expect(
+      queryByText(DM.Commerce.AgeRange.name)?.parentElement?.parentElement?.parentElement,
+    ).toHaveAttribute('aria-disabled', 'true');
+    expect(
+      queryByText(DM.Commerce.Condition.name)?.parentElement?.parentElement?.parentElement,
+    ).toHaveAttribute('aria-disabled', 'true');
   });
 });

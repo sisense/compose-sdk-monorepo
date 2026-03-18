@@ -11,7 +11,7 @@ import {
   useWidgetErrorsAndWarnings,
   WidgetErrorsAndWarningsProvider,
 } from '../widget-errors-and-warnings-context.js';
-import { WidgetHeaderConfig } from '../widget-header/types.js';
+import { TitleEditorConfig, WidgetHeaderConfig } from '../widget-header/types.js';
 import { WidgetHeader } from '../widget-header/widget-header.js';
 import { getShadowValue, WidgetCornerRadius, WidgetSpaceAround } from '../widget-style-utils.js';
 
@@ -26,6 +26,8 @@ export interface WidgetContainerProps {
    * Header configuration (e.g. toolbar menu items). Passed to {@link WidgetHeader} as `config`.
    */
   headerConfig?: WidgetHeaderConfig;
+  /** Inline title editor config (when rename is enabled). Passed to {@link WidgetHeader}. */
+  titleEditor?: TitleEditorConfig;
   title?: string;
   description?: string;
   topSlot?: ReactNode;
@@ -48,6 +50,7 @@ export const RawWidgetContainer: React.FC<WidgetContainerProps> = ({
   dataSetName,
   styleOptions,
   headerConfig,
+  titleEditor,
   title,
   description,
   topSlot,
@@ -90,6 +93,7 @@ export const RawWidgetContainer: React.FC<WidgetContainerProps> = ({
               }}
               styleOptions={styleOptions?.header}
               config={headerConfig}
+              titleEditor={titleEditor}
               onRefresh={onRefresh}
             />
           )}

@@ -248,12 +248,14 @@ const translation: TranslationDictionary = {
     },
   },
   widgetHeader: {
+    addTitle: '제목 추가',
     info: {
       details: '위젯 세부 정보',
       tooltip: '클릭하여 전체 세부 정보 보기',
     },
     menu: {
       deleteWidget: '위젯 삭제',
+      renameWidget: '위젯 이름 바꾸기',
       distributeEqualWidth: '이 행에서 균등하게 배포',
     },
   },
@@ -400,6 +402,9 @@ const translation: TranslationDictionary = {
     configureFilter: '필터 구성',
     noResults: '결과 없음',
     searchPlaceholder: '검색',
+    more: '더보기...',
+    filter: '필터',
+    addMeasure: '측정값 추가',
   },
   pivotTable: {
     grandTotal: '합계',
@@ -448,6 +453,18 @@ const translation: TranslationDictionary = {
       lockGroup: '그룹 잠금',
       unlockGroup: '그룹 잠금 해제',
     },
+  },
+  measures: {
+    countShort: '{{level}} 개수',
+    countDistinct: '고유 개수',
+    count: '전체 개수',
+    average: '평균',
+    sum: '합계',
+    min: '최소',
+    max: '최대',
+    stdev: '표준 편차',
+    median: '중앙값',
+    variance: '분산',
   },
 };
 

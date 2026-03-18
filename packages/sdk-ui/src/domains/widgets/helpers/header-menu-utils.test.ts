@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { MenuItem } from '@/shared/types/menu-item';
+import type { MenuItem } from '@/shared/types/menu-item';
 
 import type { WidgetProps } from '../components/widget/types';
-import { withHeaderMenuItem } from './header-menu-utils.js';
+import { withHeaderMenuItem, withMenuItemInHeaderConfig } from './header-menu-utils.js';
 
 const createMinimalWidgetProps = (overrides?: Partial<WidgetProps>): WidgetProps =>
   ({
@@ -18,6 +18,54 @@ const createMenuItem = (overrides?: Partial<MenuItem>): MenuItem => ({
   caption: 'Custom action',
   onClick: vi.fn(),
   ...overrides,
+});
+
+describe('withMenuItemInHeaderConfig', () => {
+  it('returns a transformer that adds a menu item to header config', () => {
+    const menuItem = createMenuItem();
+    const transform = withMenuItemInHeaderConfig(menuItem);
+    const result = transform({});
+    expect(result.toolbar?.menu?.items).toEqual([menuItem]);
+  });
+
+  it('appends menu item to existing items', () => {
+    const existingItem = createMenuItem({ id: 'existing', caption: 'Existing' });
+    const newItem = createMenuItem({ id: 'new', caption: 'New' });
+    const headerConfig = {
+      toolbar: { menu: { items: [existingItem] } },
+    };
+    const result = withMenuItemInHeaderConfig(newItem)(headerConfig);
+    expect(result.toolbar?.menu?.items).toEqual([existingItem, newItem]);
+  });
+
+  it('preserves other header config (e.g. title)', () => {
+    const menuItem = createMenuItem();
+    const headerConfig = { title: { editing: { enabled: true } } };
+    const result = withMenuItemInHeaderConfig(menuItem)(headerConfig);
+    expect(result.title).toEqual({ editing: { enabled: true } });
+    expect(result.toolbar?.menu?.items).toEqual([menuItem]);
+  });
+
+  it('preserves existing toolbar.menu options (e.g. enabled)', () => {
+    const menuItem = createMenuItem();
+    const headerConfig = {
+      toolbar: { menu: { enabled: false, items: [] } },
+    };
+    const result = withMenuItemInHeaderConfig(menuItem)(headerConfig);
+    expect(result.toolbar?.menu?.enabled).toBe(false);
+    expect(result.toolbar?.menu?.items).toEqual([menuItem]);
+  });
+
+  it('does not mutate the input header config', () => {
+    const menuItem = createMenuItem();
+    const headerConfig = {
+      toolbar: { menu: { items: [createMenuItem({ id: 'original' })] } },
+    };
+    const originalItems = headerConfig.toolbar?.menu?.items;
+    withMenuItemInHeaderConfig(menuItem)(headerConfig);
+    expect(headerConfig.toolbar?.menu?.items).toBe(originalItems);
+    expect(headerConfig.toolbar?.menu?.items).toHaveLength(1);
+  });
 });
 
 describe('withHeaderMenuItem', () => {

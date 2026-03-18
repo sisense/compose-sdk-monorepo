@@ -7,7 +7,6 @@ import {
   createDataModel,
   getFilePathInfo,
   getHttpClient,
-  handleHttpClientLogin,
   isSupportedOutputFile,
   writeFile,
 } from './helpers.js';
@@ -102,10 +101,9 @@ export const getDataModel = async (
     ({ maskedPassword: password } = await promptPasswordInteractive(username));
   }
 
-  const httpClient = getHttpClient({ url, username, password, token, wat });
-
   try {
-    await handleHttpClientLogin(httpClient);
+    const httpClient = await getHttpClient({ url, username, password, token, wat });
+
     trackExecution(httpClient, commandName, options);
     await createDataModel(httpClient, dataSource).then((model) => {
       return writeFile(model, outputInfo);

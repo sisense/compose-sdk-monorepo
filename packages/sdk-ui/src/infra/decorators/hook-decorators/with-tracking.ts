@@ -5,7 +5,7 @@ import { TrackingEventDetails, trackProductEvent } from '@sisense/sdk-tracking';
 import { useTracking } from '@/shared/hooks/use-tracking';
 
 import { useSisenseContext } from '../../../infra/contexts/sisense-context/sisense-context';
-import { ClientApplication } from '../../app/client-application';
+import { ClientApplication } from '../../app/types';
 
 export type HookDecorator<DecoratorConfig> = (
   decoratorConfig: DecoratorConfig,

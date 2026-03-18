@@ -6,7 +6,7 @@ import {
   getDataSourceName,
 } from '@sisense/sdk-data';
 
-import { ClientApplication } from '../../infra/app/client-application';
+import { type ClientApplication } from '../../infra/app/types';
 import { TranslatableError } from '../../infra/translation/translatable-error';
 
 /**

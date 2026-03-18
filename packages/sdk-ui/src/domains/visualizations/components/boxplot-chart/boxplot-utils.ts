@@ -8,7 +8,7 @@ import {
 } from '@sisense/sdk-data';
 import isNull from 'lodash-es/isNull';
 
-import { ClientApplication } from '../../../../infra/app/client-application.js';
+import { type ClientApplication } from '../../../../infra/app/types.js';
 import { executeQuery as executeQueryFunction } from '../../../query-execution/core/execute-query.js';
 import { translateBoxplotDataOptions } from '../../core/chart-data-options/translate-boxplot-data-options.js';
 import {

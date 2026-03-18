@@ -7,7 +7,7 @@ import {
   QueryDescription,
 } from '@/domains/query-execution/core/execute-query';
 import { executeBoxplotQuery } from '@/domains/visualizations/components/boxplot-chart/boxplot-utils';
-import { ClientApplication } from '@/infra/app/client-application';
+import { type ClientApplication } from '@/infra/app/types';
 import { ChartType } from '@/types';
 
 import {

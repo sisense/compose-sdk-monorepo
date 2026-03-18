@@ -5,6 +5,7 @@ import { getDataSourceName } from '@sisense/sdk-data';
 import omit from 'lodash-es/omit';
 
 import { Chart } from '@/domains/visualizations/components/chart';
+import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { HighchartsOptions } from '@/props';
@@ -16,6 +17,7 @@ import { combineHandlers } from '@/shared/utils/combine-handlers';
 import { ChartWidgetStyleOptions, DrilldownSelection } from '@/types';
 
 import { useHighlightSelection } from '../../hooks/use-highlight-selection';
+import { useWidgetHeaderManagement } from '../../hooks/use-widget-header-management';
 import { WidgetContainer } from '../../shared/widget-container';
 import { ChartWidgetProps } from './types';
 import { useWithChartWidgetDrilldown } from './use-with-chart-widget-drilldown';
@@ -82,15 +84,16 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
   );
   const onDrilldownSelectionsChange = useCallback(
     (selections: DrilldownSelection[]) => {
-      onChange?.({
-        drilldownOptions: {
-          ...props.drilldownOptions,
-          drilldownSelections: selections,
-        },
-      });
+      onChange?.({ type: 'drilldownSelections/changed', payload: selections });
     },
-    [onChange, props.drilldownOptions],
+    [onChange],
   );
+
+  const { headerConfig, titleEditor } = useWidgetHeaderManagement({
+    title: props.title,
+    onChange: props.onChange as (event: WidgetChangeEvent) => void,
+    headerConfig: props.config?.header,
+  });
 
   const { propsWithDrilldown, isDrilldownEnabled, breadcrumbs } = useWithChartWidgetDrilldown({
     propsToExtend: props,
@@ -166,7 +169,8 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     <DynamicSizeContainer defaultSize={defaultSize} size={size}>
       <WidgetContainer
         {...props}
-        headerConfig={props.config?.header}
+        headerConfig={headerConfig}
+        titleEditor={titleEditor}
         topSlot={
           <>
             {props.topSlot}

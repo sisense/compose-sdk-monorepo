@@ -5,7 +5,7 @@ import { QueryResultData } from '@sisense/sdk-data';
 import { renderHook, waitFor } from '@testing-library/react';
 
 import { executeQueryMock } from '@/domains/query-execution/core/__mocks__/execute-query';
-import { ClientApplication } from '@/infra/app/client-application';
+import { type ClientApplication } from '@/infra/app/types';
 import { useSisenseContextMock } from '@/infra/contexts/sisense-context/__mocks__/sisense-context';
 import { SisenseContextPayload } from '@/infra/contexts/sisense-context/sisense-context';
 import { useSetErrorMock } from '@/infra/error-boundary/__mocks__/use-set-error';

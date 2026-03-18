@@ -12,9 +12,9 @@ export const defaultMerger = <P extends AnyObject>(existingValue: P, delta: Part
   };
 };
 
-type UseWithChangeDetectionParams<P extends AnyObject> = {
+type UseWithChangeDetectionParams<P extends AnyObject, E extends object = Partial<P>> = {
   target: P | P[];
-  onChange: (delta: Partial<P>, index?: number) => void;
+  onChange: (event: E, index?: number) => void;
 };
 
 /**
@@ -25,8 +25,8 @@ type UseWithChangeDetectionParams<P extends AnyObject> = {
  *
  * @internal
  */
-export function useWithChangeDetection<P extends AnyObject>(
-  params: UseWithChangeDetectionParams<P>,
+export function useWithChangeDetection<P extends AnyObject, E extends object = Partial<P>>(
+  params: UseWithChangeDetectionParams<P, E>,
 ) {
   const { target, onChange: globalOnChange } = params;
   const isMultipleTargets = Array.isArray(target);
@@ -36,23 +36,23 @@ export function useWithChangeDetection<P extends AnyObject>(
   );
 
   const handleChange = useCallback(
-    (delta: Partial<P>, index: number) => {
+    (event: E, index: number) => {
       // Fire the onChange callback if provided in the object
       if (targets[index] && 'onChange' in targets[index]) {
-        targets[index].onChange(delta);
+        (targets[index] as unknown as { onChange: (event: E) => void }).onChange(event);
       }
 
-      // Fire the global onChangeCallback to notify the parent of changes
-      globalOnChange(delta, isMultipleTargets ? index : undefined);
+      // Fire the global onChange callback to notify the parent of changes
+      globalOnChange(event, isMultipleTargets ? index : undefined);
     },
     [targets, isMultipleTargets, globalOnChange],
   );
 
   // Return the updated props with the onChange handler injected
   return useMemo(() => {
-    const extendedTargets = targets.map((target, index) => ({
-      ...target,
-      onChange: (delta: Partial<P>) => handleChange(delta, index),
+    const extendedTargets = targets.map((targetItem, index) => ({
+      ...targetItem,
+      onChange: (event: E) => handleChange(event, index),
     }));
     return isMultipleTargets ? extendedTargets : extendedTargets[0];
   }, [isMultipleTargets, targets, handleChange]);

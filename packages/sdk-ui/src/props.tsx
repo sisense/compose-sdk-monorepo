@@ -35,7 +35,7 @@ import {
 import { HighchartsOptions } from './domains/visualizations/core/chart-options-processor/chart-options-service';
 import type { ChartWidgetProps } from './domains/widgets/components/chart-widget/types';
 import { FiltersMergeStrategy } from './domains/widgets/components/widget-by-id/types';
-import { AppConfig } from './infra/app/client-application';
+import { type AppConfig } from './infra/app/types';
 import type { Plugin } from './infra/contexts/plugin-provider/types';
 import {
   AreamapDataPoint,

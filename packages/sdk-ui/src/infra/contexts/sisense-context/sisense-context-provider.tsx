@@ -8,7 +8,8 @@ import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
 import { ModalProvider } from '@/infra/contexts/modal-provider/modal-provider';
 
 import { SisenseContextProviderProps } from '../../../props';
-import { ClientApplication, createClientApplication } from '../../app/client-application';
+import { createClientApplication } from '../../app/client-application';
+import { type ClientApplication } from '../../app/types';
 import { ErrorBoundary } from '../../error-boundary/error-boundary';
 import { I18nProvider } from '../../translation/i18n-provider';
 import { PluginProvider } from '../plugin-provider';

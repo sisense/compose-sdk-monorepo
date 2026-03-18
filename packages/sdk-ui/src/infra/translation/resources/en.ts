@@ -241,12 +241,14 @@ export const translation = {
     },
   },
   widgetHeader: {
+    addTitle: 'Add title',
     info: {
       details: 'Widget Details',
       tooltip: 'Click to view full details',
     },
     menu: {
       deleteWidget: 'Delete Widget',
+      renameWidget: 'Rename Widget',
       distributeEqualWidth: 'Distribute equally in this row',
     },
   },
@@ -395,6 +397,9 @@ export const translation = {
     configureFilter: 'Configure Filter',
     noResults: 'No results',
     searchPlaceholder: 'Search',
+    more: 'More...',
+    filter: 'Filter',
+    addMeasure: 'Add Measure',
   },
   pivotTable: {
     grandTotal: 'Grand Total',
@@ -443,6 +448,18 @@ export const translation = {
       lockGroup: 'Lock Group',
       unlockGroup: 'Unlock Group',
     },
+  },
+  measures: {
+    countShort: '# of {{level}}',
+    countDistinct: 'Count Unique',
+    count: 'Count All',
+    average: 'Average',
+    sum: 'Sum',
+    min: 'Min',
+    max: 'Max',
+    stdev: 'Standard Deviation',
+    median: 'Median',
+    variance: 'Variance',
   },
 };
 

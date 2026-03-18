@@ -70,7 +70,7 @@ export type DashboardSettings = {
 };
 
 /**
- * @internal
+ * @sisenseInternal
  */
 export type DashboardDto = {
   oid: string;

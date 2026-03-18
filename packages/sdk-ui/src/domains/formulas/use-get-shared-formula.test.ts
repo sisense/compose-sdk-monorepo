@@ -6,7 +6,7 @@ import { Mock } from 'vitest';
 
 import { TranslatableError } from '@/infra/translation/translatable-error';
 
-import { ClientApplication } from '../../infra/app/client-application';
+import { type ClientApplication } from '../../infra/app/types';
 import { useSisenseContextMock } from '../../infra/contexts/sisense-context/__mocks__/sisense-context';
 import { translation } from '../../infra/translation/resources/en';
 import { fetchFormula, fetchFormulaByOid } from './fetch-formula';

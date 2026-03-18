@@ -15,17 +15,20 @@ type MultiSelectItemProps<Value> = SelectItem<Value> & {
 export function MultiSelectItem<Value = unknown>(props: MultiSelectItemProps<Value>) {
   const { themeSettings } = useThemeContext();
   const { value, displayValue, selected, onSelect } = props;
+
+  const handleToggle = () => onSelect?.(value);
+
   return (
     <SelectItemContainer
       theme={themeSettings}
       style={{ height: '36px', paddingLeft: '8px' }}
-      onClick={() => onSelect?.(value)}
+      onClick={handleToggle}
     >
       <Checkbox
         checked={selected}
-        readOnly={true}
+        onChange={handleToggle}
         style={{ width: '13px', height: '13px', marginRight: '12px' }}
-        labelProps={{ onClick: (e) => e.preventDefault() }}
+        labelProps={{ onClick: (e) => e.stopPropagation() }}
       />
       <DropdownSelectLabel theme={themeSettings}>{displayValue ?? `${value}`}</DropdownSelectLabel>
     </SelectItemContainer>

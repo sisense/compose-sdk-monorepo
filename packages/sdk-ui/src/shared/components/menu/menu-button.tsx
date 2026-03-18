@@ -1,8 +1,8 @@
 import { MouseEventHandler, useCallback } from 'react';
 
+import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
 
-import styled from '@/infra/styled';
 import ThreeDotsIcon from '@/modules/ai/icons/three-dots-icon';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
 
@@ -19,7 +19,9 @@ type SizableIcon = {
 
 const DEFAULT_SIZE = 28;
 
-const StyledIconButton = styled(IconButton)<SizableIcon>`
+const StyledIconButton = styled(IconButton, {
+  shouldForwardProp: (prop) => prop !== 'iconSize',
+})<SizableIcon>`
   min-width: ${({ iconSize }) => iconSize ?? DEFAULT_SIZE}px;
   min-height: ${({ iconSize }) => iconSize ?? DEFAULT_SIZE}px;
 `;

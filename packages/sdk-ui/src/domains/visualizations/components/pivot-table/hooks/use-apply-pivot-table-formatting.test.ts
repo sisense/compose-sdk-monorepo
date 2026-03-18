@@ -6,7 +6,7 @@ import {
 import { renderHook } from '@testing-library/react';
 
 import type { PivotTableDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types';
-import type { ClientApplication } from '@/infra/app/client-application';
+import type { ClientApplication } from '@/infra/app/types';
 import { useSisenseContextMock } from '@/infra/contexts/sisense-context/__mocks__/sisense-context';
 
 import type { CustomDataCellFormatter, CustomHeaderCellFormatter } from '../formatters/types';

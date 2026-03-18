@@ -180,6 +180,103 @@ describe('useConvertFilterRelations', () => {
       });
       expect(newFiltersOrRelations).toEqual([filter1, filter2, filter3, filter4]);
     });
+
+    it('should replace a widget filter on the same attribute in-place, preserving the original relation structure', () => {
+      // Dashboard relations: filter1 AND (filter2 OR filter3)
+      const initialRelations = filterFactory.logic.and(
+        filter1,
+        filterFactory.logic.or(filter2, filter3),
+      );
+      const { result } = renderHook(() => useConvertFilterRelations(initialRelations));
+
+      // widgetFilter3 targets the same dimension as filter3 (Commerce.Condition) but with
+      // different members, simulating a widget-level filter override.
+      const widgetFilter3 = filterFactory.members(DM.Commerce.Condition, ['Used']);
+      const otherFilters = [filter1, filter2, widgetFilter3];
+
+      let newFiltersOrRelations;
+      act(() => {
+        newFiltersOrRelations = result.current.applyRelationsToOtherFilters(otherFilters);
+      });
+
+      // Expected: filter1 AND (filter2 OR widgetFilter3) — structure preserved, node swapped
+      expect(newFiltersOrRelations).toEqual(
+        filterFactory.logic.and(filter1, filterFactory.logic.or(filter2, widgetFilter3)),
+      );
+    });
+
+    it('should append a widget filter with AND when it targets a dimension not present in dashboard filters', () => {
+      // Dashboard relations: filter2 OR filter3
+      const initialRelations = filterFactory.logic.or(filter2, filter3);
+      const { result } = renderHook(() => useConvertFilterRelations(initialRelations));
+
+      // filter4 is on a new dimension (Country.Country) not present in dashboard relations
+      const otherFilters = [filter2, filter3, filter4];
+
+      let newFiltersOrRelations;
+      act(() => {
+        newFiltersOrRelations = result.current.applyRelationsToOtherFilters(otherFilters);
+      });
+
+      // Expected: (filter2 OR filter3) AND filter4 — new filter appended with AND
+      expect(newFiltersOrRelations).toEqual(
+        filterFactory.logic.and(filterFactory.logic.or(filter2, filter3), filter4),
+      );
+    });
+
+    it('should append (not replace) a widget filter when the corresponding dashboard filter is disabled', () => {
+      // Dashboard relations: filter1 AND (disabledFilter2 OR filter3)
+      const disabledFilter2 = filterFactory.members(DM.Commerce.Gender, ['Female'], {
+        disabled: true,
+      });
+      const initialRelations = filterFactory.logic.and(
+        filter1,
+        filterFactory.logic.or(disabledFilter2, filter3),
+      );
+      const { result } = renderHook(() => useConvertFilterRelations(initialRelations));
+
+      const widgetFilter2 = filterFactory.members(DM.Commerce.Gender, ['Male']);
+      const otherFilters = [filter1, disabledFilter2, filter3, widgetFilter2];
+
+      let newFiltersOrRelations;
+      act(() => {
+        newFiltersOrRelations = result.current.applyRelationsToOtherFilters(otherFilters);
+      });
+
+      // The disabled dashboard filter slot is preserved; the widget filter is appended with AND.
+      expect(newFiltersOrRelations).toEqual(
+        filterFactory.logic.and(
+          filterFactory.logic.and(filter1, filterFactory.logic.or(disabledFilter2, filter3)),
+          widgetFilter2,
+        ),
+      );
+    });
+
+    it('should replace one filter in-place and append another new filter with AND simultaneously', () => {
+      // Dashboard relations: filter1 AND (filter2 OR filter3)
+      const initialRelations = filterFactory.logic.and(
+        filter1,
+        filterFactory.logic.or(filter2, filter3),
+      );
+      const { result } = renderHook(() => useConvertFilterRelations(initialRelations));
+
+      const widgetFilter3 = filterFactory.members(DM.Commerce.Condition, ['Used']);
+      // filter3 is overridden by widgetFilter3; filter4 is a new addition
+      const otherFilters = [filter1, filter2, widgetFilter3, filter4];
+
+      let newFiltersOrRelations;
+      act(() => {
+        newFiltersOrRelations = result.current.applyRelationsToOtherFilters(otherFilters);
+      });
+
+      // Expected: (filter1 AND (filter2 OR widgetFilter3)) AND filter4
+      expect(newFiltersOrRelations).toEqual(
+        filterFactory.logic.and(
+          filterFactory.logic.and(filter1, filterFactory.logic.or(filter2, widgetFilter3)),
+          filter4,
+        ),
+      );
+    });
   });
 
   describe('onFiltersChange callback - double-fire prevention', () => {

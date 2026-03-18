@@ -94,6 +94,12 @@ export const DashboardById = asSisenseComponent({
           widgetOptions: payload.widgetOptions,
         };
       },
+      patchWidget: async (widgetOid, patch) => {
+        await dispatchChanges({
+          type: UseDashboardModelActionType.PATCH_WIDGET,
+          payload: { widgetOid, patch },
+        });
+      },
     }),
     [dispatchChanges],
   );
@@ -114,6 +120,9 @@ export const DashboardById = asSisenseComponent({
           ...propConfig?.widgetsPanel?.editMode,
           duplicateWidget: {
             enabled: propConfig?.widgetsPanel?.editMode?.duplicateWidget?.enabled ?? false,
+          },
+          renameWidget: {
+            enabled: propConfig?.widgetsPanel?.editMode?.renameWidget?.enabled ?? false,
           },
           enabled: Boolean(
             app?.settings?.user?.permissions?.dashboards?.edit_layout &&

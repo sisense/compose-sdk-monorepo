@@ -5,4 +5,4 @@
  * Not recommended for production use.
  */
 
-export { useQueryCache } from '../domains/query-execution/hooks/use-query-cache/use-query-cache';
+export { useDashboardTheme } from '../domains/dashboarding/use-dashboard-theme.js';

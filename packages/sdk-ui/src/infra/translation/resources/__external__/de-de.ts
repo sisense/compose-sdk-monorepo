@@ -250,12 +250,14 @@ const translation: TranslationDictionary = {
     },
   },
   widgetHeader: {
+    addTitle: 'Titel hinzufügen',
     info: {
       details: 'Widget-Details',
       tooltip: 'Klicken Sie, um vollständige Details anzuzeigen',
     },
     menu: {
       deleteWidget: 'Widget löschen',
+      renameWidget: 'Widget umbenennen',
       distributeEqualWidth: 'Gleichmäßig in dieser Zeile verteilen',
     },
   },
@@ -407,6 +409,9 @@ const translation: TranslationDictionary = {
     configureFilter: 'Filter konfigurieren',
     noResults: 'Keine Ergebnisse',
     searchPlaceholder: 'Suchen',
+    more: 'Mehr...',
+    filter: 'Filter',
+    addMeasure: 'Maß hinzufügen',
   },
   pivotTable: {
     grandTotal: 'Gesamtsumme',
@@ -455,6 +460,18 @@ const translation: TranslationDictionary = {
       lockGroup: 'Gruppe sperren',
       unlockGroup: 'Gruppe entsperren',
     },
+  },
+  measures: {
+    countShort: 'Anz. {{level}}',
+    countDistinct: 'Eindeutige Anzahl',
+    count: 'Alle zählen',
+    average: 'Durchschnitt',
+    sum: 'Summe',
+    min: 'Min',
+    max: 'Max',
+    stdev: 'Standardabweichung',
+    median: 'Median',
+    variance: 'Varianz',
   },
 };
 

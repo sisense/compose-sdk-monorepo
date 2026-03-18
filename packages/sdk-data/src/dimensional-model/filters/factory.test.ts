@@ -506,6 +506,18 @@ describe('filterFactory', () => {
       `filterFactory.measureGreaterThanOrEqual(measureFactory.sum(DM.Table.Num), 5, { disabled: true, locked: true })`,
     );
   });
+  test('filterFactory.measureGreaterThanOrEqual() with customFormula', () => {
+    const customMeasure = measureFactory.customFormula('AOV', '[m1] / [m2]', {
+      m1: measureFactory.sum(numAttr, 'sum num'),
+      m2: measureFactory.count(numAttr, 'count num'),
+    });
+    const f = filterFactory.measureGreaterThanOrEqual(customMeasure, 50);
+    expect(f).toBeInstanceOf(MeasureFilter);
+    expect(f).toHaveProperty('attribute', numAttr);
+    expect(f).toHaveProperty('measure', customMeasure);
+    expect(f).toHaveProperty('operatorA', NumericOperators.From);
+    expect(f).toHaveProperty('valueA', 50);
+  });
   test('filterFactory.measureLessThanOrEqual()', () => {
     const f = filterFactory.measureLessThanOrEqual(measureFactory.sum(numAttr), 5);
     expect(f).toBeInstanceOf(MeasureFilter);

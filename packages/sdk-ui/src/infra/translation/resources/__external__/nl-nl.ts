@@ -249,12 +249,14 @@ const translation: TranslationDictionary = {
     },
   },
   widgetHeader: {
+    addTitle: 'Titel toevoegen',
     info: {
       details: 'Widgetdetails',
       tooltip: 'Klik om volledige details te bekijken',
     },
     menu: {
       deleteWidget: 'Widget verwijderen',
+      renameWidget: 'Widget hernoemen',
       distributeEqualWidth: 'Gelijkmatig verdelen in deze rij',
     },
   },
@@ -405,6 +407,9 @@ const translation: TranslationDictionary = {
     configureFilter: 'Filter configureren',
     noResults: 'Geen resultaten',
     searchPlaceholder: 'Zoeken',
+    more: 'Meer...',
+    filter: 'Filter',
+    addMeasure: 'Maat toevoegen',
   },
   pivotTable: {
     grandTotal: 'Totaal',
@@ -453,6 +458,18 @@ const translation: TranslationDictionary = {
       lockGroup: 'Groep vergrendelen',
       unlockGroup: 'Groep ontgrendelen',
     },
+  },
+  measures: {
+    countShort: 'Aantal {{level}}',
+    countDistinct: 'Unieke waarden tellen',
+    count: 'Alles tellen',
+    average: 'Gemiddelde',
+    sum: 'Som',
+    min: 'Min',
+    max: 'Max',
+    stdev: 'Standaardafwijking',
+    median: 'Mediaan',
+    variance: 'Variantie',
   },
 };
 

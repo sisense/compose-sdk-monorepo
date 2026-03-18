@@ -267,6 +267,26 @@ export class RestApi {
   };
 
   /**
+   * Partially update a widget in a dashboard.
+   */
+  public patchWidgetInDashboard = (
+    dashboardOid: string,
+    widgetOid: string,
+    // temporary only title is supported to avoid full DTO reconstruction
+    patch: Partial<Pick<WidgetDto, 'title'>>,
+    sharedMode?: boolean,
+  ) => {
+    const queryParams = new URLSearchParams({
+      ...(sharedMode && { sharedMode: 'true' }),
+    }).toString();
+
+    return this.httpClient.patch<WidgetDto>(
+      `api/v1/dashboards/${dashboardOid}/widgets/${widgetOid}?${queryParams}`,
+      patch,
+    );
+  };
+
+  /**
    * Get shared formulas by ids
    *
    * @param sharedFormulasIds - An array of shared formulas ids
