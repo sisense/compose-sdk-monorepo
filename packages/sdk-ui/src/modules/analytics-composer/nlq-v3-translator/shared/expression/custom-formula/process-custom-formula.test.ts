@@ -21,7 +21,7 @@ vi.mock('../../utils/schema-index.js', async (importOriginal) => {
   };
 });
 
-/** Schema with datetime column for time-diff (DDiff) tests. */
+/** Schema with datetime column for xdiff (DDiff) tests. */
 const schemaWithDateTime = createSchemaIndex([
   {
     name: 'Commerce',
@@ -325,7 +325,7 @@ describe('processCustomFormula', () => {
     );
   });
 
-  describe('time-diff date level inference', () => {
+  describe('xdiff date level inference', () => {
     it('should call createAttributeFromName with inferredDateLevel when ref has no level (DDiff)', () => {
       const createAttributeFromNameMock = vi.mocked(createAttributeFromName) as ReturnType<
         typeof vi.fn
@@ -352,11 +352,11 @@ describe('processCustomFormula', () => {
       expect(dischargeCall).toBeDefined();
       expect(dischargeCall![3]).toEqual({ inferredDateLevel: 'Days' });
       expect(admissionCall).toBeDefined();
-      // admission has level in name (.Days); we still pass inferredDateLevel for refs in time-diff, createAttributeFromName uses name's level when present
+      // admission has level in name (.Days); we still pass inferredDateLevel for refs in xdiff, createAttributeFromName uses name's level when present
       expect(admissionCall![3]).toEqual({ inferredDateLevel: 'Days' });
     });
 
-    it('should throw when same ref is used in time-diff calls with conflicting date levels', () => {
+    it('should throw when same ref is used in xdiff calls with conflicting date levels', () => {
       const processedArgs = [
         'Conflicting',
         'Avg(DDiff([x],[a])) + Avg(YDiff([x],[b]))',
@@ -373,7 +373,7 @@ describe('processCustomFormula', () => {
 
       expect(() => {
         processCustomFormula(processedArgs, contextWithDateTime);
-      }).toThrow(/Reference \[x\] is used in time-diff functions with conflicting date levels/);
+      }).toThrow(/Reference \[x\] is used in xdiff functions with conflicting date levels/);
     });
   });
 });

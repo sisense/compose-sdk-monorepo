@@ -17,6 +17,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootContentId,
@@ -94,6 +95,7 @@ export class ContextMenuComponent implements AfterViewInit, OnChanges, OnDestroy
     public themeService: ThemeService,
   ) {
     this.componentAdapter = new ComponentAdapter(ContextMenuPreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
     ]);

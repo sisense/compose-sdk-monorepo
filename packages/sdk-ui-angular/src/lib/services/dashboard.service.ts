@@ -15,7 +15,10 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { BehaviorSubject } from 'rxjs';
 
-import { createSisenseContextConnector } from '../component-wrapper-helpers';
+import {
+  createPluginContextConnector,
+  createSisenseContextConnector,
+} from '../component-wrapper-helpers';
 import { type DashboardProps } from '../components/dashboard/dashboard.component';
 import { type WidgetProps } from '../components/widgets/widget.component';
 import { TrackableService } from '../decorators/trackable.decorator';
@@ -151,7 +154,10 @@ export class DashboardService {
   } {
     const hookAdapter = new HookAdapter(
       useComposedDashboardInternal<ComposableDashboardPropsPreact | DashboardPropsPreact>,
-      [createSisenseContextConnector(this.sisenseContextService)],
+      [
+        createPluginContextConnector(this.sisenseContextService),
+        createSisenseContextConnector(this.sisenseContextService),
+      ],
     );
     const dashboard$ = new BehaviorSubject<D>(initialDashboard);
 

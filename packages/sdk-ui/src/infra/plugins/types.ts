@@ -1,9 +1,11 @@
+import type { WidgetPlugin } from './widget-plugins/types.js';
+
 /**
- * Plugin with metadata information
+ * Base plugin information
  *
- * @internal
+ * @sisenseInternal
  */
-export interface Plugin {
+export interface BasePluginInfo {
   /**
    * Unique name identifier for the plugin
    */
@@ -35,7 +37,7 @@ export interface Plugin {
 /**
  * Result of plugin validation
  *
- * @internal
+ * @sisenseInternal
  */
 export interface PluginValidationResult {
   /**
@@ -53,3 +55,11 @@ export interface PluginValidationResult {
    */
   reason?: string;
 }
+
+/**
+ * Plugin declaration.
+ * Currently only widget plugins are supported.
+ *
+ * @sisenseInternal
+ */
+export type Plugin = WidgetPlugin;

@@ -28,10 +28,10 @@ export class PivotBuilderMock {
   }
 
   render() {
-    // Mock render method - creates a proper React element with the expected aria-label
+    // Mock render method - creates a placeholder pivot body inside the real region wrapper
     const mockElement = React.createElement(
       'div',
-      { 'aria-label': 'pivot-table-root' },
+      { 'data-testid': 'mock-pivot-element' },
       'Mocked Pivot Table',
     );
     setTimeout(() => {

@@ -20,10 +20,10 @@ describe('Table', () => {
     const tableDataOptions = {
       columns: [col1, col2],
     };
-    const { findByLabelText, findAllByRole } = render(
+    const { findByTestId, findAllByRole } = render(
       <Table dataSet={dataSet} dataOptions={tableDataOptions} />,
     );
-    const table = await findByLabelText('table-root');
+    const table = await findByTestId('table-root');
     expect(table).toBeTruthy();
     const columns = await findAllByRole('columnheader');
     expect(columns.length).toBe(tableDataOptions.columns.length);

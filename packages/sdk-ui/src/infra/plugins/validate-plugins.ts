@@ -1,6 +1,6 @@
 import semverSatisfies from 'semver/functions/satisfies';
 
-import { Plugin, PluginValidationResult } from './types';
+import { Plugin, PluginValidationResult } from './types.js';
 
 /**
  * Normalizes SDK version for range comparison: strips prerelease suffix so only x.y.z is used.

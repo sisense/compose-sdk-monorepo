@@ -1,7 +1,9 @@
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 
-import { CustomWidgetsContext } from './custom-widgets-context';
-import { CustomWidgetComponent } from './types';
+import { useWidgetPluginRegistry } from '@/infra/plugins/use-widget-plugin-registry';
+import type { CustomVisualization } from '@/infra/plugins/widget-plugins/types';
+
+import { CustomWidgetComponent, CustomWidgetComponentProps } from './types';
 
 /**
  * Hook that provides API for configuring custom widgets.
@@ -22,54 +24,25 @@ import { CustomWidgetComponent } from './types';
  *
  * @group Dashboards
  */
-export const useCustomWidgets = () => {
-  const customWidgets = useContext(CustomWidgetsContext);
+export const useCustomWidgets = (): UseCustomWidgetsResult => {
+  const widgetRegistry = useWidgetPluginRegistry();
 
-  if (!customWidgets) {
-    throw new Error('useCustomWidgets must be used within a CustomWidgetsProvider');
-  }
-
-  /**
-   * Registers a custom widget.
-   *
-   * @param customWidgetType - The type of the custom widget.
-   * @param customWidget - The custom widget component.
-   */
   const registerCustomWidget = useCallback(
-    <T = any>(customWidgetType: string, customWidget: CustomWidgetComponent<T>) => {
-      if (!customWidgets.has(customWidgetType)) {
-        customWidgets.set(customWidgetType, customWidget);
-      }
+    <T = unknown>(customWidgetType: string, customWidget: CustomWidgetComponent<T>) => {
+      widgetRegistry.register(customWidgetType, customWidget as CustomVisualization, 'legacy');
     },
-    [customWidgets],
+    [widgetRegistry],
   );
 
-  /**
-   * Checks if a custom widget is registered.
-   *
-   * @param customWidgetType - The type of the custom widget.
-   * @returns True if the custom widget is registered, false otherwise.
-   */
   const hasCustomWidget = useCallback(
-    (customWidgetType: string) => {
-      return customWidgets.has(customWidgetType);
-    },
-    [customWidgets],
+    (customWidgetType: string) => widgetRegistry.has(customWidgetType, 'legacy'),
+    [widgetRegistry],
   );
 
-  /**
-   * Retrieves a custom widget.
-   *
-   * @param customWidgetType - The type of the custom widget.
-   * @returns The custom widget component.
-   *
-   * @internal
-   */
   const getCustomWidget = useCallback(
-    (customWidgetType: string) => {
-      return customWidgets.get(customWidgetType);
-    },
-    [customWidgets],
+    (customWidgetType: string) =>
+      widgetRegistry.getComponent(customWidgetType, 'legacy') as CustomWidgetComponent | undefined,
+    [widgetRegistry],
   );
 
   return {
@@ -77,4 +50,19 @@ export const useCustomWidgets = () => {
     hasCustomWidget,
     getCustomWidget,
   };
+};
+
+/**
+ * Result of the `useCustomWidgets` hook.
+ */
+export type UseCustomWidgetsResult = {
+  /** Registers a custom widget. */
+  registerCustomWidget: <T = CustomWidgetComponentProps>(
+    customWidgetType: string,
+    customWidget: CustomWidgetComponent<T>,
+  ) => void;
+  /** Checks if a custom widget is registered. */
+  hasCustomWidget: (customWidgetType: string) => boolean;
+  /** Gets a custom widget. */
+  getCustomWidget: (customWidgetType: string) => CustomWidgetComponent | undefined;
 };

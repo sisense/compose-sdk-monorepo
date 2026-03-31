@@ -10,6 +10,7 @@ import {
 import { BehaviorSubject } from 'rxjs';
 
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../component-wrapper-helpers';
@@ -160,6 +161,7 @@ export class WidgetService {
 
     // Create HookAdapter with useJtdWidget hook and context connectors
     const hookAdapter = new HookAdapter(useJtdWidgetPreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
     ]);

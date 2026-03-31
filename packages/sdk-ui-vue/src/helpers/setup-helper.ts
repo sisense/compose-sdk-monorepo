@@ -9,12 +9,14 @@ import { h, isReactive, onBeforeUnmount, ref, type Slots, toRaw } from 'vue';
 import { isObject } from '../utils.js';
 import {
   createCustomWidgetsContextConnector,
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
 } from './context-connectors';
 
 export function createDefaultContextConnectors() {
   return [
+    createPluginContextConnector(),
     createCustomWidgetsContextConnector(),
     createSisenseContextConnector(),
     createThemeContextConnector(),

@@ -23,6 +23,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootContentId,
@@ -184,6 +185,7 @@ export class DrilldownWidgetComponent implements AfterViewInit, OnChanges, OnDes
     public themeService: ThemeService,
   ) {
     this.componentAdapter = new ComponentAdapter(DrilldownWidgetPreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
     ]);

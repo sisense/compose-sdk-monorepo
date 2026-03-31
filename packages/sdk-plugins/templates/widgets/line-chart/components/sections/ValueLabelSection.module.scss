@@ -1,0 +1,106 @@
+@import '../shared/Color';
+
+.valueLabelsContainer {
+  margin-left: 13px;
+  width: 226px;
+  box-sizing: border-box;
+  border: 1px solid $ATHENS_GRAY_DARK2;
+  border-radius: 4px;
+  background: white;
+  font-size: 13px;
+  color: $SHUTTLE_GRAY_DARK;
+  overflow: hidden;
+}
+
+.iconRow {
+  display: flex;
+  height: 74px;
+}
+
+.alignmentOption {
+  flex: 1;
+  border: none;
+  border-right: 1px solid $ATHENS_GRAY_DARK2;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $OXFORD_BLUE;
+    outline-offset: -2px;
+  }
+
+  &.hoverEffect {
+    &:hover {
+      background-color: $PALE_CANERY;
+
+      .horizontal,
+      .diagonal,
+      .vertical {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.textRow {
+  height: 25px;
+  border-top: 1px solid $ATHENS_GRAY_DARK2;
+}
+
+.horizontal {
+  border-bottom: 1px solid $SHUTTLE_GRAY_DARK;
+  text-align: center;
+  box-sizing: border-box;
+  width: 40px;
+  opacity: 0.3;
+
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.diagonal {
+  border-bottom: 1px solid $SHUTTLE_GRAY_DARK;
+  text-align: center;
+  box-sizing: border-box;
+  transform: rotate(-45deg);
+  width: 40px;
+  opacity: 0.3;
+
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.vertical {
+  border-bottom: 1px solid $SHUTTLE_GRAY_DARK;
+  text-align: center;
+  box-sizing: border-box;
+  transform: rotate(-90deg);
+  width: 40px;
+  opacity: 0.3;
+
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tdSelected {
+  background-color: transparent;
+}
+
+.valueLabelSection {
+  border: none;
+}

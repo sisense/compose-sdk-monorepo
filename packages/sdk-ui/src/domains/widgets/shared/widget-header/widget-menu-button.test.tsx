@@ -5,6 +5,7 @@ import { describe, expect, it, Mock, vi } from 'vitest';
 import { useMenu } from '@/infra/contexts/menu-provider/hooks/use-menu';
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context';
 import { MenuItem } from '@/shared/types/menu-item';
+import { convertMenuItemToLegacySectionItem } from '@/shared/utils/menu-item-converters';
 
 import { WidgetMenuButton } from './widget-menu-button';
 
@@ -103,7 +104,7 @@ describe('WidgetMenuButton', () => {
     expect(mockOpenMenu).toHaveBeenCalledWith({
       position: { left: 100, top: 50 },
       alignment: { horizontal: 'right' },
-      itemSections: [{ items: menuItems }],
+      itemSections: [{ items: menuItems.map(convertMenuItemToLegacySectionItem) }],
     });
   });
 

@@ -87,7 +87,7 @@ const costValue = {
 
 describe('Boxplot Chart', () => {
   it('render boxplot with custom data options that allow to pass all values', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <BoxplotChart
         dataSet={dataSet}
         dataOptions={{
@@ -110,11 +110,11 @@ describe('Boxplot Chart', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 
   it('render boxplot with single value in data options', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <BoxplotChart
         dataSet={dataSet}
         dataOptions={{
@@ -130,11 +130,11 @@ describe('Boxplot Chart', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 
   it('render boxplot without outlier points', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <BoxplotChart
         dataSet={dataSet}
         dataOptions={{
@@ -150,11 +150,11 @@ describe('Boxplot Chart', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 
   it('render boxplot with only values (without category)', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <BoxplotChart
         dataSet={dataSet}
         dataOptions={{
@@ -170,13 +170,13 @@ describe('Boxplot Chart', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 
   it('render boxplot with highlights', async () => {
     const bluredDataIndexes = [0];
 
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <BoxplotChart
         dataSet={withBlurredRows(dataSet, bluredDataIndexes)}
         dataOptions={{
@@ -196,6 +196,6 @@ describe('Boxplot Chart', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 });

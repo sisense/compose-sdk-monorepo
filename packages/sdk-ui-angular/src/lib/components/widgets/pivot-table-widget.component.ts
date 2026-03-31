@@ -16,6 +16,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
@@ -192,6 +193,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
     private themeService: ThemeService,
   ) {
     this.componentAdapter = new ComponentAdapter(PivotTableWidgetPreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
     ]);

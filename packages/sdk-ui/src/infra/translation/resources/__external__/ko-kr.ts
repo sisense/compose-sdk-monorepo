@@ -257,6 +257,8 @@ const translation: TranslationDictionary = {
       deleteWidget: '위젯 삭제',
       renameWidget: '위젯 이름 바꾸기',
       distributeEqualWidth: '이 행에서 균등하게 배포',
+      download: '다운로드',
+      csvFile: 'CSV 파일',
     },
   },
   customWidgets: {
@@ -453,6 +455,24 @@ const translation: TranslationDictionary = {
       lockGroup: '그룹 잠금',
       unlockGroup: '그룹 잠금 해제',
     },
+    toggleSwitch: '필터 활성화/비활성화',
+  },
+  chart: {
+    indicator: {
+      label: '지표 차트',
+    },
+    visualization: {
+      label: '데이터 시각화',
+    },
+    pivotTable: {
+      label: '피벗 테이블',
+    },
+    table: {
+      label: '데이터 테이블',
+    },
+  },
+  loadingOverlay: {
+    label: '콘텐츠 로드 중',
   },
   measures: {
     countShort: '{{level}} 개수',

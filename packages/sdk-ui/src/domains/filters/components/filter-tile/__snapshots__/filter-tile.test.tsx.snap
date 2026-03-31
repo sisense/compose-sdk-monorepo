@@ -14,13 +14,13 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
         style="color: rgb(91, 99, 114);"
       >
         <button
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1gwyhv6-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
           <svg
             aria-label="arrow-down"
-            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            class="csdk-transition csdk-cursor-pointer -csdk-rotate-90"
             data-testid="expand-collapse-button"
             fill="#5B6372"
             height="16"
@@ -39,7 +39,7 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
           style="flex-grow: 1;"
         >
           <span
-            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
             style="color: rgb(91, 99, 114); display: inline-block;"
           >
             Test Revenue
@@ -65,6 +65,7 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
+              aria-label="Enable/disable filter"
               checked=""
               class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
@@ -99,13 +100,13 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         style="color: rgb(91, 99, 114);"
       >
         <button
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1gwyhv6-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
           <svg
             aria-label="arrow-down"
-            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            class="csdk-transition csdk-cursor-pointer -csdk-rotate-90"
             data-testid="expand-collapse-button"
             fill="#5B6372"
             height="16"
@@ -124,7 +125,7 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
           style="flex-grow: 1;"
         >
           <span
-            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
             style="color: rgb(91, 99, 114); display: inline-block;"
           >
             Test Revenue
@@ -150,6 +151,7 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
+              aria-label="Enable/disable filter"
               checked=""
               class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
@@ -184,13 +186,13 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
         style="color: rgb(91, 99, 114);"
       >
         <button
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1gwyhv6-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
           <svg
             aria-label="arrow-down"
-            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            class="csdk-transition csdk-cursor-pointer -csdk-rotate-90"
             data-testid="expand-collapse-button"
             fill="#5B6372"
             height="16"
@@ -209,7 +211,7 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
           style="flex-grow: 1;"
         >
           <span
-            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
             style="color: rgb(91, 99, 114); display: inline-block;"
           >
             Test Revenue
@@ -235,6 +237,7 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
+              aria-label="Enable/disable filter"
               checked=""
               class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
@@ -272,7 +275,7 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
           style="flex-grow: 1;"
         >
           <span
-            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
             style="color: rgb(91, 99, 114); display: inline-block;"
           >
             Test Revenue
@@ -298,6 +301,7 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
+              aria-label="Enable/disable filter"
               checked=""
               class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
@@ -335,7 +339,7 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
           style="flex-grow: 1;"
         >
           <span
-            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
             style="color: rgb(91, 99, 114); display: inline-block;"
           >
             Unsupported Filter
@@ -361,6 +365,7 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
+              aria-label="Enable/disable filter"
               checked=""
               class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
@@ -395,13 +400,13 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
         style="color: rgb(91, 99, 114);"
       >
         <button
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1qr84g8-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1gwyhv6-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
           <svg
             aria-label="arrow-down"
-            class="csdk-transition csdk-ml-[4px] csdk-cursor-pointer -csdk-rotate-90"
+            class="csdk-transition csdk-cursor-pointer -csdk-rotate-90"
             data-testid="expand-collapse-button"
             fill="#5B6372"
             height="16"
@@ -420,7 +425,7 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
           style="flex-grow: 1;"
         >
           <span
-            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
             style="color: rgb(91, 99, 114); display: inline-block;"
           >
             Years
@@ -446,6 +451,7 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
             class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
           >
             <input
+              aria-label="Enable/disable filter"
               checked=""
               class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
               name="tile-switch"
@@ -505,7 +511,7 @@ exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
           style="flex-grow: 1;"
         >
           <span
-            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
             style="color: rgb(91, 99, 114); display: inline-block;"
           >
             Test Revenue
@@ -571,7 +577,7 @@ exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
           style="flex-grow: 1;"
         >
           <span
-            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]"
+            class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
             style="color: rgb(91, 99, 114); display: inline-block;"
           >
             Years

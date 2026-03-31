@@ -1,9 +1,4 @@
-import { ReactNode, useRef } from 'react';
-
-import { TabberButtonsWidget } from '@/domains/widgets/components/tabber-buttons-widget';
-
-import { CustomWidgetsContext } from './custom-widgets-context';
-import { CustomWidgetComponent } from './types';
+import { ReactNode } from 'react';
 
 /**
  * Custom Widget Provider component that allows registering and accessing custom widgets.
@@ -11,13 +6,5 @@ import { CustomWidgetComponent } from './types';
  * @internal
  */
 export const CustomWidgetsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const customWidgesMapRef = useRef(
-    new Map<string, CustomWidgetComponent<any>>([['tabber-buttons', TabberButtonsWidget]]),
-  );
-
-  return (
-    <CustomWidgetsContext.Provider value={customWidgesMapRef.current}>
-      {children}
-    </CustomWidgetsContext.Provider>
-  );
+  return <>{children}</>;
 };

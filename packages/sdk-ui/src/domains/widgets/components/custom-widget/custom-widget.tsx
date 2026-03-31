@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { getDataSourceName } from '@sisense/sdk-data';
 
 import { AbstractDataPointWithEntries } from '@/domains/dashboarding/common-filters/types';
-import { useCustomWidgets } from '@/infra/contexts/custom-widgets-provider';
-import { CustomWidgetComponentProps } from '@/infra/contexts/custom-widgets-provider/types';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { withErrorBoundary } from '@/infra/decorators/component-decorators/with-error-boundary';
 import ErrorBoundaryBox from '@/infra/error-boundary/error-boundary-box';
+import { useWidgetPluginRegistry } from '@/infra/plugins/use-widget-plugin-registry';
+import type { CustomVisualizationProps } from '@/infra/plugins/widget-plugins/types';
 import {
   DynamicSizeContainer,
   getWidgetDefaultSize,
@@ -18,8 +18,9 @@ import { CustomWidgetStyleOptions, GenericDataOptions } from '@/types';
 
 import { WidgetContainer } from '../../shared/widget-container';
 import { CustomWidgetProps } from './types';
+import { useCustomWidgetCsvDownload } from './use-custom-widget-csv-download.js';
 
-const withSize = (props: CustomWidgetComponentProps, size: { width: number; height: number }) => {
+const withSize = (props: CustomVisualizationProps, size: { width: number; height: number }) => {
   return {
     ...props,
     styleOptions: {
@@ -39,32 +40,31 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
   componentName: 'CustomWidget',
 })((widgetProps: CustomWidgetProps) => {
   const { t } = useTranslation();
-  const { getCustomWidget } = useCustomWidgets();
+  const registry = useWidgetPluginRegistry();
   const { app } = useSisenseContext();
 
-  const CustomWidgetComponentToRender = getCustomWidget(widgetProps.customWidgetType);
+  const CustomVisualizationToRender = registry.getComponent(widgetProps.customWidgetType);
 
-  const CustomWidgetComponentWithErrorBoundary = useMemo(() => {
-    if (!CustomWidgetComponentToRender) return null;
+  const CustomVisualizationWithErrorBoundary = useMemo(() => {
+    if (!CustomVisualizationToRender) return null;
     return withErrorBoundary({
-      componentName: 'CustomWidget',
-    })(CustomWidgetComponentToRender as FunctionComponent<CustomWidgetComponentProps>);
-  }, [CustomWidgetComponentToRender]);
+      componentName: 'CustomVisualization',
+    })(CustomVisualizationToRender as FunctionComponent<CustomVisualizationProps>);
+  }, [CustomVisualizationToRender]);
 
   const dataSource = widgetProps.dataSource ?? app?.defaultDataSource;
-  const customWidgetProps: CustomWidgetComponentProps<
+  const { description, ...widgetPropsForVisualization } = widgetProps;
+  const visualizationProps: CustomVisualizationProps<
     GenericDataOptions,
     CustomWidgetStyleOptions,
     AbstractDataPointWithEntries
   > = {
-    // TODO - we need to pass dynamically added props, at the same time we wanted to limit amount of the props, so we probably should find a balance here
-    ...widgetProps,
+    ...widgetPropsForVisualization,
     dataSource,
     dataOptions: widgetProps.dataOptions,
     styleOptions: widgetProps.styleOptions,
     filters: widgetProps.filters,
     highlights: widgetProps.highlights,
-    description: widgetProps.description,
   };
 
   const containerSize = useMemo(
@@ -75,6 +75,15 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
     [widgetProps.styleOptions?.width, widgetProps.styleOptions?.height],
   );
 
+  const { headerConfig } = useCustomWidgetCsvDownload({
+    dataSource,
+    dataOptions: widgetProps.dataOptions,
+    filters: widgetProps.filters,
+    highlights: widgetProps.highlights,
+    title: widgetProps.title,
+    config: widgetProps.config,
+  });
+
   const wrapperDefaultSize = useMemo(() => getWidgetDefaultSize('line', { hasHeader: true }), []);
   const chartDefaultSize = useMemo(() => getWidgetDefaultSize('line'), []);
 
@@ -82,15 +91,22 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
     <DynamicSizeContainer size={containerSize} defaultSize={wrapperDefaultSize}>
       <WidgetContainer
         title={widgetProps.title}
-        description={widgetProps.description}
+        description={description}
         styleOptions={widgetProps.styleOptions}
-        headerConfig={widgetProps.config?.header}
+        headerConfig={headerConfig}
         dataSetName={dataSource && getDataSourceName(dataSource)}
       >
-        {CustomWidgetComponentWithErrorBoundary ? (
+        {CustomVisualizationWithErrorBoundary ? (
           <DynamicSizeContainer defaultSize={chartDefaultSize}>
             {(size) => (
-              <CustomWidgetComponentWithErrorBoundary {...withSize(customWidgetProps, size)} />
+              <CustomVisualizationWithErrorBoundary
+                {...({
+                  ...withSize(visualizationProps, size),
+                  // Add `description` for backward compatibility with legacy custom widgets that might be dependent on it.
+                  // This should be removed once we deprecate the legacy custom widgets registration.
+                  ...(description ? { description } : {}),
+                } as CustomVisualizationProps)}
+              />
             )}
           </DynamicSizeContainer>
         ) : (

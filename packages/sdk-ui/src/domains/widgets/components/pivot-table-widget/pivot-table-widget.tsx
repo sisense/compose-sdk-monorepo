@@ -16,6 +16,7 @@ import { DEFAULT_WIDGET_HEADER_HEIGHT } from '../../constants';
 import { useWidgetHeaderManagement } from '../../hooks/use-widget-header-management';
 import { WidgetContainer } from '../../shared/widget-container';
 import { PivotTableWidgetProps } from './types';
+import { usePivotWidgetCsvDownload } from './use-pivot-widget-csv-download.js';
 import { useWithPivotTableWidgetDrilldown } from './use-with-pivot-table-widget-drilldown';
 
 const MIN_PIVOT_HEIGHT = 100;
@@ -73,10 +74,20 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
 
   const { styleOptions, dataSource = app?.defaultDataSource, dataOptions, onChange } = props;
 
-  const { headerConfig, titleEditor } = useWidgetHeaderManagement({
+  const { headerConfig: headerConfigWithRenaming, titleEditor } = useWidgetHeaderManagement({
     title: props.title,
     onChange: props.onChange as (event: WidgetChangeEvent) => void,
     headerConfig: props.config?.header,
+  });
+
+  const { headerConfig } = usePivotWidgetCsvDownload({
+    baseHeaderConfig: headerConfigWithRenaming,
+    title: props.title,
+    dataOptions,
+    dataSource,
+    filters: props.filters,
+    highlights: props.highlights,
+    config: props.config,
   });
 
   const defaultSize = getWidgetDefaultSize('pivot', {

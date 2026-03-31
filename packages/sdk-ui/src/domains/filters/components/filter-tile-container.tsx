@@ -1,5 +1,6 @@
 import type { FunctionComponent, ReactNode } from 'react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { css } from '@emotion/react';
 import IconButton from '@mui/material/IconButton';
@@ -8,7 +9,7 @@ import { DeepRequired } from 'ts-essentials';
 
 import { BackgroundFilterIcon } from '@/domains/filters/components/icons/background-filter-icon';
 import styled from '@/infra/styled';
-import { DEFAULT_TEXT_COLOR } from '@/shared/const';
+import { DEFAULT_TEXT_COLOR, MIN_TOUCH_TARGET_SIZE } from '@/shared/const';
 import type { MenuItem } from '@/shared/types/menu-item';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
 
@@ -177,6 +178,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
   ) as CompleteFilterTileDesignOptions;
   const [collapsed, setCollapsed] = useState(true);
 
+  const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
 
   const { backgroundColor: bgColor } = themeSettings.general;
@@ -199,7 +201,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
             <Header shouldShowBorder={design.header.hasBorder} style={{ color: textColor }}>
               {!locked && design.header.isCollapsible && (
                 <IconButton
-                  sx={{ padding: 0 }}
+                  sx={{ p: '4px' }}
                   onClick={() => setCollapsed((value) => !value)}
                   disableRipple
                   disableTouchRipple
@@ -210,7 +212,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
                     width="16"
                     height="16"
                     fill={`${textColor ?? DEFAULT_TEXT_COLOR}`}
-                    className={`csdk-transition csdk-ml-[4px] csdk-cursor-pointer ${
+                    className={`csdk-transition csdk-cursor-pointer ${
                       collapsed ? '-csdk-rotate-90' : ''
                     }`}
                   />
@@ -221,9 +223,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
               <div style={{ flexGrow: 1 }}>
                 {renderHeaderTitle(
                   <span
-                    className={
-                      'csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-ml-[7px] csdk-leading-[16px]'
-                    }
+                    className={'csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]'}
                     style={{ color: textColor, display: 'inline-block' }}
                   >
                     {title}
@@ -234,7 +234,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
                 <IconButton
                   className="csdk-filter-edit-button"
                   onClick={onEdit}
-                  sx={{ p: 0, mr: '2px' }}
+                  sx={{ p: 0, mr: '2px', ...MIN_TOUCH_TARGET_SIZE }}
                   data-testid="filter-edit-button"
                 >
                   <PencilIcon color={themeSettings.typography.primaryTextColor} aria-label="edit" />
@@ -266,7 +266,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
             {onDelete && !locked && (
               <IconButton
                 onClick={onDelete}
-                sx={{ p: 0, mr: 'auto' }}
+                sx={{ p: 0, mr: 'auto', ...MIN_TOUCH_TARGET_SIZE }}
                 data-testid="filter-delete-button"
               >
                 <TrashIcon
@@ -279,7 +279,11 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
               <SisenseSwitchButton
                 checked={!disabled}
                 size="small"
-                inputProps={{ role: 'switch', name: 'tile-switch' }}
+                inputProps={{
+                  role: 'switch',
+                  name: 'tile-switch',
+                  'aria-label': t('filterTile.toggleSwitch'),
+                }}
                 onChange={() => onToggleDisabled?.()}
                 theme={themeSettings}
               />

@@ -197,7 +197,7 @@ export const DrilldownBreadcrumbs: React.FC<DrilldownBreadcrumbsProps> = asSisen
     if (!filtersDisplayValues.length) return null;
 
     return (
-      <div aria-label="drilldown-breadcrumbs">
+      <div data-testid="drilldown-breadcrumbs">
         <DrilldownBreadcrumbsNavigation currentDimension={currentDimension}>
           <StyledBreadcrumbs
             separator={null}

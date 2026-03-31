@@ -16,6 +16,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
@@ -113,6 +114,7 @@ export class DrilldownBreadcrumbsComponent implements AfterViewInit, OnChanges, 
     public themeService: ThemeService,
   ) {
     this.componentAdapter = new ComponentAdapter(DrilldownBreadcrumbsPreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
     ]);

@@ -92,7 +92,7 @@ const rangeMeas2Lower = {
 
 describe('Chart', () => {
   it('change theme of a chart', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <ThemeProvider
         theme={{
           chart: {
@@ -113,12 +113,12 @@ describe('Chart', () => {
         />
       </ThemeProvider>,
     );
-    const chart = await findByLabelText('chart-root');
+    const chart = await findByTestId('chart-root');
     expect(chart).toBeTruthy();
   });
 
   it('add handlers to a chart', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <Chart
         dataSet={dataSet}
         chartType={'line'}
@@ -132,12 +132,12 @@ describe('Chart', () => {
         onDataPointsSelected={vi.fn() as DataPointsEventHandler}
       />,
     );
-    const chart = await findByLabelText('chart-root');
+    const chart = await findByTestId('chart-root');
     expect(chart).toBeTruthy();
   });
 
   it('render a line chart', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <Chart
         dataSet={dataSet}
         chartType={'line'}
@@ -148,12 +148,12 @@ describe('Chart', () => {
         }}
       />,
     );
-    const chart = await findByLabelText('chart-root');
+    const chart = await findByTestId('chart-root');
     expect(chart).toBeTruthy();
   });
 
   it('render a line chart with only category (x-axis)', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <Chart
         dataSet={dataSet}
         chartType={'line'}
@@ -164,12 +164,12 @@ describe('Chart', () => {
         }}
       />,
     );
-    const chart = await findByLabelText('chart-root');
+    const chart = await findByTestId('chart-root');
     expect(chart).toBeTruthy();
   });
 
   it('render a line chart with only category (x-axis) and breakBy', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <Chart
         dataSet={dataSet}
         chartType={'line'}
@@ -180,12 +180,12 @@ describe('Chart', () => {
         }}
       />,
     );
-    const chart = await findByLabelText('chart-root');
+    const chart = await findByTestId('chart-root');
     expect(chart).toBeTruthy();
   });
 
   it('render a column chart with breakBy', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <Chart
         dataSet={dataSet}
         chartType={'column'}
@@ -196,12 +196,12 @@ describe('Chart', () => {
         }}
       />,
     );
-    const chart = await findByLabelText('chart-root');
+    const chart = await findByTestId('chart-root');
     expect(chart).toBeTruthy();
   });
 
   it('render a bar chart with breakBy and two x-axes', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <Chart
         dataSet={dataSet}
         chartType={'bar'}
@@ -212,7 +212,7 @@ describe('Chart', () => {
         }}
       />,
     );
-    const chart = await findByLabelText('chart-root');
+    const chart = await findByTestId('chart-root');
     expect(chart).toBeTruthy();
   });
 
@@ -248,7 +248,7 @@ describe('Chart', () => {
    */
   describe('pie chart', () => {
     it('render pie chart with cat and value', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'pie'}
@@ -259,12 +259,12 @@ describe('Chart', () => {
           }}
         />,
       );
-      const chart = await findByLabelText('chart-root');
+      const chart = await findByTestId('chart-root');
       expect(chart).toBeTruthy();
     });
 
     it('render pie chart with cat and no value', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'pie'}
@@ -275,12 +275,12 @@ describe('Chart', () => {
           }}
         />,
       );
-      const chart = await findByLabelText('chart-root');
+      const chart = await findByTestId('chart-root');
       expect(chart).toBeTruthy();
     });
 
     it('render pie chart with two values', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'pie'}
@@ -291,14 +291,14 @@ describe('Chart', () => {
           }}
         />,
       );
-      const chart = await findByLabelText('chart-root');
+      const chart = await findByTestId('chart-root');
       expect(chart).toBeTruthy();
     });
   });
 
   describe('funnel chart', () => {
     it('render funnel chart with cat and value', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'funnel'}
@@ -309,12 +309,12 @@ describe('Chart', () => {
           }}
         />,
       );
-      const chart = await findByLabelText('chart-root');
+      const chart = await findByTestId('chart-root');
       expect(chart).toBeTruthy();
     });
 
     it('render funnel chart with cat and no value', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'funnel'}
@@ -325,12 +325,12 @@ describe('Chart', () => {
           }}
         />,
       );
-      const chart = await findByLabelText('chart-root');
+      const chart = await findByTestId('chart-root');
       expect(chart).toBeTruthy();
     });
 
     it('render funnel chart with two values', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'funnel'}
@@ -341,14 +341,14 @@ describe('Chart', () => {
           }}
         />,
       );
-      const chart = await findByLabelText('chart-root');
+      const chart = await findByTestId('chart-root');
       expect(chart).toBeTruthy();
     });
   });
 
   describe('indicator chart', () => {
     it('should render indicator chart', async () => {
-      const { container, findByLabelText } = render(
+      const { container, findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'indicator'}
@@ -359,7 +359,7 @@ describe('Chart', () => {
           }}
         />,
       );
-      const indicator = await findByLabelText('indicator-root');
+      const indicator = await findByTestId('indicator-root');
       setTimeout(100);
       const canvas = container.querySelector('canvas');
       expect(indicator).toBeTruthy();
@@ -386,7 +386,7 @@ describe('Chart', () => {
           },
         },
       };
-      const { container, findByLabelText } = render(
+      const { container, findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'indicator'}
@@ -398,7 +398,7 @@ describe('Chart', () => {
           styleOptions={styleOptions}
         />,
       );
-      const indicator = await findByLabelText('indicator-root');
+      const indicator = await findByTestId('indicator-root');
       const canvas = container.querySelector('canvas');
       expect(indicator).toBeTruthy();
       expect(canvas).toBeTruthy();
@@ -409,7 +409,7 @@ describe('Chart', () => {
         subtype: 'indicator/numeric',
         numericSubtype: 'numericBar',
       };
-      const { container, findByLabelText } = render(
+      const { container, findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'indicator'}
@@ -421,7 +421,7 @@ describe('Chart', () => {
           }}
         />,
       );
-      const indicator = await findByLabelText('indicator-root');
+      const indicator = await findByTestId('indicator-root');
       const canvas = container.querySelector('canvas');
       expect(indicator).toBeTruthy();
       expect(canvas).toBeTruthy();
@@ -432,10 +432,10 @@ describe('Chart', () => {
     const tableDataOptions = {
       columns: [cat1, cat2],
     };
-    const { findByLabelText, findAllByRole } = render(
+    const { findByTestId, findAllByRole } = render(
       <Table dataSet={dataSet} dataOptions={tableDataOptions} />,
     );
-    const table = await findByLabelText('table-root');
+    const table = await findByTestId('table-root');
     expect(table).toBeTruthy();
     const columns = await findAllByRole('columnheader');
     expect(columns.length).toBe(tableDataOptions.columns.length);
@@ -500,7 +500,7 @@ describe('Chart', () => {
 
   describe('range charts', () => {
     it('render a area range chart two y and two x', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={rangeDataSet}
           chartType={'arearange'}
@@ -527,11 +527,11 @@ describe('Chart', () => {
           }}
         />,
       );
-      const chart = await findByLabelText('chart-root');
+      const chart = await findByTestId('chart-root');
       expect(chart).toBeTruthy();
     });
     it('render a area range chart with break by', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={rangeDataSet}
           chartType={'arearange'}
@@ -553,7 +553,7 @@ describe('Chart', () => {
           }}
         />,
       );
-      const chart = await findByLabelText('chart-root');
+      const chart = await findByTestId('chart-root');
       expect(chart).toBeTruthy();
     });
   });

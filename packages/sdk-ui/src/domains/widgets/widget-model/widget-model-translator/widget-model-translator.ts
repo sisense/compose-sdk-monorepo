@@ -61,6 +61,7 @@ import {
   extractStyleOptions,
   getFlattenWidgetDesign,
   getStyleWithWidgetDesign,
+  toAreaWidgetStyle,
   toLineWidgetStyle,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/index.js';
 import {
@@ -70,6 +71,7 @@ import {
   PanelItem,
   WidgetDto,
   WidgetStyle,
+  WidgetSubtype,
 } from '@/domains/widgets/components/widget-by-id/types.js';
 import {
   getChartType,
@@ -89,6 +91,7 @@ import { AppSettings } from '@/infra/app/settings/settings.js';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { ChartProps, PivotTableProps, TableProps } from '@/props';
 import {
+  AreaStyleOptions,
   ChartStyleOptions,
   CompleteThemeSettings,
   CustomWidgetStyleOptions,
@@ -900,6 +903,11 @@ export function toWidgetDto(
 
     if (chartType === 'line') {
       style = toLineWidgetStyle(widgetModel.styleOptions as LineStyleOptions);
+    } else if (chartType === 'area') {
+      style = toAreaWidgetStyle(
+        widgetModel.styleOptions as AreaStyleOptions,
+        subtype as WidgetSubtype,
+      );
     }
   } else if (isTable(chartType)) {
     const { attributes, measures } = getTableAttributesAndMeasures(

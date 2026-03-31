@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   SisenseChartDataPointEventHandler,
@@ -59,6 +60,7 @@ export function createHighchartsBasedChartRenderer<CT extends HighchartBasedChar
     onBeforeRender,
     size,
   }: HighchartsBasedChartRendererProps<CT>) {
+    const { t } = useTranslation();
     const extraConfig = useExtraConfig();
 
     const highchartsOptions: HighchartsOptionsInternal = useMemo(
@@ -111,7 +113,9 @@ export function createHighchartsBasedChartRenderer<CT extends HighchartBasedChar
     return (
       highchartsOptionsWithSize && (
         <div
-          aria-label="chart-root"
+          data-testid="chart-root"
+          role="img"
+          aria-label={t('chart.visualization.label')}
           style={{
             display: 'flex',
             justifyContent: 'center',

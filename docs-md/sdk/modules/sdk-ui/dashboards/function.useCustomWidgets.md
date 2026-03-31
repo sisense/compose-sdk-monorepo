@@ -4,60 +4,13 @@ title: useCustomWidgets
 
 # Function useCustomWidgets
 
-> **useCustomWidgets**(): `object`
+> **useCustomWidgets**(): [`UseCustomWidgetsResult`](../type-aliases/type-alias.UseCustomWidgetsResult.md)
 
 Hook that provides API for configuring custom widgets.
 
 ## Returns
 
-### `getCustomWidget`
-
-**getCustomWidget**: (`customWidgetType`) => [`CustomWidgetComponent`](../type-aliases/type-alias.CustomWidgetComponent.md)\< `any` \> \| `undefined`
-
-#### Parameters
-
-| Parameter | Type |
-| :------ | :------ |
-| `customWidgetType` | `string` |
-
-#### Returns
-
-[`CustomWidgetComponent`](../type-aliases/type-alias.CustomWidgetComponent.md)\< `any` \> \| `undefined`
-
-### `hasCustomWidget`
-
-**hasCustomWidget**: (`customWidgetType`) => `boolean`
-
-#### Parameters
-
-| Parameter | Type |
-| :------ | :------ |
-| `customWidgetType` | `string` |
-
-#### Returns
-
-`boolean`
-
-### `registerCustomWidget`
-
-**registerCustomWidget**: <`T`>(`customWidgetType`, `customWidget`) => `void`
-
-#### Type parameters
-
-| Parameter | Default |
-| :------ | :------ |
-| `T` | `any` |
-
-#### Parameters
-
-| Parameter | Type |
-| :------ | :------ |
-| `customWidgetType` | `string` |
-| `customWidget` | [`CustomWidgetComponent`](../type-aliases/type-alias.CustomWidgetComponent.md)\< `T` \> |
-
-#### Returns
-
-`void`
+[`UseCustomWidgetsResult`](../type-aliases/type-alias.UseCustomWidgetsResult.md)
 
 ## Example
 

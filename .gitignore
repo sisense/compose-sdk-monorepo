@@ -76,3 +76,7 @@ packages/sdk-*/vite.config.ts.timestamp-*
 *.snapshot.json
 *.snapshot.test.ts
 *.snapshot.test.ts.snap
+dist-zip/
+
+# ignore the generated plugins repository
+packages/sdk-plugins/sdk-plugins-repo-test/

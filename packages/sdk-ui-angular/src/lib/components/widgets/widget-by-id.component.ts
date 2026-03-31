@@ -14,6 +14,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
@@ -171,6 +172,7 @@ export class WidgetByIdComponent implements AfterViewInit, OnChanges, OnDestroy 
     private themeService: ThemeService,
   ) {
     this.componentAdapter = new ComponentAdapter(WidgetByIdPreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
     ]);

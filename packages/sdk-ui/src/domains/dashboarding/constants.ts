@@ -58,6 +58,9 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
         historyLimit: 20,
       },
     },
+    actions: {
+      downloadCsv: { enabled: false },
+    },
   },
 };
 

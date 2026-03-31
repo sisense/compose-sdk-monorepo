@@ -17,6 +17,7 @@ import {
 
 import {
   createCustomWidgetsContextConnector,
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
@@ -179,6 +180,7 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
     public customWidgetsService: CustomWidgetsService,
   ) {
     this.componentAdapter = new ComponentAdapter(DashboardPreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createCustomWidgetsContextConnector(this.customWidgetsService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),

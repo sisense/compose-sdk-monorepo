@@ -122,6 +122,7 @@ export function useExecuteCsvQueryInternal(params: ExecuteCsvQueryParams): CsvQu
         highlights,
         count,
         offset,
+        ungroup,
         config,
         onBeforeQuery,
       } = params;
@@ -132,6 +133,7 @@ export function useExecuteCsvQueryInternal(params: ExecuteCsvQueryParams): CsvQu
           dataSource,
           dimensions,
           measures,
+          ungroup,
           filters: filterList,
           filterRelations,
           highlights,

@@ -111,7 +111,10 @@ export { DrilldownBreadcrumbs } from '../domains/drilldown/components/drilldown-
 
 // Custom Widgets
 export * from '../infra/contexts/custom-widgets-provider/types';
-export { useCustomWidgets } from '../infra/contexts/custom-widgets-provider';
+export {
+  useCustomWidgets,
+  type UseCustomWidgetsResult,
+} from '../infra/contexts/custom-widgets-provider';
 
 // Models
 export {

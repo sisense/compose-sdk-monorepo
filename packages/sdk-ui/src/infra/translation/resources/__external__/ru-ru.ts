@@ -260,6 +260,8 @@ const translation: TranslationDictionary = {
       deleteWidget: 'Удалить виджет',
       renameWidget: 'Переименовать виджет',
       distributeEqualWidth: 'Равномерно распределить в этой строке',
+      download: 'Скачать',
+      csvFile: 'CSV-файл',
     },
   },
   customWidgets: {
@@ -458,6 +460,24 @@ const translation: TranslationDictionary = {
       lockGroup: 'Заблокировать группу',
       unlockGroup: 'Разблокировать группу',
     },
+    toggleSwitch: 'Включить/отключить фильтр',
+  },
+  chart: {
+    indicator: {
+      label: 'Диаграмма показателя',
+    },
+    visualization: {
+      label: 'Визуализация данных',
+    },
+    pivotTable: {
+      label: 'Сводная таблица',
+    },
+    table: {
+      label: 'Таблица данных',
+    },
+  },
+  loadingOverlay: {
+    label: 'Загрузка содержимого',
   },
   measures: {
     countShort: 'Кол-во {{level}}',

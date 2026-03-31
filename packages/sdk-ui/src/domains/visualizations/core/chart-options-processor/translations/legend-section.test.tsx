@@ -611,7 +611,7 @@ describe('getLegendSettings', () => {
 
   describe('Chart rendering tests with onBeforeRender verification', () => {
     it('should apply default legend settings when no legend options provided', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -632,11 +632,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply enabled legend with position settings', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -658,11 +658,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend with title options', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -691,11 +691,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend with items configuration', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -739,11 +739,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend with symbols configuration', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -773,11 +773,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend with offset configuration', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -799,11 +799,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply comprehensive legend configuration', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -893,11 +893,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should handle disabled legend title', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -920,11 +920,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should merge default item style with custom item style', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -956,7 +956,7 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply linear gradient backgroundColor to legend', async () => {
@@ -965,7 +965,7 @@ describe('getLegendSettings', () => {
         { position: 1, color: '#764ba2' },
       ]);
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -998,7 +998,7 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply radial gradient borderColor to legend', async () => {
@@ -1008,7 +1008,7 @@ describe('getLegendSettings', () => {
         { position: 1, color: '#45b7d1' },
       ]);
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -1043,7 +1043,7 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply both gradient backgroundColor and borderColor to legend', async () => {
@@ -1057,7 +1057,7 @@ describe('getLegendSettings', () => {
         { position: 1, color: '#fecfef' },
       ]);
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -1106,7 +1106,7 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply custom gradient directions to legend', async () => {
@@ -1125,7 +1125,7 @@ describe('getLegendSettings', () => {
         ],
       );
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <Chart
           dataSet={dataSet}
           chartType={'line'}
@@ -1176,13 +1176,13 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
   });
 
   describe('Individual chart type tests with legend options', () => {
     it('should apply legend options to LineChart', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={dataSet}
           dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
@@ -1208,11 +1208,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend options to AreaChart', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaChart
           dataSet={dataSet}
           dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
@@ -1237,11 +1237,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend options to AreaRangeChart', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaRangeChart
           dataSet={dataSet}
           dataOptions={{
@@ -1283,11 +1283,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend options to ColumnChart', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={dataSet}
           dataOptions={{ category: [cat1], value: [meas1], breakBy: [cat2] }}
@@ -1314,11 +1314,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend options to BarChart', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={dataSet}
           dataOptions={{ category: [cat1], value: [meas1], breakBy: [cat2] }}
@@ -1343,11 +1343,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend options to PieChart', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <PieChart
           dataSet={dataSet}
           dataOptions={{ category: [cat1], value: [meas1] }}
@@ -1375,11 +1375,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend options to FunnelChart', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <FunnelChart
           dataSet={dataSet}
           dataOptions={{ category: [cat1], value: [meas1] }}
@@ -1404,11 +1404,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend options to PolarChart', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <PolarChart
           dataSet={dataSet}
           dataOptions={{ category: [cat1], value: [meas1], breakBy: [] }}
@@ -1433,11 +1433,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend options to ScatterChart', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ScatterChart
           dataSet={dataSet}
           dataOptions={{ x: cat1, y: meas1, breakByPoint: cat2 }}
@@ -1466,11 +1466,11 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply legend options to SunburstChart', async () => {
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <SunburstChart
           dataSet={dataSet}
           dataOptions={{ category: [cat1, cat2], value: [meas1] }}
@@ -1495,7 +1495,7 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply gradient legend options to PieChart', async () => {
@@ -1504,7 +1504,7 @@ describe('getLegendSettings', () => {
         { position: 1, color: '#fecfef' },
       ]);
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <PieChart
           dataSet={dataSet}
           dataOptions={{ category: [cat1], value: [meas1] }}
@@ -1538,7 +1538,7 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply gradient legend options to BarChart', async () => {
@@ -1547,7 +1547,7 @@ describe('getLegendSettings', () => {
         { position: 1, color: '#764ba2' },
       ]);
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={dataSet}
           dataOptions={{ category: [cat1], value: [meas1], breakBy: [cat2] }}
@@ -1582,7 +1582,7 @@ describe('getLegendSettings', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
   });
 });

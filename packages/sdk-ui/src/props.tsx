@@ -36,7 +36,7 @@ import { HighchartsOptions } from './domains/visualizations/core/chart-options-p
 import type { ChartWidgetProps } from './domains/widgets/components/chart-widget/types';
 import { FiltersMergeStrategy } from './domains/widgets/components/widget-by-id/types';
 import { type AppConfig } from './infra/app/types';
-import type { Plugin } from './infra/contexts/plugin-provider/types';
+import type { Plugin } from './infra/plugins/types';
 import {
   AreamapDataPoint,
   AreamapStyleOptions,
@@ -147,6 +147,7 @@ export interface SisenseContextProviderProps {
    */
   wat?: string | null;
 
+  // TODO: move to AuthConfig, make @sisenseInternal
   /**
    * Flag to delegate authentication to Fusion.
    *
@@ -198,6 +199,7 @@ export interface SisenseContextProviderProps {
     },
   ) => void | ReactNode;
 
+  // TODO: move to AuthConfig
   /**
    * Boolean flag to enable sending silent pre-authentication requests to the Sisense instance.
    * Used to check if user is already authenticated, check is performed in an ivisible iframe.
@@ -209,6 +211,7 @@ export interface SisenseContextProviderProps {
    */
   enableSilentPreAuth?: boolean;
 
+  // TODO: move to AuthConfig
   /**
    * Alternative host to use for SSO authentication.
    * Used **only** when the SSO Login URL is configured as a *relative* url.
@@ -219,6 +222,28 @@ export interface SisenseContextProviderProps {
    * @internal
    */
   alternativeSsoHost?: string;
+
+  // TODO: move to AuthConfig
+  /**
+   * Maximum number of SSO redirect attempts before stopping.
+   * Prevents infinite refresh loops when auth cookies fail to land (e.g. third-party
+   * cookie restrictions, SSO configuration issues, browser privacy settings).
+   * Redirect attempts are tracked in localStorage per Sisense URL and reset on successful auth.
+   * If not specified, the default value is `3`.
+   *
+   * @category Sisense Authentication
+   * @alpha
+   */
+  ssoMaxAuthRedirectAttempts?: number;
+
+  // TODO: move to AuthConfig
+  /**
+   * Milliseconds after the latest redirect timestamp before the counter resets. Use `0` to disable expiry (counter only resets on successful auth). Default is `5000` (5 seconds).
+   *
+   * @category Sisense Authentication
+   * @alpha
+   */
+  ssoRedirectAttemptsTtlMs?: number;
 
   /**
    * Boolean flag to use the default palette from Compose SDK.

@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "suppressImplicitAnyIndexErrors": false
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["./scripts/**/*"],
+  "references": [{ "path": "../../sdk-ui" }]
+}

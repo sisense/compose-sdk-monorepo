@@ -6,9 +6,9 @@ import {
   ProcessedArg,
 } from '../../../types.js';
 import { createAttributeFromName } from '../../utils/schema-index.js';
-import { getRequiredDateLevel, getTimeDiffFormulaFunctions } from '../formula-function-schemas.js';
+import { getRequiredDateLevel, getXDiffFormulaFunctions } from '../formula-function-schemas.js';
 import { processNode } from '../process-node.js';
-import { parseTimeDiffCalls, validateCustomFormula } from './validate-custom-formula.js';
+import { parseXDiffCalls, validateCustomFormula } from './validate-custom-formula.js';
 
 /**
  * Custom processor for measureFactory.customFormula that:
@@ -55,7 +55,7 @@ export function processCustomFormula(
   }
   const rawContext = contextArg;
 
-  // 1. First, validate formula references (incl. time-diff datetime/level when schemaIndex available)
+  // 1. First, validate formula references (incl. xdiff datetime/level when schemaIndex available)
   validateCustomFormula(formula, rawContext, {
     errorPrefix: `${context.pathPrefix}`,
     errorOnUnusedContext: true, // Strict validation: all context keys must be used
@@ -63,7 +63,7 @@ export function processCustomFormula(
     schemaIndex: context.schemaIndex,
   });
 
-  // 2. Build ref -> inferred date level from time-diff calls (for refs without level in name)
+  // 2. Build ref -> inferred date level from xdiff calls (for refs without level in name)
   const refToInferredLevel = buildRefToInferredDateLevel(formula);
 
   // 3. Validate and transform each context item
@@ -116,13 +116,13 @@ export function processCustomFormula(
 }
 
 /**
- * Builds a map from context ref name to required date level for refs used in time-diff calls.
+ * Builds a map from context ref name to required date level for refs used in xdiff calls.
  * Used to infer date level when the dimensional name has no level (e.g. DM.Table.Column -> Days for DDIFF).
- * Throws if the same ref is used in multiple time-diff calls with different required levels.
+ * Throws if the same ref is used in multiple xdiff calls with different required levels.
  */
 function buildRefToInferredDateLevel(formula: string): Record<string, string> {
-  const timeDiffNames = getTimeDiffFormulaFunctions();
-  const calls = parseTimeDiffCalls(formula, timeDiffNames);
+  const xDiffNames = getXDiffFormulaFunctions();
+  const calls = parseXDiffCalls(formula, xDiffNames);
   const refToLevel: Record<string, string> = {};
   for (const call of calls) {
     const requiredLevel = getRequiredDateLevel(call.functionName);
@@ -131,7 +131,7 @@ function buildRefToInferredDateLevel(formula: string): Record<string, string> {
       const existing = refToLevel[ref];
       if (existing !== undefined && existing !== requiredLevel) {
         throw new Error(
-          `Reference [${ref}] is used in time-diff functions with conflicting date levels ('${existing}' and '${requiredLevel}'). Specify the date level in the context (e.g. DM.Table.Column.${requiredLevel}).`,
+          `Reference [${ref}] is used in xdiff functions with conflicting date levels ('${existing}' and '${requiredLevel}'). Specify the date level in the context (e.g. DM.Table.Column.${requiredLevel}).`,
         );
       }
       refToLevel[ref] = requiredLevel;

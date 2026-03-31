@@ -1,4 +1,5 @@
 import { type FunctionComponent, type MouseEvent, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useThemeContext } from '../../../../../../infra/contexts/theme-provider';
 import { IndicatorDataPointEventHandler } from '../../../../../../props';
@@ -112,6 +113,7 @@ export const IndicatorCanvas: FunctionComponent<IndicatorCanvasProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
 
   useEffect(() => {
@@ -168,6 +170,9 @@ export const IndicatorCanvas: FunctionComponent<IndicatorCanvasProps> = ({
   return (
     <div
       ref={containerRef}
+      data-testid="indicator-root"
+      role="img"
+      aria-label={t('chart.indicator.label')}
       style={{
         display: 'flex',
         justifyContent: 'center',
@@ -177,7 +182,6 @@ export const IndicatorCanvas: FunctionComponent<IndicatorCanvasProps> = ({
         backgroundColor: themeSettings?.chart?.backgroundColor,
         cursor: onDataPointClick ? 'pointer' : 'default',
       }}
-      aria-label="indicator-root"
       onClick={handleContainerClick}
     >
       <canvas ref={canvasRef} />

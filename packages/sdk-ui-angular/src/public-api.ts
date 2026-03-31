@@ -53,6 +53,7 @@ export * from './lib/utilities';
 /* Re-exports internal core functionalities to use in dependant angular modules */
 export {
   createCustomWidgetsContextConnector,
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
 } from './lib/component-wrapper-helpers';

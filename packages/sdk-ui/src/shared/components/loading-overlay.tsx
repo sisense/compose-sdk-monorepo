@@ -1,5 +1,6 @@
 /* eslint-disable rulesdir/opacity-zero-needs-focus-visible */
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context';
@@ -57,6 +58,7 @@ export type LoadingOverlayProps = {
  */
 export const LoadingOverlay = ({ isVisible = true, children }: LoadingOverlayProps) => {
   const { app } = useSisenseContext();
+  const { t } = useTranslation();
   const isLoaderEnabled = app?.settings?.loadingIndicatorConfig?.enabled ?? true;
   const shouldShowLoader = isLoaderEnabled && isVisible;
   const loaderDelay = app?.settings?.loadingIndicatorConfig?.delay ?? 0;
@@ -64,7 +66,12 @@ export const LoadingOverlay = ({ isVisible = true, children }: LoadingOverlayPro
   return (
     <div id="overlay" className="csdk-relative csdk-h-full">
       {shouldShowLoader && (
-        <LoaderWrapper delay={loaderDelay} aria-label="csdk-loading-overlay">
+        <LoaderWrapper
+          delay={loaderDelay}
+          role="status"
+          aria-label={t('loadingOverlay.label')}
+          data-testid="csdk-loading-overlay"
+        >
           <div className={`csdk-h-full csdk-bg-transparent`}>
             <div
               className={`csdk-h-full csdk-flex csdk-flex-col csdk-gap-y-4 csdk-items-center csdk-justify-center csdk-bg-transparent`}

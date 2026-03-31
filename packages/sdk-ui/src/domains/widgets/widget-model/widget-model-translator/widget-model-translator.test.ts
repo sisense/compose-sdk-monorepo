@@ -58,6 +58,33 @@ describe('WidgetModelTranslator', () => {
       });
     });
 
+    it('should create a valid WidgetDto for the "area"(cartesian) chart', () => {
+      const mockAreaWidgetDto = {
+        ...cloneDeep(mockLineWidgetDto),
+        type: 'chart/area',
+        subtype: 'area/basic',
+      } as WidgetDto;
+
+      const { widgetFromChart } = getWidgetTransformChain(mockAreaWidgetDto);
+      expect(widgetFromChart.chartType).toBe('area');
+
+      resWidgetDto = toWidgetDto(widgetFromChart);
+
+      expect(resWidgetDto.type).toBe('chart/area');
+      expect(resWidgetDto.subtype).toBe('area/basic');
+      expect(resWidgetDto.metadata.panels[0].name).toBe('x-axis');
+
+      const expectedStyle = mockAreaWidgetDto.style as CartesianWidgetStyle;
+      expect(resWidgetDto.style).toMatchObject({
+        legend: expectedStyle.legend,
+        navigator: expectedStyle.navigator,
+        seriesLabels: expectedStyle.seriesLabels,
+        lineWidth: expectedStyle.lineWidth,
+        markers: expectedStyle.markers,
+        dataLimits: expectedStyle.dataLimits,
+      });
+    });
+
     it('should create a valid WidgetDto for the "line" chart with advanced analytics', () => {
       const { widgetFromChart } = getWidgetTransformChain(advancedLineChartWidgetDto);
       expect(widgetFromChart.chartType).toBe('line');

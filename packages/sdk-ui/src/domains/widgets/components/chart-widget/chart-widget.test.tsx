@@ -91,12 +91,12 @@ describe('ChartWidget', () => {
 
   it('should render table widget', async () => {
     executeQueryMock.mockResolvedValue(mockResolvedQuery);
-    const { findByLabelText, findAllByRole } = render(
+    const { findByTestId, findAllByRole } = render(
       <MenuProvider>
         <ChartWidget {...mockChartWidgetPropsForTable} />
       </MenuProvider>,
     );
-    const table = await findByLabelText('table-root');
+    const table = await findByTestId('table-root');
     expect(table).toBeTruthy();
     const columns = await findAllByRole('columnheader');
     expect(columns.length).toBe(mockResolvedQuery.columns.length);
@@ -110,7 +110,7 @@ describe('ChartWidget', () => {
     dataMock.columns[1].name = '$measure0_sum Revenue';
 
     executeQueryMock.mockResolvedValue(dataMock);
-    const { findByLabelText, findByText } = render(
+    const { findByTestId, findByText } = render(
       <MenuProvider>
         <ChartWidget
           {...{
@@ -141,7 +141,7 @@ describe('ChartWidget', () => {
     );
 
     // verifies rendered chart
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
 
     // verifies existence of drilldown breadcrumbs
     expect(await findByText('Male')).toBeInTheDocument();

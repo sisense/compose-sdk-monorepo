@@ -34,7 +34,6 @@ const baseProps: TabberButtonsWidgetProps = {
   customWidgetType: 'tabber-buttons',
   styleOptions: baseStyleOptions,
   customOptions: { ...baseTabsConfig, activeTab: 0 },
-  description: '',
 };
 
 describe('TabberButtonsWidget Component Comprehensive Tests', () => {
@@ -50,19 +49,14 @@ describe('TabberButtonsWidget Component Comprehensive Tests', () => {
     expect(screen.getByText('Tab Three')).toBeInTheDocument();
   });
 
-  it('renders description when showDescription is true and description prop is provided', () => {
+  it('renders description when showDescription is true and description is in styleOptions', () => {
+    const descriptionText = 'This is a tab description';
     const customStyle: TabberButtonsWidgetStyleOptions = {
       ...baseStyleOptions,
       showDescription: true,
+      description: descriptionText,
     };
-    const descriptionText = 'This is a tab description';
-    render(
-      <TabberButtonsWidget
-        {...baseProps}
-        styleOptions={customStyle}
-        description={descriptionText}
-      />,
-    );
+    render(<TabberButtonsWidget {...baseProps} styleOptions={customStyle} />);
     expect(screen.getByText(descriptionText)).toBeInTheDocument();
   });
 
@@ -113,12 +107,15 @@ describe('TabberButtonsWidget Component Comprehensive Tests', () => {
       activeTab: 1,
     };
 
+    const styleWithDesc: TabberButtonsWidgetStyleOptions = {
+      ...customStyle,
+      description: 'desc',
+    };
     render(
       <TabberButtonsWidget
         {...baseProps}
-        styleOptions={customStyle}
+        styleOptions={styleWithDesc}
         customOptions={customTabsConfig}
-        description={'desc'}
       />,
     );
     const activeTabElement = screen.getByText('Tab Two').parentElement;
@@ -178,19 +175,14 @@ describe('TabberButtonsWidget Component Comprehensive Tests', () => {
   });
 
   it('applies custom descriptionColor to the description text', () => {
+    const descriptionText = 'Custom description';
     const customStyle: TabberButtonsWidgetStyleOptions = {
       ...baseStyleOptions,
       showDescription: true,
       descriptionColor: 'purple',
+      description: descriptionText,
     };
-    const descriptionText = 'Custom description';
-    render(
-      <TabberButtonsWidget
-        {...baseProps}
-        styleOptions={customStyle}
-        description={descriptionText}
-      />,
-    );
+    render(<TabberButtonsWidget {...baseProps} styleOptions={customStyle} />);
     const descriptionElement = screen.getByText(descriptionText);
     const descriptionStyles = window.getComputedStyle(descriptionElement);
     // 'purple' usually computes to 'rgb(128, 0, 128)'

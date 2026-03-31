@@ -38,7 +38,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -51,7 +51,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -63,7 +63,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -76,7 +76,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -91,7 +91,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -105,7 +105,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -121,7 +121,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -130,7 +130,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -145,7 +145,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -159,7 +159,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -174,7 +174,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -188,7 +188,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
   });
@@ -202,7 +202,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -215,7 +215,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -227,7 +227,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -240,7 +240,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -255,7 +255,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -269,7 +269,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -285,7 +285,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -294,7 +294,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -309,7 +309,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -323,7 +323,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -338,7 +338,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -352,7 +352,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
   });
@@ -370,7 +370,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -384,7 +384,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -400,7 +400,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -414,7 +414,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -429,7 +429,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -443,7 +443,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -458,7 +458,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -472,7 +472,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
   });
@@ -490,7 +490,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -499,7 +499,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -515,7 +515,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -524,7 +524,7 @@ describe('Stackable Padding - itemPadding and groupPadding Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
   });

@@ -231,7 +231,7 @@ async function loadServerSettings(
     serverThemeSettings: convertToThemeSettings(globals.designSettings, palette, httpClient.url),
     serverLanguage: globals.language,
     serverVersion: globals.version,
-    serverFeatures: mapFeatures(globals.features),
+    serverFeatures: mapFeatures(globals.features ?? []),
     isUnifiedNarrationEnabled: props?.narrationUnified === true,
     isSisenseAiEnabled: unlimitedNarrativesEnabled || creditNarrativesEnabled,
     user: {

@@ -37,6 +37,22 @@ export type {
   QuotaState,
 } from '../shared/hooks/use-quota-notification.js';
 
+// Plugin system — for creating and registering plugins (e.g. custom widgets, design panels)
+export type { Plugin } from '../infra/plugins/types.js';
+export type {
+  WidgetPlugin,
+  CustomVisualization,
+  CustomVisualizationProps,
+  CustomVisualizationStyleOptions,
+  CustomVisualizationEventProps,
+  CustomVisualizationDataPoint,
+  CustomVisualizationDataPointEventHandler,
+  CustomVisualizationDataPointContextMenuHandler,
+  CustomVisualizationDataPointsEventHandler,
+  DesignPanelProps,
+  DesignPanel,
+} from '../infra/plugins/widget-plugins/types.js';
+
 // Components
 export { LoadingIndicator } from '../shared/components/loading-indicator.js';
 export { DataSchemaBrowser } from '../domains/data-browser/data-schema-browser/data-schema-browser.js';

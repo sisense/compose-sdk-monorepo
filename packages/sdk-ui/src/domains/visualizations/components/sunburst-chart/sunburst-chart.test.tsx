@@ -46,7 +46,7 @@ const meas1 = {
 
 describe('Sunburst Chart', () => {
   it('render a sunburst with single category', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <SunburstChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1], value: [meas1] }}
@@ -57,11 +57,11 @@ describe('Sunburst Chart', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 
   it('render a sunburst with two categories', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <SunburstChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, cat2], value: [meas1] }}
@@ -72,11 +72,11 @@ describe('Sunburst Chart', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 
   it('render a sunburst with two categories and legend', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <SunburstChart
         dataSet={dataSet}
         dataOptions={{ category: [cat1, cat2], value: [meas1] }}
@@ -93,11 +93,11 @@ describe('Sunburst Chart', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 
   it('render a sunburst with series coloring', async () => {
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <SunburstChart
         dataSet={dataSet}
         dataOptions={{
@@ -136,6 +136,6 @@ describe('Sunburst Chart', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 });

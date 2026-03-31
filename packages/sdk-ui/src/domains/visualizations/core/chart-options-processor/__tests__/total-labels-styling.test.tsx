@@ -40,7 +40,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -54,7 +54,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -64,7 +64,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -79,7 +79,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -89,7 +89,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -104,7 +104,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -114,7 +114,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -129,7 +129,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -139,7 +139,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -156,7 +156,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -166,7 +166,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -181,7 +181,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -191,7 +191,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -206,7 +206,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -216,7 +216,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -231,7 +231,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -241,7 +241,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -256,7 +256,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -266,7 +266,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -281,7 +281,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -291,7 +291,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -306,7 +306,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -316,7 +316,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -331,12 +331,12 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
       it('should apply prefix property to total labels', async () => {
-        const { findByLabelText, findByText } = render(
+        const { findByTestId, findByText } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -350,12 +350,12 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(await findByText('Total: 4.54K')).toBeInTheDocument();
       });
 
       it('should apply suffix property to total labels', async () => {
-        const { findByLabelText, findByText } = render(
+        const { findByTestId, findByText } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -369,7 +369,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(await findByText('4.54K units')).toBeInTheDocument();
       });
 
@@ -379,7 +379,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -396,7 +396,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -406,7 +406,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -423,7 +423,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -433,7 +433,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -450,7 +450,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -460,7 +460,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -477,7 +477,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -487,7 +487,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -504,7 +504,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -532,7 +532,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -565,7 +565,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -592,7 +592,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -607,7 +607,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -635,7 +635,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -650,7 +650,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -677,7 +677,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -692,7 +692,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -718,7 +718,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -733,7 +733,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -776,7 +776,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -792,7 +792,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -804,7 +804,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -818,7 +818,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -828,7 +828,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -843,7 +843,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -855,7 +855,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -869,7 +869,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -879,7 +879,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <BarChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -894,7 +894,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -908,7 +908,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -922,7 +922,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -932,7 +932,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -947,7 +947,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -957,7 +957,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -972,12 +972,12 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
       it('should apply prefix and suffix properties to total labels', async () => {
-        const { findByLabelText, findByText } = render(
+        const { findByTestId, findByText } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -992,7 +992,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(await findByText('Sum: 4.54K items')).toBeInTheDocument();
       });
 
@@ -1007,7 +1007,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1028,7 +1028,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -1055,7 +1055,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1070,7 +1070,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -1096,7 +1096,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1111,7 +1111,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -1123,7 +1123,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1137,7 +1137,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -1147,7 +1147,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1162,7 +1162,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -1174,7 +1174,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1188,7 +1188,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -1198,7 +1198,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <ColumnChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1213,7 +1213,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -1227,7 +1227,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1241,7 +1241,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -1251,7 +1251,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1266,7 +1266,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -1276,7 +1276,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1291,12 +1291,12 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
       it('should apply prefix and suffix properties to total labels', async () => {
-        const { findByLabelText, findByText } = render(
+        const { findByTestId, findByText } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1311,7 +1311,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(await findByText('Area: 4.54K sq units')).toBeInTheDocument();
       });
 
@@ -1326,7 +1326,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1347,7 +1347,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -1376,7 +1376,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1391,7 +1391,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -1419,7 +1419,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1434,7 +1434,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -1446,7 +1446,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1460,7 +1460,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -1470,7 +1470,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1485,7 +1485,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -1497,7 +1497,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1511,7 +1511,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
 
@@ -1521,7 +1521,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1536,7 +1536,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -1548,7 +1548,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1562,7 +1562,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -1574,7 +1574,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1588,7 +1588,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });
@@ -1600,7 +1600,7 @@ describe('Total Labels Styling Tests', () => {
           return options;
         });
 
-        const { findByLabelText } = render(
+        const { findByTestId } = render(
           <AreaChart
             dataSet={mockData}
             dataOptions={mockDataOptions}
@@ -1614,7 +1614,7 @@ describe('Total Labels Styling Tests', () => {
           />,
         );
 
-        expect(await findByLabelText('chart-root')).toBeInTheDocument();
+        expect(await findByTestId('chart-root')).toBeInTheDocument();
         expect(onBeforeRender).toHaveBeenCalled();
       });
     });

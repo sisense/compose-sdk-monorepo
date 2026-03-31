@@ -1,5 +1,7 @@
 import type {
+  AreaStyleOptions,
   AxisLabel,
+  CartesianStyleOptions,
   DataLimits,
   LegendOptions,
   LineStyleOptions,
@@ -7,9 +9,10 @@ import type {
   Markers,
   Navigator,
   SeriesLabels,
+  TotalLabels,
 } from '@/types.js';
 
-import type { AxisStyle, CartesianWidgetStyle } from '../types.js';
+import type { AxisStyle, CartesianWidgetStyle, WidgetSubtype } from '../types.js';
 
 const DEFAULT_LEGEND = { enabled: true, position: 'bottom' as const };
 const DEFAULT_NAVIGATOR = { enabled: false };
@@ -163,6 +166,94 @@ export function toDataLimitsStyle(dataLimits?: DataLimits): CartesianWidgetStyle
   };
 }
 
+function buildCommonCartesianWidgetStyle(
+  styleOptions: CartesianStyleOptions,
+): Omit<CartesianWidgetStyle, 'seriesLabels'> {
+  const legend = toLegendStyle(styleOptions.legend);
+  const navigator = toNavigatorStyle(styleOptions.navigator);
+  const xAxis = toAxisStyle(styleOptions.xAxis);
+  const yAxis = toAxisStyle(styleOptions.yAxis);
+  const y2Axis = styleOptions.y2Axis ? toAxisStyle(styleOptions.y2Axis) : undefined;
+  const lineWidth =
+    'lineWidth' in styleOptions ? toLineWidthStyle(styleOptions.lineWidth) : undefined;
+  const markers = toMarkersStyle(styleOptions.markers);
+  const dataLimits = toDataLimitsStyle(styleOptions.dataLimits);
+
+  return {
+    legend,
+    navigator,
+    xAxis,
+    yAxis,
+    ...(y2Axis && { y2Axis }),
+    ...(lineWidth && { lineWidth }),
+    ...(markers && { markers }),
+    ...(dataLimits && { dataLimits }),
+  };
+}
+
+const AREA_STACKED_SUBTYPES: ReadonlySet<WidgetSubtype> = new Set([
+  'area/stacked',
+  'area/stackedspline',
+]);
+const AREA_STACKED100_SUBTYPES: ReadonlySet<WidgetSubtype> = new Set([
+  'area/stacked100',
+  'area/stackedspline100',
+]);
+
+/**
+ * Inverse of {@link extractValueLabelsOptions} for area chart subtypes: restores Fusion
+ * `seriesLabels.labels` (stacked / stackedPercentage / types) from SDK model fields.
+ */
+function toAreaSeriesLabelsStyle(
+  widgetSubtype: WidgetSubtype,
+  seriesLabels?: SeriesLabels,
+  totalLabels?: TotalLabels,
+): CartesianWidgetStyle['seriesLabels'] {
+  const enabled = seriesLabels?.enabled ?? false;
+  const rotation = seriesLabels?.rotation ?? 0;
+  const showValue = seriesLabels?.showValue ?? false;
+  const showTotals = totalLabels?.enabled && enabled;
+
+  if (AREA_STACKED_SUBTYPES.has(widgetSubtype)) {
+    return {
+      enabled,
+      rotation,
+      labels: {
+        enabled: true,
+        stacked: true,
+        stackedPercentage: false,
+        types: {
+          count: false,
+          percentage: false,
+          relative: showValue,
+          totals: showTotals,
+        },
+      },
+    };
+  }
+
+  if (AREA_STACKED100_SUBTYPES.has(widgetSubtype)) {
+    const showPercentage = seriesLabels?.showPercentage ?? false;
+    return {
+      enabled,
+      rotation,
+      labels: {
+        enabled: true,
+        stacked: false,
+        stackedPercentage: true,
+        types: {
+          count: showValue,
+          percentage: showPercentage,
+          relative: false,
+          totals: showTotals,
+        },
+      },
+    };
+  }
+
+  return toSeriesLabelsStyle(seriesLabels);
+}
+
 /**
  * Maps SDK line chart style options to Fusion CartesianWidgetStyle (DTO).
  * Used when serializing a line chart widget back to WidgetDto.
@@ -172,25 +263,30 @@ export function toDataLimitsStyle(dataLimits?: DataLimits): CartesianWidgetStyle
  * @internal
  */
 export function toLineWidgetStyle(styleOptions: LineStyleOptions): CartesianWidgetStyle {
-  const legend = toLegendStyle(styleOptions.legend);
-  const navigator = toNavigatorStyle(styleOptions.navigator);
-  const seriesLabels = toSeriesLabelsStyle(styleOptions.seriesLabels);
-  const xAxis = toAxisStyle(styleOptions.xAxis);
-  const yAxis = toAxisStyle(styleOptions.yAxis);
-  const y2Axis = styleOptions.y2Axis ? toAxisStyle(styleOptions.y2Axis) : undefined;
-  const lineWidth = toLineWidthStyle(styleOptions.lineWidth);
-  const markers = toMarkersStyle(styleOptions.markers);
-  const dataLimits = toDataLimitsStyle(styleOptions.dataLimits);
-
   return {
-    legend,
-    navigator,
-    seriesLabels,
-    xAxis,
-    yAxis,
-    ...(y2Axis && { y2Axis }),
-    ...(lineWidth && { lineWidth }),
-    ...(markers && { markers }),
-    ...(dataLimits && { dataLimits }),
+    ...buildCommonCartesianWidgetStyle(styleOptions),
+    seriesLabels: toSeriesLabelsStyle(styleOptions.seriesLabels),
+  };
+}
+
+/**
+ * Converts area chart style options to Fusion CartesianWidgetStyle DTO.
+ * Used when serializing an area chart widget back to WidgetDto.
+ *
+ * @param styleOptions - Area style options from WidgetModel.styleOptions
+ * @param widgetSubtype - Resolved Fusion widget subtype (e.g. after `area/basic` default)
+ * @returns Fusion CartesianWidgetStyle for the widget DTO
+ */
+export function toAreaWidgetStyle(
+  styleOptions: AreaStyleOptions,
+  widgetSubtype: WidgetSubtype,
+): CartesianWidgetStyle {
+  return {
+    ...buildCommonCartesianWidgetStyle(styleOptions),
+    seriesLabels: toAreaSeriesLabelsStyle(
+      widgetSubtype,
+      styleOptions.seriesLabels,
+      styleOptions.totalLabels,
+    ),
   };
 }

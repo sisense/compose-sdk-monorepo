@@ -30,7 +30,7 @@ describe('Advanced Charts', () => {
 
     let preparedHighchartsOptions: HighchartsOptions | undefined;
 
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <SisenseContextProvider {...contextProviderProps}>
         <Chart
           dataSet={DM.DataSource}
@@ -70,7 +70,7 @@ describe('Advanced Charts', () => {
       expect(preparedHighchartsOptions).toMatchSnapshot();
     });
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 
   it('should render trend chart', async () => {
@@ -78,7 +78,7 @@ describe('Advanced Charts', () => {
 
     let preparedHighchartsOptions: HighchartsOptions | undefined;
 
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <SisenseContextProvider {...contextProviderProps}>
         <Chart
           dataSet={DM.DataSource}
@@ -108,6 +108,6 @@ describe('Advanced Charts', () => {
       expect(preparedHighchartsOptions).toMatchSnapshot();
     });
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 });

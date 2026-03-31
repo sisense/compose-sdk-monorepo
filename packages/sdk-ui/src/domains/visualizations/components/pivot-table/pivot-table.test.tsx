@@ -6,8 +6,9 @@
 
 /** @vitest-environment jsdom */
 import { EMPTY_PIVOT_QUERY_RESULT_DATA } from '@sisense/sdk-data';
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
+import { setupI18nMock } from '@/__test-helpers__';
 import { executePivotQueryMock } from '@/domains/query-execution/core/__mocks__/execute-query';
 import { type ClientApplication } from '@/infra/app/types';
 import { useSisenseContextMock } from '@/infra/contexts/sisense-context/__mocks__/sisense-context';
@@ -19,6 +20,8 @@ import { createMockPivotQueryClient } from './__mocks__/pivot-query-client-mock'
 import { usePivotBuilder } from './hooks/use-pivot-builder';
 import { usePivotClient } from './hooks/use-pivot-client';
 import { PivotTable } from './pivot-table';
+
+setupI18nMock();
 
 vi.mock('@/domains/query-execution/core/execute-query');
 vi.mock('@/infra/contexts/sisense-context/sisense-context');
@@ -34,6 +37,7 @@ describe('PivotTable', () => {
         pivotQueryClient: mockPivotQueryClient,
         settings: {
           trackingConfig: { enabled: false },
+          loadingIndicatorConfig: { enabled: true, delay: 0 },
         },
       } as ClientApplication,
       isInitialized: true,
@@ -53,8 +57,8 @@ describe('PivotTable', () => {
   });
   it('should render empty pivot table', async () => {
     executePivotQueryMock.mockResolvedValue(EMPTY_PIVOT_QUERY_RESULT_DATA);
-    const { container, findByLabelText } = render(<PivotTable {...mockPivotTableProps} />);
-    const pivotTable = await findByLabelText('pivot-table-root');
+    const { container, findByRole } = render(<PivotTable {...mockPivotTableProps} />);
+    const pivotTable = await findByRole('region', { name: 'Pivot table' });
     expect(pivotTable).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
@@ -65,12 +69,9 @@ describe('PivotTable', () => {
 
     const mockError = new Error('Test error');
     executePivotQueryMock.mockRejectedValue(mockError);
-    const { findByLabelText, findByText } = render(<PivotTable {...mockPivotTableProps} />);
+    const { findByLabelText } = render(<PivotTable {...mockPivotTableProps} />);
 
-    const errorBoxContainer = await findByLabelText('error-box');
-    fireEvent.mouseEnter(errorBoxContainer);
-    const errorBoxText = await findByText(/errorBoxText/);
-    expect(errorBoxText).toBeTruthy();
+    expect(await findByLabelText('error-box')).toBeInTheDocument();
 
     spy.mockRestore();
   });

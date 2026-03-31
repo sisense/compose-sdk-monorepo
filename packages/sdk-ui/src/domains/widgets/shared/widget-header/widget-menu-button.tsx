@@ -3,7 +3,8 @@ import { type MouseEvent, useCallback } from 'react';
 import { useMenu } from '@/infra/contexts/menu-provider/hooks/use-menu';
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context.js';
 import { MenuButton } from '@/shared/components/menu/menu-button.js';
-import { MenuItem } from '@/shared/types/menu-item';
+import type { MenuItem } from '@/shared/types/menu-item';
+import { convertMenuItemToLegacySectionItem } from '@/shared/utils/menu-item-converters.js';
 
 export interface WidgetMenuButtonProps {
   menuItems: MenuItem[];
@@ -28,7 +29,7 @@ export const WidgetMenuButton = ({ menuItems }: WidgetMenuButtonProps) => {
         },
         itemSections: [
           {
-            items: menuItems,
+            items: menuItems.map(convertMenuItemToLegacySectionItem),
           },
         ],
       });

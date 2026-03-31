@@ -82,6 +82,7 @@ const defaultStyleOptions: Required<TabberButtonsWidgetStyleOptions> = {
   tabsInterval: 'medium',
   tabsAlignment: 'center',
   tabCornerRadius: 'none',
+  description: '',
 };
 
 const ContentWrapper = styled.div`
@@ -162,7 +163,7 @@ const Description = styled.span<{ descriptionColor: string }>`
 export const TabberButtonsWidget = asSisenseComponent({
   componentName: 'tabber-buttons',
 })((props: TabberButtonsWidgetProps) => {
-  const { styleOptions, customOptions, description = '' } = props;
+  const { styleOptions, customOptions } = props;
   const {
     showSeparators,
     showDescription,
@@ -173,6 +174,7 @@ export const TabberButtonsWidget = asSisenseComponent({
     tabsInterval,
     tabsAlignment,
     tabCornerRadius,
+    description = '',
   } = { ...defaultStyleOptions, ...styleOptions };
 
   if (!customOptions.tabNames.length) {

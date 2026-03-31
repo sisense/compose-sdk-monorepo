@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   SisenseContextService,
@@ -126,6 +127,7 @@ export class ChatbotComponent implements AfterViewInit, OnChanges, OnDestroy {
     public aiService: AiService,
   ) {
     this.componentAdapter = new ComponentAdapter(ChatbotPreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
       createAiContextConnector(this.aiService),

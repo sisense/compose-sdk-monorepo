@@ -10,6 +10,14 @@ Configuration options that define style of the various elements of the tabbers b
 
 ## Type declaration
 
+### `description`
+
+**description**?: `string`
+
+Description text displayed in the tabber widget (when showDescription is true)
+
+***
+
 ### `descriptionColor`
 
 **descriptionColor**?: `string`

@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   SisenseContextService,
@@ -139,6 +140,7 @@ export class GetNlgInsightsComponent implements AfterViewInit, OnChanges, OnDest
     public aiService: AiService,
   ) {
     this.componentAdapter = new ComponentAdapter(GetNlgInsightsPreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
       createAiContextConnector(this.aiService),

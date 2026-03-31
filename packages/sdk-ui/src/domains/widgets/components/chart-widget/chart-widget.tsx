@@ -20,6 +20,7 @@ import { useHighlightSelection } from '../../hooks/use-highlight-selection';
 import { useWidgetHeaderManagement } from '../../hooks/use-widget-header-management';
 import { WidgetContainer } from '../../shared/widget-container';
 import { ChartWidgetProps } from './types';
+import { useChartWidgetCsvDownload } from './use-chart-widget-csv-download.js';
 import { useWithChartWidgetDrilldown } from './use-with-chart-widget-drilldown';
 
 /**
@@ -89,10 +90,21 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     [onChange],
   );
 
-  const { headerConfig, titleEditor } = useWidgetHeaderManagement({
+  const { headerConfig: headerConfigWithRenaming, titleEditor } = useWidgetHeaderManagement({
     title: props.title,
     onChange: props.onChange as (event: WidgetChangeEvent) => void,
     headerConfig: props.config?.header,
+  });
+
+  const { headerConfig } = useChartWidgetCsvDownload({
+    baseHeaderConfig: headerConfigWithRenaming,
+    title: props.title,
+    chartType,
+    dataOptions,
+    dataSource,
+    filters: props.filters,
+    highlights: props.highlights,
+    config: props.config,
   });
 
   const { propsWithDrilldown, isDrilldownEnabled, breadcrumbs } = useWithChartWidgetDrilldown({

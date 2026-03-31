@@ -59,7 +59,7 @@ describe('IndicatorCanvas', () => {
         />,
       );
 
-      const indicatorRoot = container.querySelector('[aria-label="indicator-root"]');
+      const indicatorRoot = container.querySelector('[data-testid="indicator-root"]');
       expect(indicatorRoot).toBeInTheDocument();
     });
 
@@ -90,7 +90,7 @@ describe('IndicatorCanvas', () => {
         />,
       );
 
-      const indicatorRoot = container.querySelector('[aria-label="indicator-root"]');
+      const indicatorRoot = container.querySelector('[data-testid="indicator-root"]');
       expect(indicatorRoot).toHaveStyle('cursor: pointer');
 
       fireEvent.click(indicatorRoot!);
@@ -110,7 +110,7 @@ describe('IndicatorCanvas', () => {
         />,
       );
 
-      const indicatorRoot = container.querySelector('[aria-label="indicator-root"]');
+      const indicatorRoot = container.querySelector('[data-testid="indicator-root"]');
       fireEvent.click(indicatorRoot!);
 
       expect(onDataPointClickMock).toHaveBeenCalledWith(
@@ -174,7 +174,7 @@ describe('IndicatorCanvas', () => {
         />,
       );
 
-      const indicatorRoot = container.querySelector('[aria-label="indicator-root"]');
+      const indicatorRoot = container.querySelector('[data-testid="indicator-root"]');
       fireEvent.click(indicatorRoot!);
 
       const [, nativeEvent] = onDataPointClickMock.mock.calls[0];
@@ -201,7 +201,7 @@ describe('IndicatorCanvas', () => {
         />,
       );
 
-      const indicatorRoot = container.querySelector('[aria-label="indicator-root"]');
+      const indicatorRoot = container.querySelector('[data-testid="indicator-root"]');
       fireEvent.click(indicatorRoot!);
 
       expect(onDataPointClickMock).toHaveBeenCalledTimes(1);

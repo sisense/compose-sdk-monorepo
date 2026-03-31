@@ -3,6 +3,13 @@
 exports[`WidgetById > should exclude dashboard filters when includeDashboardFilters is false > widget-props-with-dashboard-filters-excluded 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -129,6 +136,13 @@ exports[`WidgetById > should exclude dashboard filters when includeDashboardFilt
 exports[`WidgetById > should handle complex prop combinations correctly > widget-props-complex-combination 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -434,6 +448,13 @@ exports[`WidgetById > should handle complex prop combinations correctly > widget
 exports[`WidgetById > should handle filters merge strategy correctly > widget-props-with-filters-merge-strategy 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -592,6 +613,13 @@ exports[`WidgetById > should handle filters merge strategy correctly > widget-pr
 exports[`WidgetById > should include dashboard filters when includeDashboardFilters is true > widget-props-with-dashboard-filters-included 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -828,6 +856,13 @@ exports[`WidgetById > should include dashboard filters when includeDashboardFilt
 exports[`WidgetById > should merge external style options with widget style options > widget-props-with-style-options 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -960,6 +995,13 @@ exports[`WidgetById > should merge external style options with widget style opti
 exports[`WidgetById > should omit undefined values from external props > widget-props-with-undefined-values-omitted 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -1086,6 +1128,13 @@ exports[`WidgetById > should omit undefined values from external props > widget-
 exports[`WidgetById > should override widget title and description > widget-props-with-title-description 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -1212,6 +1261,13 @@ exports[`WidgetById > should override widget title and description > widget-prop
 exports[`WidgetById > should pass drilldown options to Widget component > widget-props-with-drilldown-options 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -1384,6 +1440,13 @@ exports[`WidgetById > should pass drilldown options to Widget component > widget
 exports[`WidgetById > should pass external filters to Widget component > widget-props-with-filters 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -1570,6 +1633,13 @@ exports[`WidgetById > should pass external filters to Widget component > widget-
 exports[`WidgetById > should pass external highlights to Widget component > widget-props-with-highlights 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -1755,6 +1825,13 @@ exports[`WidgetById > should pass external highlights to Widget component > widg
 exports[`WidgetById > should pass through additional widget props > widget-props-with-additional-props 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -1881,6 +1958,13 @@ exports[`WidgetById > should pass through additional widget props > widget-props
 exports[`WidgetById > should preserve widget id from dashboard configuration > widget-props-with-preserved-id 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {
@@ -2007,6 +2091,13 @@ exports[`WidgetById > should preserve widget id from dashboard configuration > w
 exports[`WidgetById > should render widget by id > basic-widget-props 1`] = `
 {
   "chartType": "indicator",
+  "config": {
+    "actions": {
+      "downloadCsv": {
+        "enabled": false,
+      },
+    },
+  },
   "dataOptions": {
     "max": [
       {

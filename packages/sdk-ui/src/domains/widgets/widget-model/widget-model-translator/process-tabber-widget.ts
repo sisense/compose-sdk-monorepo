@@ -36,10 +36,10 @@ export const processTabberWidget = (params: {
     fusionWidgetType: 'custom',
     customWidgetType: 'tabber-buttons',
     dataOptions: createDataOptionsFromPanels(panels, variantColors),
-    styleOptions: extractStyleOptions(
-      'WidgetsTabber',
-      widgetDto,
-    ) as TabberButtonsWidgetStyleOptions,
+    styleOptions: {
+      ...(extractStyleOptions('WidgetsTabber', widgetDto) as TabberButtonsWidgetStyleOptions),
+      description: widgetDto.desc || '',
+    },
     customOptions,
   };
 };

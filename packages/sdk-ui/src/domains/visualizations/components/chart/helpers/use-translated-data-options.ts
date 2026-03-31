@@ -15,45 +15,70 @@ import { isRestructuredChartType } from '../restructured-charts/utils.js';
 export const useTranslatedDataOptions = (
   chartDataOptions: ChartDataOptions,
   chartType: ChartType,
-  /** Indicates if the chart is a forecast or trend chart for temporal routing between legacy and restructured charts processing */
-  isForecastOrTrendChart: boolean,
+  isForecastOrTrendChart?: boolean,
 ) => {
   return useMemo(() => {
-    if (isRestructuredChartType(chartType) && !isForecastOrTrendChart) {
-      const chartBuilder = getChartBuilder(chartType);
-      if (!chartBuilder.dataOptions.isCorrectDataOptions(chartDataOptions)) {
-        throw new Error('Incorrect data options');
-      }
-      return newTranslateDataOptions(chartBuilder, chartDataOptions);
-    } else {
-      return legacyTranslateDataOptions(chartDataOptions, chartType);
-    }
+    return getTranslatedDataOptions(chartDataOptions, chartType, {
+      isForecastOrTrendChart,
+      shouldHaveUniqueDataColumnNames: true,
+    });
   }, [chartDataOptions, chartType, isForecastOrTrendChart]);
 };
+
+export function getTranslatedDataOptions(
+  chartDataOptions: ChartDataOptions,
+  chartType: ChartType,
+  options?: {
+    /** Indicates if the chart is a forecast or trend chart for temporal routing between legacy and restructured charts processing */
+    isForecastOrTrendChart?: boolean;
+    /** Indicates if the data column names should be generated uniquely */
+    shouldHaveUniqueDataColumnNames?: boolean;
+  },
+) {
+  if (isRestructuredChartType(chartType) && !options?.isForecastOrTrendChart) {
+    const chartBuilder = getChartBuilder(chartType);
+    if (!chartBuilder.dataOptions.isCorrectDataOptions(chartDataOptions)) {
+      throw new Error('Incorrect data options');
+    }
+    return newTranslateDataOptions(chartBuilder, chartDataOptions, options);
+  } else {
+    return legacyTranslateDataOptions(chartDataOptions, chartType, options);
+  }
+}
 
 function newTranslateDataOptions<CT extends SupportedChartType>(
   chartBuilder: ChartBuilder<CT>,
   chartDataOptions: TypedChartDataOptions<CT>,
+  options?: {
+    /** Indicates if the data column names should be generated uniquely */
+    shouldHaveUniqueDataColumnNames?: boolean;
+  },
 ) {
   const internalDataOptions =
     chartBuilder.dataOptions.translateDataOptionsToInternal(chartDataOptions);
   const attributes = chartBuilder.dataOptions.getAttributes(internalDataOptions);
   const measures = chartBuilder.dataOptions.getMeasures(internalDataOptions);
-  const dataColumnNamesMapping = generateUniqueDataColumnsNames(measures);
-  return {
-    dataOptions: internalDataOptions,
-    attributes,
-    measures,
-    dataColumnNamesMapping,
-  };
+  const dataColumnNamesMapping = options?.shouldHaveUniqueDataColumnNames
+    ? generateUniqueDataColumnsNames(measures)
+    : {};
+  return { dataOptions: internalDataOptions, attributes, measures, dataColumnNamesMapping };
 }
 
-function legacyTranslateDataOptions(chartDataOptions: ChartDataOptions, chartType: ChartType) {
+function legacyTranslateDataOptions(
+  chartDataOptions: ChartDataOptions,
+  chartType: ChartType,
+  options?: {
+    /** Indicates if the data column names should be generated uniquely */
+    shouldHaveUniqueDataColumnNames?: boolean;
+  },
+) {
   const { dataOptions, attributes, measures } = legacyGetTranslatedDataOptions(
     chartDataOptions,
     chartType,
   );
-  const dataColumnNamesMapping = generateUniqueDataColumnsNames(measures);
+  const dataColumnNamesMapping = options?.shouldHaveUniqueDataColumnNames
+    ? generateUniqueDataColumnsNames(measures)
+    : {};
   return {
     dataOptions,
     attributes,

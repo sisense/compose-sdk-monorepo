@@ -48,7 +48,7 @@ describe('Pie chart types', () => {
     const styleOptions: PieStyleOptions = {
       subtype: 'pie/classic',
     };
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <PieChart
         dataSet={dataSet}
         dataOptions={{ value: [meas1], category: [cat1] }}
@@ -60,14 +60,14 @@ describe('Pie chart types', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 
   it('should prepare correct options for donut type', async () => {
     const styleOptions: PieStyleOptions = {
       subtype: 'pie/donut',
     };
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <PieChart
         dataSet={dataSet}
         dataOptions={{ value: [meas1], category: [cat1] }}
@@ -79,14 +79,14 @@ describe('Pie chart types', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 
   it('should prepare correct options for ring type', async () => {
     const styleOptions: PieStyleOptions = {
       subtype: 'pie/ring',
     };
-    const { findByLabelText } = render(
+    const { findByTestId } = render(
       <PieChart
         dataSet={dataSet}
         dataOptions={{ value: [meas1], category: [cat1] }}
@@ -98,6 +98,6 @@ describe('Pie chart types', () => {
       />,
     );
 
-    expect(await findByLabelText('chart-root')).toBeInTheDocument();
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
 });

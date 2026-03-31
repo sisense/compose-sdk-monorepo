@@ -1,10 +1,10 @@
 import type { SisenseContextProviderProps as SisenseContextProviderPropsPreact } from '@sisense/sdk-ui-preact';
 import { createClientApplication, type CustomSisenseContext } from '@sisense/sdk-ui-preact';
-import { defineComponent, provide, ref } from 'vue';
+import { computed, defineComponent, provide, ref } from 'vue';
 import type { PropType, Ref } from 'vue';
 
 import { ThemeProvider } from '../theme-provider';
-import { defaultSisenseContext, sisenseContextKey } from './sisense-context';
+import { defaultSisenseContext, pluginsContextKey, sisenseContextKey } from './sisense-context';
 
 /**
  * Configurations and authentication for Sisense Context.
@@ -107,6 +107,34 @@ export const SisenseContextProvider = defineComponent({
      */
     appConfig: Object as PropType<SisenseContextProviderProps['appConfig']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.plugins}
+     *
+     * @category Sisense App
+     * @internal
+     */
+    plugins: {
+      type: Array as PropType<SisenseContextProviderProps['plugins']>,
+      default: () => [],
+    },
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.ssoMaxAuthRedirectAttempts}
+     *
+     * @category Sisense Authentication
+     * @alpha
+     */
+    ssoMaxAuthRedirectAttempts: Number as PropType<
+      SisenseContextProviderProps['ssoMaxAuthRedirectAttempts']
+    >,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.ssoRedirectAttemptsTtlMs}
+     *
+     * @category Sisense Authentication
+     * @alpha
+     */
+    ssoRedirectAttemptsTtlMs: Number as PropType<
+      SisenseContextProviderProps['ssoRedirectAttemptsTtlMs']
+    >,
+    /**
      * @internal
      */
     showRuntimeErrors: {
@@ -135,6 +163,8 @@ export const SisenseContextProvider = defineComponent({
     });
 
     provide(sisenseContextKey, context as Ref<CustomSisenseContext>);
+    const pluginsRef = computed(() => props.plugins ?? []);
+    provide(pluginsContextKey, pluginsRef);
 
     return () => {
       return (

@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Empty Project (Recommended for experts)",
+    "value": "empty",
+    "embedded": true,
+    "dependencies": {},
+    "devDependencies": {}
+  },
+  {
+    "name": "[Example] Line Chart",
+    "value": "line-chart",
+    "dependencies": {
+      "@emotion/styled": "^11.14.0",
+      "classnames": "^2.3.2",
+      "lodash": "^4.17.21"
+    },
+    "devDependencies": {
+      "@types/lodash": "^4.17.0"
+    }
+  }
+]

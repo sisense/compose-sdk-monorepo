@@ -250,6 +250,8 @@ export const translation = {
       deleteWidget: 'Delete Widget',
       renameWidget: 'Rename Widget',
       distributeEqualWidth: 'Distribute equally in this row',
+      download: 'Download',
+      csvFile: 'CSV File',
     },
   },
   customWidgets: {
@@ -448,6 +450,24 @@ export const translation = {
       lockGroup: 'Lock Group',
       unlockGroup: 'Unlock Group',
     },
+    toggleSwitch: 'Enable/disable filter',
+  },
+  chart: {
+    indicator: {
+      label: 'Indicator chart',
+    },
+    visualization: {
+      label: 'Data visualization',
+    },
+    pivotTable: {
+      label: 'Pivot table',
+    },
+    table: {
+      label: 'Data table',
+    },
+  },
+  loadingOverlay: {
+    label: 'Loading content',
   },
   measures: {
     countShort: '# of {{level}}',

@@ -1,5 +1,5 @@
 {
-  "version": "2.23.0",
+  "version": "2.24.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -61,8 +61,10 @@
   },
   "workspaces": [
     "packages/*",
+    "packages/sdk-plugins/*",
     "packages/internal/*",
     "examples/*demo",
+    "examples/simple-table-plugin",
     "e2e/",
     "typedoc-plugins/typedoc-plugin-markdown/",
     "typedoc-plugins/typedoc-plugin-diff-packages/"

@@ -32,6 +32,8 @@ type ClientApplicationParams = Pick<
   | 'enableSilentPreAuth'
   | 'useFusionAuth'
   | 'alternativeSsoHost'
+  | 'ssoMaxAuthRedirectAttempts'
+  | 'ssoRedirectAttemptsTtlMs'
   | 'disableFusionPalette'
 > & {
   /**
@@ -67,6 +69,8 @@ export const createClientApplication = async ({
   enableSilentPreAuth,
   useFusionAuth,
   alternativeSsoHost,
+  ssoMaxAuthRedirectAttempts,
+  ssoRedirectAttemptsTtlMs,
   disableFusionPalette,
   packageName = 'sdk-ui',
 }: ClientApplicationParams): Promise<ClientApplication> => {
@@ -85,6 +89,8 @@ export const createClientApplication = async ({
     enableSilentPreAuth,
     useFusionAuth,
     alternativeSsoHost,
+    ssoMaxAuthRedirectAttempts,
+    ssoRedirectAttemptsTtlMs,
   });
 
   if (!auth) {

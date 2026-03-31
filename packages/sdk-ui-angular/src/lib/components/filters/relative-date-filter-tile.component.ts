@@ -16,6 +16,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
@@ -142,6 +143,7 @@ export class RelativeDateFilterTileComponent implements AfterViewInit, OnChanges
     public themeService: ThemeService,
   ) {
     this.componentAdapter = new ComponentAdapter(RelativeDateFilterTilePreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
     ]);

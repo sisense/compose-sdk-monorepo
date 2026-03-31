@@ -199,7 +199,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
   );
 
   return (
-    <div aria-label="member-filter-tile">
+    <div data-testid="member-filter-tile">
       <FilterTileContainer
         title={title}
         renderHeaderTitle={renderHeaderTitle}

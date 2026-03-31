@@ -7,9 +7,16 @@
 import { isDatetime } from '@sisense/sdk-data';
 
 import { DIMENSIONAL_NAME_PREFIX, isFunctionCall, isRecordStringUnknown } from '../../../types.js';
+import { findMatchingCloseParen, splitAtDepthZero } from '../../utils/parse-compose-code.js';
 import type { SchemaIndex } from '../../utils/schema-index.js';
 import { parseDimensionalName } from '../../utils/schema-index.js';
-import { getRequiredDateLevel, getTimeDiffFormulaFunctions } from '../formula-function-schemas.js';
+import {
+  formatFormulaFunctionArityMessage,
+  FORMULA_FUNCTION_SCHEMAS,
+  getRequiredDateLevel,
+  getXDiffFormulaFunctions,
+  UNSUPPORTED_FORMULA_FUNCTIONS,
+} from '../formula-function-schemas.js';
 
 export interface FormulaValidationResult {
   isValid: boolean;
@@ -28,7 +35,7 @@ export interface FormulaValidationOptions {
   allowEmptyFormula?: boolean;
   /** Custom error message prefix for better context */
   errorPrefix?: string;
-  /** When provided, time-diff args are validated as datetime dimensions and level-matched */
+  /** When provided, xdiff args are validated as datetime dimensions and level-matched */
   schemaIndex?: SchemaIndex;
 }
 
@@ -49,7 +56,6 @@ const AGGREGATIVE_FORMULA_FUNCTIONS = new Set([
   'AVG',
   'COUNT',
   'DUPCOUNT',
-  'LARGEST',
   'MAX',
   'MEDIAN',
   'MIN',
@@ -65,13 +71,7 @@ const AGGREGATIVE_FORMULA_FUNCTIONS = new Set([
   'YTDAVG',
   'YTDSUM',
   // RAVG, RSUM are non-aggregative per Sisense doc (Other Functions, not (A))
-  // Elasticube – Aggregative
-  'CORREL',
-  'COVARP',
-  'COVAR',
-  'SKEWP',
-  'SKEW',
-  'SLOPE',
+  // CORREL, COVAR*, SKEW*, SLOPE, LARGEST are unsupported in custom formulas (see UNSUPPORTED_FORMULA_FUNCTIONS).
 ]);
 
 /** Regex matching a call to any known aggregative function (e.g. SUM(, AVG(). Case-insensitive. */
@@ -126,13 +126,10 @@ export interface TimeDiffCall {
 }
 
 /**
- * Extracts time-diff (or other two-arg bracket) calls from a formula string.
+ * Extracts xdiff (or other two-arg bracket) calls from a formula string.
  * Matches FUNC([ref1], [ref2]) for each function name in the set (case-insensitive).
  */
-export function parseTimeDiffCalls(
-  formula: string,
-  functionNames: readonly string[],
-): TimeDiffCall[] {
+export function parseXDiffCalls(formula: string, functionNames: readonly string[]): TimeDiffCall[] {
   if (functionNames.length === 0) return [];
   const escaped = functionNames.map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
   const pattern = new RegExp(
@@ -201,6 +198,125 @@ function validateOperatorSyntax(ctx: ValidatorCtx): void {
       ctx,
       `${ctx.errorPrefix}args[1]: Invalid syntax: '${invalidMatch[1]}' - operator cannot be used before bracket reference without parentheses`,
     );
+  }
+}
+
+/** Advances past a single- or double-quoted string starting at `start` (index of opening quote). */
+function skipQuotedString(formula: string, start: number): number {
+  const q = formula[start];
+  let i = start + 1;
+  while (i < formula.length) {
+    const char = formula[i];
+    const next = formula[i + 1];
+    if (char !== q) {
+      i++;
+      continue;
+    }
+    if (next === q) {
+      i += 2;
+      continue;
+    }
+    return i + 1;
+  }
+  return formula.length;
+}
+
+export interface FormulaParenCall {
+  readonly name: string;
+  readonly argCount: number;
+}
+
+function countCommaSeparatedArgs(argsStr: string): number {
+  return splitAtDepthZero(argsStr, ',').filter((s) => s.trim().length > 0).length;
+}
+
+/**
+ * After an identifier ending at `i`, skips whitespace; if the next char is `(`, records the call
+ * and recurses into the argument list. Returns the index to resume scanning from.
+ */
+function consumeParenCallsAfterIdent(
+  formula: string,
+  i: number,
+  rawName: string,
+  calls: FormulaParenCall[],
+): number {
+  while (i < formula.length && /\s/.test(formula[i])) {
+    i++;
+  }
+  if (formula[i] !== '(') {
+    return i;
+  }
+  const open = i;
+  const close = findMatchingCloseParen(formula, open);
+  if (close === -1) {
+    return open + 1;
+  }
+  const argsStr = formula.slice(open + 1, close);
+  calls.push({ name: rawName.toUpperCase(), argCount: countCommaSeparatedArgs(argsStr) });
+  calls.push(...extractParenFunctionCalls(argsStr));
+  return close + 1;
+}
+
+/**
+ * Finds all `IDENT(` calls in a formula, outside quoted strings, with comma-separated arg counts
+ * (nesting-aware, same rules as {@link splitAtDepthZero}). Recurses into argument lists so nested
+ * calls (e.g. `SUM(MAX([a]))`) are included.
+ *
+ * @internal Exported for unit tests
+ */
+export function extractParenFunctionCalls(formula: string): FormulaParenCall[] {
+  const calls: FormulaParenCall[] = [];
+  let i = 0;
+  while (i < formula.length) {
+    const char = formula[i];
+    if (char === "'" || char === '"') {
+      i = skipQuotedString(formula, i);
+      continue;
+    }
+    if (/[A-Za-z_]/.test(char)) {
+      const nameStart = i;
+      i++;
+      while (i < formula.length && /[A-Za-z0-9_]/.test(formula[i])) {
+        i++;
+      }
+      const rawName = formula.slice(nameStart, i);
+      i = consumeParenCallsAfterIdent(formula, i, rawName, calls);
+      continue;
+    }
+    i++;
+  }
+  return calls;
+}
+
+/**
+ * Rejects unsupported engine functions and validates arity for registered formula functions.
+ * Runs before aggregative checks so unsupported statistical functions do not suggest wrapping in SUM/AVG.
+ */
+function validateUnsupportedAndFormulaArity(ctx: ValidatorCtx): void {
+  const calls = extractParenFunctionCalls(ctx.formula);
+  const unsupportedReported = new Set<string>();
+  const arityReported = new Set<string>();
+
+  for (const { name, argCount } of calls) {
+    if (UNSUPPORTED_FORMULA_FUNCTIONS.has(name)) {
+      if (!unsupportedReported.has(name)) {
+        unsupportedReported.add(name);
+        addError(
+          ctx,
+          `${ctx.errorPrefix}args[1]: Function ${name} is not supported in custom formulas`,
+        );
+      }
+      continue;
+    }
+
+    const meta = FORMULA_FUNCTION_SCHEMAS[name];
+    if (!meta) continue;
+
+    if ((argCount < meta.minArgs || argCount > meta.maxArgs) && !arityReported.has(name)) {
+      arityReported.add(name);
+      const range = formatFormulaFunctionArityMessage(meta.minArgs, meta.maxArgs);
+      addError(ctx, `${ctx.errorPrefix}args[1]: Function ${name} accepts ${range}`);
+    }
   }
 }
 
@@ -307,8 +423,8 @@ function validateTimeDiffRef(
 }
 
 function validateTimeDiffCalls(ctx: ValidatorCtx): void {
-  const timeDiffNames = getTimeDiffFormulaFunctions();
-  const calls = parseTimeDiffCalls(ctx.formula, timeDiffNames);
+  const timeDiffNames = getXDiffFormulaFunctions();
+  const calls = parseXDiffCalls(ctx.formula, timeDiffNames);
   for (const call of calls) {
     const requiredLevel = getRequiredDateLevel(call.functionName);
     validateTimeDiffRef(call.ref1, call, requiredLevel, ctx);
@@ -365,6 +481,7 @@ export function validateFormulaReferences(
   }
 
   validateOperatorSyntax(ctx);
+  validateUnsupportedAndFormulaArity(ctx);
 
   ctx.result.references = extractBracketReferences(formula);
 

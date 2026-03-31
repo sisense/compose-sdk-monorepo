@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Pagination from '@mui/material/Pagination';
 import { isDataSource } from '@sisense/sdk-data';
@@ -48,6 +49,7 @@ export const TableComponent = ({
   onDataReady,
 }: TableProps) => {
   const { rowsPerPage = DEFAULT_TABLE_ROWS_PER_PAGE, width, height } = styleOptions;
+  const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
   const [offset, setOffset] = useState(0);
   const { filters: filterList, relations: filterRelations } =
@@ -191,13 +193,16 @@ export const TableComponent = ({
 
         return (
           <div
+            className="csdk-table-root"
             style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               backgroundColor: themeSettings.chart.backgroundColor,
             }}
-            aria-label="table-root"
+            data-testid="table-root"
+            role="region"
+            aria-label={t('chart.table.label')}
           >
             <PureTable
               dataTable={paginatedTable}

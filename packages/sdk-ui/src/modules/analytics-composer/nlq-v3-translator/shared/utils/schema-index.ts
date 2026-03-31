@@ -16,6 +16,22 @@ import type { NormalizedColumn, NormalizedTable } from '../../../types.js';
 import { DIMENSIONAL_NAME_PREFIX } from '../../types.js';
 import { findBestMatch, SUGGESTION_THRESHOLD } from './fuzzy-match.js';
 
+/** Stable locale for identifier comparisons (case-insensitive table/column segments). */
+const IDENTIFIER_LOCALE = 'en';
+
+function equalsIgnoreCase(a: string, b: string): boolean {
+  return a.localeCompare(b, IDENTIFIER_LOCALE, { sensitivity: 'accent' }) === 0;
+}
+
+function startsWithIgnoreCase(str: string, prefix: string): boolean {
+  return (
+    prefix.length <= str.length &&
+    str
+      .slice(0, prefix.length)
+      .localeCompare(prefix, IDENTIFIER_LOCALE, { sensitivity: 'accent' }) === 0
+  );
+}
+
 /**
  * Schema index for efficient table/column lookups and greedy matching
  * @internal
@@ -72,7 +88,10 @@ export function createSchemaIndex(tables: NormalizedTable[]): SchemaIndex {
 }
 
 /**
- * Parses a dimensional name using schema-aware greedy matching to handle dots in table/column names
+ * Parses a dimensional name using schema-aware greedy matching to handle dots in table/column names.
+ * Table and column segments are matched case-insensitively against the schema; returned table/column
+ * objects keep canonical names and expressions. Date level suffixes are case-sensitive.
+ * If two tables share the same name ignoring case, the first match in {@link SchemaIndex.sortedTables} wins.
  *
  * @param dimensionalName - The dimensional name (e.g., "DM.Brand.io.Brand" or "DM.Commerce.Date.Years")
  * @param schemaIndex - The schema index for efficient matching
@@ -107,7 +126,7 @@ export function parseDimensionalName(
   let matchedTableAfter: string | undefined;
 
   for (const table of schemaIndex.sortedTables) {
-    if (remaining.startsWith(table.name + '.')) {
+    if (startsWithIgnoreCase(remaining, table.name + '.')) {
       const afterTable = remaining.slice(table.name.length + 1);
       if (!afterTable) {
         throw new Error(
@@ -152,12 +171,12 @@ export function parseDimensionalName(
   const validLevels = DateLevels.all;
 
   for (const column of sortedColumns) {
-    if (matchedTableAfter === column.name) {
+    if (equalsIgnoreCase(matchedTableAfter!, column.name)) {
       // Exact match, no level
       return { table: matchedTable, column };
     }
 
-    if (!matchedTableAfter!.startsWith(column.name + '.')) {
+    if (!startsWithIgnoreCase(matchedTableAfter!, column.name + '.')) {
       continue;
     }
 
@@ -226,12 +245,13 @@ export function parseDimensionalName(
   const suggestDifferentName =
     columnMatch &&
     columnMatch.distance <= SUGGESTION_THRESHOLD &&
-    columnMatch.best.name !== potentialColumnName;
+    !equalsIgnoreCase(columnMatch.best.name, potentialColumnName);
   const columnSuggestion = suggestDifferentName ? ` Did you mean '${columnMatch.best.name}'?` : '';
   const trailingDotHint =
     !suggestDifferentName &&
     matchedTableAfter!.endsWith('.') &&
-    columnMatch?.best.name === potentialColumnName
+    columnMatch !== undefined &&
+    equalsIgnoreCase(columnMatch.best.name, potentialColumnName)
       ? ` Use '${potentialColumnName}' without a trailing dot.`
       : '';
   throw new Error(
@@ -282,7 +302,7 @@ function findColumnAndLevel(
 
 /** Options for {@link createAttributeFromName} when translating custom formula context. */
 export interface CreateAttributeFromNameOptions {
-  /** When the dimensional name has no date level, use this level for datetime columns (e.g. from time-diff function). */
+  /** When the dimensional name has no date level, use this level for datetime columns (e.g. from xdiff function). */
   inferredDateLevel?: string;
 }
 

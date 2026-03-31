@@ -259,6 +259,8 @@ const translation: TranslationDictionary = {
       deleteWidget: 'Widget löschen',
       renameWidget: 'Widget umbenennen',
       distributeEqualWidth: 'Gleichmäßig in dieser Zeile verteilen',
+      download: 'Herunterladen',
+      csvFile: 'CSV-Datei',
     },
   },
   customWidgets: {
@@ -460,6 +462,24 @@ const translation: TranslationDictionary = {
       lockGroup: 'Gruppe sperren',
       unlockGroup: 'Gruppe entsperren',
     },
+    toggleSwitch: 'Filter aktivieren/deaktivieren',
+  },
+  chart: {
+    indicator: {
+      label: 'Indikatordiagramm',
+    },
+    visualization: {
+      label: 'Datenvisualisierung',
+    },
+    pivotTable: {
+      label: 'Pivot-Tabelle',
+    },
+    table: {
+      label: 'Datentabelle',
+    },
+  },
+  loadingOverlay: {
+    label: 'Inhalt wird geladen',
   },
   measures: {
     countShort: 'Anz. {{level}}',

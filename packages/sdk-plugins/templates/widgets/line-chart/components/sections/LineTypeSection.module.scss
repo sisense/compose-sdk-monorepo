@@ -1,0 +1,97 @@
+@import '../shared/Color';
+@import '../shared/Icons';
+
+.title {
+  padding-top: 15px;
+  margin-left: 20px;
+  margin-bottom: 7px;
+  font-size: 13px;
+  color: $OXFORD_BLUE;
+}
+
+.lineTypeContainer {
+  margin-left: 13px;
+  width: 226px;
+  height: 70px;
+  box-sizing: border-box;
+  border: 1px solid $ATHENS_GRAY_DARK2;
+  background: white;
+  display: flex;
+}
+
+.lineTypeOption {
+  flex: 1;
+  border: none;
+  border-right: 1px solid $ATHENS_GRAY_DARK2;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $OXFORD_BLUE;
+    outline-offset: -2px;
+  }
+
+  &.hoverEffect {
+    &:hover {
+      background-color: $PALE_CANERY;
+
+      .straightLine {
+        opacity: 1;
+      }
+
+      .smoothLine {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.straightLine {
+  width: 44px;
+  height: 7px;
+  background-image: $STRAIGHT_LINE;
+  margin-top: 10px;
+  opacity: 0.3;
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.straightText {
+  margin-top: 15px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  line-height: normal;
+  color: rgb(91, 99, 114);
+}
+
+.smoothLine {
+  width: 43px;
+  height: 18px;
+  background-image: $SMOOTH_LINE;
+  margin-top: 4px;
+  opacity: 0.3;
+  &.selected {
+    opacity: 1;
+  }
+}
+
+.smoothText {
+  margin-top: 8px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  line-height: normal;
+  color: rgb(91, 99, 114);
+}

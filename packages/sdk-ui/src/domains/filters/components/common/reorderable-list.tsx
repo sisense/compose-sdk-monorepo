@@ -26,6 +26,7 @@ import {
 import { Transform } from '@dnd-kit/utilities';
 
 import styled from '@/infra/styled';
+import { MIN_TOUCH_TARGET_SIZE } from '@/shared/const';
 
 export interface RenderItemProps {
   index: number;
@@ -139,6 +140,8 @@ const SortableItemHandleWrapper = styled.div<{
 }>`
   cursor: ${({ draggable, isDragging }) =>
     draggable ? (isDragging ? 'grabbing' : 'grab') : 'auto'};
+  min-width: ${MIN_TOUCH_TARGET_SIZE.minWidth};
+  min-height: ${MIN_TOUCH_TARGET_SIZE.minHeight};
 `;
 
 export const ReorderableItem = ({ disabled, id, index, renderItem }: ReorderableItemProps) => {

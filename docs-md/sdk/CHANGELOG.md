@@ -1,9 +1,27 @@
 # Changelog
 
+## [2.24.0] - 2026-03-31
+
+### Added
+- Added maximum redirect limit for SSO authorization
+- Add CSV download support for widgets (internal testing)
+- Add plugin system support for `WidgetPlugins` registration and creation (internal testing)
+
+### Changed
+- Added a fallback for checking `globals.features` to prevent console errors after failed authentication
+- Make custom formula context optional in `sdk-data`
+- Improve isolation of third-party library styles
+- Accessibility improvements:
+  - Increase the minimum touch target size for interactive buttons
+  - Improve form label accessibility
+  - Improve `aria-label` usage
+  - Add alternative text for the "No results" image
+  - Improve color contrast for `NoResultsOverlay`
+
 ## [2.23.0] - 2026-03-17
 
 ### Added
-- Add widget renaming (title change)
+- Add widget renaming (title change) for internal testing
 - Add aggregations in data browser for internal testing
 - Add `CalculatedMeasure` support in measure filter functions
 
@@ -17,8 +35,8 @@
 ## [2.22.0] - 2026-03-03
 
 ### Added
-- Add "Duplicate widget" functionality to the dashboard
-- Add lock/unlock menu for filter tiles
+- Add "Duplicate widget" functionality to the dashboard (internal testing)
+- Add lock/unlock menu for filter tiles (internal testing)
 - Add basic plugins infrastructure for internal testing
 - Extend the AI `Chatbot` component with quota limits notification
 

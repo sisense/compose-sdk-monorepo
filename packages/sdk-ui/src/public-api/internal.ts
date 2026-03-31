@@ -56,6 +56,13 @@ export {
   type CustomWidgetsProviderAdapterProps,
 } from '../infra/contexts/custom-widgets-provider/custom-widgets-provider-adapter';
 
+// Plugin system (internal — for framework adapters)
+export { CustomPluginContextProvider } from '../infra/plugins/custom-plugin-context-provider.js';
+export type {
+  CustomPluginContextProviderProps,
+  CustomPluginContextProviderContext,
+} from '../infra/plugins/custom-plugin-context-provider.js';
+
 // Formulas
 export { useGetSharedFormulaInternal } from '../domains/formulas/use-get-shared-formula';
 

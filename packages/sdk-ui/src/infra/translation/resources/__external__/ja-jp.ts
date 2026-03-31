@@ -257,6 +257,8 @@ const translation: TranslationDictionary = {
       deleteWidget: 'ウィジェットを削除',
       renameWidget: 'ウィジェットの名前を変更',
       distributeEqualWidth: 'この行で均等に配分',
+      download: 'ダウンロード',
+      csvFile: 'CSVファイル',
     },
   },
   customWidgets: {
@@ -454,6 +456,24 @@ const translation: TranslationDictionary = {
       lockGroup: 'グループをロック',
       unlockGroup: 'グループのロック解除',
     },
+    toggleSwitch: 'フィルターを有効/無効にする',
+  },
+  chart: {
+    indicator: {
+      label: 'インジケーターチャート',
+    },
+    visualization: {
+      label: 'データの可視化',
+    },
+    pivotTable: {
+      label: 'ピボットテーブル',
+    },
+    table: {
+      label: 'データテーブル',
+    },
+  },
+  loadingOverlay: {
+    label: 'コンテンツを読み込み中',
   },
   measures: {
     countShort: '{{level}}の件数',

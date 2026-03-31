@@ -34,7 +34,7 @@ vi.mock('@/domains/query-execution/core/execute-query', () => ({
 type ClientApplicationParams = Parameters<typeof createClientApplication>[0];
 
 describe('createClientApplication', () => {
-  const defaultParams = {
+  const defaultParams: ClientApplicationParams = {
     defaultDataSource: undefined,
     url: 'http://test-url/',
     token: 'test-token',
@@ -43,8 +43,10 @@ describe('createClientApplication', () => {
     appConfig: {},
     enableSilentPreAuth: false,
     useFusionAuth: false,
-    customHttpHeaders: {},
-  } as ClientApplicationParams;
+    alternativeSsoHost: '',
+    ssoMaxAuthRedirectAttempts: undefined,
+    ssoRedirectAttemptsTtlMs: undefined,
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -70,7 +72,32 @@ describe('createClientApplication', () => {
       ssoEnabled: defaultParams.ssoEnabled,
       enableSilentPreAuth: defaultParams.enableSilentPreAuth,
       useFusionAuth: defaultParams.useFusionAuth,
+      alternativeSsoHost: defaultParams.alternativeSsoHost,
+      ssoMaxAuthRedirectAttempts: undefined,
+      ssoRedirectAttemptsTtlMs: undefined,
     });
+  });
+
+  it('should forward ssoMaxAuthRedirectAttempts and ssoRedirectAttemptsTtlMs to getAuthenticator', async () => {
+    (getAuthenticator as Mock).mockReturnValue({});
+    (HttpClient as Mock).mockReturnValue({
+      login: vi.fn().mockResolvedValue(true),
+      get: vi.fn().mockResolvedValue({ tracking: { apiTelemetry: false } }),
+    });
+    (getSettings as Mock).mockResolvedValue({ user: { tenant: { name: 'system' } } });
+
+    await createClientApplication({
+      ...defaultParams,
+      ssoMaxAuthRedirectAttempts: 7,
+      ssoRedirectAttemptsTtlMs: 999,
+    });
+
+    expect(getAuthenticator).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ssoMaxAuthRedirectAttempts: 7,
+        ssoRedirectAttemptsTtlMs: 999,
+      }),
+    );
   });
 
   it('should create HttpClient, PivotQueryClient, and QueryClient instances', async () => {

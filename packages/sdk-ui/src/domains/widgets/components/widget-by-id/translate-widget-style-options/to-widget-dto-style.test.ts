@@ -1,7 +1,9 @@
+import cloneDeep from 'lodash-es/cloneDeep';
 import { describe, expect, it } from 'vitest';
 
 import { advancedLineChartWidgetDto } from '@/domains/dashboarding/dashboard-model/__mocks__/advanced-line-chart-widget.js';
 import type {
+  AreaStyleOptions,
   AxisLabel,
   DataLimits,
   LegendOptions,
@@ -10,8 +12,9 @@ import type {
   Navigator,
 } from '@/types.js';
 
-import type { CartesianWidgetStyle } from '../types.js';
+import type { CartesianWidgetStyle, WidgetDto, WidgetSubtype } from '../types.js';
 import {
+  toAreaWidgetStyle,
   toAxisStyle,
   toDataLimitsStyle,
   toLegendStyle,
@@ -217,6 +220,170 @@ describe('to-widget-dto-style', () => {
         title: original.y2Axis?.title,
         labels: { enabled: original.y2Axis?.labels?.enabled, rotation: 0 },
       });
+    });
+  });
+
+  describe('toAreaWidgetStyle', () => {
+    it('returns full cartesian style with defaults when styleOptions is minimal', () => {
+      const styleOptions: AreaStyleOptions = {};
+      const result = toAreaWidgetStyle(styleOptions, 'area/basic');
+      expect(result.legend).toEqual({ enabled: true, position: 'bottom' });
+      expect(result.navigator).toEqual({ enabled: false });
+      expect(result.seriesLabels).toEqual({ enabled: false, rotation: 0 });
+      expect(result.xAxis).toBeDefined();
+      expect(result.yAxis).toBeDefined();
+      expect(result.y2Axis).toBeUndefined();
+      expect(result.lineWidth).toBeUndefined();
+      expect(result.markers).toBeUndefined();
+      expect(result.dataLimits).toBeUndefined();
+    });
+
+    it('round-trips with extractStyleOptions for area/basic chart', () => {
+      const areaDto = {
+        ...cloneDeep(advancedLineChartWidgetDto),
+        type: 'chart/area',
+        subtype: 'area/basic' as WidgetSubtype,
+      } as WidgetDto;
+      const styleOptions = extractStyleOptions('chart/area', areaDto);
+      const restored = toAreaWidgetStyle(styleOptions as AreaStyleOptions, 'area/basic');
+
+      const original = areaDto.style as CartesianWidgetStyle;
+      expect(restored.legend).toEqual(original.legend);
+      expect(restored.navigator).toEqual(original.navigator);
+      expect(restored.seriesLabels).toMatchObject({
+        enabled: original.seriesLabels.enabled,
+        rotation: original.seriesLabels.rotation,
+      });
+      expect(restored.lineWidth).toEqual(original.lineWidth);
+      expect(restored.markers).toEqual(original.markers);
+      expect(restored.dataLimits).toEqual(original.dataLimits);
+      expect(restored.xAxis).toMatchObject({
+        enabled: original.xAxis.enabled,
+        gridLines: original.xAxis.gridLines,
+        isIntervalEnabled: original.xAxis.isIntervalEnabled,
+        title: original.xAxis.title,
+        labels: { enabled: original.xAxis.labels.enabled, rotation: 0 },
+      });
+    });
+
+    it('maps stacked area seriesLabels and totalLabels to Fusion labels.types', () => {
+      const styleOptions: AreaStyleOptions = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 30,
+          showValue: true,
+          showPercentage: false,
+        },
+        totalLabels: { enabled: true, rotation: 30 },
+      };
+      const result = toAreaWidgetStyle(styleOptions, 'area/stacked');
+      expect(result.seriesLabels).toEqual({
+        enabled: true,
+        rotation: 30,
+        labels: {
+          enabled: true,
+          stacked: true,
+          stackedPercentage: false,
+          types: {
+            count: false,
+            percentage: false,
+            relative: true,
+            totals: true,
+          },
+        },
+      });
+    });
+
+    it('maps stacked100 area seriesLabels and totalLabels to Fusion labels.types', () => {
+      const styleOptions: AreaStyleOptions = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 45,
+          showValue: true,
+          showPercentage: true,
+        },
+        totalLabels: { enabled: true, rotation: 45 },
+      };
+      const result = toAreaWidgetStyle(styleOptions, 'area/stacked100');
+      expect(result.seriesLabels).toEqual({
+        enabled: true,
+        rotation: 45,
+        labels: {
+          enabled: true,
+          stacked: false,
+          stackedPercentage: true,
+          types: {
+            count: true,
+            percentage: true,
+            relative: false,
+            totals: true,
+          },
+        },
+      });
+    });
+
+    it('round-trips stacked area labels through extractStyleOptions', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          labels: {
+            enabled: true,
+            stacked: true,
+            stackedPercentage: false,
+            types: {
+              count: false,
+              percentage: false,
+              relative: true,
+              totals: true,
+            },
+          },
+        },
+      } as CartesianWidgetStyle;
+
+      const widgetDto = {
+        type: 'chart/area',
+        subtype: 'area/stacked' as WidgetSubtype,
+        style: widgetStyle,
+        metadata: { panels: [] },
+        options: {},
+      } as unknown as WidgetDto;
+
+      const extracted = extractStyleOptions('chart/area', widgetDto);
+      const restored = toAreaWidgetStyle(extracted as AreaStyleOptions, 'area/stacked');
+      expect(restored.seriesLabels).toEqual(widgetStyle.seriesLabels);
+    });
+
+    it('round-trips stacked100 area labels through extractStyleOptions', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          labels: {
+            enabled: true,
+            stacked: false,
+            stackedPercentage: true,
+            types: {
+              count: true,
+              percentage: false,
+              relative: false,
+              totals: true,
+            },
+          },
+        },
+      } as CartesianWidgetStyle;
+
+      const widgetDto = {
+        type: 'chart/area',
+        subtype: 'area/stacked100' as WidgetSubtype,
+        style: widgetStyle,
+        metadata: { panels: [] },
+        options: {},
+      } as unknown as WidgetDto;
+
+      const extracted = extractStyleOptions('chart/area', widgetDto);
+      const restored = toAreaWidgetStyle(extracted as AreaStyleOptions, 'area/stacked100');
+      expect(restored.seriesLabels).toEqual(widgetStyle.seriesLabels);
     });
   });
 });

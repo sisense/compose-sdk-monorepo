@@ -42,6 +42,7 @@ vi.mock('../helpers/widget-props-preact-translator', () => ({
 }));
 
 vi.mock('../component-wrapper-helpers', () => ({
+  createPluginContextConnector: vi.fn(() => ({})),
   createSisenseContextConnector: vi.fn(() => ({})),
   createThemeContextConnector: vi.fn(() => ({})),
 }));

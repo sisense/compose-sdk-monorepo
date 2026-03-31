@@ -38,7 +38,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -51,7 +51,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -63,7 +63,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -76,7 +76,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -93,7 +93,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -108,7 +108,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -122,7 +122,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -131,7 +131,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -144,7 +144,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -157,7 +157,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -170,7 +170,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -183,7 +183,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
   });
@@ -197,7 +197,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -210,7 +210,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -222,7 +222,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -235,7 +235,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -252,7 +252,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -267,7 +267,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -281,7 +281,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -290,7 +290,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -303,7 +303,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -316,7 +316,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -329,7 +329,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -342,7 +342,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
   });
@@ -358,7 +358,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -371,7 +371,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -389,7 +389,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -404,7 +404,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -417,7 +417,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -430,7 +430,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -443,7 +443,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -456,7 +456,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
   });
@@ -472,7 +472,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <ColumnChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -481,7 +481,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -495,7 +495,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <BarChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -504,7 +504,7 @@ describe('Border Radius Styling - borderRadius Property', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
   });

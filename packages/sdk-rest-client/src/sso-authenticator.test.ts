@@ -6,6 +6,7 @@
 import { normalizeUrl } from '@sisense/sdk-common';
 
 import { isSsoAuthenticator, SsoAuthenticator } from './sso-authenticator.js';
+import { TranslatableError } from './translation/translatable-error.js';
 
 const mockFetch = (loginUrl: string) =>
   vi.fn().mockImplementation(() => {
@@ -160,6 +161,7 @@ describe('SSOAuthenticator', () => {
         `${fakeSsoHost}${fakeLoginUrl}/?return_to=${encodeURIComponent(fakeDeploymentUrl)}`,
       );
     });
+
     it('if query parameters have to be merged', async () => {
       const fakeLoginUrl = '/users/login?tracking=true&role=view';
       const fakeSsoHost = 'http://sso.app.client.com/auth?app=staging';
@@ -180,6 +182,127 @@ describe('SSOAuthenticator', () => {
       expect(testUrl.searchParams.toString().includes('role')).toBeTruthy();
       expect(testUrl.searchParams.toString().includes('app')).toBeTruthy();
       expect(testUrl.searchParams.toString().includes('return_to')).toBeTruthy();
+    });
+  });
+
+  describe('ssoMaxAuthRedirectAttempts', () => {
+    const countKeyPrefix = 'sisense_sso_redirect_attempts_';
+    const lastAtKeyPrefix = 'sisense_sso_redirect_last_at_';
+
+    it('should throw and not redirect when redirect attempts reach ssoMaxAuthRedirectAttempts', async () => {
+      const fakeLoginUrl = normalizeUrl('http://login.url');
+      global.fetch = mockFetch(fakeLoginUrl);
+
+      const maxAttempts = 3;
+      const authWithLimit = new SsoAuthenticator(fakeDeploymentUrl, false, '', maxAttempts);
+
+      const normalizedUrl = normalizeUrl(fakeDeploymentUrl, true);
+      const countKey = countKeyPrefix + encodeURIComponent(normalizedUrl);
+      const lastAtKey = lastAtKeyPrefix + encodeURIComponent(normalizedUrl);
+
+      const replaceSpy = vi.fn();
+      global.window = {
+        location: {
+          href: fakeDeploymentUrl,
+          replace: replaceSpy,
+        } as unknown as Location,
+        localStorage: {
+          getItem: (key: string) => {
+            if (key === countKey) {
+              return String(maxAttempts);
+            }
+            if (key === lastAtKey) {
+              return String(Date.now());
+            }
+            return null;
+          },
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          clear: vi.fn(),
+          key: vi.fn(),
+          length: 0,
+        } as Storage,
+      } as Window & typeof globalThis;
+
+      const removeItemSpy = vi.fn();
+      global.window.localStorage.removeItem = removeItemSpy;
+
+      await expect(authWithLimit.authenticate()).rejects.toThrow(TranslatableError);
+      expect(replaceSpy).not.toHaveBeenCalled();
+      expect(removeItemSpy).not.toHaveBeenCalled();
+    });
+
+    it('should clear redirect attempts on successful authentication', async () => {
+      const removeItemSpy = vi.fn();
+      global.window = {
+        location: { href: fakeDeploymentUrl, replace: vi.fn() } as unknown as Location,
+        localStorage: {
+          getItem: () => null,
+          setItem: vi.fn(),
+          removeItem: removeItemSpy,
+          clear: vi.fn(),
+          key: vi.fn(),
+          length: 0,
+        } as Storage,
+      } as Window & typeof globalThis;
+
+      global.fetch = vi.fn().mockImplementation(() =>
+        Promise.resolve({
+          json: () =>
+            Promise.resolve({
+              isAuthenticated: true,
+              ssoEnabled: true,
+              loginUrl: '',
+            }),
+        } as Response),
+      );
+
+      await auth.authenticate();
+
+      expect(removeItemSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should reset stored attempts after TTL expires', async () => {
+      const fakeLoginUrl = normalizeUrl('http://login.url');
+      const ttlMs = 500;
+      const authWithTtl = new SsoAuthenticator(fakeDeploymentUrl, false, '', 5, ttlMs);
+
+      const normalizedUrl = normalizeUrl(fakeDeploymentUrl, true);
+      const countKey = countKeyPrefix + encodeURIComponent(normalizedUrl);
+      const lastAtKey = lastAtKeyPrefix + encodeURIComponent(normalizedUrl);
+      const expiredLastAt = Date.now() - ttlMs - 1;
+
+      const replaceSpy = vi.fn();
+      global.window = {
+        location: {
+          href: fakeDeploymentUrl,
+          replace: replaceSpy,
+        } as unknown as Location,
+        localStorage: {
+          getItem: (key: string) => {
+            if (key === countKey) {
+              return '5';
+            }
+            if (key === lastAtKey) {
+              return String(expiredLastAt);
+            }
+            return null;
+          },
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          clear: vi.fn(),
+          key: vi.fn(),
+          length: 0,
+        } as Storage,
+      } as Window & typeof globalThis;
+
+      global.fetch = mockFetch(fakeLoginUrl);
+
+      await authWithTtl.authenticate();
+
+      await new Promise((resolve) => setImmediate(resolve));
+
+      expect(replaceSpy).toHaveBeenCalled();
     });
   });
 });

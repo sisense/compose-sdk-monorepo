@@ -62,6 +62,10 @@ rm -rf ./examples
 rm -rf ./packages/internal
 rm -rf ./packages/sdk-query-client/src/__test-helpers__
 
+# remove embedded cli templates, keep only the widgets gallery and widgets.json
+find ./packages/sdk-plugins/templates -mindepth 1 -maxdepth 1 ! -name 'widgets' ! -name 'widgets.json' -exec rm -rf {} +
+rm -rf ./packages/sdk-plugins/templates/widgets/empty
+
 # Remove e2e tests
 rm -rf ./e2e
 
@@ -70,6 +74,9 @@ rm -rf ./.cursor
 
 # Remove code for features that are under development.
 rm -rf packages/sdk-ui/src/__exclude__
+
+# Remove internal development documentation
+find ./packages -type d -name '__dev-docs__' -prune -exec rm -rf {} +
 
 # Remove demo app with POC code.
 rm -rf packages/sdk-ui/src/__demo__

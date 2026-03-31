@@ -123,7 +123,9 @@ export const SisenseChart = ({
   return (
     optionsWithSize && (
       <div
-        aria-label="chart-root"
+        data-testid="chart-root"
+        role="img"
+        aria-label={translate('chart.visualization.label')}
         style={{
           display: 'flex',
           justifyContent: 'center',

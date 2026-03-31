@@ -5,7 +5,7 @@ import LoadingIcon from '@/shared/icons/loading-icon';
  */
 export default function LoadingSpinner() {
   return (
-    <div className="csdk-m-auto" aria-label="loading spinner">
+    <div className="csdk-m-auto" role="status" aria-label="loading spinner">
       <LoadingIcon spin />
     </div>
   );

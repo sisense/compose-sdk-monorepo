@@ -1,26 +1,26 @@
+import type React from 'react';
+
 import { render } from '@testing-library/react';
 import { Mock } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { useCustomWidgets } from '@/infra/contexts/custom-widgets-provider';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
+import { useWidgetPluginRegistry } from '@/infra/plugins/use-widget-plugin-registry';
 
 import { CustomWidget } from './custom-widget';
 
-vi.mock('@/infra/contexts/custom-widgets-provider');
+vi.mock('@/infra/plugins/use-widget-plugin-registry');
 vi.mock('@/infra/contexts/sisense-context/sisense-context');
 
 describe('CustomWidget', () => {
-  const mockUseCustomWidgets = useCustomWidgets as unknown as Mock;
+  const mockUseWidgetPluginRegistry = useWidgetPluginRegistry as unknown as Mock;
   const mockUseSisenseContext = useSisenseContext as unknown as Mock;
 
-  // We'll store a fake custom widget map in memory
-  const customWidgetMap = new Map<string, (props: any) => JSX.Element>();
+  const customWidgetMap = new Map<string, (props: unknown) => React.JSX.Element>();
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // By default, context returns a fallback dataSource
     mockUseSisenseContext.mockReturnValue({
       isInitialized: true,
       app: {
@@ -31,12 +31,9 @@ describe('CustomWidget', () => {
       },
     });
 
-    // By default, no custom widgets in the map; can add in individual tests
     customWidgetMap.clear();
-    mockUseCustomWidgets.mockReturnValue({
-      registerCustomWidget: vi.fn(),
-      hasCustomWidget: vi.fn((key: string) => customWidgetMap.has(key)),
-      getCustomWidget: vi.fn((key: string) => customWidgetMap.get(key)),
+    mockUseWidgetPluginRegistry.mockReturnValue({
+      getComponent: (key: string) => customWidgetMap.get(key),
     });
   });
 

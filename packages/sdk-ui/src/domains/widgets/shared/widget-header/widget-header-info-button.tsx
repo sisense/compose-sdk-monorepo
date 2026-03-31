@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import ExclamationMarkBrandIcon from '@/modules/ai/icons/exclamation-mark-brand-icon';
 import { Popover } from '@/shared/components/popover';
+import { MIN_TOUCH_TARGET_SIZE } from '@/shared/const';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
 import { WidgetContainerStyleOptions } from '@/types';
 
@@ -149,7 +150,11 @@ export default function WidgetHeaderInfoButton({
           fontFamily: themeSettings.typography?.fontFamily,
         }}
       >
-        <IconButton onClick={handleInfoButtonClick} sx={{ p: 0 }}>
+        <IconButton
+          onClick={handleInfoButtonClick}
+          sx={{ p: 0, ...MIN_TOUCH_TARGET_SIZE }}
+          data-testid="widget-header-info-icon-button"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
             <path
               fill={styleOptions?.titleTextColor || themeSettings.widget.header.titleTextColor}
@@ -196,7 +201,11 @@ export default function WidgetHeaderInfoButton({
             >
               {t('widgetHeader.info.details')}
             </Typography>
-            <IconButton onClick={onRefresh} sx={{ p: 0 }}>
+            <IconButton
+              onClick={onRefresh}
+              sx={{ p: 0, ...MIN_TOUCH_TARGET_SIZE }}
+              data-testid="widget-header-refresh-icon-button"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                 <path
                   fill={themeSettings.chart?.textColor}

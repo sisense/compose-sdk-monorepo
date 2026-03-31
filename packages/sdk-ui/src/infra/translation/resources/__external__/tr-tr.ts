@@ -257,6 +257,8 @@ const translation: TranslationDictionary = {
       deleteWidget: "Widget'ı sil",
       renameWidget: "Widget'ı yeniden adlandır",
       distributeEqualWidth: 'Bu satırda eşit olarak dağıt',
+      download: 'İndir',
+      csvFile: 'CSV dosyası',
     },
   },
   customWidgets: {
@@ -456,6 +458,24 @@ const translation: TranslationDictionary = {
       lockGroup: 'Grubu Kilitle',
       unlockGroup: 'Grup Kilidini Aç',
     },
+    toggleSwitch: 'Filtreyi etkinleştir/devre dışı bırak',
+  },
+  chart: {
+    indicator: {
+      label: 'Gösterge grafiği',
+    },
+    visualization: {
+      label: 'Veri görselleştirme',
+    },
+    pivotTable: {
+      label: 'Pivot tablo',
+    },
+    table: {
+      label: 'Veri tablosu',
+    },
+  },
+  loadingOverlay: {
+    label: 'İçerik yükleniyor',
   },
   measures: {
     countShort: '{{level}} sayısı',

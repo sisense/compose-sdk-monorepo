@@ -74,6 +74,7 @@ describe('useComposedDashboard', () => {
       dataOptions: {
         category: [DM.Commerce.AgeRange],
         value: [measureFactory.sum(DM.Commerce.Cost)],
+        breakBy: [],
       },
       filters: [filterFactory.members(DM.Commerce.Gender, ['Female'])],
       highlights: [],
@@ -187,6 +188,7 @@ describe('useComposedDashboard', () => {
             dataOptions: {
               category: [DM.Category.Category],
               value: [measureFactory.sum(DM.Commerce.Cost)],
+              breakBy: [],
             },
             filters: [],
             highlights: [],
@@ -246,8 +248,8 @@ describe('useComposedDashboard', () => {
         </SisenseContextProvider>,
       );
       const chartMocks = await result.findAllByTestId('ChartMock');
-      const filterTiles = await result.findAllByLabelText('member-filter-tile');
-      const drilldownBreadcrumbs = await result.findAllByLabelText('drilldown-breadcrumbs');
+      const filterTiles = await result.findAllByTestId('member-filter-tile');
+      const drilldownBreadcrumbs = await result.findAllByTestId('drilldown-breadcrumbs');
 
       expect(filterTiles).toHaveLength(1);
       expect(drilldownBreadcrumbs).toHaveLength(1);
@@ -289,10 +291,10 @@ describe('useComposedDashboard', () => {
       });
 
       // new filter tile should be added to the dashboard UI
-      expect(await result.findAllByLabelText('member-filter-tile')).toHaveLength(2);
+      expect(await result.findAllByTestId('member-filter-tile')).toHaveLength(2);
 
       // drilldown breadcrumbs should be still visible
-      expect(await result.findAllByLabelText('drilldown-breadcrumbs')).toHaveLength(1);
+      expect(await result.findAllByTestId('drilldown-breadcrumbs')).toHaveLength(1);
     });
   });
 

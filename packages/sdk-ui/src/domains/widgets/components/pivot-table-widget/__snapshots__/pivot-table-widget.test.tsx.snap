@@ -42,8 +42,9 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
                   >
                     <button
                       aria-label="Click to view full details"
-                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1avsmgh-MuiButtonBase-root-MuiIconButton-root"
+                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-19vz14z-MuiButtonBase-root-MuiIconButton-root"
                       data-mui-internal-clone-element="true"
+                      data-testid="widget-header-info-icon-button"
                       style="color: rgb(0, 0, 0); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
                       tabindex="0"
                       type="button"
@@ -81,7 +82,8 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
                         id="overlay"
                       >
                         <div
-                          aria-label="pivot-table-root"
+                          aria-label="Pivot table"
+                          role="region"
                           style="padding: 8px 8px 0px 8px;"
                         />
                       </div>

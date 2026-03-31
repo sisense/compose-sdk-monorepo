@@ -14,6 +14,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
@@ -119,6 +120,7 @@ export class TableComponent implements AfterViewInit, OnChanges, OnDestroy {
     private themeService: ThemeService,
   ) {
     this.componentAdapter = new ComponentAdapter(TablePreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
     ]);

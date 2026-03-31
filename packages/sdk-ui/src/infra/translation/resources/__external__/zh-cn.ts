@@ -238,6 +238,8 @@ const translation: TranslationDictionary = {
       deleteWidget: '删除小部件',
       renameWidget: '重命名小部件',
       distributeEqualWidth: '在此行中平均分配',
+      download: '下载',
+      csvFile: 'CSV 文件',
     },
   },
   customWidgets: {
@@ -423,6 +425,24 @@ const translation: TranslationDictionary = {
       lockGroup: '锁定组',
       unlockGroup: '解锁组',
     },
+    toggleSwitch: '启用/禁用筛选器',
+  },
+  chart: {
+    indicator: {
+      label: '指标图',
+    },
+    visualization: {
+      label: '数据可视化',
+    },
+    pivotTable: {
+      label: '数据透视表',
+    },
+    table: {
+      label: '数据表',
+    },
+  },
+  loadingOverlay: {
+    label: '正在加载内容',
   },
   measures: {
     countShort: '{{level}}数量',

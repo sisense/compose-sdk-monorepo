@@ -42,11 +42,12 @@ export const NoResultsOverlay = ({ iconType }: { iconType: ChartType | TableType
         style={{
           fontFamily: themeSettings.typography?.fontFamily,
           fontSize: calculateTitleFontSize(size.width, size.height),
+          color: themeSettings.typography?.secondaryTextColor,
         }}
       >
         {t('chartNoData')}
       </div>
-      {icon ? <img className={styles.image} src={icon} /> : null}
+      {icon ? <img className={styles.image} src={icon} alt={t('chartNoData')} /> : null}
     </div>
   );
 };

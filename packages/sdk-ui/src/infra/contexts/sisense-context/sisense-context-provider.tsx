@@ -11,8 +11,8 @@ import { SisenseContextProviderProps } from '../../../props';
 import { createClientApplication } from '../../app/client-application';
 import { type ClientApplication } from '../../app/types';
 import { ErrorBoundary } from '../../error-boundary/error-boundary';
+import { PluginProvider } from '../../plugins/plugin-provider';
 import { I18nProvider } from '../../translation/i18n-provider';
-import { PluginProvider } from '../plugin-provider';
 import { ThemeProvider } from '../theme-provider';
 import { SisenseContext } from './sisense-context';
 import { SisenseQueryClientProvider } from './sisense-query-client-provider';
@@ -66,6 +66,8 @@ export const SisenseContextProvider: FunctionComponent<
   useFusionAuth = false,
   onError,
   alternativeSsoHost = '',
+  ssoMaxAuthRedirectAttempts,
+  ssoRedirectAttemptsTtlMs,
   disableFusionPalette = false,
   plugins = [],
 }) => {
@@ -100,6 +102,8 @@ export const SisenseContextProvider: FunctionComponent<
       enableSilentPreAuth,
       useFusionAuth,
       alternativeSsoHost,
+      ssoMaxAuthRedirectAttempts,
+      ssoRedirectAttemptsTtlMs,
       disableFusionPalette,
     })
       .then((newApp) => {
@@ -127,6 +131,8 @@ export const SisenseContextProvider: FunctionComponent<
     useFusionAuth,
     onError,
     alternativeSsoHost,
+    ssoMaxAuthRedirectAttempts,
+    ssoRedirectAttemptsTtlMs,
     disableFusionPalette,
   ]);
 

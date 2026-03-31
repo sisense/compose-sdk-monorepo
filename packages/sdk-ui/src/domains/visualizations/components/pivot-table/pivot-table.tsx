@@ -1,5 +1,6 @@
 /* eslint-disable promise/catch-or-return */
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   EVENT_SORTING_SETTINGS_CHANGED,
@@ -165,6 +166,7 @@ export const PivotTable = asSisenseComponent({
   const [pivotTotalHeight, setPivotTotalHeight] = useState<number | null>(null);
   // retrieve and validate the pivot client
   const { app } = useSisenseContext();
+  const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
   const pivotQueryClient = app?.pivotQueryClient;
 
@@ -299,7 +301,8 @@ export const PivotTable = asSisenseComponent({
         <>
           {isNoResults && <NoResultsOverlay iconType="table" />}
           <div
-            aria-label="pivot-table-root"
+            role="region"
+            aria-label={t('chart.pivotTable.label')}
             style={{
               padding: `${PIVOT_WIDGET_PADDING}px ${PIVOT_WIDGET_PADDING}px 0 ${PIVOT_WIDGET_PADDING}px`,
             }}

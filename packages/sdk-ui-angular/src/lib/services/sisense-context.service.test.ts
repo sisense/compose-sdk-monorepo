@@ -114,6 +114,24 @@ describe('SisenseContextService', () => {
       );
     });
 
+    it('should forward SSO redirect limit props to createClientApplication', async () => {
+      createClientApplicationMock.mockResolvedValue({ httpClient: {} } as ClientApplication);
+
+      await sisenseContextService.setConfig({
+        ...sisenseConfigMock,
+        ssoMaxAuthRedirectAttempts: 3,
+        ssoRedirectAttemptsTtlMs: 5000,
+      });
+
+      expect(createClientApplicationMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ssoMaxAuthRedirectAttempts: 3,
+          ssoRedirectAttemptsTtlMs: 5000,
+          packageName: 'sdk-ui-angular',
+        }),
+      );
+    });
+
     it('should allow reconfiguration', async () => {
       const mockApp1 = { httpClient: { baseURL: 'app1' } } as unknown as ClientApplication;
       const mockApp2 = { httpClient: { baseURL: 'app2' } } as unknown as ClientApplication;

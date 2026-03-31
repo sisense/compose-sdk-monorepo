@@ -9,6 +9,7 @@ import { useDuplicateWidgetMenuItem } from '@/domains/dashboarding/hooks/duplica
 import { useWidgetRenaming } from '@/domains/dashboarding/hooks/rename-widget/use-widget-renaming.js';
 import { useJtdInternal } from '@/domains/dashboarding/hooks/use-jtd.js';
 import { useTabber } from '@/domains/dashboarding/hooks/use-tabber.js';
+import { useWidgetCsvDownload } from '@/domains/dashboarding/hooks/use-widget-csv-download.js';
 import { useWidgetsLayoutManagement } from '@/domains/dashboarding/hooks/use-widgets-layout.js';
 import { getDefaultWidgetsPanelLayout } from '@/domains/dashboarding/utils.js';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
@@ -238,12 +239,19 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     persistence,
   });
 
+  const shouldEnableWidgetDownloadCsv =
+    !!initialDashboard.config?.widgetsPanel?.actions?.downloadCsv?.enabled;
+  const { widgets: widgetsWithDownloadCsv } = useWidgetCsvDownload({
+    widgets: widgetsWithRename,
+    enabled: shouldEnableWidgetDownloadCsv,
+  });
+
   // Connect common filters to widgets
   const widgetsWithCommonFilters = useMemo(() => {
-    return widgetsWithRename.map((widget) =>
+    return widgetsWithDownloadCsv.map((widget) =>
       connectToWidgetProps(widget, innerWidgetsOptions?.[widget.id]?.filtersOptions),
     );
-  }, [widgetsWithRename, innerWidgetsOptions, connectToWidgetProps]);
+  }, [widgetsWithDownloadCsv, innerWidgetsOptions, connectToWidgetProps]);
 
   const widgetsWithFilterAndJtd = useMemo(() => {
     return widgetsWithCommonFilters.map((widget: WidgetProps) => connectToWidgetPropsJtd(widget));

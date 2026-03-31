@@ -1,4 +1,4 @@
-import type { CustomSisenseContext } from '@sisense/sdk-ui-preact';
+import type { CustomSisenseContext, Plugin } from '@sisense/sdk-ui-preact';
 import { inject, ref } from 'vue';
 import type { InjectionKey, Ref } from 'vue';
 
@@ -29,4 +29,11 @@ export const getSisenseContext = (): Ref<CustomSisenseContext> => {
     () => ref(defaultSisenseContext) as Ref<CustomSisenseContext>,
     treatDefaultAsFactory,
   );
+};
+
+export const pluginsContextKey = Symbol('pluginsContextKey') as InjectionKey<Ref<Plugin[]>>;
+
+export const getPluginsContext = (): Ref<Plugin[]> => {
+  const treatDefaultAsFactory = true;
+  return inject(pluginsContextKey, () => ref<Plugin[]>([]) as Ref<Plugin[]>, treatDefaultAsFactory);
 };

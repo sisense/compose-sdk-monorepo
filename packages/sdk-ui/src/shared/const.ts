@@ -7,3 +7,9 @@ export const ERROR_COLOR = '#FA5656';
 
 export const NOT_AVAILABLE_DATA_VALUE = 'N\\A';
 export const NOT_AVAILABLE_TEXT = 'N/A';
+
+/** WCAG 2.5.8 Target Size (Minimum) — minimum 24×24 CSS pixels for interactive controls. */
+export const MIN_TOUCH_TARGET_SIZE = {
+  minWidth: '24px',
+  minHeight: '24px',
+} as const;

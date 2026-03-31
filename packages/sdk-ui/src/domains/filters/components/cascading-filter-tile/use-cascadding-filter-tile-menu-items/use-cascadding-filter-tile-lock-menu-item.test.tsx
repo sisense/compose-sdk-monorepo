@@ -33,7 +33,7 @@ describe('useCascadingFilterTileLockMenuItem', () => {
       useCascadingFilterTileLockMenuItem({ locked: false, onLockToggle }),
     );
 
-    result.current.onClick();
+    result.current.onClick?.();
 
     expect(onLockToggle).toHaveBeenCalledTimes(1);
   });

@@ -151,7 +151,7 @@ function measureFunction(
  * ```
  * @param title - Title of the measure to be displayed in legend
  * @param formula - Formula to be used for the measure
- * @param context - Formula context as a map of strings to attributes, measures, or filters
+ * @param context - Optional formula context as a map of strings to attributes, measures, or filters
  * @param format - Optional format string for the measure
  * @param description - Optional description of the measure
  * @returns A calculated measure instance
@@ -160,14 +160,17 @@ function measureFunction(
 export const customFormula: (
   title: string,
   formula: string,
-  context: CustomFormulaContext,
+  context?: CustomFormulaContext,
   format?: string,
   description?: string,
 ) => CalculatedMeasure = withComposeCodeForMeasure(
   (title, formula, context, format, description) => {
     // context keys must be in brackets
     const newContext = Object.fromEntries(
-      Object.entries(context).map(([key, val]) => [key.startsWith('[') ? key : `[${key}]`, val]),
+      Object.entries(context ?? {}).map(([key, val]) => [
+        key.startsWith('[') ? key : `[${key}]`,
+        val,
+      ]),
     );
 
     return new DimensionalCalculatedMeasure(title, formula, newContext, format, description);

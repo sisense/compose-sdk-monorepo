@@ -7,7 +7,10 @@ import {
   type UseGetSharedFormulaParams as UseGetSharedFormulaParamsPreact,
 } from '@sisense/sdk-ui-preact';
 
-import { createSisenseContextConnector } from '../component-wrapper-helpers';
+import {
+  createPluginContextConnector,
+  createSisenseContextConnector,
+} from '../component-wrapper-helpers';
 import { TrackableService } from '../decorators/trackable.decorator';
 import { SisenseContextService } from './sisense-context.service';
 
@@ -82,6 +85,7 @@ export class FormulaService {
    */
   async getSharedFormula(params: GetSharedFormulaParams): Promise<CalculatedMeasure | null> {
     const hookAdapter = new HookAdapter(useGetSharedFormulaInternal, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
     ]);
 

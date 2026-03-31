@@ -1,0 +1,10 @@
+@import '../shared/Color';
+
+.component {
+  width: 250px;
+  max-width: 250px;
+  padding-bottom: 25px;
+  background: $ATHENS_GRAY_LIGHT;
+  height: 100%;
+  display: block;
+}

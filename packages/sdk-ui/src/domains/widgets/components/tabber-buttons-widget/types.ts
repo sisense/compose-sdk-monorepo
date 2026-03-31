@@ -6,11 +6,6 @@ import { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/ty
  */
 export type TabberButtonsWidgetStyleOptions = {
   /**
-   * Color of the widget description text
-   */
-  descriptionColor?: string;
-
-  /**
    * Background color of the selected tab
    */
   selectedBackgroundColor?: string;
@@ -26,6 +21,16 @@ export type TabberButtonsWidgetStyleOptions = {
    * @defaultValue true
    */
   showDescription?: boolean;
+
+  /**
+   * Description text displayed in the tabber widget (when showDescription is true)
+   */
+  description?: string;
+
+  /**
+   * Color of the widget description text
+   */
+  descriptionColor?: string;
 
   /**
    * Whether to show visual separators between tabs
@@ -140,9 +145,4 @@ export interface TabberButtonsWidgetProps extends CustomWidgetProps {
    * Configuration for tabs including names and active tab index
    */
   customOptions: TabberButtonsWidgetCustomOptions;
-
-  /**
-   * Description text displayed in the widget
-   */
-  description?: string;
 }

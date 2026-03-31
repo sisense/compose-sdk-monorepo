@@ -44,7 +44,7 @@ describe('useSyncedState', () => {
     expect(state).toBe(initialValue); // State should not change
   });
 
-  it('should trigger onLocalStateChange when local state is changed', () => {
+  it('should trigger onLocalStateChange when local state is changed', async () => {
     const initialValue = { someProp: 'some value' };
     const modifiedValue = { someProp: 'some modified value' };
     const mockOnLocalStateChange = vi.fn();
@@ -55,8 +55,9 @@ describe('useSyncedState', () => {
 
     const [, setState] = result.current;
 
-    act(() => {
+    await act(async () => {
       setState(modifiedValue);
+      await Promise.resolve(); // Flush microtask queue (onLocalStateChange is deferred)
     });
 
     const [state] = result.current;

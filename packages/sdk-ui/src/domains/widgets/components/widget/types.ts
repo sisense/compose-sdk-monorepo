@@ -7,7 +7,7 @@ import type { PivotTableWidgetProps } from '../pivot-table-widget/types';
 import type { TextWidgetProps } from '../text-widget/types';
 
 /**
- * Generic widget configuration (e.g. header menu, toolbar).
+ * Generic widget configuration (e.g. header menu, toolbar, actions).
  * Shared across chart, pivot, text, and custom widgets.
  */
 export type WidgetConfig = {
@@ -15,6 +15,26 @@ export type WidgetConfig = {
    * Configurations for the widget header (e.g. toolbar menu items)
    */
   header?: WidgetHeaderConfig;
+  /**
+   * Configuration for widget actions.
+   *
+   * @sisenseInternal
+   */
+  actions?: {
+    /**
+     * Configuration for downloading a CSV file.
+     *
+     * @sisenseInternal
+     */
+    downloadCsv?: {
+      /**
+       * Determines whether the possibility to download a CSV is enabled.
+       *
+       * If not specified, the default value is `false`.
+       */
+      enabled?: boolean;
+    };
+  };
 };
 
 /**

@@ -34,7 +34,7 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
   typography: {
     fontFamily: '"Open Sans","Roboto","Helvetica","Arial",sans-serif',
     primaryTextColor: '#5B6372',
-    secondaryTextColor: '#9EA2AB',
+    secondaryTextColor: '#70747D',
     hyperlinkColor: DEFAULT_HYPERLINK_COLOR,
     hyperlinkHoverColor: DEFAULT_HYPERLINK_HOVER_COLOR,
   },

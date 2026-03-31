@@ -16,6 +16,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
@@ -214,6 +215,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     public themeService: ThemeService,
   ) {
     this.componentAdapter = new ComponentAdapter(ChartPreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
     ]);

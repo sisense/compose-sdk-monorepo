@@ -11,7 +11,11 @@ export type MenuItem = {
    */
   caption: string;
   /**
+   * Sub items of the menu item
+   */
+  items?: MenuItem[];
+  /**
    * Handler function to be called when the menu item is clicked
    */
-  onClick: () => void;
+  onClick?: () => void;
 };

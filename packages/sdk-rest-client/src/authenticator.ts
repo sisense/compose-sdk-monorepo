@@ -18,6 +18,8 @@ type AuthenticatorConfig = {
   enableSilentPreAuth?: boolean;
   useFusionAuth?: boolean;
   alternativeSsoHost?: string;
+  ssoMaxAuthRedirectAttempts?: number;
+  ssoRedirectAttemptsTtlMs?: number;
 };
 
 export function getAuthenticator({
@@ -30,6 +32,8 @@ export function getAuthenticator({
   enableSilentPreAuth = false,
   useFusionAuth = false,
   alternativeSsoHost = '',
+  ssoMaxAuthRedirectAttempts,
+  ssoRedirectAttemptsTtlMs,
 }: AuthenticatorConfig): Authenticator | null {
   const url = normalizeUrl(rawUrl);
 
@@ -39,6 +43,8 @@ export function getAuthenticator({
       normalizeUrl(rawUrl, true),
       enableSilentPreAuth,
       alternativeSsoHost,
+      ssoMaxAuthRedirectAttempts,
+      ssoRedirectAttemptsTtlMs,
     );
   }
 

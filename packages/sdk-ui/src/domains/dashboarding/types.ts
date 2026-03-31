@@ -199,6 +199,26 @@ export interface WidgetsPanelConfig {
    * Edit mode configuration.
    */
   editMode?: EditModeConfig;
+  /**
+   * Actions available for all widgets in the panel.
+   *
+   * @sisenseInternal
+   */
+  actions?: {
+    /**
+     * Configuration for downloading a widget CSV.
+     *
+     * @sisenseInternal
+     */
+    downloadCsv?: {
+      /**
+       * Determines whether the widgets possibility to download a CSV is enabled.
+       *
+       * If not specified, the default value is `false`.
+       */
+      enabled?: boolean;
+    };
+  };
 }
 
 /**

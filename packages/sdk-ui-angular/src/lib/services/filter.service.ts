@@ -7,7 +7,10 @@ import {
   useGetFilterMembers,
 } from '@sisense/sdk-ui-preact';
 
-import { createSisenseContextConnector } from '../component-wrapper-helpers';
+import {
+  createPluginContextConnector,
+  createSisenseContextConnector,
+} from '../component-wrapper-helpers';
 import { TrackableService } from '../decorators/trackable.decorator';
 import { SisenseContextService } from './sisense-context.service';
 
@@ -57,6 +60,7 @@ export class FilterService {
    */
   async getFilterMembers(params: GetFilterMembersParams): Promise<GetFilterMembersData> {
     const hookAdapter = new HookAdapter(useGetFilterMembers, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
     ]);
 

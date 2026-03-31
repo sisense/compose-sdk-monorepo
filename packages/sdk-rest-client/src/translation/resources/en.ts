@@ -12,6 +12,8 @@ export const translation = {
     passwordAuthFailed:
       '$t(errorPrefix) Username and password authentication was not successful. Check credentials.',
     tokenAuthFailed: '$t(errorPrefix) Token authentication was not successful. Check credentials.',
+    authRedirectLimitExceeded:
+      'SSO redirect limit reached. Authentication may be blocked by browser privacy settings or third-party cookie restrictions. Please check your SSO configuration or try a different browser.',
   },
 };
 /**

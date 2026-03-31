@@ -8,6 +8,7 @@ import dts from 'vite-plugin-dts';
 
 import { fixJsxRuntime } from './scripts/vite-plugins/fix-jsx-runtime';
 import { replaceReact18Hooks } from './scripts/vite-plugins/replace-react18-hooks';
+import { scopeThirdPartyCss } from './scripts/vite-plugins/scope-third-party-css';
 
 /**
  * Discovers translation files and generates Vite entry points.
@@ -27,6 +28,7 @@ const getTranslationEntries = (): Record<string, string> => {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [
+    scopeThirdPartyCss(),
     react({
       jsxImportSource: '@emotion/react', // This tells SWC to use Emotion for JSX
     }),
@@ -95,6 +97,8 @@ export default defineConfig(({ mode }) => ({
     },
   },
   resolve: {
-    alias: { '@': resolve(__dirname, './src') },
+    alias: {
+      '@': resolve(__dirname, './src'),
+    },
   },
 }));

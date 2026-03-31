@@ -16,6 +16,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import {
+  createPluginContextConnector,
   createSisenseContextConnector,
   createThemeContextConnector,
   rootId,
@@ -140,6 +141,7 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
     public themeService: ThemeService,
   ) {
     this.componentAdapter = new ComponentAdapter(CriteriaFilterTilePreact, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
       createThemeContextConnector(this.themeService),
     ]);

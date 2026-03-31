@@ -117,7 +117,7 @@ it('renders a table chart', async () => {
     </AiTestWrapper>,
   );
 
-  await waitFor(() => expect(screen.getByLabelText('table-root')).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByTestId('table-root')).toBeInTheDocument());
 });
 
 it('shows a text summary when the insights button is clicked', async () => {

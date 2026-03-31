@@ -14,7 +14,10 @@ import {
   useExecuteCustomWidgetQueryInternal,
 } from '@sisense/sdk-ui-preact';
 
-import { createSisenseContextConnector } from '../component-wrapper-helpers';
+import {
+  createPluginContextConnector,
+  createSisenseContextConnector,
+} from '../component-wrapper-helpers';
 import { TrackableService } from '../decorators/trackable.decorator';
 import { SisenseContextService } from './sisense-context.service';
 
@@ -187,6 +190,7 @@ export class QueryService {
    */
   async executeCsvQuery(params: ExecuteCsvQueryParams) {
     const hookAdapter = new HookAdapter(useExecuteCsvQueryInternal, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
     ]);
 
@@ -219,6 +223,7 @@ export class QueryService {
    */
   async executeCustomWidgetQuery(params: ExecuteCustomWidgetQueryParams) {
     const hookAdapter = new HookAdapter(useExecuteCustomWidgetQueryInternal, [
+      createPluginContextConnector(this.sisenseContextService),
       createSisenseContextConnector(this.sisenseContextService),
     ]);
 

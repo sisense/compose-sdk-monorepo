@@ -1,0 +1,36 @@
+@import './Icons';
+
+.component {
+  display: inline-block;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+.switcher {
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-image: $TOGGLE_ON;
+}
+
+.inactive {
+  width: 24px;
+  height: 24px;
+  background-image: $TOGGLE_OFF;
+}
+
+.disabled {
+  opacity: 0.5;
+}

@@ -5,9 +5,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { NormalizedTable } from '../../../../types.js';
 import { createSchemaIndex } from '../../utils/schema-index.js';
-import { getTimeDiffFormulaFunctions } from '../formula-function-schemas.js';
+import { getXDiffFormulaFunctions } from '../formula-function-schemas.js';
 import {
-  parseTimeDiffCalls,
+  extractParenFunctionCalls,
+  parseXDiffCalls,
   validateCustomFormula,
   validateFormulaReferences,
 } from './validate-custom-formula.js';
@@ -622,19 +623,127 @@ describe('formula-validation', () => {
       expect(result.references).toEqual(['totalRevenue']);
     });
 
-    describe('parseTimeDiffCalls', () => {
-      const timeDiffNames = getTimeDiffFormulaFunctions();
-
-      it('should return empty array for empty formula', () => {
-        expect(parseTimeDiffCalls('', timeDiffNames)).toEqual([]);
+    describe('formula function arity and unsupported', () => {
+      it('should reject SUM with three comma-separated arguments (BE#600561 style)', () => {
+        const formula = 'SUM([date], [country], MAX([cost]))';
+        const context = {
+          date: 'DM.commerce.Date.Days',
+          country: 'DM.commerce.Country ID',
+          cost: 'DM.commerce.cost',
+        };
+        const result = validateFormulaReferences(formula, context, {
+          errorOnUnusedContext: false,
+          warnUnusedContext: false,
+        });
+        expect(result.isValid).toBe(false);
+        expect(result.errors.some((e) => e.includes('SUM') && e.includes('1 or 2'))).toBe(true);
       });
 
-      it('should return empty array when no time-diff pattern matches', () => {
-        expect(parseTimeDiffCalls('SUM([a]) + AVG([b])', timeDiffNames)).toEqual([]);
+      it('should accept SUM with one nested MAX argument', () => {
+        const formula = 'SUM(MAX([cost]))';
+        const context = { cost: 'DM.commerce.cost' };
+        const result = validateFormulaReferences(formula, context, {
+          errorOnUnusedContext: false,
+          warnUnusedContext: false,
+        });
+        expect(result.isValid).toBe(true);
+      });
+
+      it('should accept SUM with two arguments', () => {
+        const formula = 'SUM([a], MAX([b]))';
+        const context = { a: 'DM.T.C1', b: 'DM.T.C2' };
+        const result = validateFormulaReferences(formula, context, {
+          errorOnUnusedContext: false,
+          warnUnusedContext: false,
+        });
+        expect(result.isValid).toBe(true);
+      });
+
+      it('should reject unsupported LARGEST before aggregative messaging', () => {
+        const formula = 'LARGEST([x], 1)';
+        const context = { x: 'DM.T.Col' };
+        const result = validateFormulaReferences(formula, context, {
+          errorOnUnusedContext: false,
+          warnUnusedContext: false,
+        });
+        expect(result.isValid).toBe(false);
+        expect(
+          result.errors.some((e) => e.includes('LARGEST') && e.includes('not supported')),
+        ).toBe(true);
+      });
+
+      it('should reject unsupported CORREL', () => {
+        const formula = 'CORREL([a], [b])';
+        const context = { a: 'DM.T.C1', b: 'DM.T.C2' };
+        const result = validateFormulaReferences(formula, context, {
+          errorOnUnusedContext: false,
+          warnUnusedContext: false,
+        });
+        expect(result.isValid).toBe(false);
+        expect(result.errors.some((e) => e.includes('CORREL') && e.includes('not supported'))).toBe(
+          true,
+        );
+      });
+
+      it('should reject QUARTILE with too few arguments', () => {
+        const formula = 'QUARTILE([x])';
+        const context = { x: 'DM.T.C' };
+        const result = validateFormulaReferences(formula, context, {
+          errorOnUnusedContext: false,
+          warnUnusedContext: false,
+        });
+        expect(result.isValid).toBe(false);
+        expect(result.errors.some((e) => e.includes('QUARTILE') && e.includes('2 or 3'))).toBe(
+          true,
+        );
+      });
+
+      it('should reject CONCAT with one argument', () => {
+        const formula = 'CONCAT([a])';
+        const context = { a: 'DM.T.C' };
+        const result = validateFormulaReferences(formula, context, {
+          errorOnUnusedContext: false,
+          warnUnusedContext: false,
+        });
+        expect(result.isValid).toBe(false);
+        expect(result.errors.some((e) => e.includes('CONCAT') && e.includes('at least 2'))).toBe(
+          true,
+        );
+      });
+
+      it('should not treat CORREL inside a quoted string as a function call', () => {
+        const formula = "SUM([a]) + 'CORREL([b])'";
+        const context = { a: 'DM.T.C1', b: 'DM.T.C2' };
+        const result = validateFormulaReferences(formula, context, {
+          errorOnUnusedContext: false,
+          warnUnusedContext: false,
+        });
+        expect(result.errors.some((e) => e.includes('CORREL') && e.includes('not supported'))).toBe(
+          false,
+        );
+      });
+
+      it('extractParenFunctionCalls should count nested calls separately', () => {
+        const calls = extractParenFunctionCalls('SUM([a], MAX([b]))');
+        const byName = Object.fromEntries(calls.map((c) => [c.name, c.argCount]));
+        expect(byName.SUM).toBe(2);
+        expect(byName.MAX).toBe(1);
+      });
+    });
+
+    describe('parseXDiffCalls', () => {
+      const timeDiffNames = getXDiffFormulaFunctions();
+
+      it('should return empty array for empty formula', () => {
+        expect(parseXDiffCalls('', timeDiffNames)).toEqual([]);
+      });
+
+      it('should return empty array when no xdiff pattern matches', () => {
+        expect(parseXDiffCalls('SUM([a]) + AVG([b])', timeDiffNames)).toEqual([]);
       });
 
       it('should extract single DDIFF call', () => {
-        const result = parseTimeDiffCalls('DDIFF([Leave Time], [Enter Time])', timeDiffNames);
+        const result = parseXDiffCalls('DDIFF([Leave Time], [Enter Time])', timeDiffNames);
         expect(result).toHaveLength(1);
         expect(result[0]).toEqual({
           functionName: 'DDIFF',
@@ -643,8 +752,8 @@ describe('formula-validation', () => {
         });
       });
 
-      it('should extract multiple time-diff calls (case-insensitive)', () => {
-        const result = parseTimeDiffCalls(
+      it('should extract multiple xdiff calls (case-insensitive)', () => {
+        const result = parseXDiffCalls(
           'Avg(ddiff([end], [start])) + SUM(ydiff([a], [b]))',
           timeDiffNames,
         );
@@ -658,7 +767,7 @@ describe('formula-validation', () => {
       });
     });
 
-    describe('time-diff validation', () => {
+    describe('xdiff validation', () => {
       const tablesWithDateTime: NormalizedTable[] = [
         {
           name: 'Commerce',
@@ -680,7 +789,7 @@ describe('formula-validation', () => {
       ];
       const schemaIndex = createSchemaIndex(tablesWithDateTime);
 
-      it('should error when time-diff arg points to measure', () => {
+      it('should error when xdiff arg points to measure', () => {
         const formula = 'Avg(DDIFF([end], [start]))';
         const context = {
           end: 'DM.Commerce.Date.Days',
@@ -713,7 +822,7 @@ describe('formula-validation', () => {
         ).toBe(true);
       });
 
-      it('should error when date level does not match time-diff function', () => {
+      it('should error when date level does not match xdiff function', () => {
         const formula = 'Avg(DDIFF([a], [b]))';
         const context = {
           a: 'DM.Commerce.Date.Years',

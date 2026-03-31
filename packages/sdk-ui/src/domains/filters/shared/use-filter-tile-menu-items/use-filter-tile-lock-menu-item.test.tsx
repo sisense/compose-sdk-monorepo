@@ -28,7 +28,7 @@ describe('useFilterTileLockMenuItem', () => {
     const onLockToggle = vi.fn();
     const { result } = renderHook(() => useFilterTileLockMenuItem({ locked: false, onLockToggle }));
 
-    result.current.onClick();
+    result.current.onClick?.();
 
     expect(onLockToggle).toHaveBeenCalledTimes(1);
   });

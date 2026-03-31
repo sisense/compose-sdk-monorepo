@@ -9,7 +9,7 @@ import { Arg, FunctionCall } from '../../types.js';
  * @returns Array of trimmed segments
  * @internal
  */
-function splitAtDepthZero(str: string, delimiter: string): string[] {
+export function splitAtDepthZero(str: string, delimiter: string): string[] {
   const result: string[] = [];
   let current = '';
   let depth = 0;
@@ -91,6 +91,52 @@ function findDelimiterAtDepthZero(str: string, delimiter: string): number {
       }
       inString = false;
       stringChar = null;
+    }
+  }
+  return -1;
+}
+
+/**
+ * Index of the `)` that closes the `(` at `openParenIndex`, or -1 if unbalanced.
+ * Respects strings and nesting of `()`, `[]`, `{}` (same rules as {@link splitAtDepthZero}).
+ *
+ * @param str - Full source string
+ * @param openParenIndex - Index of the opening `(`
+ * @internal
+ */
+export function findMatchingCloseParen(str: string, openParenIndex: number): number {
+  if (str[openParenIndex] !== '(') return -1;
+  let depth = 1;
+  let i = openParenIndex + 1;
+  let inString = false;
+  let stringChar: string | null = null;
+
+  while (i < str.length) {
+    const char = str[i];
+    const nextChar = str[i + 1];
+
+    if (!inString) {
+      if (char === "'" || char === '"') {
+        inString = true;
+        stringChar = char;
+        i++;
+        continue;
+      }
+      if ('([{'.includes(char)) depth++;
+      if (')]}'.includes(char) && --depth === 0) return i;
+      i++;
+    } else {
+      if (char !== stringChar) {
+        i++;
+        continue;
+      }
+      if (nextChar === stringChar) {
+        i += 2;
+        continue;
+      }
+      inString = false;
+      stringChar = null;
+      i++;
     }
   }
   return -1;

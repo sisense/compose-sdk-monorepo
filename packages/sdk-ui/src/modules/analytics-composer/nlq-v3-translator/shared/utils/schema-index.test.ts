@@ -296,6 +296,55 @@ describe('createAttributeFromName', () => {
       }).toThrow("Did you mean 'Years'?");
     });
   });
+
+  describe('case-insensitive table and column segments', () => {
+    const commerceBrandTables: NormalizedTable[] = [
+      {
+        name: 'Commerce',
+        columns: [
+          {
+            name: 'Brand',
+            dataType: 'text',
+            expression: '[Commerce.Brand]',
+            description: 'Brand',
+          },
+          {
+            name: 'Date',
+            dataType: 'datetime',
+            expression: '[Commerce.Date]',
+            description: 'Order date',
+          },
+        ],
+      },
+    ];
+    const commerceBrandIndex = createSchemaIndex(commerceBrandTables);
+
+    it('should resolve lowercase table/column against schema casing and keep canonical expression', () => {
+      const attribute = createAttributeFromName(
+        'DM.commerce.brand',
+        mockDataSource,
+        commerceBrandIndex,
+      );
+      expect(attribute.expression).toBe('[Commerce.Brand]');
+    });
+
+    it('should resolve mixed-case column with case-sensitive date level', () => {
+      const attribute = createAttributeFromName(
+        'DM.Commerce.date.Years',
+        mockDataSource,
+        commerceBrandIndex,
+      );
+      expect(attribute.expression).toBe('[Commerce.Date]');
+      expect(isDateLevelAttribute(attribute)).toBe(true);
+      expect((attribute as { granularity: string }).granularity).toBe('Years');
+    });
+
+    it('should reject date level with wrong case', () => {
+      expect(() => {
+        createAttributeFromName('DM.Commerce.Date.years', mockDataSource, commerceBrandIndex);
+      }).toThrow();
+    });
+  });
 });
 
 describe('createSchemaIndex', () => {

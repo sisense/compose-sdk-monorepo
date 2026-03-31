@@ -47,7 +47,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -60,7 +60,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -71,7 +71,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -84,7 +84,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -95,7 +95,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -108,7 +108,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -119,7 +119,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -132,7 +132,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -146,7 +146,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -162,7 +162,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -173,7 +173,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -184,7 +184,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -195,7 +195,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -209,7 +209,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
 
@@ -220,7 +220,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -229,7 +229,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
       expect(onBeforeRender).toHaveBeenCalled();
     });
   });
@@ -242,7 +242,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -255,7 +255,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply new line.dash property correctly', async () => {
@@ -265,7 +265,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -278,7 +278,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply new line.endCap property correctly', async () => {
@@ -288,7 +288,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -301,7 +301,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply new line.shadow property correctly', async () => {
@@ -311,7 +311,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -324,7 +324,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should fallback to deprecated lineWidth when line.width is not provided', async () => {
@@ -334,7 +334,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -345,7 +345,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should prioritize line.width over deprecated lineWidth', async () => {
@@ -355,7 +355,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -369,7 +369,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should use default line width when neither line.width nor lineWidth is provided', async () => {
@@ -379,7 +379,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -388,7 +388,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
   });
 
@@ -400,7 +400,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaRangeChart
           dataSet={mockData}
           dataOptions={mockRangeDataOptions}
@@ -413,7 +413,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply new line.dash property correctly', async () => {
@@ -423,7 +423,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaRangeChart
           dataSet={mockData}
           dataOptions={mockRangeDataOptions}
@@ -436,7 +436,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply new line.endCap property correctly', async () => {
@@ -446,7 +446,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaRangeChart
           dataSet={mockData}
           dataOptions={mockRangeDataOptions}
@@ -459,7 +459,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply new line.shadow property correctly', async () => {
@@ -469,7 +469,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaRangeChart
           dataSet={mockData}
           dataOptions={mockRangeDataOptions}
@@ -482,7 +482,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should apply all new line properties together', async () => {
@@ -495,7 +495,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaRangeChart
           dataSet={mockData}
           dataOptions={mockRangeDataOptions}
@@ -511,7 +511,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should fallback to deprecated lineWidth when line.width is not provided', async () => {
@@ -521,7 +521,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaRangeChart
           dataSet={mockData}
           dataOptions={mockRangeDataOptions}
@@ -532,7 +532,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should prioritize line.width over deprecated lineWidth', async () => {
@@ -542,7 +542,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaRangeChart
           dataSet={mockData}
           dataOptions={mockRangeDataOptions}
@@ -556,7 +556,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
   });
 
@@ -568,7 +568,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -577,7 +577,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should preserve default line width values for Area charts', async () => {
@@ -587,7 +587,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -596,7 +596,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should preserve default line width values for AreaRange charts', async () => {
@@ -606,7 +606,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <AreaRangeChart
           dataSet={mockData}
           dataOptions={mockRangeDataOptions}
@@ -615,7 +615,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
   });
 
@@ -631,7 +631,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -647,7 +647,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should handle empty line object gracefully', async () => {
@@ -657,7 +657,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -668,7 +668,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
 
     it('should handle mixed line properties correctly', async () => {
@@ -682,7 +682,7 @@ describe('Line Styling - New Line Inner Props', () => {
         return options;
       });
 
-      const { findByLabelText } = render(
+      const { findByTestId } = render(
         <LineChart
           dataSet={mockData}
           dataOptions={mockDataOptions}
@@ -697,7 +697,7 @@ describe('Line Styling - New Line Inner Props', () => {
         />,
       );
 
-      expect(await findByLabelText('chart-root')).toBeInTheDocument();
+      expect(await findByTestId('chart-root')).toBeInTheDocument();
     });
   });
 });

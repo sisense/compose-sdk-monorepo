@@ -36,6 +36,14 @@ Filters that will highlight query results
 
 ### Widget
 
+#### description
+
+> **description**?: `string`
+
+Description of the widget
+
+***
+
 #### title
 
 > **title**?: `string`
@@ -89,14 +97,6 @@ Custom widget type identifier, always 'tabber-buttons' for tabber widget
 > **dataOptions**: `Record`\< `string`, `never` \>
 
 Data options configuration (empty object for tabber widget as it doesn't require data)
-
-***
-
-#### description
-
-> **description**?: `string`
-
-Description text displayed in the widget
 
 ***
 

@@ -222,6 +222,7 @@ TypeScript type aliases for components and hooks listed above
 - [TriggerMethod](type-alias.TriggerMethod.md)
 - [UniformDataColorOptions](type-alias.UniformDataColorOptions.md)
 - [UseComposedDashboardOptions](type-alias.UseComposedDashboardOptions.md)
+- [UseCustomWidgetsResult](type-alias.UseCustomWidgetsResult.md)
 - [UseQueryResult](type-alias.UseQueryResult.md)
 - [ValueToColorMap](type-alias.ValueToColorMap.md)
 - [WidgetDataOptions](type-alias.WidgetDataOptions.md)

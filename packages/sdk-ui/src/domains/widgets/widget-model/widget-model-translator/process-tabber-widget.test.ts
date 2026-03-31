@@ -335,6 +335,30 @@ describe('processTabberWidget', () => {
 
       expect(result.styleOptions.showDescription).toBe(true);
       expect(result.styleOptions.descriptionColor).toBe('#123456');
+      expect(result.styleOptions.description).toBe('Test tabber widget');
+    });
+
+    it('should set styleOptions.description from widgetDto.desc', () => {
+      const widgetDto = createTabberWidgetDto(defaultTabberStyle);
+      const result = processTabberWidget({
+        panels: [],
+        widgetDto,
+        variantColors: [],
+      });
+
+      expect(result.styleOptions.description).toBe('Test tabber widget');
+    });
+
+    it('should set styleOptions.description to empty string when widgetDto.desc is missing', () => {
+      const widgetDto = createTabberWidgetDto(defaultTabberStyle);
+      (widgetDto as { desc?: string }).desc = undefined;
+      const result = processTabberWidget({
+        panels: [],
+        widgetDto,
+        variantColors: [],
+      });
+
+      expect(result.styleOptions.description).toBe('');
     });
   });
 

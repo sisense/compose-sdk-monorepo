@@ -59,10 +59,8 @@ describe('PivotTableWidget', () => {
 
   it('should render empty pivot table widget', async () => {
     executePivotQueryMock.mockResolvedValue(EMPTY_PIVOT_QUERY_RESULT_DATA);
-    const { container, findByLabelText } = render(
-      <PivotTableWidget {...mockPivotTableWidgetProps} />,
-    );
-    const pivotTable = await findByLabelText('pivot-table-root');
+    const { container, findByRole } = render(<PivotTableWidget {...mockPivotTableWidgetProps} />);
+    const pivotTable = await findByRole('region', { name: 'Pivot table' });
     expect(pivotTable).toBeTruthy();
     expect(container).toMatchSnapshot();
   });

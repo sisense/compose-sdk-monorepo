@@ -1,5 +1,7 @@
 import {
   ContextConnector,
+  CustomPluginContextProvider,
+  type CustomPluginContextProviderProps,
   CustomSisenseContextProvider,
   CustomSisenseContextProviderProps,
   CustomThemeProvider,
@@ -101,6 +103,38 @@ export const createSisenseContextConnector = (
   return {
     propsObserver,
     providerComponent: CustomSisenseContextProvider,
+  };
+};
+
+/**
+ * Creates plugin context connector
+ *
+ * @param sisenseContextService - The Sisense context service
+ * @internal
+ */
+export const createPluginContextConnector = (
+  sisenseContextService: SisenseContextService,
+): ContextConnector<CustomPluginContextProviderProps> => {
+  const propsObserver = new DataObserver<CustomPluginContextProviderProps>({
+    context: { plugins: sisenseContextService.getConfig()?.plugins ?? [] },
+  });
+
+  sisenseContextService.getApp$().subscribe({
+    next: () => {
+      propsObserver.setValue({
+        context: { plugins: sisenseContextService.getConfig()?.plugins ?? [] },
+      });
+    },
+    error: (error: Error) => {
+      propsObserver.setValue({
+        error,
+      });
+    },
+  });
+
+  return {
+    propsObserver,
+    providerComponent: CustomPluginContextProvider,
   };
 };
 

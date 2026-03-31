@@ -74,7 +74,8 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
                         id="overlay"
                       >
                         <div
-                          aria-label="pivot-table-root"
+                          aria-label="Pivot table"
+                          role="region"
                           style="padding: 8px 8px 0px 8px;"
                         />
                       </div>

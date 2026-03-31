@@ -31,7 +31,9 @@ export const LoadingIndicator = ({
     <div
       style={backgroundColor}
       className="csdk-h-full csdk-bg-white csdk-p-[20px]"
-      aria-label="csdk-loading-indicator"
+      data-testid="csdk-loading-indicator"
+      role="status"
+      aria-label={t('loadingOverlay.label')}
     >
       <div
         style={backgroundColor}
