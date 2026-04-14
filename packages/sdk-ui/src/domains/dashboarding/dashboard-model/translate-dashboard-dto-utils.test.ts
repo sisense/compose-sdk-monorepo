@@ -72,6 +72,29 @@ describe('baseFilterToFilterDto', () => {
 
     expect(result).toMatchSnapshot();
   });
+
+  it('should set locked on root FilterDto when filter config has locked true', () => {
+    const filter = filterFactory.members(DM.Commerce.Gender, ['Male'], { locked: true });
+    const result = filterToFilterDto(filter) as FilterDto;
+
+    expect(result.locked).toBe(true);
+  });
+
+  it('should set locked on root CascadingFilterDto only, not on level jaql payloads', () => {
+    const filter = filterFactory.cascading(
+      [
+        filterFactory.members(DM.Commerce.BrandID, ['1'], { guid: 'BRAND_FILTER_ID' }),
+        filterFactory.members(DM.Commerce.Gender, ['Female'], { guid: 'GENDER_FILTER_ID' }),
+      ],
+      { guid: 'CASCADING_FILTER_ID', locked: true },
+    );
+    const result = filterToFilterDto(filter) as CascadingFilterDto;
+
+    expect(result.locked).toBe(true);
+    for (const level of result.levels) {
+      expect(level).not.toHaveProperty('locked');
+    }
+  });
 });
 
 describe('layoutToLayoutDto', () => {

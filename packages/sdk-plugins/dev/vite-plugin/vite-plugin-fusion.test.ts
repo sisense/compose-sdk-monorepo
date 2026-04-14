@@ -7,6 +7,7 @@ vi.mock('node:fs', () => ({
   existsSync: vi.fn(),
   readFileSync: vi.fn(),
   writeFileSync: vi.fn(),
+  rmSync: vi.fn(),
 }));
 
 vi.mock('vite-plugin-css-injected-by-js', () => ({
@@ -17,10 +18,13 @@ vi.mock('vite-plugin-zip-pack', () => ({
   default: vi.fn(() => ({ name: 'vite-plugin-zip-pack' })),
 }));
 
+vi.mock('vite-plugin-dts', () => ({
+  default: vi.fn(() => ({ name: 'vite-plugin-dts' })),
+}));
+
 const mockedExistsSync = vi.mocked(existsSync);
 const mockedReadFileSync = vi.mocked(readFileSync);
 const mockedWriteFileSync = vi.mocked(writeFileSync);
-
 const VALID_MANIFEST = `export default { name: 'my-plugin', customWidget: { visualization: {} } }`;
 const MANIFEST_PATH = 'src/index.tsx';
 
@@ -28,8 +32,6 @@ const MANIFEST_PATH = 'src/index.tsx';
 interface FusionPlugin {
   name: string;
   apply: string;
-  resolveId(id: string): string | undefined;
-  load(id: string): string | undefined;
   config(
     config: unknown,
     env: { command: string; mode: string },
@@ -42,8 +44,11 @@ interface FusionPlugin {
 function getFusionPlugin(argv: string[] = ['node', 'script.js']): FusionPlugin {
   process.argv = argv;
   const plugins = sisenseFusionPlugin({ manifest: MANIFEST_PATH });
-  // fusionFilesPlugin is always index 1 (after cssInjectedByJs)
-  return plugins[1] as unknown as FusionPlugin;
+  const plugin = plugins.find(
+    (p) => (p as { name?: string }).name === 'sisense-fusion-vite-plugin',
+  );
+  if (!plugin) throw new Error('sisense-fusion-vite-plugin not found in plugin list');
+  return plugin as unknown as FusionPlugin;
 }
 
 describe('sisenseFusionPlugin', () => {
@@ -81,43 +86,15 @@ describe('sisenseFusionPlugin', () => {
       expect(() => sisenseFusionPlugin({ manifest: MANIFEST_PATH })).not.toThrow();
     });
 
-    it('returns 2 plugins in non-fusion mode', () => {
+    it('returns 4 plugins in non-fusion mode (cleanDist, css, fusionFiles, dts)', () => {
       const plugins = sisenseFusionPlugin({ manifest: MANIFEST_PATH });
-      expect(plugins).toHaveLength(2);
+      expect(plugins).toHaveLength(4);
     });
 
-    it('returns 3 plugins in fusion mode (includes zip plugin)', () => {
+    it('returns 4 plugins in fusion mode (cleanDist, css, fusionFiles, zip)', () => {
       process.argv = ['node', 'script.js', '--fusion'];
       const plugins = sisenseFusionPlugin({ manifest: MANIFEST_PATH });
-      expect(plugins).toHaveLength(3);
-    });
-  });
-
-  describe('resolveId', () => {
-    it('returns the prefixed virtual module id for the virtual module', () => {
-      const plugin = getFusionPlugin();
-      const result = plugin.resolveId('virtual:sisense-fusion-vite-plugin-module');
-      expect(result).toBe('\0virtual:sisense-fusion-vite-plugin-module');
-    });
-
-    it('returns undefined for unrelated module ids', () => {
-      const plugin = getFusionPlugin();
-      expect(plugin.resolveId('react')).toBeUndefined();
-      expect(plugin.resolveId('./some-file')).toBeUndefined();
-    });
-  });
-
-  describe('load', () => {
-    it('returns the manifest wrapper module for the resolved virtual module id', () => {
-      const plugin = getFusionPlugin();
-      const code = plugin.load('\0virtual:sisense-fusion-vite-plugin-module');
-      expect(code).toContain('export default manifest');
-      expect(code).toContain(`import manifest from "./src/index.tsx"`);
-    });
-
-    it('returns undefined for unrelated module ids', () => {
-      const plugin = getFusionPlugin();
-      expect(plugin.load('react')).toBeUndefined();
+      expect(plugins).toHaveLength(4);
     });
   });
 
@@ -129,17 +106,17 @@ describe('sisenseFusionPlugin', () => {
       expect(result!.build.lib.entry).toBe('./src/index.tsx');
     });
 
-    it('returns umd format with virtual module entry in fusion mode', () => {
+    it('returns iife format with manifest entry in fusion mode', () => {
       const plugin = getFusionPlugin(['node', 'script.js', '--fusion']);
       const result = plugin.config({}, { command: 'build', mode: 'production' });
-      expect(result!.build.lib.formats).toEqual(['umd']);
-      expect(result!.build.lib.entry).toBe('virtual:sisense-fusion-vite-plugin-module');
+      expect(result!.build.lib.formats).toEqual(['iife']);
+      expect(result!.build.lib.entry).toBe('./src/index.tsx');
     });
 
     it('sets plugin name as lib name', () => {
       const plugin = getFusionPlugin();
       const result = plugin.config({}, { command: 'build', mode: 'production' });
-      expect(result!.build.lib.name).toBe('my-plugin');
+      expect(result!.build.lib.name).toBe('plugin_my_plugin');
     });
 
     it('fileName always returns main.js', () => {
@@ -166,9 +143,8 @@ describe('sisenseFusionPlugin', () => {
         name: 'my-plugin',
         folderName: 'my-plugin',
         isEnabled: true,
-        pluginInfraVersion: 2,
-        source: ['main.js'],
-        version: '1.0.0',
+        pluginInfraVersion: 3,
+        main: 'main.js',
         skipCompilation: true,
       });
     });

@@ -6,7 +6,7 @@ title: SpecificWidgetOptions
 
 > **SpecificWidgetOptions**: `object`
 
-Options for a specific widget
+Dashboard-level options for a specific widget
 
 ## Type declaration
 

@@ -1,5 +1,6 @@
+import styled from '@emotion/styled';
+
 import { Z_INDEX_CELL_DROPZONE } from '@/domains/dashboarding/components/editable-layout/const';
-import styled from '@/infra/styled';
 
 import { DropType } from '../types';
 import { DroppableZone } from './droppable-zone';

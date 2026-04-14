@@ -6,7 +6,6 @@
  */
 
 // Dashboarding
-export { useDashboardPersistence } from '../domains/dashboarding/dashboard-model';
 export { translateFiltersAndRelationsToDto } from '../domains/dashboarding/dashboard-model/use-dashboard-model/dashboard-model-reducer/utils.js';
 export { UseDashboardModelActionType } from '../domains/dashboarding/dashboard-model/use-dashboard-model/dashboard-model-reducer/types.js';
 export { type DashboardDto } from '../infra/api/types/dashboard-dto';
@@ -57,8 +56,38 @@ export type {
 export { LoadingIndicator } from '../shared/components/loading-indicator.js';
 export { DataSchemaBrowser } from '../domains/data-browser/data-schema-browser/data-schema-browser.js';
 
+// Narrative
+export { type NarrativeQueryParams } from '../domains/narrative/core/build-narrative-request.js';
+export {
+  useGetWidgetNarrative,
+  type UseGetWidgetNarrativeOptions,
+  type UseGetWidgetNarrativeParams,
+  type UseGetWidgetNarrativeResult,
+} from '../domains/narrative/hooks/use-get-widget-narrative.js';
+export {
+  WidgetNarrative,
+  type WidgetNarrativeProps,
+} from '../domains/narrative/components/widget-narrative.js';
+
 // Others
 export type { NlqChartWidgetStyleOptions } from '../types';
 export type { RenderTitleHandler } from '../types';
 export { isChartWidgetProps } from '../domains/widgets/components/widget-by-id/utils.js';
 export { isPivotTableWidgetProps } from '../domains/widgets/components/widget-by-id/utils.js';
+
+// Dashboard persistence
+/* legacy */
+export { useDashboardPersistence } from '../domains/dashboarding/dashboard-model';
+
+/* recommended approach */
+export { createDashboardPersistenceManager } from '../domains/dashboarding/persistence/persistence-manager.js';
+export type { DashboardPersistenceManager } from '../domains/dashboarding/persistence/types.js';
+
+// Query Definition (read-only pills above widget in canvas)
+export {
+  QueryDefinition,
+  type QueryDefinitionProps,
+  type QueryPillCategory,
+  type QueryPillItem,
+  type QueryDefinitionViewModel,
+} from '../domains/visualizations/core/query-definition';

@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 
+import styled from '@emotion/styled';
+
 import { ChartRendererProps } from '@/domains/visualizations/components/chart/types.js';
 import { useThemeContext } from '@/infra/contexts/theme-provider/index.js';
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
-import styled from '@/infra/styled/index.js';
 import { useDateFormatter } from '@/shared/hooks/useDateFormatter.js';
 import { CalendarHeatmapSubtype, CalendarHeatmapViewType } from '@/types.js';
 

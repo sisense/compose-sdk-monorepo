@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import {
   Attribute,
   BaseMeasure,
@@ -19,7 +20,6 @@ import { useGetDataSourceFields } from '@/domains/data-browser/data-source-dimen
 import { useMenu } from '@/infra/contexts/menu-provider/hooks/use-menu';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import { withLazyLoading } from '@/shared/hooks/decorators/with-lazy-loading/index.js';
 import { MenuItemSection } from '@/types';
 

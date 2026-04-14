@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
 import merge from 'ts-deepmerge';
 import { DeepRequired } from 'ts-essentials';
 
 import { BackgroundFilterIcon } from '@/domains/filters/components/icons/background-filter-icon';
-import styled from '@/infra/styled';
 import { DEFAULT_TEXT_COLOR, MIN_TOUCH_TARGET_SIZE } from '@/shared/const';
 import type { MenuItem } from '@/shared/types/menu-item';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';

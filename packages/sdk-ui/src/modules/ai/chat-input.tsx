@@ -2,10 +2,10 @@ import { ChangeEvent, KeyboardEvent, useCallback, useLayoutEffect, useRef, useSt
 import { useTranslation } from 'react-i18next';
 
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 
 import { useChatConfig } from './chat-config.js';
 import ChatDropup, { isCommand } from './chat-dropup.js';

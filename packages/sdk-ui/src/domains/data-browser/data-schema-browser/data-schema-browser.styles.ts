@@ -1,5 +1,6 @@
+import styled from '@emotion/styled';
+
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
-import styled from '@/infra/styled';
 
 export const DimensionsBrowserContainer = styled.div<Themable>`
   height: 100%;

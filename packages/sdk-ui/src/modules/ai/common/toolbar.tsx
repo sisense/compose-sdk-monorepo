@@ -1,6 +1,6 @@
 import { forwardRef, ReactNode } from 'react';
 
-import styled from '@/infra/styled';
+import styled from '@emotion/styled';
 
 type ToolbarStyle = {
   textColor: string;

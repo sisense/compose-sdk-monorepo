@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import { CompleteThemeSettings } from '@/index';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import styled from '@/infra/styled';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
 
 import { colors } from '../../../infra/themes/colors';

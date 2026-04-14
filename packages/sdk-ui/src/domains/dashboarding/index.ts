@@ -9,6 +9,10 @@ export {
 } from './use-composed-dashboard.js';
 export { useDashboardTheme, type DashboardThemeParams } from './use-dashboard-theme.js';
 
+// Dashboard persistence
+export { createDashboardPersistenceManager } from './persistence/persistence-manager.js';
+export type { DashboardPersistenceManager } from './persistence/types.js';
+
 // Dashboard Hooks
 export * from './hooks/index.js';
 export type {

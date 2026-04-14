@@ -263,7 +263,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
    * @param sort - Sort definition
    * @returns An instance representing the sorted {@link LevelAttribute} of this instance
    */
-  sort(sort: Sort): Attribute {
+  sort(sort: Sort): LevelAttribute {
     return new DimensionalLevelAttribute(
       this.name,
       this.expression,

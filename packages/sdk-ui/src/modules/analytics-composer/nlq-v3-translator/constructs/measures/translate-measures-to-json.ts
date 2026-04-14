@@ -7,10 +7,10 @@ import {
   Sort,
 } from '@sisense/sdk-data';
 import type { SortDirection } from '@sisense/sdk-data';
+import { parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
 import omit from 'lodash-es/omit';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
-import { parseComposeCodeToFunctionCall } from '../../shared/utils/parse-compose-code.js';
 
 /** Runtime StyledMeasureColumn: wrapper with column and optional style (from chart dataOptions) */
 type StyledMeasureColumn = { column: Measure; sortType?: SortDirection; [key: string]: unknown };

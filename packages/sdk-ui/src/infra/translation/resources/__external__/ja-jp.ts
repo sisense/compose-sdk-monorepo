@@ -475,6 +475,15 @@ const translation: TranslationDictionary = {
   loadingOverlay: {
     label: 'コンテンツを読み込み中',
   },
+  queryDefinition: {
+    showMorePills: 'あと{{count}}件を表示',
+    showLess: '表示を減らす',
+    connectorBy: '別',
+    connectorWhere: '条件',
+    tooltipType: '種類',
+    tooltipColumn: '列',
+    tooltipFormula: '数式',
+  },
   measures: {
     countShort: '{{level}}の件数',
     countDistinct: 'ユニーク数',

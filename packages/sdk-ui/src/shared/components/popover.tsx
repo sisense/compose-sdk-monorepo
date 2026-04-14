@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
 
+import styled from '@emotion/styled';
 // This is the original custom popover, it has to use MUI Popover as a base component
 // eslint-disable-next-line rulesdir/prefer-custom-popover
 import MuiPopover from '@mui/material/Popover';
-
-import styled from '@/infra/styled';
 
 /* eslint-disable rulesdir/opacity-zero-needs-focus-visible */
 const StyledMuiPopover = styled(MuiPopover)`

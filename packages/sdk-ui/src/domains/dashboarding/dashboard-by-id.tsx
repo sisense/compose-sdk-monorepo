@@ -1,10 +1,8 @@
 import { useCallback, useMemo } from 'react';
 
 import * as dashboardModelTranslator from '@/domains/dashboarding/dashboard-model/dashboard-model-translator';
-import { UseDashboardModelActionType } from '@/domains/dashboarding/dashboard-model/use-dashboard-model/dashboard-model-reducer/types.js';
 import { useDashboardModelInternal } from '@/domains/dashboarding/dashboard-model/use-dashboard-model/use-dashboard-model';
 import { dashboardChangeEventToUseDashboardModelAction } from '@/domains/dashboarding/dashboard-model/use-dashboard-model/use-dashboard-model-utils';
-import { WidgetModel, widgetModelTranslator } from '@/domains/widgets/widget-model';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { TranslatableError } from '@/infra/translation/translatable-error';
@@ -13,14 +11,9 @@ import { useDefaults } from '@/shared/hooks/use-defaults';
 
 import { DEFAULT_DASHBOARD_BY_ID_CONFIG } from './constants.js';
 import { Dashboard } from './dashboard.js';
-import {
-  DashboardByIdProps,
-  DashboardChangeEvent,
-  DashboardConfig,
-  DashboardPersistenceManager,
-  SpecificWidgetOptions,
-  WidgetsPanelLayout,
-} from './types.js';
+import { createDashboardPersistenceManager } from './persistence/persistence-manager.js';
+import type { DashboardPersistenceManager } from './persistence/types.js';
+import { DashboardByIdProps, DashboardChangeEvent, DashboardConfig } from './types.js';
 
 /**
  * React component that renders a dashboard created in Sisense Fusion by its ID.
@@ -75,32 +68,7 @@ export const DashboardById = asSisenseComponent({
   );
 
   const persistence: DashboardPersistenceManager = useMemo(
-    () => ({
-      addWidget: async (widgetProps, widgetsPanelLayout, widgetOptions?: SpecificWidgetOptions) => {
-        const widgetModel = widgetModelTranslator.fromWidgetProps(widgetProps);
-        const processedAction = await dispatchChanges({
-          type: UseDashboardModelActionType.ADD_WIDGET,
-          payload: { widget: widgetModel, widgetsPanelLayout, widgetOptions },
-        });
-        const payload = processedAction.payload as {
-          widget: WidgetModel;
-          widgetsPanelLayout?: WidgetsPanelLayout;
-          widgetOptions?: SpecificWidgetOptions;
-        };
-        const widget = widgetModelTranslator.toWidgetProps(payload.widget);
-        return {
-          widget,
-          widgetsPanelLayout: payload.widgetsPanelLayout!,
-          widgetOptions: payload.widgetOptions,
-        };
-      },
-      patchWidget: async (widgetOid, patch) => {
-        await dispatchChanges({
-          type: UseDashboardModelActionType.PATCH_WIDGET,
-          payload: { widgetOid, patch },
-        });
-      },
-    }),
+    () => createDashboardPersistenceManager(dispatchChanges),
     [dispatchChanges],
   );
 

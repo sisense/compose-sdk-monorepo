@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import dayjs from 'dayjs';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import styled from '@/infra/styled';
 import { getSlightlyDifferentColor } from '@/shared/utils/color/index.js';
 
 import { CompleteThemeSettings } from '../../../../../types';

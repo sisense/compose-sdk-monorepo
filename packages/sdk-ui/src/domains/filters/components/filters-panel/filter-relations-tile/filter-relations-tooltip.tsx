@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
 import { Filter } from '@sisense/sdk-data';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import {
   FilterRelationsRules,
   getFilterRelationsDescription,

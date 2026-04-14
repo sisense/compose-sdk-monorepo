@@ -8,7 +8,7 @@ title: GetNlgInsightsRequest
 
 ### jaql
 
-> **jaql**: `Pick`\< `JaqlQueryPayload`, `"datasource"` \| `"filterRelations"` \| `"metadata"` \>
+> **jaql**: `Partial`\< `JaqlQueryPayload` \> & `Pick`\< `JaqlQueryPayload`, `"datasource"` \| `"metadata"` \>
 
 ***
 

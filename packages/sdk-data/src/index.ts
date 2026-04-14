@@ -19,6 +19,7 @@ export * from './dimensional-model/interfaces.js';
 export * from './dimensional-model/jaql-element.js';
 export * from './dimensional-model/types.js';
 export * from './interfaces.js';
+export * from './dimensional-model/parse-compose-code.js';
 
 /**
  * Functions to create date, text, or numeric filters on specified data.

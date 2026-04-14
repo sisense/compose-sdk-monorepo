@@ -1,10 +1,10 @@
 import { type ReactNode, useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import get from 'lodash-es/get';
 
 import { ThemeProvider, useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
-import styled from '@/infra/styled';
 import { WidgetContainerStyleOptions } from '@/types';
 
 import {

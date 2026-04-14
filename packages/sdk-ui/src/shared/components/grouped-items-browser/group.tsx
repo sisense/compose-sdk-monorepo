@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
+import styled from '@emotion/styled';
 import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 
 import { GroupHeader } from './group-header.js';
 import { ItemRow } from './item-row.js';

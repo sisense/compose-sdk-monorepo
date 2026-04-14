@@ -134,10 +134,28 @@ const translateScatterChartDataOptions = (
   };
 };
 
-export function getAttributes(
+/**
+ * `ChartDataOptionsInternal` is a union without a string index; keys are resolved per chart type.
+ * Normalizes optional single columns to a one-element array (e.g. scatter).
+ */
+function getChartDataOptionValuesForKey<T>(
+  dataOptions: ChartDataOptionsInternal,
+  key: string,
+): T[] {
+  const value = (dataOptions as Record<string, unknown>)[key];
+  if (value == null) return [];
+  return Array.isArray(value) ? (value as T[]) : [value as T];
+}
+
+/**
+ * Styled dimension columns used by charts for the same axes as {@link getAttributes}.
+ *
+ * @internal
+ */
+export function getStyledDimensionColumns(
   dataOptions: ChartDataOptionsInternal,
   chartType: ChartType,
-): Attribute[] {
+): StyledColumn[] {
   let targetDataOptionKeys: string[] = [];
 
   if (isScatter(chartType)) {
@@ -150,17 +168,20 @@ export function getAttributes(
     targetDataOptionKeys = ['locations'];
   }
 
-  const targetColumns = targetDataOptionKeys
-    .flatMap<StyledColumn>((key) => dataOptions[key] ?? [])
+  return targetDataOptionKeys
+    .flatMap<StyledColumn>((key) => getChartDataOptionValuesForKey<StyledColumn>(dataOptions, key))
     .filter((dataOption) => !isMeasureColumn(dataOption));
-
-  return targetColumns.map(({ column: attribute }) => attribute as Attribute);
 }
 
-export function getMeasures(
+/**
+ * Styled measure columns used by charts for the same axes as {@link getMeasures}.
+ *
+ * @internal
+ */
+export function getStyledMeasureColumns(
   dataOptions: ChartDataOptionsInternal,
   chartType: ChartType,
-): Measure[] {
+): StyledMeasureColumn[] {
   let targetDataOptionKeys: string[] = [];
 
   if (isIndicator(chartType)) {
@@ -182,11 +203,29 @@ export function getMeasures(
     targetDataOptionKeys = ['size', 'colorBy', 'details'];
   }
 
-  const targetColumns = targetDataOptionKeys
-    .flatMap<StyledMeasureColumn>((key) => dataOptions[key] ?? [])
+  return targetDataOptionKeys
+    .flatMap<StyledMeasureColumn>((key) =>
+      getChartDataOptionValuesForKey<StyledMeasureColumn>(dataOptions, key),
+    )
     .filter(isMeasureColumn);
+}
 
-  return targetColumns.map(({ column: measure }) => measure as Measure);
+export function getAttributes(
+  dataOptions: ChartDataOptionsInternal,
+  chartType: ChartType,
+): Attribute[] {
+  return getStyledDimensionColumns(dataOptions, chartType).map(
+    ({ column: attribute }) => attribute as Attribute,
+  );
+}
+
+export function getMeasures(
+  dataOptions: ChartDataOptionsInternal,
+  chartType: ChartType,
+): Measure[] {
+  return getStyledMeasureColumns(dataOptions, chartType).map(
+    ({ column: measure }) => measure as Measure,
+  );
 }
 
 export function translateTableDataOptions(dataOptions: TableDataOptions): TableDataOptionsInternal {

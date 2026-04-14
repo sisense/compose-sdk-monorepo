@@ -2,10 +2,10 @@ import { ReactNode, useCallback } from 'react';
 
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
+import styled from '@emotion/styled';
 
 import { Z_INDEX_ACTIVE_DRAGGABLE } from '@/domains/dashboarding/components/editable-layout/const';
 import { EditableLayoutDragData } from '@/domains/dashboarding/components/editable-layout/types';
-import styled from '@/infra/styled';
 import { DragHandleIcon } from '@/shared/icons/drag-handle-icon';
 
 const Wrapper = styled.div<{

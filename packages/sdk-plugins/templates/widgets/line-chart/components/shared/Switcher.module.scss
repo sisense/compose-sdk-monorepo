@@ -1,4 +1,4 @@
-@import './Icons';
+@use './Icons' as *;
 
 .component {
   display: inline-block;

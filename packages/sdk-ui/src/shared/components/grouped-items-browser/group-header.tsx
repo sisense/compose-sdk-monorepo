@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
 
+import styled from '@emotion/styled';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import { ArrowIcon } from '@/shared/icons/arrow-icon';
 
 import { GroupSecondaryActionConfig, ItemsGroup } from './types';

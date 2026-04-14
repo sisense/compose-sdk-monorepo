@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import React, { ReactElement } from 'react';
 
+import styled from '@emotion/styled';
 import ListItemButton from '@mui/material/ListItemButton';
 import Tooltip from '@mui/material/Tooltip';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 
 import { Item, ItemActionConfig, ItemSecondaryActionConfig } from './types.js';
 
@@ -112,7 +112,8 @@ export const ItemRow: React.FC<ItemRowProps> = ({
 
 type Activatable = { isActivated: boolean };
 const ItemRowButton = styled(ListItemButton, {
-  shouldForwardProp: (props) => props !== 'isActivated',
+  // Sisense theme must not be forwarded: MUI ListItemButton uses `theme` for the MUI theme API (e.g. transitions.create).
+  shouldForwardProp: (prop) => prop !== 'isActivated' && prop !== 'theme',
 })<Themable & Activatable>`
   display: flex;
   padding: 0px 8px 0px 40px;

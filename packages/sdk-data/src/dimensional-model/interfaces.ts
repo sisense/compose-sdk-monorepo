@@ -425,6 +425,14 @@ export interface LevelAttribute extends Attribute {
    * @internal
    */
   setGranularity(granularity: DateLevel): LevelAttribute;
+
+  /**
+   * Gets a sorted {@link LevelAttribute} with the given definition
+   *
+   * @param sort - Sort definition
+   * @returns A sorted instance of this level attribute
+   */
+  sort(sort: Sort): LevelAttribute;
 }
 
 /**

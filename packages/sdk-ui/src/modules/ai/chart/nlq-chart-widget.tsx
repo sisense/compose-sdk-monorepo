@@ -12,7 +12,7 @@ import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import type { GetNlgInsightsRequest, NlqResponseData } from '@/modules/ai';
 import { ChartInsights } from '@/modules/ai/chart/chart-insights';
 import LoadingDotsIcon from '@/modules/ai/icons/loading-dots-icon';
-import { useGetNlgInsightsInternal } from '@/modules/ai/use-get-nlg-insights';
+import { useGetNlgInsightsInternal } from '@/modules/ai/use-get-nlg-insights.js';
 import { widgetComposer } from '@/modules/analytics-composer';
 import { getFiltersArray } from '@/shared/utils/filter-relations';
 import { NlqChartWidgetStyleOptions } from '@/types';
@@ -67,6 +67,8 @@ const arePropsEqual = (prevProps: NlqChartWidgetProps, nextProps: NlqChartWidget
 
 /**
  * React component that renders a chart widget based on NLQ response data.
+ *
+ * @deprecated Prefer composing `ChartWidget` with `WidgetNarrative` when using `WidgetProps` for new embeds.
  *
  * @example
  * ```tsx

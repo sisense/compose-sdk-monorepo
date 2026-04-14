@@ -62,7 +62,10 @@ import {
   getFlattenWidgetDesign,
   getStyleWithWidgetDesign,
   toAreaWidgetStyle,
+  toIndicatorWidgetStyle,
   toLineWidgetStyle,
+  toPieWidgetStyle,
+  withWidgetDesign,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/index.js';
 import {
   FusionWidgetType,
@@ -88,6 +91,7 @@ import {
 } from '@/domains/widgets/components/widget-by-id/utils.js';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { AppSettings } from '@/infra/app/settings/settings.js';
+import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { ChartProps, PivotTableProps, TableProps } from '@/props';
 import {
@@ -97,7 +101,9 @@ import {
   CustomWidgetStyleOptions,
   DrilldownOptions,
   GenericDataOptions,
+  IndicatorStyleOptions,
   LineStyleOptions,
+  PieStyleOptions,
   PivotTableDrilldownOptions,
   PivotTableWidgetStyleOptions,
   TableStyleOptions,
@@ -107,6 +113,7 @@ import {
 
 import { WidgetDataOptions, WidgetModel } from '../widget-model';
 import { processTabberWidget } from './process-tabber-widget';
+import { isWidgetDesignEnabled } from './utils';
 
 /**
  * Translates a {@link WidgetModel} to the parameters for executing a query for the widget.
@@ -506,16 +513,6 @@ const getVariantColors = (themeSettings?: CompleteThemeSettings): string[] => {
 };
 
 /**
- * Checks if widget design style is enabled.
- * Pure function with default fallback.
- *
- * @param appSettings - Optional application settings
- * @returns True if widget design is enabled
- */
-const isWidgetDesignEnabled = (appSettings?: AppSettings): boolean =>
-  appSettings?.serverFeatures?.widgetDesignStyle?.active ?? true;
-
-/**
  * Processes unsupported custom widgets.
  * Pure function that creates data and style options for unknown widget types.
  *
@@ -838,12 +835,17 @@ function withOid(oid: string): (widgetModel: WidgetModel) => WidgetModel {
  *
  * @param widgetModel - The WidgetModel to be converted to a widgetDto
  * @param dataSource - The full datasource details
+ * @param themeSettings - The theme settings to be used for the widget design
+ * @param appSettings - The application settings to be used for the widget design
  * @returns WidgetDto
- * @internal
+ *
+ * @sisenseInternal
  */
 export function toWidgetDto(
   widgetModel: WidgetModel,
   dataSource?: JaqlDataSourceForDto,
+  themeSettings?: CompleteThemeSettings,
+  appSettings?: AppSettings,
 ): WidgetDto {
   const datasource = dataSource || widgetModel.dataSource;
   if (typeof datasource === 'string') throw new IncompleteWidgetTypeError('dataSource');
@@ -933,37 +935,7 @@ export function toWidgetDto(
       panels.push({ name: panelName, items });
     });
     subtype = subtype || 'indicator/numeric';
-
-    // Simple default style,  Empty style or {} cause errors
-    style = {
-      ...(subtype === 'indicator/gauge'
-        ? {
-            subtype: 'round',
-            skin: '1',
-          }
-        : {
-            subtype: 'simple',
-            skin: 'vertical',
-          }),
-      components: {
-        ticks: {
-          inactive: false,
-          enabled: true,
-        },
-        labels: {
-          inactive: false,
-          enabled: true,
-        },
-        title: {
-          inactive: false,
-          enabled: true,
-        },
-        secondaryTitle: {
-          inactive: true,
-          enabled: true,
-        },
-      },
-    } as WidgetStyle;
+    style = toIndicatorWidgetStyle(widgetModel.styleOptions as IndicatorStyleOptions);
   } else if (isCategorical(chartType)) {
     const items: PanelItem[] = (
       widgetModel.dataOptions as CategoricalChartDataOptions
@@ -990,17 +962,9 @@ export function toWidgetDto(
       });
     }
 
-    // Styling: TBD
     if (chartType === 'pie') {
       subtype = subtype || 'pie/basic';
-      style = {
-        convolution: {
-          enabled: true,
-          selectedConvolutionType: 'bySlicesCount',
-          minimalIndependentSlicePercentage: 3,
-          independentSlicesCount: 7,
-        },
-      } as WidgetStyle;
+      style = toPieWidgetStyle(widgetModel.styleOptions as PieStyleOptions);
     } else if (chartType === 'treemap' || chartType === 'sunburst') {
       subtype = subtype || chartType;
     } else if (chartType === 'funnel') {
@@ -1044,6 +1008,13 @@ export function toWidgetDto(
     items: filterItems,
   });
 
+  const styleWithWidgetDesign = withWidgetDesign(
+    style,
+    widgetModel.styleOptions,
+    themeSettings ?? getDefaultThemeSettings(),
+    appSettings,
+  );
+
   const widget: WidgetDto = {
     oid: widgetModel.oid || '',
     title: widgetModel.title,
@@ -1053,7 +1024,7 @@ export function toWidgetDto(
     metadata: {
       panels,
     },
-    style,
+    style: styleWithWidgetDesign,
     subtype,
   };
   return widget;

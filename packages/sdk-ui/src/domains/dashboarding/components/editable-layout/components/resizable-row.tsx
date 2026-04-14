@@ -2,12 +2,12 @@ import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { DndContext, DragMoveEvent } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import styled from '@emotion/styled';
 
 import {
   RESIZE_LINE_SIZE,
   Z_INDEX_RESIZE_OVERLAY,
 } from '@/domains/dashboarding/components/editable-layout/const';
-import styled from '@/infra/styled';
 import { useSyncedState } from '@/shared/hooks/use-synced-state';
 
 import { DraggableLine } from './draggable-line';

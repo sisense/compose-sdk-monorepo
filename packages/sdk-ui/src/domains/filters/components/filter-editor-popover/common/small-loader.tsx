@@ -1,4 +1,5 @@
-import styled from '@/infra/styled';
+import styled from '@emotion/styled';
+
 import { LoadingDots } from '@/shared/components/loading-dots';
 
 const Container = styled.div`

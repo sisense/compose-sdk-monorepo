@@ -163,4 +163,5 @@ export type {
   Member,
   FilterVariant,
   TranslationConfig,
+  Plugin,
 } from '@sisense/sdk-ui-preact';

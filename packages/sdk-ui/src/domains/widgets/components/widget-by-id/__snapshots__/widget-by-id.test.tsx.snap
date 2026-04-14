@@ -342,6 +342,7 @@ exports[`WidgetById > should handle complex prop combinations correctly > widget
         "format": "yyyy",
         "granularity": "Years",
         "name": "YEARS",
+        "sort": 2,
         "type": "datelevel",
       },
       "composeCode": "filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00'])",
@@ -379,7 +380,7 @@ exports[`WidgetById > should handle complex prop combinations correctly > widget
       "members": [
         "2013-01-01T00:00:00",
       ],
-      "name": "97472e6fe59",
+      "name": "e21a9426a37",
       "type": "filter",
     },
   ],
@@ -786,6 +787,7 @@ exports[`WidgetById > should include dashboard filters when includeDashboardFilt
         "format": "yyyy",
         "granularity": "Years",
         "name": "YEARS",
+        "sort": 2,
         "type": "datelevel",
       },
       "composeCode": "filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00'])",
@@ -823,7 +825,7 @@ exports[`WidgetById > should include dashboard filters when includeDashboardFilt
       "members": [
         "2013-01-01T00:00:00",
       ],
-      "name": "97472e6fe59",
+      "name": "e21a9426a37",
       "type": "filter",
     },
   ],

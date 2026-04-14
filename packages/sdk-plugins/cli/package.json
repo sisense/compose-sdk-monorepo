@@ -1,0 +1,59 @@
+{
+  "name": "@sisense/sdk-plugins-cli",
+  "homepage": "https://developer.sisense.com/guides/sdk/",
+  "description": "Compose SDK CLI command for creating and scaffolding plugin repositories",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sisense/compose-sdk-monorepo",
+    "directory": "packages/sdk-plugins/cli"
+  },
+  "keywords": [
+    "Sisense",
+    "Compose SDK"
+  ],
+  "version": "2.25.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "author": "Sisense",
+  "scripts": {
+    "prepare-plugins-repo": "node ./dist/cli.js create-plugin --dev-mode",
+    "build": "tsc --project tsconfig.json && node scripts/copy-templates.mjs",
+    "build:prod": "tsc --project tsconfig.json && node scripts/copy-templates.mjs",
+    "clean": "rm -rf dist coverage tsconfig.tsbuildinfo",
+    "format": "run -T prettier --write .",
+    "format:check": "run -T prettier --check .",
+    "lint": "run -T eslint . --quiet",
+    "lint:fix": "run lint --fix",
+    "vitest": "run -T vitest",
+    "test": "run vitest run",
+    "test:watch": "run vitest watch",
+    "test:coverage": "run vitest run --coverage --passWithNoTests"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.0.0",
+    "inquirer": "^9.2.15",
+    "replace-in-file": "^8.4.0",
+    "yargs": "17.7.1"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "@types/lodash": "^4.14.194",
+    "@types/yargs": "^17.0.22",
+    "@vitest/coverage-istanbul": "3.2.4",
+    "lodash": "^4.17.21",
+    "typescript": "4.8.4",
+    "vitest": "^3.2.4"
+  },
+  "packageManager": "yarn@3.2.3",
+  "volta": {
+    "extends": "../../../package.json"
+  }
+}

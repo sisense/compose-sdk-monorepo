@@ -2,8 +2,8 @@ import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 're
 
 import { DndContext, DragMoveEvent } from '@dnd-kit/core';
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
+import styled from '@emotion/styled';
 
-import styled from '@/infra/styled';
 import { useSyncedState } from '@/shared/hooks/use-synced-state';
 
 import {

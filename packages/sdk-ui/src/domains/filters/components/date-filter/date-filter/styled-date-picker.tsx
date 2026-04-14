@@ -1,11 +1,11 @@
 import DatePicker, { type DatePickerProps } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+import styled from '@emotion/styled';
 import classNames from 'classnames';
 
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
 import { getElementStateColor } from '@/infra/contexts/theme-provider/utils';
-import styled from '@/infra/styled/index.js';
 import { applyOpacity, getSlightlyDifferentColor } from '@/shared/utils/color/index.js';
 import { ElementStates } from '@/types';
 

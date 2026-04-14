@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
 import { getElementStateColor } from '@/infra/contexts/theme-provider/utils';
-import styled from '@/infra/styled';
 import { useDebouncedValue } from '@/shared/hooks/use-debounced-value';
 import { CloseIcon } from '@/shared/icons/close-icon';
 import { SearchIcon } from '@/shared/icons/search-icon';

@@ -58,9 +58,9 @@ The Sort definition
 
 ### sort
 
-> **sort**(`sort`): [`Attribute`](interface.Attribute.md)
+> **sort**(`sort`): [`LevelAttribute`](interface.LevelAttribute.md)
 
-Sorts the attribute by the given definition
+Gets a sorted [LevelAttribute](interface.LevelAttribute.md) with the given definition
 
 #### Parameters
 
@@ -70,9 +70,9 @@ Sorts the attribute by the given definition
 
 #### Returns
 
-[`Attribute`](interface.Attribute.md)
+[`LevelAttribute`](interface.LevelAttribute.md)
 
-A sorted instance of the attribute
+A sorted instance of this level attribute
 
 ## Properties
 

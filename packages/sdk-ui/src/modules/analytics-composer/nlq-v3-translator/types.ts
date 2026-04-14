@@ -1,7 +1,10 @@
 import {
+  type Arg,
+  type ArgValue,
   Attribute,
   Filter,
   FilterRelations,
+  type FunctionCall,
   JaqlDataSourceForDto,
   JSONArray,
   Measure,
@@ -28,6 +31,9 @@ export interface InternalDataSchemaContext {
 }
 
 export const DIMENSIONAL_NAME_PREFIX = 'DM.';
+
+/** Re-exported from `@sisense/sdk-data` (compose-code parse tree). */
+export type { Arg, ArgValue, FunctionCall };
 
 // Argument types for function validation
 export type ArgType =
@@ -69,21 +75,9 @@ export interface ArgSchema {
   required: boolean;
 }
 
-// Type to represent a function argument value (non-recursive base type)
-export type ArgValue = string | number | boolean | FunctionCall | string[];
-
-// Type to represent a function argument (includes context objects)
-// Context objects use ArgValue to avoid circular reference
-export type Arg = ArgValue | Record<string, ArgValue>;
 export type ProcessedArg = unknown;
 export type QueryElement = Filter | FilterRelations | Measure;
 export type FactoryFunction = (...args: unknown[]) => QueryElement;
-
-// Type to represent the structure parsed from the JSON
-export type FunctionCall = {
-  function: string;
-  args: Arg[];
-};
 
 /**
  * Context object passed to all custom processors containing runtime information

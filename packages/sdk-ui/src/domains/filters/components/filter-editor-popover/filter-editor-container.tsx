@@ -1,5 +1,6 @@
+import styled from '@emotion/styled';
+
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 
 export const FilterEditorContainer = styled.div<Themable>`
   display: flex;

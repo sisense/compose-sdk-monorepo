@@ -4,6 +4,7 @@
 import { describe } from 'vitest';
 
 import { Filter, LevelAttribute } from '../../interfaces.js';
+import { Sort } from '../../types.js';
 import * as filterFactory from '../factory.js';
 import { DateRangeFilter, ExcludeFilter } from '../filters.js';
 import {
@@ -109,6 +110,45 @@ describe('filter-from-jaql-util', () => {
           const expectedFilter = filterFactory.members(attribute, jaql.filter.members, { guid });
           expectEqualFilters(filter, expectedFilter);
         });
+      });
+
+      it('defaults datetime member filter attribute to descending sort when JAQL has no sort (native Sisense parity)', () => {
+        const jaql = {
+          title: 'Years',
+          table: 'Commerce',
+          column: 'Date',
+          dim: '[Commerce.Date (Calendar)]',
+          datatype: 'datetime',
+          level: 'years' as DatetimeLevel,
+          filter: {
+            explicit: true,
+            multiSelection: true,
+            all: true,
+          },
+        };
+
+        const attribute = createAttributeFromFilterJaql(jaql) as LevelAttribute;
+        expect(attribute.getSort()).toBe(Sort.Descending);
+      });
+
+      it('preserves explicit ascending sort from JAQL on datetime member filters', () => {
+        const jaql = {
+          title: 'Years',
+          table: 'Commerce',
+          column: 'Date',
+          dim: '[Commerce.Date (Calendar)]',
+          datatype: 'datetime',
+          level: 'years' as DatetimeLevel,
+          sort: 'asc' as const,
+          filter: {
+            explicit: true,
+            multiSelection: true,
+            all: true,
+          },
+        };
+
+        const attribute = createAttributeFromFilterJaql(jaql) as LevelAttribute;
+        expect(attribute.getSort()).toBe(Sort.Ascending);
       });
 
       test('should handle JAQL without table name', () => {

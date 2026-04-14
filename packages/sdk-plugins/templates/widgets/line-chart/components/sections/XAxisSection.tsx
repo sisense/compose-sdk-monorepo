@@ -87,6 +87,7 @@ export const XAxisSection = ({
   );
 };
 
+/* eslint-disable security/detect-object-injection */
 const TitleSection = ({
   xAxis,
   field,
@@ -155,3 +156,4 @@ const TitleSection = ({
     </tr>
   );
 };
+/* eslint-enable security/detect-object-injection */

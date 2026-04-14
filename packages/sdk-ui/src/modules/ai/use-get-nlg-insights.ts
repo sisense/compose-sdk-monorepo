@@ -1,50 +1,19 @@
 import { useCallback, useMemo } from 'react';
 
-import {
-  Attribute,
-  convertJaqlDataSource,
-  DataSource,
-  Filter,
-  FilterRelations,
-  getFilterListAndRelationsJaql,
-  JaqlDataSource,
-  Measure,
-} from '@sisense/sdk-data';
-import { getJaqlQueryPayload } from '@sisense/sdk-query-client';
 import { useQuery } from '@tanstack/react-query';
 
+import {
+  prepareGetNlgInsightsPayload,
+  type UseGetNlgInsightsParams,
+} from '@/domains/narrative/core/build-narrative-request.js';
+import type { GetNlgInsightsRequest } from '@/infra/api/narrative/narrative-api-types.js';
+import { getNarrative } from '@/infra/api/narrative/narrative-endpoints.js';
+import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { withTracking } from '@/infra/decorators/hook-decorators';
 
-import { useChatApi } from './api/chat-api-provider.js';
-import { GetNlgInsightsRequest } from './api/types.js';
-import { GetNlgInsightsProps } from './get-nlg-insights.js';
+import type { GetNlgInsightsProps } from './get-nlg-insights.js';
 
-/**
- * Parameters for {@link useGetNlgInsights} hook.
- */
-export interface UseGetNlgInsightsParams {
-  /** The data source that the query targets - e.g. `Sample ECommerce` */
-  dataSource: DataSource;
-
-  /** Dimensions of the query */
-  dimensions?: Attribute[];
-
-  /** Measures of the query */
-  measures?: Measure[];
-
-  /** Filters of the query */
-  filters?: Filter[] | FilterRelations;
-
-  /**
-   * Boolean flag to enable/disable API call by default
-   *
-   * If not specified, the default value is `true`
-   */
-  enabled?: boolean;
-
-  /** The verbosity of the NLG summarization */
-  verbosity?: 'Low' | 'High';
-}
+export { prepareGetNlgInsightsPayload, type UseGetNlgInsightsParams };
 
 /**
  * State for {@link useGetNlgInsights} hook.
@@ -64,44 +33,6 @@ export interface UseGetNlgInsightsState {
   refetch: () => void;
 }
 
-/** @internal */
-export function prepareGetNlgInsightsPayload(
-  params: UseGetNlgInsightsParams | GetNlgInsightsRequest,
-): GetNlgInsightsRequest {
-  if ('jaql' in params) {
-    return params;
-  } else {
-    const dataSource: JaqlDataSource = convertJaqlDataSource(params.dataSource);
-
-    const { filters = [], relations } = getFilterListAndRelationsJaql(params.filters);
-    const { metadata, filterRelations } = getJaqlQueryPayload(
-      {
-        dataSource: params.dataSource,
-        attributes: params.dimensions ?? [],
-        measures: params.measures ?? [],
-        filters,
-        filterRelations: relations,
-        highlights: [],
-      },
-      true,
-    );
-
-    const parameters: GetNlgInsightsRequest = {
-      jaql: {
-        datasource: dataSource,
-        metadata,
-        filterRelations,
-      },
-    };
-
-    if (params.verbosity) {
-      parameters.verbosity = params.verbosity;
-    }
-
-    return parameters;
-  }
-}
-
 /**
  *
  * @param params - {@link UseGetNlgInsightsParams}
@@ -112,17 +43,31 @@ export const useGetNlgInsightsInternal = (
   params: GetNlgInsightsProps | GetNlgInsightsRequest,
   enabled = true,
 ): UseGetNlgInsightsState => {
+  const { app } = useSisenseContext();
+  const httpClient = app?.httpClient;
+
+  const narrationOptions = useMemo(
+    () => ({
+      isUnifiedNarrationEnabled: app?.settings?.isUnifiedNarrationEnabled ?? false,
+      isSisenseAiEnabled: app?.settings?.isSisenseAiEnabled ?? false,
+    }),
+    [app?.settings?.isUnifiedNarrationEnabled, app?.settings?.isSisenseAiEnabled],
+  );
+
   const payload: GetNlgInsightsRequest = useMemo(() => {
     return prepareGetNlgInsightsPayload(params);
   }, [params]);
 
-  const api = useChatApi();
-
   const { data, error, isError, isLoading, isSuccess, refetch } = useQuery({
-    queryKey: ['getNlgInsights', payload, api],
-    queryFn: () => api?.ai.getNlgInsights(payload),
-    select: (data) => data?.data?.answer,
-    enabled: !!api && enabled,
+    queryKey: ['narrative', payload, narrationOptions],
+    queryFn: () => {
+      if (!httpClient) {
+        return Promise.reject(new Error('HttpClient is required for narrative requests'));
+      }
+      return getNarrative(httpClient, payload, narrationOptions);
+    },
+    select: (response) => response?.data?.answer,
+    enabled,
   });
 
   return {
@@ -132,7 +77,7 @@ export const useGetNlgInsightsInternal = (
     data,
     error,
     refetch: useCallback(() => {
-      refetch();
+      void refetch();
     }, [refetch]),
   };
 };

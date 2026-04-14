@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.24.0",
+  "version": "2.25.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -72,6 +72,7 @@
     "clean": "rm -rf ./dist && rm -rf ./coverage && rm -rf tsconfig.tsbuildinfo"
   },
   "dependencies": {
+    "@sisense/sdk-data": "workspace:*",
     "@sisense/sdk-ui-preact": "workspace:*",
     "deepmerge": "^4.3.1",
     "lodash-es": "^4.17.21",

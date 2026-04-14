@@ -1,15 +1,10 @@
-import {
-  Attribute,
-  convertDataSource,
-  convertSortDirectionToSort,
-  Filter,
-  FilterRelations,
-  isSortDirection,
-  Measure,
-  measureFactory,
-} from '@sisense/sdk-data';
+import { convertDataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
 import { BaseQueryParams } from '@/domains/query-execution/index.js';
+import {
+  adaptDimensionsForQuery,
+  adaptMeasuresForQuery,
+} from '@/domains/visualizations/core/chart-data-options/apply-styled-options-to-query.js';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../types.js';
 import { QueryInput } from '../../types.js';
@@ -22,53 +17,6 @@ import { translateMeasuresFromJSON } from '../constructs/measures/translate-meas
 import { createSchemaIndex } from '../shared/utils/schema-index.js';
 import { collectTranslationErrors } from '../shared/utils/translation-helpers.js';
 import type { DimensionTranslationItem, MeasureTranslationItem } from '../types.js';
-import { FORECAST_PREFIX, TREND_PREFIX } from './constants.js';
-
-function adaptDimensionsForQuery(items: DimensionTranslationItem[]): Attribute[] {
-  return items.map(({ attribute, style }) => {
-    const sortType = style?.sortType;
-    if (!sortType) return attribute;
-    const direction = typeof sortType === 'object' ? sortType.direction : sortType;
-    if (!isSortDirection(direction)) return attribute;
-    return attribute.sort(convertSortDirectionToSort(direction));
-  });
-}
-
-function isTrendMeasure(measure: Measure): boolean {
-  return measure.composeCode?.includes('measureFactory.trend') ?? false;
-}
-
-function isForecastMeasure(measure: Measure): boolean {
-  return measure.composeCode?.includes('measureFactory.forecast') ?? false;
-}
-
-function adaptMeasuresForQuery(items: MeasureTranslationItem[]): Measure[] {
-  const result: Measure[] = [];
-  for (const { measure, style } of items) {
-    const sortType = style?.sortType;
-    const baseMeasure =
-      sortType && isSortDirection(sortType)
-        ? measure.sort(convertSortDirectionToSort(sortType))
-        : measure;
-    result.push(baseMeasure);
-
-    if (style?.trend && !isTrendMeasure(measure)) {
-      result.push(
-        measureFactory.trend(measure, `${TREND_PREFIX}_${measure.name ?? 'Measure'}`, style.trend),
-      );
-    }
-    if (style?.forecast && !isForecastMeasure(measure)) {
-      result.push(
-        measureFactory.forecast(
-          measure,
-          `${FORECAST_PREFIX}_${measure.name ?? 'Measure'}`,
-          style.forecast,
-        ),
-      );
-    }
-  }
-  return result;
-}
 
 /**
  * Translates NLQ JSON format to CSDK BaseQueryParams object.

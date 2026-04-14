@@ -320,6 +320,12 @@ export default function CodeExample() {
           seriesCapacity: 100000,
           categoriesCapacity: undefined,
         },
+        convolution: {
+          enabled: true,
+          independentSlicesCount: 7,
+          minimalIndependentSlicePercentage: 3,
+          selectedConvolutionType: 'bySlicesCount',
+        },
       },
       drilldownOptions: {
         drilldownPaths: [],

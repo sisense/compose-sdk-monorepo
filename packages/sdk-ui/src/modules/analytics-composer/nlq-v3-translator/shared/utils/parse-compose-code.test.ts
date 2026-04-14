@@ -1,6 +1,5 @@
+import { parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
-
-import { parseComposeCodeToFunctionCall } from './parse-compose-code.js';
 
 describe('parseComposeCodeToFunctionCall', () => {
   it('parses simple function call with two string args', () => {

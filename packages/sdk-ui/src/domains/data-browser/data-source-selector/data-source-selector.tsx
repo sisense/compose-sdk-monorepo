@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -8,7 +9,6 @@ import { DataSource } from '@sisense/sdk-data';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
 import { getElementStateColor } from '@/infra/contexts/theme-provider/utils';
-import styled from '@/infra/styled';
 import { Popover } from '@/shared/components/popover';
 import { ApprovalIcon } from '@/shared/icons/approval-icon';
 import { ArrowIcon } from '@/shared/icons/arrow-icon';

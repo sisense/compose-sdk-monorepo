@@ -52,8 +52,10 @@ export const TableComponent = ({
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
   const [offset, setOffset] = useState(0);
-  const { filters: filterList, relations: filterRelations } =
-    getFilterListAndRelationsJaql(filters);
+  const { filters: filterList, relations: filterRelations } = useMemo(
+    () => getFilterListAndRelationsJaql(filters),
+    [filters],
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const paginationEl = useRef(null);
 

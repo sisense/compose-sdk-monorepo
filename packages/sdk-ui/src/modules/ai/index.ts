@@ -49,7 +49,7 @@ export {
   type CustomAiContext,
   type CustomAiContextProviderProps,
 } from './custom-ai-context-provider.js';
-export { prepareGetNlgInsightsPayload } from './use-get-nlg-insights.js';
+export { prepareGetNlgInsightsPayload } from '@/domains/narrative/core/build-narrative-request.js';
 export {
   getNlgInsightsFromWidget,
   type GetNlgInsightsFromWidgetOptions,

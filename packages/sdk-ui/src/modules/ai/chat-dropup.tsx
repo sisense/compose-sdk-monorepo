@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import Popper from '@mui/material/Popper';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import LoadingSpinner from '@/shared/components/loading-spinner';
 
 import DropupSection, { DropupSectionProps } from './common/dropup-section.js';

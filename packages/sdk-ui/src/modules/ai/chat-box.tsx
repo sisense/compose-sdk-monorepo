@@ -1,8 +1,9 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
+
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import { ChatContextDetails } from '@/modules/ai/api/types';
 
 import { useThemeContext } from '../..';

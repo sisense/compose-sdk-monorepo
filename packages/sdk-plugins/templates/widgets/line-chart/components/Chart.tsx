@@ -1,6 +1,5 @@
 import React from 'react';
 
-import type { Attribute } from '@sisense/sdk-data';
 import type { CustomVisualization, CustomVisualizationProps } from '@sisense/sdk-ui';
 import { LineChart } from '@sisense/sdk-ui';
 
@@ -13,9 +12,9 @@ export const Chart: CustomVisualization<LineChartProps> = (props) => {
     <LineChart
       dataSet={props.dataSource}
       dataOptions={{
-        category: props.dataOptions.categories?.map((d) => d.column as Attribute) ?? [],
+        category: props.dataOptions.categories?.map((d) => d.column) ?? [],
         value: props.dataOptions.values?.map((d) => d.column) ?? [],
-        breakBy: props.dataOptions.breakBy?.map((d) => d.column as Attribute) ?? [],
+        breakBy: props.dataOptions.breakBy?.map((d) => d.column) ?? [],
       }}
       filters={props.filters}
       styleOptions={{

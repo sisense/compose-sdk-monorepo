@@ -5,7 +5,8 @@ import {
   getGranularityFromJaql,
 } from '../../../utils.js';
 import { Attribute, BaseMeasure, CalculatedMeasure, LevelAttribute } from '../../interfaces.js';
-import { FilterJaql } from '../../types.js';
+import { isDatetime } from '../../simple-column-types.js';
+import { FilterJaql, Sort } from '../../types.js';
 import { CustomFormulaJaql, FilterJaqlInternal, RankingFilterJaql } from './types.js';
 
 /**
@@ -18,13 +19,22 @@ export const createAttributeFromFilterJaql = (
   jaql: FilterJaql | FilterJaqlInternal,
 ): Attribute | LevelAttribute => {
   const { dim, datatype, title, datasource: dataSource } = jaql;
-  return createAttributeHelper({
+  const sort = 'sort' in jaql ? jaql.sort : undefined;
+  const attribute = createAttributeHelper({
     expression: dim,
     dataType: datatype,
     granularity: getGranularityFromJaql(jaql),
     title,
     dataSource,
+    sort,
   });
+
+  // datetime member lists default to newest-first when JAQL has no sort.
+  if (isDatetime(datatype) && attribute.getSort() === Sort.None) {
+    return (attribute as LevelAttribute).sort(Sort.Descending);
+  }
+
+  return attribute;
 };
 
 /**

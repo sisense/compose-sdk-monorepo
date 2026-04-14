@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import dayjs from 'dayjs';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled/index.js';
 
 import { CalendarHeader } from './calendar-header.js';
 import { calculateNewDateRange } from './date-range-calculator.js';

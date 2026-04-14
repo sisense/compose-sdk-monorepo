@@ -1,7 +1,7 @@
+import styled from '@emotion/styled';
 import Switch from '@mui/material/Switch';
 
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 
 export const SisenseSwitchButton = styled(Switch)<Themable>(({ theme }) => {
   return {

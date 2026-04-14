@@ -1,16 +1,26 @@
 # Changelog
 
+## [2.25.0] - 2026-04-14
+
+### Added
+- Add plugins cross-framework support for internal testing
+- Add troubleshooting article for SSO in Safari browser
+
+### Changed
+- Change default date sort to descending in member filter tile to match Sisense Fusion
+- Fix infinite render in table component when using filter relations
+- Fix dashboard filter persistence race conditions
+- Upgrade `dompurify` to 3.3.2 in `sdk-ui` and `sdk-pivot-ui`
+
 ## [2.24.0] - 2026-03-31
 
 ### Added
-- Added maximum redirect limit for SSO authorization
+- Add maximum redirect limit for SSO authorization
 - Add CSV download support for widgets (internal testing)
-- Add plugin system support for `WidgetPlugins` registration and creation (internal testing)
 
 ### Changed
-- Added a fallback for checking `globals.features` to prevent console errors after failed authentication
 - Make custom formula context optional in `sdk-data`
-- Improve isolation of third-party library styles
+- Improved style isolation to avoid unintended overrides
 - Accessibility improvements:
   - Increase the minimum touch target size for interactive buttons
   - Improve form label accessibility

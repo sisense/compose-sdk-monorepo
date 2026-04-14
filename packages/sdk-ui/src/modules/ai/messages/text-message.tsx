@@ -1,11 +1,11 @@
 import { FC, PropsWithChildren } from 'react';
 
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import Markdown from 'markdown-to-jsx';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 
 type Alignable = {
   align: 'left' | 'right' | 'full';

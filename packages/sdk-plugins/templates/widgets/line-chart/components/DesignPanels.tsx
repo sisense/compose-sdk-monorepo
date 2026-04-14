@@ -29,3 +29,4 @@ export const DesignPanels = React.memo((props: DesignPanelProps<StyleOptions>) =
     </Container>
   );
 });
+DesignPanels.displayName = 'DesignPanels';

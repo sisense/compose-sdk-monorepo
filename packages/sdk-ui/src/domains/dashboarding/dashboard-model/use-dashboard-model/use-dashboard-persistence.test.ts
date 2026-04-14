@@ -304,7 +304,8 @@ describe('useDashboardPersistence', () => {
     expect(result.current.dashboard).toEqual(dashboardMock);
   });
 
-  it('should handle persistence errors gracefully', async () => {
+  it('should keep optimistic filter state when persistence fails', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     patchDashboardMock.mockRejectedValueOnce(new Error('Network error'));
 
     const { result } = renderHook(() =>
@@ -317,16 +318,23 @@ describe('useDashboardPersistence', () => {
     const newFilters = [filterFactory.members(DM.Commerce.Date, ['02/01/2021'])];
     const { dispatchChanges } = result.current;
 
-    await expect(
-      act(async () => {
-        await dispatchChanges({
-          type: UseDashboardModelActionType.FILTERS_UPDATE,
-          payload: newFilters,
-        });
-      }),
-    ).rejects.toThrow('Network error');
+    await act(async () => {
+      await dispatchChanges({
+        type: UseDashboardModelActionType.FILTERS_UPDATE,
+        payload: newFilters,
+      });
+    });
 
+    expect(result.current.dashboard).toEqual({
+      ...dashboardMock,
+      filters: newFilters,
+    });
     expect(patchDashboardMock).toHaveBeenCalledTimes(1);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Failed to update filters on dashboard:',
+      expect.objectContaining({ message: 'Network error' }),
+    );
+    consoleSpy.mockRestore();
   });
 
   it('should update and persist dashboard widgets deletion', async () => {

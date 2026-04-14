@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import Divider from '@mui/material/Divider';
 import get from 'lodash-es/get';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
-import styled from '@/infra/styled';
 import { InlineTextEditor } from '@/shared/components/inline-text-editor/inline-text-editor.js';
 import { AlignmentTypes, WidgetContainerStyleOptions } from '@/types';
 

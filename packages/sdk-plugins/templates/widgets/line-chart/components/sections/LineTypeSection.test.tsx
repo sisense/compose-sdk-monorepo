@@ -32,14 +32,14 @@ describe('LineTypeSection', () => {
   it('calls onClick with line/basic when Straight button is clicked', () => {
     const onClick = vi.fn();
     render(<LineTypeSection lineType="line/spline" onClick={onClick} />);
-    fireEvent.click(screen.getByText('Straight').closest('button')!);
+    fireEvent.click(screen.getByText('Straight').closest('button') as HTMLElement);
     expect(onClick).toHaveBeenCalledWith('line/basic');
   });
 
   it('calls onClick with line/spline when Smooth button is clicked', () => {
     const onClick = vi.fn();
     render(<LineTypeSection lineType="line/basic" onClick={onClick} />);
-    fireEvent.click(screen.getByText('Smooth').closest('button')!);
+    fireEvent.click(screen.getByText('Smooth').closest('button') as HTMLElement);
     expect(onClick).toHaveBeenCalledWith('line/spline');
   });
 });

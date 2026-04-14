@@ -1,7 +1,7 @@
 import { useDroppable } from '@dnd-kit/core';
+import styled from '@emotion/styled';
 
 import { EditableLayoutDropData } from '@/domains/dashboarding/components/editable-layout/types';
-import styled from '@/infra/styled';
 
 const Zone = styled.div<{ highlighted: boolean }>`
   position: absolute;

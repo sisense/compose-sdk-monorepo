@@ -34,6 +34,8 @@ export default defineConfig(({ mode }) => ({
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         ai: resolve(__dirname, 'src/ai/index.ts'),
+        'preact/compat': resolve(__dirname, 'src/preact-compat.ts'),
+        'preact/jsx-runtime': resolve(__dirname, 'src/preact-jsx-runtime.ts'),
         ...getTranslationEntries(),
       },
       name: '@sisense/sdk-ui-preact',

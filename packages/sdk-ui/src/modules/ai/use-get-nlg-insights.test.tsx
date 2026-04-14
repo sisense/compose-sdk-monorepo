@@ -2,9 +2,12 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 
 import { server } from '@/__mocks__/msw';
+import {
+  LEGACY_NARRATIVE_ENDPOINT,
+  UNIFIED_NARRATIVE_ENDPOINT,
+} from '@/infra/api/narrative/narrative-endpoints.js';
 
 import { AiTestWrapper } from './__mocks__/index.js';
-import { LEGACY_NARRATION_ENDPOINT, UNIFIED_NARRATION_ENDPOINT } from './api/narration-endpoints';
 import { GetNlgInsightsResponse } from './api/types.js';
 import { useGetNlgInsights, UseGetNlgInsightsParams } from './use-get-nlg-insights.js';
 
@@ -27,8 +30,8 @@ const renderHookWithWrapper = (params: UseGetNlgInsightsParams) => {
 describe('useGetNlgInsights', () => {
   beforeEach(() => {
     server.use(
-      http.post(`*/${UNIFIED_NARRATION_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
-      http.post(`*/${LEGACY_NARRATION_ENDPOINT}`, () => HttpResponse.json(mockNlgResponse)),
+      http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
+      http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => HttpResponse.json(mockNlgResponse)),
     );
   });
 
@@ -61,8 +64,8 @@ describe('useGetNlgInsights', () => {
 
   it('returns error when unsuccessful', async () => {
     server.use(
-      http.post(`*/${UNIFIED_NARRATION_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
-      http.post(`*/${LEGACY_NARRATION_ENDPOINT}`, () => HttpResponse.error()),
+      http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
+      http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => HttpResponse.error()),
     );
 
     const { result } = renderHookWithWrapper(mockNlgParams);

@@ -17,5 +17,13 @@
     "devDependencies": {
       "@types/lodash": "^4.17.0"
     }
+  },
+  {
+    "name": "[Example] Simple table",
+    "value": "simple-table",
+    "dependencies": {
+      "@mui/material": "^6.4.11"
+    },
+    "devDependencies": {}
   }
 ]

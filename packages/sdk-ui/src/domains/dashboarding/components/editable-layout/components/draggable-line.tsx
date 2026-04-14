@@ -1,7 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
 import { css } from '@emotion/react';
-
-import styled from '@/infra/styled';
+import styled from '@emotion/styled';
 
 import { RESIZE_LINE_SIZE, Z_INDEX_RESIZE_LINE } from '../const.js';
 

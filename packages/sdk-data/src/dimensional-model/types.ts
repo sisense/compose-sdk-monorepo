@@ -13,6 +13,7 @@ import type {
   JaqlDataSourceForDto,
 } from './filters/utils/types.js';
 import { Attribute } from './interfaces.js';
+import type { FunctionCall } from './parse-compose-code.js';
 
 /**
  * @internal
@@ -544,9 +545,19 @@ export type AnyObject = Record<string, any>;
 /**
  * JSON Value
  *
+ * Includes {@link FunctionCall} trees produced by compose-code parsing (serializable NLQ/query JSON).
+ *
  * @internal
  */
-export type JSONValue = string | number | boolean | undefined | null | JSONArray | JSONObject;
+export type JSONValue =
+  | string
+  | number
+  | boolean
+  | undefined
+  | null
+  | JSONArray
+  | JSONObject
+  | FunctionCall;
 
 /**
  * JSON Array

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { realpathSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -57,7 +58,11 @@ export async function run() {
 
   const formData = new FormData();
   // eslint-disable-next-line security/detect-non-literal-fs-filename
-  formData.append('plugins', new Blob([await readFile(zipFilePath)]), zippedFileName);
+  formData.append(
+    'plugins',
+    new Blob([new Uint8Array(await readFile(zipFilePath))]),
+    zippedFileName,
+  );
 
   const response = await fetch(`${url.replace(/\/$/, '')}/api/v1/plugins/import?overwrite=false`, {
     method: 'POST',
@@ -70,10 +75,11 @@ export async function run() {
   console.log('Import response', await response.text());
 }
 
-// Only auto-execute when run directly as a script, not when imported by tests
+// Only auto-execute when run directly as a script, not when imported by tests.
+// realpathSync resolves symlinks (Yarn workspaces symlink node_modules packages).
 const isMain =
   typeof process.argv[1] !== 'undefined' &&
-  fileURLToPath(import.meta.url) === resolve(process.argv[1]);
+  realpathSync(fileURLToPath(import.meta.url)) === realpathSync(resolve(process.argv[1]));
 
 if (isMain) {
   run().catch((e) => {

@@ -1,4 +1,4 @@
-@import '../shared/Color';
+@use '../shared/Color' as *;
 
 .center {
   display: flex;

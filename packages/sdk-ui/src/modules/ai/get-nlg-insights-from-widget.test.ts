@@ -4,8 +4,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import {
+  LEGACY_NARRATIVE_ENDPOINT,
+  UNIFIED_NARRATIVE_ENDPOINT,
+} from '@/infra/api/narrative/narrative-endpoints.js';
 
-import { LEGACY_NARRATION_ENDPOINT, UNIFIED_NARRATION_ENDPOINT } from './api/narration-endpoints';
 import { GetNlgInsightsResponse } from './api/types.js';
 import { getNlgInsightsFromWidget } from './get-nlg-insights-from-widget.js';
 
@@ -25,6 +28,17 @@ const mockChartWidgetProps: WidgetProps = {
   },
 };
 
+const mockPivotWidgetProps: WidgetProps = {
+  widgetType: 'pivot',
+  id: 'test-pivot',
+  dataSource: 'Sample ECommerce',
+  dataOptions: {
+    rows: [DM.Commerce.AgeRange],
+    columns: [{ column: DM.Commerce.Gender, includeSubTotals: true }],
+    values: [measureFactory.sum(DM.Commerce.Cost, 'Total Cost')],
+  },
+};
+
 const mockNlgResponse: GetNlgInsightsResponse = {
   responseType: 'Text',
   data: {
@@ -40,7 +54,7 @@ const narrationOptionsUnified = {
 describe('getNlgInsightsFromWidget', () => {
   beforeEach(() => {
     mockHttpClientPost.mockImplementation((endpoint: string) =>
-      endpoint === UNIFIED_NARRATION_ENDPOINT
+      endpoint === UNIFIED_NARRATIVE_ENDPOINT
         ? Promise.reject({ status: '404' })
         : Promise.resolve(mockNlgResponse),
     );
@@ -59,7 +73,7 @@ describe('getNlgInsightsFromWidget', () => {
     expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
     expect(mockHttpClientPost).toHaveBeenNthCalledWith(
       2,
-      LEGACY_NARRATION_ENDPOINT,
+      LEGACY_NARRATIVE_ENDPOINT,
       expect.objectContaining({
         jaql: expect.objectContaining({
           datasource: expect.any(Object),
@@ -69,20 +83,39 @@ describe('getNlgInsightsFromWidget', () => {
     );
   });
 
-  it('throws error when widgetProps is not ChartWidgetProps', async () => {
-    const pivotWidgetProps: WidgetProps = {
-      widgetType: 'pivot',
-      id: 'test-pivot',
-      dataSource: 'Sample ECommerce',
-      dataOptions: {
-        rows: [],
-        columns: [],
-        values: [],
+  it('returns insights for pivot widget props with pivot JAQL', async () => {
+    const result = await getNlgInsightsFromWidget(mockPivotWidgetProps, mockHttpClient, {
+      ...narrationOptionsUnified,
+    });
+
+    expect(result).toBe('This is a summary of the chart data');
+    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
+    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
+      2,
+      LEGACY_NARRATIVE_ENDPOINT,
+      expect.objectContaining({
+        jaql: expect.objectContaining({
+          format: 'pivot',
+          datasource: expect.any(Object),
+          metadata: expect.any(Array),
+        }),
+      }),
+    );
+  });
+
+  it('throws error when widgetProps is not chart or pivot', async () => {
+    const textProps: WidgetProps = {
+      id: 'widget-text',
+      widgetType: 'text',
+      styleOptions: {
+        html: 'Test',
+        vAlign: 'valign-middle',
+        bgColor: 'white',
       },
     };
 
-    await expect(getNlgInsightsFromWidget(pivotWidgetProps, mockHttpClient)).rejects.toThrow(
-      'Only ChartWidgetProps are supported for now',
+    await expect(getNlgInsightsFromWidget(textProps, mockHttpClient)).rejects.toThrow(
+      'Only chart or pivot widget props are supported',
     );
 
     expect(mockHttpClientPost).not.toHaveBeenCalled();
@@ -124,7 +157,7 @@ describe('getNlgInsightsFromWidget', () => {
 
     expect(mockHttpClientPost).toHaveBeenNthCalledWith(
       2,
-      LEGACY_NARRATION_ENDPOINT,
+      LEGACY_NARRATIVE_ENDPOINT,
       expect.objectContaining({
         verbosity: 'High',
       }),
@@ -182,7 +215,7 @@ describe('getNlgInsightsFromWidget', () => {
 
     expect(mockHttpClientPost).toHaveBeenNthCalledWith(
       2,
-      LEGACY_NARRATION_ENDPOINT,
+      LEGACY_NARRATIVE_ENDPOINT,
       expect.objectContaining({
         jaql: expect.objectContaining({
           metadata: expect.arrayContaining([
@@ -240,7 +273,7 @@ describe('getNlgInsightsFromWidget', () => {
     expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
     expect(mockHttpClientPost).toHaveBeenNthCalledWith(
       2,
-      LEGACY_NARRATION_ENDPOINT,
+      LEGACY_NARRATIVE_ENDPOINT,
       expect.objectContaining({
         jaql: expect.objectContaining({
           datasource: expect.any(Object),
@@ -259,7 +292,7 @@ describe('getNlgInsightsFromWidget', () => {
     expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
     expect(mockHttpClientPost).toHaveBeenNthCalledWith(
       2,
-      LEGACY_NARRATION_ENDPOINT,
+      LEGACY_NARRATIVE_ENDPOINT,
       expect.objectContaining({ jaql: expect.any(Object) }),
     );
   });

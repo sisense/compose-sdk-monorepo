@@ -11,11 +11,11 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.24.0",
+  "version": "2.25.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./vite-plugin-fusion": "./dist/vite-plugin-fusion.js",
+    "./vite-plugin-fusion": "./dist/vite-plugin/vite-plugin-fusion.js",
     "./scripts/deploy": "./dist/scripts/deploy.js"
   },
   "main": "./dist/index.js",
@@ -24,7 +24,7 @@
   "typesVersions": {
     "*": {
       "vite-plugin-fusion": [
-        "./dist/vite-plugin-fusion.d.ts"
+        "./dist/vite-plugin/vite-plugin-fusion.d.ts"
       ],
       "scripts/deploy": [
         "./dist/scripts/deploy.d.ts"
@@ -34,8 +34,10 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Sisense",
   "scripts": {
-    "build": "tsc --project tsconfig.scripts.json && vite build",
-    "build:prod": "tsc --project tsconfig.scripts.json && vite build --mode production",
+    "build": "run build:scripts && run build:vite-plugin && vite build",
+    "build:prod": "run build:scripts && run build:vite-plugin && vite build --mode production",
+    "build:vite-plugin": "rm -f dist/vite-plugin-fusion.js dist/vite-plugin-fusion.d.ts && tsc --project tsconfig.plugin.json",
+    "build:scripts": "tsc --project tsconfig.scripts.json",
     "clean": "rm -rf dist coverage tsconfig.tsbuildinfo",
     "format": "run -T prettier --write .",
     "format:check": "run -T prettier --check .",
@@ -48,6 +50,7 @@
   },
   "dependencies": {
     "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vite-plugin-dts": "^3.9.1",
     "vite-plugin-zip-pack": "^1.2.4"
   },
   "devDependencies": {
@@ -61,7 +64,6 @@
     "react-dom": "18.3.1",
     "typescript": "4.8.4",
     "vite": "^5",
-    "vite-plugin-dts": "^2.3.0",
     "vitest": "^3.2.4"
   },
   "peerDependencies": {

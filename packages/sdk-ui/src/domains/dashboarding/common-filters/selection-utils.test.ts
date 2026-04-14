@@ -6,6 +6,7 @@ import {
   BoxplotDataPoint,
   CalendarHeatmapDataPoint,
   DataPoint,
+  GenericDataOptions,
   ScatterDataPoint,
   ScattermapDataPoint,
 } from '@/types';
@@ -147,6 +148,17 @@ describe('selection-utils', () => {
       expect(selectableAttributes).toEqual([]);
     });
 
+    it('should ignore non-array fields in custom widget dataOptions (e.g. pivot grandTotals)', () => {
+      const selectableAttributes = getSelectableWidgetAttributes('custom', {
+        rows: [DM.Commerce.AgeRange],
+        columns: [DM.Commerce.Gender],
+        values: [],
+        grandTotals: { rows: true, columns: true },
+      } as unknown as GenericDataOptions);
+
+      expect(selectableAttributes).toHaveLength(2);
+    });
+
     it('should return selectable attributes for "pivot" widget', () => {
       const selectableAttributes = getSelectableWidgetAttributes('pivot', {
         rows: [attributes[0]],
@@ -196,6 +208,20 @@ describe('selection-utils', () => {
   describe('getWidgetSelections()', () => {
     it('should return no selections for "custom" widget', () => {
       const selections = getWidgetSelections('custom', {}, []);
+      expect(selections).toEqual([]);
+    });
+
+    it('should handle custom widget dataOptions with pivot grandTotals for selections', () => {
+      const selections = getWidgetSelections(
+        'custom',
+        {
+          rows: [DM.Commerce.AgeRange],
+          columns: [DM.Commerce.Gender],
+          values: [],
+          grandTotals: { rows: true, columns: true },
+        } as unknown as GenericDataOptions,
+        [],
+      );
       expect(selections).toEqual([]);
     });
 

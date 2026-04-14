@@ -131,7 +131,32 @@ reviews:
 
   # Path Instructions - Provide specific additional guidelines for code review based on file paths.
   # Default: []
-  path_instructions: []
+  path_instructions:
+    - path: 'docs-md/sdk/modules/**/*.md'
+      instructions: |
+        These files are auto-generated public API documentation (TypeDoc markdown output).
+        When reviewing changes to these files, focus on the following:
+
+        1. **Breaking changes** — flag any removed properties, parameters, type aliases, interfaces,
+           or functions. Removals are potentially breaking for external consumers of the SDK.
+
+        2. **Type signature changes** — highlight when a property or parameter changes its type,
+           becomes required vs optional, or changes its generic constraints. These may be
+           breaking even if the name is unchanged.
+
+        3. **New additions** — note new exported props, interfaces, type aliases, or functions.
+           Check that descriptions are clear and complete.
+
+        4. **Deprecations** — flag if any deprecation notices have been added or removed.
+
+        5. **Consistency** — verify that equivalent items across sdk-ui, sdk-ui-angular, and
+           sdk-ui-vue have consistent descriptions and signatures where applicable.
+
+        Do NOT flag minor prose/wording improvements unless they introduce inaccuracies.
+        Do NOT flag formatting-only changes (whitespace, newlines).
+
+        When you detect a breaking change, add an inline comment on the relevant line and
+        include a 🚨 emoji in your comment so it is easily spotted in the review.
 
   # Abort the in-progress review if the pull request is closed or merged.
   # Default: true

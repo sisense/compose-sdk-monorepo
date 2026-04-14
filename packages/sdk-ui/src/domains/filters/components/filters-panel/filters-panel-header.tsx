@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import { PlusIcon } from '@/shared/icons/plus-icon';
 
 const PanelHeader = styled.div<Themable>`

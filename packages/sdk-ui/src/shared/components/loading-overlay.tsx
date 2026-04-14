@@ -2,9 +2,10 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
+
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context';
-import styled from '@/infra/styled';
 
 import { LoadingDots } from './loading-dots.js';
 

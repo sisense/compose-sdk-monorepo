@@ -1,6 +1,10 @@
-import { JSONArray, Measure } from '@sisense/sdk-data';
+import { JSONArray, Measure, parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
 
 import { BaseQueryParams } from '@/domains/query-execution/index.js';
+import {
+  FORECAST_PREFIX,
+  TREND_PREFIX,
+} from '@/domains/visualizations/core/chart-data-options/apply-styled-options-to-query.js';
 
 import { NlqResponseJSON, NlqTranslationError, NlqTranslationResult } from '../../types.js';
 import { translateDimensionsToJSON } from '../constructs/dimensions/translate-dimensions-to-json.js';
@@ -9,12 +13,10 @@ import {
   translateHighlightsToJSON,
 } from '../constructs/filters/translate-filters-to-json.js';
 import { translateMeasuresToJSON } from '../constructs/measures/translate-measures-to-json.js';
-import { parseComposeCodeToFunctionCall } from '../shared/utils/parse-compose-code.js';
 import {
   collectTranslationErrors,
   stripDelimitersFromJson,
 } from '../shared/utils/translation-helpers.js';
-import { FORECAST_PREFIX, TREND_PREFIX } from './constants.js';
 
 /** Query-level styled measure: base Measure + optional trend/forecast (column is Measure, not MeasureColumn). */
 type StyledMeasureColumnForQuery = {

@@ -34,7 +34,9 @@ export default defineConfig(({ mode }) => ({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['vue'],
+      // Externalize @sisense/* so Preact (via sdk-ui-preact) is not duplicated in the
+      // bundle — plugin widgets and the host must share one Preact runtime.
+      external: ['vue', /@sisense\//],
     },
   },
   plugins: [

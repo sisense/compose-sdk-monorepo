@@ -12,9 +12,18 @@ vi.mock('@sisense/sdk-ui', () => ({
   ThemeProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-const mockChartComponent = vi.fn(() => <div data-testid="chart-component" />);
-const mockDesignPanelComponent = vi.fn(({ onChange }: { onChange: (opts: object) => void }) => (
-  <button data-testid="design-panel" onClick={() => onChange({ updated: true })} />
+// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+const mockChartComponent = vi.fn((_props: CustomVisualizationProps) => (
+  <div data-testid="chart-component" />
+));
+
+type DesignPanelTestProps = {
+  styleOptions?: Record<string, unknown>;
+  onChange: (opts: object) => void;
+};
+
+const mockDesignPanelComponent = vi.fn((props: DesignPanelTestProps) => (
+  <button data-testid="design-panel" onClick={() => props.onChange({ updated: true })} />
 ));
 
 // The test fixtures intentionally omit non-essential WidgetPlugin fields.

@@ -1,9 +1,10 @@
 import { ReactNode } from 'react';
 
+import styled from '@emotion/styled';
+
 import { WidgetsPanelRow } from '@/domains/dashboarding/dashboard-model';
 import { checkForAutoHeight } from '@/domains/dashboarding/utils';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
-import styled from '@/infra/styled';
 
 import { WIDGET_HEADER_HEIGHT } from '../const';
 import { getRowHeight, getRowMaxHeight, getRowMinHeight } from '../helpers';

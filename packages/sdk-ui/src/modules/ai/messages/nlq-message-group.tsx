@@ -1,10 +1,10 @@
 /* eslint-disable complexity */
 import { useCallback, useState } from 'react';
 
+import styled from '@emotion/styled';
 import lowerFirst from 'lodash-es/lowerFirst';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import styled from '@/infra/styled';
 
 import { GetNlgInsightsRequest, NlqResponseData } from '../api/types.js';
 import InsightsButton from '../buttons/insights-button.js';

@@ -479,6 +479,15 @@ const translation: TranslationDictionary = {
   loadingOverlay: {
     label: 'Загрузка содержимого',
   },
+  queryDefinition: {
+    showMorePills: 'Показать ещё {{count}}',
+    showLess: 'Показать меньше',
+    connectorBy: 'по',
+    connectorWhere: 'где',
+    tooltipType: 'Тип',
+    tooltipColumn: 'Столбец',
+    tooltipFormula: 'Формула',
+  },
   measures: {
     countShort: 'Кол-во {{level}}',
     countDistinct: 'Количество уникальных',

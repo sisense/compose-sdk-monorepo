@@ -1,11 +1,11 @@
 import { FunctionComponent, type MouseEvent } from 'react';
 
+import styled from '@emotion/styled';
 import DOMPurify from 'dompurify';
 import get from 'lodash-es/get';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
-import styled from '@/infra/styled';
 import { CompleteThemeSettings, TextWidgetDataPoint, TextWidgetStyleOptions } from '@/types';
 
 import { WidgetMenuButton } from '../../shared/widget-header/widget-menu-button';

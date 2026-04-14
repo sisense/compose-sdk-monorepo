@@ -12,32 +12,32 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
         style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"
       >
         <div
-          class="csdk-accessible css-i1ycqm"
+          class="csdk-accessible css-r5x6lv"
           data-component="widget-container-root"
         >
           <div
-            class="css-1f0f6z6"
+            class="css-1c5e0o1"
             data-component="widget-container-layout"
           >
             <div
-              class="css-ei3g9r"
+              class="css-elaa7d"
               data-component="widget-container-card"
             >
               <div
                 data-component="widget-header"
               >
                 <div
-                  class="css-1p6ds3l"
+                  class="css-syqvl0"
                   data-component="header-container"
                 >
                   <div
-                    class="css-mdfanr"
+                    class="css-1tbf5m4"
                     data-component="title"
                   >
                     Pivot table widget title
                   </div>
                   <div
-                    class="css-15r4p8k"
+                    class="css-1qt6g1x"
                     data-component="toolbar-container"
                   >
                     <button
@@ -65,7 +65,7 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
                 </div>
               </div>
               <div
-                class="css-1220o1q"
+                class="css-17utbja"
                 data-component="widget-container-content"
               >
                 <div

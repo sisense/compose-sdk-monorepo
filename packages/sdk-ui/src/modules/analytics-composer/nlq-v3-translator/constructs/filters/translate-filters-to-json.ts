@@ -1,8 +1,12 @@
-import { Filter, FilterRelations, isFilterRelations, JSONArray } from '@sisense/sdk-data';
+import {
+  Filter,
+  FilterRelations,
+  isFilterRelations,
+  JSONArray,
+  parseComposeCodeToFunctionCall,
+} from '@sisense/sdk-data';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
-import { parseComposeCodeToFunctionCall } from '../../shared/utils/parse-compose-code.js';
-import { FunctionCall } from '../../types.js';
 
 const UNKNOWN_ERROR_MESSAGE = 'Unknown error';
 
@@ -64,7 +68,7 @@ export function translateFiltersToJSON(
   }
 
   // Handle Filter array
-  const results: FunctionCall[] = [];
+  const results: JSONArray = [];
   filters.forEach((filter, index) => {
     if (!filter.composeCode) {
       errors.push({

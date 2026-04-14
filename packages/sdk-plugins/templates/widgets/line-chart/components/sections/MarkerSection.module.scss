@@ -1,4 +1,4 @@
-@import '../shared/Color';
+@use '../shared/Color' as *;
 
 .title {
   padding-top: 15px;

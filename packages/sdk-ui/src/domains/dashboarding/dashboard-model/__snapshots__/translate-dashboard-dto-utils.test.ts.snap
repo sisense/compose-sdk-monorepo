@@ -43,6 +43,7 @@ exports[`baseFilterToFilterDto > should return correctly translated cascading fi
       "title": "Gender",
     },
   ],
+  "locked": false,
 }
 `;
 
@@ -67,6 +68,7 @@ exports[`baseFilterToFilterDto > should return correctly translated disabled fil
     "table": "Commerce",
     "title": "Gender",
   },
+  "locked": false,
 }
 `;
 
@@ -145,5 +147,6 @@ exports[`baseFilterToFilterDto > should return correctly translated simple filte
     "table": "Commerce",
     "title": "Gender",
   },
+  "locked": false,
 }
 `;

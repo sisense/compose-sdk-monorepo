@@ -4,7 +4,13 @@
     "composite": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "suppressImplicitAnyIndexErrors": false
+    "suppressImplicitAnyIndexErrors": false,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@sisense/sdk-ui": ["../../sdk-ui/dist/packages/sdk-ui/src/index.d.ts"]
+    }
   },
   "include": ["./src/**/*"],
   "exclude": ["./scripts/**/*"],

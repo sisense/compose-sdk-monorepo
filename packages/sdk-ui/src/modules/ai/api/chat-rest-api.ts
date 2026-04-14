@@ -1,8 +1,8 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 
+import { getNarrative } from '@/infra/api/narrative/narrative-endpoints.js';
 import { ChatContextDetails } from '@/modules/ai/api/types';
 
-import { getNarrations } from './narration-endpoints.js';
 import type {
   Chat,
   ChatContext,
@@ -46,7 +46,7 @@ export class ChatRestApi {
 
   // ==== /v2/ai endpoints ====
   private getNlgInsights = (request: GetNlgInsightsRequest) =>
-    getNarrations(this.httpClient, request, {
+    getNarrative(this.httpClient, request, {
       isUnifiedNarrationEnabled: this.isUnifiedNarrationEnabled,
       isSisenseAiEnabled: this.isSisenseAiEnabled,
     });

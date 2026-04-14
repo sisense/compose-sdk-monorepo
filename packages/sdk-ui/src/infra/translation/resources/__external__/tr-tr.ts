@@ -477,6 +477,15 @@ const translation: TranslationDictionary = {
   loadingOverlay: {
     label: 'İçerik yükleniyor',
   },
+  queryDefinition: {
+    showMorePills: '{{count}} tane daha göster',
+    showLess: 'Daha az göster',
+    connectorBy: 'göre',
+    connectorWhere: 'koşul',
+    tooltipType: 'Tür',
+    tooltipColumn: 'Sütun',
+    tooltipFormula: 'Formül',
+  },
   measures: {
     countShort: '{{level}} sayısı',
     countDistinct: 'Benzersiz say',

@@ -45,4 +45,4 @@ const plugin: WidgetPlugin<LineChartProps, StyleOptions> = {
   },
 };
 
-export default plugin;
+export default plugin as WidgetPlugin;

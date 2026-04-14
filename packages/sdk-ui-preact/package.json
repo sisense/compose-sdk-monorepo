@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.24.0",
+  "version": "2.25.0",
   "type": "module",
   "exports": {
     ".": {
@@ -31,6 +31,18 @@
       "require": "./dist/translations/*.cjs",
       "import": "./dist/translations/*.js",
       "default": "./dist/translations/*.js"
+    },
+    "./preact/compat": {
+      "types": "./dist/preact/compat.d.ts",
+      "import": "./dist/preact/compat.js",
+      "require": "./dist/preact/compat.cjs",
+      "default": "./dist/preact/compat.js"
+    },
+    "./preact/jsx-runtime": {
+      "types": "./dist/preact/jsx-runtime.d.ts",
+      "import": "./dist/preact/jsx-runtime.js",
+      "require": "./dist/preact/jsx-runtime.cjs",
+      "default": "./dist/preact/jsx-runtime.js"
     }
   },
   "main": "./dist/index.cjs",
@@ -43,6 +55,12 @@
       ],
       "translations/*": [
         "./dist/translations/*.d.ts"
+      ],
+      "preact/compat": [
+        "./dist/preact/compat.d.ts"
+      ],
+      "preact/jsx-runtime": [
+        "./dist/preact/jsx-runtime.d.ts"
       ]
     }
   },

@@ -2,8 +2,9 @@ import type { FunctionComponent } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
+
 import { FilterContentDisplay } from '@/domains/filters/components/common';
-import styled from '@/infra/styled';
 
 import { useThemeContext } from '../../../../infra/contexts/theme-provider';
 import { SelectedMember } from './members-reducer';

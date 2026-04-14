@@ -1,9 +1,9 @@
 import { CSSProperties } from 'react';
 
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 
 const MIN_ALLOWED_WIDTH = 500;
 const MIN_ALLOWED_HEIGHT = 500;

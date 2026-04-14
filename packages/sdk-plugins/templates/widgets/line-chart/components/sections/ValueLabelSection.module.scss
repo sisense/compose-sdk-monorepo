@@ -1,4 +1,4 @@
-@import '../shared/Color';
+@use '../shared/Color' as *;
 
 .valueLabelsContainer {
   margin-left: 13px;

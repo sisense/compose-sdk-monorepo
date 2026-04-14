@@ -4,6 +4,12 @@
     "rootDir": ".",
     "composite": false
   },
-  "include": ["src/**/*", "scripts/**/*", "vite-plugin/**/*", "vitest.setup.ts"],
+  "include": [
+    "src/**/*",
+    "scripts/**/*",
+    "vite-plugin/**/*",
+    "vitest.setup.ts",
+    "package-constraints.test.ts"
+  ],
   "exclude": []
 }

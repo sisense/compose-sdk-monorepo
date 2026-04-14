@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
-import styled from '@/infra/styled';
+import styled from '@emotion/styled';
+
 import { ArrowCollapseIcon } from '@/shared/icons/arrow-collapse-icon';
 
 const ArrowWrapper = styled('div', {

@@ -24,8 +24,8 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { Transform } from '@dnd-kit/utilities';
+import styled from '@emotion/styled';
 
-import styled from '@/infra/styled';
 import { MIN_TOUCH_TARGET_SIZE } from '@/shared/const';
 
 export interface RenderItemProps {

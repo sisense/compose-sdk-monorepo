@@ -29,7 +29,10 @@ vi.mock('@emotion/styled', async () => {
     () =>
     ({ children }: { children?: React.ReactNode }) =>
       createElement(tag, {}, children);
-  const styled: any = (tag: string) => makeTaggedTemplate(tag);
+  const styled = Object.assign(
+    (tag: string) => makeTaggedTemplate(tag),
+    {} as Record<string, ReturnType<typeof makeTaggedTemplate>>,
+  );
   ['div', 'span', 'section', 'article', 'main', 'aside', 'p'].forEach((tag) => {
     styled[tag] = makeTaggedTemplate(tag);
   });
@@ -40,6 +43,11 @@ const baseStyleOptions = {
   legend: { enabled: true },
   subtype: 'line/basic',
 } as unknown as StyleOptions;
+
+// React 19 passes `undefined` as the second argument to functional components,
+// so assertions target only the first argument (props) via mock.lastCall![0].
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const lastProps = () => mockLineDesignPanel.mock.lastCall![0] as Record<string, unknown>;
 
 describe('DesignPanels (line-chart template)', () => {
   const mockOnChange = vi.fn();
@@ -61,10 +69,7 @@ describe('DesignPanels (line-chart template)', () => {
 
   it('passes styleOptions to LineDesignPanel', () => {
     render(<DesignPanels styleOptions={baseStyleOptions} onChange={mockOnChange} />);
-    expect(mockLineDesignPanel).toHaveBeenCalledWith(
-      expect.objectContaining({ styleOptions: baseStyleOptions }),
-      expect.anything(),
-    );
+    expect(lastProps()).toEqual(expect.objectContaining({ styleOptions: baseStyleOptions }));
   });
 
   it('calls onChange with merged styleOptions when LineDesignPanel triggers a change', () => {

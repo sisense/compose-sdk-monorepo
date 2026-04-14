@@ -36,9 +36,12 @@ export enum UseDashboardModelActionType {
  * Fields that can be safely patched on a widget without full DTO reconstruction.
  * Intentionally narrow — extend only when lossless roundtrip is guaranteed.
  *
- * @internal
+ * @sisenseInternal
  */
 export type WidgetPatch = {
+  /**
+   * The title of the widget.
+   */
   title?: string;
 };
 

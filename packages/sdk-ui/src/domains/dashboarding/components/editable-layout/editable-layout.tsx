@@ -10,6 +10,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
+import styled from '@emotion/styled';
 import flow from 'lodash-es/flow';
 import isNumber from 'lodash-es/isNumber';
 import isUndefined from 'lodash-es/isUndefined';
@@ -24,7 +25,6 @@ import { Widget } from '@/domains/widgets/components/widget';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { withHeaderMenuItem } from '@/domains/widgets/helpers/header-menu-utils';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import styled from '@/infra/styled';
 import { useSyncedState } from '@/shared/hooks/use-synced-state';
 import { composeTitleHandlers } from '@/shared/utils/combine-handlers';
 import type { RenderTitleHandler } from '@/types';

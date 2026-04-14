@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import isNumber from 'lodash-es/isNumber';
 import isUndefined from 'lodash-es/isUndefined';
 
@@ -12,7 +13,6 @@ import {
 import { Widget } from '@/domains/widgets/components/widget';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import styled from '@/infra/styled';
 
 const SMALL_WIDTH = '600px';
 const MEDIUM_WIDTH = '900px';

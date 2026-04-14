@@ -4,14 +4,14 @@ import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
 import {
   DashboardStyleOptions,
-  SpecificWidgetOptions,
-  WidgetPatch,
   WidgetsOptions,
   WidgetsPanelLayout,
 } from '@/domains/dashboarding/dashboard-model';
 import { TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import { FiltersPanelConfig } from '@/domains/filters/components/filters-panel/types';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
+
+import type { DashboardPersistenceManager } from './persistence/types.js';
 
 export type {
   DashboardStyleOptions,
@@ -374,36 +374,7 @@ export interface DashboardLayoutOptions {
   widgetsPanel?: WidgetsPanelLayout;
 }
 
-/**
- * Interface for persisting dashboard changes from the composition layer (e.g. add widget).
- *
- * @internal
- */
-export type DashboardPersistenceManager = {
-  /**
-   * Adds a widget to the dashboard.
-   *
-   * @param widget - The widget to add.
-   * @param widgetsPanelLayout - The layout to add the widget to.
-   * @param widgetOptions - The options for the widget.
-   * @returns The persisted widget (possibly modified by the server, e.g. new id), the new widgets panel layout and the widget options.
-   */
-  addWidget: (
-    widget: WidgetProps,
-    widgetsPanelLayout: WidgetsPanelLayout,
-    widgetOptions?: SpecificWidgetOptions,
-  ) => Promise<{
-    widget: WidgetProps;
-    widgetsPanelLayout: WidgetsPanelLayout;
-    widgetOptions?: SpecificWidgetOptions;
-  }>;
-  /**
-   * Patch a single field (e.g. title) on an existing widget.
-   *
-   * @internal
-   */
-  patchWidget: (widgetOid: string, patch: WidgetPatch) => Promise<void>;
-};
+export type { DashboardPersistenceManager };
 
 /**
  * Props for the Dashboard component
@@ -445,7 +416,8 @@ export interface DashboardProps {
    */
   onChange?: (event: DashboardChangeEvent) => void;
   /**
-   * @internal
+   * Persistence manager for the dashboard
+   * @sisenseInternal
    */
   persistence?: DashboardPersistenceManager;
 }

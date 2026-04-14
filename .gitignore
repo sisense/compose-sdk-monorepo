@@ -80,3 +80,18 @@ dist-zip/
 
 # ignore the generated plugins repository
 packages/sdk-plugins/sdk-plugins-repo-test/
+examples/plugins-demo/demo-plugin/node_modules/
+examples/plugins-demo/demo-plugin/src/
+examples/plugins-demo/demo-plugin/dev/
+examples/plugins-demo/demo-plugin/tsconfig.json
+examples/plugins-demo/demo-plugin/vite.config.ts
+examples/plugins-demo/demo-plugin/README.md
+examples/plugins-demo/demo-plugin/.editorconfig
+examples/plugins-demo/demo-plugin/.env.local.example
+examples/plugins-demo/demo-plugin/.eslintrc.cjs
+examples/plugins-demo/demo-plugin/.gitattributes
+examples/plugins-demo/demo-plugin/.gitignore
+examples/plugins-demo/demo-plugin/.npmignore
+examples/plugins-demo/demo-plugin/.prettierignore
+examples/plugins-demo/demo-plugin/.prettierrc
+examples/plugins-demo/angular/.angular

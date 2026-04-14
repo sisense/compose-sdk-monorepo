@@ -1,9 +1,10 @@
 import { SVGProps, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
+
 import { WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import styled from '@/infra/styled';
 import { Button } from '@/shared/components/button';
 import { useStateWithHistory } from '@/shared/hooks/use-state-with-history';
 

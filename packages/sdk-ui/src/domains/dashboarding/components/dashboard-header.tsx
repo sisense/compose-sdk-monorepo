@@ -1,8 +1,9 @@
+import styled from '@emotion/styled';
+
 import { DashboardHeaderProps } from '@/domains/dashboarding/types';
 import { getDividerStyle } from '@/domains/dashboarding/utils';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 
 export const DASHBOARD_HEADER_HEIGHT = 48;
 

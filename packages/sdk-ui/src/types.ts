@@ -2246,7 +2246,7 @@ export type CompleteThemeSettings = DeepRequired<Omit<ThemeSettings, 'typography
   };
 };
 
-/** @internal */
+/** @alpha */
 export type ThemeConfig = {
   cssSelectorPrefix?: {
     enabled?: boolean;

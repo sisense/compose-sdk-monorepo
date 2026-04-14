@@ -8,10 +8,10 @@ import {
   useState,
 } from 'react';
 
+import styled from '@emotion/styled';
 import isNumber from 'lodash-es/isNumber';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import styled from '@/infra/styled';
 
 const StyledBasicInput = styled.input`
   box-sizing: border-box;

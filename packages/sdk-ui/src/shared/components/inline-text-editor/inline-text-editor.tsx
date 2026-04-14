@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import styled from '@emotion/styled';
 import InputBase from '@mui/material/InputBase';
 import DOMPurify from 'dompurify';
-
-import styled from '@/infra/styled';
 
 import { useBlurOnPointerDownOutside } from './use-blur-on-pointer-down-outside.js';
 

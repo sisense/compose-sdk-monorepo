@@ -3,6 +3,8 @@ import { filterFactory } from '@sisense/sdk-data';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { WidgetsPanelColumnLayout } from '@/domains/dashboarding/types.js';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
+import { AppSettings } from '@/infra/app/settings/settings';
+import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
 
 import { sampleEcommerceDashboard } from '../../__mocks__/sample-ecommerce-dashboard.js';
 import { createWidgetModel, dashboardOid } from '../../__test-helpers__/create-dashboard-model.js';
@@ -10,6 +12,16 @@ import { persistDashboardModelMiddleware } from './persist-dashboard-model-middl
 import { UseDashboardModelActionType, UseDashboardModelActionTypeInternal } from './types.js';
 
 describe('persistDashboardModelMiddleware', () => {
+  const testThemeSettings = getDefaultThemeSettings();
+  const testAppSettings = {
+    serverFeatures: {
+      widgetDesignStyle: {
+        key: 'widgetDesignStyle',
+        active: false,
+      },
+    },
+  } as AppSettings;
+
   it('should throw when dashboardOid is undefined', async () => {
     const restApi = {
       patchDashboard: vi.fn(),
@@ -18,12 +30,14 @@ describe('persistDashboardModelMiddleware', () => {
     };
 
     await expect(
-      persistDashboardModelMiddleware(
-        undefined,
-        { type: UseDashboardModelActionType.FILTERS_UPDATE, payload: [] },
-        restApi as never,
-        false,
-      ),
+      persistDashboardModelMiddleware({
+        dashboardOid: undefined,
+        action: { type: UseDashboardModelActionType.FILTERS_UPDATE, payload: [] },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+      }),
     ).rejects.toThrow('Dashboard model is not initialized');
   });
 
@@ -35,12 +49,14 @@ describe('persistDashboardModelMiddleware', () => {
     };
     const filters = [filterFactory.members(DM.Commerce.Date, ['01/01/2021'])];
 
-    const result = await persistDashboardModelMiddleware(
+    const result = await persistDashboardModelMiddleware({
       dashboardOid,
-      { type: UseDashboardModelActionType.FILTERS_UPDATE, payload: filters },
-      restApi as never,
-      false,
-    );
+      action: { type: UseDashboardModelActionType.FILTERS_UPDATE, payload: filters },
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
 
     expect(restApi.patchDashboard).toHaveBeenCalledWith(
       dashboardOid,
@@ -62,12 +78,14 @@ describe('persistDashboardModelMiddleware', () => {
     };
     const newWidget = widgetModelTranslator.fromWidgetDto(sampleEcommerceDashboard.widgets![0]!);
 
-    const result = await persistDashboardModelMiddleware(
+    const result = await persistDashboardModelMiddleware({
       dashboardOid,
-      { type: UseDashboardModelActionType.ADD_WIDGET, payload: newWidget },
-      restApi as never,
-      false,
-    );
+      action: { type: UseDashboardModelActionType.ADD_WIDGET, payload: newWidget },
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
 
     expect(restApi.addWidgetToDashboard).toHaveBeenCalledWith(
       dashboardOid,
@@ -92,12 +110,14 @@ describe('persistDashboardModelMiddleware', () => {
     const newWidget = widgetModelTranslator.fromWidgetDto(sampleEcommerceDashboard.widgets![0]!);
 
     await expect(
-      persistDashboardModelMiddleware(
+      persistDashboardModelMiddleware({
         dashboardOid,
-        { type: UseDashboardModelActionType.ADD_WIDGET, payload: newWidget },
-        restApi as never,
-        false,
-      ),
+        action: { type: UseDashboardModelActionType.ADD_WIDGET, payload: newWidget },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+      }),
     ).rejects.toThrow('Failed to add widget to dashboard');
   });
 
@@ -130,15 +150,17 @@ describe('persistDashboardModelMiddleware', () => {
       ],
     };
 
-    const result = await persistDashboardModelMiddleware(
+    const result = await persistDashboardModelMiddleware({
       dashboardOid,
-      {
+      action: {
         type: UseDashboardModelActionType.ADD_WIDGET,
         payload: { widget: inputWidget, widgetsPanelLayout: customLayout },
       },
-      restApi as never,
-      false,
-    );
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
 
     expect(restApi.addWidgetToDashboard).toHaveBeenCalledWith(
       dashboardOid,
@@ -189,12 +211,14 @@ describe('persistDashboardModelMiddleware', () => {
       ],
     };
 
-    const result = await persistDashboardModelMiddleware(
+    const result = await persistDashboardModelMiddleware({
       dashboardOid,
-      { type: UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE, payload: layout },
-      restApi as never,
-      false,
-    );
+      action: { type: UseDashboardModelActionType.WIDGETS_PANEL_LAYOUT_UPDATE, payload: layout },
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
 
     expect(restApi.patchDashboard).toHaveBeenCalledWith(
       dashboardOid,
@@ -215,15 +239,17 @@ describe('persistDashboardModelMiddleware', () => {
       patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
     };
 
-    const result = await persistDashboardModelMiddleware(
+    const result = await persistDashboardModelMiddleware({
       dashboardOid,
-      {
+      action: {
         type: UseDashboardModelActionType.PATCH_WIDGET,
         payload: { widgetOid: 'widget-123', patch: { title: 'New Title' } },
       },
-      restApi as never,
-      false,
-    );
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
 
     expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
       dashboardOid,
@@ -244,12 +270,14 @@ describe('persistDashboardModelMiddleware', () => {
       deleteWidgetFromDashboard: vi.fn().mockResolvedValue(undefined),
     };
 
-    const result = await persistDashboardModelMiddleware(
+    const result = await persistDashboardModelMiddleware({
       dashboardOid,
-      { type: UseDashboardModelActionType.WIDGETS_DELETE, payload: ['w1', 'w2'] },
-      restApi as never,
-      false,
-    );
+      action: { type: UseDashboardModelActionType.WIDGETS_DELETE, payload: ['w1', 'w2'] },
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
 
     expect(restApi.deleteWidgetFromDashboard).toHaveBeenCalledTimes(2);
     expect(restApi.deleteWidgetFromDashboard).toHaveBeenCalledWith(dashboardOid, 'w1', false);
@@ -275,15 +303,17 @@ describe('persistDashboardModelMiddleware', () => {
       ],
     };
 
-    const result = await persistDashboardModelMiddleware(
+    const result = await persistDashboardModelMiddleware({
       dashboardOid,
-      {
+      action: {
         type: UseDashboardModelActionTypeInternal.UPDATE_WIDGETS_PANEL_LAYOUT_AND_WIDGETS_DELETE,
         payload: { widgetsPanel: layout, widgets: ['w1', 'w2'] },
       },
-      restApi as never,
-      true,
-    );
+      restApi: restApi as never,
+      sharedMode: true,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
 
     expect(restApi.patchDashboard).toHaveBeenCalledWith(
       dashboardOid,

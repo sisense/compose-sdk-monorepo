@@ -1120,6 +1120,12 @@ export const sampleEcommerceDashboard = {
         dataLimits: {
           seriesCapacity: 100000,
         },
+        convolution: {
+          enabled: true,
+          selectedConvolutionType: 'bySlicesCount',
+          independentSlicesCount: 7,
+          minimalIndependentSlicePercentage: 3,
+        },
       },
       _dataSourcePermission: 'owner',
       userAuth: {

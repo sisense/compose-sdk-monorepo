@@ -225,9 +225,12 @@ function getCustomWidgetSelections(
   points: AbstractDataPointWithEntries[],
   dataOptions: GenericDataOptions,
 ): DataSelection[] {
-  // Get all keys from dataOptions that contain non-measure columns (attributes)
+  // Get all keys from dataOptions that contain non-measure columns (attributes).
+  // Values must be arrays (pivot-style options may include non-array fields such as `grandTotals`).
   const selectablePaths = Object.entries(dataOptions)
-    .filter(([, columns]) => columns.some((column) => !isMeasureColumn(column)))
+    .filter(
+      ([, columns]) => Array.isArray(columns) && columns.some((column) => !isMeasureColumn(column)),
+    )
     .map(([key]) => key);
 
   return getSelectionsFromPoints(points, selectablePaths);
@@ -317,7 +320,9 @@ function getAllSelectableColumnsForCustomWidget(
   dataOptions: GenericDataOptions,
 ): (Column | StyledColumn)[] {
   return Object.values(dataOptions).flatMap((columns) =>
-    columns.filter((column): column is StyledColumn => !isMeasureColumn(column)),
+    Array.isArray(columns)
+      ? columns.filter((column): column is StyledColumn => !isMeasureColumn(column))
+      : [],
   );
 }
 

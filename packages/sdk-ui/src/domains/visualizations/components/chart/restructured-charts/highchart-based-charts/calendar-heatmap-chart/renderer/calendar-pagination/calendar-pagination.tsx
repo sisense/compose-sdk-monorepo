@@ -1,11 +1,12 @@
 import React, { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
+
 import { ArrowIcon } from '@/domains/filters/components/icons/arrow-icon.js';
 import { DoubleArrowIcon } from '@/domains/filters/components/icons/double-arrow-icon.js';
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context';
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
-import styled from '@/infra/styled/index.js';
 import { DoubleArrowEndIcon } from '@/shared/icons/double-arrow-end-icon.js';
 import { CalendarHeatmapViewType, TextStyle } from '@/types.js';
 

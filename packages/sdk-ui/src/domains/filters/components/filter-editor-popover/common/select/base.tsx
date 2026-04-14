@@ -1,6 +1,7 @@
+import styled from '@emotion/styled';
+
 import { Themable } from '@/infra/contexts/theme-provider/types';
 import { getElementStateColor } from '@/infra/contexts/theme-provider/utils';
-import styled from '@/infra/styled';
 import { DEFAULT_TEXT_COLOR } from '@/shared/const';
 import { ElementStates } from '@/types';
 

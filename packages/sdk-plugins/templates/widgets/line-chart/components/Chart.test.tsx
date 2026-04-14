@@ -10,9 +10,11 @@ import { Chart } from './Chart.js';
 
 // CustomVisualization<T> has return type ReactNode (includes undefined), so TypeScript
 // rejects it as a JSX element directly. Cast to a concrete ComponentType for tests.
-const TestChart = Chart as React.ComponentType<any>;
+const TestChart = Chart as unknown as React.ComponentType<Record<string, unknown>>;
 
-const { mockLineChart } = vi.hoisted(() => ({ mockLineChart: vi.fn(() => null) }));
+const { mockLineChart } = vi.hoisted(() => ({
+  mockLineChart: vi.fn<(...args: unknown[]) => null>(() => null),
+}));
 
 vi.mock('@sisense/sdk-ui', () => ({
   LineChart: mockLineChart,
@@ -35,6 +37,11 @@ function makeProps(overrides: Record<string, unknown> = {}) {
   } as unknown as CustomVisualizationProps<DataOptions, StyleOptions>;
 }
 
+// React 19 passes `undefined` as the second argument to functional components,
+// so assertions target only the first argument (props) via mock.lastCall![0].
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const lastProps = () => mockLineChart.mock.lastCall![0] as Record<string, unknown>;
+
 describe('Chart (line-chart template)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -46,10 +53,7 @@ describe('Chart (line-chart template)', () => {
 
   it('passes dataSource as dataSet to LineChart', () => {
     render(<TestChart {...makeProps({ dataSource: 'MyDataSource' })} />);
-    expect(mockLineChart).toHaveBeenCalledWith(
-      expect.objectContaining({ dataSet: 'MyDataSource' }),
-      expect.anything(),
-    );
+    expect(lastProps()).toEqual(expect.objectContaining({ dataSet: 'MyDataSource' }));
   });
 
   it('maps categories columns to the category array', () => {
@@ -59,11 +63,8 @@ describe('Chart (line-chart template)', () => {
         {...makeProps({ dataOptions: { categories: [{ column: cat }], values: [], breakBy: [] } })}
       />,
     );
-    expect(mockLineChart).toHaveBeenCalledWith(
-      expect.objectContaining({
-        dataOptions: expect.objectContaining({ category: [cat] }),
-      }),
-      expect.anything(),
+    expect(lastProps()).toEqual(
+      expect.objectContaining({ dataOptions: expect.objectContaining({ category: [cat] }) }),
     );
   });
 
@@ -71,11 +72,8 @@ describe('Chart (line-chart template)', () => {
     render(
       <TestChart {...makeProps({ dataOptions: { categories: [], values: [], breakBy: [] } })} />,
     );
-    expect(mockLineChart).toHaveBeenCalledWith(
-      expect.objectContaining({
-        dataOptions: expect.objectContaining({ category: [] }),
-      }),
-      expect.anything(),
+    expect(lastProps()).toEqual(
+      expect.objectContaining({ dataOptions: expect.objectContaining({ category: [] }) }),
     );
   });
 
@@ -88,11 +86,8 @@ describe('Chart (line-chart template)', () => {
         })}
       />,
     );
-    expect(mockLineChart).toHaveBeenCalledWith(
-      expect.objectContaining({
-        dataOptions: expect.objectContaining({ value: [measure] }),
-      }),
-      expect.anything(),
+    expect(lastProps()).toEqual(
+      expect.objectContaining({ dataOptions: expect.objectContaining({ value: [measure] }) }),
     );
   });
 
@@ -103,21 +98,15 @@ describe('Chart (line-chart template)', () => {
         {...makeProps({ dataOptions: { categories: [], values: [], breakBy: [{ column: dim }] } })}
       />,
     );
-    expect(mockLineChart).toHaveBeenCalledWith(
-      expect.objectContaining({
-        dataOptions: expect.objectContaining({ breakBy: [dim] }),
-      }),
-      expect.anything(),
+    expect(lastProps()).toEqual(
+      expect.objectContaining({ dataOptions: expect.objectContaining({ breakBy: [dim] }) }),
     );
   });
 
   it('passes filters through to LineChart unchanged', () => {
     const filters = [{ jaql: { dim: '[Commerce.Date]' } }] as unknown as Filter[];
     render(<TestChart {...makeProps({ filters })} />);
-    expect(mockLineChart).toHaveBeenCalledWith(
-      expect.objectContaining({ filters }),
-      expect.anything(),
-    );
+    expect(lastProps()).toEqual(expect.objectContaining({ filters }));
   });
 
   it('passes styleOptions through to LineChart', () => {
@@ -126,9 +115,8 @@ describe('Chart (line-chart template)', () => {
       legend: { enabled: false },
     } as unknown as StyleOptions;
     render(<TestChart {...makeProps({ styleOptions })} />);
-    expect(mockLineChart).toHaveBeenCalledWith(
+    expect(lastProps()).toEqual(
       expect.objectContaining({ styleOptions: expect.objectContaining(styleOptions) }),
-      expect.anything(),
     );
   });
 });

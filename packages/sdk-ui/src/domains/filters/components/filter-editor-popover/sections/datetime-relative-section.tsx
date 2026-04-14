@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import { TFunction } from '@sisense/sdk-common';
 import {
   DateLevels,
@@ -13,7 +14,6 @@ import {
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import { createLevelAttribute } from '@/shared/utils/create-level-attribute';
 
 import { Checkbox } from '../../common/index.js';

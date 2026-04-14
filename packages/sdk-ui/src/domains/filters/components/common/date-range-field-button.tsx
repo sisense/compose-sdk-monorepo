@@ -1,7 +1,8 @@
 import { type ButtonHTMLAttributes, type FunctionComponent } from 'react';
 
+import styled from '@emotion/styled';
+
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import { DEFAULT_BACKGROUND_COLOR } from '@/shared/const';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
 

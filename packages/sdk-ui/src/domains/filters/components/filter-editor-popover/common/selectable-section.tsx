@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
-import styled from '@/infra/styled';
+import styled from '@emotion/styled';
+
 import { Radio } from '@/shared/components/radio';
 
 type ChildrenFn = (select: () => void) => ReactNode;

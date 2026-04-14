@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "rootDir": ".",
+    "outDir": "./dist",
+    "module": "ES2022",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "sourceMap": false,
+    "declarationMap": false,
+    "declaration": true,
+    "composite": false
+  },
+  "include": ["./vite-plugin/vite-plugin-fusion.ts", "./scripts/consts.ts"],
+  "exclude": []
+}

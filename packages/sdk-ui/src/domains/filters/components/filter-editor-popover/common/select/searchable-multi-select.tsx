@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 import {
@@ -11,7 +12,6 @@ import { StyledSearchInput } from '@/domains/filters/components/filter-editor-po
 import { SmallLoader } from '@/domains/filters/components/filter-editor-popover/common/small-loader';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import { Popper } from '@/shared/components/popper';
 import { DEFAULT_TEXT_COLOR } from '@/shared/const';
 

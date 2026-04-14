@@ -7,6 +7,7 @@ import {
 import { DashboardModel } from '@/domains/dashboarding/dashboard-model';
 import { RestApiNotReadyError, useRestApi } from '@/infra/api/rest-api';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
+import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { usePrevious } from '@/shared/hooks/use-previous';
 
 import {
@@ -147,6 +148,7 @@ export function useDashboardPersistence({
 }: UseDashboardPersistenceParams): UseDashboardPersistenceResult {
   const { restApi: api, isReady: apiIsReady } = useRestApi();
   const { app } = useSisenseContext();
+  const { themeSettings } = useThemeContext();
   const previousDashboard = usePrevious(dashboard);
 
   const isPersistenceSupported = useMemo(
@@ -159,7 +161,7 @@ export function useDashboardPersistence({
 
   const persistentDispatch = useCallback(
     async (action: UseDashboardModelInternalAction): Promise<UseDashboardModelInternalAction> => {
-      if (!apiIsReady || !api) {
+      if (!apiIsReady || !api || !app) {
         throw new RestApiNotReadyError();
       }
 
@@ -167,19 +169,30 @@ export function useDashboardPersistence({
       const transformedAction = transformAction(action, localDashboard);
 
       if (shouldEnablePersist) {
-        const processedAction = await persistDashboardModelMiddleware(
-          localDashboard?.oid,
-          transformedAction,
-          api,
+        const processedAction = await persistDashboardModelMiddleware({
+          dashboardOid: localDashboard?.oid,
+          action: transformedAction,
+          restApi: api,
           sharedMode,
-        );
+          appSettings: app.settings,
+          themeSettings,
+        });
         dispatch(processedAction);
         return processedAction;
       }
       dispatch(transformedAction);
       return transformedAction;
     },
-    [shouldEnablePersist, localDashboard, api, apiIsReady, dispatch, sharedMode],
+    [
+      shouldEnablePersist,
+      localDashboard,
+      api,
+      apiIsReady,
+      dispatch,
+      sharedMode,
+      app,
+      themeSettings,
+    ],
   );
 
   // Sync with external dashboard changes when the dashboard reference changes

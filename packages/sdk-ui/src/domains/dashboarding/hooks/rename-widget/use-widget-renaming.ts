@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events.js';
 import type { WidgetProps } from '@/domains/widgets/components/widget/types.js';
 
-import type { DashboardPersistenceManager } from '../../types.js';
+import type { DashboardPersistenceManager } from '../../persistence/types.js';
 
 /** Options for the widget renaming middleware hook. */
 export type UseWidgetRenamingParams = {

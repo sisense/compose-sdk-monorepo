@@ -54,6 +54,7 @@ function cascadingFilterToFilterDto(filter: CascadingFilter): CascadingFilterDto
     isCascading: true,
     instanceid: filter.config.guid,
     disabled: filter.config.disabled,
+    locked: filter.config.locked,
     levels: filter.filters.map((f) => {
       const levelFilterDto = regularFilterToFilterDto(f);
       return {
@@ -79,6 +80,7 @@ function getFilterBaseDto(filter: Filter): FilterDto {
       column: getColumnNameFromAttribute(filter.attribute),
     },
     disabled,
+    locked: filter.config.locked,
     instanceid: filter.config.guid,
     isCascading: false,
   };

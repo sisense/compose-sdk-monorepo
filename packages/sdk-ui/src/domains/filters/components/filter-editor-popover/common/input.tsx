@@ -1,9 +1,10 @@
 import { DetailedHTMLProps, InputHTMLAttributes, useEffect, useRef } from 'react';
 
+import styled from '@emotion/styled';
+
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
 import { getElementStateColor } from '@/infra/contexts/theme-provider/utils';
-import styled from '@/infra/styled';
 import { ERROR_COLOR } from '@/shared/const';
 import { ElementStates } from '@/types';
 

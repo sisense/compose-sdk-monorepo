@@ -474,6 +474,15 @@ const translation: TranslationDictionary = {
   loadingOverlay: {
     label: '콘텐츠 로드 중',
   },
+  queryDefinition: {
+    showMorePills: '{{count}}개 더 표시',
+    showLess: '간단히 표시',
+    connectorBy: '기준',
+    connectorWhere: '조건',
+    tooltipType: '유형',
+    tooltipColumn: '열',
+    tooltipFormula: '수식',
+  },
   measures: {
     countShort: '{{level}} 개수',
     countDistinct: '고유 개수',

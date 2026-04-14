@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn *)",
+      "Bash(npx nx *)",
+      "Bash(npx vitest *)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(git stash*)"
+    ],
+    "deny": ["Bash(npm *)", "Bash(git push*)", "Bash(git reset --hard*)", "Bash(rm -rf *)"]
+  }
+}

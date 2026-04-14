@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react';
 
 import { arrayMove } from '@dnd-kit/sortable';
+import styled from '@emotion/styled';
 import {
   DataSource,
   Filter,
@@ -15,7 +16,6 @@ import { FilterTile } from '@/domains/filters/components/filter-tile';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
-import styled from '@/infra/styled';
 import { useDefaults } from '@/shared/hooks/use-defaults';
 import {
   calculateNewRelations,

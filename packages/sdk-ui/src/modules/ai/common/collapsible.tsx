@@ -5,11 +5,16 @@ type CollapsibleProps = {
   text: string;
 };
 
-// line height * number of rows
-const MAX_HEIGHT_PX = 18 * 5;
+/** Matches `ai-xs` line height in theme. */
+const LINE_HEIGHT_PX = 18;
+const COLLAPSED_LINE_COUNT = 5;
+const MAX_HEIGHT_PX = LINE_HEIGHT_PX * COLLAPSED_LINE_COUNT;
 
 /**
  * Text container with an expand/collapse button for text over the character limit.
+ *
+ * Uses `max-height` + `overflow: hidden` when collapsed (not `line-clamp`), because
+ * `white-space: pre-wrap` is incompatible with `-webkit-line-clamp` in browsers.
  *
  * @internal
  */
@@ -22,14 +27,18 @@ export default function Collapsible({ text }: CollapsibleProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    if (ref.current && ref.current.scrollHeight > MAX_HEIGHT_PX) {
-      setShowReadMore(true);
+    if (ref.current) {
+      setShowReadMore(ref.current.scrollHeight > MAX_HEIGHT_PX);
     }
   }, [text]);
 
   return (
-    <div>
-      <div ref={ref} className={`${collapsed ? 'csdk-line-clamp-5' : ''} csdk-whitespace-pre-wrap`}>
+    <div className="csdk-min-w-0 csdk-flex-1">
+      <div
+        ref={ref}
+        className={`csdk-whitespace-pre-wrap ${collapsed ? 'csdk-overflow-hidden' : ''}`}
+        style={collapsed ? { maxHeight: MAX_HEIGHT_PX } : undefined}
+      >
         {text}
       </div>
       {showReadMore && (

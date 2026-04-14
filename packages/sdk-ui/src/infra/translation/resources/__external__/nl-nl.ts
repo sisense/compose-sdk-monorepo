@@ -479,6 +479,15 @@ const translation: TranslationDictionary = {
   loadingOverlay: {
     label: 'Inhoud laden',
   },
+  queryDefinition: {
+    showMorePills: 'Nog {{count}} tonen',
+    showLess: 'Minder tonen',
+    connectorBy: 'per',
+    connectorWhere: 'waar',
+    tooltipType: 'Type',
+    tooltipColumn: 'Kolom',
+    tooltipFormula: 'Formule',
+  },
   measures: {
     countShort: 'Aantal {{level}}',
     countDistinct: 'Unieke waarden tellen',

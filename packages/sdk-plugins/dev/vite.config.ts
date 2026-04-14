@@ -13,7 +13,6 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
-        'vite-plugin-fusion': resolve(__dirname, 'vite-plugin/vite-plugin-fusion.ts'),
       },
       name: 'sdk-plugins-dev',
       fileName: (_format, entryName) => `${entryName}.js`,
@@ -26,6 +25,8 @@ export default defineConfig({
         '@sisense/sdk-data',
         '@sisense/sdk-ui',
         'vite',
+        'vite-plugin-css-injected-by-js',
+        'vite-plugin-dts',
         'vite-plugin-zip-pack',
         'node:fs',
         'node:path',

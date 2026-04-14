@@ -4,10 +4,9 @@
  * This module provides validation functions specifically for measureFactory.customFormula
  * to ensure that bracket references in formulas match the provided context keys.
  */
-import { isDatetime } from '@sisense/sdk-data';
+import { findMatchingCloseParen, isDatetime, splitAtDepthZero } from '@sisense/sdk-data';
 
 import { DIMENSIONAL_NAME_PREFIX, isFunctionCall, isRecordStringUnknown } from '../../../types.js';
-import { findMatchingCloseParen, splitAtDepthZero } from '../../utils/parse-compose-code.js';
 import type { SchemaIndex } from '../../utils/schema-index.js';
 import { parseDimensionalName } from '../../utils/schema-index.js';
 import {

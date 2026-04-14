@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import { Attribute, DateDimension, Dimension, MetadataTypes } from '@sisense/sdk-data';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
-import styled from '@/infra/styled/index.js';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
 import { GroupedItemsBrowser } from '@/shared/components/grouped-items-browser/grouped-items-browser.js';
 import {

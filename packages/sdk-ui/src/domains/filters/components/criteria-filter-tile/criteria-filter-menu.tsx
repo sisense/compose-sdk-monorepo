@@ -2,10 +2,10 @@
 import { CSSProperties, FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import { FilterTypes, Measure } from '@sisense/sdk-data';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import styled from '@/infra/styled';
 
 import { Dropdown } from '../common/dropdown.js';
 import { FilterVariant, isVertical } from '../common/filter-utils.js';

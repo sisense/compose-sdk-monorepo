@@ -1,6 +1,7 @@
+import styled from '@emotion/styled';
+
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
 
 import ArrowLeftIcon from '../icons/arrow-left-icon.js';

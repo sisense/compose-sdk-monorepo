@@ -21,21 +21,21 @@ describe('LineWidthSection', () => {
   it('calls onClick with 1 when Thin row is clicked', () => {
     const onClick = vi.fn();
     render(<LineWidthSection onClick={onClick} />);
-    fireEvent.click(screen.getByText('Thin').closest('tr')!);
+    fireEvent.click(screen.getByText('Thin').closest('tr') as HTMLElement);
     expect(onClick).toHaveBeenCalledWith(1);
   });
 
   it('calls onClick with 3 when Bold row is clicked', () => {
     const onClick = vi.fn();
     render(<LineWidthSection onClick={onClick} />);
-    fireEvent.click(screen.getByText('Bold').closest('tr')!);
+    fireEvent.click(screen.getByText('Bold').closest('tr') as HTMLElement);
     expect(onClick).toHaveBeenCalledWith(3);
   });
 
   it('calls onClick with 5 when Thick row is clicked', () => {
     const onClick = vi.fn();
     render(<LineWidthSection onClick={onClick} />);
-    fireEvent.click(screen.getByText('Thick').closest('tr')!);
+    fireEvent.click(screen.getByText('Thick').closest('tr') as HTMLElement);
     expect(onClick).toHaveBeenCalledWith(5);
   });
 });

@@ -483,6 +483,15 @@ const translation: TranslationDictionary = {
   loadingOverlay: {
     label: 'Cargando contenido',
   },
+  queryDefinition: {
+    showMorePills: 'Mostrar {{count}} más',
+    showLess: 'Mostrar menos',
+    connectorBy: 'por',
+    connectorWhere: 'donde',
+    tooltipType: 'Tipo',
+    tooltipColumn: 'Columna',
+    tooltipFormula: 'Fórmula',
+  },
   measures: {
     countShort: 'Cant. de {{level}}',
     countDistinct: 'Contar únicos',

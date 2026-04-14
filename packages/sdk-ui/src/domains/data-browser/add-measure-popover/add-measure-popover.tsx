@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
+import styled from '@emotion/styled';
 import { BaseMeasure, DataSource } from '@sisense/sdk-data';
 
 import { AddMeasureDataBrowser } from '@/domains/data-browser/add-measure-popover/add-measure-data-browser';
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context';
 import { Themable } from '@/infra/contexts/theme-provider/types';
 import { withErrorBoundary } from '@/infra/decorators/component-decorators/with-error-boundary';
-import styled from '@/infra/styled';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { Popover } from '@/shared/components/popover';
 

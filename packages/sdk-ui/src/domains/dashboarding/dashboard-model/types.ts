@@ -92,7 +92,7 @@ export type DashboardId = string;
 export type WidgetsOptions = Record<WidgetId, SpecificWidgetOptions>;
 
 /**
- * Options for a specific widget
+ * Dashboard-level options for a specific widget
  */
 export type SpecificWidgetOptions = {
   /**

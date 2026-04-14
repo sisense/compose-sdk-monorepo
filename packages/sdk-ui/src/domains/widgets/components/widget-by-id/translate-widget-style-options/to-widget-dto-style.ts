@@ -1,18 +1,38 @@
+import { isWidgetDesignEnabled } from '@/domains/widgets/widget-model/widget-model-translator/utils.js';
+import { AppSettings } from '@/infra/app/settings/settings.js';
+import { LEGACY_DESIGN_TYPES } from '@/infra/themes/legacy-design-settings';
 import type {
+  AlignmentTypes,
   AreaStyleOptions,
   AxisLabel,
   CartesianStyleOptions,
+  CompleteThemeSettings,
   DataLimits,
+  GaugeIndicatorStyleOptions,
+  IndicatorStyleOptions,
   LegendOptions,
   LineStyleOptions,
   LineWidth,
   Markers,
   Navigator,
+  NumericBarIndicatorStyleOptions,
+  NumericSimpleIndicatorStyleOptions,
+  PieStyleOptions,
+  RadiusSizes,
   SeriesLabels,
+  ShadowsTypes,
+  SpaceSizes,
   TotalLabels,
+  WidgetStyleOptions,
 } from '@/types.js';
 
-import type { AxisStyle, CartesianWidgetStyle, WidgetSubtype } from '../types.js';
+import type {
+  AxisStyle,
+  CartesianWidgetStyle,
+  WidgetDesign,
+  WidgetStyle,
+  WidgetSubtype,
+} from '../types.js';
 
 const DEFAULT_LEGEND = { enabled: true, position: 'bottom' as const };
 const DEFAULT_NAVIGATOR = { enabled: false };
@@ -252,6 +272,198 @@ function toAreaSeriesLabelsStyle(
   }
 
   return toSeriesLabelsStyle(seriesLabels);
+}
+
+type LegacyDesignKey = keyof typeof LEGACY_DESIGN_TYPES;
+
+const SPACE_AROUND_TO_DTO: Record<SpaceSizes, LegacyDesignKey> = {
+  None: 'none',
+  Small: 'small',
+  Medium: 'medium',
+  Large: 'large',
+};
+
+const CORNER_RADIUS_TO_DTO: Record<RadiusSizes, LegacyDesignKey> = {
+  None: 'none',
+  Small: 'small',
+  Medium: 'medium',
+  Large: 'large',
+};
+
+const SHADOW_TO_DTO: Record<ShadowsTypes, LegacyDesignKey> = {
+  None: 'none',
+  Light: 'light',
+  Medium: 'medium',
+  Dark: 'dark',
+};
+
+const ALIGNMENT_TO_DTO: Record<AlignmentTypes, LegacyDesignKey> = {
+  Left: 'left',
+  Center: 'center',
+  Right: 'right',
+};
+
+/**
+ * Returns true when {@link WidgetModel.styleOptions} carries any widget container / design
+ * field that was produced by {@link getFlattenWidgetDesign} (and should be written back).
+ *
+ * @internal
+ */
+export function hasWidgetContainerStyleFields(styleOptions: WidgetStyleOptions): boolean {
+  if (
+    styleOptions.backgroundColor !== undefined ||
+    styleOptions.spaceAround !== undefined ||
+    styleOptions.cornerRadius !== undefined ||
+    styleOptions.shadow !== undefined ||
+    styleOptions.border !== undefined ||
+    styleOptions.borderColor !== undefined
+  ) {
+    return true;
+  }
+  const header = styleOptions.header;
+  return (
+    header !== undefined &&
+    (header.titleTextColor !== undefined ||
+      header.titleAlignment !== undefined ||
+      header.dividerLine !== undefined ||
+      header.dividerLineColor !== undefined ||
+      header.backgroundColor !== undefined)
+  );
+}
+
+/**
+ * Rebuilds Fusion `style.widgetDesign` from flattened container options (inverse of
+ * {@link getFlattenWidgetDesign}).
+ *
+ * Missing fields default to the corresponding values from `themeSettings.widget` so that
+ * the resulting {@link WidgetDesign} is always fully populated which is critical for the widget design feature in Fusion.
+ *
+ * @internal
+ */
+export function toWidgetDesign(
+  styleOptions: WidgetStyleOptions,
+  widgetTheme: CompleteThemeSettings['widget'],
+): WidgetDesign | undefined {
+  if (!hasWidgetContainerStyleFields(styleOptions)) {
+    return undefined;
+  }
+  const header = styleOptions.header;
+  return {
+    widgetBackgroundColor: styleOptions.backgroundColor ?? '',
+    widgetSpacing: SPACE_AROUND_TO_DTO[styleOptions.spaceAround ?? widgetTheme.spaceAround],
+    widgetCornerRadius: CORNER_RADIUS_TO_DTO[styleOptions.cornerRadius ?? widgetTheme.cornerRadius],
+    widgetShadow: SHADOW_TO_DTO[styleOptions.shadow ?? widgetTheme.shadow],
+    widgetBorderEnabled: styleOptions.border ?? widgetTheme.border,
+    widgetBorderColor: styleOptions.borderColor ?? widgetTheme.borderColor,
+    widgetTitleColor: header?.titleTextColor ?? widgetTheme.header.titleTextColor,
+    widgetTitleAlignment:
+      ALIGNMENT_TO_DTO[header?.titleAlignment ?? widgetTheme.header.titleAlignment],
+    widgetTitleDividerEnabled: header?.dividerLine ?? widgetTheme.header.dividerLine,
+    widgetTitleDividerColor: header?.dividerLineColor ?? widgetTheme.header.dividerLineColor,
+    widgetTitleBackgroundColor: header?.backgroundColor ?? widgetTheme.header.backgroundColor,
+  } as WidgetDesign;
+}
+
+/**
+ * Attaches `style.widgetDesign` built from widget container fields in `styleOptions`.
+ * When the feature flag is off, or when `styleOptions` carries no container fields, the
+ * base style is returned unchanged.
+ *
+ * @param baseStyle - The base style to be attached with the widget design
+ * @param styleOptions - The style options to be used for the widget design
+ * @param themeSettings - The theme settings to be used for the widget design
+ * @param appSettings - The application settings to be used for the widget design
+ * @returns The widget style with the widget design
+ */
+export function withWidgetDesign(
+  baseStyle: WidgetStyle,
+  styleOptions: WidgetStyleOptions,
+  themeSettings: CompleteThemeSettings,
+  appSettings?: AppSettings,
+): WidgetStyle {
+  if (!appSettings || !isWidgetDesignEnabled(appSettings)) {
+    return baseStyle;
+  }
+  const widgetDesign = toWidgetDesign(styleOptions, themeSettings.widget);
+  if (!widgetDesign) {
+    return baseStyle;
+  }
+  return { ...baseStyle, widgetDesign };
+}
+
+/**
+ * Maps SDK pie chart style options to Fusion PieWidgetStyle (DTO).
+ * Inverse of {@link extractPieChartStyleOptions}.
+ *
+ * @param styleOptions - Pie style options from WidgetModel.styleOptions
+ * @returns Fusion PieWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toPieWidgetStyle(styleOptions: PieStyleOptions): WidgetStyle {
+  const legend = toLegendStyle(styleOptions.legend);
+  const dataLimits = toDataLimitsStyle(styleOptions.dataLimits);
+  const l = styleOptions.labels ?? {};
+
+  return {
+    legend,
+    labels: {
+      enabled: l.enabled ?? true,
+      categories: l.categories ?? true,
+      percent: l.percent ?? true,
+      value: l.value ?? false,
+      decimals: l.decimals ?? false,
+    },
+    ...(dataLimits && { dataLimits }),
+    ...(styleOptions.convolution && { convolution: styleOptions.convolution }),
+  } as WidgetStyle;
+}
+
+/**
+ * Maps SDK indicator style options to Fusion IndicatorWidgetStyle (DTO).
+ * Inverse of {@link extractIndicatorChartStyleOptions}.
+ *
+ * @param styleOptions - Indicator style options from WidgetModel.styleOptions
+ * @returns Fusion IndicatorWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toIndicatorWidgetStyle(styleOptions: IndicatorStyleOptions): WidgetStyle {
+  let dtoSubtype: 'simple' | 'bar' | 'round';
+  let skin: string | undefined;
+
+  if (styleOptions.subtype === 'indicator/gauge') {
+    dtoSubtype = 'round';
+    skin = String((styleOptions as GaugeIndicatorStyleOptions).skin ?? 1);
+  } else if ((styleOptions as NumericBarIndicatorStyleOptions).numericSubtype === 'numericBar') {
+    dtoSubtype = 'bar';
+  } else {
+    dtoSubtype = 'simple';
+    skin = (styleOptions as NumericSimpleIndicatorStyleOptions).skin ?? 'vertical';
+  }
+
+  const components = styleOptions.indicatorComponents;
+
+  return {
+    subtype: dtoSubtype,
+    ...(skin !== undefined && { skin }),
+    components: {
+      ticks: {
+        inactive: false,
+        enabled: components?.ticks?.shouldBeShown ?? true,
+      },
+      labels: {
+        inactive: false,
+        enabled: components?.labels?.shouldBeShown ?? true,
+      },
+      title: {
+        inactive: false,
+        enabled: components?.title?.shouldBeShown ?? true,
+      },
+      secondaryTitle: {
+        inactive: true,
+        enabled: true,
+      },
+    },
+  } as WidgetStyle;
 }
 
 /**

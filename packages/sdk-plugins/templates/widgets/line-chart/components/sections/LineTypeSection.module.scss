@@ -1,5 +1,5 @@
-@import '../shared/Color';
-@import '../shared/Icons';
+@use '../shared/Color' as *;
+@use '../shared/Icons' as *;
 
 .title {
   padding-top: 15px;

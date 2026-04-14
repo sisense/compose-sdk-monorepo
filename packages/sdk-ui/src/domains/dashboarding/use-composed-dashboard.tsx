@@ -23,7 +23,8 @@ import { useSyncedState } from '@/shared/hooks/use-synced-state.js';
 import { defaultMerger, useWithChangeDetection } from '@/shared/hooks/use-with-change-detection.js';
 import { combineHandlers } from '@/shared/utils/combine-handlers.js';
 
-import { DashboardPersistenceManager, DashboardProps } from './types.js';
+import type { DashboardPersistenceManager } from './persistence/types.js';
+import { DashboardProps } from './types.js';
 
 export type ComposableDashboardProps = Pick<
   DashboardProps,
@@ -90,7 +91,8 @@ export type UseComposedDashboardOptions = {
    */
   onFiltersChange?: (filters: Filter[] | FilterRelations) => void;
   /**
-   * @internal
+   * Persistence manager for the dashboard
+   * @sisenseInternal
    */
   persistence?: DashboardPersistenceManager;
   /**

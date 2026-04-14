@@ -10,7 +10,7 @@ import type {
 import { type WidgetProps } from '@/domains/widgets/components/widget/types.js';
 import { withHeaderMenuItem } from '@/domains/widgets/helpers/header-menu-utils.js';
 
-import type { DashboardPersistenceManager } from '../../types.js';
+import type { DashboardPersistenceManager } from '../../persistence/types.js';
 import {
   getWidgetCellLocation,
   withNewCellInsertedToTheSameRow,

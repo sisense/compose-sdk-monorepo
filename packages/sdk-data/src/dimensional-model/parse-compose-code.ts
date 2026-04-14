@@ -1,4 +1,41 @@
-import { Arg, FunctionCall } from '../../types.js';
+/**
+ * Forward declaration for mutually recursive argument types (see {@link ArgValue}).
+ */
+interface ArgArray extends ReadonlyArray<ArgValue> {}
+
+/**
+ * Parsed object argument (nested key/value pairs).
+ */
+type ArgObject = { readonly [key: string]: ArgValue };
+
+/**
+ * Type to represent a function argument value (matches {@link parseArgumentValue} output).
+ * @internal
+ */
+export type ArgValue =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | FunctionCall
+  | ArgArray
+  | ArgObject;
+
+/**
+ * Alias for {@link ArgValue}.
+ * @internal
+ */
+export type Arg = ArgValue;
+
+/**
+ * Type to represent the structure parsed from compose code.
+ * @internal
+ */
+export interface FunctionCall {
+  function: string;
+  args: ReadonlyArray<Arg>;
+}
 
 /**
  * Splits a string by a delimiter, respecting nested structures and strings.

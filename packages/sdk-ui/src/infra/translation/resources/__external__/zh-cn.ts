@@ -444,6 +444,15 @@ const translation: TranslationDictionary = {
   loadingOverlay: {
     label: '正在加载内容',
   },
+  queryDefinition: {
+    showMorePills: '再显示 {{count}} 项',
+    showLess: '收起',
+    connectorBy: '按',
+    connectorWhere: '筛选',
+    tooltipType: '类型',
+    tooltipColumn: '列',
+    tooltipFormula: '公式',
+  },
   measures: {
     countShort: '{{level}}数量',
     countDistinct: '唯一计数',

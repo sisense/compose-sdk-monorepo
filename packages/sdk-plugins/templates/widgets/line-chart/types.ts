@@ -18,16 +18,15 @@ export interface DataOptions extends GenericDataOptions {
  * Style options for the line-chart plugin.
  * Picks only the properties editable via DesignPanels from LineStyleOptions.
  */
-export interface StyleOptions
-  extends Pick<
-    LineStyleOptions,
-    | 'subtype'
-    | 'line'
-    | 'legend'
-    | 'seriesLabels'
-    | 'markers'
-    | 'xAxis'
-    | 'yAxis'
-    | 'y2Axis'
-    | 'navigator'
-  > {}
+export type StyleOptions = Pick<
+  LineStyleOptions,
+  | 'subtype'
+  | 'line'
+  | 'legend'
+  | 'seriesLabels'
+  | 'markers'
+  | 'xAxis'
+  | 'yAxis'
+  | 'y2Axis'
+  | 'navigator'
+>;

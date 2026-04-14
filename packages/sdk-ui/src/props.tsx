@@ -341,7 +341,7 @@ export type ThemeProviderProps = PropsWithChildren<{
    */
   skipTracking?: boolean;
 
-  /** @internal */
+  /** @alpha */
   config?: ThemeConfig;
 }>;
 

@@ -1,6 +1,8 @@
-import { JaqlQueryPayload } from '@sisense/sdk-query-client';
-
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import type {
+  GetNlgInsightsResponse as GetNlgInsightsResponseInfra,
+  SendAiFeedbackRequest,
+} from '@/infra/api/narrative/narrative-api-types.js';
 import { ExpandedQueryModel } from '@/modules/analytics-composer';
 
 export interface ChatContext {
@@ -114,18 +116,10 @@ export type NlqResult = Omit<NlqResponseData, 'followupQuestions'>;
 export interface QueryRecommendation extends Omit<NlqResponseData, 'followupQuestions'> {}
 export type QueryRecommendationResponse = QueryRecommendation[];
 
-export interface GetNlgInsightsRequest {
-  jaql: Pick<JaqlQueryPayload, 'datasource' | 'metadata' | 'filterRelations'>;
-  verbosity?: 'Low' | 'High';
-}
+export type { GetNlgInsightsRequest } from '@/infra/api/narrative/narrative-api-types.js';
 
 /** @internal */
-export interface GetNlgInsightsResponse {
-  data?: {
-    answer: string;
-  };
-  responseType: 'Text';
-}
+export type GetNlgInsightsResponse = GetNlgInsightsResponseInfra;
 
 /** @internal */
 export const NLQ_RESULT_CHART_TYPES = [
@@ -144,12 +138,8 @@ export interface GetNlqResultRequest {
   chartTypes: NlqResultChartType[];
 }
 
-export interface SendFeedbackRequest {
-  type: string;
-  data: object;
-  sourceId: string;
-  rating: -1 | 1;
-}
+/** @internal */
+export type SendFeedbackRequest = SendAiFeedbackRequest;
 
 /**
  * The chat mode to use for a chat session

@@ -7,11 +7,11 @@ exports[`should display cartesian tooltip for point 1`] = `
     <br style="color:red; font-size: 15px; line-height: 18px">@42.0009
 
 
-    <hr style="margin: 7px 0px" class="csdk-border-t">
+    <hr class="csdk-border-t" style="margin: 7px 0px">
     !9.877
 
-        <svg style="display: inline-block" viewBox="0 0 24 24" height="18" width="12" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6.84 8.5l-2.72-3.175a.5.5 0 1 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175z" fill="#5B6372"></path>
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="18" viewBox="0 0 24 24" style="display: inline-block">
+        <path fill="#5B6372" d="M6.84 8.5l-2.72-3.175a.5.5 0 1 1 .76-.65l2.998 3.5a.5.5 0 0 1 0 .65l-2.998 3.5a.5.5 0 1 1-.76-.65l2.72-3.175z"></path>
         </svg>
 
     $1.26

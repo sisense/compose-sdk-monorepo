@@ -1,6 +1,7 @@
+import styled from '@emotion/styled';
+
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import { GetNlgInsightsRequest } from '@/modules/ai';
 import Collapsible from '@/modules/ai/common/collapsible';
 import AiIcon from '@/modules/ai/icons/ai-icon';

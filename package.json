@@ -1,5 +1,5 @@
 {
-  "version": "2.24.0",
+  "version": "2.25.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -65,6 +65,7 @@
     "packages/internal/*",
     "examples/*demo",
     "examples/simple-table-plugin",
+    "examples/plugins-demo/*",
     "e2e/",
     "typedoc-plugins/typedoc-plugin-markdown/",
     "typedoc-plugins/typedoc-plugin-diff-packages/"
@@ -74,6 +75,7 @@
     "demo": "yarn workspace @sisense/react-ts-demo dev",
     "demo:vue": "yarn workspace @sisense/vue-ts-demo dev",
     "demo:angular": "yarn workspace @sisense/angular-demo start",
+    "prepare:plugins-demo": "yarn nx run @sisense/sdk-plugins-cli:build && node packages/sdk-plugins/cli/dist/cli.js create-plugin --dev-mode --force --name demo-plugin --template line-chart --path examples/plugins-demo/demo-plugin && yarn install --no-immutable && yarn workspace demo-plugin build && yarn workspace demo-plugin test",
     "build": "yarn nx:build",
     "build:packages": "yarn nx run-many --target=build --projects='packages/*'",
     "storybook": "yarn workspace @sisense/sdk-ui storybook",
@@ -88,6 +90,7 @@
     "format": "yarn workspaces foreach -p run format",
     "format:check": "yarn workspaces foreach -p run format:check",
     "test": "yarn workspaces foreach -p --verbose run test",
+    "test:watch": "nx run-many --exclude @sisense/root -t test:watch",
     "test:coverage": "yarn nx:test:coverage",
     "test:coverage:collect": "mkdir -p .nyc_output && node ./ci/collect-coverage-files.cjs collectFiles --pattern='packages/**/coverage-final.json' --target='.nyc_output'",
     "test:coverage:report": "nyc report --reporter lcov --reporter text-summary --reporter cobertura",

@@ -1,8 +1,8 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+import styled from '@emotion/styled';
 import dayjs from 'dayjs';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import styled from '@/infra/styled/index.js';
 
 import { CompleteThemeSettings } from '../../../../../types.js';
 import { ArrowIcon } from '../../icons/arrow-icon.js';

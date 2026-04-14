@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 
+import styled from '@emotion/styled';
 import List from '@mui/material/List';
-
-import styled from '@/infra/styled';
 
 import { Group } from './group.js';
 import { GroupedItemsBrowserProps } from './types.js';

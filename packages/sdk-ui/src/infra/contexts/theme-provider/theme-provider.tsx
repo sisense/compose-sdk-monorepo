@@ -6,6 +6,7 @@ import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-s
 import { ThemeProviderProps } from '@/props';
 
 import { ThemeConfig } from '../../../types';
+import { EmotionCacheProvider } from '../emotion-cache-provider';
 import { FontsLoader } from './fonts-loader/fonts-loader';
 import { ThemeContext, useThemeContext } from './theme-context';
 import { useThemeSettings } from './use-theme-settings';
@@ -75,16 +76,23 @@ export const ThemeProvider = asSisenseComponent({
     return parentThemeConfig;
   }, [parentThemeConfig, userConfig]);
 
+  const cssSelectorPrefix = config?.cssSelectorPrefix?.enabled
+    ? config.cssSelectorPrefix.value
+    : undefined;
+
   if (error) {
     throw error;
   }
+
+  if (!themeSettings) {
+    return null;
+  }
+
   return (
-    <>
-      {themeSettings && (
-        <ThemeContext.Provider value={{ themeSettings: themeSettings, config }}>
-          <FontsLoader>{children}</FontsLoader>
-        </ThemeContext.Provider>
-      )}
-    </>
+    <EmotionCacheProvider cssSelectorPrefix={cssSelectorPrefix}>
+      <ThemeContext.Provider value={{ themeSettings, config }}>
+        <FontsLoader>{children}</FontsLoader>
+      </ThemeContext.Provider>
+    </EmotionCacheProvider>
   );
 });

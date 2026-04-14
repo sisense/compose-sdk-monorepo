@@ -469,6 +469,15 @@ export const translation = {
   loadingOverlay: {
     label: 'Loading content',
   },
+  queryDefinition: {
+    showMorePills: 'Show {{count}} more',
+    showLess: 'Show less',
+    connectorBy: 'by',
+    connectorWhere: 'where',
+    tooltipType: 'Type',
+    tooltipColumn: 'Column',
+    tooltipFormula: 'Formula',
+  },
   measures: {
     countShort: '# of {{level}}',
     countDistinct: 'Count Unique',

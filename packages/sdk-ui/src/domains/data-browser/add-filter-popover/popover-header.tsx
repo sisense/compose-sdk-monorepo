@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 
+import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 import { BreadcrumbsArrowsIcon } from '@/shared/icons/breadcrumbs-arrows-arrow-icon';
 import { CloseIcon } from '@/shared/icons/close-icon';
 

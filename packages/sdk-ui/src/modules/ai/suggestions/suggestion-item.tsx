@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
-import styled from '@/infra/styled';
 
 const Button = styled.button<Themable>`
   font-size: inherit;
