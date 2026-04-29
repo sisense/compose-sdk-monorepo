@@ -81,7 +81,7 @@ function getTable(
   group.children.forEach((child) => {
     const row: string[] = [];
 
-    row.push(link(escapeChars(child.name), context.relativeURL(child.url)));
+    row.push(link(escapeChars(child.name, context.options.getValue('useHTMLEncodedBrackets') as boolean), context.relativeURL(child.url)));
 
     if (child.comment?.summary) {
       row.push(tableComments(context.commentParts(child.comment.summary)).split('\n')[0]);
@@ -97,7 +97,7 @@ function getList(context: MarkdownThemeRenderContext, group: ReflectionGroup | R
   const children = group.children.map(
     (child: DeclarationReflection) =>
       // CSDK: add member badge
-      `- [${escapeChars(child.name)}](${context.relativeURL(child.url)})${context.memberBadge(
+      `- [${escapeChars(child.name, context.options.getValue('useHTMLEncodedBrackets') as boolean)}](${context.relativeURL(child.url)})${context.memberBadge(
         child,
       )}${context.memberShortDescription(child)}`,
   );

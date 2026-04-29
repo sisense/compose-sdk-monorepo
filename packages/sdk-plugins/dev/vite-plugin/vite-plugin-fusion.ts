@@ -37,14 +37,12 @@ function readManifestFields(manifestPath: string): { name: string; version: stri
   return { name: nameMatch[1], version: versionMatch?.[1] ?? '1.0.0' };
 }
 
-/** `--react` or no flag → react+preact; `--preact` → preact only; `--fusion` → fusion */
-type BuildMode = 'react' | 'preact' | 'both' | 'fusion';
+/** no flag → csdk react + cross-framework; `--fusion` → fusion only */
+type BuildMode = 'csdk' | 'fusion';
 
 function detectMode(): BuildMode {
   if (process.argv.includes('--fusion')) return 'fusion';
-  if (process.argv.includes('--preact')) return 'preact';
-  if (process.argv.includes('--react')) return 'react';
-  return 'both';
+  return 'csdk';
 }
 
 const suppressModuleLevelDirective = (
@@ -55,7 +53,7 @@ const suppressModuleLevelDirective = (
 };
 
 const REACT_OUT_DIR = 'dist/react';
-const PREACT_OUT_DIR = 'dist/preact';
+const CROSS_FRAMEWORK_OUT_DIR = 'dist/cross-framework';
 const TYPES_OUT_DIR = 'dist/types';
 
 const PREACT_ALIASES: Record<string, string> = {
@@ -109,7 +107,7 @@ function preactBuildConfig(entry: string, pluginIdentifier: string) {
       jsxImportSource: '@sisense/sdk-ui-preact/preact',
     },
     build: {
-      outDir: PREACT_OUT_DIR,
+      outDir: CROSS_FRAMEWORK_OUT_DIR,
       lib: {
         entry,
         name: pluginIdentifier,
@@ -172,10 +170,8 @@ export interface SisenseFusionPluginOptions {
 }
 
 /**
- * Vite plugin for Sisense plugin builds. Supports four modes via CLI flag:
- *   (no flag)   → both react + preact library builds
- *   --react     → react library build only  (dist/react/)
- *   --preact    → preact library build only (dist/preact/)
+ * Vite plugin for Sisense plugin builds. Supports two modes via CLI flag:
+ *   (no flag)   → csdk react + cross-framework library builds
  *   --fusion    → Fusion IIFE bundle + plugin.json + zip
  */
 export function sisenseFusionPlugin(options: SisenseFusionPluginOptions): Plugin[] {
@@ -194,9 +190,7 @@ export function sisenseFusionPlugin(options: SisenseFusionPluginOptions): Plugin
 
   // ── Per-mode vite build configs ───────────────────────────────────────────
   const configBuilders: Record<BuildMode, () => object> = {
-    react: () => reactBuildConfig(manifestPath, pluginIdentifier),
-    preact: () => preactBuildConfig(manifestPath, pluginIdentifier),
-    both: () => reactBuildConfig(manifestPath, pluginIdentifier), // first pass is react
+    csdk: () => reactBuildConfig(manifestPath, pluginIdentifier), // first pass is react
     fusion: () => fusionBuildConfig(manifestPath, pluginIdentifier),
   };
 
@@ -205,9 +199,7 @@ export function sisenseFusionPlugin(options: SisenseFusionPluginOptions): Plugin
   let resolvedCss: CSSOptions | undefined;
 
   const modeCloseBundle: Record<BuildMode, () => Promise<void>> = {
-    react: async () => {},
-    preact: async () => {},
-    both: async () => {
+    csdk: async () => {
       // Second pass: preact build. Types from the first (react) pass are reused.
       await viteBuild({
         configFile: false,
@@ -243,24 +235,7 @@ export function sisenseFusionPlugin(options: SisenseFusionPluginOptions): Plugin
   // ── Per-mode extra plugins (dts for library modes, zip for fusion) ────────
   const testFilePattern = `${srcRoot}/**/*.{test,spec}.{ts,tsx}`;
   const modeExtraPlugins: Record<BuildMode, Plugin[]> = {
-    react: [
-      dts({
-        outDir: TYPES_OUT_DIR,
-        entryRoot: srcRoot,
-        include: [srcRoot],
-        exclude: [testFilePattern],
-      }),
-    ],
-    preact: [
-      dts({
-        outDir: TYPES_OUT_DIR,
-        entryRoot: srcRoot,
-        include: [srcRoot],
-        exclude: [testFilePattern],
-        aliasesExclude: [/@sisense\/sdk-ui$/, /^react/, /^react-dom/],
-      }),
-    ],
-    both: [
+    csdk: [
       dts({
         outDir: TYPES_OUT_DIR,
         entryRoot: srcRoot,
@@ -303,8 +278,21 @@ export function sisenseFusionPlugin(options: SisenseFusionPluginOptions): Plugin
     },
   };
 
+  const titlePlugin: Plugin = {
+    name: 'sisense-dev-title',
+    transformIndexHtml(html) {
+      return html.replace(/<title>.*?<\/title>/, `<title>${pluginName} — Dev</title>`);
+    },
+  };
+
   const cssInjected = cssInjectedByJsPlugin();
   const cssPlugins: Plugin[] = Array.isArray(cssInjected) ? cssInjected : [cssInjected as Plugin];
 
-  return [cleanDistPlugin, ...cssPlugins, fusionFilesPlugin, ...modeExtraPlugins[mode]];
+  return [
+    cleanDistPlugin,
+    titlePlugin,
+    ...cssPlugins,
+    fusionFilesPlugin,
+    ...modeExtraPlugins[mode],
+  ];
 }

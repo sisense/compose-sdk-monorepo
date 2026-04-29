@@ -12,8 +12,8 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=charts%2Fmap-scatter&mode=docs'
- *  width=1000
- *  height=900
+ *  width='1000'
+ *  height='900'
  *  style='border:none;'
  * />
  *

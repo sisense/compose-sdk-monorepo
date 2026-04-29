@@ -3,7 +3,6 @@ import { http, HttpResponse } from 'msw';
 
 import { server } from '@/__mocks__/msw';
 import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
-import { TableWidgetProps } from '@/domains/widgets/components/table-widget/types';
 
 import { AiTestWrapper } from './__mocks__/index.js';
 import {
@@ -39,7 +38,7 @@ describe('useGetQueryRecommendations', () => {
       const widget1 = result.current.data![0].widgetProps as ChartWidgetProps;
       expect(widget1.title).toBe('total of Revenue by Brand');
 
-      const widget2 = result.current.data![1].widgetProps as TableWidgetProps;
+      const widget2 = result.current.data![1].widgetProps as ChartWidgetProps;
       expect(widget2.title).toBe('total of Revenue by Category');
     });
   });
@@ -82,7 +81,7 @@ describe('useGetQueryRecommendations', () => {
       const widget1 = result.current.data![0].widgetProps as ChartWidgetProps;
       expect(widget1.title).toBe('total of Revenue by Brand');
 
-      const widget2 = result.current.data![1].widgetProps as TableWidgetProps;
+      const widget2 = result.current.data![1].widgetProps as ChartWidgetProps;
       expect(widget2.title).toBe('total of Revenue by Category');
     });
   });

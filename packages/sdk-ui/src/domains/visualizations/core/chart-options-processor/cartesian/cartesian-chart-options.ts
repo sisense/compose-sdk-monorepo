@@ -16,6 +16,7 @@ import { CartesianChartDataOptionsInternal } from '../../chart-data-options/type
 import { ChartData } from '../../chart-data/types';
 import { HighchartsOptionsInternal, Stacking } from '../chart-options-service';
 import { chartOptionsDefaults } from '../defaults/cartesian';
+import { withScrollerEvent } from '../translations/axis-section';
 import {
   LineChartDesignOptions,
   StackableChartDesignOptions,
@@ -31,6 +32,7 @@ import {
   getPolarDataLabelsSettings,
 } from '../translations/value-label-section';
 import {
+  areAllDatetimeXAxes,
   buildCategoriesMeta,
   buildStackingMeta,
   buildXAxisSettings,
@@ -109,6 +111,7 @@ export const getCartesianChartOptions = (
     dataOptions,
     chartDesignOptions,
     continuousDatetimeXAxis,
+    dateFormatter,
   );
 
   const xAxisSettings = buildXAxisSettings({
@@ -184,6 +187,7 @@ export const getCartesianChartOptions = (
       totalLabelRightSpacing,
       totalLabelTopSpacing,
     }),
+    withScrollerEvent(chartDesignOptions.autoZoom?.onScrollerChange),
   )(xAxisSettings);
 
   const updatedYAxisSettings = withYAxisLabelPositioning({
@@ -230,7 +234,7 @@ export const getCartesianChartOptions = (
         polar: chartState.isPolarChart,
         events: {
           load: function () {
-            if (dataOptions.x.length === 2) return;
+            if (dataOptions.x.length === 2 && !areAllDatetimeXAxes(dataOptions.x)) return;
             const chart = this as Highcharts.Chart;
             const chartWidth = chart.chartWidth;
             const chartHeight = chart.chartHeight;

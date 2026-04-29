@@ -36,9 +36,10 @@ export function declarationMemberIdentifier(
   if (Boolean(reflection.getSignature || Boolean(reflection.setSignature))) {
     name.push(context.declarationMemberAccessor(reflection));
   } else {
+    const useEncodedBrackets = context.options.getValue('useHTMLEncodedBrackets') as boolean;
     name.push(
       bold(
-        reflection.name.startsWith('<') ? backTicks(reflection.name) : escapeChars(reflection.name),
+        reflection.name.startsWith('<') ? backTicks(reflection.name) : escapeChars(reflection.name, useEncodedBrackets),
       ),
     );
   }
@@ -55,9 +56,9 @@ export function declarationMemberIdentifier(
 
   if (reflection.typeParameters) {
     md.push(
-      `<${reflection.typeParameters
+      `${context.getAngleBracket('open')}${reflection.typeParameters
         ?.map((typeParameter) => backTicks(typeParameter.name))
-        .join(', ')}>`,
+        .join(', ')}${context.getAngleBracket('close')}`,
     );
   }
 

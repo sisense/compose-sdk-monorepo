@@ -10,4 +10,3 @@ title: Functions
 - [isLinearGradient](function.isLinearGradient.md)
 - [isRadialGradient](function.isRadialGradient.md)
 - [LoadingOverlay](function.LoadingOverlay.md)
-- [useGetDataSourceDimensions](function.useGetDataSourceDimensions.md)

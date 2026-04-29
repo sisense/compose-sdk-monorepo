@@ -5,7 +5,7 @@ import { TabberButtonsWidget } from '@/domains/widgets/components/tabber-buttons
 import { PluginContext } from './plugin-context.js';
 import { Plugin } from './types.js';
 import { getValidPlugins } from './validate-plugins.js';
-import type { CustomVisualization, WidgetPlugin } from './widget-plugins/types.js';
+import type { AnyWidgetPlugin, CustomVisualization } from './widget-plugins/types.js';
 import { WidgetPluginRegistry } from './widget-plugins/widget-plugin-registry.js';
 
 /**
@@ -33,7 +33,8 @@ export interface PluginProviderProps {
 export const PluginProvider: React.FC<PluginProviderProps> = ({ plugins, children }) => {
   const validPlugins = useMemo(() => getValidPlugins(plugins, __PACKAGE_VERSION__), [plugins]);
   const widgetPlugins = useMemo(
-    () => validPlugins.filter((plugin): plugin is WidgetPlugin => plugin.pluginType === 'widget'),
+    () =>
+      validPlugins.filter((plugin): plugin is AnyWidgetPlugin => plugin.pluginType === 'widget'),
     [validPlugins],
   );
 

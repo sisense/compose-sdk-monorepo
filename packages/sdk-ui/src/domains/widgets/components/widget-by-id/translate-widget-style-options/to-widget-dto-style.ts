@@ -1,13 +1,17 @@
+import type { PivotGrandTotals } from '@sisense/sdk-data';
+
 import { isWidgetDesignEnabled } from '@/domains/widgets/widget-model/widget-model-translator/utils.js';
 import { AppSettings } from '@/infra/app/settings/settings.js';
 import { LEGACY_DESIGN_TYPES } from '@/infra/themes/legacy-design-settings';
 import type {
   AlignmentTypes,
+  AreamapType,
   AreaStyleOptions,
   AxisLabel,
   CartesianStyleOptions,
   CompleteThemeSettings,
   DataLimits,
+  FunnelStyleOptions,
   GaugeIndicatorStyleOptions,
   IndicatorStyleOptions,
   LegendOptions,
@@ -18,17 +22,33 @@ import type {
   NumericBarIndicatorStyleOptions,
   NumericSimpleIndicatorStyleOptions,
   PieStyleOptions,
+  PivotTableWidgetStyleOptions,
+  PolarStyleOptions,
   RadiusSizes,
+  ScattermapStyleOptions,
+  ScatterStyleOptions,
   SeriesLabels,
   ShadowsTypes,
   SpaceSizes,
+  StackableStyleOptions,
+  SunburstStyleOptions,
+  TableStyleOptions,
   TotalLabels,
+  TreemapStyleOptions,
   WidgetStyleOptions,
 } from '@/types.js';
 
 import type {
   AxisStyle,
   CartesianWidgetStyle,
+  FunnelWidgetStyle,
+  PivotWidgetStyle,
+  PolarWidgetStyle,
+  ScattermapWidgetStyle,
+  ScatterWidgetStyle,
+  SunburstWidgetStyle,
+  TableWidgetStyle,
+  TreemapWidgetStyle,
   WidgetDesign,
   WidgetStyle,
   WidgetSubtype,
@@ -211,20 +231,24 @@ function buildCommonCartesianWidgetStyle(
   };
 }
 
-const AREA_STACKED_SUBTYPES: ReadonlySet<WidgetSubtype> = new Set([
+const STACKED_SUBTYPES: ReadonlySet<WidgetSubtype> = new Set([
   'area/stacked',
   'area/stackedspline',
+  'column/stackedcolumn',
+  'bar/stacked',
 ]);
-const AREA_STACKED100_SUBTYPES: ReadonlySet<WidgetSubtype> = new Set([
+const STACKED100_SUBTYPES: ReadonlySet<WidgetSubtype> = new Set([
   'area/stacked100',
   'area/stackedspline100',
+  'column/stackedcolumn100',
+  'bar/stacked100',
 ]);
 
 /**
- * Inverse of {@link extractValueLabelsOptions} for area chart subtypes: restores Fusion
- * `seriesLabels.labels` (stacked / stackedPercentage / types) from SDK model fields.
+ * Inverse of {@link extractValueLabelsOptions} for stacked chart subtypes (area, bar, column):
+ * restores Fusion `seriesLabels.labels` (stacked / stackedPercentage / types) from SDK model fields.
  */
-function toAreaSeriesLabelsStyle(
+function toStackedSeriesLabelsStyle(
   widgetSubtype: WidgetSubtype,
   seriesLabels?: SeriesLabels,
   totalLabels?: TotalLabels,
@@ -232,9 +256,9 @@ function toAreaSeriesLabelsStyle(
   const enabled = seriesLabels?.enabled ?? false;
   const rotation = seriesLabels?.rotation ?? 0;
   const showValue = seriesLabels?.showValue ?? false;
-  const showTotals = totalLabels?.enabled && enabled;
+  const showTotals = !!(totalLabels?.enabled && enabled);
 
-  if (AREA_STACKED_SUBTYPES.has(widgetSubtype)) {
+  if (STACKED_SUBTYPES.has(widgetSubtype)) {
     return {
       enabled,
       rotation,
@@ -252,7 +276,7 @@ function toAreaSeriesLabelsStyle(
     };
   }
 
-  if (AREA_STACKED100_SUBTYPES.has(widgetSubtype)) {
+  if (STACKED100_SUBTYPES.has(widgetSubtype)) {
     const showPercentage = seriesLabels?.showPercentage ?? false;
     return {
       enabled,
@@ -406,6 +430,7 @@ export function toPieWidgetStyle(styleOptions: PieStyleOptions): WidgetStyle {
 
   return {
     legend,
+    navigator: toNavigatorStyle(undefined),
     labels: {
       enabled: l.enabled ?? true,
       categories: l.categories ?? true,
@@ -415,7 +440,7 @@ export function toPieWidgetStyle(styleOptions: PieStyleOptions): WidgetStyle {
     },
     ...(dataLimits && { dataLimits }),
     ...(styleOptions.convolution && { convolution: styleOptions.convolution }),
-  } as WidgetStyle;
+  };
 }
 
 /**
@@ -493,12 +518,271 @@ export function toAreaWidgetStyle(
   styleOptions: AreaStyleOptions,
   widgetSubtype: WidgetSubtype,
 ): CartesianWidgetStyle {
+  return toStackedCartesianWidgetStyle(styleOptions, widgetSubtype);
+}
+
+function toStackedCartesianWidgetStyle(
+  styleOptions: AreaStyleOptions | StackableStyleOptions,
+  widgetSubtype: WidgetSubtype,
+): CartesianWidgetStyle {
   return {
     ...buildCommonCartesianWidgetStyle(styleOptions),
-    seriesLabels: toAreaSeriesLabelsStyle(
+    seriesLabels: toStackedSeriesLabelsStyle(
       widgetSubtype,
       styleOptions.seriesLabels,
       styleOptions.totalLabels,
     ),
+  };
+}
+
+/**
+ * Converts funnel chart style options to Fusion FunnelWidgetStyle DTO.
+ * Inverse of {@link extractFunnelChartStyleOptions}.
+ *
+ * @param styleOptions - Funnel style options from WidgetModel.styleOptions
+ * @returns Fusion FunnelWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toFunnelWidgetStyle(styleOptions: FunnelStyleOptions): FunnelWidgetStyle {
+  const l = styleOptions.labels ?? {};
+  return {
+    legend: toLegendStyle(styleOptions.legend),
+    navigator: toNavigatorStyle(undefined),
+    size: styleOptions.funnelSize ?? 'regular',
+    type: styleOptions.funnelType ?? 'regular',
+    direction: styleOptions.funnelDirection ?? 'regular',
+    labels: {
+      enabled: l.enabled ?? true,
+      categories: l.categories ?? true,
+      percent: l.percent ?? true,
+      value: l.value ?? false,
+      decimals: l.decimals ?? false,
+    },
+  } as FunnelWidgetStyle;
+}
+
+/**
+ * Converts treemap chart style options to Fusion TreemapWidgetStyle DTO.
+ * Inverse of {@link extractTreemapChartStyleOptions}.
+ *
+ * @param styleOptions - Treemap style options from WidgetModel.styleOptions
+ * @returns Fusion TreemapWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toTreemapWidgetStyle(styleOptions: TreemapStyleOptions): TreemapWidgetStyle {
+  const isValueMode = styleOptions.tooltip?.mode !== 'contribution';
+  return {
+    'title/1': styleOptions.labels?.category?.[0]?.enabled ?? true,
+    'title/2': styleOptions.labels?.category?.[1]?.enabled ?? true,
+    'title/3': styleOptions.labels?.category?.[2]?.enabled ?? true,
+    'tooltip/value': isValueMode,
+    'tooltip/contribution': !isValueMode,
+  };
+}
+
+/**
+ * Converts sunburst chart style options to Fusion SunburstWidgetStyle DTO.
+ * Inverse of {@link extractSunburstChartStyleOptions}.
+ *
+ * @param styleOptions - Sunburst style options from WidgetModel.styleOptions
+ * @returns Fusion SunburstWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toSunburstWidgetStyle(styleOptions: SunburstStyleOptions): SunburstWidgetStyle {
+  const isValueMode = styleOptions.tooltip?.mode !== 'contribution';
+  return {
+    'legend/enabled': styleOptions.legend?.enabled ?? true,
+    'legend/position': styleOptions.legend?.position ?? 'bottom',
+    'tooltip/value': isValueMode,
+    'tooltip/contribution': !isValueMode,
+  };
+}
+
+/**
+ * Converts bar chart style options to Fusion CartesianWidgetStyle DTO.
+ * Used when serializing a bar chart widget back to WidgetDto.
+ *
+ * @param styleOptions - Bar/stackable style options from WidgetModel.styleOptions
+ * @param widgetSubtype - Resolved Fusion widget subtype (e.g. 'bar/classic', 'bar/stacked', 'bar/stacked100')
+ * @returns Fusion CartesianWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toBarWidgetStyle(
+  styleOptions: StackableStyleOptions,
+  widgetSubtype: WidgetSubtype,
+): CartesianWidgetStyle {
+  return toStackedCartesianWidgetStyle(styleOptions, widgetSubtype);
+}
+
+/**
+ * Converts column chart style options to Fusion CartesianWidgetStyle DTO.
+ * Used when serializing a column chart widget back to WidgetDto.
+ *
+ * @param styleOptions - Column/stackable style options from WidgetModel.styleOptions
+ * @param widgetSubtype - Resolved Fusion widget subtype (e.g. 'column/classic', 'column/stackedcolumn', 'column/stackedcolumn100')
+ * @returns Fusion CartesianWidgetStyle for the widget DTO
+ * @internal
+ */
+export const toColumnWidgetStyle = toBarWidgetStyle;
+
+/**
+ * Converts polar chart style options to Fusion PolarWidgetStyle DTO.
+ * Uses `categories` / `axis` field names (instead of `xAxis` / `yAxis` used by Cartesian charts).
+ * Used when serializing a polar chart widget back to WidgetDto.
+ *
+ * @param styleOptions - Polar style options from WidgetModel.styleOptions
+ * @returns Fusion PolarWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toPolarWidgetStyle(styleOptions: PolarStyleOptions): PolarWidgetStyle {
+  const dataLimits = toDataLimitsStyle(styleOptions.dataLimits);
+  return {
+    legend: toLegendStyle(styleOptions.legend),
+    navigator: toNavigatorStyle(styleOptions.navigator),
+    categories: toAxisStyle(styleOptions.xAxis),
+    axis: toAxisStyle(styleOptions.yAxis),
+    seriesLabels: toSeriesLabelsStyle(styleOptions.seriesLabels),
+    ...(dataLimits && { dataLimits }),
+  };
+}
+
+/**
+ * Maps SDK scatter marker size to Fusion DTO marker size style.
+ * Inverse of the extraction performed by `extractScatterChartStyleOptions`.
+ *
+ * @internal
+ */
+export function toScatterMarkerSizeStyle(
+  markerSize?: ScatterStyleOptions['markerSize'],
+): ScatterWidgetStyle['markerSize'] {
+  if (!markerSize) return undefined;
+  return {
+    defaultSize: markerSize.scatterDefaultSize,
+    min: markerSize.scatterBubbleMinSize,
+    max: markerSize.scatterBubbleMaxSize,
+  };
+}
+
+/**
+ * Converts scatter chart style options to Fusion ScatterWidgetStyle DTO.
+ * Inverse of `extractScatterChartStyleOptions`.
+ *
+ * @param styleOptions - Scatter style options from WidgetModel.styleOptions
+ * @returns Fusion ScatterWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toScatterWidgetStyle(styleOptions: ScatterStyleOptions): ScatterWidgetStyle {
+  const dataLimits = toDataLimitsStyle(styleOptions.dataLimits);
+  const markerSize = toScatterMarkerSizeStyle(styleOptions.markerSize);
+  return {
+    legend: toLegendStyle(styleOptions.legend),
+    navigator: toNavigatorStyle(styleOptions.navigator),
+    xAxis: toAxisStyle(styleOptions.xAxis),
+    yAxis: toAxisStyle(styleOptions.yAxis),
+    seriesLabels: toSeriesLabelsStyle(styleOptions.seriesLabels),
+    ...(dataLimits && { dataLimits }),
+    ...(markerSize && { markerSize }),
+  };
+}
+
+/** Fusion's baked-in defaults for `style.markers` on a scattermap widget */
+const DEFAULT_SCATTERMAP_MARKERS: ScattermapWidgetStyle['markers'] = {
+  fill: 'filled',
+  size: { defaultSize: 4, min: 4, max: 24 },
+};
+
+/**
+ * Converts scattermap style options to Fusion ScattermapWidgetStyle DTO.
+ * Inverse of `extractScattermapChartStyleOptions`. Missing SDK fields fall back
+ * to Fusion's scattermap defaults so the emitted DTO always carries a fully
+ * populated `markers` object (Fusion assumes it is always set).
+ *
+ * @param styleOptions - Scattermap style options from WidgetModel.styleOptions
+ * @returns Fusion ScattermapWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toScattermapWidgetStyle(
+  styleOptions: ScattermapStyleOptions,
+): ScattermapWidgetStyle {
+  const { fill, size } = styleOptions.markers ?? {};
+  return {
+    markers: {
+      fill: fill ?? DEFAULT_SCATTERMAP_MARKERS.fill,
+      size: {
+        defaultSize: size?.defaultSize ?? DEFAULT_SCATTERMAP_MARKERS.size.defaultSize,
+        min: size?.minSize ?? DEFAULT_SCATTERMAP_MARKERS.size.min,
+        max: size?.maxSize ?? DEFAULT_SCATTERMAP_MARKERS.size.max,
+
+        // Defaults from Fusion
+        inactive: false,
+        lowest: 1,
+        highest: 42,
+        step: 1,
+      },
+    },
+  };
+}
+
+/**
+ * Maps an SDK areamap `mapType` to the Fusion widget subtype used as the DTO
+ * `subtype` field. Inverse of the `subtype → mapType` mapping performed by
+ * {@link extractAreamapChartStyleOptions}. Defaults to `areamap/world` when
+ * `mapType` is unset or unrecognized — matching Fusion default.
+ *
+ * @internal
+ */
+export function toAreamapSubtype(mapType?: AreamapType): 'areamap/world' | 'areamap/usa' {
+  return mapType === 'usa' ? 'areamap/usa' : 'areamap/world';
+}
+
+/**
+ * Converts table style options to Fusion TableWidgetStyle DTO.
+ * Used when serializing a table widget back to WidgetDto.
+ *
+ * @param styleOptions - Table style options from WidgetModel.styleOptions
+ * @returns Fusion TableWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toTableWidgetStyle(styleOptions: TableStyleOptions): TableWidgetStyle {
+  const columnsWidth = styleOptions.columns?.width;
+  return {
+    pageSize: styleOptions.rowsPerPage ?? 25,
+    'colors/headers': styleOptions.header?.color?.enabled ?? true,
+    'colors/rows': styleOptions.rows?.alternatingColor?.enabled ?? true,
+    'colors/columns': styleOptions.columns?.alternatingColor?.enabled ?? false,
+    'width/content': columnsWidth === 'content' || columnsWidth === undefined,
+    'width/window': columnsWidth === 'auto',
+  };
+}
+
+/**
+ * Converts pivot table style options to Fusion PivotWidgetStyle DTO.
+ * Inverse of {@link extractPivotTableStyleOptions}.
+ *
+ * Grand totals come from {@link PivotTableDataOptions.grandTotals} in the WidgetModel, not
+ * from `styleOptions`, so they are passed in separately.
+ *
+ * @param styleOptions - Pivot table style options from WidgetModel.styleOptions
+ * @param grandTotals - Grand totals config from WidgetModel.dataOptions.grandTotals
+ * @returns Fusion PivotWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toPivotTableWidgetStyle(
+  styleOptions: PivotTableWidgetStyleOptions,
+  grandTotals?: PivotGrandTotals,
+): PivotWidgetStyle {
+  return {
+    ...(grandTotals?.rows !== undefined && { rowsGrandTotal: grandTotals.rows }),
+    ...(grandTotals?.columns !== undefined && { columnsGrandTotal: grandTotals.columns }),
+    colors: {
+      rows: styleOptions.alternatingRowsColor,
+      columns: styleOptions.alternatingColumnsColor,
+      headers: styleOptions.headersColor,
+      members: styleOptions.membersColor,
+      totals: styleOptions.totalsColor,
+    },
+    ...(styleOptions.rowsPerPage !== undefined && { pageSize: styleOptions.rowsPerPage }),
+    ...(styleOptions.rowHeight !== undefined && { rowHeight: styleOptions.rowHeight }),
+    ...(styleOptions.isAutoHeight !== undefined && { automaticHeight: styleOptions.isAutoHeight }),
   };
 }

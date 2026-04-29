@@ -265,6 +265,7 @@ const translateToJtdConfig = (
 
 /**
  * Extract pivot targets configuration from widget DTO and build Map-based targets
+ *
  * @param widget - Widget DTO with drillToDashboardConfig
  * @returns Map of dimensions/measures to their targets or undefined if no targets found
  * @internal
@@ -370,6 +371,7 @@ export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptio
         forceApplyBackgroundFilters: true,
       },
       ...(jtd ? { jtdConfig: jtd } : {}),
+      partialDtoOptions: { options: widget.options, style: widget.style },
     };
   });
 
@@ -460,18 +462,24 @@ export function withSpecificWidgetOptions(
     if (!widgetOptions) {
       return widgetDto;
     }
-    const { filtersOptions, jtdConfig } = widgetOptions;
+    const { filtersOptions, jtdConfig, partialDtoOptions } = widgetOptions;
+
+    // Merge partialDtoOptions.options as the base layer so original server options are preserved.
+    // filtersOptions-derived values are applied on top and take precedence.
+    const baseOptions = partialDtoOptions?.options
+      ? { ...partialDtoOptions.options, ...widgetDto.options }
+      : widgetDto.options;
 
     const options = filtersOptions
       ? {
-          ...widgetDto.options,
+          ...baseOptions,
           dashboardFiltersMode:
             filtersOptions.applyMode === CommonFiltersApplyMode.FILTER
               ? (WidgetDashboardFilterMode.FILTER as `${WidgetDashboardFilterMode}`)
               : (WidgetDashboardFilterMode.SELECT as `${WidgetDashboardFilterMode}`),
           selector: filtersOptions.shouldAffectFilters ?? true,
         }
-      : widgetDto.options;
+      : baseOptions;
 
     const metadata =
       filtersOptions?.ignoreFilters != null
@@ -617,6 +625,7 @@ function applySharedFormulas(
 
 /**
  * Find dimension or measure by instanceId in widget panels and convert to proper type
+ *
  * @param panels - Widget metadata panels to search
  * @param pivotDimension - Instance ID to find, this is not a PivotDimId, it is the instanceId of the dimension or measure
  * @returns Dimension/Measure object with optional location info or undefined if not found

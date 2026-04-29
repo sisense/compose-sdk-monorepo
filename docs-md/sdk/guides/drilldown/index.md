@@ -23,11 +23,11 @@ With Compose SDK you can create a drilldown experience using the charts in the `
 
 ![Drilldown with Compose SDK chart](../../img/drilldown-guide/csdk-context-menu.png 'Drilldown with Compose SDK chart')
 
-You can also create a drilldown experience using third party charts:
+You can also create a drilldown experience using third-party charts:
 
-![Drilldown with third party chart](../../img/drilldown-guide/plotly-csdk-context-menu.png 'Drilldown with third party chart')
+![Drilldown with third-party chart](../../img/drilldown-guide/plotly-csdk-context-menu.png 'Drilldown with third party chart')
 
-With both types of charts, you can use the built in drilldown-related components to show drilldown context menus and drilldown breadcrumbs:
+With both types of charts, you can use the built-in drilldown-related components to show drilldown context menus and drilldown breadcrumbs:
 
 ![Drilldown with Compose SDK components](../../img/drilldown-guide/csdk-components.png 'Drilldown with Compose SDK components')
 

@@ -95,3 +95,7 @@ examples/plugins-demo/demo-plugin/.npmignore
 examples/plugins-demo/demo-plugin/.prettierignore
 examples/plugins-demo/demo-plugin/.prettierrc
 examples/plugins-demo/angular/.angular
+
+.reports/changelog-release.md
+
+.claude/worktrees/

@@ -1,51 +1,30 @@
-import type { Attribute, Filter, FilterRelations, FunctionCall, Measure } from '@sisense/sdk-data';
+import type { Attribute, Filter, FilterRelations, Measure } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
-import { functionCallToString, getQueryPillTooltipModel } from './compose-code-to-readable';
+import {
+  getQueryPillTooltipModel,
+  simplifyComposeCodeForTooltip,
+} from './compose-code-to-readable';
 
-describe('functionCallToString', () => {
-  it('returns ??? when args is not an array', () => {
+describe('simplifyComposeCodeForTooltip', () => {
+  it('strips measureFactory, filterFactory, and DM prefixes', () => {
     expect(
-      functionCallToString({ function: 'x', args: undefined as unknown as FunctionCall['args'] }),
-    ).toBe('???');
+      simplifyComposeCodeForTooltip("measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')"),
+    ).toBe("sum(Commerce.Revenue, 'Total Revenue')");
   });
 
-  it('formats a simple call using the function name leaf', () => {
-    const fc: FunctionCall = { function: 'factory.sum', args: ['DM.A.B', '1'] };
-    expect(functionCallToString(fc)).toBe('sum(DM.A.B, 1)');
+  it('strips nested factory and DM tokens', () => {
+    expect(
+      simplifyComposeCodeForTooltip(
+        'filterFactory.topRanking(DM.Brand.Brand, measureFactory.sum(DM.Commerce.Revenue), 5)',
+      ),
+    ).toBe('topRanking(Brand.Brand, sum(Commerce.Revenue), 5)');
   });
 
-  it('drops string args whose path leaf is in ignoreArgs', () => {
-    const fc: FunctionCall = { function: 'sum', args: ['DM.Commerce.Revenue', 'Other'] };
-    expect(functionCallToString(fc, ['Revenue'])).toBe('sum(Other)');
-  });
-
-  it('stringifies nested function calls', () => {
-    const inner: FunctionCall = { function: 'inner.f', args: ['x'] };
-    const fc: FunctionCall = { function: 'outer.g', args: [inner] };
-    expect(functionCallToString(fc)).toBe('g(f(x))');
-  });
-
-  it('formats array args as bracketed lists', () => {
-    const fc: FunctionCall = { function: 'm', args: [['a', 'b']] };
-    expect(functionCallToString(fc)).toBe('m([a,b])');
-  });
-
-  it('formats null and undefined args without throwing', () => {
-    expect(functionCallToString({ function: 'm', args: [null as unknown as string] })).toBe(
-      'm(null)',
-    );
-    expect(functionCallToString({ function: 'm', args: [undefined as unknown as string] })).toBe(
-      'm(undefined)',
-    );
-  });
-
-  it('formats object args as JSON, not [object Object]', () => {
-    const fc: FunctionCall = {
-      function: 'm',
-      args: [{ a: 1 } as unknown as string],
-    };
-    expect(functionCallToString(fc)).toBe('m({"a":1})');
+  it('trims leading and trailing whitespace before stripping prefixes', () => {
+    expect(
+      simplifyComposeCodeForTooltip("  measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')  "),
+    ).toBe("sum(Commerce.Revenue, 'Total Revenue')");
   });
 });
 
@@ -67,7 +46,21 @@ describe('getQueryPillTooltipModel', () => {
     ).toBeNull();
   });
 
-  it('parses measure composeCode into a readable formula when present', () => {
+  it('detects call-shaped composeCode and strips factories when leading whitespace is present', () => {
+    const model = getQueryPillTooltipModel({
+      type: 'pill',
+      label: 'Total Revenue',
+      category: 'measure',
+      tooltipData: {
+        name: 'Total Revenue',
+        composeCode: "  measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')",
+      } as unknown as Measure,
+    });
+    expect(model).not.toBeNull();
+    expect(model?.formula).toBe("sum(Commerce.Revenue, 'Total Revenue')");
+  });
+
+  it('uses stripped composeCode as formula when present', () => {
     const model = getQueryPillTooltipModel({
       type: 'pill',
       label: 'Total Revenue',
@@ -79,8 +72,31 @@ describe('getQueryPillTooltipModel', () => {
     });
     expect(model).not.toBeNull();
     expect(model?.typeLabel).toBe('Measure');
-    expect(model?.formula).toBe('sum(DM.Commerce.Revenue)');
+    expect(model?.formula).toBe("sum(Commerce.Revenue, 'Total Revenue')");
     expect(model?.layoutText).toBe('Total Revenue');
+    expect(model?.column).toBe('Total Revenue');
+    expect(model?.showColumnInTooltip).toBe(false);
+    expect(model?.showFormulaInTooltip).toBe(true);
+  });
+
+  it('keeps full compose when attribute leaf matches path (regression)', () => {
+    const model = getQueryPillTooltipModel({
+      type: 'pill',
+      label: 'Total Revenue',
+      category: 'measure',
+      tooltipData: {
+        name: 'Total Revenue',
+        composeCode: "measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')",
+        attribute: {
+          name: 'Revenue',
+          composeCode: 'DM.Commerce.Revenue',
+        },
+      } as unknown as Measure,
+    });
+    expect(model?.column).toBe('Commerce.Revenue');
+    expect(model?.formula).toBe("sum(Commerce.Revenue, 'Total Revenue')");
+    expect(model?.showColumnInTooltip).toBe(true);
+    expect(model?.showFormulaInTooltip).toBe(true);
   });
 
   it('uses SUM(column) when aggregate measure has no composeCode function call', () => {
@@ -97,10 +113,13 @@ describe('getQueryPillTooltipModel', () => {
         },
       } as unknown as Measure,
     });
-    expect(model?.formula).toBe('SUM(Revenue)');
+    expect(model?.column).toBe('Commerce.Revenue');
+    expect(model?.formula).toBe('SUM(Commerce.Revenue)');
+    expect(model?.showColumnInTooltip).toBe(true);
+    expect(model?.showFormulaInTooltip).toBe(true);
   });
 
-  it('parses filter composeCode into a readable members(...) formula', () => {
+  it('uses stripped filter composeCode as formula', () => {
     const model = getQueryPillTooltipModel({
       type: 'pill',
       label: 'Region',
@@ -112,8 +131,10 @@ describe('getQueryPillTooltipModel', () => {
     });
     expect(model).not.toBeNull();
     expect(model?.typeLabel).toBe('Filter');
-    expect(model?.formula).toContain('members(');
-    expect(model?.column).toBe('Region');
+    expect(model?.formula).toBe("members(Geography.Region, ['North', 'South'])");
+    expect(model?.column).toBe('Geography.Region');
+    expect(model?.showColumnInTooltip).toBe(true);
+    expect(model?.showFormulaInTooltip).toBe(true);
   });
 
   it('uses pill label as layoutText when source has no name', () => {
@@ -129,23 +150,104 @@ describe('getQueryPillTooltipModel', () => {
     expect(model?.layoutText).toBe('Region');
   });
 
-  it('uses dimension column leaf as formula when composeCode is a DM path', () => {
+  it('shows Column for DM path dimension when path differs from display name; omits duplicate Formula', () => {
     const model = getQueryPillTooltipModel({
       type: 'pill',
-      label: 'Category',
+      label: 'Product Category',
       category: 'dimension',
       tooltipData: {
-        name: 'Category',
+        name: 'Product Category',
         composeCode: 'DM.Category.Category',
       } as Attribute,
     });
     expect(model).not.toBeNull();
     expect(model?.typeLabel).toBe('Dimension');
-    expect(model?.formula).toBe('Category');
-    expect(model?.column).toBe('Category');
+    expect(model?.formula).toBe('Category.Category');
+    expect(model?.column).toBe('Category.Category');
+    expect(model?.showColumnInTooltip).toBe(true);
+    expect(model?.showFormulaInTooltip).toBe(false);
   });
 
-  it('falls back to aggregation formula when composeCode parses with an error', () => {
+  it('unwraps [[...]] in DM path for column display (spaces in column name)', () => {
+    const model = getQueryPillTooltipModel({
+      type: 'pill',
+      label: 'Age Range',
+      category: 'dimension',
+      tooltipData: {
+        name: 'Age Range',
+        composeCode: 'DM.Commerce.[[Age Range]]',
+      } as Attribute,
+    });
+    expect(model?.column).toBe('Commerce.Age Range');
+    expect(model?.formula).toBe('Commerce.Age Range');
+    expect(model?.showColumnInTooltip).toBe(true);
+    expect(model?.showFormulaInTooltip).toBe(false);
+  });
+
+  it('strips only leading DM. in path; preserves DM. later in the path', () => {
+    const model = getQueryPillTooltipModel({
+      type: 'pill',
+      label: 'Edge',
+      category: 'dimension',
+      tooltipData: {
+        name: 'Edge',
+        composeCode: 'DM.Category.DM.Label',
+      } as Attribute,
+    });
+    expect(model?.column).toBe('Category.DM.Label');
+    expect(model?.formula).toBe('Category.DM.Label');
+  });
+
+  it('unwraps [[...]] in DM path when segment contains parentheses (e.g. currency suffix)', () => {
+    const model = getQueryPillTooltipModel({
+      type: 'pill',
+      label: 'Revenue (USD)',
+      category: 'dimension',
+      tooltipData: {
+        name: 'Revenue (USD)',
+        composeCode: 'DM.Commerce.[[Revenue (USD)]]',
+      } as Attribute,
+    });
+    expect(model?.column).toBe('Commerce.Revenue (USD)');
+    expect(model?.formula).toBe('Commerce.Revenue (USD)');
+    expect(model?.showColumnInTooltip).toBe(true);
+    expect(model?.showFormulaInTooltip).toBe(false);
+  });
+
+  it('includes date level in DM path for dimensional level attribute', () => {
+    const model = getQueryPillTooltipModel({
+      type: 'pill',
+      label: 'Years in Date',
+      category: 'dimension',
+      tooltipData: {
+        name: 'Years in Date',
+        composeCode: 'DM.Commerce.Date.Years',
+      } as Attribute,
+    });
+    expect(model?.column).toBe('Commerce.Date.Years');
+    expect(model?.formula).toBe('Commerce.Date.Years');
+    expect(model?.showColumnInTooltip).toBe(true);
+    expect(model?.showFormulaInTooltip).toBe(false);
+  });
+
+  it('hides column when it matches measure name for customFormula', () => {
+    const model = getQueryPillTooltipModel({
+      type: 'pill',
+      label: 'Revenue When Cost Under 100',
+      category: 'measure',
+      tooltipData: {
+        name: 'Revenue When Cost Under 100',
+        composeCode:
+          "customFormula('Revenue When Cost Under 100', 'CASE WHEN [cost] < 100 THEN [revenue] ELSE 0 END', { cost: sum(Commerce.Cost), revenue: sum(Commerce.Revenue) })",
+      } as unknown as Measure,
+    });
+    expect(model?.column).toBe('Revenue When Cost Under 100');
+    expect(model?.showColumnInTooltip).toBe(false);
+    expect(model?.showFormulaInTooltip).toBe(true);
+    expect(model?.formula).toContain('customFormula');
+  });
+
+  it('uses stripped compose when call-shaped even if not parseable as valid compose', () => {
     const model = getQueryPillTooltipModel({
       type: 'pill',
       label: 'Bad',
@@ -158,6 +260,9 @@ describe('getQueryPillTooltipModel', () => {
       } as unknown as Measure,
     });
     expect(model).not.toBeNull();
-    expect(model?.formula).toBe('SUM(Revenue)');
+    expect(model?.formula).toBe('x(');
+    expect(model?.column).toBe('Commerce.Revenue');
+    expect(model?.showColumnInTooltip).toBe(true);
+    expect(model?.showFormulaInTooltip).toBe(true);
   });
 });

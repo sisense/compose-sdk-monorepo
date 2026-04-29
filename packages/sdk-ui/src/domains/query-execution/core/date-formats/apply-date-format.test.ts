@@ -96,6 +96,8 @@ describe('when the fiscal year feature flag is disabled', () => {
     { locale: enUS, date: zero, format: 'ww', expected: '01' },
     { locale: enUS, date: zero, format: 'w yyyy', expected: '1 1970' },
     { locale: enUS, date: zero, format: 'ww yyyy', expected: '01 1970' },
+    { locale: enUS, date: zero, format: 'WEEK-ww', expected: 'WEEK-01' },
+    { locale: enUS, date: zero, format: 'WEEK-w', expected: 'WEEK-1' },
 
     { locale: enUS, date: zero, format: 'HH:mm', expected: '00:00' },
     { locale: enUS, date: zero, format: 'HH', expected: '00' },

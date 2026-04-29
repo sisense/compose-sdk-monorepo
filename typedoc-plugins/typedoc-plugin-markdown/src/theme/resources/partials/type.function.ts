@@ -11,10 +11,10 @@ export function functionType(
 ): string {
   const functions = modelSignatures.map((fn) => {
     const typeParams = fn.typeParameters
-      ? `<${fn.typeParameters
+      ? `${context.getAngleBracket('open')}${fn.typeParameters
           .map((typeParameter) => backTicks(typeParameter.name))
-          .join(', ')}>`
-      : [];
+          .join(', ')}${context.getAngleBracket('close')}`
+      : '';
     const params = fn.parameters
       ? fn.parameters.map((param) => {
           return `${param.flags.isRest ? '...' : ''}${backTicks(param.name)}${

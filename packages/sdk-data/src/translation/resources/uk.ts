@@ -30,6 +30,7 @@ export const translation: TranslationDictionary = {
         'Jaql для {{attributeName}} містить непідтримуваний condition фільтр: {{filter}}',
       formulaFiltersNotSupported:
         'Фільтри, що містять формули для {{attributeName}} наразі не підтримуються: {{filter}}',
+      unexpectedFilterRelationsModelNode: 'Неочікуваний вузол моделі зв’язків фільтрів: {{node}}',
     },
     unsupportedDimensionalElement: 'Непідтримуваний тип елемента',
   },

@@ -52,6 +52,7 @@ TypeScript interfaces for components and services listed above
 - [GaugeIndicatorStyleOptions](interface.GaugeIndicatorStyleOptions.md)
 - [GetDashboardModelOptions](interface.GetDashboardModelOptions.md)
 - [GetDashboardModelsOptions](interface.GetDashboardModelsOptions.md)
+- [GetDataSourceDimensionsParams](interface.GetDataSourceDimensionsParams.md)
 - [GetFilterMembersData](interface.GetFilterMembersData.md)
 - [GetFilterMembersParams](interface.GetFilterMembersParams.md)
 - [GetHierarchyModelsParams](interface.GetHierarchyModelsParams.md)

@@ -72,7 +72,7 @@ export function useWidgetNarrativeState({
   verbosity,
   enabled = true,
   ignoreTrendAndForecast = false,
-  isUnifiedNarrationEnabled: optionsUnified,
+  isUnified: optionsUnified,
   isSisenseAiEnabled: optionsSisenseAi,
 }: UseWidgetNarrativeStateParams): UseWidgetNarrativeStateResult {
   const { app } = useSisenseContext();
@@ -80,15 +80,14 @@ export function useWidgetNarrativeState({
 
   const narrativeOptions = useMemo(
     () => ({
-      isUnifiedNarrationEnabled:
-        optionsUnified ?? app?.settings?.isUnifiedNarrationEnabled ?? false,
-      isSisenseAiEnabled: optionsSisenseAi ?? app?.settings?.isSisenseAiEnabled ?? false,
+      isUnified: optionsUnified ?? app?.settings?.narrative?.isUnified ?? false,
+      isSisenseAiEnabled: optionsSisenseAi ?? app?.settings?.narrative?.isSisenseAiEnabled ?? false,
     }),
     [
       optionsUnified,
       optionsSisenseAi,
-      app?.settings?.isUnifiedNarrationEnabled,
-      app?.settings?.isSisenseAiEnabled,
+      app?.settings?.narrative?.isUnified,
+      app?.settings?.narrative?.isSisenseAiEnabled,
     ],
   );
 
@@ -147,7 +146,7 @@ export function useWidgetNarrativeState({
       'narrative',
       payloadKey,
       clientId,
-      narrativeOptions.isUnifiedNarrationEnabled,
+      narrativeOptions.isUnified,
       narrativeOptions.isSisenseAiEnabled,
     ],
     queryFn: () => {

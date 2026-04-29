@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import { WidgetPlugin } from './widget-plugins/types.js';
+import type { AnyWidgetPlugin } from './widget-plugins/types.js';
 import type { WidgetPluginRegistry } from './widget-plugins/widget-plugin-registry.js';
 
 /**
@@ -12,7 +12,7 @@ export interface PluginContextValue {
   /**
    * Validated widget plugin declarations (metadata)
    */
-  widgetPlugins: readonly WidgetPlugin[];
+  widgetPlugins: readonly AnyWidgetPlugin[];
   /**
    * Central widget component registry (used for lookup and legacy bridge)
    */

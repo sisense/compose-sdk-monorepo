@@ -73,6 +73,7 @@ exports[`prepareChartDesignOptions > should return design options for combo "lin
 {
   "autoZoom": {
     "enabled": true,
+    "onScrollerChange": undefined,
     "scrollerLocation": undefined,
   },
   "dataLimits": {

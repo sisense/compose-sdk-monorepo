@@ -37,15 +37,7 @@ export const ChatApiProvider = ({
 }) => {
   const { app } = useSisenseContext();
   const api = useMemo(
-    () =>
-      app
-        ? new ChatRestApi(
-            app.httpClient,
-            volatile,
-            app.settings?.isUnifiedNarrationEnabled,
-            app.settings?.isSisenseAiEnabled,
-          )
-        : undefined,
+    () => (app ? new ChatRestApi(app.httpClient, volatile) : undefined),
     [app, volatile],
   );
 

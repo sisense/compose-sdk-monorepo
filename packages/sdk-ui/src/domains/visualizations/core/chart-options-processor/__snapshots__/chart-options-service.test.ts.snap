@@ -146,14 +146,14 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           },
           {
             "custom": {
-              "xDisplayValue": "2020-04",
+              "xDisplayValue": "Y-04",
             },
             "x": 1585785600000,
             "y": 0,
           },
           {
             "custom": {
-              "xDisplayValue": "2020-05",
+              "xDisplayValue": "Y-05",
             },
             "x": 1588377600000,
             "y": 0,
@@ -318,14 +318,14 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
           },
           {
             "custom": {
-              "xDisplayValue": "2020-04",
+              "xDisplayValue": "Y-04",
             },
             "x": 1585785600000,
             "y": 0,
           },
           {
             "custom": {
-              "xDisplayValue": "2020-05",
+              "xDisplayValue": "Y-05",
             },
             "x": 1588377600000,
             "y": 0,
@@ -824,14 +824,14 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           },
           {
             "custom": {
-              "xDisplayValue": "2020-04",
+              "xDisplayValue": "Y-04",
             },
             "x": 1585785600000,
             "y": 0,
           },
           {
             "custom": {
-              "xDisplayValue": "2020-05",
+              "xDisplayValue": "Y-05",
             },
             "x": 1588377600000,
             "y": 0,
@@ -996,14 +996,14 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
           },
           {
             "custom": {
-              "xDisplayValue": "2020-04",
+              "xDisplayValue": "Y-04",
             },
             "x": 1585785600000,
             "y": 0,
           },
           {
             "custom": {
-              "xDisplayValue": "2020-05",
+              "xDisplayValue": "Y-05",
             },
             "x": 1588377600000,
             "y": 0,
@@ -1509,14 +1509,14 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           },
           {
             "custom": {
-              "xDisplayValue": "2020-04",
+              "xDisplayValue": "Y-04",
             },
             "x": 1585785600000,
             "y": 0,
           },
           {
             "custom": {
-              "xDisplayValue": "2020-05",
+              "xDisplayValue": "Y-05",
             },
             "x": 1588377600000,
             "y": 0,
@@ -1681,14 +1681,14 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
           },
           {
             "custom": {
-              "xDisplayValue": "2020-04",
+              "xDisplayValue": "Y-04",
             },
             "x": 1585785600000,
             "y": 0,
           },
           {
             "custom": {
-              "xDisplayValue": "2020-05",
+              "xDisplayValue": "Y-05",
             },
             "x": 1588377600000,
             "y": 0,
@@ -2187,14 +2187,14 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           },
           {
             "custom": {
-              "xDisplayValue": "2020-04",
+              "xDisplayValue": "Y-04",
             },
             "x": 1585785600000,
             "y": 0,
           },
           {
             "custom": {
-              "xDisplayValue": "2020-05",
+              "xDisplayValue": "Y-05",
             },
             "x": 1588377600000,
             "y": 0,
@@ -2359,14 +2359,14 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
           },
           {
             "custom": {
-              "xDisplayValue": "2020-04",
+              "xDisplayValue": "Y-04",
             },
             "x": 1585785600000,
             "y": 0,
           },
           {
             "custom": {
-              "xDisplayValue": "2020-05",
+              "xDisplayValue": "Y-05",
             },
             "x": 1588377600000,
             "y": 0,
@@ -2846,7 +2846,7 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
         },
         {
           "custom": {
-            "xDisplayValue": "2020-01",
+            "xDisplayValue": "Y-01",
           },
           "x": 1580428800000,
           "y": null,
@@ -3566,6 +3566,9 @@ exports[`renders a categorical line chart 1`] = `
         {
           "custom": {
             "rawValue": "200",
+            "xDisplayValue": [
+              "Pies",
+            ],
             "xValue": [
               "Pies",
             ],
@@ -3576,6 +3579,9 @@ exports[`renders a categorical line chart 1`] = `
         {
           "custom": {
             "rawValue": "400",
+            "xDisplayValue": [
+              "Wine",
+            ],
             "xValue": [
               "Wine",
             ],
@@ -3586,6 +3592,9 @@ exports[`renders a categorical line chart 1`] = `
         {
           "custom": {
             "rawValue": "600",
+            "xDisplayValue": [
+              "Pasta",
+            ],
             "xValue": [
               "Pasta",
             ],
@@ -3633,6 +3642,9 @@ exports[`renders a categorical line chart 1`] = `
         {
           "custom": {
             "rawValue": "1000",
+            "xDisplayValue": [
+              "Pies",
+            ],
             "xValue": [
               "Pies",
             ],
@@ -3643,6 +3655,9 @@ exports[`renders a categorical line chart 1`] = `
         {
           "custom": {
             "rawValue": "100",
+            "xDisplayValue": [
+              "Wine",
+            ],
             "xValue": [
               "Wine",
             ],
@@ -3653,6 +3668,9 @@ exports[`renders a categorical line chart 1`] = `
         {
           "custom": {
             "rawValue": "1200",
+            "xDisplayValue": [
+              "Pasta",
+            ],
             "xValue": [
               "Pasta",
             ],
@@ -3940,6 +3958,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "1200",
+            "xDisplayValue": [
+              "Pasta",
+              "USA",
+            ],
             "xValue": [
               "Pasta",
               "USA",
@@ -3951,6 +3973,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "600",
+            "xDisplayValue": [
+              "Pasta",
+              "France",
+            ],
             "xValue": [
               "Pasta",
               "France",
@@ -3965,6 +3991,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "1000",
+            "xDisplayValue": [
+              "Pies",
+              "USA",
+            ],
             "xValue": [
               "Pies",
               "USA",
@@ -3976,6 +4006,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "200",
+            "xDisplayValue": [
+              "Pies",
+              "France",
+            ],
             "xValue": [
               "Pies",
               "France",
@@ -3990,6 +4024,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "100",
+            "xDisplayValue": [
+              "Wine",
+              "USA",
+            ],
             "xValue": [
               "Wine",
               "USA",
@@ -4001,6 +4039,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "400",
+            "xDisplayValue": [
+              "Wine",
+              "France",
+            ],
             "xValue": [
               "Wine",
               "France",
@@ -4044,6 +4086,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "400",
+            "xDisplayValue": [
+              "Pasta",
+              "USA",
+            ],
             "xValue": [
               "Pasta",
               "USA",
@@ -4055,6 +4101,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "270",
+            "xDisplayValue": [
+              "Pasta",
+              "France",
+            ],
             "xValue": [
               "Pasta",
               "France",
@@ -4069,6 +4119,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "40",
+            "xDisplayValue": [
+              "Pies",
+              "USA",
+            ],
             "xValue": [
               "Pies",
               "USA",
@@ -4080,6 +4134,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "180",
+            "xDisplayValue": [
+              "Pies",
+              "France",
+            ],
             "xValue": [
               "Pies",
               "France",
@@ -4094,6 +4152,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "35",
+            "xDisplayValue": [
+              "Wine",
+              "USA",
+            ],
             "xValue": [
               "Wine",
               "USA",
@@ -4105,6 +4167,10 @@ exports[`renders a categorical line chart with two x axes 1`] = `
         {
           "custom": {
             "rawValue": "350",
+            "xDisplayValue": [
+              "Wine",
+              "France",
+            ],
             "xValue": [
               "Wine",
               "France",
@@ -4579,14 +4645,14 @@ exports[`renders a time series chart with break by 1`] = `
         },
         {
           "custom": {
-            "xDisplayValue": "2020-04",
+            "xDisplayValue": "Y-04",
           },
           "x": 1585785600000,
           "y": null,
         },
         {
           "custom": {
-            "xDisplayValue": "2020-05",
+            "xDisplayValue": "Y-05",
           },
           "x": 1588377600000,
           "y": null,
@@ -4772,14 +4838,14 @@ exports[`renders a time series chart with break by 1`] = `
         },
         {
           "custom": {
-            "xDisplayValue": "2020-04",
+            "xDisplayValue": "Y-04",
           },
           "x": 1585785600000,
           "y": null,
         },
         {
           "custom": {
-            "xDisplayValue": "2020-05",
+            "xDisplayValue": "Y-05",
           },
           "x": 1588377600000,
           "y": null,
@@ -5217,14 +5283,14 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         {
           "custom": {
-            "xDisplayValue": "2020-04",
+            "xDisplayValue": "Y-04",
           },
           "x": 1585785600000,
           "y": null,
         },
         {
           "custom": {
-            "xDisplayValue": "2020-05",
+            "xDisplayValue": "Y-05",
           },
           "x": 1588377600000,
           "y": null,
@@ -5410,14 +5476,14 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
         },
         {
           "custom": {
-            "xDisplayValue": "2020-04",
+            "xDisplayValue": "Y-04",
           },
           "x": 1585785600000,
           "y": null,
         },
         {
           "custom": {
-            "xDisplayValue": "2020-05",
+            "xDisplayValue": "Y-05",
           },
           "x": 1588377600000,
           "y": null,
@@ -5850,14 +5916,14 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         },
         {
           "custom": {
-            "xDisplayValue": "2020-04",
+            "xDisplayValue": "Y-04",
           },
           "x": 1585785600000,
           "y": null,
         },
         {
           "custom": {
-            "xDisplayValue": "2020-05",
+            "xDisplayValue": "Y-05",
           },
           "x": 1588377600000,
           "y": null,
@@ -6022,14 +6088,14 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
         },
         {
           "custom": {
-            "xDisplayValue": "2020-04",
+            "xDisplayValue": "Y-04",
           },
           "x": 1585785600000,
           "y": null,
         },
         {
           "custom": {
-            "xDisplayValue": "2020-05",
+            "xDisplayValue": "Y-05",
           },
           "x": 1588377600000,
           "y": null,
@@ -6458,14 +6524,14 @@ exports[`renders a time series with granularity Month 1`] = `
         },
         {
           "custom": {
-            "xDisplayValue": "2020-04",
+            "xDisplayValue": "Y-04",
           },
           "x": 1585785600000,
           "y": null,
         },
         {
           "custom": {
-            "xDisplayValue": "2020-05",
+            "xDisplayValue": "Y-05",
           },
           "x": 1588377600000,
           "y": null,
@@ -6630,14 +6696,14 @@ exports[`renders a time series with granularity Month 1`] = `
         },
         {
           "custom": {
-            "xDisplayValue": "2020-04",
+            "xDisplayValue": "Y-04",
           },
           "x": 1585785600000,
           "y": null,
         },
         {
           "custom": {
-            "xDisplayValue": "2020-05",
+            "xDisplayValue": "Y-05",
           },
           "x": 1588377600000,
           "y": null,
@@ -7066,14 +7132,14 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         },
         {
           "custom": {
-            "xDisplayValue": "2020-04",
+            "xDisplayValue": "Y-04",
           },
           "x": 1585785600000,
           "y": null,
         },
         {
           "custom": {
-            "xDisplayValue": "2020-05",
+            "xDisplayValue": "Y-05",
           },
           "x": 1588377600000,
           "y": null,
@@ -7238,14 +7304,14 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
         },
         {
           "custom": {
-            "xDisplayValue": "2020-04",
+            "xDisplayValue": "Y-04",
           },
           "x": 1585785600000,
           "y": null,
         },
         {
           "custom": {
-            "xDisplayValue": "2020-05",
+            "xDisplayValue": "Y-05",
           },
           "x": 1588377600000,
           "y": null,

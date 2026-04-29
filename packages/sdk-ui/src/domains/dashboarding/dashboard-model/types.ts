@@ -3,6 +3,7 @@ import type {
   JumpToDashboardConfig,
   JumpToDashboardConfigForPivot,
 } from '@/domains/dashboarding/hooks/jtd/jtd-types';
+import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { ColorPaletteTheme } from '@/types';
 
 export type {
@@ -17,6 +18,7 @@ export type {
 export interface WidgetsPanelCell {
   /**
    * Flag that indicates if the cell is hidden
+   *
    * @internal
    */
   hidden?: boolean;
@@ -81,6 +83,7 @@ export type WidgetId = string;
 
 /**
  * Dashboard ID
+ *
  * @internal
  */
 export type DashboardId = string;
@@ -103,6 +106,14 @@ export type SpecificWidgetOptions = {
    * Jump To Dashboard config for widgets.
    */
   jtdConfig?: JumpToDashboardConfig | JumpToDashboardConfigForPivot;
+  /**
+   * Partial snapshot of raw DTO fields preserved from the server response.
+   * Required to include all existing options/style when PATCHing a single field (e.g. previousScrollerLocation),
+   * because the server replaces the entire object rather than merging.
+   *
+   * @internal
+   */
+  partialDtoOptions?: Partial<Pick<WidgetDto, 'options' | 'style'>>;
 };
 
 /**

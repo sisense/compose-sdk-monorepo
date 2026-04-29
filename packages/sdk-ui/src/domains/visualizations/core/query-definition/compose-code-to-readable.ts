@@ -1,38 +1,80 @@
-import type {
-  Attribute,
-  Filter,
-  FilterRelations,
-  FunctionCall,
-  Measure,
-  MeasureColumn,
-} from '@sisense/sdk-data';
-import { parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
+import type { Attribute, Filter, FilterRelations, Measure, MeasureColumn } from '@sisense/sdk-data';
 
 import type { QueryPillCategory, QueryPillItem } from './types';
 
 /**
- * Query-pill tooltip generation: parses compose code with {@link parseComposeCodeToFunctionCall}
- * and formats {@link FunctionCall} trees into short readable formulas.
+ * Query-pill tooltip generation: shows `composeCode` with factory and `DM.` prefixes removed for readability.
  *
  * @internal
  */
 
-const DM_PATH_ONLY = /^DM\.[\w.]+$/;
+/**
+ * True when `composeCode` is a single dimensional path (`DM...`) and not a factory/call (`(`).
+ * Paths may include `[[Segment With Spaces]]` (sdk-data normalization for non-identifier names);
+ * parentheses inside `[[...]]` are ignored for the call-syntax check (e.g. `[[Revenue (USD)]]`).
+ *
+ * @internal
+ */
+function isDmAttributePath(composeCode: string): boolean {
+  const t = composeCode.trim();
+  if (!t.startsWith('DM.')) {
+    return false;
+  }
+  const withoutBracketedSegments = t.replace(/\[\[[^\]]+\]\]/g, '');
+  return !withoutBracketedSegments.includes('(');
+}
 
+/**
+ * Unwraps `[[Name]]` tokens (sdk-data normalization for non-identifier segments) for readable tooltips.
+ *
+ * @internal
+ */
+function unwrapDoubleBracketSegments(path: string): string {
+  return path.replace(/\[\[([^\]]+)\]\]/g, '$1');
+}
+
+/**
+ * When `composeCode` is a DM attribute path, returns that path with the leading `DM.` module prefix removed
+ * once and `[[...]]` unwrapped. Inner `DM.` segments (e.g. in display names) are left unchanged.
+ *
+ * @internal
+ */
+function stripDmModulePrefixFromPath(composeCode: string): string {
+  const trimmed = composeCode.trim();
+  const withoutDm = trimmed.replace(/^DM\./, '');
+  return unwrapDoubleBracketSegments(withoutDm);
+}
+
+/**
+ * Structured tooltip model produced by {@link getQueryPillTooltipModel}.
+ *
+ * @sisenseInternal
+ */
 export type TooltipModel = {
   layoutText: string;
   typeLabel: 'Measure' | 'Dimension' | 'Filter';
+  /** Resolved field path or display fallback; may duplicate {@link TooltipModel.formula}. */
   column: string;
   formula: string;
+  /** When false, the UI omits the "Column:" row (empty/`-` or same as the pill display name). */
+  showColumnInTooltip: boolean;
+  /** When false, the UI omits the "Formula:" row (identical to Column, e.g. plain DM dimensions). */
+  showFormulaInTooltip: boolean;
 };
 
-function dmPathLeaf(token: string): string | undefined {
-  const t = token.trim();
-  if (!t.startsWith('DM.') || !DM_PATH_ONLY.test(t)) {
-    return undefined;
-  }
-  const parts = t.split('.');
-  return parts.length >= 3 ? parts[parts.length - 1] : undefined;
+/**
+ * Strips `measureFactory.`, `filterFactory.`, and `DM.` from compose code for tooltip display.
+ * Preserves the rest of the string (including quoted literals). Rare titles containing `DM.`
+ * inside quotes may be altered.
+ *
+ * @internal
+ */
+export function simplifyComposeCodeForTooltip(composeCode: string): string {
+  const trimmed = composeCode.trim();
+  return trimmed
+    .replace(/\bmeasureFactory\./g, '')
+    .replace(/\bfilterFactory\./g, '')
+    .replace(/\bDM\./g, '');
 }
 
 function stringifyTooltipSource(data: unknown): string {
@@ -62,59 +104,28 @@ function getColumnName(source: Attribute | Measure | FilterRelations | Filter): 
   if (!composeCode) {
     return (source as Attribute | Measure).name;
   }
-  const leaf = dmPathLeaf(composeCode);
-  return leaf ?? (source as Attribute | Measure).name;
+  const trimmed = composeCode.trim();
+  if (isDmAttributePath(trimmed)) {
+    return stripDmModulePrefixFromPath(trimmed);
+  }
+  return (source as Attribute | Measure).name;
 }
 
-function formatArgForFunctionCall(arg: unknown, ignoreArgs: string[]): string {
-  if (arg === null) {
-    return 'null';
-  }
-  if (arg === undefined) {
-    return 'undefined';
-  }
-  if (typeof arg === 'string' || typeof arg === 'number' || typeof arg === 'boolean') {
-    return String(arg);
-  }
-  if (typeof arg === 'bigint') {
-    return arg.toString();
-  }
-  if ((arg as FunctionCall)?.function) {
-    return functionCallToString(arg as FunctionCall, ignoreArgs);
-  }
-  if (Array.isArray(arg)) {
-    return `[${arg.map((v) => formatArgForFunctionCall(v, ignoreArgs)).join(',')}]`;
-  }
-  if (typeof arg === 'object') {
-    try {
-      return JSON.stringify(arg);
-    } catch {
-      return String(arg);
-    }
-  }
-  return String(arg);
+function computeShowColumnInTooltip(column: string, layoutText: string): boolean {
+  const c = column.trim();
+  return c !== '' && c !== '-' && c !== layoutText.trim();
 }
 
-/** @internal */
-export function functionCallToString(
-  functionCall: FunctionCall,
-  ignoreArgs: string[] = [],
-): string {
-  const leaf = (s: string) => s?.split && (s.split('.').pop() ?? '');
-  if (!Array.isArray(functionCall.args)) return '???';
-  const args = functionCall.args.filter((arg) => {
-    return typeof arg !== 'string' || !ignoreArgs.includes(leaf(arg));
-  });
-
-  return (
-    leaf(functionCall.function) +
-    '(' +
-    args.map((arg) => formatArgForFunctionCall(arg, ignoreArgs)).join(', ') +
-    ')'
-  );
+function computeShowFormulaInTooltip(column: string, formula: string): boolean {
+  return formula.trim() !== column.trim();
 }
 
-/** @internal */
+/**
+ * Builds the structured tooltip model rendered by {@link QueryPill} from a {@link QueryPillItem}.
+ * Returns `null` when the item has no tooltip-eligible data (e.g. operator pills or pills without `tooltipData`).
+ *
+ * @sisenseInternal
+ */
 export function getQueryPillTooltipModel(item: QueryPillItem): TooltipModel | null {
   if (
     item.tooltipData === undefined ||
@@ -130,20 +141,21 @@ export function getQueryPillTooltipModel(item: QueryPillItem): TooltipModel | nu
   const aggregation = (source as MeasureColumn).aggregation;
   const column = getColumnName(source) ?? '-';
 
-  const composeCode = (source as FilterRelations | Filter).composeCode;
+  const composeCode = source.composeCode;
+  const trimmed = composeCode?.trim() ?? '';
   const aggregationFormula = aggregation ? `${aggregation.toUpperCase()}(${column})` : column;
   let formula = aggregationFormula;
-  if (composeCode && /^[a-zA-Z_$][\w.$]*\(/.test(composeCode)) {
-    try {
-      formula = functionCallToString(parseComposeCodeToFunctionCall(composeCode), [column]);
-    } catch {
-      formula = aggregationFormula;
-    }
+  if (trimmed && /^[a-zA-Z_$][\w.$]*\(/.test(trimmed)) {
+    formula = simplifyComposeCodeForTooltip(trimmed);
   }
+  const showColumnInTooltip = computeShowColumnInTooltip(column, layoutText);
+  const showFormulaInTooltip = computeShowFormulaInTooltip(column, formula);
   return {
     layoutText,
     typeLabel,
     column,
     formula,
+    showColumnInTooltip,
+    showFormulaInTooltip,
   };
 }

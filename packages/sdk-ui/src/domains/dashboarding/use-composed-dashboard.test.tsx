@@ -419,4 +419,75 @@ describe('useComposedDashboard', () => {
       expect(afterThemeChangeRefs.widgetHighlights).toBe(initialRefs.widgetHighlights);
     });
   });
+
+  describe('navigator scroll persistence integration', () => {
+    const widgetWithNavigator: WidgetProps = {
+      id: 'nav-widget',
+      widgetType: 'chart',
+      chartType: 'line',
+      dataOptions: {
+        category: [DM.Commerce.AgeRange],
+        value: [measureFactory.sum(DM.Commerce.Cost)],
+        breakBy: [],
+      },
+      filters: [],
+      highlights: [],
+      styleOptions: { navigator: { enabled: true } },
+    };
+
+    it('injects onScrollerChange into navigator when persistence is provided', () => {
+      const persistence = {
+        addWidget: vi.fn(),
+        patchWidget: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const { result } = renderHook(
+        () => useComposedDashboard({ widgets: [widgetWithNavigator] }, { persistence }),
+        { wrapper: CombinedProvider },
+      );
+
+      const widget = result.current.dashboard.widgets[0] as {
+        styleOptions?: { navigator?: { onScrollerChange?: unknown } };
+      };
+      expect(widget.styleOptions?.navigator?.onScrollerChange).toBeTypeOf('function');
+    });
+
+    it('does not inject onScrollerChange when persistence is not provided', () => {
+      const { result } = renderHook(
+        () => useComposedDashboard({ widgets: [widgetWithNavigator] }),
+        { wrapper: CombinedProvider },
+      );
+
+      const widget = result.current.dashboard.widgets[0] as {
+        styleOptions?: { navigator?: { onScrollerChange?: unknown } };
+      };
+      expect(widget.styleOptions?.navigator?.onScrollerChange).toBeUndefined();
+    });
+
+    it('gives each widget its own independent scroll handler', () => {
+      const secondWidget: WidgetProps = {
+        ...widgetWithNavigator,
+        id: 'nav-widget-2',
+      };
+      const persistence = {
+        addWidget: vi.fn(),
+        patchWidget: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const { result } = renderHook(
+        () =>
+          useComposedDashboard({ widgets: [widgetWithNavigator, secondWidget] }, { persistence }),
+        { wrapper: CombinedProvider },
+      );
+
+      const [w1, w2] = result.current.dashboard.widgets as Array<{
+        styleOptions?: { navigator?: { onScrollerChange?: unknown } };
+      }>;
+      expect(w1.styleOptions?.navigator?.onScrollerChange).toBeTypeOf('function');
+      expect(w2.styleOptions?.navigator?.onScrollerChange).toBeTypeOf('function');
+      expect(w1.styleOptions?.navigator?.onScrollerChange).not.toBe(
+        w2.styleOptions?.navigator?.onScrollerChange,
+      );
+    });
+  });
 });

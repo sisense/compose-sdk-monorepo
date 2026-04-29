@@ -1,4 +1,4 @@
-import type { WidgetPlugin } from './widget-plugins/types.js';
+import type { AnyWidgetPlugin } from './widget-plugins/types.js';
 
 /**
  * Base plugin information
@@ -62,4 +62,4 @@ export interface PluginValidationResult {
  *
  * @sisenseInternal
  */
-export type Plugin = WidgetPlugin;
+export type Plugin = AnyWidgetPlugin;

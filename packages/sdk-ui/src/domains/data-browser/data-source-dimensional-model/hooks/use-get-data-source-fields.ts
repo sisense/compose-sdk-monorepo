@@ -1,5 +1,6 @@
 import { DataSource, DataSourceField, isDataSourceInfo } from '@sisense/sdk-data';
 import { useQuery } from '@tanstack/react-query';
+import isNumber from 'lodash-es/isNumber';
 
 import { RestApi } from '@/infra/api/rest-api.js';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context.js';
@@ -14,6 +15,7 @@ import { RestApiHookState } from '@/shared/utils/utility-types';
  * @param params.count - The number of items to return
  * @param params.offset - The offset for pagination
  * @param params.searchValue - The search value to filter by
+ * @param params.cacheTime - The cache time in milliseconds
  * @returns The data source fields state
  * @internal
  */
@@ -23,8 +25,9 @@ export const useGetDataSourceFields = (params: {
   count?: number;
   offset?: number;
   searchValue?: string;
+  cacheTime?: number;
 }): DataSourceFieldsState => {
-  const { dataSource, enabled = true, count, offset, searchValue } = params;
+  const { dataSource, enabled = true, count, offset, searchValue, cacheTime } = params;
   const { app, isInitialized } = useSisenseContext();
   const canLoad = isInitialized && !!app;
   const api = canLoad ? new RestApi(app?.httpClient) : undefined;
@@ -48,6 +51,7 @@ export const useGetDataSourceFields = (params: {
         ? api.getDataSourceFields(dataSourceString, { count, offset, searchValue })
         : undefined,
     enabled: shouldBeQueried,
+    ...(isNumber(cacheTime) && { cacheTime }),
   });
 
   switch (status) {

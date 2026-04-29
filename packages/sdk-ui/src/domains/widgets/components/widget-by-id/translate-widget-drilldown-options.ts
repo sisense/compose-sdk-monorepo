@@ -17,7 +17,7 @@ import { Hierarchy, HierarchyId } from '../../../../domains/drilldown/hierarchy-
 import { DataPoint, DrilldownOptions, PivotTableDrilldownOptions } from '../../../../types.js';
 import { createDataColumn } from './translate-widget-data-options.js';
 import { DatetimeMask, FusionWidgetType, Panel, PanelItem } from './types.js';
-import { getEnabledPanelItems, getRootPanelItem } from './utils.js';
+import { getEnabledPanelItems, getRootPanelItem, isMeasurePanelItem } from './utils.js';
 
 const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
   item?.parent
@@ -90,11 +90,7 @@ const findDrillableItems = (widgetType: FusionWidgetType, panels: Panel[]): Pane
   const drillableItems = getDrilldownAllowedPanelNames(widgetType)
     .map((name) => getEnabledPanelItems(panels, name))
     .flat()
-    .filter((item) => {
-      const isMeasure = 'agg' in item.jaql && item.jaql.agg;
-      const isFormula = 'formula' in item.jaql && item.jaql.formula;
-      return !isMeasure && !isFormula;
-    });
+    .filter((item) => !isMeasurePanelItem(item));
 
   if (widgetType === 'pivot2') {
     return drillableItems;

@@ -114,6 +114,14 @@ export const isContinuousDatetimeXAxis = (
   isDatetime(xDataOptions[0].column.type);
 
 /**
+ * Returns true when every X-axis dimension is a datetime column.
+ * Used to decide whether multi-granularity date charts can still show the navigator.
+ */
+export const areAllDatetimeXAxes = (
+  xDataOptions: CartesianChartDataOptionsInternal['x'],
+): boolean => xDataOptions.every((x) => isDatetime(x.column.type));
+
+/**
  * Builds Y-axis metadata from chart data and options
  *
  * @param chartData - Cartesian chart data
@@ -163,6 +171,7 @@ export const buildCategoriesMeta = (
   dataOptions: CartesianChartDataOptionsInternal,
   designOptions: ChartDesignOptions,
   isContinuous: boolean,
+  dateFormatter?: (date: Date, format: string) => string,
 ): CategoriesMeta => {
   const { categoriesCapacity } = designOptions.dataLimits;
   const limitedChartData = {
@@ -172,7 +181,13 @@ export const buildCategoriesMeta = (
 
   const { categories, indexMap, plotBands } = applyNumberFormatToPlotBands(
     dataOptions,
-    getCategoriesIndexMapAndPlotBands(limitedChartData, dataOptions, designOptions, isContinuous),
+    getCategoriesIndexMapAndPlotBands(
+      limitedChartData,
+      dataOptions,
+      designOptions,
+      isContinuous,
+      dateFormatter,
+    ),
   );
 
   return { categories, indexMap, plotBands };

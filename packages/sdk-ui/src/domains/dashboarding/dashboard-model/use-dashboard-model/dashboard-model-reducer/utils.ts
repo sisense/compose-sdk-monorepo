@@ -18,8 +18,11 @@ import { AddWidgetPayload } from './types.js';
 /**
  * Translates filters and relations to DTOs.
  *
- * @param filtersOrFilterRelations - The filters or filter relations to translate
- * @returns The translated filters and relations DTOs for Fusion
+ * `filterRelations[].datasource` is always a **string** (never `undefined`), so Fusion validation
+ * does not break. The value is derived from `filter.dataSource` / `filter.attribute.dataSource`
+ * when present; otherwise `''`.
+ *
+ * @param filtersOrFilterRelations - Flat filters or a filter-relations tree
  *
  * @sisenseInternal
  */
@@ -29,13 +32,13 @@ export function translateFiltersAndRelationsToDto(
   const { filters, relations } = splitFiltersAndRelations(filtersOrFilterRelations);
   const filterDtos = filters.map(filterToFilterDto);
   const filterRelationsModel = filterRelationRulesToFilterRelationsModel(relations, filters);
-  const stringDataSource = getDataSourceStringFromFilters(filters);
+  const datasource = getDataSourceStringFromFilters(filters) ?? '';
   return {
     filters: filterDtos,
     filterRelations: filterRelationsModel
       ? [
           {
-            datasource: stringDataSource,
+            datasource,
             filterRelations: filterRelationsModel,
           },
         ]
@@ -82,10 +85,31 @@ export function appendWidgetToFirstCell(
   return { ...layout, columns: [newFirstCol, ...restCols] };
 }
 
-function getDataSourceStringFromFilters(filters: Filter[]): string {
-  const allUniqueDatasources = new Set(filters.map((filter) => filter.dataSource?.title));
-  if (allUniqueDatasources.size > 1) {
+/**
+ * Datasource title from filter: `filter.dataSource` is usually unset; use `attribute.dataSource` (JAQL).
+ */
+function getDataSourceTitleFromFilter(filter: Filter): string | undefined {
+  const fromFilter = filter.dataSource?.title;
+  if (typeof fromFilter === 'string' && fromFilter.length > 0) {
+    return fromFilter;
+  }
+  const fromAttribute = filter.attribute.dataSource?.title;
+  if (typeof fromAttribute === 'string' && fromAttribute.length > 0) {
+    return fromAttribute;
+  }
+  return undefined;
+}
+
+/**
+ * Single unique datasource title from filters, or `undefined` if none of the filters expose a title.
+ */
+function getDataSourceStringFromFilters(filters: Filter[]): string | undefined {
+  const titles = filters
+    .map(getDataSourceTitleFromFilter)
+    .filter((title) => typeof title === 'string' && title.length > 0);
+  const unique = new Set(titles);
+  if (unique.size > 1) {
     throw new Error('Persisting filters from multiple datasources is not supported now');
   }
-  return allUniqueDatasources.values().next().value;
+  return unique.size === 1 ? titles[0] : undefined;
 }

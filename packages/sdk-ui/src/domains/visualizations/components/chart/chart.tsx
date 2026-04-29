@@ -19,8 +19,8 @@ import { shouldSkipSisenseContextWaiting } from './helpers/should-skip-sisense-c
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=charts/chart&mode=docs'
- *  width=800
- *  height=870
+ *  width='800'
+ *  height='870'
  *  style='border:none;'
  * />
  *

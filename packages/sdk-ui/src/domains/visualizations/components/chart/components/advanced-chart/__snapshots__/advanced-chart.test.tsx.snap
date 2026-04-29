@@ -147,6 +147,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 66781.63189208508,
+            "xDisplayValue": [
+              "2009-11",
+            ],
             "xValue": [
               "2009-11-01",
             ],
@@ -157,6 +160,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 359971.00955861807,
+            "xDisplayValue": [
+              "2009-12",
+            ],
             "xValue": [
               "2009-12-01",
             ],
@@ -167,6 +173,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 290398.9091284871,
+            "xDisplayValue": [
+              "2010-01",
+            ],
             "xValue": [
               "2010-01-01",
             ],
@@ -177,6 +186,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 170889.8894996643,
+            "xDisplayValue": [
+              "2010-02",
+            ],
             "xValue": [
               "2010-02-01",
             ],
@@ -187,6 +199,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 309543.24207001925,
+            "xDisplayValue": [
+              "2010-03",
+            ],
             "xValue": [
               "2010-03-01",
             ],
@@ -197,6 +212,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 371724.55312902667,
+            "xDisplayValue": [
+              "2010-04",
+            ],
             "xValue": [
               "2010-04-01",
             ],
@@ -207,6 +225,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 335743.71691042185,
+            "xDisplayValue": [
+              "2010-05",
+            ],
             "xValue": [
               "2010-05-01",
             ],
@@ -217,6 +238,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 205558.42935597897,
+            "xDisplayValue": [
+              "2010-06",
+            ],
             "xValue": [
               "2010-06-01",
             ],
@@ -227,6 +251,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 157792.30764091015,
+            "xDisplayValue": [
+              "2010-07",
+            ],
             "xValue": [
               "2010-07-01",
             ],
@@ -237,6 +264,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 324757.70880162716,
+            "xDisplayValue": [
+              "2010-08",
+            ],
             "xValue": [
               "2010-08-01",
             ],
@@ -247,6 +277,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 202324.06454509497,
+            "xDisplayValue": [
+              "2010-09",
+            ],
             "xValue": [
               "2010-09-01",
             ],
@@ -257,6 +290,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 235094.33303177357,
+            "xDisplayValue": [
+              "2010-10",
+            ],
             "xValue": [
               "2010-10-01",
             ],
@@ -267,6 +303,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 956515.9698420167,
+            "xDisplayValue": [
+              "2010-11",
+            ],
             "xValue": [
               "2010-11-01",
             ],
@@ -277,6 +316,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1125384.2649897337,
+            "xDisplayValue": [
+              "2010-12",
+            ],
             "xValue": [
               "2010-12-01",
             ],
@@ -287,6 +329,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 463382.532077305,
+            "xDisplayValue": [
+              "2011-01",
+            ],
             "xValue": [
               "2011-01-01",
             ],
@@ -297,6 +342,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 245568.28763371706,
+            "xDisplayValue": [
+              "2011-02",
+            ],
             "xValue": [
               "2011-02-01",
             ],
@@ -307,6 +355,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 260606.05075496435,
+            "xDisplayValue": [
+              "2011-03",
+            ],
             "xValue": [
               "2011-03-01",
             ],
@@ -317,6 +368,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 268872.20260578394,
+            "xDisplayValue": [
+              "2011-04",
+            ],
             "xValue": [
               "2011-04-01",
             ],
@@ -327,6 +381,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 340273.4022771716,
+            "xDisplayValue": [
+              "2011-05",
+            ],
             "xValue": [
               "2011-05-01",
             ],
@@ -337,6 +394,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 393066.62418581545,
+            "xDisplayValue": [
+              "2011-06",
+            ],
             "xValue": [
               "2011-06-01",
             ],
@@ -347,6 +407,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 456280.5512932539,
+            "xDisplayValue": [
+              "2011-07",
+            ],
             "xValue": [
               "2011-07-01",
             ],
@@ -357,6 +420,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 425414.88275170326,
+            "xDisplayValue": [
+              "2011-08",
+            ],
             "xValue": [
               "2011-08-01",
             ],
@@ -367,6 +433,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 479749.6705650091,
+            "xDisplayValue": [
+              "2011-09",
+            ],
             "xValue": [
               "2011-09-01",
             ],
@@ -377,6 +446,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 579453.2531992197,
+            "xDisplayValue": [
+              "2011-10",
+            ],
             "xValue": [
               "2011-10-01",
             ],
@@ -387,6 +459,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 839236.7714686394,
+            "xDisplayValue": [
+              "2011-11",
+            ],
             "xValue": [
               "2011-11-01",
             ],
@@ -397,6 +472,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 885736.7923775315,
+            "xDisplayValue": [
+              "2011-12",
+            ],
             "xValue": [
               "2011-12-01",
             ],
@@ -407,6 +485,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 473612.27137738466,
+            "xDisplayValue": [
+              "2012-01",
+            ],
             "xValue": [
               "2012-01-01",
             ],
@@ -417,6 +498,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 551207.5465496182,
+            "xDisplayValue": [
+              "2012-02",
+            ],
             "xValue": [
               "2012-02-01",
             ],
@@ -427,6 +511,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 486378.02141964436,
+            "xDisplayValue": [
+              "2012-03",
+            ],
             "xValue": [
               "2012-03-01",
             ],
@@ -437,6 +524,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 844005.6761152148,
+            "xDisplayValue": [
+              "2012-04",
+            ],
             "xValue": [
               "2012-04-01",
             ],
@@ -447,6 +537,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 528642.743718408,
+            "xDisplayValue": [
+              "2012-05",
+            ],
             "xValue": [
               "2012-05-01",
             ],
@@ -457,6 +550,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 500458.08090537786,
+            "xDisplayValue": [
+              "2012-06",
+            ],
             "xValue": [
               "2012-06-01",
             ],
@@ -467,6 +563,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 613358.3858718723,
+            "xDisplayValue": [
+              "2012-07",
+            ],
             "xValue": [
               "2012-07-01",
             ],
@@ -477,6 +576,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 640640.1058340669,
+            "xDisplayValue": [
+              "2012-08",
+            ],
             "xValue": [
               "2012-08-01",
             ],
@@ -487,6 +589,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 6468195.891011775,
+            "xDisplayValue": [
+              "2012-09",
+            ],
             "xValue": [
               "2012-09-01",
             ],
@@ -497,6 +602,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1077545.8103399873,
+            "xDisplayValue": [
+              "2012-10",
+            ],
             "xValue": [
               "2012-10-01",
             ],
@@ -507,6 +615,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1139118.50432086,
+            "xDisplayValue": [
+              "2012-11",
+            ],
             "xValue": [
               "2012-11-01",
             ],
@@ -517,6 +628,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1207031.0010682344,
+            "xDisplayValue": [
+              "2012-12",
+            ],
             "xValue": [
               "2012-12-01",
             ],
@@ -527,6 +641,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 672788.0245242715,
+            "xDisplayValue": [
+              "2013-01",
+            ],
             "xValue": [
               "2013-01-01",
             ],
@@ -537,6 +654,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 664365.3652909398,
+            "xDisplayValue": [
+              "2013-02",
+            ],
             "xValue": [
               "2013-02-01",
             ],
@@ -547,6 +667,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 618802.1503348947,
+            "xDisplayValue": [
+              "2013-03",
+            ],
             "xValue": [
               "2013-03-01",
             ],
@@ -557,6 +680,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 866949.1155990958,
+            "xDisplayValue": [
+              "2013-04",
+            ],
             "xValue": [
               "2013-04-01",
             ],
@@ -567,6 +693,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 618889.3449394181,
+            "xDisplayValue": [
+              "2013-05",
+            ],
             "xValue": [
               "2013-05-01",
             ],
@@ -577,6 +706,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 683584.009878993,
+            "xDisplayValue": [
+              "2013-06",
+            ],
             "xValue": [
               "2013-06-01",
             ],
@@ -587,6 +719,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 798123.2515560985,
+            "xDisplayValue": [
+              "2013-07",
+            ],
             "xValue": [
               "2013-07-01",
             ],
@@ -597,6 +732,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 650025.2262863517,
+            "xDisplayValue": [
+              "2013-08",
+            ],
             "xValue": [
               "2013-08-01",
             ],
@@ -607,6 +745,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 5916789.096129909,
+            "xDisplayValue": [
+              "2013-09",
+            ],
             "xValue": [
               "2013-09-01",
             ],
@@ -617,6 +758,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1025246.3933910131,
+            "xDisplayValue": [
+              "2013-10",
+            ],
             "xValue": [
               "2013-10-01",
             ],
@@ -627,6 +771,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1793304.247486055,
+            "xDisplayValue": [
+              "2013-11",
+            ],
             "xValue": [
               "2013-11-01",
             ],
@@ -637,6 +784,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 170444.1994921565,
+            "xDisplayValue": [
+              "2013-12",
+            ],
             "xValue": [
               "2013-12-01",
             ],
@@ -647,6 +797,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-01",
+            ],
             "xValue": [
               "2014-01-01",
             ],
@@ -657,6 +810,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-02",
+            ],
             "xValue": [
               "2014-02-01",
             ],
@@ -671,6 +827,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-03",
+            ],
             "xValue": [
               "2014-03-01",
             ],
@@ -685,6 +844,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-04",
+            ],
             "xValue": [
               "2014-04-01",
             ],
@@ -699,6 +861,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-05",
+            ],
             "xValue": [
               "2014-05-01",
             ],
@@ -713,6 +878,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-06",
+            ],
             "xValue": [
               "2014-06-01",
             ],
@@ -762,6 +930,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 189976.80757868662,
+            "xDisplayValue": [
+              "2009-11",
+            ],
             "xValue": [
               "2009-11-01",
             ],
@@ -772,6 +943,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1107490.0728950314,
+            "xDisplayValue": [
+              "2009-12",
+            ],
             "xValue": [
               "2009-12-01",
             ],
@@ -782,6 +956,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 845205.6287006252,
+            "xDisplayValue": [
+              "2010-01",
+            ],
             "xValue": [
               "2010-01-01",
             ],
@@ -792,6 +969,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 787917.8207888827,
+            "xDisplayValue": [
+              "2010-02",
+            ],
             "xValue": [
               "2010-02-01",
             ],
@@ -802,6 +982,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 946810.4692947622,
+            "xDisplayValue": [
+              "2010-03",
+            ],
             "xValue": [
               "2010-03-01",
             ],
@@ -812,6 +995,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 900508.5092079439,
+            "xDisplayValue": [
+              "2010-04",
+            ],
             "xValue": [
               "2010-04-01",
             ],
@@ -822,6 +1008,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 946238.5815005917,
+            "xDisplayValue": [
+              "2010-05",
+            ],
             "xValue": [
               "2010-05-01",
             ],
@@ -832,6 +1021,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 886700.2053317726,
+            "xDisplayValue": [
+              "2010-06",
+            ],
             "xValue": [
               "2010-06-01",
             ],
@@ -842,6 +1034,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 900954.317531623,
+            "xDisplayValue": [
+              "2010-07",
+            ],
             "xValue": [
               "2010-07-01",
             ],
@@ -852,6 +1047,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 984546.9012292922,
+            "xDisplayValue": [
+              "2010-08",
+            ],
             "xValue": [
               "2010-08-01",
             ],
@@ -862,6 +1060,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 947657.5594753642,
+            "xDisplayValue": [
+              "2010-09",
+            ],
             "xValue": [
               "2010-09-01",
             ],
@@ -872,6 +1073,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1067067.8516010046,
+            "xDisplayValue": [
+              "2010-10",
+            ],
             "xValue": [
               "2010-10-01",
             ],
@@ -882,6 +1086,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1313277.0609966572,
+            "xDisplayValue": [
+              "2010-11",
+            ],
             "xValue": [
               "2010-11-01",
             ],
@@ -892,6 +1099,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1467710.2702174708,
+            "xDisplayValue": [
+              "2010-12",
+            ],
             "xValue": [
               "2010-12-01",
             ],
@@ -902,6 +1112,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1175238.5499559864,
+            "xDisplayValue": [
+              "2011-01",
+            ],
             "xValue": [
               "2011-01-01",
             ],
@@ -912,6 +1125,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1092969.080261767,
+            "xDisplayValue": [
+              "2011-02",
+            ],
             "xValue": [
               "2011-02-01",
             ],
@@ -922,6 +1138,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1188733.9370134315,
+            "xDisplayValue": [
+              "2011-03",
+            ],
             "xValue": [
               "2011-03-01",
             ],
@@ -932,6 +1151,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1468171.674996743,
+            "xDisplayValue": [
+              "2011-04",
+            ],
             "xValue": [
               "2011-04-01",
             ],
@@ -942,6 +1164,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1809045.4618380964,
+            "xDisplayValue": [
+              "2011-05",
+            ],
             "xValue": [
               "2011-05-01",
             ],
@@ -952,6 +1177,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1963988.3454919308,
+            "xDisplayValue": [
+              "2011-06",
+            ],
             "xValue": [
               "2011-06-01",
             ],
@@ -962,6 +1190,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2011346.4261528384,
+            "xDisplayValue": [
+              "2011-07",
+            ],
             "xValue": [
               "2011-07-01",
             ],
@@ -972,6 +1203,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2128043.9337140303,
+            "xDisplayValue": [
+              "2011-08",
+            ],
             "xValue": [
               "2011-08-01",
             ],
@@ -982,6 +1216,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2017077.2452351712,
+            "xDisplayValue": [
+              "2011-09",
+            ],
             "xValue": [
               "2011-09-01",
             ],
@@ -992,6 +1229,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2283585.5977138802,
+            "xDisplayValue": [
+              "2011-10",
+            ],
             "xValue": [
               "2011-10-01",
             ],
@@ -1002,6 +1242,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2558169.054697007,
+            "xDisplayValue": [
+              "2011-11",
+            ],
             "xValue": [
               "2011-11-01",
             ],
@@ -1012,6 +1255,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2855504.8063853886,
+            "xDisplayValue": [
+              "2011-12",
+            ],
             "xValue": [
               "2011-12-01",
             ],
@@ -1022,6 +1268,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2267886.0520572066,
+            "xDisplayValue": [
+              "2012-01",
+            ],
             "xValue": [
               "2012-01-01",
             ],
@@ -1032,6 +1281,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2289422.9980101623,
+            "xDisplayValue": [
+              "2012-02",
+            ],
             "xValue": [
               "2012-02-01",
             ],
@@ -1042,6 +1294,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2413584.21836257,
+            "xDisplayValue": [
+              "2012-03",
+            ],
             "xValue": [
               "2012-03-01",
             ],
@@ -1052,6 +1307,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2450628.8393439148,
+            "xDisplayValue": [
+              "2012-04",
+            ],
             "xValue": [
               "2012-04-01",
             ],
@@ -1062,6 +1320,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2616360.1553670047,
+            "xDisplayValue": [
+              "2012-05",
+            ],
             "xValue": [
               "2012-05-01",
             ],
@@ -1072,6 +1333,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2482130.5598226488,
+            "xDisplayValue": [
+              "2012-06",
+            ],
             "xValue": [
               "2012-06-01",
             ],
@@ -1082,6 +1346,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2594841.3182018436,
+            "xDisplayValue": [
+              "2012-07",
+            ],
             "xValue": [
               "2012-07-01",
             ],
@@ -1092,6 +1359,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2673938.1166581884,
+            "xDisplayValue": [
+              "2012-08",
+            ],
             "xValue": [
               "2012-08-01",
             ],
@@ -1102,6 +1372,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2867416.29551314,
+            "xDisplayValue": [
+              "2012-09",
+            ],
             "xValue": [
               "2012-09-01",
             ],
@@ -1112,6 +1385,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3168871.066950053,
+            "xDisplayValue": [
+              "2012-10",
+            ],
             "xValue": [
               "2012-10-01",
             ],
@@ -1122,6 +1398,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3888213.687782809,
+            "xDisplayValue": [
+              "2012-11",
+            ],
             "xValue": [
               "2012-11-01",
             ],
@@ -1132,6 +1411,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3992612.938552344,
+            "xDisplayValue": [
+              "2012-12",
+            ],
             "xValue": [
               "2012-12-01",
             ],
@@ -1142,6 +1424,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2759434.9833942996,
+            "xDisplayValue": [
+              "2013-01",
+            ],
             "xValue": [
               "2013-01-01",
             ],
@@ -1152,6 +1437,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2788158.3545121085,
+            "xDisplayValue": [
+              "2013-02",
+            ],
             "xValue": [
               "2013-02-01",
             ],
@@ -1162,6 +1450,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3046625.3691154122,
+            "xDisplayValue": [
+              "2013-03",
+            ],
             "xValue": [
               "2013-03-01",
             ],
@@ -1172,6 +1463,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2961134.7611477133,
+            "xDisplayValue": [
+              "2013-04",
+            ],
             "xValue": [
               "2013-04-01",
             ],
@@ -1182,6 +1476,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3242762.429729399,
+            "xDisplayValue": [
+              "2013-05",
+            ],
             "xValue": [
               "2013-05-01",
             ],
@@ -1192,6 +1489,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3204714.5343812816,
+            "xDisplayValue": [
+              "2013-06",
+            ],
             "xValue": [
               "2013-06-01",
             ],
@@ -1202,6 +1502,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3349081.2784886193,
+            "xDisplayValue": [
+              "2013-07",
+            ],
             "xValue": [
               "2013-07-01",
             ],
@@ -1212,6 +1515,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3238694.8539762036,
+            "xDisplayValue": [
+              "2013-08",
+            ],
             "xValue": [
               "2013-08-01",
             ],
@@ -1222,6 +1528,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3581952.4929154813,
+            "xDisplayValue": [
+              "2013-09",
+            ],
             "xValue": [
               "2013-09-01",
             ],
@@ -1232,6 +1541,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3935084.4678387493,
+            "xDisplayValue": [
+              "2013-10",
+            ],
             "xValue": [
               "2013-10-01",
             ],
@@ -1242,6 +1554,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 4844611.66696444,
+            "xDisplayValue": [
+              "2013-11",
+            ],
             "xValue": [
               "2013-11-01",
             ],
@@ -1252,6 +1567,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 770441.3868424296,
+            "xDisplayValue": [
+              "2013-12",
+            ],
             "xValue": [
               "2013-12-01",
             ],
@@ -1262,6 +1580,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-01",
+            ],
             "xValue": [
               "2014-01-01",
             ],
@@ -1272,6 +1593,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-02",
+            ],
             "xValue": [
               "2014-02-01",
             ],
@@ -1286,6 +1610,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-03",
+            ],
             "xValue": [
               "2014-03-01",
             ],
@@ -1300,6 +1627,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-04",
+            ],
             "xValue": [
               "2014-04-01",
             ],
@@ -1314,6 +1644,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-05",
+            ],
             "xValue": [
               "2014-05-01",
             ],
@@ -1328,6 +1661,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-06",
+            ],
             "xValue": [
               "2014-06-01",
             ],
@@ -1378,6 +1714,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 399877.66021296044,
+            "xDisplayValue": [
+              "2009-11",
+            ],
             "xValue": [
               "2009-11-01",
             ],
@@ -1394,6 +1733,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 760254.7486363016,
+            "xDisplayValue": [
+              "2009-12",
+            ],
             "xValue": [
               "2009-12-01",
             ],
@@ -1410,6 +1752,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 892589.3891729144,
+            "xDisplayValue": [
+              "2010-01",
+            ],
             "xValue": [
               "2010-01-01",
             ],
@@ -1426,6 +1771,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 904228.5180767283,
+            "xDisplayValue": [
+              "2010-02",
+            ],
             "xValue": [
               "2010-02-01",
             ],
@@ -1442,6 +1790,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 912866.4678721044,
+            "xDisplayValue": [
+              "2010-03",
+            ],
             "xValue": [
               "2010-03-01",
             ],
@@ -1458,6 +1809,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 916526.9340331501,
+            "xDisplayValue": [
+              "2010-04",
+            ],
             "xValue": [
               "2010-04-01",
             ],
@@ -1474,6 +1828,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 914095.3329283679,
+            "xDisplayValue": [
+              "2010-05",
+            ],
             "xValue": [
               "2010-05-01",
             ],
@@ -1490,6 +1847,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 904960.4685997746,
+            "xDisplayValue": [
+              "2010-06",
+            ],
             "xValue": [
               "2010-06-01",
             ],
@@ -1506,6 +1866,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 912084.7216383086,
+            "xDisplayValue": [
+              "2010-07",
+            ],
             "xValue": [
               "2010-07-01",
             ],
@@ -1522,6 +1885,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 945423.4204832909,
+            "xDisplayValue": [
+              "2010-08",
+            ],
             "xValue": [
               "2010-08-01",
             ],
@@ -1538,6 +1904,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1009017.2938368567,
+            "xDisplayValue": [
+              "2010-09",
+            ],
             "xValue": [
               "2010-09-01",
             ],
@@ -1554,6 +1923,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1127908.0165300977,
+            "xDisplayValue": [
+              "2010-10",
+            ],
             "xValue": [
               "2010-10-01",
             ],
@@ -1570,6 +1942,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1260348.35798684,
+            "xDisplayValue": [
+              "2010-11",
+            ],
             "xValue": [
               "2010-11-01",
             ],
@@ -1586,6 +1961,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1301643.164863898,
+            "xDisplayValue": [
+              "2010-12",
+            ],
             "xValue": [
               "2010-12-01",
             ],
@@ -1602,6 +1980,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1226332.721934023,
+            "xDisplayValue": [
+              "2011-01",
+            ],
             "xValue": [
               "2011-01-01",
             ],
@@ -1618,6 +1999,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1175483.052081485,
+            "xDisplayValue": [
+              "2011-02",
+            ],
             "xValue": [
               "2011-02-01",
             ],
@@ -1634,6 +2018,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1259954.2895959807,
+            "xDisplayValue": [
+              "2011-03",
+            ],
             "xValue": [
               "2011-03-01",
             ],
@@ -1650,6 +2037,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1477513.9658073424,
+            "xDisplayValue": [
+              "2011-04",
+            ],
             "xValue": [
               "2011-04-01",
             ],
@@ -1666,6 +2056,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1731745.1938052739,
+            "xDisplayValue": [
+              "2011-05",
+            ],
             "xValue": [
               "2011-05-01",
             ],
@@ -1682,6 +2075,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1918408.774731447,
+            "xDisplayValue": [
+              "2011-06",
+            ],
             "xValue": [
               "2011-06-01",
             ],
@@ -1698,6 +2094,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2019625.0977478286,
+            "xDisplayValue": [
+              "2011-07",
+            ],
             "xValue": [
               "2011-07-01",
             ],
@@ -1714,6 +2113,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2080349.5218863264,
+            "xDisplayValue": [
+              "2011-08",
+            ],
             "xValue": [
               "2011-08-01",
             ],
@@ -1730,6 +2132,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2160577.230230905,
+            "xDisplayValue": [
+              "2011-09",
+            ],
             "xValue": [
               "2011-09-01",
             ],
@@ -1746,6 +2151,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2330053.153545553,
+            "xDisplayValue": [
+              "2011-10",
+            ],
             "xValue": [
               "2011-10-01",
             ],
@@ -1762,6 +2170,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2515328.951597531,
+            "xDisplayValue": [
+              "2011-11",
+            ],
             "xValue": [
               "2011-11-01",
             ],
@@ -1778,6 +2189,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2571323.757848365,
+            "xDisplayValue": [
+              "2011-12",
+            ],
             "xValue": [
               "2011-12-01",
             ],
@@ -1794,6 +2208,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2455225.182035394,
+            "xDisplayValue": [
+              "2012-01",
+            ],
             "xValue": [
               "2012-01-01",
             ],
@@ -1810,6 +2227,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2372277.1257133014,
+            "xDisplayValue": [
+              "2012-02",
+            ],
             "xValue": [
               "2012-02-01",
             ],
@@ -1826,6 +2246,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2390716.0906670545,
+            "xDisplayValue": [
+              "2012-03",
+            ],
             "xValue": [
               "2012-03-01",
             ],
@@ -1842,6 +2265,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2454806.7004078142,
+            "xDisplayValue": [
+              "2012-04",
+            ],
             "xValue": [
               "2012-04-01",
             ],
@@ -1858,6 +2284,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2509923.7089504977,
+            "xDisplayValue": [
+              "2012-05",
+            ],
             "xValue": [
               "2012-05-01",
             ],
@@ -1874,6 +2303,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2529590.1527741267,
+            "xDisplayValue": [
+              "2012-06",
+            ],
             "xValue": [
               "2012-06-01",
             ],
@@ -1890,6 +2322,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2580856.1512703863,
+            "xDisplayValue": [
+              "2012-07",
+            ],
             "xValue": [
               "2012-07-01",
             ],
@@ -1906,6 +2341,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2713417.6342164744,
+            "xDisplayValue": [
+              "2012-08",
+            ],
             "xValue": [
               "2012-08-01",
             ],
@@ -1922,6 +2360,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2969220.9206936043,
+            "xDisplayValue": [
+              "2012-09",
+            ],
             "xValue": [
               "2012-09-01",
             ],
@@ -1938,6 +2379,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3328777.947662453,
+            "xDisplayValue": [
+              "2012-10",
+            ],
             "xValue": [
               "2012-10-01",
             ],
@@ -1954,6 +2398,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3620949.4273355627,
+            "xDisplayValue": [
+              "2012-11",
+            ],
             "xValue": [
               "2012-11-01",
             ],
@@ -1970,6 +2417,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3556054.100029769,
+            "xDisplayValue": [
+              "2012-12",
+            ],
             "xValue": [
               "2012-12-01",
             ],
@@ -1986,6 +2436,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3180837.955961699,
+            "xDisplayValue": [
+              "2013-01",
+            ],
             "xValue": [
               "2013-01-01",
             ],
@@ -2002,6 +2455,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2940071.145840517,
+            "xDisplayValue": [
+              "2013-02",
+            ],
             "xValue": [
               "2013-02-01",
             ],
@@ -2018,6 +2474,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2928282.3596065277,
+            "xDisplayValue": [
+              "2013-03",
+            ],
             "xValue": [
               "2013-03-01",
             ],
@@ -2034,6 +2493,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3012322.5051070023,
+            "xDisplayValue": [
+              "2013-04",
+            ],
             "xValue": [
               "2013-04-01",
             ],
@@ -2050,6 +2512,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3126610.365876169,
+            "xDisplayValue": [
+              "2013-05",
+            ],
             "xValue": [
               "2013-05-01",
             ],
@@ -2066,6 +2531,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3213000.749829498,
+            "xDisplayValue": [
+              "2013-06",
+            ],
             "xValue": [
               "2013-06-01",
             ],
@@ -2082,6 +2550,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3314632.0388838113,
+            "xDisplayValue": [
+              "2013-07",
+            ],
             "xValue": [
               "2013-07-01",
             ],
@@ -2098,6 +2569,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3504006.725372224,
+            "xDisplayValue": [
+              "2013-08",
+            ],
             "xValue": [
               "2013-08-01",
             ],
@@ -2114,6 +2588,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3819677.0195216006,
+            "xDisplayValue": [
+              "2013-09",
+            ],
             "xValue": [
               "2013-09-01",
             ],
@@ -2130,6 +2607,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3984064.438412456,
+            "xDisplayValue": [
+              "2013-10",
+            ],
             "xValue": [
               "2013-10-01",
             ],
@@ -2146,6 +2626,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3403293.012026755,
+            "xDisplayValue": [
+              "2013-11",
+            ],
             "xValue": [
               "2013-11-01",
             ],
@@ -2162,6 +2645,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1735405.3318556482,
+            "xDisplayValue": [
+              "2013-12",
+            ],
             "xValue": [
               "2013-12-01",
             ],
@@ -2178,6 +2664,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-01",
+            ],
             "xValue": [
               "2014-01-01",
             ],
@@ -2194,6 +2683,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-02",
+            ],
             "xValue": [
               "2014-02-01",
             ],
@@ -2214,6 +2706,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-03",
+            ],
             "xValue": [
               "2014-03-01",
             ],
@@ -2234,6 +2729,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-04",
+            ],
             "xValue": [
               "2014-04-01",
             ],
@@ -2254,6 +2752,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-05",
+            ],
             "xValue": [
               "2014-05-01",
             ],
@@ -2274,6 +2775,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2014-06",
+            ],
             "xValue": [
               "2014-06-01",
             ],
@@ -2333,6 +2837,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2009-11",
+            ],
             "xValue": [
               "2009-11-01",
             ],
@@ -2349,6 +2856,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2009-12",
+            ],
             "xValue": [
               "2009-12-01",
             ],
@@ -2365,6 +2875,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-01",
+            ],
             "xValue": [
               "2010-01-01",
             ],
@@ -2381,6 +2894,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-02",
+            ],
             "xValue": [
               "2010-02-01",
             ],
@@ -2397,6 +2913,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-03",
+            ],
             "xValue": [
               "2010-03-01",
             ],
@@ -2413,6 +2932,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-04",
+            ],
             "xValue": [
               "2010-04-01",
             ],
@@ -2429,6 +2951,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-05",
+            ],
             "xValue": [
               "2010-05-01",
             ],
@@ -2445,6 +2970,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-06",
+            ],
             "xValue": [
               "2010-06-01",
             ],
@@ -2461,6 +2989,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-07",
+            ],
             "xValue": [
               "2010-07-01",
             ],
@@ -2477,6 +3008,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-08",
+            ],
             "xValue": [
               "2010-08-01",
             ],
@@ -2493,6 +3027,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-09",
+            ],
             "xValue": [
               "2010-09-01",
             ],
@@ -2509,6 +3046,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-10",
+            ],
             "xValue": [
               "2010-10-01",
             ],
@@ -2525,6 +3065,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-11",
+            ],
             "xValue": [
               "2010-11-01",
             ],
@@ -2541,6 +3084,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-12",
+            ],
             "xValue": [
               "2010-12-01",
             ],
@@ -2557,6 +3103,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-01",
+            ],
             "xValue": [
               "2011-01-01",
             ],
@@ -2573,6 +3122,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-02",
+            ],
             "xValue": [
               "2011-02-01",
             ],
@@ -2589,6 +3141,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-03",
+            ],
             "xValue": [
               "2011-03-01",
             ],
@@ -2605,6 +3160,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-04",
+            ],
             "xValue": [
               "2011-04-01",
             ],
@@ -2621,6 +3179,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-05",
+            ],
             "xValue": [
               "2011-05-01",
             ],
@@ -2637,6 +3198,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-06",
+            ],
             "xValue": [
               "2011-06-01",
             ],
@@ -2653,6 +3217,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-07",
+            ],
             "xValue": [
               "2011-07-01",
             ],
@@ -2669,6 +3236,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-08",
+            ],
             "xValue": [
               "2011-08-01",
             ],
@@ -2685,6 +3255,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-09",
+            ],
             "xValue": [
               "2011-09-01",
             ],
@@ -2701,6 +3274,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-10",
+            ],
             "xValue": [
               "2011-10-01",
             ],
@@ -2717,6 +3293,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-11",
+            ],
             "xValue": [
               "2011-11-01",
             ],
@@ -2733,6 +3312,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-12",
+            ],
             "xValue": [
               "2011-12-01",
             ],
@@ -2749,6 +3331,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-01",
+            ],
             "xValue": [
               "2012-01-01",
             ],
@@ -2765,6 +3350,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-02",
+            ],
             "xValue": [
               "2012-02-01",
             ],
@@ -2781,6 +3369,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-03",
+            ],
             "xValue": [
               "2012-03-01",
             ],
@@ -2797,6 +3388,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-04",
+            ],
             "xValue": [
               "2012-04-01",
             ],
@@ -2813,6 +3407,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-05",
+            ],
             "xValue": [
               "2012-05-01",
             ],
@@ -2829,6 +3426,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-06",
+            ],
             "xValue": [
               "2012-06-01",
             ],
@@ -2845,6 +3445,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-07",
+            ],
             "xValue": [
               "2012-07-01",
             ],
@@ -2861,6 +3464,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-08",
+            ],
             "xValue": [
               "2012-08-01",
             ],
@@ -2877,6 +3483,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-09",
+            ],
             "xValue": [
               "2012-09-01",
             ],
@@ -2893,6 +3502,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-10",
+            ],
             "xValue": [
               "2012-10-01",
             ],
@@ -2909,6 +3521,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-11",
+            ],
             "xValue": [
               "2012-11-01",
             ],
@@ -2925,6 +3540,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-12",
+            ],
             "xValue": [
               "2012-12-01",
             ],
@@ -2941,6 +3559,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-01",
+            ],
             "xValue": [
               "2013-01-01",
             ],
@@ -2957,6 +3578,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-02",
+            ],
             "xValue": [
               "2013-02-01",
             ],
@@ -2973,6 +3597,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-03",
+            ],
             "xValue": [
               "2013-03-01",
             ],
@@ -2989,6 +3616,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-04",
+            ],
             "xValue": [
               "2013-04-01",
             ],
@@ -3005,6 +3635,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-05",
+            ],
             "xValue": [
               "2013-05-01",
             ],
@@ -3021,6 +3654,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-06",
+            ],
             "xValue": [
               "2013-06-01",
             ],
@@ -3037,6 +3673,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-07",
+            ],
             "xValue": [
               "2013-07-01",
             ],
@@ -3053,6 +3692,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-08",
+            ],
             "xValue": [
               "2013-08-01",
             ],
@@ -3069,6 +3711,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-09",
+            ],
             "xValue": [
               "2013-09-01",
             ],
@@ -3085,6 +3730,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-10",
+            ],
             "xValue": [
               "2013-10-01",
             ],
@@ -3101,6 +3749,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-11",
+            ],
             "xValue": [
               "2013-11-01",
             ],
@@ -3117,6 +3768,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-12",
+            ],
             "xValue": [
               "2013-12-01",
             ],
@@ -3129,6 +3783,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 894228.9346309917,
+            "xDisplayValue": [
+              "2014-01",
+            ],
             "xValue": [
               "2014-01-01",
             ],
@@ -3141,6 +3798,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1089836.547888303,
+            "xDisplayValue": [
+              "2014-02",
+            ],
             "xValue": [
               "2014-02-01",
             ],
@@ -3153,6 +3813,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1021374.1984700696,
+            "xDisplayValue": [
+              "2014-03",
+            ],
             "xValue": [
               "2014-03-01",
             ],
@@ -3165,6 +3828,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1128726.544473912,
+            "xDisplayValue": [
+              "2014-04",
+            ],
             "xValue": [
               "2014-04-01",
             ],
@@ -3177,6 +3843,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1128726.544473912,
+            "xDisplayValue": [
+              "2014-05",
+            ],
             "xValue": [
               "2014-05-01",
             ],
@@ -3189,6 +3858,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 1128726.5444739123,
+            "xDisplayValue": [
+              "2014-06",
+            ],
             "xValue": [
               "2014-06-01",
             ],
@@ -3240,6 +3912,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2009-11",
+            ],
             "xValue": [
               "2009-11-01",
             ],
@@ -3256,6 +3931,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2009-12",
+            ],
             "xValue": [
               "2009-12-01",
             ],
@@ -3272,6 +3950,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-01",
+            ],
             "xValue": [
               "2010-01-01",
             ],
@@ -3288,6 +3969,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-02",
+            ],
             "xValue": [
               "2010-02-01",
             ],
@@ -3304,6 +3988,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-03",
+            ],
             "xValue": [
               "2010-03-01",
             ],
@@ -3320,6 +4007,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-04",
+            ],
             "xValue": [
               "2010-04-01",
             ],
@@ -3336,6 +4026,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-05",
+            ],
             "xValue": [
               "2010-05-01",
             ],
@@ -3352,6 +4045,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-06",
+            ],
             "xValue": [
               "2010-06-01",
             ],
@@ -3368,6 +4064,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-07",
+            ],
             "xValue": [
               "2010-07-01",
             ],
@@ -3384,6 +4083,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-08",
+            ],
             "xValue": [
               "2010-08-01",
             ],
@@ -3400,6 +4102,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-09",
+            ],
             "xValue": [
               "2010-09-01",
             ],
@@ -3416,6 +4121,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-10",
+            ],
             "xValue": [
               "2010-10-01",
             ],
@@ -3432,6 +4140,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-11",
+            ],
             "xValue": [
               "2010-11-01",
             ],
@@ -3448,6 +4159,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-12",
+            ],
             "xValue": [
               "2010-12-01",
             ],
@@ -3464,6 +4178,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-01",
+            ],
             "xValue": [
               "2011-01-01",
             ],
@@ -3480,6 +4197,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-02",
+            ],
             "xValue": [
               "2011-02-01",
             ],
@@ -3496,6 +4216,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-03",
+            ],
             "xValue": [
               "2011-03-01",
             ],
@@ -3512,6 +4235,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-04",
+            ],
             "xValue": [
               "2011-04-01",
             ],
@@ -3528,6 +4254,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-05",
+            ],
             "xValue": [
               "2011-05-01",
             ],
@@ -3544,6 +4273,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-06",
+            ],
             "xValue": [
               "2011-06-01",
             ],
@@ -3560,6 +4292,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-07",
+            ],
             "xValue": [
               "2011-07-01",
             ],
@@ -3576,6 +4311,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-08",
+            ],
             "xValue": [
               "2011-08-01",
             ],
@@ -3592,6 +4330,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-09",
+            ],
             "xValue": [
               "2011-09-01",
             ],
@@ -3608,6 +4349,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-10",
+            ],
             "xValue": [
               "2011-10-01",
             ],
@@ -3624,6 +4368,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-11",
+            ],
             "xValue": [
               "2011-11-01",
             ],
@@ -3640,6 +4387,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-12",
+            ],
             "xValue": [
               "2011-12-01",
             ],
@@ -3656,6 +4406,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-01",
+            ],
             "xValue": [
               "2012-01-01",
             ],
@@ -3672,6 +4425,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-02",
+            ],
             "xValue": [
               "2012-02-01",
             ],
@@ -3688,6 +4444,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-03",
+            ],
             "xValue": [
               "2012-03-01",
             ],
@@ -3704,6 +4463,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-04",
+            ],
             "xValue": [
               "2012-04-01",
             ],
@@ -3720,6 +4482,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-05",
+            ],
             "xValue": [
               "2012-05-01",
             ],
@@ -3736,6 +4501,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-06",
+            ],
             "xValue": [
               "2012-06-01",
             ],
@@ -3752,6 +4520,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-07",
+            ],
             "xValue": [
               "2012-07-01",
             ],
@@ -3768,6 +4539,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-08",
+            ],
             "xValue": [
               "2012-08-01",
             ],
@@ -3784,6 +4558,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-09",
+            ],
             "xValue": [
               "2012-09-01",
             ],
@@ -3800,6 +4577,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-10",
+            ],
             "xValue": [
               "2012-10-01",
             ],
@@ -3816,6 +4596,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-11",
+            ],
             "xValue": [
               "2012-11-01",
             ],
@@ -3832,6 +4615,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-12",
+            ],
             "xValue": [
               "2012-12-01",
             ],
@@ -3848,6 +4634,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-01",
+            ],
             "xValue": [
               "2013-01-01",
             ],
@@ -3864,6 +4653,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-02",
+            ],
             "xValue": [
               "2013-02-01",
             ],
@@ -3880,6 +4672,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-03",
+            ],
             "xValue": [
               "2013-03-01",
             ],
@@ -3896,6 +4691,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-04",
+            ],
             "xValue": [
               "2013-04-01",
             ],
@@ -3912,6 +4710,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-05",
+            ],
             "xValue": [
               "2013-05-01",
             ],
@@ -3928,6 +4729,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-06",
+            ],
             "xValue": [
               "2013-06-01",
             ],
@@ -3944,6 +4748,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-07",
+            ],
             "xValue": [
               "2013-07-01",
             ],
@@ -3960,6 +4767,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-08",
+            ],
             "xValue": [
               "2013-08-01",
             ],
@@ -3976,6 +4786,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-09",
+            ],
             "xValue": [
               "2013-09-01",
             ],
@@ -3992,6 +4805,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-10",
+            ],
             "xValue": [
               "2013-10-01",
             ],
@@ -4008,6 +4824,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-11",
+            ],
             "xValue": [
               "2013-11-01",
             ],
@@ -4024,6 +4843,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-12",
+            ],
             "xValue": [
               "2013-12-01",
             ],
@@ -4036,6 +4858,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3432902.395304515,
+            "xDisplayValue": [
+              "2014-01",
+            ],
             "xValue": [
               "2014-01-01",
             ],
@@ -4048,6 +4873,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3455861.1150580775,
+            "xDisplayValue": [
+              "2014-02",
+            ],
             "xValue": [
               "2014-02-01",
             ],
@@ -4060,6 +4888,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3491353.7095914274,
+            "xDisplayValue": [
+              "2014-03",
+            ],
             "xValue": [
               "2014-03-01",
             ],
@@ -4072,6 +4903,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3601096.993465676,
+            "xDisplayValue": [
+              "2014-04",
+            ],
             "xValue": [
               "2014-04-01",
             ],
@@ -4084,6 +4918,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3512644.745014943,
+            "xDisplayValue": [
+              "2014-05",
+            ],
             "xValue": [
               "2014-05-01",
             ],
@@ -4096,6 +4933,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 3570184.1638095835,
+            "xDisplayValue": [
+              "2014-06",
+            ],
             "xValue": [
               "2014-06-01",
             ],
@@ -4146,6 +4986,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2009-11",
+            ],
             "xValue": [
               "2009-11-01",
             ],
@@ -4164,6 +5007,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2009-12",
+            ],
             "xValue": [
               "2009-12-01",
             ],
@@ -4182,6 +5028,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-01",
+            ],
             "xValue": [
               "2010-01-01",
             ],
@@ -4200,6 +5049,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-02",
+            ],
             "xValue": [
               "2010-02-01",
             ],
@@ -4218,6 +5070,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-03",
+            ],
             "xValue": [
               "2010-03-01",
             ],
@@ -4236,6 +5091,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-04",
+            ],
             "xValue": [
               "2010-04-01",
             ],
@@ -4254,6 +5112,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-05",
+            ],
             "xValue": [
               "2010-05-01",
             ],
@@ -4272,6 +5133,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-06",
+            ],
             "xValue": [
               "2010-06-01",
             ],
@@ -4290,6 +5154,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-07",
+            ],
             "xValue": [
               "2010-07-01",
             ],
@@ -4308,6 +5175,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-08",
+            ],
             "xValue": [
               "2010-08-01",
             ],
@@ -4326,6 +5196,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-09",
+            ],
             "xValue": [
               "2010-09-01",
             ],
@@ -4344,6 +5217,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-10",
+            ],
             "xValue": [
               "2010-10-01",
             ],
@@ -4362,6 +5238,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-11",
+            ],
             "xValue": [
               "2010-11-01",
             ],
@@ -4380,6 +5259,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-12",
+            ],
             "xValue": [
               "2010-12-01",
             ],
@@ -4398,6 +5280,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-01",
+            ],
             "xValue": [
               "2011-01-01",
             ],
@@ -4416,6 +5301,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-02",
+            ],
             "xValue": [
               "2011-02-01",
             ],
@@ -4434,6 +5322,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-03",
+            ],
             "xValue": [
               "2011-03-01",
             ],
@@ -4452,6 +5343,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-04",
+            ],
             "xValue": [
               "2011-04-01",
             ],
@@ -4470,6 +5364,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-05",
+            ],
             "xValue": [
               "2011-05-01",
             ],
@@ -4488,6 +5385,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-06",
+            ],
             "xValue": [
               "2011-06-01",
             ],
@@ -4506,6 +5406,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-07",
+            ],
             "xValue": [
               "2011-07-01",
             ],
@@ -4524,6 +5427,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-08",
+            ],
             "xValue": [
               "2011-08-01",
             ],
@@ -4542,6 +5448,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-09",
+            ],
             "xValue": [
               "2011-09-01",
             ],
@@ -4560,6 +5469,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-10",
+            ],
             "xValue": [
               "2011-10-01",
             ],
@@ -4578,6 +5490,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-11",
+            ],
             "xValue": [
               "2011-11-01",
             ],
@@ -4596,6 +5511,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-12",
+            ],
             "xValue": [
               "2011-12-01",
             ],
@@ -4614,6 +5532,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-01",
+            ],
             "xValue": [
               "2012-01-01",
             ],
@@ -4632,6 +5553,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-02",
+            ],
             "xValue": [
               "2012-02-01",
             ],
@@ -4650,6 +5574,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-03",
+            ],
             "xValue": [
               "2012-03-01",
             ],
@@ -4668,6 +5595,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-04",
+            ],
             "xValue": [
               "2012-04-01",
             ],
@@ -4686,6 +5616,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-05",
+            ],
             "xValue": [
               "2012-05-01",
             ],
@@ -4704,6 +5637,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-06",
+            ],
             "xValue": [
               "2012-06-01",
             ],
@@ -4722,6 +5658,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-07",
+            ],
             "xValue": [
               "2012-07-01",
             ],
@@ -4740,6 +5679,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-08",
+            ],
             "xValue": [
               "2012-08-01",
             ],
@@ -4758,6 +5700,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-09",
+            ],
             "xValue": [
               "2012-09-01",
             ],
@@ -4776,6 +5721,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-10",
+            ],
             "xValue": [
               "2012-10-01",
             ],
@@ -4794,6 +5742,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-11",
+            ],
             "xValue": [
               "2012-11-01",
             ],
@@ -4812,6 +5763,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-12",
+            ],
             "xValue": [
               "2012-12-01",
             ],
@@ -4830,6 +5784,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-01",
+            ],
             "xValue": [
               "2013-01-01",
             ],
@@ -4848,6 +5805,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-02",
+            ],
             "xValue": [
               "2013-02-01",
             ],
@@ -4866,6 +5826,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-03",
+            ],
             "xValue": [
               "2013-03-01",
             ],
@@ -4884,6 +5847,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-04",
+            ],
             "xValue": [
               "2013-04-01",
             ],
@@ -4902,6 +5868,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-05",
+            ],
             "xValue": [
               "2013-05-01",
             ],
@@ -4920,6 +5889,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-06",
+            ],
             "xValue": [
               "2013-06-01",
             ],
@@ -4938,6 +5910,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-07",
+            ],
             "xValue": [
               "2013-07-01",
             ],
@@ -4956,6 +5931,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-08",
+            ],
             "xValue": [
               "2013-08-01",
             ],
@@ -4974,6 +5952,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-09",
+            ],
             "xValue": [
               "2013-09-01",
             ],
@@ -4992,6 +5973,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-10",
+            ],
             "xValue": [
               "2013-10-01",
             ],
@@ -5010,6 +5994,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-11",
+            ],
             "xValue": [
               "2013-11-01",
             ],
@@ -5028,6 +6015,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-12",
+            ],
             "xValue": [
               "2013-12-01",
             ],
@@ -5042,6 +6032,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2502270.7452848963,
+            "xDisplayValue": [
+              "2014-01",
+            ],
             "xValue": [
               "2014-01-01",
             ],
@@ -5056,6 +6049,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2774896.364626469,
+            "xDisplayValue": [
+              "2014-02",
+            ],
             "xValue": [
               "2014-02-01",
             ],
@@ -5070,6 +6066,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2529612.5733055985,
+            "xDisplayValue": [
+              "2014-03",
+            ],
             "xValue": [
               "2014-03-01",
             ],
@@ -5084,6 +6083,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2586368.303115316,
+            "xDisplayValue": [
+              "2014-04",
+            ],
             "xValue": [
               "2014-04-01",
             ],
@@ -5098,6 +6100,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2506222.5577449454,
+            "xDisplayValue": [
+              "2014-05",
+            ],
             "xValue": [
               "2014-05-01",
             ],
@@ -5112,6 +6117,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 2555594.430841752,
+            "xDisplayValue": [
+              "2014-06",
+            ],
             "xValue": [
               "2014-06-01",
             ],
@@ -5165,6 +6173,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2009-11",
+            ],
             "xValue": [
               "2009-11-01",
             ],
@@ -5183,6 +6194,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2009-12",
+            ],
             "xValue": [
               "2009-12-01",
             ],
@@ -5201,6 +6215,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-01",
+            ],
             "xValue": [
               "2010-01-01",
             ],
@@ -5219,6 +6236,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-02",
+            ],
             "xValue": [
               "2010-02-01",
             ],
@@ -5237,6 +6257,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-03",
+            ],
             "xValue": [
               "2010-03-01",
             ],
@@ -5255,6 +6278,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-04",
+            ],
             "xValue": [
               "2010-04-01",
             ],
@@ -5273,6 +6299,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-05",
+            ],
             "xValue": [
               "2010-05-01",
             ],
@@ -5291,6 +6320,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-06",
+            ],
             "xValue": [
               "2010-06-01",
             ],
@@ -5309,6 +6341,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-07",
+            ],
             "xValue": [
               "2010-07-01",
             ],
@@ -5327,6 +6362,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-08",
+            ],
             "xValue": [
               "2010-08-01",
             ],
@@ -5345,6 +6383,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-09",
+            ],
             "xValue": [
               "2010-09-01",
             ],
@@ -5363,6 +6404,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-10",
+            ],
             "xValue": [
               "2010-10-01",
             ],
@@ -5381,6 +6425,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-11",
+            ],
             "xValue": [
               "2010-11-01",
             ],
@@ -5399,6 +6446,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2010-12",
+            ],
             "xValue": [
               "2010-12-01",
             ],
@@ -5417,6 +6467,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-01",
+            ],
             "xValue": [
               "2011-01-01",
             ],
@@ -5435,6 +6488,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-02",
+            ],
             "xValue": [
               "2011-02-01",
             ],
@@ -5453,6 +6509,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-03",
+            ],
             "xValue": [
               "2011-03-01",
             ],
@@ -5471,6 +6530,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-04",
+            ],
             "xValue": [
               "2011-04-01",
             ],
@@ -5489,6 +6551,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-05",
+            ],
             "xValue": [
               "2011-05-01",
             ],
@@ -5507,6 +6572,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-06",
+            ],
             "xValue": [
               "2011-06-01",
             ],
@@ -5525,6 +6593,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-07",
+            ],
             "xValue": [
               "2011-07-01",
             ],
@@ -5543,6 +6614,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-08",
+            ],
             "xValue": [
               "2011-08-01",
             ],
@@ -5561,6 +6635,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-09",
+            ],
             "xValue": [
               "2011-09-01",
             ],
@@ -5579,6 +6656,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-10",
+            ],
             "xValue": [
               "2011-10-01",
             ],
@@ -5597,6 +6677,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-11",
+            ],
             "xValue": [
               "2011-11-01",
             ],
@@ -5615,6 +6698,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2011-12",
+            ],
             "xValue": [
               "2011-12-01",
             ],
@@ -5633,6 +6719,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-01",
+            ],
             "xValue": [
               "2012-01-01",
             ],
@@ -5651,6 +6740,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-02",
+            ],
             "xValue": [
               "2012-02-01",
             ],
@@ -5669,6 +6761,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-03",
+            ],
             "xValue": [
               "2012-03-01",
             ],
@@ -5687,6 +6782,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-04",
+            ],
             "xValue": [
               "2012-04-01",
             ],
@@ -5705,6 +6803,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-05",
+            ],
             "xValue": [
               "2012-05-01",
             ],
@@ -5723,6 +6824,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-06",
+            ],
             "xValue": [
               "2012-06-01",
             ],
@@ -5741,6 +6845,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-07",
+            ],
             "xValue": [
               "2012-07-01",
             ],
@@ -5759,6 +6866,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-08",
+            ],
             "xValue": [
               "2012-08-01",
             ],
@@ -5777,6 +6887,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-09",
+            ],
             "xValue": [
               "2012-09-01",
             ],
@@ -5795,6 +6908,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-10",
+            ],
             "xValue": [
               "2012-10-01",
             ],
@@ -5813,6 +6929,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-11",
+            ],
             "xValue": [
               "2012-11-01",
             ],
@@ -5831,6 +6950,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2012-12",
+            ],
             "xValue": [
               "2012-12-01",
             ],
@@ -5849,6 +6971,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-01",
+            ],
             "xValue": [
               "2013-01-01",
             ],
@@ -5867,6 +6992,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-02",
+            ],
             "xValue": [
               "2013-02-01",
             ],
@@ -5885,6 +7013,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-03",
+            ],
             "xValue": [
               "2013-03-01",
             ],
@@ -5903,6 +7034,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-04",
+            ],
             "xValue": [
               "2013-04-01",
             ],
@@ -5921,6 +7055,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-05",
+            ],
             "xValue": [
               "2013-05-01",
             ],
@@ -5939,6 +7076,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-06",
+            ],
             "xValue": [
               "2013-06-01",
             ],
@@ -5957,6 +7097,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-07",
+            ],
             "xValue": [
               "2013-07-01",
             ],
@@ -5975,6 +7118,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-08",
+            ],
             "xValue": [
               "2013-08-01",
             ],
@@ -5993,6 +7139,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-09",
+            ],
             "xValue": [
               "2013-09-01",
             ],
@@ -6011,6 +7160,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-10",
+            ],
             "xValue": [
               "2013-10-01",
             ],
@@ -6029,6 +7181,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-11",
+            ],
             "xValue": [
               "2013-11-01",
             ],
@@ -6047,6 +7202,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": "N\\A",
+            "xDisplayValue": [
+              "2013-12",
+            ],
             "xValue": [
               "2013-12-01",
             ],
@@ -6061,6 +7219,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 4215621.114209566,
+            "xDisplayValue": [
+              "2014-01",
+            ],
             "xValue": [
               "2014-01-01",
             ],
@@ -6075,6 +7236,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 4257156.218797659,
+            "xDisplayValue": [
+              "2014-02",
+            ],
             "xValue": [
               "2014-02-01",
             ],
@@ -6089,6 +7253,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 4254548.220516098,
+            "xDisplayValue": [
+              "2014-03",
+            ],
             "xValue": [
               "2014-03-01",
             ],
@@ -6103,6 +7270,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 4354370.65910466,
+            "xDisplayValue": [
+              "2014-04",
+            ],
             "xValue": [
               "2014-04-01",
             ],
@@ -6117,6 +7287,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 4249394.877735277,
+            "xDisplayValue": [
+              "2014-05",
+            ],
             "xValue": [
               "2014-05-01",
             ],
@@ -6131,6 +7304,9 @@ exports[`Advanced Charts > should render forecast trend combo chart 1`] = `
         {
           "custom": {
             "rawValue": 4319327.450568654,
+            "xDisplayValue": [
+              "2014-06",
+            ],
             "xValue": [
               "2014-06-01",
             ],
@@ -6553,6 +7729,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 189976.80757868662,
+            "xDisplayValue": [
+              "2009-11",
+            ],
             "xValue": [
               "2009-11-01",
             ],
@@ -6563,6 +7742,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1107490.0728950314,
+            "xDisplayValue": [
+              "2009-12",
+            ],
             "xValue": [
               "2009-12-01",
             ],
@@ -6573,6 +7755,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 845205.6287006252,
+            "xDisplayValue": [
+              "2010-01",
+            ],
             "xValue": [
               "2010-01-01",
             ],
@@ -6583,6 +7768,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 787917.8207888827,
+            "xDisplayValue": [
+              "2010-02",
+            ],
             "xValue": [
               "2010-02-01",
             ],
@@ -6593,6 +7781,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 946810.4692947622,
+            "xDisplayValue": [
+              "2010-03",
+            ],
             "xValue": [
               "2010-03-01",
             ],
@@ -6603,6 +7794,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 900508.5092079439,
+            "xDisplayValue": [
+              "2010-04",
+            ],
             "xValue": [
               "2010-04-01",
             ],
@@ -6613,6 +7807,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 946238.5815005917,
+            "xDisplayValue": [
+              "2010-05",
+            ],
             "xValue": [
               "2010-05-01",
             ],
@@ -6623,6 +7820,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 886700.2053317726,
+            "xDisplayValue": [
+              "2010-06",
+            ],
             "xValue": [
               "2010-06-01",
             ],
@@ -6633,6 +7833,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 900954.317531623,
+            "xDisplayValue": [
+              "2010-07",
+            ],
             "xValue": [
               "2010-07-01",
             ],
@@ -6643,6 +7846,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 984546.9012292922,
+            "xDisplayValue": [
+              "2010-08",
+            ],
             "xValue": [
               "2010-08-01",
             ],
@@ -6653,6 +7859,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 947657.5594753642,
+            "xDisplayValue": [
+              "2010-09",
+            ],
             "xValue": [
               "2010-09-01",
             ],
@@ -6663,6 +7872,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1067067.8516010046,
+            "xDisplayValue": [
+              "2010-10",
+            ],
             "xValue": [
               "2010-10-01",
             ],
@@ -6673,6 +7885,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1313277.0609966572,
+            "xDisplayValue": [
+              "2010-11",
+            ],
             "xValue": [
               "2010-11-01",
             ],
@@ -6683,6 +7898,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1467710.2702174708,
+            "xDisplayValue": [
+              "2010-12",
+            ],
             "xValue": [
               "2010-12-01",
             ],
@@ -6693,6 +7911,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1175238.5499559864,
+            "xDisplayValue": [
+              "2011-01",
+            ],
             "xValue": [
               "2011-01-01",
             ],
@@ -6703,6 +7924,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1092969.080261767,
+            "xDisplayValue": [
+              "2011-02",
+            ],
             "xValue": [
               "2011-02-01",
             ],
@@ -6713,6 +7937,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1188733.9370134315,
+            "xDisplayValue": [
+              "2011-03",
+            ],
             "xValue": [
               "2011-03-01",
             ],
@@ -6723,6 +7950,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1468171.674996743,
+            "xDisplayValue": [
+              "2011-04",
+            ],
             "xValue": [
               "2011-04-01",
             ],
@@ -6733,6 +7963,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1809045.4618380964,
+            "xDisplayValue": [
+              "2011-05",
+            ],
             "xValue": [
               "2011-05-01",
             ],
@@ -6743,6 +7976,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1963988.3454919308,
+            "xDisplayValue": [
+              "2011-06",
+            ],
             "xValue": [
               "2011-06-01",
             ],
@@ -6753,6 +7989,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2011346.4261528384,
+            "xDisplayValue": [
+              "2011-07",
+            ],
             "xValue": [
               "2011-07-01",
             ],
@@ -6763,6 +8002,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2128043.9337140303,
+            "xDisplayValue": [
+              "2011-08",
+            ],
             "xValue": [
               "2011-08-01",
             ],
@@ -6773,6 +8015,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2017077.2452351712,
+            "xDisplayValue": [
+              "2011-09",
+            ],
             "xValue": [
               "2011-09-01",
             ],
@@ -6783,6 +8028,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2283585.5977138802,
+            "xDisplayValue": [
+              "2011-10",
+            ],
             "xValue": [
               "2011-10-01",
             ],
@@ -6793,6 +8041,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2558169.054697007,
+            "xDisplayValue": [
+              "2011-11",
+            ],
             "xValue": [
               "2011-11-01",
             ],
@@ -6803,6 +8054,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2855504.8063853886,
+            "xDisplayValue": [
+              "2011-12",
+            ],
             "xValue": [
               "2011-12-01",
             ],
@@ -6813,6 +8067,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2267886.0520572066,
+            "xDisplayValue": [
+              "2012-01",
+            ],
             "xValue": [
               "2012-01-01",
             ],
@@ -6823,6 +8080,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2289422.9980101623,
+            "xDisplayValue": [
+              "2012-02",
+            ],
             "xValue": [
               "2012-02-01",
             ],
@@ -6833,6 +8093,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2413584.21836257,
+            "xDisplayValue": [
+              "2012-03",
+            ],
             "xValue": [
               "2012-03-01",
             ],
@@ -6843,6 +8106,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2450628.8393439148,
+            "xDisplayValue": [
+              "2012-04",
+            ],
             "xValue": [
               "2012-04-01",
             ],
@@ -6853,6 +8119,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2616360.1553670047,
+            "xDisplayValue": [
+              "2012-05",
+            ],
             "xValue": [
               "2012-05-01",
             ],
@@ -6863,6 +8132,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2482130.5598226488,
+            "xDisplayValue": [
+              "2012-06",
+            ],
             "xValue": [
               "2012-06-01",
             ],
@@ -6873,6 +8145,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2594841.3182018436,
+            "xDisplayValue": [
+              "2012-07",
+            ],
             "xValue": [
               "2012-07-01",
             ],
@@ -6883,6 +8158,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2673938.1166581884,
+            "xDisplayValue": [
+              "2012-08",
+            ],
             "xValue": [
               "2012-08-01",
             ],
@@ -6893,6 +8171,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2867416.29551314,
+            "xDisplayValue": [
+              "2012-09",
+            ],
             "xValue": [
               "2012-09-01",
             ],
@@ -6903,6 +8184,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3168871.066950053,
+            "xDisplayValue": [
+              "2012-10",
+            ],
             "xValue": [
               "2012-10-01",
             ],
@@ -6913,6 +8197,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3888213.687782809,
+            "xDisplayValue": [
+              "2012-11",
+            ],
             "xValue": [
               "2012-11-01",
             ],
@@ -6923,6 +8210,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3992612.938552344,
+            "xDisplayValue": [
+              "2012-12",
+            ],
             "xValue": [
               "2012-12-01",
             ],
@@ -6933,6 +8223,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2759434.9833942996,
+            "xDisplayValue": [
+              "2013-01",
+            ],
             "xValue": [
               "2013-01-01",
             ],
@@ -6943,6 +8236,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2788158.3545121085,
+            "xDisplayValue": [
+              "2013-02",
+            ],
             "xValue": [
               "2013-02-01",
             ],
@@ -6953,6 +8249,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3046625.3691154122,
+            "xDisplayValue": [
+              "2013-03",
+            ],
             "xValue": [
               "2013-03-01",
             ],
@@ -6963,6 +8262,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2961134.7611477133,
+            "xDisplayValue": [
+              "2013-04",
+            ],
             "xValue": [
               "2013-04-01",
             ],
@@ -6973,6 +8275,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3242762.429729399,
+            "xDisplayValue": [
+              "2013-05",
+            ],
             "xValue": [
               "2013-05-01",
             ],
@@ -6983,6 +8288,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3204714.5343812816,
+            "xDisplayValue": [
+              "2013-06",
+            ],
             "xValue": [
               "2013-06-01",
             ],
@@ -6993,6 +8301,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3349081.2784886193,
+            "xDisplayValue": [
+              "2013-07",
+            ],
             "xValue": [
               "2013-07-01",
             ],
@@ -7003,6 +8314,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3238694.8539762036,
+            "xDisplayValue": [
+              "2013-08",
+            ],
             "xValue": [
               "2013-08-01",
             ],
@@ -7013,6 +8327,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3581952.4929154813,
+            "xDisplayValue": [
+              "2013-09",
+            ],
             "xValue": [
               "2013-09-01",
             ],
@@ -7023,6 +8340,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3935084.4678387493,
+            "xDisplayValue": [
+              "2013-10",
+            ],
             "xValue": [
               "2013-10-01",
             ],
@@ -7033,6 +8353,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 4844611.66696444,
+            "xDisplayValue": [
+              "2013-11",
+            ],
             "xValue": [
               "2013-11-01",
             ],
@@ -7043,6 +8366,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 770441.3868424296,
+            "xDisplayValue": [
+              "2013-12",
+            ],
             "xValue": [
               "2013-12-01",
             ],
@@ -7088,6 +8414,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 399877.66021296044,
+            "xDisplayValue": [
+              "2009-11",
+            ],
             "xValue": [
               "2009-11-01",
             ],
@@ -7104,6 +8433,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 760254.7486363016,
+            "xDisplayValue": [
+              "2009-12",
+            ],
             "xValue": [
               "2009-12-01",
             ],
@@ -7120,6 +8452,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 892589.3891729144,
+            "xDisplayValue": [
+              "2010-01",
+            ],
             "xValue": [
               "2010-01-01",
             ],
@@ -7136,6 +8471,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 904228.5180767283,
+            "xDisplayValue": [
+              "2010-02",
+            ],
             "xValue": [
               "2010-02-01",
             ],
@@ -7152,6 +8490,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 912866.4678721044,
+            "xDisplayValue": [
+              "2010-03",
+            ],
             "xValue": [
               "2010-03-01",
             ],
@@ -7168,6 +8509,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 916526.9340331501,
+            "xDisplayValue": [
+              "2010-04",
+            ],
             "xValue": [
               "2010-04-01",
             ],
@@ -7184,6 +8528,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 914095.3329283679,
+            "xDisplayValue": [
+              "2010-05",
+            ],
             "xValue": [
               "2010-05-01",
             ],
@@ -7200,6 +8547,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 904960.4685997746,
+            "xDisplayValue": [
+              "2010-06",
+            ],
             "xValue": [
               "2010-06-01",
             ],
@@ -7216,6 +8566,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 912084.7216383086,
+            "xDisplayValue": [
+              "2010-07",
+            ],
             "xValue": [
               "2010-07-01",
             ],
@@ -7232,6 +8585,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 945423.4204832909,
+            "xDisplayValue": [
+              "2010-08",
+            ],
             "xValue": [
               "2010-08-01",
             ],
@@ -7248,6 +8604,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1009017.2938368567,
+            "xDisplayValue": [
+              "2010-09",
+            ],
             "xValue": [
               "2010-09-01",
             ],
@@ -7264,6 +8623,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1127908.0165300977,
+            "xDisplayValue": [
+              "2010-10",
+            ],
             "xValue": [
               "2010-10-01",
             ],
@@ -7280,6 +8642,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1260348.35798684,
+            "xDisplayValue": [
+              "2010-11",
+            ],
             "xValue": [
               "2010-11-01",
             ],
@@ -7296,6 +8661,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1301643.164863898,
+            "xDisplayValue": [
+              "2010-12",
+            ],
             "xValue": [
               "2010-12-01",
             ],
@@ -7312,6 +8680,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1226332.721934023,
+            "xDisplayValue": [
+              "2011-01",
+            ],
             "xValue": [
               "2011-01-01",
             ],
@@ -7328,6 +8699,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1175483.052081485,
+            "xDisplayValue": [
+              "2011-02",
+            ],
             "xValue": [
               "2011-02-01",
             ],
@@ -7344,6 +8718,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1259954.2895959807,
+            "xDisplayValue": [
+              "2011-03",
+            ],
             "xValue": [
               "2011-03-01",
             ],
@@ -7360,6 +8737,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1477513.9658073424,
+            "xDisplayValue": [
+              "2011-04",
+            ],
             "xValue": [
               "2011-04-01",
             ],
@@ -7376,6 +8756,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1731745.1938052739,
+            "xDisplayValue": [
+              "2011-05",
+            ],
             "xValue": [
               "2011-05-01",
             ],
@@ -7392,6 +8775,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1918408.774731447,
+            "xDisplayValue": [
+              "2011-06",
+            ],
             "xValue": [
               "2011-06-01",
             ],
@@ -7408,6 +8794,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2019625.0977478286,
+            "xDisplayValue": [
+              "2011-07",
+            ],
             "xValue": [
               "2011-07-01",
             ],
@@ -7424,6 +8813,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2080349.5218863264,
+            "xDisplayValue": [
+              "2011-08",
+            ],
             "xValue": [
               "2011-08-01",
             ],
@@ -7440,6 +8832,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2160577.230230905,
+            "xDisplayValue": [
+              "2011-09",
+            ],
             "xValue": [
               "2011-09-01",
             ],
@@ -7456,6 +8851,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2330053.153545553,
+            "xDisplayValue": [
+              "2011-10",
+            ],
             "xValue": [
               "2011-10-01",
             ],
@@ -7472,6 +8870,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2515328.951597531,
+            "xDisplayValue": [
+              "2011-11",
+            ],
             "xValue": [
               "2011-11-01",
             ],
@@ -7488,6 +8889,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2571323.757848365,
+            "xDisplayValue": [
+              "2011-12",
+            ],
             "xValue": [
               "2011-12-01",
             ],
@@ -7504,6 +8908,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2455225.182035394,
+            "xDisplayValue": [
+              "2012-01",
+            ],
             "xValue": [
               "2012-01-01",
             ],
@@ -7520,6 +8927,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2372277.1257133014,
+            "xDisplayValue": [
+              "2012-02",
+            ],
             "xValue": [
               "2012-02-01",
             ],
@@ -7536,6 +8946,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2390716.0906670545,
+            "xDisplayValue": [
+              "2012-03",
+            ],
             "xValue": [
               "2012-03-01",
             ],
@@ -7552,6 +8965,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2454806.7004078142,
+            "xDisplayValue": [
+              "2012-04",
+            ],
             "xValue": [
               "2012-04-01",
             ],
@@ -7568,6 +8984,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2509923.7089504977,
+            "xDisplayValue": [
+              "2012-05",
+            ],
             "xValue": [
               "2012-05-01",
             ],
@@ -7584,6 +9003,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2529590.1527741267,
+            "xDisplayValue": [
+              "2012-06",
+            ],
             "xValue": [
               "2012-06-01",
             ],
@@ -7600,6 +9022,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2580856.1512703863,
+            "xDisplayValue": [
+              "2012-07",
+            ],
             "xValue": [
               "2012-07-01",
             ],
@@ -7616,6 +9041,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2713417.6342164744,
+            "xDisplayValue": [
+              "2012-08",
+            ],
             "xValue": [
               "2012-08-01",
             ],
@@ -7632,6 +9060,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2969220.9206936043,
+            "xDisplayValue": [
+              "2012-09",
+            ],
             "xValue": [
               "2012-09-01",
             ],
@@ -7648,6 +9079,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3328777.947662453,
+            "xDisplayValue": [
+              "2012-10",
+            ],
             "xValue": [
               "2012-10-01",
             ],
@@ -7664,6 +9098,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3620949.4273355627,
+            "xDisplayValue": [
+              "2012-11",
+            ],
             "xValue": [
               "2012-11-01",
             ],
@@ -7680,6 +9117,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3556054.100029769,
+            "xDisplayValue": [
+              "2012-12",
+            ],
             "xValue": [
               "2012-12-01",
             ],
@@ -7696,6 +9136,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3180837.955961699,
+            "xDisplayValue": [
+              "2013-01",
+            ],
             "xValue": [
               "2013-01-01",
             ],
@@ -7712,6 +9155,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2940071.145840517,
+            "xDisplayValue": [
+              "2013-02",
+            ],
             "xValue": [
               "2013-02-01",
             ],
@@ -7728,6 +9174,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 2928282.3596065277,
+            "xDisplayValue": [
+              "2013-03",
+            ],
             "xValue": [
               "2013-03-01",
             ],
@@ -7744,6 +9193,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3012322.5051070023,
+            "xDisplayValue": [
+              "2013-04",
+            ],
             "xValue": [
               "2013-04-01",
             ],
@@ -7760,6 +9212,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3126610.365876169,
+            "xDisplayValue": [
+              "2013-05",
+            ],
             "xValue": [
               "2013-05-01",
             ],
@@ -7776,6 +9231,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3213000.749829498,
+            "xDisplayValue": [
+              "2013-06",
+            ],
             "xValue": [
               "2013-06-01",
             ],
@@ -7792,6 +9250,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3314632.0388838113,
+            "xDisplayValue": [
+              "2013-07",
+            ],
             "xValue": [
               "2013-07-01",
             ],
@@ -7808,6 +9269,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3504006.725372224,
+            "xDisplayValue": [
+              "2013-08",
+            ],
             "xValue": [
               "2013-08-01",
             ],
@@ -7824,6 +9288,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3819677.0195216006,
+            "xDisplayValue": [
+              "2013-09",
+            ],
             "xValue": [
               "2013-09-01",
             ],
@@ -7840,6 +9307,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3984064.438412456,
+            "xDisplayValue": [
+              "2013-10",
+            ],
             "xValue": [
               "2013-10-01",
             ],
@@ -7856,6 +9326,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 3403293.012026755,
+            "xDisplayValue": [
+              "2013-11",
+            ],
             "xValue": [
               "2013-11-01",
             ],
@@ -7872,6 +9345,9 @@ exports[`Advanced Charts > should render trend chart 1`] = `
         {
           "custom": {
             "rawValue": 1735405.3318556482,
+            "xDisplayValue": [
+              "2013-12",
+            ],
             "xValue": [
               "2013-12-01",
             ],

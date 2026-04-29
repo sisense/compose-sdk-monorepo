@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -104,5 +102,196 @@ describe('YAxisSection', () => {
     // inputs: [title, min, max, interval]
     fireEvent.change(inputs[1], { target: { value: '10' } });
     expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ min: 10 }));
+  });
+
+  it('calls onClick with undefined min when Min input is cleared', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection
+        {...baseProps}
+        hasRange={true}
+        onClick={onClick}
+        yAxis={{ enabled: true, min: 5 }}
+      />,
+    );
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[1], { target: { value: '' } });
+    expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ min: undefined }));
+  });
+
+  it('preserves intervalJumps when logarithmic is toggled off', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection
+        {...baseProps}
+        hasRange={true}
+        onClick={onClick}
+        yAxis={{ enabled: true, logarithmic: true, intervalJumps: 10 }}
+      />,
+    );
+    fireEvent.click(screen.getByText('Logarithmic').closest('tr') as HTMLTableRowElement);
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ logarithmic: false, intervalJumps: 10 }),
+    );
+  });
+
+  it('calls onClick with toggled gridLines when Grid Lines row is clicked', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection
+        {...baseProps}
+        hasGridLine={true}
+        onClick={onClick}
+        yAxis={{ enabled: true, gridLines: false }}
+      />,
+    );
+    fireEvent.click(screen.getByText('Grid Lines').closest('tr') as HTMLTableRowElement);
+    expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ gridLines: true }));
+  });
+
+  it('calls onClick with toggled logarithmic when Logarithmic row is clicked', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection
+        {...baseProps}
+        hasRange={true}
+        onClick={onClick}
+        yAxis={{ enabled: true, logarithmic: false }}
+      />,
+    );
+    fireEvent.click(screen.getByText('Logarithmic').closest('tr') as HTMLTableRowElement);
+    expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ logarithmic: true }));
+  });
+
+  it('calls onClick with toggled title.enabled when title checkbox cell is clicked', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection
+        {...baseProps}
+        onClick={onClick}
+        yAxis={{ enabled: true, title: { enabled: false } }}
+      />,
+    );
+    // The title row: find the "Title" label, navigate to its tr, click the first td (checkbox cell)
+    const titleLabel = screen.getByText('Title');
+    const titleRow = titleLabel.closest('tr');
+    const checkboxCell = titleRow?.querySelector('td');
+    fireEvent.click(checkboxCell!);
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ title: expect.objectContaining({ enabled: true }) }),
+    );
+  });
+
+  it('calls onClick with toggled title.enabled when title label div is clicked', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection
+        {...baseProps}
+        onClick={onClick}
+        yAxis={{ enabled: true, title: { enabled: true } }}
+      />,
+    );
+    fireEvent.click(screen.getByText('Title'));
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ title: expect.objectContaining({ enabled: false }) }),
+    );
+  });
+
+  it('calls onClick with enabled=true when title input is focused while disabled', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection
+        {...baseProps}
+        onClick={onClick}
+        yAxis={{ enabled: true, title: { enabled: false } }}
+      />,
+    );
+    fireEvent.focus(screen.getAllByRole('textbox')[0]);
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ title: expect.objectContaining({ enabled: true }) }),
+    );
+  });
+
+  it('does not call onClick when title input is focused while already enabled', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection
+        {...baseProps}
+        onClick={onClick}
+        yAxis={{ enabled: true, title: { enabled: true } }}
+      />,
+    );
+    fireEvent.focus(screen.getAllByRole('textbox')[0]);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('calls onClick with parsed max value when Max input changes', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection {...baseProps} hasRange={true} onClick={onClick} yAxis={{ enabled: true }} />,
+    );
+    const inputs = screen.getAllByRole('textbox');
+    // inputs: [title, min, max, interval]
+    fireEvent.change(inputs[2], { target: { value: '100' } });
+    expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ max: 100 }));
+  });
+
+  it('calls onClick with undefined max when Max input is cleared', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection
+        {...baseProps}
+        hasRange={true}
+        onClick={onClick}
+        yAxis={{ enabled: true, max: 50 }}
+      />,
+    );
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[2], { target: { value: '' } });
+    expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ max: undefined }));
+  });
+
+  it('calls onClick with parsed intervalJumps when Interval input changes', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection {...baseProps} hasRange={true} onClick={onClick} yAxis={{ enabled: true }} />,
+    );
+    const inputs = screen.getAllByRole('textbox');
+    // inputs: [title, min, max, interval]
+    fireEvent.change(inputs[3], { target: { value: '5' } });
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ intervalJumps: 5, isIntervalEnabled: true }),
+    );
+  });
+
+  it('calls onClick with undefined intervalJumps when Interval input is cleared', () => {
+    const onClick = vi.fn();
+    render(
+      <YAxisSection
+        {...baseProps}
+        hasRange={true}
+        onClick={onClick}
+        yAxis={{ enabled: true, intervalJumps: 10 }}
+      />,
+    );
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[3], { target: { value: '' } });
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ intervalJumps: undefined, isIntervalEnabled: false }),
+    );
+  });
+
+  it('hides the Interval row when yAxis.logarithmic is true', () => {
+    render(
+      <YAxisSection {...baseProps} hasRange={true} yAxis={{ enabled: true, logarithmic: true }} />,
+    );
+    expect(screen.queryByText('Interval')).not.toBeInTheDocument();
+  });
+
+  it('shows the Interval row when yAxis.logarithmic is false', () => {
+    render(
+      <YAxisSection {...baseProps} hasRange={true} yAxis={{ enabled: true, logarithmic: false }} />,
+    );
+    expect(screen.getByText('Interval')).toBeInTheDocument();
   });
 });

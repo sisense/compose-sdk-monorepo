@@ -66,6 +66,47 @@ describe('persistDashboardModelMiddleware', () => {
     expect(result).toEqual({ type: UseDashboardModelActionType.FILTERS_UPDATE, payload: filters });
   });
 
+  it('should include partialDtoOptions in the WidgetDto sent to the server on ADD_WIDGET', async () => {
+    const serverWidget = {
+      ...sampleEcommerceDashboard.widgets![0]!,
+      oid: 'server-assigned-oid',
+    };
+    const restApi = {
+      patchDashboard: vi.fn(),
+      addWidgetToDashboard: vi.fn().mockResolvedValue(serverWidget),
+      deleteWidgetFromDashboard: vi.fn(),
+    };
+    const newWidget = widgetModelTranslator.fromWidgetDto(sampleEcommerceDashboard.widgets![0]!);
+
+    await persistDashboardModelMiddleware({
+      dashboardOid,
+      action: {
+        type: UseDashboardModelActionType.ADD_WIDGET,
+        payload: {
+          widget: newWidget,
+          widgetOptions: {
+            partialDtoOptions: {
+              options: {
+                dashboardFiltersMode: 'filter',
+                selector: false,
+                disableExportToCSV: true,
+                hideFromWidgetList: true,
+              },
+            },
+          },
+        },
+      },
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
+
+    const sentWidgetDto = restApi.addWidgetToDashboard.mock.calls[0][1];
+    expect(sentWidgetDto.options?.disableExportToCSV).toBe(true);
+    expect(sentWidgetDto.options?.hideFromWidgetList).toBe(true);
+  });
+
   it('should add widget and return transformed payload for ADD_WIDGET', async () => {
     const serverWidget = {
       ...sampleEcommerceDashboard.widgets![0]!,
@@ -260,6 +301,39 @@ describe('persistDashboardModelMiddleware', () => {
     expect(result).toEqual({
       type: UseDashboardModelActionType.PATCH_WIDGET,
       payload: { widgetOid: 'widget-123', patch: { title: 'New Title' } },
+    });
+  });
+
+  it('should patch widget scroller location for PATCH_WIDGET with options', async () => {
+    const restApi = {
+      patchDashboard: vi.fn(),
+      addWidgetToDashboard: vi.fn(),
+      deleteWidgetFromDashboard: vi.fn(),
+      patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+    };
+    const scrollerPatch = { options: { previousScrollerLocation: { min: 10, max: 90 } } };
+
+    const result = await persistDashboardModelMiddleware({
+      dashboardOid,
+      action: {
+        type: UseDashboardModelActionType.PATCH_WIDGET,
+        payload: { widgetOid: 'widget-456', patch: scrollerPatch },
+      },
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
+
+    expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+      dashboardOid,
+      'widget-456',
+      scrollerPatch,
+      false,
+    );
+    expect(result).toEqual({
+      type: UseDashboardModelActionType.PATCH_WIDGET,
+      payload: { widgetOid: 'widget-456', patch: scrollerPatch },
     });
   });
 

@@ -26,7 +26,7 @@ describe('getNarrative', () => {
     const httpClient = { post } as unknown as HttpClient;
 
     await getNarrative(httpClient, baseRequest, {
-      isUnifiedNarrationEnabled: false,
+      isUnified: false,
       isSisenseAiEnabled: false,
     });
 
@@ -41,7 +41,7 @@ describe('getNarrative', () => {
     const httpClient = { post } as unknown as HttpClient;
 
     await getNarrative(httpClient, baseRequest, {
-      isUnifiedNarrationEnabled: true,
+      isUnified: true,
       isSisenseAiEnabled: true,
     });
 
@@ -57,7 +57,7 @@ describe('getNarrative', () => {
     const httpClient = { post } as unknown as HttpClient;
 
     await getNarrative(httpClient, baseRequest, {
-      isUnifiedNarrationEnabled: true,
+      isUnified: true,
       isSisenseAiEnabled: true,
     });
 

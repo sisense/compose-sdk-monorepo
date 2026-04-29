@@ -1,7 +1,12 @@
 import { Comment } from 'typedoc';
 import { MarkdownThemeRenderContext } from '../..';
 import { bold, heading } from '../../../support/elements';
-import { camelToTitleCase, escapeAngleBrackets } from '../../../support/utils';
+import {
+  camelToTitleCase,
+  convertHtmlToJsxInCommentContent,
+  encodeAngleBracketsOutsideCodeBlocks,
+  escapeAngleBrackets,
+} from '../../../support/utils';
 
 /**
  * @category Partials
@@ -42,5 +47,25 @@ export function comment(
     md.push(tags.join('\n\n'));
   }
 
-  return escapeAngleBrackets(md.join('\n\n'));
+  const commentStr = md.join('\n\n');
+  const convertToJsx = context.options.getValue('convertHtmlToJsxInComments') as boolean;
+  const escapeAll = context.options.getValue('escapeHtmlInComments') as boolean;
+  if (convertToJsx) {
+    const imgMarkdownSyntax = context.options.getValue('imgMarkdownSyntax') as boolean;
+    const { text, jsxBlocks } = convertHtmlToJsxInCommentContent(commentStr, { imgMarkdownSyntax });
+    let output = encodeAngleBracketsOutsideCodeBlocks(text);
+    jsxBlocks.forEach((jsx, i) => {
+      const placeholder = `\u0001JSX_${i}_\u0001`;
+      output = output.replace(placeholder, () => jsx);
+    });
+    // Rewrite guide links for Docusaurus: /guides/sdk/ -> /docs/compose-sdk/
+    output = output.replace(/guides\/sdk/g, 'docs/compose-sdk');
+    // Use .md extension in links for Docusaurus
+    output = output.replace(/\.html/g, '.md');
+    return output;
+  }
+  if (escapeAll) {
+    return encodeAngleBracketsOutsideCodeBlocks(commentStr);
+  }
+  return escapeAngleBrackets(commentStr);
 }

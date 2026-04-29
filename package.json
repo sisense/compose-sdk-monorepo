@@ -1,5 +1,5 @@
 {
-  "version": "2.25.0",
+  "version": "2.26.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -22,6 +22,15 @@
       "docs:gen:md": {
         "outputs": [
           "{workspaceRoot}/docs-md"
+        ],
+        "cache": true,
+        "dependsOn": [
+          "^build:prod"
+        ]
+      },
+      "docs:gen:mdx": {
+        "outputs": [
+          "{workspaceRoot}/docs-mdx"
         ],
         "cache": true,
         "dependsOn": [
@@ -109,6 +118,7 @@
     "docs:gen:internal": "TYPEDOC_MODE=INTERNAL typedoc --options typedoc.config.cjs",
     "docs:serve:internal": "node ./scripts/serve-static.cjs docs-internal",
     "docs:gen:md": "./scripts/gen-docs-md.sh",
+    "docs:gen:mdx": "./scripts/gen-docs-mdx.sh",
     "docs:check:md": "./scripts/check-docs-md.sh",
     "docs:frameworks:diff": "./scripts/diff-docs-ui.sh",
     "docs:frameworks:diff:full": "FULL_DIFF_REPORT=true ./scripts/diff-docs-ui.sh",
@@ -135,7 +145,7 @@
   "files": [
     "packages/**/dist/*"
   ],
-  "packageManager": "yarn@3.2.3",
+  "packageManager": "yarn@3.8.7",
   "volta": {
     "node": "18.16.0"
   },

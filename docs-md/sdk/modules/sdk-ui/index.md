@@ -99,6 +99,7 @@ React components, hooks, and utilities for working with Fusion dashboards, widge
 - [useFetch](fusion-assets/function.useFetch.md)
 - [useGetDashboardModel](fusion-assets/function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModels](fusion-assets/function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetDataSourceDimensions](fusion-assets/function.useGetDataSourceDimensions.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetHierarchyModels](fusion-assets/function.useGetHierarchyModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetSharedFormula](fusion-assets/function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetWidgetModel](fusion-assets/function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
@@ -128,4 +129,3 @@ For more information on requirements for enabling Generative AI features, please
 - [isLinearGradient](functions/function.isLinearGradient.md)
 - [isRadialGradient](functions/function.isRadialGradient.md)
 - [LoadingOverlay](functions/function.LoadingOverlay.md)
-- [useGetDataSourceDimensions](functions/function.useGetDataSourceDimensions.md)

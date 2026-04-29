@@ -37,19 +37,19 @@ describe('formatSeries', () => {
           name: 'Category 1',
           y: 10,
           color: 'red',
-          custom: { rawValue: 10, xValue: ['xAxis 1'] },
+          custom: { rawValue: 10, xValue: ['xAxis 1'], xDisplayValue: ['xAxis 1'] },
         },
         {
           name: 'Category 2',
           y: 20,
           color: 'blue',
-          custom: { rawValue: 20, xValue: ['xAxis 2'] },
+          custom: { rawValue: 20, xValue: ['xAxis 2'], xDisplayValue: ['xAxis 2'] },
         },
         {
           name: 'Category 3',
           y: 30,
           color: 'green',
-          custom: { rawValue: 30, xValue: ['xAxis 3'] },
+          custom: { rawValue: 30, xValue: ['xAxis 3'], xDisplayValue: ['xAxis 3'] },
         },
       ],
     });
@@ -63,17 +63,17 @@ describe('formatSeries', () => {
       data: [
         {
           y: 10,
-          custom: { rawValue: 10, xValue: ['xAxis 1'] },
+          custom: { rawValue: 10, xValue: ['xAxis 1'], xDisplayValue: ['xAxis 1'] },
           selected: false,
         },
         {
           y: 20,
-          custom: { rawValue: 20, xValue: ['xAxis 2'] },
+          custom: { rawValue: 20, xValue: ['xAxis 2'], xDisplayValue: ['xAxis 2'] },
           selected: false,
         },
         {
           y: 30,
-          custom: { rawValue: 30, xValue: ['xAxis 3'] },
+          custom: { rawValue: 30, xValue: ['xAxis 3'], xDisplayValue: ['xAxis 3'] },
           selected: false,
         },
       ],
@@ -97,19 +97,19 @@ describe('formatSeries', () => {
       data: [
         {
           y: 10,
-          custom: { rawValue: 10, xValue: ['xAxis 1'] },
+          custom: { rawValue: 10, xValue: ['xAxis 1'], xDisplayValue: ['xAxis 1'] },
           color: 'red',
           selected: false,
         },
         {
           y: 20,
-          custom: { rawValue: 20, xValue: ['xAxis 2'] },
+          custom: { rawValue: 20, xValue: ['xAxis 2'], xDisplayValue: ['xAxis 2'] },
           color: 'blue',
           selected: false,
         },
         {
           y: 30,
-          custom: { rawValue: 30, xValue: ['xAxis 3'] },
+          custom: { rawValue: 30, xValue: ['xAxis 3'], xDisplayValue: ['xAxis 3'] },
           color: 'green',
           selected: false,
         },
@@ -134,7 +134,7 @@ describe('formatSeries', () => {
       data: [
         {
           y: 10,
-          custom: { rawValue: 10, xValue: ['xAxis 1'] },
+          custom: { rawValue: 10, xValue: ['xAxis 1'], xDisplayValue: ['xAxis 1'] },
           selected: true,
           marker: {
             enabled: false,
@@ -143,7 +143,7 @@ describe('formatSeries', () => {
         },
         {
           y: 20,
-          custom: { rawValue: 20, xValue: ['xAxis 2'] },
+          custom: { rawValue: 20, xValue: ['xAxis 2'], xDisplayValue: ['xAxis 2'] },
           selected: false,
           marker: {
             enabled: true,
@@ -152,12 +152,57 @@ describe('formatSeries', () => {
         },
         {
           y: 30,
-          custom: { rawValue: 30, xValue: ['xAxis 3'] },
+          custom: { rawValue: 30, xValue: ['xAxis 3'], xDisplayValue: ['xAxis 3'] },
           selected: true,
           marker: {
             enabled: false,
             isIsolatedPoint: false,
           },
+        },
+      ],
+    });
+  });
+
+  test('should preserve distinct xDisplayValue when it differs from xValue', () => {
+    const testSeries = {
+      name: 'Series 1',
+      data: [
+        {
+          value: 10,
+          rawValue: 10,
+          xValue: ['2009-01-01T00:00:00.000Z'],
+          xDisplayValue: ['2009'],
+        },
+        {
+          value: 20,
+          rawValue: 20,
+          xValue: ['2010-01-01T00:00:00.000Z'],
+          xDisplayValue: ['2010'],
+        },
+      ],
+    };
+    const formattedSeries = formatSeries(testSeries, [0, 1], treatNullDataAsZeros);
+
+    expect(formattedSeries).toEqual({
+      name: 'Series 1',
+      data: [
+        {
+          y: 10,
+          custom: {
+            rawValue: 10,
+            xValue: ['2009-01-01T00:00:00.000Z'],
+            xDisplayValue: ['2009'],
+          },
+          selected: false,
+        },
+        {
+          y: 20,
+          custom: {
+            rawValue: 20,
+            xValue: ['2010-01-01T00:00:00.000Z'],
+            xDisplayValue: ['2010'],
+          },
+          selected: false,
         },
       ],
     });
@@ -179,12 +224,12 @@ describe('formatSeries', () => {
       data: [
         {
           y: NaN,
-          custom: { rawValue: 'value1', xValue: ['xAxis 1'] },
+          custom: { rawValue: 'value1', xValue: ['xAxis 1'], xDisplayValue: ['xAxis 1'] },
           selected: false,
         },
         {
           y: 20,
-          custom: { rawValue: 20, xValue: ['xAxis 2'] },
+          custom: { rawValue: 20, xValue: ['xAxis 2'], xDisplayValue: ['xAxis 2'] },
           marker: {
             enabled: true,
             isIsolatedPoint: true,
@@ -193,7 +238,7 @@ describe('formatSeries', () => {
         },
         {
           y: NaN,
-          custom: { rawValue: 'value3', xValue: ['xAxis 3'] },
+          custom: { rawValue: 'value3', xValue: ['xAxis 3'], xDisplayValue: ['xAxis 3'] },
           selected: false,
         },
       ],

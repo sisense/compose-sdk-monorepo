@@ -129,6 +129,10 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
         },
         "shouldAffectFilters": undefined,
       },
+      "partialDtoOptions": {
+        "options": undefined,
+        "style": {},
+      },
     },
   },
 }

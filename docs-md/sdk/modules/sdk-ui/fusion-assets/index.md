@@ -14,6 +14,7 @@ React components, hooks, and utilities for working with Fusion dashboards, widge
 - [useFetch](function.useFetch.md)
 - [useGetDashboardModel](function.useGetDashboardModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetDashboardModels](function.useGetDashboardModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
+- [useGetDataSourceDimensions](function.useGetDataSourceDimensions.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetHierarchyModels](function.useGetHierarchyModels.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetSharedFormula](function.useGetSharedFormula.md) <Badge type="fusionEmbed" text="Fusion Embed" />
 - [useGetWidgetModel](function.useGetWidgetModel.md) <Badge type="fusionEmbed" text="Fusion Embed" />

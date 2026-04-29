@@ -61,7 +61,6 @@ export const ValueLabelSection = ({
               >
                 <div className={styles.center}>
                   <div
-                    // eslint-disable-next-line security/detect-object-injection
                     className={classnames(styles[alignment], {
                       [styles.selected]: rotation === alignment,
                     })}

@@ -35,7 +35,7 @@ export function breadcrumbs(
     md.push(link(model.name, context.relativeURL(model?.url)));
   };
 
-  const pageName = escapeChars(page.model.name);
+  const pageName = escapeChars(page.model.name, context.options.getValue('useHTMLEncodedBrackets') as boolean);
 
   if (
     page.model?.parent?.parent &&

@@ -145,6 +145,17 @@ export interface WidgetPlugin<
 }
 
 /**
+ * Any Widget plugin declaration
+ * Represents heterogeneous widget plugin declarations at registry/context boundaries.
+ * Generic params are intentionally erased because each plugin can define distinct props/style types.
+ * Do not consume component prop types from this alias directly.
+ *
+ * @sisenseInternal
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyWidgetPlugin = WidgetPlugin<any, any>;
+
+/**
  * Props passed to a user-defined custom visualization component.
  *
  * @typeParam DataOptions - The shape of data options for this custom visualization

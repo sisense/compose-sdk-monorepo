@@ -99,7 +99,7 @@ export type HighchartsDataPointContext = {
     custom?: {
       number1?: number;
       string1?: string;
-      xDisplayValue?: string;
+      xDisplayValue?: string | string[];
       xValue?: (number | string)[];
       monthDay?: number;
       hasData?: boolean;

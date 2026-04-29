@@ -2,24 +2,35 @@ export const appendHeaders = (
   existingHeaders: HeadersInit,
   additionalHeaders: { [key: string]: string },
 ): void => {
-  for (const [headerName, headerValue] of Object.entries(additionalHeaders)) {
-    if (Array.isArray(existingHeaders)) {
+  if (Array.isArray(existingHeaders)) {
+    for (const [headerName, headerValue] of Object.entries(additionalHeaders)) {
       existingHeaders.push([headerName, headerValue]);
-    } else if (typeof existingHeaders.set === 'function') {
-      existingHeaders.set(headerName, headerValue);
-    } else {
-      // eslint-disable-next-line security/detect-object-injection
-      existingHeaders[headerName] = headerValue;
     }
+    return;
+  }
+
+  if (existingHeaders instanceof Headers) {
+    for (const [headerName, headerValue] of Object.entries(additionalHeaders)) {
+      existingHeaders.set(headerName, headerValue);
+    }
+    return;
+  }
+
+  const recordHeaders = existingHeaders;
+  for (const [headerName, headerValue] of Object.entries(additionalHeaders)) {
+    recordHeaders[headerName] = headerValue;
   }
 };
 
+/**
+ * Merges query string parameters into a URL using `URLSearchParams.set`, so each provided name
+ * replaces any existing query value with the same name.
+ */
 export const addQueryParamsToUrl = (url: string, params: { [key: string]: string }): string => {
   if (!url || typeof url !== 'string') return url;
-  // can't just append to the url because it might already have a query string
   const urlObject = new URL(url);
   for (const [paramName, paramValue] of Object.entries(params)) {
-    urlObject.searchParams.append(paramName, paramValue);
+    urlObject.searchParams.set(paramName, paramValue);
   }
 
   return urlObject.toString();

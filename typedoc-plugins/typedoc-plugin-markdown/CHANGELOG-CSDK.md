@@ -1,5 +1,11 @@
 # Changelog
 
+## 2025-02-26
+
+- Add `useHTMLEncodedBrackets` option for MDX/Docusaurus compatibility. When enabled, angle brackets in signatures and type text are output as HTML entities (`&lt;`, `&gt;`) so generated markdown is safe for MDX processors that interpret `<` and `>` as JSX.
+- Add `convertHtmlToJsxInComments` and `escapeHtmlInComments` options for comment content. When `convertHtmlToJsxInComments` is true, HTML tags (e.g. iframe) in TSDoc comments are converted to valid JSX so they remain functional in Docusaurus; when `escapeHtmlInComments` is true, all angle brackets in comments are encoded.
+- Support dual output: `yarn docs:gen:md` (VuePress, `docs-md/`) and `yarn docs:gen:mdx` (Docusaurus, `docs-mdx/`).
+
 ## 2024-10-21
 
 - Support custom block tag `@shortDescription`

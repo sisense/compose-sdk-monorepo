@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.26.0] - 2026-04-28
+
+### Added
+- Add `useGetDataSourceDimensions` hook to `sdk-ui-angular` and `sdk-ui-vue`
+- Add `enableSilentPreAuth` support to Vue `SisenseContextProvider`
+
+### Changed
+- Fix Autozoom navigator appearance when using multiple date granularities on the X-axis, use saved zoom state
+- Fix "No Results" message not showing for box & whisker chart
+- Fix URL query parameter persistence for `sisenseUrl` during SSO redirect
+- Fix Fusion dashboard persistence when using filter relations
+- Fix date formatting and tooltip for dual X-axis charts to be aligned with Fusion
+
 ## [2.25.0] - 2026-04-14
 
 ### Added

@@ -47,6 +47,7 @@ export type BaseDesignOptionsType = {
       min: number;
       max: number;
     };
+    onScrollerChange?: (min: number, max: number) => void;
   };
   dataLimits: DataLimits;
 };

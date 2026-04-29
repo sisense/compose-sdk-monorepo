@@ -18,10 +18,10 @@ export function sources(
   reflection.sources?.forEach((source) => {
     if (source.url) {
       md.push(
-        link(`${escapeChars(source.fileName)}:${source.line}`, source.url),
+        link(`${escapeChars(source.fileName, context.options.getValue('useHTMLEncodedBrackets') as boolean)}:${source.line}`, source.url),
       );
     } else {
-      md.push(`${escapeChars(source.fileName)}:${source.line}`);
+      md.push(`${escapeChars(source.fileName, context.options.getValue('useHTMLEncodedBrackets') as boolean)}:${source.line}`);
     }
   });
   return md.join('\n\n');

@@ -9,5 +9,5 @@ export function inferredType(
   context: MarkdownThemeRenderContext,
   model: InferredType,
 ): string {
-  return `infer ${escapeChars(model.name)}`;
+  return `infer ${escapeChars(model.name, context.options.getValue('useHTMLEncodedBrackets') as boolean)}`;
 }

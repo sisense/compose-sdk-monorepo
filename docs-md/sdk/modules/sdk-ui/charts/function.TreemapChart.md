@@ -16,8 +16,8 @@ Tree map chart displaying total revenue, categorized by condition and age range,
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts%2Ftreemap-chart&mode=docs'
- width=800
- height=870
+ width='800'
+ height='870'
  style='border:none;'
 />
 

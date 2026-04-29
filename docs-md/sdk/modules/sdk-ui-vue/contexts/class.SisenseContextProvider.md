@@ -78,6 +78,17 @@ URL of the Sisense environment the app connects to
 
 ### Sisense Authentication
 
+#### enableSilentPreAuth
+
+> **`readonly`** **enableSilentPreAuth**: `boolean` \| `undefined`
+
+Boolean flag to enable sending silent pre-authentication requests to the Sisense instance.
+Used to check if user is already authenticated, check is performed in an ivisible iframe.
+Used only with SSO authentication.
+If not specified, the default value is `false`.
+
+***
+
 #### ssoEnabled
 
 > **`readonly`** **ssoEnabled**?: `boolean`

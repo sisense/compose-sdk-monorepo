@@ -23,8 +23,8 @@ function isCompleteDataSet(dataSet: TableProps['dataSet']): dataSet is Data {
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=tables%2Faggregated-table&mode=docs'
- *  width=800
- *  height=870
+ *  width='800'
+ *  height='870'
  *  style='border:none;'
  * />
  *

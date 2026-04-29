@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -o errexit
 set -o xtrace
 
 # It looks like the external URL is not set up correctly for GitLab

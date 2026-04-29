@@ -289,6 +289,47 @@ describe('CustomWidgetsService', () => {
     });
   });
 
+  describe('unregisterCustomWidget', () => {
+    it('should remove a registered custom widget and emit', () => {
+      const widgetType = 'unregister-widget';
+      const widgetComponent = TestCustomWidget as Type<CustomWidgetComponentProps>;
+
+      service.registerCustomWidget(widgetType, widgetComponent);
+      expect(service.customWidgetsMap$.value.size).toBe(2);
+
+      const emitSpy = vi.fn();
+      service.customWidgetsMap$.subscribe(emitSpy);
+      emitSpy.mockClear();
+
+      service.unregisterCustomWidget(widgetType);
+
+      expect(service.hasCustomWidget(widgetType)).toBe(false);
+      expect(service.customWidgetsMap$.value.size).toBe(1);
+      expect(emitSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not throw and should not emit when unregistering unknown type', () => {
+      const emitSpy = vi.fn();
+      service.customWidgetsMap$.subscribe(emitSpy);
+      emitSpy.mockClear();
+
+      expect(() => service.unregisterCustomWidget('never-registered')).not.toThrow();
+      expect(emitSpy).not.toHaveBeenCalled();
+    });
+
+    it('should allow registering again after unregister', () => {
+      const widgetType = 're-register-widget';
+      const widgetComponent = TestCustomWidget as Type<CustomWidgetComponentProps>;
+
+      service.registerCustomWidget(widgetType, widgetComponent);
+      service.unregisterCustomWidget(widgetType);
+      service.registerCustomWidget(widgetType, widgetComponent);
+
+      expect(service.hasCustomWidget(widgetType)).toBe(true);
+      expect(service.customWidgetsMap$.value.get(widgetType)).toBeDefined();
+    });
+  });
+
   describe('hasCustomWidget', () => {
     it('should return true for registered widget', () => {
       const widgetType = 'test-widget';

@@ -83,8 +83,8 @@ export const QueryDefinition: FunctionComponent<QueryDefinitionProps> = ({
 
   const viewModel = useMemo(() => {
     const params = isChartPropsInput(queryInput) ? chartPropsToQueryParams(queryInput) : queryInput;
-    return baseQueryParamsToViewModel(params);
-  }, [queryInput]);
+    return baseQueryParamsToViewModel(params, t);
+  }, [queryInput, t]);
 
   const { visible, moreCount } = useMemo(() => splitCollapsedView(viewModel), [viewModel]);
   const showExpander = moreCount > 0;

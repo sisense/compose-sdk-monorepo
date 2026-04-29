@@ -12,7 +12,8 @@ export interface WidgetNarrativeOptions {
   /** The verbosity of the NLG summarization */
   verbosity?: 'Low' | 'High';
   /** When false, legacy narration endpoint only; when true or undefined, try unified then fallback. */
-  isUnifiedNarrationEnabled?: boolean;
+  isUnified?: boolean;
+  /** Computed SDK flag from server settings (`app.settings.narrative.isSisenseAiEnabled`), not raw AI API. */
   isSisenseAiEnabled?: boolean;
   /**
    * When `true`, trend and forecast companion measures are omitted from the narrative JAQL so

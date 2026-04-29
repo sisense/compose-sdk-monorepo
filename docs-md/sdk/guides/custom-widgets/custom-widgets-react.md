@@ -28,7 +28,7 @@ import { DashboardById } from '@sisense/sdk-ui';
 
 function App() {
   return (
-    <DashboardById dashboardOid={'66f23d1b202c89002abd64ac'} />;
+    <DashboardById dashboardOid={'66f23d1b202c89002abd64ac'} />
   );
 }
 
@@ -120,7 +120,7 @@ function App() {
   registerCustomWidget('histogramwidget', ResultsTable);
 
   return <DashboardById dashboardOid={'66f4d4dd384428002ae0a21d'} />;
-};
+}
 
 ...
 ```

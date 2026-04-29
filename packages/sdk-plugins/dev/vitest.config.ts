@@ -9,6 +9,10 @@ const config: ViteUserConfig = {
   },
   test: {
     setupFiles: ['./vitest.setup.ts'],
+    coverage: {
+      include: ['src/**/*.{ts,tsx}', 'vite-plugin/**/*.ts', 'scripts/**/*.ts'],
+      exclude: ['src/**/*.test.{ts,tsx}', 'vite-plugin/**/*.test.ts', 'scripts/**/*.test.ts'],
+    },
   },
 };
 

@@ -46,7 +46,8 @@ const formatTooltipContent = (
   };
 
   const numberFormatConfig = getCompleteNumberFormatConfig(getNumberFormatConfig());
-  const xValue = highchartsDataPoint.point?.custom?.xDisplayValue ?? highchartsDataPoint.x;
+  const xValueRaw = highchartsDataPoint.point?.custom?.xDisplayValue ?? highchartsDataPoint.x;
+  const xValue = Array.isArray(xValueRaw) ? xValueRaw.join(', ') : xValueRaw;
   const formattedValue =
     applyFormat(numberFormatConfig, highchartsDataPoint.y) +
     (formattedPercentage ? ` / ${formattedPercentage}%` : '');

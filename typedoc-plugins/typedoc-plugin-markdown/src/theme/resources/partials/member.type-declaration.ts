@@ -23,7 +23,7 @@ export function typeDeclarationMember(
           heading(
             headingLevel,
             backTicks(
-              [escapeChars(parentName || ''), declarationChild.name]
+              [escapeChars(parentName || '', context.options.getValue('useHTMLEncodedBrackets') as boolean), declarationChild.name]
                 .filter((name) => Boolean(name))
                 .join('.'),
             ),

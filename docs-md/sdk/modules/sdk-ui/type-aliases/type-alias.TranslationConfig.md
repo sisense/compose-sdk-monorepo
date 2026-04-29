@@ -21,7 +21,7 @@ You can find the list of available translation keys in the translation folder of
 Translation keys that are not provided will default to the English translation.
 If translation is provided for a package other than sdk-ui, please specify the namespace property.
 
-Important: Do not translate parts in {{}} - these are placeholders for dynamic values and will be matched using provided variable names.
+Important: Do not translate parts in `{{}}` - these are placeholders for dynamic values and will be matched using provided variable names.
 
 #### Example
 

@@ -93,6 +93,14 @@ export class MarkdownThemeRenderContext {
     return encodeURI(url);
   }
 
+  /**
+   * Returns the open or close angle bracket, optionally HTML-encoded for MDX.
+   */
+  getAngleBracket(which: 'open' | 'close'): string {
+    const useHTML = this.options.getValue('useHTMLEncodedBrackets') as boolean;
+    return which === 'open' ? (useHTML ? '&lt;' : '<') : (useHTML ? '&gt;' : '>');
+  }
+
   /* start_resources */
 
   // templates

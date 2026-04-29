@@ -507,29 +507,30 @@ describe('filter-relations', () => {
       });
     });
 
-    it('should convert relation model with ParenthesizedLogicalExpression and CascadingIdentifier', () => {
-      const relation = {
-        left: {
-          left: { type: 'CascadingIdentifier', instanceId: 'cascade' },
-          right: { type: 'Identifier', instanceId: 'right1' },
-          type: 'ParenthesizedLogicalExpression',
-          operator: 'AND',
-        },
-        right: { type: 'Identifier', instanceId: 'right2' },
+    it('should unwrap ParenthesizedLogicalExpression to binary relation rules', () => {
+      const relation: FilterRelationsModel = {
         type: 'LogicalExpression',
         operator: 'OR',
-      };
-      const result = convertFilterRelationsModelToRelationRules(relation as FilterRelationsModel, [
-        memberCostFilter,
-      ]);
-      expect(result).toEqual({
         left: {
-          left: { instanceid: 'cascade' },
-          right: { instanceid: 'right1' },
-          operator: 'AND',
+          type: 'ParenthesizedLogicalExpression',
+          value: {
+            type: 'LogicalExpression',
+            operator: 'OR',
+            left: { type: 'Identifier', instanceId: 'A' },
+            right: { type: 'Identifier', instanceId: 'B' },
+          },
         },
-        right: { instanceid: 'right2' },
+        right: { type: 'Identifier', instanceId: 'C' },
+      };
+      const result = convertFilterRelationsModelToRelationRules(relation, [memberCostFilter]);
+      expect(result).toEqual({
         operator: 'OR',
+        left: {
+          operator: 'OR',
+          left: { instanceid: 'A' },
+          right: { instanceid: 'B' },
+        },
+        right: { instanceid: 'C' },
       });
     });
   });
@@ -611,6 +612,72 @@ describe('filter-relations', () => {
           type: 'Identifier',
         },
         type: 'LogicalExpression',
+      });
+    });
+
+    it('should wrap nested same-operator OR children in ParenthesizedLogicalExpression for Fusion', () => {
+      const rules = {
+        operator: 'OR' as const,
+        left: {
+          operator: 'OR' as const,
+          left: { instanceid: 'A' },
+          right: { instanceid: 'B' },
+        },
+        right: { instanceid: 'C' },
+      };
+      const result = filterRelationRulesToFilterRelationsModel(rules, []);
+      expect(result).toEqual({
+        type: 'LogicalExpression',
+        operator: 'OR',
+        left: {
+          type: 'ParenthesizedLogicalExpression',
+          value: {
+            type: 'LogicalExpression',
+            operator: 'OR',
+            left: { type: 'Identifier', instanceId: 'A' },
+            right: { type: 'Identifier', instanceId: 'B' },
+          },
+        },
+        right: { type: 'Identifier', instanceId: 'C' },
+      });
+    });
+
+    it('should wrap mixed AND/OR subgroups in ParenthesizedLogicalExpression for Fusion', () => {
+      const rules = {
+        operator: 'OR' as const,
+        left: { instanceid: 'A' },
+        right: {
+          operator: 'AND' as const,
+          left: { instanceid: 'B' },
+          right: {
+            operator: 'OR' as const,
+            left: { instanceid: 'C' },
+            right: { instanceid: 'D' },
+          },
+        },
+      };
+      const result = filterRelationRulesToFilterRelationsModel(rules, []);
+      expect(result).toEqual({
+        type: 'LogicalExpression',
+        operator: 'OR',
+        left: { type: 'Identifier', instanceId: 'A' },
+        right: {
+          type: 'ParenthesizedLogicalExpression',
+          value: {
+            type: 'LogicalExpression',
+            operator: 'AND',
+            left: { type: 'Identifier', instanceId: 'B' },
+            right: {
+              type: 'ParenthesizedLogicalExpression',
+              value: {
+                type: 'LogicalExpression',
+                operator: 'OR',
+                left: { type: 'Identifier', instanceId: 'C' },
+                right: { type: 'Identifier', instanceId: 'D' },
+              },
+            },
+          },
+        },
       });
     });
   });

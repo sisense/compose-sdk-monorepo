@@ -1,14 +1,21 @@
 /* eslint-disable sonarjs/no-ignored-return */
-import { isNumber } from '@sisense/sdk-data';
+import { isDatetime, isNumber } from '@sisense/sdk-data';
+
+import { parseISOWithTimezoneCheck } from '@/shared/utils/parseISOWithTimezoneCheck';
 
 import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
+  StyledColumn,
 } from '../chart-data-options/types';
-import { getDataOptionTitle } from '../chart-data-options/utils';
+import { getDataOptionGranularity, getDataOptionTitle } from '../chart-data-options/utils';
 import { CartesianChartData, CategoricalXValues, ChartData } from '../chart-data/types';
 import { onlyY, onlyYAndSeries } from '../chart-data/utils';
-import { getCategoricalCompareValue, PlotBand } from './translations/axis-section.js';
+import {
+  getCategoricalCompareValue,
+  getDefaultDateFormat,
+  PlotBand,
+} from './translations/axis-section.js';
 import { StackableChartDesignOptions } from './translations/design-options.js';
 import {
   applyFormatPlainText,
@@ -21,6 +28,41 @@ type CategoryIndexMapPlotBands = {
   indexMap: number[];
   plotBands: PlotBand[];
 };
+
+function parseRawToDate(raw: string | number | undefined): Date | undefined {
+  if (raw == null) return undefined;
+  if (typeof raw === 'number') {
+    const d = new Date(raw);
+    return Number.isNaN(d.getTime()) ? undefined : d;
+  }
+  const s = String(raw);
+  if (/^\d+$/.test(s)) {
+    const d = new Date(Number(s));
+    return Number.isNaN(d.getTime()) ? undefined : d;
+  }
+  if (/^\d{4}-\d{2}-\d{2}/.test(s) || s.includes('T')) {
+    const d = parseISOWithTimezoneCheck(s);
+    return Number.isNaN(d.getTime()) ? undefined : d;
+  }
+  return undefined;
+}
+
+function formatCategoricalDatetimeLabel(
+  column: StyledColumn | undefined,
+  displayFallback: string,
+  raw: string | number | undefined,
+  dateFormatter?: (date: Date, format: string) => string,
+): string {
+  if (!dateFormatter || !column || !isDatetime(column.column.type)) {
+    return displayFallback;
+  }
+  const format = column.dateFormat || getDefaultDateFormat(getDataOptionGranularity(column));
+  if (!format) return displayFallback;
+
+  const date = parseRawToDate(raw);
+  if (!date) return displayFallback;
+  return dateFormatter(date, format);
+}
 
 export const applyNumberFormatToPlotBands = (
   dataOptions: ChartDataOptionsInternal,
@@ -108,12 +150,14 @@ const noPlotBandsSection = (
  * @param dataOptions -
  * @param designOptions -
  * @param continuousDatetimeXAxis -
+ * @param dateFormatter - When set, formats datetime x1/x2 labels from raw values (dual categorical axes)
  */
 export const getCategoriesIndexMapAndPlotBands = (
   data: ChartData,
   dataOptions: CartesianChartDataOptionsInternal,
   designOptions: DesignOptions,
   continuousDatetimeXAxis: boolean,
+  dateFormatter?: (date: Date, format: string) => string,
   // eslint-disable-next-line max-params
 ): CategoryIndexMapPlotBands => {
   const x2PanelIndex = 0;
@@ -155,13 +199,27 @@ export const getCategoriesIndexMapAndPlotBands = (
   let prevX2Value = xValues[0].xValues[x2PanelIndex];
   let from = -0.5;
   xValues.map((xAxisValue, index) => {
-    const x1Value = xAxisValue.xValues[xAxisIndex];
+    const x1Value = formatCategoricalDatetimeLabel(
+      dataOptions.x[1],
+      xAxisValue.xValues[xAxisIndex],
+      xAxisValue.rawValues?.[xAxisIndex],
+      dateFormatter,
+    );
     const x2Value = xAxisValue.xValues[x2PanelIndex];
     if (x2Value !== prevX2Value) {
       indexMap.push(-1);
       const to = indexMap.length - 1;
       categories.push(' ');
-      plotBands.push({ text: prevX2Value, from: from, to: to });
+      plotBands.push({
+        text: formatCategoricalDatetimeLabel(
+          dataOptions.x[0],
+          prevX2Value,
+          xValues[index - 1]?.rawValues?.[x2PanelIndex],
+          dateFormatter,
+        ),
+        from: from,
+        to: to,
+      });
       from = to;
       prevX2Value = x2Value;
     }
@@ -172,7 +230,12 @@ export const getCategoriesIndexMapAndPlotBands = (
   const lastXIndex = xValues.length - 1;
   const lastX2 = xValues[lastXIndex].xValues[x2PanelIndex];
   plotBands.push({
-    text: lastX2,
+    text: formatCategoricalDatetimeLabel(
+      dataOptions.x[0],
+      lastX2,
+      xValues[lastXIndex].rawValues?.[x2PanelIndex],
+      dateFormatter,
+    ),
     from: from,
     to: indexMap.length - 0.5,
   });

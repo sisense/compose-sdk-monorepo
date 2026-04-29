@@ -345,4 +345,14 @@ describe('loadExamples', () => {
       path: 'packages/sdk-plugins/templates/widgets.json',
     });
   });
+
+  it('returns cached result without calling GitHub when the cache is fresh', async () => {
+    const cached = [{ name: 'Cached Widget', value: 'cached-widget' }];
+    mockedReadFile.mockResolvedValueOnce(JSON.stringify({ timestamp: Date.now(), data: cached }));
+
+    const result = await loadExamples();
+
+    expect(result).toEqual(cached);
+    expect(mockGetContent).not.toHaveBeenCalled();
+  });
 });

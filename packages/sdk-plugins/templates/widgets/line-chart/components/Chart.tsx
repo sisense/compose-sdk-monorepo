@@ -1,5 +1,3 @@
-import React from 'react';
-
 import type { CustomVisualization, CustomVisualizationProps } from '@sisense/sdk-ui';
 import { LineChart } from '@sisense/sdk-ui';
 

@@ -1,6 +1,9 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 
-import { getNarrative } from '@/infra/api/narrative/narrative-endpoints.js';
+import {
+  getNarrative,
+  type GetNarrativeOptions,
+} from '@/infra/api/narrative/narrative-endpoints.js';
 import { ChatContextDetails } from '@/modules/ai/api/types';
 
 import type {
@@ -22,19 +25,8 @@ import type {
 export class ChatRestApi {
   private httpClient: HttpClient;
 
-  private readonly isUnifiedNarrationEnabled: boolean | undefined;
-
-  private readonly isSisenseAiEnabled: boolean | undefined;
-
-  constructor(
-    httpClient: HttpClient,
-    private readonly volatile = false,
-    isUnifiedNarrationEnabled?: boolean,
-    isSisenseAiEnabled?: boolean,
-  ) {
+  constructor(httpClient: HttpClient, private readonly volatile = false) {
     this.httpClient = httpClient;
-    this.isUnifiedNarrationEnabled = isUnifiedNarrationEnabled;
-    this.isSisenseAiEnabled = isSisenseAiEnabled;
   }
 
   public getChatContexts = async () => {
@@ -45,11 +37,8 @@ export class ChatRestApi {
   };
 
   // ==== /v2/ai endpoints ====
-  private getNlgInsights = (request: GetNlgInsightsRequest) =>
-    getNarrative(this.httpClient, request, {
-      isUnifiedNarrationEnabled: this.isUnifiedNarrationEnabled,
-      isSisenseAiEnabled: this.isSisenseAiEnabled,
-    });
+  private getNlgInsights = (request: GetNlgInsightsRequest, options?: GetNarrativeOptions) =>
+    getNarrative(this.httpClient, request, options);
 
   private getQueryRecommendations = (contextTitle: string, config: QueryRecommendationConfig) => {
     return this.httpClient.get<QueryRecommendationResponse>(

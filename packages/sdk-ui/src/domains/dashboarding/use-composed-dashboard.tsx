@@ -10,9 +10,11 @@ import { useWidgetRenaming } from '@/domains/dashboarding/hooks/rename-widget/us
 import { useJtdInternal } from '@/domains/dashboarding/hooks/use-jtd.js';
 import { useTabber } from '@/domains/dashboarding/hooks/use-tabber.js';
 import { useWidgetCsvDownload } from '@/domains/dashboarding/hooks/use-widget-csv-download.js';
+import { useWidgetScrollPersistence } from '@/domains/dashboarding/hooks/use-widget-scroll-persistence.js';
 import { useWidgetsLayoutManagement } from '@/domains/dashboarding/hooks/use-widgets-layout.js';
 import { getDefaultWidgetsPanelLayout } from '@/domains/dashboarding/utils.js';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
+import { withNavigatorScrollSave } from '@/domains/widgets/components/widget-by-id/with-navigator-scroll-save.js';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { widgetChangeEventToDelta } from '@/domains/widgets/event-to-delta';
 import { useCombinedMenu } from '@/infra/contexts/menu-provider/hooks/use-combined-menu.js';
@@ -92,14 +94,15 @@ export type UseComposedDashboardOptions = {
   onFiltersChange?: (filters: Filter[] | FilterRelations) => void;
   /**
    * Persistence manager for the dashboard
+   *
    * @sisenseInternal
    */
   persistence?: DashboardPersistenceManager;
   /**
    * Runtime edit mode state. When provided (e.g. by Dashboard), used for duplicate-widget visibility
    * instead of only config.widgetsPanel.editMode.isEditing.
-   * @internal
    *
+   * @internal
    * @deprecated Temporal workaround. Edit mode (with history management) should be managed by the `useComposedDashboard` hook instead of the Dashboard component.
    */
   isEditing?: boolean;
@@ -259,8 +262,14 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     return widgetsWithCommonFilters.map((widget: WidgetProps) => connectToWidgetPropsJtd(widget));
   }, [widgetsWithCommonFilters, connectToWidgetPropsJtd]);
 
+  const scrollerFactory = useWidgetScrollPersistence(persistence, innerWidgetsOptions);
+  const widgetsWithFilterAndJtdAndScrollSaver = useMemo(() => {
+    if (!persistence) return widgetsWithFilterAndJtd;
+    return widgetsWithFilterAndJtd.map((w) => withNavigatorScrollSave(scrollerFactory(w.id))(w));
+  }, [widgetsWithFilterAndJtd, persistence, scrollerFactory]);
+
   const { layoutManager: tabberLayoutManager, widgets: finalWidgets } = useTabber({
-    widgets: widgetsWithFilterAndJtd,
+    widgets: widgetsWithFilterAndJtdAndScrollSaver,
     config: initialDashboard.config?.tabbers,
   });
 
@@ -326,11 +335,9 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
  * }
  *   export default CodeExample;
  * ```
- *
  * @template {D extends ComposableDashboardProps | DashboardProps} D - The type parameter for a dashboard properties, restricted to ComposableDashboardProps or DashboardProps
  * @param {D} initialDashboard - set of properties for the Dashboard component
  * @param {UseComposedDashboardOptions} [options] - Options for the composable.
- *
  * @return {ComposedDashboardResult} An object containing the composed dashboard and APIs to interact with it.
  * @group Dashboards
  */

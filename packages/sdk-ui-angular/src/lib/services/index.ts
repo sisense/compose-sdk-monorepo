@@ -1,5 +1,6 @@
 export * from './custom-widgets.service';
 export * from './dashboard.service';
+export * from './data-source.service';
 export * from './filter.service';
 export * from './formula.service';
 export * from './hierarchy.service';

@@ -18,6 +18,7 @@ if (process.env.TYPEDOC_FORMAT === 'MD') {
     ...baseConfig,
     plugin: [
       './typedoc-plugins/typedoc-plugin-public-exclude-tags/index.cjs',
+      './typedoc-plugins/typedoc-plugin-tag-usage-report/index.cjs',
       '@sisense/typedoc-plugin-markdown',
       'typedoc-plugin-vue',
       './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs',
@@ -40,6 +41,38 @@ if (process.env.TYPEDOC_FORMAT === 'MD') {
     treatWarningsAsErrors: true,
     logLevel: 'Info',
     hiddenFunctionParameters: ['deprecatedLegacyContext'],
+  };
+}
+
+if (process.env.TYPEDOC_FORMAT === 'MDX') {
+  baseConfig = {
+    ...baseConfig,
+    plugin: [
+      '@sisense/typedoc-plugin-markdown',
+      'typedoc-plugin-vue',
+      './typedoc-plugins/typedoc-plugin-expand-type-aliases/index.cjs',
+    ],
+    githubPages: false,
+    outputFileStrategy: 'members',
+    flattenOutputFiles: false,
+    entryFileName: 'index.md',
+    indexFileName: 'index.md',
+    indexPageTitle: 'Compose SDK',
+    skipIndexPage: false,
+    excludeGroups: false,
+    hidePageHeader: true,
+    hidePageTitle: false,
+    hideBreadcrumbs: true,
+    hideInPageTOC: true,
+    titleTemplate: '{kind} {name}',
+    readme: 'none',
+    out: 'docs-mdx/compose-sdk/modules',
+    treatWarningsAsErrors: true,
+    logLevel: 'Info',
+    hiddenFunctionParameters: ['deprecatedLegacyContext'],
+    useHTMLEncodedBrackets: true,
+    convertHtmlToJsxInComments: true,
+    imgMarkdownSyntax: true,
   };
 }
 

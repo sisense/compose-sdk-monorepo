@@ -24,6 +24,18 @@ import { useSisenseContext } from '../contexts/sisense-context/sisense-context';
 import { TranslatableError } from '../translation/translatable-error';
 import type { DashboardDto } from './types/dashboard-dto';
 
+/** PATCH body for persisting Highcharts navigator scroller bounds on a dashboard widget. */
+export type WidgetDashboardScrollerLocationPatch = {
+  options: Partial<NonNullable<WidgetDto['options']>> & {
+    previousScrollerLocation: { min: number; max: number };
+  };
+};
+
+/** Supported PATCH bodies for `RestApi.patchWidgetInDashboard`. */
+export type PatchWidgetInDashboardBody =
+  | Partial<Pick<WidgetDto, 'title'>>
+  | WidgetDashboardScrollerLocationPatch;
+
 type GetDashboardsOptions = {
   searchByTitle?: string;
   fields?: string[];
@@ -272,8 +284,7 @@ export class RestApi {
   public patchWidgetInDashboard = (
     dashboardOid: string,
     widgetOid: string,
-    // temporary only title is supported to avoid full DTO reconstruction
-    patch: Partial<Pick<WidgetDto, 'title'>>,
+    patch: PatchWidgetInDashboardBody,
     sharedMode?: boolean,
   ) => {
     const queryParams = new URLSearchParams({

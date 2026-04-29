@@ -47,7 +47,7 @@ const mockNlgResponse: GetNlgInsightsResponse = {
 };
 
 const narrationOptionsUnified = {
-  isUnifiedNarrationEnabled: true,
+  isUnified: true,
   isSisenseAiEnabled: true,
 };
 

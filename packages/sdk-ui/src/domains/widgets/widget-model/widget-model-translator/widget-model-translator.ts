@@ -1,12 +1,10 @@
 import {
   Attribute,
-  Column,
   convertDataSource,
   Filter,
   JaqlDataSource,
   JaqlDataSourceForDto,
   Measure,
-  MeasureColumn,
 } from '@sisense/sdk-data';
 
 import { ExecutePivotQueryParams, ExecuteQueryParams } from '@/domains/query-execution/index.js';
@@ -22,37 +20,25 @@ import {
   translateTableDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
 import {
+  AreamapChartDataOptions,
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   ChartDataOptions,
   IndicatorChartDataOptions,
   PivotTableDataOptions,
   ScatterChartDataOptions,
+  ScattermapChartDataOptions,
   TableDataOptions,
   TableDataOptionsInternal,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
-import {
-  normalizeAnyColumn,
-  normalizeColumn,
-  normalizeMeasureColumn,
-} from '@/domains/visualizations/core/chart-data-options/utils.js';
-import {
-  isCartesian,
-  isCategorical,
-  isIndicator,
-  isScatter,
-  isTable,
-} from '@/domains/visualizations/core/chart-options-processor/translations/types.js';
 import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { CommonWidgetProps } from '@/domains/widgets/components/common-widget/types';
 import { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
 import { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
-import { TableWidgetProps } from '@/domains/widgets/components/table-widget/types';
 import { TextWidgetProps } from '@/domains/widgets/components/text-widget/types';
 import {
   attachDataSourceToPanels,
   createDataOptionsFromPanels,
-  createPanelItem,
   extractDataOptions,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-data-options.js';
 import { extractDrilldownOptions } from '@/domains/widgets/components/widget-by-id/translate-widget-drilldown-options.js';
@@ -61,17 +47,27 @@ import {
   extractStyleOptions,
   getFlattenWidgetDesign,
   getStyleWithWidgetDesign,
+  toAreamapSubtype,
   toAreaWidgetStyle,
+  toBarWidgetStyle,
+  toColumnWidgetStyle,
+  toFunnelWidgetStyle,
   toIndicatorWidgetStyle,
   toLineWidgetStyle,
   toPieWidgetStyle,
+  toPivotTableWidgetStyle,
+  toPolarWidgetStyle,
+  toScattermapWidgetStyle,
+  toScatterWidgetStyle,
+  toSunburstWidgetStyle,
+  toTableWidgetStyle,
+  toTreemapWidgetStyle,
   withWidgetDesign,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/index.js';
 import {
   FusionWidgetType,
   IndicatorWidgetStyle,
   Panel,
-  PanelItem,
   WidgetDto,
   WidgetStyle,
   WidgetSubtype,
@@ -83,6 +79,7 @@ import {
   isChartFusionWidget,
   isChartWidgetProps,
   isCustomWidget,
+  isPivotTableWidgetProps,
   isPivotWidget,
   isSupportedPluginFusionWidget,
   isSupportedWidgetType,
@@ -95,24 +92,49 @@ import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { ChartProps, PivotTableProps, TableProps } from '@/props';
 import {
+  AreamapStyleOptions,
   AreaStyleOptions,
   ChartStyleOptions,
   CompleteThemeSettings,
   CustomWidgetStyleOptions,
   DrilldownOptions,
+  FunnelStyleOptions,
   GenericDataOptions,
   IndicatorStyleOptions,
   LineStyleOptions,
   PieStyleOptions,
   PivotTableDrilldownOptions,
   PivotTableWidgetStyleOptions,
+  PolarStyleOptions,
+  ScattermapStyleOptions,
+  ScatterStyleOptions,
+  StackableStyleOptions,
+  SunburstStyleOptions,
   TableStyleOptions,
   TextWidgetStyleOptions,
+  TreemapStyleOptions,
   WidgetStyleOptions,
 } from '@/types.js';
 
 import { WidgetDataOptions, WidgetModel } from '../widget-model';
 import { processTabberWidget } from './process-tabber-widget';
+import {
+  toAreamapPanels,
+  toAreaPanels,
+  toBarPanels,
+  toColumnPanels,
+  toFunnelPanels,
+  toIndicatorPanels,
+  toLinePanels,
+  toPiePanels,
+  toPivotTablePanels,
+  toPolarPanels,
+  toScattermapPanels,
+  toScatterPanels,
+  toSunburstPanels,
+  toTablePanels,
+  toTreemapPanels,
+} from './to-widget-dto-panels';
 import { isWidgetDesignEnabled } from './utils';
 
 /**
@@ -314,34 +336,6 @@ export function toChartWidgetProps(widgetModel: WidgetModel): ChartWidgetProps {
     title: widgetModel.title,
     description: widgetModel.description || '',
     drilldownOptions: widgetModel.drilldownOptions as DrilldownOptions,
-  };
-}
-
-/**
- * Translates a {@link WidgetModel} to the props for rendering a table widget.
- *
- * @example
- * ```tsx
- * <TableWidget {...widgetModelTranslator.toTableWidgetProps(widgetModel)} />
- * ```
- *
- * Note: this method is not supported for chart widgets.
- * Use {@link toChartWidgetProps} instead for getting props for the <ChartWidget> component.
- * @internal
- */
-export function toTableWidgetProps(widgetModel: WidgetModel): TableWidgetProps {
-  if (!isTableWidgetModel(widgetModel)) {
-    throw new TranslatableError('errors.widgetModel.onlyTableWidgetSupported', {
-      methodName: 'toTableWidgetProps',
-    });
-  }
-  return {
-    dataOptions: widgetModel.dataOptions as TableDataOptions,
-    styleOptions: widgetModel.styleOptions as TableStyleOptions,
-    dataSource: widgetModel.dataSource,
-    filters: widgetModel.filters,
-    title: widgetModel.title,
-    description: widgetModel.description || '',
   };
 }
 
@@ -809,6 +803,26 @@ export function fromChartWidgetProps(chartWidgetProps: ChartWidgetProps): Widget
 }
 
 /**
+ * Creates a {@link WidgetModel} from a {@link PivotTableWidgetProps}.
+ *
+ * @param pivotTableWidgetProps - The PivotTableWidgetProps to be converted to a widget model
+ * @returns WidgetModel
+ * @internal
+ */
+export function fromPivotTableWidgetProps(
+  pivotTableWidgetProps: PivotTableWidgetProps,
+): WidgetModel {
+  const widgetModel: WidgetModel = {
+    ...DEFAULT_WIDGET_MODEL,
+    ...pivotTableWidgetProps,
+    filters: (pivotTableWidgetProps.filters as Filter[]) || [], // typecast because of FilterRelation tmp incompatibility
+    widgetType: 'pivot',
+  };
+
+  return widgetModel;
+}
+
+/**
  * Creates a {@link WidgetModel} from a {@link WidgetProps}.
  *
  * @param widgetProps - The WidgetProps to be converted to a widget model
@@ -818,6 +832,9 @@ export function fromChartWidgetProps(chartWidgetProps: ChartWidgetProps): Widget
 export function fromWidgetProps(widgetProps: WidgetProps): WidgetModel {
   if (isChartWidgetProps(widgetProps)) {
     return withOid(widgetProps.id)(fromChartWidgetProps(widgetProps));
+  }
+  if (isPivotTableWidgetProps(widgetProps)) {
+    return withOid(widgetProps.id)(fromPivotTableWidgetProps(widgetProps));
   }
 
   throw new TranslatableError('errors.otherWidgetTypesNotSupported');
@@ -859,146 +876,98 @@ export function toWidgetDto(
   // TODO: For some reason TreeMap, Sunburst (and maybe others) are not include subtype in the styleOptions
   let subtype: string = (widgetModel.styleOptions as IndicatorWidgetStyle).subtype || '';
 
-  if (!chartType) throw new Error('Chart type is required');
-
   const panels: Panel[] = [];
-  if (isCartesian(chartType)) {
-    const categoriesPanelName = ['chart/line', 'chart/area'].includes(fusionWidgetType)
-      ? 'x-axis'
-      : 'categories';
-    const items: PanelItem[] = (widgetModel.dataOptions as CartesianChartDataOptions).category.map(
-      (column) => createPanelItem(normalizeColumn(column)),
+  if (isPivotWidget(widgetModel.widgetType)) {
+    const pivotDataOptions = widgetModel.dataOptions as PivotTableDataOptions;
+    panels.push(...toPivotTablePanels(pivotDataOptions));
+    subtype = subtype || 'pivot2';
+    style = toPivotTableWidgetStyle(
+      widgetModel.styleOptions as PivotTableWidgetStyleOptions,
+      pivotDataOptions.grandTotals,
     );
-    const categoryPanel: Panel = {
-      name: categoriesPanelName,
-      items,
+  } else if (!chartType) {
+    throw new Error('Chart type is required');
+  } else if (chartType === 'line') {
+    panels.push(...toLinePanels(widgetModel.dataOptions as CartesianChartDataOptions));
+    subtype = subtype || 'line/basic';
+    style = toLineWidgetStyle(widgetModel.styleOptions as LineStyleOptions);
+  } else if (chartType === 'area') {
+    panels.push(...toAreaPanels(widgetModel.dataOptions as CartesianChartDataOptions));
+    subtype = subtype || 'area/basic';
+    style = toAreaWidgetStyle(
+      widgetModel.styleOptions as AreaStyleOptions,
+      subtype as WidgetSubtype,
+    );
+  } else if (chartType === 'bar') {
+    panels.push(...toBarPanels(widgetModel.dataOptions as CartesianChartDataOptions));
+    subtype = subtype || 'bar/classic';
+    style = toBarWidgetStyle(
+      widgetModel.styleOptions as StackableStyleOptions,
+      subtype as WidgetSubtype,
+    );
+  } else if (chartType === 'column') {
+    panels.push(...toColumnPanels(widgetModel.dataOptions as CartesianChartDataOptions));
+    subtype = subtype || 'column/classic';
+    style = toColumnWidgetStyle(
+      widgetModel.styleOptions as StackableStyleOptions,
+      subtype as WidgetSubtype,
+    );
+  } else if (chartType === 'polar') {
+    panels.push(...toPolarPanels(widgetModel.dataOptions as CartesianChartDataOptions));
+    const polarSubtypeToWidgetSubtype: Record<string, string> = {
+      'polar/column': 'column/polar',
+      'polar/area': 'area/polar',
+      'polar/line': 'line/polar',
     };
-    panels.push(categoryPanel);
-    const valueItems = (widgetModel.dataOptions as CartesianChartDataOptions).value.map((column) =>
-      createPanelItem(normalizeMeasureColumn(column)),
-    );
-
-    panels.push({
-      name: 'values',
-      items: valueItems,
-    });
-    const breakByItems = (widgetModel.dataOptions as CartesianChartDataOptions).breakBy.map(
-      (column) => createPanelItem(normalizeColumn(column)),
-    );
-
-    panels.push({
-      name: 'break by',
-      items: breakByItems,
-    });
-    // fix subtype
-    if (chartType === 'polar') {
-      subtype = 'column/polar';
-    } else if (chartType === 'bar') {
-      subtype = subtype || 'bar/classic';
-    } else if (chartType === 'column') {
-      subtype = subtype || 'column/classic';
-    } else if (chartType === 'area') {
-      subtype = subtype || 'area/basic';
-    } else if (chartType === 'line') {
-      subtype = subtype || 'line/basic';
-    }
-
-    if (chartType === 'line') {
-      style = toLineWidgetStyle(widgetModel.styleOptions as LineStyleOptions);
-    } else if (chartType === 'area') {
-      style = toAreaWidgetStyle(
-        widgetModel.styleOptions as AreaStyleOptions,
-        subtype as WidgetSubtype,
-      );
-    }
-  } else if (isTable(chartType)) {
-    const { attributes, measures } = getTableAttributesAndMeasures(
-      widgetModel.dataOptions as TableDataOptionsInternal,
-    );
-    const items: PanelItem[] = [
-      ...attributes.map((column) => createPanelItem(normalizeColumn(column))),
-      ...measures.map((column) => createPanelItem(normalizeMeasureColumn(column))),
-    ];
-    panels.push({
-      name: 'columns',
-      items,
-    });
+    const polarSubtype = (widgetModel.styleOptions as PolarStyleOptions).subtype;
+    subtype = (polarSubtype && polarSubtypeToWidgetSubtype[polarSubtype]) || 'column/polar';
+    style = toPolarWidgetStyle(widgetModel.styleOptions as PolarStyleOptions);
+  } else if (chartType === 'table') {
+    panels.push(...toTablePanels(widgetModel.dataOptions as TableDataOptionsInternal));
     // tablewidgetagg is now a disabled custom widget by default, and tablewidget should be fully compatible
     fusionWidgetType = 'tablewidget';
-  } else if (isIndicator(chartType)) {
-    ['value', 'min', 'max', 'secondary'].forEach((panelName) => {
-      const items: PanelItem[] = (
-        (widgetModel.dataOptions as IndicatorChartDataOptions)[
-          panelName as keyof IndicatorChartDataOptions
-        ] || []
-      ).map((column) => createPanelItem(normalizeMeasureColumn(column)));
-      panels.push({ name: panelName, items });
-    });
+    subtype = 'tablewidget';
+    style = toTableWidgetStyle(widgetModel.styleOptions as TableStyleOptions);
+  } else if (chartType === 'indicator') {
+    panels.push(...toIndicatorPanels(widgetModel.dataOptions as IndicatorChartDataOptions));
     subtype = subtype || 'indicator/numeric';
     style = toIndicatorWidgetStyle(widgetModel.styleOptions as IndicatorStyleOptions);
-  } else if (isCategorical(chartType)) {
-    const items: PanelItem[] = (
-      widgetModel.dataOptions as CategoricalChartDataOptions
-    ).category.map((column) => createPanelItem(normalizeAnyColumn(column)));
-    panels.push({
-      name: 'categories',
-      items,
-    });
-    const valueItems = (widgetModel.dataOptions as CategoricalChartDataOptions).value.map(
-      (column) => createPanelItem(normalizeAnyColumn(column)),
-    );
-    const isTreemap = chartType === 'treemap';
-    panels.push({
-      name: isTreemap ? 'size' : 'values',
-      items: valueItems,
-    });
-    if (isTreemap) {
-      const emptyPanels = ['color', 'values']; // required for treemap
-      emptyPanels.forEach((panelName) => {
-        panels.push({
-          name: panelName,
-          items: [],
-        });
-      });
-    }
-
-    if (chartType === 'pie') {
-      subtype = subtype || 'pie/basic';
-      style = toPieWidgetStyle(widgetModel.styleOptions as PieStyleOptions);
-    } else if (chartType === 'treemap' || chartType === 'sunburst') {
-      subtype = subtype || chartType;
-    } else if (chartType === 'funnel') {
-      subtype = subtype || 'chart/funnel';
-    }
-  } else if (isScatter(chartType)) {
-    (
-      ['x', 'y', 'size', 'breakByColor', 'breakByPoint'] as (keyof ScatterChartDataOptions)[]
-    ).forEach((panelName) => {
-      if (
-        (widgetModel.dataOptions as ScatterChartDataOptions)[panelName] as Column | MeasureColumn
-      ) {
-        const aliases: { [key: string]: string } = {
-          breakByColor: 'Break By / Color',
-          breakByPoint: 'point',
-          x: 'x-axis',
-          y: 'y-axis',
-        };
-        const items: PanelItem[] = [
-          createPanelItem(
-            normalizeAnyColumn(
-              (widgetModel.dataOptions as ScatterChartDataOptions)[panelName]! as Column,
-            ),
-          ),
-        ];
-        panels.push({
-          name: aliases[panelName] || panelName,
-          items,
-        });
-      }
-    });
-    // default subtype
+  } else if (chartType === 'pie') {
+    panels.push(...toPiePanels(widgetModel.dataOptions as CategoricalChartDataOptions));
+    subtype = subtype || 'pie/basic';
+    style = toPieWidgetStyle(widgetModel.styleOptions as PieStyleOptions);
+  } else if (chartType === 'funnel') {
+    panels.push(...toFunnelPanels(widgetModel.dataOptions as CategoricalChartDataOptions));
+    subtype = subtype || 'chart/funnel';
+    style = toFunnelWidgetStyle(widgetModel.styleOptions as FunnelStyleOptions);
+  } else if (chartType === 'treemap') {
+    panels.push(...toTreemapPanels(widgetModel.dataOptions as CategoricalChartDataOptions));
+    subtype = subtype || chartType;
+    style = toTreemapWidgetStyle(widgetModel.styleOptions as TreemapStyleOptions);
+  } else if (chartType === 'sunburst') {
+    panels.push(...toSunburstPanels(widgetModel.dataOptions as CategoricalChartDataOptions));
+    subtype = subtype || chartType;
+    style = toSunburstWidgetStyle(widgetModel.styleOptions as SunburstStyleOptions);
+  } else if (chartType === 'scatter') {
+    panels.push(...toScatterPanels(widgetModel.dataOptions as ScatterChartDataOptions));
     subtype = subtype || 'bubble/scatter';
-    // Styling
+    style = toScatterWidgetStyle(widgetModel.styleOptions as ScatterStyleOptions);
+  } else if (chartType === 'scattermap') {
+    const scattermapStyleOptions = widgetModel.styleOptions as ScattermapStyleOptions;
+    panels.push(
+      ...toScattermapPanels(
+        widgetModel.dataOptions as ScattermapChartDataOptions,
+        scattermapStyleOptions.markers?.size,
+      ),
+    );
+    // Scattermap DTO always uses the `map/scatter` subtype; the `'scattermap'`
+    // subtype picked up from styleOptions is the CSDK chart-subtype, not the DTO one.
+    subtype = 'map/scatter';
+    style = toScattermapWidgetStyle(scattermapStyleOptions);
+  } else if (chartType === 'areamap') {
+    const areamapStyleOptions = widgetModel.styleOptions as AreamapStyleOptions;
+    panels.push(...toAreamapPanels(widgetModel.dataOptions as AreamapChartDataOptions));
+    subtype = toAreamapSubtype(areamapStyleOptions.mapType);
   } else {
     throw new UnsupportedChartTypeError(chartType);
   }

@@ -376,6 +376,48 @@ describe('getRangeTooltipSettings', () => {
     });
   });
 
+  describe('array xDisplayValue (dual x-axis)', () => {
+    it('uses the first element of an array xDisplayValue as the x label', () => {
+      const chartDataOptions = createMockChartDataOptions();
+      const dataPointContext = createMockDataPointContext({
+        point: {
+          name: 'Test Point',
+          color: '#00FF00',
+          high: 150,
+          low: 50,
+          custom: {
+            xDisplayValue: ['WEEK-31', '03.08.11'] as any,
+          },
+        },
+        x: '03.08.11',
+      });
+      const settings = getRangeTooltipSettings(true, chartDataOptions, mockTranslate);
+
+      const result = settings.formatter?.call(dataPointContext);
+      expect(result).toContain('WEEK-31');
+    });
+
+    it('falls back to ctx.x when array xDisplayValue first element is null/undefined', () => {
+      const chartDataOptions = createMockChartDataOptions();
+      const dataPointContext = createMockDataPointContext({
+        point: {
+          name: 'Test Point',
+          color: '#00FF00',
+          high: 150,
+          low: 50,
+          custom: {
+            xDisplayValue: [null, '03.08.11'] as any,
+          },
+        },
+        x: '2023-fallback',
+      });
+      const settings = getRangeTooltipSettings(true, chartDataOptions, mockTranslate);
+
+      const result = settings.formatter?.call(dataPointContext);
+      expect(result).toContain('2023-fallback');
+    });
+  });
+
   describe('edge cases', () => {
     it('should handle null percentage values', () => {
       const chartDataOptions = createMockChartDataOptions();

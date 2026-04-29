@@ -30,7 +30,7 @@ const example=true;
 
 <iframe
 src='https://csdk-playground.sisense.com/?example=charts%2Farea-chart&mode=docs'
-width=800
-height=870
+width='800'
+height='870'
 style='border:none;'
 />

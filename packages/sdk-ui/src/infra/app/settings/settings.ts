@@ -35,6 +35,7 @@ type ConfigurableAppSettings = AppConfig;
 
 /**
  * User role permissions
+ *
  * @internal
  */
 type RoleManifest = {
@@ -86,14 +87,21 @@ type ServerSettings = {
   serverLanguage: string;
   serverVersion: string;
   serverFeatures: FeatureMap;
-  isUnifiedNarrationEnabled?: boolean;
-  isSisenseAiEnabled?: boolean;
+  narrative: {
+    /** From `api/v2/settings/ai` narration.enabled */
+    isEnabled: boolean;
+    /** From globals.props.narrationUnified */
+    isUnified: boolean;
+    /** Computed: unlimited (API sisenseAIEnabled or props) or credit-based narratives */
+    isSisenseAiEnabled: boolean;
+  };
   user: {
     tenant: {
       name: string;
     };
     /**
      * User role permissions
+     *
      * @internal
      */
     permissions: RoleManifest;
@@ -189,14 +197,19 @@ function mapFeatures(features: Features): FeatureMap {
   return map as FeatureMap;
 }
 
-async function loadAiSettings(
-  httpClient: Pick<HttpClient, 'get'>,
-): Promise<{ isSisenseAiEnabled: boolean }> {
+async function loadAiSettings(httpClient: Pick<HttpClient, 'get'>) {
   try {
     const ai = await httpClient.get<AiSettingsResponse>('api/v2/settings/ai');
-    return { isSisenseAiEnabled: ai?.narration?.sisenseAIEnabled === true };
+    return {
+      narrative: {
+        isEnabled: ai?.narration?.enabled === true,
+        isSisenseAiEnabled: ai?.narration?.sisenseAIEnabled === true,
+      },
+    };
   } catch {
-    return { isSisenseAiEnabled: false };
+    return {
+      narrative: { isEnabled: false, isSisenseAiEnabled: false },
+    };
   }
 }
 
@@ -218,10 +231,11 @@ async function loadServerSettings(
   const palette = useDefaultPalette
     ? ({ colors: getDefaultThemeSettings().palette.variantColors } as LegacyPalette)
     : await getLegacyPalette(getPaletteName(globals.designSettings), httpClient);
-  const { isSisenseAiEnabled } = await loadAiSettings(httpClient);
+  const { narrative: apiNarration } = await loadAiSettings(httpClient);
   const props = globals.props;
   const unlimitedNarrativesEnabled =
-    isSisenseAiEnabled || (props?.isNarration && props?.narrationProvider === 'sisenseAI');
+    apiNarration.isSisenseAiEnabled ||
+    (props?.isNarration && props?.narrationProvider === 'sisenseAI');
   const creditNarrativesEnabled = !!(
     props?.isNarration === false &&
     props?.aiNarrative &&
@@ -232,8 +246,11 @@ async function loadServerSettings(
     serverLanguage: globals.language,
     serverVersion: globals.version,
     serverFeatures: mapFeatures(globals.features ?? []),
-    isUnifiedNarrationEnabled: props?.narrationUnified === true,
-    isSisenseAiEnabled: unlimitedNarrativesEnabled || creditNarrativesEnabled,
+    narrative: {
+      isEnabled: apiNarration.isEnabled,
+      isUnified: props?.narrationUnified === true,
+      isSisenseAiEnabled: unlimitedNarrativesEnabled || creditNarrativesEnabled,
+    },
     user: {
       tenant: {
         name: globals.user?.tenant?.name || SYSTEM_TENANT_NAME,

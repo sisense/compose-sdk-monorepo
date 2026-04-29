@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
 import type { CustomVisualizationProps } from '@sisense/sdk-ui';
@@ -10,7 +11,15 @@ import { SimpleTable } from './simple-table.js';
 // that isn't available in the test environment. Mock the MUI modules to avoid
 // this, using simple pass-through wrappers.
 vi.mock('@mui/material/Box', () => ({
-  default: ({ children, ...rest }: any) => <div {...rest}>{children}</div>,
+  // Destructure MUI system props so they are not forwarded to the DOM element.
+  default: ({
+    children,
+    display: _display,
+    justifyContent: _jc,
+    alignItems: _ai,
+    sx: _sx,
+    ...rest
+  }: any) => <div {...rest}>{children}</div>,
 }));
 vi.mock('@mui/material/CircularProgress', () => ({ default: () => <div role="progressbar" /> }));
 vi.mock('@mui/material/Table', () => ({
@@ -37,7 +46,7 @@ vi.mock('@mui/material/Typography', () => ({
   default: ({ children }: any) => <span>{children}</span>,
 }));
 
-const TestSimpleTable = SimpleTable as React.ComponentType<any>;
+const TestSimpleTable = SimpleTable as unknown as React.ComponentType<Record<string, unknown>>;
 
 const { mockUseExecuteCustomWidgetQuery } = vi.hoisted(() => ({
   mockUseExecuteCustomWidgetQuery: vi.fn(),
@@ -167,5 +176,30 @@ describe('SimpleTable', () => {
       <TestSimpleTable {...makeProps({ styleOptions: { headerBackgroundColor: '#ff0000' } })} />,
     );
     expect(screen.getByText('Col')).toHaveStyle({ backgroundColor: '#ff0000' });
+  });
+
+  it('renders empty string when cell has neither text nor data', () => {
+    mockUseExecuteCustomWidgetQuery.mockReturnValue({
+      data: {
+        columns: [{ name: 'Value' }],
+        rows: [[{}]], // cell with neither text nor data
+      },
+      isLoading: false,
+      isError: false,
+    });
+    render(<TestSimpleTable {...makeProps()} />);
+    // getAllByRole('cell') returns <td> elements; index 0 = header, index 1 = body cell
+    const cells = screen.getAllByRole('cell');
+    expect(cells[1].textContent).toBe('');
+  });
+
+  it('renders "No data available" when data is null', () => {
+    mockUseExecuteCustomWidgetQuery.mockReturnValue({
+      data: null,
+      isLoading: false,
+      isError: false,
+    });
+    render(<TestSimpleTable {...makeProps()} />);
+    expect(screen.getByText('No data available')).toBeInTheDocument();
   });
 });

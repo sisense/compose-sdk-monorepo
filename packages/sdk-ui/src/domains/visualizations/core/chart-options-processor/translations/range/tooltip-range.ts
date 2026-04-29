@@ -53,7 +53,10 @@ export const getRangeTooltipSettings = (
       const upperYValue = formatTooltipValue(dataOptionY, this.point.high, '');
       const bottomYValue = formatTooltipValue(dataOptionY2, this.point.low, '');
 
-      const maskedX = this.point?.custom?.xDisplayValue ?? this.x;
+      const xDisplay = this.point?.custom?.xDisplayValue;
+      const maskedX: string = Array.isArray(xDisplay)
+        ? String(xDisplay[0] ?? this.x)
+        : xDisplay ?? this.x;
       const x1Value = rangeChartDataOptions.x
         ? formatTooltipValue(rangeChartDataOptions.x[0], this.x, maskedX)
         : maskedX;

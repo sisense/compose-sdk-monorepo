@@ -87,6 +87,23 @@ describe('SSOAuthenticator', () => {
     );
   });
 
+  it('should throw when SSO is enabled but loginUrl is missing', async () => {
+    global.fetch = vi.fn().mockImplementation(() => {
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            isAuthenticated: false,
+            ssoEnabled: true,
+          }),
+      } as Response);
+    });
+
+    const localAuth = new SsoAuthenticator(fakeDeploymentUrl);
+    await expect(localAuth.authenticate()).rejects.toThrow(
+      'Unable to fetch SSO login URL from target instance. Check SSO settings.',
+    );
+  });
+
   it('should throw an error on receiving non json response from server', async () => {
     global.fetch = vi.fn().mockImplementation(() => {
       return Promise.resolve(
@@ -160,6 +177,33 @@ describe('SSOAuthenticator', () => {
       expect(window.location.href).toBe(
         `${fakeSsoHost}${fakeLoginUrl}/?return_to=${encodeURIComponent(fakeDeploymentUrl)}`,
       );
+    });
+
+    it('if sisense URL has query parameters, they are forwarded to the SSO login URL', async () => {
+      const fakeLoginUrl = 'https://sso.example.com/api/v1/ssoRouter/login';
+      const sisenseUrlWithParams = 'https://random.awesome-app.com/cool-path/?domain=app';
+      global.fetch = mockFetch(fakeLoginUrl);
+
+      const authenticator = new SsoAuthenticator(sisenseUrlWithParams);
+      await authenticator.authenticate();
+      await new Promise((resolve) => setImmediate(resolve));
+
+      const resultUrl = new URL(window.location.href);
+      expect(resultUrl.searchParams.getAll('domain')).toEqual(['app']);
+      expect(resultUrl.searchParams.getAll('return_to')).toEqual([fakeDeploymentUrl]);
+    });
+
+    it('if sisense URL param conflicts with a loginUrl param, sisense URL param wins', async () => {
+      const fakeLoginUrl = 'https://sso.example.com/api/v1/ssoRouter/login?domain=original';
+      const sisenseUrlWithParams = 'https://random.awesome-app.com/cool-path/?domain=app';
+      global.fetch = mockFetch(fakeLoginUrl);
+
+      const authenticator = new SsoAuthenticator(sisenseUrlWithParams);
+      await authenticator.authenticate();
+      await new Promise((resolve) => setImmediate(resolve));
+
+      const resultUrl = new URL(window.location.href);
+      expect(resultUrl.searchParams.getAll('domain')).toEqual(['app']);
     });
 
     it('if query parameters have to be merged', async () => {

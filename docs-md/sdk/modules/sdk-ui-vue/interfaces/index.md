@@ -57,6 +57,7 @@ TypeScript interfaces for components and composables listed above
 - [GetDashboardModelParams](interface.GetDashboardModelParams.md)
 - [GetDashboardModelsOptions](interface.GetDashboardModelsOptions.md)
 - [GetDashboardModelsParams](interface.GetDashboardModelsParams.md)
+- [GetDataSourceDimensionsParams](interface.GetDataSourceDimensionsParams.md)
 - [GetFilterMembersData](interface.GetFilterMembersData.md)
 - [GetFilterMembersParams](interface.GetFilterMembersParams.md)
 - [GetHierarchyModelsParams](interface.GetHierarchyModelsParams.md)

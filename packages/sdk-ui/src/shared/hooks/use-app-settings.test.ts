@@ -47,8 +47,11 @@ describe('useAppSettings', () => {
         },
       },
       serverLanguage: 'en-US',
-      isSisenseAiEnabled: true,
-      isUnifiedNarrationEnabled: false,
+      narrative: {
+        isEnabled: true,
+        isUnified: false,
+        isSisenseAiEnabled: true,
+      },
     };
 
     useSisenseContextMock.mockReturnValue({
@@ -61,7 +64,7 @@ describe('useAppSettings', () => {
     expect(result.current?.translationConfig.language).toBe('en-US');
     expect(result.current?.user.permissions.dashboards?.create).toBe(true);
     expect(result.current?.serverFeatures?.aiAssistant?.quotaNotification).toBe(true);
-    expect(result.current?.isSisenseAiEnabled).toBe(true);
+    expect(result.current?.narrative?.isSisenseAiEnabled).toBe(true);
   });
 
   it('returns the same settings object reference on re-render when app unchanged', () => {

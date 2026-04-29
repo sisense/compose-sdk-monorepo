@@ -10,6 +10,10 @@ const mockGet = vi.fn().mockImplementation((url) => {
   switch (url) {
     case 'api/globals':
       return Promise.resolve(mockGlobals);
+    case 'api/v2/settings/ai':
+      return Promise.resolve({
+        narration: { enabled: false, sisenseAIEnabled: false },
+      });
     case 'api/v1/settings/system':
       return Promise.resolve(mockSystemSettings);
     case 'api/palettes/Vivid':

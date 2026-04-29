@@ -31,12 +31,21 @@ function tooltipTitleFromModel(
       }}
     >
       <div>{`${t('queryDefinition.tooltipType')}: ${model.typeLabel}`}</div>
-      <div>{`${t('queryDefinition.tooltipColumn')}: ${model.column}`}</div>
-      <div>{`${t('queryDefinition.tooltipFormula')}: ${model.formula}`}</div>
+      {model.showColumnInTooltip ? (
+        <div>{`${t('queryDefinition.tooltipColumn')}: ${model.column}`}</div>
+      ) : null}
+      {model.showFormulaInTooltip ? (
+        <div>{`${t('queryDefinition.tooltipFormula')}: ${model.formula}`}</div>
+      ) : null}
     </div>
   );
 }
 
+/**
+ * Props for {@link QueryPill}.
+ *
+ * @sisenseInternal
+ */
 export interface QueryPillProps {
   item: QueryPillItem;
   showTooltip?: boolean;
@@ -46,7 +55,7 @@ export interface QueryPillProps {
 /**
  * Read-only query-definition pill; JSON tooltip is a portal bubble with a real triangle.
  *
- * @internal
+ * @sisenseInternal
  */
 export const QueryPill: FunctionComponent<QueryPillProps> = ({
   item,

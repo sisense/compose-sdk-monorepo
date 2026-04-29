@@ -42,16 +42,6 @@ There is a warning saying that my app website is not secure.
 
 Safari’s [Intelligent Tracking Prevention (ITP)](https://support.apple.com/en-ca/guide/safari/sfri40732/mac) limits cross-site tracking and is stricter than most other browsers. The Compose SDK’s [`enableSilentPreAuth`](https://developer.sisense.com/guides/sdk/modules/sdk-ui/interfaces/interface.SisenseContextProviderProps.html#enablesilentpreauth) option relies on an iframe to set cookies for silent pre-authentication. Under ITP, that flow may not work reliably, so silent sign-in can fail or behave inconsistently in Safari.
 
-**Solution:**
+**Workaround:**
 
-Choose one of the following:
-
-1. **Disable silent pre-authentication** — Set [`enableSilentPreAuth`](https://developer.sisense.com/guides/sdk/modules/sdk-ui/interfaces/interface.SisenseContextProviderProps.html#enablesilentpreauth) to `false` on `SisenseContextProvider` (or omit it; the default is `false`).
-
-2. **Disable only for Safari** — Keep it enabled for other browsers but turn it off when the runtime reports Apple as the vendor (common for Safari and other WebKit-based browsers on Apple platforms):
-
-```ts
-enableSilentPreAuth: navigator.vendor !== 'Apple Computer, Inc.',
-```
-
-`navigator.vendor` is a heuristic: vendors can change identification strings, and other WebKit-based browsers may behave differently. Confirm behavior for the Safari and iOS versions you support, using [Apple’s ITP documentation](https://support.apple.com/en-ca/guide/safari/sfri40732/mac) as needed.
+With ITP enabled, silent pre-authentication is not consistently supported in Safari. Adjusting Safari’s privacy settings can restore this behavior in some cases. Disabling “Prevent cross-site tracking” may allow silent sign-in to work, but it requires user action and reduces privacy protections.

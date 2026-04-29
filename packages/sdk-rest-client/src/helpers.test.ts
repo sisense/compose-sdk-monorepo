@@ -84,7 +84,7 @@ describe('appendHeaders', () => {
   });
 
   describe('addQueryParamsToUrl', () => {
-    it('should append query parameters to a URL without existing query parameters', () => {
+    it('should add query parameters to a URL without existing query parameters', () => {
       const url = 'https://example.com/';
       const queryParams = {
         param1: 'value1',
@@ -97,7 +97,7 @@ describe('appendHeaders', () => {
       expect(resultUrl).toBe(expectedResult);
     });
 
-    it('should append query parameters to a URL with existing query parameters', () => {
+    it('should merge query parameters into a URL that already has a query string', () => {
       const url = 'https://example.com?existingParam=existingValue';
       const queryParams = {
         param1: 'value1',
@@ -111,7 +111,20 @@ describe('appendHeaders', () => {
       expect(resultUrl).toBe(expectedResult);
     });
 
-    it('should handle URL with hash and append query parameters correctly', () => {
+    it('should replace an existing query parameter when the same name is provided', () => {
+      const url = 'https://example.com/path?role=viewer&keep=yes';
+      const queryParams = {
+        role: 'admin',
+      };
+
+      const resultUrl = addQueryParamsToUrl(url, queryParams);
+      const parsed = new URL(resultUrl);
+
+      expect(parsed.searchParams.get('role')).toBe('admin');
+      expect(parsed.searchParams.get('keep')).toBe('yes');
+    });
+
+    it('should handle URL with hash and merge query parameters correctly', () => {
       const url = 'https://example.com/page#section';
       const queryParams = {
         param1: 'value1',

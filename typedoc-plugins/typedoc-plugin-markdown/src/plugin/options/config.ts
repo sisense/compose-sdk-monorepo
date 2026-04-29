@@ -298,6 +298,59 @@ export const namedAnchors: DeclarationOption = {
 };
 
 /**
+ * Use HTML encoded entities for angle brackets (e.g. &lt; &gt;) for MDX compatibility.
+ * When true, output is safe for Docusaurus and other MDX processors.
+ *
+ * @category fileOutput
+ */
+export const useHTMLEncodedBrackets: DeclarationOption = {
+  name: 'useHTMLEncodedBrackets',
+  help: 'Use HTML encoded entities for angle brackets (e.g. &lt; &gt;) for MDX compatibility.',
+  type: ParameterType.Boolean,
+  defaultValue: false,
+};
+
+/**
+ * When true, convert allowed HTML tags in comment content to valid JSX so they render in MDX
+ * (e.g. iframe style='...' becomes style={{ ... }}). Use for Docusaurus with working iframes.
+ *
+ * @category fileOutput
+ */
+export const convertHtmlToJsxInComments: DeclarationOption = {
+  name: 'convertHtmlToJsxInComments',
+  help: 'Convert HTML tags in comments to valid JSX for MDX (e.g. iframe remains functional).',
+  type: ParameterType.Boolean,
+  defaultValue: false,
+};
+
+/**
+ * When true (and convertHtmlToJsxInComments is true), emit Markdown image syntax for img tags
+ * with media:// src (e.g. ![alt](path)) instead of JSX. Use for Docusaurus so it can process
+ * images natively. Path placeholder __MEDIA_PREFIX__ is replaced in post-processing.
+ *
+ * @category fileOutput
+ */
+export const imgMarkdownSyntax: DeclarationOption = {
+  name: 'imgMarkdownSyntax',
+  help: 'Emit Markdown image syntax for media:// img tags (for Docusaurus).',
+  type: ParameterType.Boolean,
+  defaultValue: false,
+};
+
+/**
+ * When true, encode all angle brackets in comment content as HTML entities.
+ * Use only if you want tags like iframe to appear as text in MDX.
+ *
+ * @category fileOutput
+ */
+export const escapeHtmlInComments: DeclarationOption = {
+  name: 'escapeHtmlInComments',
+  help: 'Encode all angle brackets in comments as HTML entities for MDX.',
+  type: ParameterType.Boolean,
+  defaultValue: false,
+};
+
+/**
  * Add config `hiddenFunctionParameters` to hide function parameters – e.g., `deprecatedLegacyContext`
  * Needed for CSDK
  *

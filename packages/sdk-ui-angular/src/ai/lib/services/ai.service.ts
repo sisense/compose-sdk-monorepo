@@ -5,6 +5,7 @@ import {
   AiContextProviderProps,
   ChatRestApi,
   DEFAULT_RECOMMENDATIONS_COUNT,
+  type GetNarrativeOptions,
   GetNlgInsightsResponse,
   GetNlqResultParams,
   GetQueryRecommendationsParams,
@@ -96,10 +97,16 @@ export class AiService {
    * @returns NLG insights text summary
    */
   async getNlgInsights(params: GetNlgInsightsParams): Promise<string | undefined> {
-    const api = await this.getApi();
+    const app = await this.sisenseContextService.getApp();
+    const api = new ChatRestApi(app.httpClient, this.aiContextConfig?.volatile);
     const payload = prepareGetNlgInsightsPayload(params);
+    const narrative = app.settings?.narrative;
+    const narrativeOptions: GetNarrativeOptions = {
+      isUnified: narrative?.isUnified ?? false,
+      isSisenseAiEnabled: narrative?.isSisenseAiEnabled ?? false,
+    };
     return api.ai
-      .getNlgInsights(payload)
+      .getNlgInsights(payload, narrativeOptions)
       .then((response?: GetNlgInsightsResponse) => response?.data?.answer);
   }
 

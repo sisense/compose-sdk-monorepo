@@ -27,7 +27,7 @@ Compose SDK contains a set of components needed to interface with your Sisense i
 
 ## Quickstart Application Setup
 
-For this quickstart guide we'll create a new Angular project using [comand line tool](https://angular.io/quick-start#create-a-new-angular-app-from-the-command-line).
+For this quickstart guide we'll create a new Angular project using [command line tool](https://angular.io/quick-start#create-a-new-angular-app-from-the-command-line).
 
 If you're using an existing project, skip to [Installing the SDK packages](#installing-the-sdk-packages).
 

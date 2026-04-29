@@ -47,7 +47,7 @@ The minimum supported version of <img src="./../img/angular-logo.png" height="14
    - `getPivotTableProps` – use `widgetModelTranslator.toPivotTableProps` instead.
    - `getPivotTableWidgetProps` – use `widgetModelTranslator.toPivotTableWidgetProps` instead.
    - `getChartWidgetProps` – use `widgetModelTranslator.toChartWidgetProps` instead.
-   - `getTableWidgetProps` – use `widgetModelTranslator.toTableWidgetProps` instead.
+   - `getTableWidgetProps` – removed. Use `widgetModelTranslator.toChartWidgetProps` instead.
    - `getTextWidgetProps` – use `widgetModelTranslator.toTextWidgetProps` instead.
 
    Example:

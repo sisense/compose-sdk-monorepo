@@ -13,7 +13,7 @@ Follow this guide to get started developing applications with Compose SDK.
 
 Compose SDK contains a set of components needed to interface with your Sisense instance. The following prerequisites are needed in order to use the SDK:
 
-1. Familiarity with [front-end web development](https://developer.mozilla.org/en-US/docs/Learn/Front-end_web_developer), including Node.js, JavaScript/TypeScript, and Angular.
+1. Familiarity with [front-end web development](https://developer.mozilla.org/en-US/docs/Learn/Front-end_web_developer), including Node.js, JavaScript/TypeScript, and Vue.
 2. [Node.js](https://nodejs.org/en) version **18.0.0** or higher.
 3. [Vue](https://vuejs.org) version **3.3.0** or higher.
 4. A Node package manager such as [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) or [Yarn](https://yarnpkg.com/getting-started/install).
@@ -22,7 +22,7 @@ Compose SDK contains a set of components needed to interface with your Sisense i
 
 ## Quickstart Application Setup
 
-For this quickstart guide we'll create a new Vue project using [comand line tool](https://vuejs.org/guide/quick-start#creating-a-vue-application).
+For this quickstart guide we'll create a new Vue project using [command line tool](https://vuejs.org/guide/quick-start#creating-a-vue-application).
 
 If you're using an existing project, skip to [Installing the SDK packages](#installing-the-sdk-packages).
 

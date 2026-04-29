@@ -4,6 +4,7 @@ import { CompleteThemeSettings, HighchartsSelectEvent, OptionsWithAlerts } from 
 import { BoxplotChartDataOptionsInternal } from '../chart-data-options/types';
 import { BoxplotChartData } from '../chart-data/types';
 import { HighchartsOptionsInternal } from './chart-options-service';
+import { withScrollerEvent } from './translations/axis-section';
 import {
   getBoxplotXAxisSettings,
   getBoxplotYAxisSettings,
@@ -35,6 +36,15 @@ export const getBoxplotChartOptions = (
     themeSettings?.palette.variantColors,
   );
   const categories = chartData.xValues.map((xAxisValue) => xAxisValue.key);
+
+  const baseXAxisSettings = getBoxplotXAxisSettings(
+    chartDesignOptions.xAxis,
+    categories,
+    dataOptions.category,
+  );
+  const xAxisSettings = withScrollerEvent(chartDesignOptions.autoZoom?.onScrollerChange)(
+    baseXAxisSettings,
+  );
 
   const boxplotOptions: HighchartsOptionsInternal = {
     title: { text: null },
@@ -71,7 +81,7 @@ export const getBoxplotChartOptions = (
       },
     },
     legend: getLegendSettings(chartDesignOptions.legend),
-    xAxis: getBoxplotXAxisSettings(chartDesignOptions.xAxis, categories, dataOptions.category),
+    xAxis: xAxisSettings,
     // Note: as we have multiple data options that describe the yAxis,
     // we are just using one of them to get formatting configuration
     yAxis: getBoxplotYAxisSettings(chartDesignOptions.yAxis, chartData, dataOptions.whiskerMax),

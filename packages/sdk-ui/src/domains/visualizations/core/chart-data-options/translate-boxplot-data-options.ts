@@ -85,10 +85,19 @@ const isBoxplotCustomDataOptions = (
   dataOptions: BoxplotChartDataOptions | BoxplotChartCustomDataOptions,
 ): dataOptions is BoxplotChartCustomDataOptions => dataOptions.value.length > 1;
 
+const emptyBoxplotChartDataOptionsInternal = (): BoxplotChartDataOptionsInternal => ({
+  valueTitle: '',
+});
+
 export const translateBoxplotDataOptions = (
   boxplotDataOptions: BoxplotChartDataOptions | BoxplotChartCustomDataOptions,
 ): BoxplotChartDataOptionsInternal => {
   const { category } = boxplotDataOptions;
+
+  if (boxplotDataOptions.value.length === 0) {
+    return emptyBoxplotChartDataOptionsInternal();
+  }
+
   let values: (MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn)[];
   let outliers: Column | StyledColumn | undefined;
   let valueTitle: string;

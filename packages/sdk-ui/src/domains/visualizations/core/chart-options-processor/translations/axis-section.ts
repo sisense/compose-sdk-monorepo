@@ -28,6 +28,15 @@ export interface AxisLabelsFormatterContextObject {
   };
 }
 
+/**
+ * Subset of the Highcharts axis `afterSetExtremes` event payload used for navigator scroll persistence.
+ */
+export type NavigatorAxisSetExtremesEvent = {
+  min: number;
+  max: number;
+  trigger?: string;
+};
+
 export type AxisSettings = {
   type?: 'linear' | 'logarithmic';
   title?: {
@@ -78,6 +87,9 @@ export type AxisSettings = {
   accessibility?: {
     description?: string;
     rangeDescription?: string;
+  };
+  events?: {
+    afterSetExtremes?: (e: NavigatorAxisSetExtremesEvent) => void;
   };
 };
 
@@ -130,6 +142,52 @@ export const getCategoricalCompareValue = (value: CategoricalXValues): number =>
   }
   return NaN;
 };
+
+/**
+ * Merges a navigator scroll callback into the primary X-axis `afterSetExtremes` handler.
+ * Preserves any existing `events` and prior `afterSetExtremes` implementation.
+ *
+ * @param axes - Axis settings (first entry is treated as the primary X-axis).
+ * @param onScrollerChange - Invoked only when extremes change due to the navigator scroller.
+ * @returns New axis settings array with the merged handler on the first axis.
+ */
+export const attachNavigatorScrollerToPrimaryXAxis = (
+  axes: readonly AxisSettings[],
+  onScrollerChange: (min: number, max: number) => void,
+): AxisSettings[] => {
+  if (axes.length === 0) {
+    return [...axes];
+  }
+  const primary = axes[0];
+  const previousAfterSetExtremes = primary.events?.afterSetExtremes;
+  return [
+    {
+      ...primary,
+      events: {
+        ...primary.events,
+        afterSetExtremes: (e: NavigatorAxisSetExtremesEvent) => {
+          previousAfterSetExtremes?.(e);
+          if (e.trigger === 'navigator' && typeof e.min === 'number' && typeof e.max === 'number') {
+            onScrollerChange(Math.round(e.min), Math.round(e.max));
+          }
+        },
+      },
+    },
+    ...axes.slice(1),
+  ];
+};
+
+/**
+ * Transformer that merges a navigator scroll callback into the primary X-axis `afterSetExtremes` handler.
+ * No-ops when no callback is provided.
+ *
+ * @param onScrollerChange - Optional callback invoked when the navigator scroller changes extremes.
+ * @returns Transformer function over an axis settings array.
+ */
+export const withScrollerEvent =
+  (onScrollerChange?: (min: number, max: number) => void) =>
+  (axes: readonly AxisSettings[]): AxisSettings[] =>
+    onScrollerChange ? attachNavigatorScrollerToPrimaryXAxis(axes, onScrollerChange) : [...axes];
 
 export const getDefaultDateFormat = (granularity?: string) => {
   if (granularity === undefined) return undefined;

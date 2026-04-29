@@ -119,4 +119,37 @@ describe('Chart (line-chart template)', () => {
       expect.objectContaining({ styleOptions: expect.objectContaining(styleOptions) }),
     );
   });
+
+  it('uses empty category array when dataOptions.categories is undefined', () => {
+    render(
+      <TestChart
+        {...makeProps({ dataOptions: { categories: undefined, values: [], breakBy: [] } })}
+      />,
+    );
+    expect(lastProps()).toEqual(
+      expect.objectContaining({ dataOptions: expect.objectContaining({ category: [] }) }),
+    );
+  });
+
+  it('uses empty value array when dataOptions.values is undefined', () => {
+    render(
+      <TestChart
+        {...makeProps({ dataOptions: { categories: [], values: undefined, breakBy: [] } })}
+      />,
+    );
+    expect(lastProps()).toEqual(
+      expect.objectContaining({ dataOptions: expect.objectContaining({ value: [] }) }),
+    );
+  });
+
+  it('uses empty breakBy array when dataOptions.breakBy is undefined', () => {
+    render(
+      <TestChart
+        {...makeProps({ dataOptions: { categories: [], values: [], breakBy: undefined } })}
+      />,
+    );
+    expect(lastProps()).toEqual(
+      expect.objectContaining({ dataOptions: expect.objectContaining({ breakBy: [] }) }),
+    );
+  });
 });

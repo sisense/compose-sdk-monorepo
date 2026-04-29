@@ -60,3 +60,21 @@ Registers a new custom widget.
 #### Returns
 
 `void`
+
+***
+
+### unregisterCustomWidget
+
+> **unregisterCustomWidget**(`customWidgetType`): `void`
+
+Unregisters a custom widget for the given type name.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `customWidgetType` | `string` | The unique identifier for the custom widget type. |
+
+#### Returns
+
+`void`

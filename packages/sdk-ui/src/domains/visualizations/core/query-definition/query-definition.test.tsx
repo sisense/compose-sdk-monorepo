@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { I18nextProvider } from 'react-i18next';
 
 import type { Attribute, FilterRelations, Measure } from '@sisense/sdk-data';
-import { createAttribute, createMeasure, filterFactory } from '@sisense/sdk-data';
+import { createAttribute, createMeasure, DateLevels, filterFactory } from '@sisense/sdk-data';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -74,8 +74,8 @@ describe('QueryPill', () => {
     await user.hover(screen.getByText('Product Category'));
     await waitFor(() => {
       expect(screen.getByRole('tooltip')).toHaveTextContent('Type: Dimension');
-      expect(screen.getByRole('tooltip')).toHaveTextContent('Column: Category');
-      expect(screen.getByRole('tooltip')).toHaveTextContent('Formula: Category');
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Column: Category.Category');
+      expect(screen.getByRole('tooltip')).not.toHaveTextContent('Formula:');
     });
   });
 
@@ -172,6 +172,33 @@ describe('QueryDefinition', () => {
     expect(screen.getByText('Sum of Sales')).toBeInTheDocument();
     expect(screen.getByText('Region')).toBeInTheDocument();
     expect(screen.getByText('by')).toBeInTheDocument();
+  });
+
+  it('renders date-level dimension pill with granularity in column (i18n)', () => {
+    const dateAtMonth = createAttribute({
+      name: 'Date',
+      expression: '[Commerce.Date]',
+      granularity: DateLevels.Months,
+    });
+    const measureAttr = createAttribute({
+      name: 'Revenue',
+      type: 'numeric',
+      expression: '[Commerce.Revenue]',
+    });
+    const measure = createMeasure({
+      name: 'Total Revenue',
+      aggregation: 'sum',
+      attribute: measureAttr,
+    });
+    renderWithI18n(
+      <QueryDefinition
+        query={{
+          measures: [measure],
+          dimensions: [dateAtMonth],
+        }}
+      />,
+    );
+    expect(screen.getByText('Months in Date')).toBeInTheDocument();
   });
 
   it('shows "Show N more" when more than 4 pills; expands and collapses', async () => {

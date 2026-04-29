@@ -1141,6 +1141,81 @@ export default function CodeExample() {
             },
             'forceApplyBackgroundFilters': true,
           },
+          'partialDtoOptions': {
+            'options': {
+              'title': false,
+              'dashboardFiltersMode': 'filter',
+              'selector': false,
+              'allowSelector': false,
+              'disallowSelector': true,
+              'triggersDomready': true,
+              'noTitle': false,
+            },
+            'style': {
+              '"indicator/pictogram"': {
+              },
+              'subtype': 'round',
+              '"indicator/numeric"': {
+                'subtype': 'simple',
+                'skin': '1',
+                'components': {
+                  'title': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'icon': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'secondaryTitle': {
+                    'inactive': true,
+                    'enabled': true,
+                  },
+                },
+              },
+              'skin': '1',
+              '"indicator/gauge"': {
+                'subtype': 'round',
+                'skin': '1',
+                'components': {
+                  'ticks': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'labels': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'title': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'secondaryTitle': {
+                    'inactive': true,
+                    'enabled': true,
+                  },
+                },
+              },
+              'components': {
+                'ticks': {
+                  'inactive': false,
+                  'enabled': true,
+                },
+                'labels': {
+                  'inactive': false,
+                  'enabled': true,
+                },
+                'title': {
+                  'inactive': false,
+                  'enabled': false,
+                },
+                'secondaryTitle': {
+                  'inactive': true,
+                  'enabled': true,
+                },
+              },
+            },
+          },
         },
         '6560ce3b6f1df500326a069e': {
           'filtersOptions': {
@@ -1151,6 +1226,81 @@ export default function CodeExample() {
               'ids': [],
             },
             'forceApplyBackgroundFilters': true,
+          },
+          'partialDtoOptions': {
+            'options': {
+              'title': false,
+              'dashboardFiltersMode': 'filter',
+              'selector': false,
+              'allowSelector': false,
+              'disallowSelector': true,
+              'triggersDomready': true,
+              'noTitle': false,
+            },
+            'style': {
+              '"indicator/pictogram"': {
+              },
+              'subtype': 'round',
+              '"indicator/numeric"': {
+                'subtype': 'simple',
+                'skin': '1',
+                'components': {
+                  'title': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'icon': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'secondaryTitle': {
+                    'inactive': true,
+                    'enabled': true,
+                  },
+                },
+              },
+              'skin': '1',
+              '"indicator/gauge"': {
+                'subtype': 'round',
+                'skin': '1',
+                'components': {
+                  'ticks': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'labels': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'title': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'secondaryTitle': {
+                    'inactive': true,
+                    'enabled': true,
+                  },
+                },
+              },
+              'components': {
+                'ticks': {
+                  'inactive': false,
+                  'enabled': true,
+                },
+                'labels': {
+                  'inactive': false,
+                  'enabled': true,
+                },
+                'title': {
+                  'inactive': false,
+                  'enabled': false,
+                },
+                'secondaryTitle': {
+                  'inactive': true,
+                  'enabled': true,
+                },
+              },
+            },
           },
         },
         '6560ce3b6f1df500326a069f': {
@@ -1163,6 +1313,35 @@ export default function CodeExample() {
             },
             'forceApplyBackgroundFilters': true,
           },
+          'partialDtoOptions': {
+            'options': {
+              'dashboardFiltersMode': 'select',
+              'selector': true,
+              'triggersDomready': true,
+            },
+            'style': {
+              'legend': {
+                'enabled': false,
+                'position': 'bottom',
+              },
+              'labels': {
+                'enabled': true,
+                'categories': true,
+                'value': false,
+                'percent': true,
+                'decimals': false,
+              },
+              'dataLimits': {
+                'seriesCapacity': 100000,
+              },
+              'convolution': {
+                'enabled': true,
+                'selectedConvolutionType': 'bySlicesCount',
+                'independentSlicesCount': 7,
+                'minimalIndependentSlicePercentage': 3,
+              },
+            },
+          },
         },
         '6560ce3b6f1df500326a06a0': {
           'filtersOptions': {
@@ -1173,6 +1352,81 @@ export default function CodeExample() {
               'ids': [],
             },
             'forceApplyBackgroundFilters': true,
+          },
+          'partialDtoOptions': {
+            'options': {
+              'title': false,
+              'dashboardFiltersMode': 'filter',
+              'selector': false,
+              'allowSelector': false,
+              'disallowSelector': true,
+              'triggersDomready': true,
+              'noTitle': false,
+            },
+            'style': {
+              '"indicator/gauge"': {
+                'subtype': 'round',
+                'skin': '1',
+                'components': {
+                  'ticks': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'labels': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'title': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'secondaryTitle': {
+                    'inactive': true,
+                    'enabled': true,
+                  },
+                },
+              },
+              '"indicator/numeric"': {
+                'subtype': 'simple',
+                'skin': '1',
+                'components': {
+                  'title': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'icon': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'secondaryTitle': {
+                    'inactive': true,
+                    'enabled': true,
+                  },
+                },
+              },
+              'skin': '1',
+              'subtype': 'round',
+              '"indicator/pictogram"': {
+              },
+              'components': {
+                'ticks': {
+                  'inactive': false,
+                  'enabled': true,
+                },
+                'labels': {
+                  'inactive': false,
+                  'enabled': true,
+                },
+                'title': {
+                  'inactive': false,
+                  'enabled': false,
+                },
+                'secondaryTitle': {
+                  'inactive': true,
+                  'enabled': true,
+                },
+              },
+            },
           },
         },
         '6560ce3b6f1df500326a06a1': {
@@ -1185,6 +1439,29 @@ export default function CodeExample() {
             },
             'forceApplyBackgroundFilters': true,
           },
+          'partialDtoOptions': {
+            'options': {
+              'dashboardFiltersMode': 'select',
+              'selector': true,
+              'triggersDomready': true,
+            },
+            'style': {
+              'legend': {
+                'enabled': false,
+                'position': 'left',
+              },
+              'labels': {
+                'enabled': true,
+                'categories': true,
+                'value': false,
+                'percent': true,
+                'decimals': false,
+              },
+              'dataLimits': {
+                'seriesCapacity': 100000,
+              },
+            },
+          },
         },
         '6560ce3b6f1df500326a06a2': {
           'filtersOptions': {
@@ -1195,6 +1472,81 @@ export default function CodeExample() {
               'ids': [],
             },
             'forceApplyBackgroundFilters': true,
+          },
+          'partialDtoOptions': {
+            'options': {
+              'title': false,
+              'dashboardFiltersMode': 'filter',
+              'selector': false,
+              'allowSelector': false,
+              'disallowSelector': true,
+              'triggersDomready': true,
+              'noTitle': false,
+            },
+            'style': {
+              '"indicator/gauge"': {
+                'subtype': 'round',
+                'skin': '1',
+                'components': {
+                  'ticks': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'labels': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'title': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'secondaryTitle': {
+                    'inactive': true,
+                    'enabled': true,
+                  },
+                },
+              },
+              '"indicator/numeric"': {
+                'subtype': 'simple',
+                'skin': '1',
+                'components': {
+                  'title': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'icon': {
+                    'inactive': false,
+                    'enabled': true,
+                  },
+                  'secondaryTitle': {
+                    'inactive': true,
+                    'enabled': true,
+                  },
+                },
+              },
+              'skin': '1',
+              'subtype': 'round',
+              '"indicator/pictogram"': {
+              },
+              'components': {
+                'ticks': {
+                  'inactive': false,
+                  'enabled': true,
+                },
+                'labels': {
+                  'inactive': false,
+                  'enabled': true,
+                },
+                'title': {
+                  'inactive': false,
+                  'enabled': false,
+                },
+                'secondaryTitle': {
+                  'inactive': true,
+                  'enabled': true,
+                },
+              },
+            },
           },
         },
         '6560ce3b6f1df500326a06a3': {
@@ -1207,6 +1559,71 @@ export default function CodeExample() {
             },
             'forceApplyBackgroundFilters': true,
           },
+          'partialDtoOptions': {
+            'options': {
+              'dashboardFiltersMode': 'select',
+              'selector': false,
+              'triggersDomready': true,
+            },
+            'style': {
+              'legend': {
+                'enabled': true,
+                'position': 'right',
+              },
+              'seriesLabels': {
+                'enabled': false,
+                'rotation': 0,
+              },
+              'markerSize': {
+                'min': 12,
+                'max': 48,
+                'isRange': true,
+                'lowest': 10,
+                'highest': 60,
+                'step': 1,
+                'defaultSize': 10,
+              },
+              'xAxis': {
+                'enabled': true,
+                'ticks': true,
+                'labels': {
+                  'enabled': true,
+                  'rotation': 0,
+                },
+                'gridLines': false,
+                'logarithmic': true,
+                'title': {
+                  'enabled': false,
+                  'text': 'SALES',
+                },
+                'intervalEnabled': false,
+                'logarithmicOld': true,
+                'hideMinMax': false,
+              },
+              'yAxis': {
+                'enabled': true,
+                'ticks': true,
+                'labels': {
+                  'enabled': true,
+                  'rotation': 0,
+                },
+                'gridLines': true,
+                'logarithmic': true,
+                'title': {
+                  'enabled': true,
+                  'text': 'QUANTITY',
+                },
+                'intervalEnabled': false,
+                'logarithmicOld': true,
+                'hideMinMax': false,
+              },
+              'dataLimits': {
+                'categoriesCapacityX': 500,
+                'categoriesCapacityY': 500,
+                'seriesCapacity': 50,
+              },
+            },
+          },
         },
         '6560ce3b6f1df500326a06a4': {
           'filtersOptions': {
@@ -1217,6 +1634,89 @@ export default function CodeExample() {
               'ids': [],
             },
             'forceApplyBackgroundFilters': true,
+          },
+          'partialDtoOptions': {
+            'options': {
+              'dashboardFiltersMode': 'filter',
+              'selector': true,
+              'triggersDomready': true,
+            },
+            'style': {
+              'lineWidth': {
+                'width': 'bold',
+              },
+              'legend': {
+                'enabled': true,
+                'position': 'bottom',
+              },
+              'seriesLabels': {
+                'enabled': false,
+                'rotation': 0,
+              },
+              'markers': {
+                'enabled': true,
+                'fill': 'hollow',
+                'size': 'small',
+              },
+              'xAxis': {
+                'enabled': true,
+                'ticks': true,
+                'labels': {
+                  'enabled': true,
+                  'rotation': 0,
+                },
+                'gridLines': false,
+                'title': {
+                  'enabled': false,
+                  'text': 'MONTH',
+                },
+                'x2Title': {
+                  'enabled': false,
+                },
+                'intervalEnabled': false,
+              },
+              'yAxis': {
+                'inactive': false,
+                'enabled': true,
+                'ticks': true,
+                'labels': {
+                  'enabled': true,
+                  'rotation': 0,
+                },
+                'gridLines': true,
+                'logarithmic': true,
+                'title': {
+                  'enabled': true,
+                  'text': 'SALES',
+                },
+                'min': '',
+                'intervalEnabled': false,
+              },
+              'y2Axis': {
+                'inactive': false,
+                'enabled': true,
+                'ticks': true,
+                'labels': {
+                  'enabled': true,
+                  'rotation': 0,
+                },
+                'gridLines': false,
+                'logarithmic': false,
+                'title': {
+                  'enabled': true,
+                  'text': 'QUANTITY',
+                },
+                'templateMainYHasGridLines': true,
+                'intervalEnabled': true,
+              },
+              'navigator': {
+                'enabled': true,
+              },
+              'dataLimits': {
+                'seriesCapacity': 50,
+                'categoriesCapacity': 100000,
+              },
+            },
           },
         },
         '6560ce3b6f1df500326a06a5': {
@@ -1229,6 +1729,81 @@ export default function CodeExample() {
             },
             'forceApplyBackgroundFilters': true,
           },
+          'partialDtoOptions': {
+            'options': {
+              'dashboardFiltersMode': 'filter',
+              'selector': true,
+              'triggersDomready': true,
+              'maxCharsPerLabelXAxis': 9,
+            },
+            'style': {
+              'legend': {
+                'enabled': true,
+                'position': 'bottom',
+              },
+              'seriesLabels': {
+                'enabled': false,
+                'rotation': 0,
+              },
+              'xAxis': {
+                'enabled': true,
+                'ticks': true,
+                'labels': {
+                  'enabled': true,
+                  'rotation': 0,
+                },
+                'gridLines': false,
+                'title': {
+                  'enabled': true,
+                  'text': 'AGE RANGE',
+                },
+                'x2Title': {
+                  'enabled': false,
+                },
+                'intervalEnabled': false,
+              },
+              'yAxis': {
+                'inactive': false,
+                'enabled': true,
+                'ticks': true,
+                'labels': {
+                  'enabled': true,
+                  'rotation': 0,
+                },
+                'gridLines': true,
+                'logarithmic': false,
+                'title': {
+                  'enabled': true,
+                  'text': 'SALES',
+                },
+                'intervalEnabled': true,
+                'hideMinMax': false,
+              },
+              'y2Axis': {
+                'inactive': true,
+                'enabled': true,
+                'ticks': true,
+                'labels': {
+                  'enabled': true,
+                  'rotation': 0,
+                },
+                'gridLines': false,
+                'logarithmic': false,
+                'title': {
+                  'enabled': false,
+                },
+                'intervalEnabled': true,
+                'hideMinMax': false,
+              },
+              'dataLimits': {
+                'seriesCapacity': 50,
+                'categoriesCapacity': 100000,
+              },
+              'navigator': {
+                'enabled': true,
+              },
+            },
+          },
         },
         '67111cb76ab71f0032d8599d': {
           'filtersOptions': {
@@ -1239,6 +1814,98 @@ export default function CodeExample() {
               'ids': [],
             },
             'forceApplyBackgroundFilters': true,
+          },
+          'partialDtoOptions': {
+            'options': {
+              'dashboardFiltersMode': 'filter',
+              'disallowSelector': true,
+              'triggersDomready': true,
+              'selector': false,
+              'dataTypes': {
+                'dimensions': true,
+                'measures': false,
+                'filter': false,
+              },
+              'autoUpdateOnEveryChange': true,
+              'supportsHierarchies': false,
+            },
+            'style': {
+              '"borders/all"': true,
+              '"borders/grid"': false,
+              '"borders/rows"': false,
+              '"borders/columns"': false,
+              '"width/content"': true,
+              '"width/window"': false,
+              '"colors/headers"': true,
+              '"colors/rows"': true,
+              '"colors/columns"': false,
+              '"wordwrap/headers"': true,
+              '"wordwrap/rows"': false,
+              'scroll': false,
+              'pageSize': 25,
+              'tableState': {
+                'columns': [{
+                    'visible': true,
+                    'search': {
+                    },
+                  },{
+                    'visible': true,
+                    'search': {
+                    },
+                  }
+                ],
+                'colResize': {
+                  'columns': ['84.3906px','191.539px'
+                  ],
+                  'tableSize': 275,
+                },
+                'headers': [{
+                    'title': 'Brand ID',
+                    'dim': '[Commerce.Brand ID]',
+                    'datatype': 'numeric',
+                  },{
+                    'title': 'Brand',
+                    'dim': '[Brand.Brand]',
+                    'datatype': 'text',
+                  }
+                ],
+                'length': 25,
+                'start': 0,
+                'iScrollerTopRow': 0,
+                'iScroller': 0,
+                'search': {
+                  'search': '',
+                  'smart': true,
+                  'regex': false,
+                  'caseInsensitive': true,
+                },
+                'order': [[,'asc'
+                    ]
+                ],
+                'time': 1729175082658,
+              },
+              'automaticHeight': true,
+              'narration': {
+                'enabled': false,
+                'display': 'above',
+                'format': 'bullets',
+                'verbosity': 'medium',
+                'up_sentiment': 'good',
+                'aggregation': 'sum',
+                'labels': [{
+                    'id': 'brand_id',
+                    'title': 'Brand ID',
+                    'singular': 'Brand ID',
+                    'plural': 'Brand ID',
+                  },{
+                    'id': 'brand',
+                    'title': 'Brand',
+                    'singular': 'Brand',
+                    'plural': 'Brand',
+                  }
+                ],
+              },
+            },
           },
         },
         '672352d827ea67002bdcf485': {
@@ -1251,6 +1918,71 @@ export default function CodeExample() {
             },
             'forceApplyBackgroundFilters': true,
           },
+          'partialDtoOptions': {
+            'options': {
+              'dashboardFiltersMode': 'select',
+              'selector': true,
+              'triggersDomready': true,
+              'autoUpdateOnEveryChange': true,
+              'drillToAnywhere': true,
+            },
+            'style': {
+              'legend': {
+                'enabled': true,
+                'position': 'bottom',
+              },
+              'seriesLabels': {
+                'enabled': false,
+                'rotation': 0,
+              },
+              'categories': {
+                'enabled': true,
+                'labels': {
+                  'enabled': true,
+                  'rotation': 0,
+                },
+                'title': {
+                  'enabled': false,
+                },
+                'gridLines': true,
+                'isIntervalEnabled': false,
+              },
+              'axis': {
+                'enabled': true,
+                'labels': {
+                  'enabled': true,
+                  'rotation': 0,
+                },
+                'gridLines': true,
+                'logarithmic': false,
+                'isIntervalEnabled': true,
+              },
+              'dataLimits': {
+                'seriesCapacity': 50,
+                'categoriesCapacity': 200,
+              },
+              'narration': {
+                'enabled': false,
+                'display': 'above',
+                'format': 'bullets',
+                'verbosity': 'medium',
+                'up_sentiment': 'good',
+                'aggregation': 'sum',
+                'labels': [{
+                    'id': 'country',
+                    'title': 'Country',
+                    'singular': 'Country',
+                    'plural': 'Country',
+                  },{
+                    'id': 'age_range',
+                    'title': 'Age Range',
+                    'singular': 'Age Range',
+                    'plural': 'Age Range',
+                  }
+                ],
+              },
+            },
+          },
         },
         '6742206527ea67002bdcf6ac': {
           'filtersOptions': {
@@ -1261,6 +1993,38 @@ export default function CodeExample() {
               'ids': [],
             },
             'forceApplyBackgroundFilters': true,
+          },
+          'partialDtoOptions': {
+            'options': {
+              'dashboardFiltersMode': 'select',
+              'triggersDomready': true,
+              'selector': true,
+              'disallowSelector': false,
+              'autoUpdateOnEveryChange': true,
+              'supportsHierarchies': false,
+            },
+            'style': {
+              '"title/1"': true,
+              '"title/2"': true,
+              '"title/3"': true,
+              '"tooltip/value"': true,
+              '"tooltip/contribution"': false,
+              'narration': {
+                'enabled': false,
+                'display': 'above',
+                'format': 'bullets',
+                'verbosity': 'medium',
+                'up_sentiment': 'good',
+                'aggregation': 'sum',
+                'labels': [{
+                    'id': 'country',
+                    'title': 'Country',
+                    'singular': 'Country',
+                    'plural': 'Country',
+                  }
+                ],
+              },
+            },
           },
         },
       },

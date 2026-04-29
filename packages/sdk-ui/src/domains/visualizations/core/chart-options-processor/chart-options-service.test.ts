@@ -1650,31 +1650,56 @@ describe('funnelChart', () => {
           name: 'Website visits',
           y: 15654,
           color: '#00cee6',
-          custom: { number1: 100, rawValue: 15654, xValue: ['Website visits'] },
+          custom: {
+            number1: 100,
+            rawValue: 15654,
+            xValue: ['Website visits'],
+            xDisplayValue: ['Website visits'],
+          },
         },
         {
           name: 'Downloads',
           y: 4064,
           color: '#9b9bd7',
-          custom: { number1: 25.96141561262297, rawValue: 4064, xValue: ['Downloads'] },
+          custom: {
+            number1: 25.96141561262297,
+            rawValue: 4064,
+            xValue: ['Downloads'],
+            xDisplayValue: ['Downloads'],
+          },
         },
         {
           name: 'Requested price list',
           y: 1987,
           color: '#6eda55',
-          custom: { number1: 12.693241344065415, rawValue: 1987, xValue: ['Requested price list'] },
+          custom: {
+            number1: 12.693241344065415,
+            rawValue: 1987,
+            xValue: ['Requested price list'],
+            xDisplayValue: ['Requested price list'],
+          },
         },
         {
           name: 'Invoice sent',
           y: 976,
           color: '#fc7570',
-          custom: { number1: 6.234828158937013, rawValue: 976, xValue: ['Invoice sent'] },
+          custom: {
+            number1: 6.234828158937013,
+            rawValue: 976,
+            xValue: ['Invoice sent'],
+            xDisplayValue: ['Invoice sent'],
+          },
         },
         {
           name: 'Finalized',
           y: 846,
           color: '#fbb755',
-          custom: { number1: 5.40436949022614, rawValue: 846, xValue: ['Finalized'] },
+          custom: {
+            number1: 5.40436949022614,
+            rawValue: 846,
+            xValue: ['Finalized'],
+            xDisplayValue: ['Finalized'],
+          },
         },
       ]);
     });

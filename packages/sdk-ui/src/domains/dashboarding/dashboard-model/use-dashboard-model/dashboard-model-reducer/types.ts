@@ -5,6 +5,7 @@ import {
   SpecificWidgetOptions,
   WidgetsPanelLayout,
 } from '@/domains/dashboarding/dashboard-model';
+import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { WidgetModel } from '@/domains/widgets/widget-model';
 
 export type UseDashboardModelState = DashboardModel | null;
@@ -43,6 +44,14 @@ export type WidgetPatch = {
    * The title of the widget.
    */
   title?: string;
+  /**
+   * Full widget options to send in the PATCH request.
+   * Must include all existing option fields alongside the changed ones, because
+   * the server replaces the entire options object rather than merging.
+   */
+  options?: Partial<NonNullable<WidgetDto['options']>> & {
+    previousScrollerLocation: { min: number; max: number };
+  };
 };
 
 /**

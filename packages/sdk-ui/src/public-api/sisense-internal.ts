@@ -87,6 +87,11 @@ export type { DashboardPersistenceManager } from '../domains/dashboarding/persis
 export {
   QueryDefinition,
   type QueryDefinitionProps,
+  QueryPill,
+  type QueryPillProps,
+  baseQueryParamsToViewModel,
+  getQueryPillTooltipModel,
+  type TooltipModel,
   type QueryPillCategory,
   type QueryPillItem,
   type QueryDefinitionViewModel,

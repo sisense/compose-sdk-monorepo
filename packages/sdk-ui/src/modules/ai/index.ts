@@ -44,6 +44,7 @@ export { default as GetNlgInsights, type GetNlgInsightsProps } from './get-nlg-i
 export { NlqChartWidget, type NlqChartWidgetProps } from './chart/nlq-chart-widget.js';
 
 export { ChatRestApi } from './api/chat-rest-api.js';
+export type { GetNarrativeOptions } from '@/infra/api/narrative/narrative-endpoints.js';
 export {
   CustomAiContextProvider,
   type CustomAiContext,

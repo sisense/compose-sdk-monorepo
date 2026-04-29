@@ -11,17 +11,22 @@ import { CustomWidgetComponent, CustomWidgetComponentProps } from './types';
  * @example
  * Example of registering a custom widget in a dashboard:
  * ```tsx
+ * import { useEffect } from 'react';
  * import { useCustomWidgets, DashboardById } from '@sisense/sdk-ui';
  * import CustomHistogramWidget from './custom-histogram-widget';
  *
  * const Example = () => {
- *   const { registerCustomWidget } = useCustomWidgets();
- *   registerCustomWidget('histogramwidget', CustomHistogramWidget);
+ *   const { registerCustomWidget, unregisterCustomWidget } = useCustomWidgets();
+ *
+ *   useEffect(() => {
+ *     registerCustomWidget('histogramwidget', CustomHistogramWidget);
+ *     // Optionally unregister on unmount (e.g. if the widget should only be available within this component)
+ *     return () => unregisterCustomWidget('histogramwidget');
+ *   }, [registerCustomWidget, unregisterCustomWidget]);
  *
  *   return <DashboardById dashboardOid="your-dashboard-oid" />;
  * }
  * ```
- *
  * @group Dashboards
  */
 export const useCustomWidgets = (): UseCustomWidgetsResult => {
@@ -30,6 +35,13 @@ export const useCustomWidgets = (): UseCustomWidgetsResult => {
   const registerCustomWidget = useCallback(
     <T = unknown>(customWidgetType: string, customWidget: CustomWidgetComponent<T>) => {
       widgetRegistry.register(customWidgetType, customWidget as CustomVisualization, 'legacy');
+    },
+    [widgetRegistry],
+  );
+
+  const unregisterCustomWidget = useCallback(
+    (customWidgetType: string) => {
+      widgetRegistry.unregister(customWidgetType, 'legacy');
     },
     [widgetRegistry],
   );
@@ -47,6 +59,7 @@ export const useCustomWidgets = (): UseCustomWidgetsResult => {
 
   return {
     registerCustomWidget,
+    unregisterCustomWidget,
     hasCustomWidget,
     getCustomWidget,
   };
@@ -61,6 +74,8 @@ export type UseCustomWidgetsResult = {
     customWidgetType: string,
     customWidget: CustomWidgetComponent<T>,
   ) => void;
+  /** Unregisters a legacy custom widget for the given type name. */
+  unregisterCustomWidget: (customWidgetType: string) => void;
   /** Checks if a custom widget is registered. */
   hasCustomWidget: (customWidgetType: string) => boolean;
   /** Gets a custom widget. */

@@ -318,6 +318,15 @@ export type PanelItem = {
     databars?: boolean;
     width?: number;
     colorIndex?: number;
+    /**
+     * Marker-size range carried on the `size` panel item of a scattermap widget.
+     * Fusion reads `items[0].format.size.min/max` and overwrites `style.markers.size.min/max`
+     * at widget load — so this is the source of truth for rendered marker sizes.
+     */
+    size?: {
+      min?: number;
+      max?: number;
+    };
   };
   jaql: WidgetJaql;
   disabled?: boolean;
@@ -663,6 +672,15 @@ export type ScattermapWidgetStyle = WidgetContainerStyleOptions & {
       defaultSize: number;
       min: number;
       max: number;
+      /**
+       * Fusion-internal UI state / slider bounds. Not read by the renderer but
+       * present on widgets produced by the Fusion wizard, so they are included
+       * when writing the DTO so round-trips keep them intact.
+       */
+      inactive?: boolean;
+      lowest?: number;
+      highest?: number;
+      step?: number;
     };
   };
 };

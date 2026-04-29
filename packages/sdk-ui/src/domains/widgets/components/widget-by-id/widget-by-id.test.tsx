@@ -12,6 +12,16 @@ import { SisenseContextProvider } from '@/infra/contexts/sisense-context/sisense
 import type { WidgetProps } from '../widget/types';
 import { WidgetById } from './widget-by-id.js';
 
+const { useScrollerLocationSaveMock } = vi.hoisted(() => {
+  const saveScrollerLocation = vi.fn();
+  const useScrollerLocationSaveMock = vi.fn().mockReturnValue(saveScrollerLocation);
+  return { useScrollerLocationSaveMock };
+});
+
+vi.mock('./use-scroller-location-save', () => ({
+  useScrollerLocationSave: useScrollerLocationSaveMock,
+}));
+
 // Create a spy to capture Widget props
 const widgetSpy = vi.fn();
 
@@ -508,5 +518,29 @@ describe('WidgetById', () => {
     expect(normalizePropsForSnapshot(widgetProps)).toMatchSnapshot(
       'widget-props-with-undefined-values-omitted',
     );
+  });
+
+  describe('navigator scroll persistence wiring', () => {
+    it('calls useScrollerLocationSave with the dashboard and widget OIDs', async () => {
+      render(
+        <SisenseContextProvider
+          url={mockUrl}
+          token={mockToken}
+          appConfig={{ trackingConfig: { enabled: false } }}
+        >
+          <WidgetById widgetOid={widgetId} dashboardOid={dashboardId} />
+        </SisenseContextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(widgetSpy).toHaveBeenCalled();
+      });
+
+      expect(useScrollerLocationSaveMock).toHaveBeenCalledWith(
+        dashboardId,
+        widgetId,
+        expect.anything(),
+      );
+    });
   });
 });

@@ -52,22 +52,26 @@ export type FiltersMergeStrategy = `${FiltersMergeStrategyEnum}`;
  */
 export function getRelationsAsText(relations: FilterRelationsRules, filters: Filter[]): string {
   if (!relations) return '';
-  if ('instanceid' in relations)
+  if (isRelationsRuleIdNode(relations)) {
     return relations.instanceid
       ? findFilterByGuid(filters, relations.instanceid)?.attribute.name ?? ''
       : '';
-  const left =
-    'instanceid' in relations.left
+  }
+  if (isRelationsRule(relations)) {
+    const left = isRelationsRuleIdNode(relations.left)
       ? `[${findFilterByGuid(filters, relations.left.instanceid)?.attribute.name}]`
       : getRelationsAsText(relations.left, filters);
-  const right =
-    'instanceid' in relations.right
+    const right = isRelationsRuleIdNode(relations.right)
       ? `[${findFilterByGuid(filters, relations.right.instanceid)?.attribute.name}]`
       : getRelationsAsText(relations.right, filters);
-  return `(${left} ${relations.operator} ${right})`;
+    return `(${left} ${relations.operator} ${right})`;
+  }
+  return '';
 }
 
 /**
+ * Builds tooltip lines: adds `(` / `)` around each logical subtree from `splitFiltersAndRelations`.
+ *
  * @internal
  */
 export function getFilterRelationsDescription(
@@ -150,7 +154,7 @@ export function applyWidgetFiltersToRelations(
 
   const newRelations = cloneDeep(relations);
 
-  const replacementsMap = {};
+  const replacementsMap: Record<string, string> = {};
   widgetFilters.forEach((widgetFilter) => {
     if (widgetFilter.config.guid) {
       const correspondingFilter = dashboardFilters.find(

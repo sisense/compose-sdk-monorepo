@@ -24,7 +24,7 @@ You can get the `dashboardOid` and `widgetOid` from the widget’s embed code in
 
 For example, the following code snippets get a chart or charts from a Sisense dashboard:
 
-##### React
+#### React
 
 Hardcoded dashboard and widget IDs
 
@@ -44,7 +44,7 @@ Retrieve widget IDs using hook
  style='border:none;'
 />
 
-##### Angular
+#### Angular
 
 ```ts
 // Hardcoded dashboard and widget IDs

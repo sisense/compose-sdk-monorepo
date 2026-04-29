@@ -17,7 +17,7 @@ export function pageIndex(
   if (!page.model.groups) {
     md.push(heading(headingLevel, 'Packages'));
     const packagesList = page.model.children?.map((projectPackage) => {
-      return `- [${escapeChars(projectPackage.name)}](${context.relativeURL(
+      return `- [${escapeChars(projectPackage.name, context.options.getValue('useHTMLEncodedBrackets') as boolean)}](${context.relativeURL(
         Boolean(projectPackage.readme)
           ? `${path.dirname(
               projectPackage.url || '',

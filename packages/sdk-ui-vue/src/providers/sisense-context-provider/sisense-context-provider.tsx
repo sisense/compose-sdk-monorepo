@@ -89,6 +89,15 @@ export const SisenseContextProvider = defineComponent({
      */
     ssoEnabled: Boolean as PropType<SisenseContextProviderProps['ssoEnabled']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.enableSilentPreAuth}
+     *
+     * @category Sisense Authentication
+     */
+    enableSilentPreAuth: {
+      type: Boolean as PropType<SisenseContextProviderProps['enableSilentPreAuth']>,
+      default: false,
+    },
+    /**
      * {@inheritDoc @sisense/sdk-ui!SisenseContextProviderProps.token}
      *
      * @category Sisense Authentication

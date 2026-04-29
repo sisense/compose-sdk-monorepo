@@ -24,8 +24,8 @@ import { pivotQueryStateReducer } from './pivot-query-state-reducer';
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=queries%2Fuse-execute-pivot-query&mode=docs'
- *  width=800
- *  height=870
+ *  width='800'
+ *  height='870'
  *  style='border:none;'
  * />
  *

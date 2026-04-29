@@ -2,19 +2,26 @@ import cloneDeep from 'lodash-es/cloneDeep';
 
 import { advancedLineChartWidgetDto } from '@/domains/dashboarding/dashboard-model/__mocks__/advanced-line-chart-widget.js';
 import { sampleEcommerceDashboard as dashboardMock } from '@/domains/dashboarding/dashboard-model/__mocks__/sample-ecommerce-dashboard.js';
+import { samplePivotDashboard } from '@/domains/dashboarding/dashboard-model/__mocks__/sample-pivot-dashboard.js';
+import { PivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
 import {
   CartesianWidgetStyle,
+  PivotWidgetStyle,
+  ScattermapWidgetStyle,
+  ScatterWidgetStyle,
   TabberWidgetDtoStyle,
 } from '@/domains/widgets/components/widget-by-id/types';
 import { WidgetDto } from '@/index';
 import { AppSettings } from '@/infra/app/settings/settings';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettings, PivotTableWidgetStyleOptions } from '@/types';
 
 import {
   fromChartWidgetProps,
+  fromPivotTableWidgetProps,
   fromWidgetDto,
   toChartWidgetProps,
   toCustomWidgetProps,
+  toPivotTableWidgetProps,
   toWidgetDto,
 } from './widget-model-translator.js';
 
@@ -118,10 +125,82 @@ describe('WidgetModelTranslator', () => {
 
       resWidgetDto = toWidgetDto(widgetFromChart);
 
-      // console.log(JSON.stringify(resWidgetDto, null, 2));
-
-      expect(resWidgetDto.metadata.panels.filter(({ name }) => name === 'filters').length).toBe(1);
       expect(resWidgetDto.type).toBe('tablewidget');
+      expect(resWidgetDto.subtype).toBe('tablewidget');
+      expect(resWidgetDto.metadata.panels.filter(({ name }) => name === 'filters').length).toBe(1);
+
+      const columnsPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'columns');
+      expect(columnsPanel).toBeDefined();
+      expect(columnsPanel!.items).toHaveLength(2);
+      expect((columnsPanel!.items[0].jaql as any).dim).toBe('[Commerce.Brand ID]');
+      expect((columnsPanel!.items[1].jaql as any).dim).toBe('[Brand.Brand]');
+
+      // Style round-trip
+      const mockStyle = mockTableWidgetDto.style as any;
+      const resultStyle = resWidgetDto.style as any;
+      expect(resultStyle.pageSize).toBe(mockStyle.pageSize);
+      expect(resultStyle['colors/headers']).toBe(mockStyle['colors/headers']);
+      expect(resultStyle['colors/rows']).toBe(mockStyle['colors/rows']);
+      expect(resultStyle['colors/columns']).toBe(mockStyle['colors/columns']);
+      expect(resultStyle['width/content']).toBe(mockStyle['width/content']);
+      expect(resultStyle['width/window']).toBe(mockStyle['width/window']);
+    });
+
+    it('should create a valid WidgetDto for a "table" with measure columns', () => {
+      const tableWithMeasureDto = {
+        ...cloneDeep(mockTableWidgetDto),
+        metadata: {
+          panels: [
+            {
+              name: 'columns',
+              items: [
+                {
+                  jaql: {
+                    table: 'Brand',
+                    column: 'Brand',
+                    dim: '[Brand.Brand]',
+                    datatype: 'text',
+                    merged: true,
+                    title: 'Brand',
+                  },
+                  panel: 'rows',
+                },
+                {
+                  jaql: {
+                    table: 'Commerce',
+                    column: 'Revenue',
+                    dim: '[Commerce.Revenue]',
+                    datatype: 'numeric',
+                    agg: 'sum',
+                    title: 'Total Revenue',
+                  },
+                  panel: 'rows',
+                },
+              ],
+            },
+            { name: 'filters', items: [] },
+          ],
+        },
+      } as WidgetDto;
+
+      const { widgetFromChart } = getWidgetTransformChain(tableWithMeasureDto);
+      expect(widgetFromChart.chartType).toBe('table');
+
+      resWidgetDto = toWidgetDto(widgetFromChart);
+
+      expect(resWidgetDto.type).toBe('tablewidget');
+
+      const columnsPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'columns');
+      expect(columnsPanel).toBeDefined();
+      expect(columnsPanel!.items).toHaveLength(2);
+
+      // Attribute column comes first
+      expect((columnsPanel!.items[0].jaql as any).dim).toBe('[Brand.Brand]');
+      expect((columnsPanel!.items[0].jaql as any).agg).toBeUndefined();
+
+      // Measure column with aggregation
+      expect((columnsPanel!.items[1].jaql as any).dim).toBe('[Commerce.Revenue]');
+      expect((columnsPanel!.items[1].jaql as any).agg).toBe('sum');
     });
 
     it('should create a valid WidgetDto for the "indicator" chart', () => {
@@ -157,12 +236,505 @@ describe('WidgetModelTranslator', () => {
 
       resWidgetDto = toWidgetDto(widgetFromChart);
 
-      // console.log(JSON.stringify(resWidgetDto, null, 2));
-
       expect(resWidgetDto.metadata.panels.filter(({ name }) => name === 'filters').length).toBe(1);
       expect(resWidgetDto.metadata.panels.filter(({ name }) => name === 'y-axis').length).toBe(1);
       expect(resWidgetDto.metadata.panels.filter(({ name }) => name === 'x-axis').length).toBe(1);
       expect(resWidgetDto.type).toBe(mockScatterWidgetDto.type);
+      expect(resWidgetDto.subtype).toBe(mockScatterWidgetDto.subtype);
+
+      const panelNames = resWidgetDto.metadata.panels
+        .map(({ name }) => name)
+        .filter((name) => name !== 'filters');
+      expect(panelNames).toEqual(['x-axis', 'y-axis', 'point', 'Break By / Color', 'size']);
+
+      const expectedStyle = mockScatterWidgetDto.style as ScatterWidgetStyle;
+      expect(resWidgetDto.style).toMatchObject({
+        legend: expectedStyle.legend,
+        navigator: { enabled: false },
+        seriesLabels: expectedStyle.seriesLabels,
+      });
+      expect((resWidgetDto.style as ScatterWidgetStyle).xAxis).toMatchObject({
+        enabled: expectedStyle.xAxis.enabled,
+        gridLines: expectedStyle.xAxis.gridLines,
+        title: expectedStyle.xAxis.title,
+      });
+      expect((resWidgetDto.style as ScatterWidgetStyle).yAxis).toMatchObject({
+        enabled: expectedStyle.yAxis.enabled,
+        gridLines: expectedStyle.yAxis.gridLines,
+        title: expectedStyle.yAxis.title,
+      });
+      const expectedMarkerSize = expectedStyle.markerSize;
+      expect(expectedMarkerSize).toBeDefined();
+      expect((resWidgetDto.style as ScatterWidgetStyle).markerSize).toEqual({
+        defaultSize: expectedMarkerSize?.defaultSize,
+        min: expectedMarkerSize?.min,
+        max: expectedMarkerSize?.max,
+      });
+    });
+
+    it('should always emit all scatter panels even when slots are empty', () => {
+      const widget = fromWidgetDto(mockScatterWidgetDto);
+      // Strip every scatter slot so only filters are left.
+      const emptyDataOptions = {
+        x: undefined,
+        y: undefined,
+        breakByPoint: undefined,
+        breakByColor: undefined,
+        size: undefined,
+      };
+      const widgetWithNoSlots = {
+        ...widget,
+        dataOptions: emptyDataOptions,
+      } as typeof widget;
+
+      resWidgetDto = toWidgetDto(widgetWithNoSlots);
+
+      const nonFilterPanels = resWidgetDto.metadata.panels.filter(({ name }) => name !== 'filters');
+      expect(nonFilterPanels.map(({ name }) => name)).toEqual([
+        'x-axis',
+        'y-axis',
+        'point',
+        'Break By / Color',
+        'size',
+      ]);
+      nonFilterPanels.forEach((panel) => expect(panel.items).toEqual([]));
+    });
+
+    it('should drop "point" items when neither x nor y is a measure (Fusion breakByPoint dependency)', () => {
+      const widget = fromWidgetDto(mockScatterWidgetDto);
+      // The mock has measure x/y and text breakByPoint/breakByColor. Swap axes with
+      // the text columns so neither axis is a measure; breakByPoint must then be empty.
+      const base = widget.dataOptions as Record<string, unknown>;
+      const widgetWithoutMeasureAxis = {
+        ...widget,
+        dataOptions: {
+          x: base.breakByPoint,
+          y: base.breakByColor,
+          breakByPoint: base.breakByPoint,
+          breakByColor: base.breakByColor,
+          size: base.size,
+        },
+      } as unknown as typeof widget;
+
+      resWidgetDto = toWidgetDto(widgetWithoutMeasureAxis);
+
+      const pointPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'point');
+      expect(pointPanel).toBeDefined();
+      expect(pointPanel!.items).toEqual([]);
+
+      // Other populated slots still get items.
+      const xPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'x-axis');
+      expect(xPanel!.items).toHaveLength(1);
+      const breakByColorPanel = resWidgetDto.metadata.panels.find(
+        ({ name }) => name === 'Break By / Color',
+      );
+      expect(breakByColorPanel!.items).toHaveLength(1);
+      const sizePanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'size');
+      expect(sizePanel!.items).toHaveLength(1);
+    });
+
+    it('should keep "point" items when at least one axis is a measure', () => {
+      const widget = fromWidgetDto(mockScatterWidgetDto);
+      const base = widget.dataOptions as Record<string, unknown>;
+      const widgetWithMeasureY = {
+        ...widget,
+        dataOptions: {
+          x: base.breakByPoint, // text
+          y: base.y, // measure
+          breakByPoint: base.breakByPoint,
+        },
+      } as unknown as typeof widget;
+
+      resWidgetDto = toWidgetDto(widgetWithMeasureY);
+
+      const pointPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'point');
+      expect(pointPanel!.items).toHaveLength(1);
+    });
+
+    it('should drop "point" items when only one axis is populated', () => {
+      const widget = fromWidgetDto(mockScatterWidgetDto);
+      const base = widget.dataOptions as Record<string, unknown>;
+      const widgetWithOneAxis = {
+        ...widget,
+        dataOptions: {
+          x: base.x,
+          y: undefined,
+          breakByPoint: base.breakByPoint,
+        },
+      } as unknown as typeof widget;
+
+      resWidgetDto = toWidgetDto(widgetWithOneAxis);
+
+      const pointPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'point');
+      expect(pointPanel!.items).toEqual([]);
+    });
+
+    it('should write seriesToColorMap to the "Break By / Color" panel item format.members', () => {
+      const widget = fromWidgetDto(mockScatterWidgetDto);
+      const scatterDataOptions = {
+        ...(widget.dataOptions as object),
+        seriesToColorMap: { Male: '#ff0000', Female: '#00ff00' },
+      };
+      const widgetWithColors = { ...widget, dataOptions: scatterDataOptions } as typeof widget;
+
+      resWidgetDto = toWidgetDto(widgetWithColors);
+
+      const breakByColorPanel = resWidgetDto.metadata.panels.find(
+        ({ name }) => name === 'Break By / Color',
+      );
+      expect(breakByColorPanel).toBeDefined();
+      expect(breakByColorPanel!.items).toHaveLength(1);
+      expect(breakByColorPanel!.items[0].format?.members).toEqual({
+        Male: { color: '#ff0000', colored: true, isHandPickedColor: true },
+        Female: { color: '#00ff00', colored: true, isHandPickedColor: true },
+      });
+    });
+
+    describe('scattermap widget', () => {
+      const makeScattermapWidgetDto = (
+        overrides: Partial<WidgetDto['metadata']['panels'][number]>[] = [],
+      ): WidgetDto =>
+        ({
+          oid: 'scattermap-oid',
+          title: 'scattermap',
+          desc: null,
+          type: 'map/scatter',
+          subtype: 'map/scatter',
+          datasource: {
+            title: 'Sample ECommerce',
+            id: 'localhost_aSampleIAAaECommerce',
+            address: 'LocalHost',
+            database: 'aSampleIAAaECommerce',
+          },
+          metadata: {
+            panels: [
+              {
+                name: 'geo',
+                items: [
+                  {
+                    jaql: {
+                      table: 'Country',
+                      column: 'Country',
+                      dim: '[Country.Country]',
+                      datatype: 'text',
+                      merged: true,
+                      title: 'Country',
+                    },
+                    geoLevel: 'country',
+                  },
+                ],
+              },
+              {
+                name: 'color',
+                items: [
+                  {
+                    jaql: {
+                      table: 'Commerce',
+                      column: 'Revenue',
+                      dim: '[Commerce.Revenue]',
+                      datatype: 'numeric',
+                      agg: 'sum',
+                      title: 'Total Revenue',
+                    },
+                  },
+                ],
+              },
+              {
+                name: 'size',
+                items: [
+                  {
+                    jaql: {
+                      table: 'Commerce',
+                      column: 'Cost',
+                      dim: '[Commerce.Cost]',
+                      datatype: 'numeric',
+                      agg: 'sum',
+                      title: 'Total Cost',
+                    },
+                  },
+                ],
+              },
+              { name: 'details', items: [] },
+              { name: 'filters', items: [] },
+              ...overrides,
+            ],
+          },
+          style: {
+            markers: {
+              fill: 'filled',
+              size: { inactive: false, min: 4, max: 24, defaultSize: 4 },
+            },
+          },
+        } as unknown as WidgetDto);
+
+      it('should create a valid WidgetDto for the "scattermap" chart', () => {
+        const mockDto = makeScattermapWidgetDto();
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+        expect(widgetFromChart.chartType).toBe('scattermap');
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        expect(resWidgetDto.type).toBe('map/scatter');
+        expect(resWidgetDto.subtype).toBe('map/scatter');
+
+        const panelNames = resWidgetDto.metadata.panels
+          .map(({ name }) => name)
+          .filter((name) => name !== 'filters');
+        expect(panelNames).toEqual(['geo', 'color', 'size', 'details']);
+
+        const geoPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'geo');
+        expect(geoPanel!.items).toHaveLength(1);
+        expect(geoPanel!.items[0].geoLevel).toBe('country');
+
+        const colorPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'color');
+        expect(colorPanel!.items).toHaveLength(1);
+        const sizePanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'size');
+        expect(sizePanel!.items).toHaveLength(1);
+      });
+
+      it('should translate scattermap markers style (fill + size defaults + min/max) back into the DTO style', () => {
+        const mockDto = makeScattermapWidgetDto();
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        const expectedMarkers = (mockDto.style as ScattermapWidgetStyle).markers;
+        const resultStyle = resWidgetDto.style as ScattermapWidgetStyle;
+        expect(resultStyle.markers.fill).toBe(expectedMarkers.fill);
+        expect(resultStyle.markers.size).toMatchObject({
+          defaultSize: expectedMarkers.size.defaultSize,
+          min: expectedMarkers.size.min,
+          max: expectedMarkers.size.max,
+        });
+      });
+
+      it('should always emit all scattermap panels even when slots are empty', () => {
+        const mockDto = makeScattermapWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const widgetWithNoSlots = {
+          ...widget,
+          dataOptions: { geo: [], colorBy: undefined, size: undefined, details: undefined },
+        } as unknown as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetWithNoSlots);
+
+        const nonFilterPanels = resWidgetDto.metadata.panels.filter(
+          ({ name }) => name !== 'filters',
+        );
+        expect(nonFilterPanels.map(({ name }) => name)).toEqual([
+          'geo',
+          'color',
+          'size',
+          'details',
+        ]);
+        nonFilterPanels.forEach((panel) => expect(panel.items).toEqual([]));
+      });
+
+      it('should preserve geoLevel on geo items when present on styled columns', () => {
+        const mockDto = makeScattermapWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const base = widget.dataOptions as Record<string, unknown>;
+        const geoColumn = (base.geo as unknown[])[0] as Record<string, unknown>;
+        const widgetWithStateLevel = {
+          ...widget,
+          dataOptions: {
+            ...base,
+            geo: [{ ...geoColumn, geoLevel: 'state' }],
+          },
+        } as unknown as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetWithStateLevel);
+
+        const geoPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'geo');
+        expect(geoPanel!.items[0].geoLevel).toBe('state');
+      });
+
+      it('should omit geoLevel when the column level is "auto"', () => {
+        const mockDto = makeScattermapWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const base = widget.dataOptions as Record<string, unknown>;
+        const geoColumn = (base.geo as unknown[])[0] as Record<string, unknown>;
+        const widgetWithAutoLevel = {
+          ...widget,
+          dataOptions: {
+            ...base,
+            geo: [{ ...geoColumn, geoLevel: 'auto' }],
+          },
+        } as unknown as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetWithAutoLevel);
+
+        const geoPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'geo');
+        expect(geoPanel!.items[0].geoLevel).toBeUndefined();
+      });
+
+      it('should write marker min/max to the size panel item format.size (Fusion reads this at widget load)', () => {
+        const mockDto = makeScattermapWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const widgetWithMarkers = {
+          ...widget,
+          styleOptions: {
+            markers: {
+              fill: 'filled',
+              size: { defaultSize: 10, minSize: 8, maxSize: 40 },
+            },
+          },
+        } as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetWithMarkers);
+
+        const sizePanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'size');
+        expect(sizePanel!.items).toHaveLength(1);
+        expect(sizePanel!.items[0].format?.size).toEqual({ min: 8, max: 40 });
+      });
+
+      it('should not attach format.size when no marker-size options are provided', () => {
+        const mockDto = makeScattermapWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const widgetNoSizeStyle = { ...widget, styleOptions: {} } as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetNoSizeStyle);
+
+        const sizePanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'size');
+        expect(sizePanel!.items[0].format?.size).toBeUndefined();
+      });
+
+      it('should apply Fusion scattermap defaults when the WidgetModel has no markers style', () => {
+        const mockDto = makeScattermapWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const widgetNoStyle = { ...widget, styleOptions: {} } as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetNoStyle);
+
+        const resultStyle = resWidgetDto.style as ScattermapWidgetStyle;
+        expect(resultStyle.markers.fill).toBe('filled');
+        expect(resultStyle.markers.size).toMatchObject({
+          defaultSize: 4,
+          min: 4,
+          max: 24,
+        });
+      });
+    });
+
+    describe('areamap widget', () => {
+      const makeAreamapWidgetDto = (subtype: 'areamap/world' | 'areamap/usa'): WidgetDto =>
+        ({
+          oid: 'areamap-oid',
+          title: 'areamap',
+          desc: null,
+          type: 'map/area',
+          subtype,
+          datasource: {
+            title: 'Sample ECommerce',
+            id: 'localhost_aSampleIAAaECommerce',
+            address: 'LocalHost',
+            database: 'aSampleIAAaECommerce',
+          },
+          metadata: {
+            panels: [
+              {
+                name: 'geo',
+                items: [
+                  {
+                    jaql: {
+                      table: 'Country',
+                      column: 'Country',
+                      dim: '[Country.Country]',
+                      datatype: 'text',
+                      merged: true,
+                      title: 'Country',
+                    },
+                  },
+                ],
+              },
+              {
+                name: 'color',
+                items: [
+                  {
+                    jaql: {
+                      table: 'Commerce',
+                      column: 'Revenue',
+                      dim: '[Commerce.Revenue]',
+                      datatype: 'numeric',
+                      agg: 'sum',
+                      title: 'Total Revenue',
+                    },
+                  },
+                ],
+              },
+              { name: 'filters', items: [] },
+            ],
+          },
+          style: {},
+        } as unknown as WidgetDto);
+
+      it('should create a valid WidgetDto for the "areamap" (world) chart', () => {
+        const mockDto = makeAreamapWidgetDto('areamap/world');
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+        expect(widgetFromChart.chartType).toBe('areamap');
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        expect(resWidgetDto.type).toBe('map/area');
+        expect(resWidgetDto.subtype).toBe('areamap/world');
+
+        const panelNames = resWidgetDto.metadata.panels
+          .map(({ name }) => name)
+          .filter((name) => name !== 'filters');
+        expect(panelNames).toEqual(['geo', 'color']);
+
+        const geoPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'geo');
+        expect(geoPanel!.items).toHaveLength(1);
+        const colorPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'color');
+        expect(colorPanel!.items).toHaveLength(1);
+      });
+
+      it('should map AreamapStyleOptions.mapType = "usa" to subtype = "areamap/usa"', () => {
+        const mockDto = makeAreamapWidgetDto('areamap/usa');
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        expect(resWidgetDto.subtype).toBe('areamap/usa');
+      });
+
+      it('should default subtype to "areamap/world" when mapType is missing (Fusion defaultSubtype)', () => {
+        const mockDto = makeAreamapWidgetDto('areamap/world');
+        const widget = fromWidgetDto(mockDto);
+        const widgetNoStyle = { ...widget, styleOptions: {} } as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetNoStyle);
+
+        expect(resWidgetDto.subtype).toBe('areamap/world');
+      });
+
+      it('should always emit geo and color panels even when slots are empty', () => {
+        const mockDto = makeAreamapWidgetDto('areamap/world');
+        const widget = fromWidgetDto(mockDto);
+        const widgetWithNoSlots = {
+          ...widget,
+          dataOptions: { geo: [], color: undefined },
+        } as unknown as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetWithNoSlots);
+
+        const nonFilterPanels = resWidgetDto.metadata.panels.filter(
+          ({ name }) => name !== 'filters',
+        );
+        expect(nonFilterPanels.map(({ name }) => name)).toEqual(['geo', 'color']);
+        nonFilterPanels.forEach((panel) => expect(panel.items).toEqual([]));
+      });
+
+      it('should still include the filters panel even when no data filters are set', () => {
+        const mockDto = makeAreamapWidgetDto('areamap/world');
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        const filterPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'filters');
+        expect(filterPanel).toBeDefined();
+        expect(filterPanel!.items).toEqual([]);
+      });
     });
 
     it('should create a valid WidgetDto for the "polar" chart with Filters', () => {
@@ -194,8 +766,7 @@ describe('WidgetModelTranslator', () => {
       const filterPanel = resWidgetDto.metadata.panels.filter(({ name }) => name === 'filters');
       expect(filterPanel.length).toBe(1);
       const valuesPanel = resWidgetDto.metadata.panels.filter(({ name }) => name === 'values');
-      expect(valuesPanel.length).toBe(1);
-      expect(valuesPanel[0].items.length).toBe(0);
+      expect(valuesPanel.length).toBe(0);
       const sizePanel = resWidgetDto.metadata.panels.filter(({ name }) => name === 'size');
       expect(sizePanel.length).toBe(1);
       expect(sizePanel[0].items.length).toBe(1);
@@ -212,6 +783,130 @@ describe('WidgetModelTranslator', () => {
         pivotMock.type = 'pivot2';
         getWidgetTransformChain(pivotMock);
       }).toThrow();
+    });
+  });
+
+  describe('fromPivotTableWidgetProps + toWidgetDto', () => {
+    const mockPivotWidgetDto = samplePivotDashboard.widgets![0] as unknown as WidgetDto;
+
+    const getPivotWidgetTransformChain = (widgetDto: WidgetDto) => {
+      const widget = fromWidgetDto(widgetDto);
+      const pivotProps = toPivotTableWidgetProps(widget);
+      const widgetFromPivot = fromPivotTableWidgetProps(pivotProps);
+      return { widget, pivotProps, widgetFromPivot };
+    };
+
+    it('should create a valid WidgetDto for the "pivot" widget with type, subtype, and filters panel', () => {
+      const { widgetFromPivot } = getPivotWidgetTransformChain(mockPivotWidgetDto);
+      expect(widgetFromPivot.widgetType).toBe('pivot');
+
+      resWidgetDto = toWidgetDto(widgetFromPivot);
+
+      expect(resWidgetDto.type).toBe('pivot2');
+      expect(resWidgetDto.subtype).toBe('pivot2');
+      expect(resWidgetDto.metadata.panels.filter(({ name }) => name === 'filters').length).toBe(1);
+    });
+
+    it('should emit rows, columns, and values panels with the original items preserved', () => {
+      const { widgetFromPivot } = getPivotWidgetTransformChain(mockPivotWidgetDto);
+
+      resWidgetDto = toWidgetDto(widgetFromPivot);
+
+      const rowsPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'rows');
+      const columnsPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'columns');
+      const valuesPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'values');
+
+      expect(rowsPanel).toBeDefined();
+      expect(columnsPanel).toBeDefined();
+      expect(valuesPanel).toBeDefined();
+
+      expect(rowsPanel!.items).toHaveLength(1);
+      expect((rowsPanel!.items[0].jaql as any).dim).toBe('[Brand.Brand]');
+
+      expect(columnsPanel!.items).toHaveLength(1);
+      expect((columnsPanel!.items[0].jaql as any).dim).toBe('[Commerce.Gender]');
+
+      expect(valuesPanel!.items).toHaveLength(1);
+      expect((valuesPanel!.items[0].jaql as any).dim).toBe('[Commerce.Cost]');
+      expect((valuesPanel!.items[0].jaql as any).agg).toBe('sum');
+    });
+
+    it('should translate style options (colors, pageSize, automaticHeight)', () => {
+      const { widgetFromPivot } = getPivotWidgetTransformChain(mockPivotWidgetDto);
+
+      resWidgetDto = toWidgetDto(widgetFromPivot);
+
+      const expectedStyle = mockPivotWidgetDto.style as PivotWidgetStyle;
+      const resultStyle = resWidgetDto.style as PivotWidgetStyle;
+
+      expect(resultStyle.pageSize).toBe(expectedStyle.pageSize);
+      expect(resultStyle.automaticHeight).toBe(expectedStyle.automaticHeight);
+      expect(resultStyle.colors).toMatchObject({
+        rows: expectedStyle.colors!.rows,
+        columns: expectedStyle.colors!.columns,
+        headers: expectedStyle.colors!.headers,
+        members: expectedStyle.colors!.members,
+        totals: expectedStyle.colors!.totals,
+      });
+    });
+
+    it('should write grandTotals from dataOptions back into style.rowsGrandTotal/columnsGrandTotal', () => {
+      const { widgetFromPivot } = getPivotWidgetTransformChain(mockPivotWidgetDto);
+      const widgetWithGrandTotals = {
+        ...widgetFromPivot,
+        dataOptions: {
+          ...(widgetFromPivot.dataOptions as PivotTableDataOptions),
+          grandTotals: { rows: true, columns: false },
+        } as PivotTableDataOptions,
+      };
+
+      resWidgetDto = toWidgetDto(widgetWithGrandTotals);
+
+      const resultStyle = resWidgetDto.style as PivotWidgetStyle;
+      expect(resultStyle.rowsGrandTotal).toBe(true);
+      expect(resultStyle.columnsGrandTotal).toBe(false);
+    });
+
+    it('should omit rowsGrandTotal/columnsGrandTotal when dataOptions.grandTotals is absent', () => {
+      const { widgetFromPivot } = getPivotWidgetTransformChain(mockPivotWidgetDto);
+
+      resWidgetDto = toWidgetDto(widgetFromPivot);
+
+      const resultStyle = resWidgetDto.style as PivotWidgetStyle;
+      expect(resultStyle.rowsGrandTotal).toBeUndefined();
+      expect(resultStyle.columnsGrandTotal).toBeUndefined();
+    });
+
+    it('should map custom PivotTableWidgetStyleOptions fields to the DTO style shape', () => {
+      const { widgetFromPivot } = getPivotWidgetTransformChain(mockPivotWidgetDto);
+      const customizedWidget = {
+        ...widgetFromPivot,
+        styleOptions: {
+          ...(widgetFromPivot.styleOptions as PivotTableWidgetStyleOptions),
+          rowsPerPage: 50,
+          isAutoHeight: false,
+          rowHeight: 30,
+          alternatingRowsColor: false,
+          alternatingColumnsColor: true,
+          headersColor: true,
+          membersColor: true,
+          totalsColor: true,
+        } as PivotTableWidgetStyleOptions,
+      };
+
+      resWidgetDto = toWidgetDto(customizedWidget);
+
+      const resultStyle = resWidgetDto.style as PivotWidgetStyle;
+      expect(resultStyle.pageSize).toBe(50);
+      expect(resultStyle.automaticHeight).toBe(false);
+      expect(resultStyle.rowHeight).toBe(30);
+      expect(resultStyle.colors).toEqual({
+        rows: false,
+        columns: true,
+        headers: true,
+        members: true,
+        totals: true,
+      });
     });
   });
 

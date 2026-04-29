@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { sisenseFusionPlugin } from './vite-plugin-fusion.js';
@@ -8,6 +8,10 @@ vi.mock('node:fs', () => ({
   readFileSync: vi.fn(),
   writeFileSync: vi.fn(),
   rmSync: vi.fn(),
+}));
+
+vi.mock('vite', () => ({
+  build: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('vite-plugin-css-injected-by-js', () => ({
@@ -25,6 +29,7 @@ vi.mock('vite-plugin-dts', () => ({
 const mockedExistsSync = vi.mocked(existsSync);
 const mockedReadFileSync = vi.mocked(readFileSync);
 const mockedWriteFileSync = vi.mocked(writeFileSync);
+const mockedRmSync = vi.mocked(rmSync);
 const VALID_MANIFEST = `export default { name: 'my-plugin', customWidget: { visualization: {} } }`;
 const MANIFEST_PATH = 'src/index.tsx';
 
@@ -36,9 +41,17 @@ interface FusionPlugin {
     config: unknown,
     env: { command: string; mode: string },
   ): {
-    build: { lib: { entry: string; name: string; formats: string[]; fileName: () => string } };
+    build: {
+      lib: { entry: string; name: string; formats: string[]; fileName: () => string };
+      rollupOptions?: { onwarn?: (warning: { code: string }, warn: (w: unknown) => void) => void };
+    };
   } | null;
-  closeBundle(): void;
+  configResolved(config: { css?: unknown }): void;
+  closeBundle(): void | Promise<void>;
+}
+
+interface CleanDistPlugin {
+  buildStart(): void;
 }
 
 function getFusionPlugin(argv: string[] = ['node', 'script.js']): FusionPlugin {
@@ -49,6 +62,14 @@ function getFusionPlugin(argv: string[] = ['node', 'script.js']): FusionPlugin {
   );
   if (!plugin) throw new Error('sisense-fusion-vite-plugin not found in plugin list');
   return plugin as unknown as FusionPlugin;
+}
+
+function getCleanDistPlugin(argv: string[] = ['node', 'script.js']): CleanDistPlugin {
+  process.argv = argv;
+  const plugins = sisenseFusionPlugin({ manifest: MANIFEST_PATH });
+  const plugin = plugins.find((p) => (p as { name?: string }).name === 'sisense-clean-dist');
+  if (!plugin) throw new Error('sisense-clean-dist not found in plugin list');
+  return plugin as unknown as CleanDistPlugin;
 }
 
 describe('sisenseFusionPlugin', () => {
@@ -86,20 +107,26 @@ describe('sisenseFusionPlugin', () => {
       expect(() => sisenseFusionPlugin({ manifest: MANIFEST_PATH })).not.toThrow();
     });
 
-    it('returns 4 plugins in non-fusion mode (cleanDist, css, fusionFiles, dts)', () => {
+    it('returns 5 plugins in csdk mode (cleanDist, title, css, fusionFiles, dts)', () => {
       const plugins = sisenseFusionPlugin({ manifest: MANIFEST_PATH });
-      expect(plugins).toHaveLength(4);
+      expect(plugins).toHaveLength(5);
     });
 
-    it('returns 4 plugins in fusion mode (cleanDist, css, fusionFiles, zip)', () => {
+    it('ignores unrecognized flags and defaults to csdk mode', () => {
+      process.argv = ['node', 'script.js', '--react', '--preact'];
+      const plugins = sisenseFusionPlugin({ manifest: MANIFEST_PATH });
+      expect(plugins).toHaveLength(5); // dts, not zip — csdk mode
+    });
+
+    it('returns 5 plugins in fusion mode (cleanDist, title, css, fusionFiles, zip)', () => {
       process.argv = ['node', 'script.js', '--fusion'];
       const plugins = sisenseFusionPlugin({ manifest: MANIFEST_PATH });
-      expect(plugins).toHaveLength(4);
+      expect(plugins).toHaveLength(5);
     });
   });
 
   describe('config', () => {
-    it('returns es format with manifest entry in non-fusion mode', () => {
+    it('returns es format with manifest entry in csdk mode', () => {
       const plugin = getFusionPlugin();
       const result = plugin.config({}, { command: 'build', mode: 'production' });
       expect(result!.build.lib.formats).toEqual(['es']);
@@ -128,6 +155,43 @@ describe('sisenseFusionPlugin', () => {
     it('returns null for non-build commands', () => {
       const plugin = getFusionPlugin();
       expect(plugin.config({}, { command: 'serve', mode: 'development' })).toBeNull();
+    });
+
+    it('returns es format with manifest entry in react mode', () => {
+      const plugin = getFusionPlugin(['node', 'script.js', '--react']);
+      const result = plugin.config({}, { command: 'build', mode: 'production' });
+      expect(result!.build.lib.formats).toEqual(['es']);
+      expect(result!.build.lib.entry).toBe('./src/index.tsx');
+    });
+
+    it('returns es format with manifest entry in preact mode', () => {
+      const plugin = getFusionPlugin(['node', 'script.js', '--preact']);
+      const result = plugin.config({}, { command: 'build', mode: 'production' });
+      expect(result!.build.lib.formats).toEqual(['es']);
+      expect(result!.build.lib.entry).toBe('./src/index.tsx');
+    });
+
+    it('fileName returns main.js in preact mode', () => {
+      const plugin = getFusionPlugin(['node', 'script.js', '--preact']);
+      const result = plugin.config({}, { command: 'build', mode: 'production' });
+      expect(result!.build.lib.fileName()).toBe('main.js');
+    });
+
+    it('fileName returns main.js in fusion mode', () => {
+      const plugin = getFusionPlugin(['node', 'script.js', '--fusion']);
+      const result = plugin.config({}, { command: 'build', mode: 'production' });
+      expect(result!.build.lib.fileName()).toBe('main.js');
+    });
+
+    it('onwarn passes through non-MODULE_LEVEL_DIRECTIVE warnings', () => {
+      const plugin = getFusionPlugin();
+      const result = plugin.config({}, { command: 'build', mode: 'production' });
+      const { onwarn } = result!.build.rollupOptions!;
+      const mockWarn = vi.fn();
+      onwarn!({ code: 'MODULE_LEVEL_DIRECTIVE' }, mockWarn);
+      expect(mockWarn).not.toHaveBeenCalled();
+      onwarn!({ code: 'OTHER_WARNING' }, mockWarn);
+      expect(mockWarn).toHaveBeenCalledWith({ code: 'OTHER_WARNING' });
     });
   });
 
@@ -158,10 +222,29 @@ describe('sisenseFusionPlugin', () => {
       expect(String(pathArg)).toContain('plugin.json');
     });
 
-    it('does not write anything in non-fusion mode', () => {
+    it('does not write anything in csdk mode', async () => {
       const plugin = getFusionPlugin();
-      plugin.closeBundle();
+      await plugin.closeBundle();
       expect(mockedWriteFileSync).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('configResolved', () => {
+    it('captures css options from the resolved config', () => {
+      const plugin = getFusionPlugin();
+      // Should not throw — the hook captures css for use in the second vite pass
+      expect(() => plugin.configResolved({ css: { preprocessorOptions: {} } })).not.toThrow();
+    });
+  });
+
+  describe('cleanDistPlugin', () => {
+    it('buildStart removes the dist folder', () => {
+      const plugin = getCleanDistPlugin();
+      plugin.buildStart();
+      expect(mockedRmSync).toHaveBeenCalledWith(expect.stringContaining('dist'), {
+        recursive: true,
+        force: true,
+      });
     });
   });
 });

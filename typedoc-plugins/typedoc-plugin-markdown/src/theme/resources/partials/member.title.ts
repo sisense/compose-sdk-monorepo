@@ -13,7 +13,7 @@ export function memberTitle(
 ): string {
   const md: string[] = [];
 
-  md.push(`${escapeChars(reflection.name)}`);
+  md.push(`${escapeChars(reflection.name, context.options.getValue('useHTMLEncodedBrackets') as boolean)}`);
 
   /** CSDK START */
   md.push(context.memberBadge(reflection));

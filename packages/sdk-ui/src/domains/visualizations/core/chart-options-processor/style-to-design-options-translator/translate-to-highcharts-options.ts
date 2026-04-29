@@ -91,6 +91,7 @@ const getNavigator = (navigator: Navigator | undefined): Navigator => {
     ? {
         enabled: true,
         scrollerLocation: navigator?.scrollerLocation,
+        onScrollerChange: navigator?.onScrollerChange,
       }
     : { enabled: false };
 };

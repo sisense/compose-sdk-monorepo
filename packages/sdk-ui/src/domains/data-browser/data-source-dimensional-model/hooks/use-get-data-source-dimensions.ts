@@ -8,6 +8,7 @@ import {
 } from '@sisense/sdk-data';
 
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context.js';
+import { withTracking } from '@/infra/decorators/hook-decorators/with-tracking.js';
 
 import { useGetDataSourceFields } from './use-get-data-source-fields.js';
 
@@ -90,14 +91,15 @@ export interface GetDataSourceDimensionsParams {
 }
 
 /**
- * Gets the dimensions of a data source.
+ * {@link useGetDataSourceDimensions} without tracking to be used inside other hooks or components.
  *
  * @param params - The parameters for getting the dimensions
  * @returns The dimensions state
+ * @internal
  */
-export const useGetDataSourceDimensions = (
+export function useGetDataSourceDimensionsInternal(
   params: GetDataSourceDimensionsParams,
-): DataSourceDimensionsState => {
+): DataSourceDimensionsState {
   const { dataSource, enabled = true, count, offset, searchValue } = params;
   const { app } = useSisenseContext();
 
@@ -107,6 +109,7 @@ export const useGetDataSourceDimensions = (
     count,
     offset,
     searchValue,
+    cacheTime: 0,
   });
 
   const dataSourceToQuery = dataSource || app?.defaultDataSource;
@@ -163,4 +166,18 @@ export const useGetDataSourceDimensions = (
     default:
       throw new Error(`Unknown status: ${status}`);
   }
+}
+
+/**
+ * Gets the dimensions of a data source.
+ *
+ * @param params - The parameters for getting the dimensions
+ * @returns The dimensions state
+ * @group Fusion Assets
+ * @fusionEmbed
+ */
+export const useGetDataSourceDimensions = (
+  params: GetDataSourceDimensionsParams,
+): DataSourceDimensionsState => {
+  return withTracking('useGetDataSourceDimensions')(useGetDataSourceDimensionsInternal)(params);
 };

@@ -13,8 +13,8 @@ import {
  * Options for {@link useGetWidgetNarrative}.
  *
  * @remarks
- * Narration endpoints and flags default from `app.settings` on {@link useSisenseContext} when
- * `isUnifiedNarrationEnabled` / `isSisenseAiEnabled` are omitted. Optional overrides match the
+ * Narration endpoints and flags default from `app.settings.narrative` on {@link useSisenseContext} when
+ * `isUnified` / `isSisenseAiEnabled` are omitted. Optional overrides match the
  * imperative `getNlgInsightsFromWidget` helper for per-call behavior.
  * @sisenseInternal
  */

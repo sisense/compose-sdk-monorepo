@@ -20,8 +20,8 @@ Display two dashboard widgets from a Fusion instance.
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=fusion-assets%2Ffusion-widgets&mode=docs'
- width=800
- height=870
+ width='800'
+ height='870'
  style='border:none;'
 />
 

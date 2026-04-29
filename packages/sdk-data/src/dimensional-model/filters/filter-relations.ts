@@ -387,6 +387,10 @@ function removeFilterFromRelations(
     return relations.instanceid === filter.config.guid ? null : relations;
   }
 
+  if (!isRelationsRule(relations)) {
+    throw new UnknownRelationsNodeError();
+  }
+
   const leftAfterRemoval = removeFilterFromRelations(filter, relations.left);
   const rightAfterRemoval = removeFilterFromRelations(filter, relations.right);
 
@@ -500,6 +504,62 @@ function isFilterNode(node: FilterRelationsNode): node is Filter {
 }
 
 /**
+ * Wraps a nested {@link FilterRelationsModel} child in `ParenthesizedLogicalExpression` so Fusion
+ * receives explicit grouping for any logical subgroup (same or mixed AND/OR). Identifier and
+ * bracket nodes are left unchanged.
+ */
+function wrapNestedLogicalSubgroupForFusion(
+  child: FilterRelationsModelNode,
+): FilterRelationsModelNode {
+  if (child.type === 'LogicalExpression') {
+    return {
+      type: 'ParenthesizedLogicalExpression',
+      value: child,
+    };
+  }
+  return child;
+}
+
+/**
+ * Ensures every nested logical subtree under a {@link FilterRelationsModel} is wrapped in
+ * `ParenthesizedLogicalExpression` (covers same-operator chains and mixed AND/OR precedence).
+ *
+ * Idempotent: safe to call on an already-parenthesized model.
+ *
+ * @internal
+ */
+export function parenthesizeNestedLogicalSubgroupsInFilterRelationsModel(
+  node: FilterRelationsModelNode,
+): FilterRelationsModelNode {
+  if (node.type === 'Identifier' || node.type === 'CascadingIdentifier') {
+    return node;
+  }
+  if (node.type === 'ParenthesizedLogicalExpression') {
+    return {
+      type: 'ParenthesizedLogicalExpression',
+      value: parenthesizeNestedLogicalSubgroupsInFilterRelationsModel(node.value),
+    };
+  }
+  if (node.type === 'LogicalExpression') {
+    const left = parenthesizeNestedLogicalSubgroupsInFilterRelationsModel(node.left);
+    const right = parenthesizeNestedLogicalSubgroupsInFilterRelationsModel(node.right);
+    return {
+      type: 'LogicalExpression',
+      operator: node.operator,
+      left: wrapNestedLogicalSubgroupForFusion(left),
+      right: wrapNestedLogicalSubgroupForFusion(right),
+    };
+  }
+  return assertUnreachableFilterRelationsModelNode(node);
+}
+
+function assertUnreachableFilterRelationsModelNode(value: never): FilterRelationsModelNode {
+  throw new TranslatableError('errors.filter.unexpectedFilterRelationsModelNode', {
+    node: JSON.stringify(value as unknown),
+  });
+}
+
+/**
  * Converts internal CSDK filter relations rules to filter relations model for Fusion.
  *
  * @internal
@@ -533,20 +593,19 @@ export function filterRelationRulesToFilterRelationsModel(
           instanceId: node.instanceid,
         };
       }
-    } else if (isRelationsRule(node)) {
-      // Build a LogicalExpression node
+    }
+    if (isRelationsRule(node)) {
       return {
         type: 'LogicalExpression',
         operator: node.operator,
         left: traverse(node.left),
         right: traverse(node.right),
       };
-    } else {
-      throw new Error('Unknown node type in filter relations rules.');
     }
+    throw new Error('Unknown node type in filter relations rules.');
   }
 
-  return traverse(filterRelationRules);
+  return parenthesizeNestedLogicalSubgroupsInFilterRelationsModel(traverse(filterRelationRules));
 }
 
 /**

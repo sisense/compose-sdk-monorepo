@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Navigator } from '@sisense/sdk-ui';
 
 import { TogglerSection } from '../shared/TogglerSection.js';

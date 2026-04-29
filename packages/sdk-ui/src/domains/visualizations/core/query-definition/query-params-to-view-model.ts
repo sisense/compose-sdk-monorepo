@@ -1,3 +1,4 @@
+import type { TFunction } from '@sisense/sdk-common';
 import type {
   Attribute,
   Filter,
@@ -5,21 +6,33 @@ import type {
   FilterRelationsNode,
   Measure,
 } from '@sisense/sdk-data';
+import { getColumnNameFromAttribute, isDimensionalLevelAttribute } from '@sisense/sdk-data';
 
 import type { BaseQueryParams } from '@/domains/query-execution/types';
+import { generateAttributeName } from '@/shared/utils/generate-attribute-name';
 
 import type { QueryDefinitionViewModel, QueryPillItem } from './types';
 
-function getAttributeLabel(attr: Attribute): string {
-  return attr.name ?? String(attr);
+/** Pill label for a dimension (or filter) attribute; `t` enables date-level strings via {@link generateAttributeName}. */
+function getAttributeLabel(attr: Attribute, t?: TFunction): string {
+  const fallback = attr.name ?? String(attr);
+  if (t && isDimensionalLevelAttribute(attr)) {
+    return generateAttributeName(t, getColumnNameFromAttribute(attr), attr.granularity);
+  }
+  return fallback;
 }
 
+/** Pill label from measure display name. */
 function getMeasureLabel(measure: Measure): string {
   return measure.name ?? String(measure);
 }
 
-function getFilterLabel(filter: Filter): string {
-  return filter.attribute?.name;
+/** Pill label from filter attribute; empty when the filter has no attribute. */
+function getFilterLabel(filter: Filter, t?: TFunction): string {
+  if (!filter.attribute) {
+    return '';
+  }
+  return getAttributeLabel(filter.attribute, t);
 }
 
 /**
@@ -28,10 +41,16 @@ function getFilterLabel(filter: Filter): string {
  * Operators (comparison/sort) are not derived from BaseQueryParams in v1.
  *
  * @param params - BaseQueryParams from chart or query
+ * @param t - Optional i18n translate function. When provided, date-level (`DimensionalLevelAttribute`)
+ *   dimensions and filters use `attribute.datetimeName.*` strings (e.g. "Months in Date"). When omitted,
+ *   labels match the previous behavior (`attr.name` only).
  * @returns QueryDefinitionViewModel (pills and connectors)
- * @internal
+ * @sisenseInternal
  */
-export function baseQueryParamsToViewModel(params: BaseQueryParams): QueryDefinitionViewModel {
+export function baseQueryParamsToViewModel(
+  params: BaseQueryParams,
+  t?: TFunction,
+): QueryDefinitionViewModel {
   const result: QueryDefinitionViewModel = [];
   const measures = params.measures ?? [];
   const dimensions = params.dimensions ?? [];
@@ -58,11 +77,12 @@ export function baseQueryParamsToViewModel(params: BaseQueryParams): QueryDefini
 
   // Dimensions
   dimensions.forEach((d, i) => {
+    const label = getAttributeLabel(d, t);
     result.push({
       type: 'pill',
-      label: getAttributeLabel(d),
+      label,
       category: 'dimension',
-      id: `dimension-${i}-${getAttributeLabel(d)}`,
+      id: `dimension-${i}-${label}`,
       tooltipData: d,
     });
   });
@@ -72,7 +92,7 @@ export function baseQueryParamsToViewModel(params: BaseQueryParams): QueryDefini
   }
 
   const filterToModel = (f: Filter, i: number): QueryPillItem => {
-    const label = getFilterLabel(f) ?? '';
+    const label = getFilterLabel(f, t);
     return {
       type: 'pill',
       label,
@@ -82,27 +102,27 @@ export function baseQueryParamsToViewModel(params: BaseQueryParams): QueryDefini
     };
   };
   const filterRelationsToModel = (f: FilterRelations, i: number): QueryDefinitionViewModel => {
-    const result: QueryDefinitionViewModel = [];
-    result.push({ type: 'connector', label: '(' });
+    const relationResult: QueryDefinitionViewModel = [];
+    relationResult.push({ type: 'connector', label: '(' });
     const pushNode = (node: FilterRelationsNode) => {
       if ((node as Filter).attribute) {
-        result.push(filterToModel(node as Filter, i));
+        relationResult.push(filterToModel(node as Filter, i));
       } else if (Array.isArray(node)) {
         node.forEach((leftFilter, idx) => {
           if (idx > 0) {
-            result.push({ type: 'connector', label: 'AND' });
+            relationResult.push({ type: 'connector', label: 'AND' });
           }
-          result.push(filterToModel(leftFilter, i + idx));
+          relationResult.push(filterToModel(leftFilter, i + idx));
         });
       } else {
-        result.push(...filterRelationsToModel(node as FilterRelations, i + 1));
+        relationResult.push(...filterRelationsToModel(node as FilterRelations, i + 1));
       }
     };
     pushNode(f.left);
-    result.push({ type: 'connector', label: f.operator });
+    relationResult.push({ type: 'connector', label: f.operator });
     pushNode(f.right);
-    result.push({ type: 'connector', label: ')' });
-    return result;
+    relationResult.push({ type: 'connector', label: ')' });
+    return relationResult;
   };
   // Filters
   filters.forEach((f, i) => {

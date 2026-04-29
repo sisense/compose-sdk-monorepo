@@ -377,33 +377,25 @@ const getBoxplotDataPoint = (
       } as DataPointEntry,
     ];
   } else {
+    const toValueEntry = (
+      option: StyledMeasureColumn | undefined,
+      raw: number | undefined,
+    ): DataPointEntry | undefined =>
+      option
+        ? ({
+            ...getDataPointMetadata(option),
+            value: raw,
+            displayValue: createFormatter(option)(raw),
+          } as DataPointEntry)
+        : undefined;
+
     entries.value = [
-      {
-        ...getDataPointMetadata(dataOptions.boxMin),
-        value: point.options.q1!,
-        displayValue: createFormatter(dataOptions.boxMin)(point.options.q1),
-      },
-      {
-        ...getDataPointMetadata(dataOptions.boxMedian),
-        value: point.options.median!,
-        displayValue: createFormatter(dataOptions.boxMedian)(point.options.median),
-      },
-      {
-        ...getDataPointMetadata(dataOptions.boxMax),
-        value: point.options.q3!,
-        displayValue: createFormatter(dataOptions.boxMax)(point.options.q3),
-      },
-      {
-        ...getDataPointMetadata(dataOptions.whiskerMin),
-        value: point.options.low!,
-        displayValue: createFormatter(dataOptions.whiskerMin)(point.options.low),
-      },
-      {
-        ...getDataPointMetadata(dataOptions.whiskerMax),
-        value: point.options.high!,
-        displayValue: createFormatter(dataOptions.whiskerMax)(point.options.high),
-      },
-    ];
+      toValueEntry(dataOptions.boxMin, point.options.q1),
+      toValueEntry(dataOptions.boxMedian, point.options.median),
+      toValueEntry(dataOptions.boxMax, point.options.q3),
+      toValueEntry(dataOptions.whiskerMin, point.options.low),
+      toValueEntry(dataOptions.whiskerMax, point.options.high),
+    ].filter((e): e is DataPointEntry => e !== undefined);
   }
 
   if (dataOptions.category) {

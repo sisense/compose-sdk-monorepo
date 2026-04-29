@@ -92,6 +92,6 @@ export function someType(
   }
 
   return /(\||\`)/g.test(someType?.toString())
-    ? escapeChars(someType?.toString())
+    ? escapeChars(someType?.toString(), context.options.getValue('useHTMLEncodedBrackets') as boolean)
     : backTicks(someType?.toString());
 }

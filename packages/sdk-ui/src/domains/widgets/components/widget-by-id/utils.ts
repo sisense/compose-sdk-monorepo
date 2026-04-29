@@ -65,6 +65,19 @@ const chartTypeToFusionWidgetType: Record<ChartType, FusionWidgetType> = Object.
 }, {} as Record<ChartType, FusionWidgetType>);
 
 /**
+ * Returns `true` when a panel item's jaql represents a measure — either a base-measure
+ * aggregation (`jaql.agg`) or a calculated measure (`jaql.formula`). Mirrors Fusion's
+ * `isMeasure` dimension helper so CSDK code can evaluate the same "is measure?" checks
+ * Fusion's widget manifests rely on.
+ *
+ * @internal
+ */
+export function isMeasurePanelItem(item: PanelItem): boolean {
+  const jaql = item.jaql;
+  return ('agg' in jaql && !!jaql.agg) || ('formula' in jaql && !!jaql.formula);
+}
+
+/**
  * Returns the corresponding chart type for a given widget type
  *
  * @internal

@@ -78,7 +78,7 @@ export async function getNlgInsightsFromWidget(
     throw new Error('Only chart or pivot widget props are supported');
   }
   const response = await getNarrative(httpClient, request, {
-    isUnifiedNarrationEnabled: options?.isUnifiedNarrationEnabled,
+    isUnified: options?.isUnified,
     isSisenseAiEnabled: options?.isSisenseAiEnabled,
   });
 

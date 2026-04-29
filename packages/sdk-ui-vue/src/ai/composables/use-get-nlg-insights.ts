@@ -9,6 +9,7 @@ import { toRefs, watch } from 'vue';
 
 import { useTracking } from '../../composables/use-tracking.js';
 import { useReducer } from '../../helpers/use-reducer.js';
+import { getSisenseContext } from '../../providers';
 import type { MaybeRefOrWithRefs, ToRefsExceptFns } from '../../types';
 import { collectRefs, toPlainObject } from '../../utils.js';
 import { getAiContext } from '../providers/index.js';
@@ -66,12 +67,17 @@ export const useGetNlgInsights = (
   });
 
   const aiContext = getAiContext();
+  const sisenseContext = getSisenseContext();
 
   const runGetNlgInsights = async (api: ChatRestApi) => {
     try {
       dispatch({ type: 'loading' });
       const payload = prepareGetNlgInsightsPayload(toPlainObject(params));
-      const response = await api?.ai.getNlgInsights(payload);
+      const narrative = sisenseContext.value.app?.settings?.narrative;
+      const response = await api?.ai.getNlgInsights(payload, {
+        isUnified: narrative?.isUnified ?? false,
+        isSisenseAiEnabled: narrative?.isSisenseAiEnabled ?? false,
+      });
 
       dispatch({ type: 'success', data: response?.data?.answer });
     } catch (error) {
@@ -80,7 +86,7 @@ export const useGetNlgInsights = (
   };
 
   watch(
-    [...collectRefs(params), aiContext],
+    [...collectRefs(params), aiContext, sisenseContext],
     () => {
       const { api } = aiContext.value;
       const { enabled } = toPlainObject(params);

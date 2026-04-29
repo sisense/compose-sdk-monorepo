@@ -1,6 +1,7 @@
 import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types';
 import { PolarChartDesignOptions } from '../../../translations/design-options.js';
 import {
+  areAllDatetimeXAxes,
   getXAxisOrientation,
   hasSecondaryYAxis,
   isContinuousDatetimeXAxis,
@@ -172,6 +173,49 @@ describe('axis-builders', () => {
     it('should return false for empty array', () => {
       const yAxisSide: number[] = [];
       expect(hasSecondaryYAxis(yAxisSide)).toBe(false);
+    });
+  });
+
+  describe('areAllDatetimeXAxes', () => {
+    it('returns true when every X-axis is a datetime column', () => {
+      const xDataOptions = [
+        { column: { type: 'datetime', name: 'Year' } },
+        { column: { type: 'datetime', name: 'Month' } },
+      ] as CartesianChartDataOptionsInternal['x'];
+
+      expect(areAllDatetimeXAxes(xDataOptions)).toBe(true);
+    });
+
+    it('returns true for a single datetime X-axis', () => {
+      const xDataOptions = [
+        { column: { type: 'datetime', name: 'Date' } },
+      ] as CartesianChartDataOptionsInternal['x'];
+
+      expect(areAllDatetimeXAxes(xDataOptions)).toBe(true);
+    });
+
+    it('returns false when at least one X-axis is not datetime', () => {
+      const xDataOptions = [
+        { column: { type: 'datetime', name: 'Date' } },
+        { column: { type: 'text', name: 'Category' } },
+      ] as CartesianChartDataOptionsInternal['x'];
+
+      expect(areAllDatetimeXAxes(xDataOptions)).toBe(false);
+    });
+
+    it('returns false when no X-axes are datetime', () => {
+      const xDataOptions = [
+        { column: { type: 'text', name: 'Category' } },
+        { column: { type: 'numeric', name: 'Revenue' } },
+      ] as CartesianChartDataOptionsInternal['x'];
+
+      expect(areAllDatetimeXAxes(xDataOptions)).toBe(false);
+    });
+
+    it('returns true for an empty array (vacuous truth of Array.every)', () => {
+      const xDataOptions = [] as CartesianChartDataOptionsInternal['x'];
+
+      expect(areAllDatetimeXAxes(xDataOptions)).toBe(true);
     });
   });
 

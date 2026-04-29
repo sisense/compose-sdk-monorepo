@@ -341,14 +341,14 @@ const translateNumbersToSeriesPointStructure = (
       return { y: null };
     }
 
-    const { value, blur, color, rawValue, xValue } = input[index];
+    const { value, blur, color, rawValue, xValue, xDisplayValue } = input[index];
     if (categories) {
       return {
         name: categories[index],
         y: value,
         color: color ?? categoryColors?.[index],
         ...(hasHighlighted && !blur && { selected: true }),
-        custom: { rawValue, xValue },
+        custom: { rawValue, xValue, xDisplayValue: xDisplayValue || xValue },
       };
     } else {
       const shouldShowIsolatedPoint = isIsolatedPoint(input, indexMap, index, indexOfIndex);
@@ -362,7 +362,7 @@ const translateNumbersToSeriesPointStructure = (
         selected: !!blur,
         ...(hasMarker && { marker }),
         ...(color && { color }),
-        custom: { rawValue, xValue },
+        custom: { rawValue, xValue, xDisplayValue: xDisplayValue || xValue },
       };
     }
   });

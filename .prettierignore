@@ -17,3 +17,6 @@ CHANGELOG_INTERNAL.md
 
 # Ignore yarn configuration file:
 .yarnrc.yml
+
+# Ingore generated reports
+.reports/

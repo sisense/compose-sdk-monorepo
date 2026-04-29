@@ -16,8 +16,8 @@ Sunburst chart displaying total revenue, categorized by condition and age range,
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts%2Fsunburst-chart&mode=docs'
- width=800
- height=870
+ width='800'
+ height='870'
  style='border:none;'
 />
 

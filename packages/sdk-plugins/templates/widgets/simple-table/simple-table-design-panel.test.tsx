@@ -1,5 +1,4 @@
-import React from 'react';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -125,6 +124,56 @@ describe('SimpleTableDesignPanel', () => {
         fontSize: 14,
       }),
     );
+  });
+
+  describe('fallback values for undefined options', () => {
+    it('shows default headerBackgroundColor when styleOptions.headerBackgroundColor is undefined', () => {
+      render(
+        <SimpleTableDesignPanel
+          styleOptions={{ headerBackgroundColor: undefined }}
+          onChange={mockOnChange}
+        />,
+      );
+      expect(screen.getByLabelText('Header Background Color')).toHaveValue('#1976d2');
+    });
+
+    it('shows default headerTextColor when styleOptions.headerTextColor is undefined', () => {
+      render(
+        <SimpleTableDesignPanel
+          styleOptions={{ headerTextColor: undefined }}
+          onChange={mockOnChange}
+        />,
+      );
+      expect(screen.getByLabelText('Header Text Color')).toHaveValue('#ffffff');
+    });
+
+    it('shows default cellPadding when styleOptions.cellPadding is undefined', () => {
+      render(
+        <SimpleTableDesignPanel
+          styleOptions={{ cellPadding: undefined }}
+          onChange={mockOnChange}
+        />,
+      );
+      expect(screen.getByLabelText('Cell Padding (px)')).toHaveValue(4);
+    });
+
+    it('shows default fontSize when styleOptions.fontSize is undefined', () => {
+      render(
+        <SimpleTableDesignPanel styleOptions={{ fontSize: undefined }} onChange={mockOnChange} />,
+      );
+      expect(screen.getByLabelText('Font Size (px)')).toHaveValue(14);
+    });
+
+    it('falls back to 1 when fontSize input is cleared', () => {
+      render(<SimpleTableDesignPanel styleOptions={defaultStyleOptions} onChange={mockOnChange} />);
+      vi.runAllTimers();
+      mockOnChange.mockClear();
+
+      fireEvent.change(screen.getByLabelText('Font Size (px)'), { target: { value: '' } });
+      vi.runAllTimers();
+
+      expect(mockOnChange).toHaveBeenCalledWith(expect.objectContaining({ fontSize: 1 }));
+    });
   });
 
   describe('color inputs (debounced)', () => {

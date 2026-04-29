@@ -7,6 +7,7 @@ import { NARRATIVE_BY_CSDK } from './narrative-constants.js';
  * Adds `by: NARRATIVE_BY_CSDK` to the request.
  * Somehow, the endpoint returns "400 - The jaql failed to run. Provide a valid jaql."
  * for JAQL with trend or forecast if the `by` is not set.
+ *
  * @internal
  */
 function withNarrativeRequestBy(request: NarrativeRequest): NarrativeRequest {
@@ -37,7 +38,7 @@ function isUnifiedNarrativeEndpointMissing(error: unknown): boolean {
  * @internal
  */
 export type GetNarrativeOptions = {
-  isUnifiedNarrationEnabled?: boolean;
+  isUnified?: boolean;
   isSisenseAiEnabled?: boolean;
 };
 
@@ -58,12 +59,12 @@ async function fetchUnifiedNarrativeWithFallback(
 }
 
 /**
- * Fetches Narrative. Single place for endpoint logic: isUnifiedNarrationEnabled === false → legacy only;
+ * Fetches Narrative. Single place for endpoint logic: `isUnified === false` → legacy only;
  * otherwise try unified endpoint first, fall back to legacy on 404.
  *
  * @param httpClient - HttpClient instance
  * @param request - Narration request payload
- * @param options - Optional; isUnifiedNarrationEnabled (from props.isUnifiedNarrationEnabled)
+ * @param options - Optional; `isUnified` / `isSisenseAiEnabled` (e.g. from `app.settings.narrative`)
  * @returns Promise with narration response
  * @internal
  */
@@ -72,9 +73,9 @@ export async function getNarrative(
   request: NarrativeRequest,
   options?: GetNarrativeOptions,
 ): Promise<NarrativeResponse> {
-  const { isUnifiedNarrationEnabled = false, isSisenseAiEnabled = false } = options ?? {};
+  const { isUnified = false, isSisenseAiEnabled = false } = options ?? {};
 
-  if (isUnifiedNarrationEnabled && isSisenseAiEnabled) {
+  if (isUnified && isSisenseAiEnabled) {
     return fetchUnifiedNarrativeWithFallback(httpClient, request);
   }
 

@@ -1,4 +1,5 @@
-import { createAttribute, createMeasure, filterFactory } from '@sisense/sdk-data';
+import type { TFunction } from '@sisense/sdk-common';
+import { createAttribute, createMeasure, DateLevels, filterFactory } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
 import type { BaseQueryParams } from '@/domains/query-execution/types';
@@ -155,5 +156,53 @@ describe('baseQueryParamsToViewModel', () => {
     const result = baseQueryParamsToViewModel(params);
     expect(result).toHaveLength(1);
     expect(result[0]).toMatchObject({ category: 'filter', label: 'Region' });
+  });
+
+  it('uses attribute name for date-level dimension when t is omitted', () => {
+    const dateLevel = createAttribute({
+      name: 'Date',
+      expression: '[Orders.Date]',
+      granularity: DateLevels.Months,
+    });
+    const result = baseQueryParamsToViewModel({ dimensions: [dateLevel] });
+    const dim = result.find(isPillItem);
+    expect(dim).toMatchObject({ category: 'dimension', label: 'Date' });
+  });
+
+  it('uses generateAttributeName pattern for date-level dimension when t is provided', () => {
+    const stubT = ((key: string, opts?: { columnName?: string }) => {
+      if (key === 'attribute.datetimeName.months') {
+        return `Months in ${opts?.columnName ?? ''}`;
+      }
+      return key;
+    }) as TFunction;
+
+    const dateLevel = createAttribute({
+      name: 'Date',
+      expression: '[Orders.Date]',
+      granularity: DateLevels.Months,
+    });
+    const result = baseQueryParamsToViewModel({ dimensions: [dateLevel] }, stubT);
+    const dim = result.find(isPillItem);
+    expect(dim).toMatchObject({ category: 'dimension', label: 'Months in Date' });
+  });
+
+  it('uses generateAttributeName pattern for date-level filter attribute when t is provided', () => {
+    const stubT = ((key: string, opts?: { columnName?: string }) => {
+      if (key === 'attribute.datetimeName.days') {
+        return `Days in ${opts?.columnName ?? ''}`;
+      }
+      return key;
+    }) as TFunction;
+
+    const dateLevel = createAttribute({
+      name: 'Date',
+      expression: '[Orders.Date]',
+      granularity: DateLevels.Days,
+    });
+    const filter = filterFactory.members(dateLevel, ['2024-01-01']);
+    const result = baseQueryParamsToViewModel({ filters: [filter] }, stubT);
+    const pill = result.find(isPillItem);
+    expect(pill).toMatchObject({ category: 'filter', label: 'Days in Date' });
   });
 });

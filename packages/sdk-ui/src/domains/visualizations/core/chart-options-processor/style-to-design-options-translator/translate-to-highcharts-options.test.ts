@@ -1,6 +1,16 @@
-import { PieStyleOptions } from '@/types';
+import { CartesianChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types';
+import { LineStyleOptions, PieStyleOptions } from '@/types';
 
-import { getPieChartDesignOptions } from './translate-to-highcharts-options.js';
+import {
+  getLineChartDesignOptions,
+  getPieChartDesignOptions,
+} from './translate-to-highcharts-options.js';
+
+const emptyDataOptions: CartesianChartDataOptionsInternal = {
+  x: [],
+  y: [],
+  breakBy: [],
+};
 
 describe('Legacy Pie Chart Design Options', () => {
   describe('getPieChartDesignOptions', () => {
@@ -42,7 +52,7 @@ describe('Legacy Pie Chart Design Options', () => {
       expect(result.pieType).toBe('classic');
     });
 
-    it('should handle labels configuration correctly with donut subtype', () => {
+    it('handles labels configuration correctly with donut subtype', () => {
       const styleOptions: PieStyleOptions = {
         subtype: 'pie/donut',
         labels: {
@@ -67,5 +77,51 @@ describe('Legacy Pie Chart Design Options', () => {
       });
       expect(result.pieType).toBe('donut');
     });
+  });
+});
+
+describe('getNavigator passthrough via getLineChartDesignOptions', () => {
+  it('propagates onScrollerChange when navigator is enabled', () => {
+    const onScrollerChange = vi.fn();
+    const styleOptions: LineStyleOptions = {
+      navigator: { enabled: true, onScrollerChange },
+    };
+
+    const result = getLineChartDesignOptions(styleOptions, emptyDataOptions, false);
+
+    expect(result.autoZoom.onScrollerChange).toBe(onScrollerChange);
+    expect(result.autoZoom.enabled).toBe(true);
+  });
+
+  it('preserves scrollerLocation alongside onScrollerChange', () => {
+    const onScrollerChange = vi.fn();
+    const scrollerLocation = { min: 10, max: 90 };
+    const styleOptions: LineStyleOptions = {
+      navigator: { enabled: true, onScrollerChange, scrollerLocation },
+    };
+
+    const result = getLineChartDesignOptions(styleOptions, emptyDataOptions, false);
+
+    expect(result.autoZoom.onScrollerChange).toBe(onScrollerChange);
+    expect(result.autoZoom.scrollerLocation).toEqual(scrollerLocation);
+  });
+
+  it('produces disabled autoZoom when navigator is not provided', () => {
+    const result = getLineChartDesignOptions({}, emptyDataOptions, false);
+
+    expect(result.autoZoom.enabled).toBe(false);
+    expect(result.autoZoom.onScrollerChange).toBeUndefined();
+  });
+
+  it('produces disabled autoZoom when navigator is explicitly disabled', () => {
+    const onScrollerChange = vi.fn();
+    const styleOptions: LineStyleOptions = {
+      navigator: { enabled: false, onScrollerChange },
+    };
+
+    const result = getLineChartDesignOptions(styleOptions, emptyDataOptions, false);
+
+    expect(result.autoZoom.enabled).toBe(false);
+    expect(result.autoZoom.onScrollerChange).toBeUndefined();
   });
 });

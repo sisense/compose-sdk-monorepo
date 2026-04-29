@@ -73,7 +73,7 @@ const typeAndParent = (context: MarkdownThemeRenderContext, props: ArrayType | R
         }
         return md.length > 0 ? md.join('.') : props.name;
       } else {
-        return escapeChars(props.toString());
+        return escapeChars(props.toString(), context.options.getValue('useHTMLEncodedBrackets') as boolean);
       }
     }
   }

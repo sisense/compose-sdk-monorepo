@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -71,6 +69,73 @@ describe('XAxisSection', () => {
     expect(onClick).toHaveBeenCalledWith(
       expect.objectContaining({
         title: expect.objectContaining({ text: 'new title', enabled: true }),
+      }),
+    );
+  });
+
+  it('calls onClick with toggled title.enabled when title checkbox is changed', () => {
+    const onClick = vi.fn();
+    render(<XAxisSection xAxis={{ enabled: true, title: { enabled: false } }} onClick={onClick} />);
+    // Checkboxes: 0=gridLines, 1=labels, 2=title, 3=x2Title
+    const checkboxes = screen.getAllByRole('checkbox');
+    fireEvent.click(checkboxes[2]);
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ title: expect.objectContaining({ enabled: true }) }),
+    );
+  });
+
+  it('calls onClick with toggled title.enabled when title button is clicked', () => {
+    const onClick = vi.fn();
+    render(<XAxisSection xAxis={{ enabled: true, title: { enabled: true } }} onClick={onClick} />);
+    // Buttons: 0=title, 1=x2Title
+    fireEvent.click(screen.getAllByRole('button')[0]);
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ title: expect.objectContaining({ enabled: false }) }),
+    );
+  });
+
+  it('calls onClick with enabled=true when title input is focused while disabled', () => {
+    const onClick = vi.fn();
+    render(<XAxisSection xAxis={{ enabled: true, title: { enabled: false } }} onClick={onClick} />);
+    fireEvent.focus(screen.getAllByRole('textbox')[0]);
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ title: expect.objectContaining({ enabled: true }) }),
+    );
+  });
+
+  it('does not call onClick when title input is focused while already enabled', () => {
+    const onClick = vi.fn();
+    render(<XAxisSection xAxis={{ enabled: true, title: { enabled: true } }} onClick={onClick} />);
+    fireEvent.focus(screen.getAllByRole('textbox')[0]);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('calls onClick with toggled x2Title.enabled when x2Title checkbox is changed', () => {
+    const onClick = vi.fn();
+    render(
+      <XAxisSection xAxis={{ enabled: true, x2Title: { enabled: false } }} onClick={onClick} />,
+    );
+    // Checkboxes: 0=gridLines, 1=labels, 2=title, 3=x2Title
+    const checkboxes = screen.getAllByRole('checkbox');
+    fireEvent.click(checkboxes[3]);
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ x2Title: expect.objectContaining({ enabled: true }) }),
+    );
+  });
+
+  it('calls onClick with enabled=true and text when x2Title input changes', () => {
+    const onClick = vi.fn();
+    render(
+      <XAxisSection
+        xAxis={{ enabled: true, x2Title: { enabled: true, text: 'old' } }}
+        onClick={onClick}
+      />,
+    );
+    // Textboxes: 0=title, 1=x2Title
+    fireEvent.change(screen.getAllByRole('textbox')[1], { target: { value: 'new x2 title' } });
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({
+        x2Title: expect.objectContaining({ text: 'new x2 title', enabled: true }),
       }),
     );
   });

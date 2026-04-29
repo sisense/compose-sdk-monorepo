@@ -147,7 +147,16 @@ export class SsoAuthenticator extends BaseAuthenticator {
         finalLoginUrl = mergeUrlsWithParams(this._alternativeSsoHost || this.url, authUrl);
       }
 
-      finalLoginUrl = addQueryParamsToUrl(finalLoginUrl, { return_to: window.location.href });
+      // Copy query parameters from the configured Sisense URL onto the SSO login URL so that
+      // parameters such as `domain` are preserved for SSO Router routing rules when the
+      // loginUrl returned by /api/auth/isauth does not retain them.
+      // Use set() (not append()) so Sisense URL params override any conflicting params
+      // already present in the loginUrl.
+      const sisenseQueryParams = Object.fromEntries(new URL(this.url).searchParams.entries());
+      finalLoginUrl = addQueryParamsToUrl(finalLoginUrl, {
+        ...sisenseQueryParams,
+        return_to: window.location.href,
+      });
 
       const attempts = this.getRedirectAttempts();
       if (attempts >= this._ssoMaxAuthRedirectAttempts) {

@@ -16,8 +16,8 @@ Execute a query to retrieve revenue per country per year from the Sample ECommer
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=queries%2Fuse-execute-query-sorting&mode=docs'
- width=800
- height=870
+ width='800'
+ height='870'
  style='border:none;'
 />
 

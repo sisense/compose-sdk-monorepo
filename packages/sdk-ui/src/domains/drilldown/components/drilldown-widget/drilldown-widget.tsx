@@ -36,8 +36,8 @@ import { DrilldownBreadcrumbs } from '../drilldown-breadcrumbs/index';
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=use-cases%2Fdrilldown&mode=docs'
- *  width=800
- *  height=870
+ *  width='800'
+ *  height='870'
  *  style='border:none;'
  * />
  *

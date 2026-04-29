@@ -18,6 +18,7 @@ import {
   subtractYearForFiscal,
 } from './fiscal-date-format-replacers.js';
 import {
+  newDateFormatWithEscapedNonTokenChars,
   newDateFormatWithExpandedAMPM,
   newDateFormatWithExpandedTimezoneOffset,
   newDateFormatWithUnicodeMillisecondsMasks,
@@ -177,6 +178,8 @@ function applyDateFormat(
     cfg.selectedDateLevel,
     cfg.fiscalMonth,
   );
+
+  format = newDateFormatWithEscapedNonTokenChars(format);
 
   // previously was using formatInTimeZone and can revit when
   // completing cfg implementation

@@ -14,8 +14,8 @@ import { shouldSkipSisenseContextWaiting } from '../chart/helpers/should-skip-si
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=charts%2Fpie-chart&mode=docs'
- *  width=800
- *  height=870
+ *  width='800'
+ *  height='870'
  *  style='border:none;'
  * />
  *

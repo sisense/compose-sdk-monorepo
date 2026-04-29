@@ -28,6 +28,7 @@ export const translation = {
         'Jaql for {{attributeName}} contains unsupported condition filter: {{filter}}',
       formulaFiltersNotSupported:
         'Formula-based filter for {{attributeName}} not supported yet: {{filter}}',
+      unexpectedFilterRelationsModelNode: 'Unexpected filter relations model node: {{node}}',
     },
     unsupportedDimensionalElement: 'Unsupported dimensional element type',
   },

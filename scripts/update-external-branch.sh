@@ -72,6 +72,9 @@ rm -rf ./e2e
 # Remove Cursor rules
 rm -rf ./.cursor
 
+# Remove internal documentation reports
+rm -rf ./.reports/doc-tag-usage-report
+
 # Remove code for features that are under development.
 rm -rf packages/sdk-ui/src/__exclude__
 

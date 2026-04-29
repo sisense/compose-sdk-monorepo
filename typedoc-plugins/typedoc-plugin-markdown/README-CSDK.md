@@ -48,6 +48,22 @@ Both approaches support debugging in IDEs.
 1. Add new options to `typedoc-plugins/typedoc-plugin-markdown/src/plugin/options/config.ts` – see `hiddenFunctionParameters` as an example
 2. Run `ts-node scripts/code/options` from `typedoc-plugins/typedoc-plugin-markdown/`
 
+Other examples of config options that were added for docusaurus compatibility, enabled by default only for `TYPEDOC_FORMAT === 'MDX'` output via `/typedoc.config.cjs`
+
+#### **`useHTMLEncodedBrackets`**
+When `true`, angle brackets in generated markdown (outside of TSDoc Comments) are output as HTML entities (`&lt;`, `&gt;`) so that MDX processors do not interpret them as JSX.
+
+#### **`convertHtmlToJsxInComments`**
+When `true`, allowed tags (e.g. `<iframe ...>` or `<img ..>`) in TSDoc comments are converted to valid JSX (e.g. `style='border:none;'` becomes `style={{ border: 'none' }}`).
+Also, guide links in comments are rewritten so Docusaurus routes work: `/guides/sdk/` becomes `/docs/compose-sdk/` in the `docs-mdx` output.
+
+#### **`escapeHtmlInComments`**
+When `true`, all angle brackets like `<` and `>` in TSDoc comments are encoded as HTML entities so tags appear as literal text in MDX.
+
+The monorepo uses two scripts:
+- `yarn docs:gen:md` for VuePress (output in `docs-md/`, raw HTML in comments)
+- `yarn docs:gen:mdx` for Docusaurus (output in `docs-mdx/`, comments converted to JSX).
+
 ## Testing
 
 There are tests from the original `tgreyuk/typedoc-plugin-markdown` that are not moved to this forked plugin yet.

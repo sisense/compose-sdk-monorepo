@@ -23,6 +23,8 @@ import { FiltersMergeStrategy, mergeFiltersByStrategy } from '@/shared/utils/fil
 import { DrilldownOptions, PivotTableDrilldownOptions } from '@/types.js';
 
 import { WidgetProps } from '../widget/types';
+import { useScrollerLocationSave } from './use-scroller-location-save';
+import { withNavigatorScrollSave } from './with-navigator-scroll-save';
 
 /**
  * The WidgetById component, which is a thin wrapper on the {@link ChartWidget} component,
@@ -39,8 +41,8 @@ import { WidgetProps } from '../widget/types';
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=fusion-assets%2Ffusion-widgets&mode=docs'
- *  width=800
- *  height=870
+ *  width='800'
+ *  height='870'
  *  style='border:none;'
  * />
  *
@@ -107,6 +109,10 @@ export const WidgetById: FunctionComponent<WidgetByIdProps> = asSisenseComponent
 
   const widgetProps = composedDashboardProps?.widgets.find((widget) => widget.id === widgetOid);
 
+  const widgetDtoOptions =
+    customizedDashboardModel?.widgetsOptions[widgetOid]?.partialDtoOptions?.options;
+  const saveScrollerLocation = useScrollerLocationSave(dashboardOid, widgetOid, widgetDtoOptions);
+
   const customizedWidgetProps = useMemo(() => {
     if (!widgetProps) {
       return undefined;
@@ -117,6 +123,7 @@ export const WidgetById: FunctionComponent<WidgetByIdProps> = asSisenseComponent
       withDrilldownOptionsFromProps(drilldownOptionsFromProps),
       withStyleOptionsFromProps(styleOptionsFromProps),
       withRestExternalProps(restExternalProps),
+      withNavigatorScrollSave(saveScrollerLocation),
     )(widgetProps);
   }, [
     widgetProps,
@@ -126,6 +133,7 @@ export const WidgetById: FunctionComponent<WidgetByIdProps> = asSisenseComponent
     drilldownOptionsFromProps,
     styleOptionsFromProps,
     restExternalProps,
+    saveScrollerLocation,
   ]);
 
   return (
@@ -139,6 +147,7 @@ export const WidgetById: FunctionComponent<WidgetByIdProps> = asSisenseComponent
 
 /**
  * Returns a dashboard model with only the widget with the given oid.
+ *
  * @param widgetOid - The oid of the widget to return.
  * @returns The dashboard model with only the widget with the given oid.
  */
@@ -164,6 +173,7 @@ function withOnlySingleWidget(widgetOid: string): DashboardModelTransformer {
 
 /**
  * Disables crossfiltering behavior for all widgets in the dashboard model.
+ *
  * @param dashboardModel - The dashboard model to disable crossfiltering for.
  * @returns The dashboard model with crossfiltering disabled for all widgets.
  */
@@ -190,6 +200,7 @@ function withDisabledCrossfiltering(dashboardModel: DashboardModel): DashboardMo
 
 /**
  * Merges the filters from the external props with the local filters of the widget props.
+ *
  * @param filtersFromProps - The filters from the props.
  * @param filtersMergeStrategy - The strategy to merge the filters.
  * @returns The widget props with the merged filters.
@@ -215,6 +226,7 @@ function withFiltersFromProps(
 
 /**
  * Merges the highlights from the external props with the local highlights of the widget props.
+ *
  * @param highlightsFromProps - The highlights from the props.
  * @param filtersMergeStrategy - The strategy to merge the highlights.
  * @returns The widget props with the merged highlights.
@@ -236,6 +248,7 @@ function withHighlightsFromProps(
 
 /**
  * Merges the drilldown options from the external props with the local drilldown options of the widget props.
+ *
  * @param drilldownOptions - The drilldown options from the props.
  * @returns The widget props with the merged drilldown options.
  */
@@ -258,6 +271,7 @@ function withDrilldownOptionsFromProps(
 
 /**
  * Merges the style options from the external props with the local style options of the widget props.
+ *
  * @param styleOptions - The style options from the props.
  * @returns The widget props with the merged style options.
  */
@@ -280,6 +294,7 @@ function withStyleOptionsFromProps(
 
 /**
  * Merges the rest external props with the widget props, omitting undefined values.
+ *
  * @param restExternalProps - The rest external props.
  * @returns The widget props with the merged rest external props.
  */
@@ -289,6 +304,7 @@ function withRestExternalProps(restExternalProps: Partial<WidgetProps>): WidgetP
     return { ...widgetProps, ...nonEmptyExternalProps } as WidgetProps;
   };
 }
+
 /** A function that transforms a dashboard model. */
 type DashboardModelTransformer = (dashboardModel: DashboardModel) => DashboardModel;
 

@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`tooltip utils > getCartesianTooltipSettings with number formats > should display cartesian tooltip for point 1`] = `
+"<div style="min-width: 100px; color: #5B6372; font-size: 13px; line-height: 18px; margin: 4px 6px">
+
+    3.14
+    <br><span style="color:red; font-size: 15px; line-height: 18px">@42.0009</span>
+
+
+    <hr class="csdk-border-t" style="margin: 7px 0px">$9.88, !1.259
+
+  </div>"
+`;
+
+exports[`tooltip utils > getCartesianTooltipSettings with number formats > should display pie tooltip for point 1`] = `
+"<div style="min-width: 100px; color: #5B6372; font-size: 13px; line-height: 18px; margin: 4px 6px">
+
+    3.14
+    <br><span style="color:red; font-size: 15px; line-height: 18px">@42.0009 / 20%</span>
+
+
+
+
+  </div>"
+`;
+
+exports[`tooltip utils > getCartesianTooltipSettings with number formats > should not contain percent for unsupported column 1`] = `
+"<div style="min-width: 100px; color: #5B6372; font-size: 13px; line-height: 18px; margin: 4px 6px">
+
+    3.14
+    <br><span style="color:red; font-size: 15px; line-height: 18px">@42.0009</span>
+
+
+
+
+  </div>"
+`;

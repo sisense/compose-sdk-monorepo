@@ -8,6 +8,16 @@ export {
   type CustomWidgetQueryState,
 } from './use-execute-custom-widget-query.js';
 export { useGetFilterMembers } from './use-get-filter-members.js';
+export {
+  useGetDataSourceDimensions,
+  type GetDataSourceDimensionsParams,
+  type DataSourceDimensionsState,
+} from './use-get-data-source-dimensions.js';
+export type {
+  DataSourceDimensionsLoadingState,
+  DataSourceDimensionsErrorState,
+  DataSourceDimensionsSuccessState,
+} from './use-get-data-source-dimensions.js';
 export { useGetDashboardModel } from './use-get-dashboard-model.js';
 export { useGetDashboardModels } from './use-get-dashboard-models.js';
 export { useGetSharedFormula } from './use-get-shared-formula.js';

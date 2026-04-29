@@ -753,12 +753,12 @@ export type IndicatorChartDataOptionsInternal = {
 /** @internal */
 export interface BoxplotChartDataOptionsInternal {
   category?: StyledColumn;
-  boxMin: StyledMeasureColumn;
-  boxMedian: StyledMeasureColumn;
-  boxMax: StyledMeasureColumn;
-  whiskerMin: StyledMeasureColumn;
-  whiskerMax: StyledMeasureColumn;
-  outliersCount: StyledMeasureColumn;
+  boxMin?: StyledMeasureColumn;
+  boxMedian?: StyledMeasureColumn;
+  boxMax?: StyledMeasureColumn;
+  whiskerMin?: StyledMeasureColumn;
+  whiskerMax?: StyledMeasureColumn;
+  outliersCount?: StyledMeasureColumn;
   outliers?: StyledColumn;
   valueTitle: string;
 }

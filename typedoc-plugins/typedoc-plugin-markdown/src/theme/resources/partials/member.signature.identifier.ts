@@ -25,14 +25,14 @@ export function signatureMemberIdentifier(
   // }
 
   if (!['__call', '__type'].includes(signature.name)) {
-    md.push(bold(escapeChars(signature.name)));
+    md.push(bold(escapeChars(signature.name, context.options.getValue('useHTMLEncodedBrackets') as boolean)));
   }
 
   if (signature.typeParameters) {
     md.push(
-      `<${signature.typeParameters
+      `${context.getAngleBracket('open')}${signature.typeParameters
         .map((typeParameter) => backTicks(typeParameter.name))
-        .join(', ')}>`,
+        .join(', ')}${context.getAngleBracket('close')}`,
     );
   }
 

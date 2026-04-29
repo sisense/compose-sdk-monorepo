@@ -17,6 +17,18 @@ import {
   ChartData,
 } from './types.js';
 
+const emptyBoxplotChartData = (valueTitle: string): BoxplotChartData => ({
+  type: 'boxplot',
+  xValues: [],
+  series: [
+    {
+      name: valueTitle,
+      title: valueTitle,
+      data: [],
+    },
+  ],
+});
+
 /**
  * Creates data for box plot charts given chart data table and data options
  *
@@ -29,6 +41,29 @@ export const boxplotData = (
   dataOptions: BoxplotChartDataOptionsInternal,
   dataTable: DataTable,
 ): BoxplotChartData => {
+  const { valueTitle } = dataOptions;
+
+  const boxMinColumn =
+    dataOptions.boxMin && getColumnByName(dataTable, dataOptions.boxMin.column.name);
+  const boxMedianColumn =
+    dataOptions.boxMedian && getColumnByName(dataTable, dataOptions.boxMedian.column.name);
+  const boxMaxColumn =
+    dataOptions.boxMax && getColumnByName(dataTable, dataOptions.boxMax.column.name);
+  const whiskerMinColumn =
+    dataOptions.whiskerMin && getColumnByName(dataTable, dataOptions.whiskerMin.column.name);
+  const whiskerMaxColumn =
+    dataOptions.whiskerMax && getColumnByName(dataTable, dataOptions.whiskerMax.column.name);
+
+  if (
+    !boxMinColumn ||
+    !boxMedianColumn ||
+    !boxMaxColumn ||
+    !whiskerMinColumn ||
+    !whiskerMaxColumn
+  ) {
+    return emptyBoxplotChartData(valueTitle);
+  }
+
   const xColumn: Column | undefined =
     dataOptions.category && getColumnByName(dataTable, dataOptions.category.column.name);
 
@@ -44,11 +79,6 @@ export const boxplotData = (
   );
 
   const rowsByXColumns = getIndexedRows(dataTable.rows, xColumn ? [xColumn] : []);
-  const boxMinColumn = getColumnByName(dataTable, dataOptions.boxMin.column.name);
-  const boxMedianColumn = getColumnByName(dataTable, dataOptions.boxMedian.column.name);
-  const boxMaxColumn = getColumnByName(dataTable, dataOptions.boxMax.column.name);
-  const whiskerMinColumn = getColumnByName(dataTable, dataOptions.whiskerMin.column.name);
-  const whiskerMaxColumn = getColumnByName(dataTable, dataOptions.whiskerMax.column.name);
   const outliersColumn =
     dataOptions.outliers && getColumnByName(dataTable, dataOptions.outliers.column.name);
 

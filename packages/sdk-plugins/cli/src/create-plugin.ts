@@ -435,10 +435,6 @@ const handler = async (options: Arguments<CreatePluginOptions>) => {
   }
 
   console.log('\nWelcome to the Sisense Compose SDK Plugin toolkit!\n\n');
-  if (!options.path) {
-    console.log(`A new plugin will be created in the current folder ${projectPath}\n`);
-    console.log('Use --path to specify a target location.\n\n');
-  }
 
   let shouldDelete = false;
 
@@ -544,7 +540,7 @@ const handler = async (options: Arguments<CreatePluginOptions>) => {
 
     console.log(`\nNext steps:`);
     console.log(`  npm install  - Install all dependencies\n`);
-    console.log(`  Prepare a .dev.local from .env.local.example\n`);
+    console.log(`  Prepare a .env.local from .env.local.example\n`);
     console.log(`  npm run dev  - Start the development server\n`);
     console.log(`  npm run build - Build the production bundle\n`);
     console.log(`  npm run build:fusion - Build the production bundle for Fusion\n`);

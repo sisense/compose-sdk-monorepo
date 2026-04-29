@@ -110,7 +110,7 @@ x3 = [
 We can do that fairly easily with this code:
 
 ```ts
-const x1: number[] = [];
+const x1: string[] = [];
 const y1: number[] = [];
 const y2: number[] = [];
 
@@ -342,4 +342,4 @@ export class AnalyticsComponent {
 
 ## Learn More
 
-To learn more about using 3rd party chats with Compose SDK, including using [Material UI](https://mui.com/x/react-charts/) with React, see [Take control of your data visualizations: Connecting to third-party libraries with Compose SDK](https://www.sisense.com/blog/take-control-of-your-data-visualizations/).
+To learn more about using 3rd party charts with Compose SDK, including using [Material UI](https://mui.com/x/react-charts/) with React, see [Take control of your data visualizations: Connecting to third-party libraries with Compose SDK](https://www.sisense.com/blog/take-control-of-your-data-visualizations/).

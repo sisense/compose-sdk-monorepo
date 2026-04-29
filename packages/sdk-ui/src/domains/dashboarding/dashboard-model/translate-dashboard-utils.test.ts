@@ -1,6 +1,7 @@
 import { Dimension } from '@sisense/sdk-data';
 import isEqual from 'lodash-es/isEqual';
 
+import { CommonFiltersApplyMode } from '@/domains/dashboarding/common-filters/types';
 import {
   convertDimensionsToDimIndexes,
   extractPivotTargetsConfigFromWidgetDto,
@@ -8,7 +9,9 @@ import {
   getJtdNavigateType,
   translateLayout,
   withSharedFormulas,
+  withSpecificWidgetOptions,
 } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils';
+import { SpecificWidgetOptions } from '@/domains/dashboarding/dashboard-model/types';
 import { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { RestApi } from '@/infra/api/rest-api';
 
@@ -1592,6 +1595,90 @@ describe('translate-dashboard-utils', () => {
           (target) => ('id' in target && target.id === 'dashboard-1') || 'dashboard' in target,
         ),
       ).toBe(true);
+    });
+  });
+
+  describe('withSpecificWidgetOptions', () => {
+    const baseWidgetDto: WidgetDto = {
+      oid: 'widget-1',
+      type: 'chart/column',
+      subtype: 'column',
+      datasource: { title: 'test' } as any,
+      metadata: { panels: [] },
+      style: {},
+      title: 'Test Widget',
+      desc: 'Test',
+    };
+
+    it('should preserve partialDtoOptions fields when no filtersOptions are provided', () => {
+      const widgetOptions: SpecificWidgetOptions = {
+        partialDtoOptions: {
+          options: {
+            dashboardFiltersMode: 'filter',
+            selector: false,
+            disableExportToCSV: true,
+            hideFromWidgetList: true,
+          },
+        },
+      };
+
+      const result = withSpecificWidgetOptions(widgetOptions)(baseWidgetDto);
+
+      expect(result.options?.disableExportToCSV).toBe(true);
+      expect(result.options?.hideFromWidgetList).toBe(true);
+    });
+
+    it('should preserve partialDtoOptions fields when filtersOptions are also provided', () => {
+      const widgetOptions: SpecificWidgetOptions = {
+        partialDtoOptions: {
+          options: {
+            dashboardFiltersMode: 'filter',
+            selector: false,
+            disableExportToCSV: true,
+            drillToAnywhere: true,
+          },
+        },
+        filtersOptions: {
+          applyMode: CommonFiltersApplyMode.FILTER,
+          shouldAffectFilters: true,
+        },
+      };
+
+      const result = withSpecificWidgetOptions(widgetOptions)(baseWidgetDto);
+
+      // partialDtoOptions fields must survive alongside computed filtersOptions fields
+      expect(result.options?.disableExportToCSV).toBe(true);
+      expect(result.options?.drillToAnywhere).toBe(true);
+      // filtersOptions-derived fields must still be set correctly
+      expect(result.options?.dashboardFiltersMode).toBe('filter');
+      expect(result.options?.selector).toBe(true);
+    });
+
+    it('should let filtersOptions-derived values override partialDtoOptions values', () => {
+      const widgetOptions: SpecificWidgetOptions = {
+        partialDtoOptions: {
+          options: {
+            dashboardFiltersMode: 'select',
+            selector: false,
+          },
+        },
+        filtersOptions: {
+          applyMode: CommonFiltersApplyMode.FILTER,
+          shouldAffectFilters: true,
+        },
+      };
+
+      const result = withSpecificWidgetOptions(widgetOptions)(baseWidgetDto);
+
+      // filtersOptions-derived value must win over partialDtoOptions
+      expect(result.options?.dashboardFiltersMode).toBe('filter');
+      expect(result.options?.selector).toBe(true);
+    });
+
+    it('should return unchanged widgetDto when widgetOptions is undefined', () => {
+      const result = withSpecificWidgetOptions(undefined)(baseWidgetDto);
+
+      expect(result).toBe(baseWidgetDto);
     });
   });
 

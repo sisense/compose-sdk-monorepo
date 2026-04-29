@@ -139,6 +139,12 @@ export type Navigator = {
   enabled: boolean;
   /** The scroll location of the navigator scroller / auto zoom feature */
   scrollerLocation?: { min: number; max: number };
+  /**
+   * Callback invoked when the user moves the navigator scroller.
+   * Receives the new min and max values of the visible range.
+   * @internal
+   */
+  onScrollerChange?: (min: number, max: number) => void;
 };
 
 /** Configuration that defines line width */
@@ -2360,13 +2366,6 @@ export interface WidgetByIdStyleOptions extends WidgetContainerStyleOptions {
 export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetContainerStyleOptions;
 
 /**
- * Style settings defining the look and feel of TableWidget
- *
- * @internal
- */
-export type TableWidgetStyleOptions = TableStyleOptions & WidgetContainerStyleOptions;
-
-/**
  * Style settings defining the look and feel of PivotTableWidget
  *
  */
@@ -3173,7 +3172,7 @@ export type TranslationConfig = {
    * Translation keys that are not provided will default to the English translation.
    * If translation is provided for a package other than sdk-ui, please specify the namespace property.
    *
-   * Important: Do not translate parts in {{}} - these are placeholders for dynamic values and will be matched using provided variable names.
+   * Important: Do not translate parts in `{{}}` - these are placeholders for dynamic values and will be matched using provided variable names.
    *
    * @example
    * ```ts

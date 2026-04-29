@@ -47,7 +47,6 @@ export { processDrilldownSelections } from '../domains/drilldown/hooks/use-drill
 
 // Widgets
 export { CommonWidget, type CommonWidgetProps } from '../domains/widgets/components/common-widget';
-export { TableWidget, type TableWidgetProps } from '../domains/widgets/components/table-widget';
 
 // Context Adapters
 export {
@@ -65,6 +64,9 @@ export type {
 
 // Formulas
 export { useGetSharedFormulaInternal } from '../domains/formulas/use-get-shared-formula';
+
+// Data Browser
+export { useGetDataSourceDimensionsInternal } from '../domains/data-browser/data-source-dimensional-model';
 
 // Utilities
 export { translateColumnToAttribute } from '../domains/visualizations/core/chart-data-options/utils';
