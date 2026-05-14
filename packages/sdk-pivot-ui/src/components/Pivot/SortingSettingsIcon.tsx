@@ -16,7 +16,6 @@ export const SortingSettingsIcon = (props: Props) => {
     props;
 
   const preventEventBubble = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
     event.stopPropagation();
   }, []);
 

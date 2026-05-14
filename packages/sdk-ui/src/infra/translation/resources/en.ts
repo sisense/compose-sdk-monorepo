@@ -504,6 +504,6 @@ export const translation = {
  *
  * const customTranslationResources: Partial<TranslationDictionary> = {
  * ```
- * @internal
+ * @alpha
  */
 export type TranslationDictionary = typeof translation;

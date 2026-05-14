@@ -12,7 +12,7 @@ import {
 import { toRefs, watch } from 'vue';
 
 import { useReducer } from '../helpers/use-reducer';
-import { getSisenseContext } from '../providers';
+import { getSisenseContext, getThemeContext } from '../providers';
 import type { MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
@@ -69,12 +69,18 @@ export const useGetDashboardModels = (params: MaybeRefOrWithRefs<GetDashboardMod
   });
 
   const context = getSisenseContext();
+  const themeContext = getThemeContext();
 
-  const runGetDashboardModels = async (application: ClientApplication) => {
+  const runGetDashboardModels = async (app: ClientApplication) => {
     try {
       dispatch({ type: 'loading' });
       const plainParams = toPlainObject(params);
-      const data = await getDashboardModels(application.httpClient, plainParams);
+      const data = await getDashboardModels(
+        app.httpClient,
+        plainParams,
+        themeContext.value,
+        app.settings,
+      );
 
       dispatch({ type: 'success', data });
     } catch (error) {
@@ -83,7 +89,7 @@ export const useGetDashboardModels = (params: MaybeRefOrWithRefs<GetDashboardMod
   };
 
   watch(
-    [...collectRefs(params), context],
+    [...collectRefs(params), context, themeContext],
     () => {
       const { app } = context.value;
       const { enabled } = toPlainObject(params);

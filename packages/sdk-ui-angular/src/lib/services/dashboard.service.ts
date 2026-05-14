@@ -27,6 +27,7 @@ import {
   toPreactDashboardProps,
 } from '../helpers/dashboard-props-preact-translator';
 import { SisenseContextService } from './sisense-context.service';
+import { ThemeService } from './theme.service';
 
 export interface ComposableDashboardProps extends Omit<ComposableDashboardPropsPreact, 'widgets'> {
   widgets: WidgetProps[];
@@ -45,7 +46,10 @@ export interface ComposableDashboardProps extends Omit<ComposableDashboardPropsP
 })
 @TrackableService<DashboardService>(['getDashboardModel', 'getDashboardModels'])
 export class DashboardService {
-  constructor(private sisenseContextService: SisenseContextService) {}
+  constructor(
+    private sisenseContextService: SisenseContextService,
+    private themeService: ThemeService,
+  ) {}
 
   /**
    * Retrieves an existing dashboard model from the Sisense instance.
@@ -56,7 +60,8 @@ export class DashboardService {
    */
   async getDashboardModel(dashboardOid: string, options?: GetDashboardModelOptions) {
     const app = await this.sisenseContextService.getApp();
-    return getDashboardModel(app.httpClient, dashboardOid, options);
+    const themeSettings = this.themeService.getThemeSettings();
+    return getDashboardModel(app.httpClient, dashboardOid, options, themeSettings, app.settings);
   }
 
   /**
@@ -67,7 +72,8 @@ export class DashboardService {
    */
   async getDashboardModels(options?: GetDashboardModelsOptions) {
     const app = await this.sisenseContextService.getApp();
-    return getDashboardModels(app.httpClient, options);
+    const themeSettings = this.themeService.getThemeSettings();
+    return getDashboardModels(app.httpClient, options, themeSettings, app.settings);
   }
 
   /**

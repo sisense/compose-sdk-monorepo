@@ -11,7 +11,6 @@ export default function CodeExample() {
       dataOptions={ {
         category: [{
             column: DM.Commerce.Date.Months,
-            isColored: false,
             sortType: 'sortNone',
           }
         ],
@@ -166,7 +165,6 @@ export class CodeExample {
     dataOptions: ChartDataOptions = {
         category: [{
             column: DM.Commerce.Date.Months,
-            isColored: false,
             sortType: 'sortNone',
           }
         ],
@@ -304,7 +302,6 @@ export const MOCK_CODE_VUE_1 = `<script setup lang="ts">
   const dataOptions = ref({
         category: [{
             column: DM.Commerce.Date.Months,
-            isColored: false,
             sortType: 'sortNone',
           }
         ],
@@ -702,7 +699,6 @@ export default function CodeExample() {
       dataOptions={ {
         category: [{
             column: DM.Commerce.Date.Months,
-            isColored: false,
             sortType: 'sortNone',
           }
         ],
@@ -797,7 +793,6 @@ export const MOCK_CODE_VUE_LINE_WITHOUT_DEFAULT_PROPS = `<script setup lang="ts"
   const dataOptions = ref({
         category: [{
             column: DM.Commerce.Date.Months,
-            isColored: false,
             sortType: 'sortNone',
           }
         ],
@@ -984,13 +979,11 @@ export default function CodeExample() {
       dataOptions={ {
   rows: [{
       column: DM.Brand.Brand,
-      isColored: false,
       sortType: 'sortNone',
     }
   ],
   columns: [{
       column: DM.Commerce.Gender,
-      isColored: false,
       sortType: 'sortNone',
       panel: 'columns',
     }

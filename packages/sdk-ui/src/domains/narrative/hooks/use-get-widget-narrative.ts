@@ -13,9 +13,9 @@ import {
  * Options for {@link useGetWidgetNarrative}.
  *
  * @remarks
- * Narration endpoints and flags default from `app.settings.narrative` on {@link useSisenseContext} when
- * `isUnified` / `isSisenseAiEnabled` are omitted. Optional overrides match the
- * imperative `getNlgInsightsFromWidget` helper for per-call behavior.
+ * Narration endpoint selection defaults from `app.settings.narrative.canGenerateNarrativeViaAI`
+ * on {@link useSisenseContext} when `canGenerateNarrativeViaAI` is omitted. Optional overrides
+ * match the imperative `getNlgInsightsFromWidget` helper for per-call behavior.
  * @sisenseInternal
  */
 export type UseGetWidgetNarrativeOptions = WidgetNarrativeOptions & {

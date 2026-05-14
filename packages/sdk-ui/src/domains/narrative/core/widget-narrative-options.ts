@@ -11,10 +11,17 @@ export interface WidgetNarrativeOptions {
   defaultDataSource?: DataSource;
   /** The verbosity of the NLG summarization */
   verbosity?: 'Low' | 'High';
-  /** When false, legacy narration endpoint only; when true or undefined, try unified then fallback. */
-  isUnified?: boolean;
-  /** Computed SDK flag from server settings (`app.settings.narrative.isSisenseAiEnabled`), not raw AI API. */
-  isSisenseAiEnabled?: boolean;
+  /**
+   * When `true`, attempts the unified AI narrative endpoint and falls back to the legacy endpoint
+   * on 404. When `false` or omitted, only the legacy endpoint is used.
+   *
+   * **Hook-based flows** (e.g. {@link useGetWidgetNarrative}): when omitted, the value is read
+   * from `app.settings.narrative.canGenerateNarrativeViaAI` via {@link useSisenseContext}.
+   *
+   * **Imperative helpers** (e.g. {@link getNlgInsightsFromWidget}): no context fallback is
+   * performed — omitting this option is equivalent to `false` (legacy endpoint only).
+   */
+  canGenerateNarrativeViaAI?: boolean;
   /**
    * When `true`, trend and forecast companion measures are omitted from the narrative JAQL so
    * requests stay compatible with backends that do not yet support them.

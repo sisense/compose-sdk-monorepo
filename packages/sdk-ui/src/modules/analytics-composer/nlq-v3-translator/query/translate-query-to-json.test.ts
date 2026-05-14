@@ -1,7 +1,7 @@
 import { createAttribute, filterFactory, measureFactory, Sort } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
-import { BaseQueryParams } from '@/domains/query-execution/types.js';
+import type { ExecuteQueryParams } from '@/domains/query-execution/types.js';
 
 import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
@@ -50,8 +50,8 @@ describe('translateQueryToJSON', () => {
     dataSource: { title: 'Sample ECommerce', live: false },
   });
 
-  it('should translate BaseQueryParams to NlqResponseJSON', () => {
-    const query: BaseQueryParams = {
+  it('should translate ExecuteQueryParams to NlqResponseJSON', () => {
+    const query: ExecuteQueryParams = {
       dimensions: [Category, Brand],
       measures: [
         measureFactory.sum(Revenue, 'Total Revenue'),
@@ -101,7 +101,7 @@ describe('translateQueryToJSON', () => {
   });
 
   it('should handle empty arrays', () => {
-    const query: BaseQueryParams = {
+    const query: ExecuteQueryParams = {
       dimensions: [],
       measures: [],
       filters: [],
@@ -120,7 +120,7 @@ describe('translateQueryToJSON', () => {
   });
 
   it('should handle optional highlights', () => {
-    const query: BaseQueryParams = {
+    const query: ExecuteQueryParams = {
       dimensions: [Category],
       measures: [measureFactory.sum(Revenue)],
       filters: [],
@@ -145,7 +145,7 @@ describe('translateQueryToJSON', () => {
     const filter2 = filterFactory.members(Brand, ['Brand B']);
     const filterRelations = filterFactory.logic.and(filter1, filter2);
 
-    const query: BaseQueryParams = {
+    const query: ExecuteQueryParams = {
       dimensions: [Category],
       measures: [measureFactory.sum(Revenue)],
       filters: filterRelations,
@@ -179,7 +179,7 @@ describe('translateQueryToJSON', () => {
     const innerRelation = filterFactory.logic.or(filter1, filter2);
     const outerRelation = filterFactory.logic.and(innerRelation, filter3);
 
-    const query: BaseQueryParams = {
+    const query: ExecuteQueryParams = {
       dimensions: [Category],
       measures: [measureFactory.sum(Revenue)],
       filters: outerRelation,
@@ -206,7 +206,7 @@ describe('translateQueryToJSON', () => {
       Cost: measureFactory.sum(Cost),
     });
 
-    const query: BaseQueryParams = {
+    const query: ExecuteQueryParams = {
       dimensions: [Category],
       measures: [calculatedMeasure],
       filters: [],
@@ -230,7 +230,7 @@ describe('translateQueryToJSON', () => {
     it('should return structured error when dimension is missing composeCode', () => {
       const invalidAttribute = { ...Category, composeCode: undefined } as any;
 
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [invalidAttribute],
         measures: [],
         filters: [],
@@ -251,7 +251,7 @@ describe('translateQueryToJSON', () => {
     it('should return structured error when measure is missing composeCode', () => {
       const invalidMeasure = { ...measureFactory.sum(Revenue), composeCode: undefined } as any;
 
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [],
         measures: [invalidMeasure],
         filters: [],
@@ -275,7 +275,7 @@ describe('translateQueryToJSON', () => {
         composeCode: undefined,
       } as any;
 
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [],
         measures: [],
         filters: [invalidFilter],
@@ -299,7 +299,7 @@ describe('translateQueryToJSON', () => {
       const invalidRelations = filterFactory.logic.and(filter1, filter2);
       (invalidRelations as any).composeCode = undefined;
 
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [],
         measures: [],
         filters: invalidRelations,
@@ -320,7 +320,7 @@ describe('translateQueryToJSON', () => {
     it('should return structured error when dimension composeCode is invalid', () => {
       const invalidAttribute = { ...Category, composeCode: 'Invalid.Code' } as any;
 
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [invalidAttribute],
         measures: [],
         filters: [],
@@ -342,7 +342,7 @@ describe('translateQueryToJSON', () => {
       const invalidAttribute = { ...Category, composeCode: undefined } as any;
       const invalidMeasure = { ...measureFactory.sum(Revenue), composeCode: undefined } as any;
 
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [invalidAttribute],
         measures: [invalidMeasure],
         filters: [],
@@ -362,7 +362,7 @@ describe('translateQueryToJSON', () => {
   describe('styled columns', () => {
     it('should translate styled dimension columns with sortType', () => {
       const sortedCategory = Category.sort(Sort.Ascending);
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [sortedCategory, Brand],
         measures: [measureFactory.sum(Revenue)],
         filters: [],
@@ -380,7 +380,7 @@ describe('translateQueryToJSON', () => {
     });
 
     it('should translate styled dimension columns without sortType', () => {
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [Category, Brand],
         measures: [measureFactory.sum(Revenue)],
         filters: [],
@@ -396,7 +396,7 @@ describe('translateQueryToJSON', () => {
 
     it('should translate styled measure columns with sortType', () => {
       const sortedMeasure = measureFactory.sum(Revenue, 'Total Revenue').sort(Sort.Descending);
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [Category],
         measures: [measureFactory.sum(Cost, 'Total Cost'), sortedMeasure],
         filters: [],
@@ -423,7 +423,7 @@ describe('translateQueryToJSON', () => {
     });
 
     it('should translate styled measure columns without sortType', () => {
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [Category],
         measures: [
           measureFactory.sum(Revenue, 'Total Revenue'),
@@ -452,7 +452,7 @@ describe('translateQueryToJSON', () => {
     it('should translate mixed styled and non-styled columns', () => {
       const sortedCategory = Category.sort(Sort.Ascending);
       const sortedMeasure = measureFactory.sum(Revenue, 'Total Revenue').sort(Sort.Descending);
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [sortedCategory, Brand],
         measures: [measureFactory.sum(Cost, 'Total Cost'), sortedMeasure],
         filters: [],
@@ -490,7 +490,7 @@ describe('translateQueryToJSON', () => {
       const trendMeasure = measureFactory.trend(baseMeasure, '$trend_Total Revenue', {
         modelType: 'linear',
       });
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [Category],
         measures: [baseMeasure, trendMeasure],
         filters: [],
@@ -517,7 +517,7 @@ describe('translateQueryToJSON', () => {
       const forecastMeasure = measureFactory.forecast(baseMeasure, '$forecast_Total Revenue', {
         forecastHorizon: 6,
       });
-      const query: BaseQueryParams = {
+      const query: ExecuteQueryParams = {
         dimensions: [Category],
         measures: [baseMeasure, trendMeasure, forecastMeasure],
         filters: [],

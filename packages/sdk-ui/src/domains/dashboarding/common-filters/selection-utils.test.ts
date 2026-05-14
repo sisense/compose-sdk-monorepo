@@ -1,4 +1,10 @@
-import { Attribute, filterFactory, MembersFilter } from '@sisense/sdk-data';
+import {
+  Attribute,
+  createAttribute,
+  filterFactory,
+  measureFactory,
+  MembersFilter,
+} from '@sisense/sdk-data';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import {
@@ -61,6 +67,44 @@ describe('selection-utils', () => {
       expect((createdFilters[0] as MembersFilter).members).toEqual(['65+']);
       expect(createdFilters[0].config.guid).toEqual(filters[0].config.guid);
       expect(isSelection).toBe(true);
+    });
+
+    it('should preserve the existing filter attribute (and its title) when updating by a selection with a different attribute instance', () => {
+      // Existing filter uses an attribute with a custom title (e.g., user-defined title on a filter tile)
+      const filterAttribute = createAttribute({
+        name: 'Age Range',
+        type: 'text-attribute',
+        expression: '[Commerce.Age Range]',
+      });
+      filterAttribute.title = 'Customer Age Group';
+
+      // Chart's selection uses a different attribute instance with the same expression but a different title
+      const chartAttribute = createAttribute({
+        name: 'Age Range',
+        type: 'text-attribute',
+        expression: '[Commerce.Age Range]',
+      });
+
+      const existingFilters: MembersFilter[] = [
+        filterFactory.members(filterAttribute, ['0-18'], { guid: 'abc' }) as MembersFilter,
+      ];
+
+      const { filters: createdFilters } = createCommonFiltersOverSelections(
+        [
+          {
+            attribute: chartAttribute,
+            values: ['65+'],
+            displayValues: ['65+'],
+          },
+        ],
+        existingFilters,
+      );
+
+      expect(createdFilters.length).toBe(1);
+      expect(createdFilters[0].attribute).toBe(filterAttribute);
+      expect(createdFilters[0].attribute.title).toBe('Customer Age Group');
+      expect((createdFilters[0] as MembersFilter).members).toEqual(['65+']);
+      expect(createdFilters[0].config.guid).toBe('abc');
     });
 
     it('should deselect all filters if they matches the existing filters', () => {
@@ -250,6 +294,40 @@ describe('selection-utils', () => {
       const selections = getWidgetSelections('column', dataOptions, points);
       expect(selections[0].attribute.expression).toEqual(DM.Commerce.AgeRange.expression);
       expect(selections[0].values).toEqual(['65+']);
+    });
+
+    it('should keep datetime attributes with the same expression as separate selections by granularity', () => {
+      const dataOptions = {
+        category: [DM.Commerce.Date.Weeks, DM.Commerce.Date.Days],
+        value: [measureFactory.sum(DM.Commerce.Revenue)],
+      };
+      const points = [
+        {
+          entries: {
+            category: [
+              {
+                dataOption: DM.Commerce.Date.Weeks,
+                attribute: DM.Commerce.Date.Weeks,
+                value: '2023-01-01T00:00:00',
+              },
+              {
+                dataOption: DM.Commerce.Date.Days,
+                attribute: DM.Commerce.Date.Days,
+                value: '2023-01-01T00:00:00',
+              },
+            ],
+            value: [],
+          },
+        },
+      ] as DataPoint[];
+
+      const selections = getWidgetSelections('column', dataOptions, points);
+
+      expect(selections).toHaveLength(2);
+      expect(selections[0].attribute).toEqual(DM.Commerce.Date.Weeks);
+      expect(selections[0].values).toEqual(['2023-01-01T00:00:00']);
+      expect(selections[1].attribute).toEqual(DM.Commerce.Date.Days);
+      expect(selections[1].values).toEqual(['2023-01-01T00:00:00']);
     });
 
     it('should return selections for "treemap" and "sunburst" widget', () => {

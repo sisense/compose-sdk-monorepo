@@ -1,4 +1,4 @@
-import { ScattermapChartDataOptionsInternal } from '@/index';
+import { ScattermapChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 
 import { ScattermapChartLocation } from '../../../../../core/chart-data/types';
 import {

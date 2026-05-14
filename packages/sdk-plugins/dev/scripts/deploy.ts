@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
 
-import { distFolder, pluginConfigFileName, zippedFileName } from './consts.js';
+import { distFusionFolder, pluginConfigFileName, zippedFileName } from './consts.js';
 
 interface PluginConfig {
   name: string;
@@ -22,7 +22,7 @@ export async function readPluginConfig(distPath: string): Promise<PluginConfig> 
 }
 
 export async function run() {
-  const buildDistPath = resolve(process.cwd(), distFolder);
+  const buildDistPath = resolve(process.cwd(), distFusionFolder);
   const zipFilePath = resolve(buildDistPath, `./${zippedFileName}`);
 
   const env = loadEnv('development', process.cwd(), '');

@@ -247,6 +247,26 @@ describe('utils', () => {
       expect(filter.config.backgroundFilter).toBeDefined();
       expect(expectedFilter.config.backgroundFilter).toBeDefined();
     });
+
+    test('should preserve agg from original JAQL in members filter output', () => {
+      const jaql = {
+        table: 'Commerce',
+        column: 'Revenue',
+        dim: '[Commerce.Revenue]',
+        datatype: 'numeric' as DataType,
+        agg: 'sum',
+        filter: {
+          explicit: true,
+          multiSelection: true,
+          members: ['100', '200'],
+        },
+        title: 'Total Revenue',
+      };
+
+      const filter = createFilterFromJaql(jaql, instanceid);
+      expect(filter.jaql().jaql.agg).toBe('sum');
+      expect(filter.jaql(true).agg).toBe('sum');
+    });
   });
   describe('convertSortDirectionToSort', () => {
     test('should convert SortDirection to Sort', () => {

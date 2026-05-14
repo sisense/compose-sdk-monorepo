@@ -36,6 +36,7 @@ export { getHierarchyModels } from '@/domains/drilldown/hierarchy-model';
 // Theming
 export { getThemeSettingsByOid } from '../infra/themes/theme-loader';
 export { getDefaultThemeSettings } from '../infra/contexts/theme-provider/default-theme-settings';
+export { type CompleteThemeSettings } from '../types';
 
 // Drilldown
 export { updateDrilldownSelections } from '../domains/drilldown/hooks/use-drilldown-core';
@@ -47,6 +48,10 @@ export { processDrilldownSelections } from '../domains/drilldown/hooks/use-drill
 
 // Widgets
 export { CommonWidget, type CommonWidgetProps } from '../domains/widgets/components/common-widget';
+export { type TextWidgetDataPointEventHandler } from '../props';
+export { TabberButtonsWidget } from '../domains/widgets/components/tabber-buttons-widget';
+export type { TextWidgetDataPoint } from '../types';
+export { widgetHelpers } from '../domains/widgets/helpers';
 
 // Context Adapters
 export {
@@ -54,6 +59,16 @@ export {
   type CustomWidgetsContextAdapter,
   type CustomWidgetsProviderAdapterProps,
 } from '../infra/contexts/custom-widgets-provider/custom-widgets-provider-adapter';
+export type { CustomContextProviderProps } from '@/types';
+export {
+  type CustomSisenseContext,
+  type CustomSisenseContextProviderProps,
+  CustomSisenseContextProvider,
+} from '../infra/contexts/sisense-context/custom-sisense-context-provider';
+export {
+  type CustomThemeProviderProps,
+  CustomThemeProvider,
+} from '../infra/contexts/theme-provider/custom-theme-provider';
 
 // Plugin system (internal — for framework adapters)
 export { CustomPluginContextProvider } from '../infra/plugins/custom-plugin-context-provider.js';
@@ -61,6 +76,14 @@ export type {
   CustomPluginContextProviderProps,
   CustomPluginContextProviderContext,
 } from '../infra/plugins/custom-plugin-context-provider.js';
+
+// Internal filter component/types used in "component" tests.
+// TODO: remove after affected component tests refactoring.
+export {
+  DateFilter,
+  type DateRangeFilterProps,
+  type DateFilterRange,
+} from '../domains/filters/components/date-filter/date-filter/date-filter';
 
 // Formulas
 export { useGetSharedFormulaInternal } from '../domains/formulas/use-get-shared-formula';
@@ -87,5 +110,9 @@ export {
 } from '../shared/hooks/data-load-state-reducer';
 export { trackHook } from '../infra/decorators/hook-decorators/with-tracking';
 
-// Widget helpers
-export { widgetHelpers } from '../domains/widgets/helpers';
+// Dashboarding
+export { useComposedDashboardInternal } from '../domains/dashboarding/use-composed-dashboard';
+
+// Query internals
+export { useExecuteCustomWidgetQueryInternal } from '../infra/contexts/custom-widgets-provider';
+export { useGetDataSourceFields } from '../domains/data-browser/data-source-dimensional-model';

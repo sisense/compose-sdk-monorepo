@@ -7,7 +7,7 @@ import type { ReplaceInFileConfig } from 'replace-in-file';
 import { replaceInFileSync } from 'replace-in-file';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { createPluginCommand } from './create-plugin.js';
+import { createPluginCommand, findAvailableName } from './create-plugin.js';
 import {
   copyDirectory,
   directoryExists,
@@ -140,33 +140,49 @@ describe('createPluginCommand handler', () => {
       expect(mockedMkdir).toHaveBeenCalledWith(PROJECT_PATH, { recursive: true });
     });
 
-    it('skips the delete prompt when the target directory is empty', async () => {
+    it('skips the conflict prompt when the target directory is empty', async () => {
       mockedIsDirectoryEmpty.mockResolvedValue(true);
       await callHandler();
-      expect(mockedPrompt).not.toHaveBeenCalledWith(
-        expect.arrayContaining([expect.objectContaining({ name: 'deleteContents' })]),
+      const conflictPrompts = mockedPrompt.mock.calls.filter((call) =>
+        (call[0] as { name: string }[]).some((q) => q.name === 'newPath'),
       );
+      expect(conflictPrompts).toHaveLength(0);
     });
 
-    it('exits when user declines to delete a non-empty directory', async () => {
+    it('warns and prompts for a new path when the explicit --path is not empty', async () => {
       mockedIsDirectoryEmpty.mockResolvedValue(false);
-      mockedPrompt.mockResolvedValueOnce({ deleteContents: false });
-      const exitSpy = vi.spyOn(process, 'exit').mockImplementation((_code?: number) => {
-        throw new Error(`process.exit(${_code})`);
-      });
-      await expect(callHandler()).rejects.toThrow('process.exit(0)');
-      exitSpy.mockRestore();
-    });
+      // findAvailablePath: PROJECT_PATH exists, PROJECT_PATH+'2' is free
+      mockedExistsSync.mockReturnValueOnce(true).mockReturnValueOnce(false);
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      mockedPrompt.mockResolvedValueOnce({ newPath: `${PROJECT_PATH}2` });
 
-    it('deletes directory contents when user confirms', async () => {
-      mockedIsDirectoryEmpty.mockResolvedValue(false);
-      mockedPrompt.mockResolvedValueOnce({ deleteContents: true });
-      const { readdir } = await import('fs/promises');
-      vi.mocked(readdir).mockResolvedValueOnce([
-        { name: 'old-file.txt', isDirectory: () => false } as unknown as Dirent,
-      ]);
       await callHandler();
-      expect(mockedRm).toHaveBeenCalled();
+
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('is not empty'));
+      expect(mockedPrompt).toHaveBeenCalledWith(
+        expect.arrayContaining([expect.objectContaining({ name: 'newPath' })]),
+      );
+      expect(mockedMkdir).toHaveBeenCalledWith(`${PROJECT_PATH}2`, { recursive: true });
+      warnSpy.mockRestore();
+    });
+
+    it('warns and re-prompts for plugin name when name-derived path is not empty', async () => {
+      // existsSync false → findAvailableName('my-plugin') returns 'my-plugin' immediately
+      mockedExistsSync.mockReturnValue(false);
+      mockedIsDirectoryEmpty.mockResolvedValue(false);
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      mockedPrompt.mockResolvedValueOnce({ pluginName: 'my-plugin2' });
+
+      await callHandler({ path: undefined });
+
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('is not empty'));
+      expect(mockedPrompt).toHaveBeenCalledWith(
+        expect.arrayContaining([expect.objectContaining({ name: 'pluginName' })]),
+      );
+      expect(mockedMkdir).toHaveBeenCalledWith(path.join(process.cwd(), 'my-plugin2'), {
+        recursive: true,
+      });
+      warnSpy.mockRestore();
     });
   });
 
@@ -187,6 +203,18 @@ describe('createPluginCommand handler', () => {
       );
     });
 
+    it('shows my-custom-plugin as the default name in the interactive prompt', async () => {
+      // path is explicit → defaultName is always DEFAULT_PLUGIN_NAME
+      mockedPrompt.mockResolvedValueOnce({ pluginName: 'my-custom-plugin' });
+      await callHandler({ name: undefined });
+      const namePromptCall = mockedPrompt.mock.calls.find((call) =>
+        (call[0] as Array<{ name: string }>).some((q) => q.name === 'pluginName'),
+      );
+      expect(namePromptCall).toBeDefined();
+      const question = (namePromptCall![0] as Array<{ default?: string }>)[0];
+      expect(question.default).toBe('my-custom-plugin');
+    });
+
     it('skips the template prompt when --template flag is provided', async () => {
       await callHandler({ template: TEMPLATE });
       const templatePromptCalls = mockedPrompt.mock.calls.filter((call) =>
@@ -201,6 +229,17 @@ describe('createPluginCommand handler', () => {
       expect(mockedPrompt).toHaveBeenCalledWith(
         expect.arrayContaining([expect.objectContaining({ name: 'template' })]),
       );
+    });
+
+    it('shows first template name in the template prompt choices', async () => {
+      mockedPrompt.mockResolvedValueOnce({ template: TEMPLATE });
+      await callHandler({ template: undefined });
+      const templatePromptCall = mockedPrompt.mock.calls.find((call) =>
+        (call[0] as Array<{ name: string }>).some((q) => q.name === 'template'),
+      );
+      const choices = (templatePromptCall![0] as Array<{ choices: Array<{ name: string }> }>)[0]
+        .choices;
+      expect(choices.map((c) => c.name)).toContain('Empty Project');
     });
   });
 
@@ -244,6 +283,30 @@ describe('createPluginCommand handler', () => {
         String(config.files).endsWith('package.json'),
       );
       expect(pkgReplacement).toBeDefined();
+    });
+
+    it('converts underscores to hyphens in the package.json name field', async () => {
+      await callHandler({ name: 'my_plugin' });
+      const calls = mockedReplaceInFileSync.mock.calls as [ReplaceInFileConfig][];
+      const pkgNameReplacement = calls.find(
+        ([config]) =>
+          String(config.files).endsWith('package.json') &&
+          String(config.from) === String(/PLUGIN_NAME/g),
+      );
+      expect(pkgNameReplacement).toBeDefined();
+      expect(pkgNameReplacement![0].to).toBe('my-plugin');
+    });
+
+    it('strips leading hyphens produced by a leading underscore in the package.json name field', async () => {
+      await callHandler({ name: '_foo' });
+      const calls = mockedReplaceInFileSync.mock.calls as [ReplaceInFileConfig][];
+      const pkgNameReplacement = calls.find(
+        ([config]) =>
+          String(config.files).endsWith('package.json') &&
+          String(config.from) === String(/PLUGIN_NAME/g),
+      );
+      expect(pkgNameReplacement).toBeDefined();
+      expect(pkgNameReplacement![0].to).toBe('foo');
     });
 
     it('ensures the src directory exists before copying', async () => {
@@ -339,12 +402,35 @@ describe('createPluginCommand handler', () => {
     });
   });
 
-  describe('no --path flag', () => {
-    it('resolves the project to the current directory when path is not provided', async () => {
-      const cwdProject = path.resolve('.');
-      mockedDirectoryExists.mockImplementation(async (p: string) => p !== cwdProject);
+  describe('path behavior', () => {
+    it('uses name-derived path {cwd}/{name} when --path is not provided', async () => {
+      const expectedPath = path.join(process.cwd(), PLUGIN_NAME);
+      mockedExistsSync.mockReturnValue(false);
+      mockedDirectoryExists.mockImplementation(async (p: string) => p !== expectedPath);
       await callHandler({ path: undefined });
-      expect(mockedMkdir).toHaveBeenCalledWith(cwdProject, { recursive: true });
+      expect(mockedMkdir).toHaveBeenCalledWith(expectedPath, { recursive: true });
+    });
+
+    it('uses the explicit --path when provided', async () => {
+      mockedDirectoryExists.mockImplementation(async (p: string) => p !== PROJECT_PATH);
+      await callHandler({ path: PROJECT_PATH });
+      expect(mockedMkdir).toHaveBeenCalledWith(PROJECT_PATH, { recursive: true });
+    });
+
+    it('treats positional arg as the plugin name, deriving path from it', async () => {
+      const expectedPath = path.join(process.cwd(), 'my-custom-name');
+      mockedExistsSync.mockReturnValue(false);
+      mockedDirectoryExists.mockImplementation(async (p: string) => p !== expectedPath);
+      // positional [name] maps to options.name in yargs
+      await callHandler({ name: 'my-custom-name', path: undefined });
+      expect(mockedMkdir).toHaveBeenCalledWith(expectedPath, { recursive: true });
+    });
+
+    it('prints cd instruction in next steps', async () => {
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      await callHandler();
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('cd'));
+      logSpy.mockRestore();
     });
   });
 
@@ -384,7 +470,23 @@ describe('createPluginCommand handler', () => {
     it('rejects plugin names with invalid characters', async () => {
       mockedPrompt.mockImplementationOnce(async (questions: unknown) => {
         const q = (questions as Array<{ validate?: (v: string) => boolean | string }>)[0];
-        expect(q.validate?.('invalid name!')).toMatch(/only contain letters/);
+        expect(q.validate?.('invalid name!')).toBe(
+          'The plugin name can only contain letters, numbers, hyphens, and underscores',
+        );
+        return { pluginName: 'valid-name' };
+      });
+      await callHandler({ name: undefined });
+    });
+
+    it('rejects punctuation-only names that normalize to an empty npm package name', async () => {
+      mockedPrompt.mockImplementationOnce(async (questions: unknown) => {
+        const q = (questions as Array<{ validate?: (v: string) => boolean | string }>)[0];
+        expect(q.validate?.('---')).toBe(
+          'The plugin name can only contain letters, numbers, hyphens, and underscores',
+        );
+        expect(q.validate?.('___')).toBe(
+          'The plugin name can only contain letters, numbers, hyphens, and underscores',
+        );
         return { pluginName: 'valid-name' };
       });
       await callHandler({ name: undefined });
@@ -397,6 +499,22 @@ describe('createPluginCommand handler', () => {
         return { pluginName: 'my-plugin' };
       });
       await callHandler({ name: undefined });
+    });
+
+    it('rejects a name when the derived folder already exists', async () => {
+      // path: undefined → name-derived. Use a finite once-sequence so findAvailableName terminates.
+      mockedExistsSync
+        .mockReturnValueOnce(true) // findAvailableName: my-custom-plugin exists → try next
+        .mockReturnValueOnce(false) // findAvailableName: my-custom-plugin2 is free → use as default
+        .mockReturnValueOnce(true); // validate('my-custom-plugin'): folder exists → show warning
+      mockedPrompt.mockImplementationOnce(async (questions: unknown) => {
+        const q = (questions as Array<{ validate?: (v: string) => boolean | string }>)[0];
+        const result = q.validate?.('my-custom-plugin');
+        expect(typeof result).toBe('string');
+        expect(result).toContain('already exists');
+        return { pluginName: 'my-custom-plugin2' };
+      });
+      await callHandler({ name: undefined, path: undefined });
     });
   });
 
@@ -446,5 +564,32 @@ describe('createPluginCommand handler', () => {
       await expect(callHandler({ template: 'line-chart' })).rejects.toThrow(/process\.exit/);
       exitSpy.mockRestore();
     });
+  });
+});
+
+describe('findAvailableName', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('returns baseName when the folder does not exist', () => {
+    mockedExistsSync.mockReturnValue(false);
+    expect(findAvailableName('my-plugin', '/some/dir')).toBe('my-plugin');
+  });
+
+  it('appends 2 when baseName already exists', () => {
+    mockedExistsSync
+      .mockReturnValueOnce(true) // my-plugin exists
+      .mockReturnValueOnce(false); // my-plugin2 does not
+    expect(findAvailableName('my-plugin', '/some/dir')).toBe('my-plugin2');
+  });
+
+  it('increments until a free name is found', () => {
+    mockedExistsSync
+      .mockReturnValueOnce(true) // my-plugin
+      .mockReturnValueOnce(true) // my-plugin2
+      .mockReturnValueOnce(true) // my-plugin3
+      .mockReturnValueOnce(false); // my-plugin4 — free
+    expect(findAvailableName('my-plugin', '/some/dir')).toBe('my-plugin4');
   });
 });

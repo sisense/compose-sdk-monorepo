@@ -1,12 +1,17 @@
 import {
   Attribute,
   convertDataSource,
+  convertJaqlDataSourceForDto,
   Filter,
-  JaqlDataSource,
   JaqlDataSourceForDto,
   Measure,
 } from '@sisense/sdk-data';
 
+import { jumpToDashboardConfigFromWidgetDto } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils.js';
+import type {
+  JumpToDashboardConfig,
+  JumpToDashboardConfigForPivot,
+} from '@/domains/dashboarding/hooks/jtd/jtd-types.js';
 import { ExecutePivotQueryParams, ExecuteQueryParams } from '@/domains/query-execution/index.js';
 import { getPivotQueryOptions } from '@/domains/visualizations/components/pivot-table/hooks/use-get-pivot-table-query.js';
 import { getTableAttributesAndMeasures } from '@/domains/visualizations/components/table/hooks/use-table-data.js';
@@ -79,12 +84,14 @@ import {
   isChartFusionWidget,
   isChartWidgetProps,
   isCustomWidget,
+  isCustomWidgetProps,
   isPivotTableWidgetProps,
   isPivotWidget,
   isSupportedPluginFusionWidget,
   isSupportedWidgetType,
   isTableWidgetModel,
   isTextWidget,
+  isTextWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils.js';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { AppSettings } from '@/infra/app/settings/settings.js';
@@ -123,6 +130,7 @@ import {
   toAreaPanels,
   toBarPanels,
   toColumnPanels,
+  toCustomWidgetPanels,
   toFunnelPanels,
   toIndicatorPanels,
   toLinePanels,
@@ -448,6 +456,31 @@ export function toWidgetProps(widgetModel: WidgetModel): WidgetProps {
 }
 
 /**
+ * Returns Jump to Dashboard configuration for a {@link WidgetModel} that was built from
+ * Fusion via {@link fromWidgetDto}.
+ *
+ * @param widgetModel - The {@link WidgetModel} built from Fusion via {@link fromWidgetDto};
+ *
+ * @returns `JumpToDashboardConfig`, `JumpToDashboardConfigForPivot`, or `null` when the model is not
+ * Fusion-sourced, or the widget has no versioned JTD.
+ *
+ * @example
+ * ```tsx
+ * const widgetProps = widgetModelTranslator.toWidgetProps(widgetModel);
+ * const jtdConfig = widgetModelTranslator.toJtdConfig(widgetModel);
+ * // When jtdConfig is non-null, pass widgetProps and jtdConfig to useJtdWidget; otherwise render the widget with widgetProps alone.
+ * ```
+ *
+ * @sisenseInternal
+ * @alpha
+ */
+export function toJtdConfig(
+  widgetModel: WidgetModel,
+): JumpToDashboardConfig | JumpToDashboardConfigForPivot | null {
+  return widgetModel.jtdConfig ?? null;
+}
+
+/**
  * The default widget model.
  */
 const DEFAULT_WIDGET_MODEL: WidgetModel = {
@@ -732,6 +765,8 @@ const buildWidgetModel = (params: {
     ? getChartType(fusionWidgetType)
     : undefined;
 
+  const jtdConfig = jumpToDashboardConfigFromWidgetDto(widgetDto);
+
   return {
     ...DEFAULT_WIDGET_MODEL,
     oid: widgetDto.oid,
@@ -746,6 +781,7 @@ const buildWidgetModel = (params: {
     customOptions,
     drilldownOptions,
     filters,
+    ...(jtdConfig ? { jtdConfig } : {}),
   };
 };
 
@@ -823,6 +859,41 @@ export function fromPivotTableWidgetProps(
 }
 
 /**
+ * Creates a {@link WidgetModel} from a {@link TextWidgetProps}.
+ *
+ * @param textWidgetProps - The TextWidgetProps to be converted to a widget model
+ * @returns WidgetModel
+ * @internal
+ */
+export function fromTextWidgetProps(textWidgetProps: TextWidgetProps): WidgetModel {
+  const widgetModel: WidgetModel = {
+    ...DEFAULT_WIDGET_MODEL,
+    styleOptions: textWidgetProps.styleOptions as WidgetModel['styleOptions'],
+    widgetType: 'text',
+  };
+
+  return widgetModel;
+}
+
+/**
+ * Creates a {@link WidgetModel} from a {@link CustomWidgetProps}.
+ *
+ * @param customWidgetProps - The CustomWidgetProps to be converted to a widget model
+ * @returns WidgetModel
+ * @internal
+ */
+export function fromCustomWidgetProps(customWidgetProps: CustomWidgetProps): WidgetModel {
+  const widgetModel: WidgetModel = {
+    ...DEFAULT_WIDGET_MODEL,
+    ...customWidgetProps,
+    filters: (customWidgetProps.filters as Filter[]) || [],
+    widgetType: 'custom',
+  };
+
+  return widgetModel;
+}
+
+/**
  * Creates a {@link WidgetModel} from a {@link WidgetProps}.
  *
  * @param widgetProps - The WidgetProps to be converted to a widget model
@@ -835,6 +906,12 @@ export function fromWidgetProps(widgetProps: WidgetProps): WidgetModel {
   }
   if (isPivotTableWidgetProps(widgetProps)) {
     return withOid(widgetProps.id)(fromPivotTableWidgetProps(widgetProps));
+  }
+  if (isTextWidgetProps(widgetProps)) {
+    return withOid(widgetProps.id)(fromTextWidgetProps(widgetProps));
+  }
+  if (isCustomWidgetProps(widgetProps)) {
+    return withOid(widgetProps.id)(fromCustomWidgetProps(widgetProps));
   }
 
   throw new TranslatableError('errors.otherWidgetTypesNotSupported');
@@ -864,14 +941,18 @@ export function toWidgetDto(
   themeSettings?: CompleteThemeSettings,
   appSettings?: AppSettings,
 ): WidgetDto {
-  const datasource = dataSource || widgetModel.dataSource;
-  if (typeof datasource === 'string') throw new IncompleteWidgetTypeError('dataSource');
-  const isLive = (datasource as JaqlDataSource).live || datasource.type === 'live';
-  if (!datasource.id || (!isLive && !(datasource as JaqlDataSource).address))
+  const datasource = dataSource ?? convertJaqlDataSourceForDto(widgetModel.dataSource);
+  const isLive = Boolean(datasource.live);
+  if (!datasource.id || (!isLive && !datasource.address)) {
     throw new IncompleteWidgetTypeError('dataSource');
+  }
 
   const chartType = widgetModel.chartType;
-  let fusionWidgetType = getFusionWidgetType(widgetModel.widgetType, chartType);
+  let fusionWidgetType = getFusionWidgetType(
+    widgetModel.widgetType,
+    chartType,
+    widgetModel.customWidgetType,
+  );
   let style: WidgetStyle = {};
   // TODO: For some reason TreeMap, Sunburst (and maybe others) are not include subtype in the styleOptions
   let subtype: string = (widgetModel.styleOptions as IndicatorWidgetStyle).subtype || '';
@@ -885,6 +966,21 @@ export function toWidgetDto(
       widgetModel.styleOptions as PivotTableWidgetStyleOptions,
       pivotDataOptions.grandTotals,
     );
+  } else if (isTextWidget(widgetModel.widgetType)) {
+    const textStyleOptions = widgetModel.styleOptions as TextWidgetStyleOptions;
+    subtype = 'richtexteditor';
+    style = {
+      content: {
+        html: textStyleOptions.html,
+        vAlign: textStyleOptions.vAlign,
+        bgColor: textStyleOptions.bgColor,
+        textAlign: 'center',
+      },
+    };
+  } else if (isCustomWidget(widgetModel.widgetType)) {
+    panels.push(...toCustomWidgetPanels(widgetModel.dataOptions as GenericDataOptions));
+    // Custom-widget styles are plugin-defined; pass through opaquely.
+    style = (widgetModel.styleOptions as unknown as WidgetStyle) ?? {};
   } else if (!chartType) {
     throw new Error('Chart type is required');
   } else if (chartType === 'line') {

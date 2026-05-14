@@ -1,17 +1,20 @@
 import { type FunctionComponent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { BaseQueryParams } from '@/domains/query-execution/types';
+import type { ExecuteQueryParams } from '@/domains/query-execution/types';
+import { useThemeContext } from '@/infra/contexts/theme-provider';
 import type { ChartProps } from '@/props';
 
 import { getTranslatedDataOptions } from '../chart-data-options/get-translated-data-options';
+import { QUERY_DEFINITION_TEXT_STYLE } from './query-definition-style-constants';
 import { baseQueryParamsToViewModel } from './query-params-to-view-model';
 import { QueryPill } from './query-pill';
 
 const MAX_VISIBLE_PILLS = 4;
 
-/** Connector label color — Figma text/default/primary-strong */
-const CONNECTOR_CLASS = 'csdk-text-sm csdk-text-[#262e3d] csdk-select-none';
+const EXPANDER_BUTTON_COLOR_STYLE = { color: 'inherit' as const };
+
+const CONNECTOR_CLASS = 'csdk-select-none';
 
 /**
  * Props for the QueryDefinition component.
@@ -19,8 +22,8 @@ const CONNECTOR_CLASS = 'csdk-text-sm csdk-text-[#262e3d] csdk-select-none';
  * @sisenseInternal
  */
 export interface QueryDefinitionProps {
-  /** Either chart props (uses getTranslatedDataOptions internally) or base query params */
-  query: BaseQueryParams | ChartProps;
+  /** Either chart props (uses getTranslatedDataOptions internally) or query params (same shape as {@link useExecuteQuery}) */
+  query: ExecuteQueryParams | ChartProps;
   /** When true (default), pills show JSON tooltip on hover. */
   showTooltip?: boolean;
   /**
@@ -30,7 +33,7 @@ export interface QueryDefinitionProps {
   tooltipBoundaryElement?: HTMLElement | null;
 }
 
-function isChartPropsInput(input: BaseQueryParams | ChartProps): input is ChartProps {
+function isChartPropsInput(input: ExecuteQueryParams | ChartProps): input is ChartProps {
   return 'chartType' in input && 'dataOptions' in input && typeof input.chartType === 'string';
 }
 
@@ -62,7 +65,11 @@ function splitCollapsedView(viewModel: ReturnType<typeof baseQueryParamsToViewMo
   return { visible, moreCount };
 }
 
-function chartPropsToQueryParams({ dataOptions, chartType, filters }: ChartProps): BaseQueryParams {
+function chartPropsToQueryParams({
+  dataOptions,
+  chartType,
+  filters,
+}: ChartProps): ExecuteQueryParams {
   const { attributes: dimensions, measures } = getTranslatedDataOptions(dataOptions, chartType);
   return { dimensions, measures, filters };
 }
@@ -79,6 +86,7 @@ export const QueryDefinition: FunctionComponent<QueryDefinitionProps> = ({
   tooltipBoundaryElement,
 }) => {
   const { t } = useTranslation();
+  const { themeSettings } = useThemeContext();
   const [expanded, setExpanded] = useState(false);
 
   const viewModel = useMemo(() => {
@@ -96,10 +104,10 @@ export const QueryDefinition: FunctionComponent<QueryDefinitionProps> = ({
 
   return (
     <div
-      className={`csdk-flex csdk-flex-wrap csdk-items-center csdk-gap-x-2 csdk-gap-y-1 csdk-max-w-[800px] ${
+      className={`csdk-flex csdk-flex-wrap csdk-items-center csdk-gap-1 csdk-max-w-[800px] ${
         expanded || !showExpander ? '' : 'csdk-max-h-[3.5rem] csdk-overflow-hidden'
       }`}
-      style={{ lineHeight: 1.5 }}
+      style={{ ...QUERY_DEFINITION_TEXT_STYLE, color: themeSettings.chart.textColor }}
     >
       {displayItems.map((item, index) =>
         item.type === 'connector' ? (
@@ -122,7 +130,8 @@ export const QueryDefinition: FunctionComponent<QueryDefinitionProps> = ({
       {showExpander && !expanded && (
         <button
           type="button"
-          className="csdk-inline-flex csdk-h-6 csdk-shrink-0 csdk-cursor-pointer csdk-items-center csdk-rounded csdk-border-0 csdk-bg-transparent csdk-px-2 csdk-py-1 csdk-text-sm csdk-text-[#262e3d] csdk-underline-offset-2 hover:csdk-underline"
+          className="csdk-inline-flex csdk-h-6 csdk-shrink-0 csdk-cursor-pointer csdk-items-center csdk-rounded csdk-border-0 csdk-bg-transparent csdk-px-2 csdk-py-1 csdk-underline-offset-2 hover:csdk-underline"
+          style={EXPANDER_BUTTON_COLOR_STYLE}
           onClick={() => setExpanded(true)}
         >
           {t('queryDefinition.showMorePills', { count: moreCount })}
@@ -131,7 +140,8 @@ export const QueryDefinition: FunctionComponent<QueryDefinitionProps> = ({
       {showExpander && expanded && (
         <button
           type="button"
-          className="csdk-inline-flex csdk-h-6 csdk-shrink-0 csdk-cursor-pointer csdk-items-center csdk-rounded csdk-border-0 csdk-bg-transparent csdk-px-2 csdk-py-1 csdk-text-sm csdk-text-[#262e3d] csdk-underline-offset-2 hover:csdk-underline"
+          className="csdk-inline-flex csdk-h-6 csdk-shrink-0 csdk-cursor-pointer csdk-items-center csdk-rounded csdk-border-0 csdk-bg-transparent csdk-px-2 csdk-py-1 csdk-underline-offset-2 hover:csdk-underline"
+          style={EXPANDER_BUTTON_COLOR_STYLE}
           onClick={() => setExpanded(false)}
         >
           {t('queryDefinition.showLess')}

@@ -13,7 +13,7 @@ import { FilterTileContainer, FilterTileDesignOptions } from './filter-tile-cont
 /**
  * Props for {@link CustomFilterTile}
  *
- * @internal
+ * @alpha
  */
 export interface CustomFilterTileProps {
   /** Custom filter. */
@@ -48,7 +48,6 @@ export interface CustomFilterTileProps {
 /**
  * UI component for a custom filter defined with JAQL.
  *
- * @internal
  * @example
  * ```tsx
  * const filterJaql = { from: 10, to: 20000 };
@@ -69,6 +68,7 @@ export interface CustomFilterTileProps {
  * @param props - Custom filter tile props
  * @returns Custom filter tile component
  * @group Filter Tiles
+ * @alpha
  */
 export const CustomFilterTile = asSisenseComponent({
   componentName: 'CustomFilterTile',

@@ -108,11 +108,20 @@ function findAllMatchingPivotTargets(
   // Generate the dimension ID based on the array position (e.g., "values.0", "columns.1", "rows.2")
   let targetDimensionId: string | undefined;
   if (entries.values?.length) {
-    targetDimensionId = `values.${entries.values.length - 1}`;
+    const targetEntryIndex = entries.values.length - 1;
+    const index =
+      entries.values[targetEntryIndex].dataOptionLocation?.dataOptionIndex ?? targetEntryIndex;
+    targetDimensionId = `values.${index}`;
   } else if (entries.columns?.length) {
-    targetDimensionId = `columns.${entries.columns.length - 1}`;
+    const targetEntryIndex = entries.columns.length - 1;
+    const index =
+      entries.columns[targetEntryIndex].dataOptionLocation?.dataOptionIndex ?? targetEntryIndex;
+    targetDimensionId = `columns.${index}`;
   } else if (entries.rows?.length) {
-    targetDimensionId = `rows.${entries.rows.length - 1}`;
+    const targetEntryIndex = entries.rows.length - 1;
+    const index =
+      entries.rows[targetEntryIndex].dataOptionLocation?.dataOptionIndex ?? targetEntryIndex;
+    targetDimensionId = `rows.${index}`;
   }
 
   if (!targetDimensionId) {

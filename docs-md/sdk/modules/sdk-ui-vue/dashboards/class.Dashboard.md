@@ -13,13 +13,14 @@ Here's how you can use the Dashboard component in a Vue application:
 <template>
  <Dashboard
    v-if="dashboardProps"
-   :title="dashboardProps.title"
-   :layoutOptions="dashboardProps.layoutOptions"
-   :widgets="dashboardProps.widgets"
-   :filters="dashboardProps.filters"
+   :config="dashboardProps.config"
    :defaultDataSource="dashboardProps.defaultDataSource"
-   :widgetsOptions="dashboardProps.widgetsOptions"
+   :filters="dashboardProps.filters"
+   :layoutOptions="dashboardProps.layoutOptions"
    :styleOptions="dashboardProps.styleOptions"
+   :title="dashboardProps.title"
+   :widgets="dashboardProps.widgets"
+   :widgetsOptions="dashboardProps.widgetsOptions"
  />
 </template>
 

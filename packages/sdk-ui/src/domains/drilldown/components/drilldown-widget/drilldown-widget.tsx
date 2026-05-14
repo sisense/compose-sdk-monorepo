@@ -133,16 +133,15 @@ export const DrilldownWidget = asSisenseComponent({
     [setSelectedDataPoints],
   );
 
-  const drilldownMenuItems: MenuItemSection[] = useMemo(() => {
-    return [
-      getSelectionTitleMenuItem(selectedDataPoints, drilldownDimension),
-      getDrilldownMenuItems(
-        availableDrilldownPaths,
-        drilldownDimension,
-        onMenuDrilldownClick,
-        translate,
-      ),
-    ];
+  const drilldownMenuItems: MenuItemSection[] = useMemo((): MenuItemSection[] => {
+    const titleSection = getSelectionTitleMenuItem(selectedDataPoints, drilldownDimension);
+    const drillSection = getDrilldownMenuItems(
+      availableDrilldownPaths,
+      drilldownDimension,
+      onMenuDrilldownClick,
+      translate,
+    );
+    return drillSection ? [titleSection, drillSection] : [titleSection];
   }, [
     drilldownDimension,
     availableDrilldownPaths,

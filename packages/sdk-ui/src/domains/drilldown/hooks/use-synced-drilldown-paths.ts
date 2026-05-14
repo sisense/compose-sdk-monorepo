@@ -1,11 +1,13 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Attribute, DataSource } from '@sisense/sdk-data';
+import isString from 'lodash-es/isString';
+import partition from 'lodash-es/partition';
 
 import { useHasChanged } from '@/shared/hooks/use-has-changed';
 
 import { Hierarchy, HierarchyId } from '../hierarchy-model/index';
-import { useSyncedDrilldownPathsManager } from './use-synced-drilldown-paths-manager';
+import { useHierarchiesLoader } from './use-hierarchies-loader';
 
 /**
  * Synchronizes drilldown paths with hierarchy data from a Fusion instance.
@@ -27,15 +29,32 @@ export function useSyncedDrilldownPaths(params: {
     'enabled',
   ]);
   const { attribute, dataSource, drilldownPaths, enabled } = params;
-  const { drilldownPaths: syncedDrilldownPaths, synchronize: synchronizeDrilldownPaths } =
-    useSyncedDrilldownPathsManager();
+  const [idsToLoad, nonIdPaths] = useMemo(
+    () => partition(drilldownPaths, isString),
+    [drilldownPaths],
+  );
+  const { getHierarchies } = useHierarchiesLoader();
+
+  const [loadedHierarchies, setLoadedHierarchies] = useState<Hierarchy[]>([]);
 
   useEffect(() => {
     const isEnabled = enabled || enabled === undefined;
     if (isEnabled && isParamsChanged) {
-      synchronizeDrilldownPaths({ attribute, dataSource, drilldownPaths });
+      getHierarchies({ attribute, dataSource, ids: idsToLoad })
+        .then((hierarchies) => {
+          setLoadedHierarchies((existingHierarchies) => {
+            const shouldUpdate =
+              hierarchies.length > 0 || existingHierarchies.length !== hierarchies.length;
+            return shouldUpdate ? hierarchies : existingHierarchies;
+          });
+        })
+        .catch((error) => {
+          console.error('Failed to load hierarchies', error);
+        });
     }
-  }, [isParamsChanged, enabled, attribute, dataSource, drilldownPaths, synchronizeDrilldownPaths]);
+  }, [isParamsChanged, enabled, attribute, dataSource, idsToLoad, getHierarchies]);
 
-  return useMemo(() => syncedDrilldownPaths ?? [], [syncedDrilldownPaths]);
+  return useMemo(() => {
+    return loadedHierarchies.length ? [...loadedHierarchies, ...nonIdPaths] : nonIdPaths;
+  }, [loadedHierarchies, nonIdPaths]);
 }

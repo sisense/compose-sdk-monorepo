@@ -75,8 +75,7 @@ export const useGetNlgInsights = (
       const payload = prepareGetNlgInsightsPayload(toPlainObject(params));
       const narrative = sisenseContext.value.app?.settings?.narrative;
       const response = await api?.ai.getNlgInsights(payload, {
-        isUnified: narrative?.isUnified ?? false,
-        isSisenseAiEnabled: narrative?.isSisenseAiEnabled ?? false,
+        canGenerateNarrativeViaAI: narrative?.canGenerateNarrativeViaAI,
       });
 
       dispatch({ type: 'success', data: response?.data?.answer });

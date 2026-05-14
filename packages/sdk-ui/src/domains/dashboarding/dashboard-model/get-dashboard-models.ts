@@ -2,7 +2,9 @@ import { HttpClient } from '@sisense/sdk-rest-client';
 
 import { dashboardModelTranslator } from '@/domains/dashboarding/dashboard-model';
 import { RestApi } from '@/infra/api/rest-api.js';
+import { AppSettings } from '@/infra/app/settings/settings';
 import { dedupe } from '@/shared/utils/dedupe.js';
+import { CompleteThemeSettings } from '@/types';
 
 import { withSharedFormulas } from './translate-dashboard-utils.js';
 
@@ -23,11 +25,13 @@ export interface GetDashboardModelsOptions {
 export async function getDashboardModels(
   http: HttpClient,
   options: GetDashboardModelsOptions = {},
+  themeSettings?: CompleteThemeSettings,
+  appSettings?: AppSettings,
 ) {
   const { includeWidgets, searchByTitle } = options;
   const api = new RestApi(http);
   const expand: string[] = [];
-  let fields = ['oid', 'title', 'datasource'];
+  let fields = ['oid', 'title', 'datasource', 'style'];
 
   if (includeWidgets) {
     // Removes "fields" list due to it's conflict with "expand" parameter => API endpoint issue
@@ -57,9 +61,40 @@ export async function getDashboardModels(
     );
   }
 
+  // Fetch palettes once for all dashboards that have a paletteId but no resolved palette.
+  const dashboardsNeedsPaletteResolution = dedupedDashboards.filter(
+    (dashboard) => dashboard.style?.paletteId && !dashboard.style.palette,
+  );
+
+  if (dashboardsNeedsPaletteResolution.length > 0) {
+    try {
+      const palettesDto = (await api.getPalettes()) ?? [];
+      for (const dashboard of dashboardsNeedsPaletteResolution) {
+        const paletteDto = palettesDto.find(({ _id }) => _id === dashboard.style?.paletteId);
+        dashboard.style = {
+          ...dashboard.style,
+          ...(paletteDto && {
+            palette: {
+              name: paletteDto.name,
+              colors: paletteDto.colors,
+            },
+          }),
+        };
+      }
+    } catch (e) {
+      console.warn('Loading palettes failed, palettes will not be translated to dashboard models.');
+    }
+  }
+
   return Promise.all(
     dedupedDashboards.map((dashboard) =>
-      withSharedFormulas(dashboard, api).then(dashboardModelTranslator.fromDashboardDto),
+      withSharedFormulas(dashboard, api).then((dashboardWithSharedFormulas) =>
+        dashboardModelTranslator.fromDashboardDto(
+          dashboardWithSharedFormulas,
+          themeSettings,
+          appSettings,
+        ),
+      ),
     ),
   );
 }

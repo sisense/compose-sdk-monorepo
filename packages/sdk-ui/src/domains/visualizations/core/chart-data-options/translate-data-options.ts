@@ -53,7 +53,9 @@ import {
   normalizeColumn,
   normalizeMeasureColumn,
   safeMerge,
+  translateColumnToMeasure,
 } from './utils';
+import { applyUniqueDataColumnsNames, DataColumnNamesMapping } from './validate-data-options';
 
 export function translateChartDataOptions(
   chartType: ChartType,
@@ -234,6 +236,31 @@ export function translateTableDataOptions(dataOptions: TableDataOptions): TableD
       .map((c) => normalizeAnyColumn(c))
       .map(updateStyledColumnSortForTable),
   };
+}
+
+/**
+ * Returns a shallow copy of the table data options whose measure columns carry
+ * unique alias names, paired with the unique-name -> original-name mapping.
+ *
+ * Pure: neither the input data options nor the user's measure refs are
+ * mutated. Each renamed column wraps a fresh measure clone whose prototype is
+ * the original measure (so methods like `jaql()` keep working).
+ */
+export function withUniqueMeasureNames(dataOptions: TableDataOptionsInternal): {
+  dataOptions: TableDataOptionsInternal;
+  mapping: DataColumnNamesMapping;
+} {
+  const measureColumns = dataOptions.columns.filter(isMeasureColumn) as StyledMeasureColumn[];
+  const { measures: uniqueMeasures, mapping } = applyUniqueDataColumnsNames(
+    measureColumns.map(translateColumnToMeasure),
+  );
+
+  let measureIdx = 0;
+  const columns = dataOptions.columns.map((c) =>
+    isMeasureColumn(c) ? { ...c, column: uniqueMeasures[measureIdx++] } : c,
+  );
+
+  return { dataOptions: { ...dataOptions, columns }, mapping };
 }
 
 /**

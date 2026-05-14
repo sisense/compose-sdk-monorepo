@@ -1,5 +1,8 @@
+import { convertJaqlDataSourceForDto, DataSource } from '@sisense/sdk-data';
+
 import { withSpecificWidgetOptions } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils';
 import { withReplacedWidgetId } from '@/domains/dashboarding/hooks/duplicate-widget';
+import { isTextWidget } from '@/domains/widgets/components/widget-by-id/utils.js';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 import { RestApi } from '@/infra/api/rest-api';
 import { AppSettings } from '@/infra/app/settings/settings';
@@ -48,6 +51,12 @@ export type PersistDashboardModelMiddlewareParams = {
   appSettings: AppSettings;
   /** Theme settings forwarded to {@link toWidgetDto} (used as defaults for widget design) */
   themeSettings: CompleteThemeSettings;
+  /**
+   * Dashboard-level data source. Used as a fallback data source for widgets
+   * whose model does not carry one (e.g. text widgets), so the produced DTO
+   * still satisfies the server's datasource schema.
+   */
+  dashboardDataSource?: DataSource;
 };
 
 /**
@@ -63,6 +72,7 @@ export async function persistDashboardModelMiddleware({
   sharedMode,
   appSettings,
   themeSettings,
+  dashboardDataSource,
 }: PersistDashboardModelMiddlewareParams): Promise<UseDashboardModelInternalAction> {
   if (!dashboardOid) throw new Error('Dashboard model is not initialized');
 
@@ -81,8 +91,21 @@ export async function persistDashboardModelMiddleware({
         widgetOptions,
       } = parseAddWidgetPayload(action.payload);
 
+      // Text widgets don't carry a data source in their widget model.
+      // Fall back to the dashboard-level data source so the produced DTO
+      // still satisfies the server's datasource schema.
+      const dataSourceForDto =
+        isTextWidget(inputWidget.widgetType) && dashboardDataSource
+          ? convertJaqlDataSourceForDto(dashboardDataSource)
+          : undefined;
+
       const widgetDto = withSpecificWidgetOptions(widgetOptions)(
-        widgetModelTranslator.toWidgetDto(inputWidget, undefined, themeSettings, appSettings),
+        widgetModelTranslator.toWidgetDto(
+          inputWidget,
+          dataSourceForDto,
+          themeSettings,
+          appSettings,
+        ),
       );
 
       const createdWidgetDto = await restApi.addWidgetToDashboard(

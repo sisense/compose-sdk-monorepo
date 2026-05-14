@@ -1680,6 +1680,57 @@ describe('translate-dashboard-utils', () => {
 
       expect(result).toBe(baseWidgetDto);
     });
+
+    it('should fill unsupported style fields from partialDtoOptions.style without overriding rebuilt values', () => {
+      const sunburstDto: WidgetDto = {
+        ...baseWidgetDto,
+        type: 'sunburst',
+        subtype: 'sunburst',
+        // mimic to-widget-dto-style output
+        style: {
+          'legend/enabled': true,
+          'legend/position': 'bottom',
+          'tooltip/value': true,
+          'tooltip/contribution': false,
+        } as unknown as WidgetDto['style'],
+      };
+
+      const widgetOptions: SpecificWidgetOptions = {
+        partialDtoOptions: {
+          style: {
+            // gap fields preserved from the original DTO
+            'center/value': true,
+            'center/contribution': false,
+            'center/contributionToParent': true,
+            // conflict: rebuild emits true; partial holds the stale opposite
+            'legend/enabled': false,
+          },
+        },
+      };
+
+      const result = withSpecificWidgetOptions(widgetOptions)(sunburstDto);
+
+      // gap fields restored
+      expect(result.style).toMatchObject({
+        'center/value': true,
+        'center/contribution': false,
+        'center/contributionToParent': true,
+      });
+      // conflict resolved in favor of rebuild
+      expect((result.style as Record<string, unknown>)['legend/enabled']).toBe(true);
+    });
+
+    it('should leave style unchanged when partialDtoOptions.style is empty', () => {
+      const dto: WidgetDto = {
+        ...baseWidgetDto,
+        style: { foo: 'bar' } as unknown as WidgetDto['style'],
+      };
+      const widgetOptions: SpecificWidgetOptions = {
+        partialDtoOptions: { style: {} },
+      };
+      const result = withSpecificWidgetOptions(widgetOptions)(dto);
+      expect(result.style).toEqual({ foo: 'bar' });
+    });
   });
 
   describe('getJtdNavigateType', () => {

@@ -5,7 +5,7 @@ import {
   CustomSisenseContextProvider,
   CustomThemeProvider,
 } from '@sisense/sdk-ui-preact';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { Mocked } from 'vitest';
 
 import { ThemeService } from '../services';
@@ -78,7 +78,7 @@ describe('createThemeContextConnector', () => {
 
   beforeEach(() => {
     themeService = {
-      getThemeSettings: vi.fn().mockReturnValue(of(themeSettingsMock)),
+      themeSettings$: new BehaviorSubject(themeSettingsMock),
     } as unknown as Mocked<ThemeService>;
   });
 

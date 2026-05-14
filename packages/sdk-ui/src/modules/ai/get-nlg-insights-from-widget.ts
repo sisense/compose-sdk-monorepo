@@ -1,15 +1,10 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
 
-import { prepareGetNlgInsightsPayload } from '@/domains/narrative/core/build-narrative-request.js';
 import type { WidgetNarrativeNlgOptions } from '@/domains/narrative/core/widget-narrative-options.js';
 import {
-  convertChartWidgetPropsToUseGetNlgInsightsParams,
-  convertPivotWidgetPropsToNarrativeRequest,
+  buildWidgetNarrativeRequests,
+  MISSING_DATASOURCE_NLG_ERROR,
 } from '@/domains/narrative/core/widget-props-to-narrative-params.js';
-import {
-  isChartWidgetProps,
-  isPivotTableWidgetProps,
-} from '@/domains/widgets/components/widget-by-id/utils.js';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { getNarrative } from '@/infra/api/narrative/narrative-endpoints.js';
 
@@ -56,30 +51,24 @@ export async function getNlgInsightsFromWidget(
   httpClient: HttpClient,
   options?: GetNlgInsightsFromWidgetOptions,
 ): Promise<string> {
-  const request = isPivotTableWidgetProps(props)
-    ? convertPivotWidgetPropsToNarrativeRequest(
-        props,
-        options?.defaultDataSource,
-        options?.verbosity,
-        options?.ignoreTrendAndForecast,
-      )
-    : isChartWidgetProps(props)
-    ? prepareGetNlgInsightsPayload(
-        convertChartWidgetPropsToUseGetNlgInsightsParams(
-          props,
-          options?.defaultDataSource,
-          options?.verbosity,
-          options?.ignoreTrendAndForecast,
-        ),
-      )
-    : null;
+  const { supported, narrativeRequest, narrativeFallbackRequest, missingDataSource } =
+    buildWidgetNarrativeRequests(
+      props,
+      options?.defaultDataSource,
+      options?.verbosity,
+      options?.ignoreTrendAndForecast,
+    );
 
-  if (!request) {
+  if (!supported || !narrativeRequest) {
+    if (missingDataSource) {
+      throw new Error(MISSING_DATASOURCE_NLG_ERROR);
+    }
     throw new Error('Only chart or pivot widget props are supported');
   }
-  const response = await getNarrative(httpClient, request, {
-    isUnified: options?.isUnified,
-    isSisenseAiEnabled: options?.isSisenseAiEnabled,
+
+  const response = await getNarrative(httpClient, narrativeRequest, {
+    canGenerateNarrativeViaAI: options?.canGenerateNarrativeViaAI,
+    fallbackRequestOn400: narrativeFallbackRequest,
   });
 
   if (!response?.data?.answer) {

@@ -52,11 +52,13 @@ export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
  * ```html
  * <csdk-dashboard
  *  *ngIf="dashboard"
- *  [title]="dashboard.title"
- *  [layoutOptions]="dashboard.layoutOptions"
- *  [widgets]="dashboard.widgets"
- *  [filters]="dashboard.filters"
+ *  [config]="dashboard.config"
  *  [defaultDataSource]="dashboard.defaultDataSource"
+ *  [filters]="dashboard.filters"
+ *  [layoutOptions]="dashboard.layoutOptions"
+ *  [styleOptions]="dashboard.styleOptions"
+ *  [title]="dashboard.title"
+ *  [widgets]="dashboard.widgets"
  *  [widgetsOptions]="dashboard.widgetsOptions"
  * />
  * ```

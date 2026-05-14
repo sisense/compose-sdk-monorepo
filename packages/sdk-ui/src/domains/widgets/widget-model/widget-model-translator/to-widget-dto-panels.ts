@@ -1,6 +1,7 @@
 /* eslint-disable sonarjs/no-identical-functions */
 import { Column, normalizeName } from '@sisense/sdk-data';
 
+import { isPivotRowsSort } from '@/domains/visualizations/components/pivot-table/sorting-utils.js';
 import { getTableAttributesAndMeasures } from '@/domains/visualizations/components/table/hooks/use-table-data.js';
 import {
   AreamapChartDataOptions,
@@ -10,7 +11,6 @@ import {
   PivotTableDataOptions,
   ScatterChartDataOptions,
   ScattermapChartDataOptions,
-  ScattermapLocationLevel,
   StyledColumn,
   TableDataOptionsInternal,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
@@ -22,6 +22,7 @@ import {
 import { createPanelItem } from '@/domains/widgets/components/widget-by-id/translate-widget-data-options.js';
 import { Panel, PanelItem } from '@/domains/widgets/components/widget-by-id/types.js';
 import { isMeasurePanelItem } from '@/domains/widgets/components/widget-by-id/utils.js';
+import type { GenericDataOptions, PivotRowsSort } from '@/types.js';
 import { MultiColumnValueToColorMap, ScattermapStyleOptions, ValueToColorMap } from '@/types.js';
 
 type MembersFormat = Record<
@@ -423,9 +424,21 @@ export function toPivotTablePanels(dataOptions: PivotTableDataOptions): Panel[] 
   const columnItems: PanelItem[] = (dataOptions.columns ?? []).map((column) =>
     createPanelItem(normalizeColumn(column)),
   );
-  const valueItems: PanelItem[] = (dataOptions.values ?? []).map((column) =>
-    createPanelItem(normalizeMeasureColumn(column)),
-  );
+  // Emit stable `field.id`/`field.index` on value items so pivot sort-by-measure
+  // can reference them via `jaql.sortDetails.field` (see extractPivotTableChartDataOptions
+  // which round-trips this via `valuesFieldIndexesMapping`).
+  const valueItems: PanelItem[] = (dataOptions.values ?? []).map((column, index) => {
+    const item = createPanelItem(normalizeMeasureColumn(column));
+    return { ...item, field: { id: `${index}`, index } };
+  });
+
+  applyPivotRowsSorting({
+    rows: dataOptions.rows ?? [],
+    rowItems,
+    columnItems,
+    valueItems,
+  });
+
   return [
     { name: 'rows', items: rowItems },
     { name: 'columns', items: columnItems },
@@ -434,17 +447,78 @@ export function toPivotTablePanels(dataOptions: PivotTableDataOptions): Panel[] 
 }
 
 /**
- * Reads the Fusion `geoLevel` value carried on a styled geo column and narrows
- * it to the subset Fusion actually writes to the DTO (`country | state | city`;
- * `auto` means "no explicit level" and is not round-tripped to the panel).
- * The inverse `extractScattermapChartDataOptions` historically wrote it as
- * `level`, while the public `CategoryStyle.geoLevel` is the documented field —
- * accept either.
+ * Maps a CSDK `SortDirection` to the `jaql` sort token. `sortNone` returns undefined
+ * so no sort is written — matching how `createPanelItem` treats it.
  */
-function getGeoLevel(column: Column | StyledColumn): 'country' | 'state' | 'city' | undefined {
-  const styled = column as StyledColumn & { level?: ScattermapLocationLevel };
-  const raw = styled.geoLevel ?? styled.level;
-  return raw === 'country' || raw === 'state' || raw === 'city' ? raw : undefined;
+function toJaqlSortDir(direction: PivotRowsSort['direction']): 'asc' | 'desc' | undefined {
+  if (direction === 'sortAsc') return 'asc';
+  if (direction === 'sortDesc') return 'desc';
+  return undefined;
+}
+
+/**
+ * Reconstructs `sortDetails.measurePath` from `columnsMembersPath`. Forward translation
+ * loses the keys (via `Object.values`), so we re-pair each member value with the `dim`
+ * of the column at the same position — the shape Fusion writes in practice.
+ */
+function buildMeasurePath(
+  columnsMembersPath: (string | number)[] | undefined,
+  columnItems: PanelItem[],
+): Record<string, string> | undefined {
+  if (!columnsMembersPath || columnsMembersPath.length === 0) return undefined;
+  const measurePath: Record<string, string> = {};
+  columnsMembersPath.forEach((member, i) => {
+    const columnJaql = columnItems[i]?.jaql as { dim?: string; title?: string } | undefined;
+    const key = columnJaql?.dim ?? columnJaql?.title;
+    if (key !== undefined) measurePath[key] = String(member);
+  });
+  return Object.keys(measurePath).length > 0 ? measurePath : undefined;
+}
+
+/**
+ * Writes pivot row sorting back to the DTO shape. For a row whose `sortType` is a
+ * `PivotRowsSort` with `by`, sorting lives on the referenced value panel item as
+ * `jaql.sortDetails` — matching the forward read in `extractPivotTableChartDataOptions`.
+ * A bare `{direction}` (no `by`) is a row-self sort, emitted as `jaql.sort` on the row.
+ * Simple `SortDirection` strings are already handled inside `createPanelItem`.
+ */
+function applyPivotRowsSorting(params: {
+  rows: NonNullable<PivotTableDataOptions['rows']>;
+  rowItems: PanelItem[];
+  columnItems: PanelItem[];
+  valueItems: PanelItem[];
+}): void {
+  const { rows, rowItems, columnItems, valueItems } = params;
+  rows.forEach((row, rowIndex) => {
+    const sortType = (row as { sortType?: unknown }).sortType;
+    if (!isPivotRowsSort(sortType)) return;
+    const jaqlSort = toJaqlSortDir(sortType.direction);
+    if (!jaqlSort) return;
+
+    const valuesIndex = sortType.by?.valuesIndex;
+    if (valuesIndex === undefined) {
+      const rowItem = rowItems[rowIndex];
+      if (rowItem) rowItem.jaql = { ...rowItem.jaql, sort: jaqlSort } as PanelItem['jaql'];
+      return;
+    }
+
+    const target = valueItems[valuesIndex];
+    if (!target || !target.field) return;
+    const measurePath = buildMeasurePath(sortType.by?.columnsMembersPath, columnItems);
+    // Emit the same metadata under both `sort` (consumed by pivot query helpers) and
+    // `sortDetails` (consumed by `extractPivotTableChartDataOptions`) so the two
+    // read paths stay in sync.
+    const sortMetadata = {
+      dir: jaqlSort,
+      field: target.field.index,
+      ...(measurePath ? { measurePath } : {}),
+    };
+    target.jaql = {
+      ...target.jaql,
+      sort: sortMetadata,
+      sortDetails: sortMetadata,
+    } as unknown as PanelItem['jaql'];
+  });
 }
 
 /**
@@ -474,11 +548,9 @@ export function toScattermapPanels(
   dataOptions: ScattermapChartDataOptions,
   markerSize?: NonNullable<ScattermapStyleOptions['markers']>['size'],
 ): Panel[] {
-  const geoItems: PanelItem[] = (dataOptions.geo ?? []).map((column) => {
-    const item = createPanelItem(normalizeColumn(column));
-    const geoLevel = getGeoLevel(column);
-    return geoLevel ? { ...item, geoLevel } : item;
-  });
+  const geoItems: PanelItem[] = (dataOptions.geo ?? []).map((column) =>
+    createPanelItem(normalizeColumn(column)),
+  );
   const colorItems: PanelItem[] = dataOptions.colorBy
     ? [createPanelItem(normalizeMeasureColumn(dataOptions.colorBy))]
     : [];
@@ -538,4 +610,28 @@ export function toAreamapPanels(dataOptions: AreamapChartDataOptions): Panel[] {
     { name: 'geo', items: geoItems },
     { name: 'color', items: colorItems },
   ];
+}
+
+/**
+ * Builds DTO panels for a plugin / custom widget. Each key in {@link GenericDataOptions}
+ * becomes one panel; every Column is normalised then converted to a JAQL panel item via
+ * the same helper chart widgets use, so the DTO round-trips through `fromWidgetDto`
+ * without further translation. The `filters` key is reserved by the DTO schema and
+ * emitted separately from `widgetModel.filters`, so it is skipped here.
+ *
+ * @param dataOptions - Generic data options keyed by the plugin's input names
+ * @returns One Fusion panel per declared input
+ * @internal
+ */
+export function toCustomWidgetPanels(dataOptions: GenericDataOptions | undefined): Panel[] {
+  if (!dataOptions) return [];
+  const panels: Panel[] = [];
+  for (const [panelName, columns] of Object.entries(dataOptions)) {
+    if (panelName === 'filters' || !Array.isArray(columns)) continue;
+    panels.push({
+      name: panelName,
+      items: columns.map((column) => createPanelItem(normalizeAnyColumn(column))),
+    });
+  }
+  return panels;
 }

@@ -80,16 +80,6 @@ export const SettingsItemComponent = (props: Props) => {
     }
   };
 
-  const handleClickOnItem = (): void => {
-    changeCheckboxState(!isCheckboxSelected);
-
-    onSettingsItemStateChange({
-      title,
-      selected: !isCheckboxSelected,
-      direction: directionState,
-    });
-  };
-
   const [isMouseOverLabel, setMouseOverLabelState] = useState(false);
   const handleMouseEnterLabel = (): void => setMouseOverLabelState(true);
   const handleMouseLeaveLabel = (): void => setMouseOverLabelState(false);
@@ -108,8 +98,8 @@ export const SettingsItemComponent = (props: Props) => {
           tabIndex={0}
           role="button"
           aria-pressed="false"
-          onClick={handleClickOnItem}
-          onKeyUp={handleClickOnItem}
+          onClick={handleCheckboxChange}
+          onKeyUp={handleCheckboxChange}
           onMouseEnter={handleMouseEnterLabel}
           onMouseLeave={handleMouseLeaveLabel}
         >

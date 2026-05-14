@@ -12,7 +12,7 @@ import {
 import { toRefs, watch } from 'vue';
 
 import { useReducer } from '../helpers/use-reducer';
-import { getSisenseContext } from '../providers';
+import { getSisenseContext, getThemeContext } from '../providers';
 import type { MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
@@ -86,16 +86,20 @@ export const useGetDashboardModel = (params: MaybeRefOrWithRefs<GetDashboardMode
   });
 
   const context = getSisenseContext();
+  const themeContext = getThemeContext();
 
-  const runGetDashboardModel = async (application: ClientApplication) => {
+  const runGetDashboardModel = async (app: ClientApplication) => {
     try {
       dispatch({ type: 'loading' });
       const { dashboardOid, includeWidgets, includeFilters } = toPlainObject(params);
 
-      const data = await getDashboardModel(application.httpClient, dashboardOid, {
-        includeWidgets,
-        includeFilters,
-      });
+      const data = await getDashboardModel(
+        app.httpClient,
+        dashboardOid,
+        { includeWidgets, includeFilters },
+        themeContext.value,
+        app.settings,
+      );
 
       dispatch({ type: 'success', data });
     } catch (error) {
@@ -104,7 +108,7 @@ export const useGetDashboardModel = (params: MaybeRefOrWithRefs<GetDashboardMode
   };
 
   watch(
-    [...collectRefs(params), context],
+    [...collectRefs(params), context, themeContext],
     () => {
       const { app } = context.value;
       const { enabled } = toPlainObject(params);

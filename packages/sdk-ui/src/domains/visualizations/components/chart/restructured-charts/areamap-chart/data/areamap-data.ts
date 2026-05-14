@@ -1,4 +1,4 @@
-import { AreamapChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
+import { type AreamapChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 import {
   DataTable,
   getColumnByName,

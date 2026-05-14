@@ -47,7 +47,9 @@ const getDrilldownSelections = (
   if (item?.parent && item.through && 'filter' in item.through.jaql) {
     const nextDimension = createDataColumn(item).column as Attribute;
     const { jaql, format: { mask } = {} } = item.parent;
-    const dateFormat = 'level' in jaql && jaql.level && mask && (mask as DatetimeMask)[jaql.level];
+    const jl = jaql as { level?: string; dateTimeLevel?: string };
+    const datetimeLevelKey = jl.dateTimeLevel || jl.level;
+    const dateFormat = datetimeLevelKey && mask && (mask as DatetimeMask)[datetimeLevelKey];
 
     const points =
       (item.through.jaql.filter as IncludeMembersFilterJaql)?.members?.map(

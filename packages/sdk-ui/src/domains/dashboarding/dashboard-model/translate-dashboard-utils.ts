@@ -23,6 +23,10 @@ import {
 import type { JtdConfigDto, JtdTargetDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import { TabberConfig, TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import {
+  applyPartialDtoStyle,
+  extractUnsupportedStyleOptions,
+} from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/index.js';
+import {
   isJaqlWithFormula,
   isSharedFormulaReferenceContext,
   Panel,
@@ -55,6 +59,8 @@ import {
 } from '@/shared/utils/filter-relations';
 
 import type { SpecificWidgetOptions, WidgetsOptions, WidgetsPanelColumnLayout } from './types';
+
+type WidgetJtdDtoSlice = Pick<WidgetDto, 'oid' | 'type' | 'metadata' | 'drillToDashboardConfig'>;
 
 /** Default width (100%) when Fusion omits it for a single-widget subcell. */
 const DEFAULT_SUBCELL_WIDTH = 100;
@@ -153,7 +159,7 @@ const translateNavigateType = (navigateType: number): TriggerMethod => {
   return 'click';
 };
 
-export const getJtdNavigateType = (widget: WidgetDto): TriggerMethod => {
+export const getJtdNavigateType = (widget: WidgetJtdDtoSlice): TriggerMethod => {
   const jtdConfigDto = widget.drillToDashboardConfig;
   if (!jtdConfigDto) {
     // default one
@@ -180,7 +186,10 @@ export const getJtdNavigateType = (widget: WidgetDto): TriggerMethod => {
   return 'rightclick';
 };
 
-export const convertDimensionsToDimIndexes = (widget: WidgetDto, dimensionIds: string[]) => {
+export const convertDimensionsToDimIndexes = (
+  widget: WidgetJtdDtoSlice,
+  dimensionIds: string[],
+) => {
   const columns = widget.metadata?.panels.find((p) => p.name === 'columns');
   const rows = widget.metadata?.panels.find((p) => p.name === 'rows');
   const values = widget.metadata?.panels.find((p) => p.name === 'values');
@@ -206,7 +215,7 @@ export const convertDimensionsToDimIndexes = (widget: WidgetDto, dimensionIds: s
 };
 
 const translateToJtdConfig = (
-  widget: WidgetDto,
+  widget: WidgetJtdDtoSlice,
 ): JumpToDashboardConfig | JumpToDashboardConfigForPivot | undefined => {
   const jtdConfigDto = widget.drillToDashboardConfig;
   if (!jtdConfigDto) {
@@ -270,7 +279,7 @@ const translateToJtdConfig = (
  * @returns Map of dimensions/measures to their targets or undefined if no targets found
  * @internal
  */
-export function extractPivotTargetsConfigFromWidgetDto(widget: WidgetDto):
+export function extractPivotTargetsConfigFromWidgetDto(widget: WidgetJtdDtoSlice):
   | Map<
       | Dimension
       | {
@@ -321,7 +330,7 @@ export function extractPivotTargetsConfigFromWidgetDto(widget: WidgetDto):
 
         if (!dimensionObj) {
           // Find and convert the panel item to Dimension/Measure
-          dimensionObj = findDimensionByInstanceId(widget.metadata.panels, pivotDimensionId);
+          dimensionObj = findDimensionByInstanceId(widget.metadata?.panels ?? [], pivotDimensionId);
           if (dimensionObj) {
             dimensionCache.set(pivotDimensionId, dimensionObj);
           }
@@ -347,15 +356,35 @@ export function extractPivotTargetsConfigFromWidgetDto(widget: WidgetDto):
   return targets;
 }
 
+function jumpToDashboardConfigFromJtdDtoSlice(
+  source: WidgetJtdDtoSlice,
+): JumpToDashboardConfig | JumpToDashboardConfigForPivot | undefined {
+  if (!source?.drillToDashboardConfig?.version) {
+    return undefined;
+  }
+  return translateToJtdConfig(source);
+}
+
+/**
+ * Converts a Fusion {@link WidgetDto}'s `drillToDashboardConfig` into Compose SDK JumpToDashboardConfig | JumpToDashboardConfigForPivot
+ * {@link JumpToDashboardConfig} {@link JumpToDashboardConfigForPivot} for use with {@link useJtdWidget}
+ *
+ * @param widget - Fusion widget DTO (or the subset of fields used for JTD translation)
+ * @returns JTD config, or `undefined` when there is no versioned JTD DTO or the widget type does not support JTD
+ *
+ * @group Dashboards
+ */
+export function jumpToDashboardConfigFromWidgetDto(
+  widget: WidgetJtdDtoSlice,
+): JumpToDashboardConfig | JumpToDashboardConfigForPivot | undefined {
+  return jumpToDashboardConfigFromJtdDtoSlice(widget);
+}
+
 export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptions {
   const widgetsOptionsMap: WidgetsOptions = {};
 
   widgets.forEach((widget: WidgetDto) => {
-    // Safely translate JTD config, avoiding non-null assertion
-    const jtd: JumpToDashboardConfig | JumpToDashboardConfigForPivot | undefined =
-      widget?.drillToDashboardConfig && widget.drillToDashboardConfig.version
-        ? translateToJtdConfig(widget)
-        : undefined;
+    const jtd = jumpToDashboardConfigFromWidgetDto(widget);
 
     widgetsOptionsMap[widget.oid] = {
       filtersOptions: {
@@ -371,7 +400,10 @@ export function translateWidgetsOptions(widgets: WidgetDto[] = []): WidgetsOptio
         forceApplyBackgroundFilters: true,
       },
       ...(jtd ? { jtdConfig: jtd } : {}),
-      partialDtoOptions: { options: widget.options, style: widget.style },
+      partialDtoOptions: {
+        options: widget.options,
+        style: extractUnsupportedStyleOptions(widget.type, widget.style),
+      },
     };
   });
 
@@ -497,10 +529,16 @@ export function withSpecificWidgetOptions(
         ? jtdConfigToDto(jtdConfig as JumpToDashboardConfig)
         : widgetDto.drillToDashboardConfig;
 
+    // Re-attach unsupported style fields snapshot from the original DTO so they
+    // survive Fusion → CSDK → Fusion round-trips. Rebuilt style takes precedence,
+    // partialDtoOptions.style only fills gaps the rebuild leaves untouched.
+    const style = applyPartialDtoStyle(widgetDto.style, partialDtoOptions?.style);
+
     return {
       ...widgetDto,
       ...(options && { options }),
       metadata,
+      style,
       ...(drillToDashboardConfig && { drillToDashboardConfig }),
     };
   };

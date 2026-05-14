@@ -11,6 +11,7 @@ import { AppConfig, ThemeSettings } from '../../../types';
 import {
   convertToThemeSettings,
   getPaletteName,
+  LegacyDesignSettings,
   LegacyPalette,
 } from '../../themes/legacy-design-settings.js';
 import { getLegacyPalette } from '../../themes/theme-loader';
@@ -20,6 +21,72 @@ import { FeatureMap, Features } from './types/features.js';
 type AiSettingsResponse = {
   narration?: { enabled?: boolean; sisenseAIEnabled?: boolean };
 };
+
+/**
+ * AI-related slice derived from globals (`serverFeatures` + deployment props),
+ * aligned with admin UI paths such as `ai.featureFlags.*`, `ai.featureModelType`,
+ * `ai.quotaNotification`, and `ai.aiStudio.*`.
+ */
+type AiSettingsSlice = {
+  featureFlags: {
+    completionV2: boolean;
+    naturalResponseEnabled: boolean;
+    nlqV3Enabled: boolean;
+    queryDefinition: boolean;
+  };
+  /**
+   * Only when `serverFeatures.aiAssistant` exists.
+   * If the block is present but omits this field, defaults to `customer_byok`.
+   * When the AI Assistant feature is absent from globals, this stays unset (`undefined`).
+   */
+  featureModelType?: string;
+  quotaNotification: boolean;
+  aiStudio: {
+    realtime: boolean;
+    usageDisplay: boolean;
+  };
+};
+
+function mapAiSettingsSlice(features: FeatureMap): AiSettingsSlice {
+  const aiAssistant = features.aiAssistant;
+  const aiStudioFeature = features.aiStudio;
+
+  const nlqV3Enabled = Boolean(aiAssistant?.nlqV3Enabled ?? aiAssistant?.isNlqV3Enabled ?? false);
+
+  const naturalResponseEnabled = Boolean(aiAssistant?.naturalResponseEnabled ?? false);
+
+  const queryDefinition = Boolean(aiAssistant?.queryDefinition ?? false);
+
+  const completionV2 = Boolean(aiAssistant?.completionV2 ?? false);
+
+  const quotaNotification = Boolean(aiAssistant?.quotaNotification ?? false);
+
+  const featureModelType =
+    aiAssistant !== undefined ? aiAssistant.featureModelType ?? 'customer_byok' : undefined;
+
+  const realtime = Boolean(
+    aiStudioFeature?.realtime ?? aiStudioFeature?.isRealtimeEnabled ?? false,
+  );
+
+  const usageDisplay = Boolean(
+    aiStudioFeature?.usageDisplay ?? aiStudioFeature?.isUsageDisplayEnabled ?? false,
+  );
+
+  return {
+    featureFlags: {
+      completionV2,
+      naturalResponseEnabled,
+      nlqV3Enabled,
+      queryDefinition,
+    },
+    ...(featureModelType !== undefined ? { featureModelType } : {}),
+    quotaNotification,
+    aiStudio: {
+      realtime,
+      usageDisplay,
+    },
+  };
+}
 
 /**
  * Application settings
@@ -87,13 +154,13 @@ type ServerSettings = {
   serverLanguage: string;
   serverVersion: string;
   serverFeatures: FeatureMap;
+  ai: AiSettingsSlice;
   narrative: {
     /** From `api/v2/settings/ai` narration.enabled */
     isEnabled: boolean;
-    /** From globals.props.narrationUnified */
-    isUnified: boolean;
-    /** Computed: unlimited (API sisenseAIEnabled or props) or credit-based narratives */
-    isSisenseAiEnabled: boolean;
+
+    /** Computed from `narrationUnified` and the unlimited or credit-based narrative entitlements. */
+    canGenerateNarrativeViaAI: boolean;
   };
   user: {
     tenant: {
@@ -105,6 +172,21 @@ type ServerSettings = {
      * @internal
      */
     permissions: RoleManifest;
+    /** From `api/globals` `user.firstName` — for embedded UIs (e.g. assistant greeting). */
+    firstName?: string;
+    /** From `api/globals` `user.lastName`. */
+    lastName?: string;
+    /** From `api/globals` `user.email`. */
+    email?: string;
+  };
+  /**
+   * Raw Fusion `designSettings` from `api/globals` (before palette / theme conversion).
+   * Use for CSS variable derivation that mirrors the main Fusion app; see also {@link ServerSettings.serverThemeSettings}.
+   */
+  fusionDesignSettings: LegacyDesignSettings;
+  /** Subset of `globals.brand` needed by embedded chrome (e.g. documentation link). */
+  fusionBrand: {
+    documentationUrl: string | null;
   };
 };
 
@@ -188,7 +270,7 @@ export async function getSettings(
  * @returns FeatureMap
  */
 function mapFeatures(features: Features): FeatureMap {
-  const map = {};
+  const map: Record<string, Features[number]> = {};
 
   features.forEach((feature) => {
     map[feature.key] = feature;
@@ -211,6 +293,13 @@ async function loadAiSettings(httpClient: Pick<HttpClient, 'get'>) {
       narrative: { isEnabled: false, isSisenseAiEnabled: false },
     };
   }
+}
+
+function documentationUrlFromBrand(brand: unknown): string | null {
+  if (brand == null || typeof brand !== 'object') return null;
+  const raw = Reflect.get(brand, 'documentationUrl');
+  if (raw == null) return null;
+  return typeof raw === 'string' ? raw : null;
 }
 
 /**
@@ -241,15 +330,20 @@ async function loadServerSettings(
     props?.aiNarrative &&
     (props?.SisenseManagedLLM || props?.llmBYOK)
   );
+  const isUnified = props?.narrationUnified === true;
+  const serverFeatures = mapFeatures(globals.features ?? []);
+  const ai = mapAiSettingsSlice(serverFeatures);
+
   const serverSettings: ServerSettings = {
     serverThemeSettings: convertToThemeSettings(globals.designSettings, palette, httpClient.url),
     serverLanguage: globals.language,
     serverVersion: globals.version,
-    serverFeatures: mapFeatures(globals.features ?? []),
+    serverFeatures,
+    ai,
     narrative: {
       isEnabled: apiNarration.isEnabled,
-      isUnified: props?.narrationUnified === true,
-      isSisenseAiEnabled: unlimitedNarrativesEnabled || creditNarrativesEnabled,
+      canGenerateNarrativeViaAI:
+        isUnified && (unlimitedNarrativesEnabled || creditNarrativesEnabled),
     },
     user: {
       tenant: {
@@ -258,6 +352,13 @@ async function loadServerSettings(
       permissions: {
         dashboards: globals?.user?.userAuth?.dashboards,
       },
+      firstName: globals.user?.firstName,
+      lastName: globals.user?.lastName,
+      email: globals.user?.email,
+    },
+    fusionDesignSettings: globals.designSettings,
+    fusionBrand: {
+      documentationUrl: documentationUrlFromBrand(globals.brand),
     },
   };
   return serverSettings;

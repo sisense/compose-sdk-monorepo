@@ -38,9 +38,9 @@ function getFilterLabel(filter: Filter, t?: TFunction): string {
 /**
  * Builds the query definition view model from base query params.
  * Order: Measures → "by" → Dimensions → "for"/"where" → Filters.
- * Operators (comparison/sort) are not derived from BaseQueryParams in v1.
+ * Operators (comparison/sort) are not derived from base query fields in v1.
  *
- * @param params - BaseQueryParams from chart or query
+ * @param params - Base query fields from chart or query; accepts {@link ExecuteQueryParams} (execution-only fields are ignored).
  * @param t - Optional i18n translate function. When provided, date-level (`DimensionalLevelAttribute`)
  *   dimensions and filters use `attribute.datetimeName.*` strings (e.g. "Months in Date"). When omitted,
  *   labels match the previous behavior (`attr.name` only).

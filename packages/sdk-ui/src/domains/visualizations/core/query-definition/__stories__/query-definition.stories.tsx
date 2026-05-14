@@ -1,7 +1,7 @@
 import { createAttribute, createMeasure, filterFactory } from '@sisense/sdk-data';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import type { BaseQueryParams } from '@/domains/query-execution/types';
+import type { ExecuteQueryParams } from '@/domains/query-execution/types';
 
 import { QueryDefinition } from '../query-definition';
 
@@ -68,7 +68,7 @@ export const MeasuresAndDimensions: Story = {
     query: {
       measures: [sumOfSales],
       dimensions: [regionAttr],
-    } as BaseQueryParams,
+    } as ExecuteQueryParams,
   },
 };
 
@@ -88,7 +88,7 @@ export const WithFilters: Story = {
           ),
         ),
       ),
-    } as BaseQueryParams,
+    } as ExecuteQueryParams,
   },
 };
 
@@ -101,7 +101,7 @@ export const ManyPillsShowsMore: Story = {
         filterFactory.members(regionAttr, ['North']),
         filterFactory.members(categoryAttr, ['Electronics']),
       ],
-    } as BaseQueryParams,
+    } as ExecuteQueryParams,
   },
   parameters: {
     docs: {
@@ -117,7 +117,7 @@ export const MeasuresOnly: Story = {
   args: {
     query: {
       measures: [sumOfSales],
-    } as BaseQueryParams,
+    } as ExecuteQueryParams,
   },
 };
 
@@ -125,7 +125,7 @@ export const DimensionsOnly: Story = {
   args: {
     query: {
       dimensions: [regionAttr, categoryAttr],
-    } as BaseQueryParams,
+    } as ExecuteQueryParams,
   },
 };
 
@@ -135,7 +135,7 @@ export const AllCategories: Story = {
       measures: [sumOfSales, avgPrice],
       dimensions: [regionAttr],
       filters: [filterFactory.members(regionAttr, ['North'])],
-    } as BaseQueryParams,
+    } as ExecuteQueryParams,
   },
   parameters: {
     docs: {

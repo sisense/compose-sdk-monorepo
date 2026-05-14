@@ -7,7 +7,8 @@ const ts = require('typescript');
 /**
  * @typedef {{
  *  entry: string;
- *  requiredTag: string;
+ *  requiredTag?: string;
+ *  forbiddenTags?: string[];
  * }} ExportEntry
  */
 
@@ -84,6 +85,27 @@ function hasRequiredTag(node, requiredTag) {
 }
 
 /**
+ * Returns whether a declaration (or any of its owners) has any of the forbidden JSDoc tags.
+ *
+ * @param {import('typescript').Node} node
+ * @param {readonly string[]} forbiddenTags
+ * @returns {boolean}
+ */
+function hasForbiddenTag(node, forbiddenTags) {
+  const normalized = forbiddenTags.map((t) => t.replace(/^@/, ''));
+  /** @type {import('typescript').Node | undefined} */
+  let current = node;
+  while (current) {
+    const tags = ts.getJSDocTags(current);
+    if (tags.some((tag) => normalized.includes(tag.tagName?.text))) {
+      return true;
+    }
+    current = current.parent;
+  }
+  return false;
+}
+
+/**
  * Resolves alias symbols to the final declaration.
  *
  * @param {import('typescript').Symbol | undefined} symbol
@@ -108,9 +130,11 @@ function isWildcardExport(statement) {
     return false;
   }
   if (!statement.exportClause) {
+    // export * from '...' — dumps all exports, forbidden
     return true;
   }
-  return ts.isNamespaceExport(statement.exportClause);
+  // export * as name from '...' — single named binding, allowed
+  return false;
 }
 
 /**
@@ -188,10 +212,11 @@ function printViolationsReport(violations) {
  * @param {import('typescript').Program} program
  * @param {string} packageRoot
  * @param {string} barrelPath
- * @param {string} requiredTag
+ * @param {string | undefined} requiredTag
+ * @param {readonly string[] | undefined} forbiddenTags
  * @returns {Violation[]}
  */
-function validatePublicApiEntry(program, packageRoot, barrelPath, requiredTag) {
+function validatePublicApiEntry(program, packageRoot, barrelPath, requiredTag, forbiddenTags) {
   const absoluteBarrelPath = path.resolve(packageRoot, barrelPath);
   const sourceFile = program.getSourceFile(absoluteBarrelPath);
 
@@ -260,19 +285,37 @@ function validatePublicApiEntry(program, packageRoot, barrelPath, requiredTag) {
         continue;
       }
 
+      const declarationFile = declaration.getSourceFile();
+      const declarationLine =
+        ts.getLineAndCharacterOfPosition(declarationFile, declaration.getStart()).line + 1;
+
+      if (forbiddenTags && forbiddenTags.length > 0) {
+        if (!hasForbiddenTag(declaration, forbiddenTags)) {
+          continue;
+        }
+        violations.push({
+          barrelPath,
+          requiredTag: '<none>',
+          exportName: exportedAs,
+          file: normalizePath(declarationFile.fileName),
+          line: declarationLine,
+          reason: `Forbidden tag found. Public API must not export items tagged ${forbiddenTags.join(
+            ', ',
+          )}.`,
+        });
+        continue;
+      }
+
       if (hasRequiredTag(declaration, requiredTag)) {
         continue;
       }
 
-      const declarationFile = declaration.getSourceFile();
-      const line =
-        ts.getLineAndCharacterOfPosition(declarationFile, declaration.getStart()).line + 1;
       violations.push({
         barrelPath,
         requiredTag,
         exportName: exportedAs,
         file: normalizePath(declarationFile.fileName),
-        line,
+        line: declarationLine,
         reason: `Missing required tag ${requiredTag}.`,
       });
     }
@@ -289,8 +332,8 @@ function validatePublicApiEntry(program, packageRoot, barrelPath, requiredTag) {
 function validatePublicApiEntries(exportEntries) {
   const packageRoot = process.cwd();
   const program = createProgram(packageRoot);
-  const violations = exportEntries.flatMap(({ entry, requiredTag }) =>
-    validatePublicApiEntry(program, packageRoot, entry, requiredTag),
+  const violations = exportEntries.flatMap(({ entry, requiredTag, forbiddenTags }) =>
+    validatePublicApiEntry(program, packageRoot, entry, requiredTag, forbiddenTags),
   );
 
   if (violations.length === 0) {

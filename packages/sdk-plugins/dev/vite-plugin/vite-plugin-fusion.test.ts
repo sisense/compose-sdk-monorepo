@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import zipPack from 'vite-plugin-zip-pack';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { sisenseFusionPlugin } from './vite-plugin-fusion.js';
@@ -30,6 +31,7 @@ const mockedExistsSync = vi.mocked(existsSync);
 const mockedReadFileSync = vi.mocked(readFileSync);
 const mockedWriteFileSync = vi.mocked(writeFileSync);
 const mockedRmSync = vi.mocked(rmSync);
+const mockedZipPack = vi.mocked(zipPack);
 const VALID_MANIFEST = `export default { name: 'my-plugin', customWidget: { visualization: {} } }`;
 const MANIFEST_PATH = 'src/index.tsx';
 
@@ -123,6 +125,12 @@ describe('sisenseFusionPlugin', () => {
       const plugins = sisenseFusionPlugin({ manifest: MANIFEST_PATH });
       expect(plugins).toHaveLength(5);
     });
+
+    it('passes inDir: dist-fusion to zipPack in fusion mode', () => {
+      process.argv = ['node', 'script.js', '--fusion'];
+      sisenseFusionPlugin({ manifest: MANIFEST_PATH });
+      expect(mockedZipPack).toHaveBeenCalledWith(expect.objectContaining({ inDir: 'dist-fusion' }));
+    });
   });
 
   describe('config', () => {
@@ -213,12 +221,12 @@ describe('sisenseFusionPlugin', () => {
       });
     });
 
-    it('writes plugin.json to the dist folder', () => {
+    it('writes plugin.json to dist-fusion', () => {
       const plugin = getFusionPlugin(['node', 'script.js', '--fusion']);
       plugin.closeBundle();
 
       const [pathArg] = mockedWriteFileSync.mock.calls[0];
-      expect(String(pathArg)).toContain('dist');
+      expect(String(pathArg)).toContain('dist-fusion');
       expect(String(pathArg)).toContain('plugin.json');
     });
 
@@ -238,10 +246,19 @@ describe('sisenseFusionPlugin', () => {
   });
 
   describe('cleanDistPlugin', () => {
-    it('buildStart removes the dist folder', () => {
+    it('buildStart removes dist in csdk mode', () => {
       const plugin = getCleanDistPlugin();
       plugin.buildStart();
-      expect(mockedRmSync).toHaveBeenCalledWith(expect.stringContaining('dist'), {
+      expect(mockedRmSync).toHaveBeenCalledWith(expect.stringMatching(/[/\\]dist$/), {
+        recursive: true,
+        force: true,
+      });
+    });
+
+    it('buildStart removes dist-fusion in fusion mode', () => {
+      const plugin = getCleanDistPlugin(['node', 'script.js', '--fusion']);
+      plugin.buildStart();
+      expect(mockedRmSync).toHaveBeenCalledWith(expect.stringContaining('dist-fusion'), {
         recursive: true,
         force: true,
       });

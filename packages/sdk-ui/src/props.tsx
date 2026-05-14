@@ -238,7 +238,7 @@ export interface SisenseContextProviderProps {
 
   // TODO: move to AuthConfig
   /**
-   * Milliseconds after the latest redirect timestamp before the counter resets. Use `0` to disable expiry (counter only resets on successful auth). Default is `5000` (5 seconds).
+   * Milliseconds after the latest redirect timestamp before the counter resets. Use `0` to disable expiry (counter only resets on successful auth). Default is `10000` (10 seconds).
    *
    * @category Sisense Authentication
    * @alpha
@@ -368,7 +368,7 @@ export type BeforeRenderHandler = (
  *
  * @param renderOptions - The render options to check
  * @returns whether the render options are of type HighchartsOptions
- * @internal
+ * @alpha
  */
 export const isHighchartsOptions = (renderOptions: any): renderOptions is HighchartsOptions => {
   return renderOptions?.chart?.type !== undefined;
@@ -379,7 +379,7 @@ export const isHighchartsOptions = (renderOptions: any): renderOptions is Highch
  *
  * @param renderOptions - The render options to check
  * @returns whether the render options are of type IndicatorRenderOptions
- * @internal
+ * @alpha
  */
 export const isIndicatorRenderOptions = (
   renderOptions: any,
@@ -687,7 +687,7 @@ interface IndicatorChartEventProps extends BaseChartEventProps {
  * Event props for CalendarHeatmap chart which uses CalendarHeatmapDataPoint type
  * to describe data points for events.
  *
- * @internal
+ * @alpha
  */
 export interface CalendarHeatmapChartEventProps
   extends BaseChartEventProps,

@@ -11,7 +11,11 @@ import {
   PivotGrandTotals,
 } from '@sisense/sdk-data';
 
-import { CategoryStyle, SeriesStyle, ValueStyle } from '@/public-api/index.js';
+import {
+  CategoryStyle,
+  SeriesStyle,
+  ValueStyle,
+} from '@/domains/visualizations/core/chart-data-options/types.js';
 import type { PivotTableStyleOptions } from '@/types.js';
 
 import { DataSchemaContext, NlqTranslationInput } from '../types.js';

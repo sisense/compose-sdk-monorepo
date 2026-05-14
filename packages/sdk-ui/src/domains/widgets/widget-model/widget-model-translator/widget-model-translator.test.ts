@@ -1,9 +1,14 @@
+import { measureFactory } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 
+import { Commerce } from '@/__test-helpers__/sample-ecommerce';
 import { advancedLineChartWidgetDto } from '@/domains/dashboarding/dashboard-model/__mocks__/advanced-line-chart-widget.js';
 import { sampleEcommerceDashboard as dashboardMock } from '@/domains/dashboarding/dashboard-model/__mocks__/sample-ecommerce-dashboard.js';
 import { samplePivotDashboard } from '@/domains/dashboarding/dashboard-model/__mocks__/sample-pivot-dashboard.js';
+import { jumpToDashboardConfigFromWidgetDto } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils.js';
+import type { JtdConfigDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import { PivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
+import type { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
 import {
   CartesianWidgetStyle,
   PivotWidgetStyle,
@@ -17,13 +22,48 @@ import { CompleteThemeSettings, PivotTableWidgetStyleOptions } from '@/types';
 
 import {
   fromChartWidgetProps,
+  fromCustomWidgetProps,
   fromPivotTableWidgetProps,
   fromWidgetDto,
+  fromWidgetProps,
   toChartWidgetProps,
   toCustomWidgetProps,
+  toJtdConfig,
   toPivotTableWidgetProps,
   toWidgetDto,
 } from './widget-model-translator.js';
+
+/** Minimal versioned JTD DTO for chart widgets (see translate-dashboard-utils). */
+const minimalChartJtdDto: JtdConfigDto = {
+  drilledDashboardPrefix: '_drill',
+  drilledDashboardsFolderPrefix: '',
+  displayFilterPane: true,
+  displayDashboardsPane: true,
+  displayToolbarRow: true,
+  displayHeaderRow: true,
+  volatile: false,
+  hideDrilledDashboards: true,
+  hideSharedDashboardsForNonOwner: true,
+  drillToDashboardRightMenuCaption: 'Jump to ',
+  drillToDashboardNavigateType: 1,
+  drillToDashboardNavigateTypePivot: 2,
+  drillToDashboardNavigateTypeCharts: 1,
+  drillToDashboardNavigateTypeOthers: 3,
+  drilledDashboardDisplayType: 2,
+  dashboardIds: [{ id: 'target-dash', caption: 'Target', oid: 'target-dash' }],
+  modalWindowResize: false,
+  showFolderNameOnMenuSelection: false,
+  resetDashFiltersAfterJTD: false,
+  sameCubeRestriction: true,
+  showJTDIcon: true,
+  sendPieChartMeasureFiltersOnClick: true,
+  forceZeroInsteadNull: false,
+  mergeTargetDashboardFilters: false,
+  drillToDashboardByName: false,
+  sendBreakByValueFilter: true,
+  ignoreFiltersSource: false,
+  version: '1',
+};
 
 describe('WidgetModelTranslator', () => {
   const mockIndicatorWidgetDto = dashboardMock.widgets![0];
@@ -1304,6 +1344,110 @@ describe('WidgetModelTranslator', () => {
         expect(widgetModel.widgetType).toBe('chart');
         expect(widgetModel.dataOptions).toBeDefined();
         expect(widgetModel.filters).toEqual([]);
+      });
+    });
+  });
+
+  describe('toJtdConfig', () => {
+    it('returns null when WidgetModel was not built from a Fusion DTO (no JTD source fields)', () => {
+      const { widgetFromChart } = getWidgetTransformChain(mockLineWidgetDto);
+      expect(toJtdConfig(widgetFromChart)).toBeNull();
+    });
+
+    it('matches jumpToDashboardConfigFromWidgetDto when the Fusion DTO carries versioned JTD', () => {
+      const dto: WidgetDto = {
+        ...cloneDeep(mockLineWidgetDto),
+        drillToDashboardConfig: minimalChartJtdDto,
+      };
+      const model = fromWidgetDto(dto);
+      expect(toJtdConfig(model)).toEqual(jumpToDashboardConfigFromWidgetDto(dto));
+    });
+  });
+
+  describe('fromCustomWidgetProps + fromWidgetProps + toWidgetDto (custom widgets)', () => {
+    const datasourceForDto = {
+      title: 'Sample ECommerce',
+      id: 'aLOCALHOST_aSAMPLEIAAaECOMMERCE',
+      address: 'LocalHost',
+      fullname: 'LocalHost/Sample ECommerce',
+      live: false,
+    };
+
+    const makeCustomWidgetProps = (): CustomWidgetProps => ({
+      customWidgetType: 'demo-plugin',
+      dataSource: { title: 'Sample ECommerce', type: 'elasticube' },
+      dataOptions: {
+        category: [{ column: Commerce.AgeRange }],
+        value: [{ column: measureFactory.sum(Commerce.Revenue, 'Total Revenue') }],
+        breakBy: [{ column: Commerce.Condition }],
+      } as unknown as CustomWidgetProps['dataOptions'],
+      styleOptions: { plugin: 'specific' } as unknown as CustomWidgetProps['styleOptions'],
+      title: 'Demo Plugin',
+      description: 'A demo plugin widget',
+      filters: [],
+    });
+
+    it('fromCustomWidgetProps produces a WidgetModel typed as custom with the plugin name and data preserved', () => {
+      const model = fromCustomWidgetProps(makeCustomWidgetProps());
+
+      expect(model.widgetType).toBe('custom');
+      expect(model.customWidgetType).toBe('demo-plugin');
+      expect(model.title).toBe('Demo Plugin');
+      expect(model.description).toBe('A demo plugin widget');
+      expect(model.filters).toEqual([]);
+      expect(model.dataOptions).toMatchObject({
+        category: expect.any(Array),
+        value: expect.any(Array),
+        breakBy: expect.any(Array),
+      });
+    });
+
+    it('fromWidgetProps dispatches custom widgets through fromCustomWidgetProps and stamps the oid', () => {
+      const props = { id: 'custom-1', widgetType: 'custom' as const, ...makeCustomWidgetProps() };
+
+      const model = fromWidgetProps(props);
+
+      expect(model.widgetType).toBe('custom');
+      expect(model.customWidgetType).toBe('demo-plugin');
+      expect(model.oid).toBe('custom-1');
+    });
+
+    it('toWidgetDto emits a DTO whose `type` is the plugin name and whose panels carry valid JAQL', () => {
+      const model = fromCustomWidgetProps(makeCustomWidgetProps());
+
+      const dto = toWidgetDto(model, datasourceForDto);
+
+      expect(dto.type).toBe('demo-plugin');
+
+      const panelNames = dto.metadata.panels.map((p) => p.name);
+      // Each dataOptions key becomes a panel; the trailing `filters` panel is always appended.
+      expect(panelNames).toContain('category');
+      expect(panelNames).toContain('value');
+      expect(panelNames).toContain('breakBy');
+      expect(panelNames[panelNames.length - 1]).toBe('filters');
+
+      const categoryPanel = dto.metadata.panels.find((p) => p.name === 'category')!;
+      const categoryJaql = categoryPanel.items[0].jaql as { dim?: string };
+      expect(categoryJaql.dim).toBe('[Commerce.Age Range]');
+
+      const valuePanel = dto.metadata.panels.find((p) => p.name === 'value')!;
+      const valueJaql = valuePanel.items[0].jaql as { dim?: string; agg?: string };
+      expect(valueJaql.dim).toBe('[Commerce.Revenue]');
+      expect(valueJaql.agg).toBe('sum');
+    });
+
+    it('round-trips: fromWidgetDto(toWidgetDto(...)) recovers a custom WidgetModel with the same plugin name', () => {
+      const originalModel = fromCustomWidgetProps(makeCustomWidgetProps());
+      const dto = toWidgetDto(originalModel, datasourceForDto);
+
+      const recovered = fromWidgetDto(dto);
+
+      expect(recovered.widgetType).toBe('custom');
+      expect(recovered.customWidgetType).toBe('demo-plugin');
+      expect(recovered.title).toBe('Demo Plugin');
+      // The plugin-side style fields ride through opaquely.
+      expect(recovered.styleOptions as Record<string, unknown>).toMatchObject({
+        plugin: 'specific',
       });
     });
   });

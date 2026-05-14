@@ -143,4 +143,30 @@ describe('getCartesianChartOptions', () => {
       expect(mockUpdate).not.toHaveBeenCalled();
     });
   });
+
+  describe('line chart step in plotOptions.series', () => {
+    it('sets step to false when design options omit step (clears step on merged Highcharts update)', () => {
+      const { options } = getCartesianChartOptions(
+        minimalChartData,
+        'line',
+        minimalDesignOptions,
+        makeDataOptions(['datetime']),
+        translate,
+      );
+
+      expect(options.plotOptions?.series?.step).toBe(false);
+    });
+
+    it('sets step to the design position when step line is enabled', () => {
+      const { options } = getCartesianChartOptions(
+        minimalChartData,
+        'line',
+        { ...minimalDesignOptions, step: 'center' },
+        makeDataOptions(['datetime']),
+        translate,
+      );
+
+      expect(options.plotOptions?.series?.step).toBe('center');
+    });
+  });
 });

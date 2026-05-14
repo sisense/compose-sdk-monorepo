@@ -103,10 +103,14 @@ export const createClientApplication = async ({
   let httpClient: HttpClient = new HttpClient(url, auth, env);
   const loginSuccess = await httpClient.login();
 
-  // do not fetch palette settings from server if login failed
-  // SSO redirect is considered failed login as there will be another login attempt
-  const useDefaultPalette = disableFusionPalette || !loginSuccess;
-  const settings = await getSettings(appConfig || {}, httpClient, useDefaultPalette);
+  // SSO redirect is in flight — the browser is navigating away. Return a never-resolving
+  // promise to stop here: any further API calls would 401 and re-trigger authenticate(),
+  // burning through the redirect attempt counter before the page even navigates.
+  if (!loginSuccess) {
+    return new Promise<ClientApplication>(() => {});
+  }
+
+  const settings = await getSettings(appConfig || {}, httpClient, disableFusionPalette);
   const systemSettings = await httpClient.get<SystemSettings>('api/v1/settings/system');
   if (isApiTelemetryEnabled(systemSettings)) {
     httpClient = new HttpClient(

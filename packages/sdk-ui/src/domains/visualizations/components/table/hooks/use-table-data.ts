@@ -24,10 +24,12 @@ import {
   executeQuery as executeQueryWithoutCache,
 } from '../../../../query-execution/core/execute-query';
 import { TableDataOptionsInternal } from '../../../core/chart-data-options/types';
+import { DataColumnNamesMapping } from '../../../core/chart-data-options/validate-data-options';
 
 type UseDataProps = {
   dataSet: Data | DataSource | undefined;
   dataOptions: TableDataOptionsInternal | null;
+  dataColumnNamesMapping: DataColumnNamesMapping;
   filters: Filter[] | undefined;
   filterRelations: FilterRelationsJaql | undefined;
   count: number;
@@ -53,17 +55,21 @@ export const getTableAttributesAndMeasures = (dataOptions: TableDataOptionsInter
 export const useTableData = ({
   dataSet,
   dataOptions: originalDataOptions,
+  dataColumnNamesMapping: originalDataColumnNamesMapping,
   filters,
   filterRelations,
   count,
   offset,
-}: UseDataProps): [Data | null, TableDataOptionsInternal | null] => {
+}: UseDataProps): [Data | null, TableDataOptionsInternal | null, DataColumnNamesMapping] => {
   const setError = useSetError();
   const [data, setData] = useState(isDataSource(dataSet) ? null : dataSet);
   const [isLoading, setIsLoading] = useState(false);
   const isMoreDataAvailable = useRef(true);
   const { isInitialized, app } = useSisenseContext();
   const [dataOptions, setDataOptions] = useState(originalDataOptions);
+  const [dataColumnNamesMapping, setDataColumnNamesMapping] = useState(
+    originalDataColumnNamesMapping,
+  );
 
   useEffect(() => {
     let ignore = false;
@@ -122,6 +128,7 @@ export const useTableData = ({
             });
           }
           setDataOptions(originalDataOptions);
+          setDataColumnNamesMapping(originalDataColumnNamesMapping);
         })
         .finally(() => {
           setIsLoading(false);
@@ -134,6 +141,7 @@ export const useTableData = ({
     } else {
       setData(dataSet);
       setDataOptions(originalDataOptions);
+      setDataColumnNamesMapping(originalDataColumnNamesMapping);
     }
 
     // Set up cleanup function to ignore async fetch results of previous render
@@ -146,6 +154,7 @@ export const useTableData = ({
     app,
     dataSet,
     originalDataOptions,
+    originalDataColumnNamesMapping,
     filters,
     filterRelations,
     offset,
@@ -154,5 +163,5 @@ export const useTableData = ({
     setError,
   ]);
 
-  return [isLoading ? null : data, dataOptions];
+  return [isLoading ? null : data, dataOptions, dataColumnNamesMapping];
 };

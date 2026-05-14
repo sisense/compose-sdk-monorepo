@@ -1,7 +1,6 @@
 import { HighchartsGradientColorObject, withGradientConversion } from '@/shared/utils/gradient';
 import { omitUndefinedAndEmpty } from '@/shared/utils/omit-undefined';
-
-import { SeriesLabels, TextStyle } from '../../../..';
+import { SeriesLabels, TextStyle } from '@/types.js';
 
 type DataLabelsOptions = {
   enabled: boolean;

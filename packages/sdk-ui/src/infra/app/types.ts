@@ -150,7 +150,6 @@ export type AppConfig = {
    * Widgets that are configured using an older version of Jump To Dashboard, or via scripts, are not supported.
    *
    * Known limitations:
-   * - Jump To Dashboard is not currently supported for Pivot widgets.
    * - Target dashboards are always opened in a popup window, options to open in new tab and new window are not supported.
    * - Show 'Header' and 'Dashboards panel' options are not supported (only relevant to Fusion).
    * - 'Reset filters after JTD' is not supported, since changes are never saved to the target dashboard using Compose SDK.

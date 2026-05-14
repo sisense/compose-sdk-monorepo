@@ -1,6 +1,10 @@
 import { DataSource, Filter } from '@sisense/sdk-data';
 import { EmptyObject } from '@sisense/sdk-query-client/src/helpers/utility-types';
 
+import type {
+  JumpToDashboardConfig,
+  JumpToDashboardConfigForPivot,
+} from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import {
   ChartDataOptions,
   PivotTableDataOptions,
@@ -94,6 +98,18 @@ export interface WidgetModel {
    * Widget drilldown options.
    */
   drilldownOptions: DrilldownOptions | PivotTableDrilldownOptions;
+
+  /**
+   * Jump to Dashboard configuration for this widget, when the model was built from a Fusion
+   * `WidgetDto` via `fromWidgetDto`. Populated with the same translation as dashboard
+   * `fromDashboardDto` uses for `widgetsOptions` (via `translateWidgetsOptions` →
+   * `jumpToDashboardConfigFromWidgetDto`). Omitted or `undefined` when the model is not
+   * Fusion-sourced (e.g. from widget props) or the widget has no versioned JTD.
+   *
+   * @see {@link widgetModelTranslator.toJtdConfig}
+   * @internal
+   */
+  jtdConfig?: JumpToDashboardConfig | JumpToDashboardConfigForPivot;
 }
 
 export const isWidgetModel = (widget: any): widget is WidgetModel => {

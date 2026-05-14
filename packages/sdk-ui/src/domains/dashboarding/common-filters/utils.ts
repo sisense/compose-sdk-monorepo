@@ -45,7 +45,7 @@ export function createCommonFilter(
 ) {
   const existingFilter = getFilterByAttribute(existingCommonFilters, attribute);
   return filterFactory.members(
-    attribute,
+    existingFilter?.attribute ?? attribute,
     members.map((v) => `${v}`),
     {
       guid: existingFilter?.config.guid,

@@ -24,10 +24,9 @@ import { ThemeService } from '../services/theme.service';
 export const createThemeContextConnector = (
   themeService: ThemeService,
 ): ContextConnector<CustomThemeProviderProps> => {
-  const themeSettings$ = themeService.getThemeSettings();
   const propsObserver = new DataObserver<CustomThemeProviderProps>();
 
-  themeSettings$.subscribe({
+  themeService.themeSettings$.subscribe({
     next: (themeSettings) => {
       propsObserver.setValue({
         context: {

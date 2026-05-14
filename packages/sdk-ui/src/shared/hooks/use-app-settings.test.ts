@@ -49,8 +49,7 @@ describe('useAppSettings', () => {
       serverLanguage: 'en-US',
       narrative: {
         isEnabled: true,
-        isUnified: false,
-        isSisenseAiEnabled: true,
+        canGenerateNarrativeViaAI: true,
       },
     };
 
@@ -64,7 +63,7 @@ describe('useAppSettings', () => {
     expect(result.current?.translationConfig.language).toBe('en-US');
     expect(result.current?.user.permissions.dashboards?.create).toBe(true);
     expect(result.current?.serverFeatures?.aiAssistant?.quotaNotification).toBe(true);
-    expect(result.current?.narrative?.isSisenseAiEnabled).toBe(true);
+    expect(result.current?.narrative?.canGenerateNarrativeViaAI).toBe(true);
   });
 
   it('returns the same settings object reference on re-render when app unchanged', () => {

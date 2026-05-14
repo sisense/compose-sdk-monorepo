@@ -5,9 +5,10 @@ import { DashboardHeader } from './dashboard-header.js';
 describe('DashboardHeader', () => {
   it('should render and contain provided title', () => {
     const TEST_TITLE = 'Test Title';
-    const { getByText } = render(<DashboardHeader title={TEST_TITLE} />);
+    const { getByText, getByTestId } = render(<DashboardHeader title={TEST_TITLE} />);
 
     expect(getByText(TEST_TITLE)).toBeInTheDocument();
+    expect(getByTestId('dashboard-header-title')).toHaveTextContent(TEST_TITLE);
   });
 
   it('should render without toolbar when not provided', () => {

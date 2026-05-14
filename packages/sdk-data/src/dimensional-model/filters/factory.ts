@@ -596,13 +596,21 @@ export const members: (
 /**
  * Creates a filter to isolate date values starting from and including the given date and level.
  *
+ * @remarks
+ * Pass a JavaScript `Date` or an ISO-format datetime string. On **`Years`–`Days`** levels, the time
+ * part (from the first `T` onward) is stripped.
+ *
  * @example
  * Filter for items in the Sample ECommerce data model where the date is not before the year 2010.
  * ```ts
- * filterFactory.dateFrom(DM.Commerce.Date.Years, '2010-01')
+ * filterFactory.dateFrom(DM.Commerce.Date.Years, '2010-01-01')
+ * // or
+ * filterFactory.dateFrom(DM.Commerce.Date.Years, '2010-12-31')
  * ```
+ * With `Years` as date level, both are equivalent: the level uses the **calendar year** only, so month and day
+ * inside that year do not change the filter.
  * @param level - Date {@link LevelAttribute} to filter on
- * @param from - Date or string representing the value to filter from
+ * @param from - `Date` or ISO-format string
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
@@ -616,15 +624,23 @@ export const dateFrom: (
 );
 
 /**
- * Creates a filter to isolate items up until and including the given date and level.
+ * Creates a filter that keeps rows **on or before** an end date at the given level, with no lower limit.
+ *
+ * @remarks
+ * Pass a JavaScript `Date` or an ISO-format datetime string. On **`Years`–`Days`** levels, the time
+ * part (from the first `T` onward) is stripped.
  *
  * @example
  * Filter for items where the date is from the year 2010 or earlier in the Sample ECommerce data model.
  * ```ts
- * filterFactory.dateTo(DM.Commerce.Date.Years, '2010-01')
+ * filterFactory.dateTo(DM.Commerce.Date.Years, '2010-01-01')
+ * // or
+ * filterFactory.dateTo(DM.Commerce.Date.Years, '2010-12-31')
  * ```
+ * With `Years` as date level, both are equivalent: the level uses the **calendar year** only, so month and day
+ * inside that year do not change the filter.
  * @param level - Date {@link LevelAttribute} to filter on
- * @param to - Date or string representing the last member to filter to
+ * @param to - `Date` or ISO-format string
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */
@@ -638,16 +654,31 @@ export const dateTo: (
 );
 
 /**
- * Creates a filter to isolate items between and including the given dates and level.
+ * Creates a filter that keeps rows between a start and an end at the given date level.
+ *
+ * @remarks
+ * Pass JavaScript `Date` values or ISO-format datetime strings for `from` and/or `to`. On
+ * **`Years`–`Days`** levels, the time part of each supplied value (from the first `T` onward) is
+ * stripped.
  *
  * @example
  * Filter for items in the Sample ECommerce data model where the date is from the years 2009, 2010, or 2011.
  * ```ts
- * filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01', '2011-01')
+ * filterFactory.dateRange(DM.Commerce.Date.Years, '2009-06-15', '2011-03-20')
+ * // or
+ * filterFactory.dateRange(DM.Commerce.Date.Years, '2009-01-01', '2011-12-31')
  * ```
+ * With `Years`, both are equivalent: only the **years** in `from` and `to` drive the range; month and
+ * day inside those endpoints do not change which year buckets are included.
+ *
+ * One calendar day at day granularity: use the **same** `yyyy-MM-dd` for `from` and `to`.
+ * ```ts
+ * filterFactory.dateRange(DM.Commerce.Date.Days, '2012-05-05', '2012-05-05')
+ * ```
+ *
  * @param level - Date {@link LevelAttribute} to filter on
- * @param from - Date or string representing the start member to filter from
- * @param to - Date or string representing the end member to filter to
+ * @param from - Optional `Date` or ISO-format string
+ * @param to - Optional `Date` or ISO-format string
  * @param config - Optional configuration for the filter
  * @returns A filter instance
  */

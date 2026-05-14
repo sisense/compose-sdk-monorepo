@@ -2,8 +2,8 @@ import { ReactNode, useMemo } from 'react';
 
 import MuiMenu, { MenuProps as MuiMenuProps } from '@mui/material/Menu';
 
-import { MenuAlignment, MenuPosition } from '@/index';
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context';
+import { MenuAlignment, MenuPosition } from '@/types';
 
 type MenuProps = {
   children: ReactNode;

@@ -2,10 +2,6 @@ import { useCallback, useMemo } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 
-import {
-  isChartWidgetProps,
-  isPivotTableWidgetProps,
-} from '@/domains/widgets/components/widget-by-id/utils.js';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import type { NarrativeRequest } from '@/infra/api/narrative/narrative-api-types.js';
 import { getNarrative } from '@/infra/api/narrative/narrative-endpoints.js';
@@ -16,10 +12,7 @@ import {
   prepareNarrativeRequest,
 } from '../core/build-narrative-request.js';
 import type { WidgetNarrativeOptions } from '../core/widget-narrative-options.js';
-import {
-  convertChartWidgetPropsToNarrativeParams,
-  convertPivotWidgetPropsToNarrativeRequest,
-} from '../core/widget-props-to-narrative-params.js';
+import { buildWidgetNarrativeRequests } from '../core/widget-props-to-narrative-params.js';
 
 /**
  * Hook state aligned with legacy {@link UseGetNlgInsightsState}; used by {@link useGetWidgetNarrative}.
@@ -52,7 +45,7 @@ export type UseWidgetNarrativeStateResult = WidgetNarrativeQueryState & {
   /**
    * Mirrors the `enabled` param. When `false`, the narrative is opted out: `data` is cleared (no
    * cached fallback), `narrativeRequest` is undefined, and loading/error flags reflect a disabled
-   * query rather than “no insights.”
+   * query rather than "no insights."
    */
   enabled: boolean;
   /** Present when `supported` and `enabled`; used by {@link WidgetNarrative} for feedback payload only. */
@@ -72,61 +65,29 @@ export function useWidgetNarrativeState({
   verbosity,
   enabled = true,
   ignoreTrendAndForecast = false,
-  isUnified: optionsUnified,
-  isSisenseAiEnabled: optionsSisenseAi,
+  canGenerateNarrativeViaAI: optionsCanGenerateNarrativeViaAI,
 }: UseWidgetNarrativeStateParams): UseWidgetNarrativeStateResult {
   const { app } = useSisenseContext();
   const httpClient = app?.httpClient;
 
   const narrativeOptions = useMemo(
     () => ({
-      isUnified: optionsUnified ?? app?.settings?.narrative?.isUnified ?? false,
-      isSisenseAiEnabled: optionsSisenseAi ?? app?.settings?.narrative?.isSisenseAiEnabled ?? false,
+      canGenerateNarrativeViaAI:
+        optionsCanGenerateNarrativeViaAI ?? app?.settings?.narrative?.canGenerateNarrativeViaAI,
     }),
-    [
-      optionsUnified,
-      optionsSisenseAi,
-      app?.settings?.narrative?.isUnified,
-      app?.settings?.narrative?.isSisenseAiEnabled,
-    ],
+    [optionsCanGenerateNarrativeViaAI, app?.settings?.narrative?.canGenerateNarrativeViaAI],
   );
 
-  const { supported, narrativeRequest } = useMemo((): {
-    supported: boolean;
-    narrativeRequest: NarrativeRequest | undefined;
-  } => {
-    if (isPivotTableWidgetProps(widgetProps)) {
-      try {
-        return {
-          supported: true,
-          narrativeRequest: convertPivotWidgetPropsToNarrativeRequest(
-            widgetProps,
-            defaultDataSource,
-            verbosity,
-            ignoreTrendAndForecast,
-          ),
-        };
-      } catch {
-        return { supported: false, narrativeRequest: undefined };
-      }
-    }
-
-    if (!isChartWidgetProps(widgetProps)) {
-      return { supported: false, narrativeRequest: undefined };
-    }
-
-    try {
-      const params = convertChartWidgetPropsToNarrativeParams(
+  const { supported, narrativeRequest, narrativeFallbackRequest } = useMemo(
+    () =>
+      buildWidgetNarrativeRequests(
         widgetProps,
         defaultDataSource,
         verbosity,
         ignoreTrendAndForecast,
-      );
-      return { supported: true, narrativeRequest: prepareNarrativeRequest(params) };
-    } catch {
-      return { supported: false, narrativeRequest: undefined };
-    }
-  }, [widgetProps, defaultDataSource, verbosity, ignoreTrendAndForecast]);
+      ),
+    [widgetProps, defaultDataSource, verbosity, ignoreTrendAndForecast],
+  );
 
   const payload = useMemo(() => {
     if (supported && narrativeRequest) {
@@ -142,18 +103,15 @@ export function useWidgetNarrativeState({
   const payloadKey = useMemo(() => JSON.stringify(payload), [payload]);
 
   const { data, error, isError, isLoading, isSuccess, refetch } = useQuery({
-    queryKey: [
-      'narrative',
-      payloadKey,
-      clientId,
-      narrativeOptions.isUnified,
-      narrativeOptions.isSisenseAiEnabled,
-    ],
+    queryKey: ['narrative', payloadKey, clientId, narrativeOptions.canGenerateNarrativeViaAI],
     queryFn: () => {
       if (!httpClient) {
         return Promise.reject(new Error('HttpClient is required for narrative requests'));
       }
-      return getNarrative(httpClient, payload, narrativeOptions);
+      return getNarrative(httpClient, payload, {
+        ...narrativeOptions,
+        fallbackRequestOn400: narrativeFallbackRequest,
+      });
     },
     select: (response) => response?.data?.answer,
     enabled: queryEnabled,

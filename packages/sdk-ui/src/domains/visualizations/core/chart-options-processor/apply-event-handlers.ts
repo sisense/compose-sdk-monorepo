@@ -6,13 +6,14 @@ import type { SeriesLegendItemClickCallbackFunction } from '@sisense/sisense-cha
 import merge from 'deepmerge';
 import isNull from 'lodash-es/isNull';
 
-import { ChartDataOptionsInternal } from '../../../..';
+import { ChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 import {
   HighchartsPoint,
   HighchartsPointerEvent,
   HighchartsSelectEvent,
   HighchartsSelectEventAxis,
-} from '../../../../types';
+} from '@/types.js';
+
 import {
   SisenseChartDataPointEventHandler,
   SisenseChartDataPointsEventHandler,

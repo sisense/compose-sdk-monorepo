@@ -1,6 +1,6 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import { Octokit } from '@octokit/rest';
-import { access, cp, mkdir, readdir, readFile, rm, writeFile } from 'fs/promises';
+import { access, cp, mkdir, readdir, readFile, rename, rm, writeFile } from 'fs/promises';
 import inquirer from 'inquirer';
 import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -22,17 +22,18 @@ import { CreatePluginOptions } from './types.js';
 const requireModule = createRequire(import.meta.url);
 const PKG_VERSION: string = (requireModule('../package.json') as { version: string }).version;
 
-const command = 'create-plugin [path]';
+const DEFAULT_PLUGIN_NAME = 'my-custom-plugin';
+
+const command = 'create-plugin [name]';
 const describe = 'Create a new Compose SDK plugin';
 
 const builder: CommandBuilder<unknown, CreatePluginOptions> = (
   yargs: Argv<unknown>,
 ): Argv<CreatePluginOptions> =>
   yargs
-    .positional('path', {
+    .positional('name', {
       type: 'string',
-      describe: 'Path where the repository should be created',
-      default: '.',
+      describe: 'Name of the plugin',
     })
     .options({
       name: {
@@ -46,7 +47,6 @@ const builder: CommandBuilder<unknown, CreatePluginOptions> = (
       path: {
         type: 'string',
         describe: 'Path where the repository should be created',
-        default: '.',
       },
       'dev-mode': {
         type: 'boolean',
@@ -62,12 +62,27 @@ const builder: CommandBuilder<unknown, CreatePluginOptions> = (
     })
     .example([
       ['$0 create-plugin'],
-      ['$0 create-plugin ../../../test-package'],
-      ['$0 create-plugin --name my-plugin'],
-      ['$0 create-plugin --name my-plugin --template empty'],
-      ['$0 create-plugin --path ./my-project'],
-      ['$0 create-plugin --name my-plugin --path ./my-plugin'],
+      ['$0 create-plugin my-awesome-plugin'],
+      ['$0 create-plugin --name my-awesome-plugin'],
+      ['$0 create-plugin --name my-awesome-plugin --template empty'],
+      ['$0 create-plugin --name my-awesome-plugin --path ./my-project'],
     ]) as Argv<CreatePluginOptions>;
+
+/** Returns `baseName` if available in `baseDir`, otherwise appends an incrementing suffix. */
+export function findAvailableName(baseName: string, baseDir: string): string {
+  if (!existsSync(path.join(baseDir, baseName))) return baseName;
+  let i = 2;
+  while (existsSync(path.join(baseDir, `${baseName}${i}`))) i++;
+  return `${baseName}${i}`;
+}
+
+/** Returns `basePath` if it doesn't exist, otherwise appends an incrementing suffix. */
+function findAvailablePath(basePath: string): string {
+  if (!existsSync(basePath)) return basePath;
+  let i = 2;
+  while (existsSync(`${basePath}${i}`)) i++;
+  return `${basePath}${i}`;
+}
 
 async function createPlugin(
   projectPath: string,
@@ -121,6 +136,16 @@ async function copyRepository(projectPath: string, pluginName: string, isDevMono
   }
 
   await copyDirectory(repoTemplatePath, projectPath);
+  // npm strips files named .gitignore from tarballs; template stores it as "gitignore" and we rename on copy
+  try {
+    await rename(path.join(projectPath, 'gitignore'), path.join(projectPath, '.gitignore'));
+  } catch (error) {
+    // ignore if source file is not present (e.g. dev-mode source already has .gitignore)
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+      console.warn(`Warning: Could not rename gitignore to .gitignore: ${error}`);
+    }
+  }
+
   // Remove dev-only directory from the copied project (it shouldn't be in user's project)
   const devOnlyDestPath = path.join(projectPath, 'dev-only');
   try {
@@ -132,7 +157,11 @@ async function copyRepository(projectPath: string, pluginName: string, isDevMono
     }
   }
   const packageJsonPath = path.resolve(projectPath, `./package.json`);
-  replaceInFileSync({ files: packageJsonPath, from: /PLUGIN_NAME/g, to: pluginName });
+  replaceInFileSync({
+    files: packageJsonPath,
+    from: /PLUGIN_NAME/g,
+    to: toNpmPackageName(pluginName),
+  });
   replaceInFileSync({
     files: packageJsonPath,
     from: /CSDK_VERSION/g,
@@ -165,19 +194,6 @@ async function copyRepository(projectPath: string, pluginName: string, isDevMono
   }
 }
 
-async function promptDeleteDirectoryContents(projectPath: string): Promise<boolean> {
-  const answer = await inquirer.prompt<{ deleteContents: boolean }>([
-    {
-      type: 'confirm',
-      name: 'deleteContents',
-      message: `Warning: Directory '${projectPath}' is not empty. All contents will be deleted. Do you want to continue?`,
-      default: false,
-    },
-  ]);
-
-  return answer.deleteContents;
-}
-
 async function deleteDirectoryContents(dirPath: string): Promise<void> {
   try {
     const entries = await readdir(dirPath, { withFileTypes: true });
@@ -191,6 +207,54 @@ async function deleteDirectoryContents(dirPath: string): Promise<void> {
   } catch (error) {
     throw new Error(`Failed to delete directory contents: ${error}`);
   }
+}
+
+const NAME_PROMPT_MESSAGE = 'What name would you like to give the plugin?';
+const NAME_BLANK_ERROR = 'The plugin name cannot be blank';
+const NAME_INVALID_CHARS_ERROR =
+  'The plugin name can only contain letters, numbers, hyphens, and underscores';
+
+function isNameValid(name?: string): name is string {
+  if (!name) return false;
+  const trimmed = name.trim();
+  return /^[a-zA-Z0-9_-]+$/.test(trimmed) && toNpmPackageName(trimmed) !== '';
+}
+
+function toNpmPackageName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/_/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+async function isNonEmptyDirectory(p: string): Promise<boolean> {
+  return (await directoryExists(p)) && !(await isDirectoryEmpty(p));
+}
+
+async function promptPluginName(
+  defaultName: string,
+  checkFolderConflict: boolean,
+): Promise<string> {
+  return (
+    await inquirer.prompt<{ pluginName: string }>([
+      {
+        type: 'input',
+        name: 'pluginName',
+        message: NAME_PROMPT_MESSAGE,
+        default: defaultName,
+        validate: (answer: string): boolean | string => {
+          if (!answer || answer.trim() === '') return NAME_BLANK_ERROR;
+          if (!isNameValid(answer)) return NAME_INVALID_CHARS_ERROR;
+          if (checkFolderConflict) {
+            const targetPath = path.join(process.cwd(), answer.trim());
+            if (existsSync(targetPath))
+              return `Directory '${targetPath}' already exists. Please choose a different name`;
+          }
+          return true;
+        },
+      },
+    ])
+  ).pluginName.trim();
 }
 
 const SILENT_LOG = { debug: () => {}, info: () => {}, warn: () => {}, error: () => {} };
@@ -422,59 +486,81 @@ export async function mergeWidgetDependencies(
 const handler = async (options: Arguments<CreatePluginOptions>) => {
   if (options.devMode) {
     console.log('\n!!! DEV MODE. Installing the repo to monorepo !!!\n');
-    // --path overrides the default dev-mode destination when explicitly provided
-    if (!options.path || options.path === '.') {
+    if (!options.path) {
       options.path = '../sdk-plugins-repo-test';
     }
-  }
-
-  const projectPath = path.resolve(options.path ?? '.');
-  const fsRoot = path.parse(projectPath).root;
-  if (options.force && projectPath === fsRoot) {
-    throw new Error('Refusing to use --force on filesystem root');
   }
 
   console.log('\nWelcome to the Sisense Compose SDK Plugin toolkit!\n\n');
 
   let shouldDelete = false;
+  let resolvedPath = options.path ? path.resolve(options.path) : null;
 
-  if ((await directoryExists(projectPath)) && !(await isDirectoryEmpty(projectPath))) {
-    if (options.force) {
-      shouldDelete = true;
-    } else {
-      shouldDelete = await promptDeleteDirectoryContents(projectPath);
+  if (options.force && resolvedPath && resolvedPath === path.parse(resolvedPath).root) {
+    throw new Error('Refusing to use --force on filesystem root');
+  }
 
-      if (!shouldDelete) {
-        console.log('Operation cancelled.');
-        process.exit(0);
+  let pluginName = DEFAULT_PLUGIN_NAME;
+  let askPluginName = true;
+  const pluginNameAsFolderName = !resolvedPath;
+
+  if (isNameValid(options.name)) {
+    pluginName = options.name.trim();
+
+    if (pluginNameAsFolderName) {
+      const derivedPath = path.join(process.cwd(), pluginName);
+      const isNotEmpty = await isNonEmptyDirectory(derivedPath);
+      shouldDelete = !!options.force && isNotEmpty;
+
+      if (isNotEmpty && !options.force) {
+        pluginName = findAvailableName(pluginName, process.cwd());
+        console.warn(
+          `Warning: Directory '${derivedPath}' is not empty. Please choose a different name`,
+        );
+      } else {
+        askPluginName = false;
       }
+    } else {
+      askPluginName = false;
+    }
+  } else if (options.name) {
+    console.warn(`Warning: Name "${options.name}" cannot be used as a plugin name`);
+  } else if (pluginNameAsFolderName) {
+    pluginName = findAvailableName(pluginName, process.cwd());
+  }
+
+  pluginName = askPluginName
+    ? await promptPluginName(pluginName, pluginNameAsFolderName)
+    : pluginName;
+
+  if (resolvedPath) {
+    const isNonEmptyResolvedPath = await isNonEmptyDirectory(resolvedPath);
+    shouldDelete = !!options.force && isNonEmptyResolvedPath;
+
+    if (isNonEmptyResolvedPath && !options.force) {
+      const suggested = findAvailablePath(resolvedPath);
+      console.warn(
+        `Warning: Directory '${resolvedPath}' is not empty. Please provide a different location`,
+      );
+      const result = await inquirer.prompt<{ newPath: string }>([
+        {
+          type: 'input',
+          name: 'newPath',
+          message: 'Please provide a different location',
+          default: suggested,
+          validate: (answer: string): boolean | string => {
+            if (!answer || answer.trim() === '') return 'The location cannot be blank';
+            const resolved = path.resolve(answer.trim());
+            if (!existsSync(resolved)) return true;
+            return `Directory '${resolved}' already exists. Please provide a different location`;
+          },
+        },
+      ]);
+      resolvedPath = path.resolve(result.newPath.trim());
     }
   }
 
-  const isNameValid = (name?: string) => !!name && /^[a-zA-Z0-9_-]+$/.test(name.trim());
-
-  // Prompt for plugin name
-  const pluginName: string =
-    (isNameValid(options.name) && options.name) ||
-    (
-      await inquirer.prompt<{ pluginName: string }>([
-        {
-          type: 'input',
-          name: 'pluginName',
-          message: 'What name would you like to give the plugin?',
-          validate: (answer: string): boolean | string => {
-            if (!answer || answer.trim() === '') {
-              return 'The plugin name cannot be blank';
-            }
-            // Validate Widget name format (alphanumeric, hyphens, underscores)
-            if (!isNameValid(answer)) {
-              return 'The plugin name can only contain letters, numbers, hyphens, and underscores';
-            }
-            return true;
-          },
-        },
-      ])
-    ).pluginName.trim();
+  const projectPath = resolvedPath ? resolvedPath : path.join(process.cwd(), pluginName);
 
   let embeddedWidgets: ExampleChoice[] = [];
   let githubExamples: ExampleChoice[] = [];
@@ -505,7 +591,7 @@ const handler = async (options: Arguments<CreatePluginOptions>) => {
         {
           type: 'list',
           name: 'template',
-          message: 'How would you like to start? (Use arrow keys)',
+          message: `How would you like to start?`,
           choices: templates,
           default: templates[0],
         },
@@ -525,9 +611,8 @@ const handler = async (options: Arguments<CreatePluginOptions>) => {
   try {
     if (shouldDelete) {
       await deleteDirectoryContents(projectPath);
-    } else {
-      await mkdir(projectPath, { recursive: true });
     }
+    await mkdir(projectPath, { recursive: true });
 
     const isEmbedded = selectedTemplateEntry.embedded === true;
     await copyRepository(projectPath, pluginName, options.devMode);
@@ -538,13 +623,16 @@ const handler = async (options: Arguments<CreatePluginOptions>) => {
     );
     await createPlugin(projectPath, pluginName, selectedTemplate, isEmbedded, options.devMode);
 
+    const cpCommand =
+      process.platform === 'win32'
+        ? 'copy .env.local.example .env.local'
+        : 'cp .env.local.example .env.local';
+
     console.log(`\nNext steps:`);
-    console.log(`  npm install  - Install all dependencies\n`);
-    console.log(`  Prepare a .env.local from .env.local.example\n`);
-    console.log(`  npm run dev  - Start the development server\n`);
-    console.log(`  npm run build - Build the production bundle\n`);
-    console.log(`  npm run build:fusion - Build the production bundle for Fusion\n`);
-    console.log(`  npm run deploy - Build the bundle for Fusion and deploy it\n`);
+    console.log(`  cd "${projectPath}"  - Navigate to the plugin directory`);
+    console.log(`  npm install  - Install all dependencies`);
+    console.log(`  ${cpCommand}  - Prepare a .env.local. Setup your envs manually`);
+    console.log(`  npm run dev  - Start the development server`);
   } catch (err) {
     if (err) console.log(`Error: ${err}\r\n`);
     process.exit(1);

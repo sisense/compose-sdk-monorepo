@@ -139,13 +139,12 @@ function sortDirectionToJaqlSort(sortType: SortDirection): 'asc' | 'desc' | unde
 }
 
 const extractDatetimeFormat = (item: PanelItem) => {
-  if (item.jaql && 'level' in item.jaql) {
-    return (
-      (item.format?.mask as DatetimeMask)?.[item.jaql.level!] ??
-      (item.format?.mask as DatetimeMask)?.dateAndTime
-    );
-  }
-  return (item.format?.mask as DatetimeMask)?.dateAndTime;
+  const mask = item.format?.mask as DatetimeMask | undefined;
+  // Mirror the write path in `createPanelItem`: prefer `dateTimeLevel` over `level`
+  // so masks stored under either key round-trip cleanly.
+  const jl = item.jaql as { level?: string; dateTimeLevel?: string } | undefined;
+  const levelKey = jl?.dateTimeLevel || jl?.level;
+  return (levelKey && mask?.[levelKey]) || mask?.dateAndTime;
 };
 
 export function createDataColumn(item: PanelItem, customPaletteColors?: Color[]) {
@@ -156,42 +155,33 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
   );
   const sortType = getSortType(item.jaql.sort ?? item.categoriesSorting);
   const numberFormatConfig = extractNumberFormat(item);
-  const subtotal = item.format?.subtotal;
   const width = item.format?.width;
-  const isContinuous = item.format?.continuous;
-  let color = createValueColorOptions(item.format?.color, customPaletteColors);
-  const colorSecondary = createValueColorOptions(item.format?.colorSecond, customPaletteColors);
-  // panel is not needed in most cases, this is to support break by columns functionality
+  // panel is needed only to support break-by columns functionality
   const panel = item.panel === 'columns' && item.panel;
-
-  // Hande specific case in Fusion dashboard model
-  // Sunburst palette index stores that way
-  if (!color && !item.format?.color && item.format && 'colorIndex' in item.format) {
-    color = createValueColorOptions(
-      {
-        type: 'color',
-        colorIndex: item.format.colorIndex,
-      },
-      customPaletteColors,
-    );
-  }
+  // Sunburst stores the palette index under `colorIndex` instead of `color`
+  const color =
+    createValueColorOptions(item.format?.color, customPaletteColors) ??
+    (item.format && 'colorIndex' in item.format
+      ? createValueColorOptions(
+          { type: 'color', colorIndex: item.format.colorIndex },
+          customPaletteColors,
+        )
+      : undefined);
 
   if (MetadataTypes.isMeasure(element)) {
-    const showOnRightAxis = item.y2;
-    const chartType = item.singleSeriesType;
+    const dataBarsColor = createValueColorOptions(item.format?.colorSecond, customPaletteColors);
     const totalsCalculation = 'subtotalAgg' in item.jaql && item.jaql.subtotalAgg;
-    const dataBars = item.format?.databars;
 
     const dataOption = {
       column: element,
       ...(color && { color }),
-      ...(colorSecondary && { dataBarsColor: colorSecondary }),
-      ...(showOnRightAxis && { showOnRightAxis }),
+      ...(dataBarsColor && { dataBarsColor }),
+      ...(item.y2 && { showOnRightAxis: item.y2 }),
       ...(sortType && { sortType }),
-      ...(chartType && { chartType }),
+      ...(item.singleSeriesType && { chartType: item.singleSeriesType }),
       ...(numberFormatConfig && { numberFormatConfig }),
       ...(totalsCalculation && { totalsCalculation }),
-      ...(dataBars && { dataBars }),
+      ...(item.format?.databars && { dataBars: item.format.databars }),
       ...(width && { width }),
       ...(panel && { panel }),
     } as StyledMeasureColumn;
@@ -201,93 +191,93 @@ export function createDataColumn(item: PanelItem, customPaletteColors?: Color[])
 
   return {
     column: element,
-    isColored: item.isColored ?? false,
+    ...(item.isColored && { isColored: true }),
     ...(sortType && { sortType }),
     ...(numberFormatConfig && { numberFormatConfig }),
-    ...(subtotal && { includeSubTotals: subtotal }),
+    ...(item.format?.subtotal && { includeSubTotals: item.format.subtotal }),
     ...(width && { width }),
     ...(color && { color }),
     ...(panel && { panel }),
-    ...(isContinuous && { continuous: isContinuous }),
+    ...(item.format?.continuous && { continuous: item.format.continuous }),
   } as StyledColumn;
 }
 
 /** @internal */
 export function createPanelItem(column: StyledColumn | StyledMeasureColumn): PanelItem {
   const element = column.column;
-  let jaql;
-  if (MetadataTypes.isAttribute(element)) {
-    jaql = (element as DimensionalAttribute).jaql(true);
-  } else if (MetadataTypes.isMeasure(element)) {
-    jaql = (element as DimensionalCalculatedMeasure).jaql(true);
-  } else {
+  const isMeasure = MetadataTypes.isMeasure(element);
+  const isAttribute = MetadataTypes.isAttribute(element);
+  if (!isMeasure && !isAttribute) {
     throw new TranslatableError('errors.unsupportedDimensionalElement');
   }
 
-  const baseItem: PanelItem = jaql.jaql ? jaql : { jaql };
+  const rawJaql = isMeasure
+    ? (element as DimensionalCalculatedMeasure).jaql(true)
+    : (element as DimensionalAttribute).jaql(true);
+  const baseItem: PanelItem = rawJaql.jaql ? rawJaql : { jaql: rawJaql };
 
-  // Common enrichment: sort and number format (all columns)
-  if (column.sortType !== undefined && isSortDirection(column.sortType)) {
+  if (isSortDirection(column.sortType)) {
     const jaqlSort = sortDirectionToJaqlSort(column.sortType);
-    if (jaqlSort !== undefined && baseItem.jaql) {
-      baseItem.jaql = { ...baseItem.jaql, sort: jaqlSort } as PanelItem['jaql'];
-    }
-  }
-  if (column.numberFormatConfig) {
-    baseItem.format = {
-      ...baseItem.format,
-      mask: numberFormatConfigToNumericMask(column.numberFormatConfig),
-    };
+    if (jaqlSort) baseItem.jaql = { ...baseItem.jaql, sort: jaqlSort } as PanelItem['jaql'];
   }
 
-  if (MetadataTypes.isMeasure(element)) {
-    const measureColumn = column as StyledMeasureColumn;
+  // Format fragments shared by attributes and measures.
+  const colorFormat = createPanelColorFormat(column.color);
+  const formatPatch: NonNullable<PanelItem['format']> = {
+    ...(colorFormat && { color: colorFormat }),
+    ...(column.numberFormatConfig && {
+      mask: numberFormatConfigToNumericMask(column.numberFormatConfig),
+    }),
+    ...(column.width !== undefined && { width: column.width }),
+  };
+
+  if (isMeasure) {
+    const measure = column as StyledMeasureColumn;
+    const dataBarsColorFormat = createPanelColorFormat(measure.dataBarsColor);
 
     baseItem.panel = 'measures';
-    baseItem.y2 = measureColumn.showOnRightAxis ?? undefined;
-
-    const colorFormat = createPanelColorFormat(measureColumn.color);
-    baseItem.format = {
-      ...baseItem.format,
-      ...(colorFormat && { color: colorFormat }),
-    };
-
-    if (measureColumn.chartType)
-      baseItem.singleSeriesType = measureColumn.chartType as PanelItem['singleSeriesType'];
-    if (measureColumn.totalsCalculation && baseItem.jaql) {
-      baseItem.jaql = { ...baseItem.jaql, subtotalAgg: measureColumn.totalsCalculation };
+    if (measure.showOnRightAxis) baseItem.y2 = measure.showOnRightAxis;
+    if (measure.chartType)
+      baseItem.singleSeriesType = measure.chartType as PanelItem['singleSeriesType'];
+    if (measure.totalsCalculation) {
+      baseItem.jaql = { ...baseItem.jaql, subtotalAgg: measure.totalsCalculation };
     }
-    if (measureColumn.dataBars)
-      baseItem.format = { ...baseItem.format, databars: measureColumn.dataBars };
-    const dataBarsColorFormat = createPanelColorFormat(measureColumn.dataBarsColor);
-    if (dataBarsColorFormat)
-      baseItem.format = { ...baseItem.format, colorSecond: dataBarsColorFormat };
-    if (measureColumn.width !== undefined)
-      baseItem.format = { ...baseItem.format, width: measureColumn.width };
+    if (measure.dataBars) formatPatch.databars = measure.dataBars;
+    if (dataBarsColorFormat) formatPatch.colorSecond = dataBarsColorFormat;
 
-    const statisticalModels = createStatisticalModels(measureColumn);
-    if (statisticalModels) {
-      baseItem.statisticalModels = statisticalModels;
-    }
+    const statisticalModels = createStatisticalModels(measure);
+    if (statisticalModels) baseItem.statisticalModels = statisticalModels;
   } else {
-    const attributeColumn = column as StyledColumn;
+    const attribute = column as StyledColumn & { panel?: string };
 
-    if (attributeColumn.isColored) baseItem.isColored = true;
-    if (attributeColumn.includeSubTotals !== undefined) {
-      baseItem.format = { ...baseItem.format, subtotal: attributeColumn.includeSubTotals };
+    if (attribute.isColored) baseItem.isColored = true;
+    if (attribute.panel) baseItem.panel = attribute.panel;
+    const geoLevel = narrowGeoLevel(attribute.geoLevel);
+    if (geoLevel) baseItem.geoLevel = geoLevel;
+    if (attribute.includeSubTotals !== undefined) formatPatch.subtotal = attribute.includeSubTotals;
+    if (attribute.continuous !== undefined) formatPatch.continuous = attribute.continuous;
+
+    // Datetime mask uses the jaql level (or `dateTimeLevel`) as the key, matching how
+    // `DimensionalLevelAttribute.jaql()` writes `format.mask[level] = <format>`.
+    const jaql = baseItem.jaql as { level?: string; dateTimeLevel?: string };
+    const datetimeLevelKey = jaql.dateTimeLevel || jaql.level;
+    if (attribute.dateFormat && datetimeLevelKey) {
+      formatPatch.mask = {
+        ...(formatPatch.mask as Partial<DatetimeMask> | undefined),
+        [datetimeLevelKey]: attribute.dateFormat,
+      } as DatetimeMask;
     }
-    if (attributeColumn.width !== undefined)
-      baseItem.format = { ...baseItem.format, width: attributeColumn.width };
-    if (attributeColumn.continuous !== undefined) {
-      baseItem.format = { ...baseItem.format, continuous: attributeColumn.continuous };
-    }
-    const attrColorFormat = createPanelColorFormat(attributeColumn.color);
-    if (attrColorFormat) baseItem.format = { ...baseItem.format, color: attrColorFormat };
-    const attrPanel = (attributeColumn as StyledColumn & { panel?: string }).panel;
-    if (attrPanel) baseItem.panel = attrPanel;
+  }
+
+  if (Object.keys(formatPatch).length > 0) {
+    baseItem.format = { ...baseItem.format, ...formatPatch };
   }
 
   return baseItem;
+}
+
+function narrowGeoLevel(level: unknown): 'country' | 'state' | 'city' | undefined {
+  return level === 'country' || level === 'state' || level === 'city' ? level : undefined;
 }
 
 /** @sisenseInternal */
@@ -585,15 +575,7 @@ function createGeoColumnsFromPanelItems(panels: Panel[], customPaletteColors?: C
     .map(getRootPanelItem)
     .map((item) => {
       const column = createDataColumn(item, customPaletteColors) as StyledColumn;
-
-      if ('geoLevel' in item) {
-        return {
-          ...column,
-          level: item.geoLevel,
-        } as StyledColumn;
-      }
-
-      return column;
+      return 'geoLevel' in item ? ({ ...column, geoLevel: item.geoLevel } as StyledColumn) : column;
     });
 }
 

@@ -1,6 +1,5 @@
 import { Attribute, Column } from '@sisense/sdk-data';
 
-import { getSelectableWidgetAttributes } from '@/domains/dashboarding/common-filters/selection-utils';
 import { PivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
 import {
   getDataOptionByLocation,
@@ -34,15 +33,6 @@ export function getInitialDimensionLocation(
   }
 
   return getDataOptionLocation(dataOptions, drilldownTarget);
-}
-
-/**
- * Checks if drilldown is applicable to a pivot table.
- * Drilldown requires the pivot table to have at least one selectable attribute (row or column dimension).
- */
-export function isDrilldownApplicableToPivot(dataOptions: PivotTableDataOptions): boolean {
-  const selectableAttributes = getSelectableWidgetAttributes('pivot', dataOptions);
-  return selectableAttributes.length > 0;
 }
 
 /**

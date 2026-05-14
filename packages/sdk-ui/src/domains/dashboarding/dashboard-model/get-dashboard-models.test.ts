@@ -7,6 +7,8 @@ import { type HttpClient } from '@sisense/sdk-rest-client';
 
 import { isWidgetModel } from '@/domains/widgets/widget-model/widget-model.js';
 import { DashboardDto } from '@/infra/api/types/dashboard-dto.js';
+import { PaletteDto } from '@/infra/api/types/palette-dto.js';
+import { CompleteThemeSettings } from '@/types.js';
 
 import {
   dashboardWithSharedFormulas,
@@ -42,6 +44,8 @@ const getDashboardsMock = vi.fn(({ expand, searchByTitle } = {}): unknown => {
     })
     .filter((dashboardMock) => !searchByTitle || dashboardMock.title === searchByTitle);
 });
+
+const getPalettesMock = vi.fn((): Promise<PaletteDto[]> => Promise.resolve([]));
 
 const getSharedFormulasMock = vi.fn((sharedFormulasIds: string[]) => {
   // Return empty object if no formulas requested (e.g., when widgets aren't included)
@@ -88,6 +92,8 @@ vi.mock('@/infra/api/rest-api', () => ({
     getDashboards = getDashboardsMock;
 
     getSharedFormulas = getSharedFormulasMock;
+
+    getPalettes = getPalettesMock;
   },
 }));
 
@@ -100,6 +106,7 @@ describe('getDashboardModels', () => {
   beforeEach(() => {
     getDashboardsMock.mockClear();
     getSharedFormulasMock.mockClear();
+    getPalettesMock.mockClear();
   });
 
   it('should fetch all dashboard models', async () => {
@@ -238,6 +245,53 @@ describe('getDashboardModels', () => {
 
     expect(result).toBeUndefined();
     expect(error).toEqual(new Error('Network error'));
+  });
+
+  it('should resolve palette from paletteId when style.palette is absent', async () => {
+    const paletteId = 'palette-abc-123';
+    const paletteDto: PaletteDto = {
+      _id: paletteId,
+      colors: ['#AA0000', '#00AA00', '#0000AA'],
+      name: 'Test Palette',
+      isDefault: false,
+      sortOrder: 0,
+      isSystem: false,
+      systemDefault: false,
+    };
+    const dashboardWithPaletteId: DashboardDto = {
+      ...sampleEcommerceDashboard,
+      oid: 'dash-palette-id-only',
+      title: 'Dashboard With Palette ID',
+      style: {
+        ...sampleEcommerceDashboard.style,
+        paletteId,
+        palette: undefined,
+      },
+    };
+
+    getDashboardsMock.mockReturnValueOnce([dashboardWithPaletteId]);
+    getPalettesMock.mockResolvedValueOnce([paletteDto]);
+
+    const result = await getDashboardModels(httpClientMock);
+
+    expect(getPalettesMock).toHaveBeenCalledOnce();
+    expect(result).toHaveLength(1);
+    expect(result[0].styleOptions?.palette?.variantColors).toEqual(paletteDto.colors);
+  });
+
+  it('should pass themeSettings and appSettings to the dashboard model translator', async () => {
+    const mockThemeSettings = {
+      palette: { variantColors: ['#FF0000'] },
+    } as unknown as CompleteThemeSettings;
+
+    getDashboardsMock.mockReturnValueOnce([sampleEcommerceDashboard]);
+
+    const result = await getDashboardModels(httpClientMock, {}, mockThemeSettings);
+
+    // The translator uses themeSettings.palette as a fallback when the dashboard has no own palette.
+    // sampleEcommerceDashboard already has its own palette, so the dashboard palette takes precedence.
+    expect(result).toHaveLength(1);
+    expect(result[0].oid).toBe(sampleEcommerceDashboard.oid);
   });
 
   it('should resolve shared formulas when includeWidgets is true', async () => {

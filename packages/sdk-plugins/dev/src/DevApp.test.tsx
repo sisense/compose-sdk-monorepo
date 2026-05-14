@@ -45,8 +45,8 @@ const pluginWithDesignPanel = {
 
 const pluginWithoutWidget = { name: 'no-widget-plugin' } as unknown as WidgetPlugin;
 
-// Minimal chartProps for tests that don't care about the data shape
-const emptyChartProps = {} as unknown as CustomVisualizationProps;
+// Minimal devPreviewProps for tests that don't care about the data shape
+const emptyDevPreviewProps = {} as unknown as CustomVisualizationProps;
 
 describe('EnvWarning', () => {
   it('renders the configuration required title', () => {
@@ -67,19 +67,23 @@ describe('DevApp', () => {
   });
 
   it('renders EnvWarning when url is missing', () => {
-    render(<DevApp plugin={pluginWithWidget} chartProps={emptyChartProps} token="tok" />);
+    render(<DevApp plugin={pluginWithWidget} devPreviewProps={emptyDevPreviewProps} token="tok" />);
     expect(screen.getByText('Configuration required')).toBeInTheDocument();
   });
 
   it('renders EnvWarning when token is missing', () => {
     render(
-      <DevApp plugin={pluginWithWidget} chartProps={emptyChartProps} url="https://example.com" />,
+      <DevApp
+        plugin={pluginWithWidget}
+        devPreviewProps={emptyDevPreviewProps}
+        url="https://example.com"
+      />,
     );
     expect(screen.getByText('Configuration required')).toBeInTheDocument();
   });
 
   it('renders EnvWarning when both url and token are missing', () => {
-    render(<DevApp plugin={pluginWithWidget} chartProps={emptyChartProps} />);
+    render(<DevApp plugin={pluginWithWidget} devPreviewProps={emptyDevPreviewProps} />);
     expect(screen.getByText('Configuration required')).toBeInTheDocument();
   });
 
@@ -87,7 +91,7 @@ describe('DevApp', () => {
     render(
       <DevApp
         plugin={pluginWithoutWidget}
-        chartProps={emptyChartProps}
+        devPreviewProps={emptyDevPreviewProps}
         url="https://example.com"
         token="tok"
       />,
@@ -96,15 +100,15 @@ describe('DevApp', () => {
     expect(screen.getByText(/no-widget-plugin/)).toBeInTheDocument();
   });
 
-  it('renders the chart visualization component with chartProps', () => {
-    const chartProps = {
+  it('renders the chart visualization component with devPreviewProps', () => {
+    const devPreviewProps = {
       styleOptions: { color: 'red' },
       dataOptions: {},
     } as unknown as CustomVisualizationProps;
     render(
       <DevApp
         plugin={pluginWithWidget}
-        chartProps={chartProps}
+        devPreviewProps={devPreviewProps}
         url="https://example.com"
         token="tok"
       />,
@@ -118,7 +122,7 @@ describe('DevApp', () => {
     render(
       <DevApp
         plugin={pluginWithWidget}
-        chartProps={emptyChartProps}
+        devPreviewProps={emptyDevPreviewProps}
         url="https://example.com"
         token="tok"
       />,
@@ -130,7 +134,7 @@ describe('DevApp', () => {
     render(
       <DevApp
         plugin={pluginWithDesignPanel}
-        chartProps={emptyChartProps}
+        devPreviewProps={emptyDevPreviewProps}
         url="https://example.com"
         token="tok"
       />,
@@ -138,14 +142,14 @@ describe('DevApp', () => {
     expect(screen.getByTestId('design-panel')).toBeInTheDocument();
   });
 
-  it('passes styleOptions from chartProps to both chart and design panel initially', () => {
-    const chartProps = {
+  it('passes styleOptions from devPreviewProps to both chart and design panel initially', () => {
+    const devPreviewProps = {
       styleOptions: { subtype: 'line/spline' },
     } as unknown as CustomVisualizationProps;
     render(
       <DevApp
         plugin={pluginWithDesignPanel}
-        chartProps={chartProps}
+        devPreviewProps={devPreviewProps}
         url="https://example.com"
         token="tok"
       />,
@@ -157,13 +161,13 @@ describe('DevApp', () => {
   });
 
   it('updates styleOptions when design panel calls onChange', () => {
-    const chartProps = {
+    const devPreviewProps = {
       styleOptions: { subtype: 'line/basic' },
     } as unknown as CustomVisualizationProps;
     render(
       <DevApp
         plugin={pluginWithDesignPanel}
-        chartProps={chartProps}
+        devPreviewProps={devPreviewProps}
         url="https://example.com"
         token="tok"
       />,

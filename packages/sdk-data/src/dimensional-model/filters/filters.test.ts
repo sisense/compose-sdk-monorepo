@@ -103,8 +103,8 @@ describe('Filters jaql preparations', () => {
         level: 'years',
         datatype: 'datetime',
         filter: {
-          from: '2010-01-01T00:00:00.000Z',
-          to: '2012-01-01T00:00:00.000Z',
+          from: '2010-01-01',
+          to: '2012-01-01',
         },
       },
       panel: 'scope',
@@ -122,6 +122,41 @@ describe('Filters jaql preparations', () => {
     expect(jaql).toStrictEqual(result);
   });
 
+  it('strips time from closed date range bounds for date-only granularity', () => {
+    const filter = new DateRangeFilter(
+      new DimensionalLevelAttribute('Days', '[Commerce.Date (Calendar)]', DateLevels.Days),
+      '2026-05-05T10:00:00.000Z',
+      '2026-05-07T15:30:00.000Z',
+    );
+    const jaql = filter.jaql();
+    expect(jaql.jaql.filter?.from).toBe('2026-05-05');
+    expect(jaql.jaql.filter?.to).toBe('2026-05-07');
+  });
+
+  it('does not strip time from closed date range for non-period granularity', () => {
+    const fromIso = '2026-05-05T10:00:00.000Z';
+    const toIso = '2026-05-07T15:30:00.000Z';
+    const filter = new DateRangeFilter(
+      new DimensionalLevelAttribute('AggHours', '[Commerce.Date (Calendar)]', DateLevels.AggHours),
+      fromIso,
+      toIso,
+    );
+    const jaql = filter.jaql();
+    expect(jaql.jaql.filter?.from).toBe(fromIso);
+    expect(jaql.jaql.filter?.to).toBe(toIso);
+  });
+
+  it('leaves plain calendar strings unchanged for closed date-only range', () => {
+    const filter = new DateRangeFilter(
+      new DimensionalLevelAttribute('Days', '[Commerce.Date (Calendar)]', DateLevels.Days),
+      '2026-05-05',
+      '2026-05-07',
+    );
+    const jaql = filter.jaql();
+    expect(jaql.jaql.filter?.from).toBe('2026-05-05');
+    expect(jaql.jaql.filter?.to).toBe('2026-05-07');
+  });
+
   it('must prepare partial date range filters jaql', () => {
     const filterFrom = new DateRangeFilter(
       new DimensionalLevelAttribute('Years', '[Commerce.Date (Calendar)]', 'Years'),
@@ -136,11 +171,11 @@ describe('Filters jaql preparations', () => {
     const jaqlFrom = filterFrom.jaql();
     const jaqlTo = filterTo.jaql();
 
-    expect(jaqlFrom.jaql.filter?.from).toBe('2010-01-01T00:00:00.000Z');
+    expect(jaqlFrom.jaql.filter?.from).toBe('2010-01-01');
     expect(jaqlFrom.jaql.filter?.to).toBeUndefined();
 
     expect(jaqlTo.jaql.filter?.from).toBeUndefined();
-    expect(jaqlTo.jaql.filter?.to).toBe('2012-01-01T00:00:00.000Z');
+    expect(jaqlTo.jaql.filter?.to).toBe('2012-01-01');
   });
 
   it('must prepare logical attribute filter jaql', () => {

@@ -339,7 +339,7 @@ describe('filterFactory', () => {
     expect(f).toBeInstanceOf(DateRangeFilter);
     expect(f).toHaveProperty('attribute', dateDim.Years);
     expect(f).toHaveProperty('operatorA', DateOperators.From);
-    expect(f).toHaveProperty('valueA', '2020-02-02T00:00:00Z');
+    expect(f).toHaveProperty('valueA', '2020-02-02');
     const f2 = filterFactory.dateFrom(dateDim.Years, '2020-02-02T00:00:00Z', config);
     testConfig(
       f2,
@@ -352,7 +352,7 @@ describe('filterFactory', () => {
     expect(f).toBeInstanceOf(DateRangeFilter);
     expect(f).toHaveProperty('attribute', dateDim.Years);
     expect(f).toHaveProperty('operatorB', DateOperators.To);
-    expect(f).toHaveProperty('valueB', '2020-02-02T00:00:00Z');
+    expect(f).toHaveProperty('valueB', '2020-02-02');
 
     const f2 = filterFactory.dateTo(dateDim.Years, '2020-02-02T00:00:00Z', config);
     testConfig(
@@ -369,9 +369,9 @@ describe('filterFactory', () => {
     expect(f).toBeInstanceOf(DateRangeFilter);
     expect(f).toHaveProperty('attribute', dateDim.Years);
     expect(f).toHaveProperty('operatorA', DateOperators.From);
-    expect(f).toHaveProperty('valueA', '2020-02-02T00:00:00Z');
+    expect(f).toHaveProperty('valueA', '2020-02-02');
     expect(f).toHaveProperty('operatorB', DateOperators.To);
-    expect(f).toHaveProperty('valueB', '2021-02-02T00:00:00Z');
+    expect(f).toHaveProperty('valueB', '2021-02-02');
 
     const f2 = filterFactory.dateRange(
       dateDim.Years,

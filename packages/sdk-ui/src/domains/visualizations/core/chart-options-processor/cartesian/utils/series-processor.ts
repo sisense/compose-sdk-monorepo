@@ -54,6 +54,7 @@ interface SeriesProcessingConfig {
 export function processSeries(config: SeriesProcessingConfig) {
   const {
     chartData,
+    chartType,
     chartDesignOptions,
     dataOptions,
     continuousDatetimeXAxis,
@@ -74,7 +75,7 @@ export function processSeries(config: SeriesProcessingConfig) {
 
   const { seriesCapacity } = chartDesignOptions.dataLimits;
 
-  return chartData.series
+  const mappedSeries = chartData.series
     .slice(0, seriesCapacity)
     .map((seriesValue: CategoricalSeriesValues, index: number) => {
       const dataOption = getDataOptionForSeries(dataOptions, seriesValue.name);
@@ -142,6 +143,10 @@ export function processSeries(config: SeriesProcessingConfig) {
           }),
       };
     });
+
+  return chartType === 'line'
+    ? applySeriesTypeSpecificOptions(mappedSeries, chartType, chartDesignOptions)
+    : mappedSeries;
 }
 
 /**
@@ -259,8 +264,8 @@ export function applySeriesTypeSpecificOptions(
     const additionalOptions: any = {};
 
     // Add chart type specific configurations
-    if (chartType === 'line' && (chartDesignOptions as LineChartDesignOptions).step) {
-      additionalOptions.step = (chartDesignOptions as LineChartDesignOptions).step;
+    if (chartType === 'line') {
+      additionalOptions.step = (chartDesignOptions as LineChartDesignOptions).step ?? false;
     }
 
     return {

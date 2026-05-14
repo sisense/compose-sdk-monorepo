@@ -17,7 +17,7 @@ const mockedReadFile = vi.mocked(readFile);
 const mockedLoadEnv = vi.mocked(loadEnv);
 const mockFetch = vi.fn();
 
-const DIST_PATH = resolve(process.cwd(), 'dist');
+const DIST_PATH = resolve(process.cwd(), 'dist-fusion');
 const PLUGIN_CONFIG = { name: 'test-plugin' };
 const SISENSE_URL = 'https://example.sisense.com';
 const TOKEN = 'secret-token';

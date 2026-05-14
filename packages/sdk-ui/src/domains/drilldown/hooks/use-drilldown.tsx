@@ -64,17 +64,19 @@ export const useDrilldown = ({
       availableDrilldownPaths: (Attribute | Hierarchy)[] = [],
       onSelect?: (nextDimension: Attribute, hierarchy?: Hierarchy) => void,
     ) => {
+      const drilldownMenuSection = getDrilldownMenuItems(
+        availableDrilldownPaths,
+        drilldownDimension,
+        (nextDimension: Attribute, hierarchy?: Hierarchy) => {
+          onSelect?.(nextDimension, hierarchy);
+          selectDrilldown(points, nextDimension, hierarchy);
+        },
+        translate,
+      );
+
       const menuItems = [
         getSelectionTitleMenuItem(points, drilldownDimension),
-        getDrilldownMenuItems(
-          availableDrilldownPaths,
-          drilldownDimension,
-          (nextDimension: Attribute, hierarchy?: Hierarchy) => {
-            onSelect?.(nextDimension, hierarchy);
-            selectDrilldown(points, nextDimension, hierarchy);
-          },
-          translate,
-        ),
+        ...(drilldownMenuSection ? [drilldownMenuSection] : []),
       ];
 
       openMenu({ id: MenuIds.WIDGET_POINTS_DRILLDOWN, position, itemSections: menuItems });
@@ -144,7 +146,7 @@ export function getDrilldownMenuItems(
   drilldownDimension: Attribute,
   selectFn: (nextDimension: Attribute, hierarchy?: Hierarchy) => void,
   translate: TFunction,
-): MenuItemSection {
+): MenuItemSection | null {
   const [availableDrilldownDimensions, availableDrilldownHierarchies] = partition<
     Attribute | Hierarchy,
     Attribute
@@ -172,9 +174,14 @@ export function getDrilldownMenuItems(
     };
   });
 
+  const items = [...drilldownHierarchiesMenuItems, ...drilldownDimensionsMenuItems];
+  if (items.length === 0) {
+    return null;
+  }
+
   return {
     id: MenuSectionIds.DRILLDOWN_DRILL_DIRECTIONS,
     sectionTitle: translate('drilldown.drillMenuItem'),
-    items: [...drilldownHierarchiesMenuItems, ...drilldownDimensionsMenuItems],
+    items,
   };
 }

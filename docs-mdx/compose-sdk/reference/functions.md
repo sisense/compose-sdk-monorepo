@@ -2666,7 +2666,7 @@ RDOUBLE("m <-log(matrix(unlist(args), ncol=2)); kmeans (m,3)$cluster", [Total Co
 
 ```
 
-For additional discussion on using `RDOUBLE` and how to do advanced forecasting with R, see [this community post](https://community.sisense.com/kb/faqs/so-how-exactly-does-r-work-with-sisense/8817).
+For additional discussion on using `RDOUBLE` and how to do advanced forecasting with R, see [this community post](https://community.sisense.com/forum/how-tos-faqs-43/topic/so-how-exactly-does-r-work-with-sisense-4690/).
 
 ---
 
@@ -2702,6 +2702,6 @@ RINT("m <-log(matrix(unlist(args), ncol=2)); kmeans (m,3)$cluster", [Total Cost]
 
 ```
 
-For additional discussion on using `RINT` and how to do advanced forecasting with R, see [this community post](https://community.sisense.com/kb/faqs/so-how-exactly-does-r-work-with-sisense/8817).
+For additional discussion on using `RINT` and how to do advanced forecasting with R, see [this community post](https://community.sisense.com/forum/how-tos-faqs-43/topic/so-how-exactly-does-r-work-with-sisense-4690/).
 
 ---

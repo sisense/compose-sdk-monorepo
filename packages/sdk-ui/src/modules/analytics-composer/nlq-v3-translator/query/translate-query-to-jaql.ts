@@ -6,17 +6,17 @@ import {
   prepareQueryParams,
   type QueryDescription,
 } from '@/domains/query-execution/core/execute-query.js';
-import { BaseQueryParams } from '@/domains/query-execution/types.js';
+import type { ExecuteQueryParams } from '@/domains/query-execution/types.js';
 
 /**
- * Converts BaseQueryParams to QueryDescription format
+ * Converts ExecuteQueryParams to QueryDescription format
  *
  * @param queryParams - The query parameters to convert
  * @returns QueryDescription
  */
-function baseQueryParamsToQueryDescription(queryParams: BaseQueryParams): QueryDescription {
-  // Extract filters and filter relations from BaseQueryParams
-  // BaseQueryParams.filters can be Filter[] | FilterRelations, but QueryDescription.filters is Filter[]
+function executeQueryParamsToQueryDescription(queryParams: ExecuteQueryParams): QueryDescription {
+  // Extract filters and filter relations from query params
+  // `filters` can be Filter[] | FilterRelations, but QueryDescription.filters is Filter[]
   const { filters: pureFilters, relations: filterRelations } = getFilterListAndRelationsJaql(
     queryParams.filters || [],
   );
@@ -33,26 +33,26 @@ function baseQueryParamsToQueryDescription(queryParams: BaseQueryParams): QueryD
 }
 
 /**
- * Converts BaseQueryParams to JAQL payload
+ * Converts ExecuteQueryParams to JAQL payload
  *
  * This is a pure TypeScript function that works in Node.js environments
  * and converts query parameters to JAQL without requiring React hooks or browser APIs.
  *
  * Reuses the existing query preparation logic from executeQuery to avoid duplication.
  *
- * @param queryParams - The base query parameters from NLQ translation
+ * @param queryParams - Query parameters (execution-only fields are not reflected in JAQL beyond prepareQueryParams)
  * @param defaultDataSource - Default data source if not specified in queryParams
  * @param shouldSkipHighlightsWithoutAttributes - Whether to skip highlights without corresponding attributes
  * @returns The JAQL query payload
  * @internal
  */
 export function translateQueryToJaql(
-  queryParams: BaseQueryParams,
+  queryParams: ExecuteQueryParams,
   defaultDataSource?: DataSource,
   shouldSkipHighlightsWithoutAttributes = false,
 ): JaqlQueryPayload {
-  // Convert BaseQueryParams to QueryDescription format
-  const queryDescription = baseQueryParamsToQueryDescription(queryParams);
+  // Convert to QueryDescription format (execution-only fields omitted from description)
+  const queryDescription = executeQueryParamsToQueryDescription(queryParams);
 
   // Reuse existing logic from executeQuery to prepare internal query description
   const internalQueryDescription = prepareQueryParams(queryDescription, defaultDataSource);

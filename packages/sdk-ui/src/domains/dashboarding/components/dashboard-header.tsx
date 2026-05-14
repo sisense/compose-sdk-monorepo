@@ -34,7 +34,7 @@ export const DashboardHeader = ({ title, toolbar }: DashboardHeaderProps) => {
   const { themeSettings } = useThemeContext();
   return (
     <DashboardHeaderContainer theme={themeSettings}>
-      <DashboardHeaderTitle>{title}</DashboardHeaderTitle>
+      <DashboardHeaderTitle data-testid="dashboard-header-title">{title}</DashboardHeaderTitle>
       <div data-testid="dashboard-header-toolbar" className="csdk-flex">
         {toolbar?.()}
       </div>

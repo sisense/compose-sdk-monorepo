@@ -26,8 +26,7 @@ describe('getNarrative', () => {
     const httpClient = { post } as unknown as HttpClient;
 
     await getNarrative(httpClient, baseRequest, {
-      isUnified: false,
-      isSisenseAiEnabled: false,
+      canGenerateNarrativeViaAI: false,
     });
 
     expect(post).toHaveBeenCalledWith(LEGACY_NARRATIVE_ENDPOINT, {
@@ -41,8 +40,7 @@ describe('getNarrative', () => {
     const httpClient = { post } as unknown as HttpClient;
 
     await getNarrative(httpClient, baseRequest, {
-      isUnified: true,
-      isSisenseAiEnabled: true,
+      canGenerateNarrativeViaAI: true,
     });
 
     expect(post).toHaveBeenCalledWith(UNIFIED_NARRATIVE_ENDPOINT, {
@@ -57,8 +55,7 @@ describe('getNarrative', () => {
     const httpClient = { post } as unknown as HttpClient;
 
     await getNarrative(httpClient, baseRequest, {
-      isUnified: true,
-      isSisenseAiEnabled: true,
+      canGenerateNarrativeViaAI: true,
     });
 
     const payload = {
@@ -67,5 +64,69 @@ describe('getNarrative', () => {
     };
     expect(post).toHaveBeenNthCalledWith(1, UNIFIED_NARRATIVE_ENDPOINT, payload);
     expect(post).toHaveBeenNthCalledWith(2, LEGACY_NARRATIVE_ENDPOINT, payload);
+  });
+
+  describe('fallbackRequestOn400', () => {
+    const fallbackRequest: NarrativeRequest = {
+      jaql: { datasource: { title: 'Sample ECommerce' }, metadata: [] },
+    };
+    const fallbackPayload = {
+      ...fallbackRequest,
+      jaql: { ...fallbackRequest.jaql, by: NARRATIVE_BY_CSDK },
+    };
+
+    it('retries with fallback on 400 (legacy path)', async () => {
+      const post = vi
+        .fn()
+        .mockRejectedValueOnce({ status: '400' })
+        .mockResolvedValueOnce(mockResponse);
+      const httpClient = { post } as unknown as HttpClient;
+
+      const result = await getNarrative(httpClient, baseRequest, {
+        canGenerateNarrativeViaAI: false,
+        fallbackRequestOn400: fallbackRequest,
+      });
+
+      expect(post).toHaveBeenCalledTimes(2);
+      expect(post).toHaveBeenNthCalledWith(1, LEGACY_NARRATIVE_ENDPOINT, {
+        ...baseRequest,
+        jaql: { ...baseRequest.jaql, by: NARRATIVE_BY_CSDK },
+      });
+      expect(post).toHaveBeenNthCalledWith(2, LEGACY_NARRATIVE_ENDPOINT, fallbackPayload);
+      expect(result).toBe(mockResponse);
+    });
+
+    it('retries with fallback on 400 (unified path)', async () => {
+      const post = vi
+        .fn()
+        .mockRejectedValueOnce({ status: '400' })
+        .mockResolvedValueOnce(mockResponse);
+      const httpClient = { post } as unknown as HttpClient;
+
+      await getNarrative(httpClient, baseRequest, {
+        canGenerateNarrativeViaAI: true,
+        fallbackRequestOn400: fallbackRequest,
+      });
+
+      expect(post).toHaveBeenCalledTimes(2);
+      expect(post).toHaveBeenNthCalledWith(1, UNIFIED_NARRATIVE_ENDPOINT, {
+        ...baseRequest,
+        jaql: { ...baseRequest.jaql, by: NARRATIVE_BY_CSDK },
+      });
+      expect(post).toHaveBeenNthCalledWith(2, UNIFIED_NARRATIVE_ENDPOINT, fallbackPayload);
+    });
+
+    it('rethrows non-400 errors even when fallback is provided', async () => {
+      const serverError = { status: '500' };
+      const post = vi.fn().mockRejectedValueOnce(serverError);
+      const httpClient = { post } as unknown as HttpClient;
+
+      await expect(
+        getNarrative(httpClient, baseRequest, {
+          fallbackRequestOn400: fallbackRequest,
+        }),
+      ).rejects.toBe(serverError);
+      expect(post).toHaveBeenCalledTimes(1);
+    });
   });
 });

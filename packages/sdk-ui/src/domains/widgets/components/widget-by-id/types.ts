@@ -64,7 +64,7 @@ export type FusionWidgetType =
   | 'heatmap'
   | TextWidgetType
   | FusionPluginWidgetType
-  | 'custom';
+  | string;
 
 export type WidgetSubtype =
   | 'area/basic'

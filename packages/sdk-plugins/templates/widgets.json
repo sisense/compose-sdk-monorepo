@@ -9,18 +9,14 @@
   {
     "name": "[Example] Line Chart",
     "value": "line-chart",
-    "dependencies": {
-      "@emotion/styled": "^11.14.0",
-      "classnames": "^2.3.2",
-      "lodash": "^4.17.21"
-    },
-    "devDependencies": {
-      "@types/lodash": "^4.17.0"
-    }
+    "embedded": true,
+    "dependencies": {},
+    "devDependencies": {}
   },
   {
     "name": "[Example] Simple table",
     "value": "simple-table",
+    "embedded": true,
     "dependencies": {
       "@mui/material": "^6.4.11"
     },

@@ -102,8 +102,7 @@ export class AiService {
     const payload = prepareGetNlgInsightsPayload(params);
     const narrative = app.settings?.narrative;
     const narrativeOptions: GetNarrativeOptions = {
-      isUnified: narrative?.isUnified ?? false,
-      isSisenseAiEnabled: narrative?.isSisenseAiEnabled ?? false,
+      canGenerateNarrativeViaAI: narrative?.canGenerateNarrativeViaAI,
     };
     return api.ai
       .getNlgInsights(payload, narrativeOptions)

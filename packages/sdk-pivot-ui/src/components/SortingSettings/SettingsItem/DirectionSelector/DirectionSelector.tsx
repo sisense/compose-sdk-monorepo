@@ -24,12 +24,6 @@ export const DirectionSelector = (props: Props) => {
       selectedItemId={direction}
       onSelectItem={handleItemSelected as DropdownProps['onSelectItem']}
       mask={false}
-      scrollbarProps={{
-        // Custom style to remove bottom padding below the last item
-        style: {
-          marginBottom: '-8px',
-        },
-      }}
     />
   );
 };

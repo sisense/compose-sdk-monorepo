@@ -19,6 +19,13 @@ export function normalizePivotSort(sortType: SortDirection | PivotRowsSort) {
   return isString(sortType) ? { direction: sortType } : sortType;
 }
 
+/**
+ * Type guard for the complex pivot sort shape (as opposed to a bare `SortDirection` string).
+ */
+export function isPivotRowsSort(sort: unknown): sort is PivotRowsSort {
+  return typeof sort === 'object' && sort !== null && 'direction' in sort;
+}
+
 function getSortBy(
   sortDetails: SortingSettingsChangePayload['sortDetails'],
   dataOptionsInternal: PivotTableDataOptionsInternal,

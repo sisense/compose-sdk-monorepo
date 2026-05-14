@@ -12,10 +12,8 @@ import type { BasePluginInfo } from '../types';
  *
  * @sisenseInternal
  */
-export interface WidgetPlugin<
-  Props = CustomVisualizationProps,
-  StyleOptions = CustomVisualizationStyleOptions,
-> extends BasePluginInfo {
+export interface WidgetPlugin<Props extends CustomVisualizationProps = CustomVisualizationProps>
+  extends BasePluginInfo {
   /**
    * The type of plugin
    */
@@ -66,8 +64,18 @@ export interface WidgetPlugin<
      * Definition of the design panel for the custom widget
      */
     designPanel?: {
-      Component?: DesignPanel<StyleOptions>;
+      Component?: DesignPanel<NonNullable<Props['styleOptions']>>;
     };
+
+    /**
+     * The icon of the custom widget to be displayed in the widget selector
+     * @example
+     * ```tsx
+     * const MyWidgetIcon = () => <PieChartIcon />;
+     * ```
+     * @internal
+     */
+    icon?: () => ReactNode;
 
     /**
      * Definition of the data panel for the custom widget
@@ -129,17 +137,12 @@ export interface WidgetPlugin<
            * Whether the items can be formatted
            */
           canFormat?: boolean;
+          /**
+           * Whether the items can be colored
+           */
+          canColor?: boolean;
         }[];
       };
-
-      /**
-       * The icon of the custom widget to be displayed in the widget selector
-       * @example
-       * ```tsx
-       * const MyWidgetIcon = () => <PieChartIcon />;
-       * ```
-       */
-      icon?: () => ReactNode;
     };
   };
 }
@@ -153,7 +156,7 @@ export interface WidgetPlugin<
  * @sisenseInternal
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyWidgetPlugin = WidgetPlugin<any, any>;
+export type AnyWidgetPlugin = WidgetPlugin<any>;
 
 /**
  * Props passed to a user-defined custom visualization component.

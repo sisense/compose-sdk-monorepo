@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`translateQueryParamsToJaql > should convert BaseQueryParams to JAQL payload 1`] = `
+exports[`translateQueryToJaql > should convert ExecuteQueryParams to JAQL payload 1`] = `
 [
   {
     "jaql": {

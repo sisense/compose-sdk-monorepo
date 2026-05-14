@@ -38,15 +38,17 @@ const itemSections = computed(() => {
   // todo: connect internationalization to vue
   const translate = ((key: string) =>
     key === 'drilldown.drillMenuItem' ? 'Drill' : key) as TFunction;
-  return [
-    getSelectionTitleMenuItem(selectedDataPoints.value, drilldownDimension.value!),
-    getDrilldownMenuItems(
-      availableDrilldownPaths.value,
-      drilldownDimension.value!,
-      onMenuDrilldownClick,
-      translate,
-    ),
-  ];
+  const titleSection = getSelectionTitleMenuItem(
+    selectedDataPoints.value,
+    drilldownDimension.value!,
+  );
+  const drillSection = getDrilldownMenuItems(
+    availableDrilldownPaths.value,
+    drilldownDimension.value!,
+    onMenuDrilldownClick,
+    translate,
+  );
+  return drillSection ? [titleSection, drillSection] : [titleSection];
 });
 
 const openContextMenu = (menuPos: { top: number; left: number }) => {

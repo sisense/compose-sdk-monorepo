@@ -1,6 +1,6 @@
 import { JSONArray, Measure, parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
 
-import { BaseQueryParams } from '@/domains/query-execution/index.js';
+import type { ExecuteQueryParams } from '@/domains/query-execution/index.js';
 import {
   FORECAST_PREFIX,
   TREND_PREFIX,
@@ -123,14 +123,14 @@ function collapseMeasuresForJSON(measures: Measure[]): (Measure | StyledMeasureC
 }
 
 /**
- * Translates CSDK BaseQueryParams to NLQ JSON format.
+ * Translates CSDK ExecuteQueryParams to NLQ JSON format.
  * Direction: CSDK → JSON
  *
  * Converts CSDK objects (Attribute[], Measure[], Filter[], FilterRelations) to NLQ FunctionCall format.
  *
  * @example
  * ```typescript
- * const query: BaseQueryParams = {
+ * const query: ExecuteQueryParams = {
  *   dimensions: [DM.Category.Category, DM.Brand.Brand],
  *   measures: [
  *     measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'),
@@ -171,12 +171,12 @@ function collapseMeasuresForJSON(measures: Measure[]): (Measure | StyledMeasureC
  * });
  * ```
  *
- * @param query - BaseQueryParams object with CSDK objects
+ * @param query - ExecuteQueryParams object with CSDK objects
  * @returns NlqTranslationResult<NlqResponseJSON> with FunctionCall format or structured errors
  * @internal
  */
 export function translateQueryToJSON(
-  query: BaseQueryParams,
+  query: ExecuteQueryParams,
 ): NlqTranslationResult<NlqResponseJSON> {
   const translationErrors: NlqTranslationError[] = [];
 

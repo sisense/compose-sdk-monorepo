@@ -67,7 +67,7 @@ describe('ThemeService', () => {
     expect(themeService).toBeTruthy();
   });
 
-  describe('getThemeSettings', () => {
+  describe('themeSettings$', () => {
     it('should return default theme settings if server theme setting are empty', async () => {
       const defaultThemeSettingsMock: CompleteThemeSettings = {
         chart: 'chart-settings',
@@ -78,8 +78,7 @@ describe('ThemeService', () => {
       getDefaultThemeSettingsMock.mockReturnValue(defaultThemeSettingsMock);
       themeService = new ThemeService(sisenseContextServiceMock);
 
-      const themeSettingsObservable = themeService.getThemeSettings();
-      const themeSettings = await firstValueFrom(themeSettingsObservable);
+      const themeSettings = await firstValueFrom(themeService.themeSettings$);
       expect(themeSettings).toEqual(defaultThemeSettingsMock);
       expect(getDefaultThemeSettingsMock).toHaveBeenCalledTimes(1);
     });
@@ -107,10 +106,8 @@ describe('ThemeService', () => {
 
       themeService = new ThemeService(sisenseContextServiceMock);
 
-      const themeSettingsObservable = themeService.getThemeSettings();
-
       const emittedSettings = (await firstValueFrom(
-        themeSettingsObservable.pipe(take(2), toArray()),
+        themeService.themeSettings$.pipe(take(2), toArray()),
       )) as unknown as Promise<CompleteThemeSettings>[];
 
       const [firstThemeSettings, secondThemeSettings] = emittedSettings;
@@ -142,10 +139,9 @@ describe('ThemeService', () => {
 
       themeService = new ThemeService(sisenseContextServiceMock);
 
-      const themeSettingsObservable = themeService.getThemeSettings();
-      expect(await firstValueFrom(themeSettingsObservable)).toEqual(defaultThemeSettingsMock);
+      expect(await firstValueFrom(themeService.themeSettings$)).toEqual(defaultThemeSettingsMock);
       await themeService.updateThemeSettings('new-theme-oid');
-      expect(await firstValueFrom(themeSettingsObservable)).toEqual(newThemeSettingsMock);
+      expect(await firstValueFrom(themeService.themeSettings$)).toEqual(newThemeSettingsMock);
 
       expect(getThemeSettingsByOidMock).toHaveBeenCalledTimes(1);
       expect(getThemeSettingsByOidMock).toHaveBeenCalledWith('new-theme-oid', undefined);
@@ -183,8 +179,7 @@ describe('ThemeService', () => {
 
       // Verify that updateThemeSettings is waiting for initialization to complete
       // At this point, initialization hasn't completed yet, so theme should still be default
-      const themeSettingsObservable = themeService.getThemeSettings();
-      const initialThemeSettings = await firstValueFrom(themeSettingsObservable);
+      const initialThemeSettings = await firstValueFrom(themeService.themeSettings$);
       expect(initialThemeSettings).toEqual(defaultThemeSettingsMock);
 
       // Complete initialization by resolving getApp
@@ -198,7 +193,7 @@ describe('ThemeService', () => {
       await updatePromise;
 
       // Verify that manual theme settings are applied after initialization
-      const finalThemeSettings = await firstValueFrom(themeSettingsObservable);
+      const finalThemeSettings = await firstValueFrom(themeService.themeSettings$);
       expect(finalThemeSettings).toEqual({
         chart: 'server-chart-settings',
         palette: 'server-palette-settings',
@@ -226,13 +221,11 @@ describe('ThemeService', () => {
       // Wait for initialization to complete
       await delay(0);
 
-      const themeSettingsObservable = themeService.getThemeSettings();
-
       // Apply manual theme update after initialization
       await themeService.updateThemeSettings(manualThemeSettingsMock);
 
       // Verify that manual theme settings are applied immediately
-      const finalThemeSettings = await firstValueFrom(themeSettingsObservable);
+      const finalThemeSettings = await firstValueFrom(themeService.themeSettings$);
       expect(finalThemeSettings).toEqual({
         chart: 'chart-settings',
         palette: 'palette-settings',
@@ -281,13 +274,11 @@ describe('ThemeService', () => {
 
       themeService = new ThemeService(sisenseContextServiceMock);
 
-      const themeSettingsObservable = themeService.getThemeSettings();
-
       // Wait for initial theme to be applied
       await delay(0);
 
       // Verify initial theme settings (default + initial server settings)
-      const initialThemeSettings = await firstValueFrom(themeSettingsObservable);
+      const initialThemeSettings = await firstValueFrom(themeService.themeSettings$);
       expect(initialThemeSettings).toEqual({
         chart: 'initial-server-chart-settings',
         palette: 'initial-server-palette-settings',
@@ -315,7 +306,7 @@ describe('ThemeService', () => {
       await delay();
 
       // Verify that theme settings were updated with new server settings
-      const updatedThemeSettings = await firstValueFrom(themeSettingsObservable);
+      const updatedThemeSettings = await firstValueFrom(themeService.themeSettings$);
       expect(updatedThemeSettings).toEqual({
         chart: 'new-server-chart-settings',
         palette: 'new-server-palette-settings',
@@ -393,8 +384,7 @@ describe('ThemeService', () => {
       await delay();
 
       // Verify final theme settings include both manual and new server settings
-      const themeSettingsObservable = themeService.getThemeSettings();
-      const finalThemeSettings = await firstValueFrom(themeSettingsObservable);
+      const finalThemeSettings = await firstValueFrom(themeService.themeSettings$);
 
       // The final result should have:
       // - Manual typography setting

@@ -1,17 +1,18 @@
 import uniqueId from 'lodash-es/uniqueId';
 import merge from 'ts-deepmerge';
 
-import {
+import type { HighchartsPoint } from '@/types';
+
+import type {
   BoxplotChartDataOptionsInternal,
   CalendarHeatmapChartDataOptionsInternal,
   CartesianChartDataOptionsInternal,
   CategoricalChartDataOptionsInternal,
-  HighchartsPoint,
   RangeChartDataOptionsInternal,
   ScatterChartDataOptionsInternal,
   StyledColumn,
   StyledMeasureColumn,
-} from '../../../..';
+} from '../chart-data-options/types';
 import { getDataPoint } from './data-points';
 
 const createPointMock = (chartType: string, point: Partial<HighchartsPoint>) => {

@@ -1,4 +1,12 @@
-import { Attribute, Column, Filter, isMembersFilter, MembersFilter } from '@sisense/sdk-data';
+import {
+  Attribute,
+  Column,
+  Filter,
+  isDatetime,
+  isLevelAttribute,
+  isMembersFilter,
+  MembersFilter,
+} from '@sisense/sdk-data';
 import groupBy from 'lodash-es/groupBy';
 import partition from 'lodash-es/partition';
 import uniq from 'lodash-es/uniq';
@@ -80,7 +88,7 @@ function extractEntriesFromPath(
 
 /**
  * Converts chart data points into filter selections by extracting attribute information
- * from specified entry paths and grouping by attribute expression.
+ * from specified entry paths and grouping by attribute expression (with granularity for datetime level attributes).
  *
  * @param points - Array of data points with entries
  * @param selectablePaths - Array of entry path keys to extract (e.g., ['category'], ['x', 'y'])
@@ -105,7 +113,11 @@ function getSelectionsFromPoints(
   );
 
   // Group entries by attribute expression
-  const groupedEntries = groupBy(selectableEntriesArray, ({ attribute }) => attribute?.expression);
+  const groupedEntries = groupBy(selectableEntriesArray, ({ attribute }) =>
+    isLevelAttribute(attribute) && isDatetime(attribute.type)
+      ? `${attribute.expression}.${attribute.granularity}`
+      : attribute.expression,
+  );
 
   // Convert grouped entries to DataSelection objects
   return Object.values(groupedEntries)

@@ -1,0 +1,11 @@
+{
+  "name": "@sisense/sdk-plugins-cli",
+  "targets": {
+    "build": {
+      "inputs": ["default", "{workspaceRoot}/packages/sdk-plugins/templates/**/*"]
+    },
+    "build:prod": {
+      "inputs": ["default", "{workspaceRoot}/packages/sdk-plugins/templates/**/*"]
+    }
+  }
+}

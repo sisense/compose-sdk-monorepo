@@ -209,6 +209,12 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
 
     result.jaql.filter = this.filterJaql();
 
+    // Preserve agg from original filter JAQL when the attribute doesn't carry it
+    // (e.g., a members filter whose underlying field is an aggregated measure)
+    if (!result.jaql.agg && this.config.originalFilterJaql?.agg) {
+      result.jaql.agg = this.config.originalFilterJaql.agg;
+    }
+
     // prioritize attribute dataSource for the use case of multi-source dashboard
     if (this.attribute.dataSource) {
       result.jaql.datasource = this.attribute.dataSource;
@@ -878,6 +884,26 @@ export class TextFilter extends DoubleOperatorFilter<string> {
 }
 
 /**
+ * Strips clock and offset tail from an ISO-like bound at the first `T`, leaving the calendar prefix.
+ *
+ * @param bound - Serialized date or datetime string
+ * @returns `bound` unchanged when there is no `T` separator
+ * @internal
+ */
+function stripClockTimeFromIsoDateTime(bound: string): string {
+  const tIndex = bound.indexOf('T');
+  return tIndex === -1 ? bound : bound.slice(0, tIndex);
+}
+
+/**
+ * Closed or open-ended range filter on a date {@link LevelAttribute}.
+ *
+ * @remarks
+ * When the level is a **period** granularity (`Years`–`Days`, see `DateLevels.dateOnly`), **each
+ * bound that is set** is aligned to a **calendar date**: `Date` values become ISO strings, then the
+ * segment from the first `T` onward is removed. Omitted bounds are unchanged. Matches calendar-style
+ * behavior in dashboard date filters.
+ *
  * @internal
  */
 export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
@@ -910,6 +936,15 @@ export class DateRangeFilter extends DoubleOperatorFilter<Date | string> {
 
     if (typeof valueTo === 'object') {
       this.valueB = valueTo.toISOString();
+    }
+
+    if (DateLevels.dateOnly.includes(levelAttribute.granularity)) {
+      if (valueFrom !== undefined && typeof this.valueA === 'string') {
+        this.valueA = stripClockTimeFromIsoDateTime(this.valueA);
+      }
+      if (valueTo !== undefined && typeof this.valueB === 'string') {
+        this.valueB = stripClockTimeFromIsoDateTime(this.valueB);
+      }
     }
   }
 

@@ -3,6 +3,7 @@ import type {
   JumpToDashboardConfig,
   JumpToDashboardConfigForPivot,
 } from '@/domains/dashboarding/hooks/jtd/jtd-types';
+import type { UnsupportedStyleOptions } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/extract-unsupported-style-options.js';
 import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { ColorPaletteTheme } from '@/types';
 
@@ -111,9 +112,16 @@ export type SpecificWidgetOptions = {
    * Required to include all existing options/style when PATCHing a single field (e.g. previousScrollerLocation),
    * because the server replaces the entire object rather than merging.
    *
+   * `style` carries only the unsupported style fields not yet first-class translated by the
+   * CSDK widget model (extracted via `extractUnsupportedStyleOptions`); they are re-attached
+   * to the DTO during serialization with lower priority than rebuilt translation output.
+   *
    * @internal
    */
-  partialDtoOptions?: Partial<Pick<WidgetDto, 'options' | 'style'>>;
+  partialDtoOptions?: {
+    options?: WidgetDto['options'];
+    style?: UnsupportedStyleOptions;
+  };
 };
 
 /**

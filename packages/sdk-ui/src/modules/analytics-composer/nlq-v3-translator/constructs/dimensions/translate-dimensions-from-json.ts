@@ -7,7 +7,7 @@ import {
 } from '@sisense/sdk-data';
 import omit from 'lodash-es/omit';
 
-import type { CategoryStyle } from '@/public-api/index.js';
+import type { CategoryStyle } from '@/domains/visualizations/core/chart-data-options/types.js';
 
 import {
   NlqTranslationError,

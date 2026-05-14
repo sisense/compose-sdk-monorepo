@@ -55,7 +55,8 @@ export interface GetDashboardModelOptions {
  * @param appSettings - Optional application settings
  * @returns The dashboard model
  *
- * @internal @sisenseInternal
+ * @internal
+ * @sisenseInternal
  */
 export async function getDashboardModel(
   http: HttpClient,

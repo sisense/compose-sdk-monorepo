@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.27.0] - 2026-05-13
+
+### Added
+- Add `create-plugin` command to `sdk-cli` (for internal testing)
+- Extend `WidgetDTO` round-trip translation coverage for duplicate widget support
+
+### Changed
+- Fix `Table` error when switching column aggregation
+- Fix SSO authentication race condition on concurrent requests
+- Fix incorrect filter creation for charts with two date-level categories  of the same dimension
+- Fix widget-level filters not applied for aggregated measures in JAQL
+- Fix missing dashboard palette in dashboard model in Angular and Vue
+- Fix `PivotTable` sorting checkbox not toggling on click
+- Fix step line chart when switched back to basic or spline subtype
+- Fix title replacement in filter tile when cross filtering
+- Fix drill down context menu edge cases
+
 ## [2.26.0] - 2026-04-28
 
 ### Added

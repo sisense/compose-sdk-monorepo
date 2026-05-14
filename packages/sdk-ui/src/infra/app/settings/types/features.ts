@@ -135,6 +135,8 @@ type AiAssistantFeature = Feature<
     nlqV3Enabled?: boolean;
     isNlqV3Enabled?: boolean;
     naturalResponseEnabled?: boolean;
+    queryDefinition?: boolean;
+    completionV2?: boolean;
     sharedFormulasEnabled?: boolean;
     aiAccessControl?: string;
     quotaNotification?: boolean;

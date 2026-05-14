@@ -12,13 +12,13 @@ export interface DevAppProps {
   /** The plugin to preview — must include a `customWidget` declaration */
   plugin: WidgetPlugin;
   /** Initial props passed to the visualization component */
-  chartProps: CustomVisualizationProps;
+  devPreviewProps: CustomVisualizationProps;
   url?: string;
   token?: string;
   theme?: ThemeSettings;
 }
 
-export const DevApp = ({ url, token, plugin, chartProps, theme = {} }: DevAppProps) => {
+export const DevApp = ({ url, token, plugin, devPreviewProps, theme = {} }: DevAppProps) => {
   if (!url || !token) {
     return <EnvWarning />;
   }
@@ -36,7 +36,7 @@ export const DevApp = ({ url, token, plugin, chartProps, theme = {} }: DevAppPro
       }}
     >
       <ThemeProvider theme={theme}>
-        <PluginPreview plugin={plugin} chartProps={chartProps} />
+        <PluginPreview plugin={plugin} devPreviewProps={devPreviewProps} />
       </ThemeProvider>
     </SisenseContextProvider>
   );
@@ -44,15 +44,15 @@ export const DevApp = ({ url, token, plugin, chartProps, theme = {} }: DevAppPro
 
 interface PluginPreviewProps {
   plugin: WidgetPlugin;
-  chartProps: CustomVisualizationProps;
+  devPreviewProps: CustomVisualizationProps;
 }
 
-const PluginPreview = ({ plugin, chartProps }: PluginPreviewProps) => {
-  const [styleOptions, setStyleOptions] = useState(chartProps.styleOptions);
+const PluginPreview = ({ plugin, devPreviewProps }: PluginPreviewProps) => {
+  const [styleOptions, setStyleOptions] = useState(devPreviewProps.styleOptions);
 
   useEffect(() => {
-    setStyleOptions(chartProps.styleOptions);
-  }, [chartProps.styleOptions]);
+    setStyleOptions(devPreviewProps.styleOptions);
+  }, [devPreviewProps.styleOptions]);
 
   const customWidget = plugin.customWidget;
 
@@ -68,7 +68,7 @@ const PluginPreview = ({ plugin, chartProps }: PluginPreviewProps) => {
     <div className="app-container">
       <div className="widget-container">
         <div className="widget-chart">
-          <ChartComponent {...chartProps} styleOptions={styleOptions} />
+          <ChartComponent {...devPreviewProps} styleOptions={styleOptions} />
         </div>
         {DesignPanelComponent && (
           <div className="widget-panels">
@@ -109,8 +109,8 @@ export const EnvWarning = () => {
           Sisense without them.
         </p>
         <p className="env-warning-hint">
-          Set VITE_APP_SISENSE_URL and VITE_APP_SISENSE_TOKEN in your .env file, then restart the
-          dev server.
+          Set VITE_APP_SISENSE_URL and VITE_APP_SISENSE_TOKEN in your .env.local file, then restart
+          the dev server.
         </p>
       </div>
     </div>

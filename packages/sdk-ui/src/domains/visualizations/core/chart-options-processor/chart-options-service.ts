@@ -47,7 +47,7 @@ import { DataLabelsSettings } from './translations/value-label-section';
 /**
  * Highcharts options
  *
- * @internal
+ * @alpha
  */
 export type HighchartsOptions = Pick<Options, keyof Options>;
 
@@ -173,6 +173,7 @@ export type SeriesType = HighchartsSeriesValues & {
   legendIndex?: number;
   dashStyle?: string;
   lineWidth?: number;
+  step?: boolean | 'left' | 'center' | 'right';
   zIndex?: number;
   keys?: string[];
   nullColor?: string;
@@ -232,6 +233,7 @@ export type PlotOptions = {
     softThreshold?: boolean;
     fillOpacity?: number;
     connectNulls?: boolean;
+    step?: boolean | 'left' | 'center' | 'right';
     animation?: {
       duration?: number;
     };

@@ -13,7 +13,7 @@ import { useCascadingFilterTileMenuItems } from './use-cascadding-filter-tile-me
 /**
  * Props for {@link CascadingFilterTile}
  *
- * @internal
+ * @alpha
  */
 export interface CascadingFilterTileProps {
   /** Cascading filter object to initialize filter type and default values */
@@ -52,7 +52,7 @@ export interface CascadingFilterTileProps {
  * @param props - Cascading filter tile props
  * @returns Cascading filter tile component
  * @group Filter Tiles
- * @internal
+ * @alpha
  */
 export const CascadingFilterTile = asSisenseComponent({ componentName: 'CascadingFilterTile' })(
   (props: CascadingFilterTileProps) => {

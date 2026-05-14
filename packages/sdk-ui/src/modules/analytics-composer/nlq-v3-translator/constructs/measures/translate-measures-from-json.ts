@@ -1,7 +1,10 @@
 import { isSortDirection, JaqlDataSourceForDto, Measure } from '@sisense/sdk-data';
 import omit from 'lodash-es/omit';
 
-import type { SeriesStyle, ValueStyle } from '@/public-api/index.js';
+import type {
+  SeriesStyle,
+  ValueStyle,
+} from '@/domains/visualizations/core/chart-data-options/types.js';
 
 import {
   NlqTranslationError,

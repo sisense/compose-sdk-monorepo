@@ -91,6 +91,40 @@ describe('useDrilldown', () => {
     expect(lastCall[0].itemSections[1].items[0].caption).toBe(ageRange.name);
   });
 
+  it('should not include drill section when no drill targets exist', () => {
+    const menuPosition = {
+      left: 10,
+      top: 20,
+    };
+    const { result } = renderHook(() =>
+      useDrilldown({
+        initialDrilldownSelections: [
+          {
+            points: [
+              {
+                categoryValue: 'Male',
+              },
+            ],
+            nextDimension: category,
+          },
+        ],
+        initialDimension: gender,
+        openMenu: openMenuMock,
+      }),
+    );
+
+    const { openDrilldownMenu } = result.current;
+
+    act(() => openDrilldownMenu(menuPosition, [], []));
+
+    const lastCall = openMenuMock.mock.lastCall as any;
+    expect(lastCall).toBeDefined();
+
+    expect(lastCall[0].position).toStrictEqual(menuPosition);
+    expect(lastCall[0].itemSections).toHaveLength(1);
+    expect(lastCall[0].itemSections[0].id).toBe('drilldown-chart-points-selection');
+  });
+
   it('should make selection via menu item', () => {
     const onDrilldownSelectionsChange = vi.fn();
     const menuPosition = {

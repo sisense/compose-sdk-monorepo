@@ -275,10 +275,9 @@ export const getCartesianChartOptions = (
           marker: getMarkerSettings(chartDesignOptions.marker),
           stacking: (stackingMeta.stacking as Stacking) || undefined,
           connectNulls: false,
-          ...(chartType === 'line' &&
-            (chartDesignOptions as LineChartDesignOptions).step && {
-              step: (chartDesignOptions as LineChartDesignOptions).step,
-            }),
+          ...(chartType === 'line' && {
+            step: (chartDesignOptions as LineChartDesignOptions).step ?? false,
+          }),
           // Disable series labels by default for non-streamgraph charts
           label: {
             enabled: false,

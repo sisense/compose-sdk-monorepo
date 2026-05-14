@@ -16,8 +16,8 @@ export { FunnelChart } from '../domains/visualizations/components/funnel-chart';
 export { PolarChart } from '../domains/visualizations/components/polar-chart';
 export { ScatterChart } from '../domains/visualizations/components/scatter-chart';
 export { IndicatorChart } from '../domains/visualizations/components/indicator-chart';
-export * from '../domains/visualizations/components/table';
-export * from '../domains/visualizations/components/pivot-table';
+export { Table } from '../domains/visualizations/components/table';
+export { PivotTable } from '../domains/visualizations/components/pivot-table';
 export { TreemapChart } from '../domains/visualizations/components/treemap-chart';
 export { SunburstChart } from '../domains/visualizations/components/sunburst-chart';
 export { BoxplotChart } from '../domains/visualizations/components/boxplot-chart';
@@ -27,7 +27,32 @@ export { AreaRangeChart } from '../domains/visualizations/components/area-range-
 export { CalendarHeatmapChart } from '../domains/visualizations/components/calendar-heatmap-chart';
 
 // Dashboarding
-export * from '../domains/dashboarding';
+export {
+  DashboardById,
+  Dashboard,
+  useComposedDashboard,
+  type ComposableDashboardProps,
+  type UseComposedDashboardOptions,
+  type ComposedDashboardResult,
+  type DashboardByIdProps,
+  type DashboardProps,
+  type DashboardLayoutOptions,
+  type DashboardStyleOptions,
+  type DashboardConfig,
+  type DashboardByIdConfig,
+  type WidgetsPanelConfig,
+  type EditModeConfig,
+  type DashboardFiltersPanelConfig,
+  type TabbersConfig,
+  type TabberConfig,
+  type TabberTabConfig,
+  type DashboardChangeEvent,
+  type DashboardFiltersUpdatedEvent,
+  type DashboardFiltersPanelCollapseChangedEvent,
+  type DashboardWidgetsPanelLayoutUpdatedEvent,
+  type DashboardWidgetsPanelIsEditingChangedEvent,
+  type DashboardWidgetsDeletedEvent,
+} from '../domains/dashboarding';
 /**
  * Jump To Dashboard (JTD) configuration types
  *
@@ -35,6 +60,11 @@ export * from '../domains/dashboarding';
  * @shortDescription Configuration types for Jump To Dashboard functionality
  */
 export type { JumpToDashboardConfig } from '../domains/dashboarding/hooks/jtd';
+export type {
+  JumpToDashboardConfigForPivot,
+  JtdTarget,
+  TriggerMethod,
+} from '../domains/dashboarding/hooks/jtd';
 export { useJtdWidget } from '../domains/dashboarding/hooks/use-jtd-widget';
 
 // Widgets
@@ -68,7 +98,6 @@ export type {
   PivotQueryLoadingState,
   PivotQuerySuccessState,
   PivotQueryErrorState,
-  BaseQueryParams,
   ExecuteQueryParams,
   ExecuteQueryResult,
   ExecuteCsvQueryParams,
@@ -81,15 +110,12 @@ export type {
 export {
   extractDimensionsAndMeasures,
   useExecuteCustomWidgetQuery,
-  useExecuteCustomWidgetQueryInternal,
   type ExecuteCustomWidgetQueryParams,
   type CustomWidgetQueryState,
 } from '../infra/contexts/custom-widgets-provider';
 
 // Contexts
 export { SisenseContextProvider } from '../infra/contexts/sisense-context/sisense-context-provider';
-export * from '../infra/contexts/sisense-context/custom-sisense-context-provider';
-export * from '../infra/contexts/theme-provider/custom-theme-provider';
 
 // Widgets
 export { DrilldownWidget } from '../domains/drilldown/components/drilldown-widget';
@@ -98,7 +124,7 @@ export {
   PivotTableWidget,
   type PivotTableWidgetProps,
 } from '../domains/widgets/components/pivot-table-widget';
-export { TextWidget, type TextWidgetProps } from '../domains/widgets/components/text-widget';
+export { type TextWidgetProps } from '../domains/widgets/components/text-widget';
 export {
   Widget,
   type WidgetProps,
@@ -106,11 +132,13 @@ export {
   type WithCommonWidgetProps,
 } from '../domains/widgets/components/widget';
 export { type CustomWidgetProps } from '../domains/widgets/components/custom-widget';
-export { TabberButtonsWidget } from '../domains/widgets/components/tabber-buttons-widget';
 export { DrilldownBreadcrumbs } from '../domains/drilldown/components/drilldown-breadcrumbs';
 
 // Custom Widgets
-export * from '../infra/contexts/custom-widgets-provider/types';
+export type {
+  CustomWidgetComponentProps,
+  CustomWidgetComponent,
+} from '../infra/contexts/custom-widgets-provider/types';
 export {
   useCustomWidgets,
   type UseCustomWidgetsResult,
@@ -120,7 +148,6 @@ export {
 export {
   useGetDashboardModel,
   useGetDashboardModels,
-  useDashboardModel,
   type DashboardModel,
   type GetDashboardModelParams,
   type GetDashboardModelsParams,
@@ -140,7 +167,6 @@ export {
   type WidgetsPanelRow,
   type WidgetsPanelCell,
   type WidgetId,
-  type DashboardId,
   type WidgetsOptions,
   type SpecificWidgetOptions,
   type CommonFiltersOptions,
@@ -170,7 +196,41 @@ export {
 } from '../domains/drilldown/hierarchy-model';
 
 // Filters
-export * from '../domains/filters';
+export {
+  MemberFilterTile,
+  type MemberFilterTileProps,
+  type Member,
+  type SelectedMember,
+} from '../domains/filters/components/member-filter-tile';
+export {
+  DateRangeFilterTile,
+  type DateRangeFilterTileProps,
+} from '../domains/filters/components/date-filter/date-range-filter-tile';
+export {
+  RelativeDateFilterTile,
+  type RelativeDateFilterTileProps,
+} from '../domains/filters/components/date-filter/relative-date-filter-tile';
+export {
+  CriteriaFilterTile,
+  type CriteriaFilterTileProps,
+} from '../domains/filters/components/criteria-filter-tile';
+export {
+  FiltersPanel,
+  type FiltersPanelProps,
+  type FiltersPanelConfig,
+} from '../domains/filters/components/filters-panel';
+export { FilterTile, type FilterTileProps } from '../domains/filters/components/filter-tile';
+export { type FilterVariant } from '../domains/filters/components/common/filter-utils';
+export {
+  useGetFilterMembers,
+  type GetFilterMembersParams,
+  type FilterMembersState,
+  type FilterMembersLoadingState,
+  type FilterMembersSuccessState,
+  type FilterMembersErrorState,
+  type GetFilterMembersResult,
+  type GetFilterMembersData,
+} from '../domains/filters/hooks/use-get-filter-members';
 
 // Formulas
 export {
@@ -184,10 +244,8 @@ export {
 } from '../domains/formulas';
 
 // Data Browser & Data Source
-export { DataSchemaBrowser } from '../domains/data-browser/data-schema-browser/data-schema-browser';
 export {
   useGetDataSourceDimensions,
-  useGetDataSourceFields,
   type GetDataSourceDimensionsParams,
   type DataSourceDimensionsState,
   type DataSourceDimensionsLoadingState,
@@ -199,7 +257,6 @@ export {
 export { ThemeProvider } from '../infra/contexts/theme-provider';
 
 // General Components
-export { LoadingIndicator } from '../shared/components/loading-indicator';
 export { LoadingOverlay, type LoadingOverlayProps } from '../shared/components/loading-overlay';
 export { ContextMenu } from '../shared/components/menu/context-menu/context-menu';
 
@@ -237,15 +294,267 @@ export * as dashboardHelpers from '../domains/dashboarding/dashboard-helpers';
 export type { EmptyObject } from '@/shared/utils/utility-types';
 
 // Infra
-export {
-  type TranslationDictionary,
-  PACKAGE_NAMESPACE as translationNamespace,
-} from '@/infra/translation/resources';
 export { useFetch, type RequestConfig, type UseQueryResult } from '../shared/hooks/use-fetch';
 
-// Other Bucket (will be refactored)
-export * from '../domains/visualizations/core/chart-data-options/types';
+// Chart Data Options Types
+export type {
+  StyledColumn,
+  SeriesStyleOptions,
+  StyledMeasureColumn,
+  CartesianChartDataOptions,
+  CategoricalChartDataOptions,
+  IndicatorChartDataOptions,
+  ScatterChartDataOptions,
+  AreamapChartDataOptions,
+  CalendarHeatmapChartDataOptions,
+  TableDataOptions,
+  TabularChartDataOptions,
+  PivotTableDataOptions,
+  ScattermapLocationLevel,
+  ScattermapChartDataOptions,
+  BoxWhiskerType,
+  BoxplotChartDataOptions,
+  BoxplotChartCustomDataOptions,
+  AreaRangeMeasureColumn,
+  RangeChartDataOptions,
+  ChartDataOptions,
+  RegularChartDataOptions,
+} from '../domains/visualizations/core/chart-data-options/types';
+
+// Props
+export type {
+  TabberButtonsWidgetProps,
+  SisenseContextProviderProps,
+  ExecuteQueryProps,
+  ThemeProviderProps,
+  BeforeRenderHandler,
+  IndicatorBeforeRenderHandler,
+  ChartDataPointsEventHandler,
+  DataPointsEventHandler,
+  DataPointEventHandler,
+  ScatterDataPointEventHandler,
+  ScatterDataPointsEventHandler,
+  AreamapDataPointEventHandler,
+  ScattermapDataPointEventHandler,
+  BoxplotDataPointEventHandler,
+  IndicatorDataPointEventHandler,
+  CalendarHeatmapDataPointEventHandler,
+  CalendarHeatmapDataPointsEventHandler,
+  PivotTableDataPointEventHandler,
+  ChartEventProps,
+  ChartProps,
+  AreaChartProps,
+  StreamgraphChartProps,
+  BarChartProps,
+  ColumnChartProps,
+  FunnelChartProps,
+  LineChartProps,
+  PieChartProps,
+  PolarChartProps,
+  IndicatorChartProps,
+  TableProps,
+  PivotTableProps,
+  ScatterChartProps,
+  WidgetByIdProps,
+  ExecuteQueryByWidgetIdProps,
+  TreemapChartProps,
+  SunburstChartProps,
+  BoxplotChartProps,
+  ScattermapChartProps,
+  AreamapChartProps,
+  AreaRangeChartProps,
+  ContextMenuProps,
+  DrilldownBreadcrumbsProps,
+  DrilldownWidgetConfig,
+  DrilldownWidgetProps,
+  CalendarHeatmapChartProps,
+} from '../props';
 export type { AutoZoomNavigatorScrollerLocation } from '../domains/widgets/components/widget-by-id/types';
-export * from '../props';
-export * from '../types';
-export * from '@/shared/utils/gradient';
+
+// Types
+export type {
+  SortDirection,
+  PivotRowsSort,
+  AppConfig,
+  DateConfig,
+  CalendarDayOfWeek,
+  IndicatorComponents,
+  ScatterMarkerSize,
+  LegendPosition,
+  Coordinates,
+  TableColorOptions,
+  IndicatorRenderOptions,
+  GeoDataElement,
+  RawGeoDataElement,
+  CartesianChartType,
+  CategoricalChartType,
+  ScatterChartType,
+  IndicatorChartType,
+  BoxplotChartType,
+  ScattermapChartType,
+  AreamapChartType,
+  CalendarHeatmapChartType,
+  TableType,
+  TableChartType,
+  RangeChartType,
+  TextStyle,
+  DataColorCondition,
+  ConditionalDataColorOptions,
+  DataColorOptions,
+  RangeDataColorOptions,
+  UniformDataColorOptions,
+  AreaSubtype,
+  AreaRangeSubtype,
+  LineSubtype,
+  PieSubtype,
+  PolarSubtype,
+  StackableSubtype,
+  BoxplotSubtype,
+  MonthOfYear,
+  DayOfWeek,
+  DateLevel,
+  TabberButtonsWidgetStyleOptions,
+  TabberButtonsWidgetCustomOptions,
+  Color,
+  ColorPaletteTheme,
+  Navigator,
+  LineWidth,
+  DashStyle,
+  EndCapType,
+  LineOptions,
+  Markers,
+  X2Title,
+  SeriesLabelsTextStyle,
+  SeriesLabelsBase,
+  SeriesLabelsAligning,
+  SeriesLabels,
+  TotalLabelsTextStyle,
+  TotalLabels,
+  LegendTitleOptions,
+  LegendItemsOptions,
+  LegendSymbolsOptions,
+  LegendOptions,
+  Legend,
+  Labels,
+  AxisLabel,
+  Convolution,
+  DataLimits,
+  LineStyleOptions,
+  AreaRangeStyleOptions,
+  AreaStyleOptions,
+  StreamgraphStyleOptions,
+  StackableStyleOptions,
+  PiePercentageLabels,
+  PieSeriesLabels,
+  PieStyleOptions,
+  FunnelSeriesLabels,
+  FunnelStyleOptions,
+  PolarStyleOptions,
+  IndicatorStyleOptions,
+  TableStyleOptions,
+  TabularChartStyleOptions,
+  PivotTableStyleOptions,
+  NumericSimpleIndicatorStyleOptions,
+  NumericBarIndicatorStyleOptions,
+  GaugeIndicatorStyleOptions,
+  ScatterSeriesLabels,
+  ScatterStyleOptions,
+  TreemapSeriesLabels,
+  TreemapStyleOptions,
+  SunburstSeriesLabelsBase,
+  SunburstSeriesLabels,
+  SunburstStyleOptions,
+  BoxplotStyleOptions,
+  AreamapType,
+  AreamapStyleOptions,
+  ScattermapMarkers,
+  ScattermapStyleOptions,
+  CalendarHeatmapCellLabels,
+  CalendarHeatmapSubtype,
+  CalendarHeatmapStyleOptions,
+  CalendarHeatmapViewType,
+  ChartStyleOptions,
+  RegularChartStyleOptions,
+  ValueToColorMap,
+  MultiColumnValueToColorMap,
+  ChartType,
+  RegularChartType,
+  SeriesChartType,
+  DecimalScale,
+  NumberFormatConfig,
+  ThemeOid,
+  ChartThemeSettings,
+  AiChatThemeSettings,
+  ThemeSettingsFontSource,
+  ThemeSettingsFont,
+  FontsLoaderSettings,
+  TypographyThemeSettings,
+  GeneralThemeSettings,
+  SpaceSizes,
+  RadiusSizes,
+  ShadowsTypes,
+  AlignmentTypes,
+  WidgetThemeSettings,
+  FilterThemeSettings,
+  ThemeSettings,
+  WidgetStyleOptions,
+  WidgetContainerStyleOptions,
+  WidgetByIdStyleOptions,
+  ChartWidgetStyleOptions,
+  PivotTableWidgetStyleOptions,
+  TextWidgetStyleOptions,
+  CustomWidgetStyleOptions,
+  DrilldownOptions,
+  PivotTableDrilldownOptions,
+  PivotTableSelectableDrilldownOptions,
+  PivotTableNonSelectableDrilldownOptions,
+  DrilldownSelection,
+  DataOptionLocation,
+  ChartDataPoints,
+  ChartDataPoint,
+  DataPoint,
+  DataPointEntry,
+  BasicDataPointEntry,
+  AttributeDataPointEntry,
+  MeasureDataPointEntry,
+  ScatterDataPoint,
+  BoxplotDataPoint,
+  IndicatorDataPoint,
+  CalendarHeatmapDataPoint,
+  PivotTableDataPoint,
+  AreamapDataPoint,
+  ScattermapDataPoint,
+  CustomWidgetDataPoint,
+  CustomWidgetDataPointEventHandler,
+  CustomWidgetDataPointContextMenuHandler,
+  CustomWidgetDataPointsEventHandler,
+  CustomWidgetEventProps,
+  AbstractDataPointWithEntries,
+  MenuPosition,
+  MenuItemSection,
+  CustomDrilldownResult,
+  LoadingIndicatorConfig,
+  GenericDataOptions,
+  NestedTranslationResources,
+  CustomTranslationObject,
+  TranslationConfig,
+} from '../types';
+
+// Gradient utilities
+export {
+  type GradientPosition,
+  type ColorValue,
+  type GradientStop,
+  type LinearGradientDirection,
+  type RadialGradientConfig,
+  type LinearGradientColor,
+  type RadialGradientColor,
+  type GradientColor,
+  isLinearGradient,
+  isRadialGradient,
+  isGradient,
+  GradientDirections,
+  RadialGradientPresets,
+  createLinearGradient,
+  createRadialGradient,
+} from '@/shared/utils/gradient';

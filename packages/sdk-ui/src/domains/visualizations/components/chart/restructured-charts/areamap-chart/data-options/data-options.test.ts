@@ -1,7 +1,8 @@
 import { measureFactory } from '@sisense/sdk-data';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
-import { AreamapChartDataOptions, AreamapChartDataOptionsInternal } from '@/index';
+import { AreamapChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
+import { AreamapChartDataOptions } from '@/index';
 
 import { dataOptionsTranslators } from './data-options.js';
 

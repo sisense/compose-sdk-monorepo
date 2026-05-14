@@ -12,13 +12,14 @@ Service for working with Sisense Fusion dashboards.
 
 ### constructor
 
-> **new DashboardService**(`sisenseContextService`): [`DashboardService`](class.DashboardService.md)
+> **new DashboardService**(`sisenseContextService`, `themeService`): [`DashboardService`](class.DashboardService.md)
 
 #### Parameters
 
 | Parameter | Type |
 | :------ | :------ |
 | `sisenseContextService` | [`SisenseContextService`](../contexts/class.SisenseContextService.md) |
+| `themeService` | [`ThemeService`](../contexts/class.ThemeService.md) |
 
 #### Returns
 

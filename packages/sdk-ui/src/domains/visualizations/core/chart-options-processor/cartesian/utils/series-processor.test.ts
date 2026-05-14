@@ -683,4 +683,35 @@ describe('processSeries', () => {
       expect(result[0]).toHaveProperty('marker');
     });
   });
+
+  describe('line chart step on each series', () => {
+    it('sets step to false when design options omit step (clears Highcharts per-series step)', () => {
+      const config = createBaseConfig();
+      const result = processSeries(config);
+
+      expect(result[0]).toHaveProperty('step', false);
+      expect(result[1]).toHaveProperty('step', false);
+    });
+
+    it('sets step to the design position for step lines', () => {
+      const config = createBaseConfig();
+      config.chartDesignOptions = {
+        ...config.chartDesignOptions,
+        step: 'right',
+      } as ChartDesignOptions;
+
+      const result = processSeries(config);
+
+      expect(result[0]).toHaveProperty('step', 'right');
+      expect(result[1]).toHaveProperty('step', 'right');
+    });
+
+    it('does not add step when chart type is not line', () => {
+      const config = createBaseConfig();
+      config.chartType = 'column';
+      const result = processSeries(config);
+
+      expect(result[0]).not.toHaveProperty('step');
+    });
+  });
 });

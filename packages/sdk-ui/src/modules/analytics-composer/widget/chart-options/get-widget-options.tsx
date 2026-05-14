@@ -120,9 +120,11 @@ export const getChartDataOptions = (
           }
 
           if (isDatetime(column.type)) {
-            const dateFormat: string | undefined = (m.format?.mask as DatetimeMask)?.[
-              m.jaql.level!
-            ];
+            const jl = m.jaql as { level?: string; dateTimeLevel?: string };
+            const levelKey = jl.dateTimeLevel || jl.level;
+            const dateFormat: string | undefined = levelKey
+              ? (m.format?.mask as DatetimeMask)?.[levelKey]
+              : undefined;
             if (dateFormat) {
               return {
                 ...nColumn,

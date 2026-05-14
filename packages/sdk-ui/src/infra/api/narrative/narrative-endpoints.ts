@@ -32,56 +32,69 @@ function isUnifiedNarrativeEndpointMissing(error: unknown): boolean {
   return hasStatusProperty(error) && error.status === '404';
 }
 
+function isNarrative400(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null) return false;
+  return hasStatusProperty(error) && error.status === '400';
+}
+
 /**
  * Options for getNarrative. All endpoint choice logic lives in this module.
  *
  * @internal
  */
 export type GetNarrativeOptions = {
-  isUnified?: boolean;
-  isSisenseAiEnabled?: boolean;
+  canGenerateNarrativeViaAI?: boolean;
+  /**
+   * When provided and the primary request returns a 400, the request is retried once with this
+   * fallback payload. Intended for trend/forecast stripping when the backend cannot handle them.
+   */
+  fallbackRequestOn400?: NarrativeRequest;
 };
 
 async function fetchUnifiedNarrativeWithFallback(
   httpClient: HttpClient,
   request: NarrativeRequest,
-): Promise<NarrativeResponse> {
+): Promise<NarrativeResponse | undefined> {
   const payload = withNarrativeRequestBy(request);
   try {
-    const response = await httpClient.post<NarrativeResponse>(UNIFIED_NARRATIVE_ENDPOINT, payload);
-    return response as NarrativeResponse;
+    return await httpClient.post<NarrativeResponse>(UNIFIED_NARRATIVE_ENDPOINT, payload);
   } catch (err) {
     if (!isUnifiedNarrativeEndpointMissing(err)) throw err;
 
-    const response = await httpClient.post<NarrativeResponse>(LEGACY_NARRATIVE_ENDPOINT, payload);
-    return response as NarrativeResponse;
+    return await httpClient.post<NarrativeResponse>(LEGACY_NARRATIVE_ENDPOINT, payload);
   }
 }
 
 /**
- * Fetches Narrative. Single place for endpoint logic: `isUnified === false` → legacy only;
- * otherwise try unified endpoint first, fall back to legacy on 404.
+ * Fetches Narrative. Single place for endpoint logic: when `canGenerateNarrativeViaAI` is truthy,
+ * try the unified endpoint first and fall back to legacy on 404; otherwise hit legacy directly.
+ * When `fallbackRequestOn400` is provided and the primary request returns a 400, the request is
+ * retried once with the fallback payload.
  *
  * @param httpClient - HttpClient instance
  * @param request - Narration request payload
- * @param options - Optional; `isUnified` / `isSisenseAiEnabled` (e.g. from `app.settings.narrative`)
- * @returns Promise with narration response
+ * @param options - Optional; `canGenerateNarrativeViaAI` (typically from `app.settings.narrative`)
+ * @returns Promise that resolves with narration JSON or `undefined` (same semantics as `HttpClient.post`)
  * @internal
  */
 export async function getNarrative(
   httpClient: HttpClient,
   request: NarrativeRequest,
   options?: GetNarrativeOptions,
-): Promise<NarrativeResponse> {
-  const { isUnified = false, isSisenseAiEnabled = false } = options ?? {};
+): Promise<NarrativeResponse | undefined> {
+  const { canGenerateNarrativeViaAI, fallbackRequestOn400 } = options ?? {};
 
-  if (isUnified && isSisenseAiEnabled) {
-    return fetchUnifiedNarrativeWithFallback(httpClient, request);
+  const run = (req: NarrativeRequest) =>
+    canGenerateNarrativeViaAI
+      ? fetchUnifiedNarrativeWithFallback(httpClient, req)
+      : httpClient.post<NarrativeResponse>(LEGACY_NARRATIVE_ENDPOINT, withNarrativeRequestBy(req));
+
+  if (!fallbackRequestOn400) return run(request);
+
+  try {
+    return await run(request);
+  } catch (e) {
+    if (!isNarrative400(e)) throw e;
+    return run(fallbackRequestOn400);
   }
-
-  const response = await httpClient.post<NarrativeResponse>(
-    LEGACY_NARRATIVE_ENDPOINT,
-    withNarrativeRequestBy(request),
-  );
-  return response as NarrativeResponse;
 }

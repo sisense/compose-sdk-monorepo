@@ -1,7 +1,8 @@
 import type { SeriesLegendItemClickCallbackFunction } from '@sisense/sisense-charts';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ChartDataOptionsInternal } from '../../../..';
+import type { ChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
+
 import { applyEventHandlersToChart } from './apply-event-handlers';
 import type { HighchartsOptionsInternal } from './chart-options-service';
 

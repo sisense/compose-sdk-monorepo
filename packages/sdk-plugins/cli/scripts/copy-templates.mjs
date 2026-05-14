@@ -23,7 +23,6 @@ const EXCLUDE_PATTERNS = ['node_modules', '.yarn/'];
  * Important hidden files that should always be included
  */
 const IMPORTANT_HIDDEN_FILES = [
-  '.gitignore',
   '.yarnrc.yml',
   '.npmrc',
   '.editorconfig',

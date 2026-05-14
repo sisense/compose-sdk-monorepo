@@ -6,10 +6,6 @@ import { isDataSource } from '@sisense/sdk-data';
 import { getFilterListAndRelationsJaql } from '@sisense/sdk-data';
 
 import { isData } from '@/domains/visualizations/components/chart/components/regular-chart';
-import {
-  isMeasureColumn,
-  translateColumnToMeasure,
-} from '@/domains/visualizations/core/chart-data-options/utils';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import {
@@ -20,9 +16,11 @@ import { LoadingOverlay } from '@/shared/components/loading-overlay';
 import { NoResultsOverlay } from '@/shared/components/no-results-overlay/no-results-overlay';
 
 import { TableProps } from '../../../../props';
-import { translateTableDataOptions } from '../../core/chart-data-options/translate-data-options';
-import { StyledMeasureColumn, TableDataOptionsInternal } from '../../core/chart-data-options/types';
-import { generateUniqueDataColumnsNames } from '../../core/chart-data-options/validate-data-options';
+import {
+  translateTableDataOptions,
+  withUniqueMeasureNames,
+} from '../../core/chart-data-options/translate-data-options';
+import { TableDataOptionsInternal } from '../../core/chart-data-options/types';
 import { isDataTableEmpty } from '../../core/chart-data-processor/table-creators';
 import { Column as DataTableColumn } from '../../core/chart-data-processor/table-processor';
 import { orderBy } from '../../core/chart-data-processor/table-processor';
@@ -59,18 +57,9 @@ export const TableComponent = ({
   const [currentPage, setCurrentPage] = useState(1);
   const paginationEl = useRef(null);
 
-  const translatedDataOptions = useMemo(
-    () => translateTableDataOptions(dataOptions),
+  const { dataOptions: translatedDataOptions, mapping: translatedDataColumnNamesMapping } = useMemo(
+    () => withUniqueMeasureNames(translateTableDataOptions(dataOptions)),
     [dataOptions],
-  );
-  const dataColumnNamesMapping = useMemo(
-    () =>
-      generateUniqueDataColumnsNames(
-        (translatedDataOptions.columns.filter(isMeasureColumn) as StyledMeasureColumn[]).map(
-          translateColumnToMeasure,
-        ),
-      ),
-    [translatedDataOptions],
   );
 
   const designOptions = useMemo(
@@ -80,11 +69,15 @@ export const TableComponent = ({
 
   const [innerDataOptions, setInnerDataOptions] =
     useState<TableDataOptionsInternal>(translatedDataOptions);
+  const [innerDataColumnNamesMapping, setInnerDataColumnNamesMapping] = useState(
+    translatedDataColumnNamesMapping,
+  );
 
   const [usedDataSet, setUsedDataset] = useState(dataSet);
-  const [data, updatedDataOptions] = useTableData({
+  const [data, updatedDataOptions, updatedDataColumnNamesMapping] = useTableData({
     dataSet: usedDataSet,
     dataOptions: innerDataOptions,
+    dataColumnNamesMapping: innerDataColumnNamesMapping,
     filters: filterList,
     filterRelations,
     count: rowsPerPage * PAGES_BATCH_SIZE,
@@ -108,17 +101,18 @@ export const TableComponent = ({
   const dataTable = useTableDataTable({
     data: finalData,
     innerDataOptions: updatedDataOptions,
-    dataColumnNamesMapping,
+    dataColumnNamesMapping: updatedDataColumnNamesMapping,
     needToAggregate: !isDataSource(usedDataSet),
   });
 
   useEffect(() => {
     setInnerDataOptions(translatedDataOptions);
+    setInnerDataColumnNamesMapping(translatedDataColumnNamesMapping);
     setUsedDataset(dataSet);
 
     setCurrentPage(1);
     setOffset(0);
-  }, [dataSet, translatedDataOptions]);
+  }, [dataSet, translatedDataOptions, translatedDataColumnNamesMapping]);
 
   const onPageChange = useCallback(
     (page: number) => {

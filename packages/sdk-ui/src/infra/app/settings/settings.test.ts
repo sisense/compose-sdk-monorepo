@@ -65,11 +65,21 @@ describe('getSettings function', () => {
 
     expect(mockHttpClient.get).toHaveBeenCalledWith('api/globals');
     expect(mockHttpClient.get).toHaveBeenCalledWith('api/palettes/Vivid');
-  });
 
-  it('fetches palette if useDefaultPalette is not specified', async () => {
-    await getSettings({}, mockHttpClient);
-    expect(mockHttpClient.get).toHaveBeenCalledWith('api/palettes/Vivid');
+    expect(settings.ai.featureFlags.nlqV3Enabled).toBe(true);
+    expect(settings.ai.featureFlags.naturalResponseEnabled).toBe(false);
+    expect(settings.ai.featureFlags.queryDefinition).toBe(false);
+    expect(settings.ai.featureFlags.completionV2).toBe(false);
+    expect(settings.ai.quotaNotification).toBe(true);
+    expect(settings.ai.featureModelType).toBe('sisense_managed');
+    expect(settings.ai.aiStudio.realtime).toBe(false);
+    expect(settings.ai.aiStudio.usageDisplay).toBe(false);
+    expect(settings.user.firstName).toBe('Test');
+    expect(settings.user.lastName).toBe('Test');
+    expect(settings.user.email).toBe('admin@sisense.com');
+    expect(settings.fusionBrand.documentationUrl).toBeNull();
+    expect(settings.fusionDesignSettings).toBeDefined();
+    expect(settings.fusionDesignSettings.general.brandColor).toBe('#ffcb05');
   });
 
   it('returns merged application settings with default palette', async () => {
@@ -109,5 +119,40 @@ describe('getSettings function', () => {
       { get: vi.fn().mockResolvedValue({ ...mockGlobals, user: {} }), url: 'http://test.com/' },
     );
     expect(settings.user.tenant.name).toBe(SYSTEM_TENANT_NAME);
+  });
+
+  it('does not set flattened featureModelType when aiAssistant feature is absent', async () => {
+    const globalsWithoutAiAssistant = {
+      ...mockGlobals,
+      features: mockGlobals.features.filter((f) => f.key !== 'aiAssistant'),
+    };
+
+    const settings = await getSettings(
+      {},
+      {
+        get: vi.fn().mockImplementation((url: string) => {
+          switch (url) {
+            case 'api/globals':
+              return Promise.resolve(globalsWithoutAiAssistant);
+            case 'api/v2/settings/ai':
+              return Promise.resolve({
+                narration: { enabled: false, sisenseAIEnabled: false },
+              });
+            case 'api/v1/settings/system':
+              return Promise.resolve(mockSystemSettings);
+            case 'api/palettes/Vivid':
+              return Promise.resolve({
+                colors: ['mockColor1', 'mockColor2'],
+              });
+            default:
+              return null;
+          }
+        }),
+        url: 'http://test.com/',
+      },
+      false,
+    );
+
+    expect(settings.ai.featureModelType).toBeUndefined();
   });
 });

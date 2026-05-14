@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.26.0",
+  "version": "2.27.0",
   "type": "module",
   "exports": "./dist/index.js",
   "main": "./dist/index.js",
@@ -23,11 +23,12 @@
     "@sisense/sdk-common": "workspace:*",
     "@sisense/sdk-data": "workspace:*",
     "@sisense/sdk-modeling": "workspace:*",
+    "@sisense/sdk-plugins-cli": "workspace:*",
     "@sisense/sdk-query-client": "workspace:*",
     "@sisense/sdk-rest-client": "workspace:*",
     "@sisense/sdk-tracking": "workspace:*",
-    "cross-fetch": "^4.0.0",
     "inquirer": "^8.1.2",
+    "node-fetch": "^3.3.2",
     "node-window-polyfill": "^1.0.2",
     "yargs": "17.7.1"
   },

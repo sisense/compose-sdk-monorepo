@@ -15,6 +15,8 @@ import { validateCategoricalChartDataOptions } from './validate-categorical-data
 
 export type DataColumnNamesMapping = Record<string, string>;
 
+const getMeasurePrefix = (id: number): string => `$measure${id}_`;
+
 /**
  * Generates and applies unique data column names and creates a mapping of new names to original names.
  *
@@ -23,18 +25,36 @@ export type DataColumnNamesMapping = Record<string, string>;
  */
 export const generateUniqueDataColumnsNames = (measures: Measure[]): DataColumnNamesMapping => {
   const dataColumnNamesMapping: DataColumnNamesMapping = {};
-  const getMeasurePrefix = (id: number): string => `$measure${id}_`;
 
   measures.forEach((measure, index) => {
     const originalName = measure.name;
-    const prefix = getMeasurePrefix(index);
-    const uniqueName = `${prefix}${originalName}`;
+    const uniqueName = `${getMeasurePrefix(index)}${originalName}`;
 
     measure.name = uniqueName;
     dataColumnNamesMapping[uniqueName] = originalName;
   });
 
   return dataColumnNamesMapping;
+};
+
+/**
+ * Pure variant of {@link generateUniqueDataColumnsNames}: returns a fresh array of
+ * measure clones whose `name` is the unique alias, alongside the mapping. The
+ * input measures are not mutated.
+ */
+export const applyUniqueDataColumnsNames = (
+  measures: Measure[],
+): { measures: Measure[]; mapping: DataColumnNamesMapping } => {
+  const mapping: DataColumnNamesMapping = {};
+
+  const renamedMeasures = measures.map((measure, index) => {
+    const originalName = measure.name;
+    const uniqueName = `${getMeasurePrefix(index)}${originalName}`;
+    mapping[uniqueName] = originalName;
+    return Object.assign(Object.create(measure as object), { name: uniqueName }) as Measure;
+  });
+
+  return { measures: renamedMeasures, mapping };
 };
 
 /**

@@ -13,11 +13,13 @@ An Angular component used for easily rendering a dashboard created in Sisense Fu
 ```html
 <csdk-dashboard
  *ngIf="dashboard"
- [title]="dashboard.title"
- [layoutOptions]="dashboard.layoutOptions"
- [widgets]="dashboard.widgets"
- [filters]="dashboard.filters"
+ [config]="dashboard.config"
  [defaultDataSource]="dashboard.defaultDataSource"
+ [filters]="dashboard.filters"
+ [layoutOptions]="dashboard.layoutOptions"
+ [styleOptions]="dashboard.styleOptions"
+ [title]="dashboard.title"
+ [widgets]="dashboard.widgets"
  [widgetsOptions]="dashboard.widgetsOptions"
 />
 ```

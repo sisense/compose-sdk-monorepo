@@ -4,8 +4,11 @@ import { renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
 
 import { DashboardModel, dashboardModelTranslator } from '@/domains/dashboarding/dashboard-model';
+import { type AppSettings } from '@/infra/app/settings/settings.js';
 import { type ClientApplication } from '@/infra/app/types.js';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context.js';
+import { useThemeContext } from '@/infra/contexts/theme-provider';
+import { type CompleteThemeSettings } from '@/types.js';
 
 import { sampleEcommerceDashboard } from './__mocks__/sample-ecommerce-dashboard.js';
 import { sampleHealthcareDashboard } from './__mocks__/sample-healthcare-dashboard.js';
@@ -40,21 +43,35 @@ vi.mock('@/infra/contexts/sisense-context/sisense-context', async () => {
   };
 });
 
+vi.mock('@/infra/contexts/theme-provider/theme-context', async () => {
+  const actual: typeof import('@/infra/contexts/theme-provider/theme-context') =
+    await vi.importActual('@/infra/contexts/theme-provider/theme-context');
+  return {
+    ...actual,
+    useThemeContext: vi.fn(),
+  };
+});
+
 vi.mock('./get-dashboard-models', () => ({
   getDashboardModels: vi.fn(),
 }));
 
 const getDashboarsdModelsMock = getDashboardModels as Mock<typeof getDashboardModels>;
 const useSisenseContextMock = useSisenseContext as Mock<typeof useSisenseContext>;
+const useThemeContextMock = useThemeContext as Mock<typeof useThemeContext>;
 
 const trackProductEventMock = trackProductEvent as Mock<typeof trackProductEvent>;
+
+const mockThemeSettings = { palette: { variantColors: ['#FF0000'] } } as CompleteThemeSettings;
+const mockAppSettings = { serverThemeSettings: {} } as unknown as AppSettings;
 
 describe('useGetDashboardModels', () => {
   beforeEach(() => {
     getDashboarsdModelsMock.mockClear();
     trackProductEventMock.mockClear();
+    useThemeContextMock.mockReturnValue({ themeSettings: mockThemeSettings });
     useSisenseContextMock.mockReturnValue({
-      app: {} as ClientApplication,
+      app: { httpClient: {}, settings: mockAppSettings } as ClientApplication,
       isInitialized: true,
       tracking: {
         enabled: false,
@@ -78,6 +95,20 @@ describe('useGetDashboardModels', () => {
     });
   });
 
+  it('should pass themeSettings and appSettings to getDashboardModels', async () => {
+    getDashboarsdModelsMock.mockResolvedValue(dashboardModelsMock);
+    renderHook(() => useGetDashboardModels());
+
+    await waitFor(() => {
+      expect(getDashboarsdModelsMock).toHaveBeenCalledWith(
+        {},
+        {},
+        mockThemeSettings,
+        mockAppSettings,
+      );
+    });
+  });
+
   it('should handle dashboards fetch error', async () => {
     const mockError = new Error('Dashboards fetch error');
     getDashboarsdModelsMock.mockRejectedValueOnce(mockError);
@@ -96,7 +127,7 @@ describe('useGetDashboardModels', () => {
     getDashboarsdModelsMock.mockResolvedValue(dashboardModelsMock);
 
     useSisenseContextMock.mockReturnValue({
-      app: { httpClient: {} } as ClientApplication,
+      app: { httpClient: {}, settings: mockAppSettings } as ClientApplication,
       isInitialized: true,
       tracking: {
         enabled: true,

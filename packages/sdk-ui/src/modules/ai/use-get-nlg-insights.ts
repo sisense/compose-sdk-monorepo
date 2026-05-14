@@ -48,10 +48,9 @@ export const useGetNlgInsightsInternal = (
 
   const narrationOptions = useMemo(
     () => ({
-      isUnified: app?.settings?.narrative?.isUnified ?? false,
-      isSisenseAiEnabled: app?.settings?.narrative?.isSisenseAiEnabled ?? false,
+      canGenerateNarrativeViaAI: app?.settings?.narrative?.canGenerateNarrativeViaAI,
     }),
-    [app?.settings?.narrative?.isUnified, app?.settings?.narrative?.isSisenseAiEnabled],
+    [app?.settings?.narrative?.canGenerateNarrativeViaAI],
   );
 
   const payload: GetNlgInsightsRequest = useMemo(() => {

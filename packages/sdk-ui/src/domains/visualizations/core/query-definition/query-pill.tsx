@@ -3,17 +3,18 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getQueryPillTooltipModel } from './compose-code-to-readable';
+import { QUERY_PILL_LABEL_STYLE } from './query-definition-style-constants';
 import { QueryPillBubbleTooltip } from './query-pill-bubble-tooltip';
 import type { QueryPillCategory, QueryPillItem } from './types';
 
 /**
- * Figma tokens — Display query definition in canvas (ChipItem variants).
+ * Fixed chip styling — intentionally not tied to theme (product/design spec).
  */
 const PILL_COLORS: Record<QueryPillCategory, { bg: string; text: string }> = {
-  measure: { bg: '#d0f1e1', text: '#262e3d' },
-  dimension: { bg: '#ebe9fe', text: '#262e3d' },
-  filter: { bg: '#d7edf7', text: '#262e3d' },
-  operator: { bg: '#ebe9fe', text: '#262e3d' },
+  measure: { bg: '#d0f1e1', text: '#131F29' },
+  dimension: { bg: '#ebe9fe', text: '#131F29' },
+  filter: { bg: '#d7edf7', text: '#131F29' },
+  operator: { bg: '#ebe9fe', text: '#131F29' },
 };
 
 function tooltipTitleFromModel(
@@ -23,12 +24,7 @@ function tooltipTitleFromModel(
   return (
     <div
       className="csdk-m-0 csdk-max-h-64 csdk-overflow-auto csdk-whitespace-pre-wrap csdk-break-all"
-      style={{
-        margin: 0,
-        fontSize: '12px',
-        lineHeight: '16px',
-        letterSpacing: '0.2px',
-      }}
+      style={{ margin: 0 }}
     >
       <div>{`${t('queryDefinition.tooltipType')}: ${model.typeLabel}`}</div>
       {model.showColumnInTooltip ? (
@@ -71,8 +67,12 @@ export const QueryPill: FunctionComponent<QueryPillProps> = ({
 
   const pill = (
     <span
-      className="csdk-inline-flex csdk-items-center csdk-rounded csdk-px-2 csdk-py-0.5 csdk-text-sm csdk-font-normal csdk-whitespace-nowrap csdk-max-w-full csdk-truncate"
-      style={{ backgroundColor: bg, color: text }}
+      className="csdk-inline-flex csdk-items-center csdk-rounded csdk-px-2 csdk-py-0.5 csdk-font-normal csdk-whitespace-nowrap csdk-max-w-full csdk-truncate"
+      style={{
+        backgroundColor: bg,
+        color: text,
+        ...QUERY_PILL_LABEL_STYLE,
+      }}
     >
       {item.label}
     </span>

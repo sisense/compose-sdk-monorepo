@@ -9,6 +9,11 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useThemeContext } from '@/infra/contexts/theme-provider';
+import type { CompleteThemeSettings } from '@/types';
+
+import { QUERY_DEFINITION_TEXT_STYLE } from './query-definition-style-constants';
+
 const GAP = 8;
 const ARROW = 8;
 const CARET_EXT = Math.round((ARROW / 2) * Math.sqrt(2));
@@ -19,7 +24,15 @@ const VP = 8;
 const BORDER = 'rgba(38, 46, 61, 0.08)';
 const SHADOW = `0 2px 8px rgba(38, 46, 61, 0.12), 0 0 0 1px ${BORDER}`;
 
-function Caret({ dir, centerXPx }: { dir: 'up' | 'down'; centerXPx: number | null }) {
+function Caret({
+  dir,
+  centerXPx,
+  themeSettings,
+}: {
+  dir: 'up' | 'down';
+  centerXPx: number | null;
+  themeSettings: CompleteThemeSettings;
+}) {
   const half = ARROW / 2;
   const pos =
     centerXPx !== null
@@ -29,7 +42,7 @@ function Caret({ dir, centerXPx }: { dir: 'up' | 'down'; centerXPx: number | nul
     position: 'absolute' as const,
     width: ARROW,
     height: ARROW,
-    backgroundColor: '#ffffff',
+    backgroundColor: themeSettings.chart.backgroundColor,
     boxSizing: 'border-box' as const,
     ...pos,
   };
@@ -82,6 +95,7 @@ export const QueryPillBubbleTooltip: FunctionComponent<QueryPillBubbleTooltipPro
   preferBelow = false,
   boundaryElement,
 }) => {
+  const { themeSettings } = useThemeContext();
   const triggerRef = useRef<HTMLSpanElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const boundaryRef = useRef(boundaryElement);
@@ -206,11 +220,12 @@ export const QueryPillBubbleTooltip: FunctionComponent<QueryPillBubbleTooltipPro
             }}
           >
             <div style={{ position: 'relative' }}>
-              {below && <Caret dir="up" centerXPx={caretX} />}
+              {below && <Caret dir="up" centerXPx={caretX} themeSettings={themeSettings} />}
               <div
                 style={{
-                  backgroundColor: '#fff',
-                  color: '#262e3d',
+                  backgroundColor: themeSettings.chart.backgroundColor,
+                  ...QUERY_DEFINITION_TEXT_STYLE,
+                  color: themeSettings.chart.textColor,
                   borderRadius: R,
                   padding: PAD,
                   boxShadow: SHADOW,
@@ -218,7 +233,7 @@ export const QueryPillBubbleTooltip: FunctionComponent<QueryPillBubbleTooltipPro
               >
                 {content}
               </div>
-              {!below && <Caret dir="down" centerXPx={caretX} />}
+              {!below && <Caret dir="down" centerXPx={caretX} themeSettings={themeSettings} />}
             </div>
           </div>,
           document.body,

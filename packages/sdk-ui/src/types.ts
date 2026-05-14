@@ -2304,14 +2304,14 @@ export interface WidgetContainerStyleOptions {
     /**
      * Custom toolbar to render to the right of the title
      *
-     * @internal
+     * @sisenseInternal
      * @deprecated - should be moved out from StyleOptions
      */
     renderToolbar?: RenderToolbarHandler;
     /**
      * Custom title to render in widget header
      *
-     * @internal
+     * @sisenseInternal
      * @deprecated - should be moved out from StyleOptions
      */
     renderTitle?: RenderTitleHandler;
@@ -2329,7 +2329,7 @@ export type NlqChartWidgetStyleOptions = {
   };
 };
 
-/** @internal */
+/** @sisenseInternal */
 export type RenderToolbarHandler = (
   onRefresh: () => void,
   defaultToolbar: JSX.Element,

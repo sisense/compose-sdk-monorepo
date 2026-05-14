@@ -71,7 +71,7 @@ export {
 
 // Others
 export type { NlqChartWidgetStyleOptions } from '../types';
-export type { RenderTitleHandler } from '../types';
+export type { RenderToolbarHandler, RenderTitleHandler } from '../types';
 export { isChartWidgetProps } from '../domains/widgets/components/widget-by-id/utils.js';
 export { isPivotTableWidgetProps } from '../domains/widgets/components/widget-by-id/utils.js';
 
@@ -87,12 +87,4 @@ export type { DashboardPersistenceManager } from '../domains/dashboarding/persis
 export {
   QueryDefinition,
   type QueryDefinitionProps,
-  QueryPill,
-  type QueryPillProps,
-  baseQueryParamsToViewModel,
-  getQueryPillTooltipModel,
-  type TooltipModel,
-  type QueryPillCategory,
-  type QueryPillItem,
-  type QueryDefinitionViewModel,
 } from '../domains/visualizations/core/query-definition';

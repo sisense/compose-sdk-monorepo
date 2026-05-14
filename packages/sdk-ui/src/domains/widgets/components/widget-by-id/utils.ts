@@ -60,7 +60,9 @@ const fusionWidgetTypeToChartType: Partial<Record<FusionWidgetType, ChartType>> 
 const chartTypeToFusionWidgetType: Record<ChartType, FusionWidgetType> = Object.entries(
   fusionWidgetTypeToChartType,
 ).reduce<Record<ChartType, FusionWidgetType>>((acc, [key, value]) => {
-  acc[value] = key as FusionWidgetType;
+  if (value !== undefined) {
+    acc[value] = key;
+  }
   return acc;
 }, {} as Record<ChartType, FusionWidgetType>);
 
@@ -92,6 +94,7 @@ export function getFusionWidgetTypeFromChartType(chartType: ChartType): FusionWi
 export function getFusionWidgetType(
   widgetType: WidgetType,
   chartType?: ChartType,
+  customWidgetType?: string,
 ): FusionWidgetType {
   if (widgetType === 'chart') {
     if (!chartType) {
@@ -103,7 +106,7 @@ export function getFusionWidgetType(
     return 'pivot2';
   }
   if (widgetType === 'custom') {
-    return 'custom';
+    return customWidgetType ?? 'custom';
   }
   if (widgetType === 'text') {
     return 'richtexteditor';

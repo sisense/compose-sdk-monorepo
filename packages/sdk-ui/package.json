@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.26.0",
+  "version": "2.27.0",
   "type": "module",
   "exports": {
     ".": {
@@ -123,6 +123,7 @@
     "build:prod": "run type-check && vite build && run build:umd:prod",
     "build:umd": "tsx ./scripts/vite/vite.umd.build.ts --mode development",
     "build:umd:prod": "tsx ./scripts/vite/vite.umd.build.ts --mode production",
+    "build:umd:watch": "tsx ./scripts/vite/vite.umd.fusion.build.ts",
     "clean": "rm -rf ./dist && rm -rf ./coverage && rm -rf tsconfig.tsbuildinfo  && rm -rf node_modules/.vite/deps",
     "lint": "eslint . --quiet",
     "lint:fix": "run lint --fix",

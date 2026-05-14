@@ -12,7 +12,7 @@ const SSO_REDIRECT_LAST_AT_KEY_PREFIX = 'sisense_sso_redirect_last_at_';
 /** Maximum number of SSO redirects before stopping */
 const DEFAULT_MAX_AUTH_REDIRECT_ATTEMPTS = 3;
 /** Milliseconds after the latest stored redirect timestamp before the counter resets */
-const DEFAULT_REDIRECT_ATTEMPTS_TTL_MS = 5000;
+const DEFAULT_REDIRECT_ATTEMPTS_TTL_MS = 10000;
 
 interface IsAuthResponse {
   isAuthenticated: boolean;

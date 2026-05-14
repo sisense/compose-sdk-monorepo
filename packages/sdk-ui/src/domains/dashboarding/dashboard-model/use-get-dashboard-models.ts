@@ -2,6 +2,7 @@ import { useEffect, useReducer } from 'react';
 
 import { DashboardModel } from '@/domains/dashboarding/dashboard-model';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context.js';
+import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context.js';
 import { withTracking } from '@/infra/decorators/hook-decorators';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
 import { dataLoadStateReducer, DataState } from '@/shared/hooks/data-load-state-reducer.js';
@@ -123,6 +124,7 @@ export function useGetDashboardModelsInternal(params: GetDashboardModelsParams =
     data: undefined,
   });
   const { isInitialized, app } = useSisenseContext();
+  const { themeSettings } = useThemeContext();
 
   useEffect(() => {
     if (!isInitialized) {
@@ -134,7 +136,7 @@ export function useGetDashboardModelsInternal(params: GetDashboardModelsParams =
     if (shouldLoad(app)) {
       dispatch({ type: 'loading' });
 
-      void getDashboardModels(app.httpClient, params)
+      void getDashboardModels(app.httpClient, params, themeSettings, app.settings)
         .then((data) => {
           dispatch({ type: 'success', data });
         })
@@ -142,7 +144,7 @@ export function useGetDashboardModelsInternal(params: GetDashboardModelsParams =
           dispatch({ type: 'error', error });
         });
     }
-  }, [app, isInitialized, params, shouldLoad]);
+  }, [app, isInitialized, params, themeSettings, shouldLoad]);
 
   // Return the loading state on the first render, before the loading action is
   // dispatched in useEffect().

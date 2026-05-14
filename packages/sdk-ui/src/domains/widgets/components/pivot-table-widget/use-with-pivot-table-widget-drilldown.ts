@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Attribute, Column, createAttribute } from '@sisense/sdk-data';
 import isEqual from 'lodash-es/isEqual';
+import isString from 'lodash-es/isString';
+import partition from 'lodash-es/partition';
 
 import { StyledColumn } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { translateColumnToAttribute } from '@/domains/visualizations/core/chart-data-options/utils.js';
@@ -16,13 +18,9 @@ import {
   getSelectedDrilldownAttributes,
 } from '../../../drilldown/drilldown-utils.js';
 import { useDrilldown } from '../../../drilldown/hooks/use-drilldown.js';
-import { useSyncedDrilldownPathsManager } from '../../../drilldown/hooks/use-synced-drilldown-paths-manager.js';
+import { useHierarchiesLoader } from '../../../drilldown/hooks/use-hierarchies-loader.js';
 import { PivotTableWidgetProps } from './types';
-import {
-  applyDrilldownDimensionToPivot,
-  getInitialDimensionLocation,
-  isDrilldownApplicableToPivot,
-} from './utils.js';
+import { applyDrilldownDimensionToPivot, getInitialDimensionLocation } from './utils.js';
 
 type UseWithPivotTableWidgetDrilldownParams = {
   propsToExtend: PivotTableWidgetProps;
@@ -34,7 +32,6 @@ type UseWithPivotTableWidgetDrilldownParams = {
 
 type UseWithPivotTableWidgetDrilldownResult = {
   propsWithDrilldown: PivotTableWidgetProps;
-  isDrilldownEnabled: boolean;
   breadcrumbs: JSX.Element;
 };
 
@@ -91,25 +88,17 @@ export function useWithPivotTableWidgetDrilldown(
     );
   }, [propsToExtend.dataOptions, initialDimensionLocation]);
 
-  const isDrilldownApplicable = useMemo(() => {
-    return isDrilldownApplicableToPivot(propsToExtend.dataOptions);
-  }, [propsToExtend.dataOptions]);
-
   const initialDrilldownPaths = useMemo(
     () => drilldownOptions?.drilldownPaths || [],
     [drilldownOptions?.drilldownPaths],
   );
 
-  // Includes the available drilldown paths (hierarchies) from Sisense instance
-  const { drilldownPaths, synchronize: synchronizeDrilldownPaths } =
-    useSyncedDrilldownPathsManager();
+  const [idsToLoad, nonIdPaths] = useMemo(
+    () => partition(initialDrilldownPaths, isString),
+    [initialDrilldownPaths],
+  );
 
-  const isDrilldownEnabled = useMemo(() => {
-    const hasDrilldownConfig =
-      !!drilldownOptions?.drilldownSelections?.length || !!drilldownPaths?.length;
-
-    return hasDrilldownConfig && isDrilldownApplicable;
-  }, [drilldownOptions, isDrilldownApplicable, drilldownPaths]);
+  const { getHierarchies } = useHierarchiesLoader();
 
   const {
     drilldownDimension,
@@ -176,11 +165,15 @@ export function useWithPivotTableWidgetDrilldown(
         targetDataOptionLocation,
       ) as Column | StyledColumn;
 
-      const synchronizedPaths = await synchronizeDrilldownPaths({
+      const loadedHierarchies = await getHierarchies({
         attribute: translateColumnToAttribute(targetDataOption),
         dataSource: dataSource,
-        drilldownPaths: initialDrilldownPaths,
+        ids: idsToLoad,
       });
+
+      const synchronizedPaths = loadedHierarchies.length
+        ? [...loadedHierarchies, ...nonIdPaths]
+        : nonIdPaths;
 
       const drilldownSelectionPoints = [
         {
@@ -214,9 +207,10 @@ export function useWithPivotTableWidgetDrilldown(
     [
       drilldownSelections,
       dataSource,
-      initialDrilldownPaths,
+      idsToLoad,
+      nonIdPaths,
       propsToExtend.dataOptions,
-      synchronizeDrilldownPaths,
+      getHierarchies,
       openDrilldownMenu,
     ],
   );
@@ -243,7 +237,6 @@ export function useWithPivotTableWidgetDrilldown(
 
   return {
     propsWithDrilldown,
-    isDrilldownEnabled,
     breadcrumbs,
   };
 }

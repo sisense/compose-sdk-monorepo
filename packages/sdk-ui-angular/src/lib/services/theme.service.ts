@@ -5,7 +5,7 @@ import {
   getThemeSettingsByOid,
   type ThemeProviderProps as ThemeConfig,
 } from '@sisense/sdk-ui-preact';
-import { BehaviorSubject, skip } from 'rxjs';
+import { BehaviorSubject, Observable, skip } from 'rxjs';
 import merge from 'ts-deepmerge';
 
 import { track, TrackableService } from '../decorators/trackable.decorator';
@@ -62,7 +62,17 @@ export const THEME_CONFIG_TOKEN = new InjectionToken<ThemeConfig>('theme configu
 })
 @TrackableService<ThemeService>(['updateThemeSettings'])
 export class ThemeService {
-  private themeSettings$: BehaviorSubject<CompleteThemeSettings>;
+  /**
+   * Current theme settings as a BehaviorSubject.
+   */
+  private _themeSettings$: BehaviorSubject<CompleteThemeSettings>;
+
+  /**
+   * Current theme settings as an Observable.
+   *
+   * @internal
+   */
+  readonly themeSettings$: Observable<CompleteThemeSettings>;
 
   private initializationPromise: Promise<void> = Promise.resolve();
 
@@ -70,7 +80,8 @@ export class ThemeService {
     private sisenseContextService: SisenseContextService,
     @Optional() @Inject(THEME_CONFIG_TOKEN) themeConfig?: ThemeConfig,
   ) {
-    this.themeSettings$ = new BehaviorSubject<CompleteThemeSettings>(getDefaultThemeSettings());
+    this._themeSettings$ = new BehaviorSubject<CompleteThemeSettings>(getDefaultThemeSettings());
+    this.themeSettings$ = this._themeSettings$.asObservable();
     this.initializationPromise = this.initThemeSettings(themeConfig?.theme);
     this.sisenseContextService
       .getApp$()
@@ -111,23 +122,29 @@ export class ThemeService {
 
       const mergedThemeSettings = merge.withOptions(
         { mergeArrays: false },
-        this.themeSettings$.value,
+        this._themeSettings$.value,
         userThemeSettings,
       ) as CompleteThemeSettings;
 
-      this.themeSettings$.next(mergedThemeSettings);
+      this._themeSettings$.next(mergedThemeSettings);
     } catch (error) {
-      this.themeSettings$.error(error);
+      this._themeSettings$.error(error);
     }
-  }
-
-  /** @internal */
-  getThemeSettings() {
-    return this.themeSettings$.asObservable();
   }
 
   async updateThemeSettings(theme: string | ThemeSettings) {
     await this.initializationPromise;
     await this.applyThemeSettings(theme);
+  }
+
+  /**
+   * Gets the current theme settings.
+   *
+   * @returns The current theme settings.
+   *
+   * @internal
+   */
+  getThemeSettings(): CompleteThemeSettings {
+    return this._themeSettings$.value;
   }
 }

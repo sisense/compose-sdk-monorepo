@@ -8,6 +8,7 @@ import zipPack from 'vite-plugin-zip-pack';
 import {
   bundlePluginFileName,
   distFolder,
+  distFusionFolder,
   pluginConfigFileName,
   zippedFileName,
 } from '../scripts/consts.js';
@@ -128,6 +129,7 @@ function preactBuildConfig(entry: string, pluginIdentifier: string) {
 function fusionBuildConfig(entry: string, pluginIdentifier: string) {
   return {
     build: {
+      outDir: distFusionFolder,
       lib: {
         entry,
         name: pluginIdentifier,
@@ -156,7 +158,7 @@ function fusionBuildConfig(entry: string, pluginIdentifier: string) {
           },
           // After the IIFE assigns globalThis[pluginName] = fn,
           // expose it as module.exports for webpack (spa-plugins-loader).
-          footer: `typeof module!='undefined'&&(Object.getPrototypeOf(module).exports=${pluginIdentifier});`,
+          footer: `typeof module!='undefined'&&(module.exports=${pluginIdentifier});`,
         },
         onwarn: suppressModuleLevelDirective,
       },
@@ -213,7 +215,7 @@ export function sisenseFusionPlugin(options: SisenseFusionPluginOptions): Plugin
     fusion: async () => {
       // eslint-disable-next-line security/detect-non-literal-fs-filename
       writeFileSync(
-        resolve(process.cwd(), distFolder, pluginConfigFileName),
+        resolve(process.cwd(), distFusionFolder, pluginConfigFileName),
         JSON.stringify(
           {
             name: pluginName,
@@ -247,7 +249,8 @@ export function sisenseFusionPlugin(options: SisenseFusionPluginOptions): Plugin
       zipPack({
         pathPrefix: pluginName,
         outFileName: zippedFileName,
-        outDir: distFolder,
+        inDir: distFusionFolder,
+        outDir: distFusionFolder,
       }) as Plugin,
     ],
   };
@@ -273,8 +276,9 @@ export function sisenseFusionPlugin(options: SisenseFusionPluginOptions): Plugin
     name: 'sisense-clean-dist',
     apply: 'build' as const,
     buildStart() {
+      const folderToClean = mode === 'fusion' ? distFusionFolder : distFolder;
       // eslint-disable-next-line security/detect-non-literal-fs-filename
-      rmSync(resolve(process.cwd(), 'dist'), { recursive: true, force: true });
+      rmSync(resolve(process.cwd(), folderToClean), { recursive: true, force: true });
     },
   };
 

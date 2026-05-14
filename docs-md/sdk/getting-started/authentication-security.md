@@ -31,13 +31,10 @@ Set up your Sisense instance to authenticate users with SSO using one of the fol
 ##### Using the SSO Router Addon with JWT
 If your Sisense instance is configured to use the [SSO Router addon](https://www.sisense.com/marketplace/add-on/sso-router/) in order to support dynamic routing to various JWT endpoints, please use Compose SDK 2.6.0 or later.
 
-For more information on configuring SSO Router check [this knowledge base article](https://community.sisense.com/kb/add-ons_and_plug-ins/sso-router-plugin-usage-with-examples/4805), or contact Sisense support.
+For more information on configuring SSO Router check [this community post](https://community.sisense.com/forum/add-ons-plug-ins-28/topic/sso-router-plugin-usage-with-examples-4467/), or contact Sisense support.
 
 ::: tip Note
-If you're experiencing difficulties or unexpected behavior when using SSO, the cause may be a hidden feature configuration. To resolve the issue, you can:
-
-- Contact [support](https://www.sisense.com/support/) to validate you Fusion configuration settings
-- See this [community post](https://community.sisense.com/discussions/help_and_how_to/issue-with-sisense-compose-sdk-and-sso-authentication/18580/replies/18601#M40) to try to resolve the issue yourself
+If you're experiencing difficulties or unexpected behavior when using SSO related to the `return_to` parameter, the cause may be related to system configuration. To resolve the issue please contact [support](https://www.sisense.com/support/) in order to validate your Fusion configuration settings.
 :::
 
 #### Authenticate with SSO

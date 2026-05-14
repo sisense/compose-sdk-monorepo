@@ -1,7 +1,7 @@
 import type { WidgetPlugin } from '@sisense/sdk-ui';
 
-import { SimpleTable } from './simple-table';
-import { SimpleTableDesignPanel } from './simple-table-design-panel';
+import { SimpleTableDesignPanel } from './components/DesignPanel.js';
+import { SimpleTable } from './components/Visualization.js';
 
 export const simpleTablePlugin: WidgetPlugin = {
   name: 'PLUGIN_NAME',
@@ -10,7 +10,7 @@ export const simpleTablePlugin: WidgetPlugin = {
   pluginType: 'widget',
   customWidget: {
     name: 'PLUGIN_NAME',
-    displayName: 'PLUGIN_NAME',
+    displayName: 'PLUGIN_DISPLAY_NAME',
     visualization: {
       Component: SimpleTable,
     },

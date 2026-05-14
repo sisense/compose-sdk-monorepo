@@ -31,6 +31,7 @@ describe('useTableData', () => {
   const staticProps = {
     dataSet,
     dataOptions: null,
+    dataColumnNamesMapping: {},
     filters: undefined,
     filterRelations: undefined,
     count: 0,
@@ -42,6 +43,7 @@ describe('useTableData', () => {
     dataOptions: {
       columns: [],
     },
+    dataColumnNamesMapping: {},
     filters: undefined,
     filterRelations: undefined,
     count: 2,
@@ -52,6 +54,7 @@ describe('useTableData', () => {
     dataOptions: {
       columns: [],
     },
+    dataColumnNamesMapping: {},
     filters: undefined,
     filterRelations: undefined,
     count: 2,
