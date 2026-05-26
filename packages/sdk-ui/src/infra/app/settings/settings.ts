@@ -23,17 +23,36 @@ type AiSettingsResponse = {
 };
 
 /**
+ * Known AI feature flags exposed on {@link AppSettings} `ai.featureFlags`.
+ * Add a flag here when you want first-class typing/autocomplete for it; otherwise
+ * it still surfaces via the index signature on {@link AiFeatureFlags}.
+ */
+type KnownAiFeatureFlags = {
+  completionV2: boolean;
+  naturalResponseEnabled: boolean;
+  nlqV3Enabled: boolean;
+  queryDefinition: boolean;
+};
+
+/**
+ * Loose, forward-compatible shape of `ai.featureFlags`. Known flags are strongly typed
+ * (see {@link KnownAiFeatureFlags}); arbitrary string-keyed flags are type-allowed
+ * for forward compatibility (unknown keys are readable as `boolean | undefined`)
+ * without requiring a CSDK type bump.
+ *
+ * @sisenseInternal
+ */
+export type AiFeatureFlags = KnownAiFeatureFlags & {
+  [flag: string]: boolean | undefined;
+};
+
+/**
  * AI-related slice derived from globals (`serverFeatures` + deployment props),
  * aligned with admin UI paths such as `ai.featureFlags.*`, `ai.featureModelType`,
  * `ai.quotaNotification`, and `ai.aiStudio.*`.
  */
 type AiSettingsSlice = {
-  featureFlags: {
-    completionV2: boolean;
-    naturalResponseEnabled: boolean;
-    nlqV3Enabled: boolean;
-    queryDefinition: boolean;
-  };
+  featureFlags: AiFeatureFlags;
   /**
    * Only when `serverFeatures.aiAssistant` exists.
    * If the block is present but omits this field, defaults to `customer_byok`.
@@ -178,6 +197,8 @@ type ServerSettings = {
     lastName?: string;
     /** From `api/globals` `user.email`. */
     email?: string;
+    /** From `api/globals` `user.baseRoleName`. */
+    baseRoleName?: string;
   };
   /**
    * Raw Fusion `designSettings` from `api/globals` (before palette / theme conversion).
@@ -355,6 +376,7 @@ async function loadServerSettings(
       firstName: globals.user?.firstName,
       lastName: globals.user?.lastName,
       email: globals.user?.email,
+      baseRoleName: globals.user?.baseRoleName,
     },
     fusionDesignSettings: globals.designSettings,
     fusionBrand: {

@@ -1,7 +1,10 @@
 import { isNumber } from '@sisense/sdk-data';
 import merge from 'deepmerge';
 
-import { CompleteNumberFormatConfig, CompleteThemeSettings } from '../../../../../../../types';
+import {
+  CompleteNumberFormatConfig,
+  CompleteThemeSettingsInternal,
+} from '../../../../../../../types';
 import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
@@ -178,7 +181,7 @@ export const getYAxisSettings = (
   axisMinMax: AxisMinMax,
   axis2MinMax: AxisMinMax | undefined,
   dataOptions: ChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): AxisSettings[] => {
   const cartesianChartDataOptions: CartesianChartDataOptionsInternal =
     dataOptions as CartesianChartDataOptionsInternal;

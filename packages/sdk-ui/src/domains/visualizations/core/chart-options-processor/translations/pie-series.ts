@@ -4,7 +4,7 @@ import { seriesSliceWarning } from '@/shared/utils/data-limit-warning';
 import { ContextfulTransformer } from '@/shared/utils/utility-types/transformer';
 
 import {
-  CompleteThemeSettings,
+  CompleteThemeSettingsInternal,
   Convolution,
   SeriesWithAlerts,
   ValueToColorMap,
@@ -177,7 +177,7 @@ const createBasicPieSeries = (
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
   seriesCapacity: number,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): SeriesType[] => {
   if (chartData.xAxisCount === 0) {
     const seriesValues = chartData.series.slice(0, seriesCapacity);
@@ -254,7 +254,7 @@ export const getPieSeries = ({
   dataOptions: CategoricalChartDataOptionsInternal;
   seriesCapacity: number;
   convolution?: Convolution;
-  themeSettings?: CompleteThemeSettings;
+  themeSettings?: CompleteThemeSettingsInternal;
 }): SeriesType[] => {
   const basicSeries = createBasicPieSeries(chartData, dataOptions, seriesCapacity, themeSettings);
 
@@ -288,7 +288,7 @@ export const getPieConvolutionSeries = ({
   dataOptions: CategoricalChartDataOptionsInternal;
   seriesCapacity: number;
   convolution?: Convolution;
-  themeSettings?: CompleteThemeSettings;
+  themeSettings?: CompleteThemeSettingsInternal;
 }): SeriesPieOptions[] => {
   if (!convolution?.enabled) {
     return [];
@@ -320,7 +320,7 @@ export const formatCategoricalChartData = (
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
   designOptions: PieChartDesignOptions,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): FormattedPieChartData => {
   const { seriesCapacity } = designOptions.dataLimits;
   const convolution = designOptions?.convolution;

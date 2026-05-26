@@ -19,6 +19,7 @@ import { CustomWidgetStyleOptions, GenericDataOptions } from '@/types';
 import { WidgetContainer } from '../../shared/widget-container';
 import { CustomWidgetProps } from './types';
 import { useCustomWidgetCsvDownload } from './use-custom-widget-csv-download.js';
+import { useCustomWidgetExcelDownload } from './use-custom-widget-excel-download.js';
 
 const withSize = (props: CustomVisualizationProps, size: { width: number; height: number }) => {
   return {
@@ -75,13 +76,25 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
     [widgetProps.styleOptions?.width, widgetProps.styleOptions?.height],
   );
 
-  const { headerConfig } = useCustomWidgetCsvDownload({
+  const { headerConfig: headerConfigWithCsv } = useCustomWidgetCsvDownload({
     dataSource,
     dataOptions: widgetProps.dataOptions,
     filters: widgetProps.filters,
     highlights: widgetProps.highlights,
     title: widgetProps.title,
     config: widgetProps.config,
+  });
+
+  const { headerConfig } = useCustomWidgetExcelDownload({
+    baseHeaderConfig: headerConfigWithCsv,
+    title: widgetProps.title,
+    dataOptions: widgetProps.dataOptions,
+    dataSource,
+    config: widgetProps.config,
+    id: widgetProps.id,
+    customWidgetType: widgetProps.customWidgetType,
+    filters: widgetProps.filters,
+    highlights: widgetProps.highlights,
   });
 
   const wrapperDefaultSize = useMemo(() => getWidgetDefaultSize('line', { hasHeader: true }), []);

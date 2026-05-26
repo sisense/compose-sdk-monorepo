@@ -17,7 +17,7 @@ import {
 
 import {
   AlignmentTypes,
-  CompleteThemeSettings,
+  CompleteThemeSettingsInternal,
   RadiusSizes,
   ShadowsTypes,
   SpaceSizes,
@@ -26,7 +26,7 @@ import {
 } from '../../types.js';
 
 /**
- * Legacy analog of CompleteThemeSettings used in Sisense UI.
+ * Legacy analog of CompleteThemeSettingsInternal used in Sisense UI.
  */
 export type LegacyDesignSettings = {
   oid: ThemeOid;
@@ -120,7 +120,7 @@ export const LEGACY_DESIGN_TYPES = {
 };
 
 /**
- * Converts legacy (used in Sisense UI) design settings and it's palette object to CompleteThemeSettings.
+ * Converts legacy (used in Sisense UI) design settings and its palette object to CompleteThemeSettingsInternal.
  *
  * @param legacyDesignSettings - legacy design settings.
  * @param legacyPalette - legacy palette object.
@@ -130,8 +130,8 @@ export function convertToThemeSettings(
   legacyDesignSettings: LegacyDesignSettings,
   legacyPalette: LegacyPalette,
   domainUrl: string,
-): CompleteThemeSettings {
-  const themeSettings: Omit<CompleteThemeSettings, 'aiChat'> = {
+): CompleteThemeSettingsInternal {
+  const themeSettings: Omit<CompleteThemeSettingsInternal, 'aiChat'> = {
     chart: {
       textColor: legacyDesignSettings.dashboards.widgetTextColor,
       backgroundColor: legacyDesignSettings.dashboards.widgetBackgroundColor,

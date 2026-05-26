@@ -178,8 +178,7 @@ export const translateMeasuresFromJSON = (
       success: false,
       errors: [
         {
-          category: 'measures',
-          index: -1,
+          path: 'measures',
           input: measuresJSON,
           message: 'Invalid measures JSON. Expected an array.',
         },
@@ -192,8 +191,7 @@ export const translateMeasuresFromJSON = (
 
   measuresJSON.forEach((measureJSON, index) => {
     const context: NlqTranslationErrorContext = {
-      category: 'measures',
-      index,
+      path: `measures[${index}]`,
       input: measureJSON,
     };
     try {

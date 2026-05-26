@@ -1,7 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
 
 import { ThemeContext } from '@/infra/contexts/theme-provider';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import ErrorBoundaryBox from './error-boundary-box';
 
@@ -24,7 +24,7 @@ describe('ErrorBoundaryBox', () => {
               fontFamily: 'Roboto',
               primaryTextColor: 'green',
             },
-          } as CompleteThemeSettings,
+          } as CompleteThemeSettingsInternal,
         }}
       >
         <ErrorBoundaryBox error="error" />

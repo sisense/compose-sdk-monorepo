@@ -10,7 +10,7 @@ import {
 import { createPortal } from 'react-dom';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import type { CompleteThemeSettings } from '@/types';
+import type { CompleteThemeSettingsInternal } from '@/types';
 
 import { QUERY_DEFINITION_TEXT_STYLE } from './query-definition-style-constants';
 
@@ -31,7 +31,7 @@ function Caret({
 }: {
   dir: 'up' | 'down';
   centerXPx: number | null;
-  themeSettings: CompleteThemeSettings;
+  themeSettings: CompleteThemeSettingsInternal;
 }) {
   const half = ARROW / 2;
   const pos =

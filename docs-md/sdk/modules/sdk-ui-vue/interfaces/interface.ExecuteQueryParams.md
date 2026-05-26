@@ -58,7 +58,10 @@ Filters that will slice query results
 
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-Highlight filters that will highlight results that pass filter criteria
+Highlight filters that will highlight results that pass filter criteria.
+
+NOTE that highlight filters in the "Include all" state are silently omitted from the
+query. To clear a highlight, remove it from the array.
 
 ***
 

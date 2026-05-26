@@ -15,6 +15,7 @@ export * from './dimensional-model/factory.js';
 export * from './dimensional-model/filters/filter-config-utils.js';
 export * from './dimensional-model/filters/filters.js';
 export { createFilterMatcher } from './dimensional-model/filters/utils/filter-matcher-utils.js';
+export { isIncludeAllMembersFilter } from './dimensional-model/filters/utils/is-include-all-members-filter.js';
 export * from './dimensional-model/interfaces.js';
 export * from './dimensional-model/jaql-element.js';
 export * from './dimensional-model/types.js';

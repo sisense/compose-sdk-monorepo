@@ -1,7 +1,7 @@
 import { getDataOptionTitle } from '@/domains/visualizations/core/chart-data-options/utils';
 import { getExplicitColorSteps, scaleBrightness } from '@/shared/utils/color';
 
-import { CompleteThemeSettings, UniformDataColorOptions } from '../../../../../../types';
+import { CompleteThemeSettingsInternal, UniformDataColorOptions } from '../../../../../../types';
 import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CategoricalChartData } from '../../../chart-data/types';
@@ -13,7 +13,7 @@ export const SUNBURST_ROOT_PARENT_ID = 'SUNBURST_ROOT_PARENT_ID';
 export function prepareSunburstDataItems(
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ) {
   const rootDataItem = {
     id: SUNBURST_ROOT_PARENT_ID,
@@ -46,7 +46,7 @@ export function prepareSunburstDataItems(
 function handleSunburstSeriesColor(
   series: SeriesPointStructure[],
   dataOptions: CategoricalChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ) {
   const MAX_BRIGHTNESS_PERCENT = 0.3;
   const seriesColorMapByLevels = prepareColorMapByLevels(dataOptions);

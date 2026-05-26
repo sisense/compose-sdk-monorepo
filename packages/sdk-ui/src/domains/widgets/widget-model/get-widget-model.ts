@@ -5,7 +5,7 @@ import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 import { RestApi } from '@/infra/api/rest-api';
 import { AppSettings } from '@/infra/app/settings/settings';
 import { TranslatableError } from '@/infra/translation/translatable-error';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { WidgetModel } from './widget-model';
 
@@ -24,7 +24,7 @@ export async function getWidgetModel(
   httpClient: HttpClient,
   dashboardOid: string,
   widgetOid: string,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   appSettings?: AppSettings,
 ): Promise<WidgetModel> {
   const api = new RestApi(httpClient);

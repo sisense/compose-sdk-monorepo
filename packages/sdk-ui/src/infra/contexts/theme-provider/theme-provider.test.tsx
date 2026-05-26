@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
-import { CompleteThemeSettings } from '../../../types';
+import { CompleteThemeSettingsInternal } from '../../../types';
 import { ThemeSettings } from '../../../types';
 import { getThemeSettingsByOid } from '../../themes/theme-loader';
 import { useSisenseContext } from '../sisense-context/sisense-context';
@@ -46,7 +46,7 @@ describe('ThemeProvider', () => {
   });
 
   it('should render children with default theme settings when no theme is provided', async () => {
-    let actuallyRenderedThemeSettings: CompleteThemeSettings | undefined;
+    let actuallyRenderedThemeSettings: CompleteThemeSettingsInternal | undefined;
     const ChildComponent = () => {
       const { themeSettings } = useThemeContext();
       actuallyRenderedThemeSettings = themeSettings;
@@ -71,7 +71,7 @@ describe('ThemeProvider', () => {
       },
     };
 
-    let actuallyRenderedThemeSettings: CompleteThemeSettings | undefined;
+    let actuallyRenderedThemeSettings: CompleteThemeSettingsInternal | undefined;
     const ChildComponent = () => {
       const { themeSettings } = useThemeContext();
       actuallyRenderedThemeSettings = themeSettings;
@@ -105,7 +105,7 @@ describe('ThemeProvider', () => {
     };
     getThemeSettingsByOidMock.mockReturnValue(Promise.resolve(themeFromServer));
 
-    let actuallyRenderedThemeSettings: CompleteThemeSettings | undefined;
+    let actuallyRenderedThemeSettings: CompleteThemeSettingsInternal | undefined;
     const ChildComponent = () => {
       const { themeSettings } = useThemeContext();
       actuallyRenderedThemeSettings = themeSettings;

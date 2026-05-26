@@ -1,13 +1,13 @@
 import leaflet, { type FitBoundsOptions } from 'leaflet';
 
-import { CompleteThemeSettings } from '@/types.js';
+import { CompleteThemeSettingsInternal } from '@/types.js';
 
 const DEFAULT_ANIMATION_DURATION = 250;
 
 type FitBoundsAnimationOptions = Pick<FitBoundsOptions, 'animate' | 'duration'>;
 
 export function prepareFitBoundsAnimationOptions(
-  themeSettings: CompleteThemeSettings,
+  themeSettings: CompleteThemeSettingsInternal,
 ): FitBoundsAnimationOptions {
   const duration =
     themeSettings.chart.animation.init.duration === 'auto'

@@ -6,7 +6,7 @@ import { SimpleTable } from './components/Visualization.js';
 export const simpleTablePlugin: WidgetPlugin = {
   name: 'PLUGIN_NAME',
   version: '1.0.0',
-  requiredApiVersion: '^2.0.0',
+  requiredApiVersion: '^2.27.0',
   pluginType: 'widget',
   customWidget: {
     name: 'PLUGIN_NAME',

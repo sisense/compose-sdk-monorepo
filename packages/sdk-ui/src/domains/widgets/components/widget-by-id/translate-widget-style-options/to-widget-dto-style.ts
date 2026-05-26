@@ -9,7 +9,7 @@ import type {
   AreaStyleOptions,
   AxisLabel,
   CartesianStyleOptions,
-  CompleteThemeSettings,
+  CompleteThemeSettingsInternal,
   DataLimits,
   FunnelStyleOptions,
   GaugeIndicatorStyleOptions,
@@ -366,7 +366,7 @@ export function hasWidgetContainerStyleFields(styleOptions: WidgetStyleOptions):
  */
 export function toWidgetDesign(
   styleOptions: WidgetStyleOptions,
-  widgetTheme: CompleteThemeSettings['widget'],
+  widgetTheme: CompleteThemeSettingsInternal['widget'],
 ): WidgetDesign | undefined {
   if (!hasWidgetContainerStyleFields(styleOptions)) {
     return undefined;
@@ -402,7 +402,7 @@ export function toWidgetDesign(
 export function withWidgetDesign(
   baseStyle: WidgetStyle,
   styleOptions: WidgetStyleOptions,
-  themeSettings: CompleteThemeSettings,
+  themeSettings: CompleteThemeSettingsInternal,
   appSettings?: AppSettings,
 ): WidgetStyle {
   if (!appSettings || !isWidgetDesignEnabled(appSettings)) {

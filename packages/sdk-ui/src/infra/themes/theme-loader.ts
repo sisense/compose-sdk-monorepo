@@ -1,6 +1,6 @@
 import type { HttpClient } from '@sisense/sdk-rest-client';
 
-import type { CompleteThemeSettings, ThemeOid } from '../../types';
+import type { CompleteThemeSettingsInternal, ThemeOid } from '../../types';
 import { TranslatableError } from '../translation/translatable-error';
 import {
   convertToThemeSettings,
@@ -11,17 +11,17 @@ import {
 } from './legacy-design-settings';
 
 /**
- * Fetches theme settings from the Sisense instance and converts them to CompleteThemeSettings.
+ * Fetches theme settings from the Sisense instance and converts them to CompleteThemeSettingsInternal.
  *
  * @param themeOid - Theme oid.
  * @param httpClient - Sisense REST API client.
- * @returns CompleteThemeSettings from server.
+ * @returns CompleteThemeSettingsInternal from server.
  * @internal
  */
 export async function getThemeSettingsByOid(
   themeOid: ThemeOid,
   httpClient: Pick<HttpClient, 'get' | 'url'>,
-): Promise<CompleteThemeSettings> {
+): Promise<CompleteThemeSettingsInternal> {
   const legacyDesignSettings = await getLegacyDesignSettings(themeOid, httpClient);
 
   if (!legacyDesignSettings) {

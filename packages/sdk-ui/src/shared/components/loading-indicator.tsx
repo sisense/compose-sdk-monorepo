@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { CompleteThemeSettings } from '../../types.js';
+import { CompleteThemeSettingsInternal } from '../../types.js';
 import { LoadingDots } from './loading-dots.js';
 
 /**
@@ -19,7 +19,7 @@ export const LoadingIndicator = ({
   themeSettings,
   onCancel,
 }: {
-  themeSettings?: CompleteThemeSettings;
+  themeSettings?: CompleteThemeSettingsInternal;
   onCancel?: () => void;
 }) => {
   const { t } = useTranslation();

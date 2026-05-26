@@ -254,7 +254,8 @@ export {
 } from '../domains/data-browser/data-source-dimensional-model';
 
 // Theming
-export { ThemeProvider } from '../infra/contexts/theme-provider';
+export { ThemeProvider, useTheme } from '../infra/contexts/theme-provider';
+export type { CompleteThemeSettings } from '../types';
 
 // General Components
 export { LoadingOverlay, type LoadingOverlayProps } from '../shared/components/loading-overlay';

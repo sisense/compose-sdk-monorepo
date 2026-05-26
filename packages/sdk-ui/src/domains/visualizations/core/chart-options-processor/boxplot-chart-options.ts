@@ -1,6 +1,10 @@
 import { TFunction } from '@sisense/sdk-common';
 
-import { CompleteThemeSettings, HighchartsSelectEvent, OptionsWithAlerts } from '../../../../types';
+import {
+  CompleteThemeSettingsInternal,
+  HighchartsSelectEvent,
+  OptionsWithAlerts,
+} from '../../../../types';
 import { BoxplotChartDataOptionsInternal } from '../chart-data-options/types';
 import { BoxplotChartData } from '../chart-data/types';
 import { HighchartsOptionsInternal } from './chart-options-service';
@@ -27,7 +31,7 @@ export const getBoxplotChartOptions = (
   chartDesignOptions: ChartDesignOptions,
   dataOptions: BoxplotChartDataOptionsInternal,
   translate: TFunction,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const sisenseChartType = determineHighchartsChartType('boxplot', chartDesignOptions);
   const { series, alerts } = buildBoxplotSeries(
@@ -69,7 +73,9 @@ export const getBoxplotChartOptions = (
 
           if (navigator.enabled && chartDesignOptions.autoZoom?.scrollerLocation) {
             const { min, max } = chartDesignOptions.autoZoom.scrollerLocation;
-            setInitialScrollerPosition(chart, min, max);
+            if (min >= 0 && max >= min && max < chartData.xValues.length) {
+              setInitialScrollerPosition(chart, min, max);
+            }
           }
 
           chart.update({ navigator: navigator as Highcharts.NavigatorOptions }, true);

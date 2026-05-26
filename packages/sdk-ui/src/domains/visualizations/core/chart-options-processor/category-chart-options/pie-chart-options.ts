@@ -1,5 +1,5 @@
 /* eslint-disable max-params */
-import { CompleteThemeSettings, OptionsWithAlerts } from '../../../../../types';
+import { CompleteThemeSettingsInternal, OptionsWithAlerts } from '../../../../../types';
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
 import { CategoricalChartData } from '../../chart-data/types';
 import { HighchartsOptionsInternal } from '../chart-options-service';
@@ -23,7 +23,7 @@ export const getPieChartOptions = (
   chartData: CategoricalChartData,
   chartDesignOptions: PieChartDesignOptions,
   dataOptions: CategoricalChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const alerts: OptionsWithAlerts<HighchartsOptionsInternal>['alerts'] = [];
   const sisenseChartType = determineHighchartsChartType('pie', chartDesignOptions);

@@ -124,6 +124,9 @@ Highlights based on filter criteria to apply to a chart using one of the followi
 NOTE that the filter dimensions used in highlights must match those defined in the
 `dataOptions` of the chart. Otherwise, the filters will be applied as regular slice filters.
 
+NOTE that highlight filters in the "Include all" state are silently omitted from the
+query. To clear a highlight, remove it from the array.
+
 (1) Array of [Filter](../../sdk-data/interfaces/interface.Filter.md) returned from filter factory functions, such as
 [`greaterThan()`](../../sdk-data/factories/namespace.filterFactory/functions/function.greaterThan.md) and [`members()`](../../sdk-data/factories/namespace.filterFactory/functions/function.members.md).
 

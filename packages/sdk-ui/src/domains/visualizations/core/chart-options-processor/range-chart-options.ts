@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars */
 import { TFunction } from '@sisense/sdk-common';
 
-import { ChartType, CompleteThemeSettings } from '../../../../types';
+import { ChartType, CompleteThemeSettingsInternal } from '../../../../types';
 import {
   CartesianChartDataOptionsInternal,
   RangeChartDataOptionsInternal,
@@ -39,7 +39,7 @@ export const getRangeChartOptions = (
   chartDesignOptions: ChartDesignOptions,
   dataOptions: RangeChartDataOptionsInternal,
   translate: TFunction,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   dateFormatter?: (date: Date, format: string) => string,
 ) => {
   const lowerValues: StyledMeasureColumn[] = [];

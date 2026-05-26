@@ -83,9 +83,8 @@ describe('processCustomFormula', () => {
       },
     ];
 
-    expect(() => {
-      processCustomFormula(processedArgs, mockProcessingContext);
-    }).not.toThrow();
+    const out = processCustomFormula(processedArgs, mockProcessingContext);
+    expect(out).toHaveLength(3);
   });
 
   it('should process customFormula with function calls and attribute strings', () => {
@@ -98,12 +97,10 @@ describe('processCustomFormula', () => {
       },
     ];
 
-    expect(() => {
-      processCustomFormula(processedArgs, mockProcessingContext);
-    }).not.toThrow();
+    const out = processCustomFormula(processedArgs, mockProcessingContext);
 
     // Verify that context transformation occurred
-    const transformedContext = processedArgs[2] as Record<string, any>;
+    const transformedContext = out[2] as Record<string, any>;
     expect(transformedContext.revenue).toBeDefined();
     expect(transformedContext.cost).toBeDefined();
     // The context should now contain processed SDK objects, not the raw strings/function calls
@@ -124,12 +121,10 @@ describe('processCustomFormula', () => {
       },
     ];
 
-    expect(() => {
-      processCustomFormula(processedArgs, mockProcessingContext);
-    }).not.toThrow();
+    const out = processCustomFormula(processedArgs, mockProcessingContext);
 
     // Verify that context transformation occurred - both function call and attribute string were processed
-    const transformedContext = processedArgs[2] as Record<string, any>;
+    const transformedContext = out[2] as Record<string, any>;
     expect(transformedContext.totalRevenue).toBeDefined();
     expect(transformedContext.totalRevenue.__serializable).toBe('DimensionalBaseMeasure');
     expect(transformedContext.cost).toBeDefined();
@@ -171,12 +166,10 @@ describe('processCustomFormula', () => {
   it('should allow customFormula with empty context when formula has no bracket references', () => {
     const processedArgs = ['Remainder of 10 / 7', 'MOD(10, 7)', {}];
 
-    expect(() => {
-      processCustomFormula(processedArgs, mockProcessingContext);
-    }).not.toThrow();
+    const out = processCustomFormula(processedArgs, mockProcessingContext);
 
     // Verify that empty context is preserved
-    const transformedContext = processedArgs[2] as Record<string, any>;
+    const transformedContext = out[2] as Record<string, any>;
     expect(transformedContext).toEqual({});
   });
 
@@ -207,13 +200,11 @@ describe('processCustomFormula', () => {
       '0.00%', // Optional format
     ];
 
-    expect(() => {
-      processCustomFormula(processedArgs, mockProcessingContext);
-    }).not.toThrow();
+    const out = processCustomFormula(processedArgs, mockProcessingContext);
 
     // Format is metadata only - doesn't affect processing
     // Verify that context processing still works correctly
-    const transformedContext = processedArgs[2] as Record<string, any>;
+    const transformedContext = out[2] as Record<string, any>;
     expect(transformedContext.revenue).toBeDefined();
     expect(transformedContext.cost).toBeDefined();
   });
@@ -230,13 +221,11 @@ describe('processCustomFormula', () => {
       'This formula calculates profit ratio', // Optional description
     ];
 
-    expect(() => {
-      processCustomFormula(processedArgs, mockProcessingContext);
-    }).not.toThrow();
+    const out = processCustomFormula(processedArgs, mockProcessingContext);
 
     // Format and description are metadata only - don't affect processing
     // Verify that context processing still works correctly
-    const transformedContext = processedArgs[2] as Record<string, any>;
+    const transformedContext = out[2] as Record<string, any>;
     expect(transformedContext.revenue).toBeDefined();
     expect(transformedContext.cost).toBeDefined();
   });
@@ -269,12 +258,10 @@ describe('processCustomFormula', () => {
       },
     ];
 
-    expect(() => {
-      processCustomFormula(processedArgs, mockProcessingContext);
-    }).not.toThrow();
+    const out = processCustomFormula(processedArgs, mockProcessingContext);
 
     // Verify processing works correctly with 3 args
-    const transformedContext = processedArgs[2] as Record<string, any>;
+    const transformedContext = out[2] as Record<string, any>;
     expect(transformedContext.revenue).toBeDefined();
     expect(transformedContext.cost).toBeDefined();
   });

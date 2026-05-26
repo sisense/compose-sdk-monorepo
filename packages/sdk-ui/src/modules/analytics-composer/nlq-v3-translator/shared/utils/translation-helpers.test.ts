@@ -1,7 +1,87 @@
 import { describe, expect, it } from 'vitest';
 
 import type { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
-import { collectTranslationErrors } from './translation-helpers.js';
+import { withAxisContext } from '../data-options/adapters.js';
+import {
+  collectTranslationErrors,
+  stripDelimitersFromJson,
+  toNlqErrorInput,
+  translateDataSourceToJSON,
+  translateWidgetsOptionsToJSON,
+} from './translation-helpers.js';
+
+describe('toNlqErrorInput', () => {
+  it('uses toJSON when available', () => {
+    const input = toNlqErrorInput({
+      toJSON: () => ({ name: 'Revenue' }),
+    });
+    expect(input).toEqual({ name: 'Revenue' });
+  });
+
+  it('returns the value as-is when toJSON is missing', () => {
+    const measure = { name: 'Revenue', composeCode: 'measureFactory.sum(...)' };
+    expect(toNlqErrorInput(measure)).toBe(measure);
+  });
+});
+
+describe('translateDataSourceToJSON', () => {
+  it('returns string data sources as-is', () => {
+    expect(translateDataSourceToJSON('Sample ECommerce')).toBe('Sample ECommerce');
+  });
+
+  it('returns only the title from DataSourceInfo', () => {
+    expect(
+      translateDataSourceToJSON({
+        title: 'Sample ECommerce',
+        type: 'elasticube',
+        id: 'ds-id',
+        address: 'localhost',
+      }),
+    ).toBe('Sample ECommerce');
+  });
+});
+
+describe('translateWidgetsOptionsToJSON', () => {
+  it('keeps filtersOptions and partialDtoOptions only', () => {
+    const result = translateWidgetsOptionsToJSON({
+      'w-1': {
+        filtersOptions: { applyMode: 'filter', shouldAffectFilters: false },
+        partialDtoOptions: {
+          options: { selector: true, dashboardFiltersMode: 'filter' },
+        },
+        jtdConfig: { targets: new Map() } as never,
+      },
+    });
+    expect(result).toEqual({
+      'w-1': {
+        filtersOptions: { applyMode: 'filter', shouldAffectFilters: false },
+        partialDtoOptions: {
+          options: { selector: true, dashboardFiltersMode: 'filter' },
+        },
+      },
+    });
+  });
+
+  it('returns undefined for empty options', () => {
+    expect(translateWidgetsOptionsToJSON({})).toBeUndefined();
+  });
+});
+
+describe('stripDelimitersFromJson', () => {
+  it('strips delimiters from NLQ output shapes with Record<string, unknown> fields', () => {
+    const chartJson = {
+      chartType: 'column',
+      dataOptions: { category: ['DM.[[Commerce]].[[Gender]]'] },
+      styleOptions: { legend: { enabled: true } },
+    };
+
+    expect(stripDelimitersFromJson(chartJson)).toEqual({
+      chartType: 'column',
+      dataOptions: { category: ['DM.Commerce.Gender'] },
+      styleOptions: { legend: { enabled: true } },
+    });
+  });
+});
 
 describe('collectTranslationErrors', () => {
   it('should return data when translation succeeds', () => {
@@ -23,8 +103,7 @@ describe('collectTranslationErrors', () => {
       success: false,
       errors: [
         {
-          category: 'dimensions',
-          index: 0,
+          path: 'dimensions[0]',
           input: 'DM.Invalid.Attribute',
           message: 'Invalid attribute',
         },
@@ -36,8 +115,7 @@ describe('collectTranslationErrors', () => {
     expect(result).toBeNull();
     expect(errors).toHaveLength(1);
     expect(errors[0]).toEqual({
-      category: 'dimensions',
-      index: 0,
+      path: 'dimensions[0]',
       input: 'DM.Invalid.Attribute',
       message: 'Invalid attribute',
     });
@@ -49,8 +127,7 @@ describe('collectTranslationErrors', () => {
       success: false,
       errors: [
         {
-          category: 'dimensions',
-          index: 0,
+          path: 'dimensions[0]',
           input: 'DM.Invalid.Attribute1',
           message: 'Invalid attribute 1',
         },
@@ -60,14 +137,12 @@ describe('collectTranslationErrors', () => {
       success: false,
       errors: [
         {
-          category: 'measures',
-          index: 1,
+          path: 'measures[1]',
           input: 'measureFactory.invalid',
           message: 'Invalid measure',
         },
         {
-          category: 'measures',
-          index: 2,
+          path: 'measures[2]',
           input: 'measureFactory.anotherInvalid',
           message: 'Another invalid measure',
         },
@@ -93,8 +168,7 @@ describe('collectTranslationErrors', () => {
       success: false,
       errors: [
         {
-          category: 'filters',
-          index: 0,
+          path: 'filters[0]',
           input: 'filterFactory.invalid',
           message: 'Invalid filter',
         },
@@ -129,27 +203,19 @@ describe('collectTranslationErrors', () => {
       success: false,
       errors: [
         {
-          category: 'dimensions',
-          index: 0,
+          path: 'dimensions[0]',
           input: 'DM.Invalid.Attribute',
           message: 'Invalid attribute',
         },
       ],
     };
 
-    const mapError = (e: NlqTranslationError): NlqTranslationError => ({
-      ...e,
-      category: 'dataOptions',
-      index: 'category',
-    });
-
-    const result = collectTranslationErrors(() => errorResult, errors, mapError);
+    const result = collectTranslationErrors(() => errorResult, errors, withAxisContext('category'));
 
     expect(result).toBeNull();
     expect(errors).toHaveLength(1);
     expect(errors[0]).toEqual({
-      category: 'dataOptions',
-      index: 'category',
+      path: 'dataOptions.category[0]',
       input: 'DM.Invalid.Attribute',
       message: 'Invalid attribute',
     });

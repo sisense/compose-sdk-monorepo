@@ -239,7 +239,7 @@ export function sisenseFusionPlugin(options: SisenseFusionPluginOptions): Plugin
   const modeExtraPlugins: Record<BuildMode, Plugin[]> = {
     csdk: [
       dts({
-        outDir: TYPES_OUT_DIR,
+        outDirs: TYPES_OUT_DIR,
         entryRoot: srcRoot,
         include: [srcRoot],
         exclude: [testFilePattern],

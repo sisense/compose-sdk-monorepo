@@ -6,7 +6,11 @@ import get from 'lodash-es/get';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
-import { CompleteThemeSettings, TextWidgetDataPoint, TextWidgetStyleOptions } from '@/types';
+import {
+  CompleteThemeSettingsInternal,
+  TextWidgetDataPoint,
+  TextWidgetStyleOptions,
+} from '@/types';
 
 import { WidgetMenuButton } from '../../shared/widget-header/widget-menu-button';
 import { WidgetSpaceAround } from '../../shared/widget-style-utils';
@@ -25,7 +29,7 @@ export function isTextWidgetProps(props: any): props is TextWidgetProps {
 
 type Themeable = {
   styleOptions: TextWidgetStyleOptions;
-  themeSettings: CompleteThemeSettings;
+  themeSettings: CompleteThemeSettingsInternal;
 };
 
 type Stylable = {

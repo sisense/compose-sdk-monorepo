@@ -23,12 +23,13 @@ import { parseXDiffCalls, validateCustomFormula } from './validate-custom-formul
  *
  * @param processedArgs - [title: string, formula: string, context: Record<string, unknown>, format?: string, description?: string]
  * @param context - Processing context with error prefix and other metadata
+ * @returns New args array with `processedContext` at index 2 (does not mutate `processedArgs`)
  * @throws Error with descriptive message if validation fails
  */
 export function processCustomFormula(
   processedArgs: ProcessedArg[],
   context: FunctionContext,
-): void {
+): ProcessedArg[] {
   // Ensure we have the expected number of arguments (should be guaranteed by basic validation)
   // Accept 3, 4, or 5 arguments (4th is optional format, 5th is optional description for LLM context)
   if (processedArgs.length < 3 || processedArgs.length > 5) {
@@ -110,9 +111,8 @@ export function processCustomFormula(
     }
   }
 
-  // 4. Replace rawContext with processedContext in processedArgs[2]
-  // This now contains actual QueryElements (Measures, Attributes, etc.)
-  processedArgs[2] = processedContext;
+  // 4. Return args with processedContext at index 2 (QueryElements, Measures, Attributes, etc.)
+  return [processedArgs[0]!, processedArgs[1]!, processedContext, ...processedArgs.slice(3)];
 }
 
 /**

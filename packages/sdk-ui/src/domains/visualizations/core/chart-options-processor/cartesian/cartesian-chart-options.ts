@@ -10,7 +10,7 @@ import flow from 'lodash-es/flow';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { categoriesSliceWarning, seriesSliceWarning } from '@/shared/utils/data-limit-warning';
 
-import { ChartType, CompleteThemeSettings } from '../../../../../types';
+import { ChartType, CompleteThemeSettingsInternal } from '../../../../../types';
 import { OptionsWithAlerts } from '../../../../../types';
 import { CartesianChartDataOptionsInternal } from '../../chart-data-options/types';
 import { ChartData } from '../../chart-data/types';
@@ -80,7 +80,7 @@ export const getCartesianChartOptions = (
   chartDesignOptions: ChartDesignOptions,
   dataOptions: CartesianChartDataOptionsInternal,
   translate: TFunction,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   dateFormatter?: (date: Date, format: string) => string,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const alerts: OptionsWithAlerts<HighchartsOptionsInternal>['alerts'] = [];
@@ -249,7 +249,9 @@ export const getCartesianChartOptions = (
 
             if (navigator.enabled && chartDesignOptions.autoZoom?.scrollerLocation) {
               const { min, max } = chartDesignOptions.autoZoom.scrollerLocation;
-              setInitialScrollerPosition(chart, min, max);
+              if (min >= 0 && max >= min && max < chartData.xValues.length) {
+                setInitialScrollerPosition(chart, min, max);
+              }
             }
 
             chart.update({ navigator: navigator as Highcharts.NavigatorOptions }, true);

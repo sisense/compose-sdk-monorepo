@@ -642,8 +642,13 @@ export class PivotTable extends React.PureComponent<Props, State> {
     }
     if (this.props.onTotalSizeChange && this.scrollContainer && this.scrollContainer.view) {
       const table = this.scrollContainer.view.children[0];
-      const height = table.scrollHeight + this.props.scrollBarsMargin;
-      this.props.onTotalSizeChange(height);
+      // Skip transient pre-layout reads: when the virtualized grid hasn't laid out yet
+      // `scrollHeight` is 0, which would otherwise propagate as `scrollBarsMargin` alone
+      // and collapse the consumer's auto-height container.
+      if (table && table.scrollHeight > 0 && this.hasContent()) {
+        const height = table.scrollHeight + this.props.scrollBarsMargin;
+        this.props.onTotalSizeChange(height);
+      }
     }
     if (this.props.isFullWidth && !this.isDomReadyTriggered && !this.isFullWidthRefreshed) {
       this.isFullWidthRefreshed = true;

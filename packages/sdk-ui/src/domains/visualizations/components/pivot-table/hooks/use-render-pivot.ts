@@ -14,7 +14,7 @@ import type {
 import { PivotTableDataPointEventHandler } from '@/props';
 import type { ContainerSize } from '@/shared/components/dynamic-size-container/dynamic-size-container';
 import { AlertIcon } from '@/shared/icons/alert-icon';
-import type { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
+import type { CompleteThemeSettingsInternal, PivotTableStyleOptions } from '@/types';
 
 import { preparePivotStylingProps } from '../helpers/prepare-pivot-styling-props';
 import { useApplyPivotTableCellEvents } from './use-apply-pivot-table-cell-events';
@@ -27,7 +27,7 @@ type PivotRenderOptions = {
   /** The pivot table style options. */
   styleOptions: PivotTableStyleOptions;
   /** The theme settings. */
-  themeSettings: CompleteThemeSettings;
+  themeSettings: CompleteThemeSettingsInternal;
   /** The size of the pivot table container. */
   size: ContainerSize | null;
   /** Allow html in pivot table cells */

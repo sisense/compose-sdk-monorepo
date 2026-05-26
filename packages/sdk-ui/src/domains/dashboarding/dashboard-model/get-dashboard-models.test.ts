@@ -8,7 +8,7 @@ import { type HttpClient } from '@sisense/sdk-rest-client';
 import { isWidgetModel } from '@/domains/widgets/widget-model/widget-model.js';
 import { DashboardDto } from '@/infra/api/types/dashboard-dto.js';
 import { PaletteDto } from '@/infra/api/types/palette-dto.js';
-import { CompleteThemeSettings } from '@/types.js';
+import { CompleteThemeSettingsInternal } from '@/types.js';
 
 import {
   dashboardWithSharedFormulas,
@@ -282,7 +282,7 @@ describe('getDashboardModels', () => {
   it('should pass themeSettings and appSettings to the dashboard model translator', async () => {
     const mockThemeSettings = {
       palette: { variantColors: ['#FF0000'] },
-    } as unknown as CompleteThemeSettings;
+    } as unknown as CompleteThemeSettingsInternal;
 
     getDashboardsMock.mockReturnValueOnce([sampleEcommerceDashboard]);
 

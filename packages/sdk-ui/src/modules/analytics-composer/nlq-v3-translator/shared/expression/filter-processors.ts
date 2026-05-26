@@ -1,8 +1,8 @@
 /**
- * Custom processors for filter functions that require cross-argument validation.
+ * Custom processors for filter functions that require cross-argument validation or normalization.
  *
- * These processors validate that attribute types are compatible with the expected
- * value types for specific filter functions.
+ * These processors validate that attribute types are compatible with the expected value types, or
+ * adjust arguments.
  */
 import { Attribute, Filter, isMembersFilter } from '@sisense/sdk-data';
 
@@ -38,12 +38,13 @@ function extractAttribute(processedArgs: ProcessedArg[], context: FunctionContex
  *
  * @param processedArgs - [attribute, value, config?]
  * @param context - Processing context with error prefix and other metadata
+ * @returns Same `processedArgs` reference when validation succeeds
  * @throws Error with descriptive message if validation fails
  */
 export function processStringOrNumericFilter(
   processedArgs: ProcessedArg[],
   context: FunctionContext,
-): void {
+): ProcessedArg[] {
   const attribute = extractAttribute(processedArgs, context);
 
   if (!isTextOrNumericAttribute(attribute)) {
@@ -55,6 +56,8 @@ export function processStringOrNumericFilter(
       )} attribute`,
     );
   }
+
+  return processedArgs;
 }
 
 /**
@@ -63,12 +66,13 @@ export function processStringOrNumericFilter(
  *
  * @param processedArgs - [attribute, value, config?]
  * @param context - Processing context with error prefix and other metadata
+ * @returns Same `processedArgs` reference when validation succeeds
  * @throws Error with descriptive message if validation fails
  */
 export function processNumericFilter(
   processedArgs: ProcessedArg[],
   context: FunctionContext,
-): void {
+): ProcessedArg[] {
   const attribute = extractAttribute(processedArgs, context);
 
   if (!isNumericAttribute(attribute)) {
@@ -80,6 +84,8 @@ export function processNumericFilter(
       )} attribute`,
     );
   }
+
+  return processedArgs;
 }
 
 /**
@@ -88,9 +94,13 @@ export function processNumericFilter(
  *
  * @param processedArgs - [attribute, value, config?]
  * @param context - Processing context with error prefix and other metadata
+ * @returns Same `processedArgs` reference when validation succeeds
  * @throws Error with descriptive message if validation fails
  */
-export function processStringFilter(processedArgs: ProcessedArg[], context: FunctionContext): void {
+export function processStringFilter(
+  processedArgs: ProcessedArg[],
+  context: FunctionContext,
+): ProcessedArg[] {
   const attribute = extractAttribute(processedArgs, context);
 
   if (!isTextAttribute(attribute)) {
@@ -102,6 +112,8 @@ export function processStringFilter(processedArgs: ProcessedArg[], context: Func
       )} attribute`,
     );
   }
+
+  return processedArgs;
 }
 
 /**
@@ -128,12 +140,13 @@ function extractFilter(processedArgs: ProcessedArg[], context: FunctionContext):
  *
  * @param processedArgs - [filter, inputFilter?, config?]
  * @param context - Processing context with error prefix and other metadata
+ * @returns Same `processedArgs` reference when validation succeeds
  * @throws Error with descriptive message if validation fails
  */
 export function processExcludeFilter(
   processedArgs: ProcessedArg[],
   context: FunctionContext,
-): void {
+): ProcessedArg[] {
   const filter = extractFilter(processedArgs, context);
 
   if (!isMembersFilter(filter)) {
@@ -143,4 +156,6 @@ export function processExcludeFilter(
       } filter`,
     );
   }
+
+  return processedArgs;
 }

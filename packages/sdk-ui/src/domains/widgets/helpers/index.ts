@@ -1,3 +1,4 @@
+import * as downloadBlobAsFile from './download-blob-as-file';
 import * as headerMenuUtils from './header-menu-utils';
 
 /**
@@ -6,4 +7,5 @@ import * as headerMenuUtils from './header-menu-utils';
  */
 export const widgetHelpers = {
   ...headerMenuUtils,
+  ...downloadBlobAsFile,
 };

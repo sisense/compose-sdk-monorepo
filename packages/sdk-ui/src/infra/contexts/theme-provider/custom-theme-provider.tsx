@@ -1,12 +1,12 @@
 import { PropsWithChildren } from 'react';
 
 import { asSisenseComponent } from '../../../infra/decorators/component-decorators/as-sisense-component';
-import { CompleteThemeSettings, CustomContextProviderProps } from '../../../types';
+import { CompleteThemeSettingsInternal, CustomContextProviderProps } from '../../../types';
 import { ThemeContext } from './theme-context';
 
 /** @internal */
 export type CustomThemeProviderProps = CustomContextProviderProps<{
-  themeSettings: CompleteThemeSettings;
+  themeSettings: CompleteThemeSettingsInternal;
   skipTracking?: boolean;
 }>;
 

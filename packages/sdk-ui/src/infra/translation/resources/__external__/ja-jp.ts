@@ -259,6 +259,9 @@ const translation: TranslationDictionary = {
       distributeEqualWidth: 'この行で均等に配分',
       download: 'ダウンロード',
       csvFile: 'CSVファイル',
+      excelFile: 'Excelファイル',
+      repeatRowsRecommended: '行を繰り返す（推奨）',
+      mergeRows: '行を結合',
     },
   },
   customWidgets: {

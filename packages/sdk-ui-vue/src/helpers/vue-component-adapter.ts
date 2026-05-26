@@ -1,4 +1,4 @@
-import type { CompleteThemeSettings, CustomSisenseContext } from '@sisense/sdk-ui-preact';
+import type { CompleteThemeSettingsInternal, CustomSisenseContext } from '@sisense/sdk-ui-preact';
 import type { ExternalComponentAdapter } from '@sisense/sdk-ui-preact';
 import { type App, type Component, createApp, type DefineComponent, h, ref, type Ref } from 'vue';
 
@@ -31,7 +31,7 @@ export class VueComponentAdapter<Props extends AnyObject>
     private componentClass: Component<Props> | DefineComponent<Props>,
     private contexts: {
       sisenseContext: Ref<CustomSisenseContext>;
-      themeContext: Ref<CompleteThemeSettings>;
+      themeContext: Ref<CompleteThemeSettingsInternal>;
       customWidgetsContext: Ref<any>;
     },
   ) {}

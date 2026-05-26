@@ -8,7 +8,7 @@ import type {
   AreamapStyleOptions,
   AreaStyleOptions,
   AxisLabel,
-  CompleteThemeSettings,
+  CompleteThemeSettingsInternal,
   DataLimits,
   FunnelStyleOptions,
   GaugeIndicatorStyleOptions,
@@ -435,7 +435,7 @@ describe('to-widget-dto-style', () => {
   });
 
   describe('toWidgetDesign', () => {
-    const customWidgetTheme: CompleteThemeSettings['widget'] = {
+    const customWidgetTheme: CompleteThemeSettingsInternal['widget'] = {
       spaceAround: 'Medium',
       cornerRadius: 'Small',
       shadow: 'Light',
@@ -773,7 +773,7 @@ describe('to-widget-dto-style', () => {
       },
     } as AppSettings;
 
-    const themeSettings: CompleteThemeSettings = {
+    const themeSettings: CompleteThemeSettingsInternal = {
       ...getDefaultThemeSettings(),
       widget: {
         spaceAround: 'Small',

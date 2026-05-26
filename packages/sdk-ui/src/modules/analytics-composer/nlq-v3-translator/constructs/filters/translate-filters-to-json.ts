@@ -36,8 +36,7 @@ export function translateFiltersToJSON(
         success: false,
         errors: [
           {
-            category: 'filters',
-            index: -1,
+            path: 'filters',
             input: filters,
             message: `FilterRelations is missing composeCode. Operator: ${
               filters.operator || 'unknown'
@@ -57,8 +56,7 @@ export function translateFiltersToJSON(
         success: false,
         errors: [
           {
-            category: 'filters',
-            index: -1,
+            path: 'filters',
             input: filters,
             message: `Failed to parse composeCode for FilterRelations: ${errorMessage}. ComposeCode: '${filters.composeCode}'`,
           },
@@ -72,8 +70,7 @@ export function translateFiltersToJSON(
   filters.forEach((filter, index) => {
     if (!filter.composeCode) {
       errors.push({
-        category: 'filters',
-        index,
+        path: `filters[${index}]`,
         input: filter,
         message: `Filter at index ${index} (${
           (filter as { name?: string }).name ?? 'unnamed'
@@ -89,8 +86,7 @@ export function translateFiltersToJSON(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : UNKNOWN_ERROR_MESSAGE;
       errors.push({
-        category: 'filters',
-        index,
+        path: `filters[${index}]`,
         input: filter,
         message: `Failed to parse composeCode for filter at index ${index}: ${errorMessage}. ComposeCode: '${filter.composeCode}'`,
       });
@@ -124,8 +120,7 @@ export function translateHighlightsToJSON(
   highlights.forEach((filter, index) => {
     if (!filter.composeCode) {
       errors.push({
-        category: 'highlights',
-        index,
+        path: `highlights[${index}]`,
         input: filter,
         message: `Highlight filter at index ${index} (${
           (filter as { name?: string }).name ?? 'unnamed'
@@ -141,8 +136,7 @@ export function translateHighlightsToJSON(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : UNKNOWN_ERROR_MESSAGE;
       errors.push({
-        category: 'highlights',
-        index,
+        path: `highlights[${index}]`,
         input: filter,
         message: `Failed to parse composeCode for highlight filter at index ${index}: ${errorMessage}. ComposeCode: '${filter.composeCode}'`,
       });

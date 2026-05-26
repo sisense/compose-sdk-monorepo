@@ -1,5 +1,5 @@
 import { getDarkFactor, getSlightlyDifferentColor, toColor } from '@/shared/utils/color';
-import { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
+import { CompleteThemeSettingsInternal, PivotTableStyleOptions } from '@/types';
 
 const PIVOT_DEFAULT_BORDER_COLOR = '#cbced7';
 const PIVOT_DEFAULT_HIGHLIGHT_COLOR = '#ffff9c';
@@ -27,7 +27,7 @@ export type PivotStylingProps = {
 
 export function preparePivotStylingProps(
   styleOptions?: PivotTableStyleOptions,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): PivotStylingProps {
   let fillColor;
   let additionalFillColor;

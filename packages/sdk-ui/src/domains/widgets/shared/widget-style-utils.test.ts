@@ -1,4 +1,4 @@
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { getShadowValue } from './widget-style-utils.js';
 
@@ -7,7 +7,7 @@ const themeSettings = {
     shadow: 'None',
     spaceAround: 'None',
   },
-} as CompleteThemeSettings;
+} as CompleteThemeSettingsInternal;
 
 describe('getShadowValue', () => {
   it('returns "none" when widgetStyleOptions is undefined', () => {

@@ -345,6 +345,18 @@ export class RestApi {
       },
     );
   };
+
+  /**
+   * Export JAQL query results as an XLSX file (binary response).
+   *
+   * @param body - JSON payload for the JAQL export API
+   * @returns XLSX file as a {@link Blob}
+   */
+  public exportJaqlToXlsx = (body: object) => {
+    return this.httpClient.post<Blob>('api/v1/export/jaql/xlsx', body, {}, undefined, {
+      returnBlob: true,
+    });
+  };
 }
 
 function isSharedFormulaDto(

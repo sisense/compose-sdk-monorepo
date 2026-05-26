@@ -264,6 +264,9 @@ const translation: TranslationDictionary = {
       distributeEqualWidth: 'Distribuir igualmente nesta linha',
       download: 'Baixar',
       csvFile: 'Arquivo CSV',
+      excelFile: 'Arquivo Excel',
+      repeatRowsRecommended: 'Repetir linhas (Recomendado)',
+      mergeRows: 'Mesclar linhas',
     },
   },
   customWidgets: {

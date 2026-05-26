@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { getSlightlyDifferentColor } from '@/shared/utils/color/index.js';
 
-import { CompleteThemeSettings } from '../../../../../types';
+import { CompleteThemeSettingsInternal } from '../../../../../types';
 import {
   ButtonProps,
   ButtonWithTooltipProps,
@@ -25,7 +25,7 @@ type QuickDateSelectionButtonsProps = {
 };
 
 type ThemePropMixin = {
-  theme: CompleteThemeSettings;
+  theme: CompleteThemeSettingsInternal;
 };
 
 type ThemedButtonProps = ButtonProps & ThemePropMixin;

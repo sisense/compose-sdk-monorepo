@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 
-import { CompleteThemeSettings } from '../../../../../types.js';
+import { CompleteThemeSettingsInternal } from '../../../../../types.js';
 import { ArrowIcon } from '../../icons/arrow-icon.js';
 import { DoubleArrowIcon } from '../../icons/double-arrow-icon.js';
 
@@ -18,7 +18,7 @@ type HeaderProps = {
   nextMonthButtonDisabled: boolean;
 };
 
-const MonthTitle = styled.span<{ theme: CompleteThemeSettings }>`
+const MonthTitle = styled.span<{ theme: CompleteThemeSettingsInternal }>`
   font-size: 13px;
   font-weight: 700;
   color: ${({ theme }) => theme.typography.primaryTextColor};
@@ -26,7 +26,7 @@ const MonthTitle = styled.span<{ theme: CompleteThemeSettings }>`
   text-align: center;
 `;
 
-const MonthSelectionButton = styled.button<{ theme: CompleteThemeSettings }>`
+const MonthSelectionButton = styled.button<{ theme: CompleteThemeSettingsInternal }>`
   border: none;
   background-color: transparent;
   color: ${({ theme, disabled }) => (disabled ? 'transparent' : theme.typography.primaryTextColor)};

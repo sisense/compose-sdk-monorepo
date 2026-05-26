@@ -4,7 +4,7 @@ import { describe, expect, test, vi } from 'vitest';
 
 import { CartesianChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { StackableChartDesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/design-options.js';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { BuildContext } from '../../../../types.js';
 // Import mocked functions
@@ -117,7 +117,7 @@ describe('areaHighchartsOptionsBuilder', () => {
         typography: {
           primaryTextColor: '#000000',
         },
-      } as CompleteThemeSettings,
+      } as CompleteThemeSettingsInternal,
       dateFormatter: vi.fn(() => 'formatted-date'),
       accessibilityEnabled: false,
     },

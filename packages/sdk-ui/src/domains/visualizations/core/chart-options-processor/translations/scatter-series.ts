@@ -5,7 +5,7 @@ import { isNumber } from '@sisense/sdk-data';
 
 import { seriesSliceWarning } from '@/shared/utils/data-limit-warning';
 
-import { CompleteThemeSettings, SeriesWithAlerts } from '../../../../../types';
+import { CompleteThemeSettingsInternal, SeriesWithAlerts } from '../../../../../types';
 import { getPaletteColor } from '../../chart-data-options/coloring/utils';
 import {
   ScatterChartDataOptionsInternal,
@@ -93,7 +93,7 @@ const getComputedProperties = (
 const fillColors = (
   data: ScatterDataTable,
   dataOptions?: ScatterChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): ScatterSeriesColorsMap => {
   const colorsMap = new Map<string, string | undefined>();
 
@@ -275,7 +275,7 @@ const fill = (
   data: ScatterDataTable,
   categoriesMap: ScatterAxisCategoriesMap,
   dataOptions?: ScatterChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): SeriesType[] => {
   const breakByColor = dataOptions?.breakByColor;
   const seriesName = getSingleSeriesName(dataOptions);
@@ -314,7 +314,7 @@ export const buildScatterSeries = (
   categoriesMap: ScatterAxisCategoriesMap,
   dataOptions?: ScatterChartDataOptionsInternal,
   designOptions?: ChartDesignOptions,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   seriesCapacity?: number,
 ): SeriesWithAlerts<SeriesType[]> => {
   const alerts: SeriesWithAlerts<SeriesType[]>['alerts'] = [];

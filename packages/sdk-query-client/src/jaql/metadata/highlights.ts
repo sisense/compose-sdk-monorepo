@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Filter, MetadataItem } from '@sisense/sdk-data';
+import { Filter, isIncludeAllMembersFilter, MetadataItem } from '@sisense/sdk-data';
 
 export function applyHighlightFilters(metadataItem: MetadataItem, highlights: Filter[]) {
   const filter = highlights?.find((f) => getMetadataItemId(metadataItem) === f.attribute.id);
 
-  if (filter && !filter.config.disabled) {
+  if (filter && !filter.config.disabled && !isIncludeAllMembersFilter(filter)) {
     if (filter.isScope) {
       filter.isScope = false;
     }
@@ -24,6 +24,9 @@ export function matchHighlightsWithAttributes(
   const highlightsWithoutAttributes: Filter[] = [];
 
   highlights.forEach((filter) => {
+    if (isIncludeAllMembersFilter(filter)) {
+      return;
+    }
     const isMatch = attributesMetadata.some((d) => getMetadataItemId(d) === filter.attribute.id);
     if (isMatch) {
       highlightsWithAttributes.push(filter);

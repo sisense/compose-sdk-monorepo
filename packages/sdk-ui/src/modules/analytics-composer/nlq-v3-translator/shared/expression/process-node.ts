@@ -102,6 +102,7 @@ export function processNode(input: NodeInput): QueryElement {
   }
 
   // Run custom processing if the function has it
+  let finalArgs = processedArgs;
   const customProcessor = getCustomProcessor(functionPath);
   if (customProcessor) {
     try {
@@ -111,7 +112,7 @@ export function processNode(input: NodeInput): QueryElement {
         pathPrefix: actualPathPrefix,
       };
 
-      customProcessor(processedArgs, processingContext);
+      finalArgs = customProcessor(processedArgs, processingContext);
     } catch (validationError) {
       const errorMsg =
         validationError instanceof Error ? validationError.message : 'Unknown validation error';
@@ -120,5 +121,5 @@ export function processNode(input: NodeInput): QueryElement {
   }
 
   // Execute the function with validated arguments
-  return executeFunction(functionPath, processedArgs);
+  return executeFunction(functionPath, finalArgs);
 }

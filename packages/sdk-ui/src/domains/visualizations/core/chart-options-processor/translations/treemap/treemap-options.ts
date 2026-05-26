@@ -3,7 +3,7 @@ import { TFunction } from '@sisense/sdk-common';
 
 import { getDataOptionTitle } from '@/domains/visualizations/core/chart-data-options/utils';
 
-import { CompleteThemeSettings } from '../../../../../../types';
+import { CompleteThemeSettingsInternal } from '../../../../../../types';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CategoricalChartData } from '../../../chart-data/types';
 import { HighchartsOptionsInternal } from '../../chart-options-service';
@@ -46,7 +46,7 @@ export function prepareTreemapOptions(
   dataOptions: CategoricalChartDataOptionsInternal,
   designOptions: TreemapChartDesignOptions,
   translate: TFunction,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): HighchartsOptionsInternal {
   return {
     ...DEFAULT_TREEMAP_OPTIONS,

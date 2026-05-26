@@ -60,6 +60,7 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
     },
     actions: {
       downloadCsv: { enabled: false },
+      downloadExcel: { enabled: false },
     },
   },
 };

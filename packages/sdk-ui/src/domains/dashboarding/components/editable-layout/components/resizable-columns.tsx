@@ -130,32 +130,16 @@ export const ResizableColumns = ({
       // Calculate the delta in percentage
       const deltaPercent = x / coefficient;
 
-      // Calculate new widths
-      let newLeftWidth = currentLeftWidth + deltaPercent;
-      let newRightWidth = currentRightWidth - deltaPercent;
+      // Clamp the delta so both columns stay within their min/max bounds. Applying the same
+      // clamped delta to both sides keeps the column-pair sum constant — clamping each column
+      // independently would let one side stop at its limit while the other absorbs the full
+      // delta, breaking the 100% total.
+      const minDelta = Math.max(leftMinWidth - currentLeftWidth, currentRightWidth - rightMaxWidth);
+      const maxDelta = Math.min(leftMaxWidth - currentLeftWidth, currentRightWidth - rightMinWidth);
+      const clampedDelta = Math.max(minDelta, Math.min(maxDelta, deltaPercent));
 
-      // Apply min/max constraints with coordination between columns
-      // If left column hits its minimum, right column should not grow beyond its maximum
-      if (newLeftWidth <= leftMinWidth) {
-        newLeftWidth = leftMinWidth;
-        newRightWidth = Math.min(
-          rightMaxWidth,
-          currentRightWidth - (leftMinWidth - currentLeftWidth),
-        );
-      }
-      // If right column hits its minimum, left column should not grow beyond its maximum
-      else if (newRightWidth <= rightMinWidth) {
-        newRightWidth = rightMinWidth;
-        newLeftWidth = Math.min(
-          leftMaxWidth,
-          currentLeftWidth + (currentRightWidth - rightMinWidth),
-        );
-      }
-      // Otherwise apply normal constraints
-      else {
-        newLeftWidth = Math.max(leftMinWidth, Math.min(leftMaxWidth, newLeftWidth));
-        newRightWidth = Math.max(rightMinWidth, Math.min(rightMaxWidth, newRightWidth));
-      }
+      const newLeftWidth = currentLeftWidth + clampedDelta;
+      const newRightWidth = currentRightWidth - clampedDelta;
 
       setInternalWidths(() =>
         widths.map((width, index) => {

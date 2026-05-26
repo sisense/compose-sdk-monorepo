@@ -1,7 +1,7 @@
 import { getPaletteColor } from '@/domains/visualizations/core/chart-data-options/coloring/utils.js';
 import { createDataColoringFunction } from '@/domains/visualizations/core/chart-data/data-coloring/create-data-coloring-function.js';
 import { scaleBrightness } from '@/shared/utils/color/color-interpolation.js';
-import { CompleteThemeSettings, DataColorOptions, RangeDataColorOptions } from '@/types';
+import { CompleteThemeSettingsInternal, DataColorOptions, RangeDataColorOptions } from '@/types';
 
 import { CALENDAR_HEATMAP_COLORS } from '../constants.js';
 import { CalendarHeatmapChartData, CalendarHeatmapDataValue } from '../data.js';
@@ -13,7 +13,7 @@ import { CalendarHeatmapChartData, CalendarHeatmapDataValue } from '../data.js';
  * @returns Default color options
  */
 export function getCalendarHeatmapDefaultColorOptions(
-  themeSettings: CompleteThemeSettings,
+  themeSettings: CompleteThemeSettingsInternal,
 ): RangeDataColorOptions {
   const baseColor = getPaletteColor(themeSettings.palette.variantColors, 0);
   const minColor = scaleBrightness(baseColor, CALENDAR_HEATMAP_COLORS.MIN_COLOR_BRIGHTNESS_PERCENT);

@@ -4,7 +4,7 @@ import merge from 'ts-deepmerge';
 
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { getThemeSettingsByOid } from '@/infra/themes/theme-loader';
-import { CompleteThemeSettings, isThemeOid, ThemeOid, ThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal, isThemeOid, ThemeOid, ThemeSettings } from '@/types';
 
 import { useThemeContext } from './theme-context';
 
@@ -20,11 +20,10 @@ import { useThemeContext } from './theme-context';
  */
 export function useThemeSettings(
   userTheme?: ThemeOid | ThemeSettings,
-): [CompleteThemeSettings, null] | [null, Error] {
+): [CompleteThemeSettingsInternal, null] | [null, Error] {
   const parentThemeSettings = useThemeContext().themeSettings;
-  const [loadedThemeSettings, setLoadedThemeSettings] = useState<CompleteThemeSettings | null>(
-    null,
-  );
+  const [loadedThemeSettings, setLoadedThemeSettings] =
+    useState<CompleteThemeSettingsInternal | null>(null);
   const [themeError, setThemeError] = useState<Error | null>(null);
   const httpClient = useSisenseContext().app?.httpClient;
 
@@ -69,12 +68,12 @@ export function useThemeSettings(
 }
 
 function mergeThemeSettings(
-  parentThemeSettings: CompleteThemeSettings,
+  parentThemeSettings: CompleteThemeSettingsInternal,
   userTheme: ThemeSettings,
-): CompleteThemeSettings {
+): CompleteThemeSettingsInternal {
   return merge.withOptions(
     { mergeArrays: false },
     parentThemeSettings,
     userTheme,
-  ) as CompleteThemeSettings;
+  ) as CompleteThemeSettingsInternal;
 }

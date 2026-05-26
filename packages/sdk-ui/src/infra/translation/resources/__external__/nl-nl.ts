@@ -260,6 +260,9 @@ const translation: TranslationDictionary = {
       distributeEqualWidth: 'Gelijkmatig verdelen in deze rij',
       download: 'Downloaden',
       csvFile: 'CSV-bestand',
+      excelFile: 'Excel-bestand',
+      repeatRowsRecommended: 'Rijen herhalen (Aanbevolen)',
+      mergeRows: 'Rijen samenvoegen',
     },
   },
   customWidgets: {

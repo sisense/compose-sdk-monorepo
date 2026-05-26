@@ -198,15 +198,11 @@ describe('translateChartFromJSON', () => {
     });
 
     expect(result.success).toBe(false);
-    const errors = (
-      result as { errors: Array<{ category: string; index: unknown; message: string }> }
-    ).errors;
+    const errors = (result as { errors: NlqTranslationError[] }).errors;
     expect(errors.length).toBeGreaterThanOrEqual(2);
 
-    const categoryError = errors.find(
-      (e) => e.category === 'dataOptions' && e.index === 'category',
-    );
-    const valueError = errors.find((e) => e.category === 'dataOptions' && e.index === 'value');
+    const categoryError = errors.find((e) => e.path === 'dataOptions.category[0]');
+    const valueError = errors.find((e) => e.path.startsWith('dataOptions.value'));
 
     expect(categoryError).toBeDefined();
     expect(categoryError!.message).toMatch(/Invalid date level 'Year'/);
@@ -236,7 +232,7 @@ describe('translateChartFromJSON', () => {
 
     expect(result.success).toBe(false);
     const errors = (result as { errors: NlqTranslationError[] }).errors;
-    const chartTypeError = errors.find((e) => e.category === 'chartType' && e.index === -1);
+    const chartTypeError = errors.find((e) => e.path === 'chartType');
     expect(chartTypeError).toBeDefined();
     expect(chartTypeError!.message).toMatch(/chartType is required/);
     expect(chartTypeError!.message).toMatch(/chartTypeZZ/);
@@ -263,7 +259,7 @@ describe('translateChartFromJSON', () => {
 
     expect(result.success).toBe(false);
     const errors = (result as { errors: NlqTranslationError[] }).errors;
-    const chartTypeError = errors.find((e) => e.category === 'chartType' && e.index === -1);
+    const chartTypeError = errors.find((e) => e.path === 'chartType');
     expect(chartTypeError).toBeDefined();
     expect(chartTypeError!.message).toMatch(/Invalid chartType 'colunn'/);
     expect(chartTypeError!.message).toMatch(/Did you mean 'column'/);
@@ -288,7 +284,7 @@ describe('translateChartFromJSON', () => {
 
     expect(result.success).toBe(false);
     const errors = (result as { errors: NlqTranslationError[] }).errors;
-    const chartTypeError = errors.find((e) => e.category === 'chartType' && e.index === -1);
+    const chartTypeError = errors.find((e) => e.path === 'chartType');
     expect(chartTypeError).toBeDefined();
     expect(chartTypeError!.message).toMatch(/Invalid chartType 'columnINVALID'/);
     expect(chartTypeError!.message).toMatch(/Valid types/);
@@ -313,9 +309,7 @@ describe('translateChartFromJSON', () => {
 
     expect(result.success).toBe(false);
     const errors = (result as { errors: NlqTranslationError[] }).errors;
-    const dataOptionsError = errors.find(
-      (e) => e.category === 'dataOptions' && e.index === 'categry',
-    );
+    const dataOptionsError = errors.find((e) => e.path === 'dataOptions.categry');
     expect(dataOptionsError).toBeDefined();
     expect(dataOptionsError!.message).toMatch(/Unknown dataOptions key 'categry'/);
     expect(dataOptionsError!.message).toMatch(/Did you mean 'category'/);
@@ -340,10 +334,9 @@ describe('translateChartFromJSON', () => {
 
     expect(result.success).toBe(false);
     const errors = (result as { errors: NlqTranslationError[] }).errors;
-    const typoError = errors.find((e) => e.category === 'dataOptions' && e.index === 'categoryz');
+    const typoError = errors.find((e) => e.path === 'dataOptions.categoryz');
     const missingError = errors.find(
-      (e) =>
-        e.category === 'dataOptions' && e.index === 'category' && e.message.includes('Missing'),
+      (e) => e.path === 'dataOptions.category' && e.message.includes('Missing'),
     );
     expect(typoError).toBeDefined();
     expect(typoError!.message).toMatch(/Unknown dataOptions key 'categoryz'/);
@@ -371,10 +364,7 @@ describe('translateChartFromJSON', () => {
     expect(result.success).toBe(false);
     const errors = (result as { errors: NlqTranslationError[] }).errors;
     const invalidAxisError = errors.find(
-      (e) =>
-        e.category === 'dataOptions' &&
-        e.index === 'category' &&
-        e.message.includes('not valid for chart type'),
+      (e) => e.path === 'dataOptions.category' && e.message.includes('not valid for chart type'),
     );
     expect(invalidAxisError).toBeDefined();
     expect(invalidAxisError!.message).toMatch(/scattermap/);
@@ -400,7 +390,7 @@ describe('translateChartFromJSON', () => {
     expect(result.success).toBe(false);
     const errors = (result as { errors: NlqTranslationError[] }).errors;
     const missingError = errors.find(
-      (e) => e.category === 'dataOptions' && e.index === 'value' && e.message.includes('Missing'),
+      (e) => e.path === 'dataOptions.value' && e.message.includes('Missing'),
     );
     expect(missingError).toBeDefined();
     expect(missingError!.message).toMatch(/requires.*value/);
@@ -424,8 +414,7 @@ describe('translateChartFromJSON', () => {
     const errors = (result as { errors: NlqTranslationError[] }).errors;
     const indicatorError = errors.find(
       (e) =>
-        e.category === 'dataOptions' &&
-        e.message.includes('Indicator chart requires at least one of'),
+        e.path === 'dataOptions' && e.message.includes('Indicator chart requires at least one of'),
     );
     expect(indicatorError).toBeDefined();
   });

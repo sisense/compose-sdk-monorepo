@@ -36,7 +36,7 @@ export { getHierarchyModels } from '@/domains/drilldown/hierarchy-model';
 // Theming
 export { getThemeSettingsByOid } from '../infra/themes/theme-loader';
 export { getDefaultThemeSettings } from '../infra/contexts/theme-provider/default-theme-settings';
-export { type CompleteThemeSettings } from '../types';
+export { type CompleteThemeSettingsInternal } from '../types';
 
 // Drilldown
 export { updateDrilldownSelections } from '../domains/drilldown/hooks/use-drilldown-core';

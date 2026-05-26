@@ -102,7 +102,7 @@ import {
   AreamapStyleOptions,
   AreaStyleOptions,
   ChartStyleOptions,
-  CompleteThemeSettings,
+  CompleteThemeSettingsInternal,
   CustomWidgetStyleOptions,
   DrilldownOptions,
   FunnelStyleOptions,
@@ -534,7 +534,7 @@ const categorizeWidget = (fusionWidgetType: string): WidgetCategory => {
  * @param themeSettings - Optional theme settings
  * @returns Array of variant colors as strings (nulls filtered out)
  */
-const getVariantColors = (themeSettings?: CompleteThemeSettings): string[] => {
+const getVariantColors = (themeSettings?: CompleteThemeSettingsInternal): string[] => {
   const colors = themeSettings?.palette.variantColors ?? [];
   return colors.filter((color): color is string => color !== null);
 };
@@ -797,7 +797,7 @@ const buildWidgetModel = (params: {
 export function fromWidgetDto(
   widgetDto: WidgetDto,
   // todo: remove after making palette-dependant colors calculation inside the chart component
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   appSettings?: AppSettings,
 ): WidgetModel {
   const panels = attachDataSourceToPanels(widgetDto.metadata.panels, widgetDto.datasource);
@@ -938,7 +938,7 @@ function withOid(oid: string): (widgetModel: WidgetModel) => WidgetModel {
 export function toWidgetDto(
   widgetModel: WidgetModel,
   dataSource?: JaqlDataSourceForDto,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   appSettings?: AppSettings,
 ): WidgetDto {
   const datasource = dataSource ?? convertJaqlDataSourceForDto(widgetModel.dataSource);

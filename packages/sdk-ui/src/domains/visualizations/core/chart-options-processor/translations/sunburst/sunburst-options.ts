@@ -3,7 +3,7 @@ import { TFunction } from '@sisense/sdk-common';
 
 import { getDataOptionTitle } from '@/domains/visualizations/core/chart-data-options/utils';
 
-import { CompleteThemeSettings, UniformDataColorOptions } from '../../../../../../types';
+import { CompleteThemeSettingsInternal, UniformDataColorOptions } from '../../../../../../types';
 import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CategoricalChartData } from '../../../chart-data/types';
@@ -57,7 +57,7 @@ export function prepareSunburstSeries(
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
   designOptions: SunburstChartDesignOptions,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ) {
   return [
     {
@@ -105,7 +105,7 @@ export function prepareSunburstOptions(
   dataOptions: CategoricalChartDataOptionsInternal,
   designOptions: SunburstChartDesignOptions,
   translate: TFunction,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): HighchartsOptionsInternal {
   return {
     ...DEFAULT_SUNBURST_OPTIONS,

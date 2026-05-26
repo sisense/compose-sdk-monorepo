@@ -37,7 +37,6 @@ import { RowDropOverlay } from './components/row-drop-overlay';
 import {
   deleteWidgetFromLayout,
   distributeEqualWidthInRow,
-  getColumnMaxWidths,
   getColumnMinWidths,
   updateLayoutAfterDragAndDrop,
   updateLayoutWidths,
@@ -279,7 +278,6 @@ export const EditableLayout = ({
                           disableResize={equalWidthCells}
                           widths={rowWidths}
                           minColWidths={getColumnMinWidths(row)}
-                          maxColWidths={getColumnMaxWidths(row)}
                           onWidthsChange={(widths) =>
                             onCellWidthChange(widths, columnIndex, rowIndex)
                           }

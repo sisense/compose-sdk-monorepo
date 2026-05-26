@@ -1,4 +1,4 @@
-import { CompleteThemeSettings, PivotTableStyleOptions } from '@/types';
+import { CompleteThemeSettingsInternal, PivotTableStyleOptions } from '@/types';
 
 import { preparePivotStylingProps } from './prepare-pivot-styling-props';
 
@@ -21,7 +21,7 @@ describe('preparePivotStylingProps', () => {
       typography: {
         fontFamily: 'Arial',
       },
-    } as CompleteThemeSettings;
+    } as CompleteThemeSettingsInternal;
     const result = preparePivotStylingProps(styleOptions, themeSettings);
     expect(result).toEqual({
       fontFamily: 'Arial',

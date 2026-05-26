@@ -3,7 +3,7 @@
 /** @vitest-environment jsdom */
 import {
   ClientApplication,
-  CompleteThemeSettings,
+  CompleteThemeSettingsInternal,
   getDefaultThemeSettings,
   getThemeSettingsByOid,
 } from '@sisense/sdk-ui-preact';
@@ -69,12 +69,12 @@ describe('ThemeService', () => {
 
   describe('themeSettings$', () => {
     it('should return default theme settings if server theme setting are empty', async () => {
-      const defaultThemeSettingsMock: CompleteThemeSettings = {
+      const defaultThemeSettingsMock: CompleteThemeSettingsInternal = {
         chart: 'chart-settings',
         palette: 'palette-settings',
         typography: 'typography-settings',
         general: 'general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
       getDefaultThemeSettingsMock.mockReturnValue(defaultThemeSettingsMock);
       themeService = new ThemeService(sisenseContextServiceMock);
 
@@ -84,18 +84,18 @@ describe('ThemeService', () => {
     });
 
     it('should return server theme setting instead of default if they are present in app.settings', async () => {
-      const defaultThemeSettingsMock: CompleteThemeSettings = {
+      const defaultThemeSettingsMock: CompleteThemeSettingsInternal = {
         chart: 'chart-settings',
         palette: 'palette-settings',
         typography: 'typography-settings',
         general: 'general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
       const serverThemeSettingsMock = {
         chart: 'server-chart-settings',
         palette: 'server-palette-settings',
         typography: 'server-typography-settings',
         general: 'server-general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
 
       getDefaultThemeSettingsMock.mockResolvedValue(defaultThemeSettingsMock);
       sisenseContextServiceMock.getApp.mockResolvedValue({
@@ -108,7 +108,7 @@ describe('ThemeService', () => {
 
       const emittedSettings = (await firstValueFrom(
         themeService.themeSettings$.pipe(take(2), toArray()),
-      )) as unknown as Promise<CompleteThemeSettings>[];
+      )) as unknown as Promise<CompleteThemeSettingsInternal>[];
 
       const [firstThemeSettings, secondThemeSettings] = emittedSettings;
 
@@ -122,19 +122,19 @@ describe('ThemeService', () => {
 
   describe('updateThemeSettings', () => {
     it('should update theme settings', async () => {
-      const defaultThemeSettingsMock: CompleteThemeSettings = {
+      const defaultThemeSettingsMock: CompleteThemeSettingsInternal = {
         chart: 'chart-settings',
         palette: 'palette-settings',
         typography: 'typography-settings',
         general: 'general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
       getDefaultThemeSettingsMock.mockReturnValue(defaultThemeSettingsMock);
-      const newThemeSettingsMock: CompleteThemeSettings = {
+      const newThemeSettingsMock: CompleteThemeSettingsInternal = {
         chart: 'new-chart-settings',
         palette: 'new-palette-settings',
         typography: 'new-typography-settings',
         general: 'new-general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
       getThemeSettingsByOidMock.mockResolvedValue(newThemeSettingsMock);
 
       themeService = new ThemeService(sisenseContextServiceMock);
@@ -148,20 +148,20 @@ describe('ThemeService', () => {
     });
 
     it('should handle race condition between initialization and manual theme updates', async () => {
-      const defaultThemeSettingsMock: CompleteThemeSettings = {
+      const defaultThemeSettingsMock: CompleteThemeSettingsInternal = {
         chart: 'chart-settings',
         palette: 'palette-settings',
         typography: 'typography-settings',
         general: 'general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
       const serverThemeSettingsMock = {
         chart: 'server-chart-settings',
         palette: 'server-palette-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
       const manualThemeSettingsMock = {
         typography: 'manual-typography-settings',
         general: 'manual-general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
 
       getDefaultThemeSettingsMock.mockReturnValue(defaultThemeSettingsMock);
 
@@ -203,16 +203,16 @@ describe('ThemeService', () => {
     });
 
     it('should apply theme updates immediately when initialization is already complete', async () => {
-      const defaultThemeSettingsMock: CompleteThemeSettings = {
+      const defaultThemeSettingsMock: CompleteThemeSettingsInternal = {
         chart: 'chart-settings',
         palette: 'palette-settings',
         typography: 'typography-settings',
         general: 'general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
       const manualThemeSettingsMock = {
         typography: 'manual-typography-settings',
         general: 'manual-general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
 
       getDefaultThemeSettingsMock.mockReturnValue(defaultThemeSettingsMock);
 
@@ -237,23 +237,23 @@ describe('ThemeService', () => {
 
   describe('app state changes', () => {
     it('should trigger theme update when sisenseContextService app changes', async () => {
-      const defaultThemeSettingsMock: CompleteThemeSettings = {
+      const defaultThemeSettingsMock: CompleteThemeSettingsInternal = {
         chart: 'chart-settings',
         palette: 'palette-settings',
         typography: 'typography-settings',
         general: 'general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
 
       const initialServerThemeSettings = {
         chart: 'initial-server-chart-settings',
         palette: 'initial-server-palette-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
 
       const newServerThemeSettings = {
         chart: 'new-server-chart-settings',
         palette: 'new-server-palette-settings',
         typography: 'new-server-typography-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
 
       getDefaultThemeSettingsMock.mockReturnValue(defaultThemeSettingsMock);
 
@@ -319,25 +319,25 @@ describe('ThemeService', () => {
     });
 
     it('should handle postponed updateThemeSettings when app changes during manual update', async () => {
-      const defaultThemeSettingsMock: CompleteThemeSettings = {
+      const defaultThemeSettingsMock: CompleteThemeSettingsInternal = {
         chart: 'chart-settings',
         palette: 'palette-settings',
         typography: 'typography-settings',
         general: 'general-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
 
       const serverThemeSettings = {
         chart: 'server-chart-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
 
       const newServerThemeSettings = {
         chart: 'new-server-chart-settings',
         palette: 'new-server-palette-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
 
       const manualThemeSettings = {
         typography: 'manual-typography-settings',
-      } as unknown as CompleteThemeSettings;
+      } as unknown as CompleteThemeSettingsInternal;
 
       getDefaultThemeSettingsMock.mockReturnValue(defaultThemeSettingsMock);
 

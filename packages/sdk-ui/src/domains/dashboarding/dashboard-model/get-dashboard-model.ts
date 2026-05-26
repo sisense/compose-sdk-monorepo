@@ -8,7 +8,7 @@ import { PaletteDto } from '@/infra/api/types/palette-dto';
 import { AppSettings } from '@/infra/app/settings/settings';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { getWidgetIdsFromDashboard } from '@/shared/utils/extract-widget-ids';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { withSharedFormulas } from './translate-dashboard-utils';
 
@@ -62,7 +62,7 @@ export async function getDashboardModel(
   http: HttpClient,
   dashboardOid: string,
   options: GetDashboardModelOptions = {},
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   appSettings?: AppSettings,
 ): Promise<DashboardModel> {
   const { includeWidgets, includeFilters, sharedMode, useLegacyApiVersion } = options;

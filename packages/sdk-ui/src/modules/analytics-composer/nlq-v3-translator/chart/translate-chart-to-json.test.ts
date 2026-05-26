@@ -1,3 +1,5 @@
+import { createAttribute, measureFactory } from '@sisense/sdk-data';
+
 import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -80,6 +82,29 @@ describe('translateChartToJSON', () => {
     expect(breakBy).toHaveLength(1);
     expect(breakBy![0]).toHaveProperty('column', 'DM.Commerce.Gender');
     expect(breakBy![0]).toHaveProperty('sortType', 'sortAsc');
+  });
+
+  it('should attribute axis item errors to the outer dataOptions index', () => {
+    const Revenue = createAttribute({
+      name: 'Revenue',
+      type: 'numeric-attribute',
+      expression: '[Commerce.Revenue]',
+      dataSource: { title: 'Sample ECommerce', live: false },
+    });
+    const validMeasure = measureFactory.sum(Revenue, 'Total Revenue');
+    const invalidMeasure = { ...measureFactory.sum(Revenue, 'Bad'), composeCode: undefined };
+
+    const result = translateChartToJSON({
+      chartType: 'column',
+      dataOptions: {
+        value: [validMeasure, invalidMeasure],
+      },
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+
+    expect(result.errors[0].path).toBe('dataOptions.value[1]');
   });
 
   it('should round-trip boxplot with boxType and outliersEnabled passed through', () => {

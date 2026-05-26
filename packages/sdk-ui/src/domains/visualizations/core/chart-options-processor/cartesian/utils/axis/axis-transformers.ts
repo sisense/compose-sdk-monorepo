@@ -6,7 +6,7 @@ import { isPolar } from '@/domains/visualizations/core/chart-options-processor/t
 import {
   ChartType,
   CompleteNumberFormatConfig,
-  CompleteThemeSettings,
+  CompleteThemeSettingsInternal,
   TotalLabels,
 } from '../../../../../../../types';
 import {
@@ -28,7 +28,7 @@ export interface StackingConfig {
   stacking?: Stacking;
   totalLabels?: TotalLabels;
   dataOptions: ChartDataOptionsInternal;
-  themeSettings?: CompleteThemeSettings;
+  themeSettings?: CompleteThemeSettingsInternal;
 }
 
 /**

@@ -78,6 +78,12 @@ export function preparePivotRowJaqlSortOptions(
       }),
       {},
     );
+  } else if (metadataStats.rowsCount > 1) {
+    // Always emit `measurePath` for multi-rows by-measure sorts, even as an empty object when there
+    // are no pivot columns. The Sisense backend uses the presence of this field to
+    // recognise a by-measure sort: when it is absent the server may ignore the sort
+    // direction for row dimensions, producing incorrect ordering.
+    sortDetails.measurePath = {};
   }
 
   return {

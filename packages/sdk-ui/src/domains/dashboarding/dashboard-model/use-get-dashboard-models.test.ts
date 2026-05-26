@@ -8,7 +8,7 @@ import { type AppSettings } from '@/infra/app/settings/settings.js';
 import { type ClientApplication } from '@/infra/app/types.js';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context.js';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import { type CompleteThemeSettings } from '@/types.js';
+import { type CompleteThemeSettingsInternal } from '@/types.js';
 
 import { sampleEcommerceDashboard } from './__mocks__/sample-ecommerce-dashboard.js';
 import { sampleHealthcareDashboard } from './__mocks__/sample-healthcare-dashboard.js';
@@ -62,7 +62,9 @@ const useThemeContextMock = useThemeContext as Mock<typeof useThemeContext>;
 
 const trackProductEventMock = trackProductEvent as Mock<typeof trackProductEvent>;
 
-const mockThemeSettings = { palette: { variantColors: ['#FF0000'] } } as CompleteThemeSettings;
+const mockThemeSettings = {
+  palette: { variantColors: ['#FF0000'] },
+} as CompleteThemeSettingsInternal;
 const mockAppSettings = { serverThemeSettings: {} } as unknown as AppSettings;
 
 describe('useGetDashboardModels', () => {

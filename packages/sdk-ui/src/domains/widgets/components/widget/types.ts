@@ -34,6 +34,19 @@ export type WidgetConfig = {
        */
       enabled?: boolean;
     };
+    /**
+     * Configuration for downloading an Excel file.
+     *
+     * @sisenseInternal
+     */
+    downloadExcel?: {
+      /**
+       * Determines whether the possibility to download Excel is enabled.
+       *
+       * If not specified, the default value is `false`.
+       */
+      enabled?: boolean;
+    };
   };
 };
 

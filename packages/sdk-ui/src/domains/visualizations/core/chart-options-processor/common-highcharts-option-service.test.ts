@@ -1,4 +1,4 @@
-import { CompleteThemeSettings } from '../../../..';
+import { CompleteThemeSettingsInternal } from '../../../..';
 import { HighchartsOptionsInternal } from './chart-options-service';
 import {
   applyCommonHighchartsOptions,
@@ -16,7 +16,7 @@ describe('applyCommonHighchartsOptions', () => {
           redraw: { duration: 'auto' },
         },
       },
-    } as CompleteThemeSettings;
+    } as CompleteThemeSettingsInternal;
 
     const result = applyCommonHighchartsOptions(chartOptions, themeSettings, true);
 

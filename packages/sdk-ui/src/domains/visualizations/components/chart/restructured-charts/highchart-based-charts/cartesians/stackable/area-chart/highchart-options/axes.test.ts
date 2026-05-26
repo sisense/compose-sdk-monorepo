@@ -9,7 +9,7 @@ import {
 } from '@/domains/visualizations/core/chart-options-processor/cartesian/utils/chart-configuration.js';
 import { AxisSettings } from '@/domains/visualizations/core/chart-options-processor/translations/axis-section.js';
 import { StackableChartDesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/design-options.js';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { BuildContext } from '../../../../types.js';
 // Import the mocked functions
@@ -54,7 +54,7 @@ describe('axes', () => {
       stackType: 'classic' | 'stacked' | 'stack100' = 'stacked',
       showTotal = false,
       totalLabelRotation = 0,
-      themeSettings?: Partial<CompleteThemeSettings>,
+      themeSettings?: Partial<CompleteThemeSettingsInternal>,
     ): BuildContext<'area'> => ({
       chartData: {
         type: 'cartesian',
@@ -126,7 +126,7 @@ describe('axes', () => {
             ...themeSettings?.typography,
           },
           ...themeSettings,
-        } as CompleteThemeSettings,
+        } as CompleteThemeSettingsInternal,
         dateFormatter: vi.fn(() => 'formatted-date'),
         accessibilityEnabled: false,
       },

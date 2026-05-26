@@ -420,22 +420,16 @@ export interface DataSchemaContext {
 export type QueryInput = NlqTranslationInput<NlqResponseJSON, DataSchemaContext>;
 
 /**
- * Context information for error generation
+ * Context used when building translation errors (before message is attached).
  *
  * @internal
  */
 export type NlqTranslationErrorContext = {
-  /** The category of the query/chart element that failed (dimensions, measures, filters, highlights, dataOptions, chartType, styleOptions) */
-  category:
-    | 'dimensions'
-    | 'measures'
-    | 'filters'
-    | 'highlights'
-    | 'dataOptions'
-    | 'chartType'
-    | 'styleOptions';
-  /** The index of the element within its category array, or axis key for dataOptions (e.g. "category", "value") */
-  index: number | string;
+  /**
+   * Structural location in the JSON being translated, using pathPrefix notation.
+   * e.g. "widgets[0].dataOptions.category[0]" or "filters[0]"
+   */
+  path: string;
   /** The complete original input that caused the error */
   input: unknown;
 };

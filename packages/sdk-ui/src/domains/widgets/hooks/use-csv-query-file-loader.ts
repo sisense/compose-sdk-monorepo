@@ -2,6 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useExecuteCsvQueryInternal } from '@/domains/query-execution/hooks/use-execute-csv-query/use-execute-csv-query.js';
 import type { ExecuteCsvQueryParams } from '@/domains/query-execution/types.js';
+import {
+  downloadBlobAsFile,
+  normalizeFileName,
+} from '@/domains/widgets/helpers/download-blob-as-file.js';
 
 const DEFAULT_CSV_FILENAME = 'data.csv';
 
@@ -14,44 +18,6 @@ export type UseCsvQueryLoaderResult = {
   /** Triggers CSV query execution and browser file download with the given params. */
   execute: (params: CsvExecuteParams) => void;
 };
-
-/**
- * Triggers a browser file download from a Blob.
- *
- * @param blob - The CSV Blob to download.
- * @param filename - The name to give the downloaded file.
- */
-function downloadBlobAsFile(blob: Blob, filename: string): void {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  URL.revokeObjectURL(url);
-  document.body.removeChild(link);
-}
-
-const DEFAULT_FILENAME = 'file';
-
-/**
- * Normalizes a file name by removing invalid characters and keeping the extension.
- *
- * @param rawFileName - The raw file name to normalize.
- * @returns The normalized file name.
- */
-function normalizeFileName(rawFileName: string): string {
-  const lastDotIndex = rawFileName.lastIndexOf('.');
-
-  const namePart = lastDotIndex === -1 ? rawFileName : rawFileName.substring(0, lastDotIndex);
-  const extensionPart = lastDotIndex === -1 ? '' : rawFileName.substring(lastDotIndex);
-
-  // The regex /[^a-zA-Z0-9]/g finds anything that is NOT (-) a letter or number
-  // and replaces it with an empty string (removes it).
-  const normalizedName = namePart.replace(/[^a-zA-Z0-9]/g, '');
-
-  return `${normalizedName || DEFAULT_FILENAME}${extensionPart}`;
-}
 
 /**
  * Hook that executes a CSV query on demand and triggers a browser file download.

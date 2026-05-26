@@ -1,6 +1,7 @@
 import { WidgetsPanelLayout, WidgetsPanelRow } from '@/domains/dashboarding/dashboard-model';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
+import { MAX_COLUMN_WIDTH } from './const.js';
 import {
   deleteWidgetsFromLayout,
   distributeEqualWidthInRow,
@@ -1898,7 +1899,7 @@ describe('getColumnMaxWidths', () => {
 
     const result = getColumnMaxWidths(row);
 
-    expect(result).toEqual([2048, 2048]); // MAX_COLUMN_WIDTH from const.ts
+    expect(result).toEqual([MAX_COLUMN_WIDTH, MAX_COLUMN_WIDTH]); // MAX_COLUMN_WIDTH from const.ts
   });
 
   it('should return maxWidth for cells that have it', () => {
@@ -1923,7 +1924,7 @@ describe('getColumnMaxWidths', () => {
 
     const result = getColumnMaxWidths(row);
 
-    expect(result).toEqual([800, 1200, 2048]); // [800, 1200, MAX_COLUMN_WIDTH]
+    expect(result).toEqual([800, 1200, MAX_COLUMN_WIDTH]); // [800, 1200, MAX_COLUMN_WIDTH]
   });
 
   it('should handle cells with undefined maxWidth', () => {
@@ -1949,7 +1950,7 @@ describe('getColumnMaxWidths', () => {
 
     const result = getColumnMaxWidths(row);
 
-    expect(result).toEqual([800, 2048, 1200]); // [800, MAX_COLUMN_WIDTH, 1200]
+    expect(result).toEqual([800, MAX_COLUMN_WIDTH, 1200]); // [800, MAX_COLUMN_WIDTH, 1200]
   });
 
   it('should handle cells with null maxWidth', () => {

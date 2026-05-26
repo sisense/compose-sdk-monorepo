@@ -792,6 +792,9 @@ export interface BaseChartProps extends BaseChartEventProps {
    * NOTE that the filter dimensions used in highlights must match those defined in the
    * `dataOptions` of the chart. Otherwise, the filters will be applied as regular slice filters.
    *
+   * NOTE that highlight filters in the "Include all" state are silently omitted from the
+   * query. To clear a highlight, remove it from the array.
+   *
    * (1) Array of {@link Filter} returned from filter factory functions, such as
    * {@link @sisense/sdk-data!filterFactory.greaterThan | `greaterThan()`} and {@link @sisense/sdk-data!filterFactory.members | `members()`}.
    *
@@ -1210,7 +1213,10 @@ export interface PivotTableProps {
   filters?: Filter[] | FilterRelations;
 
   /**
-   * Filters that will highlight query results
+   * Filters that will highlight query results.
+   *
+   * NOTE that highlight filters in the "Include all" state are silently omitted from the
+   * query. To clear a highlight, remove it from the array.
    *
    * @category Data
    */
@@ -1349,7 +1355,10 @@ export interface WidgetByIdProps
    */
   filters?: Filter[];
   /**
-   * Highlight filters that will highlight results that pass filter criteria
+   * Highlight filters that will highlight results that pass filter criteria.
+   *
+   * NOTE that highlight filters in the "Include all" state are silently omitted from the
+   * query. To clear a highlight, remove it from the array.
    *
    * @category Data
    */

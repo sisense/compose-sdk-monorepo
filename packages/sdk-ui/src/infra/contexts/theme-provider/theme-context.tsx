@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import { CompleteThemeSettings, ThemeConfig } from '@/types';
+import { CompleteThemeSettingsInternal, ThemeConfig } from '@/types';
 
 import { getDefaultThemeSettings } from './default-theme-settings';
 
 export const ThemeContext = createContext<{
-  themeSettings: CompleteThemeSettings;
+  themeSettings: CompleteThemeSettingsInternal;
   config?: ThemeConfig;
 }>({
   themeSettings: getDefaultThemeSettings(),

@@ -119,6 +119,16 @@ export interface ChartWidgetProps extends ChartEventProps {
   highlightSelectionDisabled?: boolean;
 
   /**
+   * Widget identifier
+   *
+   * The optional property which is only meaningful for some internal features (for example Excel export).
+   *
+   * @category Widget
+   * @internal
+   */
+  id?: string;
+
+  /**
    * Callback to receive widget change events.
    *
    * Invoked when the widget state changes (e.g. drilldown selections).

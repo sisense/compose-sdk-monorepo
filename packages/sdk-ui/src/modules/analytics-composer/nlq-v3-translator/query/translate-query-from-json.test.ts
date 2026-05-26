@@ -84,8 +84,7 @@ describe('translateQueryFromJSON', () => {
       const errorResponse = result as NlqTranslationErrorResult;
       expect(errorResponse.errors).toHaveLength(1);
       expect(errorResponse.errors[0]).toMatchObject({
-        category: 'dimensions',
-        index: 0,
+        path: 'dimensions[0]',
         input: 123,
         message: expect.stringContaining(
           "Invalid dimension item. Expected a string (composeCode) or object with 'column' and optional 'sortType'.",
@@ -115,8 +114,7 @@ describe('translateQueryFromJSON', () => {
       const errorResponse = result as NlqTranslationErrorResult;
       expect(errorResponse.errors).toHaveLength(1);
       expect(errorResponse.errors[0]).toMatchObject({
-        category: 'measures',
-        index: 0,
+        path: 'measures[0]',
         input: 'invalid-measure',
         message: expect.stringContaining(
           "Invalid measure item. Expected a function call (function/args) or object with 'column' and optional 'sortType'.",
@@ -153,8 +151,7 @@ describe('translateQueryFromJSON', () => {
       const errorResponse = result as NlqTranslationErrorResult;
       expect(errorResponse.errors).toHaveLength(1);
       expect(errorResponse.errors[0]).toMatchObject({
-        category: 'filters',
-        index: 0,
+        path: 'filters[0]',
         input: invalidFilter,
         message: expect.stringContaining("Table 'NonExistentTable' not found in the data model"),
       });
@@ -190,8 +187,7 @@ describe('translateQueryFromJSON', () => {
       const errorResponse = result as NlqTranslationErrorResult;
       expect(errorResponse.errors).toHaveLength(1);
       expect(errorResponse.errors[0]).toMatchObject({
-        category: 'highlights',
-        index: 0,
+        path: 'highlights[0]',
         input: invalidHighlight,
         message: expect.stringContaining('Invalid filter JSON'),
       });
@@ -226,11 +222,10 @@ describe('translateQueryFromJSON', () => {
       expect(errorResponse.errors).toHaveLength(3);
 
       // Check dimensions error
-      const dimensionError = errorResponse.errors.find((e) => e.category === 'dimensions');
+      const dimensionError = errorResponse.errors.find((e) => e.path === 'dimensions[0]');
       expect(dimensionError).toBeDefined();
       expect(dimensionError).toMatchObject({
-        category: 'dimensions',
-        index: 0,
+        path: 'dimensions[0]',
         input: null,
         message: expect.stringContaining(
           "Invalid dimension item. Expected a string (composeCode) or object with 'column' and optional 'sortType'.",
@@ -238,21 +233,19 @@ describe('translateQueryFromJSON', () => {
       });
 
       // Check measures error
-      const measureError = errorResponse.errors.find((e) => e.category === 'measures');
+      const measureError = errorResponse.errors.find((e) => e.path === 'measures[0]');
       expect(measureError).toBeDefined();
       expect(measureError).toMatchObject({
-        category: 'measures',
-        index: 0,
+        path: 'measures[0]',
         input: invalidMeasure,
         message: expect.stringContaining('measureFactory.nonExistentFunction'),
       });
 
       // Check filters error
-      const filterError = errorResponse.errors.find((e) => e.category === 'filters');
+      const filterError = errorResponse.errors.find((e) => e.path === 'filters[0]');
       expect(filterError).toBeDefined();
       expect(filterError).toMatchObject({
-        category: 'filters',
-        index: 0,
+        path: 'filters[0]',
         input: invalidFilter,
         message: expect.stringContaining("Table 'InvalidTable' not found"),
       });
@@ -302,8 +295,7 @@ describe('translateQueryFromJSON', () => {
       const errorResponse = result as { success: false; errors: any[] };
       expect(errorResponse.errors).toHaveLength(1);
       expect(errorResponse.errors[0]).toMatchObject({
-        category: 'filters',
-        index: 0,
+        path: 'filters[0]',
         input: invalidFilter,
       });
     });
@@ -332,8 +324,7 @@ describe('translateQueryFromJSON', () => {
       const errorResponse = result as { success: false; errors: any[] };
       expect(errorResponse.errors).toHaveLength(1);
       expect(errorResponse.errors[0]).toMatchObject({
-        category: 'measures',
-        index: 0,
+        path: 'measures[0]',
         input: invalidMeasure,
         message: expect.stringContaining('Invalid measure JSON'),
       });
@@ -364,8 +355,7 @@ describe('translateQueryFromJSON', () => {
       const errorResponse = result as { success: false; errors: any[] };
       expect(errorResponse.errors).toHaveLength(1);
       expect(errorResponse.errors[0]).toMatchObject({
-        category: 'dimensions',
-        index: 0,
+        path: 'dimensions[0]',
         input: 'DM.Category',
         message: expect.stringContaining('Invalid dimensional element name format'),
       });
@@ -400,8 +390,7 @@ describe('translateQueryFromJSON', () => {
       const errorResponse = result as { success: false; errors: any[] };
       expect(errorResponse.errors).toHaveLength(1);
       expect(errorResponse.errors[0]).toMatchObject({
-        category: 'filters',
-        index: 0,
+        path: 'filters[0]',
         input: invalidFilter,
         message: expect.stringMatching(/Invalid date level 'Years'.*not a datetime column/),
       });

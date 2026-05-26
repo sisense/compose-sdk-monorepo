@@ -1,6 +1,6 @@
 import { getSlightlyDifferentColor } from '@/shared/utils/color/index.js';
 
-import { CompleteThemeSettings } from '../../../../../../types.js';
+import { CompleteThemeSettingsInternal } from '../../../../../../types.js';
 import { TableCustomStyles } from '../types.js';
 
 const oddIndex = (rowIndex: number) => rowIndex % 2 === 1;
@@ -14,7 +14,7 @@ export const getCellStyles = ({
 }: {
   colIndex?: number;
   rowIndex?: number;
-  themeSettings: CompleteThemeSettings;
+  themeSettings: CompleteThemeSettingsInternal;
   customStyles?: TableCustomStyles;
   isHeaderCell?: boolean;
 }) => {

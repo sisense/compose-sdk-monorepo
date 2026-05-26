@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/default-param-last */
-import { CompleteThemeSettings, PieSeriesLabels } from '@/types';
+import { CompleteThemeSettingsInternal, PieSeriesLabels } from '@/types';
 
 import {
   CategoricalChartDataOptionsInternal,
@@ -81,7 +81,7 @@ export type GetPiePlotOptionsParams = {
   pieType?: PieType;
   seriesLabels?: PieSeriesLabels;
   chartDataOptions: ChartDataOptionsInternal;
-  themeSettings?: CompleteThemeSettings;
+  themeSettings?: CompleteThemeSettingsInternal;
   semiCircle?: boolean;
 };
 

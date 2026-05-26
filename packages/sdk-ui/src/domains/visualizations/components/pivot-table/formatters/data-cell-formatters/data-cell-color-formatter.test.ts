@@ -6,7 +6,7 @@ import {
   PivotTableDataOptions,
   type StyledMeasureColumn,
 } from '@/domains/visualizations/core/chart-data-options/types';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { createDataCellColorFormatter } from './data-cell-color-formatter';
 
@@ -20,7 +20,7 @@ describe('createDataCellColorFormatter', () => {
     palette: {
       variantColors: ['#e0e0e0'],
     },
-  } as CompleteThemeSettings;
+  } as CompleteThemeSettingsInternal;
   const jaqlPanelItem: JaqlPanel = {
     field: {
       index: 0,

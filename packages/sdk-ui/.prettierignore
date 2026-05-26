@@ -6,6 +6,7 @@ node_modules/
 # Ignore artifacts:
 dist/
 coverage/
+public/
 
 # Ignore auto-generated files:
 CHANGELOG.md

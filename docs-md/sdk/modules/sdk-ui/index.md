@@ -61,6 +61,7 @@ React context components
 
 - [SisenseContextProvider](contexts/function.SisenseContextProvider.md)
 - [ThemeProvider](contexts/function.ThemeProvider.md)
+- [useTheme](contexts/function.useTheme.md)
 
 ## Queries
 

@@ -1,13 +1,13 @@
 import merge from 'ts-deepmerge';
 
-import { CompleteThemeSettings } from '../../../../types';
+import { CompleteThemeSettingsInternal } from '../../../../types';
 import { HighchartsOptionsInternal } from './chart-options-service';
 import { AxisPlotBand } from './translations/axis-section';
 import { LegendSettings } from './translations/legend-section';
 
 export const applyThemeToChart = (
   chartOptions: HighchartsOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): HighchartsOptionsInternal => {
   if (!themeSettings) {
     return chartOptions;
@@ -147,7 +147,7 @@ export const applyThemeToChart = (
  * @returns A function that applies theme options to the chart options.
  */
 export function withThemeOptions(
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): (chartOptions: HighchartsOptionsInternal) => HighchartsOptionsInternal {
   return (chartOptions: HighchartsOptionsInternal) =>
     applyThemeToChart(chartOptions, themeSettings);

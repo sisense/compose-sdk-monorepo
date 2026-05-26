@@ -4,7 +4,7 @@ import { dashboardModelTranslator } from '@/domains/dashboarding/dashboard-model
 import { RestApi } from '@/infra/api/rest-api.js';
 import { AppSettings } from '@/infra/app/settings/settings';
 import { dedupe } from '@/shared/utils/dedupe.js';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { withSharedFormulas } from './translate-dashboard-utils.js';
 
@@ -25,7 +25,7 @@ export interface GetDashboardModelsOptions {
 export async function getDashboardModels(
   http: HttpClient,
   options: GetDashboardModelsOptions = {},
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   appSettings?: AppSettings,
 ) {
   const { includeWidgets, searchByTitle } = options;

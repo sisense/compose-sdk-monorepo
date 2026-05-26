@@ -218,6 +218,19 @@ export interface WidgetsPanelConfig {
        */
       enabled?: boolean;
     };
+    /**
+     * Configuration for downloading widget data as Excel.
+     *
+     * @sisenseInternal
+     */
+    downloadExcel?: {
+      /**
+       * Determines whether the widgets possibility to download Excel is enabled.
+       *
+       * If not specified, the default value is `false`.
+       */
+      enabled?: boolean;
+    };
   };
 }
 

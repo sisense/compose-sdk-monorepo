@@ -21,7 +21,6 @@ import {
  * ```typescript
  * // Adding a new custom processor
  * 'measureFactory.rank': processRankingParameters,
- * 'filterFactory.dateRange': processDateRangeLogic,
  * ```
  */
 export const FUNCTION_PROCESSORS: Record<string, CustomFunctionProcessor> = {

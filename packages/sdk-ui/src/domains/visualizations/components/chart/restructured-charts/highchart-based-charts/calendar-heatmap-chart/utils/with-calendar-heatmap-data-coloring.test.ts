@@ -1,4 +1,8 @@
-import { CompleteThemeSettings, RangeDataColorOptions, UniformDataColorOptions } from '@/types';
+import {
+  CompleteThemeSettingsInternal,
+  RangeDataColorOptions,
+  UniformDataColorOptions,
+} from '@/types';
 
 import { CalendarHeatmapChartData } from '../data.js';
 import {
@@ -7,11 +11,11 @@ import {
 } from './with-calendar-heatmap-data-coloring.js';
 
 describe('getCalendarHeatmapDefaultColorOptions', () => {
-  const mockThemeSettings: CompleteThemeSettings = {
+  const mockThemeSettings: CompleteThemeSettingsInternal = {
     palette: {
       variantColors: ['#ff0000', '#00ff00', '#0000ff'],
     },
-  } as CompleteThemeSettings;
+  } as CompleteThemeSettingsInternal;
 
   it('should return range color options with correct structure', () => {
     const result = getCalendarHeatmapDefaultColorOptions(mockThemeSettings);

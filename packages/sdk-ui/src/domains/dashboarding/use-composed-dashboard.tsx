@@ -10,6 +10,7 @@ import { useWidgetRenaming } from '@/domains/dashboarding/hooks/rename-widget/us
 import { useJtdInternal } from '@/domains/dashboarding/hooks/use-jtd.js';
 import { useTabber } from '@/domains/dashboarding/hooks/use-tabber.js';
 import { useWidgetCsvDownload } from '@/domains/dashboarding/hooks/use-widget-csv-download.js';
+import { useWidgetExcelDownload } from '@/domains/dashboarding/hooks/use-widget-excel-download.js';
 import { useWidgetScrollPersistence } from '@/domains/dashboarding/hooks/use-widget-scroll-persistence.js';
 import { useWidgetsLayoutManagement } from '@/domains/dashboarding/hooks/use-widgets-layout.js';
 import { getDefaultWidgetsPanelLayout } from '@/domains/dashboarding/utils.js';
@@ -251,12 +252,19 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     enabled: shouldEnableWidgetDownloadCsv,
   });
 
+  const shouldEnableWidgetDownloadExcel =
+    !!initialDashboard.config?.widgetsPanel?.actions?.downloadExcel?.enabled;
+  const { widgets: widgetsWithDownloadExcel } = useWidgetExcelDownload({
+    widgets: widgetsWithDownloadCsv,
+    enabled: shouldEnableWidgetDownloadExcel,
+  });
+
   // Connect common filters to widgets
   const widgetsWithCommonFilters = useMemo(() => {
-    return widgetsWithDownloadCsv.map((widget) =>
+    return widgetsWithDownloadExcel.map((widget) =>
       connectToWidgetProps(widget, innerWidgetsOptions?.[widget.id]?.filtersOptions),
     );
-  }, [widgetsWithDownloadCsv, innerWidgetsOptions, connectToWidgetProps]);
+  }, [widgetsWithDownloadExcel, innerWidgetsOptions, connectToWidgetProps]);
 
   const widgetsWithFilterAndJtd = useMemo(() => {
     return widgetsWithCommonFilters.map((widget: WidgetProps) => connectToWidgetPropsJtd(widget));

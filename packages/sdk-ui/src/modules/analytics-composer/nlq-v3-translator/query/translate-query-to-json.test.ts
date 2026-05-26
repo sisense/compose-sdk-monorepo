@@ -242,8 +242,7 @@ describe('translateQueryToJSON', () => {
       if (result.success) return;
 
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].category).toBe('dimensions');
-      expect(result.errors[0].index).toBe(0);
+      expect(result.errors[0].path).toBe('dimensions[0]');
       expect(result.errors[0].message).toMatch(/missing composeCode/);
       expect(result.errors[0].input).toBe(invalidAttribute);
     });
@@ -263,8 +262,7 @@ describe('translateQueryToJSON', () => {
       if (result.success) return;
 
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].category).toBe('measures');
-      expect(result.errors[0].index).toBe(0);
+      expect(result.errors[0].path).toBe('measures[0]');
       expect(result.errors[0].message).toMatch(/missing composeCode/);
       expect(result.errors[0].input).toBe(invalidMeasure);
     });
@@ -287,8 +285,7 @@ describe('translateQueryToJSON', () => {
       if (result.success) return;
 
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].category).toBe('filters');
-      expect(result.errors[0].index).toBe(0);
+      expect(result.errors[0].path).toBe('filters[0]');
       expect(result.errors[0].message).toMatch(/missing composeCode/);
       expect(result.errors[0].input).toBe(invalidFilter);
     });
@@ -311,8 +308,7 @@ describe('translateQueryToJSON', () => {
       if (result.success) return;
 
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].category).toBe('filters');
-      expect(result.errors[0].index).toBe(-1);
+      expect(result.errors[0].path).toBe('filters');
       expect(result.errors[0].message).toMatch(/missing composeCode/);
       expect(result.errors[0].input).toBe(invalidRelations);
     });
@@ -332,8 +328,7 @@ describe('translateQueryToJSON', () => {
       if (result.success) return;
 
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].category).toBe('dimensions');
-      expect(result.errors[0].index).toBe(0);
+      expect(result.errors[0].path).toBe('dimensions[0]');
       expect(result.errors[0].message).toMatch(/Expected composeCode to start with 'DM.'/);
       expect(result.errors[0].input).toBe(invalidAttribute);
     });
@@ -354,8 +349,8 @@ describe('translateQueryToJSON', () => {
       if (result.success) return;
 
       expect(result.errors).toHaveLength(2);
-      expect(result.errors[0].category).toBe('dimensions');
-      expect(result.errors[1].category).toBe('measures');
+      expect(result.errors[0].path).toBe('dimensions[0]');
+      expect(result.errors[1].path).toBe('measures[0]');
     });
   });
 

@@ -1,4 +1,4 @@
-import { CompleteThemeSettings } from '../../../../../../types';
+import { CompleteThemeSettingsInternal } from '../../../../../../types';
 import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CategoricalChartData } from '../../../chart-data/types';
@@ -7,7 +7,7 @@ import { getColorSetting, SeriesPointStructure } from '../translations-to-highch
 export function prepareTreemapDataItems(
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): SeriesPointStructure[] {
   if (!chartData.series[0]) {
     return [];
@@ -59,7 +59,7 @@ function createTreemapParents(chartData: CategoricalChartData): SeriesPointStruc
 function handleTreemapSeriesColor(
   series: SeriesPointStructure[],
   dataOptions: CategoricalChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ) {
   const coloringLevel = dataOptions.breakBy.map((item) => item.isColored).indexOf(true) + 1;
   const coloringSeriesIndexMap = new Map();

@@ -6,7 +6,7 @@ import { isTextWidget } from '@/domains/widgets/components/widget-by-id/utils.js
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 import { RestApi } from '@/infra/api/rest-api';
 import { AppSettings } from '@/infra/app/settings/settings';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { layoutToLayoutDto } from '../../translate-dashboard-dto-utils.js';
 import {
@@ -50,7 +50,7 @@ export type PersistDashboardModelMiddlewareParams = {
   /** Application settings forwarded to {@link toWidgetDto} (controls widget design feature flag) */
   appSettings: AppSettings;
   /** Theme settings forwarded to {@link toWidgetDto} (used as defaults for widget design) */
-  themeSettings: CompleteThemeSettings;
+  themeSettings: CompleteThemeSettingsInternal;
   /**
    * Dashboard-level data source. Used as a fallback data source for widgets
    * whose model does not carry one (e.g. text widgets), so the produced DTO

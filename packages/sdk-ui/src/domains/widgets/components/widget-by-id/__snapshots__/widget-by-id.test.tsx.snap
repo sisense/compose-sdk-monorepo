@@ -8,6 +8,9 @@ exports[`WidgetById > should exclude dashboard filters when includeDashboardFilt
       "downloadCsv": {
         "enabled": false,
       },
+      "downloadExcel": {
+        "enabled": false,
+      },
     },
   },
   "dataOptions": {
@@ -139,6 +142,9 @@ exports[`WidgetById > should handle complex prop combinations correctly > widget
   "config": {
     "actions": {
       "downloadCsv": {
+        "enabled": false,
+      },
+      "downloadExcel": {
         "enabled": false,
       },
     },
@@ -454,6 +460,9 @@ exports[`WidgetById > should handle filters merge strategy correctly > widget-pr
       "downloadCsv": {
         "enabled": false,
       },
+      "downloadExcel": {
+        "enabled": false,
+      },
     },
   },
   "dataOptions": {
@@ -617,6 +626,9 @@ exports[`WidgetById > should include dashboard filters when includeDashboardFilt
   "config": {
     "actions": {
       "downloadCsv": {
+        "enabled": false,
+      },
+      "downloadExcel": {
         "enabled": false,
       },
     },
@@ -863,6 +875,9 @@ exports[`WidgetById > should merge external style options with widget style opti
       "downloadCsv": {
         "enabled": false,
       },
+      "downloadExcel": {
+        "enabled": false,
+      },
     },
   },
   "dataOptions": {
@@ -1002,6 +1017,9 @@ exports[`WidgetById > should omit undefined values from external props > widget-
       "downloadCsv": {
         "enabled": false,
       },
+      "downloadExcel": {
+        "enabled": false,
+      },
     },
   },
   "dataOptions": {
@@ -1135,6 +1153,9 @@ exports[`WidgetById > should override widget title and description > widget-prop
       "downloadCsv": {
         "enabled": false,
       },
+      "downloadExcel": {
+        "enabled": false,
+      },
     },
   },
   "dataOptions": {
@@ -1266,6 +1287,9 @@ exports[`WidgetById > should pass drilldown options to Widget component > widget
   "config": {
     "actions": {
       "downloadCsv": {
+        "enabled": false,
+      },
+      "downloadExcel": {
         "enabled": false,
       },
     },
@@ -1445,6 +1469,9 @@ exports[`WidgetById > should pass external filters to Widget component > widget-
   "config": {
     "actions": {
       "downloadCsv": {
+        "enabled": false,
+      },
+      "downloadExcel": {
         "enabled": false,
       },
     },
@@ -1640,6 +1667,9 @@ exports[`WidgetById > should pass external highlights to Widget component > widg
       "downloadCsv": {
         "enabled": false,
       },
+      "downloadExcel": {
+        "enabled": false,
+      },
     },
   },
   "dataOptions": {
@@ -1832,6 +1862,9 @@ exports[`WidgetById > should pass through additional widget props > widget-props
       "downloadCsv": {
         "enabled": false,
       },
+      "downloadExcel": {
+        "enabled": false,
+      },
     },
   },
   "dataOptions": {
@@ -1965,6 +1998,9 @@ exports[`WidgetById > should preserve widget id from dashboard configuration > w
       "downloadCsv": {
         "enabled": false,
       },
+      "downloadExcel": {
+        "enabled": false,
+      },
     },
   },
   "dataOptions": {
@@ -2096,6 +2132,9 @@ exports[`WidgetById > should render widget by id > basic-widget-props 1`] = `
   "config": {
     "actions": {
       "downloadCsv": {
+        "enabled": false,
+      },
+      "downloadExcel": {
         "enabled": false,
       },
     },

@@ -202,12 +202,16 @@ export class Pivot extends React.PureComponent<Props, State> implements PivotI {
     }
 
     if (onTotalHeightChange) {
-      const { pivotTableHeight = 0, paginationPanelHeight = 0 } = this.state;
-      const total = pivotTableHeight + paginationPanelHeight + scrollBarsMargin;
-
-      if (this.totalHeight !== total) {
-        this.totalHeight = total;
-        onTotalHeightChange(total);
+      const { pivotTableHeight, paginationPanelHeight = 0 } = this.state;
+      // Don't emit until the inner PivotTable has actually reported a height. Otherwise
+      // unrelated state changes (e.g. pagination height set, or props re-computed) would
+      // cause `componentDidUpdate` to emit `0 + 0 + scrollBarsMargin` as the total.
+      if (typeof pivotTableHeight === 'number') {
+        const total = pivotTableHeight + paginationPanelHeight + scrollBarsMargin;
+        if (this.totalHeight !== total) {
+          this.totalHeight = total;
+          onTotalHeightChange(total);
+        }
       }
     }
   }

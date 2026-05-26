@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compose SDK — Review App</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #18181b;
+      padding: 2rem 1.5rem 15vh;
+    }
+
+    /* ── Header ──────────────────────────────────────────────────────────── */
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      color: #18181b;
+    }
+
+    .subtitle {
+      margin-top: .4rem;
+      font-size: .875rem;
+      color: #71717a;
+    }
+
+    .subtitle a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    .subtitle a:hover { text-decoration: underline; }
+
+    /* ── Sections ────────────────────────────────────────────────────────── */
+
+    .sections {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .section-title {
+      font-size: .67rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: #a1a1aa;
+      padding-bottom: .45rem;
+      border-bottom: 1px solid #e4e4e7;
+      margin-bottom: .5rem;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+
+    /* ── Link card ───────────────────────────────────────────────────────── */
+
+    .link {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      padding: .75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid #e4e4e7;
+      color: #18181b;
+      text-decoration: none;
+      transition: background .13s, border-color .13s;
+    }
+
+    .link:hover {
+      background: #fafafa;
+      border-color: #d4d4d8;
+    }
+
+    .link-icon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+    }
+
+    .link-text { flex: 1; }
+
+    .link-name {
+      font-size: .9rem;
+      font-weight: 600;
+      color: #18181b;
+    }
+
+    .link-muted .link-name {
+      font-weight: 500;
+      color: #3f3f46;
+    }
+
+    .link-path {
+      margin-top: .2rem;
+      font-size: .72rem;
+      color: #a1a1aa;
+      font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    }
+
+    .link-arrow {
+      color: #a1a1aa;
+      font-size: .85rem;
+      flex-shrink: 0;
+    }
+
+    .link:hover .link-arrow { color: #71717a; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Compose SDK Review App</h1>
+    <p id="subtitle" class="subtitle"></p>
+    <div id="meta"></div>
+  </header>
+
+  <div id="app"></div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ── Mode detection ─────────────────────────────────────────────────────
+    // Detects the last non-empty path segment of the current URL:
+    //   /compose-sdk-monorepo/staging/  → 'staging'
+    //   /compose-sdk-monorepo/mr-2519/  → 'mr-2519'
+    var seg = window.location.pathname.replace(/\/$/, '').split('/').pop();
+    var mrMatch = /^mr-(\d+)$/.exec(seg);
+    var isStaging = seg === 'staging';
+    var isMR = !!mrMatch;
+    var mrId = mrMatch ? mrMatch[1] : null;
+
+    // ── SVG icons ──────────────────────────────────────────────────────────
+    var ICONS = {
+      react: '<svg class="link-icon" viewBox="-11.5 -10.232 23 20.463" xmlns="http://www.w3.org/2000/svg"><circle r="2.05" fill="#61DAFB"/><g stroke="#61DAFB" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>',
+      vue: '<svg class="link-icon" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><path d="M161.1 0L130.9 52.4 100.6 0H0l130.9 226.7L261.7 0z" fill="#41B883"/><path d="M161.1 0L130.9 52.4 100.6 0H52.3l78.5 136 78.5-136z" fill="#34495E"/></svg>',
+      angular: '<svg class="link-icon" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg"><path d="M125 30L31.9 63.2l14.2 123.1L125 230l78.9-43.7 14.2-123.1z" fill="#DD0031"/><path d="M125 30v22.2V230l78.9-43.7 14.2-123.1z" fill="#C3002F"/><path d="M125 52.1L66.8 182.6h21.7l11.7-29.2h49.4l11.7 29.2H183L125 52.1zm17 83.3h-34l17-40.9 17 40.9z" fill="#fff"/></svg>',
+      layers: '<svg class="link-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#a1a1aa" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>'
+    };
+
+    // External link icon (10×10, inherits color)
+    var EXT = '<svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 1H11V9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+
+    // ── HTML builders ──────────────────────────────────────────────────────
+    function card(href, iconSvg, name, path, muted, newTab) {
+      return '<a class="link' + (muted ? ' link-muted' : '') + '" href="' + href + '"'
+        + (newTab ? ' target="_blank" rel="noopener noreferrer"' : '') + '>'
+        + iconSvg
+        + '<div class="link-text">'
+        + '<div class="link-name">' + name + '</div>'
+        + '<div class="link-path">' + path + '</div>'
+        + '</div>'
+        + '<span class="link-arrow">→</span>'
+        + '</a>';
+    }
+
+    function section(title, cardsHtml) {
+      return '<div>'
+        + '<div class="section-title">' + title + '</div>'
+        + '<div class="links">' + cardsHtml + '</div>'
+        + '</div>';
+    }
+
+    // The three framework demo cards are identical across all modes.
+    var frameworkCards =
+      card('./react/',   ICONS.react,   'React',   'packages/sdk-ui/src/__demo__')
+      + card('./vue/',   ICONS.vue,     'Vue',     'examples/vue-ts-demo')
+      + card('./angular/', ICONS.angular, 'Angular', 'examples/angular-demo');
+
+    // ── Render ─────────────────────────────────────────────────────────────
+    if (isStaging) {
+      var masterHref = 'https://gitlab.rnd.sisense.com/SisenseTeam/compose-sdk-monorepo/-/tree/master';
+      document.getElementById('subtitle').innerHTML =
+        'Represents changes from <a href="' + masterHref + '" target="_blank" rel="noopener noreferrer">'
+        + 'latest master ' + EXT + '</a>';
+      document.getElementById('app').innerHTML =
+        '<div class="sections">'
+        + section('CSDK Demos - Staging', frameworkCards)
+        + '</div>';
+
+    } else if (isMR) {
+      // mrId is /^\d+$/ — safe to embed in HTML
+      var glBase = 'https://gitlab.rnd.sisense.com/SisenseTeam/compose-sdk-monorepo';
+      var mrHref = glBase + '/-/merge_requests/' + mrId;
+      document.getElementById('subtitle').innerHTML =
+        'Represents changes from <a href="' + mrHref + '" target="_blank" rel="noopener noreferrer">'
+        + 'MR !' + mrId + ' ' + EXT + '</a>';
+
+      var stagingCard = card('../staging/', ICONS.layers, 'Staging',
+        'master branch — use for comparison', true, true);
+
+      document.getElementById('app').innerHTML =
+        '<div class="sections">'
+        + section('CSDK Demos - MR #' + mrId, frameworkCards)
+        + section('Env for comparison', stagingCard)
+        + '</div>';
+
+    } else {
+      // Fallback — local preview or unknown context
+      document.getElementById('subtitle').textContent = 'Select a target demo';
+      document.getElementById('app').innerHTML =
+        '<div class="sections">'
+        + section('Demos', frameworkCards)
+        + '</div>';
+    }
+
+  })();
+  </script>
+
+  <!--
+    source-link and env-switcher: copied from scripts/demo-features/ by build-review-app.mjs.
+    Not present during plain file:// preview — only available after `yarn review-app:build`.
+  -->
+  <script src="./source-link.js"></script>
+  <script src="./env-switcher/env-switcher.js"></script>
+
+</body>
+</html>

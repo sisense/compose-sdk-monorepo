@@ -4,11 +4,21 @@
  *
  * @internal
  */
-import type { NlqTranslationResult } from '../../../types.js';
+import type { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
 import { translateDimensionsToJSON } from '../../constructs/dimensions/translate-dimensions-to-json.js';
 import { translateMeasuresToJSON } from '../../constructs/measures/translate-measures-to-json.js';
 import type { DimensionItemJSON, MeasureItemJSON } from '../../types.js';
+import { dataOptionsPath } from '../utils/error-path.js';
 import type { AxisType } from './adapters.js';
+
+const toDataOptionsAxisError = (
+  axisKey: string,
+  error: NlqTranslationError,
+): NlqTranslationError => {
+  const itemMatch = error.path.match(/\[(\d+)\]$/);
+  const itemIndex = itemMatch ? Number(itemMatch[1]) : undefined;
+  return { ...error, path: dataOptionsPath(axisKey, itemIndex) };
+};
 
 /**
  * Translates a single axis from CSDK to JSON format.
@@ -33,11 +43,7 @@ export function translateSingleAxisToJSON(
     if (!result.success) {
       return {
         success: false,
-        errors: result.errors.map((e) => ({
-          ...e,
-          category: 'dataOptions' as const,
-          index: axisKey,
-        })),
+        errors: result.errors.map((e) => toDataOptionsAxisError(axisKey, e)),
       };
     }
     return { success: true, data: result.data as DimensionItemJSON[] };
@@ -47,11 +53,7 @@ export function translateSingleAxisToJSON(
   if (!result.success) {
     return {
       success: false,
-      errors: result.errors.map((e) => ({
-        ...e,
-        category: 'dataOptions' as const,
-        index: axisKey,
-      })),
+      errors: result.errors.map((e) => toDataOptionsAxisError(axisKey, e)),
     };
   }
   return { success: true, data: result.data as MeasureItemJSON[] };

@@ -3,7 +3,7 @@
  */
 import { describe, expect, it, vi } from 'vitest';
 
-import { FunctionContext } from '../../types.js';
+import { FunctionContext, ProcessedArg } from '../../types.js';
 import { createSchemaIndex } from '../utils/schema-index.js';
 import {
   FUNCTION_PROCESSORS,
@@ -54,10 +54,11 @@ describe('factory-function-processors', () => {
       };
 
       // Demonstrate how easy it would be to add a new processor
-      const testProcessor = (args: any[], context: FunctionContext) => {
+      const testProcessor = (args: ProcessedArg[], context: FunctionContext): ProcessedArg[] => {
         if (args.length === 0) {
           throw new Error(`${context.pathPrefix}: Test processing failed`);
         }
+        return args;
       };
 
       // In real implementation, you would add to FUNCTION_PROCESSORS

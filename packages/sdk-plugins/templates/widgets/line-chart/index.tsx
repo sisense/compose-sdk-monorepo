@@ -6,7 +6,7 @@ import { Visualization, VisualizationProps } from './components/Visualization.js
 const plugin: WidgetPlugin<VisualizationProps> = {
   name: 'PLUGIN_NAME',
   version: '1.0.0',
-  requiredApiVersion: '^2.0.0',
+  requiredApiVersion: '^2.27.0',
   pluginType: 'widget',
   customWidget: {
     name: 'PLUGIN_NAME',

@@ -106,8 +106,7 @@ export const translateFiltersFromJSONFunctionCall = (
   // Process each filter and collect errors instead of throwing
   filtersJSON.forEach((filterJSON, index) => {
     const context: NlqTranslationErrorContext = {
-      category: 'filters',
-      index,
+      path: `filters[${index}]`,
       input: filterJSON,
     };
     try {
@@ -154,8 +153,7 @@ export const translateFiltersFromJSON = (
       success: false,
       errors: [
         {
-          category: 'filters',
-          index: -1,
+          path: 'filters',
           input: filtersJSON,
           message:
             "Invalid filters JSON. Expected an array of function calls with 'function' and 'args' properties.",
@@ -181,8 +179,7 @@ export const translateHighlightsFromJSONFunctionCall = (
   // Process each highlight and collect errors instead of throwing
   highlightsJSON.forEach((filterJSON, index) => {
     const context: NlqTranslationErrorContext = {
-      category: 'highlights',
-      index,
+      path: `highlights[${index}]`,
       input: filterJSON,
     };
     try {
@@ -226,8 +223,7 @@ export const translateHighlightsFromJSON = (
       success: false,
       errors: [
         {
-          category: 'highlights',
-          index: -1,
+          path: 'highlights',
           input: highlightsJSON,
           message:
             "Invalid highlights JSON. Expected an array of function calls with 'function' and 'args' properties.",

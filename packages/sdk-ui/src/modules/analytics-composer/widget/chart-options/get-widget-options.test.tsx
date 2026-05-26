@@ -7,7 +7,11 @@ import { getDefaultStyleOptions } from '@/domains/visualizations/core/chart-opti
 import { ChartRecommendations } from '@/modules/analytics-composer/types';
 import { IndicatorStyleOptions } from '@/types';
 
-import { getChartOptions, getChartStyleOptions } from './get-widget-options';
+import {
+  getChartOptions,
+  getChartStyleOptions,
+  getMinimalChartStyleOptions,
+} from './get-widget-options';
 
 describe('getChartOptions', () => {
   const jaql: MetadataItem[] = [];
@@ -216,6 +220,120 @@ describe('getChartStyleOptions', () => {
 
       // Should use default style options, not customized ones
       expect(chartStyleOptions).toEqual(getDefaultStyleOptions());
+    });
+  });
+});
+
+describe('getMinimalChartStyleOptions', () => {
+  const cartesianAxes = {
+    category: [{ column: { name: 'Product Category', type: 'text' }, enabled: true }],
+    value: [
+      { column: { name: 'Sales Amount', type: 'numeric' }, enabled: true },
+      { column: { name: 'Profit', type: 'numeric' }, enabled: true },
+    ],
+  };
+
+  it('returns subtype and axis titles for line (cartesian) without legend override', () => {
+    expect(getMinimalChartStyleOptions('line', cartesianAxes)).toEqual({
+      subtype: 'line/spline',
+      xAxis: { title: { enabled: true, text: 'Product Category' } },
+      yAxis: { title: { enabled: true, text: 'Sales Amount, Profit' } },
+    });
+  });
+
+  it('returns stacked subtype and axis titles for bar', () => {
+    expect(getMinimalChartStyleOptions('bar', cartesianAxes)).toEqual({
+      subtype: 'bar/stacked',
+      xAxis: { title: { enabled: true, text: 'Product Category' } },
+      yAxis: { title: { enabled: true, text: 'Sales Amount, Profit' } },
+    });
+  });
+
+  it('returns stacked subtype and axis titles for area', () => {
+    expect(getMinimalChartStyleOptions('area', cartesianAxes)).toEqual({
+      subtype: 'area/stacked',
+      xAxis: { title: { enabled: true, text: 'Product Category' } },
+      yAxis: { title: { enabled: true, text: 'Sales Amount, Profit' } },
+    });
+  });
+
+  it('returns spline subtype only for arearange', () => {
+    expect(getMinimalChartStyleOptions('arearange', cartesianAxes)).toEqual({
+      subtype: 'arearange/spline',
+    });
+  });
+
+  it('returns polar column subtype and axis titles for polar', () => {
+    expect(getMinimalChartStyleOptions('polar', cartesianAxes)).toEqual({
+      subtype: 'polar/column',
+      xAxis: { title: { enabled: true, text: 'Product Category' } },
+      yAxis: { title: { enabled: true, text: 'Sales Amount, Profit' } },
+    });
+  });
+
+  it('returns full boxplot subtype only for boxplot', () => {
+    expect(getMinimalChartStyleOptions('boxplot', cartesianAxes)).toEqual({
+      subtype: 'boxplot/full',
+    });
+  });
+
+  it('returns donut subtype only for pie (no cartesian axes)', () => {
+    const pieAxes = {
+      category: [{ column: { name: 'Region', type: 'text' }, enabled: true }],
+      value: [{ column: { name: 'Revenue', type: 'numeric' }, enabled: true }],
+    };
+    expect(getMinimalChartStyleOptions('pie', pieAxes)).toEqual({
+      subtype: 'pie/donut',
+    });
+  });
+
+  it('returns column stacked subtype and axis titles for column', () => {
+    expect(getMinimalChartStyleOptions('column', cartesianAxes)).toEqual({
+      subtype: 'column/stackedcolumn',
+      xAxis: { title: { enabled: true, text: 'Product Category' } },
+      yAxis: { title: { enabled: true, text: 'Sales Amount, Profit' } },
+    });
+  });
+
+  it('returns indicator components for primary only', () => {
+    const axes = {
+      value: [{ column: { name: 'Total Sales', type: 'numeric' }, enabled: true }],
+    };
+    expect(getMinimalChartStyleOptions('indicator', axes)).toEqual({
+      indicatorComponents: {
+        title: { shouldBeShown: true, text: 'Total Sales' },
+      },
+    });
+  });
+
+  it('returns indicator components with secondary title when present', () => {
+    const axes = {
+      value: [{ column: { name: 'Total Sales', type: 'numeric' }, enabled: true }],
+      secondary: [{ column: { name: 'Total Revenue', type: 'numeric' }, enabled: true }],
+    };
+    expect(getMinimalChartStyleOptions('indicator', axes)).toEqual({
+      indicatorComponents: {
+        title: { shouldBeShown: true, text: 'Total Sales' },
+        secondaryTitle: { text: 'Total Revenue' },
+      },
+    });
+  });
+
+  it('returns axis titles for scatter using x and y axes', () => {
+    const scatterAxes = {
+      x: [{ column: { name: 'Height', type: 'numeric' }, enabled: true }],
+      y: [{ column: { name: 'Weight', type: 'numeric' }, enabled: true }],
+    };
+    expect(getMinimalChartStyleOptions('scatter', scatterAxes)).toEqual({
+      xAxis: { title: { enabled: true, text: 'Height' } },
+      yAxis: { title: { enabled: true, text: 'Weight' } },
+    });
+  });
+
+  it('returns empty axis title text for scatter when axes mapping has no x/y', () => {
+    expect(getMinimalChartStyleOptions('scatter', {})).toEqual({
+      xAxis: { title: { enabled: true, text: undefined } },
+      yAxis: { title: { enabled: true, text: undefined } },
     });
   });
 });

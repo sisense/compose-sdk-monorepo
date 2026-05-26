@@ -259,6 +259,9 @@ const translation: TranslationDictionary = {
       distributeEqualWidth: '이 행에서 균등하게 배포',
       download: '다운로드',
       csvFile: 'CSV 파일',
+      excelFile: 'Excel 파일',
+      repeatRowsRecommended: '행 반복 (권장)',
+      mergeRows: '행 병합',
     },
   },
   customWidgets: {

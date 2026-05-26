@@ -13,6 +13,7 @@ import type {
   MeasureItemJSON,
   MeasureTranslationItem,
 } from '../../types.js';
+import { dataOptionsPath, joinPathStrings } from '../utils/error-path.js';
 
 /**
  * Shared adapters and utilities for data options translation.
@@ -48,10 +49,23 @@ export function toJSONArray(
 /**
  * Maps inner translation errors to dataOptions axis context.
  */
+const TOP_LEVEL_CONSTRUCT_PATH = /^(dimensions|measures|filters|highlights)(\[\d+\])?$/;
+
 export function withAxisContext(axisKey: string): (e: NlqTranslationError) => NlqTranslationError {
-  return (e) => ({
-    ...e,
-    category: 'dataOptions',
-    index: axisKey,
-  });
+  return (e) => {
+    const itemMatch = e.path.match(/\[(\d+)\]$/);
+    const itemIndex = itemMatch ? Number(itemMatch[1]) : undefined;
+    const axisSegment = dataOptionsPath(axisKey, itemIndex);
+
+    if (TOP_LEVEL_CONSTRUCT_PATH.test(e.path) || e.path.startsWith('dataOptions')) {
+      return { ...e, path: axisSegment };
+    }
+
+    const pathPrefix = e.path.replace(/\[\d+\]$/, '');
+
+    return {
+      ...e,
+      path: joinPathStrings(pathPrefix, axisSegment),
+    };
+  };
 }

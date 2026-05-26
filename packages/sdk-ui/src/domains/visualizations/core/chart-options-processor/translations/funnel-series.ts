@@ -3,7 +3,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { seriesSliceWarning } from '@/shared/utils/data-limit-warning';
 
-import { CompleteThemeSettings, SeriesWithAlerts, ValueToColorMap } from '../../../../../types';
+import {
+  CompleteThemeSettingsInternal,
+  SeriesWithAlerts,
+  ValueToColorMap,
+} from '../../../../../types';
 import { getPaletteColor } from '../../chart-data-options/coloring/utils';
 import { CategoricalChartDataOptionsInternal } from '../../chart-data-options/types';
 import {
@@ -33,7 +37,7 @@ export const formatFunnelChartData = (
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
   designOptions: FunnelChartDesignOptions,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): SeriesWithAlerts<SeriesType[]> => {
   let series: SeriesType[];
   const alerts = getAlerts(chartData, designOptions);

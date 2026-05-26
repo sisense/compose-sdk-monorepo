@@ -17,6 +17,7 @@ import { useWidgetHeaderManagement } from '../../hooks/use-widget-header-managem
 import { WidgetContainer } from '../../shared/widget-container';
 import { PivotTableWidgetProps } from './types';
 import { usePivotWidgetCsvDownload } from './use-pivot-widget-csv-download.js';
+import { usePivotWidgetExcelDownload } from './use-pivot-widget-excel-download.js';
 import { useWithPivotTableWidgetDrilldown } from './use-with-pivot-table-widget-drilldown';
 
 const MIN_PIVOT_HEIGHT = 100;
@@ -60,7 +61,6 @@ function calcPivotTableWidgetHeight(pivotTableHeight: number | undefined) {
  * />
  * ```
  * <img src="media://pivot-widget-example.png" width="800px" />
- *
  * @param props - Pivot Table Widget properties
  * @returns Widget component representing a pivot table
  * @group Dashboards
@@ -80,7 +80,7 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     headerConfig: props.config?.header,
   });
 
-  const { headerConfig } = usePivotWidgetCsvDownload({
+  const { headerConfig: headerConfigWithCsv } = usePivotWidgetCsvDownload({
     baseHeaderConfig: headerConfigWithRenaming,
     title: props.title,
     dataOptions,
@@ -88,6 +88,17 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     filters: props.filters,
     highlights: props.highlights,
     config: props.config,
+  });
+
+  const { headerConfig } = usePivotWidgetExcelDownload({
+    baseHeaderConfig: headerConfigWithCsv,
+    title: props.title,
+    dataOptions,
+    dataSource,
+    filters: props.filters,
+    highlights: props.highlights,
+    config: props.config,
+    id: props.id,
   });
 
   const defaultSize = getWidgetDefaultSize('pivot', {

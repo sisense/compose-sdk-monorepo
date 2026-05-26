@@ -13,10 +13,10 @@ const pkg = require('./package.json') as {
 };
 
 describe('package.json dependency constraints', () => {
-  it('vite-plugin-dts must be v3+ (v2.x causes Collector.js.js double-extension error on Node 18+)', () => {
-    const range = (pkg.dependencies ?? {})['vite-plugin-dts'];
-    expect(range, "'vite-plugin-dts' must be listed in dependencies").toBeTruthy();
-    // ^2.x, ~2.x, or bare 2.x would install a broken version; require v3 or higher
-    expect(range).not.toMatch(/^[\^~]?2\./);
+  it('vite-plugin-dts must be ^5 or higher (v3 pulled in @microsoft/api-extractor with high-severity lodash/minimatch CVEs; v5 only depends on unplugin-dts)', () => {
+    const version = (pkg.dependencies ?? {})['vite-plugin-dts'];
+    expect(version, "'vite-plugin-dts' must be present in dependencies").toBeDefined();
+    const major = parseInt(version?.replace(/[^0-9]/, '') ?? '0', 10);
+    expect(major, "'vite-plugin-dts' must be v5 or higher").toBeGreaterThanOrEqual(5);
   });
 });

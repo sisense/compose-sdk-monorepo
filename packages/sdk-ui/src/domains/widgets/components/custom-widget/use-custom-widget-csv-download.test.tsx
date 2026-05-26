@@ -47,7 +47,7 @@ describe('useCustomWidgetCsvDownload', () => {
     expect(findCsvOnClick(result.current.headerConfig)).toBeUndefined();
   });
 
-  it('exposes CSV download and passes extracted dimensions and measures to the loader', async () => {
+  it('exposes CSV download and passes extracted dimensions and measures to the loader', () => {
     vi.mocked(extractDimensionsAndMeasures).mockReturnValue({
       dimensions: [{ name: 'd' } as never],
       measures: [{ name: 'm' } as never],
@@ -55,7 +55,7 @@ describe('useCustomWidgetCsvDownload', () => {
 
     const { result } = renderHook(() => useCustomWidgetCsvDownload(baseParams));
 
-    await act(async () => {
+    act(() => {
       findCsvOnClick(result.current.headerConfig)?.();
     });
 

@@ -4,6 +4,7 @@ export {
   useExecuteCsvQuery,
   useExecuteCsvQueryInternal,
 } from './hooks/use-execute-csv-query/use-execute-csv-query.js';
+export { useExecuteExcelQueryInternal } from './hooks/use-execute-excel-query/use-execute-excel-query.js';
 export { ExecuteQueryByWidgetId } from './components/execute-query-by-widget-id.js';
 export {
   useExecuteQueryByWidgetId,
@@ -23,6 +24,10 @@ export type {
   CsvQueryLoadingState,
   CsvQuerySuccessState,
   CsvQueryErrorState,
+  ExcelQueryState,
+  ExcelQueryLoadingState,
+  ExcelQuerySuccessState,
+  ExcelQueryErrorState,
   PivotQueryState,
   PivotQueryLoadingState,
   PivotQuerySuccessState,
@@ -31,6 +36,7 @@ export type {
   ExecuteQueryParams,
   ExecuteQueryResult,
   ExecuteCsvQueryParams,
+  ExecuteExcelQueryParams,
   ExecuteCSVQueryConfig,
   ExecuteQueryByWidgetIdParams,
   QueryByWidgetIdState,

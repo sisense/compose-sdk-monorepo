@@ -3,7 +3,7 @@ import { categoriesSliceWarning } from '@/shared/utils/data-limit-warning';
 
 import {
   ChartType,
-  CompleteThemeSettings,
+  CompleteThemeSettingsInternal,
   LegendOptions,
   OptionsWithAlerts,
 } from '../../../../types';
@@ -52,7 +52,7 @@ export const getScatterChartOptions = (
   chartType: ChartType,
   designOptions: ChartDesignOptions,
   dataOptions: ChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   const alerts: OptionsWithAlerts<HighchartsOptionsInternal>['alerts'] = [];
   const sisenseChartType = determineHighchartsChartType(chartType, designOptions);

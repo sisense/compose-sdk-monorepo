@@ -1,4 +1,4 @@
-import { CompleteThemeSettings } from '../../../../../types';
+import { CompleteThemeSettingsInternal } from '../../../../../types';
 import { getCustomPaginationStyles } from './get-custom-pagination-styles';
 
 describe('getCustomPaginationStyles', () => {
@@ -11,7 +11,7 @@ describe('getCustomPaginationStyles', () => {
       typography: {
         fontFamily: 'Open Sans',
       },
-    } as CompleteThemeSettings;
+    } as CompleteThemeSettingsInternal;
 
     const result = getCustomPaginationStyles(themeSettings);
 

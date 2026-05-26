@@ -48,6 +48,7 @@ TypeScript type aliases for components and hooks listed above
 - [ColorPaletteTheme](type-alias.ColorPaletteTheme.md)
 - [ColorValue](type-alias.ColorValue.md)
 - [CommonFiltersOptions](type-alias.CommonFiltersOptions.md)
+- [CompleteThemeSettings](type-alias.CompleteThemeSettings.md)
 - [ComposableDashboardProps](type-alias.ComposableDashboardProps.md)
 - [ComposedDashboardResult](type-alias.ComposedDashboardResult.md)
 - [ConditionalDataColorOptions](type-alias.ConditionalDataColorOptions.md)

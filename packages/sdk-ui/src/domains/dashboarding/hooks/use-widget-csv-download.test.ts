@@ -15,14 +15,14 @@ const chartWidget = (overrides?: Partial<WidgetProps>): WidgetProps =>
   } as WidgetProps);
 
 describe('useWidgetCsvDownload', () => {
-  it('merges panel-level enabled into widget config when widget has no override', () => {
+  it('merges dashboard-level enabled into widget config when widget has no override', () => {
     const widgets = [chartWidget()];
     const { result } = renderHook(() => useWidgetCsvDownload({ widgets, enabled: true }));
 
     expect(result.current.widgets[0]?.config?.actions?.downloadCsv?.enabled).toBe(true);
   });
 
-  it('widget-level downloadCsv.enabled takes precedence over the panel default', () => {
+  it('widget-level downloadCsv.enabled takes precedence over the dashboard-level config', () => {
     const widgets = [
       chartWidget({
         config: { actions: { downloadCsv: { enabled: false } } },

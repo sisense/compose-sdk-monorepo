@@ -259,6 +259,9 @@ const translation: TranslationDictionary = {
       distributeEqualWidth: 'Bu satırda eşit olarak dağıt',
       download: 'İndir',
       csvFile: 'CSV dosyası',
+      excelFile: 'Excel dosyası',
+      repeatRowsRecommended: 'Satırları tekrarla (Önerilen)',
+      mergeRows: 'Satırları birleştir',
     },
   },
   customWidgets: {

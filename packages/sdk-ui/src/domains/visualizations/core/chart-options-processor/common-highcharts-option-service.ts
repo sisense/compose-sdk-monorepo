@@ -1,6 +1,6 @@
 import merge from 'ts-deepmerge';
 
-import { CompleteThemeSettings } from '../../../..';
+import { CompleteThemeSettingsInternal } from '../../../..';
 import { HighchartsOptionsInternal } from './chart-options-service';
 
 // Highcharts default is 1000ms
@@ -14,7 +14,7 @@ export const DEFAULT_ANIMATION_DURATION_MS_UPDATE = 300;
  */
 export const applyCommonHighchartsOptions = (
   chartOptions: HighchartsOptionsInternal,
-  themeSettings: CompleteThemeSettings,
+  themeSettings: CompleteThemeSettingsInternal,
   accessibilityEnabled: boolean,
 ): HighchartsOptionsInternal => {
   const initAnimation = {
@@ -48,7 +48,7 @@ export const applyCommonHighchartsOptions = (
  * @returns A function that applies common highcharts options to the chart.
  */
 export function withCommonHighchartsOptions(
-  themeSettings: CompleteThemeSettings,
+  themeSettings: CompleteThemeSettingsInternal,
   accessibilityEnabled: boolean,
 ): (chartOptions: HighchartsOptionsInternal) => HighchartsOptionsInternal {
   return (chartOptions: HighchartsOptionsInternal) =>

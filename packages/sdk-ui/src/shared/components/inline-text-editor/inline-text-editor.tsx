@@ -67,7 +67,6 @@ const StyledInputBase = styled(InputBase)`
 `;
 
 const StyledText = styled.span<{ isPlaceholder?: boolean }>`
-  cursor: text;
   color: ${({ isPlaceholder }) => (isPlaceholder ? 'rgba(0, 0, 0, 0.38)' : 'inherit')};
 `;
 
@@ -179,7 +178,6 @@ export function InlineTextEditor({
       tabIndex={0}
       aria-label="Editable text. Double-click or press Enter or Space to edit."
       data-component="inline-text-editor-text"
-      data-no-dnd
       onDoubleClick={enterEditMode}
       onKeyDown={handleTextKeyDown}
       isPlaceholder={isPlaceholder}

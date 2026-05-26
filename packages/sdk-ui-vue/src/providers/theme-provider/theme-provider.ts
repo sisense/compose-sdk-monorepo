@@ -1,5 +1,5 @@
 import type {
-  CompleteThemeSettings,
+  CompleteThemeSettingsInternal,
   ThemeProviderProps as ThemeProviderPropsPreact,
   ThemeSettings,
 } from '@sisense/sdk-ui-preact';
@@ -110,7 +110,7 @@ export const ThemeProvider = defineComponent({
         { mergeArrays: false },
         existingThemeSettings?.value,
         userThemeSettings,
-      ) as CompleteThemeSettings;
+      ) as CompleteThemeSettingsInternal;
     });
 
     provide(themeContextConfigKey, themeSettings);

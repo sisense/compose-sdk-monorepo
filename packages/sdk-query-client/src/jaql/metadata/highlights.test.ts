@@ -93,6 +93,30 @@ describe('Highlight filters applying', () => {
 
     expect(metadata).toStrictEqual(result);
   });
+
+  it('must not apply an include-all members highlight filter (empty members)', () => {
+    const result = { jaql: { title: 'Gender', dim: '[Commerce.Gender]', datatype: 'text' } };
+    const attribute = new DimensionalAttribute('Gender', '[Commerce.Gender]', 'text-attribute');
+
+    const filter = new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), []);
+
+    const metadata = applyHighlightFilters(attribute.jaql(), [filter]);
+
+    expect(metadata).toStrictEqual(result);
+  });
+
+  it('must not apply an exclude-mode empty members highlight filter (also a no-op)', () => {
+    const result = { jaql: { title: 'Gender', dim: '[Commerce.Gender]', datatype: 'text' } };
+    const attribute = new DimensionalAttribute('Gender', '[Commerce.Gender]', 'text-attribute');
+
+    const filter = new MembersFilter(new DimensionalAttribute('Gender', '[Commerce.Gender]'), [], {
+      excludeMembers: true,
+    });
+
+    const metadata = applyHighlightFilters(attribute.jaql(), [filter]);
+
+    expect(metadata).toStrictEqual(result);
+  });
 });
 
 describe('Match Highlights with Attributes', () => {
@@ -114,6 +138,21 @@ describe('Match Highlights with Attributes', () => {
 
     expect(hWithout).toHaveLength(1);
     expect(hWithout[0]?.attribute.id).toBe('[Brand.Brand]');
+  });
+
+  it('must drop include-all (empty members) highlights from both buckets', () => {
+    const dimensionsMetadata = [
+      new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]').jaql(),
+    ];
+    const highlights = [
+      new MembersFilter(new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'), []),
+      new MembersFilter(new DimensionalAttribute('[Brand.Brand]', '[Brand.Brand]'), []),
+    ];
+
+    const [hWith, hWithout] = matchHighlightsWithAttributes(dimensionsMetadata, highlights);
+
+    expect(hWith).toHaveLength(0);
+    expect(hWithout).toHaveLength(0);
   });
 });
 

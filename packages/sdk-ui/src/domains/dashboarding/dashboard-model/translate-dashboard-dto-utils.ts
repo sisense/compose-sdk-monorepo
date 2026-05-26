@@ -19,7 +19,6 @@ import {
 import { ConditionFilterJaql } from '@sisense/sdk-data/dist/dimensional-model/filters/utils/types';
 
 import {
-  MAX_COLUMN_WIDTH,
   MAX_ROW_HEIGHT,
   MIN_COLUMN_WIDTH,
   MIN_ROW_HEIGHT,
@@ -170,7 +169,7 @@ export function layoutToLayoutDto(layout: WidgetsPanelLayout): LayoutDto {
               widgetid: cell.widgetId,
               height: cell.height ?? DEFAULT_HEIGHT,
               minWidth: cell.minWidth ?? MIN_COLUMN_WIDTH,
-              maxWidth: cell.maxWidth ?? MAX_COLUMN_WIDTH,
+              maxWidth: cell.maxWidth ?? 2048,
               minHeight: cell.minHeight ?? MIN_ROW_HEIGHT,
               maxHeight: cell.maxHeight ?? MAX_ROW_HEIGHT,
             },

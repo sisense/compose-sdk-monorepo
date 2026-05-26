@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import cloneDeep from 'lodash-es/cloneDeep';
 
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 export const DEFAULT_DIVIDER_COLOR = '#F2F2F2';
 export const DEFAULT_DIVIDER_WIDTH = 4;
@@ -17,7 +17,7 @@ export const DEFAULT_TITLE_FONT_SIZE = 15;
 export const DEFAULT_HYPERLINK_COLOR = '#1FAFF3';
 export const DEFAULT_HYPERLINK_HOVER_COLOR = '#1FCCF3';
 
-const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
+const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettingsInternal = {
   chart: {
     backgroundColor: '#FFFFFF',
     textColor: '#000000',
@@ -270,7 +270,7 @@ const DEFAULT_THEME_SETTINGS_LIGHT: CompleteThemeSettings = {
   },
 };
 
-const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
+const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettingsInternal = {
   chart: {
     backgroundColor: '#313138',
     textColor: '#FFFFFF',
@@ -530,7 +530,7 @@ const DEFAULT_THEME_SETTINGS_DARK: CompleteThemeSettings = {
  * @returns Theme settings object
  * @internal
  */
-export const getDefaultThemeSettings = (isDarkMode = false): CompleteThemeSettings => {
+export const getDefaultThemeSettings = (isDarkMode = false): CompleteThemeSettingsInternal => {
   return isDarkMode
     ? cloneDeep(DEFAULT_THEME_SETTINGS_DARK)
     : cloneDeep(DEFAULT_THEME_SETTINGS_LIGHT);

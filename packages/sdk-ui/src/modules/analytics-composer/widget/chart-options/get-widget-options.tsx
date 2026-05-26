@@ -10,6 +10,7 @@ import { ScattermapChartDataOptions } from '@/domains/visualizations/core/chart-
 import { normalizeAnyColumn } from '@/domains/visualizations/core/chart-data-options/utils';
 import { getDefaultStyleOptions } from '@/domains/visualizations/core/chart-options-processor/chart-options-service';
 import { ChartSubtype } from '@/domains/visualizations/core/chart-options-processor/subtype-to-design-options';
+import { isCartesian } from '@/domains/visualizations/core/chart-options-processor/translations/types';
 import {
   AxesMapping,
   ChartRecommendations,
@@ -72,10 +73,14 @@ const DEFAULT_STYLE_OPTIONS = Object.freeze<ChartStyleOptions>({
 });
 
 const DEFAULT_SUBTYPE_FOR = Object.freeze<Partial<Record<ChartType, ChartSubtype>>>({
+  area: 'area/stacked',
+  arearange: 'arearange/spline',
+  bar: 'bar/stacked',
+  boxplot: 'boxplot/full',
+  column: 'column/stackedcolumn',
   line: 'line/spline',
   pie: 'pie/donut',
-  bar: 'bar/stacked',
-  column: 'column/stackedcolumn',
+  polar: 'polar/column',
 });
 
 /**
@@ -194,6 +199,83 @@ const getAxisTitle = (axesMapping: AxesMapping, axis: 'x' | 'y') => {
 
 const getIndicatorValueTitle = (axesMapping: AxesMapping, valueType: 'value' | 'secondary') => {
   return axesMapping[valueType]?.map((item) => normalizeAnyColumn(item).column.name).join(', ');
+};
+
+/**
+ * Minimal chart style overrides for consumers that persist widget props without merged SDK defaults.
+ * Compose merges these with per-chart defaults at render time (`extendStyleOptionsWithDefaults`).
+ *
+ * This function is used by buildChartEngine in sdk-ai-core
+ *
+ * @param chartType - chart type
+ * @param axesMapping - axes mapping
+ * @returns partial style options
+ * @internal
+ */
+export const getMinimalChartStyleOptions = (
+  chartType: ChartType,
+  axesMapping: AxesMapping,
+): Partial<ChartStyleOptions> => {
+  if (chartType in DEFAULT_SUBTYPE_FOR) {
+    const subtype = DEFAULT_SUBTYPE_FOR[`${chartType}`];
+
+    if (!isCartesian(chartType)) {
+      return { subtype } as Partial<ChartStyleOptions>;
+    }
+
+    return {
+      subtype,
+      yAxis: {
+        title: {
+          enabled: true,
+          text: getAxisTitle(axesMapping, 'y'),
+        },
+      },
+      xAxis: {
+        title: {
+          enabled: true,
+          text: getAxisTitle(axesMapping, 'x'),
+        },
+      },
+    } as Partial<ChartStyleOptions>;
+  }
+
+  if (chartType === 'scatter') {
+    return {
+      xAxis: {
+        title: {
+          enabled: true,
+          text: getAxisTitle(axesMapping, 'x'),
+        },
+      },
+      yAxis: {
+        title: {
+          enabled: true,
+          text: getAxisTitle(axesMapping, 'y'),
+        },
+      },
+    } as Partial<ChartStyleOptions>;
+  }
+
+  if (chartType === 'indicator') {
+    const indicatorComponents: NonNullable<IndicatorStyleOptions['indicatorComponents']> = {
+      title: {
+        shouldBeShown: true,
+        text: getIndicatorValueTitle(axesMapping, 'value') ?? '',
+      },
+    };
+
+    const secondaryTitle = getIndicatorValueTitle(axesMapping, 'secondary');
+    if (secondaryTitle) {
+      indicatorComponents.secondaryTitle = {
+        text: secondaryTitle,
+      };
+    }
+
+    return { indicatorComponents };
+  }
+
+  return {};
 };
 
 /**

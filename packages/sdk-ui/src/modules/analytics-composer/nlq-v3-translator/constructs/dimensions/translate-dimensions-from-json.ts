@@ -126,8 +126,7 @@ export const translateDimensionsFromJSON = (
       success: false,
       errors: [
         {
-          category: 'dimensions',
-          index: -1,
+          path: 'dimensions',
           input: dimensionsJSON,
           message: 'Invalid dimensions JSON. Expected an array.',
         },
@@ -140,8 +139,7 @@ export const translateDimensionsFromJSON = (
 
   dimensionsJSON.forEach((dimensionJSON, index) => {
     const context: NlqTranslationErrorContext = {
-      category: 'dimensions',
-      index,
+      path: `dimensions[${index}]`,
       input: dimensionJSON,
     };
     try {

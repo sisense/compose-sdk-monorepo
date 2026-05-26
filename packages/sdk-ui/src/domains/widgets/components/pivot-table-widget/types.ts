@@ -91,6 +91,16 @@ export interface PivotTableWidgetProps {
   title?: string;
 
   /**
+   * Widget identifier
+   *
+   * The optional property which is only meaningful for some internal features (for example Excel export).
+   *
+   * @category Widget
+   * @internal
+   */
+  id?: string;
+
+  /**
    *  Description of the widget
    *
    * @category Widget
@@ -136,7 +146,6 @@ export interface PivotTableWidgetProps {
    *   }
    * };
    * ```
-   *
    * @internal
    */
   onDataCellFormat?: CustomDataCellFormatter;
@@ -159,7 +168,6 @@ export interface PivotTableWidgetProps {
    *   }
    * };
    * ```
-   *
    * @internal
    */
   onHeaderCellFormat?: CustomHeaderCellFormatter;

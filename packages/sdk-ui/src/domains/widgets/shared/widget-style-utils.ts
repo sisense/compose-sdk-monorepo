@@ -1,6 +1,6 @@
 import get from 'lodash-es/get';
 
-import { CompleteThemeSettings, WidgetContainerStyleOptions } from '@/types';
+import { CompleteThemeSettingsInternal, WidgetContainerStyleOptions } from '@/types';
 
 export enum WidgetCornerRadius {
   'None' = '',
@@ -32,7 +32,7 @@ export enum WidgetSpaceAround {
 
 export const getShadowValue = (
   styleOptions: WidgetContainerStyleOptions | undefined,
-  themeSettings: CompleteThemeSettings,
+  themeSettings: CompleteThemeSettingsInternal,
 ): string => {
   const shadow = get(styleOptions, 'shadow', themeSettings.widget.shadow);
   const spaceAround = get(styleOptions, 'spaceAround', themeSettings.widget.spaceAround);

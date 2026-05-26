@@ -252,6 +252,9 @@ export const translation = {
       distributeEqualWidth: 'Distribute equally in this row',
       download: 'Download',
       csvFile: 'CSV File',
+      excelFile: 'Excel File',
+      repeatRowsRecommended: 'Repeat rows (Recommended)',
+      mergeRows: 'Merge rows',
     },
   },
   customWidgets: {

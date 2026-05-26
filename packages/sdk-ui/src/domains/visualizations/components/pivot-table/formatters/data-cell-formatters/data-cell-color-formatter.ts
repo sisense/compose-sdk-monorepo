@@ -10,7 +10,7 @@ import type {
 } from '@/domains/visualizations/core/chart-data-options/types';
 import { RangeDataColorOptions } from '@/domains/visualizations/core/chart-data/data-coloring';
 import { scaleBrightness, toGray } from '@/shared/utils/color';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { getPivotDataOptionByJaqlIndex } from '../utils';
 
@@ -19,7 +19,7 @@ const DEFAULT_MAX_COLOR = '#ffffff';
 
 export function createDataCellColorFormatter(
   dataOptions: PivotTableDataOptions,
-  themeSettings: CompleteThemeSettings,
+  themeSettings: CompleteThemeSettingsInternal,
 ) {
   return (
     cell: PivotDataNode,

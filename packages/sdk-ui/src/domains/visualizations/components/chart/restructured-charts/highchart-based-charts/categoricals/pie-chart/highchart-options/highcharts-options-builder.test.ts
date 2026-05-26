@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next';
 import { describe, expect, it, vi } from 'vitest';
 
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { BuildContext } from '../../../types.js';
 import { PieChartDesignOptions } from '../types.js';
@@ -59,7 +59,7 @@ describe('Pie Highcharts Options Builder', () => {
           fontFamily: 'Arial',
           primaryTextColor: '#000000',
         },
-      } as CompleteThemeSettings,
+      } as CompleteThemeSettingsInternal,
       dateFormatter: vi.fn(() => 'formatted-date'),
       accessibilityEnabled: false,
     },

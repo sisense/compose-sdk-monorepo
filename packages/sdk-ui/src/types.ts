@@ -2246,9 +2246,226 @@ export interface ThemeSettings {
  *
  * @internal
  */
-export type CompleteThemeSettings = DeepRequired<Omit<ThemeSettings, 'typography'>> & {
+export type CompleteThemeSettingsInternal = DeepRequired<Omit<ThemeSettings, 'typography'>> & {
   typography: DeepRequired<Omit<TypographyThemeSettings, 'fontsLoader'>> & {
     fontsLoader?: FontsLoaderSettings;
+  };
+};
+
+/**
+ * Resolved theme returned by {@link useTheme}.
+ *
+ * Contains all theme values after defaults are applied. Unlike {@link ThemeSettings}
+ * (where every field is optional), every field here is guaranteed to be present.
+ */
+export type CompleteThemeSettings = {
+  /** Chart theme settings */
+  chart: {
+    /** Text color */
+    textColor: string;
+    /** Secondary text color */
+    secondaryTextColor: string;
+    /** Background color */
+    backgroundColor: string;
+    /** Animation options */
+    animation: {
+      /** Chart initialization animation options */
+      init: {
+        /** Animation duration in milliseconds */
+        duration: number | 'auto';
+      };
+      /** Chart redraw animation options */
+      redraw: {
+        /** Animation duration in milliseconds */
+        duration: number | 'auto';
+      };
+    };
+  };
+  /** Collection of colors used to color various elements */
+  palette: {
+    /** Set of colors used to color chart elements */
+    variantColors: Color[];
+  };
+  /** Text theme settings */
+  typography: {
+    /** Font family name to style component text */
+    fontFamily: string;
+    /** Primary text color */
+    primaryTextColor: string;
+    /** Secondary text color */
+    secondaryTextColor: string;
+    /** Hyperlink color */
+    hyperlinkColor: string;
+    /** Hyperlink hover color */
+    hyperlinkHoverColor: string;
+    /** Settings for font loading */
+    fontsLoader?: FontsLoaderSettings;
+  };
+  /** General theme settings */
+  general: {
+    /** Main color used for various elements like primary buttons, switches, etc. */
+    brandColor: string;
+    /** Background color used for elements like tiles, etc. */
+    backgroundColor: string;
+    /** Text color for primary buttons */
+    primaryButtonTextColor: string;
+    /** Hover color for primary buttons */
+    primaryButtonHoverColor: string;
+  };
+  /** Widget theme settings */
+  widget: {
+    /** Space between widget container edge and the chart */
+    spaceAround: SpaceSizes;
+    /** Corner radius of the widget container */
+    cornerRadius: RadiusSizes;
+    /** Shadow level of the widget container */
+    shadow: ShadowsTypes;
+    /** Widget container border toggle */
+    border: boolean;
+    /** Widget container border color */
+    borderColor: string;
+    /** Widget header styles */
+    header: {
+      /** Header title text color */
+      titleTextColor: string;
+      /** Header title alignment */
+      titleAlignment: AlignmentTypes;
+      /** Header title font size */
+      titleFontSize: number;
+      /** Toggle of the divider line between widget header and chart */
+      dividerLine: boolean;
+      /** Divider line color */
+      dividerLineColor: string;
+      /** Header background color */
+      backgroundColor: string;
+    };
+  };
+  /** Filter theme settings */
+  filter: {
+    panel: {
+      /** Title color */
+      titleColor: string;
+      /** Background color */
+      backgroundColor: string;
+      /** Divider line color for the filter panel */
+      dividerLineColor: string;
+      /** Divider line width for the filter panel */
+      dividerLineWidth: number;
+    };
+  };
+  /** Theme settings specific to the AI Chatbot component */
+  aiChat: {
+    /** Background color of the chatbot */
+    backgroundColor: string;
+    /** Text color of the chatbot */
+    primaryTextColor: string;
+    /** Secondary text color of the chatbot */
+    secondaryTextColor: string;
+    /** Primary font size for text in the chatbot */
+    primaryFontSize: [fontSize: string, lineHeight: string];
+    /** Border of the chatbot */
+    border: false | string;
+    /** Border radius of the chatbot */
+    borderRadius: false | string;
+    /** Settings for the main chat body */
+    body: {
+      paddingLeft: string;
+      paddingRight: string;
+      paddingTop: string;
+      paddingBottom: string;
+      gapBetweenMessages: string;
+    };
+    /** Settings for the chat footer */
+    footer: {
+      paddingLeft: string;
+      paddingRight: string;
+      paddingTop: string;
+      paddingBottom: string;
+    };
+    /** Settings for user chat messages */
+    userMessages: {
+      backgroundColor: string;
+    };
+    /** Settings for system chat messages */
+    systemMessages: {
+      backgroundColor: string;
+    };
+    /** Settings for the chatbot input */
+    input: {
+      backgroundColor: string;
+      focus: {
+        outlineColor: string;
+      };
+    };
+    /** Settings for the chatbot header */
+    header: {
+      backgroundColor: string;
+      textColor: string;
+    };
+    /** Settings for chatbot dropup */
+    dropup: {
+      backgroundColor: string;
+      boxShadow: string;
+      borderRadius: string;
+      headers: {
+        textColor: string;
+        hover: {
+          backgroundColor: string;
+        };
+      };
+      items: {
+        textColor: string;
+        hover: {
+          backgroundColor: string;
+        };
+      };
+    };
+    /** Settings for the chatbot suggestions */
+    suggestions: {
+      textColor: string;
+      backgroundColor: string;
+      border: string;
+      borderGradient: [string, string] | null;
+      borderRadius: string;
+      hover: {
+        textColor: string;
+        backgroundColor: string;
+      };
+      loadingGradient: [string, string];
+      gap: string;
+    };
+    /** Settings for the chatbot clickable messages */
+    clickableMessages: {
+      textColor: string;
+      backgroundColor: string;
+      border: false | string;
+      borderGradient: [string, string] | null;
+      hover: {
+        textColor: string;
+        backgroundColor: string;
+      };
+    };
+    /** Settings for the data topics screen */
+    dataTopics: {
+      backgroundColor: string;
+      items: {
+        textColor: string;
+        backgroundColor: string;
+      };
+    };
+    /** Settings for the chatbot icons */
+    icons: {
+      color: string;
+      feedbackIcons: {
+        hoverColor: string;
+      };
+    };
+    /** Settings for the chatbot tooltips */
+    tooltips: {
+      backgroundColor: string;
+      textColor: string;
+      boxShadow: string;
+    };
   };
 };
 

@@ -18,7 +18,7 @@ import {
 } from '@/domains/widgets/components/widget-by-id/types';
 import { WidgetDto } from '@/index';
 import { AppSettings } from '@/infra/app/settings/settings';
-import { CompleteThemeSettings, PivotTableWidgetStyleOptions } from '@/types';
+import { CompleteThemeSettingsInternal, PivotTableWidgetStyleOptions } from '@/types';
 
 import {
   fromChartWidgetProps,
@@ -1136,7 +1136,7 @@ describe('WidgetModelTranslator', () => {
       it('should apply theme settings to standard widgets', () => {
         const lineChartDto = cloneDeep(mockLineWidgetDto);
 
-        const themeSettings: Partial<CompleteThemeSettings> = {
+        const themeSettings: Partial<CompleteThemeSettingsInternal> = {
           palette: {
             variantColors: ['#FF0000', '#00FF00', '#0000FF'],
           },
@@ -1144,7 +1144,7 @@ describe('WidgetModelTranslator', () => {
 
         const widgetModel = fromWidgetDto(
           lineChartDto,
-          themeSettings as unknown as CompleteThemeSettings,
+          themeSettings as unknown as CompleteThemeSettingsInternal,
         );
 
         expect(widgetModel.dataOptions).toBeDefined();

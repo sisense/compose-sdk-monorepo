@@ -10,6 +10,7 @@ import type { SortDirection } from '@sisense/sdk-data';
 import omit from 'lodash-es/omit';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
+import { toNlqErrorInput } from '../../shared/utils/translation-helpers.js';
 import { DIMENSIONAL_NAME_PREFIX } from '../../types.js';
 
 /** Runtime StyledColumn: wrapper with column and optional CategoryStyle (from chart dataOptions) */
@@ -45,15 +46,11 @@ export function translateDimensionsToJSON(
     const attr = isStyledColumn(item) ? item.column : item;
     const styledItem = isStyledColumn(item) ? item : undefined;
 
-    const getInputJson = () =>
-      typeof attr.toJSON === 'function'
-        ? attr.toJSON()
-        : (attr as unknown as Record<string, unknown>);
+    const getInputJson = () => toNlqErrorInput(attr);
 
     if (!attr.composeCode) {
       errors.push({
-        category: 'dimensions',
-        index,
+        path: `dimensions[${index}]`,
         input: getInputJson(),
         message: `Dimension at index ${index} (${attr.name || 'unnamed'}) is missing composeCode`,
       });
@@ -62,8 +59,7 @@ export function translateDimensionsToJSON(
 
     if (!attr.composeCode.startsWith(DIMENSIONAL_NAME_PREFIX)) {
       errors.push({
-        category: 'dimensions',
-        index,
+        path: `dimensions[${index}]`,
         input: getInputJson(),
         message: `Expected composeCode to start with '${DIMENSIONAL_NAME_PREFIX}' for dimension at index ${index} (${
           attr.name || 'unnamed'

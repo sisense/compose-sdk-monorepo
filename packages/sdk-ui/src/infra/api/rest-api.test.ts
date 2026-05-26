@@ -177,6 +177,16 @@ describe('Rest API', () => {
     });
   });
 
+  describe('exportJaqlToXlsx', () => {
+    it('should post JAQL export body to the xlsx endpoint with returnBlob', async () => {
+      const body = { widgetId: 'w1', jaql: {} };
+      await restApi.exportJaqlToXlsx(body);
+      expect(httpPostMock).toHaveBeenCalledWith('api/v1/export/jaql/xlsx', body, {}, undefined, {
+        returnBlob: true,
+      });
+    });
+  });
+
   describe('getSharedFormula', () => {
     it('should send correct request to fetch shared formula with flat=true', async () => {
       httpGetMock.mockResolvedValueOnce({ oid: '1' });

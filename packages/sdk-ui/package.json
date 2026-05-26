@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.27.0",
+  "version": "2.28.0",
   "type": "module",
   "exports": {
     ".": {
@@ -121,6 +121,8 @@
     "type-check": "tsc --noEmit",
     "build": "run type-check && vite build --mode development && run build:umd",
     "build:prod": "run type-check && vite build && run build:umd:prod",
+    "demo:build": "vite build --config vite.demo.config.ts",
+    "demo:serve": "vite preview --config vite.demo.config.ts",
     "build:umd": "tsx ./scripts/vite/vite.umd.build.ts --mode development",
     "build:umd:prod": "tsx ./scripts/vite/vite.umd.build.ts --mode production",
     "build:umd:watch": "tsx ./scripts/vite/vite.umd.fusion.build.ts",

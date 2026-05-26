@@ -29,7 +29,8 @@ ALL_COMMITS_ARE_CORRECT=true
 
 for COMMIT in ${COMMITS//+ }; do
     MESSAGE=`git log --format=%B -n 1 $COMMIT`
-    if ! echo "$MESSAGE" | npx commitlint; then
+    # Use workspace @commitlint/cli (Node 18). `npx commitlint` installs commitlint@21+ (wrong package, needs Node 22+).
+    if ! echo "$MESSAGE" | ./node_modules/.bin/commitlint; then
         ALL_COMMITS_ARE_CORRECT=false
         break
     fi

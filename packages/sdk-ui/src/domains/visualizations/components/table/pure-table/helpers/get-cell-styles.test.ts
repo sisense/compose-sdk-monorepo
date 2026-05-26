@@ -1,4 +1,4 @@
-import { CompleteThemeSettings } from '../../../../../../types.js';
+import { CompleteThemeSettingsInternal } from '../../../../../../types.js';
 import { getCellStyles } from './get-cell-styles.js';
 
 describe('getCellThemeAndDesignBasedStyles', () => {
@@ -10,7 +10,7 @@ describe('getCellThemeAndDesignBasedStyles', () => {
     typography: {
       fontFamily: 'Arial',
     },
-  } as CompleteThemeSettings;
+  } as CompleteThemeSettingsInternal;
 
   it('should return correct styles for header cell without any custom styles', () => {
     const result = getCellStyles({

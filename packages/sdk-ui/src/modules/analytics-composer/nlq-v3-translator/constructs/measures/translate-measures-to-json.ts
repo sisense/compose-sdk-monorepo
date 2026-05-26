@@ -11,6 +11,7 @@ import { parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
 import omit from 'lodash-es/omit';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
+import { toNlqErrorInput } from '../../shared/utils/translation-helpers.js';
 
 /** Runtime StyledMeasureColumn: wrapper with column and optional style (from chart dataOptions) */
 type StyledMeasureColumn = { column: Measure; sortType?: SortDirection; [key: string]: unknown };
@@ -45,13 +46,11 @@ export function translateMeasuresToJSON(
     const measure = isStyledMeasureColumn(item) ? item.column : item;
     const styledItem = isStyledMeasureColumn(item) ? item : undefined;
 
-    const getInputJson = () =>
-      typeof measure.toJSON === 'function' ? measure.toJSON() : (measure as unknown as JSONValue);
+    const getInputJson = () => toNlqErrorInput(measure);
 
     if (!measure.composeCode) {
       errors.push({
-        category: 'measures',
-        index,
+        path: `measures[${index}]`,
         input: getInputJson(),
         message: `Measure at index ${index} (${measure.name || 'unnamed'}) is missing composeCode`,
       });
@@ -86,8 +85,7 @@ export function translateMeasuresToJSON(
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       errors.push({
-        category: 'measures',
-        index,
+        path: `measures[${index}]`,
         input: getInputJson(),
         message: `Failed to parse composeCode for measure at index ${index} (${
           measure.name || 'unnamed'

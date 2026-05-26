@@ -8,6 +8,7 @@ import type { PivotTableDataOptions } from '@/domains/visualizations/core/chart-
 
 import { NlqTranslationError } from '../../../types.js';
 import { translateSingleAxisFromJSON } from '../../shared/data-options/index.js';
+import { dataOptionsPath } from '../../shared/utils/error-path.js';
 import type { InternalDataSchemaContext, PivotTableDataOptionsJSON } from '../../types.js';
 
 /**
@@ -21,8 +22,7 @@ export function translatePivotTableDataOptionsFromJSON(
 ): PivotTableDataOptions | null {
   if (!dataOptionsJSON || typeof dataOptionsJSON !== 'object') {
     translationErrors.push({
-      category: 'dataOptions',
-      index: -1,
+      path: dataOptionsPath(-1),
       input: dataOptionsJSON,
       message: 'dataOptions is required',
     });

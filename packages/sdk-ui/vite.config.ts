@@ -6,6 +6,8 @@ import checker from 'vite-plugin-checker';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import dts from 'vite-plugin-dts';
 
+// @ts-ignore — plain ESM, no types needed; processed by Vite/esbuild at config load time
+import { csdkEnvSwitcher } from '../../scripts/demo-features/env-switcher/vite-plugin.mjs';
 import { fixJsxRuntime } from './scripts/vite-plugins/fix-jsx-runtime';
 import { replaceReact18Hooks } from './scripts/vite-plugins/replace-react18-hooks';
 import { scopeThirdPartyCss } from './scripts/vite-plugins/scope-third-party-css';
@@ -28,6 +30,8 @@ const getTranslationEntries = (): Record<string, string> => {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [
+    // Only active during `vite serve` (dev mode); library builds ignore it.
+    { ...csdkEnvSwitcher(), apply: 'serve' },
     scopeThirdPartyCss(),
     react({
       jsxImportSource: '@emotion/react', // This tells SWC to use Emotion for JSX

@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CompleteThemeSettings, NumberFormatConfig } from '../../../../../../../types';
+import { CompleteThemeSettingsInternal, NumberFormatConfig } from '../../../../../../../types';
 import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types';
 import { AxisSettings } from '../../../translations/axis-section';
 import {
@@ -46,12 +46,12 @@ describe('axis-transformers', () => {
       breakBy: [],
     });
 
-    const mockThemeSettings: CompleteThemeSettings = {
+    const mockThemeSettings: CompleteThemeSettingsInternal = {
       typography: {
         primaryTextColor: '#333333',
         secondaryTextColor: '#666666',
       },
-    } as CompleteThemeSettings;
+    } as CompleteThemeSettingsInternal;
 
     const createMockAxisSettings = (): AxisSettings[] => [
       {

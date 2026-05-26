@@ -240,6 +240,9 @@ const translation: TranslationDictionary = {
       distributeEqualWidth: '在此行中平均分配',
       download: '下载',
       csvFile: 'CSV 文件',
+      excelFile: 'Excel 文件',
+      repeatRowsRecommended: '重复行（推荐）',
+      mergeRows: '合并行',
     },
   },
   customWidgets: {

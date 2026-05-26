@@ -1,4 +1,4 @@
-import { CompleteThemeSettings } from '../../../types.js';
+import { CompleteThemeSettingsInternal } from '../../../types.js';
 import { LegacyDesignSettings, LegacyPalette } from '../legacy-design-settings.js';
 
 export const redLegacyDesignSettings: LegacyDesignSettings = {
@@ -55,7 +55,7 @@ export const redLegacyDesignSettings: LegacyDesignSettings = {
   created: '2023-07-04T11:56:16.000Z',
 };
 
-export const redThemeSettings: CompleteThemeSettings = {
+export const redThemeSettings: CompleteThemeSettingsInternal = {
   chart: {
     textColor: '#FFFFFF',
     backgroundColor: '#ec4646',

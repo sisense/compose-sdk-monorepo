@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 import { Themable } from '@/infra/contexts/theme-provider/types';
 
-import { CompleteThemeSettings } from '../..';
+import { CompleteThemeSettingsInternal } from '../..';
 
 const AiDisclaimerContainer = styled.div<Themable>`
   text-align: center;
@@ -21,7 +21,7 @@ const AiDisclaimerContainer = styled.div<Themable>`
   color: ${({ theme }) => theme.aiChat.secondaryTextColor};
 `;
 
-export default function AiDisclaimer({ theme }: { theme: CompleteThemeSettings }) {
+export default function AiDisclaimer({ theme }: { theme: CompleteThemeSettingsInternal }) {
   const { t } = useTranslation();
 
   return (

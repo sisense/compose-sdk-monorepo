@@ -4,7 +4,7 @@
 import {
   type AppSettings,
   type ClientApplication,
-  type CompleteThemeSettings,
+  type CompleteThemeSettingsInternal,
   getDashboardModel,
   getDashboardModels,
 } from '@sisense/sdk-ui-preact';
@@ -29,7 +29,9 @@ const getDashboardModelMock = getDashboardModel as Mock<typeof getDashboardModel
 
 const getDashboardModelsMock = getDashboardModels as Mock<typeof getDashboardModels>;
 
-const mockThemeSettings = { palette: { variantColors: ['#FF0000'] } } as CompleteThemeSettings;
+const mockThemeSettings = {
+  palette: { variantColors: ['#FF0000'] },
+} as CompleteThemeSettingsInternal;
 const mockAppSettings = { serverThemeSettings: {} } as AppSettings;
 
 describe('DashboardService', () => {

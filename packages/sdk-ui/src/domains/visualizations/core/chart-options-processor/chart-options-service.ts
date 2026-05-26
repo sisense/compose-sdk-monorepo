@@ -15,7 +15,7 @@ import { TranslatableError } from '@/infra/translation/translatable-error';
 import {
   ChartStyleOptions,
   ChartType,
-  CompleteThemeSettings,
+  CompleteThemeSettingsInternal,
   HighchartsSelectEvent,
   OptionsWithAlerts,
 } from '../../../../types';
@@ -69,7 +69,7 @@ export const highchartsOptionsService = (
   chartDesignOptions: ChartDesignOptions,
   dataOptions: ChartDataOptionsInternal,
   translate: TFunction,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   dateFormatter?: (date: Date, format: string) => string,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   switch (chartData.type) {

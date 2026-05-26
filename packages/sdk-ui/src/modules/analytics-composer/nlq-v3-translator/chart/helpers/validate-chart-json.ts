@@ -29,8 +29,7 @@ export function validateChartJSONStructure(rawInput: unknown): {
 
   if (!isRecordStringUnknown(rawInput)) {
     errors.push({
-      category: 'chartType',
-      index: -1,
+      path: 'chartType',
       input: rawInput,
       message: 'Expected an object',
     });
@@ -51,8 +50,7 @@ export function validateChartJSONStructure(rawInput: unknown): {
         ? { [match.best]: rawInput[match.best] }
         : rawInput;
     errors.push({
-      category: 'chartType',
-      index: -1,
+      path: 'chartType',
       input,
       message: `chartType is required.${suggestion}`,
     });
@@ -62,8 +60,7 @@ export function validateChartJSONStructure(rawInput: unknown): {
       match && match.distance <= SUGGESTION_THRESHOLD ? ` Did you mean '${match.best}'?` : '';
     const validList = VALID_CHART_TYPES_ARRAY.slice(0, 8).join(', ');
     errors.push({
-      category: 'chartType',
-      index: -1,
+      path: 'chartType',
       input: chartTypeValue,
       message: `Invalid chartType '${chartTypeValue}'. Valid types: ${validList}, ...${suggestion}`,
     });
@@ -85,8 +82,7 @@ export function validateChartJSONStructure(rawInput: unknown): {
         ? { [match.best]: rawInput[match.best] }
         : rawInput;
     errors.push({
-      category: 'dataOptions',
-      index: -1,
+      path: 'dataOptions',
       input,
       message: `dataOptions is required.${suggestion}`,
     });

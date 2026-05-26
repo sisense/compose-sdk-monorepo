@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CompleteThemeSettings, NumberFormatConfig } from '../../../../../../../types.js';
+import { CompleteThemeSettingsInternal, NumberFormatConfig } from '../../../../../../../types.js';
 import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types.js';
 import { Axis, AxisMinMax } from '../../../translations/axis-section.js';
 import {
@@ -75,12 +75,12 @@ describe('axis utils integration tests', () => {
 
     const mockAxisMinMax: AxisMinMax = { min: 0, max: 100 };
 
-    const mockThemeSettings: CompleteThemeSettings = {
+    const mockThemeSettings: CompleteThemeSettingsInternal = {
       typography: {
         primaryTextColor: '#333333',
         secondaryTextColor: '#666666',
       },
-    } as CompleteThemeSettings;
+    } as CompleteThemeSettingsInternal;
 
     it('should handle full Y-axis configuration with stacking', () => {
       const axis = createMockAxis();

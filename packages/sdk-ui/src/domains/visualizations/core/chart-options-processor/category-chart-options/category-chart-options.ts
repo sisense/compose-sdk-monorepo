@@ -5,7 +5,7 @@ import { TFunction } from '@sisense/sdk-common';
 
 import { TranslatableError } from '@/infra/translation/translatable-error';
 
-import { ChartType, CompleteThemeSettings, OptionsWithAlerts } from '../../../../../types';
+import { ChartType, CompleteThemeSettingsInternal, OptionsWithAlerts } from '../../../../../types';
 import {
   CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
@@ -47,7 +47,7 @@ export const getCategoricalChartOptions = (
   chartDesignOptions: ChartDesignOptions,
   dataOptions: ChartDataOptionsInternal,
   translate: TFunction,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): OptionsWithAlerts<HighchartsOptionsInternal> => {
   switch (chartType) {
     case 'pie':

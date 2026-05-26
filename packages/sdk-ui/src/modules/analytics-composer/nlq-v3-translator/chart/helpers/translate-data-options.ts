@@ -18,6 +18,7 @@ import {
   translateSingleAxisFromJSON,
   withAxisContext,
 } from '../../shared/data-options/index.js';
+import { dataOptionsPath } from '../../shared/utils/error-path.js';
 import { findBestMatch, SUGGESTION_THRESHOLD } from '../../shared/utils/fuzzy-match.js';
 import { collectTranslationErrors } from '../../shared/utils/translation-helpers.js';
 import type {
@@ -84,8 +85,7 @@ export function translateDataOptionsFromJSON(
 ): ChartDataOptions | null {
   if (!dataOptionsJSON || !isRecordStringUnknown(dataOptionsJSON)) {
     translationErrors.push({
-      category: 'dataOptions',
-      index: -1,
+      path: dataOptionsPath(-1),
       input: dataOptionsJSON,
       message: 'dataOptions is required',
     });
@@ -109,8 +109,7 @@ export function translateDataOptionsFromJSON(
         typoKeyToSuggested.set(axisKey, match.best);
       }
       translationErrors.push({
-        category: 'dataOptions',
-        index: axisKey,
+        path: dataOptionsPath(axisKey),
         input: dataOptionsRecord[axisKey],
         message: `Unknown dataOptions key '${axisKey}'.${suggestion}`,
       });
@@ -128,8 +127,7 @@ export function translateDataOptionsFromJSON(
           match && match.distance <= SUGGESTION_THRESHOLD ? ` Did you mean '${match.best}'?` : '';
         const validList = [...metadata.validAxes].join(', ');
         translationErrors.push({
-          category: 'dataOptions',
-          index: axisKey,
+          path: dataOptionsPath(axisKey),
           input: dataOptionsRecord[axisKey],
           message: `Axis '${axisKey}' is not valid for chart type '${chartType}'. Valid axes: ${validList}.${suggestion}`,
         });
@@ -142,8 +140,7 @@ export function translateDataOptionsFromJSON(
       }
       if (!(required in dataOptionsRecord) || dataOptionsRecord[required] == null) {
         translationErrors.push({
-          category: 'dataOptions',
-          index: required,
+          path: dataOptionsPath(required),
           input: null,
           message: `Chart type '${chartType}' requires '${metadata.requiredAxes.join(
             "' and '",
@@ -159,8 +156,7 @@ export function translateDataOptionsFromJSON(
       );
       if (!hasAny) {
         translationErrors.push({
-          category: 'dataOptions',
-          index: -1,
+          path: dataOptionsPath(-1),
           input: dataOptionsJSON,
           message: 'Indicator chart requires at least one of: value, secondary, min, max.',
         });
@@ -173,8 +169,7 @@ export function translateDataOptionsFromJSON(
         ('y' in dataOptionsJSON && dataOptionsJSON.y != null);
       if (!hasXorY) {
         translationErrors.push({
-          category: 'dataOptions',
-          index: -1,
+          path: dataOptionsPath(-1),
           input: dataOptionsJSON,
           message: 'Scatter chart requires at least one of: x, y.',
         });

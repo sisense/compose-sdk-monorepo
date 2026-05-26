@@ -1,6 +1,6 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 import {
-  type CompleteThemeSettings,
+  type CompleteThemeSettingsInternal,
   getDefaultThemeSettings,
   getThemeSettingsByOid,
   type ThemeProviderProps as ThemeConfig,
@@ -65,14 +65,14 @@ export class ThemeService {
   /**
    * Current theme settings as a BehaviorSubject.
    */
-  private _themeSettings$: BehaviorSubject<CompleteThemeSettings>;
+  private _themeSettings$: BehaviorSubject<CompleteThemeSettingsInternal>;
 
   /**
    * Current theme settings as an Observable.
    *
    * @internal
    */
-  readonly themeSettings$: Observable<CompleteThemeSettings>;
+  readonly themeSettings$: Observable<CompleteThemeSettingsInternal>;
 
   private initializationPromise: Promise<void> = Promise.resolve();
 
@@ -80,7 +80,9 @@ export class ThemeService {
     private sisenseContextService: SisenseContextService,
     @Optional() @Inject(THEME_CONFIG_TOKEN) themeConfig?: ThemeConfig,
   ) {
-    this._themeSettings$ = new BehaviorSubject<CompleteThemeSettings>(getDefaultThemeSettings());
+    this._themeSettings$ = new BehaviorSubject<CompleteThemeSettingsInternal>(
+      getDefaultThemeSettings(),
+    );
     this.themeSettings$ = this._themeSettings$.asObservable();
     this.initializationPromise = this.initThemeSettings(themeConfig?.theme);
     this.sisenseContextService
@@ -124,7 +126,7 @@ export class ThemeService {
         { mergeArrays: false },
         this._themeSettings$.value,
         userThemeSettings,
-      ) as CompleteThemeSettings;
+      ) as CompleteThemeSettingsInternal;
 
       this._themeSettings$.next(mergedThemeSettings);
     } catch (error) {
@@ -144,7 +146,7 @@ export class ThemeService {
    *
    * @internal
    */
-  getThemeSettings(): CompleteThemeSettings {
+  getThemeSettings(): CompleteThemeSettingsInternal {
     return this._themeSettings$.value;
   }
 }

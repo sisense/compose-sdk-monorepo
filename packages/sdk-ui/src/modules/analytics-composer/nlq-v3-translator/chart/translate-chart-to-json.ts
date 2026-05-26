@@ -1,5 +1,3 @@
-import { JSONValue } from '@sisense/sdk-data';
-
 import { ChartProps } from '@/props.js';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../types.js';
@@ -9,6 +7,7 @@ import {
   translateHighlightsToJSON,
 } from '../constructs/filters/translate-filters-to-json.js';
 import { translateMeasuresToJSON } from '../constructs/measures/translate-measures-to-json.js';
+import { dataOptionsPath } from '../shared/utils/error-path.js';
 import {
   collectTranslationErrors,
   stripDelimitersFromJson,
@@ -63,8 +62,7 @@ export const translateChartToJSON = (
       success: false,
       errors: [
         {
-          category: 'dimensions',
-          index: -1,
+          path: 'chartType',
           input: chartProps,
           message: 'chartType is required',
         },
@@ -77,8 +75,7 @@ export const translateChartToJSON = (
       success: false,
       errors: [
         {
-          category: 'dimensions',
-          index: -1,
+          path: 'dataOptions',
           input: chartProps,
           message: 'dataOptions is required',
         },
@@ -130,14 +127,9 @@ export const translateChartToJSON = (
     ...(highlightsJSON && highlightsJSON.length > 0 && { highlights: highlightsJSON }),
   };
 
-  // Type boundary: ChartJSON is JSON-serializable at runtime but TS does not infer assignability to JSONValue
-  const strippedChartJSON = stripDelimitersFromJson(
-    chartJSONBase as unknown as JSONValue,
-  ) as unknown as ChartJSON;
-
   return {
     success: true,
-    data: strippedChartJSON,
+    data: stripDelimitersFromJson(chartJSONBase),
   };
 };
 
@@ -183,7 +175,11 @@ function translateDataOptionsToJSON(dataOptions: object): NlqTranslationResult<D
         : translateMeasuresToJSON([item as Parameters<typeof translateMeasuresToJSON>[0][number]]);
       if (!itemResult.success) {
         itemResult.errors.forEach((e) => {
-          axisErrors.push({ ...e, index: i, input: e.input ?? item });
+          axisErrors.push({
+            ...e,
+            path: dataOptionsPath(axisKey, i),
+            input: e.input ?? item,
+          });
         });
       } else {
         translated.push(...itemResult.data);

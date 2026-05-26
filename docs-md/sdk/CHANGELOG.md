@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.28.0] - 2026-05-26
+
+### Added
+- Add Excel download support for widgets (for internal testing)
+- Add `useTheme` hook for accessing the active theme settings
+
+### Changed
+- Fix dashboard column resize when reaching `maxWidth`
+- Fix widget drag interaction obstructed by widget title text
+- Fix pivot query sorting configuration when sorting by measure with no pivot columns
+- Fix `IncludeAll` highlight filter causing JAQL query failure
+- Fix chart navigator rendering when zoom range falls outside data bounds
+- Fix pivot widget loader vertical centering inside explicit-height containers
+
 ## [2.27.0] - 2026-05-13
 
 ### Added

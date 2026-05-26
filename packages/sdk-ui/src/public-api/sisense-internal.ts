@@ -24,7 +24,7 @@ export { useThemeContext } from '../infra/contexts/theme-provider';
 
 // App settings hook and type
 export { useAppSettings } from '../shared/hooks/use-app-settings';
-export type { AppSettings } from '../infra/app/settings/settings';
+export type { AiFeatureFlags, AppSettings } from '../infra/app/settings/settings';
 
 // QuotaNotification component and hooks
 export { QuotaNotification } from '../shared/components/quota-notification/quota-notification.js';

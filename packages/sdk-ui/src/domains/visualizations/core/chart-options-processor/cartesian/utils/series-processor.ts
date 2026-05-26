@@ -1,6 +1,6 @@
 import { prepareDataLabelsOptions } from '@/domains/visualizations/core/chart-options-processor/series-labels';
 
-import { ChartType, CompleteThemeSettings } from '../../../../../../types';
+import { ChartType, CompleteThemeSettingsInternal } from '../../../../../../types';
 import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 import { CartesianChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CategoricalSeriesValues } from '../../../chart-data/types';
@@ -44,7 +44,7 @@ interface SeriesProcessingConfig {
   axisClipped: AxisClipped[];
   xAxisSettings: AxisSettings[];
   stacking?: string;
-  themeSettings?: CompleteThemeSettings;
+  themeSettings?: CompleteThemeSettingsInternal;
   dateFormatter?: (date: Date, format: string) => string;
 }
 
@@ -181,7 +181,7 @@ function getSeriesDesignOptions(
 function getSeriesColor(
   dataOptions: CartesianChartDataOptionsInternal,
   seriesName: string,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   index?: number,
 ): string | undefined {
   return (

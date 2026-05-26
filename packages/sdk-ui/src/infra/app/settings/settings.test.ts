@@ -155,4 +155,12 @@ describe('getSettings function', () => {
 
     expect(settings.ai.featureModelType).toBeUndefined();
   });
+
+  it('allows consumers to read arbitrary loosely-typed feature flags from ai.featureFlags', async () => {
+    const settings = await getSettings({}, mockHttpClient, false);
+
+    // Index-signature access for forward-compat flags not yet known to CSDK.
+    // Unknown keys must be readable (typed `boolean | undefined`) without a CSDK type bump.
+    expect(settings.ai.featureFlags.someFutureFlag).toBeUndefined();
+  });
 });

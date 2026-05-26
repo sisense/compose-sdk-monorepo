@@ -137,8 +137,7 @@ export const translateChartFromJSON = (input: ChartInput): NlqTranslationResult<
       success: false,
       errors: [
         {
-          category: 'chartType',
-          index: -1,
+          path: 'chartType',
           input: normalized.chartType,
           message: 'Invalid chartType',
         },

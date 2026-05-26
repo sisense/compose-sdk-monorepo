@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-import { CompleteThemeSettings } from '@/index';
+import { CompleteThemeSettingsInternal } from '@/index';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
 
@@ -17,7 +17,7 @@ import InfoIcon from '../icons/info-icon';
 import RefreshIcon from '../icons/refresh-icon';
 import ThreeDotsIcon from '../icons/three-dots-icon';
 
-const getHoverColor = (themeSettings: CompleteThemeSettings) =>
+const getHoverColor = (themeSettings: CompleteThemeSettingsInternal) =>
   getSlightlyDifferentColor(themeSettings.chart.backgroundColor);
 
 const InfoTooltip = ({ title }: { title: string }) => {

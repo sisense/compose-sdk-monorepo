@@ -1,6 +1,6 @@
 import { isDatetime } from '@sisense/sdk-data';
 
-import { ChartType, CompleteThemeSettings, TotalLabels } from '../../../../../../../types';
+import { ChartType, CompleteThemeSettingsInternal, TotalLabels } from '../../../../../../../types';
 import { CartesianChartDataOptionsInternal } from '../../../../chart-data-options/types';
 import { CartesianChartData } from '../../../../chart-data/types';
 import { Stacking } from '../../../chart-options-service';
@@ -316,7 +316,7 @@ export const buildYAxisSettings = (
   secondaryMinMax: AxisMinMax | undefined,
   stackingMeta: StackingMeta,
   dataOptions: CartesianChartDataOptionsInternal,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ): YAxisSettingsResult => {
   const basicSettings = getYAxisSettings(
     yAxis,

@@ -5,6 +5,7 @@
  * @internal
  */
 import { NlqTranslationError } from '../../../types.js';
+import { dataOptionsPath } from '../../shared/utils/error-path.js';
 import { findBestMatch, SUGGESTION_THRESHOLD } from '../../shared/utils/fuzzy-match.js';
 import type { PivotTableDataOptionsJSON, PivotTableJSON } from '../../types.js';
 import { isRecordStringUnknown } from '../../types.js';
@@ -38,8 +39,7 @@ export function validatePivotTableJSONStructure(rawInput: unknown): {
 
   if (!isRecordStringUnknown(rawInput)) {
     errors.push({
-      category: 'dataOptions',
-      index: -1,
+      path: 'dataOptions',
       input: rawInput,
       message: 'Expected an object',
     });
@@ -60,8 +60,7 @@ export function validatePivotTableJSONStructure(rawInput: unknown): {
         ? { [match.best]: rawInput[match.best] }
         : rawInput;
     errors.push({
-      category: 'dataOptions',
-      index: -1,
+      path: 'dataOptions',
       input,
       message: `dataOptions is required.${suggestion}`,
     });
@@ -76,8 +75,7 @@ export function validatePivotTableJSONStructure(rawInput: unknown): {
         const suggestion =
           match && match.distance <= SUGGESTION_THRESHOLD ? ` Did you mean '${match.best}'?` : '';
         errors.push({
-          category: 'dataOptions',
-          index: key,
+          path: dataOptionsPath(key),
           input: dataOptions[key],
           message: `Unknown dataOptions key '${key}'. Valid keys: rows, columns, values, grandTotals.${suggestion}`,
         });
@@ -89,8 +87,7 @@ export function validatePivotTableJSONStructure(rawInput: unknown): {
       const val = dataOptions[key];
       if (val !== undefined && val !== null && !Array.isArray(val)) {
         errors.push({
-          category: 'dataOptions',
-          index: key,
+          path: dataOptionsPath(key),
           input: val,
           message: `dataOptions.${key} must be an array`,
         });
@@ -101,8 +98,7 @@ export function validatePivotTableJSONStructure(rawInput: unknown): {
     const grandTotals = dataOptions.grandTotals;
     if (grandTotals !== undefined && grandTotals !== null && !isValidGrandTotals(grandTotals)) {
       errors.push({
-        category: 'dataOptions',
-        index: 'grandTotals',
+        path: dataOptionsPath('grandTotals'),
         input: grandTotals,
         message: 'grandTotals must be an object with optional rows?: boolean, columns?: boolean',
       });

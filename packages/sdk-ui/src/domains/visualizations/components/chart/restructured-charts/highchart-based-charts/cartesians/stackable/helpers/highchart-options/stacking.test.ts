@@ -4,7 +4,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { CartesianChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { AxisSettings } from '@/domains/visualizations/core/chart-options-processor/translations/axis-section.js';
 import { StackableChartDesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/design-options.js';
-import { CompleteThemeSettings, SeriesLabels } from '@/types';
+import { CompleteThemeSettingsInternal, SeriesLabels } from '@/types';
 
 import { BuildContext } from '../../../../types.js';
 import { StackableChartTypes } from '../../types.js';
@@ -37,7 +37,7 @@ describe('stacking', () => {
       showTotal = false,
       totalLabelRotation = 0,
       seriesLabels?: SeriesLabels,
-      themeSettings?: Partial<CompleteThemeSettings>,
+      themeSettings?: Partial<CompleteThemeSettingsInternal>,
     ): BuildContext<StackableChartTypes> => ({
       chartData: {
         type: 'cartesian',
@@ -112,7 +112,7 @@ describe('stacking', () => {
             ...themeSettings?.typography,
           },
           ...themeSettings,
-        } as CompleteThemeSettings,
+        } as CompleteThemeSettingsInternal,
         dateFormatter: vi.fn(() => 'formatted-date'),
         accessibilityEnabled: false,
       },

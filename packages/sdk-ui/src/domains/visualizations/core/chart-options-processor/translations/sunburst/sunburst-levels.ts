@@ -3,7 +3,7 @@ import { PointLabelObject } from '@sisense/sisense-charts';
 import { prepareDataLabelsOptions } from '@/domains/visualizations/core/chart-options-processor/series-labels';
 import { getDarkFactor, toColor } from '@/shared/utils/color';
 
-import { CompleteThemeSettings } from '../../../../../../types';
+import { CompleteThemeSettingsInternal } from '../../../../../../types';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CategoricalChartData } from '../../../chart-data/types';
 import { SunburstChartDesignOptions } from '../design-options';
@@ -21,7 +21,7 @@ export function prepareSunburstLevels(
   chartData: CategoricalChartData,
   dataOptions: CategoricalChartDataOptionsInternal,
   designOptions: SunburstChartDesignOptions,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ) {
   const rootLevelOptions = {
     level: 1,

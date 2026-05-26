@@ -1,5 +1,5 @@
 {
-  "version": "2.27.0",
+  "version": "2.28.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -84,6 +84,9 @@
     "demo": "yarn workspace @sisense/react-ts-demo dev",
     "demo:vue": "yarn workspace @sisense/vue-ts-demo dev",
     "demo:angular": "yarn workspace @sisense/angular-demo start",
+    "review-app": "yarn run review-app:build && yarn run review-app:serve",
+    "review-app:build": "node ./scripts/build-review-app.mjs",
+    "review-app:serve": "node ./scripts/serve-static.cjs public",
     "prepare:plugins-demo": "yarn nx run @sisense/sdk-plugins-cli:build && node packages/sdk-plugins/cli/dist/cli.js create-plugin --dev-mode --force --name demo-plugin --template line-chart --path examples/plugins-demo/demo-plugin && yarn install --no-immutable && yarn workspace demo-plugin build && yarn workspace demo-plugin test",
     "build": "yarn nx:build",
     "build:packages": "yarn nx run-many --target=build --projects='packages/*'",

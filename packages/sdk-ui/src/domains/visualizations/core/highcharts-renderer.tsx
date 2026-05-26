@@ -68,8 +68,29 @@ export const HighchartsRenderer = ({ options }: HighchartsRendererProps) => {
   // changing chart type requires a chart re-initialization
   const isChartTypeChanged = !!prevOptions && prevOptions?.chart?.type !== options?.chart?.type;
 
+  const isCategoriesLengthChanged =
+    !!prevOptions &&
+    (prevOptions?.xAxis?.[0]?.categories?.length ?? 0) !==
+      (options?.xAxis?.[0]?.categories?.length ?? 0);
+
+  const isSeriesDataLengthChanged =
+    !!prevOptions &&
+    (prevOptions?.series ?? []).some(
+      (prevSeries, index) =>
+        (prevSeries?.data?.length ?? 0) !== (options?.series?.[index]?.data?.length ?? 0),
+    );
+
+  const isSeriesCountChanged =
+    !!prevOptions && (prevOptions?.series?.length ?? 0) !== (options?.series?.length ?? 0);
+
   const immutable =
-    isAxisTypeChanged || isNavigatorStateChanged || isChartTypeChanged || isDeselectAllHighlights;
+    isAxisTypeChanged ||
+    isNavigatorStateChanged ||
+    isChartTypeChanged ||
+    isDeselectAllHighlights ||
+    isCategoriesLengthChanged ||
+    isSeriesDataLengthChanged ||
+    isSeriesCountChanged;
 
   const finalOptions = useMemo(() => {
     // provides deep copy in order to prevent "options" prop mutation, that leads to an extra rerender of current momoized component

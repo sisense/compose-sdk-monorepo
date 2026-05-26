@@ -4,7 +4,7 @@ import { DashboardProps } from '@/domains/dashboarding/index.js';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 import { DashboardDto } from '@/infra/api/types/dashboard-dto.js';
 import { AppSettings } from '@/infra/app/settings/settings.js';
-import { CompleteThemeSettings } from '@/types.js';
+import { CompleteThemeSettingsInternal } from '@/types.js';
 
 import { DashboardModel } from './dashboard-model.js';
 import {
@@ -57,7 +57,7 @@ export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps
  */
 export function fromDashboardDto(
   dashboardDto: DashboardDto,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
   appSettings?: AppSettings,
 ): DashboardModel {
   const {

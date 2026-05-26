@@ -1,4 +1,4 @@
-import { CompleteThemeSettings } from '../../../../../types.js';
+import { CompleteThemeSettingsInternal } from '../../../../../types.js';
 import { TableDataOptionsInternal } from '../../../core/chart-data-options/types.js';
 import { Column, DataTable } from '../../../core/chart-data-processor/table-processor.js';
 import {
@@ -28,7 +28,7 @@ export type TableProps = {
    *
    */
   designOptions?: TableDesignOptions;
-  themeSettings: CompleteThemeSettings;
+  themeSettings: CompleteThemeSettingsInternal;
   /**
    * Callback that calls when sort of column triggered
    *
@@ -52,7 +52,7 @@ export type DataTableWrapperProps = {
   height: number;
   width: number;
   customStyles?: TableCustomStyles;
-  themeSettings: CompleteThemeSettings;
+  themeSettings: CompleteThemeSettingsInternal;
   onSortUpdate: (column: Column) => void;
 };
 

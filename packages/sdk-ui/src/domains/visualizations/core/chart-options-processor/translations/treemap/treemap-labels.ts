@@ -13,7 +13,7 @@ import Highcharts, {
 import { prepareDataLabelsOptions } from '@/domains/visualizations/core/chart-options-processor/series-labels';
 import { getDarkFactor, toColor } from '@/shared/utils/color';
 
-import { CompleteThemeSettings, TreemapSeriesLabels } from '../../../../../../types';
+import { CompleteThemeSettingsInternal, TreemapSeriesLabels } from '../../../../../../types';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { TreemapChartDesignOptions } from '../design-options';
 import { LayoutPointResult, ParentValues, TreemapLayoutAlgorithmContext } from './types';
@@ -62,7 +62,7 @@ Highcharts.Series.types.treemap.prototype['squarifiedWithTopSpacing'] = function
 export function prepareTreemapLevels(
   dataOptions: CategoricalChartDataOptionsInternal,
   chartDesignOptions: TreemapChartDesignOptions,
-  themeSettings?: CompleteThemeSettings,
+  themeSettings?: CompleteThemeSettingsInternal,
 ) {
   const levels = createDefaultTreemapLevels();
 

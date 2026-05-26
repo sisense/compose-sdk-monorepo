@@ -11,12 +11,23 @@ import {
   PivotGrandTotals,
 } from '@sisense/sdk-data';
 
+import type { CommonFiltersOptions } from '@/domains/dashboarding/common-filters/types.js';
+import type {
+  DashboardConfig,
+  DashboardLayoutOptions,
+  DashboardStyleOptions,
+} from '@/domains/dashboarding/types.js';
 import {
   CategoryStyle,
   SeriesStyle,
   ValueStyle,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
-import type { PivotTableStyleOptions } from '@/types.js';
+import type { WidgetConfig, WidgetType } from '@/domains/widgets/components/widget/types.js';
+import type {
+  CustomWidgetStyleOptions,
+  PivotTableStyleOptions,
+  TextWidgetStyleOptions,
+} from '@/types.js';
 
 import { DataSchemaContext, NlqTranslationInput } from '../types.js';
 import type { SchemaIndex } from './shared/utils/schema-index.js';
@@ -123,11 +134,15 @@ export type ArgInput = NlqTranslationInput<Arg, ArgContext>;
 
 /**
  * Custom processor function signature.
+ *
+ * Implementations must not mutate `processedArgs`. Returns the argument list to pass to
+ * `executeFunction`—typically the same array reference when only validating, or a new array when
+ * normalizing or replacing nested values.
  */
 export type CustomFunctionProcessor = (
   processedArgs: ProcessedArg[],
   context: FunctionContext,
-) => void;
+) => ProcessedArg[];
 
 /**
  * Type guard: value is a non-null object (Record<string, unknown>).
@@ -356,3 +371,149 @@ export interface PivotTableJSON {
  * @internal
  */
 export type PivotTableInput = NlqTranslationInput<PivotTableJSON, DataSchemaContext>;
+
+// ─── Widget JSON utility types ────────────────────────────────────────────────
+
+/**
+ * Mirrors `WithCommonWidgetProps` for the JSON layer
+ */
+type WithCommonWidgetJSON<Base, Type extends WidgetType> = Base & {
+  widgetType: Type;
+  readonly id: string;
+};
+
+// ─── Widget JSON types ────────────────────────────────────────────────────────
+
+/**
+ * Data source in NLQ JSON — title only. Full JAQL details live in {@link DataSchemaContext}.
+ *
+ * @internal
+ */
+export type DataSourceJSON = string;
+
+/**
+ * JSON representation of a chart widget
+ *
+ * @internal
+ */
+export type ChartWidgetJSON = ChartJSON & {
+  title?: string;
+  description?: string;
+  dataSource?: DataSourceJSON;
+  config?: WidgetConfig;
+  highlightSelectionDisabled?: boolean;
+};
+
+/**
+ * JSON representation of a pivot table widget.
+ *
+ * @internal
+ */
+export type PivotTableWidgetJSON = PivotTableJSON & {
+  title?: string;
+  description?: string;
+  dataSource?: DataSourceJSON;
+  config?: WidgetConfig;
+};
+
+/**
+ * JSON representation of a text widget
+ *
+ * @internal
+ */
+export type TextWidgetJSON = {
+  styleOptions: TextWidgetStyleOptions;
+  config?: WidgetConfig;
+};
+
+/**
+ * JSON representation of a custom/plugin widget payload.
+ * `dataOptions` is passed through as opaque JSON — `GenericDataOptions` cannot be reliably
+ * round-tripped without custom-widget-specific schema knowledge.
+ * Only `filters` and `highlights` are translated; all other fields are pass-through.
+ * `widgetType` and `id` are added on `WidgetJSON` via `WithCommonWidgetJSON`.
+ *
+ * @internal
+ */
+export type CustomWidgetJSON = {
+  customWidgetType: string;
+  title?: string;
+  description?: string;
+  dataSource?: DataSourceJSON;
+  config?: WidgetConfig;
+  filters?: FunctionCall[];
+  highlights?: FunctionCall[];
+  /** Opaque pass-through — GenericDataOptions serialized as plain JSON */
+  dataOptions?: Record<string, unknown>;
+  styleOptions?: CustomWidgetStyleOptions;
+  customOptions?: Record<string, unknown>;
+};
+
+/**
+ * Dashboard-level options for a specific widget in NLQ JSON.
+ * Excludes non-JSON-safe fields such as `jtdConfig` (Map / Filter objects).
+ *
+ * @internal
+ */
+export type SpecificWidgetOptionsJSON = {
+  filtersOptions?: CommonFiltersOptions;
+  partialDtoOptions?: {
+    options?: Record<string, unknown>;
+    style?: Record<string, unknown>;
+  };
+};
+
+/**
+ * Widget options map for NLQ dashboard JSON.
+ *
+ * @internal
+ */
+export type WidgetsOptionsJSON = Record<string, SpecificWidgetOptionsJSON>;
+
+/**
+ * Discriminated union of all NLQ widget JSON representations.
+ * Mirrors the `WidgetProps` discriminated union in serializable JSON form.
+ *
+ * @internal
+ */
+export type WidgetJSON =
+  | WithCommonWidgetJSON<ChartWidgetJSON, 'chart'>
+  | WithCommonWidgetJSON<PivotTableWidgetJSON, 'pivot'>
+  | WithCommonWidgetJSON<TextWidgetJSON, 'text'>
+  | WithCommonWidgetJSON<CustomWidgetJSON, 'custom'>;
+
+// ─── Dashboard JSON type ──────────────────────────────────────────────────────
+
+/**
+ * JSON representation of a dashboard.
+ *
+ * @internal
+ */
+export interface DashboardJSON {
+  id?: string;
+  title?: string;
+  filters?: FunctionCall[];
+  widgets: WidgetJSON[];
+  layoutOptions?: DashboardLayoutOptions;
+  config?: DashboardConfig;
+  /** Data source title only — schema details live in {@link DataSchemaContext}. */
+  defaultDataSource?: DataSourceJSON;
+  styleOptions?: DashboardStyleOptions;
+  widgetsOptions?: WidgetsOptionsJSON;
+}
+
+// ─── Widget / Dashboard translation input types ───────────────────────────────
+
+/**
+ * Input type for widget translation (JSON → CSDK).
+ *
+ * @internal
+ */
+export type WidgetInput = NlqTranslationInput<WidgetJSON, DataSchemaContext>;
+
+/**
+ * Input type for dashboard translation (JSON → CSDK).
+ *
+ * @internal
+ */
+export type DashboardInput = NlqTranslationInput<DashboardJSON, DataSchemaContext>;

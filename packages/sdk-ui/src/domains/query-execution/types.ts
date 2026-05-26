@@ -76,6 +76,70 @@ export type CsvQuerySuccessState = {
 export type CsvQueryAction = DataLoadAction<Blob | string>;
 
 /**
+ * State of an on-demand Excel (JAQL) export request.
+ */
+export type ExcelQueryState =
+  | ExcelQueryLoadingState
+  | ExcelQueryErrorState
+  | ExcelQuerySuccessState;
+
+/**
+ * State of an Excel export that is loading.
+ */
+export type ExcelQueryLoadingState = {
+  /** Whether the export is loading */
+  isLoading: true;
+  /** Whether the export has failed */
+  isError: false;
+  /** Whether the export has succeeded */
+  isSuccess: false;
+  /** The error if any occurred */
+  error: undefined;
+  /** XLSX blob when the export has succeeded */
+  data: Blob | undefined;
+  /** Status of the export */
+  status: 'loading';
+};
+
+/**
+ * State of an Excel export that has failed.
+ */
+export type ExcelQueryErrorState = {
+  /** Whether the export is loading */
+  isLoading: false;
+  /** Whether the export has failed */
+  isError: true;
+  /** Whether the export has succeeded */
+  isSuccess: false;
+  /** The error if any occurred */
+  error: Error;
+  /** Result data when the export has succeeded */
+  data: undefined;
+  /** Status of the export */
+  status: 'error';
+};
+
+/**
+ * State of an Excel export that has succeeded.
+ */
+export type ExcelQuerySuccessState = {
+  /** Whether the export is loading */
+  isLoading: false;
+  /** Whether the export has failed */
+  isError: false;
+  /** Whether the export has succeeded */
+  isSuccess: true;
+  /** The error if any occurred */
+  error: undefined;
+  /** XLSX blob */
+  data: Blob;
+  /** Status of the export */
+  status: 'success';
+};
+
+export type ExcelQueryAction = DataLoadAction<Blob>;
+
+/**
  * State of a query execution.
  */
 export type QueryState = QueryLoadingState | QueryErrorState | QuerySuccessState;
@@ -158,7 +222,12 @@ export interface ExecuteQueryByWidgetIdParams {
    */
   filters?: Filter[];
 
-  /** Highlight filters that will highlight results that pass filter criteria */
+  /**
+   * Highlight filters that will highlight results that pass filter criteria.
+   *
+   * NOTE that highlight filters in the "Include all" state are silently omitted from the
+   * query. To clear a highlight, remove it from the array.
+   */
   highlights?: Filter[];
 
   /** {@inheritDoc ExecuteQueryParams.count} */
@@ -230,7 +299,12 @@ export interface BaseQueryParams {
   /** Filters that will slice query results */
   filters?: Filter[] | FilterRelations;
 
-  /** Highlight filters that will highlight results that pass filter criteria */
+  /**
+   * Highlight filters that will highlight results that pass filter criteria.
+   *
+   * NOTE that highlight filters in the "Include all" state are silently omitted from the
+   * query. To clear a highlight, remove it from the array.
+   */
   highlights?: Filter[];
 }
 
@@ -315,6 +389,36 @@ export type ExecuteCSVQueryConfig = {
  */
 export interface ExecuteCsvQueryParams extends ExecuteQueryParams {
   config?: ExecuteCSVQueryConfig;
+}
+
+/**
+ * Parameters for {@link useExecuteExcelQueryInternal} (JAQL XLSX export).
+ */
+export interface ExecuteExcelQueryParams extends ExecuteQueryParams {
+  /** `false` = repeat rows (Angular default); `true` = merge rows. */
+  mergeRows: boolean;
+  /** Suggested download file name (e.g. from widget title). */
+  filename?: string;
+  /**
+   * Widget id for export (`ChartWidget` / `Widget` `id`). Required when `enabled` runs an export;
+   * optional on the type so idle/default param objects can omit it.
+   */
+  widgetId?: string;
+  /**
+   * Widget presentation type for export (e.g. Compose `ChartType` from `ChartWidget` `chartType`).
+   */
+  widgetType?: string;
+  /**
+   * Widget title for Fusion JAQL `widget` segment (`oid;title`). Optional; defaults to empty string.
+   */
+  widgetTitle?: string;
+  /**
+   * Monotonic id assigned by {@link useExcelQueryFileLoader} on each `execute` so each click starts
+   * a distinct export even when query fields and `mergeRows` match the previous run.
+   *
+   * @internal
+   */
+  exportRunId?: number;
 }
 
 /**

@@ -1,7 +1,7 @@
 import { TFunction } from '@sisense/sdk-common';
 
 import { HighchartsOptionsInternal } from '@/domains/visualizations/core/chart-options-processor/chart-options-service.js';
-import { CompleteThemeSettings } from '@/types';
+import { CompleteThemeSettingsInternal } from '@/types';
 
 import { TypedChartData, TypedDataOptionsInternal, TypedDesignOptions } from '../types.js';
 
@@ -37,7 +37,7 @@ export type BuildContext<CT extends HighchartBasedChartTypes> = {
   designOptions: TypedDesignOptions<CT>;
   extraConfig: {
     translate: TFunction;
-    themeSettings: CompleteThemeSettings;
+    themeSettings: CompleteThemeSettingsInternal;
     dateFormatter: (date: Date, format: string) => string;
     accessibilityEnabled: boolean;
   };

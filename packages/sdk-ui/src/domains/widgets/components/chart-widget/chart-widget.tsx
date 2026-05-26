@@ -21,6 +21,7 @@ import { useWidgetHeaderManagement } from '../../hooks/use-widget-header-managem
 import { WidgetContainer } from '../../shared/widget-container';
 import { ChartWidgetProps } from './types';
 import { useChartWidgetCsvDownload } from './use-chart-widget-csv-download.js';
+import { useChartWidgetExcelDownload } from './use-chart-widget-excel-download.js';
 import { useWithChartWidgetDrilldown } from './use-with-chart-widget-drilldown';
 
 /**
@@ -96,7 +97,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     headerConfig: props.config?.header,
   });
 
-  const { headerConfig } = useChartWidgetCsvDownload({
+  const { headerConfig: headerConfigWithCsv } = useChartWidgetCsvDownload({
     baseHeaderConfig: headerConfigWithRenaming,
     title: props.title,
     chartType,
@@ -105,6 +106,16 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     filters: props.filters,
     highlights: props.highlights,
     config: props.config,
+  });
+
+  const { headerConfig } = useChartWidgetExcelDownload({
+    baseHeaderConfig: headerConfigWithCsv,
+    title: props.title,
+    chartType,
+    dataOptions,
+    dataSource,
+    config: props.config,
+    id: props.id,
   });
 
   const { propsWithDrilldown, isDrilldownEnabled, breadcrumbs } = useWithChartWidgetDrilldown({

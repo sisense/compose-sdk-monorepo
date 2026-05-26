@@ -1,5 +1,3 @@
-import { JSONValue } from '@sisense/sdk-data';
-
 import { PivotTableProps } from '@/props.js';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../types.js';
@@ -30,8 +28,7 @@ export const translatePivotTableToJSON = (
       success: false,
       errors: [
         {
-          category: 'dataOptions',
-          index: -1,
+          path: 'dataOptions',
           input: pivotTableProps,
           message: 'dataOptions is required',
         },
@@ -102,13 +99,8 @@ export const translatePivotTableToJSON = (
     ...(highlightsJSON && highlightsJSON.length > 0 && { highlights: highlightsJSON }),
   };
 
-  // Type boundary: PivotTableJSON is JSON-serializable at runtime but TS does not infer assignability to JSONValue
-  const strippedJSON = stripDelimitersFromJson(
-    pivotTableJSONBase as unknown as JSONValue,
-  ) as unknown as PivotTableJSON;
-
   return {
     success: true,
-    data: strippedJSON,
+    data: stripDelimitersFromJson(pivotTableJSONBase),
   };
 };
