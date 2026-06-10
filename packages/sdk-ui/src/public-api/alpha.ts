@@ -24,6 +24,9 @@ export {
   type CustomFilterTileProps,
 } from '../domains/filters/components/custom-filter-tile';
 
+// Shared hooks
+export { useSyncedState, type UseSyncedStateOptions } from '../shared/hooks/use-synced-state';
+
 // Charts related
 export {
   isIndicatorRenderOptions,
@@ -31,3 +34,7 @@ export {
   type HighchartsOptions,
   type CalendarHeatmapChartEventProps,
 } from '../props';
+
+// Modules infrastructure
+export type { Module, ModuleRequirement } from '../infra/modules/types.js';
+export { useModuleApiRegistry } from '../infra/modules/modules-context.js';

@@ -12,7 +12,7 @@
 
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { TranslatableError } from '../../translation/translatable-error.js';
-import { createAttribute, DimensionalAttribute } from '../attributes.js';
+import { createAttribute, DimensionalAttribute } from '../attributes/attributes.js';
 import { DimensionalElement } from '../base.js';
 import { create } from '../factory.js';
 import {

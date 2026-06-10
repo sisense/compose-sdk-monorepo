@@ -13,6 +13,10 @@ export * from './dashboard/translate-dashboard-to-json.js';
 // JAQL translation functionality
 export * from './query/translate-query-to-jaql.js';
 
+// Query element display names (NLQ query JSON)
+export { getQueryElementSummary } from './constructs/get-query-element-summary.js';
+export type { GetQueryElementSummaryOptions } from './constructs/get-query-element-summary.js';
+
 // Export types
 export type {
   ChartJSON,
@@ -28,6 +32,15 @@ export type {
   CustomWidgetJSON,
   WidgetJSON,
   WidgetInput,
+  WidgetConfigJSON,
+  QueryJSON,
+  QueryInput,
+  DimensionItemJSON,
+  MeasureItemJSON,
+  FunctionCall,
+  QueryElementKind,
+  QueryElementItemJSON,
+  ElementSummary,
   SpecificWidgetOptionsJSON,
   WidgetsOptionsJSON,
   DashboardJSON,

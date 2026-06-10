@@ -151,6 +151,12 @@ describe('when the fiscal year feature flag is disabled', () => {
       format: 'EEEE MMMM dd yyyy',
       expected: 'jeudi janvier 01 1970',
     },
+    {
+      locale: enUS,
+      date: zero,
+      format: 'EEEEE',
+      expected: 'T',
+    },
 
     /*
      * Angular text dates

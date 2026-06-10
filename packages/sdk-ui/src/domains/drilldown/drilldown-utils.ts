@@ -1,4 +1,4 @@
-import { Attribute, Column, MetadataTypes } from '@sisense/sdk-data';
+import { Attribute, CalculatedColumn, Column, MetadataTypes } from '@sisense/sdk-data';
 import { PointClickEventObject } from '@sisense/sisense-charts';
 import camelCase from 'lodash-es/camelCase';
 
@@ -29,6 +29,7 @@ import {
 } from '@/types';
 import { ChartDataOptions, ChartType, DataPoint, ScatterChartDataOptions } from '@/types';
 
+import { AnyColumn } from '../visualizations/core/chart-data-options/types';
 import { Hierarchy } from './hierarchy-model';
 
 export function getDrilldownInitialDimension(
@@ -72,7 +73,7 @@ export function applyDrilldownDimension(
   drilldownDimension: Attribute,
 ): ChartDataOptions {
   const shouldUpdateDataOption = (
-    currentDataOption: Column | StyledColumn | undefined,
+    currentDataOption: Column | CalculatedColumn | StyledColumn | undefined,
   ): boolean => {
     return (
       !!currentDataOption &&
@@ -86,7 +87,10 @@ export function applyDrilldownDimension(
     isBoxplot(chartType) ||
     isRange(chartType)
   ) {
-    const targetDataOption = (dataOptions as CartesianChartDataOptions).category[0];
+    // Target the first drillable category (skipping calculated dimensions which are not drillable)
+    const targetDataOption = (dataOptions as CartesianChartDataOptions).category.find(
+      (c) => !MetadataTypes.isCalculatedAttribute(translateColumnToAttribute(c)),
+    );
     if (shouldUpdateDataOption(targetDataOption)) {
       return {
         ...dataOptions,
@@ -96,10 +100,9 @@ export function applyDrilldownDimension(
   } else if (isScatter(chartType)) {
     const scatterDataOptions = dataOptions as ScatterChartDataOptions;
     const scatterTargetKeys = ['x', 'y', 'breakByPoint', 'breakByColor'] as const;
-    const drilldownTargetDataOptionKey = scatterTargetKeys.find((key) => {
-      const dataOption = scatterDataOptions[key];
-      return dataOption && !isMeasureColumn(dataOption);
-    })!;
+    const drilldownTargetDataOptionKey = scatterTargetKeys.find((key) =>
+      isScatterDataOptionDrillable(scatterDataOptions[key]),
+    );
 
     if (drilldownTargetDataOptionKey) {
       const targetDataOption = scatterDataOptions[drilldownTargetDataOptionKey] as
@@ -118,6 +121,17 @@ export function applyDrilldownDimension(
   return dataOptions;
 }
 
+/**
+ * Returns true when a scatter data-option is eligible as a drilldown target
+ */
+function isScatterDataOptionDrillable(dataOption: AnyColumn | undefined): boolean {
+  return (
+    !!dataOption &&
+    !isMeasureColumn(dataOption) &&
+    !MetadataTypes.isCalculatedAttribute(translateColumnToAttribute(dataOption))
+  );
+}
+
 export function prepareDrilldownSelectionPoints(
   points: (DataPoint | ScatterDataPoint)[],
   nativeEvent: MouseEvent,
@@ -128,8 +142,12 @@ export function prepareDrilldownSelectionPoints(
     const isScatterPoint = [...scatterTargetDataOptionsKeys, 'size'].some(
       (propName) => propName in point,
     );
-    const drilldownTargetDataOptionsKey = scatterTargetDataOptionsKeys.find(
-      (key) => dataOptions[key] && !isMeasureColumn(dataOptions[key]),
+    const drilldownTargetDataOptionsKey = scatterTargetDataOptionsKeys.find((key) =>
+      isScatterDataOptionDrillable(
+        (dataOptions as ScatterChartDataOptions)[
+          key as 'x' | 'y' | 'breakByPoint' | 'breakByColor'
+        ],
+      ),
     )!;
     if (isScatterPoint) {
       const event = nativeEvent as PointClickEventObject;

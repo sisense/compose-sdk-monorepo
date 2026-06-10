@@ -1,5 +1,5 @@
 import { TranslatableError } from '../../translation/translatable-error.js';
-import { DimensionalAttribute } from '../attributes.js';
+import { DimensionalAttribute } from '../attributes/attributes.js';
 import { FilterRelations, FilterRelationsJaql, FilterRelationsModel } from '../interfaces.js';
 import * as filterFactory from './factory.js';
 import {

@@ -1,7 +1,6 @@
 import {
   convertSortDirectionToSort,
   convertSortToSortDirection,
-  JSONArray,
   JSONValue,
   Measure,
   Sort,
@@ -12,6 +11,7 @@ import omit from 'lodash-es/omit';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
 import { toNlqErrorInput } from '../../shared/utils/translation-helpers.js';
+import type { MeasureItemJSON, StyledMeasureColumnJSON } from '../../types.js';
 
 /** Runtime StyledMeasureColumn: wrapper with column and optional style (from chart dataOptions) */
 type StyledMeasureColumn = { column: Measure; sortType?: SortDirection; [key: string]: unknown };
@@ -33,13 +33,13 @@ function isStyledMeasureColumn(item: unknown): item is StyledMeasureColumn {
  * otherwise outputs the parsed FunctionCall.
  *
  * @param measures - Array of CSDK Measure or StyledMeasureColumn objects
- * @returns NlqTranslationResult<JSONArray> - JSON array output for NLQ measures
+ * @returns NlqTranslationResult with measure items in NLQ JSON format
  * @internal
  */
 export function translateMeasuresToJSON(
   measures: (Measure | StyledMeasureColumn)[],
-): NlqTranslationResult<JSONArray> {
-  const results: JSONArray = [];
+): NlqTranslationResult<MeasureItemJSON[]> {
+  const results: MeasureItemJSON[] = [];
   const errors: NlqTranslationError[] = [];
 
   measures.forEach((item, index) => {
@@ -72,7 +72,7 @@ export function translateMeasuresToJSON(
 
       if (hasStyle) {
         const style = styledItem ? (omit(styledItem, 'column') as Record<string, JSONValue>) : {};
-        const styled: JSONValue = {
+        const styled: StyledMeasureColumnJSON = {
           column: functionCall,
           ...(sort !== undefined &&
             sort !== Sort.None && { sortType: convertSortToSortDirection(sort) }),

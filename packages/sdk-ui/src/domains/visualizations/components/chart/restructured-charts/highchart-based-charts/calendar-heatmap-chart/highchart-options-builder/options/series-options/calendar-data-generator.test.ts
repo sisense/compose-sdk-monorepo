@@ -21,13 +21,15 @@ describe('Calendar Data Generator', () => {
 
   // Create test data for January 2024 (starts on Monday)
   // January 6, 2024 is a Saturday, January 7, 2024 is a Sunday
+  // Use local midnight (new Date(y, m, d)) to match what the data pipeline produces after
+  // toLocalCalendarDate() normalization — avoids UTC-offset timezone shifts in getDate() calls.
   const testDataWithColors: CalendarHeatmapChartData = {
     type: 'calendar-heatmap',
     values: [
-      { date: new Date('2024-01-01T00:00:00Z'), value: 10, blur: false, color: '#data-color-1' }, // Monday with data color
-      { date: new Date('2024-01-06T00:00:00Z'), value: 15, blur: false, color: '#data-color-2' }, // Saturday with data color
-      { date: new Date('2024-01-07T00:00:00Z'), value: 20, blur: false }, // Sunday without color
-      { date: new Date('2024-01-08T00:00:00Z'), value: 25, blur: false }, // Monday without color
+      { date: new Date(2024, 0, 1), value: 10, blur: false, color: '#data-color-1' }, // Monday with data color
+      { date: new Date(2024, 0, 6), value: 15, blur: false, color: '#data-color-2' }, // Saturday with data color
+      { date: new Date(2024, 0, 7), value: 20, blur: false }, // Sunday without color
+      { date: new Date(2024, 0, 8), value: 25, blur: false }, // Monday without color
     ],
   };
 
@@ -90,9 +92,9 @@ describe('Calendar Data Generator', () => {
     const testDataNoColors: CalendarHeatmapChartData = {
       type: 'calendar-heatmap',
       values: [
-        { date: new Date('2024-01-01T00:00:00Z'), value: 10, blur: false },
-        { date: new Date('2024-01-06T00:00:00Z'), value: 15, blur: false },
-        { date: new Date('2024-01-07T00:00:00Z'), value: 20, blur: false },
+        { date: new Date(2024, 0, 1), value: 10, blur: false },
+        { date: new Date(2024, 0, 6), value: 15, blur: false },
+        { date: new Date(2024, 0, 7), value: 20, blur: false },
       ],
     };
 
@@ -152,11 +154,11 @@ describe('Calendar Data Generator', () => {
     const testDataWithBlur: CalendarHeatmapChartData = {
       type: 'calendar-heatmap',
       values: [
-        { date: new Date('2024-01-01T00:00:00Z'), value: 10, blur: false, color: '#normal' }, // Not blurred
-        { date: new Date('2024-01-02T00:00:00Z'), value: 15, blur: true, color: '#blurred' }, // Blurred
-        { date: new Date('2024-01-03T00:00:00Z'), value: 20, blur: false }, // Not blurred, no color
-        { date: new Date('2024-01-04T00:00:00Z'), value: 25, blur: true }, // Blurred, no color
-        { date: new Date('2024-01-05T00:00:00Z'), value: 30 }, // No blur property (undefined)
+        { date: new Date(2024, 0, 1), value: 10, blur: false, color: '#normal' }, // Not blurred
+        { date: new Date(2024, 0, 2), value: 15, blur: true, color: '#blurred' }, // Blurred
+        { date: new Date(2024, 0, 3), value: 20, blur: false }, // Not blurred, no color
+        { date: new Date(2024, 0, 4), value: 25, blur: true }, // Blurred, no color
+        { date: new Date(2024, 0, 5), value: 30 }, // No blur property (undefined)
       ],
     };
 
@@ -193,9 +195,9 @@ describe('Calendar Data Generator', () => {
     const testDataBlurWithWeekends: CalendarHeatmapChartData = {
       type: 'calendar-heatmap',
       values: [
-        { date: new Date('2024-01-06T00:00:00Z'), value: 15, blur: true, color: '#data-color' }, // Saturday, blurred
-        { date: new Date('2024-01-07T00:00:00Z'), value: 20, blur: false, color: '#data-color' }, // Sunday, not blurred
-        { date: new Date('2024-01-08T00:00:00Z'), value: 25, blur: true }, // Monday, blurred, no data color
+        { date: new Date(2024, 0, 6), value: 15, blur: true, color: '#data-color' }, // Saturday, blurred
+        { date: new Date(2024, 0, 7), value: 20, blur: false, color: '#data-color' }, // Sunday, not blurred
+        { date: new Date(2024, 0, 8), value: 25, blur: true }, // Monday, blurred, no data color
       ],
     };
 
@@ -233,13 +235,13 @@ describe('Calendar Data Generator', () => {
     const multiMonthData: CalendarHeatmapChartData = {
       type: 'calendar-heatmap',
       values: [
-        { date: new Date('2024-01-01T00:00:00Z'), value: 10 },
-        { date: new Date('2024-01-15T00:00:00Z'), value: 15 },
-        { date: new Date('2024-01-31T00:00:00Z'), value: 20 },
-        { date: new Date('2024-02-01T00:00:00Z'), value: 25 },
-        { date: new Date('2024-02-14T00:00:00Z'), value: 30 },
-        { date: new Date('2024-02-29T00:00:00Z'), value: 35 }, // Leap year
-        { date: new Date('2024-03-01T00:00:00Z'), value: 40 },
+        { date: new Date(2024, 0, 1), value: 10 },
+        { date: new Date(2024, 0, 15), value: 15 },
+        { date: new Date(2024, 0, 31), value: 20 },
+        { date: new Date(2024, 1, 1), value: 25 },
+        { date: new Date(2024, 1, 14), value: 30 },
+        { date: new Date(2024, 1, 29), value: 35 }, // Leap year
+        { date: new Date(2024, 2, 1), value: 40 },
       ],
     };
 
@@ -346,8 +348,8 @@ describe('Calendar Data Generator', () => {
       const testData: CalendarHeatmapChartData = {
         type: 'calendar-heatmap',
         values: [
-          { date: new Date('2024-01-01T00:00:00Z'), value: 10, blur: true, color: '#test-color' },
-          { date: new Date('2024-01-02T00:00:00Z'), value: 20, blur: false },
+          { date: new Date(2024, 0, 1), value: 10, blur: true, color: '#test-color' },
+          { date: new Date(2024, 0, 2), value: 20, blur: false },
         ],
       };
 
@@ -436,7 +438,7 @@ describe('Calendar Data Generator', () => {
     it('should handle single data point', () => {
       const singlePointData: CalendarHeatmapChartData = {
         type: 'calendar-heatmap',
-        values: [{ date: new Date('2024-01-01T00:00:00Z'), value: 10 }],
+        values: [{ date: new Date(2024, 0, 1), value: 10 }],
       };
 
       const result = generateContinuousCalendarChartData(

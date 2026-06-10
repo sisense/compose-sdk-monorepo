@@ -13,9 +13,15 @@ const meta: Meta<typeof QueryDefinition> = {
       control: 'boolean',
       description: 'Hover pills to see source JSON (works in Storybook without MUI theme).',
     },
+    maxPillLength: {
+      control: { type: 'number', min: 0 },
+      description:
+        'Maximum characters shown in each pill label before truncation (default 25). Pass 0 to show the full label.',
+    },
   },
   args: {
     showTooltip: true,
+    maxPillLength: 25,
   },
   parameters: {
     docs: {
@@ -23,6 +29,8 @@ const meta: Meta<typeof QueryDefinition> = {
         component:
           'Read-only query definition as colored pills (measures → dimensions → filters). ' +
           'Figma-aligned colors; up to 4 pills then “Show N more” / “Show less”. Hover pills for JSON tooltip. ' +
+          "Filter pills use readable labels (e.g. `Region is North`, `Category in ['A', 'B']`). " +
+          'Long labels truncate at `maxPillLength` (default 25) with an ellipsis; set `maxPillLength={0}` to disable. ' +
           'Tooltips use the viewport by default; pass `tooltipBoundaryElement` (e.g. chart card) to clamp inside a host.',
       },
     },
@@ -142,6 +150,46 @@ export const AllCategories: Story = {
       description: {
         story:
           'Measure (green), Dimension (purple), Filter (blue) per Figma tokens; connectors "by" and "where".',
+      },
+    },
+  },
+};
+
+/** Long filter labels truncate at `maxPillLength` (default 25). Hover for the full label via tooltip or native title. */
+export const TruncatedFilterLabels: Story = {
+  args: {
+    maxPillLength: 25,
+    query: {
+      filters: [
+        filterFactory.members(categoryAttr, ['Calculators', 'Camera Flashes', 'Accessories']),
+        filterFactory.members(regionAttr, ['North']),
+      ],
+    } as ExecuteQueryParams,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Multi-value filters produce long readable labels (`Category in […]`). ' +
+          'With the default `maxPillLength={25}`, pills show the first 25 characters plus `...`.',
+      },
+    },
+  },
+};
+
+export const NoLabelTruncation: Story = {
+  args: {
+    maxPillLength: 0,
+    query: {
+      filters: [
+        filterFactory.members(categoryAttr, ['Calculators', 'Camera Flashes', 'Accessories']),
+      ],
+    } as ExecuteQueryParams,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pass `maxPillLength={0}` to render the full pill label without truncation.',
       },
     },
   },

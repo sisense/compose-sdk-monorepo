@@ -5,6 +5,8 @@ import { isPivotRowsSort } from '@/domains/visualizations/components/pivot-table
 import { getTableAttributesAndMeasures } from '@/domains/visualizations/components/table/hooks/use-table-data.js';
 import {
   AreamapChartDataOptions,
+  BoxplotChartDataOptions,
+  CalendarHeatmapChartDataOptions,
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   IndicatorChartDataOptions,
@@ -608,6 +610,60 @@ export function toAreamapPanels(dataOptions: AreamapChartDataOptions): Panel[] {
     : [];
   return [
     { name: 'geo', items: geoItems },
+    { name: 'color', items: colorItems },
+  ];
+}
+
+/**
+ * Builds DTO panels for a boxplot chart widget. Emits `category` (0 or 1 attribute)
+ * and `value` (the single target numeric attribute, treated as an attribute — not a
+ * measure — to match the inverse read in `extractBoxplotChartDataOptions`). The
+ * derived box/whisker measures live on `style.whisker` rather than on panels, so
+ * they are written by {@link toBoxplotWidgetStyle} instead.
+ *
+ * @param dataOptions - Boxplot chart data options from the WidgetModel
+ * @returns Fusion panels in fixed order: category, value
+ * @internal
+ */
+export function toBoxplotPanels(dataOptions: BoxplotChartDataOptions): Panel[] {
+  const [categoryColumn] = dataOptions.category ?? [];
+  const [valueColumn] = dataOptions.value ?? [];
+  const categoryItems: PanelItem[] = categoryColumn
+    ? [createPanelItem(normalizeColumn(categoryColumn))]
+    : [];
+  const valueItems: PanelItem[] = valueColumn
+    ? [createPanelItem(normalizeColumn(valueColumn))]
+    : [];
+  return [
+    { name: 'category', items: categoryItems },
+    { name: 'value', items: valueItems },
+  ];
+}
+
+/**
+ * Builds DTO panels for a calendar-heatmap widget. The Fusion `heatmap` manifest declares
+ * `date` (single attribute) and `color` (single measure) panels — both are always emitted,
+ * matching the inverse read in {@link extractCaledarHeatmapChartDataOptions}: an empty
+ * `items: []` array is written when a slot has no column so Fusion's renderer can locate
+ * each declared panel by name.
+ *
+ * Note: the DTO panel name for the measure slot is `color`, not `value` — the SDK's
+ * {@link CalendarHeatmapChartDataOptions.value} is read from / written to the panel named
+ * `color`.
+ *
+ * @param dataOptions - Calendar heatmap chart data options from the WidgetModel
+ * @returns Fusion panels: date, color
+ * @internal
+ */
+export function toCalendarHeatmapPanels(dataOptions: CalendarHeatmapChartDataOptions): Panel[] {
+  const dateItems: PanelItem[] = dataOptions.date
+    ? [createPanelItem(normalizeColumn(dataOptions.date))]
+    : [];
+  const colorItems: PanelItem[] = dataOptions.value
+    ? [createPanelItem(normalizeMeasureColumn(dataOptions.value))]
+    : [];
+  return [
+    { name: 'date', items: dateItems },
     { name: 'color', items: colorItems },
   ];
 }

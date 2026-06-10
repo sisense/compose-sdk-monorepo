@@ -1,4 +1,6 @@
-import { createAttribute } from '../attributes.js';
+import { TranslatableError } from '../../translation/translatable-error.js';
+import { createAttribute } from '../attributes/attributes.js';
+import * as attributeFactory from '../attributes/factory.js';
 import { createDateDimension } from '../dimensions/index.js';
 import { Filter } from '../interfaces.js';
 import * as measureFactory from '../measures/factory.js';
@@ -41,6 +43,23 @@ const dateDim = createDateDimension({
 
 const filter1 = filterFactory.members(textAttr, ['text1', 'text2']);
 const filter2 = filterFactory.members(numAttr, ['1', '2', '3']);
+
+describe('filterFactory calculated-dimension guard', () => {
+  const calcDim = attributeFactory.customFormula('Bucket', "IF([n] > 10, 'A', 'B')", {
+    n: numAttr,
+  });
+
+  it('throws when a calculated dimension is used as a filter source attribute', () => {
+    const expectedError = new TranslatableError('errors.filter.unsupportedCalculatedAttribute');
+    expect(() => filterFactory.members(calcDim, ['A'])).toThrow(expectedError);
+    expect(() => filterFactory.contains(calcDim, 'A')).toThrow(expectedError);
+    expect(() => filterFactory.greaterThan(calcDim, 1)).toThrow(expectedError);
+  });
+
+  it('still allows regular attributes', () => {
+    expect(() => filterFactory.members(textAttr, ['text1'])).not.toThrow();
+  });
+});
 
 describe('filterFactory', () => {
   const mockGuid = 'GUID';

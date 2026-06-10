@@ -5,8 +5,6 @@ import {
   Dimension,
   Filter,
   FilterRelations,
-  FilterRelationsModel,
-  FilterRelationsModelNode,
   FormulaContext,
   FormulaJaql,
   Measure,
@@ -117,19 +115,33 @@ const createFilterFromCascadingFilterDto = (
 
 export function extractDashboardFilters(
   dashboardFilters: Array<FilterDto | CascadingFilterDto>,
-  filterRelationsModel?: FilterRelationsModel | FilterRelationsModelNode,
+  filterRelationsDtoOptions?: DashboardDto['filterRelations'],
 ): Filter[] | FilterRelations {
   const filters = dashboardFilters.map((f) =>
     isCascadingFilterDto(f) ? createFilterFromCascadingFilterDto(f) : createFilterFromFilterDto(f),
   );
-  if (!filterRelationsModel) {
+  if (!filterRelationsDtoOptions?.length) {
     return filters;
   }
-  const filterRelations = convertFilterRelationsModelToRelationRules(filterRelationsModel, filters);
-  if (!filterRelations || isTrivialSingleNodeRelations(filterRelations)) {
+
+  // Fusion stores one filter-relations group per entry; top-level combination is always AND.
+  // Convert each entry and AND them together to reconstruct the full dashboard relations.
+  const allRules = filterRelationsDtoOptions
+    .map(({ filterRelations: model }) => convertFilterRelationsModelToRelationRules(model, filters))
+    .filter((rules): rules is NonNullable<typeof rules> => rules !== null);
+
+  // Return a flat array when no explicit non-trivial relations exist (avoids spurious filter-relations tile).
+  if (allRules.length === 0 || allRules.every(isTrivialSingleNodeRelations)) {
     return filters;
   }
-  return combineFiltersAndRelations(filters, filterRelations);
+
+  const [first, ...rest] = allRules;
+  const combinedRules = rest.reduce(
+    (acc, rules) => ({ left: acc, right: rules, operator: 'AND' as const }),
+    first,
+  );
+
+  return combineFiltersAndRelations(filters, combinedRules);
 }
 
 /**

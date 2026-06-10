@@ -1,0 +1,5 @@
+node_modules
+*.local
+.yarn
+.env.local
+.env.*.local

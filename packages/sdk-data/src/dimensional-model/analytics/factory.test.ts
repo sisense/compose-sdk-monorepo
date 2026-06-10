@@ -1,5 +1,5 @@
 /* eslint-disable vitest/expect-expect */
-import { createAttribute } from '../attributes.js';
+import { createAttribute } from '../attributes/attributes.js';
 import { Attribute, Measure } from '../interfaces.js';
 import { BaseJaql, FilterJaql, FormulaJaql, NumericFilterJaql, OrFilterJaql } from '../types.js';
 import * as analyticsFactory from './factory.js';

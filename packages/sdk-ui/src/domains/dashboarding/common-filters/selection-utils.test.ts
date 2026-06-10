@@ -1,5 +1,6 @@
 import {
   Attribute,
+  attributeFactory,
   createAttribute,
   filterFactory,
   measureFactory,
@@ -247,6 +248,20 @@ describe('selection-utils', () => {
         expect(attribute.expression).toEqual(attributes[index].expression);
       });
     });
+
+    it('excludes calculated dimensions (not selectable for cross-filtering or drilldown)', () => {
+      const calcDim = attributeFactory.customFormula('Bucket', "IF([rev] > 1000, 'A', 'B')", {
+        rev: DM.Commerce.Revenue,
+      });
+
+      const selectableAttributes = getSelectableWidgetAttributes('column', {
+        category: [calcDim, DM.Commerce.AgeRange],
+        value: [],
+      });
+
+      expect(selectableAttributes).toHaveLength(1);
+      expect(selectableAttributes[0].expression).toEqual(DM.Commerce.AgeRange.expression);
+    });
   });
 
   describe('getWidgetSelections()', () => {
@@ -294,6 +309,23 @@ describe('selection-utils', () => {
       const selections = getWidgetSelections('column', dataOptions, points);
       expect(selections[0].attribute.expression).toEqual(DM.Commerce.AgeRange.expression);
       expect(selections[0].values).toEqual(['65+']);
+    });
+
+    it('does not produce a cross-filter selection for a calculated-dimension data point', () => {
+      const calcDim = attributeFactory.customFormula('Bucket', "IF([rev] > 1000, 'A', 'B')", {
+        rev: DM.Commerce.Revenue,
+      });
+      const dataOptions = { category: [calcDim], value: [] };
+      const points = [
+        {
+          entries: {
+            category: [{ attribute: calcDim, value: 'A' }],
+          },
+        },
+      ] as unknown as DataPoint[];
+
+      const selections = getWidgetSelections('column', dataOptions, points);
+      expect(selections).toEqual([]);
     });
 
     it('should keep datetime attributes with the same expression as separate selections by granularity', () => {

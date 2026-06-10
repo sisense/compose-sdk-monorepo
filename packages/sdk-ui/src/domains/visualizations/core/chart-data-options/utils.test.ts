@@ -1,4 +1,5 @@
 import {
+  attributeFactory,
   CalculatedMeasureColumn,
   Column,
   DateLevels,
@@ -156,6 +157,21 @@ describe('Chart Data Options Utils', () => {
 
     it('should return false for attribute columns', () => {
       expect(isMeasureColumn(thisColumn)).toBe(false);
+    });
+
+    it('should return false for a calculated dimension (calculated attribute)', () => {
+      // A calculated dimension carries formula + context like a calculated measure, but must be
+      // treated as a category/dimension, not a measure.
+      const calculatedDimension = attributeFactory.customFormula(
+        'Age & Gender',
+        "Concat([ageRange], ' ', [gender])",
+        { ageRange: thisColumn, gender: thatColumn } as never,
+      );
+
+      expect(isMeasureColumn(calculatedDimension as unknown as Column)).toBe(false);
+      expect(isMeasureColumn({ column: calculatedDimension } as unknown as StyledColumn)).toBe(
+        false,
+      );
     });
   });
 

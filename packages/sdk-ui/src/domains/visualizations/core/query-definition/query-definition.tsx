@@ -2,10 +2,12 @@ import { type FunctionComponent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { ExecuteQueryParams } from '@/domains/query-execution/types';
+import { getTableAttributesAndMeasures } from '@/domains/visualizations/components/table/hooks/use-table-data';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import type { ChartProps } from '@/props';
 
 import { getTranslatedDataOptions } from '../chart-data-options/get-translated-data-options';
+import { translateTableDataOptions } from '../chart-data-options/translate-data-options';
 import { QUERY_DEFINITION_TEXT_STYLE } from './query-definition-style-constants';
 import { baseQueryParamsToViewModel } from './query-params-to-view-model';
 import { QueryPill } from './query-pill';
@@ -31,6 +33,11 @@ export interface QueryDefinitionProps {
    * root is only one row tall and must not be used as boundary (breaks vertical placement).
    */
   tooltipBoundaryElement?: HTMLElement | null;
+  /**
+   * Maximum number of characters shown in each pill label before truncation (default `25`).
+   * Pass `0` to show the full label.
+   */
+  maxPillLength?: number;
 }
 
 function isChartPropsInput(input: ExecuteQueryParams | ChartProps): input is ChartProps {
@@ -70,6 +77,12 @@ function chartPropsToQueryParams({
   chartType,
   filters,
 }: ChartProps): ExecuteQueryParams {
+  if (chartType === 'table' && 'columns' in dataOptions) {
+    const { attributes: dimensions, measures } = getTableAttributesAndMeasures(
+      translateTableDataOptions(dataOptions),
+    );
+    return { dimensions, measures, filters };
+  }
   const { attributes: dimensions, measures } = getTranslatedDataOptions(dataOptions, chartType);
   return { dimensions, measures, filters };
 }
@@ -84,6 +97,7 @@ export const QueryDefinition: FunctionComponent<QueryDefinitionProps> = ({
   query: queryInput,
   showTooltip = true,
   tooltipBoundaryElement,
+  maxPillLength = 25,
 }) => {
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
@@ -124,6 +138,7 @@ export const QueryDefinition: FunctionComponent<QueryDefinitionProps> = ({
             item={item}
             showTooltip={showTooltip}
             tooltipBoundaryElement={tooltipBoundaryElement}
+            maxLength={maxPillLength}
           />
         ),
       )}

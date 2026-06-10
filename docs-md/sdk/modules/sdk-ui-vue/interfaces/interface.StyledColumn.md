@@ -50,9 +50,9 @@ All possible color options for data.
 
 ### column
 
-> **column**: [`Column`](../../sdk-data/interfaces/interface.Column.md)
+> **column**: [`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md)
 
-Wrapped Column
+Wrapped Column or CalculatedColumn (calculated dimension)
 
 ***
 

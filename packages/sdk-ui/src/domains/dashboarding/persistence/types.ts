@@ -5,6 +5,10 @@ import type {
 } from '@/domains/dashboarding/dashboard-model';
 import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 
+import type { WidgetPropsUpdate } from './update-types.js';
+
+export type { WidgetPropsUpdate, OnWidgetUpdate } from './update-types.js';
+
 /**
  * Interface for persisting dashboard changes from the composition layer (e.g. add widget).
  *
@@ -57,4 +61,18 @@ export type DashboardPersistenceManager = {
      */
     patch: WidgetPatch,
   ) => Promise<void>;
+
+  /**
+   * Apply a props-shaped partial update to an existing widget. The composition
+   * layer's preferred write channel for visualization-originated state
+   * (scroll, customOptions, future title/description). Internally routed
+   * through the per-field DTO patch table in `persist-dashboard-model-middleware`.
+   *
+   * Fire-and-forget; errors are logged at the call site. The reducer applies
+   * the update to the canonical `WidgetModel` synchronously before the REST
+   * call fires.
+   *
+   * @sisenseInternal
+   */
+  updateWidget: (widgetOid: string, update: WidgetPropsUpdate) => Promise<void>;
 };

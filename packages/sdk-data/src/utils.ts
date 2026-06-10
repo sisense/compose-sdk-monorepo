@@ -1,7 +1,11 @@
 import cloneDeep from 'lodash-es/cloneDeep.js';
 import mapValues from 'lodash-es/mapValues.js';
 
-import { DimensionalAttribute, DimensionalLevelAttribute } from './dimensional-model/attributes.js';
+import {
+  DimensionalAttribute,
+  DimensionalLevelAttribute,
+} from './dimensional-model/attributes/attributes.js';
+import * as attributeFactory from './dimensional-model/attributes/factory.js';
 import { isCascadingFilter } from './dimensional-model/filters/filters.js';
 import { createFilterFromJaqlInternal } from './dimensional-model/filters/utils/filter-from-jaql-util.js';
 import {
@@ -12,6 +16,7 @@ import {
 } from './dimensional-model/filters/utils/types.js';
 import {
   Attribute,
+  AttributeContext,
   BaseMeasure,
   CalculatedMeasure,
   Filter,
@@ -31,6 +36,7 @@ import {
   AggregationType,
   AggregationTypes,
   BaseJaql,
+  CALCULATED_DIMENSION_JAQL_TYPE,
   DateLevels,
   FilterJaql,
   FormulaJaql,
@@ -593,6 +599,30 @@ export const createCalculatedMeasureHelper = (jaql: FormulaJaql): CalculatedMeas
 };
 
 /**
+ * Creates a calculated attribute (a calculated dimension) from the provided JAQL.
+ *
+ * @returns calculated attribute
+ * @internal
+ */
+export const createCalculatedAttributeHelper = (jaql: FormulaJaql): Attribute => {
+  const context: AttributeContext = mapValues(jaql.context ?? {}, (jaqlContextValue) => {
+    if (typeof jaqlContextValue === 'string') {
+      return jaqlContextValue;
+    }
+    return jaqlContextValue && createDimensionalElementFromJaql(jaqlContextValue);
+  });
+
+  const attribute = attributeFactory.customFormula(jaql.title, jaql.formula, context);
+
+  // Apply sort if present in the JAQL
+  if (jaql.sort) {
+    return attribute.sort(convertSort(jaql.sort));
+  }
+
+  return attribute;
+};
+
+/**
  * Creates a dimensional element from a JAQL object.
  *
  * @param jaql - The JAQL object.
@@ -608,6 +638,13 @@ export function createDimensionalElementFromJaql(
   const isFilterJaql = 'filter' in jaql;
   if (isFilterJaql) {
     return createFilterFromJaql(jaql);
+  }
+
+  // A calculated dimension is also a formula JAQL, so it must be checked before the
+  // calculated-measure branch below to avoid being created as a measure.
+  const isCalculatedDimensionJaql = (jaql as FormulaJaql).type === CALCULATED_DIMENSION_JAQL_TYPE;
+  if (isCalculatedDimensionJaql) {
+    return createCalculatedAttributeHelper(jaql as FormulaJaql);
   }
 
   const isFormulaJaql = 'formula' in jaql;

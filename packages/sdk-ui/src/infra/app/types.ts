@@ -3,6 +3,7 @@ import { PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { QueryClient } from '@sisense/sdk-query-client';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { TrackingEventDetails } from '@sisense/sdk-tracking';
+import type { Locale } from 'date-fns';
 
 import { DateConfig, LoadingIndicatorConfig, TranslationConfig } from '@/types';
 
@@ -203,6 +204,19 @@ export type AppConfig = {
        * @default false
        */
       alwaysShowResultsPerPage?: boolean;
+    };
+    /**
+     * Configuration of the default number formatting for visualizations.
+     *
+     * @sisenseInternal
+     */
+    defaultNumberFormatting?: {
+      /**
+       *  If `false`, raw values are displayed without applying the default number formatting configuration.
+       *
+       * @default true
+       */
+      enabled?: boolean;
     };
   };
 };

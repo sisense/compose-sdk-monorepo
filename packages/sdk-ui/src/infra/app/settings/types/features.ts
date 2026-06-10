@@ -132,11 +132,8 @@ type AiAssistantFeature = Feature<
   'aiAssistant',
   {
     unified?: boolean;
-    nlqV3Enabled?: boolean;
-    isNlqV3Enabled?: boolean;
     naturalResponseEnabled?: boolean;
     queryDefinition?: boolean;
-    completionV2?: boolean;
     sharedFormulasEnabled?: boolean;
     aiAccessControl?: string;
     quotaNotification?: boolean;
@@ -144,15 +141,7 @@ type AiAssistantFeature = Feature<
   }
 >;
 
-type AiStudioFeature = Feature<
-  'aiStudio',
-  {
-    realtime?: boolean;
-    usageDisplay?: boolean;
-    isRealtimeEnabled?: boolean;
-    isUsageDisplayEnabled?: boolean;
-  }
->;
+type AiStudioFeature = Feature<'aiStudio'>;
 
 type NewNavigationBetaFeature = Feature<'newNavigationBeta'>;
 

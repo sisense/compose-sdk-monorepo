@@ -11,11 +11,10 @@ import { useJtdInternal } from '@/domains/dashboarding/hooks/use-jtd.js';
 import { useTabber } from '@/domains/dashboarding/hooks/use-tabber.js';
 import { useWidgetCsvDownload } from '@/domains/dashboarding/hooks/use-widget-csv-download.js';
 import { useWidgetExcelDownload } from '@/domains/dashboarding/hooks/use-widget-excel-download.js';
-import { useWidgetScrollPersistence } from '@/domains/dashboarding/hooks/use-widget-scroll-persistence.js';
+import { useWidgetUpdatesPersistence } from '@/domains/dashboarding/hooks/use-widget-updates-persistence.js';
 import { useWidgetsLayoutManagement } from '@/domains/dashboarding/hooks/use-widgets-layout.js';
 import { getDefaultWidgetsPanelLayout } from '@/domains/dashboarding/utils.js';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
-import { withNavigatorScrollSave } from '@/domains/widgets/components/widget-by-id/with-navigator-scroll-save.js';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { widgetChangeEventToDelta } from '@/domains/widgets/event-to-delta';
 import { useCombinedMenu } from '@/infra/contexts/menu-provider/hooks/use-combined-menu.js';
@@ -270,11 +269,11 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     return widgetsWithCommonFilters.map((widget: WidgetProps) => connectToWidgetPropsJtd(widget));
   }, [widgetsWithCommonFilters, connectToWidgetPropsJtd]);
 
-  const scrollerFactory = useWidgetScrollPersistence(persistence, innerWidgetsOptions);
-  const widgetsWithFilterAndJtdAndScrollSaver = useMemo(() => {
-    if (!persistence) return widgetsWithFilterAndJtd;
-    return widgetsWithFilterAndJtd.map((w) => withNavigatorScrollSave(scrollerFactory(w.id))(w));
-  }, [widgetsWithFilterAndJtd, persistence, scrollerFactory]);
+  const { widgets: widgetsWithFilterAndJtdAndScrollSaver } = useWidgetUpdatesPersistence(
+    widgetsWithFilterAndJtd,
+    setInnerWidgets,
+    persistence,
+  );
 
   const { layoutManager: tabberLayoutManager, widgets: finalWidgets } = useTabber({
     widgets: widgetsWithFilterAndJtdAndScrollSaver,

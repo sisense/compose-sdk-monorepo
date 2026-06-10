@@ -401,4 +401,442 @@ describe('persistDashboardModelMiddleware', () => {
       payload: { widgetsPanel: layout, widgets: ['w1', 'w2'] },
     });
   });
+
+  describe('UPDATE_WIDGET', () => {
+    it('maps scrollerLocation update to options.previousScrollerLocation PATCH', async () => {
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: {
+            widgetOid: 'w-a',
+            update: { styleOptions: { navigator: { scrollerLocation: { min: 10, max: 90 } } } },
+          },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+      });
+
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        'w-a',
+        { options: { previousScrollerLocation: { min: 10, max: 90 } } },
+        false,
+      );
+    });
+
+    it('spreads partialDtoOptions.options so Fusion does not drop existing option fields', async () => {
+      const existingOptions = { dashboardFiltersMode: 'select', selector: true } as const;
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+      const modelWithOptions = {
+        oid: dashboardOid,
+        widgetsOptions: {
+          'w-a': { partialDtoOptions: { options: existingOptions } },
+        },
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: {
+            widgetOid: 'w-a',
+            update: { styleOptions: { navigator: { scrollerLocation: { min: 5, max: 95 } } } },
+          },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: modelWithOptions as never,
+      });
+
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        'w-a',
+        { options: { ...existingOptions, previousScrollerLocation: { min: 5, max: 95 } } },
+        false,
+      );
+    });
+
+    it('logs error and skips REST when the update has no DTO mapping', async () => {
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn(),
+      };
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: { widgetOid: 'w-a', update: {} },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+      });
+
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('UPDATE_WIDGET has no DTO mapping'),
+        expect.anything(),
+      );
+      expect(restApi.patchWidgetInDashboard).not.toHaveBeenCalled();
+      errorSpy.mockRestore();
+    });
+
+    it('roundtrip: patch emitted by middleware restores scrollerLocation via fromWidgetDto → toWidgetProps', async () => {
+      // Widget at index 7 (chart/line) has navigator enabled in its style
+      const baseWidgetDto = sampleEcommerceDashboard.widgets![7]!;
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: {
+            widgetOid: baseWidgetDto.oid,
+            update: { styleOptions: { navigator: { scrollerLocation: { min: 10, max: 90 } } } },
+          },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+      });
+
+      const [, , sentPatch] = restApi.patchWidgetInDashboard.mock.calls[0] as [
+        string,
+        string,
+        { options: unknown },
+      ];
+
+      const patchedDto = { ...baseWidgetDto, options: sentPatch.options };
+      const model = widgetModelTranslator.fromWidgetDto(patchedDto as never);
+      const props = widgetModelTranslator.toWidgetProps(model);
+
+      const navigator = (props as { styleOptions?: { navigator?: { scrollerLocation?: unknown } } })
+        .styleOptions?.navigator;
+      expect(navigator?.scrollerLocation).toEqual({ min: 10, max: 90 });
+    });
+
+    it('maps a customOptions update to a customOptions PATCH', async () => {
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: { widgetOid: 'cw-a', update: { customOptions: { lastPage: 3 } } },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+      });
+
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        'cw-a',
+        { customOptions: { lastPage: 3 } },
+        false,
+      );
+    });
+
+    it('merges customOptions into the current bag so other keys are not dropped', async () => {
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+      const modelWithWidget = {
+        oid: dashboardOid,
+        widgets: [{ oid: 'cw-a', customOptions: { lastPage: 0, theme: 'dark' } }],
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: { widgetOid: 'cw-a', update: { customOptions: { lastPage: 7 } } },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: modelWithWidget as never,
+      });
+
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        'cw-a',
+        { customOptions: { lastPage: 7, theme: 'dark' } },
+        false,
+      );
+    });
+
+    it('deep-merges a nested customOptions update into the current bag', async () => {
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+      const modelWithWidget = {
+        oid: dashboardOid,
+        widgets: [{ oid: 'cw-a', customOptions: { view: { zoom: 1, center: 'auto' } } }],
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: { widgetOid: 'cw-a', update: { customOptions: { view: { zoom: 2 } } } },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: modelWithWidget as never,
+      });
+
+      // Nested sibling keys (`center`) survive a partial nested update.
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        'cw-a',
+        { customOptions: { view: { zoom: 2, center: 'auto' } } },
+        false,
+      );
+    });
+
+    it('roundtrip: customOptions PATCH restores via fromWidgetDto → toWidgetProps', async () => {
+      const baseDto = sampleEcommerceDashboard.widgets![0]!;
+      const customWidgetDto = {
+        ...baseDto,
+        oid: 'cw-1',
+        type: 'my-plugin',
+        style: {},
+        customOptions: { lastPage: 0, theme: 'dark' },
+      };
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: { widgetOid: 'cw-1', update: { customOptions: { lastPage: 3 } } },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: {
+          oid: dashboardOid,
+          widgets: [{ oid: 'cw-1', customOptions: customWidgetDto.customOptions }],
+        } as never,
+      });
+
+      const [, , sentPatch] = restApi.patchWidgetInDashboard.mock.calls[0] as [
+        string,
+        string,
+        { customOptions: Record<string, unknown> },
+      ];
+
+      const patchedDto = { ...customWidgetDto, customOptions: sentPatch.customOptions };
+      const model = widgetModelTranslator.fromWidgetDto(patchedDto as never);
+      const props = widgetModelTranslator.toWidgetProps(model);
+
+      expect((props as { customOptions?: Record<string, unknown> }).customOptions).toEqual({
+        lastPage: 3,
+        theme: 'dark',
+      });
+    });
+
+    it('maps a custom-widget styleOptions update to a style PATCH, merging current style', async () => {
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: { widgetOid: 'cw-a', update: { styleOptions: { rowsPerPage: 20 } } },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: {
+          oid: dashboardOid,
+          widgets: [{ oid: 'cw-a', widgetType: 'custom', styleOptions: { theme: 'dark' } }],
+        } as never,
+      });
+
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        'cw-a',
+        { style: { theme: 'dark', rowsPerPage: 20 } },
+        false,
+      );
+    });
+
+    it('deep-merges a nested custom-widget styleOptions update into the current style', async () => {
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: {
+            widgetOid: 'cw-a',
+            update: { styleOptions: { pagination: { currentPage: 3 } } },
+          },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: {
+          oid: dashboardOid,
+          widgets: [
+            {
+              oid: 'cw-a',
+              widgetType: 'custom',
+              styleOptions: { pagination: { currentPage: 1, location: 'left' } },
+            },
+          ],
+        } as never,
+      });
+
+      // Nested sibling keys (`location`) survive a partial nested update.
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        'cw-a',
+        { style: { pagination: { currentPage: 3, location: 'left' } } },
+        false,
+      );
+    });
+
+    it('does not produce a style PATCH for non-custom widgets', async () => {
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn(),
+      };
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: { widgetOid: 'chart-a', update: { styleOptions: { rowsPerPage: 20 } } },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: {
+          oid: dashboardOid,
+          widgets: [{ oid: 'chart-a', widgetType: 'chart', styleOptions: {} }],
+        } as never,
+      });
+
+      expect(restApi.patchWidgetInDashboard).not.toHaveBeenCalled();
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('UPDATE_WIDGET has no DTO mapping'),
+        expect.anything(),
+      );
+      errorSpy.mockRestore();
+    });
+
+    it('roundtrip: styleOptions PATCH restores via fromWidgetDto → toWidgetProps', async () => {
+      const baseDto = sampleEcommerceDashboard.widgets![0]!;
+      const customWidgetDto = {
+        ...baseDto,
+        oid: 'cw-1',
+        type: 'my-plugin',
+        style: { theme: 'dark' },
+      };
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: { widgetOid: 'cw-1', update: { styleOptions: { rowsPerPage: 20 } } },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: {
+          oid: dashboardOid,
+          widgets: [{ oid: 'cw-1', widgetType: 'custom', styleOptions: { theme: 'dark' } }],
+        } as never,
+      });
+
+      const [, , sentPatch] = restApi.patchWidgetInDashboard.mock.calls[0] as [
+        string,
+        string,
+        { style: Record<string, unknown> },
+      ];
+
+      const patchedDto = { ...customWidgetDto, style: sentPatch.style };
+      const model = widgetModelTranslator.fromWidgetDto(patchedDto as never);
+      const props = widgetModelTranslator.toWidgetProps(model);
+
+      expect((props as { styleOptions?: Record<string, unknown> }).styleOptions).toMatchObject({
+        theme: 'dark',
+        rowsPerPage: 20,
+      });
+    });
+  });
 });

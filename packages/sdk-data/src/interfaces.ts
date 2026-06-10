@@ -1,4 +1,4 @@
-import type { MeasureContext } from './dimensional-model/interfaces.js';
+import type { AttributeContext, MeasureContext } from './dimensional-model/interfaces.js';
 
 /**
  * Data cell, which is a storage unit in a {@link Data | user-provided data set}
@@ -132,6 +132,42 @@ export interface CalculatedMeasureColumn {
   description?: string;
   /**
    * Optional title for the column after aggregation.
+   * If not specified, the column `name` will be used.
+   */
+  title?: string;
+}
+
+/**
+ * Calculated attribute defined by a formula over one or more {@link Column}(s).
+ * When associated with a dimensional model, a Calculated Column is equivalent to a calculated attribute
+ * (see {@link @sisense/sdk-data!attributeFactory.customFormula | attributeFactory.customFormula}).
+ *
+ * It is the attribute counterpart of {@link CalculatedMeasureColumn}: it produces
+ * categorical/grouping values rather than an aggregated number.
+ */
+export interface CalculatedColumn {
+  /**
+   * Identifier. Required when associated with a model.
+   *
+   * @internal
+   */
+  id?: string;
+  /** Column name */
+  name: string;
+  /** Column type */
+  type: string;
+  /** Formula context */
+  context: AttributeContext;
+  /** Expression (formula) representing the element in a {@link https://developer.sisense.com/guides/querying/useJaql/ | JAQL query}. */
+  expression: string;
+  /**
+   * Column description
+   *
+   * @internal
+   */
+  description?: string;
+  /**
+   * Optional title for the column.
    * If not specified, the column `name` will be used.
    */
   title?: string;

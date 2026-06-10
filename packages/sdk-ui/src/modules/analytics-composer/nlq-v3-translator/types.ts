@@ -24,6 +24,10 @@ import {
 } from '@/domains/visualizations/core/chart-data-options/types.js';
 import type { WidgetConfig, WidgetType } from '@/domains/widgets/components/widget/types.js';
 import type {
+  ToolbarMenuConfig,
+  WidgetHeaderTitleConfig,
+} from '@/domains/widgets/shared/widget-header/types.js';
+import type {
   CustomWidgetStyleOptions,
   PivotTableStyleOptions,
   TextWidgetStyleOptions,
@@ -88,6 +92,8 @@ export type ArgType =
 export interface ArgSchema {
   type: ArgType;
   required: boolean;
+  /** Marks this positional arg as the human-readable display name. */
+  isName?: true;
 }
 
 export type ProcessedArg = unknown;
@@ -107,12 +113,6 @@ export interface FunctionContext extends InternalDataSchemaContext {
 export interface ArgContext extends FunctionContext {
   argSchema: ArgSchema;
 }
-
-// Translation input types (internal - use schemaIndex)
-export type DimensionsInput = NlqTranslationInput<JSONArray, InternalDataSchemaContext>;
-export type MeasuresInput = NlqTranslationInput<JSONArray, InternalDataSchemaContext>;
-export type FiltersInput = NlqTranslationInput<JSONArray, InternalDataSchemaContext>;
-export type HighlightsInput = NlqTranslationInput<JSONArray, InternalDataSchemaContext>;
 
 // Function call input types (internal - use schemaIndex)
 export type MeasuresFunctionCallInput = NlqTranslationInput<
@@ -156,8 +156,8 @@ export function isFunctionCall(value: unknown): value is FunctionCall {
   return typeof value === 'object' && value !== null && 'function' in value && 'args' in value;
 }
 
-export function isFunctionCallArray(value: JSONArray): value is FunctionCall[] {
-  return value.every(isFunctionCall);
+export function isFunctionCallArray(value: readonly unknown[]): value is FunctionCall[] {
+  return Array.isArray(value) && value.every(isFunctionCall);
 }
 
 // Type guard to check if the argument is a Filter
@@ -233,6 +233,60 @@ export type DimensionItemJSON = string | StyledColumnJSON;
  * @internal
  */
 export type MeasureItemJSON = FunctionCall | StyledMeasureColumnJSON;
+
+/**
+ * Translation input types for query constructs (precise JSON arrays).
+ *
+ * @internal
+ */
+export type DimensionsInput = NlqTranslationInput<DimensionItemJSON[], InternalDataSchemaContext>;
+export type MeasuresInput = NlqTranslationInput<MeasureItemJSON[], InternalDataSchemaContext>;
+export type FiltersInput = NlqTranslationInput<FunctionCall[], InternalDataSchemaContext>;
+export type HighlightsInput = NlqTranslationInput<FunctionCall[], InternalDataSchemaContext>;
+
+/**
+ * JSON representation of a query from the NLQ API.
+ * Precise serializable schema for dimensions, measures, filters, and highlights.
+ *
+ * @internal
+ */
+export interface QueryJSON {
+  dimensions: DimensionItemJSON[];
+  measures: MeasureItemJSON[];
+  filters: FunctionCall[];
+  highlights?: FunctionCall[];
+}
+
+/**
+ * Input type for query translation (JSON → CSDK).
+ *
+ * @internal
+ */
+export type QueryInput = NlqTranslationInput<QueryJSON, DataSchemaContext>;
+
+/**
+ * Element kind for a single {@link QueryJSON} array entry.
+ *
+ * @internal
+ */
+export type QueryElementKind = 'dimension' | 'measure' | 'filter' | 'highlight';
+
+/**
+ * Display name and kind for a query JSON element.
+ *
+ * @internal
+ */
+export interface ElementSummary {
+  readonly name: string;
+  readonly type: QueryElementKind;
+}
+
+/**
+ * A single item from {@link QueryJSON} dimensions, measures, filters, or highlights arrays.
+ *
+ * @internal
+ */
+export type QueryElementItemJSON = DimensionItemJSON | MeasureItemJSON | FunctionCall;
 
 /**
  * Type guard: value is StyledColumnJSON (object with column, not a FunctionCall).
@@ -385,6 +439,19 @@ type WithCommonWidgetJSON<Base, Type extends WidgetType> = Base & {
 // ─── Widget JSON types ────────────────────────────────────────────────────────
 
 /**
+ * JSON-safe subset of {@link WidgetConfig} (drops function-bearing menu items).
+ * Structurally assignable to {@link WidgetConfig} because `items` is optional on the runtime type.
+ *
+ * @internal
+ */
+export type WidgetConfigJSON = Pick<WidgetConfig, 'actions'> & {
+  header?: {
+    title?: WidgetHeaderTitleConfig;
+    toolbar?: { menu?: Pick<ToolbarMenuConfig, 'enabled'> };
+  };
+};
+
+/**
  * Data source in NLQ JSON — title only. Full JAQL details live in {@link DataSchemaContext}.
  *
  * @internal
@@ -400,7 +467,7 @@ export type ChartWidgetJSON = ChartJSON & {
   title?: string;
   description?: string;
   dataSource?: DataSourceJSON;
-  config?: WidgetConfig;
+  config?: WidgetConfigJSON;
   highlightSelectionDisabled?: boolean;
 };
 
@@ -413,7 +480,7 @@ export type PivotTableWidgetJSON = PivotTableJSON & {
   title?: string;
   description?: string;
   dataSource?: DataSourceJSON;
-  config?: WidgetConfig;
+  config?: WidgetConfigJSON;
 };
 
 /**
@@ -423,7 +490,7 @@ export type PivotTableWidgetJSON = PivotTableJSON & {
  */
 export type TextWidgetJSON = {
   styleOptions: TextWidgetStyleOptions;
-  config?: WidgetConfig;
+  config?: WidgetConfigJSON;
 };
 
 /**
@@ -440,7 +507,7 @@ export type CustomWidgetJSON = {
   title?: string;
   description?: string;
   dataSource?: DataSourceJSON;
-  config?: WidgetConfig;
+  config?: WidgetConfigJSON;
   filters?: FunctionCall[];
   highlights?: FunctionCall[];
   /** Opaque pass-through — GenericDataOptions serialized as plain JSON */

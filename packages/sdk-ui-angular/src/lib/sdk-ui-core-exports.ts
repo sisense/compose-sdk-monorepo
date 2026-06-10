@@ -1,7 +1,14 @@
 // This file re-exports common types/utils from @sisense/sdk-ui-preact
 
 // Re-exports utils from @sisense/sdk-ui-preact
-export { boxWhiskerProcessResult, extractDimensionsAndMeasures } from '@sisense/sdk-ui-preact';
+export {
+  boxWhiskerProcessResult,
+  extractDimensionsAndMeasures,
+  formatNumber,
+  formatDate,
+  getDefaultDateFormat,
+  formatDataSet,
+} from '@sisense/sdk-ui-preact';
 
 // Re-exports types from @sisense/sdk-ui-preact
 export type {
@@ -36,6 +43,10 @@ export type {
   CategoricalChartDataOptions,
   CategoricalChartType,
   CategoricalWidgetType,
+  // Formatting:
+  CommonDataOptions,
+  FormatDateOptions,
+  FormatDataSetOptions,
   // Data Options:
   ChartDataOptions,
   // Style Options:

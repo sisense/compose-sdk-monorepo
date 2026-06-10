@@ -99,7 +99,7 @@ export const translateChartToJSON = (
       () => translateFiltersToJSON(chartProps.filters),
       translationErrors,
     );
-    filtersJSON = (filtersResult ?? undefined) as ChartJSON['filters'];
+    filtersJSON = filtersResult ?? undefined;
   }
 
   // Translate highlights if present
@@ -109,7 +109,7 @@ export const translateChartToJSON = (
       () => translateHighlightsToJSON(chartProps.highlights),
       translationErrors,
     );
-    highlightsJSON = (highlightsResult ?? undefined) as ChartJSON['highlights'];
+    highlightsJSON = highlightsResult ?? undefined;
   }
 
   if (translationErrors.length > 0 || dataOptionsJSON === null) {

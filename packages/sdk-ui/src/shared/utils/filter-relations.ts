@@ -45,6 +45,24 @@ export enum FiltersMergeStrategyEnum {
 export type FiltersMergeStrategy = `${FiltersMergeStrategyEnum}`;
 
 /**
+ * Returns true if any node in the filter-relations tree uses an OR operator.
+ * Used to decide whether to show the AND/OR Formula tile — AND-only trees are the default
+ * behavior and don't warrant a visible indicator.
+ *
+ * @internal
+ */
+export function hasOrOperator(relations: FilterRelationsRules): boolean {
+  if (!relations || !isRelationsRule(relations)) {
+    return false;
+  }
+  return (
+    relations.operator === 'OR' ||
+    hasOrOperator(relations.left as FilterRelationsRules) ||
+    hasOrOperator(relations.right as FilterRelationsRules)
+  );
+}
+
+/**
  * Textual representation of filter relations for debugging purposes.
  * Returns string like "(([Gender] AND [Country]) OR [Condition])".
  *

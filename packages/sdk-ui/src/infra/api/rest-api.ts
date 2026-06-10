@@ -45,6 +45,7 @@ type GetDashboardsOptions = {
 type GetDashboardOptions = {
   fields?: string[];
   sharedMode?: boolean;
+  adminAccess?: boolean;
 };
 
 export class RestApi {
@@ -95,11 +96,12 @@ export class RestApi {
    * Get a specific dashboard
    */
   public getDashboard = (dashboardOid: string, options: GetDashboardOptions = {}) => {
-    const { fields, sharedMode } = options;
+    const { fields, sharedMode, adminAccess } = options;
     // Note: do not use `expand` query parameter cause it is restricted for all non-admin users.
     const queryParams = new URLSearchParams({
       ...(fields?.length && { fields: fields?.join(',') }),
       ...(sharedMode && { sharedMode: 'true' }),
+      ...(adminAccess && { adminAccess: 'true' }),
     }).toString();
     return this.httpClient
       .get<DashboardDto>(`api/v1/dashboards/${dashboardOid}?${queryParams}`)
@@ -113,12 +115,18 @@ export class RestApi {
   /**
    * Get a specific dashboard using the legacy API version
    */
-  public getDashboardLegacy = (dashboardOid: string) => {
-    return this.httpClient.get<DashboardDto>(`api/dashboards/${dashboardOid}`).catch(() => {
-      // when error is encountered, API may return only status code 422 without informative error message
-      // to remedy, catch error and throw a more informative error message
-      throw new TranslatableError('errors.dashboardInvalidIdentifier', { dashboardOid });
-    });
+  public getDashboardLegacy = (dashboardOid: string, options: GetDashboardOptions = {}) => {
+    const { adminAccess } = options;
+    const queryParams = new URLSearchParams({
+      ...(adminAccess && { adminAccess: 'true' }),
+    }).toString();
+    return this.httpClient
+      .get<DashboardDto>(`api/dashboards/${dashboardOid}?${queryParams}`)
+      .catch(() => {
+        // when error is encountered, API may return only status code 422 without informative error message
+        // to remedy, catch error and throw a more informative error message
+        throw new TranslatableError('errors.dashboardInvalidIdentifier', { dashboardOid });
+      });
   };
 
   /**

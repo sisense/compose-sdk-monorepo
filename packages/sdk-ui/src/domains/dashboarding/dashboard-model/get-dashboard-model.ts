@@ -43,6 +43,14 @@ export interface GetDashboardModelOptions {
    * @internal
    */
   useLegacyApiVersion?: boolean;
+
+  /**
+   * Whether to fetch the dashboard with admin-level access.
+   *
+   * @default false
+   * @sisenseInternal
+   */
+  adminAccess?: boolean;
 }
 
 /**
@@ -65,7 +73,7 @@ export async function getDashboardModel(
   themeSettings?: CompleteThemeSettingsInternal,
   appSettings?: AppSettings,
 ): Promise<DashboardModel> {
-  const { includeWidgets, includeFilters, sharedMode, useLegacyApiVersion } = options;
+  const { includeWidgets, includeFilters, sharedMode, useLegacyApiVersion, adminAccess } = options;
   const api = new RestApi(http);
 
   let dashboard: DashboardDto | undefined;
@@ -84,7 +92,7 @@ export async function getDashboardModel(
       fields.push('filterRelations');
     }
 
-    dashboard = await api.getDashboard(dashboardOid, { fields, sharedMode });
+    dashboard = await api.getDashboard(dashboardOid, { fields, sharedMode, adminAccess });
 
     if (!dashboard) {
       throw new TranslatableError('errors.dashboardInvalidIdentifier', { dashboardOid });
@@ -131,7 +139,7 @@ export async function getDashboardModel(
       }
     }
   } else {
-    dashboard = await api.getDashboardLegacy(dashboardOid);
+    dashboard = await api.getDashboardLegacy(dashboardOid, { adminAccess });
 
     if (!dashboard) {
       throw new TranslatableError('errors.dashboardInvalidIdentifier', { dashboardOid });

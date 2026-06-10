@@ -1,13 +1,11 @@
 import omit from 'lodash-es/omit';
 
-import type { WidgetConfig } from '@/domains/widgets/components/widget/types.js';
-
 import type {
   DataSchemaContext,
   NlqTranslationInput,
   NlqTranslationResult,
 } from '../../../types.js';
-import type { DataSourceJSON } from '../../types.js';
+import type { DataSourceJSON, WidgetConfigJSON } from '../../types.js';
 import type { WidgetMeta } from './to-widget-props.js';
 
 const WIDGET_ENVELOPE_OMIT_KEYS = [
@@ -25,7 +23,7 @@ type WidgetEnvelopeJSON = {
   readonly title?: string;
   readonly description?: string;
   readonly dataSource?: DataSourceJSON;
-  readonly config?: WidgetConfig;
+  readonly config?: WidgetConfigJSON;
   readonly highlightSelectionDisabled?: boolean;
 };
 

@@ -196,6 +196,7 @@ export type GradientColor = LinearGradientColor | RadialGradientColor;
  *
  * @param value - The value to check
  * @returns True if the value is a linear gradient
+ * @group Styling
  */
 export const isLinearGradient = (value: any): value is LinearGradientColor => {
   return typeof value === 'object' && value !== null && 'type' in value && value.type === 'linear';
@@ -206,6 +207,7 @@ export const isLinearGradient = (value: any): value is LinearGradientColor => {
  *
  * @param value - The value to check
  * @returns True if the value is a radial gradient
+ * @group Styling
  */
 export const isRadialGradient = (value: any): value is RadialGradientColor => {
   return typeof value === 'object' && value !== null && 'type' in value && value.type === 'radial';
@@ -216,6 +218,7 @@ export const isRadialGradient = (value: any): value is RadialGradientColor => {
  *
  * @param value - The value to check
  * @returns True if the value is a gradient
+ * @group Styling
  */
 export const isGradient = (value: any): value is GradientColor => {
   return isLinearGradient(value) || isRadialGradient(value);
@@ -303,6 +306,7 @@ export const RadialGradientPresets = {
  *   ]
  * );
  * ```
+ * @group Styling
  */
 export const createLinearGradient = (
   direction: LinearGradientDirection,
@@ -330,6 +334,7 @@ export const createLinearGradient = (
  *   ]
  * );
  * ```
+ * @group Styling
  */
 export const createRadialGradient = (
   center: RadialGradientConfig,

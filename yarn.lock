@@ -7892,6 +7892,7 @@ __metadata:
     eslint: ^8.40.0
     fixed-data-table-2: ^2.0.21
     geojson: ^0.5.0
+    hash-it: ^6.0.0
     highcharts-react-official: ^3.2.1
     highcharts-rounded-corners: ^1.0.7
     immer: ^10.0.2

@@ -11,6 +11,7 @@ import {
   DataType,
   FormulaJaql,
   JaqlSortDirection,
+  MetadataTypes,
   Sort,
 } from './dimensional-model/types.js';
 import { DataSource, DataSourceInfo } from './interfaces.js';
@@ -361,6 +362,31 @@ describe('utils', () => {
 
       expect(element.indexed).toBe(true);
       expect(element.merged).toBe(true);
+    });
+
+    test('creates a calculated attribute (not a measure) for a calculated_dimension jaql', () => {
+      const jaql = {
+        type: 'calculated_dimension',
+        formula: "IF([844DC-5D4] > 1000, 'High', 'Low')",
+        title: 'Formula',
+        context: {
+          '[844DC-5D4]': {
+            dim: '[Commerce.Revenue]',
+            datatype: 'numeric',
+            title: 'Revenue',
+          },
+        },
+      } as unknown as FormulaJaql;
+
+      const element = createDimensionalElementFromJaql(jaql);
+
+      expect(MetadataTypes.isCalculatedAttribute(element)).toBe(true);
+      expect(MetadataTypes.isMeasure(element)).toBe(false);
+      expect(MetadataTypes.isAttribute(element)).toBe(true);
+      expect(element.jaql().jaql).toMatchObject({
+        type: 'calculated_dimension',
+        formula: "IF([844DC-5D4] > 1000, 'High', 'Low')",
+      });
     });
   });
 

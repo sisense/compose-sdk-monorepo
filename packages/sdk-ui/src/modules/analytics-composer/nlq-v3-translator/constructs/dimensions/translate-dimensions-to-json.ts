@@ -2,7 +2,6 @@ import {
   Attribute,
   convertSortDirectionToSort,
   convertSortToSortDirection,
-  JSONArray,
   JSONValue,
   Sort,
 } from '@sisense/sdk-data';
@@ -11,7 +10,11 @@ import omit from 'lodash-es/omit';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
 import { toNlqErrorInput } from '../../shared/utils/translation-helpers.js';
-import { DIMENSIONAL_NAME_PREFIX } from '../../types.js';
+import {
+  DIMENSIONAL_NAME_PREFIX,
+  type DimensionItemJSON,
+  type StyledColumnJSON,
+} from '../../types.js';
 
 /** Runtime StyledColumn: wrapper with column and optional CategoryStyle (from chart dataOptions) */
 type StyledColumn = { column: Attribute; sortType?: SortDirection; [key: string]: unknown };
@@ -33,13 +36,13 @@ function isStyledColumn(item: unknown): item is StyledColumn {
  * properties; otherwise outputs composeCode string.
  *
  * @param dimensions - Array of CSDK Attribute or StyledColumn objects
- * @returns NlqTranslationResult<JSONArray> - JSON array output for NLQ dimensions
+ * @returns NlqTranslationResult with dimension items in NLQ JSON format
  * @internal
  */
 export function translateDimensionsToJSON(
   dimensions: (Attribute | StyledColumn)[],
-): NlqTranslationResult<JSONArray> {
-  const results: JSONArray = [];
+): NlqTranslationResult<DimensionItemJSON[]> {
+  const results: DimensionItemJSON[] = [];
   const errors: NlqTranslationError[] = [];
 
   dimensions.forEach((item, index) => {
@@ -80,7 +83,7 @@ export function translateDimensionsToJSON(
       (sort !== undefined && sort !== Sort.None) || (styledItem && Object.keys(style).length > 0);
 
     if (hasStyle) {
-      const styled: JSONValue = {
+      const styled: StyledColumnJSON = {
         column: attr.composeCode,
         ...(sort !== undefined &&
           sort !== Sort.None && { sortType: convertSortToSortDirection(sort) }),

@@ -7,7 +7,7 @@ import './translation/initialize-i18n.js';
  * @group Data Model Utilities
  * Utility functions for creating attributes and dimensions in code.
  */
-export * from './dimensional-model/attributes.js';
+export * from './dimensional-model/attributes/attributes.js';
 export * from './dimensional-model/base.js';
 export * from './dimensional-model/data-model.js';
 export * from './dimensional-model/dimensions/index.js';
@@ -89,6 +89,25 @@ export * from './dimensional-model/measures/measures.js';
  * @group Factories
  */
 export * as measureFactory from './dimensional-model/measures/factory.js';
+/**
+ * Functions to create calculated attributes — formula-based attributes that produce
+ * categorical/grouping values.
+ *
+ * Calculated attributes created with these functions can be used wherever attributes are accepted,
+ * in UI component data options or in the `dimensions` of a query.
+ *
+ * @example
+ * Combine two attributes into a single text dimension from the `Sample ECommerce` data model.
+ * ```ts
+ *   const ageAndGender = attributeFactory.customFormula(
+ *     'Age & Gender',
+ *     'Concat([ageRange], " ", [gender])',
+ *     { ageRange: DM.Commerce.AgeRange, gender: DM.Commerce.Gender },
+ *   );
+ * ```
+ * @group Factories
+ */
+export * as attributeFactory from './dimensional-model/attributes/factory.js';
 export * from './dimensional-model/simple-column-types.js';
 
 /**

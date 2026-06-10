@@ -1,4 +1,4 @@
-import { JSONArray, Measure, parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
+import { Measure, parseComposeCodeToFunctionCall } from '@sisense/sdk-data';
 
 import type { ExecuteQueryParams } from '@/domains/query-execution/index.js';
 import {
@@ -6,7 +6,7 @@ import {
   TREND_PREFIX,
 } from '@/domains/visualizations/core/chart-data-options/apply-styled-options-to-query.js';
 
-import { NlqResponseJSON, NlqTranslationError, NlqTranslationResult } from '../../types.js';
+import { NlqTranslationError, NlqTranslationResult } from '../../types.js';
 import { translateDimensionsToJSON } from '../constructs/dimensions/translate-dimensions-to-json.js';
 import {
   translateFiltersToJSON,
@@ -17,6 +17,7 @@ import {
   collectTranslationErrors,
   stripDelimitersFromJson,
 } from '../shared/utils/translation-helpers.js';
+import type { QueryJSON } from '../types.js';
 
 /** Query-level styled measure: base Measure + optional trend/forecast (column is Measure, not MeasureColumn). */
 type StyledMeasureColumnForQuery = {
@@ -172,34 +173,32 @@ function collapseMeasuresForJSON(measures: Measure[]): (Measure | StyledMeasureC
  * ```
  *
  * @param query - ExecuteQueryParams object with CSDK objects
- * @returns NlqTranslationResult<NlqResponseJSON> with FunctionCall format or structured errors
+ * @returns NlqTranslationResult<QueryJSON> with FunctionCall format or structured errors
  * @internal
  */
-export function translateQueryToJSON(
-  query: ExecuteQueryParams,
-): NlqTranslationResult<NlqResponseJSON> {
+export function translateQueryToJSON(query: ExecuteQueryParams): NlqTranslationResult<QueryJSON> {
   const translationErrors: NlqTranslationError[] = [];
 
   // Process each translation category
-  const dimensions = collectTranslationErrors<JSONArray>(
+  const dimensions = collectTranslationErrors(
     () => translateDimensionsToJSON(query.dimensions || []),
     translationErrors,
   );
 
   const collapsedMeasures = collapseMeasuresForJSON(query.measures || []);
-  const measures = collectTranslationErrors<JSONArray>(
+  const measures = collectTranslationErrors(
     () => translateMeasuresToJSON(collapsedMeasures),
     translationErrors,
   );
 
-  const filters = collectTranslationErrors<JSONArray>(
+  const filters = collectTranslationErrors(
     () => translateFiltersToJSON(query.filters),
     translationErrors,
   );
 
   let highlights = null;
   if (query.highlights && query.highlights.length > 0) {
-    highlights = collectTranslationErrors<JSONArray>(
+    highlights = collectTranslationErrors(
       () => translateHighlightsToJSON(query.highlights),
       translationErrors,
     );
@@ -214,11 +213,11 @@ export function translateQueryToJSON(
   }
 
   // Return successful result
-  const result: NlqResponseJSON = {
+  const result: QueryJSON = {
     dimensions: dimensions || [],
     measures: measures || [],
     filters: filters || [],
-    ...(highlights && { highlights: highlights }),
+    ...(highlights && { highlights }),
   };
 
   return {

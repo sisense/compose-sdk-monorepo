@@ -1,4 +1,4 @@
-import { createAttribute } from '@sisense/sdk-data';
+import { attributeFactory, createAttribute } from '@sisense/sdk-data';
 
 import { CartesianChartDataOptions, ScatterChartDataOptions } from '@/types.js';
 
@@ -155,6 +155,36 @@ describe('drilldown-utils', () => {
     });
   });
 
+  describe('calculated dimensions are excluded from drilldown', () => {
+    const calcDim = attributeFactory.customFormula('Bucket', "IF([rev] > 1000, 'A', 'B')", {
+      rev: revenue,
+    });
+
+    it('disables drilldown when the only category is a calculated dimension', () => {
+      const dataOptions: CartesianChartDataOptions = {
+        category: [calcDim],
+        value: [],
+        breakBy: [],
+      };
+
+      expect(isDrilldownApplicableToChart('column', dataOptions)).toBe(false);
+      expect(getDrilldownInitialDimension('column', dataOptions)).toBeUndefined();
+    });
+
+    it('skips a calculated dimension and uses the next regular category as the source', () => {
+      const dataOptions: CartesianChartDataOptions = {
+        category: [calcDim, ageRange],
+        value: [],
+        breakBy: [],
+      };
+
+      expect(isDrilldownApplicableToChart('column', dataOptions)).toBe(true);
+      expect(getDrilldownInitialDimension('column', dataOptions)?.expression).toBe(
+        ageRange.expression,
+      );
+    });
+  });
+
   describe('getDrilldownInitialDimension', () => {
     it('should return the first category for cartesian chart with single category', () => {
       const dataOptions: CartesianChartDataOptions = {
@@ -261,6 +291,26 @@ describe('drilldown-utils', () => {
       const result = applyDrilldownDimension('bar', dataOptions, category);
 
       expect((result as CartesianChartDataOptions).category).toEqual([category]);
+    });
+
+    it('does not drop a leading calculated dimension (targets the first drillable category)', () => {
+      const calcDim = attributeFactory.customFormula('Bucket', 'Concat([a], [b])', {
+        a: ageRange,
+        b: gender,
+      });
+      const dataOptions: CartesianChartDataOptions = {
+        category: [calcDim, gender],
+        value: [],
+        breakBy: [],
+      };
+
+      // The drilldown source is the first DRILLABLE category — `gender` — because the leading
+      // calculated dimension is skipped. With no actual drill (drilldown dimension === source),
+      // the data options must be returned unchanged, preserving the calculated dimension.
+      const result = applyDrilldownDimension('column', dataOptions, gender);
+
+      expect(result).toBe(dataOptions);
+      expect((result as CartesianChartDataOptions).category).toEqual([calcDim, gender]);
     });
 
     it('should replace category for line chart', () => {

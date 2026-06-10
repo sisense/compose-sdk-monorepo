@@ -24,7 +24,32 @@ import { DrilldownOptions, PivotTableDrilldownOptions } from '@/types.js';
 
 import { WidgetProps } from '../widget/types';
 import { useScrollerLocationSave } from './use-scroller-location-save';
-import { withNavigatorScrollSave } from './with-navigator-scroll-save';
+
+function withNavigatorScrollSave(
+  onScrollerChange: (min: number, max: number) => void,
+): (widgetProps: WidgetProps) => WidgetProps {
+  return (widgetProps: WidgetProps) => {
+    if (!('styleOptions' in widgetProps) || !widgetProps.styleOptions) {
+      return widgetProps;
+    }
+    const { styleOptions } = widgetProps as {
+      styleOptions: { navigator?: { enabled?: boolean } } & WidgetProps['styleOptions'];
+    };
+    if (!styleOptions.navigator) {
+      return widgetProps;
+    }
+    return {
+      ...widgetProps,
+      styleOptions: {
+        ...widgetProps.styleOptions,
+        navigator: {
+          ...styleOptions.navigator,
+          onScrollerChange,
+        },
+      },
+    } as WidgetProps;
+  };
+}
 
 /**
  * The WidgetById component, which is a thin wrapper on the {@link ChartWidget} component,

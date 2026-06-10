@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Table from '@mui/material/Table';
@@ -7,17 +9,40 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { type CustomVisualization, useExecuteCustomWidgetQuery } from '@sisense/sdk-ui';
+import {
+  type CustomVisualization,
+  extractDimensionsAndMeasures,
+  formatDataSet,
+  useExecuteQuery,
+  useTheme,
+} from '@sisense/sdk-ui';
 
 /**
  * A simple table visualization component for the simple-table custom widget.
  */
 export const SimpleTable: CustomVisualization = (props) => {
-  const { data, isLoading, isError } = useExecuteCustomWidgetQuery(props);
+  const { dataSource, dataOptions, filters, highlights } = props;
+  const { chart } = useTheme();
+
+  const { dimensions, measures } = useMemo(
+    () => extractDimensionsAndMeasures(dataOptions),
+    [dataOptions],
+  );
 
   const {
-    headerBackgroundColor = '#1976d2',
-    headerTextColor = '#ffffff',
+    data: rawData,
+    isLoading,
+    isError,
+  } = useExecuteQuery({ dataSource, dimensions, measures, filters, highlights });
+
+  const data = useMemo(
+    () => (rawData ? formatDataSet(rawData, dataOptions) : rawData),
+    [rawData, dataOptions],
+  );
+
+  const {
+    headerBackgroundColor = chart.secondaryTextColor,
+    headerTextColor = chart.textColor,
     cellPadding = 12,
     fontSize = 14,
   } = props.styleOptions ?? {};
@@ -27,7 +52,9 @@ export const SimpleTable: CustomVisualization = (props) => {
 
     const columns = data.columns.map((col) => col.name);
     const rows = data.rows.map((row) =>
-      row.map((cell: { data?: unknown; text?: string }) => cell.text ?? String(cell.data ?? '')),
+      row.map(
+        (cell: { data?: unknown; text?: string | null }) => cell.text ?? String(cell.data ?? ''),
+      ),
     );
 
     return { columns, rows };

@@ -14,7 +14,7 @@ and encoded by bubble sizes.
 
 ### breakByColor
 
-> **breakByColor**?: [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`StyledColumn`](interface.StyledColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md)
+> **breakByColor**?: [`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`StyledColumn`](interface.StyledColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md)
 
 Select a column by which to break (group) the columns in the chart.
 This must be a descriptive column. If you select descriptive data,
@@ -32,7 +32,7 @@ the darkest color and the lowest value is the lightest color.
 
 ### breakByPoint
 
-> **breakByPoint**?: [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md)
+> **breakByPoint**?: [`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md)
 
 A column to be scattered across the chart as circles;
 one point (circle) appears on the chart for each member of this column.
@@ -60,7 +60,7 @@ Column that determines the size of the circle. It must be numeric data.
 
 ### x
 
-> **x**?: [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`StyledColumn`](interface.StyledColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md)
+> **x**?: [`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`StyledColumn`](interface.StyledColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md)
 
 A column or measure column whose values are placed on the X-axis.
 
@@ -71,7 +71,7 @@ Alternatively, Descriptive data is also supported. At most one column is allowed
 
 ### y
 
-> **y**?: [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`StyledColumn`](interface.StyledColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md)
+> **y**?: [`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`CalculatedMeasureColumn`](../../sdk-data/interfaces/interface.CalculatedMeasureColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`MeasureColumn`](../../sdk-data/interfaces/interface.MeasureColumn.md) \| [`StyledColumn`](interface.StyledColumn.md) \| [`StyledMeasureColumn`](interface.StyledMeasureColumn.md)
 
 A column or measure column whose values are placed on the Y-axis.
 

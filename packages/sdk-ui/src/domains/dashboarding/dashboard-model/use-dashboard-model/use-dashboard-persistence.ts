@@ -177,6 +177,7 @@ export function useDashboardPersistence({
           appSettings: app.settings,
           themeSettings,
           dashboardDataSource: localDashboard?.dataSource,
+          model: localDashboard ?? undefined,
         });
         dispatch(processedAction);
         return processedAction;

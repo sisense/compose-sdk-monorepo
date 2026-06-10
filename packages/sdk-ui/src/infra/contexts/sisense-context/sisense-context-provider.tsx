@@ -1,4 +1,4 @@
-import { type FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
+import { type FunctionComponent, type PropsWithChildren, useEffect, useState } from 'react';
 
 import { isAuthTokenPending } from '@sisense/sdk-rest-client';
 
@@ -11,6 +11,7 @@ import { SisenseContextProviderProps } from '../../../props';
 import { createClientApplication } from '../../app/client-application';
 import { type ClientApplication } from '../../app/types';
 import { ErrorBoundary } from '../../error-boundary/error-boundary';
+import { ModuleProvider } from '../../modules';
 import { PluginProvider } from '../../plugins/plugin-provider';
 import { I18nProvider } from '../../translation/i18n-provider';
 import { ThemeProvider } from '../theme-provider';
@@ -70,6 +71,7 @@ export const SisenseContextProvider: FunctionComponent<
   ssoRedirectAttemptsTtlMs,
   disableFusionPalette = false,
   plugins = [],
+  modules,
 }) => {
   const tracking = {
     // if tracking is configured in appConfig, use it
@@ -159,13 +161,15 @@ export const SisenseContextProvider: FunctionComponent<
           >
             <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
               <SisenseQueryClientProvider>
-                <PluginProvider plugins={plugins}>
-                  <CustomWidgetsProvider>
-                    <MenuProvider>
-                      <ModalProvider>{children}</ModalProvider>
-                    </MenuProvider>
-                  </CustomWidgetsProvider>
-                </PluginProvider>
+                <ModuleProvider modules={modules}>
+                  <PluginProvider plugins={plugins}>
+                    <CustomWidgetsProvider>
+                      <MenuProvider>
+                        <ModalProvider>{children}</ModalProvider>
+                      </MenuProvider>
+                    </CustomWidgetsProvider>
+                  </PluginProvider>
+                </ModuleProvider>
               </SisenseQueryClientProvider>
             </ThemeProvider>
           </SisenseContext.Provider>

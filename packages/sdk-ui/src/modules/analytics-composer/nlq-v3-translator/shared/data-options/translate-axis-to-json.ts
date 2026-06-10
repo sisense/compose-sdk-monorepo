@@ -46,7 +46,7 @@ export function translateSingleAxisToJSON(
         errors: result.errors.map((e) => toDataOptionsAxisError(axisKey, e)),
       };
     }
-    return { success: true, data: result.data as DimensionItemJSON[] };
+    return { success: true, data: result.data };
   }
 
   const result = translateMeasuresToJSON(arr as Parameters<typeof translateMeasuresToJSON>[0]);
@@ -56,5 +56,5 @@ export function translateSingleAxisToJSON(
       errors: result.errors.map((e) => toDataOptionsAxisError(axisKey, e)),
     };
   }
-  return { success: true, data: result.data as MeasureItemJSON[] };
+  return { success: true, data: result.data };
 }

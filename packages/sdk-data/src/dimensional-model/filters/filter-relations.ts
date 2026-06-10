@@ -3,7 +3,7 @@ import cloneDeep from 'lodash-es/cloneDeep.js';
 import isArray from 'lodash-es/isArray.js';
 
 import { TranslatableError } from '../../translation/translatable-error.js';
-import { DimensionalLevelAttribute } from '../attributes.js';
+import { DimensionalLevelAttribute } from '../attributes/attributes.js';
 import {
   Filter,
   FilterRelations,

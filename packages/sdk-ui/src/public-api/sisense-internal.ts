@@ -42,6 +42,7 @@ export type {
   WidgetPlugin,
   CustomVisualization,
   CustomVisualizationProps,
+  VisualizationStateUpdate,
   CustomVisualizationStyleOptions,
   CustomVisualizationEventProps,
   CustomVisualizationDataPoint,

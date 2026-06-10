@@ -1,6 +1,6 @@
 import { DataSource } from '../../interfaces.js';
 import { isDataSourceInfo } from '../../utils.js';
-import { createAttribute } from '../attributes.js';
+import { createAttribute } from '../attributes/attributes.js';
 import { normalizeName } from '../base.js';
 import { Attribute, Dimension } from '../interfaces.js';
 import { DataSourceField } from '../types.js';

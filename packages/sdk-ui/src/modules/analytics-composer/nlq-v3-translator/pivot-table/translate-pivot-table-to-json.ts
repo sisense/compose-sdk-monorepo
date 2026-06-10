@@ -75,7 +75,7 @@ export const translatePivotTableToJSON = (
       () => translateFiltersToJSON(pivotTableProps.filters),
       translationErrors,
     );
-    filtersJSON = (filtersResult ?? undefined) as PivotTableJSON['filters'];
+    filtersJSON = filtersResult ?? undefined;
   }
 
   // Translate highlights
@@ -85,7 +85,7 @@ export const translatePivotTableToJSON = (
       () => translateHighlightsToJSON(pivotTableProps.highlights),
       translationErrors,
     );
-    highlightsJSON = (highlightsResult ?? undefined) as PivotTableJSON['highlights'];
+    highlightsJSON = highlightsResult ?? undefined;
   }
 
   if (translationErrors.length > 0) {

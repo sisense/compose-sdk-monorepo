@@ -1,5 +1,6 @@
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
+import type { VisualizationStateUpdate } from '@/infra/plugins/widget-plugins/types';
 import { CustomWidgetEventProps, CustomWidgetStyleOptions, GenericDataOptions } from '@/types';
 
 import { WidgetConfig } from '../widget/types';
@@ -90,4 +91,15 @@ export interface CustomWidgetProps extends CustomWidgetEventProps {
    * @category Widget
    */
   customOptions?: Record<string, any>;
+
+  /**
+   * Emit a partial state update to be persisted through the dashboard
+   * persistence layer. Injected by the dashboard composition layer
+   * (`useWidgetUpdatesPersistence`) and forwarded to the plugin visualization
+   * component as {@link CustomVisualizationProps.onChange}.
+   *
+   * @category Widget
+   * @internal
+   */
+  onChange?: (update: VisualizationStateUpdate) => void;
 }

@@ -134,6 +134,4 @@ When wrapping built-in charts:
 - Use `Pick<LineStyleOptions, ...>` for your `StyleOptions` to expose only the properties
   your design panel controls
 
----
-
 **Next lesson:** [Fetching Data](./03-fetching-data.md)

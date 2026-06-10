@@ -89,9 +89,26 @@ describe('Rest API', () => {
       );
     });
 
+    it('should include adminAccess query param when adminAccess is true', async () => {
+      await restApi.getDashboard('dashboardOid', { adminAccess: true });
+      expect(httpGetMock).toHaveBeenCalledWith('api/v1/dashboards/dashboardOid?adminAccess=true');
+    });
+
     it('should throw an error when fetching a dashboard with an invalid identifier', async () => {
       httpGetMock.mockRejectedValueOnce({ status: 400 });
       await expect(restApi.getDashboard('invalid-id')).rejects.toThrow();
+    });
+  });
+
+  describe('getDashboardLegacy', () => {
+    it('should send correct request to fetch a dashboard via legacy API', async () => {
+      await restApi.getDashboardLegacy('dashboardOid');
+      expect(httpGetMock).toHaveBeenCalledWith('api/dashboards/dashboardOid?');
+    });
+
+    it('should include adminAccess query param when adminAccess is true', async () => {
+      await restApi.getDashboardLegacy('dashboardOid', { adminAccess: true });
+      expect(httpGetMock).toHaveBeenCalledWith('api/dashboards/dashboardOid?adminAccess=true');
     });
   });
 

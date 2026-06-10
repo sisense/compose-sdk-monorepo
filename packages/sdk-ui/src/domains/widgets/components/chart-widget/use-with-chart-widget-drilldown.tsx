@@ -132,8 +132,14 @@ export const useWithChartWidgetDrilldown = ({
    * Connecting drilldown to props:
    */
   const dataOptionsWithDrilldown = useMemo(() => {
+    // When drilldown is not applicable (e.g. the category is a calculated dimension), keep the
+    // original data options. Otherwise `initialDimension` falls back to a dim-less dummy attribute
+    // that would replace the real category and produce an invalid ("no dim") JAQL query.
+    if (!isDrilldownApplicable) {
+      return dataOptions;
+    }
     return applyDrilldownDimension(chartType, dataOptions, drilldownDimension);
-  }, [chartType, dataOptions, drilldownDimension]);
+  }, [chartType, dataOptions, drilldownDimension, isDrilldownApplicable]);
 
   const filtersWithDrilldown = useMemo(() => {
     return drilldownFilters.length

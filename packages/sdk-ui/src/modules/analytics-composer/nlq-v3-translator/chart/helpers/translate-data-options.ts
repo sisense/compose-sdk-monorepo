@@ -14,7 +14,7 @@ import type { ChartDataOptions } from '@/types.js';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../../types.js';
 import {
-  toJSONArray,
+  toDataOptionItemsJSON,
   translateSingleAxisFromJSON,
   withAxisContext,
 } from '../../shared/data-options/index.js';
@@ -195,7 +195,7 @@ export function translateDataOptionsFromJSON(
 
     if (axisKey === 'columns') {
       result[axisKey] = translateTableColumnsAxis(
-        toJSONArray(axisValue) as (DimensionItemJSON | MeasureItemJSON)[],
+        toDataOptionItemsJSON(axisValue),
         context,
         translationErrors,
         withAxisContext('columns'),

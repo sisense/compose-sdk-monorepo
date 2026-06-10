@@ -124,6 +124,69 @@ describe('extractUnsupportedStyleOptions', () => {
         },
       });
     });
+
+    it('extracts xAxis.x2Title (Fusion boxplot editor exposes it even though boxplot is single-axis)', () => {
+      const style = {
+        xAxis: { x2Title: { enabled: true, text: 'Secondary X' } },
+        yAxis: { labels: {} },
+      } as unknown as WidgetStyle;
+      expect(extractUnsupportedStyleOptions('chart/boxplot', style)).toEqual({
+        xAxis: { x2Title: { enabled: true, text: 'Secondary X' } },
+      });
+    });
+
+    it('merges xAxis.x2Title with other unsupported xAxis fields', () => {
+      const style = {
+        xAxis: {
+          ticks: false,
+          labels: { rotation: 45, step: 3, stepInterval: 5 },
+          x2Title: { enabled: false, text: 'X2' },
+        },
+        yAxis: {},
+      } as unknown as WidgetStyle;
+      expect(extractUnsupportedStyleOptions('chart/boxplot', style)).toEqual({
+        xAxis: {
+          ticks: false,
+          labels: { rotation: 45, step: 3, stepInterval: 5 },
+          x2Title: { enabled: false, text: 'X2' },
+        },
+      });
+    });
+  });
+
+  describe('axis labels.step', () => {
+    it('extracts labels.step alongside labels.stepInterval for cartesian charts', () => {
+      const style = {
+        xAxis: { labels: { step: 5 } },
+        yAxis: { labels: { step: 2, stepInterval: 4 } },
+      } as unknown as WidgetStyle;
+      expect(extractUnsupportedStyleOptions('chart/line', style)).toEqual({
+        xAxis: { labels: { step: 5 } },
+        yAxis: { labels: { step: 2, stepInterval: 4 } },
+      });
+    });
+
+    it('extracts labels.step for polar charts (categories/axis panels)', () => {
+      const style = {
+        categories: { labels: { step: 7 } },
+        axis: { labels: { step: 1 } },
+      } as unknown as WidgetStyle;
+      expect(extractUnsupportedStyleOptions('chart/polar', style)).toEqual({
+        categories: { labels: { step: 7 } },
+        axis: { labels: { step: 1 } },
+      });
+    });
+
+    it('extracts labels.step for scatter charts', () => {
+      const style = {
+        xAxis: { labels: { step: 4 } },
+        yAxis: { labels: { step: 6 } },
+      } as unknown as WidgetStyle;
+      expect(extractUnsupportedStyleOptions('chart/scatter', style)).toEqual({
+        xAxis: { labels: { step: 4 } },
+        yAxis: { labels: { step: 6 } },
+      });
+    });
   });
 
   describe('chart/pie', () => {

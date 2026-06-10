@@ -17,7 +17,10 @@ import { combineHandlers } from '@/shared/utils/combine-handlers';
 import { ChartWidgetStyleOptions, DrilldownSelection } from '@/types';
 
 import { useHighlightSelection } from '../../hooks/use-highlight-selection';
+import { useTrackWidgetInit } from '../../hooks/use-track-widget-init';
 import { useWidgetHeaderManagement } from '../../hooks/use-widget-header-management';
+import { getWidgetEntityId } from '../../hooks/widget-entity-id';
+import { getChartWidgetName, getWidgetTitle } from '../../hooks/widget-tracking-adapters';
 import { WidgetContainer } from '../../shared/widget-container';
 import { ChartWidgetProps } from './types';
 import { useChartWidgetCsvDownload } from './use-chart-widget-csv-download.js';
@@ -51,6 +54,13 @@ import { useWithChartWidgetDrilldown } from './use-with-chart-widget-drilldown';
 export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseComponent({
   componentName: 'ChartWidget',
 })((props) => {
+  useTrackWidgetInit({
+    widgetType: 'chart',
+    widgetName: getChartWidgetName(props),
+    widgetTitle: getWidgetTitle(props),
+    entityId: getWidgetEntityId(props, 'chart', getChartWidgetName(props)),
+    enabled: !!(props.chartType && props.dataOptions),
+  });
   const { app } = useSisenseContext();
   const {
     chartType,

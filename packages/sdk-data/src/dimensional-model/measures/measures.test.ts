@@ -4,7 +4,7 @@
 
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { TranslatableError } from '../../translation/translatable-error.js';
-import { DimensionalAttribute } from '../attributes.js';
+import { DimensionalAttribute } from '../attributes/attributes.js';
 import { AggregationType, AggregationTypes, Sort } from '../types.js';
 import {
   createMeasure,

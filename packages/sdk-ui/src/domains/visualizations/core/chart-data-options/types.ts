@@ -1,4 +1,5 @@
 import {
+  CalculatedColumn,
   CalculatedMeasureColumn,
   Column,
   ForecastFormulaOptions,
@@ -9,6 +10,7 @@ import {
 } from '@sisense/sdk-data';
 
 import type {
+  GenericDataOptions,
   LineWidth,
   Markers,
   MultiColumnValueToColorMap,
@@ -123,8 +125,8 @@ export interface CategoryStyle {
  * Also, see {@link StyledMeasureColumn}.
  */
 export interface StyledColumn extends CategoryStyle {
-  /** Wrapped Column */
-  column: Column;
+  /** Wrapped Column or CalculatedColumn (calculated dimension) */
+  column: Column | CalculatedColumn;
 }
 
 /**
@@ -268,6 +270,7 @@ export interface StyledMeasureColumn extends ValueStyle, SeriesStyle {
  */
 export type AnyColumn =
   | Column
+  | CalculatedColumn
   | StyledColumn
   | MeasureColumn
   | StyledMeasureColumn
@@ -286,7 +289,7 @@ export interface CartesianChartDataOptions {
    *
    * Typically, the X-axis represents descriptive data.
    */
-  category: (Column | StyledColumn)[];
+  category: (Column | CalculatedColumn | StyledColumn)[];
   /**
    * Measure columns (or measures) whose values are scaled to the Y-axis of the chart.
    *
@@ -300,7 +303,7 @@ export interface CartesianChartDataOptions {
    * Each group is represented by a different visual encoding - for example, color of bars in a bar chart,
    * and is automatically added to the chart's legend.
    */
-  breakBy: (Column | StyledColumn)[];
+  breakBy: (Column | CalculatedColumn | StyledColumn)[];
   /**
    * Optional mapping of each of the series to colors.
    */
@@ -324,7 +327,7 @@ export interface CategoricalChartDataOptions {
    *
    * For funnel charts, only the first 50 categories will be used.
    */
-  category: (Column | StyledColumn)[];
+  category: (Column | CalculatedColumn | StyledColumn)[];
   /**
    * Optional mapping of each of the series to colors.
    * ({@link MultiColumnValueToColorMap} used only for the Sunburst Chart component)
@@ -361,14 +364,26 @@ export interface ScatterChartDataOptions {
    * Typically, the X-axis of a Scatter Chart is used to represent numeric data.
    * Alternatively, Descriptive data is also supported. At most one column is allowed.
    */
-  x?: Column | StyledColumn | MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
+  x?:
+    | Column
+    | CalculatedColumn
+    | StyledColumn
+    | MeasureColumn
+    | CalculatedMeasureColumn
+    | StyledMeasureColumn;
   /**
    * A column or measure column whose values are placed on the Y-axis.
    *
    * Typically, the Y-axis of a Scatter Chart is used to represent numeric data.
    * Alternatively, Descriptive data is also supported. At most one column is allowed.
    */
-  y?: Column | StyledColumn | MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
+  y?:
+    | Column
+    | CalculatedColumn
+    | StyledColumn
+    | MeasureColumn
+    | CalculatedMeasureColumn
+    | StyledMeasureColumn;
   /**
    * A column to be scattered across the chart as circles;
    * one point (circle) appears on the chart for each member of this column.
@@ -376,7 +391,7 @@ export interface ScatterChartDataOptions {
    *
    * You can only add a break-by point if either the X-axis or the Y-axis was defined to represent numeric data.
    */
-  breakByPoint?: Column | StyledColumn;
+  breakByPoint?: Column | CalculatedColumn | StyledColumn;
 
   /**
    * Select a column by which to break (group) the columns in the chart.
@@ -394,6 +409,7 @@ export interface ScatterChartDataOptions {
    */
   breakByColor?:
     | Column
+    | CalculatedColumn
     | StyledColumn
     | MeasureColumn
     | CalculatedMeasureColumn
@@ -417,7 +433,7 @@ export interface ScatterChartDataOptions {
  */
 export interface AreamapChartDataOptions {
   /** Column or attribute representing the countries (or states) on the map. */
-  geo: [Column | StyledColumn];
+  geo: [Column | CalculatedColumn | StyledColumn];
   /** Measure column (or measure) encoded by the color of the countries (or states) on the map. */
   color?: [MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn];
 }
@@ -428,7 +444,7 @@ export interface AreamapChartDataOptions {
  */
 export interface CalendarHeatmapChartDataOptions {
   /** Date column representing dates on the calendar heatmap. */
-  date: Column | StyledColumn;
+  date: Column | CalculatedColumn | StyledColumn;
   /** Measure column (or measure) assigned to the calendar cells. */
   value: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
 }
@@ -442,6 +458,7 @@ export interface TableDataOptions {
    */
   columns: (
     | Column
+    | CalculatedColumn
     | StyledColumn
     | MeasureColumn
     | CalculatedMeasureColumn
@@ -464,14 +481,14 @@ export interface PivotTableDataOptions {
    *
    * @category Data Options
    */
-  rows?: (Column | StyledColumn)[];
+  rows?: (Column | CalculatedColumn | StyledColumn)[];
 
   /**
    * Dimensions for the columns of the pivot table
    *
    * @category Data Options
    */
-  columns?: (Column | StyledColumn)[];
+  columns?: (Column | CalculatedColumn | StyledColumn)[];
 
   /**
    * Measures for the values of the pivot table
@@ -508,7 +525,7 @@ export interface ScattermapChartDataOptions {
    * Support field(s) that contain geographic data (Country, City, State/Province, etc)
    * To visualize latitude and longitude data, you have to add one field containing latitude data, and another field containing longitude data, in this order.
    */
-  geo: (Column | StyledColumn)[];
+  geo: (Column | CalculatedColumn | StyledColumn)[];
   /**
    * Measure column (or measure) representing the size of the points on the map.
    */
@@ -520,7 +537,13 @@ export interface ScattermapChartDataOptions {
   /**
    * Column or measure column representing the additional details for the points on the map.
    */
-  details?: Column | StyledColumn | MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
+  details?:
+    | Column
+    | CalculatedColumn
+    | StyledColumn
+    | MeasureColumn
+    | CalculatedMeasureColumn
+    | StyledMeasureColumn;
 }
 
 /**
@@ -539,7 +562,7 @@ export type BoxplotChartDataOptions = {
   /**
    * Columns (or attributes) whose values represent categories in the chart.
    */
-  category: [(Column | StyledColumn)?];
+  category: [(Column | CalculatedColumn | StyledColumn)?];
   /**
    * Columns (or attributes) whose values represent the target numeric value column for computing boxplot metrics according to the selected `boxType`
    */
@@ -565,7 +588,7 @@ export type BoxplotChartCustomDataOptions = {
   /**
    * Columns (or attributes) whose values represent categories in the chart.
    */
-  category: [(Column | StyledColumn)?];
+  category: [(Column | CalculatedColumn | StyledColumn)?];
   /**
    * Measure columns (or measures) representing the target numeric values used for computing boxplot metrics.
    */
@@ -597,7 +620,7 @@ export interface RangeChartDataOptions {
    *
    * Typically, the X-axis represents descriptive data.
    */
-  category: (Column | StyledColumn)[];
+  category: (Column | CalculatedColumn | StyledColumn)[];
   /**
    * An array of measure columns used to represent the target numeric values for computing the metrics
    * in an area range chart.
@@ -612,7 +635,7 @@ export interface RangeChartDataOptions {
    * Each group is represented by a different visual encoding - for example, color of bars in a bar chart,
    * and is automatically added to the chart's legend.
    */
-  breakBy: (Column | StyledColumn)[];
+  breakBy: (Column | CalculatedColumn | StyledColumn)[];
   /**
    * Optional mapping of each of the series to colors.
    */
@@ -632,6 +655,11 @@ export interface RangeChartDataOptions {
  * {@link ScattermapChartDataOptions | Scattermap} charts.
  */
 export type ChartDataOptions = RegularChartDataOptions | TabularChartDataOptions;
+
+/**
+ * Union of data options for all supported CSDK visualization (chart) types
+ */
+export type CommonDataOptions = ChartDataOptions | PivotTableDataOptions | GenericDataOptions;
 
 /**
  * Configuration for how to query aggregate data and assigning data to chart encodings of regular charts.

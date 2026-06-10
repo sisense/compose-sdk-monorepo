@@ -70,6 +70,7 @@ const VALID_FUSION_TOKENS = new Set([
   'dd',
   'EEE',
   'EEEE',
+  'EEEEE',
   'H',
   'HH',
   'h',

@@ -11,7 +11,7 @@ to a [Categorical chart](../type-aliases/type-alias.CategoricalChartType.md).
 
 ### category
 
-> **category**: ([`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
+> **category**: ([`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
 
 Columns (or attributes) whose values represent categories in the chart.
 

@@ -1,4 +1,4 @@
-import { JSONArray, Sort } from '@sisense/sdk-data';
+import { Sort } from '@sisense/sdk-data';
 
 import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
@@ -6,6 +6,7 @@ import {
 } from '../../../__mocks__/mock-data-sources.js';
 import { createSchemaIndex } from '../../shared/utils/schema-index.js';
 import { getErrors, getSuccessData } from '../../shared/utils/translation-helpers.js';
+import type { DimensionItemJSON } from '../../types.js';
 import { translateDimensionsFromJSON } from './translate-dimensions-from-json.js';
 
 const MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE = createSchemaIndex(
@@ -49,7 +50,7 @@ describe('translateDimensions', () => {
 
   it('should return empty array when dimensionsJSON is null', () => {
     const result = translateDimensionsFromJSON({
-      data: null as unknown as JSONArray,
+      data: null as unknown as DimensionItemJSON[],
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -61,7 +62,7 @@ describe('translateDimensions', () => {
 
   it('should return empty array when dimensionsJSON is undefined', () => {
     const result = translateDimensionsFromJSON({
-      data: undefined as unknown as JSONArray,
+      data: undefined as unknown as DimensionItemJSON[],
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -73,7 +74,7 @@ describe('translateDimensions', () => {
 
   it('should return empty array when dimensionsJSON is false', () => {
     const result = translateDimensionsFromJSON({
-      data: false as unknown as JSONArray,
+      data: false as unknown as DimensionItemJSON[],
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -85,7 +86,7 @@ describe('translateDimensions', () => {
 
   it('should return empty array when dimensionsJSON is 0', () => {
     const result = translateDimensionsFromJSON({
-      data: 0 as unknown as JSONArray,
+      data: 0 as unknown as DimensionItemJSON[],
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -97,7 +98,7 @@ describe('translateDimensions', () => {
 
   it('should return empty array when dimensionsJSON is empty string', () => {
     const result = translateDimensionsFromJSON({
-      data: '' as unknown as JSONArray,
+      data: '' as unknown as DimensionItemJSON[],
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -124,7 +125,7 @@ describe('translateDimensions', () => {
       'DM.Country.Country',
       123,
       'DM.Brand.Brand',
-    ] as unknown as JSONArray;
+    ] as unknown as DimensionItemJSON[];
 
     const result = translateDimensionsFromJSON({
       data: mockDimensionsJSON,
@@ -145,7 +146,7 @@ describe('translateDimensions', () => {
       'DM.Country.Country',
       { invalid: 'object' },
       'DM.Brand.Brand',
-    ] as unknown as JSONArray;
+    ] as unknown as DimensionItemJSON[];
 
     const result = translateDimensionsFromJSON({
       data: mockDimensionsJSON,
@@ -166,7 +167,7 @@ describe('translateDimensions', () => {
       'DM.Country.Country',
       null,
       'DM.Brand.Brand',
-    ] as unknown as JSONArray;
+    ] as unknown as DimensionItemJSON[];
 
     const result = translateDimensionsFromJSON({
       data: mockDimensionsJSON,
@@ -187,7 +188,7 @@ describe('translateDimensions', () => {
       'DM.Country.Country',
       true,
       'DM.Brand.Brand',
-    ] as unknown as JSONArray;
+    ] as unknown as DimensionItemJSON[];
 
     const result = translateDimensionsFromJSON({
       data: mockDimensionsJSON,
@@ -204,7 +205,7 @@ describe('translateDimensions', () => {
   });
 
   it('should return enriched format for styled dimension with sortType (attribute has no sort applied)', () => {
-    const mockDimensionsJSON = [{ column: 'DM.Brand.Brand', sortType: 'sortDesc' }];
+    const mockDimensionsJSON = [{ column: 'DM.Brand.Brand', sortType: 'sortDesc' as const }];
 
     const result = translateDimensionsFromJSON({
       data: mockDimensionsJSON,
@@ -245,7 +246,7 @@ describe('translateDimensions', () => {
       'DM.Country.Country',
       ['nested', 'array'],
       'DM.Brand.Brand',
-    ] as unknown as JSONArray;
+    ] as unknown as DimensionItemJSON[];
 
     const result = translateDimensionsFromJSON({
       data: mockDimensionsJSON,

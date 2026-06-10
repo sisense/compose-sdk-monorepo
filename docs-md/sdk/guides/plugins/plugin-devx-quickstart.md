@@ -127,6 +127,8 @@ export const DesignPanels = ({ styleOptions, onChange }: DesignPanelProps<StyleO
 
 Edit `src/dev-preview-props.ts` to provide sample data that matches your `DataOptions` type.
 
+> **Using an AI agent?** The project includes a pre-configured `.claude/` folder with reference docs readable by any AI coding agent. With Claude Code, run `/design-custom-widget` and describe your chart — the agent implements everything (data inputs, library, chart code, style controls) in one step. With other agents, describe your goal in plain language and reference the guides in `.claude/docs/` directly. See [AI-Driven Development](./ai-driven-development.md) for the full workflow.
+
 ---
 
 ## 5. Build
@@ -211,5 +213,6 @@ For details on the Fusion bundle format, `plugin.json` metadata, and what the de
 
 ## Next Steps
 
+- **[AI-Driven Development](./ai-driven-development.md)** — use an AI agent to build plugins faster: describe your goal in plain language and the agent implements everything in one step
 - **[Widget Plugins Tutorial](../../tutorials/tutorial-widget-plugins/index.md)** — learn the plugin API: visualization props, data fetching, data panel, design panel, event handling
 - **[Plugin DevX Reference](./plugin-devx-reference.md)** — full CLI options, project structure, testing, all framework examples, Fusion deployment

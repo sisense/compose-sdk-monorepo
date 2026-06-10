@@ -7,6 +7,7 @@ title: sdk-data
 ## Factories
 
 - [analyticsFactory](factories/namespace.analyticsFactory/index.md)
+- [attributeFactory](factories/namespace.attributeFactory/index.md)
 - [filterFactory](factories/namespace.filterFactory/index.md)
 - [measureFactory](factories/namespace.measureFactory/index.md)
 

@@ -4,7 +4,7 @@ import {
   DimensionalAttribute,
   DimensionalLevelAttribute,
   jaqlSimpleColumnType,
-} from '../attributes.js';
+} from '../attributes/attributes.js';
 import { DimensionalElement, normalizeName, wrapIfNeedsNormalization } from '../base.js';
 import { DATA_MODEL_MODULE_NAME } from '../consts.js';
 import { Attribute, DateDimension, Dimension, LevelAttribute } from '../interfaces.js';

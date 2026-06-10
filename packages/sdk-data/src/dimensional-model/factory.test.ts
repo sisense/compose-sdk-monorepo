@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
 import { TranslatableError } from '../translation/translatable-error.js';
-import { DimensionalAttribute } from './attributes.js';
+import { DimensionalAttribute } from './attributes/attributes.js';
 import { DimensionalDateDimension, DimensionalDimension } from './dimensions/dimensions.js';
 import { create, createAll } from './factory.js';
 import { MembersFilter, NumericFilter } from './filters/filters.js';

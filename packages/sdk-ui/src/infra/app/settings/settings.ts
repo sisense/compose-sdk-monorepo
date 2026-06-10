@@ -28,9 +28,7 @@ type AiSettingsResponse = {
  * it still surfaces via the index signature on {@link AiFeatureFlags}.
  */
 type KnownAiFeatureFlags = {
-  completionV2: boolean;
   naturalResponseEnabled: boolean;
-  nlqV3Enabled: boolean;
   queryDefinition: boolean;
 };
 
@@ -49,7 +47,7 @@ export type AiFeatureFlags = KnownAiFeatureFlags & {
 /**
  * AI-related slice derived from globals (`serverFeatures` + deployment props),
  * aligned with admin UI paths such as `ai.featureFlags.*`, `ai.featureModelType`,
- * `ai.quotaNotification`, and `ai.aiStudio.*`.
+ * and `ai.quotaNotification`.
  */
 type AiSettingsSlice = {
   featureFlags: AiFeatureFlags;
@@ -60,50 +58,27 @@ type AiSettingsSlice = {
    */
   featureModelType?: string;
   quotaNotification: boolean;
-  aiStudio: {
-    realtime: boolean;
-    usageDisplay: boolean;
-  };
 };
 
 function mapAiSettingsSlice(features: FeatureMap): AiSettingsSlice {
   const aiAssistant = features.aiAssistant;
-  const aiStudioFeature = features.aiStudio;
-
-  const nlqV3Enabled = Boolean(aiAssistant?.nlqV3Enabled ?? aiAssistant?.isNlqV3Enabled ?? false);
 
   const naturalResponseEnabled = Boolean(aiAssistant?.naturalResponseEnabled ?? false);
 
   const queryDefinition = Boolean(aiAssistant?.queryDefinition ?? false);
-
-  const completionV2 = Boolean(aiAssistant?.completionV2 ?? false);
 
   const quotaNotification = Boolean(aiAssistant?.quotaNotification ?? false);
 
   const featureModelType =
     aiAssistant !== undefined ? aiAssistant.featureModelType ?? 'customer_byok' : undefined;
 
-  const realtime = Boolean(
-    aiStudioFeature?.realtime ?? aiStudioFeature?.isRealtimeEnabled ?? false,
-  );
-
-  const usageDisplay = Boolean(
-    aiStudioFeature?.usageDisplay ?? aiStudioFeature?.isUsageDisplayEnabled ?? false,
-  );
-
   return {
     featureFlags: {
-      completionV2,
       naturalResponseEnabled,
-      nlqV3Enabled,
       queryDefinition,
     },
     ...(featureModelType !== undefined ? { featureModelType } : {}),
     quotaNotification,
-    aiStudio: {
-      realtime,
-      usageDisplay,
-    },
   };
 }
 
@@ -250,6 +225,9 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
         enabled: true,
         sanitizeContents: true,
       },
+    },
+    defaultNumberFormatting: {
+      enabled: true,
     },
   },
 };

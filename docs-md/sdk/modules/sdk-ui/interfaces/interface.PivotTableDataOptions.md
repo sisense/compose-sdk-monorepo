@@ -12,7 +12,7 @@ Configuration for how to query data and assign data to PivotTable.
 
 #### columns
 
-> **columns**?: ([`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
+> **columns**?: ([`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
 
 Dimensions for the columns of the pivot table
 
@@ -28,7 +28,7 @@ Options for grand totals
 
 #### rows
 
-> **rows**?: ([`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
+> **rows**?: ([`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
 
 Dimensions for the rows of the pivot table
 

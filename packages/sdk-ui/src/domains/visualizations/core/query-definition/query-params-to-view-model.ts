@@ -11,6 +11,7 @@ import { getColumnNameFromAttribute, isDimensionalLevelAttribute } from '@sisens
 import type { BaseQueryParams } from '@/domains/query-execution/types';
 import { generateAttributeName } from '@/shared/utils/generate-attribute-name';
 
+import { toReadableFilterLabel } from './filter-to-readable-label';
 import type { QueryDefinitionViewModel, QueryPillItem } from './types';
 
 /** Pill label for a dimension (or filter) attribute; `t` enables date-level strings via {@link generateAttributeName}. */
@@ -27,12 +28,13 @@ function getMeasureLabel(measure: Measure): string {
   return measure.name ?? String(measure);
 }
 
-/** Pill label from filter attribute; empty when the filter has no attribute. */
+/** Pill label from filter attribute and operator/value; empty when the filter has no attribute. */
 function getFilterLabel(filter: Filter, t?: TFunction): string {
   if (!filter.attribute) {
     return '';
   }
-  return getAttributeLabel(filter.attribute, t);
+  const attributeLabel = getAttributeLabel(filter.attribute, t);
+  return toReadableFilterLabel(filter, attributeLabel);
 }
 
 /**

@@ -192,6 +192,30 @@ export const PivotTable = asSisenseComponent({
   const isJaqlChanged = useHasChanged(jaql);
   const isForceReload = refreshCounter > 0 && useHasChanged(refreshCounter);
 
+  /*
+   * Detect client-side formatting changes that don't alter the JAQL query
+   * (for example, color or number format changes on pivot value columns).
+   *
+   * These changes are applied entirely on the client side, so the generated
+   * JAQL remains identical. Without this additional signal, the pivot would
+   * not detect any change and therefore would not re-render.
+   */
+  const formattingKey = useMemo(
+    () =>
+      JSON.stringify({
+        values: dataOptionsInternal.values?.map(({ color, numberFormatConfig }) => ({
+          color,
+          numberFormatConfig,
+        })),
+        rows: dataOptionsInternal.rows?.map(({ color, numberFormatConfig }) => ({
+          color,
+          numberFormatConfig,
+        })),
+      }),
+    [dataOptionsInternal],
+  );
+  const isFormattingOnlyChange = useHasChanged(formattingKey) && !isJaqlChanged;
+
   const [pageSize, setPageSize] = useSyncedState(
     typeof styleOptions?.rowsPerPage === 'number' && !isNaN(styleOptions?.rowsPerPage)
       ? styleOptions?.rowsPerPage
@@ -205,7 +229,7 @@ export const PivotTable = asSisenseComponent({
   const dataService = usePivotDataService({
     pivotClient,
     pivotBuilder,
-    shouldBeRecreated: isJaqlChanged || isForceReload,
+    shouldBeRecreated: isJaqlChanged || isForceReload || isFormattingOnlyChange,
   });
   useApplyPivotTableFormatting({
     dataService,
@@ -248,7 +272,7 @@ export const PivotTable = asSisenseComponent({
   const { isLoading, isNoResults } = usePivotDataLoading({
     jaql,
     pivotBuilder,
-    isForceReload,
+    isForceReload: isForceReload || isFormattingOnlyChange,
   });
 
   const onSort = useCallback(

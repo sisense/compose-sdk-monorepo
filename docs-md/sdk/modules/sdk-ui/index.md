@@ -122,11 +122,10 @@ For more information on requirements for enabling Generative AI features, please
 - [useGetNlqResult](generative-ai/function.useGetNlqResult.md) <Badge type="beta" text="Beta" />
 - [useGetQueryRecommendations](generative-ai/function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />
 
-## Functions
+## General
 
-- [createLinearGradient](functions/function.createLinearGradient.md)
-- [createRadialGradient](functions/function.createRadialGradient.md)
-- [isGradient](functions/function.isGradient.md)
-- [isLinearGradient](functions/function.isLinearGradient.md)
-- [isRadialGradient](functions/function.isRadialGradient.md)
-- [LoadingOverlay](functions/function.LoadingOverlay.md)
+General-purpose utilities and primitives for formatting, styling, and common UI components
+
+- [Formatting](formatting/index.md) - Utilities for formatting numbers, dates, and query result data sets.
+- [Styling](styling/index.md) - Utilities for creating and inspecting color gradients used in chart styling.
+- [Primitives](primitives/index.md) - General-purpose presentational primitive components.

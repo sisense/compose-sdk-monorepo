@@ -1,4 +1,4 @@
-import { isFilterRelations, JSONArray, withoutGuids } from '@sisense/sdk-data';
+import { isFilterRelations, withoutGuids } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -349,7 +349,7 @@ describe('translateFilters', () => {
   describe('translateFiltersFromJSON', () => {
     it('should return empty array when filtersJSON is null', () => {
       const result = translateFiltersFromJSON({
-        data: null as unknown as JSONArray,
+        data: null as unknown as FunctionCall[],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -361,7 +361,7 @@ describe('translateFilters', () => {
 
     it('should return empty array when filtersJSON is undefined', () => {
       const result = translateFiltersFromJSON({
-        data: undefined as unknown as JSONArray,
+        data: undefined as unknown as FunctionCall[],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -373,7 +373,7 @@ describe('translateFilters', () => {
 
     it('should return empty array when filtersJSON is false', () => {
       const result = translateFiltersFromJSON({
-        data: false as unknown as JSONArray,
+        data: false as unknown as FunctionCall[],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -385,7 +385,7 @@ describe('translateFilters', () => {
 
     it('should return empty array when filtersJSON is 0', () => {
       const result = translateFiltersFromJSON({
-        data: 0 as unknown as JSONArray,
+        data: 0 as unknown as FunctionCall[],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -397,7 +397,7 @@ describe('translateFilters', () => {
 
     it('should return empty array when filtersJSON is empty string', () => {
       const result = translateFiltersFromJSON({
-        data: '' as unknown as JSONArray,
+        data: '' as unknown as FunctionCall[],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -420,7 +420,10 @@ describe('translateFilters', () => {
     });
 
     it('should return error for array of strings instead of function calls', () => {
-      const invalidFiltersJSON = ['DM.Country.Country', 'DM.Brand.Brand'] as unknown as JSONArray;
+      const invalidFiltersJSON = [
+        'DM.Country.Country',
+        'DM.Brand.Brand',
+      ] as unknown as FunctionCall[];
 
       const result = translateFiltersFromJSON({
         data: invalidFiltersJSON,
@@ -439,7 +442,7 @@ describe('translateFilters', () => {
     it('should return error for array of objects missing function property', () => {
       const invalidFiltersJSON = [
         { args: ['DM.Country.Country', ['United States']] },
-      ] as unknown as JSONArray;
+      ] as unknown as FunctionCall[];
 
       const result = translateFiltersFromJSON({
         data: invalidFiltersJSON,
@@ -456,7 +459,9 @@ describe('translateFilters', () => {
     });
 
     it('should return error for array of objects missing args property', () => {
-      const invalidFiltersJSON = [{ function: 'filterFactory.members' }] as unknown as JSONArray;
+      const invalidFiltersJSON = [
+        { function: 'filterFactory.members' },
+      ] as unknown as FunctionCall[];
 
       const result = translateFiltersFromJSON({
         data: invalidFiltersJSON,
@@ -476,7 +481,7 @@ describe('translateFilters', () => {
       const invalidFiltersJSON = [
         { function: 'filterFactory.members', args: ['DM.Country.Country', ['United States']] },
         'not an object',
-      ] as unknown as JSONArray;
+      ] as unknown as FunctionCall[];
 
       const result = translateFiltersFromJSON({
         data: invalidFiltersJSON,
@@ -496,7 +501,7 @@ describe('translateFilters', () => {
       const invalidFiltersJSON = [
         { function: 'filterFactory.members', args: ['DM.Country.Country', ['United States']] },
         null,
-      ] as unknown as JSONArray;
+      ] as unknown as FunctionCall[];
 
       const result = translateFiltersFromJSON({
         data: invalidFiltersJSON,

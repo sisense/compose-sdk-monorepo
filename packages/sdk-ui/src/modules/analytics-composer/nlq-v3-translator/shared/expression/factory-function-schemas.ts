@@ -12,55 +12,55 @@ export const FACTORY_FUNCTION_SCHEMAS: Record<string, ArgSchema[]> = {
   // Basic aggregations
   'measureFactory.sum': [
     { type: 'Attribute', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
   'measureFactory.average': [
     { type: 'Attribute', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
   'measureFactory.avg': [
     { type: 'Attribute', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
   'measureFactory.min': [
     { type: 'Attribute', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
   'measureFactory.max': [
     { type: 'Attribute', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
   'measureFactory.median': [
     { type: 'Attribute', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
   'measureFactory.count': [
     { type: 'Attribute', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
   'measureFactory.countDistinct': [
     { type: 'Attribute', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
   'measureFactory.aggregate': [
     { type: 'Attribute', required: true },
     { type: 'string', required: true }, // aggregationType
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
 
   // Constants and formulas
   'measureFactory.constant': [{ type: 'number', required: true }],
   'measureFactory.customFormula': [
-    { type: 'string', required: true }, // title
+    { type: 'string', required: true, isName: true }, // title
     { type: 'string', required: true }, // formula
     { type: 'CustomFormulaContext', required: true }, // context
     { type: 'string', required: false }, // format
@@ -71,25 +71,25 @@ export const FACTORY_FUNCTION_SCHEMAS: Record<string, ArgSchema[]> = {
   'measureFactory.add': [
     { type: 'Measure | number', required: true },
     { type: 'Measure | number', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'boolean', required: false }, // withParentheses
   ],
   'measureFactory.subtract': [
     { type: 'Measure | number', required: true },
     { type: 'Measure | number', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'boolean', required: false }, // withParentheses
   ],
   'measureFactory.multiply': [
     { type: 'Measure | number', required: true },
     { type: 'Measure | number', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'boolean', required: false }, // withParentheses
   ],
   'measureFactory.divide': [
     { type: 'Measure | number', required: true },
     { type: 'Measure | number', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'boolean', required: false }, // withParentheses
   ],
 
@@ -97,122 +97,122 @@ export const FACTORY_FUNCTION_SCHEMAS: Record<string, ArgSchema[]> = {
   'measureFactory.measuredValue': [
     { type: 'Measure', required: true },
     { type: 'Filter[]', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
   'measureFactory.rank': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // sort
     { type: 'string', required: false }, // rankType
     { type: 'Attribute[]', required: false }, // groupBy
   ],
   'measureFactory.trend': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'any', required: false }, // options
   ],
   'measureFactory.forecast': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
     { type: 'any', required: false }, // options
   ],
 
   // Time-based aggregations
   'measureFactory.yearToDateSum': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.quarterToDateSum': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.monthToDateSum': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.weekToDateSum': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.runningSum': [
     { type: 'Measure', required: true },
     { type: 'boolean', required: false }, // continuous
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
 
   // Growth and difference calculations
   'measureFactory.growth': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.growthRate': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.growthPastWeek': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.growthPastMonth': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.growthPastQuarter': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.growthPastYear': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.difference': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.diffPastWeek': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.diffPastMonth': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.diffPastQuarter': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.diffPastYear': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
 
   // Past period measures
   'measureFactory.pastDay': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.pastWeek': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.pastMonth': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.pastQuarter': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
   'measureFactory.pastYear': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
 
   // Statistics
   'measureFactory.contribution': [
     { type: 'Measure', required: true },
-    { type: 'string', required: false }, // name
+    { type: 'string', required: false, isName: true }, // name
   ],
 
   // ==================== FILTER FACTORY FUNCTIONS ====================

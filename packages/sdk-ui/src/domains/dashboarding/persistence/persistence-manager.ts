@@ -45,5 +45,11 @@ export function createDashboardPersistenceManager(
         payload: { widgetOid, patch },
       });
     },
+    updateWidget: async (widgetOid, update) => {
+      await dispatchDashboardModelChanges({
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: { widgetOid, update },
+      });
+    },
   };
 }

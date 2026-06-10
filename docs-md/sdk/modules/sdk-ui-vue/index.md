@@ -117,3 +117,9 @@ For more information on requirements for enabling Generative AI features, please
 - [useGetNlgInsights](generative-ai/function.useGetNlgInsights.md)
 - [useGetNlqResult](generative-ai/function.useGetNlqResult.md) <Badge type="beta" text="Beta" />
 - [useGetQueryRecommendations](generative-ai/function.useGetQueryRecommendations.md) <Badge type="beta" text="Beta" />
+
+## General
+
+General-purpose utilities and primitives for formatting, styling, and common UI components
+
+- [Formatting](formatting/index.md) - Utilities for formatting numbers, dates, and query result data sets.

@@ -7,7 +7,9 @@
 export {
   adaptDimensionsToStyledColumn,
   adaptMeasuresToStyledMeasureColumn,
-  toJSONArray,
+  toDataOptionItemsJSON,
+  toDimensionItemsJSON,
+  toMeasureItemsJSON,
   withAxisContext,
 } from './adapters.js';
 export {

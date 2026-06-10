@@ -1,4 +1,4 @@
-import { DimensionalAttribute } from './attributes.js';
+import { DimensionalAttribute } from './attributes/attributes.js';
 import { stringifyHelper } from './compose-code-utils.js';
 import * as filterFactory from './filters/factory.js';
 

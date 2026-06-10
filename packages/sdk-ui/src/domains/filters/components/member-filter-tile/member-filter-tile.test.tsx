@@ -1,4 +1,4 @@
-import { filterFactory, type MembersFilter } from '@sisense/sdk-data';
+import { attributeFactory, filterFactory, type MembersFilter } from '@sisense/sdk-data';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { expect } from 'vitest';
@@ -51,6 +51,31 @@ describe('MemberFilterTile', () => {
         expect(await screen.findByText(member)).toBeInTheDocument(),
       ),
     );
+  });
+
+  it('does not render normally for a calculated dimension (filters unsupported)', async () => {
+    // A calculated dimension cannot back a filter; the tile must surface an error
+    // (via the data-layer guard) instead of rendering its normal content.
+    const calcDim = attributeFactory.customFormula('Bucket', "IF([rev] > 1000, 'A', 'B')", {
+      rev: DM.Commerce.Revenue,
+    });
+    const filterTitle = 'Calc Dim Filter';
+
+    render(
+      <SisenseContextProvider {...contextProviderProps}>
+        <MemberFilterTile
+          title={filterTitle}
+          dataSource={'Some datasource'}
+          attribute={calcDim}
+          filter={null}
+          onChange={() => {}}
+        />
+      </SisenseContextProvider>,
+    );
+
+    // The normal tile content (its title) must not be rendered.
+    expect(screen.queryByText(filterTitle)).not.toBeInTheDocument();
+    expect(await screen.findByLabelText('error-box')).toBeInTheDocument();
   });
 
   it('should render a MemberFilterTile component with excluded members', async () => {

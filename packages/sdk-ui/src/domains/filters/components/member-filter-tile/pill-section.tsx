@@ -60,7 +60,12 @@ const Pill = ({ name, active, excludeMembers, disabled, onClick }: PillProps) =>
     : '#ffffff';
 
   return (
-    <StyledPillButton backgroundColor={backgroundColor} textColor={textColor} onClick={onClick}>
+    <StyledPillButton
+      title={name}
+      backgroundColor={backgroundColor}
+      textColor={textColor}
+      onClick={onClick}
+    >
       {name}
     </StyledPillButton>
   );

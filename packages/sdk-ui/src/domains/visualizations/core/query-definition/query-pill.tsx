@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { getQueryPillTooltipModel } from './compose-code-to-readable';
 import { QUERY_PILL_LABEL_STYLE } from './query-definition-style-constants';
 import { QueryPillBubbleTooltip } from './query-pill-bubble-tooltip';
+import { truncatePillLabel } from './truncate-pill-label';
 import type { QueryPillCategory, QueryPillItem } from './types';
 
 /**
@@ -46,6 +47,11 @@ export interface QueryPillProps {
   item: QueryPillItem;
   showTooltip?: boolean;
   tooltipBoundaryElement?: HTMLElement | null;
+  /**
+   * Maximum number of characters shown in the pill label before truncation.
+   * When `0` or omitted, the full label is shown.
+   */
+  maxLength?: number;
 }
 
 /**
@@ -57,9 +63,15 @@ export const QueryPill: FunctionComponent<QueryPillProps> = ({
   item,
   showTooltip = true,
   tooltipBoundaryElement,
+  maxLength = 0,
 }) => {
   const { t } = useTranslation();
   const { bg, text } = PILL_COLORS[item.category];
+  const displayLabel = useMemo(
+    () => truncatePillLabel(item.label, maxLength),
+    [item.label, maxLength],
+  );
+  const isTruncated = displayLabel !== item.label;
   const tooltipModel = useMemo(() => getQueryPillTooltipModel(item), [item]);
   const tooltipTitle = tooltipModel === null ? null : tooltipTitleFromModel(tooltipModel, t);
   const preferBelow = tooltipModel ? (tooltipModel.layoutText ?? '').split('\n').length > 3 : false;
@@ -73,8 +85,9 @@ export const QueryPill: FunctionComponent<QueryPillProps> = ({
         color: text,
         ...QUERY_PILL_LABEL_STYLE,
       }}
+      title={isTruncated ? item.label : undefined}
     >
-      {item.label}
+      {displayLabel}
     </span>
   );
 

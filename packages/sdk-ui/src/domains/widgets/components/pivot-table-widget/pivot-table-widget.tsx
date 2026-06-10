@@ -6,15 +6,20 @@ import { PivotTable } from '@/domains/visualizations/components/pivot-table';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
 import { DataOptionLocation, DrilldownSelection } from '@/index';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
+import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import {
   DynamicSizeContainer,
   getWidgetDefaultSize,
 } from '@/shared/components/dynamic-size-container';
+import { useElementHeight } from '@/shared/hooks/use-element-height';
 
-import { DEFAULT_WIDGET_HEADER_HEIGHT } from '../../constants';
+import { useTrackWidgetInit } from '../../hooks/use-track-widget-init';
 import { useWidgetHeaderManagement } from '../../hooks/use-widget-header-management';
+import { getWidgetEntityId } from '../../hooks/widget-entity-id';
+import { getPivotWidgetName, getWidgetTitle } from '../../hooks/widget-tracking-adapters';
 import { WidgetContainer } from '../../shared/widget-container';
+import { getWidgetOverheadHeight } from '../../shared/widget-style-utils';
 import { PivotTableWidgetProps } from './types';
 import { usePivotWidgetCsvDownload } from './use-pivot-widget-csv-download.js';
 import { usePivotWidgetExcelDownload } from './use-pivot-widget-excel-download.js';
@@ -22,9 +27,26 @@ import { useWithPivotTableWidgetDrilldown } from './use-with-pivot-table-widget-
 
 const MIN_PIVOT_HEIGHT = 100;
 
-function calcPivotTableWidgetHeight(pivotTableHeight: number | undefined) {
-  return pivotTableHeight
-    ? Math.max(MIN_PIVOT_HEIGHT, pivotTableHeight + DEFAULT_WIDGET_HEADER_HEIGHT)
+/**
+ * Computes the outer widget height in auto-height mode.
+ *
+ * The inner pivot reports only its own table height. The widget reserves additional vertical
+ * space above the pivot — the container chrome (header + `spaceAround` padding, SNS-127785) and
+ * the optional top slot (e.g. drilldown breadcrumbs, SNS-128141). Callers must sum all such
+ * non-pivot reserved space into `reservedHeight` so that pagination at the bottom of the pivot
+ * remains reachable.
+ *
+ * @param pivotTableHeight - The measured content height of the pivot table.
+ * @param reservedHeight - The total non-pivot vertical space the widget reserves (chrome + topSlot).
+ * @returns The total widget height in pixels, or `undefined` when the content height is unknown.
+ * @internal
+ */
+export function calcPivotTableWidgetHeight(
+  pivotTableHeight: number | undefined,
+  reservedHeight: number,
+) {
+  return pivotTableHeight !== undefined
+    ? Math.max(MIN_PIVOT_HEIGHT, pivotTableHeight + reservedHeight)
     : undefined;
 }
 
@@ -68,9 +90,21 @@ function calcPivotTableWidgetHeight(pivotTableHeight: number | undefined) {
 export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSisenseComponent({
   componentName: 'PivotTableWidget',
 })((props) => {
+  useTrackWidgetInit({
+    widgetType: 'pivot',
+    widgetName: getPivotWidgetName(),
+    widgetTitle: getWidgetTitle(props),
+    entityId: getWidgetEntityId(props, 'pivot', getPivotWidgetName()),
+    enabled: !!props.dataOptions,
+  });
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [pivotTableHeight, setPivotTableHeight] = useState<number | undefined>();
+  // Measure the top slot (e.g. drilldown breadcrumbs) so its height is included in the
+  // auto-height budget — otherwise breadcrumbs appearing after a drilldown push the
+  // pagination controls out of the visible area (SNS-128141).
+  const { ref: topSlotRef, height: topSlotHeight } = useElementHeight<HTMLDivElement>();
   const { app } = useSisenseContext();
+  const { themeSettings } = useThemeContext();
 
   const { styleOptions, dataSource = app?.defaultDataSource, dataOptions, onChange } = props;
 
@@ -101,9 +135,9 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     id: props.id,
   });
 
-  const defaultSize = getWidgetDefaultSize('pivot', {
-    hasHeader: !styleOptions?.header?.hidden,
-  });
+  const hasHeader = !styleOptions?.header?.hidden;
+  const defaultSize = getWidgetDefaultSize('pivot', { hasHeader });
+  const overheadHeight = getWidgetOverheadHeight({ styleOptions, themeSettings, hasHeader });
   const { width, height, ...styleOptionsWithoutSizing } = props.styleOptions || {};
 
   const onDrilldownSelectionsChange = useCallback(
@@ -130,7 +164,9 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
       defaultSize={defaultSize}
       size={{
         width: width,
-        height: styleOptions?.isAutoHeight ? calcPivotTableWidgetHeight(pivotTableHeight) : height,
+        height: styleOptions?.isAutoHeight
+          ? calcPivotTableWidgetHeight(pivotTableHeight, overheadHeight + topSlotHeight)
+          : height,
       }}
     >
       <WidgetContainer
@@ -138,10 +174,12 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
         headerConfig={headerConfig}
         titleEditor={titleEditor}
         topSlot={
-          <>
-            {props.topSlot}
-            {breadcrumbs}
-          </>
+          props.topSlot || breadcrumbs ? (
+            <div ref={topSlotRef}>
+              {props.topSlot}
+              {breadcrumbs}
+            </div>
+          ) : undefined
         }
         dataSetName={dataSource && getDataSourceName(dataSource)}
         onRefresh={() => setRefreshCounter(refreshCounter + 1)}

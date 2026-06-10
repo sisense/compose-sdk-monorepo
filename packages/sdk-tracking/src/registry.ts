@@ -13,6 +13,7 @@ export const eventRegistry = {
   sdkError: { internal: true, external: false },
   sdkCliExec: { internal: true, external: false },
   sdkAngularServiceMethodExecuted: { internal: true, external: true },
+  sdkWidgetInit: { internal: true, external: true },
 };
 
 /**

@@ -1,6 +1,7 @@
 import { FunctionComponent, ReactNode } from 'react';
 
 import type { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+import type { DeepPartial } from 'ts-essentials';
 
 import { AnyObject } from '@/shared/utils/utility-types';
 import type { AbstractDataPointWithEntries, GenericDataOptions } from '@/types';
@@ -12,8 +13,14 @@ import type { BasePluginInfo } from '../types';
  *
  * @sisenseInternal
  */
-export interface WidgetPlugin<Props extends CustomVisualizationProps = CustomVisualizationProps>
-  extends BasePluginInfo {
+export interface WidgetPlugin<
+  // The constraint uses `any` generics so plugin authors can supply a strongly
+  // typed `CustomOptions` (e.g. `interface MyOptions { lastPage?: number }`)
+  // without it having to be assignable to `Record<string, unknown>` (object
+  // types without an index signature are not). The default keeps the strict shape.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Props extends CustomVisualizationProps<any, any, any, any> = CustomVisualizationProps,
+> extends BasePluginInfo {
   /**
    * The type of plugin
    */
@@ -196,6 +203,7 @@ export interface CustomVisualizationProps<
   DataOptions = GenericDataOptions,
   StyleOptions = CustomVisualizationStyleOptions,
   DataPoint extends AbstractDataPointWithEntries = AbstractDataPointWithEntries,
+  CustomOptions = Record<string, unknown>,
 > extends CustomVisualizationEventProps<DataPoint> {
   /** Data source for the custom visualization */
   dataSource?: DataSource;
@@ -207,7 +215,50 @@ export interface CustomVisualizationProps<
   filters?: Filter[] | FilterRelations;
   /** Highlight filters for interactive highlighting */
   highlights?: Filter[];
+  /**
+   * Arbitrary plugin-specific options that is not data- or style-related.
+   *
+   * @sisenseInternal
+   */
+  customOptions?: CustomOptions;
+  /**
+   * Emit a partial state update to be persisted through the dashboard
+   * persistence layer. Injected by the dashboard when the widget lives inside a
+   * Dashboard component; `undefined` in standalone use or read-only mode — always
+   * call it with optional chaining.
+   *
+   * @example
+   * ```tsx
+   * onChange?.({ customOptions: { lastPage: 3 } });
+   * ```
+   *
+   * @sisenseInternal
+   */
+  onChange?: (update: VisualizationStateUpdate<StyleOptions, CustomOptions>) => void;
 }
+
+/**
+ * Partial persistable state a custom visualization can push back to the
+ * persistence layer. Carries the same props vocabulary the plugin already reads
+ * from.
+ *
+ * Both fields are deeply partial and are deep-merged into the current widget
+ * state: nested plain objects merge recursively at any depth, so a plugin
+ * passes only the leaf values that changed — e.g.
+ * `{ styleOptions: { pagination: { currentPage: 3 } } }` updates `currentPage`
+ * while preserving the sibling `pagination` keys. Arrays and primitives are
+ * replaced wholesale (last-write-wins). Keys cannot be deleted via merge —
+ * overwrite with an explicit value (e.g. `null`) instead.
+ *
+ * @sisenseInternal
+ */
+export type VisualizationStateUpdate<
+  StyleOptions = CustomVisualizationStyleOptions,
+  CustomOptions = Record<string, unknown>,
+> = {
+  styleOptions?: DeepPartial<StyleOptions>;
+  customOptions?: DeepPartial<CustomOptions>;
+};
 
 /**
  * Style options for a custom visualization.
@@ -224,6 +275,17 @@ export interface CustomVisualizationStyleOptions extends AnyObject {}
  * @sisenseInternal
  */
 export type CustomVisualization<Props = CustomVisualizationProps> = (props: Props) => ReactNode;
+
+/**
+ * A custom visualization with erased prop types, used for heterogeneous storage
+ * at registry/context boundaries. Each concrete visualization specializes
+ * {@link CustomVisualizationProps} differently (and may require extra props such
+ * as a widget `id`), so the registry cannot know each exact shape — the prop
+ * type is intentionally erased here. Do not consume prop types from this alias.
+ *
+ * @sisenseInternal
+ */
+export type AnyCustomVisualization = CustomVisualization<any>;
 
 /**
  * Event props for custom visualizations with generic data point type.

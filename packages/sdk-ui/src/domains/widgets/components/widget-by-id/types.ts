@@ -145,6 +145,12 @@ export interface WidgetDto {
     supportsHierarchies?: boolean;
     imageColumns?: number[];
   };
+  /**
+   * Custom-widget-specific runtime options bag, persisted across reloads for
+   * custom (plugin) widgets. Round-trips opaquely between the Fusion DTO and the
+   * CSDK widget model's `customOptions`.
+   */
+  customOptions?: Record<string, unknown>;
   source?: any;
   owner?: string;
   userId?: string;

@@ -48,7 +48,7 @@ export const translateDashboardToJSON = (
       () => translateFiltersToJSON(dashboardProps.filters),
       translationErrors,
     );
-    filtersJSON = (result ?? undefined) as DashboardJSON['filters'];
+    filtersJSON = result ?? undefined;
   }
 
   if (translationErrors.length > 0) {

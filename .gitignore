@@ -53,9 +53,9 @@ lerna-debug.log*
 .idea
 .vscode
 
-# generated docs from typedoc
-docs/
-docs-internal/
+# generated docs from typedoc (root-level only — nested docs/ folders e.g. .claude/docs/ are intentional)
+/docs/
+/docs-internal/
 e2e/results.xml
 
 # generated from storybook build

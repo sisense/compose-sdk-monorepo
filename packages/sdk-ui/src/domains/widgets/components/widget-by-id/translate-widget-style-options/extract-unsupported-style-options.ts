@@ -58,15 +58,22 @@ function pickDefined<K extends string>(
 
 /**
  * Extracts axis fields that the CSDK model does not capture: `inactive`,
- * `ticks`, `labels.rotation`, `labels.stepInterval`. Used by Cartesian
- * (line/area/bar/column), polar (categories/axis), scatter, and boxplot.
+ * `ticks`, `labels.rotation`, `labels.step`, `labels.stepInterval`. Used by
+ * Cartesian (line/area/bar/column), polar (categories/axis), scatter, and
+ * boxplot.
+ *
+ * `labels.step` and `labels.stepInterval` both originate from Fusion's editor:
+ * the default style template seeds `labels.stepInterval: null`, while the
+ * "every N items" input in `axisLabelsDirective.html` writes to `labels.step`
+ * via two-way binding. Both are preserved so user-entered values survive a
+ * Fusion → CSDK → Fusion round-trip.
  */
 function pickUnsupportedAxisFields(axis: unknown): Bag | undefined {
   if (!isPlainObject(axis)) return undefined;
   const out: Bag = {};
   if (axis.inactive !== undefined) out.inactive = axis.inactive;
   if (axis.ticks !== undefined) out.ticks = axis.ticks;
-  const labels = pickDefined(axis.labels, ['rotation', 'stepInterval'] as const);
+  const labels = pickDefined(axis.labels, ['rotation', 'step', 'stepInterval'] as const);
   if (labels) out.labels = labels;
   return hasKeys(out) ? out : undefined;
 }
@@ -119,6 +126,19 @@ function extractScatterUnsupported(style: ScatterWidgetStyle): UnsupportedStyleO
 
 function extractBoxplotUnsupported(style: BoxplotWidgetStyle): UnsupportedStyleOptions {
   const out: Bag = { ...extractCartesianUnsupported(style) };
+
+  // Fusion's boxplot editor (boxplot.html) binds the bottom-of-axis title to
+  // `model.xAxis.x2Title.{enabled,text}` even though boxplot is single-axis.
+  // The cartesian main extractor only emits `x2Title` in the dual-axis case
+  // (handled inside `extractCartesianChartAxisOptions`), so a user-entered
+  // value would otherwise be lost on round-trip — preserve it here.
+  const xAxis = (style as unknown as Bag).xAxis;
+  const x2Title = isPlainObject(xAxis)
+    ? pickDefined(xAxis.x2Title, ['enabled', 'text'] as const)
+    : undefined;
+  if (x2Title) {
+    out.xAxis = { ...(out.xAxis as Bag), x2Title };
+  }
 
   const outliers = pickDefined(style.outliers, ['enabled'] as const);
   if (outliers) out.outliers = outliers;

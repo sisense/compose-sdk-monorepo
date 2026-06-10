@@ -22,24 +22,38 @@ const sampleItem: QueryPillItem = {
   }),
 };
 
+const longFilterItem: QueryPillItem = {
+  type: 'pill',
+  label: "Category in ['Calculators', 'Camera Flashes', 'Accessories']",
+  category: 'filter',
+  id: 'f1',
+};
+
 const meta: Meta<typeof QueryPill> = {
   title: 'Visualizations/QueryDefinition/QueryPill',
   component: QueryPill,
   args: {
     item: sampleItem,
     showTooltip: true,
+    maxLength: 0,
   },
   argTypes: {
     showTooltip: {
       control: 'boolean',
       description: 'Hover the pill to see JSON (on by default).',
     },
+    maxLength: {
+      control: { type: 'number', min: 0 },
+      description:
+        'Maximum characters shown in the pill label before truncation. Pass 0 to show the full label.',
+    },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'Single query-definition pill; hover for JSON tooltip when `showTooltip` is true.',
+          'Single query-definition pill; hover for JSON tooltip when `showTooltip` is true. ' +
+          'Use `maxLength` to truncate long labels (`QueryDefinition` passes `maxPillLength={25}` by default).',
       },
     },
   },
@@ -62,6 +76,29 @@ export const Dimension: Story = {
         type: 'text-attribute',
         expression: '[Geography.Region]',
       }),
+    },
+  },
+};
+
+export const Filter: Story = {
+  args: {
+    item: longFilterItem,
+    maxLength: 0,
+  },
+};
+
+export const TruncatedLabel: Story = {
+  args: {
+    item: longFilterItem,
+    maxLength: 25,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Labels longer than `maxLength` are cut at that length and suffixed with `...`. ' +
+          'The full label is available via the native `title` attribute and tooltip.',
+      },
     },
   },
 };

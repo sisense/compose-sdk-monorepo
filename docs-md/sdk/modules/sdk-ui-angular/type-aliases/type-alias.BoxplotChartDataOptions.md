@@ -24,7 +24,7 @@ The type of box whisker data algorithm to be used.
 
 ### `category`
 
-**category**: [(Column \| StyledColumn)?]
+**category**: [(Column \| CalculatedColumn \| StyledColumn)?]
 
 Columns (or attributes) whose values represent categories in the chart.
 

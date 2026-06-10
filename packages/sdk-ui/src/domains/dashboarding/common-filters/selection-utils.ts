@@ -6,6 +6,7 @@ import {
   isLevelAttribute,
   isMembersFilter,
   MembersFilter,
+  MetadataTypes,
 } from '@sisense/sdk-data';
 import groupBy from 'lodash-es/groupBy';
 import partition from 'lodash-es/partition';
@@ -97,6 +98,7 @@ function extractEntriesFromPath(
 function getSelectionsFromPoints(
   points: AbstractDataPointWithEntries[],
   selectablePaths: string[],
+  includeCalculatedAttributes = false,
 ): DataSelection[] {
   // Early return for empty inputs
   if (!points.length || !selectablePaths.length) {
@@ -122,8 +124,13 @@ function getSelectionsFromPoints(
   // Convert grouped entries to DataSelection objects
   return Object.values(groupedEntries)
     .filter((entries): entries is AttributeDataPointEntry[] => {
-      // Ensure we have entries with valid attributes
-      return entries.length > 0 && !!entries[0].attribute;
+      // Ensure we have entries with valid attributes, and exclude calculated dimensions —
+      // they cannot back a filter, so clicking such a point must not produce a cross-filter.
+      return (
+        entries.length > 0 &&
+        !!entries[0].attribute &&
+        (!MetadataTypes.isCalculatedAttribute(entries[0].attribute) || includeCalculatedAttributes)
+      );
     })
     .map((entries) => {
       // At this point, we know entries[0].attribute exists due to the filter above
@@ -166,24 +173,43 @@ function getTreemapChartSelections(
   points: DataPoint[],
   dataOptions: CategoricalChartDataOptions,
 ): DataSelection[] {
-  const selections = getSelectionsFromPoints(points, ['category']);
+  const shouldIncludeCalculatedAttributes = true;
+  const selections = getSelectionsFromPoints(
+    points,
+    ['category'],
+    shouldIncludeCalculatedAttributes,
+  );
   const pointLevelIndex = selections.length - 1;
+  const pointLevelAttribute = translateColumnToAttribute(dataOptions.category[pointLevelIndex]);
 
-  return dataOptions.category.map((dataOption, index) => {
-    const isPointLevel = pointLevelIndex === index;
+  // if the target (point level) is a calculated attribute, return empty selections
+  if (MetadataTypes.isCalculatedAttribute(pointLevelAttribute)) {
+    return [];
+  }
 
-    // select only current level
-    if (isPointLevel) {
-      return selections[index];
-    }
+  return dataOptions.category
+    .map((dataOption, index) => {
+      const isPointLevel = pointLevelIndex === index;
+      const attribute = translateColumnToAttribute(dataOption);
+      const isCalculatedAttribute = MetadataTypes.isCalculatedAttribute(attribute);
 
-    // deselect all other levels
-    return {
-      attribute: translateColumnToAttribute(dataOption),
-      values: [],
-      displayValues: [],
-    };
-  });
+      // skip calculated attributes from deselection logic
+      if (isCalculatedAttribute) {
+        return undefined;
+      }
+
+      if (isPointLevel) {
+        return selections[index];
+      }
+
+      // deselect all other levels
+      return {
+        attribute,
+        values: [],
+        displayValues: [],
+      };
+    })
+    .filter((selection): selection is DataSelection => selection !== undefined);
 }
 
 function getScatterChartSelections(points: ScatterDataPoint[]): DataSelection[] {
@@ -320,7 +346,13 @@ export function getSelectableWidgetAttributes(
     targetDataOptions = [(dataOptions as CalendarHeatmapChartDataOptions).date];
   }
 
-  return targetDataOptions.map(translateColumnToAttribute);
+  return (
+    targetDataOptions
+      .map(translateColumnToAttribute)
+      // Calculated dimensions (calculated attributes) cannot back a filter, so they are not
+      // selectable for cross-filtering or drilldown.
+      .filter((attribute) => !MetadataTypes.isCalculatedAttribute(attribute))
+  );
 }
 
 /**

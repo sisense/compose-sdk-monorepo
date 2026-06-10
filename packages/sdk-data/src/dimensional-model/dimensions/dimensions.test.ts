@@ -1,4 +1,4 @@
-import { DimensionalAttribute } from '../attributes.js';
+import { DimensionalAttribute } from '../attributes/attributes.js';
 import { MetadataTypes, Sort } from '../types.js';
 import {
   createDateDimension,

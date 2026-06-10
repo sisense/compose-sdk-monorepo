@@ -20,6 +20,7 @@ import { useDefaults } from '@/shared/hooks/use-defaults';
 import {
   calculateNewRelations,
   combineFiltersAndRelations,
+  hasOrOperator,
   splitFiltersAndRelations,
 } from '@/shared/utils/filter-relations';
 
@@ -227,7 +228,9 @@ export const FiltersPanel = asSisenseComponent({
         />
         <PanelBody>
           <PanelBodyInner>
-            {relations && <FilterRelationsTile relations={relations} filters={filters} />}
+            {relations && hasOrOperator(relations) && (
+              <FilterRelationsTile relations={relations} filters={filters} />
+            )}
             {<ExistingFilterEditor />}
             {<NewFilterCreator />}
             <ReorderableList

@@ -154,6 +154,21 @@ const deserializeDimensionalCalculatedMeasure = (v: any) => {
             return [key, deserializeDimensionalBaseMeasure(value)];
           case 'DimensionalCalculatedMeasure':
             return [key, deserializeDimensionalCalculatedMeasure(value)];
+          case 'DimensionalMeasureTemplate':
+            return [key, deserializeDimensionalMeasureTemplate(value)];
+          case 'MembersFilter':
+          case 'LogicalAttributeFilter':
+          case 'CascadingFilter':
+          case 'ExcludeFilter':
+          case 'MeasureFilter':
+          case 'RankingFilter':
+          case 'MeasureRankingFilter':
+          case 'NumericFilter':
+          case 'TextFilter':
+          case 'DateRangeFilter':
+          case 'RelativeDateFilter':
+          case 'CustomFilter':
+            return [key, deserializeFilter(value)];
           default:
             return [key, value];
         }

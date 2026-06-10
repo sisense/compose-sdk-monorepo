@@ -13,7 +13,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 /* eslint-disable vitest/no-identical-title */
-import { createAttribute, DimensionalAttribute } from '../attributes.js';
+import { createAttribute, DimensionalAttribute } from '../attributes/attributes.js';
 import { normalizeName } from '../base.js';
 import * as filterFactory from '../filters/factory.js';
 import { CalculatedMeasure, Element, Measure, MeasureContext } from '../interfaces.js';

@@ -19,6 +19,6 @@ Measure column (or measure) encoded by the color of the countries (or states) on
 
 ### geo
 
-> **geo**: [[`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md)]
+> **geo**: [[`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md)]
 
 Column or attribute representing the countries (or states) on the map.

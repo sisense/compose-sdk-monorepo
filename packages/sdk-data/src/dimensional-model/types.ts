@@ -73,6 +73,15 @@ export enum Sort {
 }
 
 /**
+ * JAQL `type` value that marks a calculated dimension (a formula-based attribute).
+ *
+ * Emitted by {@link DimensionalCalculatedAttribute} and recognized when parsing JAQL.
+ *
+ * @internal
+ */
+export const CALCULATED_DIMENSION_JAQL_TYPE = 'calculated_dimension';
+
+/**
  * Different metadata types
  *
  * @internal
@@ -92,6 +101,7 @@ export const MetadataTypes = {
   Attribute: 'attribute',
   TextAttribute: 'text-attribute',
   NumericAttribute: 'numeric-attribute',
+  CalculatedAttribute: 'calculatedattribute',
 
   Filter: 'filter',
   DimensionFilter: 'dimensionfilter',
@@ -198,7 +208,43 @@ export const MetadataTypes = {
       return type.toLowerCase() === MetadataTypes.CalculatedMeasure;
     }
 
-    return (o.expression || o.formula) && o.context;
+    // A calculated dimension shares the `formula` + `context` shape with a calculated
+    // measure, so it must be explicitly excluded here to avoid being treated as a measure.
+    return Boolean((o.expression || o.formula) && o.context) && !this.isCalculatedAttribute(o);
+  },
+
+  /**
+   * Checks whether the given object or type is a calculated attribute (a calculated dimension).
+   *
+   * A calculated attribute is a formula-based {@link Attribute}: it carries a `formula` and a
+   * `context` like a calculated measure, but is consumed as a dimension and emits
+   * `type: "calculated_dimension"` in its JAQL.
+   *
+   * @param o - object to check
+   * @returns true if the object or type is a calculated attribute
+   */
+  isCalculatedAttribute(o: any): boolean {
+    if (!o) {
+      return false;
+    }
+
+    if (typeof o === 'string') {
+      const type = o.toLowerCase();
+      return type === MetadataTypes.CalculatedAttribute || type === CALCULATED_DIMENSION_JAQL_TYPE;
+    }
+
+    // CSDK instance (or its serialized form, which also carries `__serializable`)
+    if (o.__serializable === 'DimensionalCalculatedAttribute') {
+      return true;
+    }
+
+    // Raw JAQL form: { type: 'calculated_dimension', formula, context }, optionally wrapped in { jaql }
+    const jaql = o.jaql ?? o;
+    return (
+      (jaql?.type === CALCULATED_DIMENSION_JAQL_TYPE ||
+        jaql?.type === MetadataTypes.CalculatedAttribute) &&
+      Boolean((jaql.expression || jaql.formula) && jaql.context)
+    );
   },
 
   /**
@@ -294,6 +340,7 @@ export const MetadataTypes = {
         type.toLowerCase() === MetadataTypes.Attribute ||
         type.toLowerCase() === MetadataTypes.TextAttribute ||
         type.toLowerCase() === MetadataTypes.NumericAttribute ||
+        type.toLowerCase() === MetadataTypes.CalculatedAttribute ||
         type.toLowerCase() === MetadataTypes.DateLevel
       );
     }
@@ -456,7 +503,7 @@ export type FormulaContext = BaseJaql | FormulaJaql | FilterJaql;
 
 /** @internal */
 export type FormulaJaql = {
-  type?: 'measure';
+  type?: 'measure' | typeof CALCULATED_DIMENSION_JAQL_TYPE;
   sort?: JaqlSortDirection;
   title: string;
   formula: string;

@@ -147,4 +147,28 @@ describe('useWidgetRenaming', () => {
 
     expect(getWidgetOnChange(result.current.widgets[0]!)).toBe(onChange);
   });
+
+  it('does not wrap onChange of a custom widget (it is the persistence callback, not a change-event channel)', () => {
+    const persistenceOnChange = vi.fn();
+    const patchWidget = vi.fn().mockResolvedValue(undefined);
+    const widgets = [
+      createMinimalWidget({
+        id: 'cw-1',
+        widgetType: 'custom',
+        onChange: persistenceOnChange,
+      } as Partial<WidgetProps>),
+    ];
+    const params: UseWidgetRenamingParams = {
+      widgets,
+      enabled: true,
+      persistence: { patchWidget },
+    };
+
+    const { result } = renderHook(() => useWidgetRenaming(params));
+
+    // The custom widget's onChange must pass through untouched...
+    expect(getWidgetOnChange(result.current.widgets[0]!)).toBe(persistenceOnChange);
+    // ...while title editing config is still applied.
+    expect(result.current.widgets[0]?.config?.header?.title?.editing?.enabled).toBe(true);
+  });
 });

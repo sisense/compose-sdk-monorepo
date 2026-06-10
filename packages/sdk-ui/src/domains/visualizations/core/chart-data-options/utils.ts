@@ -1,5 +1,6 @@
 import {
   Attribute,
+  CalculatedColumn,
   CalculatedMeasureColumn,
   Column,
   DateLevels,
@@ -9,6 +10,7 @@ import {
   LevelAttribute,
   Measure,
   MeasureColumn,
+  MetadataTypes,
 } from '@sisense/sdk-data';
 import isUndefined from 'lodash-es/isUndefined';
 
@@ -82,6 +84,13 @@ export function isMeasureColumn(
   arg: AnyColumn,
 ): arg is MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn {
   const column = 'column' in arg ? arg.column : arg;
+
+  // Calculated dimensions (calculated attributes) carry a formula + context like calculated
+  // measures, but must be treated as categories/dimensions — not measures.
+  if (MetadataTypes.isCalculatedAttribute(column)) {
+    return false;
+  }
+
   const hasAggregation = 'aggregation' in column && !!column.aggregation;
   const hasContext = 'context' in column && !!(column as CalculatedMeasureColumn).context;
   const hasFormula = 'formula' in column && !!(column as JaqlElement).formula;
@@ -128,7 +137,7 @@ export const getDataOptionGranularity = ({ column, granularity }: StyledColumn) 
 };
 
 /** @internal */
-export const translateColumnToAttribute = (c: Column | StyledColumn) => {
+export const translateColumnToAttribute = (c: Column | CalculatedColumn | StyledColumn) => {
   const { column: attribute } = splitColumn(c);
   return attribute as Attribute;
 };
@@ -163,10 +172,13 @@ export function isCategoryStyle(category: Column | CategoryStyle): category is C
 }
 
 export function normalizeColumn(
-  targetColumn: Column | StyledColumn,
+  targetColumn: Column | CalculatedColumn | StyledColumn,
   defaultStyle?: CategoryStyle,
 ): StyledColumn {
-  const { column, style } = splitColumn(targetColumn) as { column: Column; style: CategoryStyle };
+  const { column, style } = splitColumn(targetColumn) as {
+    column: Column | CalculatedColumn;
+    style: CategoryStyle;
+  };
 
   const nColumn = {
     ...defaultStyle,

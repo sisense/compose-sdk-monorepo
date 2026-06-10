@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { TranslatableError } from '../translation/translatable-error.js';
-import { createAttribute } from './attributes.js';
+import { createAttribute } from './attributes/attributes.js';
 import { DimensionalElement } from './base.js';
 import { createDimension } from './dimensions/index.js';
 import { createFilter } from './filters/filters.js';
@@ -34,6 +34,10 @@ export function create(item: any): Element | Element[] {
   // todo: implement filter generation
   if (MetadataTypes.isFilter(item)) {
     return createFilter(item);
+  } else if (MetadataTypes.isCalculatedAttribute(item)) {
+    // A calculated dimension shares the formula/context shape with a calculated measure and its
+    // JAQL `type` is not in the attribute-type list, so it must be matched explicitly here.
+    return createAttribute(item);
   } else if (MetadataTypes.isMeasure(item)) {
     return createMeasure(item);
   } else if (MetadataTypes.isAttribute(item)) {

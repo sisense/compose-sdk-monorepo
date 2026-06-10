@@ -14,13 +14,14 @@ import type {
 import type { NlqTranslationError } from '../../../types.js';
 import { translateDimensionsFromJSON } from '../../constructs/dimensions/translate-dimensions-from-json.js';
 import { translateMeasuresFromJSON } from '../../constructs/measures/translate-measures-from-json.js';
-import type { InternalDataSchemaContext } from '../../types.js';
+import type { DimensionItemJSON, InternalDataSchemaContext, MeasureItemJSON } from '../../types.js';
 import { collectTranslationErrors } from '../utils/translation-helpers.js';
 import {
   adaptDimensionsToStyledColumn,
   adaptMeasuresToStyledMeasureColumn,
   type AxisType,
-  toJSONArray,
+  toDimensionItemsJSON,
+  toMeasureItemsJSON,
   withAxisContext,
 } from './adapters.js';
 
@@ -45,24 +46,18 @@ export function translateSingleAxisFromJSON(
   context: InternalDataSchemaContext,
   translationErrors: NlqTranslationError[],
 ): TranslatedAxis | null {
-  const arr = axisValue
-    ? toJSONArray(
-        axisValue as
-          | import('../../types.js').DimensionItemJSON
-          | import('../../types.js').DimensionItemJSON[]
-          | import('../../types.js').MeasureItemJSON
-          | import('../../types.js').MeasureItemJSON[],
-      )
-    : [];
-  if (arr.length === 0) {
-    return [];
-  }
-
   if (axisType === 'dimension') {
+    const dimensionItems = axisValue
+      ? toDimensionItemsJSON(axisValue as DimensionItemJSON | DimensionItemJSON[])
+      : [];
+    if (dimensionItems.length === 0) {
+      return [];
+    }
+
     const dimensionsData = collectTranslationErrors(
       () =>
         translateDimensionsFromJSON({
-          data: arr,
+          data: dimensionItems,
           context,
         }),
       translationErrors,
@@ -71,10 +66,17 @@ export function translateSingleAxisFromJSON(
     return dimensionsData !== null ? adaptDimensionsToStyledColumn(dimensionsData) : null;
   }
 
+  const measureItems = axisValue
+    ? toMeasureItemsJSON(axisValue as MeasureItemJSON | MeasureItemJSON[])
+    : [];
+  if (measureItems.length === 0) {
+    return [];
+  }
+
   const measuresData = collectTranslationErrors(
     () =>
       translateMeasuresFromJSON({
-        data: arr,
+        data: measureItems,
         context,
       }),
     translationErrors,

@@ -5,7 +5,7 @@ import { TrackingEventType } from './registry.js';
 
 const TRACKING_CATEGORY = 'composesdk';
 
-export type TrackingEventDetails = Record<string, number | string | boolean | undefined>;
+export type TrackingEventDetails = Record<string, number | string | boolean | null | undefined>;
 
 export const trackProductEvent = (
   action: TrackingEventType,

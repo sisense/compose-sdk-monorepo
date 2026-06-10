@@ -36,6 +36,7 @@ import { HighchartsOptions } from './domains/visualizations/core/chart-options-p
 import type { ChartWidgetProps } from './domains/widgets/components/chart-widget/types';
 import { FiltersMergeStrategy } from './domains/widgets/components/widget-by-id/types';
 import { type AppConfig } from './infra/app/types';
+import type { Module } from './infra/modules';
 import type { Plugin } from './infra/plugins/types';
 import {
   AreamapDataPoint,
@@ -269,6 +270,15 @@ export interface SisenseContextProviderProps {
    * @internal
    */
   plugins?: Plugin[];
+
+  /**
+   * Array of modules to register.
+   *
+   * @category Sisense App
+   *
+   * @alpha
+   */
+  modules?: Module[];
 }
 
 /**

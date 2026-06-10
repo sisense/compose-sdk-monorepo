@@ -67,6 +67,7 @@ const MemberRow: FunctionComponent<{
   return mode === 'radio' ? (
     <MemberRadio
       wrapperClassName="csdk-border-b hover:csdk-bg-row-hover"
+      title={label}
       label={label}
       isLabelInactive={inactive}
       checked={checked}
@@ -79,6 +80,7 @@ const MemberRow: FunctionComponent<{
     <Checkbox
       wrapperClassName="csdk-border-b hover:csdk-bg-row-hover"
       label={label}
+      title={label}
       isLabelInactive={inactive}
       checked={checked}
       readOnly

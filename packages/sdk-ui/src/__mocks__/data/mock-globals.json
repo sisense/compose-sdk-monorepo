@@ -929,7 +929,6 @@
       "key": "aiAssistant",
       "active": true,
       "unified": true,
-      "nlqV3Enabled": true,
       "aiAccessControl": "automatically",
       "quotaNotification": true,
       "featureModelType": "sisense_managed"

@@ -5,7 +5,7 @@ import { TabberButtonsWidget } from '@/domains/widgets/components/tabber-buttons
 import { PluginContext } from './plugin-context.js';
 import { Plugin } from './types.js';
 import { getValidPlugins } from './validate-plugins.js';
-import type { AnyWidgetPlugin, CustomVisualization } from './widget-plugins/types.js';
+import type { AnyWidgetPlugin } from './widget-plugins/types.js';
 import { WidgetPluginRegistry } from './widget-plugins/widget-plugin-registry.js';
 
 /**
@@ -42,7 +42,7 @@ export const PluginProvider: React.FC<PluginProviderProps> = ({ plugins, childre
     const registry = new WidgetPluginRegistry();
 
     // 1. Register built-in widgets
-    registry.register('tabber-buttons', TabberButtonsWidget as CustomVisualization, 'plugin');
+    registry.register('tabber-buttons', TabberButtonsWidget, 'plugin');
 
     // 2. Register declarative plugin widgets
     widgetPlugins.forEach((plugin) => {

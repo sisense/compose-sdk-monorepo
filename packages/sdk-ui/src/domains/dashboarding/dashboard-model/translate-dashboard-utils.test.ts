@@ -1,9 +1,10 @@
-import { Dimension } from '@sisense/sdk-data';
+import { Dimension, isFilterRelations } from '@sisense/sdk-data';
 import isEqual from 'lodash-es/isEqual';
 
 import { CommonFiltersApplyMode } from '@/domains/dashboarding/common-filters/types';
 import {
   convertDimensionsToDimIndexes,
+  extractDashboardFilters,
   extractPivotTargetsConfigFromWidgetDto,
   findDimensionByInstanceId,
   getJtdNavigateType,
@@ -14,6 +15,7 @@ import {
 import { SpecificWidgetOptions } from '@/domains/dashboarding/dashboard-model/types';
 import { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { RestApi } from '@/infra/api/rest-api';
+import { getFiltersArray } from '@/shared/utils/filter-relations';
 
 import {
   dashboardWithSharedFormulas,
@@ -1982,6 +1984,119 @@ describe('translate-dashboard-utils', () => {
 
         expect(result).toBe('click');
       });
+    });
+  });
+
+  describe('extractDashboardFilters', () => {
+    const makeFilterDto = (instanceid: string, dim: string) => ({
+      jaql: {
+        dim,
+        table: 'Table',
+        column: dim,
+        title: dim,
+        datatype: 'text' as const,
+        filter: { members: [] },
+      },
+      instanceid,
+    });
+
+    it('returns flat filter array when no filterRelationsDtoOptions is provided', () => {
+      const dtos = [makeFilterDto('id-a1', '[ECommerce.A]'), makeFilterDto('id-b1', '[Health.B]')];
+      const result = extractDashboardFilters(dtos);
+      expect(Array.isArray(result)).toBe(true);
+      expect((result as []).length).toBe(2);
+    });
+
+    it('combines multiple filterRelations entries with AND — preserves filters from all datasources', () => {
+      // Fusion sends two entries: one covering ECommerce (A1 AND A2), one covering Healthcare (B1).
+      // Both must be present in the result, combined with AND.
+      const dtos = [
+        makeFilterDto('id-a1', '[ECommerce.A1]'),
+        makeFilterDto('id-a2', '[ECommerce.A2]'),
+        makeFilterDto('id-b1', '[Health.B1]'),
+      ];
+
+      const result = extractDashboardFilters(dtos, [
+        {
+          datasource: 'Sample ECommerce',
+          filterRelations: {
+            type: 'LogicalExpression',
+            operator: 'AND',
+            left: { type: 'Identifier', instanceId: 'id-a1' },
+            right: { type: 'Identifier', instanceId: 'id-a2' },
+          },
+        },
+        {
+          datasource: 'Sample Healthcare',
+          filterRelations: { type: 'Identifier', instanceId: 'id-b1' },
+        },
+      ]);
+
+      expect(isFilterRelations(result)).toBe(true);
+      const guids = getFiltersArray(result).map((f) => f.config.guid);
+      expect(guids).toContain('id-a1');
+      expect(guids).toContain('id-a2');
+      expect(guids).toContain('id-b1');
+    });
+
+    it('combines two non-trivial entries with AND — preserves OR-group structure', () => {
+      // Fusion sends two logical groups: (G1 OR AR) and (G2 OR D).
+      // Expected result: (G1 OR AR) AND (G2 OR D).
+      const dtos = [
+        makeFilterDto('id-g1', '[Health.Gender1]'),
+        makeFilterDto('id-ar', '[Health.AgeRange]'),
+        makeFilterDto('id-g2', '[Health.Gender2]'),
+        makeFilterDto('id-d', '[Health.Death]'),
+      ];
+
+      const result = extractDashboardFilters(dtos, [
+        {
+          datasource: 'Sample Healthcare',
+          filterRelations: {
+            type: 'LogicalExpression',
+            operator: 'OR',
+            left: { type: 'Identifier', instanceId: 'id-g1' },
+            right: { type: 'Identifier', instanceId: 'id-ar' },
+          },
+        },
+        {
+          datasource: 'Sample Healthcare',
+          filterRelations: {
+            type: 'LogicalExpression',
+            operator: 'OR',
+            left: { type: 'Identifier', instanceId: 'id-g2' },
+            right: { type: 'Identifier', instanceId: 'id-d' },
+          },
+        },
+      ]);
+
+      expect(isFilterRelations(result)).toBe(true);
+      const guids = getFiltersArray(result).map((f) => f.config.guid);
+      expect(guids).toContain('id-g1');
+      expect(guids).toContain('id-ar');
+      expect(guids).toContain('id-g2');
+      expect(guids).toContain('id-d');
+    });
+
+    it('returns flat array when all entries are trivial (no explicit relations)', () => {
+      const dtos = [
+        makeFilterDto('id-a1', '[ECommerce.A1]'),
+        makeFilterDto('id-b1', '[Health.B1]'),
+      ];
+
+      const result = extractDashboardFilters(dtos, [
+        {
+          datasource: 'Sample ECommerce',
+          filterRelations: { type: 'Identifier', instanceId: 'id-a1' },
+        },
+        {
+          datasource: 'Sample Healthcare',
+          filterRelations: { type: 'Identifier', instanceId: 'id-b1' },
+        },
+      ]);
+
+      expect(Array.isArray(result)).toBe(true);
+      expect((result as []).length).toBe(2);
     });
   });
 });

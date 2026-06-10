@@ -47,4 +47,16 @@ export const jaqlMock = {
       } as BaseJaql,
     },
   } as FormulaJaql,
+  calculatedDimension: {
+    type: 'calculated_dimension',
+    formula: "IF([844DC-5D4] > 1000, 'High', 'Low')",
+    title: 'Formula',
+    context: {
+      '[844DC-5D4]': {
+        dim: '[Commerce.Revenue]',
+        datatype: 'numeric',
+        title: 'Revenue',
+      } as BaseJaql,
+    },
+  } as FormulaJaql,
 };

@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes.js';
+import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes/attributes.js';
 import { Filter } from '../interfaces.js';
 import { DimensionalBaseMeasure } from '../measures/measures.js';
 import { DateLevels } from '../types.js';

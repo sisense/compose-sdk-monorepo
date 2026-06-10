@@ -78,5 +78,11 @@ export type PivotTableWidgetChangeEvent =
  *   }
  * }}
  * ```
+ *
+ * Persistable state changes (e.g. scroll position, future title/customOptions)
+ * flow through {@link WidgetPropsUpdate} and `DashboardPersistenceManager.updateWidget`,
+ * NOT through this channel. Use `WidgetChangeEvent` for transient/interactive
+ * events; use `WidgetPropsUpdate` for "if this is lost on reload, the user
+ * notices."
  */
 export type WidgetChangeEvent = ChartWidgetChangeEvent | PivotTableWidgetChangeEvent;

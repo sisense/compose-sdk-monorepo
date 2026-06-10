@@ -16,6 +16,9 @@ import {
 } from '@/shared/components/dynamic-size-container';
 import { CustomWidgetStyleOptions, GenericDataOptions } from '@/types';
 
+import { useTrackWidgetInit } from '../../hooks/use-track-widget-init';
+import { getWidgetEntityId } from '../../hooks/widget-entity-id';
+import { getCustomWidgetName, getWidgetTitle } from '../../hooks/widget-tracking-adapters';
 import { WidgetContainer } from '../../shared/widget-container';
 import { CustomWidgetProps } from './types';
 import { useCustomWidgetCsvDownload } from './use-custom-widget-csv-download.js';
@@ -40,6 +43,12 @@ const withSize = (props: CustomVisualizationProps, size: { width: number; height
 export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseComponent({
   componentName: 'CustomWidget',
 })((widgetProps: CustomWidgetProps) => {
+  useTrackWidgetInit({
+    widgetType: 'custom',
+    widgetName: getCustomWidgetName(widgetProps),
+    widgetTitle: getWidgetTitle(widgetProps),
+    entityId: getWidgetEntityId(widgetProps, 'custom', getCustomWidgetName(widgetProps)),
+  });
   const { t } = useTranslation();
   const registry = useWidgetPluginRegistry();
   const { app } = useSisenseContext();

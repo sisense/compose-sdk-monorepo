@@ -129,7 +129,7 @@ export const useGetDashboardModel = withTracking('useGetDashboardModel')(
  * @internal
  */
 export function useGetDashboardModelInternal(params: GetDashboardModelParams): DashboardModelState {
-  const isParamsChanged = useHasChanged(params, ['dashboardOid', 'sharedMode']);
+  const isParamsChanged = useHasChanged(params, ['dashboardOid', 'sharedMode', 'adminAccess']);
   const shouldLoad = useShouldLoad(params, isParamsChanged);
   const [dataState, dispatch] = useReducer(dataLoadStateReducer<DashboardModel>, {
     isLoading: true,
@@ -152,8 +152,14 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams): D
     if (shouldLoad(app)) {
       dispatch({ type: 'loading' });
 
-      const { dashboardOid, includeWidgets, includeFilters, sharedMode, useLegacyApiVersion } =
-        params;
+      const {
+        dashboardOid,
+        includeWidgets,
+        includeFilters,
+        sharedMode,
+        useLegacyApiVersion,
+        adminAccess,
+      } = params;
       void getDashboardModel(
         app.httpClient,
         dashboardOid,
@@ -162,6 +168,7 @@ export function useGetDashboardModelInternal(params: GetDashboardModelParams): D
           includeFilters,
           sharedMode,
           useLegacyApiVersion,
+          adminAccess,
         },
         themeSettings,
         app.settings,

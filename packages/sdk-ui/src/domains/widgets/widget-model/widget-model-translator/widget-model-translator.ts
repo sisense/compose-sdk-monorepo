@@ -26,6 +26,8 @@ import {
 } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
 import {
   AreamapChartDataOptions,
+  BoxplotChartDataOptions,
+  CalendarHeatmapChartDataOptions,
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   ChartDataOptions,
@@ -55,6 +57,8 @@ import {
   toAreamapSubtype,
   toAreaWidgetStyle,
   toBarWidgetStyle,
+  toBoxplotWidgetStyle,
+  toCalendarHeatmapWidgetStyle,
   toColumnWidgetStyle,
   toFunnelWidgetStyle,
   toIndicatorWidgetStyle,
@@ -101,6 +105,8 @@ import { ChartProps, PivotTableProps, TableProps } from '@/props';
 import {
   AreamapStyleOptions,
   AreaStyleOptions,
+  BoxplotStyleOptions,
+  CalendarHeatmapStyleOptions,
   ChartStyleOptions,
   CompleteThemeSettingsInternal,
   CustomWidgetStyleOptions,
@@ -129,6 +135,8 @@ import {
   toAreamapPanels,
   toAreaPanels,
   toBarPanels,
+  toBoxplotPanels,
+  toCalendarHeatmapPanels,
   toColumnPanels,
   toCustomWidgetPanels,
   toFunnelPanels,
@@ -767,6 +775,13 @@ const buildWidgetModel = (params: {
 
   const jtdConfig = jumpToDashboardConfigFromWidgetDto(widgetDto);
 
+  // Merge the opaque DTO `customOptions` bag (persisted plugin runtime state)
+  // under any category-specific options (e.g. Tabber's), which take precedence.
+  const mergedCustomOptions =
+    widgetDto.customOptions || customOptions
+      ? { ...widgetDto.customOptions, ...customOptions }
+      : undefined;
+
   return {
     ...DEFAULT_WIDGET_MODEL,
     oid: widgetDto.oid,
@@ -778,7 +793,7 @@ const buildWidgetModel = (params: {
     customWidgetType,
     dataOptions,
     styleOptions,
-    customOptions,
+    customOptions: mergedCustomOptions,
     drilldownOptions,
     filters,
     ...(jtdConfig ? { jtdConfig } : {}),
@@ -1048,6 +1063,15 @@ export function toWidgetDto(
     panels.push(...toScatterPanels(widgetModel.dataOptions as ScatterChartDataOptions));
     subtype = subtype || 'bubble/scatter';
     style = toScatterWidgetStyle(widgetModel.styleOptions as ScatterStyleOptions);
+  } else if (chartType === 'boxplot') {
+    const boxplotDataOptions = widgetModel.dataOptions as BoxplotChartDataOptions;
+    panels.push(...toBoxplotPanels(boxplotDataOptions));
+    subtype = subtype || 'boxplot/full';
+    style = toBoxplotWidgetStyle(
+      widgetModel.styleOptions as BoxplotStyleOptions,
+      boxplotDataOptions.boxType,
+      boxplotDataOptions.outliersEnabled,
+    );
   } else if (chartType === 'scattermap') {
     const scattermapStyleOptions = widgetModel.styleOptions as ScattermapStyleOptions;
     panels.push(
@@ -1064,6 +1088,15 @@ export function toWidgetDto(
     const areamapStyleOptions = widgetModel.styleOptions as AreamapStyleOptions;
     panels.push(...toAreamapPanels(widgetModel.dataOptions as AreamapChartDataOptions));
     subtype = toAreamapSubtype(areamapStyleOptions.mapType);
+  } else if (chartType === 'calendar-heatmap') {
+    panels.push(
+      ...toCalendarHeatmapPanels(widgetModel.dataOptions as CalendarHeatmapChartDataOptions),
+    );
+    // Calendar heatmap DTO uses `heatmap` as both `type` and `subtype`; the CSDK
+    // styleOptions.subtype (`'calendar-heatmap/split' | 'calendar-heatmap/continuous'`)
+    // is the chart-subtype, not the DTO one, and is encoded in style flags instead.
+    subtype = 'heatmap';
+    style = toCalendarHeatmapWidgetStyle(widgetModel.styleOptions as CalendarHeatmapStyleOptions);
   } else {
     throw new UnsupportedChartTypeError(chartType);
   }
@@ -1091,6 +1124,10 @@ export function toWidgetDto(
     },
     style: styleWithWidgetDesign,
     subtype,
+    // Custom-widget options round-trip opaquely through the DTO's `customOptions` bag.
+    ...(isCustomWidget(widgetModel.widgetType) && widgetModel.customOptions
+      ? { customOptions: widgetModel.customOptions }
+      : {}),
   };
   return widget;
 }

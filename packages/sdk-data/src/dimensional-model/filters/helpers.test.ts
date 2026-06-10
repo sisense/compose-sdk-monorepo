@@ -1,4 +1,4 @@
-import { DimensionalAttribute } from '../attributes.js';
+import { DimensionalAttribute } from '../attributes/attributes.js';
 import { FilterRelations } from '../interfaces.js';
 import { ExcludeFilter, MembersFilter, TextFilter, TextOperators } from './filters.js';
 import {

@@ -23,6 +23,22 @@ export type CalendarHeatmapChartData = {
 };
 
 /**
+ * Converts a UTC-midnight timestamp (as returned by parseISOWithTimezoneCheck) to a local-midnight
+ * Date so that getDate()/getMonth()/getFullYear() return the correct calendar day in all timezones.
+ * The Sisense API sends date strings without timezone info; parseISOWithTimezoneCheck appends 'Z',
+ * making every date UTC midnight. Without this normalization, UTC-offset timezones (e.g. UTC-5)
+ * would shift all dates back by one day.
+ *
+ * Precondition: `value` must represent UTC midnight (e.g. "2024-01-15T00:00:00Z" or an equivalent
+ * timestamp). Passing a local-midnight Date from a positive-offset timezone (UTC+N) will return the
+ * previous calendar day.
+ */
+function toLocalCalendarDate(value: string | number | Date): Date {
+  const d = new Date(value);
+  return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+}
+
+/**
  * Converts a data table to calendar heatmap chart data format
  *
  * Transforms raw data table rows into the specific format required for calendar heatmap visualization,
@@ -31,7 +47,6 @@ export type CalendarHeatmapChartData = {
  * @param chartDataOptions - Internal data options specifying which columns to use
  * @param dataTable - Raw data table containing the source data
  * @returns Formatted calendar heatmap chart data
-
  */
 export function getCalendarHeatmapChartData(
   chartDataOptions: CalendarHeatmapChartDataOptionsInternal,
@@ -59,7 +74,7 @@ export function getCalendarHeatmapChartData(
     const blur = isBlurred(row, valueColumn);
 
     return {
-      date: new Date(date),
+      date: toLocalCalendarDate(date),
       value: value,
       color,
       blur,

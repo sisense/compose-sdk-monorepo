@@ -14,7 +14,7 @@ as well as a break-down by categories displayed on the Y-axis.
 
 ### breakBy
 
-> **breakBy**: ([`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
+> **breakBy**: ([`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
 
 Columns (or attributes) by which to break (group) the data represented in the chart.
 
@@ -25,7 +25,7 @@ and is automatically added to the chart's legend.
 
 ### category
 
-> **category**: ([`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
+> **category**: ([`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md))[]
 
 Columns (or attributes) whose values are placed on the X-axis.
 

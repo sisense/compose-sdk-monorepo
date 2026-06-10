@@ -7,6 +7,8 @@ hidden: true
 
 > **Prerequisite:** Scaffold a plugin project with `@sisense/sdk-cli@latest create-plugin` and start the dev server. See the [Plugin DevX Quick Start](../../guides/plugins/plugin-devx-quickstart.md) if you haven't done this yet.
 
+> **Using Claude Code?** After scaffolding, open the project and run `/design-custom-widget` — describe your chart in plain language and Claude implements everything (data inputs, library, chart code, style controls) in one step instead of following the tutorial manually. See [AI-Driven Development](../../guides/plugins/ai-driven-development.md).
+
 ## What Are Widget Plugins?
 
 Widget plugins let you add custom visualizations to Compose SDK dashboards. A plugin renders any React component as a dashboard widget — custom charts, tables, KPI cards, or any visual you can build in React.

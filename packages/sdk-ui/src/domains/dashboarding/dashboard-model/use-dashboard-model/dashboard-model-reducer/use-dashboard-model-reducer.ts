@@ -1,4 +1,7 @@
 import { DashboardModel } from '@/domains/dashboarding/dashboard-model';
+import { deepMerge } from '@/domains/dashboarding/persistence/deep-merge.js';
+import type { WidgetPropsUpdate } from '@/domains/dashboarding/persistence/update-types.js';
+import { WidgetModel } from '@/domains/widgets/widget-model';
 
 import {
   UseDashboardModelActionType,
@@ -7,6 +10,51 @@ import {
   UseDashboardModelState,
 } from './types.js';
 import { appendWidgetToFirstCell, parseAddWidgetPayload } from './utils.js';
+
+function applyStyleOptionsUpdate(
+  widget: WidgetModel,
+  styleOptions: WidgetPropsUpdate['styleOptions'],
+): WidgetModel {
+  if (!styleOptions) {
+    return widget;
+  }
+
+  // Deep merge subsumes the previously special-cased
+  // `navigator.scrollerLocation` graft: nested plain objects merge recursively,
+  // so a partial subtree lands without dropping sibling keys at any depth.
+  return {
+    ...widget,
+    styleOptions: deepMerge(widget.styleOptions ?? {}, styleOptions),
+  };
+}
+
+function applyCustomOptionsUpdate(
+  widget: WidgetModel,
+  customOptions: WidgetPropsUpdate['customOptions'],
+): WidgetModel {
+  if (!customOptions) {
+    return widget;
+  }
+
+  return {
+    ...widget,
+    customOptions: deepMerge(widget.customOptions ?? {}, customOptions),
+  };
+}
+
+/**
+ * Applies a narrow {@link WidgetPropsUpdate} to a {@link WidgetModel} by
+ * deep-merging the supported subtrees (see {@link deepMerge} for the
+ * semantics) — fields outside the supported set are silently ignored
+ * (TypeScript guards against this at call sites, since `WidgetPropsUpdate`
+ * only carries supported keys).
+ */
+function applyWidgetPropsUpdate(widget: WidgetModel, update: WidgetPropsUpdate): WidgetModel {
+  return applyCustomOptionsUpdate(
+    applyStyleOptionsUpdate(widget, update.styleOptions),
+    update.customOptions,
+  );
+}
 
 /**
  * Reducer for the dashboard model state used in {@link useDashboardModel}.
@@ -37,6 +85,16 @@ export function dashboardReducer(
         ...model,
         widgets: model.widgets.map((widget) =>
           widget.oid === widgetOid ? { ...widget, ...patch } : widget,
+        ),
+      };
+    }
+    case UseDashboardModelActionType.UPDATE_WIDGET: {
+      const model = state as DashboardModel;
+      const { widgetOid, update } = action.payload;
+      return {
+        ...model,
+        widgets: model.widgets.map((widget) =>
+          widget.oid === widgetOid ? applyWidgetPropsUpdate(widget, update) : widget,
         ),
       };
     }

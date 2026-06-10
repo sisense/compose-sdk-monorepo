@@ -19,28 +19,32 @@ interface MyStyleOptions {
   showLegend: boolean;
 }
 
-const MyDesignPanel: React.FC<DesignPanelProps<MyStyleOptions>> = ({ styleOptions, onChange }) => {
-  return (
-    <div>
-      <label>
-        Color Scheme
-        <select
-          value={styleOptions.colorScheme ?? 'warm'}
-          onChange={(e) =>
-            onChange({
-              ...styleOptions,
-              colorScheme: e.target.value as MyStyleOptions['colorScheme'],
-            })
-          }
-        >
-          <option value="warm">Warm</option>
-          <option value="cool">Cool</option>
-          <option value="monochrome">Monochrome</option>
-        </select>
-      </label>
-    </div>
-  );
-};
+// Wrap in React.memo to avoid unnecessary re-renders.
+// Set displayName so the component is identifiable in React DevTools.
+const MyDesignPanel: React.FC<DesignPanelProps<MyStyleOptions>> = React.memo(
+  ({ styleOptions, onChange }) => {
+    // The update helper reduces repetition: spreads styleOptions and sets one key.
+    const update = <K extends keyof MyStyleOptions>(key: K, value: MyStyleOptions[K]) =>
+      onChange({ ...styleOptions, [key]: value });
+
+    return (
+      <div>
+        <label>
+          Color Scheme
+          <select
+            value={styleOptions.colorScheme ?? 'warm'}
+            onChange={(e) => update('colorScheme', e.target.value as MyStyleOptions['colorScheme'])}
+          >
+            <option value="warm">Warm</option>
+            <option value="cool">Cool</option>
+            <option value="monochrome">Monochrome</option>
+          </select>
+        </label>
+      </div>
+    );
+  },
+);
+MyDesignPanel.displayName = 'MyDesignPanel';
 ```
 
 **Important:** Always spread the existing `styleOptions` when calling `onChange` to preserve other properties:
@@ -124,12 +128,21 @@ export const DesignPanels: React.FC<DesignPanelProps<MyStyleOptions>> = ({
    interface MyStyleOptions extends Pick<LineStyleOptions, 'subtype' | 'legend' | 'markers'> {}
    ```
 
-3. **Keep types serializable** — Style options are persisted. Avoid functions, classes, or non-serializable values.
+3. **Keep types serializable** — Style options are persisted as JSON. Avoid functions, class instances, Dates, or `undefined` in nested objects.
 
-4. **Use `React.memo`** — Wrap your design panel to avoid unnecessary re-renders.
+4. **Use `React.memo` and `displayName`** — Wrap your design panel to avoid unnecessary re-renders and set `displayName` for React DevTools.
 
 Use any CSS approach for styling your design panel (CSS modules, Emotion, Tailwind, inline styles).
 
 ---
+
+---
+
+## Using an AI Agent
+
+Your AI agent automates the boilerplate of wiring a new style option through all three locations (the type, the visualization default, and the panel control). Tell it what you want in plain language:
+
+- "Add a style option for bar color" — adds the field to `StyleOptions` in `src/types.ts`, adds a safe default in `Visualization.tsx`, and writes the matching control in `DesignPanel.tsx` (select, checkbox, number input, or color picker depending on the field type)
+- "Add a number format selector" — adds `NumberFormatConfig` to `StyleOptions`, injects it into measure columns via `useMemo` so `formatDataSet(data, dataOptions)` applies formatting after the query, and adds a dropdown with common presets (Auto, Integer, 2 decimals, Percentage, Currency) to `DesignPanel.tsx`
 
 **Next lesson:** [Event Handling and Cross-Filtering](./06-event-handling.md)

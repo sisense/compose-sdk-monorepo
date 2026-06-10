@@ -1,6 +1,7 @@
+import { DEFAULT_WIDGET_HEADER_HEIGHT } from '@/domains/widgets/constants';
 import { CompleteThemeSettingsInternal } from '@/types';
 
-import { getShadowValue } from './widget-style-utils.js';
+import { getShadowValue, getSpaceAroundPx, getWidgetOverheadHeight } from './widget-style-utils.js';
 
 const themeSettings = {
   widget: {
@@ -71,5 +72,64 @@ describe('getShadowValue', () => {
   it('returns "none" for invalid spaceAround value', () => {
     const widgetStyleOptions = { shadow: 'Dark' as const, spaceAround: 'invalid' as 'Medium' };
     expect(getShadowValue(widgetStyleOptions, themeSettings)).toBe('none');
+  });
+});
+
+describe('getSpaceAroundPx', () => {
+  it('returns 0 when neither style options nor theme define spacing', () => {
+    expect(getSpaceAroundPx(undefined, themeSettings)).toBe(0);
+    expect(getSpaceAroundPx({ spaceAround: 'None' }, themeSettings)).toBe(0);
+  });
+
+  it('returns the expected pixel value for each spaceAround size', () => {
+    expect(getSpaceAroundPx({ spaceAround: 'Small' }, themeSettings)).toBe(5);
+    expect(getSpaceAroundPx({ spaceAround: 'Medium' }, themeSettings)).toBe(10);
+    expect(getSpaceAroundPx({ spaceAround: 'Large' }, themeSettings)).toBe(15);
+  });
+
+  it('falls back to the theme spaceAround when style options omit it', () => {
+    const themed = {
+      widget: { shadow: 'None', spaceAround: 'Large' },
+    } as CompleteThemeSettingsInternal;
+    expect(getSpaceAroundPx({}, themed)).toBe(15);
+    expect(getSpaceAroundPx(undefined, themed)).toBe(15);
+  });
+});
+
+describe('getWidgetOverheadHeight', () => {
+  it('adds header height and top/bottom padding when the header is visible', () => {
+    expect(
+      getWidgetOverheadHeight({
+        styleOptions: { spaceAround: 'Large' },
+        themeSettings,
+        hasHeader: true,
+      }),
+    ).toBe(DEFAULT_WIDGET_HEADER_HEIGHT + 2 * 15);
+  });
+
+  it('omits the header height when the header is hidden', () => {
+    expect(
+      getWidgetOverheadHeight({
+        styleOptions: { spaceAround: 'Large' },
+        themeSettings,
+        hasHeader: false,
+      }),
+    ).toBe(2 * 15);
+  });
+
+  it('returns only the header height when there is no spacing', () => {
+    expect(
+      getWidgetOverheadHeight({
+        styleOptions: { spaceAround: 'None' },
+        themeSettings,
+        hasHeader: true,
+      }),
+    ).toBe(DEFAULT_WIDGET_HEADER_HEIGHT);
+  });
+
+  it('returns 0 when the header is hidden and there is no spacing', () => {
+    expect(
+      getWidgetOverheadHeight({ styleOptions: undefined, themeSettings, hasHeader: false }),
+    ).toBe(0);
   });
 });

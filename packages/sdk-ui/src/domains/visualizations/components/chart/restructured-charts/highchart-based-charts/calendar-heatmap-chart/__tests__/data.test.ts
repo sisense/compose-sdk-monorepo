@@ -317,4 +317,39 @@ describe('Calendar Heatmap Data Processing', () => {
     expect(result.values[2].blur).toBe(true);
     expect(result.values[2].color).toBeUndefined();
   });
+
+  it('should normalize UTC-midnight dates to the correct calendar day regardless of local timezone', () => {
+    // The Sisense API returns date-only strings; parseISOWithTimezoneCheck appends 'Z', producing
+    // UTC-midnight timestamps. Without toLocalCalendarDate, getDate() in UTC-N timezones returns
+    // the previous day. This test asserts the calendar date fields are always correct.
+    const dataTable: DataTable = {
+      columns: [mockDateColumn, mockValueColumn],
+      rows: [
+        [
+          {
+            displayValue: '2024-11-01',
+            rawValue: '2024-11-01T00:00:00Z', // UTC midnight — what parseISOWithTimezoneCheck produces
+            compareValue: {
+              value: new Date('2024-11-01T00:00:00Z').getTime(),
+              valueUndefined: false,
+              valueIsNaN: false,
+            },
+          },
+          {
+            displayValue: '42',
+            rawValue: 42,
+            compareValue: { value: 42, valueUndefined: false, valueIsNaN: false },
+          },
+        ],
+      ],
+    };
+
+    const result = getCalendarHeatmapChartData(mockDataOptions, dataTable);
+
+    const date = result.values[0].date;
+    // These must hold in every timezone — the point of the timezone fix
+    expect(date.getFullYear()).toBe(2024);
+    expect(date.getMonth()).toBe(10); // November (0-based)
+    expect(date.getDate()).toBe(1);
+  });
 });

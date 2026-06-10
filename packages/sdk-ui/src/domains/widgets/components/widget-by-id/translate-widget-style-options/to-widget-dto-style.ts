@@ -1,5 +1,7 @@
 import type { PivotGrandTotals } from '@sisense/sdk-data';
 
+import { CALENDAR_HEATMAP_DEFAULTS } from '@/domains/visualizations/components/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/constants.js';
+import type { BoxWhiskerType } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { isWidgetDesignEnabled } from '@/domains/widgets/widget-model/widget-model-translator/utils.js';
 import { AppSettings } from '@/infra/app/settings/settings.js';
 import { LEGACY_DESIGN_TYPES } from '@/infra/themes/legacy-design-settings';
@@ -8,6 +10,8 @@ import type {
   AreamapType,
   AreaStyleOptions,
   AxisLabel,
+  BoxplotStyleOptions,
+  CalendarHeatmapStyleOptions,
   CartesianStyleOptions,
   CompleteThemeSettingsInternal,
   DataLimits,
@@ -40,6 +44,8 @@ import type {
 
 import type {
   AxisStyle,
+  BoxplotWidgetStyle,
+  CalendarHeatmapWidgetStyle,
   CartesianWidgetStyle,
   FunnelWidgetStyle,
   PivotWidgetStyle,
@@ -733,6 +739,106 @@ export function toScattermapWidgetStyle(
  */
 export function toAreamapSubtype(mapType?: AreamapType): 'areamap/world' | 'areamap/usa' {
   return mapType === 'usa' ? 'areamap/usa' : 'areamap/world';
+}
+
+/**
+ * Maps an SDK {@link BoxWhiskerType} to the Fusion `style.whisker` flag object —
+ * exactly one of `'whisker/iqr' | 'whisker/extremums' | 'whisker/deviation'` is
+ * true. Inverse of `extractBoxplotBoxType`.
+ */
+function toBoxplotWhiskerStyle(boxType: BoxWhiskerType): BoxplotWidgetStyle['whisker'] {
+  return {
+    'whisker/iqr': boxType === 'iqr',
+    'whisker/extremums': boxType === 'extremums',
+    'whisker/deviation': boxType === 'standardDeviation',
+  };
+}
+
+/**
+ * Converts boxplot style options to Fusion BoxplotWidgetStyle DTO.
+ * Inverse of `extractBoxplotChartStyleOptions`.
+ *
+ * The whisker algorithm (`boxType`) and `outliersEnabled` flag live on
+ * {@link BoxplotChartDataOptions} in the WidgetModel rather than on `styleOptions`,
+ * so they are passed in separately. `boxType` defaults to `'iqr'` — the same default
+ * the boxplot translator falls back to when no whisker flag is selected.
+ *
+ * @param styleOptions - Boxplot style options from WidgetModel.styleOptions
+ * @param boxType - Whisker algorithm from WidgetModel.dataOptions.boxType
+ * @param outliersEnabled - Whether to render boxplot outliers
+ * @returns Fusion BoxplotWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toBoxplotWidgetStyle(
+  styleOptions: BoxplotStyleOptions,
+  boxType: BoxWhiskerType = 'iqr',
+  outliersEnabled?: boolean,
+): BoxplotWidgetStyle {
+  const dataLimits = toDataLimitsStyle(styleOptions.dataLimits);
+  // Cast through `unknown` because `BoxplotWidgetStyle` does not declare `legend`
+  // or `navigator`, but the inverse extractor reads them via `'legend' in style`
+  // checks and Fusion's boxplot widgets carry both fields in practice — emitting
+  // them keeps the round-trip intact.
+  return {
+    legend: toLegendStyle(styleOptions.legend),
+    navigator: toNavigatorStyle(styleOptions.navigator),
+    xAxis: toAxisStyle(styleOptions.xAxis),
+    yAxis: toAxisStyle(styleOptions.yAxis),
+    seriesLabels: toSeriesLabelsStyle(styleOptions.seriesLabels),
+    ...(dataLimits && { dataLimits }),
+    whisker: toBoxplotWhiskerStyle(boxType),
+    outliers: { enabled: outliersEnabled ?? false },
+  } as unknown as BoxplotWidgetStyle;
+}
+
+/**
+ * Converts calendar-heatmap style options to Fusion CalendarHeatmapWidgetStyle DTO.
+ * Inverse of {@link extractCalendarHeatmapChartStyleOptions}.
+ *
+ * Only the fields the inverse extractor reads are round-trippable. Cosmetic fields
+ * that the extractor synthesizes from {@link CALENDAR_HEATMAP_DEFAULTS}
+ * (`monthLabels.enabled`, `weekends.cellColor`, `weekends.hideValues`,
+ * `pagination.enabled`) are not written back because the Fusion DTO has no fields
+ * for them.
+ *
+ * The CSDK `subtype` (`'calendar-heatmap/split' | 'calendar-heatmap/continuous'`)
+ * is NOT the DTO `subtype` — the DTO uses `'heatmap'` and encodes view as the
+ * `'view/weekly'` / `'view/monthly'` style flags.
+ *
+ * `pagination.startMonth` is emitted as `{year, month}` because Fusion's startMonth
+ * object form is the canonical write shape; the string form is read-only legacy input.
+ *
+ * @param styleOptions - Calendar heatmap style options from WidgetModel.styleOptions
+ * @returns Fusion CalendarHeatmapWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toCalendarHeatmapWidgetStyle(
+  styleOptions: CalendarHeatmapStyleOptions,
+): CalendarHeatmapWidgetStyle {
+  const subtype = styleOptions.subtype ?? CALENDAR_HEATMAP_DEFAULTS.SUBTYPE;
+  const viewType = styleOptions.viewType ?? CALENDAR_HEATMAP_DEFAULTS.VIEW_TYPE;
+  const startOfWeek = styleOptions.startOfWeek ?? CALENDAR_HEATMAP_DEFAULTS.START_OF_WEEK;
+
+  const startMonthDate = styleOptions.pagination?.startMonth;
+  const startMonth =
+    startMonthDate instanceof Date
+      ? { year: startMonthDate.getFullYear(), month: startMonthDate.getMonth() }
+      : undefined;
+
+  return {
+    dayNameEnabled: styleOptions.dayLabels?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_DAY_LABEL,
+    dayNumberEnabled: styleOptions.cellLabels?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.SHOW_CELL_LABEL,
+    grayoutEnabled: styleOptions.weekends?.enabled ?? CALENDAR_HEATMAP_DEFAULTS.WEEKEND_ENABLED,
+    'view/monthly': subtype === 'calendar-heatmap/split',
+    'view/weekly': subtype === 'calendar-heatmap/continuous',
+    'domain/month': viewType === 'month',
+    'domain/quarter': viewType === 'quarter',
+    'domain/half-year': viewType === 'half-year',
+    'domain/year': viewType === 'year',
+    'week/monday': startOfWeek === 'monday',
+    'week/sunday': startOfWeek === 'sunday',
+    ...(startMonth && { startMonth }),
+  };
 }
 
 /**

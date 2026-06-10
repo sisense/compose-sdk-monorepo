@@ -7,6 +7,8 @@ hidden: true
 
 The data panel defines what dimension and measure inputs your widget accepts. These inputs appear in the Fusion widget editor and determine the shape of `dataOptions` passed to your visualization component.
 
+> **Design inputs first.** Before writing any Visualization code, decide what your inputs should be called. Name them after what they represent visually — `x`/`y` for coordinate-based charts, `lat`/`lon` for geo, `path` for hierarchy, `breakBy` when a dimension splits data into series. The template defaults (`category`/`value`) are generic placeholders — rename them unless your chart is literally a category vs. value chart. The names become keys in `DataOptions`, appear in `DataPoint.entries` for cross-filtering, and are shown to users in the Widget editor.
+
 ## Defining Inputs
 
 Each input in the `dataPanel.config.inputs` array describes one data slot:
@@ -99,5 +101,18 @@ inputs: [
   { name: 'secondary', displayName: 'Secondary', type: 'measure', maxItems: 1 },
 ];
 ```
+
+---
+
+## Using an AI Agent
+
+Your AI agent handles the mechanical work of keeping `src/index.tsx` and `src/types.ts` in sync when your data panel changes. Tell it what you want in plain language:
+
+- "Add a dimension input called `region`" — adds the entry to `dataPanel.config.inputs` and the typed field to `DataOptions`
+- "Rename the `category` input to `x`" — updates the manifest, the type, and every reference in component code
+- "Remove the `value` input" — removes the entry and cleans up all references
+- "Generate a data model from my Sisense instance" — creates a typed TypeScript representation for use in `dev-preview-props.ts`
+
+This is particularly useful when the template defaults (`category` / `value`) don't match your chart's semantics and you want to rename them to `x` / `y`, `lat` / `lon`, or `source` / `target`.
 
 **Next lesson:** [Design Panel](./05-design-panel.md)

@@ -16,7 +16,7 @@ such as `whisker max`, `whisker min`, `box max`, `box median`, and `box min`.
 
 ### `category`
 
-**category**: [(Column \| StyledColumn)?]
+**category**: [(Column \| CalculatedColumn \| StyledColumn)?]
 
 Columns (or attributes) whose values represent categories in the chart.
 

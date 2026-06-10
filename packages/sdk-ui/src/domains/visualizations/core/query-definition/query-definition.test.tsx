@@ -137,6 +137,27 @@ describe('QueryPill', () => {
       expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });
   });
+
+  it('truncates the label when maxLength is exceeded', () => {
+    const item: QueryPillItem = {
+      type: 'pill',
+      label: 'abcdefghijklmnopqrstuvwxyz',
+      category: 'filter',
+    };
+    renderWithI18n(<QueryPill item={item} maxLength={10} />);
+    expect(screen.getByText('abcdefghij...')).toBeInTheDocument();
+    expect(screen.queryByText('abcdefghijklmnopqrstuvwxyz')).not.toBeInTheDocument();
+  });
+
+  it('shows the full label when maxLength is 0', () => {
+    const item: QueryPillItem = {
+      type: 'pill',
+      label: 'abcdefghijklmnopqrstuvwxyz',
+      category: 'filter',
+    };
+    renderWithI18n(<QueryPill item={item} maxLength={0} />);
+    expect(screen.getByText('abcdefghijklmnopqrstuvwxyz')).toBeInTheDocument();
+  });
 });
 
 describe('QueryDefinition', () => {
@@ -268,6 +289,35 @@ describe('QueryDefinition', () => {
       />,
     );
     expect(screen.getByText('where')).toBeInTheDocument();
-    expect(screen.getAllByText('Region')).toHaveLength(2);
+    expect(screen.getByText('Region is North')).toBeInTheDocument();
+  });
+
+  it('truncates pill labels to maxPillLength by default', () => {
+    const category = createAttribute({
+      name: 'Category',
+      type: 'text-attribute',
+      expression: '[Category.Category]',
+    });
+    const filter = filterFactory.members(category, [
+      'Calculators',
+      'Camera Flashes',
+      'Accessories',
+    ]);
+    const fullLabel = "Category in ['Calculators', 'Camera Flashes', 'Accessories']";
+    renderWithI18n(<QueryDefinition query={{ filters: [filter] }} />);
+    expect(screen.getByText("Category in ['Calculators...")).toBeInTheDocument();
+    expect(screen.queryByText(fullLabel)).not.toBeInTheDocument();
+  });
+
+  it('shows full pill labels when maxPillLength is 0', () => {
+    const category = createAttribute({
+      name: 'Category',
+      type: 'text-attribute',
+      expression: '[Category.Category]',
+    });
+    const filter = filterFactory.members(category, ['Calculators', 'Camera Flashes']);
+    const fullLabel = "Category in ['Calculators', 'Camera Flashes']";
+    renderWithI18n(<QueryDefinition query={{ filters: [filter] }} maxPillLength={0} />);
+    expect(screen.getByText(fullLabel)).toBeInTheDocument();
   });
 });

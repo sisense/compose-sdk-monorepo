@@ -1,8 +1,8 @@
-import type { CustomVisualization } from './types.js';
+import type { AnyCustomVisualization } from './types.js';
 
 interface WidgetRegistryEntry {
   widgetTypeName: string;
-  component: CustomVisualization;
+  component: AnyCustomVisualization;
   source: 'plugin' | 'legacy';
 }
 
@@ -22,7 +22,7 @@ export class WidgetPluginRegistry {
    */
   register(
     widgetTypeName: string,
-    component: CustomVisualization,
+    component: AnyCustomVisualization,
     source: 'plugin' | 'legacy' = 'legacy',
   ): void {
     const existing = this.entries.get(widgetTypeName);
@@ -60,7 +60,7 @@ export class WidgetPluginRegistry {
   getComponent(
     widgetTypeName: string,
     source?: 'plugin' | 'legacy',
-  ): CustomVisualization | undefined {
+  ): AnyCustomVisualization | undefined {
     const entry = this.entries.get(widgetTypeName);
     if (!entry) return undefined;
     if (source !== undefined && entry.source !== source) {

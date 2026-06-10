@@ -7,7 +7,7 @@ import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../../__mocks__/mock-data-sources.js';
-import { FunctionCall } from '../types.js';
+import { FunctionCall, type QueryJSON } from '../types.js';
 import { translateQueryFromJSON } from './translate-query-from-json.js';
 import { translateQueryToJSON } from './translate-query-to-json.js';
 
@@ -50,7 +50,7 @@ describe('translateQueryToJSON', () => {
     dataSource: { title: 'Sample ECommerce', live: false },
   });
 
-  it('should translate ExecuteQueryParams to NlqResponseJSON', () => {
+  it('should translate ExecuteQueryParams to QueryJSON', () => {
     const query: ExecuteQueryParams = {
       dimensions: [Category, Brand],
       measures: [
@@ -191,7 +191,7 @@ describe('translateQueryToJSON', () => {
     if (!result.success) return;
 
     expect(result.data.filters).toHaveLength(1);
-    const filterCall = result.data.filters[0] as FunctionCall;
+    const filterCall = result.data.filters[0];
     expect(filterCall).toBeDefined();
     expect(filterCall.function).toBe('filterFactory.logic.and');
     const innerCall = filterCall.args[0] as FunctionCall;
@@ -228,7 +228,7 @@ describe('translateQueryToJSON', () => {
 
   describe('error handling', () => {
     it('should return structured error when dimension is missing composeCode', () => {
-      const invalidAttribute = { ...Category, composeCode: undefined } as any;
+      const invalidAttribute = { ...Category, composeCode: undefined };
 
       const query: ExecuteQueryParams = {
         dimensions: [invalidAttribute],
@@ -314,7 +314,7 @@ describe('translateQueryToJSON', () => {
     });
 
     it('should return structured error when dimension composeCode is invalid', () => {
-      const invalidAttribute = { ...Category, composeCode: 'Invalid.Code' } as any;
+      const invalidAttribute = { ...Category, composeCode: 'Invalid.Code' };
 
       const query: ExecuteQueryParams = {
         dimensions: [invalidAttribute],
@@ -334,7 +334,7 @@ describe('translateQueryToJSON', () => {
     });
 
     it('should collect multiple errors from different categories', () => {
-      const invalidAttribute = { ...Category, composeCode: undefined } as any;
+      const invalidAttribute = { ...Category, composeCode: undefined };
       const invalidMeasure = { ...measureFactory.sum(Revenue), composeCode: undefined } as any;
 
       const query: ExecuteQueryParams = {
@@ -497,7 +497,7 @@ describe('translateQueryToJSON', () => {
       if (!result.success) return;
 
       expect(result.data.measures).toHaveLength(1);
-      const styled = result.data.measures[0] as Record<string, unknown>;
+      const styled = result.data.measures[0] as unknown as Record<string, unknown>;
       expect(styled).toHaveProperty('column');
       expect(styled).toHaveProperty('trend');
       expect((styled.column as FunctionCall).function).toBe('measureFactory.sum');
@@ -524,7 +524,7 @@ describe('translateQueryToJSON', () => {
       if (!result.success) return;
 
       expect(result.data.measures).toHaveLength(1);
-      const styled = result.data.measures[0] as Record<string, unknown>;
+      const styled = result.data.measures[0] as unknown as Record<string, unknown>;
       expect(styled).toHaveProperty('column');
       expect(styled).toHaveProperty('trend');
       expect(styled).toHaveProperty('forecast');
@@ -582,7 +582,7 @@ describe('translateQueryToJSON', () => {
       expect(roundTripJSON.measures).toEqual(originalJSON.measures);
       // Filters might have slight differences in formatting, so we check structure
       expect(roundTripJSON.filters).toHaveLength(originalJSON.filters.length);
-      const filterCall = roundTripJSON.filters[0] as FunctionCall;
+      const filterCall = roundTripJSON.filters[0];
       const originalFilterCall = originalJSON.filters[0] as FunctionCall;
       expect(filterCall).toBeDefined();
       expect(originalFilterCall).toBeDefined();
@@ -598,14 +598,14 @@ describe('translateQueryToJSON', () => {
               function: 'measureFactory.sum',
               args: ['DM.Commerce.Revenue', 'Total Revenue'],
             },
-            trend: { modelType: 'linear' },
+            trend: { modelType: 'linear' as const },
           },
         ],
         filters: [],
       };
 
       const translationResult = translateQueryFromJSON({
-        data: originalJSON,
+        data: originalJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -620,7 +620,7 @@ describe('translateQueryToJSON', () => {
       if (!roundTripResult.success) return;
 
       expect(roundTripResult.data.measures).toHaveLength(1);
-      const styled = roundTripResult.data.measures[0] as Record<string, unknown>;
+      const styled = roundTripResult.data.measures[0] as unknown as Record<string, unknown>;
       expect(styled).toHaveProperty('column');
       expect(styled).toHaveProperty('trend');
       expect((styled.column as FunctionCall).function).toBe('measureFactory.sum');
@@ -636,7 +636,7 @@ describe('translateQueryToJSON', () => {
               function: 'measureFactory.sum',
               args: ['DM.Commerce.Revenue', 'Total Revenue'],
             },
-            trend: { modelType: 'advancedSmoothing' },
+            trend: { modelType: 'advancedSmoothing' as const },
             forecast: { forecastHorizon: 3 },
           },
         ],
@@ -644,7 +644,7 @@ describe('translateQueryToJSON', () => {
       };
 
       const translationResult = translateQueryFromJSON({
-        data: originalJSON,
+        data: originalJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -659,7 +659,7 @@ describe('translateQueryToJSON', () => {
       if (!roundTripResult.success) return;
 
       expect(roundTripResult.data.measures).toHaveLength(1);
-      const styled = roundTripResult.data.measures[0] as Record<string, unknown>;
+      const styled = roundTripResult.data.measures[0] as unknown as Record<string, unknown>;
       expect(styled).toHaveProperty('column');
       expect(styled).toHaveProperty('trend');
       expect(styled).toHaveProperty('forecast');

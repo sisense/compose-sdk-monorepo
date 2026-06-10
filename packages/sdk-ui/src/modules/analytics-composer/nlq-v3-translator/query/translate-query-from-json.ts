@@ -7,7 +7,6 @@ import {
 } from '@/domains/visualizations/core/chart-data-options/apply-styled-options-to-query.js';
 
 import { NlqTranslationError, NlqTranslationResult } from '../../types.js';
-import { QueryInput } from '../../types.js';
 import { translateDimensionsFromJSON } from '../constructs/dimensions/translate-dimensions-from-json.js';
 import {
   translateFiltersFromJSON,
@@ -16,6 +15,7 @@ import {
 import { translateMeasuresFromJSON } from '../constructs/measures/translate-measures-from-json.js';
 import { createSchemaIndex } from '../shared/utils/schema-index.js';
 import { collectTranslationErrors } from '../shared/utils/translation-helpers.js';
+import { QueryInput } from '../types.js';
 import type { DimensionTranslationItem, MeasureTranslationItem } from '../types.js';
 
 /**

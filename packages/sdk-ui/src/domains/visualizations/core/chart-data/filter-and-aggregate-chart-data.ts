@@ -1,5 +1,10 @@
 /* eslint-disable max-params */
-import { CalculatedMeasureColumn, Column, MeasureColumn } from '@sisense/sdk-data';
+import {
+  CalculatedColumn,
+  CalculatedMeasureColumn,
+  Column,
+  MeasureColumn,
+} from '@sisense/sdk-data';
 import union from 'lodash-es/union';
 
 import { TranslatableError } from '@/infra/translation/translatable-error';
@@ -19,7 +24,7 @@ import {
 // one measure value exists per row of unique attributes
 export const filterAndAggregateChartData = (
   sourceTable: DataTable,
-  attributes: Column[],
+  attributes: (Column | CalculatedColumn)[],
   measures: (MeasureColumn | CalculatedMeasureColumn)[],
   dataColumnNamesMapping: DataColumnNamesMapping = {},
   //filters?: IFilter,

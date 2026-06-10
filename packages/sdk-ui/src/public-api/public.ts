@@ -320,7 +320,12 @@ export type {
   RangeChartDataOptions,
   ChartDataOptions,
   RegularChartDataOptions,
+  CommonDataOptions,
 } from '../domains/visualizations/core/chart-data-options/types';
+
+// Formatting
+export { formatNumber, formatDate, getDefaultDateFormat, formatDataSet } from '../infra/formatting';
+export type { FormatDateOptions, FormatDataSetOptions } from '../infra/formatting';
 
 // Props
 export type {

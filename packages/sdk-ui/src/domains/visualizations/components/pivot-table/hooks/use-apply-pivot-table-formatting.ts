@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -44,13 +43,15 @@ export const useApplyPivotTableFormatting = ({
   const { t: translate } = useTranslation();
   const { themeSettings } = useThemeContext();
 
-  const onDataCellFormatCombined = useCallback(
-    over([
-      createDataCellValueFormatter(dataOptions),
-      createDataCellColorFormatter(dataOptions, themeSettings),
-      // Apply functional formatter using unified wrapper (single callback instead of array)
-      ...(onDataCellFormat ? [createUnifiedDataCellFormatter(onDataCellFormat, dataOptions)] : []),
-    ]),
+  const onDataCellFormatCombined = useMemo(
+    () =>
+      over([
+        createDataCellValueFormatter(dataOptions),
+        createDataCellColorFormatter(dataOptions, themeSettings),
+        ...(onDataCellFormat
+          ? [createUnifiedDataCellFormatter(onDataCellFormat, dataOptions)]
+          : []),
+      ]),
     [dataOptions, onDataCellFormat, themeSettings],
   );
 
@@ -60,25 +61,26 @@ export const useApplyPivotTableFormatting = ({
     [app],
   );
 
-  const onHeaderCellFormatCombined = useCallback(
-    over([
-      createHeaderCellValueFormatter(dataOptions, dateFormatter),
-      createHeaderCellTotalsFormatter(dataOptions, translate),
-      createHeaderCellHighlightFormatter(),
-      // Apply additional header formatter using unified wrapper (single callback instead of array)
-      ...(onHeaderCellFormat
-        ? [createUnifiedHeaderCellFormatter(onHeaderCellFormat, dataOptions)]
-        : []),
-    ]),
+  const onHeaderCellFormatCombined = useMemo(
+    () =>
+      over([
+        createHeaderCellValueFormatter(dataOptions, dateFormatter),
+        createHeaderCellTotalsFormatter(dataOptions, translate),
+        createHeaderCellHighlightFormatter(),
+        ...(onHeaderCellFormat
+          ? [createUnifiedHeaderCellFormatter(onHeaderCellFormat, dataOptions)]
+          : []),
+      ]),
     [dataOptions, translate, onHeaderCellFormat, dateFormatter],
   );
 
   useEffect(() => {
     dataService.on(EVENT_DATA_CELL_FORMAT, onDataCellFormatCombined);
     dataService.on(EVENT_HEADER_CELL_FORMAT, onHeaderCellFormatCombined);
+
     return () => {
       dataService.off(EVENT_DATA_CELL_FORMAT, onDataCellFormatCombined);
       dataService.off(EVENT_HEADER_CELL_FORMAT, onHeaderCellFormatCombined);
     };
-  }, [dataService, onDataCellFormat, onHeaderCellFormat]);
+  }, [dataService, onDataCellFormatCombined, onHeaderCellFormatCombined]);
 };

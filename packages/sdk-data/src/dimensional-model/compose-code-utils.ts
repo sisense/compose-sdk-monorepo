@@ -150,3 +150,17 @@ export function withComposeCodeForMeasure<T extends (...args: any[]) => any>(
 ): T {
   return withComposeCode('measureFactory', funcName)(func);
 }
+
+/**
+ * High order function to construct compose code for attribute factory functions
+ *
+ * @param func - attribute factory function
+ * @param funcName - name of the attribute factory function. Needed if the function name is minified.
+ * @returns attribute factory function with composeCode property added to the attribute
+ */
+export function withComposeCodeForAttribute<T extends (...args: any[]) => any>(
+  func: T,
+  funcName?: string,
+): T {
+  return withComposeCode('attributeFactory', funcName)(func);
+}

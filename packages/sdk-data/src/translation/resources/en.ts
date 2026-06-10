@@ -23,6 +23,7 @@ export const translation = {
       unsupportedType: 'Unsupported filter type: {{filterType}}',
       unsupportedDatetimeLevel:
         'Filters do not support the following "datetime" levels: Hours, MinutesRoundTo30, MinutesRoundTo15, Minutes, Seconds',
+      unsupportedCalculatedAttribute: 'Filters are not supported on calculated attributes',
       membersFilterNullMember: 'MembersFilter of {{attributeId}} - member cannot be null',
       unsupportedConditionFilter:
         'Jaql for {{attributeName}} contains unsupported condition filter: {{filter}}',

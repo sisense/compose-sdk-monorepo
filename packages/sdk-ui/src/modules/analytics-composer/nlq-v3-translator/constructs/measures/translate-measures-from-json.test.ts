@@ -1,4 +1,4 @@
-import { JSONArray, Sort } from '@sisense/sdk-data';
+import { Sort } from '@sisense/sdk-data';
 
 import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
@@ -6,6 +6,7 @@ import {
 } from '../../../__mocks__/mock-data-sources.js';
 import { createSchemaIndex } from '../../shared/utils/schema-index.js';
 import { getErrors, getSuccessData } from '../../shared/utils/translation-helpers.js';
+import type { MeasureItemJSON } from '../../types.js';
 import { translateMeasuresFromJSON } from './translate-measures-from-json.js';
 
 const MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE = createSchemaIndex(
@@ -16,7 +17,7 @@ describe('translateMeasures', () => {
   describe('translateMeasuresFromJSON', () => {
     it('should return empty array when measuresJSON is null', () => {
       const result = translateMeasuresFromJSON({
-        data: null as unknown as JSONArray,
+        data: null as unknown as MeasureItemJSON[],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -28,7 +29,7 @@ describe('translateMeasures', () => {
 
     it('should return empty array when measuresJSON is undefined', () => {
       const result = translateMeasuresFromJSON({
-        data: undefined as unknown as JSONArray,
+        data: undefined as unknown as MeasureItemJSON[],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -40,7 +41,7 @@ describe('translateMeasures', () => {
 
     it('should return empty array when measuresJSON is false', () => {
       const result = translateMeasuresFromJSON({
-        data: false as unknown as JSONArray,
+        data: false as unknown as MeasureItemJSON[],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -52,7 +53,7 @@ describe('translateMeasures', () => {
 
     it('should return empty array when measuresJSON is 0', () => {
       const result = translateMeasuresFromJSON({
-        data: 0 as unknown as JSONArray,
+        data: 0 as unknown as MeasureItemJSON[],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -64,7 +65,7 @@ describe('translateMeasures', () => {
 
     it('should return empty array when measuresJSON is empty string', () => {
       const result = translateMeasuresFromJSON({
-        data: '' as unknown as JSONArray,
+        data: '' as unknown as MeasureItemJSON[],
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
@@ -90,7 +91,7 @@ describe('translateMeasures', () => {
       const invalidMeasuresJSON = [
         'DM.Commerce.Revenue',
         'DM.Commerce.Cost',
-      ] as unknown as JSONArray;
+      ] as unknown as MeasureItemJSON[];
 
       const result = translateMeasuresFromJSON({
         data: invalidMeasuresJSON,
@@ -109,7 +110,7 @@ describe('translateMeasures', () => {
     it('should return error for array of objects missing function property', () => {
       const invalidMeasuresJSON = [
         { args: ['DM.Commerce.Revenue', 'Total Revenue'] },
-      ] as unknown as JSONArray;
+      ] as unknown as MeasureItemJSON[];
 
       const result = translateMeasuresFromJSON({
         data: invalidMeasuresJSON,
@@ -126,7 +127,9 @@ describe('translateMeasures', () => {
     });
 
     it('should return error for array of objects missing args property', () => {
-      const invalidMeasuresJSON = [{ function: 'measureFactory.sum' }] as unknown as JSONArray;
+      const invalidMeasuresJSON = [
+        { function: 'measureFactory.sum' },
+      ] as unknown as MeasureItemJSON[];
 
       const result = translateMeasuresFromJSON({
         data: invalidMeasuresJSON,
@@ -146,7 +149,7 @@ describe('translateMeasures', () => {
       const invalidMeasuresJSON = [
         { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Total Revenue'] },
         'not an object',
-      ] as unknown as JSONArray;
+      ] as unknown as MeasureItemJSON[];
 
       const result = translateMeasuresFromJSON({
         data: invalidMeasuresJSON,
@@ -166,7 +169,7 @@ describe('translateMeasures', () => {
       const invalidMeasuresJSON = [
         { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Total Revenue'] },
         null,
-      ] as unknown as JSONArray;
+      ] as unknown as MeasureItemJSON[];
 
       const result = translateMeasuresFromJSON({
         data: invalidMeasuresJSON,
@@ -186,7 +189,7 @@ describe('translateMeasures', () => {
       const invalidMeasuresJSON = [
         { function: 'measureFactory.sum', args: ['DM.Commerce.Revenue', 'Total Revenue'] },
         true,
-      ] as unknown as JSONArray;
+      ] as unknown as MeasureItemJSON[];
 
       const result = translateMeasuresFromJSON({
         data: invalidMeasuresJSON,
@@ -209,7 +212,7 @@ describe('translateMeasures', () => {
             function: 'measureFactory.sum',
             args: ['DM.Commerce.Cost', 'Total Cost'],
           },
-          sortType: 'sortDesc',
+          sortType: 'sortDesc' as const,
         },
       ];
 

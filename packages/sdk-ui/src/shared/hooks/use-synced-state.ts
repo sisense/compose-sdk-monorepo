@@ -3,7 +3,12 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } fr
 import isEqual from 'lodash-es/isEqual';
 import isFunction from 'lodash-es/isFunction';
 
-type UseSyncedStateOptions<T> = {
+/**
+ * Options for {@link useSyncedState}.
+ *
+ * @alpha
+ */
+export type UseSyncedStateOptions<T> = {
   /**
    * A callback function that is triggered when the state is updated via the local setter,
    * but not through synchronization with `syncValue`.
@@ -19,6 +24,23 @@ type UseSyncedStateOptions<T> = {
 /**
  * A custom React hook that behaves like the regular `useState`, but also synchronizes the state
  * with an external `syncValue`.
+ *
+ * @param syncValue - The external value to synchronize with. When this value changes (as
+ *   determined by `syncCompareFn`), the local state is updated to match it.
+ * @param options - Optional configuration object.
+ * @param options.onLocalStateChange - Callback invoked whenever the local state is updated via
+ *   the returned setter (not triggered by external `syncValue` synchronization).
+ * @param options.syncCompareFn - Custom equality function used to detect changes in `syncValue`.
+ *   Defaults to a deep equality check via `isEqual` from lodash-es. See {@link UseSyncedStateOptions}.
+ * @returns A tuple of `[localState, setState]` — the current local state and a setter that
+ *   both updates state and fires `onLocalStateChange`.
+ * @example
+ * ```tsx
+ * const [localState, setLocalState] = useSyncedState(externalValue, {
+ *   onLocalStateChange: (s) => console.log('local update', s),
+ * });
+ * ```
+ * @alpha
  */
 export function useSyncedState<T>(
   syncValue: T,

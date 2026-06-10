@@ -202,7 +202,9 @@ describe('getDashboardModel', () => {
       };
       const result = await getDashboardModel(httpClientMock, dashboardMock.oid, options);
 
-      expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid);
+      expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid, {
+        adminAccess: undefined,
+      });
       expect(getDashboardMock).not.toHaveBeenCalled();
       expect(result).toEqual({
         oid: dashboardMock.oid,
@@ -241,7 +243,9 @@ describe('getDashboardModel', () => {
         error = e;
       }
 
-      expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid);
+      expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid, {
+        adminAccess: undefined,
+      });
       expect(getDashboardMock).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
       expect(error).toBeInstanceOf(Error);
@@ -265,10 +269,35 @@ describe('getDashboardModel', () => {
         error = e;
       }
 
-      expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid);
+      expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid, {
+        adminAccess: undefined,
+      });
       expect(getDashboardMock).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
       expect(error).toEqual(new Error('Legacy API network error'));
+    });
+  });
+
+  describe('adminAccess', () => {
+    it('should pass adminAccess to getDashboard when not using legacy API', async () => {
+      await getDashboardModel(httpClientMock, dashboardMock.oid, { adminAccess: true });
+
+      expect(getDashboardMock).toHaveBeenCalledWith(
+        dashboardMock.oid,
+        expect.objectContaining({ adminAccess: true }),
+      );
+    });
+
+    it('should pass adminAccess to getDashboardLegacy when using legacy API', async () => {
+      await getDashboardModel(httpClientMock, dashboardMock.oid, {
+        useLegacyApiVersion: true,
+        adminAccess: true,
+      });
+
+      expect(getDashboardLegacyMock).toHaveBeenCalledWith(
+        dashboardMock.oid,
+        expect.objectContaining({ adminAccess: true }),
+      );
     });
   });
 });

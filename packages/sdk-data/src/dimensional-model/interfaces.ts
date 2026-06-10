@@ -239,6 +239,13 @@ export interface MeasureContext {
 }
 
 /**
+ * Context of a calculated attribute.
+ */
+export interface AttributeContext {
+  [propName: string]: any;
+}
+
+/**
  * Interface for a Calculated Measure, extending {@link Measure}.
  *
  * @see {@link https://developer.sisense.com/guides/querying/useJaql/#step-7-adding-a-formula | Using the JAQL to Add A Formula}

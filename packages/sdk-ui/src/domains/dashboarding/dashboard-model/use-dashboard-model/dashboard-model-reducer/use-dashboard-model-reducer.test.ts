@@ -76,6 +76,146 @@ describe('dashboardReducer', () => {
     });
   });
 
+  describe('UPDATE_WIDGET', () => {
+    it('merges scrollerLocation into styleOptions.navigator on the target widget', () => {
+      const widgetA = {
+        ...createWidgetModel('w-a'),
+        styleOptions: { navigator: { enabled: true } },
+      };
+      const widgetB = createWidgetModel('w-b');
+      const model = { ...baseModel, widgets: [widgetA, widgetB] };
+
+      const result = dashboardReducer(model, {
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: {
+          widgetOid: 'w-a',
+          update: { styleOptions: { navigator: { scrollerLocation: { min: 10, max: 90 } } } },
+        },
+      });
+
+      expect((result?.widgets[0] as { styleOptions: unknown }).styleOptions).toEqual({
+        navigator: { enabled: true, scrollerLocation: { min: 10, max: 90 } },
+      });
+      expect(result?.widgets[1]).toBe(widgetB);
+    });
+
+    it('preserves unrelated widgets and styleOptions sub-fields', () => {
+      const widgetA = {
+        ...createWidgetModel('w-a'),
+        styleOptions: { navigator: { enabled: true }, legend: { enabled: false } },
+      };
+      const widgetB = createWidgetModel('w-b');
+      const model = { ...baseModel, widgets: [widgetA, widgetB] };
+
+      const result = dashboardReducer(model, {
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: {
+          widgetOid: 'w-a',
+          update: { styleOptions: { navigator: { scrollerLocation: { min: 5, max: 95 } } } },
+        },
+      });
+
+      expect((result?.widgets[0] as { styleOptions: unknown }).styleOptions).toMatchObject({
+        legend: { enabled: false },
+        navigator: { enabled: true, scrollerLocation: { min: 5, max: 95 } },
+      });
+      expect(result?.widgets[1]).toBe(widgetB);
+    });
+
+    it('returns widget unchanged when update has no matching field', () => {
+      const widgetA = createWidgetModel('w-a');
+      const model = { ...baseModel, widgets: [widgetA] };
+
+      const result = dashboardReducer(model, {
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: { widgetOid: 'w-a', update: {} },
+      });
+
+      expect(result?.widgets[0]).toEqual(widgetA);
+    });
+
+    it('merges customOptions into the target widget bag, preserving other keys', () => {
+      const widgetA = {
+        ...createWidgetModel('w-a'),
+        customOptions: { lastPage: 0, theme: 'dark' },
+      };
+      const widgetB = createWidgetModel('w-b');
+      const model = { ...baseModel, widgets: [widgetA, widgetB] };
+
+      const result = dashboardReducer(model, {
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: { widgetOid: 'w-a', update: { customOptions: { lastPage: 4 } } },
+      });
+
+      expect((result?.widgets[0] as { customOptions: unknown }).customOptions).toEqual({
+        lastPage: 4,
+        theme: 'dark',
+      });
+      expect(result?.widgets[1]).toBe(widgetB);
+    });
+
+    it('merges opaque styleOptions into the target widget, preserving other keys', () => {
+      const widgetA = {
+        ...createWidgetModel('w-a'),
+        styleOptions: { theme: 'dark', rowsPerPage: 10 },
+      };
+      const model = { ...baseModel, widgets: [widgetA] };
+
+      const result = dashboardReducer(model, {
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: { widgetOid: 'w-a', update: { styleOptions: { rowsPerPage: 25 } } },
+      });
+
+      expect((result?.widgets[0] as { styleOptions: unknown }).styleOptions).toEqual({
+        theme: 'dark',
+        rowsPerPage: 25,
+      });
+    });
+
+    it('deep-merges a nested styleOptions update, preserving nested sibling keys', () => {
+      const widgetA = {
+        ...createWidgetModel('w-a'),
+        styleOptions: { pagination: { currentPage: 1, location: 'left' }, theme: 'dark' },
+      };
+      const model = { ...baseModel, widgets: [widgetA] };
+
+      const result = dashboardReducer(model, {
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: {
+          widgetOid: 'w-a',
+          update: { styleOptions: { pagination: { currentPage: 3 } } },
+        },
+      });
+
+      expect((result?.widgets[0] as { styleOptions: unknown }).styleOptions).toEqual({
+        pagination: { currentPage: 3, location: 'left' },
+        theme: 'dark',
+      });
+    });
+
+    it('deep-merges a nested customOptions update, preserving nested sibling keys', () => {
+      const widgetA = {
+        ...createWidgetModel('w-a'),
+        customOptions: { view: { zoom: 1, center: 'auto' }, selectedIds: [1, 2] },
+      };
+      const model = { ...baseModel, widgets: [widgetA] };
+
+      const result = dashboardReducer(model, {
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: {
+          widgetOid: 'w-a',
+          update: { customOptions: { view: { zoom: 2 }, selectedIds: [3] } },
+        },
+      });
+
+      // Nested plain objects merge recursively; arrays are replaced wholesale.
+      expect((result?.widgets[0] as { customOptions: unknown }).customOptions).toEqual({
+        view: { zoom: 2, center: 'auto' },
+        selectedIds: [3],
+      });
+    });
+  });
+
   describe('WIDGETS_PANEL_LAYOUT_UPDATE', () => {
     it('should update layout', () => {
       const newLayout: WidgetsPanelColumnLayout = {

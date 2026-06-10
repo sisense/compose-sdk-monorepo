@@ -42,9 +42,9 @@ function filterAndExtendChartForMonth(
       // Use existing data if available
       allDaysData.push(existingData);
     } else {
-      // Create placeholder data for missing days
+      // Create placeholder data for missing days (local midnight to match real data dates)
       allDaysData.push({
-        date: new Date(Date.UTC(targetMonth.year, targetMonth.month, day)),
+        date: new Date(targetMonth.year, targetMonth.month, day),
         // No value property - represents missing data
       });
     }

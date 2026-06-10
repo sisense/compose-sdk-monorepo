@@ -21,6 +21,12 @@
  * ::: tip Note
  * For more information on requirements for enabling Generative AI features, please refer to the [Generative AI documentation](https://docs.sisense.com/main/SisenseLinux/genai.htm)
  * :::
+ * @groupDescription Formatting
+ * Utilities for formatting numbers, dates, and query result data sets
+ * @groupDescription Styling
+ * Utilities for creating and inspecting color gradients used in chart styling
+ * @groupDescription Primitives
+ * General-purpose presentational primitive components
  * @groupDescription Interfaces
  * TypeScript interfaces for components and hooks listed above
  * @groupDescription Type Aliases

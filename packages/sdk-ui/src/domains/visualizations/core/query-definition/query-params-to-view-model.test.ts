@@ -64,7 +64,7 @@ describe('baseQueryParamsToViewModel', () => {
       'connector:by',
       'dimension:Region',
       'connector:where',
-      'filter:Region',
+      'filter:Region is North',
     ]);
   });
 
@@ -138,9 +138,9 @@ describe('baseQueryParamsToViewModel', () => {
       'dimension:Region',
       'connector:where',
       'connector:(',
-      'filter:Region',
+      'filter:Region is North',
       'connector:AND',
-      'filter:Region',
+      'filter:Region is South',
       'connector:)',
     ]);
   });
@@ -155,7 +155,7 @@ describe('baseQueryParamsToViewModel', () => {
     const params = { filters: filter } as unknown as BaseQueryParams;
     const result = baseQueryParamsToViewModel(params);
     expect(result).toHaveLength(1);
-    expect(result[0]).toMatchObject({ category: 'filter', label: 'Region' });
+    expect(result[0]).toMatchObject({ category: 'filter', label: 'Region is North' });
   });
 
   it('uses attribute name for date-level dimension when t is omitted', () => {
@@ -203,6 +203,6 @@ describe('baseQueryParamsToViewModel', () => {
     const filter = filterFactory.members(dateLevel, ['2024-01-01']);
     const result = baseQueryParamsToViewModel({ filters: [filter] }, stubT);
     const pill = result.find(isPillItem);
-    expect(pill).toMatchObject({ category: 'filter', label: 'Days in Date' });
+    expect(pill).toMatchObject({ category: 'filter', label: 'Days in Date is 2024-01-01' });
   });
 });

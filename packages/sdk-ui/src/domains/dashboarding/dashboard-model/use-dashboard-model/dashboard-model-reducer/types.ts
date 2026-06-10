@@ -5,6 +5,7 @@ import {
   SpecificWidgetOptions,
   WidgetsPanelLayout,
 } from '@/domains/dashboarding/dashboard-model';
+import type { WidgetPropsUpdate } from '@/domains/dashboarding/persistence/update-types.js';
 import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { WidgetModel } from '@/domains/widgets/widget-model';
 
@@ -29,6 +30,7 @@ export enum UseDashboardModelActionType {
   FILTERS_UPDATE = 'FILTERS.UPDATE',
   ADD_WIDGET = 'WIDGETS.ADD',
   PATCH_WIDGET = 'WIDGETS.PATCH',
+  UPDATE_WIDGET = 'WIDGETS.UPDATE',
   WIDGETS_PANEL_LAYOUT_UPDATE = 'WIDGETS_PANEL_LAYOUT.UPDATE',
   WIDGETS_DELETE = 'WIDGETS.DELETE',
 }
@@ -52,6 +54,18 @@ export type WidgetPatch = {
   options?: Partial<NonNullable<WidgetDto['options']>> & {
     previousScrollerLocation: { min: number; max: number };
   };
+  /**
+   * Full opaque widget style to send in the PATCH request. Used for custom
+   * (plugin) widgets whose `styleOptions` round-trip through `WidgetDto.style`.
+   * Must reconstruct the entire style object (the server replaces it on PATCH).
+   */
+  style?: WidgetDto['style'];
+  /**
+   * Full custom-widget options bag to send in the PATCH request.
+   * Must include all existing keys alongside the changed ones, because the
+   * server replaces the entire object rather than merging.
+   */
+  customOptions?: Record<string, unknown>;
 };
 
 /**
@@ -74,6 +88,21 @@ export type UseDashboardModelInternalAction =
     };
 
 /**
+ * Props-shaped widget update action. Carries a partial `WidgetPropsUpdate` that
+ * the reducer applies to the in-memory `WidgetModel` and the persist middleware
+ * translates to a targeted DTO patch via its per-field mapping table.
+ *
+ * @internal
+ */
+export type UseDashboardModelUpdateWidgetAction = {
+  type: UseDashboardModelActionType.UPDATE_WIDGET;
+  payload: {
+    widgetOid: string;
+    update: WidgetPropsUpdate;
+  };
+};
+
+/**
  * Actions for the dashboard model state used in {@link useDashboardModel}.
  *
  * @internal
@@ -82,6 +111,7 @@ export type UseDashboardModelAction =
   | UseDashboardModelFilterUpdateAction
   | UseDashboardModelAddWidgetAction
   | UseDashboardModelPatchWidgetAction
+  | UseDashboardModelUpdateWidgetAction
   | UseDashboardModelLayoutUpdateAction
   | UseDashboardWidgetsDeleteAction;
 

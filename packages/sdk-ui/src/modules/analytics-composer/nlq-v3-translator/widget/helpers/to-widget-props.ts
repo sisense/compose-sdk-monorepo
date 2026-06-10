@@ -1,16 +1,16 @@
 import { isDataSource } from '@sisense/sdk-data';
 
-import type { WidgetConfig, WidgetProps } from '@/domains/widgets/components/widget/types.js';
+import type { WidgetProps } from '@/domains/widgets/components/widget/types.js';
 import type { ChartProps, PivotTableProps } from '@/props.js';
 
-import type { DataSourceJSON } from '../../types.js';
+import type { DataSourceJSON, WidgetConfigJSON } from '../../types.js';
 
 export type WidgetMeta = {
   readonly id: string;
   readonly title?: string;
   readonly description?: string;
   readonly dataSource?: DataSourceJSON;
-  readonly config?: WidgetConfig;
+  readonly config?: WidgetConfigJSON;
   readonly highlightSelectionDisabled?: boolean;
 };
 

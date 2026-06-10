@@ -5,8 +5,10 @@ title: Interfaces
 # Interfaces
 
 - [Attribute](interface.Attribute.md)
+- [AttributeContext](interface.AttributeContext.md)
 - [BaseFilterConfig](interface.BaseFilterConfig.md)
 - [BaseMeasure](interface.BaseMeasure.md)
+- [CalculatedColumn](interface.CalculatedColumn.md)
 - [CalculatedMeasure](interface.CalculatedMeasure.md)
 - [CalculatedMeasureColumn](interface.CalculatedMeasureColumn.md)
 - [Cell](interface.Cell.md)

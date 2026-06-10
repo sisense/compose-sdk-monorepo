@@ -6,6 +6,7 @@ import {
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../../__mocks__/mock-data-sources.js';
 import { NlqTranslationErrorResult } from '../../types.js';
+import type { QueryJSON } from '../types.js';
 import { translateQueryFromJSON } from './translate-query-from-json.js';
 
 describe('translateQueryFromJSON', () => {
@@ -42,7 +43,7 @@ describe('translateQueryFromJSON', () => {
     };
 
     const result = translateQueryFromJSON({
-      data: mockQueryJSON,
+      data: mockQueryJSON as QueryJSON,
       context: {
         dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
         tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -72,7 +73,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -102,7 +103,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as unknown as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -139,7 +140,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -175,7 +176,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -209,7 +210,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -283,7 +284,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -312,7 +313,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -343,7 +344,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -378,7 +379,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -411,7 +412,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -441,7 +442,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -478,7 +479,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -518,7 +519,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -559,7 +560,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -604,7 +605,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -639,7 +640,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -674,7 +675,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -714,7 +715,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -746,7 +747,7 @@ describe('translateQueryFromJSON', () => {
       };
 
       const result = translateQueryFromJSON({
-        data: mockQueryJSON,
+        data: mockQueryJSON as QueryJSON,
         context: {
           dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
           tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,

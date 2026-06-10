@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { DimensionalAttribute } from '../../attributes.js';
+import { DimensionalAttribute } from '../../attributes/attributes.js';
 import * as filterFactory from '../factory.js';
 import { ExcludeFilter, MembersFilter, NumericFilter } from '../filters.js';
 import { isIncludeAllMembersFilter } from './is-include-all-members-filter.js';

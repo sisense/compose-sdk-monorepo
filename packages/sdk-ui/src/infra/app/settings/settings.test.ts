@@ -66,14 +66,10 @@ describe('getSettings function', () => {
     expect(mockHttpClient.get).toHaveBeenCalledWith('api/globals');
     expect(mockHttpClient.get).toHaveBeenCalledWith('api/palettes/Vivid');
 
-    expect(settings.ai.featureFlags.nlqV3Enabled).toBe(true);
     expect(settings.ai.featureFlags.naturalResponseEnabled).toBe(false);
     expect(settings.ai.featureFlags.queryDefinition).toBe(false);
-    expect(settings.ai.featureFlags.completionV2).toBe(false);
     expect(settings.ai.quotaNotification).toBe(true);
     expect(settings.ai.featureModelType).toBe('sisense_managed');
-    expect(settings.ai.aiStudio.realtime).toBe(false);
-    expect(settings.ai.aiStudio.usageDisplay).toBe(false);
     expect(settings.user.firstName).toBe('Test');
     expect(settings.user.lastName).toBe('Test');
     expect(settings.user.email).toBe('admin@sisense.com');

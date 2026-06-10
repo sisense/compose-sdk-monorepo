@@ -118,8 +118,8 @@ module.exports = {
           files: [
             '**/__demo__/**/*',
             '**/*.stories.tsx',
-            '**/__mocks__/*.{ts,tsx}',
-            '**/__test-helpers__/*.{ts,tsx}',
+            '**/__mocks__/**/*.{ts,tsx}',
+            '**/__test-helpers__/**/*.{ts,tsx}',
             '**/test-helpers/*.{ts,tsx}',
             '**/*.test.{ts,tsx}',
             'e2e/**/*.spec.{ts,tsx,js,jsx}',

@@ -7,9 +7,14 @@ import { sampleEcommerceDashboard as dashboardMock } from '@/domains/dashboardin
 import { samplePivotDashboard } from '@/domains/dashboarding/dashboard-model/__mocks__/sample-pivot-dashboard.js';
 import { jumpToDashboardConfigFromWidgetDto } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils.js';
 import type { JtdConfigDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
-import { PivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
+import {
+  BoxplotChartDataOptions,
+  PivotTableDataOptions,
+} from '@/domains/visualizations/core/chart-data-options/types';
 import type { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
 import {
+  BoxplotWidgetStyle,
+  CalendarHeatmapWidgetStyle,
   CartesianWidgetStyle,
   PivotWidgetStyle,
   ScattermapWidgetStyle,
@@ -18,7 +23,11 @@ import {
 } from '@/domains/widgets/components/widget-by-id/types';
 import { WidgetDto } from '@/index';
 import { AppSettings } from '@/infra/app/settings/settings';
-import { CompleteThemeSettingsInternal, PivotTableWidgetStyleOptions } from '@/types';
+import {
+  CalendarHeatmapStyleOptions,
+  CompleteThemeSettingsInternal,
+  PivotTableWidgetStyleOptions,
+} from '@/types';
 
 import {
   fromChartWidgetProps,
@@ -767,6 +776,444 @@ describe('WidgetModelTranslator', () => {
 
       it('should still include the filters panel even when no data filters are set', () => {
         const mockDto = makeAreamapWidgetDto('areamap/world');
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        const filterPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'filters');
+        expect(filterPanel).toBeDefined();
+        expect(filterPanel!.items).toEqual([]);
+      });
+    });
+
+    describe('boxplot widget', () => {
+      const makeBoxplotWidgetDto = (
+        overrides: { subtype?: string; styleOverrides?: Partial<BoxplotWidgetStyle> } = {},
+      ): WidgetDto =>
+        ({
+          oid: 'boxplot-oid',
+          title: 'boxplot',
+          desc: null,
+          type: 'chart/boxplot',
+          subtype: overrides.subtype ?? 'boxplot/full',
+          datasource: {
+            title: 'Sample ECommerce',
+            id: 'localhost_aSampleIAAaECommerce',
+            address: 'LocalHost',
+            database: 'aSampleIAAaECommerce',
+          },
+          metadata: {
+            panels: [
+              {
+                name: 'category',
+                items: [
+                  {
+                    jaql: {
+                      table: 'Commerce',
+                      column: 'Age Range',
+                      dim: '[Commerce.Age Range]',
+                      datatype: 'text',
+                      merged: true,
+                      title: 'Age Range',
+                    },
+                  },
+                ],
+              },
+              {
+                name: 'value',
+                items: [
+                  {
+                    jaql: {
+                      table: 'Commerce',
+                      column: 'Cost',
+                      dim: '[Commerce.Cost]',
+                      datatype: 'numeric',
+                      title: 'Cost',
+                    },
+                  },
+                ],
+              },
+              { name: 'filters', items: [] },
+            ],
+          },
+          style: {
+            legend: { enabled: true, position: 'bottom' },
+            navigator: { enabled: false },
+            xAxis: {
+              enabled: true,
+              ticks: true,
+              labels: { enabled: true, rotation: 0 },
+              gridLines: true,
+              isIntervalEnabled: false,
+            },
+            yAxis: {
+              enabled: true,
+              ticks: true,
+              labels: { enabled: true, rotation: 0 },
+              gridLines: true,
+              isIntervalEnabled: false,
+            },
+            whisker: {
+              'whisker/iqr': true,
+              'whisker/extremums': false,
+              'whisker/deviation': false,
+            },
+            outliers: { enabled: true },
+            ...overrides.styleOverrides,
+          },
+        } as unknown as WidgetDto);
+
+      it('should create a valid WidgetDto for the "boxplot" chart', () => {
+        const mockDto = makeBoxplotWidgetDto();
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+        expect(widgetFromChart.chartType).toBe('boxplot');
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        expect(resWidgetDto.type).toBe('chart/boxplot');
+        expect(resWidgetDto.subtype).toBe('boxplot/full');
+
+        const panelNames = resWidgetDto.metadata.panels
+          .map(({ name }) => name)
+          .filter((name) => name !== 'filters');
+        expect(panelNames).toEqual(['category', 'value']);
+
+        const categoryPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'category');
+        expect(categoryPanel!.items).toHaveLength(1);
+        expect((categoryPanel!.items[0].jaql as any).dim).toBe('[Commerce.Age Range]');
+
+        const valuePanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'value');
+        expect(valuePanel!.items).toHaveLength(1);
+        expect((valuePanel!.items[0].jaql as any).dim).toBe('[Commerce.Cost]');
+        // value is treated as an attribute (no agg), matching the extractor's read
+        expect((valuePanel!.items[0].jaql as any).agg).toBeUndefined();
+      });
+
+      it('should round-trip whisker (iqr) and outliers from dataOptions back into the DTO style', () => {
+        const mockDto = makeBoxplotWidgetDto();
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        const resultStyle = resWidgetDto.style as BoxplotWidgetStyle;
+        expect(resultStyle.whisker).toEqual({
+          'whisker/iqr': true,
+          'whisker/extremums': false,
+          'whisker/deviation': false,
+        });
+        expect(resultStyle.outliers).toEqual({ enabled: true });
+      });
+
+      it('should map whisker/extremums into BoxWhiskerType "extremums" and back', () => {
+        const mockDto = makeBoxplotWidgetDto({
+          styleOverrides: {
+            whisker: {
+              'whisker/iqr': false,
+              'whisker/extremums': true,
+              'whisker/deviation': false,
+            },
+            outliers: { enabled: false },
+          },
+        });
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+        expect((widgetFromChart.dataOptions as BoxplotChartDataOptions).boxType).toBe('extremums');
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        const resultStyle = resWidgetDto.style as BoxplotWidgetStyle;
+        expect(resultStyle.whisker).toEqual({
+          'whisker/iqr': false,
+          'whisker/extremums': true,
+          'whisker/deviation': false,
+        });
+        expect(resultStyle.outliers).toEqual({ enabled: false });
+      });
+
+      it('should map whisker/deviation into BoxWhiskerType "standardDeviation" and back', () => {
+        const mockDto = makeBoxplotWidgetDto({
+          styleOverrides: {
+            whisker: {
+              'whisker/iqr': false,
+              'whisker/extremums': false,
+              'whisker/deviation': true,
+            },
+            outliers: { enabled: false },
+          },
+        });
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+        expect((widgetFromChart.dataOptions as BoxplotChartDataOptions).boxType).toBe(
+          'standardDeviation',
+        );
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        const resultStyle = resWidgetDto.style as BoxplotWidgetStyle;
+        expect(resultStyle.whisker).toEqual({
+          'whisker/iqr': false,
+          'whisker/extremums': false,
+          'whisker/deviation': true,
+        });
+      });
+
+      it('should preserve the boxplot/hollow subtype', () => {
+        const mockDto = makeBoxplotWidgetDto({ subtype: 'boxplot/hollow' });
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        expect(resWidgetDto.subtype).toBe('boxplot/hollow');
+      });
+
+      it('should default subtype to "boxplot/full" when styleOptions has no subtype', () => {
+        const mockDto = makeBoxplotWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const widgetNoSubtype = {
+          ...widget,
+          styleOptions: {},
+        } as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetNoSubtype);
+
+        expect(resWidgetDto.subtype).toBe('boxplot/full');
+      });
+
+      it('should emit category and value panels with empty items when slots are missing', () => {
+        const mockDto = makeBoxplotWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const widgetWithNoSlots = {
+          ...widget,
+          dataOptions: {
+            category: [],
+            value: [],
+            boxType: 'iqr',
+            outliersEnabled: false,
+          },
+        } as unknown as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetWithNoSlots);
+
+        const nonFilterPanels = resWidgetDto.metadata.panels.filter(
+          ({ name }) => name !== 'filters',
+        );
+        expect(nonFilterPanels.map(({ name }) => name)).toEqual(['category', 'value']);
+        nonFilterPanels.forEach((panel) => expect(panel.items).toEqual([]));
+      });
+
+      it('should write back axis options from styleOptions', () => {
+        const mockDto = makeBoxplotWidgetDto();
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        const expectedStyle = mockDto.style as BoxplotWidgetStyle;
+        const resultStyle = resWidgetDto.style as BoxplotWidgetStyle;
+        expect(resultStyle.xAxis).toMatchObject({
+          enabled: expectedStyle.xAxis.enabled,
+          gridLines: expectedStyle.xAxis.gridLines,
+        });
+        expect(resultStyle.yAxis).toMatchObject({
+          enabled: expectedStyle.yAxis.enabled,
+          gridLines: expectedStyle.yAxis.gridLines,
+        });
+      });
+
+      it('should still include the filters panel even when no data filters are set', () => {
+        const mockDto = makeBoxplotWidgetDto();
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        const filterPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'filters');
+        expect(filterPanel).toBeDefined();
+        expect(filterPanel!.items).toEqual([]);
+      });
+    });
+
+    describe('calendar-heatmap widget', () => {
+      const makeCalendarHeatmapWidgetDto = (style: CalendarHeatmapWidgetStyle = {}): WidgetDto =>
+        ({
+          oid: 'calendar-heatmap-oid',
+          title: 'calendar heatmap',
+          desc: null,
+          type: 'heatmap',
+          subtype: 'heatmap',
+          datasource: {
+            title: 'Sample ECommerce',
+            id: 'localhost_aSampleIAAaECommerce',
+            address: 'LocalHost',
+            database: 'aSampleIAAaECommerce',
+          },
+          metadata: {
+            panels: [
+              {
+                name: 'date',
+                items: [
+                  {
+                    jaql: {
+                      table: 'Commerce',
+                      column: 'Date',
+                      dim: '[Commerce.Date (Calendar)]',
+                      datatype: 'datetime',
+                      level: 'days',
+                      title: 'Date',
+                    },
+                  },
+                ],
+              },
+              {
+                name: 'color',
+                items: [
+                  {
+                    jaql: {
+                      table: 'Commerce',
+                      column: 'Revenue',
+                      dim: '[Commerce.Revenue]',
+                      datatype: 'numeric',
+                      agg: 'sum',
+                      title: 'Total Revenue',
+                    },
+                  },
+                ],
+              },
+              { name: 'filters', items: [] },
+            ],
+          },
+          style,
+        } as unknown as WidgetDto);
+
+      it('should create a valid WidgetDto for the "calendar-heatmap" chart', () => {
+        const mockDto = makeCalendarHeatmapWidgetDto({
+          dayNameEnabled: true,
+          dayNumberEnabled: true,
+          'domain/quarter': true,
+          'view/weekly': true,
+          'week/monday': true,
+          grayoutEnabled: true,
+        });
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+        expect(widgetFromChart.chartType).toBe('calendar-heatmap');
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        expect(resWidgetDto.type).toBe('heatmap');
+        expect(resWidgetDto.subtype).toBe('heatmap');
+
+        const panelNames = resWidgetDto.metadata.panels
+          .map(({ name }) => name)
+          .filter((name) => name !== 'filters');
+        expect(panelNames).toEqual(['date', 'color']);
+
+        const datePanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'date');
+        expect(datePanel!.items).toHaveLength(1);
+        expect((datePanel!.items[0].jaql as any).dim).toBe('[Commerce.Date (Calendar)]');
+
+        const colorPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'color');
+        expect(colorPanel!.items).toHaveLength(1);
+        expect((colorPanel!.items[0].jaql as any).dim).toBe('[Commerce.Revenue]');
+        expect((colorPanel!.items[0].jaql as any).agg).toBe('sum');
+      });
+
+      it('should round-trip view/domain/week/grayout flags through the DTO style', () => {
+        const mockDto = makeCalendarHeatmapWidgetDto({
+          dayNameEnabled: true,
+          dayNumberEnabled: false,
+          'domain/half-year': true,
+          'view/weekly': true,
+          'week/monday': true,
+          grayoutEnabled: true,
+        });
+        const { widgetFromChart } = getWidgetTransformChain(mockDto);
+
+        resWidgetDto = toWidgetDto(widgetFromChart);
+
+        const resultStyle = resWidgetDto.style as CalendarHeatmapWidgetStyle;
+        expect(resultStyle.dayNameEnabled).toBe(true);
+        expect(resultStyle.dayNumberEnabled).toBe(false);
+        expect(resultStyle.grayoutEnabled).toBe(true);
+        expect(resultStyle['view/weekly']).toBe(true);
+        expect(resultStyle['view/monthly']).toBe(false);
+        expect(resultStyle['domain/half-year']).toBe(true);
+        expect(resultStyle['domain/month']).toBe(false);
+        expect(resultStyle['domain/quarter']).toBe(false);
+        expect(resultStyle['domain/year']).toBe(false);
+        expect(resultStyle['week/monday']).toBe(true);
+        expect(resultStyle['week/sunday']).toBe(false);
+      });
+
+      it('should default subtype flag to "view/monthly" when styleOptions.subtype is missing', () => {
+        const mockDto = makeCalendarHeatmapWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const widgetNoSubtype = {
+          ...widget,
+          styleOptions: { ...widget.styleOptions, subtype: undefined },
+        } as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetNoSubtype);
+
+        const resultStyle = resWidgetDto.style as CalendarHeatmapWidgetStyle;
+        expect(resultStyle['view/monthly']).toBe(true);
+        expect(resultStyle['view/weekly']).toBe(false);
+      });
+
+      it('should emit "view/weekly" when subtype is "calendar-heatmap/continuous"', () => {
+        const mockDto = makeCalendarHeatmapWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const widgetContinuous = {
+          ...widget,
+          styleOptions: {
+            ...widget.styleOptions,
+            subtype: 'calendar-heatmap/continuous',
+          } as CalendarHeatmapStyleOptions,
+        } as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetContinuous);
+
+        const resultStyle = resWidgetDto.style as CalendarHeatmapWidgetStyle;
+        expect(resultStyle['view/weekly']).toBe(true);
+        expect(resultStyle['view/monthly']).toBe(false);
+      });
+
+      it('should write pagination.startMonth as { year, month } when set', () => {
+        const mockDto = makeCalendarHeatmapWidgetDto({
+          startMonth: { year: 2024, month: 5 },
+        });
+        const widget = fromWidgetDto(mockDto);
+
+        resWidgetDto = toWidgetDto(widget);
+
+        const resultStyle = resWidgetDto.style as CalendarHeatmapWidgetStyle;
+        expect(resultStyle.startMonth).toEqual({ year: 2024, month: 5 });
+      });
+
+      it('should omit startMonth when pagination.startMonth is missing', () => {
+        const mockDto = makeCalendarHeatmapWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+
+        resWidgetDto = toWidgetDto(widget);
+
+        const resultStyle = resWidgetDto.style as CalendarHeatmapWidgetStyle;
+        expect(resultStyle.startMonth).toBeUndefined();
+      });
+
+      it('should always emit both date and color panels even when slots are empty', () => {
+        const mockDto = makeCalendarHeatmapWidgetDto();
+        const widget = fromWidgetDto(mockDto);
+        const widgetWithNoSlots = {
+          ...widget,
+          dataOptions: { date: undefined, value: undefined },
+        } as unknown as typeof widget;
+
+        resWidgetDto = toWidgetDto(widgetWithNoSlots);
+
+        const nonFilterPanels = resWidgetDto.metadata.panels.filter(
+          ({ name }) => name !== 'filters',
+        );
+        expect(nonFilterPanels.map(({ name }) => name)).toEqual(['date', 'color']);
+        nonFilterPanels.forEach((panel) => expect(panel.items).toEqual([]));
+      });
+
+      it('should still include the filters panel even when no data filters are set', () => {
+        const mockDto = makeCalendarHeatmapWidgetDto();
         const { widgetFromChart } = getWidgetTransformChain(mockDto);
 
         resWidgetDto = toWidgetDto(widgetFromChart);

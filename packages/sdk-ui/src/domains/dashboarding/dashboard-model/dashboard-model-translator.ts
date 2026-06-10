@@ -90,8 +90,7 @@ export function fromDashboardDto(
       widgetModelTranslator.fromWidgetDto(widgetDto, mergedThemeSettings, appSettings),
     ) || [];
   const widgetsPanelLayout = layoutDto ? translateLayout(layoutDto) : { columns: [] };
-  const filterRelationsModel = filterRelationsDtoOptions?.[0]?.filterRelations;
-  const filters = extractDashboardFilters(filterDtoList || [], filterRelationsModel);
+  const filters = extractDashboardFilters(filterDtoList || [], filterRelationsDtoOptions);
   const widgetsOptions = translateWidgetsOptions(widgetDtoList);
   const tabbersConfig = translateTabbersOptions(widgetDtoList);
 

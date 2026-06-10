@@ -1,8 +1,8 @@
 import {
   Filter,
   FilterRelations,
+  type FunctionCall,
   isFilterRelations,
-  JSONArray,
   parseComposeCodeToFunctionCall,
 } from '@sisense/sdk-data';
 
@@ -22,7 +22,7 @@ const UNKNOWN_ERROR_MESSAGE = 'Unknown error';
  */
 export function translateFiltersToJSON(
   filters: Filter[] | FilterRelations | undefined,
-): NlqTranslationResult<JSONArray> {
+): NlqTranslationResult<FunctionCall[]> {
   if (!filters) {
     return { success: true, data: [] };
   }
@@ -66,7 +66,7 @@ export function translateFiltersToJSON(
   }
 
   // Handle Filter array
-  const results: JSONArray = [];
+  const results: FunctionCall[] = [];
   filters.forEach((filter, index) => {
     if (!filter.composeCode) {
       errors.push({
@@ -109,12 +109,12 @@ export function translateFiltersToJSON(
  */
 export function translateHighlightsToJSON(
   highlights: Filter[] | undefined,
-): NlqTranslationResult<JSONArray> {
+): NlqTranslationResult<FunctionCall[]> {
   if (!highlights) {
     return { success: true, data: [] };
   }
 
-  const results: JSONArray = [];
+  const results: FunctionCall[] = [];
   const errors: NlqTranslationError[] = [];
 
   highlights.forEach((filter, index) => {

@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.29.0] - 2026-06-10
+
+### Added
+- Add calculated attributes (calculated dimensions) support:
+  - Add `attributeFactory.customFormula` factory for creating formula-based calculated attributes
+  - Extend existing visualizations and widgets to accept `CalculatedColumn` in data options
+- Add `formatNumber`, `formatDate`, `getDefaultDateFormat`, and `formatDataSet` formatting utilities
+- Add persistence support for `styleOptions` and `customOptions` properties in custom widget plugins (for internal testing)
+
+### Changed
+- Fix missing tooltip on members in `MemberFilterTile`
+- Fix `CalendarHeatmapChart` day and month label formatting and timezone date offsets
+- Fix broken filter relations in case of having multiple filters from different data sources
+- `PivotTable` improvements:
+  - Fix stale cell colors and number formatting after data options configuration update
+  - Fix auto-height not accounting for drilldown breadcrumb height
+  - Fix content clipping when internal padding (e.g., `spaceAround` spacing) is applied
+
 ## [2.28.0] - 2026-05-26
 
 ### Added

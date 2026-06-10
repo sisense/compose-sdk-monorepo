@@ -12,6 +12,9 @@ import {
   TextWidgetStyleOptions,
 } from '@/types';
 
+import { useTrackWidgetInit } from '../../hooks/use-track-widget-init';
+import { getWidgetEntityId } from '../../hooks/widget-entity-id';
+import { getTextWidgetName, getWidgetTitle } from '../../hooks/widget-tracking-adapters';
 import { WidgetMenuButton } from '../../shared/widget-header/widget-menu-button';
 import { WidgetSpaceAround } from '../../shared/widget-style-utils';
 import { TextWidgetProps } from './types';
@@ -97,6 +100,12 @@ const InnerHtml = styled.div`
 export const TextWidget: FunctionComponent<TextWidgetProps> = asSisenseComponent({
   componentName: 'TextWidget',
 })((props) => {
+  useTrackWidgetInit({
+    widgetType: 'text',
+    widgetName: getTextWidgetName(),
+    widgetTitle: getWidgetTitle(props),
+    entityId: getWidgetEntityId(props, 'text', getTextWidgetName()),
+  });
   const { html, header } = props.styleOptions;
   const sanitizedHtml = DOMPurify.sanitize(html);
   const { themeSettings } = useThemeContext();

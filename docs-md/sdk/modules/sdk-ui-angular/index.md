@@ -111,6 +111,12 @@ For more information on requirements for enabling Generative AI features, please
 - [GetNlgInsightsComponent](generative-ai/class.GetNlgInsightsComponent.md)
 - [SdkAiModule](generative-ai/class.SdkAiModule.md)
 
+## General
+
+General-purpose utilities and primitives for formatting, styling, and common UI components
+
+- [Formatting](formatting/index.md) - Utilities for formatting numbers, dates, and query result data sets.
+
 ## Filters
 
 - [FilterService](filters/class.FilterService.md)

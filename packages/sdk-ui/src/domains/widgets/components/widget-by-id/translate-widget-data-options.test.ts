@@ -9,9 +9,11 @@ import {
   BaseJaql,
   DimensionalAttribute,
   DimensionalBaseMeasure,
+  DimensionalCalculatedAttribute,
   DimensionalCalculatedMeasure,
   FilterJaql,
   JaqlSortDirection,
+  MetadataTypes,
   PivotJaql,
 } from '@sisense/sdk-data';
 import isObject from 'lodash-es/isObject';
@@ -186,6 +188,52 @@ describe('utils for widget data options translation', () => {
         verifyColumn(category[0], panels[0].items[0]);
         verifyColumn(value[0], panels[1].items[0]);
         verifyColumn(breakBy[0], panels[2].items[0]);
+      });
+
+      describe('calculated dimension (calculated_dimension)', () => {
+        it('routes a calculated_dimension item to a dimension column, never a measure', () => {
+          const panelItem: PanelItem = {
+            jaql: jaqlMock.calculatedDimension,
+            panel: 'rows',
+          };
+
+          const column = createDataColumn(panelItem) as StyledColumn;
+
+          expect(column.column instanceof DimensionalCalculatedAttribute).toBe(true);
+          expect(MetadataTypes.isCalculatedAttribute(column.column)).toBe(true);
+          expect(MetadataTypes.isMeasure(column.column)).toBe(false);
+
+          const { jaql } = (column.column as DimensionalCalculatedAttribute).jaql();
+          expect(jaql.type).toBe('calculated_dimension');
+          expect(jaql.formula).toBe(jaqlMock.calculatedDimension.formula);
+          expect(Object.keys(jaql.context)).toEqual(['[844DC-5D4]']);
+        });
+
+        it('places a Fusion calculated_dimension as a chart category, leaving measures intact', () => {
+          const panels: Panel[] = [
+            { name: 'categories', items: [{ jaql: jaqlMock.calculatedDimension }] },
+            { name: 'values', items: [{ jaql: jaqlMock.costAggregated }] },
+            { name: 'break by', items: [] },
+          ];
+
+          const { category, value } = extractDataOptions(
+            'chart/column',
+            panels,
+            styleMock,
+          ) as CartesianChartDataOptions;
+
+          expect(category).toHaveLength(1);
+          expect(
+            (category[0] as StyledColumn).column instanceof DimensionalCalculatedAttribute,
+          ).toBe(true);
+          expect(MetadataTypes.isCalculatedAttribute((category[0] as StyledColumn).column)).toBe(
+            true,
+          );
+          expect(value).toHaveLength(1);
+          expect((value[0] as StyledMeasureColumn).column instanceof DimensionalBaseMeasure).toBe(
+            true,
+          );
+        });
       });
 
       it('should return correct data options for cartesian chart with multiple values', () => {

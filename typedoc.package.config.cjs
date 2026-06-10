@@ -25,6 +25,10 @@ const baseConfig = {
     'Dashboards',
     'Fusion Assets',
     'Generative AI',
+    /* `General` umbrella sub-sections (nested under a synthetic `General` node in dev-docs nav) */
+    'Formatting',
+    'Styling',
+    'Primitives',
     /* sdk-data */
     'Factories',
     'Data Model Utilities',

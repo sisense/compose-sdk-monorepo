@@ -2,7 +2,7 @@ import { describe, expect, test, vi } from 'vitest';
 
 import { DataSourceInfo } from '../interfaces.js';
 import { TranslatableError } from '../translation/translatable-error.js';
-import { DimensionalAttribute } from './attributes.js';
+import { DimensionalAttribute } from './attributes/attributes.js';
 import { DimensionalElement } from './base.js';
 import { DimensionalDataModel } from './data-model.js';
 import { DimensionalDimension } from './dimensions/dimensions.js';

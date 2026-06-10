@@ -1,5 +1,4 @@
 import type { Attribute, Measure } from '@sisense/sdk-data';
-import type { JSONArray } from '@sisense/sdk-data';
 
 import type {
   StyledColumn,
@@ -40,10 +39,20 @@ export function adaptMeasuresToStyledMeasureColumn(
   );
 }
 
-export function toJSONArray(
+export function toDimensionItemsJSON(
+  value: DimensionItemJSON | DimensionItemJSON[],
+): DimensionItemJSON[] {
+  return Array.isArray(value) ? value : [value];
+}
+
+export function toMeasureItemsJSON(value: MeasureItemJSON | MeasureItemJSON[]): MeasureItemJSON[] {
+  return Array.isArray(value) ? value : [value];
+}
+
+export function toDataOptionItemsJSON(
   value: DimensionItemJSON | DimensionItemJSON[] | MeasureItemJSON | MeasureItemJSON[],
-): JSONArray {
-  return (Array.isArray(value) ? value : [value]) as JSONArray;
+): (DimensionItemJSON | MeasureItemJSON)[] {
+  return Array.isArray(value) ? value : [value];
 }
 
 /**

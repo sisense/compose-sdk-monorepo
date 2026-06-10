@@ -439,6 +439,7 @@ describe('useComposedDashboard', () => {
       const persistence = {
         addWidget: vi.fn(),
         patchWidget: vi.fn().mockResolvedValue(undefined),
+        updateWidget: vi.fn().mockResolvedValue(undefined),
       };
 
       const { result } = renderHook(
@@ -452,7 +453,7 @@ describe('useComposedDashboard', () => {
       expect(widget.styleOptions?.navigator?.onScrollerChange).toBeTypeOf('function');
     });
 
-    it('does not inject onScrollerChange when persistence is not provided', () => {
+    it('injects onScrollerChange even when persistence is not provided (optimistic apply only)', () => {
       const { result } = renderHook(
         () => useComposedDashboard({ widgets: [widgetWithNavigator] }),
         { wrapper: CombinedProvider },
@@ -461,7 +462,7 @@ describe('useComposedDashboard', () => {
       const widget = result.current.dashboard.widgets[0] as {
         styleOptions?: { navigator?: { onScrollerChange?: unknown } };
       };
-      expect(widget.styleOptions?.navigator?.onScrollerChange).toBeUndefined();
+      expect(widget.styleOptions?.navigator?.onScrollerChange).toBeTypeOf('function');
     });
 
     it('gives each widget its own independent scroll handler', () => {
@@ -472,6 +473,7 @@ describe('useComposedDashboard', () => {
       const persistence = {
         addWidget: vi.fn(),
         patchWidget: vi.fn().mockResolvedValue(undefined),
+        updateWidget: vi.fn().mockResolvedValue(undefined),
       };
 
       const { result } = renderHook(

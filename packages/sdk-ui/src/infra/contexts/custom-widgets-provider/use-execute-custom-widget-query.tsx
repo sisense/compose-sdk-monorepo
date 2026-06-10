@@ -1,14 +1,6 @@
 import { useMemo } from 'react';
 
-import {
-  Attribute,
-  Cell,
-  DataSource,
-  Filter,
-  FilterRelations,
-  Measure,
-  QueryResultData,
-} from '@sisense/sdk-data';
+import { Attribute, DataSource, Filter, FilterRelations, Measure } from '@sisense/sdk-data';
 
 import { useExecuteQuery } from '@/domains/query-execution/hooks/use-execute-query';
 import { ExecuteQueryParams, QueryState } from '@/domains/query-execution/types';
@@ -17,14 +9,12 @@ import {
   translateColumnToAttribute,
   translateColumnToMeasure,
 } from '@/domains/visualizations/core/chart-data-options/utils';
-import {
-  applyFormatPlainText,
-  getCompleteNumberFormatConfig,
-} from '@/domains/visualizations/core/chart-options-processor/translations/number-format-config';
 import { HookEnableParam } from '@/shared/hooks/types';
-import { GenericDataOptions, NumberFormatConfig } from '@/types';
+import { useAppSettings } from '@/shared/hooks/use-app-settings';
+import { GenericDataOptions } from '@/types';
 
 import { withTracking } from '../../decorators/hook-decorators';
+import { formatDataSet } from '../../formatting';
 
 /**
  * State of a query execution retrieving data of a custom widget.
@@ -78,40 +68,6 @@ export function extractDimensionsAndMeasures(dataOptions: GenericDataOptions) {
   };
 }
 
-type ColumnKey = string;
-type NumberFormatMap = Map<ColumnKey, NumberFormatConfig>;
-function makeNumberFormatMap(dataOptions: GenericDataOptions): NumberFormatMap {
-  return Object.values(dataOptions).reduce((acc, categories) => {
-    categories.forEach((cat) => {
-      if (cat.numberFormatConfig) {
-        acc.set(cat.column.name, cat.numberFormatConfig);
-      }
-    });
-    return acc;
-  }, new Map<ColumnKey, NumberFormatConfig>());
-}
-
-function applyNumberFormat(
-  data: QueryResultData,
-  dataOptions: GenericDataOptions,
-): QueryResultData {
-  const numberFormatMap: NumberFormatMap = makeNumberFormatMap(dataOptions);
-
-  data.rows = data.rows.map((row) =>
-    row.map((cell, columnIndex): Cell => {
-      const numberFormat = numberFormatMap.get(data.columns[columnIndex].name);
-      if (numberFormat) {
-        return {
-          ...cell,
-          text: applyFormatPlainText(getCompleteNumberFormatConfig(numberFormat), cell.data),
-        };
-      }
-      return cell;
-    }),
-  );
-  return data;
-}
-
 /**
  * {@link useExecuteCustomWidgetQuery} without tracking to be used inside other hooks or components in Compose SDK.
  *
@@ -127,6 +83,7 @@ export function useExecuteCustomWidgetQueryInternal({
   ungroup,
   onBeforeQuery,
 }: ExecuteCustomWidgetQueryParams): CustomWidgetQueryState {
+  const appSettings = useAppSettings();
   const { dimensions, measures } = extractDimensionsAndMeasures(dataOptions);
   const {
     data: rawData,
@@ -152,8 +109,8 @@ export function useExecuteCustomWidgetQueryInternal({
       return rawData;
     }
 
-    return applyNumberFormat(rawData, dataOptions);
-  }, [rawData, dataOptions]);
+    return formatDataSet(rawData, dataOptions, appSettings);
+  }, [rawData, dataOptions, appSettings]);
 
   return { data, isLoading, isError, isSuccess, status, error } as CustomWidgetQueryState;
 }

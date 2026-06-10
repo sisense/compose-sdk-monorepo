@@ -5,6 +5,21 @@ import type { WidgetProps } from '@/domains/widgets/components/widget/types.js';
 
 import type { DashboardPersistenceManager } from '../../persistence/types.js';
 
+/**
+ * Widget variants whose `onChange` accepts a {@link WidgetChangeEvent} and whose
+ * header supports inline title editing (see `useWidgetHeaderManagement`). Custom
+ * widgets are excluded — their `onChange` is the persistence-facing
+ * `VisualizationStateUpdate` callback, not a change-event channel.
+ */
+type ChangeEventCapableWidgetProps = Extract<WidgetProps, { widgetType: 'chart' | 'pivot' }>;
+
+/** Identifies widgets that emit {@link WidgetChangeEvent} through `onChange`. */
+function isChangeEventCapableWidgetProps(
+  widget: WidgetProps,
+): widget is ChangeEventCapableWidgetProps {
+  return widget.widgetType === 'chart' || widget.widgetType === 'pivot';
+}
+
 /** Options for the widget renaming middleware hook. */
 export type UseWidgetRenamingParams = {
   /** Current widgets. */
@@ -44,33 +59,37 @@ export function useWidgetRenaming(params: UseWidgetRenamingParams): WidgetRenami
   const widgetsWithRenamePersistence = useMemo(() => {
     if (!enabled) return [...widgets];
     return widgets.map((widget) => {
-      const base = {
-        ...widget,
-        config: {
-          ...widget.config,
-          header: {
-            ...widget.config?.header,
-            title: {
-              ...widget.config?.header?.title,
-              editing: { enabled: true },
-            },
+      const editingEnabledConfig = {
+        ...widget.config,
+        header: {
+          ...widget.config?.header,
+          title: {
+            ...widget.config?.header?.title,
+            editing: { enabled: true },
           },
         },
       };
-      if (!persistence) return base;
-      return {
-        ...base,
-        onChange: (event: WidgetChangeEvent) => {
-          if (event.type === 'title/changed') {
-            void persistence.patchWidget(widget.id, { title: event.payload.title }).catch((err) => {
-              console.error('[useWidgetRenaming] Failed to persist widget rename:', err);
-            });
-          }
-          if ('onChange' in widget && typeof widget.onChange === 'function') {
-            (widget.onChange as (e: WidgetChangeEvent) => void)(event);
-          }
-        },
-      };
+      // Only chart/pivot widgets emit WidgetChangeEvent through `onChange`; wrapping
+      // other variants would clobber unrelated callbacks (e.g. the custom-widget
+      // persistence `onChange`, which carries a VisualizationStateUpdate instead).
+      if (persistence && isChangeEventCapableWidgetProps(widget)) {
+        return {
+          ...widget,
+          config: editingEnabledConfig,
+          onChange: (event: WidgetChangeEvent) => {
+            if (event.type === 'title/changed') {
+              void persistence
+                .patchWidget(widget.id, { title: event.payload.title })
+                .catch((err) => {
+                  console.error('[useWidgetRenaming] Failed to persist widget rename:', err);
+                });
+            }
+            // Safe: the wrapper only forwards events the wrapped widget itself emitted.
+            (widget.onChange as ((e: WidgetChangeEvent) => void) | undefined)?.(event);
+          },
+        };
+      }
+      return { ...widget, config: editingEnabledConfig };
     });
   }, [widgets, enabled, persistence]);
 

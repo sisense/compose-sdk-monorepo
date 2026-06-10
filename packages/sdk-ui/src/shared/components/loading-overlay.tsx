@@ -56,6 +56,7 @@ export type LoadingOverlayProps = {
  *   <Chart {...chartOptions} />
  * </LoadingOverlay>
  * ```
+ * @group Primitives
  */
 export const LoadingOverlay = ({ isVisible = true, children }: LoadingOverlayProps) => {
   const { app } = useSisenseContext();

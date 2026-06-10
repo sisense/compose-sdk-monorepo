@@ -11,7 +11,7 @@ to a calendar-heatmap chart.
 
 ### date
 
-> **date**: [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md)
+> **date**: [`CalculatedColumn`](../../sdk-data/interfaces/interface.CalculatedColumn.md) \| [`Column`](../../sdk-data/interfaces/interface.Column.md) \| [`StyledColumn`](interface.StyledColumn.md)
 
 Date column representing dates on the calendar heatmap.
 
