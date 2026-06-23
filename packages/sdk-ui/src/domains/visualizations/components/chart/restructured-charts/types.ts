@@ -16,6 +16,8 @@ import {
   CategoricalChartDataOptions,
   CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
+  SankeyChartDataOptions,
+  SankeyChartDataOptionsInternal,
   ScattermapChartDataOptions,
   ScattermapChartDataOptionsInternal,
 } from '@/domains/visualizations/core/chart-data-options/types';
@@ -37,6 +39,7 @@ import type {
   LineStyleOptions,
   PieStyleOptions,
   PolarStyleOptions,
+  SankeyStyleOptions,
   ScattermapStyleOptions,
   StackableStyleOptions,
   StreamgraphStyleOptions,
@@ -47,6 +50,7 @@ import type {
 import { AreamapData } from './areamap-chart/types';
 import { CalendarHeatmapChartData } from './highchart-based-charts/calendar-heatmap-chart/data';
 import { HighchartsBasedChartRendererProps } from './highchart-based-charts/highcharts-based-chart-renderer/highcharts-based-chart-renderer';
+import { SankeyChartData } from './highchart-based-charts/sankey-chart/types';
 
 export type SupportedChartType =
   | 'areamap'
@@ -60,7 +64,8 @@ export type SupportedChartType =
   | 'calendar-heatmap'
   | 'treemap'
   | 'sunburst'
-  | 'streamgraph';
+  | 'streamgraph'
+  | 'sankey';
 
 export type TypedChartDataOptions<CT extends SupportedChartType> = CT extends 'areamap'
   ? AreamapChartDataOptions
@@ -72,6 +77,8 @@ export type TypedChartDataOptions<CT extends SupportedChartType> = CT extends 'a
   ? CartesianChartDataOptions
   : CT extends 'calendar-heatmap'
   ? CalendarHeatmapChartDataOptions
+  : CT extends 'sankey'
+  ? SankeyChartDataOptions
   : never;
 
 export type TypedDataOptionsInternal<CT extends SupportedChartType> = CT extends 'areamap'
@@ -84,6 +91,8 @@ export type TypedDataOptionsInternal<CT extends SupportedChartType> = CT extends
   ? CartesianChartDataOptionsInternal
   : CT extends 'calendar-heatmap'
   ? CalendarHeatmapChartDataOptionsInternal
+  : CT extends 'sankey'
+  ? SankeyChartDataOptionsInternal
   : never;
 
 export type TypedChartStyleOptions<CT extends SupportedChartType> = CT extends 'areamap'
@@ -110,6 +119,8 @@ export type TypedChartStyleOptions<CT extends SupportedChartType> = CT extends '
   ? CalendarHeatmapStyleOptions
   : CT extends 'streamgraph'
   ? StreamgraphStyleOptions
+  : CT extends 'sankey'
+  ? SankeyStyleOptions
   : never;
 
 export type TypedDesignOptions<CT extends SupportedChartType> = DesignOptions<CT>;
@@ -124,6 +135,8 @@ export type TypedChartData<CT extends SupportedChartType> = CT extends 'areamap'
   ? CartesianChartData
   : CT extends 'calendar-heatmap'
   ? CalendarHeatmapChartData
+  : CT extends 'sankey'
+  ? SankeyChartData
   : never;
 
 export type TypedLoadDataFunction<CT extends SupportedChartType> = (options: {
@@ -149,6 +162,7 @@ export type TypedChartRendererProps<CT extends SupportedChartType> = CT extends 
       | 'treemap'
       | 'sunburst'
       | 'streamgraph'
+      | 'sankey'
   ? HighchartsBasedChartRendererProps<CT>
   : never;
 
@@ -207,6 +221,7 @@ export interface ChartBuilder<CT extends SupportedChartType = SupportedChartType
     getChartData: (
       chartDataOptions: TypedDataOptionsInternal<CT>,
       dataTable: DataTable,
+      options?: { defaultNumberFormattingEnabled?: boolean },
     ) => TypedChartData<CT>;
   };
 

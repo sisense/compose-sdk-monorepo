@@ -288,11 +288,13 @@ const translation: TranslationDictionary = {
       incorrectResponse: '잘못된 응답',
       clearChat: '채팅 지우기',
       refresh: '새로 고침',
-      readMore: '더 읽기',
+      readMore: '더 보기',
       collapse: '접기',
       yes: '예',
       no: '아니오',
       seeMore: '더 보기',
+      generateNarrative: 'AI 내러티브 생성',
+      hideNarrative: 'AI 내러티브 숨기기',
     },
     disclaimer: {
       poweredByAi: '콘텐츠는 AI로 구동되므로 예상치 못한 결과와 오류가 발생할 수 있습니다.',
@@ -353,6 +355,8 @@ const translation: TranslationDictionary = {
       from: '시작',
       to: '종료',
       includeCurrent: '현재 포함',
+      rankedBy: '순위 기준',
+      selectField: '필드 선택',
     },
     placeholders: {
       selectFromList: '목록에서 선택',
@@ -377,6 +381,8 @@ const translation: TranslationDictionary = {
       greaterThan: '보다 큼',
       greaterThanOrEqual: '보다 크거나 같음',
       isWithin: '내부에 있음',
+      top: '상위',
+      bottom: '하위',
     },
     validationErrors: {
       invalidNumber: '숫자만',
@@ -473,6 +479,12 @@ const translation: TranslationDictionary = {
     table: {
       label: '데이터 테이블',
     },
+    sankey: {
+      alerts: {
+        tooManyStages:
+          'Sankey 차트에 {{stageCount}}단계가 있습니다. {{softLimit}}을 넘으면 다이어그램이 읽기 어려워지는 경우가 많습니다. 카테고리 열을 줄이거나 필터를 강화하세요.',
+      },
+    },
   },
   loadingOverlay: {
     label: '콘텐츠 로드 중',
@@ -497,6 +509,17 @@ const translation: TranslationDictionary = {
     stdev: '표준 편차',
     median: '중앙값',
     variance: '분산',
+  },
+  measuresAgg: {
+    countDistinct: '고유 개수',
+    count: '개수',
+    sum: '합계',
+    average: '평균',
+    min: '최소',
+    max: '최대',
+    median: '중앙값',
+    variance: '분산',
+    stdev: '표준 편차',
   },
 };
 

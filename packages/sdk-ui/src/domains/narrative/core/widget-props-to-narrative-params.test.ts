@@ -10,6 +10,7 @@ import {
   buildWidgetNarrativeRequests,
   convertChartWidgetPropsToNarrativeParams,
   convertPivotWidgetPropsToNarrativeRequest,
+  convertWidgetPropsToNarrativeParams,
 } from './widget-props-to-narrative-params.js';
 
 describe('convertChartWidgetPropsToNarrativeParams', () => {
@@ -32,27 +33,25 @@ describe('convertChartWidgetPropsToNarrativeParams', () => {
     expect(params.measures).toHaveLength(3);
   });
 
-  it('omits trend and forecast companion measures when ignoreTrendAndForecast is true', () => {
-    const params = convertChartWidgetPropsToNarrativeParams(
-      {
-        chartType: 'bar',
-        dataSource: DM.DataSource,
-        dataOptions: {
-          category: [DM.Commerce.Date.Months],
-          value: [
-            {
-              column: measureFactory.sum(DM.Commerce.Revenue),
-              trend: {},
-              forecast: { modelType: 'holtWinters' },
-            },
-          ],
-          breakBy: [],
-        },
+  it('omits trend and forecast companion measures when includeTrendAndForecast is false', () => {
+    const params = convertChartWidgetPropsToNarrativeParams({
+      chartType: 'bar',
+      dataSource: DM.DataSource,
+      dataOptions: {
+        category: [DM.Commerce.Date.Months],
+        value: [
+          {
+            column: measureFactory.sum(DM.Commerce.Revenue),
+            trend: {},
+            forecast: { modelType: 'holtWinters' },
+          },
+        ],
+        breakBy: [],
       },
-      undefined,
-      undefined,
-      true,
-    );
+      aiOptions: {
+        narrative: { includeTrendAndForecast: false },
+      },
+    });
     expect(params.measures).toHaveLength(1);
   });
 });
@@ -88,7 +87,7 @@ const pivotProps: WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'> = {
 
 describe('buildWidgetNarrativeRequests', () => {
   describe('chart widget', () => {
-    it('returns supported=true with both requests when ignoreTrendAndForecast is false', () => {
+    it('returns supported=true with both requests when includeTrendAndForecast is true (default)', () => {
       const { supported, narrativeRequest, narrativeFallbackRequest } =
         buildWidgetNarrativeRequests(chartPropsWithTrend);
 
@@ -110,9 +109,15 @@ describe('buildWidgetNarrativeRequests', () => {
       expect(fallbackCount).toBeLessThan(primaryCount);
     });
 
-    it('returns supported=true with no fallback when ignoreTrendAndForecast is true', () => {
+    it('returns supported=true with no fallback when includeTrendAndForecast is false', () => {
+      const props: WithCommonWidgetProps<ChartWidgetProps, 'chart'> = {
+        ...chartPropsWithTrend,
+        aiOptions: {
+          narrative: { includeTrendAndForecast: false },
+        },
+      };
       const { supported, narrativeRequest, narrativeFallbackRequest } =
-        buildWidgetNarrativeRequests(chartPropsWithTrend, undefined, undefined, true);
+        buildWidgetNarrativeRequests(props);
 
       expect(supported).toBe(true);
       expect(narrativeRequest).toBeDefined();
@@ -134,7 +139,7 @@ describe('buildWidgetNarrativeRequests', () => {
   });
 
   describe('pivot widget', () => {
-    it('returns supported=true with both requests when ignoreTrendAndForecast is false', () => {
+    it('returns supported=true with both requests when includeTrendAndForecast is true (default)', () => {
       const { supported, narrativeRequest, narrativeFallbackRequest } =
         buildWidgetNarrativeRequests(pivotProps);
 
@@ -143,13 +148,14 @@ describe('buildWidgetNarrativeRequests', () => {
       expect(narrativeFallbackRequest).toBeDefined();
     });
 
-    it('returns supported=true with no fallback when ignoreTrendAndForecast is true', () => {
-      const { supported, narrativeFallbackRequest } = buildWidgetNarrativeRequests(
-        pivotProps,
-        undefined,
-        undefined,
-        true,
-      );
+    it('returns supported=true with no fallback when includeTrendAndForecast is false', () => {
+      const props: WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'> = {
+        ...pivotProps,
+        aiOptions: {
+          narrative: { includeTrendAndForecast: false },
+        },
+      };
+      const { supported, narrativeFallbackRequest } = buildWidgetNarrativeRequests(props);
 
       expect(supported).toBe(true);
       expect(narrativeFallbackRequest).toBeUndefined();
@@ -175,6 +181,18 @@ describe('buildWidgetNarrativeRequests', () => {
       expect(narrativeRequest).toBeUndefined();
       expect(narrativeFallbackRequest).toBeUndefined();
     });
+  });
+});
+
+describe('convertWidgetPropsToNarrativeParams', () => {
+  it('returns a narrative request for chart props with widgetType', () => {
+    const request = convertWidgetPropsToNarrativeParams(chartPropsWithTrend);
+    expect(request.jaql.metadata?.length).toBeGreaterThan(0);
+  });
+
+  it('returns pivot-format narrative request for pivot props', () => {
+    const request = convertWidgetPropsToNarrativeParams(pivotProps);
+    expect(request.jaql.format).toBe('pivot');
   });
 });
 

@@ -10,7 +10,8 @@ export const dataTranslators = {
   getChartData: (
     dataOptions: SunburstChartDataOptionsInternal,
     dataTable: DataTable,
+    options?: { defaultNumberFormattingEnabled?: boolean },
   ): SunburstChartData => {
-    return categoricalData(dataOptions, dataTable);
+    return categoricalData(dataOptions, dataTable, options?.defaultNumberFormattingEnabled);
   },
 };

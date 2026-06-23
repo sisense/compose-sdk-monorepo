@@ -4,6 +4,7 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
 <div>
   <div
     class="css-12vk4to"
+    data-testid="csdk-filter-tile-container"
   >
     <div
       class="csdk-accessible css-163e5sv"
@@ -90,6 +91,7 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
 <div>
   <div
     class="css-12vk4to"
+    data-testid="csdk-filter-tile-container"
   >
     <div
       class="csdk-accessible css-163e5sv"
@@ -138,7 +140,7 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
         <div
           class="css-1uvk1au"
         >
-          All items top 10 by avg Test Revenue
+          Top 10 By Average Test Revenue
         </div>
       </main>
       <footer
@@ -176,6 +178,7 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
 <div>
   <div
     class="css-12vk4to"
+    data-testid="csdk-filter-tile-container"
   >
     <div
       class="csdk-accessible css-163e5sv"
@@ -262,6 +265,7 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
 <div>
   <div
     class="css-12vk4to"
+    data-testid="csdk-filter-tile-container"
   >
     <div
       class="csdk-accessible css-163e5sv"
@@ -326,6 +330,7 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
 <div>
   <div
     class="css-12vk4to"
+    data-testid="csdk-filter-tile-container"
   >
     <div
       class="csdk-accessible css-163e5sv"
@@ -390,6 +395,7 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
 <div>
   <div
     class="css-12vk4to"
+    data-testid="csdk-filter-tile-container"
   >
     <div
       class="csdk-accessible css-163e5sv"
@@ -476,6 +482,7 @@ exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
 <div>
   <div
     class="css-12vk4to"
+    data-testid="csdk-filter-tile-container"
   >
     <div
       class="csdk-accessible css-163e5sv"
@@ -542,6 +549,7 @@ exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
 <div>
   <div
     class="css-12vk4to"
+    data-testid="csdk-filter-tile-container"
   >
     <div
       class="csdk-accessible css-163e5sv"

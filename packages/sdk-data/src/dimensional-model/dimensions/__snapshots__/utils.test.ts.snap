@@ -15,6 +15,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Brand.Brand]",
         "name": "Brand",
+        "title": "Brand",
         "type": "text-attribute",
       },
       {
@@ -27,6 +28,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Brand.Brand ID]",
         "name": "Brand ID",
+        "title": "Brand ID",
         "type": "numeric-attribute",
       },
     ],
@@ -37,6 +39,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
     "expression": "Brand",
     "name": "Brand",
     "sort": 0,
+    "title": "Brand",
     "type": "textdimension",
   },
   {
@@ -52,6 +55,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Category.Category]",
         "name": "Category",
+        "title": "Category",
         "type": "text-attribute",
       },
       {
@@ -64,6 +68,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Category.Category ID]",
         "name": "Category ID",
+        "title": "Category ID",
         "type": "numeric-attribute",
       },
     ],
@@ -74,6 +79,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
     "expression": "Category",
     "name": "Category",
     "sort": 0,
+    "title": "Category",
     "type": "textdimension",
   },
   {
@@ -89,6 +95,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Commerce.Age Range]",
         "name": "Age Range",
+        "title": "Age Range",
         "type": "text-attribute",
       },
       {
@@ -101,6 +108,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Commerce.Brand ID]",
         "name": "Brand ID",
+        "title": "Brand ID",
         "type": "numeric-attribute",
       },
       {
@@ -113,6 +121,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Commerce.Category ID]",
         "name": "Category ID",
+        "title": "Category ID",
         "type": "numeric-attribute",
       },
       {
@@ -125,6 +134,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Commerce.Condition]",
         "name": "Condition",
+        "title": "Condition",
         "type": "text-attribute",
       },
       {
@@ -137,6 +147,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Commerce.Cost]",
         "name": "Cost",
+        "title": "Cost",
         "type": "numeric-attribute",
       },
       {
@@ -149,6 +160,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Commerce.Country ID]",
         "name": "Country ID",
+        "title": "Country ID",
         "type": "numeric-attribute",
       },
       {
@@ -161,6 +173,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Commerce.Gender]",
         "name": "Gender",
+        "title": "Gender",
         "type": "text-attribute",
       },
       {
@@ -173,6 +186,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Commerce.Quantity]",
         "name": "Quantity",
+        "title": "Quantity",
         "type": "numeric-attribute",
       },
       {
@@ -185,6 +199,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Commerce.Revenue]",
         "name": "Revenue",
+        "title": "Revenue",
         "type": "numeric-attribute",
       },
       {
@@ -197,6 +212,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Commerce.Visit ID]",
         "name": "Visit ID",
+        "title": "Visit ID",
         "type": "numeric-attribute",
       },
     ],
@@ -219,6 +235,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "yyyy",
             "granularity": "Years",
             "name": "Years",
+            "title": "Years",
             "type": "datelevel",
           },
           {
@@ -233,6 +250,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "Q yyyy",
             "granularity": "Quarters",
             "name": "Quarters",
+            "title": "Quarters",
             "type": "datelevel",
           },
           {
@@ -247,6 +265,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "yyyy-MM",
             "granularity": "Months",
             "name": "Months",
+            "title": "Months",
             "type": "datelevel",
           },
           {
@@ -261,6 +280,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "ww yyyy",
             "granularity": "Weeks",
             "name": "Weeks",
+            "title": "Weeks",
             "type": "datelevel",
           },
           {
@@ -275,6 +295,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "yyyy-MM-dd",
             "granularity": "Days",
             "name": "Days",
+            "title": "Days",
             "type": "datelevel",
           },
           {
@@ -289,6 +310,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "yyyy-MM-dd HH:mm",
             "granularity": "Hours",
             "name": "Hours",
+            "title": "Hours",
             "type": "datelevel",
           },
           {
@@ -303,6 +325,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "yyyy-MM-dd HH:mm",
             "granularity": "MinutesRoundTo30",
             "name": "MinutesRoundTo30",
+            "title": "MinutesRoundTo30",
             "type": "datelevel",
           },
           {
@@ -317,6 +340,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "yyyy-MM-dd HH:mm",
             "granularity": "MinutesRoundTo15",
             "name": "MinutesRoundTo15",
+            "title": "MinutesRoundTo15",
             "type": "datelevel",
           },
           {
@@ -331,6 +355,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "yyyy-MM-dd HH:mm",
             "granularity": "Minutes",
             "name": "Minutes",
+            "title": "Minutes",
             "type": "datelevel",
           },
           {
@@ -345,6 +370,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "yyyy-MM-dd HH:mm:ss",
             "granularity": "Seconds",
             "name": "Seconds",
+            "title": "Seconds",
             "type": "datelevel",
           },
           {
@@ -359,6 +385,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "HH:mm",
             "granularity": "AggHours",
             "name": "AggHours",
+            "title": "AggHours",
             "type": "datelevel",
           },
           {
@@ -373,6 +400,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "HH:mm",
             "granularity": "AggMinutesRoundTo30",
             "name": "AggMinutesRoundTo30",
+            "title": "AggMinutesRoundTo30",
             "type": "datelevel",
           },
           {
@@ -387,6 +415,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "HH:mm",
             "granularity": "AggMinutesRoundTo15",
             "name": "AggMinutesRoundTo15",
+            "title": "AggMinutesRoundTo15",
             "type": "datelevel",
           },
           {
@@ -401,6 +430,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
             "format": "HH:mm",
             "granularity": "AggMinutesRoundTo1",
             "name": "AggMinutesRoundTo1",
+            "title": "AggMinutesRoundTo1",
             "type": "datelevel",
           },
         ],
@@ -414,12 +444,14 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "expression": "[Commerce.Date (Calendar)]",
         "name": "Date",
         "sort": 0,
+        "title": "Date",
         "type": "datedimension",
       },
     ],
     "expression": "Commerce",
     "name": "Commerce",
     "sort": 0,
+    "title": "Commerce",
     "type": "textdimension",
   },
   {
@@ -435,6 +467,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Country.Country]",
         "name": "Country",
+        "title": "Country",
         "type": "text-attribute",
       },
       {
@@ -447,6 +480,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
         "description": "",
         "expression": "[Country.Country ID]",
         "name": "Country ID",
+        "title": "Country ID",
         "type": "numeric-attribute",
       },
     ],
@@ -457,6 +491,7 @@ exports[`getDimensionsFromDataSourceFields > should return a list of dimensions 
     "expression": "Country",
     "name": "Country",
     "sort": 0,
+    "title": "Country",
     "type": "textdimension",
   },
 ]

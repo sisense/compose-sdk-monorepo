@@ -129,6 +129,7 @@ describe('axes', () => {
         } as CompleteThemeSettingsInternal,
         dateFormatter: vi.fn(() => 'formatted-date'),
         accessibilityEnabled: false,
+        defaultNumberFormattingEnabled: true,
       },
     });
 

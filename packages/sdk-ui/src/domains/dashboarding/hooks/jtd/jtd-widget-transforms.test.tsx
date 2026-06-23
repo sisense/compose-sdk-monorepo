@@ -497,6 +497,26 @@ describe('jtd-widget-transforms', () => {
       expect(typeof (result as any).styleOptions?.header?.renderTitle).toBe('function');
     });
 
+    it('should compose with existing renderTitle instead of overriding it', () => {
+      vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(true);
+
+      const existingRenderTitle = vi.fn((element) => element);
+      const widgetWithRenderTitle = {
+        ...mockChartWidgetProps,
+        styleOptions: { header: { renderTitle: existingRenderTitle } },
+      } as any;
+
+      const result = addJtdIconToHeader(widgetWithRenderTitle);
+      const newRenderTitle = (result as any).styleOptions?.header?.renderTitle;
+
+      expect(newRenderTitle).toBeDefined();
+      expect(newRenderTitle).not.toBe(existingRenderTitle);
+
+      newRenderTitle('title text');
+
+      expect(existingRenderTitle).toHaveBeenCalledWith('title text');
+    });
+
     it('should preserve existing header properties for pivot widgets', () => {
       vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(false);
       vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(true);

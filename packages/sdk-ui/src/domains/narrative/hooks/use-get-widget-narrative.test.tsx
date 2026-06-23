@@ -131,15 +131,15 @@ describe('useGetWidgetNarrative', () => {
   });
 
   it('returns supported false for non-chart widgets without fetching', async () => {
-    let narrationCallsUnified = 0;
-    let narrationCalls = 0;
+    let narrativeCallsUnified = 0;
+    let narrativeCalls = 0;
     server.use(
       http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => {
-        narrationCallsUnified += 1;
+        narrativeCallsUnified += 1;
         return HttpResponse.json({}, { status: 404 });
       }),
       http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => {
-        narrationCalls += 1;
+        narrativeCalls += 1;
         return HttpResponse.json(mockNlgResponse);
       }),
     );
@@ -163,20 +163,20 @@ describe('useGetWidgetNarrative', () => {
     });
 
     expect(result.current?.supported).toBe(false);
-    expect(narrationCallsUnified).toBe(0);
-    expect(narrationCalls).toBe(0);
+    expect(narrativeCallsUnified).toBe(0);
+    expect(narrativeCalls).toBe(0);
   });
 
   it('does not fetch when enabled is false', async () => {
-    let narrationCallsUnified = 0;
-    let narrationCalls = 0;
+    let narrativeCallsUnified = 0;
+    let narrativeCalls = 0;
     server.use(
       http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => {
-        narrationCallsUnified += 1;
+        narrativeCallsUnified += 1;
         return HttpResponse.json({}, { status: 404 });
       }),
       http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => {
-        narrationCalls += 1;
+        narrativeCalls += 1;
         return HttpResponse.json(mockNlgResponse);
       }),
     );
@@ -193,8 +193,8 @@ describe('useGetWidgetNarrative', () => {
     });
 
     await waitFor(() => {
-      expect(narrationCallsUnified).toBe(0);
-      expect(narrationCalls).toBe(0);
+      expect(narrativeCallsUnified).toBe(0);
+      expect(narrativeCalls).toBe(0);
     });
 
     expect(result.current?.supported).toBe(true);

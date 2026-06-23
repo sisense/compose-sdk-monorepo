@@ -10,7 +10,8 @@ export const dataTranslators = {
   getChartData: (
     dataOptions: TreemapChartDataOptionsInternal,
     dataTable: DataTable,
+    options?: { defaultNumberFormattingEnabled?: boolean },
   ): TreemapChartData => {
-    return categoricalData(dataOptions, dataTable);
+    return categoricalData(dataOptions, dataTable, options?.defaultNumberFormattingEnabled);
   },
 };

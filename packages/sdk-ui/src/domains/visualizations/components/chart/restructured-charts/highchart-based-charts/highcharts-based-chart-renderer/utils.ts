@@ -17,5 +17,6 @@ export const isHighchartsBasedChart = (
     'calendar-heatmap',
     'sunburst',
     'streamgraph',
+    'sankey',
   ].includes(chartType);
 };

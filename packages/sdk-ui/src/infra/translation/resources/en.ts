@@ -140,8 +140,8 @@ export const translation = {
     greaterThanOrEqual: 'Greater than or equal to {{val}}',
     between: 'Between {{valA}} and {{valB}}',
     notBetween: 'Not between {{valA}} and {{valB}}',
-    top: 'Top {{valA}} by {{valB}}',
-    bottom: 'Last {{valA}} by {{valB}}',
+    top: 'Top {{valA}} By {{valB}}',
+    bottom: 'Bottom {{valA}} By {{valB}}',
     is: 'Is {{val}}',
     isNot: 'Is not {{val}}',
     contains: 'Contains {{val}}',
@@ -281,11 +281,13 @@ export const translation = {
       incorrectResponse: 'Incorrect response',
       clearChat: 'Clear chat',
       refresh: 'Refresh',
-      readMore: 'Read more',
-      collapse: 'Collapse',
+      readMore: 'Show more',
+      collapse: 'Show less',
       yes: 'Yes',
       no: 'No',
       seeMore: 'See more',
+      generateNarrative: 'Generate AI Narrative',
+      hideNarrative: 'Hide AI Narrative',
     },
     disclaimer: {
       poweredByAi: 'Content is powered by AI, so surprises and mistakes are possible.',
@@ -348,6 +350,8 @@ export const translation = {
       from: 'From',
       to: 'To',
       includeCurrent: 'Including current',
+      rankedBy: 'Ranked by',
+      selectField: 'Select field',
     },
     placeholders: {
       selectFromList: 'Select from list',
@@ -372,6 +376,8 @@ export const translation = {
       greaterThan: 'Greater than',
       greaterThanOrEqual: 'Equals or greater than',
       isWithin: 'Is within',
+      top: 'Top',
+      bottom: 'Bottom',
     },
     validationErrors: {
       invalidNumber: 'Numbers only',
@@ -468,6 +474,12 @@ export const translation = {
     table: {
       label: 'Data table',
     },
+    sankey: {
+      alerts: {
+        tooManyStages:
+          'Sankey chart has {{stageCount}} stages; more than {{softLimit}} often produces an unreadable diagram. Consider fewer category columns or stricter filters.',
+      },
+    },
   },
   loadingOverlay: {
     label: 'Loading content',
@@ -492,6 +504,17 @@ export const translation = {
     stdev: 'Standard Deviation',
     median: 'Median',
     variance: 'Variance',
+  },
+  measuresAgg: {
+    countDistinct: '# of unique',
+    count: '# of',
+    sum: 'Total',
+    average: 'Average',
+    min: 'Min',
+    max: 'Max',
+    median: 'Median of',
+    variance: 'Variance of',
+    stdev: 'Standard Deviation of',
   },
 };
 

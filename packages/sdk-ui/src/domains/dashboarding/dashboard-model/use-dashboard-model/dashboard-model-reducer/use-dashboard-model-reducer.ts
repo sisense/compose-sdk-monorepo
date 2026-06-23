@@ -130,6 +130,7 @@ export function dashboardReducer(
         widget,
         widgetsPanelLayout: customLayout,
         widgetOptions,
+        tabberConfig,
       } = parseAddWidgetPayload(action.payload);
       const widgets = [...model.widgets, widget];
       const newLayout =
@@ -140,10 +141,20 @@ export function dashboardReducer(
           ? { ...model.widgetsOptions, [widget.oid]: widgetOptions }
           : model.widgetsOptions;
 
+      // Carry the dashboard-level tabber config to the new widget id (duplication).
+      const updatedConfig =
+        tabberConfig != null
+          ? {
+              ...model.config,
+              tabbers: { ...model.config?.tabbers, [widget.oid]: tabberConfig },
+            }
+          : model.config;
+
       return {
         ...model,
         widgets,
         widgetsOptions: updatedWidgetsOptions,
+        config: updatedConfig,
         ...(model.layoutOptions?.widgetsPanel && newLayout
           ? { layoutOptions: { ...model.layoutOptions, widgetsPanel: newLayout } }
           : {}),

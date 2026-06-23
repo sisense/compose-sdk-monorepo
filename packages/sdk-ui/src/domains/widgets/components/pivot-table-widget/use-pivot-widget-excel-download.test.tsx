@@ -1,6 +1,8 @@
+import { filterFactory } from '@sisense/sdk-data';
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { translatePivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
 
@@ -75,7 +77,6 @@ const baseParams: UsePivotWidgetExcelDownloadParams = {
   dataOptions: {} as UsePivotWidgetExcelDownloadParams['dataOptions'],
   title: 'Pivot',
   filters: undefined,
-  highlights: undefined,
   dataSource: undefined,
   config: { actions: { downloadExcel: { enabled: true } } },
   baseHeaderConfig: { toolbar: { menu: { items: [] } } },
@@ -243,5 +244,28 @@ describe('usePivotWidgetExcelDownload', () => {
     });
 
     expect(mockExecute).toHaveBeenCalledWith(expect.objectContaining({ mergeRows: true }));
+  });
+
+  it('passes filters to loader execute on download', () => {
+    vi.mocked(translatePivotTableDataOptions).mockReturnValue({
+      rows: [{ id: 'r1' } as never],
+      columns: [],
+      values: [],
+    } as ReturnType<typeof translatePivotTableDataOptions>);
+
+    const filters = [filterFactory.members(DM.Commerce.Gender, ['Male'])];
+
+    const { result } = renderHook(() => usePivotWidgetExcelDownload({ ...baseParams, filters }));
+
+    act(() => {
+      findExcelRepeatRowsOnClick(result.current.headerConfig)?.();
+    });
+
+    expect(mockExecute).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filters,
+        mergeRows: false,
+      }),
+    );
   });
 });

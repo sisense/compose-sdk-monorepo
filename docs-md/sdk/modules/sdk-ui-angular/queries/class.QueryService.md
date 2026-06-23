@@ -104,6 +104,7 @@ Pivot query result
 
 > **executeQuery**(`params`): `Promise`\< \{
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
+  `rowCount`: `number`;
  } \>
 
 Executes a data query. If you want to display the query results, you can use
@@ -122,9 +123,11 @@ To learn how to populate third party UI elements with query results, see the
 
 `Promise`\< \{
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
+  `rowCount`: `number`;
  } \>
 
-Query result
+Query result containing the data and, when `includeRowCount` is enabled,
+the total row count of the query ignoring the `count` and `offset` paging
 
 ***
 
@@ -132,6 +135,7 @@ Query result
 
 > **executeQueryByWidgetId**(`params`): `Promise`\< \{
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
+  `rowCount`: `number`;
  } & [`QueryByWidgetIdQueryParams`](../../sdk-ui/type-aliases/type-alias.QueryByWidgetIdQueryParams.md) \>
 
 Executes a data query extracted from an existing widget in the Sisense instance.
@@ -146,6 +150,7 @@ Executes a data query extracted from an existing widget in the Sisense instance.
 
 `Promise`\< \{
   `data`: [`QueryResultData`](../../sdk-data/interfaces/interface.QueryResultData.md);
+  `rowCount`: `number`;
  } & [`QueryByWidgetIdQueryParams`](../../sdk-ui/type-aliases/type-alias.QueryByWidgetIdQueryParams.md) \>
 
 Query result

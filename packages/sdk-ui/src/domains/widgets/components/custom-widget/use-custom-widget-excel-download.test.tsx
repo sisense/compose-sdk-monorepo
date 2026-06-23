@@ -1,8 +1,10 @@
+import { filterFactory, measureFactory } from '@sisense/sdk-data';
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
-import { extractDimensionsAndMeasures } from '@/infra/contexts/custom-widgets-provider/use-execute-custom-widget-query.js';
+import type { GenericDataOptions } from '@/types';
 
 import { useCustomWidgetExcelDownload } from './use-custom-widget-excel-download.js';
 import type { UseCustomWidgetExcelDownloadParams } from './use-custom-widget-excel-download.js';
@@ -21,9 +23,10 @@ vi.mock('@/domains/widgets/hooks/use-excel-query-file-loader.js', () => ({
   useExcelQueryFileLoader: () => ({ execute: mockExecute }),
 }));
 
-vi.mock('@/infra/contexts/custom-widgets-provider/use-execute-custom-widget-query.js', () => ({
-  extractDimensionsAndMeasures: vi.fn(),
-}));
+const dataOptionsWithQuery: GenericDataOptions = {
+  categories: [{ column: DM.Commerce.AgeRange }],
+  values: [{ column: measureFactory.sum(DM.Commerce.Revenue) }],
+};
 
 const latestOnDownloadExcel = vi.hoisted(() => ({
   fn: null as null | ((mergeRows: boolean) => void),
@@ -72,7 +75,6 @@ const baseParams: UseCustomWidgetExcelDownloadParams = {
   title: 'Custom',
   dataSource: undefined,
   filters: undefined,
-  highlights: undefined,
   config: { actions: { downloadExcel: { enabled: true } } },
   baseHeaderConfig: { toolbar: { menu: { items: [] } } },
 };
@@ -82,7 +84,6 @@ describe('useCustomWidgetExcelDownload', () => {
     latestOnDownloadExcel.fn = null;
     appSettingsFeatureFlags.exportingXlsxV2Active = true;
     mockExecute.mockClear();
-    vi.mocked(extractDimensionsAndMeasures).mockReturnValue({ dimensions: [], measures: [] });
   });
 
   it('does not expose Excel download when there are no dimensions or measures', () => {
@@ -94,23 +95,22 @@ describe('useCustomWidgetExcelDownload', () => {
 
   it('does not expose Excel when exportingXlsxV2.active is false', () => {
     appSettingsFeatureFlags.exportingXlsxV2Active = false;
-    vi.mocked(extractDimensionsAndMeasures).mockReturnValue({
-      dimensions: [{ name: 'd' } as never],
-      measures: [],
-    });
 
-    const { result } = renderHook(() => useCustomWidgetExcelDownload(baseParams));
+    const { result } = renderHook(() =>
+      useCustomWidgetExcelDownload({ ...baseParams, dataOptions: dataOptionsWithQuery }),
+    );
 
     expect(findExcelRepeatRowsOnClick(result.current.headerConfig)).toBeUndefined();
   });
 
   it('calls loader with mergeRows false for repeat rows', () => {
-    vi.mocked(extractDimensionsAndMeasures).mockReturnValue({
-      dimensions: [{ name: 'd' } as never],
-      measures: [{ name: 'm' } as never],
-    });
-
-    const { result } = renderHook(() => useCustomWidgetExcelDownload({ ...baseParams, id: 'w-1' }));
+    const { result } = renderHook(() =>
+      useCustomWidgetExcelDownload({
+        ...baseParams,
+        dataOptions: dataOptionsWithQuery,
+        id: 'w-1',
+      }),
+    );
 
     act(() => {
       findExcelRepeatRowsOnClick(result.current.headerConfig)?.();
@@ -118,28 +118,50 @@ describe('useCustomWidgetExcelDownload', () => {
 
     expect(mockExecute).toHaveBeenCalledWith(
       expect.objectContaining({
-        dimensions: [{ name: 'd' }],
-        measures: [{ name: 'm' }],
+        dimensions: expect.any(Array),
+        measures: expect.any(Array),
         mergeRows: false,
         widgetType: 'my-widget',
         widgetId: 'w-1',
         filename: 'Custom.xlsx',
       }),
     );
+    expect(mockExecute.mock.calls[0]?.[0]?.dimensions).toHaveLength(1);
+    expect(mockExecute.mock.calls[0]?.[0]?.measures).toHaveLength(1);
   });
 
   it('calls loader with mergeRows true for merge rows', () => {
-    vi.mocked(extractDimensionsAndMeasures).mockReturnValue({
-      dimensions: [{ name: 'd' } as never],
-      measures: [{ name: 'm' } as never],
-    });
-
-    const { result } = renderHook(() => useCustomWidgetExcelDownload(baseParams));
+    const { result } = renderHook(() =>
+      useCustomWidgetExcelDownload({ ...baseParams, dataOptions: dataOptionsWithQuery }),
+    );
 
     act(() => {
       findExcelMergeRowsOnClick(result.current.headerConfig)?.();
     });
 
     expect(mockExecute).toHaveBeenCalledWith(expect.objectContaining({ mergeRows: true }));
+  });
+
+  it('passes filters to loader execute on download', () => {
+    const filters = [filterFactory.members(DM.Commerce.Gender, ['Male'])];
+
+    const { result } = renderHook(() =>
+      useCustomWidgetExcelDownload({
+        ...baseParams,
+        dataOptions: dataOptionsWithQuery,
+        filters,
+      }),
+    );
+
+    act(() => {
+      findExcelRepeatRowsOnClick(result.current.headerConfig)?.();
+    });
+
+    expect(mockExecute).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filters,
+        mergeRows: false,
+      }),
+    );
   });
 });

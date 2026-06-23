@@ -20,7 +20,8 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
         "dataSource": undefined,
         "description": "",
         "expression": "[table.column]",
-        "name": "title",
+        "name": "column",
+        "title": "title",
         "type": "text-attribute",
       },
       "composeCode": "filterFactory.members(DM.table.column, ['member'])",
@@ -51,6 +52,7 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
         "member",
       ],
       "name": "a9984db61c3",
+      "title": "filter",
       "type": "filter",
     },
   ],
@@ -90,6 +92,7 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
   "userAuth": undefined,
   "widgets": [
     {
+      "aiOptions": undefined,
       "chartType": "pie",
       "customOptions": undefined,
       "customWidgetType": "",

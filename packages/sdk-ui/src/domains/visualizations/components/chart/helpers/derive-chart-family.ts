@@ -1,9 +1,12 @@
 import {
   isAreamap,
   isBoxplot,
+  isCalendarHeatmap,
   isCartesian,
   isCategorical,
   isIndicator,
+  isRange,
+  isSankey,
   isScatter,
   isScattermap,
 } from '@/domains/visualizations/core/chart-options-processor/translations/types';
@@ -37,6 +40,15 @@ export const deriveChartFamily = (chartType: string): string => {
   }
   if (isBoxplot(chartType as ChartType)) {
     return 'boxplot';
+  }
+  if (isCalendarHeatmap(chartType as ChartType)) {
+    return 'calendar-heatmap';
+  }
+  if (isRange(chartType as ChartType)) {
+    return 'range';
+  }
+  if (isSankey(chartType as ChartType)) {
+    return 'sankey';
   }
 
   return 'table';

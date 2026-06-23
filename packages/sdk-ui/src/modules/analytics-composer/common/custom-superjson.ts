@@ -52,6 +52,9 @@ interface SerializedObject extends JSONObject {
 
 const normalizeSort = (v: Sort | undefined) => (v === undefined ? Sort.None : v);
 
+/** Reads display label from serialized element JSON (pre-MR blobs may omit `title`). */
+const resolveSerializedTitle = (v: { name?: string; title?: string }) => v.title ?? v.name ?? '';
+
 const deserializeJaqlElement = (v: any) => new JaqlElement(v.metadataItem, v.type);
 
 const deserializeDimensionalAttribute = (v: any) =>
@@ -63,6 +66,10 @@ const deserializeDimensionalAttribute = (v: any) =>
     normalizeSort(v.sort),
     v.dataSource,
     v.composeCode,
+    v.panel,
+    v.indexed,
+    v.merged,
+    resolveSerializedTitle(v),
   );
 
 const deserializeDimensionalLevelAttribute = (v: any) =>
@@ -75,6 +82,10 @@ const deserializeDimensionalLevelAttribute = (v: any) =>
     normalizeSort(v.sort),
     v.dataSource,
     v.composeCode,
+    v.panel,
+    v.indexed,
+    v.merged,
+    resolveSerializedTitle(v),
   );
 
 const deserializeAttribute = (v: any) => {
@@ -101,6 +112,7 @@ const deserializeDimensionalDimension = (v: any) =>
     v.dataSource,
     v.composeCode,
     v.defaultAttribute ? deserializeAttribute(v.defaultAttribute) : undefined,
+    resolveSerializedTitle(v),
   );
 
 const deserializeDimensionalDateDimension = (v: any) =>
@@ -113,6 +125,7 @@ const deserializeDimensionalDateDimension = (v: any) =>
     v.composeCode,
     v.indexed,
     v.merged,
+    resolveSerializedTitle(v),
   );
 
 const deserializeDimension = (v: any) => {
@@ -137,6 +150,7 @@ const deserializeDimensionalBaseMeasure = (v: any) =>
     normalizeSort(v.sort),
     v.dataSource,
     v.composeCode,
+    resolveSerializedTitle(v),
   );
 
 const deserializeDimensionalCalculatedMeasure = (v: any) => {
@@ -187,6 +201,7 @@ const deserializeDimensionalCalculatedMeasure = (v: any) => {
     normalizeSort(v.sort),
     v.dataSource,
     v.composeCode,
+    resolveSerializedTitle(v),
   );
 };
 
@@ -199,6 +214,7 @@ const deserializeDimensionalMeasureTemplate = (v: any) =>
     normalizeSort(v.sort),
     v.dataSource,
     v.composeCode,
+    resolveSerializedTitle(v),
   );
 
 const deserializeMeasure = (v: any) => {

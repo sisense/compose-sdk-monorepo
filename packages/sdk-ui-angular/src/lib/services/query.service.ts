@@ -9,6 +9,7 @@ import {
   executeQueryByWidgetId,
   type ExecuteQueryByWidgetIdParams as ExecuteQueryByWidgetIdParamsPreact,
   type ExecuteQueryParams as ExecuteQueryParamsPreact,
+  executeQueryWithRowCount,
   HookAdapter,
   useExecuteCsvQueryInternal,
   useExecuteCustomWidgetQueryInternal,
@@ -86,9 +87,12 @@ export class QueryService {
    * [External Charts Guide](/guides/sdk/guides/charts/guide-external-charts.html#query)
    *
    * @param params - Query parameters
-   * @return Query result
+   * @return Query result containing the data and, when `includeRowCount` is enabled,
+   * the total row count of the query ignoring the `count` and `offset` paging
    */
-  async executeQuery(params: ExecuteQueryParams) {
+  async executeQuery(
+    params: ExecuteQueryParams,
+  ): Promise<{ data: QueryResultData; rowCount?: number }> {
     const {
       dataSource,
       dimensions,
@@ -98,27 +102,34 @@ export class QueryService {
       count,
       offset,
       ungroup,
+      includeRowCount,
       beforeQuery,
     } = params;
     const app = await this.sisenseContextService.getApp();
     const { filters: filterList, relations: filterRelations } =
       getFilterListAndRelationsJaql(filters);
-    const data = await executeQuery(
-      {
-        dataSource,
-        dimensions,
-        measures,
-        filters: filterList,
-        filterRelations,
-        highlights,
-        count,
-        offset,
-        ungroup,
-      },
-      app,
-      { onBeforeQuery: beforeQuery },
-    );
+    const queryDescription = {
+      dataSource,
+      dimensions,
+      measures,
+      filters: filterList,
+      filterRelations,
+      highlights,
+      count,
+      offset,
+      ungroup,
+    };
+    const executionConfig = { onBeforeQuery: beforeQuery };
+    if (includeRowCount) {
+      const { data, rowCount } = await executeQueryWithRowCount(
+        queryDescription,
+        app,
+        executionConfig,
+      );
+      return { data, rowCount };
+    }
 
+    const data = await executeQuery(queryDescription, app, executionConfig);
     return { data };
   }
 

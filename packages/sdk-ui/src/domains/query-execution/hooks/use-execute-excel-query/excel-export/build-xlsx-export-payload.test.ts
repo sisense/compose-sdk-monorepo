@@ -21,6 +21,11 @@ describe('buildXlsxExportPayload', () => {
       jaql,
       mergeRows: true,
       language: 'en-US',
+      widgetStyles: {
+        coloringRules: {
+          alternatingRows: true,
+        },
+      },
     });
   });
 });

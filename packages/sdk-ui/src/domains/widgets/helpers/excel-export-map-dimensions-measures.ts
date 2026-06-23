@@ -1,11 +1,26 @@
 import {
   type Attribute,
+  type CalculatedMeasureColumn,
   DimensionalLevelAttribute,
   isDimensionalLevelAttribute,
   type Measure,
+  type MeasureColumn,
 } from '@sisense/sdk-data';
 
+import type { StyledMeasureColumn } from '@/domains/visualizations/core/chart-data-options/types.js';
+import {
+  safeCombine,
+  translateColumnToMeasure,
+} from '@/domains/visualizations/core/chart-data-options/utils.js';
+import type { NumberFormatConfig } from '@/types';
+
 const DEFAULT_MEASURE_NUMBER_FORMAT = '0,0';
+
+export type MeasureWithExcelExportFormat = Measure & {
+  readonly excelNumberFormatConfig?: NumberFormatConfig;
+};
+
+type MeasureColumnInput = MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
 
 /**
  * Returns attributes prepared for Excel JAQL export: dimensional level attributes without an
@@ -37,7 +52,9 @@ export function mapAttributesForExcelExport(attributes: readonly Attribute[]): A
  * @param measures - Raw measures from chart or pivot translation
  * @returns New array of measures safe to pass as export measures
  */
-export function mapMeasuresForExcelExport(measures: readonly Measure[]): Measure[] {
+export function mapMeasuresForExcelExport(
+  measures: readonly Measure[],
+): MeasureWithExcelExportFormat[] {
   return measures.map((measure) => {
     if (typeof measure.format !== 'function') {
       return measure;
@@ -49,4 +66,30 @@ export function mapMeasuresForExcelExport(measures: readonly Measure[]): Measure
     }
     return measure.format(DEFAULT_MEASURE_NUMBER_FORMAT);
   });
+}
+
+/**
+ * Maps a styled measure column to a measure for Excel export, preserving `numberFormatConfig`.
+ */
+export function mapMeasureColumnForExcelExport(
+  column: MeasureColumnInput,
+): MeasureWithExcelExportFormat {
+  const [measure] = mapMeasuresForExcelExport([translateColumnToMeasure(column)]);
+  const excelNumberFormatConfig =
+    'numberFormatConfig' in column ? column.numberFormatConfig : undefined;
+
+  if (!excelNumberFormatConfig) {
+    return measure;
+  }
+
+  return safeCombine(measure, { excelNumberFormatConfig });
+}
+
+/**
+ * Maps measure columns to measures for Excel export, preserving per-column `numberFormatConfig`.
+ */
+export function mapMeasureColumnsForExcelExport(
+  columns: readonly MeasureColumnInput[],
+): MeasureWithExcelExportFormat[] {
+  return columns.map(mapMeasureColumnForExcelExport);
 }

@@ -73,7 +73,7 @@ export const SISENSE_CONTEXT_CONFIG: SisenseContextConfig = {
 Sisense Web Access Tokens (WATs) impersonate specific Sisense users. Typically, in a production environment you create a Sisense user specifically for using Compose SDK. You grant that user the permissions you want to expose in your application and use a WAT that impersonates that user.
 
 ::: tip Note
-When using a Structured Token (By Value) you can enforce row level security using an `acl` claim. All other claims are not supported.
+When using a Structured Token (By Value), you can enforce row-level security using an `acl` claim. All other claims are not supported.
 :::
 
 #### Create a WAT
@@ -175,7 +175,7 @@ export const SISENSE_CONTEXT_CONFIG: SisenseContextConfig = {
 
 ## Cross-Origin Resource Sharing (CORS)
 
-By default, browser same-origin policy prevents client-side web applications located in one domain from obtaining data from a different domain. That means an application you build with Compose SDK can't get data from your Sisense instance without some initial setup.
+By default, the browser same-origin policy prevents client-side web applications located in one domain from obtaining data from a different domain. That means an application you build with Compose SDK can't get data from your Sisense instance without some initial setup.
 
 To get around this problem, you enable [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) for specific origins for which you want to allow resource sharing. Doing so instructs the Sisense server to respond to requests from your application with a header that tells the browser your application can use the data returned from Sisense even though it comes from a different domain.
 
@@ -197,16 +197,16 @@ Set up CORS on your Sisense instance using one of the following:
 
 ::: tip Notes
 
-- **Do not** include the trailing slash (`/`) when adding a domain to the **CORS Allowed Origins**
+- **Do not** include the trailing slash (`/`) when adding a domain to the **CORS Allowed Origins**.
 - Save your settings changes after adding your domain.
 
 :::
 
 ## Third-Party Cookies
 
-Most modern browsers block third-party cookies. This affects cookie-based authentications such as SSO.
+Most modern browsers block third-party cookies. This affects cookie-based authentication such as SSO.
 
-Therefore, the best practice is either to:
+Therefore, the best practice is one of the following:
 
 - Use the same domain for the different apps and put it behind a specific path. This prevents Sisense cookies from being third-party cookies. For example: `companyA.com/analytics`.
 - Leverage the Web Access Tokens (WAT) feature for authentication. Note that WAT requires special licensing.

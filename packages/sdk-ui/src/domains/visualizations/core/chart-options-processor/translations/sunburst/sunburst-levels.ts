@@ -7,7 +7,7 @@ import { CompleteThemeSettingsInternal } from '../../../../../../types';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CategoricalChartData } from '../../../chart-data/types';
 import { SunburstChartDesignOptions } from '../design-options';
-import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config';
+import { formatNumberWithFallback } from '../number-format-config';
 import { tooltipSeparator } from '../scatter-tooltip';
 
 const ROOT_LEVEL_SIZE_PER_CATEGORIES = Object.freeze({
@@ -22,7 +22,10 @@ export function prepareSunburstLevels(
   dataOptions: CategoricalChartDataOptionsInternal,
   designOptions: SunburstChartDesignOptions,
   themeSettings?: CompleteThemeSettingsInternal,
+  defaultNumberFormattingEnabled = true,
 ) {
+  const rawConfig = dataOptions.y?.[0]?.numberFormatConfig;
+
   const rootLevelOptions = {
     level: 1,
     color: themeSettings?.chart?.backgroundColor ?? 'white',
@@ -31,9 +34,6 @@ export function prepareSunburstLevels(
       useHTML: true,
       className: '!csdk-overflow-visible',
       formatter(this: PointLabelObject) {
-        const numberFormatConfig = getCompleteNumberFormatConfig(
-          dataOptions.y?.[0]?.numberFormatConfig,
-        );
         const { value } = this.point as unknown as { value: number };
 
         return `
@@ -49,7 +49,7 @@ export function prepareSunburstLevels(
             font-size: 18px;
             color: ${themeSettings?.chart?.textColor ?? '#5B6372'}
             "
-            >${applyFormat(numberFormatConfig, value)}</div>
+            >${formatNumberWithFallback(value, rawConfig, defaultNumberFormattingEnabled)}</div>
         </div>
       `;
       },

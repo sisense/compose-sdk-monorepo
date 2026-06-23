@@ -4,6 +4,7 @@ import type {
   WidgetsPanelLayout,
 } from '@/domains/dashboarding/dashboard-model';
 import { UseDashboardModelActionType } from '@/domains/dashboarding/dashboard-model/use-dashboard-model/dashboard-model-reducer/types.js';
+import type { TabberConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import type { WidgetModel } from '@/domains/widgets/widget-model';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 
@@ -21,22 +22,29 @@ export function createDashboardPersistenceManager(
   dispatchDashboardModelChanges: UseDashboardModelResult['dispatchChanges'],
 ): DashboardPersistenceManager {
   return {
-    addWidget: async (widgetProps, widgetsPanelLayout, widgetOptions?: SpecificWidgetOptions) => {
+    addWidget: async (
+      widgetProps,
+      widgetsPanelLayout,
+      widgetOptions?: SpecificWidgetOptions,
+      tabberConfig?: TabberConfig,
+    ) => {
       const widgetModel = widgetModelTranslator.fromWidgetProps(widgetProps);
       const processedAction = await dispatchDashboardModelChanges({
         type: UseDashboardModelActionType.ADD_WIDGET,
-        payload: { widget: widgetModel, widgetsPanelLayout, widgetOptions },
+        payload: { widget: widgetModel, widgetsPanelLayout, widgetOptions, tabberConfig },
       });
       const payload = processedAction.payload as {
         widget: WidgetModel;
         widgetsPanelLayout: WidgetsPanelLayout;
         widgetOptions?: SpecificWidgetOptions;
+        tabberConfig?: TabberConfig;
       };
       const widget = widgetModelTranslator.toWidgetProps(payload.widget);
       return {
         widget,
         widgetsPanelLayout: payload.widgetsPanelLayout,
         widgetOptions: payload.widgetOptions,
+        tabberConfig: payload.tabberConfig,
       };
     },
     patchWidget: async (widgetOid, patch) => {

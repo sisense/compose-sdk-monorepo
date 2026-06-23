@@ -108,6 +108,36 @@ describe('QueryApiDispatcher', () => {
     });
   });
 
+  describe('sendCountRowsRequest', () => {
+    it('should call httpClient.post with the correct URL, payload, and abort signal', async () => {
+      // Arrange
+      const dataSource = 'exampleDataSource';
+      const jaqlPayload: JaqlQueryPayload = {
+        metadata: [],
+        datasource: { title: dataSource, live: false },
+        by: 'ComposeSDK',
+        queryGuid: '12312',
+      };
+      const expectedUrl = 'api/datasources/exampleDataSource/jaql/countrows';
+      const expectedResponse = { countRows: 1234 };
+      httpClient.post.mockResolvedValue(expectedResponse);
+
+      // Act
+      const result = queryApi.sendCountRowsRequest(dataSource, jaqlPayload);
+
+      // Assert
+      expect(httpClient.post).toHaveBeenCalledWith(
+        expectedUrl,
+        jaqlPayload,
+        undefined,
+        expect.any(AbortSignal),
+      );
+      expect(result.abortHttpRequest).toBeInstanceOf(Function);
+      const response = await result.responsePromise;
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
   describe('sendDownloadCsvRequest', () => {
     it('should call httpClient.post with the correct URL, payload, and abort signal', async () => {
       // Arrange

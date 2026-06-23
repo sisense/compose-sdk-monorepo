@@ -4,12 +4,14 @@ import { DataSource, Filter } from '@sisense/sdk-data';
 
 type FilterEditorContextValue = {
   defaultDataSource: DataSource | null;
+  dataSources: DataSource[];
   parentFilters: Filter[];
   membersOnlyMode: boolean;
 };
 
 const FilterEditorContext = createContext<FilterEditorContextValue>({
   defaultDataSource: null,
+  dataSources: [],
   parentFilters: [],
   membersOnlyMode: false,
 });
@@ -31,7 +33,8 @@ export const FilterEditorContextProvider = ({
     value.defaultDataSource,
   );
   const parentFilters = useMemo(() => value.parentFilters ?? [], [value.parentFilters]);
-  const membersOnlyMode = useMemo(() => value.membersOnlyMode ?? [], [value.membersOnlyMode]);
+  const membersOnlyMode = useMemo(() => value.membersOnlyMode ?? false, [value.membersOnlyMode]);
+  const dataSources = useMemo(() => value.dataSources ?? [], [value.dataSources]);
 
   useEffect(() => {
     if (defaultDataSource !== value.defaultDataSource) {
@@ -40,7 +43,9 @@ export const FilterEditorContextProvider = ({
   }, [defaultDataSource, value.defaultDataSource]);
 
   return (
-    <FilterEditorContext.Provider value={{ defaultDataSource, parentFilters, membersOnlyMode }}>
+    <FilterEditorContext.Provider
+      value={{ defaultDataSource, dataSources, parentFilters, membersOnlyMode }}
+    >
       {children}
     </FilterEditorContext.Provider>
   );

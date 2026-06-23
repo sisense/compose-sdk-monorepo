@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
@@ -18,7 +18,7 @@ const DEFAULT_STYLE_OPTIONS: StyleOptions = {
 /**
  * Design panel for customizing simple-table widget style options.
  */
-export const SimpleTableDesignPanel: React.FC<DesignPanelProps<StyleOptions>> = ({
+export const SimpleTableDesignPanel: FC<DesignPanelProps<StyleOptions>> = ({
   styleOptions,
   onChange,
 }) => {

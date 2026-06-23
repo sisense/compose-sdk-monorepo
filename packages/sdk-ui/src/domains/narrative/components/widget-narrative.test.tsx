@@ -38,6 +38,13 @@ const mockPivotWidgetProps: WidgetProps = {
   },
 };
 
+const chartWithFeedback: WidgetProps = {
+  ...mockChartWidgetProps,
+  aiOptions: {
+    narrative: { feedback: { enabled: true } },
+  },
+};
+
 const summaryText = 'widget narrative summary text';
 
 const mockNlgResponse: GetNlgInsightsResponse = {
@@ -47,43 +54,133 @@ const mockNlgResponse: GetNlgInsightsResponse = {
   },
 };
 
+const useLegacyNarrativeHandlers = () => {
+  server.use(
+    http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
+    http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => HttpResponse.json(mockNlgResponse)),
+  );
+};
+
 describe('WidgetNarrative', () => {
-  it('renders plain variant with narrative text after load', async () => {
-    server.use(
-      http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
-      http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => HttpResponse.json(mockNlgResponse)),
-    );
+  it('shows narrative text without feedback chrome when feedback uses defaults (chart)', async () => {
+    useLegacyNarrativeHandlers();
 
     setup(
       <NarrativeTestWrapper>
-        <WidgetNarrative widgetProps={mockChartWidgetProps} variant="plain" />
+        <WidgetNarrative widgetProps={mockChartWidgetProps} />
       </NarrativeTestWrapper>,
     );
 
     await waitFor(() => expect(screen.getByText(summaryText)).toBeInTheDocument());
+    expect(screen.queryByLabelText('thumbs-up')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('thumbs-down')).not.toBeInTheDocument();
   });
 
-  it('renders plain variant for pivot widget props after load', async () => {
-    server.use(
-      http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
-      http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => HttpResponse.json(mockNlgResponse)),
-    );
+  it('shows narrative text without feedback chrome when feedback uses defaults (pivot)', async () => {
+    useLegacyNarrativeHandlers();
 
     setup(
       <NarrativeTestWrapper>
-        <WidgetNarrative widgetProps={mockPivotWidgetProps} variant="plain" />
+        <WidgetNarrative widgetProps={mockPivotWidgetProps} />
       </NarrativeTestWrapper>,
     );
 
     await waitFor(() => expect(screen.getByText(summaryText)).toBeInTheDocument());
+    expect(screen.queryByLabelText('thumbs-up')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('thumbs-down')).not.toBeInTheDocument();
+  });
+
+  it('always shows the sparkle AI icon regardless of feedback setting', async () => {
+    useLegacyNarrativeHandlers();
+
+    // Without feedback
+    const { unmount } = setup(
+      <NarrativeTestWrapper>
+        <WidgetNarrative widgetProps={mockChartWidgetProps} />
+      </NarrativeTestWrapper>,
+    );
+    await waitFor(() => expect(screen.getByText(summaryText)).toBeInTheDocument());
+    expect(screen.getByTestId('narrative-ai-icon')).toBeInTheDocument();
+    unmount();
+
+    // With feedback
+    useLegacyNarrativeHandlers();
+    setup(
+      <NarrativeTestWrapper>
+        <WidgetNarrative widgetProps={chartWithFeedback} />
+      </NarrativeTestWrapper>,
+    );
+    await waitFor(() => expect(screen.getByText(summaryText)).toBeInTheDocument());
+    expect(screen.getByTestId('narrative-ai-icon')).toBeInTheDocument();
+  });
+
+  it('shows narrative text and feedback chrome when aiOptions.narrative.feedback.enabled is true', async () => {
+    useLegacyNarrativeHandlers();
+
+    setup(
+      <NarrativeTestWrapper>
+        <WidgetNarrative widgetProps={chartWithFeedback} />
+      </NarrativeTestWrapper>,
+    );
+
+    await waitFor(() => expect(screen.getByText(summaryText)).toBeInTheDocument());
+    expect(screen.getByLabelText('thumbs-up')).toBeInTheDocument();
+    expect(screen.getByLabelText('thumbs-down')).toBeInTheDocument();
+  });
+
+  it('feedback buttons remain visible after clicking thumbs-up', async () => {
+    useLegacyNarrativeHandlers();
+
+    const { user } = setup(
+      <NarrativeTestWrapper>
+        <WidgetNarrative widgetProps={chartWithFeedback} />
+      </NarrativeTestWrapper>,
+    );
+
+    await waitFor(() => expect(screen.getByText(summaryText)).toBeInTheDocument());
+    await user.click(screen.getByLabelText('thumbs-up'));
+
+    // Both buttons still visible after click
+    expect(screen.getByLabelText('thumbs-up')).toBeInTheDocument();
+    expect(screen.getByLabelText('thumbs-down')).toBeInTheDocument();
+  });
+
+  it('feedback buttons remain visible after clicking thumbs-down', async () => {
+    useLegacyNarrativeHandlers();
+
+    const { user } = setup(
+      <NarrativeTestWrapper>
+        <WidgetNarrative widgetProps={chartWithFeedback} />
+      </NarrativeTestWrapper>,
+    );
+
+    await waitFor(() => expect(screen.getByText(summaryText)).toBeInTheDocument());
+    await user.click(screen.getByLabelText('thumbs-down'));
+
+    expect(screen.getByLabelText('thumbs-up')).toBeInTheDocument();
+    expect(screen.getByLabelText('thumbs-down')).toBeInTheDocument();
+  });
+
+  it('feedback buttons remain visible when same button is clicked twice (deselect)', async () => {
+    useLegacyNarrativeHandlers();
+
+    const { user } = setup(
+      <NarrativeTestWrapper>
+        <WidgetNarrative widgetProps={chartWithFeedback} />
+      </NarrativeTestWrapper>,
+    );
+
+    await waitFor(() => expect(screen.getByText(summaryText)).toBeInTheDocument());
+
+    // First click selects, second click deselects — both buttons must stay enabled
+    await user.click(screen.getByLabelText('thumbs-up'));
+    await user.click(screen.getByLabelText('thumbs-up'));
+
+    expect(screen.getByLabelText('thumbs-up')).toBeInTheDocument();
+    expect(screen.getByLabelText('thumbs-down')).toBeInTheDocument();
   });
 
   it('renders nothing for unsupported widget types', () => {
-    server.use(
-      http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
-      http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => HttpResponse.json(mockNlgResponse)),
-    );
-
     const textProps: WidgetProps = {
       id: 'widget-text',
       widgetType: 'text',
@@ -96,7 +193,7 @@ describe('WidgetNarrative', () => {
 
     const { container } = setup(
       <NarrativeTestWrapper>
-        <WidgetNarrative widgetProps={textProps} variant="plain" />
+        <WidgetNarrative widgetProps={textProps} />
       </NarrativeTestWrapper>,
     );
 
@@ -104,32 +201,12 @@ describe('WidgetNarrative', () => {
   });
 
   it('renders nothing when enabled is false (opt-out)', () => {
-    server.use(
-      http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
-      http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => HttpResponse.json(mockNlgResponse)),
-    );
-
     const { container } = setup(
       <NarrativeTestWrapper>
-        <WidgetNarrative widgetProps={mockChartWidgetProps} variant="plain" enabled={false} />
+        <WidgetNarrative widgetProps={mockChartWidgetProps} enabled={false} />
       </NarrativeTestWrapper>,
     );
 
     expect(container.textContent).toBe('');
-  });
-
-  it('default variant shows narrative after load', async () => {
-    server.use(
-      http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
-      http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => HttpResponse.json(mockNlgResponse)),
-    );
-
-    setup(
-      <NarrativeTestWrapper>
-        <WidgetNarrative widgetProps={mockChartWidgetProps} variant="default" />
-      </NarrativeTestWrapper>,
-    );
-
-    await waitFor(() => expect(screen.getByText(summaryText)).toBeInTheDocument());
   });
 });

@@ -10,6 +10,7 @@ import {
   processStringFilter,
   processStringOrNumericFilter,
 } from './filter-processors.js';
+import { processMeasuredValue } from './process-measured-value.js';
 
 /**
  * Registry mapping function paths to their custom processing functions.
@@ -25,6 +26,7 @@ import {
  */
 export const FUNCTION_PROCESSORS: Record<string, CustomFunctionProcessor> = {
   'measureFactory.customFormula': processCustomFormula,
+  'measureFactory.measuredValue': processMeasuredValue,
 
   // String | Number filters
   'filterFactory.equals': processStringOrNumericFilter,

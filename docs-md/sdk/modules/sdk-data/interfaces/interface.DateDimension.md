@@ -135,7 +135,7 @@ Months level
 
 > **name**: `string`
 
-Element name
+Identity name of the element.
 
 ***
 
@@ -152,6 +152,14 @@ Quarters level
 > **`readonly`** **Seconds**: [`LevelAttribute`](interface.LevelAttribute.md)
 
 Seconds level (for Live Models)
+
+***
+
+### title
+
+> **title**: `string`
+
+Label displayed in UI.
 
 ***
 

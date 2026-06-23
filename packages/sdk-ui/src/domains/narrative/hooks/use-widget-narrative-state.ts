@@ -6,12 +6,12 @@ import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import type { NarrativeRequest } from '@/infra/api/narrative/narrative-api-types.js';
 import { getNarrative } from '@/infra/api/narrative/narrative-endpoints.js';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
+import type { HookEnableParam } from '@/shared/hooks/types';
 
 import {
   type NarrativeQueryParams,
   prepareNarrativeRequest,
 } from '../core/build-narrative-request.js';
-import type { WidgetNarrativeOptions } from '../core/widget-narrative-options.js';
 import { buildWidgetNarrativeRequests } from '../core/widget-props-to-narrative-params.js';
 
 /**
@@ -37,15 +37,14 @@ const INACTIVE_NARRATIVE_PARAMS: NarrativeQueryParams = {
 
 export type UseWidgetNarrativeStateParams = {
   widgetProps: WidgetProps;
-  enabled?: boolean;
-} & WidgetNarrativeOptions;
+} & HookEnableParam;
 
 export type UseWidgetNarrativeStateResult = WidgetNarrativeQueryState & {
   supported: boolean;
   /**
-   * Mirrors the `enabled` param. When `false`, the narrative is opted out: `data` is cleared (no
-   * cached fallback), `narrativeRequest` is undefined, and loading/error flags reflect a disabled
-   * query rather than "no insights."
+   * Effective value after applying {@link HookEnableParam} defaults (always `true` or `false`).
+   * When `false`, narrative is opted out: `data` is cleared (no cached fallback), `narrativeRequest`
+   * is undefined, and loading/error flags reflect a disabled query rather than "no insights."
    */
   enabled: boolean;
   /** Present when `supported` and `enabled`; used by {@link WidgetNarrative} for feedback payload only. */
@@ -53,40 +52,28 @@ export type UseWidgetNarrativeStateResult = WidgetNarrativeQueryState & {
 };
 
 /**
- * Resolves chart or pivot widget props to a narration request and runs `getNarrative` via TanStack Query.
- * Depends on {@link useSisenseContext} (`httpClient`, narration settings) and a `QueryClientProvider`.
+ * Resolves chart or pivot widget props to a narrative request and runs `getNarrative` via TanStack Query.
+ * Depends on {@link useSisenseContext} (`httpClient`, narrative settings) and a `QueryClientProvider`.
  * Not exported from `@sisenseInternal` public API.
  *
  * @internal
  */
 export function useWidgetNarrativeState({
   widgetProps,
-  defaultDataSource,
-  verbosity,
   enabled = true,
-  ignoreTrendAndForecast = false,
-  canGenerateNarrativeViaAI: optionsCanGenerateNarrativeViaAI,
 }: UseWidgetNarrativeStateParams): UseWidgetNarrativeStateResult {
   const { app } = useSisenseContext();
   const httpClient = app?.httpClient;
-
   const narrativeOptions = useMemo(
     () => ({
-      canGenerateNarrativeViaAI:
-        optionsCanGenerateNarrativeViaAI ?? app?.settings?.narrative?.canGenerateNarrativeViaAI,
+      canGenerateNarrativeViaAI: app?.settings?.narrative?.canGenerateNarrativeViaAI,
     }),
-    [optionsCanGenerateNarrativeViaAI, app?.settings?.narrative?.canGenerateNarrativeViaAI],
+    [app?.settings?.narrative?.canGenerateNarrativeViaAI],
   );
 
   const { supported, narrativeRequest, narrativeFallbackRequest } = useMemo(
-    () =>
-      buildWidgetNarrativeRequests(
-        widgetProps,
-        defaultDataSource,
-        verbosity,
-        ignoreTrendAndForecast,
-      ),
-    [widgetProps, defaultDataSource, verbosity, ignoreTrendAndForecast],
+    () => buildWidgetNarrativeRequests(widgetProps, app?.defaultDataSource),
+    [widgetProps, app?.defaultDataSource],
   );
 
   const payload = useMemo(() => {

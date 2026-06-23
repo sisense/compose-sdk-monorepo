@@ -219,6 +219,9 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
   jumpToDashboardConfig: {
     enabled: true,
   },
+  narrativeConfig: {
+    widgetNarrativeEnabled: false,
+  },
   chartConfig: {
     tabular: {
       htmlContent: {

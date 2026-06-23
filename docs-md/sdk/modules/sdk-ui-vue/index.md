@@ -123,3 +123,7 @@ For more information on requirements for enabling Generative AI features, please
 General-purpose utilities and primitives for formatting, styling, and common UI components
 
 - [Formatting](formatting/index.md) - Utilities for formatting numbers, dates, and query result data sets.
+
+## Plugin System
+
+- [Plugin](plugin-system/type-alias.Plugin.md) <Badge type="beta" text="Beta" />

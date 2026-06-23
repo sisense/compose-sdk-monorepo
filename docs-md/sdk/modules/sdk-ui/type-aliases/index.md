@@ -174,6 +174,7 @@ TypeScript type aliases for components and hooks listed above
 - [RegularChartStyleOptions](type-alias.RegularChartStyleOptions.md)
 - [RegularChartType](type-alias.RegularChartType.md)
 - [RequestConfig](type-alias.RequestConfig.md)
+- [SankeyChartType](type-alias.SankeyChartType.md) <Badge type="beta" text="Beta" />
 - [ScatterChartType](type-alias.ScatterChartType.md)
 - [ScatterDataPoint](type-alias.ScatterDataPoint.md)
 - [ScatterDataPointEventHandler](type-alias.ScatterDataPointEventHandler.md)

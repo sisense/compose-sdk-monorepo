@@ -79,6 +79,55 @@ describe('getFunnelPlotOptions', () => {
       series: {},
     });
   });
+
+  describe('formatter behavior with defaultNumberFormattingEnabled', () => {
+    const measureWithoutConfig = {
+      column: { name: 'revenue', aggregation: 'sum', title: 'Revenue' },
+      sortType: 'sortNone',
+      showOnRightAxis: false,
+      enabled: true,
+    } as StyledMeasureColumn;
+
+    const designWithValueOnly: FunnelChartDesignOptions = {
+      ...BaseDesignOptions,
+      funnelType: DefaultFunnelType,
+      funnelSize: DefaultFunnelSize,
+      funnelDirection: DefaultFunnelDirection,
+      seriesLabels: { ...DefaultFunnelSeriesLabels, showCategory: false, showPercentage: false },
+    };
+
+    it('should render raw value when defaultNumberFormattingEnabled is false and no explicit config', () => {
+      const options = getFunnelPlotOptions(
+        designWithValueOnly,
+        { y: [measureWithoutConfig], breakBy: [] },
+        false,
+      );
+      const formatter = (
+        options.funnel as any
+      ) /* PlotOptions.funnel.dataLabels.formatter is not typed */.dataLabels.formatter;
+      const result = formatter.call({ y: 54321, point: { name: '' }, series: { name: 'Revenue' } });
+      expect(result).toContain('54321');
+      expect(result).not.toContain('54.32K');
+    });
+
+    it('should format value with explicit config when defaultNumberFormattingEnabled is false', () => {
+      const measureWithConfig = {
+        ...measureWithoutConfig,
+        numberFormatConfig: { name: 'Percent', decimalScale: 0 },
+      } as StyledMeasureColumn;
+      const options = getFunnelPlotOptions(
+        designWithValueOnly,
+        { y: [measureWithConfig], breakBy: [] },
+        false,
+      );
+      const formatter = (
+        options.funnel as any
+      ) /* PlotOptions.funnel.dataLabels.formatter is not typed */.dataLabels.formatter;
+      // 42 * 100 = 4,200% — confirms formatting was applied, not raw String(42)
+      const result = formatter.call({ y: 42, point: { name: '' }, series: { name: 'Revenue' } });
+      expect(result).toContain('4,200%');
+    });
+  });
 });
 
 describe('Funnel width and height calculation', () => {

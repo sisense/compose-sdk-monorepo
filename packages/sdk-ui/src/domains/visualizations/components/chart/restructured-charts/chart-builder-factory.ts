@@ -10,6 +10,7 @@ import { funnelChartBuilder } from './highchart-based-charts/categoricals/funnel
 import { pieChartBuilder } from './highchart-based-charts/categoricals/pie-chart/pie-chart-builder.js';
 import { sunburstChartBuilder } from './highchart-based-charts/categoricals/sunburst-chart/sunburst-chart-builder.js';
 import { treemapChartBuilder } from './highchart-based-charts/categoricals/treemap-chart/treemap-chart-builder.js';
+import { sankeyChartBuilder } from './highchart-based-charts/sankey-chart/sankey-chart-builder.js';
 import type { ChartBuilder, SupportedChartType } from './types.js';
 
 export const chartBuildersMap: { [K in SupportedChartType]: ChartBuilder<K> } = {
@@ -25,6 +26,7 @@ export const chartBuildersMap: { [K in SupportedChartType]: ChartBuilder<K> } = 
   treemap: treemapChartBuilder,
   sunburst: sunburstChartBuilder,
   'calendar-heatmap': calendarHeatmapChartBuilder,
+  sankey: sankeyChartBuilder,
 };
 
 export function getChartBuilder<CT extends SupportedChartType>(chartType: CT): ChartBuilder<CT> {

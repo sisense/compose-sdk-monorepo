@@ -33,6 +33,7 @@ const noResultOverlayImages = {
   boxplot: boxplotChartNoResultsImage,
   sunburst: sunburstChartNoResultsImage,
   'calendar-heatmap': calendarHeatmapChartNoResultsImage,
+  sankey: lineChartNoResultsImage,
 };
 
 export function getNoResultOverlayImage(type: ChartType | TableType) {

@@ -147,6 +147,14 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   styleOptions: PivotTableWidgetProps['styleOptions'];
 
   /**
+   * Configuration for AI-powered widget features such as automated narrative generation
+   * @alpha
+   * @category Widget
+   */
+  @Input()
+  aiOptions: PivotTableWidgetProps['aiOptions'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.drilldownOptions}
    *
    * @category Widget
@@ -218,6 +226,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
       filters: this.filters,
       highlights: this.highlights,
       styleOptions: this.styleOptions,
+      aiOptions: this.aiOptions,
       drilldownOptions: this.drilldownOptions,
       title: this.title,
       description: this.description,

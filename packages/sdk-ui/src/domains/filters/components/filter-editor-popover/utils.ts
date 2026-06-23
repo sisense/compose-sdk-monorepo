@@ -13,7 +13,7 @@ import {
 } from '@sisense/sdk-data';
 
 export function isSupportedByFilterEditor(filter: Filter): boolean {
-  return !isRankingFilter(filter) && !isCustomFilter(filter);
+  return !isCustomFilter(filter);
 }
 
 export function isIncludeAllFilter(filter: Filter): filter is MembersFilter {

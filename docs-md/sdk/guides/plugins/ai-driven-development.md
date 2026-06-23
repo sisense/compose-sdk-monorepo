@@ -1,6 +1,5 @@
 ---
 title: AI-Driven Development
-hidden: true
 ---
 
 # AI-Driven Development

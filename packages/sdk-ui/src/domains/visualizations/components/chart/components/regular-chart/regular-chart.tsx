@@ -29,6 +29,7 @@ import { useTranslatedDataOptions } from '../../helpers/use-translated-data-opti
 import { isAreamapData } from '../../restructured-charts/areamap-chart/renderer/areamap';
 import { getChartBuilder } from '../../restructured-charts/chart-builder-factory';
 import { isCalendarHeatmapChartData } from '../../restructured-charts/highchart-based-charts/calendar-heatmap-chart/data';
+import { isSankeyChartData } from '../../restructured-charts/highchart-based-charts/sankey-chart/types';
 import { hasForecastOrTrend, isRestructuredChartType } from '../../restructured-charts/utils';
 import { IndicatorCanvas, isIndicatorCanvasProps } from '../indicator-canvas';
 import { isScattermapData, isScattermapProps, Scattermap } from '../scattermap/scattermap';
@@ -70,6 +71,9 @@ const hasNoResults = (chartType: ChartType, chartData: ChartData) => {
   }
   if (chartType === 'calendar-heatmap' && isCalendarHeatmapChartData(chartData)) {
     return chartData.values.length === 0;
+  }
+  if (chartType === 'sankey' && isSankeyChartData(chartData)) {
+    return chartData.links.length === 0;
   }
   return 'series' in chartData && chartData.series.length === 0;
 };

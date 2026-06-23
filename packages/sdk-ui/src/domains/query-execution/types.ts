@@ -237,6 +237,24 @@ export interface ExecuteQueryByWidgetIdParams {
   offset?: number;
 
   /**
+   * Boolean flag whether to include the total row count of the query result,
+   * ignoring the `count` and `offset` paging.
+   *
+   * When enabled, the total is returned as `rowCount` in the query state
+   * ({@link QueryByWidgetIdState.rowCount}) and is reused for subsequent pages of the same query.
+   *
+   * Row count feature requires a Sisense instance version of 2026.3.0 or greater.
+   * On older versions, the query still succeeds and `rowCount` stays `undefined`.
+   *
+   * Not supported for pivot table widgets.
+   *
+   * If not specified, the default value is `false`
+   *
+   * @beta
+   */
+  includeRowCount?: boolean;
+
+  /**
    * Strategy for merging the existing widget filters (including highlights) with the filters provided via the `filters` and `highlights` props:
    *
    * - `widgetFirst` - prioritizes the widget filters over the provided filters in case of filter conflicts by certain attributes.
@@ -275,7 +293,18 @@ export type QueryByWidgetIdQueryParams = {
 /**
  * State of a query execution retrieving data of Fusion widget.
  */
-export type QueryByWidgetIdState = QueryState & QueryByWidgetIdQueryParams;
+export type QueryByWidgetIdState = QueryState &
+  QueryByWidgetIdQueryParams & {
+    /**
+     * Total row count of the query result, ignoring the `count` and `offset` paging.
+     *
+     * Populated only when {@link ExecuteQueryByWidgetIdParams.includeRowCount} is enabled and
+     * the Sisense instance supports the row count API; `undefined` otherwise.
+     *
+     * @beta
+     */
+    rowCount?: number;
+  };
 
 /**
  * Base query parameters
@@ -343,6 +372,23 @@ export interface ExecuteQueryParams extends BaseQueryParams {
   ungroup?: boolean;
 
   /**
+   * Boolean flag whether to include the total row count of the query result,
+   * ignoring the `count` and `offset` paging.
+   *
+   * When enabled, an additional row count query is sent to the server alongside
+   * the data query, and the total is returned in {@link ExecuteQueryResult.rowCount}.
+   * The retrieved total is reused for subsequent pages of the same query.
+   *
+   * Row count feature requires a Sisense instance version of 2026.3.0 or greater.
+   * On older versions, the query still succeeds and `rowCount` stays `undefined`.
+   *
+   * If not specified, the default value is `false`
+   *
+   * @beta
+   */
+  includeRowCount?: boolean;
+
+  /**
    * Sync or async callback that allows to modify the JAQL payload before it is sent to the server.
    *
    * **Note:** In React, wrap this function in `useCallback` hook to avoid triggering query execution on each render.
@@ -374,6 +420,15 @@ export type ExecuteQueryResult = QueryState & {
    * @internal
    */
   isAllItemsLoaded: boolean;
+  /**
+   * Total row count of the query result, ignoring the `count` and `offset` paging.
+   *
+   * Populated only when {@link ExecuteQueryParams.includeRowCount} is enabled and
+   * the Sisense instance supports the row count API; `undefined` otherwise.
+   *
+   * @beta
+   */
+  rowCount?: number;
 };
 
 /** Configuration for {@link useExecuteCsvQuery} hook. */
@@ -387,14 +442,14 @@ export type ExecuteCSVQueryConfig = {
 /**
  * Parameters for {@link useExecuteCsvQuery} hook.
  */
-export interface ExecuteCsvQueryParams extends ExecuteQueryParams {
+export interface ExecuteCsvQueryParams extends Omit<ExecuteQueryParams, 'includeRowCount'> {
   config?: ExecuteCSVQueryConfig;
 }
 
 /**
  * Parameters for {@link useExecuteExcelQueryInternal} (JAQL XLSX export).
  */
-export interface ExecuteExcelQueryParams extends ExecuteQueryParams {
+export interface ExecuteExcelQueryParams extends Omit<ExecuteQueryParams, 'includeRowCount'> {
   /** `false` = repeat rows (Angular default); `true` = merge rows. */
   mergeRows: boolean;
   /** Suggested download file name (e.g. from widget title). */

@@ -714,7 +714,40 @@ export type CalendarHeatmapWidgetStyle = {
       };
 };
 
-export type WidgetStyle = { widgetDesign?: WidgetDesign; narration?: any } & (
+/**
+ * Fusion `style.narration` payload (chart widgets and others that support narration).
+ *
+ * @internal
+ */
+export type WidgetDtoNarration = {
+  enabled?: boolean;
+  /** Placement string from Fusion; maps to SDK `displayLocation`. */
+  display?: string;
+  format?: string;
+  verbosity?: string;
+  up_sentiment?: string;
+  aggregation?: string;
+  labels?: readonly {
+    id: string;
+    title: string;
+    singular: string;
+    plural: string;
+  }[];
+  includeTrendAndForecast?: boolean;
+  /** When `true`, narrative is shown as soon as the widget loads */
+  autoShow?: boolean;
+  /** Narrative feedback actions */
+  feedback?: {
+    enabled?: boolean;
+  };
+  /** Fraction (0–1) of the content area height reserved for the narrative; maps to SDK `height`. */
+  size?: number;
+};
+
+export type WidgetStyle = {
+  widgetDesign?: WidgetDesign;
+  narration?: WidgetDtoNarration;
+} & (
   | CartesianWidgetStyle
   | PolarWidgetStyle
   | FunnelWidgetStyle

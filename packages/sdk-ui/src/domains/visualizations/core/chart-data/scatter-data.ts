@@ -104,15 +104,21 @@ export const createCategoriesMap = (
 export const groupData = (
   dataOptions: ScatterChartDataOptionsInternal,
   dataTable: DataTable,
+  defaultNumberFormattingEnabled = true,
 ): ScatterDataTable => {
   const indexes = defineIndexes(dataOptions, dataTable);
+  const hasPointExplicitConfig = dataOptions.breakByPoint?.numberFormatConfig !== undefined;
   const pointNumFormatConfig =
-    dataOptions?.breakByPoint && isNumber(dataOptions.breakByPoint.column.type)
+    dataOptions?.breakByPoint &&
+    isNumber(dataOptions.breakByPoint.column.type) &&
+    (defaultNumberFormattingEnabled || hasPointExplicitConfig)
       ? getCompleteNumberFormatConfig(dataOptions.breakByPoint?.numberFormatConfig)
       : undefined;
+  const hasColorExplicitConfig = dataOptions.breakByColor?.numberFormatConfig !== undefined;
   const colorNumFormatConfig =
     dataOptions?.breakByColor &&
-    (isMeasureColumn(dataOptions.breakByColor) || isNumber(dataOptions.breakByColor.column.type))
+    (isMeasureColumn(dataOptions.breakByColor) || isNumber(dataOptions.breakByColor.column.type)) &&
+    (defaultNumberFormattingEnabled || hasColorExplicitConfig)
       ? getCompleteNumberFormatConfig(dataOptions.breakByColor?.numberFormatConfig)
       : undefined;
 
@@ -154,9 +160,10 @@ export const groupData = (
 export const scatterData = (
   dataOptions: ScatterChartDataOptionsInternal,
   dataTable: DataTable,
+  defaultNumberFormattingEnabled = true,
 ): ScatterChartData => {
   // TODO consider applyNullMask
-  const scatterDataTable = groupData(dataOptions, dataTable);
+  const scatterDataTable = groupData(dataOptions, dataTable, defaultNumberFormattingEnabled);
 
   const { x: xAxis, y: yAxis } = dataOptions;
 

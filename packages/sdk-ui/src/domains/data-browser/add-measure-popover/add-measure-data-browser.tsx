@@ -30,6 +30,7 @@ import { DimensionsBrowser } from '../dimensions-browser/dimensions-browser.js';
 import { AttributiveElement } from '../dimensions-browser/types.js';
 import { SearchInput } from '../search-input/search-input.js';
 import './add-measure-popover.scss';
+import { buildMeasureRankingTitle } from './measure-ranking-title.js';
 import { getMeasuresListForAttribute } from './measures.js';
 
 type AddMeasureDataBrowserProps = {
@@ -71,7 +72,12 @@ const useMeasuresMap = (dimensions: Dimension[]) => {
         title: t(measureConfig.titleKey),
         class: measureConfig.class,
         group: measureConfig.group,
-        create: () => createMeasureByAggType(measureConfig.name, attribute),
+        create: () =>
+          createMeasureByAggType(
+            measureConfig.name,
+            attribute,
+            buildMeasureRankingTitle(measureConfig.name, attribute.name, t),
+          ),
       }));
     };
 
@@ -86,10 +92,15 @@ const useMeasuresMap = (dimensions: Dimension[]) => {
 
       return attributes.flatMap((attribute) => {
         return getMeasuresListForAttribute(attribute).map((measureConfig) => ({
-          title: t('measures.countShort', { level: attribute.name }),
+          title: t('measures.countShort', { level: attribute.title }),
           class: measureConfig.class,
           group: measureConfig.group,
-          create: () => createMeasureByAggType(measureConfig.name, attribute),
+          create: () =>
+            createMeasureByAggType(
+              measureConfig.name,
+              attribute,
+              buildMeasureRankingTitle(measureConfig.name, attribute.name, t),
+            ),
         }));
       });
     };

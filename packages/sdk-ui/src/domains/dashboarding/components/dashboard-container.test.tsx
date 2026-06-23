@@ -8,12 +8,17 @@ import { FiltersPanelProps } from '@/domains/filters';
 import * as DM from '../../../__test-helpers__/sample-ecommerce';
 import { DashboardContainer } from './dashboard-container';
 
-vi.mock('./dashboard-header', () => {
+vi.mock('./dashboard-header', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./dashboard-header.js')>();
   return {
+    ...actual,
     DashboardHeader: (props: DashboardHeaderProps) => (
       <div data-testid="dashboard-header">
-        {props.title}
-        <div data-testid="dashboard-toolbar">{props.toolbar?.()}</div>
+        <div data-testid="dashboard-toolbar">
+          {props.items?.map((item) => (
+            <div key={item.id}>{item.component({ size: { width: 28, height: 28 } })}</div>
+          ))}
+        </div>
       </div>
     ),
   };
@@ -168,9 +173,14 @@ describe('DashboardContainer', () => {
               showFilterIconInToolbar: true,
             },
           }}
-          renderToolbar={() => (
-            <ToolbarFilterToggleButton collapsed={false} onToggleClick={vi.fn()} />
-          )}
+          headerItems={[
+            {
+              id: 'filter-toggle',
+              component: () => (
+                <ToolbarFilterToggleButton collapsed={false} onToggleClick={vi.fn()} />
+              ),
+            },
+          ]}
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
@@ -201,12 +211,17 @@ describe('DashboardContainer', () => {
               showFilterIconInToolbar: true,
             },
           }}
-          renderToolbar={() => (
-            <ToolbarFilterToggleButton
-              collapsed={false}
-              onToggleClick={() => onFilterPanelCollapsedChangeMock(true)}
-            />
-          )}
+          headerItems={[
+            {
+              id: 'filter-toggle',
+              component: () => (
+                <ToolbarFilterToggleButton
+                  collapsed={false}
+                  onToggleClick={() => onFilterPanelCollapsedChangeMock(true)}
+                />
+              ),
+            },
+          ]}
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
@@ -293,9 +308,14 @@ describe('DashboardContainer', () => {
               showFilterIconInToolbar: true,
             },
           }}
-          renderToolbar={() => (
-            <ToolbarFilterToggleButton collapsed={false} onToggleClick={vi.fn()} />
-          )}
+          headerItems={[
+            {
+              id: 'filter-toggle',
+              component: () => (
+                <ToolbarFilterToggleButton collapsed={false} onToggleClick={vi.fn()} />
+              ),
+            },
+          ]}
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}
@@ -322,9 +342,14 @@ describe('DashboardContainer', () => {
               showFilterIconInToolbar: true,
             },
           }}
-          renderToolbar={() => (
-            <ToolbarFilterToggleButton collapsed={true} onToggleClick={vi.fn()} />
-          )}
+          headerItems={[
+            {
+              id: 'filter-toggle',
+              component: () => (
+                <ToolbarFilterToggleButton collapsed={true} onToggleClick={vi.fn()} />
+              ),
+            },
+          ]}
           widgets={[]}
           filters={[]}
           onFiltersChange={vi.fn()}

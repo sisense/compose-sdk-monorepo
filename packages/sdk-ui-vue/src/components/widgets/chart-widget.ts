@@ -160,6 +160,12 @@ export const ChartWidget = defineComponent({
      */
     styleOptions: Object as PropType<ChartWidgetProps['styleOptions']>,
     /**
+     * Configuration for AI-powered widget features such as automated narrative generation
+     * @alpha
+     * @category Widget
+     */
+    aiOptions: Object as PropType<ChartWidgetProps['aiOptions']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.title}
      *
      * @category Widget

@@ -27,6 +27,8 @@
  * Utilities for creating and inspecting color gradients used in chart styling
  * @groupDescription Primitives
  * General-purpose presentational primitive components
+ * @groupDescription Plugin System
+ * Types for building and registering custom visualization plugins
  * @groupDescription Interfaces
  * TypeScript interfaces for components and hooks listed above
  * @groupDescription Type Aliases

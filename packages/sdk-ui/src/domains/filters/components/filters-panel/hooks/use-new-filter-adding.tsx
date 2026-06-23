@@ -69,6 +69,7 @@ export const useNewFilterCreation = ({
             }}
             config={config}
             defaultDataSource={defaultDataSource}
+            dataSources={dataSources}
           />
         </>
       ) : null;

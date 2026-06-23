@@ -6,9 +6,10 @@ import merge from 'lodash-es/merge';
 
 import { useGetFilterMembersInternal } from '@/domains/filters/hooks/use-get-filter-members';
 import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-filter';
+import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
+import ErrorBoundaryBox from '@/infra/error-boundary/error-boundary-box';
 import { cloneFilterAndToggleDisabled } from '@/shared/utils/filters';
 
-import { asSisenseComponent } from '../../../../infra/decorators/component-decorators/as-sisense-component';
 import { useFilterTileMenuItems } from '../../shared/use-filter-tile-menu-items/use-filter-tile-menu-items';
 import { ScrollWrapperOnScrollEvent } from '../filter-editor-popover/common/scroll-wrapper';
 import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container';
@@ -145,12 +146,18 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     count: QUERY_MEMBERS_COUNT,
   });
 
-  if (isError) {
-    return <div>{error.message}</div>;
-  }
-
+  // The members query can resolve to an error state, in which case `data` is
+  // `undefined`. Fall back to neutral values so the hooks below always run in a
+  // stable order — returning early before them would skip hooks on the error
+  // render and trigger React's "Rendered fewer hooks than expected" crash.
   const { selectedMembers, allMembers, excludeMembers, enableMultiSelection, hasBackgroundFilter } =
-    data;
+    data ?? {
+      selectedMembers: [],
+      allMembers: [],
+      excludeMembers: false,
+      enableMultiSelection: false,
+      hasBackgroundFilter: false,
+    };
 
   const updateFilterFromMembersList = useCallback(
     (member: Member, isSelected: boolean) => {
@@ -199,59 +206,63 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
   );
 
   return (
-    <div data-testid="member-filter-tile">
-      <FilterTileContainer
-        title={title}
-        renderHeaderTitle={renderHeaderTitle}
-        renderContent={(collapsed, tileDisabled) => {
-          if (collapsed) {
-            return (
-              <PillSection
-                selectedMembers={selectedMembers}
-                onToggleSelectedMember={(memberKey) => {
-                  const newSelectedMembers = toggleActivationInSelectedMemberByMemberKey(
-                    selectedMembers,
-                    memberKey,
-                  );
-                  updateFilter(withSelectedMembers(filter, newSelectedMembers, excludeMembers));
-                }}
-                excludeMembers={excludeMembers}
-                disabled={tileDisabled}
-              />
-            );
-          }
+    <FilterTileContainer
+      title={title}
+      renderHeaderTitle={renderHeaderTitle}
+      renderContent={(collapsed, tileDisabled) => {
+        // Surface query failures (e.g. a filter whose dimension is missing from the
+        // data model) as a contained error box inside the tile, keeping the tile
+        // header and controls, rather than dumping the raw error message.
+        if (isError) {
+          return <ErrorBoundaryBox error={error} />;
+        }
+        if (collapsed) {
           return (
-            <MemberList
-              members={allMembers}
-              isMembersLoading={membersLoading}
+            <PillSection
               selectedMembers={selectedMembers}
-              onSelectMember={updateFilterFromMembersList}
-              checkAllMembers={() => updateFilter(withSelectedMembers(filter, [], true))}
-              uncheckAllMembers={() => updateFilter(withSelectedMembers(filter, [], false))}
+              onToggleSelectedMember={(memberKey) => {
+                const newSelectedMembers = toggleActivationInSelectedMemberByMemberKey(
+                  selectedMembers,
+                  memberKey,
+                );
+                updateFilter(withSelectedMembers(filter, newSelectedMembers, excludeMembers));
+              }}
               excludeMembers={excludeMembers}
-              enableMultiSelection={enableMultiSelection}
               disabled={tileDisabled}
-              onListScroll={handleMembersListScroll}
-              searchValue={searchValue}
-              onSearchValueChange={onSearchValueChange}
             />
           );
-        }}
-        disabled={filter.config.disabled}
-        onToggleDisabled={() => {
-          const newFilter = cloneFilterAndToggleDisabled(filter);
-          updateFilter(newFilter);
-        }}
-        isDependent={parentFilters && parentFilters.length > 0}
-        design={merge(tileDesignOptions, {
-          header: { hasBackgroundFilter },
-        })}
-        locked={filter.config.locked}
-        menuItems={menuItems}
-        onDelete={onDelete}
-        onEdit={onEdit}
-      />
-    </div>
+        }
+        return (
+          <MemberList
+            members={allMembers}
+            isMembersLoading={membersLoading}
+            selectedMembers={selectedMembers}
+            onSelectMember={updateFilterFromMembersList}
+            checkAllMembers={() => updateFilter(withSelectedMembers(filter, [], true))}
+            uncheckAllMembers={() => updateFilter(withSelectedMembers(filter, [], false))}
+            excludeMembers={excludeMembers}
+            enableMultiSelection={enableMultiSelection}
+            disabled={tileDisabled}
+            onListScroll={handleMembersListScroll}
+            searchValue={searchValue}
+            onSearchValueChange={onSearchValueChange}
+          />
+        );
+      }}
+      disabled={filter.config.disabled}
+      onToggleDisabled={() => {
+        const newFilter = cloneFilterAndToggleDisabled(filter);
+        updateFilter(newFilter);
+      }}
+      isDependent={parentFilters && parentFilters.length > 0}
+      design={merge(tileDesignOptions, {
+        header: { hasBackgroundFilter },
+      })}
+      locked={filter.config.locked}
+      menuItems={menuItems}
+      onDelete={onDelete}
+      onEdit={onEdit}
+    />
   );
 });
 

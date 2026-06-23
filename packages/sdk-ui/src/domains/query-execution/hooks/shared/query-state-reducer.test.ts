@@ -54,4 +54,21 @@ describe('queryStateReducer', () => {
     expect(newState.status).toBe('error');
     expect(newState.error).toBe(testError);
   });
+
+  it('should handle success-load-more action by extending rows', () => {
+    const successState = queryStateReducer(initialState, {
+      type: 'success',
+      data: {
+        columns: [{ name: 'col', type: 'string' }],
+        rows: [[{ data: 1 }]],
+      },
+    });
+    const newState = queryStateReducer(successState, {
+      type: 'success-load-more',
+      data: { columns: [{ name: 'col', type: 'string' }], rows: [[{ data: 2 }]] },
+    });
+
+    expect(newState.isSuccess).toBe(true);
+    expect(newState.data?.rows).toEqual([[{ data: 1 }], [{ data: 2 }]]);
+  });
 });

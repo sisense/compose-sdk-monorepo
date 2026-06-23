@@ -20,7 +20,11 @@ import {
   isPivotWidget,
   mergeFilters,
 } from '../../../widgets/components/widget-by-id/utils';
-import { executePivotQuery, executeQuery } from '../../core/execute-query';
+import {
+  executePivotQuery,
+  executeQuery,
+  executeQueryWithRowCount,
+} from '../../core/execute-query';
 import {
   ExecutePivotQueryParams,
   ExecuteQueryByWidgetIdParams,
@@ -77,6 +81,7 @@ export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetId
   const { isInitialized, app } = useSisenseContext();
   const query = useRef<QueryByWidgetIdState['query']>(undefined);
   const pivotQuery = useRef<QueryByWidgetIdState['pivotQuery']>(undefined);
+  const rowCount = useRef<QueryByWidgetIdState['rowCount']>(undefined);
   const [queryState, dispatch] = useReducer(queryStateReducer, {
     isLoading: true,
     isError: false,
@@ -103,6 +108,7 @@ export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetId
         filtersMergeStrategy,
         count,
         offset,
+        includeRowCount,
         includeDashboardFilters,
         onBeforeQuery,
       } = params;
@@ -118,12 +124,14 @@ export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetId
         app,
         count,
         offset,
+        includeRowCount,
         includeDashboardFilters,
         onBeforeQuery,
       })
-        .then(({ data, query: executedQuery, pivotQuery: executedPivotQuery }) => {
+        .then(({ data, query: executedQuery, pivotQuery: executedPivotQuery, rowCount: count }) => {
           query.current = executedQuery;
           pivotQuery.current = executedPivotQuery;
+          rowCount.current = count;
           dispatch({ type: 'success', data });
         })
         .catch((error: Error) => {
@@ -136,6 +144,7 @@ export function useExecuteQueryByWidgetIdInternal(params: ExecuteQueryByWidgetId
     ...queryState,
     query: query.current,
     pivotQuery: pivotQuery.current,
+    rowCount: rowCount.current,
   } as QueryByWidgetIdState;
 }
 
@@ -145,6 +154,7 @@ const simplySerializableParamNames: (keyof ExecuteQueryByWidgetIdParams)[] = [
   'dashboardOid',
   'count',
   'offset',
+  'includeRowCount',
   'filtersMergeStrategy',
   'includeDashboardFilters',
   'onBeforeQuery',
@@ -172,11 +182,12 @@ export async function executeQueryByWidgetId({
   filtersMergeStrategy,
   count,
   offset,
+  includeRowCount,
   includeDashboardFilters,
   app,
   onBeforeQuery,
 }: ExecuteQueryByWidgetIdParams & { app: ClientApplication }): Promise<
-  { data: QueryResultData } & QueryByWidgetIdQueryParams
+  { data: QueryResultData; rowCount?: number } & QueryByWidgetIdQueryParams
 > {
   const api = new RestApi(app.httpClient);
   const { widget: fetchedWidget, dashboard: fetchedDashboard } = await fetchWidgetDtoModel({
@@ -272,10 +283,20 @@ export async function executeQueryByWidgetId({
     };
   } else {
     const widgetQuery = widgetModelTranslator.toExecuteQueryParams(widgetModel);
-    const executeQueryParams: ExecuteQueryParams = prepareExecuteQueryParams(widgetQuery, false);
+    const executeQueryParams: ExecuteQueryParams = {
+      ...prepareExecuteQueryParams(widgetQuery, false),
+      includeRowCount,
+    };
     const queryDescription = convertToQueryDescription(executeQueryParams);
-    const data = await executeQuery(queryDescription, app, { onBeforeQuery });
 
+    if (includeRowCount) {
+      const { data, rowCount } = await executeQueryWithRowCount(queryDescription, app, {
+        onBeforeQuery,
+      });
+      return { data, rowCount, query: executeQueryParams, pivotQuery: undefined };
+    }
+
+    const data = await executeQuery(queryDescription, app, { onBeforeQuery });
     return {
       data,
       query: executeQueryParams,

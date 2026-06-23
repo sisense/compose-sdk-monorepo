@@ -13,6 +13,7 @@ import {
   ChartType,
   DrilldownOptions,
   PivotTableDrilldownOptions,
+  WidgetAiOptions,
   WidgetStyleOptions,
 } from '@/types';
 
@@ -71,6 +72,12 @@ export interface WidgetModel {
    * Widget style options.
    */
   styleOptions: WidgetStyleOptions;
+
+  /**
+   * Configuration for AI-powered widget features such as automated narrative generation
+   * @alpha
+   */
+  aiOptions?: WidgetAiOptions;
 
   /**
    * Custom widget options. Only present for custom widgets.

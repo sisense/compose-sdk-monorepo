@@ -38,6 +38,7 @@ export const chartDataService = (
   chartType: ChartType,
   chartDataOptions: ChartDataOptionsInternal,
   dataTable: DataTable,
+  defaultNumberFormattingEnabled = true,
 ): ChartData => {
   if (isCartesian(chartType)) {
     if (isForecastChart(chartDataOptions as CartesianChartDataOptionsInternal)) {
@@ -46,11 +47,23 @@ export const chartDataService = (
         dataTable,
       );
     }
-    return cartesianData(chartDataOptions as CartesianChartDataOptionsInternal, dataTable);
+    return cartesianData(
+      chartDataOptions as CartesianChartDataOptionsInternal,
+      dataTable,
+      defaultNumberFormattingEnabled,
+    );
   } else if (isCategorical(chartType)) {
-    return categoricalData(chartDataOptions as CategoricalChartDataOptionsInternal, dataTable);
+    return categoricalData(
+      chartDataOptions as CategoricalChartDataOptionsInternal,
+      dataTable,
+      defaultNumberFormattingEnabled,
+    );
   } else if (isScatter(chartType)) {
-    return scatterData(chartDataOptions as ScatterChartDataOptionsInternal, dataTable);
+    return scatterData(
+      chartDataOptions as ScatterChartDataOptionsInternal,
+      dataTable,
+      defaultNumberFormattingEnabled,
+    );
   } else if (isScattermap(chartType)) {
     return scattermapData(chartDataOptions as ScattermapChartDataOptionsInternal, dataTable);
   } else if (isIndicator(chartType)) {

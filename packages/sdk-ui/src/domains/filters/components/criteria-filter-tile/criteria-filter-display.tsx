@@ -42,7 +42,6 @@ export const CriteriaFilterDisplay: FunctionComponent<CriteriaFilterDisplayProps
   const filterInfo = CRITERIA_FILTER_MAP[filterType];
   const { t } = useTranslation();
 
-  // eslint-disable-next-line sonarjs/no-unused-collection
   let text = '';
   switch (filterInfo.inputCount) {
     case 1:
@@ -57,9 +56,9 @@ export const CriteriaFilterDisplay: FunctionComponent<CriteriaFilterDisplayProps
       }
   }
 
-  const displayText = `${t('criteriaFilter.displayModePrefix')} ${
-    text[0].toLowerCase() + text.slice(1)
-  }`;
+  const displayText = filterInfo.ranked
+    ? text
+    : `${t('criteriaFilter.displayModePrefix')} ${text[0].toLowerCase() + text.slice(1)}`;
 
   return <FilterContentDisplay>{displayText}</FilterContentDisplay>;
 };

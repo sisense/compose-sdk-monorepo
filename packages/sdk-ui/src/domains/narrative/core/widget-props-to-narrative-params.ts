@@ -33,15 +33,19 @@ import {
   getNarrativeDimensionsAndMeasures,
   getNarrativeDimensionsAndMeasuresFromTable,
 } from './get-narrative-dimensions-and-measures.js';
+import { getWidgetNarrativeOptionsFromWidgetProps } from './get-widget-narrative-from-widget-props.js';
+import { toNlgApiVerbosity } from './to-nlg-api-verbosity.js';
+import {
+  type CompleteWidgetNarrativeOptions,
+  getCompleteWidgetNarrativeOptions,
+} from './widget-narrative-options.js';
 
 /**
  * Converts ChartWidgetProps to {@link NarrativeQueryParams} by extracting dimensions and measures
  * from the chart data options.
  *
- * @param props - ChartWidgetProps to convert
+ * @param props - ChartWidgetProps to convert. `aiOptions.narrative` supplies {@link WidgetNarrativeOptions}. Defaults are calculated via {@link getCompleteWidgetNarrativeOptions})
  * @param defaultDataSource - Optional default data source to use if props.dataSource is undefined
- * @param verbosity - Optional verbosity for narrative text
- * @param ignoreTrendAndForecast - When `true`, omits trend/forecast companion measures from the narrative JAQL
  * @returns Params ready for {@link prepareNarrativeRequest}
  * @throws If neither `props.dataSource` nor `defaultDataSource` is set
  * @internal
@@ -49,8 +53,6 @@ import {
 export function convertChartWidgetPropsToNarrativeParams(
   props: ChartWidgetProps,
   defaultDataSource?: DataSource,
-  verbosity?: 'Low' | 'High',
-  ignoreTrendAndForecast = false,
 ): NarrativeQueryParams {
   const { dataSource, dataOptions, chartType, filters } = props;
   const resolvedDataSource = dataSource ?? defaultDataSource;
@@ -61,7 +63,10 @@ export function convertChartWidgetPropsToNarrativeParams(
     );
   }
 
-  const adaptMeasureOptions = { ignoreTrendAndForecast };
+  const { verbosity, includeTrendAndForecast } = getCompleteWidgetNarrativeOptions(
+    getWidgetNarrativeOptionsFromWidgetProps(props),
+  );
+  const adaptMeasureOptions = { includeTrendAndForecast };
   const { dimensions, measures } = isTable(chartType)
     ? getNarrativeDimensionsAndMeasuresFromTable(
         dataOptions as TableDataOptions,
@@ -74,7 +79,7 @@ export function convertChartWidgetPropsToNarrativeParams(
     dimensions,
     measures,
     filters,
-    verbosity,
+    verbosity: toNlgApiVerbosity(verbosity),
   };
 }
 
@@ -82,10 +87,9 @@ export function convertChartWidgetPropsToNarrativeParams(
  * Builds a narrative API request from pivot widget props using the same JAQL as pivot query
  * execution ({@link getPivotJaqlQueryPayload}).
  *
- * @param props - Pivot widget props (`widgetType: 'pivot'`)
+ * @param props - Pivot widget props (`widgetType: 'pivot'`); `aiOptions.narrative` supplies
+ *   {@link WidgetNarrativeOptions} via {@link getWidgetNarrativeOptionsFromWidgetProps}
  * @param defaultDataSource - Used when `props.dataSource` is undefined
- * @param verbosity - Optional verbosity for narrative text
- * @param ignoreTrendAndForecast - When `true`, omits trend/forecast from pivot value columns in the narrative JAQL
  * @returns Request ready for `getNarrative`
  * @throws If data source cannot be resolved, or pivot query description is invalid
  * @internal
@@ -93,8 +97,6 @@ export function convertChartWidgetPropsToNarrativeParams(
 export function convertPivotWidgetPropsToNarrativeRequest(
   props: WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>,
   defaultDataSource?: DataSource,
-  verbosity?: 'Low' | 'High',
-  ignoreTrendAndForecast = false,
 ): NarrativeRequest {
   const resolvedDataSource = props.dataSource ?? defaultDataSource;
 
@@ -104,8 +106,12 @@ export function convertPivotWidgetPropsToNarrativeRequest(
     );
   }
 
+  const { verbosity, includeTrendAndForecast } = getCompleteWidgetNarrativeOptions(
+    getWidgetNarrativeOptionsFromWidgetProps(props),
+  );
+
   const pivotDataOptions =
-    ignoreTrendAndForecast && props.dataOptions.values
+    !includeTrendAndForecast && props.dataOptions.values
       ? {
           ...props.dataOptions,
           values: props.dataOptions.values.map((v) =>
@@ -141,31 +147,74 @@ export function convertPivotWidgetPropsToNarrativeRequest(
   const jaqlPayload = getPivotJaqlQueryPayload(pivotQueryDescription, false);
   return prepareNarrativeRequest({
     jaql: jaqlPayload,
-    verbosity,
+    verbosity: toNlgApiVerbosity(verbosity),
   });
 }
 
 /**
- * @deprecated Use {@link convertChartWidgetPropsToNarrativeParams}. Same function; kept for legacy `getNlgInsightsFromWidget`.
+ * @deprecated Use {@link convertChartWidgetPropsToNarrativeParams} for {@link NarrativeQueryParams},
+ *   or {@link convertWidgetPropsToNarrativeParams} for a ready {@link NarrativeRequest}.
  */
 export const convertChartWidgetPropsToUseGetNlgInsightsParams =
   convertChartWidgetPropsToNarrativeParams;
 
 /**
- * Error message for imperative callers (e.g. {@link getNlgInsightsFromWidget}) when chart or pivot
- * props omit `dataSource` and no `defaultDataSource` is passed.
+ * Builds a {@link NarrativeRequest} from chart or pivot widget props (including `id` / `widgetType`).
+ *
+ * @param props - Chart or pivot {@link WidgetProps}
+ * @param defaultDataSource - Used when `props.dataSource` is undefined
+ * @returns Request ready for {@link getNarrative}
+ * @throws If widget type is not chart or pivot, data source cannot be resolved, or conversion fails
+ * @internal
+ */
+export function convertWidgetPropsToNarrativeParams(
+  props:
+    | WithCommonWidgetProps<ChartWidgetProps, 'chart'>
+    | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>,
+  defaultDataSource?: DataSource,
+): NarrativeRequest {
+  if (isPivotTableWidgetProps(props)) {
+    return convertPivotWidgetPropsToNarrativeRequest(props, defaultDataSource);
+  }
+  if (isChartWidgetProps(props)) {
+    return prepareNarrativeRequest(
+      convertChartWidgetPropsToNarrativeParams(props, defaultDataSource),
+    );
+  }
+  throw new Error('Expected chart or pivot widget props');
+}
+
+/**
+ * Completes widget narrative options from chart/pivot `WidgetProps` for NLG (`aiOptions.narrative`).
+ *
+ * @param props - Widget props (chart, pivot, or other)
+ * @returns Complete narrative defaults for non-chart/pivot types
+ * @internal
+ */
+export function getCompleteWidgetNarrativeOptionsFromWidgetProps(
+  props: WidgetProps,
+): CompleteWidgetNarrativeOptions {
+  if (isChartWidgetProps(props) || isPivotTableWidgetProps(props)) {
+    return getCompleteWidgetNarrativeOptions(getWidgetNarrativeOptionsFromWidgetProps(props));
+  }
+  return getCompleteWidgetNarrativeOptions(undefined);
+}
+
+/**
+ * Error message for imperative callers (e.g. {@link getNlgInsightsFromWidget}) when chart or pivot widget
+ * props omit `dataSource`, no defaultDataSource can be resolved from app context, and no defaultDataSource is provided.
  *
  * @internal
  */
 export const MISSING_DATASOURCE_NLG_ERROR =
-  'dataSource is required. Provide it on the widget props or as defaultDataSource parameter.';
+  'dataSource is required. Provide it on the widget props, defaultDataSource parameter or via SisenseContextProvider.';
 
 export type WidgetNarrativeRequestPair = {
   supported: boolean;
   narrativeRequest: NarrativeRequest | undefined;
   /**
-   * Same request with trend/forecast stripped. `undefined` when `ignoreTrendAndForecast` is
-   * already `true` (primary already stripped), when the widget type is unsupported, or when
+   * Same request with trend/forecast stripped. `undefined` when `includeTrendAndForecast` is
+   * already `false` (primary already stripped), when the widget type is unsupported, or when
    * the fallback conversion itself fails.
    */
   narrativeFallbackRequest: NarrativeRequest | undefined;
@@ -189,39 +238,43 @@ function unsupportedMissingDataSource(): WidgetNarrativeRequestPair {
   return { ...createUnsupported(), missingDataSource: true };
 }
 
+/** Clones chart/pivot props with `aiOptions.narrative.includeTrendAndForecast` forced to `false`. */
+function withNarrativeIncludeTrendForecastDisabled<P extends WidgetProps>(props: P): P {
+  if (!isChartWidgetProps(props) && !isPivotTableWidgetProps(props)) {
+    return props;
+  }
+  const prev = getWidgetNarrativeOptionsFromWidgetProps(props);
+  return {
+    ...props,
+    aiOptions: {
+      ...(props.aiOptions ?? {}),
+      narrative: {
+        ...(prev ?? {}),
+        includeTrendAndForecast: false,
+      },
+    },
+  } as P;
+}
+
 /**
  * Builds a primary narrative request and, when useful, a fallback request with trend/forecast
  * stripped — both from the same widget props in a single call.
  *
  * @param props - Chart or pivot widget props
- * @param defaultDataSource - Used when `props.dataSource` is undefined
- * @param verbosity - Optional verbosity for narrative text
- * @param ignoreTrendAndForecast - When `true`, the primary request already omits trend/forecast
- *   and no fallback is needed
+ * @param defaultDataSource - Used when `props.dataSource` is undefined.
  * @returns `{ supported, narrativeRequest, narrativeFallbackRequest }`. `supported` is `false`
  *   when the widget type is unsupported, when no data source can be resolved for chart/pivot, or
  *   when the primary conversion fails.
- * @example Chart or pivot widget props
- * ```ts
- * const { supported, narrativeRequest, narrativeFallbackRequest } =
- *   buildWidgetNarrativeRequests(
- *     widgetProps, // `WithCommonWidgetProps<ChartWidgetProps, 'chart'>` or pivot equivalent
- *     defaultDataSource,
- *     'High',
- *     false,
- *   );
- * ```
- * On success, `supported` is `true` and `narrativeRequest` / `narrativeFallbackRequest` hold the
- * primary and trend-stripped NLG payloads; otherwise `supported` is `false` and requests are
- * `undefined` (and `missingDataSource` may be set when no source could be resolved).
+ * @remarks {@link WidgetNarrativeOptions} are derived from `props.aiOptions?.narrative`
+ *   via {@link getWidgetNarrativeOptionsFromWidgetProps} and {@link getCompleteWidgetNarrativeOptions}.
  * @internal
  */
 export function buildWidgetNarrativeRequests(
   props: WidgetProps,
   defaultDataSource?: DataSource,
-  verbosity?: 'Low' | 'High',
-  ignoreTrendAndForecast = false,
 ): WidgetNarrativeRequestPair {
+  const { includeTrendAndForecast } = getCompleteWidgetNarrativeOptionsFromWidgetProps(props);
+
   if (isPivotTableWidgetProps(props)) {
     if (!(props.dataSource ?? defaultDataSource)) {
       return unsupportedMissingDataSource();
@@ -229,24 +282,17 @@ export function buildWidgetNarrativeRequests(
 
     let narrativeRequest: NarrativeRequest;
     try {
-      narrativeRequest = convertPivotWidgetPropsToNarrativeRequest(
-        props,
-        defaultDataSource,
-        verbosity,
-        ignoreTrendAndForecast,
-      );
+      narrativeRequest = convertWidgetPropsToNarrativeParams(props, defaultDataSource);
     } catch {
       return createUnsupported();
     }
 
     let narrativeFallbackRequest: NarrativeRequest | undefined;
-    if (!ignoreTrendAndForecast) {
+    if (includeTrendAndForecast) {
       try {
-        narrativeFallbackRequest = convertPivotWidgetPropsToNarrativeRequest(
-          props,
+        narrativeFallbackRequest = convertWidgetPropsToNarrativeParams(
+          withNarrativeIncludeTrendForecastDisabled(props),
           defaultDataSource,
-          verbosity,
-          true,
         );
       } catch {
         // fallback stays undefined
@@ -263,23 +309,17 @@ export function buildWidgetNarrativeRequests(
 
     let narrativeRequest: NarrativeRequest;
     try {
-      narrativeRequest = prepareNarrativeRequest(
-        convertChartWidgetPropsToNarrativeParams(
-          props,
-          defaultDataSource,
-          verbosity,
-          ignoreTrendAndForecast,
-        ),
-      );
+      narrativeRequest = convertWidgetPropsToNarrativeParams(props, defaultDataSource);
     } catch {
       return createUnsupported();
     }
 
     let narrativeFallbackRequest: NarrativeRequest | undefined;
-    if (!ignoreTrendAndForecast) {
+    if (includeTrendAndForecast) {
       try {
-        narrativeFallbackRequest = prepareNarrativeRequest(
-          convertChartWidgetPropsToNarrativeParams(props, defaultDataSource, verbosity, true),
+        narrativeFallbackRequest = convertWidgetPropsToNarrativeParams(
+          withNarrativeIncludeTrendForecastDisabled(props),
+          defaultDataSource,
         );
       } catch {
         // fallback stays undefined

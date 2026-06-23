@@ -1,27 +1,49 @@
 import { useCallback, useMemo } from 'react';
 
 import {
+  isMeasureColumn,
+  translateColumnToAttribute,
+} from '@/domains/visualizations/core/chart-data-options/utils.js';
+import {
   mapAttributesForExcelExport,
-  mapMeasuresForExcelExport,
+  mapMeasureColumnForExcelExport,
+  type MeasureWithExcelExportFormat,
 } from '@/domains/widgets/helpers/excel-export-map-dimensions-measures.js';
 import { useExcelQueryFileLoader } from '@/domains/widgets/hooks/use-excel-query-file-loader.js';
 import { useWithExcelDownloadMenuItem } from '@/domains/widgets/hooks/use-with-excel-download-menu-item.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
-import { extractDimensionsAndMeasures } from '@/infra/contexts/custom-widgets-provider/use-execute-custom-widget-query.js';
 import { useAppSettings } from '@/shared/hooks/use-app-settings.js';
+import type { GenericDataOptions } from '@/types';
 
 import type { CustomWidgetProps } from './types.js';
 
+function extractDimensionsAndMeasuresForExcelExport(dataOptions: GenericDataOptions): {
+  dimensions: ReturnType<typeof translateColumnToAttribute>[];
+  measures: MeasureWithExcelExportFormat[];
+} {
+  const dimensions: ReturnType<typeof translateColumnToAttribute>[] = [];
+  const measures: MeasureWithExcelExportFormat[] = [];
+
+  Object.keys(dataOptions).forEach((key) => {
+    if (!dataOptions[key].length) {
+      return;
+    }
+
+    dataOptions[key].forEach((column) => {
+      if (isMeasureColumn(column)) {
+        measures.push(mapMeasureColumnForExcelExport(column));
+      } else {
+        dimensions.push(translateColumnToAttribute(column));
+      }
+    });
+  });
+
+  return { dimensions, measures };
+}
+
 export type UseCustomWidgetExcelDownloadParams = Pick<
   CustomWidgetProps,
-  | 'title'
-  | 'dataOptions'
-  | 'filters'
-  | 'highlights'
-  | 'config'
-  | 'dataSource'
-  | 'customWidgetType'
-  | 'id'
+  'title' | 'dataOptions' | 'filters' | 'config' | 'dataSource' | 'customWidgetType' | 'id'
 > & {
   baseHeaderConfig: WidgetHeaderConfig;
 };
@@ -49,27 +71,24 @@ export function useCustomWidgetExcelDownload(
     baseHeaderConfig,
     id,
     filters,
-    highlights,
   } = props;
   const excelLoader = useExcelQueryFileLoader();
   const appSettings = useAppSettings();
   const isExportingXlsxV2FeatureOn = appSettings?.serverFeatures?.exportingXlsxV2?.active === true;
 
   const excelQueryParams = useMemo(() => {
-    const { dimensions, measures } = extractDimensionsAndMeasures(dataOptions);
+    const { dimensions, measures } = extractDimensionsAndMeasuresForExcelExport(dataOptions);
     return {
       dataSource,
       dimensions: mapAttributesForExcelExport(dimensions),
-      measures: mapMeasuresForExcelExport(measures),
-      filters,
-      highlights,
+      measures,
       ungroup: false,
       filename: title ? `${title}.xlsx` : undefined,
       widgetType: customWidgetType,
       widgetId: id,
       widgetTitle: title ?? '',
     };
-  }, [customWidgetType, dataOptions, dataSource, filters, highlights, id, title]);
+  }, [customWidgetType, dataOptions, dataSource, id, title]);
 
   const isCustomWidgetAllowExcelDownload =
     excelQueryParams.dimensions.length > 0 || excelQueryParams.measures.length > 0;
@@ -83,10 +102,15 @@ export function useCustomWidgetExcelDownload(
       if (!isExcelDownloadEnabled || !isCustomWidgetAllowExcelDownload) {
         return;
       }
-      const params = { ...excelQueryParams, mergeRows };
-      void excelLoader.execute(params);
+      void excelLoader.execute({ ...excelQueryParams, mergeRows, filters });
     },
-    [excelLoader, excelQueryParams, isCustomWidgetAllowExcelDownload, isExcelDownloadEnabled],
+    [
+      excelLoader,
+      excelQueryParams,
+      filters,
+      isCustomWidgetAllowExcelDownload,
+      isExcelDownloadEnabled,
+    ],
   );
 
   const headerConfig = useWithExcelDownloadMenuItem({

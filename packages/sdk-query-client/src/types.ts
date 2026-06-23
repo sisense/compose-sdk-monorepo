@@ -86,6 +86,11 @@ export type ExecutingQueryResult = {
   cancel: (reason?: string) => Promise<void>;
 };
 
+export type ExecutingCountRowsQueryResult = {
+  resultPromise: Promise<number>;
+  cancel: (reason?: string) => Promise<void>;
+};
+
 export type ExecutingCsvQueryResult = {
   resultPromise: Promise<Blob>;
   cancel: (reason?: string) => Promise<void>;
@@ -99,6 +104,10 @@ export type ExecutingPivotQueryResult = {
 export type JaqlQueryPayload = QueryOptions & {
   filterRelations?: FilterRelationsJaql;
   metadata: MetadataItem[];
+};
+
+export type CountRowsResponse = {
+  countRows: number;
 };
 
 export type JaqlResponse = {

@@ -7,6 +7,7 @@ import type {
   WidgetsOptions,
   WidgetsPanelLayout,
 } from '@/domains/dashboarding/dashboard-model/types.js';
+import type { TabberConfig, TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber.js';
 import { type WidgetProps } from '@/domains/widgets/components/widget/types.js';
 import { withHeaderMenuItem } from '@/domains/widgets/helpers/header-menu-utils.js';
 
@@ -21,6 +22,9 @@ export type SetWidgets = React.Dispatch<React.SetStateAction<WidgetProps[]>>;
 
 /** Setter for widgets options array (e.g. React setState or updater function). */
 export type SetWidgetsOptions = React.Dispatch<React.SetStateAction<WidgetsOptions>>;
+
+/** Setter for the dashboard-level tabbers config (e.g. React setState or updater function). */
+export type SetTabbersConfig = React.Dispatch<React.SetStateAction<TabbersConfig>>;
 
 /** Setter for widgets panel layout. */
 export type SetWidgetsLayout = (newLayout: WidgetsPanelLayout) => void;
@@ -43,6 +47,11 @@ export type UseDuplicateWidgetMenuItemParams = {
   widgetsOptions?: WidgetsOptions;
   /** Setter to update widgets options (e.g. from parent state). */
   setWidgetsOptions: SetWidgetsOptions;
+
+  /** Dashboard-level tabbers config (copied to the cloned widget so its tab show/hide mapping survives). */
+  tabbersConfig?: TabbersConfig;
+  /** Setter to update the tabbers config (e.g. from parent state). */
+  setTabbersConfig?: SetTabbersConfig;
 
   persistence?: Pick<DashboardPersistenceManager, 'addWidget'>;
 };
@@ -87,6 +96,8 @@ export function useDuplicateWidgetMenuItem(
     enabled = false,
     widgetsOptions,
     setWidgetsOptions,
+    tabbersConfig,
+    setTabbersConfig,
     persistence,
   } = params;
 
@@ -104,6 +115,9 @@ export function useDuplicateWidgetMenuItem(
       const newLayout = withNewCellInsertedToTheSameRow(location, tempWidgetId)(widgetsLayout);
 
       const widgetOptions: SpecificWidgetOptions | undefined = widgetsOptions?.[widgetId];
+      // Tabber show/hide mapping lives at the dashboard level (config.tabbers), keyed by the
+      // tabber widget's id — carry it so the duplicated tabber keeps controlling its widgets.
+      const tabberConfig: TabberConfig | undefined = tabbersConfig?.[widgetId];
 
       if (persistence) {
         try {
@@ -113,7 +127,8 @@ export function useDuplicateWidgetMenuItem(
             widget: storedWidget,
             widgetsPanelLayout: storedWidgetsPanelLayout,
             widgetOptions: storedWidgetOptions,
-          } = await persistence.addWidget(clonedWidget, newLayout, widgetOptions);
+            tabberConfig: storedTabberConfig,
+          } = await persistence.addWidget(clonedWidget, newLayout, widgetOptions, tabberConfig);
           setWidgets((prev) => {
             const orig = prev.find((w) => w.id === widgetId);
             if (!orig) return prev;
@@ -121,6 +136,9 @@ export function useDuplicateWidgetMenuItem(
           });
           setWidgetsLayout(storedWidgetsPanelLayout);
           setWidgetsOptions((prev) => ({ ...prev, [storedWidget.id]: storedWidgetOptions ?? {} }));
+          if (storedTabberConfig && setTabbersConfig) {
+            setTabbersConfig((prev) => ({ ...prev, [storedWidget.id]: storedTabberConfig }));
+          }
         } catch (error) {
           console.error('[useDuplicateWidgetMenuItem] Failed to persist duplicated widget:', error);
         }
@@ -128,15 +146,20 @@ export function useDuplicateWidgetMenuItem(
         setWidgets((prev) => [...prev, clonedWidget]);
         setWidgetsLayout(newLayout);
         setWidgetsOptions((prev) => ({ ...prev, [tempWidgetId]: widgetOptions ?? {} }));
+        if (tabberConfig && setTabbersConfig) {
+          setTabbersConfig((prev) => ({ ...prev, [tempWidgetId]: tabberConfig }));
+        }
       }
     },
     [
       widgets,
       widgetsLayout,
       widgetsOptions,
+      tabbersConfig,
       setWidgets,
       setWidgetsLayout,
       setWidgetsOptions,
+      setTabbersConfig,
       persistence,
     ],
   );

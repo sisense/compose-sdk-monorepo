@@ -6,7 +6,7 @@ import {
 } from '@/domains/visualizations/core/chart-data-processor/table-processor.js';
 import {
   applyFormatPlainText,
-  getCompleteNumberFormatConfig,
+  formatNumberWithFallback,
 } from '@/domains/visualizations/core/chart-options-processor/translations/number-format-config.js';
 import { createValueColorOptions } from '@/domains/widgets/components/widget-by-id/translate-panel-color-format.js';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
@@ -23,6 +23,7 @@ const defaultAreamapColorOptions = createValueColorOptions({
 export const getAreamapData = (
   dataOptions: AreamapChartDataOptionsInternal,
   dataTable: DataTable,
+  options?: { defaultNumberFormattingEnabled?: boolean },
 ): AreamapData => {
   const geoColumn = getColumnByName(dataTable, dataOptions.geo.column.name);
   const colorColumn = getColumnByName(
@@ -35,10 +36,16 @@ export const getAreamapData = (
     });
   }
 
+  const defaultNumberFormattingEnabled = options?.defaultNumberFormattingEnabled ?? true;
+
   const rawGeoData: RawGeoDataElement[] = dataTable.rows.map((row) => {
     const originalValue = getValue(row, colorColumn) as number;
-    const numberFormatConfig = getCompleteNumberFormatConfig(dataOptions.color?.numberFormatConfig);
-    const formattedOriginalValue = applyFormatPlainText(numberFormatConfig, originalValue);
+    const formattedOriginalValue = formatNumberWithFallback(
+      originalValue,
+      dataOptions.color?.numberFormatConfig,
+      defaultNumberFormattingEnabled,
+      applyFormatPlainText,
+    );
     return {
       geoName: getValue(row, geoColumn) as string,
       originalValue,

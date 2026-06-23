@@ -41,7 +41,7 @@ export const dimensionalModelECommerce = {
           },
         },
         {
-          expression: "[Category.'Category ID']",
+          expression: '[Category.Category ID]',
           name: 'Category ID',
           type: 'numeric-attribute',
           dataSource: {
@@ -59,6 +59,7 @@ export const dimensionalModelECommerce = {
         {
           expression: '[Commerce.Age Range]',
           name: 'Age Range',
+          title: 'Age Range DisplayName',
           type: 'text-attribute',
           dataSource: {
             title: 'Sample ECommerce',
@@ -75,7 +76,7 @@ export const dimensionalModelECommerce = {
           },
         },
         {
-          expression: "[Commerce.'Category ID']",
+          expression: '[Commerce.Category ID]',
           name: 'Category ID',
           type: 'numeric-attribute',
           dataSource: {

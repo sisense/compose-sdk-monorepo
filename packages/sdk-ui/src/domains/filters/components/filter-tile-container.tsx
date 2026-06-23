@@ -186,7 +186,10 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
   const disabledBgColor = getSlightlyDifferentColor(bgColor, 0.1);
 
   return (
-    <GroupHoverWrapper disableHeaderGroupHover={design.header.disableGroupHover}>
+    <GroupHoverWrapper
+      disableHeaderGroupHover={design.header.disableGroupHover}
+      data-testid="csdk-filter-tile-container"
+    >
       <Container
         shouldShowBorder={design.border?.shouldBeShown}
         style={{

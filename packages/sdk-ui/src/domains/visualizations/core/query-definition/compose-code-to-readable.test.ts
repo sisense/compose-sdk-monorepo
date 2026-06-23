@@ -137,6 +137,22 @@ describe('getQueryPillTooltipModel', () => {
     expect(model?.showFormulaInTooltip).toBe(true);
   });
 
+  it('uses title as layoutText when it differs from identity name', () => {
+    const model = getQueryPillTooltipModel({
+      type: 'pill',
+      label: 'Age Range',
+      category: 'dimension',
+      tooltipData: {
+        name: 'Age Range',
+        title: 'Age Range DisplayName',
+        composeCode: 'DM.Commerce.[[Age Range]]',
+      } as Attribute,
+    });
+    expect(model?.layoutText).toBe('Age Range DisplayName');
+    expect(model?.column).toBe('Commerce.Age Range');
+    expect(model?.showColumnInTooltip).toBe(true);
+  });
+
   it('uses pill label as layoutText when source has no name', () => {
     const model = getQueryPillTooltipModel({
       type: 'pill',

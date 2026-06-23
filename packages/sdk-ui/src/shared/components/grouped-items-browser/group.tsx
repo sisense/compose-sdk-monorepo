@@ -39,7 +39,7 @@ export const Group: React.FC<GroupProps> = ({
   }, [collapsed]);
 
   return (
-    <GroupContainer>
+    <GroupContainer data-testid="csdk-databrowser-group-container">
       <GroupHeader
         group={group}
         secondaryAction={groupSecondaryActionConfig}

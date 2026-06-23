@@ -5,13 +5,15 @@ import { PropsWithChildren, ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Cell, Data } from '@sisense/sdk-data';
-import { Authenticator, HttpClient } from '@sisense/sdk-rest-client';
+import { BearerAuthenticator, HttpClient } from '@sisense/sdk-rest-client';
 import { render, RenderResult } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import isObject from 'lodash-es/isObject';
 import { DeepPartial } from 'ts-essentials';
 
+import { DashboardModule } from '@/domains/dashboarding/dashboard-module';
 import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
+import { type Module, ModuleProvider } from '@/infra/modules';
 
 import { ClientApplication } from '../infra/app/types';
 import { CustomWidgetsProvider } from '../infra/contexts/custom-widgets-provider';
@@ -60,12 +62,15 @@ export const MockedHighchartsReact = ({
 };
 
 type MockedSisenseContextProviderProps = PropsWithChildren<
-  DeepPartial<Omit<SisenseContextPayload, 'app'>>
+  DeepPartial<Omit<SisenseContextPayload, 'app'>> & {
+    /** Extra modules to register, in addition to the built-in `DashboardModule`. */
+    modules?: Module[];
+  }
 >;
 
 const mockHttpClient = new HttpClient(
   'http://mock-url/sometenant?someparam=true',
-  {} as Authenticator,
+  new BearerAuthenticator('http://mock-url', 'mock-token'),
   'mock-env',
 );
 export const MockedSisenseContextProvider = ({
@@ -75,12 +80,14 @@ export const MockedSisenseContextProvider = ({
   },
   isInitialized = true,
   errorBoundary,
+  modules,
 }: MockedSisenseContextProviderProps) => {
   return (
     <SisenseContext.Provider
       value={{
         app: {
           httpClient: mockHttpClient,
+          settings: {},
         } as ClientApplication,
         tracking: {
           enabled: tracking.enabled ?? true,
@@ -90,9 +97,11 @@ export const MockedSisenseContextProvider = ({
         errorBoundary: { showErrorBox: true, ...errorBoundary },
       }}
     >
-      <MenuProvider>
-        <CustomWidgetsProvider>{children}</CustomWidgetsProvider>
-      </MenuProvider>
+      <ModuleProvider modules={[DashboardModule, ...(modules ?? [])]}>
+        <MenuProvider>
+          <CustomWidgetsProvider>{children}</CustomWidgetsProvider>
+        </MenuProvider>
+      </ModuleProvider>
     </SisenseContext.Provider>
   );
 };

@@ -27,6 +27,7 @@ import {
   PivotTableDataOptions,
   RangeChartDataOptions,
   RegularChartDataOptions,
+  SankeyChartDataOptions,
   ScatterChartDataOptions,
   ScattermapChartDataOptions,
   TableDataOptions,
@@ -72,6 +73,7 @@ import {
   PolarStyleOptions,
   RegularChartStyleOptions,
   RegularChartType,
+  SankeyStyleOptions,
   ScatterDataPoint,
   ScattermapDataPoint,
   ScattermapStyleOptions,
@@ -313,6 +315,13 @@ export interface ExecuteQueryProps {
 
   /** {@inheritDoc ExecuteQueryParams.ungroup} */
   ungroup?: boolean;
+
+  /**
+   * {@inheritDoc ExecuteQueryParams.includeRowCount}
+   *
+   * @beta
+   */
+  includeRowCount?: boolean;
 
   /** Function as child component that is called to render the query results */
   children?: (queryResult: ExecuteQueryResult) => ReactNode;
@@ -1067,6 +1076,42 @@ export interface FunnelChartProps
 }
 
 /**
+ * Props of the {@link SankeyChart} component.
+ *
+ * @group Charts
+ * @beta
+ *
+ * @example
+ * ```tsx
+ * <SankeyChart
+ *   dataSet={DM.DataSource}
+ *   dataOptions={{
+ *     category: [DM.Commerce.Gender, DM.Category.Category],
+ *     value: measureFactory.sum(DM.Commerce.Revenue),
+ *   }}
+ *   styleOptions={{ orientation: 'horizontal' }}
+ * />
+ * ```
+ */
+export interface SankeyChartProps
+  extends BaseChartProps,
+    HighchartsBasedChartEventProps,
+    RegularChartEventProps {
+  /**
+   * Configurations for how to interpret and present the data passed to the chart.
+   *
+   * @category Chart
+   */
+  dataOptions: SankeyChartDataOptions;
+  /**
+   * Configurations for how to style and present a chart's data.
+   *
+   * @category Chart
+   */
+  styleOptions?: SankeyStyleOptions;
+}
+
+/**
  * Props of the {@link LineChart} component.
  */
 export interface LineChartProps
@@ -1442,6 +1487,13 @@ export interface ExecuteQueryByWidgetIdProps {
 
   /** {@inheritDoc ExecuteQueryParams.offset} */
   offset?: number;
+
+  /**
+   * {@inheritDoc ExecuteQueryByWidgetIdParams.includeRowCount}
+   *
+   * @beta
+   */
+  includeRowCount?: boolean;
 
   /** {@inheritDoc ExecuteQueryByWidgetIdParams.filtersMergeStrategy} */
   filtersMergeStrategy?: FiltersMergeStrategy;

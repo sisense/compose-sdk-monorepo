@@ -123,6 +123,61 @@ describe('helpers', () => {
     it('should clean and group complex data model', () => {
       expect(rewriteDataModel(fieldsOrdersDB)).toEqual(dimensionalModelOrdersDB);
     });
+
+    it('should map column identity to name and title when title differs', () => {
+      const result = rewriteDataModel({
+        name: 'Test',
+        dataSource: 'Test',
+        metadata: [
+          {
+            id: '[Commerce.Age Range]',
+            type: 'dimension',
+            dimtype: 'text',
+            title: 'Age Range DisplayName',
+            table: 'Commerce',
+            column: 'Age Range',
+            merged: false,
+            indexed: true,
+          },
+        ],
+      });
+
+      const grouped = result.metadata[0] as unknown as {
+        attributes: Array<Record<string, string>>;
+      };
+      expect(grouped.attributes[0]).toMatchObject({
+        name: 'Age Range',
+        title: 'Age Range DisplayName',
+        expression: '[Commerce.Age Range]',
+      });
+    });
+
+    it('should derive identity from expression when column is omitted', () => {
+      const result = rewriteDataModel({
+        name: 'Test',
+        dataSource: 'Test',
+        metadata: [
+          {
+            id: '[Commerce.Age Range]',
+            type: 'dimension',
+            dimtype: 'text',
+            title: 'Age Range DisplayName',
+            table: 'Commerce',
+            merged: false,
+            indexed: true,
+          },
+        ],
+      });
+
+      const grouped = result.metadata[0] as unknown as {
+        attributes: Array<Record<string, string>>;
+      };
+      expect(grouped.attributes[0]).toMatchObject({
+        name: 'Age Range',
+        title: 'Age Range DisplayName',
+        expression: '[Commerce.Age Range]',
+      });
+    });
   });
   describe('writeFile', () => {
     const fakeDataModel = { name: 'fakeDataModel' } as DataModel;

@@ -1,6 +1,5 @@
 ---
 title: 5 | Design Panel
-hidden: true
 ---
 
 # Design Panel

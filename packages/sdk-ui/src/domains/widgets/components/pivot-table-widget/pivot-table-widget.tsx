@@ -1,9 +1,15 @@
-import { type FunctionComponent, useCallback, useState } from 'react';
+import { type FunctionComponent, useCallback, useMemo, useState } from 'react';
 
 import { Attribute, getDataSourceName } from '@sisense/sdk-data';
+import omit from 'lodash-es/omit';
 
+import { NarrativeTriggerButton } from '@/domains/narrative/components/narrative-trigger-button';
+import { WidgetNarrative } from '@/domains/narrative/components/widget-narrative';
+import { getWidgetNarrativeOptionsFromWidgetProps } from '@/domains/narrative/core/get-widget-narrative-from-widget-props.js';
+import { getCompleteWidgetNarrativeOptions } from '@/domains/narrative/core/widget-narrative-options.js';
 import { PivotTable } from '@/domains/visualizations/components/pivot-table';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
+import type { WithCommonWidgetProps } from '@/domains/widgets/components/widget/types';
 import { DataOptionLocation, DrilldownSelection } from '@/index';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
@@ -31,10 +37,10 @@ const MIN_PIVOT_HEIGHT = 100;
  * Computes the outer widget height in auto-height mode.
  *
  * The inner pivot reports only its own table height. The widget reserves additional vertical
- * space above the pivot — the container chrome (header + `spaceAround` padding, SNS-127785) and
- * the optional top slot (e.g. drilldown breadcrumbs, SNS-128141). Callers must sum all such
- * non-pivot reserved space into `reservedHeight` so that pagination at the bottom of the pivot
- * remains reachable.
+ * space above the pivot — the container chrome (header + `spaceAround` padding) and
+ * the optional top slot (e.g. drilldown breadcrumbs, narrative-above). Callers must
+ * sum all such non-pivot reserved space into `reservedHeight` so that pagination at the bottom of
+ * the pivot remains reachable.
  *
  * @param pivotTableHeight - The measured content height of the pivot table.
  * @param reservedHeight - The total non-pivot vertical space the widget reserves (chrome + topSlot).
@@ -99,9 +105,9 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
   });
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [pivotTableHeight, setPivotTableHeight] = useState<number | undefined>();
-  // Measure the top slot (e.g. drilldown breadcrumbs) so its height is included in the
-  // auto-height budget — otherwise breadcrumbs appearing after a drilldown push the
-  // pagination controls out of the visible area (SNS-128141).
+  // Measure the top slot (custom content, narrative-above, drilldown breadcrumbs) so its height is
+  // included in the auto-height budget — otherwise dynamic top-slot content pushes the pagination
+  // controls out of the visible area.
   const { ref: topSlotRef, height: topSlotHeight } = useElementHeight<HTMLDivElement>();
   const { app } = useSisenseContext();
   const { themeSettings } = useThemeContext();
@@ -130,7 +136,6 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     dataOptions,
     dataSource,
     filters: props.filters,
-    highlights: props.highlights,
     config: props.config,
     id: props.id,
   });
@@ -138,7 +143,11 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
   const hasHeader = !styleOptions?.header?.hidden;
   const defaultSize = getWidgetDefaultSize('pivot', { hasHeader });
   const overheadHeight = getWidgetOverheadHeight({ styleOptions, themeSettings, hasHeader });
-  const { width, height, ...styleOptionsWithoutSizing } = props.styleOptions || {};
+  const isAutoHeight = styleOptions?.isAutoHeight ?? false;
+  const styleOptionsWithoutSizing = useMemo(
+    () => omit(props.styleOptions, ['width', 'height']),
+    [props.styleOptions],
+  );
 
   const onDrilldownSelectionsChange = useCallback(
     (target: Attribute | DataOptionLocation, selections: DrilldownSelection[]) => {
@@ -155,6 +164,114 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     onDrilldownSelectionsChange,
   });
 
+  const completeNarrativeOptions = useMemo(
+    () =>
+      getCompleteWidgetNarrativeOptions(
+        getWidgetNarrativeOptionsFromWidgetProps(propsWithDrilldown),
+      ),
+    [propsWithDrilldown],
+  );
+
+  const isAutoShowNarrativeEnabled =
+    !!app?.settings?.narrativeConfig?.widgetNarrativeEnabled &&
+    completeNarrativeOptions.enabled &&
+    completeNarrativeOptions.autoShow;
+
+  // Pivot table bottom slot causes issues with pagination controls
+  // Force narrative to be shown above the pivot table when the display location is 'above' or 'below'
+  const showNarrativeAbove =
+    isAutoShowNarrativeEnabled &&
+    (completeNarrativeOptions.displayLocation === 'above' ||
+      completeNarrativeOptions.displayLocation === 'below');
+
+  const canGenerateNarrativeViaAI = app?.settings?.narrative?.canGenerateNarrativeViaAI ?? false;
+
+  const [narrativeVisible, setNarrativeVisible] = useState(false);
+
+  const showNarrativeTrigger =
+    canGenerateNarrativeViaAI &&
+    completeNarrativeOptions.enabled &&
+    !completeNarrativeOptions.autoShow;
+
+  const containerStyleOptions = useMemo(() => {
+    if (!showNarrativeTrigger) return styleOptions;
+    return {
+      ...styleOptions,
+      header: {
+        ...styleOptions?.header,
+        renderToolbar: (_onRefresh: () => void, defaultToolbar: JSX.Element) => {
+          const toolbar = styleOptions?.header?.renderToolbar
+            ? styleOptions.header.renderToolbar(_onRefresh, defaultToolbar)
+            : defaultToolbar;
+          return (
+            <>
+              {toolbar}
+              <NarrativeTriggerButton
+                isVisible={narrativeVisible}
+                onClick={() => setNarrativeVisible((v) => !v)}
+              />
+            </>
+          );
+        },
+      },
+    };
+  }, [showNarrativeTrigger, styleOptions, setNarrativeVisible, narrativeVisible]);
+
+  const narrativeShouldShow =
+    canGenerateNarrativeViaAI &&
+    completeNarrativeOptions.enabled &&
+    (completeNarrativeOptions.autoShow || narrativeVisible);
+
+  const narrativeWidgetProps = useMemo((): WithCommonWidgetProps<
+    PivotTableWidgetProps,
+    'pivot'
+  > => {
+    const base = propsWithDrilldown as PivotTableWidgetProps & { id?: string };
+    const id = typeof base.id === 'string' ? base.id : '__pivotWidgetNarrative__';
+    return {
+      ...base,
+      id,
+      widgetType: 'pivot',
+      dataSource,
+    };
+  }, [propsWithDrilldown, dataSource]);
+
+  const hasTopSlotContent = Boolean(props.topSlot || breadcrumbs || showNarrativeAbove);
+
+  const handlePivotTableHeightChange = useCallback((nextHeight: number) => {
+    setPivotTableHeight(nextHeight);
+  }, []);
+
+  const pivotTableProps = useMemo(
+    () => ({
+      dataSet: dataSource,
+      dataOptions: propsWithDrilldown.dataOptions,
+      styleOptions: styleOptionsWithoutSizing,
+      filters: propsWithDrilldown.filters,
+      highlights: propsWithDrilldown.highlights,
+      refreshCounter,
+      onHeightChange: isAutoHeight ? handlePivotTableHeightChange : undefined,
+      onDataPointClick: propsWithDrilldown.onDataPointClick,
+      onDataPointContextMenu: propsWithDrilldown.onDataPointContextMenu,
+      onDataCellFormat: propsWithDrilldown.onDataCellFormat,
+      onHeaderCellFormat: propsWithDrilldown.onHeaderCellFormat,
+    }),
+    [
+      dataSource,
+      propsWithDrilldown.dataOptions,
+      propsWithDrilldown.filters,
+      propsWithDrilldown.highlights,
+      propsWithDrilldown.onDataPointClick,
+      propsWithDrilldown.onDataPointContextMenu,
+      propsWithDrilldown.onDataCellFormat,
+      propsWithDrilldown.onHeaderCellFormat,
+      styleOptionsWithoutSizing,
+      refreshCounter,
+      isAutoHeight,
+      handlePivotTableHeightChange,
+    ],
+  );
+
   if (!dataOptions) {
     return null;
   }
@@ -163,40 +280,44 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     <DynamicSizeContainer
       defaultSize={defaultSize}
       size={{
-        width: width,
-        height: styleOptions?.isAutoHeight
+        width: styleOptions?.width,
+        height: isAutoHeight
           ? calcPivotTableWidgetHeight(pivotTableHeight, overheadHeight + topSlotHeight)
-          : height,
+          : styleOptions?.height,
       }}
     >
       <WidgetContainer
         {...props}
+        styleOptions={containerStyleOptions}
         headerConfig={headerConfig}
         titleEditor={titleEditor}
         topSlot={
-          props.topSlot || breadcrumbs ? (
-            <div ref={topSlotRef}>
+          hasTopSlotContent ? (
+            <div ref={isAutoHeight ? topSlotRef : undefined}>
               {props.topSlot}
+              {narrativeShouldShow && completeNarrativeOptions.displayLocation === 'above' ? (
+                <WidgetNarrative widgetProps={narrativeWidgetProps} />
+              ) : null}
               {breadcrumbs}
             </div>
           ) : undefined
         }
         dataSetName={dataSource && getDataSourceName(dataSource)}
         onRefresh={() => setRefreshCounter(refreshCounter + 1)}
+        bottomSlot={
+          <>
+            {narrativeShouldShow && completeNarrativeOptions.displayLocation === 'below' ? (
+              <WidgetNarrative widgetProps={narrativeWidgetProps} />
+            ) : null}
+            {props.bottomSlot}
+          </>
+        }
       >
-        <PivotTable
-          dataSet={propsWithDrilldown.dataSource}
-          dataOptions={propsWithDrilldown.dataOptions}
-          styleOptions={styleOptionsWithoutSizing}
-          filters={propsWithDrilldown.filters}
-          highlights={propsWithDrilldown.highlights}
-          refreshCounter={refreshCounter}
-          onHeightChange={setPivotTableHeight}
-          onDataPointClick={propsWithDrilldown.onDataPointClick}
-          onDataPointContextMenu={propsWithDrilldown.onDataPointContextMenu}
-          onDataCellFormat={propsWithDrilldown.onDataCellFormat}
-          onHeaderCellFormat={propsWithDrilldown.onHeaderCellFormat}
-        />
+        {narrativeShouldShow && completeNarrativeOptions.displayLocation === 'alone' ? (
+          <WidgetNarrative widgetProps={narrativeWidgetProps} />
+        ) : (
+          <PivotTable {...pivotTableProps} />
+        )}
       </WidgetContainer>
     </DynamicSizeContainer>
   );

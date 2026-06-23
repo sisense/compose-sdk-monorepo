@@ -16,6 +16,7 @@ import {
   CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
   RangeChartDataOptionsInternal,
+  SankeyChartDataOptionsInternal,
   ScatterChartDataOptionsInternal,
 } from '@/domains/visualizations/core/chart-data-options/types';
 import { getDataOptionGranularity } from '@/domains/visualizations/core/chart-data-options/utils';
@@ -454,6 +455,120 @@ const getCalendarHeatmapDataPoint = (
   };
 };
 
+/** Highcharts Sankey point fields not present on the base HighchartsPoint type. */
+type SankeyHighchartsPoint = HighchartsPoint & {
+  isNode?: boolean;
+  /** 0-based stage index within the diagram. */
+  column?: number;
+  id?: string;
+  sum?: number;
+  weight?: number;
+  options?: { custom?: { rawValue?: unknown } };
+  fromNode?: {
+    name?: string;
+    id?: string;
+    column?: number;
+    options?: { custom?: { rawValue?: unknown } };
+  };
+  toNode?: {
+    name?: string;
+    id?: string;
+    column?: number;
+    options?: { custom?: { rawValue?: unknown } };
+  };
+};
+
+/**
+ * Returns a DataPoint for a Sankey chart click event.
+ *
+ * A Highcharts Sankey point is either a node (isNode=true, with .id/.name/.sum)
+ * or a link (isNode=false/undefined, with .fromNode/.toNode/.weight).
+ * We map the clicked node name to a category entry so callers can build filters.
+ */
+const getSankeyDataPoint = (
+  point: HighchartsPoint,
+  dataOptions: SankeyChartDataOptionsInternal,
+): DataPoint => {
+  const p = point as SankeyHighchartsPoint;
+  const isNode = Boolean(p.isNode);
+
+  if (isNode) {
+    // p.name is the human-readable display label set from SankeyNode.name.
+    // p.id carries the column-prefixed unique ID (e.g. "2__Unspecified"); don't expose that.
+    const nodeName: string = p.name ?? p.id ?? '';
+    // Highcharts sets `point.column` to the 0-based stage index of the node in the diagram.
+    // Use it to select exactly the matching category column so callers get a precise attribute.
+    const columnIndex: number = typeof p.column === 'number' ? p.column : 0;
+    const matchingCategory = dataOptions.category[columnIndex] ?? dataOptions.category[0];
+    // Use the raw value stored in node custom data when available (e.g. date timestamps).
+    const rawValue: string | number =
+      typeof p.options?.custom?.rawValue === 'string' ||
+      typeof p.options?.custom?.rawValue === 'number'
+        ? p.options.custom.rawValue
+        : nodeName;
+    const categoryEntries: DataPointEntry[] = [
+      {
+        ...getDataPointMetadata(matchingCategory),
+        value: rawValue,
+        displayValue: nodeName,
+      } as DataPointEntry,
+    ];
+    const normalizedSum = p.sum ?? 0;
+    const valueEntry: DataPointEntry = {
+      ...getDataPointMetadata(dataOptions.value),
+      value: normalizedSum,
+      displayValue: createFormatter(dataOptions.value)(normalizedSum),
+    };
+    return {
+      value: normalizedSum,
+      categoryValue: rawValue,
+      categoryDisplayValue: nodeName,
+      entries: {
+        category: categoryEntries,
+        value: [valueEntry],
+      },
+    };
+  }
+
+  // Link point
+  const fromName: string = p.fromNode?.name ?? p.fromNode?.id ?? '';
+  const toName: string = p.toNode?.name ?? p.toNode?.id ?? '';
+  const weight: number = p.weight ?? 0;
+  const fromColumn: number = typeof p.fromNode?.column === 'number' ? p.fromNode.column : 0;
+  const toColumn: number = typeof p.toNode?.column === 'number' ? p.toNode.column : fromColumn + 1;
+  const fromCategory = dataOptions.category[fromColumn] ?? dataOptions.category[0];
+  const toCategory =
+    dataOptions.category[toColumn] ?? dataOptions.category[dataOptions.category.length - 1];
+  const fromRaw: string | number =
+    typeof p.fromNode?.options?.custom?.rawValue === 'string' ||
+    typeof p.fromNode?.options?.custom?.rawValue === 'number'
+      ? p.fromNode.options.custom.rawValue
+      : fromName;
+  const toRaw: string | number =
+    typeof p.toNode?.options?.custom?.rawValue === 'string' ||
+    typeof p.toNode?.options?.custom?.rawValue === 'number'
+      ? p.toNode.options.custom.rawValue
+      : toName;
+  return {
+    value: weight,
+    categoryValue: fromName,
+    categoryDisplayValue: `${fromName} → ${toName}`,
+    entries: {
+      category: [
+        { ...getDataPointMetadata(fromCategory), value: fromRaw, displayValue: fromName },
+        { ...getDataPointMetadata(toCategory), value: toRaw, displayValue: toName },
+      ],
+      value: [
+        {
+          ...getDataPointMetadata(dataOptions.value),
+          value: weight,
+          displayValue: createFormatter(dataOptions.value)(weight),
+        },
+      ],
+    },
+  };
+};
+
 export function getDataPoint(
   point: HighchartsPoint,
   dataOptions: ChartDataOptionsInternal,
@@ -478,6 +593,8 @@ export function getDataPoint(
         point,
         dataOptions as CalendarHeatmapChartDataOptionsInternal,
       );
+    case 'sankey':
+      return getSankeyDataPoint(point, dataOptions as SankeyChartDataOptionsInternal);
     default:
       return getCartesianDataPoint(point, dataOptions as CartesianChartDataOptionsInternal);
   }

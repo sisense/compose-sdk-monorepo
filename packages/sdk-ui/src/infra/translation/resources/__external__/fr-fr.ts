@@ -294,11 +294,13 @@ const translation: TranslationDictionary = {
       incorrectResponse: 'Réponse incorrecte',
       clearChat: 'Effacer le chat',
       refresh: 'Actualiser',
-      readMore: 'Lire plus',
+      readMore: 'Afficher plus',
       collapse: 'Réduire',
       yes: 'Oui',
       no: 'Non',
       seeMore: 'Voir plus',
+      generateNarrative: 'Générer une narration IA',
+      hideNarrative: 'Masquer la narration IA',
     },
     disclaimer: {
       poweredByAi:
@@ -364,6 +366,8 @@ const translation: TranslationDictionary = {
       from: 'De',
       to: 'À',
       includeCurrent: "Incluant l'actuel",
+      rankedBy: 'Classé par',
+      selectField: 'Sélectionner un champ',
     },
     placeholders: {
       selectFromList: 'Sélectionner dans la liste',
@@ -388,6 +392,8 @@ const translation: TranslationDictionary = {
       greaterThan: 'Supérieur à',
       greaterThanOrEqual: 'Égal ou supérieur à',
       isWithin: 'Est dans',
+      top: 'Top',
+      bottom: 'Derniers',
     },
     validationErrors: {
       invalidNumber: 'Nombres uniquement',
@@ -484,6 +490,12 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Tableau de données',
     },
+    sankey: {
+      alerts: {
+        tooManyStages:
+          'Le diagramme de Sankey comporte {{stageCount}} étapes ; au-delà de {{softLimit}} le diagramme devient souvent illisible. Réduisez les colonnes de catégorie ou resserrez les filtres.',
+      },
+    },
   },
   loadingOverlay: {
     label: 'Chargement du contenu',
@@ -508,6 +520,17 @@ const translation: TranslationDictionary = {
     stdev: 'Écart-type',
     median: 'Médiane',
     variance: 'Variance',
+  },
+  measuresAgg: {
+    countDistinct: '# uniques',
+    count: '# de',
+    sum: 'Total',
+    average: 'Moyenne',
+    min: 'Min',
+    max: 'Max',
+    median: 'Médiane de',
+    variance: 'Variance de',
+    stdev: 'Écart-type de',
   },
 };
 

@@ -56,6 +56,7 @@ describe('tooltip.ts', () => {
         themeSettings: {} as any,
         dateFormatter: vi.fn(),
         accessibilityEnabled: false,
+        defaultNumberFormattingEnabled: true,
       },
     });
 
@@ -78,7 +79,7 @@ describe('tooltip.ts', () => {
       const ctx = createMockBuildContext(true);
       const result = getBasicCategoricalTooltip(ctx);
 
-      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(true, mockDataOptions);
+      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(true, mockDataOptions, true);
       expect(result).toEqual(expectedTooltipSettings);
     });
 
@@ -97,7 +98,7 @@ describe('tooltip.ts', () => {
       const ctx = createMockBuildContext(false);
       const result = getBasicCategoricalTooltip(ctx);
 
-      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(false, mockDataOptions);
+      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(false, mockDataOptions, true);
       expect(result).toEqual(expectedTooltipSettings);
     });
 
@@ -116,7 +117,7 @@ describe('tooltip.ts', () => {
       const ctx = createMockBuildContext(undefined);
       const result = getBasicCategoricalTooltip(ctx);
 
-      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(false, mockDataOptions);
+      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(false, mockDataOptions, true);
       expect(result).toEqual(expectedTooltipSettings);
     });
 
@@ -167,12 +168,13 @@ describe('tooltip.ts', () => {
           themeSettings: {} as any,
           dateFormatter: vi.fn(),
           accessibilityEnabled: false,
+          defaultNumberFormattingEnabled: true,
         },
       };
 
       const result = getBasicCategoricalTooltip(ctx);
 
-      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(false, mockDataOptions);
+      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(false, mockDataOptions, true);
       expect(result).toEqual(expectedTooltipSettings);
     });
 
@@ -193,7 +195,7 @@ describe('tooltip.ts', () => {
       const ctx = createMockBuildContext(true, customDataOptions);
       const result = getBasicCategoricalTooltip(ctx);
 
-      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(true, customDataOptions);
+      expect(mockGetCategoryTooltipSettings).toHaveBeenCalledWith(true, customDataOptions, true);
       expect(result).toEqual(expectedTooltipSettings);
     });
 

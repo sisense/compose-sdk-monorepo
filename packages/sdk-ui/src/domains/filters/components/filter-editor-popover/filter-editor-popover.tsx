@@ -24,6 +24,7 @@ type FilterEditorPopoverProps = {
   onClose?: () => void;
   /** Default data source used for filter attribute */
   defaultDataSource?: DataSource;
+  dataSources?: DataSource[];
   config?: FilterEditorConfig;
 };
 
@@ -95,6 +96,7 @@ export const FilterEditorPopover = ({
   onChange,
   onClose,
   defaultDataSource,
+  dataSources,
   config,
 }: FilterEditorPopoverProps) => {
   const { t } = useTranslation();
@@ -124,7 +126,7 @@ export const FilterEditorPopover = ({
       onClose={onClose}
       aria-label="Filter editor popover"
     >
-      <Container theme={themeSettings}>
+      <Container theme={themeSettings} data-testid="csdk-filter-editor-popover-root">
         <ModalHeader theme={themeSettings}>
           <ModalHeaderTitle data-testid="filter-editor-popover-header-attribute">
             {filter?.attribute.title}
@@ -142,6 +144,7 @@ export const FilterEditorPopover = ({
           parentFilters={parentFilters}
           onChange={(filter) => setEditedFilter(filter)}
           defaultDataSource={defaultDataSource}
+          dataSources={dataSources}
           config={config}
         />
         <ModalFooter theme={themeSettings}>

@@ -16,7 +16,8 @@ export type HighchartBasedChartTypes =
   | 'funnel'
   | 'treemap'
   | 'calendar-heatmap'
-  | 'sunburst';
+  | 'sunburst'
+  | 'sankey';
 
 export type HighchartsOptionsBuilder<CT extends HighchartBasedChartTypes> = {
   getChart: (ctx: BuildContext<CT>) => HighchartsOptionsInternal['chart'];
@@ -40,5 +41,6 @@ export type BuildContext<CT extends HighchartBasedChartTypes> = {
     themeSettings: CompleteThemeSettingsInternal;
     dateFormatter: (date: Date, format: string) => string;
     accessibilityEnabled: boolean;
+    defaultNumberFormattingEnabled: boolean;
   };
 };

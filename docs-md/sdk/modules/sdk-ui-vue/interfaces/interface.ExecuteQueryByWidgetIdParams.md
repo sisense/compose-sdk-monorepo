@@ -81,6 +81,25 @@ If not specified, the default value is `false`.
 
 ***
 
+### includeRowCount <Badge type="beta" text="Beta" />
+
+> **includeRowCount**?: `boolean`
+
+Boolean flag whether to include the total row count of the query result,
+ignoring the `count` and `offset` paging.
+
+When enabled, the total is returned as `rowCount` in the query state
+(QueryByWidgetIdState.rowCount) and is reused for subsequent pages of the same query.
+
+Row count feature requires a Sisense instance version of 2026.3.0 or greater.
+On older versions, the query still succeeds and `rowCount` stays `undefined`.
+
+Not supported for pivot table widgets.
+
+If not specified, the default value is `false`
+
+***
+
 ### offset
 
 > **offset**?: `number`

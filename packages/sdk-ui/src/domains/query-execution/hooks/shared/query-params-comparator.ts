@@ -12,6 +12,7 @@ const simplySerializableParamNames: (keyof ExecuteQueryParams)[] = [
   'dimensions',
   'count',
   'offset',
+  'includeRowCount',
   'onBeforeQuery',
 ];
 

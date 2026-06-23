@@ -18,6 +18,13 @@ vi.mock(
     getCompleteNumberFormatConfig: vi.fn(
       (config) => config || { decimalScale: 2, symbol: '$', prefix: true },
     ),
+    formatNumberWithFallback: vi.fn((value, config, isEnabled, formatter) =>
+      !isEnabled && config === undefined
+        ? String(value)
+        : formatter
+        ? formatter({}, value)
+        : `formatted_${value}`,
+    ),
   }),
 );
 
@@ -115,6 +122,7 @@ describe('stacking', () => {
         } as CompleteThemeSettingsInternal,
         dateFormatter: vi.fn(() => 'formatted-date'),
         accessibilityEnabled: false,
+        defaultNumberFormattingEnabled: true,
       },
     });
 
@@ -428,6 +436,24 @@ describe('stacking', () => {
         const mockThis = { value: 100, total: 200 };
         const formattedResult = stackFormatter?.call(mockThis);
         expect(formattedResult).toBe('formatted_200');
+      });
+    });
+
+    describe('defaultNumberFormattingEnabled = false', () => {
+      test('should return raw string value when flag is false and no numberFormatConfig is set', () => {
+        const ctx = createMockBuildContext('stacked', false, 0);
+        // Override both axes to have no numberFormatConfig and disable default formatting
+        ctx.dataOptions.y = [
+          { column: { name: 'Revenue', aggregation: 'sum' }, showOnRightAxis: false } as any,
+        ];
+        ctx.extraConfig.defaultNumberFormattingEnabled = false;
+
+        const basicAxisSettings = createMockAxisSettings();
+        const result = withStacking(ctx)(basicAxisSettings);
+
+        const formatter = result[0].labels?.formatter;
+        expect(formatter).toBeDefined();
+        expect(formatter?.call({ value: 1234.56, axis: { categories: [] } })).toBe('1234.56');
       });
     });
 

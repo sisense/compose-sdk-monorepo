@@ -4,6 +4,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
 <div>
   <div
     class="css-cbo886"
+    data-testid="csdk-filter-tile-container"
   >
     <div
       class="csdk-accessible css-163e5sv"
@@ -17,74 +18,71 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
           style="border-bottom-color: rgba(232, 232, 232, 1);"
         >
           <div
-            data-testid="member-filter-tile"
+            class="css-12vk4to"
+            data-testid="csdk-filter-tile-container"
           >
             <div
-              class="css-12vk4to"
+              class="csdk-accessible css-n759pn"
+              style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
             >
-              <div
-                class="csdk-accessible css-n759pn"
-                style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
+              <header
+                class="css-1yqya5g"
+                style="color: rgb(91, 99, 114);"
               >
-                <header
-                  class="css-1yqya5g"
-                  style="color: rgb(91, 99, 114);"
+                <svg
+                  fill="#b4b4b4"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  width="22"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <svg
-                    fill="#b4b4b4"
-                    height="22"
-                    viewBox="0 0 22 22"
-                    width="22"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <g
+                    transform="translate(5.000000,5.000000) scale(.70, 0.6)"
                   >
-                    <g
-                      transform="translate(5.000000,5.000000) scale(.70, 0.6)"
-                    >
-                      <path
-                        d="m3,9v11h14V9M4,9V6c0-3.3 2.7-6 6-6c3.3,0 6,2.7 6,6v3H14V6c0-2.2-1.8-4-4-4-2.2,0-4,1.8-4,4v3"
-                      />
-                      <rect
-                        fill="#dcdcdc"
-                        height="9"
-                        width="12"
-                        x="4"
-                        y="10"
-                      />
-                    </g>
-                  </svg>
-                  <div
-                    style="flex-grow: 1;"
+                    <path
+                      d="m3,9v11h14V9M4,9V6c0-3.3 2.7-6 6-6c3.3,0 6,2.7 6,6v3H14V6c0-2.2-1.8-4-4-4-2.2,0-4,1.8-4,4v3"
+                    />
+                    <rect
+                      fill="#dcdcdc"
+                      height="9"
+                      width="12"
+                      x="4"
+                      y="10"
+                    />
+                  </g>
+                </svg>
+                <div
+                  style="flex-grow: 1;"
+                >
+                  <span
+                    class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
+                    style="color: rgb(91, 99, 114); display: inline-block;"
                   >
-                    <span
-                      class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
-                      style="color: rgb(91, 99, 114); display: inline-block;"
-                    >
-                      Gender
-                    </span>
-                  </div>
-                </header>
-                <main
-                  style="color: rgb(91, 99, 114); position: relative;"
+                    Gender
+                  </span>
+                </div>
+              </header>
+              <main
+                style="color: rgb(91, 99, 114); position: relative;"
+              >
+                <div
+                  class="css-1uvk1au"
                 >
                   <div
-                    class="css-1uvk1au"
+                    class="css-w34bcj"
                   >
-                    <div
-                      class="css-w34bcj"
+                    <button
+                      class="css-sc98s6"
+                      title="Unspecified"
                     >
-                      <button
-                        class="css-sc98s6"
-                        title="Unspecified"
-                      >
-                        Unspecified
-                      </button>
-                    </div>
+                      Unspecified
+                    </button>
                   </div>
-                  <div
-                    style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
-                  />
-                </main>
-              </div>
+                </div>
+                <div
+                  style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
+                />
+              </main>
             </div>
           </div>
         </div>
@@ -92,61 +90,58 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
           class=""
         >
           <div
-            data-testid="member-filter-tile"
+            class="css-12vk4to"
+            data-testid="csdk-filter-tile-container"
           >
             <div
-              class="css-12vk4to"
+              class="csdk-accessible css-n759pn"
+              style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
             >
               <div
-                class="csdk-accessible css-n759pn"
-                style="min-width: 214px; background-color: rgb(255, 255, 255); font-family: Open Sans;"
+                class="csdk-flex csdk-justify-center"
+                data-testid="triangle-indicator"
               >
                 <div
-                  class="csdk-flex csdk-justify-center"
-                  data-testid="triangle-indicator"
-                >
-                  <div
-                    class="csdk-border-l-[70px] csdk-border-l-[transparent] csdk-border-r-[70px] csdk-border-r-[transparent] csdk-border-t-[13px]"
-                    style="border-top-color: rgba(232, 232, 232, 1);"
-                  />
-                </div>
-                <header
-                  class="css-1yqya5g"
-                  style="color: rgb(91, 99, 114);"
-                >
-                  <div
-                    style="flex-grow: 1;"
-                  >
-                    <span
-                      class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
-                      style="color: rgb(91, 99, 114); display: inline-block;"
-                    >
-                      Age Range
-                    </span>
-                  </div>
-                </header>
-                <main
-                  style="color: rgb(91, 99, 114); position: relative;"
-                >
-                  <div
-                    class="css-1uvk1au"
-                  >
-                    <div
-                      class="css-w34bcj"
-                    >
-                      <button
-                        class="css-sc98s6"
-                        title="0-18"
-                      >
-                        0-18
-                      </button>
-                    </div>
-                  </div>
-                  <div
-                    style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
-                  />
-                </main>
+                  class="csdk-border-l-[70px] csdk-border-l-[transparent] csdk-border-r-[70px] csdk-border-r-[transparent] csdk-border-t-[13px]"
+                  style="border-top-color: rgba(232, 232, 232, 1);"
+                />
               </div>
+              <header
+                class="css-1yqya5g"
+                style="color: rgb(91, 99, 114);"
+              >
+                <div
+                  style="flex-grow: 1;"
+                >
+                  <span
+                    class="csdk-text-[13px] csdk-mt-[6px] csdk-mb-[4px] csdk-leading-[16px]"
+                    style="color: rgb(91, 99, 114); display: inline-block;"
+                  >
+                    Age Range
+                  </span>
+                </div>
+              </header>
+              <main
+                style="color: rgb(91, 99, 114); position: relative;"
+              >
+                <div
+                  class="css-1uvk1au"
+                >
+                  <div
+                    class="css-w34bcj"
+                  >
+                    <button
+                      class="css-sc98s6"
+                      title="0-18"
+                    >
+                      0-18
+                    </button>
+                  </div>
+                </div>
+                <div
+                  style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
+                />
+              </main>
             </div>
           </div>
         </div>

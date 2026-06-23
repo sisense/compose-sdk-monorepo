@@ -291,11 +291,13 @@ const translation: TranslationDictionary = {
       incorrectResponse: 'Неправильный ответ',
       clearChat: 'Очистить чат',
       refresh: 'Обновить',
-      readMore: 'Читать далее',
+      readMore: 'Показать больше',
       collapse: 'Свернуть',
       yes: 'Да',
       no: 'Нет',
       seeMore: 'Смотреть больше',
+      generateNarrative: 'Создать нарратив ИИ',
+      hideNarrative: 'Скрыть нарратив ИИ',
     },
     disclaimer: {
       poweredByAi: 'Контент создан с помощью ИИ, поэтому возможны сюрпризы и ошибки.',
@@ -358,6 +360,8 @@ const translation: TranslationDictionary = {
       from: 'С',
       to: 'По',
       includeCurrent: 'Включая текущий',
+      rankedBy: 'Ранжировано по',
+      selectField: 'Выберите поле',
     },
     placeholders: {
       selectFromList: 'Выбрать из списка',
@@ -382,6 +386,8 @@ const translation: TranslationDictionary = {
       greaterThan: 'Больше',
       greaterThanOrEqual: 'Равно или больше',
       isWithin: 'В пределах',
+      top: 'Топ',
+      bottom: 'Последние',
     },
     validationErrors: {
       invalidNumber: 'Только числа',
@@ -478,6 +484,12 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Таблица данных',
     },
+    sankey: {
+      alerts: {
+        tooManyStages:
+          'Диаграмма Sankey содержит {{stageCount}} этапов; больше {{softLimit}} часто делает диаграмму нечитаемой. Уменьшите число столбцов категории или ужесточите фильтры.',
+      },
+    },
   },
   loadingOverlay: {
     label: 'Загрузка содержимого',
@@ -502,6 +514,17 @@ const translation: TranslationDictionary = {
     stdev: 'Стандартное отклонение',
     median: 'Медиана',
     variance: 'Дисперсия',
+  },
+  measuresAgg: {
+    countDistinct: '# уникальных',
+    count: '#',
+    sum: 'Итого',
+    average: 'Среднее',
+    min: 'Мин',
+    max: 'Макс',
+    median: 'Медиана',
+    variance: 'Дисперсия',
+    stdev: 'Стандартное отклонение',
   },
 };
 

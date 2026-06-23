@@ -14,4 +14,4 @@ indexTopics:
 
 # Custom Widgets
 
-Here you'll find guides that will help get started with the custom widgets in Compose SDK.
+Here you'll find guides that will help you get started with the custom widgets in Compose SDK.

@@ -657,6 +657,20 @@ describe('attributes', () => {
       });
 
       expect(attribute.name).toBe('Brand Title');
+      expect(attribute.title).toBe('Brand Title');
+    });
+
+    it('should separate identity name and title', () => {
+      const attribute = createAttribute({
+        name: 'Age Range',
+        title: 'Age Range DisplayName',
+        expression: '[Commerce.Age Range]',
+        type: 'text-attribute',
+      });
+
+      expect(attribute.name).toBe('Age Range');
+      expect(attribute.title).toBe('Age Range DisplayName');
+      expect(attribute.jaql().jaql.title).toBe('Age Range DisplayName');
     });
 
     it('should handle json with attribute property instead of expression', () => {

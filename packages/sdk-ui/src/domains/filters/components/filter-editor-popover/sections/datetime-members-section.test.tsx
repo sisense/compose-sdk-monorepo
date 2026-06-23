@@ -36,7 +36,12 @@ describe('DatetimeMembersSection', () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeMembersSection
             filter={dateFilter}
@@ -56,7 +61,12 @@ describe('DatetimeMembersSection', () => {
     const { user } = setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeMembersSection
             filter={dateFilter}
@@ -107,7 +117,12 @@ describe('DatetimeMembersSection', () => {
     const { user } = setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters, membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters,
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeMembersSection
             filter={dateFilter}
@@ -158,7 +173,12 @@ describe('DatetimeMembersSection', () => {
     const { user } = setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters, membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters,
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeMembersSection
             filter={dateFilter}
@@ -197,7 +217,12 @@ describe('DatetimeMembersSection', () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeMembersSection
             filter={dateFilter}
@@ -218,7 +243,12 @@ describe('DatetimeMembersSection', () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeMembersSection
             filter={dateFilter}
@@ -239,7 +269,12 @@ describe('DatetimeMembersSection', () => {
     const { user } = setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeMembersSection
             filter={dateFilter}

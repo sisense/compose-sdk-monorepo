@@ -1,7 +1,6 @@
-import { ReactNode } from 'react';
-
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
+import { DashboardHeaderConfig } from '@/domains/dashboarding/components/dashboard-header-config';
 import {
   DashboardStyleOptions,
   WidgetsOptions,
@@ -9,6 +8,7 @@ import {
 } from '@/domains/dashboarding/dashboard-model';
 import { TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import { FiltersPanelConfig } from '@/domains/filters/components/filters-panel/types';
+import { HeaderItem } from '@/domains/shared/header';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 import type { DashboardPersistenceManager } from './persistence/types.js';
@@ -146,11 +146,13 @@ export interface DashboardContainerProps {
    */
   onLayoutChange: (layout: WidgetsPanelLayout) => void;
   /**
-   * Render the toolbar
-   *
-   * @internal
+   * Built-in action items rendered in the dashboard header.
    */
-  renderToolbar?: () => ReactNode;
+  headerItems?: HeaderItem[];
+  /**
+   * User configuration for the dashboard header items.
+   */
+  headerConfig?: DashboardHeaderConfig;
 }
 
 /**
@@ -333,6 +335,12 @@ export interface DashboardConfig {
    */
   filtersPanel?: DashboardFiltersPanelConfig;
   /**
+   * Configuration for the dashboard header
+   *
+   * @alpha
+   */
+  header?: DashboardHeaderConfig;
+  /**
    * Configuration for the toolbar
    */
   toolbar?: {
@@ -441,6 +449,8 @@ export interface DashboardProps {
  * @internal
  */
 export interface DashboardHeaderProps {
-  title: string;
-  toolbar?: () => ReactNode;
+  /** Built-in header items (title, spacer, edit-mode toolbar, toggles, menu) before user config is merged. */
+  items?: HeaderItem[];
+  /** User configuration for the header items. */
+  config?: DashboardHeaderConfig;
 }

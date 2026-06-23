@@ -42,17 +42,19 @@ export const useApplyPivotTableFormatting = ({
   const { app } = useSisenseContext();
   const { t: translate } = useTranslation();
   const { themeSettings } = useThemeContext();
+  const defaultNumberFormattingEnabled =
+    app?.settings?.chartConfig?.defaultNumberFormatting?.enabled ?? true;
 
   const onDataCellFormatCombined = useMemo(
     () =>
       over([
-        createDataCellValueFormatter(dataOptions),
+        createDataCellValueFormatter(dataOptions, defaultNumberFormattingEnabled),
         createDataCellColorFormatter(dataOptions, themeSettings),
         ...(onDataCellFormat
           ? [createUnifiedDataCellFormatter(onDataCellFormat, dataOptions)]
           : []),
       ]),
-    [dataOptions, onDataCellFormat, themeSettings],
+    [dataOptions, onDataCellFormat, themeSettings, defaultNumberFormattingEnabled],
   );
 
   const dateFormatter = useCallback(
@@ -64,14 +66,14 @@ export const useApplyPivotTableFormatting = ({
   const onHeaderCellFormatCombined = useMemo(
     () =>
       over([
-        createHeaderCellValueFormatter(dataOptions, dateFormatter),
+        createHeaderCellValueFormatter(dataOptions, dateFormatter, defaultNumberFormattingEnabled),
         createHeaderCellTotalsFormatter(dataOptions, translate),
         createHeaderCellHighlightFormatter(),
         ...(onHeaderCellFormat
           ? [createUnifiedHeaderCellFormatter(onHeaderCellFormat, dataOptions)]
           : []),
       ]),
-    [dataOptions, translate, onHeaderCellFormat, dateFormatter],
+    [dataOptions, translate, onHeaderCellFormat, dateFormatter, defaultNumberFormattingEnabled],
   );
 
   useEffect(() => {

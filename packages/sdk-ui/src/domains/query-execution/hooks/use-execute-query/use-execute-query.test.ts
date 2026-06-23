@@ -11,9 +11,12 @@ import { useExecuteQuery } from '.';
 import { type ClientApplication } from '../../../../infra/app/types';
 import { useSisenseContextMock } from '../../../../infra/contexts/sisense-context/__mocks__/sisense-context';
 import {
+  clearRowCountQueryCacheMock,
   createExecuteQueryCacheKeyMock,
+  createRowCountQueryCacheKeyMock,
   executeQueryMock,
   executeQueryWithCacheMock,
+  executeQueryWithRowCountMock,
 } from '../../core/__mocks__/execute-query';
 import { ExecuteQueryParams } from '../../types';
 
@@ -95,6 +98,59 @@ describe('useExecuteQuery', () => {
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.data).toBe(mockData);
     });
+  });
+
+  it('should fetch total row count when includeRowCount is enabled', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryWithRowCountMock.mockResolvedValue({ data: mockData, rowCount: 1234 });
+
+    const { result } = renderHook(() => useExecuteQuery({ ...params, includeRowCount: true }));
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.data).toBe(mockData);
+      expect(result.current.rowCount).toBe(1234);
+    });
+
+    expect(executeQueryWithRowCountMock).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      executeQueryMock,
+    );
+    expect(executeQueryMock).not.toHaveBeenCalled();
+  });
+
+  it('should not request total row count by default', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() => useExecuteQuery(params));
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    expect(result.current.rowCount).toBeUndefined();
+    expect(executeQueryWithRowCountMock).not.toHaveBeenCalled();
+  });
+
+  it('should clear the row count cache on refetch', async () => {
+    const mockData: QueryResultData = { columns: [], rows: [] };
+    executeQueryWithRowCountMock.mockResolvedValue({ data: mockData, rowCount: 5 });
+    createRowCountQueryCacheKeyMock.mockReturnValue('row-count-cache-key');
+
+    const { result } = renderHook(() => useExecuteQuery({ ...params, includeRowCount: true }));
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    act(() => {
+      result.current.refetch();
+    });
+
+    expect(clearRowCountQueryCacheMock).toHaveBeenCalledWith('row-count-cache-key');
   });
 
   it('if enabled is set to false, should return initial state', async () => {

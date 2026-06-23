@@ -5,7 +5,12 @@ import {
   DimensionalLevelAttribute,
   jaqlSimpleColumnType,
 } from '../attributes/attributes.js';
-import { DimensionalElement, normalizeName, wrapIfNeedsNormalization } from '../base.js';
+import {
+  DimensionalElement,
+  normalizeName,
+  resolveElementNames,
+  wrapIfNeedsNormalization,
+} from '../base.js';
 import { DATA_MODEL_MODULE_NAME } from '../consts.js';
 import { Attribute, DateDimension, Dimension, LevelAttribute } from '../interfaces.js';
 import {
@@ -69,8 +74,9 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
     dataSource?: JaqlDataSource,
     composeCode?: string,
     defaultAttribute?: Attribute,
+    title?: string,
   ) {
-    super(name, type || MetadataTypes.Dimension, desc, dataSource, composeCode);
+    super(name, type || MetadataTypes.Dimension, desc, dataSource, composeCode, title);
 
     // if composeCode is not explicitly set by the caller, extract it from expression
     // Use [[delimiters]] to preserve original names that need normalization
@@ -190,6 +196,7 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
       this.dataSource,
       this.composeCode,
       this.defaultAttribute,
+      this.title,
     );
   }
 
@@ -231,7 +238,7 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
 
     const result = <any>{
       jaql: {
-        title: this.name,
+        title: this.title,
         dim: this.expression,
         datatype: jaqlSimpleColumnType(this.type),
       },
@@ -272,7 +279,9 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
     composeCode?: string,
     indexed?: boolean,
     merged?: boolean,
+    title?: string,
   ) {
+    const defaultAttribute: Attribute | undefined = undefined;
     super(
       name,
       expression,
@@ -283,6 +292,8 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
       sort,
       dataSource,
       composeCode,
+      defaultAttribute,
+      title,
     );
     const commonProps = [desc, sort, dataSource, undefined, undefined, indexed, merged] as const;
 
@@ -523,6 +534,7 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
       this.composeCode,
       this.indexed,
       this.merged,
+      this.title,
     );
   }
 
@@ -540,7 +552,7 @@ export class DimensionalDateDimension extends DimensionalDimension implements Da
    */
   jaql(nested?: boolean): any {
     const result = this[this.defaultLevel].jaql();
-    result.jaql.title = this.name;
+    result.jaql.title = this.title;
     return nested ? result.jaql : result;
   }
 }
@@ -564,7 +576,7 @@ export const isDimensionalDateDimension = (v: AnyObject): v is DimensionalDateDi
  * @group Data Model Utilities
  */
 export function createDimension(json: any): Dimension {
-  const name = json.name || json.title;
+  const { name, title } = resolveElementNames(json);
   const description = json.desc || json.description;
   const expression = json.expression || json.dim;
   const type = DimensionalDimension.parseType(json.dimtype || json.type);
@@ -572,6 +584,8 @@ export function createDimension(json: any): Dimension {
   const dataSource = json.dataSource;
   const indexed = json.indexed;
   const merged = json.merged;
+  const composeCode: string | undefined = undefined;
+  const defaultAttribute: Attribute | undefined = undefined;
   // date dimension
   if (type == MetadataTypes.DateDimension) {
     return new DimensionalDateDimension(
@@ -580,9 +594,10 @@ export function createDimension(json: any): Dimension {
       description,
       sort,
       dataSource,
-      undefined,
+      composeCode,
       indexed,
       merged,
+      title,
     );
   }
 
@@ -595,18 +610,20 @@ export function createDimension(json: any): Dimension {
       let att;
       for (let i = 0; i < json.attributes.length; i++) {
         att = json.attributes[i];
+        const { name: attName, title: attTitle } = resolveElementNames(att);
         atts.push(
           new DimensionalAttribute(
-            att.name,
-            att.expression,
+            attName,
+            att.expression || att.attribute || att.dim,
             att.type,
-            att.description,
+            att.desc || att.description,
             att.sort,
             att.dataSource,
             undefined,
             undefined,
             att.indexed,
             att.merged,
+            attTitle,
           ),
         );
       }
@@ -650,6 +667,9 @@ export function createDimension(json: any): Dimension {
     description,
     sort,
     dataSource,
+    composeCode,
+    defaultAttribute,
+    title,
   );
 
   if (json.defaultAttribute) {
@@ -671,19 +691,21 @@ export function createDimension(json: any): Dimension {
  * @group Data Model Utilities
  */
 export function createDateDimension(json: any): DateDimension {
-  const name = json.name || json.title;
+  const { name, title } = resolveElementNames(json);
   const expression = json.expression || json.dim;
   const description = json.desc || json.description;
   const sort = json.sort;
   const dataSource = json.dataSource;
+  const composeCode: string | undefined = undefined;
   return new DimensionalDateDimension(
     name,
     expression,
     description,
     sort,
     dataSource,
-    undefined,
+    composeCode,
     json.indexed,
     json.merged,
+    title,
   );
 }

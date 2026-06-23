@@ -9,6 +9,7 @@ import { DataTable } from '@/domains/visualizations/core/chart-data-processor/ta
 import { chartDataService as legacyChartDataService } from '@/domains/visualizations/core/chart-data/chart-data-service.js';
 import { filterAndAggregateChartData } from '@/domains/visualizations/core/chart-data/filter-and-aggregate-chart-data.js';
 import { ChartData } from '@/domains/visualizations/core/chart-data/types.js';
+import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context.js';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { ChartType } from '@/types';
 
@@ -40,6 +41,10 @@ export function useChartDataPreparation({
   dataColumnNamesMapping,
   onDataReady,
 }: UseChartDataPreparationProps): ChartData | null {
+  const { app } = useSisenseContext();
+  const defaultNumberFormattingEnabled =
+    app?.settings?.chartConfig?.defaultNumberFormatting?.enabled ?? true;
+
   return useMemo((): ChartData | null => {
     if (!data || !chartDataOptions) {
       return null;
@@ -63,9 +68,15 @@ export function useChartDataPreparation({
       );
     }
 
-    return getChartData(chartType, chartDataOptions, dataTable, isForecastOrTrendChart);
+    return getChartData(
+      chartType,
+      chartDataOptions,
+      dataTable,
+      isForecastOrTrendChart,
+      defaultNumberFormattingEnabled,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, chartType, isForecastOrTrendChart]);
+  }, [data, chartType, isForecastOrTrendChart, defaultNumberFormattingEnabled]);
 }
 
 function getChartData(
@@ -73,13 +84,21 @@ function getChartData(
   chartDataOptions: ChartDataOptionsInternal,
   dataTable: DataTable,
   isForecastOrTrendChart = false,
+  defaultNumberFormattingEnabled = true,
 ): ChartData {
   if (isRestructuredChartType(chartType) && !isForecastOrTrendChart) {
     const chartBuilder = getChartBuilder(chartType);
     if (chartBuilder.dataOptions.isCorrectDataOptionsInternal(chartDataOptions)) {
-      return chartBuilder.data.getChartData(chartDataOptions, dataTable);
+      return chartBuilder.data.getChartData(chartDataOptions, dataTable, {
+        defaultNumberFormattingEnabled,
+      });
     }
     throw new Error('Incorrect internal data options for restructured chart');
   }
-  return legacyChartDataService(chartType, chartDataOptions, dataTable);
+  return legacyChartDataService(
+    chartType,
+    chartDataOptions,
+    dataTable,
+    defaultNumberFormattingEnabled,
+  );
 }

@@ -17,6 +17,7 @@ export const translation: TranslationDictionary = {
     missingHttpClient: 'Для запиту потрібен httpClient, щоб працювати належним чином.',
     missingPostMethod: 'httpClient повинен мати метод "post".',
     noJaqlResponse: 'Відповіді, що містить jaql, від сервера не отримано',
+    invalidCountRowsResponse: 'Від сервера отримано недійсну відповідь із кількістю рядків.',
     dataSourceNotFound:
       'Не вдалося отримати поля для джерела даних "{{dataSource}}". Переконайтесь що джерело існує і доступне.',
   },

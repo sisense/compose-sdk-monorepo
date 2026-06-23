@@ -420,12 +420,14 @@ export const createAttributeHelper = ({
 }): Attribute | LevelAttribute => {
   const column = parseExpression(expression).column;
   const sortEnum = convertSort(sort);
+  const identityName = column;
+  const resolvedDisplayName = title ?? column;
 
   const isDataTypeDatetime = dataType !== undefined && isDatetime(dataType);
 
   if (isDataTypeDatetime) {
     const levelAttribute: LevelAttribute = new DimensionalLevelAttribute(
-      title ?? column,
+      identityName,
       expression,
       granularity || DateLevels.Years,
       format ||
@@ -437,6 +439,7 @@ export const createAttributeHelper = ({
       panel,
       indexed,
       merged,
+      resolvedDisplayName,
     );
 
     return levelAttribute;
@@ -446,7 +449,7 @@ export const createAttributeHelper = ({
     !dataType || isNumber(dataType) ? MetadataTypes.NumericAttribute : MetadataTypes.TextAttribute;
 
   const attribute: Attribute = new DimensionalAttribute(
-    title ?? column,
+    identityName,
     expression,
     attributeType,
     undefined,
@@ -456,6 +459,7 @@ export const createAttributeHelper = ({
     panel,
     indexed,
     merged,
+    resolvedDisplayName,
   );
 
   return attribute;

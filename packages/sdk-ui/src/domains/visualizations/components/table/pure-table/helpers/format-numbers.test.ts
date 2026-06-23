@@ -87,4 +87,33 @@ describe('formatNumbers', () => {
 
     expect(formatNumbers(table, chartDataOptions as TableDataOptionsInternal)).toEqual(newTable);
   });
+
+  it('should skip formatting for columns without explicit config when defaultNumberFormattingEnabled is false', () => {
+    const table: DataTable = {
+      columns: [
+        { name: 'price', type: 'number', index: 0, direction: 0 },
+        { name: 'revenue', type: 'number', index: 1, direction: 0 },
+      ],
+      rows: [[{ displayValue: '54321.54321' }, { displayValue: '12345.12345' }]],
+    };
+
+    const chartDataOptions: TableDataOptions = {
+      columns: [
+        { name: 'price', type: 'number', enabled: true },
+        {
+          name: 'revenue',
+          type: 'number',
+          enabled: true,
+          numberFormatConfig: { name: 'Currency' },
+        },
+      ],
+    };
+
+    const result = formatNumbers(table, chartDataOptions as TableDataOptionsInternal, false);
+
+    // price has no explicit config → raw value unchanged
+    expect(result.rows[0][0].displayValue).toBe('54321.54321');
+    // revenue has explicit numberFormatConfig → still formatted
+    expect(result.rows[0][1].displayValue).toBe('$12.35K');
+  });
 });

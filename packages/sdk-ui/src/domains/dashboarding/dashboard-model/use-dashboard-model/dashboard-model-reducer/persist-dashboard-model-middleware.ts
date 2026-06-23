@@ -1,7 +1,7 @@
 import { convertJaqlDataSourceForDto, DataSource } from '@sisense/sdk-data';
 
 import { DashboardModel } from '@/domains/dashboarding/dashboard-model';
-import { withSpecificWidgetOptions } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils';
+import { withDashboardWidgetContext } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils';
 import { withReplacedWidgetId } from '@/domains/dashboarding/hooks/duplicate-widget';
 import { deepMerge } from '@/domains/dashboarding/persistence/deep-merge.js';
 import type { WidgetPropsUpdate } from '@/domains/dashboarding/persistence/update-types.js';
@@ -179,6 +179,7 @@ export async function persistDashboardModelMiddleware({
         widget: inputWidget,
         widgetsPanelLayout: customLayout,
         widgetOptions,
+        tabberConfig,
       } = parseAddWidgetPayload(action.payload);
 
       // Text widgets don't carry a data source in their widget model.
@@ -189,7 +190,13 @@ export async function persistDashboardModelMiddleware({
           ? convertJaqlDataSourceForDto(dashboardDataSource)
           : undefined;
 
-      const widgetDto = withSpecificWidgetOptions(widgetOptions)(
+      // Re-project all dashboard-level widget context (common filters, JTD, and the
+      // tabber show/hide mapping) onto the freshly-translated DTO, so config that lives
+      // outside the widget model survives the model → DTO write path on add/duplicate.
+      const widgetDto = withDashboardWidgetContext({
+        options: widgetOptions,
+        tabber: tabberConfig,
+      })(
         widgetModelTranslator.toWidgetDto(
           inputWidget,
           dataSourceForDto,
@@ -225,13 +232,14 @@ export async function persistDashboardModelMiddleware({
             widget: serverWidget,
             widgetsPanelLayout: fixedLayout,
             widgetOptions,
+            tabberConfig,
           },
         };
       }
 
       return {
         type: UseDashboardModelActionType.ADD_WIDGET,
-        payload: { widget: serverWidget, widgetOptions },
+        payload: { widget: serverWidget, widgetOptions, tabberConfig },
       };
     }
     case UseDashboardModelActionType.PATCH_WIDGET: {

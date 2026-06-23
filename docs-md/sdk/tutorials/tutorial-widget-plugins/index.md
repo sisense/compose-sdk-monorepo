@@ -1,6 +1,5 @@
 ---
 title: Widget Plugin Tutorial
-hidden: true
 ---
 
 # Widget Plugin Tutorial

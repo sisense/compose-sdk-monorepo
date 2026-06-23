@@ -707,7 +707,10 @@ export function getFilterCompareId(filter: Filter): string {
   // TODO: remove fallback on 'filter.jaql()' after removing temporal 'jaql()' workaround from filter translation layer
   const { attribute: filterAttribute } = filter;
   const filterJaql = filter.jaql().jaql;
-  const expression = filterAttribute.expression || filterJaql.dim;
+  // Calculated-dimension (formula) filters carry neither an attribute expression nor a `dim`; their
+  // identity lives in the formula. Falling back to it keeps distinct calculated dimensions apart,
+  // instead of all collapsing to the same compare id and being deduped down to one when merged.
+  const expression = filterAttribute.expression || filterJaql.dim || filterJaql.formula;
   const granularity =
     (filterAttribute as DimensionalLevelAttribute).granularity ||
     (filterJaql?.datatype === 'datetime'

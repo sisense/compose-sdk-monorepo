@@ -18,6 +18,14 @@ export { WithCommonWidgetProps, TextWidgetProps, CustomWidgetProps };
 export interface PivotTableWidgetProps extends PivotTableWidgetPropsPreact {}
 
 /**
+ * Configuration for AI-powered widget features such as automated narrative generation.
+ * Shared by chart and pivot {@link Widget} instances.
+ *
+ * @alpha
+ */
+export type WidgetAiOptions = NonNullable<ChartWidgetProps['aiOptions']>;
+
+/**
  * Props of the {@link @sisense/sdk-ui-vue!Widget | `Widget`} component.
  */
 export type WidgetProps = SoftUnion<
@@ -129,6 +137,12 @@ export const Widget = defineComponent({
      * @category Widget
      */
     styleOptions: Object as PropType<WidgetProps['styleOptions']>,
+    /**
+     * Configuration for AI-powered widget features such as automated narrative generation
+     * @alpha
+     * @category Widget
+     */
+    aiOptions: Object as PropType<WidgetAiOptions>,
     /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
      *

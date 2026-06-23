@@ -20,6 +20,7 @@ export {
   executeCsvQuery,
   executePivotQuery,
   executeQuery,
+  executeQueryWithRowCount,
 } from '../domains/query-execution/core/execute-query';
 
 // Models

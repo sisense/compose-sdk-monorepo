@@ -78,6 +78,7 @@ describe('polar-chart axes', () => {
       themeSettings: {} as any,
       dateFormatter: vi.fn() as any,
       accessibilityEnabled: false,
+      defaultNumberFormattingEnabled: true,
     },
   };
 

@@ -62,6 +62,7 @@ describe('Pie Highcharts Options Builder', () => {
       } as CompleteThemeSettingsInternal,
       dateFormatter: vi.fn(() => 'formatted-date'),
       accessibilityEnabled: false,
+      defaultNumberFormattingEnabled: true,
     },
   });
 

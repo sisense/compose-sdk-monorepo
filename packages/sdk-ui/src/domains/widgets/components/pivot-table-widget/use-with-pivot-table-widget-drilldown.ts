@@ -226,14 +226,21 @@ export function useWithPivotTableWidgetDrilldown(
     [drilldownOnDataPointContextMenu, propsToExtend.onDataPointContextMenu],
   );
 
-  const propsWithDrilldown = {
-    ...propsToExtend,
-    ...{
-      dataOptions: dataOptionsWithDrilldown,
-      filters: filtersWithDrilldown,
-      onDataPointContextMenu: onDataPointContextMenuWithDrilldown,
-    },
-  } as PivotTableWidgetProps;
+  const propsWithDrilldown = useMemo(
+    () =>
+      ({
+        ...propsToExtend,
+        dataOptions: dataOptionsWithDrilldown,
+        filters: filtersWithDrilldown,
+        onDataPointContextMenu: onDataPointContextMenuWithDrilldown,
+      } as PivotTableWidgetProps),
+    [
+      propsToExtend,
+      dataOptionsWithDrilldown,
+      filtersWithDrilldown,
+      onDataPointContextMenuWithDrilldown,
+    ],
+  );
 
   return {
     propsWithDrilldown,

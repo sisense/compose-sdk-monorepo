@@ -1,5 +1,82 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`translateQueryFromJSON > error handling > should translate query-level FilterRelations when not inside measuredValue 1`] = `
+{
+  "composeCode": "filterFactory.logic.or(filterFactory.members(DM.Country.Country, ['United States']), filterFactory.members(DM.Commerce.Gender, ['Male']))",
+  "left": {
+    "__serializable": "MembersFilter",
+    "_name": "filter",
+    "_title": "filter",
+    "attribute": {
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Country.Country",
+      "dataSource": {
+        "address": "LocalHost",
+        "id": "localhost_aSampleIAAaECommerce",
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "description": "",
+      "expression": "[Country.Country]",
+      "name": "Country",
+      "title": "Country",
+      "type": "text-attribute",
+    },
+    "composeCode": "filterFactory.members(DM.Country.Country, ['United States'])",
+    "config": {
+      "deactivatedMembers": [],
+      "disabled": false,
+      "enableMultiSelection": true,
+      "excludeMembers": false,
+      "locked": false,
+    },
+    "description": "",
+    "filterType": "members",
+    "isScope": true,
+    "members": [
+      "United States",
+    ],
+    "type": "filter",
+  },
+  "operator": "OR",
+  "right": {
+    "__serializable": "MembersFilter",
+    "_name": "filter",
+    "_title": "filter",
+    "attribute": {
+      "__serializable": "DimensionalAttribute",
+      "composeCode": "DM.Commerce.Gender",
+      "dataSource": {
+        "address": "LocalHost",
+        "id": "localhost_aSampleIAAaECommerce",
+        "live": false,
+        "title": "Sample ECommerce",
+      },
+      "description": "",
+      "expression": "[Commerce.Gender]",
+      "name": "Gender",
+      "title": "Gender",
+      "type": "text-attribute",
+    },
+    "composeCode": "filterFactory.members(DM.Commerce.Gender, ['Male'])",
+    "config": {
+      "deactivatedMembers": [],
+      "disabled": false,
+      "enableMultiSelection": true,
+      "excludeMembers": false,
+      "locked": false,
+    },
+    "description": "",
+    "filterType": "members",
+    "isScope": true,
+    "members": [
+      "Male",
+    ],
+    "type": "filter",
+  },
+}
+`;
+
 exports[`translateQueryFromJSON > should translate query json 1`] = `
 {
   "dataSource": {
@@ -21,6 +98,7 @@ exports[`translateQueryFromJSON > should translate query json 1`] = `
       "description": "",
       "expression": "[Category.Category]",
       "name": "Category",
+      "title": "Category",
       "type": "text-attribute",
     },
     {
@@ -35,6 +113,7 @@ exports[`translateQueryFromJSON > should translate query json 1`] = `
       "description": "",
       "expression": "[Brand.Brand]",
       "name": "Brand",
+      "title": "Brand",
       "type": "text-attribute",
     },
   ],
@@ -55,6 +134,7 @@ exports[`translateQueryFromJSON > should translate query json 1`] = `
         "description": "",
         "expression": "[Brand.Brand]",
         "name": "Brand",
+        "title": "Brand",
         "type": "text-attribute",
       },
       "composeCode": "filterFactory.topRanking(DM.Brand.Brand, measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue'), 5)",
@@ -81,6 +161,7 @@ exports[`translateQueryFromJSON > should translate query json 1`] = `
           "description": "",
           "expression": "[Commerce.Revenue]",
           "name": "Revenue",
+          "title": "Revenue",
           "type": "numeric-attribute",
         },
         "composeCode": "measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')",
@@ -88,6 +169,7 @@ exports[`translateQueryFromJSON > should translate query json 1`] = `
         "description": "",
         "name": "Total Revenue",
         "sort": 0,
+        "title": "Total Revenue",
         "type": "basemeasure",
       },
       "operator": "top",
@@ -111,6 +193,7 @@ exports[`translateQueryFromJSON > should translate query json 1`] = `
         "format": "yyyy",
         "granularity": "Years",
         "name": "Date",
+        "title": "Date",
         "type": "datelevel",
       },
       "composeCode": "filterFactory.members(DM.Commerce.Date.Years, ['2024-01-01T00:00:00'])",
@@ -146,6 +229,7 @@ exports[`translateQueryFromJSON > should translate query json 1`] = `
         "description": "",
         "expression": "[Commerce.Revenue]",
         "name": "Revenue",
+        "title": "Revenue",
         "type": "numeric-attribute",
       },
       "composeCode": "measureFactory.sum(DM.Commerce.Revenue, 'Total Revenue')",
@@ -153,6 +237,7 @@ exports[`translateQueryFromJSON > should translate query json 1`] = `
       "description": "",
       "name": "Total Revenue",
       "sort": 0,
+      "title": "Total Revenue",
       "type": "basemeasure",
     },
     {
@@ -170,6 +255,7 @@ exports[`translateQueryFromJSON > should translate query json 1`] = `
         "description": "",
         "expression": "[Commerce.Cost]",
         "name": "Cost",
+        "title": "Cost",
         "type": "numeric-attribute",
       },
       "composeCode": "measureFactory.sum(DM.Commerce.Cost, 'Total Cost')",
@@ -177,6 +263,7 @@ exports[`translateQueryFromJSON > should translate query json 1`] = `
       "description": "",
       "name": "Total Cost",
       "sort": 0,
+      "title": "Total Cost",
       "type": "basemeasure",
     },
   ],

@@ -17,6 +17,18 @@ Column name
 
 ***
 
+### title
+
+> **title**?: `string`
+
+Display label shown in chart UI when different from [name](interface.Column.md#name).
+
+Optional override in chart `dataOptions` input. Factory-produced model elements
+([Attribute](interface.Attribute.md), [Measure](interface.Measure.md), etc.) expose a resolved [title](interface.Attribute.md#title)
+instead; use the model element directly rather than duplicating the label here.
+
+***
+
 ### type
 
 > **type**: `string`

@@ -3,12 +3,16 @@ import { useCallback, useMemo } from 'react';
 import type { Attribute, Measure } from '@sisense/sdk-data';
 
 import { getTranslatedDataOptions } from '@/domains/visualizations/components/chart/helpers/use-translated-data-options.js';
-import { getTableAttributesAndMeasures } from '@/domains/visualizations/components/table/hooks/use-table-data.js';
 import { translateTableDataOptions } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
 import { TableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
+import {
+  isMeasureColumn,
+  translateColumnToAttribute,
+} from '@/domains/visualizations/core/chart-data-options/utils.js';
 import { isTable } from '@/domains/visualizations/core/chart-options-processor/translations/types.js';
 import {
   mapAttributesForExcelExport,
+  mapMeasureColumnsForExcelExport,
   mapMeasuresForExcelExport,
 } from '@/domains/widgets/helpers/excel-export-map-dimensions-measures.js';
 import { useExcelQueryFileLoader } from '@/domains/widgets/hooks/use-excel-query-file-loader.js';
@@ -20,7 +24,7 @@ import type { ChartWidgetProps } from './types.js';
 
 export type UseChartWidgetExcelDownloadParams = Pick<
   ChartWidgetProps,
-  'title' | 'dataOptions' | 'chartType' | 'config' | 'dataSource' | 'id'
+  'title' | 'dataOptions' | 'chartType' | 'config' | 'dataSource' | 'filters' | 'id'
 > & {
   baseHeaderConfig: WidgetHeaderConfig;
 };
@@ -41,7 +45,8 @@ export type UseChartWidgetExcelDownloadResult = {
 export function useChartWidgetExcelDownload(
   props: UseChartWidgetExcelDownloadParams,
 ): UseChartWidgetExcelDownloadResult {
-  const { chartType, dataOptions, dataSource, title, config, baseHeaderConfig, id } = props;
+  const { chartType, dataOptions, dataSource, title, config, baseHeaderConfig, id, filters } =
+    props;
   const excelLoader = useExcelQueryFileLoader();
   const appSettings = useAppSettings();
   const isExportingXlsxV2FeatureOn = appSettings?.serverFeatures?.exportingXlsxV2?.active === true;
@@ -63,13 +68,28 @@ export function useChartWidgetExcelDownload(
 
     const isTableWidget = isTable(chartType);
     const { attributes, measures } = isTableWidget
-      ? getTableAttributesAndMeasures(translateTableDataOptions(dataOptions as TableDataOptions))
+      ? (() => {
+          const translated = translateTableDataOptions(dataOptions as TableDataOptions);
+          const tableAttributes: Attribute[] = [];
+          const tableMeasureColumns = [];
+          for (const column of translated.columns) {
+            if (isMeasureColumn(column)) {
+              tableMeasureColumns.push(column);
+            } else {
+              tableAttributes.push(translateColumnToAttribute(column));
+            }
+          }
+          return {
+            attributes: mapAttributesForExcelExport(tableAttributes),
+            measures: mapMeasureColumnsForExcelExport(tableMeasureColumns),
+          };
+        })()
       : getTranslatedDataOptions(dataOptions, chartType);
 
     return {
       dataSource,
       dimensions: mapAttributesForExcelExport(attributes),
-      measures: mapMeasuresForExcelExport(measures),
+      measures: isTableWidget ? measures : mapMeasuresForExcelExport(measures),
       ungroup: false,
       filename: title ? `${title}.xlsx` : undefined,
       widgetType: chartType,
@@ -98,10 +118,15 @@ export function useChartWidgetExcelDownload(
       if (!isExcelDownloadEnabled || !isChartWidgetAllowExcelDownload) {
         return;
       }
-      const params = { ...excelQueryParams, mergeRows };
-      void excelLoader.execute(params);
+      void excelLoader.execute({ ...excelQueryParams, mergeRows, filters });
     },
-    [excelLoader, excelQueryParams, isChartWidgetAllowExcelDownload, isExcelDownloadEnabled],
+    [
+      excelLoader,
+      excelQueryParams,
+      filters,
+      isChartWidgetAllowExcelDownload,
+      isExcelDownloadEnabled,
+    ],
   );
 
   const headerConfig = useWithExcelDownloadMenuItem({

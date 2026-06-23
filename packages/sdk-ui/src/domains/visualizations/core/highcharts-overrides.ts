@@ -6,6 +6,8 @@
 import Highcharts from '@sisense/sisense-charts';
 import highchartsRoundedCorners from 'highcharts-rounded-corners';
 // eslint-disable-next-line import/no-extraneous-dependencies
+import HighchartsSankey from 'highcharts/modules/sankey';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import HighchartsSeriesLabel from 'highcharts/modules/series-label';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import HighchartsStreamgraph from 'highcharts/modules/streamgraph';
@@ -15,6 +17,7 @@ export const applyHighchartOverrides = () => {
   if (typeof Highcharts === 'object') {
     HighchartsSeriesLabel(Highcharts);
     HighchartsStreamgraph(Highcharts);
+    HighchartsSankey(Highcharts);
   }
 
   (function (H: any) {
@@ -70,4 +73,17 @@ export const applyHighchartOverrides = () => {
   })(Highcharts);
 
   highchartsRoundedCorners(Highcharts);
+
+  // Set default dataLabel alignment for sankey nodes so individual chart builders
+  // do not need to repeat it.
+  Highcharts.setOptions({
+    plotOptions: {
+      sankey: {
+        dataLabels: {
+          align: 'center',
+          verticalAlign: 'middle',
+        },
+      },
+    },
+  });
 };

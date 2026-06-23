@@ -3,6 +3,7 @@ import type {
   WidgetPatch,
   WidgetsPanelLayout,
 } from '@/domains/dashboarding/dashboard-model';
+import type { TabberConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 import type { WidgetPropsUpdate } from './update-types.js';
@@ -32,6 +33,11 @@ export type DashboardPersistenceManager = {
      * The dashboard-level options for the new widget.
      */
     widgetOptions?: SpecificWidgetOptions,
+    /**
+     * The dashboard-level tabber config for the new widget (from `config.tabbers[id]`).
+     * Projected back onto the widget DTO and stored under the new widget id.
+     */
+    tabberConfig?: TabberConfig,
   ) => Promise<{
     /**
      * The persisted widget (possibly modified by the server, e.g. new id).
@@ -45,6 +51,10 @@ export type DashboardPersistenceManager = {
      * The options for the widget (after server modifications).
      */
     widgetOptions?: SpecificWidgetOptions;
+    /**
+     * The tabber config for the widget (after server modifications).
+     */
+    tabberConfig?: TabberConfig;
   }>;
 
   /**

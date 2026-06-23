@@ -4,9 +4,9 @@ import { prepareStackLabels } from '@/domains/visualizations/core/chart-options-
 import { AxisSettings } from '@/domains/visualizations/core/chart-options-processor/translations/axis-section.js';
 import {
   applyFormatPlainText,
-  getCompleteNumberFormatConfig,
+  formatNumberWithFallback,
 } from '@/domains/visualizations/core/chart-options-processor/translations/number-format-config.js';
-import { CompleteNumberFormatConfig, TotalLabels } from '@/types';
+import { NumberFormatConfig, TotalLabels } from '@/types';
 
 import { BuildContext } from '../../../../types.js';
 import { StackableChartTypes } from '../../types.js';
@@ -81,26 +81,28 @@ export const withStacking =
     }
 
     // Get number format configs for primary and secondary axes
+    const { defaultNumberFormattingEnabled } = ctx.extraConfig;
     const cartesianDataOptions = ctx.dataOptions;
-    const y1NumberFormatConfig = getCompleteNumberFormatConfig(
-      cartesianDataOptions.y.find(({ showOnRightAxis }) => !showOnRightAxis)?.numberFormatConfig,
-    );
-    const y2NumberFormatConfig = getCompleteNumberFormatConfig(
-      cartesianDataOptions.y.find(({ showOnRightAxis }) => showOnRightAxis)?.numberFormatConfig,
-    );
+    const y1Axis = cartesianDataOptions.y.find(({ showOnRightAxis }) => !showOnRightAxis);
+    const y2Axis = cartesianDataOptions.y.find(({ showOnRightAxis }) => !!showOnRightAxis);
 
     /**
      * Creates formatter function for stacking labels with proper number formatting
      */
     function getStackingLabelsFormatter(
-      numberFormatConfig: CompleteNumberFormatConfig,
+      rawConfig: NumberFormatConfig | undefined,
       stackingType?: Stacking,
       isTotal = false,
     ) {
       return function (this: { value: string | number; total?: number }) {
         const numericValue = typeof this.value === 'number' ? this.value : parseFloat(this.value);
         const valueToFormat = isTotal ? this.total || numericValue : numericValue;
-        const formattedValue = applyFormatPlainText(numberFormatConfig, valueToFormat);
+        const formattedValue = formatNumberWithFallback(
+          valueToFormat,
+          rawConfig,
+          defaultNumberFormattingEnabled,
+          applyFormatPlainText,
+        );
         const text = stackingType === 'percent' ? `${formattedValue}%` : formattedValue;
         return isTotal ? `${totalLabels?.prefix ?? ''}${text}${totalLabels?.suffix ?? ''}` : text;
       };
@@ -109,7 +111,7 @@ export const withStacking =
     // Apply stacking-specific enhancements to each axis
     return basicYAxisSettings.map((axisSettings, index) => {
       const isSecondaryAxis = index === 1;
-      const numberFormatConfig = isSecondaryAxis ? y2NumberFormatConfig : y1NumberFormatConfig;
+      const axisRawConfig = (isSecondaryAxis ? y2Axis : y1Axis)?.numberFormatConfig;
 
       return {
         ...axisSettings,
@@ -117,7 +119,7 @@ export const withStacking =
         labels: stacking
           ? {
               ...axisSettings.labels,
-              formatter: getStackingLabelsFormatter(numberFormatConfig, stacking),
+              formatter: getStackingLabelsFormatter(axisRawConfig, stacking),
             }
           : axisSettings.labels,
         // Apply stack labels configuration matching legacy functionality exactly
@@ -125,7 +127,7 @@ export const withStacking =
           ? {
               ...axisSettings.stackLabels,
               ...prepareStackLabels(totalLabels),
-              formatter: getStackingLabelsFormatter(numberFormatConfig, 'normal', true),
+              formatter: getStackingLabelsFormatter(axisRawConfig, 'normal', true),
               style: {
                 ...stackTotalFontStyleDefault,
                 ...(ctx.extraConfig.themeSettings

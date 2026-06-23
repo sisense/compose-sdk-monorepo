@@ -289,11 +289,13 @@ const translation: TranslationDictionary = {
       incorrectResponse: 'Onjuiste reactie',
       clearChat: 'Chat wissen',
       refresh: 'Vernieuwen',
-      readMore: 'Meer lezen',
+      readMore: 'Meer weergeven',
       collapse: 'Inklappen',
       yes: 'Ja',
       no: 'Nee',
       seeMore: 'Meer zien',
+      generateNarrative: 'AI-narratief genereren',
+      hideNarrative: 'AI-narratief verbergen',
     },
     disclaimer: {
       poweredByAi: 'Inhoud wordt aangedreven door AI, dus verrassingen en fouten zijn mogelijk.',
@@ -358,6 +360,8 @@ const translation: TranslationDictionary = {
       from: 'Van',
       to: 'Tot',
       includeCurrent: 'Inclusief huidige',
+      rankedBy: 'Gerangschikt op',
+      selectField: 'Veld selecteren',
     },
     placeholders: {
       selectFromList: 'Selecteren uit lijst',
@@ -382,6 +386,8 @@ const translation: TranslationDictionary = {
       greaterThan: 'Groter dan',
       greaterThanOrEqual: 'Gelijk aan of groter dan',
       isWithin: 'Is binnen',
+      top: 'Top',
+      bottom: 'Laatste',
     },
     validationErrors: {
       invalidNumber: 'Alleen cijfers',
@@ -478,6 +484,12 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Gegevenstabel',
     },
+    sankey: {
+      alerts: {
+        tooManyStages:
+          'Sankey-diagram heeft {{stageCount}} fasen; meer dan {{softLimit}} levert vaak een onleesbaar diagram op. Gebruik minder categoriekolommen of strengere filters.',
+      },
+    },
   },
   loadingOverlay: {
     label: 'Inhoud laden',
@@ -502,6 +514,17 @@ const translation: TranslationDictionary = {
     stdev: 'Standaardafwijking',
     median: 'Mediaan',
     variance: 'Variantie',
+  },
+  measuresAgg: {
+    countDistinct: '# unieke',
+    count: '# van',
+    sum: 'Totaal',
+    average: 'Gemiddelde',
+    min: 'Min',
+    max: 'Max',
+    median: 'Mediaan van',
+    variance: 'Variantie van',
+    stdev: 'Standaardafwijking van',
   },
 };
 

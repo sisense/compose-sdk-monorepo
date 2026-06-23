@@ -229,6 +229,58 @@ describe('Scatter Chart Data', () => {
 
       expect(groupedData).toMatchObject(expected);
     });
+
+    describe('defaultNumberFormattingEnabled behavior', () => {
+      it('should not format numeric breakByPoint without explicit config when disabled', () => {
+        const dataOptions = {
+          breakByPoint: {
+            column: { name: 'col_5', type: 'number' },
+          },
+        } as ScatterChartDataOptionsInternal;
+
+        const groupedData = groupData(dataOptions, mockData, false);
+
+        expect(groupedData[0].breakByPoint?.displayValue).toBe('34.001234');
+      });
+
+      it('should still format numeric breakByPoint with explicit config when disabled', () => {
+        const dataOptions = {
+          breakByPoint: {
+            column: { name: 'col_5', type: 'number' },
+            numberFormatConfig: { decimalScale: 1 },
+          },
+        } as ScatterChartDataOptionsInternal;
+
+        const groupedData = groupData(dataOptions, mockData, false);
+
+        expect(groupedData[0].breakByPoint?.displayValue).toBe('34.0');
+      });
+
+      it('should not format numeric breakByColor without explicit config when disabled', () => {
+        const dataOptions = {
+          breakByColor: {
+            column: { name: 'col_5', type: 'number' },
+          },
+        } as ScatterChartDataOptionsInternal;
+
+        const groupedData = groupData(dataOptions, mockData, false);
+
+        expect(groupedData[0].breakByColor?.displayValue).toBe('34.001234');
+      });
+
+      it('should still format numeric breakByColor with explicit config when disabled', () => {
+        const dataOptions = {
+          breakByColor: {
+            column: { name: 'col_5', type: 'number' },
+            numberFormatConfig: { decimalScale: 2 },
+          },
+        } as ScatterChartDataOptionsInternal;
+
+        const groupedData = groupData(dataOptions, mockData, false);
+
+        expect(groupedData[0].breakByColor?.displayValue).toBe('34.00');
+      });
+    });
   });
 
   describe('buildCategories', () => {

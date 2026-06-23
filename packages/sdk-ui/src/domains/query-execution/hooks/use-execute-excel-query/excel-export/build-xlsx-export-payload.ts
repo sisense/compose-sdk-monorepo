@@ -22,6 +22,11 @@ export type XlsxExportRequestPayload = {
   jaql: Record<string, unknown>;
   mergeRows: boolean;
   language: string;
+  widgetStyles?: {
+    coloringRules?: {
+      alternatingRows?: boolean;
+    };
+  };
 };
 
 /**
@@ -43,5 +48,10 @@ export function buildXlsxExportPayload(
     jaql,
     mergeRows,
     language: widget.language,
+    widgetStyles: {
+      coloringRules: {
+        alternatingRows: true,
+      },
+    },
   };
 }

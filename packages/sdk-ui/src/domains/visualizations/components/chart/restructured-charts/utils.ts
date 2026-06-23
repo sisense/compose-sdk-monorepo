@@ -38,6 +38,7 @@ export function isRestructuredChartType(chartType: ChartType): chartType is Supp
     'treemap',
     'sunburst',
     'streamgraph',
+    'sankey',
   ];
   return restructuredChartTypes.includes(chartType as SupportedChartType);
 }

@@ -10,7 +10,12 @@
 
 /* eslint-disable sonarjs/no-nested-switch */
 import { parseExpression } from '../../utils.js';
-import { DimensionalElement, normalizeName, wrapIfNeedsNormalization } from '../base.js';
+import {
+  DimensionalElement,
+  normalizeName,
+  resolveElementNames,
+  wrapIfNeedsNormalization,
+} from '../base.js';
 import { DATA_MODEL_MODULE_NAME } from '../consts.js';
 import { create } from '../factory.js';
 import { Attribute, AttributeContext, LevelAttribute } from '../interfaces.js';
@@ -68,8 +73,9 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
     panel?: string,
     indexed?: boolean,
     merged?: boolean,
+    title?: string,
   ) {
-    super(name, type || MetadataTypes.Attribute, desc, dataSource, composeCode);
+    super(name, type || MetadataTypes.Attribute, desc, dataSource, composeCode, title);
     this.expression = expression;
 
     // if composeCode is not explicitly set by the caller, extract it from expression
@@ -124,6 +130,7 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
       this.panel,
       this.indexed,
       this.merged,
+      this.title,
     );
   }
 
@@ -135,7 +142,7 @@ export class DimensionalAttribute extends DimensionalElement implements Attribut
   jaql(nested?: boolean): any {
     const result = <any>{
       jaql: {
-        title: this.name,
+        title: this.title,
         dim: this.expression,
         datatype: jaqlSimpleColumnType(this.type),
       },
@@ -201,6 +208,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
     panel?: string,
     indexed?: boolean,
     merged?: boolean,
+    title?: string,
   ) {
     super(
       name,
@@ -210,9 +218,10 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       sort,
       dataSource,
       composeCode,
-      undefined,
+      panel,
       indexed,
       merged,
+      title,
     );
 
     this._format = format;
@@ -275,9 +284,10 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       sort,
       this.dataSource,
       this.composeCode,
-      undefined,
+      this.panel,
       this.indexed,
       this.merged,
+      this.title,
     );
   }
 
@@ -309,6 +319,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       undefined,
       this.indexed,
       this.merged,
+      this.title,
     );
   }
 
@@ -331,6 +342,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       undefined,
       this.indexed,
       this.merged,
+      this.title,
     );
   }
 
@@ -356,7 +368,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
   jaql(nested?: boolean): any {
     const r = <any>{
       jaql: {
-        title: this.name,
+        title: this.title,
         dim: this.expression,
         datatype: jaqlSimpleColumnType(this.type),
         ...this.translateGranularityToJaql(),
@@ -600,8 +612,9 @@ export class DimensionalCalculatedAttribute extends DimensionalElement implement
     panel?: string,
     indexed?: boolean,
     merged?: boolean,
+    title?: string,
   ) {
-    super(name, MetadataTypes.CalculatedAttribute, desc, dataSource, composeCode);
+    super(name, MetadataTypes.CalculatedAttribute, desc, dataSource, composeCode, title);
 
     this.expression = expression;
     this.context = context;
@@ -650,6 +663,7 @@ export class DimensionalCalculatedAttribute extends DimensionalElement implement
       this.panel,
       this.indexed,
       this.merged,
+      this.title,
     );
   }
 
@@ -685,13 +699,48 @@ export class DimensionalCalculatedAttribute extends DimensionalElement implement
     const context: Record<string, any> = {};
     Object.getOwnPropertyNames(this.context).forEach((key) => {
       const value = this.context[key];
-      context[key] = value && typeof value.jaql === 'function' ? value.jaql(true) : value;
+      let entry = value && typeof value.jaql === 'function' ? value.jaql(true) : value;
+
+      // A calculated-dimension formula must operate on the raw column value. A date attribute in
+      // the context otherwise serializes with a level (e.g. `level: 'years'` — the implicit default
+      // when no granularity is chosen), which truncates the date before the formula runs and
+      // silently changes the result (and diverges from the Sisense UI, which references the raw
+      // column). So, matching the UI, drop the date granularity from the context entry.
+      //
+      // A calendar date dimension (`[Table.Column (Calendar)]`) only resolves when the JAQL gives
+      // it either a level or an explicit `table`/`column`. Removing the level alone would make it
+      // unresolvable ("dimension not found"), so we add the raw `table`/`column` reference instead
+      // (the way the UI does). Non-date attributes carry no granularity keys, so they are untouched.
+      const hasDateGranularity =
+        entry &&
+        typeof entry === 'object' &&
+        ('level' in entry || 'dateTimeLevel' in entry || 'bucket' in entry);
+      if (hasDateGranularity) {
+        // When the entry is the raw context object (no `jaql()` method), clone it before mutating
+        // so the consumer-provided input is never modified. Objects returned by `jaql(true)` are
+        // already fresh, so they can be mutated in place.
+        if (entry === value) {
+          entry = { ...entry };
+        }
+
+        delete entry.level;
+        delete entry.dateTimeLevel;
+        delete entry.bucket;
+
+        if (typeof entry.dim === 'string') {
+          const { table, column } = parseExpression(entry.dim);
+          entry.table = table;
+          entry.column = column;
+        }
+      }
+
+      context[key] = entry;
     });
 
     const result = <any>{
       jaql: {
         type: CALCULATED_DIMENSION_JAQL_TYPE,
-        title: this.name,
+        title: this.title,
         formula: this.expression,
         context,
       },
@@ -734,13 +783,14 @@ export function createAttribute(json: any): Attribute {
   if (MetadataTypes.isCalculatedAttribute(json)) {
     return createCalculatedAttribute(json);
   }
+  const { name, title } = resolveElementNames(json);
 
   if (json.granularity) {
     return createLevel(json);
   }
 
   return new DimensionalAttribute(
-    json.name || json.title,
+    name,
     json.attribute || json.expression || json.dim,
     json.type,
     json.desc || json.description,
@@ -750,6 +800,7 @@ export function createAttribute(json: any): Attribute {
     undefined,
     json.indexed,
     json.merged,
+    title,
   );
 }
 
@@ -760,8 +811,10 @@ export function createAttribute(json: any): Attribute {
  * @internal
  */
 export function createLevel(json: any): LevelAttribute {
+  const { name, title } = resolveElementNames(json);
+
   return new DimensionalLevelAttribute(
-    json.name || json.title,
+    name,
     json.attribute || json.expression || json.dim,
     json.granularity,
     json.format,
@@ -772,6 +825,7 @@ export function createLevel(json: any): LevelAttribute {
     undefined,
     json.indexed,
     json.merged,
+    title,
   );
 }
 
@@ -787,7 +841,7 @@ export function createLevel(json: any): LevelAttribute {
  * @internal
  */
 export function createCalculatedAttribute(json: any): Attribute {
-  const name = json.name || json.title;
+  const { name, title } = resolveElementNames(json);
   const expression = json.expression || json.formula;
   const desc = json.desc || json.description;
   const sort = json.sort;
@@ -808,6 +862,7 @@ export function createCalculatedAttribute(json: any): Attribute {
     json.panel,
     json.indexed,
     json.merged,
+    title,
   );
 }
 

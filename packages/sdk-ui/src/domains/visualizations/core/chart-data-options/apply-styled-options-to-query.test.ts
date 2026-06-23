@@ -32,7 +32,7 @@ describe('adaptMeasuresForQuery', () => {
     expect(isForecastMeasure(measures[2])).toBe(true);
   });
 
-  it('omits trend and forecast companions when ignoreTrendAndForecast is true', () => {
+  it('omits trend and forecast companions when includeTrendAndForecast is false', () => {
     const base = measureFactory.sum(DM.Commerce.Revenue, 'Revenue');
     const measures = adaptMeasuresForQuery(
       [
@@ -44,7 +44,7 @@ describe('adaptMeasuresForQuery', () => {
           },
         },
       ],
-      { ignoreTrendAndForecast: true },
+      { includeTrendAndForecast: false },
     );
     expect(measures).toHaveLength(1);
     expect(measures[0]).toBe(base);

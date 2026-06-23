@@ -2,7 +2,7 @@ import { TaskPassport } from '@sisense/task-manager';
 
 import { PivotQueryDescription, QueryDescription, QueryExecutionConfigInternal } from '../types.js';
 
-type TaskType = 'SEND_JAQL_QUERY' | 'SEND_DOWNLOAD_CSV_QUERY';
+type TaskType = 'SEND_JAQL_QUERY' | 'SEND_DOWNLOAD_CSV_QUERY' | 'SEND_COUNT_ROWS_QUERY';
 
 export class QueryTaskPassport extends TaskPassport {
   public queryDescription: QueryDescription;

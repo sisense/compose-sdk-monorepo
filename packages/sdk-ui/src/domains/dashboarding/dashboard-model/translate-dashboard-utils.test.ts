@@ -8,11 +8,15 @@ import {
   extractPivotTargetsConfigFromWidgetDto,
   findDimensionByInstanceId,
   getJtdNavigateType,
+  jumpToDashboardConfigFromWidgetDto,
   translateLayout,
+  withDashboardWidgetContext,
   withSharedFormulas,
   withSpecificWidgetOptions,
+  withTabberWidgetConfig,
 } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils';
 import { SpecificWidgetOptions } from '@/domains/dashboarding/dashboard-model/types';
+import type { JumpToDashboardConfigForPivot } from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { RestApi } from '@/infra/api/rest-api';
 import { getFiltersArray } from '@/shared/utils/filter-relations';
@@ -1258,7 +1262,8 @@ describe('translate-dashboard-utils', () => {
       expect(result).toBeDefined();
       expect(result).toHaveProperty('dimension');
       expect(result).toHaveProperty('location', 'row');
-      expect((result as any).dimension.name).toBe('Months in Date');
+      expect((result as any).dimension.name).toBe('Date');
+      expect((result as any).dimension.title).toBe('Months in Date');
     });
 
     it('should find measure in values panel and return without location', () => {
@@ -1732,6 +1737,288 @@ describe('translate-dashboard-utils', () => {
       };
       const result = withSpecificWidgetOptions(widgetOptions)(dto);
       expect(result.style).toEqual({ foo: 'bar' });
+    });
+
+    it('stamps version "1" on the JTD DTO so it survives the read path on reload', () => {
+      const widgetOptions: SpecificWidgetOptions = {
+        jtdConfig: {
+          enabled: true,
+          targets: [{ caption: 'Target', id: 'dash-1' }],
+        },
+      };
+      const result = withSpecificWidgetOptions(widgetOptions)(baseWidgetDto);
+      expect(result.drillToDashboardConfig?.version).toBe('1');
+      expect(result.drillToDashboardConfig?.dashboardIds).toEqual([
+        { caption: 'Target', id: 'dash-1', oid: 'dash-1' },
+      ]);
+    });
+  });
+
+  describe('pivot JTD (Map targets) serialization', () => {
+    const ROWS_INSTANCE_ID = 'EFEE2-7247-CE';
+
+    // Mirrors the pivot widget in some-pivot.json: a rows Gender dimension whose
+    // instanceid is referenced by the JTD target's pivotDimensions.
+    const sourcePivotDto = (): WidgetDto =>
+      ({
+        oid: 'pivot-1',
+        type: 'pivot2',
+        subtype: 'pivot2',
+        title: 'some-pivot',
+        desc: null,
+        datasource: {
+          title: 'Sample ECommerce',
+          fullname: 'LocalHost/Sample ECommerce',
+          id: 'aLOCALHOST_aSAMPLEIAAaECOMMERCE',
+          address: 'LocalHost',
+        },
+        metadata: {
+          panels: [
+            {
+              name: 'rows',
+              items: [
+                {
+                  jaql: { dim: '[Commerce.Gender]', datatype: 'text', title: 'Gender' },
+                  instanceid: ROWS_INSTANCE_ID,
+                  panel: 'rows',
+                },
+              ],
+            },
+            {
+              name: 'values',
+              items: [
+                {
+                  jaql: {
+                    dim: '[Commerce.Cost]',
+                    datatype: 'numeric',
+                    agg: 'sum',
+                    title: 'Total Cost',
+                  },
+                  instanceid: 'F7610-7545-92',
+                  panel: 'measures',
+                },
+              ],
+            },
+            { name: 'columns', items: [] },
+            { name: 'filters', items: [] },
+          ],
+        },
+        style: {},
+        drillToDashboardConfig: {
+          drillToDashboardRightMenuCaption: 'Jump to ',
+          drillToDashboardNavigateType: 2,
+          drillToDashboardNavigateTypePivot: 2,
+          displayToolbarRow: true,
+          displayFilterPane: true,
+          modalWindowMeasurement: '%',
+          dashboardIds: [
+            {
+              oid: '69ab04c7e9e1e766fc4f9d40',
+              caption: 'tabber-test__drill',
+              pivotDimensions: [ROWS_INSTANCE_ID],
+              id: '69ab04c7e9e1e766fc4f9d40',
+            },
+          ],
+          enabled: true,
+          version: '1',
+        },
+      } as unknown as WidgetDto);
+
+    // Mimics the freshly-translated DTO for the duplicated widget: same panels but
+    // WITHOUT instanceids (toWidgetDto omits them) and WITHOUT drillToDashboardConfig.
+    const copyPivotDto = (): WidgetDto =>
+      ({
+        oid: 'pivot-1-copy',
+        type: 'pivot2',
+        subtype: 'pivot2',
+        title: 'some-pivot copy',
+        desc: '',
+        datasource: {
+          title: 'Sample ECommerce',
+          fullname: 'LocalHost/Sample ECommerce',
+          id: 'aLOCALHOST_aSAMPLEIAAaECOMMERCE',
+          address: 'LocalHost',
+        },
+        metadata: {
+          panels: [
+            {
+              name: 'rows',
+              items: [{ jaql: { dim: '[Commerce.Gender]', datatype: 'text', title: 'Gender' } }],
+            },
+            { name: 'columns', items: [] },
+            {
+              name: 'values',
+              items: [
+                {
+                  jaql: {
+                    dim: '[Commerce.Cost]',
+                    datatype: 'numeric',
+                    agg: 'sum',
+                    title: 'Total Cost',
+                  },
+                  panel: 'measures',
+                },
+              ],
+            },
+            { name: 'filters', items: [] },
+          ],
+        },
+        style: {},
+      } as unknown as WidgetDto);
+
+    it('round-trips: a duplicated pivot keeps its per-dimension JTD target', () => {
+      // READ the source pivot widget's JTD into a Map-based config.
+      const jtdConfig = jumpToDashboardConfigFromWidgetDto(sourcePivotDto()) as
+        | JumpToDashboardConfigForPivot
+        | undefined;
+      expect(jtdConfig?.targets instanceof Map).toBe(true);
+
+      // WRITE it back onto the freshly-translated copy DTO (the duplicate scenario).
+      const result = withSpecificWidgetOptions({ jtdConfig })(copyPivotDto());
+
+      // The config is restored (previously the copy lost drillToDashboardConfig entirely).
+      expect(result.drillToDashboardConfig?.version).toBe('1');
+      const dashboardIds = result.drillToDashboardConfig!.dashboardIds;
+      expect(dashboardIds).toHaveLength(1);
+      expect(dashboardIds[0].caption).toBe('tabber-test__drill');
+      expect(dashboardIds[0].id).toBe('69ab04c7e9e1e766fc4f9d40');
+
+      // The target references the rows dimension via a pivotDimensions instanceid...
+      const pivotDimensions = (dashboardIds[0] as { pivotDimensions?: string[] }).pivotDimensions;
+      expect(pivotDimensions).toHaveLength(1);
+
+      // ...and that instanceid is now stamped on the matching rows panel item.
+      const rowsItem = result.metadata.panels.find((p) => p.name === 'rows')!.items[0];
+      expect(rowsItem.instanceid).toBe(pivotDimensions![0]);
+
+      // Re-reading the produced DTO reconstructs the same per-dimension target.
+      const reread = jumpToDashboardConfigFromWidgetDto(result) as
+        | JumpToDashboardConfigForPivot
+        | undefined;
+      expect(reread?.targets instanceof Map).toBe(true);
+      const targetLists = [...reread!.targets.values()];
+      expect(targetLists).toHaveLength(1);
+      expect(targetLists[0][0].caption).toBe('tabber-test__drill');
+    });
+
+    it('does not stamp instanceids or attach JTD when there is no jtd config', () => {
+      const result = withSpecificWidgetOptions({})(copyPivotDto());
+      expect(result.drillToDashboardConfig).toBeUndefined();
+      expect(
+        result.metadata.panels.find((p) => p.name === 'rows')!.items[0].instanceid,
+      ).toBeUndefined();
+    });
+  });
+
+  describe('withTabberWidgetConfig', () => {
+    const baseTabberDto = (): WidgetDto =>
+      ({
+        oid: 'tabber-1',
+        type: 'WidgetsTabber',
+        subtype: 'WidgetsTabber',
+        datasource: { title: 'test' } as any,
+        metadata: { panels: [] },
+        // mimic toTabberWidgetStyle output: tabs with names but empty displayWidgetIds
+        style: {
+          tabs: [
+            { title: 'TAB 1', displayWidgetIds: [], hideWidgetIds: [] },
+            { title: 'TAB 2', displayWidgetIds: [], hideWidgetIds: [] },
+          ],
+          activeTab: '0',
+        },
+        title: 'Tabber',
+        desc: '',
+      } as unknown as WidgetDto);
+
+    it('overlays displayWidgetIds onto the tabber style tabs by index', () => {
+      const result = withTabberWidgetConfig({
+        tabs: [{ displayWidgetIds: ['a', 'b'] }, { displayWidgetIds: ['c'] }],
+      })(baseTabberDto());
+
+      const tabs = (result.style as any).tabs;
+      expect(tabs[0].displayWidgetIds).toEqual(['a', 'b']);
+      expect(tabs[1].displayWidgetIds).toEqual(['c']);
+      // tab names produced by the widget-level translator are preserved
+      expect(tabs[0].title).toBe('TAB 1');
+      expect(tabs[1].title).toBe('TAB 2');
+    });
+
+    it('is a no-op when there is no tabber config', () => {
+      const dto = baseTabberDto();
+      const result = withTabberWidgetConfig(undefined)(dto);
+      expect(result).toBe(dto);
+    });
+
+    it('is a no-op for non-tabber widgets', () => {
+      const chartDto: WidgetDto = {
+        oid: 'widget-1',
+        type: 'chart/column',
+        subtype: 'column',
+        datasource: { title: 'test' } as any,
+        metadata: { panels: [] },
+        style: {},
+        title: 'Chart',
+        desc: '',
+      };
+      const result = withTabberWidgetConfig({ tabs: [{ displayWidgetIds: ['a'] }] })(chartDto);
+      expect(result).toBe(chartDto);
+    });
+
+    it('keeps existing tab displayWidgetIds when the config has fewer tabs', () => {
+      const dto = baseTabberDto();
+      (dto.style as any).tabs[0].displayWidgetIds = ['keep'];
+      const result = withTabberWidgetConfig({ tabs: [] })(dto);
+      // index 0 has no config entry → falls back to the existing value
+      expect((result.style as any).tabs[0].displayWidgetIds).toEqual(['keep']);
+    });
+  });
+
+  describe('withDashboardWidgetContext', () => {
+    it('applies both the widget options and the tabber projection', () => {
+      const tabberDto = {
+        oid: 'tabber-1',
+        type: 'WidgetsTabber',
+        subtype: 'WidgetsTabber',
+        datasource: { title: 'test' } as any,
+        metadata: { panels: [] },
+        style: { tabs: [{ title: 'TAB 1', displayWidgetIds: [], hideWidgetIds: [] }] },
+        title: 'Tabber',
+        desc: '',
+      } as unknown as WidgetDto;
+
+      const result = withDashboardWidgetContext({
+        options: {
+          filtersOptions: {
+            applyMode: CommonFiltersApplyMode.FILTER,
+            shouldAffectFilters: true,
+          },
+        },
+        tabber: { tabs: [{ displayWidgetIds: ['a', 'b'] }] },
+      })(tabberDto);
+
+      // options projection
+      expect(result.options?.dashboardFiltersMode).toBe('filter');
+      // tabber projection
+      expect((result.style as any).tabs[0].displayWidgetIds).toEqual(['a', 'b']);
+    });
+
+    it('is behavior-preserving when only options are provided (no tabber)', () => {
+      const chartDto: WidgetDto = {
+        oid: 'widget-1',
+        type: 'chart/column',
+        subtype: 'column',
+        datasource: { title: 'test' } as any,
+        metadata: { panels: [] },
+        style: {},
+        title: 'Chart',
+        desc: '',
+      };
+      const options: SpecificWidgetOptions = {
+        filtersOptions: { applyMode: CommonFiltersApplyMode.FILTER, shouldAffectFilters: false },
+      };
+      const viaContext = withDashboardWidgetContext({ options })(chartDto);
+      const viaOptions = withSpecificWidgetOptions(options)(chartDto);
+      expect(viaContext).toEqual(viaOptions);
     });
   });
 

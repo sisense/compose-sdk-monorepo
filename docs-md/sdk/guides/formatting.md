@@ -120,7 +120,7 @@ The percent type doesn't have any additional properties for further customizatio
 
 ## Date Formatting
 
-You can format dates in your chart categories using the `dateFormat` property of a `StyledColumn` or `StyledMeasureColumn` object. Provide the function with a format string using a [ECMAScript Date Time String Format](https://tc39.es/ecma262/multipage/numbers-and-dates.html#sec-date-time-string-format) string.
+You can format dates in your chart categories using the `dateFormat` property on a [`StyledColumn`](../modules/sdk-ui/interfaces/interface.StyledColumn.md). Provide a format string using [date-fns `format` tokens](https://date-fns.org/v2.29.3/docs/format) (for example `yyyy`, `MM`, `dd`, `HH:mm:ss`, or `qqq` and `yyyy` as in the example below), not the ECMAScript Date Time String Format.
 
 ### Date Example
 

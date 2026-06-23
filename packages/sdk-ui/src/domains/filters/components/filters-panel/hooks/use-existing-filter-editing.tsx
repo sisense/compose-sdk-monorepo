@@ -19,6 +19,7 @@ import type { UseExistingFilterEditingConfig } from '../types';
 type UseExistingFilterEditingParams = {
   onFilterChanged: (filter: Filter) => void;
   defaultDataSource?: DataSource;
+  dataSources?: DataSource[];
   config?: UseExistingFilterEditingConfig;
 };
 
@@ -34,6 +35,7 @@ type UseExistingFilterEditingReturn = {
 export const useExistingFilterEditing = ({
   config,
   defaultDataSource,
+  dataSources,
   onFilterChanged,
 }: UseExistingFilterEditingParams): UseExistingFilterEditingReturn => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -95,6 +97,7 @@ export const useExistingFilterEditing = ({
           }}
           config={extendedConfig}
           defaultDataSource={defaultDataSource}
+          dataSources={dataSources}
         />
       ) : null;
     }, [
@@ -103,6 +106,7 @@ export const useExistingFilterEditing = ({
       config,
       handleChange,
       defaultDataSource,
+      dataSources,
       levelIndexToEdit,
       extendedConfig,
       parentFilters,

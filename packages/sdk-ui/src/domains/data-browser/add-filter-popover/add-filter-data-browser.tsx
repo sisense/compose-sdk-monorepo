@@ -81,7 +81,7 @@ export const AddFilterDataBrowser = ({
           disabledAttributes && {
             disabledAttributes: disabledAttributes,
             getTooltip: (attribute) =>
-              `Filter already exists for ${attribute.name}. Please edit the existing filter, or remove it to add a new one.`,
+              `Filter already exists for ${attribute.title}. Please edit the existing filter, or remove it to add a new one.`,
           }
         }
       />

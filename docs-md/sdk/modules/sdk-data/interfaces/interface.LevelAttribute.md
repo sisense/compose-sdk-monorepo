@@ -97,7 +97,15 @@ Granularity of the level. See supported granularity values at [DateLevels](../va
 
 > **name**: `string`
 
-Element name
+Identity name of the element.
+
+***
+
+### title
+
+> **title**: `string`
+
+Label displayed in UI.
 
 ***
 

@@ -8,7 +8,12 @@ import { QueryApiDispatcher } from '../query-api-dispatcher/query-api-dispatcher
 import { QUERY_DEFAULT_LIMIT } from '../query-client.js';
 import { getDataFromQueryResult } from '../query-result/index.js';
 import { TranslatableError } from '../translation/translatable-error.js';
-import { AbortRequestFunction, JaqlQueryPayload, JaqlResponse } from '../types.js';
+import {
+  AbortRequestFunction,
+  CountRowsResponse,
+  JaqlQueryPayload,
+  JaqlResponse,
+} from '../types.js';
 import { PivotQueryTaskPassport, QueryTaskPassport } from './query-task-passport.js';
 
 type QueryTask = Task<QueryTaskPassport>;
@@ -65,6 +70,42 @@ export class QueryTaskManager extends AbstractTaskManager {
       .map((c) => ({ name: c, type: 'number' })) as Element[];
 
     return getDataFromQueryResult(jaqlResponse, [...metadata, ...extraColumns]);
+  }
+
+  private async prepareCountRowsJaqlPayload(task: QueryTask): Promise<JaqlQueryPayload> {
+    const { queryDescription, executionConfig } = task.passport;
+    // The total row count is page-independent: the server ignores paging when counting,
+    // and omitting count/offset keeps the payload identical across pages of the same query.
+    const pageIndependentQueryDescription = {
+      ...queryDescription,
+      count: undefined,
+      offset: undefined,
+    };
+    const jaqlPayload: JaqlQueryPayload = getJaqlQueryPayload(
+      pageIndependentQueryDescription,
+      executionConfig.shouldSkipHighlightsWithoutAttributes,
+    );
+    const onBeforeQuery = executionConfig.onBeforeQuery;
+    if (onBeforeQuery) {
+      return onBeforeQuery(jaqlPayload);
+    }
+    return jaqlPayload;
+  }
+
+  private async sendCountRowsQuery(task: QueryTask, jaqlPayload: JaqlQueryPayload) {
+    const { taskId } = task.passport;
+    const { responsePromise, abortHttpRequest } = this.queryApi.sendCountRowsRequest(
+      task.passport.queryDescription.dataSource,
+      jaqlPayload,
+    );
+    this.sentRequestsAbortersMap.set(taskId, abortHttpRequest);
+    const countRowsResponse = await responsePromise.finally(() => {
+      this.sentRequestsAbortersMap.delete(taskId);
+    });
+
+    validateCountRowsResponse(countRowsResponse);
+
+    return countRowsResponse.countRows;
   }
 
   private async sendCsvQuery(
@@ -155,6 +196,15 @@ export class QueryTaskManager extends AbstractTaskManager {
     ),
   ]);
 
+  public executeCountRowsSending = super.createFlow<QueryTaskPassport, EmptyObject, number>([
+    new Step('PREPARE_JAQL_PAYLOAD', this.prepareCountRowsJaqlPayload.bind(this), async () => {}),
+    new Step(
+      'SEND_COUNT_ROWS_QUERY',
+      this.sendCountRowsQuery.bind(this),
+      this.cancelDataRetrievalQuery.bind(this),
+    ),
+  ]);
+
   public executeDownloadCsvSending = super.createFlow<QueryTaskPassport, EmptyObject, Blob>([
     new Step('PREPARE_JAQL_PAYLOAD', this.prepareJaqlPayload.bind(this), async () => {}),
     new Step(
@@ -185,10 +235,18 @@ export function validateJaqlResponse(
     throw new TranslatableError('errors.noJaqlResponse');
   }
   if (jaqlResponse.error) {
-    throw new Error(
-      `${jaqlResponse.details} ${jaqlResponse.database ?? ''} ${
-        jaqlResponse.extraDetails ? JSON.stringify(jaqlResponse.extraDetails) : ''
-      }`,
-    );
+    // Build the message from the human-readable server fields only. `extraDetails`
+    // is a structured object and must not be serialized into user-facing error text
+    // (it would append raw JSON like {"baseTranslationException":...} to the message).
+    const message = [jaqlResponse.details, jaqlResponse.database].filter(Boolean).join(' ');
+    throw new Error(message);
+  }
+}
+
+export function validateCountRowsResponse(
+  countRowsResponse: CountRowsResponse | undefined,
+): asserts countRowsResponse is CountRowsResponse {
+  if (!countRowsResponse || typeof countRowsResponse.countRows !== 'number') {
+    throw new TranslatableError('errors.invalidCountRowsResponse');
   }
 }

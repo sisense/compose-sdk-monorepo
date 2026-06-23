@@ -17,6 +17,7 @@ export const loadCategoricalData = loadDataBySingleQuery;
 export function getCategoricalChartDataFromTable(
   dataOptions: CategoricalChartDataOptionsInternal,
   dataTable: DataTable,
+  options?: { defaultNumberFormattingEnabled?: boolean },
 ): CategoricalChartData {
-  return categoricalData(dataOptions, dataTable);
+  return categoricalData(dataOptions, dataTable, options?.defaultNumberFormattingEnabled);
 }

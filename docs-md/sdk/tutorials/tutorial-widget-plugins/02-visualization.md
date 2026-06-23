@@ -1,6 +1,5 @@
 ---
 title: 2 | Building a Visualization
-hidden: true
 ---
 
 # Building a Visualization

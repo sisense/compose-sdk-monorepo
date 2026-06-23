@@ -1,13 +1,41 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import type { InitPageData, JaqlRequest } from '@sisense/sdk-pivot-query-client';
-import { EVENT_QUERY_END, EVENT_QUERY_START, PivotBuilder } from '@sisense/sdk-pivot-ui';
+import {
+  EVENT_QUERY_END,
+  EVENT_QUERY_ERROR,
+  EVENT_QUERY_START,
+  PivotBuilder,
+} from '@sisense/sdk-pivot-ui';
 
 import { useHasChanged } from '@/shared/hooks/use-has-changed';
 
 interface LoadingState {
   isLoading: boolean;
   isNoResults: boolean;
+  error?: Error;
+}
+
+/**
+ * Normalizes an error emitted by the pivot data layer into an `Error` instance.
+ *
+ * Server-streamed failures arrive as a plain object (for example
+ * `{ type, subType, details }`), so extract a meaningful message from it.
+ */
+function toError(error: unknown): Error {
+  if (error instanceof Error) {
+    return error;
+  }
+  if (error && typeof error === 'object') {
+    const { details, message } = error as { details?: string; message?: string };
+    if (details || message) {
+      return new Error(details ?? message);
+    }
+  }
+  if (typeof error === 'string') {
+    return new Error(error);
+  }
+  return new Error('Pivot query failed');
 }
 
 /**
@@ -35,7 +63,7 @@ export function usePivotDataLoading(options: {
   }, [isForceReload, isJaqlChanged, jaql, pivotBuilder]);
 
   const handleQueryStart = useCallback(() => {
-    setLoadingState({ isLoading: true, isNoResults: false });
+    setLoadingState({ isLoading: true, isNoResults: false, error: undefined });
   }, []);
 
   const handleQueryEnd = useCallback((data: InitPageData) => {
@@ -45,10 +73,15 @@ export function usePivotDataLoading(options: {
     });
   }, []);
 
+  const handleQueryError = useCallback((error: unknown) => {
+    setLoadingState({ isLoading: false, isNoResults: false, error: toError(error) });
+  }, []);
+
   useEffect(() => {
     const eventHandlers = [
       { event: EVENT_QUERY_START, handler: handleQueryStart },
       { event: EVENT_QUERY_END, handler: handleQueryEnd },
+      { event: EVENT_QUERY_ERROR, handler: handleQueryError },
     ];
 
     eventHandlers.forEach(({ event, handler }) => {
@@ -60,7 +93,7 @@ export function usePivotDataLoading(options: {
         pivotBuilder.off(event, handler);
       });
     };
-  }, [pivotBuilder, handleQueryStart, handleQueryEnd]);
+  }, [pivotBuilder, handleQueryStart, handleQueryEnd, handleQueryError]);
 
   return loadingState;
 }

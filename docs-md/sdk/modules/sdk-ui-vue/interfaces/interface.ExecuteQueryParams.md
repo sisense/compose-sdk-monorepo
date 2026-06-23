@@ -65,6 +65,24 @@ query. To clear a highlight, remove it from the array.
 
 ***
 
+### includeRowCount <Badge type="beta" text="Beta" />
+
+> **includeRowCount**?: `boolean`
+
+Boolean flag whether to include the total row count of the query result,
+ignoring the `count` and `offset` paging.
+
+When enabled, an additional row count query is sent to the server alongside
+the data query, and the total is returned in ExecuteQueryResult.rowCount.
+The retrieved total is reused for subsequent pages of the same query.
+
+Row count feature requires a Sisense instance version of 2026.3.0 or greater.
+On older versions, the query still succeeds and `rowCount` stays `undefined`.
+
+If not specified, the default value is `false`
+
+***
+
 ### measures
 
 > **measures**?: [`Measure`](../../sdk-data/interfaces/interface.Measure.md)[]

@@ -72,9 +72,9 @@ async function fetchUnifiedNarrativeWithFallback(
  * retried once with the fallback payload.
  *
  * @param httpClient - HttpClient instance
- * @param request - Narration request payload
+ * @param request - Narrative request payload
  * @param options - Optional; `canGenerateNarrativeViaAI` (typically from `app.settings.narrative`)
- * @returns Promise that resolves with narration JSON or `undefined` (same semantics as `HttpClient.post`)
+ * @returns Promise that resolves with narrative JSON or `undefined` (same semantics as `HttpClient.post`)
  * @internal
  */
 export async function getNarrative(

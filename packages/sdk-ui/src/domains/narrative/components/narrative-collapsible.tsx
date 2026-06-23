@@ -1,64 +1,48 @@
-import { useLayoutEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import Collapsible from '@/modules/ai/common/collapsible';
 
 type NarrativeCollapsibleProps = {
   text: string;
+  noCollapse?: boolean;
+  /** When true, shows the loading overlay over the text area at its settled height. */
+  isLoading?: boolean;
+  isError?: boolean;
+  /** Fired when the collapsed state toggles. */
+  onCollapsedChange?: (isCollapsed: boolean) => void;
+  /**
+   * Reserved height in pixels for the collapsed state (line-aligned internally).
+   * The container always occupies this much vertical space; "show more" only appears when
+   * the text overflows it. Defaults to 5 text rows when `undefined`.
+   */
+  constrainedHeightPx?: number;
+  /**
+   * Absolute pixel cap applied when the narrative is expanded.
+   * Text scrolls rather than exceeding this limit.
+   */
+  maxConstrainedHeightPx?: number;
 };
 
-/** Matches `ai-xs` / narrative body line height in theme. */
-const LINE_HEIGHT_PX = 22;
-const COLLAPSED_LINE_COUNT = 3;
-const MAX_HEIGHT_PX = LINE_HEIGHT_PX * COLLAPSED_LINE_COUNT;
-
 /**
- * Text container with an expand/collapse control for long narrative text.
+ * Narrative-specific collapsible: always reserves the collapsed height to prevent widget
+ * layout shifts during data loads.
  *
- * Uses `max-height` + `overflow: hidden` when collapsed (not `line-clamp`), because
- * `white-space: pre-wrap` is incompatible with `-webkit-line-clamp` in browsers.
+ * Thin wrapper around {@link Collapsible} that maps legacy prop names and sets
+ * narrative-appropriate defaults.
  *
  * @internal
  */
-export function NarrativeCollapsible({ text }: NarrativeCollapsibleProps) {
-  const [collapsed, setCollapsed] = useState(true);
-  const [showReadMore, setShowReadMore] = useState(false);
-
-  const { t } = useTranslation();
-
-  const ref = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    if (ref.current) {
-      setShowReadMore(ref.current.scrollHeight > MAX_HEIGHT_PX);
-    }
-  }, [text]);
-
+export function NarrativeCollapsible({
+  constrainedHeightPx,
+  maxConstrainedHeightPx,
+  ...rest
+}: NarrativeCollapsibleProps) {
   return (
-    <div className="csdk-min-w-0 csdk-flex-1">
-      <div
-        ref={ref}
-        className={`csdk-whitespace-pre-wrap ${collapsed ? 'csdk-overflow-hidden' : ''}`}
-        style={collapsed ? { maxHeight: MAX_HEIGHT_PX } : undefined}
-      >
-        {text}
-      </div>
-      {showReadMore && (
-        <div className="csdk-mt-3 csdk-flex csdk-justify-end">
-          <div
-            className="csdk-text-ai-xs csdk-text-text-link csdk-cursor-pointer"
-            onClick={() => setCollapsed((v) => !v)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                setCollapsed((v) => !v);
-              }
-            }}
-            role="button"
-            tabIndex={0}
-          >
-            {collapsed ? t('ai.buttons.readMore') : t('ai.buttons.collapse')}
-          </div>
-        </div>
-      )}
-    </div>
+    <Collapsible
+      {...rest}
+      showDisclaimer
+      maxCollapsedHeightPx={constrainedHeightPx}
+      maxExpandedHeightPx={maxConstrainedHeightPx}
+      reserveCollapsedHeight
+      textClassName="csdk-text-[13px]"
+    />
   );
 }

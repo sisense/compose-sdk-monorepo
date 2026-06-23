@@ -45,4 +45,28 @@ describe('createDataCellValueFormatter', () => {
 
     expect(cell.content).toBe('123.46');
   });
+
+  it('should not format data cell value when defaultNumberFormattingEnabled is false and no explicit config', () => {
+    const dataOptions = {} as PivotTableDataOptions;
+    const cell = { value: 123.456, content: null };
+    const jaqlPanelItem = {} as JaqlPanel;
+    const formatter = createDataCellValueFormatter(dataOptions, false);
+
+    formatter(cell, {}, {}, jaqlPanelItem);
+
+    expect(cell.content).toBe('123.456');
+  });
+
+  it('should still format data cell value with explicit config when defaultNumberFormattingEnabled is false', () => {
+    const dataOptions = {
+      values: [{ numberFormatConfig: { name: 'Percent', decimalScale: 1 } }],
+    } as PivotTableDataOptions;
+    const cell = { value: 123.456, content: null };
+    const jaqlPanelItem = { field: { index: 0 } } as JaqlPanel;
+    const formatter = createDataCellValueFormatter(dataOptions, false);
+
+    formatter(cell, {}, {}, jaqlPanelItem);
+
+    expect(cell.content).toBe('12,345.6%');
+  });
 });

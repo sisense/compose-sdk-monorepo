@@ -1,10 +1,12 @@
+import { DimensionalDateDimension } from '../dimensions/dimensions.js';
 import { create } from '../factory.js';
 import { Attribute } from '../interfaces.js';
 import * as measureFactory from '../measures/factory.js';
-import { CALCULATED_DIMENSION_JAQL_TYPE, MetadataTypes, Sort } from '../types.js';
+import { CALCULATED_DIMENSION_JAQL_TYPE, DateLevels, MetadataTypes, Sort } from '../types.js';
 import {
   DimensionalAttribute,
   DimensionalCalculatedAttribute,
+  DimensionalLevelAttribute,
   isDimensionalCalculatedAttribute,
 } from './attributes.js';
 import * as attributeFactory from './factory.js';
@@ -71,6 +73,82 @@ describe('attributeFactory.customFormula', () => {
       .sort(Sort.Ascending);
 
     expect(calcDim.jaql().jaql.sort).toBe('asc');
+  });
+});
+
+describe('attributeFactory.customFormula date-context granularity', () => {
+  it('drops the default level of a date dimension and references the raw table/column', () => {
+    // A bare date dimension serializes at its default level (years). Inside a formula that level
+    // would truncate the date before the formula runs, so it must be stripped and replaced with a
+    // raw column reference (otherwise the calendar dimension cannot be resolved by the backend).
+    const date = new DimensionalDateDimension('Date', '[Commerce.Date (Calendar)]');
+
+    const calcDim = attributeFactory.customFormula('Date prefix', 'left([date], 10)', {
+      date,
+    });
+
+    expect(calcDim.jaql().jaql.context['[date]']).toEqual({
+      title: 'Date',
+      dim: '[Commerce.Date (Calendar)]',
+      datatype: 'datetime',
+      table: 'Commerce',
+      column: 'Date',
+    });
+  });
+
+  it('drops an explicit level of a date level attribute and references the raw table/column', () => {
+    const dateMonths = new DimensionalLevelAttribute(
+      'Date',
+      '[Commerce.Date (Calendar)]',
+      DateLevels.Months,
+    );
+
+    const calcDim = attributeFactory.customFormula('Date prefix', 'left([date], 10)', {
+      date: dateMonths,
+    });
+
+    const entry = calcDim.jaql().jaql.context['[date]'];
+    expect(entry).not.toHaveProperty('level');
+    expect(entry).toMatchObject({ table: 'Commerce', column: 'Date' });
+  });
+
+  it('does not mutate a raw context object (constructed directly)', () => {
+    // The class accepts a looser AttributeContext, so a context value may be a raw JAQL object
+    // without a jaql() method. Such an object must not be mutated when its level is stripped.
+    const rawDate = { dim: '[Commerce.Date (Calendar)]', datatype: 'datetime', level: 'years' };
+    const calcDim = new DimensionalCalculatedAttribute('Date prefix', 'left([date], 10)', {
+      '[date]': rawDate,
+    });
+
+    // The emitted JAQL is normalized (level dropped, raw column added)...
+    expect(calcDim.jaql().jaql.context['[date]']).toEqual({
+      dim: '[Commerce.Date (Calendar)]',
+      datatype: 'datetime',
+      table: 'Commerce',
+      column: 'Date',
+    });
+    // ...but the consumer's original object is left untouched.
+    expect(rawDate).toEqual({
+      dim: '[Commerce.Date (Calendar)]',
+      datatype: 'datetime',
+      level: 'years',
+    });
+  });
+
+  it('leaves non-date context attributes untouched (no table/column added)', () => {
+    const calcDim = attributeFactory.customFormula('x', 'Concat([ageRange], [gender])', {
+      ageRange,
+      gender,
+    });
+
+    const context = calcDim.jaql().jaql.context;
+    expect(context['[ageRange]']).toEqual({
+      title: 'Age Range',
+      dim: '[Commerce.Age Range]',
+      datatype: 'text',
+    });
+    expect(context['[ageRange]']).not.toHaveProperty('table');
+    expect(context['[gender]']).not.toHaveProperty('column');
   });
 });
 

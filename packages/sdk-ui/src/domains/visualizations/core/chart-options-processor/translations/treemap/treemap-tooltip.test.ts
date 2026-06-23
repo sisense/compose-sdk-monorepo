@@ -75,6 +75,62 @@ describe('Treemap Chart tooltip formatter', () => {
     ).toMatchSnapshot();
   });
 
+  it('should render raw value when defaultNumberFormattingEnabled is false and no explicit config', () => {
+    const context = {
+      color: 'red',
+      point: {
+        node: {
+          val: 54321,
+          name: 'Test Node',
+          parentNode: { val: 100000, name: 'Root' },
+        },
+      },
+    } as unknown as HighchartsDataPointContext;
+
+    const result = treemapTooltipFormatter(
+      context,
+      dataOptions,
+      designOptions,
+      translateMock,
+      undefined,
+      false,
+    );
+
+    expect(result).toContain('54321');
+    expect(result).not.toContain('54.32K');
+  });
+
+  it('should format value with explicit numberFormatConfig when defaultNumberFormattingEnabled is false', () => {
+    const context = {
+      color: 'red',
+      point: {
+        node: {
+          val: 42,
+          name: 'Test Node',
+          parentNode: { val: 100, name: 'Root' },
+        },
+      },
+    } as unknown as HighchartsDataPointContext;
+
+    const dataOptionsWithConfig = {
+      y: [
+        { column: { title: 'Revenue' }, numberFormatConfig: { name: 'Percent', decimalScale: 0 } },
+      ],
+    } as CategoricalChartDataOptionsInternal;
+
+    // 42 * 100 = 4,200% — confirms formatting was applied, not raw String(42)
+    const result = treemapTooltipFormatter(
+      context,
+      dataOptionsWithConfig,
+      designOptions,
+      translateMock,
+      undefined,
+      false,
+    );
+
+    expect(result).toContain('4,200%');
+  });
+
   it('contribution mode', () => {
     const context = {
       color: 'blue',

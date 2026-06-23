@@ -6,7 +6,12 @@ import { CartesianChartData } from '@/domains/visualizations/core/chart-data/typ
 export function getCartesianChartData(
   chartDataOptions: CartesianChartDataOptionsInternal,
   dataTable: DataTable,
+  options?: { defaultNumberFormattingEnabled?: boolean },
 ): CartesianChartData {
   // TODO: refactor this function and move the logic from legacyGetCartesianChartData here
-  return legacyGetCartesianChartData(chartDataOptions, dataTable);
+  return legacyGetCartesianChartData(
+    chartDataOptions,
+    dataTable,
+    options?.defaultNumberFormattingEnabled,
+  );
 }

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Filter } from '@sisense/sdk-data';
+import { Filter, Measure } from '@sisense/sdk-data';
 
 import { MembersListSelect } from '@/domains/filters/components/filter-editor-popover/common/select/members-list-select';
 import { usePrevious } from '@/shared/hooks/use-previous.js';
@@ -19,6 +19,12 @@ import { Input, SingleSelect } from '../../common/index.js';
 import { SelectableSection } from '../../common/selectable-section.js';
 import { useFilterEditorContext } from '../../filter-editor-context';
 import { isExcludeMembersFilter } from '../../utils.js';
+import {
+  DEFAULT_RANKING_COUNT,
+  getRankingStateFromFilter,
+  isRankingCondition,
+  RankingConditionControls,
+} from '../ranking-condition/index.js';
 import { getMembersWithDeactivated } from '../utils.js';
 import { NumericCondition, NumericConditionFilterData, NumericConditionType } from './types.js';
 import {
@@ -64,6 +70,8 @@ const conditionItems = [
     displayValue: 'filterEditor.conditions.greaterThanOrEqual',
     icon: <GreaterThanOrEqualIcon />,
   },
+  { value: NumericCondition.TOP, displayValue: 'filterEditor.conditions.top' },
+  { value: NumericCondition.BOTTOM, displayValue: 'filterEditor.conditions.bottom' },
 ];
 
 type NumericConditionSectionProps = {
@@ -89,6 +97,9 @@ export const NumericConditionSection = ({
   const [selectedMembers, setSelectedMembers] = useState(
     isExcludeMembersFilter(filter) ? getMembersWithDeactivated(filter) : [],
   );
+  const initialRankingState = getRankingStateFromFilter(filter);
+  const [rankingCount, setRankingCount] = useState(initialRankingState.count);
+  const [rankingMeasure, setRankingMeasure] = useState<Measure | null>(initialRankingState.measure);
   const isValueWasModified = useWasModified(value, '');
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
 
@@ -120,6 +131,8 @@ export const NumericConditionSection = ({
     [condition],
   );
 
+  const showRankingControls = isRankingCondition(condition);
+
   const prepareAndChangeFilter = useCallback(
     (data: NumericConditionFilterData) => {
       const newFilter = createConditionalFilter(filter, data);
@@ -144,6 +157,8 @@ export const NumericConditionSection = ({
         value,
         selectedMembers: newSelectedMembers,
         multiSelectEnabled,
+        rankingCount,
+        rankingMeasure,
       });
     }
   }, [
@@ -151,6 +166,8 @@ export const NumericConditionSection = ({
     value,
     selectedMembers,
     multiSelectEnabled,
+    rankingCount,
+    rankingMeasure,
     multiSelectChanged,
     selected,
     prepareAndChangeFilter,
@@ -162,8 +179,18 @@ export const NumericConditionSection = ({
       value,
       selectedMembers,
       multiSelectEnabled,
+      rankingCount,
+      rankingMeasure,
     });
-  }, [condition, value, selectedMembers, multiSelectEnabled, prepareAndChangeFilter]);
+  }, [
+    condition,
+    value,
+    selectedMembers,
+    multiSelectEnabled,
+    rankingCount,
+    rankingMeasure,
+    prepareAndChangeFilter,
+  ]);
 
   const handleMembersChange = useCallback(
     (members: string[] | string) => {
@@ -174,23 +201,44 @@ export const NumericConditionSection = ({
         value,
         selectedMembers: newMembers,
         multiSelectEnabled,
+        rankingCount,
+        rankingMeasure,
       });
     },
-    [condition, value, multiSelectEnabled, prepareAndChangeFilter],
+    [condition, value, multiSelectEnabled, rankingCount, rankingMeasure, prepareAndChangeFilter],
   );
 
   const handleConditionChange = useCallback(
     (newCondition: NumericConditionType) => {
       setCondition(newCondition);
 
+      let nextRankingCount = rankingCount;
+      let nextRankingMeasure = rankingMeasure;
+      if (isRankingCondition(newCondition) && !isRankingCondition(condition)) {
+        nextRankingCount = DEFAULT_RANKING_COUNT;
+        nextRankingMeasure = null;
+        setRankingCount(nextRankingCount);
+        setRankingMeasure(nextRankingMeasure);
+      }
+
       prepareAndChangeFilter({
         condition: newCondition,
         value,
         selectedMembers,
         multiSelectEnabled,
+        rankingCount: nextRankingCount,
+        rankingMeasure: nextRankingMeasure,
       });
     },
-    [value, selectedMembers, multiSelectEnabled, prepareAndChangeFilter],
+    [
+      value,
+      selectedMembers,
+      multiSelectEnabled,
+      rankingCount,
+      rankingMeasure,
+      condition,
+      prepareAndChangeFilter,
+    ],
   );
 
   const handleValueChange = useCallback(
@@ -203,9 +251,48 @@ export const NumericConditionSection = ({
         value: newValue,
         selectedMembers,
         multiSelectEnabled,
+        rankingCount,
+        rankingMeasure,
       });
     },
-    [condition, selectedMembers, multiSelectEnabled, prepareAndChangeFilter],
+    [
+      condition,
+      selectedMembers,
+      multiSelectEnabled,
+      rankingCount,
+      rankingMeasure,
+      prepareAndChangeFilter,
+    ],
+  );
+
+  const handleRankingCountChange = useCallback(
+    (count: number) => {
+      setRankingCount(count);
+      prepareAndChangeFilter({
+        condition,
+        value,
+        selectedMembers,
+        multiSelectEnabled,
+        rankingCount: count,
+        rankingMeasure,
+      });
+    },
+    [condition, value, selectedMembers, multiSelectEnabled, rankingMeasure, prepareAndChangeFilter],
+  );
+
+  const handleRankingMeasureChange = useCallback(
+    (measure: Measure) => {
+      setRankingMeasure(measure);
+      prepareAndChangeFilter({
+        condition,
+        value,
+        selectedMembers,
+        multiSelectEnabled,
+        rankingCount,
+        rankingMeasure: measure,
+      });
+    },
+    [condition, value, selectedMembers, multiSelectEnabled, rankingCount, prepareAndChangeFilter],
   );
 
   return (
@@ -215,7 +302,7 @@ export const NumericConditionSection = ({
       aria-label="Numeric condition section"
     >
       <SingleSelect
-        style={{ width: '210px', marginRight: '8px' }}
+        style={{ width: '210px', marginRight: showRankingControls ? '0' : '8px' }}
         value={condition}
         items={translatedConditionItems}
         onChange={handleConditionChange}
@@ -231,6 +318,14 @@ export const NumericConditionSection = ({
           onChange={handleValueChange}
           error={isValueWasModified && validateInputValue(value, t)}
           aria-label="Value input"
+        />
+      )}
+      {showRankingControls && (
+        <RankingConditionControls
+          count={rankingCount}
+          measure={rankingMeasure}
+          onCountChange={handleRankingCountChange}
+          onMeasureChange={handleRankingMeasureChange}
         />
       )}
       {condition === NumericCondition.EXCLUDE && (

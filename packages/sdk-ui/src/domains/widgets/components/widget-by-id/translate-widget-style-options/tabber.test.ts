@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { TabberButtonsWidgetStyleOptions } from '@/types.js';
+import { TabberButtonsWidgetCustomOptions, TabberButtonsWidgetStyleOptions } from '@/types.js';
 
 import { TabberWidgetDto, TabberWidgetDtoStyle } from '../types.js';
 import {
   extractTabberButtonsWidgetCustomOptions,
   extractTabberButtonsWidgetStyleOptions,
+  toTabberWidgetStyle,
 } from './tabber.js';
 
 describe('Tabber Style Options Translation', () => {
@@ -490,6 +491,141 @@ describe('Tabber Style Options Translation', () => {
 
         expect(result.tabsSize).toBe(tabsSize.toLowerCase());
       });
+    });
+  });
+
+  describe('toTabberWidgetStyle', () => {
+    it('should re-encode style options and re-materialize tabs/activeTab from custom options', () => {
+      const styleOptions: TabberButtonsWidgetStyleOptions = {
+        showSeparators: true,
+        showDescription: false,
+        selectedColor: '#94F5F0',
+        unselectedColor: '#666666',
+        descriptionColor: '#666666',
+        tabCornerRadius: 'small',
+        tabsAlignment: 'center',
+        tabsInterval: 'large',
+        tabsSize: 'medium',
+        selectedBackgroundColor: '#ffffff',
+      };
+      const customOptions: TabberButtonsWidgetCustomOptions = {
+        tabNames: ['TAB 1', 'TAB 2'],
+        activeTab: 1,
+      };
+
+      const result = toTabberWidgetStyle(styleOptions, customOptions);
+
+      expect(result).toEqual<TabberWidgetDtoStyle>({
+        tabs: [
+          { title: 'TAB 1', displayWidgetIds: [], hideWidgetIds: [] },
+          { title: 'TAB 2', displayWidgetIds: [], hideWidgetIds: [] },
+        ],
+        activeTab: '1',
+        showTitle: false,
+        showSeparators: true,
+        showDescription: false,
+        descriptionColor: '#666666',
+        selectedColor: '#94F5F0',
+        unselectedColor: '#666666',
+        tabCornerRadius: 'SMALL',
+        tabsAlignment: 'CENTER',
+        tabsInterval: 'LARGE',
+        tabsSize: 'MEDIUM',
+        useSelectedBkg: true,
+        useUnselectedBkg: false,
+        selectedBkgColor: '#ffffff',
+        unselectedBkgColor: '',
+      });
+    });
+
+    it('should set the background-color flags from the presence of the colors', () => {
+      const withBoth = toTabberWidgetStyle(
+        { selectedBackgroundColor: '#ff0000', unselectedBackgroundColor: '#00ff00' },
+        { tabNames: [], activeTab: 0 },
+      );
+      expect(withBoth.useSelectedBkg).toBe(true);
+      expect(withBoth.useUnselectedBkg).toBe(true);
+      expect(withBoth.selectedBkgColor).toBe('#ff0000');
+      expect(withBoth.unselectedBkgColor).toBe('#00ff00');
+
+      const withNeither = toTabberWidgetStyle({}, { tabNames: [], activeTab: 0 });
+      expect(withNeither.useSelectedBkg).toBe(false);
+      expect(withNeither.useUnselectedBkg).toBe(false);
+    });
+
+    it('should pass through numeric tabsInterval/tabsSize as-is', () => {
+      const result = toTabberWidgetStyle(
+        { tabsInterval: 16, tabsSize: 14 },
+        { tabNames: [], activeTab: 0 },
+      );
+      expect(result.tabsInterval).toBe(16);
+      expect(result.tabsSize).toBe(14);
+    });
+
+    it('should default activeTab to "0" when missing', () => {
+      const result = toTabberWidgetStyle({}, { tabNames: ['only'] });
+      expect(result.activeTab).toBe('0');
+    });
+
+    it('should default activeTab to "0" when it is not a finite number', () => {
+      expect(toTabberWidgetStyle({}, { tabNames: [], activeTab: NaN }).activeTab).toBe('0');
+      expect(toTabberWidgetStyle({}, { tabNames: [], activeTab: Infinity }).activeTab).toBe('0');
+    });
+
+    it('should map "none" corner radius back to "NONE"', () => {
+      const result = toTabberWidgetStyle(
+        { tabCornerRadius: 'none' },
+        { tabNames: [], activeTab: 0 },
+      );
+      expect(result.tabCornerRadius).toBe('NONE');
+    });
+
+    it('should round-trip a DTO style through extract and back without data loss', () => {
+      const originalDtoStyle: TabberWidgetDtoStyle = {
+        activeTab: '1',
+        showTitle: false,
+        showSeparators: true,
+        useSelectedBkg: true,
+        useUnselectedBkg: true,
+        tabsSize: 'MEDIUM',
+        tabsInterval: 'LARGE',
+        tabsAlignment: 'CENTER',
+        selectedColor: '#94F5F0',
+        selectedBkgColor: '#ffffff',
+        unselectedColor: '#666666',
+        unselectedBkgColor: '#f0f0f0',
+        descriptionColor: '#666666',
+        tabCornerRadius: 'SMALL',
+        showDescription: false,
+        tabs: [
+          { title: 'TAB 1', displayWidgetIds: ['widget1'], hideWidgetIds: ['widget2'] },
+          { title: 'TAB 2', displayWidgetIds: ['widget2'], hideWidgetIds: ['widget1'] },
+        ],
+      };
+
+      const styleOptions = extractTabberButtonsWidgetStyleOptions(originalDtoStyle);
+      const customOptions = extractTabberButtonsWidgetCustomOptions({
+        style: originalDtoStyle,
+      } as unknown as TabberWidgetDto);
+
+      const roundTripped = toTabberWidgetStyle(styleOptions, customOptions);
+
+      // Style fields the CSDK model preserves survive the round-trip.
+      expect(roundTripped.tabCornerRadius).toBe('SMALL');
+      expect(roundTripped.tabsAlignment).toBe('CENTER');
+      expect(roundTripped.tabsInterval).toBe('LARGE');
+      expect(roundTripped.tabsSize).toBe('MEDIUM');
+      expect(roundTripped.selectedColor).toBe('#94F5F0');
+      expect(roundTripped.unselectedColor).toBe('#666666');
+      expect(roundTripped.descriptionColor).toBe('#666666');
+      expect(roundTripped.showSeparators).toBe(true);
+      expect(roundTripped.showDescription).toBe(false);
+      expect(roundTripped.useSelectedBkg).toBe(true);
+      expect(roundTripped.useUnselectedBkg).toBe(true);
+      expect(roundTripped.selectedBkgColor).toBe('#ffffff');
+      expect(roundTripped.unselectedBkgColor).toBe('#f0f0f0');
+      expect(roundTripped.activeTab).toBe('1');
+      expect(roundTripped.tabs?.map((tab) => tab.title)).toEqual(['TAB 1', 'TAB 2']);
     });
   });
 });

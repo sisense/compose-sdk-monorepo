@@ -8,7 +8,7 @@ import {
 } from './types.js';
 
 export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
-  Omit<DashboardConfig, 'widgetsPanel' | 'tabbers'> & {
+  Omit<DashboardConfig, 'widgetsPanel' | 'tabbers' | 'header'> & {
     widgetsPanel: Omit<WidgetsPanelConfig, 'editMode'> & {
       editMode: Omit<EditModeConfig, 'isEditing'>;
     };
@@ -66,7 +66,7 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
 };
 
 export const DEFAULT_DASHBOARD_BY_ID_CONFIG: DeepRequired<
-  Omit<DashboardByIdConfig, 'widgetsPanel' | 'tabbers'> & {
+  Omit<DashboardByIdConfig, 'widgetsPanel' | 'tabbers' | 'header'> & {
     widgetsPanel: Omit<WidgetsPanelConfig, 'editMode'> & {
       editMode: Omit<EditModeConfig, 'isEditing'>;
     };

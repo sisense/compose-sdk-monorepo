@@ -68,33 +68,41 @@
       "optional": true
     }
   },
+  "overrides": {
+    "esbuild": "^0.28.1"
+  },
+  "resolutions": {
+    "esbuild": "^0.28.1"
+  },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
     "@preact/preset-vite": "^2.10.0",
     "@sisense/sdk-data": "CSDK_VERSION",
     "@sisense/sdk-plugins-dev": "CSDK_VERSION",
     "@sisense/sdk-ui": "CSDK_VERSION",
+    "@testing-library/dom": "^10.0.0",
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.0.0",
     "@types/node": "^22.5.3",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-react": "^7.37.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.14",
+    "@typescript-eslint/eslint-plugin": "^8.61.1",
+    "@typescript-eslint/parser": "^8.61.1",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.6.0",
+    "jsdom": "^25.0.0",
     "preact": "^10.26.8",
     "prettier": "^3.4.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "typescript": "~4.9.3",
     "sass": "^1.77.0",
+    "typescript": "~4.9.3",
     "vite": "^7",
-    "@vitejs/plugin-react": "^4.0.0",
-    "vitest": "^3.2.4",
-    "jsdom": "^25.0.0",
-    "@testing-library/dom": "^10.0.0",
-    "@testing-library/react": "^16.0.0",
-    "@testing-library/jest-dom": "^6.6.0"
+    "vitest": "^3.2.4"
   }
 }

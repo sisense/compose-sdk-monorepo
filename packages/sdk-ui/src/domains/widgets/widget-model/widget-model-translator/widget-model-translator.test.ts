@@ -1756,6 +1756,74 @@ describe('WidgetModelTranslator', () => {
         expect(styleOptions.header).toBeDefined();
         expect(styleOptions.header!.titleTextColor).toBe('#000000');
       });
+
+      it('round-trips a tabber widget back to a WidgetsTabber DTO (duplicate scenario)', () => {
+        const tabberDatasource = {
+          title: 'Sample ECommerce',
+          id: 'aLOCALHOST_aSAMPLEIAAaECOMMERCE',
+          address: 'LocalHost',
+          fullname: 'LocalHost/Sample ECommerce',
+          live: false,
+        };
+        const tabberStyle: TabberWidgetDtoStyle = {
+          activeTab: '1',
+          showTitle: false,
+          showSeparators: true,
+          useSelectedBkg: true,
+          useUnselectedBkg: false,
+          tabsSize: 'MEDIUM',
+          tabsInterval: 'LARGE',
+          tabsAlignment: 'CENTER',
+          selectedColor: '#94F5F0',
+          selectedBkgColor: '#ffffff',
+          unselectedColor: '#666666',
+          unselectedBkgColor: '#f0f0f0',
+          descriptionColor: '#666666',
+          tabCornerRadius: 'SMALL',
+          showDescription: false,
+          tabs: [
+            { title: 'TAB 1', displayWidgetIds: ['widget1'], hideWidgetIds: ['widget2'] },
+            { title: 'TAB 2', displayWidgetIds: ['widget2'], hideWidgetIds: ['widget1'] },
+          ],
+        };
+        const tabberWidgetDto: WidgetDto = {
+          oid: 'tabber-widget-rt',
+          type: 'WidgetsTabber',
+          subtype: 'WidgetsTabber',
+          title: 'Tabber Widget',
+          desc: 'Test tabber widget',
+          datasource: tabberDatasource,
+          style: tabberStyle,
+          metadata: { panels: [] },
+        };
+
+        const model = fromWidgetDto(tabberWidgetDto);
+        const resultDto = toWidgetDto(model, tabberDatasource);
+
+        // The bug: the DTO `type`/`subtype` were written back as the CSDK
+        // 'tabber-buttons' instead of the Fusion 'WidgetsTabber'.
+        expect(resultDto.type).toBe('WidgetsTabber');
+        expect(resultDto.subtype).toBe('WidgetsTabber');
+
+        // The style transform is inverted and tabs/activeTab are re-materialized.
+        const resultStyle = resultDto.style as unknown as TabberWidgetDtoStyle;
+        expect(resultStyle.activeTab).toBe('1');
+        expect(resultStyle.tabs?.map((tab) => tab.title)).toEqual(['TAB 1', 'TAB 2']);
+        expect(resultStyle.tabsSize).toBe('MEDIUM');
+        expect(resultStyle.tabsInterval).toBe('LARGE');
+        expect(resultStyle.tabCornerRadius).toBe('SMALL');
+        expect(resultStyle.tabsAlignment).toBe('CENTER');
+        expect(resultStyle.useSelectedBkg).toBe(true);
+        expect(resultStyle.selectedBkgColor).toBe('#ffffff');
+        expect(resultStyle.useUnselectedBkg).toBe(false);
+
+        // The DTO can be read back into a tabber widget model again.
+        const recovered = fromWidgetDto(resultDto);
+        expect(recovered.widgetType).toBe('custom');
+        expect(recovered.customWidgetType).toBe('tabber-buttons');
+        expect(recovered.customOptions!.tabNames).toEqual(['TAB 1', 'TAB 2']);
+        expect(recovered.customOptions!.activeTab).toBe(1);
+      });
     });
 
     describe('Edge Cases', () => {
@@ -1791,6 +1859,42 @@ describe('WidgetModelTranslator', () => {
         expect(widgetModel.widgetType).toBe('chart');
         expect(widgetModel.dataOptions).toBeDefined();
         expect(widgetModel.filters).toEqual([]);
+      });
+    });
+
+    describe('Widget narrative round-trip', () => {
+      it('maps style.narration from Fusion DTO into aiOptions.narrative only', () => {
+        const dto = cloneDeep(advancedLineChartWidgetDto);
+        const model = fromWidgetDto(dto);
+        expect(model.aiOptions?.narrative).toEqual(
+          expect.objectContaining({
+            displayLocation: 'above',
+            verbosity: 'low',
+          }),
+        );
+        expect(model).not.toHaveProperty('fusionNarrationStyle');
+      });
+
+      it('does not add autoShow to DTO when it was never set on the model', () => {
+        const dto = cloneDeep(advancedLineChartWidgetDto);
+        if (dto.style.narration && 'autoShow' in dto.style.narration) {
+          delete (dto.style.narration as Record<string, unknown>).autoShow;
+        }
+        const model = fromWidgetDto(dto);
+        expect(
+          model.aiOptions?.narrative == null || !('autoShow' in model.aiOptions.narrative),
+        ).toBe(true);
+        const out = toWidgetDto(model);
+        expect(out.style.narration == null || !('autoShow' in out.style.narration)).toBe(true);
+      });
+
+      it('persists Fusion autoShow on the DTO when present', () => {
+        const dto = cloneDeep(advancedLineChartWidgetDto);
+        (dto.style.narration as { autoShow?: boolean }).autoShow = true;
+        const model = fromWidgetDto(dto);
+        expect(model.aiOptions?.narrative?.autoShow).toBe(true);
+        const out = toWidgetDto(model);
+        expect((out.style.narration as { autoShow?: boolean })?.autoShow).toBe(true);
       });
     });
   });

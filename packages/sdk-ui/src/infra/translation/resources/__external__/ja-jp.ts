@@ -287,11 +287,13 @@ const translation: TranslationDictionary = {
       incorrectResponse: '間違った応答',
       clearChat: 'チャットをクリア',
       refresh: '更新',
-      readMore: '続きを読む',
+      readMore: 'さらに表示',
       collapse: '折りたたむ',
       yes: 'はい',
       no: 'いいえ',
       seeMore: 'もっと見る',
+      generateNarrative: 'AIナレーションを生成',
+      hideNarrative: 'AIナレーションを非表示',
     },
     disclaimer: {
       poweredByAi:
@@ -354,6 +356,8 @@ const translation: TranslationDictionary = {
       from: '開始',
       to: '終了',
       includeCurrent: '現在を含む',
+      rankedBy: 'ランク付け基準',
+      selectField: 'フィールドを選択',
     },
     placeholders: {
       selectFromList: 'リストから選択',
@@ -378,6 +382,8 @@ const translation: TranslationDictionary = {
       greaterThan: 'より大きい',
       greaterThanOrEqual: '以上',
       isWithin: '以内',
+      top: '上位',
+      bottom: '下位',
     },
     validationErrors: {
       invalidNumber: '数字のみ',
@@ -474,6 +480,12 @@ const translation: TranslationDictionary = {
     table: {
       label: 'データテーブル',
     },
+    sankey: {
+      alerts: {
+        tooManyStages:
+          'サンキー図のステージ数は{{stageCount}}です。{{softLimit}}を超えると図が読みにくくなることがよくあります。カテゴリ列を減らすか、フィルターを厳しくしてください。',
+      },
+    },
   },
   loadingOverlay: {
     label: 'コンテンツを読み込み中',
@@ -498,6 +510,17 @@ const translation: TranslationDictionary = {
     stdev: '標準偏差',
     median: '中央値',
     variance: '分散',
+  },
+  measuresAgg: {
+    countDistinct: 'ユニーク数',
+    count: '件数',
+    sum: '合計',
+    average: '平均',
+    min: '最小',
+    max: '最大',
+    median: '中央値',
+    variance: '分散',
+    stdev: '標準偏差',
   },
 };
 

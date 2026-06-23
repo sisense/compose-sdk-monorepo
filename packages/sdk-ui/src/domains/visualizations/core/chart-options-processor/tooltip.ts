@@ -4,7 +4,7 @@ import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
-import { applyFormat, getCompleteNumberFormatConfig } from './translations/number-format-config.js';
+import { formatNumberWithFallback } from './translations/number-format-config.js';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from './translations/scatter-tooltip.js';
 import {
   HighchartsDataPointContext,
@@ -18,6 +18,7 @@ const formatTooltipContent = (
   highchartsDataPoint: HighchartsDataPointContext,
   showDecimals: boolean | undefined,
   chartDataOptions: ChartDataOptionsInternal,
+  defaultNumberFormattingEnabled = true,
 ): string => {
   // Calculate percentage for pie and funnel charts
   const formattedPercentage = highchartsDataPoint.percentage
@@ -45,12 +46,14 @@ const formatTooltipContent = (
     return undefined;
   };
 
-  const numberFormatConfig = getCompleteNumberFormatConfig(getNumberFormatConfig());
+  const rawConfig = getNumberFormatConfig();
   const xValueRaw = highchartsDataPoint.point?.custom?.xDisplayValue ?? highchartsDataPoint.x;
   const xValue = Array.isArray(xValueRaw) ? xValueRaw.join(', ') : xValueRaw;
+  const rawValue = highchartsDataPoint.y;
   const formattedValue =
-    applyFormat(numberFormatConfig, highchartsDataPoint.y) +
-    (formattedPercentage ? ` / ${formattedPercentage}%` : '');
+    (rawValue != null
+      ? formatNumberWithFallback(rawValue, rawConfig, defaultNumberFormattingEnabled)
+      : '') + (formattedPercentage ? ` / ${formattedPercentage}%` : '');
   const color = highchartsDataPoint.point.color || highchartsDataPoint.series.color;
 
   const seriesName = highchartsDataPoint.series.name || '';
@@ -70,6 +73,7 @@ const formatTooltipContent = (
 export const getCategoryTooltipSettings = (
   showDecimals: boolean | undefined,
   chartDataOptions: ChartDataOptionsInternal,
+  defaultNumberFormattingEnabled = true,
 ): TooltipSettings => {
   return {
     animation: false,
@@ -79,7 +83,12 @@ export const getCategoryTooltipSettings = (
     borderWidth: 1,
     useHTML: true,
     formatter: function () {
-      return formatTooltipContent(this, showDecimals, chartDataOptions);
+      return formatTooltipContent(
+        this,
+        showDecimals,
+        chartDataOptions,
+        defaultNumberFormattingEnabled,
+      );
     },
   };
 };

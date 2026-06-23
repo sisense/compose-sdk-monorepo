@@ -8,6 +8,8 @@ export const NARRATIVE_TOP_SLOT_LEADING_GUTTER_PX = 18;
 /** Space after feedback controls (interactive) and plain narrative right inset. */
 export const NARRATIVE_TOP_SLOT_TRAILING_GUTTER_PX = 12;
 
+export const NARRATIVE_TOP_SLOT_PADDING_TOP = 8;
+
 /** SVG width in {@link WidgetNarrativeInteractive} narrative row. */
 const NARRATIVE_AI_ICON_WIDTH_PX = 0;
 
@@ -33,8 +35,8 @@ export const NarrativeTopSlotShell = styled.div<Themable & { $horizontalInset?: 
   margin: 0;
   padding: ${({ $horizontalInset }) =>
     $horizontalInset
-      ? `24px ${NARRATIVE_TOP_SLOT_TRAILING_GUTTER_PX}px 0 ${PLAIN_HORIZONTAL_PADDING_LEFT_PX}px`
-      : '24px 0 0'};
+      ? `${NARRATIVE_TOP_SLOT_PADDING_TOP}px ${NARRATIVE_TOP_SLOT_TRAILING_GUTTER_PX}px 0 ${PLAIN_HORIZONTAL_PADDING_LEFT_PX}px`
+      : '8px 0 0'};
   width: 100%;
   color: ${({ theme }) => theme.chart.textColor};
   background-color: ${({ theme }) => theme.chart.backgroundColor};

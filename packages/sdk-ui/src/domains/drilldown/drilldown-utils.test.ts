@@ -1,6 +1,10 @@
-import { attributeFactory, createAttribute } from '@sisense/sdk-data';
+import { attributeFactory, createAttribute, measureFactory } from '@sisense/sdk-data';
 
-import { CartesianChartDataOptions, ScatterChartDataOptions } from '@/types.js';
+import {
+  CartesianChartDataOptions,
+  SankeyChartDataOptions,
+  ScatterChartDataOptions,
+} from '@/types.js';
 
 import {
   applyDrilldownDimension,
@@ -152,6 +156,15 @@ describe('drilldown-utils', () => {
       const result = isDrilldownApplicableToChart('table' as any, dataOptions);
 
       expect(result).toBe(false);
+    });
+
+    it('should allow drilldown for sankey chart with flow stages', () => {
+      const dataOptions: SankeyChartDataOptions = {
+        category: [ageRange, gender],
+        value: measureFactory.sum(revenue),
+      };
+
+      expect(isDrilldownApplicableToChart('sankey', dataOptions)).toBe(true);
     });
   });
 
@@ -406,6 +419,17 @@ describe('drilldown-utils', () => {
       const result = applyDrilldownDimension('table' as 'column', dataOptions, gender);
 
       expect(result).toBe(dataOptions);
+    });
+
+    it('should replace category with drilldown dimension for sankey when different', () => {
+      const dataOptions: SankeyChartDataOptions = {
+        category: [ageRange, gender],
+        value: measureFactory.sum(revenue),
+      };
+
+      const result = applyDrilldownDimension('sankey', dataOptions, category);
+
+      expect((result as SankeyChartDataOptions).category).toEqual([category]);
     });
   });
 });

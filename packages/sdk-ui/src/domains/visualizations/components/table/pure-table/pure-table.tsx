@@ -1,5 +1,7 @@
 import { useLayoutEffect, useMemo, useRef } from 'react';
 
+import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context.js';
+
 import { TableDesignOptions } from '../../../core/chart-options-processor/translations/design-options.js';
 import { DataTableWrapper } from './data-table-wrapper.js';
 import { formatNumbers } from './helpers/format-numbers.js';
@@ -20,12 +22,16 @@ export const PureTable = ({
   width = 400,
   height = 500,
 }: TableProps) => {
+  const { app } = useSisenseContext();
+  const defaultNumberFormattingEnabled =
+    app?.settings?.chartConfig?.defaultNumberFormatting?.enabled ?? true;
+
   const listRef = useRef<HTMLDivElement>(null);
   const loadedTable = useRef(dataTable);
 
   const formattedTable = useMemo(
-    () => formatNumbers(dataTable, dataOptions),
-    [dataTable, dataOptions],
+    () => formatNumbers(dataTable, dataOptions, defaultNumberFormattingEnabled),
+    [dataTable, dataOptions, defaultNumberFormattingEnabled],
   );
 
   useLayoutEffect(() => {

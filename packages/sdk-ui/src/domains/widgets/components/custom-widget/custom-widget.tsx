@@ -103,7 +103,6 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
     id: widgetProps.id,
     customWidgetType: widgetProps.customWidgetType,
     filters: widgetProps.filters,
-    highlights: widgetProps.highlights,
   });
 
   const wrapperDefaultSize = useMemo(() => getWidgetDefaultSize('line', { hasHeader: true }), []);

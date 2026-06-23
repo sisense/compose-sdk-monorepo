@@ -1,10 +1,11 @@
-import { measureFactory } from '@sisense/sdk-data';
+import { filterFactory, measureFactory } from '@sisense/sdk-data';
 import { describe, expect, it, vi } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 import {
   buildJaqlForExcelExport,
+  createFiltersMetadataForXlsx,
   createPanelsMetadataForXlsx,
   EXCEL_EXPORT_JAQL_BY,
   resolveExcelDimensionMetadataPanel,
@@ -53,13 +54,120 @@ describe('createPanelsMetadataForXlsx', () => {
   it('maps dimensions and measures to metadata rows', () => {
     const metadata = createPanelsMetadataForXlsx(
       [DM.Commerce.AgeRange],
-      [measureFactory.sum(DM.Commerce.Revenue)],
+      [measureFactory.sum(DM.Commerce.Revenue).format('0,0')],
       true,
     );
 
     expect(metadata).toHaveLength(2);
     expect(metadata[0]).toMatchObject({ panel: 'rows' });
-    expect(metadata[1]).toMatchObject({ panel: 'measures' });
+    expect(metadata[1]).toMatchObject({
+      panel: 'measures',
+      format: {
+        mask: {
+          type: 'number',
+          abbreviations: { t: false, b: false, m: false, k: false },
+          abbreviateAll: false,
+          separated: true,
+          decimals: 'auto',
+          isdefault: true,
+        },
+      },
+    });
+  });
+
+  it('maps percent measure formats to a percent Fusion mask', () => {
+    const metadata = createPanelsMetadataForXlsx(
+      [],
+      [measureFactory.sum(DM.Commerce.Revenue).format('0.00%')],
+      true,
+    );
+
+    expect(metadata[0]?.format).toEqual({
+      mask: {
+        type: 'percent',
+        percent: true,
+        abbreviations: { t: false, b: false, m: false, k: false },
+        abbreviateAll: false,
+        separated: false,
+        decimals: 2,
+        isdefault: true,
+      },
+    });
+  });
+
+  it('maps numeral patterns with fractional digits to mask decimals', () => {
+    const metadata = createPanelsMetadataForXlsx(
+      [],
+      [measureFactory.sum(DM.Commerce.Revenue).format('0,0.00')],
+      true,
+    );
+
+    expect(metadata[0]?.format).toEqual({
+      mask: {
+        type: 'number',
+        abbreviations: { t: false, b: false, m: false, k: false },
+        abbreviateAll: false,
+        separated: true,
+        decimals: 2,
+        isdefault: true,
+      },
+    });
+  });
+
+  it('maps pivot numberFormatConfig to a Fusion mask with abbreviations', () => {
+    const measure = Object.assign(measureFactory.sum(DM.Commerce.Revenue), {
+      excelNumberFormatConfig: {
+        name: 'Numbers' as const,
+        million: true,
+        billion: true,
+        trillion: true,
+        kilo: true,
+        decimalScale: 2,
+        thousandSeparator: true,
+      },
+    });
+    const metadata = createPanelsMetadataForXlsx([], [measure], true);
+
+    expect(metadata[0]?.format).toEqual({
+      mask: {
+        type: 'number',
+        abbreviations: { t: true, b: true, m: true, k: true },
+        abbreviateAll: false,
+        decimals: 2,
+        isdefault: true,
+        number: { separated: true },
+        separated: true,
+      },
+    });
+  });
+
+  it('merges an existing numeric mask without dropping abbreviations', () => {
+    const measure = measureFactory.sum(DM.Commerce.Revenue);
+    const metadataItem = measure.jaql();
+    metadataItem.format = {
+      mask: {
+        type: 'number',
+        abbreviations: { t: false, b: false, m: true, k: false },
+        separated: true,
+        decimals: 2,
+      },
+    };
+    const metadata = createPanelsMetadataForXlsx(
+      [],
+      [Object.assign(measure, { jaql: () => metadataItem })],
+      true,
+    );
+
+    expect(metadata[0]?.format).toEqual({
+      mask: {
+        type: 'number',
+        abbreviations: { t: false, b: false, m: true, k: false },
+        abbreviateAll: false,
+        separated: true,
+        decimals: 2,
+        isdefault: true,
+      },
+    });
   });
 
   it('uses panel columns on dimensions when Attribute.panel is columns', () => {
@@ -145,5 +253,47 @@ describe('buildJaqlForExcelExport', () => {
     expect(metadata).toHaveLength(2);
     expect(metadata[0]?.panel).toBe('rows');
     expect(metadata[1]?.panel).toBe('rows');
+  });
+
+  it('appends scope filter metadata when filters are provided', () => {
+    const genderFilter = filterFactory.members(DM.Commerce.Gender, ['Male']);
+    const jaql = buildJaqlForExcelExport(
+      {
+        dimensions: [DM.Commerce.AgeRange],
+        measures: [],
+        filters: [genderFilter],
+      },
+      {
+        widgetOid: 'oid-1',
+        widgetTitle: 'My chart',
+        dataSource: DM.DataSource,
+        mergeRows: false,
+      },
+    );
+
+    const metadata = jaql.metadata as Array<{ panel: string; jaql: { dim: string } }>;
+    expect(metadata).toHaveLength(2);
+    expect(metadata[0]?.panel).toBe('rows');
+    expect(metadata[1]).toMatchObject({
+      panel: 'scope',
+      jaql: expect.objectContaining({ dim: '[Commerce.Gender]' }),
+    });
+  });
+});
+
+describe('createFiltersMetadataForXlsx', () => {
+  it('returns scope metadata for filters whose attribute is not on the export panels', () => {
+    const genderFilter = filterFactory.members(DM.Commerce.Gender, ['Male']);
+
+    const filtersMetadata = createFiltersMetadataForXlsx([genderFilter]);
+
+    expect(filtersMetadata).toHaveLength(1);
+    expect(filtersMetadata[0]).toMatchObject({
+      panel: 'scope',
+      jaql: expect.objectContaining({
+        dim: '[Commerce.Gender]',
+        filter: { members: ['Male'] },
+      }),
+    });
   });
 });

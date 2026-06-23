@@ -73,6 +73,11 @@ import {
   toTreemapWidgetStyle,
   withWidgetDesign,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/index.js';
+import { toTabberWidgetStyle } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/tabber.js';
+import {
+  extractWidgetNarrativeOptionsFromDto,
+  mergeWidgetStyleWithNarrativeForDto,
+} from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/widget-narrative-style.js';
 import {
   FusionWidgetType,
   IndicatorWidgetStyle,
@@ -91,6 +96,7 @@ import {
   isCustomWidgetProps,
   isPivotTableWidgetProps,
   isPivotWidget,
+  isSupportedPluginCsdkWidget,
   isSupportedPluginFusionWidget,
   isSupportedWidgetType,
   isTableWidgetModel,
@@ -123,6 +129,8 @@ import {
   ScatterStyleOptions,
   StackableStyleOptions,
   SunburstStyleOptions,
+  TabberButtonsWidgetCustomOptions,
+  TabberButtonsWidgetStyleOptions,
   TableStyleOptions,
   TextWidgetStyleOptions,
   TreemapStyleOptions,
@@ -346,6 +354,7 @@ export function toChartWidgetProps(widgetModel: WidgetModel): ChartWidgetProps {
     chartType: widgetModel.chartType!,
     dataOptions: widgetModel.dataOptions as ChartDataOptions,
     styleOptions: widgetModel.styleOptions,
+    aiOptions: widgetModel.aiOptions,
     dataSource: widgetModel.dataSource,
     filters: widgetModel.filters,
     highlights: widgetModel.highlights,
@@ -375,6 +384,7 @@ export function toPivotTableWidgetProps(widgetModel: WidgetModel): PivotTableWid
   return {
     dataOptions: widgetModel.dataOptions as PivotTableDataOptions,
     styleOptions: widgetModel.styleOptions as PivotTableWidgetStyleOptions,
+    aiOptions: widgetModel.aiOptions,
     dataSource: widgetModel.dataSource,
     filters: widgetModel.filters,
     highlights: widgetModel.highlights,
@@ -505,6 +515,7 @@ const DEFAULT_WIDGET_MODEL: WidgetModel = {
   filters: [],
   highlights: [],
   chartType: undefined,
+  aiOptions: undefined,
 };
 
 /**
@@ -566,7 +577,8 @@ const processUnsupportedCustomWidget = (params: {
   styleOptions: CustomWidgetStyleOptions;
 } => {
   const { originalType, panels, widgetStyle, variantColors } = params;
-  const { widgetDesign, ...styleRest } = widgetStyle;
+  const { widgetDesign, narration, ...styleRest } = widgetStyle;
+  void narration; // Narration is intentionally excluded from unsupported custom widget styles
 
   return {
     fusionWidgetType: 'custom',
@@ -775,6 +787,9 @@ const buildWidgetModel = (params: {
 
   const jtdConfig = jumpToDashboardConfigFromWidgetDto(widgetDto);
 
+  const narrativeOptions = extractWidgetNarrativeOptionsFromDto(widgetDto.style?.narration);
+  const aiOptions = narrativeOptions !== undefined ? { narrative: narrativeOptions } : undefined;
+
   // Merge the opaque DTO `customOptions` bag (persisted plugin runtime state)
   // under any category-specific options (e.g. Tabber's), which take precedence.
   const mergedCustomOptions =
@@ -797,6 +812,7 @@ const buildWidgetModel = (params: {
     drilldownOptions,
     filters,
     ...(jtdConfig ? { jtdConfig } : {}),
+    ...(aiOptions !== undefined ? { aiOptions } : {}),
   };
 };
 
@@ -994,8 +1010,19 @@ export function toWidgetDto(
     };
   } else if (isCustomWidget(widgetModel.widgetType)) {
     panels.push(...toCustomWidgetPanels(widgetModel.dataOptions as GenericDataOptions));
-    // Custom-widget styles are plugin-defined; pass through opaquely.
-    style = (widgetModel.styleOptions as unknown as WidgetStyle) ?? {};
+    if (widgetModel.customWidgetType && isSupportedPluginCsdkWidget(widgetModel.customWidgetType)) {
+      // Officially-supported plugin widgets (e.g. Tabber) round-trip through a dedicated
+      // DTO shape: the Fusion type doubles as the subtype, and the CSDK style + custom
+      // options are re-encoded into the Fusion DTO style — opaque pass-through is invalid.
+      subtype = fusionWidgetType;
+      style = toTabberWidgetStyle(
+        (widgetModel.styleOptions ?? {}) as TabberButtonsWidgetStyleOptions,
+        (widgetModel.customOptions ?? { tabNames: [] }) as TabberButtonsWidgetCustomOptions,
+      );
+    } else {
+      // Custom-widget styles are plugin-defined; pass through opaquely.
+      style = (widgetModel.styleOptions as unknown as WidgetStyle) ?? {};
+    }
   } else if (!chartType) {
     throw new Error('Chart type is required');
   } else if (chartType === 'line') {
@@ -1113,6 +1140,11 @@ export function toWidgetDto(
     appSettings,
   );
 
+  const styleWithDtoNarration = mergeWidgetStyleWithNarrativeForDto(
+    styleWithWidgetDesign,
+    widgetModel.aiOptions?.narrative,
+  );
+
   const widget: WidgetDto = {
     oid: widgetModel.oid || '',
     title: widgetModel.title,
@@ -1122,7 +1154,7 @@ export function toWidgetDto(
     metadata: {
       panels,
     },
-    style: styleWithWidgetDesign,
+    style: styleWithDtoNarration,
     subtype,
     // Custom-widget options round-trip opaquely through the DTO's `customOptions` bag.
     ...(isCustomWidget(widgetModel.widgetType) && widgetModel.customOptions

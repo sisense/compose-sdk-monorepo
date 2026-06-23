@@ -38,7 +38,12 @@ describe('DatetimeExcludeConditionForm', () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
@@ -57,7 +62,12 @@ describe('DatetimeExcludeConditionForm', () => {
     const { user } = setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
@@ -104,7 +114,12 @@ describe('DatetimeExcludeConditionForm', () => {
     const { user } = setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters, membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters,
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
@@ -151,7 +166,12 @@ describe('DatetimeExcludeConditionForm', () => {
     const { user } = setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters, membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters,
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
@@ -194,7 +214,12 @@ describe('DatetimeExcludeConditionForm', () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters, membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters,
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeExcludeConditionForm
             filter={monthsFilter}
@@ -221,7 +246,12 @@ describe('DatetimeExcludeConditionForm', () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeExcludeConditionForm
             filter={basicFilter}
@@ -243,7 +273,12 @@ describe('DatetimeExcludeConditionForm', () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
@@ -262,7 +297,12 @@ describe('DatetimeExcludeConditionForm', () => {
     setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}
@@ -281,7 +321,12 @@ describe('DatetimeExcludeConditionForm', () => {
     const { user } = setup(
       <SisenseContextProvider {...contextProviderProps}>
         <FilterEditorContextProvider
-          value={{ defaultDataSource: null, parentFilters: [], membersOnlyMode: false }}
+          value={{
+            defaultDataSource: null,
+            dataSources: [],
+            parentFilters: [],
+            membersOnlyMode: false,
+          }}
         >
           <DatetimeExcludeConditionForm
             filter={excludeFilter}

@@ -30,6 +30,11 @@ describe('factory-function-processors', () => {
       expect(getCustomProcessor('measureFactory.customFormula')).toBeDefined();
     });
 
+    it('should have measuredValue processor registered', () => {
+      expect(hasCustomProcessing('measureFactory.measuredValue')).toBe(true);
+      expect(getCustomProcessor('measureFactory.measuredValue')).toBeDefined();
+    });
+
     it('should return undefined for functions without custom processing', () => {
       expect(hasCustomProcessing('measureFactory.sum')).toBe(false);
       expect(getCustomProcessor('measureFactory.sum')).toBeUndefined();
@@ -38,6 +43,7 @@ describe('factory-function-processors', () => {
     it('should return list of functions with custom processing', () => {
       const functions = getFunctionsWithCustomProcessing();
       expect(functions).toContain('measureFactory.customFormula');
+      expect(functions).toContain('measureFactory.measuredValue');
       expect(functions).toContain('filterFactory.equals');
       expect(functions).toContain('filterFactory.greaterThan');
       expect(functions).toContain('filterFactory.contains');

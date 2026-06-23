@@ -1,4 +1,11 @@
-import { createAttribute, createMeasure, filterFactory } from '@sisense/sdk-data';
+import {
+  createAttribute,
+  createLevel,
+  createMeasure,
+  DateLevels,
+  filterFactory,
+  measureFactory,
+} from '@sisense/sdk-data';
 import { render, screen, waitFor } from '@testing-library/react';
 
 import { MockedSisenseContextProvider, setup } from '../../../../__test-helpers__/index.js';
@@ -100,6 +107,80 @@ describe('criteria tests', () => {
     expect(screen.getByDisplayValue('boop')).toBeInTheDocument();
   });
 
+  it('renders collapsed bottom ranking label with Bottom prefix', () => {
+    const propsBottomRank: CriteriaFilterTileProps = {
+      title: 'Test Title',
+      filter: filterFactory.bottomRanking(mockAttribute, mockMeasureB, 1),
+      onUpdate: vi.fn(),
+      measures,
+    };
+    render(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsBottomRank} />
+      </MockedSisenseContextProvider>,
+    );
+    expect(screen.getByText('Bottom 1 By Total BrandID')).toBeInTheDocument();
+  });
+
+  it('renders collapsed top ranking label with date level in ranked-by measure', () => {
+    const branchAttribute = createAttribute({
+      name: 'Branch',
+      type: 'text-attribute',
+      expression: '[Commerce.Branch]',
+    });
+    const quartersLevel = createLevel({
+      name: 'Quarters',
+      expression: '[Commerce.Date]',
+      granularity: DateLevels.Quarters,
+      dataSource: { title: 'Sample ECommerce', live: false },
+    });
+    const dateMeasure = measureFactory.countDistinct(quartersLevel, '# of unique Quarters');
+    const propsTopRankByDate: CriteriaFilterTileProps = {
+      title: 'Branch',
+      filter: filterFactory.topRanking(branchAttribute, dateMeasure, 2),
+      onUpdate: vi.fn(),
+      measures: [dateMeasure],
+    };
+
+    render(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsTopRankByDate} />
+      </MockedSisenseContextProvider>,
+    );
+
+    expect(screen.getByText('Top 2 By # of unique Quarters in Date')).toBeInTheDocument();
+  });
+
+  it('renders expanded top ranking measure labels with date level in ranked-by field', async () => {
+    const branchAttribute = createAttribute({
+      name: 'Branch',
+      type: 'text-attribute',
+      expression: '[Commerce.Branch]',
+    });
+    const quartersLevel = createLevel({
+      name: 'Quarters',
+      expression: '[Commerce.Date]',
+      granularity: DateLevels.Quarters,
+      dataSource: { title: 'Sample ECommerce', live: false },
+    });
+    const dateMeasure = measureFactory.countDistinct(quartersLevel, '# of unique Quarters');
+    const propsTopRankByDate: CriteriaFilterTileProps = {
+      title: 'Branch',
+      filter: filterFactory.topRanking(branchAttribute, dateMeasure, 2),
+      onUpdate: vi.fn(),
+      measures: [dateMeasure],
+    };
+    const { user } = setup(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile {...propsTopRankByDate} />
+      </MockedSisenseContextProvider>,
+    );
+
+    await user.click(screen.getByLabelText('arrow-down'));
+    expect(screen.getByText('By measure')).toBeInTheDocument();
+    expect(screen.getByLabelText('# of unique Quarters in Date')).toBeChecked();
+  });
+
   it('renders ranked controls when expanded', async () => {
     const propsTopRank: CriteriaFilterTileProps = {
       title: 'Test Title',
@@ -112,16 +193,16 @@ describe('criteria tests', () => {
         <CriteriaFilterTile {...propsTopRank} />
       </MockedSisenseContextProvider>,
     );
-    const textElt = screen.getByText(`All items top 5 by ${mockMeasureB.name}`);
+    const textElt = screen.getByText('Top 5 By Total BrandID');
     expect(textElt).toBeInTheDocument();
     await user.click(screen.getByLabelText('arrow-down'));
     expect(textElt).not.toBeInTheDocument();
     expect(screen.getByText('By measure')).toBeInTheDocument();
-    expect(screen.getByLabelText(mockMeasureB.name)).toBeChecked();
+    expect(screen.getByLabelText('Total BrandID')).toBeChecked();
   });
 
   it('renders dropdown for horizontal ranked variant', async () => {
-    const propsTopRank: CriteriaFilterTileProps = {
+    const propsBottomRank: CriteriaFilterTileProps = {
       title: 'Test Title',
       filter: filterFactory.bottomRanking(mockAttribute, mockMeasureA, 5),
       arrangement: 'horizontal',
@@ -130,27 +211,27 @@ describe('criteria tests', () => {
     };
     const { user } = setup(
       <MockedSisenseContextProvider>
-        <CriteriaFilterTile {...propsTopRank} />
+        <CriteriaFilterTile {...propsBottomRank} />
       </MockedSisenseContextProvider>,
     );
-    const label = screen.getByText('Last');
+    const label = screen.getByText('Bottom');
     expect(label).toBeInTheDocument();
-    const button1 = screen.getByText('avg Revenue');
+    const button1 = screen.getByText('Average BrandID');
     expect(button1).toBeInTheDocument();
     await user.click(button1);
     const menu = screen.getByRole('menu');
     expect(menu).toBeInTheDocument();
-    const item = screen.getByText('max Revenue');
+    const item = screen.getByText('Max BrandID');
     expect(item).toBeInTheDocument();
     await user.click(item);
-    expect(propsTopRank.onUpdate).toHaveBeenCalledWith(
+    expect(propsBottomRank.onUpdate).toHaveBeenCalledWith(
       filterFactory.bottomRanking(mockAttribute, mockMeasureC, 5, {
         guid: expect.any(String),
         disabled: false,
       }),
     );
     expect(button1).not.toBeInTheDocument();
-    expect(screen.getByText('max Revenue')).toBeInTheDocument();
+    expect(screen.getByText('Max BrandID')).toBeInTheDocument();
   });
 
   it('should not have delete button by default', async () => {

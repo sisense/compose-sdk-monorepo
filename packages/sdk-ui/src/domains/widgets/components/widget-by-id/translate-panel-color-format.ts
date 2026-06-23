@@ -132,9 +132,11 @@ export const createValueColorOptions = (
   }
 };
 
+const decodeMemberKey = (key: string): string => key.replace(/%46/g, '.').replace(/%36/g, '$');
+
 export const createValueToColorMap = (membersFormat: PanelMembersFormat): ValueToColorMap => {
   return Object.entries(membersFormat).reduce<ValueToColorMap>((acc, [member, { color }]) => {
-    acc[member] = color;
+    acc[decodeMemberKey(member)] = color;
     return acc;
   }, {});
 };

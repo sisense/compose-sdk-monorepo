@@ -16,17 +16,19 @@ const exportJaqlToXlsx = vi.hoisted(() =>
   ),
 );
 
+const buildJaqlForExcelExport = vi.hoisted(() => vi.fn(() => ({ jaql: {} })));
+
 vi.mock('@/infra/api/rest-api.js', () => ({
   RestApi: vi.fn().mockImplementation(() => ({
     exportJaqlToXlsx,
   })),
 }));
 
-vi.mock('../../excel-export/build-jaql-excel-export.js', () => ({
-  buildJaqlForExcelExport: vi.fn(() => ({ jaql: {} })),
+vi.mock('./excel-export/build-jaql-excel-export.js', () => ({
+  buildJaqlForExcelExport,
 }));
 
-vi.mock('../../excel-export/build-xlsx-export-payload.js', () => ({
+vi.mock('./excel-export/build-xlsx-export-payload.js', () => ({
   buildXlsxExportPayload: vi.fn(() => ({})),
 }));
 
@@ -53,6 +55,7 @@ describe('useExecuteExcelQueryInternal', () => {
   beforeEach(() => {
     exportJaqlToXlsx.mockClear();
     exportJaqlToXlsx.mockResolvedValue(xlsxBlob);
+    buildJaqlForExcelExport.mockClear();
     useSisenseContextMock.mockReturnValue({
       app: {
         httpClient: {},
@@ -134,5 +137,27 @@ describe('useExecuteExcelQueryInternal', () => {
     });
 
     await waitFor(() => expect(exportJaqlToXlsx).toHaveBeenCalledTimes(2));
+  });
+
+  it('passes filters to buildJaqlForExcelExport', async () => {
+    const filters = [{ id: 'filter-1' }] as ExecuteExcelQueryParams['filters'];
+    const props: ExecuteExcelQueryParams = {
+      ...baseParams,
+      enabled: true,
+      exportRunId: 1,
+      filters,
+    };
+
+    renderHook(() => useExecuteExcelQueryInternal(props));
+
+    await waitFor(() => expect(buildJaqlForExcelExport).toHaveBeenCalledTimes(1));
+    expect(buildJaqlForExcelExport).toHaveBeenCalledWith(
+      expect.objectContaining({ filters }),
+      expect.objectContaining({
+        widgetOid: 'widget-1',
+        widgetTitle: 'T',
+        mergeRows: false,
+      }),
+    );
   });
 });

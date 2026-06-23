@@ -15,6 +15,7 @@ export const translation = {
     missingHttpClient: 'Query was unable to load httpClient.',
     missingPostMethod: 'httpClient must provide "post" method.',
     noJaqlResponse: 'No jaql response received from the server',
+    invalidCountRowsResponse: 'Invalid row count response received from the server.',
     dataSourceNotFound:
       'Failed to get fields for data source "{{dataSource}}". Please make sure the data source exists and is accessible.',
   },

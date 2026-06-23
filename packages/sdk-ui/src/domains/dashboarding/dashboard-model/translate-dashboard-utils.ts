@@ -10,15 +10,22 @@ import {
   Measure,
   MetadataTypes,
 } from '@sisense/sdk-data';
+import flow from 'lodash-es/flow';
 
 import { CommonFiltersApplyMode } from '@/domains/dashboarding/common-filters/types';
+import { dimensionToPivotDimId } from '@/domains/dashboarding/hooks/jtd/jtd-config-transformers';
 import {
+  isJumpTargetWithId,
   JtdTarget,
   JumpToDashboardConfig,
   JumpToDashboardConfigForPivot,
   TriggerMethod,
 } from '@/domains/dashboarding/hooks/jtd/jtd-types';
-import type { JtdConfigDto, JtdTargetDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
+import type {
+  JtdConfigDto,
+  JtdPivotTargetDto,
+  JtdTargetDto,
+} from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import { TabberConfig, TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import {
   applyPartialDtoStyle,
@@ -461,21 +468,22 @@ const triggerMethodToNavigateType = (method: TriggerMethod): number =>
   method === 'rightclick' ? 1 : 3;
 
 /**
- * Translates {@link JumpToDashboardConfig} to {@link JtdConfigDto}.
- * Supports only non-pivot config (array targets). Pivot config (Map-based targets) is not persisted.
+ * Builds the shared (target-independent) {@link JtdConfigDto} fields from a JTD config.
+ * Both the array (non-pivot) and Map (pivot) serializers layer their `dashboardIds`
+ * on top of this. The pivot variant reuses these fields because
+ * {@link JumpToDashboardConfigForPivot} is `JumpToDashboardConfig` minus `targets`.
  */
-function jtdConfigToDto(config: JumpToDashboardConfig): JtdConfigDto {
+function jtdConfigDtoCommonFields(config: Omit<JumpToDashboardConfig, 'targets'>): JtdConfigDto {
   const triggerMethod = config.interaction?.triggerMethod ?? 'rightclick';
   return {
+    // `dashboardIds` defaults to `[]` here (from DEFAULT_JTD_CONFIG_DTO); callers override it
+    // with the array- or pivot-specific targets.
     ...DEFAULT_JTD_CONFIG_DTO,
+    // The read path (`jumpToDashboardConfigFromJtdDtoSlice`) only restores JTD when
+    // `drillToDashboardConfig.version` is set, so a persisted config without it would
+    // be silently dropped on the next dashboard load. Stamp the current version.
+    version: '1',
     enabled: config.enabled ?? true,
-    dashboardIds: config.targets.map(
-      (t): JtdTargetDto => ({
-        caption: t.caption,
-        id: 'id' in t ? t.id : undefined,
-        oid: 'id' in t ? t.id : undefined,
-      }),
-    ),
     drillToDashboardRightMenuCaption: config.interaction?.captionPrefix ?? 'Jump to ',
     drillToDashboardNavigateType: triggerMethodToNavigateType(triggerMethod),
     drillToDashboardNavigateTypeCharts: triggerMethodToNavigateType(triggerMethod),
@@ -490,6 +498,93 @@ function jtdConfigToDto(config: JumpToDashboardConfig): JtdConfigDto {
     mergeTargetDashboardFilters: config.filtering?.mergeWithTargetFilters ?? false,
     includeDashFilterDims: config.filtering?.includeDashboardFilters,
     includeWidgetFilterDims: config.filtering?.includeWidgetFilters,
+  };
+}
+
+/**
+ * Translates a non-pivot {@link JumpToDashboardConfig} (array targets) to {@link JtdConfigDto}.
+ */
+function jtdConfigToDto(config: JumpToDashboardConfig): JtdConfigDto {
+  return {
+    ...jtdConfigDtoCommonFields(config),
+    dashboardIds: config.targets.map(
+      (t): JtdTargetDto => ({
+        caption: t.caption,
+        id: isJumpTargetWithId(t) ? t.id : undefined,
+        oid: isJumpTargetWithId(t) ? t.id : undefined,
+      }),
+    ),
+  };
+}
+
+/**
+ * Serializes a pivot {@link JumpToDashboardConfigForPivot} (Map targets) onto a pivot
+ * {@link WidgetDto}, the inverse of {@link extractPivotTargetsConfigFromWidgetDto}.
+ *
+ * Each Map entry is a (dimension → targets) pair. The dimension is matched to a panel
+ * item via {@link dimensionToPivotDimId} (by JAQL expression/aggregation/level), and a
+ * `dashboardIds` entry is emitted per target with `pivotDimensions` referencing that
+ * panel item's `instanceid`. Because `toWidgetDto` does not emit `instanceid`s, we stamp
+ * a deterministic one (the positional pivot-dim id, e.g. `"rows.0"`) onto the matched
+ * item so the targets resolve again on reload — `findDimensionByInstanceId` matches it
+ * by string equality. Returns the (possibly newly-stamped) panels alongside the config.
+ *
+ * @internal
+ */
+function pivotJtdConfigToDto(
+  config: JumpToDashboardConfigForPivot,
+  panels: Panel[],
+): { drillToDashboardConfig: JtdConfigDto; panels: Panel[] } {
+  let stampedPanels = panels;
+  const ensureWritablePanels = (): Panel[] => {
+    if (stampedPanels === panels) {
+      stampedPanels = panels.map((panel) => ({
+        ...panel,
+        items: panel.items.map((item) => ({ ...item })),
+      }));
+    }
+    return stampedPanels;
+  };
+
+  const dashboardIds: Array<JtdTargetDto | JtdPivotTargetDto> = [];
+
+  config.targets.forEach((targets, dimension) => {
+    const pivotDimId = dimensionToPivotDimId(
+      dimension as Parameters<typeof dimensionToPivotDimId>[0],
+      panels,
+    );
+    if (!pivotDimId) {
+      console.warn(
+        '[pivotJtdConfigToDto] Could not locate a pivot dimension for a JTD target; skipping it.',
+      );
+      return;
+    }
+    const separatorIndex = pivotDimId.lastIndexOf('.');
+    const panelName = pivotDimId.slice(0, separatorIndex);
+    const itemIndex = Number(pivotDimId.slice(separatorIndex + 1));
+    const writablePanels = ensureWritablePanels();
+    const item = writablePanels.find((panel) => panel.name === panelName)?.items[itemIndex];
+    if (!item) {
+      return;
+    }
+    // Reuse an existing instanceid (none today, since toWidgetDto omits them) or stamp the
+    // positional id so the panel item and the target reference the same opaque key.
+    const instanceid = item.instanceid ?? pivotDimId;
+    item.instanceid = instanceid;
+    targets.forEach((target) => {
+      const id = isJumpTargetWithId(target) ? target.id : undefined;
+      dashboardIds.push({
+        caption: target.caption,
+        id,
+        oid: id,
+        pivotDimensions: [instanceid],
+      });
+    });
+  });
+
+  return {
+    drillToDashboardConfig: { ...jtdConfigDtoCommonFields(config), dashboardIds },
+    panels: stampedPanels,
   };
 }
 
@@ -525,21 +620,33 @@ export function withSpecificWidgetOptions(
         }
       : baseOptions;
 
+    // JTD: array (non-pivot) targets serialize to `dashboardIds` directly; Map (pivot)
+    // targets additionally stamp `instanceid`s on the referenced panel items so the
+    // per-dimension targets resolve on reload (see `pivotJtdConfigToDto`).
+    let drillToDashboardConfig = widgetDto.drillToDashboardConfig;
+    let panels = widgetDto.metadata.panels;
+    if (jtdConfig) {
+      if (jtdConfig.targets instanceof Map) {
+        const pivot = pivotJtdConfigToDto(jtdConfig as JumpToDashboardConfigForPivot, panels);
+        drillToDashboardConfig = pivot.drillToDashboardConfig;
+        panels = pivot.panels;
+      } else {
+        drillToDashboardConfig = jtdConfigToDto(jtdConfig as JumpToDashboardConfig);
+      }
+    }
+
+    const metadataBase =
+      panels === widgetDto.metadata.panels ? widgetDto.metadata : { ...widgetDto.metadata, panels };
     const metadata =
       filtersOptions?.ignoreFilters != null
         ? {
-            ...widgetDto.metadata,
+            ...metadataBase,
             ignore: {
               all: filtersOptions.ignoreFilters.all ?? false,
               ids: filtersOptions.ignoreFilters.ids ?? [],
             },
           }
-        : widgetDto.metadata;
-
-    const drillToDashboardConfig =
-      jtdConfig && !(jtdConfig.targets instanceof Map)
-        ? jtdConfigToDto(jtdConfig as JumpToDashboardConfig)
-        : widgetDto.drillToDashboardConfig;
+        : metadataBase;
 
     // Re-attach unsupported style fields snapshot from the original DTO so they
     // survive Fusion → CSDK → Fusion round-trips. Rebuilt style takes precedence,
@@ -554,6 +661,71 @@ export function withSpecificWidgetOptions(
       ...(drillToDashboardConfig && { drillToDashboardConfig }),
     };
   };
+}
+
+/**
+ * The dashboard-level context held about a single widget, gathered from the
+ * (separate) containers it can live in: `widgetsOptions[id]`
+ * ({@link SpecificWidgetOptions}: common filters, JTD, partial DTO snapshot) and
+ * `config.tabbers[id]` ({@link TabberConfig}: per-tab show/hide mapping).
+ *
+ * Consumed by {@link withDashboardWidgetContext} to re-project this context onto a
+ * freshly-translated {@link WidgetDto} on add/duplicate, so dashboard-level config
+ * survives the model → DTO write path.
+ *
+ * @internal
+ */
+export type WidgetContext = {
+  /** Per-widget options from `widgetsOptions[id]`. */
+  options?: SpecificWidgetOptions;
+  /** Tabber show/hide mapping from `config.tabbers[id]`. */
+  tabber?: TabberConfig;
+};
+
+/**
+ * Overlays a {@link TabberConfig} onto a tabber {@link WidgetDto}.
+ *
+ * The widget-level translator (`toTabberWidgetStyle`) rebuilds `style.tabs[]` with
+ * tab names / `activeTab` / styling but empty `displayWidgetIds` — the widget model
+ * does not know about other widgets' ids. This overlays the dashboard-level
+ * show/hide mapping back onto those tabs by index. No-op for non-tabber DTOs or
+ * when there is no tabber config.
+ *
+ * @internal
+ */
+export function withTabberWidgetConfig(
+  tabberConfig?: TabberConfig,
+): (widgetDto: WidgetDto) => WidgetDto {
+  return (widgetDto: WidgetDto) => {
+    if (!tabberConfig || !isTabberWidgetDto(widgetDto)) {
+      return widgetDto;
+    }
+    const tabs = (widgetDto.style.tabs ?? []).map((tab, index) => ({
+      ...tab,
+      displayWidgetIds: tabberConfig.tabs[index]?.displayWidgetIds ?? tab.displayWidgetIds,
+    }));
+    return {
+      ...widgetDto,
+      style: { ...widgetDto.style, tabs },
+    };
+  };
+}
+
+/**
+ * Projects all dashboard-level {@link WidgetContext} for a widget onto a freshly
+ * translated {@link WidgetDto}. Composes the per-container projections
+ * ({@link withSpecificWidgetOptions} for `widgetsOptions`, {@link withTabberWidgetConfig}
+ * for `config.tabbers`); each is last-write-wins and a no-op when its slice is absent.
+ *
+ * This is the single seam that re-attaches dashboard-level widget config on
+ * add/duplicate; a new per-widget side-channel adds its projection here.
+ *
+ * @internal
+ */
+export function withDashboardWidgetContext(
+  context: WidgetContext,
+): (widgetDto: WidgetDto) => WidgetDto {
+  return flow(withSpecificWidgetOptions(context.options), withTabberWidgetConfig(context.tabber));
 }
 
 export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersConfig {

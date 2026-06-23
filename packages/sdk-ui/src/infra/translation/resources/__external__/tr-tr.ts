@@ -288,11 +288,13 @@ const translation: TranslationDictionary = {
       incorrectResponse: 'Yanlış yanıt',
       clearChat: 'Sohbeti temizle',
       refresh: 'Yenile',
-      readMore: 'Daha fazla oku',
+      readMore: 'Daha fazla göster',
       collapse: 'Daralt',
       yes: 'Evet',
       no: 'Hayır',
       seeMore: 'Daha fazla gör',
+      generateNarrative: 'Yapay Zeka Anlatısı Oluştur',
+      hideNarrative: 'Yapay Zeka Anlatısını Gizle',
     },
     disclaimer: {
       poweredByAi:
@@ -356,6 +358,8 @@ const translation: TranslationDictionary = {
       from: 'Başlangıç',
       to: 'Bitiş',
       includeCurrent: 'Mevcut dahil',
+      rankedBy: 'Sıralama ölçütü',
+      selectField: 'Alan seç',
     },
     placeholders: {
       selectFromList: 'Listeden seç',
@@ -380,6 +384,8 @@ const translation: TranslationDictionary = {
       greaterThan: 'Büyüktür',
       greaterThanOrEqual: 'Eşit veya büyüktür',
       isWithin: 'İçindedir',
+      top: 'İlk',
+      bottom: 'Son',
     },
     validationErrors: {
       invalidNumber: 'Yalnızca sayılar',
@@ -476,6 +482,12 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Veri tablosu',
     },
+    sankey: {
+      alerts: {
+        tooManyStages:
+          'Sankey grafiğinde {{stageCount}} aşama var; {{softLimit}} değerinden fazlası genellikle okunamaz bir diyagram üretir. Daha az kategori sütunu veya daha sıkı filtreler kullanın.',
+      },
+    },
   },
   loadingOverlay: {
     label: 'İçerik yükleniyor',
@@ -500,6 +512,17 @@ const translation: TranslationDictionary = {
     stdev: 'Standart sapma',
     median: 'Medyan',
     variance: 'Varyans',
+  },
+  measuresAgg: {
+    countDistinct: '# benzersiz',
+    count: '#',
+    sum: 'Toplam',
+    average: 'Ortalama',
+    min: 'Min',
+    max: 'Maks',
+    median: 'Medyan',
+    variance: 'Varyans',
+    stdev: 'Standart sapma',
   },
 };
 

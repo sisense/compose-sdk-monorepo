@@ -62,6 +62,7 @@ export const useExecuteQueryByWidgetId = (
 ) => {
   const query = ref<QueryByWidgetIdState['query']>(undefined);
   const pivotQuery = ref<QueryByWidgetIdState['pivotQuery']>(undefined);
+  const rowCount = ref<QueryByWidgetIdState['rowCount']>(undefined);
   const { hasTrackedRef } = useTracking('useExecuteQueryByWidgetId');
   const [queryState, dispatch] = useReducer(queryStateReducer, {
     isLoading: true,
@@ -82,6 +83,7 @@ export const useExecuteQueryByWidgetId = (
         data,
         query: resQuery,
         pivotQuery: resPivotQuery,
+        rowCount: resRowCount,
       } = await executeQueryByWidgetId({
         ...rest,
         filters: filterList,
@@ -91,6 +93,7 @@ export const useExecuteQueryByWidgetId = (
       dispatch({ type: 'success', data });
       query.value = resQuery;
       pivotQuery.value = resPivotQuery;
+      rowCount.value = resRowCount;
     } catch (error) {
       dispatch({ type: 'error', error: error as Error });
     }
@@ -112,5 +115,6 @@ export const useExecuteQueryByWidgetId = (
     ...toRefs(queryState.value),
     query: query,
     pivotQuery: pivotQuery,
+    rowCount: rowCount,
   } as ToRefs<QueryByWidgetIdState>;
 };

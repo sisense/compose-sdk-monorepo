@@ -32,29 +32,36 @@ export const validateCategoricalChartDataOptions = (
 export const categoricalData = (
   dataOptions: CategoricalChartDataOptionsInternal,
   dataTable: DataTable,
+  defaultNumberFormattingEnabled = true,
 ): CategoricalChartData => {
   const cartesianChartDataOptions = {
     ...dataOptions,
     x: dataOptions.breakBy,
     breakBy: [],
   } as CartesianChartDataOptionsInternal;
-  let cartesianChartData = cartesianData(cartesianChartDataOptions, dataTable);
+  let cartesianChartData = cartesianData(
+    cartesianChartDataOptions,
+    dataTable,
+    defaultNumberFormattingEnabled,
+  );
   // maybe format break By values
   const breakByHasNumberFormatConfig = dataOptions.breakBy.some(
-    ({ column: { type }, numberFormatConfig }) => isNumber(type) && numberFormatConfig,
+    ({ column: { type }, numberFormatConfig }) =>
+      isNumber(type) && (defaultNumberFormattingEnabled || numberFormatConfig),
   );
   if (breakByHasNumberFormatConfig) {
     const xValues = cartesianChartData.xValues.map((xValue) => {
       const formattedXValues: string[] = [];
       dataOptions.breakBy.forEach(({ column: { type }, numberFormatConfig }, index) => {
-        const completeNumberFormatConfig = getCompleteNumberFormatConfig(numberFormatConfig);
+        const hasExplicitConfig = numberFormatConfig !== undefined;
         const value = xValue.xValues[index];
-        if (isNumber(type)) {
+        if (isNumber(type) && (defaultNumberFormattingEnabled || hasExplicitConfig)) {
+          const completeNumberFormatConfig = getCompleteNumberFormatConfig(numberFormatConfig);
           formattedXValues.push(
             applyFormatPlainText(completeNumberFormatConfig, parseFloat(value)),
           );
         } else {
-          formattedXValues.push(xValue.xValues[index]);
+          formattedXValues.push(value);
         }
       });
       return {

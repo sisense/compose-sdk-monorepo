@@ -78,11 +78,19 @@ export function preparePivotRowJaqlSortOptions(
       }),
       {},
     );
-  } else if (metadataStats.rowsCount > 1) {
-    // Always emit `measurePath` for multi-rows by-measure sorts, even as an empty object when there
-    // are no pivot columns. The Sisense backend uses the presence of this field to
-    // recognise a by-measure sort: when it is absent the server may ignore the sort
+  } else if (metadataStats.rowsCount > 1 && !isLastRow && sort.by && 'valuesIndex' in sort.by) {
+    // Emit `measurePath` (even as an empty object when there are no pivot columns) ONLY for a
+    // multi-row by-measure sort on a NON-last row. The Sisense backend uses the presence of this
+    // field to recognise a by-measure sort: when it is absent the server may ignore the sort
     // direction for row dimensions, producing incorrect ordering.
+    //
+    // It must NOT be set otherwise, because Fusion omits it and the backend mis-handles its
+    // unexpected presence:
+    //  - by-dimension sorts (no `valuesIndex`): the backend treats the sort as by-measure,
+    //    mis-anchors the empty path and drops the measure column.
+    //  - by-measure sorts on the LAST row: that sort is normalised onto the target measure, where an
+    //    empty `measurePath` makes the backend sort by the FIRST measure instead of the selected one
+    //    when several measures are present.
     sortDetails.measurePath = {};
   }
 

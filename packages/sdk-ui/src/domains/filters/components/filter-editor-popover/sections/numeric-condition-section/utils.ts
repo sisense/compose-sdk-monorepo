@@ -14,6 +14,11 @@ import {
   isSupportedByFilterEditor,
 } from '../../utils.js';
 import {
+  createRankingFilter,
+  DEFAULT_RANKING_COUNT,
+  isRankingCondition,
+} from '../ranking-condition/ranking-condition-utils.js';
+import {
   createExcludeMembersFilter,
   getConfigWithUpdatedDeactivated,
   getCriteriaFilterBuilder,
@@ -59,7 +64,8 @@ export function getNumericFilterValue(filter: Filter): string {
 
 export function createConditionalFilter(baseFilter: Filter, data: NumericConditionFilterData) {
   const { attribute } = baseFilter;
-  const { condition, value, selectedMembers, multiSelectEnabled } = data;
+  const { condition, value, selectedMembers, multiSelectEnabled, rankingCount, rankingMeasure } =
+    data;
   if (condition === NumericCondition.EXCLUDE) {
     const config = getConfigWithUpdatedDeactivated(baseFilter, selectedMembers);
     const members = getMembersWithoutDeactivated(baseFilter, selectedMembers);
@@ -68,6 +74,11 @@ export function createConditionalFilter(baseFilter: Filter, data: NumericConditi
       ...config,
       enableMultiSelection: multiSelectEnabled,
     });
+  }
+
+  if (isRankingCondition(condition)) {
+    const count = rankingCount ?? DEFAULT_RANKING_COUNT;
+    return createRankingFilter(baseFilter, condition, count, rankingMeasure ?? null);
   }
 
   if (!isNumericString(value)) {

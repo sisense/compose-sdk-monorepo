@@ -20,6 +20,29 @@ export const SAMPLE_ECOMMERCE_SIMPLE_QUERY: QueryJSON = {
   ],
 };
 
+export const SAMPLE_ECOMMERCE_MEASURED_VALUE_REVENUE_BY_GENDER_QUERY: QueryJSON = {
+  dimensions: [],
+  measures: [
+    {
+      function: 'measureFactory.measuredValue',
+      args: [
+        {
+          function: 'measureFactory.sum',
+          args: ['DM.Commerce.Revenue', 'Revenue (Female and Male)'],
+        },
+        [
+          {
+            function: 'filterFactory.members',
+            args: ['DM.Commerce.Gender', ['Female', 'Male']],
+          },
+        ],
+        'Revenue (Female and Male)',
+      ],
+    },
+  ],
+  filters: [],
+};
+
 export const SAMPLE_ECOMMERCE_COMPLEX_QUERY: QueryJSON = {
   dimensions: ['DM.Commerce.Date.Years', 'DM.Brand.Brand', 'DM.Commerce.Age Range'],
   measures: [
@@ -429,4 +452,41 @@ export const BENCHMARK_SNOWFLAKE_DEFAULT_QUERY: QueryJSON = {
       ],
     },
   ],
+};
+
+export const BENCHMARK_SNOWFLAKE_TOTAL_PRICE_AND_QUANTITY_GROWTH_SUMMARY_QUERY: QueryJSON = {
+  dimensions: [],
+  measures: [
+    {
+      function: 'measureFactory.measuredValue',
+      args: [
+        {
+          function: 'measureFactory.sum',
+          args: ['DM.orders.O_TOTALPRICE', 'Total Price (Last Year)'],
+        },
+        [
+          {
+            function: 'filterFactory.dateRelative',
+            args: ['DM.orders.O_ORDERDATE.Years', -1, 1],
+          },
+        ],
+        'Total Price (Last Year)',
+      ],
+    },
+    {
+      function: 'measureFactory.sum',
+      args: ['DM.orders.O_TOTALPRICE', 'Total Price All Orders'],
+    },
+    {
+      function: 'measureFactory.growthPastMonth',
+      args: [
+        {
+          function: 'measureFactory.sum',
+          args: ['DM.lineitem.L_QUANTITY'],
+        },
+        'Quantity Growth',
+      ],
+    },
+  ],
+  filters: [],
 };

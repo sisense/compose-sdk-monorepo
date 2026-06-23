@@ -62,6 +62,14 @@ export interface Column {
   id?: string;
   /** Column name */
   name: string;
+  /**
+   * Display label shown in chart UI when different from {@link name}.
+   *
+   * Optional override in chart `dataOptions` input. Factory-produced model elements
+   * ({@link Attribute}, {@link Measure}, etc.) expose a resolved {@link Attribute.title | title}
+   * instead; use the model element directly rather than duplicating the label here.
+   */
+  title?: string;
   /** Column type */
   type: string;
   /**

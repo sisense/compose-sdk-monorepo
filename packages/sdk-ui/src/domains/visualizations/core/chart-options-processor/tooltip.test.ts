@@ -92,4 +92,30 @@ describe('getCategoryTooltipSettings', () => {
     const html = settings.formatter!.call(ctx);
     expect(html).toContain('/ 33.7%');
   });
+
+  it('formatter renders raw value when defaultNumberFormattingEnabled is false and no explicit config', () => {
+    const settings = getCategoryTooltipSettings(undefined, createChartDataOptions(), false);
+    const ctx = createPointContext({ y: 54321 });
+    const html = settings.formatter!.call(ctx);
+    expect(html).toContain('54321');
+    expect(html).not.toContain('54.32K');
+  });
+
+  it('formatter still formats value with explicit numberFormatConfig when defaultNumberFormattingEnabled is false', () => {
+    const dataOptions = createChartDataOptions({
+      y: [
+        {
+          column: { title: 'Revenue', name: 'revenue', type: 'number' },
+          enabled: true,
+          chartType: 'column',
+          numberFormatConfig: { name: 'Percent', decimalScale: 0 },
+        },
+      ],
+    });
+    const settings = getCategoryTooltipSettings(undefined, dataOptions, false);
+    const ctx = createPointContext({ y: 42 });
+    const html = settings.formatter!.call(ctx);
+    // 42 * 100 = 4,200% — confirms formatting was applied, not raw String(42)
+    expect(html).toContain('4,200%');
+  });
 });

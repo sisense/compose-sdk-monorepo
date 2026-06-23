@@ -1,6 +1,5 @@
 ---
 title: 6 | Event Handling and Cross-Filtering
-hidden: true
 ---
 
 # Event Handling and Cross-Filtering

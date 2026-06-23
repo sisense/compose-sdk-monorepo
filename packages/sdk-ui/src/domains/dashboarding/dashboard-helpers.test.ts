@@ -3,7 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { JumpToDashboardConfig } from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
-import { applyJtdConfig, applyJtdConfigs } from './dashboard-helpers';
+import { DashboardHeaderItem } from './components/dashboard-header-config';
+import { applyJtdConfig, applyJtdConfigs, withHeaderItem } from './dashboard-helpers';
 import { DashboardProps } from './types';
 
 describe('Dashboard JTD Helpers', () => {
@@ -163,5 +164,31 @@ describe('Dashboard JTD Helpers', () => {
       expect(result.widgetsOptions?.['widget-1']?.jtdConfig).toEqual(mockJtdConfig);
       expect(result.widgetsOptions?.['widget-2']?.jtdConfig).toEqual(mockJumpToDashboardConfig);
     });
+  });
+});
+
+describe('withHeaderItem', () => {
+  const headerItem = (id: string): DashboardHeaderItem => ({ id, component: () => null });
+
+  it('appends to config.header.items without mutating the input', () => {
+    const dashboard: DashboardProps = { title: 'Test', widgets: [] };
+
+    const next = withHeaderItem(headerItem('a'))(dashboard);
+    expect(next.config?.header?.items?.map((item) => item.id)).toEqual(['a']);
+    expect(dashboard.config).toBeUndefined();
+
+    const next2 = withHeaderItem(headerItem('b'))(next);
+    expect(next2.config?.header?.items?.map((item) => item.id)).toEqual(['a', 'b']);
+  });
+
+  it('preserves other config fields', () => {
+    const dashboard: DashboardProps = {
+      widgets: [],
+      config: { toolbar: { visible: true } },
+    };
+
+    const next = withHeaderItem(headerItem('a'))(dashboard);
+    expect(next.config?.toolbar?.visible).toBe(true);
+    expect(next.config?.header?.items?.map((item) => item.id)).toEqual(['a']);
   });
 });

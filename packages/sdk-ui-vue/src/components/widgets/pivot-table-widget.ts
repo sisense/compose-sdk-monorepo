@@ -99,6 +99,12 @@ export const PivotTableWidget = defineComponent({
      */
     styleOptions: Object as PropType<PivotTableWidgetProps['styleOptions']>,
     /**
+     * Configuration for AI-powered widget features such as automated narrative generation
+     * @alpha
+     * @category Widget
+     */
+    aiOptions: Object as PropType<PivotTableWidgetProps['aiOptions']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.drilldownOptions}
      *
      * @category Widget

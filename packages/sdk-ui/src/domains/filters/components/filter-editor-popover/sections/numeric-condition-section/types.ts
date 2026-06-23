@@ -1,3 +1,5 @@
+import { Measure } from '@sisense/sdk-data';
+
 import { FilterOption } from '../../../criteria-filter-tile/criteria-filter-operations.js';
 
 export const NumericCondition = {
@@ -8,6 +10,8 @@ export const NumericCondition = {
   LESS_THAN_OR_EQUAL: FilterOption.LESS_THAN_OR_EQUAL,
   GREATER_THAN: FilterOption.GREATER_THAN,
   GREATER_THAN_OR_EQUAL: FilterOption.GREATER_THAN_OR_EQUAL,
+  TOP: FilterOption.TOP,
+  BOTTOM: FilterOption.BOTTOM,
 } as const;
 
 export type NumericConditionType = (typeof NumericCondition)[keyof typeof NumericCondition];
@@ -17,4 +21,6 @@ export type NumericConditionFilterData = {
   value: string;
   selectedMembers: string[];
   multiSelectEnabled: boolean;
+  rankingCount?: number;
+  rankingMeasure?: Measure | null;
 };

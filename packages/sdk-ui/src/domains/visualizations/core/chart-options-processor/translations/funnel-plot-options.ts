@@ -4,7 +4,7 @@ import { DeepPartial } from 'ts-essentials';
 
 import { prepareDataLabelsOptions } from '@/domains/visualizations/core/chart-options-processor/series-labels';
 
-import { CompleteNumberFormatConfig, FunnelSeriesLabels } from '../../../../../types';
+import { FunnelSeriesLabels, NumberFormatConfig } from '../../../../../types';
 import {
   CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
@@ -13,7 +13,7 @@ import { fraction, fromFraction, withPercentSign } from '../../chart-data/utils'
 import { PlotOptions } from '../chart-options-service';
 import { fontStyleDefault } from '../defaults/cartesian';
 import { FunnelChartDesignOptions } from './design-options';
-import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config';
+import { applyFormatPlainText, formatNumberWithFallback } from './number-format-config';
 import { HighchartsDataPointContext } from './tooltip-utils';
 import { DataLabelsSettings } from './value-label-section';
 
@@ -96,10 +96,19 @@ const getCategory = (ctx: HighchartsDataPointContext, labels: FunnelSeriesLabels
 const getValue = (
   ctx: HighchartsDataPointContext,
   labels: FunnelSeriesLabels,
-  numberFormatConfig: CompleteNumberFormatConfig,
+  rawConfig: NumberFormatConfig | undefined,
+  isDefaultNumberFormattingEnabled: boolean,
 ): string => {
   if (!labels.showValue) return '';
-  const value = applyFormatPlainText(numberFormatConfig, ctx.y);
+  const value =
+    ctx.y != null
+      ? formatNumberWithFallback(
+          ctx.y,
+          rawConfig,
+          isDefaultNumberFormattingEnabled,
+          applyFormatPlainText,
+        )
+      : '';
   if (labels.showValue && labels.showCategory) return `<br />${value}`;
 
   return value;
@@ -147,6 +156,7 @@ export const funnelNeckHeight = (type: FunnelType): number => (type === 'pinched
 export const getFunnelPlotOptions = (
   funnelDesignOptions: FunnelChartDesignOptions,
   chartDataOptions: ChartDataOptionsInternal,
+  defaultNumberFormattingEnabled = true,
 ): PlotOptions => {
   const {
     funnelType = DefaultFunnelType,
@@ -155,9 +165,8 @@ export const getFunnelPlotOptions = (
     seriesLabels = DefaultFunnelSeriesLabels,
   } = funnelDesignOptions;
 
-  const numberFormatConfig = getCompleteNumberFormatConfig(
-    (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig,
-  );
+  const rawConfig = (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]
+    ?.numberFormatConfig;
   const renderTo = null;
 
   const funnelWidth = funnelWidthPercentage(renderTo);
@@ -168,7 +177,7 @@ export const getFunnelPlotOptions = (
 
       formatter: function (this: HighchartsDataPointContext) {
         const category = getCategory(this, seriesLabels);
-        const value = getValue(this, seriesLabels, numberFormatConfig);
+        const value = getValue(this, seriesLabels, rawConfig, defaultNumberFormattingEnabled);
         const percent = getPercent(this, seriesLabels);
 
         return `${seriesLabels?.prefix ?? ''}${category}${value}${percent}${

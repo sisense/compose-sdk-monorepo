@@ -120,6 +120,7 @@ export type Props = {
 
 export const EVENT_QUERY_START = 'queryStart';
 export const EVENT_QUERY_END = 'queryEnd';
+export const EVENT_QUERY_ERROR = 'queryError';
 export const EVENT_LOADING_START = 'loadingStart';
 export const EVENT_LOADING_END = 'loadingFinish';
 
@@ -550,7 +551,12 @@ export class PivotBuilder {
         if (err instanceof LoadingCanceledError) {
           return;
         }
-        throw err;
+        // The query failed (e.g. an error streamed back from the server). The
+        // success branch that emits EVENT_QUERY_END never runs, so surface the
+        // failure explicitly: stop the loading indication and notify listeners,
+        // otherwise the UI would stay stuck in a loading state forever.
+        this.hideLoading();
+        this.events.emit(EVENT_QUERY_ERROR, err);
       });
 
     dataService
@@ -572,7 +578,9 @@ export class PivotBuilder {
         if (err instanceof LoadingCanceledError) {
           return;
         }
-        throw err;
+        // A failure here rejects with the same server error already surfaced by
+        // the "loadData" promise above (which emits EVENT_QUERY_ERROR). Swallow
+        // it here to avoid an unhandled rejection and a duplicate error event.
       });
   }
 

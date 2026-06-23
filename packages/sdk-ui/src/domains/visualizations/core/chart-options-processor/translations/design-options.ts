@@ -8,6 +8,7 @@ import {
   LegendOptions,
   LineOptions,
   PieSeriesLabels,
+  SankeyStyleOptions,
   ScattermapMarkers,
   SeriesLabels,
   SunburstStyleOptions,
@@ -136,6 +137,16 @@ export type FunnelChartDesignOptions = Omit<BaseDesignOptionsType, 'seriesLabels
 export type TreemapChartDesignOptions = BaseDesignOptionsType & TreemapStyleOptions;
 
 export type SunburstChartDesignOptions = BaseDesignOptionsType & SunburstStyleOptions;
+
+export type SankeyChartDesignOptions = BaseDesignOptionsType & {
+  /** Resolved flow direction from {@link SankeyStyleOptions.orientation} (defaults to horizontal). */
+  orientation?: 'horizontal' | 'vertical';
+  curveFactor?: SankeyStyleOptions['curveFactor'];
+  linkOpacity?: SankeyStyleOptions['linkOpacity'];
+  nodeWidth?: SankeyStyleOptions['nodeWidth'];
+  nodePadding?: SankeyStyleOptions['nodePadding'];
+  nodeAlignment?: SankeyStyleOptions['nodeAlignment'];
+};
 
 export type ScatterChartDesignOptions = BaseDesignOptionsType & {
   markerSize?: ScatterMarkerSize;

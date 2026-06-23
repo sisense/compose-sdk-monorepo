@@ -7,6 +7,7 @@ import { http, HttpResponse } from 'msw';
 import { mockToken, mockUrl, server } from '@/__mocks__/msw';
 import { chartMocksManager } from '@/__test-helpers__/mock-chart-component';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { DashboardModule } from '@/domains/dashboarding/dashboard-module';
 import { FilterTile } from '@/domains/filters/index.js';
 import type { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { isTextWidgetProps } from '@/domains/widgets/components/text-widget/text-widget.js';
@@ -17,11 +18,12 @@ import { ModalProvider } from '@/infra/contexts/modal-provider/modal-provider.js
 import { SisenseContextProvider } from '@/infra/contexts/sisense-context/sisense-context-provider.js';
 import { ThemeProvider } from '@/infra/contexts/theme-provider';
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
+import { ModuleProvider } from '@/infra/modules';
 import type { SisenseContextProviderProps } from '@/props';
 import { CartesianChartDataOptions, DataPoint } from '@/types.js';
 
 import { totalCostByAgeRangeJaqlResult } from './__mocks__/jaql-responce-mock.js';
-import { useComposedDashboard } from './use-composed-dashboard.js';
+import { ComposableDashboardProps, useComposedDashboard } from './use-composed-dashboard.js';
 
 /**
  * Helper function to get property from widget props
@@ -31,9 +33,11 @@ const getProperty = (widget: WidgetProps, key: keyof WidgetProps | keyof ChartWi
 };
 
 const CombinedProvider = ({ children }: { children: React.ReactNode }) => (
-  <MenuProvider>
-    <ModalProvider>{children}</ModalProvider>
-  </MenuProvider>
+  <ModuleProvider modules={[DashboardModule]}>
+    <MenuProvider>
+      <ModalProvider>{children}</ModalProvider>
+    </MenuProvider>
+  </ModuleProvider>
 );
 
 const contextProviderProps: SisenseContextProviderProps = {
@@ -103,6 +107,30 @@ describe('useComposedDashboard', () => {
     expect(getProperty(connectedWidget, 'filters')).toEqual(
       getProperty(widgetPropsMock, 'filters'),
     );
+  });
+
+  describe('returned dashboard config (tabbers wiring)', () => {
+    it('omits `config` from the returned dashboard when none was provided', () => {
+      const props: ComposableDashboardProps = { widgets: [widgetPropsMock] };
+      const { result } = renderHook(() => useComposedDashboard(props), {
+        wrapper: CombinedProvider,
+      });
+
+      // A dashboard that never had a config must not materialize an empty one.
+      expect(result.current.dashboard.config).toBeUndefined();
+    });
+
+    it('surfaces the config (with its tabbers slice) on the returned dashboard from state', () => {
+      const tabbers = { 'some-tabber': { tabs: [{ displayWidgetIds: ['widget-1'] }] } };
+      const props: ComposableDashboardProps = { widgets: [widgetPropsMock], config: { tabbers } };
+      const { result } = renderHook(() => useComposedDashboard(props), {
+        wrapper: CombinedProvider,
+      });
+
+      // `config` comes from the internal (mutable-on-duplication) state, so a tabber's
+      // show/hide mapping survives into the returned model.
+      expect(result.current.dashboard.config?.tabbers).toEqual(tabbers);
+    });
   });
 
   it('should add menu options from common filters to drilldown menu', async () => {
@@ -248,7 +276,7 @@ describe('useComposedDashboard', () => {
         </SisenseContextProvider>,
       );
       const chartMocks = await result.findAllByTestId('ChartMock');
-      const filterTiles = await result.findAllByTestId('member-filter-tile');
+      const filterTiles = await result.findAllByTestId('csdk-filter-tile-container');
       const drilldownBreadcrumbs = await result.findAllByTestId('drilldown-breadcrumbs');
 
       expect(filterTiles).toHaveLength(1);
@@ -291,7 +319,7 @@ describe('useComposedDashboard', () => {
       });
 
       // new filter tile should be added to the dashboard UI
-      expect(await result.findAllByTestId('member-filter-tile')).toHaveLength(2);
+      expect(await result.findAllByTestId('csdk-filter-tile-container')).toHaveLength(2);
 
       // drilldown breadcrumbs should be still visible
       expect(await result.findAllByTestId('drilldown-breadcrumbs')).toHaveLength(1);

@@ -1,6 +1,5 @@
 ---
 title: 4 | Data Panel Configuration
-hidden: true
 ---
 
 # Data Panel Configuration

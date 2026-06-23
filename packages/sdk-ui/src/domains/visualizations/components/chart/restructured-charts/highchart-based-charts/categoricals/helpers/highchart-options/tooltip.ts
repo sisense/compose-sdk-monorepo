@@ -7,5 +7,6 @@ export const getBasicCategoricalTooltip = (ctx: BuildContext<'pie'>): TooltipSet
   return getCategoryTooltipSettings(
     ctx.designOptions.seriesLabels?.percentageLabels?.showDecimals,
     ctx.dataOptions,
+    ctx.extraConfig.defaultNumberFormattingEnabled,
   );
 };

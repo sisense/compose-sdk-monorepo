@@ -79,7 +79,15 @@ A sorted instance of measure
 
 > **name**: `string`
 
-Element name
+Identity name of the element.
+
+***
+
+### title
+
+> **title**: `string`
+
+Label displayed in UI.
 
 ***
 

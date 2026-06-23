@@ -9,6 +9,7 @@ import {
   withReplacedFilter,
 } from '@/domains/filters/helpers';
 
+import { DashboardHeaderItem } from './components/dashboard-header-config.js';
 import type { JumpToDashboardConfig } from './hooks/jtd/jtd-types.js';
 import { DashboardProps } from './types.js';
 
@@ -331,3 +332,35 @@ export const applyJtdConfigs = (
     widgetsOptions: updatedWidgetsOptions,
   };
 };
+
+/**
+ * Creates a transformer that appends the given item to `config.header.items` of a dashboard.
+ *
+ * This is the canonical way for a dashboard customization (see `DashboardCustomization`) to add a
+ * header toolbar item. The returned transformer is pure — it does not modify the original dashboard;
+ * instead, it returns a new dashboard with the header item added.
+ *
+ * @example
+ * Add a custom header item to a dashboard.
+ * ```ts
+ * const updatedDashboard = withHeaderItem({
+ *   id: 'my-button',
+ *   component: () => <MyButton />,
+ * })(dashboard);
+ * ```
+ * @param item - The header item to add.
+ * @returns A transformer `(dashboard: DashboardProps) => DashboardProps` with the item appended.
+ * @sisenseInternal
+ */
+export const withHeaderItem =
+  (item: DashboardHeaderItem) =>
+  (dashboard: Readonly<DashboardProps>): DashboardProps => ({
+    ...dashboard,
+    config: {
+      ...dashboard.config,
+      header: {
+        ...dashboard.config?.header,
+        items: [...(dashboard.config?.header?.items ?? []), item],
+      },
+    },
+  });

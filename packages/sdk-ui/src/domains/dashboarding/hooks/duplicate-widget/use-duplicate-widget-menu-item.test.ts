@@ -286,6 +286,7 @@ describe('useDuplicateWidgetMenuItem', () => {
       }),
       expect.any(Object),
       undefined,
+      undefined,
     );
 
     expect(setWidgets).toHaveBeenCalledTimes(1);
@@ -301,6 +302,111 @@ describe('useDuplicateWidgetMenuItem', () => {
     ) => Record<string, unknown>;
     const newOptions = optionsUpdater({});
     expect(newOptions['server-widget-oid']).toEqual({ storedOption: true });
+  });
+
+  it('without persistence, copies the source tabber config to the cloned widget id', async () => {
+    const widgets = [createMinimalWidget({ id: 'w1' })];
+    const setWidgetsOptions = vi.fn();
+    const setTabbersConfig = vi.fn();
+    const tabbersConfig = {
+      w1: { tabs: [{ displayWidgetIds: ['a', 'b'] }, { displayWidgetIds: ['c'] }] },
+    };
+    const params: UseDuplicateWidgetMenuItemParams = {
+      widgets,
+      setWidgets: vi.fn(),
+      widgetsLayout: createLayout('w1'),
+      setWidgetsLayout: vi.fn(),
+      setWidgetsOptions,
+      tabbersConfig,
+      setTabbersConfig,
+      enabled: true,
+    };
+
+    const { result } = renderHook(() => useDuplicateWidgetMenuItem(params));
+    const onClick = getDuplicateMenuItemOnClick(result.current.widgets[0]!);
+
+    await act(async () => {
+      onClick?.();
+    });
+
+    expect(setTabbersConfig).toHaveBeenCalledTimes(1);
+    const tabbersUpdater = setTabbersConfig.mock.calls[0]![0] as (
+      prev: Record<string, unknown>,
+    ) => Record<string, unknown>;
+    const newTabbers = tabbersUpdater({});
+    const duplicateKey = Object.keys(newTabbers).find((k) => k.startsWith('w1-copy-'));
+    expect(duplicateKey).toBeDefined();
+    expect(newTabbers[duplicateKey!]).toEqual(tabbersConfig.w1);
+  });
+
+  it('does not touch tabbers config when the duplicated widget is not a tabber', async () => {
+    const widgets = [createMinimalWidget({ id: 'w1' })];
+    const setTabbersConfig = vi.fn();
+    const params: UseDuplicateWidgetMenuItemParams = {
+      widgets,
+      setWidgets: vi.fn(),
+      widgetsLayout: createLayout('w1'),
+      setWidgetsLayout: vi.fn(),
+      setWidgetsOptions: vi.fn(),
+      // a different widget owns a tabber config; the duplicated 'w1' is not a tabber
+      tabbersConfig: { 'some-tabber': { tabs: [{ displayWidgetIds: ['w1'] }] } },
+      setTabbersConfig,
+      enabled: true,
+    };
+
+    const { result } = renderHook(() => useDuplicateWidgetMenuItem(params));
+    const onClick = getDuplicateMenuItemOnClick(result.current.widgets[0]!);
+
+    await act(async () => {
+      onClick?.();
+    });
+
+    expect(setTabbersConfig).not.toHaveBeenCalled();
+  });
+
+  it('with persistence, forwards the tabber config to addWidget and stores the returned config under the new id', async () => {
+    const widgets = [createMinimalWidget({ id: 'w1' })];
+    const setTabbersConfig = vi.fn();
+    const tabberConfig = { tabs: [{ displayWidgetIds: ['a', 'b'] }] };
+    const addWidget = vi.fn().mockResolvedValue({
+      widget: createMinimalWidget({ id: 'server-widget-oid' }),
+      widgetsPanelLayout: createLayout('server-widget-oid'),
+      widgetOptions: {},
+      tabberConfig,
+    });
+    const params: UseDuplicateWidgetMenuItemParams = {
+      widgets,
+      setWidgets: vi.fn(),
+      widgetsLayout: createLayout('w1'),
+      setWidgetsLayout: vi.fn(),
+      setWidgetsOptions: vi.fn(),
+      tabbersConfig: { w1: tabberConfig },
+      setTabbersConfig,
+      enabled: true,
+      persistence: { addWidget },
+    };
+
+    const { result } = renderHook(() => useDuplicateWidgetMenuItem(params));
+    const onClick = getDuplicateMenuItemOnClick(result.current.widgets[0]!);
+
+    await act(async () => {
+      onClick?.();
+    });
+
+    // The source tabber config is passed as the 4th addWidget argument.
+    expect(addWidget).toHaveBeenCalledWith(
+      expect.any(Object),
+      expect.any(Object),
+      undefined,
+      tabberConfig,
+    );
+
+    expect(setTabbersConfig).toHaveBeenCalledTimes(1);
+    const tabbersUpdater = setTabbersConfig.mock.calls[0]![0] as (
+      prev: Record<string, unknown>,
+    ) => Record<string, unknown>;
+    const newTabbers = tabbersUpdater({});
+    expect(newTabbers['server-widget-oid']).toEqual(tabberConfig);
   });
 
   it('defaults enabled to false when not provided', () => {

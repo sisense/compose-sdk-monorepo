@@ -1,7 +1,9 @@
 import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Filter, Measure } from '@sisense/sdk-data';
 
+import { getRankingMeasureDisplayName } from '@/domains/data-browser/add-measure-popover/measure-ranking-title';
 import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-filter.js';
 import { useSyncedState } from '@/shared/hooks/use-synced-state.js';
 
@@ -141,16 +143,25 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
       [filterFromProps.config.guid, filter.attribute, filterInfo],
     );
 
+    const { t } = useTranslation();
+
+    const collapsedDisplayValues = useMemo((): (string | number)[] => {
+      if (filterInfo.ranked) {
+        return [
+          values[0] as string | number,
+          getRankingMeasureDisplayName((values[1] as Measure) ?? null, t),
+        ];
+      }
+      return valuesToDisplayValues(values);
+    }, [values, filterInfo.ranked, t]);
+
     return (
       <FilterTileContainer
         title={title}
         renderHeaderTitle={renderHeaderTitle}
         renderContent={(collapsed) => {
           return collapsed && isVertical(arrangement) ? (
-            <CriteriaFilterDisplay
-              filterType={filterOption}
-              values={valuesToDisplayValues(values)}
-            />
+            <CriteriaFilterDisplay filterType={filterOption} values={collapsedDisplayValues} />
           ) : (
             <CriteriaFilterMenu
               filterType={filterOption}
@@ -159,6 +170,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
               onUpdate={updateValues}
               disabled={disabled}
               measures={measures}
+              attribute={filter.attribute}
             />
           );
         }}

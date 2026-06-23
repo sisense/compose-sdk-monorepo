@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.30.0] - 2026-06-23
+
+### Added
+- Promote Widget Plugins to public beta
+- Add new `SankeyChart` visualization component for React (beta)
+- Add `includeRowCount` query option to retrieve the total row count alongside query results (beta)
+- Add Top and Bottom (ranking) filter options to the filter editor
+- Add dashboard module system and dashboard header customization APIs (for internal testing)
+
+### Changed
+- `PivotTable` fixes:
+  - Fix incorrect row sorting when sorting by measure on the last row
+  - Fix the measure column being dropped when sorting the last row dimension by its values
+  - Fix the loading spinner never clearing when a query fails, now showing the error
+- Fix Jump to Dashboard icon overlapping the widget warning icon
+- Fix `MemberFilterTile` to show inline errors when a member query fails
+- Fix break-by colors not applying to members whose keys contain encoded characters
+- Fix number formatting in chart series names
+- Fix calculated dimensions truncating dates when a date column is used in the formula context
+- Fix issue with multiple filters on calculated dimension filters returning incorrect results
+- Improve Excel widget export to respect applied filters and apply number formatting (for internal testing)
+- Fix display name support in generated data models
+
+
 ## [2.29.0] - 2026-06-10
 
 ### Added

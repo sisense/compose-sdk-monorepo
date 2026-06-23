@@ -1,6 +1,5 @@
 ---
 title: Plugin DevX Quickstart Guide
-hidden: true
 ---
 
 # Plugin DevX — Quick Start

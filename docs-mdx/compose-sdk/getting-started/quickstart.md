@@ -6,7 +6,7 @@ title: Quickstart Guide (React)
 
 Follow this guide to get started developing applications with Compose SDK.
 
-> **Note**:
+> **Note:**
 > This guide is for [React](./quickstart.md)  ![React Logo](../img/logos/react-logo-small.png). We also have a Quickstart Guide for [Angular](./quickstart-angular.md)  ![Angular Logo](../img/logos/angular-logo-small.png)
 > and [Vue](./quickstart-vue.md) ![Vue Logo](../img/logos/vue-logo-small.png).
 
@@ -23,7 +23,7 @@ Compose SDK contains a set of React components needed to interface with your Sis
 
 ## Quickstart Application Setup
 
-For this quickstart guide we will use the `Vite` project.
+For this quickstart guide, we will use the `Vite` project.
 
 If you want to use your own application, skip to [Installing the SDK packages](#installing-the-sdk-packages).
 
@@ -118,7 +118,7 @@ In order to retrieve data, you need to authenticate your application with your S
 
 ### Authentication
 
-There are a number different ways you can authenticate your application. To learn more, see [Authentication and Security](./authentication-security.md#authentication).
+There are a number of different ways you can authenticate your application. To learn more, see [Authentication and Security](./authentication-security.md#authentication).
 
 Here, we'll use an API Token that we retrieve using the Compose SDK tool. To do so, run the `get-api-token` command:
 
@@ -195,13 +195,13 @@ Use the two components, `SisenseContextProvider` and `Chart`, from `@sisense/sdk
 >
 > -   The `src/App.tsx` file is the main React component.
 > -   The `sample-ecommerce.ts` file generated earlier resides in `src/`.
-> -   The URL to your application (e.g. http://localhost:5173) is already added as an entry to CORS Allowed Origins section on your Sisense instance. If not, you can do so on your Sisense instance by going to _Admin_, then _Security Settings_.
+> -   The URL to your application (e.g. http://localhost:5173) is already added as an entry to the CORS Allowed Origins section on your Sisense instance. If not, you can do so on your Sisense instance by going to _Admin_, then _Security Settings_.
 
 ### Connecting to a Sisense Instance
 
 The `SisenseContextProvider` component contains all relevant information about the Sisense instance and ensures it is available to all nested Compose SDK components. In other words, this is a wrapper for your application so that all the components are able to access the data. The authentication method used to access your Sisense instance is also defined in this component.
 
-The following examples shows how to add `SisenseContextProvider` to `src/App.tsx`. Make sure that all the other SDK components you want to use are nested inside the `SisenseContextProvider` component.
+The following example shows how to add `SisenseContextProvider` to `src/App.tsx`. Make sure that all the other SDK components you want to use are nested inside the `SisenseContextProvider` component.
 
 ```ts
 // src/App.tsx
@@ -239,7 +239,7 @@ Use the `dataOptions` property (`ChartProps` interface) to assign table columns 
 }
 ```
 
-> **Note**
+> **Note:**
 > Use `measureFactory.sum()` from the example above to specify the `sum` type aggregation on the `Revenue` category. This `measureFactory` utility is exported from the `@sisense/sdk-data` library and supports other aggregation types. See the [`measureFactory`](../modules/sdk-data/factories/namespace.measureFactory/index.md) documentation for more information.
 
 The following is a complete example of a rendered chart in an application.

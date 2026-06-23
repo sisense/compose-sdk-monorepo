@@ -6,7 +6,7 @@ title: Quickstart Guide (Angular)
 
 Follow this guide to get started developing applications with Compose SDK.
 
-> **Note**:
+> **Note:**
 > This guide is for [<img src="../img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular.md). We also have a Quickstart Guide for [<img src="../img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart.md) and [<img src="../img/vue-logo.png" height="14px" /> Vue](./quickstart-vue.md).
 
 ## Prerequisites
@@ -20,14 +20,14 @@ Compose SDK contains a set of components needed to interface with your Sisense i
 5. Access to a [Sisense](https://sisense.com) instance with a queryable data source (for example, Sample Healthcare).
 6. Angular application **with TypeScript**. You can use an existing application, or if you don't have one, you can follow the [tutorial](https://angular.io/start) to create one.
 
-> **Package manager**:
-> In Angular `npm` is the default choice and this guide will also adopt `npm`.
+> **Package manager:**
+> In Angular, `npm` is the default choice, and this guide will also adopt `npm`.
 >
 > You can opt to switch to `Yarn` by following the instructions in a [blog post](https://blog.angular-university.io/getting-started-with-angular-setup-a-development-environment-with-yarn-the-angular-cli-setup-an-ide/) from Angular University.
 
 ## Quickstart Application Setup
 
-For this quickstart guide we'll create a new Angular project using [command line tool](https://angular.io/quick-start#create-a-new-angular-app-from-the-command-line).
+For this quickstart guide, we'll create a new Angular project using the [command line tool](https://angular.io/quick-start#create-a-new-angular-app-from-the-command-line).
 
 If you're using an existing project, skip to [Installing the SDK packages](#installing-the-sdk-packages).
 
@@ -160,13 +160,13 @@ In this section, you will add a new component and modify the main app module to 
 > The following assumptions are made about your application:
 >
 > -   The `sample-healthcare.ts` file generated earlier resides in `src/`.
-> -   The URL to your application (e.g. http://localhost:4200) is already added as an entry to CORS Allowed Origins section on your Sisense instance
+> -   The URL to your application (e.g. http://localhost:4200) is already added as an entry to the CORS Allowed Origins section on your Sisense instance.
 
 ### Connecting to a Sisense Instance
 
 Add a Sisense provider that contains all relevant information about the Sisense instance and ensures it is available to all Compose SDK components. The authentication method used to access your Sisense instance is defined in this provider.
 
-The following examples shows how to add a provider to `src/app/app.config.ts`.
+The following example shows how to add a provider to `src/app/app.config.ts`.
 
 ```typescript
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
@@ -197,7 +197,7 @@ To render a chart in your application that queries your data model, you need to 
 
 Here, we'll add a new **Analytics** component with the help of the `ng` CLI tool. You can do it manually. For more information, see the [guide](https://angular.io/guide/component-overview) from Angular.
 
-Run following in your terminal from the project directory:
+Run the following in your terminal from the project directory:
 
 ```sh
 npx ng generate component analytics

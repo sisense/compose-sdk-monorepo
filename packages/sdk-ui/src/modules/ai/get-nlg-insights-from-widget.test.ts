@@ -4,10 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
-import {
-  LEGACY_NARRATIVE_ENDPOINT,
-  UNIFIED_NARRATIVE_ENDPOINT,
-} from '@/infra/api/narrative/narrative-endpoints.js';
+import { LEGACY_NARRATIVE_ENDPOINT } from '@/infra/api/narrative/narrative-endpoints.js';
 
 import { GetNlgInsightsResponse } from './api/types.js';
 import { getNlgInsightsFromWidget } from './get-nlg-insights-from-widget.js';
@@ -46,17 +43,9 @@ const mockNlgResponse: GetNlgInsightsResponse = {
   },
 };
 
-const narrationOptionsUnified = {
-  canGenerateNarrativeViaAI: true,
-};
-
 describe('getNlgInsightsFromWidget', () => {
   beforeEach(() => {
-    mockHttpClientPost.mockImplementation((endpoint: string) =>
-      endpoint === UNIFIED_NARRATIVE_ENDPOINT
-        ? Promise.reject({ status: '404' })
-        : Promise.resolve(mockNlgResponse),
-    );
+    mockHttpClientPost.mockResolvedValue(mockNlgResponse);
   });
 
   afterEach(() => {
@@ -64,14 +53,11 @@ describe('getNlgInsightsFromWidget', () => {
   });
 
   it('returns insights when successful', async () => {
-    const result = await getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient, {
-      ...narrationOptionsUnified,
-    });
+    const result = await getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient);
 
     expect(result).toBe('This is a summary of the chart data');
-    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
-    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
-      2,
+    expect(mockHttpClientPost).toHaveBeenCalledTimes(1);
+    expect(mockHttpClientPost).toHaveBeenCalledWith(
       LEGACY_NARRATIVE_ENDPOINT,
       expect.objectContaining({
         jaql: expect.objectContaining({
@@ -83,14 +69,11 @@ describe('getNlgInsightsFromWidget', () => {
   });
 
   it('returns insights for pivot widget props with pivot JAQL', async () => {
-    const result = await getNlgInsightsFromWidget(mockPivotWidgetProps, mockHttpClient, {
-      ...narrationOptionsUnified,
-    });
+    const result = await getNlgInsightsFromWidget(mockPivotWidgetProps, mockHttpClient);
 
     expect(result).toBe('This is a summary of the chart data');
-    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
-    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
-      2,
+    expect(mockHttpClientPost).toHaveBeenCalledTimes(1);
+    expect(mockHttpClientPost).toHaveBeenCalledWith(
       LEGACY_NARRATIVE_ENDPOINT,
       expect.objectContaining({
         jaql: expect.objectContaining({
@@ -120,7 +103,7 @@ describe('getNlgInsightsFromWidget', () => {
     expect(mockHttpClientPost).not.toHaveBeenCalled();
   });
 
-  it('throws error when dataSource is missing and defaultDataSource is not provided', async () => {
+  it('throws error when dataSource is missing', async () => {
     const propsWithoutDataSource: WidgetProps = {
       ...mockChartWidgetProps,
       dataSource: undefined,
@@ -133,29 +116,17 @@ describe('getNlgInsightsFromWidget', () => {
     expect(mockHttpClientPost).not.toHaveBeenCalled();
   });
 
-  it('uses defaultDataSource when dataSource is missing', async () => {
-    const propsWithoutDataSource: WidgetProps = {
+  it('uses verbosity from aiOptions.narrative', async () => {
+    const props: WidgetProps = {
       ...mockChartWidgetProps,
-      dataSource: undefined,
+      aiOptions: {
+        narrative: { verbosity: 'high' },
+      },
     };
 
-    const result = await getNlgInsightsFromWidget(propsWithoutDataSource, mockHttpClient, {
-      defaultDataSource: 'Default Data Source',
-      ...narrationOptionsUnified,
-    });
+    await getNlgInsightsFromWidget(props, mockHttpClient);
 
-    expect(result).toBe('This is a summary of the chart data');
-    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
-  });
-
-  it('passes verbosity option to the request', async () => {
-    await getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient, {
-      verbosity: 'High',
-      ...narrationOptionsUnified,
-    });
-
-    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
-      2,
+    expect(mockHttpClientPost).toHaveBeenCalledWith(
       LEGACY_NARRATIVE_ENDPOINT,
       expect.objectContaining({
         verbosity: 'High',
@@ -169,9 +140,9 @@ describe('getNlgInsightsFromWidget', () => {
       data: {},
     });
 
-    await expect(
-      getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient, narrationOptionsUnified),
-    ).rejects.toThrow('Invalid response from NLG insights API');
+    await expect(getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient)).rejects.toThrow(
+      'Invalid response from NLG insights API',
+    );
   });
 
   it('throws error when API response is invalid (missing answer)', async () => {
@@ -182,26 +153,26 @@ describe('getNlgInsightsFromWidget', () => {
       },
     });
 
-    await expect(
-      getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient, narrationOptionsUnified),
-    ).rejects.toThrow('Invalid response from NLG insights API');
+    await expect(getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient)).rejects.toThrow(
+      'Invalid response from NLG insights API',
+    );
   });
 
   it('throws error when API response is null', async () => {
     mockHttpClientPost.mockResolvedValue(null);
 
-    await expect(
-      getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient, narrationOptionsUnified),
-    ).rejects.toThrow('Invalid response from NLG insights API');
+    await expect(getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient)).rejects.toThrow(
+      'Invalid response from NLG insights API',
+    );
   });
 
   it('throws error when HTTP request fails', async () => {
     const httpError = new Error('Network error');
     mockHttpClientPost.mockRejectedValue(httpError);
 
-    await expect(
-      getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient, narrationOptionsUnified),
-    ).rejects.toThrow('Network error');
+    await expect(getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient)).rejects.toThrow(
+      'Network error',
+    );
   });
 
   it('handles filters in WidgetProps', async () => {
@@ -210,10 +181,9 @@ describe('getNlgInsightsFromWidget', () => {
       filters: [filterFactory.members(DM.Commerce.Condition, ['New'])],
     };
 
-    await getNlgInsightsFromWidget(propsWithFilters, mockHttpClient, narrationOptionsUnified);
+    await getNlgInsightsFromWidget(propsWithFilters, mockHttpClient);
 
-    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
-      2,
+    expect(mockHttpClientPost).toHaveBeenCalledWith(
       LEGACY_NARRATIVE_ENDPOINT,
       expect.objectContaining({
         jaql: expect.objectContaining({
@@ -237,14 +207,10 @@ describe('getNlgInsightsFromWidget', () => {
       dataSource: { title: 'My Data Source', type: 'live' },
     };
 
-    const result = await getNlgInsightsFromWidget(
-      propsWithDataSourceObject,
-      mockHttpClient,
-      narrationOptionsUnified,
-    );
+    const result = await getNlgInsightsFromWidget(propsWithDataSourceObject, mockHttpClient);
 
     expect(result).toBe('This is a summary of the chart data');
-    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
+    expect(mockHttpClientPost).toHaveBeenCalledTimes(1);
   });
 
   it('handles table chart type with columns containing attributes and measures', async () => {
@@ -262,16 +228,11 @@ describe('getNlgInsightsFromWidget', () => {
       },
     };
 
-    const result = await getNlgInsightsFromWidget(
-      tableWidgetProps,
-      mockHttpClient,
-      narrationOptionsUnified,
-    );
+    const result = await getNlgInsightsFromWidget(tableWidgetProps, mockHttpClient);
 
     expect(result).toBe('This is a summary of the chart data');
-    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
-    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
-      2,
+    expect(mockHttpClientPost).toHaveBeenCalledTimes(1);
+    expect(mockHttpClientPost).toHaveBeenCalledWith(
       LEGACY_NARRATIVE_ENDPOINT,
       expect.objectContaining({
         jaql: expect.objectContaining({
@@ -279,20 +240,6 @@ describe('getNlgInsightsFromWidget', () => {
           metadata: expect.any(Array),
         }),
       }),
-    );
-  });
-
-  it('falls back to legacy endpoint when unified returns 404', async () => {
-    const result = await getNlgInsightsFromWidget(mockChartWidgetProps, mockHttpClient, {
-      ...narrationOptionsUnified,
-    });
-
-    expect(result).toBe('This is a summary of the chart data');
-    expect(mockHttpClientPost).toHaveBeenCalledTimes(2);
-    expect(mockHttpClientPost).toHaveBeenNthCalledWith(
-      2,
-      LEGACY_NARRATIVE_ENDPOINT,
-      expect.objectContaining({ jaql: expect.any(Object) }),
     );
   });
 });

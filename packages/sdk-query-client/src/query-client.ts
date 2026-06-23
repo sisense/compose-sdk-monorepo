@@ -12,6 +12,7 @@ import {
 } from './query-task-manager/query-task-passport.js';
 import { TranslatableError } from './translation/translatable-error.js';
 import {
+  ExecutingCountRowsQueryResult,
   ExecutingCsvQueryResult,
   ExecutingPivotQueryResult,
   ExecutingQueryResult,
@@ -64,6 +65,42 @@ export class DimensionalQueryClient implements QueryClient {
       resultPromise: new Promise((resolve, reject) => {
         validateQueryDescription(queryDescription);
         void this.taskManager.executeQuerySending(taskPassport).then((executionResult) => {
+          if (executionResult.status === ExecutionResultStatus.SUCCESS) {
+            resolve(executionResult.result!);
+          } else {
+            reject(executionResult.error);
+          }
+        });
+      }),
+      cancel: (reason?: string) =>
+        this.taskManager.cancel(taskPassport.taskId, reason || UNSPECIFIED_REASON),
+    };
+  }
+
+  /**
+   * Executes a query that returns only the total row count of the given query,
+   * ignoring any `count`/`offset` paging.
+   *
+   * Requires a Sisense instance that supports the row count API; on older versions
+   * the returned promise rejects since the endpoint does not exist.
+   *
+   * @param queryDescription - all options that describe the query
+   * @param config - query execution configuration
+   * @returns promise that resolves to the total row count and cancel function that can be used to cancel sent query
+   * @throws Error if query description is invalid
+   */
+  public executeCountRowsQuery(
+    queryDescription: QueryDescription,
+    config?: QueryExecutionConfig,
+  ): ExecutingCountRowsQueryResult {
+    const taskPassport = new QueryTaskPassport('SEND_COUNT_ROWS_QUERY', queryDescription, {
+      ...(config ? config : {}),
+      shouldSkipHighlightsWithoutAttributes: this.shouldSkipHighlightsWithoutAttributes || false,
+    });
+    return {
+      resultPromise: new Promise((resolve, reject) => {
+        validateQueryDescription(queryDescription);
+        void this.taskManager.executeCountRowsSending(taskPassport).then((executionResult) => {
           if (executionResult.status === ExecutionResultStatus.SUCCESS) {
             resolve(executionResult.result!);
           } else {

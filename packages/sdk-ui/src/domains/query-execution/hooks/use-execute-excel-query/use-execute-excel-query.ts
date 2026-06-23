@@ -23,12 +23,16 @@ function buildExcelExportPayloadFromParams(
   widgetId: string,
   dataSource: DataSource,
 ): XlsxExportRequestPayload {
-  const jaql = buildJaqlForExcelExport(params, {
-    widgetOid: widgetId,
-    widgetTitle: params.widgetTitle ?? '',
-    dataSource,
-    mergeRows: params.mergeRows,
-  });
+  const { dimensions, measures, filters } = params;
+  const jaql = buildJaqlForExcelExport(
+    { dimensions, measures, filters },
+    {
+      widgetOid: widgetId,
+      widgetTitle: params.widgetTitle ?? '',
+      dataSource,
+      mergeRows: params.mergeRows,
+    },
+  );
   return buildXlsxExportPayload(
     {
       widgetId,

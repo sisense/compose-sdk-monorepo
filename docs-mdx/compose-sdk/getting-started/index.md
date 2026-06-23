@@ -17,4 +17,4 @@ indexTopics:
 
 # Getting Started
 
-Here you'll find guides that will help get started with Compose SDK.
+Here you'll find guides that will help you get started with Compose SDK.

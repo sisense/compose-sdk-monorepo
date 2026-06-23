@@ -11,6 +11,7 @@ import {
 export const formatNumbers = (
   table: DataTable,
   chartDataOptions: TableDataOptionsInternal,
+  defaultNumberFormattingEnabled = true,
 ): DataTable => {
   // If there are no numberFormatConfigs, there is no formatting to be done
   if (!table.columns.some((c) => isNumber(c.type))) return table;
@@ -24,10 +25,14 @@ export const formatNumbers = (
     return row.map((r, index) => {
       const columnType = columns[index].type;
 
-      const numberFormatConfig = getCompleteNumberFormatConfig(
-        chartDataOptions.columns[index].numberFormatConfig,
-      );
       if (isNumber(columnType)) {
+        const hasExplicitConfig = chartDataOptions.columns[index].numberFormatConfig !== undefined;
+        if (!defaultNumberFormattingEnabled && !hasExplicitConfig) {
+          return r;
+        }
+        const numberFormatConfig = getCompleteNumberFormatConfig(
+          chartDataOptions.columns[index].numberFormatConfig,
+        );
         const compareValue = createCompareValue(r.displayValue, columnType);
         return {
           displayValue: applyFormatPlainText(numberFormatConfig, compareValue.value as number),

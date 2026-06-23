@@ -1,4 +1,4 @@
-import { type ReactNode, useMemo } from 'react';
+import { type ReactNode, type RefObject, useMemo } from 'react';
 
 import styled from '@emotion/styled';
 import get from 'lodash-es/get';
@@ -34,6 +34,12 @@ export interface WidgetContainerProps {
   bottomSlot?: ReactNode;
   children: ReactNode;
   onRefresh?: () => void;
+  /**
+   * Ref attached to the content area below the header (topSlot + chart + bottomSlot).
+   * Use to measure the available height for narrative-to-chart ratio calculations.
+   * @internal
+   */
+  contentAreaRef?: RefObject<HTMLDivElement | null>;
 }
 
 /** @internal */
@@ -57,6 +63,7 @@ export const RawWidgetContainer: React.FC<WidgetContainerProps> = ({
   bottomSlot,
   children,
   onRefresh = () => {},
+  contentAreaRef,
 }: WidgetContainerProps) => {
   const { errors, warnings } = useWidgetErrorsAndWarnings();
   const { themeSettings } = useThemeContext();
@@ -97,17 +104,24 @@ export const RawWidgetContainer: React.FC<WidgetContainerProps> = ({
               onRefresh={onRefresh}
             />
           )}
-          {topSlot}
-          <ThemeProvider theme={contentTheme}>
-            <WidgetContainerContent
-              styleOptions={styleOptions}
-              theme={themeSettings}
-              data-component="widget-container-content"
-            >
-              {children}
-            </WidgetContainerContent>
-          </ThemeProvider>
-          {bottomSlot}
+          <WidgetContentArea
+            ref={contentAreaRef}
+            styleOptions={styleOptions}
+            theme={themeSettings}
+            data-component="widget-content-area"
+          >
+            {topSlot}
+            <ThemeProvider theme={contentTheme}>
+              <WidgetContainerContent
+                styleOptions={styleOptions}
+                theme={themeSettings}
+                data-component="widget-container-content"
+              >
+                {children}
+              </WidgetContainerContent>
+            </ThemeProvider>
+            {bottomSlot}
+          </WidgetContentArea>
         </WidgetContainerCard>
       </WidgetContainerLayout>
     </WidgetContainerRoot>
@@ -142,6 +156,16 @@ const WidgetContainerCard = styled.div<Styleable & Themable>`
   border-radius: ${({ styleOptions, theme }) =>
     WidgetCornerRadius[styleOptions?.cornerRadius || theme.widget.cornerRadius] || '0'};
   box-shadow: ${({ styleOptions, theme }) => getShadowValue(styleOptions, theme)};
+`;
+
+const WidgetContentArea = styled.div<Styleable & Themable>`
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: ${({ styleOptions, theme }) =>
+    styleOptions?.backgroundColor || theme.chart?.backgroundColor};
 `;
 
 const WidgetContainerContent = styled.div<Styleable & Themable>`

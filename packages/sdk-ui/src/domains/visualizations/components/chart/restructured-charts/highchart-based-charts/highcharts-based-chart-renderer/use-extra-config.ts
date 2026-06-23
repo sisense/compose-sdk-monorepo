@@ -18,8 +18,16 @@ export function useExtraConfig(): BuildContext<HighchartBasedChartTypes>['extraC
       translate,
       themeSettings,
       dateFormatter,
-      accessibilityEnabled: app?.settings.accessibilityConfig?.enabled || false,
+      accessibilityEnabled: app?.settings?.accessibilityConfig?.enabled || false,
+      defaultNumberFormattingEnabled:
+        app?.settings?.chartConfig?.defaultNumberFormatting?.enabled ?? true,
     }),
-    [translate, themeSettings, dateFormatter, app?.settings.accessibilityConfig?.enabled],
+    [
+      translate,
+      themeSettings,
+      dateFormatter,
+      app?.settings?.accessibilityConfig?.enabled,
+      app?.settings?.chartConfig?.defaultNumberFormatting?.enabled,
+    ],
   );
 }

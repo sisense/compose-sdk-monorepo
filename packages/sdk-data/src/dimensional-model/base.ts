@@ -40,16 +40,14 @@ export abstract class DimensionalElement implements Element {
   }
 
   /**
-   * Gets the element's title
-   * @internal
+   * Gets the display label shown in UI labels and JAQL titles.
    */
   get title(): string {
     return this._title;
   }
 
   /**
-   * Sets the element's title
-   * @internal
+   * Sets the display label shown in UI labels and JAQL titles.
    */
   set title(value: string) {
     this._title = value;
@@ -68,10 +66,10 @@ export abstract class DimensionalElement implements Element {
     desc?: string,
     dataSource?: JaqlDataSource,
     composeCode?: string,
+    title?: string,
   ) {
     this._name = name;
-    // default title to name to retain the original name in the data model
-    this._title = name;
+    this._title = title ?? name;
     this.type = type;
     this.description = desc || '';
 
@@ -112,6 +110,7 @@ export abstract class DimensionalElement implements Element {
   serialize(): JSONObject {
     return {
       name: this.name,
+      title: this.title,
       type: this.type,
       description: this.description,
       dataSource: this.dataSource,
@@ -132,6 +131,23 @@ export abstract class DimensionalElement implements Element {
   toString(): string {
     return this.jaql();
   }
+}
+
+/**
+ * Resolves identity `name` and display `title` from create* JSON input.
+ * Supports legacy `title`-only input (used as identity when `name` is omitted).
+ *
+ * @param json - JSON object with optional name and title
+ * @returns Resolved name and title
+ * @internal
+ */
+export function resolveElementNames(json: { name?: string; title?: string }): {
+  name: string;
+  title: string;
+} {
+  const name = json.name || json.title || '';
+  const title = json.title ?? name;
+  return { name, title };
 }
 
 /**
@@ -161,7 +177,6 @@ export function normalizeName(name: string): string {
  * needsNormalization("Rev.2024")   // true (dot)
  * needsNormalization("2024Data")   // true (starts with number)
  * needsNormalization("Revenue")    // false
- *
  * @param name - The name to check
  * @returns true if the name would be modified by normalizeName()
  * @internal
@@ -180,7 +195,6 @@ export function needsNormalization(name: string): boolean {
  * @example
  * wrapIfNeedsNormalization("Age Range")  // "[[Age Range]]"
  * wrapIfNeedsNormalization("Revenue")    // "Revenue" (unchanged)
- *
  * @param name - The name to potentially wrap
  * @returns The name wrapped in [[]] if it needs normalization, otherwise unchanged
  * @internal

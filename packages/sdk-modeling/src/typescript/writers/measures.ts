@@ -8,7 +8,7 @@
 import { BaseMeasure, MeasureTemplate, normalizeName } from '@sisense/sdk-data';
 
 import { prepareDescription } from '../utils/prepare-description.js';
-import { ElementWriter, NEWLINE, rnt, writeIndented } from './base.js';
+import { ElementWriter, escapeSpecialChars, NEWLINE, rnt, writeIndented } from './base.js';
 
 export abstract class MeasureWriter<T> extends ElementWriter<T> {
   readonly isNested: boolean;
@@ -40,10 +40,15 @@ export class BaseMeasureWriter extends MeasureWriter<BaseMeasure> {
   }
 
   writeDef(stream: NodeJS.WritableStream, idnt: number): void {
+    const titleProperty =
+      this.element.title && this.element.title !== this.element.name
+        ? `${rnt(idnt + 1)}title: "${escapeSpecialChars(this.element.title)}", `
+        : '';
+
     writeIndented(
       stream,
       `<BaseMeasure>createMeasure({\
-                ${rnt(idnt + 1)}name: "${this.name}", \
+                ${rnt(idnt + 1)}name: "${escapeSpecialChars(this.element.name)}", ${titleProperty}\
                 ${rnt(idnt + 1)}expression: "${this.element.attribute.expression}", \
                 ${rnt(idnt + 1)}agg: "${this.element.aggregation}"${
                   this.element.getFormat()
@@ -76,10 +81,15 @@ export class MeasureTemplateWriter extends MeasureWriter<MeasureTemplate> {
   }
 
   writeDef(stream: NodeJS.WritableStream, ident: number): void {
+    const titleProperty =
+      this.element.title && this.element.title !== this.element.name
+        ? `${rnt(ident + 1)}title: "${escapeSpecialChars(this.element.title)}", `
+        : '';
+
     writeIndented(
       stream,
       `<MeasureTemplate>createMeasure({\
-                ${rnt(ident + 1)}name: "${this.name}", \
+                ${rnt(ident + 1)}name: "${escapeSpecialChars(this.element.name)}", ${titleProperty}\
                 ${rnt(ident + 1)}expression: "${this.element.attribute.expression}", \
                 ${rnt(ident + 1)}agg: "*"${
                   this.element.getFormat()

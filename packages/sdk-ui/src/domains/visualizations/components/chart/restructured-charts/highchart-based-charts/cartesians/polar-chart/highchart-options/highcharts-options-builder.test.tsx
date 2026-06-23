@@ -87,6 +87,7 @@ describe('polar-chart highcharts-options-builder', () => {
       themeSettings: {} as any,
       dateFormatter: vi.fn() as any,
       accessibilityEnabled: false,
+      defaultNumberFormattingEnabled: true,
     },
   };
 

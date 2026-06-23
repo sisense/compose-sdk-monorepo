@@ -68,12 +68,11 @@ Boolean flag to toggle continuous timeline on this date column.
 
 > **dateFormat**?: `string`
 
-Date format.
+Date format for display using [date-fns `format` token syntax](https://date-fns.org/v2.29.3/docs/format)
+(for example `yyyy`, `MM`, `dd`, `HH:mm:ss`, or `yy-MM`). This is **not** the ECMAScript Date Time String Format.
 
-See [ECMAScript Date Time String Format](https://tc39.es/ecma262/multipage/numbers-and-dates.html#sec-date-time-string-format)
-
-Note that 'YYYY' and 'DD' have been disabled since they often get confused with 'yyyy' and 'dd'
-and can produce unexpected results.
+Note that `YYYY` and `DD` are discouraged since they are often confused with `yyyy` and `dd` and can produce
+unexpected results.
 
 ***
 

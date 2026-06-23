@@ -175,6 +175,25 @@ export type AppConfig = {
   };
 
   /**
+   * Configuration of the Narrative feature for widgets
+   * Temporary feature flag to explicitly enable narrative on widgets
+   * (avoid narratives appearing in fusion dashboards/widgets before this feature is released)
+   * @sisenseInternal
+   */
+  narrativeConfig?: {
+    /**
+     * Whether to enable or disable the Widget Narrative feature
+     *
+     * When `true`, the Widget Narrative feature is enabled if the Fusion server supports it.
+     *
+     * When `false`, the Widget Narrative feature is disabled.
+     *
+     * @default false
+     */
+    widgetNarrativeEnabled?: boolean;
+  };
+
+  /**
    * Global configuration for some specific aspects of data visualizations.
    */
   chartConfig?: {

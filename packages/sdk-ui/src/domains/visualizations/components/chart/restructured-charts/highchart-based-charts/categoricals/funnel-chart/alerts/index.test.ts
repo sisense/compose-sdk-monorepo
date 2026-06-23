@@ -74,6 +74,7 @@ const createMockBuildContext = (
       } as any,
       dateFormatter: (date: Date) => date.toISOString(),
       accessibilityEnabled: false,
+      defaultNumberFormattingEnabled: true,
     },
   };
 };

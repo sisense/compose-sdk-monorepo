@@ -290,11 +290,13 @@ const translation: TranslationDictionary = {
       incorrectResponse: 'Falsche Antwort',
       clearChat: 'Chat löschen',
       refresh: 'Aktualisieren',
-      readMore: 'Mehr lesen',
+      readMore: 'Mehr anzeigen',
       collapse: 'Einklappen',
       yes: 'Ja',
       no: 'Nein',
       seeMore: 'Mehr anzeigen',
+      generateNarrative: 'KI-Narrativ generieren',
+      hideNarrative: 'KI-Narrativ ausblenden',
     },
     disclaimer: {
       poweredByAi:
@@ -360,6 +362,8 @@ const translation: TranslationDictionary = {
       from: 'Von',
       to: 'Bis',
       includeCurrent: 'Aktuelles einschließen',
+      rankedBy: 'Sortiert nach',
+      selectField: 'Feld auswählen',
     },
     placeholders: {
       selectFromList: 'Aus Liste auswählen',
@@ -384,6 +388,8 @@ const translation: TranslationDictionary = {
       greaterThan: 'Größer als',
       greaterThanOrEqual: 'Gleich oder größer als',
       isWithin: 'Ist innerhalb',
+      top: 'Top',
+      bottom: 'Letzte',
     },
     validationErrors: {
       invalidNumber: 'Nur Zahlen',
@@ -480,6 +486,12 @@ const translation: TranslationDictionary = {
     table: {
       label: 'Datentabelle',
     },
+    sankey: {
+      alerts: {
+        tooManyStages:
+          'Dieses Sankey-Diagramm hat {{stageCount}} Stufen; mehr als {{softLimit}} führt oft zu einem unlesbaren Diagramm. Reduzieren Sie die Kategoriespalten oder verschärfen Sie die Filter.',
+      },
+    },
   },
   loadingOverlay: {
     label: 'Inhalt wird geladen',
@@ -504,6 +516,17 @@ const translation: TranslationDictionary = {
     stdev: 'Standardabweichung',
     median: 'Median',
     variance: 'Varianz',
+  },
+  measuresAgg: {
+    countDistinct: '# eindeutige',
+    count: '# von',
+    sum: 'Gesamt',
+    average: 'Durchschnitt',
+    min: 'Min',
+    max: 'Max',
+    median: 'Median von',
+    variance: 'Varianz von',
+    stdev: 'Standardabweichung von',
   },
 };
 

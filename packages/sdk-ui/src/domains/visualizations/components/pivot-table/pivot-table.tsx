@@ -30,6 +30,10 @@ import { usePivotDataLoading } from './hooks/use-pivot-data-loading';
 import { usePivotDataService } from './hooks/use-pivot-data-service';
 import { usePivotTableDataOptionsInternal } from './hooks/use-pivot-table-data-options-internal';
 import { useRenderPivot } from './hooks/use-render-pivot';
+import {
+  hasPivotContainerSizeChanged,
+  resolvePivotContainerSize,
+} from './resolve-pivot-container-size';
 import { preparePivotRowsSortCriteriaList } from './sorting-utils';
 
 export const PIVOT_WIDGET_PADDING = 8;
@@ -191,6 +195,7 @@ export const PivotTable = asSisenseComponent({
   const pivotBuilder = usePivotBuilder({ pivotClient });
   const isJaqlChanged = useHasChanged(jaql);
   const isForceReload = refreshCounter > 0 && useHasChanged(refreshCounter);
+  const isAutoHeight = styleOptions?.isAutoHeight ?? false;
 
   /*
    * Detect client-side formatting changes that don't alter the JAQL query
@@ -269,11 +274,18 @@ export const PivotTable = asSisenseComponent({
 
   // The pivot data layer depends on the pivot's render props.
   // Therefore, "usePivotDataLoading" hook should be invoked only after the "useRenderPivot" hook.
-  const { isLoading, isNoResults } = usePivotDataLoading({
+  const {
+    isLoading,
+    isNoResults,
+    error: queryError,
+  } = usePivotDataLoading({
     jaql,
     pivotBuilder,
     isForceReload: isForceReload || isFormattingOnlyChange,
   });
+  if (queryError) {
+    throw queryError;
+  }
 
   const onSort = useCallback(
     (payload: SortingSettingsChangePayload) => {
@@ -292,22 +304,32 @@ export const PivotTable = asSisenseComponent({
     };
   }, [pivotBuilder, onSort]);
 
+  useEffect(() => {
+    if (isJaqlChanged || isForceReload) {
+      setSize(null);
+    }
+  }, [isJaqlChanged, isForceReload]);
+
   const updateSize = useCallback(
     (containerSize: ContainerSize) => {
-      const height = containerSize.height - PIVOT_WIDGET_PADDING;
-      const width = containerSize.width - 2 * PIVOT_WIDGET_PADDING;
-      if (width !== size?.width || height !== size?.height) {
-        setSize({ width, height });
+      const nextSize = resolvePivotContainerSize(
+        containerSize,
+        { vertical: PIVOT_WIDGET_PADDING, horizontal: 2 * PIVOT_WIDGET_PADDING },
+        size,
+        isAutoHeight,
+      );
+      if (hasPivotContainerSizeChanged(size, nextSize)) {
+        setSize(nextSize);
       }
     },
-    [size, setSize],
+    [size, isAutoHeight],
   );
 
   useEffect(() => {
-    if (styleOptions?.isAutoHeight && isNoResults) {
+    if (isAutoHeight && isNoResults) {
       onHeightChange?.(NO_RESULTS_HEIGHT);
     }
-  }, [pivotTotalHeight, styleOptions?.isAutoHeight, isNoResults, onHeightChange]);
+  }, [pivotTotalHeight, isAutoHeight, isNoResults, onHeightChange]);
 
   return (
     <DynamicSizeContainer
@@ -315,7 +337,7 @@ export const PivotTable = asSisenseComponent({
       size={{
         width: styleOptions?.width,
         height:
-          styleOptions?.isAutoHeight && !isNoResults
+          isAutoHeight && !isNoResults
             ? pivotTotalHeight ?? styleOptions?.height
             : styleOptions?.height,
       }}

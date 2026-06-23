@@ -7,6 +7,9 @@ indexTopics:
     - title: Generative AI Tutorial
       description: Build applications using Generative AI components from Compose SDK
       link: ./tutorial-genai/
+    - title: Widget Plugin Tutorial
+      description: Build custom visualization plugins for Compose SDK dashboards
+      link: ./tutorial-widget-plugins/
 ---
 
 # Tutorials

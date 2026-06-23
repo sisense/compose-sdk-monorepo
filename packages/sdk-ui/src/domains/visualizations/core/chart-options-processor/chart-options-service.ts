@@ -261,6 +261,7 @@ export type PlotOptions = {
   scatter?: ChartPlotOptions;
   arearange?: ChartPlotOptions;
   heatmap?: ChartPlotOptions;
+  sankey?: ChartPlotOptions;
   streamgraph?: {
     lineWidth?: number;
     fillOpacity?: number;
@@ -293,6 +294,8 @@ export type HighchartsOptionsInternal = {
     spacing?: number[];
     marginTop?: number;
     alignTicks?: boolean;
+    /** When true, x and y axes are swapped (e.g. vertical Sankey). */
+    inverted?: boolean;
     polar: boolean;
     zoomType?: 'x' | 'y';
     scrollablePlotArea?: {

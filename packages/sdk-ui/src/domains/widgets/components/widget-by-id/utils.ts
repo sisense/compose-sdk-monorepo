@@ -106,6 +106,11 @@ export function getFusionWidgetType(
     return 'pivot2';
   }
   if (widgetType === 'custom') {
+    // Officially-supported plugin widgets (e.g. Tabber) map to their Fusion DTO type
+    // (`'tabber-buttons'` → `'WidgetsTabber'`); other custom widgets pass through as-is.
+    if (customWidgetType && isSupportedPluginCsdkWidget(customWidgetType)) {
+      return csdkPluginWidgetTypeToFusion(customWidgetType as CsdkPluginWidgetType);
+    }
     return customWidgetType ?? 'custom';
   }
   if (widgetType === 'text') {

@@ -66,6 +66,7 @@ export const validateCartesianChartDataOptions = (
 export const cartesianData = (
   dataOptions: CartesianChartDataOptionsInternal,
   dataTable: DataTable,
+  defaultNumberFormattingEnabled = true,
 ): CartesianChartData => {
   if (dataTable.rows.length === 0) {
     return { type: 'cartesian', series: [], xValues: [], xAxisCount: 0 };
@@ -111,6 +112,7 @@ export const cartesianData = (
           yColumnNames[0],
           seriesColumns,
           dataOptions.breakBy,
+          defaultNumberFormattingEnabled,
         )
       : withMultipleValues(dataTable, xValuesOrdered, xColumns, yColumnNames, dataOptions.y);
 
@@ -306,14 +308,20 @@ const withMultipleValues = (
   return { xValues: xValuesOrdered, series: seriesValues };
 };
 
-const getSeriesName = (row: Row, columns: readonly Column[], breakBy: StyledColumn[]) => {
-  // maybe format series value
+const getSeriesName = (
+  row: Row,
+  columns: readonly Column[],
+  breakBy: StyledColumn[],
+  defaultNumberFormattingEnabled: boolean,
+) => {
   return getValues(row, columns)
     .map((data, index) => {
-      const numberFormatConfig = getCompleteNumberFormatConfig(breakBy[index].numberFormatConfig);
-      return isNumber(columns[index].type)
-        ? applyFormatPlainText(numberFormatConfig, parseFloat(data.displayValue))
-        : data.displayValue;
+      const hasExplicitConfig = breakBy[index].numberFormatConfig !== undefined;
+      if (isNumber(columns[index].type) && (defaultNumberFormattingEnabled || hasExplicitConfig)) {
+        const numberFormatConfig = getCompleteNumberFormatConfig(breakBy[index].numberFormatConfig);
+        return applyFormatPlainText(numberFormatConfig, parseFloat(data.displayValue));
+      }
+      return data.displayValue;
     })
     .join(',');
 };
@@ -341,6 +349,7 @@ const withBreakBy = (
   yColumnName: string,
   seriesColumns: Column[],
   breakBy: StyledColumn[],
+  defaultNumberFormattingEnabled: boolean,
 ) => {
   const yAggColumn = getColumnByName(dataTable, yColumnName);
 
@@ -356,6 +365,7 @@ const withBreakBy = (
         firstRow,
         seriesColumns,
         breakBy,
+        defaultNumberFormattingEnabled,
       ),
       seriesValues: getSeriesValues(firstRow, seriesColumns),
       rowsByXColumns: getIndexedRows(rows, xColumns),

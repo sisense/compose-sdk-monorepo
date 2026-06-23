@@ -1,13 +1,26 @@
-import { Sort, withoutGuids } from '@sisense/sdk-data';
+import {
+  CalculatedMeasure,
+  FilterRelations,
+  isFilterRelations,
+  Measure,
+  Sort,
+  withoutGuids,
+} from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
+import { SAMPLE_ECOMMERCE_MEASURED_VALUE_REVENUE_BY_GENDER_QUERY } from '../../../../__mocks__/nlq-v3-translator/example-queries.js';
 import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
 } from '../../__mocks__/mock-data-sources.js';
 import { NlqTranslationErrorResult } from '../../types.js';
+import { getSuccessData } from '../shared/utils/translation-helpers.js';
 import type { QueryJSON } from '../types.js';
 import { translateQueryFromJSON } from './translate-query-from-json.js';
+
+function isCalculatedMeasure(measure: Measure): measure is CalculatedMeasure {
+  return 'expression' in measure && 'context' in measure;
+}
 
 describe('translateQueryFromJSON', () => {
   it('should translate query json', () => {
@@ -156,6 +169,131 @@ describe('translateQueryFromJSON', () => {
         input: invalidFilter,
         message: expect.stringContaining("Table 'NonExistentTable' not found in the data model"),
       });
+    });
+
+    it('should return structured error when measuredValue filters contain FilterRelations', () => {
+      const measuredValueWithLogicOr = {
+        function: 'measureFactory.measuredValue',
+        args: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Filtered Revenue'],
+          },
+          [
+            {
+              function: 'filterFactory.logic.or',
+              args: [
+                {
+                  function: 'filterFactory.members',
+                  args: ['DM.Country.Country', ['United States']],
+                },
+                {
+                  function: 'filterFactory.members',
+                  args: ['DM.Commerce.Gender', ['Male']],
+                },
+              ],
+            },
+          ],
+        ],
+      };
+      const mockQueryJSON = {
+        dimensions: [],
+        measures: [measuredValueWithLogicOr],
+        filters: [],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON as QueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(false);
+      const errorResponse = result as NlqTranslationErrorResult;
+      expect(errorResponse.errors[0]).toMatchObject({
+        path: 'measures[0]',
+        input: measuredValueWithLogicOr,
+        message: expect.stringContaining(
+          'FilterRelations (filterFactory.logic.or / filterFactory.logic.and) is not supported inside measureFactory.measuredValue filters',
+        ),
+      });
+    });
+
+    it('should translate measuredValue with plain filters successfully', () => {
+      const result = translateQueryFromJSON({
+        data: SAMPLE_ECOMMERCE_MEASURED_VALUE_REVENUE_BY_GENDER_QUERY,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(true);
+      const query = getSuccessData(result);
+      const { measures, dimensions, filters: queryFilters } = query;
+      expect(measures).toHaveLength(1);
+      expect(dimensions).toEqual([]);
+      expect(queryFilters).toEqual([]);
+
+      const measure = measures![0]!;
+      expect(measure.name).toBe('Revenue (Female and Male)');
+      expect(measure.composeCode).toContain('measureFactory.measuredValue');
+      expect(measure.composeCode).toContain('filterFactory.members');
+      expect(measure.composeCode).toContain("'Revenue (Female and Male)'");
+      expect(isCalculatedMeasure(measure)).toBe(true);
+      const calculatedMeasure = measure as CalculatedMeasure;
+      expect(calculatedMeasure.expression).toMatch(/^\(.+,/);
+      expect(Object.keys(calculatedMeasure.context)).toHaveLength(2);
+    });
+
+    it('should translate query-level FilterRelations when not inside measuredValue', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Category.Category'],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+        ],
+        filters: [
+          {
+            function: 'filterFactory.logic.or',
+            args: [
+              {
+                function: 'filterFactory.members',
+                args: ['DM.Country.Country', ['United States']],
+              },
+              {
+                function: 'filterFactory.members',
+                args: ['DM.Commerce.Gender', ['Male']],
+              },
+            ],
+          },
+        ],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON as QueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(true);
+      const query = getSuccessData(result);
+      const { measures, dimensions, filters: queryFilters } = query;
+      expect(dimensions).toHaveLength(1);
+      expect(measures).toHaveLength(1);
+      expect(measures![0]?.name).toBe('Total Revenue');
+      expect(queryFilters).toBeDefined();
+      expect(isFilterRelations(queryFilters)).toBe(true);
+      const filters = queryFilters as FilterRelations;
+      expect(filters.operator).toBe('OR');
+      expect(filters.composeCode).toContain('filterFactory.logic.or');
+      expect(withoutGuids(filters)).toMatchSnapshot();
     });
 
     it('should return structured error when highlights translation fails', () => {

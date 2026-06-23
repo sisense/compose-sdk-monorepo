@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { type FunctionComponent, useCallback, useMemo, useState } from 'react';
 
 import { getDataSourceName } from '@sisense/sdk-data';
@@ -25,6 +24,7 @@ import { WidgetContainer } from '../../shared/widget-container';
 import { ChartWidgetProps } from './types';
 import { useChartWidgetCsvDownload } from './use-chart-widget-csv-download.js';
 import { useChartWidgetExcelDownload } from './use-chart-widget-excel-download.js';
+import { useChartWidgetNarrative } from './use-chart-widget-narrative.js';
 import { useWithChartWidgetDrilldown } from './use-with-chart-widget-drilldown';
 
 /**
@@ -124,6 +124,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     chartType,
     dataOptions,
     dataSource,
+    filters: props.filters,
     config: props.config,
     id: props.id,
   });
@@ -132,6 +133,14 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     propsToExtend: props,
     onDrilldownSelectionsChange,
   });
+
+  const {
+    contentAreaRef,
+    styleOptionsWithNarrative,
+    narrativeTopSlot,
+    narrativeBottomSlot,
+    narrativeAloneContent,
+  } = useChartWidgetNarrative({ propsWithDrilldown, styleOptions });
 
   const highlightSelection = useHighlightSelection({
     chartType,
@@ -202,18 +211,27 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     <DynamicSizeContainer defaultSize={defaultSize} size={size}>
       <WidgetContainer
         {...props}
+        styleOptions={styleOptionsWithNarrative}
         headerConfig={headerConfig}
         titleEditor={titleEditor}
+        contentAreaRef={contentAreaRef}
         topSlot={
           <>
             {props.topSlot}
+            {narrativeTopSlot}
             {breadcrumbs}
           </>
         }
         dataSetName={dataSource && getDataSourceName(dataSource)}
         onRefresh={() => setRefreshCounter(refreshCounter + 1)}
+        bottomSlot={
+          <>
+            {narrativeBottomSlot}
+            {props.bottomSlot}
+          </>
+        }
       >
-        <Chart {...chartProps} />
+        {narrativeAloneContent ?? <Chart {...chartProps} />}
       </WidgetContainer>
     </DynamicSizeContainer>
   );

@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import {
-  Attribute,
-  DateDimension,
-  DateLevels,
-  Dimension,
-  LevelAttribute,
-  MetadataTypes,
-  normalizeName,
-} from '@sisense/sdk-data';
+import type { Attribute, DateDimension, Dimension, LevelAttribute } from '@sisense/sdk-data';
+import { DateLevels, MetadataTypes, normalizeName } from '@sisense/sdk-data';
 
 import { prepareDescription } from '../utils/prepare-description.js';
 import { ElementWriter, escapeSpecialChars, NEWLINE, rnt, writeIndented } from './base.js';
@@ -151,7 +144,14 @@ export class DateDimensionWriter extends ElementWriter<DateDimension> {
 
   writeDef(stream: NodeJS.WritableStream, ident: number) {
     writeIndented(stream, `createDateDimension({${NEWLINE}`, 0);
-    writeIndented(stream, `name: '${this.element.name}',${NEWLINE}`, ident + 1);
+    writeIndented(stream, `name: '${escapeSpecialChars(this.element.name)}',${NEWLINE}`, ident + 1);
+    if (this.element.title && this.element.title !== this.element.name) {
+      writeIndented(
+        stream,
+        `title: '${escapeSpecialChars(this.element.title)}',${NEWLINE}`,
+        ident + 1,
+      );
+    }
     writeIndented(
       stream,
       `expression: '${escapeSpecialChars(this.element.expression)}',`,
@@ -197,10 +197,15 @@ export class AttributeWriter extends ElementWriter<Attribute> {
   }
 
   write(stream: NodeJS.WritableStream, ident: number): any {
+    const titleProperty =
+      this.element.title && this.element.title !== this.element.name
+        ? `${rnt(ident + 2)}title: '${escapeSpecialChars(this.element.title)}',`
+        : '';
+
     writeIndented(
       stream,
       `createAttribute({\
-${rnt(ident + 2)}name: '${this.element.name}',\
+${rnt(ident + 2)}name: '${escapeSpecialChars(this.element.name)}',${titleProperty}\
 ${rnt(ident + 2)}type: '${this.element.type}',\
 ${rnt(ident + 2)}expression: '${escapeSpecialChars(this.element.expression)}',\
 ${

@@ -16,14 +16,17 @@ import {
   isCartesian,
   isCategorical,
   isRange,
+  isSankey,
   isScatter,
   RANGE_CHART_TYPES,
+  SANKEY_CHART_TYPES,
   SCATTER_CHART_TYPES,
 } from '@/domains/visualizations/core/chart-options-processor/translations/types';
 import { isSameAttribute } from '@/shared/utils/filters';
 import {
   CartesianChartDataOptions,
   DrilldownSelection,
+  SankeyChartDataOptions,
   ScatterDataPoint,
   StyledColumn,
 } from '@/types';
@@ -47,6 +50,7 @@ function isSupportedChartForDrilldown(chartType: ChartType) {
       ...SCATTER_CHART_TYPES,
       ...BOXPLOT_CHART_TYPES,
       ...RANGE_CHART_TYPES,
+      ...SANKEY_CHART_TYPES,
     ] as ChartType[]
   ).includes(chartType);
 }
@@ -85,12 +89,13 @@ export function applyDrilldownDimension(
     isCartesian(chartType) ||
     isCategorical(chartType) ||
     isBoxplot(chartType) ||
-    isRange(chartType)
+    isRange(chartType) ||
+    isSankey(chartType)
   ) {
     // Target the first drillable category (skipping calculated dimensions which are not drillable)
-    const targetDataOption = (dataOptions as CartesianChartDataOptions).category.find(
-      (c) => !MetadataTypes.isCalculatedAttribute(translateColumnToAttribute(c)),
-    );
+    const targetDataOption = (
+      dataOptions as CartesianChartDataOptions | SankeyChartDataOptions
+    ).category.find((c) => !MetadataTypes.isCalculatedAttribute(translateColumnToAttribute(c)));
     if (shouldUpdateDataOption(targetDataOption)) {
       return {
         ...dataOptions,

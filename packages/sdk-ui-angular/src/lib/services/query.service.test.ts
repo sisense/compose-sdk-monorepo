@@ -5,7 +5,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { EMPTY_PIVOT_QUERY_RESULT_DATA, PivotQueryResultData } from '@sisense/sdk-data';
 import type { ExecuteQueryByWidgetIdParams, ExecuteQueryParams } from '@sisense/sdk-ui-angular';
-import { executePivotQuery, executeQuery, executeQueryByWidgetId } from '@sisense/sdk-ui-preact';
+import {
+  executePivotQuery,
+  executeQuery,
+  executeQueryByWidgetId,
+  executeQueryWithRowCount,
+} from '@sisense/sdk-ui-preact';
 import { Mock, Mocked } from 'vitest';
 
 import { ExecutePivotQueryParams, QueryService } from './query.service';
@@ -19,17 +24,23 @@ vi.mock('@sisense/sdk-ui-preact', () => ({
   executeQuery: vi.fn(),
   executeQueryByWidgetId: vi.fn(),
   executePivotQuery: vi.fn(),
+  executeQueryWithRowCount: vi.fn(),
 }));
 
 const executeQueryMock = executeQuery as Mock<typeof executeQuery>;
 const executeQueryByWidgetIdMock = executeQueryByWidgetId as Mock<typeof executeQueryByWidgetId>;
 const executePivotQueryMock = executePivotQuery as Mock<typeof executePivotQuery>;
+const executeQueryWithRowCountMock = executeQueryWithRowCount as Mock<
+  typeof executeQueryWithRowCount
+>;
 
 describe('QueryService', () => {
   let queryService: QueryService;
   let sisenseContextServiceMock: Mocked<SisenseContextService>;
 
   beforeEach(() => {
+    vi.clearAllMocks();
+
     sisenseContextServiceMock = {
       getApp: vi.fn().mockResolvedValue({}),
     } as unknown as Mocked<SisenseContextService>;
@@ -74,6 +85,64 @@ describe('QueryService', () => {
         { onBeforeQuery: expect.any(Function) },
       );
       expect(result).toEqual({ data: { columns: [], rows: [] } });
+    });
+
+    it('should execute a data query with total row count when includeRowCount is enabled', async () => {
+      executeQueryWithRowCountMock.mockResolvedValue({
+        data: { columns: [], rows: [] },
+        rowCount: 1234,
+      });
+
+      const params: ExecuteQueryParams = {
+        dataSource: 'Sample ECommerce',
+        dimensions: [],
+        measures: [],
+        filters: [],
+        highlights: [],
+        count: 10,
+        offset: 0,
+        includeRowCount: true,
+        beforeQuery: vi.fn(),
+      };
+      const result = await queryService.executeQuery(params);
+
+      expect(executeQueryWithRowCountMock).toHaveBeenCalledWith(
+        {
+          dataSource: 'Sample ECommerce',
+          dimensions: [],
+          measures: [],
+          filters: [],
+          highlights: [],
+          count: 10,
+          offset: 0,
+        },
+        {},
+        { onBeforeQuery: expect.any(Function) },
+      );
+      expect(executeQueryMock).not.toHaveBeenCalled();
+      expect(result).toEqual({
+        data: { columns: [], rows: [] },
+        rowCount: 1234,
+      });
+    });
+
+    it('should not request total row count by default', async () => {
+      executeQueryMock.mockResolvedValue({
+        columns: [],
+        rows: [],
+      });
+
+      const params: ExecuteQueryParams = {
+        dataSource: 'Sample ECommerce',
+        dimensions: [],
+        measures: [],
+        filters: [],
+        highlights: [],
+      };
+      const result = await queryService.executeQuery(params);
+
+      expect(executeQueryWithRowCountMock).not.toHaveBeenCalled();
+      expect(result.rowCount).toBeUndefined();
     });
   });
 

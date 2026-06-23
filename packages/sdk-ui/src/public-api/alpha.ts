@@ -6,7 +6,29 @@
  */
 
 export { useDashboardTheme } from '../domains/dashboarding/use-dashboard-theme.js';
-export type { ThemeConfig } from '../types';
+export type {
+  ThemeConfig,
+  WidgetNarrativeDisplayLocation,
+  WidgetNarrativeOptions,
+  CompleteWidgetNarrativeOptions,
+  WidgetAiOptions,
+} from '../types';
+
+// Dashboard header items configuration.
+export {
+  DashboardHeaderTargets,
+  type DashboardHeaderTarget,
+} from '../domains/dashboarding/components/dashboard-header-targets.js';
+export type {
+  DashboardHeaderConfig,
+  DashboardHeaderItem,
+  DashboardHeaderItemComponent,
+  DashboardHeaderItemComponentProps,
+  DashboardHeaderItemPosition,
+  DashboardHeaderItemSize,
+  DashboardHeaderItemsTransform,
+  DashboardResolvedHeaderItem,
+} from '../domains/dashboarding/components/dashboard-header-config.js';
 
 // Translation
 export {

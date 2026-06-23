@@ -137,7 +137,10 @@ export function getQueryPillTooltipModel(item: QueryPillItem): TooltipModel | nu
 
   const source = item.tooltipData;
   const typeLabel = getPillType(item.category);
-  const layoutText = (source as Attribute).name ?? item.label;
+  const layoutText =
+    'name' in source && source.name !== undefined
+      ? (source as Attribute).title ?? source.name
+      : item.label;
   const aggregation = (source as MeasureColumn).aggregation;
   const column = getColumnName(source) ?? '-';
 

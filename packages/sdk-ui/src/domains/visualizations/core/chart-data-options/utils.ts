@@ -128,7 +128,7 @@ export const getDataOptionTitle = (styledColumn: StyledColumn | StyledMeasureCol
     return column.title;
   }
 
-  // Default column name
+  // Default column name — model elements expose resolved title
   return column.name;
 };
 

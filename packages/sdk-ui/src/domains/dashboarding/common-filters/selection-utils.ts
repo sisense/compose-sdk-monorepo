@@ -14,6 +14,7 @@ import uniq from 'lodash-es/uniq';
 
 import {
   PivotTableDataOptions,
+  SankeyChartDataOptions,
   ScattermapChartDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
 import {
@@ -27,6 +28,7 @@ import {
   isCartesian,
   isCategorical,
   isRange,
+  isSankey,
   isScatter,
   isScattermap,
 } from '@/domains/visualizations/core/chart-options-processor/translations/types.js';
@@ -228,6 +230,10 @@ function getCalendarHeatmapChartSelections(points: CalendarHeatmapDataPoint[]): 
   return getSelectionsFromPoints(points, ['date']);
 }
 
+function getSankeyChartSelections(points: DataPoint[]): DataSelection[] {
+  return getSelectionsFromPoints(points, ['category']);
+}
+
 function getPivotTableSelections(points: PivotTableDataPoint[]): DataSelection[] {
   const selectablePoints = points.filter((point) => point.isDataCell && !point.isTotalCell);
   return getSelectionsFromPoints(
@@ -306,6 +312,8 @@ export function getWidgetSelections(
     return getAreamapChartSelections(points as AreamapDataPoint[]);
   } else if (isCalendarHeatmap(widgetType)) {
     return getCalendarHeatmapChartSelections(points as CalendarHeatmapDataPoint[]);
+  } else if (isSankey(widgetType)) {
+    return getSankeyChartSelections(points as DataPoint[]);
   }
 
   return [];
@@ -344,6 +352,8 @@ export function getSelectableWidgetAttributes(
     targetDataOptions = [...(dataOptions as ScattermapChartDataOptions).geo];
   } else if (isCalendarHeatmap(widgetType)) {
     targetDataOptions = [(dataOptions as CalendarHeatmapChartDataOptions).date];
+  } else if (isSankey(widgetType)) {
+    targetDataOptions = [...(dataOptions as SankeyChartDataOptions).category];
   }
 
   return (
@@ -357,6 +367,7 @@ export function getSelectableWidgetAttributes(
 
 /**
  * Returns all selectable columns for a custom widget.
+ *
  * @param dataOptions - The data options for the custom widget.
  * @returns All selectable columns for the custom widget.
  */
@@ -501,7 +512,7 @@ function getWidgetSelectionsTitle(
   }
 
   // For single selection
-  return hasExcessValues ? selection.attribute.name : selection.displayValues.join(', ');
+  return hasExcessValues ? selection.attribute.title : selection.displayValues.join(', ');
 }
 
 export function getWidgetSelectionsTitleMenuItem(

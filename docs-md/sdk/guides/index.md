@@ -28,6 +28,9 @@ indexTopics:
     - title: Custom Widgets
       description: Learn how to create and use custom widgets with Compose SDK
       link: ./custom-widgets
+    - title: Plugins
+      description: Build and register custom visualization plugins for Compose SDK dashboards (Beta)
+      link: ./plugins
     - title: Migration Guide
       description: Migrate your project from 0.X.X to 1.0.0
       link: ./migration-guide-1.0.0

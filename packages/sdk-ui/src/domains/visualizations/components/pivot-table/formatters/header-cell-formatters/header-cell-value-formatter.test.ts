@@ -154,6 +154,49 @@ describe('createHeaderCellValueFormatter', () => {
     expect(cell.content).toBe('N\\A');
   });
 
+  it('should not format header cell numeric value when defaultNumberFormattingEnabled is false and no explicit config', () => {
+    const dataOptions = {
+      rows: [{ column: { type: 'numeric' } }],
+    } as PivotTableDataOptions;
+    const cell = {
+      value: 123.456,
+      content: null,
+    } as unknown as PivotTreeNode;
+    const jaqlPanelItem = {
+      jaql: { datatype: 'numeric' },
+      field: { index: 0 },
+    } as JaqlPanel;
+    const formatter = createHeaderCellValueFormatter(dataOptions, dateFormatterMock, false);
+
+    formatter(cell, jaqlPanelItem, jaqlMock);
+
+    expect(cell.content).toBe('123.456');
+  });
+
+  it('should still format header cell numeric value with explicit config when defaultNumberFormattingEnabled is false', () => {
+    const dataOptions = {
+      rows: [
+        {
+          numberFormatConfig: { name: 'Percent', decimalScale: 0 },
+          column: { type: 'numeric' },
+        },
+      ],
+    } as PivotTableDataOptions;
+    const cell = {
+      value: 123.456,
+      content: null,
+    } as unknown as PivotTreeNode;
+    const jaqlPanelItem = {
+      jaql: { datatype: 'numeric' },
+      field: { index: 0 },
+    } as JaqlPanel;
+    const formatter = createHeaderCellValueFormatter(dataOptions, dateFormatterMock, false);
+
+    formatter(cell, jaqlPanelItem, jaqlMock);
+
+    expect(cell.content).toBe('12,346%');
+  });
+
   it('should format datetime cell with invalid date as original value', () => {
     const dataOptions = {
       rows: [

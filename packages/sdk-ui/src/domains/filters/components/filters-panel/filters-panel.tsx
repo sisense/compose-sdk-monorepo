@@ -202,6 +202,7 @@ export const FiltersPanel = asSisenseComponent({
     const { ExistingFilterEditor, startEditingFilter } = useExistingFilterEditing({
       onFilterChanged: handleFilterChange,
       defaultDataSource: defaultDataSource,
+      dataSources: dataSources ? dataSources : defaultDataSource ? [defaultDataSource] : [],
       config: config?.actions?.editFilter,
     });
 

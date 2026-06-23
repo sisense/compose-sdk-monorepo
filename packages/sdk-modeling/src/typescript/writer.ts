@@ -29,7 +29,7 @@ import { ImportsWriter } from './writers/imports.js';
 import { Writer } from './writers/interfaces.js';
 import { BaseMeasureWriter, MeasureTemplateWriter } from './writers/measures.js';
 
-function getMetadataWriter(item: Element): ElementWriter<any> {
+function getMetadataWriter(item: Element): ElementWriter<Element> {
   if (MetadataTypes.isDateDimension(item.type)) {
     return new DateDimensionWriter(<DateDimension>item, false);
   } else if (MetadataTypes.isDimension(item.type)) {

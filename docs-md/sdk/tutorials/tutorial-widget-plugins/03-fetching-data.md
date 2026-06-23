@@ -1,6 +1,5 @@
 ---
 title: 3 | Fetching Data
-hidden: true
 ---
 
 # Fetching Data

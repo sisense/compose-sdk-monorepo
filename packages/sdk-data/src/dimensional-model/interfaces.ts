@@ -18,14 +18,12 @@ export interface DataModel {
  */
 export interface Element {
   /**
-   * Element name
+   * Identity name of the element.
    */
   name: string;
 
   /**
-   * Element title
-   *
-   * @internal
+   * Label displayed in UI.
    */
   title: string;
 

@@ -2,38 +2,28 @@ import omit from 'lodash-es/omit';
 
 import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { withTracking } from '@/infra/decorators/hook-decorators';
+import type { HookEnableParam } from '@/shared/hooks/types';
 
-import type { WidgetNarrativeOptions } from '../core/widget-narrative-options.js';
 import {
   useWidgetNarrativeState,
   type WidgetNarrativeQueryState,
 } from './use-widget-narrative-state.js';
 
 /**
- * Options for {@link useGetWidgetNarrative}.
+ * Parameters for {@link useGetWidgetNarrative}.
  *
  * @remarks
- * Narration endpoint selection defaults from `app.settings.narrative.canGenerateNarrativeViaAI`
- * on {@link useSisenseContext} when `canGenerateNarrativeViaAI` is omitted. Optional overrides
- * match the imperative `getNlgInsightsFromWidget` helper for per-call behavior.
- * @sisenseInternal
- */
-export type UseGetWidgetNarrativeOptions = WidgetNarrativeOptions & {
-  /**
-   * When `false`, skips the narrative request.
-   *
-   * @default true
-   */
-  enabled?: boolean;
-};
-
-/**
+ * Narrative endpoint selection uses `app.settings.narrative.canGenerateNarrativeViaAI` from
+ * {@link useSisenseContext}. {@link WidgetNarrativeOptions} come from
+ * `widgetProps.aiOptions.narrative` (see {@link getCompleteWidgetNarrativeOptions}).
+ *
+ * The `enabled` flag follows {@link HookEnableParam} (defaults to `true` when omitted).
  * @sisenseInternal
  */
 export type UseGetWidgetNarrativeParams = {
   /** Widget configuration whose query drives the narrative (chart or pivot). */
   widgetProps: WidgetProps;
-} & UseGetWidgetNarrativeOptions;
+} & HookEnableParam;
 
 /**
  * @sisenseInternal
@@ -41,18 +31,18 @@ export type UseGetWidgetNarrativeParams = {
 export type UseGetWidgetNarrativeResult = WidgetNarrativeQueryState & {
   /**
    * `true` when `widgetProps` is a chart or pivot widget and narrative params could be built
-   * (including resolving `dataSource` via `defaultDataSource`).
+   * (including resolving `dataSource` via context `defaultDataSource` when omitted on props).
    */
   supported: boolean;
   /**
-   * Mirrors {@link UseGetWidgetNarrativeOptions.enabled}. When `false`, narrative is opted out and
-   * `data` is not populated from cache.
+   * Effective value after applying {@link HookEnableParam} defaults (always `true` or `false`).
+   * When `false`, narrative is opted out and `data` is not populated from cache.
    */
   enabled: boolean;
 };
 
 /** @internal */
-function useGetWidgetNarrativeWithoutTracking(
+function useGetWidgetNarrativeInternal(
   params: UseGetWidgetNarrativeParams,
 ): UseGetWidgetNarrativeResult {
   return omit(useWidgetNarrativeState(params), ['narrativeRequest']);
@@ -71,12 +61,10 @@ function useGetWidgetNarrativeWithoutTracking(
  * ```tsx
  * const { data, isLoading, supported } = useGetWidgetNarrative({
  *   widgetProps,
- *   defaultDataSource: DM.DataSource,
- *   verbosity: 'Low',
  * });
  * ```
  * @sisenseInternal
  */
 export const useGetWidgetNarrative = withTracking('useGetWidgetNarrative')(
-  useGetWidgetNarrativeWithoutTracking,
+  useGetWidgetNarrativeInternal,
 );

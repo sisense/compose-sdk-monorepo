@@ -8,7 +8,7 @@ import {
 import { PlotOptions } from '../chart-options-service.js';
 import { fontStyleDefault } from '../defaults/cartesian.js';
 import { prepareDataLabelsOptions } from '../series-labels.js';
-import { applyFormatPlainText, getCompleteNumberFormatConfig } from './number-format-config.js';
+import { applyFormatPlainText, formatNumberWithFallback } from './number-format-config.js';
 import { HighchartsDataPointContext } from './tooltip-utils.js';
 import { DataLabelsSettings } from './value-label-section.js';
 
@@ -83,6 +83,7 @@ export type GetPiePlotOptionsParams = {
   chartDataOptions: ChartDataOptionsInternal;
   themeSettings?: CompleteThemeSettingsInternal;
   semiCircle?: boolean;
+  defaultNumberFormattingEnabled?: boolean;
 };
 
 export const getPiePlotOptions = ({
@@ -91,6 +92,7 @@ export const getPiePlotOptions = ({
   chartDataOptions,
   themeSettings,
   semiCircle,
+  defaultNumberFormattingEnabled = true,
 }: GetPiePlotOptionsParams): PlotOptions => {
   const pieOptions = defaultPieOptions();
   const seriesOptions = defaultSeriesOptions();
@@ -105,9 +107,8 @@ export const getPiePlotOptions = ({
   }
 
   if (seriesLabels.enabled) {
-    const numberFormatConfig = getCompleteNumberFormatConfig(
-      (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]?.numberFormatConfig,
-    );
+    const rawConfig = (chartDataOptions as CategoricalChartDataOptionsInternal).y[0]
+      ?.numberFormatConfig;
     const shouldEnableDataLabels =
       seriesLabels.enabled && (seriesLabels.showCategory || seriesLabels.showValue);
     const dataLabelsOptions = prepareDataLabelsOptions(seriesLabels);
@@ -127,7 +128,14 @@ export const getPiePlotOptions = ({
           (seriesLabels.prefix ?? '') +
           (seriesLabels.showCategory ? name : '') +
           (seriesLabels.showCategory && seriesLabels.showValue ? '<br />' : '') +
-          (seriesLabels.showValue ? applyFormatPlainText(numberFormatConfig, value) : '') +
+          (seriesLabels.showValue
+            ? formatNumberWithFallback(
+                value ?? 0,
+                rawConfig,
+                defaultNumberFormattingEnabled,
+                applyFormatPlainText,
+              )
+            : '') +
           (seriesLabels.suffix ?? '') +
           '</div>'
         );

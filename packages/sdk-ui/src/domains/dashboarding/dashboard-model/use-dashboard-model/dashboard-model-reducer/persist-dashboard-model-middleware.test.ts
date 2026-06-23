@@ -2,12 +2,15 @@ import { filterFactory } from '@sisense/sdk-data';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { WidgetsPanelColumnLayout } from '@/domains/dashboarding/types.js';
+import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 import { AppSettings } from '@/infra/app/settings/settings';
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
 
 import { sampleEcommerceDashboard } from '../../__mocks__/sample-ecommerce-dashboard.js';
+import { samplePivotDashboard } from '../../__mocks__/sample-pivot-dashboard.js';
 import { createWidgetModel, dashboardOid } from '../../__test-helpers__/create-dashboard-model.js';
+import { jumpToDashboardConfigFromWidgetDto } from '../../translate-dashboard-utils.js';
 import { persistDashboardModelMiddleware } from './persist-dashboard-model-middleware.js';
 import { UseDashboardModelActionType, UseDashboardModelActionTypeInternal } from './types.js';
 
@@ -105,6 +108,146 @@ describe('persistDashboardModelMiddleware', () => {
     const sentWidgetDto = restApi.addWidgetToDashboard.mock.calls[0][1];
     expect(sentWidgetDto.options?.disableExportToCSV).toBe(true);
     expect(sentWidgetDto.options?.hideFromWidgetList).toBe(true);
+  });
+
+  it('projects the dashboard-level tabber config onto the WidgetDto sent to the server on ADD_WIDGET', async () => {
+    const baseWidget = sampleEcommerceDashboard.widgets![0]!;
+    const tabberDto = {
+      ...baseWidget,
+      oid: 'tabber-1',
+      type: 'WidgetsTabber',
+      subtype: 'WidgetsTabber',
+      metadata: { panels: [] },
+      style: {
+        activeTab: '0',
+        showTitle: false,
+        showSeparators: true,
+        useSelectedBkg: false,
+        useUnselectedBkg: false,
+        tabsSize: 'MEDIUM',
+        tabsInterval: 'MEDIUM',
+        tabsAlignment: 'CENTER',
+        selectedColor: '#000000',
+        selectedBkgColor: '#ffffff',
+        unselectedColor: '#666666',
+        unselectedBkgColor: '#ffffff',
+        descriptionColor: '#666666',
+        tabCornerRadius: 'NONE',
+        showDescription: false,
+        tabs: [
+          { title: 'TAB 1', displayWidgetIds: ['orig-a'], hideWidgetIds: [] },
+          { title: 'TAB 2', displayWidgetIds: ['orig-b'], hideWidgetIds: [] },
+        ],
+      },
+    } as unknown as WidgetDto;
+
+    const restApi = {
+      patchDashboard: vi.fn(),
+      addWidgetToDashboard: vi.fn().mockResolvedValue({ ...tabberDto, oid: 'server-assigned-oid' }),
+      deleteWidgetFromDashboard: vi.fn(),
+    };
+    const newWidget = widgetModelTranslator.fromWidgetDto(tabberDto);
+
+    await persistDashboardModelMiddleware({
+      dashboardOid,
+      action: {
+        type: UseDashboardModelActionType.ADD_WIDGET,
+        payload: {
+          widget: newWidget,
+          // dashboard-level show/hide mapping carried from the source tabber on duplicate
+          tabberConfig: {
+            tabs: [{ displayWidgetIds: ['orig-a'] }, { displayWidgetIds: ['orig-b'] }],
+          },
+        },
+      },
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
+
+    const sentWidgetDto = restApi.addWidgetToDashboard.mock.calls[0][1];
+    // type/subtype restored by the widget-level translator (fixes the original crash)
+    expect(sentWidgetDto.type).toBe('WidgetsTabber');
+    expect(sentWidgetDto.subtype).toBe('WidgetsTabber');
+    // tab names round-trip via the widget model...
+    expect(sentWidgetDto.style.tabs.map((t: { title: string }) => t.title)).toEqual([
+      'TAB 1',
+      'TAB 2',
+    ]);
+    // ...and the dashboard-level show/hide mapping is projected back onto the DTO.
+    expect(
+      sentWidgetDto.style.tabs.map((t: { displayWidgetIds: string[] }) => t.displayWidgetIds),
+    ).toEqual([['orig-a'], ['orig-b']]);
+  });
+
+  it('persists pivot (Map) JTD on ADD_WIDGET, end-to-end through toWidgetDto-rebuilt panels', async () => {
+    // Real pivot widget (rows: Brand, values: Cost, columns: Gender) with instanceids.
+    const pivotWidget = samplePivotDashboard.widgets![0]! as unknown as WidgetDto;
+    const rowsInstanceId = pivotWidget.metadata.panels.find((p) => p.name === 'rows')!.items[0]!
+      .instanceid!;
+
+    // Attach a per-dimension (pivot) JTD target referencing the rows dimension.
+    const pivotWidgetWithJtd = {
+      ...pivotWidget,
+      drillToDashboardConfig: {
+        drillToDashboardRightMenuCaption: 'Jump to ',
+        drillToDashboardNavigateType: 2,
+        drillToDashboardNavigateTypePivot: 2,
+        displayToolbarRow: true,
+        displayFilterPane: true,
+        modalWindowMeasurement: '%',
+        dashboardIds: [
+          {
+            oid: 'target-dash-oid',
+            id: 'target-dash-oid',
+            caption: 'Drill target',
+            pivotDimensions: [rowsInstanceId],
+          },
+        ],
+        enabled: true,
+        version: '1',
+      },
+    } as unknown as WidgetDto;
+
+    // READ the pivot JTD into a Map-based config (as fromDashboardDto/widgetsOptions would).
+    const jtdConfig = jumpToDashboardConfigFromWidgetDto(pivotWidgetWithJtd);
+    expect(jtdConfig && 'targets' in jtdConfig && jtdConfig.targets instanceof Map).toBe(true);
+
+    const newWidget = widgetModelTranslator.fromWidgetDto(pivotWidgetWithJtd);
+    const restApi = {
+      patchDashboard: vi.fn(),
+      addWidgetToDashboard: vi
+        .fn()
+        .mockResolvedValue({ ...pivotWidgetWithJtd, oid: 'server-assigned-oid' }),
+      deleteWidgetFromDashboard: vi.fn(),
+    };
+
+    await persistDashboardModelMiddleware({
+      dashboardOid,
+      action: {
+        type: UseDashboardModelActionType.ADD_WIDGET,
+        payload: { widget: newWidget, widgetOptions: { jtdConfig } },
+      },
+      restApi: restApi as never,
+      sharedMode: false,
+      appSettings: testAppSettings,
+      themeSettings: testThemeSettings,
+    });
+
+    const sentWidgetDto = restApi.addWidgetToDashboard.mock.calls[0][1];
+    // The duplicate previously dropped drillToDashboardConfig entirely; now it is restored.
+    expect(sentWidgetDto.drillToDashboardConfig?.version).toBe('1');
+    const dashboardIds = sentWidgetDto.drillToDashboardConfig!.dashboardIds;
+    expect(dashboardIds).toHaveLength(1);
+    expect(dashboardIds[0].caption).toBe('Drill target');
+    const pivotDimensions = dashboardIds[0].pivotDimensions as string[];
+    expect(pivotDimensions).toHaveLength(1);
+    // The referenced instanceid resolves to a panel item in the produced DTO.
+    const allItems = sentWidgetDto.metadata.panels.flatMap((p: { items: unknown[] }) => p.items);
+    expect(
+      allItems.some((it: { instanceid?: string }) => it.instanceid === pivotDimensions[0]),
+    ).toBe(true);
   });
 
   it('should add widget and return transformed payload for ADD_WIDGET', async () => {

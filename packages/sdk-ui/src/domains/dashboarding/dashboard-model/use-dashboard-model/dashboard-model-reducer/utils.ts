@@ -6,6 +6,7 @@ import {
   WidgetsPanelLayout,
   WidgetsPanelRow,
 } from '@/domains/dashboarding/dashboard-model';
+import { TabberConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import { WidgetModel } from '@/domains/widgets/widget-model';
 import {
   filterRelationRulesToFilterRelationsModel,
@@ -50,12 +51,14 @@ export function parseAddWidgetPayload(payload: AddWidgetPayload): {
   widget: WidgetModel;
   widgetsPanelLayout?: WidgetsPanelLayout;
   widgetOptions?: SpecificWidgetOptions;
+  tabberConfig?: TabberConfig;
 } {
   return 'widget' in payload
     ? {
         widget: payload.widget,
         widgetsPanelLayout: payload.widgetsPanelLayout,
         widgetOptions: payload.widgetOptions,
+        tabberConfig: payload.tabberConfig,
       }
     : { widget: payload };
 }

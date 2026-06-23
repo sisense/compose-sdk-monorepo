@@ -71,9 +71,13 @@ export function getTooltipOptions(
       let formattedValue = '';
       if (point.value !== null && point.value !== undefined && point.custom?.hasData) {
         const numberFormatConfig = ctx.dataOptions.value.numberFormatConfig;
-        // Use the SDK's number formatting
-        const completeConfig = getCompleteNumberFormatConfig(numberFormatConfig);
-        formattedValue = applyFormat(completeConfig, point.value);
+        const hasExplicitConfig = numberFormatConfig !== undefined;
+        if (ctx.extraConfig.defaultNumberFormattingEnabled || hasExplicitConfig) {
+          const completeConfig = getCompleteNumberFormatConfig(numberFormatConfig);
+          formattedValue = applyFormat(completeConfig, point.value);
+        } else {
+          formattedValue = String(point.value);
+        }
       } else {
         formattedValue = '—';
       }

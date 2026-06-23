@@ -1,5 +1,5 @@
 /** @vitest-environment jsdom */
-import { filterFactory } from '@sisense/sdk-data';
+import { filterFactory, measureFactory } from '@sisense/sdk-data';
 import { screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 
@@ -74,6 +74,46 @@ describe('FilterEditorPopover', () => {
     const applyButton = await screen.findByText('Apply');
     await user.click(applyButton);
     expect(onChangeMock).toHaveBeenCalled();
+  });
+
+  it('should render existing top ranking filter in condition section', async () => {
+    const rankingFilter = filterFactory.topRanking(
+      DM.Commerce.AgeRange,
+      measureFactory.sum(DM.Commerce.Revenue),
+      5,
+    );
+    setup(
+      <SisenseContextProvider {...contextProviderProps}>
+        <FilterEditorPopover
+          filter={rankingFilter}
+          position={{ anchorEl: document.body }}
+          defaultDataSource={DM.DataSource}
+          dataSources={[DM.DataSource]}
+        />
+      </SisenseContextProvider>,
+    );
+    expect(await screen.findByLabelText('Ranking count input')).toHaveValue(5);
+    expect(screen.queryByLabelText('Not supported section')).not.toBeInTheDocument();
+  });
+
+  it('should honor an explicitly empty dataSources list', async () => {
+    const rankingFilter = filterFactory.topRanking(
+      DM.Commerce.AgeRange,
+      measureFactory.sum(DM.Commerce.Revenue),
+      5,
+    );
+    setup(
+      <SisenseContextProvider {...contextProviderProps}>
+        <FilterEditorPopover
+          filter={rankingFilter}
+          position={{ anchorEl: document.body }}
+          defaultDataSource={DM.DataSource}
+          dataSources={[]}
+        />
+      </SisenseContextProvider>,
+    );
+
+    expect(await screen.findByLabelText('Select ranked by measure')).toBeDisabled();
   });
 
   it('should execute "onClose" callback when cancel button is clicked', async () => {

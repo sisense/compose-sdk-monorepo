@@ -812,7 +812,8 @@ describe('measures', () => {
         };
 
         const measure = createMeasure(json);
-        expect(measure.name).toBeUndefined();
+        expect(measure.name).toBe('');
+        expect(measure.title).toBe('');
       });
     });
 

@@ -15,6 +15,12 @@ import { AbstractDataPointWithEntries } from '@/domains/dashboarding/common-filt
 import { Coordinates } from '@/domains/visualizations/components/chart/components/scattermap/types';
 
 import { Hierarchy, HierarchyId, StyledColumn, StyledMeasureColumn } from '.';
+import type {
+  CompleteWidgetNarrativeOptions,
+  WidgetNarrativeDisplayLocation,
+  WidgetNarrativeOptions,
+} from './domains/narrative/core/widget-narrative-options.js';
+import { getCompleteWidgetNarrativeOptions } from './domains/narrative/core/widget-narrative-options.js';
 import { GeoDataElement } from './domains/visualizations/components/chart/restructured-charts/areamap-chart/types';
 import { CalendarDayOfWeek } from './domains/visualizations/components/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 import { HighchartsOptionsInternal } from './domains/visualizations/core/chart-options-processor/chart-options-service';
@@ -46,6 +52,7 @@ import {
   CategoricalChartType,
   IndicatorChartType,
   RangeChartType,
+  SankeyChartType,
   ScatterChartType,
   ScattermapChartType,
   TableChartType,
@@ -67,6 +74,7 @@ export type {
   ScatterChartDataOptions,
   IndicatorChartDataOptions,
   CalendarHeatmapChartDataOptions,
+  SankeyChartDataOptions,
   StyledColumn,
   StyledMeasureColumn,
 } from './domains/visualizations/core/chart-data-options/types';
@@ -90,6 +98,7 @@ export type {
   TableType,
   TableChartType,
   RangeChartType,
+  SankeyChartType,
   TextStyle,
 } from './domains/visualizations/core/chart-options-processor/translations/types';
 export type { IndicatorComponents } from './domains/visualizations/core/chart-options-processor/translations/design-options';
@@ -123,6 +132,28 @@ export type {
   TabberButtonsWidgetStyleOptions,
   TabberButtonsWidgetCustomOptions,
 } from '@/domains/widgets/components/tabber-buttons-widget/types';
+
+/**
+ * Configuration for AI-powered widget features such as automated narrative generation
+ *
+ * Exposed on {@link ChartWidgetProps} and {@link PivotTableWidgetProps} as `aiOptions`.
+ *
+ * @alpha
+ */
+export type WidgetAiOptions = {
+  /**
+   * Natural-language narrative settings
+   * @alpha
+   */
+  narrative?: WidgetNarrativeOptions;
+};
+
+export type {
+  WidgetNarrativeDisplayLocation,
+  WidgetNarrativeOptions,
+  CompleteWidgetNarrativeOptions,
+};
+export { getCompleteWidgetNarrativeOptions };
 
 /**
  * @internal
@@ -1541,6 +1572,62 @@ export interface CalendarHeatmapStyleOptions extends Pick<BaseStyleOptions, 'wid
 export type CalendarHeatmapViewType = 'month' | 'quarter' | 'half-year' | 'year';
 
 /**
+ * Configuration options that define functional style of the various elements of a SankeyChart.
+ *
+ * @group Charts
+ * @beta
+ *
+ * @example
+ * ```tsx
+ * <SankeyChart
+ *   dataSet={dataSource}
+ *   dataOptions={{
+ *     category: [DM.Commerce.Gender, DM.Category.Category],
+ *     value: [DM.Measures.SumRevenue],
+ *   }}
+ *   styleOptions={{
+ *     orientation: 'vertical',
+ *     nodePadding: 12,
+ *   }}
+ * />
+ * ```
+ */
+export interface SankeyStyleOptions extends BaseStyleOptions {
+  /**
+   * Whether the diagram flows horizontally (left-to-right) or vertically (top-to-bottom).
+   * Highcharts renders vertical flow by inverting the chart.
+   *
+   * @default 'horizontal'
+   */
+  orientation?: 'horizontal' | 'vertical';
+  /**
+   * Curve factor of links between Sankey nodes. 0 makes the lines straight.
+   * @default 0.33
+   */
+  curveFactor?: number;
+  /**
+   * Opacity of the links between Sankey nodes.
+   * @default 0.5
+   */
+  linkOpacity?: number;
+  /**
+   * Width of Sankey nodes in pixels (or height in vertical mode).
+   * @default 20
+   */
+  nodeWidth?: number;
+  /**
+   * Vertical padding between Sankey nodes in pixels (horizontal padding in vertical mode).
+   * @default 10
+   */
+  nodePadding?: number;
+  /**
+   * Determines which side of the chart the nodes are aligned to.
+   * In vertical mode `'top'` aligns to the left and `'bottom'` to the right.
+   */
+  nodeAlignment?: 'top' | 'center' | 'bottom';
+}
+
+/**
  * Configuration options that define functional style of the various elements of chart.
  */
 export type ChartStyleOptions = RegularChartStyleOptions | TabularChartStyleOptions;
@@ -1562,7 +1649,8 @@ export type RegularChartStyleOptions =
   | ScattermapStyleOptions
   | AreaRangeStyleOptions
   | CalendarHeatmapStyleOptions
-  | StreamgraphStyleOptions;
+  | StreamgraphStyleOptions
+  | SankeyStyleOptions;
 
 /** Mapping of each of the chart value series to colors. */
 export type ValueToColorMap = {
@@ -1587,6 +1675,7 @@ export type ChartType =
   | ScattermapChartType
   | CalendarHeatmapChartType
   | RangeChartType
+  | SankeyChartType
   | TableChartType;
 
 /** Chart type of the regular charts */
@@ -2584,7 +2673,6 @@ export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetContainerStyleOp
 
 /**
  * Style settings defining the look and feel of PivotTableWidget
- *
  */
 export type PivotTableWidgetStyleOptions = PivotTableStyleOptions & WidgetContainerStyleOptions;
 

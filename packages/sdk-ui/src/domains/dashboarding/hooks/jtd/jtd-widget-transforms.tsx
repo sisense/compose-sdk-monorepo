@@ -546,13 +546,20 @@ export const addJtdIconToHeader = (widgetProps: WidgetProps): WidgetProps => {
   }
 
   const prevHeader = widgetProps.styleOptions?.header || {};
-  const jtdRenderTitle = (element: ReactNode): ReactNode => (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <JtdJumpableIconWithTooltip />
-      {/* same class names as the parent element to preserve title positioning */}
-      <div className="csdk-w-full csdk-whitespace-nowrap csdk-overflow-hidden">{element}</div>
-    </div>
-  );
+  const prevRenderTitle = prevHeader.renderTitle;
+  const jtdRenderTitle = (element: ReactNode): ReactNode => {
+    const titleContent = prevRenderTitle ? prevRenderTitle(element) : element;
+
+    return (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <JtdJumpableIconWithTooltip />
+        {/* same class names as the parent element to preserve title positioning */}
+        <div className="csdk-w-full csdk-whitespace-nowrap csdk-overflow-hidden">
+          {titleContent}
+        </div>
+      </div>
+    );
+  };
 
   return {
     ...widgetProps,

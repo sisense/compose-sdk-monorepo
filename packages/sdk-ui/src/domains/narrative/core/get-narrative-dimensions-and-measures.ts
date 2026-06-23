@@ -63,7 +63,7 @@ function partitionTableColumnsByMeasure(columns: readonly (StyledColumn | Styled
 }
 
 /**
- * Dimensions and measures for narration / JAQL, including styled sort, trend, and forecast.
+ * Dimensions and measures for narrative / JAQL, including styled sort, trend, and forecast.
  *
  * @internal
  */
@@ -87,7 +87,7 @@ export function getNarrativeDimensionsAndMeasures(
 }
 
 /**
- * Table dimensions and measures for narration / JAQL, including styled sort, trend, and forecast.
+ * Table dimensions and measures for narrative / JAQL, including styled sort, trend, and forecast.
  *
  * @internal
  */

@@ -216,6 +216,14 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   styleOptions: WidgetProps['styleOptions'];
 
   /**
+   * Configuration for AI-powered widget features such as automated narrative generation
+   * @alpha
+   * @category Widget
+   */
+  @Input()
+  aiOptions: ChartWidgetProps['aiOptions'] | PivotTableWidgetProps['aiOptions'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
    *
    * @category Widget
@@ -333,6 +341,7 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
       filters: this.filters,
       highlights: this.highlights,
       styleOptions: this.styleOptions,
+      aiOptions: this.aiOptions,
       drilldownOptions: this.drilldownOptions,
       title: this.title,
       description: this.description,

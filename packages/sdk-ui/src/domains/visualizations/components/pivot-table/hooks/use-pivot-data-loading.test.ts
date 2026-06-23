@@ -1,5 +1,10 @@
 import type { JaqlPanel, JaqlRequest } from '@sisense/sdk-pivot-query-client';
-import { EVENT_QUERY_END, EVENT_QUERY_START, PivotBuilder } from '@sisense/sdk-pivot-ui';
+import {
+  EVENT_QUERY_END,
+  EVENT_QUERY_ERROR,
+  EVENT_QUERY_START,
+  PivotBuilder,
+} from '@sisense/sdk-pivot-ui';
 import { renderHook, waitFor } from '@testing-library/react';
 
 import { usePivotDataLoading } from './use-pivot-data-loading';
@@ -96,6 +101,58 @@ describe('usePivotDataLoading', () => {
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
       expect(result.current.isNoResults).toBe(false);
+    });
+  });
+
+  it('should clear loading and expose an Error on EVENT_QUERY_ERROR', async () => {
+    const { result } = renderHook(() =>
+      usePivotDataLoading({
+        jaql: pivotJaqlMock,
+        pivotBuilder: mockPivotBuilder,
+        isForceReload: false,
+      }),
+    );
+
+    mockPivotBuilder.trigger(EVENT_QUERY_START);
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+
+    // Trigger the error event with a server-streamed error payload
+    mockPivotBuilder.trigger(EVENT_QUERY_ERROR, {
+      type: 'query',
+      subType: 'formulaNotSupported',
+      details: 'Filter on calculated dimension is not supported.',
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isNoResults).toBe(false);
+      expect(result.current.error).toBeInstanceOf(Error);
+      expect(result.current.error?.message).toBe(
+        'Filter on calculated dimension is not supported.',
+      );
+    });
+  });
+
+  it('should reset the error when a new query starts', async () => {
+    const { result } = renderHook(() =>
+      usePivotDataLoading({
+        jaql: pivotJaqlMock,
+        pivotBuilder: mockPivotBuilder,
+        isForceReload: false,
+      }),
+    );
+
+    mockPivotBuilder.trigger(EVENT_QUERY_ERROR, { details: 'boom' });
+    await waitFor(() => {
+      expect(result.current.error).toBeInstanceOf(Error);
+    });
+
+    mockPivotBuilder.trigger(EVENT_QUERY_START);
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+      expect(result.current.error).toBeUndefined();
     });
   });
 

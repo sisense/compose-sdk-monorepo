@@ -1,6 +1,7 @@
 import { Coordinates } from '@/domains/visualizations/components/chart/components/scattermap/types';
 import { AreamapData } from '@/domains/visualizations/components/chart/restructured-charts/areamap-chart/types';
 import { CalendarHeatmapChartData } from '@/domains/visualizations/components/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/data';
+import { SankeyChartData } from '@/domains/visualizations/components/chart/restructured-charts/highchart-based-charts/sankey-chart/types';
 import {
   ComparableData,
   Value,
@@ -175,4 +176,5 @@ export type ChartData =
   | AreamapData
   | ScattermapChartData
   | RangeChartData
-  | CalendarHeatmapChartData;
+  | CalendarHeatmapChartData
+  | SankeyChartData;

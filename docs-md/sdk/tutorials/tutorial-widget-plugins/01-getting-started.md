@@ -1,6 +1,5 @@
 ---
 title: 1 | Getting Started
-hidden: true
 ---
 
 # Getting Started

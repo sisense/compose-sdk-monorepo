@@ -60,7 +60,13 @@ export const treemapHighchartsOptionsBuilder: HighchartsOptionsBuilder<'treemap'
   }),
 
   getTooltip: (ctx) => {
-    return getTreemapTooltipSettings(ctx.dataOptions, ctx.designOptions, ctx.extraConfig.translate);
+    return getTreemapTooltipSettings(
+      ctx.dataOptions,
+      ctx.designOptions,
+      ctx.extraConfig.translate,
+      undefined,
+      ctx.extraConfig.defaultNumberFormattingEnabled,
+    );
   },
 
   getExtras: () => ({

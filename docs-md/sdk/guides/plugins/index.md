@@ -1,6 +1,5 @@
 ---
 title: Plugins
-hidden: true
 ---
 
 # Plugins

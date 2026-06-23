@@ -8,7 +8,7 @@ import {
 import { HttpClient } from '@sisense/sdk-rest-client';
 
 import { TranslatableError } from '../translation/translatable-error.js';
-import { JaqlQueryPayload, JaqlResponse, QueryGuid } from '../types.js';
+import { CountRowsResponse, JaqlQueryPayload, JaqlResponse, QueryGuid } from '../types.js';
 
 const API_DATASOURCES_BASE_PATH = 'api/datasources';
 const API_DATAMODELS_BASE_PATH = 'api/v2/datamodels';
@@ -60,6 +60,30 @@ export class QueryApiDispatcher {
           }
           return response;
         }),
+      abortHttpRequest: (reason?: string) => abortController.abort(reason),
+    };
+  }
+
+  /**
+   * Sends a request that returns only the total row count of a JAQL query,
+   * ignoring any `count`/`offset` paging in the payload.
+   *
+   * Supported by Sisense instances that expose the `jaql/countrows` endpoint;
+   * on older versions the request fails with a 404 error.
+   *
+   * @param dataSource - The data source of the query.
+   * @param jaqlPayload - The JAQL payload of the query to count rows for.
+   */
+  public sendCountRowsRequest(dataSource: DataSource, jaqlPayload: JaqlQueryPayload) {
+    const url = getCountRowsUrl(dataSource);
+    const abortController = new AbortController();
+    return {
+      responsePromise: this.httpClient.post<CountRowsResponse>(
+        url,
+        jaqlPayload,
+        undefined,
+        abortController.signal,
+      ),
       abortHttpRequest: (reason?: string) => abortController.abort(reason),
     };
   }
@@ -157,4 +181,13 @@ function getJaqlUrl(dataSource: DataSource): string {
  */
 function getDownloadCsvUrl(dataSource: DataSource): string {
   return `${getJaqlUrl(dataSource)}/csv`;
+}
+
+/**
+ * Returns the URL for sending a count rows request.
+ *
+ * @param dataSource - The data source of the query.
+ */
+function getCountRowsUrl(dataSource: DataSource): string {
+  return `${getJaqlUrl(dataSource)}/countrows`;
 }

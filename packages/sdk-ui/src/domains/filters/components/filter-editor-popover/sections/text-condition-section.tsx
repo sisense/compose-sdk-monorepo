@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Filter } from '@sisense/sdk-data';
+import { Filter, Measure } from '@sisense/sdk-data';
 
 import { usePrevious } from '@/shared/hooks/use-previous.js';
 
@@ -22,6 +22,13 @@ import {
   isSupportedByFilterEditor,
 } from '../utils.js';
 import {
+  createRankingFilter,
+  DEFAULT_RANKING_COUNT,
+  getRankingStateFromFilter,
+  isRankingCondition,
+  RankingConditionControls,
+} from './ranking-condition/index.js';
+import {
   createExcludeMembersFilter,
   getConfigWithUpdatedDeactivated,
   getMembersWithDeactivated,
@@ -40,6 +47,8 @@ const TextCondition = {
   NOT_EQUALS: FilterOption.NOT_EQUALS_TEXT,
   IS_EMPTY: 'isEmpty',
   IS_NOT_EMPTY: 'isNotEmpty',
+  TOP: FilterOption.TOP,
+  BOTTOM: FilterOption.BOTTOM,
 } as const;
 
 type TextConditionType = (typeof TextCondition)[keyof typeof TextCondition];
@@ -60,6 +69,8 @@ const conditionItems = [
   { value: TextCondition.NOT_EQUALS, displayValue: 'filterEditor.conditions.notEquals' },
   { value: TextCondition.IS_EMPTY, displayValue: 'filterEditor.conditions.isEmpty' },
   { value: TextCondition.IS_NOT_EMPTY, displayValue: 'filterEditor.conditions.isNotEmpty' },
+  { value: TextCondition.TOP, displayValue: 'filterEditor.conditions.top' },
+  { value: TextCondition.BOTTOM, displayValue: 'filterEditor.conditions.bottom' },
 ];
 
 const getTextFilterCondition = (filter: Filter): TextConditionType => {
@@ -105,7 +116,8 @@ const getCriteriaFilterBuilder = (condition: string) => {
 
 function createConditionalFilter(baseFilter: Filter, data: TextConditionFilterData) {
   const { attribute } = baseFilter;
-  const { condition, value, selectedMembers, multiSelectEnabled } = data;
+  const { condition, value, selectedMembers, multiSelectEnabled, rankingCount, rankingMeasure } =
+    data;
   if (condition === TextCondition.EXCLUDE) {
     const config = getConfigWithUpdatedDeactivated(baseFilter, selectedMembers);
     const members = getMembersWithoutDeactivated(baseFilter, selectedMembers);
@@ -113,6 +125,11 @@ function createConditionalFilter(baseFilter: Filter, data: TextConditionFilterDa
       ...config,
       enableMultiSelection: multiSelectEnabled,
     });
+  }
+
+  if (isRankingCondition(condition)) {
+    const count = rankingCount ?? DEFAULT_RANKING_COUNT;
+    return createRankingFilter(baseFilter, condition, count, rankingMeasure ?? null);
   }
 
   const builder = getCriteriaFilterBuilder(condition);
@@ -124,6 +141,8 @@ type TextConditionFilterData = {
   value: string;
   selectedMembers: string[];
   multiSelectEnabled: boolean;
+  rankingCount?: number;
+  rankingMeasure?: Measure | null;
 };
 
 type TextConditionSectionProps = {
@@ -149,6 +168,9 @@ export const TextConditionSection = ({
   const [selectedMembers, setSelectedMembers] = useState(
     isExcludeMembersFilter(filter) ? getMembersWithDeactivated(filter) : [],
   );
+  const initialRankingState = getRankingStateFromFilter(filter);
+  const [rankingCount, setRankingCount] = useState(initialRankingState.count);
+  const [rankingMeasure, setRankingMeasure] = useState<Measure | null>(initialRankingState.measure);
   const prevMultiSelectEnabled = usePrevious(multiSelectEnabled);
   const multiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
@@ -176,6 +198,8 @@ export const TextConditionSection = ({
     [condition],
   );
 
+  const showRankingControls = isRankingCondition(condition);
+
   const prepareAndChangeFilter = useCallback(
     (data: TextConditionFilterData) => {
       const newFilter = createConditionalFilter(filter, data);
@@ -200,6 +224,8 @@ export const TextConditionSection = ({
         value,
         selectedMembers: newSelectedMembers,
         multiSelectEnabled,
+        rankingCount,
+        rankingMeasure,
       });
     }
   }, [
@@ -207,6 +233,8 @@ export const TextConditionSection = ({
     value,
     selectedMembers,
     multiSelectEnabled,
+    rankingCount,
+    rankingMeasure,
     multiSelectChanged,
     selected,
     prepareAndChangeFilter,
@@ -218,8 +246,18 @@ export const TextConditionSection = ({
       value,
       selectedMembers,
       multiSelectEnabled,
+      rankingCount,
+      rankingMeasure,
     });
-  }, [condition, value, selectedMembers, multiSelectEnabled, prepareAndChangeFilter]);
+  }, [
+    condition,
+    value,
+    selectedMembers,
+    multiSelectEnabled,
+    rankingCount,
+    rankingMeasure,
+    prepareAndChangeFilter,
+  ]);
 
   const handleMembersChange = useCallback(
     (members: string[] | string) => {
@@ -230,9 +268,11 @@ export const TextConditionSection = ({
         value,
         selectedMembers: newMembers,
         multiSelectEnabled,
+        rankingCount,
+        rankingMeasure,
       });
     },
-    [condition, value, multiSelectEnabled, prepareAndChangeFilter],
+    [condition, value, multiSelectEnabled, rankingCount, rankingMeasure, prepareAndChangeFilter],
   );
 
   const handleConditionChange = useCallback(
@@ -246,14 +286,33 @@ export const TextConditionSection = ({
         currentValue = '';
       }
 
+      let nextRankingCount = rankingCount;
+      let nextRankingMeasure = rankingMeasure;
+      if (isRankingCondition(newCondition) && !isRankingCondition(condition)) {
+        nextRankingCount = DEFAULT_RANKING_COUNT;
+        nextRankingMeasure = null;
+        setRankingCount(nextRankingCount);
+        setRankingMeasure(nextRankingMeasure);
+      }
+
       prepareAndChangeFilter({
         condition: newCondition,
         value: currentValue,
         selectedMembers,
         multiSelectEnabled,
+        rankingCount: nextRankingCount,
+        rankingMeasure: nextRankingMeasure,
       });
     },
-    [value, selectedMembers, multiSelectEnabled, prepareAndChangeFilter],
+    [
+      value,
+      selectedMembers,
+      multiSelectEnabled,
+      rankingCount,
+      rankingMeasure,
+      condition,
+      prepareAndChangeFilter,
+    ],
   );
 
   const handleValueChange = useCallback(
@@ -266,9 +325,48 @@ export const TextConditionSection = ({
         value: newValue,
         selectedMembers,
         multiSelectEnabled,
+        rankingCount,
+        rankingMeasure,
       });
     },
-    [condition, selectedMembers, multiSelectEnabled, prepareAndChangeFilter],
+    [
+      condition,
+      selectedMembers,
+      multiSelectEnabled,
+      rankingCount,
+      rankingMeasure,
+      prepareAndChangeFilter,
+    ],
+  );
+
+  const handleRankingCountChange = useCallback(
+    (count: number) => {
+      setRankingCount(count);
+      prepareAndChangeFilter({
+        condition,
+        value,
+        selectedMembers,
+        multiSelectEnabled,
+        rankingCount: count,
+        rankingMeasure,
+      });
+    },
+    [condition, value, selectedMembers, multiSelectEnabled, rankingMeasure, prepareAndChangeFilter],
+  );
+
+  const handleRankingMeasureChange = useCallback(
+    (measure: Measure) => {
+      setRankingMeasure(measure);
+      prepareAndChangeFilter({
+        condition,
+        value,
+        selectedMembers,
+        multiSelectEnabled,
+        rankingCount,
+        rankingMeasure: measure,
+      });
+    },
+    [condition, value, selectedMembers, multiSelectEnabled, rankingCount, prepareAndChangeFilter],
   );
 
   return (
@@ -278,7 +376,7 @@ export const TextConditionSection = ({
       aria-label="Text condition section"
     >
       <SingleSelect
-        style={{ width: '168px', marginRight: '8px' }}
+        style={{ width: '168px', marginRight: showRankingControls ? '0' : '8px' }}
         value={condition}
         items={translatedConditionItems}
         onChange={handleConditionChange}
@@ -293,6 +391,14 @@ export const TextConditionSection = ({
           value={value}
           onChange={handleValueChange}
           aria-label="Value input"
+        />
+      )}
+      {showRankingControls && (
+        <RankingConditionControls
+          count={rankingCount}
+          measure={rankingMeasure}
+          onCountChange={handleRankingCountChange}
+          onMeasureChange={handleRankingMeasureChange}
         />
       )}
       {condition === TextCondition.EXCLUDE && (

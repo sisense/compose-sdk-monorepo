@@ -5,11 +5,16 @@ import {
   DateLevels,
   isDimensionalLevelAttribute,
   type Measure,
+  measureFactory,
 } from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+import type { StyledMeasureColumn } from '@/domains/visualizations/core/chart-data-options/types.js';
+
 import {
   mapAttributesForExcelExport,
+  mapMeasureColumnForExcelExport,
   mapMeasuresForExcelExport,
 } from './excel-export-map-dimensions-measures.js';
 
@@ -164,5 +169,27 @@ describe('mapMeasuresForExcelExport', () => {
     const result = mapMeasuresForExcelExport([jaqlLike]);
     expect(result).toHaveLength(1);
     expect(result[0]).toBe(jaqlLike);
+  });
+});
+
+describe('mapMeasureColumnForExcelExport', () => {
+  it('attaches numberFormatConfig without mutating the source measure', () => {
+    const formattedMeasure = measureFactory.sum(DM.Commerce.Revenue).format('0,0');
+    const numberFormatConfig = {
+      name: 'Numbers' as const,
+      kilo: true,
+      decimalScale: 2,
+    };
+    const column: StyledMeasureColumn = {
+      column: formattedMeasure,
+      numberFormatConfig,
+    };
+
+    const result = mapMeasureColumnForExcelExport(column);
+
+    expect(result.excelNumberFormatConfig).toEqual(numberFormatConfig);
+    expect(result).not.toBe(formattedMeasure);
+    expect(formattedMeasure).not.toHaveProperty('excelNumberFormatConfig');
+    expect(typeof result.jaql).toBe('function');
   });
 });

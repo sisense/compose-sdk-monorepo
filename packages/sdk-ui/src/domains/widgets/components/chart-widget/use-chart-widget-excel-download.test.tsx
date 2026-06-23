@@ -1,6 +1,8 @@
+import { filterFactory } from '@sisense/sdk-data';
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { getTranslatedDataOptions } from '@/domains/visualizations/components/chart/helpers/use-translated-data-options.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
 
@@ -257,5 +259,58 @@ describe('useChartWidgetExcelDownload', () => {
     });
 
     expect(mockExecute).toHaveBeenCalledWith(expect.objectContaining({ mergeRows: true }));
+  });
+
+  it('passes filters to loader execute on download', async () => {
+    vi.mocked(getTranslatedDataOptions).mockReturnValue({
+      dataOptions: {},
+      attributes: [{ name: 'dim' } as never],
+      measures: [],
+      dataColumnNamesMapping: {},
+    });
+
+    const filters = [filterFactory.members(DM.Commerce.Gender, ['Male'])];
+
+    const { result } = renderHook(() => useChartWidgetExcelDownload({ ...baseParams, filters }));
+
+    await act(async () => {
+      findExcelRepeatRowsOnClick(result.current.headerConfig)?.();
+    });
+
+    expect(mockExecute).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filters,
+        mergeRows: false,
+      }),
+    );
+  });
+
+  it('passes updated filters to loader execute after rerender', async () => {
+    vi.mocked(getTranslatedDataOptions).mockReturnValue({
+      dataOptions: {},
+      attributes: [{ name: 'dim' } as never],
+      measures: [],
+      dataColumnNamesMapping: {},
+    });
+
+    const initialFilters = [filterFactory.members(DM.Commerce.Gender, ['Male'])];
+    const updatedFilters = [filterFactory.members(DM.Commerce.Gender, ['Female'])];
+
+    const { rerender } = renderHook(
+      (p: UseChartWidgetExcelDownloadParams) => useChartWidgetExcelDownload(p),
+      { initialProps: { ...baseParams, filters: initialFilters } },
+    );
+
+    rerender({ ...baseParams, filters: updatedFilters });
+
+    await act(async () => {
+      latestOnDownloadExcel.fn?.(false);
+    });
+
+    expect(mockExecute).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filters: updatedFilters,
+      }),
+    );
   });
 });

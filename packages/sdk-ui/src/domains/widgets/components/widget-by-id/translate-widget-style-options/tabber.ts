@@ -1,8 +1,8 @@
 import omit from 'lodash-es/omit';
 
-import { TabberButtonsWidgetStyleOptions } from '@/types.js';
+import { TabberButtonsWidgetCustomOptions, TabberButtonsWidgetStyleOptions } from '@/types.js';
 
-import { TabberWidgetDto, TabberWidgetDtoStyle } from '../types.js';
+import { TabberWidgetDto, TabberWidgetDtoStyle, TabberWidgetDtoTab } from '../types.js';
 
 /**
  * Maps TabberWidgetDtoStyle tab corner radius to TabberButtonsWidgetStyleOptions format.
@@ -154,5 +154,138 @@ export function extractTabberButtonsWidgetCustomOptions(tabberDto: TabberWidgetD
     tabNames: tabs.map((tab) => tab.title),
     // Default to 0 (first tab) if activeTab is missing or invalid
     activeTab: parseInt(activeTab || '0', 10),
+  };
+}
+
+/**
+ * Maps TabberButtonsWidgetStyleOptions tab corner radius back to DTO format.
+ * Inverse of {@link mapTabberDtoTabCornerRadius}.
+ *
+ * @param tabCornerRadius - The corner radius in CSDK format
+ * @returns The corner radius in DTO format
+ */
+function mapTabberTabCornerRadiusToDto(
+  tabCornerRadius: TabberButtonsWidgetStyleOptions['tabCornerRadius'],
+): TabberWidgetDtoStyle['tabCornerRadius'] {
+  switch (tabCornerRadius) {
+    case 'small':
+      return 'SMALL';
+    case 'medium':
+      return 'MEDIUM';
+    case 'large':
+      return 'LARGE';
+  }
+  return 'NONE';
+}
+
+/**
+ * Maps TabberButtonsWidgetStyleOptions tabs alignment back to DTO format.
+ * Inverse of {@link mapTabberDtoTabsAlignment}.
+ *
+ * @param tabsAlignment - The tabs alignment in CSDK format
+ * @returns The tabs alignment in DTO format
+ */
+function mapTabberTabsAlignmentToDto(
+  tabsAlignment: TabberButtonsWidgetStyleOptions['tabsAlignment'],
+): TabberWidgetDtoStyle['tabsAlignment'] {
+  switch (tabsAlignment) {
+    case 'left':
+      return 'LEFT';
+    case 'right':
+      return 'RIGHT';
+  }
+  return 'CENTER';
+}
+
+/**
+ * Maps TabberButtonsWidgetStyleOptions tabs interval back to DTO format.
+ * Inverse of {@link mapTabberDtoTabsInterval}. Numbers pass through as pixels.
+ *
+ * @param tabsInterval - The tabs interval in CSDK format
+ * @returns The tabs interval in DTO format
+ */
+function mapTabberTabsIntervalToDto(
+  tabsInterval: TabberButtonsWidgetStyleOptions['tabsInterval'],
+): TabberWidgetDtoStyle['tabsInterval'] {
+  switch (tabsInterval) {
+    case 'small':
+      return 'SMALL';
+    case 'large':
+      return 'LARGE';
+    default:
+      if (typeof tabsInterval === 'number') {
+        return tabsInterval;
+      }
+      return 'MEDIUM';
+  }
+}
+
+/**
+ * Maps TabberButtonsWidgetStyleOptions tabs size back to DTO format.
+ * Inverse of {@link mapTabberDtoTabsSize}. Numbers pass through as pixels.
+ *
+ * @param tabsSize - The tabs size in CSDK format
+ * @returns The tabs size in DTO format
+ */
+function mapTabberTabsSizeToDto(
+  tabsSize: TabberButtonsWidgetStyleOptions['tabsSize'],
+): TabberWidgetDtoStyle['tabsSize'] {
+  switch (tabsSize) {
+    case 'small':
+      return 'SMALL';
+    case 'large':
+      return 'LARGE';
+    default:
+      if (typeof tabsSize === 'number') {
+        return tabsSize;
+      }
+      return 'MEDIUM';
+  }
+}
+
+/**
+ * Builds the tabber DTO style from CSDK tabber style and custom options.
+ * Inverse of {@link extractTabberButtonsWidgetStyleOptions} and
+ * {@link extractTabberButtonsWidgetCustomOptions}: re-encodes the lowercase enum
+ * values back to uppercase, reconstructs the `useSelectedBkg`/`useUnselectedBkg`
+ * flags from the presence of the corresponding background colors, and
+ * re-materializes `tabs`/`activeTab` from the custom options.
+ *
+ * Note: `displayWidgetIds`/`hideWidgetIds` are not represented in the CSDK
+ * widget model, so the re-materialized tabs carry empty id lists.
+ *
+ * @param styleOptions - The tabber style options from WidgetModel.styleOptions
+ * @param customOptions - The tabber custom options from WidgetModel.customOptions
+ * @returns The tabber widget style for the DTO
+ */
+export function toTabberWidgetStyle(
+  styleOptions: TabberButtonsWidgetStyleOptions,
+  customOptions: TabberButtonsWidgetCustomOptions,
+): TabberWidgetDtoStyle {
+  const tabs: TabberWidgetDtoTab[] = (customOptions.tabNames ?? []).map((title) => ({
+    title,
+    displayWidgetIds: [],
+    hideWidgetIds: [],
+  }));
+
+  return {
+    tabs,
+    activeTab: String(Number.isFinite(customOptions.activeTab) ? customOptions.activeTab : 0),
+    showTitle: false,
+    showSeparators: styleOptions.showSeparators ?? true,
+    showDescription: styleOptions.showDescription ?? true,
+    descriptionColor: styleOptions.descriptionColor ?? '',
+    selectedColor: styleOptions.selectedColor ?? '',
+    unselectedColor: styleOptions.unselectedColor ?? '',
+    tabCornerRadius: mapTabberTabCornerRadiusToDto(styleOptions.tabCornerRadius),
+    tabsAlignment: mapTabberTabsAlignmentToDto(styleOptions.tabsAlignment),
+    tabsInterval: mapTabberTabsIntervalToDto(styleOptions.tabsInterval),
+    tabsSize: mapTabberTabsSizeToDto(styleOptions.tabsSize),
+    // The background colors are only meaningful when their flags are set; mirror the
+    // read path, which drops the colors unless the flag is true.
+    useSelectedBkg: styleOptions.selectedBackgroundColor !== undefined,
+    useUnselectedBkg: styleOptions.unselectedBackgroundColor !== undefined,
+    selectedBkgColor: styleOptions.selectedBackgroundColor ?? '',
+    unselectedBkgColor: styleOptions.unselectedBackgroundColor ?? '',
   };
 }

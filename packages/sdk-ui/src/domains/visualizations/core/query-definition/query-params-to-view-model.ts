@@ -16,7 +16,7 @@ import type { QueryDefinitionViewModel, QueryPillItem } from './types';
 
 /** Pill label for a dimension (or filter) attribute; `t` enables date-level strings via {@link generateAttributeName}. */
 function getAttributeLabel(attr: Attribute, t?: TFunction): string {
-  const fallback = attr.name ?? String(attr);
+  const fallback = attr.title;
   if (t && isDimensionalLevelAttribute(attr)) {
     return generateAttributeName(t, getColumnNameFromAttribute(attr), attr.granularity);
   }
@@ -25,7 +25,7 @@ function getAttributeLabel(attr: Attribute, t?: TFunction): string {
 
 /** Pill label from measure display name. */
 function getMeasureLabel(measure: Measure): string {
-  return measure.name ?? String(measure);
+  return measure.title;
 }
 
 /** Pill label from filter attribute and operator/value; empty when the filter has no attribute. */

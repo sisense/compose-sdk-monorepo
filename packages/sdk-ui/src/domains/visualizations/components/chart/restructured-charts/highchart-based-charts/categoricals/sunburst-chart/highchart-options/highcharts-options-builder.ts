@@ -23,6 +23,7 @@ export const sunburstHighchartsOptionsBuilder: HighchartsOptionsBuilder<'sunburs
       ctx.dataOptions,
       ctx.designOptions,
       ctx.extraConfig.themeSettings,
+      ctx.extraConfig.defaultNumberFormattingEnabled,
     );
   },
 

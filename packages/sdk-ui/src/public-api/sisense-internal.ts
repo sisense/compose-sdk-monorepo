@@ -36,22 +36,8 @@ export type {
   QuotaState,
 } from '../shared/hooks/use-quota-notification.js';
 
-// Plugin system — for creating and registering plugins (e.g. custom widgets, design panels)
-export type { Plugin } from '../infra/plugins/types.js';
-export type {
-  WidgetPlugin,
-  CustomVisualization,
-  CustomVisualizationProps,
-  VisualizationStateUpdate,
-  CustomVisualizationStyleOptions,
-  CustomVisualizationEventProps,
-  CustomVisualizationDataPoint,
-  CustomVisualizationDataPointEventHandler,
-  CustomVisualizationDataPointContextMenuHandler,
-  CustomVisualizationDataPointsEventHandler,
-  DesignPanelProps,
-  DesignPanel,
-} from '../infra/plugins/widget-plugins/types.js';
+// Plugin system — VisualizationStateUpdate remains internal-only
+export type { VisualizationStateUpdate } from '../infra/plugins/widget-plugins/types.js';
 
 // Components
 export { LoadingIndicator } from '../shared/components/loading-indicator.js';
@@ -61,7 +47,6 @@ export { DataSchemaBrowser } from '../domains/data-browser/data-schema-browser/d
 export { type NarrativeQueryParams } from '../domains/narrative/core/build-narrative-request.js';
 export {
   useGetWidgetNarrative,
-  type UseGetWidgetNarrativeOptions,
   type UseGetWidgetNarrativeParams,
   type UseGetWidgetNarrativeResult,
 } from '../domains/narrative/hooks/use-get-widget-narrative.js';
@@ -75,6 +60,17 @@ export type { NlqChartWidgetStyleOptions } from '../types';
 export type { RenderToolbarHandler, RenderTitleHandler } from '../types';
 export { isChartWidgetProps } from '../domains/widgets/components/widget-by-id/utils.js';
 export { isPivotTableWidgetProps } from '../domains/widgets/components/widget-by-id/utils.js';
+
+// Dashboard module
+export {
+  DashboardModule,
+  type DashboardModuleApi,
+} from '../domains/dashboarding/dashboard-module/dashboard-module.js';
+export type {
+  DashboardCustomization,
+  DashboardStateApi,
+} from '../domains/dashboarding/dashboard-module/types.js';
+export { withHeaderItem } from '../domains/dashboarding/dashboard-helpers.js';
 
 // Dashboard persistence
 /* legacy */

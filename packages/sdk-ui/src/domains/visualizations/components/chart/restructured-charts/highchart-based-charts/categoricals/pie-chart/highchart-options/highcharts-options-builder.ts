@@ -51,6 +51,7 @@ export const pieHighchartsOptionsBuilder: HighchartsOptionsBuilder<'pie'> = {
       chartDataOptions: ctx.dataOptions,
       themeSettings: ctx.extraConfig.themeSettings,
       semiCircle: ctx.designOptions.semiCircle,
+      defaultNumberFormattingEnabled: ctx.extraConfig.defaultNumberFormattingEnabled,
     });
   },
 
@@ -58,6 +59,7 @@ export const pieHighchartsOptionsBuilder: HighchartsOptionsBuilder<'pie'> = {
     return getCategoryTooltipSettings(
       ctx.designOptions.seriesLabels?.percentageLabels?.showDecimals,
       ctx.dataOptions,
+      ctx.extraConfig.defaultNumberFormattingEnabled,
     );
   },
 

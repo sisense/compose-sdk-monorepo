@@ -91,7 +91,7 @@ export const ItemRow: React.FC<ItemRowProps> = ({
         theme={themeSettings}
         disabled={item.isDisabled}
       >
-        <ItemRowContent>
+        <ItemRowContent data-testid="csdk-databrowser-group-list-item">
           <ItemRowTitle>
             {item.Icon && <item.Icon />}
             <ItemRowTitleText>{item.title}</ItemRowTitleText>

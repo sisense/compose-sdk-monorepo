@@ -20,6 +20,37 @@ import {
   splitFiltersAndRelations,
 } from './filter-relations.js';
 import { CascadingFilter, MembersFilter } from './filters.js';
+import { createFilterFromJaqlInternal } from './utils/filter-from-jaql-util.js';
+import { FilterJaqlInternal } from './utils/types.js';
+
+// Two distinct calculated-dimension (formula) filters. They become generic pass-through filters
+// with no attribute expression and no `dim`, so they must be told apart by their formula.
+// calculated_dimension JAQL has no translated filter type, so it is cast the same way production
+// code does when feeding it into createFilterFromJaqlInternal.
+const containsCalcDimFilter = createFilterFromJaqlInternal(
+  {
+    type: 'calculated_dimension',
+    title: 'Start and End Time',
+    formula: "contains([abc-1], '2011')",
+    context: { '[abc-1]': { dim: '[Rooms.Start and End Time]', datatype: 'datetime' } },
+    filter: { contains: '2011' },
+  } as unknown as FilterJaqlInternal,
+  'calc-dim-contains-guid',
+);
+
+const concatCalcDimFilter = createFilterFromJaqlInternal(
+  {
+    type: 'calculated_dimension',
+    title: 'Concat',
+    formula: "concat([def-2], ' ', [def-3])",
+    context: {
+      '[def-2]': { dim: '[Rooms.Name]', datatype: 'text' },
+      '[def-3]': { dim: '[Rooms.Surname]', datatype: 'text' },
+    },
+    filter: { exclude: { members: ['Claudia Jarvis'] }, isCondition: true },
+  } as unknown as FilterJaqlInternal,
+  'calc-dim-concat-guid',
+);
 
 const memberGenderFilter = filterFactory.members(
   new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]'),
@@ -729,6 +760,17 @@ describe('filter-relations', () => {
       const result = getFilterCompareId(datetimeFilter);
       expect(result).toBe('[Date.Created]Months');
     });
+
+    it('should use the formula as the ID for a calculated-dimension filter', () => {
+      const result = getFilterCompareId(containsCalcDimFilter);
+      expect(result).toBe("contains([abc-1], '2011')");
+    });
+
+    it('should generate distinct IDs for two different calculated-dimension filters', () => {
+      expect(getFilterCompareId(containsCalcDimFilter)).not.toBe(
+        getFilterCompareId(concatCalcDimFilter),
+      );
+    });
   });
 
   describe('mergeFilters', () => {
@@ -745,6 +787,11 @@ describe('filter-relations', () => {
     it('should replace the filter with same dimension', () => {
       const result = mergeFilters([memberGenderFilter], [excludeGenderfilter]);
       expect(result).toEqual([excludeGenderfilter]);
+    });
+
+    it('should keep both distinct calculated-dimension filters instead of dropping one', () => {
+      const result = mergeFilters([containsCalcDimFilter], [concatCalcDimFilter]);
+      expect(result).toEqual([containsCalcDimFilter, concatCalcDimFilter]);
     });
   });
 

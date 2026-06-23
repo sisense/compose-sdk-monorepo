@@ -31,7 +31,7 @@ export var Category = createDimension({
     CategoryID: createAttribute({
         name: 'Category ID',
         type: 'numeric-attribute',
-        expression: "[Category.'Category ID']",
+        expression: '[Category.Category ID]',
         dataSource: { title: 'Sample ECommerce', live: false },
     }),
 });
@@ -39,6 +39,7 @@ export var Commerce = createDimension({
     name: 'Commerce',
     AgeRange: createAttribute({
         name: 'Age Range',
+        title: 'Age Range DisplayName',
         type: 'text-attribute',
         expression: '[Commerce.Age Range]',
         dataSource: { title: 'Sample ECommerce', live: false },
@@ -52,7 +53,7 @@ export var Commerce = createDimension({
     CategoryID: createAttribute({
         name: 'Category ID',
         type: 'numeric-attribute',
-        expression: "[Commerce.'Category ID']",
+        expression: '[Commerce.Category ID]',
         dataSource: { title: 'Sample ECommerce', live: false },
     }),
     Condition: createAttribute({
@@ -204,7 +205,7 @@ export const Category = createDimension({
     CategoryID: createAttribute({
         name: 'Category ID',
         type: 'numeric-attribute',
-        expression: "[Category.'Category ID']",
+        expression: '[Category.Category ID]',
         dataSource: { title: 'Sample ECommerce', live: false },
     }),
 }) as CategoryDimension;
@@ -227,6 +228,7 @@ export const Commerce = createDimension({
     name: 'Commerce',
     AgeRange: createAttribute({
         name: 'Age Range',
+        title: 'Age Range DisplayName',
         type: 'text-attribute',
         expression: '[Commerce.Age Range]',
         dataSource: { title: 'Sample ECommerce', live: false },
@@ -240,7 +242,7 @@ export const Commerce = createDimension({
     CategoryID: createAttribute({
         name: 'Category ID',
         type: 'numeric-attribute',
-        expression: "[Commerce.'Category ID']",
+        expression: '[Commerce.Category ID]',
         dataSource: { title: 'Sample ECommerce', live: false },
     }),
     Condition: createAttribute({
@@ -364,7 +366,7 @@ export const Category = createDimension({
     CategoryID: createAttribute({
         name: 'Category ID',
         type: 'numeric-attribute',
-        expression: "[Category.'Category ID']",
+        expression: '[Category.Category ID]',
         dataSource: { title: 'Sample ECommerce', live: false },
     }),
 }) as CategoryDimension;
@@ -387,6 +389,7 @@ export const Commerce = createDimension({
     name: 'Commerce',
     AgeRange: createAttribute({
         name: 'Age Range',
+        title: 'Age Range DisplayName',
         type: 'text-attribute',
         expression: '[Commerce.Age Range]',
         dataSource: { title: 'Sample ECommerce', live: false },
@@ -400,7 +403,7 @@ export const Commerce = createDimension({
     CategoryID: createAttribute({
         name: 'Category ID',
         type: 'numeric-attribute',
-        expression: "[Commerce.'Category ID']",
+        expression: '[Commerce.Category ID]',
         dataSource: { title: 'Sample ECommerce', live: false },
     }),
     Condition: createAttribute({

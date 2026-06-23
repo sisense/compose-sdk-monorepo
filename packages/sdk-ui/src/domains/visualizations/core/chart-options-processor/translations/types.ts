@@ -15,6 +15,7 @@ import {
   LineChartDesignOptions,
   PieChartDesignOptions,
   PolarChartDesignOptions,
+  SankeyChartDesignOptions,
   ScatterChartDesignOptions,
   ScattermapChartDesignOptions,
   SunburstChartDesignOptions,
@@ -131,6 +132,15 @@ export const RANGE_CHART_TYPES = ['arearange'] as const;
 /** AreaRange chart types  @expandType */
 export type RangeChartType = (typeof RANGE_CHART_TYPES)[number];
 
+export const SANKEY_CHART_TYPES = ['sankey'] as const;
+/**
+ * Sankey chart types
+ *
+ * @expandType
+ * @beta
+ */
+export type SankeyChartType = (typeof SANKEY_CHART_TYPES)[number];
+
 // ChartDataType is the category of data structure for a group of charts,
 // e.g. the ChartDataType of both "line" and "bar" charts is "cartesian",
 // but a bubble/scatter chart would be a different data type.
@@ -181,6 +191,8 @@ export type DesignOptions<SpecificChartType extends ChartType = ChartType> =
     ? CalendarHeatmapChartDesignOptions
     : SpecificChartType extends 'arearange'
     ? AreaRangeChartDesignOptions
+    : SpecificChartType extends 'sankey'
+    ? SankeyChartDesignOptions
     : never;
 
 /** A unique identifier for a series to be found in {@link ChartDataOptionsInternal} */
@@ -250,6 +262,10 @@ export const isCalendarHeatmap = (chartType: ChartType): chartType is CalendarHe
   return CALENDAR_HEATMAP_CHART_TYPES.find((value) => value === chartType) !== undefined;
 };
 
+export const isSankey = (chartType: ChartType): chartType is SankeyChartType => {
+  return SANKEY_CHART_TYPES.find((value) => value === chartType) !== undefined;
+};
+
 export const ALL_CHART_TYPES = [
   ...CARTESIAN_CHART_TYPES,
   ...CATEGORICAL_CHART_TYPES,
@@ -262,6 +278,7 @@ export const ALL_CHART_TYPES = [
   ...SCATTERMAP_CHART_TYPES,
   ...CALENDAR_HEATMAP_CHART_TYPES,
   ...RANGE_CHART_TYPES,
+  ...SANKEY_CHART_TYPES,
 ] as const;
 
 export type DynamicChartType = (typeof ALL_CHART_TYPES)[number];

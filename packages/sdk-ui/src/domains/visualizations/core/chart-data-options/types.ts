@@ -35,12 +35,11 @@ export interface CategoryStyle {
   /** {@inheritDoc NumberFormatConfig} */
   numberFormatConfig?: NumberFormatConfig;
   /**
-   * Date format.
+   * Date format for display using [date-fns `format` token syntax](https://date-fns.org/v2.29.3/docs/format)
+   * (for example `yyyy`, `MM`, `dd`, `HH:mm:ss`, or `yy-MM`). This is **not** the ECMAScript Date Time String Format.
    *
-   * See [ECMAScript Date Time String Format](https://tc39.es/ecma262/multipage/numbers-and-dates.html#sec-date-time-string-format)
-   *
-   * Note that 'YYYY' and 'DD' have been disabled since they often get confused with 'yyyy' and 'dd'
-   * and can produce unexpected results.
+   * Note that `YYYY` and `DD` are discouraged since they are often confused with `yyyy` and `dd` and can produce
+   * unexpected results.
    */
   dateFormat?: string;
   /** Boolean flag to toggle continuous timeline on this date column. */
@@ -674,7 +673,8 @@ export type RegularChartDataOptions =
   | AreamapChartDataOptions
   | ScattermapChartDataOptions
   | RangeChartDataOptions
-  | CalendarHeatmapChartDataOptions;
+  | CalendarHeatmapChartDataOptions
+  | SankeyChartDataOptions;
 
 /** @internal */
 export interface CartesianChartDataOptionsInternal {
@@ -768,7 +768,8 @@ export type ChartDataOptionsInternal =
   | AreamapChartDataOptionsInternal
   | ScattermapChartDataOptionsInternal
   | RangeChartDataOptionsInternal
-  | CalendarHeatmapChartDataOptionsInternal;
+  | CalendarHeatmapChartDataOptionsInternal
+  | SankeyChartDataOptionsInternal;
 
 /** @internal */
 export type IndicatorChartDataOptionsInternal = {
@@ -801,4 +802,47 @@ export type AreamapChartDataOptionsInternal = {
 export type CalendarHeatmapChartDataOptionsInternal = {
   date: StyledColumn;
   value: StyledMeasureColumn;
+};
+
+/**
+ * Configuration for how to query aggregate data and assign data
+ * to a {@link SankeyChartType | Sankey chart}.
+ *
+ * @group Charts
+ * @beta
+ *
+ * @example
+ * ```tsx
+ * <SankeyChart
+ *   dataSet={dataSource}
+ *   dataOptions={{
+ *     category: [DM.Commerce.Gender, DM.Commerce.AgeRange],
+ *     value: measureFactory.sum(DM.Commerce.Revenue),
+ *   }}
+ * />
+ * ```
+ */
+export interface SankeyChartDataOptions {
+  /**
+   * Columns (or attributes) representing the nodes in each stage of the flow.
+   * Must contain at least 2 items to define source and target nodes.
+   * When more than 2 items are provided the chart displays multi-stage flows.
+   */
+  category: (Column | CalculatedColumn | StyledColumn)[];
+  /**
+   * Measure column whose aggregated values determine the flow weight between nodes.
+   * Use a styled measure column to apply {@link StyledMeasureColumn.numberFormatConfig | number formatting}.
+   */
+  value: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
+  /**
+   * Optional mapping of node names to colors.
+   */
+  seriesToColorMap?: ValueToColorMap | MultiColumnValueToColorMap;
+}
+
+/** @internal */
+export type SankeyChartDataOptionsInternal = {
+  category: StyledColumn[];
+  value: StyledMeasureColumn;
+  seriesToColorMap?: ValueToColorMap | MultiColumnValueToColorMap;
 };

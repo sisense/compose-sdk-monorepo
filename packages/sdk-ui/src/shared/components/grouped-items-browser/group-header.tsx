@@ -48,7 +48,9 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
                 <group.Icon />
               </GroupIconContainer>
             )}
-            <GroupTitle theme={themeSettings}>{group.title}</GroupTitle>
+            <GroupTitle theme={themeSettings} data-testid={'csdk-databrowser-group-title'}>
+              {group.title}
+            </GroupTitle>
           </GroupHeaderLeftContent>
           {secondaryAction && isHovered && (
             <div

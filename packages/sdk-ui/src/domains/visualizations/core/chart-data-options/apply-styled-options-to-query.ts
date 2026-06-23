@@ -141,12 +141,12 @@ export function isForecastMeasure(measure: Measure): boolean {
  */
 export type AdaptMeasuresForQueryOptions = {
   /**
-   * When `true`, trend and forecast companion measures are not appended (e.g. narrative when the
-   * backend does not yet support them).
+   * When `true` (default), trend and forecast will be included if present.
+   * When `false`, trend and forecast will be omitted if they are present.
    *
-   * @default false
+   * @default true
    */
-  ignoreTrendAndForecast?: boolean;
+  includeTrendAndForecast?: boolean;
 };
 
 /**
@@ -158,7 +158,7 @@ export function adaptMeasuresForQuery(
   items: MeasureQueryAdaptItem[],
   options?: AdaptMeasuresForQueryOptions,
 ): Measure[] {
-  const ignoreTrendAndForecast = options?.ignoreTrendAndForecast ?? false;
+  const includeTrendAndForecast = options?.includeTrendAndForecast ?? true;
   const result: Measure[] = [];
   for (const { measure, style } of items) {
     const sortType = style?.sortType;
@@ -168,12 +168,12 @@ export function adaptMeasuresForQuery(
         : measure;
     result.push(baseMeasure);
 
-    if (!ignoreTrendAndForecast && style?.trend && !isTrendMeasure(measure)) {
+    if (includeTrendAndForecast && style?.trend && !isTrendMeasure(measure)) {
       result.push(
         measureFactory.trend(measure, `${TREND_PREFIX}_${measure.name ?? 'Measure'}`, style.trend),
       );
     }
-    if (!ignoreTrendAndForecast && style?.forecast && !isForecastMeasure(measure)) {
+    if (includeTrendAndForecast && style?.forecast && !isForecastMeasure(measure)) {
       result.push(
         measureFactory.forecast(
           measure,

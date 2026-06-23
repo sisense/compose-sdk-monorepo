@@ -1,32 +1,48 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import {
+  isChartWidgetProps,
+  isPivotTableWidgetProps,
+} from '@/domains/widgets/components/widget-by-id/utils.js';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
-import { LoadingOverlay } from '@/shared/components/loading-overlay.js';
+import type { HookEnableParam } from '@/shared/hooks/types';
 
-import type { WidgetNarrativeOptions } from '../core/widget-narrative-options.js';
+import { getWidgetNarrativeOptionsFromWidgetProps } from '../core/get-widget-narrative-from-widget-props.js';
+import { getCompleteWidgetNarrativeOptions } from '../core/widget-narrative-options.js';
 import { useWidgetNarrativeState } from '../hooks/use-widget-narrative-state.js';
 import { NarrativeCollapsible } from './narrative-collapsible.js';
-import { NarrativeTopSlotShell } from './narrative-top-slot-shell.js';
-import { WidgetNarrativeInteractive } from './widget-narrative-interactive.js';
+import {
+  NARRATIVE_TOP_SLOT_PADDING_TOP,
+  NarrativeTopSlotShell,
+} from './narrative-top-slot-shell.js';
+import {
+  IconDiv,
+  NarrativeAiIcon,
+  NarrativeTopSlotRow,
+  WidgetNarrativeInteractive,
+} from './widget-narrative-interactive.js';
 
 /**
  * Props for {@link WidgetNarrative}.
  *
+ * @remarks
+ * Narrative options are read from `widgetProps.aiOptions.narrative` for chart and pivot widgets.
+ * Accepts {@link HookEnableParam}; `enabled` is forwarded to {@link useWidgetNarrativeState}.
  * @sisenseInternal
  */
 export type WidgetNarrativeProps = {
   /** Widget whose query drives the narrative (chart or pivot). */
   widgetProps: WidgetProps;
-  /**
-   * `default` — collapsible narrative with AI feedback actions (same pattern as NLQ chart insights).
-   * `plain` — collapsible text only (similar to the `GetNlgInsights` component).
-   */
-  variant?: 'default' | 'plain';
-  /** When false, the narrative query does not run (see {@link useWidgetNarrativeState}). */
-  enabled?: boolean;
-} & WidgetNarrativeOptions;
+  /** Fired when the collapsed state of the narrative text changes (expand/collapse mode only). */
+  onCollapsedChange?: (isCollapsed: boolean) => void;
+  /** Forwarded to {@link NarrativeCollapsible} — external height constraint in pixels. */
+  constrainedHeightPx?: number;
+  /** Forwarded to {@link NarrativeCollapsible} — max height constraint in pixels. (Limit after 'show more' is expanded) */
+  maxConstrainedHeightPx?: number;
+} & HookEnableParam;
 
 /**
  * Renders a natural-language narrative for chart or pivot `WidgetProps`. The request uses the same
@@ -52,12 +68,27 @@ export const WidgetNarrative = asSisenseComponent({
   componentName: 'WidgetNarrative',
 })(function WidgetNarrative({
   widgetProps,
-  variant = 'default',
   enabled = true,
-  ...options
+  onCollapsedChange,
+  constrainedHeightPx,
+  maxConstrainedHeightPx,
 }: WidgetNarrativeProps) {
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
+
+  const { feedbackEnabled, isDisplayedAlone } = useMemo(() => {
+    if (!isChartWidgetProps(widgetProps) && !isPivotTableWidgetProps(widgetProps)) {
+      return { feedbackEnabled: false, isDisplayedAlone: false };
+    }
+    const completeOptions = getCompleteWidgetNarrativeOptions(
+      getWidgetNarrativeOptionsFromWidgetProps(widgetProps),
+    );
+    return {
+      feedbackEnabled: completeOptions.feedback.enabled,
+      isDisplayedAlone: completeOptions.displayLocation === 'alone',
+    };
+  }, [widgetProps]);
+
   const {
     data,
     isLoading,
@@ -68,7 +99,6 @@ export const WidgetNarrative = asSisenseComponent({
   } = useWidgetNarrativeState({
     widgetProps,
     enabled,
-    ...options,
   });
 
   if (!supported) {
@@ -79,21 +109,31 @@ export const WidgetNarrative = asSisenseComponent({
     return null;
   }
 
-  if (isError) {
-    return <>{t('ai.errors.unexpected')}</>;
-  }
-
   const summary = data ?? t('ai.errors.insightsNotAvailable');
-  const collapsibleText = isLoading ? '\u00A0' : summary;
 
-  if (variant === 'plain') {
-    return (
-      <NarrativeTopSlotShell theme={themeSettings} $horizontalInset>
-        <LoadingOverlay isVisible={isLoading}>
-          <NarrativeCollapsible text={collapsibleText} />
-        </LoadingOverlay>
-      </NarrativeTopSlotShell>
-    );
+  const narrativeRow = (
+    <NarrativeTopSlotRow>
+      <IconDiv theme={themeSettings}>
+        <NarrativeAiIcon theme={themeSettings} />
+      </IconDiv>
+      <NarrativeCollapsible
+        isError={isError}
+        text={summary}
+        isLoading={isLoading}
+        noCollapse={isDisplayedAlone}
+        onCollapsedChange={onCollapsedChange}
+        constrainedHeightPx={constrainedHeightPx}
+        maxConstrainedHeightPx={
+          maxConstrainedHeightPx
+            ? maxConstrainedHeightPx - NARRATIVE_TOP_SLOT_PADDING_TOP
+            : undefined
+        }
+      />
+    </NarrativeTopSlotRow>
+  );
+
+  if (!feedbackEnabled) {
+    return <NarrativeTopSlotShell theme={themeSettings}>{narrativeRow}</NarrativeTopSlotShell>;
   }
 
   if (!narrativeRequest) {
@@ -101,14 +141,21 @@ export const WidgetNarrative = asSisenseComponent({
   }
 
   if (isLoading) {
-    return (
-      <NarrativeTopSlotShell theme={themeSettings}>
-        <LoadingOverlay isVisible={isLoading}>
-          <NarrativeCollapsible text={collapsibleText} />
-        </LoadingOverlay>
-      </NarrativeTopSlotShell>
-    );
+    return <NarrativeTopSlotShell theme={themeSettings}>{narrativeRow}</NarrativeTopSlotShell>;
   }
 
-  return <WidgetNarrativeInteractive narrativeRequest={narrativeRequest} summary={summary} />;
+  return (
+    <WidgetNarrativeInteractive
+      isError={isError}
+      isLoading={isLoading}
+      narrativeRequest={narrativeRequest}
+      text={summary}
+      noCollapse={isDisplayedAlone}
+      onCollapsedChange={onCollapsedChange}
+      constrainedHeightPx={constrainedHeightPx}
+      maxConstrainedHeightPx={
+        maxConstrainedHeightPx ? maxConstrainedHeightPx - NARRATIVE_TOP_SLOT_PADDING_TOP : undefined
+      }
+    />
+  );
 });

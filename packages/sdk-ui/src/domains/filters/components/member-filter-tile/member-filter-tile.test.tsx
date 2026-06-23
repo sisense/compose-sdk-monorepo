@@ -186,9 +186,13 @@ describe('MemberFilterTile', () => {
     expect(pills[0].textContent).toBe(jaqlAgeRange.values[1][0].text);
   });
 
-  it('should render a MemberFilterTile component with jaql error', async () => {
-    expect.assertions(1);
-
+  // Regression test: when the members query fails (e.g. for a
+  // cascading filter level whose dimension is missing from the data model), the
+  // tile must surface the error gracefully. Two `useCallback` hooks used to be
+  // declared *after* an `if (isError) return` early return, so flipping into the
+  // error state skipped them and React threw "Rendered fewer hooks than expected".
+  // The error is now shown in a contained error box while the tile keeps its header.
+  it('should surface the query error in a contained error box without crashing', async () => {
     // Set failed jaql response
     server.use(
       http.post(
@@ -199,7 +203,7 @@ describe('MemberFilterTile', () => {
 
     const filterTitle = 'Member Filter Title';
     const filter = filterFactory.members(DM.Commerce.AgeRange, ['0-18', '65+']) as MembersFilter;
-    const { findByLabelText, findByText } = render(
+    render(
       <SisenseContextProvider {...contextProviderProps}>
         <MemberFilterTile
           title={filterTitle}
@@ -211,11 +215,13 @@ describe('MemberFilterTile', () => {
       </SisenseContextProvider>,
     );
 
-    const errorBoxContainer = await findByLabelText('error-box');
-    fireEvent.mouseEnter(errorBoxContainer);
-    const errorBoxText = await findByText(/Error/);
+    // The tile renders a contained error box and keeps its header, rather than
+    // crashing (a thrown hooks-order error would replace the whole tile).
+    const errorBox = await screen.findByLabelText('error-box');
+    expect(screen.getByText(filterTitle)).toBeInTheDocument();
 
-    expect(errorBoxText).toBeTruthy();
+    fireEvent.mouseEnter(errorBox);
+    expect(errorBox.textContent ?? '').not.toMatch(/Rendered fewer hooks|early return statement/i);
   });
 
   it('should not have a delete button by default', async () => {

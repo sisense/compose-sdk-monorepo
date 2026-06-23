@@ -45,7 +45,7 @@ describe('useTrackWidgetInit', () => {
         featureName: 'composesdk',
         packageName: 'sdk-ui',
         packageVersion: 'unit-test-version',
-        authType: undefined,
+        authType: 'bearer',
       },
       expect.anything(),
       false,

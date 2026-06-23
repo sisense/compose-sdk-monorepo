@@ -5,6 +5,7 @@ import {
   SpecificWidgetOptions,
   WidgetsPanelLayout,
 } from '@/domains/dashboarding/dashboard-model';
+import { TabberConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import type { WidgetPropsUpdate } from '@/domains/dashboarding/persistence/update-types.js';
 import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { WidgetModel } from '@/domains/widgets/widget-model';
@@ -145,6 +146,12 @@ export type UseDashboardModelAddWidgetAction = {
         widget: WidgetModel;
         widgetsPanelLayout?: WidgetsPanelLayout;
         widgetOptions?: SpecificWidgetOptions;
+        /**
+         * Dashboard-level tabber config for the widget (from `config.tabbers[id]`),
+         * carried so the persist middleware can project it back onto the widget DTO
+         * and the reducer can store it under the new widget id on duplication.
+         */
+        tabberConfig?: TabberConfig;
       };
 };
 

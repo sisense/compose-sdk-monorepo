@@ -3,7 +3,26 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { validateJaqlResponse } from './query-task-manager.js';
+import { CountRowsResponse } from '../types.js';
+import { validateCountRowsResponse, validateJaqlResponse } from './query-task-manager.js';
+
+describe('validateCountRowsResponse', () => {
+  it('should throw error for empty response', () => {
+    expect(() => validateCountRowsResponse(undefined)).toThrow(
+      'Invalid row count response received from the server.',
+    );
+  });
+
+  it('should throw error for response without numeric countRows', () => {
+    expect(() => validateCountRowsResponse({} as CountRowsResponse)).toThrow(
+      'Invalid row count response received from the server.',
+    );
+  });
+
+  it('should not throw error for valid response', () => {
+    expect(validateCountRowsResponse({ countRows: 0 })).toBeUndefined();
+  });
+});
 
 describe('validateJaqlResponse', () => {
   it('should throw error for empty', () => {
@@ -24,6 +43,25 @@ describe('validateJaqlResponse', () => {
     expect(() => validateJaqlResponse(jaqlResponse)).toThrow(
       `${jaqlResponse.details} ${jaqlResponse.database}`,
     );
+  });
+
+  it('should not include extraDetails JSON in the thrown message', () => {
+    const jaqlResponse = {
+      error: true,
+      details: 'The dimension, Sample Retail.[Brand.Brand], was not found',
+      extraDetails:
+        '{"inFormulaValidation":"true","baseTranslationException":"DimensionNotFoundException","dimension":"Sample Retail.[Brand.Brand]"}',
+    };
+
+    let message = '';
+    try {
+      validateJaqlResponse(jaqlResponse);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+
+    expect(message).toBe('The dimension, Sample Retail.[Brand.Brand], was not found');
+    expect(message).not.toContain('{');
   });
 
   it('should not throw error', () => {

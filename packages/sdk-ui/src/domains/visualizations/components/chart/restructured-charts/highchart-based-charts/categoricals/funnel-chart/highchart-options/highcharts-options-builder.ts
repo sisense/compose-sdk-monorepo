@@ -41,13 +41,18 @@ export const funnelHighchartsOptionsBuilder: HighchartsOptionsBuilder<'funnel'> 
   },
 
   getPlotOptions: function (ctx) {
-    return getFunnelPlotOptions(ctx.designOptions, ctx.dataOptions);
+    return getFunnelPlotOptions(
+      ctx.designOptions,
+      ctx.dataOptions,
+      ctx.extraConfig.defaultNumberFormattingEnabled,
+    );
   },
 
   getTooltip: function (ctx) {
     return getCategoryTooltipSettings(
       ctx.designOptions.seriesLabels?.showPercentDecimals,
       ctx.dataOptions,
+      ctx.extraConfig.defaultNumberFormattingEnabled,
     );
   },
 

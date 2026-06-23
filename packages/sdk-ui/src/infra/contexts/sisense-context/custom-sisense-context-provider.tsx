@@ -1,8 +1,10 @@
 import { type FunctionComponent, PropsWithChildren } from 'react';
 
+import { DashboardModule } from '@/domains/dashboarding/dashboard-module/dashboard-module.js';
 import { EmotionCacheProvider } from '@/infra/contexts/emotion-cache-provider';
 import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
 import { ModalProvider } from '@/infra/contexts/modal-provider/modal-provider';
+import { ModuleProvider } from '@/infra/modules';
 
 import { CustomContextProviderProps } from '../../../types';
 import { ErrorBoundary } from '../../error-boundary/error-boundary';
@@ -49,9 +51,11 @@ export const CustomSisenseContextProvider: FunctionComponent<
             <SisenseContext.Provider value={context}>
               <ThemeProvider skipTracking theme={context.app?.settings.serverThemeSettings}>
                 <SisenseQueryClientProvider>
-                  <MenuProvider>
-                    <ModalProvider>{children}</ModalProvider>
-                  </MenuProvider>
+                  <ModuleProvider modules={[DashboardModule]}>
+                    <MenuProvider>
+                      <ModalProvider>{children}</ModalProvider>
+                    </MenuProvider>
+                  </ModuleProvider>
                 </SisenseQueryClientProvider>
               </ThemeProvider>
             </SisenseContext.Provider>

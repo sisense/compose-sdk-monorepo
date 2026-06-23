@@ -5,7 +5,7 @@ import { getDataOptionTitle } from '@/domains/visualizations/core/chart-data-opt
 import { colorChineseSilver, colorWhite } from '../../../chart-data-options/coloring/consts';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { TreemapChartDesignOptions } from '../design-options.js';
-import { applyFormat, getCompleteNumberFormatConfig } from '../number-format-config.js';
+import { formatNumberWithFallback } from '../number-format-config.js';
 import {
   HighchartsDataPointContext,
   HighchartsDataPointContextNode,
@@ -24,6 +24,7 @@ export const getTreemapTooltipSettings = (
   designOptions: TreemapChartDesignOptions,
   translate: TFunction,
   formatterOptions?: TooltipFormatterOptions,
+  defaultNumberFormattingEnabled = true,
 ): TooltipSettings => ({
   animation: false,
   backgroundColor: colorWhite,
@@ -40,6 +41,7 @@ export const getTreemapTooltipSettings = (
       designOptions,
       translate,
       formatterOptions,
+      defaultNumberFormattingEnabled,
     );
   },
 });
@@ -87,15 +89,14 @@ export function treemapTooltipFormatter(
   designOptions: TreemapChartDesignOptions,
   translate: TFunction,
   formatterOptions?: TooltipFormatterOptions,
+  defaultNumberFormattingEnabled = true,
 ) {
   if (formatterOptions?.shouldSkip && formatterOptions.shouldSkip(context)) {
     return false;
   }
 
   const isYEmpty = chartDataOptions.y?.length === 0;
-  const numberFormatConfig = getCompleteNumberFormatConfig(
-    chartDataOptions.y?.[0]?.numberFormatConfig,
-  );
+  const rawConfig = chartDataOptions.y?.[0]?.numberFormatConfig;
   const isContributionMode = designOptions?.tooltip?.mode === 'contribution';
   const valueTitle = getDataOptionTitle(chartDataOptions.y?.[0]);
   const color = context.color as string;
@@ -141,7 +142,11 @@ export function treemapTooltipFormatter(
                   >${
                     isContributionMode
                       ? getFormattedContribution(node.val, rootValue)
-                      : applyFormat(numberFormatConfig, node.val)
+                      : formatNumberWithFallback(
+                          node.val,
+                          rawConfig,
+                          defaultNumberFormattingEnabled,
+                        )
                   }</span>
                   ${isLastNode ? '' : triangle}
                 </div>`;
@@ -154,7 +159,11 @@ export function treemapTooltipFormatter(
           <span style="color:${color}; font-size: 15px">${
                 isContributionMode
                   ? getFormattedContribution(nodesToShow[0].val, rootValue)
-                  : applyFormat(numberFormatConfig, nodesToShow[0]?.val)
+                  : formatNumberWithFallback(
+                      nodesToShow[0].val,
+                      rawConfig,
+                      defaultNumberFormattingEnabled,
+                    )
               }</span> ${translate('treemap.tooltip.of')} ${valueTitle}
         </div>`
         }

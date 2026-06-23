@@ -266,11 +266,13 @@ const translation: TranslationDictionary = {
       incorrectResponse: '错误响应',
       clearChat: '清除聊天',
       refresh: '刷新',
-      readMore: '阅读更多',
+      readMore: '显示更多',
       collapse: '折叠',
       yes: '是',
       no: '否',
       seeMore: '查看更多',
+      generateNarrative: '生成 AI 叙述',
+      hideNarrative: '隐藏 AI 叙述',
     },
     disclaimer: {
       poweredByAi: '内容由AI提供支持，因此可能会出现意外和错误。',
@@ -324,6 +326,8 @@ const translation: TranslationDictionary = {
       from: '从',
       to: '到',
       includeCurrent: '包括当前',
+      rankedBy: '排名依据',
+      selectField: '选择字段',
     },
     placeholders: {
       selectFromList: '从列表中选择',
@@ -348,6 +352,8 @@ const translation: TranslationDictionary = {
       greaterThan: '大于',
       greaterThanOrEqual: '大于或等于',
       isWithin: '在...范围内',
+      top: '前',
+      bottom: '后',
     },
     validationErrors: {
       invalidNumber: '仅数字',
@@ -443,6 +449,12 @@ const translation: TranslationDictionary = {
     table: {
       label: '数据表',
     },
+    sankey: {
+      alerts: {
+        tooManyStages:
+          'Sankey 图表有 {{stageCount}} 个阶段；超过 {{softLimit}} 个阶段往往会导致图表难以阅读。请减少类别列或加强筛选条件。',
+      },
+    },
   },
   loadingOverlay: {
     label: '正在加载内容',
@@ -467,6 +479,17 @@ const translation: TranslationDictionary = {
     stdev: '标准差',
     median: '中位数',
     variance: '方差',
+  },
+  measuresAgg: {
+    countDistinct: '唯一',
+    count: '数量',
+    sum: '总计',
+    average: '平均值',
+    min: '最小值',
+    max: '最大值',
+    median: '中位数',
+    variance: '方差',
+    stdev: '标准差',
   },
 };
 

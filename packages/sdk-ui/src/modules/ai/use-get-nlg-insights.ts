@@ -46,7 +46,7 @@ export const useGetNlgInsightsInternal = (
   const { app } = useSisenseContext();
   const httpClient = app?.httpClient;
 
-  const narrationOptions = useMemo(
+  const getNarrativeOptions = useMemo(
     () => ({
       canGenerateNarrativeViaAI: app?.settings?.narrative?.canGenerateNarrativeViaAI,
     }),
@@ -58,12 +58,12 @@ export const useGetNlgInsightsInternal = (
   }, [params]);
 
   const { data, error, isError, isLoading, isSuccess, refetch } = useQuery({
-    queryKey: ['narrative', payload, narrationOptions],
+    queryKey: ['narrative', payload, getNarrativeOptions],
     queryFn: () => {
       if (!httpClient) {
         return Promise.reject(new Error('HttpClient is required for narrative requests'));
       }
-      return getNarrative(httpClient, payload, narrationOptions);
+      return getNarrative(httpClient, payload, getNarrativeOptions);
     },
     select: (response) => response?.data?.answer,
     enabled,

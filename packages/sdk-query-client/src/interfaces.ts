@@ -6,6 +6,7 @@ import {
 } from '@sisense/sdk-data';
 
 import {
+  ExecutingCountRowsQueryResult,
   ExecutingCsvQueryResult,
   ExecutingPivotQueryResult,
   ExecutingQueryResult,
@@ -16,6 +17,10 @@ import {
 
 export interface QueryClient {
   executeQuery(params: QueryDescription, config?: QueryExecutionConfig): ExecutingQueryResult;
+  executeCountRowsQuery(
+    params: QueryDescription,
+    config?: QueryExecutionConfig,
+  ): ExecutingCountRowsQueryResult;
   executeCsvQuery(params: QueryDescription, config?: QueryExecutionConfig): ExecutingCsvQueryResult;
   executePivotQuery(
     params: PivotQueryDescription,

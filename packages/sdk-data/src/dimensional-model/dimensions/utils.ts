@@ -38,29 +38,28 @@ const createAttributeEntry = (
   const dimensionId = field.table;
   const dimensionName = field.tableTitle || dimensionId;
   const attributeId = field.id;
-  const attributeName = field.title || attributeId;
+  const identityName = field.column;
+  const title = field.title !== identityName ? field.title : undefined;
   const dataSourceConfig = isDataSourceInfo(dataSource)
     ? dataSource
     : { title: dataSource, live: false };
 
+  const attributeConfig = {
+    name: identityName,
+    ...(title ? { title } : {}),
+    expression: attributeId,
+    dataSource: dataSourceConfig,
+    description: field.description,
+    indexed: field.indexed,
+    merged: field.merged,
+  };
+
   const attribute =
     field.dimtype === 'datetime'
-      ? createDateDimension({
-          name: attributeName,
-          expression: attributeId,
-          dataSource: dataSourceConfig,
-          description: field.description,
-          indexed: field.indexed,
-          merged: field.merged,
-        })
+      ? createDateDimension(attributeConfig)
       : createAttribute({
-          name: attributeName,
+          ...attributeConfig,
           type: field.dimtype === 'text' ? 'text-attribute' : 'numeric-attribute',
-          expression: attributeId,
-          dataSource: dataSourceConfig,
-          description: field.description,
-          indexed: field.indexed,
-          merged: field.merged,
         });
 
   return {

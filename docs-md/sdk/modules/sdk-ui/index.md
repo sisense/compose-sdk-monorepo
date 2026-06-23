@@ -22,6 +22,10 @@ React components and utilities for working with charts
 - [LineChart](charts/function.LineChart.md)
 - [PieChart](charts/function.PieChart.md)
 - [PolarChart](charts/function.PolarChart.md)
+- [SankeyChart](charts/function.SankeyChart.md) <Badge type="beta" text="Beta" />
+- [SankeyChartDataOptions](charts/interface.SankeyChartDataOptions.md) <Badge type="beta" text="Beta" />
+- [SankeyChartProps](charts/interface.SankeyChartProps.md) <Badge type="beta" text="Beta" />
+- [SankeyStyleOptions](charts/interface.SankeyStyleOptions.md) <Badge type="beta" text="Beta" />
 - [ScatterChart](charts/function.ScatterChart.md)
 - [ScattermapChart](charts/function.ScattermapChart.md)
 - [StreamgraphChart](charts/function.StreamgraphChart.md)
@@ -129,3 +133,21 @@ General-purpose utilities and primitives for formatting, styling, and common UI 
 - [Formatting](formatting/index.md) - Utilities for formatting numbers, dates, and query result data sets.
 - [Styling](styling/index.md) - Utilities for creating and inspecting color gradients used in chart styling.
 - [Primitives](primitives/index.md) - General-purpose presentational primitive components.
+
+## Plugin System
+
+Types for building and registering custom visualization plugins
+
+- [BasePluginInfo](plugin-system/interface.BasePluginInfo.md) <Badge type="beta" text="Beta" />
+- [CustomVisualization](plugin-system/type-alias.CustomVisualization.md) <Badge type="beta" text="Beta" />
+- [CustomVisualizationDataPoint](plugin-system/type-alias.CustomVisualizationDataPoint.md) <Badge type="beta" text="Beta" />
+- [CustomVisualizationDataPointContextMenuHandler](plugin-system/type-alias.CustomVisualizationDataPointContextMenuHandler.md) <Badge type="beta" text="Beta" />
+- [CustomVisualizationDataPointEventHandler](plugin-system/type-alias.CustomVisualizationDataPointEventHandler.md) <Badge type="beta" text="Beta" />
+- [CustomVisualizationDataPointsEventHandler](plugin-system/type-alias.CustomVisualizationDataPointsEventHandler.md) <Badge type="beta" text="Beta" />
+- [CustomVisualizationEventProps](plugin-system/interface.CustomVisualizationEventProps.md) <Badge type="beta" text="Beta" />
+- [CustomVisualizationProps](plugin-system/interface.CustomVisualizationProps.md) <Badge type="beta" text="Beta" />
+- [CustomVisualizationStyleOptions](plugin-system/interface.CustomVisualizationStyleOptions.md) <Badge type="beta" text="Beta" />
+- [DesignPanel](plugin-system/type-alias.DesignPanel.md) <Badge type="beta" text="Beta" />
+- [DesignPanelProps](plugin-system/interface.DesignPanelProps.md) <Badge type="beta" text="Beta" />
+- [Plugin](plugin-system/type-alias.Plugin.md) <Badge type="beta" text="Beta" />
+- [WidgetPlugin](plugin-system/interface.WidgetPlugin.md) <Badge type="beta" text="Beta" />

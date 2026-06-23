@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 
 import { DashboardContainer } from '@/domains/dashboarding/components/dashboard-container';
+import { DashboardHeaderTargets } from '@/domains/dashboarding/components/dashboard-header-targets';
 import { DashboardProps, WidgetsPanelLayout } from '@/domains/dashboarding/types';
+import { HeaderItem } from '@/domains/shared/header';
 import { ThemeProvider } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { CONTEXT_MENU_SELECTED_WITH_DOT_CLASS } from '@/shared/components/menu/context-menu/context-menu';
@@ -19,7 +21,7 @@ import {
 import { EditToggle } from './components/toolbar/edit-toggle';
 import { FilterToggle } from './components/toolbar/filter-toggle';
 import { DEFAULT_DASHBOARD_CONFIG } from './constants';
-import { useDashboardHeaderToolbar } from './hooks/use-dashboard-header-toolbar';
+import { useDashboardHeaderMenuItem } from './hooks/use-dashboard-header-menu-item';
 import { useEditModeWithHistory } from './hooks/use-edit-mode-with-history';
 import { useFiltersPanelCollapsedState } from './hooks/use-filters-panel-collapsed-state';
 import { useComposedDashboardInternal } from './use-composed-dashboard';
@@ -71,6 +73,7 @@ export const Dashboard = asSisenseComponent({
   shouldHaveOwnModalRoot: true,
 })(
   ({
+    id,
     title = '',
     layoutOptions,
     config: propConfig,
@@ -82,7 +85,6 @@ export const Dashboard = asSisenseComponent({
     onChange,
     persistence,
   }: DashboardProps) => {
-    const { themeSettings } = useDashboardThemeInternal({ styleOptions });
     const config = useDefaults(propConfig, DEFAULT_DASHBOARD_CONFIG);
     const { t } = useTranslation();
 
@@ -208,51 +210,20 @@ export const Dashboard = asSisenseComponent({
       return sections;
     }, [isEditMode, currentColumnsCount, layoutChangeHandler, editingLayout, t]);
 
-    const headerToolbarComponents = useMemo(() => {
-      const components: JSX.Element[] = [];
+    // Built-in header action items, ordered left-to-right (after the title): edit-mode toolbar,
+    // edit toggle, filter toggle, menu. Each is always present so it can anchor `before`/`after`
+    // positioning, and carries `hidden: true` when the current config shouldn't render it.
+    const editModeToolbarItem = useMemo<HeaderItem>(
+      () => ({
+        id: DashboardHeaderTargets.EditModeToolbar,
+        fill: 'content',
+        hidden: !(isEditMode && isHistoryEnabled),
+        component: () => <>{editModeToolbar()}</>,
+      }),
+      [isEditMode, isHistoryEnabled, editModeToolbar],
+    );
 
-      if (isEditModeEnabled) {
-        components.push(
-          <EditToggle
-            key="edit-toggle"
-            isEditMode={isEditMode}
-            isHistoryEnabled={isHistoryEnabled}
-            color={themeSettings.dashboard.toolbar.primaryTextColor}
-            onToggleClick={() =>
-              handleModeChange(isEditMode ? DashboardMode.VIEW : DashboardMode.EDIT)
-            }
-          />,
-        );
-      }
-
-      // Add filter toggle component when showFilterIconInToolbar is enabled and both toolbar and filters panel are visible
-      if (showFilterIconInToolbar) {
-        components.push(
-          <FilterToggle
-            key="filter-toggle"
-            isFilterPanelCollapsed={isFilterPanelCollapsed}
-            color={themeSettings.dashboard.toolbar.primaryTextColor}
-            onToggleClick={handleFilterToggleClick}
-          />,
-        );
-      }
-
-      return components;
-    }, [
-      showFilterIconInToolbar,
-      isFilterPanelCollapsed,
-      handleFilterToggleClick,
-      handleModeChange,
-      isEditMode,
-      isEditModeEnabled,
-      isHistoryEnabled,
-      themeSettings.dashboard.toolbar.primaryTextColor,
-    ]);
-
-    const { toolbar: headerToolbar } = useDashboardHeaderToolbar({
-      menuItemSections: headerToolbarMenuItemSections,
-      toolbarComponents: headerToolbarComponents,
-    });
+    const menuItem = useDashboardHeaderMenuItem(headerToolbarMenuItemSections);
 
     const innerLayoutOptions = useMemo(() => {
       return {
@@ -266,15 +237,23 @@ export const Dashboard = asSisenseComponent({
         filters: dashboardFilters = [],
         widgets: dashboardWidgets,
         layoutOptions: updatedLayoutOptions,
+        config: composedConfig,
+        title: composedTitle,
+        defaultDataSource: composedDefaultDataSource,
+        styleOptions: composedStyleOptions,
       },
       setFilters,
     } = useComposedDashboardInternal(
       {
+        id,
+        title,
         filters,
         widgets,
         widgetsOptions,
         layoutOptions: innerLayoutOptions,
         config: propConfig,
+        defaultDataSource,
+        styleOptions,
       },
       {
         onFiltersChange: useCallback(
@@ -288,26 +267,80 @@ export const Dashboard = asSisenseComponent({
       },
     );
 
+    // Theme and config are derived from the composed dashboard so that module customizations
+    // to styleOptions and config are reflected in the rendered output.
+    const { themeSettings } = useDashboardThemeInternal({ styleOptions: composedStyleOptions });
+    const composedConfigWithDefaults = useDefaults(composedConfig, DEFAULT_DASHBOARD_CONFIG);
+
+    const editToggleItem = useMemo<HeaderItem>(
+      () => ({
+        id: DashboardHeaderTargets.EditToggle,
+        fill: 'content',
+        hidden: !isEditModeEnabled,
+        component: () => (
+          <EditToggle
+            isEditMode={isEditMode}
+            isHistoryEnabled={isHistoryEnabled}
+            color={themeSettings.dashboard.toolbar.primaryTextColor}
+            onToggleClick={() =>
+              handleModeChange(isEditMode ? DashboardMode.VIEW : DashboardMode.EDIT)
+            }
+          />
+        ),
+      }),
+      [
+        isEditModeEnabled,
+        isEditMode,
+        isHistoryEnabled,
+        themeSettings.dashboard.toolbar.primaryTextColor,
+        handleModeChange,
+      ],
+    );
+
+    const filterToggleItem = useMemo<HeaderItem>(
+      () => ({
+        id: DashboardHeaderTargets.FilterToggle,
+        fill: 'content',
+        // Visible only when showFilterIconInToolbar is enabled and both toolbar and filters panel
+        // are visible; otherwise kept as an anchor.
+        hidden: !showFilterIconInToolbar,
+        component: () => (
+          <FilterToggle
+            isFilterPanelCollapsed={isFilterPanelCollapsed}
+            color={themeSettings.dashboard.toolbar.primaryTextColor}
+            onToggleClick={handleFilterToggleClick}
+          />
+        ),
+      }),
+      [
+        showFilterIconInToolbar,
+        isFilterPanelCollapsed,
+        handleFilterToggleClick,
+        themeSettings.dashboard.toolbar.primaryTextColor,
+      ],
+    );
+
+    const headerItems = useMemo<HeaderItem[]>(
+      () => [editModeToolbarItem, editToggleItem, filterToggleItem, menuItem],
+      [editModeToolbarItem, editToggleItem, filterToggleItem, menuItem],
+    );
+
     return (
       <ThemeProvider theme={themeSettings}>
         <DashboardContainer
-          title={title}
+          title={composedTitle ?? ''}
           editMode={isEditMode}
           layoutOptions={updatedLayoutOptions}
-          config={config}
+          config={composedConfigWithDefaults}
           widgets={dashboardWidgets}
-          defaultDataSource={defaultDataSource}
+          defaultDataSource={composedDefaultDataSource}
           filters={dashboardFilters}
           onFiltersChange={setFilters}
           onLayoutChange={layoutChangeHandler}
           filterPanelCollapsed={isFilterPanelCollapsed}
           onFilterPanelCollapsedChange={handleFilterToggleClick}
-          renderToolbar={() => (
-            <>
-              {isEditMode && isHistoryEnabled && editModeToolbar()}
-              {headerToolbar()}
-            </>
-          )}
+          headerItems={headerItems}
+          headerConfig={composedConfig?.header}
         />
       </ThemeProvider>
     );

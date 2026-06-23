@@ -3,9 +3,10 @@ import {
   type ClientApplication,
   executeQuery,
   type ExecuteQueryParams,
+  executeQueryWithRowCount,
   queryStateReducer,
 } from '@sisense/sdk-ui-preact';
-import { toRefs, watch } from 'vue';
+import { ref, toRefs, watch } from 'vue';
 
 import { useReducer } from '../helpers/use-reducer';
 import { getSisenseContext } from '../providers/sisense-context-provider';
@@ -50,6 +51,9 @@ import { useTracking } from './use-tracking';
  * - `isError`: Indicates if an error occurred during query execution.
  * - `isSuccess`: Indicates if the query executed successfully without errors.
  * - `error`: Contains the error object if an error occurred during the query.
+ * - `rowCount`: The total row count of the query result, ignoring the `count` and `offset` paging.
+ * Populated only when `includeRowCount` is enabled in the params and the Sisense instance supports
+ * the row count API (`@beta`); `undefined` otherwise.
  *
  * This composable facilitates integrating Sisense data fetching into Vue applications, enabling developers
  * to easily manage query states and dynamically adjust query parameters based on application needs.
@@ -68,6 +72,7 @@ export const useExecuteQuery = (params: MaybeRefOrWithRefs<ExecuteQueryParams>) 
   // todo: retrive app ref directly from context
   const context = getSisenseContext();
   const { hasTrackedRef } = useTracking('useExecuteQuery');
+  const rowCount = ref<number | undefined>(undefined);
 
   const runExecuteQuery = async (application: ClientApplication) => {
     try {
@@ -80,6 +85,7 @@ export const useExecuteQuery = (params: MaybeRefOrWithRefs<ExecuteQueryParams>) 
         count,
         offset,
         ungroup,
+        includeRowCount,
         onBeforeQuery,
       } = toPlainObject(params);
       const { filters: filterList, relations: filterRelations } =
@@ -87,23 +93,34 @@ export const useExecuteQuery = (params: MaybeRefOrWithRefs<ExecuteQueryParams>) 
 
       dispatch({ type: 'loading' });
 
-      const data = await executeQuery(
-        {
-          dataSource,
-          dimensions,
-          measures,
-          filters: filterList,
-          filterRelations,
-          highlights,
-          count,
-          offset,
-          ungroup,
-        },
-        application,
-        { onBeforeQuery: toPlainValue(onBeforeQuery) },
-      );
+      const queryDescription = {
+        dataSource,
+        dimensions,
+        measures,
+        filters: filterList,
+        filterRelations,
+        highlights,
+        count,
+        offset,
+        ungroup,
+      };
+      const executionConfig = { onBeforeQuery: toPlainValue(onBeforeQuery) };
 
-      dispatch({ type: 'success', data });
+      if (includeRowCount) {
+        // Keep the previously resolved total visible while the next page loads
+        // (it is page-independent and cached); it is updated once the result resolves.
+        const result = await executeQueryWithRowCount(
+          queryDescription,
+          application,
+          executionConfig,
+        );
+        rowCount.value = result.rowCount;
+        dispatch({ type: 'success', data: result.data });
+      } else {
+        rowCount.value = undefined;
+        const data = await executeQuery(queryDescription, application, executionConfig);
+        dispatch({ type: 'success', data });
+      }
     } catch (error) {
       dispatch({ type: 'error', error: error as Error });
     }
@@ -121,5 +138,8 @@ export const useExecuteQuery = (params: MaybeRefOrWithRefs<ExecuteQueryParams>) 
     { immediate: true },
   );
 
-  return toRefs(queryState.value);
+  return {
+    ...toRefs(queryState.value),
+    rowCount,
+  };
 };

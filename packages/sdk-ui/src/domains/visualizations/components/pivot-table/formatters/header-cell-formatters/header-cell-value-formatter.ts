@@ -6,21 +6,21 @@ import type {
   PivotTableDataOptions,
   StyledColumn,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
-import { applyFormatPlainText } from '@/domains/visualizations/core/chart-options-processor/translations/number-format-config.js';
+import {
+  applyFormatPlainText,
+  formatNumberWithFallback,
+} from '@/domains/visualizations/core/chart-options-processor/translations/number-format-config.js';
 import { NOT_AVAILABLE_DATA_VALUE } from '@/shared/const.js';
 import { DateFormatter } from '@/shared/formatters/create-date-formatter.js';
 import { parseISOWithTimezoneCheck } from '@/shared/utils/parseISOWithTimezoneCheck';
 
 import type { HeaderCellFormatter } from '../types.js';
-import {
-  getDateFormatConfig,
-  getNumberFormatConfig,
-  getPivotDataOptionByJaqlIndex,
-} from '../utils.js';
+import { getDateFormatConfig, getPivotDataOptionByJaqlIndex } from '../utils.js';
 
 export const createHeaderCellValueFormatter = (
   dataOptions: PivotTableDataOptions,
   dateFormatter: DateFormatter,
+  defaultNumberFormattingEnabled = true,
 ): HeaderCellFormatter => {
   return (cell: PivotTreeNode, jaqlPanelItem: JaqlPanel | undefined) => {
     const isMeasureHeader = jaqlPanelItem?.panel === 'measures';
@@ -40,12 +40,20 @@ export const createHeaderCellValueFormatter = (
       : undefined;
 
     switch (jaqlPanelItem?.jaql?.datatype) {
-      case 'numeric':
-        cell.content = applyFormatPlainText(
-          getNumberFormatConfig(dataOption),
-          parseFloat(`${cell.value}`),
-        );
+      case 'numeric': {
+        const rawConfig =
+          'numberFormatConfig' in dataOption ? dataOption.numberFormatConfig : undefined;
+        const numericValue = parseFloat(`${cell.value}`);
+        cell.content = Number.isNaN(numericValue)
+          ? ''
+          : formatNumberWithFallback(
+              numericValue,
+              rawConfig,
+              defaultNumberFormattingEnabled,
+              applyFormatPlainText,
+            );
         break;
+      }
       case 'datetime':
         cell.content = formatDatetimeString(cell.value!, dateFormatter, dateFormat);
         break;

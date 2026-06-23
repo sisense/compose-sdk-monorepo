@@ -26,6 +26,30 @@ export const getDefaultWidgetsPanelLayout = (widgets: WidgetProps[]): WidgetsPan
 };
 
 /**
+ * Returns a copy of the layout with a new full-width row holding `widgetId` appended to the first
+ * column (a column is created if the layout has none). Pure; does not mutate the input.
+ *
+ * @param layout - The current widgets-panel layout.
+ * @param widgetId - The id of the widget to append.
+ * @returns The layout with the widget appended.
+ */
+export const withWidgetAppendedToPanelLayout = (
+  layout: WidgetsPanelColumnLayout,
+  widgetId: string,
+): WidgetsPanelColumnLayout => {
+  const newRow = { cells: [{ widthPercentage: 100, widgetId }] };
+  if (layout.columns.length === 0) {
+    return { columns: [{ widthPercentage: 100, rows: [newRow] }] };
+  }
+  return {
+    ...layout,
+    columns: layout.columns.map((column, index) =>
+      index === 0 ? { ...column, rows: [...column.rows, newRow] } : column,
+    ),
+  };
+};
+
+/**
  * With optionally disabled auto height.
  *
  * @param widgetProps - The widget props to disable the auto height for.

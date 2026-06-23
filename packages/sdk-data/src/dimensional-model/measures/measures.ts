@@ -13,7 +13,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { createAttribute, DimensionalAttribute } from '../attributes/attributes.js';
-import { DimensionalElement } from '../base.js';
+import { DimensionalElement, resolveElementNames } from '../base.js';
 import { create } from '../factory.js';
 import {
   Attribute,
@@ -55,8 +55,9 @@ export abstract class AbstractMeasure extends DimensionalElement {
     sort?: Sort,
     dataSource?: JaqlDataSource,
     composeCode?: string,
+    title?: string,
   ) {
-    super(name, type, desc, dataSource, composeCode);
+    super(name, type, desc, dataSource, composeCode, title);
 
     this._format = format;
     this._sort = sort || Sort.None;
@@ -205,8 +206,9 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
     sort?: Sort,
     dataSource?: JaqlDataSource,
     composeCode?: string,
+    title?: string,
   ) {
-    super(name, MetadataTypes.BaseMeasure, format, desc, sort, dataSource, composeCode);
+    super(name, MetadataTypes.BaseMeasure, format, desc, sort, dataSource, composeCode, title);
 
     this.attribute = attribute;
     this.aggregation = agg;
@@ -238,6 +240,7 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
       sort,
       this.dataSource,
       this.composeCode,
+      this.title,
     );
   }
 
@@ -259,6 +262,7 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
       this._sort,
       this.dataSource,
       this.composeCode,
+      this.title,
     );
   }
 
@@ -285,7 +289,7 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
     const r = <any>{
       jaql: {
         ...attributeJaql,
-        title: this.name,
+        title: this.title,
         agg: DimensionalBaseMeasure.aggregationToJAQL(this.aggregation),
       },
     };
@@ -330,8 +334,18 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
     sort?: Sort,
     dataSource?: JaqlDataSource,
     composeCode?: string,
+    title?: string,
   ) {
-    super(name, MetadataTypes.CalculatedMeasure, format, desc, sort, dataSource, composeCode);
+    super(
+      name,
+      MetadataTypes.CalculatedMeasure,
+      format,
+      desc,
+      sort,
+      dataSource,
+      composeCode,
+      title,
+    );
 
     this.expression = expression;
     this.context = context;
@@ -363,6 +377,7 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
       sort,
       this.dataSource,
       this.composeCode,
+      this.title,
     );
   }
 
@@ -384,6 +399,7 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
       this._sort,
       this.dataSource,
       this.composeCode,
+      this.title,
     );
   }
 
@@ -413,7 +429,7 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
   jaql(nested?: boolean): any {
     const r = <any>{
       jaql: {
-        title: this.name,
+        title: this.title,
         formula: this.expression,
       },
     };
@@ -465,8 +481,9 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
     sort?: Sort,
     dataSource?: JaqlDataSource,
     composeCode?: string,
+    title?: string,
   ) {
-    super(name, MetadataTypes.MeasureTemplate, format, desc, sort, dataSource, composeCode);
+    super(name, MetadataTypes.MeasureTemplate, format, desc, sort, dataSource, composeCode, title);
 
     this.attribute = attribute;
   }
@@ -509,6 +526,7 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
       sort,
       this.dataSource,
       this.composeCode,
+      this.title,
     );
   }
 
@@ -527,6 +545,7 @@ export class DimensionalMeasureTemplate extends AbstractMeasure implements Measu
       this._sort,
       this.dataSource,
       this.composeCode,
+      this.title,
     );
   }
 
@@ -615,7 +634,7 @@ export const isDimensionalMeasureTemplate = (v: AnyObject): v is DimensionalMeas
  * @internal
  */
 export function createMeasure(json: any): Measure | BaseMeasure {
-  const name = json.name || json.title;
+  const { name, title } = resolveElementNames(json);
   const desc = json.desc || json.description;
   const format = json.format;
   const sort = json.sort ?? <Sort>json.sort;
@@ -653,6 +672,9 @@ export function createMeasure(json: any): Measure | BaseMeasure {
       format,
       desc,
       sort,
+      undefined,
+      undefined,
+      title,
     );
   } else if (MetadataTypes.isMeasureTemplate(json)) {
     if (att === undefined) {
@@ -662,7 +684,16 @@ export function createMeasure(json: any): Measure | BaseMeasure {
       );
     }
 
-    return new DimensionalMeasureTemplate(name, att, format, desc, sort);
+    return new DimensionalMeasureTemplate(
+      name,
+      att,
+      format,
+      desc,
+      sort,
+      undefined,
+      undefined,
+      title,
+    );
   } else if (MetadataTypes.isBaseMeasure(json)) {
     if (att === undefined) {
       throw new TranslatableError(
@@ -678,7 +709,17 @@ export function createMeasure(json: any): Measure | BaseMeasure {
       });
     }
 
-    return new DimensionalBaseMeasure(name, att, agg, format, desc, sort);
+    return new DimensionalBaseMeasure(
+      name,
+      att,
+      agg,
+      format,
+      desc,
+      sort,
+      undefined,
+      undefined,
+      title,
+    );
   }
 
   throw new TranslatableError('errors.measure.unsupportedType', { measureName: name });

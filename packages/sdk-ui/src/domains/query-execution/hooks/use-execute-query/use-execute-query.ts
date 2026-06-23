@@ -12,9 +12,12 @@ import { TranslatableError } from '../../../../infra/translation/translatable-er
 import { useShouldLoad } from '../../../../shared/hooks/use-should-load';
 import {
   clearExecuteQueryCache,
+  clearRowCountQueryCache,
   createExecuteQueryCacheKey,
+  createRowCountQueryCacheKey,
   executeQueryWithCache,
   executeQuery as executeQueryWithoutCache,
+  executeQueryWithRowCount,
 } from '../../core/execute-query';
 import { ExecuteQueryParams, ExecuteQueryResult } from '../../types';
 import { queryStateReducer } from '../shared/query-state-reducer';
@@ -57,6 +60,7 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
   const shouldLoad = useShouldLoad(params, isParamsChanged);
   const [shouldForceRefetch, setShouldForceRefetch] = useState(false);
   const [lastQueryCacheKey, setLastQueryCacheKey] = useState<CacheKey | undefined>();
+  const [lastRowCountCacheKey, setLastRowCountCacheKey] = useState<CacheKey | undefined>();
   const { isInitialized, app } = useSisenseContext();
   const isCacheEnabled = app?.settings.queryCacheConfig?.enabled;
   const executeQuery = isCacheEnabled ? executeQueryWithCache : executeQueryWithoutCache;
@@ -67,6 +71,7 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
   const [loadMoreCount, setLoadMoreCount] = useState(0);
   const [isAllItemsLoaded, setIsAllItemsLoaded] = useState(false);
   const [shouldLoadMore, setShouldLoadMore] = useState(false);
+  const [rowCount, setRowCount] = useState<number | undefined>(undefined);
 
   const resetLoadMore = useCallback(() => {
     setLoadMoreOffset((params.offset ?? 0) + (params.count ?? app?.settings.queryLimit ?? 0));
@@ -95,11 +100,21 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
       clearExecuteQueryCache(lastQueryCacheKey);
       setLastQueryCacheKey(undefined);
     }
+    if (lastRowCountCacheKey) {
+      clearRowCountQueryCache(lastRowCountCacheKey);
+      setLastRowCountCacheKey(undefined);
+    }
     if (!queryState.isLoading) {
       resetLoadMore();
       setShouldForceRefetch(true);
     }
-  }, [isCacheEnabled, lastQueryCacheKey, queryState.isLoading, resetLoadMore]);
+  }, [
+    isCacheEnabled,
+    lastQueryCacheKey,
+    lastRowCountCacheKey,
+    queryState.isLoading,
+    resetLoadMore,
+  ]);
 
   const runQuery = useCallback(
     (app: ClientApplication, params: ExecuteQueryParams, extendData = false) => {
@@ -112,6 +127,7 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
         count = app.settings.queryLimit,
         offset,
         ungroup,
+        includeRowCount,
         onBeforeQuery,
       } = params;
 
@@ -119,20 +135,22 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
 
       const { filters: filterList, relations: filterRelations } =
         getFilterListAndRelationsJaql(filters);
+      const queryDescription = {
+        dataSource,
+        dimensions,
+        measures,
+        filters: filterList,
+        filterRelations,
+        highlights,
+        count,
+        offset,
+        ungroup,
+      };
+      const executionConfig = { onBeforeQuery };
       const executeQueryParams: Parameters<typeof executeQuery> = [
-        {
-          dataSource,
-          dimensions,
-          measures,
-          filters: filterList,
-          filterRelations,
-          highlights,
-          count,
-          offset,
-          ungroup,
-        },
+        queryDescription,
         app,
-        { onBeforeQuery },
+        executionConfig,
       ];
       if (isCacheEnabled) {
         const newQueryCacheKey = createExecuteQueryCacheKey(...executeQueryParams);
@@ -140,7 +158,31 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
           setLastQueryCacheKey(newQueryCacheKey);
         }
       }
-      void executeQuery(...executeQueryParams)
+      if (includeRowCount) {
+        const newRowCountCacheKey = createRowCountQueryCacheKey(...executeQueryParams);
+        if (lastRowCountCacheKey !== newRowCountCacheKey) {
+          setLastRowCountCacheKey(newRowCountCacheKey);
+        }
+      }
+      let dataPromise: ReturnType<typeof executeQuery>;
+      if (includeRowCount) {
+        // Keep the previously resolved total visible while the next page loads
+        // (it is page-independent and cached); it is updated once the result resolves.
+        dataPromise = executeQueryWithRowCount(
+          queryDescription,
+          app,
+          executionConfig,
+          executeQuery,
+        ).then((result) => {
+          setRowCount(result.rowCount);
+          return result.data;
+        });
+      } else {
+        setRowCount(undefined);
+        dataPromise = executeQuery(...executeQueryParams);
+      }
+
+      void dataPromise
         .then((data) => {
           if (count > data.rows.length) {
             setIsAllItemsLoaded(true);
@@ -151,7 +193,7 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
           dispatch({ type: 'error', error });
         });
     },
-    [executeQuery, isCacheEnabled, lastQueryCacheKey],
+    [executeQuery, isCacheEnabled, lastQueryCacheKey, lastRowCountCacheKey],
   );
 
   const loadMore = useCallback(
@@ -219,8 +261,15 @@ export function useExecuteQueryInternal(params: ExecuteQueryParams): ExecuteQuer
       refetch,
       loadMore,
       isAllItemsLoaded,
+      rowCount,
     };
   }
 
-  return { ...queryState, refetch, loadMore, isAllItemsLoaded };
+  return {
+    ...queryState,
+    refetch,
+    loadMore,
+    isAllItemsLoaded,
+    rowCount,
+  };
 }

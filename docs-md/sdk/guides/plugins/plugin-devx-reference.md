@@ -1,6 +1,5 @@
 ---
 title: Plugin DevX Reference
-hidden: true
 ---
 
 # Plugin DevX — Reference

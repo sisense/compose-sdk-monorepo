@@ -152,7 +152,7 @@ export const CRITERIA_FILTER_MAP: { [key: string]: FilterInfo } = {
   [FilterOption.BOTTOM]: {
     fn: filterFactory.bottomRanking,
     inputCount: 2,
-    symbols: ['Last', 'by'],
+    symbols: ['Bottom', 'by'],
     message: 'criteriaFilter.bottom',
     ranked: true,
     type: FilterTypes.ranking,
@@ -301,6 +301,12 @@ export const valuesToDisplayValues = (values: CriteriaFilterValueType[]): (strin
     if (MetadataTypes.isMeasure(value)) return (value as Measure).name;
     return value as string | number;
   });
+};
+
+export const getRankingTypeLabel = (filterType: FilterOptionType, t: TFunction): string => {
+  return filterType === (FilterOption.TOP as FilterOptionType)
+    ? t('filterEditor.conditions.top')
+    : t('filterEditor.conditions.bottom');
 };
 
 export const translatedMsgNoVal = (message: string, t: TFunction) => {

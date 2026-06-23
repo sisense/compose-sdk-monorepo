@@ -1,13 +1,10 @@
 import { useCallback, useMemo } from 'react';
 
 import { translatePivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
-import {
-  translateColumnToAttribute,
-  translateColumnToMeasure,
-} from '@/domains/visualizations/core/chart-data-options/utils.js';
+import { translateColumnToAttribute } from '@/domains/visualizations/core/chart-data-options/utils.js';
 import {
   mapAttributesForExcelExport,
-  mapMeasuresForExcelExport,
+  mapMeasureColumnsForExcelExport,
 } from '@/domains/widgets/helpers/excel-export-map-dimensions-measures.js';
 import { useExcelQueryFileLoader } from '@/domains/widgets/hooks/use-excel-query-file-loader.js';
 import { useWithExcelDownloadMenuItem } from '@/domains/widgets/hooks/use-with-excel-download-menu-item.js';
@@ -20,7 +17,7 @@ const PIVOT_WIDGET_TYPE = 'pivot';
 
 export type UsePivotWidgetExcelDownloadParams = Pick<
   PivotTableWidgetProps,
-  'title' | 'dataOptions' | 'config' | 'dataSource' | 'filters' | 'highlights' | 'id'
+  'title' | 'dataOptions' | 'config' | 'dataSource' | 'filters' | 'id'
 > & {
   baseHeaderConfig: WidgetHeaderConfig;
 };
@@ -41,8 +38,7 @@ export type UsePivotWidgetExcelDownloadResult = {
 export function usePivotWidgetExcelDownload(
   props: UsePivotWidgetExcelDownloadParams,
 ): UsePivotWidgetExcelDownloadResult {
-  const { dataOptions, dataSource, title, config, baseHeaderConfig, filters, highlights, id } =
-    props;
+  const { dataOptions, dataSource, title, config, baseHeaderConfig, filters, id } = props;
   const excelLoader = useExcelQueryFileLoader();
   const appSettings = useAppSettings();
   const isExportingXlsxV2FeatureOn = appSettings?.serverFeatures?.exportingXlsxV2?.active === true;
@@ -57,21 +53,19 @@ export function usePivotWidgetExcelDownload(
         .map(translateColumnToAttribute)
         .map((attribute) => Object.assign(attribute, { panel: 'columns' as const })),
     ]);
-    const measures = (internal.values ?? []).map(translateColumnToMeasure);
+    const measures = mapMeasureColumnsForExcelExport(internal.values ?? []);
 
     return {
       dataSource,
       dimensions,
-      measures: mapMeasuresForExcelExport(measures),
-      filters,
-      highlights,
+      measures,
       ungroup: false,
       filename: title ? `${title}.xlsx` : undefined,
       widgetType: PIVOT_WIDGET_TYPE,
       widgetId: id,
       widgetTitle: title ?? '',
     };
-  }, [dataOptions, dataSource, filters, highlights, id, title]);
+  }, [dataOptions, dataSource, id, title]);
 
   const isPivotWidgetAllowExcelDownload =
     excelQueryParams.dimensions.length > 0 || excelQueryParams.measures.length > 0;
@@ -85,10 +79,15 @@ export function usePivotWidgetExcelDownload(
       if (!isExcelDownloadEnabled || !isPivotWidgetAllowExcelDownload) {
         return;
       }
-      const params = { ...excelQueryParams, mergeRows };
-      void excelLoader.execute(params);
+      void excelLoader.execute({ ...excelQueryParams, mergeRows, filters });
     },
-    [excelLoader, excelQueryParams, isPivotWidgetAllowExcelDownload, isExcelDownloadEnabled],
+    [
+      excelLoader,
+      excelQueryParams,
+      filters,
+      isPivotWidgetAllowExcelDownload,
+      isExcelDownloadEnabled,
+    ],
   );
 
   const headerConfig = useWithExcelDownloadMenuItem({

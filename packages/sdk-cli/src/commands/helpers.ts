@@ -1,5 +1,11 @@
 import { levenshtein } from '@sisense/sdk-common';
-import { DataModel, DataSourceField, DataSourceMetadata, MetadataTypes } from '@sisense/sdk-data';
+import {
+  DataModel,
+  DataSourceField,
+  DataSourceMetadata,
+  MetadataTypes,
+  parseExpression,
+} from '@sisense/sdk-data';
 import { writeJavascript, writeTypescript } from '@sisense/sdk-modeling';
 import { DimensionalQueryClient, QueryClient } from '@sisense/sdk-query-client';
 import {
@@ -200,14 +206,21 @@ function rewriteDataModel(dataModel: any): DataModel {
   dataModel.metadata = (dataModel.metadata as any[])
     .filter((item) => !item.dimensionTable)
     .map((item) => {
-      const result = {
-        name: item.title,
+      const identityName = item.column ?? parseExpression(item.id).column;
+      const title = item.title !== identityName ? item.title : undefined;
+
+      const result: Record<string, unknown> = {
+        name: identityName,
         expression: item.id,
         type: MetadataTypes.Dimension,
         group: undefined,
         description: item.description,
         dataSource: item.dataSource,
       };
+
+      if (title) {
+        result.title = title;
+      }
 
       result.group = item.table;
 
@@ -333,15 +346,18 @@ export function addDescriptionToFields(
   fields: DataSourceField[],
   datasets: DataSourceSchemaDataset[],
 ): DataSourceField[] {
-  const schemaDataDescriptionsMap = datasets.reduce((map, dataset) => {
-    dataset.schema.tables.forEach((table) => {
-      map[table.name] = {};
-      table.columns.forEach((column) => {
-        map[table.name][column.name] = column.description;
+  const schemaDataDescriptionsMap = datasets.reduce<Record<string, Record<string, string | null>>>(
+    (map, dataset) => {
+      dataset.schema.tables.forEach((table) => {
+        map[table.name] = {};
+        table.columns.forEach((column) => {
+          map[table.name][column.name] = column.description;
+        });
       });
-    });
-    return map;
-  }, {});
+      return map;
+    },
+    {},
+  );
 
   return fields.map((field) => ({
     ...field,

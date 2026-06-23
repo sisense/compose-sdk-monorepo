@@ -414,6 +414,29 @@ describe('dashboardReducer', () => {
       expect(originalCells).toHaveLength(1);
       expect(layout.columns[0]!.rows[0]!.cells).toHaveLength(1);
     });
+
+    it('stores the tabber config under the new widget id when payload includes tabberConfig', () => {
+      const newWidget = createWidgetModel('new-tabber');
+      const tabberConfig = { tabs: [{ displayWidgetIds: ['a'] }, { displayWidgetIds: ['b'] }] };
+
+      const result = dashboardReducer(baseModel, {
+        type: UseDashboardModelActionType.ADD_WIDGET,
+        payload: { widget: newWidget, tabberConfig },
+      });
+
+      expect(result?.config?.tabbers?.['new-tabber']).toEqual(tabberConfig);
+    });
+
+    it('leaves config.tabbers untouched when payload has no tabberConfig', () => {
+      const newWidget = createWidgetModel('new-widget');
+
+      const result = dashboardReducer(baseModel, {
+        type: UseDashboardModelActionType.ADD_WIDGET,
+        payload: { widget: newWidget },
+      });
+
+      expect(result?.config?.tabbers?.['new-widget']).toBeUndefined();
+    });
   });
 
   describe('default', () => {

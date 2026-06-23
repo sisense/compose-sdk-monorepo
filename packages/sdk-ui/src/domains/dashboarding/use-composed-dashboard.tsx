@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { SetStateAction, useCallback, useMemo } from 'react';
 
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
@@ -8,12 +8,15 @@ import type { WidgetsOptions, WidgetsPanelLayout } from '@/domains/dashboarding/
 import { useDuplicateWidgetMenuItem } from '@/domains/dashboarding/hooks/duplicate-widget/use-duplicate-widget-menu-item.js';
 import { useWidgetRenaming } from '@/domains/dashboarding/hooks/rename-widget/use-widget-renaming.js';
 import { useJtdInternal } from '@/domains/dashboarding/hooks/use-jtd.js';
-import { useTabber } from '@/domains/dashboarding/hooks/use-tabber.js';
+import { TabbersConfig, useTabber } from '@/domains/dashboarding/hooks/use-tabber.js';
 import { useWidgetCsvDownload } from '@/domains/dashboarding/hooks/use-widget-csv-download.js';
 import { useWidgetExcelDownload } from '@/domains/dashboarding/hooks/use-widget-excel-download.js';
 import { useWidgetUpdatesPersistence } from '@/domains/dashboarding/hooks/use-widget-updates-persistence.js';
 import { useWidgetsLayoutManagement } from '@/domains/dashboarding/hooks/use-widgets-layout.js';
-import { getDefaultWidgetsPanelLayout } from '@/domains/dashboarding/utils.js';
+import {
+  getDefaultWidgetsPanelLayout,
+  withWidgetAppendedToPanelLayout,
+} from '@/domains/dashboarding/utils.js';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { widgetChangeEventToDelta } from '@/domains/widgets/event-to-delta';
@@ -21,12 +24,15 @@ import { useCombinedMenu } from '@/infra/contexts/menu-provider/hooks/use-combin
 import { MenuIds, MenuSectionIds } from '@/infra/contexts/menu-provider/menu-ids';
 import { MenuOptions } from '@/infra/contexts/menu-provider/types.js';
 import { withTracking } from '@/infra/decorators/hook-decorators';
+import { useModuleApiRegistry } from '@/infra/modules';
 import { useSyncedState } from '@/shared/hooks/use-synced-state.js';
 import { defaultMerger, useWithChangeDetection } from '@/shared/hooks/use-with-change-detection.js';
 import { combineHandlers } from '@/shared/utils/combine-handlers.js';
 
+import { DashboardModule } from './dashboard-module/dashboard-module.js';
+import type { DashboardStateApi } from './dashboard-module/types.js';
 import type { DashboardPersistenceManager } from './persistence/types.js';
-import { DashboardProps } from './types.js';
+import { DashboardConfig, DashboardProps } from './types.js';
 
 export type ComposableDashboardProps = Pick<
   DashboardProps,
@@ -145,6 +151,21 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   const [innerWidgetsOptions, setInnerWidgetsOptions] = useSyncedState<WidgetsOptions>(
     widgetsOptions ?? {},
   );
+  // Internal dashboard config state.
+  const [innerConfig, setInnerConfig] = useSyncedState<DashboardConfig | undefined>(
+    initialDashboard.config,
+  );
+
+  // Exposes just the `tabbers` slice as a setState-style updater, so the duplicate-widget hook
+  // can carry a tabber's show/hide mapping to the clone without owning the whole config object.
+  const setTabbersConfig = useCallback(
+    (update: SetStateAction<TabbersConfig>) =>
+      setInnerConfig((prev) => ({
+        ...prev,
+        tabbers: typeof update === 'function' ? update(prev?.tabbers ?? {}) : update,
+      })),
+    [setInnerConfig],
+  );
 
   // Combined menu logic
   const { openMenu } = useCombinedMenu({
@@ -228,6 +249,8 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     enabled: shouldEnableWidgetDuplication,
     widgetsOptions: innerWidgetsOptions,
     setWidgetsOptions: setInnerWidgetsOptions,
+    tabbersConfig: innerConfig?.tabbers,
+    setTabbersConfig,
     persistence,
   });
 
@@ -277,7 +300,7 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
 
   const { layoutManager: tabberLayoutManager, widgets: finalWidgets } = useTabber({
     widgets: widgetsWithFilterAndJtdAndScrollSaver,
-    config: initialDashboard.config?.tabbers,
+    config: innerConfig?.tabbers,
   });
 
   const { layout: finalWidgetsLayout, setLayout: setFinalWidgetsLayout } =
@@ -290,14 +313,64 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     return { ...initialDashboard.layoutOptions, widgetsPanel: finalWidgetsLayout };
   }, [finalWidgetsLayout, initialDashboard.layoutOptions]);
 
-  return {
-    dashboard: {
-      ...initialDashboard,
-      filters: commonFilters,
-      widgets: finalWidgets,
-      layoutOptions: finalLayoutOptions,
-      widgetsOptions: innerWidgetsOptions,
+  // Adds a widget to the dashboard. Persists automatically when a persistence manager is configured,
+  // otherwise updates local state only.
+  const addWidget = useCallback(
+    (widget: WidgetProps): void => {
+      const newLayout = withWidgetAppendedToPanelLayout(innerWidgetsLayout, widget.id);
+      if (!persistence) {
+        setInnerWidgets((prev) => [...prev, widget]);
+        setInnerWidgetsLayout(newLayout);
+        return;
+      }
+      void persistence
+        .addWidget(widget, newLayout)
+        .then(({ widget: storedWidget, widgetsPanelLayout: storedLayout, widgetOptions }) => {
+          setInnerWidgets((prev) => [...prev, storedWidget]);
+          setInnerWidgetsLayout(storedLayout);
+          if (widgetOptions) {
+            setInnerWidgetsOptions((prev) => ({ ...prev, [storedWidget.id]: widgetOptions }));
+          }
+        })
+        .catch((error) => {
+          console.error('[useComposedDashboard] Failed to persist added widget:', error);
+        });
     },
+    [
+      innerWidgetsLayout,
+      persistence,
+      setInnerWidgets,
+      setInnerWidgetsLayout,
+      setInnerWidgetsOptions,
+    ],
+  );
+
+  const stateApi = useMemo<DashboardStateApi>(
+    () => ({ addWidget, setFilters, setWidgetsLayout: setFinalWidgetsLayout }),
+    [addWidget, setFilters, setFinalWidgetsLayout],
+  );
+
+  // Apply customizations contributed by other modules.
+  const customizations = useModuleApiRegistry(DashboardModule, 'customizations');
+  const composedDashboard: DashboardProps = {
+    ...initialDashboard,
+    filters: commonFilters,
+    widgets: finalWidgets,
+    layoutOptions: finalLayoutOptions,
+    widgetsOptions: innerWidgetsOptions,
+    ...(innerConfig ? { config: innerConfig } : {}),
+  };
+  const customizedDashboard = customizations.reduce<DashboardProps>((current, customize) => {
+    try {
+      return customize(current, stateApi);
+    } catch (error) {
+      console.error('[useComposedDashboard] Dashboard customization failed:', error);
+      return current;
+    }
+  }, composedDashboard);
+
+  return {
+    dashboard: customizedDashboard as D,
     setFilters,
     setWidgetsLayout: setFinalWidgetsLayout,
   };

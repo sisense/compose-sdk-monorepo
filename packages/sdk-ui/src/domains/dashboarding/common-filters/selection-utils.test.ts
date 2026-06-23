@@ -262,6 +262,18 @@ describe('selection-utils', () => {
       expect(selectableAttributes).toHaveLength(1);
       expect(selectableAttributes[0].expression).toEqual(DM.Commerce.AgeRange.expression);
     });
+
+    it('should return selectable attributes for "sankey" widget', () => {
+      const selectableAttributes = getSelectableWidgetAttributes('sankey', {
+        category: attributes.slice(0, 3),
+        value: [measureFactory.sum(DM.Commerce.Revenue)],
+      });
+
+      expect(selectableAttributes).toHaveLength(3);
+      selectableAttributes.forEach((attribute, index) => {
+        expect(attribute.expression).toEqual(attributes[index].expression);
+      });
+    });
   });
 
   describe('getWidgetSelections()', () => {
@@ -498,6 +510,61 @@ describe('selection-utils', () => {
       const selections = getWidgetSelections('areamap', dataOptions, points);
       expect(selections[0].attribute.expression).toEqual(DM.Country.Country.expression);
       expect(selections[0].values).toEqual(['USA']);
+    });
+
+    it('should return selections for "sankey" widget (node click)', () => {
+      const dataOptions = {
+        category: [DM.Commerce.Gender, DM.Commerce.AgeRange],
+        value: [measureFactory.sum(DM.Commerce.Revenue)],
+      };
+      const points = [
+        {
+          entries: {
+            category: [
+              {
+                attribute: DM.Commerce.Gender,
+                value: 'Male',
+                displayValue: 'Male',
+              },
+            ],
+          },
+        },
+      ] as DataPoint[];
+      const selections = getWidgetSelections('sankey', dataOptions, points);
+      expect(selections).toHaveLength(1);
+      expect(selections[0].attribute.expression).toEqual(DM.Commerce.Gender.expression);
+      expect(selections[0].values).toEqual(['Male']);
+    });
+
+    it('should return selections for "sankey" widget (link click)', () => {
+      const dataOptions = {
+        category: [DM.Commerce.Gender, DM.Commerce.AgeRange],
+        value: [measureFactory.sum(DM.Commerce.Revenue)],
+      };
+      const points = [
+        {
+          entries: {
+            category: [
+              {
+                attribute: DM.Commerce.Gender,
+                value: 'Male',
+                displayValue: 'Male',
+              },
+              {
+                attribute: DM.Commerce.AgeRange,
+                value: '19-24',
+                displayValue: '19-24',
+              },
+            ],
+          },
+        },
+      ] as DataPoint[];
+      const selections = getWidgetSelections('sankey', dataOptions, points);
+      expect(selections).toHaveLength(2);
+      expect(selections[0].attribute.expression).toEqual(DM.Commerce.Gender.expression);
+      expect(selections[0].values).toEqual(['Male']);
+      expect(selections[1].attribute.expression).toEqual(DM.Commerce.AgeRange.expression);
+      expect(selections[1].values).toEqual(['19-24']);
     });
 
     it('should return selections for "calendar-heatmap" widget', () => {

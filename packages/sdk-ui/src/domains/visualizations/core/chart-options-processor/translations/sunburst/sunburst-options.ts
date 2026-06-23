@@ -58,13 +58,20 @@ export function prepareSunburstSeries(
   dataOptions: CategoricalChartDataOptionsInternal,
   designOptions: SunburstChartDesignOptions,
   themeSettings?: CompleteThemeSettingsInternal,
+  defaultNumberFormattingEnabled = true,
 ) {
   return [
     {
       ...DEFAULT_SUNBURST_SERIES,
       name: 'Root',
       data: prepareSunburstDataItems(chartData, dataOptions, themeSettings),
-      levels: prepareSunburstLevels(chartData, dataOptions, designOptions, themeSettings),
+      levels: prepareSunburstLevels(
+        chartData,
+        dataOptions,
+        designOptions,
+        themeSettings,
+        defaultNumberFormattingEnabled,
+      ),
       showInLegend: false,
       turboThreshold: 2000,
     },

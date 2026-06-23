@@ -142,3 +142,30 @@ export const applyFormatPlainText = (config: CompleteNumberFormatConfig, value: 
   markup = markup.replace('</span>', '');
   return markup;
 };
+
+/**
+ * Formats a number value, respecting the `defaultNumberFormatting.enabled` setting.
+ * Returns the formatted value when default formatting is enabled OR an explicit config is provided.
+ * Falls back to `String(value)` when default formatting is disabled and no explicit config exists.
+ *
+ * @param value - The numeric value to format.
+ * @param partialConfig - Optional explicit number format config set on the data option.
+ * @param isDefaultNumberFormattingEnabled - Whether default number formatting is active.
+ * @param formatter - Formatting function to use; defaults to `applyFormat`.
+ * @returns Formatted string when default formatting is enabled or an explicit config is provided; `String(value)` otherwise.
+ */
+export function formatNumberWithFallback(
+  value: number,
+  partialConfig: NumberFormatConfig | undefined,
+  isDefaultNumberFormattingEnabled: boolean,
+  formatter: (config: CompleteNumberFormatConfig, value: number) => string = applyFormat,
+): string {
+  const hasExplicitConfig = partialConfig !== undefined;
+
+  if (!isDefaultNumberFormattingEnabled && !hasExplicitConfig) {
+    return String(value);
+  }
+
+  const config = getCompleteNumberFormatConfig(partialConfig);
+  return formatter(config, value);
+}

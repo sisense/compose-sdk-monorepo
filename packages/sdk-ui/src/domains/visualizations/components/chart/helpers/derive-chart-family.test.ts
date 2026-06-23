@@ -32,6 +32,18 @@ describe('deriveChartFamily', () => {
         chartFamily: 'boxplot',
       },
       {
+        chartType: 'calendar-heatmap',
+        chartFamily: 'calendar-heatmap',
+      },
+      {
+        chartType: 'arearange',
+        chartFamily: 'range',
+      },
+      {
+        chartType: 'sankey',
+        chartFamily: 'sankey',
+      },
+      {
         chartType: 'table',
         chartFamily: 'table',
       },

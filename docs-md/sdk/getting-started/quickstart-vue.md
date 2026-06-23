@@ -6,7 +6,7 @@ title: Quickstart Guide (Vue)
 
 Follow this guide to get started developing applications with Compose SDK.
 
-> **Note**:
+> **Note:**
 > This guide is for [<img src="../img/vue-logo.png" height="14px" /> Vue](./quickstart-vue.md). We also have a Quickstart Guide for [<img src="../img/react-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 3px" /> React](./quickstart.md) and [<img src="../img/angular-logo.png" height="18px" style="vertical-align: text-bottom; padding-bottom: 2px" /> Angular](./quickstart-angular.md).
 
 ## Prerequisites
@@ -22,7 +22,7 @@ Compose SDK contains a set of components needed to interface with your Sisense i
 
 ## Quickstart Application Setup
 
-For this quickstart guide we'll create a new Vue project using [command line tool](https://vuejs.org/guide/quick-start#creating-a-vue-application).
+For this quickstart guide, we'll create a new Vue project using the [command line tool](https://vuejs.org/guide/quick-start#creating-a-vue-application).
 
 If you're using an existing project, skip to [Installing the SDK packages](#installing-the-sdk-packages).
 
@@ -224,13 +224,13 @@ In this section, you will add a new component and modify the main app to embed a
 >
 > -   The `src/App.vue` file is the main Vue component.
 > -   The `sample-retail.ts` file generated earlier resides in `src/`.
-> -   The URL to your application (e.g. http://localhost:5173) is already added as an entry to CORS Allowed Origins section on your Sisense instance
+> -   The URL to your application (e.g. http://localhost:5173) is already added as an entry to the CORS Allowed Origins section on your Sisense instance.
 
 ### Connecting to a Sisense Instance
 
 The `SisenseContextProvider` component contains all relevant information about the Sisense instance and ensures it is available to all nested Compose SDK components. In other words, this is a wrapper for your application so that all the components are able to access the data. The authentication method used to access your Sisense instance is also defined in this component.
 
-The following examples shows how to add `SisenseContextProvider` to `src/App.vue`. Make sure that all the other SDK components you want to use are nested inside the `SisenseContextProvider` component.
+The following example shows how to add `SisenseContextProvider` to `src/App.vue`. Make sure that all the other SDK components you want to use are nested inside the `SisenseContextProvider` component.
 
 ```ts
 // src/App.vue

@@ -51,8 +51,5 @@ export {
   type CustomAiContextProviderProps,
 } from './custom-ai-context-provider.js';
 export { prepareGetNlgInsightsPayload } from '@/domains/narrative/core/build-narrative-request.js';
-export {
-  getNlgInsightsFromWidget,
-  type GetNlgInsightsFromWidgetOptions,
-} from './get-nlg-insights-from-widget.js';
+export { getNlgInsightsFromWidget } from './get-nlg-insights-from-widget.js';
 export { widgetComposer } from '@/modules/analytics-composer';

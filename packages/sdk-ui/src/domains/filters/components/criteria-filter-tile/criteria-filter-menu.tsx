@@ -1,10 +1,11 @@
 /* eslint-disable security/detect-object-injection */
-import { CSSProperties, FunctionComponent } from 'react';
+import { CSSProperties, FunctionComponent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import styled from '@emotion/styled';
-import { FilterTypes, Measure } from '@sisense/sdk-data';
+import { Attribute, FilterTypes, isLevelAttribute, Measure } from '@sisense/sdk-data';
 
+import { getRankingMeasureDisplayName } from '@/domains/data-browser/add-measure-popover/measure-ranking-title';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 
 import { Dropdown } from '../common/dropdown.js';
@@ -15,6 +16,7 @@ import {
   CriteriaFilterValueType,
   FilterOptionType,
   filterTypeToInputType,
+  getRankingTypeLabel,
   translatedMsgNoVal,
 } from './criteria-filter-operations.js';
 
@@ -36,6 +38,8 @@ export interface CriteriaFilterMenuProps {
   disabled?: boolean;
   /* List of available measures for ranking filters */
   measures?: Measure[];
+  /* Filter attribute — used to show date level in datetime ranking filters */
+  attribute?: Attribute;
 }
 
 const isValidNumericValue = (val: string) => !(isNaN(Number(val)) || val === '');
@@ -157,6 +161,45 @@ const RankedName = styled.div<{ backgroundColor: string }>`
   }
 `;
 
+const RankTopRow = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  line-height: 24px;
+`;
+
+const RankTypeLabel = styled.span`
+  flex-shrink: 0;
+  font-size: 13px;
+`;
+
+const RankControlsGroup = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  max-width: 140px;
+  flex-shrink: 1;
+`;
+
+const RankCountInput = styled.div`
+  flex-shrink: 1;
+  min-width: 1px;
+  margin-right: 4px;
+  margin-top: -2px;
+`;
+
+const RankDateLevelLabel = styled.span`
+  flex-shrink: 0;
+  margin-left: 5px;
+  font-size: 13px;
+`;
+
+const RankByLabel = styled.span`
+  flex-shrink: 0;
+  margin-left: 5px;
+  font-size: 13px;
+`;
+
 /**
  * @internal
  */
@@ -168,11 +211,19 @@ const CriteriaFilterMenuRanked: FunctionComponent<CriteriaFilterMenuProps> = (pr
     arrangement = 'vertical',
     disabled,
     measures = [],
+    attribute,
   } = props;
   const filterInfo = CRITERIA_FILTER_MAP[filterType];
   const selectedMeasure = defaultValues?.[1] as Measure;
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
+  const dateLevelLabel =
+    attribute && isLevelAttribute(attribute) ? attribute.granularity.toLowerCase() : null;
+  const measureDisplayNames = useMemo(
+    () => measures.map((measure) => getRankingMeasureDisplayName(measure, t)),
+    [measures, t],
+  );
+  const selectedMeasureDisplayName = getRankingMeasureDisplayName(selectedMeasure, t);
 
   const radioGroup = () => {
     return (
@@ -180,14 +231,15 @@ const CriteriaFilterMenuRanked: FunctionComponent<CriteriaFilterMenuProps> = (pr
         className={
           'csdk-flex csdk-flex-col csdk-max-h-32 csdk-overflow-auto csdk-border-solid csdk-border-input csdk-p-px csdk-rounded-md'
         }
-        items={measures.map((m) => m.name)}
+        items={measureDisplayNames}
         onChange={(event) => {
+          const selectedIndex = measureDisplayNames.indexOf(event.target.value);
           onUpdate?.([
             Number(defaultValues?.[0]),
-            measures.find((m) => m.name === event.target.value) ?? measures[0],
+            measures[selectedIndex >= 0 ? selectedIndex : 0],
           ]);
         }}
-        currentSelection={selectedMeasure.name}
+        currentSelection={selectedMeasureDisplayName}
         title={t('criteriaFilter.byMeasure')}
         disabled={disabled}
       />
@@ -196,19 +248,16 @@ const CriteriaFilterMenuRanked: FunctionComponent<CriteriaFilterMenuProps> = (pr
 
   // measures will always have findIndex as it falls back to an empty array
   const selectedIdx = measures.findIndex((m) => m.name === selectedMeasure.name);
-  const dropdownItems = measures.map((m) => {
+  const dropdownItems = measures.map((m, index) => {
     return (
       <div
         key={m.name}
         onClick={() => {
           if (m.name !== selectedMeasure.name)
-            onUpdate?.([
-              Number(defaultValues?.[0]),
-              measures.find((meas) => meas.name === m.name) ?? measures[0],
-            ]);
+            onUpdate?.([Number(defaultValues?.[0]), measures[index] ?? measures[0]]);
         }}
       >
-        {m.name}
+        {measureDisplayNames[index]}
       </div>
     );
   });
@@ -228,34 +277,38 @@ const CriteriaFilterMenuRanked: FunctionComponent<CriteriaFilterMenuProps> = (pr
         backgroundColor={themeSettings.general.backgroundColor}
         className={isVertical(arrangement) ? '' : 'csdk-self-center'}
       >
-        {selectedMeasure.name}
+        {selectedMeasureDisplayName}
       </RankedName>
     );
   };
 
   return (
     <>
-      <div className={'csdk-flex csdk-items-center'}>
-        <div className={'csdk-grow'}>
-          <BasicInput
-            type={filterTypeToInputType(filterInfo.type)}
-            label={filterInfo.symbols[0]}
-            value={defaultValues?.[0]?.toString() ?? ''}
-            callback={(newVal: string) => {
-              if (newVal) onUpdate?.([Number(newVal), defaultValues?.[1]]);
-            }}
-            required={true}
-            disabled={disabled}
-            containerStyle={{
-              justifyContent: 'space-between',
-            }}
-            inputStyle={{
-              width: 40,
-            }}
-          />
-        </div>
-        <div className={'csdk-ml-[10px]'}>{t('criteriaFilter.by')}:</div>
-      </div>
+      <RankTopRow>
+        <RankTypeLabel>{getRankingTypeLabel(filterType, t)}</RankTypeLabel>
+        <RankControlsGroup>
+          <RankCountInput>
+            <BasicInput
+              type={filterTypeToInputType(filterInfo.type)}
+              value={defaultValues?.[0]?.toString() ?? ''}
+              callback={(newVal: string) => {
+                if (newVal) onUpdate?.([Number(newVal), defaultValues?.[1]]);
+              }}
+              required={true}
+              disabled={disabled}
+              containerStyle={{
+                gap: 0,
+                width: 'auto',
+              }}
+              inputStyle={{
+                width: 40,
+              }}
+            />
+          </RankCountInput>
+          {dateLevelLabel && <RankDateLevelLabel>{dateLevelLabel}</RankDateLevelLabel>}
+          <RankByLabel>{t('criteriaFilter.by')}:</RankByLabel>
+        </RankControlsGroup>
+      </RankTopRow>
       {measures && measures.length > 0
         ? isVertical(arrangement)
           ? radioGroup()
@@ -277,6 +330,7 @@ export const CriteriaFilterMenu: FunctionComponent<CriteriaFilterMenuProps> = ({
   onUpdate,
   disabled,
   measures,
+  attribute,
 }) => {
   const { themeSettings } = useThemeContext();
   const filterInfo = CRITERIA_FILTER_MAP[filterType];
@@ -313,6 +367,7 @@ export const CriteriaFilterMenu: FunctionComponent<CriteriaFilterMenuProps> = ({
           onUpdate={onUpdate}
           disabled={disabled}
           measures={measures}
+          attribute={attribute}
         />
       )}
     </div>

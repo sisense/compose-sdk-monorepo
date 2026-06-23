@@ -41,7 +41,7 @@ export interface UseGetNlgInsightsParams {
 }
 
 /**
- * Parameters for building a narration request (before JAQL payload expansion).
+ * Parameters for building a narrative request (before JAQL payload expansion).
  *
  * @sisenseInternal
  */

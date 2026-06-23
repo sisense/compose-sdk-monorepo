@@ -1,7 +1,14 @@
-import { type FunctionComponent, type PropsWithChildren, useEffect, useState } from 'react';
+import {
+  type FunctionComponent,
+  type PropsWithChildren,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { isAuthTokenPending } from '@sisense/sdk-rest-client';
 
+import { DashboardModule } from '@/domains/dashboarding/dashboard-module/dashboard-module.js';
 import { CustomWidgetsProvider } from '@/infra/contexts/custom-widgets-provider';
 import { EmotionCacheProvider } from '@/infra/contexts/emotion-cache-provider';
 import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
@@ -141,6 +148,9 @@ export const SisenseContextProvider: FunctionComponent<
   const userLanguage = app?.settings.translationConfig.language;
   const customTranslations = app?.settings.translationConfig.customTranslations;
 
+  // Built-in modules. `CoreModule` is added by the module registry itself;
+  const modulesWithDefaults = useMemo(() => [DashboardModule, ...(modules ?? [])], [modules]);
+
   return (
     <EmotionCacheProvider>
       <I18nProvider userLanguage={userLanguage} customTranslations={customTranslations}>
@@ -161,7 +171,7 @@ export const SisenseContextProvider: FunctionComponent<
           >
             <ThemeProvider skipTracking theme={app?.settings.serverThemeSettings}>
               <SisenseQueryClientProvider>
-                <ModuleProvider modules={modules}>
+                <ModuleProvider modules={modulesWithDefaults}>
                   <PluginProvider plugins={plugins}>
                     <CustomWidgetsProvider>
                       <MenuProvider>

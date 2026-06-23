@@ -1,9 +1,18 @@
-import type { AnyWidgetPlugin } from './widget-plugins/types.js';
+import type { WidgetPlugin } from './widget-plugins/types.js';
 
 /**
- * Base plugin information
+ * Defines base information shared by all plugin types.
  *
- * @sisenseInternal
+ * @group Plugin System
+ * @example
+ * ```ts
+ * const info: BasePluginInfo = {
+ *   name: 'my-widget-plugin',
+ *   version: '1.0.0',
+ *   requiredApiVersion: '^2.9.0',
+ * };
+ * ```
+ * @beta
  */
 export interface BasePluginInfo {
   /**
@@ -57,9 +66,31 @@ export interface PluginValidationResult {
 }
 
 /**
- * Plugin declaration.
+ * Declares a plugin for registration with the Compose SDK.
  * Currently only widget plugins are supported.
  *
- * @sisenseInternal
+ * @group Plugin System
+ * @example
+ * ```tsx
+ * import { SisenseContextProvider } from '@sisense/sdk-ui';
+ *
+ * const myPlugin: Plugin = {
+ *   name: 'my-widget-plugin',
+ *   version: '1.0.0',
+ *   requiredApiVersion: '^2.9.0',
+ *   pluginType: 'widget',
+ *   customWidget: {
+ *     name: 'my-widget',
+ *     displayName: 'My Widget',
+ *     visualization: { Component: MyVisualization },
+ *   },
+ * };
+ *
+ * <SisenseContextProvider plugins={[myPlugin]} {...props} />
+ * ```
+ * @beta
  */
-export type Plugin = AnyWidgetPlugin;
+// Props are intentionally erased so a Plugin[] can hold plugins with different
+// visualization prop shapes without requiring a common concrete supertype.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Plugin = WidgetPlugin<any>;

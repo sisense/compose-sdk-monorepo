@@ -111,6 +111,84 @@ describe('DimensionalQueryClient', () => {
     });
   });
 
+  describe('executeCountRowsQuery', () => {
+    const queryDescription: QueryDescription = {
+      dataSource: 'test',
+      attributes: [new DimensionalAttribute('AgeRange', '[Commerce.Age Range]', 'attribute')],
+      measures: [],
+      filters: [],
+      highlights: [],
+      count: 100,
+      offset: 50,
+    };
+
+    it('should execute the count rows query and resolve with the count', async () => {
+      httpClientMock.post.mockResolvedValue({ countRows: 1234 });
+
+      const count = await queryClient.executeCountRowsQuery(queryDescription).resultPromise;
+
+      expect(count).toBe(1234);
+      expect(httpClientMock.post).toHaveBeenCalledWith(
+        'api/datasources/test/jaql/countrows',
+        expect.objectContaining({ by: 'ComposeSDK' }),
+        undefined,
+        expect.any(AbortSignal),
+      );
+    });
+
+    it('should send a page-independent payload without count and offset', async () => {
+      httpClientMock.post.mockResolvedValue({ countRows: 1234 });
+
+      await queryClient.executeCountRowsQuery(queryDescription).resultPromise;
+
+      const jaqlPayload = httpClientMock.post.mock.calls[0][1] as JaqlQueryPayload;
+      expect(jaqlPayload).not.toHaveProperty('count');
+      expect(jaqlPayload).not.toHaveProperty('offset');
+    });
+
+    it("should call 'onBeforeQuery' callback if it passed in config", async () => {
+      const onBeforeQuery = vi.fn((jaql: JaqlQueryPayload) => jaql);
+      httpClientMock.post.mockResolvedValue({ countRows: 1234 });
+
+      const executionResult = queryClient.executeCountRowsQuery(queryDescription, {
+        onBeforeQuery,
+      });
+      await executionResult.resultPromise;
+
+      expect(onBeforeQuery).toHaveBeenCalledOnce();
+    });
+
+    it('should reject when server returns an invalid count rows response', async () => {
+      httpClientMock.post.mockResolvedValue({});
+
+      await expect(
+        queryClient.executeCountRowsQuery(queryDescription).resultPromise,
+      ).rejects.toThrow('Invalid row count response received from the server.');
+    });
+
+    it('should reject when query description is invalid', async () => {
+      const invalidQueryDescription: QueryDescription = {
+        ...queryDescription,
+        attributes: [],
+      };
+
+      await expect(
+        queryClient.executeCountRowsQuery(invalidQueryDescription).resultPromise,
+      ).rejects.toThrow();
+    });
+
+    it('should cancel the query execution', async () => {
+      httpClientMock.post.mockResolvedValue({ countRows: 1234 });
+
+      const executionResult = queryClient.executeCountRowsQuery(queryDescription);
+      expect(executionResult.resultPromise).toBeInstanceOf(Promise);
+      const cancelingReason = 'BECAUSE I CAN!';
+      executionResult.cancel(cancelingReason);
+
+      await expect(executionResult.resultPromise).rejects.toThrow(new RegExp(cancelingReason));
+    });
+  });
+
   describe('executeCsvQuery', () => {
     let testDataset: ExecuteJaqlTestDataset;
 
