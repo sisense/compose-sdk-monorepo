@@ -41,7 +41,10 @@ export class CustomWidgetsService {
     private dynamicRenderer: DynamicRenderer,
   ) {
     this.customWidgetsMap$ = new BehaviorSubject(
-      new Map<string, CustomWidgetComponentPreact<any>>([['tabber-buttons', TabberButtonsWidget]]),
+      new Map<string, CustomWidgetComponentPreact<any>>([
+        // The built-in widget is stored in the type-erased custom-widget map.
+        ['tabber-buttons', TabberButtonsWidget as CustomWidgetComponentPreact<any>],
+      ]),
     );
   }
 

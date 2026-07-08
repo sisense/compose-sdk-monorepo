@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Tooltip from '@mui/material/Tooltip';
 import { isNumber } from '@sisense/sdk-data';
@@ -24,6 +24,7 @@ import {
   HEADER_PADDING,
   HEADER_TYPE_ICON_SPACING,
   MAX_WIDTH,
+  MIN_WIDTH,
   ROW_HEIGHT,
 } from './styles/style-constants.js';
 import { DataTableWrapperProps } from './types.js';
@@ -102,6 +103,14 @@ export const DataTableWrapper = ({
     customStyles && customStyles.showFieldTypeIcon !== undefined
       ? customStyles.showFieldTypeIcon
       : true;
+  const isResizable = customStyles?.columns?.resizable !== false;
+  const controlledWidths = customStyles?.columns?.widths;
+  const columnMinWidth = customStyles?.columns?.minWidth ?? MIN_WIDTH;
+  const columnMaxWidth = customStyles?.columns?.maxWidth ?? MAX_WIDTH;
+  // Guard against a misconfigured bounds pair (e.g. minWidth > maxWidth) so drag-resize
+  // constraints stay consistent with {@link calcColumnWidths}.
+  const effectiveColumnMinWidth = Math.min(columnMinWidth, columnMaxWidth);
+  const effectiveColumnMaxWidth = Math.max(columnMinWidth, columnMaxWidth);
   const headerPadding = HEADER_PADDING + (showFieldTypeIcon ? HEADER_TYPE_ICON_SPACING : 0);
   const verticalPadding = customStyles?.paddingVertical || DEFAULT_PADDING;
   const horizontalPadding = customStyles?.paddingHorizontal || DEFAULT_PADDING;
@@ -116,18 +125,89 @@ export const DataTableWrapper = ({
     () =>
       dataOptions.columns.map((col) => ({
         isHtml: 'isHtml' in col && !!col.isHtml,
-        width: widthVal,
+        width: 'width' in col ? col.width : widthVal,
       })),
     [dataOptions.columns, widthVal],
   );
 
   const [fontsLoaded, setFontsLoaded] = useState(document.fonts?.status === 'loaded');
+  const [resizedWidths, setResizedWidths] = useState<Record<number, number>>({});
 
   const fontFamily = themeSettings.typography?.fontFamily;
   const columnWidths = useMemo(() => {
     void fontsLoaded;
-    return calcColumnWidths(dataTable, showFieldTypeIcon, columnsOptions, fontFamily);
-  }, [dataTable, showFieldTypeIcon, columnsOptions, fontFamily, fontsLoaded]);
+    return calcColumnWidths(dataTable, showFieldTypeIcon, columnsOptions, {
+      fontFamily,
+      minWidth: effectiveColumnMinWidth,
+      maxWidth: effectiveColumnMaxWidth,
+    });
+  }, [
+    effectiveColumnMaxWidth,
+    effectiveColumnMinWidth,
+    dataTable,
+    showFieldTypeIcon,
+    columnsOptions,
+    fontFamily,
+    fontsLoaded,
+  ]);
+
+  // Identifies the column schema (not the paginated row data), so that resized widths
+  // survive paging through TableComponent and only reset when the columns themselves change.
+  const columnsSchemaKey = useMemo(
+    () =>
+      dataTable.columns.map((column) => `${column.index}:${column.name}:${column.type}`).join('|'),
+    [dataTable.columns],
+  );
+
+  useEffect(() => {
+    setResizedWidths({});
+  }, [columnsSchemaKey]);
+
+  const effectiveColumnWidths = useMemo(
+    () =>
+      dataTable.columns.map((_column, colIndex) => {
+        // eslint-disable-next-line security/detect-object-injection
+        const controlledWidth = controlledWidths?.[colIndex];
+        if (controlledWidth !== undefined) {
+          return controlledWidth;
+        }
+        // eslint-disable-next-line security/detect-object-injection
+        const resizedWidth = resizedWidths[colIndex];
+        if (resizedWidth !== undefined) {
+          return resizedWidth;
+        }
+        // eslint-disable-next-line security/detect-object-injection
+        return columnWidths[colIndex];
+      }),
+    [controlledWidths, dataTable.columns, columnWidths, resizedWidths],
+  );
+
+  // `columnKey` is set to the column's index (see the `<Column>` element below) rather than
+  // `column.name`, since column names are not guaranteed to be unique.
+  const onColumnResizeEndCallback = useCallback(
+    (newWidth: number, columnKey: string) => {
+      const resizedColIndex = Number(columnKey);
+      const nextWidths = dataTable.columns.map((_column, colIndex) =>
+        colIndex === resizedColIndex
+          ? newWidth
+          : // eslint-disable-next-line security/detect-object-injection
+            effectiveColumnWidths[colIndex] ?? columnWidths[colIndex],
+      );
+
+      if (controlledWidths === undefined) {
+        setResizedWidths((prev) => ({ ...prev, [resizedColIndex]: newWidth }));
+      }
+
+      customStyles?.columns?.onColumnsResize?.(nextWidths);
+    },
+    [
+      columnWidths,
+      controlledWidths,
+      customStyles?.columns,
+      dataTable.columns,
+      effectiveColumnWidths,
+    ],
+  );
 
   useEffect(() => {
     document.fonts?.ready
@@ -143,7 +223,7 @@ export const DataTableWrapper = ({
     () =>
       dataTable.columns.map((column, colIndex) => {
         // eslint-disable-next-line security/detect-object-injection
-        const columnWidth = columnWidths[colIndex];
+        const columnWidth = effectiveColumnWidths[colIndex];
         // eslint-disable-next-line security/detect-object-injection
         const columnOptions = dataOptions.columns[colIndex];
         const headerCellStyle = getCellStyles({
@@ -154,8 +234,10 @@ export const DataTableWrapper = ({
         return columnWidth ? (
           <Column
             key={`col${colIndex}`}
-            maxWidth={MAX_WIDTH}
-            minWidth={MAX_WIDTH}
+            columnKey={`${colIndex}`}
+            isResizable={isResizable}
+            minWidth={effectiveColumnMinWidth}
+            maxWidth={effectiveColumnMaxWidth}
             allowCellsRecycling
             width={columnWidth}
             header={
@@ -203,22 +285,27 @@ export const DataTableWrapper = ({
       }),
     [
       dataTable,
-      columnWidths,
+      effectiveColumnWidths,
       themeSettings,
       customStyles,
       onSortUpdate,
       showFieldTypeIcon,
       dataOptions,
       headerPadding,
+      isResizable,
+      effectiveColumnMinWidth,
+      effectiveColumnMaxWidth,
     ],
   );
 
   return useMemo(
     () => (
       <div
+        data-testid="data-table-wrapper"
         className={styles.tableWrapper}
         style={{
           padding: `${verticalPadding}px ${horizontalPadding}px`,
+          ['--csdk-table-column-resizer-color' as string]: themeSettings.general.brandColor,
         }}
       >
         <Table
@@ -228,11 +315,24 @@ export const DataTableWrapper = ({
           width={width - horizontalPadding * 2}
           height={height - verticalPadding * 2}
           headerHeight={customStyles?.headerHeight || HEADER_HEIGHT}
+          isColumnResizing={false}
+          onColumnResizeEndCallback={isResizable ? onColumnResizeEndCallback : undefined}
         >
           {columns}
         </Table>
       </div>
     ),
-    [columns, customStyles, dataTable, height, horizontalPadding, verticalPadding, width],
+    [
+      columns,
+      customStyles,
+      dataTable,
+      height,
+      horizontalPadding,
+      isResizable,
+      onColumnResizeEndCallback,
+      themeSettings.general.brandColor,
+      verticalPadding,
+      width,
+    ],
   );
 };

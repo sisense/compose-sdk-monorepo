@@ -1,31 +1,38 @@
 import styled from '@emotion/styled';
 
-import { getHeaderItemStyle, resolveHeaderItemSize } from './header-item-size.js';
-import { HeaderItemComponent, HeaderItemSize, ResolvedHeaderItem } from './types.js';
+import { HeaderItemCell } from './header-item-cell.js';
+import { ResolvedHeaderItem } from './types.js';
 
-const HeaderItemsRow = styled.div`
+const HeaderItemsRow = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'gap',
+})<{ gap: number }>`
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   width: 100%;
   min-width: 0;
+  gap: ${({ gap }) => gap}px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* Slim scrollbar so the bar doesn't dominate the header (thin-scrollbar look). */
+  scrollbar-width: thin;
+  ::-webkit-scrollbar {
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #c2c2c2;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #7d7d7d;
+  }
 `;
 
 /**
- * Renders a single header item's component inside its own fiber, so the component may safely use
- * hooks. Each cell is keyed by item id (via the wrapper), so toggling items mounts/unmounts whole
- * cells instead of shifting hook order within a shared component.
- */
-const HeaderItemCell = ({
-  component,
-  size,
-}: {
-  component: HeaderItemComponent;
-  size: Required<HeaderItemSize>;
-}) => <>{component({ size })}</>;
-
-/**
  * Props for {@link HeaderItemsRenderer}.
- *
  * @internal
  */
 export interface HeaderItemsRendererProps {
@@ -36,26 +43,22 @@ export interface HeaderItemsRendererProps {
    * default (the dashboard uses 28). Defaults to {@link DEFAULT_HEADER_ITEM_SIZE}.
    */
   defaultSize?: number;
+  /**
+   * Gap (px) rendered between adjacent header items. Defaults to `0` (no gap); the dashboard uses
+   * `10` to match Fusion's spacing.
+   */
+  gap?: number;
 }
 
 /**
  * Renders a resolved list of header items as a single horizontal flex row.
  */
-export const HeaderItemsRenderer = ({ items, defaultSize }: HeaderItemsRendererProps) => {
+export const HeaderItemsRenderer = ({ items, defaultSize, gap = 0 }: HeaderItemsRendererProps) => {
   return (
-    <HeaderItemsRow data-testid="header-items-row">
-      {items.map((item) => {
-        const size = resolveHeaderItemSize(item.size, defaultSize);
-        return (
-          <div
-            key={item.id}
-            data-header-item-id={item.id}
-            style={getHeaderItemStyle(size, item.fill)}
-          >
-            <HeaderItemCell component={item.component} size={size} />
-          </div>
-        );
-      })}
+    <HeaderItemsRow data-testid="header-items-row" gap={gap}>
+      {items.map((item) => (
+        <HeaderItemCell key={item.id} item={item} defaultSize={defaultSize} />
+      ))}
     </HeaderItemsRow>
   );
 };

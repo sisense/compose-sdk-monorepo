@@ -66,6 +66,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-scattermap-chart',
   template: `
     <csdk-chart

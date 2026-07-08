@@ -44,6 +44,16 @@ describe('factory-function-schemas', () => {
       expect(count).toBe(1); // level only (from and to are optional)
     });
 
+    it('should return correct required arg count for isEmpty', () => {
+      const count = getRequiredArgCount('filterFactory.isEmpty');
+      expect(count).toBe(1); // attribute only (config is optional)
+    });
+
+    it('should return correct required arg count for isNotEmpty', () => {
+      const count = getRequiredArgCount('filterFactory.isNotEmpty');
+      expect(count).toBe(1); // attribute only (config is optional)
+    });
+
     it('should return 0 for non-existent function', () => {
       const count = getRequiredArgCount('filterFactory.nonExistent');
       expect(count).toBe(0);

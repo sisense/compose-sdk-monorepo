@@ -83,6 +83,7 @@ export class ExampleComponent {
  * @group Filter Tiles
  */
 @Component({
+  standalone: false,
   selector: 'csdk-filters-panel',
   template,
   styles,

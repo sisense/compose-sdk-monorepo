@@ -204,10 +204,10 @@ export class RestApi {
     }
 
     if (isDateDimension) {
-      const { level, dateTimeLevel } = (
+      const { level, dateTimeLevel, dateTimePart } = (
         dimension as DimensionalLevelAttribute
       ).translateGranularityToJaql();
-      dateLevel = level ?? dateTimeLevel;
+      dateLevel = level ?? dateTimeLevel ?? dateTimePart ?? '';
     }
 
     const queryParams = new URLSearchParams({
@@ -318,7 +318,7 @@ export class RestApi {
     return sharedFormulas.filter(isSharedFormulaDto).reduce((acc, sharedFormula) => {
       acc[sharedFormula.oid] = sharedFormula;
       return acc;
-    }, {});
+    }, {} as Record<string, SharedFormulaDto>);
   };
 
   /**

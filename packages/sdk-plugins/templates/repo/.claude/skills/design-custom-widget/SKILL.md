@@ -29,7 +29,11 @@ If none of the `src/` files exist (brand new project), assume `category` (dimens
 
 ## Step 2 — Ask clarifying questions
 
-Check which of the questions below are already answered by what you read or by the developer's request. Only ask the ones that remain unanswered. Ask all remaining questions at once — do not start implementing until you have all answers.
+**Hard stop — mandatory even in Auto Mode or any autonomous setting.** These questions drive fundamental implementation choices (library install, file structure, cross-filtering wiring, data model). Guessing produces the wrong implementation; asking upfront costs one round-trip. Skipping costs a full rewrite.
+
+A question is **answered** when the developer has made an explicit statement, or when the question lists a default and the developer has not addressed it. Do not infer answers from project context, template names, or common patterns beyond the defaults stated below.
+
+Check which questions below are answered — either by an explicit developer statement or by a stated default. Ask all remaining ones at once — do not write any code, edit any file, or run any install command until every open question has an explicit answer or an applicable default.
 
 1. **What does the visualization show?** Plain language description — e.g. "a bar chart showing sales by product category", "a KPI card with a single revenue number", "a circle packing chart of product hierarchy sized by revenue". _(Skip if already described.)_
 
@@ -42,7 +46,7 @@ Check which of the questions below are already answered by what you read or by t
 5. **Data source assessment** — work through the following decision tree. This may produce a question to ask the developer, or it may produce no question at all.
 
    **A — User named a specific data source** (e.g. "using Sample Healthcare", "from the Sales cube"):
-   The user has explicitly chosen a model. Do not ask whether to load it — just prepare to generate it in Step 4h.
+   The user has explicitly chosen a model. Do not ask whether to load it — just prepare to generate it in Step 4i.
    Ask for credentials only if either is missing from `.env.local`:
 
    > "To generate the `[data source name]` model I'll need your Sisense URL and credentials. What's the instance URL, and do you have an API token or prefer username/password?"
@@ -56,6 +60,24 @@ Check which of the questions below are already answered by what you read or by t
    > "The current `[model name]` model doesn't have [what's missing — be specific, e.g. 'separate start and end date columns per activity']. To build an accurate dev preview I'd need to load a different data source. Would you like to connect one? If yes, tell me the data source name and I'll also need the Sisense URL and credentials if they're not already configured."
 
    If the developer declines, use the closest available columns from the current model and note the mismatch in the final summary.
+
+6. **Should any view-time state persist across reloads?** If the widget has runtime state the user changes _inside_ the rendered widget — current page, selected tab, sort toggle, view-time rows-per-page — ask whether it should be remembered after a page reload. _(Default: no, unless the chart type implies it — e.g. a paginated table or a tabbed widget. Skip if the widget has no such interaction.)_
+
+---
+
+### Confirmation block — required before Step 3
+
+Before writing a single line of code, output this table with every row filled in. Leave nothing blank — write "not specified, using default: X" if a default applies.
+
+| Question                     | Answer                                                         |
+| ---------------------------- | -------------------------------------------------------------- |
+| What the visualization shows |                                                                |
+| Charting library             |                                                                |
+| Cross-filtering              | yes / no                                                       |
+| Style controls               | none / list them                                               |
+| Data source                  | current model (`<name>`) / generate new (`<data source name>`) |
+
+Do not proceed to Step 3 until this table is complete and visible in the conversation.
 
 ---
 
@@ -84,14 +106,15 @@ Apply `maxItems` and `minItems` rules as specified in that file.
 
 **Features to include** — decide based on answers:
 
-| Feature                 | Include when                                                                 |
-| ----------------------- | ---------------------------------------------------------------------------- |
-| Conditional query guard | Almost always — prevents blank state before required inputs are filled       |
-| Cross-filtering         | Developer said yes                                                           |
-| Tooltip on hover        | Requested, or implied by an interactive chart type                           |
-| Resize observer         | D3 or Plotly (both require it); Recharts and Highcharts handle it internally |
-| Number formatting       | Developer wants decimal/currency control from the sidebar                    |
-| Design panel controls   | Developer said yes to style options                                          |
+| Feature                 | Include when                                                                                                                                  |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Conditional query guard | Almost always — prevents blank state before required inputs are filled                                                                        |
+| Cross-filtering         | Developer said yes                                                                                                                            |
+| Tooltip on hover        | Requested, or implied by an interactive chart type                                                                                            |
+| Resize observer         | D3 or Plotly (both require it); Recharts and Highcharts handle it internally                                                                  |
+| Number formatting       | Developer wants decimal/currency control from the sidebar                                                                                     |
+| Design panel controls   | Developer said yes to style options                                                                                                           |
+| State persistence       | Q6 resolved to yes — developer asked for it, or the chart type implies it by default (paginated table, tabbed widget) and they didn't opt out |
 
 **External library checklist** (if using one):
 
@@ -154,7 +177,16 @@ For each style option the developer listed, follow `.claude/docs/add-style-prop.
 
 Follow `.claude/docs/add-number-format.md` to add a number format selector for the relevant measure column.
 
-### 4h. Update dev preview
+### 4h. Add state persistence (if requested)
+
+If Q6 resolved to yes — the developer asked for it, or the chart type implies persistence by default (e.g. a paginated table or a tabbed widget) and they didn't opt out — follow `.claude/docs/add-persistence.md`:
+
+- Decide the slice for each piece of state: configuration the design panel could own → `styleOptions`; user-driven session state (current page, selected tab) → `customOptions`
+- For `customOptions`, add a `CustomOptions` interface in `src/types.ts` and thread it as the 4th type parameter of `CustomVisualizationProps`
+- In `src/components/Visualization.tsx`, replace the relevant `useState` with `useSyncedState`, seeding from `props.styleOptions?.…` / `props.customOptions?.…` and forwarding through `props.onChange?.({ … })` (always optional-chained)
+- Seed a starting value in `src/dev-preview-props.ts` (`customOptions: { … }`) so the dev preview has state to read
+
+### 4i. Update dev preview
 
 The approach depends on what was determined in Step 2 question 5:
 
@@ -265,7 +297,7 @@ export const devPreviewProps = {
 
 ---
 
-### 4i. Verify
+### 4j. Verify
 
 Run `npx tsc --noEmit` and `npm run lint:fix`. Fix any errors before reporting done.
 

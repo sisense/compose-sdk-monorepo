@@ -1,42 +1,42 @@
 import { describe, expect, it } from 'vitest';
 
-import { getCompleteWidgetNarrativeOptions } from '@/domains/narrative/core/widget-narrative-options.js';
+import { getCompleteWidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config.js';
 import type {
   WidgetDtoNarration,
   WidgetStyle,
 } from '@/domains/widgets/components/widget-by-id/types.js';
 
 import {
-  extractWidgetNarrativeOptionsFromDto,
+  extractWidgetNarrativeConfigFromDto,
   mergeWidgetStyleWithNarrativeForDto,
-  narrativeOptionsToWidgetDtoNarration,
+  narrativeConfigToWidgetDtoNarration,
 } from './widget-narrative-style.js';
 
 describe('widget-narrative-style', () => {
-  describe('getCompleteWidgetNarrativeOptions', () => {
+  describe('getCompleteWidgetNarrativeConfig', () => {
     it('defaults feedback.enabled to false when omitted', () => {
-      expect(getCompleteWidgetNarrativeOptions({})).toMatchObject({
+      expect(getCompleteWidgetNarrativeConfig({})).toMatchObject({
         feedback: { enabled: false },
       });
     });
 
     it('defaults feedback.enabled to false when narrative is undefined', () => {
-      expect(getCompleteWidgetNarrativeOptions(undefined)).toMatchObject({
+      expect(getCompleteWidgetNarrativeConfig(undefined)).toMatchObject({
         feedback: { enabled: false },
       });
     });
 
     it('respects feedback.enabled true', () => {
-      expect(getCompleteWidgetNarrativeOptions({ feedback: { enabled: true } })).toMatchObject({
+      expect(getCompleteWidgetNarrativeConfig({ feedback: { enabled: true } })).toMatchObject({
         feedback: { enabled: true },
       });
     });
   });
 
-  describe('extractWidgetNarrativeOptionsFromDto', () => {
+  describe('extractWidgetNarrativeConfigFromDto', () => {
     it('maps Fusion display and verbosity (medium) to SDK fields', () => {
       expect(
-        extractWidgetNarrativeOptionsFromDto({
+        extractWidgetNarrativeConfigFromDto({
           enabled: false,
           display: 'above',
           verbosity: 'medium',
@@ -51,7 +51,7 @@ describe('widget-narrative-style', () => {
 
     it('maps high verbosity and Fusion autoShow', () => {
       expect(
-        extractWidgetNarrativeOptionsFromDto({
+        extractWidgetNarrativeConfigFromDto({
           verbosity: 'high',
           autoShow: true,
         }),
@@ -63,7 +63,7 @@ describe('widget-narrative-style', () => {
 
     it('maps legacy Fusion displayMode strings to autoShow when autoShow is absent', () => {
       expect(
-        extractWidgetNarrativeOptionsFromDto({
+        extractWidgetNarrativeConfigFromDto({
           verbosity: 'high',
           displayMode: 'onLoad',
         } as unknown as WidgetDtoNarration),
@@ -75,7 +75,7 @@ describe('widget-narrative-style', () => {
 
     it('maps unknown display string to above', () => {
       expect(
-        extractWidgetNarrativeOptionsFromDto({
+        extractWidgetNarrativeConfigFromDto({
           display: 'unknown-placement',
         }),
       ).toEqual({ displayLocation: 'above' });
@@ -83,33 +83,33 @@ describe('widget-narrative-style', () => {
 
     it('maps feedback.enabled from Fusion narration payload', () => {
       expect(
-        extractWidgetNarrativeOptionsFromDto({
+        extractWidgetNarrativeConfigFromDto({
           feedback: { enabled: false },
         }),
       ).toEqual({ feedback: { enabled: false } });
     });
 
     it('maps Fusion size to SDK height', () => {
-      expect(extractWidgetNarrativeOptionsFromDto({ size: 0.2596622596153846 })).toEqual({
+      expect(extractWidgetNarrativeConfigFromDto({ size: 0.2596622596153846 })).toEqual({
         heightFraction: 0.2596622596153846,
       });
     });
 
     it('rejects invalid size values (< 0, > 1, NaN, Infinity) and returns undefined', () => {
-      expect(extractWidgetNarrativeOptionsFromDto({ size: -0.5 })).toBeUndefined();
-      expect(extractWidgetNarrativeOptionsFromDto({ size: 1.5 })).toBeUndefined();
-      expect(extractWidgetNarrativeOptionsFromDto({ size: NaN })).toBeUndefined();
-      expect(extractWidgetNarrativeOptionsFromDto({ size: Infinity })).toBeUndefined();
+      expect(extractWidgetNarrativeConfigFromDto({ size: -0.5 })).toBeUndefined();
+      expect(extractWidgetNarrativeConfigFromDto({ size: 1.5 })).toBeUndefined();
+      expect(extractWidgetNarrativeConfigFromDto({ size: NaN })).toBeUndefined();
+      expect(extractWidgetNarrativeConfigFromDto({ size: Infinity })).toBeUndefined();
     });
 
     it('returns undefined for empty narration object', () => {
-      expect(extractWidgetNarrativeOptionsFromDto({})).toBeUndefined();
+      expect(extractWidgetNarrativeConfigFromDto({})).toBeUndefined();
     });
   });
 
-  describe('narrativeOptionsToWidgetDtoNarration', () => {
+  describe('narrativeConfigToWidgetDtoNarration', () => {
     it('writes Fusion autoShow only when explicitly present on narrative', () => {
-      const withoutAutoShow = narrativeOptionsToWidgetDtoNarration({
+      const withoutAutoShow = narrativeConfigToWidgetDtoNarration({
         enabled: true,
         verbosity: 'low',
         displayLocation: 'below',
@@ -121,7 +121,7 @@ describe('widget-narrative-style', () => {
       });
       expect(withoutAutoShow && 'autoShow' in withoutAutoShow).toBe(false);
 
-      const withAutoShow = narrativeOptionsToWidgetDtoNarration({
+      const withAutoShow = narrativeConfigToWidgetDtoNarration({
         enabled: true,
         verbosity: 'low',
         displayLocation: 'below',
@@ -129,7 +129,7 @@ describe('widget-narrative-style', () => {
       });
       expect(withAutoShow).toMatchObject({ autoShow: true });
 
-      const withAutoShowFalse = narrativeOptionsToWidgetDtoNarration({
+      const withAutoShowFalse = narrativeConfigToWidgetDtoNarration({
         enabled: true,
         verbosity: 'low',
         displayLocation: 'below',
@@ -139,25 +139,25 @@ describe('widget-narrative-style', () => {
     });
 
     it('writes feedback onto narration DTO', () => {
-      expect(narrativeOptionsToWidgetDtoNarration({ feedback: { enabled: false } })).toEqual({
+      expect(narrativeConfigToWidgetDtoNarration({ feedback: { enabled: false } })).toEqual({
         feedback: { enabled: false },
       });
     });
 
     it('maps SDK heightFraction to Fusion size', () => {
-      expect(narrativeOptionsToWidgetDtoNarration({ heightFraction: 0.3 })).toEqual({ size: 0.3 });
+      expect(narrativeConfigToWidgetDtoNarration({ heightFraction: 0.3 })).toEqual({ size: 0.3 });
     });
 
     it('rejects invalid heightFraction values (< 0, > 1, NaN, Infinity) and returns undefined', () => {
-      expect(narrativeOptionsToWidgetDtoNarration({ heightFraction: -0.5 })).toBeUndefined();
-      expect(narrativeOptionsToWidgetDtoNarration({ heightFraction: 1.5 })).toBeUndefined();
-      expect(narrativeOptionsToWidgetDtoNarration({ heightFraction: NaN })).toBeUndefined();
-      expect(narrativeOptionsToWidgetDtoNarration({ heightFraction: Infinity })).toBeUndefined();
+      expect(narrativeConfigToWidgetDtoNarration({ heightFraction: -0.5 })).toBeUndefined();
+      expect(narrativeConfigToWidgetDtoNarration({ heightFraction: 1.5 })).toBeUndefined();
+      expect(narrativeConfigToWidgetDtoNarration({ heightFraction: NaN })).toBeUndefined();
+      expect(narrativeConfigToWidgetDtoNarration({ heightFraction: Infinity })).toBeUndefined();
     });
 
     it('serializes only typed SDK fields (no unknown Fusion passthrough)', () => {
       expect(
-        narrativeOptionsToWidgetDtoNarration({
+        narrativeConfigToWidgetDtoNarration({
           enabled: true,
           verbosity: 'low',
           displayLocation: 'above',

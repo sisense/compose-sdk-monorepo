@@ -1,9 +1,18 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
-import type { SisenseContextProviderProps as SisenseContextConfig } from '@sisense/sdk-ui-preact';
+import type { SisenseContextProviderProps } from '@sisense/sdk-ui-preact';
 import { ClientApplication, createClientApplication } from '@sisense/sdk-ui-preact';
 import { concat, firstValueFrom, Observable, of, ReplaySubject } from 'rxjs';
 
-export { type SisenseContextConfig };
+/**
+ * Configurations and authentication for Sisense Context.
+ *
+ * Use one of the following to authenticate:
+ *
+ * - {@link @sisense/sdk-ui-angular!SisenseContextConfig.ssoEnabled | `ssoEnabled`}
+ * - {@link @sisense/sdk-ui-angular!SisenseContextConfig.token | `token`}
+ * - {@link @sisense/sdk-ui-angular!SisenseContextConfig.wat | `wat`}
+ */
+export interface SisenseContextConfig extends Omit<SisenseContextProviderProps, 'modules'> {}
 
 /**
  * Represents the state of the Sisense client application.

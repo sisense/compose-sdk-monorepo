@@ -78,6 +78,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-streamgraph-chart',
   template: `
     <csdk-chart

@@ -4,7 +4,7 @@ title: GetNlgInsights
 
 # Function GetNlgInsights
 
-> **GetNlgInsights**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **GetNlgInsights**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 React component that fetches and displays a collapsible analysis of the provided query using natural language generation (NLG).
 Specifying a query is similar to providing parameters to a [useExecuteQuery](../queries/function.useExecuteQuery.md) hook, using dimensions, measures, and filters.
@@ -17,7 +17,7 @@ Specifying a query is similar to providing parameters to a [useExecuteQuery](../
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Collapsible container wrapping a text summary
 

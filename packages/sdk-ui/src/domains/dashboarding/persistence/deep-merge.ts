@@ -1,4 +1,4 @@
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 /**
  * Deep-merges a partial `update` into `base` for widget-update persistence.

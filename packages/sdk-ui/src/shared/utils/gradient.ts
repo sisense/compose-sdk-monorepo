@@ -453,16 +453,22 @@ export const fromHighchartsGradientFormat = (
 
 /**
  * Converts a color to the inner Highcharts format if it is a gradient, otherwise returns the color as is.
+ * Maps `null` to `undefined` so callers can omit a color without inline checks.
  *
  * @param color - The color to convert
- * @returns The inner format gradient color object or the color as is
+ * @returns The inner format gradient color object, the color as is, or `undefined` when absent/cleared
  *
  * @internal
  */
-export const withGradientConversion = <T>(
-  color: T,
-): Exclude<T, GradientColor> | HighchartsGradientColorObject =>
-  isGradient(color) ? toGradientHighchartsFormat(color) : (color as Exclude<T, GradientColor>);
+export function withGradientConversion(
+  color: string | GradientColor | HighchartsGradientColorObject | null | undefined,
+): string | HighchartsGradientColorObject | undefined {
+  if (color == null) {
+    return undefined;
+  }
+
+  return isGradient(color) ? toGradientHighchartsFormat(color) : color;
+}
 
 /**
  * Converts a GradientColor to a valid CSS gradient string.

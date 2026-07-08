@@ -70,6 +70,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-treemap-chart',
   template: `
     <csdk-chart

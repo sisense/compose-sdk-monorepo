@@ -15,7 +15,8 @@ import { defaultSisenseContext, pluginsContextKey, sisenseContextKey } from './s
  * - {@link @sisense/sdk-ui-vue!SisenseContextProviderProps.token | `token`}
  * - {@link @sisense/sdk-ui-vue!SisenseContextProviderProps.wat | `wat`}
  */
-export interface SisenseContextProviderProps extends SisenseContextProviderPropsPreact {}
+export interface SisenseContextProviderProps
+  extends Omit<SisenseContextProviderPropsPreact, 'modules'> {}
 
 /**
  * Sisense Context Provider Component allowing you to connect to

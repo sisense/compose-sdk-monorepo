@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { render, waitFor } from '@testing-library/react';
-import deepMerge from 'ts-deepmerge';
+import { merge as deepMerge } from 'ts-deepmerge';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DashboardConfig } from '@/domains/dashboarding/types';

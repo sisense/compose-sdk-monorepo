@@ -84,6 +84,38 @@ describe('attributes', () => {
       expect(jaql).toStrictEqual(result);
     });
 
+    it('must prepare week-of-year date-part attribute jaql (dateTimePart)', () => {
+      const result = {
+        jaql: {
+          title: DateLevels.WeekOfYear,
+          dim: '[Commerce.Date (Calendar)]',
+          dateTimePart: 'weeks',
+          datatype: 'datetime',
+        },
+      };
+      const level = new DimensionalLevelAttribute(
+        DateLevels.WeekOfYear,
+        '[Commerce.Date (Calendar)]',
+        DateLevels.WeekOfYear,
+      );
+
+      expect(level.jaql()).toStrictEqual(result);
+    });
+
+    it('must round-trip the week-of-year date-part (jaql ⇄ granularity, id)', () => {
+      const level = new DimensionalLevelAttribute(
+        DateLevels.WeekOfYear,
+        '[Commerce.Date (Calendar)]',
+        DateLevels.WeekOfYear,
+      );
+      // reverse translation: { dateTimePart: 'weeks' } → WeekOfYear
+      expect(DimensionalLevelAttribute.translateJaqlToGranularity({ dateTimePart: 'weeks' })).toBe(
+        DateLevels.WeekOfYear,
+      );
+      // id incorporates the part token (not blank)
+      expect(level.id).toContain('_weeks');
+    });
+
     it('must apply format during transform level attribute jaql', () => {
       const format = 'yyyy MM dd';
       const level = new DimensionalLevelAttribute(

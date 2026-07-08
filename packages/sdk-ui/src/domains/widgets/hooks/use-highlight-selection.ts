@@ -88,7 +88,7 @@ export function useHighlightSelection({
           }
           return accu;
         },
-        {},
+        {} as Record<string, boolean>,
       );
 
       return (options: HighchartsOptionsInternal) => ({
@@ -97,7 +97,9 @@ export function useHighlightSelection({
           ...s,
           data: s.data.map((d) =>
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            categoryValueMap[d.custom?.xValue?.[0]] ? d : { ...d, selected: true },
+            categoryValueMap[(d.custom?.xValue as unknown[] | undefined)?.[0] as string]
+              ? d
+              : { ...d, selected: true },
           ),
         })),
       });

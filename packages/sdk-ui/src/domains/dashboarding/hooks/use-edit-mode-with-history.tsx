@@ -3,6 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import styled from '@emotion/styled';
 
+import {
+  DASHBOARD_HEADER_ITEM_SIZE,
+  DASHBOARD_HEADER_ITEMS_GAP,
+} from '@/domains/dashboarding/components/dashboard-header/constants';
 import { WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Button } from '@/shared/components/button';
@@ -12,6 +16,15 @@ const ToolbarContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  /* Consistent spacing between the undo/redo group and the cancel/apply buttons (matches the
+     header's inter-item gap). */
+  gap: ${DASHBOARD_HEADER_ITEMS_GAP}px;
+`;
+
+/** Keeps undo and redo grouped tightly together as a single icon pair. */
+const UndoRedoGroup = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const IconButton = styled(Button)`
@@ -27,8 +40,8 @@ const IconButton = styled(Button)`
 
 const UndoIcon = (props: SVGProps<SVGSVGElement> & { color?: string }) => (
   <svg
-    width="30px"
-    height="30px"
+    width={DASHBOARD_HEADER_ITEM_SIZE}
+    height={DASHBOARD_HEADER_ITEM_SIZE}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +115,6 @@ export interface UseEditModeToolbarResult {
 
 /**
  * Hook that provides layout state management with history tracking and a toolbar with undo/redo/cancel/apply buttons
- *
  * @param props Configuration options for the toolbar
  * @returns Layout state and toolbar component
  * @internal
@@ -158,27 +170,25 @@ export function useEditModeWithHistory({
   const toolbar = useCallback(
     () => (
       <ToolbarContainer>
-        <IconButton onClick={undo} disabled={!canUndo} title={t('dashboard.toolbar.undo')}>
-          <UndoIcon color={themeSettings.dashboard.toolbar.primaryTextColor} />
-        </IconButton>
-        <IconButton onClick={redo} disabled={!canRedo} title={t('dashboard.toolbar.redo')}>
-          <RedoIcon color={themeSettings.dashboard.toolbar.primaryTextColor} />
-        </IconButton>
-        <span className="csdk-ml-[8px]">
-          <Button type="secondary" onClick={handleCancel} title={t('dashboard.toolbar.cancel')}>
-            {t('dashboard.toolbar.cancel')}
-          </Button>
-        </span>
-        <span className="csdk-ml-[8px]">
-          <Button
-            type="primary"
-            onClick={handleApply}
-            disabled={!hasChanges}
-            title={t('dashboard.toolbar.apply')}
-          >
-            {t('dashboard.toolbar.apply')}
-          </Button>
-        </span>
+        <UndoRedoGroup>
+          <IconButton onClick={undo} disabled={!canUndo} title={t('dashboard.toolbar.undo')}>
+            <UndoIcon color={themeSettings.dashboard.toolbar.primaryTextColor} />
+          </IconButton>
+          <IconButton onClick={redo} disabled={!canRedo} title={t('dashboard.toolbar.redo')}>
+            <RedoIcon color={themeSettings.dashboard.toolbar.primaryTextColor} />
+          </IconButton>
+        </UndoRedoGroup>
+        <Button type="secondary" onClick={handleCancel} title={t('dashboard.toolbar.cancel')}>
+          {t('dashboard.toolbar.cancel')}
+        </Button>
+        <Button
+          type="primary"
+          onClick={handleApply}
+          disabled={!hasChanges}
+          title={t('dashboard.toolbar.apply')}
+        >
+          {t('dashboard.toolbar.apply')}
+        </Button>
       </ToolbarContainer>
     ),
     [

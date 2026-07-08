@@ -9,8 +9,9 @@ import {
 } from '@angular/core';
 import {
   ComponentAdapter,
-  type DashboardConfig,
+  type DashboardConfig as DashboardConfigPreact,
   type DashboardFiltersPanelConfig,
+  type DashboardHeaderConfig as DashboardHeaderConfigPreact,
   Dashboard as DashboardPreact,
   type DashboardProps as DashboardPropsPreact,
 } from '@sisense/sdk-ui-preact';
@@ -31,16 +32,36 @@ import { ThemeService } from '../../services/theme.service';
 import { WidgetProps } from '../widgets/widget.component';
 
 // Re-exports related types
-export { DashboardConfig, DashboardFiltersPanelConfig };
+export { DashboardFiltersPanelConfig };
+
+/**
+ * Configuration for the dashboard header.
+ */
+export interface DashboardHeaderConfig
+  extends Omit<DashboardHeaderConfigPreact, 'items' | 'onBeforeRender'> {}
+
+/**
+ * Configuration for the {@link DashboardComponent}.
+ */
+export interface DashboardConfig extends Omit<DashboardConfigPreact, 'header'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardConfig.header}
+   */
+  header?: DashboardHeaderConfig;
+}
 
 /**
  * Props of the {@link DashboardComponent}.
  */
-export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
+export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets' | 'config'> {
   /**
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
    */
   widgets: WidgetProps[];
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
+   */
+  config?: DashboardConfig;
 }
 
 /**
@@ -93,6 +114,7 @@ export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
  * @group Dashboards
  */
 @Component({
+  standalone: false,
   selector: 'csdk-dashboard',
   template,
   styles,

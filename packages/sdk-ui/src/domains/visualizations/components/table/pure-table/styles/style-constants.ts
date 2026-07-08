@@ -8,7 +8,7 @@ export const HEADER_PADDING = 36;
 export const HEADER_TYPE_ICON_SPACING = 29;
 export const DATA_PADDING = 24;
 export const MAX_WIDTH = 350;
-export const MIN_WIDTH = 126;
+export const MIN_WIDTH = 120;
 
 // temp until we have column adjustment
 export const HEADER_ELLIPSIZED_LENGTH = 38;

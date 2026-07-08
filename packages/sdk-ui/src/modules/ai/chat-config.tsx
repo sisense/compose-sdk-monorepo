@@ -130,7 +130,7 @@ export const ChatConfigProvider = ({ children, value }: ChatConfigProviderProps)
   const config = Object.entries(value).reduce<ChatConfig>(
     (acc, [key, val]) => {
       if (val !== undefined) {
-        acc[key] = val;
+        (acc as unknown as Record<string, unknown>)[key] = val;
       }
 
       return acc;

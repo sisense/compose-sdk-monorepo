@@ -65,7 +65,13 @@ describe('useCommonFilters', () => {
    * Helper function to get property from widget props
    */
   const getProperty = (widget: WidgetProps, key: keyof WidgetProps | keyof ChartWidgetProps) => {
-    return isTextWidgetProps(widget) ? (key === 'dataOptions' ? {} : []) : widget[key];
+    return isTextWidgetProps(widget)
+      ? key === 'dataOptions'
+        ? {}
+        : []
+      : // Dynamic property access across a widget-props union in a test helper; `any` mirrors the
+        // previous (implicit-any) behavior so call sites can spread/index the result freely.
+        (widget as any)[key];
   };
 
   /**
@@ -75,7 +81,9 @@ describe('useCommonFilters', () => {
     widget: WidgetProps,
     key: 'onDataPointClick' | 'onDataPointsSelected' | 'onRenderToolbar',
   ) => {
-    return isChartWidgetProps(widget) ? widget[key] : undefined;
+    // Dynamic handler lookup on chart-widget props in a test helper; `any` mirrors the previous
+    // (implicit-any) behavior so the result is assignable to the various handler types.
+    return isChartWidgetProps(widget) ? (widget as any)[key] : undefined;
   };
 
   /**

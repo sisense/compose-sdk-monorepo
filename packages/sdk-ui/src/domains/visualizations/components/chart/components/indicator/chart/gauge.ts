@@ -306,7 +306,9 @@ export class Gauge {
         activeMeasure.titleString !== data.secondaryTitle.text ||
         activeMeasure.valueString !== data.secondary.text;
     } else {
-      useMaxWidth = activeMeasure.string !== data[activeMeasure.key].text;
+      useMaxWidth =
+        activeMeasure.string !==
+        (data as unknown as Record<string, { text: string }>)[activeMeasure.key].text;
     }
 
     if (useMaxWidth) {

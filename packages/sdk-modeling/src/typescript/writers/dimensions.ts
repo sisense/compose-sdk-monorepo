@@ -115,8 +115,12 @@ export class DateDimensionWriter extends ElementWriter<DateDimension> {
   }
 
   isCustom(): boolean {
-    return DateLevels.all.some(
-      (lvl, i) => (<LevelAttribute>this.element.attributes[i]).granularity !== lvl,
+    // Compare the dimension's own level attributes against the standard ordering.
+    // Iterating the attributes (rather than DateLevels.all) keeps this robust when
+    // DateLevels gains date-part levels (e.g. WeekOfYear) that standard date
+    // dimensions don't auto-generate.
+    return this.element.attributes.some(
+      (att, i) => (<LevelAttribute>att).granularity !== DateLevels.all[i],
     );
   }
 

@@ -61,6 +61,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-areamap-chart',
   template: `
     <csdk-chart

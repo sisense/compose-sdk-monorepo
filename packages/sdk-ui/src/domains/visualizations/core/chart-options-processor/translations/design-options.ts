@@ -210,6 +210,36 @@ export type TableDesignOptions = {
      * 'content' - columns width will be based on content (default option)
      */
     width?: 'auto' | 'content';
+    /**
+     * Enables interactive resizing of column widths by dragging the column border.
+     * Default value is `true`. Set to `false` to disable.
+     */
+    resizable?: boolean;
+    /**
+     * Minimum column width in pixels when resizing.
+     * Default value is 120.
+     */
+    minWidth?: number;
+    /**
+     * Maximum column width in pixels when resizing.
+     * Default value is 350.
+     */
+    maxWidth?: number;
+    /**
+     * Current column pixel widths, in display order. Set by the dashboarding
+     * layer to make column widths controlled/persisted; not intended for
+     * direct use.
+     *
+     * @internal
+     */
+    widths?: number[];
+    /**
+     * Fired with the full set of column widths (pixels, in display order)
+     * whenever a column resize completes.
+     *
+     * @internal
+     */
+    onColumnsResize?: (widths: number[]) => void;
   };
   /**
    * Rows options

@@ -51,7 +51,7 @@ const BRACKET_REFERENCE_PATTERN = /\[(\w[\w.-]*)\]/g;
  * contain bracket references to raw attributes.
  */
 const AGGREGATIVE_FORMULA_FUNCTIONS = new Set([
-  // Universal – Aggregative (per Sisense doc: (A) only; Statistical CONTRIBUTION, PERCENTILE, etc. are non-aggregative)
+  // Universal – Aggregative (reduce a raw column to a single value)
   'AVG',
   'COUNT',
   'DUPCOUNT',
@@ -60,6 +60,15 @@ const AGGREGATIVE_FORMULA_FUNCTIONS = new Set([
   'MIN',
   'MODE',
   'SUM',
+  // Statistical aggregations – these reduce a raw column to one value and are aggregative in JAQL
+  // (e.g. Percentile([x], 0.9), Quartile([x], 1), Mode([x])).
+  'PERCENTILE',
+  'QUARTILE',
+  // Statistical – Aggregative (per AE Aggregation enum and formula-function-schemas)
+  'STDEV',
+  'STDEVP',
+  'VAR',
+  'VARP',
   // Universal – Time-to-date (WTD/MTD/QTD/YTD)
   'WTDAVG',
   'WTDSUM',
@@ -70,6 +79,7 @@ const AGGREGATIVE_FORMULA_FUNCTIONS = new Set([
   'YTDAVG',
   'YTDSUM',
   // RAVG, RSUM are non-aggregative per Sisense doc (Other Functions, not (A))
+  // CONTRIBUTION is non-aggregative (scalar).
   // CORREL, COVAR*, SKEW*, SLOPE, LARGEST are unsupported in custom formulas (see UNSUPPORTED_FORMULA_FUNCTIONS).
 ]);
 
@@ -431,6 +441,90 @@ function validateTimeDiffCalls(ctx: ValidatorCtx): void {
   }
 }
 
+// ── PERCENTILE / QUARTILE parameter range validation ──
+
+/**
+ * Extracts the raw argument strings from each call to the named function in a formula.
+ * Skips calls inside quoted strings; unparseable calls (unbalanced parentheses) are omitted.
+ *
+ * @param formula - The formula string to scan for function calls
+ * @param funcName - The function name to match (case-insensitive)
+ * @returns An array of argument lists, one inner array per matched call, or an empty array when no calls are found
+ *
+ * @internal
+ */
+export function extractFunctionArgs(formula: string, funcName: string): string[][] {
+  const escaped = funcName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const namePattern = new RegExp(`^${escaped}$`, 'i');
+  const results: string[][] = [];
+  let i = 0;
+  while (i < formula.length) {
+    const char = formula[i];
+    if (char === "'" || char === '"') {
+      i = skipQuotedString(formula, i);
+      continue;
+    }
+    if (!/[A-Za-z_]/.test(char)) {
+      i++;
+      continue;
+    }
+    const nameStart = i;
+    i++;
+    while (i < formula.length && /[A-Za-z0-9_]/.test(formula[i])) {
+      i++;
+    }
+    const rawName = formula.slice(nameStart, i);
+    while (i < formula.length && /\s/.test(formula[i])) {
+      i++;
+    }
+    if (formula[i] !== '(' || !namePattern.test(rawName)) {
+      continue;
+    }
+    const open = i;
+    const close = findMatchingCloseParen(formula, open);
+    if (close === -1) {
+      continue;
+    }
+    const argsStr = formula.slice(open + 1, close);
+    results.push(splitAtDepthZero(argsStr, ',').map((s) => s.trim()));
+    i = close + 1;
+  }
+  return results;
+}
+
+/**
+ * Validates that PERCENTILE second arg ∈ [0.0, 1.0] and QUARTILE second arg ∈ {0,1,2,3,4}.
+ * Only fires when the second argument is a numeric literal — non-literal values (e.g. bracket refs)
+ * are skipped (the engine will catch them at runtime).
+ */
+function validateBoundedNumericArgs(ctx: ValidatorCtx): void {
+  for (const argList of extractFunctionArgs(ctx.formula, 'PERCENTILE')) {
+    const second = argList[1];
+    if (second === undefined) continue;
+    const val = Number(second);
+    if (Number.isNaN(val)) continue; // non-literal, skip
+    if (val < 0 || val > 1) {
+      addError(
+        ctx,
+        `${ctx.errorPrefix}args[1]: PERCENTILE second argument must be a decimal in [0, 1], got ${second}`,
+      );
+    }
+  }
+
+  for (const argList of extractFunctionArgs(ctx.formula, 'QUARTILE')) {
+    const second = argList[1];
+    if (second === undefined) continue;
+    const val = Number(second);
+    if (Number.isNaN(val)) continue; // non-literal, skip
+    if (!Number.isInteger(val) || val < 0 || val > 4) {
+      addError(
+        ctx,
+        `${ctx.errorPrefix}args[1]: QUARTILE second argument must be an integer in [0, 4], got ${second}`,
+      );
+    }
+  }
+}
+
 // ── Main validation function ──
 
 /**
@@ -481,6 +575,7 @@ export function validateFormulaReferences(
 
   validateOperatorSyntax(ctx);
   validateUnsupportedAndFormulaArity(ctx);
+  validateBoundedNumericArgs(ctx);
 
   ctx.result.references = extractBracketReferences(formula);
 

@@ -8,7 +8,7 @@ import {
 } from '@sisense/sdk-data';
 
 import { JtdConfigDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
-import { WidgetContainerStyleOptions } from '@/types';
+import { DashStyle, WidgetContainerStyleOptions } from '@/types';
 
 import { HierarchyId } from '../../../../domains/drilldown/hierarchy-model';
 import { LEGACY_DESIGN_TYPES } from '../../../../infra/themes/legacy-design-settings';
@@ -440,6 +440,26 @@ export type PanelColorFormatConditionOperator =
 type LabelsStyle = {
   enabled: boolean;
   rotation: number;
+  /** Custom rotation in degrees from Fusion design panel. Overrides rotation when set. */
+  customRotation?: number | null;
+  /** Text prepended to each value label. */
+  prefix?: string;
+  /** Text appended to each value label. */
+  suffix?: string;
+  /** Background color behind each value label. */
+  backgroundColor?: string | null;
+  /** Padding in pixels around value label text when background color is set. */
+  backgroundPadding?: number | null;
+  /** Border color around each value label. */
+  borderColor?: string | null;
+  /** Border width in pixels when border color is set. */
+  borderWidth?: number | null;
+  /** Border radius in pixels when border color is set. */
+  borderRadius?: number | null;
+  /** Horizontal offset of value labels in pixels. */
+  xOffset?: number | null;
+  /** Vertical offset of value labels in pixels. */
+  yOffset?: number | null;
   /**
    * @internal
    */
@@ -501,6 +521,17 @@ export type CartesianWidgetStyle = BaseWidgetStyle &
     y2Axis?: AxisStyle;
     lineWidth?: {
       width: string;
+      /** Custom line width in px from Fusion design panel. Overrides width when > 0. */
+      customWidth?: number | null;
+    };
+    /** CSDK-compatible line stroke options (e.g. dashStyle, width from styleOptions.line). */
+    line?: {
+      dashStyle?: DashStyle;
+      width?: number;
+    };
+    /** Fusion design-panel dash style token (`lineType`). Maps to CSDK `line.dashStyle`; not curve line type (straight/smooth). */
+    lineStyle?: {
+      lineType?: string;
     };
     markers?: {
       enabled: boolean;
@@ -544,6 +575,17 @@ export type FunnelWidgetStyle = BaseWidgetStyle &
       percent: boolean;
       value: boolean;
       decimals: boolean;
+      rotation?: number;
+      customRotation?: number | null;
+      prefix?: string;
+      suffix?: string;
+      backgroundColor?: string | null;
+      backgroundPadding?: number | null;
+      borderColor?: string | null;
+      borderWidth?: number | null;
+      borderRadius?: number | null;
+      xOffset?: number | null;
+      yOffset?: number | null;
     };
   };
 
@@ -555,6 +597,17 @@ export type PieWidgetStyle = BaseWidgetStyle &
       percent: boolean;
       value: boolean;
       decimals: boolean;
+      rotation?: number;
+      customRotation?: number | null;
+      prefix?: string;
+      suffix?: string;
+      backgroundColor?: string | null;
+      backgroundPadding?: number | null;
+      borderColor?: string | null;
+      borderWidth?: number | null;
+      borderRadius?: number | null;
+      xOffset?: number | null;
+      yOffset?: number | null;
     };
     dataLimits?: DataLimits;
     convolution?: {
@@ -575,6 +628,24 @@ export type TableWidgetStyle = {
   'width/content': boolean;
   'width/window': boolean;
   pageSize: number;
+  /**
+   * Live table UI state written by Fusion's table widget. `colResize.columns` is the
+   * authoritative source of on-screen column widths — unlike `panels.items[].colSize`
+   * (a write-once snapshot that goes stale once a column is disabled/re-enabled), it's
+   * kept in sync with the table's currently visible columns.
+   */
+  tableState?: {
+    colResize?: {
+      /** Pixel widths (e.g. `'84.3906px'`), one per visible column, in display order. */
+      columns: string[];
+      /**
+       * Total table width in pixels at resize time. Fusion renders each column as
+       * `(columnPx / sum(columns)) × tableSize`, so this must stay in sync with the
+       * sum of `columns` for absolute pixel rendering.
+       */
+      tableSize?: number;
+    };
+  };
 };
 
 export type IndicatorWidgetStyle = WidgetContainerStyleOptions & {

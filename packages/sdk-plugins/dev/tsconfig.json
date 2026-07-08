@@ -4,7 +4,6 @@
     "composite": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "suppressImplicitAnyIndexErrors": false,
     "module": "ESNext",
     "moduleResolution": "node",
     "baseUrl": ".",

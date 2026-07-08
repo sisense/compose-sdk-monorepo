@@ -112,7 +112,8 @@ export class Indicator {
     relativeSizes.forEach(function (item) {
       let originalValue: number;
       if ('dataKey' in item && 'values' in item && item.dataKey in legacyDataOptions) {
-        originalValue = item.values[legacyDataOptions[item.dataKey]];
+        originalValue =
+          item.values[String(legacyDataOptions[item.dataKey]) as keyof typeof item.values];
       } else if ('value' in item) {
         originalValue = item.value;
       } else {
@@ -121,7 +122,10 @@ export class Indicator {
 
       const value = originalValue * baseValue;
 
-      options[item.key] = $indicatorHelper.floor(value, item.decimals);
+      (options as unknown as Record<string, number>)[item.key] = $indicatorHelper.floor(
+        value,
+        item.decimals,
+      );
     });
   }
 
@@ -133,20 +137,34 @@ export class Indicator {
    */
   setTextOptions(options: LegacyIndicatorChartOptions, size?: string) {
     options.textKeys.forEach(function (key) {
-      const textOptions = options[key];
+      const textOptions = (
+        options as unknown as Record<
+          string,
+          {
+            fontStyle?: string;
+            fontVariant?: string;
+            fontWeight?: number;
+            fontSizes?: Record<string, number | undefined>;
+            fontSize?: number;
+            fontFamily?: string;
+            color?: string;
+          }
+        >
+      )[key];
       const fontStyle = textOptions.fontStyle ? `${textOptions.fontStyle} ` : '';
       const fontVariant = textOptions.fontVariant ? `${textOptions.fontVariant} ` : '';
       const fontWeight = textOptions.fontWeight ? `${textOptions.fontWeight} ` : '';
       const fontSize = `${Number.parseFloat(
-        (textOptions.fontSizes && textOptions.fontSizes[size]) ||
+        (textOptions.fontSizes && textOptions.fontSizes[size as string]) ||
           textOptions.fontSize ||
           (options as any).fontSize,
       )}px `;
       const fontFamily = textOptions.fontFamily || options.fontFamily;
       const { color } = textOptions;
 
-      options[`${key}Font`] = fontStyle + fontVariant + fontWeight + fontSize + fontFamily;
-      options[`${key}Color`] = color;
+      const writableOptions = options as unknown as Record<string, string | undefined>;
+      writableOptions[`${key}Font`] = fontStyle + fontVariant + fontWeight + fontSize + fontFamily;
+      writableOptions[`${key}Color`] = color;
     });
   }
 }

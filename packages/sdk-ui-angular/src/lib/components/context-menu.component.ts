@@ -35,6 +35,7 @@ import type { ArgumentsAsObject } from '../types/utility-types';
  * @group Drilldown
  */
 @Component({
+  standalone: false,
   selector: 'csdk-context-menu',
   template: templateWithContent,
   styles,

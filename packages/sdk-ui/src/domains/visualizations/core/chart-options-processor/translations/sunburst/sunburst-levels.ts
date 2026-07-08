@@ -56,7 +56,10 @@ export function prepareSunburstLevels(
     },
     levelSize: {
       unit: 'percentage',
-      value: ROOT_LEVEL_SIZE_PER_CATEGORIES[dataOptions.breakBy.length] || 50,
+      value:
+        ROOT_LEVEL_SIZE_PER_CATEGORIES[
+          dataOptions.breakBy.length as keyof typeof ROOT_LEVEL_SIZE_PER_CATEGORIES
+        ] || 50,
     },
   };
 

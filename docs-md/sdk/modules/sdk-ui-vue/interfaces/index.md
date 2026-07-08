@@ -36,6 +36,7 @@ TypeScript interfaces for components and composables listed above
 - [DashboardByIdProps](interface.DashboardByIdProps.md)
 - [DashboardConfig](interface.DashboardConfig.md)
 - [DashboardFiltersPanelConfig](interface.DashboardFiltersPanelConfig.md)
+- [DashboardHeaderConfig](interface.DashboardHeaderConfig.md)
 - [DashboardLayoutOptions](interface.DashboardLayoutOptions.md)
 - [DashboardProps](interface.DashboardProps.md)
 - [DataLimits](interface.DataLimits.md)

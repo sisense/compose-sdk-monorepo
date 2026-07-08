@@ -23,9 +23,6 @@ React components and utilities for working with charts
 - [PieChart](charts/function.PieChart.md)
 - [PolarChart](charts/function.PolarChart.md)
 - [SankeyChart](charts/function.SankeyChart.md) <Badge type="beta" text="Beta" />
-- [SankeyChartDataOptions](charts/interface.SankeyChartDataOptions.md) <Badge type="beta" text="Beta" />
-- [SankeyChartProps](charts/interface.SankeyChartProps.md) <Badge type="beta" text="Beta" />
-- [SankeyStyleOptions](charts/interface.SankeyStyleOptions.md) <Badge type="beta" text="Beta" />
 - [ScatterChart](charts/function.ScatterChart.md)
 - [ScattermapChart](charts/function.ScattermapChart.md)
 - [StreamgraphChart](charts/function.StreamgraphChart.md)
@@ -133,6 +130,7 @@ General-purpose utilities and primitives for formatting, styling, and common UI 
 - [Formatting](formatting/index.md) - Utilities for formatting numbers, dates, and query result data sets.
 - [Styling](styling/index.md) - Utilities for creating and inspecting color gradients used in chart styling.
 - [Primitives](primitives/index.md) - General-purpose presentational primitive components.
+- [Helpers](helpers/index.md) - General-purpose hooks and utilities for building custom components and plugins.
 
 ## Plugin System
 
@@ -150,4 +148,5 @@ Types for building and registering custom visualization plugins
 - [DesignPanel](plugin-system/type-alias.DesignPanel.md) <Badge type="beta" text="Beta" />
 - [DesignPanelProps](plugin-system/interface.DesignPanelProps.md) <Badge type="beta" text="Beta" />
 - [Plugin](plugin-system/type-alias.Plugin.md) <Badge type="beta" text="Beta" />
+- [VisualizationStateUpdate](plugin-system/type-alias.VisualizationStateUpdate.md) <Badge type="beta" text="Beta" />
 - [WidgetPlugin](plugin-system/interface.WidgetPlugin.md) <Badge type="beta" text="Beta" />

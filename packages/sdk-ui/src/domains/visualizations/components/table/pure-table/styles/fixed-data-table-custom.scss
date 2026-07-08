@@ -59,4 +59,16 @@
   .public_fixedDataTableCell_cellContent {
     padding: 0px 24px 0 12px;
   }
+
+  .public_fixedDataTableCell_columnResizerKnob {
+    background-color: var(--csdk-table-column-resizer-color, #ffcb05);
+  }
+
+  .public_fixedDataTableColumnResizerLine_main {
+    border-color: var(--csdk-table-column-resizer-color, #ffcb05);
+  }
+
+  .fixedDataTableCellLayout_columnResizerContainer:hover {
+    background-color: var(--csdk-table-column-resizer-color, #ffcb05);
+  }
 }

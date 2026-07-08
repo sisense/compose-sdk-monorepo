@@ -4,13 +4,17 @@ import styled from '@emotion/styled';
 import { DataSource } from '@sisense/sdk-data';
 
 import { ContentPanel } from '@/domains/dashboarding/components/content-panel';
-import { DashboardHeader } from '@/domains/dashboarding/components/dashboard-header';
-import { DashboardHeaderTargets } from '@/domains/dashboarding/components/dashboard-header-targets';
-import { createDashboardTitleItem } from '@/domains/dashboarding/components/dashboard-header-title';
+import { DashboardHeader } from '@/domains/dashboarding/components/dashboard-header/dashboard-header';
+import { DashboardHeaderTargets } from '@/domains/dashboarding/components/dashboard-header/dashboard-header-targets';
+import { createDashboardTitleItem } from '@/domains/dashboarding/components/dashboard-header/dashboard-header-title';
 import { EditableLayout } from '@/domains/dashboarding/components/editable-layout/editable-layout';
 import { HorizontalCollapse } from '@/domains/dashboarding/components/horizontal-collapse';
 import { DashboardContainerProps } from '@/domains/dashboarding/types';
-import { getDefaultWidgetsPanelLayout, getDividerStyle } from '@/domains/dashboarding/utils';
+import {
+  getDefaultWidgetsPanelLayout,
+  getDividerStyle,
+  isDashboardHeaderVisible,
+} from '@/domains/dashboarding/utils';
 import { FiltersPanel } from '@/domains/filters';
 import { createHeaderSpacerItem } from '@/domains/shared/header';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
@@ -72,10 +76,10 @@ export const DashboardContainer = ({
   const { themeSettings } = useThemeContext();
 
   const isLayoutResponsive = config?.widgetsPanel?.responsive ?? false;
-  const isToolbarVisible = config?.toolbar?.visible !== false;
+  const isHeaderVisible = isDashboardHeaderVisible(config);
   const isFiltersPanelVisible = config?.filtersPanel?.visible !== false;
   const hideFiltersPanelCollapseArrow =
-    isToolbarVisible &&
+    isHeaderVisible &&
     isFiltersPanelVisible &&
     (config?.filtersPanel?.showFilterIconInToolbar ?? false);
 
@@ -99,7 +103,7 @@ export const DashboardContainer = ({
   return (
     <DashboardWrapper theme={themeSettings}>
       <ContentColumn theme={themeSettings} showRightBorder={!isFiltersPanelVisible}>
-        {isToolbarVisible && <DashboardHeader items={items} config={headerConfig} />}
+        {isHeaderVisible && <DashboardHeader items={items} config={headerConfig} />}
         <ContentPanelWrapper responsive={isLayoutResponsive}>
           {editMode ? (
             <EditableLayout

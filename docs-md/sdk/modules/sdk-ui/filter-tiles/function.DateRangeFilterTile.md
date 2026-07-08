@@ -4,7 +4,7 @@ title: DateRangeFilterTile
 
 # Function DateRangeFilterTile
 
-> **DateRangeFilterTile**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **DateRangeFilterTile**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Date Range Filter Tile component for filtering data by date range.
 
@@ -16,7 +16,7 @@ Date Range Filter Tile component for filtering data by date range.
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Date Range Filter Tile component
 

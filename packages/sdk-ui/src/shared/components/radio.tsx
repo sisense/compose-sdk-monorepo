@@ -2,11 +2,14 @@ import React from 'react';
 
 import RadioMui from '@mui/material/Radio';
 
+const ARIA_LABEL = 'aria-label';
+
 type ButtonProps = {
   checked?: boolean;
   value?: string;
   onChange?: (checked: boolean) => void;
   disabled?: boolean;
+  'aria-label'?: string;
 };
 
 /** @internal */
@@ -39,7 +42,7 @@ export const Radio = (props: ButtonProps) => {
       checked={checked}
       onChange={(event, isChecked) => onChange?.(isChecked)}
       value={value}
-      inputProps={{ ...(props['aria-label'] && { 'aria-label': props['aria-label'] }) }}
+      inputProps={{ ...(props[ARIA_LABEL] && { [ARIA_LABEL]: props[ARIA_LABEL] }) }}
       disabled={disabled}
     />
   );

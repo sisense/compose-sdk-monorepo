@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { WarningIcon } from '@/shared/icons/warning-icon.js';
@@ -7,7 +8,6 @@ import {
   type QuotaNotificationOptions,
   useQuotaNotification,
 } from '../../hooks/use-quota-notification.js';
-import { useQuotaWarningDismissed } from '../../hooks/use-quota-warning-dismissed.js';
 import { Alert } from '../alert/index.js';
 import styles from './quota-notification.module.scss';
 
@@ -21,21 +21,14 @@ export interface QuotaNotificationProps extends QuotaNotificationOptions {
    * Additional CSS class name
    */
   className?: string;
-  /**
-   * Whether the warning banner has been dismissed (controlled from parent)
-   */
-  warningDismissed?: boolean;
-  /**
-   * Callback when warning is dismissed (for controlled usage)
-   */
-  onDismissWarning?: () => void;
 }
 
 /**
  * Component that displays credit balance warnings/errors
  *
  * Shows an error banner when credit is exceeded (not dismissible).
- * Shows a warning banner when credit usage >= warningThreshold (dismissible).
+ * Shows a warning banner when credit usage >= warningThreshold (dismissible via close button,
+ * resets each time the assistant loads).
  * Automatically updates via polling every 60 seconds.
  *
  * @param props - QuotaNotification props
@@ -44,8 +37,6 @@ export interface QuotaNotificationProps extends QuotaNotificationOptions {
  */
 export function QuotaNotification({
   className = '',
-  warningDismissed: controlledWarningDismissed,
-  onDismissWarning,
   enabled = true,
   warningThreshold,
   exceededThreshold,
@@ -60,23 +51,7 @@ export function QuotaNotification({
     warningThreshold,
     exceededThreshold,
   });
-  const [persistedDismissed, setPersistedDismissed] = useQuotaWarningDismissed();
-
-  // Use controlled state if provided, otherwise use sessionStorage-persisted state
-  const warningDismissed =
-    controlledWarningDismissed !== undefined ? controlledWarningDismissed : persistedDismissed;
-
-  const handleDismissWarning = () => {
-    if (onDismissWarning) {
-      onDismissWarning();
-      // In callback-only mode (controlledWarningDismissed undefined), update persisted state
-      if (controlledWarningDismissed === undefined) {
-        setPersistedDismissed(true);
-      }
-    } else {
-      setPersistedDismissed(true);
-    }
-  };
+  const [warningDismissed, setWarningDismissed] = useState(false);
 
   if (!effectiveEnabled || isLoading || !quotaState) {
     return null;
@@ -86,10 +61,10 @@ export function QuotaNotification({
   if (quotaState.isExceeded) {
     return (
       <div className={`${styles.container} ${className}`}>
-        <div className={styles.bannerWrapper} data-variant="error">
+        <div className={styles.bannerWrapper}>
           <Alert
             variant="error"
-            icon={<XCircleIcon width="16" height="16" />}
+            icon={<XCircleIcon />}
             title={t('ai.quota.exceededErrorTitle')}
             description={t('ai.quota.exceededErrorDescription')}
             dismissible={false}
@@ -99,20 +74,19 @@ export function QuotaNotification({
     );
   }
 
-  // Show warning banner when credit usage >= warningThreshold (dismissible)
+  // Show warning banner when credit usage >= warningThreshold (dismissible, resets each load)
   if (quotaState.isWarning && !warningDismissed) {
     return (
-      <div className={`${styles.container} ${styles.containerClickable} ${className}`}>
-        <div className={styles.bannerWrapper} data-variant="warning">
+      <div className={`${styles.container} ${className}`}>
+        <div className={styles.bannerWrapper}>
           <Alert
             variant="warning"
-            icon={<WarningIcon width="16" height="16" />}
+            icon={<WarningIcon />}
             description={t('ai.quota.warningDescription', {
               usagePercentage: Math.round(quotaState.usagePercentage),
             })}
             dismissible={true}
-            dismissOnClick={true}
-            onDismiss={handleDismissWarning}
+            onDismiss={() => setWarningDismissed(true)}
           />
         </div>
       </div>

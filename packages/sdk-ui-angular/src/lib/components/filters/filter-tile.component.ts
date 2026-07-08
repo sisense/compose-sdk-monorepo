@@ -82,6 +82,7 @@ export class ExampleComponent {
  * @shortDescription Facade component rendering a filter tile based on filter type
  */
 @Component({
+  standalone: false,
   selector: 'csdk-filter-tile',
   template,
   styles,

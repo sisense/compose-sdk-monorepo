@@ -75,6 +75,17 @@ Handler callback for selection of multiple data points
 
 ### Other
 
+#### customOptions <Badge type="beta" text="Beta" />
+
+> **customOptions**?: `CustomOptions`
+
+Arbitrary plugin-specific runtime state that is not data- or style-related
+(for example the current page of a table or a selected tab). Persisted back
+to the Sisense instance when the widget lives inside a Dashboard component,
+so it survives page reloads.
+
+***
+
 #### dataOptions
 
 > **dataOptions**: `DataOptions`
@@ -104,6 +115,33 @@ Filters to apply to the data
 > **highlights**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
 Highlight filters for interactive highlighting
+
+***
+
+#### onChange <Badge type="beta" text="Beta" />
+
+> **onChange**?: (`update`) => `void`
+
+Emits a partial state update to be persisted through the dashboard
+persistence layer. Injected by the dashboard when the widget lives inside a
+Dashboard component; `undefined` in standalone use or read-only mode — always
+call it with optional chaining.
+
+##### Example
+
+```ts
+onChange?.({ customOptions: { lastPage: 3 } });
+```
+
+##### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `update` | [`VisualizationStateUpdate`](type-alias.VisualizationStateUpdate.md)\< `StyleOptions`, `CustomOptions` \> |
+
+##### Returns
+
+`void`
 
 ***
 

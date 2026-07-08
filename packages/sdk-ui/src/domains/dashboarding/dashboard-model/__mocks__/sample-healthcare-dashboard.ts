@@ -3015,4 +3015,4 @@ export const sampleHealthcareDashboard = {
       export_dash: false,
     },
   },
-} as DashboardDto;
+} as unknown as DashboardDto;

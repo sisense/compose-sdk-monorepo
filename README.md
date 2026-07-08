@@ -29,7 +29,7 @@ and [the Yarn version plugin](https://yarnpkg.com/features/release-workflow) for
 
 Using [Volta](https://docs.volta.sh/guide/getting-started) as
 your Node.js version manager is **strongly** recommended, but Node Version Manager `nvm` is also supported.
-Currently, the project is tested with Node.js 18.16.0 or newer.
+Currently, the project is tested with Node.js 20.19 or newer.
 
 ## Installation
 

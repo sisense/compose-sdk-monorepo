@@ -98,6 +98,7 @@ export interface ChartWidgetProps
  * @group Dashboards
  */
 @Component({
+  standalone: false,
   selector: 'csdk-chart-widget',
   template,
   styles,
@@ -156,12 +157,12 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
   styleOptions: ChartWidgetProps['styleOptions'];
 
   /**
-   * Configuration for AI-powered widget features such as automated narrative generation
-   * @alpha
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.config}
+   *
    * @category Widget
    */
   @Input()
-  aiOptions: ChartWidgetProps['aiOptions'];
+  config: ChartWidgetProps['config'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
@@ -269,7 +270,7 @@ export class ChartWidgetComponent implements AfterViewInit, OnChanges, OnDestroy
       filters: this.filters,
       highlights: this.highlights,
       styleOptions: this.styleOptions,
-      aiOptions: this.aiOptions,
+      config: this.config,
       drilldownOptions: this.drilldownOptions,
       title: this.title,
       description: this.description,

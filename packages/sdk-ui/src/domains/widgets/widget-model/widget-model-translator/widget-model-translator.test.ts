@@ -1863,10 +1863,10 @@ describe('WidgetModelTranslator', () => {
     });
 
     describe('Widget narrative round-trip', () => {
-      it('maps style.narration from Fusion DTO into aiOptions.narrative only', () => {
+      it('maps style.narration from Fusion DTO into config.narrative only', () => {
         const dto = cloneDeep(advancedLineChartWidgetDto);
         const model = fromWidgetDto(dto);
-        expect(model.aiOptions?.narrative).toEqual(
+        expect(model.config?.narrative).toEqual(
           expect.objectContaining({
             displayLocation: 'above',
             verbosity: 'low',
@@ -1881,9 +1881,9 @@ describe('WidgetModelTranslator', () => {
           delete (dto.style.narration as Record<string, unknown>).autoShow;
         }
         const model = fromWidgetDto(dto);
-        expect(
-          model.aiOptions?.narrative == null || !('autoShow' in model.aiOptions.narrative),
-        ).toBe(true);
+        expect(model.config?.narrative == null || !('autoShow' in model.config.narrative)).toBe(
+          true,
+        );
         const out = toWidgetDto(model);
         expect(out.style.narration == null || !('autoShow' in out.style.narration)).toBe(true);
       });
@@ -1892,7 +1892,7 @@ describe('WidgetModelTranslator', () => {
         const dto = cloneDeep(advancedLineChartWidgetDto);
         (dto.style.narration as { autoShow?: boolean }).autoShow = true;
         const model = fromWidgetDto(dto);
-        expect(model.aiOptions?.narrative?.autoShow).toBe(true);
+        expect(model.config?.narrative?.autoShow).toBe(true);
         const out = toWidgetDto(model);
         expect((out.style.narration as { autoShow?: boolean })?.autoShow).toBe(true);
       });

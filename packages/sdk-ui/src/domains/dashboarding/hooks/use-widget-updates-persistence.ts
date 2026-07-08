@@ -8,7 +8,7 @@ import type { DashboardPersistenceManager } from '@/domains/dashboarding/persist
 import type { WidgetPropsUpdate } from '@/domains/dashboarding/persistence/update-types';
 import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 import type { VisualizationStateUpdate } from '@/infra/plugins/widget-plugins/types';
-import type { Navigator } from '@/types';
+import type { Navigator, TableStyleOptions } from '@/types';
 
 /** Narrowed custom-widget variant of {@link WidgetProps}. */
 type CustomWidgetProps = Extract<WidgetProps, { widgetType: 'custom' }>;
@@ -16,6 +16,33 @@ type CustomWidgetProps = Extract<WidgetProps, { widgetType: 'custom' }>;
 /** Identifies the custom-widget variant of the {@link WidgetProps} union. */
 function isCustomWidgetProps(widget: WidgetProps): widget is CustomWidgetProps {
   return widget.widgetType === 'custom';
+}
+
+/** `styleOptions.columns` shape for table column-resize persistence, reused from {@link TableStyleOptions} to stay in sync with `types.ts`. */
+type TableColumnsStyleOptions = { columns?: TableStyleOptions['columns'] };
+
+/** Narrowed table-chart-widget variant of {@link WidgetProps} with typed `styleOptions.columns`. */
+type TableChartWidgetProps = Extract<WidgetProps, { widgetType: 'chart' }> & {
+  chartType: 'table';
+  styleOptions: TableColumnsStyleOptions;
+};
+
+/**
+ * Identifies table chart widgets eligible for resize-state persistence, i.e.
+ * `styleOptions.columns.resizable !== false` (defaults to `true`). Shared by
+ * `wireWidget` and `withTableColumnWidths` to keep the rule in one place.
+ */
+function isResizableTableChartWidget(widget: WidgetProps): widget is TableChartWidgetProps {
+  return (
+    widget.widgetType === 'chart' &&
+    'chartType' in widget &&
+    widget.chartType === 'table' &&
+    'styleOptions' in widget &&
+    !!widget.styleOptions &&
+    // Narrowing by `widgetType`/`chartType` does not narrow `styleOptions` to the table-specific
+    // shape, so cast to {@link TableColumnsStyleOptions} to read `columns.resizable`.
+    (widget.styleOptions as TableColumnsStyleOptions).columns?.resizable !== false
+  );
 }
 
 const DEBOUNCE_MS = 500;
@@ -28,7 +55,8 @@ type DebouncedSaver = ReturnType<typeof debounce>;
  * Composition middleware that adds persistable widget-update plumbing to a
  * widget list. For each widget that exposes a known runtime-state callback
  * (currently only `styleOptions.navigator.onScrollerChange` for charts with
- * a navigator), the hook injects a handler that:
+ * a navigator, and `styleOptions.columns.onColumnsResize` for table charts with
+ * resizable columns), the hook injects a handler that:
  *
  * 1. Applies the update optimistically to local widget state (the parent
  *    `useComposedDashboardInternal` re-renders with the new value).
@@ -118,7 +146,23 @@ function wireWidget(widget: WidgetProps, emit: (update: WidgetPropsUpdate) => vo
     }
   }
 
-  // Branch 2: custom (plugin) widgets. The plugin-facing `onChange`
+  // Branch 2: table chart widgets with resizable columns.
+  if (isResizableTableChartWidget(widget)) {
+    return {
+      ...widget,
+      styleOptions: {
+        ...widget.styleOptions,
+        columns: {
+          ...widget.styleOptions.columns,
+          onColumnsResize: (widths: number[]) => {
+            emit({ styleOptions: { columns: { widths } } });
+          },
+        },
+      },
+    } as WidgetProps;
+  }
+
+  // Branch 3: custom (plugin) widgets. The plugin-facing `onChange`
   // callback is translated here from `VisualizationStateUpdate` into the internal
   // `WidgetPropsUpdate`, keeping the plugin API decoupled from the persistence type.
   // `customOptions` persists to the opaque DTO `customOptions` bag; `styleOptions`
@@ -169,6 +213,27 @@ function withNavigatorScrollerLocation(update: WidgetPropsUpdate) {
   };
 }
 
+/** Applies table column widths from `update` to a table chart widget. */
+function withTableColumnWidths(update: WidgetPropsUpdate) {
+  return (widget: WidgetProps): WidgetProps => {
+    const widths = update.styleOptions?.columns?.widths;
+    if (!widths || !isResizableTableChartWidget(widget)) {
+      return widget;
+    }
+
+    return {
+      ...widget,
+      styleOptions: {
+        ...widget.styleOptions,
+        columns: {
+          ...widget.styleOptions.columns,
+          widths,
+        },
+      },
+    } as WidgetProps;
+  };
+}
+
 /**
  * Deep-merges non-navigator `styleOptions` from `update` into a custom widget.
  * Navigator scroll is handled separately by {@link withNavigatorScrollerLocation}.
@@ -196,6 +261,7 @@ function withCustomWidgetOptions(update: WidgetPropsUpdate) {
 function applyOptimistic(widget: WidgetProps, update: WidgetPropsUpdate): WidgetProps {
   return flow(
     withNavigatorScrollerLocation(update),
+    withTableColumnWidths(update),
     withCustomWidgetStyleOptions(update),
     withCustomWidgetOptions(update),
   )(widget);

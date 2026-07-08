@@ -1,6 +1,6 @@
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 
-import { WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
+import { SpecificWidgetOptions, WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
 import { DashboardProps } from '@/domains/dashboarding/types';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
@@ -19,9 +19,19 @@ export interface DashboardStateApi {
    * persistence enabled; otherwise updates local state only.
    *
    * @param widget - The widget to add.
+   * @param options - Optional dashboard-level configuration for the new widget:
+   * - `widgetOptions`: dashboard-level options for the widget (e.g. filtersOptions, jtdConfig).
+   * - `widgetsPanelLayout`: explicit widgets-panel layout describing where the widget is placed;
+   *   When omitted, the widget is appended in a new full-width row at the end of the first column.
    * @returns void
    */
-  addWidget: (widget: WidgetProps) => void;
+  addWidget: (
+    widget: WidgetProps,
+    options?: {
+      widgetOptions?: SpecificWidgetOptions;
+      widgetsPanelLayout?: WidgetsPanelLayout;
+    },
+  ) => void;
   /**
    * Replaces the dashboard filters.
    *

@@ -100,6 +100,7 @@ export const FilterTypes = {
   ranking: 'ranking',
   measureRanking: 'measure-ranking',
   text: 'text',
+  empty: 'empty',
   numeric: 'numeric',
   dateRange: 'dateRange',
   relativeDate: 'relativeDate',
@@ -890,6 +891,52 @@ export class TextFilter extends DoubleOperatorFilter<string> {
 }
 
 /**
+ * Filter that isolates attribute values that are empty/null (or, when negated, not empty/null).
+ *
+ * Emits the JAQL the backend expects for emptiness checks:
+ * - empty: `{ equals: '', isEmpty: true }`
+ * - not empty: `{ doesntEqual: '', isEmpty: true }`
+ *
+ * @internal
+ */
+export class EmptyFilter extends AbstractFilter {
+  /**
+   * @internal
+   */
+  readonly __serializable: string = 'EmptyFilter';
+
+  readonly not: boolean;
+
+  constructor(att: Attribute, not = false, config?: BaseFilterConfig, composeCode?: string) {
+    super(att, FilterTypes.empty, config, composeCode);
+    this.not = not;
+  }
+
+  /**
+   * gets the element's ID
+   */
+  get id(): string {
+    return `${this.attribute.id}_${this.not ? 'isNotEmpty' : 'isEmpty'}`;
+  }
+
+  /**
+   * Gets a serializable representation of the element
+   */
+  serialize(): JSONObject {
+    const result = super.serialize();
+    result.not = this.not;
+    return result;
+  }
+
+  /**
+   * Gets JAQL representing this Filter instance
+   */
+  filterJaql(): any {
+    return this.not ? { doesntEqual: '', isEmpty: true } : { equals: '', isEmpty: true };
+  }
+}
+
+/**
  * Strips clock and offset tail from an ISO-like bound at the first `T`, leaving the calendar prefix.
  *
  * @param bound - Serialized date or datetime string
@@ -1305,6 +1352,9 @@ export function createFilter(json: any): Filter {
 
     case FilterTypes.text:
       return new TextFilter(create(json.attribute) as Attribute, json.operatorA, json.valueA);
+
+    case FilterTypes.empty:
+      return new EmptyFilter(create(json.attribute) as Attribute, json.not);
 
     case FilterTypes.relativeDate:
       return new RelativeDateFilter(

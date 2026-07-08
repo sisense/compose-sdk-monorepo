@@ -25,6 +25,7 @@ vi.mock('fs/promises', () => ({
   mkdir: vi.fn(),
   readdir: vi.fn(),
   rm: vi.fn(),
+  rename: vi.fn(),
 }));
 
 vi.mock('node:fs', () => ({
@@ -92,6 +93,7 @@ async function callHandler(overrides: Record<string, unknown> = {}) {
     name: PLUGIN_NAME,
     template: TEMPLATE,
     devMode: false,
+    install: 'none',
     ...overrides,
   };
   await (createPluginCommand.handler as (opts: typeof options) => Promise<void>)(options);

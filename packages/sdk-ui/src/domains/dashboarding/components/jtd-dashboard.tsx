@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { type Filter, mergeFilters } from '@sisense/sdk-data';
-import deepMerge from 'ts-deepmerge';
+import { merge as deepMerge } from 'ts-deepmerge';
 
 import {
   DEFAULT_DASHBOARD_BY_ID_CONFIG,

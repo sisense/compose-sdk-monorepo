@@ -16,6 +16,14 @@ Configuration for the filters panel
 
 ***
 
+### header
+
+> **header**?: [`DashboardHeaderConfig`](interface.DashboardHeaderConfig.md)
+
+Configuration for the dashboard header.
+
+***
+
 ### persist
 
 > **persist**?: `boolean`
@@ -42,7 +50,11 @@ Configuration for tabber widgets in the dashboard
 
 > **toolbar**?: `object`
 
-Configuration for the toolbar
+Configuration for the toolbar.
+
+::: warning Deprecated
+Use the `header` configuration section instead (`header.visible`).
+:::
 
 #### Type declaration
 
@@ -53,6 +65,10 @@ Configuration for the toolbar
 > Determines whether the toolbar is visible.
 >
 > If not specified, the default value is `true`.
+>
+> ::: warning Deprecated
+> Use `header.visible` instead.
+> :::
 >
 >
 

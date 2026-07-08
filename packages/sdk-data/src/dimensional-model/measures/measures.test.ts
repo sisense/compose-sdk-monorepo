@@ -284,6 +284,24 @@ describe('measures', () => {
         expect(nestedJaql.agg).toBeDefined();
         expect(nestedJaql.dim).toBeDefined();
       });
+
+      it('should use name (not title) for JAQL title when they differ', () => {
+        const attribute = createTestAttribute('Cost', '[Commerce.Cost]', 'numeric-attribute');
+        const measure = new DimensionalBaseMeasure(
+          'Total Cost',
+          attribute,
+          AggregationTypes.Sum,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'Some Other Title',
+        );
+
+        expect(measure.title).toBe('Some Other Title');
+        expect(measure.jaql().jaql.title).toBe('Total Cost');
+      });
     });
   });
 
@@ -367,7 +385,9 @@ describe('measures', () => {
 
         expect(serialized.__serializable).toBe('DimensionalCalculatedMeasure');
         expect(serialized.expression).toBe('[M1] + 10');
-        expect(serialized.context?.['[M1]']).toEqual(baseMeasure.serialize());
+        expect((serialized.context as Record<string, unknown>)?.['[M1]']).toEqual(
+          baseMeasure.serialize(),
+        );
       });
 
       it('should handle context items without serialize method', () => {
@@ -375,7 +395,7 @@ describe('measures', () => {
         const measure = createTestCalculatedMeasure('Test', '[M1]', context);
         const serialized = measure.serialize();
 
-        expect(serialized.context?.['[M1]']).toEqual({ value: 42 });
+        expect((serialized.context as Record<string, unknown>)?.['[M1]']).toEqual({ value: 42 });
       });
     });
 
@@ -393,6 +413,24 @@ describe('measures', () => {
         expect(jaql.jaql.title).toBe('Profit Margin');
         expect(jaql.jaql.formula).toBe('[M1] * 0.1');
         expect(jaql.jaql.context?.['[M1]']).toEqual(baseMeasure.jaql(true));
+      });
+
+      it('should use name (not title) for JAQL title when they differ', () => {
+        const context = { '[M1]': createTestBaseMeasure() };
+        const measure = new DimensionalCalculatedMeasure(
+          'Profit Margin',
+          '[M1] * 0.1',
+          context,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'Some Other Title',
+        );
+
+        expect(measure.title).toBe('Some Other Title');
+        expect(measure.jaql().jaql.title).toBe('Profit Margin');
       });
 
       it('should include format and sort in JAQL when present', () => {
@@ -1299,9 +1337,10 @@ describe('measures', () => {
         const measure = createTestCalculatedMeasure('Mixed Context', '[M1] + [M2] + [M3]', context);
         const serialized = measure.serialize();
 
-        expect(serialized.context?.['[M1]']).toEqual(baseMeasure.serialize());
-        expect(serialized.context?.['[M2]']).toEqual({ custom: 'serialized' });
-        expect(serialized.context?.['[M3]']).toEqual({ plain: 'object' });
+        const serializedContext = serialized.context as Record<string, unknown>;
+        expect(serializedContext?.['[M1]']).toEqual(baseMeasure.serialize());
+        expect(serializedContext?.['[M2]']).toEqual({ custom: 'serialized' });
+        expect(serializedContext?.['[M3]']).toEqual({ plain: 'object' });
       });
     });
 

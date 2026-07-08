@@ -1,5 +1,5 @@
 import uniqueId from 'lodash-es/uniqueId';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import type { HighchartsPoint } from '@/types';
 

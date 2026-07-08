@@ -57,6 +57,8 @@ greater than 1000.
 - [greaterThan](function.greaterThan.md)
 - [greaterThanOrEqual](function.greaterThanOrEqual.md)
 - [intersection](function.intersection.md)
+- [isEmpty](function.isEmpty.md)
+- [isNotEmpty](function.isNotEmpty.md)
 - [lessThan](function.lessThan.md)
 - [lessThanOrEqual](function.lessThanOrEqual.md)
 - [like](function.like.md)

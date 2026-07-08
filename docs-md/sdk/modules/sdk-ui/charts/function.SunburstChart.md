@@ -4,7 +4,7 @@ title: SunburstChart
 
 # Function SunburstChart
 
-> **SunburstChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **SunburstChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component displaying hierarchical data in the form of nested circle slices.
 
@@ -29,6 +29,6 @@ Sunburst chart displaying total revenue, categorized by condition and age range,
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Sunburst Chart component

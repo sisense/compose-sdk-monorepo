@@ -4,7 +4,7 @@ title: 1 | Getting Started
 
 # Getting Started
 
-> **Prerequisite:** Scaffold a plugin project with `@sisense/sdk-cli@latest create-plugin` and start the dev server. See the [Plugin DevX Quick Start](../../guides/plugins/plugin-devx-quickstart.md) if you haven't done this yet.
+> **Prerequisite:** Scaffold a plugin project with `@sisense/sdk-cli@latest create-plugin` and start the dev server. The CLI installs dependencies and creates `.env.local` automatically — fill in your Sisense URL and token, then run `npm run dev`. See the [Plugin DevX Quick Start](../../guides/plugins/plugin-devx-quickstart.md) if you haven't done this yet.
 
 > **Using Claude Code?** After scaffolding, open the project and run `/design-custom-widget` — describe your chart in plain language and Claude implements everything (data inputs, library, chart code, style controls) in one step instead of following the tutorial manually. See [AI-Driven Development](../../guides/plugins/ai-driven-development.md).
 
@@ -57,7 +57,7 @@ const plugin: WidgetPlugin<VisualizationProps> = {
 export default plugin;
 ```
 
-Key fields of [`WidgetPlugin`](../../modules/sdk-ui/interfaces/interface.WidgetPlugin.md):
+Key fields of [`WidgetPlugin`](../../modules/sdk-ui/plugin-system/interface.WidgetPlugin.md):
 
 | Field                | Description                                                                                                                                                                |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -89,7 +89,7 @@ export const Visualization: CustomVisualization<VisualizationProps> = (props) =>
 };
 ```
 
-[`CustomVisualization`](../../modules/sdk-ui/type-aliases/type-alias.CustomVisualization.md)`<Props>` is a function component type: `(props: Props) => ReactNode`. The SDK passes structured props (via [`CustomVisualizationProps`](../../modules/sdk-ui/interfaces/interface.CustomVisualizationProps.md)) to your component — data options, style options, filters, and event handlers (covered in [Building a Visualization](./02-visualization.md)).
+[`CustomVisualization`](../../modules/sdk-ui/plugin-system/type-alias.CustomVisualization.md)`<Props>` is a function component type: `(props: Props) => ReactNode`. The SDK passes structured props (via [`CustomVisualizationProps`](../../modules/sdk-ui/plugin-system/interface.CustomVisualizationProps.md)) to your component — data options, style options, filters, and event handlers (covered in [Building a Visualization](./02-visualization.md)).
 
 ### Types — `src/types.ts`
 
@@ -110,7 +110,7 @@ export interface StyleOptions extends CustomVisualizationStyleOptions {}
 ```
 
 - `DataOptions` describes the data your widget receives. Each key maps to a data panel input. Dimension inputs use [`StyledColumn[]`](../../modules/sdk-ui/interfaces/interface.StyledColumn.md), measure inputs use [`StyledMeasureColumn[]`](../../modules/sdk-ui/interfaces/interface.StyledMeasureColumn.md). Both wrap an underlying column (accessible via `.column`) with optional styling metadata such as color overrides and number formatting. For query purposes, you always unwrap via `.column`.
-- `StyleOptions` describes appearance settings controlled by the design panel. Extend [`CustomVisualizationStyleOptions`](../../modules/sdk-ui/interfaces/interface.CustomVisualizationStyleOptions.md) to add your style options.
+- `StyleOptions` describes appearance settings controlled by the design panel. Extend [`CustomVisualizationStyleOptions`](../../modules/sdk-ui/plugin-system/interface.CustomVisualizationStyleOptions.md) to add your style options.
 
 These types are reused in every subsequent lesson.
 

@@ -21,7 +21,7 @@ git add -N ./.reports/doc-tag-usage-report/
 TAG_REPORT_CHANGED=$(git diff --name-only ./.reports/doc-tag-usage-report/)
 
 if [ -n "$TAG_REPORT_CHANGED" ]; then
-  echo "Error: Commit has caused the Doc tag report changes below. Please run 'yarn docs:gen:md' locally to regenerate the doc-tag-usage-report and include those changes in this commit or a separate commit." >&2
+  echo "Error: Commit has caused the Doc tag report changes below. Please run 'yarn docs:gen:md' locally to regenerate the per-tag TAG_USAGE_REPORT_*.txt files and include those changes in this commit or a separate commit." >&2
   echo "$TAG_REPORT_CHANGED"
   exit 1
 fi

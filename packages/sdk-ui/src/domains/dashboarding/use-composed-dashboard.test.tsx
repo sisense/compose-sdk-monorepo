@@ -29,7 +29,13 @@ import { ComposableDashboardProps, useComposedDashboard } from './use-composed-d
  * Helper function to get property from widget props
  */
 const getProperty = (widget: WidgetProps, key: keyof WidgetProps | keyof ChartWidgetProps) => {
-  return isTextWidgetProps(widget) ? (key === 'dataOptions' ? {} : []) : widget[key];
+  return isTextWidgetProps(widget)
+    ? key === 'dataOptions'
+      ? {}
+      : []
+    : // Dynamic property access across a widget-props union in a test helper; `any` mirrors the
+      // previous (implicit-any) behavior so call sites can spread/index the result freely.
+      (widget as any)[key];
 };
 
 const CombinedProvider = ({ children }: { children: React.ReactNode }) => (

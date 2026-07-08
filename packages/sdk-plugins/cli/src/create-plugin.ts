@@ -1,5 +1,6 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import { Octokit } from '@octokit/rest';
+import { spawn } from 'child_process';
 import { access, cp, mkdir, readdir, readFile, rename, rm, writeFile } from 'fs/promises';
 import inquirer from 'inquirer';
 import { existsSync } from 'node:fs';
@@ -17,7 +18,7 @@ import {
   getTemplatePath,
   isDirectoryEmpty,
 } from './helpers.js';
-import { CreatePluginOptions } from './types.js';
+import { CreatePluginOptions, PackageManager } from './types.js';
 
 const requireModule = createRequire(import.meta.url);
 const PKG_VERSION: string = (requireModule('../package.json') as { version: string }).version;
@@ -59,6 +60,11 @@ const builder: CommandBuilder<unknown, CreatePluginOptions> = (
         describe: 'Overwrite the target directory without prompting',
         default: false,
       },
+      install: {
+        type: 'string',
+        describe: 'Package manager used to install dependencies (none skips install)',
+        choices: ['none', 'npm', 'yarn', 'pnpm'] as const,
+      },
     })
     .example([
       ['$0 create-plugin'],
@@ -66,6 +72,8 @@ const builder: CommandBuilder<unknown, CreatePluginOptions> = (
       ['$0 create-plugin --name my-awesome-plugin'],
       ['$0 create-plugin --name my-awesome-plugin --template empty'],
       ['$0 create-plugin --name my-awesome-plugin --path ./my-project'],
+      ['$0 create-plugin --name my-awesome-plugin --install yarn'],
+      ['$0 create-plugin --name my-awesome-plugin --install none'],
     ]) as Argv<CreatePluginOptions>;
 
 /** Returns `baseName` if available in `baseDir`, otherwise appends an incrementing suffix. */
@@ -483,6 +491,64 @@ export async function mergeWidgetDependencies(
   await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8');
 }
 
+const PM_COMMANDS: Record<Exclude<PackageManager, 'none'>, { cmd: string; args: string[] }> = {
+  npm: { cmd: 'npm', args: ['install', '--quiet', '--no-fund', '--no-audit'] },
+  yarn: { cmd: 'yarn', args: ['install', '--silent'] },
+  pnpm: { cmd: 'pnpm', args: ['install', '--silent'] },
+};
+
+async function installDependencies(
+  projectPath: string,
+  pm: Exclude<PackageManager, 'none'>,
+): Promise<void> {
+  const { cmd, args } = PM_COMMANDS[pm];
+  return new Promise((resolve, reject) => {
+    const child = spawn(cmd, args, {
+      cwd: projectPath,
+      stdio: 'inherit',
+      shell: process.platform === 'win32',
+    });
+    child.on('close', (code) => {
+      if (code === 0) resolve();
+      else reject(new Error(`${pm} install exited with code ${code}`));
+    });
+    child.on('error', reject);
+  });
+}
+
+async function copyEnvFile(projectPath: string): Promise<string | null> {
+  const exampleFile = '.env.local.example';
+
+  const src = path.join(projectPath, exampleFile);
+  try {
+    await access(src);
+  } catch (e) {
+    if ((e as NodeJS.ErrnoException).code === 'ENOENT') return null;
+    throw e;
+  }
+  const dest = exampleFile.replace('.example', '');
+  await cp(src, path.join(projectPath, dest));
+  return dest;
+}
+
+async function promptPackageManager(): Promise<PackageManager> {
+  const { pm } = await inquirer.prompt<{ pm: PackageManager }>([
+    {
+      type: 'list',
+      name: 'pm',
+      message: 'Install dependencies with:',
+      choices: [
+        { name: 'npm (default)', value: 'npm' },
+        { name: 'yarn', value: 'yarn' },
+        { name: 'pnpm', value: 'pnpm' },
+        { name: 'Skip installation', value: 'none' },
+      ],
+      default: 'npm',
+    },
+  ]);
+  return pm;
+}
+
 const handler = async (options: Arguments<CreatePluginOptions>) => {
   if (options.devMode) {
     console.log('\n!!! DEV MODE. Installing the repo to monorepo !!!\n');
@@ -598,6 +664,8 @@ const handler = async (options: Arguments<CreatePluginOptions>) => {
       ])
     ).template;
 
+  const pm: PackageManager = options.install ?? (await promptPackageManager());
+
   const selectedTemplateEntry = templates.find((t) => t.value === selectedTemplate);
   if (!selectedTemplateEntry) {
     console.error(
@@ -607,6 +675,8 @@ const handler = async (options: Arguments<CreatePluginOptions>) => {
     );
     process.exit(1);
   }
+
+  const originalCwd = process.cwd();
 
   try {
     if (shouldDelete) {
@@ -623,16 +693,33 @@ const handler = async (options: Arguments<CreatePluginOptions>) => {
     );
     await createPlugin(projectPath, pluginName, selectedTemplate, isEmbedded, options.devMode);
 
-    const cpCommand =
-      process.platform === 'win32'
-        ? 'copy .env.local.example .env.local'
-        : 'cp .env.local.example .env.local';
+    const copiedEnv = await copyEnvFile(projectPath);
+
+    if (pm !== 'none') {
+      const stop = startSpinner(`Installing dependencies with ${pm}...`);
+      try {
+        await installDependencies(projectPath, pm);
+        stop();
+        console.log(`\n  Dependencies installed.`);
+      } catch (err) {
+        stop();
+        console.warn(`\n  Warning: install failed — run "${pm} install" manually. ${err}`);
+      }
+    }
+
+    const relPath = path.relative(originalCwd, projectPath);
+    const cdPath = relPath && !relPath.startsWith('..') ? relPath : projectPath;
+    const devCmd = pm === 'yarn' ? 'yarn dev' : pm === 'pnpm' ? 'pnpm dev' : 'npm run dev';
 
     console.log(`\nNext steps:`);
-    console.log(`  cd "${projectPath}"  - Navigate to the plugin directory`);
-    console.log(`  npm install  - Install all dependencies`);
-    console.log(`  ${cpCommand}  - Prepare a .env.local. Setup your envs manually`);
-    console.log(`  npm run dev  - Start the development server`);
+    console.log(`  cd "${cdPath}"`);
+    if (copiedEnv) {
+      console.log(`  Edit ${copiedEnv} — add your Sisense credentials`);
+    }
+    if (pm === 'none') {
+      console.log(`  npm install`);
+    }
+    console.log(`  ${devCmd}`);
   } catch (err) {
     if (err) console.log(`Error: ${err}\r\n`);
     process.exit(1);

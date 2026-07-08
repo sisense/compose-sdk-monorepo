@@ -1,120 +1,73 @@
 .alert {
-  position: relative;
-  width: 100%;
-  box-sizing: border-box; // Ensure padding and border are included in width
-  display: grid;
-
-  &[data-dismiss-on-click='true'] {
-    cursor: pointer;
-  }
-  grid-template-columns: 0 1fr;
-  gap: 0.5rem;
-  align-items: start;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 4px;
   border: 1px solid;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-
-  &.hasIcon {
-    grid-template-columns: 1rem 1fr;
-    gap: 0.75rem;
-  }
+  width: 100%;
+  box-sizing: border-box;
+  color: #2c2e32 !important; // needed: parent scope applies `.text-foreground { color: var(--foreground) !important }`
 
   &.error {
-    background-color: #fef2f2;
-    border-color: #fecaca;
-    color: #991b1b;
-
-    .icon {
-      color: #ef4444;
-    }
-
-    // Dark mode styles - theme-aware via data attribute
-    &[data-dark-mode='true'] {
-      background-color: #4a1f1f;
-      border-color: #5a2a2a;
-      color: #fca5a5;
-
-      .icon {
-        color: #f87171;
-      }
-    }
+    background-color: #fdf4f2;
+    border-color: #d12d04;
   }
 
   &.warning {
-    background-color: #fffbeb;
-    border-color: #fde68a;
-    color: #92400e;
-
-    .icon {
-      color: #f59e0b;
-    }
-
-    // Dark mode styles - theme-aware via data attribute
-    &[data-dark-mode='true'] {
-      background-color: #4a3a1f;
-      border-color: #5a4a2a;
-      color: #fbbf24;
-
-      .icon {
-        color: #f59e0b;
-      }
-    }
+    background-color: #fefbf2;
+    border-color: #f2b900;
   }
 
   &.info {
-    background-color: #eff6ff;
-    border-color: #bfdbfe;
-    color: #1e40af;
-
-    .icon {
-      color: #3b82f6;
-    }
+    background-color: #f2f8fc;
+    border-color: #338ed0;
   }
 }
 
 .icon {
-  width: 1rem;
-  height: 1rem;
-  margin-top: 0.125rem;
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 
   svg {
-    width: 100%;
-    height: 100%;
+    width: 18px;
+    height: 18px;
   }
 }
 
 .content {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 2px;
+  padding-top: 2px;
 }
 
 .title {
   font-weight: 600;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 20px;
   color: inherit;
 }
 
 .description {
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: 0.2px;
   color: inherit;
-  opacity: 0.9;
-  line-height: 1.5;
 }
 
 .dismissButton {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  flex-shrink: 0;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -129,55 +82,5 @@
   &:focus {
     outline: 2px solid currentColor;
     outline-offset: 2px;
-  }
-}
-
-// Dark mode fallbacks using media query and global class selector
-@media (prefers-color-scheme: dark) {
-  .alert {
-    &.error {
-      background-color: #4a1f1f;
-      border-color: #5a2a2a;
-      color: #fca5a5;
-
-      .icon {
-        color: #f87171;
-      }
-    }
-
-    &.warning {
-      background-color: #4a3a1f;
-      border-color: #5a4a2a;
-      color: #fbbf24;
-
-      .icon {
-        color: #f59e0b;
-      }
-    }
-  }
-}
-
-// Fallback: when parent app adds .dark class to documentElement
-:global(.dark) {
-  .alert {
-    &.error {
-      background-color: #4a1f1f;
-      border-color: #5a2a2a;
-      color: #fca5a5;
-
-      .icon {
-        color: #f87171;
-      }
-    }
-
-    &.warning {
-      background-color: #4a3a1f;
-      border-color: #5a4a2a;
-      color: #fbbf24;
-
-      .icon {
-        color: #f59e0b;
-      }
-    }
   }
 }

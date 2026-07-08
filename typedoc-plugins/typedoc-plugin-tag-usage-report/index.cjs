@@ -2,10 +2,14 @@
 /**
  * TypeDoc plugin — API Tag Usage Report
  *
- * Generates .reports/doc-tag-usage-report/TAG_USAGE_REPORT.md whenever `yarn docs:gen:md` is run.
- * The report lists all API declarations tagged with a visibility or maturity
+ * Generates tag usage reports under .reports/doc-tag-usage-report/ whenever
+ * `yarn docs:gen:md` is run:
+ *   TAG_USAGE_REPORT.md — collapsible markdown (local only, gitignored)
+ *   TAG_USAGE_REPORT_<TAG>.txt — one plain-text file per modifier tag
+ *
+ * The reports list API declarations tagged with a visibility or maturity
  * modifier (@internal, @sisenseInternal, @alpha, @beta), grouped by tag,
- * package, and source subdirectory, with collapsible sections and source links.
+ * package, and source subdirectory.
  *
  * Unlike a naive TypeDoc-model walk, the plugin scans the original .ts/.tsx
  * source files directly.  This captures tagged items that TypeDoc excludes from
@@ -30,7 +34,7 @@ const { Converter } = require('typedoc');
 const { REPO_ROOT, REPORT_DIR, SOURCE_DIRS } = require('./config.cjs');
 const { scanSourceFiles }        = require('./scanner.cjs');
 const { buildExportedByPkg, isExportedFromPackage } = require('./exports-resolver.cjs');
-const { writeReport, writeSimpleReport } = require('./report-writer.cjs');
+const { writeReport, writeSimpleReports } = require('./report-writer.cjs');
 
 /**
  * TypeDoc plugin entry point.
@@ -56,8 +60,8 @@ exports.load = function ({ application }) {
       `${exportedDecls.length} exported from their package.`,
     );
 
-    // 3. Write the markdown report and the plain-text simple report.
+    // 3. Write the markdown report and per-tag plain-text reports.
     writeReport(exportedDecls, path.join(REPORT_DIR, 'TAG_USAGE_REPORT.md'), application.logger);
-    writeSimpleReport(exportedDecls, path.join(REPORT_DIR, 'TAG_USAGE_REPORT_SIMPLE.txt'), application.logger);
+    writeSimpleReports(exportedDecls, REPORT_DIR, application.logger);
   });
 };

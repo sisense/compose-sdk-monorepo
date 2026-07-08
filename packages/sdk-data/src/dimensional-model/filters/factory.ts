@@ -25,6 +25,7 @@ import {
   CustomFilter,
   DateOperators,
   DateRangeFilter,
+  EmptyFilter,
   ExcludeFilter,
   LogicalAttributeFilter,
   LogicalOperators,
@@ -382,6 +383,42 @@ export const equals: (
     return numeric(attribute, NumericOperators.Equals, value, undefined, undefined, config);
   }
 }, 'equals');
+
+/**
+ * Creates a filter to isolate attribute values that are empty or null.
+ *
+ * @example
+ * Filter for items where the condition is empty or null from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.isEmpty(DM.Commerce.Condition)
+ * ```
+ * @param attribute - Attribute to filter on
+ * @param config - Optional configuration for the filter
+ * @returns A filter instance
+ */
+export const isEmpty: (attribute: Attribute, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (attribute, config) => new EmptyFilter(attribute, false, config),
+    'isEmpty',
+  );
+
+/**
+ * Creates a filter to isolate attribute values that are not empty and not null.
+ *
+ * @example
+ * Filter for items where the condition is not empty and not null from the Sample ECommerce data model.
+ * ```ts
+ * filterFactory.isNotEmpty(DM.Commerce.Condition)
+ * ```
+ * @param attribute - Attribute to filter on
+ * @param config - Optional configuration for the filter
+ * @returns A filter instance
+ */
+export const isNotEmpty: (attribute: Attribute, config?: BaseFilterConfig) => Filter =
+  withComposeCodeForFilter(
+    (attribute, config) => new EmptyFilter(attribute, true, config),
+    'isNotEmpty',
+  );
 
 /**
  * Creates a filter to isolate attribute values strictly greater than a specified number.

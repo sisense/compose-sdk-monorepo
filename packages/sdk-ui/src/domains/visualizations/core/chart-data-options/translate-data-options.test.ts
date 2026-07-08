@@ -136,7 +136,9 @@ type ConvertableToColumn = Measure | Attribute | AnyColumn;
 function verifyColumn(column: ConvertableToColumn, expectedColumn: AnyColumn) {
   // need to verify props separately in order to access inherited properties from the result column
   for (const key in expectedColumn) {
-    expect(column[key]).toEqual(expectedColumn[key]);
+    expect((column as unknown as Record<string, unknown>)[key]).toEqual(
+      (expectedColumn as unknown as Record<string, unknown>)[key],
+    );
   }
 }
 

@@ -14,7 +14,11 @@ import {
   NlqTranslationErrorContext,
   NlqTranslationResult,
 } from '../../../types.js';
-import { createAttributeFromName, type SchemaIndex } from '../../shared/utils/schema-index.js';
+import {
+  createAttributeFromName,
+  REQUIRE_EXPLICIT_DATE_LEVEL,
+  type SchemaIndex,
+} from '../../shared/utils/schema-index.js';
 import {
   DimensionsInput,
   DimensionTranslationItem,
@@ -57,15 +61,20 @@ const processStyledColumn = (
   context: NlqTranslationErrorContext,
 ): { attribute: Attribute; style: CategoryStyle; error?: NlqTranslationError } => {
   const sortError = validateSortType(styledColumn.sortType, context);
+  const attribute = createAttributeFromName(
+    styledColumn.column,
+    dataSource,
+    schemaIndex,
+    REQUIRE_EXPLICIT_DATE_LEVEL,
+  );
   if (sortError) {
     return {
-      attribute: createAttributeFromName(styledColumn.column, dataSource, schemaIndex),
+      attribute,
       style: {},
       error: sortError,
     };
   }
 
-  const attribute = createAttributeFromName(styledColumn.column, dataSource, schemaIndex);
   const style = omit(styledColumn, 'column') as CategoryStyle;
   return { attribute, style };
 };
@@ -86,7 +95,12 @@ const processDimensionItem = (
   context: NlqTranslationErrorContext,
 ): { attribute?: Attribute; style?: CategoryStyle; error?: NlqTranslationError } => {
   if (typeof dimensionJSON === 'string') {
-    const attribute = createAttributeFromName(dimensionJSON, dataSource, schemaIndex);
+    const attribute = createAttributeFromName(
+      dimensionJSON,
+      dataSource,
+      schemaIndex,
+      REQUIRE_EXPLICIT_DATE_LEVEL,
+    );
     return { attribute };
   }
 

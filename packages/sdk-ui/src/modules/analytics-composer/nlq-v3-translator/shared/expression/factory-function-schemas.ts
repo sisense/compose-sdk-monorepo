@@ -40,6 +40,16 @@ export const FACTORY_FUNCTION_SCHEMAS: Record<string, ArgSchema[]> = {
     { type: 'string', required: false, isName: true }, // name
     { type: 'string', required: false }, // format
   ],
+  'measureFactory.stdev': [
+    { type: 'Attribute', required: true },
+    { type: 'string', required: false, isName: true }, // name
+    { type: 'string', required: false }, // format
+  ],
+  'measureFactory.variance': [
+    { type: 'Attribute', required: true },
+    { type: 'string', required: false, isName: true }, // name
+    { type: 'string', required: false }, // format
+  ],
   'measureFactory.count': [
     { type: 'Attribute', required: true },
     { type: 'string', required: false, isName: true }, // name
@@ -276,6 +286,14 @@ export const FACTORY_FUNCTION_SCHEMAS: Record<string, ArgSchema[]> = {
   'filterFactory.doesntEqual': [
     { type: 'Attribute', required: true },
     { type: 'string | number', required: true },
+    { type: 'BaseFilterConfig', required: false },
+  ],
+  'filterFactory.isEmpty': [
+    { type: 'Attribute', required: true },
+    { type: 'BaseFilterConfig', required: false },
+  ],
+  'filterFactory.isNotEmpty': [
+    { type: 'Attribute', required: true },
     { type: 'BaseFilterConfig', required: false },
   ],
 

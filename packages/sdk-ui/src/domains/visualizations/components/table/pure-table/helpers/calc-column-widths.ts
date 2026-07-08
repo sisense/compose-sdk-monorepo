@@ -9,6 +9,25 @@ import {
   MIN_WIDTH,
 } from '../styles/style-constants.js';
 
+/** Optional settings for {@link calcColumnWidths}. */
+export type CalcColumnWidthsOptions = {
+  /** Font family used to measure text widths. Defaults to `'Open Sans'`. */
+  fontFamily?: string;
+  /** Lower bound for a computed column width, in pixels. Defaults to {@link MIN_WIDTH}. */
+  minWidth?: number;
+  /** Upper bound for a computed column width, in pixels. Defaults to {@link MAX_WIDTH}. */
+  maxWidth?: number;
+};
+
+/**
+ * Calculates each column's pixel width from its header text and widest cell value,
+ * clamped between `minWidth` and `maxWidth`.
+ * @param dataTable - Table data whose columns and rows are measured.
+ * @param isShowFieldTypeIcon - Whether the header reserves extra space for a field-type icon.
+ * @param columnsOptions - Per-column overrides, indexed the same as `dataTable.columns`.
+ * @param options - See {@link CalcColumnWidthsOptions}.
+ * @returns The computed width, in pixels, for each column in `dataTable.columns` order.
+ */
 export const calcColumnWidths = (
   dataTable: DataTable,
   isShowFieldTypeIcon: boolean,
@@ -16,13 +35,17 @@ export const calcColumnWidths = (
     isHtml: boolean;
     width?: number;
   }[],
-  fontFamily?: string,
+  { fontFamily, minWidth = MIN_WIDTH, maxWidth = MAX_WIDTH }: CalcColumnWidthsOptions = {},
 ): number[] => {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   if (!ctx) {
     return [];
   }
+  // Guard against a misconfigured bounds pair (e.g. minWidth > maxWidth) so the effective
+  // upper bound is never below the effective lower bound.
+  const effectiveMinWidth = Math.min(minWidth, maxWidth);
+  const effectiveMaxWidth = Math.max(minWidth, maxWidth);
   ctx.font = `13px ${fontFamily || 'Open Sans'}`;
   // get pixel width of headers
   const columnNameWidths = dataTable.columns.map((column) => {
@@ -52,10 +75,14 @@ export const calcColumnWidths = (
   });
   // get max pixel between data or header for each column
   return columnNameWidths.map((nameWidth, index) => {
-    return columnsOptions[index]?.width
-      ? (columnsOptions[index].width as number)
+    const explicitWidth = columnsOptions[index]?.width;
+    return explicitWidth
+      ? explicitWidth
       : Math.ceil(
-          Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, Math.max(nameWidth, columnDataWidths[index]))),
+          Math.max(
+            effectiveMinWidth,
+            Math.min(effectiveMaxWidth, Math.max(nameWidth, columnDataWidths[index])),
+          ),
         );
   });
 };

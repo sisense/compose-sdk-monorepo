@@ -16,13 +16,14 @@ Complete reference for the Plugin DevX toolchain. For a guided first-time setup,
 npx @sisense/sdk-cli@latest create-plugin [name] [options]
 ```
 
-| Option                  | Description                                                                            |
-| ----------------------- | -------------------------------------------------------------------------------------- |
-| `[name]`                | Plugin name (also used as the folder name). Defaults to `my-custom-plugin` if omitted. |
-| `--name <name>`         | Plugin name. Alphanumeric, hyphens, and underscores only.                              |
-| `--path <path>`         | Override the output directory. Defaults to `{cwd}/{name}` when not set.                |
-| `--template <template>` | Template to use. See [Templates](#templates) below.                                    |
-| `--force`               | Overwrite the target directory without prompting.                                      |
+| Option                  | Description                                                                                              |
+| ----------------------- | -------------------------------------------------------------------------------------------------------- |
+| `[name]`                | Plugin name (also used as the folder name). Defaults to `my-custom-plugin` if omitted.                  |
+| `--name <name>`         | Plugin name. Alphanumeric, hyphens, and underscores only.                                                |
+| `--path <path>`         | Override the output directory. Defaults to `{cwd}/{name}` when not set.                                  |
+| `--template <template>` | Template to use. See [Templates](#templates) below.                                                      |
+| `--install <manager>`   | Package manager used to install dependencies after scaffolding. One of `npm` (default), `yarn`, `pnpm`, or `none` (skip install). If omitted, you are prompted interactively. |
+| `--force`               | Overwrite the target directory without prompting.                                                        |
 
 ### Interactive Mode
 
@@ -36,6 +37,22 @@ Welcome to the Sisense Compose SDK Plugin toolkit!
 > Empty Project
   Line Chart
   Simple Table
+? Install dependencies with:
+> npm (default)
+  yarn
+  pnpm
+  Skip installation
+```
+
+After scaffolding, the CLI automatically copies `.env.local.example` to `.env.local` and (unless you chose **Skip installation**) installs dependencies. The final output shows only what still needs your attention:
+
+```
+  Dependencies installed.
+
+Next steps:
+  cd "my-custom-plugin"
+  Edit .env.local — add your Sisense credentials
+  npm run dev
 ```
 
 **Plugin name rules:** Letters (`a-z`, `A-Z`), numbers (`0-9`), hyphens (`-`), and underscores (`_`) only. No spaces or special characters. Supplying an invalid name prints a warning and falls back to the interactive prompt.
@@ -56,8 +73,14 @@ npx @sisense/sdk-cli@latest create-plugin my-awesome-plugin
 # Equivalent with --name flag
 npx @sisense/sdk-cli@latest create-plugin --name my-awesome-plugin
 
-# Skip all prompts
+# Skip all prompts (installs with npm by default)
 npx @sisense/sdk-cli@latest create-plugin --name my-widget --template line-chart
+
+# Use yarn for the auto-install
+npx @sisense/sdk-cli@latest create-plugin --name my-widget --template empty --install yarn
+
+# Skip dependency installation entirely
+npx @sisense/sdk-cli@latest create-plugin --name my-widget --template empty --install none
 
 # Place plugin in a custom directory
 npx @sisense/sdk-cli@latest create-plugin --name my-widget --path ./my-custom-charts/revenue-chart
@@ -101,6 +124,7 @@ my-custom-chart/
 |   +-- models/                # Data model helpers for the dev server
 |   +-- vitest.setup.ts
 +-- .env.local.example         # Template for environment variables
++-- .env.local                 # Auto-created from .env.local.example — fill in your credentials
 +-- vite.config.ts             # Vite configuration
 +-- tsconfig.json
 +-- package.json

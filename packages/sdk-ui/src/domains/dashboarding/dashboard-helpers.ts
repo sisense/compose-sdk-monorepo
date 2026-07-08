@@ -9,7 +9,7 @@ import {
   withReplacedFilter,
 } from '@/domains/filters/helpers';
 
-import { DashboardHeaderItem } from './components/dashboard-header-config.js';
+import { DashboardHeaderItem } from './components/dashboard-header/dashboard-header-config.js';
 import type { JumpToDashboardConfig } from './hooks/jtd/jtd-types.js';
 import { DashboardProps } from './types.js';
 

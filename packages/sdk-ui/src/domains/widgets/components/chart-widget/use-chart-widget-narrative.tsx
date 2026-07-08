@@ -4,10 +4,10 @@ import type { RefObject } from 'react';
 
 import { NarrativeTriggerButton } from '@/domains/narrative/components/narrative-trigger-button';
 import { WidgetNarrative } from '@/domains/narrative/components/widget-narrative';
-import { getWidgetNarrativeOptionsFromWidgetProps } from '@/domains/narrative/core/get-widget-narrative-from-widget-props.js';
+import { getWidgetNarrativeConfigFromWidgetProps } from '@/domains/narrative/core/get-widget-narrative-from-widget-props.js';
+import { getCompleteWidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config';
 import type { WithCommonWidgetProps } from '@/domains/widgets/components/widget/types';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
-import { getCompleteWidgetNarrativeOptions } from '@/types';
 import type { ChartWidgetStyleOptions } from '@/types';
 
 import type { ChartWidgetProps } from './types';
@@ -42,11 +42,9 @@ export function useChartWidgetNarrative({
 }: UseChartWidgetNarrativeParams): UseChartWidgetNarrativeReturn {
   const { app } = useSisenseContext();
 
-  const completeNarrativeOptions = useMemo(
+  const completeNarrativeConfig = useMemo(
     () =>
-      getCompleteWidgetNarrativeOptions(
-        getWidgetNarrativeOptionsFromWidgetProps(propsWithDrilldown),
-      ),
+      getCompleteWidgetNarrativeConfig(getWidgetNarrativeConfigFromWidgetProps(propsWithDrilldown)),
     [propsWithDrilldown],
   );
 
@@ -55,9 +53,10 @@ export function useChartWidgetNarrative({
   const [narrativeVisible, setNarrativeVisible] = useState(false);
 
   const showNarrativeTrigger =
+    !!app?.settings?.narrativeConfig?.enabled &&
     canGenerateNarrativeViaAI &&
-    completeNarrativeOptions.enabled &&
-    !completeNarrativeOptions.autoShow;
+    completeNarrativeConfig.enabled &&
+    !completeNarrativeConfig.autoShow;
 
   const styleOptionsWithNarrative = useMemo<ChartWidgetStyleOptions | undefined>(() => {
     if (!showNarrativeTrigger) return styleOptions;
@@ -84,9 +83,10 @@ export function useChartWidgetNarrative({
   }, [showNarrativeTrigger, styleOptions, narrativeVisible, setNarrativeVisible]);
 
   const narrativeShouldShow =
+    !!app?.settings?.narrativeConfig?.enabled &&
     canGenerateNarrativeViaAI &&
-    completeNarrativeOptions.enabled &&
-    (completeNarrativeOptions.autoShow || narrativeVisible);
+    completeNarrativeConfig.enabled &&
+    (completeNarrativeConfig.autoShow || narrativeVisible);
 
   const narrativeWidgetProps = useMemo((): WithCommonWidgetProps<ChartWidgetProps, 'chart'> => {
     const base = propsWithDrilldown as ChartWidgetProps & { id?: string };
@@ -111,7 +111,7 @@ export function useChartWidgetNarrative({
   }, []);
 
   const constrainedHeightPx = useMemo(() => {
-    const { heightFraction, displayLocation } = completeNarrativeOptions;
+    const { heightFraction, displayLocation } = completeNarrativeConfig;
     if (
       heightFraction === undefined ||
       displayLocation === 'alone' ||
@@ -120,10 +120,10 @@ export function useChartWidgetNarrative({
       return undefined;
     }
     return heightFraction * contentAreaHeight;
-  }, [completeNarrativeOptions, contentAreaHeight]);
+  }, [completeNarrativeConfig, contentAreaHeight]);
 
   const maxConstrainedHeightPx = useMemo(() => {
-    const { displayLocation } = completeNarrativeOptions;
+    const { displayLocation } = completeNarrativeConfig;
     if (contentAreaHeight === undefined) {
       return undefined;
     }
@@ -132,9 +132,9 @@ export function useChartWidgetNarrative({
     }
     // Ensure expanded cap is never smaller than collapsed cap (happens when heightFraction > 0.5)
     return Math.max(contentAreaHeight * 0.5, constrainedHeightPx ?? 0);
-  }, [completeNarrativeOptions, contentAreaHeight, constrainedHeightPx]);
+  }, [completeNarrativeConfig, contentAreaHeight, constrainedHeightPx]);
 
-  const { displayLocation } = completeNarrativeOptions;
+  const { displayLocation } = completeNarrativeConfig;
 
   const narrativeNode: ReactNode = narrativeShouldShow ? (
     <WidgetNarrative

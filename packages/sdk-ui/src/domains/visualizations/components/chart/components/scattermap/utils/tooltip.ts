@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+
 import { ScattermapChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 import {
   getDataOptionTitle,
@@ -91,7 +93,7 @@ export const createScattermapTooltip = (
     dataOptions.details &&
     formatTooltipValue(dataOptions.details, location.details as number, `${location.details}`);
 
-  return `
+  const html = `
     <div class="csdk-scattermap-tooltip-container">
       <div class="csdk-scattermap-tooltip-content">
         <div>${spanSegment(location.name)}</div>
@@ -131,4 +133,8 @@ export const createScattermapTooltip = (
       </div>
     </div>
   `;
+
+  // location/details values originate from query data and are interpolated into HTML
+  // fed to Leaflet's bindTooltip, which renders it via innerHTML - sanitize to prevent stored XSS.
+  return DOMPurify.sanitize(html);
 };

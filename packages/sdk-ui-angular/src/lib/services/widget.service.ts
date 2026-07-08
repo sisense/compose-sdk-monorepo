@@ -3,8 +3,8 @@ import {
   getWidgetModel,
   type GetWidgetModelParams as GetWidgetModelParamsPreact,
   HookAdapter,
-  type JumpToDashboardConfig,
-  type JumpToDashboardConfigForPivot,
+  type JumpToDashboardConfigForPivot as JumpToDashboardConfigForPivotPreact,
+  type JumpToDashboardConfig as JumpToDashboardConfigPreact,
   useJtdWidget as useJtdWidgetPreact,
 } from '@sisense/sdk-ui-preact';
 import { BehaviorSubject } from 'rxjs';
@@ -14,6 +14,7 @@ import {
   createSisenseContextConnector,
   createThemeContextConnector,
 } from '../component-wrapper-helpers';
+import { type DashboardConfig } from '../components/dashboard/dashboard.component';
 import { type WidgetProps } from '../components/widgets/widget.component';
 import { TrackableService } from '../decorators/trackable.decorator';
 import { toPreactWidgetProps, toWidgetProps } from '../helpers/widget-props-preact-translator';
@@ -24,6 +25,36 @@ import { ThemeService } from './theme.service';
  * Parameters for retrieving an existing widget model from the Sisense instance
  */
 export interface GetWidgetModelParams extends Omit<GetWidgetModelParamsPreact, 'enabled'> {}
+
+/**
+ * Configuration for Jump To Dashboard functionality.
+ * Allows users to navigate from a widget to another dashboard with contextual filtering.
+ */
+export interface JumpToDashboardConfig
+  extends Omit<JumpToDashboardConfigPreact, 'targetDashboardConfig'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!JumpToDashboardConfig.targetDashboardConfig}
+   *
+   * @default {}
+   */
+  targetDashboardConfig?: DashboardConfig;
+}
+
+/**
+ * Configuration for Jump To Dashboard functionality for pivot widgets.
+ * Used for pivot widgets, allowing to configure jumping to different dashboard from different dimensions
+ *
+ * @see {@link JumpToDashboardConfig}
+ */
+export interface JumpToDashboardConfigForPivot
+  extends Omit<JumpToDashboardConfigForPivotPreact, 'targetDashboardConfig'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!JumpToDashboardConfig.targetDashboardConfig}
+   *
+   * @default {}
+   */
+  targetDashboardConfig?: DashboardConfig;
+}
 
 /**
  * Service for working with Sisense Fusion widgets.

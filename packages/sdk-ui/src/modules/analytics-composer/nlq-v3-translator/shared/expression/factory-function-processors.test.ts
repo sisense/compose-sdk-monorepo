@@ -19,7 +19,7 @@ vi.mock('../utils/schema-index.js', async (importOriginal) => {
     ...actual,
     createAttributeFromName: vi
       .fn()
-      .mockReturnValue({ kind: 'attribute', name: 'mockProcessedAttribute' }),
+      .mockReturnValue({ type: 'numeric-attribute', name: 'mockProcessedAttribute' }),
   };
 });
 
@@ -36,8 +36,13 @@ describe('factory-function-processors', () => {
     });
 
     it('should return undefined for functions without custom processing', () => {
-      expect(hasCustomProcessing('measureFactory.sum')).toBe(false);
-      expect(getCustomProcessor('measureFactory.sum')).toBeUndefined();
+      expect(hasCustomProcessing('measureFactory.min')).toBe(false);
+      expect(getCustomProcessor('measureFactory.min')).toBeUndefined();
+    });
+
+    it('should have numeric measure processors registered', () => {
+      expect(hasCustomProcessing('measureFactory.sum')).toBe(true);
+      expect(getCustomProcessor('measureFactory.sum')).toBeDefined();
     });
 
     it('should return list of functions with custom processing', () => {

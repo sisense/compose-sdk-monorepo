@@ -4,7 +4,7 @@ title: Widget Plugin Tutorial
 
 # Widget Plugin Tutorial
 
-Build custom visualizations for Compose SDK dashboards. Each lesson builds on the previous one, progressively adding data fetching, editor configuration, and cross-filtering to a plugin scaffold.
+Build custom visualizations for Compose SDK dashboards. Each lesson builds on the previous one, progressively adding data fetching, editor configuration, cross-filtering, and state persistence to a plugin scaffold.
 
 ## Before You Begin
 
@@ -22,10 +22,10 @@ See the [Plugin DevX Quick Start](../../guides/plugins/plugin-devx-quickstart.md
 ## Lessons
 
 1. **[Getting Started](./01-getting-started.md)**
-   Plugin anatomy, key files, registration, and how the pieces fit together. Introduces [`WidgetPlugin`](../../modules/sdk-ui/interfaces/interface.WidgetPlugin.md) and [`CustomVisualization`](../../modules/sdk-ui/type-aliases/type-alias.CustomVisualization.md).
+   Plugin anatomy, key files, registration, and how the pieces fit together. Introduces [`WidgetPlugin`](../../modules/sdk-ui/plugin-system/interface.WidgetPlugin.md) and [`CustomVisualization`](../../modules/sdk-ui/plugin-system/type-alias.CustomVisualization.md).
 
 2. **[Building a Visualization](./02-visualization.md)**
-   [`CustomVisualizationProps`](../../modules/sdk-ui/interfaces/interface.CustomVisualizationProps.md) API and type parameterization.
+   [`CustomVisualizationProps`](../../modules/sdk-ui/plugin-system/interface.CustomVisualizationProps.md) API and type parameterization.
 
 3. **[Fetching Data](./03-fetching-data.md)**
    Query real data with the [`useExecuteQuery`](../../modules/sdk-ui/queries/function.useExecuteQuery.md) hook and apply formatting with [`formatDataSet`](../../modules/sdk-ui/formatting/function.formatDataSet.md).
@@ -34,10 +34,13 @@ See the [Plugin DevX Quick Start](../../guides/plugins/plugin-devx-quickstart.md
    Define dimension/measure inputs for the widget editor.
 
 5. **[Design Panel](./05-design-panel.md)**
-   Build a style configuration UI using [`DesignPanelProps`](../../modules/sdk-ui/interfaces/interface.DesignPanelProps.md).
+   Build a style configuration UI using [`DesignPanelProps`](../../modules/sdk-ui/plugin-system/interface.DesignPanelProps.md).
 
 6. **[Event Handling and Cross-Filtering](./06-event-handling.md)**
    Data point events, context menu, and cross-filtering integration.
+
+7. **[State Persistence](./07-state-persistence.md)**
+   Persist runtime state across reloads with the `onChange` callback, `customOptions`, and the `useSyncedState` hook.
 
 ---
 

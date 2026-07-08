@@ -5,11 +5,19 @@
 import { CustomFunctionProcessor } from '../../types.js';
 import { processCustomFormula } from './custom-formula/process-custom-formula.js';
 import {
+  processDatetimeFromFilter,
+  processDatetimeMembersFilter,
+  processDatetimeRangeFilter,
+  processDatetimeRelativeFilter,
+  processDatetimeToFilter,
+} from './datetime-filter-processors.js';
+import {
   processExcludeFilter,
   processNumericFilter,
   processStringFilter,
   processStringOrNumericFilter,
 } from './filter-processors.js';
+import { processNumericMeasure } from './measure-processors.js';
 import { processMeasuredValue } from './process-measured-value.js';
 
 /**
@@ -27,6 +35,14 @@ import { processMeasuredValue } from './process-measured-value.js';
 export const FUNCTION_PROCESSORS: Record<string, CustomFunctionProcessor> = {
   'measureFactory.customFormula': processCustomFormula,
   'measureFactory.measuredValue': processMeasuredValue,
+
+  // Numeric-only aggregations: reject text and datetime attributes (BE throws otherwise)
+  'measureFactory.sum': processNumericMeasure,
+  'measureFactory.average': processNumericMeasure,
+  'measureFactory.avg': processNumericMeasure,
+  'measureFactory.stdev': processNumericMeasure,
+  'measureFactory.variance': processNumericMeasure,
+  'measureFactory.median': processNumericMeasure,
 
   // String | Number filters
   'filterFactory.equals': processStringOrNumericFilter,
@@ -52,6 +68,15 @@ export const FUNCTION_PROCESSORS: Record<string, CustomFunctionProcessor> = {
 
   // Exclude filter
   'filterFactory.exclude': processExcludeFilter,
+
+  // Datetime filters
+  'filterFactory.members': processDatetimeMembersFilter,
+  'filterFactory.dateFrom': processDatetimeFromFilter,
+  'filterFactory.dateTo': processDatetimeToFilter,
+  'filterFactory.dateRange': processDatetimeRangeFilter,
+  'filterFactory.dateRelative': processDatetimeRelativeFilter,
+  'filterFactory.dateRelativeFrom': processDatetimeRelativeFilter,
+  'filterFactory.dateRelativeTo': processDatetimeRelativeFilter,
 };
 
 /**

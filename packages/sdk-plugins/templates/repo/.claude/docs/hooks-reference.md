@@ -124,6 +124,35 @@ See `.claude/docs/types-reference.md` for the full `CompleteThemeSettings` shape
 
 ---
 
+## State persistence
+
+### `useSyncedState(syncValue, options?)`
+
+Like `useState`, but synchronizes the local state with an external value (typically derived from props) and notifies you only on local edits. The bridge for persisting view-time state across reloads — see `.claude/docs/add-persistence.md`.
+
+```ts
+import { useSyncedState } from '@sisense/sdk-ui';
+
+const [page, setPage] = useSyncedState(
+  props.customOptions?.lastOpenedPage ?? 0,
+  {
+    // fires ONLY on local setPage(...) calls — not when the prop re-syncs (e.g. on reload)
+    onLocalStateChange: (next) =>
+      props.onChange?.({ customOptions: { lastOpenedPage: next } }),
+  }
+);
+```
+
+**Behavior:**
+
+- Initializes from `syncValue`; re-syncs local state when `syncValue` changes externally (deep-equality checked).
+- `onLocalStateChange` fires only when you call the returned setter — never on a prop re-sync. That asymmetry prevents persistence feedback loops.
+- Returns `[state, setState]`; `setState` accepts a value or an updater function, exactly like `useState`.
+
+Pair it with the `onChange` prop on `CustomVisualizationProps` to persist `styleOptions` (configuration) or `customOptions` (session state). `onChange` is `undefined` outside a dashboard — always call it with `?.`.
+
+---
+
 ## Plugin introspection
 
 ### `usePlugins()`

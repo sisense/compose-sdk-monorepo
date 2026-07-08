@@ -4,7 +4,7 @@ title: SisenseContextProvider
 
 # Function SisenseContextProvider
 
-> **SisenseContextProvider**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **SisenseContextProvider**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Sisense Context Provider Component allowing you to connect to
 a Sisense instance and provide that context
@@ -18,7 +18,7 @@ to all Compose SDK components in your application.
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 A Sisense Context Provider Component
 

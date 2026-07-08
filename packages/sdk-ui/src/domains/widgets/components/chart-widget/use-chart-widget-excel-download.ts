@@ -18,7 +18,6 @@ import {
 import { useExcelQueryFileLoader } from '@/domains/widgets/hooks/use-excel-query-file-loader.js';
 import { useWithExcelDownloadMenuItem } from '@/domains/widgets/hooks/use-with-excel-download-menu-item.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
-import { useAppSettings } from '@/shared/hooks/use-app-settings.js';
 
 import type { ChartWidgetProps } from './types.js';
 
@@ -35,8 +34,7 @@ export type UseChartWidgetExcelDownloadResult = {
 
 /**
  * Enhances a chart widget header with Excel download menu items (placeholder).
- * Excel menu is shown only when the widget/dashboard allows download **and**
- * the Sisense server feature **`exportingXlsxV2`** is active (`api/globals` → `features`).
+ * Excel menu is shown only when the widget/dashboard allows download.
  * **Repeat rows** sets `mergeRows: false`; **Merge rows** sets `mergeRows: true`).
  *
  * @param props - Chart data/config plus `baseHeaderConfig`. `id` is optional; when present it is forwarded as `widgetId` without validation.
@@ -48,12 +46,10 @@ export function useChartWidgetExcelDownload(
   const { chartType, dataOptions, dataSource, title, config, baseHeaderConfig, id, filters } =
     props;
   const excelLoader = useExcelQueryFileLoader();
-  const appSettings = useAppSettings();
-  const isExportingXlsxV2FeatureOn = appSettings?.serverFeatures?.exportingXlsxV2?.active === true;
   const downloadExcelRequested = !!config?.actions?.downloadExcel?.enabled;
 
   const excelQueryParams = useMemo(() => {
-    if (!downloadExcelRequested || !isExportingXlsxV2FeatureOn) {
+    if (!downloadExcelRequested) {
       return {
         dataSource,
         dimensions: [] as Attribute[],
@@ -96,22 +92,12 @@ export function useChartWidgetExcelDownload(
       widgetId: id,
       widgetTitle: title ?? '',
     };
-  }, [
-    chartType,
-    dataOptions,
-    dataSource,
-    downloadExcelRequested,
-    id,
-    isExportingXlsxV2FeatureOn,
-    title,
-  ]);
+  }, [chartType, dataOptions, dataSource, downloadExcelRequested, id, title]);
 
   const isChartWidgetAllowExcelDownload =
     excelQueryParams.dimensions.length > 0 || excelQueryParams.measures.length > 0;
   const isExcelDownloadEnabled =
-    !!config?.actions?.downloadExcel?.enabled &&
-    isExportingXlsxV2FeatureOn &&
-    isChartWidgetAllowExcelDownload;
+    !!config?.actions?.downloadExcel?.enabled && isChartWidgetAllowExcelDownload;
 
   const onDownloadExcel = useCallback(
     (mergeRows: boolean) => {

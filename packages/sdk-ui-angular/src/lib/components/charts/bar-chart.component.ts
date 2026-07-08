@@ -71,6 +71,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-bar-chart',
   template: `
     <csdk-chart

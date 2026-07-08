@@ -93,6 +93,7 @@ export interface ChartProps
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-chart',
   template,
   styles,

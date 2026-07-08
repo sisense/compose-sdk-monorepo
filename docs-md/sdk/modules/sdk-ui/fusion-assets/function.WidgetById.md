@@ -4,7 +4,7 @@ title: WidgetById
 
 # Function WidgetById <Badge type="fusionEmbed" text="Fusion Embed" />
 
-> **WidgetById**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **WidgetById**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 The WidgetById component, which is a thin wrapper on the [ChartWidget](../dashboards/function.ChartWidget.md) component,
 is used to render a widget created in a Sisense Fusion instance.
@@ -33,4 +33,4 @@ Display two dashboard widgets from a Fusion instance.
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`

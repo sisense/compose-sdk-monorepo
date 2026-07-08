@@ -4,7 +4,7 @@ import type {
   ThemeSettings,
 } from '@sisense/sdk-ui-preact';
 import { getThemeSettingsByOid } from '@sisense/sdk-ui-preact';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 import { defineComponent, provide, ref, watchEffect } from 'vue';
 import type { PropType } from 'vue';
 

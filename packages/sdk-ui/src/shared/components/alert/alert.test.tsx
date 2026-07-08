@@ -70,38 +70,4 @@ describe('Alert component', () => {
     render(<Alert dismissible={false} description="Non-dismissible" />);
     expect(screen.queryByLabelText('Dismiss alert')).not.toBeInTheDocument();
   });
-
-  it('calls onDismiss when dismissOnClick is true and alert body is clicked', () => {
-    const onDismiss = vi.fn();
-    render(
-      <Alert
-        dismissible={true}
-        dismissOnClick={true}
-        onDismiss={onDismiss}
-        description="Click anywhere"
-      />,
-    );
-
-    const alert = screen.getByRole('alert');
-    fireEvent.click(alert);
-
-    expect(onDismiss).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls onDismiss when dismissOnClick is true and Space key is pressed on alert', () => {
-    const onDismiss = vi.fn();
-    render(
-      <Alert
-        dismissible={true}
-        dismissOnClick={true}
-        onDismiss={onDismiss}
-        description="Keyboard dismiss"
-      />,
-    );
-
-    const alert = screen.getByRole('alert');
-    fireEvent.keyDown(alert, { key: ' ' });
-
-    expect(onDismiss).toHaveBeenCalledTimes(1);
-  });
 });

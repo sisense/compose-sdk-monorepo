@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { ThemeProviderProps } from '@/props';

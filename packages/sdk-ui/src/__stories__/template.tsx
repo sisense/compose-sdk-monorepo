@@ -20,27 +20,33 @@ const themeSettings = {
 
 const contextDecorator = {
   decorators: [
-    (Story: StoryFn) => (
-      <SisenseContextProvider
-        url={url}
-        token={token}
-        showRuntimeErrors={true}
-        appConfig={{ errorBoundaryConfig: { alwaysShowErrorText: true } }}
-      >
-        <ThemeProvider theme={themeSettings}>
-          <Story />
-        </ThemeProvider>
-      </SisenseContextProvider>
-    ),
+    (Story: StoryFn) => {
+      const StoryComponent = Story as unknown as React.ComponentType;
+      return (
+        <SisenseContextProvider
+          url={url}
+          token={token}
+          showRuntimeErrors={true}
+          appConfig={{ errorBoundaryConfig: { alwaysShowErrorText: true } }}
+        >
+          <ThemeProvider theme={themeSettings}>
+            <StoryComponent />
+          </ThemeProvider>
+        </SisenseContextProvider>
+      );
+    },
   ],
 };
 const visualTestIdDecorator = {
   decorators: [
-    (Story: StoryFn, { id }: StoryContext) => (
-      <div data-visual-test-id={id}>
-        <Story />
-      </div>
-    ),
+    (Story: StoryFn, { id }: StoryContext) => {
+      const StoryComponent = Story as unknown as React.ComponentType;
+      return (
+        <div data-visual-test-id={id}>
+          <StoryComponent />
+        </div>
+      );
+    },
   ],
 };
 

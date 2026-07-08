@@ -21,6 +21,51 @@ type HighchartsRendererProps = {
   options: HighchartsOptionsInternal;
 };
 
+type DataLabelsStyleSnapshot = {
+  backgroundColor?: unknown;
+  borderColor?: unknown;
+};
+
+function getDataLabelsStyleSnapshot(
+  options: HighchartsOptionsInternal | undefined,
+): DataLabelsStyleSnapshot | undefined {
+  if (!options) {
+    return undefined;
+  }
+
+  const plotSeriesDataLabels = options.plotOptions?.series?.dataLabels;
+  const seriesDataLabels = options.series?.[0]?.dataLabels;
+  const dataLabels =
+    seriesDataLabels && typeof seriesDataLabels === 'object'
+      ? seriesDataLabels
+      : plotSeriesDataLabels && typeof plotSeriesDataLabels === 'object'
+      ? plotSeriesDataLabels
+      : undefined;
+
+  if (!dataLabels) {
+    return undefined;
+  }
+
+  return {
+    backgroundColor: dataLabels.backgroundColor,
+    borderColor: dataLabels.borderColor,
+  };
+}
+
+function isDataLabelsStyleChanged(
+  prevOptions: HighchartsOptionsInternal | undefined,
+  nextOptions: HighchartsOptionsInternal | undefined,
+): boolean {
+  if (!prevOptions) {
+    return false;
+  }
+
+  return (
+    JSON.stringify(getDataLabelsStyleSnapshot(prevOptions)) !==
+    JSON.stringify(getDataLabelsStyleSnapshot(nextOptions))
+  );
+}
+
 const defaultContainerProps = {
   style: {
     // Container should inherit parent size for correct chart size calculation by Highcharts
@@ -90,7 +135,8 @@ export const HighchartsRenderer = ({ options }: HighchartsRendererProps) => {
     isDeselectAllHighlights ||
     isCategoriesLengthChanged ||
     isSeriesDataLengthChanged ||
-    isSeriesCountChanged;
+    isSeriesCountChanged ||
+    isDataLabelsStyleChanged(prevOptions, options);
 
   const finalOptions = useMemo(() => {
     // provides deep copy in order to prevent "options" prop mutation, that leads to an extra rerender of current momoized component

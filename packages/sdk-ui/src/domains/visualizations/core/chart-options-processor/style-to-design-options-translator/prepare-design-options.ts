@@ -1,5 +1,5 @@
 import pick from 'lodash-es/pick';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { getChartBuilder } from '@/domains/visualizations/components/chart/restructured-charts/chart-builder-factory';
 import { isRestructuredChartType } from '@/domains/visualizations/components/chart/restructured-charts/utils';

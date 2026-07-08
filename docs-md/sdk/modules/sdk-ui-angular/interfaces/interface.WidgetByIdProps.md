@@ -55,6 +55,14 @@ If not specified, the default value is `false`.
 
 ### Widget
 
+#### config
+
+> **config**?: [`WidgetConfig`](../type-aliases/type-alias.WidgetConfig.md)
+
+Configuration of the widget
+
+***
+
 #### dashboardOid
 
 > **dashboardOid**: `string`

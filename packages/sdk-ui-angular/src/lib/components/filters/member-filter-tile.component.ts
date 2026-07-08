@@ -72,6 +72,7 @@ export interface MemberFilterTileProps extends Omit<MemberFilterTilePropsPreact,
  * @group Filter Tiles
  */
 @Component({
+  standalone: false,
   selector: 'csdk-member-filter-tile',
   template,
   styles,

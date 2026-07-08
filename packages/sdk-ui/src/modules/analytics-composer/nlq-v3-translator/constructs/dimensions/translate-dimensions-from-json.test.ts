@@ -48,6 +48,21 @@ describe('translateDimensions', () => {
     expect(data).toMatchSnapshot();
   });
 
+  it('should return error when dimension uses datetime column without date level', () => {
+    const result = translateDimensionsFromJSON({
+      data: ['DM.Commerce.Date'],
+      context: {
+        dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
+      },
+    });
+
+    expect(result.success).toBe(false);
+    expect(getErrors(result)[0]).toContain(
+      "Date level required for 'DM.Commerce.Date'. Use 'DM.Commerce.Date.Years'",
+    );
+  });
+
   it('should return empty array when dimensionsJSON is null', () => {
     const result = translateDimensionsFromJSON({
       data: null as unknown as DimensionItemJSON[],

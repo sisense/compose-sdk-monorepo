@@ -1,3 +1,4 @@
+import type { WidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config';
 import type { BeforeMenuOpenHandler } from '@/infra/contexts/menu-provider/types';
 
 import type { WidgetHeaderConfig } from '../../shared/widget-header/types';
@@ -7,30 +8,41 @@ import type { PivotTableWidgetProps } from '../pivot-table-widget/types';
 import type { TextWidgetProps } from '../text-widget/types';
 
 /**
- * Generic widget configuration (e.g. header menu, toolbar, actions).
- * Shared across chart, pivot, text, and custom widgets.
+ * Configuration of the widget.
  */
 export type WidgetConfig = {
   /**
    * Configurations for the widget header (e.g. toolbar menu items)
+   *
+   * @alpha
    */
   header?: WidgetHeaderConfig;
   /**
-   * Configuration for widget actions.
-   *
-   * @sisenseInternal
+   * Configuration for actions available on the widget, such as
+   * downloading the widget's data.
    */
   actions?: {
     /**
-     * Configuration for downloading a CSV file.
+     * Configuration for the "Download as CSV" action, which adds an item to the
+     * widget's header menu that exports the widget's underlying data as a CSV file.
      *
-     * @sisenseInternal
+     * @example
+     * Enable CSV download for a widget:
+     * ```ts
+     * const widgetConfig: WidgetConfig = {
+     *   actions: {
+     *     downloadCsv: {
+     *       enabled: true,
+     *     },
+     *   },
+     * };
+     * ```
      */
     downloadCsv?: {
       /**
-       * Determines whether the possibility to download a CSV is enabled.
+       * Whether the "Download as CSV" action is enabled for the widget.
        *
-       * If not specified, the default value is `false`.
+       * @default false
        */
       enabled?: boolean;
     };
@@ -48,6 +60,10 @@ export type WidgetConfig = {
       enabled?: boolean;
     };
   };
+  /**
+   * Configuration for widget narrative.
+   */
+  narrative?: WidgetNarrativeConfig;
 };
 
 /**

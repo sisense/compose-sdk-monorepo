@@ -71,6 +71,7 @@ export interface CriteriaFilterTileProps extends Omit<CriteriaFilterTilePropsPre
  * @group Filter Tiles
  */
 @Component({
+  standalone: false,
   selector: 'csdk-criteria-filter-tile',
   template,
   styles,

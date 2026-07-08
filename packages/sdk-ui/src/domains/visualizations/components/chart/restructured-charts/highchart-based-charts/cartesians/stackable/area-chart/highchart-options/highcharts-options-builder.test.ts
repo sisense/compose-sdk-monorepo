@@ -440,7 +440,9 @@ describe('areaHighchartsOptionsBuilder', () => {
 
       requiredMethods.forEach((method) => {
         expect(areaHighchartsOptionsBuilder).toHaveProperty(method);
-        expect(typeof areaHighchartsOptionsBuilder[method]).toBe('function');
+        expect(
+          typeof areaHighchartsOptionsBuilder[method as keyof typeof areaHighchartsOptionsBuilder],
+        ).toBe('function');
       });
     });
 

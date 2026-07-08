@@ -58,11 +58,27 @@ Min aggregation type
 
 ***
 
+### `Mode`
+
+**`readonly`** **Mode**: `"mode"` = `'mode'`
+
+Mode (most frequent value) aggregation type
+
+***
+
 ### `StandardDeviation`
 
 **`readonly`** **StandardDeviation**: `"stdev"` = `'stdev'`
 
 Standard deviation aggregation type
+
+***
+
+### `StandardDeviationPop`
+
+**`readonly`** **StandardDeviationPop**: `"stdevp"` = `'stdevp'`
+
+Population standard deviation aggregation type
 
 ***
 
@@ -79,3 +95,11 @@ Sum aggregation type
 **`readonly`** **Variance**: `"var"` = `'var'`
 
 Variance aggregation type
+
+***
+
+### `VariancePop`
+
+**`readonly`** **VariancePop**: `"varp"` = `'varp'`
+
+Population variance aggregation type

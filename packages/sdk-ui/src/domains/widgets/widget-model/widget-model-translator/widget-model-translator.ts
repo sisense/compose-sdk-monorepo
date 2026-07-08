@@ -75,7 +75,7 @@ import {
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/index.js';
 import { toTabberWidgetStyle } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/tabber.js';
 import {
-  extractWidgetNarrativeOptionsFromDto,
+  extractWidgetNarrativeConfigFromDto,
   mergeWidgetStyleWithNarrativeForDto,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/widget-narrative-style.js';
 import {
@@ -354,7 +354,7 @@ export function toChartWidgetProps(widgetModel: WidgetModel): ChartWidgetProps {
     chartType: widgetModel.chartType!,
     dataOptions: widgetModel.dataOptions as ChartDataOptions,
     styleOptions: widgetModel.styleOptions,
-    aiOptions: widgetModel.aiOptions,
+    config: widgetModel.config,
     dataSource: widgetModel.dataSource,
     filters: widgetModel.filters,
     highlights: widgetModel.highlights,
@@ -384,7 +384,7 @@ export function toPivotTableWidgetProps(widgetModel: WidgetModel): PivotTableWid
   return {
     dataOptions: widgetModel.dataOptions as PivotTableDataOptions,
     styleOptions: widgetModel.styleOptions as PivotTableWidgetStyleOptions,
-    aiOptions: widgetModel.aiOptions,
+    config: widgetModel.config,
     dataSource: widgetModel.dataSource,
     filters: widgetModel.filters,
     highlights: widgetModel.highlights,
@@ -515,7 +515,7 @@ const DEFAULT_WIDGET_MODEL: WidgetModel = {
   filters: [],
   highlights: [],
   chartType: undefined,
-  aiOptions: undefined,
+  config: undefined,
 };
 
 /**
@@ -787,8 +787,8 @@ const buildWidgetModel = (params: {
 
   const jtdConfig = jumpToDashboardConfigFromWidgetDto(widgetDto);
 
-  const narrativeOptions = extractWidgetNarrativeOptionsFromDto(widgetDto.style?.narration);
-  const aiOptions = narrativeOptions !== undefined ? { narrative: narrativeOptions } : undefined;
+  const narrativeConfig = extractWidgetNarrativeConfigFromDto(widgetDto.style?.narration);
+  const config = narrativeConfig !== undefined ? { narrative: narrativeConfig } : undefined;
 
   // Merge the opaque DTO `customOptions` bag (persisted plugin runtime state)
   // under any category-specific options (e.g. Tabber's), which take precedence.
@@ -811,8 +811,8 @@ const buildWidgetModel = (params: {
     customOptions: mergedCustomOptions,
     drilldownOptions,
     filters,
+    config,
     ...(jtdConfig ? { jtdConfig } : {}),
-    ...(aiOptions !== undefined ? { aiOptions } : {}),
   };
 };
 
@@ -1142,7 +1142,7 @@ export function toWidgetDto(
 
   const styleWithDtoNarration = mergeWidgetStyleWithNarrativeForDto(
     styleWithWidgetDesign,
-    widgetModel.aiOptions?.narrative,
+    widgetModel.config?.narrative,
   );
 
   const widget: WidgetDto = {

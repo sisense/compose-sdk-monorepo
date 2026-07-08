@@ -174,6 +174,7 @@ export type SeriesType = HighchartsSeriesValues & {
   dashStyle?: string;
   lineWidth?: number;
   step?: boolean | 'left' | 'center' | 'right';
+  dataLabels?: DataLabelsSettings;
   zIndex?: number;
   keys?: string[];
   nullColor?: string;

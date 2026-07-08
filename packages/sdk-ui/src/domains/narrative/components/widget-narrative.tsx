@@ -10,8 +10,8 @@ import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import type { HookEnableParam } from '@/shared/hooks/types';
 
-import { getWidgetNarrativeOptionsFromWidgetProps } from '../core/get-widget-narrative-from-widget-props.js';
-import { getCompleteWidgetNarrativeOptions } from '../core/widget-narrative-options.js';
+import { getWidgetNarrativeConfigFromWidgetProps } from '../core/get-widget-narrative-from-widget-props.js';
+import { getCompleteWidgetNarrativeConfig } from '../core/widget-narrative-config.js';
 import { useWidgetNarrativeState } from '../hooks/use-widget-narrative-state.js';
 import { NarrativeCollapsible } from './narrative-collapsible.js';
 import {
@@ -29,7 +29,7 @@ import {
  * Props for {@link WidgetNarrative}.
  *
  * @remarks
- * Narrative options are read from `widgetProps.aiOptions.narrative` for chart and pivot widgets.
+ * Narrative options are read from `widgetProps.config.narrative` for chart and pivot widgets.
  * Accepts {@link HookEnableParam}; `enabled` is forwarded to {@link useWidgetNarrativeState}.
  * @sisenseInternal
  */
@@ -80,8 +80,8 @@ export const WidgetNarrative = asSisenseComponent({
     if (!isChartWidgetProps(widgetProps) && !isPivotTableWidgetProps(widgetProps)) {
       return { feedbackEnabled: false, isDisplayedAlone: false };
     }
-    const completeOptions = getCompleteWidgetNarrativeOptions(
-      getWidgetNarrativeOptionsFromWidgetProps(widgetProps),
+    const completeOptions = getCompleteWidgetNarrativeConfig(
+      getWidgetNarrativeConfigFromWidgetProps(widgetProps),
     );
     return {
       feedbackEnabled: completeOptions.feedback.enabled,
@@ -133,7 +133,11 @@ export const WidgetNarrative = asSisenseComponent({
   );
 
   if (!feedbackEnabled) {
-    return <NarrativeTopSlotShell theme={themeSettings}>{narrativeRow}</NarrativeTopSlotShell>;
+    return (
+      <NarrativeTopSlotShell data-testid="widget-narrative" theme={themeSettings}>
+        {narrativeRow}
+      </NarrativeTopSlotShell>
+    );
   }
 
   if (!narrativeRequest) {
@@ -141,7 +145,11 @@ export const WidgetNarrative = asSisenseComponent({
   }
 
   if (isLoading) {
-    return <NarrativeTopSlotShell theme={themeSettings}>{narrativeRow}</NarrativeTopSlotShell>;
+    return (
+      <NarrativeTopSlotShell data-testid="widget-narrative" theme={themeSettings}>
+        {narrativeRow}
+      </NarrativeTopSlotShell>
+    );
   }
 
   return (

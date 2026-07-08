@@ -261,7 +261,7 @@ export const filterToOption = (filter: Filter): FilterOptionType => {
   }
   const opStr = `${filter.filterType}${operatorA ?? ''}${operatorB ?? ''}`;
   const key = Object.keys(FilterOption).find(
-    (option) => FilterOption[option] == opStr,
+    (option) => FilterOption[option as keyof typeof FilterOption] == opStr,
   ) as keyof typeof FilterOption;
   if (FilterOption[key] === undefined) throw new UnsupportedFilterError(filter);
   return FilterOption[key] as FilterOptionType;

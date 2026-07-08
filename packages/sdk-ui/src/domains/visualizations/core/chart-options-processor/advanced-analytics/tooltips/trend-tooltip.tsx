@@ -56,7 +56,7 @@ export default function TrendToolip(props: TrendToolipProps) {
       <div style={{ display: 'table' }}>
         <AdvancedAnalyticsTooltipRow
           name={translate('advanced.tooltip.trendType')}
-          value={[TrendTypesFromExpression[modelType]]}
+          value={[TrendTypesFromExpression[modelType as keyof typeof TrendTypesFromExpression]]}
         />
         <AdvancedAnalyticsTooltipRow
           name={translate('advanced.tooltip.trendLocalValue')}

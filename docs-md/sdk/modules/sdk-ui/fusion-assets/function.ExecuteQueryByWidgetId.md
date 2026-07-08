@@ -4,7 +4,7 @@ title: ExecuteQueryByWidgetId
 
 # Function ExecuteQueryByWidgetId <Badge type="fusionEmbed" text="Fusion Embed" />
 
-> **ExecuteQueryByWidgetId**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **ExecuteQueryByWidgetId**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Executes a query over the existing widget and renders a function as child component.
 The child component is passed the state of the query as defined in [QueryByWidgetIdState](../type-aliases/type-alias.QueryByWidgetIdState.md).
@@ -22,7 +22,7 @@ offers an alternative approach to the [useExecuteQueryByWidgetId](function.useEx
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 ExecuteQueryByWidgetId component
 

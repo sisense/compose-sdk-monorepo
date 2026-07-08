@@ -8,7 +8,8 @@ import type { InjectionKey, Ref } from 'vue';
 
 export const defaultCustomWidgetsContext = {
   customWidgetsMap: new Map<string, CustomWidgetComponent<any>>([
-    ['tabber-buttons', TabberButtonsWidget],
+    // The built-in widget is stored in the type-erased custom-widget map.
+    ['tabber-buttons', TabberButtonsWidget as CustomWidgetComponent<any>],
   ]),
 };
 

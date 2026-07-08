@@ -2,12 +2,12 @@
 /**
  * Report writers for the tag-usage-report plugin.
  *
- * Converts a filtered list of TaggedDecl objects into two output files:
- *   TAG_USAGE_REPORT.md        — collapsible markdown, grouped by tag → package → subgroup
- *   TAG_USAGE_REPORT_SIMPLE.txt — plain bullet list, grouped by tag → package, no formatting
+ * Converts a filtered list of TaggedDecl objects into report files:
+ *   TAG_USAGE_REPORT.md — collapsible markdown, grouped by tag → package → subgroup
+ *   TAG_USAGE_REPORT_<TAG>.txt — one plain-text file per tag, grouped by package
  *
  * Main exports: writeReport(exportedDecls, outputPath, logger)
- *               writeSimpleReport(exportedDecls, outputPath, logger)
+ *               writeSimpleReports(exportedDecls, reportDir, logger)
  */
 
 'use strict';
@@ -16,7 +16,7 @@ const fs = require('fs');
 const path = require('path');
 const {
   REPO_ROOT, REPORT_DIR,
-  TAGS_TO_REPORT, TAG_DESCRIPTIONS, TAG_ANCHOR,
+  TAGS_TO_REPORT, TAG_DESCRIPTIONS, TAG_ANCHOR, TAG_REPORT_FILE_SUFFIX,
 } = require('./config.cjs');
 
 // ── Path helpers ──────────────────────────────────────────────────────────────
@@ -268,69 +268,80 @@ function simpleFilePath(absPath, pkg) {
 }
 
 /**
- * Build the lines for TAG_USAGE_REPORT_SIMPLE.txt.
+ * Build the lines for a single per-tag plain-text report file.
  *
  * Format:
- *   @tag (N items)
+ *   sdk-ui
+ *     - Kind: name - filepath.ts
+ *     ...
  *
- *     sdk-ui (M items)
- *       - Kind: name - filepath.ts
- *       ...
- *
- * @param {TaggedDecl[]} exportedDecls
+ * @param {TaggedDecl[]} tagDecls
  * @returns {string[]}
  */
-function buildSimpleReportLines(exportedDecls) {
+function buildSimpleReportLinesForTag(tagDecls) {
+  if (tagDecls.length === 0) {
+    return ['(none)', ''];
+  }
+
   const lines = [];
 
-  for (const tag of TAGS_TO_REPORT) {
-    const tagDecls = exportedDecls.filter((d) => d.tag === tag);
-    lines.push(`${tag} (${tagDecls.length} items)`, '');
+  // Group by package only — filepath conveys subgroup location.
+  /** @type {Map<string, TaggedDecl[]>} */
+  const byPackage = new Map();
+  for (const decl of tagDecls) {
+    const pkg = packageFromPath(decl.file);
+    if (!byPackage.has(pkg)) byPackage.set(pkg, []);
+    byPackage.get(pkg).push(decl);
+  }
 
-    if (tagDecls.length === 0) {
-      lines.push('  (none)', '');
-      continue;
+  for (const pkg of [...byPackage.keys()].sort()) {
+    const pkgDecls = sortByKindAndName(byPackage.get(pkg));
+    lines.push(pkg);
+    for (const decl of pkgDecls) {
+      lines.push(`  - ${decl.kind}: ${decl.name} - ${simpleFilePath(decl.file, pkg)}`);
     }
-
-    // Group by package only — filepath conveys subgroup location.
-    /** @type {Map<string, TaggedDecl[]>} */
-    const byPackage = new Map();
-    for (const decl of tagDecls) {
-      const pkg = packageFromPath(decl.file);
-      if (!byPackage.has(pkg)) byPackage.set(pkg, []);
-      byPackage.get(pkg).push(decl);
-    }
-
-    for (const pkg of [...byPackage.keys()].sort()) {
-      const pkgDecls = sortByKindAndName(byPackage.get(pkg));
-      lines.push(`  ${pkg} (${pkgDecls.length} items)`);
-      for (const decl of pkgDecls) {
-        lines.push(`    - ${decl.kind}: ${decl.name} - ${simpleFilePath(decl.file, pkg)}`);
-      }
-      lines.push('');
-    }
+    lines.push('');
   }
 
   return lines;
 }
 
 /**
- * Build and write TAG_USAGE_REPORT_SIMPLE.txt from the given exported declarations.
+ * Build and write one TAG_USAGE_REPORT_<TAG>.txt file per configured tag.
  *
  * @param {TaggedDecl[]} exportedDecls
- * @param {string} outputPath  Absolute path to write the report to.
+ * @param {string} reportDir  Absolute path to the report output directory.
  * @param {{ info: (msg: string) => void, error: (msg: string) => void }} logger
  */
-function writeSimpleReport(exportedDecls, outputPath, logger) {
-  const lines = buildSimpleReportLines(exportedDecls);
-
+function writeSimpleReports(exportedDecls, reportDir, logger) {
   try {
-    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-    fs.writeFileSync(outputPath, lines.join('\n'), 'utf-8');
-    logger.info(`[tag-usage-report] Simple report written to ${outputPath}`);
-  } catch (/** @type {any} */ err) {
-    logger.error(`[tag-usage-report] Failed to write simple report: ${err.message}`);
+    fs.mkdirSync(reportDir, { recursive: true });
+  } catch (err) {
+    logger.error(
+      `[tag-usage-report] Failed to create report directory: ${err instanceof Error ? err.message : String(err)}`,
+    );
+    return;
+  }
+
+  for (const tag of TAGS_TO_REPORT) {
+    const suffix = TAG_REPORT_FILE_SUFFIX[tag];
+    if (suffix === undefined) {
+      logger.error(`[tag-usage-report] No file suffix configured for tag "${tag}"; skipping.`);
+      continue;
+    }
+    const outputPath = path.join(reportDir, `TAG_USAGE_REPORT_${suffix}.txt`);
+    const tagDecls = exportedDecls.filter((d) => d.tag === tag);
+    const lines = buildSimpleReportLinesForTag(tagDecls);
+
+    try {
+      fs.writeFileSync(outputPath, lines.join('\n'), 'utf-8');
+      logger.info(`[tag-usage-report] Simple report written to ${outputPath}`);
+    } catch (err) {
+      logger.error(
+        `[tag-usage-report] Failed to write simple report: ${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
   }
 }
 
-module.exports = { writeReport, writeSimpleReport };
+module.exports = { writeReport, writeSimpleReports };

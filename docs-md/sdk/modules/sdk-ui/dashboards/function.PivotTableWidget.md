@@ -4,7 +4,7 @@ title: PivotTableWidget
 
 # Function PivotTableWidget
 
-> **PivotTableWidget**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **PivotTableWidget**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 React component extending `PivotTable` to support widget style options.
 
@@ -16,7 +16,7 @@ React component extending `PivotTable` to support widget style options.
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Widget component representing a pivot table
 

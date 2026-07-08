@@ -7,13 +7,7 @@ import type {
   ChartWidgetDrilldownSelectionsChangedEvent,
 } from '@/domains/widgets/change-events';
 import type { ChartEventProps } from '@/props';
-import {
-  ChartDataOptions,
-  ChartType,
-  ChartWidgetStyleOptions,
-  DrilldownOptions,
-  WidgetAiOptions,
-} from '@/types';
+import { ChartDataOptions, ChartType, ChartWidgetStyleOptions, DrilldownOptions } from '@/types';
 
 import { WidgetConfig } from '../widget/types';
 
@@ -69,14 +63,6 @@ export interface ChartWidgetProps extends ChartEventProps {
   styleOptions?: ChartWidgetStyleOptions;
 
   /**
-   * Configuration for AI-powered widget features such as automated narrative generation
-   *
-   * @category Widget
-   * @alpha
-   */
-  aiOptions?: WidgetAiOptions;
-
-  /**
    * List of categories to allow drilldowns on
    *
    * @category Widget
@@ -84,10 +70,9 @@ export interface ChartWidgetProps extends ChartEventProps {
   drilldownOptions?: DrilldownOptions;
 
   /**
-   * Widget configuration (e.g. header toolbar menu)
+   * Configuration of the widget
    *
    * @category Widget
-   * @internal
    */
   config?: WidgetConfig;
 

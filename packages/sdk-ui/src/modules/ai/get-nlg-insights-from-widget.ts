@@ -13,8 +13,8 @@ import { getNarrative } from '@/infra/api/narrative/narrative-endpoints.js';
  * This function converts WidgetProps to the required API format and makes an HTTP request
  * to get natural language insights about the chart or pivot data.
  *
- * @param props - WidgetProps containing chart or pivot configuration (`aiOptions.narrative`
- *   drives {@link WidgetNarrativeOptions})
+ * @param props - WidgetProps containing chart or pivot configuration (`config.narrative`
+ *   drives {@link WidgetNarrativeConfig})
  * @param httpClient - HttpClient instance for making API requests
  * @returns Promise that resolves to the NLG insights answer string
  * @throws Error if dataSource cannot be resolved or if API response is invalid

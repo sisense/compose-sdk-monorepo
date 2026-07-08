@@ -16,6 +16,9 @@ indexTopics:
   - title: Generative AI Troubleshooting
     description: Troubleshoot issues that arise when using the Compose SDK Generative AI components
     link: ./troubleshooting-genai
+  - title: Security Advisories
+    description: Learn how Compose SDK addresses known vulnerability scanner findings in its dependencies
+    link: ./security-advisories
 ---
 
 # Compose SDK Troubleshooting

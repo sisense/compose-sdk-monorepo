@@ -23,10 +23,10 @@ import {
   CalendarHeatmapViewType,
   CartesianStyleOptions,
   ChartStyleOptions,
+  DashStyle,
   FunnelStyleOptions,
   GaugeIndicatorStyleOptions,
   IndicatorStyleOptions,
-  Labels,
   LegendPosition,
   LineStyleOptions,
   LineWidth,
@@ -77,6 +77,15 @@ import {
   WidgetSubtype,
 } from '../types.js';
 import { getChartSubtype, getEnabledPanelItems } from '../utils.js';
+import {
+  buildFunnelSeriesLabelsFromFusionLabels,
+  buildPieSeriesLabelsFromFusionLabels,
+  type CategoricalFusionLabels,
+} from './categorical-labels-style.js';
+import {
+  extractSeriesLabelAffixFromFusion,
+  toPublicSeriesLabelAffixFields,
+} from './series-label-affix-style.js';
 import { extractTabberButtonsWidgetStyleOptions } from './tabber.js';
 
 /**
@@ -307,6 +316,20 @@ function extractBoxplotChartAxisOptions(
 }
 
 /**
+ * Resolves effective value-label rotation from Fusion DTO.
+ * Reads customRotation (Fusion design panel) or preset rotation token.
+ */
+function getFusionSeriesLabelsRotation(
+  seriesLabels?: CartesianWidgetStyle['seriesLabels'],
+): number {
+  const customRotation = seriesLabels?.customRotation;
+  if (customRotation != null) {
+    return customRotation;
+  }
+  return seriesLabels?.rotation ?? 0;
+}
+
+/**
  * Helper function to extract values (series labels) chart labels options from WidgetDto
  */
 function extractValueLabelsOptions(
@@ -336,14 +359,17 @@ function extractValueLabelsOptions(
     ...(showTotals && {
       totalLabels: {
         enabled: showTotals,
-        rotation: widgetStyle.seriesLabels?.rotation ?? 0,
+        rotation: getFusionSeriesLabelsRotation(widgetStyle.seriesLabels),
       },
     }),
     seriesLabels: {
       enabled: widgetStyle.seriesLabels?.enabled ?? false,
-      rotation: widgetStyle.seriesLabels?.rotation ?? 0,
+      rotation: getFusionSeriesLabelsRotation(widgetStyle.seriesLabels),
       showValue: showValue,
       showPercentage: !!(isStacked100 && widgetStyle.seriesLabels?.labels?.types?.percentage),
+      ...toPublicSeriesLabelAffixFields(
+        extractSeriesLabelAffixFromFusion(widgetStyle.seriesLabels ?? {}),
+      ),
     },
   };
 }
@@ -428,6 +454,80 @@ function extractLineWidthOptions(
 }
 
 /**
+ * Helper function to extract custom line width (px) from WidgetDto.
+ * Reads CSDK-shaped `style.line.width` or Fusion `style.lineWidth.customWidth`.
+ */
+function extractLineCustomWidthOptions(
+  widgetStyle: CartesianWidgetStyle,
+): Pick<LineStyleOptions, 'line'> {
+  const widthFromLine = widgetStyle.line?.width;
+  if (typeof widthFromLine === 'number' && widthFromLine > 0) {
+    return { line: { width: widthFromLine } };
+  }
+
+  const customWidth = widgetStyle.lineWidth?.customWidth;
+  if (customWidth != null && customWidth > 0) {
+    return { line: { width: customWidth } };
+  }
+
+  return {};
+}
+
+/**
+ * Merges CSDK/Fusion line stroke options (dashStyle + custom width) into styleOptions.line.
+ */
+function extractLineOptions(widgetStyle: CartesianWidgetStyle): Pick<LineStyleOptions, 'line'> {
+  const line = {
+    ...extractLineDashOptions(widgetStyle).line,
+    ...extractLineCustomWidthOptions(widgetStyle).line,
+  };
+
+  return Object.keys(line).length > 0 ? { line } : {};
+}
+
+const FUSION_LINE_TYPE_TO_DASH_STYLE: Record<string, DashStyle> = {
+  solid: 'Solid',
+  dashed: 'ShortDash',
+  dotted: 'ShortDot',
+  shortDash: 'ShortDash',
+  shortDot: 'ShortDot',
+  shortDashDot: 'ShortDashDot',
+  shortDashDotDot: 'ShortDashDotDot',
+  dot: 'Dot',
+  dash: 'Dash',
+  longDash: 'LongDash',
+  dashDot: 'DashDot',
+  longDashDot: 'LongDashDot',
+  longDashDotDot: 'LongDashDotDot',
+};
+
+const VALID_DASH_STYLES: ReadonlySet<string> = new Set(
+  Object.values(FUSION_LINE_TYPE_TO_DASH_STYLE),
+);
+
+function isDashStyle(value: string): value is DashStyle {
+  return VALID_DASH_STYLES.has(value);
+}
+
+/**
+ * Helper function to extract line dash options from WidgetDto.
+ * Reads CSDK-shaped `style.line.dashStyle` or Fusion `style.lineStyle.lineType`.
+ */
+function extractLineDashOptions(widgetStyle: CartesianWidgetStyle): Pick<LineStyleOptions, 'line'> {
+  const dashFromLine = widgetStyle.line?.dashStyle;
+  if (dashFromLine && isDashStyle(dashFromLine)) {
+    return { line: { dashStyle: dashFromLine } };
+  }
+
+  const lineType = widgetStyle.lineStyle?.lineType;
+  if (lineType && lineType in FUSION_LINE_TYPE_TO_DASH_STYLE) {
+    return { line: { dashStyle: FUSION_LINE_TYPE_TO_DASH_STYLE[lineType] } };
+  }
+
+  return {};
+}
+
+/**
  * Helper function to extract markers options from WidgetDto
  */
 function extractMarkersOptions(
@@ -447,22 +547,38 @@ function extractMarkersOptions(
   return {};
 }
 
-function extractCategoricalLabelsOptions(widgetStyle: WidgetStyle): { labels?: Labels } {
-  if ('labels' in widgetStyle && widgetStyle.labels) {
-    const { enabled, categories, percent, decimals, value } = widgetStyle.labels;
-    return {
-      labels: {
-        enabled,
-        categories,
-        percent,
-        decimals,
-        value,
-      },
-    };
+function extractCategoricalLabelsOptions<TSeriesLabels>(
+  widgetStyle: { labels?: CategoricalFusionLabels },
+  buildSeriesLabels: (labels: CategoricalFusionLabels) => TSeriesLabels,
+) {
+  if (!widgetStyle.labels) {
+    return {};
   }
 
-  return {};
+  const labels = widgetStyle.labels;
+  const { enabled, categories, percent, decimals, value } = labels;
+
+  return {
+    labels: {
+      enabled,
+      categories,
+      percent,
+      decimals,
+      value,
+    },
+    seriesLabels: buildSeriesLabels(labels),
+  };
 }
+
+const extractPieLabelsOptions = (
+  widgetStyle: PieWidgetStyle,
+): Pick<PieStyleOptions, 'labels' | 'seriesLabels'> =>
+  extractCategoricalLabelsOptions(widgetStyle, buildPieSeriesLabelsFromFusionLabels);
+
+const extractFunnelLabelsOptions = (
+  widgetStyle: FunnelWidgetStyle,
+): Pick<FunnelStyleOptions, 'labels' | 'seriesLabels'> =>
+  extractCategoricalLabelsOptions(widgetStyle, buildFunnelSeriesLabelsFromFusionLabels);
 
 /**
  * Common function to extract base cartesian chart style options (without navigator)
@@ -499,6 +615,7 @@ function extractLineChartStyleOptions(widget: WidgetDto): CartesianStyleOptions 
     ...extractNavigatorOptions(widgetStyle, widget.options),
     // Line-specific properties:
     ...extractLineWidthOptions(widgetStyle),
+    ...extractLineOptions(widgetStyle),
     ...extractMarkersOptions(widgetStyle),
   };
 }
@@ -520,6 +637,7 @@ function extractAreaChartStyleOptions(widget: WidgetDto): CartesianStyleOptions 
     ...extractNavigatorOptions(widgetStyle, widget.options),
     // Area-specific properties:
     ...extractLineWidthOptions(widgetStyle),
+    ...extractLineOptions(widgetStyle),
     ...extractMarkersOptions(widgetStyle),
   };
 }
@@ -638,7 +756,7 @@ function extractFunnelChartStyleOptions(
   return {
     ...(extractChartSubtype(widgetSubtype) as FunnelStyleOptions),
     ...extractLegendOptions(widgetStyle),
-    ...extractCategoricalLabelsOptions(widgetStyle),
+    ...extractFunnelLabelsOptions(widgetStyle),
     // Extract funnel-specific properties
     funnelSize: widgetStyle.size as FunnelSize,
     funnelType: widgetStyle.type as FunnelType,
@@ -658,7 +776,7 @@ function extractPieChartStyleOptions(
       ['pie/classic', 'pie/donut', 'pie/ring'].includes(chartSubtype.subtype) &&
       chartSubtype),
     ...extractLegendOptions(widgetStyle),
-    ...extractCategoricalLabelsOptions(widgetStyle),
+    ...extractPieLabelsOptions(widgetStyle),
     ...extractDataLimitsOptions(widgetStyle),
     ...(widgetStyle.convolution && {
       convolution: {

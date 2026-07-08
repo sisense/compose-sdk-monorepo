@@ -123,6 +123,87 @@ describe('measureFactory', () => {
         `measureFactory.median(DM.Commerce.Cost, 'measure name', '00.00')`,
       );
     });
+    test('measureFactory.stdev()', () => {
+      const m = measureFactory.stdev(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+      verifyMeasure(
+        m,
+        AggregationTypes.StandardDeviation,
+        `measureFactory.stdev(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
+    });
+    test('measureFactory.variance()', () => {
+      const m = measureFactory.variance(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+      verifyMeasure(
+        m,
+        AggregationTypes.Variance,
+        `measureFactory.variance(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
+    });
+    test('measureFactory.stdevp()', () => {
+      const m = measureFactory.stdevp(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+      verifyMeasure(
+        m,
+        AggregationTypes.StandardDeviationPop,
+        `measureFactory.stdevp(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
+      expect(m.jaql().jaql.agg).toBe('stdevp');
+    });
+    test('measureFactory.varp()', () => {
+      const m = measureFactory.varp(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+      verifyMeasure(
+        m,
+        AggregationTypes.VariancePop,
+        `measureFactory.varp(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
+      expect(m.jaql().jaql.agg).toBe('varp');
+    });
+    test('measureFactory.mode()', () => {
+      const m = measureFactory.mode(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
+      verifyMeasure(
+        m,
+        AggregationTypes.Mode,
+        `measureFactory.mode(DM.Commerce.Cost, 'measure name', '00.00')`,
+      );
+      expect(m.jaql().jaql.agg).toBe('mode');
+    });
+    test('measureFactory.percentile() emits PERCENTILE formula', () => {
+      const jaql = measureFactory.percentile(sampleAttribute, 0.9).jaql().jaql;
+      expect(jaql.formula).toBe('PERCENTILE([Cost],0.9)');
+      expect(jaql.context['[Cost]']).toMatchObject({ dim: '[Commerce.Cost]' });
+    });
+    test('measureFactory.quartile() emits QUARTILE formula', () => {
+      const jaql = measureFactory.quartile(sampleAttribute, 3).jaql().jaql;
+      expect(jaql.formula).toBe('QUARTILE([Cost],3)');
+      expect(jaql.context['[Cost]']).toMatchObject({ dim: '[Commerce.Cost]' });
+    });
+    const xAttr = new DimensionalAttribute('Revenue', '[Commerce.Revenue]', 'numeric-attribute');
+    test('measureFactory.covarp() emits population covariance formula', () => {
+      const jaql = measureFactory.covarp(xAttr, sampleAttribute).jaql().jaql;
+      expect(jaql.formula).toBe('avg([x]*[y]) - avg([x])*avg([y])');
+      expect(jaql.context['[x]']).toMatchObject({ dim: '[Commerce.Revenue]' });
+      expect(jaql.context['[y]']).toMatchObject({ dim: '[Commerce.Cost]' });
+    });
+    test('measureFactory.correlation() emits stable Pearson formula', () => {
+      const jaql = measureFactory.correlation(xAttr, sampleAttribute).jaql().jaql;
+      expect(jaql.formula).toBe(
+        '(avg([x]*[y]) - avg([x])*avg([y])) / sqrt((avg([x]*[x]) - avg([x])*avg([x]))*(avg([y]*[y]) - avg([y])*avg([y])))',
+      );
+    });
+    test('measureFactory.slope() emits regression-slope formula', () => {
+      const jaql = measureFactory.slope(sampleAttribute, xAttr).jaql().jaql;
+      expect(jaql.formula).toBe(
+        '(avg([x]*[y]) - avg([x])*avg([y])) / (avg([x]*[x]) - avg([x])*avg([x]))',
+      );
+      // dependentY -> [y], independentX -> [x]
+      expect(jaql.context['[x]']).toMatchObject({ dim: '[Commerce.Revenue]' });
+      expect(jaql.context['[y]']).toMatchObject({ dim: '[Commerce.Cost]' });
+    });
+    test('measureFactory.intercept() emits regression-intercept formula', () => {
+      const jaql = measureFactory.intercept(sampleAttribute, xAttr).jaql().jaql;
+      expect(jaql.formula).toBe(
+        'avg([y]) - ((avg([x]*[y]) - avg([x])*avg([y])) / (avg([x]*[x]) - avg([x])*avg([x])))*avg([x])',
+      );
+    });
     test('measureFactory.count()', () => {
       const m = measureFactory.count(sampleAttribute, sampleMeasureName, sampleMeasureFormat);
       verifyMeasure(

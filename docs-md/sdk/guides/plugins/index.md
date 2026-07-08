@@ -12,6 +12,7 @@ Set up your plugin development environment and explore the full toolchain refere
 
 - **[Plugin DevX Quickstart Guide](./plugin-devx-quickstart.md)** — Create, develop, and deploy a plugin from scratch. Covers scaffolding, dev server, build, and Fusion deployment.
 - **[Plugin DevX Reference](./plugin-devx-reference.md)** — Complete CLI reference, project structure, testing, framework integration examples, and Fusion deployment details.
+- **[AI-Driven Development](./ai-driven-development.md)** — Build plugins faster with AI coding agents using the bundled context files, pre-approved permissions, and `/design-custom-widget` skill.
 
 ## Tutorial
 

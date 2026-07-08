@@ -95,19 +95,21 @@ describe('DateLevels', () => {
   describe('all', () => {
     it('should return all date levels', () => {
       const allLevels = DateLevels.all;
-      expect(allLevels).toHaveLength(14);
+      expect(allLevels).toHaveLength(15);
       expect(allLevels).toContain(DateLevels.Years);
       expect(allLevels).toContain(DateLevels.Seconds);
       expect(allLevels).toContain(DateLevels.AggMinutesRoundTo1);
+      expect(allLevels).toContain(DateLevels.WeekOfYear);
     });
   });
 
   describe('dateOnly', () => {
     it('should return only date levels', () => {
       const dateLevels = DateLevels.dateOnly;
-      expect(dateLevels).toHaveLength(5);
+      expect(dateLevels).toHaveLength(6);
       expect(dateLevels).toContain(DateLevels.Years);
       expect(dateLevels).toContain(DateLevels.Days);
+      expect(dateLevels).toContain(DateLevels.WeekOfYear);
       expect(dateLevels).not.toContain(DateLevels.Hours);
       expect(dateLevels).not.toContain(DateLevels.Seconds);
     });

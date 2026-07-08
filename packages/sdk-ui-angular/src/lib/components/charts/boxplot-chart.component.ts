@@ -64,6 +64,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-boxplot-chart',
   template: `
     <csdk-chart

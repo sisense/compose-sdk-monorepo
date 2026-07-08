@@ -24,6 +24,7 @@ import {
  */
 export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps {
   const {
+    oid,
     title,
     dataSource,
     widgets: widgetModels,
@@ -34,6 +35,7 @@ export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps
     styleOptions,
   } = dashboardModel;
   return {
+    id: oid,
     title,
     defaultDataSource: dataSource,
     widgets: widgetModels.map(widgetModelTranslator.toWidgetProps),

@@ -69,6 +69,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-polar-chart',
   template: `
     <csdk-chart

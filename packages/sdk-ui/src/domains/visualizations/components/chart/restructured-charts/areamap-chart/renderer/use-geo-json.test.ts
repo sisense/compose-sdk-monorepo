@@ -50,6 +50,8 @@ vi.mock('@/infra/api/rest-api.js', () => ({
 
 // Mock the LocalStorage
 class LocalStorageMock {
+  [key: string]: unknown;
+
   getItem(key: string) {
     return this[key] ?? null;
   }

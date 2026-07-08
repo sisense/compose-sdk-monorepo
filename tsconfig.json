@@ -21,7 +21,6 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": false,
-    "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,

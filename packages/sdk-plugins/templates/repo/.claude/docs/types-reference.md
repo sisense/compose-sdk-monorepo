@@ -171,6 +171,50 @@ interface CustomVisualizationStyleOptions {
 
 ---
 
+## Persistence types
+
+See `.claude/docs/add-persistence.md` for the full pattern. These types let a visualization persist view-time state across reloads.
+
+### `CustomOptions` — the 4th type parameter of `CustomVisualizationProps`
+
+```ts
+import type { CustomVisualizationProps } from '@sisense/sdk-ui';
+
+// CustomVisualizationProps<DataOptions, StyleOptions, DataPoint, CustomOptions>
+//                                                                ^^^^^^^^^^^^^
+// Defaults to Record<string, unknown>. Define your own shape for type-safe customOptions:
+export interface CustomOptions {
+  lastOpenedPage?: number;
+}
+
+export type VisualizationProps = CustomVisualizationProps<
+  DataOptions,
+  StyleOptions,
+  AbstractDataPointWithEntries,
+  CustomOptions
+>;
+```
+
+This types two things: `props.customOptions` (arbitrary plugin runtime state, separate from styling) and the `customOptions` patch you pass to `props.onChange`.
+
+### `props.onChange` — persist a partial state patch
+
+```ts
+// On CustomVisualizationProps. Injected only inside a dashboard; undefined otherwise.
+onChange?: (update: {
+  styleOptions?: DeepPartial<StyleOptions>;   // configuration (same bag the design panel edits)
+  customOptions?: DeepPartial<CustomOptions>; // session state
+}) => void;
+```
+
+- **Always call with `?.`** — it is `undefined` outside a dashboard (dev preview, standalone).
+- **Partial patch** — pass only the keys that changed; they deep-merge into saved state (arrays/primitives replace; keys cannot be deleted by merge).
+- Distinct from the **design panel's** `onChange`, which takes the **full** `StyleOptions` object (not a patch).
+
+All persisted values must be **JSON-serializable**, same as `styleOptions`.
+
+---
+
 ## SDK Data types (from `@sisense/sdk-data`)
 
 ### `Attribute`

@@ -12,7 +12,7 @@ import type {
   PivotTableWidgetDrilldownSelectionsChangedEvent,
 } from '@/domains/widgets/change-events';
 import type { PivotTableDataPointEventHandler } from '@/props';
-import { PivotTableDrilldownOptions, PivotTableWidgetStyleOptions, WidgetAiOptions } from '@/types';
+import { PivotTableDrilldownOptions, PivotTableWidgetStyleOptions } from '@/types';
 
 import { WidgetConfig } from '../widget/types';
 
@@ -60,17 +60,9 @@ export interface PivotTableWidgetProps {
   styleOptions?: PivotTableWidgetStyleOptions;
 
   /**
-   * Configuration for AI-powered widget features such as automated narrative generation
-   * @alpha
-   * @category Widget
-   */
-  aiOptions?: WidgetAiOptions;
-
-  /**
-   * Widget configuration (e.g. header toolbar menu)
+   * Configuration of the widget
    *
    * @category Widget
-   * @internal
    */
   config?: WidgetConfig;
 

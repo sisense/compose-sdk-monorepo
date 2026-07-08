@@ -904,4 +904,137 @@ describe('translateQueryFromJSON', () => {
       expect(query.measures[1].name).toBe('$trend_Total Revenue');
     });
   });
+
+  describe('datetime query validation', () => {
+    it('should reject week filter with year breakdown on the same date column', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Commerce.Date.Years', 'DM.Commerce.Age Range'],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+        ],
+        filters: [
+          {
+            function: 'filterFactory.members',
+            args: ['DM.Commerce.Date.Weeks', ['2024-12-30T00:00:00']],
+          },
+        ],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON as QueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(false);
+      const errorResponse = result as NlqTranslationErrorResult;
+      const datetimeError = errorResponse.errors.find((error) => error.path === 'query');
+      expect(datetimeError).toBeDefined();
+      expect(datetimeError!.message).toContain('conflicts');
+      expect(datetimeError!.message).toContain('Commerce.Date');
+      expect(datetimeError!.message).not.toContain('[Commerce.Date');
+    });
+
+    it('should reject two filters on the same date column at different levels', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Commerce.Age Range'],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+        ],
+        filters: [
+          {
+            function: 'filterFactory.members',
+            args: ['DM.Commerce.Date.Weeks', ['2024-12-30T00:00:00']],
+          },
+          {
+            function: 'filterFactory.members',
+            args: ['DM.Commerce.Date.Months', ['2024-01-01T00:00:00']],
+          },
+        ],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON as QueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(false);
+      const errorResponse = result as NlqTranslationErrorResult;
+      const datetimeError = errorResponse.errors.find((error) => error.path === 'filters');
+      expect(datetimeError).toBeDefined();
+      expect(datetimeError!.message).toContain('conflicts');
+    });
+
+    it('should reject two dimensions on the same date column at different granularities (D3)', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Commerce.Date.Years', 'DM.Commerce.Date.Months'],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+        ],
+        filters: [],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON as QueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(false);
+      const errorResponse = result as NlqTranslationErrorResult;
+      const datetimeError = errorResponse.errors.find((error) => error.path === 'dimensions');
+      expect(datetimeError).toBeDefined();
+      expect(datetimeError!.message).toContain('conflicts');
+      expect(datetimeError!.message).toContain('Commerce.Date');
+    });
+
+    it('should reject highlight granularity mismatch with dimension breakdown', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Commerce.Date.Years'],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+        ],
+        filters: [],
+        highlights: [
+          {
+            function: 'filterFactory.members',
+            args: ['DM.Commerce.Date.Weeks', ['2024-12-30T00:00:00']],
+          },
+        ],
+      };
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON as QueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(false);
+      const errorResponse = result as NlqTranslationErrorResult;
+      const datetimeError = errorResponse.errors.find((error) => error.path === 'query');
+      expect(datetimeError).toBeDefined();
+      expect(datetimeError!.message).toContain('conflicts');
+    });
+  });
 });

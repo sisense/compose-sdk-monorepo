@@ -4,7 +4,7 @@ title: PivotTable
 
 # Function PivotTable
 
-> **PivotTable**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **PivotTable**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Pivot table with pagination.
 
@@ -16,7 +16,7 @@ Pivot table with pagination.
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Pivot Table component
 

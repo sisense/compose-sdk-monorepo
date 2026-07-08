@@ -22,7 +22,7 @@
       "react-dom": ["node_modules/preact/compat/"]
     },
     "types": ["node"],
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["../../node_modules/@types", "node_modules/@types"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["src/__demo__/**"],

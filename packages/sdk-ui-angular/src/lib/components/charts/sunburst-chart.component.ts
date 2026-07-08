@@ -70,6 +70,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-sunburst-chart',
   template: `
     <csdk-chart

@@ -482,7 +482,7 @@ describe('getJaqlQueryPayload (regular query)', () => {
       expect(payload.dashboard).toBeUndefined();
     });
 
-    it('should include ungroup when specified and no measures', () => {
+    it('should include ungroup when specified', () => {
       const queryDescription: QueryDescription = {
         ...baseQueryDescription,
         ungroup: true,
@@ -493,12 +493,24 @@ describe('getJaqlQueryPayload (regular query)', () => {
       expect(payload.ungroup).toBe(true);
     });
 
-    it('should not include ungroup when measures are present', () => {
+    it('should include ungroup when specified even with measures present', () => {
       const measure = new DimensionalBaseMeasure('sum Cost', costAttribute, 'sum');
       const queryDescription: QueryDescription = {
         ...baseQueryDescription,
         measures: [measure],
         ungroup: true,
+      };
+
+      const payload = getJaqlQueryPayload(queryDescription, false);
+
+      expect(payload.ungroup).toBe(true);
+    });
+
+    it('should not include ungroup when not specified', () => {
+      const measure = new DimensionalBaseMeasure('sum Cost', costAttribute, 'sum');
+      const queryDescription: QueryDescription = {
+        ...baseQueryDescription,
+        measures: [measure],
       };
 
       const payload = getJaqlQueryPayload(queryDescription, false);

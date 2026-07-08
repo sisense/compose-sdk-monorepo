@@ -4,7 +4,7 @@ title: StreamgraphChart
 
 # Function StreamgraphChart
 
-> **StreamgraphChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **StreamgraphChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component that displays a streamgraph chart.
 
@@ -48,6 +48,6 @@ function RevenueByCategoryStreamgraph() {
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Streamgraph Chart component

@@ -12,7 +12,6 @@ import {
 import { useExcelQueryFileLoader } from '@/domains/widgets/hooks/use-excel-query-file-loader.js';
 import { useWithExcelDownloadMenuItem } from '@/domains/widgets/hooks/use-with-excel-download-menu-item.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
-import { useAppSettings } from '@/shared/hooks/use-app-settings.js';
 import type { GenericDataOptions } from '@/types';
 
 import type { CustomWidgetProps } from './types.js';
@@ -53,8 +52,8 @@ export type UseCustomWidgetExcelDownloadResult = {
 };
 
 /**
- * Enhances a custom widget header with Excel download menu items when the server feature
- * **`exportingXlsxV2`** is active. **Repeat rows** sets `mergeRows: false`; **Merge rows** sets `mergeRows: true`.
+ * Enhances a custom widget header with Excel download menu items when the widget/dashboard allows download.
+ * **Repeat rows** sets `mergeRows: false`; **Merge rows** sets `mergeRows: true`.
  *
  * @param props - Custom widget data plus `baseHeaderConfig` (typically from {@link useCustomWidgetCsvDownload}).
  * @returns Header config for {@link WidgetContainer}
@@ -73,8 +72,6 @@ export function useCustomWidgetExcelDownload(
     filters,
   } = props;
   const excelLoader = useExcelQueryFileLoader();
-  const appSettings = useAppSettings();
-  const isExportingXlsxV2FeatureOn = appSettings?.serverFeatures?.exportingXlsxV2?.active === true;
 
   const excelQueryParams = useMemo(() => {
     const { dimensions, measures } = extractDimensionsAndMeasuresForExcelExport(dataOptions);
@@ -93,9 +90,7 @@ export function useCustomWidgetExcelDownload(
   const isCustomWidgetAllowExcelDownload =
     excelQueryParams.dimensions.length > 0 || excelQueryParams.measures.length > 0;
   const isExcelDownloadEnabled =
-    !!config?.actions?.downloadExcel?.enabled &&
-    isExportingXlsxV2FeatureOn &&
-    isCustomWidgetAllowExcelDownload;
+    !!config?.actions?.downloadExcel?.enabled && isCustomWidgetAllowExcelDownload;
 
   const onDownloadExcel = useCallback(
     (mergeRows: boolean) => {

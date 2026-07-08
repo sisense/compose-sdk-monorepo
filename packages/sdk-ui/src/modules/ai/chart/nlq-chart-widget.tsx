@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo, useState } from 'react';
 
 import { Data, Filter, FilterRelations, MetadataItem } from '@sisense/sdk-data';
 import upperFirst from 'lodash-es/upperFirst';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { useCommonFilters } from '@/domains/dashboarding/common-filters/use-common-filters';
 import { ChartWidget } from '@/domains/widgets/components/chart-widget';

@@ -46,7 +46,14 @@ Factory function `measureFactory.sum()` is used to create a measure that sums th
 - [max](functions/function.max.md)
 - [median](functions/function.median.md)
 - [min](functions/function.min.md)
+- [mode](functions/function.mode.md)
+- [percentile](functions/function.percentile.md)
+- [quartile](functions/function.quartile.md)
+- [stdev](functions/function.stdev.md)
+- [stdevp](functions/function.stdevp.md)
 - [sum](functions/function.sum.md)
+- [variance](functions/function.variance.md)
+- [varp](functions/function.varp.md)
 
 ### Arithmetic
 
@@ -91,3 +98,10 @@ Factory function `measureFactory.sum()` is used to create a measure that sums th
 - [forecast](functions/function.forecast.md)
 - [measuredValue](functions/function.measuredValue.md)
 - [trend](functions/function.trend.md)
+
+### Statistical
+
+- [correlation](functions/function.correlation.md)
+- [covarp](functions/function.covarp.md)
+- [intercept](functions/function.intercept.md)
+- [slope](functions/function.slope.md)

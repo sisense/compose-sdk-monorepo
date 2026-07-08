@@ -10,7 +10,7 @@ import {
   Measure,
   QueryResultData,
 } from '@sisense/sdk-data';
-import { PivotClient } from '@sisense/sdk-pivot-query-client';
+import { PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import type { Mocked } from 'vitest';
 
@@ -35,7 +35,7 @@ import { JaqlQueryPayload, PivotQueryDescription, QueryDescription } from './typ
 
 describe('DimensionalQueryClient', () => {
   let httpClientMock: Mocked<HttpClient>;
-  let pivotClientMock: Mocked<PivotClient>;
+  let pivotClientMock: Mocked<PivotQueryClient>;
   let queryClient: DimensionalQueryClient;
 
   beforeEach(() => {
@@ -45,7 +45,7 @@ describe('DimensionalQueryClient', () => {
     } as unknown as Mocked<HttpClient>;
     pivotClientMock = {
       queryData: vi.fn().mockResolvedValue(EMPTY_PIVOT_QUERY_RESULT_DATA),
-    } as unknown as Mocked<PivotClient>;
+    } as unknown as Mocked<PivotQueryClient>;
     queryClient = new DimensionalQueryClient(httpClientMock, pivotClientMock);
   });
 

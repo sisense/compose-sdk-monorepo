@@ -41,8 +41,6 @@ type BuildDestinationFeature = Feature<
 type VersionHistoryFeature = Feature<'versionHistory'>;
 type EmbedCodeFeature = Feature<'embedCode'>;
 type LiveCustomColumnFeature = Feature<'liveCustomColumn'>;
-type ExportingEngineV2Feature = Feature<'exportingEngineV2'>;
-type ExportingXlsxV2Feature = Feature<'exportingXlsxV2'>;
 type ExportingCsvFeature = Feature<'exportingCsv', { localized: boolean }>;
 type ConnectionManagementFeature = Feature<
   'connectionManagement',
@@ -158,8 +156,6 @@ export type Features = (
   | VersionHistoryFeature
   | EmbedCodeFeature
   | LiveCustomColumnFeature
-  | ExportingEngineV2Feature
-  | ExportingXlsxV2Feature
   | ExportingCsvFeature
   | ConnectionManagementFeature
   | SisenseLightFeature

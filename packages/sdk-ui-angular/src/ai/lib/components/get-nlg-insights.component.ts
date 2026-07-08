@@ -69,6 +69,7 @@ export class ExampleComponent {
  * @group Generative AI
  */
 @Component({
+  standalone: false,
   selector: 'csdk-get-nlg-insights',
   template,
   styles,

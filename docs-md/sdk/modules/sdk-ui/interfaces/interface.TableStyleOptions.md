@@ -22,6 +22,27 @@ Columns options
 >
 > Alternating color for columns
 >
+> ##### `columns.maxWidth`
+>
+> **maxWidth**?: `number`
+>
+> Maximum column width in pixels when resizing.
+> Default value is 350.
+>
+> ##### `columns.minWidth`
+>
+> **minWidth**?: `number`
+>
+> Minimum column width in pixels when resizing.
+> Default value is 120.
+>
+> ##### `columns.resizable`
+>
+> **resizable**?: `boolean`
+>
+> Enables interactive resizing of column widths by dragging the column border.
+> Default value is `true`. Set to `false` to disable.
+>
 > ##### `columns.width`
 >
 > **width**?: `"auto"` \| `"content"`

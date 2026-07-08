@@ -482,7 +482,7 @@ export const dashboardWithSharedFormulas = {
       instanceType: 'owner',
     },
   ],
-} as DashboardDto;
+} as unknown as DashboardDto;
 
 export const sharedFormulasDictionary = {
   'e78303f1-820c-4a02-91ab-6d2b8700abeb': {

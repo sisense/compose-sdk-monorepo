@@ -8,6 +8,56 @@ Widgets panel configuration
 
 ## Properties
 
+### actions
+
+> **actions**?: `object`
+
+Configuration for actions available on all widgets in the panel, such as
+downloading each widget's data.
+
+#### Type declaration
+
+> ##### `actions.downloadCsv`
+>
+> **downloadCsv**?: `object`
+>
+> Configuration for the "Download as CSV" action on all widgets in the panel,
+> which adds an item to each widget's header menu that exports the widget's
+> underlying data as a CSV file.
+>
+> ###### Example
+>
+> Enable CSV download for every widget in a dashboard:
+> ```ts
+> const dashboardConfig: DashboardConfig = {
+> widgetsPanel: {
+> actions: {
+> downloadCsv: {
+> enabled: true,
+> },
+> },
+> },
+> };
+> ```
+>
+> > ###### `downloadCsv.enabled`
+> >
+> > **enabled**?: `boolean`
+> >
+> > Whether the "Download as CSV" action is enabled for all widgets in the panel.
+> >
+> > ###### Default
+> >
+> > ```ts
+> > false
+> > ```
+> >
+> >
+>
+>
+
+***
+
 ### editMode
 
 > **editMode**?: [`EditModeConfig`](interface.EditModeConfig.md)

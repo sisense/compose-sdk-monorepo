@@ -4,7 +4,7 @@ title: Dashboard
 
 # Function Dashboard
 
-> **Dashboard**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **Dashboard**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 React component that renders a dashboard whose elements are customizable. It includes internal logic of applying common filters to widgets.
 
@@ -18,7 +18,7 @@ React component that renders a dashboard whose elements are customizable. It inc
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 ## Example
 

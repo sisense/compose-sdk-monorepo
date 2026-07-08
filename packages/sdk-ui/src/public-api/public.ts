@@ -53,6 +53,21 @@ export {
   type DashboardWidgetsPanelIsEditingChangedEvent,
   type DashboardWidgetsDeletedEvent,
 } from '../domains/dashboarding';
+// Dashboard header items configuration
+export {
+  DashboardHeaderTargets,
+  type DashboardHeaderTarget,
+} from '../domains/dashboarding/components/dashboard-header/dashboard-header-targets';
+export type {
+  DashboardHeaderConfig,
+  DashboardHeaderItem,
+  DashboardHeaderItemComponent,
+  DashboardHeaderItemComponentProps,
+  DashboardHeaderItemPosition,
+  DashboardHeaderItemSize,
+  DashboardHeaderItemsTransform,
+  DashboardResolvedHeaderItem,
+} from '../domains/dashboarding/components/dashboard-header/dashboard-header-config';
 /**
  * Jump To Dashboard (JTD) configuration types
  *
@@ -128,11 +143,16 @@ export { type TextWidgetProps } from '../domains/widgets/components/text-widget'
 export {
   Widget,
   type WidgetProps,
+  type WidgetConfig,
   type WidgetType,
   type WithCommonWidgetProps,
 } from '../domains/widgets/components/widget';
 export { type CustomWidgetProps } from '../domains/widgets/components/custom-widget';
 export { DrilldownBreadcrumbs } from '../domains/drilldown/components/drilldown-breadcrumbs';
+export type {
+  WidgetNarrativeConfig,
+  WidgetNarrativeDisplayLocation,
+} from '../domains/narrative/core/widget-narrative-config';
 
 // Custom Widgets
 export type {

@@ -172,8 +172,9 @@ export class QueryTranslator {
       jaql: { level },
       format: { mask } = {},
     } = item;
-    if (level && mask?.[level]) {
-      return { ...item, format: { mask: { [level]: mask[level] } } };
+    const maskRecord = mask as Record<string, string> | undefined;
+    if (level && maskRecord?.[level]) {
+      return { ...item, format: { mask: { [level]: maskRecord[level] } } };
     }
     return item;
   }
@@ -224,7 +225,7 @@ export class QueryTranslator {
     const dataOptions = Object.entries(axesMapping).reduce((acc, [key, items]) => {
       acc[key] = items.map((item) => normalizeAnyColumn(item));
       return acc;
-    }, {});
+    }, {} as Record<string, unknown>);
 
     // Remove chartFamily from chartRecommendations and rename axesMapping to dataOptions
     return { chartType, dataOptions, styleOptions };

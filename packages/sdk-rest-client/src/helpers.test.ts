@@ -20,7 +20,7 @@ describe('appendHeaders', () => {
   });
 
   it('should append headers to an existing object representing headers', () => {
-    const existingHeaders = {
+    const existingHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
     };
 
@@ -38,7 +38,7 @@ describe('appendHeaders', () => {
   });
 
   it('should append headers to an existing array representing headers', () => {
-    const existingHeaders = {
+    const existingHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
     };
 

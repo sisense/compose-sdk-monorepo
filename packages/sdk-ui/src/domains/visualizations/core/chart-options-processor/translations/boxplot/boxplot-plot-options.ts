@@ -13,7 +13,9 @@ const createDataLabelsFormatter = (seriesLabels: SeriesLabels | undefined) => {
     _options?: DataLabelsOptions,
     valueProp?: string,
   ) {
-    const value = valueProp ? (this.point[valueProp] as number) : undefined;
+    const value = valueProp
+      ? ((this.point as Record<string, unknown>)[valueProp] as number)
+      : undefined;
     if (value === undefined || isNaN(value)) {
       return '';
     }

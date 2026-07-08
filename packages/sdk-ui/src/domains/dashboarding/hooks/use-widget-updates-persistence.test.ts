@@ -21,6 +21,15 @@ function makeWidget(id: string, navigatorEnabled = true) {
   } as never;
 }
 
+function makeTableWidget(id: string, resizable = true) {
+  return {
+    id,
+    widgetType: 'chart' as const,
+    chartType: 'table' as const,
+    styleOptions: resizable ? {} : { columns: { resizable: false } },
+  } as never;
+}
+
 function makeCustomWidget(
   id: string,
   customOptions: Record<string, unknown> = {},
@@ -182,6 +191,74 @@ describe('useWidgetUpdatesPersistence', () => {
     });
 
     expect(setWidgets).toHaveBeenCalled();
+  });
+
+  it('injects onColumnsResize that emits a columns.widths update for table widgets', () => {
+    const persistence = makePersistence();
+    const setWidgets = vi.fn();
+    const widgets = [makeTableWidget('table-a')];
+
+    const { result } = renderHook(() =>
+      useWidgetUpdatesPersistence(widgets, setWidgets, persistence),
+    );
+    const columns = (
+      result.current.widgets[0] as never as {
+        styleOptions: { columns: { onColumnsResize: (widths: number[]) => void } };
+      }
+    ).styleOptions.columns;
+    expect(typeof columns.onColumnsResize).toBe('function');
+
+    act(() => {
+      columns.onColumnsResize([120, 200]);
+    });
+
+    expect(setWidgets).toHaveBeenCalled();
+    expect(persistence.updateWidget).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+
+    expect(persistence.updateWidget).toHaveBeenCalledWith('table-a', {
+      styleOptions: { columns: { widths: [120, 200] } },
+    });
+  });
+
+  it('does not inject onColumnsResize when resizable is explicitly false', () => {
+    const widgets = [makeTableWidget('table-a', false)];
+
+    const { result } = renderHook(() =>
+      useWidgetUpdatesPersistence(widgets, vi.fn(), makePersistence()),
+    );
+
+    expect(
+      (result.current.widgets[0] as { styleOptions?: { columns?: { onColumnsResize?: unknown } } })
+        .styleOptions?.columns?.onColumnsResize,
+    ).toBeUndefined();
+  });
+
+  it('optimistically applies table column widths to local widget state', () => {
+    let stored = [makeTableWidget('table-a')];
+    const setWidgets = (updater: (prev: never[]) => never[]) => {
+      stored = updater(stored as never) as never;
+    };
+
+    const { result } = renderHook(() =>
+      useWidgetUpdatesPersistence(stored, setWidgets as never, makePersistence()),
+    );
+
+    act(() => {
+      (
+        result.current.widgets[0] as never as {
+          styleOptions: { columns: { onColumnsResize: (widths: number[]) => void } };
+        }
+      ).styleOptions.columns.onColumnsResize([150, 250]);
+    });
+
+    expect(
+      (stored[0] as { styleOptions: { columns: { widths?: number[] } } }).styleOptions.columns
+        .widths,
+    ).toEqual([150, 250]);
   });
 
   it('leaves widgets without a navigator unchanged', () => {

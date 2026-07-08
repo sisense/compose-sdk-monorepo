@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 import { DeepRequired } from 'ts-essentials';
 
 import { BackgroundFilterIcon } from '@/domains/filters/components/icons/background-filter-icon';

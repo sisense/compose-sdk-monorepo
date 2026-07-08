@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import DOMPurify from 'dompurify';
 import type {
   Feature as GeoJsonFeature,
   FeatureCollection as GeoJsonFeatureCollection,
@@ -147,7 +148,7 @@ function getTooltipContent(
 ): string {
   const featureInfo = featureStylesDictionary[feature.id!];
   const { formattedOriginalValue } = featureInfo.geoDataElement || {};
-  return `
+  const html = `
   <div>
     <span>${featureInfo.displayName}<span>
     ${
@@ -156,6 +157,10 @@ function getTooltipContent(
         : ''
     }
   </div>`;
+
+  // displayName/formattedOriginalValue originate from query data and are interpolated into HTML
+  // fed to Leaflet's bindTooltip, which renders it via innerHTML - sanitize to prevent stored XSS.
+  return DOMPurify.sanitize(html);
 }
 
 function createMap(element: HTMLElement, mapType: AreamapType): Leaflet.Map {

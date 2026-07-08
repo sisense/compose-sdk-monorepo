@@ -4,7 +4,7 @@ title: SankeyChart
 
 # Function SankeyChart <Badge type="beta" text="Beta" />
 
-> **SankeyChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **SankeyChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component that visualizes flow and volume between nodes using a Sankey diagram.
 Node width represents the total flow through that node; link width represents the flow
@@ -30,10 +30,10 @@ between two connected nodes.
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `props` | [`SankeyChartProps`](interface.SankeyChartProps.md) | Sankey chart properties |
+| `props` | [`SankeyChartProps`](../interfaces/interface.SankeyChartProps.md) | Sankey chart properties |
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Sankey Chart component

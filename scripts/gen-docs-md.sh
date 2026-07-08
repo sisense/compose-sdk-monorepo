@@ -57,6 +57,7 @@ general_subgroups=(
   "Formatting:formatting:Utilities for formatting numbers, dates, and query result data sets."
   "Styling:styling:Utilities for creating and inspecting color gradients used in chart styling."
   "Primitives:primitives:General-purpose presentational primitive components."
+  "Helpers:helpers:General-purpose hooks and utilities for building custom components and plugins."
 )
 for pkg in sdk-ui sdk-ui-angular sdk-ui-vue; do
   pkg_dir="${docs_path}/modules/${pkg}"
@@ -113,7 +114,7 @@ for pkg in sdk-ui sdk-ui-angular sdk-ui-vue; do
         if (!injected) { while ((getline line < gsf) > 0) print line; injected=1 }
         skip=1; next
       }
-      /^## (Styling|Primitives)$/ { skip=1; next }
+      /^## (Styling|Primitives|Helpers)$/ { skip=1; next }
       /^## / && skip              { skip=0 }
       !skip                       { print }
     ' "${index_file}" > "${index_file}.tmp"

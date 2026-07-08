@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import deepMerge from 'ts-deepmerge';
+import { merge as deepMerge } from 'ts-deepmerge';
 
 import { AnyObject } from '@/shared/utils/utility-types';
 

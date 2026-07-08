@@ -5,7 +5,9 @@ import { ArgInput, DIMENSIONAL_NAME_PREFIX, isFunctionCall, ProcessedArg } from 
 import { getAttributeTypeDisplayString, isDateLevelAttribute } from '../utils/attribute-helpers.js';
 import {
   createAttributeFromName,
+  type CreateAttributeFromNameOptions,
   createDateDimensionFromName,
+  REQUIRE_EXPLICIT_DATE_LEVEL,
   type SchemaIndex,
 } from '../utils/schema-index.js';
 import { processNode } from './process-node.js';
@@ -48,11 +50,12 @@ function processAttributeString(
   dataSource: JaqlDataSourceForDto,
   schemaIndex: SchemaIndex,
   errorPrefix: string,
+  options?: CreateAttributeFromNameOptions,
 ): ProcessedArg {
   // Already has DM prefix - validate and create attribute
   if (attrStr.startsWith(DIMENSIONAL_NAME_PREFIX)) {
     try {
-      return createAttributeFromName(attrStr, dataSource, schemaIndex);
+      return createAttributeFromName(attrStr, dataSource, schemaIndex, options);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(`${errorPrefix}: ${errorMessage}`);
@@ -159,7 +162,13 @@ export function processArg(input: ArgInput): ProcessedArg {
           `${errorPrefix}: Expected attribute string, got ${typeof rawArg}. Example: 'DM.Commerce.Revenue'`,
         );
       }
-      return processAttributeString(rawArg, dataSource, schemaIndex, errorPrefix);
+      return processAttributeString(
+        rawArg,
+        dataSource,
+        schemaIndex,
+        errorPrefix,
+        REQUIRE_EXPLICIT_DATE_LEVEL,
+      );
 
     case 'Attribute[]':
       if (!Array.isArray(rawArg)) {
@@ -171,7 +180,13 @@ export function processArg(input: ArgInput): ProcessedArg {
         if (typeof item !== 'string') {
           throw new Error(`${errorPrefix}[${i}]: Expected attribute string, got ${typeof item}`);
         }
-        return processAttributeString(item, dataSource, schemaIndex, `${errorPrefix}[${i}]`);
+        return processAttributeString(
+          item,
+          dataSource,
+          schemaIndex,
+          `${errorPrefix}[${i}]`,
+          REQUIRE_EXPLICIT_DATE_LEVEL,
+        );
       });
 
     case 'Measure':
@@ -278,6 +293,7 @@ export function processArg(input: ArgInput): ProcessedArg {
         dataSource,
         schemaIndex,
         errorPrefix,
+        REQUIRE_EXPLICIT_DATE_LEVEL,
       ) as LevelAttribute;
       // Validate that the attribute is actually a date level attribute
       if (!isDateLevelAttribute(levelAttribute)) {

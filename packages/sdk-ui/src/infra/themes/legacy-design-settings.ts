@@ -1,4 +1,4 @@
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import {
   DEFAULT_DASHBOARD_BORDER_COLOR,

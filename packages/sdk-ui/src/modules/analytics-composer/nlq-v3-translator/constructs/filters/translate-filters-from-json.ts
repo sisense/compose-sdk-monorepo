@@ -2,6 +2,7 @@ import {
   Filter,
   filterFactory,
   FilterRelations,
+  FilterRelationsNode,
   isLevelAttribute,
   isMembersFilter,
   mergeFiltersOrFilterRelations,
@@ -14,6 +15,8 @@ import {
   NlqTranslationResult,
 } from '../../../types.js';
 import { processNode } from '../../shared/expression/process-node.js';
+import { validateNoDuplicateMembers } from '../../shared/validation/datetime-member-validation.js';
+import { normalizeMemberForGranularity } from '../../shared/validation/normalize-member-for-granularity.js';
 import {
   FiltersFunctionCallInput,
   FiltersInput,
@@ -24,17 +27,16 @@ import {
   isFunctionCallArray,
 } from '../../types.js';
 
-function postProcessFilter(filter: Filter) {
+const UNKNOWN_ERROR_MSG = 'Unknown error';
+
+function postProcessFilter(filter: Filter, pathPrefix = 'filters') {
   const { attribute, config } = filter;
   if (isMembersFilter(filter) && isLevelAttribute(attribute)) {
     const { granularity } = attribute;
-    // Convert values to ISO 8601 string -- e.g., 2011 to "2011-01-01"
-    const members = filter.members.map((member) => {
-      if (granularity === 'Years' && !isNaN(Number(member))) {
-        return `${member}-01-01T00:00:00`;
-      }
-      return member;
-    });
+    const members = filter.members.map((member) =>
+      normalizeMemberForGranularity(String(member), granularity),
+    );
+    validateNoDuplicateMembers(members, pathPrefix);
 
     // Simplify config to remove default values before passing to filterFactory.members()
     // This ensures composeCode doesn't include config when all values match defaults
@@ -46,16 +48,83 @@ function postProcessFilter(filter: Filter) {
   return filter;
 }
 
-function postProcessFilters(filters: (Filter | FilterRelations)[]): Filter[] | FilterRelations {
-  let mergedFilters: Filter[] | FilterRelations = [];
-  for (const filter of filters) {
-    if (isFilterRelationsElement(filter)) {
-      mergedFilters = mergeFiltersOrFilterRelations(filter, mergedFilters);
-    } else {
-      mergedFilters = mergeFiltersOrFilterRelations([postProcessFilter(filter)], mergedFilters);
-    }
+function isFilterRelationsNode(node: FilterRelationsNode): node is FilterRelations {
+  return (
+    !Array.isArray(node) &&
+    'operator' in node &&
+    (node.operator === 'AND' || node.operator === 'OR') &&
+    'left' in node &&
+    'right' in node
+  );
+}
+
+function postProcessFilterRelationsNode(
+  node: FilterRelationsNode,
+  pathPrefix: string,
+): FilterRelationsNode {
+  if (Array.isArray(node)) {
+    return node.map((item, index) =>
+      postProcessFilterRelationsNode(item, `${pathPrefix}[${index}]`),
+    ) as Filter[];
   }
-  return mergedFilters ?? [];
+  if (isFilterRelationsNode(node)) {
+    return {
+      ...node,
+      left: postProcessFilterRelationsNode(node.left, `${pathPrefix}.left`),
+      right: postProcessFilterRelationsNode(node.right, `${pathPrefix}.right`),
+    };
+  }
+  return postProcessFilter(node, pathPrefix);
+}
+
+function postProcessFilterRelations(
+  filterRelations: FilterRelations,
+  pathPrefix: string,
+): FilterRelations {
+  return {
+    ...filterRelations,
+    left: postProcessFilterRelationsNode(filterRelations.left, `${pathPrefix}.left`),
+    right: postProcessFilterRelationsNode(filterRelations.right, `${pathPrefix}.right`),
+  };
+}
+
+function postProcessFilters(
+  filters: (Filter | FilterRelations)[],
+  filtersJSON: FiltersFunctionCallInput['data'],
+  pathPrefix = 'filters',
+): { data: Filter[] | FilterRelations | null; errors: NlqTranslationError[] } {
+  const errors: NlqTranslationError[] = [];
+  let mergedFilters: Filter[] | FilterRelations = [];
+
+  filters.forEach((filter, index) => {
+    const itemPath = `${pathPrefix}[${index}]`;
+    if (isFilterRelationsElement(filter)) {
+      try {
+        mergedFilters = mergeFiltersOrFilterRelations(
+          postProcessFilterRelations(filter, itemPath),
+          mergedFilters,
+        );
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : UNKNOWN_ERROR_MSG;
+        errors.push({ path: itemPath, input: filtersJSON[index], message: errorMsg });
+      }
+      return;
+    }
+    try {
+      mergedFilters = mergeFiltersOrFilterRelations(
+        [postProcessFilter(filter, itemPath)],
+        mergedFilters,
+      );
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : UNKNOWN_ERROR_MSG;
+      errors.push({ path: itemPath, input: filtersJSON[index], message: errorMsg });
+    }
+  });
+
+  return {
+    data: errors.length > 0 ? null : mergedFilters,
+    errors,
+  };
 }
 
 /**
@@ -120,7 +189,7 @@ export const translateFiltersFromJSONFunctionCall = (
         filters.push(filter);
       }
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      const errorMsg = error instanceof Error ? error.message : UNKNOWN_ERROR_MSG;
       errors.push({ ...context, message: errorMsg });
     }
   });
@@ -129,7 +198,12 @@ export const translateFiltersFromJSONFunctionCall = (
     return { success: false, errors };
   }
 
-  return { success: true, data: postProcessFilters(filters) };
+  const postProcessResult = postProcessFilters(filters, filtersJSON);
+  if (postProcessResult.errors.length > 0) {
+    return { success: false, errors: postProcessResult.errors };
+  }
+
+  return { success: true, data: postProcessResult.data! };
 };
 
 /**
@@ -190,10 +264,10 @@ export const translateHighlightsFromJSONFunctionCall = (
       if (!isFilterElement(filter)) {
         errors.push({ ...context, message: `Invalid filter JSON` });
       } else {
-        results.push(postProcessFilter(filter));
+        results.push(postProcessFilter(filter, `highlights[${index}]`));
       }
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      const errorMsg = error instanceof Error ? error.message : UNKNOWN_ERROR_MSG;
       errors.push({ ...context, message: errorMsg });
     }
   });

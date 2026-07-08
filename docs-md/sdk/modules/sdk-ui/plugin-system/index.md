@@ -18,4 +18,5 @@ Types for building and registering custom visualization plugins
 - [DesignPanel](type-alias.DesignPanel.md) <Badge type="beta" text="Beta" />
 - [DesignPanelProps](interface.DesignPanelProps.md) <Badge type="beta" text="Beta" />
 - [Plugin](type-alias.Plugin.md) <Badge type="beta" text="Beta" />
+- [VisualizationStateUpdate](type-alias.VisualizationStateUpdate.md) <Badge type="beta" text="Beta" />
 - [WidgetPlugin](interface.WidgetPlugin.md) <Badge type="beta" text="Beta" />

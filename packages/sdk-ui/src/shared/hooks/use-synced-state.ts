@@ -6,7 +6,8 @@ import isFunction from 'lodash-es/isFunction';
 /**
  * Options for {@link useSyncedState}.
  *
- * @alpha
+ * @group Helpers
+ * @beta
  */
 export type UseSyncedStateOptions<T> = {
   /**
@@ -27,11 +28,8 @@ export type UseSyncedStateOptions<T> = {
  *
  * @param syncValue - The external value to synchronize with. When this value changes (as
  *   determined by `syncCompareFn`), the local state is updated to match it.
- * @param options - Optional configuration object.
- * @param options.onLocalStateChange - Callback invoked whenever the local state is updated via
- *   the returned setter (not triggered by external `syncValue` synchronization).
- * @param options.syncCompareFn - Custom equality function used to detect changes in `syncValue`.
- *   Defaults to a deep equality check via `isEqual` from lodash-es. See {@link UseSyncedStateOptions}.
+ * @param options - Optional configuration object. See {@link UseSyncedStateOptions} for the
+ *   `onLocalStateChange` and `syncCompareFn` fields.
  * @returns A tuple of `[localState, setState]` — the current local state and a setter that
  *   both updates state and fires `onLocalStateChange`.
  * @example
@@ -40,7 +38,8 @@ export type UseSyncedStateOptions<T> = {
  *   onLocalStateChange: (s) => console.log('local update', s),
  * });
  * ```
- * @alpha
+ * @group Helpers
+ * @beta
  */
 export function useSyncedState<T>(
   syncValue: T,

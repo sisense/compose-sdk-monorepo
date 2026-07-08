@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useRef } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useRef } from 'react';
 
 import { TrackingEventDetails } from '@sisense/sdk-tracking';
 
@@ -17,14 +17,29 @@ interface ComponentInitEventDetails extends TrackingEventDetails {
 
 type TrackingComponentConfig = TrackingDecoratorConfig;
 
-const TrackingContext = createContext(false);
+type TrackingContextValue = {
+  skipNested: boolean;
+};
+
+const TrackingContext = createContext<TrackingContextValue>({
+  skipNested: false,
+});
 export const TrackingContextProvider = ({
   skipNested = true,
   children,
 }: {
   children: ReactNode;
   skipNested?: boolean;
-}) => <TrackingContext.Provider value={skipNested}>{children}</TrackingContext.Provider>;
+}) => {
+  const contextValue = useMemo(() => ({ skipNested: skipNested }), [skipNested]);
+  return <TrackingContext.Provider value={contextValue}>{children}</TrackingContext.Provider>;
+};
+
+/**
+ * Reads whether the current subtree is already inside a tracking context — i.e. an ancestor
+ * component is being tracked, so nested components must not fire their own init event.
+ */
+export const useTrackingContext = () => useContext(TrackingContext);
 
 export const useTrackComponentInit = <P extends {}>(
   trackingComponentConfig: TrackingComponentConfig,
@@ -34,14 +49,16 @@ export const useTrackComponentInit = <P extends {}>(
   const { tracking: contextLevelTracking, app } = useSisenseContext();
   const { trackEvent } = useTracking();
 
-  const inTrackingContext = useContext(TrackingContext);
+  const { skipNested: parentSkipNested } = useTrackingContext();
 
   const hasTrackedRef = useRef<boolean>(false);
 
   useEffect(() => {
     if (!contextLevelTracking || !app) return;
     const hasBeenTracked = hasTrackedRef.current;
-    if (!hasBeenTracked && !inTrackingContext) {
+    if (!hasBeenTracked && !parentSkipNested) {
+      // Mark as tracked synchronously, before the async call to avoid duplicate events in case of re-render or StrictMode
+      hasTrackedRef.current = true;
       const payload: ComponentInitEventDetails = {
         packageName: componentLevelConfig.packageName || contextLevelTracking.packageName,
         packageVersion: componentLevelConfig.packageVersion || __PACKAGE_VERSION__,
@@ -52,15 +69,13 @@ export const useTrackComponentInit = <P extends {}>(
           .join(', '),
       };
 
-      void trackEvent(action, payload, !contextLevelTracking.enabled).finally(
-        () => (hasTrackedRef.current = true),
-      );
+      void trackEvent(action, payload, !contextLevelTracking.enabled);
     }
   }, [
     componentName,
     props,
     contextLevelTracking,
-    inTrackingContext,
+    parentSkipNested,
     trackEvent,
     app,
     componentLevelConfig,

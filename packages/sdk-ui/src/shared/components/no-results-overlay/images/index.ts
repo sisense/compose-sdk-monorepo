@@ -38,5 +38,8 @@ const noResultOverlayImages = {
 
 export function getNoResultOverlayImage(type: ChartType | TableType) {
   const defaultTypeFallback = 'bar';
-  return noResultOverlayImages[type] ?? noResultOverlayImages[defaultTypeFallback];
+  return (
+    noResultOverlayImages[type as keyof typeof noResultOverlayImages] ??
+    noResultOverlayImages[defaultTypeFallback]
+  );
 }

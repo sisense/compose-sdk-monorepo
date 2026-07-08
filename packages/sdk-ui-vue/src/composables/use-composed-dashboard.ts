@@ -9,14 +9,19 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { onBeforeUnmount, type Ref, watch } from 'vue';
 
-import type { DashboardProps } from '../components/dashboard';
+import type { DashboardConfig, DashboardProps } from '../components/dashboard';
 import { createSisenseContextConnector } from '../helpers/context-connectors';
 import { useRefState } from '../helpers/use-ref-state';
 import type { MaybeRef } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
 
-export interface ComposableDashboardProps extends ComposableDashboardPropsPreact {}
+export interface ComposableDashboardProps extends Omit<ComposableDashboardPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
+   */
+  config?: DashboardConfig;
+}
 
 /**
  * A Vue composable function `useComposedDashboard` that takes in separate dashboard elements and

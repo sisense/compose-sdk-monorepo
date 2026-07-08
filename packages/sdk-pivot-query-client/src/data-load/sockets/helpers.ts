@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+
 /**
  * Get XSRF token from `document.cookie`
  */
@@ -16,7 +18,7 @@ function getCsrfToken(cookie = document.cookie) {
  */
 export function getCsrfResponseData() {
   const csrfToken = getCsrfToken();
-  const data = {};
+  const data: Record<string, string> = {};
 
   // The CSRF token is optional, but the domain needs to be added to the whitelist to pass the check without a token
   if (csrfToken) {

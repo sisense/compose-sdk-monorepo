@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import { DashboardHeaderTargets } from '@/domains/dashboarding/components/dashboard-header-targets';
+import { DashboardHeaderTargets } from '@/domains/dashboarding/components/dashboard-header/dashboard-header-targets';
 import { HeaderItem } from '@/domains/shared/header';
 import { useMenu } from '@/infra/contexts/menu-provider/hooks/use-menu';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
@@ -40,12 +40,13 @@ export const useDashboardHeaderMenuItem = (
       id: DashboardHeaderTargets.Menu,
       fill: 'content',
       hidden: menuItemSections.length === 0,
-      component: () => (
+      component: ({ size }) => (
         <MenuButton
           onClick={handleMenuOpen}
           aria-label="dashboard toolbar menu"
           data-testid="dashboard-toolbar-menu"
           color={themeSettings.dashboard.toolbar.primaryTextColor}
+          size={size.height}
         />
       ),
     }),

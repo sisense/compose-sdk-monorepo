@@ -808,7 +808,6 @@ export type CalendarHeatmapChartDataOptionsInternal = {
  * Configuration for how to query aggregate data and assign data
  * to a {@link SankeyChartType | Sankey chart}.
  *
- * @group Charts
  * @beta
  *
  * @example

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { CartesianChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types';
 import {

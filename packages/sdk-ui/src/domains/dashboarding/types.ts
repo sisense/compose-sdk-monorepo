@@ -1,6 +1,6 @@
 import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
-import { DashboardHeaderConfig } from '@/domains/dashboarding/components/dashboard-header-config';
+import { DashboardHeaderConfig } from '@/domains/dashboarding/components/dashboard-header/dashboard-header-config';
 import {
   DashboardStyleOptions,
   WidgetsOptions,
@@ -202,21 +202,34 @@ export interface WidgetsPanelConfig {
    */
   editMode?: EditModeConfig;
   /**
-   * Actions available for all widgets in the panel.
-   *
-   * @sisenseInternal
+   * Configuration for actions available on all widgets in the panel, such as
+   * downloading each widget's data.
    */
   actions?: {
     /**
-     * Configuration for downloading a widget CSV.
+     * Configuration for the "Download as CSV" action on all widgets in the panel,
+     * which adds an item to each widget's header menu that exports the widget's
+     * underlying data as a CSV file.
      *
-     * @sisenseInternal
+     * @example
+     * Enable CSV download for every widget in a dashboard:
+     * ```ts
+     * const dashboardConfig: DashboardConfig = {
+     *   widgetsPanel: {
+     *     actions: {
+     *       downloadCsv: {
+     *         enabled: true,
+     *       },
+     *     },
+     *   },
+     * };
+     * ```
      */
     downloadCsv?: {
       /**
-       * Determines whether the widgets possibility to download a CSV is enabled.
+       * Whether the "Download as CSV" action is enabled for all widgets in the panel.
        *
-       * If not specified, the default value is `false`.
+       * @default false
        */
       enabled?: boolean;
     };
@@ -335,19 +348,21 @@ export interface DashboardConfig {
    */
   filtersPanel?: DashboardFiltersPanelConfig;
   /**
-   * Configuration for the dashboard header
-   *
-   * @alpha
+   * Configuration for the dashboard header.
    */
   header?: DashboardHeaderConfig;
   /**
-   * Configuration for the toolbar
+   * Configuration for the toolbar.
+   *
+   * @deprecated Use the `header` configuration section instead (`header.visible`).
    */
   toolbar?: {
     /**
      * Determines whether the toolbar is visible.
      *
      * If not specified, the default value is `true`.
+     *
+     * @deprecated Use `header.visible` instead.
      */
     visible: boolean;
   };
@@ -402,7 +417,9 @@ export type { DashboardPersistenceManager };
  */
 export interface DashboardProps {
   /**
-   * Optional identifer of the dashboard
+   * Optional unique identifier of the dashboard.
+   *
+   * For dashboards loaded from Fusion (for example, via `DashboardById`), this is populated with the dashboard OID
    *
    * @internal
    */

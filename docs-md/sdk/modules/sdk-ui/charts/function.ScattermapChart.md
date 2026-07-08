@@ -4,7 +4,7 @@ title: ScattermapChart
 
 # Function ScattermapChart
 
-> **ScattermapChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **ScattermapChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component that allows to visualize geographical data as data points on a map.
 
@@ -27,6 +27,6 @@ Scatter map chart displaying cost and revenue rank from the Sample ECommerce dat
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Scattermap Chart component

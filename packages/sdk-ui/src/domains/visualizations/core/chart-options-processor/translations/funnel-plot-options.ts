@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 import { DeepPartial } from 'ts-essentials';
 
 import { prepareDataLabelsOptions } from '@/domains/visualizations/core/chart-options-processor/series-labels';

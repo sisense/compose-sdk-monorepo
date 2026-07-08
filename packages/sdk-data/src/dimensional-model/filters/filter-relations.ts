@@ -5,6 +5,7 @@ import isArray from 'lodash-es/isArray.js';
 import { TranslatableError } from '../../translation/translatable-error.js';
 import { DimensionalLevelAttribute } from '../attributes/attributes.js';
 import {
+  Attribute,
   Filter,
   FilterRelations,
   FilterRelationsJaql,
@@ -15,6 +16,7 @@ import {
   FilterRelationsModelIdNode,
   FilterRelationsModelNode,
   FilterRelationsNode,
+  isLevelAttribute,
 } from '../interfaces.js';
 import * as filterFactory from './factory.js';
 import { isCascadingFilter } from './filters.js';
@@ -694,6 +696,47 @@ export function isOperatorDescriptionNode(
 }
 
 /**
+ * Builds the identity string for an attribute (its `expression` plus optional `granularity`) from
+ * the attribute and the JAQL it resolves to.
+ *
+ * Shared by {@link getAttributeCompareId} and {@link getFilterCompareId} so the two stay in sync;
+ * each caller supplies its own JAQL source (the attribute's own JAQL vs. the filter's JAQL).
+ */
+function buildAttributeCompareId(
+  attribute: Attribute,
+  jaql: { dim?: string; formula?: string; datatype?: string } | undefined,
+): string {
+  // Calculated-dimension (formula) attributes carry neither an `expression` nor a `dim`; their
+  // identity lives in the formula. Falling back to it keeps distinct calculated dimensions apart,
+  // instead of all collapsing to the same compare id and being deduped down to one when merged.
+  const expression = attribute.expression || jaql?.dim || jaql?.formula || '';
+  const granularity =
+    (isLevelAttribute(attribute) ? attribute.granularity : '') ||
+    (jaql?.datatype === 'datetime'
+      ? DimensionalLevelAttribute.translateJaqlToGranularity(jaql)
+      : '');
+
+  return `${expression}${granularity}`;
+}
+
+/**
+ * Gets a unique identifier for an attribute, combining its expression and granularity if available.
+ *
+ * Used to match filters by the attribute they target (e.g. filters embedded in
+ * calculated-measure formulas), so that targeting by attribute and by filter instance
+ * resolve to the same identity.
+ *
+ * @param attribute - The attribute to generate the unique identifier for.
+ * @returns The unique identifier for the attribute.
+ * @internal
+ */
+export function getAttributeCompareId(attribute: Attribute): string {
+  // Some synthetic attributes lack a `jaql()` method; degrade to expression + granularity only.
+  const attributeJaql = typeof attribute.jaql === 'function' ? attribute.jaql(true) : undefined;
+  return buildAttributeCompareId(attribute, attributeJaql);
+}
+
+/**
  * Gets a unique identifier for a filter, combining its attribute expression and granularity if available.
  *
  * @param {Filter} filter - The filter object to generate the unique identifier for.
@@ -705,19 +748,9 @@ export function getFilterCompareId(filter: Filter): string {
     return filter.filters.map(getFilterCompareId).join('-');
   }
   // TODO: remove fallback on 'filter.jaql()' after removing temporal 'jaql()' workaround from filter translation layer
-  const { attribute: filterAttribute } = filter;
-  const filterJaql = filter.jaql().jaql;
-  // Calculated-dimension (formula) filters carry neither an attribute expression nor a `dim`; their
-  // identity lives in the formula. Falling back to it keeps distinct calculated dimensions apart,
-  // instead of all collapsing to the same compare id and being deduped down to one when merged.
-  const expression = filterAttribute.expression || filterJaql.dim || filterJaql.formula;
-  const granularity =
-    (filterAttribute as DimensionalLevelAttribute).granularity ||
-    (filterJaql?.datatype === 'datetime'
-      ? DimensionalLevelAttribute.translateJaqlToGranularity(filterJaql)
-      : '');
-
-  return `${expression}${granularity}`;
+  // The filter's own JAQL (not the bare attribute's) carries the resolved datetime granularity and
+  // the calculated-dimension formula, so identity is derived from it.
+  return buildAttributeCompareId(filter.attribute, filter.jaql().jaql);
 }
 
 /**

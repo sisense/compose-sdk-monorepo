@@ -1,6 +1,6 @@
 /* eslint-disable max-params */
 import { Attribute, Data, Filter, Measure } from '@sisense/sdk-data';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { TranslatableError } from '../../../../../infra/translation/translatable-error';
 import { ChartType } from '../../../../../types';

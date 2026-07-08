@@ -312,7 +312,7 @@ export class NumericSimple {
     const useMaxWidth = options.fitMeasures.some(
       (item: { key: string; dataKey: string; prop: string }) => {
         const measure = options[item.key];
-        const dataObj = data[item.dataKey];
+        const dataObj = (data as unknown as Record<string, { text: string }>)[item.dataKey];
 
         return !!(measure && dataObj && measure[item.prop] !== dataObj.text);
       },
@@ -395,7 +395,10 @@ export class NumericSimple {
     if (
       !options.fitTitleMeasure ||
       (data.skin === 'horizontal' &&
-        options.fitValueMeasure.string !== data[options.fitValueMeasure.key].text)
+        options.fitValueMeasure.string !==
+          (data as unknown as Record<string, { text: string }>)[
+            options.fitValueMeasure.key as string
+          ].text)
     ) {
       return;
     }

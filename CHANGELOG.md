@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.31.0] - 2026-07-07
+
+### Added
+- Add table column resizing, with configurable minimum/maximum widths
+- Add embed code generation for custom widgets in React, Angular, and Vue
+- Move following to to General Availability (GA):
+  - dashboard header customization API
+  - widget narrative configuration
+  - "Download as CSV" widget action
+- Move module registration API and widget plugin state persistence APIs to beta
+
+### Changed
+- Improve dashboard header layout so taller custom items are no longer clipped
+- Fix Fusion table widgets losing their per-column widths when rendered in Compose SDK
+- Fix an explicit "no sort" setting bug in table queries
+- Fix incorrect forecast/trend chart titles for certain measures
+- Deprecate `DashboardConfig.toolbar.visible` in favor of `DashboardHeaderConfig.visible`
+
+
 ## [2.30.0] - 2026-06-23
 
 ### Added

@@ -2,7 +2,7 @@ import { filterFactory } from '@sisense/sdk-data';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { WidgetsPanelColumnLayout } from '@/domains/dashboarding/types.js';
-import type { WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
+import type { TableWidgetStyle, WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 import { AppSettings } from '@/infra/app/settings/settings';
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
@@ -683,6 +683,257 @@ describe('persistDashboardModelMiddleware', () => {
       const navigator = (props as { styleOptions?: { navigator?: { scrollerLocation?: unknown } } })
         .styleOptions?.navigator;
       expect(navigator?.scrollerLocation).toEqual({ min: 10, max: 90 });
+    });
+
+    it('maps table column widths update to style.tableState.colResize PATCH', async () => {
+      const baseWidgetDto = sampleEcommerceDashboard.widgets!.find(
+        (widget) => widget.oid === '67111cb76ab71f0032d8599d',
+      )!;
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: {
+            widgetOid: baseWidgetDto.oid,
+            update: { styleOptions: { columns: { widths: [120, 200] } } },
+          },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: {
+          oid: dashboardOid,
+          widgets: [{ oid: baseWidgetDto.oid, widgetType: 'chart', chartType: 'table' }],
+          widgetsOptions: {
+            [baseWidgetDto.oid]: {
+              partialDtoOptions: { style: baseWidgetDto.style },
+            },
+          },
+        } as never,
+      });
+
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        baseWidgetDto.oid,
+        {
+          style: expect.objectContaining({
+            tableState: expect.objectContaining({
+              colResize: expect.objectContaining({
+                columns: ['120px', '200px'],
+                tableSize: 320,
+              }),
+            }),
+          }),
+        },
+        false,
+      );
+    });
+
+    it('updates colResize.tableSize to the sum of column widths so Fusion renders absolute px', async () => {
+      const baseWidgetDto = sampleEcommerceDashboard.widgets!.find(
+        (widget) => widget.oid === '67111cb76ab71f0032d8599d',
+      )!;
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+      const staleTableSize = 934;
+      const baseTableStyle = baseWidgetDto.style as TableWidgetStyle;
+      const styleWithStaleTableSize: TableWidgetStyle = {
+        ...baseTableStyle,
+        tableState: {
+          ...baseTableStyle.tableState,
+          colResize: {
+            ...baseTableStyle.tableState?.colResize,
+            columns: ['395px', '213px', '198px'],
+            tableSize: staleTableSize,
+          },
+        },
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: {
+            widgetOid: baseWidgetDto.oid,
+            update: { styleOptions: { columns: { widths: [395, 213, 198] } } },
+          },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: {
+          oid: dashboardOid,
+          widgets: [{ oid: baseWidgetDto.oid, widgetType: 'chart', chartType: 'table' }],
+          widgetsOptions: {
+            [baseWidgetDto.oid]: {
+              partialDtoOptions: { style: styleWithStaleTableSize },
+            },
+          },
+        } as never,
+      });
+
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        baseWidgetDto.oid,
+        {
+          style: expect.objectContaining({
+            tableState: expect.objectContaining({
+              colResize: expect.objectContaining({
+                columns: ['395px', '213px', '198px'],
+                tableSize: 806,
+              }),
+            }),
+          }),
+        },
+        false,
+      );
+    });
+
+    it('roundtrip: table column widths PATCH restores dataOptions column widths via fromWidgetDto', async () => {
+      const baseWidgetDto = sampleEcommerceDashboard.widgets!.find(
+        (widget) => widget.oid === '67111cb76ab71f0032d8599d',
+      )!;
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: {
+            widgetOid: baseWidgetDto.oid,
+            update: { styleOptions: { columns: { widths: [120, 200] } } },
+          },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: {
+          oid: dashboardOid,
+          widgets: [{ oid: baseWidgetDto.oid, widgetType: 'chart', chartType: 'table' }],
+          widgetsOptions: {
+            [baseWidgetDto.oid]: {
+              partialDtoOptions: { style: baseWidgetDto.style },
+            },
+          },
+        } as never,
+      });
+
+      const [, , sentPatch] = restApi.patchWidgetInDashboard.mock.calls[0] as [
+        string,
+        string,
+        { style: Record<string, unknown> },
+      ];
+
+      const patchedDto = { ...baseWidgetDto, style: sentPatch.style };
+      const model = widgetModelTranslator.fromWidgetDto(patchedDto as never);
+      const props = widgetModelTranslator.toTableProps(model);
+
+      expect((props.dataOptions.columns[0] as { width?: number }).width).toBe(120);
+      expect((props.dataOptions.columns[1] as { width?: number }).width).toBe(200);
+    });
+
+    it('drops a stale colResize.columns entry left over from a higher column count on merge', async () => {
+      // Simulates a widget whose column count shrank since the last resize (e.g. a
+      // column was removed): the stale DTO style still has 3 `colResize.columns`
+      // entries, but the current update — and the widget's 2 enabled column panels —
+      // only carry 2 widths.
+      const baseWidgetDto = sampleEcommerceDashboard.widgets!.find(
+        (widget) => widget.oid === '67111cb76ab71f0032d8599d',
+      )!;
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      };
+      const baseTableStyle = baseWidgetDto.style as TableWidgetStyle;
+      const styleWithStaleThreeColumnResize: TableWidgetStyle = {
+        ...baseTableStyle,
+        tableState: {
+          ...baseTableStyle.tableState,
+          colResize: {
+            ...baseTableStyle.tableState?.colResize,
+            columns: ['395px', '213px', '198px'],
+            tableSize: 806,
+          },
+        },
+      };
+
+      await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: {
+            widgetOid: baseWidgetDto.oid,
+            update: { styleOptions: { columns: { widths: [120, 200] } } },
+          },
+        },
+        restApi: restApi as never,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+        model: {
+          oid: dashboardOid,
+          widgets: [{ oid: baseWidgetDto.oid, widgetType: 'chart', chartType: 'table' }],
+          widgetsOptions: {
+            [baseWidgetDto.oid]: {
+              partialDtoOptions: { style: styleWithStaleThreeColumnResize },
+            },
+          },
+        } as never,
+      });
+
+      const [, , sentPatch] = restApi.patchWidgetInDashboard.mock.calls[0] as [
+        string,
+        string,
+        { style: Record<string, unknown> },
+      ];
+
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        baseWidgetDto.oid,
+        {
+          style: expect.objectContaining({
+            tableState: expect.objectContaining({
+              colResize: expect.objectContaining({
+                columns: ['120px', '200px'],
+                tableSize: 320,
+              }),
+            }),
+          }),
+        },
+        false,
+      );
+
+      // Roundtrip: a leftover 3rd column entry would make `colResize.columns.length`
+      // (3) mismatch the widget's enabled column count (2), causing
+      // `extractTableColumnWidths` to discard all widths instead of just the stale one.
+      const patchedDto = { ...baseWidgetDto, style: sentPatch.style };
+      const model = widgetModelTranslator.fromWidgetDto(patchedDto as never);
+      const props = widgetModelTranslator.toTableProps(model);
+
+      expect(props.dataOptions.columns).toHaveLength(2);
+      expect((props.dataOptions.columns[0] as { width?: number }).width).toBe(120);
+      expect((props.dataOptions.columns[1] as { width?: number }).width).toBe(200);
     });
 
     it('maps a customOptions update to a customOptions PATCH', async () => {

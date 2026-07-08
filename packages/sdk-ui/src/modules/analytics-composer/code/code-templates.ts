@@ -164,6 +164,27 @@ export default function CodeExample() {
       filters: {{filtersString}},
       styleOptions: {{styleOptionsString}},
     }`,
+    customWidgetTmpl: `
+    /* Please make sure "{{customWidgetTypeString}}" is registered as a plugin in your application. */
+    import { Widget } from '@sisense/sdk-ui';
+{{extraImportsString}}
+import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+
+export default function CodeExample() {
+  return (
+    <Widget
+      id="{{customWidgetTypeString}}-1"
+      widgetType="custom"
+      customWidgetType="{{customWidgetTypeString}}"
+      title={'{{titleString}}'}
+      dataSource={DM.DataSource}
+      dataOptions={ {{dataOptionsString}} }
+      filters={ {{filtersString}} }
+      styleOptions={ {{styleOptionsString}} }
+      customOptions={ {{customOptionsString}} }
+    />
+  );
+}`,
     dashboardByIdTmpl: `import { DashboardById } from '@sisense/sdk-ui';
 
 const CodeExample = () => {
@@ -349,6 +370,37 @@ export class CodeExample {
       filters: {{filtersString}},
       styleOptions: {{styleOptionsString}},
     }`,
+    customWidgetTmpl: `/* Please make sure "{{customWidgetTypeString}}" is registered as a plugin in your application. */
+import { Component } from '@angular/core';
+import { SdkUiModule, type GenericDataOptions } from '@sisense/sdk-ui-angular';
+{{extraImportsString}}
+import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+
+@Component({
+    selector: 'code-example',
+    imports: [SdkUiModule],
+    template: \`
+      <csdk-widget
+        id="{{customWidgetTypeString}}-1"
+        widgetType="custom"
+        [customWidgetType]="customWidgetType"
+        [title]="'{{titleString}}'"
+        [dataSource]="DM.DataSource"
+        [dataOptions]="dataOptions"
+        [filters]="filters"
+        [styleOptions]="styleOptions"
+        [customOptions]="customOptions"
+      />
+    \`
+})
+export class CodeExample {
+    DM = DM;
+    customWidgetType = "{{customWidgetTypeString}}";
+    dataOptions: GenericDataOptions = {{dataOptionsString}};
+    filters = {{filtersString}};
+    styleOptions = {{styleOptionsString}};
+    customOptions = {{customOptionsString}};
+}`,
     dashboardByIdTmpl: `import { Component } from '@angular/core';
 
 @Component({
@@ -460,6 +512,32 @@ const { data, isLoading, isError, error } = useExecuteQuery(queryProps);
       filters: {{filtersString}},
       styleOptions: {{styleOptionsString}},
     }`,
+    customWidgetTmpl: `<!-- Please make sure "{{customWidgetTypeString}}" is registered as a plugin in your application. -->
+<script setup lang="ts">
+  import { ref } from 'vue';
+  import { Widget } from '@sisense/sdk-ui-vue';
+  {{extraImportsString}}
+  import * as DM from './{{dataSourceString}}'; // generated with @sisense/sdk-cli
+
+  const dataOptions = ref({{dataOptionsString}});
+  const filters = ref({{filtersString}});
+  const styleOptions = ref({{styleOptionsString}});
+  const customOptions = ref({{customOptionsString}});
+</script>
+
+<template>
+  <Widget
+    id="{{customWidgetTypeString}}-1"
+    widgetType="custom"
+    customWidgetType="{{customWidgetTypeString}}"
+    title="{{titleString}}"
+    :dataSource="DM.DataSource"
+    :dataOptions="dataOptions"
+    :filters="filters"
+    :styleOptions="styleOptions"
+    :customOptions="customOptions"
+  />
+</template>`,
     dashboardByIdTmpl: `<script setup lang="ts">
 import { DashboardById } from '@sisense/sdk-ui-vue';
 

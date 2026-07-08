@@ -1,5 +1,5 @@
 {
-  "version": "2.30.0",
+  "version": "2.31.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -90,7 +90,7 @@
     "review-app": "yarn run review-app:build && yarn run review-app:serve",
     "review-app:build": "node ./scripts/build-review-app.mjs",
     "review-app:serve": "node ./scripts/serve-static.cjs public",
-    "prepare:plugins-demo": "yarn nx run @sisense/sdk-plugins-cli:build && node packages/sdk-plugins/cli/dist/cli.js create-plugin --dev-mode --force --name demo-plugin --template line-chart --path examples/plugins-demo/demo-plugin && yarn install --no-immutable && yarn workspace demo-plugin build && yarn workspace demo-plugin test",
+    "prepare:plugins-demo": "yarn nx run @sisense/sdk-plugins-cli:build && node packages/sdk-plugins/cli/dist/cli.js create-plugin --dev-mode --force --install none --name demo-plugin --template line-chart --path examples/plugins-demo/demo-plugin && yarn install --no-immutable && yarn workspace demo-plugin build && yarn workspace demo-plugin test",
     "build": "yarn nx:build",
     "build:packages": "yarn nx run-many --target=build --projects='packages/*'",
     "storybook": "yarn workspace @sisense/sdk-ui storybook",
@@ -153,27 +153,36 @@
   ],
   "packageManager": "yarn@3.8.7",
   "volta": {
-    "node": "18.16.0"
+    "node": "20.20.2"
   },
   "resolutions": {
     "form-data": "4.0.4",
-    "socket.io-parser": "3.4.1"
+    "socket.io-parser": "3.4.1",
+    "js-cookie": "^3.0.7"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",
+    "@eslint/js": "^9.39.4",
     "@sisense/commitlint-config": "^1.9.9",
-    "@sisense/eslint-config": "1.9.12",
     "@sisense/prettier-config": "^1.9.9",
     "@sisense/typedoc-plugin-diff-packages": "0.1.0",
     "@sisense/typedoc-plugin-markdown": "0.0.0",
     "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "@vitest/coverage-v8": "^3.2.4",
-    "eslint": "^8.40.0",
-    "eslint-plugin-i18next": "^6.1.0",
-    "eslint-plugin-rulesdir": "^0.2.2",
-    "eslint-plugin-tsdoc": "0.2.17",
-    "eslint-plugin-vitest": "0.2.8",
+    "@vitest/eslint-plugin": "^1.1.24",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-i18next": "^6.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsdoc": "^50.6.1",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-sonarjs": "^1.0.4",
+    "eslint-plugin-tsdoc": "^0.5.2",
     "express": "^4.18.2",
+    "globals": "^17.6.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
     "nx": "20.0.0",
@@ -182,6 +191,7 @@
     "storybook": "^9.1.6",
     "typedoc": "0.26.10",
     "typedoc-plugin-vue": "^1.2.0",
+    "typescript-eslint": "^8.20.0",
     "vitest": "^3.2.4"
   },
   "lint-staged": {

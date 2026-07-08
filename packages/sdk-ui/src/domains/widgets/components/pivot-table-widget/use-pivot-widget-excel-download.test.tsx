@@ -51,16 +51,6 @@ vi.mock('@/domains/widgets/hooks/use-with-excel-download-menu-item.js', async (i
   };
 });
 
-const appSettingsFeatureFlags = vi.hoisted(() => ({
-  exportingXlsxV2Active: true,
-}));
-
-vi.mock('@/shared/hooks/use-app-settings.js', () => ({
-  useAppSettings: () => ({
-    serverFeatures: { exportingXlsxV2: { active: appSettingsFeatureFlags.exportingXlsxV2Active } },
-  }),
-}));
-
 function findExcelRepeatRowsOnClick(header: WidgetHeaderConfig): (() => void) | undefined {
   const download = header.toolbar?.menu?.items?.find((i) => i.id === 'widget-download');
   const excelFile = download?.items?.find((i) => i.id === 'excelFileMenuItem');
@@ -85,7 +75,6 @@ const baseParams: UsePivotWidgetExcelDownloadParams = {
 describe('usePivotWidgetExcelDownload', () => {
   beforeEach(() => {
     latestOnDownloadExcel.fn = null;
-    appSettingsFeatureFlags.exportingXlsxV2Active = true;
     mockExecute.mockClear();
     vi.mocked(translatePivotTableDataOptions).mockReturnValue({
       rows: [],
@@ -102,27 +91,6 @@ describe('usePivotWidgetExcelDownload', () => {
 
     act(() => {
       latestOnDownloadExcel.fn?.(false);
-    });
-    expect(mockExecute).not.toHaveBeenCalled();
-  });
-
-  it('does not add Excel menu or call loader when exportingXlsxV2.active is false (gated)', () => {
-    appSettingsFeatureFlags.exportingXlsxV2Active = false;
-    vi.mocked(translatePivotTableDataOptions).mockReturnValue({
-      rows: [{ id: 'r1' } as never],
-      columns: [],
-      values: [],
-    } as ReturnType<typeof translatePivotTableDataOptions>);
-
-    const { result } = renderHook(() => usePivotWidgetExcelDownload(baseParams));
-
-    expect(findExcelRepeatRowsOnClick(result.current.headerConfig)).toBeUndefined();
-    expect(findExcelMergeRowsOnClick(result.current.headerConfig)).toBeUndefined();
-    expect(mockExecute).not.toHaveBeenCalled();
-
-    act(() => {
-      latestOnDownloadExcel.fn?.(false);
-      latestOnDownloadExcel.fn?.(true);
     });
     expect(mockExecute).not.toHaveBeenCalled();
   });

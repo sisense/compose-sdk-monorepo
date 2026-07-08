@@ -48,7 +48,7 @@ describe('convertChartWidgetPropsToNarrativeParams', () => {
         ],
         breakBy: [],
       },
-      aiOptions: {
+      config: {
         narrative: { includeTrendAndForecast: false },
       },
     });
@@ -112,7 +112,7 @@ describe('buildWidgetNarrativeRequests', () => {
     it('returns supported=true with no fallback when includeTrendAndForecast is false', () => {
       const props: WithCommonWidgetProps<ChartWidgetProps, 'chart'> = {
         ...chartPropsWithTrend,
-        aiOptions: {
+        config: {
           narrative: { includeTrendAndForecast: false },
         },
       };
@@ -151,7 +151,7 @@ describe('buildWidgetNarrativeRequests', () => {
     it('returns supported=true with no fallback when includeTrendAndForecast is false', () => {
       const props: WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'> = {
         ...pivotProps,
-        aiOptions: {
+        config: {
           narrative: { includeTrendAndForecast: false },
         },
       };

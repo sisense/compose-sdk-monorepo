@@ -4,7 +4,7 @@ title: Chatbot
 
 # Function Chatbot
 
-> **Chatbot**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **Chatbot**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 React component that displays a chatbot with data topic selection.
 You can optionally configure size, config e.g. data topics, recommendations, UI text.
@@ -17,7 +17,7 @@ You can optionally configure size, config e.g. data topics, recommendations, UI 
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 ## Example
 

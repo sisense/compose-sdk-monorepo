@@ -83,6 +83,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-area-range-chart',
   template: `
     <csdk-chart

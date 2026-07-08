@@ -3,17 +3,16 @@
 exports[`Alert component > renders alert with title and description 1`] = `
 <div>
   <div
-    class="_alert_af20a0 _info_af20a0 _hasIcon_af20a0 "
-    data-dark-mode="false"
+    class="_alert_af20a0 _info_af20a0 "
     role="alert"
   >
     <div
       class="_icon_af20a0"
     >
       <svg
-        height="16"
+        height="24"
         viewBox="0 0 24 24"
-        width="16"
+        width="24"
       >
         <path
           clip-rule="evenodd"
@@ -43,17 +42,16 @@ exports[`Alert component > renders alert with title and description 1`] = `
 exports[`Alert component > renders dismissible alert with close button 1`] = `
 <div>
   <div
-    class="_alert_af20a0 _info_af20a0 _hasIcon_af20a0 "
-    data-dark-mode="false"
+    class="_alert_af20a0 _info_af20a0 "
     role="alert"
   >
     <div
       class="_icon_af20a0"
     >
       <svg
-        height="16"
+        height="24"
         viewBox="0 0 24 24"
-        width="16"
+        width="24"
       >
         <path
           clip-rule="evenodd"
@@ -78,17 +76,14 @@ exports[`Alert component > renders dismissible alert with close button 1`] = `
     >
       <svg
         fill="none"
-        height="24"
-        viewBox="0 0 24 24"
-        width="24"
+        height="16"
+        viewBox="0 0 16 16"
+        width="16"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          clip-rule="evenodd"
-          d="M11.4309 12L6.28445 6.85355C6.08918 6.65829 6.08918 6.34171 6.28445 6.14645C6.47971 5.95118 6.79629 5.95118 6.99155 6.14645L12.138 11.2929L17.2844 6.14645C17.4797 5.95118 17.7963 5.95118 17.9916 6.14645C18.1868 6.34171 18.1868 6.65829 17.9916 6.85355L12.8451 12L17.9916 17.1464C18.1868 17.3417 18.1868 17.6583 17.9916 17.8536C17.7963 18.0488 17.4797 18.0488 17.2844 17.8536L12.138 12.7071L6.99155 17.8536C6.79629 18.0488 6.47971 18.0488 6.28445 17.8536C6.08918 17.6583 6.08918 17.3417 6.28445 17.1464L11.4309 12Z"
-          fill="#262E3D"
-          fill-opacity="0.67"
-          fill-rule="evenodd"
+          d="M13.0908 2.20223C13.286 2.00704 13.6026 2.00699 13.7978 2.20223C13.993 2.39747 13.993 2.71402 13.7978 2.90926L8.70698 8.00008L13.7978 13.0909C13.9929 13.2862 13.993 13.6027 13.7978 13.7979C13.6026 13.9931 13.286 13.993 13.0908 13.7979L7.99995 8.70711L2.90913 13.7979C2.71389 13.9931 2.39735 13.9931 2.2021 13.7979C2.00687 13.6027 2.00692 13.2862 2.2021 13.0909L7.29292 8.00008L2.2021 2.90926C2.00685 2.714 2.00685 2.39749 2.2021 2.20223C2.39736 2.00697 2.71387 2.00697 2.90913 2.20223L7.99995 7.29305L13.0908 2.20223Z"
+          fill="#2C2E32"
         />
       </svg>
     </button>
@@ -99,17 +94,16 @@ exports[`Alert component > renders dismissible alert with close button 1`] = `
 exports[`Alert component > renders error variant correctly 1`] = `
 <div>
   <div
-    class="_alert_af20a0 _error_af20a0 _hasIcon_af20a0 "
-    data-dark-mode="false"
+    class="_alert_af20a0 _error_af20a0 "
     role="alert"
   >
     <div
       class="_icon_af20a0"
     >
       <svg
-        height="16"
+        height="24"
         viewBox="0 0 24 24"
-        width="16"
+        width="24"
       >
         <path
           clip-rule="evenodd"
@@ -139,17 +133,16 @@ exports[`Alert component > renders error variant correctly 1`] = `
 exports[`Alert component > renders info variant correctly 1`] = `
 <div>
   <div
-    class="_alert_af20a0 _info_af20a0 _hasIcon_af20a0 "
-    data-dark-mode="false"
+    class="_alert_af20a0 _info_af20a0 "
     role="alert"
   >
     <div
       class="_icon_af20a0"
     >
       <svg
-        height="16"
+        height="24"
         viewBox="0 0 24 24"
-        width="16"
+        width="24"
       >
         <path
           clip-rule="evenodd"
@@ -179,17 +172,16 @@ exports[`Alert component > renders info variant correctly 1`] = `
 exports[`Alert component > renders warning variant correctly 1`] = `
 <div>
   <div
-    class="_alert_af20a0 _warning_af20a0 _hasIcon_af20a0 "
-    data-dark-mode="false"
+    class="_alert_af20a0 _warning_af20a0 "
     role="alert"
   >
     <div
       class="_icon_af20a0"
     >
       <svg
-        height="16"
+        height="24"
         viewBox="0 0 24 24"
-        width="16"
+        width="24"
       >
         <path
           clip-rule="evenodd"
@@ -219,17 +211,16 @@ exports[`Alert component > renders warning variant correctly 1`] = `
 exports[`Alert component > renders without title 1`] = `
 <div>
   <div
-    class="_alert_af20a0 _info_af20a0 _hasIcon_af20a0 "
-    data-dark-mode="false"
+    class="_alert_af20a0 _info_af20a0 "
     role="alert"
   >
     <div
       class="_icon_af20a0"
     >
       <svg
-        height="16"
+        height="24"
         viewBox="0 0 24 24"
-        width="16"
+        width="24"
       >
         <path
           clip-rule="evenodd"

@@ -380,7 +380,7 @@ describe('DimensionalDimension serialize method', () => {
 
     expect(serialized.__serializable).toBe('DimensionalDimension');
     expect(serialized.dimensions).toHaveLength(1);
-    expect(serialized.dimensions?.[0]).toBeDefined();
+    expect((serialized.dimensions as unknown[])?.[0]).toBeDefined();
   });
 });
 

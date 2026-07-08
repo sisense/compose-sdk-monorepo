@@ -68,6 +68,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-line-chart',
   template: `
     <csdk-chart

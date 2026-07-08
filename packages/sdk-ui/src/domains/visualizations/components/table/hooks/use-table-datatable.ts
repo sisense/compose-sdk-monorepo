@@ -43,12 +43,12 @@ export const useTableDataTable = ({
     let table = createDataTableFromData(
       applyDateFormats(data, innerDataOptions, app?.settings.locale, app?.settings.dateConfig),
     );
-    const attributes = (
-      innerDataOptions.columns.filter((c) => !isMeasureColumn(c)) as StyledColumn[]
-    ).map(translateColumnToAttribute);
-    const measures = (
-      innerDataOptions.columns.filter((c) => isMeasureColumn(c)) as StyledMeasureColumn[]
-    ).map(translateColumnToMeasure);
+    const attributes = innerDataOptions.columns
+      .filter((c): c is StyledColumn => !isMeasureColumn(c))
+      .map(translateColumnToAttribute);
+    const measures = innerDataOptions.columns
+      .filter((c): c is StyledMeasureColumn => isMeasureColumn(c))
+      .map(translateColumnToMeasure);
 
     validateDataOptionsAgainstData(table, attributes, measures, dataColumnNamesMapping);
 

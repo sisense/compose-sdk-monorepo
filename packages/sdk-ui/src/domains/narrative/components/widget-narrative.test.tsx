@@ -40,7 +40,7 @@ const mockPivotWidgetProps: WidgetProps = {
 
 const chartWithFeedback: WidgetProps = {
   ...mockChartWidgetProps,
-  aiOptions: {
+  config: {
     narrative: { feedback: { enabled: true } },
   },
 };
@@ -54,10 +54,13 @@ const mockNlgResponse: GetNlgInsightsResponse = {
   },
 };
 
+const FEEDBACK_ENDPOINT = 'api/v2/ai/feedback';
+
 const useLegacyNarrativeHandlers = () => {
   server.use(
     http.post(`*/${UNIFIED_NARRATIVE_ENDPOINT}`, () => HttpResponse.json({}, { status: 404 })),
     http.post(`*/${LEGACY_NARRATIVE_ENDPOINT}`, () => HttpResponse.json(mockNlgResponse)),
+    http.post(`*/${FEEDBACK_ENDPOINT}`, () => HttpResponse.json({})),
   );
 };
 
@@ -114,7 +117,7 @@ describe('WidgetNarrative', () => {
     expect(screen.getByTestId('narrative-ai-icon')).toBeInTheDocument();
   });
 
-  it('shows narrative text and feedback chrome when aiOptions.narrative.feedback.enabled is true', async () => {
+  it('shows narrative text and feedback chrome when config.narrative.feedback.enabled is true', async () => {
     useLegacyNarrativeHandlers();
 
     setup(

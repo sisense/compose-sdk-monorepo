@@ -248,9 +248,14 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
    */
   get id(): string {
     let id = `${this.expression}`;
-    const { level = '', dateTimeLevel = '', bucket } = this.translateGranularityToJaql();
+    const {
+      level = '',
+      dateTimeLevel = '',
+      dateTimePart = '',
+      bucket,
+    } = this.translateGranularityToJaql();
 
-    id += `_${(level || dateTimeLevel).toLowerCase()}`;
+    id += `_${(level || dateTimeLevel || dateTimePart).toLowerCase()}`;
 
     if (bucket) {
       id += `_${bucket}`;
@@ -380,7 +385,7 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
     }
 
     if (this._format !== undefined) {
-      const levelName = r.jaql.dateTimeLevel || r.jaql.level;
+      const levelName = r.jaql.dateTimeLevel || r.jaql.level || r.jaql.dateTimePart;
       r.format = { mask: {} };
       r.format.mask[levelName] = this._format;
     }
@@ -450,6 +455,11 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
           level: MINUTES_LEVEL,
           bucket: '1',
         };
+      // Date-PART extraction → JAQL `dateTimePart` (engine DateTimeLevelPartFunction).
+      // Value is the lowercase Level token; e.g. week-of-year = 'weeks'. Live-verified
+      // against AE (dateTimePart:'weeks' → ordinals 1..53).
+      case DateLevels.WeekOfYear:
+        return { dateTimePart: 'weeks' };
       default:
         console.warn('Unsupported level');
         return { level: this.granularity };
@@ -461,6 +471,12 @@ export class DimensionalLevelAttribute extends DimensionalAttribute implements L
       console.warn('Unsupported granularity', lvl);
       return lvl;
     };
+
+    if (json.dateTimePart) {
+      return json.dateTimePart === 'weeks'
+        ? DateLevels.WeekOfYear
+        : returnUnsupported(json.dateTimePart);
+    }
 
     if (json.dateTimeLevel) {
       if (json.dateTimeLevel !== 'minutes' && json.dateTimeLevel !== 'seconds') {

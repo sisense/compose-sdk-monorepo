@@ -15,6 +15,7 @@ import { useWidgetUpdatesPersistence } from '@/domains/dashboarding/hooks/use-wi
 import { useWidgetsLayoutManagement } from '@/domains/dashboarding/hooks/use-widgets-layout.js';
 import {
   getDefaultWidgetsPanelLayout,
+  withResolvedWidgetDataSource,
   withWidgetAppendedToPanelLayout,
 } from '@/domains/dashboarding/utils.js';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
@@ -23,6 +24,7 @@ import { widgetChangeEventToDelta } from '@/domains/widgets/event-to-delta';
 import { useCombinedMenu } from '@/infra/contexts/menu-provider/hooks/use-combined-menu.js';
 import { MenuIds, MenuSectionIds } from '@/infra/contexts/menu-provider/menu-ids';
 import { MenuOptions } from '@/infra/contexts/menu-provider/types.js';
+import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context.js';
 import { withTracking } from '@/infra/decorators/hook-decorators';
 import { useModuleApiRegistry } from '@/infra/modules';
 import { useSyncedState } from '@/shared/hooks/use-synced-state.js';
@@ -155,6 +157,7 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   const [innerConfig, setInnerConfig] = useSyncedState<DashboardConfig | undefined>(
     initialDashboard.config,
   );
+  const { app } = useSisenseContext();
 
   // Exposes just the `tabbers` slice as a setState-style updater, so the duplicate-widget hook
   // can carry a tabber's show/hide mapping to the clone without owning the whole config object.
@@ -313,25 +316,48 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     return { ...initialDashboard.layoutOptions, widgetsPanel: finalWidgetsLayout };
   }, [finalWidgetsLayout, initialDashboard.layoutOptions]);
 
+  const dashboardDefaultDataSource = (initialDashboard as Partial<DashboardProps>)
+    .defaultDataSource;
+
   // Adds a widget to the dashboard. Persists automatically when a persistence manager is configured,
   // otherwise updates local state only.
-  const addWidget = useCallback(
-    (widget: WidgetProps): void => {
-      const newLayout = withWidgetAppendedToPanelLayout(innerWidgetsLayout, widget.id);
+  const addWidget = useCallback<DashboardStateApi['addWidget']>(
+    (widget, options = {}): void => {
+      const { widgetOptions, widgetsPanelLayout } = options;
+      const normalizedWidget = withResolvedWidgetDataSource([
+        dashboardDefaultDataSource,
+        app?.defaultDataSource,
+      ])(widget);
+      const newLayout =
+        widgetsPanelLayout ??
+        withWidgetAppendedToPanelLayout(normalizedWidget.id)(innerWidgetsLayout);
+
       if (!persistence) {
-        setInnerWidgets((prev) => [...prev, widget]);
+        setInnerWidgets((prev) => [...prev, normalizedWidget]);
         setInnerWidgetsLayout(newLayout);
+        if (widgetOptions) {
+          setInnerWidgetsOptions((prev) => ({ ...prev, [normalizedWidget.id]: widgetOptions }));
+        }
         return;
       }
       void persistence
-        .addWidget(widget, newLayout)
-        .then(({ widget: storedWidget, widgetsPanelLayout: storedLayout, widgetOptions }) => {
-          setInnerWidgets((prev) => [...prev, storedWidget]);
-          setInnerWidgetsLayout(storedLayout);
-          if (widgetOptions) {
-            setInnerWidgetsOptions((prev) => ({ ...prev, [storedWidget.id]: widgetOptions }));
-          }
-        })
+        .addWidget(normalizedWidget, newLayout, widgetOptions)
+        .then(
+          ({
+            widget: storedWidget,
+            widgetsPanelLayout: storedLayout,
+            widgetOptions: storedWidgetOptions,
+          }) => {
+            setInnerWidgets((prev) => [...prev, storedWidget]);
+            setInnerWidgetsLayout(storedLayout);
+            if (storedWidgetOptions) {
+              setInnerWidgetsOptions((prev) => ({
+                ...prev,
+                [storedWidget.id]: storedWidgetOptions,
+              }));
+            }
+          },
+        )
         .catch((error) => {
           console.error('[useComposedDashboard] Failed to persist added widget:', error);
         });
@@ -339,6 +365,8 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     [
       innerWidgetsLayout,
       persistence,
+      dashboardDefaultDataSource,
+      app,
       setInnerWidgets,
       setInnerWidgetsLayout,
       setInnerWidgetsOptions,

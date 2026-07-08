@@ -68,6 +68,7 @@ export class ExampleComponent {
  * @group Generative AI
  */
 @Component({
+  standalone: false,
   selector: 'csdk-chatbot',
   template,
   styles,

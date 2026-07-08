@@ -66,8 +66,11 @@ export const boxWhiskerProcessResultInternal = (
     return boxWhiskerData;
   }
 
+  // Capture the post-guard non-null index in a const so the narrowing holds inside the closures below.
+  const outliersValueIndex = outliersValueColumnIndex;
+
   const combinedData: QueryResultData = {
-    columns: [...boxWhiskerData.columns, outliersData.columns[outliersValueColumnIndex]],
+    columns: [...boxWhiskerData.columns, outliersData.columns[outliersValueIndex]],
     rows: boxWhiskerData.rows.map((row) => {
       const boxCategory = isNull(boxCategoryColumnIndex) ? null : row[boxCategoryColumnIndex].data;
       const whiskerMax = row[boxWhiskerMaxColumnIndex!].data;
@@ -77,14 +80,14 @@ export const boxWhiskerProcessResultInternal = (
           const outlierCategory = isNull(outliersCategoryColumnIndex)
             ? null
             : outliersRow[outliersCategoryColumnIndex].data;
-          const outlierValue = outliersRow[outliersValueColumnIndex!].data;
+          const outlierValue = outliersRow[outliersValueIndex].data;
           return (
             outlierCategory === boxCategory &&
             // manually removes points located between the whiskers, due to the back-end issue that returns incorrect points
             (outlierValue < whiskerMin || outlierValue > whiskerMax)
           );
         })
-        .map((outliersRow) => outliersRow[outliersValueColumnIndex!].data)
+        .map((outliersRow) => outliersRow[outliersValueIndex].data)
         .join(',');
       return [
         ...row,

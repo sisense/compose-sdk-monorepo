@@ -308,7 +308,7 @@ export function WidgetNarrativeInteractive({
       type="chart/insights"
       buttonVisibility="always"
       renderContent={(buttonRow) => (
-        <NarrativeTopSlotShell theme={themeSettings}>
+        <NarrativeTopSlotShell theme={themeSettings} data-testid="widget-narrative">
           <NarrativeTopSlotRow>
             <IconDiv theme={themeSettings}>
               <NarrativeAiIcon theme={themeSettings} />

@@ -4,7 +4,7 @@ title: FilterTile
 
 # Function FilterTile
 
-> **FilterTile**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **FilterTile**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Facade component that renders a filter tile based on filter type
 
@@ -16,4 +16,4 @@ Facade component that renders a filter tile based on filter type
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`

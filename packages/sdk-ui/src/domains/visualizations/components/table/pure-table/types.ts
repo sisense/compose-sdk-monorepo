@@ -69,6 +69,11 @@ export type TableCustomStyles = {
   columns?: {
     alternatingColor?: TableColorOptions;
     width?: 'auto' | 'content';
+    resizable?: boolean;
+    minWidth?: number;
+    maxWidth?: number;
+    widths?: number[];
+    onColumnsResize?: (widths: number[]) => void;
   };
   rows?: {
     alternatingColor?: TableColorOptions;

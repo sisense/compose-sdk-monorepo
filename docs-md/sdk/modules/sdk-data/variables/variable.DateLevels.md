@@ -82,6 +82,26 @@ Levels for [DateDimension](../interfaces/interface.DateDimension.md)
 
 ***
 
+### `WeekOfYear`
+
+**`readonly`** **WeekOfYear**: `"WeekOfYear"` = `'WeekOfYear'`
+
+Groups by the **week-of-year ordinal** (1–53), collapsing across years — e.g. all
+"week 5" values across every year are grouped together. Emitted as the JAQL
+`dateTimePart` field (a date-*part* extraction).
+
+Differs from DateLevels.Weeks, which truncates to each distinct calendar week
+on the timeline (e.g. the week of 2024-01-01, then 2024-01-08, …) and is emitted as a
+`level`.
+
+#### Remarks
+
+Requires an Analytical Engine that supports date-part grouping (the
+`TIME_HANDLING_ENHANCEMENT` feature, i.e. the `dateTimePart` JAQL property).
+Older Fusion / AE versions reject it.
+
+***
+
 ### `Weeks`
 
 **`readonly`** **Weeks**: `"Weeks"` = `'Weeks'`

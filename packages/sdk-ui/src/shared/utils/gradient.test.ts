@@ -12,9 +12,21 @@ import {
   type RadialGradientColor,
   RadialGradientPresets,
   toGradientHighchartsFormat,
+  withGradientConversion,
 } from './gradient';
 
 describe('gradient utilities', () => {
+  describe('withGradientConversion', () => {
+    it('should map null and undefined to undefined', () => {
+      expect(withGradientConversion(null)).toBeUndefined();
+      expect(withGradientConversion(undefined)).toBeUndefined();
+    });
+
+    it('should return plain colors unchanged', () => {
+      expect(withGradientConversion('#ff0000')).toBe('#ff0000');
+    });
+  });
+
   describe('toGradientHighchartsFormat', () => {
     it('should convert linear gradient to Highcharts format', () => {
       const linearGradient: LinearGradientColor = {

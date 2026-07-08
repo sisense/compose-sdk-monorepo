@@ -12,7 +12,6 @@ export {
 
 // Re-exports types from @sisense/sdk-ui-preact
 export type {
-  // General (Others):
   AppConfig,
   AreamapChartDataOptions,
   AreamapChartType,
@@ -21,7 +20,6 @@ export type {
   AreaStyleOptions,
   AreaSubtype,
   AxisLabel,
-  // Charts related:
   BeforeRenderHandler,
   BoxplotChartCustomDataOptions,
   BoxplotChartDataOptions,
@@ -43,29 +41,23 @@ export type {
   CategoricalChartDataOptions,
   CategoricalChartType,
   CategoricalWidgetType,
-  // Formatting:
   CommonDataOptions,
   FormatDateOptions,
   FormatDataSetOptions,
-  // Data Options:
   ChartDataOptions,
-  // Style Options:
   ChartStyleOptions,
   ChartType,
   ChartWidgetStyleOptions,
   Color,
   ColorPaletteTheme,
-  // Props:
   CommonWidgetProps,
   ConditionalDataColorOptions,
   Convolution,
-  // Dashboard:
   DashboardLayoutOptions,
   DashboardModel,
   DashStyle,
   DataColorCondition,
   DataColorOptions,
-  // Style related:
   DataLimits,
   DataOptionLocation,
   DataPoint,
@@ -104,7 +96,6 @@ export type {
   MonthOfYear,
   MultiColumnValueToColorMap,
   Navigator,
-  // Data Options related:
   NumberFormatConfig,
   NumericBarIndicatorStyleOptions,
   NumericSimpleIndicatorStyleOptions,
@@ -154,9 +145,9 @@ export type {
   WidgetByIdStyleOptions,
   WidgetDataOptions,
   WidgetId,
-  JumpToDashboardConfig,
-  JumpToDashboardConfigForPivot,
-  // Models:
+  WidgetConfig,
+  WidgetNarrativeConfig,
+  WidgetNarrativeDisplayLocation,
   WidgetModel,
   WidgetsOptions,
   WidgetsPanelColumnLayout,

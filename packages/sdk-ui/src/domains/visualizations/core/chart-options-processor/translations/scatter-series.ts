@@ -19,6 +19,7 @@ import { DataColorOptions, legendColor } from '../../chart-data/data-coloring';
 import { createDataColoringFunction } from '../../chart-data/data-coloring/create-data-coloring-function';
 import { ScatterAxisCategoriesMap, ScatterDataRow, ScatterDataTable } from '../../chart-data/types';
 import { SeriesType } from '../chart-options-service';
+import { prepareDataLabelsOptions } from '../series-labels';
 import { MarkerSettings } from './marker-section';
 import { SeriesPointStructure } from './translations-to-highcharts';
 import { ChartDesignOptions } from './types';
@@ -320,7 +321,7 @@ export const buildScatterSeries = (
   const alerts: SeriesWithAlerts<SeriesType[]>['alerts'] = [];
   const series = fill(data, categoriesMap, dataOptions, themeSettings).map((seriesItem) => ({
     ...seriesItem,
-    dataLabels: designOptions?.seriesLabels,
+    dataLabels: prepareDataLabelsOptions(designOptions?.seriesLabels),
   }));
 
   if (seriesCapacity && series.length > seriesCapacity) {

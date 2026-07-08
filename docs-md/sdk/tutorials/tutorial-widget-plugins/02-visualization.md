@@ -22,7 +22,7 @@ const Visualization: CustomVisualization<VisualizationProps> = (props) => {
 
 ## Props Overview
 
-Your component receives `VisualizationProps` (i.e. [`CustomVisualizationProps`](../../modules/sdk-ui/interfaces/interface.CustomVisualizationProps.md)`<DataOptions, StyleOptions>` — `DataPoint` defaults to `AbstractDataPointWithEntries`):
+Your component receives `VisualizationProps` (i.e. [`CustomVisualizationProps`](../../modules/sdk-ui/plugin-system/interface.CustomVisualizationProps.md)`<DataOptions, StyleOptions>` — `DataPoint` defaults to `AbstractDataPointWithEntries`):
 
 | Prop                     | Type                                                                                                                                                           | Description                                                                   |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -31,9 +31,11 @@ Your component receives `VisualizationProps` (i.e. [`CustomVisualizationProps`](
 | `styleOptions`           | `StyleOptions`                                                                                                                                                 | Style config from the [design panel](./05-design-panel.md).                   |
 | `filters`                | [`Filter[]`](../../modules/sdk-data/interfaces/interface.Filter.md) &#124; [`FilterRelations`](../../modules/sdk-data/interfaces/interface.FilterRelations.md) | Active filters from the dashboard context.                                    |
 | `highlights`             | [`Filter[]`](../../modules/sdk-data/interfaces/interface.Filter.md)                                                                                            | Cross-widget highlight filters. Matching data is visually emphasized.         |
-| `onDataPointClick`       | [`CustomVisualizationDataPointEventHandler`](../../modules/sdk-ui/type-aliases/type-alias.CustomVisualizationDataPointEventHandler.md)                          | Single data point click. See [Event Handling](./06-event-handling.md).        |
-| `onDataPointContextMenu` | [`CustomVisualizationDataPointContextMenuHandler`](../../modules/sdk-ui/type-aliases/type-alias.CustomVisualizationDataPointContextMenuHandler.md)              | Right-click handler. See [Event Handling](./06-event-handling.md).            |
-| `onDataPointsSelected`   | [`CustomVisualizationDataPointsEventHandler`](../../modules/sdk-ui/type-aliases/type-alias.CustomVisualizationDataPointsEventHandler.md)                       | Multi-selection handler. See [Event Handling](./06-event-handling.md).        |
+| `onDataPointClick`       | [`CustomVisualizationDataPointEventHandler`](../../modules/sdk-ui/plugin-system/type-alias.CustomVisualizationDataPointEventHandler.md)                          | Single data point click. See [Event Handling](./06-event-handling.md).        |
+| `onDataPointContextMenu` | [`CustomVisualizationDataPointContextMenuHandler`](../../modules/sdk-ui/plugin-system/type-alias.CustomVisualizationDataPointContextMenuHandler.md)              | Right-click handler. See [Event Handling](./06-event-handling.md).            |
+| `onDataPointsSelected`   | [`CustomVisualizationDataPointsEventHandler`](../../modules/sdk-ui/plugin-system/type-alias.CustomVisualizationDataPointsEventHandler.md)                       | Multi-selection handler. See [Event Handling](./06-event-handling.md).        |
+| `customOptions`          | `CustomOptions`                                                                                                                                                | Plugin-specific runtime state, persisted across reloads. See [State Persistence](./07-state-persistence.md). |
+| `onChange`               | `(update) => void`                                                                                                                                            | Persist a partial `styleOptions` / `customOptions` update. Present only inside a dashboard. See [State Persistence](./07-state-persistence.md). |
 
 Both `filters` and `highlights` are passed to query hooks when fetching data (covered in [Fetching Data](./03-fetching-data.md)).
 
@@ -49,17 +51,20 @@ const Visualization: CustomVisualization<VisualizationProps> = ({ styleOptions }
 
 ## Type Parameterization
 
-[`CustomVisualizationProps`](../../modules/sdk-ui/interfaces/interface.CustomVisualizationProps.md) accepts three type parameters:
+[`CustomVisualizationProps`](../../modules/sdk-ui/plugin-system/interface.CustomVisualizationProps.md) accepts four type parameters:
 
 ```tsx
-CustomVisualizationProps<DataOptions, StyleOptions, DataPoint>;
+CustomVisualizationProps<DataOptions, StyleOptions, DataPoint, CustomOptions>;
 ```
 
-| Parameter      | Default                                                                                                           | Description                                      |
-| -------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| `DataOptions`  | [`GenericDataOptions`](../../modules/sdk-ui/type-aliases/type-alias.GenericDataOptions.md)                        | Shape of data options matching data panel inputs |
-| `StyleOptions` | [`CustomVisualizationStyleOptions`](../../modules/sdk-ui/interfaces/interface.CustomVisualizationStyleOptions.md) | Shape of style options from design panel         |
-| `DataPoint`    | [`AbstractDataPointWithEntries`](../../modules/sdk-ui/type-aliases/type-alias.AbstractDataPointWithEntries.md)    | Shape of data points in event handlers           |
+| Parameter       | Default                                                                                                           | Description                                      |
+| --------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `DataOptions`   | [`GenericDataOptions`](../../modules/sdk-ui/type-aliases/type-alias.GenericDataOptions.md)                        | Shape of data options matching data panel inputs |
+| `StyleOptions`  | [`CustomVisualizationStyleOptions`](../../modules/sdk-ui/plugin-system/interface.CustomVisualizationStyleOptions.md) | Shape of style options from design panel         |
+| `DataPoint`     | [`AbstractDataPointWithEntries`](../../modules/sdk-ui/type-aliases/type-alias.AbstractDataPointWithEntries.md)    | Shape of data points in event handlers           |
+| `CustomOptions` | `Record<string, unknown>`                                                                                         | Shape of persisted runtime state — see [State Persistence](./07-state-persistence.md) |
+
+The last two parameters are optional and only needed when your widget uses them — `DataPoint` for cross-filtering ([Lesson 6](./06-event-handling.md)) and `CustomOptions` for persistence ([Lesson 7](./07-state-persistence.md)).
 
 ## Rendering Environment
 

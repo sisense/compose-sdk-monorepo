@@ -4,7 +4,7 @@ title: Widget
 
 # Function Widget
 
-> **Widget**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **Widget**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Facade component that renders a widget within a dashboard based on the widget type.
 
@@ -16,4 +16,4 @@ Facade component that renders a widget within a dashboard based on the widget ty
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`

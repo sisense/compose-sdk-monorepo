@@ -8,9 +8,9 @@ Configurations and authentication for Sisense Context.
 
 Use one of the following to authenticate:
 
-- [ssoEnabled](interface.SisenseContextConfig.md#ssoenabled)
-- [token](interface.SisenseContextConfig.md#token)
-- [wat](interface.SisenseContextConfig.md#wat)
+- [`ssoEnabled`](interface.SisenseContextConfig.md#ssoenabled)
+- [`token`](interface.SisenseContextConfig.md#token)
+- [`wat`](interface.SisenseContextConfig.md#wat)
 
 ## Properties
 

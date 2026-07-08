@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {
   ComponentAdapter,
-  type DashboardByIdConfig,
+  type DashboardByIdConfig as DashboardByIdConfigPreact,
   DashboardById as DashboardByIdPreact,
   type DashboardByIdProps as DashboardByIdPropsPreact,
 } from '@sisense/sdk-ui-preact';
@@ -26,14 +26,27 @@ import {
 import { CustomWidgetsService } from '../../services/custom-widgets.service';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
+import { type DashboardHeaderConfig } from './dashboard.component';
 
-// Re-exports related types
-export { DashboardByIdConfig };
+/**
+ * Configuration for the {@link DashboardByIdComponent}.
+ */
+export interface DashboardByIdConfig extends Omit<DashboardByIdConfigPreact, 'header'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardConfig.header}
+   */
+  header?: DashboardHeaderConfig;
+}
 
 /**
  * Props of the {@link DashboardByIdComponent}.
  */
-export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
+export interface DashboardByIdProps extends Omit<DashboardByIdPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
+   */
+  config?: DashboardByIdConfig;
+}
 
 /**
  * An Angular component used for easily rendering a dashboard by its ID created in a Sisense Fusion instance.
@@ -62,6 +75,7 @@ export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
  * @fusionEmbed
  */
 @Component({
+  standalone: false,
   selector: 'csdk-dashboard-by-id',
   template,
   styles,

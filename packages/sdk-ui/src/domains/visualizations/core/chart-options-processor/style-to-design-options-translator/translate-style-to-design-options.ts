@@ -19,7 +19,7 @@ import {
   ChartDataOptionsInternal,
   ValueStyle,
 } from '../../chart-data-options/types';
-import { chartSubtypeToDesignOptions } from '../subtype-to-design-options';
+import { ChartSubtype, chartSubtypeToDesignOptions } from '../subtype-to-design-options';
 import { DesignOptions } from '../translations/types';
 import {
   getAreaChartDesignOptions,
@@ -104,7 +104,7 @@ export const translateStyleOptionsToDesignOptions = (
 
   const subtype =
     'subtype' in styleOptions && styleOptions.subtype ? styleOptions.subtype : 'line/basic';
-  const subtypeOptions = chartSubtypeToDesignOptions[subtype];
+  const subtypeOptions = chartSubtypeToDesignOptions[subtype as ChartSubtype];
 
   return {
     ...intermediateDesignOptions,

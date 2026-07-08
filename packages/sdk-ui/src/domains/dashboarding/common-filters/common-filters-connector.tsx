@@ -1,7 +1,7 @@
 import { TFunction } from '@sisense/sdk-common';
 import { Attribute, type Filter, isMembersFilter, MembersFilter } from '@sisense/sdk-data';
 import partition from 'lodash-es/partition';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { PivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
 import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';

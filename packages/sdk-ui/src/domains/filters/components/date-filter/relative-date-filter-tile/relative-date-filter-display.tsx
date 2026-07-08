@@ -33,7 +33,11 @@ export const RelativeDateFilterDisplay: FunctionComponent<RelativeDateFilterDisp
 
   const operatorTxt = t(DATE_OPS_MAP[filter.operator]);
   const countTxt = filter.count.toString();
-  const levelTxt = t(DATE_LEVELS_MAP[(filter.attribute as LevelAttribute).granularity]);
+  const levelTxt = t(
+    DATE_LEVELS_MAP[
+      (filter.attribute as LevelAttribute).granularity as keyof typeof DATE_LEVELS_MAP
+    ],
+  );
   const anchorDate = useMemo(() => createAnchorDateFromRelativeDateFilter(filter), [filter]);
   const anchorTxt = anchorDate.isToday()
     ? t('dateFilter.today')

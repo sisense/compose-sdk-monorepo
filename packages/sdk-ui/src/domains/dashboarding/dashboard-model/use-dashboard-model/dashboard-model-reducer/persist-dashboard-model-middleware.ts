@@ -5,13 +5,22 @@ import { withDashboardWidgetContext } from '@/domains/dashboarding/dashboard-mod
 import { withReplacedWidgetId } from '@/domains/dashboarding/hooks/duplicate-widget';
 import { deepMerge } from '@/domains/dashboarding/persistence/deep-merge.js';
 import type { WidgetPropsUpdate } from '@/domains/dashboarding/persistence/update-types.js';
-import { withWidgetDesign } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/index.js';
-import type { WidgetDto, WidgetStyle } from '@/domains/widgets/components/widget-by-id/types';
+import { applyPartialDtoStyle } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/apply-partial-dto-style.js';
+import type { UnsupportedStyleOptions } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/extract-unsupported-style-options.js';
+import {
+  toTableWidgetStyle,
+  withWidgetDesign,
+} from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/to-widget-dto-style.js';
+import type {
+  TableWidgetStyle,
+  WidgetDto,
+  WidgetStyle,
+} from '@/domains/widgets/components/widget-by-id/types';
 import { isTextWidget } from '@/domains/widgets/components/widget-by-id/utils.js';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 import { RestApi } from '@/infra/api/rest-api';
 import { AppSettings } from '@/infra/app/settings/settings';
-import { CompleteThemeSettingsInternal, WidgetStyleOptions } from '@/types';
+import { CompleteThemeSettingsInternal, TableStyleOptions, WidgetStyleOptions } from '@/types';
 
 import { layoutToLayoutDto } from '../../translate-dashboard-dto-utils.js';
 import {
@@ -25,12 +34,41 @@ import { parseAddWidgetPayload, translateFiltersAndRelationsToDto } from './util
 /** Current DTO-derived state needed to build a replace-on-PATCH widget patch. */
 type FusionPatchContext = {
   currentDtoOptions: WidgetDto['options'] | undefined;
+  currentPartialDtoStyle: WidgetDto['style'] | undefined;
   currentStyleOptions: WidgetStyleOptions | undefined;
   currentCustomOptions: Record<string, unknown> | undefined;
   isCustomWidget: boolean;
+  isTableWidget: boolean;
   themeSettings: CompleteThemeSettingsInternal;
   appSettings: AppSettings;
 };
+
+/**
+ * Returns the Fusion `tableState.colResize.tableSize` for persisted column widths.
+ * Fusion renders each column as `(columnPx / sum(columns)) × tableSize`, so
+ * `tableSize` must equal the sum of column pixel widths for absolute px rendering.
+ *
+ * @param columnWidths - Column pixel widths in display order
+ * @returns Total table width in pixels
+ * @internal
+ */
+export function toColResizeTableSize(columnWidths: readonly number[]): number {
+  return columnWidths.reduce((sum, width) => sum + width, 0);
+}
+
+/**
+ * Drops `tableState.colResize` from a stale table style before it's merged as the
+ * lower-priority source in {@link applyPartialDtoStyle}, which merges arrays by index
+ * and would otherwise leave stale `colResize.columns` entries behind after a resize to
+ * fewer columns. `rebuiltStyle` always carries a freshly computed `colResize`.
+ *
+ * @internal
+ */
+function withoutColResize(style: TableWidgetStyle | undefined): TableWidgetStyle | undefined {
+  if (!style?.tableState) return style;
+  const { colResize, ...tableStateWithoutColResize } = style.tableState;
+  return { ...style, tableState: tableStateWithoutColResize };
+}
 
 /**
  * Translates a {@link WidgetPropsUpdate} into a narrow {@link WidgetPatch} body
@@ -50,19 +88,54 @@ function widgetPropsUpdateToFusionPatch(
 ): WidgetPatch | undefined {
   const {
     currentDtoOptions,
+    currentPartialDtoStyle,
     currentStyleOptions,
     currentCustomOptions,
     isCustomWidget,
+    isTableWidget,
     themeSettings,
     appSettings,
   } = context;
   let patch: WidgetPatch | undefined;
 
   const scrollerLocation = update.styleOptions?.navigator?.scrollerLocation;
+  const columnWidths = update.styleOptions?.columns?.widths;
   if (scrollerLocation) {
     patch = {
       ...patch,
       options: { ...currentDtoOptions, previousScrollerLocation: scrollerLocation },
+    };
+  } else if (columnWidths && isTableWidget) {
+    const mergedStyleOptions = deepMerge(
+      currentStyleOptions ?? {},
+      update.styleOptions,
+    ) as TableStyleOptions;
+    // `currentPartialDtoStyle` is `WidgetDto['style']` generically, but this branch only
+    // runs when `isTableWidget` is true, so it's a `TableWidgetStyle` at runtime. Narrowed
+    // once here and reused below to avoid repeating the cast.
+    const partialTableStyle = currentPartialDtoStyle as TableWidgetStyle | undefined;
+    const columns = columnWidths.map((width) => `${width}px`);
+    const tableSize = toColResizeTableSize(columnWidths);
+    const rebuiltStyle: TableWidgetStyle = {
+      ...toTableWidgetStyle(mergedStyleOptions),
+      tableState: {
+        ...partialTableStyle?.tableState,
+        colResize: {
+          ...partialTableStyle?.tableState?.colResize,
+          columns,
+          tableSize,
+        },
+      },
+    };
+    // `UnsupportedStyleOptions` is a loose `Record<string, unknown>` bag for DTO fields the
+    // CSDK model doesn't translate. `partialTableStyle` matches that shape structurally, but
+    // `TableWidgetStyle` has no index signature, so the cast is required.
+    patch = {
+      ...patch,
+      style: applyPartialDtoStyle(
+        rebuiltStyle,
+        withoutColResize(partialTableStyle) as UnsupportedStyleOptions | undefined,
+      ),
     };
   } else if (update.styleOptions && isCustomWidget) {
     // Custom-widget styleOptions round-trip through the opaque DTO `style`.
@@ -254,9 +327,12 @@ export async function persistDashboardModelMiddleware({
       const currentWidget = model?.widgets?.find((widget) => widget.oid === widgetOid);
       const patch = widgetPropsUpdateToFusionPatch(update, {
         currentDtoOptions: model?.widgetsOptions?.[widgetOid]?.partialDtoOptions?.options,
+        currentPartialDtoStyle: model?.widgetsOptions?.[widgetOid]?.partialDtoOptions?.style,
         currentStyleOptions: currentWidget?.styleOptions,
         currentCustomOptions: currentWidget?.customOptions,
         isCustomWidget: currentWidget?.widgetType === 'custom',
+        isTableWidget:
+          currentWidget?.widgetType === 'chart' && currentWidget?.chartType === 'table',
         themeSettings,
         appSettings,
       });

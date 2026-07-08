@@ -153,6 +153,30 @@ describe('prepareDataLabelsOptions', () => {
       });
     });
 
+    it('should omit backgroundColor when SDK value is absent', () => {
+      const seriesLabels: SeriesLabels = {
+        enabled: true,
+      };
+      const result = prepareDataLabelsOptions(seriesLabels);
+
+      expect(result).toEqual({
+        enabled: true,
+      });
+      expect(result).not.toHaveProperty('backgroundColor');
+    });
+
+    it('should omit borderColor when SDK value is absent', () => {
+      const seriesLabels: SeriesLabels = {
+        enabled: true,
+      };
+      const result = prepareDataLabelsOptions(seriesLabels);
+
+      expect(result).toEqual({
+        enabled: true,
+      });
+      expect(result).not.toHaveProperty('borderColor');
+    });
+
     it('should map borderRadius', () => {
       const seriesLabels: SeriesLabels = {
         enabled: true,

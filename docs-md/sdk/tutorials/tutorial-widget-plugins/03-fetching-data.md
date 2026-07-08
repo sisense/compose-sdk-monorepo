@@ -4,7 +4,7 @@ title: 3 | Fetching Data
 
 # Fetching Data
 
-Your visualization component receives `dataOptions` (column definitions) and `filters`, but not the actual query results. Use [`useExecuteQuery`](../../modules/sdk-ui/queries/function.useExecuteQuery.md) together with [`extractDimensionsAndMeasures`](../../modules/sdk-ui/dashboards/function.extractDimensionsAndMeasures.md) to fetch data, and [`formatDataSet`](../../modules/sdk-ui/functions/function.formatDataSet.md) to apply any number/date formatting declared on the columns.
+Your visualization component receives `dataOptions` (column definitions) and `filters`, but not the actual query results. Use [`useExecuteQuery`](../../modules/sdk-ui/queries/function.useExecuteQuery.md) together with [`extractDimensionsAndMeasures`](../../modules/sdk-ui/dashboards/function.extractDimensionsAndMeasures.md) to fetch data, and [`formatDataSet`](../../modules/sdk-ui/formatting/function.formatDataSet.md) to apply any number/date formatting declared on the columns.
 
 > An [`<ExecuteQuery>`](../../modules/sdk-ui/queries/function.ExecuteQuery.md) render-prop component is also available for the same purpose. Most plugins use the hook.
 

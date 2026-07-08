@@ -4,7 +4,7 @@ title: PieChart
 
 # Function PieChart
 
-> **PieChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **PieChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component representing data in a circular graph with the data shown as slices of a whole,
 with each slice representing a proportion of the total.
@@ -33,6 +33,6 @@ Additional Pie Chart examples:
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Pie Chart component

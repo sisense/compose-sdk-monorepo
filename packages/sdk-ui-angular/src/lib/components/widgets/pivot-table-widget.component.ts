@@ -97,6 +97,7 @@ export class AnalyticsComponent {
  * @group Dashboards
  */
 @Component({
+  standalone: false,
   selector: 'csdk-pivot-table-widget',
   template,
   styles,
@@ -147,12 +148,12 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   styleOptions: PivotTableWidgetProps['styleOptions'];
 
   /**
-   * Configuration for AI-powered widget features such as automated narrative generation
-   * @alpha
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.config}
+   *
    * @category Widget
    */
   @Input()
-  aiOptions: PivotTableWidgetProps['aiOptions'];
+  config: PivotTableWidgetProps['config'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.drilldownOptions}
@@ -226,7 +227,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
       filters: this.filters,
       highlights: this.highlights,
       styleOptions: this.styleOptions,
-      aiOptions: this.aiOptions,
+      config: this.config,
       drilldownOptions: this.drilldownOptions,
       title: this.title,
       description: this.description,

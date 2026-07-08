@@ -53,6 +53,7 @@ import {
   Panel,
   PanelItem,
   PivotWidgetStyle,
+  TableWidgetStyle,
   WidgetStyle,
 } from './types.js';
 import {
@@ -144,7 +145,9 @@ const extractDatetimeFormat = (item: PanelItem) => {
   // so masks stored under either key round-trip cleanly.
   const jl = item.jaql as { level?: string; dateTimeLevel?: string } | undefined;
   const levelKey = jl?.dateTimeLevel || jl?.level;
-  return (levelKey && mask?.[levelKey]) || mask?.dateAndTime;
+  return (
+    (levelKey && (mask as Record<string, string> | undefined)?.[levelKey]) || mask?.dateAndTime
+  );
 };
 
 export function createDataColumn(item: PanelItem, customPaletteColors?: Color[]) {
@@ -440,9 +443,45 @@ function extractIndicatorChartDataOptions(
   };
 }
 
-function extractTableChartDataOptions(panels: Panel[], paletteColors?: Color[]): TableDataOptions {
+/**
+ * Parses column pixel widths from `style.tableState.colResize`.
+ *
+ * Returns `[]` when `colResize.columns` is missing or its length does not match
+ * enabled column panel items. Invalid, non-positive, or non-numeric entries are
+ * `undefined` so callers can fall back via `widths[index] ?? column.width`.
+ *
+ * @param panels - JAQL panels with column definitions
+ * @param style - Table widget style
+ * @returns Parsed widths in display order, or `[]` on count mismatch
+ */
+function extractTableColumnWidths(
+  panels: Panel[],
+  style: TableWidgetStyle,
+): (number | undefined)[] {
+  const columnCount = getEnabledPanelItems(panels, 'columns').length;
+  const rawWidths = style.tableState?.colResize?.columns;
+  if (!rawWidths || rawWidths.length !== columnCount) return [];
+
+  return rawWidths.map((rawWidth) => {
+    const parsed = Math.round(parseFloat(rawWidth));
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
+  });
+}
+
+function extractTableChartDataOptions(
+  panels: Panel[],
+  style: TableWidgetStyle,
+  paletteColors?: Color[],
+): TableDataOptions {
+  const columns = createColumnsFromPanelItems(panels, 'columns', paletteColors);
+  const widths = extractTableColumnWidths(panels, style);
+
   return {
-    columns: createColumnsFromPanelItems(panels, 'columns', paletteColors),
+    columns: columns.map((column, index) => {
+      // eslint-disable-next-line security/detect-object-injection
+      const width = widths[index] ?? column.width;
+      return width === undefined ? column : { ...column, width };
+    }),
   };
 }
 
@@ -694,7 +733,7 @@ export function extractDataOptions(
     return extractIndicatorChartDataOptions(panels, customPaletteColors);
   }
   if (isTableFusionWidget(fusionWidgetType)) {
-    return extractTableChartDataOptions(panels, customPaletteColors);
+    return extractTableChartDataOptions(panels, style as TableWidgetStyle, customPaletteColors);
   }
   if (isPivotTableFusionWidget(fusionWidgetType)) {
     return extractPivotTableChartDataOptions(

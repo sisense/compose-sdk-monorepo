@@ -67,6 +67,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-calendar-heatmap-chart',
   template: `
     <csdk-chart

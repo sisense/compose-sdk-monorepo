@@ -4,7 +4,7 @@ title: ThemeProvider
 
 # Function ThemeProvider
 
-> **ThemeProvider**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **ThemeProvider**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Theme provider, which allows you to adjust the look and feel of child components.
 
@@ -18,7 +18,7 @@ Components not wrapped in a theme provider use the current theme from the connec
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 A Theme Provider component
 

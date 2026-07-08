@@ -29,6 +29,7 @@ const baseConfig = {
     'Formatting',
     'Styling',
     'Primitives',
+    'Helpers',
     /* sdk-data */
     'Factories',
     'Data Model Utilities',

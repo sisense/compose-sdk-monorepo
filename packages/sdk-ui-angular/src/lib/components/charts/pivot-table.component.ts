@@ -101,6 +101,7 @@ export class AnalyticsComponent {
  * @group Data Grids
  */
 @Component({
+  standalone: false,
   selector: 'csdk-pivot-table',
   template,
   styles,

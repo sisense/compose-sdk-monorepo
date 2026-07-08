@@ -8,7 +8,7 @@ The design panel lets users customize your widget's appearance at design time. I
 
 ## Design Panel Component
 
-A design panel implements [`DesignPanelProps`](../../modules/sdk-ui/interfaces/interface.DesignPanelProps.md) — it receives the current style options and an `onChange` callback:
+A design panel implements [`DesignPanelProps`](../../modules/sdk-ui/plugin-system/interface.DesignPanelProps.md) — it receives the current style options and an `onChange` callback:
 
 ```tsx
 import type { DesignPanelProps } from '@sisense/sdk-ui';
@@ -58,7 +58,7 @@ onChange({ showLegend: false });
 
 ## Registering the Design Panel
 
-Include it in your plugin declaration. The [`DesignPanel`](../../modules/sdk-ui/type-aliases/type-alias.DesignPanel.md) type alias describes the accepted component shape:
+Include it in your plugin declaration. The [`DesignPanel`](../../modules/sdk-ui/plugin-system/type-alias.DesignPanel.md) type alias describes the accepted component shape:
 
 ```tsx
 const plugin: WidgetPlugin<VisualizationProps> = {

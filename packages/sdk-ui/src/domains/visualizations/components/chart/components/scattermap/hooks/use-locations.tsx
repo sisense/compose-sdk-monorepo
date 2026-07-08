@@ -17,7 +17,10 @@ type EncodedWordsMap = {
 };
 
 function encodeNotSupportedLocationName(name: string, encodedWordsMap: EncodedWordsMap): string {
-  const encodedName = notSupportedLocationNameEncodeMap[name.toLowerCase()];
+  const encodedName =
+    notSupportedLocationNameEncodeMap[
+      name.toLowerCase() as keyof typeof notSupportedLocationNameEncodeMap
+    ];
   if (encodedName) encodedWordsMap[encodedName] = name;
   return encodedName || name;
 }
@@ -60,7 +63,7 @@ export const useLocations = (
       };
       acc[decodedLocation.name] = decodedLocation;
       return acc;
-    }, {});
+    }, {} as Record<string, Location>);
 
     const notFoundCoordinates: string[] = [];
     const result = locations.map((location) => {

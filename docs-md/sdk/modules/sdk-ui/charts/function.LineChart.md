@@ -4,7 +4,7 @@ title: LineChart
 
 # Function LineChart
 
-> **LineChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **LineChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component displaying data as a series of points connected by a line. Used to show trends or changes over time.
 
@@ -32,6 +32,6 @@ Additional Line Chart examples:
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Line Chart component

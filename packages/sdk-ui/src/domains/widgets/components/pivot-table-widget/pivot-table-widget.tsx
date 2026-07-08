@@ -5,8 +5,8 @@ import omit from 'lodash-es/omit';
 
 import { NarrativeTriggerButton } from '@/domains/narrative/components/narrative-trigger-button';
 import { WidgetNarrative } from '@/domains/narrative/components/widget-narrative';
-import { getWidgetNarrativeOptionsFromWidgetProps } from '@/domains/narrative/core/get-widget-narrative-from-widget-props.js';
-import { getCompleteWidgetNarrativeOptions } from '@/domains/narrative/core/widget-narrative-options.js';
+import { getWidgetNarrativeConfigFromWidgetProps } from '@/domains/narrative/core/get-widget-narrative-from-widget-props.js';
+import { getCompleteWidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config.js';
 import { PivotTable } from '@/domains/visualizations/components/pivot-table';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
 import type { WithCommonWidgetProps } from '@/domains/widgets/components/widget/types';
@@ -164,34 +164,33 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     onDrilldownSelectionsChange,
   });
 
-  const completeNarrativeOptions = useMemo(
+  const completeNarrativeConfig = useMemo(
     () =>
-      getCompleteWidgetNarrativeOptions(
-        getWidgetNarrativeOptionsFromWidgetProps(propsWithDrilldown),
-      ),
+      getCompleteWidgetNarrativeConfig(getWidgetNarrativeConfigFromWidgetProps(propsWithDrilldown)),
     [propsWithDrilldown],
   );
 
   const isAutoShowNarrativeEnabled =
-    !!app?.settings?.narrativeConfig?.widgetNarrativeEnabled &&
-    completeNarrativeOptions.enabled &&
-    completeNarrativeOptions.autoShow;
+    !!app?.settings?.narrativeConfig?.enabled &&
+    completeNarrativeConfig.enabled &&
+    completeNarrativeConfig.autoShow;
 
   // Pivot table bottom slot causes issues with pagination controls
   // Force narrative to be shown above the pivot table when the display location is 'above' or 'below'
   const showNarrativeAbove =
     isAutoShowNarrativeEnabled &&
-    (completeNarrativeOptions.displayLocation === 'above' ||
-      completeNarrativeOptions.displayLocation === 'below');
+    (completeNarrativeConfig.displayLocation === 'above' ||
+      completeNarrativeConfig.displayLocation === 'below');
 
   const canGenerateNarrativeViaAI = app?.settings?.narrative?.canGenerateNarrativeViaAI ?? false;
 
   const [narrativeVisible, setNarrativeVisible] = useState(false);
 
   const showNarrativeTrigger =
+    !!app?.settings?.narrativeConfig?.enabled &&
     canGenerateNarrativeViaAI &&
-    completeNarrativeOptions.enabled &&
-    !completeNarrativeOptions.autoShow;
+    completeNarrativeConfig.enabled &&
+    !completeNarrativeConfig.autoShow;
 
   const containerStyleOptions = useMemo(() => {
     if (!showNarrativeTrigger) return styleOptions;
@@ -218,9 +217,10 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
   }, [showNarrativeTrigger, styleOptions, setNarrativeVisible, narrativeVisible]);
 
   const narrativeShouldShow =
+    !!app?.settings?.narrativeConfig?.enabled &&
     canGenerateNarrativeViaAI &&
-    completeNarrativeOptions.enabled &&
-    (completeNarrativeOptions.autoShow || narrativeVisible);
+    completeNarrativeConfig.enabled &&
+    (completeNarrativeConfig.autoShow || narrativeVisible);
 
   const narrativeWidgetProps = useMemo((): WithCommonWidgetProps<
     PivotTableWidgetProps,
@@ -295,7 +295,7 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
           hasTopSlotContent ? (
             <div ref={isAutoHeight ? topSlotRef : undefined}>
               {props.topSlot}
-              {narrativeShouldShow && completeNarrativeOptions.displayLocation === 'above' ? (
+              {narrativeShouldShow && completeNarrativeConfig.displayLocation === 'above' ? (
                 <WidgetNarrative widgetProps={narrativeWidgetProps} />
               ) : null}
               {breadcrumbs}
@@ -306,14 +306,14 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
         onRefresh={() => setRefreshCounter(refreshCounter + 1)}
         bottomSlot={
           <>
-            {narrativeShouldShow && completeNarrativeOptions.displayLocation === 'below' ? (
+            {narrativeShouldShow && completeNarrativeConfig.displayLocation === 'below' ? (
               <WidgetNarrative widgetProps={narrativeWidgetProps} />
             ) : null}
             {props.bottomSlot}
           </>
         }
       >
-        {narrativeShouldShow && completeNarrativeOptions.displayLocation === 'alone' ? (
+        {narrativeShouldShow && completeNarrativeConfig.displayLocation === 'alone' ? (
           <WidgetNarrative widgetProps={narrativeWidgetProps} />
         ) : (
           <PivotTable {...pivotTableProps} />

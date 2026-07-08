@@ -49,17 +49,12 @@ export function getJaqlQueryPayload(
     offset,
     ungroup,
   } = queryDescription;
-  // "ungroup: true" will be set in JAQL when two conditions are met:
-  // (1) ungroup is set to true
-  // AND
-  // (2) the query has no measures (unaggregated query)
-  const includeUngroup = ungroup && measures.length === 0;
   const queryPayload = {
     metadata: prepareQueryMetadata(
       { attributes, measures, filters, filterRelations, highlights },
       shouldSkipHighlightsWithoutAttributes,
     ),
-    ...prepareQueryOptions(dataSource, count, offset, includeUngroup),
+    ...prepareQueryOptions(dataSource, count, offset, ungroup),
   };
 
   if (filterRelations) {

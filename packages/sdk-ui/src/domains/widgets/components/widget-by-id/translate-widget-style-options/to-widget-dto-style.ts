@@ -19,6 +19,7 @@ import type {
   GaugeIndicatorStyleOptions,
   IndicatorStyleOptions,
   LegendOptions,
+  LineOptions,
   LineStyleOptions,
   LineWidth,
   Markers,
@@ -59,6 +60,8 @@ import type {
   WidgetStyle,
   WidgetSubtype,
 } from '../types.js';
+import { toFusionCategoricalLabelsFromSeriesLabels } from './categorical-labels-style.js';
+import { toFusionSeriesLabelAffixFromSdk } from './series-label-affix-style.js';
 
 const DEFAULT_LEGEND = { enabled: true, position: 'bottom' as const };
 const DEFAULT_NAVIGATOR = { enabled: false };
@@ -128,6 +131,7 @@ export function toSeriesLabelsStyle(
   return {
     enabled: seriesLabels.enabled ?? false,
     rotation: seriesLabels.rotation ?? 0,
+    ...toFusionSeriesLabelAffixFromSdk(seriesLabels),
   };
 }
 
@@ -186,6 +190,29 @@ export function toLineWidthStyle(
 }
 
 /**
+ * Maps CSDK line.width (px) to Fusion lineWidth.customWidth on DTO.
+ *
+ * @internal
+ */
+export function toLineCustomWidthStyle(line?: LineOptions): number | undefined {
+  const width = line?.width;
+  if (width != null && width > 0) {
+    return width;
+  }
+  return undefined;
+}
+
+/**
+ * Maps SDK line dash options to Fusion DTO line style.
+ *
+ * @internal
+ */
+export function toLineDashStyle(line?: LineOptions): CartesianWidgetStyle['line'] {
+  if (!line?.dashStyle) return undefined;
+  return { dashStyle: line.dashStyle };
+}
+
+/**
  * Maps SDK markers options to Fusion DTO markers style.
  *
  * @internal
@@ -220,8 +247,18 @@ function buildCommonCartesianWidgetStyle(
   const xAxis = toAxisStyle(styleOptions.xAxis);
   const yAxis = toAxisStyle(styleOptions.yAxis);
   const y2Axis = styleOptions.y2Axis ? toAxisStyle(styleOptions.y2Axis) : undefined;
-  const lineWidth =
+  const lineWidthToken =
     'lineWidth' in styleOptions ? toLineWidthStyle(styleOptions.lineWidth) : undefined;
+  const customWidth =
+    'line' in styleOptions ? toLineCustomWidthStyle(styleOptions.line) : undefined;
+  const lineWidth =
+    lineWidthToken != null
+      ? customWidth != null
+        ? { ...lineWidthToken, customWidth }
+        : lineWidthToken
+      : customWidth != null
+      ? { width: 'bold', customWidth }
+      : undefined;
   const markers = toMarkersStyle(styleOptions.markers);
   const dataLimits = toDataLimitsStyle(styleOptions.dataLimits);
 
@@ -263,11 +300,13 @@ function toStackedSeriesLabelsStyle(
   const rotation = seriesLabels?.rotation ?? 0;
   const showValue = seriesLabels?.showValue ?? false;
   const showTotals = !!(totalLabels?.enabled && enabled);
+  const affix = toFusionSeriesLabelAffixFromSdk(seriesLabels);
 
   if (STACKED_SUBTYPES.has(widgetSubtype)) {
     return {
       enabled,
       rotation,
+      ...affix,
       labels: {
         enabled: true,
         stacked: true,
@@ -287,6 +326,7 @@ function toStackedSeriesLabelsStyle(
     return {
       enabled,
       rotation,
+      ...affix,
       labels: {
         enabled: true,
         stacked: false,
@@ -432,18 +472,14 @@ export function withWidgetDesign(
 export function toPieWidgetStyle(styleOptions: PieStyleOptions): WidgetStyle {
   const legend = toLegendStyle(styleOptions.legend);
   const dataLimits = toDataLimitsStyle(styleOptions.dataLimits);
-  const l = styleOptions.labels ?? {};
 
   return {
     legend,
     navigator: toNavigatorStyle(undefined),
-    labels: {
-      enabled: l.enabled ?? true,
-      categories: l.categories ?? true,
-      percent: l.percent ?? true,
-      value: l.value ?? false,
-      decimals: l.decimals ?? false,
-    },
+    labels: toFusionCategoricalLabelsFromSeriesLabels(
+      styleOptions.labels,
+      styleOptions.seriesLabels,
+    ),
     ...(dataLimits && { dataLimits }),
     ...(styleOptions.convolution && { convolution: styleOptions.convolution }),
   };
@@ -506,9 +542,11 @@ export function toIndicatorWidgetStyle(styleOptions: IndicatorStyleOptions): Wid
  * @internal
  */
 export function toLineWidgetStyle(styleOptions: LineStyleOptions): CartesianWidgetStyle {
+  const line = toLineDashStyle(styleOptions.line);
   return {
     ...buildCommonCartesianWidgetStyle(styleOptions),
     seriesLabels: toSeriesLabelsStyle(styleOptions.seriesLabels),
+    ...(line && { line }),
   };
 }
 
@@ -524,7 +562,11 @@ export function toAreaWidgetStyle(
   styleOptions: AreaStyleOptions,
   widgetSubtype: WidgetSubtype,
 ): CartesianWidgetStyle {
-  return toStackedCartesianWidgetStyle(styleOptions, widgetSubtype);
+  const line = toLineDashStyle(styleOptions.line);
+  return {
+    ...toStackedCartesianWidgetStyle(styleOptions, widgetSubtype),
+    ...(line && { line }),
+  };
 }
 
 function toStackedCartesianWidgetStyle(
@@ -550,20 +592,16 @@ function toStackedCartesianWidgetStyle(
  * @internal
  */
 export function toFunnelWidgetStyle(styleOptions: FunnelStyleOptions): FunnelWidgetStyle {
-  const l = styleOptions.labels ?? {};
   return {
     legend: toLegendStyle(styleOptions.legend),
     navigator: toNavigatorStyle(undefined),
     size: styleOptions.funnelSize ?? 'regular',
     type: styleOptions.funnelType ?? 'regular',
     direction: styleOptions.funnelDirection ?? 'regular',
-    labels: {
-      enabled: l.enabled ?? true,
-      categories: l.categories ?? true,
-      percent: l.percent ?? true,
-      value: l.value ?? false,
-      decimals: l.decimals ?? false,
-    },
+    labels: toFusionCategoricalLabelsFromSeriesLabels(
+      styleOptions.labels,
+      styleOptions.seriesLabels,
+    ),
   } as FunnelWidgetStyle;
 }
 

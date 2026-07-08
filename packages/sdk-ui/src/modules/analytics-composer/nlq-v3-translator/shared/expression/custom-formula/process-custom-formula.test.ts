@@ -4,8 +4,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { type FunctionContext } from '../../../types.js';
-import { createSchemaIndex } from '../../utils/schema-index.js';
-import { createAttributeFromName } from '../../utils/schema-index.js';
+import {
+  createAttributeFromName,
+  createSchemaIndex,
+  REQUIRE_EXPLICIT_DATE_LEVEL,
+} from '../../utils/schema-index.js';
 import { processCustomFormula } from './process-custom-formula.js';
 
 // Mock the createAttributeFromName function
@@ -15,7 +18,7 @@ vi.mock('../../utils/schema-index.js', async (importOriginal) => {
     ...actual,
     createAttributeFromName: vi.fn().mockReturnValue({
       __serializable: 'DimensionalAttribute',
-      kind: 'attribute',
+      type: 'numeric-attribute',
       name: 'mockProcessedAttribute',
     }),
   };
@@ -361,6 +364,33 @@ describe('processCustomFormula', () => {
       expect(() => {
         processCustomFormula(processedArgs, contextWithDateTime);
       }).toThrow(/Reference \[x\] is used in xdiff functions with conflicting date levels/);
+    });
+  });
+
+  describe('bare datetime context without xdiff', () => {
+    it('should call createAttributeFromName without requireExplicitDateLevel for non-xdiff formula', () => {
+      const createAttributeFromNameMock = vi.mocked(createAttributeFromName);
+      createAttributeFromNameMock.mockClear();
+      const processedArgs = ['Date count', 'COUNT([date])', { date: 'DM.Commerce.Date' }];
+      const contextWithDateTime: FunctionContext = {
+        ...mockProcessingContext,
+        schemaIndex: schemaWithDateTime,
+      };
+
+      processCustomFormula(processedArgs, contextWithDateTime);
+
+      expect(createAttributeFromNameMock).toHaveBeenCalledWith(
+        'DM.Commerce.Date',
+        expect.any(Object),
+        expect.any(Object),
+        undefined,
+      );
+      expect(createAttributeFromNameMock).not.toHaveBeenCalledWith(
+        'DM.Commerce.Date',
+        expect.any(Object),
+        expect.any(Object),
+        REQUIRE_EXPLICIT_DATE_LEVEL,
+      );
     });
   });
 });

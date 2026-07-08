@@ -16,6 +16,14 @@ Widget chart type.
 
 ***
 
+### config
+
+> **config**?: [`WidgetConfig`](../type-aliases/type-alias.WidgetConfig.md)
+
+Widget configuration.
+
+***
+
 ### customOptions
 
 > **customOptions**?: `Record`\< `string`, `any` \>

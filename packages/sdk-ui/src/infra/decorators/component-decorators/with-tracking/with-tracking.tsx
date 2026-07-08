@@ -5,7 +5,11 @@ import { useTracking } from '@/shared/hooks/use-tracking';
 
 import { ComponentDecorator } from '../as-sisense-component';
 import { ErrorTracker } from './error-tracker';
-import { TrackingContextProvider, useTrackComponentInit } from './use-track-component-init';
+import {
+  TrackingContextProvider,
+  useTrackComponentInit,
+  useTrackingContext,
+} from './use-track-component-init';
 
 /**
  * Configuration for withTracking decorator
@@ -35,15 +39,21 @@ export const withTracking: ComponentDecorator<TrackingDecoratorConfig> = ({
   return (Component) => {
     return function Tracking(props) {
       const { trackError } = useTracking();
+      const { skipNested: parentSkipNested } = useTrackingContext();
 
       if ((isBoolean(skip) && skip) || (isFunction(skip) && skip(props))) {
         return <Component {...props} />;
       }
       // eslint-disable-next-line react-hooks/rules-of-hooks
       useTrackComponentInit({ componentName, config }, props);
+      // A `transparent` component is invisible to tracking nesting: it must not change whether its
+      // descendants are tracked. Propagate the inherited parent context so components nested under an
+      // already-tracked ancestor (e.g. widgets under a Dashboard that renders an internal
+      // ThemeProvider) stay suppressed, while a normal component suppresses its nested components
+      // because it is itself the tracked unit.
+      const skipNested = transparent ? parentSkipNested : true;
       return (
-        // If component is transperent for tracking, nested components will be tracked
-        <TrackingContextProvider skipNested={!transparent}>
+        <TrackingContextProvider skipNested={skipNested}>
           <ErrorTracker componentName={componentName} handler={trackError}>
             <Component {...props} />
           </ErrorTracker>

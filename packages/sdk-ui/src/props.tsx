@@ -278,7 +278,7 @@ export interface SisenseContextProviderProps {
    *
    * @category Sisense App
    *
-   * @alpha
+   * @beta
    */
   modules?: Module[];
 }
@@ -1078,7 +1078,6 @@ export interface FunnelChartProps
 /**
  * Props of the {@link SankeyChart} component.
  *
- * @group Charts
  * @beta
  *
  * @example

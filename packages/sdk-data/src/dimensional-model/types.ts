@@ -50,6 +50,15 @@ export const AggregationTypes = {
 
   /** Standard deviation aggregation type */
   StandardDeviation: 'stdev',
+
+  /** Population standard deviation aggregation type */
+  StandardDeviationPop: 'stdevp',
+
+  /** Population variance aggregation type */
+  VariancePop: 'varp',
+
+  /** Mode (most frequent value) aggregation type */
+  Mode: 'mode',
 } as const;
 
 const aggTypes = Object.values(AggregationTypes);
@@ -395,6 +404,23 @@ export const DateLevels = {
   AggMinutesRoundTo15: 'AggMinutesRoundTo15',
   AggMinutesRoundTo1: 'AggMinutesRoundTo1',
 
+  /**
+   * Groups by the **week-of-year ordinal** (1–53), collapsing across years — e.g. all
+   * "week 5" values across every year are grouped together. Emitted as the JAQL
+   * `dateTimePart` field (a date-*part* extraction).
+   *
+   * Differs from {@link DateLevels.Weeks}, which truncates to each distinct calendar week
+   * on the timeline (e.g. the week of 2024-01-01, then 2024-01-08, …) and is emitted as a
+   * `level`.
+   *
+   * @beta
+   * @remarks
+   * Requires an Analytical Engine that supports date-part grouping (the
+   * `TIME_HANDLING_ENHANCEMENT` feature, i.e. the `dateTimePart` JAQL property).
+   * Older Fusion / AE versions reject it.
+   */
+  WeekOfYear: 'WeekOfYear',
+
   /** @internal */
   get all(): string[] {
     return [
@@ -412,6 +438,7 @@ export const DateLevels = {
       DateLevels.AggMinutesRoundTo30,
       DateLevels.AggMinutesRoundTo15,
       DateLevels.AggMinutesRoundTo1,
+      DateLevels.WeekOfYear,
     ];
   },
 
@@ -423,6 +450,7 @@ export const DateLevels = {
       DateLevels.Months,
       DateLevels.Weeks,
       DateLevels.Days,
+      DateLevels.WeekOfYear,
     ];
   },
 
@@ -484,6 +512,16 @@ export type BaseJaql = {
   datasource?: JaqlDataSource;
   title: string;
   level?: 'years' | 'quarters' | 'months' | 'weeks' | 'minutes' | 'days';
+  /** Date-part extraction (engine DateTimeLevelPartFunction); value is a lowercase Level token, e.g. 'weeks' = week-of-year. Mutually exclusive with `level`. */
+  dateTimePart?:
+    | 'years'
+    | 'quarters'
+    | 'months'
+    | 'weeks'
+    | 'days'
+    | 'hours'
+    | 'minutes'
+    | 'seconds';
   sort?: `${JaqlSortDirection}`;
   in?: {
     selected?: {

@@ -6,6 +6,8 @@ import {
   AreaStyleOptions,
   BaseAxisStyleOptions,
   CalendarHeatmapStyleOptions,
+  FunnelStyleOptions,
+  LineStyleOptions,
   StackableStyleOptions,
 } from '@/types.js';
 
@@ -166,6 +168,231 @@ describe('translate widget style options', () => {
 
       expect(styleOptions.lineWidth).toEqual(widgetStyle.lineWidth);
     });
+
+    it('should map Fusion lineWidth.customWidth to styleOptions.line.width', () => {
+      const widgetStyle = {
+        lineWidth: { width: 'bold', customWidth: 7 },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.lineWidth).toEqual({ width: 'bold' });
+      expect(styleOptions.line).toEqual({ width: 7 });
+    });
+
+    it('should omit styleOptions.line.width when Fusion lineWidth.customWidth is zero', () => {
+      const widgetStyle = {
+        lineWidth: { width: 'bold', customWidth: 0 },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.lineWidth).toEqual({ width: 'bold' });
+      expect(styleOptions.line).toBeUndefined();
+    });
+
+    it('should map Fusion seriesLabels.customRotation to styleOptions.seriesLabels.rotation', () => {
+      const widgetStyle = {
+        seriesLabels: { enabled: true, rotation: 0, customRotation: 67 },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.rotation).toBe(67);
+    });
+
+    it('should map Fusion seriesLabels prefix and suffix to styleOptions.seriesLabels', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          prefix: 'y',
+          suffix: 'K',
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.prefix).toBe('y');
+      expect(styleOptions.seriesLabels?.suffix).toBe('K');
+    });
+
+    it('should map Fusion seriesLabels backgroundColor to styleOptions.seriesLabels', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          backgroundColor: '#00bcd4',
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.backgroundColor).toBe('#00bcd4');
+      expect(styleOptions.seriesLabels?.padding).toBeUndefined();
+    });
+
+    it('should map Fusion seriesLabels backgroundPadding when backgroundColor is set', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          backgroundColor: '#00bcd4',
+          backgroundPadding: 6,
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.padding).toBe(6);
+    });
+
+    it('should map Fusion seriesLabels borderColor to styleOptions.seriesLabels', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          borderColor: '#333333',
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.borderColor).toBe('#333333');
+      expect(styleOptions.seriesLabels?.borderWidth).toBeUndefined();
+      expect(styleOptions.seriesLabels?.borderRadius).toBeUndefined();
+    });
+
+    it('should map Fusion seriesLabels borderWidth and borderRadius when borderColor is set', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          borderColor: '#333333',
+          borderWidth: 3,
+          borderRadius: 4,
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.borderWidth).toBe(3);
+      expect(styleOptions.seriesLabels?.borderRadius).toBe(4);
+    });
+
+    it('should map Fusion seriesLabels xOffset and yOffset to styleOptions.seriesLabels', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          xOffset: -4,
+          yOffset: 6,
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.xOffset).toBe(-4);
+      expect(styleOptions.seriesLabels?.yOffset).toBe(6);
+    });
+
+    it('should omit zero Fusion seriesLabels offsets from styleOptions.seriesLabels', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          xOffset: 0,
+          yOffset: 0,
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.xOffset).toBeUndefined();
+      expect(styleOptions.seriesLabels?.yOffset).toBeUndefined();
+    });
+
+    it('should prepare correct line dashStyle from style.line', () => {
+      const widgetStyle = {
+        line: { dashStyle: 'ShortDash' },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.line).toEqual({ dashStyle: 'ShortDash' });
+    });
+
+    it('should ignore invalid Fusion line.dashStyle strings', () => {
+      const widgetStyle = {
+        line: { dashStyle: 'NotARealDashStyle' },
+      } as unknown as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.line).toBeUndefined();
+    });
+
+    it('should map Fusion lineStyle.lineType to styleOptions.line.dashStyle', () => {
+      const widgetStyle = {
+        lineStyle: { lineType: 'dotted' },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/area',
+        mockWidgetDto('', widgetStyle, []),
+      ) as AreaStyleOptions;
+
+      expect(styleOptions.line).toEqual({ dashStyle: 'ShortDot' });
+    });
+
+    it('should map extended Fusion lineStyle.lineType tokens to dashStyle', () => {
+      const widgetStyle = {
+        lineStyle: { lineType: 'longDashDotDot' },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.line).toEqual({ dashStyle: 'LongDashDotDot' });
+    });
   });
 
   describe('axes style options for polar chart', () => {
@@ -303,7 +530,86 @@ describe('translate widget style options', () => {
         funnelType: widgetStyle.type,
         funnelDirection: widgetStyle.direction,
         labels: widgetStyle.labels,
+        seriesLabels: {
+          enabled: true,
+          showCategory: true,
+          showValue: true,
+          showPercentage: true,
+          showPercentDecimals: true,
+          rotation: 0,
+        },
       });
+    });
+
+    it('should map Fusion labels formatting to styleOptions.seriesLabels', () => {
+      const widgetStyle = {
+        size: 'regular',
+        type: 'regular',
+        direction: 'regular',
+        labels: {
+          enabled: true,
+          categories: true,
+          percent: true,
+          value: true,
+          decimals: false,
+          customRotation: 30,
+          prefix: 'A',
+          suffix: 'B',
+          backgroundColor: '#ff0000',
+          backgroundPadding: 4,
+          borderColor: '#111111',
+          borderWidth: 2,
+          borderRadius: 3,
+          xOffset: 5,
+          yOffset: -1,
+        },
+      } as FunnelWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/funnel',
+        mockWidgetDto('', widgetStyle, []),
+      ) as FunnelStyleOptions;
+
+      expect(styleOptions.seriesLabels).toMatchObject({
+        rotation: 30,
+        prefix: 'A',
+        suffix: 'B',
+        backgroundColor: '#ff0000',
+        padding: 4,
+        borderColor: '#111111',
+        borderWidth: 2,
+        borderRadius: 3,
+        xOffset: 5,
+        yOffset: -1,
+      });
+    });
+
+    it('should clear seriesLabels colors when Fusion labels colors are null', () => {
+      const widgetStyle = {
+        size: 'regular',
+        type: 'regular',
+        direction: 'regular',
+        labels: {
+          enabled: true,
+          categories: true,
+          percent: true,
+          value: true,
+          decimals: false,
+          backgroundColor: null,
+          borderColor: null,
+        },
+      } as FunnelWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/funnel',
+        mockWidgetDto('', widgetStyle, []),
+      ) as FunnelStyleOptions;
+
+      expect(styleOptions.seriesLabels).not.toHaveProperty('backgroundColor');
+      expect(styleOptions.seriesLabels).not.toHaveProperty('padding');
+      expect(styleOptions.seriesLabels).not.toHaveProperty('borderColor');
+      expect(styleOptions.seriesLabels).not.toHaveProperty('borderWidth');
+      expect(styleOptions.seriesLabels).not.toHaveProperty('borderRadius');
     });
   });
 

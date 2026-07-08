@@ -14,8 +14,8 @@ import {
  *
  * @remarks
  * Narrative endpoint selection uses `app.settings.narrative.canGenerateNarrativeViaAI` from
- * {@link useSisenseContext}. {@link WidgetNarrativeOptions} come from
- * `widgetProps.aiOptions.narrative` (see {@link getCompleteWidgetNarrativeOptions}).
+ * {@link useSisenseContext}. {@link WidgetNarrativeConfig} come from
+ * `widgetProps.config.narrative` (see {@link getCompleteWidgetNarrativeConfig}).
  *
  * The `enabled` flag follows {@link HookEnableParam} (defaults to `true` when omitted).
  * @sisenseInternal

@@ -1,4 +1,4 @@
-import Color from 'colorjs.io';
+import { Color } from './colorjs';
 
 export const TRIANGLE_COLOR_ADJUSTMENT = 0.15;
 

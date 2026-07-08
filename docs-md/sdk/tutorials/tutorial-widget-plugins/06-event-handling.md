@@ -139,7 +139,7 @@ const rowOpacity = (row: (typeof data.rows)[0]) =>
 
 ## Building Data Points
 
-Define a typed data point matching your data panel inputs. Use [`CustomVisualizationDataPoint`](../../modules/sdk-ui/type-aliases/type-alias.CustomVisualizationDataPoint.md) as your base when using the `CustomVisualization` API:
+Define a typed data point matching your data panel inputs. Use [`CustomVisualizationDataPoint`](../../modules/sdk-ui/plugin-system/type-alias.CustomVisualizationDataPoint.md) as your base when using the `CustomVisualization` API:
 
 ```tsx
 import type { Attribute, Measure } from '@sisense/sdk-data';
@@ -431,4 +431,4 @@ Tell your AI agent what you want in plain language:
 
 ---
 
-**Tutorial complete.** [Back to overview](./index.md)
+**Next lesson:** [State Persistence](./07-state-persistence.md)

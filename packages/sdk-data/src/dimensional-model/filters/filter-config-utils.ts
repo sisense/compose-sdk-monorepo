@@ -61,7 +61,7 @@ export const simplifyFilterConfig = (
   // Filter out properties that match their default values
   return Object.fromEntries(
     Object.entries(config).filter(
-      ([key, value]) => !isEqual(value, defaultConfig[key as keyof MembersFilterConfig]),
+      ([key, value]) => !isEqual(value, (defaultConfig as Record<string, unknown>)[key]),
     ),
   );
 };

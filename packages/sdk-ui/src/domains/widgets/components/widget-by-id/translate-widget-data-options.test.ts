@@ -148,6 +148,308 @@ describe('utils for widget data options translation', () => {
         verifyColumn(tableDataOptions.columns[0], panels[0].items[0]);
       });
 
+      it('should take table column width from style.tableState.colResize over format.width', () => {
+        const panels = [
+          {
+            name: 'columns',
+            items: [
+              {
+                jaql: {
+                  table: 'Commerce',
+                  column: 'Gender',
+                  dim: '[Commerce.Gender]',
+                  datatype: 'text',
+                  title: 'Gender',
+                },
+                // a stale width that should be overridden by tableState.colResize
+                format: { width: 999 },
+              },
+            ],
+          },
+        ] as Panel[];
+        const style = {
+          tableState: {
+            colResize: { columns: ['150.5px'] },
+          },
+        } as WidgetStyle;
+
+        const tableDataOptions = extractDataOptions(
+          'tablewidget',
+          panels,
+          style,
+        ) as TableDataOptions;
+
+        expect((tableDataOptions.columns[0] as StyledColumn).width).toBe(151);
+      });
+
+      it('should map colResize widths positionally across multiple columns', () => {
+        const panels = [
+          {
+            name: 'columns',
+            items: [
+              {
+                jaql: { dim: '[Commerce.Brand]', datatype: 'text', title: 'Brand' },
+              },
+              {
+                jaql: { dim: '[Commerce.Category]', datatype: 'text', title: 'Category' },
+              },
+            ],
+          },
+        ] as Panel[];
+        const style = {
+          tableState: {
+            colResize: { columns: ['100px', '200px'] },
+          },
+        } as WidgetStyle;
+
+        const tableDataOptions = extractDataOptions(
+          'tablewidget',
+          panels,
+          style,
+        ) as TableDataOptions;
+
+        expect((tableDataOptions.columns[0] as StyledColumn).width).toBe(100); // Brand
+        expect((tableDataOptions.columns[1] as StyledColumn).width).toBe(200); // Category
+      });
+
+      it('should map colResize widths for enabled columns when a middle panel item is disabled', () => {
+        const panels = [
+          {
+            name: 'columns',
+            items: [
+              {
+                jaql: { dim: '[Commerce.Brand]', datatype: 'text', title: 'Brand' },
+                format: { width: 50 },
+              },
+              {
+                disabled: true,
+                jaql: { dim: '[Commerce.Category]', datatype: 'text', title: 'Category' },
+                format: { width: 999 },
+              },
+              {
+                jaql: { dim: '[Commerce.Age Range]', datatype: 'text', title: 'Age Range' },
+                format: { width: 80 },
+              },
+            ],
+          },
+        ] as Panel[];
+        const style = {
+          tableState: {
+            colResize: { columns: ['100px', '200px'] },
+          },
+        } as WidgetStyle;
+
+        const tableDataOptions = extractDataOptions(
+          'tablewidget',
+          panels,
+          style,
+        ) as TableDataOptions;
+
+        expect(tableDataOptions.columns).toHaveLength(2);
+        expect((tableDataOptions.columns[0] as StyledColumn).width).toBe(100);
+        expect((tableDataOptions.columns[1] as StyledColumn).width).toBe(200);
+      });
+
+      it('should fall back to format.width for enabled columns when colResize includes a disabled column', () => {
+        const panels = [
+          {
+            name: 'columns',
+            items: [
+              {
+                jaql: { dim: '[Commerce.Brand]', datatype: 'text', title: 'Brand' },
+                format: { width: 120 },
+              },
+              {
+                disabled: true,
+                jaql: { dim: '[Commerce.Category]', datatype: 'text', title: 'Category' },
+              },
+              {
+                jaql: { dim: '[Commerce.Age Range]', datatype: 'text', title: 'Age Range' },
+                format: { width: 80 },
+              },
+            ],
+          },
+        ] as Panel[];
+        const style = {
+          tableState: {
+            // stale: still lists the disabled middle column
+            colResize: { columns: ['100px', '150px', '200px'] },
+          },
+        } as WidgetStyle;
+
+        const tableDataOptions = extractDataOptions(
+          'tablewidget',
+          panels,
+          style,
+        ) as TableDataOptions;
+
+        expect(tableDataOptions.columns).toHaveLength(2);
+        expect((tableDataOptions.columns[0] as StyledColumn).width).toBe(120);
+        expect((tableDataOptions.columns[1] as StyledColumn).width).toBe(80);
+      });
+
+      it('should apply colResize width to a formula column', () => {
+        const panels = [
+          {
+            name: 'columns',
+            items: [
+              { jaql: { dim: '[Category.Category]', datatype: 'text', title: 'Category' } },
+              { jaql: { dim: '[Commerce.Age Range]', datatype: 'text', title: 'Age Range' } },
+              {
+                jaql: {
+                  dim: '[Commerce.Quantity]',
+                  datatype: 'numeric',
+                  agg: 'sum',
+                  title: 'Total Quantity',
+                },
+              },
+              { jaql: jaqlMock.formula, format: { width: 999 } },
+            ],
+          },
+        ] as Panel[];
+        const style = {
+          tableState: {
+            colResize: { columns: ['158.047px', '116.75px', '136.25px', '397.25px'] },
+          },
+        } as WidgetStyle;
+
+        const tableDataOptions = extractDataOptions(
+          'tablewidget',
+          panels,
+          style,
+        ) as TableDataOptions;
+
+        expect((tableDataOptions.columns[0] as StyledColumn).width).toBe(158);
+        expect((tableDataOptions.columns[1] as StyledColumn).width).toBe(117);
+        expect((tableDataOptions.columns[2] as StyledMeasureColumn).width).toBe(136);
+        expect((tableDataOptions.columns[3] as StyledMeasureColumn).width).toBe(397); // formula column
+      });
+
+      it('should fall back to format.width when style.tableState is absent', () => {
+        const panels = [
+          {
+            name: 'columns',
+            items: [
+              {
+                jaql: {
+                  dim: '[Commerce.Gender]',
+                  datatype: 'text',
+                  title: 'Gender',
+                },
+                format: { width: 120 },
+              },
+            ],
+          },
+        ] as Panel[];
+
+        const tableDataOptions = extractDataOptions(
+          'tablewidget',
+          panels,
+          styleMock,
+        ) as TableDataOptions;
+
+        expect((tableDataOptions.columns[0] as StyledColumn).width).toBe(120);
+      });
+
+      it('should fall back to format.width when colResize column count does not equal the visible column count', () => {
+        const panels = [
+          {
+            name: 'columns',
+            items: [
+              {
+                jaql: { dim: '[Commerce.Gender]', datatype: 'text', title: 'Gender' },
+                format: { width: 120 },
+              },
+              {
+                jaql: { dim: '[Commerce.Age Range]', datatype: 'text', title: 'Age Range' },
+              },
+            ],
+          },
+        ] as Panel[];
+        const style = {
+          tableState: {
+            colResize: { columns: ['150px'] }, // only 1 entry for 2 visible columns
+          },
+        } as WidgetStyle;
+
+        const tableDataOptions = extractDataOptions(
+          'tablewidget',
+          panels,
+          style,
+        ) as TableDataOptions;
+
+        expect((tableDataOptions.columns[0] as StyledColumn).width).toBe(120);
+        expect((tableDataOptions.columns[1] as StyledColumn).width).toBeUndefined();
+      });
+
+      it('should fall back to format.width when colResize entry is malformed, negative, or zero', () => {
+        const panels = [
+          {
+            name: 'columns',
+            items: [
+              {
+                jaql: { dim: '[Commerce.Gender]', datatype: 'text', title: 'Gender' },
+                format: { width: 120 },
+              },
+              {
+                jaql: { dim: '[Commerce.Age Range]', datatype: 'text', title: 'Age Range' },
+                format: { width: 80 },
+              },
+              {
+                jaql: { dim: '[Commerce.Brand]', datatype: 'text', title: 'Brand' },
+              },
+            ],
+          },
+        ] as Panel[];
+        const style = {
+          tableState: {
+            colResize: { columns: ['invalid', '-50px', '0px'] },
+          },
+        } as WidgetStyle;
+
+        const tableDataOptions = extractDataOptions(
+          'tablewidget',
+          panels,
+          style,
+        ) as TableDataOptions;
+
+        expect((tableDataOptions.columns[0] as StyledColumn).width).toBe(120);
+        expect((tableDataOptions.columns[1] as StyledColumn).width).toBe(80);
+        expect((tableDataOptions.columns[2] as StyledColumn).width).toBeUndefined();
+      });
+
+      it('should apply valid colResize widths and fall back for invalid entries in the same array', () => {
+        const panels = [
+          {
+            name: 'columns',
+            items: [
+              {
+                jaql: { dim: '[Commerce.Gender]', datatype: 'text', title: 'Gender' },
+                format: { width: 120 },
+              },
+              {
+                jaql: { dim: '[Commerce.Age Range]', datatype: 'text', title: 'Age Range' },
+                format: { width: 80 },
+              },
+            ],
+          },
+        ] as Panel[];
+        const style = {
+          tableState: {
+            colResize: { columns: ['150px', 'not-a-number'] },
+          },
+        } as WidgetStyle;
+
+        const tableDataOptions = extractDataOptions(
+          'tablewidget',
+          panels,
+          style,
+        ) as TableDataOptions;
+
+        expect((tableDataOptions.columns[0] as StyledColumn).width).toBe(150);
+        expect((tableDataOptions.columns[1] as StyledColumn).width).toBe(80);
+      });
+
       it('should return correct data options for cartesian chart', () => {
         const {
           // eslint-disable-next-line no-unused-vars

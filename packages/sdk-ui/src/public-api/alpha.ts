@@ -6,29 +6,7 @@
  */
 
 export { useDashboardTheme } from '../domains/dashboarding/use-dashboard-theme.js';
-export type {
-  ThemeConfig,
-  WidgetNarrativeDisplayLocation,
-  WidgetNarrativeOptions,
-  CompleteWidgetNarrativeOptions,
-  WidgetAiOptions,
-} from '../types';
-
-// Dashboard header items configuration.
-export {
-  DashboardHeaderTargets,
-  type DashboardHeaderTarget,
-} from '../domains/dashboarding/components/dashboard-header-targets.js';
-export type {
-  DashboardHeaderConfig,
-  DashboardHeaderItem,
-  DashboardHeaderItemComponent,
-  DashboardHeaderItemComponentProps,
-  DashboardHeaderItemPosition,
-  DashboardHeaderItemSize,
-  DashboardHeaderItemsTransform,
-  DashboardResolvedHeaderItem,
-} from '../domains/dashboarding/components/dashboard-header-config.js';
+export type { ThemeConfig } from '../types';
 
 // Translation
 export {
@@ -46,9 +24,6 @@ export {
   type CustomFilterTileProps,
 } from '../domains/filters/components/custom-filter-tile';
 
-// Shared hooks
-export { useSyncedState, type UseSyncedStateOptions } from '../shared/hooks/use-synced-state';
-
 // Charts related
 export {
   isIndicatorRenderOptions,
@@ -57,6 +32,5 @@ export {
   type CalendarHeatmapChartEventProps,
 } from '../props';
 
-// Modules infrastructure
-export type { Module, ModuleRequirement } from '../infra/modules/types.js';
+// Modules infrastructure — producer-side API (consumer-side types are @beta)
 export { useModuleApiRegistry } from '../infra/modules/modules-context.js';

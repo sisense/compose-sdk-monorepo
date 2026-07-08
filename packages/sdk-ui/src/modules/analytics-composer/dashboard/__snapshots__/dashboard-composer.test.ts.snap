@@ -315,6 +315,16 @@ export default function CodeExample() {
           decimals: false,
           value: false,
         },
+        seriesLabels: {
+          enabled: true,
+          showCategory: true,
+          showValue: false,
+          percentageLabels: {
+            enabled: true,
+            showDecimals: false,
+          },
+          rotation: 0,
+        },
         dataLimits: {
           seriesCapacity: 100000,
           categoriesCapacity: undefined,
@@ -452,6 +462,16 @@ export default function CodeExample() {
           percent: true,
           decimals: false,
           value: false,
+        },
+        seriesLabels: {
+          enabled: true,
+          showCategory: true,
+          showValue: false,
+          percentageLabels: {
+            enabled: true,
+            showDecimals: false,
+          },
+          rotation: 0,
         },
         dataLimits: {
           seriesCapacity: 100000,
@@ -922,9 +942,11 @@ export default function CodeExample() {
         columns: [{
             column: DM.Commerce.BrandID,
             sortType: 'sortNone',
+            width: 84,
           },{
             column: DM.Brand.Brand,
             sortType: 'sortNone',
+            width: 192,
           }
         ],
       },

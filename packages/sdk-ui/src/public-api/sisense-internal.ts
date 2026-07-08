@@ -36,9 +36,6 @@ export type {
   QuotaState,
 } from '../shared/hooks/use-quota-notification.js';
 
-// Plugin system — VisualizationStateUpdate remains internal-only
-export type { VisualizationStateUpdate } from '../infra/plugins/widget-plugins/types.js';
-
 // Components
 export { LoadingIndicator } from '../shared/components/loading-indicator.js';
 export { DataSchemaBrowser } from '../domains/data-browser/data-schema-browser/data-schema-browser.js';

@@ -233,8 +233,8 @@ const filterDateTime = (value: string, filterData: FilterData, locale: Locale) =
     case FilterOperator.BETWEEN:
       return (
         filterData.values.length === 2 &&
-        compareValue >= filterData.values[0] &&
-        compareValue <= filterData.values[1]
+        compareValue >= Number(filterData.values[0]) &&
+        compareValue <= Number(filterData.values[1])
       );
     case FilterOperator.BEFORE:
       return (
@@ -290,29 +290,31 @@ const filterNumber = (value: string, filter: FilterData) => {
   if (filter.values.length === 0) {
     return true;
   }
+  // This matcher only handles numeric filters, so the filter values are numbers here.
+  const values = filter.values as number[];
   switch (filter.operator) {
     case FilterOperator.BETWEEN:
-      return filter.values.length === 2 && number >= filter.values[0] && number <= filter.values[1];
+      return values.length === 2 && number >= values[0] && number <= values[1];
     case FilterOperator.NOT_BETWEEN:
-      return filter.values.length === 2 && (number < filter.values[0] || number > filter.values[1]);
+      return values.length === 2 && (number < values[0] || number > values[1]);
     case FilterOperator.TOP:
     case FilterOperator.BOTTOM:
     case FilterOperator.IN:
-      return filter.values.includes(number);
+      return values.includes(number);
     case FilterOperator.NOT_IN:
-      return !filter.values.includes(number);
+      return !values.includes(number);
     case FilterOperator.EQUALS:
-      return number === filter.values[0];
+      return number === values[0];
     case FilterOperator.NOT_EQUALS:
-      return number !== filter.values[0];
+      return number !== values[0];
     case FilterOperator.LESS_THAN:
-      return number < filter.values[0];
+      return number < values[0];
     case FilterOperator.LESS_THAN_OR_EQUAL:
-      return number <= filter.values[0];
+      return number <= values[0];
     case FilterOperator.GREATER_THAN:
-      return number > filter.values[0];
+      return number > values[0];
     case FilterOperator.GREATER_THAN_OR_EQUAL:
-      return number >= filter.values[0];
+      return number >= values[0];
   }
   return false;
 };

@@ -19,7 +19,10 @@ import {
   createPluginContextConnector,
   createSisenseContextConnector,
 } from '../component-wrapper-helpers';
-import { type DashboardProps } from '../components/dashboard/dashboard.component';
+import {
+  type DashboardConfig,
+  type DashboardProps,
+} from '../components/dashboard/dashboard.component';
 import { type WidgetProps } from '../components/widgets/widget.component';
 import { TrackableService } from '../decorators/trackable.decorator';
 import {
@@ -29,8 +32,13 @@ import {
 import { SisenseContextService } from './sisense-context.service';
 import { ThemeService } from './theme.service';
 
-export interface ComposableDashboardProps extends Omit<ComposableDashboardPropsPreact, 'widgets'> {
+export interface ComposableDashboardProps
+  extends Omit<ComposableDashboardPropsPreact, 'widgets' | 'config'> {
   widgets: WidgetProps[];
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
+   */
+  config?: DashboardConfig;
 }
 
 /**

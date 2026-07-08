@@ -4,7 +4,7 @@ title: CalendarHeatmapChart
 
 # Function CalendarHeatmapChart
 
-> **CalendarHeatmapChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **CalendarHeatmapChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component that visualizes values over days in a calendar-like view,
 making it easy to identify daily patterns or anomalies
@@ -17,7 +17,7 @@ making it easy to identify daily patterns or anomalies
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Calendar Heatmap Chart component
 

@@ -7,6 +7,7 @@ import type { NormalizedTable } from '../../../../types.js';
 import { createSchemaIndex } from '../../utils/schema-index.js';
 import { getXDiffFormulaFunctions } from '../formula-function-schemas.js';
 import {
+  extractFunctionArgs,
   extractParenFunctionCalls,
   parseXDiffCalls,
   validateCustomFormula,
@@ -429,6 +430,37 @@ describe('formula-validation', () => {
         expect(result.errors.filter((e) => e.includes('aggregate function calls'))).toHaveLength(0);
       });
 
+      it('should pass for VAR([cost]) - statistical aggregative function on raw attribute', () => {
+        const formula = 'VAR([cost])';
+        const context = { cost: 'DM.commerce.cost' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(true);
+        expect(result.errors.filter((e) => e.includes('aggregative function'))).toHaveLength(0);
+      });
+
+      it('should pass for STDEV([cost]) - statistical aggregative function on raw attribute', () => {
+        const formula = 'STDEV([cost])';
+        const context = { cost: 'DM.commerce.cost' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(true);
+        expect(result.errors.filter((e) => e.includes('aggregative function'))).toHaveLength(0);
+      });
+
+      it('should pass for VARP([cost]) and STDEVP([brandId]) in separate formulas', () => {
+        const formulas = [
+          { formula: 'VARP([cost])', context: { cost: 'DM.commerce.cost' } },
+          { formula: 'STDEVP([brandId])', context: { brandId: 'DM.commerce.Brand ID' } },
+        ];
+
+        for (const { formula, context } of formulas) {
+          const result = validateFormulaReferences(formula, context);
+          expect(result.isValid).toBe(true);
+          expect(result.errors.filter((e) => e.includes('aggregative function'))).toHaveLength(0);
+        }
+      });
+
       // Only known Sisense aggregative functions (SUM, AVG, etc.) satisfy the rule; unknown
       // function names do not count as aggregative.
       it('should fail for CustomFunc([revenue]) - unknown function is not aggregative', () => {
@@ -498,6 +530,44 @@ describe('formula-validation', () => {
 
         expect(result.isValid).toBe(true);
         expect(result.errors.filter((e) => e.includes('aggregate function calls'))).toHaveLength(0);
+      });
+
+      it('should pass for Percentile([x], 0.9) - statistical aggregation over a raw attribute', () => {
+        const formula = 'Percentile([x], 0.9)';
+        const context = { x: 'DM.Commerce.mrs_count' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(true);
+        expect(result.errors.filter((e) => e.includes('aggregative function'))).toHaveLength(0);
+      });
+
+      it('should pass for Quartile([x], 1) - statistical aggregation over a raw attribute', () => {
+        const formula = 'Quartile([x], 1)';
+        const context = { x: 'DM.Commerce.mrs_count' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(true);
+        expect(result.errors.filter((e) => e.includes('aggregative function'))).toHaveLength(0);
+      });
+
+      it('should pass for Mode([x]) - statistical aggregation over a raw attribute', () => {
+        const formula = 'Mode([x])';
+        const context = { x: 'DM.Commerce.mrs_count' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(true);
+        expect(result.errors.filter((e) => e.includes('aggregative function'))).toHaveLength(0);
+      });
+
+      it('should still fail for LARGEST([x], 2) - unsupported statistical function', () => {
+        const formula = 'LARGEST([x], 2)';
+        const context = { x: 'DM.Commerce.mrs_count' };
+        const result = validateFormulaReferences(formula, context);
+
+        expect(result.isValid).toBe(false);
+        expect(
+          result.errors.some((e) => e.includes('LARGEST') && e.includes('not supported')),
+        ).toBe(true);
       });
     });
   });
@@ -888,6 +958,172 @@ describe('formula-validation', () => {
         expect(
           result.errors.some((e) => e.includes('not found') || e.includes('NonExistentTable')),
         ).toBe(true);
+      });
+    });
+
+    describe('PERCENTILE / QUARTILE parameter range validation', () => {
+      const noCtxOpts = { errorOnUnusedContext: false, warnUnusedContext: false };
+
+      describe('extractFunctionArgs', () => {
+        it('should extract args from a single PERCENTILE call', () => {
+          expect(extractFunctionArgs('PERCENTILE([x], 0.9)', 'PERCENTILE')).toEqual([
+            ['[x]', '0.9'],
+          ]);
+        });
+
+        it('should be case-insensitive', () => {
+          expect(extractFunctionArgs('percentile([x], 0.5)', 'PERCENTILE')).toEqual([
+            ['[x]', '0.5'],
+          ]);
+        });
+
+        it('should return empty array when function not present', () => {
+          expect(extractFunctionArgs('SUM([x])', 'PERCENTILE')).toEqual([]);
+        });
+
+        it('should extract multiple calls', () => {
+          const args = extractFunctionArgs(
+            'PERCENTILE([x], 0.1) + PERCENTILE([y], 0.9)',
+            'PERCENTILE',
+          );
+          expect(args).toHaveLength(2);
+          expect(args[0][1]).toBe('0.1');
+          expect(args[1][1]).toBe('0.9');
+        });
+
+        it('should ignore PERCENTILE call inside a quoted string', () => {
+          expect(extractFunctionArgs("SUM([a]) + 'PERCENTILE([x], 2)'", 'PERCENTILE')).toEqual([]);
+        });
+      });
+
+      describe('PERCENTILE range', () => {
+        it('should pass for percentile = 0', () => {
+          const result = validateFormulaReferences(
+            'PERCENTILE([x], 0)',
+            { x: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.isValid).toBe(true);
+        });
+
+        it('should pass for percentile = 1', () => {
+          const result = validateFormulaReferences(
+            'PERCENTILE([x], 1)',
+            { x: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.isValid).toBe(true);
+        });
+
+        it('should pass for percentile = 0.75', () => {
+          const result = validateFormulaReferences(
+            'PERCENTILE([x], 0.75)',
+            { x: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.isValid).toBe(true);
+        });
+
+        it('should error for percentile = 1.5 (above 1)', () => {
+          const result = validateFormulaReferences(
+            'PERCENTILE([x], 1.5)',
+            { x: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.isValid).toBe(false);
+          expect(result.errors.some((e) => e.includes('PERCENTILE') && e.includes('[0, 1]'))).toBe(
+            true,
+          );
+        });
+
+        it('should error for percentile = -0.1 (below 0)', () => {
+          const result = validateFormulaReferences(
+            'PERCENTILE([x], -0.1)',
+            { x: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.isValid).toBe(false);
+          expect(result.errors.some((e) => e.includes('PERCENTILE') && e.includes('[0, 1]'))).toBe(
+            true,
+          );
+        });
+
+        it('should skip non-literal second arg (bracket ref)', () => {
+          const result = validateFormulaReferences(
+            'PERCENTILE([x], [p])',
+            { x: 'mockMeasure', p: 'mockMeasure' },
+            noCtxOpts,
+          );
+          // [p] is NaN as a number — skip the range check
+          expect(result.errors.some((e) => e.includes('[0, 1]'))).toBe(false);
+        });
+
+        it('should not validate PERCENTILE range inside a quoted string', () => {
+          const result = validateFormulaReferences(
+            "SUM([a]) + 'PERCENTILE([x], 2)'",
+            { a: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.errors.some((e) => e.includes('PERCENTILE') && e.includes('[0, 1]'))).toBe(
+            false,
+          );
+        });
+      });
+
+      describe('QUARTILE range', () => {
+        it('should pass for quartile = 0', () => {
+          const result = validateFormulaReferences(
+            'QUARTILE([x], 0)',
+            { x: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.isValid).toBe(true);
+        });
+
+        it('should pass for quartile = 4', () => {
+          const result = validateFormulaReferences(
+            'QUARTILE([x], 4)',
+            { x: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.isValid).toBe(true);
+        });
+
+        it('should error for quartile = 5 (above 4)', () => {
+          const result = validateFormulaReferences(
+            'QUARTILE([x], 5)',
+            { x: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.isValid).toBe(false);
+          expect(result.errors.some((e) => e.includes('QUARTILE') && e.includes('[0, 4]'))).toBe(
+            true,
+          );
+        });
+
+        it('should error for quartile = -1 (below 0)', () => {
+          const result = validateFormulaReferences(
+            'QUARTILE([x], -1)',
+            { x: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.isValid).toBe(false);
+          expect(result.errors.some((e) => e.includes('QUARTILE') && e.includes('[0, 4]'))).toBe(
+            true,
+          );
+        });
+
+        it('should error for non-integer quartile = 1.5', () => {
+          const result = validateFormulaReferences(
+            'QUARTILE([x], 1.5)',
+            { x: 'mockMeasure' },
+            noCtxOpts,
+          );
+          expect(result.isValid).toBe(false);
+          expect(result.errors.some((e) => e.includes('QUARTILE') && e.includes('[0, 4]'))).toBe(
+            true,
+          );
+        });
       });
     });
   });

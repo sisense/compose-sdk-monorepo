@@ -1,7 +1,8 @@
 import { Dashboard as DashboardPreact } from '@sisense/sdk-ui-preact';
 import type {
-  DashboardConfig,
+  DashboardConfig as DashboardConfigPreact,
   DashboardFiltersPanelConfig,
+  DashboardHeaderConfig as DashboardHeaderConfigPreact,
   DashboardProps as DashboardPropsPreact,
 } from '@sisense/sdk-ui-preact';
 import { defineComponent } from 'vue';
@@ -11,16 +12,36 @@ import { setupHelper } from '../../helpers/setup-helper';
 import type { WidgetProps } from '../widgets';
 
 // Re-exports related types
-export { DashboardConfig, DashboardFiltersPanelConfig };
+export { DashboardFiltersPanelConfig };
+
+/**
+ * Configuration for the dashboard header.
+ */
+export interface DashboardHeaderConfig
+  extends Omit<DashboardHeaderConfigPreact, 'items' | 'onBeforeRender'> {}
+
+/**
+ * Configuration for the {@link @sisense/sdk-ui-vue!Dashboard | `Dashboard`} component.
+ */
+export interface DashboardConfig extends Omit<DashboardConfigPreact, 'header'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardConfig.header}
+   */
+  header?: DashboardHeaderConfig;
+}
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!Dashboard | `Dashboard`} component.
  */
-export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets'> {
+export interface DashboardProps extends Omit<DashboardPropsPreact, 'widgets' | 'config'> {
   /**
    * {@inheritDoc @sisense/sdk-ui!DashboardProps.widgets}
    */
   widgets: WidgetProps[];
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardProps.config}
+   */
+  config?: DashboardConfig;
 }
 
 /**

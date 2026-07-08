@@ -1,8 +1,11 @@
 import type {
+  WidgetNarrativeConfig,
+  WidgetNarrativeDisplayLocation,
+} from '@/domains/narrative/core/widget-narrative-config';
+import type {
   WidgetDtoNarration,
   WidgetStyle,
 } from '@/domains/widgets/components/widget-by-id/types.js';
-import type { WidgetNarrativeDisplayLocation, WidgetNarrativeOptions } from '@/types.js';
 
 const DISPLAY_LOCATIONS: ReadonlySet<WidgetNarrativeDisplayLocation> = new Set([
   'above',
@@ -18,7 +21,7 @@ function normalizeNarrativeSize(value: unknown): number | undefined {
 }
 
 /**
- * Maps Fusion `style.narration` into SDK {@link WidgetNarrativeOptions},
+ * Maps Fusion `style.narration` into SDK {@link WidgetNarrativeConfig},
  * including `feedback` when present on the DTO.
  *
  * Reads boolean `autoShow`; legacy string `displayMode` (`onLoad` / `onClick`) is still accepted for
@@ -28,14 +31,14 @@ function normalizeNarrativeSize(value: unknown): number | undefined {
  * @returns Partial narrative options, or `undefined` when absent or empty
  * @internal
  */
-export function extractWidgetNarrativeOptionsFromDto(
+export function extractWidgetNarrativeConfigFromDto(
   dto: WidgetDtoNarration | undefined,
-): WidgetNarrativeOptions | undefined {
+): WidgetNarrativeConfig | undefined {
   if (dto == null || Object.keys(dto).length === 0) {
     return undefined;
   }
 
-  const out: WidgetNarrativeOptions = {};
+  const out: WidgetNarrativeConfig = {};
 
   if ('enabled' in dto && dto.enabled !== undefined) {
     out.enabled = dto.enabled;
@@ -79,14 +82,14 @@ export function extractWidgetNarrativeOptionsFromDto(
 }
 
 /**
- * Builds Fusion `style.narration` from SDK {@link WidgetNarrativeOptions} only (typed fields).
+ * Builds Fusion `style.narration` from SDK {@link WidgetNarrativeConfig} only (typed fields).
  *
- * @param narrative - SDK narrative slice from {@link WidgetAiOptions.narrative}
+ * @param narrative - SDK narrative slice from {@link WidgetConfig.narrative}
  * @returns Narration DTO, or `undefined` when nothing should be written
  * @internal
  */
-export function narrativeOptionsToWidgetDtoNarration(
-  narrative: WidgetNarrativeOptions | undefined,
+export function narrativeConfigToWidgetDtoNarration(
+  narrative: WidgetNarrativeConfig | undefined,
 ): WidgetDtoNarration | undefined {
   const base: Record<string, unknown> = {};
 
@@ -125,15 +128,15 @@ export function narrativeOptionsToWidgetDtoNarration(
  * Merges narrative options onto a Fusion widget `style` object for {@link toWidgetDto}.
  *
  * @param baseStyle - Chart or pivot style object without narration
- * @param narrative - SDK narrative from {@link WidgetModel.aiOptions}
+ * @param narrative - SDK narrative from {@link WidgetModel.config}
  * @returns `WidgetStyle` with narration merged, or base style unchanged when narrative is absent
  * @internal
  */
 export function mergeWidgetStyleWithNarrativeForDto(
   baseStyle: WidgetStyle,
-  narrative: WidgetNarrativeOptions | undefined,
+  narrative: WidgetNarrativeConfig | undefined,
 ): WidgetStyle {
-  const dtoNarration = narrativeOptionsToWidgetDtoNarration(narrative);
+  const dtoNarration = narrativeConfigToWidgetDtoNarration(narrative);
 
   if (dtoNarration === undefined) {
     return baseStyle;

@@ -4,7 +4,7 @@ title: ChartWidget
 
 # Function ChartWidget
 
-> **ChartWidget**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **ChartWidget**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 The Chart Widget component extending the [Chart](../charts/function.Chart.md) component to support widget style options.
 It can be used along with the [DrilldownWidget](../drilldown/function.DrilldownWidget.md) component to support advanced data drilldown.
@@ -17,7 +17,7 @@ It can be used along with the [DrilldownWidget](../drilldown/function.DrilldownW
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 ChartWidget component representing a chart type as specified in `ChartWidgetProps.`[chartType](../interfaces/interface.ChartWidgetProps.md#charttype)
 

@@ -44,6 +44,14 @@ Configurations for how to interpret and present the data passed to the table
 
 ### Widget
 
+#### config
+
+> **config**?: [`WidgetConfig`](../type-aliases/type-alias.WidgetConfig.md)
+
+Configuration of the widget
+
+***
+
 #### description
 
 > **description**?: `string`

@@ -4,7 +4,7 @@ title: AreaChart
 
 # Function AreaChart
 
-> **AreaChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **AreaChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component similar to a [`LineChart`](function.LineChart.md),
 but with filled in areas under each line and an option to display them as stacked.
@@ -33,6 +33,6 @@ Additional Area Chart examples:
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Area Chart component

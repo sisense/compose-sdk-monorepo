@@ -15,6 +15,7 @@ import {
 import { translateMeasuresFromJSON } from '../constructs/measures/translate-measures-from-json.js';
 import { createSchemaIndex } from '../shared/utils/schema-index.js';
 import { collectTranslationErrors } from '../shared/utils/translation-helpers.js';
+import { validateQueryDatetimeConsistency } from '../shared/validation/query-datetime-validation.js';
 import { QueryInput } from '../types.js';
 import type { DimensionTranslationItem, MeasureTranslationItem } from '../types.js';
 
@@ -298,10 +299,24 @@ export const translateQueryFromJSON = (
     };
   }
 
+  const adaptedDimensions = dimensionsResult ? adaptDimensionsForQuery(dimensionsResult) : [];
+
+  const queryDatetimeErrors = validateQueryDatetimeConsistency({
+    dimensions: adaptedDimensions,
+    filters: filters || [],
+    highlights: highlights ?? null,
+  });
+  if (queryDatetimeErrors.length > 0) {
+    return {
+      success: false,
+      errors: queryDatetimeErrors,
+    };
+  }
+
   // Return successful result
   const result = {
     dataSource: convertDataSource(dataSource),
-    dimensions: dimensionsResult ? adaptDimensionsForQuery(dimensionsResult) : [],
+    dimensions: adaptedDimensions,
     measures: measuresResult ? adaptMeasuresForQuery(measuresResult) : [],
     filters: filters || [],
     ...(highlights && { highlights: highlights }),

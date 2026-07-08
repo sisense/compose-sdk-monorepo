@@ -1,19 +1,17 @@
 import { I18nextProvider } from 'react-i18next';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 
 import { i18nextInstance } from '../../../infra/translation/initialize-i18n.js';
 import { translation } from '../../../infra/translation/resources/en.js';
 import * as useQuotaNotificationModule from '../../hooks/use-quota-notification.js';
-import * as useQuotaWarningDismissedModule from '../../hooks/use-quota-warning-dismissed.js';
 import { QuotaNotification } from './quota-notification.js';
 
 // Mock the useQuotaNotification hook
 vi.mock('../../hooks/use-quota-notification');
-// Mock the useQuotaWarningDismissed hook to avoid sessionStorage in tests
-vi.mock('../../hooks/use-quota-warning-dismissed');
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -33,10 +31,6 @@ const createWrapper = () => {
 describe('QuotaNotification', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.spyOn(useQuotaWarningDismissedModule, 'useQuotaWarningDismissed').mockReturnValue([
-      false,
-      vi.fn(),
-    ]);
   });
 
   it('returns null when loading', () => {
@@ -106,7 +100,7 @@ describe('QuotaNotification', () => {
     ).toBeInTheDocument();
   });
 
-  it('does not show warning banner when dismissed', () => {
+  it('hides warning banner after close button is clicked', async () => {
     vi.spyOn(useQuotaNotificationModule, 'useQuotaNotification').mockReturnValue({
       enabled: true,
       quotaState: {
@@ -120,9 +114,8 @@ describe('QuotaNotification', () => {
       error: null,
     });
 
-    const { container } = render(<QuotaNotification warningDismissed={true} />, {
-      wrapper: createWrapper(),
-    });
+    const { container } = render(<QuotaNotification />, { wrapper: createWrapper() });
+    await userEvent.click(screen.getByLabelText('Dismiss alert'));
     expect(container.firstChild).toBeNull();
   });
 
@@ -142,56 +135,6 @@ describe('QuotaNotification', () => {
 
     const { container } = render(<QuotaNotification />, { wrapper: createWrapper() });
     expect(container.firstChild).toBeNull();
-  });
-
-  it('calls onDismissWarning when warning banner is clicked (uncontrolled)', () => {
-    const setPersistedDismissed = vi.fn();
-    vi.spyOn(useQuotaWarningDismissedModule, 'useQuotaWarningDismissed').mockReturnValue([
-      false,
-      setPersistedDismissed,
-    ]);
-    vi.spyOn(useQuotaNotificationModule, 'useQuotaNotification').mockReturnValue({
-      enabled: true,
-      quotaState: {
-        initialBalance: 100,
-        currentBalance: 10,
-        usagePercentage: 90,
-        isWarning: true,
-        isExceeded: false,
-      },
-      isLoading: false,
-      error: null,
-    });
-
-    render(<QuotaNotification />, { wrapper: createWrapper() });
-    const alert = screen.getByRole('alert');
-    fireEvent.click(alert);
-
-    expect(setPersistedDismissed).toHaveBeenCalledWith(true);
-  });
-
-  it('calls onDismissWarning when warning banner is clicked (controlled)', () => {
-    const onDismissWarning = vi.fn();
-    vi.spyOn(useQuotaNotificationModule, 'useQuotaNotification').mockReturnValue({
-      enabled: true,
-      quotaState: {
-        initialBalance: 100,
-        currentBalance: 10,
-        usagePercentage: 90,
-        isWarning: true,
-        isExceeded: false,
-      },
-      isLoading: false,
-      error: null,
-    });
-
-    render(<QuotaNotification warningDismissed={false} onDismissWarning={onDismissWarning} />, {
-      wrapper: createWrapper(),
-    });
-    const alert = screen.getByRole('alert');
-    fireEvent.click(alert);
-
-    expect(onDismissWarning).toHaveBeenCalledTimes(1);
   });
 
   it('returns null when disabled', () => {

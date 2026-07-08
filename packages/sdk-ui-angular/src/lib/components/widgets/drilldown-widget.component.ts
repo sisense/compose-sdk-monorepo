@@ -110,6 +110,7 @@ export type CustomDrilldownResult = CustomDrilldownResultBase & {
  * @group Drilldown
  */
 @Component({
+  standalone: false,
   selector: 'csdk-drilldown-widget',
   template: templateWithContent,
   styles,

@@ -10,7 +10,7 @@ export function combineHandlers<Handler extends AnyFunction>(
   handlers: (Handler | undefined)[],
   chainHandlers = false,
 ): Handler {
-  const validHandlers = handlers.filter((handler) => isFunction(handler)) as Handler[];
+  const validHandlers = handlers.filter((handler): handler is Handler => isFunction(handler));
 
   if (chainHandlers) {
     return flow(validHandlers) as Handler;

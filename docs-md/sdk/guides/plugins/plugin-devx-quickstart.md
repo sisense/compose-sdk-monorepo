@@ -15,7 +15,10 @@ Create, develop, and build a custom widget plugin for Compose SDK.
 ## Prerequisites
 
 - **Node.js** >= 20.19.0
-- **A Sisense instance** with a URL and API token — needed for live data. Not required to start; you can develop the UI without it.
+- **Compose SDK** >= 2.30.0
+- **A Sisense instance:**
+  - **For development:** a URL and API token are needed for live data, but not required to start — you can develop the UI without them.
+  - **For deployment to Fusion:** version 2026.2.2 or later is required.
 
 ---
 

@@ -1,5 +1,5 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.node.json",
+  "extends": "@vue/tsconfig/tsconfig.json",
   "include": [
     "vite.config.*",
     "vitest.config.*",
@@ -9,7 +9,10 @@
   ],
   "compilerOptions": {
     "composite": true,
+    // The shared @vue/tsconfig base sets noEmit:true, but a referenced composite project must emit.
+    "noEmit": false,
     "rootDir": "../../",
-    "types": ["node"]
+    "types": ["node"],
+    "verbatimModuleSyntax": false
   }
 }

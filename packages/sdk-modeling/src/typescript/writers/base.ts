@@ -27,9 +27,11 @@ export function escapeSpecialChars(expression: string) {
 export function template(strings: TemplateStringsArray, ...keys: string[]): any {
   return function (...values: TemplateStringsArray) {
     const dict = values[values.length - 1] || {};
-    const result = [strings[0]];
+    const result: unknown[] = [strings[0]];
     keys.forEach(function (key, i) {
-      const value = Number.isInteger(key) ? values[key] : dict[key];
+      const value = Number.isInteger(key)
+        ? values[key as unknown as number]
+        : (dict as Record<string, unknown>)[key];
       result.push(value, strings[i + 1]);
     });
     return result.join('');

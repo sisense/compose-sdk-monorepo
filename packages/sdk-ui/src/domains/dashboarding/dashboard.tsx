@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 
 import { DashboardContainer } from '@/domains/dashboarding/components/dashboard-container';
-import { DashboardHeaderTargets } from '@/domains/dashboarding/components/dashboard-header-targets';
+import { DashboardHeaderTargets } from '@/domains/dashboarding/components/dashboard-header/dashboard-header-targets';
 import { DashboardProps, WidgetsPanelLayout } from '@/domains/dashboarding/types';
 import { HeaderItem } from '@/domains/shared/header';
 import { ThemeProvider } from '@/infra/contexts/theme-provider';
@@ -26,7 +26,7 @@ import { useEditModeWithHistory } from './hooks/use-edit-mode-with-history';
 import { useFiltersPanelCollapsedState } from './hooks/use-filters-panel-collapsed-state';
 import { useComposedDashboardInternal } from './use-composed-dashboard';
 import { useDashboardThemeInternal } from './use-dashboard-theme';
-import { getDefaultWidgetsPanelLayout } from './utils';
+import { getDefaultWidgetsPanelLayout, isDashboardHeaderVisible } from './utils';
 
 enum DashboardMode {
   VIEW = 'view',
@@ -37,7 +37,6 @@ enum DashboardMode {
  * React component that renders a dashboard whose elements are customizable. It includes internal logic of applying common filters to widgets.
  *
  * **Note:** Dashboard and Widget extensions based on JS scripts and add-ons in Fusion – for example, Blox and Jump To Dashboard – are not supported.
- *
  * @example
  *
  * Example of rendering a Fusion dashboard using the `useGetDashboardModel hook and the `Dashboard` component.
@@ -151,7 +150,7 @@ export const Dashboard = asSisenseComponent({
     const currentColumnsCount = editingLayout.columns.length;
     const showFilterIconInToolbar =
       !!config?.filtersPanel?.showFilterIconInToolbar &&
-      config?.toolbar?.visible !== false &&
+      isDashboardHeaderVisible(config) &&
       config?.filtersPanel?.visible !== false;
 
     const layoutChangeHandler = useCallback(
@@ -276,12 +275,15 @@ export const Dashboard = asSisenseComponent({
       () => ({
         id: DashboardHeaderTargets.EditToggle,
         fill: 'content',
-        hidden: !isEditModeEnabled,
-        component: () => (
+        // Keeping it a hidden anchor while edit mode is unavailable, and — in history mode — while editing, where the
+        // edit-mode toolbar replaces it.
+        hidden: !isEditModeEnabled || (isEditMode && isHistoryEnabled),
+        component: ({ size }) => (
           <EditToggle
             isEditMode={isEditMode}
             isHistoryEnabled={isHistoryEnabled}
             color={themeSettings.dashboard.toolbar.primaryTextColor}
+            size={size.height}
             onToggleClick={() =>
               handleModeChange(isEditMode ? DashboardMode.VIEW : DashboardMode.EDIT)
             }
@@ -304,10 +306,11 @@ export const Dashboard = asSisenseComponent({
         // Visible only when showFilterIconInToolbar is enabled and both toolbar and filters panel
         // are visible; otherwise kept as an anchor.
         hidden: !showFilterIconInToolbar,
-        component: () => (
+        component: ({ size }) => (
           <FilterToggle
             isFilterPanelCollapsed={isFilterPanelCollapsed}
             color={themeSettings.dashboard.toolbar.primaryTextColor}
+            size={size.height}
             onToggleClick={handleFilterToggleClick}
           />
         ),

@@ -77,6 +77,7 @@ export interface RelativeDateFilterTileProps
  * @group Filter Tiles
  */
 @Component({
+  standalone: false,
   selector: 'csdk-relative-date-filter-tile',
   template,
   styles,

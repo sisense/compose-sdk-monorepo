@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { JumpToDashboardConfig } from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
-import { DashboardHeaderItem } from './components/dashboard-header-config';
+import { DashboardHeaderItem } from './components/dashboard-header/dashboard-header-config';
 import { applyJtdConfig, applyJtdConfigs, withHeaderItem } from './dashboard-helpers';
 import { DashboardProps } from './types';
 

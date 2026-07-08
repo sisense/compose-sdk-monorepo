@@ -1,4 +1,4 @@
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { CompleteThemeSettingsInternal } from '../../../..';
 import { HighchartsOptionsInternal } from './chart-options-service';

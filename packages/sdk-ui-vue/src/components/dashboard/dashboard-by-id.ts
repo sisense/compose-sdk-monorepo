@@ -1,20 +1,33 @@
 import { DashboardById as DashboardByIdPreact } from '@sisense/sdk-ui-preact';
 import type {
-  DashboardByIdConfig,
+  DashboardByIdConfig as DashboardByIdConfigPreact,
   DashboardByIdProps as DashboardByIdPropsPreact,
 } from '@sisense/sdk-ui-preact';
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 
 import { setupHelper } from '../../helpers/setup-helper';
+import type { DashboardHeaderConfig } from './dashboard';
 
-// Re-exports related types
-export { DashboardByIdConfig };
+/**
+ * Configuration for the {@link @sisense/sdk-ui-vue!DashboardById | `DashboardById`} component.
+ */
+export interface DashboardByIdConfig extends Omit<DashboardByIdConfigPreact, 'header'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardConfig.header}
+   */
+  header?: DashboardHeaderConfig;
+}
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!DashboardById | `DashboardById`} component.
  */
-export interface DashboardByIdProps extends DashboardByIdPropsPreact {}
+export interface DashboardByIdProps extends Omit<DashboardByIdPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!DashboardByIdProps.config}
+   */
+  config?: DashboardByIdConfig;
+}
 
 /**
  * A component used for easily rendering a dashboard by its ID in a Sisense Fusion instance.

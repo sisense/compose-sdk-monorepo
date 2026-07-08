@@ -127,6 +127,27 @@ describe('translateLineStyleOptionsToDesignOptions', () => {
 
       expect(result.line?.width).toBe(3);
     });
+
+    test('uses styleOptions.line.width when set (overrides preset token)', () => {
+      const styleOptions: LineStyleOptions = {
+        lineWidth: { width: 'thin' },
+        line: { width: 7 },
+      };
+
+      const result = translateLineStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
+
+      expect(result.line?.width).toBe(7);
+    });
+
+    test('uses styleOptions.line.width when set without lineWidth token', () => {
+      const styleOptions: LineStyleOptions = {
+        line: { width: 7 },
+      };
+
+      const result = translateLineStyleOptionsToDesignOptions(styleOptions, mockDataOptions);
+
+      expect(result.line?.width).toBe(7);
+    });
   });
 
   describe('Marker conversion', () => {

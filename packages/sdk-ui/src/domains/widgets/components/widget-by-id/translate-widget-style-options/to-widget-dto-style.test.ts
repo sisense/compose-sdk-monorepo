@@ -45,6 +45,7 @@ import type {
   WidgetStyle,
   WidgetSubtype,
 } from '../types.js';
+import { DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING } from './categorical-labels-style.js';
 import {
   toAreamapSubtype,
   toAreaWidgetStyle,
@@ -55,6 +56,8 @@ import {
   toFunnelWidgetStyle,
   toIndicatorWidgetStyle,
   toLegendStyle,
+  toLineCustomWidthStyle,
+  toLineDashStyle,
   toLineWidgetStyle,
   toLineWidthStyle,
   toMarkersStyle,
@@ -133,6 +136,91 @@ describe('to-widget-dto-style', () => {
         rotation: 45,
       });
     });
+
+    it('maps prefix and suffix from SDK seriesLabels to Fusion DTO', () => {
+      expect(toSeriesLabelsStyle({ enabled: true, rotation: 0, prefix: 'y', suffix: 'K' })).toEqual(
+        {
+          enabled: true,
+          rotation: 0,
+          prefix: 'y',
+          suffix: 'K',
+        },
+      );
+    });
+
+    it('maps backgroundColor from SDK seriesLabels to Fusion DTO', () => {
+      expect(
+        toSeriesLabelsStyle({
+          enabled: true,
+          rotation: 0,
+          backgroundColor: '#00bcd4',
+        }),
+      ).toEqual({
+        enabled: true,
+        rotation: 0,
+        backgroundColor: '#00bcd4',
+      });
+    });
+
+    it('maps backgroundPadding from SDK seriesLabels to Fusion DTO', () => {
+      expect(
+        toSeriesLabelsStyle({
+          enabled: true,
+          rotation: 0,
+          padding: 6,
+        }),
+      ).toEqual({
+        enabled: true,
+        rotation: 0,
+        backgroundPadding: 6,
+      });
+    });
+
+    it('maps borderColor from SDK seriesLabels to Fusion DTO', () => {
+      expect(
+        toSeriesLabelsStyle({
+          enabled: true,
+          rotation: 0,
+          borderColor: '#333333',
+        }),
+      ).toEqual({
+        enabled: true,
+        rotation: 0,
+        borderColor: '#333333',
+      });
+    });
+
+    it('maps borderWidth and borderRadius from SDK seriesLabels to Fusion DTO', () => {
+      expect(
+        toSeriesLabelsStyle({
+          enabled: true,
+          rotation: 0,
+          borderWidth: 3,
+          borderRadius: 4,
+        }),
+      ).toEqual({
+        enabled: true,
+        rotation: 0,
+        borderWidth: 3,
+        borderRadius: 4,
+      });
+    });
+
+    it('maps xOffset and yOffset from SDK seriesLabels to Fusion DTO', () => {
+      expect(
+        toSeriesLabelsStyle({
+          enabled: true,
+          rotation: 0,
+          xOffset: -4,
+          yOffset: 6,
+        }),
+      ).toEqual({
+        enabled: true,
+        rotation: 0,
+        xOffset: -4,
+        yOffset: 6,
+      });
+    });
   });
 
   describe('toNavigatorStyle', () => {
@@ -174,6 +262,37 @@ describe('to-widget-dto-style', () => {
     it('returns undefined for invalid string tokens', () => {
       expect(toLineWidthStyle({ width: 'medium' })).toBeUndefined();
       expect(toLineWidthStyle({ width: '10px' })).toBeUndefined();
+    });
+  });
+
+  describe('toLineCustomWidthStyle', () => {
+    it('returns undefined when line width is absent', () => {
+      expect(toLineCustomWidthStyle(undefined)).toBeUndefined();
+    });
+
+    it('maps styleOptions.line.width to customWidth px value', () => {
+      expect(toLineCustomWidthStyle({ width: 7 })).toBe(7);
+    });
+
+    it('returns undefined for zero width', () => {
+      expect(toLineCustomWidthStyle({ width: 0 })).toBeUndefined();
+    });
+
+    it('returns undefined for negative width', () => {
+      expect(toLineCustomWidthStyle({ width: -5 })).toBeUndefined();
+    });
+  });
+
+  describe('toLineDashStyle', () => {
+    it('returns undefined when line dashStyle is absent', () => {
+      expect(toLineDashStyle(undefined)).toBeUndefined();
+      expect(toLineDashStyle({})).toBeUndefined();
+    });
+
+    it('maps dashStyle to Fusion DTO line style', () => {
+      expect(toLineDashStyle({ dashStyle: 'ShortDot' })).toEqual({
+        dashStyle: 'ShortDot',
+      });
     });
   });
 
@@ -267,6 +386,23 @@ describe('to-widget-dto-style', () => {
         title: original.y2Axis?.title,
         labels: { enabled: original.y2Axis?.labels?.enabled, rotation: 0 },
       });
+    });
+
+    it('round-trips line dashStyle via style.line', () => {
+      const widgetDto = cloneDeep(advancedLineChartWidgetDto);
+      (widgetDto.style as CartesianWidgetStyle).line = { dashStyle: 'ShortDash' };
+
+      const styleOptions = extractStyleOptions('chart/line', widgetDto) as LineStyleOptions;
+      expect(styleOptions.line).toEqual({ dashStyle: 'ShortDash' });
+
+      const restored = toLineWidgetStyle(styleOptions);
+      expect(restored.line).toEqual({ dashStyle: 'ShortDash' });
+    });
+
+    it('applies customWidth to lineWidth even when lineWidth token is not set', () => {
+      const result = toLineWidgetStyle({ line: { width: 7 } });
+
+      expect(result.lineWidth).toMatchObject({ customWidth: 7 });
     });
   });
 
@@ -670,6 +806,7 @@ describe('to-widget-dto-style', () => {
         percent: false,
         value: true,
         decimals: true,
+        ...DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING,
       });
       expect(result.dataLimits).toEqual({ seriesCapacity: 50, categoriesCapacity: 200 });
       expect(result.convolution).toBeUndefined();
@@ -701,6 +838,7 @@ describe('to-widget-dto-style', () => {
         percent: true,
         value: false,
         decimals: false,
+        ...DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING,
       });
     });
 
@@ -712,7 +850,14 @@ describe('to-widget-dto-style', () => {
     it('round-trips through extractStyleOptions for pie/classic', () => {
       const originalStyle: PieWidgetStyle = {
         legend: { enabled: false, position: 'bottom' },
-        labels: { enabled: true, categories: true, value: false, percent: true, decimals: false },
+        labels: {
+          enabled: true,
+          categories: true,
+          value: false,
+          percent: true,
+          decimals: false,
+          ...DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING,
+        },
         dataLimits: { seriesCapacity: 100000 },
         convolution: {
           enabled: true,
@@ -1387,6 +1532,7 @@ describe('to-widget-dto-style', () => {
         percent: true,
         value: false,
         decimals: false,
+        ...DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING,
       });
     });
 
@@ -1413,6 +1559,7 @@ describe('to-widget-dto-style', () => {
         percent: false,
         value: true,
         decimals: true,
+        ...DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING,
       });
     });
 
@@ -1423,7 +1570,14 @@ describe('to-widget-dto-style', () => {
         size: 'narrow',
         type: 'pinched',
         direction: 'inverted',
-        labels: { enabled: true, categories: true, percent: false, value: true, decimals: true },
+        labels: {
+          enabled: true,
+          categories: true,
+          percent: false,
+          value: true,
+          decimals: true,
+          ...DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING,
+        },
       } as FunnelWidgetStyle;
       const widgetDto = {
         type: 'chart/funnel',

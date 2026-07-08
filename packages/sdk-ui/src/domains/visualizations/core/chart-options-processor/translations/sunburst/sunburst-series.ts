@@ -1,7 +1,11 @@
 import { getDataOptionTitle } from '@/domains/visualizations/core/chart-data-options/utils';
 import { getExplicitColorSteps, scaleBrightness } from '@/shared/utils/color';
 
-import { CompleteThemeSettingsInternal, UniformDataColorOptions } from '../../../../../../types';
+import {
+  CompleteThemeSettingsInternal,
+  UniformDataColorOptions,
+  ValueToColorMap,
+} from '../../../../../../types';
 import { getPaletteColor } from '../../../chart-data-options/coloring/utils';
 import { CategoricalChartDataOptionsInternal } from '../../../chart-data-options/types';
 import { CategoricalChartData } from '../../../chart-data/types';
@@ -86,7 +90,8 @@ function handleSunburstSeriesColor(
   });
 
   return series.map((item) => {
-    const colorBySeriesName = seriesColorMapByLevels[item.custom?.level || '']?.[item?.name || ''];
+    const colorBySeriesName =
+      seriesColorMapByLevels[(item.custom?.level || '') as number]?.[item?.name || ''];
     const colorFromColorMap = levelsMembersColorMaps[item.custom!.level! - 1]?.get(item.name!);
 
     return {
@@ -99,10 +104,10 @@ function handleSunburstSeriesColor(
 function prepareColorMapByLevels(dataOptions: CategoricalChartDataOptionsInternal) {
   return dataOptions.breakBy.reduce((map, { column }, index) => {
     if (dataOptions?.seriesToColorMap?.[column.name]) {
-      map[index + 1] = dataOptions.seriesToColorMap[column.name];
+      map[index + 1] = dataOptions.seriesToColorMap[column.name] as ValueToColorMap;
     }
     return map;
-  }, {});
+  }, {} as Record<number, ValueToColorMap>);
 }
 
 function sortSunburstDataItems(items: SeriesPointStructure[]): SeriesPointStructure[] {

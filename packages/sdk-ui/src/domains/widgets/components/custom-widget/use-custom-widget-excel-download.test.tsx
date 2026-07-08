@@ -47,16 +47,6 @@ vi.mock('@/domains/widgets/hooks/use-with-excel-download-menu-item.js', async (i
   };
 });
 
-const appSettingsFeatureFlags = vi.hoisted(() => ({
-  exportingXlsxV2Active: true,
-}));
-
-vi.mock('@/shared/hooks/use-app-settings.js', () => ({
-  useAppSettings: () => ({
-    serverFeatures: { exportingXlsxV2: { active: appSettingsFeatureFlags.exportingXlsxV2Active } },
-  }),
-}));
-
 function findExcelRepeatRowsOnClick(header: WidgetHeaderConfig): (() => void) | undefined {
   const download = header.toolbar?.menu?.items?.find((i) => i.id === 'widget-download');
   const excelFile = download?.items?.find((i) => i.id === 'excelFileMenuItem');
@@ -82,7 +72,6 @@ const baseParams: UseCustomWidgetExcelDownloadParams = {
 describe('useCustomWidgetExcelDownload', () => {
   beforeEach(() => {
     latestOnDownloadExcel.fn = null;
-    appSettingsFeatureFlags.exportingXlsxV2Active = true;
     mockExecute.mockClear();
   });
 
@@ -91,16 +80,6 @@ describe('useCustomWidgetExcelDownload', () => {
 
     expect(findExcelRepeatRowsOnClick(result.current.headerConfig)).toBeUndefined();
     expect(mockExecute).not.toHaveBeenCalled();
-  });
-
-  it('does not expose Excel when exportingXlsxV2.active is false', () => {
-    appSettingsFeatureFlags.exportingXlsxV2Active = false;
-
-    const { result } = renderHook(() =>
-      useCustomWidgetExcelDownload({ ...baseParams, dataOptions: dataOptionsWithQuery }),
-    );
-
-    expect(findExcelRepeatRowsOnClick(result.current.headerConfig)).toBeUndefined();
   });
 
   it('calls loader with mergeRows false for repeat rows', () => {

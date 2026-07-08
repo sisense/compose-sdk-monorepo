@@ -12,6 +12,7 @@ export type {
 export { resolveHeaderItems, type ResolveHeaderItemsOptions } from './resolve-header-items.js';
 export { useResolvedHeaderItems } from './use-resolved-header-items.js';
 export { HeaderItemsRenderer, type HeaderItemsRendererProps } from './header-items-renderer.js';
+export { HeaderItemCell, type HeaderItemCellProps } from './header-item-cell.js';
 export {
   getHeaderItemStyle,
   resolveHeaderItemSize,

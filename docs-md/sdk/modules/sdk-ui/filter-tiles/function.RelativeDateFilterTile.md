@@ -4,7 +4,7 @@ title: RelativeDateFilterTile
 
 # Function RelativeDateFilterTile
 
-> **RelativeDateFilterTile**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **RelativeDateFilterTile**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 UI component that allows the user to filter date attributes according to
 a number of built-in operations defined in the relative date filter.
@@ -18,6 +18,6 @@ Useful for filtering data by relative date ranges, such as "last 7 days" or "nex
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Relative date filter tile component

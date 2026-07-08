@@ -32,6 +32,14 @@ Default data source explicitly set to be used by child components that are not d
 
 ***
 
+#### modules <Badge type="beta" text="Beta" />
+
+> **modules**?: [`Module`](interface.Module.md)\< `any` \>[]
+
+Array of modules to register.
+
+***
+
 #### url
 
 > **url**: `string`

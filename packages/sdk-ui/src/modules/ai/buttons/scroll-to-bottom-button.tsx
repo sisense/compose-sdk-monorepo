@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import Color from 'colorjs.io';
 
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types';
+import { Color } from '@/shared/utils/color/colorjs';
 
 import ScrollToBottomIcon from '../icons/scroll-to-bottom-icon.js';
 

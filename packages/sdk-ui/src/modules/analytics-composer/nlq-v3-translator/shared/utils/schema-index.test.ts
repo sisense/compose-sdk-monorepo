@@ -141,6 +141,48 @@ describe('createAttributeFromName', () => {
       expect((attribute as { granularity: string }).granularity).toBe('Years');
     });
 
+    it('should throw when requireExplicitDateLevel is set and datetime column has no level', () => {
+      expect(() => {
+        createAttributeFromName('DM.TestTable.DateTimeColumn', mockDataSource, mockSchemaIndex, {
+          requireExplicitDateLevel: true,
+        });
+      }).toThrow(
+        "Date level required for 'DM.TestTable.DateTimeColumn'. Use 'DM.TestTable.DateTimeColumn.Years'",
+      );
+    });
+
+    it('should not require explicit date level for non-datetime columns', () => {
+      const tablesWithDots: NormalizedTable[] = [
+        {
+          name: 'Brand.io',
+          columns: [
+            {
+              name: 'Brand',
+              dataType: 'text',
+              expression: '[Brand.io.Brand]',
+              description: 'Brand name',
+            },
+          ],
+        },
+      ];
+      const attribute = createAttributeFromName(
+        'DM.Brand.io.Brand',
+        mockDataSource,
+        createSchemaIndex(tablesWithDots),
+        { requireExplicitDateLevel: true },
+      );
+      expect(attribute).toBeDefined();
+    });
+
+    it('should allow bare datetime when requireExplicitDateLevel is not set', () => {
+      const attribute = createAttributeFromName(
+        'DM.TestTable.DateTimeColumn',
+        mockDataSource,
+        mockSchemaIndex,
+      );
+      expect((attribute as { granularity: string }).granularity).toBe('Years');
+    });
+
     it('should reject inferredDateLevel time level on date-only column (matches explicit-name behavior)', () => {
       expect(() => {
         createAttributeFromName('DM.TestTable.DateColumn', mockDataSource, mockSchemaIndex, {

@@ -1,5 +1,5 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "compilerOptions": {
     "baseUrl": ".",
@@ -7,7 +7,10 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "jsxImportSource": "vue"
+    "jsxImportSource": "vue",
+    // @vue/tsconfig 0.5 enables verbatimModuleSyntax by default; keep it off to preserve the
+    // previous module-emit behavior (this upgrade only moves TypeScript to 5.5.4 and vue-tsc to 2.x).
+    "verbatimModuleSyntax": false
   },
   "references": [{ "path": "../sdk-ui-preact" }, { "path": "./tsconfig.node.json" }]
 }

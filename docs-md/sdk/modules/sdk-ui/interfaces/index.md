@@ -44,6 +44,10 @@ TypeScript interfaces for components and hooks listed above
 - [DashboardFiltersPanelCollapseChangedEvent](interface.DashboardFiltersPanelCollapseChangedEvent.md)
 - [DashboardFiltersPanelConfig](interface.DashboardFiltersPanelConfig.md)
 - [DashboardFiltersUpdatedEvent](interface.DashboardFiltersUpdatedEvent.md)
+- [DashboardHeaderConfig](interface.DashboardHeaderConfig.md)
+- [DashboardHeaderItem](interface.DashboardHeaderItem.md)
+- [DashboardHeaderItemComponentProps](interface.DashboardHeaderItemComponentProps.md)
+- [DashboardHeaderItemSize](interface.DashboardHeaderItemSize.md)
 - [DashboardLayoutOptions](interface.DashboardLayoutOptions.md)
 - [DashboardProps](interface.DashboardProps.md)
 - [DashboardWidgetsDeletedEvent](interface.DashboardWidgetsDeletedEvent.md)
@@ -104,6 +108,7 @@ TypeScript interfaces for components and hooks listed above
 - [MeasureDataPointEntry](interface.MeasureDataPointEntry.md)
 - [Member](interface.Member.md)
 - [MemberFilterTileProps](interface.MemberFilterTileProps.md)
+- [Module](interface.Module.md) <Badge type="beta" text="Beta" />
 - [NlqResponseData](interface.NlqResponseData.md)
 - [NumericBarIndicatorStyleOptions](interface.NumericBarIndicatorStyleOptions.md)
 - [NumericSimpleIndicatorStyleOptions](interface.NumericSimpleIndicatorStyleOptions.md)
@@ -120,6 +125,9 @@ TypeScript interfaces for components and hooks listed above
 - [RadialGradientConfig](interface.RadialGradientConfig.md)
 - [RangeChartDataOptions](interface.RangeChartDataOptions.md)
 - [RelativeDateFilterTileProps](interface.RelativeDateFilterTileProps.md)
+- [SankeyChartDataOptions](interface.SankeyChartDataOptions.md) <Badge type="beta" text="Beta" />
+- [SankeyChartProps](interface.SankeyChartProps.md) <Badge type="beta" text="Beta" />
+- [SankeyStyleOptions](interface.SankeyStyleOptions.md) <Badge type="beta" text="Beta" />
 - [ScatterChartDataOptions](interface.ScatterChartDataOptions.md)
 - [ScatterChartProps](interface.ScatterChartProps.md)
 - [ScattermapChartDataOptions](interface.ScattermapChartDataOptions.md)

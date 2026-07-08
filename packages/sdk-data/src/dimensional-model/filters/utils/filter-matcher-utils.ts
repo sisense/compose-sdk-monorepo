@@ -5,7 +5,6 @@ import {
   ConditionFilterJaql,
   ConditionFilterType,
   FilterJaqlInternal,
-  FilterMultipleConditionJaql,
   SpecificItemsFilterJaql,
 } from './types.js';
 
@@ -30,7 +29,9 @@ function createCombinedFilterMatcher(
   createFilterMatcherFn: (f: FilterJaqlInternal) => FilterMatcher,
   filterJaql: FilterJaqlInternal,
 ): FilterMatcher {
-  const filter = filterJaql.filter as FilterMultipleConditionJaql;
+  const filter = filterJaql.filter as
+    | { or: ConditionFilterJaql[] }
+    | { and: ConditionFilterJaql[] };
 
   if ('or' in filter) {
     return (value?: string | number) => {

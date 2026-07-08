@@ -70,6 +70,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-pie-chart',
   template: `
     <csdk-chart

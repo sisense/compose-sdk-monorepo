@@ -70,6 +70,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-column-chart',
   template: `
     <csdk-chart

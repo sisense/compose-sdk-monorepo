@@ -134,6 +134,7 @@ export class ExampleComponent {
  * @group Dashboards
  */
 @Component({
+  standalone: false,
   selector: 'csdk-widget',
   template,
   styles,
@@ -216,12 +217,21 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
   styleOptions: WidgetProps['styleOptions'];
 
   /**
-   * Configuration for AI-powered widget features such as automated narrative generation
-   * @alpha
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.config}
+   *
    * @category Widget
    */
   @Input()
-  aiOptions: ChartWidgetProps['aiOptions'] | PivotTableWidgetProps['aiOptions'];
+  config: WidgetProps['config'];
+
+  /**
+   * {@inheritDoc @sisense/sdk-ui!CustomWidgetProps.customOptions}
+   *
+   * @category Widget
+   * @internal
+   */
+  @Input()
+  customOptions: WidgetProps['customOptions'];
 
   /**
    * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.drilldownOptions}
@@ -336,12 +346,13 @@ export class WidgetComponent implements AfterViewInit, OnChanges, OnDestroy {
       widgetType: this.widgetType,
       chartType: this.chartType,
       customWidgetType: this.customWidgetType,
+      customOptions: this.customOptions,
       dataSource: this.dataSource,
       dataOptions: this.dataOptions,
       filters: this.filters,
       highlights: this.highlights,
       styleOptions: this.styleOptions,
-      aiOptions: this.aiOptions,
+      config: this.config,
       drilldownOptions: this.drilldownOptions,
       title: this.title,
       description: this.description,

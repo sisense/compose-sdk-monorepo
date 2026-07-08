@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { getThemeSettingsByOid } from '@/infra/themes/theme-loader';

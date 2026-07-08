@@ -46,16 +46,6 @@ vi.mock('@/domains/widgets/hooks/use-with-excel-download-menu-item.js', async (i
   };
 });
 
-const appSettingsFeatureFlags = vi.hoisted(() => ({
-  exportingXlsxV2Active: true,
-}));
-
-vi.mock('@/shared/hooks/use-app-settings.js', () => ({
-  useAppSettings: () => ({
-    serverFeatures: { exportingXlsxV2: { active: appSettingsFeatureFlags.exportingXlsxV2Active } },
-  }),
-}));
-
 function findExcelRepeatRowsOnClick(header: WidgetHeaderConfig): (() => void) | undefined {
   const download = header.toolbar?.menu?.items?.find((i) => i.id === 'widget-download');
   const excelFile = download?.items?.find((i) => i.id === 'excelFileMenuItem');
@@ -80,7 +70,6 @@ const baseParams: UseChartWidgetExcelDownloadParams = {
 describe('useChartWidgetExcelDownload', () => {
   beforeEach(() => {
     latestOnDownloadExcel.fn = null;
-    appSettingsFeatureFlags.exportingXlsxV2Active = true;
     mockExecute.mockClear();
     vi.mocked(getTranslatedDataOptions).mockReturnValue({
       dataOptions: {},
@@ -98,28 +87,6 @@ describe('useChartWidgetExcelDownload', () => {
 
     await act(async () => {
       latestOnDownloadExcel.fn?.(false);
-    });
-    expect(mockExecute).not.toHaveBeenCalled();
-  });
-
-  it('does not add Excel menu or call loader when exportingXlsxV2.active is false (gated)', async () => {
-    appSettingsFeatureFlags.exportingXlsxV2Active = false;
-    vi.mocked(getTranslatedDataOptions).mockReturnValue({
-      dataOptions: {},
-      attributes: [{ name: 'dim' } as never],
-      measures: [],
-      dataColumnNamesMapping: {},
-    });
-
-    const { result } = renderHook(() => useChartWidgetExcelDownload(baseParams));
-
-    expect(findExcelRepeatRowsOnClick(result.current.headerConfig)).toBeUndefined();
-    expect(findExcelMergeRowsOnClick(result.current.headerConfig)).toBeUndefined();
-    expect(mockExecute).not.toHaveBeenCalled();
-
-    await act(async () => {
-      latestOnDownloadExcel.fn?.(false);
-      latestOnDownloadExcel.fn?.(true);
     });
     expect(mockExecute).not.toHaveBeenCalled();
   });

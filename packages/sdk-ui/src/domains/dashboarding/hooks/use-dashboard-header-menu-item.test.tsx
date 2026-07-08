@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { MenuItemSection } from '@/props';
 
-import { DashboardHeaderTargets } from '../components/dashboard-header-targets.js';
+import { DashboardHeaderTargets } from '../components/dashboard-header/dashboard-header-targets.js';
 import { useDashboardHeaderMenuItem } from './use-dashboard-header-menu-item.js';
 
 // Mock the theme context

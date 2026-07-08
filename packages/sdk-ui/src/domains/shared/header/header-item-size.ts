@@ -35,7 +35,8 @@ export const resolveHeaderItemSize = (
  * `fill` is internal: it is set only on built-in items. External items never carry it, so they are
  * always laid out at a fixed pixel width.
  *
- * `height` is applied as a fixed pixel height (provided or defaulted).
+ * `height` is applied as a fixed pixel height (provided or defaulted). Every cell uses
+ * `align-items: center`, so an item shorter than the cell is centered vertically;
  */
 export const getHeaderItemStyle = (
   size: Required<HeaderItemSize>,
@@ -52,9 +53,11 @@ export const getHeaderItemStyle = (
   } else if (fill === 'content') {
     style.flex = '0 0 auto';
   } else {
-    // External items: fixed pixel width (resolved size always has a numeric width).
+    // External items: fixed pixel width (resolved size always has a numeric width). Center the
+    // content within that fixed box so an item narrower than its width sits centered.
     style.flex = '0 0 auto';
     style.width = `${size.width}px`;
+    style.justifyContent = 'center';
   }
 
   style.height = `${size.height}px`;

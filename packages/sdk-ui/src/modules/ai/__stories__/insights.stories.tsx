@@ -1,3 +1,5 @@
+import { type ComponentType } from 'react';
+
 import { MetadataItem } from '@sisense/sdk-data';
 import { Meta } from '@storybook/react-vite';
 
@@ -65,12 +67,15 @@ export const Default = template(
     },
   },
   [
-    (Story) => (
-      <SisenseContextProvider {...sisenseContextProps}>
-        <AiContextProvider>
-          <Story />
-        </AiContextProvider>
-      </SisenseContextProvider>
-    ),
+    (Story) => {
+      const StoryComponent = Story as unknown as ComponentType;
+      return (
+        <SisenseContextProvider {...sisenseContextProps}>
+          <AiContextProvider>
+            <StoryComponent />
+          </AiContextProvider>
+        </SisenseContextProvider>
+      );
+    },
   ],
 );

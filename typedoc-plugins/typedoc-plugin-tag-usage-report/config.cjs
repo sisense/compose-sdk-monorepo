@@ -37,6 +37,14 @@ const TAG_ANCHOR = {
   '@internal':        'tag-internal',
 };
 
+// Filename suffix for per-tag plain-text reports (TAG_USAGE_REPORT_<SUFFIX>.txt).
+const TAG_REPORT_FILE_SUFFIX = {
+  '@beta':            'BETA',
+  '@alpha':           'ALPHA',
+  '@sisenseInternal': 'SISENSE_INTERNAL',
+  '@internal':        'INTERNAL',
+};
+
 // Source directories to scan, relative to REPO_ROOT.
 const SOURCE_DIRS = [
   'packages/sdk-data/src',
@@ -46,4 +54,12 @@ const SOURCE_DIRS = [
   'packages/sdk-ui-vue/src',
 ];
 
-module.exports = { REPO_ROOT, REPORT_DIR, TAGS_TO_REPORT, TAG_DESCRIPTIONS, TAG_ANCHOR, SOURCE_DIRS };
+module.exports = {
+  REPO_ROOT,
+  REPORT_DIR,
+  TAGS_TO_REPORT,
+  TAG_DESCRIPTIONS,
+  TAG_ANCHOR,
+  TAG_REPORT_FILE_SUFFIX,
+  SOURCE_DIRS,
+};

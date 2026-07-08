@@ -419,6 +419,7 @@ export interface LevelAttribute extends Attribute {
   translateGranularityToJaql(): {
     level?: string;
     dateTimeLevel?: string;
+    dateTimePart?: string;
     bucket?: string;
   };
 

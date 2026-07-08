@@ -31,6 +31,8 @@ DesignPanel.displayName = 'DesignPanel';
 - **Always provide defaults** — `styleOptions` is `{}` on first render before the user configures anything.
 - Wrap in `React.memo` to avoid unnecessary re-renders.
 
+> **Not the same `onChange` as the visualization's.** The design panel's `onChange` takes the **full** `StyleOptions` object (spread it). The `onChange` on `CustomVisualizationProps` (used inside the rendered widget) takes a **partial patch** `{ styleOptions?, customOptions? }` and is how view-time interactions persist across reloads — see `.claude/docs/add-persistence.md`.
+
 ---
 
 ## Registration

@@ -34,8 +34,13 @@ const DEFAULT_COLOR_VARIATION = {
   to: 0.15,
 } as PlotTreegraphLevelsColorVariationOptions;
 
-// eslint-disable-next-line
-Highcharts.Series.types.treemap.prototype['squarifiedWithTopSpacing'] = function (
+// The custom "squarifiedWithTopSpacing" layout algorithm is registered on the Highcharts treemap
+// prototype, which is not part of its public type — assign it through a record view.
+const treemapPrototype = Highcharts.Series.types.treemap.prototype as unknown as Record<
+  string,
+  unknown
+>;
+treemapPrototype.squarifiedWithTopSpacing = function (
   this: TreemapLayoutAlgorithmContext,
   parent: ParentValues,
   children: PointLabelObject[],

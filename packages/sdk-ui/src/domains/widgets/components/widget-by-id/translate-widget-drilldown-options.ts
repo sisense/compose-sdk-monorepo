@@ -16,7 +16,7 @@ import { sliceFromMatched } from '@/shared/utils/array-utils';
 import { Hierarchy, HierarchyId } from '../../../../domains/drilldown/hierarchy-model/index';
 import { DataPoint, DrilldownOptions, PivotTableDrilldownOptions } from '../../../../types.js';
 import { createDataColumn } from './translate-widget-data-options.js';
-import { DatetimeMask, FusionWidgetType, Panel, PanelItem } from './types.js';
+import { FusionWidgetType, Panel, PanelItem } from './types.js';
 import { getEnabledPanelItems, getRootPanelItem, isMeasurePanelItem } from './utils.js';
 
 const getAvailableDrilldowns = (item: PanelItem): Attribute[] =>
@@ -49,7 +49,8 @@ const getDrilldownSelections = (
     const { jaql, format: { mask } = {} } = item.parent;
     const jl = jaql as { level?: string; dateTimeLevel?: string };
     const datetimeLevelKey = jl.dateTimeLevel || jl.level;
-    const dateFormat = datetimeLevelKey && mask && (mask as DatetimeMask)[datetimeLevelKey];
+    const dateFormat =
+      datetimeLevelKey && mask && (mask as Record<string, string>)[datetimeLevelKey];
 
     const points =
       (item.through.jaql.filter as IncludeMembersFilterJaql)?.members?.map(

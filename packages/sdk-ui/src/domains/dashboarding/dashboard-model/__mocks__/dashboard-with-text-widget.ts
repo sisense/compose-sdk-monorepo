@@ -717,4 +717,4 @@ export const dashboardWithTextWidget = {
       export_dash: false,
     },
   },
-} as DashboardDto;
+} as unknown as DashboardDto;

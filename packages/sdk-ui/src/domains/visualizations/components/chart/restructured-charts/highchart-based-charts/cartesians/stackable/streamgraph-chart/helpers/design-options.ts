@@ -1,5 +1,5 @@
 import flow from 'lodash-es/flow';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { CartesianChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { getDefaultStyleOptions } from '@/domains/visualizations/core/chart-options-processor/chart-options-service.js';

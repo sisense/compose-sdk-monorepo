@@ -7,7 +7,6 @@ import {
   isMeasureColumn,
   translateColumnToAttribute,
 } from '@/domains/visualizations/core/chart-data-options/utils';
-import { ScatterCustomPointOptions } from '@/domains/visualizations/core/chart-options-processor/translations/scatter-tooltip';
 import {
   BOXPLOT_CHART_TYPES,
   CARTESIAN_CHART_TYPES,
@@ -162,8 +161,8 @@ export function prepareDrilldownSelectionPoints(
         console.warn('No drilldown support for multi-selection in scatter chart');
       }
       const value = isMultiSelectionEvent
-        ? point[drilldownTargetDataOptionsKey]
-        : (event.point.options.custom as ScatterCustomPointOptions)[
+        ? (point as Record<string, unknown>)[drilldownTargetDataOptionsKey]
+        : (event.point.options.custom as Record<string, unknown>)[
             camelCase(`{masked ${drilldownTargetDataOptionsKey}`)
           ];
       return {

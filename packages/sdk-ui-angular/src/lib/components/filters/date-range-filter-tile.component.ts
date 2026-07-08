@@ -76,6 +76,7 @@ export interface DateRangeFilterTileProps extends Omit<DateRangeFilterTilePropsP
  * @group Filter Tiles
  */
 @Component({
+  standalone: false,
   selector: 'csdk-date-range-filter-tile',
   template,
   styles,

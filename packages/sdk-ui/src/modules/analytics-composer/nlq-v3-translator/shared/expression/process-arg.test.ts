@@ -5,6 +5,7 @@ import {
   createAttributeFromName,
   createDateDimensionFromName,
   createSchemaIndex,
+  REQUIRE_EXPLICIT_DATE_LEVEL,
 } from '../utils/schema-index.js';
 import { processArg } from './process-arg.js';
 
@@ -719,6 +720,7 @@ describe('processArg', () => {
         'DM.Commerce.Date.Years',
         expect.any(Object),
         expect.any(Object),
+        REQUIRE_EXPLICIT_DATE_LEVEL,
       );
     });
 
@@ -777,6 +779,7 @@ describe('processArg', () => {
         'DM.Commerce.Date.Years',
         expect.any(Object),
         expect.any(Object),
+        REQUIRE_EXPLICIT_DATE_LEVEL,
       );
     });
 

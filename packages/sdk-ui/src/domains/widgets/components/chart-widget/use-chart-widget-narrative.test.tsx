@@ -2,9 +2,9 @@
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { WidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config';
 import { useSisenseContextMock } from '@/infra/contexts/sisense-context/__mocks__/sisense-context';
 import type { SisenseContextPayload } from '@/infra/contexts/sisense-context/sisense-context';
-import type { WidgetNarrativeOptions } from '@/types';
 
 import type { ChartWidgetProps } from './types';
 import { useChartWidgetNarrative } from './use-chart-widget-narrative';
@@ -23,11 +23,20 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
 }));
 
-function makeContextMock(canGenerateNarrativeViaAI = true): SisenseContextPayload {
+function makeContextMock({
+  canGenerateNarrativeViaAI = true,
+  globalNarrativeEnabled = true,
+}: {
+  /** Whether the connected instance can generate narratives via AI. */
+  canGenerateNarrativeViaAI?: boolean;
+  /** Global `appConfig.narrativeConfig.enabled` flag. */
+  globalNarrativeEnabled?: boolean;
+} = {}): SisenseContextPayload {
   return {
     app: {
       settings: {
         narrative: { canGenerateNarrativeViaAI },
+        narrativeConfig: { enabled: globalNarrativeEnabled },
       },
     },
     tracking: { packageName: 'test', enabled: false },
@@ -36,11 +45,11 @@ function makeContextMock(canGenerateNarrativeViaAI = true): SisenseContextPayloa
   } as unknown as SisenseContextPayload;
 }
 
-function makeProps(narrative: WidgetNarrativeOptions): ChartWidgetProps {
+function makeProps(narrative: WidgetNarrativeConfig): ChartWidgetProps {
   return {
     chartType: 'column',
     dataOptions: { category: [], value: [], breakBy: [] },
-    aiOptions: { narrative },
+    config: { narrative },
   } as unknown as ChartWidgetProps;
 }
 
@@ -51,7 +60,7 @@ describe('useChartWidgetNarrative', () => {
 
   describe('narrative slots when narrative should NOT show', () => {
     it('returns null slots when canGenerateNarrativeViaAI=false', () => {
-      useSisenseContextMock.mockReturnValue(makeContextMock(false));
+      useSisenseContextMock.mockReturnValue(makeContextMock({ canGenerateNarrativeViaAI: false }));
       const { result } = renderHook(() =>
         useChartWidgetNarrative({
           propsWithDrilldown: makeProps({ enabled: true, autoShow: true }),
@@ -85,6 +94,54 @@ describe('useChartWidgetNarrative', () => {
       expect(result.current.narrativeTopSlot).toBeNull();
       expect(result.current.narrativeBottomSlot).toBeNull();
       expect(result.current.narrativeAloneContent).toBeNull();
+    });
+  });
+
+  describe('global narrativeConfig gate', () => {
+    it('returns null slots when global narrativeConfig.enabled=false, even if the widget enables narrative', () => {
+      useSisenseContextMock.mockReturnValue(makeContextMock({ globalNarrativeEnabled: false }));
+      const { result } = renderHook(() =>
+        useChartWidgetNarrative({
+          propsWithDrilldown: makeProps({
+            enabled: true,
+            autoShow: true,
+            displayLocation: 'above',
+          }),
+          styleOptions: undefined,
+        }),
+      );
+      expect(result.current.narrativeTopSlot).toBeNull();
+      expect(result.current.narrativeBottomSlot).toBeNull();
+      expect(result.current.narrativeAloneContent).toBeNull();
+    });
+
+    it('does not inject the trigger toolbar when global narrativeConfig.enabled=false', () => {
+      useSisenseContextMock.mockReturnValue(makeContextMock({ globalNarrativeEnabled: false }));
+      const originalStyleOptions = {
+        header: { hidden: false },
+      } as ChartWidgetProps['styleOptions'];
+      const { result } = renderHook(() =>
+        useChartWidgetNarrative({
+          propsWithDrilldown: makeProps({ enabled: true, autoShow: false }),
+          styleOptions: originalStyleOptions,
+        }),
+      );
+      expect(result.current.styleOptionsWithNarrative).toBe(originalStyleOptions);
+    });
+
+    it('shows narrative when global narrativeConfig.enabled=true and the widget enables it', () => {
+      useSisenseContextMock.mockReturnValue(makeContextMock({ globalNarrativeEnabled: true }));
+      const { result } = renderHook(() =>
+        useChartWidgetNarrative({
+          propsWithDrilldown: makeProps({
+            enabled: true,
+            autoShow: true,
+            displayLocation: 'above',
+          }),
+          styleOptions: undefined,
+        }),
+      );
+      expect(result.current.narrativeTopSlot).not.toBeNull();
     });
   });
 
@@ -175,7 +232,7 @@ describe('useChartWidgetNarrative', () => {
     });
 
     it('passes styleOptions through unchanged when canGenerateNarrativeViaAI=false', () => {
-      useSisenseContextMock.mockReturnValue(makeContextMock(false));
+      useSisenseContextMock.mockReturnValue(makeContextMock({ canGenerateNarrativeViaAI: false }));
       const originalStyleOptions = {
         header: { hidden: false },
       } as ChartWidgetProps['styleOptions'];

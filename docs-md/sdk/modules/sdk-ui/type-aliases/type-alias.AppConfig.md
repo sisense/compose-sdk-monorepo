@@ -183,6 +183,34 @@ A [date-fns Locale](https://date-fns.org/v2.30.0/docs/Locale)
 
 ***
 
+### `narrativeConfig`
+
+**narrativeConfig**?: `object`
+
+Configuration of the Narrative feature for widgets
+
+> #### `narrativeConfig.enabled`
+>
+> **enabled**?: `boolean`
+>
+> Whether to enable or disable the Widget Narrative feature
+>
+> When `true`, the Widget Narrative feature is enabled if the Fusion server supports it.
+>
+> When `false`, the Widget Narrative feature is disabled.
+>
+> Note: The Widget Narrative feature requires Sisense Intelligence Narratives to be enabled on the connected Sisense Fusion environment.
+>
+> ##### Default
+>
+> ```ts
+> true
+> ```
+>
+>
+
+***
+
 ### `queryCacheConfig`
 
 **queryCacheConfig**?: `object`

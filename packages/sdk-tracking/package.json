@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.30.0",
+  "version": "2.31.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
@@ -39,7 +39,7 @@
     "@sisense/sdk-rest-client": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "4.8.4",
+    "typescript": "5.5.4",
     "vitest": "^3.2.4"
   },
   "packageManager": "yarn@3.2.3",

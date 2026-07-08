@@ -1,5 +1,4 @@
 import { DataSource, Filter } from '@sisense/sdk-data';
-import { EmptyObject } from '@sisense/sdk-query-client/src/helpers/utility-types';
 
 import type {
   JumpToDashboardConfig,
@@ -9,15 +8,15 @@ import {
   ChartDataOptions,
   PivotTableDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/types';
+import { EmptyObject } from '@/shared/utils/utility-types';
 import {
   ChartType,
   DrilldownOptions,
   PivotTableDrilldownOptions,
-  WidgetAiOptions,
   WidgetStyleOptions,
 } from '@/types';
 
-import type { WidgetType } from '../components/widget/types';
+import type { WidgetConfig, WidgetType } from '../components/widget/types';
 
 /**
  * Widget data options.
@@ -74,10 +73,9 @@ export interface WidgetModel {
   styleOptions: WidgetStyleOptions;
 
   /**
-   * Configuration for AI-powered widget features such as automated narrative generation
-   * @alpha
+   * Widget configuration.
    */
-  aiOptions?: WidgetAiOptions;
+  config?: WidgetConfig;
 
   /**
    * Custom widget options. Only present for custom widgets.

@@ -116,10 +116,10 @@ describe('getNlgInsightsFromWidget', () => {
     expect(mockHttpClientPost).not.toHaveBeenCalled();
   });
 
-  it('uses verbosity from aiOptions.narrative', async () => {
+  it('uses verbosity from config.narrative', async () => {
     const props: WidgetProps = {
       ...mockChartWidgetProps,
-      aiOptions: {
+      config: {
         narrative: { verbosity: 'high' },
       },
     };

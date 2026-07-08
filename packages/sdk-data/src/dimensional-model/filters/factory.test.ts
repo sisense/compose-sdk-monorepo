@@ -6,8 +6,10 @@ import { Filter } from '../interfaces.js';
 import * as measureFactory from '../measures/factory.js';
 import * as filterFactory from './factory.js';
 import {
+  createFilter,
   DateOperators,
   DateRangeFilter,
+  EmptyFilter,
   ExcludeFilter,
   LogicalAttributeFilter,
   LogicalOperators,
@@ -225,6 +227,33 @@ describe('filterFactory', () => {
 
     const f2 = filterFactory.doesntEqual(numAttr, 5, config);
     testConfig(f2, `filterFactory.doesntEqual(DM.Table.Num, 5, { disabled: true, locked: true })`);
+  });
+  test('filterFactory.isEmpty()', () => {
+    const f = filterFactory.isEmpty(textAttr);
+    expect(f).toBeInstanceOf(EmptyFilter);
+    expect(f).toHaveProperty('attribute', textAttr);
+    expect(f).toHaveProperty('not', false);
+    expect(f.filterJaql()).toEqual({ equals: '', isEmpty: true });
+
+    const f2 = filterFactory.isEmpty(textAttr, config);
+    testConfig(f2, `filterFactory.isEmpty(DM.Table.Text, { disabled: true, locked: true })`);
+  });
+  test('filterFactory.isNotEmpty()', () => {
+    const f = filterFactory.isNotEmpty(textAttr);
+    expect(f).toBeInstanceOf(EmptyFilter);
+    expect(f).toHaveProperty('attribute', textAttr);
+    expect(f).toHaveProperty('not', true);
+    expect(f.filterJaql()).toEqual({ doesntEqual: '', isEmpty: true });
+
+    const f2 = filterFactory.isNotEmpty(textAttr, config);
+    testConfig(f2, `filterFactory.isNotEmpty(DM.Table.Text, { disabled: true, locked: true })`);
+  });
+  test('filterFactory.isEmpty()/isNotEmpty() round-trip through serialize/createFilter', () => {
+    [filterFactory.isEmpty(textAttr), filterFactory.isNotEmpty(textAttr)].forEach((original) => {
+      const restored = createFilter(original.serialize());
+      expect(restored).toBeInstanceOf(EmptyFilter);
+      expect(restored.filterJaql()).toEqual(original.filterJaql());
+    });
   });
   test('filterFactory.equals() with string arg', () => {
     const f = filterFactory.equals(textAttr, 'mem');

@@ -304,6 +304,30 @@ function findColumnAndLevel(
 export interface CreateAttributeFromNameOptions {
   /** When the dimensional name has no date level, use this level for datetime columns (e.g. from xdiff function). */
   inferredDateLevel?: string;
+  /** When true, datetime/date/time columns must include an explicit level suffix (or inferredDateLevel). */
+  requireExplicitDateLevel?: boolean;
+}
+
+/** Options for NLQ paths where a date level must be present in the dimensional name. */
+export const REQUIRE_EXPLICIT_DATE_LEVEL: CreateAttributeFromNameOptions = {
+  requireExplicitDateLevel: true,
+};
+
+function assertExplicitDateLevelWhenRequired(
+  attributeName: string,
+  column: NormalizedColumn,
+  level: string | undefined,
+  options?: CreateAttributeFromNameOptions,
+): void {
+  if (!options?.requireExplicitDateLevel || level !== undefined || options.inferredDateLevel) {
+    return;
+  }
+  if (!isDatetime(column.dataType)) {
+    return;
+  }
+  throw new Error(
+    `Date level required for '${attributeName}'. Use '${attributeName}.Years' (or another level such as Months, Days, …).`,
+  );
 }
 
 export function createAttributeFromName(
@@ -313,6 +337,8 @@ export function createAttributeFromName(
   options?: CreateAttributeFromNameOptions,
 ) {
   const { table, column, level } = findColumnAndLevel(attributeName, schemaIndex);
+
+  assertExplicitDateLevelWhenRequired(attributeName, column, level, options);
 
   let granularity: string | undefined = level;
   if (isDatetime(column.dataType) && granularity === undefined && options?.inferredDateLevel) {

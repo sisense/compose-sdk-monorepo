@@ -127,7 +127,7 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
                     }
                   }}
                 >
-                  {t(DATE_OPS_MAP[op])}
+                  {t(DATE_OPS_MAP[op as keyof typeof DATE_OPS_MAP])}
                 </div>
               );
             })}
@@ -159,7 +159,7 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
                     }
                   }}
                 >
-                  {t(DATE_LEVELS_MAP[level])}
+                  {t(DATE_LEVELS_MAP[level as keyof typeof DATE_LEVELS_MAP])}
                 </div>
               );
             })}

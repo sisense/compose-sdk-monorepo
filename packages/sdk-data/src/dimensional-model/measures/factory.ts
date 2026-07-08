@@ -381,6 +381,303 @@ export const median: (attribute: Attribute, name?: string, format?: string) => B
   );
 
 /**
+ * Calculates the standard deviation of the given numeric attribute based on a sample (a random subset of items).
+ *
+ * @example
+ * Calculate the standard deviation (sample) of the cost attribute.
+ * ```ts
+ * measureFactory.stdev(DM.Commerce.Cost)
+ * ```
+ * @param attribute - Attribute to aggregate
+ * @param name - Optional name for the new measure
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Format only applies to queries, visualizations (e.g charts) may apply their own formatting to query results.
+ * @returns A measure instance
+ * @group Aggregation
+ */
+export const stdev: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) =>
+      aggregate(attribute, AggregationTypes.StandardDeviation, name, format),
+    'stdev',
+  );
+
+/**
+ * Calculates the standard deviation of the given numeric attribute based on the entire population (all items).
+ *
+ * @example
+ * Calculate the standard deviation (population) of the cost attribute.
+ * ```ts
+ * measureFactory.stdevp(DM.Commerce.Cost)
+ * ```
+ * @param attribute - Attribute to aggregate
+ * @param name - Optional name for the new measure
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Format only applies to queries, visualizations (e.g charts) may apply their own formatting to query results.
+ * @returns A measure instance
+ * @group Aggregation
+ */
+export const stdevp: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) =>
+      aggregate(attribute, AggregationTypes.StandardDeviationPop, name, format),
+    'stdevp',
+  );
+
+/**
+ * Calculates the variance of the given numeric attribute based on a sample (a random subset of items).
+ *
+ * @example
+ * Calculate the variance (sample) of the cost attribute.
+ * ```ts
+ * measureFactory.variance(DM.Commerce.Cost)
+ * ```
+ * @param attribute - Attribute to aggregate
+ * @param name - Optional name for the new measure
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Format only applies to queries, visualizations (e.g charts) may apply their own formatting to query results.
+ * @returns A measure instance
+ * @group Aggregation
+ */
+export const variance: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.Variance, name, format),
+    'variance',
+  );
+
+/**
+ * Calculates the variance of the given numeric attribute across the entire population (all items).
+ *
+ * @example
+ * Calculate the variance (population) of the cost attribute.
+ * ```ts
+ * measureFactory.varp(DM.Commerce.Cost)
+ * ```
+ * @param attribute - Attribute to aggregate
+ * @param name - Optional name for the new measure
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Format only applies to queries, visualizations (e.g charts) may apply their own formatting to query results.
+ * @returns A measure instance
+ * @group Aggregation
+ */
+export const varp: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.VariancePop, name, format),
+    'varp',
+  );
+
+/**
+ * Calculates the mode (most frequent value) of the given attribute.
+ *
+ * @example
+ * Calculate the most frequent cost.
+ * ```ts
+ * measureFactory.mode(DM.Commerce.Cost)
+ * ```
+ * @param attribute - Attribute to aggregate
+ * @param name - Optional name for the new measure
+ * @param format - Optional numeric formatting to apply using a Numeral.js format string. Format only applies to queries, visualizations (e.g charts) may apply their own formatting to query results.
+ * @returns A measure instance
+ * @group Aggregation
+ */
+export const mode: (attribute: Attribute, name?: string, format?: string) => BaseMeasure =
+  withComposeCodeForMeasure(
+    (attribute, name, format) => aggregate(attribute, AggregationTypes.Mode, name, format),
+    'mode',
+  );
+
+/**
+ * Calculates the nth percentile value of the given numeric attribute.
+ *
+ * @example
+ * Calculate the 90th percentile of the cost attribute.
+ * ```ts
+ * measureFactory.percentile(DM.Commerce.Cost, 0.9)
+ * ```
+ * @param attribute - Attribute to aggregate
+ * @param percentileValue - Percentile as a fraction between 0 and 1 (e.g. 0.9 for the 90th percentile)
+ * @param name - Optional name for the new measure
+ * @returns A measure instance
+ * @group Aggregation
+ */
+export const percentile: (
+  attribute: Attribute,
+  percentileValue: number,
+  name?: string,
+) => CalculatedMeasure = withComposeCodeForMeasure((attribute, percentileValue, name) => {
+  if (!Number.isFinite(percentileValue) || percentileValue < 0 || percentileValue > 1) {
+    throw new Error(
+      `measureFactory.percentile: percentileValue must be a fraction between 0 and 1, got ${percentileValue}`,
+    );
+  }
+  const builder: string[] = [];
+  const context: MeasureContext = <MeasureContext>{};
+  builder.push('PERCENTILE(');
+  addToFormula(builder, context, attribute);
+  builder.push(`,${percentileValue})`);
+  return new DimensionalCalculatedMeasure(
+    name ?? `${attribute.name} (${percentileValue}) percentile`,
+    builder.join(''),
+    context,
+  );
+}, 'percentile');
+
+/**
+ * Calculates the nth quartile value of the given numeric attribute.
+ *
+ * @example
+ * Calculate the third quartile (Q3) of the cost attribute.
+ * ```ts
+ * measureFactory.quartile(DM.Commerce.Cost, 3)
+ * ```
+ * @param attribute - Attribute to aggregate
+ * @param quartileValue - Quartile index: 0 (minimum), 1 (Q1), 2 (median), 3 (Q3), or 4 (maximum)
+ * @param name - Optional name for the new measure
+ * @returns A measure instance
+ * @group Aggregation
+ */
+export const quartile: (
+  attribute: Attribute,
+  quartileValue: number,
+  name?: string,
+) => CalculatedMeasure = withComposeCodeForMeasure((attribute, quartileValue, name) => {
+  if (!Number.isInteger(quartileValue) || quartileValue < 0 || quartileValue > 4) {
+    throw new Error(
+      `measureFactory.quartile: quartileValue must be an integer between 0 and 4, got ${quartileValue}`,
+    );
+  }
+  const builder: string[] = [];
+  const context: MeasureContext = <MeasureContext>{};
+  builder.push('QUARTILE(');
+  addToFormula(builder, context, attribute);
+  builder.push(`,${quartileValue})`);
+  return new DimensionalCalculatedMeasure(
+    name ?? `${attribute.name} quartile ${quartileValue}`,
+    builder.join(''),
+    context,
+  );
+}, 'quartile');
+
+// Population covariance numerator and population variance, expressed from AE-supported
+// primitives (avg / arithmetic). avg-based form avoids the overflow of sum-of-products.
+const covarPopExpr = (x: string, y: string) => `avg(${x}*${y}) - avg(${x})*avg(${y})`;
+const varPopExpr = (x: string) => `avg(${x}*${x}) - avg(${x})*avg(${x})`;
+
+/**
+ * Calculates the covariance between two given numeric attributes across the entire population (all items).
+ *
+ * @example
+ * Returns the covariance (population) between Revenue and Cost
+ * ```ts
+ * measureFactory.covarp(DM.Commerce.Revenue, DM.Commerce.Cost)
+ * ```
+ * @param attributeA - First attribute
+ * @param attributeB - Second attribute
+ * @param name - Optional name for the new measure
+ * @returns A measure instance
+ * @group Statistical
+ */
+export const covarp: (
+  attributeA: Attribute,
+  attributeB: Attribute,
+  name?: string,
+) => CalculatedMeasure = withComposeCodeForMeasure((attributeA, attributeB, name) => {
+  const context = <MeasureContext>{ '[x]': attributeA, '[y]': attributeB };
+  return new DimensionalCalculatedMeasure(
+    name ?? `covarp(${attributeA.name}, ${attributeB.name})`,
+    covarPopExpr('[x]', '[y]'),
+    context,
+  );
+}, 'covarp');
+
+/**
+ * Calculates the correlation coefficient between two numeric attributes.
+ * Returns values in range [-1, 1] or N/A when either attribute has zero variance.
+ *
+ * @example
+ * Returns the correlation coefficient measure between Revenue and Cost
+ * ```ts
+ * measureFactory.correlation(DM.Commerce.Revenue, DM.Commerce.Cost)
+ * ```
+ * @param attributeA - First attribute
+ * @param attributeB - Second attribute
+ * @param name - Optional name for the new measure
+ * @returns A measure instance
+ * @group Statistical
+ */
+export const correlation: (
+  attributeA: Attribute,
+  attributeB: Attribute,
+  name?: string,
+) => CalculatedMeasure = withComposeCodeForMeasure((attributeA, attributeB, name) => {
+  const context = <MeasureContext>{ '[x]': attributeA, '[y]': attributeB };
+  const formula = `(${covarPopExpr('[x]', '[y]')}) / sqrt((${varPopExpr('[x]')})*(${varPopExpr(
+    '[y]',
+  )}))`;
+  return new DimensionalCalculatedMeasure(
+    name ?? `correlation(${attributeA.name}, ${attributeB.name})`,
+    formula,
+    context,
+  );
+}, 'correlation');
+
+/**
+ * Calculates the slope of a linear-regression line for the given dependent and independent numeric attributes.
+ *
+ * Note: Date and Time data types are not supported. Convert these types to custom numeric attributes.
+ *
+ * @example
+ * Calculate the slope of a linear regression line between Revenue and Cost
+ * ```ts
+ * measureFactory.slope(DM.Commerce.Revenue, DM.Commerce.Cost)
+ * ```
+ * @param dependentY - Dependent-variable attribute (y)
+ * @param independentX - Independent-variable attribute (x)
+ * @param name - Optional name for the new measure
+ * @returns A measure instance
+ * @group Statistical
+ */
+export const slope: (
+  dependentY: Attribute,
+  independentX: Attribute,
+  name?: string,
+) => CalculatedMeasure = withComposeCodeForMeasure((dependentY, independentX, name) => {
+  const context = <MeasureContext>{ '[x]': independentX, '[y]': dependentY };
+  const formula = `(${covarPopExpr('[x]', '[y]')}) / (${varPopExpr('[x]')})`;
+  return new DimensionalCalculatedMeasure(
+    name ?? `slope(${dependentY.name}, ${independentX.name})`,
+    formula,
+    context,
+  );
+}, 'slope');
+
+/**
+ * Calculates the intercept of a linear regression line for the given dependent and independent numeric attributes.
+ *
+ * Note: Date and Time data types are not supported. Convert these types to custom numeric attributes.
+ *
+ * @example
+ * Calculate the intercept of the linear regression line between Revenue and Cost
+ * ```ts
+ * measureFactory.intercept(DM.Commerce.Revenue, DM.Commerce.Cost)
+ * ```
+ * @param dependentY - Dependent-variable attribute (y)
+ * @param independentX - Independent-variable attribute (x)
+ * @param name - Optional name for the new measure
+ * @returns A measure instance
+ * @group Statistical
+ */
+export const intercept: (
+  dependentY: Attribute,
+  independentX: Attribute,
+  name?: string,
+) => CalculatedMeasure = withComposeCodeForMeasure((dependentY, independentX, name) => {
+  const context = <MeasureContext>{ '[x]': independentX, '[y]': dependentY };
+  const formula = `avg([y]) - ((${covarPopExpr('[x]', '[y]')}) / (${varPopExpr('[x]')}))*avg([x])`;
+  return new DimensionalCalculatedMeasure(
+    name ?? `intercept(${dependentY.name}, ${independentX.name})`,
+    formula,
+    context,
+  );
+}, 'intercept');
+
+/**
  * Creates a count aggregation measure over the given attribute.
  *
  * To count distinct values in the given attribute, use {@link countDistinct}.

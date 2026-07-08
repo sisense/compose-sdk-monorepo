@@ -44,6 +44,7 @@ export interface DrilldownBreadcrumbsProps
  * @group Drilldown
  */
 @Component({
+  standalone: false,
   selector: 'csdk-drilldown-breadcrumbs',
   template,
   styles,

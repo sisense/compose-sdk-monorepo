@@ -1,10 +1,9 @@
 import {
   createDimensionalElementFromMetadataItem,
-  DatetimeMask,
   isDatetime,
   MetadataItem,
 } from '@sisense/sdk-data';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { ScattermapChartDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
 import { normalizeAnyColumn } from '@/domains/visualizations/core/chart-data-options/utils';
@@ -128,7 +127,7 @@ export const getChartDataOptions = (
             const jl = m.jaql as { level?: string; dateTimeLevel?: string };
             const levelKey = jl.dateTimeLevel || jl.level;
             const dateFormat: string | undefined = levelKey
-              ? (m.format?.mask as DatetimeMask)?.[levelKey]
+              ? (m.format?.mask as Record<string, string> | undefined)?.[levelKey]
               : undefined;
             if (dateFormat) {
               return {
@@ -144,7 +143,7 @@ export const getChartDataOptions = (
       : value;
 
     return acc;
-  }, {});
+  }, {} as Record<string, unknown>);
 
   switch (chartFamily) {
     case 'cartesian':
@@ -162,16 +161,16 @@ export const getChartDataOptions = (
       } as CategoricalChartDataOptions;
     case 'scatter':
       Object.keys(intermediateOptions).forEach((key) => {
-        intermediateOptions[`${key}`] = intermediateOptions[`${key}`][0];
+        intermediateOptions[`${key}`] = (intermediateOptions[`${key}`] as unknown[])[0];
       });
       return intermediateOptions as ScatterChartDataOptions;
     case 'scattermap':
       Object.keys(intermediateOptions).forEach((key) => {
         if (key !== 'geo') {
-          intermediateOptions[`${key}`] = intermediateOptions[`${key}`][0];
+          intermediateOptions[`${key}`] = (intermediateOptions[`${key}`] as unknown[])[0];
         }
       });
-      return intermediateOptions as ScattermapChartDataOptions;
+      return intermediateOptions as unknown as ScattermapChartDataOptions;
     case 'table':
       if (Object.keys(intermediateOptions).length === 0) {
         return getTableDataOptions(metadataItems).dataOptions;

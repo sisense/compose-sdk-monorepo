@@ -146,6 +146,7 @@ export type CodeTemplateKey =
   | 'executePivotQueryTmpl'
   | 'pivotTableWidgetTmpl'
   | 'pivotTableWidgetPropsTmpl'
+  | 'customWidgetTmpl'
   | 'dashboardByIdTmpl'
   | 'dashboardTmpl';
 
@@ -283,6 +284,22 @@ export type ChartWidgetCodeProps = Stringify<ChartWidgetProps> & ExtraWidgetCode
  * @internal
  */
 export type PivotTableWidgetCodeProps = Stringify<PivotTableWidgetProps> & ExtraWidgetCodeProps;
+
+/**
+ * Custom Widget Code Props
+ *
+ * @internal
+ */
+export type CustomWidgetCodeProps = {
+  customWidgetTypeString: string;
+  titleString: string;
+  dataSourceString: string;
+  dataOptionsString: string;
+  filtersString: string;
+  extraImportsString: string;
+  styleOptionsString: string;
+  customOptionsString: string;
+};
 
 /**
  * Template Key by Widget Type

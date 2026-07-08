@@ -4,7 +4,7 @@ title: BoxplotChart
 
 # Function BoxplotChart
 
-> **BoxplotChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **BoxplotChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component representing data in a way that visually describes the distribution,
 variability, and center of a data set along an axis.
@@ -28,6 +28,6 @@ Boxplot chart displaying data from the Sample ECommerce data model.
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Boxplot Chart component

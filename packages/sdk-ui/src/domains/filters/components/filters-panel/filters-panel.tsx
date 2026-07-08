@@ -10,7 +10,7 @@ import {
   mergeFilters,
 } from '@sisense/sdk-data';
 
-import { DASHBOARD_HEADER_HEIGHT } from '@/domains/dashboarding/components/dashboard-header';
+import { DASHBOARD_HEADER_HEIGHT } from '@/domains/dashboarding/components/dashboard-header/constants';
 import { getDividerStyle } from '@/domains/dashboarding/utils';
 import { FilterTile } from '@/domains/filters/components/filter-tile';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
@@ -128,7 +128,6 @@ export interface FiltersPanelProps {
  *   );
  * }
  * ```
- *
  * @group Filter Tiles
  */
 export const FiltersPanel = asSisenseComponent({

@@ -64,6 +64,7 @@ export interface WidgetByIdProps
  * @fusionEmbed
  */
 @Component({
+  standalone: false,
   selector: 'csdk-widget-by-id',
   template,
   styles,

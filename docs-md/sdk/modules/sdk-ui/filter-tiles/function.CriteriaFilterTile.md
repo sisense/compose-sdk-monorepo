@@ -4,7 +4,7 @@ title: CriteriaFilterTile
 
 # Function CriteriaFilterTile
 
-> **CriteriaFilterTile**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **CriteriaFilterTile**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 UI component that allows the user to filter numeric or text attributes according to
 a number of built-in operations defined in the numeric filter, text filter, or ranking filter.
@@ -19,7 +19,7 @@ The arrangement prop determines whether the filter is rendered vertically or hor
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Criteria filter tile component
 

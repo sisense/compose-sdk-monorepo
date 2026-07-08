@@ -4,7 +4,7 @@ title: PolarChart
 
 # Function PolarChart
 
-> **PolarChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **PolarChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component comparing multiple categories/variables with a spatial perspective in a radial chart.
 
@@ -32,6 +32,6 @@ Additional Polar Chart examples:
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Polar Chart component

@@ -146,9 +146,10 @@ export type {
   WidgetsPanelLayout,
   WidgetsPanelColumnLayout,
   WidgetId,
-  JumpToDashboardConfig,
-  JumpToDashboardConfigForPivot,
   WidgetsOptions,
+  WidgetConfig,
+  WidgetNarrativeConfig,
+  WidgetNarrativeDisplayLocation,
 
   // General (Others)
   AppConfig,

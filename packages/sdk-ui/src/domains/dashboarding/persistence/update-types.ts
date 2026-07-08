@@ -17,6 +17,9 @@ export type WidgetPropsUpdate = {
     readonly navigator?: {
       readonly scrollerLocation?: { readonly min: number; readonly max: number };
     };
+    readonly columns?: {
+      readonly widths?: ReadonlyArray<number>;
+    };
     /**
      * For custom (plugin) widgets, `styleOptions` is an opaque deeply-partial
      * bag — arbitrary keys are deep-merged into the widget's opaque DTO
@@ -42,7 +45,7 @@ export type WidgetPropsUpdate = {
  * a persistable update for a specific widget. Not part of the public
  * `WidgetProps` surface — composition layer injects handlers into the
  * visualization's existing callback APIs (e.g.
- * `styleOptions.navigator.onScrollerChange`).
+ * `styleOptions.navigator.onScrollerChange`, `styleOptions.columns.onColumnsResize`).
  *
  * @internal
  */

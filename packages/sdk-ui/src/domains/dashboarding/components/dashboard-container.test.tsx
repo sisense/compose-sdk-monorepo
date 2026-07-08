@@ -8,8 +8,8 @@ import { FiltersPanelProps } from '@/domains/filters';
 import * as DM from '../../../__test-helpers__/sample-ecommerce';
 import { DashboardContainer } from './dashboard-container';
 
-vi.mock('./dashboard-header', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('./dashboard-header.js')>();
+vi.mock('./dashboard-header/dashboard-header', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./dashboard-header/dashboard-header.js')>();
   return {
     ...actual,
     DashboardHeader: (props: DashboardHeaderProps) => (
@@ -107,6 +107,48 @@ describe('DashboardContainer', () => {
 
     expect(queryByTestId('dashboard-header')).toBeNull();
     expect(queryByTestId('filter-panel')).toBeNull();
+  });
+
+  it('should hide the header when `header.visible` is false', () => {
+    const { queryByTestId } = render(
+      <MockedSisenseContextProvider>
+        <DashboardContainer
+          title="Test Dashboard"
+          editMode={false}
+          layoutOptions={{}}
+          config={{ header: { visible: false } }}
+          widgets={[]}
+          filters={[]}
+          onFiltersChange={vi.fn()}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={vi.fn()}
+        />
+      </MockedSisenseContextProvider>,
+    );
+
+    expect(queryByTestId('dashboard-header')).toBeNull();
+  });
+
+  it('should give `header.visible` precedence over the deprecated `toolbar.visible`', () => {
+    const { queryByTestId } = render(
+      <MockedSisenseContextProvider>
+        <DashboardContainer
+          title="Test Dashboard"
+          editMode={false}
+          layoutOptions={{}}
+          config={{ header: { visible: false }, toolbar: { visible: true } }}
+          widgets={[]}
+          filters={[]}
+          onFiltersChange={vi.fn()}
+          onLayoutChange={vi.fn()}
+          filterPanelCollapsed={false}
+          onFilterPanelCollapsedChange={vi.fn()}
+        />
+      </MockedSisenseContextProvider>,
+    );
+
+    expect(queryByTestId('dashboard-header')).toBeNull();
   });
 
   it('should trigger onFiltersChange when filterPanel trigger filters update', () => {

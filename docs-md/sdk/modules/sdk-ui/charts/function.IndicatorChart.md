@@ -4,7 +4,7 @@ title: IndicatorChart
 
 # Function IndicatorChart
 
-> **IndicatorChart**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **IndicatorChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 A React component that provides various options for displaying one or two numeric values as a number, gauge or ticker.
 
@@ -16,7 +16,7 @@ A React component that provides various options for displaying one or two numeri
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 Indicator Chart component
 

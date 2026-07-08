@@ -15,12 +15,6 @@ import { AbstractDataPointWithEntries } from '@/domains/dashboarding/common-filt
 import { Coordinates } from '@/domains/visualizations/components/chart/components/scattermap/types';
 
 import { Hierarchy, HierarchyId, StyledColumn, StyledMeasureColumn } from '.';
-import type {
-  CompleteWidgetNarrativeOptions,
-  WidgetNarrativeDisplayLocation,
-  WidgetNarrativeOptions,
-} from './domains/narrative/core/widget-narrative-options.js';
-import { getCompleteWidgetNarrativeOptions } from './domains/narrative/core/widget-narrative-options.js';
 import { GeoDataElement } from './domains/visualizations/components/chart/restructured-charts/areamap-chart/types';
 import { CalendarDayOfWeek } from './domains/visualizations/components/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
 import { HighchartsOptionsInternal } from './domains/visualizations/core/chart-options-processor/chart-options-service';
@@ -132,28 +126,6 @@ export type {
   TabberButtonsWidgetStyleOptions,
   TabberButtonsWidgetCustomOptions,
 } from '@/domains/widgets/components/tabber-buttons-widget/types';
-
-/**
- * Configuration for AI-powered widget features such as automated narrative generation
- *
- * Exposed on {@link ChartWidgetProps} and {@link PivotTableWidgetProps} as `aiOptions`.
- *
- * @alpha
- */
-export type WidgetAiOptions = {
-  /**
-   * Natural-language narrative settings
-   * @alpha
-   */
-  narrative?: WidgetNarrativeOptions;
-};
-
-export type {
-  WidgetNarrativeDisplayLocation,
-  WidgetNarrativeOptions,
-  CompleteWidgetNarrativeOptions,
-};
-export { getCompleteWidgetNarrativeOptions };
 
 /**
  * @internal
@@ -1097,6 +1069,36 @@ export interface TableStyleOptions {
      * 'content' - columns width will be based on content (default option)
      */
     width?: 'auto' | 'content';
+    /**
+     * Enables interactive resizing of column widths by dragging the column border.
+     * Default value is `true`. Set to `false` to disable.
+     */
+    resizable?: boolean;
+    /**
+     * Minimum column width in pixels when resizing.
+     * Default value is 120.
+     */
+    minWidth?: number;
+    /**
+     * Maximum column width in pixels when resizing.
+     * Default value is 350.
+     */
+    maxWidth?: number;
+    /**
+     * Current column pixel widths, in display order. Set by the dashboarding
+     * layer to make column widths controlled/persisted; not intended for
+     * direct use.
+     *
+     * @internal
+     */
+    widths?: number[];
+    /**
+     * Fired with the full set of column widths (pixels, in display order)
+     * whenever a column resize completes.
+     *
+     * @internal
+     */
+    onColumnsResize?: (widths: number[]) => void;
   };
   /**
    * Rows options
@@ -1574,7 +1576,6 @@ export type CalendarHeatmapViewType = 'month' | 'quarter' | 'half-year' | 'year'
 /**
  * Configuration options that define functional style of the various elements of a SankeyChart.
  *
- * @group Charts
  * @beta
  *
  * @example

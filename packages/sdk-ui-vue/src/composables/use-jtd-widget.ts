@@ -1,12 +1,13 @@
 import {
   HookAdapter,
-  type JumpToDashboardConfig,
-  type JumpToDashboardConfigForPivot,
+  type JumpToDashboardConfigForPivot as JumpToDashboardConfigForPivotPreact,
+  type JumpToDashboardConfig as JumpToDashboardConfigPreact,
   useJtdWidget as useJtdWidgetPreact,
   type WidgetProps,
 } from '@sisense/sdk-ui-preact';
 import { onBeforeUnmount, ref, type Ref, toValue, watch } from 'vue';
 
+import type { DashboardConfig } from '../components/dashboard';
 import {
   createSisenseContextConnector,
   createThemeContextConnector,
@@ -14,6 +15,36 @@ import {
 import type { MaybeRef, MaybeRefOrWithRefs } from '../types';
 import { collectRefs, toPlainObject } from '../utils';
 import { useTracking } from './use-tracking';
+
+/**
+ * Configuration for Jump To Dashboard functionality.
+ * Allows users to navigate from a widget to another dashboard with contextual filtering.
+ */
+export interface JumpToDashboardConfig
+  extends Omit<JumpToDashboardConfigPreact, 'targetDashboardConfig'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!JumpToDashboardConfig.targetDashboardConfig}
+   *
+   * @default {}
+   */
+  targetDashboardConfig?: DashboardConfig;
+}
+
+/**
+ * Configuration for Jump To Dashboard functionality for pivot widgets.
+ * Used for pivot widgets, allowing to configure jumping to different dashboard from different dimensions
+ *
+ * @see {@link JumpToDashboardConfig}
+ */
+export interface JumpToDashboardConfigForPivot
+  extends Omit<JumpToDashboardConfigForPivotPreact, 'targetDashboardConfig'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!JumpToDashboardConfig.targetDashboardConfig}
+   *
+   * @default {}
+   */
+  targetDashboardConfig?: DashboardConfig;
+}
 
 /**
  * Composable to add Jump To Dashboard (JTD) functionality to individual Widget components.

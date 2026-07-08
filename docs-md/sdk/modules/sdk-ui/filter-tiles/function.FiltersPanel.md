@@ -4,7 +4,7 @@ title: FiltersPanel
 
 # Function FiltersPanel
 
-> **FiltersPanel**(`props`): `ReactElement`\< `any`, `any` \> \| `null`
+> **FiltersPanel**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 
 Filters panel component that renders a list of filter tiles
 
@@ -16,7 +16,7 @@ Filters panel component that renders a list of filter tiles
 
 ## Returns
 
-`ReactElement`\< `any`, `any` \> \| `null`
+`Promise`\< `ReactNode` \> \| `ReactNode`
 
 ## Example
 

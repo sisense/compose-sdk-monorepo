@@ -69,6 +69,43 @@ describe('useComposedDashboard customizations', () => {
     expect(screen.getByTestId('header').textContent).toBe('1');
   });
 
+  it('addWidget applies widgetOptions and an explicit widgets-panel layout', () => {
+    let captured: { dashboard: DashboardProps; stateApi: DashboardStateApi } | undefined;
+    const customization: DashboardCustomization = (dashboard, stateApi) => {
+      captured = { dashboard, stateApi };
+      return dashboard;
+    };
+    const contributor: Module = {
+      name: 'test-contrib',
+      version: '1.0.0',
+      requires: ['dashboard'],
+      integrations: { dashboard: { customizations: [customization] } },
+    };
+
+    renderHarness({ widgets: [makeWidget('w1')] }, [contributor]);
+
+    // A distinctive column width (42) proves the provided layout was used verbatim rather than the
+    // default "append a new full-width (100) row" behavior.
+    const explicitLayout = {
+      columns: [
+        { widthPercentage: 42, rows: [{ cells: [{ widthPercentage: 100, widgetId: 'w2' }] }] },
+      ],
+    };
+
+    act(() => {
+      captured?.stateApi.addWidget(makeWidget('w2'), {
+        widgetOptions: { filtersOptions: { ignoreFilters: { all: true } } },
+        widgetsPanelLayout: explicitLayout,
+      });
+    });
+
+    expect(captured?.dashboard.widgets).toHaveLength(2);
+    expect(captured?.dashboard.widgetsOptions?.w2).toEqual({
+      filtersOptions: { ignoreFilters: { all: true } },
+    });
+    expect(captured?.dashboard.layoutOptions?.widgetsPanel?.columns[0]?.widthPercentage).toBe(42);
+  });
+
   it('is a no-op when no customizations are registered', () => {
     renderHarness({ widgets: [makeWidget('w1')] });
 

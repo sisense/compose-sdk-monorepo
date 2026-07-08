@@ -245,13 +245,16 @@ export interface CustomVisualizationProps<
   /** Highlight filters for interactive highlighting */
   highlights?: Filter[];
   /**
-   * Arbitrary plugin-specific options that is not data- or style-related.
+   * Arbitrary plugin-specific runtime state that is not data- or style-related
+   * (for example the current page of a table or a selected tab). Persisted back
+   * to the Sisense instance when the widget lives inside a Dashboard component,
+   * so it survives page reloads.
    *
-   * @sisenseInternal
+   * @beta
    */
   customOptions?: CustomOptions;
   /**
-   * Emit a partial state update to be persisted through the dashboard
+   * Emits a partial state update to be persisted through the dashboard
    * persistence layer. Injected by the dashboard when the widget lives inside a
    * Dashboard component; `undefined` in standalone use or read-only mode — always
    * call it with optional chaining.
@@ -261,7 +264,7 @@ export interface CustomVisualizationProps<
    * onChange?.({ customOptions: { lastPage: 3 } });
    * ```
    *
-   * @sisenseInternal
+   * @beta
    */
   onChange?: (update: VisualizationStateUpdate<StyleOptions, CustomOptions>) => void;
 }
@@ -279,7 +282,10 @@ export interface CustomVisualizationProps<
  * replaced wholesale (last-write-wins). Keys cannot be deleted via merge —
  * overwrite with an explicit value (e.g. `null`) instead.
  *
- * @sisenseInternal
+ * @typeParam StyleOptions - The shape of style options for the custom visualization.
+ * @typeParam CustomOptions - The shape of arbitrary plugin-specific runtime state.
+ * @group Plugin System
+ * @beta
  */
 export type VisualizationStateUpdate<
   StyleOptions = CustomVisualizationStyleOptions,

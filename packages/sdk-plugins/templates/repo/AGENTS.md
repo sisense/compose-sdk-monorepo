@@ -57,6 +57,8 @@ export const Visualization: CustomVisualization<VisualizationProps> = (
   // props.filters         — dashboard-level filters (restrict rows returned)
   // props.highlights      — cross-widget selection (dim non-matching rows)
   // props.onDataPointClick, onDataPointContextMenu, onDataPointsSelected — event handlers
+  // props.customOptions   — plugin-specific runtime state persisted across reloads (4th type param)
+  // props.onChange         — persist a styleOptions/customOptions patch; undefined outside a dashboard
 };
 ```
 
@@ -184,6 +186,8 @@ npm run deploy       # Deploy to Sisense Fusion (requires .env.local)
 | `onDataPointClick`       | `(dataPoint, nativeEvent) => void`         | Fire on click to participate in cross-filtering. See `.claude/docs/add-cross-filtering.md`                                                                                                                                                |
 | `onDataPointContextMenu` | `(dataPoint, nativeEvent) => void`         | Fire on right-click to show Sisense context menu                                                                                                                                                                                          |
 | `onDataPointsSelected`   | `(dataPoints, nativeEvent) => void`        | Fire on shift-click to broadcast multi-selection                                                                                                                                                                                          |
+| `customOptions`          | `CustomOptions \| undefined`               | Plugin-specific runtime state (4th type param of `CustomVisualizationProps`), persisted across reloads. See `.claude/docs/add-persistence.md`                                                                                             |
+| `onChange`               | `(update) => void \| undefined`            | Persist a partial `{ styleOptions?, customOptions? }` patch. `undefined` outside a dashboard — **always call with `?.`**. See `.claude/docs/add-persistence.md`                                                                           |
 
 ## Data row ordering
 
@@ -231,7 +235,8 @@ The cross-framework bundle aliases `react` → `preact/compat`. Libraries that u
 
 ## Constraints
 
-- Style options are persisted as JSON — keep them serializable (no functions or class instances)
+- Style options are persisted as JSON — keep them serializable (no functions or class instances). The same applies to `customOptions`
+- To persist runtime state (current page, selected tab) across reloads, use `onChange` + `useSyncedState` — see `.claude/docs/add-persistence.md`
 - Plugin `name` must be unique; duplicate names are silently deduplicated at runtime
 - Always provide defaults in Visualization — `styleOptions` starts as `{}` on first render
 
@@ -255,6 +260,7 @@ Describe what you want in plain language — the AI reads the guides in `.claude
 - "Add a number format selector" → follows `.claude/docs/add-number-format.md`
 - "Add a tooltip on hover" → follows `.claude/docs/add-tooltip.md`
 - "Add a resize observer" → follows `.claude/docs/add-resize-observer.md`
+- "Persist the current page / selected tab / state across reloads" → follows `.claude/docs/add-persistence.md`
 - "Add a data input / remove a data input / rename an input" → follows `.claude/docs/add-data-input.md`, `remove-data-input.md`, `rename-input.md`
 - "Generate a data model from my Sisense instance" → follows `.claude/docs/generate-model.md`
 
@@ -266,27 +272,28 @@ Ask the AI to "check for issues" or "debug the plugin" — it follows `.claude/d
 
 The `.claude/` folder contains additional reference material:
 
-| File                                    | Contents                                                                                              | When to read                                                                                                           |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `.claude/docs/types-reference.md`       | All SDK types used in plugins with field-by-field docs                                                | When working with `StyledColumn`, `DataPoint`, or SDK type shapes                                                      |
-| `.claude/docs/hooks-reference.md`       | Every hook and utility available from `@sisense/sdk-ui`                                               | Before calling `useExecuteQuery`, `useTheme`, or any SDK hook                                                          |
-| `.claude/docs/errors.md`                | Common errors, their causes, and fixes                                                                | When any error occurs — check here before diagnosing manually                                                          |
-| `.claude/docs/visualization.md`         | Visualization component patterns, external libraries (Highcharts, Recharts, D3, Plotly)               | Before implementing cross-filtering with Highcharts or Plotly                                                          |
-| `.claude/docs/scaffold-chart.md`        | Full scaffold code for Recharts, Highcharts, D3, Plotly, plain React, and SDK built-in charts         | When implementing a new chart component from scratch                                                                   |
-| `.claude/docs/data-model.md`            | DM module structure, attribute types (Column vs DateDimension vs measure), dev-preview-props guidance | Before generating a data model or writing `dev-preview-props.ts`                                                       |
-| `.claude/docs/data-fetching.md`         | Data fetching patterns, result shape, and `buildHierarchy` for hierarchy charts                       | When building circle packing, treemap, sunburst, or icicle charts — or before accessing `data.rows` for the first time |
-| `.claude/docs/data-panel.md`            | Data panel configuration reference and chart-type → input naming table                                | When choosing input names for a new chart type, or adding/removing/renaming inputs                                     |
-| `.claude/docs/add-data-input.md`        | How to add a dimension or measure input across all plugin files                                       | When adding a new data input                                                                                           |
-| `.claude/docs/remove-data-input.md`     | How to remove a data input and clean up all references                                                | When removing a data input                                                                                             |
-| `.claude/docs/rename-input.md`          | How to rename a data input across all plugin files                                                    | When renaming a data input                                                                                             |
-| `.claude/docs/design-panel.md`          | Design panel implementation patterns                                                                  | When adding style controls to `DesignPanel.tsx`                                                                        |
-| `.claude/docs/add-style-prop.md`        | How to add a style option field and its matching design panel control                                 | When adding a style option                                                                                             |
-| `.claude/docs/add-number-format.md`     | How to add a number format selector for measure values                                                | When adding number formatting                                                                                          |
-| `.claude/docs/event-handling.md`        | Cross-filtering and event handler reference                                                           | Before wiring up `onDataPointClick` or multi-selection                                                                 |
-| `.claude/docs/add-cross-filtering.md`   | Step-by-step implementation of outgoing click and incoming highlight blur                             | When adding cross-filtering                                                                                            |
-| `.claude/docs/add-tooltip.md`           | How to add a hover tooltip to data point elements                                                     | When adding a tooltip                                                                                                  |
-| `.claude/docs/add-resize-observer.md`   | How to handle widget resize for D3 and Plotly                                                         | When the chart doesn't resize with the widget                                                                          |
-| `.claude/docs/add-conditional-query.md` | How to skip the query until required inputs are filled, with a drop-prompt empty state                | When preventing blank state on mount                                                                                   |
-| `.claude/docs/generate-model.md`        | How to generate a TypeScript data model from a Sisense data source                                    | Before writing `dev-preview-props.ts` with real attribute names                                                        |
-| `.claude/docs/check.md`                 | TypeScript, lint, format, and package placement checks                                                | Before deploying or when diagnosing a silent failure                                                                   |
-| `.claude/docs/debug.md`                 | 11 common runtime and type failure patterns with diagnostics                                          | When the widget shows blank output, wrong values, or ignored clicks                                                    |
+| File                                    | Contents                                                                                                         | When to read                                                                                                           |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `.claude/docs/types-reference.md`       | All SDK types used in plugins with field-by-field docs                                                           | When working with `StyledColumn`, `DataPoint`, or SDK type shapes                                                      |
+| `.claude/docs/hooks-reference.md`       | Every hook and utility available from `@sisense/sdk-ui`                                                          | Before calling `useExecuteQuery`, `useTheme`, or any SDK hook                                                          |
+| `.claude/docs/errors.md`                | Common errors, their causes, and fixes                                                                           | When any error occurs — check here before diagnosing manually                                                          |
+| `.claude/docs/visualization.md`         | Visualization component patterns, external libraries (Highcharts, Recharts, D3, Plotly)                          | Before implementing cross-filtering with Highcharts or Plotly                                                          |
+| `.claude/docs/scaffold-chart.md`        | Full scaffold code for Recharts, Highcharts, D3, Plotly, plain React, and SDK built-in charts                    | When implementing a new chart component from scratch                                                                   |
+| `.claude/docs/data-model.md`            | DM module structure, attribute types (Column vs DateDimension vs measure), dev-preview-props guidance            | Before generating a data model or writing `dev-preview-props.ts`                                                       |
+| `.claude/docs/data-fetching.md`         | Data fetching patterns, result shape, and `buildHierarchy` for hierarchy charts                                  | When building circle packing, treemap, sunburst, or icicle charts — or before accessing `data.rows` for the first time |
+| `.claude/docs/data-panel.md`            | Data panel configuration reference and chart-type → input naming table                                           | When choosing input names for a new chart type, or adding/removing/renaming inputs                                     |
+| `.claude/docs/add-data-input.md`        | How to add a dimension or measure input across all plugin files                                                  | When adding a new data input                                                                                           |
+| `.claude/docs/remove-data-input.md`     | How to remove a data input and clean up all references                                                           | When removing a data input                                                                                             |
+| `.claude/docs/rename-input.md`          | How to rename a data input across all plugin files                                                               | When renaming a data input                                                                                             |
+| `.claude/docs/design-panel.md`          | Design panel implementation patterns                                                                             | When adding style controls to `DesignPanel.tsx`                                                                        |
+| `.claude/docs/add-style-prop.md`        | How to add a style option field and its matching design panel control                                            | When adding a style option                                                                                             |
+| `.claude/docs/add-number-format.md`     | How to add a number format selector for measure values                                                           | When adding number formatting                                                                                          |
+| `.claude/docs/event-handling.md`        | Cross-filtering and event handler reference                                                                      | Before wiring up `onDataPointClick` or multi-selection                                                                 |
+| `.claude/docs/add-cross-filtering.md`   | Step-by-step implementation of outgoing click and incoming highlight blur                                        | When adding cross-filtering                                                                                            |
+| `.claude/docs/add-tooltip.md`           | How to add a hover tooltip to data point elements                                                                | When adding a tooltip                                                                                                  |
+| `.claude/docs/add-resize-observer.md`   | How to handle widget resize for D3 and Plotly                                                                    | When the chart doesn't resize with the widget                                                                          |
+| `.claude/docs/add-persistence.md`       | How to persist runtime state (`styleOptions` / `customOptions`) across reloads via `onChange` + `useSyncedState` | When the widget should remember view-time state (current page, selected tab) across reloads                            |
+| `.claude/docs/add-conditional-query.md` | How to skip the query until required inputs are filled, with a drop-prompt empty state                           | When preventing blank state on mount                                                                                   |
+| `.claude/docs/generate-model.md`        | How to generate a TypeScript data model from a Sisense data source                                               | Before writing `dev-preview-props.ts` with real attribute names                                                        |
+| `.claude/docs/check.md`                 | TypeScript, lint, format, and package placement checks                                                           | Before deploying or when diagnosing a silent failure                                                                   |
+| `.claude/docs/debug.md`                 | 11 common runtime and type failure patterns with diagnostics                                                     | When the widget shows blank output, wrong values, or ignored clicks                                                    |

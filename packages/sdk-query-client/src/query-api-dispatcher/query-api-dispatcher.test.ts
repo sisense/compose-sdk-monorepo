@@ -62,7 +62,7 @@ describe('QueryApiDispatcher', () => {
       const dataSource = 'exampleDataSource';
       const jaqlPayload: JaqlQueryPayload = {
         metadata: [],
-        datasource: dataSource,
+        datasource: { title: dataSource, live: false },
         by: 'ComposeSDK',
         queryGuid: '12312',
       };
@@ -90,7 +90,7 @@ describe('QueryApiDispatcher', () => {
       const dataSource = 'exampleDataSource';
       const jaqlPayload: JaqlQueryPayload = {
         metadata: [],
-        datasource: dataSource,
+        datasource: { title: dataSource, live: false },
         by: 'ComposeSDK',
         queryGuid: '12312',
       };
@@ -144,7 +144,7 @@ describe('QueryApiDispatcher', () => {
       const dataSource = 'exampleDataSource';
       const jaqlPayload: JaqlQueryPayload = {
         metadata: [],
-        datasource: dataSource,
+        datasource: { title: dataSource, live: false },
         by: 'ComposeSDK',
         queryGuid: '12312',
       };

@@ -159,6 +159,15 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
 
       case 'stdev':
         return AggregationTypes.StandardDeviation;
+
+      case 'stdevp':
+        return AggregationTypes.StandardDeviationPop;
+
+      case 'varp':
+        return AggregationTypes.VariancePop;
+
+      case 'mode':
+        return AggregationTypes.Mode;
     }
 
     return AggregationTypes.Sum;
@@ -192,6 +201,15 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
 
       case AggregationTypes.StandardDeviation:
         return 'stdev';
+
+      case AggregationTypes.StandardDeviationPop:
+        return 'stdevp';
+
+      case AggregationTypes.VariancePop:
+        return 'varp';
+
+      case AggregationTypes.Mode:
+        return 'mode';
     }
 
     return AggregationTypes.Sum;
@@ -289,7 +307,9 @@ export class DimensionalBaseMeasure extends AbstractMeasure implements BaseMeasu
     const r = <any>{
       jaql: {
         ...attributeJaql,
-        title: this.title,
+        // uses `name` (not `title`) so query-time identity aliasing (e.g. sdk-ui's
+        // per-measure `$measureN_` uniqueness prefix) round-trips through the JAQL response
+        title: this.name,
         agg: DimensionalBaseMeasure.aggregationToJAQL(this.aggregation),
       },
     };
@@ -429,7 +449,9 @@ export class DimensionalCalculatedMeasure extends AbstractMeasure implements Cal
   jaql(nested?: boolean): any {
     const r = <any>{
       jaql: {
-        title: this.title,
+        // uses `name` (not `title`) so query-time identity aliasing (e.g. sdk-ui's
+        // per-measure `$measureN_` uniqueness prefix) round-trips through the JAQL response
+        title: this.name,
         formula: this.expression,
       },
     };

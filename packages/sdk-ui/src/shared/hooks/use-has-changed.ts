@@ -17,7 +17,7 @@ export function useHasChanged<T>(
 ) {
   const prev = usePrevious(value);
   // compare primitive values and functions directly
-  if (!(typeof value === 'object') && value === prev) {
+  if (typeof value !== 'object' && value === prev) {
     return false;
   }
 

@@ -271,5 +271,63 @@ describe('translateMeasures', () => {
       expect(Array.isArray(data)).toBe(true);
       expect(data).toHaveLength(2);
     });
+
+    describe('numeric measure type validation', () => {
+      const NUMERIC_ONLY_FUNCTIONS = [
+        'measureFactory.sum',
+        'measureFactory.avg',
+        'measureFactory.average',
+        'measureFactory.stdev',
+        'measureFactory.variance',
+        'measureFactory.median',
+      ];
+
+      it.each(NUMERIC_ONLY_FUNCTIONS)('%s should succeed with a numeric attribute', (fn) => {
+        const result = translateMeasuresFromJSON({
+          data: [{ function: fn, args: ['DM.Commerce.Revenue'] }],
+          context: {
+            dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+            schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
+          },
+        });
+        expect(result.success).toBe(true);
+      });
+
+      it.each(NUMERIC_ONLY_FUNCTIONS)('%s should error when given a text attribute', (fn) => {
+        const result = translateMeasuresFromJSON({
+          data: [{ function: fn, args: ['DM.Commerce.Gender'] }],
+          context: {
+            dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+            schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
+          },
+        });
+        expect(result.success).toBe(false);
+        expect(getErrors(result)).toEqual(
+          expect.arrayContaining([expect.stringContaining('Attribute must be numeric type')]),
+        );
+      });
+
+      it('measureFactory.count should accept a text attribute', () => {
+        const result = translateMeasuresFromJSON({
+          data: [{ function: 'measureFactory.count', args: ['DM.Commerce.Gender'] }],
+          context: {
+            dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+            schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
+          },
+        });
+        expect(result.success).toBe(true);
+      });
+
+      it('measureFactory.min should accept a text attribute', () => {
+        const result = translateMeasuresFromJSON({
+          data: [{ function: 'measureFactory.min', args: ['DM.Commerce.Gender'] }],
+          context: {
+            dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+            schemaIndex: MOCK_SCHEMA_INDEX_SAMPLE_ECOMMERCE,
+          },
+        });
+        expect(result.success).toBe(true);
+      });
+    });
   });
 });

@@ -17,6 +17,11 @@ export function generateAttributeName(
   granularity?: string,
 ): string {
   return granularity
-    ? t(datetimeTraslationKeysByGranularity[granularity], { columnName })
+    ? t(
+        datetimeTraslationKeysByGranularity[
+          granularity as keyof typeof datetimeTraslationKeysByGranularity
+        ],
+        { columnName },
+      )
     : columnName;
 }

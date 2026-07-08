@@ -68,6 +68,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-funnel-chart',
   template: `
     <csdk-chart

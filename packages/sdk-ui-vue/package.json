@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.30.0",
+  "version": "2.31.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -59,7 +59,7 @@
     "build-only": "vite build --mode development",
     "build-only:prod": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .vue,.js,.jsx,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore --quiet",
+    "lint": "eslint . --quiet",
     "lint:fix": "run lint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -74,30 +74,29 @@
   "dependencies": {
     "@sisense/sdk-data": "workspace:*",
     "@sisense/sdk-ui-preact": "workspace:*",
-    "deepmerge": "^4.3.1",
     "lodash-es": "^4.17.21",
+    "ts-deepmerge": "^8.0.0",
     "vue": "^3.3.2"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.2.0",
     "@testing-library/vue": "^8.1.0",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^18.14.2",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^4.1.2",
-    "@vue/eslint-config-prettier": "^7.1.0",
-    "@vue/eslint-config-typescript": "^11.0.2",
+    "@vue/eslint-config-prettier": "^10.1.0",
+    "@vue/eslint-config-typescript": "^14.2.0",
     "@vue/test-utils": "^2.4.6",
-    "@vue/tsconfig": "^0.1.3",
-    "eslint": "^8.40.0",
-    "eslint-plugin-vue": "^9.9.0",
+    "@vue/tsconfig": "^0.5.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-vue": "^9.32.0",
     "jsdom": "^22.1.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.4",
-    "typescript": "~4.8.4",
+    "typescript": "5.5.4",
     "vite": "^4.5.2",
     "vite-plugin-dts": "^2.3.0",
-    "vue-tsc": "^1.6.5"
+    "vue-tsc": "^2.1.10"
   },
   "volta": {
     "extends": "../../package.json"

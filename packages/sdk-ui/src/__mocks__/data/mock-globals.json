@@ -747,14 +747,6 @@
       "active": true
     },
     {
-      "key": "exportingEngineV2",
-      "active": true
-    },
-    {
-      "key": "exportingXlsxV2",
-      "active": false
-    },
-    {
       "key": "exportingCsv",
       "active": true,
       "localized": true

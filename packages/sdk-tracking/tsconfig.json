@@ -3,11 +3,10 @@
   "compilerOptions": {
     "target": "es6",
     "module": "es2020",
-    // "moduleResolution": "node",
+    "moduleResolution": "node",
     "composite": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "suppressImplicitAnyIndexErrors": false,
     "lib": ["ES2017", "dom", "ES2020.String", "ESNext"]
   },
   "include": ["./src/**/*"],

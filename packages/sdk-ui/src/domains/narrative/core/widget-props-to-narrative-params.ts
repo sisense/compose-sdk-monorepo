@@ -33,18 +33,18 @@ import {
   getNarrativeDimensionsAndMeasures,
   getNarrativeDimensionsAndMeasuresFromTable,
 } from './get-narrative-dimensions-and-measures.js';
-import { getWidgetNarrativeOptionsFromWidgetProps } from './get-widget-narrative-from-widget-props.js';
+import { getWidgetNarrativeConfigFromWidgetProps } from './get-widget-narrative-from-widget-props.js';
 import { toNlgApiVerbosity } from './to-nlg-api-verbosity.js';
 import {
-  type CompleteWidgetNarrativeOptions,
-  getCompleteWidgetNarrativeOptions,
-} from './widget-narrative-options.js';
+  type CompleteWidgetNarrativeConfig,
+  getCompleteWidgetNarrativeConfig,
+} from './widget-narrative-config.js';
 
 /**
  * Converts ChartWidgetProps to {@link NarrativeQueryParams} by extracting dimensions and measures
  * from the chart data options.
  *
- * @param props - ChartWidgetProps to convert. `aiOptions.narrative` supplies {@link WidgetNarrativeOptions}. Defaults are calculated via {@link getCompleteWidgetNarrativeOptions})
+ * @param props - ChartWidgetProps to convert. `config.narrative` supplies {@link WidgetNarrativeConfig}. Defaults are calculated via {@link getCompleteWidgetNarrativeConfig}
  * @param defaultDataSource - Optional default data source to use if props.dataSource is undefined
  * @returns Params ready for {@link prepareNarrativeRequest}
  * @throws If neither `props.dataSource` nor `defaultDataSource` is set
@@ -63,8 +63,8 @@ export function convertChartWidgetPropsToNarrativeParams(
     );
   }
 
-  const { verbosity, includeTrendAndForecast } = getCompleteWidgetNarrativeOptions(
-    getWidgetNarrativeOptionsFromWidgetProps(props),
+  const { verbosity, includeTrendAndForecast } = getCompleteWidgetNarrativeConfig(
+    getWidgetNarrativeConfigFromWidgetProps(props),
   );
   const adaptMeasureOptions = { includeTrendAndForecast };
   const { dimensions, measures } = isTable(chartType)
@@ -87,8 +87,8 @@ export function convertChartWidgetPropsToNarrativeParams(
  * Builds a narrative API request from pivot widget props using the same JAQL as pivot query
  * execution ({@link getPivotJaqlQueryPayload}).
  *
- * @param props - Pivot widget props (`widgetType: 'pivot'`); `aiOptions.narrative` supplies
- *   {@link WidgetNarrativeOptions} via {@link getWidgetNarrativeOptionsFromWidgetProps}
+ * @param props - Pivot widget props (`widgetType: 'pivot'`); `config.narrative` supplies
+ *   {@link WidgetNarrativeConfig} via {@link getWidgetNarrativeConfigFromWidgetProps}
  * @param defaultDataSource - Used when `props.dataSource` is undefined
  * @returns Request ready for `getNarrative`
  * @throws If data source cannot be resolved, or pivot query description is invalid
@@ -106,8 +106,8 @@ export function convertPivotWidgetPropsToNarrativeRequest(
     );
   }
 
-  const { verbosity, includeTrendAndForecast } = getCompleteWidgetNarrativeOptions(
-    getWidgetNarrativeOptionsFromWidgetProps(props),
+  const { verbosity, includeTrendAndForecast } = getCompleteWidgetNarrativeConfig(
+    getWidgetNarrativeConfigFromWidgetProps(props),
   );
 
   const pivotDataOptions =
@@ -185,19 +185,19 @@ export function convertWidgetPropsToNarrativeParams(
 }
 
 /**
- * Completes widget narrative options from chart/pivot `WidgetProps` for NLG (`aiOptions.narrative`).
+ * Completes widget narrative options from chart/pivot `WidgetProps` for NLG (`config.narrative`).
  *
  * @param props - Widget props (chart, pivot, or other)
  * @returns Complete narrative defaults for non-chart/pivot types
  * @internal
  */
-export function getCompleteWidgetNarrativeOptionsFromWidgetProps(
+export function getCompleteWidgetNarrativeConfigFromWidgetProps(
   props: WidgetProps,
-): CompleteWidgetNarrativeOptions {
+): CompleteWidgetNarrativeConfig {
   if (isChartWidgetProps(props) || isPivotTableWidgetProps(props)) {
-    return getCompleteWidgetNarrativeOptions(getWidgetNarrativeOptionsFromWidgetProps(props));
+    return getCompleteWidgetNarrativeConfig(getWidgetNarrativeConfigFromWidgetProps(props));
   }
-  return getCompleteWidgetNarrativeOptions(undefined);
+  return getCompleteWidgetNarrativeConfig(undefined);
 }
 
 /**
@@ -238,16 +238,16 @@ function unsupportedMissingDataSource(): WidgetNarrativeRequestPair {
   return { ...createUnsupported(), missingDataSource: true };
 }
 
-/** Clones chart/pivot props with `aiOptions.narrative.includeTrendAndForecast` forced to `false`. */
+/** Clones chart/pivot props with `config.narrative.includeTrendAndForecast` forced to `false`. */
 function withNarrativeIncludeTrendForecastDisabled<P extends WidgetProps>(props: P): P {
   if (!isChartWidgetProps(props) && !isPivotTableWidgetProps(props)) {
     return props;
   }
-  const prev = getWidgetNarrativeOptionsFromWidgetProps(props);
+  const prev = getWidgetNarrativeConfigFromWidgetProps(props);
   return {
     ...props,
-    aiOptions: {
-      ...(props.aiOptions ?? {}),
+    config: {
+      ...(props.config ?? {}),
       narrative: {
         ...(prev ?? {}),
         includeTrendAndForecast: false,
@@ -265,15 +265,15 @@ function withNarrativeIncludeTrendForecastDisabled<P extends WidgetProps>(props:
  * @returns `{ supported, narrativeRequest, narrativeFallbackRequest }`. `supported` is `false`
  *   when the widget type is unsupported, when no data source can be resolved for chart/pivot, or
  *   when the primary conversion fails.
- * @remarks {@link WidgetNarrativeOptions} are derived from `props.aiOptions?.narrative`
- *   via {@link getWidgetNarrativeOptionsFromWidgetProps} and {@link getCompleteWidgetNarrativeOptions}.
+ * @remarks {@link WidgetNarrativeConfig} are derived from `props.config?.narrative`
+ *   via {@link getWidgetNarrativeConfigFromWidgetProps} and {@link getCompleteWidgetNarrativeConfig}.
  * @internal
  */
 export function buildWidgetNarrativeRequests(
   props: WidgetProps,
   defaultDataSource?: DataSource,
 ): WidgetNarrativeRequestPair {
-  const { includeTrendAndForecast } = getCompleteWidgetNarrativeOptionsFromWidgetProps(props);
+  const { includeTrendAndForecast } = getCompleteWidgetNarrativeConfigFromWidgetProps(props);
 
   if (isPivotTableWidgetProps(props)) {
     if (!(props.dataSource ?? defaultDataSource)) {

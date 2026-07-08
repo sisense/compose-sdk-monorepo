@@ -1,5 +1,5 @@
 import { HttpClient } from '@sisense/sdk-rest-client';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings.js';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
@@ -149,12 +149,24 @@ type ServerSettings = {
   serverVersion: string;
   serverFeatures: FeatureMap;
   ai: AiSettingsSlice;
+  /**
+   * Whether this is a Sisense-managed (cloud) deployment.
+   * From `api/globals` props.isManagedService; `false` for on-prem.
+   */
+  isManaged: boolean;
   narrative: {
     /** From `api/v2/settings/ai` narration.enabled */
     isEnabled: boolean;
 
     /** Computed from `narrationUnified` and the unlimited or credit-based narrative entitlements. */
     canGenerateNarrativeViaAI: boolean;
+
+    /**
+     * Narrative text provider from the license (`api/globals` props.narrationProvider).
+     * `arria` is the legacy 3rd-party engine served only via `POST /api/v1/narration/widget`,
+     * which CSDK does not support; `sisenseAI` uses the AI endpoints CSDK can call.
+     */
+    provider?: 'arria' | 'sisenseAI';
   };
   user: {
     tenant: {
@@ -220,7 +232,7 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
     enabled: true,
   },
   narrativeConfig: {
-    widgetNarrativeEnabled: false,
+    enabled: true,
   },
   chartConfig: {
     tabular: {
@@ -342,10 +354,12 @@ async function loadServerSettings(
     serverVersion: globals.version,
     serverFeatures,
     ai,
+    isManaged: props?.isManagedService === true,
     narrative: {
       isEnabled: apiNarration.isEnabled,
       canGenerateNarrativeViaAI:
         isUnified && (unlimitedNarrativesEnabled || creditNarrativesEnabled),
+      provider: props?.narrationProvider,
     },
     user: {
       tenant: {

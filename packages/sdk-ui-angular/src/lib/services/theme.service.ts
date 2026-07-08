@@ -6,7 +6,7 @@ import {
   type ThemeProviderProps as ThemeConfig,
 } from '@sisense/sdk-ui-preact';
 import { BehaviorSubject, Observable, skip } from 'rxjs';
-import merge from 'ts-deepmerge';
+import { merge } from 'ts-deepmerge';
 
 import { track, TrackableService } from '../decorators/trackable.decorator';
 import { type ThemeSettings } from '../sdk-ui-core-exports';

@@ -92,8 +92,8 @@ exports[`DashboardModel > should create a new dashboard model with all arguments
   "userAuth": undefined,
   "widgets": [
     {
-      "aiOptions": undefined,
       "chartType": "pie",
+      "config": undefined,
       "customOptions": undefined,
       "customWidgetType": "",
       "dataOptions": {

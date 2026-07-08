@@ -72,6 +72,7 @@ export class AnalyticsComponent {
  * @group Charts
  */
 @Component({
+  standalone: false,
   selector: 'csdk-scatter-chart',
   template: `
     <csdk-chart

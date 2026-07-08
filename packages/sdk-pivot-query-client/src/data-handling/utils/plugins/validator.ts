@@ -33,13 +33,18 @@ function fieldsComparator(
 
     if (options && options.fields && options.fields.length) {
       options.fields.forEach((field: string) => {
-        if (target[field] !== undefined && metadataItem[field] === undefined) {
+        // Plugin field names are dynamic, so index the union targets/metadata as records.
+        const targetRecord = target as Record<string, unknown>;
+        const metadataRecord = metadataItem as Record<string, unknown>;
+        if (targetRecord[field] !== undefined && metadataRecord[field] === undefined) {
           fieldsValid = false;
-        } else if (target[field] !== undefined && metadataItem[field] !== undefined) {
-          if (Array.isArray(target[field])) {
-            fieldsValid = fieldsValid && target[field].indexOf(metadataItem[field]) !== -1;
+        } else if (targetRecord[field] !== undefined && metadataRecord[field] !== undefined) {
+          if (Array.isArray(targetRecord[field])) {
+            fieldsValid =
+              fieldsValid &&
+              (targetRecord[field] as unknown[]).indexOf(metadataRecord[field]) !== -1;
           } else {
-            fieldsValid = fieldsValid && target[field] === metadataItem[field];
+            fieldsValid = fieldsValid && targetRecord[field] === metadataRecord[field];
           }
         }
       });
