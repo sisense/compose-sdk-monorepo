@@ -74,7 +74,9 @@ describe('sankeyHighchartsOptionsBuilder', () => {
     it('does not invert when orientation is horizontal', () => {
       const chart = sankeyHighchartsOptionsBuilder.getChart(createContext());
       expect(chart.type).toBe('sankey');
-      expect(chart.inverted).toBeUndefined();
+      // Emit `inverted` explicitly — `chart.update()` treats omitted props as "no change",
+      // so toggling from vertical→horizontal would otherwise leave the chart stuck inverted.
+      expect(chart.inverted).toBe(false);
     });
 
     it('inverts when orientation is vertical', () => {
@@ -99,7 +101,9 @@ describe('sankeyHighchartsOptionsBuilder', () => {
       expect(s.nodes).toEqual([
         { id: 'A', name: 'Alpha', color: '#00cee6', custom: { rawValue: undefined } },
         { id: 'B', name: 'B', color: '#00aa00', custom: { rawValue: undefined } },
-        { id: 'C', name: 'C', color: '#9b9bd7', custom: { rawValue: undefined } },
+        // C gets palette[2], not palette[1]: B reserves its palette slot even though it has
+        // an explicit color, so customising one node never shifts the colors of others.
+        { id: 'C', name: 'C', color: '#6eda55', custom: { rawValue: undefined } },
       ]);
       expect(s.linkOpacity).toBe(0.4);
       expect(s.curveFactor).toBe(0.25);
@@ -180,7 +184,9 @@ describe('sankeyHighchartsOptionsBuilder', () => {
       const s = series[0] as Record<string, unknown>;
       const nodes = s.nodes as { name: string; color: string }[];
       expect(nodes.find((n) => n.name === 'A')?.color).toBe('#ff0000');
-      expect(nodes.find((n) => n.name === 'X')?.color).toBe('#00cee6');
+      // X gets palette[1], not palette[0]: A reserves its palette slot even though
+      // it resolves via seriesToColorMap, so customising one node never shifts others.
+      expect(nodes.find((n) => n.name === 'X')?.color).toBe('#9b9bd7');
     });
 
     it('supports MultiColumnValueToColorMap keyed by category column', () => {

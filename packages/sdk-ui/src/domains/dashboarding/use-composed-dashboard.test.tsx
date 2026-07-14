@@ -23,7 +23,12 @@ import type { SisenseContextProviderProps } from '@/props';
 import { CartesianChartDataOptions, DataPoint } from '@/types.js';
 
 import { totalCostByAgeRangeJaqlResult } from './__mocks__/jaql-responce-mock.js';
-import { ComposableDashboardProps, useComposedDashboard } from './use-composed-dashboard.js';
+import type { WidgetsPanelLayout } from './dashboard-model';
+import {
+  ComposableDashboardProps,
+  ComposedDashboardResult,
+  useComposedDashboard,
+} from './use-composed-dashboard.js';
 
 /**
  * Helper function to get property from widget props
@@ -524,6 +529,93 @@ describe('useComposedDashboard', () => {
       expect(w1.styleOptions?.navigator?.onScrollerChange).not.toBe(
         w2.styleOptions?.navigator?.onScrollerChange,
       );
+    });
+  });
+
+  describe('FilterWidget deletion removes the linked filter', () => {
+    const layoutWith = (widgetIds: string[]): WidgetsPanelLayout => ({
+      columns: [
+        {
+          widthPercentage: 100,
+          rows: widgetIds.map((widgetId) => ({
+            cells: [{ widthPercentage: 100, widgetId }],
+          })),
+        },
+      ],
+    });
+
+    const makeFilterWidget = (id: string): WidgetProps =>
+      ({
+        id,
+        widgetType: 'filter',
+        attribute: DM.Commerce.Gender,
+        filterType: 'members',
+      } as unknown as WidgetProps);
+
+    const getFilters = (r: { current: ComposedDashboardResult<ComposableDashboardProps> }) =>
+      r.current.dashboard.filters as Filter[];
+
+    it('drops the backing filter when the filter widget leaves the layout', async () => {
+      const linkedFilter = filterFactory.members(DM.Commerce.Gender, ['Female']);
+      const fw = makeFilterWidget('fw1');
+      const chart = { ...widgetPropsMock, id: 'chart1' };
+
+      const props = (layout: WidgetsPanelLayout): ComposableDashboardProps => ({
+        widgets: [fw, chart],
+        filters: [linkedFilter],
+        widgetsOptions: { fw1: { filterWidgetOptions: { filterId: linkedFilter.config.guid } } },
+        layoutOptions: { widgetsPanel: layout },
+      });
+
+      const { result, rerender } = renderHook(
+        (p: ComposableDashboardProps) => useComposedDashboard(p),
+        {
+          wrapper: CombinedProvider,
+          initialProps: props(layoutWith(['fw1', 'chart1'])),
+        },
+      );
+
+      // On mount the filter is present (deletion effect must not fire on first render).
+      expect(getFilters(result).some((f) => f.config.guid === linkedFilter.config.guid)).toBe(true);
+
+      // Delete the filter widget: it leaves the layout but the widget object lingers
+      // in the widgets array until the model syncs (mirrors the real delete path).
+      rerender(props(layoutWith(['chart1'])));
+
+      await waitFor(() => {
+        expect(getFilters(result).some((f) => f.config.guid === linkedFilter.config.guid)).toBe(
+          false,
+        );
+      });
+      expect(result.current.hiddenFilterIds).toEqual([]);
+    });
+
+    it('keeps the filter when the widget stays in the layout (no false positive)', async () => {
+      const linkedFilter = filterFactory.members(DM.Commerce.Gender, ['Female']);
+      const fw = makeFilterWidget('fw1');
+
+      const props = (layout: WidgetsPanelLayout): ComposableDashboardProps => ({
+        widgets: [fw],
+        filters: [linkedFilter],
+        widgetsOptions: { fw1: { filterWidgetOptions: { filterId: linkedFilter.config.guid } } },
+        layoutOptions: { widgetsPanel: layout },
+      });
+
+      const { result, rerender } = renderHook(
+        (p: ComposableDashboardProps) => useComposedDashboard(p),
+        {
+          wrapper: CombinedProvider,
+          initialProps: props(layoutWith(['fw1'])),
+        },
+      );
+
+      // A layout re-emit that still contains the widget must not drop the filter.
+      rerender(props(layoutWith(['fw1'])));
+
+      await waitFor(() => {
+        expect(result.current.dashboard.widgets.length).toBe(1);
+      });
+      expect(getFilters(result).some((f) => f.config.guid === linkedFilter.config.guid)).toBe(true);
     });
   });
 });

@@ -122,6 +122,16 @@ export type SpecificWidgetOptions = {
     options?: WidgetDto['options'];
     style?: UnsupportedStyleOptions;
   };
+  /**
+   * Dashboard-level link between a filter widget and its backing dashboard filter.
+   * Only present for widgets with `widgetType: 'filter'`.
+   *
+   * @internal
+   */
+  filterWidgetOptions?: {
+    /** `config.guid` of the backing filter in the dashboard filters array. */
+    filterId: string;
+  };
 };
 
 /**

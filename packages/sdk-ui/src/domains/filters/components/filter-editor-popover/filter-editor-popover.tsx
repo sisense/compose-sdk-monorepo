@@ -160,6 +160,7 @@ export const FilterEditorPopover = ({
             <Button
               onClick={() => editedFilter && onChange?.(editedFilter)}
               disabled={!editedFilter}
+              data-testid="csdk-filter-editor-apply-button"
             >
               {t('filterEditor.buttons.apply')}
             </Button>

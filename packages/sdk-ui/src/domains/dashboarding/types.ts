@@ -93,6 +93,33 @@ export interface DashboardWidgetsDeletedEvent {
 }
 
 /**
+ * Event triggered when a FilterWidget's date granularity is changed on the dashboard.
+ * Lets an embedding host sync the widget's stored dimension metadata to the new level.
+ *
+ * @beta
+ */
+export interface DashboardWidgetDateLevelChangedEvent {
+  /** Event type */
+  type: 'widget/dateLevelChanged';
+  /** Widget oid and the JAQL level descriptor of the new granularity */
+  payload: {
+    /** The oid of the changed widget */
+    widgetId: string;
+    /** JAQL of the attribute at the new date level */
+    levelJaql: {
+      /** Dimension expression (e.g. `[Commerce.Date (Calendar)]`) */
+      dim?: string;
+      /** Date level of aggregated datetime attributes (e.g. `years`) */
+      level?: string;
+      /** Date level of non-aggregated datetime attributes */
+      dateTimeLevel?: string;
+      /** Bucket size in minutes for the `minutes` level */
+      bucket?: string;
+    } & Record<string, unknown>;
+  };
+}
+
+/**
  * Events that can be triggered by the Dashboard component
  *
  * @example
@@ -108,7 +135,8 @@ export type DashboardChangeEvent =
   | DashboardFiltersPanelCollapseChangedEvent
   | DashboardWidgetsPanelLayoutUpdatedEvent
   | DashboardWidgetsPanelIsEditingChangedEvent
-  | DashboardWidgetsDeletedEvent;
+  | DashboardWidgetsDeletedEvent
+  | DashboardWidgetDateLevelChangedEvent;
 
 /**
  * Props of the {@link DashboardById} component.
@@ -153,6 +181,12 @@ export interface DashboardContainerProps {
    * User configuration for the dashboard header items.
    */
   headerConfig?: DashboardHeaderConfig;
+  /**
+   * Filter guids to pass to FiltersPanel as hidden. Derived from live FilterWidget claims.
+   *
+   * @internal
+   */
+  hiddenFilterIds?: string[];
 }
 
 /**
@@ -185,6 +219,15 @@ export interface DashboardFiltersPanelConfig extends FiltersPanelConfig {
    * If not specified, the default value is `false`.
    */
   showFilterIconInToolbar?: boolean;
+  /**
+   * When `true` (default), filters claimed by a live FilterWidget are hidden from
+   * the panel tiles. They still apply to other widgets and block their dimensions.
+   * Set to `false` to show them in the panel (useful for debugging).
+   *
+   * @defaultValue true
+   * @alpha
+   */
+  hideFilterWidgetLinkedFilters?: boolean;
 }
 
 /**

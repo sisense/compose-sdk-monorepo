@@ -243,7 +243,7 @@ function getHighlightsAllowedPanelNames(widgetType: FusionWidgetType) {
     case 'pivot2':
       return ['rows', 'columns'];
     default:
-      // Note: all other widgets are not support highlight filters. For example: funnel, table, indicator
+      // Note: all other widgets are not support highlight filters. For example: funnel, table, indicator, sankey
       return [];
   }
 }

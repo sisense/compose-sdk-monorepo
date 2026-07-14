@@ -94,6 +94,12 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
     }
   }, [open, onClose]);
 
+  // Reuse the same selected-item lookup as the visible label below, so the tooltip
+  // title cannot drift from what is rendered. `|| undefined` keeps the title attribute
+  // absent (rather than empty) when there is no selection.
+  const triggerTitle =
+    getSelectedItemsDisplayValue(items, value !== undefined ? [value] : []) || undefined;
+
   return (
     <ClickAwayListener onClickAway={onClose}>
       <div style={{ width }}>
@@ -103,6 +109,7 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
             focus={open}
             onClick={onContainerClick}
             theme={themeSettings}
+            title={triggerTitle}
             aria-label="Searchable single-select"
           >
             <SelectLabel

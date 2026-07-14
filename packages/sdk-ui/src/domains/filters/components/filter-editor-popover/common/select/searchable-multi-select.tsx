@@ -123,6 +123,17 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
     }
   }, [open, onClose]);
 
+  const triggerTitle = useMemo(
+    () =>
+      values.length > 0
+        ? items
+            .filter((item) => values.includes(item.value))
+            .map((item) => String(item.displayValue ?? item.value))
+            .join(', ')
+        : undefined,
+    [items, values],
+  );
+
   return (
     <ClickAwayListener onClickAway={onClose}>
       <div style={{ width }}>
@@ -132,6 +143,7 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
             focus={open}
             onClick={onContainerClick}
             theme={themeSettings}
+            title={triggerTitle}
             aria-label="Searchable multi-select"
           >
             <SelectLabel

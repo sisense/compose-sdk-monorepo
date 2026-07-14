@@ -101,6 +101,32 @@ describe('FiltersPanel', () => {
       expect(onFiltersChange).toHaveBeenCalledOnce();
       expect(onFiltersChange.mock.calls[0][0]).toMatchSnapshot();
     });
+
+    it('preserves hidden filters in the write-back when a visible filter changes', async () => {
+      const hidden = filterFactory.members(DM.Brand.BrandID, ['1'], { guid: 'hidden-id' });
+      const visible = filterFactory.greaterThan(DM.Commerce.Cost, 100, { guid: 'visible-id' });
+      const onFiltersChange = vi.fn();
+
+      render(
+        <MockedSisenseContextProvider>
+          <FiltersPanel
+            filters={[hidden, visible]}
+            hiddenFilterIds={['hidden-id']}
+            onFiltersChange={onFiltersChange}
+            dataSources={[DM.DataSource]}
+          />
+        </MockedSisenseContextProvider>,
+      );
+
+      // Only the non-hidden filter renders a tile.
+      await waitFor(() => expect(screen.getAllByTestId('filter-tile')).toHaveLength(1));
+      fireEvent.click(screen.getByTestId('inline-edit-filter-tile-button'));
+
+      expect(onFiltersChange).toHaveBeenCalledOnce();
+      const payload = onFiltersChange.mock.calls[0][0] as Filter[];
+      // The hidden filter must survive the write-back, not be dropped.
+      expect(payload.map((f) => f.config.guid)).toEqual(['hidden-id', 'visible-id']);
+    });
   });
 
   describe('adding new filter', () => {

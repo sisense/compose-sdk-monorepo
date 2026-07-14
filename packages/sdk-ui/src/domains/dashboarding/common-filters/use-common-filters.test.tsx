@@ -588,4 +588,54 @@ describe('useCommonFilters', () => {
       expect(getProperty(connectedWidget, 'filters')).toEqual([backgroundFilter]);
     });
   });
+
+  describe('connectToWidgetProps() for a FilterWidget', () => {
+    const filterWidgetProps = {
+      id: 'fw-1',
+      widgetType: 'filter',
+      attribute: DM.Commerce.Gender,
+    } as unknown as WidgetProps;
+
+    it('injects the attribute-matching common filter as the widget filter (adoption)', () => {
+      const linked = filterFactory.members(DM.Commerce.Gender, ['Male']);
+      const { result } = renderHook(() => useCommonFilters({ initialFilters: [linked] }));
+
+      const connected = result.current.connectToWidgetProps(filterWidgetProps) as unknown as {
+        filter: MembersFilter | null;
+      };
+      expect(connected.filter).toBe(linked);
+    });
+
+    it('writes a filter/changed selection back into the common filters', async () => {
+      const { result } = renderHook(() => useCommonFilters());
+      const selected = filterFactory.members(DM.Commerce.Gender, ['Female']);
+
+      act(() => {
+        const connected = result.current.connectToWidgetProps(filterWidgetProps) as unknown as {
+          onChange: (e: unknown) => void;
+        };
+        connected.onChange({ type: 'filter/changed', payload: { filter: selected } });
+      });
+
+      await waitFor(() => {
+        expect(result.current.filters).toContainEqual(selected);
+      });
+    });
+
+    it('forwards every event to the widget original onChange', () => {
+      const originalOnChange = vi.fn();
+      const { result } = renderHook(() => useCommonFilters());
+
+      const connected = result.current.connectToWidgetProps({
+        ...filterWidgetProps,
+        onChange: originalOnChange,
+      } as unknown as WidgetProps) as unknown as { onChange: (e: unknown) => void };
+      const titleEvent = { type: 'title/changed', payload: { title: 'X' } };
+      act(() => {
+        connected.onChange(titleEvent);
+      });
+
+      expect(originalOnChange).toHaveBeenCalledWith(titleEvent);
+    });
+  });
 });

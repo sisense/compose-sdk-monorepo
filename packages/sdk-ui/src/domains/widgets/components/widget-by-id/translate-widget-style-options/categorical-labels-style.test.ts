@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildFunnelSeriesLabelsFromFusionLabels,
   buildPieSeriesLabelsFromFusionLabels,
+  type CategoricalFusionLabels,
   DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING,
   extractCategoricalLabelFormatting,
   getFusionCategoricalLabelsRotation,
@@ -20,6 +21,7 @@ describe('categorical-labels-style', () => {
     customRotation: 45,
     prefix: 'P:',
     suffix: '%',
+    labelColor: '#123456',
     backgroundColor: '#00bcd4',
     backgroundPadding: 6,
     borderColor: '#333333',
@@ -65,6 +67,7 @@ describe('categorical-labels-style', () => {
       rotation: 45,
       prefix: 'P:',
       suffix: '%',
+      textStyle: { color: '#123456' },
       backgroundColor: '#00bcd4',
       padding: 6,
       borderColor: '#333333',
@@ -85,6 +88,7 @@ describe('categorical-labels-style', () => {
       rotation: 45,
       prefix: 'P:',
       suffix: '%',
+      textStyle: { color: '#123456' },
       backgroundColor: '#00bcd4',
       padding: 6,
       borderColor: '#333333',
@@ -93,6 +97,19 @@ describe('categorical-labels-style', () => {
       xOffset: 3,
       yOffset: -2,
     });
+  });
+
+  it('ignores legacy labels.color when labelColor is unset', () => {
+    const legacyLabels = {
+      enabled: true,
+      categories: true,
+      percent: true,
+      value: true,
+      decimals: false,
+      color: 'red',
+    } as CategoricalFusionLabels & { color?: string };
+
+    expect(buildPieSeriesLabelsFromFusionLabels(legacyLabels)).not.toHaveProperty('textStyle');
   });
 
   it('toFusionCategoricalLabelsFromSeriesLabels round-trips pie seriesLabels', () => {
@@ -108,6 +125,7 @@ describe('categorical-labels-style', () => {
       customRotation: null,
       prefix: 'P:',
       suffix: '%',
+      labelColor: '#123456',
       backgroundColor: '#00bcd4',
       backgroundPadding: 6,
       borderColor: '#333333',

@@ -1,5 +1,6 @@
 import {
   isChartWidgetProps,
+  isFilterWidgetProps,
   isPivotTableWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils';
 import type { DrilldownSelection } from '@/types';
@@ -56,6 +57,21 @@ export function widgetChangeEventToDelta(
   switch (event.type) {
     case 'title/changed':
       return { title: event.payload.title };
+    case 'filter/changed':
+      // FilterWidget selection state lives in the dashboard's common filters
+      // (written by the useCommonFilters connector) — no widget-prop delta.
+      return {};
+    case 'dateLevel/changed':
+      // FilterWidget only: swap the attribute for the new-granularity LevelAttribute
+      // so adoption (isSameAttribute: expression + granularity) keeps matching the
+      // re-leveled backing filter.
+      if (isFilterWidgetProps(currentWidget)) {
+        // Cast rationale: `attribute` exists only on the FilterWidgetProps member of
+        // the WidgetProps union; the isFilterWidgetProps guard above ensures the
+        // delta is applied to a filter widget, but TS cannot narrow Partial unions.
+        return { attribute: event.payload.attribute } as Partial<WidgetProps>;
+      }
+      return {};
     case 'drilldownSelections/changed':
       if (isChartWidgetProps(currentWidget) && isChartDrilldownPayload(event.payload)) {
         return {

@@ -4,6 +4,8 @@ import * as DM from '@/__test-helpers__/sample-ecommerce';
 
 import {
   ChartWidgetDrilldownSelectionsChangedEvent,
+  FilterWidgetDateLevelChangedEvent,
+  FilterWidgetFilterChangedEvent,
   PivotTableWidgetDrilldownSelectionsChangedEvent,
   WidgetTitleChangedEvent,
 } from './change-events';
@@ -174,6 +176,49 @@ describe('widgetChangeEventToDelta', () => {
     };
 
     const delta = widgetChangeEventToDelta(event, textWidgetProps);
+
+    expect(delta).toEqual({});
+  });
+
+  // Cast rationale: a minimal filter-widget fixture — only the fields the reducer
+  // reads (widgetType/attribute) are set, so a double cast stands in for the full
+  // FilterWidgetProps shape in this unit test.
+  const filterWidgetProps = {
+    id: 'filter-1',
+    widgetType: 'filter',
+    attribute: DM.Commerce.Gender,
+  } as unknown as WidgetProps;
+
+  it('should return an empty delta for a filter/changed event (state lives in common filters)', () => {
+    const event: FilterWidgetFilterChangedEvent = {
+      type: 'filter/changed',
+      payload: { filter: null },
+    };
+
+    const delta = widgetChangeEventToDelta(event, filterWidgetProps);
+
+    expect(delta).toEqual({});
+  });
+
+  it('should swap the attribute for a dateLevel/changed event on a filter widget', () => {
+    const newAttribute = DM.Commerce.Date.Months;
+    const event: FilterWidgetDateLevelChangedEvent = {
+      type: 'dateLevel/changed',
+      payload: { attribute: newAttribute },
+    };
+
+    const delta = widgetChangeEventToDelta(event, filterWidgetProps);
+
+    expect(delta).toEqual({ attribute: newAttribute });
+  });
+
+  it('should ignore a dateLevel/changed event for a non-filter widget', () => {
+    const event: FilterWidgetDateLevelChangedEvent = {
+      type: 'dateLevel/changed',
+      payload: { attribute: DM.Commerce.Date.Months },
+    };
+
+    const delta = widgetChangeEventToDelta(event, chartWidgetProps);
 
     expect(delta).toEqual({});
   });

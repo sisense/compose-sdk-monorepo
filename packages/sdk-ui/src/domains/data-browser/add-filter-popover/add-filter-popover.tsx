@@ -38,6 +38,10 @@ const PopoverContent = withErrorBoundary({
 
 /**
  * A popover with "data browser" that allows users to select a data source and an attribute to create a filter.
+ *
+ * Used by Fusion as the FilterWidget dimension picker.
+ *
+ * @sisenseInternal
  */
 export const AddFilterPopover = ({
   anchorEl,

@@ -1,9 +1,11 @@
-import { SetStateAction, useCallback, useMemo } from 'react';
+import { SetStateAction, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { Filter, FilterRelations } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 
+import { resolveFilterWidgetFilter } from '@/domains/dashboarding/common-filters/filter-widget-connector.js';
 import { useCommonFilters } from '@/domains/dashboarding/common-filters/use-common-filters.js';
+import { findDeletedWidgetsFromLayout } from '@/domains/dashboarding/components/editable-layout/helpers.js';
 import type { WidgetsOptions, WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
 import { useDuplicateWidgetMenuItem } from '@/domains/dashboarding/hooks/duplicate-widget/use-duplicate-widget-menu-item.js';
 import { useWidgetRenaming } from '@/domains/dashboarding/hooks/rename-widget/use-widget-renaming.js';
@@ -19,6 +21,7 @@ import {
   withWidgetAppendedToPanelLayout,
 } from '@/domains/dashboarding/utils.js';
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
+import { isFilterWidgetProps } from '@/domains/widgets/components/widget-by-id/utils.js';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { widgetChangeEventToDelta } from '@/domains/widgets/event-to-delta';
 import { useCombinedMenu } from '@/infra/contexts/menu-provider/hooks/use-combined-menu.js';
@@ -30,11 +33,20 @@ import { useModuleApiRegistry } from '@/infra/modules';
 import { useSyncedState } from '@/shared/hooks/use-synced-state.js';
 import { defaultMerger, useWithChangeDetection } from '@/shared/hooks/use-with-change-detection.js';
 import { combineHandlers } from '@/shared/utils/combine-handlers.js';
+import { getFiltersArray } from '@/shared/utils/filter-relations.js';
 
 import { DashboardModule } from './dashboard-module/dashboard-module.js';
 import type { DashboardStateApi } from './dashboard-module/types.js';
 import type { DashboardPersistenceManager } from './persistence/types.js';
 import { DashboardConfig, DashboardProps } from './types.js';
+
+function widgetExistsInLayout(layout: WidgetsPanelLayout, widgetId: string): boolean {
+  return (
+    layout.columns?.some((col) =>
+      col.rows?.some((row) => row.cells?.some((cell) => cell.widgetId === widgetId)),
+    ) ?? false
+  );
+}
 
 export type ComposableDashboardProps = Pick<
   DashboardProps,
@@ -101,6 +113,14 @@ export type UseComposedDashboardOptions = {
    */
   onFiltersChange?: (filters: Filter[] | FilterRelations) => void;
   /**
+   * Called with every widget change event emitted through a widget's unified
+   * `onChange` channel (e.g. dateLevel/changed), after local state is updated.
+   * Lets the Dashboard component forward selected events to the host bridge.
+   *
+   * @internal
+   */
+  onWidgetChangeEvent?: (widgetId: string, event: WidgetChangeEvent) => void;
+  /**
    * Persistence manager for the dashboard
    *
    * @sisenseInternal
@@ -128,6 +148,14 @@ export type ComposedDashboardResult<D extends ComposableDashboardProps | Dashboa
 
   /** API to set the layout of the widgets on the dashboard. */
   setWidgetsLayout: (newLayout: WidgetsPanelLayout) => void;
+
+  /**
+   * Filter guids that should be hidden in the FiltersPanel because they are
+   * claimed by a live FilterWidget in the current layout.
+   *
+   * @internal
+   */
+  hiddenFilterIds: string[];
 };
 
 /**
@@ -137,7 +165,12 @@ export type ComposedDashboardResult<D extends ComposableDashboardProps | Dashboa
  */
 export function useComposedDashboardInternal<D extends ComposableDashboardProps | DashboardProps>(
   initialDashboard: D,
-  { onFiltersChange, persistence, isEditing: isEditingRuntime }: UseComposedDashboardOptions = {},
+  {
+    onFiltersChange,
+    onWidgetChangeEvent,
+    persistence,
+    isEditing: isEditingRuntime,
+  }: UseComposedDashboardOptions = {},
 ): ComposedDashboardResult<D> {
   const { filters, widgets, widgetsOptions } = initialDashboard;
   // This state is needed to avoid losing the inner state when new widget objects are received from toDashboardProps.
@@ -228,10 +261,13 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
           const delta = widgetChangeEventToDelta(event, currentWidget);
           const newInnerWidgets = cloneDeep(existingInnerWidgets);
           newInnerWidgets[index] = defaultMerger(currentWidget, delta);
+          // Let the Dashboard component forward selected events to the host
+          // bridge (e.g. dateLevel/changed -> Fusion widget metadata sync).
+          onWidgetChangeEvent?.(currentWidget.id, event);
           return newInnerWidgets;
         });
       },
-      [setInnerWidgets],
+      [setInnerWidgets, onWidgetChangeEvent],
     ),
   }) as WidgetProps[];
 
@@ -287,9 +323,17 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   // Connect common filters to widgets
   const widgetsWithCommonFilters = useMemo(() => {
     return widgetsWithDownloadExcel.map((widget) =>
-      connectToWidgetProps(widget, innerWidgetsOptions?.[widget.id]?.filtersOptions),
+      connectToWidgetProps(widget, {
+        ...innerWidgetsOptions?.[widget.id]?.filtersOptions,
+        filterWidgetOptions: innerWidgetsOptions?.[widget.id]?.filterWidgetOptions,
+        setFilterWidgetOptions: (opts: { filterId: string }) =>
+          setInnerWidgetsOptions((prev) => ({
+            ...prev,
+            [widget.id]: { ...prev?.[widget.id], filterWidgetOptions: opts },
+          })),
+      }),
     );
-  }, [widgetsWithDownloadExcel, innerWidgetsOptions, connectToWidgetProps]);
+  }, [widgetsWithDownloadExcel, innerWidgetsOptions, connectToWidgetProps, setInnerWidgetsOptions]);
 
   const widgetsWithFilterAndJtd = useMemo(() => {
     return widgetsWithCommonFilters.map((widget: WidgetProps) => connectToWidgetPropsJtd(widget));
@@ -315,6 +359,85 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
   const finalLayoutOptions = useMemo(() => {
     return { ...initialDashboard.layoutOptions, widgetsPanel: finalWidgetsLayout };
   }, [finalWidgetsLayout, initialDashboard.layoutOptions]);
+
+  const shouldHideFilterWidgetFilters =
+    (initialDashboard as Partial<DashboardProps>).config?.filtersPanel
+      ?.hideFilterWidgetLinkedFilters !== false;
+
+  const hiddenFilterIds = useMemo<string[]>(() => {
+    if (!shouldHideFilterWidgetFilters) return [];
+    const allFilters = getFiltersArray(commonFilters);
+    return finalWidgets
+      .filter(isFilterWidgetProps)
+      .filter((w) => widgetExistsInLayout(finalWidgetsLayout, w.id))
+      .flatMap((w) => {
+        // Same resolution rule as the FilterWidget connector: attribute identity is
+        // authoritative, the guid link is only a re-validated hint. Covers filters
+        // created externally (e.g. by PWC's syncFilterWithWidget) before the first
+        // interaction, and ignores stale links after an external attribute edit.
+        const { filter } = resolveFilterWidgetFilter(
+          allFilters,
+          w.attribute,
+          innerWidgetsOptions?.[w.id]?.filterWidgetOptions,
+        );
+        return filter ? [filter.config.guid] : [];
+      });
+  }, [
+    finalWidgets,
+    finalWidgetsLayout,
+    innerWidgetsOptions,
+    shouldHideFilterWidgetFilters,
+    commonFilters,
+  ]);
+
+  // Deleting a FilterWidget must also remove its linked dashboard filter (design
+  // requirement — the filter is "removed together with the widget"). Detection uses the
+  // pre-tabber `innerWidgetsLayout`: a genuine deletion drops the widget id from it,
+  // whereas tabber tab-switching only reshapes the post-tabber `finalWidgetsLayout`, so
+  // this never mistakes a hidden-tab widget for a deleted one. Read the rest of the
+  // context from a ref so the effect fires on layout changes only, not on filter changes.
+  const deletionContextRef = useRef({
+    finalWidgets,
+    commonFilters,
+    innerWidgetsOptions,
+    setFilters,
+  });
+  deletionContextRef.current = {
+    finalWidgets,
+    commonFilters,
+    innerWidgetsOptions,
+    setFilters,
+  };
+  const prevWidgetsLayoutRef = useRef(innerWidgetsLayout);
+  useEffect(() => {
+    const deletedWidgetIds = findDeletedWidgetsFromLayout(
+      prevWidgetsLayoutRef.current,
+      innerWidgetsLayout,
+    );
+    prevWidgetsLayoutRef.current = innerWidgetsLayout;
+    if (deletedWidgetIds.length === 0) return;
+
+    const {
+      finalWidgets: widgets,
+      commonFilters: currentFilters,
+      innerWidgetsOptions: options,
+      setFilters: applyFilters,
+    } = deletionContextRef.current;
+    const allFilters = getFiltersArray(currentFilters);
+    const removedGuids = new Set<string>();
+    deletedWidgetIds.forEach((id) => {
+      const widget = widgets.find((w) => w.id === id);
+      if (!widget || !isFilterWidgetProps(widget)) return;
+      const { filter } = resolveFilterWidgetFilter(
+        allFilters,
+        widget.attribute,
+        options?.[id]?.filterWidgetOptions,
+      );
+      if (filter) removedGuids.add(filter.config.guid);
+    });
+    if (removedGuids.size === 0) return;
+    applyFilters(allFilters.filter((f) => !removedGuids.has(f.config.guid)));
+  }, [innerWidgetsLayout]);
 
   const dashboardDefaultDataSource = (initialDashboard as Partial<DashboardProps>)
     .defaultDataSource;
@@ -401,6 +524,7 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     dashboard: customizedDashboard as D,
     setFilters,
     setWidgetsLayout: setFinalWidgetsLayout,
+    hiddenFilterIds,
   };
 }
 

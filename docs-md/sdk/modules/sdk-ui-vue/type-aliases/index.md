@@ -56,6 +56,7 @@ TypeScript type aliases for components and composables listed above
 - [EndCapType](type-alias.EndCapType.md)
 - [FilterMembersState](type-alias.FilterMembersState.md)
 - [FilterVariant](type-alias.FilterVariant.md)
+- [FilterWidgetFilterType](type-alias.FilterWidgetFilterType.md) <Badge type="beta" text="Beta" />
 - [FormatDataSetOptions](type-alias.FormatDataSetOptions.md)
 - [FormatDateOptions](type-alias.FormatDateOptions.md)
 - [GenericDataOptions](type-alias.GenericDataOptions.md)

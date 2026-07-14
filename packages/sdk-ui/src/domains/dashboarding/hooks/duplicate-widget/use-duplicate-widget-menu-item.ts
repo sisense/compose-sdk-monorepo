@@ -168,11 +168,15 @@ export function useDuplicateWidgetMenuItem(
     () =>
       enabled
         ? widgets.map((widget) =>
-            withHeaderMenuItem({
-              id: 'duplicate-widget',
-              caption: 'Duplicate widget',
-              onClick: () => void duplicateWidget(widget.id),
-            })(widget),
+            // FilterWidget manages a dashboard filter — duplicating it would create a
+            // conflicting linked filter. Exclude duplicate from its context menu.
+            widget.widgetType === 'filter'
+              ? widget
+              : withHeaderMenuItem({
+                  id: 'duplicate-widget',
+                  caption: 'Duplicate widget',
+                  onClick: () => void duplicateWidget(widget.id),
+                })(widget),
           )
         : [...widgets],
     [widgets, duplicateWidget, enabled],

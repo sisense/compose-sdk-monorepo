@@ -11,7 +11,7 @@
     "Sisense",
     "Compose SDK"
   ],
-  "version": "2.31.0",
+  "version": "2.31.1",
   "type": "module",
   "exports": {
     ".": {
@@ -19,6 +19,12 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./query": {
+      "types": "./dist/query.d.ts",
+      "require": "./dist/query.cjs",
+      "import": "./dist/query.js",
+      "default": "./dist/query.js"
     },
     "./ai": {
       "types": "./dist/ai.d.ts",
@@ -50,6 +56,9 @@
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
+      "query": [
+        "./dist/query.d.ts"
+      ],
       "ai": [
         "./dist/ai.d.ts"
       ],
@@ -118,6 +127,7 @@
   "scripts": {
     "dev": "vite",
     "public-api-check": "node ./scripts/public-api-check/index.cjs",
+    "size-check": "size-limit",
     "type-check": "tsc --noEmit",
     "build": "run type-check && vite build --mode development && run build:umd",
     "build:prod": "run type-check && vite build && run build:umd:prod",
@@ -148,6 +158,8 @@
   "devDependencies": {
     "@mui/x-charts": "^7.29.1",
     "@mui/x-data-grid": "^7.29.0",
+    "@size-limit/esbuild": "^12.1.0",
+    "@size-limit/file": "^12.1.0",
     "@storybook/addon-docs": "9.1.6",
     "@storybook/addon-links": "9.1.6",
     "@storybook/react-vite": "9.1.6",
@@ -189,6 +201,7 @@
     "react-plotly.js": "^2.6.0",
     "react-simple-code-editor": "^0.13.1",
     "sass": "^1.90.0",
+    "size-limit": "^12.1.0",
     "storybook": "9.1.6",
     "tailwindcss": "^3.3.1",
     "tsx": "^4.19.4",

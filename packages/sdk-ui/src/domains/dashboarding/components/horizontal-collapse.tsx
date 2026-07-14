@@ -68,11 +68,15 @@ export const HorizontalCollapse = ({
   onCollapsedChange,
   children,
   hideCollapseArrow = false,
+  arrowTestId,
+  contentTestId,
 }: {
   collapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
   children: ReactNode;
   hideCollapseArrow?: boolean;
+  arrowTestId?: string;
+  contentTestId?: string;
 }) => {
   return (
     <Wrapper>
@@ -81,6 +85,7 @@ export const HorizontalCollapse = ({
           className="arrow-wrapper"
           reversed={collapsed}
           data-reversed={collapsed}
+          data-testid={arrowTestId}
           onClick={() => onCollapsedChange?.(!collapsed)}
         >
           <ArrowCollapseIcon color="#fff" height={8} width={8} />
@@ -90,6 +95,7 @@ export const HorizontalCollapse = ({
         collapsed={collapsed}
         hideCollapseArrow={hideCollapseArrow}
         aria-hidden={collapsed}
+        data-testid={contentTestId}
       >
         {children}
       </ContentWrapper>

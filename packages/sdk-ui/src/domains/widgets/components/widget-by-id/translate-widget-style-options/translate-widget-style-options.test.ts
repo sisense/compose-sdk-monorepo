@@ -247,6 +247,156 @@ describe('translate widget style options', () => {
       expect(styleOptions.seriesLabels?.padding).toBeUndefined();
     });
 
+    it('should map Fusion seriesLabels color to styleOptions.seriesLabels.textStyle', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          color: '#123456',
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.textStyle).toEqual({ color: '#123456' });
+    });
+
+    it('should map Fusion seriesLabels fontSize to styleOptions.seriesLabels.textStyle', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          fontSize: 16,
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.textStyle).toEqual({ fontSize: '16px' });
+    });
+
+    it('should map Fusion seriesLabels fontStyle to styleOptions.seriesLabels.textStyle', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          fontStyle: 'italic',
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.textStyle).toEqual({ fontStyle: 'italic' });
+    });
+
+    it('should preserve seriesLabels fontSize and fontStyle when Fusion color is explicitly cleared', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          color: null,
+          fontSize: 16,
+          fontStyle: 'italic',
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.textStyle).toEqual({
+        fontSize: '16px',
+        fontStyle: 'italic',
+      });
+    });
+
+    it('should map Fusion legend color to styleOptions.legend.items.textStyle', () => {
+      const widgetStyle = {
+        legend: {
+          enabled: true,
+          position: 'left',
+          color: '#00ff00',
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.legend?.items?.textStyle).toEqual({ color: '#00ff00' });
+    });
+
+    it('should map Fusion legend fontSize and fontStyle to styleOptions.legend.items.textStyle', () => {
+      const widgetStyle = {
+        legend: {
+          enabled: true,
+          position: 'bottom',
+          fontSize: 16,
+          fontStyle: 'italic',
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/funnel',
+        mockWidgetDto('', widgetStyle, []),
+      ) as FunnelStyleOptions;
+
+      expect(styleOptions.legend?.items?.textStyle).toEqual({
+        fontSize: '16px',
+        fontStyle: 'italic',
+      });
+    });
+
+    it('should preserve legend fontSize and fontStyle when Fusion color is explicitly cleared', () => {
+      const widgetStyle = {
+        legend: {
+          enabled: true,
+          position: 'bottom',
+          color: null,
+          fontSize: 16,
+          fontStyle: 'italic',
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/funnel',
+        mockWidgetDto('', widgetStyle, []),
+      ) as FunnelStyleOptions;
+
+      expect(styleOptions.legend?.items?.textStyle).toEqual({
+        fontSize: '16px',
+        fontStyle: 'italic',
+      });
+    });
+
+    it('should omit legend textStyle when Fusion color is explicitly cleared with no font fields', () => {
+      const widgetStyle = {
+        legend: {
+          enabled: true,
+          position: 'bottom',
+          color: null,
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/funnel',
+        mockWidgetDto('', widgetStyle, []),
+      ) as FunnelStyleOptions;
+
+      expect(styleOptions.legend?.items?.textStyle).toBeUndefined();
+    });
+
     it('should map Fusion seriesLabels backgroundPadding when backgroundColor is set', () => {
       const widgetStyle = {
         seriesLabels: {

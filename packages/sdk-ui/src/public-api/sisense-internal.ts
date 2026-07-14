@@ -24,6 +24,7 @@ export { useThemeContext } from '../infra/contexts/theme-provider';
 
 // App settings hook and type
 export { useAppSettings } from '../shared/hooks/use-app-settings';
+export { useHttpClient } from '../shared/hooks/use-http-client';
 export type { AiFeatureFlags, AppSettings } from '../infra/app/settings/settings';
 
 // QuotaNotification component and hooks
@@ -82,3 +83,8 @@ export {
   QueryDefinition,
   type QueryDefinitionProps,
 } from '../domains/visualizations/core/query-definition';
+
+// Data browser popover — Fusion uses it as the FilterWidget
+// dimension picker (also re-exported in the UMD bundle for the AngularJS host).
+export { AddFilterPopover } from '../domains/data-browser/add-filter-popover/add-filter-popover.js';
+export { AddFilterDataBrowser } from '../domains/data-browser/add-filter-popover/add-filter-data-browser.js';

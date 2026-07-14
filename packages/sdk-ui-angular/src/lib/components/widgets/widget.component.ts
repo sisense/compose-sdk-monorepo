@@ -13,6 +13,7 @@ import {
   type BeforeMenuOpenHandler,
   ComponentAdapter,
   CustomWidgetProps,
+  type FilterWidgetProps,
   type SoftUnion,
   TextWidgetProps as TextWidgetPropsPreact,
   Widget as WidgetPreact,
@@ -78,6 +79,7 @@ export type WidgetProps = SoftUnion<
   | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>
   | WithCommonWidgetProps<TextWidgetProps, 'text'>
   | WithCommonWidgetProps<CustomWidgetProps, 'custom'>
+  | WithCommonWidgetProps<FilterWidgetProps, 'filter'>
 > & {
   // Explicitly declare event handlers to prevent Angular's template type checker
   // from inferring intersection types when accessing these properties on WidgetProps.

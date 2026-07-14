@@ -50,6 +50,7 @@ TypeScript interfaces for components and hooks listed above
 - [DashboardHeaderItemSize](interface.DashboardHeaderItemSize.md)
 - [DashboardLayoutOptions](interface.DashboardLayoutOptions.md)
 - [DashboardProps](interface.DashboardProps.md)
+- [DashboardWidgetDateLevelChangedEvent](interface.DashboardWidgetDateLevelChangedEvent.md) <Badge type="beta" text="Beta" />
 - [DashboardWidgetsDeletedEvent](interface.DashboardWidgetsDeletedEvent.md)
 - [DashboardWidgetsPanelIsEditingChangedEvent](interface.DashboardWidgetsPanelIsEditingChangedEvent.md)
 - [DashboardWidgetsPanelLayoutUpdatedEvent](interface.DashboardWidgetsPanelLayoutUpdatedEvent.md)
@@ -71,6 +72,7 @@ TypeScript interfaces for components and hooks listed above
 - [FiltersPanelConfig](interface.FiltersPanelConfig.md)
 - [FiltersPanelProps](interface.FiltersPanelProps.md)
 - [FilterTileProps](interface.FilterTileProps.md)
+- [FilterWidgetProps](interface.FilterWidgetProps.md) <Badge type="beta" text="Beta" />
 - [FontsLoaderSettings](interface.FontsLoaderSettings.md)
 - [FunnelChartProps](interface.FunnelChartProps.md)
 - [FunnelSeriesLabels](interface.FunnelSeriesLabels.md)

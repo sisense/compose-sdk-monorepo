@@ -10,18 +10,9 @@ export { type ClientApplication } from '../infra/app/types';
 export { createClientApplication } from '../infra/app/client-application';
 
 // Queries
-export { queryStateReducer } from '../domains/query-execution/hooks/shared/query-state-reducer';
-export {
-  useExecuteCsvQueryInternal,
-  useExecutePivotQueryInternal,
-  executeQueryByWidgetId,
-} from '../domains/query-execution';
-export {
-  executeCsvQuery,
-  executePivotQuery,
-  executeQuery,
-  executeQueryWithRowCount,
-} from '../domains/query-execution/core/execute-query';
+// Query-sending internals live in the `query` module (src/modules/query) and are
+// re-exported by the root entry; only the widget-model-coupled function stays here.
+export { executeQueryByWidgetId } from '../domains/query-execution';
 
 // Models
 export {

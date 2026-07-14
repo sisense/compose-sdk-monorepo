@@ -2,7 +2,9 @@ import type { FunnelSeriesLabels, PieSeriesLabels, SeriesLabelsBase } from '@/ty
 
 import {
   extractSeriesLabelAffixFromFusion,
+  extractSeriesLabelTextStyleFromFusion,
   toFusionSeriesLabelColor,
+  toFusionSeriesLabelTextStyleFromSdk,
   toPublicSeriesLabelAffixFields,
 } from './series-label-affix-style.js';
 
@@ -17,6 +19,9 @@ export type CategoricalFusionLabels = {
   customRotation?: number | null;
   prefix?: string;
   suffix?: string;
+  labelColor?: string | null;
+  fontSize?: number | null;
+  fontStyle?: 'normal' | 'italic' | null;
   backgroundColor?: string | null;
   backgroundPadding?: number | null;
   borderColor?: string | null;
@@ -36,6 +41,9 @@ export type CategoricalFusionLabelsDto = {
   customRotation: number | null;
   prefix: string;
   suffix: string;
+  labelColor: string | null;
+  fontSize: number | null;
+  fontStyle: 'normal' | 'italic' | null;
   backgroundColor: string | null;
   backgroundPadding: number;
   borderColor: string | null;
@@ -82,8 +90,15 @@ export function extractCategoricalLabelFormatting(
   | 'xOffset'
   | 'yOffset'
 > {
+  const textStyle = extractSeriesLabelTextStyleFromFusion({
+    color: labels.labelColor,
+    fontSize: labels.fontSize,
+    fontStyle: labels.fontStyle,
+  });
+
   return {
     rotation: getFusionCategoricalLabelsRotation(labels),
+    ...(textStyle != null ? { textStyle } : {}),
     ...toPublicSeriesLabelAffixFields(extractSeriesLabelAffixFromFusion(labels)),
   };
 }
@@ -177,6 +192,9 @@ export const DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING = {
   customRotation: null,
   prefix: '',
   suffix: '',
+  labelColor: null,
+  fontSize: null,
+  fontStyle: null,
   backgroundColor: null,
   backgroundPadding: 2,
   borderColor: null,
@@ -203,6 +221,7 @@ export function toFusionCategoricalLabelsFromSeriesLabels(
 
   const percent = readCategoricalSeriesLabelPercentEnabled(sl) ?? l.percent ?? true;
   const decimals = readCategoricalSeriesLabelPercentDecimals(sl) ?? l.decimals ?? false;
+  const fusionTextStyle = toFusionSeriesLabelTextStyleFromSdk(sl);
 
   return {
     enabled: sl?.enabled ?? l.enabled ?? true,
@@ -214,6 +233,18 @@ export function toFusionCategoricalLabelsFromSeriesLabels(
     customRotation: l.customRotation ?? DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING.customRotation,
     prefix: sl?.prefix ?? l.prefix ?? DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING.prefix,
     suffix: sl?.suffix ?? l.suffix ?? DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING.suffix,
+    labelColor:
+      fusionTextStyle.color ??
+      l.labelColor ??
+      DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING.labelColor,
+    fontSize:
+      fusionTextStyle.fontSize ??
+      l.fontSize ??
+      DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING.fontSize,
+    fontStyle:
+      fusionTextStyle.fontStyle ??
+      l.fontStyle ??
+      DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING.fontStyle,
     backgroundColor: resolveCategoricalFusionLabelColor(
       sl?.backgroundColor,
       l.backgroundColor,

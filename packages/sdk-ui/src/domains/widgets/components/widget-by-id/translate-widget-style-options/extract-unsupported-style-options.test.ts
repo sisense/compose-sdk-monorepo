@@ -190,12 +190,12 @@ describe('extractUnsupportedStyleOptions', () => {
   });
 
   describe('chart/pie', () => {
-    it('extracts labels.fontFamily and labels.color', () => {
+    it('extracts labels.fontFamily', () => {
       const style = {
         labels: { enabled: true, fontFamily: 'Arial', color: '#fff' },
       } as unknown as WidgetStyle;
       expect(extractUnsupportedStyleOptions('chart/pie', style)).toEqual({
-        labels: { fontFamily: 'Arial', color: '#fff' },
+        labels: { fontFamily: 'Arial' },
       });
     });
   });

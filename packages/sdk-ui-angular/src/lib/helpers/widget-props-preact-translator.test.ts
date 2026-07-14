@@ -74,8 +74,10 @@ describe('widget-props-preact-translator', () => {
         dataPointClick: mockDataPointClick,
       } as WidgetPropsAngular;
 
-      const result = toPreactWidgetProps(angularProps);
-      const resultPreact = result as unknown as WidgetPropsPreact;
+      const resultPreact = toPreactWidgetProps(angularProps) as WithCommonWidgetProps<
+        ChartWidgetPropsPreact,
+        'chart'
+      >;
 
       expect(resultPreact.onDataPointClick).toBeDefined();
       expect(typeof resultPreact.onDataPointClick).toBe('function');

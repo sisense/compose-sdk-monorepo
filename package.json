@@ -1,5 +1,5 @@
 {
-  "version": "2.31.0",
+  "version": "2.31.1",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -129,6 +129,7 @@
     "docs:frameworks:diff": "./scripts/diff-docs-ui.sh",
     "docs:frameworks:diff:full": "FULL_DIFF_REPORT=true ./scripts/diff-docs-ui.sh",
     "public-api-check": "yarn workspace @sisense/sdk-ui public-api-check",
+    "size-check": "yarn workspace @sisense/sdk-ui size-check",
     "prepare": "husky install",
     "nx:build": "nx run-many --exclude @sisense/root -t build",
     "nx:build:af": "nx affected --base=origin/master --head=HEAD --exclude @sisense/root -t build",

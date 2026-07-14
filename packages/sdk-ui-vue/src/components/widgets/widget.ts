@@ -2,6 +2,7 @@ import { Widget as WidgetPreact } from '@sisense/sdk-ui-preact';
 import type {
   ChartWidgetProps,
   CustomWidgetProps,
+  FilterWidgetProps,
   PivotTableWidgetProps as PivotTableWidgetPropsPreact,
   SoftUnion,
   TextWidgetProps,
@@ -25,6 +26,7 @@ export type WidgetProps = SoftUnion<
   | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>
   | WithCommonWidgetProps<TextWidgetProps, 'text'>
   | WithCommonWidgetProps<CustomWidgetProps, 'custom'>
+  | WithCommonWidgetProps<FilterWidgetProps, 'filter'>
 >;
 
 /**

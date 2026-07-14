@@ -48,6 +48,7 @@ TypeScript interfaces for components and services listed above
 - [FiltersPanelConfig](interface.FiltersPanelConfig.md)
 - [FiltersPanelProps](interface.FiltersPanelProps.md)
 - [FilterTileProps](interface.FilterTileProps.md)
+- [FilterWidgetProps](interface.FilterWidgetProps.md) <Badge type="beta" text="Beta" />
 - [FunnelChartProps](interface.FunnelChartProps.md)
 - [FunnelStyleOptions](interface.FunnelStyleOptions.md)
 - [GaugeIndicatorStyleOptions](interface.GaugeIndicatorStyleOptions.md)

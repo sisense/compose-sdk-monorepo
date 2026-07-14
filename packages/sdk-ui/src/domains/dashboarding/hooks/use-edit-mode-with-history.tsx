@@ -169,7 +169,7 @@ export function useEditModeWithHistory({
 
   const toolbar = useCallback(
     () => (
-      <ToolbarContainer>
+      <ToolbarContainer data-testid="csdk-edit-mode-toolbar">
         <UndoRedoGroup>
           <IconButton onClick={undo} disabled={!canUndo} title={t('dashboard.toolbar.undo')}>
             <UndoIcon color={themeSettings.dashboard.toolbar.primaryTextColor} />

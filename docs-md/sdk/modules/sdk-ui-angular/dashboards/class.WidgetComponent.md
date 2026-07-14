@@ -158,7 +158,7 @@ Unique identifier of the widget
 
 #### styleOptions
 
-> **styleOptions**: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md) \| [`CustomWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.CustomWidgetStyleOptions.md) \| [`PivotTableWidgetStyleOptions`](../type-aliases/type-alias.PivotTableWidgetStyleOptions.md) \| [`TextWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.TextWidgetStyleOptions.md) \| `undefined`
+> **styleOptions**: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md) \| [`CustomWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.CustomWidgetStyleOptions.md) \| [`PivotTableWidgetStyleOptions`](../type-aliases/type-alias.PivotTableWidgetStyleOptions.md) \| [`TextWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.TextWidgetStyleOptions.md) \| [`WidgetContainerStyleOptions`](../../sdk-ui/interfaces/interface.WidgetContainerStyleOptions.md) \| `undefined`
 
 Style options for both the chart and widget including the widget header
 
@@ -174,7 +174,7 @@ Title of the widget
 
 #### widgetType
 
-> **widgetType**: `"chart"` \| `"custom"` \| `"pivot"` \| `"text"`
+> **widgetType**: `"chart"` \| `"custom"` \| `"filter"` \| `"pivot"` \| `"text"`
 
 Widget type
 

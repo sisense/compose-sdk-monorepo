@@ -1,6 +1,7 @@
 /// <reference lib="dom" />
 import { normalizeUrl } from '@sisense/sdk-common';
 
+import { isFusionAuthenticator } from './fusion-authenticator.js';
 import { addQueryParamsToUrl, appendHeaders, validateUrl } from './helpers.js';
 import { errorInterceptor, getResponseInterceptor } from './interceptors.js';
 import { Authenticator } from './interfaces.js';
@@ -48,8 +49,10 @@ export class HttpClient {
 
     config.headers = config.headers || {};
 
-    if (isSsoAuthenticator(this.auth)) {
-      // allows cookies to be sent
+    if (isSsoAuthenticator(this.auth) || isFusionAuthenticator(this.auth)) {
+      // allows cookies to be sent — required for SSO session cookies and for
+      // FusionAuth so the Fusion session cookie is included alongside the
+      // X-Xsrf-Token header (without it the server rejects the request with 401).
       config.credentials = 'include';
     }
 

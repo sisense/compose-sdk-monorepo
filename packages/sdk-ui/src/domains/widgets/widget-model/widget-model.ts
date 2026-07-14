@@ -1,3 +1,4 @@
+import type { Attribute } from '@sisense/sdk-data';
 import { DataSource, Filter } from '@sisense/sdk-data';
 
 import type {
@@ -16,6 +17,7 @@ import {
   WidgetStyleOptions,
 } from '@/types';
 
+import type { FilterWidgetFilterType } from '../components/filter-widget/types';
 import type { WidgetConfig, WidgetType } from '../components/widget/types';
 
 /**
@@ -115,6 +117,18 @@ export interface WidgetModel {
    * @internal
    */
   jtdConfig?: JumpToDashboardConfig | JumpToDashboardConfigForPivot;
+
+  /**
+   * Parsed filter widget field data extracted from the Fusion DTO.
+   * Only present when `widgetType === 'filter'` and the model was built from a DTO.
+   *
+   * @internal
+   */
+  filterWidgetData?: {
+    attribute: Attribute;
+    filterType: FilterWidgetFilterType;
+    isMultiselect: boolean;
+  };
 }
 
 export const isWidgetModel = (widget: any): widget is WidgetModel => {

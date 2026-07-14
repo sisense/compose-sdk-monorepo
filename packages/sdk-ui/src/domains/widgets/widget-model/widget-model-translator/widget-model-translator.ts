@@ -2,6 +2,8 @@ import {
   Attribute,
   convertDataSource,
   convertJaqlDataSourceForDto,
+  createAttribute,
+  DimensionalLevelAttribute,
   Filter,
   JaqlDataSourceForDto,
   Measure,
@@ -41,6 +43,7 @@ import {
 import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { CommonWidgetProps } from '@/domains/widgets/components/common-widget/types';
 import { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
+import { FilterWidgetFilterType } from '@/domains/widgets/components/filter-widget/types';
 import { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
 import { TextWidgetProps } from '@/domains/widgets/components/text-widget/types';
 import {
@@ -79,6 +82,7 @@ import {
   mergeWidgetStyleWithNarrativeForDto,
 } from '@/domains/widgets/components/widget-by-id/translate-widget-style-options/widget-narrative-style.js';
 import {
+  FilterWidgetDtoStyle,
   FusionWidgetType,
   IndicatorWidgetStyle,
   Panel,
@@ -448,7 +452,9 @@ export function toCustomWidgetProps(widgetModel: WidgetModel): CustomWidgetProps
 export function toCommonWidgetProps(widgetModel: WidgetModel): CommonWidgetProps {
   const { widgetType } = widgetModel;
 
-  if (isPivotWidget(widgetType)) {
+  if (widgetType === 'filter') {
+    return toFilterWidgetProps(widgetModel);
+  } else if (isPivotWidget(widgetType)) {
     return { widgetType: 'pivot', ...toPivotTableWidgetProps(widgetModel) };
   } else if (isTextWidget(widgetType)) {
     return { widgetType: 'text', ...toTextWidgetProps(widgetModel) };
@@ -457,6 +463,100 @@ export function toCommonWidgetProps(widgetModel: WidgetModel): CommonWidgetProps
   } else {
     return { widgetType: 'chart', ...toChartWidgetProps(widgetModel) };
   }
+}
+
+/**
+ * Maps a raw DTO `style.filterType` string to the canonical FilterWidgetFilterType.
+ * Handles the legacy `'list'` value that was stored before the type was aligned with
+ * FilterWidgetFilterType naming (legacy `'list'` → `'members'`).
+ */
+function normalizeFilterWidgetType(
+  raw: FilterWidgetDtoStyle['filterType'],
+): FilterWidgetFilterType {
+  if (raw === 'list') return 'members';
+  // Handle subtype format: 'filter/members' → 'members'
+  const value = raw?.startsWith('filter/') ? raw.slice('filter/'.length) : raw;
+  const known: FilterWidgetFilterType[] = [
+    'members',
+    'dateRange',
+    'period',
+    'numericRange',
+    'condition',
+  ];
+  const isKnownFilterType = (v: string | undefined): v is FilterWidgetFilterType =>
+    v !== undefined && (known as string[]).includes(v);
+  return isKnownFilterType(value) ? value : 'members';
+}
+
+/**
+ * Extracts typed filter widget field data from the dimension panel JAQL and style.
+ * Called once during model building so toFilterWidgetProps needs no raw DTO access.
+ */
+function extractFilterWidgetData(
+  panels: Panel[],
+  style: FilterWidgetDtoStyle,
+): NonNullable<WidgetModel['filterWidgetData']> {
+  const dimensionPanel = panels.find((p) => p.name === 'dimension');
+  // LIMITATION: FilterWidgetProps supports a single attribute, so only the first
+  // dimension item is rendered on CSDK dashboards.
+  const item = dimensionPanel?.items?.[0];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- raw JAQL access
+  const jaql = item?.jaql as any;
+
+  // Datetime dims carry a level in the JAQL — translate it to a granularity so
+  // createAttribute builds a LevelAttribute. isSameAttribute compares expression
+  // AND granularity: without it the widget attribute never matches the translated
+  // dashboard filter's LevelAttribute, so the linked filter is not adopted
+  // (not hidden in the FiltersPanel, no selection shown in the dropdown).
+  const isDatetimeLevel = Boolean(jaql?.level || jaql?.dateTimeLevel || jaql?.dateTimePart);
+  const attribute: Attribute = jaql?.dim
+    ? createAttribute({
+        name: jaql.title || jaql.dim,
+        expression: jaql.dim,
+        type: jaql.datatype || 'text',
+        ...(isDatetimeLevel
+          ? { granularity: DimensionalLevelAttribute.translateJaqlToGranularity(jaql) }
+          : {}),
+      })
+    : createAttribute({ name: '', expression: '', type: 'text' });
+
+  return {
+    attribute,
+    filterType: normalizeFilterWidgetType(style?.filterType ?? style?.subtype),
+    // allowMultiselect: legacy Fusion DTO field; multiSelection: current Fusion filter field
+    isMultiselect: style?.allowMultiselect !== false && style?.multiSelection !== false,
+  };
+}
+
+/**
+ * Translates a filter widget model (type: 'filter') to FilterWidgetProps.
+ * Reads from the typed filterWidgetData extracted during model building.
+ */
+function toFilterWidgetProps(widgetModel: WidgetModel): CommonWidgetProps {
+  // filterWidgetData is always set by extractFilterWidgetData when building from a DTO.
+  // The fallback here handles programmatically-constructed WidgetModels (no DTO).
+  const data = widgetModel.filterWidgetData ?? {
+    attribute: createAttribute({ name: '', expression: '', type: 'text' }),
+    filterType: 'members' as FilterWidgetFilterType,
+    isMultiselect: true,
+  };
+
+  // Cast rationale: this object is a FilterWidgetProps but the function's declared
+  // return is the wider CommonWidgetProps union; TS cannot infer the discriminated
+  // member from the `widgetType: 'filter'` literal in an object literal, so assert it.
+  return {
+    widgetType: 'filter',
+    attribute: data.attribute,
+    title: widgetModel.title || undefined,
+    isMultiselect: data.isMultiselect,
+    filterType: data.filterType,
+    dataSource: widgetModel.dataSource,
+    // Carry the widget-design container style (space around, corner radius, shadow,
+    // border, background, header) so the CSDK-rendered FilterWidget's WidgetContainer
+    // applies the same Widget Style as every other widget type. (`styleOptions` is
+    // already typed WidgetStyleOptions on WidgetModel, so no inner cast is needed.)
+    styleOptions: widgetModel.styleOptions,
+  } as CommonWidgetProps;
 }
 
 /**
@@ -650,6 +750,7 @@ const processStandardWidget = (params: {
     fusionWidgetType: fusionType,
     customWidgetType: '',
     dataOptions: extractDataOptions(fusionType, panels, widgetStyle, variantColors),
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- extractStyleOptions returns a wider union including TabberButtonsWidgetStyleOptions, which is excluded here by design
     styleOptions: extractStyleOptions(fusionType, widgetDto) as
       | ChartStyleOptions
       | TableStyleOptions
@@ -813,6 +914,16 @@ const buildWidgetModel = (params: {
     filters,
     config,
     ...(jtdConfig ? { jtdConfig } : {}),
+    ...(fusionWidgetType === 'filter'
+      ? {
+          // Cast rationale: WidgetStyle is a union across all widget types; the
+          // fusionWidgetType === 'filter' guard selects the FilterWidgetDtoStyle member.
+          filterWidgetData: extractFilterWidgetData(
+            panels,
+            widgetDto.style as FilterWidgetDtoStyle,
+          ),
+        }
+      : {}),
   };
 };
 

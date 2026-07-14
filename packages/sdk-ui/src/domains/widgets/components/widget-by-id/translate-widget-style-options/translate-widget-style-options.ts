@@ -37,6 +37,7 @@ import {
   PivotTableStyleOptions,
   PolarStyleOptions,
   RadiusSizes,
+  SankeyStyleOptions,
   ScattermapStyleOptions,
   ScatterStyleOptions,
   ShadowsTypes,
@@ -63,6 +64,7 @@ import {
   PieWidgetStyle,
   PivotWidgetStyle,
   PolarWidgetStyle,
+  SankeyWidgetStyle,
   ScattermapWidgetStyle,
   ScatterWidgetStyle,
   SunburstWidgetStyle,
@@ -84,6 +86,7 @@ import {
 } from './categorical-labels-style.js';
 import {
   extractSeriesLabelAffixFromFusion,
+  extractSeriesLabelTextStyleFromFusion,
   toPublicSeriesLabelAffixFields,
 } from './series-label-affix-style.js';
 import { extractTabberButtonsWidgetStyleOptions } from './tabber.js';
@@ -355,6 +358,8 @@ function extractValueLabelsOptions(
       (isStacked100 && widgetStyle.seriesLabels?.labels?.types?.count)
     );
   }
+  const textStyle = extractSeriesLabelTextStyleFromFusion(widgetStyle.seriesLabels ?? {});
+
   return {
     ...(showTotals && {
       totalLabels: {
@@ -367,6 +372,7 @@ function extractValueLabelsOptions(
       rotation: getFusionSeriesLabelsRotation(widgetStyle.seriesLabels),
       showValue: showValue,
       showPercentage: !!(isStacked100 && widgetStyle.seriesLabels?.labels?.types?.percentage),
+      ...(textStyle != null ? { textStyle } : {}),
       ...toPublicSeriesLabelAffixFields(
         extractSeriesLabelAffixFromFusion(widgetStyle.seriesLabels ?? {}),
       ),
@@ -409,10 +415,14 @@ function extractNavigatorOptions(
  */
 function extractLegendOptions(widgetStyle: WidgetStyle): Pick<BaseStyleOptions, 'legend'> {
   if ('legend' in widgetStyle && widgetStyle.legend) {
+    const { enabled, position, color, fontSize, fontStyle } = widgetStyle.legend;
+    const textStyle = extractSeriesLabelTextStyleFromFusion({ color, fontSize, fontStyle });
+
     return {
       legend: {
-        enabled: widgetStyle.legend.enabled,
-        position: widgetStyle.legend.position as LegendPosition,
+        enabled,
+        position: position as LegendPosition,
+        ...(textStyle != null ? { items: { textStyle } } : {}),
       },
     };
   }
@@ -868,6 +878,20 @@ function extractTreemapChartStyleOptions(widgetStyle: TreemapWidgetStyle): Treem
 }
 
 /**
+ * Helper function to extract sankey chart style options from WidgetDto
+ */
+function extractSankeyChartStyleOptions(widgetStyle: SankeyWidgetStyle): SankeyStyleOptions {
+  return {
+    orientation: widgetStyle.orientation,
+    nodeAlignment: widgetStyle.nodeAlignment,
+    curveFactor: widgetStyle.curveFactor,
+    linkOpacity: widgetStyle.linkOpacity,
+    nodeWidth: widgetStyle.nodeWidth,
+    nodePadding: widgetStyle.nodePadding,
+  };
+}
+
+/**
  * Helper function to extract sunburst chart style options from WidgetDto
  */
 function extractSunburstChartStyleOptions(widgetStyle: SunburstWidgetStyle): SunburstStyleOptions {
@@ -1064,6 +1088,8 @@ export function extractStyleOptions<WType extends FusionWidgetType>(
       return extractTreemapChartStyleOptions(style as TreemapWidgetStyle);
     case 'sunburst':
       return extractSunburstChartStyleOptions(style as SunburstWidgetStyle);
+    case 'sankey':
+      return extractSankeyChartStyleOptions(style as SankeyWidgetStyle);
     case 'chart/pie':
       return extractPieChartStyleOptions(widgetSubtype, style as PieWidgetStyle);
     case 'tablewidget':
@@ -1090,6 +1116,10 @@ export function extractStyleOptions<WType extends FusionWidgetType>(
       return (style as TextWidgetDtoStyle).content;
     case 'WidgetsTabber': // DTO type from Fusion (maps to 'tabber-buttons' in CSDK)
       return extractTabberButtonsWidgetStyleOptions(style as TabberWidgetDtoStyle);
+    case 'filter':
+      // Filter widgets extract all relevant data directly from the DTO in toFilterWidgetProps;
+      // dataOptions/styleOptions produced here are unused.
+      return {} as ChartStyleOptions;
     default:
       throw new TranslatableError('errors.unsupportedWidgetType', { widgetType });
   }

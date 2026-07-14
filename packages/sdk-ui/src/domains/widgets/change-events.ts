@@ -1,4 +1,4 @@
-import { Attribute } from '@sisense/sdk-data';
+import { Attribute, Filter } from '@sisense/sdk-data';
 
 import { DataOptionLocation, DrilldownSelection } from '@/types';
 
@@ -24,6 +24,8 @@ export interface ChartWidgetDrilldownSelectionsChangedEvent {
  * ```ts
  * { type: 'title/changed', payload: { title: 'New Title' } }
  * ```
+ *
+ * @internal
  */
 export interface WidgetTitleChangedEvent {
   /** Event type */
@@ -65,6 +67,53 @@ export type PivotTableWidgetChangeEvent =
   | WidgetTitleChangedEvent;
 
 /**
+ * Event triggered when a FilterWidget's date granularity changes
+ * (the level selector in the date variant of the dropdown).
+ *
+ * @example
+ * ```ts
+ * { type: 'dateLevel/changed', payload: { attribute: DM.Commerce.Date.Months } }
+ * ```
+ *
+ * @internal
+ */
+export interface FilterWidgetDateLevelChangedEvent {
+  /** Event type */
+  type: 'dateLevel/changed';
+  /** The attribute at the newly selected granularity (a LevelAttribute) */
+  payload: { attribute: Attribute };
+}
+
+/**
+ * Event triggered when the FilterWidget's filter selection changes
+ * (member selection in the dropdown, or clearing the selection).
+ *
+ * @example
+ * ```ts
+ * { type: 'filter/changed', payload: { filter: filterFactory.members(DM.Commerce.Country, ['France']) } }
+ * ```
+ *
+ * @internal
+ */
+export interface FilterWidgetFilterChangedEvent {
+  /** Event type */
+  type: 'filter/changed';
+  /** The new filter state (`null` when the selection is cleared) */
+  payload: { filter: Filter | null };
+}
+
+/**
+ * Events that can be triggered by the FilterWidget component through its
+ * unified `onChange` channel (same pattern as ChartWidget / PivotTableWidget).
+ *
+ * @internal
+ */
+export type FilterWidgetChangeEvent =
+  | FilterWidgetFilterChangedEvent
+  | FilterWidgetDateLevelChangedEvent
+  | WidgetTitleChangedEvent;
+
+/**
  * Events that can be triggered by widget components.
  *
  * Union of all widget-specific change events. Extensible for TextWidget, CustomWidget future events.
@@ -85,4 +134,7 @@ export type PivotTableWidgetChangeEvent =
  * events; use `WidgetPropsUpdate` for "if this is lost on reload, the user
  * notices."
  */
-export type WidgetChangeEvent = ChartWidgetChangeEvent | PivotTableWidgetChangeEvent;
+export type WidgetChangeEvent =
+  | ChartWidgetChangeEvent
+  | PivotTableWidgetChangeEvent
+  | FilterWidgetChangeEvent;

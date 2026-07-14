@@ -72,6 +72,7 @@ export const DashboardContainer = ({
   defaultDataSource,
   filterPanelCollapsed,
   onFilterPanelCollapsedChange,
+  hiddenFilterIds,
 }: DashboardContainerProps) => {
   const { themeSettings } = useThemeContext();
 
@@ -125,6 +126,8 @@ export const DashboardContainer = ({
           collapsed={filterPanelCollapsed}
           onCollapsedChange={onFilterPanelCollapsedChange}
           hideCollapseArrow={hideFiltersPanelCollapseArrow}
+          arrowTestId="csdk-filters-panel-collapse-toggle"
+          contentTestId="csdk-filters-panel-collapse-content"
         >
           <div className="csdk-w-[240px] csdk-h-[100%] csdk-flex">
             <ThemeProvider
@@ -142,6 +145,7 @@ export const DashboardContainer = ({
                 defaultDataSource={defaultDataSource}
                 config={config?.filtersPanel}
                 dataSources={getUniqueDataSources(widgets, defaultDataSource)}
+                hiddenFilterIds={hiddenFilterIds}
               />
             </ThemeProvider>
           </div>

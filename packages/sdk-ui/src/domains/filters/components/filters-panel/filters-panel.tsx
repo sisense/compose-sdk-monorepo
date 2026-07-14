@@ -96,6 +96,14 @@ export interface FiltersPanelProps {
   dataSources?: DataSource[];
   /** The configuration for the filters panel */
   config?: FiltersPanelConfig;
+  /**
+   * Filter guids to hide from the panel tiles. Hidden filters still apply to widgets
+   * and their dimensions still count as occupied in the add-filter browser.
+   * Computed by the dashboarding layer from live filter-widget claims.
+   *
+   * @alpha
+   */
+  hiddenFilterIds?: string[];
 }
 
 /**
@@ -139,12 +147,16 @@ export const FiltersPanel = asSisenseComponent({
     defaultDataSource,
     dataSources,
     config: propConfig,
+    hiddenFilterIds,
   }: FiltersPanelProps) => {
     const filtersPanelRef = useRef<HTMLDivElement>(null);
     const filterTilesRef = useRef<HTMLElement[]>([]);
     const { themeSettings } = useThemeContext();
-    const { filters, relations } = splitFiltersAndRelations(filtersOrFilterRelations);
+    const { filters: allFilters, relations } = splitFiltersAndRelations(filtersOrFilterRelations);
     const config = useDefaults(propConfig, DEFAULT_FILTERS_PANEL_CONFIG);
+    const filters = hiddenFilterIds?.length
+      ? allFilters.filter((f) => !hiddenFilterIds.includes(f.config.guid))
+      : allFilters;
 
     const filterTileConfig = useMemo(
       () => ({
@@ -157,45 +169,53 @@ export const FiltersPanel = asSisenseComponent({
       [config?.actions?.lockFilter?.enabled],
     );
 
+    // Write-back operates on `allFilters` (not the visible-only `filters`) so hidden
+    // filters — e.g. FilterWidget-linked ones excluded via `hiddenFilterIds` — are
+    // preserved in the payload; editing/reordering/adding/deleting a visible filter
+    // must never drop them from `commonFilters`.
     const handleFilterChange = useCallback(
       (changedFilter: Filter) => {
-        if (!filters) return;
-        const newFilters: Filter[] = filters.map((originalFilter) =>
+        const newFilters: Filter[] = allFilters.map((originalFilter) =>
           originalFilter.config.guid === changedFilter.config.guid ? changedFilter : originalFilter,
         );
-        const newRelations = calculateNewRelations(filters, relations, newFilters);
+        const newRelations = calculateNewRelations(allFilters, relations, newFilters);
         onFiltersChange(combineFiltersAndRelations(newFilters, newRelations));
       },
-      [filters, relations, onFiltersChange],
+      [allFilters, relations, onFiltersChange],
     );
 
     const handleFilterReorder = useCallback(
       (fromIndex: number, toIndex: number) => {
-        const newFilters = arrayMove(filters, fromIndex, toIndex);
-        const newRelations = calculateNewRelations(filters, relations, newFilters);
+        // fromIndex/toIndex address the visible tiles; reorder them, then splice the
+        // reordered visible filters back into their slots in `allFilters`, leaving
+        // hidden filters at their original positions.
+        const reorderedVisible = arrayMove(filters, fromIndex, toIndex);
+        let visibleIndex = 0;
+        const newFilters = allFilters.map((f) =>
+          hiddenFilterIds?.includes(f.config.guid) ? f : reorderedVisible[visibleIndex++],
+        );
+        const newRelations = calculateNewRelations(allFilters, relations, newFilters);
         onFiltersChange(combineFiltersAndRelations(newFilters, newRelations));
       },
-      [onFiltersChange, filters, relations],
+      [onFiltersChange, filters, allFilters, hiddenFilterIds, relations],
     );
 
     const handleFilterAdd = useCallback(
       (newFilter: Filter) => {
-        if (!filters) return;
-        const newFilters = mergeFilters(filters, [newFilter]);
-        const newRelations = calculateNewRelations(filters, relations, newFilters);
+        const newFilters = mergeFilters(allFilters, [newFilter]);
+        const newRelations = calculateNewRelations(allFilters, relations, newFilters);
         onFiltersChange(combineFiltersAndRelations(newFilters, newRelations));
       },
-      [filters, relations, onFiltersChange],
+      [allFilters, relations, onFiltersChange],
     );
 
     const handleFilterDelete = useCallback(
       (filter: Filter) => {
-        if (!filters) return;
-        const newFilters = filters.filter((f) => f.config.guid !== filter.config.guid);
-        const newRelations = calculateNewRelations(filters, relations, newFilters);
+        const newFilters = allFilters.filter((f) => f.config.guid !== filter.config.guid);
+        const newRelations = calculateNewRelations(allFilters, relations, newFilters);
         onFiltersChange(combineFiltersAndRelations(newFilters, newRelations));
       },
-      [filters, onFiltersChange, relations],
+      [allFilters, onFiltersChange, relations],
     );
 
     const { ExistingFilterEditor, startEditingFilter } = useExistingFilterEditing({
@@ -210,7 +230,9 @@ export const FiltersPanel = asSisenseComponent({
       onFilterCreated: handleFilterAdd,
       defaultDataSource: defaultDataSource,
       config: config?.actions?.addFilter,
-      disabledAttributes: filters.flatMap((filter) =>
+      // Use allFilters (not the visible list): hidden filters still occupy their dimension slot
+      // in the add-filter browser — one filter per dimension is a hard constraint.
+      disabledAttributes: allFilters.flatMap((filter) =>
         isCascadingFilter(filter)
           ? filter.filters.map((levelFilter) => levelFilter.attribute)
           : [filter.attribute],
@@ -266,7 +288,7 @@ export const FiltersPanel = asSisenseComponent({
                           : undefined
                       }
                       filter={filter}
-                      onChange={(newFilter) => handleFilterChange(newFilter!)}
+                      onChange={(newFilter) => newFilter && handleFilterChange(newFilter)}
                       defaultDataSource={defaultDataSource}
                       renderHeaderTitle={withDragHandle}
                       onEdit={

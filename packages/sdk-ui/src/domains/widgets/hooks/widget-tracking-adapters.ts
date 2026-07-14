@@ -34,6 +34,13 @@ export const getCustomWidgetName = (props: Pick<CustomWidgetProps, 'customWidget
   props.customWidgetType;
 
 /**
+ * Resolves the `widgetName` tracking field for a filter widget — always `'filter'`.
+ *
+ * @internal
+ */
+export const getFilterWidgetName = (): string => 'filter';
+
+/**
  * Reads the widget's user-facing title from props if present, otherwise `null`.
  *
  * Typed with a generic + intersection so callers preserve their concrete widget prop type

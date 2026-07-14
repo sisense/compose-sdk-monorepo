@@ -7,6 +7,7 @@ import { DashboardContainer } from '@/domains/dashboarding/components/dashboard-
 import { DashboardHeaderTargets } from '@/domains/dashboarding/components/dashboard-header/dashboard-header-targets';
 import { DashboardProps, WidgetsPanelLayout } from '@/domains/dashboarding/types';
 import { HeaderItem } from '@/domains/shared/header';
+import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
 import { ThemeProvider } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { CONTEXT_MENU_SELECTED_WITH_DOT_CLASS } from '@/shared/components/menu/context-menu/context-menu';
@@ -242,6 +243,7 @@ export const Dashboard = asSisenseComponent({
         styleOptions: composedStyleOptions,
       },
       setFilters,
+      hiddenFilterIds,
     } = useComposedDashboardInternal(
       {
         id,
@@ -258,6 +260,23 @@ export const Dashboard = asSisenseComponent({
         onFiltersChange: useCallback(
           (filters: Filter[] | FilterRelations) => {
             onChange?.({ type: 'filters/updated', payload: filters });
+          },
+          [onChange],
+        ),
+        onWidgetChangeEvent: useCallback(
+          (widgetId: string, event: WidgetChangeEvent) => {
+            // Forward FilterWidget date-granularity changes so the host (e.g. Fusion)
+            // can sync the widget's dimension metadata to the new level — otherwise
+            // the widget's stored level and its backing filter drift apart across modes.
+            if (event.type === 'dateLevel/changed') {
+              onChange?.({
+                type: 'widget/dateLevelChanged',
+                payload: {
+                  widgetId,
+                  levelJaql: event.payload.attribute.jaql(true) as Record<string, unknown>,
+                },
+              });
+            }
           },
           [onChange],
         ),
@@ -344,6 +363,7 @@ export const Dashboard = asSisenseComponent({
           onFilterPanelCollapsedChange={handleFilterToggleClick}
           headerItems={headerItems}
           headerConfig={composedConfig?.header}
+          hiddenFilterIds={hiddenFilterIds}
         />
       </ThemeProvider>
     );

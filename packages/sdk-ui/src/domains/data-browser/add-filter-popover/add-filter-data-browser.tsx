@@ -41,6 +41,10 @@ const useInfiniteGetDataSourceFields = withLazyLoading({
 
 /**
  * A component that allows users to select a data source and an attribute to create a filter.
+ *
+ * Used by Fusion via the FilterWidget dimension picker.
+ *
+ * @sisenseInternal
  */
 export const AddFilterDataBrowser = ({
   initialDataSource,

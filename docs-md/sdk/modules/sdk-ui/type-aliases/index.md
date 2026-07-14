@@ -110,6 +110,7 @@ TypeScript type aliases for components and hooks listed above
 - [FiltersIgnoringRules](type-alias.FiltersIgnoringRules.md)
 - [FilterThemeSettings](type-alias.FilterThemeSettings.md)
 - [FilterVariant](type-alias.FilterVariant.md)
+- [FilterWidgetFilterType](type-alias.FilterWidgetFilterType.md) <Badge type="beta" text="Beta" />
 - [FormatDataSetOptions](type-alias.FormatDataSetOptions.md)
 - [FormatDateOptions](type-alias.FormatDateOptions.md)
 - [GenericDataOptions](type-alias.GenericDataOptions.md)

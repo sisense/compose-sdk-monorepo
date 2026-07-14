@@ -18,7 +18,13 @@ import type { SankeyNode } from '../types.js';
 
 /**
  * Resolves node colors: explicit node color, then seriesToColorMap, then theme palette.
- * Palette indices are stable per display name (same pattern as funnel/treemap charts).
+ *
+ * Palette indices are reserved by order-of-first-appearance for every node,
+ * INCLUDING nodes that ultimately return an explicit color. If we only
+ * assigned indices for nodes that fall through to the palette, then picking
+ * a color for one node would shift the palette for every node that appears
+ * after it — causing unrelated nodes to change color whenever the user
+ * customises one. Reserving the slot up front keeps the mapping stable.
  */
 function resolveSankeyNodeColor(
   node: SankeyNode,
@@ -26,11 +32,15 @@ function resolveSankeyNodeColor(
   dataOptions: SankeyChartDataOptionsInternal,
   paletteColors: Color[] | undefined,
 ): string {
+  const displayName = node.name ?? node.id;
+  if (!paletteIndexByDisplayName.has(displayName)) {
+    paletteIndexByDisplayName.set(displayName, paletteIndexByDisplayName.size);
+  }
+
   if (node.color) {
     return node.color;
   }
 
-  const displayName = node.name ?? node.id;
   const mappedColor = getSankeyNodeColorFromMap(
     node.id,
     displayName,
@@ -39,10 +49,6 @@ function resolveSankeyNodeColor(
   );
   if (mappedColor) {
     return mappedColor;
-  }
-
-  if (!paletteIndexByDisplayName.has(displayName)) {
-    paletteIndexByDisplayName.set(displayName, paletteIndexByDisplayName.size);
   }
 
   return getPaletteColor(paletteColors, paletteIndexByDisplayName.get(displayName)!);
@@ -74,7 +80,7 @@ export const sankeyHighchartsOptionsBuilder: HighchartsOptionsBuilder<'sankey'> 
       polar: false,
       spacing: [20, 20, 20, 20],
       alignTicks: false,
-      ...(ctx.designOptions.orientation === 'vertical' ? { inverted: true } : {}),
+      inverted: ctx.designOptions.orientation === 'vertical',
     };
   },
 

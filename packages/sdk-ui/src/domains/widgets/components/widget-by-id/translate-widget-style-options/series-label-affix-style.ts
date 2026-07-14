@@ -1,9 +1,12 @@
-import type { SeriesLabelsBase } from '@/types';
+import type { SeriesLabelsBase, SeriesLabelsTextStyle } from '@/types';
 
 /** Fusion widget `seriesLabels` / categorical `labels` affix formatting fields. */
 export type FusionSeriesLabelAffix = {
   prefix?: string;
   suffix?: string;
+  color?: string | null;
+  fontSize?: number | null;
+  fontStyle?: 'normal' | 'italic' | null;
   backgroundColor?: string | null;
   backgroundPadding?: number | null;
   borderColor?: string | null;
@@ -75,6 +78,49 @@ export function toPublicSeriesLabelAffixFields(
 }
 
 /**
+ * Clearable text style used during Fusion → StyleOptions translation.
+ * `null` means an explicit reset; normalized away before public StyleOptions.
+ *
+ * @internal
+ */
+export type InternalSeriesLabelTextStyle = SeriesLabelsTextStyle | null;
+
+/**
+ * Maps Fusion value label text color to internal CSDK textStyle props.
+ *
+ * @param labels - Fusion series label fragment containing optional `color`
+ * @returns Internal text style; `null` means explicit clear, `undefined` means unset
+ * @internal
+ */
+export function extractSeriesLabelTextStyleFromFusion(
+  labels: Pick<FusionSeriesLabelAffix, 'color' | 'fontSize' | 'fontStyle'>,
+): InternalSeriesLabelTextStyle | undefined {
+  const textStyle: SeriesLabelsTextStyle = {};
+  let hasTextStyle = false;
+
+  if (labels.color != null && labels.color !== '') {
+    textStyle.color = labels.color;
+    hasTextStyle = true;
+  }
+
+  if (labels.fontSize != null) {
+    textStyle.fontSize = `${Number(labels.fontSize)}px`;
+    hasTextStyle = true;
+  }
+
+  if (labels.fontStyle === 'italic') {
+    textStyle.fontStyle = 'italic';
+    hasTextStyle = true;
+  }
+
+  if (labels.color === null) {
+    return hasTextStyle ? textStyle : null;
+  }
+
+  return hasTextStyle ? textStyle : undefined;
+}
+
+/**
  * Maps CSDK series label color to Fusion string color; gradients and `auto` are not supported.
  *
  * @param color - CSDK series label color value
@@ -84,6 +130,54 @@ export function toPublicSeriesLabelAffixFields(
 export const toFusionSeriesLabelColor = (
   color: SeriesLabelColor | string | null | undefined,
 ): string | null | undefined => (typeof color === 'string' && color !== 'auto' ? color : undefined);
+
+const parseFusionSeriesLabelFontSize = (
+  fontSize: SeriesLabelsTextStyle['fontSize'] | undefined,
+): number | null | undefined => {
+  if (fontSize == null || fontSize === '') {
+    return undefined;
+  }
+
+  const parsed = parseInt(String(fontSize), 10);
+
+  return Number.isFinite(parsed) ? parsed : undefined;
+};
+
+/**
+ * Maps CSDK series label text style to Fusion DTO fields.
+ *
+ * @param seriesLabels - CSDK series label options
+ * @returns Fusion text style fragment
+ * @internal
+ */
+export function toFusionSeriesLabelTextStyleFromSdk(
+  seriesLabels: Pick<SeriesLabelsBase, 'textStyle'> | undefined,
+): Pick<FusionSeriesLabelAffix, 'color' | 'fontSize' | 'fontStyle'> {
+  const textStyle = seriesLabels?.textStyle;
+
+  if (!textStyle) {
+    return {};
+  }
+
+  const result: Pick<FusionSeriesLabelAffix, 'color' | 'fontSize' | 'fontStyle'> = {};
+  const color = toFusionSeriesLabelColor(textStyle.color);
+
+  if (color) {
+    result.color = color;
+  }
+
+  const fontSize = parseFusionSeriesLabelFontSize(textStyle.fontSize);
+
+  if (fontSize != null) {
+    result.fontSize = fontSize;
+  }
+
+  if (textStyle.fontStyle === 'italic') {
+    result.fontStyle = 'italic';
+  }
+
+  return result;
+}
 
 /**
  * Maps Fusion series label affix fields to internal CSDK affix props.

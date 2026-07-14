@@ -154,7 +154,7 @@ function extractBoxplotUnsupported(style: BoxplotWidgetStyle): UnsupportedStyleO
 }
 
 function extractPieUnsupported(style: PieWidgetStyle): UnsupportedStyleOptions {
-  const labels = pickDefined(style.labels, ['fontFamily', 'color'] as const);
+  const labels = pickDefined(style.labels, ['fontFamily'] as const);
   return labels ? { labels } : {};
 }
 

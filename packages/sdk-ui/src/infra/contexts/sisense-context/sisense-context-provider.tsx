@@ -9,6 +9,7 @@ import {
 import { isAuthTokenPending } from '@sisense/sdk-rest-client';
 
 import { DashboardModule } from '@/domains/dashboarding/dashboard-module/dashboard-module.js';
+import { QueryModule } from '@/domains/query-execution/query-module/query-module.js';
 import { CustomWidgetsProvider } from '@/infra/contexts/custom-widgets-provider';
 import { EmotionCacheProvider } from '@/infra/contexts/emotion-cache-provider';
 import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
@@ -149,7 +150,10 @@ export const SisenseContextProvider: FunctionComponent<
   const customTranslations = app?.settings.translationConfig.customTranslations;
 
   // Built-in modules. `CoreModule` is added by the module registry itself;
-  const modulesWithDefaults = useMemo(() => [DashboardModule, ...(modules ?? [])], [modules]);
+  const modulesWithDefaults = useMemo(
+    () => [DashboardModule, QueryModule, ...(modules ?? [])],
+    [modules],
+  );
 
   return (
     <EmotionCacheProvider>

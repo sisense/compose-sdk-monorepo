@@ -35,7 +35,11 @@ export const WidgetHeaderClearSelectionButton = ({ onClick }: { onClick: () => v
   const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
   return (
-    <ClearSelectionButton onClick={onClick} theme={themeSettings}>
+    <ClearSelectionButton
+      onClick={onClick}
+      theme={themeSettings}
+      data-testid="csdk-clear-selection-button"
+    >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
         <path
           fill={themeSettings.chart?.textColor}

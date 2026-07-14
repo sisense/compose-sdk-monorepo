@@ -174,6 +174,8 @@ export type {
   PivotTableNonSelectableDrilldownOptions,
   Member,
   FilterVariant,
+  FilterWidgetProps,
+  FilterWidgetFilterType,
   TranslationConfig,
   Plugin,
 } from '@sisense/sdk-ui-preact';

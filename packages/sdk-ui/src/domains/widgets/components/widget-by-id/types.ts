@@ -57,6 +57,7 @@ export type FusionWidgetType =
   | CategoricalWidgetType
   | 'chart/scatter'
   | 'indicator'
+  | 'sankey'
   | TabularWidgetType
   | 'chart/boxplot'
   | 'map/scatter'
@@ -64,6 +65,7 @@ export type FusionWidgetType =
   | 'heatmap'
   | TextWidgetType
   | FusionPluginWidgetType
+  | 'filter'
   | string;
 
 export type WidgetSubtype =
@@ -446,6 +448,12 @@ type LabelsStyle = {
   prefix?: string;
   /** Text appended to each value label. */
   suffix?: string;
+  /** Text color of each value label. */
+  color?: string | null;
+  /** Font size of each value label in pixels. */
+  fontSize?: number | null;
+  /** Font style of each value label. */
+  fontStyle?: 'normal' | 'italic' | null;
   /** Background color behind each value label. */
   backgroundColor?: string | null;
   /** Padding in pixels around value label text when background color is set. */
@@ -500,6 +508,12 @@ type BaseWidgetStyle = {
   legend: {
     position: string;
     enabled: boolean;
+    /** Text color of legend items. */
+    color?: string | null;
+    /** Font size of legend items in pixels. */
+    fontSize?: number | null;
+    /** Font style of legend items. */
+    fontStyle?: 'normal' | 'italic' | null;
   };
   navigator: {
     enabled: boolean;
@@ -579,6 +593,10 @@ export type FunnelWidgetStyle = BaseWidgetStyle &
       customRotation?: number | null;
       prefix?: string;
       suffix?: string;
+      /** Text color of categorical value labels. */
+      labelColor?: string | null;
+      fontSize?: number | null;
+      fontStyle?: 'normal' | 'italic' | null;
       backgroundColor?: string | null;
       backgroundPadding?: number | null;
       borderColor?: string | null;
@@ -601,6 +619,10 @@ export type PieWidgetStyle = BaseWidgetStyle &
       customRotation?: number | null;
       prefix?: string;
       suffix?: string;
+      /** Text color of categorical value labels. */
+      labelColor?: string | null;
+      fontSize?: number | null;
+      fontStyle?: 'normal' | 'italic' | null;
       backgroundColor?: string | null;
       backgroundPadding?: number | null;
       borderColor?: string | null;
@@ -727,6 +749,15 @@ export type SunburstWidgetStyle = {
   'tooltip/value': boolean;
 };
 
+export type SankeyWidgetStyle = {
+  orientation?: 'horizontal' | 'vertical';
+  nodeAlignment?: 'top' | 'center' | 'bottom';
+  curveFactor?: number;
+  linkOpacity?: number;
+  nodeWidth?: number;
+  nodePadding?: number;
+};
+
 export type BoxplotWidgetStyle = WidgetContainerStyleOptions & {
   seriesLabels?: LabelsStyle;
   dataLimits?: DataLimits;
@@ -835,7 +866,28 @@ export type WidgetStyle = {
   | CalendarHeatmapWidgetStyle
   | TextWidgetDtoStyle
   | TabberWidgetDtoStyle
+  | FilterWidgetDtoStyle
 );
+
+/**
+ * The DTO style of a filter widget (`type: 'filter'`).
+ *
+ * @internal
+ */
+export type FilterWidgetDtoStyle = {
+  /**
+   * Rendering type of the filter. Canonical values match FilterWidgetFilterType
+   * ('members' | 'dateRange' | 'period' | 'numericRange' | 'condition');
+   * legacy DTOs may carry 'list' or a 'filter/<type>' subtype string.
+   */
+  filterType?: string;
+  /** Legacy subtype fallback used when `filterType` is absent. */
+  subtype?: string;
+  /** Whether the dropdown allows selecting multiple members (legacy Fusion field). */
+  allowMultiselect?: boolean;
+  /** Whether the dropdown allows selecting multiple members (current Fusion field). */
+  multiSelection?: boolean;
+};
 
 export enum FiltersMergeStrategyEnum {
   WIDGET_FIRST = 'widgetFirst',

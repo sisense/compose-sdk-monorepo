@@ -36,6 +36,7 @@ import {
   fromWidgetDto,
   fromWidgetProps,
   toChartWidgetProps,
+  toCommonWidgetProps,
   toCustomWidgetProps,
   toJtdConfig,
   toPivotTableWidgetProps,
@@ -2000,6 +2001,154 @@ describe('WidgetModelTranslator', () => {
       expect(recovered.styleOptions as Record<string, unknown>).toMatchObject({
         plugin: 'specific',
       });
+    });
+  });
+
+  describe('FilterWidget translation', () => {
+    const makeFilterWidgetDto = (
+      opts: {
+        jaql?: Record<string, unknown>;
+        noItems?: boolean;
+        style?: Record<string, unknown>;
+        title?: string;
+      } = {},
+    ): WidgetDto =>
+      ({
+        oid: 'fw-oid',
+        title: opts.title ?? 'My Filter',
+        desc: null,
+        type: 'filter',
+        subtype: 'filter',
+        datasource: {
+          title: 'Sample ECommerce',
+          id: 'localhost_aSampleIAAaECommerce',
+          address: 'LocalHost',
+          database: 'aSampleIAAaECommerce',
+        },
+        metadata: {
+          panels: [
+            {
+              name: 'dimension',
+              items: opts.noItems
+                ? []
+                : [
+                    {
+                      jaql: opts.jaql ?? {
+                        table: 'Country',
+                        column: 'Country',
+                        dim: '[Country.Country]',
+                        datatype: 'text',
+                        title: 'Country',
+                      },
+                    },
+                  ],
+            },
+          ],
+        },
+        style: opts.style ?? {},
+      } as unknown as WidgetDto);
+
+    const toFilterProps = (dto: WidgetDto) =>
+      toCommonWidgetProps(fromWidgetDto(dto)) as unknown as {
+        widgetType: string;
+        attribute: { expression: string; granularity?: string };
+        title?: string;
+        isMultiselect: boolean;
+        filterType: string;
+      };
+
+    it('translates a text filter widget DTO to FilterWidgetProps', () => {
+      const props = toFilterProps(makeFilterWidgetDto());
+      expect(props.widgetType).toBe('filter');
+      expect(props.attribute.expression).toBe('[Country.Country]');
+      expect(props.filterType).toBe('members');
+      expect(props.isMultiselect).toBe(true);
+      expect(props.title).toBe('My Filter');
+    });
+
+    it('normalizes the legacy "list" filter type to "members"', () => {
+      const props = toFilterProps(makeFilterWidgetDto({ style: { filterType: 'list' } }));
+      expect(props.filterType).toBe('members');
+    });
+
+    it('normalizes the "filter/<type>" subtype format', () => {
+      const props = toFilterProps(makeFilterWidgetDto({ style: { filterType: 'filter/members' } }));
+      expect(props.filterType).toBe('members');
+    });
+
+    it('preserves a known filter type and falls back to "members" for unknown values', () => {
+      expect(
+        toFilterProps(makeFilterWidgetDto({ style: { filterType: 'numericRange' } })).filterType,
+      ).toBe('numericRange');
+      expect(
+        toFilterProps(makeFilterWidgetDto({ style: { filterType: 'bogus' } })).filterType,
+      ).toBe('members');
+    });
+
+    it('builds a LevelAttribute with granularity for a datetime dimension', () => {
+      const props = toFilterProps(
+        makeFilterWidgetDto({
+          jaql: {
+            dim: '[Commerce.Date (Calendar)]',
+            level: 'years',
+            datatype: 'datetime',
+            title: 'Years',
+          },
+        }),
+      );
+      expect(props.attribute.granularity).toBe('Years');
+    });
+
+    it('respects allowMultiselect / multiSelection style flags', () => {
+      expect(
+        toFilterProps(makeFilterWidgetDto({ style: { allowMultiselect: false } })).isMultiselect,
+      ).toBe(false);
+      expect(
+        toFilterProps(makeFilterWidgetDto({ style: { multiSelection: false } })).isMultiselect,
+      ).toBe(false);
+    });
+
+    it('yields an empty attribute when no dimension item is present', () => {
+      const props = toFilterProps(makeFilterWidgetDto({ noItems: true }));
+      expect(props.attribute.expression).toBeFalsy();
+    });
+
+    it('falls back to defaults for a programmatic model without filterWidgetData', () => {
+      const model = fromWidgetDto(makeFilterWidgetDto());
+      const props = toCommonWidgetProps({
+        ...model,
+        filterWidgetData: undefined,
+      }) as unknown as {
+        attribute: { expression: string };
+        isMultiselect: boolean;
+        filterType: string;
+      };
+      expect(props.attribute.expression).toBeFalsy();
+      expect(props.isMultiselect).toBe(true);
+      expect(props.filterType).toBe('members');
+    });
+
+    it('carries the widget-design style options (so the CSDK container is styled)', () => {
+      const dto = makeFilterWidgetDto({
+        style: {
+          widgetDesign: {
+            widgetBackgroundColor: '#ff0000',
+            widgetBorderEnabled: true,
+            widgetBorderColor: '#0000ff',
+          },
+        },
+      });
+      const props = toCommonWidgetProps(fromWidgetDto(dto)) as unknown as {
+        styleOptions?: {
+          backgroundColor?: string;
+          border?: boolean;
+          borderColor?: string;
+        };
+      };
+      expect(props.styleOptions).toBeDefined();
+      expect(props.styleOptions?.backgroundColor).toBe('#ff0000');
+      expect(props.styleOptions?.border).toBe(true);
+      expect(props.styleOptions?.borderColor).toBe('#0000ff');
     });
   });
 });

@@ -68,6 +68,7 @@ export default defineConfig(({ mode }) => ({
     lib: {
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
+        query: resolve(__dirname, 'src/modules/query/index.ts'),
         ai: resolve(__dirname, 'src/modules/ai/index.ts'),
         'analytics-composer': resolve(__dirname, 'src/modules/analytics-composer/index.ts'),
         'analytics-composer/node': resolve(

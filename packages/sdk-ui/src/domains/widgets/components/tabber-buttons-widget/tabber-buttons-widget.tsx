@@ -198,6 +198,8 @@ export const TabberButtonsWidget = asSisenseComponent({
               selectedBackgroundColor={styleOptions?.selectedBackgroundColor}
               unselectedBackgroundColor={styleOptions?.unselectedBackgroundColor}
               tabCornerRadius={tabCornerRadius}
+              data-testid="csdk-tabber-tab"
+              data-active={index === customOptions.activeTab}
             >
               <TabItem onClick={() => customOptions.onTabSelected?.(index)}>{tabName}</TabItem>
             </TabItemContainer>

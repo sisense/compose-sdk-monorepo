@@ -92,35 +92,13 @@ export {
 } from '../domains/widgets/components/widget-by-id/types';
 
 // Queries
-export {
-  ExecuteQuery,
-  ExecuteQueryByWidgetId,
-  useExecuteQuery,
-  useExecuteCsvQuery,
-  useExecuteQueryByWidgetId,
-  useExecutePivotQuery,
-} from '../domains/query-execution';
+// Query-sending functionality lives in the `query` module (src/modules/query) and is
+// re-exported by the root entry; only widget-model-coupled query APIs stay here.
+export { ExecuteQueryByWidgetId, useExecuteQueryByWidgetId } from '../domains/query-execution';
 export type {
-  QueryState,
-  QueryLoadingState,
-  QuerySuccessState,
-  QueryErrorState,
-  CsvQueryState,
-  CsvQueryLoadingState,
-  CsvQuerySuccessState,
-  CsvQueryErrorState,
-  PivotQueryState,
-  PivotQueryLoadingState,
-  PivotQuerySuccessState,
-  PivotQueryErrorState,
-  ExecuteQueryParams,
-  ExecuteQueryResult,
-  ExecuteCsvQueryParams,
-  ExecuteCSVQueryConfig,
   ExecuteQueryByWidgetIdParams,
   QueryByWidgetIdState,
   QueryByWidgetIdQueryParams,
-  ExecutePivotQueryParams,
 } from '../domains/query-execution/types';
 export {
   extractDimensionsAndMeasures,
@@ -351,7 +329,6 @@ export type { FormatDateOptions, FormatDataSetOptions } from '../infra/formattin
 export type {
   TabberButtonsWidgetProps,
   SisenseContextProviderProps,
-  ExecuteQueryProps,
   ThemeProviderProps,
   BeforeRenderHandler,
   IndicatorBeforeRenderHandler,

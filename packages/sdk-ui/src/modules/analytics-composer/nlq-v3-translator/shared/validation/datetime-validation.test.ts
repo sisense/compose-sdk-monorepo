@@ -241,7 +241,7 @@ describe('flattenFilters', () => {
 });
 
 describe('query datetime validation', () => {
-  it('should use table.column display name in cross-granularity errors', () => {
+  it('should allow dimension vs filter granularity mismatch on the same column', () => {
     const yearsDimension = createDateLevelAttribute('DM.Commerce.Date.Years');
     const quartersFilterAttribute = createDateLevelAttribute('DM.Commerce.Date.Quarters');
 
@@ -251,11 +251,7 @@ describe('query datetime validation', () => {
       highlights: null,
     });
 
-    expect(errors).toHaveLength(1);
-    expect(errors[0].message).toContain('Date breakdown on Years (dimensions[0])');
-    expect(errors[0].message).toContain('Date filter on Quarters (filters[0])');
-    expect(errors[0].message).toContain("'Commerce.Date'");
-    expect(errors[0].message).not.toContain('[Commerce.Date');
+    expect(errors).toHaveLength(0);
   });
 
   it('should derive Commerce.Date display name from composeCode', () => {
@@ -285,7 +281,7 @@ describe('query datetime validation', () => {
     expect(errors[0].message).toContain("'Commerce.Date'");
   });
 
-  it('should reject highlight vs filter granularity mismatch on the same column', () => {
+  it('should allow highlight vs dimension granularity mismatch on the same column', () => {
     const yearsDimension = createDateLevelAttribute('DM.Commerce.Date.Years');
     const weeksHighlight = filterFactory.members(
       createDateLevelAttribute('DM.Commerce.Date.Weeks'),
@@ -298,9 +294,6 @@ describe('query datetime validation', () => {
       highlights: [weeksHighlight],
     });
 
-    expect(errors).toHaveLength(1);
-    expect(errors[0].path).toBe('query');
-    expect(errors[0].message).toContain('Date breakdown on Years (dimensions[0])');
-    expect(errors[0].message).toContain('Date highlight on Weeks (highlights[0])');
+    expect(errors).toHaveLength(0);
   });
 });

@@ -86,6 +86,28 @@ describe('to-widget-dto-style', () => {
       const legend: LegendOptions = { enabled: false, position: 'right' };
       expect(toLegendStyle(legend)).toEqual({ enabled: false, position: 'right' });
     });
+
+    it('maps legend item text style to Fusion legend font fields', () => {
+      const legend: LegendOptions = {
+        enabled: true,
+        position: 'bottom',
+        items: {
+          textStyle: {
+            color: '#00ff00',
+            fontSize: '16px',
+            fontStyle: 'italic',
+          },
+        },
+      };
+
+      expect(toLegendStyle(legend)).toEqual({
+        enabled: true,
+        position: 'bottom',
+        color: '#00ff00',
+        fontSize: 16,
+        fontStyle: 'italic',
+      });
+    });
   });
 
   describe('toAxisStyle', () => {

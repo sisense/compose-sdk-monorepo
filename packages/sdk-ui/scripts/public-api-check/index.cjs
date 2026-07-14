@@ -30,6 +30,23 @@ const PUBLIC_API_ENTRIES = [
     entry: 'src/public-api/internal.ts',
     requiredTag: '@internal',
   },
+  // `query` module gateway (src/modules/query/public-api) — validated the same way as root.
+  {
+    entry: 'src/modules/query/public-api/public.ts',
+    forbiddenTags: ['@internal', '@beta', '@alpha', '@sisenseInternal'],
+  },
+  {
+    entry: 'src/modules/query/public-api/beta.ts',
+    requiredTag: '@beta',
+  },
+  {
+    entry: 'src/modules/query/public-api/alpha.ts',
+    requiredTag: '@alpha',
+  },
+  {
+    entry: 'src/modules/query/public-api/internal.ts',
+    requiredTag: '@internal',
+  },
 ];
 
 validatePublicApiEntries(PUBLIC_API_ENTRIES);

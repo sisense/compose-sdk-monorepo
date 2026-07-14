@@ -16,6 +16,7 @@ import {
 import { ChartWidgetProps } from '../chart-widget/types';
 import { CommonWidgetProps } from '../common-widget/types';
 import { CustomWidgetProps } from '../custom-widget/types';
+import { FilterWidgetProps } from '../filter-widget/types';
 import { PivotTableWidgetProps } from '../pivot-table-widget/types';
 import { TextWidgetProps } from '../text-widget/types';
 import { WidgetProps, WidgetType, WithCommonWidgetProps } from '../widget/types';
@@ -47,6 +48,7 @@ const fusionWidgetTypeToChartType: Partial<Record<FusionWidgetType, ChartType>> 
   'chart/funnel': 'funnel',
   treemap: 'treemap',
   sunburst: 'sunburst',
+  sankey: 'sankey',
   'chart/scatter': 'scatter',
   indicator: 'indicator',
   'chart/boxplot': 'boxplot',
@@ -122,7 +124,9 @@ export function getFusionWidgetType(
 }
 
 export function getWidgetType(fusionWidgetType: FusionWidgetType): WidgetType {
-  if (isPivotTableFusionWidget(fusionWidgetType)) {
+  if (fusionWidgetType === 'filter') {
+    return 'filter';
+  } else if (isPivotTableFusionWidget(fusionWidgetType)) {
     return 'pivot';
   } else if (isCustomWidgetFusionWidget(fusionWidgetType)) {
     return 'custom';
@@ -182,6 +186,7 @@ export function isSupportedWidgetType(
     'chart/funnel',
     'treemap',
     'sunburst',
+    'sankey',
     'chart/scatter',
     'indicator',
     'tablewidget',
@@ -193,6 +198,7 @@ export function isSupportedWidgetType(
     'map/area',
     'richtexteditor',
     'heatmap',
+    'filter',
   ];
   return supportedWidgetTypes.includes(fusionWidgetType);
 }
@@ -327,7 +333,11 @@ export function isCustomWidget(widgetType: WidgetType) {
 }
 
 export function isChartFusionWidget(fusionWidgetType: FusionWidgetType) {
-  return !isPivotTableFusionWidget(fusionWidgetType) && !isTextFusionWidget(fusionWidgetType);
+  return (
+    fusionWidgetType !== 'filter' &&
+    !isPivotTableFusionWidget(fusionWidgetType) &&
+    !isTextFusionWidget(fusionWidgetType)
+  );
 }
 export function isChartTypeFusionWidget(fusionWidgetType: FusionWidgetType) {
   return fusionWidgetType.startsWith('chart');
@@ -380,6 +390,19 @@ export function isCustomWidgetProps(
   widgetProps: CommonWidgetProps,
 ): widgetProps is WithCommonWidgetProps<CustomWidgetProps, 'custom'> {
   return widgetProps.widgetType === 'custom';
+}
+
+/**
+ * Checks whether the widget props belong to a filter widget.
+ *
+ * @param widgetProps - The widget props to check.
+ * @returns Whether the widget props belong to a filter widget.
+ * @internal
+ */
+export function isFilterWidgetProps(
+  widgetProps: CommonWidgetProps,
+): widgetProps is WithCommonWidgetProps<FilterWidgetProps, 'filter'> {
+  return widgetProps.widgetType === 'filter';
 }
 
 /**

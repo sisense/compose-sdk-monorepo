@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.31.1] - 2026-07-13
+
+### Changed
+- Extend `DashboardById` with Sankey widget support and series labels settings (font color, size, and style)
+- Fix query building error when filter and breakdown dimensions use different date levels on the same date column
+
+
 ## [2.31.0] - 2026-07-07
 
 ### Added

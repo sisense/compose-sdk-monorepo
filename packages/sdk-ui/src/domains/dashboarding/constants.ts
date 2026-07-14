@@ -19,6 +19,7 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
     collapsedInitially: false,
     persistCollapsedStateToLocalStorage: false,
     showFilterIconInToolbar: false,
+    hideFilterWidgetLinkedFilters: true,
     actions: {
       addFilter: {
         enabled: false,

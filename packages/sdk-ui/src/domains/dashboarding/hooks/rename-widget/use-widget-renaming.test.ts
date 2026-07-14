@@ -148,6 +148,70 @@ describe('useWidgetRenaming', () => {
     expect(getWidgetOnChange(result.current.widgets[0]!)).toBe(onChange);
   });
 
+  it('FilterWidget: wraps the unified onChange for persistence on title/changed', () => {
+    const onChange = vi.fn();
+    const patchWidget = vi.fn().mockResolvedValue(undefined);
+    const widgets = [
+      createMinimalWidget({
+        id: 'fw-1',
+        widgetType: 'filter',
+        // Cast rationale: minimal attribute stub — only identity fields matter here.
+        attribute: { name: 'Country', expression: '[Country]', type: 'text' } as any,
+        onChange,
+      } as Partial<WidgetProps>),
+    ];
+    const params: UseWidgetRenamingParams = {
+      widgets,
+      enabled: true,
+      persistence: { patchWidget },
+    };
+
+    const { result } = renderHook(() => useWidgetRenaming(params));
+
+    const fw = result.current.widgets[0]!;
+    const wrappedOnChange = getWidgetOnChange(fw)!;
+    expect(wrappedOnChange).not.toBe(onChange);
+    act(() => {
+      wrappedOnChange({ type: 'title/changed', payload: { title: 'My Filter' } });
+    });
+
+    expect(patchWidget).toHaveBeenCalledWith('fw-1', { title: 'My Filter' });
+    expect(onChange).toHaveBeenCalledWith({
+      type: 'title/changed',
+      payload: { title: 'My Filter' },
+    });
+    expect(fw.config?.header?.title?.editing?.enabled).toBe(true);
+  });
+
+  it('FilterWidget: forwards non-title events (e.g. filter/changed) without persistence calls', () => {
+    const onChange = vi.fn();
+    const patchWidget = vi.fn().mockResolvedValue(undefined);
+    const widgets = [
+      createMinimalWidget({
+        id: 'fw-1',
+        widgetType: 'filter',
+        // Cast rationale: minimal attribute stub — only identity fields matter here.
+        attribute: { name: 'Country', expression: '[Country]', type: 'text' } as any,
+        onChange,
+      } as Partial<WidgetProps>),
+    ];
+    const params: UseWidgetRenamingParams = {
+      widgets,
+      enabled: true,
+      persistence: { patchWidget },
+    };
+
+    const { result } = renderHook(() => useWidgetRenaming(params));
+
+    const event = { type: 'filter/changed', payload: { filter: null } } as const;
+    act(() => {
+      getWidgetOnChange(result.current.widgets[0]!)!(event);
+    });
+
+    expect(patchWidget).not.toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith(event);
+  });
+
   it('does not wrap onChange of a custom widget (it is the persistence callback, not a change-event channel)', () => {
     const persistenceOnChange = vi.fn();
     const patchWidget = vi.fn().mockResolvedValue(undefined);

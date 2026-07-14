@@ -4,6 +4,7 @@ import type { BeforeMenuOpenHandler } from '@/infra/contexts/menu-provider/types
 import type { WidgetHeaderConfig } from '../../shared/widget-header/types';
 import type { ChartWidgetProps } from '../chart-widget/types';
 import type { CustomWidgetProps } from '../custom-widget/types';
+import type { FilterWidgetProps } from '../filter-widget/types';
 import type { PivotTableWidgetProps } from '../pivot-table-widget/types';
 import type { TextWidgetProps } from '../text-widget/types';
 
@@ -69,7 +70,7 @@ export type WidgetConfig = {
 /**
  * Type of the widget component.
  */
-export type WidgetType = 'chart' | 'pivot' | 'text' | 'custom';
+export type WidgetType = 'chart' | 'pivot' | 'text' | 'custom' | 'filter';
 
 /**
  * A utility type that combines widget-specific properties (`BaseWidget`)
@@ -100,4 +101,5 @@ export type WidgetProps =
   | WithCommonWidgetProps<ChartWidgetProps, 'chart'>
   | WithCommonWidgetProps<PivotTableWidgetProps, 'pivot'>
   | WithCommonWidgetProps<TextWidgetProps, 'text'>
-  | WithCommonWidgetProps<CustomWidgetProps, 'custom'>;
+  | WithCommonWidgetProps<CustomWidgetProps, 'custom'>
+  | WithCommonWidgetProps<FilterWidgetProps, 'filter'>;

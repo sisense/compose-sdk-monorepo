@@ -15,3 +15,9 @@ import './infra/translation/initialize-i18n';
  * All exports flow through the public-api gateway which organizes exports by stability level
  */
 export * from './public-api';
+
+/**
+ * Modules — each module owns its exports through its own public-api gateway;
+ * the root entry re-exports every module so the full surface stays available here.
+ */
+export * from './modules/query';

@@ -69,6 +69,8 @@ export type {
   DrilldownSelection,
   EndCapType,
   FilterVariant,
+  FilterWidgetProps,
+  FilterWidgetFilterType,
   FunnelStyleOptions,
   GaugeIndicatorStyleOptions,
   GetDashboardModelOptions,

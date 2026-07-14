@@ -24,6 +24,12 @@ export {
   type CustomFilterTileProps,
 } from '../domains/filters/components/custom-filter-tile';
 
+// Filter Widget (props/type live in beta.ts — they are referenced by the public WidgetProps union)
+export {
+  FilterWidget,
+  filterWidgetFilterTypeLabels,
+} from '../domains/widgets/components/filter-widget/index.js';
+
 // Charts related
 export {
   isIndicatorRenderOptions,

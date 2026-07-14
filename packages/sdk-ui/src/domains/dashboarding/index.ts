@@ -34,4 +34,5 @@ export type {
   DashboardWidgetsPanelLayoutUpdatedEvent,
   DashboardWidgetsPanelIsEditingChangedEvent,
   DashboardWidgetsDeletedEvent,
+  DashboardWidgetDateLevelChangedEvent,
 } from './types.js';

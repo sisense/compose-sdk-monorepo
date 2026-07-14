@@ -51,6 +51,7 @@ TypeScript interfaces for components and composables listed above
 - [FilterMembersSuccessState](interface.FilterMembersSuccessState.md)
 - [FiltersPanelProps](interface.FiltersPanelProps.md)
 - [FilterTileProps](interface.FilterTileProps.md)
+- [FilterWidgetProps](interface.FilterWidgetProps.md) <Badge type="beta" text="Beta" />
 - [FunnelChartProps](interface.FunnelChartProps.md)
 - [FunnelStyleOptions](interface.FunnelStyleOptions.md)
 - [GaugeIndicatorStyleOptions](interface.GaugeIndicatorStyleOptions.md)

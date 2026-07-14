@@ -31,6 +31,7 @@ import {
   Color,
   IndicatorChartDataOptions,
   NumberFormatConfig,
+  SankeyChartDataOptions,
   ScatterChartDataOptions,
   StyledColumn,
   StyledMeasureColumn,
@@ -400,6 +401,19 @@ function extractCategoricalChartDataOptions(
   };
 }
 
+function extractSankeyChartDataOptions(
+  panels: Panel[],
+  paletteColors?: Color[],
+): SankeyChartDataOptions {
+  const category = createColumnsFromPanelItems<StyledColumn>(panels, 'category', paletteColors);
+  const [value] = createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'value', paletteColors);
+
+  return {
+    category,
+    value,
+  };
+}
+
 function extractScatterChartDataOptions(
   panels: Panel[],
   paletteColors?: Color[],
@@ -732,6 +746,9 @@ export function extractDataOptions(
   if (fusionWidgetType === 'indicator') {
     return extractIndicatorChartDataOptions(panels, customPaletteColors);
   }
+  if (fusionWidgetType === 'sankey') {
+    return extractSankeyChartDataOptions(panels, customPaletteColors);
+  }
   if (isTableFusionWidget(fusionWidgetType)) {
     return extractTableChartDataOptions(panels, style as TableWidgetStyle, customPaletteColors);
   }
@@ -754,7 +771,7 @@ export function extractDataOptions(
   if (fusionWidgetType === 'heatmap') {
     return extractCaledarHeatmapChartDataOptions(panels, customPaletteColors);
   }
-  if (fusionWidgetType === 'richtexteditor') {
+  if (fusionWidgetType === 'richtexteditor' || fusionWidgetType === 'filter') {
     return {};
   }
   throw new TranslatableError('errors.unsupportedWidgetType', { widgetType: fusionWidgetType });

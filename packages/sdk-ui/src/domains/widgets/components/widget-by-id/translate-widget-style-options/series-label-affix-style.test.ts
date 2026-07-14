@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   extractSeriesLabelAffixFromFusion,
+  extractSeriesLabelTextStyleFromFusion,
   toPublicSeriesLabelAffixFields,
 } from './series-label-affix-style.js';
 
@@ -31,6 +32,46 @@ describe('series-label-affix-style', () => {
         borderRadius: null,
       }),
     ).toEqual({});
+  });
+
+  it('extractSeriesLabelTextStyleFromFusion returns null for explicit color clear', () => {
+    expect(extractSeriesLabelTextStyleFromFusion({ color: null })).toBeNull();
+  });
+
+  it('extractSeriesLabelTextStyleFromFusion maps color', () => {
+    expect(extractSeriesLabelTextStyleFromFusion({ color: '#ff0000' })).toEqual({
+      color: '#ff0000',
+    });
+  });
+
+  it('extractSeriesLabelTextStyleFromFusion preserves fontSize when color is explicitly cleared', () => {
+    expect(extractSeriesLabelTextStyleFromFusion({ color: null, fontSize: 16 })).toEqual({
+      fontSize: '16px',
+    });
+  });
+
+  it('extractSeriesLabelTextStyleFromFusion preserves fontSize and fontStyle when color is explicitly cleared', () => {
+    expect(
+      extractSeriesLabelTextStyleFromFusion({ color: null, fontSize: 16, fontStyle: 'italic' }),
+    ).toEqual({
+      fontSize: '16px',
+      fontStyle: 'italic',
+    });
+  });
+
+  it('extractSeriesLabelTextStyleFromFusion treats standalone fontSize null as unset', () => {
+    expect(extractSeriesLabelTextStyleFromFusion({ fontSize: null })).toBeUndefined();
+  });
+
+  it('extractSeriesLabelTextStyleFromFusion treats standalone fontStyle reset as unset', () => {
+    expect(extractSeriesLabelTextStyleFromFusion({ fontStyle: null })).toBeUndefined();
+    expect(extractSeriesLabelTextStyleFromFusion({ fontStyle: 'normal' })).toBeUndefined();
+  });
+
+  it('extractSeriesLabelTextStyleFromFusion preserves fontSize when only fontStyle is reset', () => {
+    expect(extractSeriesLabelTextStyleFromFusion({ fontSize: 16, fontStyle: 'normal' })).toEqual({
+      fontSize: '16px',
+    });
   });
 
   it('toPublicSeriesLabelAffixFields keeps set values', () => {

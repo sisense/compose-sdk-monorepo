@@ -67,10 +67,31 @@ function findGranularityConflict(left: DateLevelRef, right: DateLevelRef): strin
   return (
     `${leftLabel} on ${left.granularity} (${left.source}) conflicts with ` +
     `${rightLabel} on ${right.granularity} (${right.source}) on the same datetime column '${left.columnName}'. ` +
-    `Use the same date level for filters and breakdown dimensions.`
+    `Use the same date level for filters/highlights, or for breakdown dimensions.`
   );
 }
 
+/**
+ * Validates same-column datetime granularity consistency across query elements.
+ *
+ * Backend alignment:
+ * - Dimension vs filter/highlight on the same column at different levels is allowed.
+ *   Filters and dimensions are independent leveled attributes on the same column
+ *   (e.g. YEARS vs MONTHS). Period filter members are rewritten to half-open
+ *   [from, to) ranges on the raw datetime column, while the breakdown truncates
+ *   at its own level (e.g. years filter → Date >= 2013-01-01 AND Date < 2014-01-01,
+ *   months dimension → truncate to month). The backend does not reject this pattern.
+ * - Filter vs filter on the same column at different levels is rejected (D1).
+ *   The backend only merges same-level date filters; mismatched filter levels are
+ *   ambiguous / not safely combinable.
+ * - Dimension vs dimension on the same column at different levels is rejected (D2).
+ *   The backend can execute dual Year+Month breakdowns silently with misleading results.
+ *
+ * @param input - Query dimensions, filters, and highlights to check for same-column
+ *   datetime granularity conflicts.
+ * @returns Translation errors for conflicting filter/highlight (D1) or dimension (D2)
+ *   date levels; empty when consistent.
+ */
 export function validateQueryDatetimeConsistency(input: {
   dimensions: Attribute[];
   filters: Filter[] | import('@sisense/sdk-data').FilterRelations | null | undefined;
@@ -88,7 +109,7 @@ export function validateQueryDatetimeConsistency(input: {
 
   const allFilterRefs = [...filterRefs, ...highlightRefs];
 
-  // D2: multiple filters on same column at different levels
+  // D1: multiple filters/highlights on same column at different levels
   for (let i = 0; i < allFilterRefs.length; i++) {
     for (let j = i + 1; j < allFilterRefs.length; j++) {
       const message = findGranularityConflict(allFilterRefs[i], allFilterRefs[j]);
@@ -98,17 +119,7 @@ export function validateQueryDatetimeConsistency(input: {
     }
   }
 
-  // D1: dimension vs filter/highlight granularity mismatch
-  for (const dimensionRef of dimensionRefs) {
-    for (const filterRef of allFilterRefs) {
-      const message = findGranularityConflict(dimensionRef, filterRef);
-      if (message) {
-        errors.push({ path: 'query', message, input: null });
-      }
-    }
-  }
-
-  // D3: two dimensions using the same datetime column at different granularities
+  // D2: two dimensions using the same datetime column at different granularities
   for (let i = 0; i < dimensionRefs.length; i++) {
     for (let j = i + 1; j < dimensionRefs.length; j++) {
       const message = findGranularityConflict(dimensionRefs[i], dimensionRefs[j]);

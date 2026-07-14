@@ -61,7 +61,10 @@ import type {
   WidgetSubtype,
 } from '../types.js';
 import { toFusionCategoricalLabelsFromSeriesLabels } from './categorical-labels-style.js';
-import { toFusionSeriesLabelAffixFromSdk } from './series-label-affix-style.js';
+import {
+  toFusionSeriesLabelAffixFromSdk,
+  toFusionSeriesLabelTextStyleFromSdk,
+} from './series-label-affix-style.js';
 
 const DEFAULT_LEGEND = { enabled: true, position: 'bottom' as const };
 const DEFAULT_NAVIGATOR = { enabled: false };
@@ -88,6 +91,9 @@ export function toLegendStyle(legend?: LegendOptions): CartesianWidgetStyle['leg
   return {
     enabled: legend.enabled,
     position: (legend.position as string) ?? 'bottom',
+    ...toFusionSeriesLabelTextStyleFromSdk({
+      textStyle: legend.items?.textStyle,
+    }),
   };
 }
 
@@ -132,6 +138,7 @@ export function toSeriesLabelsStyle(
     enabled: seriesLabels.enabled ?? false,
     rotation: seriesLabels.rotation ?? 0,
     ...toFusionSeriesLabelAffixFromSdk(seriesLabels),
+    ...toFusionSeriesLabelTextStyleFromSdk(seriesLabels),
   };
 }
 
@@ -301,12 +308,14 @@ function toStackedSeriesLabelsStyle(
   const showValue = seriesLabels?.showValue ?? false;
   const showTotals = !!(totalLabels?.enabled && enabled);
   const affix = toFusionSeriesLabelAffixFromSdk(seriesLabels);
+  const textStyle = toFusionSeriesLabelTextStyleFromSdk(seriesLabels);
 
   if (STACKED_SUBTYPES.has(widgetSubtype)) {
     return {
       enabled,
       rotation,
       ...affix,
+      ...textStyle,
       labels: {
         enabled: true,
         stacked: true,
@@ -327,6 +336,7 @@ function toStackedSeriesLabelsStyle(
       enabled,
       rotation,
       ...affix,
+      ...textStyle,
       labels: {
         enabled: true,
         stacked: false,

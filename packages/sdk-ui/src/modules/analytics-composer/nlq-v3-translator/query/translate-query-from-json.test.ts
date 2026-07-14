@@ -906,7 +906,7 @@ describe('translateQueryFromJSON', () => {
   });
 
   describe('datetime query validation', () => {
-    it('should reject week filter with year breakdown on the same date column', () => {
+    it('should allow week filter with year breakdown on the same date column', () => {
       const mockQueryJSON = {
         dimensions: ['DM.Commerce.Date.Years', 'DM.Commerce.Age Range'],
         measures: [
@@ -931,13 +931,39 @@ describe('translateQueryFromJSON', () => {
         },
       });
 
-      expect(result.success).toBe(false);
-      const errorResponse = result as NlqTranslationErrorResult;
-      const datetimeError = errorResponse.errors.find((error) => error.path === 'query');
-      expect(datetimeError).toBeDefined();
-      expect(datetimeError!.message).toContain('conflicts');
-      expect(datetimeError!.message).toContain('Commerce.Date');
-      expect(datetimeError!.message).not.toContain('[Commerce.Date');
+      expect(result.success).toBe(true);
+    });
+
+    it('should allow months breakdown with years filter on the same date column', () => {
+      const mockQueryJSON = {
+        dimensions: ['DM.Commerce.Date.Months'],
+        measures: [
+          {
+            function: 'measureFactory.sum',
+            args: ['DM.Commerce.Revenue', 'Total Revenue'],
+          },
+        ],
+        filters: [
+          {
+            function: 'filterFactory.members',
+            args: ['DM.Commerce.Date.Years', ['2013-01-01T00:00:00']],
+          },
+          {
+            function: 'filterFactory.greaterThan',
+            args: ['DM.Commerce.Revenue', 0],
+          },
+        ],
+      } satisfies QueryJSON;
+
+      const result = translateQueryFromJSON({
+        data: mockQueryJSON,
+        context: {
+          dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+          tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+        },
+      });
+
+      expect(result.success).toBe(true);
     });
 
     it('should reject two filters on the same date column at different levels', () => {
@@ -976,7 +1002,7 @@ describe('translateQueryFromJSON', () => {
       expect(datetimeError!.message).toContain('conflicts');
     });
 
-    it('should reject two dimensions on the same date column at different granularities (D3)', () => {
+    it('should reject two dimensions on the same date column at different granularities (D2)', () => {
       const mockQueryJSON = {
         dimensions: ['DM.Commerce.Date.Years', 'DM.Commerce.Date.Months'],
         measures: [
@@ -1004,7 +1030,7 @@ describe('translateQueryFromJSON', () => {
       expect(datetimeError!.message).toContain('Commerce.Date');
     });
 
-    it('should reject highlight granularity mismatch with dimension breakdown', () => {
+    it('should allow highlight granularity mismatch with dimension breakdown', () => {
       const mockQueryJSON = {
         dimensions: ['DM.Commerce.Date.Years'],
         measures: [
@@ -1030,11 +1056,7 @@ describe('translateQueryFromJSON', () => {
         },
       });
 
-      expect(result.success).toBe(false);
-      const errorResponse = result as NlqTranslationErrorResult;
-      const datetimeError = errorResponse.errors.find((error) => error.path === 'query');
-      expect(datetimeError).toBeDefined();
-      expect(datetimeError!.message).toContain('conflicts');
+      expect(result.success).toBe(true);
     });
   });
 });
