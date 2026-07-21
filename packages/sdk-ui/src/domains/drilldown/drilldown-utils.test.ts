@@ -421,7 +421,7 @@ describe('drilldown-utils', () => {
       expect(result).toBe(dataOptions);
     });
 
-    it('should replace category with drilldown dimension for sankey when different', () => {
+    it('should replace only the drilled sankey stage and keep other flow stages', () => {
       const dataOptions: SankeyChartDataOptions = {
         category: [ageRange, gender],
         value: measureFactory.sum(revenue),
@@ -429,7 +429,8 @@ describe('drilldown-utils', () => {
 
       const result = applyDrilldownDimension('sankey', dataOptions, category);
 
-      expect((result as SankeyChartDataOptions).category).toEqual([category]);
+      // Sankey needs ≥2 category columns — do not collapse to a single dim.
+      expect((result as SankeyChartDataOptions).category).toEqual([category, gender]);
     });
   });
 });

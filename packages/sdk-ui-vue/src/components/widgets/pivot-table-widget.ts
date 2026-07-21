@@ -105,6 +105,12 @@ export const PivotTableWidget = defineComponent({
      */
     config: Object as PropType<PivotTableWidgetProps['config']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.id}
+     *
+     * @category Widget
+     */
+    id: String as PropType<PivotTableWidgetProps['id']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.drilldownOptions}
      *
      * @category Widget

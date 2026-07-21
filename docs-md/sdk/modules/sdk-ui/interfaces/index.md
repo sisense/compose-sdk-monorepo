@@ -100,6 +100,10 @@ TypeScript interfaces for components and hooks listed above
 - [IndicatorChartProps](interface.IndicatorChartProps.md)
 - [JumpToDashboardConfig](interface.JumpToDashboardConfig.md)
 - [JumpToDashboardConfigForPivot](interface.JumpToDashboardConfigForPivot.md)
+- [KpiChartDataOptions](interface.KpiChartDataOptions.md) <Badge type="beta" text="Beta" />
+- [KpiChartEventProps](interface.KpiChartEventProps.md) <Badge type="beta" text="Beta" />
+- [KpiChartProps](interface.KpiChartProps.md) <Badge type="beta" text="Beta" />
+- [KpiStyleOptions](interface.KpiStyleOptions.md) <Badge type="beta" text="Beta" />
 - [LegendItemsOptions](interface.LegendItemsOptions.md)
 - [LegendSymbolsOptions](interface.LegendSymbolsOptions.md)
 - [LegendTitleOptions](interface.LegendTitleOptions.md)

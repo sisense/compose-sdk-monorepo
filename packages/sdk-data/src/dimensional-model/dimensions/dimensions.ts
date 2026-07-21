@@ -23,6 +23,28 @@ import {
 } from '../types.js';
 
 /**
+ * Checks whether a property is defined anywhere on an object's prototype chain
+ * (as a data or accessor property), regardless of its current value. Used to
+ * detect reserved instance members (e.g. getters) before attaching a child
+ * attribute/dimension under the same name.
+ *
+ * @param obj - The object whose prototype chain is inspected.
+ * @param propName - The property name to look for.
+ * @returns True when the property is defined on the prototype chain, otherwise false.
+ * @internal
+ */
+const isDefinedOnPrototypeChain = (obj: object, propName: string): boolean => {
+  let proto = Object.getPrototypeOf(obj);
+  while (proto !== null) {
+    if (Object.getOwnPropertyDescriptor(proto, propName) !== undefined) {
+      return true;
+    }
+    proto = Object.getPrototypeOf(proto);
+  }
+  return false;
+};
+
+/**
  * Represents a Dimension in a Dimensional Model
  *
  * @internal
@@ -105,6 +127,11 @@ export class DimensionalDimension extends DimensionalElement implements Dimensio
       normalizedName === 'id' ||
       normalizedName === 'name' ||
       Object.getOwnPropertyDescriptor(this, normalizedName) !== undefined ||
+      // Catch accessor/data members inherited from the prototype (e.g. the
+      // `dataSource`/`attributes`/`dimensions` getters). These may still read as
+      // `undefined` while the instance is being constructed, so an own-value
+      // check alone would let the name through and clobber a getter-only member.
+      isDefinedOnPrototypeChain(this, normalizedName) ||
       this[normalizedName] !== undefined
     ) {
       result = expression;

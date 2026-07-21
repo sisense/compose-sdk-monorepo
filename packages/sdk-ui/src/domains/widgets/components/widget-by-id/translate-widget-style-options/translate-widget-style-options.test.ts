@@ -298,6 +298,23 @@ describe('translate widget style options', () => {
       expect(styleOptions.seriesLabels?.textStyle).toEqual({ fontStyle: 'italic' });
     });
 
+    it('should map Fusion seriesLabels fontStyle normal to clear sticky italic in textStyle', () => {
+      const widgetStyle = {
+        seriesLabels: {
+          enabled: true,
+          rotation: 0,
+          fontStyle: 'normal',
+        },
+      } as CartesianWidgetStyle;
+
+      const styleOptions = extractStyleOptions(
+        'chart/line',
+        mockWidgetDto('', widgetStyle, []),
+      ) as LineStyleOptions;
+
+      expect(styleOptions.seriesLabels?.textStyle).toEqual({ fontStyle: 'normal' });
+    });
+
     it('should preserve seriesLabels fontSize and fontStyle when Fusion color is explicitly cleared', () => {
       const widgetStyle = {
         seriesLabels: {

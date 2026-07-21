@@ -19,11 +19,19 @@ describe('sankey designOptionsTranslators', () => {
     expect(design.orientation).toBe('horizontal');
   });
 
+  it('copies minLinkWidth from style options to design options', () => {
+    const design = designOptionsTranslators.translateStyleOptionsToDesignOptions({
+      minLinkWidth: 4,
+    });
+    expect(design.minLinkWidth).toBe(4);
+  });
+
   it('getDefaultStyleOptions returns horizontal orientation and legend off', () => {
     const defaults = designOptionsTranslators.getDefaultStyleOptions();
     expect(defaults.orientation).toBe('horizontal');
     expect(defaults.legend?.enabled).toBe(false);
     expect(defaults.nodeWidth).toBe(20);
+    expect(defaults.minLinkWidth).toBe(1);
   });
 
   it('isCorrectStyleOptions accepts plain style objects', () => {

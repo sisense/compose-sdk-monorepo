@@ -382,10 +382,32 @@ export type PanelColorFormat =
   | PanelColorFormatRange
   | PanelColorFormatConditional;
 
+/**
+ * Per-member color formatting stored on Fusion panel items (`format.members`).
+ *
+ * Used when translating Fusion DTOs into chart `seriesToColorMap` entries.
+ */
 export type PanelMembersFormat = Record<
   string,
   {
+    /** Resolved member color (hex or CSS color string). */
     color: string;
+    /**
+     * Fusion flag that the member carries an explicit color value.
+     * Distinct from `isHandPickedColor`: a member can be colored from the
+     * auto palette without being user-picked.
+     */
+    colored?: boolean;
+    /**
+     * `true` when the user hand-picked the color in Fusion; `false` when it was
+     * auto-assigned from the dashboard palette. Only hand-picked entries are
+     * lifted into Sankey `seriesToColorMap`.
+     */
+    isHandPickedColor?: boolean;
+    /** Whether this member is present in the current query result set. */
+    inResultset?: boolean;
+    /** Display title for the member value (may differ from the map key). */
+    title?: string;
   }
 >;
 
@@ -453,7 +475,7 @@ type LabelsStyle = {
   /** Font size of each value label in pixels. */
   fontSize?: number | null;
   /** Font style of each value label. */
-  fontStyle?: 'normal' | 'italic' | null;
+  fontStyle?: 'normal' | 'italic';
   /** Background color behind each value label. */
   backgroundColor?: string | null;
   /** Padding in pixels around value label text when background color is set. */
@@ -513,7 +535,7 @@ type BaseWidgetStyle = {
     /** Font size of legend items in pixels. */
     fontSize?: number | null;
     /** Font style of legend items. */
-    fontStyle?: 'normal' | 'italic' | null;
+    fontStyle?: 'normal' | 'italic';
   };
   navigator: {
     enabled: boolean;
@@ -596,7 +618,7 @@ export type FunnelWidgetStyle = BaseWidgetStyle &
       /** Text color of categorical value labels. */
       labelColor?: string | null;
       fontSize?: number | null;
-      fontStyle?: 'normal' | 'italic' | null;
+      fontStyle?: 'normal' | 'italic';
       backgroundColor?: string | null;
       backgroundPadding?: number | null;
       borderColor?: string | null;
@@ -622,7 +644,7 @@ export type PieWidgetStyle = BaseWidgetStyle &
       /** Text color of categorical value labels. */
       labelColor?: string | null;
       fontSize?: number | null;
-      fontStyle?: 'normal' | 'italic' | null;
+      fontStyle?: 'normal' | 'italic';
       backgroundColor?: string | null;
       backgroundPadding?: number | null;
       borderColor?: string | null;
@@ -756,6 +778,7 @@ export type SankeyWidgetStyle = {
   linkOpacity?: number;
   nodeWidth?: number;
   nodePadding?: number;
+  minLinkWidth?: number;
 };
 
 export type BoxplotWidgetStyle = WidgetContainerStyleOptions & {
@@ -859,6 +882,7 @@ export type WidgetStyle = {
   | IndicatorWidgetStyle
   | TreemapWidgetStyle
   | SunburstWidgetStyle
+  | SankeyWidgetStyle
   | BoxplotWidgetStyle
   | ScattermapWidgetStyle
   | AreamapWidgetStyle

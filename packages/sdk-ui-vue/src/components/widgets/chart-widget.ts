@@ -166,6 +166,12 @@ export const ChartWidget = defineComponent({
      */
     config: Object as PropType<ChartWidgetProps['config']>,
     /**
+     * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.id}
+     *
+     * @category Widget
+     */
+    id: String as PropType<ChartWidgetProps['id']>,
+    /**
      * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.title}
      *
      * @category Widget

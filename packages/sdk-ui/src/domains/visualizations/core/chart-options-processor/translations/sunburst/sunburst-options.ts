@@ -73,7 +73,12 @@ export function prepareSunburstSeries(
         defaultNumberFormattingEnabled,
       ),
       showInLegend: false,
-      turboThreshold: 2000,
+      // Disable turboThreshold: sunburst points are always object-shaped
+      // ({ id, parent, value, ... }), which Highcharts rejects once a series
+      // exceeds the threshold (error #12), rendering an empty chart. The node
+      // count grows multiplicatively per category, so 4+ high-cardinality
+      // categories easily crossed the old 2000 limit. 0 disables the check.
+      turboThreshold: 0,
     },
     ...dataOptions.breakBy.map((column, index) => ({
       name: getDataOptionTitle(column),

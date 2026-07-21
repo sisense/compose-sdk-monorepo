@@ -20,5 +20,8 @@ export const translation: TranslationDictionary = {
     invalidCountRowsResponse: 'Від сервера отримано недійсну відповідь із кількістю рядків.',
     dataSourceNotFound:
       'Не вдалося отримати поля для джерела даних "{{dataSource}}". Переконайтесь що джерело існує і доступне.',
+    calculatedDimensionParseNotSupported:
+      'Підключене джерело даних не підтримує визначення типу даних формул обчислюваних вимірів.',
+    calculatedDimensionFormulaInvalid: 'Недійсна формула обчислюваного виміру. {{message}}',
   },
 };

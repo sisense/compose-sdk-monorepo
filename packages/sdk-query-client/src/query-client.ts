@@ -170,7 +170,10 @@ export class DimensionalQueryClient implements QueryClient {
   }
 
   public async getDataSourceFields(dataSource: DataSource, count = 9999, offset = 0) {
-    const dataSourceFields = await this.queryApi.getDataSourceFields(dataSource, count, offset);
+    const dataSourceFields = await this.queryApi.getDataSourceFields(dataSource, {
+      count,
+      offset,
+    });
     return dataSourceFields || [];
   }
 

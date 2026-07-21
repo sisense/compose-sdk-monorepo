@@ -7,6 +7,7 @@ import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import {
   isChartWidgetProps,
+  isFilterWidgetProps,
   isTextWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
@@ -636,6 +637,94 @@ describe('useCommonFilters', () => {
       });
 
       expect(originalOnChange).toHaveBeenCalledWith(titleEvent);
+    });
+
+    describe('dashboard filters as parentFilters', () => {
+      const ageFilter = filterFactory.members(DM.Commerce.AgeRange, ['0-18'], {
+        guid: 'f-age',
+      });
+      const conditionFilter = filterFactory.contains(DM.Commerce.Condition, 'New', {
+        guid: 'f-condition',
+      });
+      const ownFilter = filterFactory.members(DM.Commerce.Gender, ['Male'], { guid: 'f-own' });
+
+      type ConnectToWidgetProps = ReturnType<typeof useCommonFilters>['connectToWidgetProps'];
+      type ConnectOptions = Parameters<ConnectToWidgetProps>[1];
+
+      const connect = (options?: ConnectOptions, props: WidgetProps = filterWidgetProps) => {
+        const { result } = renderHook(() =>
+          useCommonFilters({ initialFilters: [ageFilter, conditionFilter, ownFilter] }),
+        );
+        const connected = result.current.connectToWidgetProps(props, options);
+        if (!isFilterWidgetProps(connected)) {
+          throw new Error('expected connectToWidgetProps to return FilterWidgetProps');
+        }
+        return connected;
+      };
+
+      it('injects applicable common filters when ignoreFilters.all is false', () => {
+        const connected = connect({ ignoreFilters: { all: false, ids: [] } });
+
+        expect(connected.parentFilters?.map((f) => f.config.guid)).toEqual([
+          'f-age',
+          'f-condition',
+        ]);
+      });
+
+      it('excludes per-widget ignored filter ids', () => {
+        const connected = connect({ ignoreFilters: { all: false, ids: ['f-condition'] } });
+
+        expect(connected.parentFilters?.map((f) => f.config.guid)).toEqual(['f-age']);
+      });
+
+      it('never includes a filter on the widget own attribute (no self-filtering)', () => {
+        const connected = connect({ ignoreFilters: { all: false, ids: [] } });
+
+        expect(connected.parentFilters?.map((f) => f.config.guid)).not.toContain('f-own');
+      });
+
+      it('injects nothing when the toggle is off (all true) or options are absent', () => {
+        expect(connect({ ignoreFilters: { all: true, ids: [] } }).parentFilters).toBeUndefined();
+        expect(connect().parentFilters).toBeUndefined();
+      });
+
+      it('merges with the widget own widget-filters already present on the props', () => {
+        const widgetFilter = filterFactory.members(DM.Category.Category, ['TV'], {
+          guid: 'f-widget',
+        });
+        if (!isFilterWidgetProps(filterWidgetProps)) {
+          throw new Error('fixture must be FilterWidgetProps');
+        }
+        const connected = connect(
+          { ignoreFilters: { all: false, ids: [] } },
+          { ...filterWidgetProps, parentFilters: [widgetFilter] },
+        );
+
+        expect(connected.parentFilters?.map((f) => f.config.guid)).toEqual([
+          'f-widget',
+          'f-age',
+          'f-condition',
+        ]);
+      });
+
+      it('preserves pre-supplied parentFilters untouched when the toggle is off or options are absent', () => {
+        const widgetFilter = filterFactory.members(DM.Category.Category, ['TV'], {
+          guid: 'f-widget',
+        });
+        if (!isFilterWidgetProps(filterWidgetProps)) {
+          throw new Error('fixture must be FilterWidgetProps');
+        }
+        const props = { ...filterWidgetProps, parentFilters: [widgetFilter] };
+        // toBe proves no new array is returned; the snapshot proves no in-place mutation.
+        const snapshot = [...props.parentFilters];
+
+        const toggledOff = connect({ ignoreFilters: { all: true, ids: [] } }, props).parentFilters;
+        const noOptions = connect(undefined, props).parentFilters;
+
+        expect(toggledOff).toBe(props.parentFilters);
+        expect(noOptions).toBe(props.parentFilters);
+        expect(props.parentFilters).toEqual(snapshot);
+      });
     });
   });
 });

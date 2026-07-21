@@ -16,8 +16,10 @@ import {
   MetadataTypes,
   PivotJaql,
 } from '@sisense/sdk-data';
+import { measureFactory } from '@sisense/sdk-data';
 import isObject from 'lodash-es/isObject';
 
+import { Commerce } from '../../../../__test-helpers__/sample-ecommerce';
 import {
   AnyColumn,
   BoxplotChartDataOptions,
@@ -30,8 +32,10 @@ import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   IndicatorChartDataOptions,
+  SankeyChartDataOptions,
   ScatterChartDataOptions,
 } from '../../../../types.js';
+import { toSankeyPanels } from '../../widget-model/widget-model-translator/to-widget-dto-panels.js';
 import { jaqlMock } from './__mocks__/jaql-mock.js';
 import {
   createDataColumn,
@@ -732,6 +736,48 @@ describe('utils for widget data options translation', () => {
 
         verifyColumn(category[0]!, panels[0].items[0]);
         verifyColumn(value[0]!, panels[1].items[0]);
+      });
+
+      it('should return sankey seriesToColorMap for multi-column hand-picked colors', () => {
+        const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+        const originalDataOptions: SankeyChartDataOptions = {
+          category: [Commerce.AgeRange, Commerce.Condition],
+          value: sumRevenue,
+          seriesToColorMap: {
+            AgeRange: { '65+': '#ff0000', '0-18': '#00ff00' },
+            Condition: { New: '#0000ff' },
+          },
+        };
+        const panels = toSankeyPanels(originalDataOptions);
+
+        const dataOptions = extractDataOptions(
+          'sankey',
+          panels,
+          styleMock,
+        ) as SankeyChartDataOptions;
+
+        expect(dataOptions.seriesToColorMap).toEqual(originalDataOptions.seriesToColorMap);
+      });
+
+      it('should return sankey seriesToColorMap for flat hand-picked colors', () => {
+        const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+        const originalDataOptions: SankeyChartDataOptions = {
+          category: [Commerce.AgeRange, Commerce.Condition],
+          value: sumRevenue,
+          seriesToColorMap: {
+            '65+': '#ff0000',
+            New: '#0000ff',
+          },
+        };
+        const panels = toSankeyPanels(originalDataOptions);
+
+        const dataOptions = extractDataOptions(
+          'sankey',
+          panels,
+          styleMock,
+        ) as SankeyChartDataOptions;
+
+        expect(dataOptions.seriesToColorMap).toEqual(originalDataOptions.seriesToColorMap);
       });
 
       it('should return correct data options for chart with "measured value" formula', () => {

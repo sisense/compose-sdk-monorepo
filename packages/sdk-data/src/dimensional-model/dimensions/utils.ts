@@ -87,6 +87,35 @@ type DimensionConfig = {
 } & Record<Exclude<string, 'name'>, Attribute>;
 
 type DimensionConfigMap = Record<string, DimensionConfig>;
+
+/**
+ * Keys that `createDimension` reads directly from its config object.
+ * An attribute stored under any of these keys would be mistaken for a reserved
+ * dimension property (e.g. a column named "title" would overwrite the dimension's
+ * title with an attribute object). Such attributes are keyed by their unique
+ * expression instead to avoid the collision.
+ *
+ * @internal
+ */
+const RESERVED_DIMENSION_CONFIG_KEYS = new Set([
+  'id',
+  'name',
+  'title',
+  'desc',
+  'description',
+  'expression',
+  'dim',
+  'dimtype',
+  'type',
+  'sort',
+  'dataSource',
+  'indexed',
+  'merged',
+  'attributes',
+  'dimensions',
+  'defaultAttribute',
+]);
+
 /**
  * Groups an array of attribute entries by their dimension name.
  * Returns an object whose keys are dimension names and values are configuration objects
@@ -102,9 +131,10 @@ const groupAttributesByDimension = (
       description: dimension.description,
     };
 
-    const safeAttributeName = ['id', 'name', 'expression'].includes(attribute.name)
+    const normalizedName = normalizeName(attribute.name);
+    const safeAttributeName = RESERVED_DIMENSION_CONFIG_KEYS.has(normalizedName)
       ? attribute.expression
-      : normalizeName(attribute.name);
+      : normalizedName;
 
     return {
       ...acc,

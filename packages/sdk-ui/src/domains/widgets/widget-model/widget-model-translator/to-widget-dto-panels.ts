@@ -11,6 +11,7 @@ import {
   CategoricalChartDataOptions,
   IndicatorChartDataOptions,
   PivotTableDataOptions,
+  SankeyChartDataOptions,
   ScatterChartDataOptions,
   ScattermapChartDataOptions,
   StyledColumn,
@@ -636,6 +637,52 @@ export function toBoxplotPanels(dataOptions: BoxplotChartDataOptions): Panel[] {
     : [];
   return [
     { name: 'category', items: categoryItems },
+    { name: 'value', items: valueItems },
+  ];
+}
+
+/**
+ * Builds the category panel items for a sankey chart.
+ *
+ * Color maps:
+ * - flat {@link ValueToColorMap} — same members on every stage (runtime resolves node
+ *   colors by display name across stages);
+ * - {@link MultiColumnValueToColorMap} — nested entry keyed by normalized column title
+ *   on the matching stage only.
+ *
+ * @param dataOptions - Sankey chart data options from the WidgetModel
+ * @returns Panel items for the `category` panel, each with per-column members format
+ */
+function toSankeyCategoryItems(dataOptions: SankeyChartDataOptions): PanelItem[] {
+  const { seriesToColorMap } = dataOptions;
+  return dataOptions.category.map((column) => {
+    const item = createPanelItem(normalizeColumn(column));
+    if (!seriesToColorMap) return item;
+    const sankeyKey = typeof item.jaql.title === 'string' ? normalizeName(item.jaql.title) : '';
+    const valueToColorMap = isValueToColorMap(seriesToColorMap)
+      ? seriesToColorMap
+      : sankeyKey
+      ? seriesToColorMap[sankeyKey]
+      : undefined;
+    return { ...item, format: { ...item.format, members: toMembersFormat(valueToColorMap) } };
+  });
+}
+
+/**
+ * Builds DTO panels for a sankey chart widget. The Fusion sankey manifest declares
+ * `category` (2+ attributes) and `value` (single measure) panels — both are always
+ * emitted, matching the inverse read in {@link extractSankeyChartDataOptions}.
+ *
+ * @param dataOptions - Sankey chart data options from the WidgetModel
+ * @returns Fusion panels in fixed order: category, value
+ * @internal
+ */
+export function toSankeyPanels(dataOptions: SankeyChartDataOptions): Panel[] {
+  const valueItems: PanelItem[] = dataOptions.value
+    ? [createPanelItem(normalizeMeasureColumn(dataOptions.value))]
+    : [];
+  return [
+    { name: 'category', items: toSankeyCategoryItems(dataOptions) },
     { name: 'value', items: valueItems },
   ];
 }

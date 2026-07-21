@@ -20,6 +20,7 @@ function translateStyleOptionsToDesignOptions(
     linkOpacity: styleOptions.linkOpacity,
     nodeWidth: styleOptions.nodeWidth,
     nodePadding: styleOptions.nodePadding,
+    minLinkWidth: styleOptions.minLinkWidth,
     nodeAlignment: styleOptions.nodeAlignment,
     legend: styleOptions.legend ?? { enabled: false },
   };
@@ -45,6 +46,7 @@ function getDefaultStyleOptions(): SankeyStyleOptions {
     linkOpacity: 0.5,
     nodeWidth: 20,
     nodePadding: 10,
+    minLinkWidth: 1,
     legend: {
       enabled: false,
     },

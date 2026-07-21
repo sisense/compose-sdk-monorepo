@@ -92,10 +92,9 @@ export interface PivotTableWidgetProps {
   /**
    * Widget identifier
    *
-   * The optional property which is only meaningful for some internal features (for example Excel export).
+   * Used to identify the widget when exporting its data (for example, the "Download as Excel" action).
    *
    * @category Widget
-   * @internal
    */
   id?: string;
 

@@ -22,6 +22,7 @@ import type {
   PieStyleOptions,
   PivotTableWidgetStyleOptions,
   PolarStyleOptions,
+  SankeyStyleOptions,
   ScattermapStyleOptions,
   ScatterStyleOptions,
   StackableStyleOptions,
@@ -37,6 +38,7 @@ import type {
   PieWidgetStyle,
   PivotWidgetStyle,
   PolarWidgetStyle,
+  SankeyWidgetStyle,
   ScattermapWidgetStyle,
   ScatterWidgetStyle,
   SunburstWidgetStyle,
@@ -65,6 +67,7 @@ import {
   toPieWidgetStyle,
   toPivotTableWidgetStyle,
   toPolarWidgetStyle,
+  toSankeyWidgetStyle,
   toScattermapWidgetStyle,
   toScatterMarkerSizeStyle,
   toScatterWidgetStyle,
@@ -1672,6 +1675,51 @@ describe('to-widget-dto-style', () => {
       expect(restored['title/3']).toBe(originalStyle['title/3']);
       expect(restored['tooltip/value']).toBe(originalStyle['tooltip/value']);
       expect(restored['tooltip/contribution']).toBe(originalStyle['tooltip/contribution']);
+    });
+  });
+
+  describe('toSankeyWidgetStyle', () => {
+    it('maps SankeyStyleOptions fields to SankeyWidgetStyle DTO', () => {
+      const styleOptions: SankeyStyleOptions = {
+        orientation: 'vertical',
+        nodeAlignment: 'center',
+        curveFactor: 0.5,
+        linkOpacity: 0.7,
+        nodeWidth: 24,
+        nodePadding: 10,
+        minLinkWidth: 2,
+      };
+
+      expect(toSankeyWidgetStyle(styleOptions)).toEqual({
+        orientation: 'vertical',
+        nodeAlignment: 'center',
+        curveFactor: 0.5,
+        linkOpacity: 0.7,
+        nodeWidth: 24,
+        nodePadding: 10,
+        minLinkWidth: 2,
+      });
+    });
+
+    it('round-trips with extractStyleOptions for sankey', () => {
+      const originalStyle: SankeyWidgetStyle = {
+        orientation: 'vertical',
+        nodeAlignment: 'center',
+        curveFactor: 0.5,
+        linkOpacity: 0.7,
+        nodeWidth: 24,
+        nodePadding: 10,
+        minLinkWidth: 2,
+      };
+      const widgetDto = {
+        type: 'sankey',
+        subtype: 'sankey' as WidgetSubtype,
+        style: originalStyle,
+        metadata: { panels: [] },
+      } as unknown as WidgetDto;
+      const extracted = extractStyleOptions('sankey', widgetDto) as SankeyStyleOptions;
+      const restored = toSankeyWidgetStyle(extracted);
+      expect(restored).toEqual(originalStyle);
     });
   });
 

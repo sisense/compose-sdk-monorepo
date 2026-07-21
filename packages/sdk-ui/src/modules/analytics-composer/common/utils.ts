@@ -81,7 +81,7 @@ export function checkIfMeasuresExist(
     if (props.chartType === 'indicator') {
       return (
         ('value' in props.dataOptions && isNonEmptyArray(props.dataOptions.value as [])) ||
-        ('secondary' in props.dataOptions && isNonEmptyArray(props.dataOptions.secondary!))
+        ('secondary' in props.dataOptions && isNonEmptyArray(props.dataOptions.secondary as []))
       );
     }
     if (props.chartType === 'table') {

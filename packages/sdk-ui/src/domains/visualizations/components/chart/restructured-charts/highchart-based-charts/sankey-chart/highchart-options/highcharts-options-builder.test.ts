@@ -95,20 +95,27 @@ describe('sankeyHighchartsOptionsBuilder', () => {
       expect(s.type).toBe('sankey');
       expect(s.name).toBe('measure_id');
       expect(s.data).toEqual([
-        { from: 'A', to: 'B', weight: 10 },
-        { from: 'B', to: 'C', weight: 4 },
+        { from: 'A', to: 'B', weight: 10, linkOpacity: 0.4 },
+        { from: 'B', to: 'C', weight: 4, linkOpacity: 0.4 },
       ]);
       expect(s.nodes).toEqual([
-        { id: 'A', name: 'Alpha', color: '#00cee6', custom: { rawValue: undefined } },
-        { id: 'B', name: 'B', color: '#00aa00', custom: { rawValue: undefined } },
+        {
+          id: 'A',
+          name: 'Alpha',
+          color: '#00cee6',
+          opacity: 1,
+          custom: { rawValue: undefined },
+        },
+        { id: 'B', name: 'B', color: '#00aa00', opacity: 1, custom: { rawValue: undefined } },
         // C gets palette[2], not palette[1]: B reserves its palette slot even though it has
         // an explicit color, so customising one node never shifts the colors of others.
-        { id: 'C', name: 'C', color: '#6eda55', custom: { rawValue: undefined } },
+        { id: 'C', name: 'C', color: '#6eda55', opacity: 1, custom: { rawValue: undefined } },
       ]);
       expect(s.linkOpacity).toBe(0.4);
       expect(s.curveFactor).toBe(0.25);
       expect(s.nodePadding).toBe(8);
       expect(s.nodeWidth).toBe(18);
+      expect(s.minLinkWidth).toBe(1);
       expect(s.nodeAlignment).toBeUndefined();
     });
 
@@ -136,6 +143,62 @@ describe('sankeyHighchartsOptionsBuilder', () => {
       expect(s.curveFactor).toBe(0.33);
       expect(s.nodePadding).toBe(10);
       expect(s.nodeWidth).toBe(20);
+      expect(s.minLinkWidth).toBe(1);
+    });
+
+    it('dims blurred nodes/links when highlight is active', () => {
+      const chartData: SankeyChartData = {
+        type: 'sankey',
+        links: [
+          { from: 'A', to: 'X', weight: 10 },
+          { from: 'B', to: 'X', weight: 4 },
+        ],
+        nodes: [
+          { id: 'A', name: 'A', blur: false },
+          { id: 'B', name: 'B', blur: true },
+          { id: 'X', name: 'X', blur: false },
+        ],
+      };
+      const series = sankeyHighchartsOptionsBuilder.getSeries(createContext({ chartData }));
+      const s = series[0] as Record<string, unknown>;
+      const data = s.data as { from: string; linkOpacity: number }[];
+      const nodes = s.nodes as { id: string; opacity: number }[];
+      expect(data.find((l) => l.from === 'A')?.linkOpacity).toBe(0.4);
+      expect(data.find((l) => l.from === 'B')?.linkOpacity).toBe(0.1);
+      expect(nodes.find((n) => n.id === 'A')?.opacity).toBe(1);
+      expect(nodes.find((n) => n.id === 'B')?.opacity).toBe(0.1);
+    });
+
+    it('dims link when destination node is blurred (toBlur)', () => {
+      const chartData: SankeyChartData = {
+        type: 'sankey',
+        links: [
+          { from: 'A', to: 'X', weight: 10 },
+          { from: 'A', to: 'Y', weight: 4 },
+        ],
+        nodes: [
+          { id: 'A', name: 'A', blur: false },
+          { id: 'X', name: 'X', blur: false },
+          { id: 'Y', name: 'Y', blur: true },
+        ],
+      };
+      const series = sankeyHighchartsOptionsBuilder.getSeries(createContext({ chartData }));
+      const s = series[0] as Record<string, unknown>;
+      const data = s.data as { to: string; linkOpacity: number }[];
+      const nodes = s.nodes as { id: string; opacity: number }[];
+      expect(data.find((l) => l.to === 'X')?.linkOpacity).toBe(0.4);
+      expect(data.find((l) => l.to === 'Y')?.linkOpacity).toBe(0.1);
+      expect(nodes.find((n) => n.id === 'X')?.opacity).toBe(1);
+      expect(nodes.find((n) => n.id === 'Y')?.opacity).toBe(0.1);
+    });
+
+    it('always emits full opacity when highlight is cleared (chart.update-safe)', () => {
+      const series = sankeyHighchartsOptionsBuilder.getSeries(createContext());
+      const s = series[0] as Record<string, unknown>;
+      const data = s.data as { linkOpacity: number }[];
+      const nodes = s.nodes as { opacity: number }[];
+      data.forEach((l) => expect(l.linkOpacity).toBe(0.4));
+      nodes.forEach((n) => expect(n.opacity).toBe(1));
     });
 
     it('assigns theme palette colors to nodes without explicit colors', () => {

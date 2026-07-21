@@ -39,6 +39,31 @@ export type { SankeyChartProps } from '../props';
 export type { SankeyChartDataOptions } from '../domains/visualizations/core/chart-data-options/types';
 export type { SankeyStyleOptions, SankeyChartType } from '../types';
 
+export { KpiChart } from '../domains/visualizations/components/kpi-chart';
+export type { KpiChartProps, KpiChartEventProps } from '../props';
+export type {
+  KpiChartDataOptions,
+  KpiComparison,
+  KpiValueMode,
+} from '../domains/visualizations/core/chart-data-options/types';
+export type {
+  KpiStyleOptions,
+  KpiValueStyleOptions,
+  KpiTitleStyleOptions,
+  KpiComparisonStyleOptions,
+  KpiSparklineStyleOptions,
+  KpiSparklineType,
+  KpiCardStyleOptions,
+  KpiTextSize,
+  KpiIconCondition,
+  KpiComparisonInfo,
+  KpiRenderOptions,
+  KpiBeforeRenderHandler,
+  KpiDataPoint,
+  KpiDataPointEventHandler,
+  KpiChartType,
+} from '../types';
+
 // FilterWidget types — referenced by the public WidgetProps union, so they must be
 // docs-visible. The FilterWidget component itself remains @alpha (alpha.ts).
 export type {

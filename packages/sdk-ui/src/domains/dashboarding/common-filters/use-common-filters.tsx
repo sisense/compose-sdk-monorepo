@@ -18,6 +18,7 @@ import {
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { BeforeMenuOpenHandler, OpenMenuFn } from '@/infra/contexts/menu-provider/types.js';
 import { getFiltersArray } from '@/shared/utils/filter-relations.js';
+import { isSameAttribute } from '@/shared/utils/filters.js';
 
 import { prepareCommonFiltersConnectionProps } from './common-filters-connector.js';
 import { connectFilterWidgetToProps } from './filter-widget-connector.js';
@@ -64,8 +65,10 @@ export const useCommonFilters = ({
       // wrap the unified `onChange` so `filter/changed` events write back to
       // common filters. Every event is ALSO forwarded to the widget's original
       // onChange (the change-detection / rename / user chain), keeping the
-      // single-channel widget contract intact. Does NOT receive highlights or
-      // parentFilters from the dashboard (member list shows all available values).
+      // single-channel widget contract intact. Does NOT receive highlights.
+      // Dashboard filters join `parentFilters` only when the widget opted in
+      // (ignoreFilters.all === false); the widget's own attribute is excluded —
+      // self-filtering would collapse the dropdown to the current selection.
       if (isFilterWidgetProps(widgetProps)) {
         const { filter, onChange: updateCommonFilter } = connectFilterWidgetToProps({
           filters: regularCommonFilters,
@@ -74,9 +77,22 @@ export const useCommonFilters = ({
           setLink: options.setFilterWidgetOptions ?? (() => {}),
         })(widgetProps);
         const originalOnChange = widgetProps.onChange;
+        const dashboardParentFilters =
+          options.ignoreFilters?.all === false
+            ? regularCommonFilters.filter(
+                (commonFilter) =>
+                  !options.ignoreFilters?.ids?.includes(commonFilter.config.guid) &&
+                  !isSameAttribute(commonFilter.attribute, widgetProps.attribute),
+              )
+            : [];
         return {
           ...widgetProps,
           filter,
+          ...(dashboardParentFilters.length
+            ? {
+                parentFilters: [...(widgetProps.parentFilters ?? []), ...dashboardParentFilters],
+              }
+            : {}),
           onChange: (event: FilterWidgetChangeEvent) => {
             if (event.type === 'filter/changed') {
               updateCommonFilter(event.payload.filter);

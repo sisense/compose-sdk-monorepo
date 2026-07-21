@@ -38,6 +38,14 @@ export interface SisenseChartProps {
   onDataPointContextMenu?: SisenseChartDataPointEventHandler;
   onDataPointsSelected?: SisenseChartDataPointsEventHandler;
   onBeforeRender?: BeforeRenderHandler;
+  /**
+   * Called when Highcharts finishes painting the chart (`chart.events.load` /
+   * `render`). Used by RegularChart as the paint signal for the shared chart
+   * `onReady` readiness contract (see `BaseChartEventProps.onReady` in props).
+   *
+   * @internal
+   */
+  onReady?: () => void;
   size?: {
     width?: number;
     height?: number;

@@ -233,5 +233,130 @@ describe('translate widget drilldown options', () => {
         expressions.includes('[Commerce.Category]') || expressions.includes('[Commerce.Age Range]');
       expect(hasExpectedAttribute).toBe(true);
     });
+
+    it('should extract Fusion drill state from sankey category panel (not categories)', () => {
+      // Sankey OOTB uses panel name `category`. Default `categories` would miss
+      // parent/through.
+      const panels: Panel[] = [
+        {
+          name: 'category',
+          items: [
+            {
+              jaql: jaqlMock.ageRange,
+              parent: {
+                jaql: jaqlMock.category,
+              },
+              through: {
+                jaql: {
+                  ...jaqlMock.category,
+                  filter: { members: ['35-44'] },
+                },
+              },
+            },
+            {
+              jaql: jaqlMock.date,
+            },
+          ],
+        },
+        {
+          name: 'value',
+          items: [
+            {
+              jaql: jaqlMock.costAggregated,
+            },
+          ],
+        },
+      ];
+
+      const drilldownOptions = extractDrilldownOptions('sankey', panels);
+
+      expect(drilldownOptions.drilldownSelections).toHaveLength(1);
+      verifyColumn(drilldownOptions.drilldownSelections![0].nextDimension, panels[0].items[0]);
+      expect(drilldownOptions.drilldownSelections![0].points).toEqual([{ categoryValue: '35-44' }]);
+    });
+
+    it('should pick the drilled sankey stage when a later category item is drilled', () => {
+      const panels: Panel[] = [
+        {
+          name: 'category',
+          items: [
+            {
+              jaql: jaqlMock.date,
+            },
+            {
+              jaql: jaqlMock.ageRange,
+              parent: {
+                jaql: jaqlMock.category,
+              },
+              through: {
+                jaql: {
+                  ...jaqlMock.category,
+                  filter: { members: ['Cell Phones'] },
+                },
+              },
+            },
+          ],
+        },
+        {
+          name: 'value',
+          items: [{ jaql: jaqlMock.costAggregated }],
+        },
+      ];
+
+      const drilldownOptions = extractDrilldownOptions('sankey', panels);
+
+      expect(drilldownOptions.drilldownSelections).toHaveLength(1);
+      verifyColumn(drilldownOptions.drilldownSelections![0].nextDimension, panels[0].items[1]);
+      expect(drilldownOptions.drilldownSelections![0].points).toEqual([
+        { categoryValue: 'Cell Phones' },
+      ]);
+    });
+
+    it('prefers the later drilled sankey stage when multiple stages have drill selection', () => {
+      // Later stage must win — `find()` on the first drilled item would regress here.
+      const panels: Panel[] = [
+        {
+          name: 'category',
+          items: [
+            {
+              jaql: jaqlMock.ageRange,
+              parent: {
+                jaql: jaqlMock.category,
+              },
+              through: {
+                jaql: {
+                  ...jaqlMock.category,
+                  filter: { members: ['35-44'] },
+                },
+              },
+            },
+            {
+              jaql: jaqlMock.date,
+              parent: {
+                jaql: jaqlMock.category,
+              },
+              through: {
+                jaql: {
+                  ...jaqlMock.category,
+                  filter: { members: ['Cell Phones'] },
+                },
+              },
+            },
+          ],
+        },
+        {
+          name: 'value',
+          items: [{ jaql: jaqlMock.costAggregated }],
+        },
+      ];
+
+      const drilldownOptions = extractDrilldownOptions('sankey', panels);
+
+      expect(drilldownOptions.drilldownSelections).toHaveLength(1);
+      verifyColumn(drilldownOptions.drilldownSelections![0].nextDimension, panels[0].items[1]);
+      expect(drilldownOptions.drilldownSelections![0].points).toEqual([
+        { categoryValue: 'Cell Phones' },
+      ]);
+    });
   });
 });

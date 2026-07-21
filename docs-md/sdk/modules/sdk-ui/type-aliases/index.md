@@ -131,6 +131,22 @@ TypeScript type aliases for components and hooks listed above
 - [IndicatorRenderOptions](type-alias.IndicatorRenderOptions.md)
 - [IndicatorStyleOptions](type-alias.IndicatorStyleOptions.md)
 - [JtdTarget](type-alias.JtdTarget.md)
+- [KpiBeforeRenderHandler](type-alias.KpiBeforeRenderHandler.md) <Badge type="beta" text="Beta" />
+- [KpiCardStyleOptions](type-alias.KpiCardStyleOptions.md) <Badge type="beta" text="Beta" />
+- [KpiChartType](type-alias.KpiChartType.md) <Badge type="beta" text="Beta" />
+- [KpiComparison](type-alias.KpiComparison.md) <Badge type="beta" text="Beta" />
+- [KpiComparisonInfo](type-alias.KpiComparisonInfo.md) <Badge type="beta" text="Beta" />
+- [KpiComparisonStyleOptions](type-alias.KpiComparisonStyleOptions.md) <Badge type="beta" text="Beta" />
+- [KpiDataPoint](type-alias.KpiDataPoint.md) <Badge type="beta" text="Beta" />
+- [KpiDataPointEventHandler](type-alias.KpiDataPointEventHandler.md) <Badge type="beta" text="Beta" />
+- [KpiIconCondition](type-alias.KpiIconCondition.md) <Badge type="beta" text="Beta" />
+- [KpiRenderOptions](type-alias.KpiRenderOptions.md) <Badge type="beta" text="Beta" />
+- [KpiSparklineStyleOptions](type-alias.KpiSparklineStyleOptions.md) <Badge type="beta" text="Beta" />
+- [KpiSparklineType](type-alias.KpiSparklineType.md) <Badge type="beta" text="Beta" />
+- [KpiTextSize](type-alias.KpiTextSize.md) <Badge type="beta" text="Beta" />
+- [KpiTitleStyleOptions](type-alias.KpiTitleStyleOptions.md) <Badge type="beta" text="Beta" />
+- [KpiValueMode](type-alias.KpiValueMode.md) <Badge type="beta" text="Beta" />
+- [KpiValueStyleOptions](type-alias.KpiValueStyleOptions.md) <Badge type="beta" text="Beta" />
 - [Labels](type-alias.Labels.md)
 - [Legend](type-alias.Legend.md)
 - [LegendOptions](type-alias.LegendOptions.md)

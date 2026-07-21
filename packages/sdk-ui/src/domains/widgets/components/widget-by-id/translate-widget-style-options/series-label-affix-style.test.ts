@@ -63,14 +63,16 @@ describe('series-label-affix-style', () => {
     expect(extractSeriesLabelTextStyleFromFusion({ fontSize: null })).toBeUndefined();
   });
 
-  it('extractSeriesLabelTextStyleFromFusion treats standalone fontStyle reset as unset', () => {
-    expect(extractSeriesLabelTextStyleFromFusion({ fontStyle: null })).toBeUndefined();
-    expect(extractSeriesLabelTextStyleFromFusion({ fontStyle: 'normal' })).toBeUndefined();
+  it('extractSeriesLabelTextStyleFromFusion emits normal to clear sticky italic', () => {
+    expect(extractSeriesLabelTextStyleFromFusion({ fontStyle: 'normal' })).toEqual({
+      fontStyle: 'normal',
+    });
   });
 
-  it('extractSeriesLabelTextStyleFromFusion preserves fontSize when only fontStyle is reset', () => {
+  it('extractSeriesLabelTextStyleFromFusion preserves fontSize when fontStyle is reset to normal', () => {
     expect(extractSeriesLabelTextStyleFromFusion({ fontSize: 16, fontStyle: 'normal' })).toEqual({
       fontSize: '16px',
+      fontStyle: 'normal',
     });
   });
 

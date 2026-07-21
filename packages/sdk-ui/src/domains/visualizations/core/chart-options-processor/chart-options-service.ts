@@ -289,6 +289,7 @@ export type HighchartsOptionsInternal = {
     renderTo?: string; // DOM element id
     events?: {
       load?: () => void;
+      render?: () => void;
       redraw?: () => void;
       selection?: (nativeEvent: HighchartsSelectEvent) => void;
     };

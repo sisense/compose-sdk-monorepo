@@ -888,6 +888,7 @@ function extractSankeyChartStyleOptions(widgetStyle: SankeyWidgetStyle): SankeyS
     linkOpacity: widgetStyle.linkOpacity,
     nodeWidth: widgetStyle.nodeWidth,
     nodePadding: widgetStyle.nodePadding,
+    minLinkWidth: widgetStyle.minLinkWidth,
   };
 }
 

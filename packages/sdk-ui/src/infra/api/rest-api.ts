@@ -8,6 +8,7 @@ import {
   getDataSourceName,
   getTableNameFromAttribute,
 } from '@sisense/sdk-data';
+import { type DisplayNameConfig, QueryApiDispatcher } from '@sisense/sdk-query-client/dispatcher';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
 import isUndefined from 'lodash-es/isUndefined';
@@ -53,10 +54,13 @@ export class RestApi {
 
   private defaultDataSource?: DataSource;
 
+  private readonly queryApi: QueryApiDispatcher;
+
   constructor(httpClient: HttpClient | undefined, defaultDataSource?: DataSource) {
     if (!httpClient) throw new TranslatableError('errors.httpClientNotFound');
     this.httpClient = httpClient;
     this.defaultDataSource = defaultDataSource;
+    this.queryApi = new QueryApiDispatcher(httpClient);
   }
 
   /**
@@ -333,25 +337,33 @@ export class RestApi {
   };
 
   /**
-   * Get legacy Fusion datasource fields
+   * Gets legacy Fusion datasource fields.
+   *
+   * Delegates to {@link QueryApiDispatcher}. Pass `displayNameConfig` from
+   * app settings (`AppSettings.displayNameConfig`) at the call site when available.
    *
    * @param dataSource - A datasource name
-   * @param options - An object with offset and count
+   * @param options - Paging, search term, and optional live / displayNameConfig
    * @returns A list of datasource fields
    */
   public getDataSourceFields = (
     dataSource: string,
-    options?: { offset?: number; count?: number; searchValue?: string },
+    options?: {
+      offset?: number;
+      count?: number;
+      searchValue?: string;
+      live?: boolean;
+      displayNameConfig?: DisplayNameConfig;
+    },
   ): Promise<DataSourceField[] | undefined> => {
-    const { offset = 0, count = 9999 } = options || {};
-    return this.httpClient.post<DataSourceField[]>(
-      `api/datasources/${encodeURIComponent(dataSource)}/fields/search`,
-      {
-        offset: offset,
-        count: count,
-        term: options?.searchValue,
-      },
-    );
+    const { offset = 0, count = 9999, searchValue, live, displayNameConfig } = options || {};
+    return this.queryApi.getDataSourceFields(dataSource, {
+      offset,
+      count,
+      term: searchValue,
+      live,
+      displayNameConfig,
+    });
   };
 
   /**

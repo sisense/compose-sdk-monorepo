@@ -30,7 +30,7 @@ export const useGetDataSourceFields = (params: {
   const { dataSource, enabled = true, count, offset, searchValue, cacheTime } = params;
   const { app, isInitialized } = useSisenseContext();
   const canLoad = isInitialized && !!app;
-  const api = canLoad ? new RestApi(app?.httpClient) : undefined;
+  const api = canLoad ? new RestApi(app?.httpClient, app?.defaultDataSource) : undefined;
 
   const dataSourceToQuery = dataSource || app?.defaultDataSource;
   const shouldBeQueried = !!(enabled && dataSourceToQuery && api);
@@ -40,15 +40,36 @@ export const useGetDataSourceFields = (params: {
       ? dataSourceToQuery.title
       : dataSourceToQuery
     : undefined;
+
+  const displayNameConfig = app?.settings?.displayNameConfig;
+  const live =
+    dataSourceToQuery && isDataSourceInfo(dataSourceToQuery)
+      ? dataSourceToQuery.type === 'live'
+      : undefined;
+
   const {
     data,
     status,
     error: unknownError,
   } = useQuery({
-    queryKey: ['getDataSourceFields', dataSource, count, offset, api, searchValue],
+    queryKey: [
+      'getDataSourceFields',
+      dataSource,
+      count,
+      offset,
+      searchValue,
+      displayNameConfig,
+      live,
+    ],
     queryFn: () =>
       dataSourceString && api
-        ? api.getDataSourceFields(dataSourceString, { count, offset, searchValue })
+        ? api.getDataSourceFields(dataSourceString, {
+            count,
+            offset,
+            searchValue,
+            displayNameConfig,
+            live,
+          })
         : undefined,
     enabled: shouldBeQueried,
     ...(isNumber(cacheTime) && { cacheTime }),

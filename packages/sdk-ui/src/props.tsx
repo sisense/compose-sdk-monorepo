@@ -24,6 +24,7 @@ import {
   BoxplotChartDataOptions,
   CalendarHeatmapChartDataOptions,
   IndicatorChartDataOptions,
+  KpiChartDataOptions,
   PivotTableDataOptions,
   RangeChartDataOptions,
   RegularChartDataOptions,
@@ -62,6 +63,9 @@ import {
   IndicatorDataPoint,
   IndicatorRenderOptions,
   IndicatorStyleOptions,
+  KpiBeforeRenderHandler,
+  KpiDataPointEventHandler,
+  KpiStyleOptions,
   LineStyleOptions,
   MenuAlignment,
   MenuItemSection,
@@ -574,6 +578,20 @@ interface BaseChartEventProps {
    * @category Callbacks
    */
   onDataReady?: (data: Data) => Data;
+  /**
+   * Calls the provided callback each time a supported chart finishes painting
+   * with fetched data — on initial load and again whenever it re-enters a ready
+   * state after a reload (e.g. filter change, refetch). Use this to signal
+   * to a host application that the chart content is committed to the DOM.
+   *
+   * Currently wired for **Sankey** only (Fusion `domready` / PDF export).
+   * Empty / no-results Sankey states also fire once the terminal overlay is shown.
+   * Other chart types ignore this prop (Fusion widgets use native `domready`).
+   *
+   * @category Callbacks
+   * @internal
+   */
+  onReady?: () => void;
 }
 
 /**
@@ -851,7 +869,8 @@ export interface ChartEventProps extends BaseChartEventProps {
     | BoxplotDataPointEventHandler
     | ScattermapDataPointEventHandler
     | IndicatorDataPointEventHandler
-    | CalendarHeatmapDataPointEventHandler;
+    | CalendarHeatmapDataPointEventHandler
+    | KpiDataPointEventHandler;
 
   /**
    * Context menu handler callback for a data point
@@ -862,7 +881,8 @@ export interface ChartEventProps extends BaseChartEventProps {
     | DataPointEventHandler
     | ScatterDataPointEventHandler
     | BoxplotDataPointEventHandler
-    | CalendarHeatmapDataPointEventHandler;
+    | CalendarHeatmapDataPointEventHandler
+    | KpiDataPointEventHandler;
 
   /**
    * Handler callback for selection of multiple data points
@@ -883,7 +903,8 @@ export interface ChartEventProps extends BaseChartEventProps {
    */
   onBeforeRender?:
     | HighchartsBasedChartEventProps['onBeforeRender']
-    | IndicatorChartEventProps['onBeforeRender'];
+    | IndicatorChartEventProps['onBeforeRender']
+    | KpiChartEventProps['onBeforeRender'];
 }
 
 /**
@@ -1782,4 +1803,64 @@ export interface CalendarHeatmapChartProps extends BaseChartProps, CalendarHeatm
    * @category Chart
    */
   styleOptions?: CalendarHeatmapStyleOptions;
+}
+
+/**
+ * Event props for the {@link KpiChart} component.
+ *
+ * @beta
+ */
+export interface KpiChartEventProps extends BaseChartEventProps {
+  /**
+   * Click handler callback for the KPI card.
+   *
+   * @category Callbacks
+   */
+  onDataPointClick?: KpiDataPointEventHandler;
+  /**
+   * Context menu handler callback for the KPI card.
+   *
+   * @category Callbacks
+   */
+  onDataPointContextMenu?: KpiDataPointEventHandler;
+  /**
+   * A callback that allows you to customize the computed KPI render options
+   * before the card is rendered. The returned options are used for painting.
+   *
+   * @category Callbacks
+   */
+  onBeforeRender?: KpiBeforeRenderHandler;
+}
+
+/**
+ * Props of the {@link KpiChart} component.
+ *
+ * @beta
+ *
+ * @example
+ * ```tsx
+ * <KpiChart
+ *   dataSet={DM.DataSource}
+ *   dataOptions={{
+ *     value: measureFactory.sum(DM.Commerce.Revenue),
+ *     trend: DM.Commerce.Date.Months,
+ *     comparison: { type: 'previous-period' },
+ *   }}
+ *   styleOptions={{ title: { text: 'Total Revenue' } }}
+ * />
+ * ```
+ */
+export interface KpiChartProps extends BaseChartProps, KpiChartEventProps {
+  /**
+   * Configurations for how to interpret and present the data passed to the chart
+   *
+   * @category Chart
+   */
+  dataOptions: KpiChartDataOptions;
+  /**
+   * Configurations for how to style and present a chart's data.
+   *
+   * @category Chart
+   */
+  styleOptions?: KpiStyleOptions;
 }

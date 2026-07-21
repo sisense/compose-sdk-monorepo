@@ -30,6 +30,7 @@ import type {
   PivotTableWidgetStyleOptions,
   PolarStyleOptions,
   RadiusSizes,
+  SankeyStyleOptions,
   ScattermapStyleOptions,
   ScatterStyleOptions,
   SeriesLabels,
@@ -51,6 +52,7 @@ import type {
   FunnelWidgetStyle,
   PivotWidgetStyle,
   PolarWidgetStyle,
+  SankeyWidgetStyle,
   ScattermapWidgetStyle,
   ScatterWidgetStyle,
   SunburstWidgetStyle,
@@ -613,6 +615,26 @@ export function toFunnelWidgetStyle(styleOptions: FunnelStyleOptions): FunnelWid
       styleOptions.seriesLabels,
     ),
   } as FunnelWidgetStyle;
+}
+
+/**
+ * Converts sankey chart style options to Fusion SankeyWidgetStyle DTO.
+ * Inverse of {@link extractSankeyChartStyleOptions}.
+ *
+ * @param styleOptions - Sankey style options from WidgetModel.styleOptions
+ * @returns Fusion SankeyWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toSankeyWidgetStyle(styleOptions: SankeyStyleOptions): SankeyWidgetStyle {
+  return {
+    orientation: styleOptions.orientation,
+    nodeAlignment: styleOptions.nodeAlignment,
+    curveFactor: styleOptions.curveFactor,
+    linkOpacity: styleOptions.linkOpacity,
+    nodeWidth: styleOptions.nodeWidth,
+    nodePadding: styleOptions.nodePadding,
+    minLinkWidth: styleOptions.minLinkWidth,
+  };
 }
 
 /**

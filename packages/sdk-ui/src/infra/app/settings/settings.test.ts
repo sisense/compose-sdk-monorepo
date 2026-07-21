@@ -4,7 +4,7 @@ import * as mockGlobals from '@/__mocks__/data/mock-globals.json';
 import * as mockSystemSettings from '@/__mocks__/data/mock-system-settings.json';
 import { SYSTEM_TENANT_NAME } from '@/shared/const';
 
-import { getSettings } from './settings';
+import { getAppSettings } from './settings';
 
 const mockGet = vi.fn().mockImplementation((url) => {
   switch (url) {
@@ -49,7 +49,12 @@ describe('getSettings function', () => {
       },
     };
     const useDefaultPalette = false;
-    const settings = await getSettings(customConfig, mockHttpClient, useDefaultPalette);
+    const settings = await getAppSettings(
+      customConfig,
+      mockHttpClient,
+      useDefaultPalette,
+      mockSystemSettings,
+    );
 
     expect(settings.dateConfig.isFiscalOn).toBe(true);
     expect(settings.loadingIndicatorConfig.enabled).toBe(false);
@@ -65,6 +70,7 @@ describe('getSettings function', () => {
 
     expect(mockHttpClient.get).toHaveBeenCalledWith('api/globals');
     expect(mockHttpClient.get).toHaveBeenCalledWith('api/palettes/Vivid');
+    expect(mockHttpClient.get).not.toHaveBeenCalledWith('api/v1/settings/system');
 
     expect(settings.ai.featureFlags.naturalResponseEnabled).toBe(false);
     expect(settings.ai.featureFlags.queryDefinition).toBe(false);
@@ -76,6 +82,7 @@ describe('getSettings function', () => {
     expect(settings.fusionBrand.documentationUrl).toBeNull();
     expect(settings.fusionDesignSettings).toBeDefined();
     expect(settings.fusionDesignSettings.general.brandColor).toBe('#ffcb05');
+    expect(settings.displayNameConfig).toEqual(mockSystemSettings.displayNameConfig);
   });
 
   it('returns merged application settings with default palette', async () => {
@@ -92,7 +99,7 @@ describe('getSettings function', () => {
       },
     };
     const useDefaultPalette = true;
-    const settings = await getSettings(customConfig, mockHttpClient, useDefaultPalette);
+    const settings = await getAppSettings(customConfig, mockHttpClient, useDefaultPalette);
 
     expect(settings.dateConfig.isFiscalOn).toBe(true);
     expect(settings.loadingIndicatorConfig.enabled).toBe(false);
@@ -110,7 +117,7 @@ describe('getSettings function', () => {
   });
 
   it('sets tenant name to defult if there is not tenant in globals', async () => {
-    const settings = await getSettings(
+    const settings = await getAppSettings(
       {},
       { get: vi.fn().mockResolvedValue({ ...mockGlobals, user: {} }), url: 'http://test.com/' },
     );
@@ -123,7 +130,7 @@ describe('getSettings function', () => {
       features: mockGlobals.features.filter((f) => f.key !== 'aiAssistant'),
     };
 
-    const settings = await getSettings(
+    const settings = await getAppSettings(
       {},
       {
         get: vi.fn().mockImplementation((url: string) => {
@@ -153,7 +160,7 @@ describe('getSettings function', () => {
   });
 
   it('allows consumers to read arbitrary loosely-typed feature flags from ai.featureFlags', async () => {
-    const settings = await getSettings({}, mockHttpClient, false);
+    const settings = await getAppSettings({}, mockHttpClient, false);
 
     // Index-signature access for forward-compat flags not yet known to CSDK.
     // Unknown keys must be readable (typed `boolean | undefined`) without a CSDK type bump.

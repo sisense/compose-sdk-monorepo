@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { SankeyChartDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
 
+import { isSankeyReadyForOnReady } from './helpers/on-ready-state.js';
 import { sankeyChartBuilder } from './sankey-chart-builder.js';
 
 const revenue = measureFactory.sum(DM.Commerce.Revenue);
@@ -86,6 +87,12 @@ describe('sankeyChartBuilder', () => {
 
     it('ChartRendererComponent is a React component function', () => {
       expect(typeof sankeyChartBuilder.renderer.ChartRendererComponent).toBe('function');
+    });
+  });
+
+  describe('onReady wiring', () => {
+    it('exposes the Sankey readiness predicate for the onReady contract', () => {
+      expect(sankeyChartBuilder.onReady?.isReadyForOnReady).toBe(isSankeyReadyForOnReady);
     });
   });
 });

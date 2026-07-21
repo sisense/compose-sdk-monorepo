@@ -59,6 +59,7 @@ type SankeyDataPoint = SeriesPointStructure & {
   from: string;
   to: string;
   weight: number;
+  linkOpacity?: number;
 };
 
 /** Narrowed tooltip context for Sankey — adds node/link specific fields to the base point. */
@@ -105,22 +106,22 @@ export const sankeyHighchartsOptionsBuilder: HighchartsOptionsBuilder<'sankey'> 
             from: l.from,
             to: l.to,
             weight: l.weight,
-            ...(isHighlightActive
-              ? { linkOpacity: isLinkBlurred ? blurOpacity : baseOpacity }
-              : {}),
+            linkOpacity: isHighlightActive && isLinkBlurred ? blurOpacity : baseOpacity,
           };
         }),
         nodes: nodes.map((n) => ({
           id: n.id,
           name: n.name ?? n.id,
           color: resolveSankeyNodeColor(n, paletteIndexByDisplayName, dataOptions, paletteColors),
-          ...(n.blur !== undefined ? { opacity: n.blur ? blurOpacity : 1 } : {}),
+          // Same as links: always set opacity so updates clear prior blur state.
+          opacity: n.blur === true ? blurOpacity : 1,
           custom: { rawValue: n.rawValue },
         })),
         linkOpacity: baseOpacity,
         curveFactor: designOptions.curveFactor ?? 0.33,
         nodePadding: designOptions.nodePadding ?? 10,
         nodeWidth: designOptions.nodeWidth ?? 20,
+        minLinkWidth: designOptions.minLinkWidth ?? 1,
         // Sankey data points are always objects ({from, to, weight}), never plain numbers.
         // Setting turboThreshold to 0 disables turbo mode so error #15 is never thrown.
         turboThreshold: 0,

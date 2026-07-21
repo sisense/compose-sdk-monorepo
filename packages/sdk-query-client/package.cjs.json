@@ -2,11 +2,21 @@
   "main": "./index.js",
   "module": "./index.js",
   "types": "./index.d.ts",
+  "typesVersions": {
+    "*": {
+      "dispatcher": ["./dispatcher.d.ts"]
+    }
+  },
   "exports": {
     ".": {
       "types": "./index.d.ts",
       "require": "./index.js",
       "default": "./index.js"
+    },
+    "./dispatcher": {
+      "types": "./dispatcher.d.ts",
+      "require": "./dispatcher.js",
+      "default": "./dispatcher.js"
     }
   }
 }

@@ -6,15 +6,16 @@ import { Chart } from './chart';
 import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
 
 /**
- * Sankey doesn't support highlight rendering, so any incoming highlight filters are folded into
- * regular slice filters here. FilterRelations can't be extended with extra items so highlights
- * are silently ignored in that case.
+ * Public {@link SankeyChart} folds `highlights` into `filters` (SNS-130999) because embed
+ * consumers pass highlight selections as slice filters. FilterRelations can't be extended with
+ * extra items, so highlights are ignored in that case. Fusion and CSDK Mode dashboards render
+ * `<Chart chartType="sankey">` directly, where the highlight/blur pipeline is fully supported.
  */
-function normalizeHighlightsToFilters(props: SankeyChartProps): SankeyChartProps {
-  const { filters, highlights } = props;
-  if (!highlights?.length) return props;
+function normalizeHighlightsToFilters(props: Readonly<SankeyChartProps>): SankeyChartProps {
+  const { filters, highlights, ...rest } = props;
+  if (!highlights?.length) return { ...props };
   const mergedFilters = isFilterRelations(filters) ? filters : [...(filters ?? []), ...highlights];
-  return { ...props, filters: mergedFilters, highlights: undefined };
+  return { ...rest, filters: mergedFilters };
 }
 
 /**

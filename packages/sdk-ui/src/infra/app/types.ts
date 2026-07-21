@@ -1,13 +1,14 @@
 import { DataSource } from '@sisense/sdk-data';
 import { PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { QueryClient } from '@sisense/sdk-query-client';
+import type { DisplayNameConfig } from '@sisense/sdk-query-client/dispatcher';
 import { HttpClient } from '@sisense/sdk-rest-client';
 import { TrackingEventDetails } from '@sisense/sdk-tracking';
 import type { Locale } from 'date-fns';
 
 import { DateConfig, LoadingIndicatorConfig, TranslationConfig } from '@/types';
 
-import { AppSettings } from './settings/settings';
+import type { AppSettings } from './settings/settings';
 
 /**
  * Application configuration
@@ -281,8 +282,20 @@ export interface ClientApplication {
   };
 }
 
+/**
+ * Normalized system settings used by CSDK (from `GET api/v1/settings/system`).
+ * Wire JSON uses `displayName`; normalize at fetch maps it to `displayNameConfig`.
+ */
 export type SystemSettings = {
   tracking?: {
     apiTelemetry?: boolean;
   };
+  /**
+   * Column display-name feature from the configuration service.
+   * When `enabled` and `useNewSearchByDisplayNameApi` are both true, field search
+   * uses `fields/searchByDisplayName?isLive=` instead of `fields/search`.
+   *
+   * @internal
+   */
+  displayNameConfig?: DisplayNameConfig;
 };

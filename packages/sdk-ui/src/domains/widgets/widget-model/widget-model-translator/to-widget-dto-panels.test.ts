@@ -1,9 +1,10 @@
 import { measureFactory } from '@sisense/sdk-data';
 
 import { Commerce } from '@/__test-helpers__/sample-ecommerce';
+import { SankeyChartDataOptions } from '@/domains/visualizations/core/chart-data-options/types.js';
 import type { GenericDataOptions } from '@/types';
 
-import { toCustomWidgetPanels } from './to-widget-dto-panels';
+import { toCustomWidgetPanels, toSankeyPanels } from './to-widget-dto-panels';
 
 describe('toCustomWidgetPanels', () => {
   it('returns an empty array when dataOptions is undefined', () => {
@@ -84,5 +85,69 @@ describe('toCustomWidgetPanels', () => {
     const panels = toCustomWidgetPanels(dataOptions);
 
     expect(panels).toEqual([{ name: 'category', items: [] }]);
+  });
+});
+
+describe('toSankeyPanels', () => {
+  it('emits category and value panels matching the sankey manifest', () => {
+    const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+    const dataOptions: SankeyChartDataOptions = {
+      category: [Commerce.AgeRange, Commerce.Condition],
+      value: sumRevenue,
+    };
+
+    const panels = toSankeyPanels(dataOptions);
+
+    expect(panels.map((panel) => panel.name)).toEqual(['category', 'value']);
+    expect(panels[0].items).toHaveLength(2);
+    expect(panels[1].items).toHaveLength(1);
+    expect((panels[1].items[0].jaql as { agg?: string }).agg).toBe('sum');
+  });
+
+  it('writes MultiColumnValueToColorMap onto matching category item format.members', () => {
+    const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+    const dataOptions: SankeyChartDataOptions = {
+      category: [Commerce.AgeRange, Commerce.Condition],
+      value: sumRevenue,
+      // Keys must match normalizeName(jaql.title) — "Age Range" → "AgeRange".
+      seriesToColorMap: {
+        AgeRange: { '65+': '#ff0000', '0-18': '#00ff00' },
+        Condition: { New: '#0000ff' },
+      },
+    };
+
+    const panels = toSankeyPanels(dataOptions);
+    const [ageItem, conditionItem] = panels[0].items;
+
+    expect(ageItem.format?.members).toEqual({
+      '65+': { color: '#ff0000', colored: true, isHandPickedColor: true },
+      '0-18': { color: '#00ff00', colored: true, isHandPickedColor: true },
+    });
+    expect(conditionItem.format?.members).toEqual({
+      New: { color: '#0000ff', colored: true, isHandPickedColor: true },
+    });
+  });
+
+  it('writes flat ValueToColorMap onto every category stage format.members', () => {
+    // Flat maps resolve by display name at runtime across stages — persist the
+    // same members on each Fusion category item so colors are not dropped on save.
+    const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+    const dataOptions: SankeyChartDataOptions = {
+      category: [Commerce.AgeRange, Commerce.Condition],
+      value: sumRevenue,
+      seriesToColorMap: {
+        '65+': '#ff0000',
+        New: '#0000ff',
+      },
+    };
+
+    const panels = toSankeyPanels(dataOptions);
+    const expectedMembers = {
+      '65+': { color: '#ff0000', colored: true, isHandPickedColor: true },
+      New: { color: '#0000ff', colored: true, isHandPickedColor: true },
+    };
+
+    expect(panels[0].items[0].format?.members).toEqual(expectedMembers);
+    expect(panels[0].items[1].format?.members).toEqual(expectedMembers);
   });
 });

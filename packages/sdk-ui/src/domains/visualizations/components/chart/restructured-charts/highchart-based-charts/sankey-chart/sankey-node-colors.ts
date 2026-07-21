@@ -1,3 +1,5 @@
+import { normalizeName } from '@sisense/sdk-data';
+
 import { StyledColumn } from '@/domains/visualizations/core/chart-data-options/types.js';
 import { getDataOptionTitle } from '@/domains/visualizations/core/chart-data-options/utils.js';
 import { MultiColumnValueToColorMap, ValueToColorMap } from '@/types';
@@ -32,10 +34,13 @@ function getSankeyColumnColorMapKeys(category: StyledColumn): readonly string[] 
   const title = getDataOptionTitle(category);
   if (title) {
     keys.add(title);
+    keys.add(normalizeName(title));
   }
   keys.add(category.column.name);
+  keys.add(normalizeName(category.column.name));
   if ('title' in category.column && typeof category.column.title === 'string') {
     keys.add(category.column.title);
+    keys.add(normalizeName(category.column.title));
   }
   return [...keys];
 }

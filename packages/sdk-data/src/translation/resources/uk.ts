@@ -25,12 +25,9 @@ export const translation: TranslationDictionary = {
       unsupportedType: 'Непідтримуваний тип фільтра: {{filterType}}',
       unsupportedDatetimeLevel:
         'Фільтри не підтримують наступні рівні "datetime": Hours, MinutesRoundTo30, MinutesRoundTo15, Minutes, Seconds',
-      unsupportedCalculatedAttribute: 'Фільтри не підтримуються для обчислюваних атрибутів',
       membersFilterNullMember: 'MembersFilter у {{attributeId}} - member не може бути нульовим',
       unsupportedConditionFilter:
         'Jaql для {{attributeName}} містить непідтримуваний condition фільтр: {{filter}}',
-      formulaFiltersNotSupported:
-        'Фільтри, що містять формули для {{attributeName}} наразі не підтримуються: {{filter}}',
       unexpectedFilterRelationsModelNode: 'Неочікуваний вузол моделі зв’язків фільтрів: {{node}}',
     },
     unsupportedDimensionalElement: 'Непідтримуваний тип елемента',

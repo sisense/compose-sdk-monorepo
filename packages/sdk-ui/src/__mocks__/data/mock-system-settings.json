@@ -1,5 +1,9 @@
 {
   "tracking": {
     "apiTelemetry": false
+  },
+  "displayNameConfig": {
+    "enabled": true,
+    "useNewSearchByDisplayNameApi": false
   }
 }

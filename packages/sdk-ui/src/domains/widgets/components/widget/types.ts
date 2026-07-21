@@ -48,15 +48,29 @@ export type WidgetConfig = {
       enabled?: boolean;
     };
     /**
-     * Configuration for downloading an Excel file.
+     * Configuration for the "Download as Excel" action, which adds an item to the
+     * widget's header menu that exports the widget's underlying data as an Excel (XLSX) file.
      *
-     * @sisenseInternal
+     * @example
+     * Enable Excel download for a widget:
+     * ```ts
+     * const widgetConfig: WidgetConfig = {
+     *   actions: {
+     *     downloadExcel: {
+     *       enabled: true,
+     *     },
+     *   },
+     * };
+     * ```
      */
     downloadExcel?: {
       /**
-       * Determines whether the possibility to download Excel is enabled.
+       * Whether the "Download as Excel" action is enabled for the widget.
        *
-       * If not specified, the default value is `false`.
+       * Note: the widget's `id` is required for Excel export to work, as it is
+       * used to build the export request. Without it, the export fails.
+       *
+       * @default false
        */
       enabled?: boolean;
     };

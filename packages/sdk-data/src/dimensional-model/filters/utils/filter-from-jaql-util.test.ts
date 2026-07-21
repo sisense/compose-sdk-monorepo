@@ -3,10 +3,17 @@
 /* eslint-disable vitest/expect-expect */
 import { describe } from 'vitest';
 
+import { createCalculatedAttribute } from '../../attributes/attributes.js';
 import { Filter, LevelAttribute } from '../../interfaces.js';
 import { Sort } from '../../types.js';
 import * as filterFactory from '../factory.js';
-import { DateRangeFilter, ExcludeFilter } from '../filters.js';
+import {
+  DateRangeFilter,
+  ExcludeFilter,
+  MembersFilter,
+  NumericFilter,
+  TextFilter,
+} from '../filters.js';
 import {
   createAttributeFromFilterJaql,
   createMeasureFromFilterJaql,
@@ -890,6 +897,73 @@ describe('filter-from-jaql-util', () => {
           expect(filter.jaql()).toEqual(expectedFilter.jaql());
           expect(filter.jaql(true)).toEqual(expectedFilter.jaql(true));
         });
+      });
+    });
+
+    describe('calculated dimension (CD)', () => {
+      const membersCdJaql = {
+        type: 'calculated_dimension',
+        formula: 'right([6F1B0-58F], 1)',
+        context: {
+          '[6F1B0-58F]': { dim: '[Commerce.Age Range]', datatype: 'text', title: 'Age Range' },
+        },
+        title: 'right([Age Range], 1)',
+        datatype: 'text',
+        filter: { explicit: true, multiSelection: true, members: ['4'] },
+      } as unknown as FilterJaqlInternal;
+
+      it('deserializes a members CD filter into a first-class MembersFilter', () => {
+        const filter = createFilterFromJaqlInternal(membersCdJaql, guid);
+        const expectedFilter = filterFactory.members(
+          createCalculatedAttribute(membersCdJaql),
+          ['4'],
+          { guid },
+        );
+        expect(filter).toBeInstanceOf(MembersFilter);
+        expectEqualFilters(filter, expectedFilter);
+      });
+
+      it('preserves the top-level datatype and formula/context on the emitted JAQL', () => {
+        const { jaql } = createFilterFromJaqlInternal(membersCdJaql, guid).jaql();
+        expect(jaql.type).toBe('calculated_dimension');
+        expect(jaql.datatype).toBe('text');
+        expect(jaql.formula).toBe('right([6F1B0-58F], 1)');
+        expect(jaql.context['[6F1B0-58F]'].datatype).toBe('text');
+        expect(jaql.filter).toEqual({ members: ['4'] });
+      });
+
+      it('deserializes a "contains" condition CD filter into a first-class TextFilter', () => {
+        const containsCdJaql = {
+          ...membersCdJaql,
+          filter: { contains: '4' },
+        } as unknown as FilterJaqlInternal;
+
+        const filter = createFilterFromJaqlInternal(containsCdJaql, guid);
+        const { jaql } = filter.jaql();
+        expect(filter).toBeInstanceOf(TextFilter);
+        expect(jaql.type).toBe('calculated_dimension');
+        expect(jaql.datatype).toBe('text');
+        expect(jaql.filter).toMatchObject({ contains: '4' });
+      });
+
+      it('deserializes a numeric "greaterThan" condition CD filter into a first-class NumericFilter', () => {
+        const numericCdJaql = {
+          type: 'calculated_dimension',
+          formula: '[042C4-365] * 2',
+          context: {
+            '[042C4-365]': { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'Revenue' },
+          },
+          title: '[Revenue] * 2',
+          datatype: 'numeric',
+          filter: { fromNotEqual: 500 },
+        } as unknown as FilterJaqlInternal;
+
+        const filter = createFilterFromJaqlInternal(numericCdJaql, guid);
+        const { jaql } = filter.jaql();
+        expect(filter).toBeInstanceOf(NumericFilter);
+        expect(jaql.type).toBe('calculated_dimension');
+        expect(jaql.datatype).toBe('numeric');
+        expect(jaql.filter).toMatchObject({ fromNotEqual: 500 });
       });
     });
   });

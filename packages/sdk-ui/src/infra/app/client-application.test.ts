@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { TranslatableError } from '../translation/translatable-error';
 import { createClientApplication } from './client-application';
-import { getSettings } from './settings/settings';
+import { getAppSettings } from './settings/settings';
 
 vi.mock('@sisense/sdk-rest-client', () => {
   return {
@@ -24,7 +24,7 @@ vi.mock('@sisense/sdk-pivot-query-client', () => ({
 }));
 
 vi.mock('./settings/settings', () => ({
-  getSettings: vi.fn(),
+  getAppSettings: vi.fn(),
 }));
 
 vi.mock('@/domains/query-execution/core/execute-query', () => ({
@@ -84,7 +84,7 @@ describe('createClientApplication', () => {
       login: vi.fn().mockResolvedValue(true),
       get: vi.fn().mockResolvedValue({ tracking: { apiTelemetry: false } }),
     });
-    (getSettings as Mock).mockResolvedValue({ user: { tenant: { name: 'system' } } });
+    (getAppSettings as Mock).mockResolvedValue({ user: { tenant: { name: 'system' } } });
 
     await createClientApplication({
       ...defaultParams,
@@ -107,7 +107,7 @@ describe('createClientApplication', () => {
       login: vi.fn().mockResolvedValue(true),
       get: getMock,
     });
-    (getSettings as Mock).mockResolvedValue({ user: { tenant: { name: 'system' } } });
+    (getAppSettings as Mock).mockResolvedValue({ user: { tenant: { name: 'system' } } });
     (getAuthenticator as Mock).mockReturnValue(authMock);
 
     const clientApp = await createClientApplication(defaultParams);
@@ -118,6 +118,12 @@ describe('createClientApplication', () => {
       expect.stringContaining('sdk-ui'),
     );
     expect(getMock).toHaveBeenCalledWith('api/v1/settings/system');
+    expect(getAppSettings).toHaveBeenCalledWith(
+      defaultParams.appConfig,
+      expect.anything(),
+      undefined,
+      { tracking: { apiTelemetry: false } },
+    );
     expect(PivotQueryClient).toHaveBeenCalledWith(
       expect.stringContaining(defaultParams.url),
       authMock,
@@ -128,6 +134,33 @@ describe('createClientApplication', () => {
     expect(clientApp).toHaveProperty('queryClient');
   });
 
+  it('should pass normalized displayNameConfig into getAppSettings for AppSettings merge', async () => {
+    const displayNameConfig = { enabled: true, useNewSearchByDisplayNameApi: true };
+    // Wire JSON still uses `displayName`; bootstrap normalizes to displayNameConfig.
+    (HttpClient as Mock).mockReturnValue({
+      login: vi.fn().mockResolvedValue(true),
+      get: vi.fn().mockResolvedValue({
+        tracking: { apiTelemetry: false },
+        displayName: displayNameConfig,
+      }),
+    });
+    (getAppSettings as Mock).mockResolvedValue({
+      user: { tenant: { name: 'system' } },
+      displayNameConfig,
+    });
+    (getAuthenticator as Mock).mockReturnValue({});
+
+    const clientApp = await createClientApplication(defaultParams);
+
+    expect(getAppSettings).toHaveBeenCalledWith(
+      defaultParams.appConfig,
+      expect.anything(),
+      undefined,
+      { tracking: { apiTelemetry: false }, displayNameConfig },
+    );
+    expect(clientApp.settings.displayNameConfig).toEqual(displayNameConfig);
+  });
+
   it('should create PivotClient with URL without tenant sub path', async () => {
     const tenantName = 'tenant1';
     const authMock = {};
@@ -135,7 +168,7 @@ describe('createClientApplication', () => {
       login: vi.fn().mockResolvedValue(true),
       get: vi.fn().mockResolvedValue({ tracking: { apiTelemetry: false } }),
     });
-    (getSettings as Mock).mockResolvedValue({ user: { tenant: { name: tenantName } } });
+    (getAppSettings as Mock).mockResolvedValue({ user: { tenant: { name: tenantName } } });
     (getAuthenticator as Mock).mockReturnValue(authMock);
 
     await createClientApplication({ ...defaultParams, url: `${defaultParams.url}${tenantName}/` });

@@ -229,12 +229,6 @@ abstract class AbstractFilter extends DimensionalElement implements Filter {
   }
 
   static checkAttributeSupport(attribute: Attribute) {
-    // Calculated attributes cannot be used as a filter's source
-    // attribute — Fusion does not support filtering on a formula-based dimension.
-    if (MetadataTypes.isCalculatedAttribute(attribute)) {
-      throw new TranslatableError('errors.filter.unsupportedCalculatedAttribute');
-    }
-
     const { granularity } = attribute as LevelAttribute;
     if (
       granularity === DateLevels.Hours ||

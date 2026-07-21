@@ -15,6 +15,7 @@ import {
   LegacyPalette,
 } from '../../themes/legacy-design-settings.js';
 import { getLegacyPalette } from '../../themes/theme-loader';
+import type { SystemSettings } from '../types';
 import { GlobalsObject } from './types';
 import { FeatureMap, Features } from './types/features.js';
 
@@ -87,7 +88,9 @@ function mapAiSettingsSlice(features: FeatureMap): AiSettingsSlice {
  *
  * @sisenseInternal
  */
-export type AppSettings = Required<ConfigurableAppSettings> & ServerSettings;
+export type AppSettings = Required<ConfigurableAppSettings> &
+  ServerSettings &
+  Pick<SystemSettings, 'displayNameConfig'>;
 
 /**
  * Application settings that can be overridden by the user
@@ -252,13 +255,16 @@ const defaultAppConfig: Required<ConfigurableAppSettings> = {
  *
  * @param customConfig - Custom application configuration
  * @param httpClient - Sisense REST API client
- * @param isWat - Whether the application is running with WAT authentication
+ * @param useDefaultPalette - Whether to use the default palette
+ * @param systemSettings - Already-fetched `api/v1/settings/system` payload (e.g. from
+ *   bootstrap telemetry). Merged into {@link AppSettings} so callers do not re-fetch.
  * @returns - Application settings
  */
-export async function getSettings(
+export async function getAppSettings(
   customConfig: ConfigurableAppSettings,
   httpClient: Pick<HttpClient, 'get' | 'url'>,
   useDefaultPalette?: boolean,
+  systemSettings?: SystemSettings,
 ): Promise<AppSettings> {
   const serverSettings = await loadServerSettings(httpClient, useDefaultPalette);
   return merge.withOptions(
@@ -272,6 +278,7 @@ export async function getSettings(
       locale: getBaseDateFnsLocale(
         customConfig?.translationConfig?.language ?? serverSettings.serverLanguage,
       ),
+      displayNameConfig: systemSettings?.displayNameConfig,
     },
     customConfig,
   ) as AppSettings;

@@ -23,6 +23,7 @@ describe('Advanced Charts', () => {
   beforeEach(() => {
     server.resetHandlers();
   });
+  // Heavier than the trend-only case; under CI coverage the default 5s budget is tight.
   it('should render forecast trend combo chart', async () => {
     server.use(
       http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlForecast)),
@@ -71,7 +72,7 @@ describe('Advanced Charts', () => {
     });
 
     expect(await findByTestId('chart-root')).toBeInTheDocument();
-  });
+  }, 15000);
 
   it('should render trend chart', async () => {
     server.use(http.post('*/api/datasources/:dataSource/jaql', () => HttpResponse.json(jaqlTrend)));

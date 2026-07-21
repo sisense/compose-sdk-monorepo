@@ -1,8 +1,13 @@
-import { Element, PivotQueryResultData, QueryResultData } from '@sisense/sdk-data';
+import { DataSource, Element, PivotQueryResultData, QueryResultData } from '@sisense/sdk-data';
 import { JaqlRequest, PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { AbstractTaskManager, Step, Task } from '@sisense/task-manager';
 
 import { EmptyObject } from '../helpers/utility-types.js';
+import { withCalculatedDimensionParseCache } from '../jaql/calculated-dimension-datatype-cache.js';
+import {
+  enrichCalculatedDimensionDatatypes,
+  ParseCalculatedDimensionFn,
+} from '../jaql/enrich-calculated-dimension-datatypes.js';
 import { getJaqlQueryPayload, getPivotJaqlQueryPayload } from '../jaql/get-jaql-query-payload.js';
 import { QueryApiDispatcher } from '../query-api-dispatcher/query-api-dispatcher.js';
 import { QUERY_DEFAULT_LIMIT } from '../query-client.js';
@@ -30,17 +35,55 @@ export class QueryTaskManager extends AbstractTaskManager {
    */
   private pivotQueryClient: PivotQueryClient;
 
+  /**
+   * Cached calculated-dimension formula parser. Instance-scoped so a data source + formula +
+   * context is resolved once and shared across every widget/query of this client (and across
+   * re-renders), rather than parsed once per widget.
+   */
+  private parseCalculatedDimension: ParseCalculatedDimensionFn;
+
   constructor(queryApi: QueryApiDispatcher, pivotQueryClient: PivotQueryClient) {
     super();
     this.queryApi = queryApi;
     this.pivotQueryClient = pivotQueryClient;
+    this.parseCalculatedDimension = withCalculatedDimensionParseCache(
+      this.queryApi.parseCalculatedDimension.bind(this.queryApi),
+    );
   }
 
+  /**
+   * Resolves and stamps the result data type on calculated-dimension filters in the payload before
+   * it is sent. See {@link enrichCalculatedDimensionDatatypes}. No-op when the payload has no
+   * unresolved calculated-dimension filters, so regular queries are unaffected.
+   *
+   * @param jaqlPayload - The JAQL payload to enrich in place.
+   * @param dataSource - The data source the query runs against.
+   * @returns The same payload, with calculated-dimension filter datatypes resolved.
+   */
+  private async enrichJaqlPayload(
+    jaqlPayload: JaqlQueryPayload,
+    dataSource: DataSource,
+  ): Promise<JaqlQueryPayload> {
+    await enrichCalculatedDimensionDatatypes(
+      jaqlPayload,
+      dataSource,
+      this.parseCalculatedDimension,
+    );
+    return jaqlPayload;
+  }
+
+  /**
+   * Builds the JAQL payload for a data query, resolving calculated-dimension filter datatypes and
+   * applying the optional `onBeforeQuery` hook.
+   *
+   * @param task - The query task carrying the query description and execution config.
+   * @returns The JAQL payload ready to send.
+   */
   private async prepareJaqlPayload(task: QueryTask): Promise<JaqlQueryPayload> {
     const { queryDescription, executionConfig } = task.passport;
-    const jaqlPayload: JaqlQueryPayload = getJaqlQueryPayload(
-      queryDescription,
-      executionConfig.shouldSkipHighlightsWithoutAttributes,
+    const jaqlPayload: JaqlQueryPayload = await this.enrichJaqlPayload(
+      getJaqlQueryPayload(queryDescription, executionConfig.shouldSkipHighlightsWithoutAttributes),
+      queryDescription.dataSource,
     );
     const onBeforeQuery = task.passport.executionConfig.onBeforeQuery;
     if (onBeforeQuery) {
@@ -72,6 +115,14 @@ export class QueryTaskManager extends AbstractTaskManager {
     return getDataFromQueryResult(jaqlResponse, [...metadata, ...extraColumns]);
   }
 
+  /**
+   * Builds the JAQL payload for a count-rows query. Paging (`count`/`offset`) is stripped so the
+   * payload is page-independent, then calculated-dimension filter datatypes are resolved and the
+   * optional `onBeforeQuery` hook is applied.
+   *
+   * @param task - The query task carrying the query description and execution config.
+   * @returns The page-independent JAQL payload ready to send.
+   */
   private async prepareCountRowsJaqlPayload(task: QueryTask): Promise<JaqlQueryPayload> {
     const { queryDescription, executionConfig } = task.passport;
     // The total row count is page-independent: the server ignores paging when counting,
@@ -81,9 +132,12 @@ export class QueryTaskManager extends AbstractTaskManager {
       count: undefined,
       offset: undefined,
     };
-    const jaqlPayload: JaqlQueryPayload = getJaqlQueryPayload(
-      pageIndependentQueryDescription,
-      executionConfig.shouldSkipHighlightsWithoutAttributes,
+    const jaqlPayload: JaqlQueryPayload = await this.enrichJaqlPayload(
+      getJaqlQueryPayload(
+        pageIndependentQueryDescription,
+        executionConfig.shouldSkipHighlightsWithoutAttributes,
+      ),
+      queryDescription.dataSource,
     );
     const onBeforeQuery = executionConfig.onBeforeQuery;
     if (onBeforeQuery) {
@@ -137,16 +191,20 @@ export class QueryTaskManager extends AbstractTaskManager {
   }
 
   /**
-   * Prepares the JAQL payload for the pivot query
+   * Builds the JAQL payload for a pivot query, resolving calculated-dimension filter datatypes and
+   * applying the optional `onBeforeQuery` hook.
    *
-   * @param task
-   * @returns JAQL payload
+   * @param task - The pivot query task carrying the pivot query description and execution config.
+   * @returns The JAQL payload ready to send.
    */
   private async preparePivotJaqlPayload(task: PivotQueryTask): Promise<JaqlQueryPayload> {
     const { pivotQueryDescription, executionConfig } = task.passport;
-    const jaqlPayload: JaqlQueryPayload = getPivotJaqlQueryPayload(
-      pivotQueryDescription,
-      executionConfig.shouldSkipHighlightsWithoutAttributes,
+    const jaqlPayload: JaqlQueryPayload = await this.enrichJaqlPayload(
+      getPivotJaqlQueryPayload(
+        pivotQueryDescription,
+        executionConfig.shouldSkipHighlightsWithoutAttributes,
+      ),
+      pivotQueryDescription.dataSource,
     );
     const onBeforeQuery = task.passport.executionConfig.onBeforeQuery;
     if (onBeforeQuery) {

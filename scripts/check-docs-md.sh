@@ -11,6 +11,8 @@ FILES_CHANGED=$(git diff --name-only ./docs-md/)
 if [ -n "$FILES_CHANGED" ]; then
   echo "Error: Commit has caused the API Doc changes below. Please run 'yarn docs:gen:md' locally and include those changes in this commit or a separate commit." >&2
   echo "$FILES_CHANGED"
+  echo "--- diff (first 400 lines) ---" >&2
+  git diff ./docs-md/ | head -400
   exit 1
 fi
 

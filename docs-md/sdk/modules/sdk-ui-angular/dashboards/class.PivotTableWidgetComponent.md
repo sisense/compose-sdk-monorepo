@@ -145,6 +145,16 @@ Configuration for the pivot table drilldown
 
 ***
 
+#### id
+
+> **id**: `string` \| `undefined`
+
+Widget identifier
+
+Used to identify the widget when exporting its data (for example, the "Download as Excel" action).
+
+***
+
 #### title
 
 > **title**: `string` \| `undefined`

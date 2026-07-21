@@ -20,6 +20,7 @@ type UnpreparedInternalChartProps = {
   onDataPointContextMenu?: ChartProps['onDataPointContextMenu'];
   onDataPointsSelected?: ChartProps['onDataPointsSelected'];
   onBeforeRender?: ChartProps['onBeforeRender'];
+  onReady?: ChartProps['onReady'];
   // separate filters may be needed for scattermap renederer
   filters?: ChartProps['filters'];
 };
@@ -44,6 +45,7 @@ export function useChartRendererProps(
     onDataPointClick,
     onDataPointContextMenu,
     onDataPointsSelected,
+    onReady,
   } = internalProps;
   return useMemo(() => {
     if (!internalDataOptions || !designOptions) {
@@ -59,6 +61,7 @@ export function useChartRendererProps(
       onDataPointClick,
       onDataPointContextMenu,
       onDataPointsSelected,
+      onReady,
     };
   }, [
     dataSet,
@@ -70,5 +73,6 @@ export function useChartRendererProps(
     onDataPointClick,
     onDataPointContextMenu,
     onDataPointsSelected,
+    onReady,
   ]);
 }

@@ -1,4 +1,4 @@
-import { measureFactory } from '@sisense/sdk-data';
+import { measureFactory, MetadataTypes } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 
 import { Commerce } from '@/__test-helpers__/sample-ecommerce';
@@ -2011,6 +2011,7 @@ describe('WidgetModelTranslator', () => {
         noItems?: boolean;
         style?: Record<string, unknown>;
         title?: string;
+        filtersPanelItems?: Record<string, unknown>[];
       } = {},
     ): WidgetDto =>
       ({
@@ -2043,6 +2044,7 @@ describe('WidgetModelTranslator', () => {
                     },
                   ],
             },
+            ...(opts.filtersPanelItems ? [{ name: 'filters', items: opts.filtersPanelItems }] : []),
           ],
         },
         style: opts.style ?? {},
@@ -2051,10 +2053,11 @@ describe('WidgetModelTranslator', () => {
     const toFilterProps = (dto: WidgetDto) =>
       toCommonWidgetProps(fromWidgetDto(dto)) as unknown as {
         widgetType: string;
-        attribute: { expression: string; granularity?: string };
+        attribute: { expression: string; granularity?: string; type?: string };
         title?: string;
         isMultiselect: boolean;
         filterType: string;
+        parentFilters?: { attribute: { expression: string } }[];
       };
 
     it('translates a text filter widget DTO to FilterWidgetProps', () => {
@@ -2064,6 +2067,39 @@ describe('WidgetModelTranslator', () => {
       expect(props.filterType).toBe('members');
       expect(props.isMultiselect).toBe(true);
       expect(props.title).toBe('My Filter');
+    });
+
+    // SNS-131802: the query layer (validateQueryDescription) rejects attributes whose
+    // `type` is a raw JAQL datatype ('text'/'numeric') — MetadataTypes.isAttribute only
+    // accepts metadata attribute types ('text-attribute'/'numeric-attribute'/...). The
+    // FilterWidget member query then throws BEFORE any request is sent and the editor
+    // dropdown silently stays empty.
+    it('builds a queryable attribute (valid metadata type) for a text dimension', () => {
+      const props = toFilterProps(makeFilterWidgetDto());
+      expect(MetadataTypes.isAttribute(props.attribute)).toBe(true);
+      expect(props.attribute.type).toBe('text-attribute');
+    });
+
+    it('builds a queryable attribute (valid metadata type) for a numeric dimension', () => {
+      const props = toFilterProps(
+        makeFilterWidgetDto({
+          jaql: { dim: '[Commerce.Revenue]', datatype: 'numeric', title: 'Revenue' },
+        }),
+      );
+      expect(MetadataTypes.isAttribute(props.attribute)).toBe(true);
+      expect(props.attribute.type).toBe('numeric-attribute');
+    });
+
+    it('defaults a datetime dimension WITHOUT a level to a Years LevelAttribute', () => {
+      // Both pickers stamp a level on date dims; a hand-crafted/legacy DTO may omit it.
+      // Mirrors the picker semantics: a date pick always creates a Years filter.
+      const props = toFilterProps(
+        makeFilterWidgetDto({
+          jaql: { dim: '[Commerce.Date (Calendar)]', datatype: 'datetime', title: 'Date' },
+        }),
+      );
+      expect(props.attribute.granularity).toBe('Years');
+      expect(MetadataTypes.isAttribute(props.attribute)).toBe(true);
     });
 
     it('normalizes the legacy "list" filter type to "members"', () => {
@@ -2111,6 +2147,41 @@ describe('WidgetModelTranslator', () => {
     it('yields an empty attribute when no dimension item is present', () => {
       const props = toFilterProps(makeFilterWidgetDto({ noItems: true }));
       expect(props.attribute.expression).toBeFalsy();
+    });
+
+    it('passes enabled widget filters from the DTO filters panel as parentFilters', () => {
+      const props = toFilterProps(
+        makeFilterWidgetDto({
+          filtersPanelItems: [
+            {
+              jaql: {
+                table: 'Commerce',
+                column: 'Age Range',
+                dim: '[Commerce.Age Range]',
+                datatype: 'text',
+                title: 'Age Range',
+                filter: { members: ['0-18'] },
+              },
+            },
+            {
+              disabled: true,
+              jaql: {
+                dim: '[Commerce.Gender]',
+                datatype: 'text',
+                title: 'Gender',
+                filter: { members: ['Male'] },
+              },
+            },
+          ],
+        }),
+      );
+
+      expect(props.parentFilters).toHaveLength(1);
+      expect(props.parentFilters?.[0].attribute.expression).toBe('[Commerce.Age Range]');
+    });
+
+    it('passes empty parentFilters when the DTO has no filters panel', () => {
+      expect(toFilterProps(makeFilterWidgetDto()).parentFilters).toEqual([]);
     });
 
     it('falls back to defaults for a programmatic model without filterWidgetData', () => {

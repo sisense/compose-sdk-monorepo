@@ -41,6 +41,7 @@ export const SisenseChart = ({
   onDataPointContextMenu,
   onDataPointsSelected,
   onBeforeRender = defaultOnBeforeRender,
+  onReady,
   size,
 }: SisenseChartProps) => {
   const { app } = useSisenseContext();
@@ -134,7 +135,7 @@ export const SisenseChart = ({
         }}
       >
         {!!alerts.length && <AlertBox alerts={alerts} />}
-        <HighchartsRenderer options={optionsWithSize} />
+        <HighchartsRenderer options={optionsWithSize} onReady={onReady} />
       </div>
     )
   );

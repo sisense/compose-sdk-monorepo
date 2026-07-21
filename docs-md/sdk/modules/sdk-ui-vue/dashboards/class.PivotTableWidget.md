@@ -121,6 +121,16 @@ Configuration for the pivot table drilldown
 
 ***
 
+#### id
+
+> **`readonly`** **id**?: `string`
+
+Widget identifier
+
+Used to identify the widget when exporting its data (for example, the "Download as Excel" action).
+
+***
+
 #### styleOptions
 
 > **`readonly`** **styleOptions**?: [`PivotTableWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.PivotTableWidgetStyleOptions.md)

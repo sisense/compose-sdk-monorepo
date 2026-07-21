@@ -23,22 +23,83 @@ describe('QueryApiDispatcher', () => {
   });
 
   describe('getDataSourceFields', () => {
-    it('should call httpClient.post with the correct URL and payload', async () => {
+    it('should call fields/search when displayName search API is not enabled', async () => {
       // Arrange
       const dataSource = 'exampleDataSource';
       const count = 10;
       const offset = 0;
-      const expectedUrl = `api/datasources/${encodeURI(dataSource)}/fields/search`;
+      const expectedUrl = `api/datasources/${encodeURIComponent(dataSource)}/fields/search`;
       const expectedPayload = { offset, count };
       const expectedFields = [{ name: 'field1' }, { name: 'field2' }];
       httpClient.post.mockResolvedValue(expectedFields);
 
       // Act
-      const result = await queryApi.getDataSourceFields(dataSource, count, offset);
+      const result = await queryApi.getDataSourceFields(dataSource, { count, offset });
 
       // Assert
       expect(httpClient.post).toHaveBeenCalledWith(expectedUrl, expectedPayload);
+      expect(httpClient.get).not.toHaveBeenCalled();
       expect(result).toEqual(expectedFields);
+    });
+
+    it('should call searchByDisplayName with isLive when displayName API is enabled', async () => {
+      const dataSource = 'Sales Live';
+      httpClient.post.mockResolvedValue([]);
+
+      await queryApi.getDataSourceFields(dataSource, {
+        displayNameConfig: { enabled: true, useNewSearchByDisplayNameApi: true },
+        live: true,
+      });
+
+      expect(httpClient.post).toHaveBeenCalledWith(
+        `api/datasources/${encodeURIComponent(dataSource)}/fields/searchByDisplayName?isLive=true`,
+        { offset: 0, count: 9999 },
+      );
+      expect(httpClient.get).not.toHaveBeenCalled();
+    });
+
+    it('should resolve live from list when displayName API is enabled and live is omitted', async () => {
+      const dataSource = 'Sample ECommerce';
+      httpClient.get.mockResolvedValueOnce([
+        { title: dataSource, fullname: `localhost/${dataSource}`, live: false },
+      ]);
+      httpClient.post.mockResolvedValueOnce([]);
+
+      await queryApi.getDataSourceFields(dataSource, {
+        displayNameConfig: { enabled: true, useNewSearchByDisplayNameApi: true },
+      });
+
+      expect(httpClient.get).toHaveBeenCalledWith('api/datasources/?sharedWith=r,w');
+      expect(httpClient.post).toHaveBeenCalledWith(
+        `api/datasources/${encodeURIComponent(dataSource)}/fields/searchByDisplayName?isLive=false`,
+        { offset: 0, count: 9999 },
+      );
+    });
+
+    it('should not use searchByDisplayName when only displayName.enabled is true', async () => {
+      const dataSource = 'exampleDataSource';
+      httpClient.post.mockResolvedValue([]);
+
+      await queryApi.getDataSourceFields(dataSource, {
+        displayNameConfig: { enabled: true, useNewSearchByDisplayNameApi: false },
+      });
+
+      expect(httpClient.post).toHaveBeenCalledWith(
+        `api/datasources/${encodeURIComponent(dataSource)}/fields/search`,
+        { offset: 0, count: 9999 },
+      );
+    });
+
+    it('should pass term in the POST body when provided', async () => {
+      const dataSource = 'exampleDataSource';
+      httpClient.post.mockResolvedValue([]);
+
+      await queryApi.getDataSourceFields(dataSource, { term: 'revenue', count: 5, offset: 1 });
+
+      expect(httpClient.post).toHaveBeenCalledWith(
+        `api/datasources/${encodeURIComponent(dataSource)}/fields/search`,
+        { offset: 1, count: 5, term: 'revenue' },
+      );
     });
 
     it('should throw an error on unsuccessful fetch', async () => {
@@ -53,6 +114,28 @@ describe('QueryApiDispatcher', () => {
       await expect(result).rejects.toThrow(
         `Failed to get fields for data source "${dataSource}". Please make sure the data source exists and is accessible.`,
       );
+    });
+  });
+
+  describe('getDataSourceByTitle', () => {
+    it('should resolve from the viewer-safe list endpoint and never GET by title', async () => {
+      const list = [
+        { title: 'A', fullname: 'localhost/A', live: false },
+        { title: 'B', fullname: 'localhost/B', live: true },
+      ];
+      httpClient.get.mockResolvedValueOnce(list);
+
+      const result = await queryApi.getDataSourceByTitle('B');
+
+      expect(httpClient.get).toHaveBeenCalledWith('api/datasources/?sharedWith=r,w');
+      expect(httpClient.get).not.toHaveBeenCalledWith('api/datasources/B');
+      expect(result).toEqual(list[1]);
+    });
+
+    it('should return null when the title is not in the list', async () => {
+      httpClient.get.mockResolvedValueOnce([{ title: 'A', fullname: 'localhost/A', live: false }]);
+
+      await expect(queryApi.getDataSourceByTitle('Missing')).resolves.toBeNull();
     });
   });
 
@@ -289,6 +372,69 @@ describe('QueryApiDispatcher', () => {
       // Assert
       expect(httpClient.get).toHaveBeenCalledWith(expectedUrl);
       expect(result).toEqual(expectedResponse);
+    });
+  });
+
+  describe('parseCalculatedDimension', () => {
+    const dataSource = 'Sample ECommerce';
+    const formula = 'right([ageRange], 1)';
+    // Context entries carry each INPUT column's datatype, added automatically when the referenced
+    // data-model attribute is serialized to JAQL — it is not user-supplied and is unrelated to the
+    // formula's result type (which is what the endpoint resolves and returns).
+    const context = { '[ageRange]': { dim: '[Commerce.Age Range]', datatype: 'text' } };
+    const expectedUrl = `api/datasources/${encodeURIComponent(
+      dataSource,
+    )}/calculated-dimension/parse`;
+    const expectedPayload = { formula, context, isMaskedResponse: false };
+
+    it('should call httpClient.post with the correct URL and payload', async () => {
+      // Arrange
+      const expectedResponse = { dataType: 'text' };
+      httpClient.post.mockResolvedValueOnce(expectedResponse);
+
+      // Act
+      const result = await queryApi.parseCalculatedDimension(dataSource, formula, context);
+
+      // Assert
+      expect(httpClient.post).toHaveBeenCalledWith(expectedUrl, expectedPayload);
+      expect(result).toEqual(expectedResponse);
+    });
+
+    it('should pass through a formula-validation error response', async () => {
+      // Arrange
+      const errorResponse = { error: true, message: 'Invalid formula' };
+      httpClient.post.mockResolvedValueOnce(errorResponse);
+
+      // Act
+      const result = await queryApi.parseCalculatedDimension(dataSource, formula, context);
+
+      // Assert
+      expect(result).toEqual(errorResponse);
+    });
+
+    it('should throw a capability error when the endpoint is unavailable (404)', async () => {
+      // Arrange
+      httpClient.post.mockRejectedValueOnce({ status: '404' });
+
+      // Act
+      const result = queryApi.parseCalculatedDimension(dataSource, formula, context);
+
+      // Assert
+      await expect(result).rejects.toThrow(
+        'The connected data source does not support resolving calculated dimension formulas.',
+      );
+    });
+
+    it('should rethrow non-404 errors unchanged', async () => {
+      // Arrange
+      const error = { status: '500' };
+      httpClient.post.mockRejectedValueOnce(error);
+
+      // Act
+      const result = queryApi.parseCalculatedDimension(dataSource, formula, context);
+
+      // Assert
+      await expect(result).rejects.toEqual(error);
     });
   });
 });

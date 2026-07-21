@@ -601,6 +601,17 @@ export class DimensionalCalculatedAttribute extends DimensionalElement implement
   readonly context: AttributeContext;
 
   /**
+   * Defines the JAQL data type of the calculated dimension (e.g. `text`, `numeric`, `datetime`).
+   *
+   * The analytical engine reads this from the element to resolve the formula's result type, so it
+   * must be preserved on the JAQL when present (e.g. for a calculated-dimension filter created in
+   * Fusion).
+   *
+   * @internal
+   */
+  readonly dataType?: string;
+
+  /**
    * @internal
    */
   readonly panel?: string;
@@ -629,11 +640,13 @@ export class DimensionalCalculatedAttribute extends DimensionalElement implement
     indexed?: boolean,
     merged?: boolean,
     title?: string,
+    dataType?: string,
   ) {
     super(name, MetadataTypes.CalculatedAttribute, desc, dataSource, composeCode, title);
 
     this.expression = expression;
     this.context = context;
+    this.dataType = dataType;
     this._sort = sort || Sort.None;
 
     // panel is not needed in most cases, this is to support break by columns functionality
@@ -680,6 +693,7 @@ export class DimensionalCalculatedAttribute extends DimensionalElement implement
       this.indexed,
       this.merged,
       this.title,
+      this.dataType,
     );
   }
 
@@ -701,6 +715,10 @@ export class DimensionalCalculatedAttribute extends DimensionalElement implement
 
     if (this.getSort() !== Sort.None) {
       result.sort = this.getSort();
+    }
+
+    if (this.dataType) {
+      result.datatype = this.dataType;
     }
 
     return result;
@@ -761,6 +779,12 @@ export class DimensionalCalculatedAttribute extends DimensionalElement implement
         context,
       },
     };
+
+    // The analytical engine resolves a formula element's result type from its `datatype`; preserve
+    // it so calculated-dimension filters/queries don't fail element data-type extraction.
+    if (this.dataType) {
+      result.jaql.datatype = this.dataType;
+    }
 
     if (this.panel) {
       result.panel = this.panel;
@@ -879,6 +903,7 @@ export function createCalculatedAttribute(json: any): Attribute {
     json.indexed,
     json.merged,
     title,
+    json.datatype,
   );
 }
 

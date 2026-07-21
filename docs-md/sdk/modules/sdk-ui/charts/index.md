@@ -17,6 +17,7 @@ React components and utilities for working with charts
 - [ColumnChart](function.ColumnChart.md)
 - [FunnelChart](function.FunnelChart.md)
 - [IndicatorChart](function.IndicatorChart.md)
+- [KpiChart](function.KpiChart.md) <Badge type="beta" text="Beta" />
 - [LineChart](function.LineChart.md)
 - [PieChart](function.PieChart.md)
 - [PolarChart](function.PolarChart.md)

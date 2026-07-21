@@ -4,8 +4,10 @@ title: DashboardWidgetDateLevelChangedEvent
 
 # Interface DashboardWidgetDateLevelChangedEvent <Badge type="beta" text="Beta" />
 
-Event triggered when a FilterWidget's date granularity is changed on the dashboard.
-Lets an embedding host sync the widget's stored dimension metadata to the new level.
+`DashboardWidgetDateLevelChangedEvent` is emitted when a filter widget's date
+granularity is changed on the dashboard, letting an embedding host sync the widget's
+stored dimension metadata to the new level. The payload carries the affected widget's
+`oid` plus a JAQL-level descriptor of the new date granularity.
 
 ## Properties
 

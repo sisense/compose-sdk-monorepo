@@ -14,5 +14,5 @@ export const QUERY_DEFINITION_TEXT_STYLE = {
  */
 export const QUERY_PILL_LABEL_STYLE = {
   ...QUERY_DEFINITION_TEXT_STYLE,
-  lineHeight: '17px',
+  lineHeight: '16px',
 } as const;

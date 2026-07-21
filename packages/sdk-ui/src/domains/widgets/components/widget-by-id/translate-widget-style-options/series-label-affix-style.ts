@@ -6,7 +6,7 @@ export type FusionSeriesLabelAffix = {
   suffix?: string;
   color?: string | null;
   fontSize?: number | null;
-  fontStyle?: 'normal' | 'italic' | null;
+  fontStyle?: 'normal' | 'italic';
   backgroundColor?: string | null;
   backgroundPadding?: number | null;
   borderColor?: string | null;
@@ -108,8 +108,13 @@ export function extractSeriesLabelTextStyleFromFusion(
     hasTextStyle = true;
   }
 
+  // Explicit normal (or legacy Fusion null) must be emitted so live Highcharts
+  // updates clear sticky italic. Omitting fontStyle leaves the previous italic.
   if (labels.fontStyle === 'italic') {
     textStyle.fontStyle = 'italic';
+    hasTextStyle = true;
+  } else if (labels.fontStyle !== undefined) {
+    textStyle.fontStyle = 'normal';
     hasTextStyle = true;
   }
 

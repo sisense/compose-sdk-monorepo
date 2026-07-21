@@ -12,6 +12,7 @@ import {
   ColumnChartDesignOptions,
   FunnelChartDesignOptions,
   IndicatorChartDesignOptions,
+  KpiChartDesignOptions,
   LineChartDesignOptions,
   PieChartDesignOptions,
   PolarChartDesignOptions,
@@ -120,6 +121,23 @@ export const SCATTERMAP_CHART_TYPES = ['scattermap'] as const;
 /** Scattermap chart types  @expandType */
 export type ScattermapChartType = (typeof SCATTERMAP_CHART_TYPES)[number];
 
+/** Chart type strings recognized as KPI charts. @internal */
+export const KPI_CHART_TYPES = ['kpi'] as const;
+/**
+ * KPI chart types.
+ *
+ * @expandType
+ * @beta
+ */
+export type KpiChartType = (typeof KPI_CHART_TYPES)[number];
+
+/**
+ * Checks whether the given chart type is a {@link KpiChartType}.
+ * @internal
+ */
+export const isKpi = (chartType: ChartType): chartType is KpiChartType =>
+  KPI_CHART_TYPES.find((value) => value === chartType) !== undefined;
+
 export const CALENDAR_HEATMAP_CHART_TYPES = ['calendar-heatmap'] as const;
 /**
  * Calendar heatmap chart types
@@ -189,6 +207,8 @@ export type DesignOptions<SpecificChartType extends ChartType = ChartType> =
     ? ScattermapChartDesignOptions
     : SpecificChartType extends 'calendar-heatmap'
     ? CalendarHeatmapChartDesignOptions
+    : SpecificChartType extends 'kpi'
+    ? KpiChartDesignOptions
     : SpecificChartType extends 'arearange'
     ? AreaRangeChartDesignOptions
     : SpecificChartType extends 'sankey'
@@ -277,6 +297,7 @@ export const ALL_CHART_TYPES = [
   ...IMAGE_CHART_TYPES,
   ...SCATTERMAP_CHART_TYPES,
   ...CALENDAR_HEATMAP_CHART_TYPES,
+  ...KPI_CHART_TYPES,
   ...RANGE_CHART_TYPES,
   ...SANKEY_CHART_TYPES,
 ] as const;

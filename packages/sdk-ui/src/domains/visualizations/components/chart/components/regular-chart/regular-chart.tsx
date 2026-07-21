@@ -3,7 +3,6 @@ import { useCallback, useMemo } from 'react';
 import { Data } from '@sisense/sdk-data';
 import isArray from 'lodash-es/isArray';
 
-import { isBoxplotChartData } from '@/domains/visualizations/core/chart-data/boxplot-data';
 import {
   DynamicSizeContainer,
   getChartDefaultSize,
@@ -14,7 +13,6 @@ import { ChartType } from '@/types';
 
 import { RegularChartProps } from '../../../../../../props';
 import { LoadingOverlay } from '../../../../../../shared/components/loading-overlay';
-import { ChartData } from '../../../../core/chart-data/types';
 import { prepareChartDesignOptions } from '../../../../core/chart-options-processor/style-to-design-options-translator';
 import {
   ChartDesignOptions,
@@ -23,17 +21,16 @@ import {
 import '../../chart.css';
 import { getLoadDataFunction } from '../../helpers/get-load-data-function';
 import { useChartDataPreparation } from '../../helpers/use-chart-data-preparation';
+import { useChartOnReady } from '../../helpers/use-chart-on-ready';
 import { useChartRendererProps } from '../../helpers/use-chart-renderer-props';
 import { useSyncedData } from '../../helpers/use-synced-data';
 import { useTranslatedDataOptions } from '../../helpers/use-translated-data-options';
-import { isAreamapData } from '../../restructured-charts/areamap-chart/renderer/areamap';
 import { getChartBuilder } from '../../restructured-charts/chart-builder-factory';
-import { isCalendarHeatmapChartData } from '../../restructured-charts/highchart-based-charts/calendar-heatmap-chart/data';
-import { isSankeyChartData } from '../../restructured-charts/highchart-based-charts/sankey-chart/types';
 import { hasForecastOrTrend, isRestructuredChartType } from '../../restructured-charts/utils';
 import { IndicatorCanvas, isIndicatorCanvasProps } from '../indicator-canvas';
-import { isScattermapData, isScattermapProps, Scattermap } from '../scattermap/scattermap';
+import { isScattermapProps, Scattermap } from '../scattermap/scattermap';
 import { isSisenseChartProps, isSisenseChartType, SisenseChart } from '../sisense-chart';
+import { hasNoResults } from './has-no-results';
 
 /*
 Roughly speaking, there are 10 steps to transform chart props to highcharts options:
@@ -55,29 +52,6 @@ const shouldRerenderOnResize = (chartType: ChartType) => {
   return chartType === 'indicator';
 };
 
-/** Function to check if chart type has results */
-const hasNoResults = (chartType: ChartType, chartData: ChartData) => {
-  if (chartType === 'scatter' && 'scatterDataTable' in chartData) {
-    return chartData.scatterDataTable.length === 0;
-  }
-  if (chartType === 'areamap' && isAreamapData(chartData)) {
-    return chartData.geoData.length === 0;
-  }
-  if (chartType === 'scattermap' && isScattermapData(chartData)) {
-    return chartData.locations.length === 0;
-  }
-  if (chartType === 'boxplot' && isBoxplotChartData(chartData)) {
-    return chartData.xValues.length === 0;
-  }
-  if (chartType === 'calendar-heatmap' && isCalendarHeatmapChartData(chartData)) {
-    return chartData.values.length === 0;
-  }
-  if (chartType === 'sankey' && isSankeyChartData(chartData)) {
-    return chartData.links.length === 0;
-  }
-  return 'series' in chartData && chartData.series.length === 0;
-};
-
 /**
  *
  * @param props
@@ -97,6 +71,7 @@ export const RegularChart = (props: RegularChartProps) => {
     onDataPointsSelected,
     onBeforeRender,
     onDataReady,
+    onReady,
   } = props;
   const { width, height } = styleOptions || {};
 
@@ -142,12 +117,12 @@ export const RegularChart = (props: RegularChartProps) => {
   });
 
   const designOptions = useMemo((): ChartDesignOptions | DesignOptions | null => {
-    if (!chartDataOptions) {
+    if (!chartDataOptions || hasNoDimensions) {
       return null;
     }
 
     return prepareChartDesignOptions(chartType, dataOptions, styleOptions);
-  }, [chartDataOptions, chartType, dataOptions, styleOptions]);
+  }, [chartDataOptions, chartType, dataOptions, styleOptions, hasNoDimensions]);
 
   const chartData = useChartDataPreparation({
     dataSet,
@@ -161,6 +136,17 @@ export const RegularChart = (props: RegularChartProps) => {
     onDataReady,
   });
 
+  // `onReady` (Fusion `domready` / PDF): chart types opt in via their
+  // ChartBuilder's `onReady` contract. This hook forwards the renderer paint
+  // signal and fires the consumer callback; non-participating types no-op.
+  const { onRendererReady } = useChartOnReady({
+    chartType,
+    isLoading,
+    hasNoDimensions,
+    chartData,
+    onReady,
+  });
+
   const chartRendererProps = useChartRendererProps({
     dataSet,
     chartType,
@@ -171,20 +157,22 @@ export const RegularChart = (props: RegularChartProps) => {
     onDataPointClick,
     onDataPointContextMenu,
     onDataPointsSelected,
+    onReady: onRendererReady,
     filters,
   });
 
   const renderChartWithSize = useCallback(
     (size: ContainerSize) => {
+      if ((chartData && hasNoResults(chartType, chartData)) || hasNoDimensions) {
+        return <NoResultsOverlay iconType={chartType} />;
+      }
+
       if (!chartRendererProps) {
         return null;
       }
 
       if (!chartData && isLoading) {
         return <LoadingOverlay />;
-      }
-      if ((chartData && hasNoResults(chartType, chartData)) || hasNoDimensions) {
-        return <NoResultsOverlay iconType={chartType} />;
       }
 
       // Check if chart should use restructured architecture
@@ -237,7 +225,9 @@ export const RegularChart = (props: RegularChartProps) => {
     [chartData, isLoading, chartType, hasNoDimensions, isForecastOrTrendChart, chartRendererProps],
   );
 
-  if (!chartRendererProps) {
+  // Allow the container when dimensions are missing even if renderer props are
+  // null — `renderChartWithSize` shows No Results for `hasNoDimensions`.
+  if (!chartRendererProps && !hasNoDimensions) {
     return null;
   }
 

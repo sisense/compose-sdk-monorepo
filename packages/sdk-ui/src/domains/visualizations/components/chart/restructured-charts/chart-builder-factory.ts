@@ -11,6 +11,7 @@ import { pieChartBuilder } from './highchart-based-charts/categoricals/pie-chart
 import { sunburstChartBuilder } from './highchart-based-charts/categoricals/sunburst-chart/sunburst-chart-builder.js';
 import { treemapChartBuilder } from './highchart-based-charts/categoricals/treemap-chart/treemap-chart-builder.js';
 import { sankeyChartBuilder } from './highchart-based-charts/sankey-chart/sankey-chart-builder.js';
+import { kpiChartBuilder } from './kpi-chart/kpi-chart-builder.js';
 import type { ChartBuilder, SupportedChartType } from './types.js';
 
 export const chartBuildersMap: { [K in SupportedChartType]: ChartBuilder<K> } = {
@@ -27,6 +28,7 @@ export const chartBuildersMap: { [K in SupportedChartType]: ChartBuilder<K> } = 
   sunburst: sunburstChartBuilder,
   'calendar-heatmap': calendarHeatmapChartBuilder,
   sankey: sankeyChartBuilder,
+  kpi: kpiChartBuilder,
 };
 
 export function getChartBuilder<CT extends SupportedChartType>(chartType: CT): ChartBuilder<CT> {

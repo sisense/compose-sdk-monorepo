@@ -34,6 +34,7 @@ const noResultOverlayImages = {
   sunburst: sunburstChartNoResultsImage,
   'calendar-heatmap': calendarHeatmapChartNoResultsImage,
   sankey: lineChartNoResultsImage,
+  kpi: indicatorChartNoResultsImage,
 };
 
 export function getNoResultOverlayImage(type: ChartType | TableType) {

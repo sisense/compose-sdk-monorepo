@@ -6,7 +6,7 @@ title: FilterWidgetFilterType
 
 > **FilterWidgetFilterType**: `"condition"` \| `"dateRange"` \| `"members"` \| `"numericRange"` \| `"period"`
 
-Rendering type for the FilterWidget.
+`FilterWidgetFilterType` selects the rendering type for a filter widget.
 
 - `'members'`      — searchable member-select dropdown. Implemented.
 - `'dateRange'`    — date-range picker. Planned.
@@ -16,6 +16,7 @@ Rendering type for the FilterWidget.
 
 ## Example
 
+The following selects the member-select dropdown rendering:
 ```ts
-<FilterWidget attribute={DM.Commerce.Country} filterType="members" />
+const filterType: FilterWidgetFilterType = 'members';
 ```

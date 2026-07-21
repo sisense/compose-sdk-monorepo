@@ -456,6 +456,20 @@ const translation: TranslationDictionary = {
       },
     },
   },
+  kpi: {
+    comparison: {
+      vsPriorYear: 'vs prior year',
+      vsPriorQuarter: 'vs prior quarter',
+      vsPriorMonth: 'vs prior month',
+      vsPriorWeek: 'vs prior week',
+      vsPriorDay: 'vs prior day',
+      vsPriorPeriod: 'vs prior period',
+    },
+    target: {
+      ofGoal: '{{percent}} of goal',
+      toGo: '{{value}} to go',
+    },
+  },
   loadingOverlay: {
     label: '正在加载内容',
   },

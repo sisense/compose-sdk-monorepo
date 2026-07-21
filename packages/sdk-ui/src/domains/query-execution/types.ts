@@ -448,6 +448,8 @@ export interface ExecuteCsvQueryParams extends Omit<ExecuteQueryParams, 'include
 
 /**
  * Parameters for {@link useExecuteExcelQueryInternal} (JAQL XLSX export).
+ *
+ * @internal
  */
 export interface ExecuteExcelQueryParams extends Omit<ExecuteQueryParams, 'includeRowCount'> {
   /** `false` = repeat rows (Angular default); `true` = merge rows. */

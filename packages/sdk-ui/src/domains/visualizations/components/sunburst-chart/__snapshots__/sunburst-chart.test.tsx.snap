@@ -334,7 +334,7 @@ exports[`Sunburst Chart > render a sunburst with single category 1`] = `
       ],
       "name": "Root",
       "showInLegend": false,
-      "turboThreshold": 2000,
+      "turboThreshold": 0,
       "type": "sunburst",
     },
     {
@@ -893,7 +893,7 @@ exports[`Sunburst Chart > render a sunburst with two categories 1`] = `
       ],
       "name": "Root",
       "showInLegend": false,
-      "turboThreshold": 2000,
+      "turboThreshold": 0,
       "type": "sunburst",
     },
     {
@@ -1463,7 +1463,7 @@ exports[`Sunburst Chart > render a sunburst with two categories and legend 1`] =
       ],
       "name": "Root",
       "showInLegend": false,
-      "turboThreshold": 2000,
+      "turboThreshold": 0,
       "type": "sunburst",
     },
     {

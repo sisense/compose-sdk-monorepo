@@ -93,6 +93,16 @@ If not specified, the default value is `false`
 
 ***
 
+#### id
+
+> **id**?: `string`
+
+Widget identifier
+
+Used to identify the widget when exporting its data (for example, the "Download as Excel" action).
+
+***
+
 #### styleOptions
 
 > **styleOptions**?: [`WidgetByIdStyleOptions`](interface.WidgetByIdStyleOptions.md)

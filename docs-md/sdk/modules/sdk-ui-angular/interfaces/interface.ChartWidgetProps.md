@@ -88,6 +88,16 @@ If not specified, the default value is `false`
 
 ***
 
+#### id
+
+> **id**?: `string`
+
+Widget identifier
+
+Used to identify the widget when exporting its data (for example, the "Download as Excel" action).
+
+***
+
 #### styleOptions
 
 > **styleOptions**?: [`ChartWidgetStyleOptions`](../type-aliases/type-alias.ChartWidgetStyleOptions.md)
@@ -106,7 +116,7 @@ Title of the widget
 
 #### beforeRender
 
-> **beforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md) \| [`IndicatorBeforeRenderHandler`](../type-aliases/type-alias.IndicatorBeforeRenderHandler.md)
+> **beforeRender**?: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md) \| [`IndicatorBeforeRenderHandler`](../type-aliases/type-alias.IndicatorBeforeRenderHandler.md) \| [`KpiBeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.KpiBeforeRenderHandler.md)
 
 A callback that allows you to customize the underlying chart element before it is rendered. The returned options are then used when rendering the chart.
 

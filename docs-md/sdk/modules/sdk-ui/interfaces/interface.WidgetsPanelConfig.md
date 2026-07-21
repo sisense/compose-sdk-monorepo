@@ -54,6 +54,43 @@ downloading each widget's data.
 > >
 > >
 >
+> ##### `actions.downloadExcel`
+>
+> **downloadExcel**?: `object`
+>
+> Configuration for the "Download as Excel" action on all widgets in the panel,
+> which adds an item to each widget's header menu that exports the widget's
+> underlying data as an Excel (XLSX) file.
+>
+> ###### Example
+>
+> Enable Excel download for every widget in a dashboard:
+> ```ts
+> const dashboardConfig: DashboardConfig = {
+> widgetsPanel: {
+> actions: {
+> downloadExcel: {
+> enabled: true,
+> },
+> },
+> },
+> };
+> ```
+>
+> > ###### `downloadExcel.enabled`
+> >
+> > **enabled**?: `boolean`
+> >
+> > Whether the "Download as Excel" action is enabled for all widgets in the panel.
+> >
+> > ###### Default
+> >
+> > ```ts
+> > false
+> > ```
+> >
+> >
+>
 >
 
 ***

@@ -3,6 +3,9 @@
  * @internal
  */
 export const isInteger = (type: string): boolean => {
+  if (!type) {
+    return false;
+  }
   return [
     '__int4',
     '__int8',
@@ -26,6 +29,9 @@ export const isInteger = (type: string): boolean => {
  * @internal
  */
 export const isDecimal = (type: string): boolean => {
+  if (!type) {
+    return false;
+  }
   return [
     'basemeasure',
     'calculatedmeasure',
@@ -55,6 +61,9 @@ export const isNumber = (type: string): boolean => {
  * @internal
  */
 export const isText = (type: string): boolean => {
+  if (!type) {
+    return false;
+  }
   return [
     'textdimension',
     'string',
@@ -79,6 +88,9 @@ export const isText = (type: string): boolean => {
  * @internal
  */
 export const isDatetime = (type: string): boolean => {
+  if (!type) {
+    return false;
+  }
   return [
     'datelevel',
     'date',
@@ -106,6 +118,9 @@ export const isDatetime = (type: string): boolean => {
  * @internal
  */
 export const isBoolean = (type: string): boolean => {
+  if (!type) {
+    return false;
+  }
   return ['bool', 'boolean', 'bit', 'logical'].includes(type.toLowerCase());
 };
 

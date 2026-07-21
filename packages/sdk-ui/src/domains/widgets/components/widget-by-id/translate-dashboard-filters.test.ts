@@ -10,7 +10,7 @@ import {
   extractCombinedFilters,
   extractDashboardFiltersForWidget,
 } from './translate-dashboard-filters.js';
-import { PanelItem, WidgetDashboardFilterMode, WidgetDto } from './types.js';
+import { Panel, PanelItem, WidgetDashboardFilterMode, WidgetDto } from './types.js';
 
 let dummyDashboard: DashboardDto;
 let dummyWidget: WidgetDto;
@@ -104,6 +104,56 @@ describe('extractCombinedFilters', () => {
       filter: (dummyDashboard.filters![1] as FilterDto).jaql.filter,
     });
   });
+
+  it('should keep only the widget filter when it and a dashboard filter target the same datetime level', () => {
+    const dateDim = '[DimDate.Date (Calendar)]';
+    const dashboard = {
+      filters: [
+        {
+          jaql: {
+            dim: dateDim,
+            datatype: 'datetime',
+            level: 'years',
+            filter: { exclude: { members: ['2012-01-01T00:00:00'] } },
+          },
+          instanceid: 'dashboard-date-filter',
+        },
+      ],
+    } as unknown as DashboardDto;
+    const widget = {
+      type: 'chart/column',
+      metadata: {
+        ignore: { all: false, ids: [] },
+        panels: [
+          {
+            name: 'filters',
+            items: [
+              {
+                jaql: {
+                  dim: dateDim,
+                  datatype: 'datetime',
+                  level: 'years',
+                  filter: { members: ['2012-01-01T00:00:00'] },
+                },
+              } as PanelItem,
+            ],
+          },
+        ],
+      },
+      // slice mode so the dashboard filter is a scope filter (as in the reported scenario)
+      options: { dashboardFiltersMode: WidgetDashboardFilterMode.FILTER },
+    } as unknown as WidgetDto;
+
+    const { filters, highlights } = extractCombinedFilters(dashboard, widget);
+
+    expect(highlights).toHaveLength(0);
+    expect(filters).toHaveLength(1);
+    expect(filters[0].jaql().jaql).toMatchObject({
+      dim: dateDim,
+      level: 'years',
+      filter: { members: ['2012-01-01T00:00:00'] },
+    });
+  });
 });
 
 describe('extractDashboardFiltersForWidget', () => {
@@ -184,6 +234,28 @@ describe('extractDashboardFiltersForWidget', () => {
     expect(filters[1].jaql().jaql.dim).toEqual((dummyDashboard.filters![1] as FilterDto).jaql.dim);
     expect(filters[1].jaql().jaql.filter).toEqual(
       (dummyDashboard.filters![1] as FilterDto).jaql.filter,
+    );
+  });
+
+  it('should treat matching dashboard filters as highlights for sankey category panel', () => {
+    dummyWidget.type = 'sankey';
+    dummyWidget.metadata.panels = [
+      {
+        name: 'category',
+        items: [{ jaql: { dim: '[Commerce.Age Range]' } }, { jaql: { dim: '[Commerce.Gender]' } }],
+      },
+    ] as Panel[];
+    dummyWidget.options!.dashboardFiltersMode = WidgetDashboardFilterMode.SELECT;
+
+    const { filters, highlights } = extractDashboardFiltersForWidget(dummyDashboard, dummyWidget);
+
+    expect(filters).toHaveLength(0);
+    expect(highlights).toHaveLength(2);
+    expect(highlights[0].jaql().jaql.dim).toEqual(
+      (dummyDashboard.filters![0] as FilterDto).jaql.dim,
+    );
+    expect(highlights[1].jaql().jaql.dim).toEqual(
+      (dummyDashboard.filters![1] as FilterDto).jaql.dim,
     );
   });
 

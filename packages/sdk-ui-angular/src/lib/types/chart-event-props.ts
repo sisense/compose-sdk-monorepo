@@ -1,5 +1,9 @@
 import type { Data } from '@sisense/sdk-data';
-import type { BeforeRenderHandler, IndicatorBeforeRenderHandler } from '@sisense/sdk-ui-preact';
+import type {
+  BeforeRenderHandler,
+  IndicatorBeforeRenderHandler,
+  KpiBeforeRenderHandler,
+} from '@sisense/sdk-ui-preact';
 
 import type {
   AreamapDataPointEventHandler,
@@ -232,7 +236,8 @@ export interface ChartEventProps extends BaseChartEventProps {
    */
   beforeRender?:
     | HighchartsBasedChartEventProps['beforeRender']
-    | IndicatorChartEventProps['beforeRender'];
+    | IndicatorChartEventProps['beforeRender']
+    | KpiBeforeRenderHandler;
 }
 
 export type WithoutPreactChartEventProps<T> = Omit<

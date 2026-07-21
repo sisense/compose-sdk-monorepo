@@ -3,10 +3,12 @@ import {
   convertDataSource,
   convertJaqlDataSourceForDto,
   createAttribute,
+  DateLevels,
   DimensionalLevelAttribute,
   Filter,
   JaqlDataSourceForDto,
   Measure,
+  MetadataTypes,
 } from '@sisense/sdk-data';
 
 import { jumpToDashboardConfigFromWidgetDto } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils.js';
@@ -35,6 +37,7 @@ import {
   ChartDataOptions,
   IndicatorChartDataOptions,
   PivotTableDataOptions,
+  SankeyChartDataOptions,
   ScatterChartDataOptions,
   ScattermapChartDataOptions,
   TableDataOptions,
@@ -69,6 +72,7 @@ import {
   toPieWidgetStyle,
   toPivotTableWidgetStyle,
   toPolarWidgetStyle,
+  toSankeyWidgetStyle,
   toScattermapWidgetStyle,
   toScatterWidgetStyle,
   toSunburstWidgetStyle,
@@ -129,6 +133,7 @@ import {
   PivotTableDrilldownOptions,
   PivotTableWidgetStyleOptions,
   PolarStyleOptions,
+  SankeyStyleOptions,
   ScattermapStyleOptions,
   ScatterStyleOptions,
   StackableStyleOptions,
@@ -157,6 +162,7 @@ import {
   toPiePanels,
   toPivotTablePanels,
   toPolarPanels,
+  toSankeyPanels,
   toScattermapPanels,
   toScatterPanels,
   toSunburstPanels,
@@ -509,16 +515,31 @@ function extractFilterWidgetData(
   // dashboard filter's LevelAttribute, so the linked filter is not adopted
   // (not hidden in the FiltersPanel, no selection shown in the dropdown).
   const isDatetimeLevel = Boolean(jaql?.level || jaql?.dateTimeLevel || jaql?.dateTimePart);
+  // A datetime dim without an explicit level (hand-crafted / legacy DTO — both pickers
+  // stamp a level) falls back to Years, mirroring the picker semantics (a date pick
+  // always creates a Years filter).
+  const isDatetime = isDatetimeLevel || jaql?.datatype === 'datetime';
+  // The attribute type must be a METADATA type ('text-attribute'/'numeric-attribute'),
+  // not the raw JAQL datatype ('text'/'numeric') — validateQueryDescription rejects
+  // non-metadata types, which killed the FilterWidget member query before any request
+  // was sent. Datetime dims are unaffected: the granularity branch builds
+  // a LevelAttribute whose type is the valid 'datelevel'.
+  const attributeType =
+    jaql?.datatype === 'numeric' ? MetadataTypes.NumericAttribute : MetadataTypes.TextAttribute;
   const attribute: Attribute = jaql?.dim
     ? createAttribute({
         name: jaql.title || jaql.dim,
         expression: jaql.dim,
-        type: jaql.datatype || 'text',
-        ...(isDatetimeLevel
-          ? { granularity: DimensionalLevelAttribute.translateJaqlToGranularity(jaql) }
+        type: attributeType,
+        ...(isDatetime
+          ? {
+              granularity: isDatetimeLevel
+                ? DimensionalLevelAttribute.translateJaqlToGranularity(jaql)
+                : DateLevels.Years,
+            }
           : {}),
       })
-    : createAttribute({ name: '', expression: '', type: 'text' });
+    : createAttribute({ name: '', expression: '', type: MetadataTypes.TextAttribute });
 
   return {
     attribute,
@@ -551,6 +572,9 @@ function toFilterWidgetProps(widgetModel: WidgetModel): CommonWidgetProps {
     isMultiselect: data.isMultiselect,
     filterType: data.filterType,
     dataSource: widgetModel.dataSource,
+    // The widget's own filters (DTO 'filters' panel) narrow the member list;
+    // dashboard filters are appended separately in useCommonFilters.
+    parentFilters: widgetModel.filters,
     // Carry the widget-design container style (space around, corner radius, shadow,
     // border, background, header) so the CSDK-rendered FilterWidget's WidgetContainer
     // applies the same Widget Style as every other widget type. (`styleOptions` is
@@ -1193,6 +1217,10 @@ export function toWidgetDto(
     panels.push(...toTreemapPanels(widgetModel.dataOptions as CategoricalChartDataOptions));
     subtype = subtype || chartType;
     style = toTreemapWidgetStyle(widgetModel.styleOptions as TreemapStyleOptions);
+  } else if (chartType === 'sankey') {
+    panels.push(...toSankeyPanels(widgetModel.dataOptions as SankeyChartDataOptions));
+    subtype = subtype || chartType;
+    style = toSankeyWidgetStyle(widgetModel.styleOptions as SankeyStyleOptions);
   } else if (chartType === 'sunburst') {
     panels.push(...toSunburstPanels(widgetModel.dataOptions as CategoricalChartDataOptions));
     subtype = subtype || chartType;

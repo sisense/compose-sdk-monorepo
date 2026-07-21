@@ -80,6 +80,20 @@ Opacity of the links between Sankey nodes.
 
 ***
 
+### minLinkWidth
+
+> **minLinkWidth**?: `number`
+
+Minimum link width in pixels.
+
+#### Default
+
+```ts
+1
+```
+
+***
+
 ### nodeAlignment
 
 > **nodeAlignment**?: `"bottom"` \| `"center"` \| `"top"`

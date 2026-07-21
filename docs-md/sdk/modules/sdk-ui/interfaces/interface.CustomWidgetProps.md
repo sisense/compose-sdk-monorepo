@@ -68,6 +68,16 @@ Description of the widget
 
 ***
 
+#### id
+
+> **id**?: `string`
+
+Widget identifier
+
+Used to identify the widget when exporting its data (for example, the "Download as Excel" action).
+
+***
+
 #### styleOptions
 
 > **styleOptions**?: [`CustomWidgetStyleOptions`](../type-aliases/type-alias.CustomWidgetStyleOptions.md)

@@ -1,6 +1,6 @@
-import { TranslatableError } from '../../../translation/translatable-error.js';
+import { createCalculatedAttribute } from '../../attributes/attributes.js';
 import { Attribute, Filter, LevelAttribute, MembersFilterConfig } from '../../interfaces.js';
-import { FilterJaql } from '../../types.js';
+import { FilterJaql, MetadataTypes } from '../../types.js';
 import * as filterFactory from '../factory.js';
 import { getDefaultBaseFilterConfig, simplifyFilterConfig } from '../filter-config-utils.js';
 import {
@@ -210,13 +210,11 @@ export const createFilterFromCustomFilterJaql = (
  */
 export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid: string): Filter => {
   try {
-    if ('formula' in jaql) {
-      // generic pass-through JAQL filter will be used instead
-      throw new TranslatableError('errors.filter.formulaFiltersNotSupported', {
-        filter: JSON.stringify(jaql),
-        attributeName: jaql.title ?? jaql.column ?? jaql.dim,
-      });
-    }
+    // A calculated dimension (CD) filter is identified by its formula + context
+    // rather than a `dim`. It is deserialized into a first-class filter backed by a
+    // calculated attribute and routed through the same filter-type handling below.
+    const isCalculatedDimension = MetadataTypes.isCalculatedAttribute(jaql);
+
     const filterJaqlWrapperWithType = extractFilterTypeFromFilterJaql(
       jaql,
       jaql.datatype as FilterModalType,
@@ -224,8 +222,12 @@ export const createFilterFromJaqlInternal = (jaql: FilterJaqlInternal, guid: str
 
     const { filter: filterJaqlWithType } = filterJaqlWrapperWithType;
     const { filterType } = filterJaqlWithType;
-    const attribute = createAttributeFromFilterJaql(jaql);
-    const measure = createMeasureFromFilterJaql(jaql);
+    const attribute = isCalculatedDimension
+      ? createCalculatedAttribute(jaql)
+      : createAttributeFromFilterJaql(jaql);
+    // A CD filter always filters on its attribute, never on a measure, so skip
+    // measure detection to route conditions through the attribute filter path.
+    const measure = isCalculatedDimension ? undefined : createMeasureFromFilterJaql(jaql);
 
     switch (filterType) {
       case FILTER_TYPES.INCLUDE_ALL:

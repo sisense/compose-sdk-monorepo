@@ -21,7 +21,7 @@ export type CategoricalFusionLabels = {
   suffix?: string;
   labelColor?: string | null;
   fontSize?: number | null;
-  fontStyle?: 'normal' | 'italic' | null;
+  fontStyle?: 'normal' | 'italic';
   backgroundColor?: string | null;
   backgroundPadding?: number | null;
   borderColor?: string | null;
@@ -43,7 +43,7 @@ export type CategoricalFusionLabelsDto = {
   suffix: string;
   labelColor: string | null;
   fontSize: number | null;
-  fontStyle: 'normal' | 'italic' | null;
+  fontStyle: 'normal' | 'italic';
   backgroundColor: string | null;
   backgroundPadding: number;
   borderColor: string | null;
@@ -194,7 +194,7 @@ export const DEFAULT_CATEGORICAL_FUSION_LABEL_FORMATTING = {
   suffix: '',
   labelColor: null,
   fontSize: null,
-  fontStyle: null,
+  fontStyle: 'normal',
   backgroundColor: null,
   backgroundPadding: 2,
   borderColor: null,

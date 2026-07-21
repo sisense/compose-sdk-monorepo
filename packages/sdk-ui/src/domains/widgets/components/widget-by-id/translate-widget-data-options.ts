@@ -7,12 +7,14 @@ import {
   isSortDirection,
   JaqlDataSource,
   MetadataTypes,
+  normalizeName,
   PivotJaql,
   Sort,
 } from '@sisense/sdk-data';
 import type { SortDirection } from '@sisense/sdk-data';
 import camelCase from 'lodash-es/camelCase';
 import findKey from 'lodash-es/findKey';
+import isEqual from 'lodash-es/isEqual';
 
 import { WidgetDataOptions } from '@/domains/widgets/widget-model';
 
@@ -30,6 +32,7 @@ import {
   CategoricalChartDataOptions,
   Color,
   IndicatorChartDataOptions,
+  MultiColumnValueToColorMap,
   NumberFormatConfig,
   SankeyChartDataOptions,
   ScatterChartDataOptions,
@@ -37,6 +40,7 @@ import {
   StyledMeasureColumn,
 } from '../../../../types.js';
 import {
+  createHandPickedValueToColorMap,
   createPanelColorFormat,
   createValueColorOptions,
   createValueToColorMap,
@@ -401,16 +405,68 @@ function extractCategoricalChartDataOptions(
   };
 }
 
+/**
+ * Builds Sankey `seriesToColorMap` from hand-picked category member colors.
+ *
+ * When every category stage has the same hand-picked map, returns a flat
+ * {@link ValueToColorMap}. Otherwise returns a {@link MultiColumnValueToColorMap}
+ * keyed by `normalizeName(item.jaql.title)` per stage.
+ *
+ * @param panels - Fusion widget panels
+ * @returns Flat or multi-column hand-picked color map, or `undefined` when none
+ * @internal
+ */
+function extractSankeySeriesToColorMap(panels: Panel[]) {
+  const categoryItems = getEnabledPanelItems(panels, 'category');
+  const itemsWithHandPicked = categoryItems
+    .map((item) => ({
+      item,
+      colorMap: item.format?.members ? createHandPickedValueToColorMap(item.format.members) : {},
+    }))
+    .filter(({ colorMap }) => Object.keys(colorMap).length > 0);
+
+  if (!itemsWithHandPicked.length) {
+    return undefined;
+  }
+
+  const colorMaps = itemsWithHandPicked.map(({ colorMap }) => colorMap);
+  const [firstColorMap] = colorMaps;
+  const hasUniformMembersAcrossStages =
+    itemsWithHandPicked.length === categoryItems.length &&
+    colorMaps.every((map) => isEqual(map, firstColorMap));
+
+  if (hasUniformMembersAcrossStages) {
+    return firstColorMap;
+  }
+
+  return itemsWithHandPicked.reduce<MultiColumnValueToColorMap>((map, { item, colorMap }) => {
+    if (typeof item.jaql.title === 'string') {
+      map[normalizeName(item.jaql.title)] = colorMap;
+    }
+    return map;
+  }, {});
+}
+
+/**
+ * Translates Fusion Sankey panels into {@link SankeyChartDataOptions}.
+ *
+ * @param panels - Fusion widget panels
+ * @param paletteColors - Optional palette colors for column styling
+ * @returns Sankey chart data options including optional hand-picked series colors
+ * @internal
+ */
 function extractSankeyChartDataOptions(
   panels: Panel[],
   paletteColors?: Color[],
 ): SankeyChartDataOptions {
   const category = createColumnsFromPanelItems<StyledColumn>(panels, 'category', paletteColors);
   const [value] = createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'value', paletteColors);
+  const seriesToColorMap = extractSankeySeriesToColorMap(panels);
 
   return {
     category,
     value,
+    ...(seriesToColorMap && { seriesToColorMap }),
   };
 }
 

@@ -202,6 +202,18 @@ describe('Rest API', () => {
         returnBlob: true,
       });
     });
+
+    it('should resolve with the Blob returned by the http client', async () => {
+      const blob = new Blob(['xlsx-bytes']);
+      httpPostMock.mockResolvedValueOnce(blob);
+      await expect(restApi.exportJaqlToXlsx({ widgetId: 'w1', jaql: {} })).resolves.toBe(blob);
+    });
+
+    it('should propagate errors from the http client', async () => {
+      const error = new Error('export failed');
+      httpPostMock.mockRejectedValueOnce(error);
+      await expect(restApi.exportJaqlToXlsx({ widgetId: 'w1', jaql: {} })).rejects.toBe(error);
+    });
   });
 
   describe('getSharedFormula', () => {
@@ -226,7 +238,10 @@ describe('Rest API', () => {
   describe('useRestApi', () => {
     it('useRestApi should load and return restApi', async () => {
       useSisenseContextMock.mockReturnValueOnce({
-        app: { httpClient: httpClientMock } as ClientApplication,
+        app: {
+          httpClient: httpClientMock,
+          settings: {},
+        } as ClientApplication,
         isInitialized: true,
         tracking: {
           enabled: false,

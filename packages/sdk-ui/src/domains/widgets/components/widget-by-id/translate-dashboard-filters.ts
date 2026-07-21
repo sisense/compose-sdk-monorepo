@@ -238,12 +238,14 @@ function getHighlightsAllowedPanelNames(widgetType: FusionWidgetType) {
       return ['x-axis', 'y-axis', 'point'];
     case 'chart/boxplot':
       return ['category'];
+    case 'sankey':
+      return ['category'];
     case 'map/scatter':
       return ['geo'];
     case 'pivot2':
       return ['rows', 'columns'];
     default:
-      // Note: all other widgets are not support highlight filters. For example: funnel, table, indicator, sankey
+      // Note: all other widgets are not support highlight filters. For example: funnel, table, indicator
       return [];
   }
 }

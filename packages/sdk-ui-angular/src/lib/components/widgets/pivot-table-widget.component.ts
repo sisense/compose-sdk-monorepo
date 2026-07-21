@@ -156,6 +156,14 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
   config: PivotTableWidgetProps['config'];
 
   /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.id}
+   *
+   * @category Widget
+   */
+  @Input()
+  id: PivotTableWidgetProps['id'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.drilldownOptions}
    *
    * @category Widget
@@ -228,6 +236,7 @@ export class PivotTableWidgetComponent implements AfterViewInit, OnChanges, OnDe
       highlights: this.highlights,
       styleOptions: this.styleOptions,
       config: this.config,
+      id: this.id,
       drilldownOptions: this.drilldownOptions,
       title: this.title,
       description: this.description,

@@ -18,6 +18,9 @@ export const translation = {
     invalidCountRowsResponse: 'Invalid row count response received from the server.',
     dataSourceNotFound:
       'Failed to get fields for data source "{{dataSource}}". Please make sure the data source exists and is accessible.',
+    calculatedDimensionParseNotSupported:
+      'The connected data source does not support resolving calculated dimension formulas.',
+    calculatedDimensionFormulaInvalid: 'Invalid calculated dimension formula. {{message}}',
   },
 };
 

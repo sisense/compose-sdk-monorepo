@@ -482,6 +482,43 @@ describe('Chart', () => {
     expect(overlayTitle).toBeTruthy();
   });
 
+  describe('kpi chart', () => {
+    // Regression coverage for regular-chart's `hasNoResults`: a KPI chart type with no rows at
+    // all must still let the KpiChartRenderer mount (it owns both of its own empty states --
+    // `noDataText` card shell vs. its own no-results overlay), rather than being short-circuited
+    // to the generic `NoResultsOverlay` before the renderer ever sees the data.
+    it('shows the generic No Results overlay when noDataText is not configured', async () => {
+      const container = render(
+        <Chart
+          dataSet={{
+            columns: dataSet.columns,
+            rows: [],
+          }}
+          chartType={'kpi'}
+          dataOptions={{ value: meas1 }}
+        />,
+      );
+      const overlayTitle = await container.findByText('No Results');
+      expect(overlayTitle).toBeTruthy();
+    });
+
+    it('renders the KPI card shell with noDataText instead of the No Results overlay', async () => {
+      const { findByText, queryByText } = render(
+        <Chart
+          dataSet={{
+            columns: dataSet.columns,
+            rows: [],
+          }}
+          chartType={'kpi'}
+          dataOptions={{ value: meas1 }}
+          styleOptions={{ value: { noDataText: 'N/A' } }}
+        />,
+      );
+      expect(await findByText('N/A')).toBeTruthy();
+      expect(queryByText('No Results')).toBeNull();
+    });
+  });
+
   it('should show No Results overlay in Table when data missing', async () => {
     const container = render(
       <Table

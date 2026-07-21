@@ -93,8 +93,10 @@ export interface DashboardWidgetsDeletedEvent {
 }
 
 /**
- * Event triggered when a FilterWidget's date granularity is changed on the dashboard.
- * Lets an embedding host sync the widget's stored dimension metadata to the new level.
+ * `DashboardWidgetDateLevelChangedEvent` is emitted when a filter widget's date
+ * granularity is changed on the dashboard, letting an embedding host sync the widget's
+ * stored dimension metadata to the new level. The payload carries the affected widget's
+ * `oid` plus a JAQL-level descriptor of the new date granularity.
  *
  * @beta
  */
@@ -277,15 +279,29 @@ export interface WidgetsPanelConfig {
       enabled?: boolean;
     };
     /**
-     * Configuration for downloading widget data as Excel.
+     * Configuration for the "Download as Excel" action on all widgets in the panel,
+     * which adds an item to each widget's header menu that exports the widget's
+     * underlying data as an Excel (XLSX) file.
      *
-     * @sisenseInternal
+     * @example
+     * Enable Excel download for every widget in a dashboard:
+     * ```ts
+     * const dashboardConfig: DashboardConfig = {
+     *   widgetsPanel: {
+     *     actions: {
+     *       downloadExcel: {
+     *         enabled: true,
+     *       },
+     *     },
+     *   },
+     * };
+     * ```
      */
     downloadExcel?: {
       /**
-       * Determines whether the widgets possibility to download Excel is enabled.
+       * Whether the "Download as Excel" action is enabled for all widgets in the panel.
        *
-       * If not specified, the default value is `false`.
+       * @default false
        */
       enabled?: boolean;
     };

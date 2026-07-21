@@ -1,11 +1,39 @@
 /** @vitest-environment jsdom */
 import { createAttribute, filterFactory } from '@sisense/sdk-data';
+import type { MembersFilter } from '@sisense/sdk-data';
 import { act, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
-import { FilterWidgetDropdown, getEffectiveMultiselect } from './filter-widget-dropdown.js';
+import {
+  asSingleSelectionMembers,
+  FilterWidgetDropdown,
+  getEffectiveMultiselect,
+} from './filter-widget-dropdown.js';
+
+describe('asSingleSelectionMembers', () => {
+  it('keeps the alphabetically-first member when more than one is selected', () => {
+    expect(asSingleSelectionMembers(['Italy', 'France', 'Germany'])).toEqual(['France']);
+  });
+
+  it('returns the members (as a new array) when at most one is selected', () => {
+    const one = ['Italy'];
+    expect(asSingleSelectionMembers(one)).toEqual(['Italy']);
+    expect(asSingleSelectionMembers(one)).not.toBe(one);
+
+    const empty: string[] = [];
+    expect(asSingleSelectionMembers(empty)).toEqual([]);
+    expect(asSingleSelectionMembers(empty)).not.toBe(empty);
+  });
+
+  it('returns a new array and does not mutate the input', () => {
+    const members = ['Italy', 'France'];
+    const result = asSingleSelectionMembers(members);
+    expect(members).toEqual(['Italy', 'France']);
+    expect(result).not.toBe(members);
+  });
+});
 
 describe('getEffectiveMultiselect', () => {
   it('is multi when the widget is configured multiselect', () => {
@@ -49,14 +77,18 @@ let mockMembersData: {
 } | null = null;
 let mockMembersLoading = false;
 
-const mockUseGetFilterMembers = vi.fn(() => ({
+// Structural subset of GetFilterMembersParams covering the fields these tests assert.
+// Typing the mock at its boundary lets `mock.calls` be consumed via inference (no casts).
+type MembersHookParams = { filter: MembersFilter; enabled?: boolean };
+
+const mockUseGetFilterMembers = vi.fn((_params: MembersHookParams) => ({
   data: mockMembersData,
   loadMore: mockLoadMore,
   isLoading: mockMembersLoading,
 }));
 
 vi.mock('@/domains/filters/hooks/use-get-filter-members', () => ({
-  useGetFilterMembersInternal: (...args: unknown[]) => mockUseGetFilterMembers(...(args as [])),
+  useGetFilterMembersInternal: (params: MembersHookParams) => mockUseGetFilterMembers(params),
 }));
 
 vi.mock('react-i18next', async (importOriginal) => {
@@ -258,5 +290,157 @@ describe('FilterWidgetDropdown', () => {
       <FilterWidgetDropdown attribute={textAttribute} isMultiselect={false} filter={filter} />,
     );
     expect(getByTestId('single-value').textContent).toBe('Italy');
+  });
+
+  // ── isMultiselect toggle realigns the filter (SNS-131674) ────────────────────
+  // The synchronized filter's enableMultiSelection is seeded once, so a live toggle
+  // of isMultiselect (widget editor / standalone) was previously ignored. Mirrors the
+  // filter editor popup's MembersSection reduce-on-toggle behavior.
+  it('drops the selection to a single member when switching from multi to single', () => {
+    const onFilterUpdate = vi.fn();
+    const multiFilter = filterFactory.members(textAttribute, ['France', 'Italy'], {
+      enableMultiSelection: true,
+    });
+    const { rerender } = render(
+      <FilterWidgetDropdown
+        attribute={textAttribute}
+        isMultiselect={true}
+        filter={multiFilter}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+    onFilterUpdate.mockClear();
+
+    rerender(
+      <FilterWidgetDropdown
+        attribute={textAttribute}
+        isMultiselect={false}
+        filter={multiFilter}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    expect(onFilterUpdate).toHaveBeenCalledTimes(1);
+    const emitted = onFilterUpdate.mock.calls[0][0];
+    expect(emitted.members).toHaveLength(1);
+    expect(emitted.config.enableMultiSelection).toBe(false);
+  });
+
+  // ── Dimension change rebuilds the filter (SNS-131802) ────────────────────────
+  // The synchronized filter is seeded once (useSynchronizedFilter useState). In the
+  // widget editor the dropdown mounts BEFORE a dimension is picked (empty attribute)
+  // and receives the real attribute via a prop swap — without a rebuild the member
+  // query keeps targeting the stale (empty or previous) attribute forever, so the
+  // dropdown stays empty with no request and no error.
+  const getMembersHookCalls = (fromIndex = 0): MembersHookParams[] =>
+    mockUseGetFilterMembers.mock.calls.slice(fromIndex).map(([params]) => params);
+
+  it('queries members for the new attribute after mounting with an empty one (editor flow)', () => {
+    const empty = createAttribute({ name: '', expression: '', type: 'text' });
+    const onFilterUpdate = vi.fn();
+    const { rerender } = render(
+      <FilterWidgetDropdown
+        attribute={empty}
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+    const callsBeforeSwap = mockUseGetFilterMembers.mock.calls.length;
+
+    rerender(
+      <FilterWidgetDropdown
+        attribute={textAttribute}
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    const callsAfterSwap = getMembersHookCalls(callsBeforeSwap);
+    const enabledCalls = callsAfterSwap.filter((params) => params.enabled);
+    // Every enabled query after the swap targets the NEW attribute — a transient
+    // enabled call still carrying the stale empty filter would hit the analytical
+    // engine with an empty dim.
+    expect(enabledCalls.length).toBeGreaterThan(0);
+    enabledCalls.forEach((params) => {
+      expect(params.filter.attribute.expression).toBe('[Country.Country]');
+    });
+  });
+
+  it('disables the member query while no dimension is picked (empty attribute)', () => {
+    // The editor mounts the dropdown before a dimension exists; querying an empty
+    // dimension is rejected by the analytical engine ("Jaql element doesn't contain
+    // dim") — the query must stay disabled until a real attribute arrives.
+    const empty = createAttribute({ name: '', expression: '', type: 'text' });
+    render(<FilterWidgetDropdown attribute={empty} isMultiselect={true} />);
+
+    getMembersHookCalls().forEach((params) => {
+      expect(params.enabled).toBe(false);
+    });
+  });
+
+  it('queries members for the new attribute after a dimension swap', () => {
+    const onFilterUpdate = vi.fn();
+    const brand = createAttribute({ name: 'Brand', expression: '[Brand.Brand]', type: 'text' });
+    const { rerender } = render(
+      <FilterWidgetDropdown
+        attribute={textAttribute}
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+    onFilterUpdate.mockClear();
+    const callsBeforeSwap = mockUseGetFilterMembers.mock.calls.length;
+
+    rerender(
+      <FilterWidgetDropdown
+        attribute={brand}
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    // Every enabled query after the swap targets the NEW attribute — none may still
+    // carry the previous dimension's filter.
+    const enabledCalls = getMembersHookCalls(callsBeforeSwap).filter((params) => params.enabled);
+    expect(enabledCalls.length).toBeGreaterThan(0);
+    enabledCalls.forEach((params) => {
+      expect(params.filter.attribute.expression).toBe('[Brand.Brand]');
+    });
+    // The rebuilt (empty) selection for the new dimension is propagated to the host,
+    // so the editor records a cleared selection instead of the old dimension's members.
+    expect(onFilterUpdate).toHaveBeenCalled();
+    const emitted = onFilterUpdate.mock.calls.at(-1)![0];
+    expect(emitted.members).toEqual([]);
+    expect(emitted.attribute.expression).toBe('[Brand.Brand]');
+  });
+
+  it('enables multiselect without dropping members when switching from single to multi', () => {
+    const onFilterUpdate = vi.fn();
+    const singleFilter = filterFactory.members(textAttribute, ['France'], {
+      enableMultiSelection: false,
+    });
+    const { rerender } = render(
+      <FilterWidgetDropdown
+        attribute={textAttribute}
+        isMultiselect={false}
+        filter={singleFilter}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+    onFilterUpdate.mockClear();
+
+    rerender(
+      <FilterWidgetDropdown
+        attribute={textAttribute}
+        isMultiselect={true}
+        filter={singleFilter}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    expect(onFilterUpdate).toHaveBeenCalledTimes(1);
+    const emitted = onFilterUpdate.mock.calls[0][0];
+    expect(emitted.members).toEqual(['France']);
+    expect(emitted.config.enableMultiSelection).toBe(true);
   });
 });

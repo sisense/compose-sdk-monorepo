@@ -17,9 +17,14 @@ import { SisenseContextProviderProps } from '@/index';
 import { SYSTEM_TENANT_NAME } from '@/shared/const';
 
 import { TranslatableError } from '../translation/translatable-error';
-import { isApiTelemetryEnabled, prepareApiTelemetryHeaders } from './helpers';
-import { getSettings } from './settings/settings';
-import { type ClientApplication, SystemSettings } from './types';
+import {
+  isApiTelemetryEnabled,
+  normalizeSystemSettings,
+  prepareApiTelemetryHeaders,
+  type SystemSettingsWire,
+} from './helpers';
+import { getAppSettings } from './settings/settings';
+import { type ClientApplication } from './types';
 
 type ClientApplicationParams = Pick<
   SisenseContextProviderProps,
@@ -110,8 +115,8 @@ export const createClientApplication = async ({
     return new Promise<ClientApplication>(() => {});
   }
 
-  const settings = await getSettings(appConfig || {}, httpClient, disableFusionPalette);
-  const systemSettings = await httpClient.get<SystemSettings>('api/v1/settings/system');
+  const systemSettingsWire = await httpClient.get<SystemSettingsWire>('api/v1/settings/system');
+  const systemSettings = normalizeSystemSettings(systemSettingsWire);
   if (isApiTelemetryEnabled(systemSettings)) {
     httpClient = new HttpClient(
       url,
@@ -120,6 +125,13 @@ export const createClientApplication = async ({
       prepareApiTelemetryHeaders(packageName, appConfig, useFusionAuth),
     );
   }
+
+  const settings = await getAppSettings(
+    appConfig || {},
+    httpClient,
+    disableFusionPalette,
+    systemSettings,
+  );
 
   const pivotQueryClient = new PivotQueryClient(getBaseUrl(url, settings.user.tenant.name), auth);
   const queryClient = new DimensionalQueryClient(httpClient, pivotQueryClient);

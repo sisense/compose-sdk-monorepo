@@ -17,6 +17,10 @@ import { Coordinates } from '@/domains/visualizations/components/chart/component
 import { Hierarchy, HierarchyId, StyledColumn, StyledMeasureColumn } from '.';
 import { GeoDataElement } from './domains/visualizations/components/chart/restructured-charts/areamap-chart/types';
 import { CalendarDayOfWeek } from './domains/visualizations/components/chart/restructured-charts/highchart-based-charts/calendar-heatmap-chart/utils';
+import type {
+  DataColorCondition,
+  DataColorOptions,
+} from './domains/visualizations/core/chart-data/data-coloring/types';
 import { HighchartsOptionsInternal } from './domains/visualizations/core/chart-options-processor/chart-options-service';
 import {
   AreaRangeSubtype,
@@ -45,6 +49,7 @@ import {
   CartesianChartType,
   CategoricalChartType,
   IndicatorChartType,
+  KpiChartType,
   RangeChartType,
   SankeyChartType,
   ScatterChartType,
@@ -69,6 +74,9 @@ export type {
   IndicatorChartDataOptions,
   CalendarHeatmapChartDataOptions,
   SankeyChartDataOptions,
+  KpiChartDataOptions,
+  KpiComparison,
+  KpiValueMode,
   StyledColumn,
   StyledMeasureColumn,
 } from './domains/visualizations/core/chart-data-options/types';
@@ -79,6 +87,7 @@ export type {
   RangeDataColorOptions,
   UniformDataColorOptions,
 } from './domains/visualizations/core/chart-data/data-coloring/types';
+
 // export the following types for TSDoc
 export type {
   CartesianChartType,
@@ -89,6 +98,7 @@ export type {
   ScattermapChartType,
   AreamapChartType,
   CalendarHeatmapChartType,
+  KpiChartType,
   TableType,
   TableChartType,
   RangeChartType,
@@ -1622,10 +1632,301 @@ export interface SankeyStyleOptions extends BaseStyleOptions {
    */
   nodePadding?: number;
   /**
+   * Minimum link width in pixels.
+   * @default 1
+   */
+  minLinkWidth?: number;
+  /**
    * Determines which side of the chart the nodes are aligned to.
    * In vertical mode `'top'` aligns to the left and `'bottom'` to the right.
    */
   nodeAlignment?: 'top' | 'center' | 'bottom';
+}
+
+/**
+ * Chart type of the sparkline embedded in a KPI chart.
+ *
+ * @beta
+ */
+export type KpiSparklineType = 'line' | 'spline' | 'area' | 'column';
+
+/**
+ * Configuration that defines styling of the KPI chart sparkline.
+ * The sparkline is rendered only when {@link KpiChartDataOptions.trend} is set.
+ *
+ * @beta
+ */
+export type KpiSparklineStyleOptions = {
+  /**
+   * Boolean flag that defines whether the sparkline is shown.
+   *
+   * @defaultValue true when `KpiChartDataOptions.trend` is set
+   */
+  enabled?: boolean;
+  /**
+   * Chart type of the sparkline.
+   *
+   * @defaultValue 'area'
+   */
+  chartType?: KpiSparklineType;
+};
+
+/**
+ * Computed comparison shown on a KPI card. Mirrors the {@link KpiComparison} input,
+ * with all math resolved.
+ *
+ * @beta
+ */
+export type KpiComparisonInfo =
+  | {
+      type: 'previous-period';
+      baseline: number;
+      deltaValue: number;
+      deltaPercent?: number;
+      label: string;
+    }
+  | { type: 'delta'; baseline: number; deltaValue: number; deltaPercent?: number; label: string }
+  | { type: 'target'; target: number; percentOfTarget?: number; toGo: number; label: string }
+  | { type: 'value'; value: number; label: string };
+
+/**
+ * Data point in a KPI chart — the card represents a single aggregated point.
+ *
+ * @beta
+ */
+export type KpiDataPoint = {
+  /** Headline value. */
+  value?: number;
+  /** Last trend bucket as epoch milliseconds, when a trend dimension is set. */
+  date?: number;
+  /** Resolved comparison shown on the card, when a comparison is active. */
+  comparison?: KpiComparisonInfo;
+};
+
+/**
+ * A handler function that allows to customize what happens when a KPI chart is clicked.
+ *
+ * @beta
+ */
+export type KpiDataPointEventHandler = (
+  /** Data point that was clicked */
+  point: KpiDataPoint,
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent,
+) => void;
+
+/**
+ * Render options of a KPI chart, as computed from the query result.
+ * Passed to {@link KpiBeforeRenderHandler} for customization before painting.
+ *
+ * @beta
+ */
+export type KpiRenderOptions = {
+  value?: number;
+  valueTitle: string;
+  valueColor?: string;
+  valuePeriodMs?: number;
+  comparison?: KpiComparisonInfo;
+  sparklinePoints?: { x: number; y: number | null }[];
+};
+
+/**
+ * A handler function that allows to customize the computed KPI render options
+ * before the card is rendered. The returned options are then used when painting the card.
+ *
+ * @beta
+ */
+export type KpiBeforeRenderHandler = (
+  /** KPI render options */
+  renderOptions: KpiRenderOptions,
+) => KpiRenderOptions;
+
+/**
+ * Icon shown next to the KPI headline value when its condition matches.
+ * Conditions are evaluated in order; the first match wins.
+ *
+ * @beta
+ */
+export type KpiIconCondition = {
+  /** Unicode symbol or short text rendered when the condition matches, for example '⚠' or '✓'. */
+  icon: string;
+  /** Icon color. Defaults to the headline value color. */
+  color?: string;
+  /** Value to compare against, expressed as a string. */
+  expression: string;
+  /** Comparison operator, same convention as {@link DataColorCondition}. */
+  operator: DataColorCondition['operator'];
+};
+
+/**
+ * Text size of the KPI headline value: `'auto'` scales the number to fit the card, or a fixed
+ * font size in pixels (must be a positive number).
+ *
+ * @beta
+ */
+export type KpiTextSize = 'auto' | number;
+
+/**
+ * Configuration that defines styling of the KPI headline value.
+ *
+ * To color the headline value, set a color (uniform or conditional) on the value measure in
+ * {@link KpiChartDataOptions.value} -- the standard measure-coloring mechanism used across the
+ * SDK.
+ *
+ * @beta
+ */
+export type KpiValueStyleOptions = {
+  /**
+   * Text size of the headline value: `'auto'` to scale it to the card, or a fixed size in px.
+   *
+   * @defaultValue 'auto'
+   */
+  textSize?: KpiTextSize;
+  /**
+   * Text shown in place of the headline when the value is null,
+   * keeping the card title and styling. When omitted, the standard
+   * no-results overlay is shown instead.
+   */
+  noDataText?: string;
+  /**
+   * Condition-driven icons shown next to the headline value;
+   * the first matching condition wins.
+   */
+  conditionalIcons?: KpiIconCondition[];
+};
+
+/**
+ * Configuration that defines styling of the KPI card title.
+ *
+ * @beta
+ */
+export type KpiTitleStyleOptions = {
+  /**
+   * Boolean flag that defines whether the title is shown.
+   *
+   * @defaultValue true
+   */
+  enabled?: boolean;
+  /** Title text. Defaults to the value measure title. */
+  text?: string;
+};
+
+/**
+ * Configuration that defines styling of the KPI comparison readout.
+ *
+ * @beta
+ */
+export type KpiComparisonStyleOptions = {
+  /**
+   * Which numeric form(s) of the comparison to render.
+   *
+   * For delta-shaped comparisons ('delta' / 'previous-period'): percent change, absolute
+   * difference, or both in one line.
+   *
+   * For 'target' comparisons: 'percent' shows only the percent-of-goal line
+   * (`percentOfTarget`), 'value' shows only the amount-to-go line (`toGo`), and 'both' shows
+   * the percent line with the amount-to-go beneath it.
+   *
+   * @defaultValue 'percent'
+   */
+  display?: 'percent' | 'value' | 'both';
+  /** Caption next to the delta, e.g. 'vs last year'. Defaults to an i18n label inferred from context. */
+  label?: string;
+  /**
+   * Color of the delta readout. Conditions evaluate against `deltaPercent`
+   * ('delta' / 'previous-period' comparisons) or `percentOfTarget` ('target').
+   * Not applicable to the 'value' comparison (colored by its own measure).
+   *
+   * @defaultValue sign-based: positive delta green, negative red
+   *
+   * @example “down is good” metric (churn, cost):
+   * ```ts
+   * color: {
+   *   type: 'conditional',
+   *   conditions: [
+   *     { color: '#2ecc71', expression: '0', operator: '<' },
+   *     { color: '#e74c3c', expression: '0', operator: '>' },
+   *   ],
+   * }
+   * ```
+   */
+  color?: DataColorOptions;
+  /**
+   * Whether the up/down arrow is shown next to the delta.
+   *
+   * @defaultValue true
+   */
+  showIcon?: boolean;
+  /** Condition-driven icons next to the comparison readout; first match wins. */
+  conditionalIcons?: KpiIconCondition[];
+};
+
+/**
+ * Configuration that defines styling of the KPI card container.
+ *
+ * @beta
+ */
+export type KpiCardStyleOptions = {
+  /** Card background color. Text and sparkline switch to white for contrast on dark backgrounds. */
+  backgroundColor?: string;
+  /**
+   * Horizontal alignment of the card text.
+   *
+   * @defaultValue 'left'
+   */
+  textAlign?: 'left' | 'center' | 'right';
+  /**
+   * Boolean flag that defines whether the card border is shown.
+   *
+   * @defaultValue false
+   */
+  showBorder?: boolean;
+  /**
+   * Corner radius of the card in pixels.
+   *
+   * @defaultValue 8
+   */
+  cornerRadius?: number;
+};
+
+/**
+ * Configuration options that define functional style of the various elements of a KPI chart.
+ *
+ * @beta
+ *
+ * @example
+ * ```tsx
+ * <KpiChart
+ *   dataSet={DM.DataSource}
+ *   dataOptions={{
+ *     value: measureFactory.sum(DM.Commerce.Revenue),
+ *     trend: DM.Commerce.Date.Months,
+ *   }}
+ *   styleOptions={{
+ *     title: { text: 'Monthly Revenue' },
+ *     sparkline: { chartType: 'line' },
+ *     card: { textAlign: 'center', cornerRadius: 12 },
+ *   }}
+ * />
+ * ```
+ */
+export interface KpiStyleOptions extends Pick<BaseStyleOptions, 'width' | 'height'> {
+  /**
+   * Card layout mode.
+   *
+   * @defaultValue 'standard'
+   */
+  layout?: 'standard' | 'big-comparison';
+  /** Headline value styling. */
+  value?: KpiValueStyleOptions;
+  /** Card title styling (defaults to the value measure title). */
+  title?: KpiTitleStyleOptions;
+  /** Comparison readout styling (polarity, icon, colors). */
+  comparison?: KpiComparisonStyleOptions;
+  /** Sparkline styling; rendered only when {@link KpiChartDataOptions.trend} is set. */
+  sparkline?: KpiSparklineStyleOptions;
+  /** Card container styling. */
+  card?: KpiCardStyleOptions;
 }
 
 /**
@@ -1650,6 +1951,7 @@ export type RegularChartStyleOptions =
   | ScattermapStyleOptions
   | AreaRangeStyleOptions
   | CalendarHeatmapStyleOptions
+  | KpiStyleOptions
   | StreamgraphStyleOptions
   | SankeyStyleOptions;
 
@@ -1675,6 +1977,7 @@ export type ChartType =
   | BoxplotChartType
   | ScattermapChartType
   | CalendarHeatmapChartType
+  | KpiChartType
   | RangeChartType
   | SankeyChartType
   | TableChartType;

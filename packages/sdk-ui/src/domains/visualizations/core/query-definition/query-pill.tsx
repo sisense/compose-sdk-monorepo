@@ -14,7 +14,7 @@ import type { QueryPillCategory, QueryPillItem } from './types';
 const PILL_COLORS: Record<QueryPillCategory, { bg: string; text: string }> = {
   measure: { bg: '#d0f1e1', text: '#131F29' },
   dimension: { bg: '#ebe9fe', text: '#131F29' },
-  filter: { bg: '#d7edf7', text: '#131F29' },
+  filter: { bg: '#cce3f3', text: '#131F29' },
   operator: { bg: '#ebe9fe', text: '#131F29' },
 };
 
@@ -79,7 +79,7 @@ export const QueryPill: FunctionComponent<QueryPillProps> = ({
 
   const pill = (
     <span
-      className="csdk-inline-flex csdk-items-center csdk-rounded csdk-px-2 csdk-py-0.5 csdk-font-normal csdk-whitespace-nowrap csdk-max-w-full csdk-truncate"
+      className="csdk-inline-flex csdk-items-center csdk-rounded csdk-px-2 csdk-py-1 csdk-font-normal csdk-whitespace-nowrap csdk-max-w-full csdk-truncate"
       style={{
         backgroundColor: bg,
         color: text,

@@ -142,6 +142,27 @@ export const createValueToColorMap = (membersFormat: PanelMembersFormat): ValueT
 };
 
 /**
+ * Creates a value-to-color map from hand-picked panel member colors.
+ *
+ * @param membersFormat - Panel member formatting metadata
+ * @returns A mapping of decoded member values to hand-picked colors
+ * @internal
+ */
+export const createHandPickedValueToColorMap = (
+  membersFormat: PanelMembersFormat,
+): ValueToColorMap => {
+  return Object.entries(membersFormat).reduce<ValueToColorMap>(
+    (acc, [member, { color, isHandPickedColor }]) => {
+      if (isHandPickedColor && color) {
+        acc[decodeMemberKey(member)] = color;
+      }
+      return acc;
+    },
+    {},
+  );
+};
+
+/**
  * Creates a PanelColorFormat from DataColorOptions
  *
  * TODO: basic use cases done for the studio assistant, need more testing with real Fusion widgets

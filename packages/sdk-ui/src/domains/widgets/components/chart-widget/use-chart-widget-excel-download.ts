@@ -33,7 +33,7 @@ export type UseChartWidgetExcelDownloadResult = {
 };
 
 /**
- * Enhances a chart widget header with Excel download menu items (placeholder).
+ * Enhances a chart widget header with Excel download menu items.
  * Excel menu is shown only when the widget/dashboard allows download.
  * **Repeat rows** sets `mergeRows: false`; **Merge rows** sets `mergeRows: true`).
  *

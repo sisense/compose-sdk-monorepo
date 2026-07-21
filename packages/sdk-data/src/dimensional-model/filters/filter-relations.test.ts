@@ -1,6 +1,7 @@
 import { TranslatableError } from '../../translation/translatable-error.js';
-import { DimensionalAttribute } from '../attributes/attributes.js';
+import { DimensionalAttribute, DimensionalLevelAttribute } from '../attributes/attributes.js';
 import { FilterRelations, FilterRelationsJaql, FilterRelationsModel } from '../interfaces.js';
+import { DateLevels } from '../types.js';
 import * as filterFactory from './factory.js';
 import {
   calculateNewRelations,
@@ -75,6 +76,17 @@ const memberAgeRangeFilter = filterFactory.members(
 const excludeGenderfilter = filterFactory.exclude(
   filterFactory.members(new DimensionalAttribute('Gender', '[Commerce.Gender]'), ['Female']),
 );
+
+const dateYearsAttribute = new DimensionalLevelAttribute(
+  'Years in Date',
+  '[DimDate.Date (Calendar)]',
+  DateLevels.Years,
+  'yyyy',
+);
+const includeYear2012Filter = filterFactory.members(dateYearsAttribute, ['2012-01-01T00:00:00']);
+const excludeYear2012Filter = filterFactory.members(dateYearsAttribute, ['2012-01-01T00:00:00'], {
+  excludeMembers: true,
+});
 
 const filterRelation: FilterRelations = filterFactory.logic.and(
   filterFactory.logic.or(memberCostFilter, memberQuantityFilter),
@@ -761,6 +773,13 @@ describe('filter-relations', () => {
       expect(result).toBe('[Date.Created]Months');
     });
 
+    it('should generate the same ID for include and exclude filters on the same datetime level', () => {
+      expect(getFilterCompareId(includeYear2012Filter)).toBe('[DimDate.Date (Calendar)]Years');
+      expect(getFilterCompareId(excludeYear2012Filter)).toBe(
+        getFilterCompareId(includeYear2012Filter),
+      );
+    });
+
     it('should use the formula as the ID for a calculated-dimension filter', () => {
       const result = getFilterCompareId(containsCalcDimFilter);
       expect(result).toBe("contains([abc-1], '2011')");
@@ -787,6 +806,11 @@ describe('filter-relations', () => {
     it('should replace the filter with same dimension', () => {
       const result = mergeFilters([memberGenderFilter], [excludeGenderfilter]);
       expect(result).toEqual([excludeGenderfilter]);
+    });
+
+    it('should let the widget filter override a dashboard filter on the same datetime level', () => {
+      const result = mergeFilters([excludeYear2012Filter], [includeYear2012Filter]);
+      expect(result).toEqual([includeYear2012Filter]);
     });
 
     it('should keep both distinct calculated-dimension filters instead of dropping one', () => {

@@ -61,6 +61,7 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
     onChange,
     parentFilters,
     isMultiselect,
+    onReady,
   } = props;
 
   const { headerConfig, titleEditor } = useWidgetHeaderManagement({
@@ -109,6 +110,7 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
       onDateLevelChange={(newAttribute) =>
         onChange?.({ type: 'dateLevel/changed', payload: { attribute: newAttribute } })
       }
+      onReady={onReady}
     />
   );
 

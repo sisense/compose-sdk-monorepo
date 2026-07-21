@@ -6,7 +6,7 @@ import type { WidgetContainerStyleOptions } from '@/types';
 import type { WidgetConfig } from '../widget/types';
 
 /**
- * Rendering type for the FilterWidget.
+ * `FilterWidgetFilterType` selects the rendering type for a filter widget.
  *
  * - `'members'`      — searchable member-select dropdown. Implemented.
  * - `'dateRange'`    — date-range picker. Planned.
@@ -15,8 +15,9 @@ import type { WidgetConfig } from '../widget/types';
  * - `'condition'`    — conditional / formula filter builder. Planned.
  *
  * @example
- * ```tsx
- * <FilterWidget attribute={DM.Commerce.Country} filterType="members" />
+ * The following selects the member-select dropdown rendering:
+ * ```ts
+ * const filterType: FilterWidgetFilterType = 'members';
  * ```
  *
  * @beta
@@ -49,26 +50,9 @@ export const filterWidgetFilterTypeLabels: Record<FilterWidgetFilterType, string
 };
 
 /**
- * Props for the FilterWidget component.
- *
- * @example
- * ```tsx
- * const [filter, setFilter] = useState<Filter | null>(null);
- *
- * return (
- *   <FilterWidget
- *     attribute={DM.Commerce.Country}
- *     title="Country"
- *     isMultiselect={true}
- *     filter={filter}
- *     onChange={(event) => {
- *       if (event.type === 'filter/changed') {
- *         setFilter(event.payload.filter);
- *       }
- *     }}
- *   />
- * );
- * ```
+ * `FilterWidgetProps` configures a filter widget — a compact, dashboard-embeddable
+ * control that lets users filter a dashboard by selecting values for a single
+ * dimension, without opening the full filter panel.
  *
  * @beta
  */
@@ -167,4 +151,14 @@ export interface FilterWidgetProps {
    * @internal
    */
   containerless?: boolean;
+  /**
+   * Calls the provided callback each time the widget finishes rendering with
+   * fetched data — on initial load and again whenever it re-enters a ready
+   * state after a reload (e.g. dimension change, refetch). Use this to signal
+   * to a host application that the widget content is committed to the DOM.
+   *
+   * @category Widget
+   * @internal
+   */
+  onReady?: () => void;
 }

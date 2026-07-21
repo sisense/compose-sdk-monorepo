@@ -35,6 +35,7 @@ export function isRestructuredChartType(chartType: ChartType): chartType is Supp
     'pie',
     'funnel',
     'calendar-heatmap',
+    'kpi',
     'treemap',
     'sunburst',
     'streamgraph',

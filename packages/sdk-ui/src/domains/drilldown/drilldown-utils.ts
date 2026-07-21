@@ -84,17 +84,35 @@ export function applyDrilldownDimension(
     );
   };
 
+  // Sankey requires ≥2 category stages. Replacing the whole `category` array
+  // with a single drilled dimension would break the chart (and wipe other
+  // flow stages).
+  if (isSankey(chartType)) {
+    const sankeyDataOptions = dataOptions as SankeyChartDataOptions;
+    const targetIndex = sankeyDataOptions.category.findIndex(
+      (c) => !MetadataTypes.isCalculatedAttribute(translateColumnToAttribute(c)),
+    );
+    if (targetIndex >= 0 && shouldUpdateDataOption(sankeyDataOptions.category[targetIndex])) {
+      const nextCategory = [...sankeyDataOptions.category];
+      nextCategory[targetIndex] = drilldownDimension;
+      return {
+        ...sankeyDataOptions,
+        category: nextCategory,
+      };
+    }
+    return dataOptions;
+  }
+
   if (
     isCartesian(chartType) ||
     isCategorical(chartType) ||
     isBoxplot(chartType) ||
-    isRange(chartType) ||
-    isSankey(chartType)
+    isRange(chartType)
   ) {
     // Target the first drillable category (skipping calculated dimensions which are not drillable)
-    const targetDataOption = (
-      dataOptions as CartesianChartDataOptions | SankeyChartDataOptions
-    ).category.find((c) => !MetadataTypes.isCalculatedAttribute(translateColumnToAttribute(c)));
+    const targetDataOption = (dataOptions as CartesianChartDataOptions).category.find(
+      (c) => !MetadataTypes.isCalculatedAttribute(translateColumnToAttribute(c)),
+    );
     if (shouldUpdateDataOption(targetDataOption)) {
       return {
         ...dataOptions,

@@ -34,6 +34,16 @@ describe('getSankeyNodeColorFromMap', () => {
     expect(color).toBe('#abc123');
   });
 
+  it('resolves colors when the multi-column key uses normalizeName(column.title)', () => {
+    const ageRangeCategory = {
+      column: { name: 'Age Range', type: 'text', title: 'Age Range' },
+    } as unknown as StyledColumn;
+    const color = getSankeyNodeColorFromMap('0__19-24', '19-24', [ageRangeCategory], {
+      AgeRange: { '19-24': '#0000ff' },
+    });
+    expect(color).toBe('#0000ff');
+  });
+
   it('returns undefined when no matching entry exists', () => {
     expect(getSankeyNodeColorFromMap('0__Female', 'Female', categories, undefined)).toBeUndefined();
     expect(getSankeyNodeColorFromMap('0__Female', 'Female', categories, {})).toBeUndefined();

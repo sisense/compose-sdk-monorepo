@@ -79,6 +79,7 @@ function getDrilldownAllowedPanelNames(widgetType: FusionWidgetType) {
     case 'chart/area':
       return ['x-axis'];
     case 'chart/boxplot':
+    case 'sankey':
       return ['category'];
     case 'chart/scatter':
       return ['x-axis', 'y-axis', 'point', 'Break By / Color'];
@@ -97,6 +98,13 @@ const findDrillableItems = (widgetType: FusionWidgetType, panels: Panel[]): Pane
 
   if (widgetType === 'pivot2') {
     return drillableItems;
+  }
+
+  // Sankey has multiple flow stages; later drilled stages take precedence
+  // (search from the end so an earlier stage with parent/through does not win).
+  if (widgetType === 'sankey') {
+    const withSelection = drillableItems.slice().reverse().find(hasDrilldownSelection);
+    return withSelection ? [withSelection] : drillableItems.slice(0, 1);
   }
 
   // Only first drillable item is allowed for drilldown for other widgets than pivot table

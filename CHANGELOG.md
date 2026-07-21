@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.32.0] - 2026-07-21
+
+### Added
+- Add `KpiChart` including comparison, conditional colors, and sparkline (Beta)
+- Promote widget Excel export to General Availability (GA)
+- Add calculated dimension filter support:
+  - Create calculated dimension filters in code
+  - Load calculated dimension filters created in Fusion dashboards
+
+### Changed
+- Fix empty Sunburst chart when configured with four or more categories
+- Fix drilling and highlighting for Sankey chart
+- Fix error when a data source column is named "title" or "description"
+
+
 ## [2.31.1] - 2026-07-13
 
 ### Changed

@@ -16,6 +16,8 @@ import {
   CategoricalChartDataOptions,
   CategoricalChartDataOptionsInternal,
   ChartDataOptionsInternal,
+  KpiChartDataOptions,
+  KpiChartDataOptionsInternal,
   SankeyChartDataOptions,
   SankeyChartDataOptionsInternal,
   ScattermapChartDataOptions,
@@ -25,6 +27,7 @@ import { DataTable } from '@/domains/visualizations/core/chart-data-processor/ta
 import type {
   CartesianChartData,
   CategoricalChartData,
+  ChartData,
   ScattermapChartData,
 } from '@/domains/visualizations/core/chart-data/types';
 import { DesignOptions } from '@/domains/visualizations/core/chart-options-processor/translations/types';
@@ -36,6 +39,7 @@ import type {
   ChartDataOptions,
   ChartStyleOptions,
   FunnelStyleOptions,
+  KpiStyleOptions,
   LineStyleOptions,
   PieStyleOptions,
   PolarStyleOptions,
@@ -51,6 +55,8 @@ import { AreamapData } from './areamap-chart/types';
 import { CalendarHeatmapChartData } from './highchart-based-charts/calendar-heatmap-chart/data';
 import { HighchartsBasedChartRendererProps } from './highchart-based-charts/highcharts-based-chart-renderer/highcharts-based-chart-renderer';
 import { SankeyChartData } from './highchart-based-charts/sankey-chart/types';
+import { KpiChartRendererProps } from './kpi-chart/renderer/index';
+import { KpiChartData } from './kpi-chart/types';
 
 export type SupportedChartType =
   | 'areamap'
@@ -62,6 +68,7 @@ export type SupportedChartType =
   | 'pie'
   | 'funnel'
   | 'calendar-heatmap'
+  | 'kpi'
   | 'treemap'
   | 'sunburst'
   | 'streamgraph'
@@ -79,6 +86,8 @@ export type TypedChartDataOptions<CT extends SupportedChartType> = CT extends 'a
   ? CalendarHeatmapChartDataOptions
   : CT extends 'sankey'
   ? SankeyChartDataOptions
+  : CT extends 'kpi'
+  ? KpiChartDataOptions
   : never;
 
 export type TypedDataOptionsInternal<CT extends SupportedChartType> = CT extends 'areamap'
@@ -93,6 +102,8 @@ export type TypedDataOptionsInternal<CT extends SupportedChartType> = CT extends
   ? CalendarHeatmapChartDataOptionsInternal
   : CT extends 'sankey'
   ? SankeyChartDataOptionsInternal
+  : CT extends 'kpi'
+  ? KpiChartDataOptionsInternal
   : never;
 
 export type TypedChartStyleOptions<CT extends SupportedChartType> = CT extends 'areamap'
@@ -117,6 +128,8 @@ export type TypedChartStyleOptions<CT extends SupportedChartType> = CT extends '
   ? PolarStyleOptions
   : CT extends 'calendar-heatmap'
   ? CalendarHeatmapStyleOptions
+  : CT extends 'kpi'
+  ? KpiStyleOptions
   : CT extends 'streamgraph'
   ? StreamgraphStyleOptions
   : CT extends 'sankey'
@@ -137,6 +150,8 @@ export type TypedChartData<CT extends SupportedChartType> = CT extends 'areamap'
   ? CalendarHeatmapChartData
   : CT extends 'sankey'
   ? SankeyChartData
+  : CT extends 'kpi'
+  ? KpiChartData
   : never;
 
 export type TypedLoadDataFunction<CT extends SupportedChartType> = (options: {
@@ -164,7 +179,31 @@ export type TypedChartRendererProps<CT extends SupportedChartType> = CT extends 
       | 'streamgraph'
       | 'sankey'
   ? HighchartsBasedChartRendererProps<CT>
+  : CT extends 'kpi'
+  ? KpiChartRendererProps
   : never;
+
+/**
+ * State signals passed to a chart's {@link ChartBuilder.onReady} readiness
+ * predicate to compute rising-edge readiness for the consumer `onReady`
+ * callback (Fusion `domready` / PDF).
+ *
+ * @internal
+ */
+export type ChartOnReadyStateInput = {
+  /** Whether a query / data sync is in progress. */
+  isLoading: boolean;
+  /**
+   * Whether the active renderer has signaled paint for the current cycle
+   * (`ChartRendererProps.onReady`, e.g. Highcharts `chart.events.load` /
+   * `render`).
+   */
+  rendererPainted: boolean;
+  /** Whether data options have no attributes or measures. */
+  hasNoDimensions: boolean;
+  /** Prepared chart data, or `null` while unavailable. */
+  chartData: ChartData | null;
+};
 
 /**
  * Chart builder interface.
@@ -269,5 +308,21 @@ export interface ChartBuilder<CT extends SupportedChartType = SupportedChartType
      * Type guard for the chart renderer props.
      */
     isCorrectRendererProps: (props: ChartRendererProps) => props is TypedChartRendererProps<CT>;
+  };
+
+  /**
+   * Optional consumer `onReady` (Fusion `domready` / PDF) readiness contract.
+   *
+   * When present, RegularChart wires the renderer's paint signal
+   * (`ChartRendererProps.onReady`) into this predicate and fires the consumer
+   * `onReady` callback on each rising edge of readiness. Chart types that omit
+   * this field do not participate in the `onReady` contract.
+   */
+  onReady?: {
+    /**
+     * Computes whether the consumer `onReady` callback should fire for the
+     * current cycle, given the loading, paint, and data signals.
+     */
+    isReadyForOnReady: (state: ChartOnReadyStateInput) => boolean;
   };
 }

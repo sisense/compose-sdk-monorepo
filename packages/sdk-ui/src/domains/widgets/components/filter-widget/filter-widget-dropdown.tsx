@@ -20,6 +20,8 @@ import { granularities } from '@/domains/filters/components/filter-editor-popove
 import type { SelectedMember } from '@/domains/filters/components/member-filter-tile/members-reducer';
 import { useGetFilterMembersInternal } from '@/domains/filters/hooks/use-get-filter-members';
 import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-filter';
+import { useFireOnReady } from '@/domains/widgets/hooks/use-fire-on-ready';
+import { usePrevious } from '@/shared/hooks/use-previous';
 import { createLevelAttribute } from '@/shared/utils/create-level-attribute';
 
 import { membersFilterWidgetDesign } from './filter-widget-design';
@@ -44,6 +46,13 @@ type FilterWidgetDropdownProps = Pick<
    * channel as a `dateLevel/changed` event (e.g. to sync Fusion widget metadata).
    */
   onDateLevelChange?: (attribute: Attribute) => void;
+  /**
+   * Calls the provided callback on every rising edge of readiness — after member data loads
+   * successfully and the list is ready to display, including after subsequent
+   * reloads (e.g. dimension change, refetch). Used by the host FilterWidget to
+   * surface the `onRender` prop.
+   */
+  onReady?: () => void;
 };
 
 /**
@@ -60,6 +69,18 @@ export function getEffectiveMultiselect(
   filterMultiSelection: boolean | undefined,
 ): boolean {
   return widgetMultiselect || selectedCount > 1 || !!filterMultiSelection;
+}
+
+/**
+ * Reduces a member selection to a single deterministic member (the alphabetically first)
+ * when it holds more than one, for switching a filter from multi- to single-select.
+ *
+ * @param members - Current member selection (treated as immutable).
+ * @returns A newly-allocated array: the single retained member, or a copy of the input.
+ * @internal
+ */
+export function asSingleSelectionMembers(members: readonly string[]): string[] {
+  return members.length > 1 ? [[...members].sort()[0]] : [...members];
 }
 
 /**
@@ -81,6 +102,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   onFilterUpdate: updateFilterFromProps,
   parentFilters = [],
   onDateLevelChange,
+  onReady,
 }) => {
   const { t } = useTranslation();
 
@@ -165,6 +187,55 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
       }) as MembersFilter,
   );
 
+  // Keep the filter's selection mode aligned with the widget's `isMultiselect` config when
+  // it is toggled live (widget editor / standalone). The synchronized filter's
+  // `enableMultiSelection` is seeded only once, so without this a toggle would be ignored —
+  // the control stayed multi after switching to single (SNS-131674). Switching to
+  // single-select also drops the selection to a single member, since a single-select control
+  // cannot hold several — mirroring the filter editor popup's MembersSection. Switching back
+  // to multi keeps the current members.
+  const prevIsMultiselect = usePrevious(isMultiselect);
+  useEffect(() => {
+    if (
+      prevIsMultiselect === undefined ||
+      prevIsMultiselect === isMultiselect ||
+      !updateFilterFromProps
+    ) {
+      return;
+    }
+    const nextMembers = isMultiselect ? filter.members : asSingleSelectionMembers(filter.members);
+    updateFilter(
+      // Cast rationale: filterFactory.members returns the base Filter type but always
+      // constructs a MembersFilter (same as createEmptyFilter / withSelectedMembers).
+      filterFactory.members(filter.attribute, nextMembers, {
+        guid: filter.config.guid,
+        excludeMembers: filter.config.excludeMembers,
+        deactivatedMembers: filter.config.deactivatedMembers,
+        backgroundFilter: filter.config.backgroundFilter,
+        enableMultiSelection: isMultiselect,
+      }) as MembersFilter,
+    );
+  }, [isMultiselect, prevIsMultiselect, filter, updateFilter, updateFilterFromProps]);
+
+  // Rebuild the filter when the DIMENSION changes. The synchronized
+  // filter is seeded only once, so after an attribute prop swap it kept wrapping the
+  // previous dimension's attribute — in the widget editor the dropdown mounts before
+  // a dimension is picked (empty attribute), so the member query silently targeted
+  // an empty dimension forever (no request, no error). Comparing expressions keeps
+  // date-granularity changes on the existing onDateLevelChange path.
+  useEffect(() => {
+    if (!updateFilterFromProps || filter.attribute.expression === effectiveAttribute.expression) {
+      return;
+    }
+    updateFilter(
+      // Cast rationale: filterFactory.members returns the base Filter type but always
+      // constructs a MembersFilter (same as the createEmptyFilter seed above).
+      filterFactory.members(effectiveAttribute, [], {
+        enableMultiSelection: isMultiselect,
+      }) as MembersFilter,
+    );
+  }, [filter, effectiveAttribute, isMultiselect, updateFilter, updateFilterFromProps]);
+
   const {
     data,
     loadMore: loadMoreMembers,
@@ -179,7 +250,18 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     ),
     allowMissingMembers: true,
     count: QUERY_MEMBERS_COUNT,
+    // No dimension picked yet (the editor mounts the dropdown before one exists) —
+    // an empty-dim query is rejected by the analytical engine ("Jaql element
+    // doesn't contain dim"), so keep it disabled until a real attribute arrives.
+    // The filter-matches-attribute condition also suppresses the transient render
+    // between a dimension swap and the rebuilding effect above, which would
+    // otherwise fire one query for the stale (empty or previous) dimension.
+    enabled:
+      Boolean(effectiveAttribute.expression) &&
+      filter.attribute.expression === effectiveAttribute.expression,
   });
+
+  useFireOnReady(!membersLoading && data !== undefined, onReady);
 
   const { selectedMembers, allMembers, excludeMembers, enableMultiSelection } = data ?? {
     selectedMembers: [],

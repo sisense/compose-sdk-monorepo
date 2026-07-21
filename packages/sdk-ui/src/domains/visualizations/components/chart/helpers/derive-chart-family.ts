@@ -5,6 +5,7 @@ import {
   isCartesian,
   isCategorical,
   isIndicator,
+  isKpi,
   isRange,
   isSankey,
   isScatter,
@@ -49,6 +50,9 @@ export const deriveChartFamily = (chartType: string): string => {
   }
   if (isSankey(chartType as ChartType)) {
     return 'sankey';
+  }
+  if (isKpi(chartType as ChartType)) {
+    return 'kpi';
   }
 
   return 'table';

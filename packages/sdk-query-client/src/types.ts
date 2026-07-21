@@ -126,3 +126,14 @@ export type JaqlResponse = {
 export type AbortRequestFunction = (reason?: string) => void;
 
 export type QueryGuid = string;
+
+/**
+ * Response of the server's calculated-dimension formula parse endpoint.
+ *
+ * A discriminated union on `error`: on success it carries the resolved result `dataType` (e.g.
+ * `text`, `numeric`, `datetime`); when the formula fails validation the server returns
+ * `error: true` with a human-readable `message` instead.
+ */
+export type CalculatedDimensionParseResponse =
+  | { error?: false; dataType?: string }
+  | { error: true; message?: string };

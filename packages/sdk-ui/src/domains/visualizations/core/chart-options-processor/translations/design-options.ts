@@ -5,6 +5,7 @@ import {
   CalendarHeatmapViewType,
   Convolution,
   FunnelSeriesLabels,
+  KpiIconCondition,
   LegendOptions,
   LineOptions,
   PieSeriesLabels,
@@ -15,6 +16,7 @@ import {
   TotalLabels,
   TreemapStyleOptions,
 } from '../../../../../types';
+import { DataColorOptions } from '../../chart-data/data-coloring';
 import { Axis } from './axis-section';
 import { FunnelDirection, FunnelSize, FunnelType } from './funnel-plot-options';
 import { Marker } from './marker-section';
@@ -108,6 +110,45 @@ export type CalendarHeatmapChartDesignOptions = BaseDesignOptionsType & {
   };
 };
 
+/**
+ * Resolved, internal-use design options for a KPI chart -- the translated form of
+ * {@link KpiStyleOptions} (see `translateKpiStyleOptionsToDesignOptions`), consumed directly by
+ * `KpiChartRenderer`.
+ * @internal
+ */
+export type KpiChartDesignOptions = BaseDesignOptionsType & {
+  width?: number;
+  height?: number;
+  layout: 'standard' | 'big-comparison';
+  value: {
+    /** `'auto'` for auto-fit sizing, or a fixed font size in px. */
+    textSize: 'auto' | number;
+    noDataText?: string;
+    conditionalIcons?: KpiIconCondition[];
+  };
+  title: {
+    enabled: boolean;
+    text?: string;
+  };
+  card: {
+    backgroundColor?: string;
+    textAlign: 'left' | 'center' | 'right';
+    showBorder: boolean;
+    cornerRadius: number;
+  };
+  sparkline: {
+    enabled: boolean;
+    chartType: 'line' | 'spline' | 'area' | 'column';
+  };
+  comparison: {
+    display: 'percent' | 'value' | 'both';
+    label?: string;
+    color?: DataColorOptions;
+    showIcon: boolean;
+    conditionalIcons?: KpiIconCondition[];
+  };
+};
+
 export type PolarType = 'line' | 'area' | 'column';
 export type PolarChartDesignOptions = CartesianChartDesignOptions & {
   polarType: PolarType;
@@ -145,6 +186,7 @@ export type SankeyChartDesignOptions = BaseDesignOptionsType & {
   linkOpacity?: SankeyStyleOptions['linkOpacity'];
   nodeWidth?: SankeyStyleOptions['nodeWidth'];
   nodePadding?: SankeyStyleOptions['nodePadding'];
+  minLinkWidth?: SankeyStyleOptions['minLinkWidth'];
   nodeAlignment?: SankeyStyleOptions['nodeAlignment'];
 };
 

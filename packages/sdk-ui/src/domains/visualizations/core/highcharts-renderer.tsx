@@ -6,6 +6,7 @@ import cloneDeep from 'lodash-es/cloneDeep';
 
 import { usePrevious } from '@/shared/hooks/use-previous';
 
+import { applyOnReadyToHighchartsOptions } from './apply-on-ready-to-highcharts-options';
 import { HighchartsEventOptions } from './chart-options-processor/apply-event-handlers';
 import {
   HighchartsOptions,
@@ -19,6 +20,12 @@ applyHighchartOverrides();
 
 type HighchartsRendererProps = {
   options: HighchartsOptionsInternal;
+  /**
+   * Invoked after Highcharts paints the chart (`chart.events.load` and
+   * subsequent `chart.events.render`). Existing load/render handlers on
+   * `options` are preserved and called first.
+   */
+  onReady?: () => void;
 };
 
 type DataLabelsStyleSnapshot = {
@@ -81,7 +88,7 @@ const defaultContainerProps = {
  * by detecting key changes that require chart re-initialization.
  * It also handles cases where Highcharts mutates input options by making deep clone.
  */
-export const HighchartsRenderer = ({ options }: HighchartsRendererProps) => {
+export const HighchartsRenderer = ({ options, onReady }: HighchartsRendererProps) => {
   const prevOptions = usePrevious(options);
   const onChartCreated = useCallback(
     (chart: Highcharts.Chart) => {
@@ -141,8 +148,13 @@ export const HighchartsRenderer = ({ options }: HighchartsRendererProps) => {
   const finalOptions = useMemo(() => {
     // provides deep copy in order to prevent "options" prop mutation, that leads to an extra rerender of current momoized component
     // See: https://github.com/highcharts/highcharts-react?tab=readme-ov-file#why-highcharts-mutates-my-data
-    return cloneDeep(options);
-  }, [options]);
+    const cloned = cloneDeep(options);
+    if (!onReady) {
+      return cloned;
+    }
+
+    return applyOnReadyToHighchartsOptions(cloned, onReady);
+  }, [options, onReady]);
 
   return (
     <HighchartsReact

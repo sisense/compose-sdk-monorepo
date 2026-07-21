@@ -98,10 +98,12 @@ export function getCalendarHeatmapMeasures(
 export function isCalendarHeatmapChartDataOptions(
   dataOptions: ChartDataOptions,
 ): dataOptions is CalendarHeatmapChartDataOptions {
-  const hasValidStructure =
-    'date' in dataOptions && dataOptions.date && 'value' in dataOptions && dataOptions.value;
-
-  if (!hasValidStructure) {
+  if (
+    !('date' in dataOptions) ||
+    !dataOptions.date ||
+    !('value' in dataOptions) ||
+    !dataOptions.value
+  ) {
     return false;
   }
 

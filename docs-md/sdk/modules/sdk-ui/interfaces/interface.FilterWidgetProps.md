@@ -4,27 +4,9 @@ title: FilterWidgetProps
 
 # Interface FilterWidgetProps <Badge type="beta" text="Beta" />
 
-Props for the FilterWidget component.
-
-## Example
-
-```ts
-const [filter, setFilter] = useState<Filter | null>(null);
-
-return (
-  <FilterWidget
-    attribute={DM.Commerce.Country}
-    title="Country"
-    isMultiselect={true}
-    filter={filter}
-    onChange={(event) => {
-      if (event.type === 'filter/changed') {
-        setFilter(event.payload.filter);
-      }
-    }}
-  />
-);
-```
+`FilterWidgetProps` configures a filter widget — a compact, dashboard-embeddable
+control that lets users filter a dashboard by selecting values for a single
+dimension, without opening the full filter panel.
 
 ## Properties
 
