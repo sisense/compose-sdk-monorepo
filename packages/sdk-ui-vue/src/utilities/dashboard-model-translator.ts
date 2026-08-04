@@ -4,6 +4,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 
 import type { DashboardProps } from '../components/dashboard';
+import { toDashboardProps as toVueDashboardProps } from '../helpers/dashboard-props-preact-translator';
 
 /**
  * Translates {@link DashboardModel} to {@link DashboardProps}.
@@ -40,5 +41,6 @@ const dashboardProps = computed(() =>
  * ```
  */
 export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps {
-  return dashboardModelTranslatorPreact.toDashboardProps(dashboardModel);
+  // structure-only conversion: a dashboard model carries no custom components to translate
+  return toVueDashboardProps(dashboardModelTranslatorPreact.toDashboardProps(dashboardModel));
 }

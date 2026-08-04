@@ -8,6 +8,9 @@
 export { useDashboardTheme } from '../domains/dashboarding/use-dashboard-theme.js';
 export type { ThemeConfig } from '../types';
 
+// Widget header configuration (the rest of the tree is public — see public.ts)
+export type { WidgetHeaderTitleConfig } from '../domains/widgets/shared/widget-header/widget-header-config.js';
+
 // Translation
 export {
   type TranslationDictionary,

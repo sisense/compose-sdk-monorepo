@@ -23,8 +23,9 @@ import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-
 import { useFireOnReady } from '@/domains/widgets/hooks/use-fire-on-ready';
 import { usePrevious } from '@/shared/hooks/use-previous';
 import { createLevelAttribute } from '@/shared/utils/create-level-attribute';
+import { isSameAttribute } from '@/shared/utils/filters';
 
-import { membersFilterWidgetDesign } from './filter-widget-design';
+import { filterWidgetDesign, membersFilterWidgetDesign } from './filter-widget-design';
 import type { FilterWidgetProps } from './types';
 
 const LIST_SCROLL_LOAD_MORE_THRESHOLD = 0.75;
@@ -33,7 +34,7 @@ const SEARCH_VALUE_UPDATE_DELAY = 300;
 
 type FilterWidgetDropdownProps = Pick<
   FilterWidgetProps,
-  'attribute' | 'dataSource' | 'title' | 'isMultiselect' | 'filter' | 'parentFilters'
+  'attribute' | 'dataSource' | 'isMultiselect' | 'filter' | 'parentFilters' | 'excludedDateLevels'
 > & {
   /**
    * Called when the user changes the filter selection. The host widget wraps
@@ -74,7 +75,6 @@ export function getEffectiveMultiselect(
 /**
  * Reduces a member selection to a single deterministic member (the alphabetically first)
  * when it holds more than one, for switching a filter from multi- to single-select.
- *
  * @param members - Current member selection (treated as immutable).
  * @returns A newly-allocated array: the single retained member, or a copy of the input.
  * @internal
@@ -96,13 +96,13 @@ export function asSingleSelectionMembers(members: readonly string[]): string[] {
 export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> = ({
   attribute,
   dataSource,
-  title,
   isMultiselect = true,
   filter: filterFromProps = null,
   onFilterUpdate: updateFilterFromProps,
   parentFilters = [],
   onDateLevelChange,
   onReady,
+  excludedDateLevels,
 }) => {
   const { t } = useTranslation();
 
@@ -120,13 +120,35 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     (attribute as DimensionalLevelAttribute).granularity ?? DateLevels.Years,
   );
 
+  // Resync local granularity during render when the host swaps dimension or level
+  // (empty → Quarters, or Years → Quarters on the same expression). Use
+  // `incomingGranularity` for derived work on that render — setState below still
+  // holds the previous value until the follow-up render.
+  const incomingGranularity =
+    (attribute as DimensionalLevelAttribute).granularity ?? DateLevels.Years;
+  const [trackedAttribute, setTrackedAttribute] = useState(() => ({
+    expression: attribute.expression,
+    granularity: incomingGranularity,
+  }));
+  const hostLevelChanged =
+    attribute.expression !== trackedAttribute.expression ||
+    incomingGranularity !== trackedAttribute.granularity;
+  if (hostLevelChanged) {
+    setTrackedAttribute({
+      expression: attribute.expression,
+      granularity: incomingGranularity,
+    });
+    setDateGranularity(incomingGranularity);
+  }
+  const resolvedGranularity = hostLevelChanged ? incomingGranularity : dateGranularity;
+
   // For date attributes, create a LevelAttribute that includes the selected granularity.
   // For non-date attributes the plain attribute is used as-is.
   const effectiveAttribute = useMemo(() => {
     if (!isDateAttribute || !attribute.expression) return attribute;
     // Cast rationale: isDateAttribute guarantees a datetime attribute here.
-    return createLevelAttribute(attribute as DimensionalLevelAttribute, dateGranularity);
-  }, [isDateAttribute, attribute, dateGranularity]);
+    return createLevelAttribute(attribute as DimensionalLevelAttribute, resolvedGranularity);
+  }, [isDateAttribute, attribute, resolvedGranularity]);
 
   // searchFilter drives the text-search API query for list (non-date) dimensions.
   // For date dimensions this is unused — member fetch is driven by the level attribute only.
@@ -136,16 +158,12 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
       : filterFactory.members(attribute, []),
   );
 
-  // Resync local state when the DIMENSION changes (a later prop swap, e.g. the widget
-  // editor picking a different field). `dateGranularity`/`searchFilter` are seeded once,
-  // so without this they'd stay tied to the previous dimension until the user interacts.
-  // Keyed on the dimension expression: a same-dimension granularity change is already
-  // handled by `handleDateLevelChange`, so it must not reset here.
+  // Resync the text-search filter when the DIMENSION changes. Date granularity on the
+  // same expression is owned by `handleDateLevelChange` / the render sync above.
   const prevExpressionRef = useRef(attribute.expression);
   useEffect(() => {
     if (prevExpressionRef.current === attribute.expression) return;
     prevExpressionRef.current = attribute.expression;
-    setDateGranularity((attribute as DimensionalLevelAttribute).granularity ?? DateLevels.Years);
     setSearchFilter(
       attribute.expression
         ? filterFactory.contains(attribute, '')
@@ -217,16 +235,12 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     );
   }, [isMultiselect, prevIsMultiselect, filter, updateFilter, updateFilterFromProps]);
 
-  // Rebuild the filter when the DIMENSION changes. The synchronized
-  // filter is seeded only once, so after an attribute prop swap it kept wrapping the
-  // previous dimension's attribute — in the widget editor the dropdown mounts before
-  // a dimension is picked (empty attribute), so the member query silently targeted
-  // an empty dimension forever (no request, no error). Comparing expressions keeps
-  // date-granularity changes on the existing onDateLevelChange path.
+  // Rebuild when dimension or date granularity changes. Filter is seeded once, so
+  // expression-only comparison misses host level pushes (empty→Quarters or
+  // Years→Quarters) while the seeded filter still carries the previous level.
   useEffect(() => {
-    if (!updateFilterFromProps || filter.attribute.expression === effectiveAttribute.expression) {
-      return;
-    }
+    if (!updateFilterFromProps) return;
+    if (isSameAttribute(filter.attribute, effectiveAttribute)) return;
     updateFilter(
       // Cast rationale: filterFactory.members returns the base Filter type but always
       // constructs a MembersFilter (same as the createEmptyFilter seed above).
@@ -235,6 +249,9 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
       }) as MembersFilter,
     );
   }, [filter, effectiveAttribute, isMultiselect, updateFilter, updateFilterFromProps]);
+
+  const membersQueryAligned =
+    Boolean(effectiveAttribute.expression) && isSameAttribute(filter.attribute, effectiveAttribute);
 
   const {
     data,
@@ -253,22 +270,25 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     // No dimension picked yet (the editor mounts the dropdown before one exists) —
     // an empty-dim query is rejected by the analytical engine ("Jaql element
     // doesn't contain dim"), so keep it disabled until a real attribute arrives.
-    // The filter-matches-attribute condition also suppresses the transient render
-    // between a dimension swap and the rebuilding effect above, which would
-    // otherwise fire one query for the stale (empty or previous) dimension.
-    enabled:
-      Boolean(effectiveAttribute.expression) &&
-      filter.attribute.expression === effectiveAttribute.expression,
+    // Matching expression + date level (via isSameAttribute) suppresses the
+    // transient render between a prop swap and the rebuilding effect above.
+    enabled: membersQueryAligned,
   });
 
-  useFireOnReady(!membersLoading && data !== undefined, onReady);
+  // `useExecuteQueryInternal` keeps prior rows while params change / query is
+  // disabled — drop them so the list does not flash members from the previous
+  // date level (e.g. Years) under an already-updated Quarters UI.
+  const alignedMembersData = membersQueryAligned ? data : undefined;
 
-  const { selectedMembers, allMembers, excludeMembers, enableMultiSelection } = data ?? {
-    selectedMembers: [],
-    allMembers: [],
-    excludeMembers: false,
-    enableMultiSelection: false,
-  };
+  useFireOnReady(!membersLoading && alignedMembersData !== undefined, onReady);
+
+  const { selectedMembers, allMembers, excludeMembers, enableMultiSelection } =
+    alignedMembersData ?? {
+      selectedMembers: [],
+      allMembers: [],
+      excludeMembers: false,
+      enableMultiSelection: filter.config.enableMultiSelection ?? false,
+    };
 
   // Map Member[] to SelectItem<string>[]
   const items: SelectItem<string>[] = useMemo(
@@ -327,8 +347,11 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
 
   // ── Date level change ──────────────────────────────────────────────────────
   const translatedGranularities = useMemo(
-    () => granularities.map((g) => ({ ...g, displayValue: t(g.displayValue) })),
-    [t],
+    () =>
+      granularities
+        .filter((g) => !(excludedDateLevels ?? []).includes(g.value))
+        .map((g) => ({ ...g, displayValue: t(g.displayValue) })),
+    [t, excludedDateLevels],
   );
 
   const handleDateLevelChange = useCallback(
@@ -350,7 +373,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     [attribute, isMultiselect, updateFilter, onDateLevelChange],
   );
 
-  const placeholder = t('filterEditor.placeholders.selectFromList');
+  const placeholder = t('filterWidget.placeholders.setFilter');
 
   // When no dimension has been selected yet (placeholder attribute with empty expression),
   // render a minimal placeholder instead of making broken queries.
@@ -360,12 +383,13 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   if (!attribute.expression) {
     return (
       <div
+        data-testid="filter-widget-no-dimension"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           height: '100%',
-          ...design.placeholder,
+          ...filterWidgetDesign.noDimPlaceholder,
         }}
       >
         {t(
@@ -378,81 +402,92 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
 
   // All rows (label, list selector, date selectors) sit inside the SAME padded
   // container, so every dimension variant shares identical outer box metrics.
-  const innerWidth = design.width - design.padding.left - design.padding.right;
-
+  // Dropdowns use width 100% / flex and follow the container as it resizes
+  // between minWidth and maxWidth — no per-control pixel widths.
   return (
     <div
+      data-testid="filter-widget-dropdown"
       style={{
         padding: `${design.padding.top}px ${design.padding.right}px ${design.padding.bottom}px ${design.padding.left}px`,
-        width: design.width,
+        width: '100%',
+        minWidth: design.minWidth,
+        maxWidth: design.maxWidth,
         boxSizing: 'border-box',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: design.rowGap,
       }}
     >
-      {/* Dimension label */}
-      <div style={design.label}>{title ?? attribute.name}</div>
-
       {isDateAttribute ? (
-        <div style={{ display: 'flex', gap: design.dateRow.gap }}>
-          <SingleSelect<string>
-            style={{
-              width: innerWidth - design.dateRow.gap - design.dateRow.valueWidth,
-              flexShrink: 0,
-            }}
-            value={dateGranularity}
-            items={translatedGranularities}
-            onChange={handleDateLevelChange}
-          />
+        <div style={{ display: 'flex', gap: design.dateRow.gap, width: '100%' }}>
+          <div data-testid="filter-widget-date-level-select" style={{ flex: 1, minWidth: 0 }}>
+            <SingleSelect<string>
+              style={{ width: '100%' }}
+              fieldStyle={design.selectField}
+              value={resolvedGranularity}
+              items={translatedGranularities}
+              onChange={handleDateLevelChange}
+            />
+          </div>
+          <div data-testid="filter-widget-members-select" style={{ flex: 1, minWidth: 0 }}>
+            {effectiveMultiselect ? (
+              <SearchableMultiSelect<string>
+                width="100%"
+                values={selectedKeys}
+                placeholder={placeholder}
+                placeholderColor={design.placeholder.color}
+                onChange={handleMultiChange}
+                onListScroll={handleListScroll}
+                showListLoader={membersLoading}
+                showSearch={false}
+                items={items}
+                fieldStyle={design.selectField}
+              />
+            ) : (
+              <SearchableSingleSelect<string>
+                key={singleSelectKey}
+                width="100%"
+                value={selectedKey}
+                placeholder={placeholder}
+                placeholderColor={design.placeholder.color}
+                onChange={handleSingleChange}
+                onListScroll={handleListScroll}
+                showListLoader={membersLoading}
+                showSearch={false}
+                items={items}
+                fieldStyle={design.selectField}
+              />
+            )}
+          </div>
+        </div>
+      ) : (
+        <div data-testid="filter-widget-members-select">
           {effectiveMultiselect ? (
             <SearchableMultiSelect<string>
-              width={design.dateRow.valueWidth}
+              items={items}
               values={selectedKeys}
               placeholder={placeholder}
+              placeholderColor={design.placeholder.color}
               onChange={handleMultiChange}
               onListScroll={handleListScroll}
               showListLoader={membersLoading}
-              showSearch={false}
-              items={items}
+              onSearchUpdate={onSearchUpdate}
+              width="100%"
+              fieldStyle={design.selectField}
             />
           ) : (
             <SearchableSingleSelect<string>
               key={singleSelectKey}
-              width={design.dateRow.valueWidth}
+              items={items}
               value={selectedKey}
               placeholder={placeholder}
+              placeholderColor={design.placeholder.color}
               onChange={handleSingleChange}
               onListScroll={handleListScroll}
               showListLoader={membersLoading}
-              showSearch={false}
-              items={items}
+              onSearchUpdate={onSearchUpdate}
+              width="100%"
+              fieldStyle={design.selectField}
             />
           )}
         </div>
-      ) : effectiveMultiselect ? (
-        <SearchableMultiSelect<string>
-          items={items}
-          values={selectedKeys}
-          placeholder={placeholder}
-          onChange={handleMultiChange}
-          onListScroll={handleListScroll}
-          showListLoader={membersLoading}
-          onSearchUpdate={onSearchUpdate}
-          width="100%"
-        />
-      ) : (
-        <SearchableSingleSelect<string>
-          key={singleSelectKey}
-          items={items}
-          value={selectedKey}
-          placeholder={placeholder}
-          onChange={handleSingleChange}
-          onListScroll={handleListScroll}
-          showListLoader={membersLoading}
-          onSearchUpdate={onSearchUpdate}
-          width="100%"
-        />
       )}
     </div>
   );

@@ -1,3 +1,5 @@
+import { type ComponentPropsWithoutRef, forwardRef } from 'react';
+
 import styled from '@emotion/styled';
 
 import { Themable } from '@/infra/contexts/theme-provider/types';
@@ -7,7 +9,7 @@ import { ElementStates } from '@/types';
 
 import { Focusable } from './types.js';
 
-export const SelectField = styled.div<Focusable & Themable>`
+const StyledSelectField = styled.div<Focusable & Themable>`
   width: 100%;
   box-sizing: border-box;
   display: inline-flex;
@@ -22,6 +24,19 @@ export const SelectField = styled.div<Focusable & Themable>`
   border: 1px solid ${({ focus }) => (focus ? DEFAULT_TEXT_COLOR : 'transparent')};
   border-radius: ${({ theme }) => theme.general.popover.input.cornerRadius};
 `;
+
+/**
+ * Renders the select trigger field used by filter-editor select controls.
+ * @param props - Select field props, including focus state and theme settings.
+ * @returns Select trigger element with a stable test id.
+ * @internal
+ */
+export const SelectField = forwardRef<
+  HTMLDivElement,
+  ComponentPropsWithoutRef<typeof StyledSelectField>
+>(function SelectField(props, ref) {
+  return <StyledSelectField ref={ref} {...props} data-testid="csdk-select-field" />;
+});
 
 export const SelectItemContainer = styled.div<Themable>`
   box-sizing: border-box;

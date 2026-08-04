@@ -54,7 +54,7 @@ export interface CustomWidgetProps extends CustomWidgetEventProps {
   styleOptions?: CustomWidgetStyleOptions;
 
   /**
-   * Widget configuration (e.g. header toolbar menu)
+   * Widget configuration (e.g. the header menu)
    *
    * @category Widget
    * @internal

@@ -20,6 +20,7 @@ Vue components and utilities for working with charts
 - [LineChart](class.LineChart.md)
 - [PieChart](class.PieChart.md)
 - [PolarChart](class.PolarChart.md)
+- [SankeyChart](class.SankeyChart.md)
 - [ScatterChart](class.ScatterChart.md)
 - [ScattermapChart](class.ScattermapChart.md)
 - [StreamgraphChart](class.StreamgraphChart.md)

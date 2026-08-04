@@ -6,7 +6,10 @@
  * that only need datasource list/fields/schema helpers.
  */
 
-export { QueryApiDispatcher } from './query-api-dispatcher/query-api-dispatcher.js';
+export {
+  QueryApiDispatcher,
+  shouldUseSearchByDisplayName,
+} from './query-api-dispatcher/query-api-dispatcher.js';
 export type {
   DisplayNameConfig,
   GetDataSourceFieldsOptions,

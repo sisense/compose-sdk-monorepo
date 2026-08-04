@@ -36,18 +36,18 @@ export type KpiCardProps = {
 
 /**
  * `value`'s `BodySlot` order per {@link KpiCardProps.layout} -- `'standard'` keeps it first
- * (visually above the comparison); `'big-comparison'` moves it after (the comparison takes over
+ * (visually above the comparison); `'comparison-first'` moves it after (the comparison takes over
  * the headline position, value renders small below it). DOM
  * order is intentionally unaffected (`{value}{comparison}` always renders in that source order --
  * only the CSS `order` used here changes), keeping focus/reading order stable across layouts.
  */
 function valueOrderFor(layout: KpiChartDesignOptions['layout']): number {
-  return layout === 'big-comparison' ? 1 : 0;
+  return layout === 'comparison-first' ? 1 : 0;
 }
 
 /** `comparison`'s `BodySlot` order -- inverse of {@link valueOrderFor}. */
 function comparisonOrderFor(layout: KpiChartDesignOptions['layout']): number {
-  return layout === 'big-comparison' ? 0 : 1;
+  return layout === 'comparison-first' ? 0 : 1;
 }
 
 /**
@@ -106,8 +106,14 @@ export const KpiCard = forwardRef<HTMLElement, KpiCardProps>(function KpiCard(
     >
       {title}
       <BodyArea ref={bodyRef} data-kpi-area="body">
-        <BodySlot $order={valueOrderFor(layout)}>{value}</BodySlot>
-        {comparison && <BodySlot $order={comparisonOrderFor(layout)}>{comparison}</BodySlot>}
+        <BodySlot $order={valueOrderFor(layout)} $shrink={false}>
+          {value}
+        </BodySlot>
+        {comparison && (
+          <BodySlot $order={comparisonOrderFor(layout)} $shrink={true}>
+            {comparison}
+          </BodySlot>
+        )}
       </BodyArea>
       {sparkline}
     </CardRoot>

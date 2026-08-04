@@ -2,7 +2,7 @@
 title: SankeyChart
 ---
 
-# Function SankeyChart <Badge type="beta" text="Beta" />
+# Function SankeyChart
 
 > **SankeyChart**(`props`): `Promise`\< `ReactNode` \> \| `ReactNode`
 

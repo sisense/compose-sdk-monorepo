@@ -19,7 +19,7 @@ React hook that allows to make authorized fetch request to any Sisense API.
 
 | Parameter | Type |
 | :------ | :------ |
-| ...`args` | [`string`, `RequestInit`, \{<br />  `enabled`: `boolean`;<br />  `requestConfig`: [`RequestConfig`](../type-aliases/type-alias.RequestConfig.md);<br /> }] |
+| ...`args` | [`string`, `RequestInit`, \{<br />  `enabled?`: `boolean`;<br />  `requestConfig?`: [`RequestConfig`](../type-aliases/type-alias.RequestConfig.md);<br /> }] |
 
 ## Returns
 

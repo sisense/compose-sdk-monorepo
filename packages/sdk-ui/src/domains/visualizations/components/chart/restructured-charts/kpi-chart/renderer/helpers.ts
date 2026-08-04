@@ -1,3 +1,4 @@
+import type { KpiComparisonInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 import {
   applyFormat,
   getCompleteNumberFormatConfig,
@@ -22,11 +23,95 @@ export const MAX_DISPLAY_PERCENT_DIFF = 999.99;
 const PREVIOUS_PERIOD = 'previous-period';
 
 /**
+ * Minimal translate signature the KPI formatters need -- structurally compatible with
+ * react-i18next's `t`, but narrow enough for tests to stub with a plain function.
+ * @internal
+ */
+export type KpiTranslateFn = (key: string, options?: Record<string, unknown>) => string;
+
+/**
+ * Interpolates `{{name}}` placeholders in a consumer-supplied template (e.g.
+ * `KpiComparisonStyleOptions.ofGoalText`). Uses i18next's `{{...}}` placeholder syntax so
+ * override templates read the same as the built-in locale strings, but interpolates directly --
+ * an override is a literal string, not a translation key. Unknown placeholders are left as-is.
+ * @internal
+ */
+export function interpolateTemplate(template: string, vars: Record<string, string>): string {
+  return template.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, name: string) => vars[name] ?? match);
+}
+
+/**
  * Formats a KPI number through the shared number-format pipeline (plain text, no markup).
  * @internal
  */
 export function formatKpiValue(value: number, config?: NumberFormatConfig): string {
   return applyFormat(getCompleteNumberFormatConfig(config), value);
+}
+
+/**
+ * Number format for the derived percent-of-target metric: the shared pipeline's defaults
+ * ('auto' decimal scale — up to 2 decimals, trailing zeros trimmed), minus unit abbreviations —
+ * an extreme ratio must render as '500,000%', never '500K%'. Deliberately NOT the measure's own
+ * config: the percent is a derived ratio, and inheriting a currency prefix would corrupt it
+ * ('$83.33%').
+ */
+const PERCENT_OF_TARGET_FORMAT: NumberFormatConfig = {
+  decimalScale: 'auto',
+  trillion: false,
+  billion: false,
+  million: false,
+  kilo: false,
+};
+
+/**
+ * Renders an already-formatted percent magnitude through the locale's `kpi.percentFormat`
+ * template, which owns the percent sign's placement (suffix in English `82%`, prefix in Turkish
+ * `%82`, spaced in French `82 %`) instead of a `%` hardcoded in TS.
+ * @internal
+ */
+export function formatPercentText(
+  t: KpiTranslateFn,
+  value: string,
+  sign: '' | '+' | '-' = '',
+): string {
+  return t('kpi.percentFormat', { sign, value });
+}
+
+/**
+ * Formats a `'target'` comparison's percent-of-goal metric for display (e.g. `'83.33%'`) through
+ * the shared number-format pipeline — the same formatting path the indicator chart uses — instead
+ * of hardcoded integer rounding. The percent sign's placement is locale-driven (see
+ * {@link formatPercentText}).
+ * @internal
+ */
+export function formatPercentOfTarget(percentOfTarget: number, t: KpiTranslateFn): string {
+  return formatPercentText(t, formatKpiValue(percentOfTarget, PERCENT_OF_TARGET_FORMAT));
+}
+
+/**
+ * Reads the number-format config carried by a `'delta'`/`'target'` comparison's own measure, or
+ * `undefined` when there is no measure-backed config to honor (fixed-number target,
+ * `'previous-period'`, or no comparison at all). `'value'`-type comparisons intentionally return
+ * `undefined` here — their config is resolved in the data layer
+ * (`KpiComparisonData.numberFormatConfig`) alongside their measure-driven color.
+ * @internal
+ */
+export function comparisonMeasureNumberFormatConfig(
+  comparison: KpiComparisonInternal | undefined,
+): NumberFormatConfig | undefined {
+  if (!comparison) {
+    return undefined;
+  }
+  switch (comparison.type) {
+    case 'delta':
+      return comparison.value.numberFormatConfig;
+    case 'target':
+      return typeof comparison.target === 'number'
+        ? undefined
+        : comparison.target.numberFormatConfig;
+    default:
+      return undefined;
+  }
 }
 
 /**
@@ -49,15 +134,16 @@ export function computeHeadlineMaxHeightPx(
 
 /**
  * Formats a percent difference with an explicit sign, capped at {@link MAX_DISPLAY_PERCENT_DIFF}.
+ * The sign rides through the locale's `kpi.percentFormat` template as its own placeholder, so a
+ * percent-sign-prefix locale renders `+%20` rather than `%+20`.
  * @internal
  */
-export function formatPercentDiff(percentDiff: number): string {
+export function formatPercentDiff(percentDiff: number, t: KpiTranslateFn): string {
   const capped = Math.max(
     -MAX_DISPLAY_PERCENT_DIFF,
     Math.min(MAX_DISPLAY_PERCENT_DIFF, percentDiff),
   );
-  const sign = capped >= 0 ? '+' : '';
-  return `${sign}${capped.toFixed(2)}%`;
+  return formatPercentText(t, Math.abs(capped).toFixed(2), capped >= 0 ? '+' : '-');
 }
 
 /**
@@ -140,10 +226,11 @@ function matchesCondition(
 export function formatDelta(
   comparison: { deltaValue: number; deltaPercent?: number },
   display: 'percent' | 'value' | 'both',
+  t: KpiTranslateFn,
   numberFormatConfig?: NumberFormatConfig,
 ): string | null {
   const percentText = isMeaningfulPercentDiff(comparison.deltaPercent)
-    ? formatPercentDiff(comparison.deltaPercent)
+    ? formatPercentDiff(comparison.deltaPercent, t)
     : null;
   const valueText = formatDeltaValue(comparison.deltaValue, numberFormatConfig);
 
@@ -346,10 +433,61 @@ export function toComparisonDisplay(
 }
 
 /**
+ * Consumer overrides for the `'target'` comparison's built-in strings
+ * (`KpiComparisonStyleOptions.ofGoalText` / `.toGoText`), already threaded through design
+ * options. When set, each replaces its localized `kpi.target.*` template.
+ * @internal
+ */
+export type KpiTargetTextOverrides = {
+  ofGoalText?: string;
+  toGoText?: string;
+};
+
+/**
+ * Builds the two display strings of a `'target'` comparison -- the percent-of-goal line (e.g.
+ * `'82% of goal'`, absent when the percent isn't computable) and the amount-to-go line (e.g.
+ * `'$250K to go'`) -- from the localized `kpi.target.*` templates, or the consumer's per-instance
+ * override templates when set. Shared by the visible readout (`kpi-comparison.tsx`) and the aria
+ * summary ({@link summarizeComparisonForAria}) so assistive tech always hears exactly the
+ * displayed wording.
+ * @internal
+ */
+export function buildTargetReadout(
+  comparison: { percentOfTarget?: number; toGo: number; label: string },
+  numberFormatConfig: NumberFormatConfig | undefined,
+  t: KpiTranslateFn,
+  overrides?: KpiTargetTextOverrides,
+): { ofGoalText?: string; toGoText: string } {
+  // The '{{percent}} of goal' template carries no unit of its own, so the percent sign must be
+  // baked into the interpolated value; `{{goal}}` (the target's display label) is offered to
+  // templates that want to name the goal.
+  const percentText =
+    comparison.percentOfTarget !== undefined
+      ? formatPercentOfTarget(comparison.percentOfTarget, t)
+      : undefined;
+  const ofGoalVars = { percent: percentText ?? '', goal: comparison.label };
+  const ofGoalText =
+    percentText !== undefined
+      ? overrides?.ofGoalText !== undefined
+        ? interpolateTemplate(overrides.ofGoalText, ofGoalVars)
+        : t('kpi.target.ofGoal', ofGoalVars)
+      : undefined;
+
+  const toGoVars = { value: formatKpiValue(Math.abs(comparison.toGo), numberFormatConfig) };
+  const toGoText =
+    overrides?.toGoText !== undefined
+      ? interpolateTemplate(overrides.toGoText, toGoVars)
+      : t('kpi.target.toGo', toGoVars);
+
+  return { ofGoalText, toGoText };
+}
+
+/**
  * Builds the comparison segment of the card's `aria-label`, e.g. `'+20.00% vs prior month'`.
  *
- * For `'target'` comparisons the summary follows the same `display` semantics as the visible
- * readout (see `kpi-comparison.tsx`), so assistive tech never hears content that isn't shown:
+ * For `'target'` comparisons the summary reads the same localized (or consumer-overridden)
+ * strings as the visible readout ({@link buildTargetReadout}) and follows the same `display`
+ * semantics (see `kpi-comparison.tsx`), so assistive tech never hears content that isn't shown:
  * `'percent'` reads the percent-of-goal line, `'value'` the amount-to-go line, `'both'` reads
  * both; an unavailable percent falls back to the amount-to-go line.
  * @internal
@@ -357,24 +495,27 @@ export function toComparisonDisplay(
 export function summarizeComparisonForAria(
   comparison: KpiComparisonDisplay,
   numberFormatConfig: NumberFormatConfig | undefined,
+  t: KpiTranslateFn,
   display: 'percent' | 'value' | 'both' = 'percent',
+  targetTextOverrides?: KpiTargetTextOverrides,
 ): string {
   switch (comparison.type) {
     case PREVIOUS_PERIOD:
     case 'delta': {
-      const deltaText = formatDelta(comparison, display, numberFormatConfig);
+      const deltaText = formatDelta(comparison, display, t, numberFormatConfig);
       return comparison.label ? `${deltaText} ${comparison.label}` : deltaText ?? '';
     }
     case 'target': {
-      const toGoText = `${formatKpiValue(Math.abs(comparison.toGo), numberFormatConfig)} to go`;
-      const percentText =
-        comparison.percentOfTarget !== undefined
-          ? `${Math.round(comparison.percentOfTarget)}% of ${comparison.label}`
-          : undefined;
-      if (display === 'value' || !percentText) {
+      const { ofGoalText, toGoText } = buildTargetReadout(
+        comparison,
+        numberFormatConfig,
+        t,
+        targetTextOverrides,
+      );
+      if (display === 'value' || !ofGoalText) {
         return toGoText;
       }
-      return display === 'both' ? `${percentText}, ${toGoText}` : percentText;
+      return display === 'both' ? `${ofGoalText}, ${toGoText}` : ofGoalText;
     }
     case 'value':
       return `${comparison.label} ${formatKpiValue(

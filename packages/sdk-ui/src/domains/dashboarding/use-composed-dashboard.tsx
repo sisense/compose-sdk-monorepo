@@ -4,6 +4,7 @@ import { Filter, FilterRelations } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 
 import { resolveFilterWidgetFilter } from '@/domains/dashboarding/common-filters/filter-widget-connector.js';
+import { withExcludedDateLevels } from '@/domains/dashboarding/common-filters/filter-widget-date-levels.js';
 import { useCommonFilters } from '@/domains/dashboarding/common-filters/use-common-filters.js';
 import { findDeletedWidgetsFromLayout } from '@/domains/dashboarding/components/editable-layout/helpers.js';
 import type { WidgetsOptions, WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
@@ -150,12 +151,12 @@ export type ComposedDashboardResult<D extends ComposableDashboardProps | Dashboa
   setWidgetsLayout: (newLayout: WidgetsPanelLayout) => void;
 
   /**
-   * Filter guids that should be hidden in the FiltersPanel because they are
-   * claimed by a live FilterWidget in the current layout.
+   * Guids of filters linked to a live FilterWidget in the current layout; the
+   * FiltersPanel renders their tiles read-only.
    *
    * @internal
    */
-  hiddenFilterIds: string[];
+  filterWidgetLinkedIds: readonly string[];
 };
 
 /**
@@ -322,7 +323,8 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
 
   // Connect common filters to widgets
   const widgetsWithCommonFilters = useMemo(() => {
-    return widgetsWithDownloadExcel.map((widget) =>
+    // Pass 1: connect all widgets (resolves linked filters into FilterWidget props)
+    const connected = widgetsWithDownloadExcel.map((widget) =>
       connectToWidgetProps(widget, {
         ...innerWidgetsOptions?.[widget.id]?.filtersOptions,
         filterWidgetOptions: innerWidgetsOptions?.[widget.id]?.filterWidgetOptions,
@@ -333,7 +335,16 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
           })),
       }),
     );
-  }, [widgetsWithDownloadExcel, innerWidgetsOptions, connectToWidgetProps, setInnerWidgetsOptions]);
+
+    // Pass 2: hide date granularities already claimed by other dashboard filters
+    return connected.map(withExcludedDateLevels(getFiltersArray(commonFilters)));
+  }, [
+    widgetsWithDownloadExcel,
+    innerWidgetsOptions,
+    connectToWidgetProps,
+    setInnerWidgetsOptions,
+    commonFilters,
+  ]);
 
   const widgetsWithFilterAndJtd = useMemo(() => {
     return widgetsWithCommonFilters.map((widget: WidgetProps) => connectToWidgetPropsJtd(widget));
@@ -360,21 +371,16 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     return { ...initialDashboard.layoutOptions, widgetsPanel: finalWidgetsLayout };
   }, [finalWidgetsLayout, initialDashboard.layoutOptions]);
 
-  const shouldHideFilterWidgetFilters =
-    (initialDashboard as Partial<DashboardProps>).config?.filtersPanel
-      ?.hideFilterWidgetLinkedFilters !== false;
-
-  const hiddenFilterIds = useMemo<string[]>(() => {
-    if (!shouldHideFilterWidgetFilters) return [];
+  // Guids of filters claimed by FilterWidgets in the layout; the panel renders them read-only.
+  const filterWidgetLinkedIds = useMemo<string[]>(() => {
     const allFilters = getFiltersArray(commonFilters);
     return finalWidgets
       .filter(isFilterWidgetProps)
       .filter((w) => widgetExistsInLayout(finalWidgetsLayout, w.id))
       .flatMap((w) => {
         // Same resolution rule as the FilterWidget connector: attribute identity is
-        // authoritative, the guid link is only a re-validated hint. Covers filters
-        // created externally (e.g. by PWC's syncFilterWithWidget) before the first
-        // interaction, and ignores stale links after an external attribute edit.
+        // authoritative, the guid link only a re-validated hint — covers externally
+        // created filters and stale links after an attribute edit.
         const { filter } = resolveFilterWidgetFilter(
           allFilters,
           w.attribute,
@@ -382,13 +388,7 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
         );
         return filter ? [filter.config.guid] : [];
       });
-  }, [
-    finalWidgets,
-    finalWidgetsLayout,
-    innerWidgetsOptions,
-    shouldHideFilterWidgetFilters,
-    commonFilters,
-  ]);
+  }, [finalWidgets, finalWidgetsLayout, innerWidgetsOptions, commonFilters]);
 
   // Deleting a FilterWidget must also remove its linked dashboard filter (design
   // requirement — the filter is "removed together with the widget"). Detection uses the
@@ -524,7 +524,7 @@ export function useComposedDashboardInternal<D extends ComposableDashboardProps 
     dashboard: customizedDashboard as D,
     setFilters,
     setWidgetsLayout: setFinalWidgetsLayout,
-    hiddenFilterIds,
+    filterWidgetLinkedIds,
   };
 }
 

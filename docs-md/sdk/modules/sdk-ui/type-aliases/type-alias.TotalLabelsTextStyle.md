@@ -5,7 +5,7 @@ title: TotalLabelsTextStyle
 # Type alias TotalLabelsTextStyle
 
 > **TotalLabelsTextStyle**: `Omit`\< [`TextStyle`](type-alias.TextStyle.md), `"pointerEvents"` \| `"textOverflow"` \> & \{
-  `align`: `"center"` \| `"left"` \| `"right"`;
+  `align?`: `"center"` \| `"left"` \| `"right"`;
  }
 
 Text styling options for total labels.

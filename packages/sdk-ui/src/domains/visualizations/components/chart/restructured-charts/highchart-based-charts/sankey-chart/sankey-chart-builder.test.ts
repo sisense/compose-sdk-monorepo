@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { SankeyChartDataOptions } from '@/domains/visualizations/core/chart-data-options/types';
 
-import { isSankeyReadyForOnReady } from './helpers/on-ready-state.js';
 import { sankeyChartBuilder } from './sankey-chart-builder.js';
 
 const revenue = measureFactory.sum(DM.Commerce.Revenue);
@@ -26,7 +25,7 @@ describe('sankeyChartBuilder', () => {
         sankeyChartBuilder.dataOptions.isCorrectDataOptions({
           ...validDataOptions,
           breakBy: [],
-        } as never),
+        }),
       ).toBe(false);
     });
 
@@ -35,7 +34,7 @@ describe('sankeyChartBuilder', () => {
         sankeyChartBuilder.dataOptions.isCorrectDataOptions({
           category: [DM.Commerce.Gender],
           value: revenue,
-        } as never),
+        }),
       ).toBe(false);
     });
 
@@ -91,8 +90,17 @@ describe('sankeyChartBuilder', () => {
   });
 
   describe('onReady wiring', () => {
-    it('exposes the Sankey readiness predicate for the onReady contract', () => {
-      expect(sankeyChartBuilder.onReady?.isReadyForOnReady).toBe(isSankeyReadyForOnReady);
+    it('exposes the chart-render readiness predicate for the onReady contract', () => {
+      expect(typeof sankeyChartBuilder.renderer.isReady).toBe('function');
+      expect(
+        sankeyChartBuilder.renderer.isReady({
+          chartType: 'sankey',
+          isLoading: false,
+          rendererPainted: true,
+          hasNoDimensions: false,
+          chartData: null,
+        }),
+      ).toBe(true);
     });
   });
 });

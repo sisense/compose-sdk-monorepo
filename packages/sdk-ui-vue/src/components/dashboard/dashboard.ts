@@ -1,24 +1,44 @@
-import { Dashboard as DashboardPreact } from '@sisense/sdk-ui-preact';
+import {
+  // a runtime constant of built-in item ids — must not be a type-only import
+  DashboardHeaderTargets,
+  Dashboard as DashboardPreact,
+} from '@sisense/sdk-ui-preact';
 import type {
   DashboardConfig as DashboardConfigPreact,
   DashboardFiltersPanelConfig,
-  DashboardHeaderConfig as DashboardHeaderConfigPreact,
+  DashboardHeaderItemComponentProps,
+  DashboardHeaderItemPosition,
+  DashboardHeaderItemSize,
+  DashboardHeaderTarget,
   DashboardProps as DashboardPropsPreact,
 } from '@sisense/sdk-ui-preact';
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 
-import { setupHelper } from '../../helpers/setup-helper';
+import { createComponentTranslator } from '../../helpers/component-translator';
+import { toPreactDashboardProps } from '../../helpers/dashboard-props-preact-translator';
+import { setupHelper, toDeepRaw } from '../../helpers/setup-helper';
+import { getCustomWidgetsContext } from '../../providers/custom-widgets-provider';
+import { getSisenseContext } from '../../providers/sisense-context-provider/sisense-context';
+import { getThemeContext } from '../../providers/theme-provider/theme-context';
 import type { WidgetProps } from '../widgets';
+import { type DashboardHeaderConfig } from './dashboard-header-config';
 
-// Re-exports related types
-export { DashboardFiltersPanelConfig };
-
-/**
- * Configuration for the dashboard header.
- */
-export interface DashboardHeaderConfig
-  extends Omit<DashboardHeaderConfigPreact, 'items' | 'onBeforeRender'> {}
+export { DashboardHeaderTargets };
+export type {
+  DashboardFiltersPanelConfig,
+  DashboardHeaderItemComponentProps,
+  DashboardHeaderItemPosition,
+  DashboardHeaderItemSize,
+  DashboardHeaderTarget,
+};
+export type {
+  DashboardHeaderConfig,
+  DashboardHeaderItem,
+  DashboardHeaderItemComponent,
+  DashboardHeaderItemsTransform,
+  DashboardResolvedHeaderItem,
+} from './dashboard-header-config';
 
 /**
  * Configuration for the {@link @sisense/sdk-ui-vue!Dashboard | `Dashboard`} component.
@@ -122,5 +142,15 @@ export const Dashboard = defineComponent({
      */
     styleOptions: Object as PropType<DashboardProps['styleOptions']>,
   },
-  setup: (props) => setupHelper(DashboardPreact, props),
+  setup: (props) => {
+    const componentTranslator = createComponentTranslator({
+      sisenseContext: getSisenseContext(),
+      themeContext: getThemeContext(),
+      customWidgetsContext: getCustomWidgetsContext(),
+    });
+    // a props getter, so the conversion re-runs on every render and prop updates keep flowing
+    return setupHelper(DashboardPreact, () =>
+      toPreactDashboardProps(toDeepRaw(props), componentTranslator),
+    );
+  },
 });

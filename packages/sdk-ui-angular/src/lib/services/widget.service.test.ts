@@ -5,7 +5,6 @@ import {
   type ClientApplication,
   getWidgetModel,
   HookAdapter,
-  type JumpToDashboardConfig,
   useJtdWidget as useJtdWidgetPreact,
 } from '@sisense/sdk-ui-preact';
 import { BehaviorSubject } from 'rxjs';
@@ -16,7 +15,7 @@ import { toPreactWidgetProps, toWidgetProps } from '../helpers/widget-props-prea
 import { type WidgetModel } from '../sdk-ui-core-exports';
 import { SisenseContextService } from './sisense-context.service';
 import { ThemeService } from './theme.service';
-import { WidgetService } from './widget.service';
+import { type JumpToDashboardConfig, WidgetService } from './widget.service';
 
 vi.mock('../decorators/trackable.decorator', () => ({
   TrackableService: (_target: any, _key: string, descriptor: PropertyDescriptor) => descriptor,

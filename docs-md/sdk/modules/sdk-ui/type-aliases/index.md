@@ -139,7 +139,9 @@ TypeScript type aliases for components and hooks listed above
 - [KpiComparisonStyleOptions](type-alias.KpiComparisonStyleOptions.md) <Badge type="beta" text="Beta" />
 - [KpiDataPoint](type-alias.KpiDataPoint.md) <Badge type="beta" text="Beta" />
 - [KpiDataPointEventHandler](type-alias.KpiDataPointEventHandler.md) <Badge type="beta" text="Beta" />
+- [KpiIcon](type-alias.KpiIcon.md) <Badge type="beta" text="Beta" />
 - [KpiIconCondition](type-alias.KpiIconCondition.md) <Badge type="beta" text="Beta" />
+- [KpiIconName](type-alias.KpiIconName.md) <Badge type="beta" text="Beta" />
 - [KpiRenderOptions](type-alias.KpiRenderOptions.md) <Badge type="beta" text="Beta" />
 - [KpiSparklineStyleOptions](type-alias.KpiSparklineStyleOptions.md) <Badge type="beta" text="Beta" />
 - [KpiSparklineType](type-alias.KpiSparklineType.md) <Badge type="beta" text="Beta" />
@@ -197,7 +199,7 @@ TypeScript type aliases for components and hooks listed above
 - [RegularChartStyleOptions](type-alias.RegularChartStyleOptions.md)
 - [RegularChartType](type-alias.RegularChartType.md)
 - [RequestConfig](type-alias.RequestConfig.md)
-- [SankeyChartType](type-alias.SankeyChartType.md) <Badge type="beta" text="Beta" />
+- [SankeyChartType](type-alias.SankeyChartType.md)
 - [ScatterChartType](type-alias.ScatterChartType.md)
 - [ScatterDataPoint](type-alias.ScatterDataPoint.md)
 - [ScatterDataPointEventHandler](type-alias.ScatterDataPointEventHandler.md)
@@ -255,6 +257,8 @@ TypeScript type aliases for components and hooks listed above
 - [ValueToColorMap](type-alias.ValueToColorMap.md)
 - [WidgetConfig](type-alias.WidgetConfig.md)
 - [WidgetDataOptions](type-alias.WidgetDataOptions.md)
+- [WidgetHeaderMenuItem](type-alias.WidgetHeaderMenuItem.md)
+- [WidgetHeaderMenuTarget](type-alias.WidgetHeaderMenuTarget.md)
 - [WidgetId](type-alias.WidgetId.md)
 - [WidgetModelErrorState](type-alias.WidgetModelErrorState.md)
 - [WidgetModelLoadingState](type-alias.WidgetModelLoadingState.md)

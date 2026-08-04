@@ -57,7 +57,7 @@ export const previousPeriodWithSparkline = template(
     dataSet: kpiData,
     dataOptions: {
       value: revenue,
-      trend: months,
+      category: months,
       comparison: { type: 'previous-period' },
     } satisfies KpiChartDataOptions,
   },
@@ -70,7 +70,7 @@ export const targetComparison = template(
     dataSet: kpiData,
     dataOptions: {
       value: revenue,
-      trend: months,
+      category: months,
       comparison: { type: 'target', target: cost },
     } satisfies KpiChartDataOptions,
   },
@@ -86,6 +86,26 @@ export const fixedNumberTarget = template(
       // Fixed-number target: the goal is a constant, not a queried measure.
       comparison: { type: 'target', target: 6500 },
     } satisfies KpiChartDataOptions,
+  },
+  [withCardSize],
+);
+
+export const customTargetTexts = template(
+  {
+    chartType: 'kpi',
+    dataSet: kpiData,
+    dataOptions: {
+      value: revenue,
+      comparison: { type: 'target', target: cost },
+    } satisfies KpiChartDataOptions,
+    styleOptions: {
+      comparison: {
+        display: 'both',
+        // Per-instance templates replacing the localized 'of goal' / 'to go' strings.
+        ofGoalText: '{{percent}} of {{goal}} target',
+        toGoText: '{{value}} remaining',
+      },
+    } satisfies KpiStyleOptions,
   },
   [withCardSize],
 );
@@ -114,7 +134,7 @@ export const plainValueComparison = template(
   [withCardSize],
 );
 
-export const bigComparisonLayout = template(
+export const comparisonFirstLayout = template(
   {
     chartType: 'kpi',
     dataSet: kpiData,
@@ -122,7 +142,7 @@ export const bigComparisonLayout = template(
       value: revenue,
       comparison: { type: 'target', target: cost },
     } satisfies KpiChartDataOptions,
-    styleOptions: { layout: 'big-comparison' } satisfies KpiStyleOptions,
+    styleOptions: { layout: 'comparison-first' } satisfies KpiStyleOptions,
   },
   [withCardSize],
 );
@@ -133,7 +153,7 @@ export const lowIsGoodInverted = template(
     dataSet: kpiData,
     dataOptions: {
       value: cost,
-      trend: months,
+      category: months,
       comparison: { type: 'previous-period' },
     } satisfies KpiChartDataOptions,
     styleOptions: {
@@ -156,7 +176,7 @@ export const coloredTile = template(
   {
     chartType: 'kpi',
     dataSet: kpiData,
-    dataOptions: { value: revenue, trend: months } satisfies KpiChartDataOptions,
+    dataOptions: { value: revenue, category: months } satisfies KpiChartDataOptions,
     styleOptions: {
       sparkline: { chartType: 'line' },
       card: { backgroundColor: '#2ecc71', cornerRadius: 12 },
@@ -179,7 +199,7 @@ export const autoFitLargeNumber = template(
   {
     chartType: 'kpi',
     dataSet: largeValueData,
-    dataOptions: { value: revenue, trend: months } satisfies KpiChartDataOptions,
+    dataOptions: { value: revenue, category: months } satisfies KpiChartDataOptions,
   },
   [
     (Story: StoryFn) => {
@@ -200,12 +220,57 @@ export const customTypography = template(
     dataOptions: {
       // Value color rides the standard measure-color mechanism (uniform here).
       value: { column: revenue, color: { type: 'uniform', color: '#7b68ee' } },
-      trend: months,
+      category: months,
     } satisfies KpiChartDataOptions,
     styleOptions: {
       value: { textSize: 48 },
       title: { text: 'Monthly Revenue' },
       card: { textAlign: 'center', showBorder: true },
+    } satisfies KpiStyleOptions,
+  },
+  [withCardSize],
+);
+
+/** Conditional icons: a built-in named SVG on the value, a custom svg-path on the comparison. */
+export const conditionalIcons = template(
+  {
+    chartType: 'kpi',
+    dataSet: kpiData,
+    dataOptions: {
+      value: revenue,
+      category: months,
+      comparison: { type: 'previous-period' },
+    } satisfies KpiChartDataOptions,
+    styleOptions: {
+      value: {
+        conditionalIcons: [
+          {
+            icon: { type: 'built-in', name: 'check', color: '#2ea44f' },
+            expression: '6000',
+            operator: '>',
+          },
+          {
+            icon: { type: 'built-in', name: 'warning', color: '#cf222e' },
+            expression: '6000',
+            operator: '<=',
+          },
+        ],
+      },
+      comparison: {
+        conditionalIcons: [
+          {
+            // Any icon as inert path geometry (Material 'bolt' path data, 24-grid).
+            icon: {
+              type: 'svg-path',
+              d: 'M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66s.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21',
+            },
+            // The sample data's June-vs-May delta is negative, so gate on '<' to keep the
+            // svg-path icon visible in the story.
+            expression: '0',
+            operator: '<',
+          },
+        ],
+      },
     } satisfies KpiStyleOptions,
   },
   [withCardSize],

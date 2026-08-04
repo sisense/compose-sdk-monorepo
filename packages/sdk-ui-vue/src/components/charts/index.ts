@@ -18,3 +18,4 @@ export { AreamapChart, type AreamapChartProps } from './areamap-chart';
 export { ScattermapChart, type ScattermapChartProps } from './scattermap-chart';
 export { StreamgraphChart, type StreamgraphChartProps } from './streamgraph-chart';
 export { AreaRangeChart, type AreaRangeChartProps } from './area-range-chart';
+export { SankeyChart, type SankeyChartProps } from './sankey-chart';

@@ -406,4 +406,34 @@ describe('useGetFilterMembers', () => {
       ]);
     });
   });
+
+  // Switching a filter's dimension from a non-date field to a date field leaves the
+  // query-state reducer holding the previous dimension's (text) rows for a transient
+  // render while `filterAttribute` is already a datelevel. Formatting those text values as
+  // dates threw "Invalid time value" and crashed the widget via the error boundary.
+  it('does not throw when a date-level filter still holds non-date rows from a previous dimension', async () => {
+    const mockData: QueryResultData = {
+      columns: [{ name: 'Category', type: 'string' }],
+      rows: [[{ data: 'Apple Mac Desktops' }], [{ data: 'Cameras' }]],
+    };
+    executeQueryMock.mockResolvedValue(mockData);
+
+    const { result } = renderHook(() =>
+      useGetFilterMembers({
+        filter: filterFactory.members(DM.Commerce.Date.Years, []),
+        allowMissingMembers: true,
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    // Unparseable values fall back to their raw string instead of throwing.
+    expect(result.current.data?.allMembers).toStrictEqual([
+      { key: 'Apple Mac Desktops', title: 'Apple Mac Desktops' },
+      { key: 'Cameras', title: 'Cameras' },
+    ]);
+  });
 });

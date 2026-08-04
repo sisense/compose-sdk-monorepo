@@ -5,7 +5,7 @@ title: CustomDrilldownResult
 # Type alias CustomDrilldownResult
 
 > **CustomDrilldownResult**: [`CustomDrilldownResult`](../../sdk-ui/type-aliases/type-alias.CustomDrilldownResult.md) & \{
-  `breadcrumbsComponent`: \{
+  `breadcrumbsComponent?`: \{
     `render`: `ComponentRenderer`;
   };
  }

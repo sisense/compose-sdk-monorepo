@@ -26,6 +26,8 @@ type SingleSelectProps<Value> = {
   multiple?: boolean;
   items: SelectItem<Value>[];
   style?: CSSProperties;
+  /** Applies inline styles to the select trigger. */
+  fieldStyle?: CSSProperties;
   className?: string;
   onChange?: (value: Value) => void;
   primaryColor?: string;
@@ -34,7 +36,7 @@ type SingleSelectProps<Value> = {
 
 /** @internal */
 export function SingleSelect<Value = unknown>(props: SingleSelectProps<Value>) {
-  const { value, items, style, className, onChange, ...rest } = props;
+  const { value, items, style, fieldStyle, className, onChange, ...rest } = props;
 
   const { themeSettings } = useThemeContext();
   const [open, setOpen] = useState(false);
@@ -59,6 +61,7 @@ export function SingleSelect<Value = unknown>(props: SingleSelectProps<Value>) {
           ref={selectElementRef}
           focus={open}
           onClick={() => setOpen((isOpen) => !isOpen)}
+          style={fieldStyle}
           {...rest}
         >
           {selectedItem?.icon && <SelectIconContainer>{selectedItem?.icon}</SelectIconContainer>}

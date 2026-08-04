@@ -89,10 +89,11 @@ describe('AngularComponentAdapter', () => {
     } as unknown as Mocked<ComponentRef<any>>;
 
     // Create mock rendered component result
-    const renderedComponentMock: RenderedComponent = {
+    const renderedComponentMock: RenderedComponent<any> = {
       element: renderedElement,
       componentRef: componentRefMock,
       destroy: vi.fn(),
+      update: vi.fn(),
     };
 
     // Create mock dynamic renderer

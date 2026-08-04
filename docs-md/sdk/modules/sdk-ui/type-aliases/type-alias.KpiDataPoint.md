@@ -22,7 +22,7 @@ Resolved comparison shown on the card, when a comparison is active.
 
 **date**?: `number`
 
-Last trend bucket as epoch milliseconds, when a trend dimension is set.
+Last category bucket as epoch milliseconds, when a category dimension is set.
 
 ***
 

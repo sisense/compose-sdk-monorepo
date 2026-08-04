@@ -584,9 +584,10 @@ interface BaseChartEventProps {
    * state after a reload (e.g. filter change, refetch). Use this to signal
    * to a host application that the chart content is committed to the DOM.
    *
-   * Currently wired for **Sankey** only (Fusion `domready` / PDF export).
-   * Empty / no-results Sankey states also fire once the terminal overlay is shown.
-   * Other chart types ignore this prop (Fusion widgets use native `domready`).
+   * Used for Fusion `domready` / PDF export. Empty / no-results states also fire
+   * once the terminal overlay is shown. Supported by every chart type that has a
+   * `ChartBuilder`; `scatter`, `scattermap`, `boxplot`, and `indicator` ignore
+   * this prop for now.
    *
    * @category Callbacks
    * @internal
@@ -1098,8 +1099,6 @@ export interface FunnelChartProps
 
 /**
  * Props of the {@link SankeyChart} component.
- *
- * @beta
  *
  * @example
  * ```tsx
@@ -1843,7 +1842,7 @@ export interface KpiChartEventProps extends BaseChartEventProps {
  *   dataSet={DM.DataSource}
  *   dataOptions={{
  *     value: measureFactory.sum(DM.Commerce.Revenue),
- *     trend: DM.Commerce.Date.Months,
+ *     category: DM.Commerce.Date.Months,
  *     comparison: { type: 'previous-period' },
  *   }}
  *   styleOptions={{ title: { text: 'Total Revenue' } }}

@@ -300,4 +300,37 @@ describe('getDashboardModel', () => {
       );
     });
   });
+
+  describe('userAuth', () => {
+    it('should request userAuth via expand on the V1 endpoint by default', async () => {
+      await getDashboardModel(httpClientMock, dashboardMock.oid);
+
+      expect(getDashboardMock).toHaveBeenCalledWith(
+        dashboardMock.oid,
+        expect.objectContaining({ expand: ['userAuth'] }),
+      );
+    });
+
+    it('should not fall back to the legacy endpoint when the V1 endpoint returns userAuth', async () => {
+      const result = await getDashboardModel(httpClientMock, dashboardMock.oid);
+
+      expect(getDashboardLegacyMock).not.toHaveBeenCalled();
+      expect(result.userAuth).toEqual(dashboardMock.userAuth);
+    });
+
+    it('should fall back to the legacy endpoint when the V1 endpoint omits userAuth', async () => {
+      // `userAuth` is optional on DashboardDto, so omitting it yields a valid (V1-style) DTO.
+      // eslint-disable-next-line no-unused-vars
+      const { userAuth, widgets, ...dashboardWithoutUserAuth } = dashboardMock;
+      getDashboardMock.mockReturnValueOnce(dashboardWithoutUserAuth);
+
+      const result = await getDashboardModel(httpClientMock, dashboardMock.oid);
+
+      expect(getDashboardMock).toHaveBeenCalledTimes(1);
+      expect(getDashboardLegacyMock).toHaveBeenCalledWith(dashboardMock.oid, {
+        adminAccess: undefined,
+      });
+      expect(result.userAuth).toEqual(dashboardMock.userAuth);
+    });
+  });
 });

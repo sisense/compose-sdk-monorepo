@@ -2,6 +2,12 @@ import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
+import {
+  findMenuActionByPath,
+  findMenuItemByPath,
+} from '@/shared/types/__test-helpers__/find-menu-item.js';
+import { isMenuSubmenuItem, type MenuItem } from '@/shared/types/menu-item.js';
 
 import { useWithExcelDownloadMenuItem } from './use-with-excel-download-menu-item.js';
 
@@ -11,10 +17,16 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
+/** Children of a submenu found by id path, or `[]` when missing / not a submenu. */
+const childrenAt = (items: MenuItem[] | undefined, ...ids: string[]): MenuItem[] => {
+  const match = findMenuItemByPath(items, ...ids);
+  return match && isMenuSubmenuItem(match) ? match.items : [];
+};
+
 describe('useWithExcelDownloadMenuItem', () => {
   it('returns base header config when disabled', () => {
     const base: WidgetHeaderConfig = {
-      toolbar: { menu: { items: [{ id: 'other', caption: 'Other' }] } },
+      menu: { items: [{ type: 'action', id: 'other', caption: 'Other', onClick: vi.fn() }] },
     };
     const onDownloadExcel = vi.fn();
 
@@ -25,7 +37,7 @@ describe('useWithExcelDownloadMenuItem', () => {
     expect(result.current).toEqual(base);
   });
 
-  it('appends a Download group with Excel subtree when no download group exists', () => {
+  it('appends a Download submenu with the Excel subtree when no download submenu exists', () => {
     const base: WidgetHeaderConfig = {};
     const onDownloadExcel = vi.fn();
 
@@ -33,39 +45,64 @@ describe('useWithExcelDownloadMenuItem', () => {
       useWithExcelDownloadMenuItem({ baseHeaderConfig: base, enabled: true, onDownloadExcel }),
     );
 
-    const items = result.current.toolbar?.menu?.items ?? [];
+    const items = result.current.menu?.items ?? [];
     expect(items).toHaveLength(1);
     expect(items[0]).toMatchObject({
-      id: 'widget-download',
+      type: 'submenu',
+      id: WidgetHeaderMenuTargets.Download,
       caption: 'widgetHeader.menu.download',
     });
-    const excelFile = items[0]?.items?.[0];
-    expect(excelFile).toMatchObject({
-      id: 'excelFileMenuItem',
+    expect(
+      findMenuItemByPath(
+        items,
+        WidgetHeaderMenuTargets.Download,
+        WidgetHeaderMenuTargets.DownloadExcel,
+      ),
+    ).toMatchObject({
+      type: 'submenu',
+      id: WidgetHeaderMenuTargets.DownloadExcel,
       caption: 'widgetHeader.menu.excelFile',
     });
-    const repeatRows = excelFile?.items?.[0];
-    const mergeRows = excelFile?.items?.[1];
-    expect(repeatRows).toMatchObject({ id: 'downloadExcelRepeatRows' });
-    expect(mergeRows).toMatchObject({ id: 'downloadExcelMergeRows' });
-    repeatRows?.onClick?.();
+
+    const repeatRows = findMenuActionByPath(
+      items,
+      WidgetHeaderMenuTargets.Download,
+      WidgetHeaderMenuTargets.DownloadExcel,
+      WidgetHeaderMenuTargets.DownloadExcelRepeatRows,
+    );
+    const mergeRows = findMenuActionByPath(
+      items,
+      WidgetHeaderMenuTargets.Download,
+      WidgetHeaderMenuTargets.DownloadExcel,
+      WidgetHeaderMenuTargets.DownloadExcelMergeRows,
+    );
+    expect(repeatRows).toBeDefined();
+    expect(mergeRows).toBeDefined();
+
+    repeatRows?.onClick();
     expect(onDownloadExcel).toHaveBeenCalledWith(false);
-    mergeRows?.onClick?.();
+    mergeRows?.onClick();
     expect(onDownloadExcel).toHaveBeenCalledWith(true);
   });
 
-  it('adds Excel branch under existing widget-download group', () => {
+  it('adds the Excel branch under an existing Download submenu', () => {
     const base: WidgetHeaderConfig = {
-      toolbar: {
-        menu: {
-          items: [
-            {
-              id: 'widget-download',
-              caption: 'widgetHeader.menu.download',
-              items: [{ id: 'widget-download-csv-file', caption: 'CSV' }],
-            },
-          ],
-        },
+      menu: {
+        items: [
+          {
+            type: 'submenu',
+            id: WidgetHeaderMenuTargets.Download,
+            caption: 'widgetHeader.menu.download',
+            items: [
+              {
+                type: 'action',
+                id: WidgetHeaderMenuTargets.DownloadCsv,
+                caption: 'CSV',
+                onClick: vi.fn(),
+              },
+            ],
+          },
+        ],
       },
     };
     const onDownloadExcel = vi.fn();
@@ -74,42 +111,52 @@ describe('useWithExcelDownloadMenuItem', () => {
       useWithExcelDownloadMenuItem({ baseHeaderConfig: base, enabled: true, onDownloadExcel }),
     );
 
-    const downloadGroup = result.current.toolbar?.menu?.items?.[0];
-    expect(downloadGroup?.items).toHaveLength(2);
-    expect(downloadGroup?.items?.[1]).toMatchObject({ id: 'excelFileMenuItem' });
+    const downloadChildren = childrenAt(
+      result.current.menu?.items,
+      WidgetHeaderMenuTargets.Download,
+    );
+    expect(downloadChildren).toHaveLength(2);
+    expect(downloadChildren[1]).toMatchObject({ id: WidgetHeaderMenuTargets.DownloadExcel });
   });
 
-  it('keeps a single excelFileMenuItem when one already exists under widget-download', () => {
+  it('keeps a single Excel entry when one already exists under Download', () => {
     const staleOnDownload = vi.fn();
     const base: WidgetHeaderConfig = {
-      toolbar: {
-        menu: {
-          items: [
-            {
-              id: 'widget-download',
-              caption: 'widgetHeader.menu.download',
-              items: [
-                { id: 'widget-download-csv-file', caption: 'CSV' },
-                {
-                  id: 'excelFileMenuItem',
-                  caption: 'widgetHeader.menu.excelFile',
-                  items: [
-                    {
-                      id: 'downloadExcelRepeatRows',
-                      caption: 'widgetHeader.menu.repeatRowsRecommended',
-                      onClick: () => staleOnDownload(false),
-                    },
-                    {
-                      id: 'downloadExcelMergeRows',
-                      caption: 'widgetHeader.menu.mergeRows',
-                      onClick: () => staleOnDownload(true),
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
+      menu: {
+        items: [
+          {
+            type: 'submenu',
+            id: WidgetHeaderMenuTargets.Download,
+            caption: 'widgetHeader.menu.download',
+            items: [
+              {
+                type: 'action',
+                id: WidgetHeaderMenuTargets.DownloadCsv,
+                caption: 'CSV',
+                onClick: vi.fn(),
+              },
+              {
+                type: 'submenu',
+                id: WidgetHeaderMenuTargets.DownloadExcel,
+                caption: 'widgetHeader.menu.excelFile',
+                items: [
+                  {
+                    type: 'action',
+                    id: WidgetHeaderMenuTargets.DownloadExcelRepeatRows,
+                    caption: 'widgetHeader.menu.repeatRowsRecommended',
+                    onClick: () => staleOnDownload(false),
+                  },
+                  {
+                    type: 'action',
+                    id: WidgetHeaderMenuTargets.DownloadExcelMergeRows,
+                    caption: 'widgetHeader.menu.mergeRows',
+                    onClick: () => staleOnDownload(true),
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     };
     const onDownloadExcel = vi.fn();
@@ -118,14 +165,28 @@ describe('useWithExcelDownloadMenuItem', () => {
       useWithExcelDownloadMenuItem({ baseHeaderConfig: base, enabled: true, onDownloadExcel }),
     );
 
-    const downloadGroup = result.current.toolbar?.menu?.items?.[0];
-    const excelLeaves = downloadGroup?.items?.filter((i) => i.id === 'excelFileMenuItem') ?? [];
-    expect(excelLeaves).toHaveLength(1);
-    expect(downloadGroup?.items).toHaveLength(2);
+    const downloadChildren = childrenAt(
+      result.current.menu?.items,
+      WidgetHeaderMenuTargets.Download,
+    );
+    expect(
+      downloadChildren.filter((item) => item.id === WidgetHeaderMenuTargets.DownloadExcel),
+    ).toHaveLength(1);
+    expect(downloadChildren).toHaveLength(2);
 
-    const excelFile = excelLeaves[0];
-    excelFile?.items?.[0]?.onClick?.();
-    excelFile?.items?.[1]?.onClick?.();
+    findMenuActionByPath(
+      result.current.menu?.items,
+      WidgetHeaderMenuTargets.Download,
+      WidgetHeaderMenuTargets.DownloadExcel,
+      WidgetHeaderMenuTargets.DownloadExcelRepeatRows,
+    )?.onClick();
+    findMenuActionByPath(
+      result.current.menu?.items,
+      WidgetHeaderMenuTargets.Download,
+      WidgetHeaderMenuTargets.DownloadExcel,
+      WidgetHeaderMenuTargets.DownloadExcelMergeRows,
+    )?.onClick();
+
     expect(onDownloadExcel).toHaveBeenCalledWith(false);
     expect(onDownloadExcel).toHaveBeenCalledWith(true);
     expect(staleOnDownload).not.toHaveBeenCalled();

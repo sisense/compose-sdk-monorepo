@@ -6,18 +6,10 @@ title: KpiIconCondition
 
 > **KpiIconCondition**: `object`
 
-Icon shown next to the KPI headline value when its condition matches.
-Conditions are evaluated in order; the first match wins.
+Condition that shows a [KpiIcon](type-alias.KpiIcon.md) next to the KPI headline value or comparison readout
+when it matches. Conditions are evaluated in order; the first match wins.
 
 ## Type declaration
-
-### `color`
-
-**color**?: `string`
-
-Icon color. Defaults to the headline value color.
-
-***
 
 ### `expression`
 
@@ -29,9 +21,9 @@ Value to compare against, expressed as a string.
 
 ### `icon`
 
-**icon**: `string`
+**icon**: [`KpiIcon`](type-alias.KpiIcon.md)
 
-Unicode symbol or short text rendered when the condition matches, for example '⚠' or '✓'.
+Icon rendered when the condition matches.
 
 ***
 

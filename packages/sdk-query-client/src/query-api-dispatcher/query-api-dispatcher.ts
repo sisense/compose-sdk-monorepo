@@ -3,7 +3,10 @@ import {
   DataSourceField,
   DataSourceMetadata,
   DataSourceSchema,
+  encodeDataSourcePath,
+  getDataSourceFullName,
   getDataSourceName,
+  isDataSourceInfo,
 } from '@sisense/sdk-data';
 import { HttpClient } from '@sisense/sdk-rest-client';
 
@@ -31,11 +34,13 @@ export class QueryApiDispatcher {
   /**
    * Returns fields for a data source.
    *
-   * Endpoint choice depends on system display-name settings (see options.displayNameConfig):
+   * Path and endpoint selection:
    * - When display names are enabled *and* `useNewSearchByDisplayNameApi` is true,
-   *   uses `POST …/fields/searchByDisplayName?isLive=` so search matches display titles
-   *   and the BE routes live vs ElastiCube correctly via `isLive`.
-   * - Otherwise uses `POST …/fields/search` (viewer-safe field listing used by data browser).
+   *   uses `POST …/fields/searchByDisplayName?isLive=` with the datasource **title**
+   *   (not fullname) so search matches display titles and the BE routes live vs EC via `isLive`.
+   * - Otherwise uses `POST …/fields/search` with the datasource **fullname** when available
+   *   (from `DataSourceInfo` or the viewer-safe list), encoding path segments while
+   *   preserving `/` — required for EC, EC perspectives, live, and live perspectives.
    *
    * @param dataSource - Datasource title or info object
    * @param options - Paging, search term, live flag, and displayNameConfig
@@ -45,20 +50,32 @@ export class QueryApiDispatcher {
     options: GetDataSourceFieldsOptions = {},
   ): Promise<DataSourceField[] | undefined> {
     const { count = 9999, offset = 0, term, displayNameConfig } = options;
-    const dataSourceName = getDataSourceName(dataSource);
+    const title = getDataSourceName(dataSource);
+    const providedFullName = getDataSourceFullName(dataSource);
     const useDisplayNameSearch = shouldUseSearchByDisplayName(displayNameConfig);
+
+    // Display-name path needs `live`; legacy search needs `fullname`. Skip the list when we already have it.
+    const needsListLookup = useDisplayNameSearch
+      ? options.live === undefined
+      : providedFullName === undefined;
+    const metadata = needsListLookup ? await this.getDataSourceByTitle(title) : null;
+
+    // Fusion: searchByDisplayName → title; fields/search → fullname.
+    const pathId = useDisplayNameSearch ? title : providedFullName ?? metadata?.fullname ?? title;
+    const encodedPath = encodeDataSourcePath(pathId);
 
     let url: string;
     if (useDisplayNameSearch) {
       // `isLive` is required by the BE on this path to pick live vs EC field handlers.
-      // Prefer an explicit option; otherwise resolve from the viewer-safe list endpoint
+      // Prefer an explicit option; otherwise list metadata; then caller DataSourceInfo.type
       // (do not GET api/datasources/{title} — that requires manage/viewschema and fails for viewers).
-      const live = options.live ?? (await this.getDataSourceByTitle(dataSourceName))?.live === true;
-      url = `${API_DATASOURCES_BASE_PATH}/${encodeURIComponent(
-        dataSourceName,
-      )}/fields/searchByDisplayName?isLive=${live}`;
+      const live =
+        options.live ??
+        metadata?.live ??
+        (isDataSourceInfo(dataSource) && dataSource.type === 'live');
+      url = `${API_DATASOURCES_BASE_PATH}/${encodedPath}/fields/searchByDisplayName?isLive=${live}`;
     } else {
-      url = `${API_DATASOURCES_BASE_PATH}/${encodeURIComponent(dataSourceName)}/fields/search`;
+      url = `${API_DATASOURCES_BASE_PATH}/${encodedPath}/fields/search`;
     }
 
     const body: { offset: number; count: number; term?: string } = { offset, count };
@@ -129,8 +146,9 @@ export class QueryApiDispatcher {
    * @returns Matching metadata, or null if not in the user's queryable list
    */
   public async getDataSourceByTitle(title: string): Promise<DataSourceMetadata | null> {
-    const list = (await this.getDataSourceList()) ?? [];
-    return list.find((ds) => ds.title === title) ?? null;
+    const list = await this.getDataSourceList();
+    const items = Array.isArray(list) ? list : [];
+    return items.find((ds) => ds.title === title) ?? null;
   }
 
   /**
@@ -244,9 +262,12 @@ export class QueryApiDispatcher {
  * Both flags must be true — matching system settings defaults
  * (`displayNameConfig.enabled` can be true while `useNewSearchByDisplayNameApi` is still false).
  *
+ * @param displayNameConfig - Optional display-name configuration from system settings.
+ * @returns `true` when both `enabled` and `useNewSearchByDisplayNameApi` are true,
+ * selecting the new search-by-display-name API; otherwise `false`.
  * @internal
  */
-function shouldUseSearchByDisplayName(displayNameConfig?: DisplayNameConfig): boolean {
+export function shouldUseSearchByDisplayName(displayNameConfig?: DisplayNameConfig): boolean {
   return Boolean(displayNameConfig?.enabled && displayNameConfig?.useNewSearchByDisplayNameApi);
 }
 

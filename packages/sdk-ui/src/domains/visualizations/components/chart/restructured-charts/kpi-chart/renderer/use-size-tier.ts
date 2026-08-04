@@ -36,3 +36,15 @@ export function getSizeTier(width: number, height: number): KpiSizeTier {
   const heightTier = tierForAxis(height, HEIGHT_THRESHOLDS_PX);
   return TIER_ORDER[Math.min(TIER_ORDER.indexOf(widthTier), TIER_ORDER.indexOf(heightTier))];
 }
+
+/**
+ * Classifies height alone (against the height thresholds), independent of width. Used where an
+ * adaptation depends on vertical room specifically -- e.g. collapsing the comparison readout onto
+ * one line only when the card is genuinely short (a decision that must ignore width, so a
+ * narrow-but-tall card keeps its readout stacked rather than single-lining and clipping).
+ * @param height - Card height in CSS pixels.
+ * @internal
+ */
+export function getHeightTier(height: number): KpiSizeTier {
+  return tierForAxis(height, HEIGHT_THRESHOLDS_PX);
+}

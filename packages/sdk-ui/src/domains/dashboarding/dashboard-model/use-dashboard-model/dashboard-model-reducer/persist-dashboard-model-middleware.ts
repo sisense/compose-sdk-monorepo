@@ -98,6 +98,10 @@ function widgetPropsUpdateToFusionPatch(
   } = context;
   let patch: WidgetPatch | undefined;
 
+  if (update.title !== undefined) {
+    patch = { ...patch, title: update.title };
+  }
+
   const scrollerLocation = update.styleOptions?.navigator?.scrollerLocation;
   const columnWidths = update.styleOptions?.columns?.widths;
   if (scrollerLocation) {
@@ -314,13 +318,6 @@ export async function persistDashboardModelMiddleware({
         type: UseDashboardModelActionType.ADD_WIDGET,
         payload: { widget: serverWidget, widgetOptions, tabberConfig },
       };
-    }
-    case UseDashboardModelActionType.PATCH_WIDGET: {
-      const { widgetOid, patch } = action.payload;
-      restApi.patchWidgetInDashboard(dashboardOid, widgetOid, patch, sharedMode).catch((error) => {
-        console.error('Failed to patch widget in dashboard:', error);
-      });
-      break;
     }
     case UseDashboardModelActionType.UPDATE_WIDGET: {
       const { widgetOid, update } = action.payload;

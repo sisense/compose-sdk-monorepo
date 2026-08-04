@@ -26,22 +26,33 @@ export function createExcludeMembersFilter(
     : null;
 }
 
+/**
+ * Members are typed as strings, but a filter deserialized from JAQL keeps whatever the JAQL held —
+ * numbers for a filter on a numeric column or calculated dimension. The member selects search and
+ * compare them as strings, so normalize every member read off a filter.
+ */
+function toMemberStrings(members: string[]): string[] {
+  return members.map((member) => String(member));
+}
+
 export function getMembersWithoutDeactivated(filter: Filter, selectedMembers: string[]) {
-  return isMembersFilter(filter) && filter?.config?.deactivatedMembers
-    ? selectedMembers.filter(
-        (member: string) => !filter.config?.deactivatedMembers.includes(member),
-      )
-    : selectedMembers;
+  if (!isMembersFilter(filter) || !filter.config?.deactivatedMembers) {
+    return selectedMembers;
+  }
+  const deactivatedMembers = toMemberStrings(filter.config.deactivatedMembers);
+  return selectedMembers.filter((member) => !deactivatedMembers.includes(member));
 }
 export function getMembersWithDeactivated(filter: Filter) {
-  return isMembersFilter(filter) ? [...filter.members, ...filter.config.deactivatedMembers] : [];
+  return isMembersFilter(filter)
+    ? toMemberStrings([...filter.members, ...filter.config.deactivatedMembers])
+    : [];
 }
 
 export function getConfigWithUpdatedDeactivated(filter: Filter, selectedMembers: string[]) {
   return isMembersFilter(filter) && filter?.config?.deactivatedMembers
     ? {
         ...filter.config,
-        deactivatedMembers: filter.config?.deactivatedMembers?.filter((member: string) =>
+        deactivatedMembers: toMemberStrings(filter.config.deactivatedMembers).filter((member) =>
           selectedMembers.includes(member),
         ),
       }

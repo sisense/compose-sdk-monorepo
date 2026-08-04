@@ -477,7 +477,6 @@ describe('useComposedDashboard', () => {
     it('injects onScrollerChange into navigator when persistence is provided', () => {
       const persistence = {
         addWidget: vi.fn(),
-        patchWidget: vi.fn().mockResolvedValue(undefined),
         updateWidget: vi.fn().mockResolvedValue(undefined),
       };
 
@@ -511,7 +510,6 @@ describe('useComposedDashboard', () => {
       };
       const persistence = {
         addWidget: vi.fn(),
-        patchWidget: vi.fn().mockResolvedValue(undefined),
         updateWidget: vi.fn().mockResolvedValue(undefined),
       };
 
@@ -587,7 +585,7 @@ describe('useComposedDashboard', () => {
           false,
         );
       });
-      expect(result.current.hiddenFilterIds).toEqual([]);
+      expect(result.current.filterWidgetLinkedIds).toEqual([]);
     });
 
     it('keeps the filter when the widget stays in the layout (no false positive)', async () => {

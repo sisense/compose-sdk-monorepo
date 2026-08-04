@@ -75,6 +75,29 @@ Caption next to the delta, e.g. 'vs last year'. Defaults to an i18n label inferr
 
 ***
 
+### `ofGoalText`
+
+**ofGoalText**?: `string`
+
+Template for the 'target' comparison's percent-of-goal readout, replacing the localized
+default. `{{percent}}` interpolates the formatted percent (e.g. '82%') and `{{goal}}` the
+target's display label (the target measure's title, or the formatted number for a fixed
+target).
+
+#### Default Value
+
+```ts
+localized '{{percent}} of goal'
+```
+
+#### Example
+
+```ts
+comparison: { ofGoalText: '{{percent}} of {{goal}} target' }
+```
+
+***
+
 ### `showIcon`
 
 **showIcon**?: `boolean`
@@ -85,4 +108,25 @@ Whether the up/down arrow is shown next to the delta.
 
 ```ts
 true
+```
+
+***
+
+### `toGoText`
+
+**toGoText**?: `string`
+
+Template for the 'target' comparison's amount-to-go readout, replacing the localized
+default. `{{value}}` interpolates the formatted remaining amount (e.g. '$250K').
+
+#### Default Value
+
+```ts
+localized '{{value}} to go'
+```
+
+#### Example
+
+```ts
+comparison: { toGoText: '{{value}} remaining' }
 ```

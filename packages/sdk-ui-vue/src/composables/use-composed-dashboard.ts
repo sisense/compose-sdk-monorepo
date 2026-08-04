@@ -2,6 +2,7 @@ import type { Filter, FilterRelations } from '@sisense/sdk-data';
 import {
   type ComposableDashboardProps as ComposableDashboardPropsPreact,
   createHookApiFacade,
+  type DashboardProps as DashboardPropsPreact,
   HookAdapter,
   useComposedDashboardInternal,
   type UseComposedDashboardOptions,
@@ -61,20 +62,27 @@ export const useComposedDashboard = <D extends ComposableDashboardProps | Dashbo
 } => {
   useTracking('useComposedDashboard');
 
-  const hookAdapter = new HookAdapter(useComposedDashboardInternal<D>, [
-    createSisenseContextConnector(),
-  ]);
+  // The composition hook runs on the preact flavor of the props; the Vue and preact flavors
+  // differ only in the custom header item components carried inside `config.header`, which the
+  // composition never renders or touches, so the props are structurally reused and only re-typed.
+  const toPreactProps = (props: MaybeRef<D>) =>
+    toPlainObject(props) as unknown as ComposableDashboardPropsPreact | DashboardPropsPreact;
+
+  const hookAdapter = new HookAdapter(
+    useComposedDashboardInternal<ComposableDashboardPropsPreact | DashboardPropsPreact>,
+    [createSisenseContextConnector()],
+  );
 
   const [dashboard, setDashboard] = useRefState<D>(toPlainObject(initialDashboard));
 
   hookAdapter.subscribe(({ dashboard }) => {
-    setDashboard(dashboard);
+    setDashboard(dashboard as unknown as D);
   });
 
-  hookAdapter.run(toPlainObject(initialDashboard), options);
+  hookAdapter.run(toPreactProps(initialDashboard), options);
 
   watch([...collectRefs(initialDashboard)], () => {
-    hookAdapter.run(toPlainObject(initialDashboard), options);
+    hookAdapter.run(toPreactProps(initialDashboard), options);
   });
 
   onBeforeUnmount(() => {

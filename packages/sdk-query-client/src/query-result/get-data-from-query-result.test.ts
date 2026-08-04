@@ -1,4 +1,10 @@
-import { DataCell, DimensionalAttribute, DimensionalBaseMeasure } from '@sisense/sdk-data';
+import {
+  createAttribute,
+  DataCell,
+  DimensionalAttribute,
+  DimensionalBaseMeasure,
+  measureFactory,
+} from '@sisense/sdk-data';
 
 import { getDataFromQueryResult, setCellsBlur } from './get-data-from-query-result.js';
 
@@ -58,7 +64,7 @@ describe('Handle query service response', () => {
     };
     const attribute = new DimensionalAttribute('Gender', '[Commerce.Gender]', 'text-attribute');
     const result = {
-      columns: [{ name: 'Gender', type: 'text' }],
+      columns: [{ name: 'Gender', title: 'Gender', type: 'text' }],
       rows: [
         [{ data: 'Female', text: 'Female' }],
         [{ data: 'Male', text: 'Male' }],
@@ -127,7 +133,7 @@ describe('Handle query service response', () => {
     };
     const attribute = new DimensionalAttribute('Gender', '[Commerce.Gender]', 'text-attribute');
     const result = {
-      columns: [{ name: 'Gender', type: 'text' }],
+      columns: [{ name: 'Gender', title: 'Gender', type: 'text' }],
       rows: [
         [{ data: 'Female', text: 'Female', blur: true }],
         [{ data: 'Male', text: 'Male', blur: false }],
@@ -213,8 +219,8 @@ describe('Handle query service response', () => {
     };
     const result = {
       columns: [
-        { name: 'Gender', type: 'text' },
-        { name: '# of unique Category', type: 'number' },
+        { name: 'Gender', title: 'Gender', type: 'text' },
+        { name: '# of unique Category', title: '# of unique Category', type: 'number' },
       ],
       rows: [
         [
@@ -313,8 +319,8 @@ describe('Handle query service response', () => {
     };
     const result = {
       columns: [
-        { name: 'Gender', type: 'text' },
-        { name: '# of unique Category', type: 'number' },
+        { name: 'Gender', title: 'Gender', type: 'text' },
+        { name: '# of unique Category', title: '# of unique Category', type: 'number' },
       ],
       rows: [
         [
@@ -341,6 +347,71 @@ describe('Handle query service response', () => {
     ]);
 
     expect(data).toStrictEqual(result);
+  });
+
+  it('exposes the display title of a column renamed in the data model', () => {
+    const response = {
+      headers: ['StudyTitle', 'Total Revenue'],
+      metadata: [
+        {
+          jaql: {
+            datatype: 'text',
+            column: 'StudyTitle',
+            columnTitle: 'StudyTitle',
+            merged: true,
+            dim: '[Studies.StudyTitle]',
+            title: 'Study',
+            table: 'Studies',
+          },
+        },
+        {
+          jaql: {
+            agg: 'sum',
+            datatype: 'numeric',
+            dim: '[Studies.Revenue]',
+            title: 'Total Revenue',
+          },
+        },
+      ],
+      values: [
+        [
+          { data: 'Phase I', text: 'Phase I' },
+          { data: 100, text: '100' },
+        ],
+      ],
+    };
+    // mirrors what the generated data model emits for a column whose display name was
+    // changed in Fusion: `name` keeps the physical column, `title` carries the label.
+    const renamedAttribute = createAttribute({
+      name: 'StudyTitle',
+      title: 'Study',
+      type: 'text-attribute',
+      expression: '[Studies.StudyTitle]',
+    });
+    const measure = measureFactory.sum(
+      new DimensionalAttribute('Revenue', '[Studies.Revenue]', 'numeric-attribute'),
+      'Total Revenue',
+    );
+
+    const data = getDataFromQueryResult(response, [renamedAttribute, measure]);
+
+    expect(data.columns).toStrictEqual([
+      { name: 'StudyTitle', title: 'Study', type: 'text' },
+      { name: 'Total Revenue', title: 'Total Revenue', type: 'number' },
+    ]);
+  });
+
+  it('falls back to the column name as title when no display name is set', () => {
+    const response = {
+      headers: ['Gender'],
+      metadata: [{ jaql: { datatype: 'text', dim: '[Commerce.Gender]', title: 'Gender' } }],
+      values: [[{ data: 'Female', text: 'Female' }]],
+    };
+    const attribute = new DimensionalAttribute('Gender', '[Commerce.Gender]', 'text-attribute');
+
+    const data = getDataFromQueryResult(response, [attribute]);
+
+    expect(data.columns).toStrictEqual([{ name: 'Gender', title: 'Gender', type: 'text' }]);
   });
 
   it('should set blur for all fields of cell based on selected field value', () => {

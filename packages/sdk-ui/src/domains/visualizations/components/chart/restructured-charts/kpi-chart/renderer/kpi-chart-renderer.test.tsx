@@ -51,7 +51,7 @@ const revenue = measureFactory.sum(DM.Commerce.Revenue);
 
 const dataOptionsWithDate = translateKpiChartDataOptions({
   value: revenue,
-  trend: DM.Commerce.Date.Months,
+  category: DM.Commerce.Date.Months,
 });
 const dataOptionsPlain = translateKpiChartDataOptions({ value: revenue });
 
@@ -114,6 +114,24 @@ describe('KpiChartRenderer', () => {
     expect(getByText('1.5K')).toBeTruthy();
   });
 
+  it('defaults the value color to the first theme palette color (indicator parity)', () => {
+    const chartData: KpiChartData = {
+      type: 'kpi',
+      hasRows: true,
+      value: 1500,
+      valueTitle: 'Total Revenue',
+    };
+    const { getByText } = render(
+      <KpiChartRenderer
+        chartData={chartData}
+        dataOptions={dataOptionsPlain}
+        designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsPlain)}
+      />,
+    );
+    // Default theme variantColors[0].
+    expect(getByText('1.5K')).toHaveStyle({ color: '#00cee6' });
+  });
+
   it('applies title toggles, a fixed px text size, and the measure-resolved value color', () => {
     const chartData: KpiChartData = {
       type: 'kpi',
@@ -150,6 +168,80 @@ describe('KpiChartRenderer', () => {
     expect(queryByText('Total Revenue')).toBeNull();
   });
 
+  it('resolves title-section visibility from enabled and the showValueTitle/showCategoryTitle parts', () => {
+    const chartData: KpiChartData = {
+      type: 'kpi',
+      hasRows: true,
+      value: 1500,
+      valueTitle: 'Total Revenue',
+      valuePeriodMs: Date.UTC(2020, 5, 15),
+    };
+    const { getByText, queryByText, rerender } = render(
+      <KpiChartRenderer
+        chartData={chartData}
+        dataOptions={dataOptionsWithDate}
+        designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsWithDate)}
+      />,
+    );
+    // Default: both parts render.
+    expect(getByText('Total Revenue')).toBeTruthy();
+    expect(getByText('2020-06')).toBeTruthy();
+
+    // showCategoryTitle: false hides only the caption.
+    rerender(
+      <KpiChartRenderer
+        chartData={chartData}
+        dataOptions={dataOptionsWithDate}
+        designOptions={translateKpiStyleOptionsToDesignOptions(
+          { title: { showCategoryTitle: false } },
+          dataOptionsWithDate,
+        )}
+      />,
+    );
+    expect(queryByText('2020-06')).toBeNull();
+    expect(getByText('Total Revenue')).toBeTruthy();
+
+    // showValueTitle: false hides only the title text; the caption alone still renders.
+    rerender(
+      <KpiChartRenderer
+        chartData={chartData}
+        dataOptions={dataOptionsWithDate}
+        designOptions={translateKpiStyleOptionsToDesignOptions(
+          { title: { showValueTitle: false } },
+          dataOptionsWithDate,
+        )}
+      />,
+    );
+    expect(getByText('2020-06')).toBeTruthy();
+    expect(queryByText('Total Revenue')).toBeNull();
+
+    // Both parts opted out: the whole title area disappears (KpiTitle renders null).
+    rerender(
+      <KpiChartRenderer
+        chartData={chartData}
+        dataOptions={dataOptionsWithDate}
+        designOptions={translateKpiStyleOptionsToDesignOptions(
+          { title: { showValueTitle: false, showCategoryTitle: false } },
+          dataOptionsWithDate,
+        )}
+      />,
+    );
+    expect(document.querySelector('[data-kpi-area="title"]')).toBeNull();
+
+    // enabled: false switches the whole section off even though both parts default to visible.
+    rerender(
+      <KpiChartRenderer
+        chartData={chartData}
+        dataOptions={dataOptionsWithDate}
+        designOptions={translateKpiStyleOptionsToDesignOptions(
+          { title: { enabled: false } },
+          dataOptionsWithDate,
+        )}
+      />,
+    );
+    expect(document.querySelector('[data-kpi-area="title"]')).toBeNull();
+  });
+
   it('renders a conditional icon next to the value', () => {
     const chartData: KpiChartData = {
       type: 'kpi',
@@ -164,7 +256,13 @@ describe('KpiChartRenderer', () => {
         designOptions={translateKpiStyleOptionsToDesignOptions(
           {
             value: {
-              conditionalIcons: [{ icon: '✓', color: '#00aa00', expression: '100', operator: '>' }],
+              conditionalIcons: [
+                {
+                  icon: { type: 'text', value: '✓', color: '#00aa00' },
+                  expression: '100',
+                  operator: '>',
+                },
+              ],
             },
           },
           dataOptionsPlain,
@@ -195,11 +293,11 @@ describe('KpiChartRenderer', () => {
           )}
         />,
       );
-      expect(getByText('42')).not.toHaveStyle({ color: '#ffffff' });
+      expect(getByText('42')).toHaveStyle({ color: '#00cee6' });
       expect(getByText('Total Revenue')).not.toHaveStyle({ color: '#ffffff' });
     });
 
-    it('forces white value/title text on a dark custom card background', () => {
+    it('keeps the palette value color and forces only the title white on a dark custom card background', () => {
       const { getByText } = render(
         <KpiChartRenderer
           chartData={chartData}
@@ -210,7 +308,9 @@ describe('KpiChartRenderer', () => {
           )}
         />,
       );
-      expect(getByText('42')).toHaveStyle({ color: '#ffffff' });
+      // Indicator parity: the value keeps the palette color even on a dark background;
+      // only the title follows the onColor white-switch.
+      expect(getByText('42')).toHaveStyle({ color: '#00cee6' });
       expect(getByText('Total Revenue')).toHaveStyle({ color: '#ffffff' });
     });
   });
@@ -241,6 +341,96 @@ describe('KpiChartRenderer', () => {
       expect(getByText('+20.00%')).toBeTruthy();
       expect(translateMock).toHaveBeenCalledWith('kpi.comparison.vsPriorMonth');
       expect(getByText('kpi.comparison.vsPriorMonth')).toBeTruthy();
+    });
+
+    it("formats a delta readout with the comparison measure's own numberFormatConfig", () => {
+      const cost = measureFactory.sum(DM.Commerce.Cost);
+      const dataOptions = translateKpiChartDataOptions({
+        value: revenue,
+        comparison: {
+          type: 'delta',
+          value: { column: cost, numberFormatConfig: { decimalScale: 0 } },
+        },
+      });
+      const chartData: KpiChartData = {
+        type: 'kpi',
+        hasRows: true,
+        value: 112.345,
+        valueTitle: 'Total Revenue',
+        comparison: {
+          type: 'delta',
+          baseline: 100,
+          deltaValue: 12.345,
+          deltaPercent: 12.345,
+          label: 'Total Cost',
+        },
+      };
+      const { getByText } = render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptions}
+          designOptions={translateKpiStyleOptionsToDesignOptions(
+            { comparison: { display: 'value' } },
+            dataOptions,
+          )}
+        />,
+      );
+      // decimalScale 0 from the comparison measure — not the headline's default 'auto' (12.35).
+      expect(getByText('+12')).toBeTruthy();
+    });
+
+    it("falls back to the headline's numberFormatConfig when onBeforeRender swaps the comparison type away from the original measure's", () => {
+      // Same dataOptions/chartData fixture as the delta test above -- dataOptions.comparison is a
+      // 'delta' measure with decimalScale: 0. onBeforeRender then swaps the *displayed*
+      // comparison to a 'target' shape entirely. The type-match guard must notice the mismatch
+      // ('target' !== 'delta') and refuse to honor the original delta measure's config against
+      // the swapped-in target readout -- falling back to the headline's own ('auto') config
+      // instead, not silently misapplying the delta measure's decimalScale: 0.
+      const cost = measureFactory.sum(DM.Commerce.Cost);
+      const dataOptions = translateKpiChartDataOptions({
+        value: revenue,
+        comparison: {
+          type: 'delta',
+          value: { column: cost, numberFormatConfig: { decimalScale: 0 } },
+        },
+      });
+      const chartData: KpiChartData = {
+        type: 'kpi',
+        hasRows: true,
+        value: 112.345,
+        valueTitle: 'Total Revenue',
+        comparison: {
+          type: 'delta',
+          baseline: 100,
+          deltaValue: 12.345,
+          deltaPercent: 12.345,
+          label: 'Total Cost',
+        },
+      };
+      const { getByText, queryByText } = render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptions}
+          designOptions={translateKpiStyleOptionsToDesignOptions(
+            { comparison: { display: 'both' } },
+            dataOptions,
+          )}
+          onBeforeRender={(renderOptions: KpiRenderOptions) => ({
+            ...renderOptions,
+            comparison: {
+              type: 'target' as const,
+              target: 120,
+              percentOfTarget: 83.3333,
+              toGo: 12.345,
+              label: 'Goal',
+            },
+          })}
+        />,
+      );
+      // 'auto' decimalScale (the headline's default, no config on this fixture) -- NOT the delta
+      // measure's decimalScale: 0 (which would render '12 to go').
+      expect(getByText('12.35 to go')).toBeTruthy();
+      expect(queryByText('12 to go')).toBeNull();
     });
 
     it('colors a delta comparison via resolveComparisonColor and can hide its icon', () => {
@@ -293,7 +483,13 @@ describe('KpiChartRenderer', () => {
           chartData={chartData}
           dataOptions={dataOptionsPlain}
           designOptions={translateKpiStyleOptionsToDesignOptions(
-            { comparison: { conditionalIcons: [{ icon: '✓', expression: '100', operator: '>' }] } },
+            {
+              comparison: {
+                conditionalIcons: [
+                  { icon: { type: 'text', value: '✓' }, expression: '100', operator: '>' },
+                ],
+              },
+            },
             dataOptionsPlain,
           )}
         />,
@@ -365,6 +561,76 @@ describe('KpiChartRenderer', () => {
       // 'both': percent primary + amount-to-go secondary (the pre-change look).
       expect(getByText('82% of goal')).toBeTruthy();
       expect(getByText('$250K to go')).toBeTruthy();
+    });
+
+    it('renders consumer ofGoalText/toGoText override templates in the readout AND the aria-label', () => {
+      const chartData: KpiChartData = {
+        type: 'kpi',
+        hasRows: true,
+        value: 750000,
+        valueTitle: 'Total Cost',
+        numberFormatConfig: { name: 'Currency', symbol: '$' },
+        comparison: {
+          type: 'target',
+          target: 1000000,
+          percentOfTarget: 82,
+          toGo: 250000,
+          label: 'Total Cost',
+        },
+      };
+      const { getByRole, getByText, queryByText } = render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsPlain}
+          designOptions={translateKpiStyleOptionsToDesignOptions(
+            {
+              comparison: {
+                display: 'both',
+                ofGoalText: '{{percent}} of {{goal}} target',
+                toGoText: '{{value}} remaining',
+              },
+            },
+            dataOptionsPlain,
+          )}
+        />,
+      );
+      expect(getByText('82% of Total Cost target')).toBeTruthy();
+      expect(getByText('$250K remaining')).toBeTruthy();
+      expect(queryByText('82% of goal')).toBeNull();
+      expect(queryByText('$250K to go')).toBeNull();
+      // The aria summary voices the same overridden strings the card shows.
+      expect(getByRole('figure')).toHaveAttribute(
+        'aria-label',
+        'Total Cost, $750K, 82% of Total Cost target, $250K remaining',
+      );
+    });
+
+    it('renders a fractional percent-of-goal without integer rounding', () => {
+      const chartData: KpiChartData = {
+        type: 'kpi',
+        hasRows: true,
+        value: 100,
+        valueTitle: 'Total Revenue',
+        comparison: {
+          type: 'target',
+          target: 120,
+          percentOfTarget: 83.3333,
+          toGo: 20,
+          label: 'Goal',
+        },
+      };
+      const { getByText } = render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsPlain}
+          designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsPlain)}
+        />,
+      );
+      expect(getByText('83.33% of goal')).toBeTruthy();
+      expect(translateMock).toHaveBeenCalledWith('kpi.target.ofGoal', {
+        percent: '83.33%',
+        goal: 'Goal',
+      });
     });
 
     it('renders a value comparison as a label plus its own formatted number', () => {
@@ -446,8 +712,16 @@ describe('KpiChartRenderer', () => {
               comparison: {
                 conditionalIcons: [
                   // Both match deltaPercent=20 -- the first must win.
-                  { icon: '🔥', color: '#aa5500', expression: '10', operator: '>' },
-                  { icon: '✓', color: '#00aa00', expression: '0', operator: '>' },
+                  {
+                    icon: { type: 'text', value: '🔥', color: '#aa5500' },
+                    expression: '10',
+                    operator: '>',
+                  },
+                  {
+                    icon: { type: 'text', value: '✓', color: '#00aa00' },
+                    expression: '0',
+                    operator: '>',
+                  },
                 ],
               },
             },
@@ -482,7 +756,9 @@ describe('KpiChartRenderer', () => {
             {
               comparison: {
                 // Matches percentOfTarget=82 but NOT deltaValue/toGo -- proves the metric used.
-                conditionalIcons: [{ icon: '⚑', expression: '80', operator: '>' }],
+                conditionalIcons: [
+                  { icon: { type: 'text', value: '⚑' }, expression: '80', operator: '>' },
+                ],
               },
             },
             dataOptionsPlain,
@@ -498,7 +774,9 @@ describe('KpiChartRenderer', () => {
           designOptions={translateKpiStyleOptionsToDesignOptions(
             {
               comparison: {
-                conditionalIcons: [{ icon: '⚑', expression: '90', operator: '>' }],
+                conditionalIcons: [
+                  { icon: { type: 'text', value: '⚑' }, expression: '90', operator: '>' },
+                ],
               },
             },
             dataOptionsPlain,
@@ -516,7 +794,9 @@ describe('KpiChartRenderer', () => {
           designOptions={translateKpiStyleOptionsToDesignOptions(
             {
               comparison: {
-                conditionalIcons: [{ icon: '✓', expression: '0', operator: '>' }],
+                conditionalIcons: [
+                  { icon: { type: 'text', value: '✓' }, expression: '0', operator: '>' },
+                ],
               },
             },
             dataOptionsWithDate,
@@ -542,7 +822,9 @@ describe('KpiChartRenderer', () => {
             {
               comparison: {
                 // Would match value=999 if it were (incorrectly) evaluated.
-                conditionalIcons: [{ icon: '✓', expression: '0', operator: '>' }],
+                conditionalIcons: [
+                  { icon: { type: 'text', value: '✓' }, expression: '0', operator: '>' },
+                ],
               },
             },
             dataOptionsPlain,
@@ -569,7 +851,7 @@ describe('KpiChartRenderer', () => {
     };
 
     // The grid template (columns/rows/areas) is now identical across layouts -- 'standard' and
-    // 'big-comparison' only differ in the CSS `order` of the BodySlot wrapping value/comparison
+    // 'comparison-first' only differ in the CSS `order` of the BodySlot wrapping value/comparison
     // (see kpi-card.tsx's valueOrderFor/comparisonOrderFor), not in the CardRoot grid itself.
     it('uses the shared single-column grid template and keeps subcomponent DOM order in the standard layout', () => {
       const { container, getByRole } = render(
@@ -596,19 +878,19 @@ describe('KpiChartRenderer', () => {
       expect(getComputedStyle(comparisonSlot).order).toBe('1');
     });
 
-    it('keeps the shared grid template and DOM order in the big-comparison layout, but visually swaps value/comparison via CSS order', () => {
+    it('keeps the shared grid template and DOM order in the comparison-first layout, but visually swaps value/comparison via CSS order', () => {
       const { container, getByRole } = render(
         <KpiChartRenderer
           chartData={chartData}
           dataOptions={dataOptionsPlain}
           designOptions={translateKpiStyleOptionsToDesignOptions(
-            { layout: 'big-comparison' },
+            { layout: 'comparison-first' },
             dataOptionsPlain,
           )}
         />,
       );
       const figure = getByRole('figure');
-      expect(figure).toHaveAttribute('data-kpi-layout', 'big-comparison');
+      expect(figure).toHaveAttribute('data-kpi-layout', 'comparison-first');
       expect(getComputedStyle(figure).gridTemplateColumns).toBe('1fr');
 
       const areas = Array.from(container.querySelectorAll('[data-kpi-area]')).map((el) =>
@@ -656,7 +938,7 @@ describe('KpiChartRenderer', () => {
       );
       expect(getByRole('figure')).toHaveAttribute('data-kpi-tier', 'xs');
       expect(queryByText('Mock Sparkline')).toBeNull();
-      expect(parentFlexDirection(getByText('-10.00%'))).toBe('row');
+      expect(parentFlexDirection(getByText('-10.00%').parentElement!)).toBe('row');
     });
 
     it('shows the sparkline but still collapses the comparison to one line at the sm tier', () => {
@@ -670,7 +952,7 @@ describe('KpiChartRenderer', () => {
       );
       expect(getByRole('figure')).toHaveAttribute('data-kpi-tier', 'sm');
       expect(getByText('Mock Sparkline')).toBeTruthy();
-      expect(parentFlexDirection(getByText('-10.00%'))).toBe('row');
+      expect(parentFlexDirection(getByText('-10.00%').parentElement!)).toBe('row');
     });
 
     it('shows the sparkline and a two-line comparison at the lg tier', () => {
@@ -684,7 +966,7 @@ describe('KpiChartRenderer', () => {
       );
       expect(getByRole('figure')).toHaveAttribute('data-kpi-tier', 'lg');
       expect(getByText('Mock Sparkline')).toBeTruthy();
-      expect(parentFlexDirection(getByText('-10.00%'))).toBe('column');
+      expect(parentFlexDirection(getByText('-10.00%').parentElement!)).toBe('column');
     });
   });
 
@@ -764,6 +1046,33 @@ describe('KpiChartRenderer', () => {
       expect(getByText('Total Revenue')).toBeTruthy();
       expect(getByText('N/A')).toBeTruthy();
       expect(getByRole('figure')).toBeTruthy();
+    });
+
+    it('renders the noDataText placeholder in the neutral theme text color, not the accent color', () => {
+      // Issue: the value slot's accent color must only apply to a real, formatted value -- the
+      // no-data placeholder occupies the same slot but isn't "the value", so it must fall back to
+      // ValueText's neutral onColor/theme-text styling instead of picking up the palette accent
+      // (which is asserted elsewhere, e.g. '#00cee6', as the real-value default).
+      const chartData: KpiChartData = {
+        type: 'kpi',
+        hasRows: false,
+        valueTitle: 'Total Revenue',
+      };
+      const { getByText } = render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsPlain}
+          designOptions={translateKpiStyleOptionsToDesignOptions(
+            { value: { noDataText: 'N/A' } },
+            dataOptionsPlain,
+          )}
+        />,
+      );
+      const placeholder = getByText('N/A');
+      expect(placeholder).not.toHaveStyle({ color: '#00cee6' });
+      // Default (light) theme's chart.textColor, applied via ValueText's `$onColor ? '#ffffff' :
+      // theme.chart.textColor` fallback -- stable here since no custom card background is set.
+      expect(placeholder).toHaveStyle({ color: '#000000' });
     });
   });
 

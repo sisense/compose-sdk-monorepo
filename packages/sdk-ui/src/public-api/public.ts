@@ -25,6 +25,7 @@ export { ScattermapChart } from '../domains/visualizations/components/scattermap
 export { AreamapChart } from '../domains/visualizations/components/areamap-chart';
 export { AreaRangeChart } from '../domains/visualizations/components/area-range-chart';
 export { CalendarHeatmapChart } from '../domains/visualizations/components/calendar-heatmap-chart';
+export { SankeyChart } from '../domains/visualizations/components/sankey-chart';
 
 // Dashboarding
 export {
@@ -125,6 +126,18 @@ export {
   type WidgetType,
   type WithCommonWidgetProps,
 } from '../domains/widgets/components/widget';
+// Widget header configuration
+export type {
+  WidgetHeaderConfig,
+  WidgetHeaderMenuActionItem,
+  WidgetHeaderMenuConfig,
+  WidgetHeaderMenuItem,
+  WidgetHeaderMenuSubmenuItem,
+} from '../domains/widgets/shared/widget-header/widget-header-config';
+export {
+  WidgetHeaderMenuTargets,
+  type WidgetHeaderMenuTarget,
+} from '../domains/widgets/shared/widget-header/widget-header-menu-targets';
 export { type CustomWidgetProps } from '../domains/widgets/components/custom-widget';
 export { DrilldownBreadcrumbs } from '../domains/drilldown/components/drilldown-breadcrumbs';
 export type {
@@ -316,6 +329,7 @@ export type {
   BoxplotChartCustomDataOptions,
   AreaRangeMeasureColumn,
   RangeChartDataOptions,
+  SankeyChartDataOptions,
   ChartDataOptions,
   RegularChartDataOptions,
   CommonDataOptions,
@@ -366,6 +380,7 @@ export type {
   ScattermapChartProps,
   AreamapChartProps,
   AreaRangeChartProps,
+  SankeyChartProps,
   ContextMenuProps,
   DrilldownBreadcrumbsProps,
   DrilldownWidgetConfig,
@@ -400,6 +415,7 @@ export type {
   TableType,
   TableChartType,
   RangeChartType,
+  SankeyChartType,
   TextStyle,
   DataColorCondition,
   ConditionalDataColorOptions,
@@ -476,6 +492,7 @@ export type {
   CalendarHeatmapSubtype,
   CalendarHeatmapStyleOptions,
   CalendarHeatmapViewType,
+  SankeyStyleOptions,
   ChartStyleOptions,
   RegularChartStyleOptions,
   ValueToColorMap,

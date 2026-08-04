@@ -20,7 +20,7 @@ export function calcTargetComparison(value: number, target: number) {
   };
 }
 
-/** Maps a `trend` column's date granularity to its `'previous-period'` translation key. @internal */
+/** Maps a `category` column's date granularity to its `'previous-period'` translation key. @internal */
 const GRANULARITY_TO_LABEL_KEY: Record<string, string> = {
   years: 'kpi.comparison.vsPriorYear',
   quarters: 'kpi.comparison.vsPriorQuarter',
@@ -30,7 +30,7 @@ const GRANULARITY_TO_LABEL_KEY: Record<string, string> = {
 };
 
 /**
- * Resolves the `'previous-period'` comparison's translation key for the given `trend` granularity,
+ * Resolves the `'previous-period'` comparison's translation key for the given `category` granularity,
  * falling back to a granularity-agnostic key when `granularity` is missing or unrecognized.
  * @internal
  */

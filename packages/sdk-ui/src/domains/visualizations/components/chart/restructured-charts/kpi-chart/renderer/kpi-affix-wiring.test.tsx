@@ -50,11 +50,30 @@ describe('auto-fit affix wiring', () => {
           textSize="auto"
           onColor={false}
           scale="headline"
-          icon={{ icon: '⚠', expression: '0', operator: '>' }}
+          icon={{ icon: { type: 'text', value: '⚠' }, expression: '0', operator: '>' }}
         />,
       );
       expect(lastAffixes()).toEqual([
         { text: '⚠', emScale: CONDITIONAL_ICON_EM, gapPx: CONDITIONAL_ICON_GAP_PX },
+      ]);
+    });
+
+    it('budgets a built-in (svg) icon as a fixed-width affix', () => {
+      render(
+        <KpiValue
+          text="170.44K"
+          textSize="auto"
+          onColor={false}
+          scale="headline"
+          icon={{
+            icon: { type: 'built-in', name: 'check' },
+            expression: '0',
+            operator: '>',
+          }}
+        />,
+      );
+      expect(lastAffixes()).toEqual([
+        { widthEm: CONDITIONAL_ICON_EM, gapPx: CONDITIONAL_ICON_GAP_PX },
       ]);
     });
 
@@ -73,7 +92,7 @@ describe('auto-fit affix wiring', () => {
       label: 'vs cost',
     };
 
-    it('budgets the trend arrow (its actual glyph) as an em-scaled affix with the flex gap', () => {
+    it('budgets the comparison arrow (its actual glyph) as an em-scaled affix with the flex gap', () => {
       render(
         <KpiComparison
           comparison={deltaComparison}
@@ -98,13 +117,38 @@ describe('auto-fit affix wiring', () => {
           scale="headline"
           compact={false}
           onColor={false}
-          conditionalIcon={{ icon: '🔥', expression: '0', operator: '>' }}
+          conditionalIcon={{ icon: { type: 'text', value: '🔥' }, expression: '0', operator: '>' }}
         />,
       );
       expect(lastAffixes()).toEqual([
         {
           text: '🔥',
           emScale: CONDITIONAL_ICON_EM,
+          gapPx: CONDITIONAL_ICON_GAP_PX + COMPARISON_PRIMARY_GAP_PX,
+        },
+        { text: '▲', emScale: COMPARISON_ARROW_EM, gapPx: COMPARISON_PRIMARY_GAP_PX },
+      ]);
+    });
+
+    it('budgets an svg-path icon as a fixed-width affix including the flex gap', () => {
+      render(
+        <KpiComparison
+          comparison={{ ...deltaComparison, deltaPercent: 12 }}
+          display="percent"
+          showIcon={true}
+          scale="headline"
+          compact={false}
+          onColor={false}
+          conditionalIcon={{
+            icon: { type: 'svg-path', d: 'M0 0H24V24Z' },
+            expression: '0',
+            operator: '>',
+          }}
+        />,
+      );
+      expect(lastAffixes()).toEqual([
+        {
+          widthEm: CONDITIONAL_ICON_EM,
           gapPx: CONDITIONAL_ICON_GAP_PX + COMPARISON_PRIMARY_GAP_PX,
         },
         { text: '▲', emScale: COMPARISON_ARROW_EM, gapPx: COMPARISON_PRIMARY_GAP_PX },

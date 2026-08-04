@@ -155,7 +155,6 @@ export const SANKEY_CHART_TYPES = ['sankey'] as const;
  * Sankey chart types
  *
  * @expandType
- * @beta
  */
 export type SankeyChartType = (typeof SANKEY_CHART_TYPES)[number];
 

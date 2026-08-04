@@ -1,4 +1,9 @@
-import { CALCULATED_DIMENSION_JAQL_TYPE, DataSource, MetadataItem } from '@sisense/sdk-data';
+import {
+  CALCULATED_DIMENSION_JAQL_TYPE,
+  DataSource,
+  MetadataItem,
+  MetadataItemJaql,
+} from '@sisense/sdk-data';
 
 import { TranslatableError } from '../translation/translatable-error.js';
 import { CalculatedDimensionParseResponse, JaqlQueryPayload } from '../types.js';
@@ -34,10 +39,16 @@ export type ParseCalculatedDimensionFn = (
  * - an invalid formula fails the query, surfacing the server's message (Fusion blocks such a
  *   formula at authoring time; here it is caught when the query runs).
  *
- * Calculated dimensions used purely as dimensions (no `filter`) and filters that already carry a
- * `datatype` (for example, those created in Fusion) are left untouched. The payload metadata is
- * stamped in place — it is freshly built per query (by `getJaqlQueryPayload` and `filter.jaql()`),
- * so this is not observable by callers.
+ * This covers both forms a calculated-dimension filter takes in the payload:
+ * - a FILTER, whose condition sits at the top level of its own metadata item (`jaql.filter`);
+ * - a HIGHLIGHT, which `getJaqlQueryPayload` embeds into its dimension as `jaql.in.selected`. Here
+ *   the engine reads the datatype off the DIMENSION element itself, so the dimension element is
+ *   stamped as well as the embedded selection.
+ *
+ * Calculated dimensions used purely as dimensions (no `filter`, no highlight) and filters that
+ * already carry a `datatype` (for example, those created in Fusion) are left untouched. The payload
+ * metadata is stamped in place — it is freshly built per query (by `getJaqlQueryPayload` and
+ * `filter.jaql()`), so this is not observable by callers.
  *
  * @param jaqlPayload - The JAQL payload whose filter metadata is enriched (only `metadata` is read).
  * @param dataSource - The data source the formulas are evaluated against.
@@ -50,43 +61,81 @@ export async function enrichCalculatedDimensionDatatypes(
   dataSource: DataSource,
   parseCalculatedDimension: ParseCalculatedDimensionFn,
 ): Promise<void> {
-  const filtersToResolve = jaqlPayload.metadata.filter(isUnresolvedCalculatedDimensionFilter);
+  const jaqlsToResolve = jaqlPayload.metadata.flatMap(collectUnresolvedCalculatedDimensionJaqls);
+
+  // A highlight produces both an unresolved dimension element and an unresolved embedded selection
+  // with the same formula/context, so resolve each distinct formula/context once per run and share
+  // the result across every matching node.
+  const resolutionByKey = new Map<string, Promise<string>>();
+  const resolveDatatype = (formula: string, context: object): Promise<string> => {
+    const key = JSON.stringify({ formula, context });
+    let pending = resolutionByKey.get(key);
+    if (!pending) {
+      pending = parseCalculatedDimension(dataSource, formula, context).then((parseResponse) => {
+        if (parseResponse?.error) {
+          throw new TranslatableError('errors.calculatedDimensionFormulaInvalid', {
+            message: parseResponse.message ?? '',
+          });
+        }
+        return parseResponse?.dataType || DEFAULT_CALCULATED_DIMENSION_DATATYPE;
+      });
+      resolutionByKey.set(key, pending);
+    }
+    return pending;
+  };
 
   await Promise.all(
-    filtersToResolve.map(async (filterMetadata) => {
-      const { formula, context } = filterMetadata.jaql;
-      // formula/filter presence is guaranteed by isUnresolvedCalculatedDimensionFilter
-      const parseResponse = await parseCalculatedDimension(
-        dataSource,
-        formula ?? '',
-        context ?? {},
-      );
-
-      if (parseResponse?.error) {
-        throw new TranslatableError('errors.calculatedDimensionFormulaInvalid', {
-          message: parseResponse.message ?? '',
-        });
-      }
-
-      filterMetadata.jaql.datatype =
-        parseResponse?.dataType || DEFAULT_CALCULATED_DIMENSION_DATATYPE;
+    jaqlsToResolve.map(async (cdJaql) => {
+      // formula presence is guaranteed by needsCalculatedDimensionDatatype
+      cdJaql.datatype = await resolveDatatype(cdJaql.formula ?? '', cdJaql.context ?? {});
     }),
   );
 }
 
 /**
- * Returns whether a metadata item is a calculated-dimension filter that still needs its result
- * data type resolved (a `filter` present, but no top-level `datatype`).
+ * Collects the calculated-dimension JAQL nodes within a metadata item that still need their result
+ * data type resolved:
+ * - the item's own element, when it drives a top-level `filter` OR carries an embedded highlight
+ *   (`jaql.in.selected`) — the engine reads the datatype off this element in both cases;
+ * - the embedded highlight node itself (`jaql.in.selected.jaql`).
  *
- * @param metadataItem - The metadata item to test.
+ * @param metadataItem - The metadata item to inspect.
+ * @returns The calculated-dimension JAQL nodes (0-2) within the item that still lack a `datatype`.
+ * @internal
  */
-function isUnresolvedCalculatedDimensionFilter(metadataItem: MetadataItem): boolean {
+function collectUnresolvedCalculatedDimensionJaqls(metadataItem: MetadataItem): MetadataItemJaql[] {
+  const jaql = metadataItem.jaql;
+  const highlightJaql = jaql?.in?.selected?.jaql;
+  const cdJaqls: MetadataItemJaql[] = [];
+
+  // The element drives a filter/highlight when it either owns a top-level filter or carries an
+  // embedded highlight. A calculated dimension has no `dim`, so it must carry its own `datatype`.
+  const drivesFilterOrHighlight = Boolean(jaql?.filter) || Boolean(highlightJaql?.filter);
+  if (drivesFilterOrHighlight && needsCalculatedDimensionDatatype(jaql)) {
+    cdJaqls.push(jaql);
+  }
+
+  if (Boolean(highlightJaql?.filter) && needsCalculatedDimensionDatatype(highlightJaql)) {
+    cdJaqls.push(highlightJaql!);
+  }
+
+  return cdJaqls;
+}
+
+/**
+ * Returns whether a JAQL node is a calculated dimension that still needs its result data type
+ * resolved (a calculated dimension with a `formula` but no `datatype`).
+ *
+ * @param jaql - The JAQL node to test.
+ * @returns `true` when the node is a calculated dimension with a `formula` and no `datatype`.
+ * @internal
+ */
+function needsCalculatedDimensionDatatype(jaql: MetadataItemJaql | undefined): boolean {
   return (
-    metadataItem.jaql?.type === CALCULATED_DIMENSION_JAQL_TYPE &&
+    jaql?.type === CALCULATED_DIMENSION_JAQL_TYPE &&
     // presence, not truthiness: an empty formula must still reach the parser to surface the
     // server's invalid-formula error rather than being silently skipped
-    metadataItem.jaql.formula !== undefined &&
-    Boolean(metadataItem.jaql.filter) &&
-    !metadataItem.jaql.datatype
+    jaql.formula !== undefined &&
+    !jaql.datatype
   );
 }

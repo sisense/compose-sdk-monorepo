@@ -146,7 +146,13 @@ export const useJtdWidget = (
 
   const runHook = () => {
     const props = toValue(widgetProps);
-    const plainConfig = toPlainObject(config);
+    // The Vue and preact JTD configs differ only in the flavor of custom header item components
+    // carried inside `config.targetDashboardConfig.header`; this navigation boundary never renders
+    // them, so the config is structurally reused and only re-typed (mirrors the dashboard props
+    // helpers).
+    const plainConfig = toPlainObject(config) as unknown as
+      | JumpToDashboardConfigPreact
+      | JumpToDashboardConfigForPivotPreact;
     hookAdapter.run(props, plainConfig);
   };
 

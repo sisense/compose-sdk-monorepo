@@ -15,7 +15,12 @@ const mockAttribute = createAttribute({
 
 describe('useFilterTileMenuItems', () => {
   it('returns external items when passed in config', () => {
-    const externalItem = { id: 'external', caption: 'External', onClick: vi.fn() };
+    const externalItem = {
+      type: 'action' as const,
+      id: 'external',
+      caption: 'External',
+      onClick: vi.fn(),
+    };
     const config: FilterTileConfig = {
       header: { menu: { items: [externalItem] } },
     };

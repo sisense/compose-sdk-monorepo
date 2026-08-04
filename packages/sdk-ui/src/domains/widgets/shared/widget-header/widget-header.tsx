@@ -10,6 +10,7 @@ import { InlineTextEditor } from '@/shared/components/inline-text-editor/inline-
 import { AlignmentTypes, WidgetContainerStyleOptions } from '@/types';
 
 import { InfoButtonConfig, TitleEditorConfig, WidgetHeaderConfig } from './types.js';
+import { WidgetHeaderMenu } from './widget-header-menu.js';
 import { WidgetHeaderToolbar } from './widget-header-toolbar.js';
 
 export interface WidgetHeaderProps {
@@ -19,7 +20,7 @@ export interface WidgetHeaderProps {
   infoButtonConfig: InfoButtonConfig;
   /** Style options for the widget header */
   styleOptions?: WidgetContainerStyleOptions['header'];
-  /** Header/toolbar configuration (e.g. toolbar menu). */
+  /** Header configuration (e.g. the header menu). */
   config?: WidgetHeaderConfig;
   /** Inline title editor config (injected at runtime when rename is enabled). */
   titleEditor?: TitleEditorConfig;
@@ -68,13 +69,14 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
         <Title styleOptions={styleOptions} theme={themeSettings} data-component="title">
           {styleOptions?.renderTitle?.(titleContent) ?? titleContent}
         </Title>
+        {/* Note: the menu button is rendered after the toolbar so it stays fixed on the right side */}
         <ToolbarContainer data-component="toolbar-container">
           <WidgetHeaderToolbar
             infoButtonConfig={infoButtonConfig}
             styleOptions={styleOptions}
             onRefresh={onRefresh}
-            config={config?.toolbar}
           />
+          <WidgetHeaderMenu config={config?.menu} />
         </ToolbarContainer>
       </HeaderContainer>
       {showDivider && (

@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
+
 import { useTitleRenaming, type UseTitleRenamingParams } from './use-title-renaming.js';
 
 vi.mock('react-i18next', async (importOriginal) => {
@@ -29,7 +31,8 @@ describe('useTitleRenaming', () => {
     const menuItem = result.current.renameMenuItem;
     expect(menuItem).toBeDefined();
     expect(menuItem).toMatchObject({
-      id: 'rename-widget',
+      type: 'action',
+      id: WidgetHeaderMenuTargets.RenameWidget,
       caption: 'Rename Widget',
     });
     expect(typeof menuItem?.onClick).toBe('function');

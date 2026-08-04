@@ -4,22 +4,29 @@ import { useTranslation } from 'react-i18next';
 import { useThemeContext } from '@/infra/contexts/theme-provider/index.js';
 import type { KpiIconCondition, NumberFormatConfig } from '@/types.js';
 
-import { formatDelta, formatKpiValue, KpiComparisonDisplay } from './helpers.js';
 import {
+  buildTargetReadout,
+  formatDelta,
+  formatKpiValue,
+  KpiComparisonDisplay,
+  KpiTargetTextOverrides,
+} from './helpers.js';
+import {
+  CardTextAlign,
   COMPARISON_ARROW_EM,
   COMPARISON_PRIMARY_GAP_PX,
   ComparisonArea,
   ComparisonArrow,
+  ComparisonClipText,
   ComparisonPrimaryText,
   ComparisonRoot,
   ComparisonSecondaryText,
-  CONDITIONAL_ICON_EM,
-  CONDITIONAL_ICON_GAP_PX,
-  ConditionalIconSpan,
 } from './kpi-card-styles.js';
+import { KpiConditionalIcon, toIconAffix } from './kpi-conditional-icon.js';
 import { AUTO_FIT_MAX_PX, AUTO_FIT_MIN_PX } from './kpi-value.js';
 import type { AutoFitAffix } from './use-auto-fit-font-size.js';
 import { useAutoFitFontSize } from './use-auto-fit-font-size.js';
+import { useElementSize } from './use-element-size.js';
 
 /**
  * Defines the props of {@link KpiComparison}.
@@ -42,19 +49,28 @@ export type KpiComparisonProps = {
   /** `designOptions.comparison.label` -- overrides the data-driven label when set. */
   labelOverride?: string;
   /**
-   * `'headline'` in the `'big-comparison'` layout, where the comparison takes over the headline
+   * `designOptions.comparison.{ofGoalText,toGoText}` -- consumer templates replacing the
+   * localized `'target'` readout strings when set (see {@link KpiTargetTextOverrides}).
+   */
+  targetTextOverrides?: KpiTargetTextOverrides;
+  /**
+   * `'headline'` in the `'comparison-first'` layout, where the comparison takes over the headline
    * role -- reading big and participating in auto-fit sizing exactly like the value does in the
    * `'standard'` layout (mirrors `KpiValueProps.scale`). `'compact'` (the `'standard'` layout's
    * default) keeps the fixed small readout.
    */
   scale: 'headline' | 'compact';
   /**
-   * Collapses the two-line readout (value + label) onto a single line at the `'sm'`/`'xs'` tiers.
-   * Only honored at the `'compact'` scale: a `'headline'`-scale readout always stacks its label
-   * on its own line below the headline, so the label never competes with the auto-fitted
-   * headline for width.
+   * Collapses the two-line readout (value + label) onto a single line at short cards. Only honored
+   * at the `'compact'` scale: a `'headline'`-scale readout always stacks its label on its own line
+   * below the headline, so the label never competes with the auto-fitted headline for width.
    */
   compact: boolean;
+  /**
+   * Card text alignment, applied to the readout's flex alignment (mirrors the value/title).
+   * @defaultValue 'left'
+   */
+  textAlign?: CardTextAlign;
   onColor: boolean;
   /**
    * Non-circular height budget for the `'headline'` auto-fit computation, forwarded to
@@ -86,8 +102,10 @@ export function KpiComparison({
   showIcon,
   conditionalIcon,
   labelOverride,
+  targetTextOverrides,
   scale,
   compact,
+  textAlign = 'left',
   onColor,
   maxHeightPx,
   areaRef,
@@ -96,32 +114,38 @@ export function KpiComparison({
   const { themeSettings } = useThemeContext();
   const internalRef = useRef<HTMLDivElement>(null);
   const containerRef = areaRef ?? internalRef;
+  // At headline scale the auto-fitted primary and this label stack in the same ComparisonArea, but
+  // only the primary participates in the fit -- so the label's own height must be reserved out of
+  // the headline height budget, or the label would push the whole readout past its budget and clip
+  // the compact sibling (the value in 'comparison-first'). The label size is independent of the fit
+  // (fixed 0.7rem), so measuring it is non-circular.
+  const labelRef = useRef<HTMLDivElement>(null);
+  const labelSize = useElementSize(labelRef);
+  // Only attach (and thus observe) the label at headline scale, where its height is reserved from
+  // the auto-fit budget. At compact scale the label needs no measurement, and attaching the ref
+  // would spin up a ResizeObserver the compact path is contractually free of.
+  const secondaryRef = scale === 'headline' ? labelRef : undefined;
   const label = labelOverride ?? comparison.label;
   const iconElement = conditionalIcon && (
-    <ConditionalIconSpan aria-hidden="true" $color={conditionalIcon.color ?? color}>
-      {conditionalIcon.icon}
-    </ConditionalIconSpan>
+    <KpiConditionalIcon icon={conditionalIcon.icon} color={color} />
   );
 
-  const roundedPercent =
-    comparison.type === 'target' && comparison.percentOfTarget !== undefined
-      ? Math.round(comparison.percentOfTarget)
+  // `label` (not `comparison.label`) feeds `{{goal}}`, so a `labelOverride` renames the goal in
+  // templates that interpolate it -- same precedence the delta caption follows.
+  const targetReadout =
+    comparison.type === 'target'
+      ? buildTargetReadout(
+          { percentOfTarget: comparison.percentOfTarget, toGo: comparison.toGo, label },
+          numberFormatConfig,
+          t,
+          targetTextOverrides,
+        )
       : undefined;
-  // The '{{percent}} of goal' template carries no unit of its own, so the percent sign must be
-  // baked into the interpolated value (matching the aria path's formatting).
-  const ofGoalText =
-    roundedPercent !== undefined
-      ? t('kpi.target.ofGoal', { percent: `${roundedPercent}%`, goal: label })
-      : undefined;
+  const ofGoalText = targetReadout?.ofGoalText;
+  const toGoText = targetReadout?.toGoText;
   const deltaText =
     comparison.type === 'previous-period' || comparison.type === 'delta'
-      ? formatDelta(comparison, display, numberFormatConfig)
-      : undefined;
-  const toGoText =
-    comparison.type === 'target'
-      ? t('kpi.target.toGo', {
-          value: formatKpiValue(Math.abs(comparison.toGo), numberFormatConfig),
-        })
+      ? formatDelta(comparison, display, t, numberFormatConfig)
       : undefined;
 
   // `display` semantics for a 'target' comparison: 'percent' renders only the percent-of-goal
@@ -149,7 +173,7 @@ export function KpiComparison({
       : deltaText ?? '';
 
   // Inline decorations that share the primary text's nowrap flex box and must be budgeted into
-  // the auto-fit (mirrors KpiValue's icon affix): the trend arrow (delta-shaped comparisons
+  // the auto-fit (mirrors KpiValue's icon affix): the comparison arrow (delta-shaped comparisons
   // only, when enabled) and the conditional icon ('value'-type comparisons render neither).
   // Gaps mirror the CSS: every extra flex item adds the primary text's flex gap; the icon also
   // carries its own margin-inline-end.
@@ -159,26 +183,25 @@ export function KpiComparison({
   const arrowGlyph = increased ? '▲' : '▼';
   const affixes: AutoFitAffix[] = [
     ...(conditionalIcon && comparison.type !== 'value'
-      ? [
-          {
-            text: conditionalIcon.icon,
-            emScale: CONDITIONAL_ICON_EM,
-            gapPx: CONDITIONAL_ICON_GAP_PX + COMPARISON_PRIMARY_GAP_PX,
-          },
-        ]
+      ? [toIconAffix(conditionalIcon.icon, COMPARISON_PRIMARY_GAP_PX)]
       : []),
     ...(showArrow
       ? [{ text: arrowGlyph, emScale: COMPARISON_ARROW_EM, gapPx: COMPARISON_PRIMARY_GAP_PX }]
       : []),
   ];
 
+  // Reserve the stacked label's measured height out of the headline budget (see labelRef above).
+  const headlineHeightBudget =
+    scale === 'headline' && maxHeightPx !== undefined
+      ? Math.max(0, maxHeightPx - labelSize.height)
+      : maxHeightPx;
   const autoFitFontSizePx = useAutoFitFontSize({
     containerRef,
     text: primaryText,
     font: { family: themeSettings.typography.fontFamily, weight: 600 },
     minPx: AUTO_FIT_MIN_PX,
     maxPx: AUTO_FIT_MAX_PX,
-    maxHeightPxOverride: maxHeightPx,
+    maxHeightPxOverride: headlineHeightBudget,
     affixes,
     // The auto-fit result is only consumed at the 'headline' scale (see `primaryStyle`
     // below); skip the observer/canvas/font-watch work entirely at 'compact'.
@@ -195,7 +218,7 @@ export function KpiComparison({
   if (comparison.type === 'target') {
     return (
       <ComparisonArea ref={containerRef} data-kpi-area="comparison">
-        <ComparisonRoot $compact={singleLine}>
+        <ComparisonRoot $compact={singleLine} $align={textAlign}>
           <ComparisonPrimaryText
             theme={themeSettings}
             $color={color}
@@ -203,10 +226,15 @@ export function KpiComparison({
             style={primaryStyle}
           >
             {iconElement}
-            {targetPrimaryText}
+            <ComparisonClipText title={targetPrimaryText}>{targetPrimaryText}</ComparisonClipText>
           </ComparisonPrimaryText>
           {targetSecondaryText && (
-            <ComparisonSecondaryText theme={themeSettings} $onColor={onColor}>
+            <ComparisonSecondaryText
+              ref={secondaryRef}
+              theme={themeSettings}
+              $onColor={onColor}
+              title={targetSecondaryText}
+            >
               {targetSecondaryText}
             </ComparisonSecondaryText>
           )}
@@ -218,17 +246,22 @@ export function KpiComparison({
   if (comparison.type === 'value') {
     return (
       <ComparisonArea ref={containerRef} data-kpi-area="comparison">
-        <ComparisonRoot $compact={singleLine}>
+        <ComparisonRoot $compact={singleLine} $align={textAlign}>
           <ComparisonPrimaryText
             theme={themeSettings}
             $color={color}
             $scale={scale}
             style={primaryStyle}
           >
-            {primaryText}
+            <ComparisonClipText title={primaryText}>{primaryText}</ComparisonClipText>
           </ComparisonPrimaryText>
           {label && (
-            <ComparisonSecondaryText theme={themeSettings} $onColor={onColor}>
+            <ComparisonSecondaryText
+              ref={secondaryRef}
+              theme={themeSettings}
+              $onColor={onColor}
+              title={label ?? undefined}
+            >
               {label}
             </ComparisonSecondaryText>
           )}
@@ -240,7 +273,7 @@ export function KpiComparison({
   // 'previous-period' | 'delta'
   return (
     <ComparisonArea ref={containerRef} data-kpi-area="comparison">
-      <ComparisonRoot $compact={singleLine}>
+      <ComparisonRoot $compact={singleLine} $align={textAlign}>
         <ComparisonPrimaryText
           theme={themeSettings}
           $color={color}
@@ -249,10 +282,15 @@ export function KpiComparison({
         >
           {iconElement}
           {showArrow && <ComparisonArrow aria-hidden="true">{arrowGlyph}</ComparisonArrow>}
-          {deltaText}
+          <ComparisonClipText title={deltaText ?? undefined}>{deltaText}</ComparisonClipText>
         </ComparisonPrimaryText>
         {label && (
-          <ComparisonSecondaryText theme={themeSettings} $onColor={onColor}>
+          <ComparisonSecondaryText
+            ref={secondaryRef}
+            theme={themeSettings}
+            $onColor={onColor}
+            title={label ?? undefined}
+          >
             {label}
           </ComparisonSecondaryText>
         )}

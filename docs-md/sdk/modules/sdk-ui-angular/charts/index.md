@@ -20,6 +20,7 @@ Angular components and utilities for working with charts
 - [LineChartComponent](class.LineChartComponent.md)
 - [PieChartComponent](class.PieChartComponent.md)
 - [PolarChartComponent](class.PolarChartComponent.md)
+- [SankeyChartComponent](class.SankeyChartComponent.md)
 - [ScatterChartComponent](class.ScatterChartComponent.md)
 - [ScattermapChartComponent](class.ScattermapChartComponent.md)
 - [StreamgraphChartComponent](class.StreamgraphChartComponent.md)

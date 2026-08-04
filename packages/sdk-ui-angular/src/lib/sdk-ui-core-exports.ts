@@ -10,6 +10,9 @@ export {
   formatDataSet,
 } from '@sisense/sdk-ui-preact';
 
+// Re-exports constants from @sisense/sdk-ui-preact
+export { WidgetHeaderMenuTargets } from '@sisense/sdk-ui-preact';
+
 // Re-exports types from @sisense/sdk-ui-preact
 export type {
   AppConfig,
@@ -115,6 +118,9 @@ export type {
   RangeChartDataOptions,
   RangeChartType,
   RangeDataColorOptions,
+  SankeyChartDataOptions,
+  SankeyChartType,
+  SankeyStyleOptions,
   ScatterChartDataOptions,
   ScatterChartType,
   ScatterDataPoint,
@@ -148,6 +154,12 @@ export type {
   WidgetDataOptions,
   WidgetId,
   WidgetConfig,
+  WidgetHeaderConfig,
+  WidgetHeaderMenuActionItem,
+  WidgetHeaderMenuConfig,
+  WidgetHeaderMenuItem,
+  WidgetHeaderMenuSubmenuItem,
+  WidgetHeaderMenuTarget,
   WidgetNarrativeConfig,
   WidgetNarrativeDisplayLocation,
   WidgetModel,

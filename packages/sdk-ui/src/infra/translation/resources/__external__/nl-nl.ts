@@ -224,6 +224,11 @@ const translation: TranslationDictionary = {
       max: 'Max',
     },
   },
+  filterWidget: {
+    placeholders: {
+      setFilter: 'Filter instellen',
+    },
+  },
   unsupportedFilterMessage: 'Niet-ondersteund filter (toegepast op de gegevensquery)',
   unsupportedFilter: 'Niet-ondersteund filter {{filter}}',
   commonFilter: {
@@ -470,6 +475,11 @@ const translation: TranslationDictionary = {
       unlockGroup: 'Groep ontgrendelen',
     },
     toggleSwitch: 'Filter in-/uitschakelen',
+    linkedToWidget: {
+      label: 'Gekoppeld aan filterwidget',
+      tooltip:
+        'Dit filter kan niet worden bewerkt vanuit het filterpaneel. Wijzig de waarden rechtstreeks op het dashboard.',
+    },
   },
   chart: {
     indicator: {
@@ -493,17 +503,18 @@ const translation: TranslationDictionary = {
   },
   kpi: {
     comparison: {
-      vsPriorYear: 'vs prior year',
-      vsPriorQuarter: 'vs prior quarter',
-      vsPriorMonth: 'vs prior month',
-      vsPriorWeek: 'vs prior week',
-      vsPriorDay: 'vs prior day',
-      vsPriorPeriod: 'vs prior period',
+      vsPriorYear: 't.o.v. vorig jaar',
+      vsPriorQuarter: 't.o.v. vorig kwartaal',
+      vsPriorMonth: 't.o.v. vorige maand',
+      vsPriorWeek: 't.o.v. vorige week',
+      vsPriorDay: 't.o.v. vorige dag',
+      vsPriorPeriod: 't.o.v. vorige periode',
     },
     target: {
-      ofGoal: '{{percent}} of goal',
-      toGo: '{{value}} to go',
+      ofGoal: '{{percent}} van het doel',
+      toGo: 'nog {{value}} te gaan',
     },
+    percentFormat: '{{sign}}{{value}}%',
   },
   loadingOverlay: {
     label: 'Inhoud laden',

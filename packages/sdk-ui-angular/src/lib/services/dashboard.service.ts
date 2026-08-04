@@ -180,7 +180,9 @@ export class DashboardService {
     });
 
     hookAdapter.run(
-      toPreactDashboardProps(initialDashboard) as
+      // composable props are a subset of DashboardProps; the config (if any) passes through
+      // untranslated here and is adapted by the Dashboard component that eventually renders it
+      toPreactDashboardProps(initialDashboard as unknown as DashboardProps) as
         | ComposableDashboardPropsPreact
         | DashboardPropsPreact,
       options,

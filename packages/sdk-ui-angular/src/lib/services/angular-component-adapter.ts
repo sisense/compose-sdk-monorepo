@@ -50,7 +50,7 @@ export class AngularComponentAdapter<Props> implements ExternalComponentAdapter<
 
     const rendered = this.dynamicRenderer.renderComponent(this.componentClass, props);
     container.appendChild(rendered.element);
-    this.componentRef = rendered.componentRef;
+    this.componentRef = rendered.componentRef ?? null;
     this.element = rendered.element;
   }
 

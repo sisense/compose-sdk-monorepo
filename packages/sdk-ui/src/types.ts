@@ -1586,15 +1586,13 @@ export type CalendarHeatmapViewType = 'month' | 'quarter' | 'half-year' | 'year'
 /**
  * Configuration options that define functional style of the various elements of a SankeyChart.
  *
- * @beta
- *
  * @example
  * ```tsx
  * <SankeyChart
  *   dataSet={dataSource}
  *   dataOptions={{
  *     category: [DM.Commerce.Gender, DM.Category.Category],
- *     value: [DM.Measures.SumRevenue],
+ *     value: DM.Measures.SumRevenue,
  *   }}
  *   styleOptions={{
  *     orientation: 'vertical',
@@ -1652,7 +1650,7 @@ export type KpiSparklineType = 'line' | 'spline' | 'area' | 'column';
 
 /**
  * Configuration that defines styling of the KPI chart sparkline.
- * The sparkline is rendered only when {@link KpiChartDataOptions.trend} is set.
+ * The sparkline is rendered only when {@link KpiChartDataOptions.category} is set.
  *
  * @beta
  */
@@ -1660,7 +1658,7 @@ export type KpiSparklineStyleOptions = {
   /**
    * Boolean flag that defines whether the sparkline is shown.
    *
-   * @defaultValue true when `KpiChartDataOptions.trend` is set
+   * @defaultValue true when `KpiChartDataOptions.category` is set
    */
   enabled?: boolean;
   /**
@@ -1697,7 +1695,7 @@ export type KpiComparisonInfo =
 export type KpiDataPoint = {
   /** Headline value. */
   value?: number;
-  /** Last trend bucket as epoch milliseconds, when a trend dimension is set. */
+  /** Last category bucket as epoch milliseconds, when a category dimension is set. */
   date?: number;
   /** Resolved comparison shown on the card, when a comparison is active. */
   comparison?: KpiComparisonInfo;
@@ -1742,16 +1740,105 @@ export type KpiBeforeRenderHandler = (
 ) => KpiRenderOptions;
 
 /**
- * Icon shown next to the KPI headline value when its condition matches.
- * Conditions are evaluated in order; the first match wins.
+ * Identifies one of the built-in icons available for KPI conditional icons -- see {@link KpiIcon}.
+ *
+ * The set follows the familiar conditional-formatting taxonomy: trend arrows, status marks,
+ * traffic-light shapes (recolorable via the icon's `color`), and rating/flag extras.
+ *
+ * @example
+ * ```ts
+ * const iconName: KpiIconName = 'arrow-up';
+ * ```
+ *
+ * @beta
+ */
+export type KpiIconName =
+  // trend
+  | 'arrow-up'
+  | 'arrow-down'
+  | 'arrow-right'
+  | 'arrow-up-right'
+  | 'arrow-down-right'
+  // status
+  | 'check'
+  | 'cross'
+  | 'warning'
+  | 'info'
+  | 'minus'
+  // shapes (traffic-light style)
+  | 'circle'
+  | 'triangle'
+  | 'diamond'
+  | 'square'
+  // extra
+  | 'star'
+  | 'flag';
+
+/**
+ * Defines the icon shown next to the KPI headline value or comparison readout when its
+ * {@link KpiIconCondition} matches.
+ *
+ * Variants:
+ * - `text` -- a custom unicode glyph, emoji, or short text.
+ * - `built-in` -- a curated SVG icon bundled with the SDK, selected by typed name.
+ * - `svg-path` -- arbitrary SVG geometry: the `d` attribute of a single `<path>` element,
+ *   e.g. copied from an icon set or a Figma export. Drawn on a 24x24 grid unless `viewBox`
+ *   says otherwise, and rendered filled with the icon color.
+ *
+ * Every variant accepts an optional `color`; when omitted, the icon inherits the headline
+ * value color (or the comparison readout color, for comparison icons).
+ *
+ * @example
+ * ```ts
+ * conditionalIcons: [
+ *   { icon: { type: 'built-in', name: 'check', color: '#2ea44f' }, expression: '1000000', operator: '>' },
+ *   { icon: { type: 'text', value: '⚠', color: '#cf222e' }, expression: '1000000', operator: '<=' },
+ * ]
+ * ```
+ *
+ * @beta
+ */
+export type KpiIcon =
+  | {
+      /** Identifies the custom-text variant. */
+      type: 'text';
+      /** Unicode symbol, emoji, or short text rendered as the icon. */
+      value: string;
+      /** Icon color. Defaults to the headline value color. */
+      color?: string;
+    }
+  | {
+      /** Identifies the built-in variant. */
+      type: 'built-in';
+      /** Name of the bundled icon. */
+      name: KpiIconName;
+      /** Icon color. Defaults to the headline value color. */
+      color?: string;
+    }
+  | {
+      /** Identifies the custom-SVG-geometry variant. */
+      type: 'svg-path';
+      /** SVG path data (a single `<path>` element's `d` attribute), rendered filled. */
+      d: string;
+      /**
+       * Coordinate grid the path is drawn on.
+       *
+       * @defaultValue '0 0 24 24'
+       */
+      viewBox?: string;
+      /** Icon color. Defaults to the headline value color. */
+      color?: string;
+    };
+
+/**
+ * Condition that shows a {@link KpiIcon} next to the KPI headline value or comparison readout
+ * when it matches. Conditions are evaluated in order; the first match wins.
  *
  * @beta
  */
 export type KpiIconCondition = {
-  /** Unicode symbol or short text rendered when the condition matches, for example '⚠' or '✓'. */
-  icon: string;
-  /** Icon color. Defaults to the headline value color. */
-  color?: string;
+  /** Icon rendered when the condition matches. */
+  icon: KpiIcon;
   /** Value to compare against, expressed as a string. */
   expression: string;
   /** Comparison operator, same convention as {@link DataColorCondition}. */
@@ -1802,13 +1889,29 @@ export type KpiValueStyleOptions = {
  */
 export type KpiTitleStyleOptions = {
   /**
-   * Boolean flag that defines whether the title is shown.
+   * Boolean flag that defines whether the whole title section (title text and
+   * category caption) is shown.
    *
    * @defaultValue true
    */
   enabled?: boolean;
   /** Title text. Defaults to the value measure title. */
   text?: string;
+  /**
+   * Boolean flag that defines whether the title text (the `text` override, or the
+   * value measure's title) is shown within the title section.
+   *
+   * @defaultValue true
+   */
+  showValueTitle?: boolean;
+  /**
+   * Boolean flag that defines whether the current category bucket caption
+   * (e.g. 'DEC 2013') is shown within the title section. Applicable when
+   * {@link KpiChartDataOptions.category} is set.
+   *
+   * @defaultValue true
+   */
+  showCategoryTitle?: boolean;
 };
 
 /**
@@ -1832,6 +1935,32 @@ export type KpiComparisonStyleOptions = {
   display?: 'percent' | 'value' | 'both';
   /** Caption next to the delta, e.g. 'vs last year'. Defaults to an i18n label inferred from context. */
   label?: string;
+  /**
+   * Template for the 'target' comparison's percent-of-goal readout, replacing the localized
+   * default. `{{percent}}` interpolates the formatted percent (e.g. '82%') and `{{goal}}` the
+   * target's display label (the target measure's title, or the formatted number for a fixed
+   * target).
+   *
+   * @defaultValue localized '{{percent}} of goal'
+   *
+   * @example
+   * ```ts
+   * comparison: { ofGoalText: '{{percent}} of {{goal}} target' }
+   * ```
+   */
+  ofGoalText?: string;
+  /**
+   * Template for the 'target' comparison's amount-to-go readout, replacing the localized
+   * default. `{{value}}` interpolates the formatted remaining amount (e.g. '$250K').
+   *
+   * @defaultValue localized '{{value}} to go'
+   *
+   * @example
+   * ```ts
+   * comparison: { toGoText: '{{value}} remaining' }
+   * ```
+   */
+  toGoText?: string;
   /**
    * Color of the delta readout. Conditions evaluate against `deltaPercent`
    * ('delta' / 'previous-period' comparisons) or `percentOfTarget` ('target').
@@ -1900,7 +2029,7 @@ export type KpiCardStyleOptions = {
  *   dataSet={DM.DataSource}
  *   dataOptions={{
  *     value: measureFactory.sum(DM.Commerce.Revenue),
- *     trend: DM.Commerce.Date.Months,
+ *     category: DM.Commerce.Date.Months,
  *   }}
  *   styleOptions={{
  *     title: { text: 'Monthly Revenue' },
@@ -1916,14 +2045,14 @@ export interface KpiStyleOptions extends Pick<BaseStyleOptions, 'width' | 'heigh
    *
    * @defaultValue 'standard'
    */
-  layout?: 'standard' | 'big-comparison';
+  layout?: 'standard' | 'comparison-first';
   /** Headline value styling. */
   value?: KpiValueStyleOptions;
   /** Card title styling (defaults to the value measure title). */
   title?: KpiTitleStyleOptions;
   /** Comparison readout styling (polarity, icon, colors). */
   comparison?: KpiComparisonStyleOptions;
-  /** Sparkline styling; rendered only when {@link KpiChartDataOptions.trend} is set. */
+  /** Sparkline styling; rendered only when {@link KpiChartDataOptions.category} is set. */
   sparkline?: KpiSparklineStyleOptions;
   /** Card container styling. */
   card?: KpiCardStyleOptions;
@@ -2971,7 +3100,6 @@ export interface WidgetByIdStyleOptions extends WidgetContainerStyleOptions {
    */
   height?: number;
 }
-
 /** Style settings defining the look and feel of ChartWidget */
 export type ChartWidgetStyleOptions = ChartStyleOptions & WidgetContainerStyleOptions;
 

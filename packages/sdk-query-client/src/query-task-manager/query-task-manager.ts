@@ -1,4 +1,4 @@
-import { DataSource, Element, PivotQueryResultData, QueryResultData } from '@sisense/sdk-data';
+import { DataSource, PivotQueryResultData, QueryResultData } from '@sisense/sdk-data';
 import { JaqlRequest, PivotQueryClient } from '@sisense/sdk-pivot-query-client';
 import { AbstractTaskManager, Step, Task } from '@sisense/task-manager';
 
@@ -11,7 +11,10 @@ import {
 import { getJaqlQueryPayload, getPivotJaqlQueryPayload } from '../jaql/get-jaql-query-payload.js';
 import { QueryApiDispatcher } from '../query-api-dispatcher/query-api-dispatcher.js';
 import { QUERY_DEFAULT_LIMIT } from '../query-client.js';
-import { getDataFromQueryResult } from '../query-result/index.js';
+import {
+  getDataFromQueryResult,
+  ResultColumnMetadata,
+} from '../query-result/get-data-from-query-result.js';
 import { TranslatableError } from '../translation/translatable-error.js';
 import {
   AbortRequestFunction,
@@ -107,10 +110,12 @@ export class QueryTaskManager extends AbstractTaskManager {
 
     const metadata = [...queryDescription.attributes, ...queryDescription.measures];
 
-    // extra columns are assumed to have been added by advanced analytics functions
-    const extraColumns = (jaqlResponse.headers || [])
+    // extra columns are assumed to have been added by advanced analytics functions.
+    // They have no model element behind them, so the response header doubles as both
+    // identity and display label.
+    const extraColumns: ResultColumnMetadata[] = (jaqlResponse.headers || [])
       .slice(metadata.length)
-      .map((c) => ({ name: c, type: 'number' })) as Element[];
+      .map((c) => ({ name: c, title: c, type: 'number' }));
 
     return getDataFromQueryResult(jaqlResponse, [...metadata, ...extraColumns]);
   }

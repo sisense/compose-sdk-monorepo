@@ -32,7 +32,7 @@ export type UseWidgetRenamingParams = {
   /** When false, returns widgets unchanged (no config.header.title.editing.enabled, no persistence wrap). */
   enabled?: boolean;
   /** When provided, persists widget renames to the server on title/changed. */
-  persistence?: Pick<DashboardPersistenceManager, 'patchWidget'>;
+  persistence?: Pick<DashboardPersistenceManager, 'updateWidget'>;
 };
 
 /** Output of the widget renaming middleware. */
@@ -43,7 +43,7 @@ export type WidgetRenamingOutput = {
 /**
  * Middleware hook that enables widget-level rename UI and optionally persists renames.
  * Sets config.header.title.editing.enabled on each widget so ChartWidget/PivotTableWidget show rename UI.
- * When persistence is set, wraps widget onChange to call patchWidget on title/changed
+ * When persistence is set, wraps widget onChange to call updateWidget on title/changed
  * before forwarding to the change-detection layer.
  *
  * @param options - Options containing widgets, enabled flag, and optional persistence.
@@ -84,7 +84,7 @@ export function useWidgetRenaming(params: UseWidgetRenamingParams): WidgetRenami
           onChange: (event: WidgetChangeEvent) => {
             if (event.type === 'title/changed') {
               void persistence
-                .patchWidget(widget.id, { title: event.payload.title })
+                .updateWidget(widget.id, { title: event.payload.title })
                 .catch((err) => {
                   console.error('[useWidgetRenaming] Failed to persist widget rename:', err);
                 });

@@ -7,7 +7,7 @@ title: KpiSparklineStyleOptions
 > **KpiSparklineStyleOptions**: `object`
 
 Configuration that defines styling of the KPI chart sparkline.
-The sparkline is rendered only when [KpiChartDataOptions.trend](../interfaces/interface.KpiChartDataOptions.md#trend) is set.
+The sparkline is rendered only when [KpiChartDataOptions.category](../interfaces/interface.KpiChartDataOptions.md#category) is set.
 
 ## Type declaration
 
@@ -33,4 +33,4 @@ Boolean flag that defines whether the sparkline is shown.
 
 #### Default Value
 
-true when `KpiChartDataOptions.trend` is set
+true when `KpiChartDataOptions.category` is set

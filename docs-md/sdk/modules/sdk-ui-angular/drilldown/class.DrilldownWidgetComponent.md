@@ -103,8 +103,8 @@ Constructor for the `DrilldownWidgetComponent`.
 #### config
 
 > **config**?: `Omit`\< [`DrilldownWidgetConfig`](../../sdk-ui/type-aliases/type-alias.DrilldownWidgetConfig.md) \| `undefined`, "breadcrumbsComponent \| contextMenuComponent" \> & \{
-  `breadcrumbsComponent`: (`drilldownBreadcrumbsProps`) => `HTMLDivElement`;
-  `contextMenuComponent`: (`contextMenuProps`) => `HTMLDivElement`;
+  `breadcrumbsComponent?`: (`drilldownBreadcrumbsProps`) => `HTMLDivElement`;
+  `contextMenuComponent?`: (`contextMenuProps`) => `HTMLDivElement`;
  }
 
 An object that allows users to pass advanced configuration options as a prop for the `DrilldownWidget` component

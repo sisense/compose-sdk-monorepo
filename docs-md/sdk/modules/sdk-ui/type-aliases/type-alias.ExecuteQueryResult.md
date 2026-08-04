@@ -6,7 +6,7 @@ title: ExecuteQueryResult
 
 > **ExecuteQueryResult**: [`QueryState`](type-alias.QueryState.md) & \{
   `refetch`: () => `void`;
-  `rowCount`: `number`;
+  `rowCount?`: `number`;
  }
 
 Result of a query execution.

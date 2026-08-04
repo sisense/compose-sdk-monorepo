@@ -228,6 +228,11 @@ const translation: TranslationDictionary = {
       max: 'Máx',
     },
   },
+  filterWidget: {
+    placeholders: {
+      setFilter: 'Definir filtro',
+    },
+  },
   unsupportedFilterMessage: 'Filtro não suportado (aplicado à consulta de dados)',
   unsupportedFilter: 'Filtro não suportado {{filter}}',
   commonFilter: {
@@ -473,6 +478,11 @@ const translation: TranslationDictionary = {
       unlockGroup: 'Desbloquear grupo',
     },
     toggleSwitch: 'Ativar/desativar filtro',
+    linkedToWidget: {
+      label: 'Vinculado ao widget de filtro',
+      tooltip:
+        'Este filtro não pode ser editado no painel de filtros. Altere os valores diretamente no painel.',
+    },
   },
   chart: {
     indicator: {
@@ -496,17 +506,18 @@ const translation: TranslationDictionary = {
   },
   kpi: {
     comparison: {
-      vsPriorYear: 'vs prior year',
-      vsPriorQuarter: 'vs prior quarter',
-      vsPriorMonth: 'vs prior month',
-      vsPriorWeek: 'vs prior week',
-      vsPriorDay: 'vs prior day',
-      vsPriorPeriod: 'vs prior period',
+      vsPriorYear: 'vs ano anterior',
+      vsPriorQuarter: 'vs trimestre anterior',
+      vsPriorMonth: 'vs mês anterior',
+      vsPriorWeek: 'vs semana anterior',
+      vsPriorDay: 'vs dia anterior',
+      vsPriorPeriod: 'vs período anterior',
     },
     target: {
-      ofGoal: '{{percent}} of goal',
-      toGo: '{{value}} to go',
+      ofGoal: '{{percent}} da meta',
+      toGo: 'Faltam {{value}}',
     },
+    percentFormat: '{{sign}}{{value}}%',
   },
   loadingOverlay: {
     label: 'Carregando conteúdo',

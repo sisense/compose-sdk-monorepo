@@ -2,6 +2,8 @@ import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { WidgetProps } from '@/domains/widgets/components/widget/types.js';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets.js';
+import { findMenuActionByPath } from '@/shared/types/__test-helpers__/find-menu-item.js';
 
 import {
   useDuplicateWidgetMenuItem,
@@ -30,9 +32,10 @@ const createLayout = (widgetId: string) => ({
 });
 
 function getDuplicateMenuItemOnClick(widget: WidgetProps): (() => void) | undefined {
-  const items = widget.config?.header?.toolbar?.menu?.items ?? [];
-  const duplicateItem = items.find((item: { id?: string }) => item.id === 'duplicate-widget');
-  return duplicateItem?.onClick as (() => void) | undefined;
+  return findMenuActionByPath(
+    widget.config?.header?.menu?.items,
+    WidgetHeaderMenuTargets.DuplicateWidget,
+  )?.onClick;
 }
 
 describe('useDuplicateWidgetMenuItem', () => {
@@ -52,7 +55,7 @@ describe('useDuplicateWidgetMenuItem', () => {
     const { result } = renderHook(() => useDuplicateWidgetMenuItem(params));
 
     expect(result.current.widgets).toEqual(widgets);
-    expect(result.current.widgets[0]).not.toHaveProperty('config.header.toolbar.menu');
+    expect(result.current.widgets[0]).not.toHaveProperty('config.header.menu');
   });
 
   it('returns widgets with duplicate menu item when enabled is true', () => {
@@ -73,10 +76,14 @@ describe('useDuplicateWidgetMenuItem', () => {
 
     expect(result.current.widgets).not.toBe(widgets);
     expect(result.current.widgets).toHaveLength(1);
-    const menuItems = result.current.widgets[0]!.config?.header?.toolbar?.menu?.items ?? [];
-    const duplicateItem = menuItems.find((item: { id?: string }) => item.id === 'duplicate-widget');
+    const menuItems = result.current.widgets[0]!.config?.header?.menu?.items ?? [];
+    const duplicateItem = findMenuActionByPath(menuItems, WidgetHeaderMenuTargets.DuplicateWidget);
     expect(duplicateItem).toBeDefined();
-    expect(duplicateItem).toMatchObject({ id: 'duplicate-widget', caption: 'Duplicate widget' });
+    expect(duplicateItem).toMatchObject({
+      type: 'action',
+      id: WidgetHeaderMenuTargets.DuplicateWidget,
+      caption: 'Duplicate widget',
+    });
     expect(typeof duplicateItem?.onClick).toBe('function');
   });
 
@@ -422,6 +429,6 @@ describe('useDuplicateWidgetMenuItem', () => {
     const { result } = renderHook(() => useDuplicateWidgetMenuItem(params));
 
     expect(result.current.widgets).toEqual(widgets);
-    expect(result.current.widgets[0]).not.toHaveProperty('config.header.toolbar.menu.items');
+    expect(result.current.widgets[0]).not.toHaveProperty('config.header.menu.items');
   });
 });

@@ -159,6 +159,7 @@ describe('getDashboardModels', () => {
         id: dashboardMock.datasource.id,
         address: dashboardMock.datasource.address,
         title: dashboardMock.datasource.title,
+        fullname: dashboardMock.datasource.fullname,
         type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
       });
 
@@ -194,6 +195,7 @@ describe('getDashboardModels', () => {
         address: 'localHost',
         id: 'localhost_aSampleIAAaHealthcare',
         title: targetDashboardMock.datasource.title,
+        fullname: targetDashboardMock.datasource.fullname,
         type: (expect as ExpectWithOneOfExtension).oneOf(['live', 'elasticube']),
       },
       widgets: expect.anything(),

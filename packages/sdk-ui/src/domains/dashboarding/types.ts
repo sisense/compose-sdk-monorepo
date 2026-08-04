@@ -184,11 +184,11 @@ export interface DashboardContainerProps {
    */
   headerConfig?: DashboardHeaderConfig;
   /**
-   * Filter guids to pass to FiltersPanel as hidden. Derived from live FilterWidget claims.
+   * Guids of filters linked to a live FilterWidget; their panel tiles render read-only.
    *
    * @internal
    */
-  hiddenFilterIds?: string[];
+  filterWidgetLinkedIds?: readonly string[];
 }
 
 /**
@@ -221,15 +221,6 @@ export interface DashboardFiltersPanelConfig extends FiltersPanelConfig {
    * If not specified, the default value is `false`.
    */
   showFilterIconInToolbar?: boolean;
-  /**
-   * When `true` (default), filters claimed by a live FilterWidget are hidden from
-   * the panel tiles. They still apply to other widgets and block their dimensions.
-   * Set to `false` to show them in the panel (useful for debugging).
-   *
-   * @defaultValue true
-   * @alpha
-   */
-  hideFilterWidgetLinkedFilters?: boolean;
 }
 
 /**
@@ -382,8 +373,6 @@ export interface EditModeConfig {
   };
   /**
    * Configuration for the widget renaming feature.
-   *
-   * @internal
    */
   renameWidget?: {
     /**
@@ -392,7 +381,6 @@ export interface EditModeConfig {
      * Only has effect when edit mode is also enabled (`editMode.enabled`).
      *
      * If not specified, the default value is `false`.
-     * @internal
      */
     enabled: boolean;
   };

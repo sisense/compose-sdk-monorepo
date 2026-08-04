@@ -1,21 +1,37 @@
 /** @vitest-environment jsdom */
 import type {
-  DashboardConfig,
+  DashboardConfig as DashboardConfigPreact,
+  DashboardHeaderItemComponent as DashboardHeaderItemComponentPreact,
   DashboardLayoutOptions,
   DashboardProps as DashboardPropsPreact,
+  DashboardResolvedHeaderItem as DashboardResolvedHeaderItemPreact,
   WidgetsOptions,
 } from '@sisense/sdk-ui-preact';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { DashboardProps as DashboardPropsAngular } from '../components/dashboard';
+import type { DashboardHeaderItemComponent } from '../components/dashboard/dashboard-header-config';
+import type {
+  DashboardConfig,
+  DashboardProps as DashboardPropsAngular,
+} from '../components/dashboard/dashboard.component';
 import type { WidgetProps } from '../components/widgets';
-import { toDashboardProps, toPreactDashboardProps } from './dashboard-props-preact-translator';
+import { ComponentTranslator } from '../services/component-translator.service';
+import type { DynamicRenderer } from '../services/dynamic-renderer.service';
+import {
+  toDashboardByIdProps,
+  toDashboardProps,
+  toPreactDashboardByIdProps,
+  toPreactDashboardProps,
+} from './dashboard-props-preact-translator';
 import { toPreactWidgetProps, toWidgetProps } from './widget-props-preact-translator';
 
 vi.mock('./widget-props-preact-translator', () => ({
   toPreactWidgetProps: vi.fn((props) => ({ ...props, translated: true })),
   toWidgetProps: vi.fn((props) => ({ ...props, translated: true })),
 }));
+
+// the renderer is only consumed lazily when a wrapped item mounts, which these tests never do
+const createComponentTranslator = () => new ComponentTranslator({} as DynamicRenderer);
 
 const toPreactWidgetPropsMock = vi.mocked(toPreactWidgetProps);
 const toWidgetPropsMock = vi.mocked(toWidgetProps);
@@ -195,7 +211,7 @@ describe('dashboard-props-preact-translator', () => {
         widgets: [],
         filters: [],
         defaultDataSource: 'Sample Healthcare',
-        config: {} as DashboardConfig,
+        config: {} as DashboardConfigPreact,
         layoutOptions: {} as DashboardLayoutOptions,
         widgetsOptions: {} as WidgetsOptions,
         styleOptions: { backgroundColor: 'black' },
@@ -258,6 +274,278 @@ describe('dashboard-props-preact-translator', () => {
           expect.any(Array),
         );
       });
+    });
+  });
+
+  describe('config.header', () => {
+    class TestHeaderItemComponent {
+      size = { width: 0, height: 0 };
+    }
+
+    class InjectedHeaderItemComponent {
+      size = { width: 0, height: 0 };
+    }
+
+    const headerItemComponent = TestHeaderItemComponent as DashboardHeaderItemComponent;
+    const injectedItemComponent = InjectedHeaderItemComponent as DashboardHeaderItemComponent;
+
+    const builtInComponent: DashboardHeaderItemComponentPreact = () => null;
+    const builtInItem: DashboardResolvedHeaderItemPreact = {
+      id: 'built-in',
+      component: builtInComponent,
+    };
+
+    describe('without a component translator (structure only)', () => {
+      it('carries item components through unchanged', () => {
+        const result = toPreactDashboardProps({
+          widgets: [],
+          config: { header: { items: [{ id: 'my-item', component: headerItemComponent }] } },
+        });
+
+        expect(result.config?.header?.items?.[0].component).toBe(headerItemComponent);
+      });
+
+      it('renames beforeRender to onBeforeRender and passes items through unchanged', () => {
+        let receivedComponent: unknown;
+        const result = toPreactDashboardProps({
+          widgets: [],
+          config: {
+            header: {
+              beforeRender: (items) => {
+                receivedComponent = items[0].component;
+                return [...items];
+              },
+            },
+          },
+        });
+
+        const transformed = result.config?.header?.onBeforeRender?.([builtInItem]);
+
+        expect(result.config?.header).not.toHaveProperty('beforeRender');
+        expect(receivedComponent).toBe(builtInComponent);
+        expect(transformed?.[0].component).toBe(builtInComponent);
+      });
+
+      it('renames onBeforeRender to beforeRender in the reverse direction', () => {
+        const onBeforeRender = vi.fn((items: ReadonlyArray<DashboardResolvedHeaderItemPreact>) => [
+          ...items,
+        ]);
+
+        const result = toDashboardProps({
+          widgets: [],
+          config: { header: { onBeforeRender } } as DashboardConfigPreact,
+        });
+
+        expect(result.config?.header).not.toHaveProperty('onBeforeRender');
+        expect(result.config?.header?.beforeRender).toBeInstanceOf(Function);
+        result.config?.header?.beforeRender?.([]);
+        expect(onBeforeRender).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('with a component translator', () => {
+      it('wraps item components in preact components', () => {
+        const result = toPreactDashboardProps(
+          {
+            widgets: [],
+            config: { header: { items: [{ id: 'my-item', component: headerItemComponent }] } },
+          },
+          createComponentTranslator(),
+        );
+
+        const component = result.config?.header?.items?.[0].component;
+        expect(typeof component).toBe('function');
+        expect(component).not.toBe(headerItemComponent);
+      });
+
+      it('keeps a stable wrapped component identity across conversions', () => {
+        const componentTranslator = createComponentTranslator();
+        const angularProps = {
+          widgets: [],
+          config: { header: { items: [{ id: 'my-item', component: headerItemComponent }] } },
+        };
+
+        const first = toPreactDashboardProps(angularProps, componentTranslator);
+        const second = toPreactDashboardProps(angularProps, componentTranslator);
+
+        expect(first.config?.header?.items?.[0].component).toBe(
+          second.config?.header?.items?.[0].component,
+        );
+      });
+
+      it('resolves wrapped components back to the Angular class', () => {
+        const componentTranslator = createComponentTranslator();
+        const preactProps = toPreactDashboardProps(
+          {
+            widgets: [],
+            config: { header: { items: [{ id: 'my-item', component: headerItemComponent }] } },
+          },
+          componentTranslator,
+        );
+
+        const angularProps = toDashboardProps(preactProps, componentTranslator);
+
+        expect(angularProps.config?.header?.items?.[0].component).toBe(headerItemComponent);
+      });
+
+      it('hands beforeRender the consumer own Angular component class', () => {
+        const componentTranslator = createComponentTranslator();
+        let receivedComponent: unknown;
+        const result = toPreactDashboardProps(
+          {
+            widgets: [],
+            config: {
+              header: {
+                items: [{ id: 'my-item', component: headerItemComponent }],
+                beforeRender: (items) => {
+                  receivedComponent = items.find((item) => item.id === 'my-item')?.component;
+                  return [...items];
+                },
+              },
+            },
+          },
+          componentTranslator,
+        );
+        const wrappedComponent = result.config?.header?.items?.[0]
+          .component as DashboardHeaderItemComponentPreact;
+
+        result.config?.header?.onBeforeRender?.([
+          builtInItem,
+          { id: 'my-item', component: wrappedComponent },
+        ]);
+
+        expect(receivedComponent).toBe(headerItemComponent);
+      });
+
+      it('exposes a built-in item as an Angular component and unwraps it on the way back', () => {
+        let receivedComponent: unknown;
+        let receivedIds: string[] = [];
+        const result = toPreactDashboardProps(
+          {
+            widgets: [],
+            config: {
+              header: {
+                beforeRender: (items) => {
+                  receivedComponent = items[0].component;
+                  receivedIds = items.map((item) => item.id);
+                  return [...items];
+                },
+              },
+            },
+          },
+          createComponentTranslator(),
+        );
+
+        const transformed = result.config?.header?.onBeforeRender?.([builtInItem]);
+
+        // the consumer gets a real Angular component class wrapping the built-in renderer
+        expect(typeof receivedComponent).toBe('function');
+        expect(receivedComponent).not.toBe(builtInComponent);
+        expect(receivedIds).toEqual(['built-in']);
+        // and it is unwrapped, not wrapped a second time, on the way back to the renderer
+        expect(transformed?.[0].component).toBe(builtInComponent);
+      });
+
+      it('wraps Angular components newly injected by beforeRender', () => {
+        const result = toPreactDashboardProps(
+          {
+            widgets: [],
+            config: {
+              header: {
+                beforeRender: (items) => [
+                  ...items,
+                  { id: 'injected', component: injectedItemComponent },
+                ],
+              },
+            },
+          },
+          createComponentTranslator(),
+        );
+
+        const transformed = result.config?.header?.onBeforeRender?.([builtInItem]);
+
+        expect(transformed).toHaveLength(2);
+        expect(transformed?.[0].component).toBe(builtInComponent);
+        expect(typeof transformed?.[1].component).toBe('function');
+        expect(transformed?.[1].component).not.toBe(injectedItemComponent);
+      });
+
+      it('supports removing built-in items', () => {
+        const result = toPreactDashboardProps(
+          {
+            widgets: [],
+            config: {
+              header: { beforeRender: (items) => items.filter((item) => item.id !== 'built-in') },
+            },
+          },
+          createComponentTranslator(),
+        );
+
+        expect(result.config?.header?.onBeforeRender?.([builtInItem])).toEqual([]);
+      });
+
+      it('omits onBeforeRender when the consumer provided no transform', () => {
+        const result = toPreactDashboardProps(
+          {
+            widgets: [],
+            config: { header: { items: [{ id: 'my-item', component: headerItemComponent }] } },
+          },
+          createComponentTranslator(),
+        );
+
+        expect(result.config?.header).not.toHaveProperty('onBeforeRender');
+      });
+    });
+  });
+
+  describe('DashboardById props', () => {
+    class ByIdHeaderItemComponent {
+      size = { width: 0, height: 0 };
+    }
+
+    const headerItemComponent = ByIdHeaderItemComponent as DashboardHeaderItemComponent;
+
+    it('wraps header item components when a translator is provided', () => {
+      const result = toPreactDashboardByIdProps(
+        {
+          dashboardOid: 'oid-1',
+          config: { header: { items: [{ id: 'my-item', component: headerItemComponent }] } },
+        },
+        createComponentTranslator(),
+      );
+
+      expect(result.dashboardOid).toBe('oid-1');
+      expect(typeof result.config?.header?.items?.[0].component).toBe('function');
+      expect(result.config?.header?.items?.[0].component).not.toBe(headerItemComponent);
+    });
+
+    it('carries header item components through without a translator', () => {
+      const result = toPreactDashboardByIdProps({
+        dashboardOid: 'oid-1',
+        config: { header: { items: [{ id: 'my-item', component: headerItemComponent }] } },
+      });
+
+      expect(result.config?.header?.items?.[0].component).toBe(headerItemComponent);
+    });
+
+    it('omits a missing config', () => {
+      expect('config' in toPreactDashboardByIdProps({ dashboardOid: 'oid-1' })).toBe(false);
+      expect('config' in toDashboardByIdProps({ dashboardOid: 'oid-1' })).toBe(false);
+    });
+
+    it('round-trips the header items back to the Angular class', () => {
+      const componentTranslator = createComponentTranslator();
+      const preactProps = toPreactDashboardByIdProps(
+        {
+          dashboardOid: 'oid-1',
+          config: { header: { items: [{ id: 'my-item', component: headerItemComponent }] } },
+        },
+        componentTranslator,
+      );
+
+      const angularProps = toDashboardByIdProps(preactProps, componentTranslator);
+
+      expect(angularProps.config?.header?.items?.[0].component).toBe(headerItemComponent);
     });
   });
 });

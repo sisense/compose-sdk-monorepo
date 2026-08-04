@@ -223,6 +223,11 @@ const translation: TranslationDictionary = {
       max: '最大',
     },
   },
+  filterWidget: {
+    placeholders: {
+      setFilter: 'フィルターを設定',
+    },
+  },
   unsupportedFilterMessage: 'サポートされていないフィルター（データクエリに適用）',
   unsupportedFilter: 'サポートされていないフィルター{{filter}}',
   commonFilter: {
@@ -466,6 +471,11 @@ const translation: TranslationDictionary = {
       unlockGroup: 'グループのロック解除',
     },
     toggleSwitch: 'フィルターを有効/無効にする',
+    linkedToWidget: {
+      label: 'フィルターウィジェットにリンク済み',
+      tooltip:
+        'このフィルターはフィルターパネルから編集できません。ダッシュボードで直接値を変更してください。',
+    },
   },
   chart: {
     indicator: {
@@ -489,17 +499,18 @@ const translation: TranslationDictionary = {
   },
   kpi: {
     comparison: {
-      vsPriorYear: 'vs prior year',
-      vsPriorQuarter: 'vs prior quarter',
-      vsPriorMonth: 'vs prior month',
-      vsPriorWeek: 'vs prior week',
-      vsPriorDay: 'vs prior day',
-      vsPriorPeriod: 'vs prior period',
+      vsPriorYear: '前年比',
+      vsPriorQuarter: '前四半期比',
+      vsPriorMonth: '前月比',
+      vsPriorWeek: '前週比',
+      vsPriorDay: '前日比',
+      vsPriorPeriod: '前期比',
     },
     target: {
-      ofGoal: '{{percent}} of goal',
-      toGo: '{{value}} to go',
+      ofGoal: '目標の{{percent}}',
+      toGo: '残り{{value}}',
     },
+    percentFormat: '{{sign}}{{value}}%',
   },
   loadingOverlay: {
     label: 'コンテンツを読み込み中',

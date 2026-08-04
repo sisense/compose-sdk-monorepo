@@ -17,7 +17,7 @@ const JAN = Date.UTC(2026, 0, 1);
 const FEB = Date.UTC(2026, 1, 1);
 const MAR = Date.UTC(2026, 2, 1);
 
-/** Resolves the display label rule shared by the whole module: `column.title || column.name`. */
+/** Mirrors the no-`name` case of the module's label rule (`getDataOptionTitle`): `column.title || column.name`. */
 function displayLabel(styled: { column: { title?: string; name: string } }): string {
   return styled.column.title || styled.column.name;
 }
@@ -50,7 +50,7 @@ function makeTable(
 
 describe('kpi - getKpiChartData', () => {
   describe('headline', () => {
-    it('reads the value from the single row when no trend is set', () => {
+    it('reads the value from the single row when no category is set', () => {
       const dataOptions = translateKpiChartDataOptions({ value: revenue });
       const table = makeTable([{ name: revenue.name, type: 'number' }], [[1000]]);
 
@@ -67,7 +67,7 @@ describe('kpi - getKpiChartData', () => {
     it("derives the headline from the last bucket for valueMode 'last', with its epoch as valuePeriodMs", () => {
       const dataOptions = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
         valueMode: 'last',
       });
       const table = makeTable(
@@ -91,7 +91,7 @@ describe('kpi - getKpiChartData', () => {
     it("reads the headline from the '$kpiRowType'='total' row for valueMode 'total', excluding it from the buckets", () => {
       const dataOptions = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
         valueMode: 'total',
       });
       const table = makeTable(
@@ -123,7 +123,7 @@ describe('kpi - getKpiChartData', () => {
     it('single-query path (no $kpiRowType column): every row is a bucket', () => {
       const dataOptions = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
         valueMode: 'last',
       });
       const table = makeTable(
@@ -153,10 +153,10 @@ describe('kpi - getKpiChartData', () => {
       expect(result.value).toBeUndefined();
     });
 
-    it('renders an Infinity trend value as a sparkline gap (null y), not a real data point', () => {
+    it('renders an Infinity category value as a sparkline gap (null y), not a real data point', () => {
       const dataOptions = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
       });
       const table = makeTable(
         [
@@ -178,11 +178,60 @@ describe('kpi - getKpiChartData', () => {
     });
   });
 
+  describe('styled wrapper name', () => {
+    it("uses the styled wrapper's top-level name as the headline title", () => {
+      const dataOptions = translateKpiChartDataOptions({
+        value: { column: revenue, name: 'Total Revenueeeee' },
+      });
+      const table = makeTable([{ name: revenue.name, type: 'number' }], [[1000]]);
+
+      const result = getKpiChartData(dataOptions, table);
+
+      expect(result.valueTitle).toBe('Total Revenueeeee');
+    });
+
+    it("uses the styled wrapper's top-level name as a delta comparison label", () => {
+      const dataOptions = translateKpiChartDataOptions({
+        value: revenue,
+        comparison: { type: 'delta', value: { column: cost, name: 'My Cost' } },
+      });
+      const table = makeTable(
+        [
+          { name: revenue.name, type: 'number' },
+          { name: cost.name, type: 'number' },
+        ],
+        [[1000, 800]],
+      );
+
+      const result = getKpiChartData(dataOptions, table);
+
+      expect(result.comparison).toMatchObject({ type: 'delta', label: 'My Cost' });
+    });
+
+    it("uses the styled wrapper's top-level name as a target comparison label", () => {
+      const dataOptions = translateKpiChartDataOptions({
+        value: revenue,
+        comparison: { type: 'target', target: { column: cost, name: 'Goal 2026' } },
+      });
+      const table = makeTable(
+        [
+          { name: revenue.name, type: 'number' },
+          { name: cost.name, type: 'number' },
+        ],
+        [[1000, 1200]],
+      );
+
+      const result = getKpiChartData(dataOptions, table);
+
+      expect(result.comparison).toMatchObject({ type: 'target', label: 'Goal 2026' });
+    });
+  });
+
   describe('comparison', () => {
     it('previous-period: baseline from the second-to-last bucket, labelKey derived from granularity', () => {
       const dataOptions = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
         comparison: { type: 'previous-period' },
       });
       const table = makeTable(
@@ -211,7 +260,7 @@ describe('kpi - getKpiChartData', () => {
     it('previous-period: a single bucket (no prior bucket) leaves comparison undefined (null-rule 3)', () => {
       const dataOptions = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
         comparison: { type: 'previous-period' },
       });
       const table = makeTable(
@@ -228,7 +277,7 @@ describe('kpi - getKpiChartData', () => {
     it('previous-period: a null prior bucket also leaves comparison undefined (null-rule 3)', () => {
       const dataOptions = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
         comparison: { type: 'previous-period' },
       });
       const table = makeTable(
@@ -391,7 +440,7 @@ describe('kpi - getKpiChartData', () => {
     it('builds points from the buckets; an empty bucket is a null y, never zero', () => {
       const dataOptions = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
       });
       const table = makeTable(
         [
@@ -414,7 +463,7 @@ describe('kpi - getKpiChartData', () => {
       ]);
     });
 
-    it('omits sparklinePoints entirely when no trend is set', () => {
+    it('omits sparklinePoints entirely when no category is set', () => {
       const dataOptions = translateKpiChartDataOptions({ value: revenue });
       const table = makeTable([{ name: revenue.name, type: 'number' }], [[100]]);
 

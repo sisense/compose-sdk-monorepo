@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { CSSProperties, useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import styled from '@emotion/styled';
@@ -39,6 +39,10 @@ type SearchableSingleSelectProps<Value> = {
   showListLoader?: boolean;
   showSearch?: boolean;
   onSearchUpdate?: (searchValue: string) => void;
+  /** Applies inline styles to the select trigger. */
+  fieldStyle?: CSSProperties;
+  /** Sets the trigger-label color when no value is selected. */
+  placeholderColor?: string;
 };
 
 /** @internal */
@@ -68,6 +72,8 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
     showSearch = true,
     onSearchUpdate,
     width,
+    fieldStyle,
+    placeholderColor,
   } = props;
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
@@ -111,10 +117,17 @@ export function SearchableSingleSelect<Value = unknown>(props: SearchableSingleS
             theme={themeSettings}
             title={triggerTitle}
             aria-label="Searchable single-select"
+            style={fieldStyle}
           >
             <SelectLabel
               theme={themeSettings}
-              style={{ opacity: value ? '100%' : '50%' }}
+              style={
+                value !== undefined
+                  ? undefined
+                  : placeholderColor
+                  ? { color: placeholderColor }
+                  : { opacity: '50%' }
+              }
               aria-label="Value"
             >
               {`${getSelectedItemsDisplayValue(items, [value]) || placeholder}`}

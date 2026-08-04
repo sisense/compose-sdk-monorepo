@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { CSSProperties, useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import styled from '@emotion/styled';
@@ -69,6 +69,10 @@ type SearchableMultiSelectProps<Value> = {
   showListLoader?: boolean;
   showSearch?: boolean;
   onSearchUpdate?: (searchValue: string) => void;
+  /** Applies inline styles to the select trigger. */
+  fieldStyle?: CSSProperties;
+  /** Sets the trigger-label color when no values are selected. */
+  placeholderColor?: string;
 };
 
 /** @internal */
@@ -82,6 +86,8 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
     showSearch = true,
     onSearchUpdate,
     width,
+    fieldStyle,
+    placeholderColor,
   } = props;
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
@@ -145,10 +151,17 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
             theme={themeSettings}
             title={triggerTitle}
             aria-label="Searchable multi-select"
+            style={fieldStyle}
           >
             <SelectLabel
               theme={themeSettings}
-              style={{ opacity: values.length ? '100%' : '50%' }}
+              style={
+                values.length
+                  ? undefined
+                  : placeholderColor
+                  ? { color: placeholderColor }
+                  : { opacity: '50%' }
+              }
               aria-label="Value"
             >
               {getSelectedItemsDisplayValue(items, values) ?? placeholder}
@@ -189,6 +202,7 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
                   selectElementRef.current?.clientWidth &&
                   selectElementRef.current?.clientWidth * 2,
               }}
+              data-testid="csdk-searchable-multi-select-content"
               aria-label="Searchable multi-select content"
             >
               <ContentToolbar>

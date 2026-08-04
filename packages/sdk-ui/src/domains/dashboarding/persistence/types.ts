@@ -1,6 +1,5 @@
 import type {
   SpecificWidgetOptions,
-  WidgetPatch,
   WidgetsPanelLayout,
 } from '@/domains/dashboarding/dashboard-model';
 import type { TabberConfig } from '@/domains/dashboarding/hooks/use-tabber';
@@ -56,21 +55,6 @@ export type DashboardPersistenceManager = {
      */
     tabberConfig?: TabberConfig;
   }>;
-
-  /**
-   * Patch a single field (e.g. title) on an existing widget.
-   * @sisenseInternal
-   */
-  patchWidget: (
-    /**
-     * The oid of the widget to patch.
-     */
-    widgetOid: string,
-    /**
-     * The patch to apply to the widget.
-     */
-    patch: WidgetPatch,
-  ) => Promise<void>;
 
   /**
    * Apply a props-shaped partial update to an existing widget. The composition

@@ -1,11 +1,16 @@
 import { KpiChartData, KpiComparisonData } from '../types.js';
 import {
+  buildTargetReadout,
+  comparisonMeasureNumberFormatConfig,
   computeHeadlineMaxHeightPx,
   formatDelta,
   formatDeltaValue,
   formatKpiValue,
   formatPercentDiff,
+  formatPercentOfTarget,
+  interpolateTemplate,
   isMeaningfulPercentDiff,
+  KpiTranslateFn,
   metricFor,
   resolveConditionalIcon,
   summarizeComparisonForAria,
@@ -15,7 +20,27 @@ import {
   toKpiRenderOptions,
 } from './helpers.js';
 
-const t = (key: string) => key;
+/** Builds a `t` stub over the given mini-dictionary: interpolates known keys, echoes unknown ones. */
+const makeT =
+  (dict: Record<string, string>): KpiTranslateFn =>
+  (key, options) =>
+    (dict[key] ?? key).replace(/\{\{(\w+)\}\}/g, (match, name: string) =>
+      options && name in options ? String(options[name]) : match,
+    );
+
+/** English-shaped templates, mirroring `resources/en.ts`. */
+const t = makeT({
+  'kpi.percentFormat': '{{sign}}{{value}}%',
+  'kpi.target.ofGoal': '{{percent}} of goal',
+  'kpi.target.toGo': '{{value}} to go',
+});
+
+/** Turkish-shaped templates: percent sign before the number, per `resources/__external__/tr-tr.ts`. */
+const tTurkish = makeT({
+  'kpi.percentFormat': '{{sign}}%{{value}}',
+  'kpi.target.ofGoal': 'hedefe göre {{percent}}',
+  'kpi.target.toGo': '{{value}} kaldı',
+});
 
 describe('formatKpiValue', () => {
   it('formats a plain number with default config', () => {
@@ -24,6 +49,81 @@ describe('formatKpiValue', () => {
 
   it('formats currency with a custom config', () => {
     expect(formatKpiValue(1500, { name: 'Currency', symbol: '$' })).toBe('$1.5K');
+  });
+});
+
+describe('formatPercentOfTarget', () => {
+  it('keeps fractional percents instead of rounding to an integer', () => {
+    expect(formatPercentOfTarget(83.3333, t)).toBe('83.33%');
+  });
+
+  it('trims trailing zeros and keeps integers plain', () => {
+    expect(formatPercentOfTarget(83.5, t)).toBe('83.5%');
+    expect(formatPercentOfTarget(80, t)).toBe('80%');
+  });
+
+  it('never abbreviates an extreme percent to K/M notation', () => {
+    // Thousand separators (locale ',' under the test runner) are fine; '500K%' is not.
+    expect(formatPercentOfTarget(500000, t)).toBe('500,000%');
+  });
+
+  it('places the percent sign where the locale template puts it (Turkish prefix)', () => {
+    expect(formatPercentOfTarget(82, tTurkish)).toBe('%82');
+  });
+});
+
+describe('interpolateTemplate', () => {
+  it('replaces {{name}} placeholders, tolerating inner whitespace', () => {
+    expect(interpolateTemplate('{{percent}} of {{ goal }}', { percent: '82%', goal: 'Cost' })).toBe(
+      '82% of Cost',
+    );
+  });
+
+  it('leaves unknown placeholders untouched', () => {
+    expect(interpolateTemplate('{{value}} to {{destination}}', { value: '5' })).toBe(
+      '5 to {{destination}}',
+    );
+  });
+});
+
+describe('comparisonMeasureNumberFormatConfig', () => {
+  const config = { decimalScale: 0 as const };
+  const styled = (numberFormatConfig?: typeof config) => ({
+    column: { name: 'Cost', aggregation: 'sum' },
+    numberFormatConfig,
+  });
+
+  it("reads a 'delta' comparison measure's config", () => {
+    expect(comparisonMeasureNumberFormatConfig({ type: 'delta', value: styled(config) })).toEqual(
+      config,
+    );
+  });
+
+  it("reads a measure-backed 'target' comparison's config", () => {
+    expect(comparisonMeasureNumberFormatConfig({ type: 'target', target: styled(config) })).toEqual(
+      config,
+    );
+  });
+
+  it("returns undefined for fixed-number targets, 'previous-period', 'value', and no comparison", () => {
+    expect(comparisonMeasureNumberFormatConfig({ type: 'target', target: 100 })).toBeUndefined();
+    expect(comparisonMeasureNumberFormatConfig({ type: 'previous-period' })).toBeUndefined();
+    expect(
+      comparisonMeasureNumberFormatConfig({ type: 'value', value: styled(config) }),
+    ).toBeUndefined();
+    expect(comparisonMeasureNumberFormatConfig(undefined)).toBeUndefined();
+  });
+
+  it('returns undefined when the measure carries no config', () => {
+    expect(
+      comparisonMeasureNumberFormatConfig({ type: 'delta', value: styled(undefined) }),
+    ).toBeUndefined();
+  });
+
+  it('returns undefined for a measure-backed target whose measure carries no config (symmetry with delta)', () => {
+    expect(
+      comparisonMeasureNumberFormatConfig({ type: 'target', target: styled(undefined) }),
+    ).toBeUndefined();
   });
 });
 
@@ -51,7 +151,7 @@ describe('computeHeadlineMaxHeightPx', () => {
 describe('isMeaningfulPercentDiff / formatPercentDiff', () => {
   it('treats a finite percent within the cap as meaningful', () => {
     expect(isMeaningfulPercentDiff(20)).toBe(true);
-    expect(formatPercentDiff(20)).toBe('+20.00%');
+    expect(formatPercentDiff(20, t)).toBe('+20.00%');
   });
 
   it('treats undefined and out-of-range percents as not meaningful', () => {
@@ -61,12 +161,17 @@ describe('isMeaningfulPercentDiff / formatPercentDiff', () => {
   });
 
   it('caps the displayed percent at the max', () => {
-    expect(formatPercentDiff(5000)).toBe('+999.99%');
-    expect(formatPercentDiff(-5000)).toBe('-999.99%');
+    expect(formatPercentDiff(5000, t)).toBe('+999.99%');
+    expect(formatPercentDiff(-5000, t)).toBe('-999.99%');
   });
 
   it('signs negative percents without a leading plus', () => {
-    expect(formatPercentDiff(-5)).toBe('-5.00%');
+    expect(formatPercentDiff(-5, t)).toBe('-5.00%');
+  });
+
+  it('keeps the sign outside a locale-prefixed percent sign (Turkish +%20, not %+20)', () => {
+    expect(formatPercentDiff(20, tTurkish)).toBe('+%20.00');
+    expect(formatPercentDiff(-5, tTurkish)).toBe('-%5.00');
   });
 });
 
@@ -84,32 +189,40 @@ describe('formatDelta', () => {
   const delta = { deltaValue: 20, deltaPercent: 20 };
 
   it('prefers percent for display="percent"', () => {
-    expect(formatDelta(delta, 'percent')).toBe('+20.00%');
+    expect(formatDelta(delta, 'percent', t)).toBe('+20.00%');
   });
 
   it('prefers value for display="value"', () => {
-    expect(formatDelta(delta, 'value')).toBe('+20');
+    expect(formatDelta(delta, 'value', t)).toBe('+20');
   });
 
   it('combines both for display="both"', () => {
-    expect(formatDelta(delta, 'both')).toBe('+20.00% (+20)');
+    expect(formatDelta(delta, 'both', t)).toBe('+20.00% (+20)');
   });
 
   it('falls back to the value when percent is not meaningful', () => {
-    expect(formatDelta({ deltaValue: 20, deltaPercent: undefined }, 'percent')).toBe('+20');
-    expect(formatDelta({ deltaValue: 20, deltaPercent: undefined }, 'both')).toBe('+20');
+    expect(formatDelta({ deltaValue: 20, deltaPercent: undefined }, 'percent', t)).toBe('+20');
+    expect(formatDelta({ deltaValue: 20, deltaPercent: undefined }, 'both', t)).toBe('+20');
   });
 });
 
 describe('resolveConditionalIcon', () => {
   const conditions = [
-    { icon: '✓', color: '#0a0', expression: '100', operator: '>' as const },
-    { icon: '⚠', color: '#a00', expression: '50', operator: '<=' as const },
+    {
+      icon: { type: 'text' as const, value: '✓', color: '#0a0' },
+      expression: '100',
+      operator: '>' as const,
+    },
+    {
+      icon: { type: 'text' as const, value: '⚠', color: '#a00' },
+      expression: '50',
+      operator: '<=' as const,
+    },
   ];
 
   it('returns the first matching condition', () => {
-    expect(resolveConditionalIcon(conditions, 150)?.icon).toBe('✓');
-    expect(resolveConditionalIcon(conditions, 30)?.icon).toBe('⚠');
+    expect(resolveConditionalIcon(conditions, 150)).toBe(conditions[0]);
+    expect(resolveConditionalIcon(conditions, 30)).toBe(conditions[1]);
   });
 
   it('returns undefined when nothing matches or inputs are missing', () => {
@@ -119,25 +232,46 @@ describe('resolveConditionalIcon', () => {
   });
 
   it('supports equality and inequality operators', () => {
-    expect(resolveConditionalIcon([{ icon: '=', expression: '42', operator: '=' }], 42)?.icon).toBe(
-      '=',
-    );
     expect(
-      resolveConditionalIcon([{ icon: '≠', expression: '42', operator: '!=' }], 43)?.icon,
-    ).toBe('≠');
+      resolveConditionalIcon(
+        [{ icon: { type: 'text' as const, value: '=' }, expression: '42', operator: '=' }],
+        42,
+      )?.icon,
+    ).toEqual({ type: 'text', value: '=' });
+    expect(
+      resolveConditionalIcon(
+        [{ icon: { type: 'text' as const, value: '≠' }, expression: '42', operator: '!=' }],
+        43,
+      )?.icon,
+    ).toEqual({ type: 'text', value: '≠' });
   });
 
   it('never matches a malformed (non-numeric) threshold expression, even for !=/≠ (NaN never equals anything)', () => {
     // Number('abc') is NaN, and `value !== NaN` is always true -- without a guard, a malformed
     // expression would make '!='/'≠' match every value instead of none.
     expect(
-      resolveConditionalIcon([{ icon: 'x', expression: 'abc', operator: '!=' }], 42),
+      resolveConditionalIcon(
+        [{ icon: { type: 'text' as const, value: 'x' }, expression: 'abc', operator: '!=' }],
+        42,
+      ),
     ).toBeUndefined();
     expect(
-      resolveConditionalIcon([{ icon: 'x', expression: 'not-a-number', operator: '≠' }], 42),
+      resolveConditionalIcon(
+        [
+          {
+            icon: { type: 'text' as const, value: 'x' },
+            expression: 'not-a-number',
+            operator: '≠',
+          },
+        ],
+        42,
+      ),
     ).toBeUndefined();
     expect(
-      resolveConditionalIcon([{ icon: 'x', expression: 'abc', operator: '>' }], 42),
+      resolveConditionalIcon(
+        [{ icon: { type: 'text' as const, value: 'x' }, expression: 'abc', operator: '>' }],
+        42,
+      ),
     ).toBeUndefined();
   });
 });
@@ -329,12 +463,63 @@ describe('toComparisonDisplay', () => {
   });
 });
 
+describe('buildTargetReadout', () => {
+  const target = { percentOfTarget: 82, toGo: 250000, label: 'Total Cost' };
+
+  it('builds both lines from the localized templates by default', () => {
+    expect(buildTargetReadout(target, undefined, t)).toEqual({
+      ofGoalText: '82% of goal',
+      toGoText: '250K to go',
+    });
+  });
+
+  it('omits the percent line when the percent is not computable (zero target)', () => {
+    expect(buildTargetReadout({ ...target, percentOfTarget: undefined }, undefined, t)).toEqual({
+      ofGoalText: undefined,
+      toGoText: '250K to go',
+    });
+  });
+
+  it('renders consumer override templates instead, interpolating percent/goal/value', () => {
+    expect(
+      buildTargetReadout(target, undefined, t, {
+        ofGoalText: '{{percent}} of {{goal}} target',
+        toGoText: '{{value}} remaining',
+      }),
+    ).toEqual({
+      ofGoalText: '82% of Total Cost target',
+      toGoText: '250K remaining',
+    });
+  });
+
+  it('overrides independently: one line overridden, the other stays localized', () => {
+    expect(buildTargetReadout(target, undefined, t, { toGoText: '{{value}} left' })).toEqual({
+      ofGoalText: '82% of goal',
+      toGoText: '250K left',
+    });
+  });
+
+  it('formats the amount-to-go with the given number format config', () => {
+    expect(buildTargetReadout(target, { name: 'Currency', symbol: '$' }, t).toGoText).toBe(
+      '$250K to go',
+    );
+  });
+
+  it('localizes both lines through the locale templates (Turkish)', () => {
+    expect(buildTargetReadout(target, undefined, tTurkish)).toEqual({
+      ofGoalText: 'hedefe göre %82',
+      toGoText: '250K kaldı',
+    });
+  });
+});
+
 describe('summarizeComparisonForAria', () => {
   it('summarizes a delta-shaped comparison', () => {
     expect(
       summarizeComparisonForAria(
         { type: 'delta', baseline: 100, deltaValue: 20, deltaPercent: 20, label: 'vs prior month' },
         undefined,
+        t,
       ),
     ).toBe('+20.00% vs prior month');
   });
@@ -347,8 +532,8 @@ describe('summarizeComparisonForAria', () => {
       deltaPercent: 20,
       label: 'vs prior month',
     };
-    expect(summarizeComparisonForAria(delta, undefined, 'value')).toBe('+20 vs prior month');
-    expect(summarizeComparisonForAria(delta, undefined, 'both')).toBe(
+    expect(summarizeComparisonForAria(delta, undefined, t, 'value')).toBe('+20 vs prior month');
+    expect(summarizeComparisonForAria(delta, undefined, t, 'both')).toBe(
       '+20.00% (+20) vs prior month',
     );
   });
@@ -361,14 +546,36 @@ describe('summarizeComparisonForAria', () => {
       toGo: 18,
       label: 'Total Cost',
     };
-    // The summary must follow the same display semantics as the visible readout, so assistive
-    // tech never hears content that isn't shown.
-    expect(summarizeComparisonForAria(target, undefined)).toBe('82% of Total Cost');
-    expect(summarizeComparisonForAria(target, undefined, 'percent')).toBe('82% of Total Cost');
-    expect(summarizeComparisonForAria(target, undefined, 'value')).toBe('18 to go');
-    expect(summarizeComparisonForAria(target, undefined, 'both')).toBe(
-      '82% of Total Cost, 18 to go',
-    );
+    // The summary must voice the exact strings the visible readout renders (localized
+    // `kpi.target.*` templates) and follow the same display semantics, so assistive tech never
+    // hears content that isn't shown.
+    expect(summarizeComparisonForAria(target, undefined, t)).toBe('82% of goal');
+    expect(summarizeComparisonForAria(target, undefined, t, 'percent')).toBe('82% of goal');
+    expect(summarizeComparisonForAria(target, undefined, t, 'value')).toBe('18 to go');
+    expect(summarizeComparisonForAria(target, undefined, t, 'both')).toBe('82% of goal, 18 to go');
+  });
+
+  it('voices consumer target-string overrides, same as the visible readout', () => {
+    expect(
+      summarizeComparisonForAria(
+        { type: 'target', target: 100, percentOfTarget: 82, toGo: 18, label: 'Total Cost' },
+        undefined,
+        t,
+        'both',
+        { ofGoalText: '{{percent}} of {{goal}}', toGoText: '{{value}} remaining' },
+      ),
+    ).toBe('82% of Total Cost, 18 remaining');
+  });
+
+  it('formats a fractional percent-of-target without integer rounding', () => {
+    expect(
+      summarizeComparisonForAria(
+        { type: 'target', target: 120, percentOfTarget: 83.3333, toGo: 20, label: 'Total Cost' },
+        undefined,
+        t,
+        'percent',
+      ),
+    ).toBe('83.33% of goal');
   });
 
   it('falls back to the amount-to-go summary when the target percent is unavailable', () => {
@@ -376,6 +583,7 @@ describe('summarizeComparisonForAria', () => {
       summarizeComparisonForAria(
         { type: 'target', target: 100, percentOfTarget: undefined, toGo: 18, label: 'Total Cost' },
         undefined,
+        t,
         'percent',
       ),
     ).toBe('18 to go');
@@ -383,7 +591,7 @@ describe('summarizeComparisonForAria', () => {
 
   it('summarizes a value comparison', () => {
     expect(
-      summarizeComparisonForAria({ type: 'value', value: 100, label: 'Total Cost' }, undefined),
+      summarizeComparisonForAria({ type: 'value', value: 100, label: 'Total Cost' }, undefined, t),
     ).toBe('Total Cost 100');
   });
 });

@@ -1,3 +1,4 @@
+import { isRendererReady } from '../../../helpers/readiness.js';
 import { ChartBuilder } from '../../../types.js';
 import {
   createHighchartsBasedChartRenderer,
@@ -19,5 +20,6 @@ export const pieChartBuilder: ChartBuilder<'pie'> = {
       getAlerts: getPieChartAlerts,
     }),
     isCorrectRendererProps: isHighchartsBasedChartRendererProps,
+    isReady: isRendererReady,
   },
 };

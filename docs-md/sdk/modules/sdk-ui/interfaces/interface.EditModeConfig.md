@@ -78,6 +78,28 @@ which by default is automatically managed from UI interactions with the dashboar
 
 ***
 
+### renameWidget
+
+> **renameWidget**?: `object`
+
+Configuration for the widget renaming feature.
+
+#### Type declaration
+
+> ##### `renameWidget.enabled`
+>
+> **enabled**: `boolean`
+>
+> When `true`, adds a "Rename widget" menu item to each widget header.
+> On click, triggers inline title editing of the widget.
+> Only has effect when edit mode is also enabled (`editMode.enabled`).
+>
+> If not specified, the default value is `false`.
+>
+>
+
+***
+
 ### showDragHandleIcon
 
 > **showDragHandleIcon**?: `boolean`

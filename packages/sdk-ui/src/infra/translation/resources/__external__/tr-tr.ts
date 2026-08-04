@@ -223,6 +223,11 @@ const translation: TranslationDictionary = {
       max: 'Max',
     },
   },
+  filterWidget: {
+    placeholders: {
+      setFilter: 'Filtre ayarla',
+    },
+  },
   unsupportedFilterMessage: 'Desteklenmeyen filtre (veri sorgusuna uygulandı)',
   unsupportedFilter: 'Desteklenmeyen filtre {{filter}}',
   commonFilter: {
@@ -468,6 +473,10 @@ const translation: TranslationDictionary = {
       unlockGroup: 'Grup Kilidini Aç',
     },
     toggleSwitch: 'Filtreyi etkinleştir/devre dışı bırak',
+    linkedToWidget: {
+      label: "Filtre widget'ına bağlı",
+      tooltip: 'Bu filtre filtre panelinden düzenlenemez. Değerleri doğrudan panoda değiştirin.',
+    },
   },
   chart: {
     indicator: {
@@ -491,17 +500,18 @@ const translation: TranslationDictionary = {
   },
   kpi: {
     comparison: {
-      vsPriorYear: 'vs prior year',
-      vsPriorQuarter: 'vs prior quarter',
-      vsPriorMonth: 'vs prior month',
-      vsPriorWeek: 'vs prior week',
-      vsPriorDay: 'vs prior day',
-      vsPriorPeriod: 'vs prior period',
+      vsPriorYear: 'önceki yıla göre',
+      vsPriorQuarter: 'önceki çeyreğe göre',
+      vsPriorMonth: 'önceki aya göre',
+      vsPriorWeek: 'önceki haftaya göre',
+      vsPriorDay: 'önceki güne göre',
+      vsPriorPeriod: 'önceki döneme göre',
     },
     target: {
-      ofGoal: '{{percent}} of goal',
-      toGo: '{{value}} to go',
+      ofGoal: 'hedefe göre {{percent}}',
+      toGo: '{{value}} kaldı',
     },
+    percentFormat: '{{sign}}%{{value}}',
   },
   loadingOverlay: {
     label: 'İçerik yükleniyor',

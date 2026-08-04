@@ -8,7 +8,6 @@ import { useWidgetUpdatesPersistence } from './use-widget-updates-persistence';
 function makePersistence(): DashboardPersistenceManager {
   return {
     addWidget: vi.fn(),
-    patchWidget: vi.fn().mockResolvedValue(undefined),
     updateWidget: vi.fn().mockResolvedValue(undefined),
   };
 }

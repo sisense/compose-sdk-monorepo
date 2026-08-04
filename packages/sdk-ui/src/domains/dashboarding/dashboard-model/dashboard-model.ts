@@ -1,10 +1,11 @@
-import { AnyObject, DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
+import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 
 import { DashboardLayoutOptions } from '@/domains/dashboarding';
 import { DashboardStyleOptions } from '@/domains/dashboarding/dashboard-model';
 import { TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber';
 import { WidgetModel } from '@/domains/widgets/widget-model';
 import { DashboardSettings } from '@/infra/api/types/dashboard-dto';
+import { DashboardUserAuth } from '@/infra/app/settings/types/role-manifest';
 
 import { type WidgetsOptions } from './types';
 
@@ -94,5 +95,5 @@ export interface DashboardModel {
    *
    * @internal
    */
-  userAuth?: AnyObject;
+  userAuth?: DashboardUserAuth;
 }

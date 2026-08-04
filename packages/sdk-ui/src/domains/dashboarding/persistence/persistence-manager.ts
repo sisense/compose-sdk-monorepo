@@ -11,7 +11,7 @@ import { widgetModelTranslator } from '@/domains/widgets/widget-model';
 import type { DashboardPersistenceManager } from './types.js';
 
 /**
- * Creates a {@link DashboardPersistenceManager} that forwards add/patch operations through
+ * Creates a {@link DashboardPersistenceManager} that forwards add/update operations through
  * the same `dispatchChanges` function returned by {@link useDashboardModelInternal} /
  *
  * @param dispatchDashboardModelChanges - Dashboard model dispatch (e.g. `dispatchChanges` from `useDashboardModelInternal`)
@@ -46,12 +46,6 @@ export function createDashboardPersistenceManager(
         widgetOptions: payload.widgetOptions,
         tabberConfig: payload.tabberConfig,
       };
-    },
-    patchWidget: async (widgetOid, patch) => {
-      await dispatchDashboardModelChanges({
-        type: UseDashboardModelActionType.PATCH_WIDGET,
-        payload: { widgetOid, patch },
-      });
     },
     updateWidget: async (widgetOid, update) => {
       await dispatchDashboardModelChanges({

@@ -72,7 +72,7 @@ export const DashboardContainer = ({
   defaultDataSource,
   filterPanelCollapsed,
   onFilterPanelCollapsedChange,
-  hiddenFilterIds,
+  filterWidgetLinkedIds,
 }: DashboardContainerProps) => {
   const { themeSettings } = useThemeContext();
 
@@ -145,7 +145,7 @@ export const DashboardContainer = ({
                 defaultDataSource={defaultDataSource}
                 config={config?.filtersPanel}
                 dataSources={getUniqueDataSources(widgets, defaultDataSource)}
-                hiddenFilterIds={hiddenFilterIds}
+                filterWidgetLinkedIds={filterWidgetLinkedIds}
               />
             </ThemeProvider>
           </div>

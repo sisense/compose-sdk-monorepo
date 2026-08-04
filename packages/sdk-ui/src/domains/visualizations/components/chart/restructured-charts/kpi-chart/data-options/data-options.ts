@@ -50,19 +50,22 @@ export function translateKpiChartDataOptions(
 ): KpiChartDataOptionsInternal {
   return {
     value: normalizeMeasureColumn(dataOptions.value),
-    trend: dataOptions.trend ? normalizeColumn(dataOptions.trend) : undefined,
+    category: dataOptions.category ? normalizeColumn(dataOptions.category) : undefined,
     valueMode: dataOptions.valueMode ?? 'last',
     comparison: dataOptions.comparison ? translateKpiComparison(dataOptions.comparison) : undefined,
   };
 }
 
 /**
- * Extracts the attribute(s) a KPI chart's query needs, from its `trend` column when present.
+ * Extracts the attribute(s) a KPI chart's query needs, from its `category` column when present.
+ *
+ * @param dataOptions - Internal KPI data options to read the `category` column from
+ * @returns The category attribute as a single-element array, or an empty array when none is set
  * @internal
  */
 export function getKpiAttributes(dataOptions: KpiChartDataOptionsInternal): Attribute[] {
-  if (dataOptions.trend && isAttributeColumn(dataOptions.trend.column)) {
-    return [dataOptions.trend.column as Attribute];
+  if (dataOptions.category && isAttributeColumn(dataOptions.category.column)) {
+    return [dataOptions.category.column as Attribute];
   }
   return [];
 }
@@ -98,7 +101,10 @@ export function isKpiChartDataOptions(
     'value' in dataOptions &&
     !!dataOptions.value &&
     !Array.isArray(dataOptions.value) &&
-    !('category' in dataOptions) &&
+    // a single-column `category` is KPI's own axis; an ARRAY `category` marks other chart
+    // shapes (cartesian/categorical/boxplot are also caught by their array `value`; a
+    // sankey-like shape — array `category` with a singular `value` — only by this clause)
+    (!('category' in dataOptions) || !Array.isArray(dataOptions.category)) &&
     !('x' in dataOptions) &&
     !('y' in dataOptions) &&
     !('geo' in dataOptions) &&

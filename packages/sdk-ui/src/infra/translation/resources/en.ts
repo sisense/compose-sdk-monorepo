@@ -216,6 +216,11 @@ export const translation = {
       max: 'Max',
     },
   },
+  filterWidget: {
+    placeholders: {
+      setFilter: 'Set filter',
+    },
+  },
   unsupportedFilterMessage: 'Unsupported Filter (applied to the data query)',
   unsupportedFilter: 'Unsupported filter {{filter}}',
   commonFilter: {
@@ -460,6 +465,11 @@ export const translation = {
       unlockGroup: 'Unlock Group',
     },
     toggleSwitch: 'Enable/disable filter',
+    linkedToWidget: {
+      label: 'Linked to filter widget',
+      tooltip:
+        "This filter can't be edited from the filter panel. Change its values directly on the dashboard.",
+    },
   },
   chart: {
     indicator: {
@@ -494,6 +504,12 @@ export const translation = {
       ofGoal: '{{percent}} of goal',
       toGo: '{{value}} to go',
     },
+    /**
+     * Locale-aware percent readout: `sign` is `''` or an explicit `+`/`-`, `value` is the
+     * formatted magnitude. Locales that place the percent sign before the number (e.g. Turkish
+     * `%82`) or insert a space before it (e.g. French `82 %`) override this template.
+     */
+    percentFormat: '{{sign}}{{value}}%',
   },
   loadingOverlay: {
     label: 'Loading content',

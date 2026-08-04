@@ -4,6 +4,7 @@ import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { WidgetsPanelColumnLayout } from '@/domains/dashboarding/types.js';
 import type { TableWidgetStyle, WidgetDto } from '@/domains/widgets/components/widget-by-id/types';
 import { widgetModelTranslator } from '@/domains/widgets/widget-model';
+import { RestApi } from '@/infra/api/rest-api';
 import { AppSettings } from '@/infra/app/settings/settings';
 import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings';
 
@@ -415,71 +416,6 @@ describe('persistDashboardModelMiddleware', () => {
     });
   });
 
-  it('should patch widget for PATCH_WIDGET', async () => {
-    const restApi = {
-      patchDashboard: vi.fn(),
-      addWidgetToDashboard: vi.fn(),
-      deleteWidgetFromDashboard: vi.fn(),
-      patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
-    };
-
-    const result = await persistDashboardModelMiddleware({
-      dashboardOid,
-      action: {
-        type: UseDashboardModelActionType.PATCH_WIDGET,
-        payload: { widgetOid: 'widget-123', patch: { title: 'New Title' } },
-      },
-      restApi: restApi as never,
-      sharedMode: false,
-      appSettings: testAppSettings,
-      themeSettings: testThemeSettings,
-    });
-
-    expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
-      dashboardOid,
-      'widget-123',
-      { title: 'New Title' },
-      false,
-    );
-    expect(result).toEqual({
-      type: UseDashboardModelActionType.PATCH_WIDGET,
-      payload: { widgetOid: 'widget-123', patch: { title: 'New Title' } },
-    });
-  });
-
-  it('should patch widget scroller location for PATCH_WIDGET with options', async () => {
-    const restApi = {
-      patchDashboard: vi.fn(),
-      addWidgetToDashboard: vi.fn(),
-      deleteWidgetFromDashboard: vi.fn(),
-      patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
-    };
-    const scrollerPatch = { options: { previousScrollerLocation: { min: 10, max: 90 } } };
-
-    const result = await persistDashboardModelMiddleware({
-      dashboardOid,
-      action: {
-        type: UseDashboardModelActionType.PATCH_WIDGET,
-        payload: { widgetOid: 'widget-456', patch: scrollerPatch },
-      },
-      restApi: restApi as never,
-      sharedMode: false,
-      appSettings: testAppSettings,
-      themeSettings: testThemeSettings,
-    });
-
-    expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
-      dashboardOid,
-      'widget-456',
-      scrollerPatch,
-      false,
-    );
-    expect(result).toEqual({
-      type: UseDashboardModelActionType.PATCH_WIDGET,
-      payload: { widgetOid: 'widget-456', patch: scrollerPatch },
-    });
-  });
-
   it('should delete widgets for WIDGETS_DELETE', async () => {
     const restApi = {
       patchDashboard: vi.fn(),
@@ -546,6 +482,38 @@ describe('persistDashboardModelMiddleware', () => {
   });
 
   describe('UPDATE_WIDGET', () => {
+    it('maps a title update to a title PATCH body', async () => {
+      const restApi = {
+        patchDashboard: vi.fn(),
+        addWidgetToDashboard: vi.fn(),
+        deleteWidgetFromDashboard: vi.fn(),
+        patchWidgetInDashboard: vi.fn().mockResolvedValue(undefined),
+      } satisfies Partial<RestApi>;
+
+      const result = await persistDashboardModelMiddleware({
+        dashboardOid,
+        action: {
+          type: UseDashboardModelActionType.UPDATE_WIDGET,
+          payload: { widgetOid: 'widget-123', update: { title: 'New Title' } },
+        },
+        restApi: restApi as unknown as RestApi,
+        sharedMode: false,
+        appSettings: testAppSettings,
+        themeSettings: testThemeSettings,
+      });
+
+      expect(restApi.patchWidgetInDashboard).toHaveBeenCalledWith(
+        dashboardOid,
+        'widget-123',
+        { title: 'New Title' },
+        false,
+      );
+      expect(result).toEqual({
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: { widgetOid: 'widget-123', update: { title: 'New Title' } },
+      });
+    });
+
     it('maps scrollerLocation update to options.previousScrollerLocation PATCH', async () => {
       const restApi = {
         patchDashboard: vi.fn(),

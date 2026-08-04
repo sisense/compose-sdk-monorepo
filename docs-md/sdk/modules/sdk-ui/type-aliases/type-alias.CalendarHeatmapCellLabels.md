@@ -27,7 +27,7 @@ true
 ### `style`
 
 **style**?: `Omit`\< [`TextStyle`](type-alias.TextStyle.md), `"color"` \> & \{
-  `color`: `"contrast"` \| `string`;
+  `color?`: `"contrast"` \| `string`;
  }
 
 Style configuration for calendar day numbers in cells
@@ -51,7 +51,7 @@ Please use `textStyle` instead
 ### `textStyle`
 
 **textStyle**?: `Omit`\< [`TextStyle`](type-alias.TextStyle.md), `"color"` \> & \{
-  `color`: `"contrast"` \| `string`;
+  `color?`: `"contrast"` \| `string`;
  }
 
 Style configuration for calendar day numbers in cells

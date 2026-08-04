@@ -10,6 +10,9 @@ export {
   formatDataSet,
 } from '@sisense/sdk-ui-preact';
 
+// Re-exports constants from @sisense/sdk-ui-preact
+export { WidgetHeaderMenuTargets } from '@sisense/sdk-ui-preact';
+
 // Re-exports types from @sisense/sdk-ui-preact
 export type {
   ChartType,
@@ -21,6 +24,7 @@ export type {
   CalendarHeatmapChartType,
   ScattermapChartType,
   AreamapChartType,
+  SankeyChartType,
   TableType,
   AreaSubtype,
   LineSubtype,
@@ -59,6 +63,7 @@ export type {
   CalendarHeatmapChartDataOptions,
   ScattermapChartDataOptions,
   AreamapChartDataOptions,
+  SankeyChartDataOptions,
   TableDataOptions,
   PivotTableDataOptions,
   WidgetDataOptions,
@@ -101,6 +106,7 @@ export type {
   CalendarHeatmapStyleOptions,
   ScattermapStyleOptions,
   AreamapStyleOptions,
+  SankeyStyleOptions,
   ChartWidgetStyleOptions,
   WidgetStyleOptions,
   WidgetByIdStyleOptions,
@@ -148,6 +154,12 @@ export type {
   WidgetId,
   WidgetsOptions,
   WidgetConfig,
+  WidgetHeaderConfig,
+  WidgetHeaderMenuActionItem,
+  WidgetHeaderMenuConfig,
+  WidgetHeaderMenuItem,
+  WidgetHeaderMenuSubmenuItem,
+  WidgetHeaderMenuTarget,
   WidgetNarrativeConfig,
   WidgetNarrativeDisplayLocation,
 

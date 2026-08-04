@@ -1,5 +1,39 @@
 # Changelog
 
+## [2.33.0] - 2026-08-04
+
+### Added
+- Promote `SankeyChart` to General Availability (GA) for React, Angular and Vue
+- Promote widget renaming to General Availability (GA)
+- Promote widget header menu customization to General Availability (GA)
+- Add dashboard header customization support for Angular and Vue
+- Add cross-filtering support for widgets using calculated dimensions
+- Add filter editing support for text and numeric calculated dimensions
+- Add `FilterWidget` component (for internal testing)
+- Extend `KpiChart` (beta):
+  - Add typed conditional icons supporting 16 built-in icons, custom text and SVG paths
+  - Add `showValueTitle` and `showCategoryTitle` options
+  - Add `ofGoalText` and `toGoText` overrides for the target comparison text
+  - Localize built-in strings, percent formatting
+
+### Changed
+- Change `KpiChart` (beta):
+  - Rename `trend` to `category` for `KpiChartDataOptions`
+  - Rename `big-comparison` option to `comparison-first` for `KpiStyleOptions.layout`
+  - Change `KpiTitleStyleOptions.enabled` to also include the category caption
+  - Change `KpiIconCondition.icon` to accept a `KpiIcon` object instead of a string
+  - Fix value clipping and comparison truncation on narrow and short cards
+  - Fix `KpiCardStyleOptions.textAlign` to also align `comparison`
+  - Fix `comparison` to apply `name` and `numberFormatConfig` when using `StyledMeasureColumn`
+  - Fix `% of goal` decimal rounding issue
+  - Change default color for `value` to use the first color in the palette
+- Fix the `highlights` prop for `SankeyChart` to set chart highlights not filters
+- Change `SankeyChart` tooltip style to align with the other chart types
+- Fix member filters on numeric columns to avoid duplicate members, keep selections, and preserve deactivated members
+- Add `title` on `QueryResultData` columns in addition to the existing `name` property
+- Fix `useGetDataSourceDimensions` and underlying field search to work correctly for all data model types (including perspectives)
+
+
 ## [2.32.0] - 2026-07-21
 
 ### Added

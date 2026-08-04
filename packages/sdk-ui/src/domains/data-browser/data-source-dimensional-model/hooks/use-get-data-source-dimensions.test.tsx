@@ -36,7 +36,16 @@ const renderHookWithWrapper = (
 describe('useGetDataSourceDimensions', () => {
   beforeEach(() => {
     server.use(
-      http.post(`*/api/datasources/${encodeURIComponent(mockDataSource)}/fields/search`, () =>
+      http.get('*/api/datasources/', () =>
+        HttpResponse.json([
+          {
+            title: mockDataSource,
+            fullname: `localhost/${mockDataSource}`,
+            live: false,
+          },
+        ]),
+      ),
+      http.post('*/api/datasources/localhost/Sample%20ECommerce/fields/search', () =>
         HttpResponse.json(MOCK_DATA_SOURCE_FIELDS),
       ),
     );

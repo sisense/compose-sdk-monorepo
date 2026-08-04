@@ -104,6 +104,13 @@ export interface FiltersPanelProps {
    * @alpha
    */
   hiddenFilterIds?: string[];
+  /**
+   * Guids of filters linked to a live FilterWidget. Their tiles render read-only and
+   * cannot be reordered. Derived by the dashboarding layer.
+   *
+   * @alpha
+   */
+  filterWidgetLinkedIds?: readonly string[];
 }
 
 /**
@@ -148,6 +155,7 @@ export const FiltersPanel = asSisenseComponent({
     dataSources,
     config: propConfig,
     hiddenFilterIds,
+    filterWidgetLinkedIds,
   }: FiltersPanelProps) => {
     const filtersPanelRef = useRef<HTMLDivElement>(null);
     const filterTilesRef = useRef<HTMLElement[]>([]);
@@ -261,6 +269,8 @@ export const FiltersPanel = asSisenseComponent({
               onReorder={handleFilterReorder}
               renderItem={({ index, withDragHandle, isDragging }) => {
                 const filter = filters[index];
+                // A linked tile is read-only — it must not expose a drag handle.
+                const isLinked = !!(filter && filterWidgetLinkedIds?.includes(filter.config.guid));
 
                 if (filter && isDragging) {
                   return withDragHandle(
@@ -290,14 +300,17 @@ export const FiltersPanel = asSisenseComponent({
                       filter={filter}
                       onChange={(newFilter) => newFilter && handleFilterChange(newFilter)}
                       defaultDataSource={defaultDataSource}
-                      renderHeaderTitle={withDragHandle}
+                      renderHeaderTitle={isLinked ? (title) => title : withDragHandle}
                       onEdit={
-                        config?.actions?.editFilter?.enabled && isFilterSupportEditing(filter)
+                        !isLinked &&
+                        config?.actions?.editFilter?.enabled &&
+                        isFilterSupportEditing(filter)
                           ? (levelIndex) =>
                               startEditingFilter(filterTilesRef.current[index], filter, levelIndex)
                           : undefined
                       }
                       config={filterTileConfig}
+                      linked={isLinked}
                     />
                   </div>
                 ) : null;

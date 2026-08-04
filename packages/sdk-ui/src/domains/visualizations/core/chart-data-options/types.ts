@@ -810,8 +810,6 @@ export type CalendarHeatmapChartDataOptionsInternal = {
  * Configuration for how to query aggregate data and assign data
  * to a {@link SankeyChartType | Sankey chart}.
  *
- * @beta
- *
  * @example
  * ```tsx
  * <SankeyChart
@@ -849,7 +847,7 @@ export type SankeyChartDataOptionsInternal = {
 };
 
 /**
- * Which number becomes the KPI headline when {@link KpiChartDataOptions.trend} is set.
+ * Which number becomes the KPI headline when {@link KpiChartDataOptions.category} is set.
  * 'last' — the last date bucket; 'total' — aggregate over the whole period
  * (computed by a separate ungrouped query — correct SQL semantics).
  *
@@ -864,14 +862,22 @@ export type KpiValueMode = 'last' | 'total';
  * @beta
  */
 export type KpiComparison =
-  /** Compares the last trend bucket against the previous one. Requires `trend`. */
+  /** Compares the last category bucket against the previous one. Requires `category`. */
   | { type: 'previous-period' }
-  /** Compares against a second measure: delta and percent change, up/down arrow. */
+  /**
+   * Compares against a second measure: delta and percent change, up/down arrow.
+   * A {@link StyledMeasureColumn} wrapper's `numberFormatConfig` formats the delta readout
+   * (falls back to the headline value's config).
+   */
   | {
       type: 'delta';
       value: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
     }
-  /** Treats the baseline as a goal: “82% of goal, $12K to go”. Fixed number or measure. */
+  /**
+   * Treats the baseline as a goal: “82% of goal, $12K to go”. Fixed number or measure.
+   * A measure-backed target's {@link StyledMeasureColumn} `numberFormatConfig` formats the
+   * to-go readout (falls back to the headline value's config).
+   */
   | {
       type: 'target';
       target: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn | number;
@@ -894,7 +900,7 @@ export type KpiComparison =
  *   dataSet={DM.DataSource}
  *   dataOptions={{
  *     value: measureFactory.sum(DM.Commerce.Revenue),
- *     trend: DM.Commerce.Date.Months,
+ *     category: DM.Commerce.Date.Months,
  *     comparison: { type: 'previous-period' },
  *   }}
  * />
@@ -904,22 +910,22 @@ export interface KpiChartDataOptions {
   /** Primary measure — the headline KPI value. Conditional coloring via `color` on the styled measure. */
   value: MeasureColumn | CalculatedMeasureColumn | StyledMeasureColumn;
   /**
-   * Sets the card's trend axis (typically a date dimension): enables the sparkline, the
+   * Sets the card's category (typically a date dimension): enables the sparkline, the
    * current-period caption, the 'previous-period' comparison, and the `valueMode` semantics.
    * Granularity comes from the column.
    *
    * @example
    * ```ts
-   * trend: DM.Commerce.Date.Months
+   * category: DM.Commerce.Date.Months
    * ```
    */
-  trend?: Column | StyledColumn;
+  category?: Column | StyledColumn;
   /**
-   * Selects which number is the headline when `trend` is set.
+   * Selects which number is the headline when `category` is set.
    *
    * @example
    * ```ts
-   * valueMode: 'total' // aggregate over the whole period instead of the last trend bucket
+   * valueMode: 'total' // aggregate over the whole period instead of the last category bucket
    * ```
    * @defaultValue 'last'
    */
@@ -945,7 +951,7 @@ export type KpiComparisonInternal =
 /** @internal */
 export type KpiChartDataOptionsInternal = {
   value: StyledMeasureColumn;
-  trend?: StyledColumn;
+  category?: StyledColumn;
   valueMode: KpiValueMode;
   comparison?: KpiComparisonInternal;
 };

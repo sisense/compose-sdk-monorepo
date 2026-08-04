@@ -67,10 +67,19 @@ describe('datetime member validation', () => {
     );
   });
 
-  it('should reject empty member lists', () => {
-    expect(() => validateDatetimeMemberStrings([], DateLevels.Weeks, 'filters[0]')).toThrow(
-      /at least one member/,
-    );
+  it('should treat empty member lists as include-all no-op', () => {
+    expect(() => validateDatetimeMemberStrings([], DateLevels.Weeks, 'filters[0]')).not.toThrow();
+  });
+
+  it('should reject non-array members', () => {
+    expect(() =>
+      // Intentionally pass a non-array at runtime to cover the malformed-input guard.
+      validateDatetimeMemberStrings(
+        '2024-01-01T00:00:00' as unknown as string[],
+        DateLevels.Weeks,
+        'filters[0]',
+      ),
+    ).toThrow(/at least one member/);
   });
 
   it('should reject WeekOfYear members filters', () => {

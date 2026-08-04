@@ -5,6 +5,7 @@ import {
   CartesianChartDataOptions,
   IndicatorChartDataOptions,
   KpiChartDataOptionsInternal,
+  SankeyChartDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
 
 import {
@@ -25,7 +26,7 @@ describe('kpi - data options translators', () => {
 
       expect(result.value.column).toEqual(expect.objectContaining({ title: revenue.title }));
       expect(result.valueMode).toBe('last');
-      expect(result.trend).toBeUndefined();
+      expect(result.category).toBeUndefined();
       expect(result.comparison).toBeUndefined();
     });
 
@@ -35,20 +36,20 @@ describe('kpi - data options translators', () => {
       expect(result.valueMode).toBe('total');
     });
 
-    it('normalizes trend to a StyledColumn when provided', () => {
+    it('normalizes category to a StyledColumn when provided', () => {
       const result = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
       });
 
-      expect(result.trend).toBeDefined();
-      expect(result.trend!.column).toBe(DM.Commerce.Date.Months);
+      expect(result.category).toBeDefined();
+      expect(result.category!.column).toBe(DM.Commerce.Date.Months);
     });
 
     it('passes through comparison { type: previous-period }', () => {
       const result = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
         comparison: { type: 'previous-period' },
       });
 
@@ -104,16 +105,16 @@ describe('kpi - data options translators', () => {
   });
 
   describe('getKpiAttributes', () => {
-    it('returns the trend attribute when trend is set', () => {
+    it('returns the category attribute when category is set', () => {
       const internal = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
       });
 
       expect(getKpiAttributes(internal)).toEqual([DM.Commerce.Date.Months]);
     });
 
-    it('returns an empty array when trend is not set', () => {
+    it('returns an empty array when category is not set', () => {
       const internal = translateKpiChartDataOptions({ value: revenue });
 
       expect(getKpiAttributes(internal)).toEqual([]);
@@ -175,7 +176,7 @@ describe('kpi - data options translators', () => {
     it('returns [value] only for a previous-period comparison', () => {
       const internal = translateKpiChartDataOptions({
         value: revenue,
-        trend: DM.Commerce.Date.Months,
+        category: DM.Commerce.Date.Months,
         comparison: { type: 'previous-period' },
       });
 
@@ -186,16 +187,29 @@ describe('kpi - data options translators', () => {
   describe('type guards', () => {
     describe('isKpiChartDataOptions', () => {
       it('accepts KPI data options', () => {
-        expect(isKpiChartDataOptions({ value: revenue, trend: DM.Commerce.Date.Months })).toBe(
+        expect(isKpiChartDataOptions({ value: revenue, category: DM.Commerce.Date.Months })).toBe(
           true,
         );
       });
 
-      it('rejects cartesian data options', () => {
+      it('accepts KPI data options without a category', () => {
+        expect(isKpiChartDataOptions({ value: revenue })).toBe(true);
+      });
+
+      it('rejects cartesian data options (array category/value)', () => {
         const dataOptions: CartesianChartDataOptions = {
           category: [DM.Commerce.Date.Months],
           value: [revenue],
           breakBy: [],
+        };
+
+        expect(isKpiChartDataOptions(dataOptions)).toBe(false);
+      });
+
+      it('rejects sankey data options (array category, singular value)', () => {
+        const dataOptions: SankeyChartDataOptions = {
+          category: [DM.Commerce.Date.Months],
+          value: revenue,
         };
 
         expect(isKpiChartDataOptions(dataOptions)).toBe(false);

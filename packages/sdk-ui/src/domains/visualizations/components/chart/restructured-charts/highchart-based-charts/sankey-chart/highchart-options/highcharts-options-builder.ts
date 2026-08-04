@@ -1,5 +1,7 @@
-import DOMPurify from 'dompurify';
-
+import {
+  colorChineseSilver,
+  colorWhite,
+} from '@/domains/visualizations/core/chart-data-options/coloring/consts.js';
 import { getPaletteColor } from '@/domains/visualizations/core/chart-data-options/coloring/utils.js';
 import type { SankeyChartDataOptionsInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
 import type { PlotOptions } from '@/domains/visualizations/core/chart-options-processor/chart-options-service';
@@ -8,6 +10,10 @@ import {
   applyFormat,
   getCompleteNumberFormatConfig,
 } from '@/domains/visualizations/core/chart-options-processor/translations/number-format-config';
+import {
+  spanSegment,
+  tooltipWrapper,
+} from '@/domains/visualizations/core/chart-options-processor/translations/scatter-tooltip.js';
 import { HighchartsDataPointContext } from '@/domains/visualizations/core/chart-options-processor/translations/tooltip-utils';
 import type { SeriesPointStructure } from '@/domains/visualizations/core/chart-options-processor/translations/translations-to-highcharts';
 import type { Color } from '@/types';
@@ -158,21 +164,26 @@ export const sankeyHighchartsOptionsBuilder: HighchartsOptionsBuilder<'sankey'> 
     };
 
     return {
+      animation: false,
+      backgroundColor: colorWhite,
+      borderColor: colorChineseSilver,
+      borderRadius: 10,
+      borderWidth: 1,
       useHTML: true,
       formatter: function (this: HighchartsDataPointContext) {
         const ctx = this as SankeyTooltipContext;
         if (ctx.point.isNode) {
-          return DOMPurify.sanitize(
-            `<span style="font-size:11px">${seriesName}</span><br/>` +
-              `<b>${ctx.point.name}</b>: ${formatValue(ctx.point.sum)}`,
+          return tooltipWrapper(
+            `${seriesName}<br/>` +
+              `${ctx.point.name}: ${spanSegment(formatValue(ctx.point.sum), ctx.point.color)}`,
           );
         }
         const fromLabel = formatLinkEndpointLabel(ctx.point.fromNode?.name);
         const toLabel = formatLinkEndpointLabel(ctx.point.toNode?.name);
-        return DOMPurify.sanitize(
-          `<span style="font-size:11px">${seriesName}</span><br/>` +
+        return tooltipWrapper(
+          `${seriesName}<br/>` +
             `${fromLabel} \u2192 ${toLabel}: ` +
-            `<b>${formatValue(ctx.point.weight)}</b>`,
+            `${spanSegment(formatValue(ctx.point.weight), ctx.point.color)}`,
         );
       },
     };

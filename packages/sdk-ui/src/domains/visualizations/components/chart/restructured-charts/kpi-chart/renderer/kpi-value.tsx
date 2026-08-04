@@ -3,20 +3,15 @@ import { RefObject, useRef } from 'react';
 import { useThemeContext } from '@/infra/contexts/theme-provider/index.js';
 import type { KpiIconCondition, KpiTextSize } from '@/types.js';
 
-import {
-  CONDITIONAL_ICON_EM,
-  CONDITIONAL_ICON_GAP_PX,
-  ConditionalIconSpan,
-  ValueArea,
-  ValueText,
-} from './kpi-card-styles.js';
+import { ValueArea, ValueText } from './kpi-card-styles.js';
+import { KpiConditionalIcon, toIconAffix } from './kpi-conditional-icon.js';
 import type { AutoFitAffix } from './use-auto-fit-font-size.js';
 import { useAutoFitFontSize } from './use-auto-fit-font-size.js';
 
 /**
  * Auto-fit corridor for whichever of value/comparison currently plays the "headline" role.
  * Exported so `kpi-comparison.tsx` uses the exact same range when it plays that role instead
- * (`layout: 'big-comparison'`), keeping the two visually interchangeable.
+ * (`layout: 'comparison-first'`), keeping the two visually interchangeable.
  * @internal
  */
 export const AUTO_FIT_MIN_PX = 16;
@@ -33,7 +28,12 @@ const COMPACT_FONT_SIZE = '0.9rem';
 export type KpiValueProps = {
   /** Already-formatted display text (the formatted value, or `designOptions.value.noDataText`). */
   text: string;
-  /** Resolved display color: the measure's data-driven color (or an `onBeforeRender` override). */
+  /**
+   * Resolves to the display color for a real value -- the measure's data-driven color, or the
+   * theme-accent default (either one possibly overridden by `onBeforeRender`). Left unset for the
+   * no-data placeholder, which falls back to the styled `ValueText`'s own onColor/theme text
+   * styling instead.
+   */
   color?: string;
   /** `'auto'` for auto-fit sizing, or a fixed font size in px. */
   textSize: KpiTextSize;
@@ -42,7 +42,7 @@ export type KpiValueProps = {
   onColor: boolean;
   /**
    * `'headline'` in the `'standard'` layout, where the value reads big and participates in
-   * auto-fit sizing; `'compact'` in `'big-comparison'`, where the comparison takes the headline
+   * auto-fit sizing; `'compact'` in `'comparison-first'`, where the comparison takes the headline
    * role instead and the value renders small (mirrors `KpiComparisonProps.scale`). Only affects
    * sizing when `textSize` is `'auto'` -- an explicit fixed `textSize` always wins.
    */
@@ -84,9 +84,7 @@ export function KpiValue({
   const internalRef = useRef<HTMLDivElement>(null);
   const containerRef = areaRef ?? internalRef;
 
-  const affixes: AutoFitAffix[] | undefined = icon
-    ? [{ text: icon.icon, emScale: CONDITIONAL_ICON_EM, gapPx: CONDITIONAL_ICON_GAP_PX }]
-    : undefined;
+  const affixes: AutoFitAffix[] | undefined = icon ? [toIconAffix(icon.icon)] : undefined;
 
   const autoFitFontSizePx = useAutoFitFontSize({
     containerRef,
@@ -111,11 +109,7 @@ export function KpiValue({
   return (
     <ValueArea ref={containerRef} data-kpi-area="value">
       <ValueText theme={themeSettings} $onColor={onColor} $color={color} style={{ fontSize }}>
-        {icon && (
-          <ConditionalIconSpan aria-hidden="true" $color={icon.color ?? color}>
-            {icon.icon}
-          </ConditionalIconSpan>
-        )}
+        {icon && <KpiConditionalIcon icon={icon.icon} color={color} />}
         {text}
       </ValueText>
     </ValueArea>

@@ -2,7 +2,9 @@ import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
 import { extractDimensionsAndMeasures } from '@/infra/contexts/custom-widgets-provider/use-execute-custom-widget-query.js';
+import { findMenuActionByPath } from '@/shared/types/__test-helpers__/find-menu-item.js';
 
 import { useCustomWidgetCsvDownload } from './use-custom-widget-csv-download.js';
 import type { UseCustomWidgetCsvDownloadParams } from './use-custom-widget-csv-download.js';
@@ -22,8 +24,11 @@ vi.mock('@/infra/contexts/custom-widgets-provider/use-execute-custom-widget-quer
 }));
 
 function findCsvOnClick(header: WidgetHeaderConfig): (() => void) | undefined {
-  const download = header.toolbar?.menu?.items?.find((i) => i.id === 'widget-download');
-  return download?.items?.find((i) => i.id === 'widget-download-csv-file')?.onClick;
+  return findMenuActionByPath(
+    header.menu?.items,
+    WidgetHeaderMenuTargets.Download,
+    WidgetHeaderMenuTargets.DownloadCsv,
+  )?.onClick;
 }
 
 const baseParams: UseCustomWidgetCsvDownloadParams = {

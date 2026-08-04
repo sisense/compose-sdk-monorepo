@@ -1,12 +1,7 @@
-import { useMemo } from 'react';
-
-import isUndefined from 'lodash-es/isUndefined';
-
 import { WidgetContainerStyleOptions } from '@/types';
 
-import { InfoButtonConfig, ToolbarConfig } from './types.js';
+import { InfoButtonConfig } from './types.js';
 import WidgetHeaderInfoButton from './widget-header-info-button.js';
-import { WidgetMenuButton } from './widget-menu-button.js';
 
 export interface WidgetHeaderToolbarProps {
   /**
@@ -21,27 +16,18 @@ export interface WidgetHeaderToolbarProps {
    */
   styleOptions?: WidgetContainerStyleOptions['header'];
 
-  /**
-   * Configuration options for the toolbar
-   */
-  config?: ToolbarConfig;
-
   onRefresh: () => void;
 }
 
 /**
- * Renders the widget header toolbar
+ * Renders the widget header toolbar — the part of the header that `styleOptions.header.renderToolbar`
+ * can replace. The header menu is rendered separately by {@link WidgetHeaderMenu}.
  */
 export function WidgetHeaderToolbar({
   infoButtonConfig,
   styleOptions,
   onRefresh,
-  config,
 }: WidgetHeaderToolbarProps): JSX.Element | null {
-  const isMenuEnabled = useMemo(
-    () => (isUndefined(config?.menu?.enabled) ? true : config?.menu?.enabled),
-    [config?.menu?.enabled],
-  );
   const defaultToolbar = (
     <>
       <WidgetHeaderInfoButton
@@ -55,15 +41,11 @@ export function WidgetHeaderToolbar({
     </>
   );
 
-  // Note: menu button is rendered after the toolbar to ensure it is fixed on the right side
   return (
     <>
       {styleOptions?.renderToolbar
         ? styleOptions.renderToolbar(onRefresh, defaultToolbar)
         : defaultToolbar}
-      {isMenuEnabled && config?.menu?.items && config?.menu?.items.length > 0 && (
-        <WidgetMenuButton menuItems={config?.menu?.items} />
-      )}
     </>
   );
 }

@@ -23,42 +23,64 @@ describe('QueryApiDispatcher', () => {
   });
 
   describe('getDataSourceFields', () => {
-    it('should call fields/search when displayName search API is not enabled', async () => {
-      // Arrange
-      const dataSource = 'exampleDataSource';
-      const count = 10;
-      const offset = 0;
-      const expectedUrl = `api/datasources/${encodeURIComponent(dataSource)}/fields/search`;
-      const expectedPayload = { offset, count };
-      const expectedFields = [{ name: 'field1' }, { name: 'field2' }];
-      httpClient.post.mockResolvedValue(expectedFields);
+    it('should resolve fullname from the list and preserve slash encoding', async () => {
+      const dataSource = 'einat perspectives';
+      const fullname = 'LocalHost/einat perspectives';
+      httpClient.get.mockResolvedValueOnce([{ title: dataSource, fullname, live: false }]);
+      httpClient.post.mockResolvedValue([{ name: 'field1' }]);
 
-      // Act
-      const result = await queryApi.getDataSourceFields(dataSource, { count, offset });
+      const result = await queryApi.getDataSourceFields(dataSource, { count: 10, offset: 0 });
 
-      // Assert
-      expect(httpClient.post).toHaveBeenCalledWith(expectedUrl, expectedPayload);
-      expect(httpClient.get).not.toHaveBeenCalled();
-      expect(result).toEqual(expectedFields);
+      expect(httpClient.get).toHaveBeenCalledWith('api/datasources/?sharedWith=r,w');
+      expect(httpClient.post).toHaveBeenCalledWith(
+        'api/datasources/LocalHost/einat%20perspectives/fields/search',
+        { offset: 0, count: 10 },
+      );
+      expect(result).toEqual([{ name: 'field1' }]);
     });
 
-    it('should call searchByDisplayName with isLive when displayName API is enabled', async () => {
-      const dataSource = 'Sales Live';
+    it('should use provided fullname without a list lookup', async () => {
       httpClient.post.mockResolvedValue([]);
 
-      await queryApi.getDataSourceFields(dataSource, {
-        displayNameConfig: { enabled: true, useNewSearchByDisplayNameApi: true },
-        live: true,
-      });
+      await queryApi.getDataSourceFields(
+        {
+          title: 'SnowflakeLive',
+          type: 'live',
+          fullname: 'live:SnowflakeLive',
+        },
+        { live: true },
+      );
 
+      expect(httpClient.get).not.toHaveBeenCalled();
       expect(httpClient.post).toHaveBeenCalledWith(
-        `api/datasources/${encodeURIComponent(dataSource)}/fields/searchByDisplayName?isLive=true`,
+        'api/datasources/live%3ASnowflakeLive/fields/search',
         { offset: 0, count: 9999 },
       );
-      expect(httpClient.get).not.toHaveBeenCalled();
     });
 
-    it('should resolve live from list when displayName API is enabled and live is omitted', async () => {
+    it('should call searchByDisplayName with title (not fullname) when displayName API is enabled', async () => {
+      httpClient.post.mockResolvedValue([]);
+
+      await queryApi.getDataSourceFields(
+        {
+          title: 'Sales Live',
+          type: 'live',
+          fullname: 'live:Sales Live',
+        },
+        {
+          displayNameConfig: { enabled: true, useNewSearchByDisplayNameApi: true },
+          live: true,
+        },
+      );
+
+      expect(httpClient.get).not.toHaveBeenCalled();
+      expect(httpClient.post).toHaveBeenCalledWith(
+        'api/datasources/Sales%20Live/fields/searchByDisplayName?isLive=true',
+        { offset: 0, count: 9999 },
+      );
+    });
+
+    it('should resolve live from list but still use title for searchByDisplayName', async () => {
       const dataSource = 'Sample ECommerce';
       httpClient.get.mockResolvedValueOnce([
         { title: dataSource, fullname: `localhost/${dataSource}`, live: false },
@@ -71,13 +93,38 @@ describe('QueryApiDispatcher', () => {
 
       expect(httpClient.get).toHaveBeenCalledWith('api/datasources/?sharedWith=r,w');
       expect(httpClient.post).toHaveBeenCalledWith(
-        `api/datasources/${encodeURIComponent(dataSource)}/fields/searchByDisplayName?isLive=false`,
+        'api/datasources/Sample%20ECommerce/fields/searchByDisplayName?isLive=false',
+        { offset: 0, count: 9999 },
+      );
+    });
+
+    it('should use DataSourceInfo.type for isLive when list lookup misses', async () => {
+      httpClient.get.mockResolvedValueOnce([]);
+      httpClient.post.mockResolvedValueOnce([]);
+
+      await queryApi.getDataSourceFields(
+        {
+          title: 'Sales Live',
+          type: 'live',
+          fullname: 'live:Sales Live',
+        },
+        {
+          displayNameConfig: { enabled: true, useNewSearchByDisplayNameApi: true },
+        },
+      );
+
+      expect(httpClient.get).toHaveBeenCalledWith('api/datasources/?sharedWith=r,w');
+      expect(httpClient.post).toHaveBeenCalledWith(
+        'api/datasources/Sales%20Live/fields/searchByDisplayName?isLive=true',
         { offset: 0, count: 9999 },
       );
     });
 
     it('should not use searchByDisplayName when only displayName.enabled is true', async () => {
       const dataSource = 'exampleDataSource';
+      httpClient.get.mockResolvedValueOnce([
+        { title: dataSource, fullname: `localhost/${dataSource}`, live: false },
+      ]);
       httpClient.post.mockResolvedValue([]);
 
       await queryApi.getDataSourceFields(dataSource, {
@@ -85,26 +132,42 @@ describe('QueryApiDispatcher', () => {
       });
 
       expect(httpClient.post).toHaveBeenCalledWith(
-        `api/datasources/${encodeURIComponent(dataSource)}/fields/search`,
+        'api/datasources/localhost/exampleDataSource/fields/search',
         { offset: 0, count: 9999 },
       );
     });
 
     it('should pass term in the POST body when provided', async () => {
       const dataSource = 'exampleDataSource';
+      httpClient.get.mockResolvedValueOnce([
+        { title: dataSource, fullname: `localhost/${dataSource}`, live: false },
+      ]);
       httpClient.post.mockResolvedValue([]);
 
       await queryApi.getDataSourceFields(dataSource, { term: 'revenue', count: 5, offset: 1 });
 
       expect(httpClient.post).toHaveBeenCalledWith(
-        `api/datasources/${encodeURIComponent(dataSource)}/fields/search`,
+        'api/datasources/localhost/exampleDataSource/fields/search',
         { offset: 1, count: 5, term: 'revenue' },
       );
+    });
+
+    it('should fall back to title when list lookup finds nothing', async () => {
+      httpClient.get.mockResolvedValueOnce([]);
+      httpClient.post.mockResolvedValue([]);
+
+      await queryApi.getDataSourceFields('Missing DS');
+
+      expect(httpClient.post).toHaveBeenCalledWith('api/datasources/Missing%20DS/fields/search', {
+        offset: 0,
+        count: 9999,
+      });
     });
 
     it('should throw an error on unsuccessful fetch', async () => {
       // Arrange
       const dataSource = 'exampleDataSource';
+      httpClient.get.mockResolvedValueOnce([]);
       httpClient.post.mockRejectedValueOnce({ status: 400 });
 
       // Act

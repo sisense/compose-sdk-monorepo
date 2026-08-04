@@ -43,7 +43,7 @@ Please use `seriesLabels` instead
 > ##### `labels.category`
 >
 > **category**?: \{
-> `enabled`: `boolean`;
+> `enabled?`: `boolean`;
 > }[]
 >
 > Array with single label options objects (order of items relative to dataOptions.category)

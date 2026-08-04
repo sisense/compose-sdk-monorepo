@@ -61,6 +61,12 @@ export interface MemberFilterTileProps {
    * @internal
    */
   renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
+  /**
+   * When true, the tile is linked to a FilterWidget and rendered read-only.
+   *
+   * @internal
+   */
+  linked?: boolean;
 }
 
 /**
@@ -103,6 +109,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     tileDesignOptions,
     config,
     renderHeaderTitle,
+    linked,
   } = props;
 
   const [searchValue, setSearchValue] = useState('');
@@ -220,13 +227,18 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
           return (
             <PillSection
               selectedMembers={selectedMembers}
-              onToggleSelectedMember={(memberKey) => {
-                const newSelectedMembers = toggleActivationInSelectedMemberByMemberKey(
-                  selectedMembers,
-                  memberKey,
-                );
-                updateFilter(withSelectedMembers(filter, newSelectedMembers, excludeMembers));
-              }}
+              // Linked tiles are read-only — no member toggling from the panel.
+              onToggleSelectedMember={
+                linked
+                  ? undefined
+                  : (memberKey) => {
+                      const newSelectedMembers = toggleActivationInSelectedMemberByMemberKey(
+                        selectedMembers,
+                        memberKey,
+                      );
+                      updateFilter(withSelectedMembers(filter, newSelectedMembers, excludeMembers));
+                    }
+              }
               excludeMembers={excludeMembers}
               disabled={tileDisabled}
             />
@@ -259,6 +271,7 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
         header: { hasBackgroundFilter },
       })}
       locked={filter.config.locked}
+      linked={linked}
       menuItems={menuItems}
       onDelete={onDelete}
       onEdit={onEdit}

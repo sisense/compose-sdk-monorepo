@@ -1,6 +1,7 @@
 import curry from 'lodash-es/curry.js';
 
 import { loadDataBySingleQuery } from '../../../../helpers/data-loading.js';
+import { isRendererReady } from '../../../../helpers/readiness.js';
 import { ChartBuilder } from '../../../../types.js';
 import {
   createHighchartsBasedChartRenderer,
@@ -42,5 +43,6 @@ export const columnChartBuilder: ChartBuilder<'column'> = {
       getAlerts: getCommonCartesianAlerts,
     }),
     isCorrectRendererProps: isHighchartsBasedChartRendererProps,
+    isReady: isRendererReady,
   },
 };

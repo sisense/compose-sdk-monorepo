@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { ChartData } from '@/domains/visualizations/core/chart-data/types';
-import { useFireOnReady } from '@/domains/widgets/hooks/use-fire-on-ready';
 import { ChartType } from '@/types';
 
 import { getChartBuilder } from '../restructured-charts/chart-builder-factory.js';
@@ -22,24 +21,20 @@ type UseChartOnReadyInput = {
 type UseChartOnReadyResult = {
   /**
    * Paint signal handler to forward to the renderer via
-   * `ChartRendererProps.onReady`, or `undefined` when the chart type does not
-   * participate in the `onReady` contract.
+   * `ChartRendererProps.onReady`, or `undefined` when the chart type has no
+   * `ChartBuilder` (non-restructured types do not participate).
    */
   onRendererReady: (() => void) | undefined;
 };
 
 /**
- * Wires the shared chart `onReady` (Fusion `domready` / PDF) readiness contract.
+ * Fires the consumer `onReady` prop (Fusion `domready` / PDF) on each rising edge of
+ * the chart's `ChartBuilder.renderer.isReady` predicate, feeding it the renderer paint
+ * signal alongside the loading and data signals.
  *
- * Chart types opt in by declaring `onReady` on their `ChartBuilder`; this
- * hook tracks the renderer paint flag, feeds it into the builder's readiness
- * predicate together with the loading / data signals, and fires the consumer
- * `onReady` callback via {@link useFireOnReady} on each rising edge. Chart types
- * without the contract get a no-op (`onRendererReady` is `undefined`).
- *
- * Readiness lives here rather than inside the renderer because `onReady` must
- * still fire in the empty / no-results case, where RegularChart shows a terminal
- * overlay and the renderer never mounts.
+ * Readiness lives here rather than in the renderer because `onReady` must still fire
+ * for the empty / no-results case, where RegularChart shows a terminal overlay and the
+ * renderer never mounts.
  *
  * @internal
  */
@@ -50,27 +45,58 @@ export function useChartOnReady({
   chartData,
   onReady,
 }: UseChartOnReadyInput): UseChartOnReadyResult {
-  const readiness = isRestructuredChartType(chartType)
-    ? getChartBuilder(chartType).onReady
+  const readinessCheck = isRestructuredChartType(chartType)
+    ? getChartBuilder(chartType).renderer.isReady
     : undefined;
 
-  const [rendererPainted, setRendererPainted] = useState(false);
+  const rendererPaintedRef = useRef(false);
+  const wasReadyRef = useRef(false);
+  // Latest consumer callback, so re-creating it between renders never refires.
+  const onReadyRef = useRef(onReady);
+  onReadyRef.current = onReady;
 
-  useEffect(() => {
-    if (readiness && isLoading) {
-      setRendererPainted(false);
+  const fireIfReady = useCallback(() => {
+    if (!readinessCheck) {
+      rendererPaintedRef.current = false;
+      wasReadyRef.current = false;
+      return;
     }
-  }, [readiness, isLoading]);
+
+    const isReady = readinessCheck({
+      chartType,
+      isLoading,
+      rendererPainted: rendererPaintedRef.current,
+      hasNoDimensions,
+      chartData,
+    });
+
+    if (isReady && !wasReadyRef.current) {
+      onReadyRef.current?.();
+    }
+    wasReadyRef.current = isReady;
+  }, [readinessCheck, chartType, isLoading, hasNoDimensions, chartData]);
+
+  // `onRendererReady` reaches Highcharts inside the chart options, where a new identity
+  // would rebuild them and force an extra `chart.update()`. Keep it stable and read the
+  // current evaluator through a ref.
+  const fireIfReadyRef = useRef(fireIfReady);
+  fireIfReadyRef.current = fireIfReady;
 
   const onRendererReady = useCallback(() => {
-    setRendererPainted(true);
+    rendererPaintedRef.current = true;
+    fireIfReadyRef.current();
   }, []);
 
-  const isReady = readiness
-    ? readiness.isReadyForOnReady({ isLoading, rendererPainted, hasNoDimensions, chartData })
-    : false;
+  useEffect(() => {
+    // A new query invalidates the previous paint, so an empty → empty refetch still
+    // produces a false → true edge.
+    if (isLoading) {
+      rendererPaintedRef.current = false;
+    }
+    // Covers readiness reached without a paint at all (terminal empty state) and
+    // re-checks after each loading / data change.
+    fireIfReady();
+  }, [fireIfReady, isLoading]);
 
-  useFireOnReady(isReady, readiness ? onReady : undefined);
-
-  return { onRendererReady: readiness ? onRendererReady : undefined };
+  return { onRendererReady: readinessCheck ? onRendererReady : undefined };
 }

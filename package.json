@@ -1,5 +1,5 @@
 {
-  "version": "2.32.0",
+  "version": "2.33.0",
   "name": "@sisense/root",
   "type": "module",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -87,6 +87,7 @@
     "demo:vue": "yarn workspace @sisense/vue-ts-demo dev",
     "demo:angular": "yarn workspace @sisense/angular-demo start",
     "demo:react-fusion": "yarn workspace @sisense/react-fusion-demo dev",
+    "update-demo-creds": "node ./scripts/update-demo-creds.mjs",
     "review-app": "yarn run review-app:build && yarn run review-app:serve",
     "review-app:build": "node ./scripts/build-review-app.mjs",
     "review-app:serve": "node ./scripts/serve-static.cjs public",

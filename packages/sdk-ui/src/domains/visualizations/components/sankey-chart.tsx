@@ -1,29 +1,12 @@
-import { isFilterRelations } from '@sisense/sdk-data';
-
 import { asSisenseComponent } from '../../../infra/decorators/component-decorators/as-sisense-component';
 import { SankeyChartProps } from '../../../props';
 import { Chart } from './chart';
 import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sisense-context-waiting';
 
 /**
- * Public {@link SankeyChart} folds `highlights` into `filters` (SNS-130999) because embed
- * consumers pass highlight selections as slice filters. FilterRelations can't be extended with
- * extra items, so highlights are ignored in that case. Fusion and CSDK Mode dashboards render
- * `<Chart chartType="sankey">` directly, where the highlight/blur pipeline is fully supported.
- */
-function normalizeHighlightsToFilters(props: Readonly<SankeyChartProps>): SankeyChartProps {
-  const { filters, highlights, ...rest } = props;
-  if (!highlights?.length) return { ...props };
-  const mergedFilters = isFilterRelations(filters) ? filters : [...(filters ?? []), ...highlights];
-  return { ...rest, filters: mergedFilters };
-}
-
-/**
  * A React component that visualizes flow and volume between nodes using a Sankey diagram.
  * Node width represents the total flow through that node; link width represents the flow
  * between two connected nodes.
- *
- * @beta
  *
  * ## Example
  *
@@ -49,5 +32,5 @@ export const SankeyChart = asSisenseComponent({
   componentName: 'SankeyChart',
   shouldSkipSisenseContextWaiting,
 })((props: SankeyChartProps) => {
-  return <Chart {...normalizeHighlightsToFilters(props)} chartType="sankey" />;
+  return <Chart {...props} chartType="sankey" />;
 });

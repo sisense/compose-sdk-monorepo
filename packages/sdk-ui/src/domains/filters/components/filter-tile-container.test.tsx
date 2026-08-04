@@ -138,4 +138,81 @@ describe('FilterTileContainer', () => {
       expect(tileSwitch).toBeNull();
     });
   });
+
+  // Linked (FilterWidget-controlled) tile — read-only with an indicator.
+  describe('linked (FilterWidget-controlled) tile', () => {
+    it('renders the "Linked to filter widget" indicator', async () => {
+      setup(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer renderContent={() => <></>} linked={true} />
+        </I18nextProvider>,
+      );
+      const indicator = await screen.findByTestId('filter-tile-linked-indicator');
+      expect(indicator).toBeInTheDocument();
+      expect(indicator).toHaveTextContent('Linked to filter widget');
+    });
+
+    it('does not render the indicator for a regular (non-linked) tile', async () => {
+      setup(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer renderContent={() => <></>} />
+        </I18nextProvider>,
+      );
+      expect(screen.queryByTestId('filter-tile-linked-indicator')).toBeNull();
+    });
+
+    it('renders delete/toggle for a linked tile but disabled (not keyboard-operable)', async () => {
+      setup(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer
+            renderContent={() => <></>}
+            linked={true}
+            onDelete={() => {}}
+            onToggleDisabled={() => {}}
+          />
+        </I18nextProvider>,
+      );
+      const deleteButton = await screen.findByTestId('filter-delete-button');
+      const tileSwitch = screen.getByRole('switch', { name: 'Enable/disable filter' });
+
+      // Controls stay in the DOM but are `disabled`, so they are neither mouse- nor
+      // keyboard-operable (disabled buttons are removed from the tab order).
+      expect(deleteButton).toBeInTheDocument();
+      expect(tileSwitch).toBeInTheDocument();
+      expect(deleteButton).toBeDisabled();
+      expect(tileSwitch).toBeDisabled();
+    });
+
+    it('disables the controls when a rendered tile transitions to linked', async () => {
+      const { rerender } = setup(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer renderContent={() => <></>} onDelete={() => {}} />
+        </I18nextProvider>,
+      );
+      // Initially editable.
+      expect(await screen.findByTestId('filter-delete-button')).toBeEnabled();
+      expect(screen.getByRole('switch', { name: 'Enable/disable filter' })).toBeEnabled();
+
+      rerender(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer renderContent={() => <></>} onDelete={() => {}} linked={true} />
+        </I18nextProvider>,
+      );
+      // After becoming linked, the same controls are disabled.
+      expect(screen.getByTestId('filter-delete-button')).toBeDisabled();
+      expect(screen.getByRole('switch', { name: 'Enable/disable filter' })).toBeDisabled();
+    });
+
+    it('exposes a keyboard-focusable info control with a static accessible name', async () => {
+      setup(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer renderContent={() => <></>} linked={true} />
+        </I18nextProvider>,
+      );
+      const info = await screen.findByTestId('filter-tile-linked-info');
+      expect(info).toHaveAttribute('aria-label', 'Linked to filter widget info');
+      // tabIndex=0 keeps the tooltip reachable via keyboard focus.
+      expect(info).toHaveAttribute('tabindex', '0');
+    });
+  });
 });

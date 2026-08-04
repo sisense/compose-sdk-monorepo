@@ -11,8 +11,8 @@ import { PeriodText, TitleArea, TitleText } from './kpi-card-styles.js';
 export type KpiTitleProps = {
   /** Title text -- the design option override, or the value measure's own title. */
   title: string;
-  /** Whether the title text is shown at all (`designOptions.title.enabled`). */
-  enabled: boolean;
+  /** Controls whether the title text is shown (resolved `title.enabled && title.showValueTitle`). */
+  showText: boolean;
   /** Formatted current-period caption (e.g. `'Jun 2026'`), shown when the headline is a single bucket. */
   period?: string;
   /** Whether the card has a custom background, so text needs to contrast against it instead of the theme. */
@@ -31,16 +31,16 @@ export type KpiTitleProps = {
  * Renders nothing when there's neither a title to show nor a period caption.
  * @internal
  */
-export function KpiTitle({ title, enabled, period, onColor, areaRef }: KpiTitleProps) {
+export function KpiTitle({ title, showText, period, onColor, areaRef }: KpiTitleProps) {
   const { themeSettings } = useThemeContext();
 
-  if (!enabled && !period) {
+  if (!showText && !period) {
     return null;
   }
 
   return (
     <TitleArea ref={areaRef} data-kpi-area="title">
-      {enabled && (
+      {showText && (
         <TitleText theme={themeSettings} $onColor={onColor}>
           {title}
         </TitleText>

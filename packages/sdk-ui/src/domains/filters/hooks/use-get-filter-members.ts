@@ -19,6 +19,7 @@ import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-cont
 import { withTracking } from '@/infra/decorators/hook-decorators';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { HookEnableParam } from '@/shared/hooks/types';
+import { parseISOWithTimezoneCheck } from '@/shared/utils/parseISOWithTimezoneCheck';
 
 import { Member, SelectedMember } from '../components/member-filter-tile/index.js';
 
@@ -204,6 +205,15 @@ export const useGetFilterMembersInternal = ({
 
   const formatDate = useCallback(
     (value: Date | string) => {
+      // `data` is preserved across a dimension change (the query-state reducer keeps the
+      // previous rows while the next query reloads), so there is a transient render where
+      // `filterAttribute` is already a datelevel but `data.rows` still holds the previous
+      // dimension's non-date values. Formatting those throws "Invalid time value" and
+      // crashes the widget; fall back to the raw string until the new query resolves.
+      const date = value instanceof Date ? value : parseISOWithTimezoneCheck(value);
+      if (Number.isNaN(date.getTime())) {
+        return String(value);
+      }
       return formatDateValue(
         value,
         getDefaultDateMask((filterAttribute as DimensionalLevelAttribute).granularity),

@@ -10,6 +10,7 @@ import type {
 import type { TabberConfig, TabbersConfig } from '@/domains/dashboarding/hooks/use-tabber.js';
 import { type WidgetProps } from '@/domains/widgets/components/widget/types.js';
 import { withHeaderMenuItem } from '@/domains/widgets/helpers/header-menu-utils.js';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets.js';
 
 import type { DashboardPersistenceManager } from '../../persistence/types.js';
 import {
@@ -173,7 +174,8 @@ export function useDuplicateWidgetMenuItem(
             widget.widgetType === 'filter'
               ? widget
               : withHeaderMenuItem({
-                  id: 'duplicate-widget',
+                  type: 'action',
+                  id: WidgetHeaderMenuTargets.DuplicateWidget,
                   caption: 'Duplicate widget',
                   onClick: () => void duplicateWidget(widget.id),
                 })(widget),

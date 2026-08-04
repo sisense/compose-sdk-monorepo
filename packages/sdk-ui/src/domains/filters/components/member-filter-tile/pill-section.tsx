@@ -79,7 +79,8 @@ const IncludeAllPill = ({ disabled }: { disabled: boolean }) => {
 
 export interface PillSectionProps {
   selectedMembers: SelectedMember[];
-  onToggleSelectedMember: (key: string) => void;
+  /** Omit to render the pills read-only (no toggling). */
+  onToggleSelectedMember?: (key: string) => void;
   excludeMembers: boolean;
   disabled: boolean;
 }
@@ -106,7 +107,7 @@ export const PillSection: FunctionComponent<PillSectionProps> = ({
                 key={m.key}
                 name={m.title}
                 active={!m.inactive}
-                onClick={() => onToggleSelectedMember(m.key)}
+                onClick={onToggleSelectedMember ? () => onToggleSelectedMember(m.key) : undefined}
                 excludeMembers={excludeMembers}
                 disabled={disabled}
               />

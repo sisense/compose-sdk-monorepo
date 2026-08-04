@@ -139,7 +139,7 @@ export interface FilterWidgetProps {
    */
   styleOptions?: WidgetContainerStyleOptions;
   /**
-   * Widget configuration (e.g. header toolbar menu).
+   * Widget configuration (e.g. the header menu).
    *
    * @internal
    */
@@ -161,4 +161,12 @@ export interface FilterWidgetProps {
    * @internal
    */
   onReady?: () => void;
+  /**
+   * Hides date granularity levels from the granularity dropdown.
+   * Populated automatically by the Dashboard to prevent selecting granularities
+   * that already have an active filter on the same date dimension.
+   *
+   * @sisenseInternal
+   */
+  excludedDateLevels?: readonly string[];
 }

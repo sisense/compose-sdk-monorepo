@@ -23,7 +23,7 @@ export interface WidgetContainerProps {
   dataSetName?: string;
   styleOptions?: WidgetContainerStyleOptions;
   /**
-   * Header configuration (e.g. toolbar menu items). Passed to {@link WidgetHeader} as `config`.
+   * Header configuration (e.g. the header menu items). Passed to {@link WidgetHeader} as `config`.
    */
   headerConfig?: WidgetHeaderConfig;
   /** Inline title editor config (when rename is enabled). Passed to {@link WidgetHeader}. */

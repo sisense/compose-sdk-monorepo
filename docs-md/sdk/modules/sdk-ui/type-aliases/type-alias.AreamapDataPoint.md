@@ -5,7 +5,7 @@ title: AreamapDataPoint
 # Type alias AreamapDataPoint
 
 > **AreamapDataPoint**: [`GeoDataElement`](type-alias.GeoDataElement.md) & \{
-  `entries`: \{
+  `entries?`: \{
     `color`: [`DataPointEntry`](type-alias.DataPointEntry.md)[];
     `geo`: [`DataPointEntry`](type-alias.DataPointEntry.md)[];
   };

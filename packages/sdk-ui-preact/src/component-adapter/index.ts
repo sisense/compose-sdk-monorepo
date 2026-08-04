@@ -3,5 +3,5 @@ export * from './context-connector';
 export * from './custom-element';
 export * from './external-component-adapter-element';
 export * from './hook-adapter';
-export type { AnyComponentFunction } from './types';
+export type { AnyComponentFunction, PreactNode } from './types';
 export { createHookApiFacade, DataObserver } from './utils';

@@ -40,6 +40,10 @@ export function processDatetimeMembersFilter(
   if (!Array.isArray(members)) {
     throw new Error(`${context.pathPrefix}args[1]: Expected string array of members.`);
   }
+  // Empty members is an include-all no-op (Fusion "include all" date filter).
+  if (members.length === 0) {
+    return processedArgs;
+  }
   validateDatetimeMemberStrings(members, levelAttribute.granularity, context.pathPrefix);
   return processedArgs;
 }

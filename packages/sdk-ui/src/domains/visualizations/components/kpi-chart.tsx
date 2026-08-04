@@ -5,7 +5,7 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
 
 /**
  * A React component that displays a KPI card: primary value with an optional
- * sparkline trend and a comparison readout — previous period, another measure,
+ * sparkline and a comparison readout — previous period, another measure,
  * or a target.
  *
  * @example
@@ -14,7 +14,7 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *   dataSet={DM.DataSource}
  *   dataOptions={{
  *     value: measureFactory.sum(DM.Commerce.Revenue),
- *     trend: DM.Commerce.Date.Months,
+ *     category: DM.Commerce.Date.Months,
  *   }}
  * />
  * ```

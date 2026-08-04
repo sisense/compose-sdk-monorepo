@@ -30,7 +30,6 @@ export enum UseDashboardModelActionTypeInternal {
 export enum UseDashboardModelActionType {
   FILTERS_UPDATE = 'FILTERS.UPDATE',
   ADD_WIDGET = 'WIDGETS.ADD',
-  PATCH_WIDGET = 'WIDGETS.PATCH',
   UPDATE_WIDGET = 'WIDGETS.UPDATE',
   WIDGETS_PANEL_LAYOUT_UPDATE = 'WIDGETS_PANEL_LAYOUT.UPDATE',
   WIDGETS_DELETE = 'WIDGETS.DELETE',
@@ -111,7 +110,6 @@ export type UseDashboardModelUpdateWidgetAction = {
 export type UseDashboardModelAction =
   | UseDashboardModelFilterUpdateAction
   | UseDashboardModelAddWidgetAction
-  | UseDashboardModelPatchWidgetAction
   | UseDashboardModelUpdateWidgetAction
   | UseDashboardModelLayoutUpdateAction
   | UseDashboardWidgetsDeleteAction;
@@ -153,19 +151,6 @@ export type UseDashboardModelAddWidgetAction = {
          */
         tabberConfig?: TabberConfig;
       };
-};
-
-/**
- * Patch widget action for the dashboard model state used in {@link useDashboardModel}.
- *
- * @internal
- */
-export type UseDashboardModelPatchWidgetAction = {
-  type: UseDashboardModelActionType.PATCH_WIDGET;
-  payload: {
-    widgetOid: string;
-    patch: WidgetPatch;
-  };
 };
 
 /**

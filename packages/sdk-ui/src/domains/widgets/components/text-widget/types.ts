@@ -24,7 +24,7 @@ export interface TextWidgetProps {
   onDataPointClick?: TextWidgetDataPointEventHandler;
 
   /**
-   * Widget configuration (e.g. header toolbar menu)
+   * Widget configuration (e.g. the header menu)
    *
    * @category Widget
    * @internal

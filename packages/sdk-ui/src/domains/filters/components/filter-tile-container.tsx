@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton';
+import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
 import { merge } from 'ts-deepmerge';
 import { DeepRequired } from 'ts-essentials';
 
@@ -14,6 +15,7 @@ import type { MenuItem } from '@/shared/types/menu-item';
 import { getSlightlyDifferentColor } from '@/shared/utils/color';
 
 import { useThemeContext } from '../../../infra/contexts/theme-provider';
+import { Themable } from '../../../infra/contexts/theme-provider/types';
 import { FilterTileMenuButton } from '../shared/filter-tile-menu-button';
 import { SisenseSwitchButton, TriangleIndicator } from './common';
 import { FilterVariant, isVertical } from './common/filter-utils';
@@ -62,6 +64,48 @@ const Footer = styled.footer`
   border-top: ${BORDER_THICKNESS} solid ${BORDER_COLOR};
 `;
 
+// White info tooltip for the linked indicator. MUI's default tooltip is dark with its
+// own font, so it is fully restyled; the font follows the theme, and a 10px collision
+// padding keeps it off the viewport edge.
+const LinkedTooltip = styled(({ className, ...props }: TooltipProps & Themable) => (
+  <Tooltip
+    {...props}
+    classes={{ popper: className }}
+    slotProps={{
+      popper: {
+        modifiers: [
+          { name: 'preventOverflow', options: { padding: 10 } },
+          { name: 'offset', options: { offset: [0, 12] } },
+        ],
+      },
+    }}
+  />
+))`
+  & .MuiTooltip-tooltip {
+    box-sizing: border-box;
+    width: 327px;
+    max-width: 327px;
+    background-color: #fff;
+    color: #5b6372;
+    font-family: ${({ theme }) => theme.typography.fontFamily};
+    font-size: 13px;
+    font-weight: 400;
+    line-height: normal;
+    padding: 20px 16px;
+    margin: 0 !important;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.15);
+  }
+  /* Arrow centered on the tooltip box (not tracking the anchor), overriding the
+     inline popper positioning. */
+  & .MuiTooltip-arrow {
+    color: #fff;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+`;
+
 /**
  * Design options for the filter tile component.
  *
@@ -97,6 +141,13 @@ interface FilterTileContainerProps {
   onEdit?: () => void;
   locked?: boolean;
   /**
+   * Renders the tile read-only: controls stay visible but inert (unlike `locked`),
+   * plus a "Linked to filter widget" indicator with an info tooltip.
+   *
+   * @internal
+   */
+  linked?: boolean;
+  /**
    * Header menu items.
    * When provided, the menu button is shown with these items.
    */
@@ -124,8 +175,22 @@ const defaultDesign: CompleteFilterTileDesignOptions = {
     shouldBeShown: true,
   },
 };
+// Opacity tokens that make a linked tile's inert controls read as disabled. LINKED_TILE_DIM
+// dims the caret, menu and member chips; LINKED_TILE_FOOTER_DIM dims the footer (trash +
+// toggle) further so it reads as the most inert region. Both dim the theme color already
+// present — no hardcoded colors. The title and the linked indicator stay full-strength.
+const LINKED_TILE_DIM = 0.5;
+const LINKED_TILE_FOOTER_DIM = 0.25;
+
 /* eslint-disable rulesdir/opacity-zero-needs-focus-visible */
-const GroupHoverWrapper = styled.div<{ disableHeaderGroupHover: boolean }>`
+/**
+ * Wraps a filter tile to drive its group-hover affordances: the edit button is hidden
+ * until hover and the on/off switch rests at a lower opacity. When `linked` is true the
+ * tile is inert (read-only), so the switch's resting opacity is reset to full and the
+ * footer's own dim governs it instead — preventing the two from compounding.
+ * @internal
+ */
+const GroupHoverWrapper = styled.div<{ disableHeaderGroupHover: boolean; linked: boolean }>`
   .MuiSwitch-root {
     opacity: 0.55;
     transition: all 0.3s ease;
@@ -149,6 +214,16 @@ const GroupHoverWrapper = styled.div<{ disableHeaderGroupHover: boolean }>`
         }
       `}
   }
+  ${({ linked }) =>
+    linked &&
+    css`
+      /* On a linked tile the footer's dim governs the toggle. Reset the switch's own
+         resting opacity so it doesn't compound with that dim; the toggle then reads at
+         the same level as the trash icon. There is no hover state on an inert tile. */
+      .MuiSwitch-root {
+        opacity: 1;
+      }
+    `}
 `;
 /* eslint-enable rulesdir/opacity-zero-needs-focus-visible */
 
@@ -168,9 +243,13 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
     onDelete,
     onEdit,
     locked = false,
+    linked = false,
     menuItems,
     renderHeaderTitle = (title) => title,
   } = props;
+  // Linked tiles keep controls rendered but inert: pointer-events blocks the mouse and
+  // each control is also `disabled` so it is not keyboard-operable.
+  const inertStyle = linked ? ({ pointerEvents: 'none' } as const) : undefined;
   const design = merge.withOptions(
     { mergeArrays: false },
     defaultDesign,
@@ -182,30 +261,36 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
   const { themeSettings } = useThemeContext();
 
   const { backgroundColor: bgColor } = themeSettings.general;
-  const { primaryTextColor: textColor } = themeSettings.typography;
+  const { primaryTextColor: textColor, secondaryTextColor } = themeSettings.typography;
   const disabledBgColor = getSlightlyDifferentColor(bgColor, 0.1);
 
   return (
     <GroupHoverWrapper
       disableHeaderGroupHover={design.header.disableGroupHover}
+      linked={linked}
       data-testid="csdk-filter-tile-container"
     >
       <Container
         shouldShowBorder={design.border?.shouldBeShown}
         style={{
           minWidth: isVertical(arrangement) ? FILTER_TILE_MIN_WIDTH : 'auto',
-          backgroundColor: disabled ? disabledBgColor : bgColor,
+          // Linked tiles are grayed out like disabled ones.
+          backgroundColor: disabled || linked ? disabledBgColor : bgColor,
           fontFamily: themeSettings.typography.fontFamily,
         }}
       >
         {isVertical(arrangement) && design.header.shouldBeShown && (
           <>
             {isDependent && <TriangleIndicator />}
-            <Header shouldShowBorder={design.header.hasBorder} style={{ color: textColor }}>
+            <Header
+              shouldShowBorder={design.header.hasBorder}
+              style={{ color: textColor, ...inertStyle }}
+            >
               {!locked && design.header.isCollapsible && (
                 <IconButton
-                  sx={{ p: '4px' }}
+                  sx={{ p: '4px', ...(linked ? { opacity: LINKED_TILE_DIM } : {}) }}
                   onClick={() => setCollapsed((value) => !value)}
+                  disabled={linked}
                   disableRipple
                   disableTouchRipple
                 >
@@ -233,7 +318,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
                   </span>,
                 )}
               </div>
-              {onEdit && !disabled && !locked && (
+              {onEdit && !disabled && !locked && !linked && (
                 <IconButton
                   className="csdk-filter-edit-button"
                   onClick={onEdit}
@@ -243,13 +328,29 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
                   <PencilIcon color={themeSettings.typography.primaryTextColor} aria-label="edit" />
                 </IconButton>
               )}
-              {menuItems && menuItems.length > 0 && <FilterTileMenuButton menuItems={menuItems} />}
+              {menuItems &&
+                menuItems.length > 0 &&
+                (linked ? (
+                  // Wrapped so the dim applies to the button (it exposes no style prop).
+                  <span style={{ display: 'inline-flex', opacity: LINKED_TILE_DIM }}>
+                    <FilterTileMenuButton menuItems={menuItems} disabled={linked} />
+                  </span>
+                ) : (
+                  <FilterTileMenuButton menuItems={menuItems} disabled={linked} />
+                ))}
             </Header>
           </>
         )}
 
-        <main style={{ color: textColor, position: 'relative' }}>
-          {renderContent(collapsed, disabled ?? false)}
+        <main
+          style={{
+            color: textColor,
+            position: 'relative',
+            ...inertStyle,
+            ...(linked ? { opacity: LINKED_TILE_DIM } : {}),
+          }}
+        >
+          {renderContent(collapsed, (disabled ?? false) || linked)}
           {locked && design.header.shouldBeShown && (
             <div
               style={{
@@ -264,11 +365,61 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
             />
           )}
         </main>
+        {linked && (
+          <div
+            data-testid="filter-tile-linked-indicator"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '2px',
+              margin: '4px 6px',
+              padding: '2px 8px',
+              fontSize: '11px',
+              color: secondaryTextColor,
+              backgroundColor: bgColor,
+              border: `${BORDER_THICKNESS} solid ${BORDER_COLOR}`,
+              borderRadius: '2px',
+            }}
+          >
+            <span>{t('filterTile.linkedToWidget.label')}</span>
+            <LinkedTooltip
+              title={t('filterTile.linkedToWidget.tooltip')}
+              placement="bottom"
+              arrow
+              theme={themeSettings}
+            >
+              <span
+                role="button"
+                tabIndex={0}
+                aria-label="Linked to filter widget info"
+                data-testid="filter-tile-linked-info"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  // 24x24 icon hit area keeps the indicator row (and tile) height
+                  // consistent with the other icon buttons.
+                  width: '24px',
+                  height: '24px',
+                  cursor: 'pointer',
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <circle cx="8" cy="8" r="6.5" stroke="currentColor" />
+                  <rect x="7.25" y="7" width="1.5" height="4" rx="0.75" fill="currentColor" />
+                  <circle cx="8" cy="4.75" r="0.9" fill="currentColor" />
+                </svg>
+              </span>
+            </LinkedTooltip>
+          </div>
+        )}
         {isVertical(arrangement) && design.footer.shouldBeShown && (
-          <Footer>
+          <Footer style={{ ...inertStyle, ...(linked ? { opacity: LINKED_TILE_FOOTER_DIM } : {}) }}>
             {onDelete && !locked && (
               <IconButton
                 onClick={onDelete}
+                disabled={linked}
                 sx={{ p: 0, mr: 'auto', ...MIN_TOUCH_TARGET_SIZE }}
                 data-testid="filter-delete-button"
               >
@@ -281,6 +432,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
             {!locked && (
               <SisenseSwitchButton
                 checked={!disabled}
+                disabled={linked}
                 size="small"
                 inputProps={{
                   role: 'switch',

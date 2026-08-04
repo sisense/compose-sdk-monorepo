@@ -5,8 +5,8 @@ title: CustomWidgetStyleOptions
 # Type alias CustomWidgetStyleOptions
 
 > **CustomWidgetStyleOptions**: [`WidgetContainerStyleOptions`](../interfaces/interface.WidgetContainerStyleOptions.md) & `Record`\< `string`, `unknown` \> & \{
-  `height`: `number`;
-  `width`: `number`;
+  `height?`: `number`;
+  `width?`: `number`;
  }
 
 Style settings defining the look and feel of CustomWidget

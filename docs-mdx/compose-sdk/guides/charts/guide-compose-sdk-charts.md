@@ -513,7 +513,7 @@ This example is similar to the one above in that it uses two `value` measures, b
 ##### React
 
 <iframe
- src='https://csdk-playground.sisense.com/?example=charts-guide/one-category-two-values&mode=docs'
+ src='https://csdk-playground.sisense.com/?example=charts-guide/mixed-chart-types&mode=docs'
  width='800'
  height='870'
  style={{ border:'none' }}
@@ -564,7 +564,7 @@ This example has two `category` attributes and two `value` measures. This chart 
 ##### React
 
 <iframe
- src='https://csdk-playground.sisense.com/?example=charts-guide/two-categories-one-value&mode=docs'
+ src='https://csdk-playground.sisense.com/?example=charts-guide/two-categories-two-values&mode=docs'
  width='800'
  height='870'
  style={{ border:'none' }}

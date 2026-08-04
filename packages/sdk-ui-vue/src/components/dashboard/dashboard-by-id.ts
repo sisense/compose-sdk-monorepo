@@ -6,8 +6,13 @@ import type {
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 
-import { setupHelper } from '../../helpers/setup-helper';
-import type { DashboardHeaderConfig } from './dashboard';
+import { createComponentTranslator } from '../../helpers/component-translator';
+import { toPreactDashboardByIdProps } from '../../helpers/dashboard-props-preact-translator';
+import { setupHelper, toDeepRaw } from '../../helpers/setup-helper';
+import { getCustomWidgetsContext } from '../../providers/custom-widgets-provider';
+import { getSisenseContext } from '../../providers/sisense-context-provider/sisense-context';
+import { getThemeContext } from '../../providers/theme-provider/theme-context';
+import { type DashboardHeaderConfig } from './dashboard-header-config';
 
 /**
  * Configuration for the {@link @sisense/sdk-ui-vue!DashboardById | `DashboardById`} component.
@@ -69,5 +74,15 @@ export const DashboardById = defineComponent({
      */
     config: Object as PropType<DashboardByIdProps['config']>,
   },
-  setup: (props) => setupHelper(DashboardByIdPreact, props),
+  setup: (props) => {
+    const componentTranslator = createComponentTranslator({
+      sisenseContext: getSisenseContext(),
+      themeContext: getThemeContext(),
+      customWidgetsContext: getCustomWidgetsContext(),
+    });
+    // a props getter, so the conversion re-runs on every render and prop updates keep flowing
+    return setupHelper(DashboardByIdPreact, () =>
+      toPreactDashboardByIdProps(toDeepRaw(props), componentTranslator),
+    );
+  },
 });

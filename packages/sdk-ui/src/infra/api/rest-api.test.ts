@@ -94,6 +94,11 @@ describe('Rest API', () => {
       expect(httpGetMock).toHaveBeenCalledWith('api/v1/dashboards/dashboardOid?adminAccess=true');
     });
 
+    it('should include expand query param when expand is provided', async () => {
+      await restApi.getDashboard('dashboardOid', { expand: ['userAuth'] });
+      expect(httpGetMock).toHaveBeenCalledWith('api/v1/dashboards/dashboardOid?expand=userAuth');
+    });
+
     it('should throw an error when fetching a dashboard with an invalid identifier', async () => {
       httpGetMock.mockRejectedValueOnce({ status: 400 });
       await expect(restApi.getDashboard('invalid-id')).rejects.toThrow();

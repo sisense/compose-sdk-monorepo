@@ -13,7 +13,7 @@ Props of the [KpiChart](../charts/function.KpiChart.md) component.
   dataSet={DM.DataSource}
   dataOptions={{
     value: measureFactory.sum(DM.Commerce.Revenue),
-    trend: DM.Commerce.Date.Months,
+    category: DM.Commerce.Date.Months,
     comparison: { type: 'previous-period' },
   }}
   styleOptions={{ title: { text: 'Total Revenue' } }}

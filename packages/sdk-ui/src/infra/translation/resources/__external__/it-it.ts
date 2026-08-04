@@ -227,6 +227,11 @@ const translation: TranslationDictionary = {
       max: 'Max',
     },
   },
+  filterWidget: {
+    placeholders: {
+      setFilter: 'Imposta filtro',
+    },
+  },
   unsupportedFilterMessage: 'Filtro non supportato (applicato alla query dei dati)',
   unsupportedFilter: 'Filtro non supportato {{filter}}',
   commonFilter: {
@@ -472,6 +477,11 @@ const translation: TranslationDictionary = {
       unlockGroup: 'Sblocca gruppo',
     },
     toggleSwitch: 'Attiva/disattiva filtro',
+    linkedToWidget: {
+      label: 'Collegato al widget filtro',
+      tooltip:
+        'Questo filtro non può essere modificato dal pannello dei filtri. Modifica i valori direttamente nella dashboard.',
+    },
   },
   chart: {
     indicator: {
@@ -495,17 +505,18 @@ const translation: TranslationDictionary = {
   },
   kpi: {
     comparison: {
-      vsPriorYear: 'vs prior year',
-      vsPriorQuarter: 'vs prior quarter',
-      vsPriorMonth: 'vs prior month',
-      vsPriorWeek: 'vs prior week',
-      vsPriorDay: 'vs prior day',
-      vsPriorPeriod: 'vs prior period',
+      vsPriorYear: 'vs anno precedente',
+      vsPriorQuarter: 'vs trimestre precedente',
+      vsPriorMonth: 'vs mese precedente',
+      vsPriorWeek: 'vs settimana precedente',
+      vsPriorDay: 'vs giorno precedente',
+      vsPriorPeriod: 'vs periodo precedente',
     },
     target: {
-      ofGoal: '{{percent}} of goal',
-      toGo: '{{value}} to go',
+      ofGoal: "{{percent}} dell'obiettivo",
+      toGo: 'Mancano {{value}}',
     },
+    percentFormat: '{{sign}}{{value}}%',
   },
   loadingOverlay: {
     label: 'Caricamento contenuto',

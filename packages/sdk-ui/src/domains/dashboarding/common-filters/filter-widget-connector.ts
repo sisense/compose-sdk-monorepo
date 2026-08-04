@@ -16,7 +16,7 @@ type FilterWidgetLink = { filterId: string };
  * stays valid — its guid is reused on re-add to keep filterRelations references.
  *
  * Single source of truth for the resolution rule — every consumer (the connector
- * below, `hiddenFilterIds` in useComposedDashboard) must use it so one derivation
+ * below, `filterWidgetLinkedIds` in useComposedDashboard) must use it so one derivation
  * cannot desync from the other.
  * @internal
  */

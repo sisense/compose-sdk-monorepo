@@ -9,6 +9,7 @@ import type {
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { AngularComponentAdapter } from './angular-component-adapter';
+import { ComponentTranslator } from './component-translator.service';
 import { CustomWidgetsService } from './custom-widgets.service';
 import { DynamicRenderer } from './dynamic-renderer.service';
 
@@ -52,7 +53,7 @@ describe('CustomWidgetsService', () => {
     } as unknown as DynamicRenderer;
 
     // Create service instance
-    service = new CustomWidgetsService(dynamicRendererMock);
+    service = new CustomWidgetsService(new ComponentTranslator(dynamicRendererMock));
   });
 
   describe('constructor', () => {

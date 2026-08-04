@@ -64,8 +64,8 @@ describe('FilterTileMenuButton', () => {
     const onClick1 = vi.fn();
     const onClick2 = vi.fn();
     const menuItems: MenuItem[] = [
-      { id: 'lock', caption: 'Lock', onClick: onClick1 },
-      { id: 'custom', caption: 'Custom action', onClick: onClick2 },
+      { type: 'action', id: 'lock', caption: 'Lock', onClick: onClick1 },
+      { type: 'action', id: 'custom', caption: 'Custom action', onClick: onClick2 },
     ];
     const { getByTestId } = render(<FilterTileMenuButton menuItems={menuItems} />);
 

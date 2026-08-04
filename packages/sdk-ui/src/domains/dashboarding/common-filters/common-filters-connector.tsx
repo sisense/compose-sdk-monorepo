@@ -91,7 +91,9 @@ export function prepareCommonFiltersConnectionProps(
   // filters that are not ignored
   const allowedFilters = getAllowedFilters(enabledFilters, pureFiltersIgnoringRules);
 
-  const selectableAttributes = getSelectableWidgetAttributes(widgetType, dataOptions);
+  // Include calculated dimensions: they can back a members filter, so a widget using a calculated
+  // dimension participates in cross-filtering (selection, highlight, clear) like a regular field.
+  const selectableAttributes = getSelectableWidgetAttributes(widgetType, dataOptions, true);
   const shouldWidgetAffectFilters =
     normalizedOptions.shouldAffectFilters && selectableAttributes.length;
 

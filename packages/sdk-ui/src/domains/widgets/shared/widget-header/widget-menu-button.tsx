@@ -39,7 +39,7 @@ export const WidgetMenuButton = ({ menuItems }: WidgetMenuButtonProps) => {
   return (
     <MenuButton
       onClick={handleClick}
-      ariaLabel="widget header toolbar menu"
+      ariaLabel="widget header menu"
       color={themeSettings.widget.header.titleTextColor}
     />
   );

@@ -12,6 +12,7 @@ export * from './line-chart.component';
 export * from './pie-chart.component';
 export * from './pivot-table.component';
 export * from './polar-chart.component';
+export * from './sankey-chart.component';
 export * from './scatter-chart.component';
 export * from './scattermap-chart.component';
 export * from './streamgraph-chart.component';

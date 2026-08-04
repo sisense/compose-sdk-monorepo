@@ -60,6 +60,8 @@ interface CalendarHeatmapChartsGridProps {
     enabled?: boolean;
     style?: TextStyle;
   };
+  /** Render signal — fired from the first month chart's Highcharts load/render. */
+  onReady?: () => void;
 }
 
 export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps> = ({
@@ -70,6 +72,7 @@ export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps>
   viewType,
   monthLabels,
   size,
+  onReady,
 }) => {
   const { themeSettings } = useThemeContext();
 
@@ -81,6 +84,9 @@ export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps>
   if (availableMonths.length === 0) return null;
 
   const monthsToDisplay = getDisplayMonths(availableMonths, currentMonth, viewType);
+  const firstRenderableIndex = monthCharts.findIndex(
+    (chartOptions, index) => !!chartOptions && !!monthsToDisplay[index],
+  );
 
   return (
     <ChartsContainer viewType={viewType} gridCols={gridInfo.cols} gridRows={gridInfo.rows}>
@@ -92,6 +98,9 @@ export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps>
 
         // Determine whether to use short month names based on chart width
         const shouldUseShortMonthName = shouldUseShortMonthNames(chartOptions.chart.width ?? 0);
+
+        // Attach render→onReady to the first rendered month chart only.
+        const chartOnReady = index === firstRenderableIndex ? onReady : undefined;
 
         return (
           <ChartWrapper key={`${month.year}-${month.month}`}>
@@ -111,7 +120,7 @@ export const CalendarHeatmapChartsGrid: React.FC<CalendarHeatmapChartsGridProps>
                   {shouldUseShortMonthName ? month.shortMonthName : month.monthName}
                 </ChartTitle>
               )}
-            <HighchartsRenderer options={chartOptions} />
+            <HighchartsRenderer options={chartOptions} onReady={chartOnReady} />
           </ChartWrapper>
         );
       })}

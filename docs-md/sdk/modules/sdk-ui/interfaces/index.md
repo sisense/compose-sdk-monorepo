@@ -131,9 +131,9 @@ TypeScript interfaces for components and hooks listed above
 - [RadialGradientConfig](interface.RadialGradientConfig.md)
 - [RangeChartDataOptions](interface.RangeChartDataOptions.md)
 - [RelativeDateFilterTileProps](interface.RelativeDateFilterTileProps.md)
-- [SankeyChartDataOptions](interface.SankeyChartDataOptions.md) <Badge type="beta" text="Beta" />
-- [SankeyChartProps](interface.SankeyChartProps.md) <Badge type="beta" text="Beta" />
-- [SankeyStyleOptions](interface.SankeyStyleOptions.md) <Badge type="beta" text="Beta" />
+- [SankeyChartDataOptions](interface.SankeyChartDataOptions.md)
+- [SankeyChartProps](interface.SankeyChartProps.md)
+- [SankeyStyleOptions](interface.SankeyStyleOptions.md)
 - [ScatterChartDataOptions](interface.ScatterChartDataOptions.md)
 - [ScatterChartProps](interface.ScatterChartProps.md)
 - [ScattermapChartDataOptions](interface.ScattermapChartDataOptions.md)
@@ -169,6 +169,10 @@ TypeScript interfaces for components and hooks listed above
 - [WidgetByIdProps](interface.WidgetByIdProps.md)
 - [WidgetByIdStyleOptions](interface.WidgetByIdStyleOptions.md)
 - [WidgetContainerStyleOptions](interface.WidgetContainerStyleOptions.md)
+- [WidgetHeaderConfig](interface.WidgetHeaderConfig.md)
+- [WidgetHeaderMenuActionItem](interface.WidgetHeaderMenuActionItem.md)
+- [WidgetHeaderMenuConfig](interface.WidgetHeaderMenuConfig.md)
+- [WidgetHeaderMenuSubmenuItem](interface.WidgetHeaderMenuSubmenuItem.md)
 - [WidgetsPanelCell](interface.WidgetsPanelCell.md)
 - [WidgetsPanelColumn](interface.WidgetsPanelColumn.md)
 - [WidgetsPanelColumnLayout](interface.WidgetsPanelColumnLayout.md)

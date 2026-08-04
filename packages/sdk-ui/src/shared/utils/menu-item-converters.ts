@@ -1,6 +1,6 @@
 import type { MenuItemSection } from '@/types';
 
-import type { MenuItem } from '../types/menu-item.js';
+import { isMenuSubmenuItem, type MenuItem } from '../types/menu-item.js';
 
 type SectionItem = NonNullable<MenuItemSection['items']>[number];
 
@@ -12,12 +12,13 @@ type SectionItem = NonNullable<MenuItemSection['items']>[number];
  * @returns The equivalent context-menu section item.
  */
 export function convertMenuItemToLegacySectionItem(menuItem: MenuItem): SectionItem {
-  return {
-    key: menuItem.id,
-    caption: menuItem.caption,
-    onClick: menuItem.onClick,
-    subItems: menuItem.items?.length
-      ? [{ items: menuItem.items.map(convertMenuItemToLegacySectionItem) }]
-      : undefined,
-  };
+  const { id: key, caption } = menuItem;
+
+  return isMenuSubmenuItem(menuItem)
+    ? {
+        key,
+        caption,
+        subItems: [{ items: menuItem.items.map(convertMenuItemToLegacySectionItem) }],
+      }
+    : { key, caption, onClick: menuItem.onClick };
 }

@@ -309,6 +309,18 @@ describe('sankeyHighchartsOptionsBuilder', () => {
   });
 
   describe('getTooltip', () => {
+    it('applies the same tooltip chrome as other chart types', () => {
+      const tooltip = sankeyHighchartsOptionsBuilder.getTooltip(createContext());
+      expect(tooltip).toMatchObject({
+        animation: false,
+        backgroundColor: '#FFFFFF',
+        borderColor: '#CCCCCC',
+        borderRadius: 10,
+        borderWidth: 1,
+        useHTML: true,
+      });
+    });
+
     it('formats node tooltip with measure title and sum', () => {
       const tooltip = sankeyHighchartsOptionsBuilder.getTooltip(createContext());
       const html = callSankeyTooltipFormatter(tooltip, {
@@ -325,6 +337,8 @@ describe('sankeyHighchartsOptionsBuilder', () => {
       expect(html).toContain('Revenue');
       expect(html).toContain('Alpha');
       expect(html).toMatch(/1[.,]25K|1250/);
+      // Reuses the shared tooltipWrapper markup instead of hand-rolled HTML.
+      expect(html).toContain('min-width: 100px');
     });
 
     it('formats link tooltip with endpoints and weight', () => {
@@ -403,7 +417,8 @@ describe('sankeyHighchartsOptionsBuilder', () => {
         },
       } as HighchartsDataPointContext);
       expect(html).toContain('fallback_measure');
-      expect(html).not.toContain('   ');
+      // The raw whitespace-only title must not leak through as the rendered label.
+      expect(html).not.toContain('   <br');
     });
   });
 

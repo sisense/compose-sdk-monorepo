@@ -3,7 +3,7 @@
 exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-fsrb1n"
     data-testid="csdk-filter-tile-container"
   >
     <div
@@ -90,7 +90,7 @@ exports[`FilterTile > renders CriteriaFilterTile for NumericFilter 1`] = `
 exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-fsrb1n"
     data-testid="csdk-filter-tile-container"
   >
     <div
@@ -177,7 +177,7 @@ exports[`FilterTile > renders CriteriaFilterTile for RankingFilter 1`] = `
 exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-fsrb1n"
     data-testid="csdk-filter-tile-container"
   >
     <div
@@ -264,7 +264,7 @@ exports[`FilterTile > renders CriteriaFilterTile for TextFilter 1`] = `
 exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-fsrb1n"
     data-testid="csdk-filter-tile-container"
   >
     <div
@@ -329,7 +329,7 @@ exports[`FilterTile > renders CustomFilterTile for advnced filter type 1`] = `
 exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-fsrb1n"
     data-testid="csdk-filter-tile-container"
   >
     <div
@@ -394,7 +394,7 @@ exports[`FilterTile > renders Filter Tile for unsupported filter type 1`] = `
 exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-fsrb1n"
     data-testid="csdk-filter-tile-container"
   >
     <div
@@ -481,7 +481,7 @@ exports[`FilterTile > renders RelativeDateFilterTile for RelativeDateFilter 1`] 
 exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-fsrb1n"
     data-testid="csdk-filter-tile-container"
   >
     <div
@@ -548,7 +548,7 @@ exports[`FilterTile > renders locked CriteriaFilterTile 1`] = `
 exports[`FilterTile > renders locked RelativeDateFilter component 1`] = `
 <div>
   <div
-    class="css-12vk4to"
+    class="css-fsrb1n"
     data-testid="csdk-filter-tile-container"
   >
     <div

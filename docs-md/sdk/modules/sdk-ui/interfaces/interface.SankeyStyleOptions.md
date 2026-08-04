@@ -2,7 +2,7 @@
 title: SankeyStyleOptions
 ---
 
-# Interface SankeyStyleOptions <Badge type="beta" text="Beta" />
+# Interface SankeyStyleOptions
 
 Configuration options that define functional style of the various elements of a SankeyChart.
 
@@ -13,7 +13,7 @@ Configuration options that define functional style of the various elements of a 
   dataSet={dataSource}
   dataOptions={{
     category: [DM.Commerce.Gender, DM.Category.Category],
-    value: [DM.Measures.SumRevenue],
+    value: DM.Measures.SumRevenue,
   }}
   styleOptions={{
     orientation: 'vertical',

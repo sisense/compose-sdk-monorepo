@@ -24,6 +24,8 @@ import {
   createFilterFromJaql,
   createMeasureByAggType,
   createMeasureHelper,
+  encodeDataSourcePath,
+  getDataSourceFullName,
   getDataSourceName,
   getFilterListAndRelationsJaql,
   guidFast,
@@ -148,6 +150,38 @@ describe('utils', () => {
       const dataSourceName = 'data-source-name';
       const result = getDataSourceName(dataSourceName);
       expect(result).toBe(dataSourceName);
+    });
+  });
+
+  describe('getDataSourceFullName', () => {
+    test('should return fullname from DataSourceInfo when present', () => {
+      expect(
+        getDataSourceFullName({
+          type: 'elasticube',
+          title: 'einat perspectives',
+          fullname: 'LocalHost/einat perspectives',
+        }),
+      ).toBe('LocalHost/einat perspectives');
+    });
+
+    test('should return undefined for a string data source', () => {
+      expect(getDataSourceFullName('Sample ECommerce')).toBeUndefined();
+    });
+  });
+
+  describe('encodeDataSourcePath', () => {
+    test('should preserve slash and encode spaces', () => {
+      expect(encodeDataSourcePath('localhost/Sample ECommerce')).toBe(
+        'localhost/Sample%20ECommerce',
+      );
+    });
+
+    test('should encode colon in live fullnames', () => {
+      expect(encodeDataSourcePath('live:SnowflakeLive')).toBe('live%3ASnowflakeLive');
+    });
+
+    test('should leave perspective fullname slash unencoded', () => {
+      expect(encodeDataSourcePath('LocalHost/EcomPersp1')).toBe('LocalHost/EcomPersp1');
     });
   });
 

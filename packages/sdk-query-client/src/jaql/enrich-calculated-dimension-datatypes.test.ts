@@ -86,6 +86,43 @@ describe('enrichCalculatedDimensionDatatypes', () => {
     expect(item.jaql.datatype).toBe('text');
   });
 
+  it('stamps datatype on a CD highlight AND its dimension element (jaql.in.selected)', async () => {
+    parse.mockResolvedValue({ dataType: 'text' });
+    // A highlight is merged into its dimension, so its filter lives under `jaql.in.selected.jaql`;
+    // the dimension itself carries no top-level filter, but the engine reads the datatype off the
+    // dimension element, so it must be stamped too.
+    const item: MetadataItem = {
+      jaql: {
+        type: 'calculated_dimension',
+        formula: 'left([ageRange], 2)',
+        context: { '[ageRange]': { dim: '[Commerce.Age Range]', datatype: 'text' } },
+        in: {
+          selected: {
+            jaql: {
+              type: 'calculated_dimension',
+              formula: 'left([ageRange], 2)',
+              context: { '[ageRange]': { dim: '[Commerce.Age Range]', datatype: 'text' } },
+              filter: { jaql: {} },
+            },
+          },
+        },
+      },
+    };
+
+    await enrichCalculatedDimensionDatatypes(payloadOf([item]), DATA_SOURCE, parseFn);
+
+    expect(parse).toHaveBeenCalledWith(
+      DATA_SOURCE,
+      'left([ageRange], 2)',
+      item.jaql.in!.selected.jaql.context,
+    );
+    // the dimension element and its embedded highlight share one formula/context, so it is parsed
+    // once and the result is applied to both nodes
+    expect(parse).toHaveBeenCalledTimes(1);
+    expect(item.jaql.datatype).toBe('text');
+    expect(item.jaql.in!.selected.jaql.datatype).toBe('text');
+  });
+
   it('ignores a calculated dimension used as a dimension (no filter)', async () => {
     const item = cdFilterItem({ filter: undefined });
 

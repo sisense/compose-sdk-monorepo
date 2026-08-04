@@ -121,15 +121,20 @@ async function retrieveDataSource(
 
 async function retrieveDataFields(
   queryClient: QueryClient,
-  dataSourceTitle: string,
+  dataSource: DataSourceMetadata,
 ): Promise<DataSourceField[]> {
   console.log('Getting fields... ');
 
-  const fields = await queryClient.getDataSourceFields(dataSourceTitle);
+  // Pass fullname so fields/search can skip a redundant list lookup (Fusion path uses fullname).
+  const fields = await queryClient.getDataSourceFields({
+    title: dataSource.title,
+    type: dataSource.live ? 'live' : 'elasticube',
+    fullname: dataSource.fullname,
+  });
 
   try {
-    // get the schema of the data source to add descriptions to the fields
-    const dataSourceSchema = await queryClient.getDataSourceSchema(dataSourceTitle);
+    // Schema lookup is by title, not fullname.
+    const dataSourceSchema = await queryClient.getDataSourceSchema(dataSource.title);
     return dataSourceSchema?.datasets
       ? addDescriptionToFields(fields, dataSourceSchema.datasets as DataSourceSchemaDataset[])
       : fields;
@@ -182,7 +187,7 @@ async function createDataModel(
   try {
     const dataSource = await retrieveDataSource(queryClient, dataSourceTitle);
 
-    const dataFields = await retrieveDataFields(queryClient, dataSource.fullname);
+    const dataFields = await retrieveDataFields(queryClient, dataSource);
 
     const rawDataModel = combineDataSourceAndDataFields(dataSource, dataFields);
 

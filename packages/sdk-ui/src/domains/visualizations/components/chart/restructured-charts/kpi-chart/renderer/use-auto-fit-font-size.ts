@@ -170,21 +170,30 @@ function measureWithCanvas(text: string, cssFont: string): number {
 /**
  * An inline decoration that shares the auto-fitted text's nowrap box and therefore consumes
  * width the text itself cannot use -- e.g. a conditional icon next to the headline value, or
- * the trend arrow before a headline-scale comparison delta. Affix glyphs are styled in em
- * units, so their width scales with the fitted font and must be budgeted proportionally; their
- * margins/flex gaps are fixed px.
+ * the comparison arrow before a headline-scale comparison delta.
+ *
+ * Two shapes: a text affix (glyph widths vary, so it is canvas-measured at its em scale), or a
+ * fixed-width affix (e.g. a square SVG icon whose width is exactly `widthEm` of the fitted
+ * font -- no measurement needed). Margins/flex gaps are fixed px in both.
  * @internal
  */
-export type AutoFitAffix = {
-  /** The affix's text content (e.g. the icon glyph or the arrow character). */
-  text: string;
-  /** The affix's font size relative to the fitted text's, e.g. `0.7` for a 0.7em icon. */
-  emScale: number;
-  /** Fixed spacing the affix adds (margins plus flex gaps), in px. */
-  gapPx: number;
-};
+export type AutoFitAffix =
+  | {
+      /** The affix's text content (e.g. the icon glyph or the arrow character). */
+      text: string;
+      /** The affix's font size relative to the fitted text's, e.g. `0.7` for a 0.7em icon. */
+      emScale: number;
+      /** Fixed spacing the affix adds (margins plus flex gaps), in px. */
+      gapPx: number;
+    }
+  | {
+      /** The affix's box width relative to the fitted text's font size, e.g. `0.7` for a 0.7em-square SVG icon. */
+      widthEm: number;
+      /** Fixed spacing the affix adds (margins plus flex gaps), in px. */
+      gapPx: number;
+    };
 
-/** Sums the widths of `affixes` measured at `fontSizePx` of the HOST text (em-scaled per affix). */
+/** Sums the widths of `affixes` at `fontSizePx` of the HOST text (measured or fixed per shape). */
 function measureAffixesWidth(
   affixes: readonly AutoFitAffix[],
   font: { family: string; weight: string | number },
@@ -192,7 +201,11 @@ function measureAffixesWidth(
   measure: (text: string, cssFont: string) => number,
 ): number {
   return affixes.reduce(
-    (total, affix) => total + measure(affix.text, toCssFont(font, affix.emScale * fontSizePx)),
+    (total, affix) =>
+      total +
+      ('text' in affix
+        ? measure(affix.text, toCssFont(font, affix.emScale * fontSizePx))
+        : affix.widthEm * fontSizePx),
     0,
   );
 }
@@ -308,9 +321,21 @@ type FitInputs = {
   affixesKey: string;
 };
 
-/** Serializes `affixes` by value for snapshot comparison (array identity changes per render). */
+/**
+ * Serializes `affixes` by value for snapshot comparison (array identity changes per render).
+ * Serialized structurally (tagged tuples through `JSON.stringify`) rather than by joining
+ * delimiters: a text affix carries arbitrary consumer text, so any in-band separator could be
+ * reproduced inside `text` and make two structurally different affix lists share one key --
+ * which {@link areSameFitInputs} would read as "nothing changed", keeping a stale font size.
+ */
 function affixesKeyOf(affixes: readonly AutoFitAffix[] | undefined): string {
-  return (affixes ?? []).map((affix) => `${affix.text} ${affix.emScale} ${affix.gapPx}`).join('|');
+  return JSON.stringify(
+    (affixes ?? []).map((affix) =>
+      'text' in affix
+        ? ['text', affix.text, affix.emScale, affix.gapPx]
+        : ['width', affix.widthEm, affix.gapPx],
+    ),
+  );
 }
 
 function areSameFitInputs(a: FitInputs, b: FitInputs): boolean {

@@ -2,7 +2,7 @@
 title: SankeyChartProps
 ---
 
-# Interface SankeyChartProps <Badge type="beta" text="Beta" />
+# Interface SankeyChartProps
 
 Props of the [SankeyChart](../charts/function.SankeyChart.md) component.
 

@@ -28,6 +28,8 @@ export function translateKpiStyleOptionsToDesignOptions(
     title: {
       enabled: styleOptions.title?.enabled ?? true,
       text: styleOptions.title?.text,
+      showValueTitle: styleOptions.title?.showValueTitle ?? true,
+      showCategoryTitle: styleOptions.title?.showCategoryTitle ?? true,
     },
     card: {
       backgroundColor: styleOptions.card?.backgroundColor,
@@ -36,14 +38,16 @@ export function translateKpiStyleOptionsToDesignOptions(
       cornerRadius: styleOptions.card?.cornerRadius ?? 8,
     },
     sparkline: {
-      // Sparkline can only be shown when a trend dimension is present; an explicit opt-out
-      // is always honored, but an explicit opt-in cannot force it on without trend data.
-      enabled: (styleOptions.sparkline?.enabled ?? true) && !!dataOptionsInternal.trend,
+      // Sparkline can only be shown when a category dimension is present; an explicit opt-out
+      // is always honored, but an explicit opt-in cannot force it on without category data.
+      enabled: (styleOptions.sparkline?.enabled ?? true) && !!dataOptionsInternal.category,
       chartType: styleOptions.sparkline?.chartType ?? 'area',
     },
     comparison: {
       display: styleOptions.comparison?.display ?? 'percent',
       label: styleOptions.comparison?.label,
+      ofGoalText: styleOptions.comparison?.ofGoalText,
+      toGoText: styleOptions.comparison?.toGoText,
       // No default is injected here: `undefined` signals the renderer to apply its
       // sign-based default (positive delta green, negative red).
       color: styleOptions.comparison?.color,
@@ -81,6 +85,8 @@ export function getDefaultKpiStyleOptions(): KpiStyleOptions {
     layout: 'standard',
     title: {
       enabled: true,
+      showValueTitle: true,
+      showCategoryTitle: true,
     },
     value: {
       textSize: 'auto',

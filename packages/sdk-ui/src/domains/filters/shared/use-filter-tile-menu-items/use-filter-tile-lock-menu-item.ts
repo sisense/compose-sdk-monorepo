@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { MenuItem } from '@/shared/types/menu-item';
+import type { MenuActionItem } from '@/shared/types/menu-item';
 
 /** Id for the lock/unlock menu item of the filter tile. */
 export const FILTER_TILE_LOCK_MENU_ITEM_ID = 'filter-tile-lock';
@@ -20,7 +20,7 @@ export function useFilterTileLockMenuItem({
 }: {
   locked: boolean;
   onLockToggle: () => void;
-}): MenuItem {
+}): MenuActionItem {
   const { t } = useTranslation();
 
   const lockCaption = useCallback((): string => {
@@ -29,6 +29,7 @@ export function useFilterTileLockMenuItem({
 
   return useMemo(() => {
     return {
+      type: 'action' as const,
       id: FILTER_TILE_LOCK_MENU_ITEM_ID,
       caption: lockCaption(),
       onClick: onLockToggle,

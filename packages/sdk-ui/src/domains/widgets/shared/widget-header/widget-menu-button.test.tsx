@@ -62,16 +62,20 @@ describe('WidgetMenuButton', () => {
 
   it('renders a menu button with correct aria-label', () => {
     const { getByRole } = render(
-      <WidgetMenuButton menuItems={[{ id: 'item-1', caption: 'Item 1', onClick: vi.fn() }]} />,
+      <WidgetMenuButton
+        menuItems={[{ type: 'action', id: 'item-1', caption: 'Item 1', onClick: vi.fn() }]}
+      />,
     );
 
-    const button = getByRole('button', { name: 'widget header toolbar menu' });
+    const button = getByRole('button', { name: 'widget header menu' });
     expect(button).toBeInTheDocument();
   });
 
   it('passes theme titleTextColor to MenuButton', () => {
     const { getByTestId } = render(
-      <WidgetMenuButton menuItems={[{ id: 'item-1', caption: 'Item 1', onClick: vi.fn() }]} />,
+      <WidgetMenuButton
+        menuItems={[{ type: 'action', id: 'item-1', caption: 'Item 1', onClick: vi.fn() }]}
+      />,
     );
 
     expect(getByTestId('widget-menu-button')).toHaveAttribute('data-color', titleTextColor);
@@ -87,8 +91,8 @@ describe('WidgetMenuButton', () => {
 
   it('calls openMenu with position, alignment and itemSections when clicked with non-empty menuItems', () => {
     const menuItems: MenuItem[] = [
-      { id: 'export', caption: 'Export', onClick: vi.fn() },
-      { id: 'refresh', caption: 'Refresh', onClick: vi.fn() },
+      { type: 'action', id: 'export', caption: 'Export', onClick: vi.fn() },
+      { type: 'action', id: 'refresh', caption: 'Refresh', onClick: vi.fn() },
     ];
     const { getByTestId } = render(<WidgetMenuButton menuItems={menuItems} />);
 
@@ -109,7 +113,9 @@ describe('WidgetMenuButton', () => {
   });
 
   it('stops propagation of click event', () => {
-    const menuItems: MenuItem[] = [{ id: 'item-1', caption: 'Item 1', onClick: vi.fn() }];
+    const menuItems: MenuItem[] = [
+      { type: 'action', id: 'item-1', caption: 'Item 1', onClick: vi.fn() },
+    ];
     const { getByTestId } = render(<WidgetMenuButton menuItems={menuItems} />);
 
     const button = getByTestId('widget-menu-button');

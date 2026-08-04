@@ -13,6 +13,11 @@
  * @sisenseInternal
  */
 export type WidgetPropsUpdate = {
+  /**
+   * Persists the widget title via the per-field DTO patch table
+   * (`title → dto.title`); used by inline widget renaming.
+   */
+  readonly title?: string;
   readonly styleOptions?: {
     readonly navigator?: {
       readonly scrollerLocation?: { readonly min: number; readonly max: number };

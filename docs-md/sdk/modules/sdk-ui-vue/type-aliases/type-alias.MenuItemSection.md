@@ -15,8 +15,8 @@ Used in [`ContextMenuProps`](../../sdk-ui/interfaces/interface.ContextMenuProps.
 
 **items**?: \{
   `caption`: `string`;
-  `key`: `number` \| `string`;
-  `onClick`: () => `void`;
+  `key?`: `number` \| `string`;
+  `onClick?`: () => `void`;
  }[]
 
 Optional list of menu items

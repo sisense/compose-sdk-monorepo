@@ -1,3 +1,4 @@
+import { isRendererDataReady } from '../helpers/readiness.js';
 import { ChartBuilder } from '../types.js';
 import { dataOptionsTranslators } from './data-options/index.js';
 import { areamapDataTranslators } from './data/index.js';
@@ -11,5 +12,6 @@ export const areamapChartBuilder: ChartBuilder<'areamap'> = {
   renderer: {
     ChartRendererComponent: Areamap,
     isCorrectRendererProps: isAreamapProps,
+    isReady: isRendererDataReady,
   },
 };

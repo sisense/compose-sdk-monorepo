@@ -5,7 +5,7 @@ title: SeriesLabelsTextStyle
 # Type alias SeriesLabelsTextStyle
 
 > **SeriesLabelsTextStyle**: `Omit`\< [`TextStyle`](type-alias.TextStyle.md), `"color"` \| `"pointerEvents"` \| `"textOverflow"` \> & \{
-  `color`: `"contrast"` \| `string`;
+  `color?`: `"contrast"` \| `string`;
  }
 
 > ## `SeriesLabelsTextStyle.color`

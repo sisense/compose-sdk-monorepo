@@ -45,6 +45,11 @@ type GetDashboardsOptions = {
 
 type GetDashboardOptions = {
   fields?: string[];
+  /**
+   * Resource names to expand in the response via the `expand` query parameter.
+   * Currently only `'userAuth'` is used to retrieve dashboard authorization.
+   */
+  expand?: readonly string[];
   sharedMode?: boolean;
   adminAccess?: boolean;
 };
@@ -100,10 +105,10 @@ export class RestApi {
    * Get a specific dashboard
    */
   public getDashboard = (dashboardOid: string, options: GetDashboardOptions = {}) => {
-    const { fields, sharedMode, adminAccess } = options;
-    // Note: do not use `expand` query parameter cause it is restricted for all non-admin users.
+    const { fields, expand, sharedMode, adminAccess } = options;
     const queryParams = new URLSearchParams({
       ...(fields?.length && { fields: fields?.join(',') }),
+      ...(expand?.length && { expand: expand?.join(',') }),
       ...(sharedMode && { sharedMode: 'true' }),
       ...(adminAccess && { adminAccess: 'true' }),
     }).toString();

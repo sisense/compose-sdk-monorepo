@@ -311,6 +311,15 @@ describe('DimensionalQueryClient', () => {
 
     it('should resolve the data source fields', async () => {
       for await (const testSample of testDataset) {
+        // Legacy fields/search resolves fullname via the viewer-safe list when the caller
+        // only passes a title string.
+        httpClientMock.get.mockResolvedValue([
+          {
+            title: testSample.datasource,
+            fullname: `localhost/${testSample.datasource}`,
+            live: false,
+          },
+        ]);
         httpClientMock.post.mockResolvedValue(testSample.fields);
         const gotDataSourceFields = await queryClient.getDataSourceFields(testSample.datasource);
         expect(gotDataSourceFields).toEqual(testSample.fields);
@@ -318,8 +327,12 @@ describe('DimensionalQueryClient', () => {
     });
 
     it('should handle empty response', async () => {
+      const { datasource } = testDataset[0];
+      httpClientMock.get.mockResolvedValue([
+        { title: datasource, fullname: `localhost/${datasource}`, live: false },
+      ]);
       httpClientMock.post.mockResolvedValue(undefined);
-      const gotDataSourceFields = await queryClient.getDataSourceFields(testDataset[0].datasource);
+      const gotDataSourceFields = await queryClient.getDataSourceFields(datasource);
       expect(gotDataSourceFields.length).toBe(0);
     });
   });

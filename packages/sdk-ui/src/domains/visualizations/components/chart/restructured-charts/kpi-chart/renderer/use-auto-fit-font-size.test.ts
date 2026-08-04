@@ -204,6 +204,43 @@ describe('computeAutoFitFontSize', () => {
         }),
       ).toBe(8);
     });
+
+    it('budgets a fixed-width affix as widthEm x the candidate font size', () => {
+      // Text 'abc': 30/px. Fixed-width affix 0.7em: 0.7/px (no canvas measurement).
+      // Composite = 30.7/px; box 317 - 10 gap = 307 -> widthBound = 10.
+      expect(
+        computeAutoFitFontSize({
+          text: 'abc',
+          font: { family: 'Arial', weight: 400 },
+          maxWidthPx: 317,
+          maxHeightPx: 1000,
+          minPx: 1,
+          maxPx: 96,
+          measure: stubMeasure,
+          affixes: [{ widthEm: 0.7, gapPx: 10 }],
+        }),
+      ).toBe(10);
+    });
+
+    it('mixes text and fixed-width affixes in one budget', () => {
+      // Text 'ab': 20/px. Text affix 'i' at 0.7em: 7/px, gap 9. Fixed-width affix 0.7em:
+      // 0.7/px, gap 3. Composite = 27.7/px; box 289 - 12 gaps = 277 -> widthBound = 10.
+      expect(
+        computeAutoFitFontSize({
+          text: 'ab',
+          font: { family: 'Arial', weight: 400 },
+          maxWidthPx: 289,
+          maxHeightPx: 1000,
+          minPx: 1,
+          maxPx: 96,
+          measure: stubMeasure,
+          affixes: [
+            { text: 'i', emScale: 0.7, gapPx: 9 },
+            { widthEm: 0.7, gapPx: 3 },
+          ],
+        }),
+      ).toBe(10);
+    });
   });
 
   it('floors the fit to a whole pixel (fractional-px safety margin against sub-pixel ellipsis)', () => {
@@ -400,6 +437,45 @@ describe('useAutoFitFontSize', () => {
 
     // measured = 20*10=200; widthBound=1000/200=5
     expect(result.current).toBe(5);
+
+    element.remove();
+  });
+
+  it('recomputes when an affix list changes into one whose text contains the key separators', () => {
+    const element = createContainer(1000, 1000);
+    const containerRef = { current: element as HTMLDivElement | null };
+
+    // The affix snapshot key must be collision-free for arbitrary affix text. These two lists
+    // are structurally different but their fields are identical once flattened -- a key built by
+    // joining fields with ' ' and lists with '|' would render both as `x 1 2|y 1 2`, so the
+    // second render would be mistaken for "no change" and keep the first fit's font size.
+    const twoAffixes = [
+      { text: 'x', emScale: 1, gapPx: 2 },
+      { text: 'y', emScale: 1, gapPx: 2 },
+    ];
+    const oneAffixSpellingBothOut = [{ text: 'x 1 2|y', emScale: 1, gapPx: 2 }];
+
+    const { result, rerender } = renderHook(
+      ({ affixes }: { affixes: { text: string; emScale: number; gapPx: number }[] }) =>
+        useAutoFitFontSize({
+          containerRef,
+          text: 'a',
+          font,
+          minPx: 1,
+          maxPx: 96,
+          measure: stubMeasure,
+          affixes,
+        }),
+      { initialProps: { affixes: twoAffixes } },
+    );
+
+    // widthPerPx = 10 (text) + 10 + 10 (affixes at 1em); gaps = 4 -> floor(996/30)
+    expect(result.current).toBe(33);
+
+    rerender({ affixes: oneAffixSpellingBothOut });
+
+    // widthPerPx = 10 (text) + 70 (7-char affix at 1em); gaps = 2 -> floor(998/80)
+    expect(result.current).toBe(12);
 
     element.remove();
   });
@@ -928,6 +1004,39 @@ describe('useAutoFitFontSize', () => {
 
     // Composite widthPerPx = 200 -> 1000/200 = 5, despite identical text/box.
     expect(result.current).toBe(5);
+
+    element.remove();
+  });
+
+  it('recomputes when a fixed-width affix changes width at the same gap', () => {
+    // Locks the affixesKeyOf fixed-width serialization: two widths must not collide to one memo key.
+    const element = createContainer(1000, 10000);
+    const containerRef = { current: element as HTMLDivElement | null };
+
+    const { result, rerender } = renderHook(
+      ({ widthEm }: { widthEm: number }) =>
+        useAutoFitFontSize({
+          containerRef,
+          text: 'a',
+          font,
+          minPx: 1,
+          maxPx: 96,
+          measure: stubMeasure,
+          affixes: [{ widthEm, gapPx: 0 }],
+        }),
+      { initialProps: { widthEm: 0.5 } },
+    );
+
+    // Text 'a': 10/px. With widthEm=0.5: composite = 10.5/px -> widthBound = 1000/10.5 ≈ 95.24 -> floor to 95.
+    const firstFit = result.current;
+    expect(firstFit).toBe(95);
+
+    rerender({ widthEm: 0.9 });
+
+    // With widthEm=0.9: composite = 10.9/px -> widthBound = 1000/10.9 ≈ 91.74 -> floor to 91.
+    // Must be different from firstFit; if the memo key collided, it would reuse the stale 95.
+    expect(result.current).toBe(91);
+    expect(result.current).not.toBe(firstFit);
 
     element.remove();
   });

@@ -83,6 +83,11 @@ export type RoleManifest = {
       modify_dashboard_filters: boolean;
       use_starred: boolean;
     };
+    /**
+     * Indicates whether widgets are view-only for this dashboard.
+     * Added when resolving a dashboard's `userAuth`; not present on the global role manifest.
+     */
+    widgetViewOnly?: boolean;
   };
   warnings: {
     revisioner: boolean;
@@ -261,3 +266,12 @@ export type RoleManifest = {
     edit_script: boolean;
   };
 };
+
+/**
+ * Describes the current user's authorization for a specific dashboard. It is a
+ * subset of the {@link RoleManifest} containing only the `dashboards`, `widgets`
+ * and `base` parts, resolved for that dashboard (e.g. narrowed by ownership).
+ *
+ * @internal
+ */
+export type DashboardUserAuth = Pick<RoleManifest, 'dashboards' | 'widgets' | 'base'>;

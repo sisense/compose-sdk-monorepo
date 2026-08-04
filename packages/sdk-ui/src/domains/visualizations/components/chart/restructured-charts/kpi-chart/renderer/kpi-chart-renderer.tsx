@@ -14,6 +14,7 @@ import { isKpiChartDataOptionsInternal } from '../data-options/index.js';
 import { resolveComparisonColor } from '../data/value-colors.js';
 import { isKpiChartData, KpiChartData } from '../types.js';
 import {
+  comparisonMeasureNumberFormatConfig,
   computeHeadlineMaxHeightPx,
   formatKpiValue,
   metricFor,
@@ -24,21 +25,23 @@ import {
   toKpiRenderOptions,
 } from './helpers.js';
 import {
+  AUTO_FIT_LINE_HEIGHT,
   BODY_GAP_PX,
   CARD_BORDER_PX,
   CARD_PADDING_BLOCK_END_PX,
   CARD_PADDING_BLOCK_START_PX,
   CARD_ROW_GAP_PX,
+  COMPARISON_LABEL_LINE_PX,
   SPARKLINE_MIN_HEIGHT_PX,
 } from './kpi-card-styles.js';
 import { KpiCard } from './kpi-card.js';
 import { KpiComparison } from './kpi-comparison.js';
 import { KpiSparkline } from './kpi-sparkline.js';
 import { KpiTitle } from './kpi-title.js';
-import { KpiValue } from './kpi-value.js';
+import { AUTO_FIT_MIN_PX, KpiValue } from './kpi-value.js';
 import { resolveOnColor, resolveSparklineColor } from './on-color.js';
 import { useElementSize } from './use-element-size.js';
-import { getSizeTier } from './use-size-tier.js';
+import { getHeightTier, getSizeTier } from './use-size-tier.js';
 
 /**
  * Props accepted by the KPI chart renderer.
@@ -69,6 +72,16 @@ export type KpiChartRendererProps = {
 /** Fallback series color used for the sparkline/value when no theme variant color is set. */
 const DEFAULT_ACCENT_COLOR = '#7b68ee';
 
+// Estimated (measurement-free) content heights, in px, used only to decide whether the sparkline
+// fits -- see the `sparklineHasRoom` computation. Estimates (not DOM measurements) keep the
+// decision deterministic and independent of the interdependent ResizeObserver settle order.
+/** Approximate title row height when shown (0.72rem uppercase text + baseline). */
+const TITLE_ROW_EST_PX = 20;
+/** The value's compact-scale font size (matches `COMPACT_FONT_SIZE` in kpi-value.tsx), in px. */
+const COMPACT_VALUE_FONT_PX = 14.4;
+/** Approximate height of the compact (single-line) comparison readout. */
+const COMPACT_COMPARISON_EST_PX = 31;
+
 /**
  * KPI chart renderer.
  *
@@ -80,6 +93,7 @@ const DEFAULT_ACCENT_COLOR = '#7b68ee';
  */
 export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
   chartData,
+  dataOptions,
   designOptions,
   onDataPointClick,
   onDataPointContextMenu,
@@ -93,6 +107,11 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
   // headline height budget below -- one observer serves both.
   const figureSize = useElementSize(containerRef);
   const tier = getSizeTier(figureSize.width, figureSize.height);
+  // Collapsing the comparison readout onto one line is purely a vertical-room decision: it saves a
+  // line when the card is short. It must NOT key off the combined tier, or a narrow-but-tall card
+  // (small combined tier due to width) would single-line and clip horizontally instead of stacking
+  // the label to its own row -- so it keys off the height tier alone.
+  const heightTier = getHeightTier(figureSize.height);
 
   // Non-circular height budget inputs for whichever of value/comparison plays the "headline"
   // (auto-fit) role -- see `headlineMaxHeightPx` below and `use-auto-fit-font-size.ts`'s
@@ -168,16 +187,24 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
     value !== undefined ? formatKpiValue(value, chartData.numberFormatConfig) : noDataText ?? '';
   const conditionalIcon = resolveConditionalIcon(designOptions.value.conditionalIcons, value);
   const titleText = designOptions.title.text ?? valueTitle;
+  // `title.enabled` switches the whole title section; the show* parts opt their own piece out.
+  const showTitleText = designOptions.title.enabled && designOptions.title.showValueTitle;
   const period =
-    valuePeriodMs !== undefined && !isNaN(valuePeriodMs)
+    designOptions.title.enabled &&
+    designOptions.title.showCategoryTitle &&
+    valuePeriodMs !== undefined &&
+    !isNaN(valuePeriodMs)
       ? dateFormatter(new Date(valuePeriodMs), 'MMM yyyy')
       : undefined;
 
-  // Unlike the text (binary dark/white via `onColor`), the sparkline keeps the theme accent as
-  // long as it is legible against a custom background (WCAG 1.4.11 graphics contrast), and only
-  // then falls back to the better of the theme text color or white.
-  const primaryColor = resolveSparklineColor({
-    accent: themeSettings.palette?.variantColors?.[0] ?? DEFAULT_ACCENT_COLOR,
+  // The theme accent (first palette color): the value text's DEFAULT color — indicator parity,
+  // measure-level color options override, and deliberately no contrast guard (the legacy
+  // indicator renders its palette color on any background). The sparkline starts from the same
+  // accent but keeps it only while legible against a custom background (WCAG 1.4.11 graphics
+  // contrast), then falls back to the better of the theme text color or white.
+  const accentColor = themeSettings.palette?.variantColors?.[0] ?? DEFAULT_ACCENT_COLOR;
+  const sparklineColor = resolveSparklineColor({
+    accent: accentColor,
     textColor: themeSettings.chart?.textColor ?? '#5b6372',
     backgroundColor: designOptions.card.backgroundColor,
   });
@@ -197,16 +224,36 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
           metricFor(comparisonDisplay),
         )
       : undefined;
+  // Formats the comparison readout with the comparison measure's own config when it carries one
+  // ('delta'/'target'), else the headline's — 'value'-type comparisons resolved theirs in the
+  // data layer already. Guarded on type match: an `onBeforeRender` consumer can swap the
+  // comparison's type entirely (e.g. delta -> target), and the original `dataOptions.comparison`
+  // then describes a different measure than the one actually being displayed -- honoring its
+  // config in that case would format the readout with the wrong measure's decimals/units. Same
+  // principle as `toComparisonDisplay`'s color/numberFormatConfig carryover (helpers.ts).
   const comparisonNumberFormatConfig =
     comparisonDisplay?.type === 'value'
       ? comparisonDisplay.numberFormatConfig
+      : comparisonDisplay?.type === dataOptions.comparison?.type
+      ? comparisonMeasureNumberFormatConfig(dataOptions.comparison) ?? chartData.numberFormatConfig
       : chartData.numberFormatConfig;
 
+  // The aria summary must voice exactly what the card shows (see `summarizeComparisonForAria`),
+  // so it gets the same `designOptions.comparison` text customizations the visible readout
+  // renders with: the label override (also fed to `{{goal}}` interpolation) and the target
+  // string templates.
   const comparisonSummary = comparisonDisplay
     ? summarizeComparisonForAria(
-        comparisonDisplay,
+        designOptions.comparison.label !== undefined
+          ? { ...comparisonDisplay, label: designOptions.comparison.label }
+          : comparisonDisplay,
         comparisonNumberFormatConfig,
+        t,
         designOptions.comparison.display,
+        {
+          ofGoalText: designOptions.comparison.ofGoalText,
+          toGoText: designOptions.comparison.toGoText,
+        },
       )
     : undefined;
   const ariaLabel = comparisonSummary
@@ -218,27 +265,59 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
   // by keyboard (Tab focus + the OS/browser's own context-menu key) even though Enter/Space has
   // nothing to actuate there.
   const clickable = !!kpiOnDataPointClick || !!kpiOnDataPointContextMenu;
-  // 'xs' has no room for the sparkline (adaptation 2); 'sm' and below collapse the comparison
-  // readout onto a single line rather than two stacked lines.
-  const showSparkline =
-    tier !== 'xs' && designOptions.sparkline.enabled && !!sparklinePoints?.length;
-  const compactComparison = tier === 'xs' || tier === 'sm';
+  // Collapse the comparison onto a single line only when the card is short (no vertical room for a
+  // stacked label). A narrow-but-tall card is NOT compact, so its readout stacks and each line
+  // ellipsizes rather than a single row overflowing horizontally.
+  const compactComparison = heightTier === 'xs' || heightTier === 'sm';
 
-  // 'big-comparison' swaps which of value/comparison plays the headline (big, auto-fit) role: the
+  // 'comparison-first' swaps which of value/comparison plays the headline (big, auto-fit) role: the
   // comparison takes the headline position/scale, and the value renders small where the
   // comparison sits in 'standard'. Falls
   // back to the value staying headline when there's no comparison to hand the role to at all
-  // (e.g. 'big-comparison' picked without a comparison configured) -- otherwise the card would
+  // (e.g. 'comparison-first' picked without a comparison configured) -- otherwise the card would
   // render with no headline element whatsoever.
-  const isBigComparison = designOptions.layout === 'big-comparison' && !!comparisonDisplay;
-  const valueScale = isBigComparison ? 'compact' : 'headline';
-  const comparisonScale = isBigComparison ? 'headline' : 'compact';
+  const isComparisonFirst = designOptions.layout === 'comparison-first' && !!comparisonDisplay;
+  const valueScale = isComparisonFirst ? 'compact' : 'headline';
+  const comparisonScale = isComparisonFirst ? 'headline' : 'compact';
 
   // The "compact" sibling's height, subtracted from the body's height budget to get the
   // headline sibling's real budget -- 0 (no subtraction) when there's no comparison to share
   // the body with at all.
-  const compactSiblingHeight = isBigComparison ? valueAreaSize.height : comparisonAreaSize.height;
+  const compactSiblingHeight = isComparisonFirst ? valueAreaSize.height : comparisonAreaSize.height;
   const gapPx = comparisonDisplay ? BODY_GAP_PX : 0;
+  const cardBorderTotalPx = designOptions.card.showBorder ? 2 * CARD_BORDER_PX : 0;
+
+  // Content-aware sparkline visibility: the sparkline is the FIRST element to yield when the card
+  // is too short for its fixed content -- so the value keeps its configured (possibly fixed, large)
+  // size and is never clipped; we drop the sparkline rather than shrink the value. Computed from
+  // the estimated RIGID (non-shrinkable) height of the title + value + comparison, not from DOM
+  // measurements: the value at its fixed textSize (auto values shrink, so they use the auto floor);
+  // the comparison headline at its min font plus the label it stacks; the compact comparison at its
+  // fixed readout height. The sparkline shows only when SPARKLINE_MIN_HEIGHT_PX still fits below.
+  const innerHeightPx =
+    figureSize.height - cardBorderTotalPx - CARD_PADDING_BLOCK_START_PX - CARD_PADDING_BLOCK_END_PX;
+  const titleRowPx = showTitleText || period ? TITLE_ROW_EST_PX : 0;
+  const valueFontPx =
+    designOptions.value.textSize !== 'auto'
+      ? designOptions.value.textSize
+      : valueScale === 'headline'
+      ? AUTO_FIT_MIN_PX
+      : COMPACT_VALUE_FONT_PX;
+  const valueRigidPx = valueFontPx * AUTO_FIT_LINE_HEIGHT;
+  const comparisonRigidPx = !comparisonDisplay
+    ? 0
+    : comparisonScale === 'headline'
+    ? AUTO_FIT_MIN_PX * AUTO_FIT_LINE_HEIGHT + COMPARISON_LABEL_LINE_PX
+    : COMPACT_COMPARISON_EST_PX;
+  const bodyRigidPx = valueRigidPx + (comparisonDisplay ? gapPx + comparisonRigidPx : 0);
+  const sparklineHasRoom =
+    innerHeightPx - titleRowPx - 2 * CARD_ROW_GAP_PX - bodyRigidPx >= SPARKLINE_MIN_HEIGHT_PX;
+  const showSparkline =
+    tier !== 'xs' &&
+    designOptions.sparkline.enabled &&
+    !!sparklinePoints?.length &&
+    sparklineHasRoom;
+
   // The body's own height budget, per which grid row currently flexes (see GRID_TEMPLATE in
   // kpi-card-styles.ts):
   // - without a sparkline, the body row is `1fr`, so `BodyArea`'s measured box IS the budget
@@ -249,15 +328,8 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
   //   the card borders (getBoundingClientRect measures border-inclusive), the title row, both
   //   row gaps, and the sparkline row at its minimum -- everything the body may grow into
   //   while the sparkline stays at least SPARKLINE_MIN_HEIGHT_PX tall.
-  const cardBorderTotalPx = designOptions.card.showBorder ? 2 * CARD_BORDER_PX : 0;
   const bodyBudgetPx = showSparkline
-    ? figureSize.height -
-      cardBorderTotalPx -
-      CARD_PADDING_BLOCK_START_PX -
-      CARD_PADDING_BLOCK_END_PX -
-      titleSize.height -
-      2 * CARD_ROW_GAP_PX -
-      SPARKLINE_MIN_HEIGHT_PX
+    ? innerHeightPx - titleSize.height - 2 * CARD_ROW_GAP_PX - SPARKLINE_MIN_HEIGHT_PX
     : bodySize.height;
   const headlineMaxHeightPx = computeHeadlineMaxHeightPx(bodyBudgetPx, compactSiblingHeight, gapPx);
 
@@ -275,7 +347,7 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
       title={
         <KpiTitle
           title={titleText}
-          enabled={designOptions.title.enabled}
+          showText={showTitleText}
           period={period}
           onColor={onColor}
           areaRef={titleRef}
@@ -284,7 +356,7 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
       value={
         <KpiValue
           text={displayedValue}
-          color={valueColor}
+          color={value !== undefined ? valueColor ?? accentColor : undefined}
           textSize={designOptions.value.textSize}
           icon={conditionalIcon}
           onColor={onColor}
@@ -303,8 +375,13 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
             showIcon={designOptions.comparison.showIcon}
             conditionalIcon={comparisonConditionalIcon}
             labelOverride={designOptions.comparison.label}
+            targetTextOverrides={{
+              ofGoalText: designOptions.comparison.ofGoalText,
+              toGoText: designOptions.comparison.toGoText,
+            }}
             scale={comparisonScale}
             compact={compactComparison}
+            textAlign={designOptions.card.textAlign}
             onColor={onColor}
             maxHeightPx={comparisonScale === 'headline' ? headlineMaxHeightPx : undefined}
             areaRef={comparisonAreaRef}
@@ -316,7 +393,7 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
           <KpiSparkline
             points={sparklinePoints}
             chartType={designOptions.sparkline.chartType}
-            color={primaryColor}
+            color={sparklineColor}
             numberFormatConfig={chartData.numberFormatConfig}
           />
         ) : undefined

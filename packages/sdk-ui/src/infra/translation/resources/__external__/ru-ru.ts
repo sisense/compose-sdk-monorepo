@@ -226,6 +226,11 @@ const translation: TranslationDictionary = {
       max: 'Макс',
     },
   },
+  filterWidget: {
+    placeholders: {
+      setFilter: 'Установить фильтр',
+    },
+  },
   unsupportedFilterMessage: 'Неподдерживаемый фильтр (применен к запросу данных)',
   unsupportedFilter: 'Неподдерживаемый фильтр {{filter}}',
   commonFilter: {
@@ -470,6 +475,11 @@ const translation: TranslationDictionary = {
       unlockGroup: 'Разблокировать группу',
     },
     toggleSwitch: 'Включить/отключить фильтр',
+    linkedToWidget: {
+      label: 'Связано с виджетом фильтра',
+      tooltip:
+        'Этот фильтр нельзя изменить на панели фильтров. Изменяйте значения непосредственно на панели.',
+    },
   },
   chart: {
     indicator: {
@@ -493,17 +503,18 @@ const translation: TranslationDictionary = {
   },
   kpi: {
     comparison: {
-      vsPriorYear: 'vs prior year',
-      vsPriorQuarter: 'vs prior quarter',
-      vsPriorMonth: 'vs prior month',
-      vsPriorWeek: 'vs prior week',
-      vsPriorDay: 'vs prior day',
-      vsPriorPeriod: 'vs prior period',
+      vsPriorYear: 'к прошлому году',
+      vsPriorQuarter: 'к прошлому кварталу',
+      vsPriorMonth: 'к прошлому месяцу',
+      vsPriorWeek: 'к прошлой неделе',
+      vsPriorDay: 'к прошлому дню',
+      vsPriorPeriod: 'к прошлому периоду',
     },
     target: {
-      ofGoal: '{{percent}} of goal',
-      toGo: '{{value}} to go',
+      ofGoal: '{{percent}} от цели',
+      toGo: 'осталось {{value}}',
     },
+    percentFormat: '{{sign}}{{value}}\u00A0%',
   },
   loadingOverlay: {
     label: 'Загрузка содержимого',

@@ -204,6 +204,11 @@ const translation: TranslationDictionary = {
       max: '最大值',
     },
   },
+  filterWidget: {
+    placeholders: {
+      setFilter: '设置筛选器',
+    },
+  },
   unsupportedFilterMessage: '不支持的筛选器（已应用于数据查询）',
   unsupportedFilter: '不支持的筛选器{{filter}}',
   commonFilter: {
@@ -435,6 +440,10 @@ const translation: TranslationDictionary = {
       unlockGroup: '解锁组',
     },
     toggleSwitch: '启用/禁用筛选器',
+    linkedToWidget: {
+      label: '已关联到筛选器小部件',
+      tooltip: '此筛选器无法从筛选器面板进行编辑。请直接在仪表板中更改其值。',
+    },
   },
   chart: {
     indicator: {
@@ -458,17 +467,18 @@ const translation: TranslationDictionary = {
   },
   kpi: {
     comparison: {
-      vsPriorYear: 'vs prior year',
-      vsPriorQuarter: 'vs prior quarter',
-      vsPriorMonth: 'vs prior month',
-      vsPriorWeek: 'vs prior week',
-      vsPriorDay: 'vs prior day',
-      vsPriorPeriod: 'vs prior period',
+      vsPriorYear: '较上年',
+      vsPriorQuarter: '较上季度',
+      vsPriorMonth: '较上月',
+      vsPriorWeek: '较上周',
+      vsPriorDay: '较前一日',
+      vsPriorPeriod: '较上一周期',
     },
     target: {
-      ofGoal: '{{percent}} of goal',
-      toGo: '{{value}} to go',
+      ofGoal: '目标的{{percent}}',
+      toGo: '还差{{value}}',
     },
+    percentFormat: '{{sign}}{{value}}%',
   },
   loadingOverlay: {
     label: '正在加载内容',

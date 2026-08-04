@@ -100,12 +100,12 @@ The custom widget declaration to be registered
 > > > ###### `config.inputs`
 > > >
 > > > **inputs**?: \{
-> > > `canColor`: `boolean`;
-> > > `canFormat`: `boolean`;
-> > > `canSort`: `boolean`;
-> > > `displayName`: `string`;
-> > > `maxItems`: `number`;
-> > > `minItems`: `number`;
+> > > `canColor?`: `boolean`;
+> > > `canFormat?`: `boolean`;
+> > > `canSort?`: `boolean`;
+> > > `displayName?`: `string`;
+> > > `maxItems?`: `number`;
+> > > `minItems?`: `number`;
 > > > `name`: `string`;
 > > > `type`: `"dimension"` \| `"measure"`;
 > > > }[]

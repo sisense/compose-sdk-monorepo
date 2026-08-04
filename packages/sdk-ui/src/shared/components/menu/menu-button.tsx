@@ -11,6 +11,7 @@ type MenuButtonProps = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   ariaLabel?: string;
   size?: number;
+  disabled?: boolean;
 };
 
 type SizableIcon = {

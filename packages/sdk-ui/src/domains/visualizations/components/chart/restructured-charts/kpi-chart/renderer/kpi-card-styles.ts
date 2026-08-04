@@ -51,6 +51,15 @@ export const CONDITIONAL_ICON_GAP_PX = 6;
 export const COMPARISON_ARROW_EM = 0.85;
 /** `ComparisonPrimaryText`'s flex gap between its items, in px. @internal */
 export const COMPARISON_PRIMARY_GAP_PX = 3;
+/**
+ * Approximate rendered height of the comparison's secondary/label line (`ComparisonSecondaryText`,
+ * 0.7rem at ~1.2 line-height), in px. Used by the renderer's sparkline-fit arithmetic to reserve
+ * room for the label the headline comparison stacks below itself.
+ * @internal
+ */
+export const COMPARISON_LABEL_LINE_PX = 14;
+/** Line-height multiplier the auto-fit corridor assumes; mirrors `use-auto-fit-font-size.ts`. @internal */
+export const AUTO_FIT_LINE_HEIGHT = 1.2;
 
 /**
  * The card's grid, identical for every {@link CardLayout}: a `title` row, a `body` row, and a
@@ -145,11 +154,20 @@ export const BodyArea = styled.div`
 
 /**
  * Wraps one of `BodyArea`'s two children, ordering it per {@link CardLayout} (see `kpi-card.tsx`).
+ *
+ * `$shrink` is the value-protection guarantee: the value slot is rigid (`flex: 0 0 auto`) while the
+ * comparison slot may shrink (`flex: 0 1 auto; min-height: 0`). So when the body can't fit both --
+ * whatever the cause (a large fixed value textSize, an off-by-a-few-px auto-fit budget, a lagging
+ * resize measurement) -- the overflow is absorbed by the comparison (which also auto-fits its font
+ * and clips inside its own `overflow: hidden` area) and the VALUE is never clipped. This holds in
+ * both layouts: the value is rigid whether it's the headline (standard) or the compact reading
+ * (comparison-first).
  * @internal
  */
-export const BodySlot = styled.div<{ $order: number }>`
-  flex: 0 0 auto;
+export const BodySlot = styled.div<{ $order: number; $shrink: boolean }>`
+  flex: ${({ $shrink }) => ($shrink ? '0 1 auto' : '0 0 auto')};
   min-width: 0;
+  min-height: ${({ $shrink }) => ($shrink ? '0' : 'auto')};
   order: ${({ $order }) => $order};
 `;
 
@@ -163,6 +181,9 @@ export const ValueArea = styled.div`
 /** Wraps `KpiComparison`'s rendered output inside {@link BodyArea}. @internal */
 export const ComparisonArea = styled.div`
   min-width: 0;
+  /* Clip the readout to the area so its lines ellipsize (via the inner clip spans) instead of
+     spilling and being hard-cut by an ancestor mid-glyph. */
+  overflow: hidden;
 `;
 
 /**
@@ -222,11 +243,53 @@ export const ConditionalIconSpan = styled.span<{ $color?: string }>`
   color: ${({ $color }) => $color ?? 'inherit'};
 `;
 
-/** The comparison readout's root: row layout when `compact`, column layout otherwise. @internal */
-export const ComparisonRoot = styled.div<{ $compact: boolean }>`
+/**
+ * Square SVG box for `built-in` / `svg-path` conditional icons: inherits
+ * {@link ConditionalIconSpan}'s margin/em-size/color contract and normalizes the inner svg --
+ * a 1em square (of the span's em-scaled font) filled with `currentColor`, nudged slightly
+ * below the baseline so a full-bleed square optically matches neighboring text glyphs.
+ * `flex-shrink: 0` keeps that square square: the span is a flex item of the value/comparison
+ * rows, so a narrow row would otherwise squash its width while `height` stays at 1em -- and the
+ * auto-fit budget already reserves the full {@link CONDITIONAL_ICON_EM} box for it either way.
+ * @internal
+ */
+export const ConditionalIconSvgSpan = styled(ConditionalIconSpan)`
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  vertical-align: -0.09em;
+
+  & > svg {
+    display: block;
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+  }
+`;
+
+/**
+ * Maps the card's `textAlign` to a writing-mode-relative flex alignment keyword, matching
+ * `CardRoot`'s logical `text-align` mapping (`left`->start, `right`->end) so the comparison
+ * readout mirrors correctly in RTL rather than pinning to a physical edge.
+ * @internal
+ */
+export type CardTextAlign = 'left' | 'center' | 'right';
+const FLEX_ALIGN: Record<CardTextAlign, string> = {
+  left: 'flex-start',
+  center: 'center',
+  right: 'flex-end',
+};
+
+/**
+ * The comparison readout's root: row layout when `compact`, column layout otherwise. Honors the
+ * card's `textAlign` on its cross axis (column: `align-items`) or main axis (compact row:
+ * `justify-content`) so the readout aligns with the value/title. @internal
+ */
+export const ComparisonRoot = styled.div<{ $compact: boolean; $align: CardTextAlign }>`
   display: flex;
   flex-direction: ${({ $compact }) => ($compact ? 'row' : 'column')};
-  align-items: ${({ $compact }) => ($compact ? 'baseline' : 'flex-start')};
+  align-items: ${({ $compact, $align }) => ($compact ? 'baseline' : FLEX_ALIGN[$align])};
+  justify-content: ${({ $compact, $align }) => ($compact ? FLEX_ALIGN[$align] : 'flex-start')};
   gap: ${({ $compact }) => ($compact ? '6px' : '0')};
   min-width: 0;
 `;
@@ -244,8 +307,22 @@ export const ComparisonPrimaryText = styled.div<
   align-items: center;
   gap: ${COMPARISON_PRIMARY_GAP_PX}px;
   white-space: nowrap;
+  /* Allow the row (and its clip-text child) to shrink below content width so the inner
+     ClipText can ellipsize instead of overflowing. */
+  min-width: 0;
+  max-width: 100%;
+`;
+
+/**
+ * The truncating text run inside {@link ComparisonPrimaryText}. Kept separate from the flex row
+ * (which also holds the arrow/icon affixes) because `text-overflow: ellipsis` only applies to a
+ * block/inline-block box, never to a bare text node inside a flex container. @internal
+ */
+export const ComparisonClipText = styled.span`
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 /** The comparison readout's secondary line (e.g. the target label or amount-to-go text). @internal */
@@ -254,6 +331,8 @@ export const ComparisonSecondaryText = styled.div<Themable & { $onColor: boolean
   color: ${({ $onColor, theme }) => ($onColor ? '#ffffff' : theme.chart.textColor)};
   opacity: ${({ $onColor }) => ($onColor ? 0.8 : 0.5)};
   white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
 `;

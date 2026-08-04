@@ -3,6 +3,7 @@ import { ExcludeFilter, MembersFilter } from '@sisense/sdk-data';
 import {
   DateLevels,
   DimensionalAttribute,
+  DimensionalCalculatedAttribute,
   DimensionalDateDimension,
   DimensionalLevelAttribute,
 } from '@sisense/sdk-data';
@@ -140,6 +141,21 @@ describe('Match Highlights with Attributes', () => {
     expect(hWithout[0]?.attribute.id).toBe('[Brand.Brand]');
   });
 
+  it('must match a calculated-dimension highlight to its dimension (by formula, no dim)', () => {
+    const makeCd = () =>
+      new DimensionalCalculatedAttribute('CD Age Range', 'left([ageRange], 2)', {
+        '[ageRange]': new DimensionalAttribute('AgeRange', '[Commerce.Age Range]'),
+      });
+    const dimensionsMetadata = [makeCd().jaql()];
+    const highlights = [new MembersFilter(makeCd(), ['65'])];
+
+    const [hWith, hWithout] = matchHighlightsWithAttributes(dimensionsMetadata, highlights);
+
+    expect(hWith).toHaveLength(1);
+    expect(hWith[0]?.attribute.id).toBe('left([ageRange], 2)');
+    expect(hWithout).toHaveLength(0);
+  });
+
   it('must drop include-all (empty members) highlights from both buckets', () => {
     const dimensionsMetadata = [
       new DimensionalAttribute('[Commerce.Gender]', '[Commerce.Gender]').jaql(),
@@ -177,6 +193,13 @@ describe('Get metadataItem id', () => {
       '[Commerce.Date (Calendar)]',
       DateLevels.AggMinutesRoundTo1,
     );
+    expect(getMetadataItemId(attribute.jaql())).toEqual(attribute.id);
+  });
+
+  it('generated id must match a calculated-dimension id (by formula, no dim)', () => {
+    const attribute = new DimensionalCalculatedAttribute('CD Age Range', 'left([ageRange], 2)', {
+      '[ageRange]': new DimensionalAttribute('AgeRange', '[Commerce.Age Range]'),
+    });
     expect(getMetadataItemId(attribute.jaql())).toEqual(attribute.id);
   });
 });

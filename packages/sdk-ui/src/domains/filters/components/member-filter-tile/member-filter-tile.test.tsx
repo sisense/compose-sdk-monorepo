@@ -1,5 +1,5 @@
 import { attributeFactory, filterFactory, type MembersFilter } from '@sisense/sdk-data';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { expect } from 'vitest';
 
@@ -172,9 +172,16 @@ describe('MemberFilterTile', () => {
     const arrow = container.querySelector('header svg');
     if (arrow) fireEvent.click(arrow);
 
-    // check that radio buttons are rendered
+    // With allowMissingMembers the list briefly contains only the selected member
+    // before JAQL returns. Wait until all queried members are present — asserting
+    // radio count too early flakes under CI load (1 instead of all members).
+    await waitFor(() => {
+      expect(container.querySelectorAll('input[type="radio"]').length).toBe(
+        jaqlAgeRange.values.length,
+      );
+    });
+
     const radio = container.querySelectorAll('input[type="radio"]');
-    expect(radio.length).toBe(jaqlAgeRange.values.length);
 
     // select second radio button
     if (radio[1] && radio[1].parentElement) fireEvent.click(radio[1].parentElement);

@@ -46,15 +46,30 @@ export function toDeepRaw<T>(data: T): T {
 /**
  * Renders a component without children.
  *
+ * `props` is either the component's reactive props object, or a getter returning the props to
+ * render. Use a getter when the Vue-flavored props need converting into the preact props shape
+ * (e.g. converting Vue components carried in props into preact components): it is called on every
+ * render, so prop updates keep flowing through Vue's reactivity. Converting once before calling
+ * this helper would instead snapshot the props at `setup` time and freeze them.
+ *
+ * A props object is unwrapped with {@link toDeepRaw} before rendering; a getter owns that step, so
+ * it can convert the already-unwrapped props.
+ *
  * @internal
  */
 export const setupHelper = <C extends AnyComponentFunction>(
   component: C,
-  props: Parameters<C>[0],
+  props: Parameters<C>[0] | (() => Parameters<C>[0]),
   contextConnectors: ContextConnector<any>[] = createDefaultContextConnectors(),
 ) => {
   if (!props) return null;
   const elementRef = ref<HTMLDivElement | null>(null);
+  // props objects are never functions, so this distinguishes the two forms; the casts are needed
+  // because `Parameters<C>[0]` is unconstrained and so overlaps the getter in the union
+  const getProps =
+    typeof props === 'function'
+      ? (props as () => Parameters<C>[0])
+      : () => toDeepRaw(props as Parameters<C>[0]);
 
   const componentAdapter = new ComponentAdapter<C>(component, contextConnectors);
 
@@ -64,7 +79,7 @@ export const setupHelper = <C extends AnyComponentFunction>(
 
   return () => {
     if (elementRef.value) {
-      componentAdapter.render(elementRef.value, toDeepRaw(props));
+      componentAdapter.render(elementRef.value, getProps());
     }
 
     return h('div', { ref: elementRef, style: 'width: 100%; height: 100%' });

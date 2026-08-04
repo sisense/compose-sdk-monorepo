@@ -243,7 +243,7 @@ export const Dashboard = asSisenseComponent({
         styleOptions: composedStyleOptions,
       },
       setFilters,
-      hiddenFilterIds,
+      filterWidgetLinkedIds,
     } = useComposedDashboardInternal(
       {
         id,
@@ -363,7 +363,7 @@ export const Dashboard = asSisenseComponent({
           onFilterPanelCollapsedChange={handleFilterToggleClick}
           headerItems={headerItems}
           headerConfig={composedConfig?.header}
-          hiddenFilterIds={hiddenFilterIds}
+          filterWidgetLinkedIds={filterWidgetLinkedIds}
         />
       </ThemeProvider>
     );

@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import type { WidgetChangeEvent } from '@/domains/widgets/change-events.js';
 import type { TitleEditorConfig } from '@/domains/widgets/shared/widget-header/types.js';
-import type { MenuItem } from '@/shared/types/menu-item.js';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets.js';
+import type { MenuActionItem } from '@/shared/types/menu-item.js';
 
 /** Parameters for the title renaming hook. */
 export type UseTitleRenamingParams = {
@@ -15,8 +16,8 @@ export type UseTitleRenamingParams = {
 
 /** Result of the title renaming hook. */
 export type UseTitleRenamingResult = {
-  /** "Rename" menu item to inject into the header toolbar; undefined when not enabled. */
-  renameMenuItem: MenuItem | undefined;
+  /** "Rename" menu item to inject into the header menu; undefined when not enabled. */
+  renameMenuItem: MenuActionItem | undefined;
   /** Config for the inline title editor; undefined when not enabled. */
   titleEditorConfig: TitleEditorConfig | undefined;
 };
@@ -54,10 +55,11 @@ export function useTitleRenaming(params: UseTitleRenamingParams): UseTitleRenami
     [onChange],
   );
 
-  const renameMenuItem = useMemo((): MenuItem | undefined => {
+  const renameMenuItem = useMemo((): MenuActionItem | undefined => {
     if (!enabled) return undefined;
     return {
-      id: 'rename-widget',
+      type: 'action',
+      id: WidgetHeaderMenuTargets.RenameWidget,
       caption: t('widgetHeader.menu.renameWidget'),
       onClick: startRename,
     };

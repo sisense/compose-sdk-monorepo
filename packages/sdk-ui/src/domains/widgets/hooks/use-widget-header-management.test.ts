@@ -2,6 +2,8 @@ import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets.js';
+import { findMenuActionByPath } from '@/shared/types/__test-helpers__/find-menu-item.js';
 
 import {
   useWidgetHeaderManagement,
@@ -19,9 +21,8 @@ vi.mock('react-i18next', async (importOriginal) => {
 });
 
 function getRenameMenuItemOnClick(headerConfig: WidgetHeaderConfig): (() => void) | undefined {
-  const items = headerConfig?.toolbar?.menu?.items ?? [];
-  const renameItem = items.find((item: { id?: string }) => item.id === 'rename-widget');
-  return renameItem?.onClick as (() => void) | undefined;
+  return findMenuActionByPath(headerConfig?.menu?.items, WidgetHeaderMenuTargets.RenameWidget)
+    ?.onClick;
 }
 
 function getTitleEditorFromResult(result: {
@@ -37,7 +38,7 @@ function getTitleEditorFromResult(result: {
 
 describe('useWidgetHeaderManagement', () => {
   it('returns headerConfig without rename UI when title.editing.enabled is not set', () => {
-    const existingHeader: WidgetHeaderConfig = { toolbar: { menu: { items: [] } } };
+    const existingHeader: WidgetHeaderConfig = { menu: { items: [] } };
     const params: UseWidgetHeaderManagementParams = {
       headerConfig: existingHeader,
     };
@@ -46,7 +47,7 @@ describe('useWidgetHeaderManagement', () => {
 
     expect(result.current.headerConfig).toBe(existingHeader);
     expect(result.current.titleEditor).toBeUndefined();
-    expect(result.current.headerConfig?.toolbar?.menu?.items?.length).toBe(0);
+    expect(result.current.headerConfig?.menu?.items?.length).toBe(0);
   });
 
   it('returns merged headerConfig with rename menu item and titleEditor when title.editing.enabled is true', () => {
@@ -57,10 +58,14 @@ describe('useWidgetHeaderManagement', () => {
 
     const { result } = renderHook(() => useWidgetHeaderManagement(params));
 
-    const menuItems = result.current.headerConfig?.toolbar?.menu?.items ?? [];
-    const renameItem = menuItems.find((item: { id?: string }) => item.id === 'rename-widget');
+    const menuItems = result.current.headerConfig?.menu?.items ?? [];
+    const renameItem = findMenuActionByPath(menuItems, WidgetHeaderMenuTargets.RenameWidget);
     expect(renameItem).toBeDefined();
-    expect(renameItem).toMatchObject({ id: 'rename-widget', caption: 'Rename Widget' });
+    expect(renameItem).toMatchObject({
+      type: 'action',
+      id: WidgetHeaderMenuTargets.RenameWidget,
+      caption: 'Rename Widget',
+    });
     expect(typeof renameItem?.onClick).toBe('function');
 
     const titleEditor = getTitleEditorFromResult(result.current);
@@ -147,11 +152,16 @@ describe('useWidgetHeaderManagement', () => {
     expect(getTitleEditorFromResult(result.current)?.isEditing).toBe(true);
   });
 
-  it('merges with existing headerConfig menu items', () => {
-    const existingItem = { id: 'custom-item', caption: 'Custom', onClick: vi.fn() };
+  it('merges with existing headerConfig menu items, keeping the built-in rename item first', () => {
+    const existingItem = {
+      type: 'action' as const,
+      id: 'custom-item',
+      caption: 'Custom',
+      onClick: vi.fn(),
+    };
     const existingHeader: WidgetHeaderConfig = {
       title: { editing: { enabled: true } },
-      toolbar: { menu: { items: [existingItem] } },
+      menu: { items: [existingItem] },
     };
     const params: UseWidgetHeaderManagementParams = {
       headerConfig: existingHeader,
@@ -159,10 +169,14 @@ describe('useWidgetHeaderManagement', () => {
 
     const { result } = renderHook(() => useWidgetHeaderManagement(params));
 
-    const items = result.current.headerConfig?.toolbar?.menu?.items ?? [];
+    const items = result.current.headerConfig?.menu?.items ?? [];
     expect(items).toHaveLength(2);
-    expect(items[0]).toEqual(existingItem);
-    expect(items[1]).toMatchObject({ id: 'rename-widget', caption: 'Rename Widget' });
+    expect(items[0]).toMatchObject({
+      type: 'action',
+      id: WidgetHeaderMenuTargets.RenameWidget,
+      caption: 'Rename Widget',
+    });
+    expect(items[1]).toEqual(existingItem);
   });
 
   it('enables rename when headerConfig has title.editing.enabled true', () => {
@@ -173,7 +187,9 @@ describe('useWidgetHeaderManagement', () => {
     const { result } = renderHook(() => useWidgetHeaderManagement(params));
 
     expect(getTitleEditorFromResult(result.current)).toBeDefined();
-    const menuItems = result.current.headerConfig?.toolbar?.menu?.items ?? [];
-    expect(menuItems.some((item: { id?: string }) => item.id === 'rename-widget')).toBe(true);
+    const menuItems = result.current.headerConfig?.menu?.items ?? [];
+    expect(
+      menuItems.some((item: { id?: string }) => item.id === WidgetHeaderMenuTargets.RenameWidget),
+    ).toBe(true);
   });
 });

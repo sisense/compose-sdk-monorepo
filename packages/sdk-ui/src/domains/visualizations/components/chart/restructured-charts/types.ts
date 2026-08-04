@@ -38,6 +38,7 @@ import type {
   CalendarHeatmapStyleOptions,
   ChartDataOptions,
   ChartStyleOptions,
+  ChartType,
   FunnelStyleOptions,
   KpiStyleOptions,
   LineStyleOptions,
@@ -184,13 +185,13 @@ export type TypedChartRendererProps<CT extends SupportedChartType> = CT extends 
   : never;
 
 /**
- * State signals passed to a chart's {@link ChartBuilder.onReady} readiness
- * predicate to compute rising-edge readiness for the consumer `onReady`
- * callback (Fusion `domready` / PDF).
- *
+ * Signals passed to a chart's `renderer.isReady` predicate to compute rising-edge
+ * readiness for the consumer `onReady` callback (Fusion `domready` / PDF).
  * @internal
  */
-export type ChartOnReadyStateInput = {
+export type ChartReadinessState = {
+  /** Chart type the signals belong to; identifies how to interpret `chartData`. */
+  chartType: ChartType;
   /** Whether a query / data sync is in progress. */
   isLoading: boolean;
   /**
@@ -308,21 +309,16 @@ export interface ChartBuilder<CT extends SupportedChartType = SupportedChartType
      * Type guard for the chart renderer props.
      */
     isCorrectRendererProps: (props: ChartRendererProps) => props is TypedChartRendererProps<CT>;
-  };
 
-  /**
-   * Optional consumer `onReady` (Fusion `domready` / PDF) readiness contract.
-   *
-   * When present, RegularChart wires the renderer's paint signal
-   * (`ChartRendererProps.onReady`) into this predicate and fires the consumer
-   * `onReady` callback on each rising edge of readiness. Chart types that omit
-   * this field do not participate in the `onReady` contract.
-   */
-  onReady?: {
     /**
-     * Computes whether the consumer `onReady` callback should fire for the
-     * current cycle, given the loading, paint, and data signals.
+     * Whether this renderer has finished rendering the current cycle, which drives the
+     * consumer `onReady` prop (Fusion `domready` / PDF). RegularChart feeds in the
+     * renderer's own paint signal (`ChartRendererProps.onReady`) alongside the loading
+     * and data signals, and fires `onReady` on each rising edge.
+     *
+     * Use `isRendererReady` when the renderer reports paint, or `isRendererDataReady`
+     * when it does not and readiness follows the data alone.
      */
-    isReadyForOnReady: (state: ChartOnReadyStateInput) => boolean;
+    isReady: (state: ChartReadinessState) => boolean;
   };
 }

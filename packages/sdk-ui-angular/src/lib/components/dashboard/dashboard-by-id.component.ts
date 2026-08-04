@@ -23,10 +23,12 @@ import {
   styles,
   template,
 } from '../../component-wrapper-helpers';
+import { toPreactDashboardByIdProps } from '../../helpers/dashboard-props-preact-translator';
+import { ComponentTranslator } from '../../services/component-translator.service';
 import { CustomWidgetsService } from '../../services/custom-widgets.service';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
-import { type DashboardHeaderConfig } from './dashboard.component';
+import { type DashboardHeaderConfig } from './dashboard-header-config';
 
 /**
  * Configuration for the {@link DashboardByIdComponent}.
@@ -127,6 +129,13 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
      * @category Constructor
      */
     public customWidgetsService: CustomWidgetsService,
+    /**
+     * Angular <-> preact component translator
+     *
+     * @internal
+     * @category Constructor
+     */
+    private componentTranslator: ComponentTranslator,
   ) {
     this.componentAdapter = new ComponentAdapter(DashboardByIdPreact, [
       createPluginContextConnector(this.sisenseContextService),
@@ -153,10 +162,11 @@ export class DashboardByIdComponent implements AfterViewInit, OnChanges, OnDestr
   }
 
   private getPreactComponentProps(): DashboardByIdPropsPreact {
-    return {
-      dashboardOid: this.dashboardOid,
-      config: this.config,
-    };
+    return toPreactDashboardByIdProps(
+      { dashboardOid: this.dashboardOid, config: this.config },
+      // the props are about to be rendered, so the header item components are converted too
+      this.componentTranslator,
+    );
   }
 
   /**

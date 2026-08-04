@@ -39,10 +39,10 @@ describe('loadKpiData', () => {
     mockLoadDataBySingleQuery.mockReset();
   });
 
-  it('passes through a single query when valueMode is "last" (trend set)', async () => {
+  it('passes through a single query when valueMode is "last" (category set)', async () => {
     const dataOptions = translateKpiChartDataOptions({
       value: revenue,
-      trend: DM.Commerce.Date.Months,
+      category: DM.Commerce.Date.Months,
       valueMode: 'last',
     });
     mockLoadDataBySingleQuery.mockResolvedValue(emptyResult);
@@ -62,7 +62,7 @@ describe('loadKpiData', () => {
     expect(result).toBe(emptyResult);
   });
 
-  it('passes through a single query when valueMode is "total" but no trend is set', async () => {
+  it('passes through a single query when valueMode is "total" but no category is set', async () => {
     const dataOptions = translateKpiChartDataOptions({
       value: revenue,
       valueMode: 'total',
@@ -89,10 +89,10 @@ describe('loadKpiData', () => {
     expect(result).toBe(emptyResult);
   });
 
-  it('runs a dual query and merges results when valueMode is "total" and trend is set', async () => {
+  it('runs a dual query and merges results when valueMode is "total" and category is set', async () => {
     const dataOptions = translateKpiChartDataOptions({
       value: revenue,
-      trend: DM.Commerce.Date.Months,
+      category: DM.Commerce.Date.Months,
       valueMode: 'total',
     });
 
@@ -150,7 +150,7 @@ describe('loadKpiData', () => {
   it('forwards a provided executionConfig to both queries in the dual-query path', async () => {
     const dataOptions = translateKpiChartDataOptions({
       value: revenue,
-      trend: DM.Commerce.Date.Months,
+      category: DM.Commerce.Date.Months,
       valueMode: 'total',
     });
     const executionConfig: QueryExecutionConfig = {

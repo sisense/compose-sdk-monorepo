@@ -39,7 +39,7 @@ describe('useChartOnReady', () => {
     expect(result.current.onRendererReady).toBeTypeOf('function');
   });
 
-  it('returns no paint handler for a restructured chart type without the contract', () => {
+  it('returns a paint handler for a participating chart type (column)', () => {
     const { result } = renderHook(() =>
       useChartOnReady({
         chartType: 'column',
@@ -48,7 +48,7 @@ describe('useChartOnReady', () => {
         chartData: null,
       }),
     );
-    expect(result.current.onRendererReady).toBeUndefined();
+    expect(result.current.onRendererReady).toBeTypeOf('function');
   });
 
   it('returns no paint handler for a non-restructured chart type', () => {
@@ -132,6 +132,53 @@ describe('useChartOnReady', () => {
     });
 
     expect(onReady).toHaveBeenCalledTimes(2);
+  });
+
+  // `onRendererReady` reaches Highcharts inside the chart options: a new identity, or a
+  // re-render triggered by the paint signal, forces an extra `chart.update()` that re-runs
+  // axis layout and visibly rescales charts.
+  it('keeps the paint handler identity stable across re-renders', () => {
+    const { result, rerender } = renderHook((props: HookInput) => useChartOnReady(props), {
+      initialProps: {
+        chartType: 'column',
+        isLoading: true,
+        hasNoDimensions: false,
+        chartData: null,
+      },
+    });
+    const handlerBefore = result.current.onRendererReady;
+
+    rerender({
+      chartType: 'column',
+      isLoading: false,
+      hasNoDimensions: false,
+      chartData: sankeyWithLinks,
+    });
+
+    expect(result.current.onRendererReady).toBe(handlerBefore);
+  });
+
+  it('does not re-render when the renderer signals paint', () => {
+    const onReady = vi.fn();
+    let renderCount = 0;
+    const { result } = renderHook(() => {
+      renderCount++;
+      return useChartOnReady({
+        chartType: 'column',
+        isLoading: false,
+        hasNoDimensions: false,
+        chartData: sankeyWithLinks,
+        onReady,
+      });
+    });
+    const renderCountBeforePaint = renderCount;
+
+    act(() => {
+      result.current.onRendererReady?.();
+    });
+
+    expect(onReady).toHaveBeenCalledTimes(1);
+    expect(renderCount).toBe(renderCountBeforePaint);
   });
 
   it('never fires for a non-participating chart type', () => {

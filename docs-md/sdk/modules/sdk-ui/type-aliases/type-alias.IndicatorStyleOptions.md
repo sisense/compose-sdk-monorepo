@@ -5,8 +5,8 @@ title: IndicatorStyleOptions
 # Type alias IndicatorStyleOptions
 
 > **IndicatorStyleOptions**: [`GaugeIndicatorStyleOptions`](../interfaces/interface.GaugeIndicatorStyleOptions.md) \| [`NumericBarIndicatorStyleOptions`](../interfaces/interface.NumericBarIndicatorStyleOptions.md) \| [`NumericSimpleIndicatorStyleOptions`](../interfaces/interface.NumericSimpleIndicatorStyleOptions.md) & \{
-  `height`: `number`;
-  `width`: `number`;
+  `height?`: `number`;
+  `width?`: `number`;
  }
 
 Configuration options that define functional style of the various elements of IndicatorChart

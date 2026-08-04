@@ -10,6 +10,7 @@ export type {
   ResolvedHeaderItem,
 } from './types.js';
 export { resolveHeaderItems, type ResolveHeaderItemsOptions } from './resolve-header-items.js';
+export { resolveHeaderMenuItems, type HeaderMenuConfig } from './resolve-header-menu-items.js';
 export { useResolvedHeaderItems } from './use-resolved-header-items.js';
 export { HeaderItemsRenderer, type HeaderItemsRendererProps } from './header-items-renderer.js';
 export { HeaderItemCell, type HeaderItemCellProps } from './header-item-cell.js';

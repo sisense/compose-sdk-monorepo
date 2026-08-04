@@ -14,7 +14,7 @@ export type UseWidgetHeaderManagementParams = {
   title?: string;
   /** onChange handler (from props). */
   onChange?: (event: WidgetChangeEvent) => void;
-  /** Merged config.header from props (may already have toolbar.menu.items). */
+  /** Merged config.header from props (may already have menu.items). */
   headerConfig?: WidgetHeaderConfig;
 };
 

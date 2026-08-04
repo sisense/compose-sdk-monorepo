@@ -47,36 +47,34 @@ describe('dashboardReducer', () => {
     });
   });
 
-  describe('PATCH_WIDGET', () => {
-    it('should merge patch into matching widget', () => {
+  describe('UPDATE_WIDGET', () => {
+    it('sets title on the target widget, leaving other widgets untouched', () => {
       const widget1 = createWidgetModel('w1');
       const widget2 = createWidgetModel('w2');
       const model = { ...baseModel, widgets: [widget1, widget2] };
 
       const result = dashboardReducer(model, {
-        type: UseDashboardModelActionType.PATCH_WIDGET,
-        payload: { widgetOid: 'w2', patch: { title: 'Updated Title' } },
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: { widgetOid: 'w2', update: { title: 'Updated Title' } },
       });
 
       expect(result?.widgets).toHaveLength(2);
-      expect(result?.widgets[0]).toEqual(widget1);
+      expect(result?.widgets[0]).toBe(widget1);
       expect(result?.widgets[1]).toEqual({ ...widget2, title: 'Updated Title' });
     });
 
-    it('should not mutate non-matching widgets', () => {
+    it('does not mutate any widget when the title target does not match', () => {
       const widget1 = createWidgetModel('w1');
       const model = { ...baseModel, widgets: [widget1] };
 
       const result = dashboardReducer(model, {
-        type: UseDashboardModelActionType.PATCH_WIDGET,
-        payload: { widgetOid: 'non-existent', patch: { title: 'No Effect' } },
+        type: UseDashboardModelActionType.UPDATE_WIDGET,
+        payload: { widgetOid: 'non-existent', update: { title: 'No Effect' } },
       });
 
       expect(result?.widgets).toEqual([widget1]);
     });
-  });
 
-  describe('UPDATE_WIDGET', () => {
     it('merges scrollerLocation into styleOptions.navigator on the target widget', () => {
       const widgetA = {
         ...createWidgetModel('w-a'),

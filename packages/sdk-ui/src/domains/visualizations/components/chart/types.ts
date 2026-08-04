@@ -8,7 +8,6 @@ import { type ChartType } from '@/types.js';
 
 /**
  * Props object to be passed to the chart renderer.
- *
  * @internal
  */
 export type ChartRendererProps = {
@@ -22,11 +21,10 @@ export type ChartRendererProps = {
   onDataPointsSelected?: ChartProps['onDataPointsSelected'];
   onBeforeRender?: ChartProps['onBeforeRender'];
   /**
-   * Paint signal from the active renderer after it finishes painting.
-   * Used for Sankey `onReady` (Fusion `domready`): RegularChart stores the
-   * flag and fires the consumer callback via `useFireOnReady`. Highcharts
-   * wires this to `chart.events.load` / `render`.
-   *
+   * Paint signal from the active renderer after it finishes painting. Feeds the
+   * chart's `ChartBuilder.renderer.isReady` predicate, which decides when `useChartOnReady`
+   * fires the consumer `onReady` prop (Fusion `domready`). Highcharts wires this to
+   * `chart.events.load` / `render`.
    * @internal
    */
   onReady?: ChartProps['onReady'];

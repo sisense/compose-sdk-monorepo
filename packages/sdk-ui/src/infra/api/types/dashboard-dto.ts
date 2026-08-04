@@ -5,6 +5,7 @@ import {
   JaqlDataSource,
 } from '@sisense/sdk-data';
 
+import { DashboardUserAuth } from '@/infra/app/settings/types/role-manifest';
 import { AnyObject } from '@/shared/utils/utility-types';
 
 import { WidgetDto } from '../../../domains/widgets/components/widget-by-id/types';
@@ -85,5 +86,9 @@ export type DashboardDto = {
   layout?: LayoutDto;
   style?: DashboardStyleDto;
   settings?: DashboardSettings;
-  userAuth?: AnyObject;
+  /**
+   * Contains the current user's authorization for this dashboard.
+   * May be absent on older Sisense V1 responses that do not return `userAuth`.
+   */
+  userAuth?: DashboardUserAuth;
 } & AnyObject;

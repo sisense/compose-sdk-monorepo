@@ -5,7 +5,7 @@ title: ThemeConfig
 # Type alias ThemeConfig
 
 > **ThemeConfig**: `PropsWithChildren`\< \{
-  `theme`: [`ThemeOid`](type-alias.ThemeOid.md) \| [`ThemeSettings`](../interfaces/interface.ThemeSettings.md);
+  `theme?`: [`ThemeOid`](type-alias.ThemeOid.md) \| [`ThemeSettings`](../interfaces/interface.ThemeSettings.md);
  } \>
 
 Configurations for Theme.

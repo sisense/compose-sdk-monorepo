@@ -20,7 +20,12 @@ export function validateDatetimeMemberStrings(
   granularity: string,
   pathPrefix: string,
 ): void {
-  if (!Array.isArray(members) || members.length === 0) {
+  // Empty members is an include-all no-op.
+  if (Array.isArray(members) && members.length === 0) {
+    return;
+  }
+
+  if (!Array.isArray(members)) {
     throw new Error(
       `${pathPrefix}: members filter requires at least one member for ${granularity}.`,
     );

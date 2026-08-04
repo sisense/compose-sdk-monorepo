@@ -172,6 +172,32 @@ export function getDataSourceName(dataSource: DataSource): string {
 }
 
 /**
+ * Returns the Fusion `fullname` when the data source carries one.
+ *
+ * @param dataSource - The data source to read the full name from
+ * @returns The Fusion `fullname` if present on a {@link DataSourceInfo}; otherwise `undefined`
+ * @internal
+ */
+export function getDataSourceFullName(dataSource: DataSource): string | undefined {
+  return isDataSourceInfo(dataSource) ? dataSource.fullname : undefined;
+}
+
+/**
+ * Encodes a Fusion datasource path for use in a URL path segment while preserving `/`.
+ * Encodes spaces and `:` (e.g. `live:Title` → `live%3ATitle`, `LocalHost/A B` → `LocalHost/A%20B`).
+ *
+ * @param path - The datasource path to encode
+ * @returns The path with each `/`-separated segment URI-encoded
+ * @internal
+ */
+export function encodeDataSourcePath(path: string): string {
+  return path
+    .split('/')
+    .map((segment) => encodeURIComponent(segment))
+    .join('/');
+}
+
+/**
  * Checks if the provided 'dataSource' is a data source info structure that contains more than just the data source name.
  *
  * @internal
@@ -191,6 +217,7 @@ export function convertDataSource(jaqlDataSource: JaqlDataSource): DataSource {
     address: jaqlDataSource.address,
     title: jaqlDataSource.title,
     type: jaqlDataSource.live ? 'live' : 'elasticube',
+    ...(jaqlDataSource.fullname !== undefined ? { fullname: jaqlDataSource.fullname } : {}),
   };
 }
 

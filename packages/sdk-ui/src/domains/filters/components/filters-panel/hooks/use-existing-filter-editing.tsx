@@ -5,14 +5,12 @@ import {
   Filter,
   filterFactory,
   isCascadingFilter,
-  isDatetime as isDatetimeAttributeType,
   isMembersFilter,
-  isNumber as isNumberAttributeType,
-  isText as isTextAttributeType,
 } from '@sisense/sdk-data';
 import clone from 'lodash-es/clone';
 
 import { FilterEditorPopover } from '@/domains/filters/components/filter-editor-popover/filter-editor-popover';
+import { getFilterEditorValueType } from '@/domains/filters/components/filter-editor-popover/utils';
 
 import type { UseExistingFilterEditingConfig } from '../types';
 
@@ -120,12 +118,7 @@ export const useExistingFilterEditing = ({
 };
 
 export function isFilterSupportEditing(filter: Filter): boolean {
-  return (
-    isTextAttributeType(filter.attribute.type) ||
-    isNumberAttributeType(filter.attribute.type) ||
-    isDatetimeAttributeType(filter.attribute.type) ||
-    isCascadingFilter(filter)
-  );
+  return isCascadingFilter(filter) || getFilterEditorValueType(filter.attribute) !== null;
 }
 
 /**

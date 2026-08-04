@@ -11,7 +11,11 @@ import {
   ComponentAdapter,
   type DashboardConfig as DashboardConfigPreact,
   type DashboardFiltersPanelConfig,
-  type DashboardHeaderConfig as DashboardHeaderConfigPreact,
+  type DashboardHeaderItemComponentProps,
+  type DashboardHeaderItemPosition,
+  type DashboardHeaderItemSize,
+  type DashboardHeaderTarget,
+  DashboardHeaderTargets,
   Dashboard as DashboardPreact,
   type DashboardProps as DashboardPropsPreact,
 } from '@sisense/sdk-ui-preact';
@@ -26,19 +30,29 @@ import {
   template,
 } from '../../component-wrapper-helpers';
 import { toPreactDashboardProps } from '../../helpers/dashboard-props-preact-translator';
+import { ComponentTranslator } from '../../services/component-translator.service';
 import { CustomWidgetsService } from '../../services/custom-widgets.service';
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import { WidgetProps } from '../widgets/widget.component';
+import { type DashboardHeaderConfig } from './dashboard-header-config';
 
 // Re-exports related types
-export { DashboardFiltersPanelConfig };
-
-/**
- * Configuration for the dashboard header.
- */
-export interface DashboardHeaderConfig
-  extends Omit<DashboardHeaderConfigPreact, 'items' | 'onBeforeRender'> {}
+export { DashboardHeaderTargets };
+export type {
+  DashboardFiltersPanelConfig,
+  DashboardHeaderItemComponentProps,
+  DashboardHeaderItemPosition,
+  DashboardHeaderItemSize,
+  DashboardHeaderTarget,
+};
+export type {
+  DashboardHeaderConfig,
+  DashboardHeaderItem,
+  DashboardHeaderItemComponent,
+  DashboardHeaderItemsTransform,
+  DashboardResolvedHeaderItem,
+} from './dashboard-header-config';
 
 /**
  * Configuration for the {@link DashboardComponent}.
@@ -202,6 +216,13 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
      * @category Constructor
      */
     public customWidgetsService: CustomWidgetsService,
+    /**
+     * Angular <-> preact component translator
+     *
+     * @internal
+     * @category Constructor
+     */
+    private componentTranslator: ComponentTranslator,
   ) {
     this.componentAdapter = new ComponentAdapter(DashboardPreact, [
       createPluginContextConnector(this.sisenseContextService),
@@ -228,16 +249,20 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private getPreactComponentProps(): DashboardPropsPreact {
-    return toPreactDashboardProps({
-      title: this.title,
-      layoutOptions: this.layoutOptions,
-      config: this.config,
-      widgets: this.widgets,
-      filters: this.filters,
-      defaultDataSource: this.defaultDataSource,
-      widgetsOptions: this.widgetsOptions,
-      styleOptions: this.styleOptions,
-    });
+    return toPreactDashboardProps(
+      {
+        title: this.title,
+        layoutOptions: this.layoutOptions,
+        config: this.config,
+        widgets: this.widgets,
+        filters: this.filters,
+        defaultDataSource: this.defaultDataSource,
+        widgetsOptions: this.widgetsOptions,
+        styleOptions: this.styleOptions,
+      },
+      // the props are about to be rendered, so the header item components are converted too
+      this.componentTranslator,
+    );
   }
 
   /**

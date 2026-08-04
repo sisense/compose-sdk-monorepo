@@ -5,6 +5,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 import { translatePivotTableDataOptions } from '@/domains/visualizations/core/chart-data-options/translate-data-options.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
+import { findMenuActionByPath } from '@/shared/types/__test-helpers__/find-menu-item.js';
 
 import { usePivotWidgetExcelDownload } from './use-pivot-widget-excel-download.js';
 import type { UsePivotWidgetExcelDownloadParams } from './use-pivot-widget-excel-download.js';
@@ -52,15 +54,21 @@ vi.mock('@/domains/widgets/hooks/use-with-excel-download-menu-item.js', async (i
 });
 
 function findExcelRepeatRowsOnClick(header: WidgetHeaderConfig): (() => void) | undefined {
-  const download = header.toolbar?.menu?.items?.find((i) => i.id === 'widget-download');
-  const excelFile = download?.items?.find((i) => i.id === 'excelFileMenuItem');
-  return excelFile?.items?.find((i) => i.id === 'downloadExcelRepeatRows')?.onClick;
+  return findMenuActionByPath(
+    header.menu?.items,
+    WidgetHeaderMenuTargets.Download,
+    WidgetHeaderMenuTargets.DownloadExcel,
+    WidgetHeaderMenuTargets.DownloadExcelRepeatRows,
+  )?.onClick;
 }
 
 function findExcelMergeRowsOnClick(header: WidgetHeaderConfig): (() => void) | undefined {
-  const download = header.toolbar?.menu?.items?.find((i) => i.id === 'widget-download');
-  const excelFile = download?.items?.find((i) => i.id === 'excelFileMenuItem');
-  return excelFile?.items?.find((i) => i.id === 'downloadExcelMergeRows')?.onClick;
+  return findMenuActionByPath(
+    header.menu?.items,
+    WidgetHeaderMenuTargets.Download,
+    WidgetHeaderMenuTargets.DownloadExcel,
+    WidgetHeaderMenuTargets.DownloadExcelMergeRows,
+  )?.onClick;
 }
 
 const baseParams: UsePivotWidgetExcelDownloadParams = {
@@ -69,7 +77,7 @@ const baseParams: UsePivotWidgetExcelDownloadParams = {
   filters: undefined,
   dataSource: undefined,
   config: { actions: { downloadExcel: { enabled: true } } },
-  baseHeaderConfig: { toolbar: { menu: { items: [] } } },
+  baseHeaderConfig: { menu: { items: [] } },
 };
 
 describe('usePivotWidgetExcelDownload', () => {

@@ -5,9 +5,9 @@ title: SeriesLabels
 # Type alias SeriesLabels
 
 > **SeriesLabels**: [`SeriesLabelsBase`](type-alias.SeriesLabelsBase.md) & [`SeriesLabelsAligning`](type-alias.SeriesLabelsAligning.md) & \{
-  `showPercentage`: `boolean`;
-  `showPercentDecimals`: `boolean`;
-  `showValue`: `boolean`;
+  `showPercentage?`: `boolean`;
+  `showPercentDecimals?`: `boolean`;
+  `showValue?`: `boolean`;
  }
 
 Options that define series labels - titles/names identifying data series in a chart.

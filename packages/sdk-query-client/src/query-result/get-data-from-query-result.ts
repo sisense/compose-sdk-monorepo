@@ -1,13 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Cell, Column, DataCell, Element, QueryResultData } from '@sisense/sdk-data';
+import { Cell, DataCell, Element, QueryResultData } from '@sisense/sdk-data';
 import { simpleColumnType } from '@sisense/sdk-data';
 import numeral from 'numeral';
 
 import { JaqlResponse } from '../types.js';
 
+/**
+ * The subset of an {@link Element} needed to describe a result column.
+ *
+ * Query metadata is normally made of full model elements, but columns appended by advanced
+ * analytics have no element behind them, so only these three fields are ever available.
+ */
+export type ResultColumnMetadata = Pick<Element, 'name' | 'title' | 'type'>;
+
 export const getDataFromQueryResult = (
   result: JaqlResponse,
-  metadata: Element[],
+  metadata: readonly ResultColumnMetadata[],
 ): QueryResultData => {
   const values = getQueryResultValues(result);
   return prepareResultAsColsAndRows(values, metadata);
@@ -15,11 +23,15 @@ export const getDataFromQueryResult = (
 
 export function prepareResultAsColsAndRows(
   data: DataCell[][],
-  metadata: Element[],
+  metadata: readonly ResultColumnMetadata[],
 ): QueryResultData {
   return {
-    columns: metadata?.map((d: Column) => ({
+    columns: metadata?.map((d) => ({
       name: d.name,
+      // `name` carries the element identity (the physical column), so the display label has to
+      // be surfaced separately for consumers rendering result headers. Model elements always
+      // resolve `title`, defaulting to `name`.
+      title: d.title,
       type: simpleColumnType(d.type),
     })),
     rows: setCellsBlur(data),

@@ -24,6 +24,7 @@ import { withOptionallyDisabledAutoHeight } from '@/domains/dashboarding/utils';
 import { Widget } from '@/domains/widgets/components/widget';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { withHeaderMenuItem } from '@/domains/widgets/helpers/header-menu-utils';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { useSyncedState } from '@/shared/hooks/use-synced-state';
 import { composeTitleHandlers } from '@/shared/utils/combine-handlers';
@@ -320,13 +321,15 @@ export const EditableLayout = ({
                                       {(() => {
                                         const customizedProps = flow(
                                           withHeaderMenuItem({
-                                            id: 'editable-layout-delete',
+                                            type: 'action',
+                                            id: WidgetHeaderMenuTargets.DeleteWidget,
                                             caption: t('widgetHeader.menu.deleteWidget'),
                                             onClick: () =>
                                               onCellDelete(columnIndex, rowIndex, subcell.widgetId),
                                           }),
                                           withHeaderMenuItem({
-                                            id: 'editable-layout-distribute',
+                                            type: 'action',
+                                            id: WidgetHeaderMenuTargets.DistributeEqualWidth,
                                             caption: t('widgetHeader.menu.distributeEqualWidth'),
                                             onClick: () =>
                                               onCellDistributeEqualWidth(columnIndex, rowIndex),

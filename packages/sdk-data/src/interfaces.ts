@@ -193,6 +193,12 @@ export type DataSourceInfo = {
    * @internal
    */
   address?: string;
+  /**
+   * Fusion datasource path id (e.g. `LocalHost/Title` or `live:Title`).
+   * Prefer this over `title` when building REST paths that accept a fullname.
+   * @internal
+   */
+  fullname?: string;
   title: string;
   type: 'live' | 'elasticube';
 };

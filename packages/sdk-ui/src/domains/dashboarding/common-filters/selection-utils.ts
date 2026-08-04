@@ -100,7 +100,6 @@ function extractEntriesFromPath(
 function getSelectionsFromPoints(
   points: AbstractDataPointWithEntries[],
   selectablePaths: string[],
-  includeCalculatedAttributes = false,
 ): DataSelection[] {
   // Early return for empty inputs
   if (!points.length || !selectablePaths.length) {
@@ -126,13 +125,9 @@ function getSelectionsFromPoints(
   // Convert grouped entries to DataSelection objects
   return Object.values(groupedEntries)
     .filter((entries): entries is AttributeDataPointEntry[] => {
-      // Ensure we have entries with valid attributes, and exclude calculated dimensions —
-      // they cannot back a filter, so clicking such a point must not produce a cross-filter.
-      return (
-        entries.length > 0 &&
-        !!entries[0].attribute &&
-        (!MetadataTypes.isCalculatedAttribute(entries[0].attribute) || includeCalculatedAttributes)
-      );
+      // Ensure we have entries with a valid attribute. Calculated dimensions are included —
+      // they can back a members filter, so clicking such a point cross-filters like a regular field.
+      return entries.length > 0 && !!entries[0].attribute;
     })
     .map((entries) => {
       // At this point, we know entries[0].attribute exists due to the filter above
@@ -175,12 +170,7 @@ function getTreemapChartSelections(
   points: DataPoint[],
   dataOptions: CategoricalChartDataOptions,
 ): DataSelection[] {
-  const shouldIncludeCalculatedAttributes = true;
-  const selections = getSelectionsFromPoints(
-    points,
-    ['category'],
-    shouldIncludeCalculatedAttributes,
-  );
+  const selections = getSelectionsFromPoints(points, ['category']);
   const pointLevelIndex = selections.length - 1;
   const pointLevelAttribute = translateColumnToAttribute(dataOptions.category[pointLevelIndex]);
 
@@ -319,9 +309,26 @@ export function getWidgetSelections(
   return [];
 }
 
+/**
+ * Returns the attributes of a widget that can drive an interaction (cross-filtering or drilldown).
+ *
+ * Calculated dimensions are excluded by default, which is what drilldown needs (a calculated
+ * dimension cannot be a drilldown target). Cross-filtering opts in via `includeCalculatedAttributes`
+ * so a calculated-dimension-backed widget can create a filter — except on treemap/sunburst, whose
+ * level-based selection cannot represent a calculated dimension, so they always exclude it (this
+ * avoids registering a cross-filter affordance that cannot produce a filter).
+ *
+ * @param widgetType - The internal widget type
+ * @param dataOptions - The widget's data options
+ * @param includeCalculatedAttributes - Opt in to treating calculated dimensions as selectable (for
+ * cross-filtering); defaults to `false` (drilldown behavior)
+ * @returns The attributes eligible for the requested interaction.
+ * @internal
+ */
 export function getSelectableWidgetAttributes(
   widgetType: WidgetTypeInternal,
   dataOptions: ChartDataOptions | PivotTableDataOptions | GenericDataOptions,
+  includeCalculatedAttributes = false,
 ) {
   let targetDataOptions: (Column | StyledColumn)[] = [];
 
@@ -356,13 +363,18 @@ export function getSelectableWidgetAttributes(
     targetDataOptions = [...(dataOptions as SankeyChartDataOptions).category];
   }
 
-  return (
-    targetDataOptions
-      .map(translateColumnToAttribute)
-      // Calculated dimensions (calculated attributes) cannot back a filter, so they are not
-      // selectable for cross-filtering or drilldown.
-      .filter((attribute) => !MetadataTypes.isCalculatedAttribute(attribute))
-  );
+  // Treemap/sunburst selection is level-based and cannot represent a calculated dimension, so a CD
+  // is never selectable there even when opted in — otherwise the widget would register a
+  // cross-filter affordance that can never produce a filter (see getTreemapChartSelections).
+  const canSelectCalculatedAttributes =
+    includeCalculatedAttributes && widgetType !== 'treemap' && widgetType !== 'sunburst';
+
+  return targetDataOptions
+    .map(translateColumnToAttribute)
+    .filter(
+      (attribute) =>
+        canSelectCalculatedAttributes || !MetadataTypes.isCalculatedAttribute(attribute),
+    );
 }
 
 /**

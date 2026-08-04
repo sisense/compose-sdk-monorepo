@@ -13,7 +13,7 @@ Configuration options that define functional style of the various elements of a 
   dataSet={DM.DataSource}
   dataOptions={{
     value: measureFactory.sum(DM.Commerce.Revenue),
-    trend: DM.Commerce.Date.Months,
+    category: DM.Commerce.Date.Months,
   }}
   styleOptions={{
     title: { text: 'Monthly Revenue' },
@@ -55,7 +55,7 @@ Total height of the component, which is considered in the following order of pri
 
 ### layout
 
-> **layout**?: `"big-comparison"` \| `"standard"`
+> **layout**?: `"comparison-first"` \| `"standard"`
 
 Card layout mode.
 
@@ -71,7 +71,7 @@ Card layout mode.
 
 > **sparkline**?: [`KpiSparklineStyleOptions`](../type-aliases/type-alias.KpiSparklineStyleOptions.md)
 
-Sparkline styling; rendered only when [KpiChartDataOptions.trend](interface.KpiChartDataOptions.md#trend) is set.
+Sparkline styling; rendered only when [KpiChartDataOptions.category](interface.KpiChartDataOptions.md#category) is set.
 
 ***
 

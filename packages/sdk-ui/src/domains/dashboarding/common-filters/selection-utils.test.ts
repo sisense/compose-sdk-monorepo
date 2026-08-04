@@ -249,7 +249,7 @@ describe('selection-utils', () => {
       });
     });
 
-    it('excludes calculated dimensions (not selectable for cross-filtering or drilldown)', () => {
+    it('excludes calculated dimensions by default (e.g. for drilldown targets)', () => {
       const calcDim = attributeFactory.customFormula('Bucket', "IF([rev] > 1000, 'A', 'B')", {
         rev: DM.Commerce.Revenue,
       });
@@ -261,6 +261,49 @@ describe('selection-utils', () => {
 
       expect(selectableAttributes).toHaveLength(1);
       expect(selectableAttributes[0].expression).toEqual(DM.Commerce.AgeRange.expression);
+    });
+
+    it('includes calculated dimensions when opted in (for cross-filtering)', () => {
+      const calcDim = attributeFactory.customFormula('Bucket', "IF([rev] > 1000, 'A', 'B')", {
+        rev: DM.Commerce.Revenue,
+      });
+
+      const selectableAttributes = getSelectableWidgetAttributes(
+        'column',
+        {
+          category: [calcDim, DM.Commerce.AgeRange],
+          value: [],
+        },
+        true,
+      );
+
+      expect(selectableAttributes).toHaveLength(2);
+      expect(selectableAttributes.map((a) => a.expression)).toEqual([
+        calcDim.expression,
+        DM.Commerce.AgeRange.expression,
+      ]);
+    });
+
+    it('excludes calculated dimensions for treemap/sunburst even when opted in', () => {
+      const calcDim = attributeFactory.customFormula('Bucket', "IF([rev] > 1000, 'A', 'B')", {
+        rev: DM.Commerce.Revenue,
+      });
+
+      // Treemap/sunburst selection is level-based and cannot represent a calculated dimension, so it
+      // must never be selectable there — otherwise the widget registers a dead cross-filter handler.
+      (['treemap', 'sunburst'] as const).forEach((widgetType) => {
+        const selectableAttributes = getSelectableWidgetAttributes(
+          widgetType,
+          {
+            category: [calcDim, DM.Commerce.AgeRange],
+            value: [],
+          },
+          true,
+        );
+
+        expect(selectableAttributes).toHaveLength(1);
+        expect(selectableAttributes[0].expression).toEqual(DM.Commerce.AgeRange.expression);
+      });
     });
 
     it('should return selectable attributes for "sankey" widget', () => {
@@ -323,7 +366,7 @@ describe('selection-utils', () => {
       expect(selections[0].values).toEqual(['65+']);
     });
 
-    it('does not produce a cross-filter selection for a calculated-dimension data point', () => {
+    it('produces a cross-filter selection for a calculated-dimension data point', () => {
       const calcDim = attributeFactory.customFormula('Bucket', "IF([rev] > 1000, 'A', 'B')", {
         rev: DM.Commerce.Revenue,
       });
@@ -337,7 +380,9 @@ describe('selection-utils', () => {
       ] as unknown as DataPoint[];
 
       const selections = getWidgetSelections('column', dataOptions, points);
-      expect(selections).toEqual([]);
+      expect(selections).toHaveLength(1);
+      expect(selections[0].attribute.expression).toEqual(calcDim.expression);
+      expect(selections[0].values).toEqual(['A']);
     });
 
     it('should keep datetime attributes with the same expression as separate selections by granularity', () => {

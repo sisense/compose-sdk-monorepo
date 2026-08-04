@@ -43,6 +43,7 @@ export function CalendarHeatmap({
   onDataPointContextMenu,
   onDataPointsSelected,
   onBeforeRender,
+  onReady,
   size,
 }: CalendarHeatmapProps) {
   const { themeSettings } = useThemeContext();
@@ -99,6 +100,7 @@ export function CalendarHeatmap({
           subtype={subtype}
           monthLabels={designOptions.monthLabels}
           size={size}
+          onReady={onReady}
         />
       </ChartsWrapper>
     </ChartRootContainer>

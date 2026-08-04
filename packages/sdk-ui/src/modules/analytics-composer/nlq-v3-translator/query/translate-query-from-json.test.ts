@@ -2,6 +2,7 @@ import {
   CalculatedMeasure,
   FilterRelations,
   isFilterRelations,
+  isMembersFilter,
   Measure,
   Sort,
   withoutGuids,
@@ -15,6 +16,7 @@ import {
 } from '../../__mocks__/mock-data-sources.js';
 import { NlqTranslationErrorResult } from '../../types.js';
 import { getSuccessData } from '../shared/utils/translation-helpers.js';
+import { flattenFilters } from '../shared/validation/flatten-filters.js';
 import type { QueryJSON } from '../types.js';
 import { translateQueryFromJSON } from './translate-query-from-json.js';
 
@@ -70,6 +72,38 @@ describe('translateQueryFromJSON', () => {
       ...query,
       ...(query.filters && { filters: withoutGuids(query.filters) }),
     }).toMatchSnapshot();
+  });
+
+  it('should accept empty datetime members filters as include-all no-op', () => {
+    const mockQueryJSON = {
+      dimensions: ['DM.Commerce.Date.Months'],
+      measures: [
+        {
+          function: 'measureFactory.sum',
+          args: ['DM.Commerce.Revenue', 'Total Revenue'],
+        },
+      ],
+      filters: [
+        {
+          function: 'filterFactory.members',
+          args: ['DM.Commerce.Date.Months', []],
+        },
+      ],
+    };
+
+    const result = translateQueryFromJSON({
+      data: mockQueryJSON as QueryJSON,
+      context: {
+        dataSource: MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
+        tables: MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
+      },
+    });
+
+    expect(result.success).toBe(true);
+    const query = getSuccessData(result);
+    const filters = flattenFilters(query.filters);
+    expect(filters).toHaveLength(1);
+    expect(isMembersFilter(filters[0]) && filters[0].members.length === 0).toBe(true);
   });
 
   describe('error handling', () => {

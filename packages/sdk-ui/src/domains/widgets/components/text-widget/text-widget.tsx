@@ -15,7 +15,7 @@ import {
 import { useTrackWidgetInit } from '../../hooks/use-track-widget-init';
 import { getWidgetEntityId } from '../../hooks/widget-entity-id';
 import { getTextWidgetName, getWidgetTitle } from '../../hooks/widget-tracking-adapters';
-import { WidgetMenuButton } from '../../shared/widget-header/widget-menu-button';
+import { WidgetHeaderMenu } from '../../shared/widget-header/widget-header-menu';
 import { WidgetSpaceAround } from '../../shared/widget-style-utils';
 import { TextWidgetProps } from './types';
 
@@ -133,10 +133,7 @@ export const TextWidget: FunctionComponent<TextWidgetProps> = asSisenseComponent
             <TextWidgetHeaderTitle>{header?.renderTitle?.(null)}</TextWidgetHeaderTitle>
             <div>
               {header?.renderToolbar?.(null)}
-              {props.config?.header?.toolbar?.menu?.items != null &&
-                props.config.header.toolbar.menu.items.length > 0 && (
-                  <WidgetMenuButton menuItems={props.config.header.toolbar.menu.items} />
-                )}
+              <WidgetHeaderMenu config={props.config?.header?.menu} />
             </div>
           </TextWidgetHeader>
         )}

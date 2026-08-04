@@ -1,6 +1,7 @@
 import { ChartBuilder } from '@/domains/visualizations/components/chart/restructured-charts/types.js';
 
 import { loadDataBySingleQuery } from '../../helpers/data-loading.js';
+import { isRendererReady } from '../../helpers/readiness.js';
 import {
   getCalendarHeatmapAttributes,
   getCalendarHeatmapMeasures,
@@ -40,5 +41,6 @@ export const calendarHeatmapChartBuilder: ChartBuilder<'calendar-heatmap'> = {
   renderer: {
     ChartRendererComponent: CalendarHeatmap,
     isCorrectRendererProps: isCalendarHeatmapProps,
+    isReady: isRendererReady,
   },
 };

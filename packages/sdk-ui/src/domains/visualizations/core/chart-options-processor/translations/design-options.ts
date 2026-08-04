@@ -119,7 +119,8 @@ export type CalendarHeatmapChartDesignOptions = BaseDesignOptionsType & {
 export type KpiChartDesignOptions = BaseDesignOptionsType & {
   width?: number;
   height?: number;
-  layout: 'standard' | 'big-comparison';
+  /** Card layout mode; `'comparison-first'` renders the comparison at headline scale. */
+  layout: 'standard' | 'comparison-first';
   value: {
     /** `'auto'` for auto-fit sizing, or a fixed font size in px. */
     textSize: 'auto' | number;
@@ -127,8 +128,14 @@ export type KpiChartDesignOptions = BaseDesignOptionsType & {
     conditionalIcons?: KpiIconCondition[];
   };
   title: {
+    /** Whether the whole title section (title text and category caption) is shown. */
     enabled: boolean;
+    /** Title text override; the value measure's title when omitted. */
     text?: string;
+    /** Whether the title text is shown within the title section. */
+    showValueTitle: boolean;
+    /** Whether the current category bucket caption is shown within the title section. */
+    showCategoryTitle: boolean;
   };
   card: {
     backgroundColor?: string;
@@ -143,6 +150,10 @@ export type KpiChartDesignOptions = BaseDesignOptionsType & {
   comparison: {
     display: 'percent' | 'value' | 'both';
     label?: string;
+    /** Consumer template overriding the localized `kpi.target.ofGoal` string. */
+    ofGoalText?: string;
+    /** Consumer template overriding the localized `kpi.target.toGo` string. */
+    toGoText?: string;
     color?: DataColorOptions;
     showIcon: boolean;
     conditionalIcons?: KpiIconCondition[];

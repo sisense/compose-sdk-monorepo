@@ -25,7 +25,7 @@ describe('KpiValue', () => {
   });
 
   it('renders a fixed compact font size (not auto-fit px) when scale is compact and textSize is auto', () => {
-    // Issue 2: in the 'big-comparison' layout the value takes the small/compact role -- it must
+    // Issue 2: in the 'comparison-first' layout the value takes the small/compact role -- it must
     // render a fixed, small size, not participate in auto-fit sizing at all.
     const { getByText } = render(
       <KpiValue text="14.48M" textSize="auto" onColor={false} scale="compact" />,
@@ -100,11 +100,31 @@ describe('KpiValue', () => {
         textSize="auto"
         onColor={false}
         scale="headline"
-        icon={{ icon: '✓', color: '#00aa00', expression: '100', operator: '>' }}
+        icon={{
+          icon: { type: 'text', value: '✓', color: '#00aa00' },
+          expression: '100',
+          operator: '>',
+        }}
       />,
     );
     const icon = getByText('✓');
     expect(icon).toHaveAttribute('aria-hidden', 'true');
     expect(icon).toHaveStyle({ color: '#00aa00' });
+  });
+
+  it('falls back to the headline value color for a conditional icon with no color of its own', () => {
+    // Locks the `icon.color ?? color` contract: an icon with no explicit `color` must inherit
+    // the headline value's own color rather than rendering with `currentColor`/unset.
+    const { getByText } = render(
+      <KpiValue
+        text="150"
+        textSize="auto"
+        onColor={false}
+        scale="headline"
+        color="#123456"
+        icon={{ icon: { type: 'text', value: '✓' }, expression: '100', operator: '>' }}
+      />,
+    );
+    expect(getByText('✓')).toHaveStyle({ color: '#123456' });
   });
 });

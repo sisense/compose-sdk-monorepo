@@ -1,4 +1,5 @@
 import { loadDataBySingleQuery } from '../../../../helpers/data-loading.js';
+import { isRendererReady } from '../../../../helpers/readiness.js';
 import { ChartBuilder } from '../../../../types.js';
 import {
   createHighchartsBasedChartRenderer,
@@ -67,5 +68,6 @@ export const streamgraphChartBuilder: ChartBuilder<'streamgraph'> = {
       getAlerts: getCommonCartesianAlerts,
     }),
     isCorrectRendererProps: isHighchartsBasedChartRendererProps,
+    isReady: isRendererReady,
   },
 };

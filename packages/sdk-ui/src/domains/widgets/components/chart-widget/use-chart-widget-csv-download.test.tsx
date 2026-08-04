@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { getTranslatedDataOptions } from '@/domains/visualizations/components/chart/helpers/use-translated-data-options.js';
 import type { WidgetHeaderConfig } from '@/domains/widgets/shared/widget-header/types.js';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
+import { findMenuActionByPath } from '@/shared/types/__test-helpers__/find-menu-item.js';
 
 import { useChartWidgetCsvDownload } from './use-chart-widget-csv-download.js';
 import type { UseChartWidgetCsvDownloadParams } from './use-chart-widget-csv-download.js';
@@ -26,8 +28,11 @@ vi.mock('@/domains/visualizations/components/chart/helpers/use-translated-data-o
 }));
 
 function findCsvOnClick(header: WidgetHeaderConfig): (() => void) | undefined {
-  const download = header.toolbar?.menu?.items?.find((i) => i.id === 'widget-download');
-  return download?.items?.find((i) => i.id === 'widget-download-csv-file')?.onClick;
+  return findMenuActionByPath(
+    header.menu?.items,
+    WidgetHeaderMenuTargets.Download,
+    WidgetHeaderMenuTargets.DownloadCsv,
+  )?.onClick;
 }
 
 const baseParams: UseChartWidgetCsvDownloadParams = {
@@ -38,7 +43,7 @@ const baseParams: UseChartWidgetCsvDownloadParams = {
   highlights: undefined,
   dataSource: undefined,
   config: { actions: { downloadCsv: { enabled: true } } },
-  baseHeaderConfig: { toolbar: { menu: { items: [] } } },
+  baseHeaderConfig: { menu: { items: [] } },
 };
 
 describe('useChartWidgetCsvDownload', () => {

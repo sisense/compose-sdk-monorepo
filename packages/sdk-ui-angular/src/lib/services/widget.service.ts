@@ -212,8 +212,14 @@ export class WidgetService {
     });
 
     // Run the hook with widget props and JTD config
-    // This will trigger the subscription above asynchronously when React contexts are ready
-    hookAdapter.run(preactProps, jtdConfig);
+    // This will trigger the subscription above asynchronously when React contexts are ready.
+    // The Angular and preact JTD configs differ only in the flavor of custom header item
+    // components carried inside `jtdConfig.targetDashboardConfig.header`; this navigation boundary
+    // never renders them, so the config is structurally reused and only re-typed.
+    hookAdapter.run(
+      preactProps,
+      jtdConfig as unknown as JumpToDashboardConfigPreact | JumpToDashboardConfigForPivotPreact,
+    );
 
     // Return the BehaviorSubject and destroy function for cleanup
     return {

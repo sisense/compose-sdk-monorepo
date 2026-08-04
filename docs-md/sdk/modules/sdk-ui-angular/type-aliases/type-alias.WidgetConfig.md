@@ -92,6 +92,14 @@ downloading the widget's data.
 
 ***
 
+### `header`
+
+**header**?: [`WidgetHeaderConfig`](../interfaces/interface.WidgetHeaderConfig.md)
+
+Configuration for the widget header, such as the items available in its menu.
+
+***
+
 ### `narrative`
 
 **narrative**?: [`WidgetNarrativeConfig`](type-alias.WidgetNarrativeConfig.md)

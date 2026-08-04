@@ -34,11 +34,6 @@ export type {
 export { useSyncedState, type UseSyncedStateOptions } from '../shared/hooks/use-synced-state';
 
 // Charts
-export { SankeyChart } from '../domains/visualizations/components/sankey-chart';
-export type { SankeyChartProps } from '../props';
-export type { SankeyChartDataOptions } from '../domains/visualizations/core/chart-data-options/types';
-export type { SankeyStyleOptions, SankeyChartType } from '../types';
-
 export { KpiChart } from '../domains/visualizations/components/kpi-chart';
 export type { KpiChartProps, KpiChartEventProps } from '../props';
 export type {
@@ -56,6 +51,8 @@ export type {
   KpiCardStyleOptions,
   KpiTextSize,
   KpiIconCondition,
+  KpiIcon,
+  KpiIconName,
   KpiComparisonInfo,
   KpiRenderOptions,
   KpiBeforeRenderHandler,

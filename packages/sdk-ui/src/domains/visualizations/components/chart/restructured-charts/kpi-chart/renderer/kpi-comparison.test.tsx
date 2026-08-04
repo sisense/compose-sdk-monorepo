@@ -13,11 +13,25 @@ function requireCurrent(ref: { current: HTMLDivElement | null }): HTMLDivElement
   return ref.current;
 }
 
-// No i18next instance is set up in this isolated test -- `t()` is stubbed to return the raw key,
-// same as react-i18next's own uninitialized fallback, just without the console warning.
+// No i18next instance is set up in this isolated test -- `t()` is stubbed with the English
+// templates the component's formatting depends on (interpolated by hand), echoing raw keys for
+// everything else, same as react-i18next's own uninitialized fallback minus the console warning.
+const T_DICT: Record<string, string> = {
+  'kpi.percentFormat': '{{sign}}{{value}}%',
+  'kpi.target.ofGoal': '{{percent}} of goal',
+  'kpi.target.toGo': '{{value}} to go',
+};
 vi.mock('react-i18next', async (importOriginal) => {
   const mod = await importOriginal<typeof import('react-i18next')>();
-  return { ...mod, useTranslation: () => ({ t: (key: string) => key }) };
+  return {
+    ...mod,
+    useTranslation: () => ({
+      t: (key: string, options?: Record<string, unknown>) =>
+        (T_DICT[key] ?? key).replace(/\{\{(\w+)\}\}/g, (match, name: string) =>
+          options && name in options ? String(options[name]) : match,
+        ),
+    }),
+  };
 });
 
 describe('KpiComparison', () => {
@@ -40,7 +54,7 @@ describe('KpiComparison', () => {
         onColor={false}
       />,
     );
-    expect(getByText('+20.00%')).toHaveStyle({ 'font-size': '0.9rem' });
+    expect(getByText('+20.00%').parentElement).toHaveStyle({ 'font-size': '0.9rem' });
   });
 
   it('skips the auto-fit ResizeObserver entirely at compact scale (result unused)', () => {
@@ -66,9 +80,9 @@ describe('KpiComparison', () => {
       toGo: 250000,
       label: 'Total Cost',
     };
-    // The file-level t() mock returns raw keys, so the two lines assert as their i18n keys.
-    const PERCENT_LINE = 'kpi.target.ofGoal';
-    const TO_GO_LINE = 'kpi.target.toGo';
+    // Rendered through the file-level t() mock's English templates.
+    const PERCENT_LINE = '82% of goal';
+    const TO_GO_LINE = '250K to go';
 
     const renderTarget = (display: 'percent' | 'value' | 'both') =>
       render(
@@ -93,12 +107,12 @@ describe('KpiComparison', () => {
       expect(queryByText(PERCENT_LINE)).toBeNull();
       const toGo = getByText(TO_GO_LINE);
       // Primary styling, not the secondary caption: the compact-scale primary is 0.9rem.
-      expect(toGo).toHaveStyle({ 'font-size': '0.9rem' });
+      expect(toGo.parentElement).toHaveStyle({ 'font-size': '0.9rem' });
     });
 
     it("renders percent primary + amount-to-go secondary for display: 'both'", () => {
       const { getByText } = renderTarget('both');
-      expect(getByText(PERCENT_LINE)).toHaveStyle({ 'font-size': '0.9rem' });
+      expect(getByText(PERCENT_LINE).parentElement).toHaveStyle({ 'font-size': '0.9rem' });
       expect(getByText(TO_GO_LINE)).toHaveStyle({ 'font-size': '0.7rem' });
     });
 
@@ -114,7 +128,44 @@ describe('KpiComparison', () => {
         />,
       );
       expect(queryByText(PERCENT_LINE)).toBeNull();
-      expect(getByText(TO_GO_LINE)).toHaveStyle({ 'font-size': '0.9rem' });
+      expect(getByText(TO_GO_LINE).parentElement).toHaveStyle({ 'font-size': '0.9rem' });
+    });
+
+    it('renders consumer targetTextOverrides templates instead of the localized strings', () => {
+      const { getByText, queryByText } = render(
+        <KpiComparison
+          comparison={targetComparison}
+          display="both"
+          showIcon={false}
+          scale="compact"
+          compact={false}
+          onColor={false}
+          targetTextOverrides={{
+            ofGoalText: '{{percent}} of {{goal}}',
+            toGoText: '{{value}} remaining',
+          }}
+        />,
+      );
+      expect(getByText('82% of Total Cost')).toBeTruthy();
+      expect(getByText('250K remaining')).toBeTruthy();
+      expect(queryByText(PERCENT_LINE)).toBeNull();
+      expect(queryByText(TO_GO_LINE)).toBeNull();
+    });
+
+    it('feeds a labelOverride into the override template’s {{goal}} placeholder', () => {
+      const { getByText } = render(
+        <KpiComparison
+          comparison={targetComparison}
+          display="percent"
+          showIcon={false}
+          scale="compact"
+          compact={false}
+          onColor={false}
+          labelOverride="Q4 quota"
+          targetTextOverrides={{ ofGoalText: '{{percent}} of {{goal}}' }}
+        />,
+      );
+      expect(getByText('82% of Q4 quota')).toBeTruthy();
     });
   });
 
@@ -153,7 +204,7 @@ describe('KpiComparison', () => {
   });
 
   it('renders an auto-fit (pixel) font size for the primary readout when scale is headline', () => {
-    // Issue 2: in the 'big-comparison' layout the comparison takes over the headline role and
+    // Issue 2: in the 'comparison-first' layout the comparison takes over the headline role and
     // must participate in auto-fit sizing exactly like the value does -- not the old fixed 2.2rem.
     const { getByText } = render(
       <KpiComparison
@@ -165,7 +216,7 @@ describe('KpiComparison', () => {
         onColor={false}
       />,
     );
-    const style = getByText('+20.00%').style.fontSize;
+    const style = getByText('+20.00%').parentElement!.style.fontSize;
     expect(style.endsWith('px')).toBe(true);
     expect(style).not.toBe('2.2rem');
   });
@@ -197,7 +248,7 @@ describe('KpiComparison', () => {
         areaRef={areaRef}
       />,
     );
-    expect(parseFloat(getByText('+21.00%').style.fontSize)).toBe(16); // height bound is 0
+    expect(parseFloat(getByText('+21.00%').parentElement!.style.fontSize)).toBe(16); // height bound is 0
 
     rerender(
       <KpiComparison
@@ -211,7 +262,7 @@ describe('KpiComparison', () => {
         areaRef={areaRef}
       />,
     );
-    expect(parseFloat(getByText('+22.00%').style.fontSize)).toBeGreaterThan(16);
+    expect(parseFloat(getByText('+22.00%').parentElement!.style.fontSize)).toBeGreaterThan(16);
   });
 
   it('forwards areaRef to ComparisonArea so the orchestrator can measure it externally', () => {
@@ -245,10 +296,9 @@ describe('KpiComparison', () => {
         onColor={false}
       />,
     );
-    // No i18next instance is set up in this isolated test, so `t()` returns the raw key rather
-    // than the interpolated '82% of Goal' -- irrelevant here, since this test only cares that
-    // *some* primary text got measured and sized in px (not the old fixed 2.2rem).
-    expect(getByText('kpi.target.ofGoal').style.fontSize.endsWith('px')).toBe(true);
+    // This test only cares that the *rendered* primary text got measured and sized in px (not
+    // the old fixed 2.2rem).
+    expect(getByText('82% of goal').parentElement!.style.fontSize.endsWith('px')).toBe(true);
   });
 
   it('measures the real rendered primary text per comparison type (value, headline scale)', () => {
@@ -262,6 +312,62 @@ describe('KpiComparison', () => {
         onColor={false}
       />,
     );
-    expect(getByText('250K').style.fontSize.endsWith('px')).toBe(true);
+    expect(getByText('250K').parentElement!.style.fontSize.endsWith('px')).toBe(true);
+  });
+
+  describe('native tooltips for clipped text', () => {
+    // The readout clips with `text-overflow: ellipsis` at narrow cards, so every line carries its
+    // own full text as a `title` -- the only way a user can recover what was cut off. Asserted per
+    // comparison type because each branch wires `title` on its own elements.
+    it("exposes the full primary and secondary text as titles for type 'delta'", () => {
+      const { getByText } = render(
+        <KpiComparison
+          comparison={deltaComparison}
+          display="percent"
+          showIcon={false}
+          scale="compact"
+          compact={false}
+          onColor={false}
+        />,
+      );
+      expect(getByText('+20.00%')).toHaveAttribute('title', '+20.00%');
+      expect(getByText('vs cost')).toHaveAttribute('title', 'vs cost');
+    });
+
+    it("exposes the full primary and secondary text as titles for type 'target'", () => {
+      const { getByText } = render(
+        <KpiComparison
+          comparison={{
+            type: 'target',
+            target: 1000000,
+            percentOfTarget: 82,
+            toGo: 250000,
+            label: 'Total Cost',
+          }}
+          display="both"
+          showIcon={false}
+          scale="compact"
+          compact={false}
+          onColor={false}
+        />,
+      );
+      expect(getByText('82% of goal')).toHaveAttribute('title', '82% of goal');
+      expect(getByText('250K to go')).toHaveAttribute('title', '250K to go');
+    });
+
+    it("exposes the full primary and secondary text as titles for type 'value'", () => {
+      const { getByText } = render(
+        <KpiComparison
+          comparison={{ type: 'value', value: 250000, label: 'Total Cost' }}
+          display="percent"
+          showIcon={false}
+          scale="compact"
+          compact={false}
+          onColor={false}
+        />,
+      );
+      expect(getByText('250K')).toHaveAttribute('title', '250K');
+      expect(getByText('Total Cost')).toHaveAttribute('title', 'Total Cost');
+    });
   });
 });

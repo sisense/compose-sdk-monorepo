@@ -13,47 +13,70 @@ import {
 
 const revenue = measureFactory.sum(DM.Commerce.Revenue);
 
-const withTrend = translateKpiChartDataOptions({
+const withCategory = translateKpiChartDataOptions({
   value: revenue,
-  trend: DM.Commerce.Date.Months,
+  category: DM.Commerce.Date.Months,
 });
-const withoutTrend = translateKpiChartDataOptions({ value: revenue });
+const withoutCategory = translateKpiChartDataOptions({ value: revenue });
 
 describe('kpi - design options', () => {
   describe('translateKpiStyleOptionsToDesignOptions', () => {
     describe('layout', () => {
       it('defaults to standard', () => {
-        const result = translateKpiStyleOptionsToDesignOptions({}, withoutTrend);
+        const result = translateKpiStyleOptionsToDesignOptions({}, withoutCategory);
         expect(result.layout).toBe('standard');
       });
 
       it('honors an explicit layout override', () => {
         const result = translateKpiStyleOptionsToDesignOptions(
-          { layout: 'big-comparison' },
-          withoutTrend,
+          { layout: 'comparison-first' },
+          withoutCategory,
         );
-        expect(result.layout).toBe('big-comparison');
+        expect(result.layout).toBe('comparison-first');
       });
     });
 
     describe('title', () => {
-      it('defaults to enabled with no text', () => {
-        const result = translateKpiStyleOptionsToDesignOptions({}, withoutTrend);
-        expect(result.title).toEqual({ enabled: true, text: undefined });
+      it('defaults to an enabled section with both parts visible and no text', () => {
+        const result = translateKpiStyleOptionsToDesignOptions({}, withoutCategory);
+        expect(result.title).toEqual({
+          enabled: true,
+          text: undefined,
+          showValueTitle: true,
+          showCategoryTitle: true,
+        });
       });
 
       it('honors overrides', () => {
         const result = translateKpiStyleOptionsToDesignOptions(
           { title: { enabled: false, text: 'Custom title' } },
-          withoutTrend,
+          withoutCategory,
         );
-        expect(result.title).toEqual({ enabled: false, text: 'Custom title' });
+        expect(result.title).toEqual({
+          enabled: false,
+          text: 'Custom title',
+          showValueTitle: true,
+          showCategoryTitle: true,
+        });
+      });
+
+      it('honors explicit showValueTitle/showCategoryTitle opt-outs', () => {
+        const result = translateKpiStyleOptionsToDesignOptions(
+          { title: { showValueTitle: false, showCategoryTitle: false } },
+          withoutCategory,
+        );
+        expect(result.title).toEqual({
+          enabled: true,
+          text: undefined,
+          showValueTitle: false,
+          showCategoryTitle: false,
+        });
       });
     });
 
     describe('value', () => {
       it('defaults textSize to auto with no noDataText/conditionalIcons', () => {
-        const result = translateKpiStyleOptionsToDesignOptions({}, withoutTrend);
+        const result = translateKpiStyleOptionsToDesignOptions({}, withoutCategory);
         expect(result.value).toEqual({
           textSize: 'auto',
           noDataText: undefined,
@@ -62,7 +85,9 @@ describe('kpi - design options', () => {
       });
 
       it('honors a numeric px textSize and passes noDataText/conditionalIcons through untouched', () => {
-        const conditionalIcons = [{ icon: '⚠', expression: '0', operator: '<' as const }];
+        const conditionalIcons = [
+          { icon: { type: 'text' as const, value: '⚠' }, expression: '0', operator: '<' as const },
+        ];
         const result = translateKpiStyleOptionsToDesignOptions(
           {
             value: {
@@ -71,7 +96,7 @@ describe('kpi - design options', () => {
               conditionalIcons,
             },
           },
-          withoutTrend,
+          withoutCategory,
         );
         expect(result.value).toEqual({
           textSize: 48,
@@ -83,7 +108,7 @@ describe('kpi - design options', () => {
 
     describe('comparison', () => {
       it('defaults display to percent, showIcon to true, with no color/label/conditionalIcons', () => {
-        const result = translateKpiStyleOptionsToDesignOptions({}, withoutTrend);
+        const result = translateKpiStyleOptionsToDesignOptions({}, withoutCategory);
         expect(result.comparison).toEqual({
           display: 'percent',
           label: undefined,
@@ -96,7 +121,7 @@ describe('kpi - design options', () => {
       it('honors display and showIcon overrides', () => {
         const result = translateKpiStyleOptionsToDesignOptions(
           { comparison: { display: 'both', showIcon: false } },
-          withoutTrend,
+          withoutCategory,
         );
         expect(result.comparison.display).toBe('both');
         expect(result.comparison.showIcon).toBe(false);
@@ -105,7 +130,7 @@ describe('kpi - design options', () => {
       it('passes a string color through untouched with no default injected', () => {
         const result = translateKpiStyleOptionsToDesignOptions(
           { comparison: { color: '#00ff00' } },
-          withoutTrend,
+          withoutCategory,
         );
         expect(result.comparison.color).toBe('#00ff00');
       });
@@ -120,28 +145,50 @@ describe('kpi - design options', () => {
         };
         const result = translateKpiStyleOptionsToDesignOptions(
           { comparison: { color } },
-          withoutTrend,
+          withoutCategory,
         );
         expect(result.comparison.color).toBe(color);
       });
 
       it('leaves color undefined when none is provided (sign-based default applied later in the renderer)', () => {
-        const result = translateKpiStyleOptionsToDesignOptions({}, withTrend);
+        const result = translateKpiStyleOptionsToDesignOptions({}, withCategory);
         expect(result.comparison.color).toBeUndefined();
       });
 
       it('passes label and conditionalIcons through untouched', () => {
-        const conditionalIcons = [{ icon: '▲', expression: '0', operator: '>' as const }];
+        const conditionalIcons = [
+          { icon: { type: 'text' as const, value: '▲' }, expression: '0', operator: '>' as const },
+        ];
         const result = translateKpiStyleOptionsToDesignOptions(
           { comparison: { label: 'vs last year', conditionalIcons } },
-          withoutTrend,
+          withoutCategory,
         );
         expect(result.comparison.label).toBe('vs last year');
         expect(result.comparison.conditionalIcons).toBe(conditionalIcons);
       });
 
+      it('passes the target string override templates through untouched', () => {
+        const result = translateKpiStyleOptionsToDesignOptions(
+          {
+            comparison: {
+              ofGoalText: '{{percent}} of {{goal}} target',
+              toGoText: '{{value}} remaining',
+            },
+          },
+          withoutCategory,
+        );
+        expect(result.comparison.ofGoalText).toBe('{{percent}} of {{goal}} target');
+        expect(result.comparison.toGoText).toBe('{{value}} remaining');
+      });
+
+      it('leaves the target string overrides undefined by default (localized templates applied in the renderer)', () => {
+        const result = translateKpiStyleOptionsToDesignOptions({}, withoutCategory);
+        expect(result.comparison.ofGoalText).toBeUndefined();
+        expect(result.comparison.toGoText).toBeUndefined();
+      });
+
       it('never carries the deleted direction/positiveColor/negativeColor/neutralColor/neutralThreshold concepts', () => {
-        const result = translateKpiStyleOptionsToDesignOptions({}, withoutTrend);
+        const result = translateKpiStyleOptionsToDesignOptions({}, withoutCategory);
         expect(result.comparison).not.toHaveProperty('direction');
         expect(result.comparison).not.toHaveProperty('positiveColor');
         expect(result.comparison).not.toHaveProperty('negativeColor');
@@ -151,41 +198,41 @@ describe('kpi - design options', () => {
     });
 
     describe('sparkline', () => {
-      it('enables the sparkline by default when a trend dimension is set', () => {
-        const result = translateKpiStyleOptionsToDesignOptions({}, withTrend);
+      it('enables the sparkline by default when a category dimension is set', () => {
+        const result = translateKpiStyleOptionsToDesignOptions({}, withCategory);
         expect(result.sparkline).toEqual({ enabled: true, chartType: 'area' });
       });
 
-      it('disables the sparkline by default when no trend dimension is set', () => {
-        const result = translateKpiStyleOptionsToDesignOptions({}, withoutTrend);
+      it('disables the sparkline by default when no category dimension is set', () => {
+        const result = translateKpiStyleOptionsToDesignOptions({}, withoutCategory);
         expect(result.sparkline.enabled).toBe(false);
       });
 
-      it('honors an explicit sparkline opt-out even when a trend dimension is set', () => {
+      it('honors an explicit sparkline opt-out even when a category dimension is set', () => {
         const result = translateKpiStyleOptionsToDesignOptions(
           { sparkline: { enabled: false } },
-          withTrend,
+          withCategory,
         );
         expect(result.sparkline.enabled).toBe(false);
       });
 
-      it('cannot be forced on when no trend dimension is set', () => {
+      it('cannot be forced on when no category dimension is set', () => {
         const result = translateKpiStyleOptionsToDesignOptions(
           { sparkline: { enabled: true } },
-          withoutTrend,
+          withoutCategory,
         );
         expect(result.sparkline.enabled).toBe(false);
       });
 
       it('defaults chart type to area', () => {
-        const result = translateKpiStyleOptionsToDesignOptions({}, withTrend);
+        const result = translateKpiStyleOptionsToDesignOptions({}, withCategory);
         expect(result.sparkline.chartType).toBe('area');
       });
 
       it('honors a chart type override', () => {
         const result = translateKpiStyleOptionsToDesignOptions(
           { sparkline: { chartType: 'line' } },
-          withTrend,
+          withCategory,
         );
         expect(result.sparkline.chartType).toBe('line');
       });
@@ -193,7 +240,7 @@ describe('kpi - design options', () => {
 
     describe('card', () => {
       it('resolves defaults', () => {
-        const result = translateKpiStyleOptionsToDesignOptions({}, withoutTrend);
+        const result = translateKpiStyleOptionsToDesignOptions({}, withoutCategory);
         expect(result.card).toEqual({
           backgroundColor: undefined,
           textAlign: 'left',
@@ -212,7 +259,7 @@ describe('kpi - design options', () => {
               cornerRadius: 0,
             },
           },
-          withoutTrend,
+          withoutCategory,
         );
         expect(result.card).toEqual({
           backgroundColor: '#123456',
@@ -225,7 +272,7 @@ describe('kpi - design options', () => {
       it("passes through a 'right' textAlign override", () => {
         const result = translateKpiStyleOptionsToDesignOptions(
           { card: { textAlign: 'right' } },
-          withoutTrend,
+          withoutCategory,
         );
         expect(result.card.textAlign).toBe('right');
       });
@@ -235,7 +282,7 @@ describe('kpi - design options', () => {
       it('passes width and height through', () => {
         const result = translateKpiStyleOptionsToDesignOptions(
           { width: 300, height: 200 },
-          withTrend,
+          withCategory,
         );
         expect(result.width).toBe(300);
         expect(result.height).toBe(200);
@@ -244,21 +291,21 @@ describe('kpi - design options', () => {
   });
 
   describe('getDefaultKpiStyleOptions', () => {
-    it('round-trips through translateKpiStyleOptionsToDesignOptions identically to {} when no trend is set', () => {
+    it('round-trips through translateKpiStyleOptionsToDesignOptions identically to {} when no category is set', () => {
       const fromDefaults = translateKpiStyleOptionsToDesignOptions(
         getDefaultKpiStyleOptions(),
-        withoutTrend,
+        withoutCategory,
       );
-      const fromEmpty = translateKpiStyleOptionsToDesignOptions({}, withoutTrend);
+      const fromEmpty = translateKpiStyleOptionsToDesignOptions({}, withoutCategory);
       expect(fromDefaults).toEqual(fromEmpty);
     });
 
-    it('round-trips through translateKpiStyleOptionsToDesignOptions identically to {} when a trend is set', () => {
+    it('round-trips through translateKpiStyleOptionsToDesignOptions identically to {} when a category is set', () => {
       const fromDefaults = translateKpiStyleOptionsToDesignOptions(
         getDefaultKpiStyleOptions(),
-        withTrend,
+        withCategory,
       );
-      const fromEmpty = translateKpiStyleOptionsToDesignOptions({}, withTrend);
+      const fromEmpty = translateKpiStyleOptionsToDesignOptions({}, withCategory);
       expect(fromDefaults).toEqual(fromEmpty);
     });
   });

@@ -7,6 +7,8 @@ header; Widget and FilterTile are planned to adopt the same core.
 
 > Source: `src/domains/shared/header/`
 > Future sizing direction (measured allocator): see [`future-sizing.md`](./future-sizing.md).
+> The sibling model for what goes _inside_ a header's menu: see
+> [`header-menu-architecture.md`](./header-menu-architecture.md).
 
 ---
 
@@ -262,6 +264,9 @@ the plugin/modules pipelines lands in a later milestone; the model is already de
 
 Roadmap: **M1 Dashboard (done)** → M2 Widget → M3 FilterTile → M4 plugin/modules wiring →
 M5 advanced sizing ([`future-sizing.md`](./future-sizing.md)) + Angular/Vue ports.
+
+The header **menu** has its own parallel roadmap — see
+[`header-menu-architecture.md`](./header-menu-architecture.md) §4.
 
 ---
 

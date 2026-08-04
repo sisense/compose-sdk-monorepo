@@ -5,10 +5,10 @@ title: PieSeriesLabels
 # Type alias PieSeriesLabels
 
 > **PieSeriesLabels**: [`SeriesLabelsBase`](type-alias.SeriesLabelsBase.md) & \{
-  `percentageLabels`: [`PiePercentageLabels`](type-alias.PiePercentageLabels.md);
-  `showCategory`: `boolean`;
-  `showValue`: `boolean`;
-  `textStyle`: `Omit`\< [`TextStyle`](type-alias.TextStyle.md), `"pointerEvents"` \| `"textOverflow"` \>;
+  `percentageLabels?`: [`PiePercentageLabels`](type-alias.PiePercentageLabels.md);
+  `showCategory?`: `boolean`;
+  `showValue?`: `boolean`;
+  `textStyle?`: `Omit`\< [`TextStyle`](type-alias.TextStyle.md), `"pointerEvents"` \| `"textOverflow"` \>;
  }
 
 > ## `PieSeriesLabels.percentageLabels`

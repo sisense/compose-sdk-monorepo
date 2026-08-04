@@ -3,7 +3,7 @@
 exports[`CascadingFilterTile > should render a locked CascadingFilterTile component 1`] = `
 <div>
   <div
-    class="css-cbo886"
+    class="css-1pmd82m"
     data-testid="csdk-filter-tile-container"
   >
     <div
@@ -18,7 +18,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
           style="border-bottom-color: rgba(232, 232, 232, 1);"
         >
           <div
-            class="css-12vk4to"
+            class="css-fsrb1n"
             data-testid="csdk-filter-tile-container"
           >
             <div
@@ -90,7 +90,7 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
           class=""
         >
           <div
-            class="css-12vk4to"
+            class="css-fsrb1n"
             data-testid="csdk-filter-tile-container"
           >
             <div

@@ -5,9 +5,9 @@ title: WidgetProps
 # Type alias WidgetProps
 
 > **WidgetProps**: `SoftUnion`\< [`WithCommonWidgetProps`](type-alias.WithCommonWidgetProps.md)\< [`ChartWidgetProps`](../interfaces/interface.ChartWidgetProps.md), `"chart"` \> \| [`WithCommonWidgetProps`](type-alias.WithCommonWidgetProps.md)\< [`CustomWidgetProps`](../../sdk-ui/interfaces/interface.CustomWidgetProps.md), `"custom"` \> \| [`WithCommonWidgetProps`](type-alias.WithCommonWidgetProps.md)\< [`FilterWidgetProps`](../interfaces/interface.FilterWidgetProps.md), `"filter"` \> \| [`WithCommonWidgetProps`](type-alias.WithCommonWidgetProps.md)\< [`PivotTableWidgetProps`](../interfaces/interface.PivotTableWidgetProps.md), `"pivot"` \> \| [`WithCommonWidgetProps`](type-alias.WithCommonWidgetProps.md)\< [`TextWidgetProps`](../interfaces/interface.TextWidgetProps.md), `"text"` \> \> & \{
-  `dataPointClick`: [`WidgetDataPointClickEventHandler`](type-alias.WidgetDataPointClickEventHandler.md);
-  `dataPointContextMenu`: [`WidgetDataPointContextMenuEventHandler`](type-alias.WidgetDataPointContextMenuEventHandler.md);
-  `dataPointsSelect`: [`ChartDataPointsEventHandler`](type-alias.ChartDataPointsEventHandler.md);
+  `dataPointClick?`: [`WidgetDataPointClickEventHandler`](type-alias.WidgetDataPointClickEventHandler.md);
+  `dataPointContextMenu?`: [`WidgetDataPointContextMenuEventHandler`](type-alias.WidgetDataPointContextMenuEventHandler.md);
+  `dataPointsSelect?`: [`ChartDataPointsEventHandler`](type-alias.ChartDataPointsEventHandler.md);
  }
 
 Props of the [WidgetComponent](../dashboards/class.WidgetComponent.md).

@@ -6,19 +6,19 @@ title: KpiComparisonInfo
 
 > **KpiComparisonInfo**: \{
   `baseline`: `number`;
-  `deltaPercent`: `number`;
+  `deltaPercent?`: `number`;
   `deltaValue`: `number`;
   `label`: `string`;
   `type`: `"previous-period"`;
  } \| \{
   `baseline`: `number`;
-  `deltaPercent`: `number`;
+  `deltaPercent?`: `number`;
   `deltaValue`: `number`;
   `label`: `string`;
   `type`: `"delta"`;
  } \| \{
   `label`: `string`;
-  `percentOfTarget`: `number`;
+  `percentOfTarget?`: `number`;
   `target`: `number`;
   `toGo`: `number`;
   `type`: `"target"`;

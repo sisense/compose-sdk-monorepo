@@ -31,8 +31,8 @@ vi.mock('@/domains/widgets/shared/widget-container/widget-container.js', () => (
 // Stub the dropdown; expose its wiring props so we can trigger the widget's onChange bridge.
 vi.mock('./filter-widget-dropdown', () => ({
   // any: stub only forwards the wiring callbacks under test; full prop typing adds no value here.
-  FilterWidgetDropdown: ({ onFilterUpdate, onDateLevelChange, isMultiselect, title }: any) => (
-    <div data-testid="dropdown" data-multiselect={String(isMultiselect)} data-title={title ?? ''}>
+  FilterWidgetDropdown: ({ onFilterUpdate, onDateLevelChange, isMultiselect }: any) => (
+    <div data-testid="dropdown" data-multiselect={String(isMultiselect)}>
       <button
         data-testid="fire-filter"
         onClick={() => onFilterUpdate(filterFactory.members(attr, ['France']))}

@@ -2,7 +2,10 @@ import {
   KpiChartDataOptionsInternal,
   StyledMeasureColumn,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
-import { getDataOptionGranularity } from '@/domains/visualizations/core/chart-data-options/utils.js';
+import {
+  getDataOptionGranularity,
+  getDataOptionTitle,
+} from '@/domains/visualizations/core/chart-data-options/utils.js';
 import {
   Column,
   DataTable,
@@ -28,9 +31,9 @@ function isFixedTarget(target: StyledMeasureColumn | number): target is number {
   return typeof target === 'number';
 }
 
-/** Display label rule shared across the module: the measure's title, falling back to its name. */
+/** Display label rule shared across the module: styled `name` → measure `title` → measure `name`. */
 function measureLabel(measure: StyledMeasureColumn): string {
-  return measure.column.title || measure.column.name;
+  return getDataOptionTitle(measure);
 }
 
 /**
@@ -87,7 +90,7 @@ function buildComparison(
         deltaValue,
         deltaPercent,
         labelKey: inferPeriodLabelKey(
-          dataOptions.trend ? getDataOptionGranularity(dataOptions.trend) : undefined,
+          dataOptions.category ? getDataOptionGranularity(dataOptions.category) : undefined,
         ),
       };
     }
@@ -147,10 +150,10 @@ function buildComparison(
 /**
  * Converts a data table to KPI chart data.
  *
- * Without `trend`: a single-row query -- the headline is read straight from the first row.
+ * Without `category`: a single-row query -- the headline is read straight from the first row.
  *
- * With `trend`: one row per time bucket. When the result was produced by the dual-query
- * merge in `load-data.ts` (`valueMode: 'total'` with a `trend`), rows carry a
+ * With `category`: one row per time bucket. When the result was produced by the dual-query
+ * merge in `load-data.ts` (`valueMode: 'total'` with a `category`), rows carry a
  * {@link KPI_ROW_TYPE_COLUMN} marker; rows are split into per-bucket rows and the single
  * ungrouped total row by that marker **before** any date-based processing runs, because the
  * merged total row's date cell is a blank placeholder that parses to `NaN` -- letting it
@@ -185,8 +188,8 @@ export function getKpiChartData(
     ? dataTable.rows.filter((row) => getValue(row, rowTypeColumn) !== 'total')
     : dataTable.rows;
 
-  const trendColumn = dataOptions.trend
-    ? getColumnByName(dataTable, dataOptions.trend.column.name)
+  const categoryColumn = dataOptions.category
+    ? getColumnByName(dataTable, dataOptions.category.column.name)
     : undefined;
 
   let value: number | undefined;
@@ -196,9 +199,9 @@ export function getKpiChartData(
   let priorBucketValue: number | undefined;
   let currentRow: Row | undefined;
 
-  if (dataOptions.trend) {
+  if (dataOptions.category) {
     sparklinePoints = bucketRows.map((row, index) => {
-      const rawX = trendColumn ? getValue(row, trendColumn) : undefined;
+      const rawX = categoryColumn ? getValue(row, categoryColumn) : undefined;
       const x = typeof rawX === 'number' && Number.isFinite(rawX) ? rawX : index;
       return { x, y: readMeasureValue(row, valueColumn) ?? null };
     });
@@ -216,8 +219,8 @@ export function getKpiChartData(
     } else {
       currentRow = lastBucketRow;
       value = lastBucketValue;
-      if (lastBucketRow && trendColumn) {
-        const rawPeriod = getValue(lastBucketRow, trendColumn);
+      if (lastBucketRow && categoryColumn) {
+        const rawPeriod = getValue(lastBucketRow, categoryColumn);
         valuePeriodMs =
           typeof rawPeriod === 'number' && Number.isFinite(rawPeriod) ? rawPeriod : undefined;
       }

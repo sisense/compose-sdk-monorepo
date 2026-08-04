@@ -24,7 +24,7 @@ import {
 } from '@/domains/visualizations/core/chart-data-options/types.js';
 import type { WidgetConfig, WidgetType } from '@/domains/widgets/components/widget/types.js';
 import type {
-  ToolbarMenuConfig,
+  WidgetHeaderMenuConfig,
   WidgetHeaderTitleConfig,
 } from '@/domains/widgets/shared/widget-header/types.js';
 import type {
@@ -447,7 +447,7 @@ type WithCommonWidgetJSON<Base, Type extends WidgetType> = Base & {
 export type WidgetConfigJSON = Pick<WidgetConfig, 'actions'> & {
   header?: {
     title?: WidgetHeaderTitleConfig;
-    toolbar?: { menu?: Pick<ToolbarMenuConfig, 'enabled'> };
+    menu?: Pick<WidgetHeaderMenuConfig, 'enabled'>;
   };
 };
 

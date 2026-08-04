@@ -37,8 +37,8 @@ describe('KpiCard', () => {
     expect(getComputedStyle(comparisonSlot).order).toBe('1');
   });
 
-  it('swaps the visual order (comparison first) via CSS order in the big-comparison layout, without touching DOM order', () => {
-    const { getByTestId, container } = render(<KpiCard {...baseCard} layout="big-comparison" />);
+  it('swaps the visual order (comparison first) via CSS order in the comparison-first layout, without touching DOM order', () => {
+    const { getByTestId, container } = render(<KpiCard {...baseCard} layout="comparison-first" />);
     const valueSlot = requireParent(getByTestId('value'));
     const comparisonSlot = requireParent(getByTestId('comparison'));
 

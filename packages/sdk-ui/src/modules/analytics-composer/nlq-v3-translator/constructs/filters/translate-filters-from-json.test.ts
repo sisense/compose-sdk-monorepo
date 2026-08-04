@@ -1,4 +1,11 @@
-import { Filter, isFilterRelations, isMembersFilter, withoutGuids } from '@sisense/sdk-data';
+import {
+  DateLevels,
+  Filter,
+  isFilterRelations,
+  isLevelAttribute,
+  isMembersFilter,
+  withoutGuids,
+} from '@sisense/sdk-data';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -911,12 +918,16 @@ describe('translateFilters', () => {
       expect(getErrors(result)[0]).toContain('T23:59:59');
     });
 
-    it('should reject empty members array', () => {
+    it('should accept empty members array as include-all no-op', () => {
       const result = translateFiltersFromJSONFunctionCall({
         data: [
           {
             function: 'filterFactory.members',
-            args: ['DM.Commerce.Date.Weeks', []],
+            args: ['DM.Commerce.Date.Months', []],
+          },
+          {
+            function: 'filterFactory.members',
+            args: ['DM.Commerce.Date.Years', []],
           },
         ],
         context: {
@@ -925,8 +936,28 @@ describe('translateFilters', () => {
         },
       });
 
-      expect(result.success).toBe(false);
-      expect(getErrors(result)[0]).toContain('at least one member');
+      expect(result.success).toBe(true);
+      const filters = flattenFilters(getSuccessData(result));
+      expect(filters).toHaveLength(2);
+      expect(filters.every((f) => isMembersFilter(f) && f.members.length === 0)).toBe(true);
+
+      const monthsFilter = filters.find(
+        (f) =>
+          isMembersFilter(f) &&
+          isLevelAttribute(f.attribute) &&
+          f.attribute.granularity === DateLevels.Months,
+      );
+      const yearsFilter = filters.find(
+        (f) =>
+          isMembersFilter(f) &&
+          isLevelAttribute(f.attribute) &&
+          f.attribute.granularity === DateLevels.Years,
+      );
+
+      expect(monthsFilter).toBeDefined();
+      expect(yearsFilter).toBeDefined();
+      expect(monthsFilter?.composeCode).toContain('DM.Commerce.Date.Months');
+      expect(yearsFilter?.composeCode).toContain('DM.Commerce.Date.Years');
     });
 
     it('should reject WeekOfYear members filters', () => {

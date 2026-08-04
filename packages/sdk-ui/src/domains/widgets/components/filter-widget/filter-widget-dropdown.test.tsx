@@ -1,10 +1,17 @@
 /** @vitest-environment jsdom */
-import { createAttribute, filterFactory } from '@sisense/sdk-data';
-import type { MembersFilter } from '@sisense/sdk-data';
+import {
+  createAttribute,
+  DateLevels,
+  type DimensionalLevelAttribute,
+  filterFactory,
+  isLevelAttribute,
+  type MembersFilter,
+} from '@sisense/sdk-data';
 import { act, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
+import { createLevelAttribute } from '@/shared/utils/create-level-attribute';
 
 import {
   asSingleSelectionMembers,
@@ -363,6 +370,81 @@ describe('FilterWidgetDropdown', () => {
     expect(enabledCalls.length).toBeGreaterThan(0);
     enabledCalls.forEach((params) => {
       expect(params.filter.attribute.expression).toBe('[Country.Country]');
+    });
+  });
+
+  // Host may push a non-Years level on first pick; query must follow that
+  // granularity, not the Years default left in local state after empty mount.
+  it('queries members at the prop granularity after mounting empty then receiving a non-Years date level', () => {
+    const empty = createAttribute({ name: '', expression: '', type: 'text' });
+    const quarters = createLevelAttribute(
+      DM.Commerce.Date.Years as DimensionalLevelAttribute,
+      DateLevels.Quarters,
+    );
+    const onFilterUpdate = vi.fn();
+    const { rerender, getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={empty}
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+    const callsBeforeSwap = mockUseGetFilterMembers.mock.calls.length;
+
+    rerender(
+      <FilterWidgetDropdown
+        attribute={quarters}
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    expect(getByTestId('granularity-value').textContent).toBe(DateLevels.Quarters);
+
+    const enabledCalls = getMembersHookCalls(callsBeforeSwap).filter((params) => params.enabled);
+    expect(enabledCalls.length).toBeGreaterThan(0);
+    enabledCalls.forEach((params) => {
+      expect(params.filter.attribute.expression).toBe(quarters.expression);
+      expect(isLevelAttribute(params.filter.attribute)).toBe(true);
+      expect((params.filter.attribute as DimensionalLevelAttribute).granularity).toBe(
+        DateLevels.Quarters,
+      );
+    });
+  });
+
+  // Same expression, new level from the host — must not keep querying Years.
+  it('queries members at the new level after a same-expression Years to Quarters prop update', () => {
+    const years = DM.Commerce.Date.Years;
+    const quarters = createLevelAttribute(years as DimensionalLevelAttribute, DateLevels.Quarters);
+    const onFilterUpdate = vi.fn();
+    const { rerender, getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={years}
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+    expect(getByTestId('granularity-value').textContent).toBe(DateLevels.Years);
+    const callsBeforeSwap = mockUseGetFilterMembers.mock.calls.length;
+
+    rerender(
+      <FilterWidgetDropdown
+        attribute={quarters}
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+
+    expect(getByTestId('granularity-value').textContent).toBe(DateLevels.Quarters);
+
+    const enabledCalls = getMembersHookCalls(callsBeforeSwap).filter((params) => params.enabled);
+    expect(enabledCalls.length).toBeGreaterThan(0);
+    enabledCalls.forEach((params) => {
+      expect(params.filter.attribute.expression).toBe(quarters.expression);
+      expect(isLevelAttribute(params.filter.attribute)).toBe(true);
+      expect((params.filter.attribute as DimensionalLevelAttribute).granularity).toBe(
+        DateLevels.Quarters,
+      );
     });
   });
 

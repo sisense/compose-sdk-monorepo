@@ -1,6 +1,6 @@
 import { act } from 'react';
 
-import { filterFactory, MembersFilter } from '@sisense/sdk-data';
+import { attributeFactory, filterFactory, MembersFilter, MetadataTypes } from '@sisense/sdk-data';
 import { fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
@@ -251,6 +251,59 @@ describe('useCommonFilters', () => {
       expect(getProperty(connectedWidget, 'filters')).toEqual(
         getProperty(widgetPropsMock, 'filters'),
       );
+    });
+
+    it('creates a calculated-dimension cross-filter via connected onDataPointClick handler', () => {
+      const cdAgeRange = attributeFactory.customFormula(
+        'left([Age Range], 2)',
+        'left([ageRange], 2)',
+        { ageRange: DM.Commerce.AgeRange },
+      );
+      const cdWidgetProps = {
+        ...widgetPropsMock,
+        dataOptions: {
+          ...(getProperty(widgetPropsMock, 'dataOptions') as CartesianChartDataOptions),
+          category: [cdAgeRange],
+        },
+      } as WidgetProps;
+
+      const { result } = renderHook(() => useCommonFilters());
+      let connectedWidget = result.current.connectToWidgetProps(cdWidgetProps, {
+        shouldAffectFilters: true,
+      });
+
+      const onDataPointClickHandler: DataPointEventHandler = getChartDataPointHandler(
+        connectedWidget,
+        'onDataPointClick',
+      );
+
+      // A widget backed by a calculated dimension must still participate in cross-filtering,
+      // so the click handler is registered.
+      expect(onDataPointClickHandler).toBeDefined();
+
+      act(() => {
+        onDataPointClickHandler?.(
+          {
+            entries: {
+              category: [{ dataOption: cdAgeRange, attribute: cdAgeRange, value: '65' }],
+              value: [],
+            },
+          } as DataPoint,
+          {} as PointerEvent,
+        );
+      });
+      // reconnect to observe the resulting filter state
+      connectedWidget = result.current.connectToWidgetProps(cdWidgetProps, {
+        shouldAffectFilters: true,
+      });
+
+      // Matches the widget's own dimension, so it applies as a highlight (like a regular field).
+      const highlight = getProperty(connectedWidget, 'highlights')?.[0] as MembersFilter;
+      expect(highlight.members).toEqual(['65']);
+      // The created filter is a real calculated-dimension filter.
+      expect(MetadataTypes.isCalculatedAttribute(highlight.attribute)).toBe(true);
+      expect(highlight.attribute.expression).toEqual(cdAgeRange.expression);
+      expect(highlight.jaql().jaql.type).toBe('calculated_dimension');
     });
 
     it('should select new filter via connected onDataPointsSelected handler', () => {

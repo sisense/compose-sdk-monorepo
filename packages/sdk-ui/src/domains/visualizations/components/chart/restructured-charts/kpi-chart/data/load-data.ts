@@ -40,14 +40,14 @@ export type LoadKpiDataOptions = Parameters<TypedLoadDataFunction<'kpi'>>[0];
 /**
  * Loads the data for a KPI chart.
  *
- * When `valueMode` is `'total'` and a `trend` dimension is configured, the headline
+ * When `valueMode` is `'total'` and a `category` dimension is configured, the headline
  * value must be the aggregate over the *entire* period, not a combination of the
  * per-bucket (e.g. per-month) values -- summing per-bucket averages, for instance,
  * would be mathematically wrong. Correct SQL semantics require a second, ungrouped
  * query (same measures, no dimensions) run alongside the regular grouped one; the
  * two results are then merged (see {@link mergeTotalIntoResult}).
  *
- * In every other case (`valueMode: 'last'`, or `'total'` without a `trend`), a single
+ * In every other case (`valueMode: 'last'`, or `'total'` without a `category`), a single
  * regular query is sufficient and its result is returned untouched.
  * @internal
  */
@@ -55,7 +55,7 @@ export const loadKpiData = async (options: LoadKpiDataOptions): Promise<QueryRes
   const { app, chartDataOptionsInternal, queryDescription, executionConfig } = options;
 
   const needsTotalQuery =
-    chartDataOptionsInternal.valueMode === 'total' && !!chartDataOptionsInternal.trend;
+    chartDataOptionsInternal.valueMode === 'total' && !!chartDataOptionsInternal.category;
 
   if (!needsTotalQuery) {
     return loadDataBySingleQuery({ app, queryDescription, executionConfig });

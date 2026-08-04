@@ -1,14 +1,11 @@
 import {
-  createElement,
   type CustomWidgetComponent as CustomWidgetComponentPreact,
   type CustomWidgetComponentProps,
-  ExternalComponentAdapterElement,
-  type ExternalComponentAdapterElementProps,
   type GenericDataOptions,
 } from '@sisense/sdk-ui-preact';
 import type { Component, DefineComponent } from 'vue';
 
-import { VueComponentAdapter } from '../helpers/vue-component-adapter';
+import { createComponentTranslator } from '../helpers/component-translator';
 import { getCustomWidgetsContext } from '../providers/custom-widgets-provider';
 import { getSisenseContext } from '../providers/sisense-context-provider/sisense-context';
 import { getThemeContext } from '../providers/theme-provider/theme-context';
@@ -51,10 +48,13 @@ onUnmounted(() => unregisterCustomWidget('histogramwidget'));
 export const useCustomWidgets = () => {
   const context = getCustomWidgetsContext();
 
-  // Capture parent contexts once at registration time
-  const sisenseContext = getSisenseContext();
-  const themeContext = getThemeContext();
-  const customWidgetsContext = context;
+  // Parent contexts are captured once here, in setup scope, and provided to every registered
+  // component when it is adapted for preact.
+  const componentTranslator = createComponentTranslator({
+    sisenseContext: getSisenseContext(),
+    themeContext: getThemeContext(),
+    customWidgetsContext: context,
+  });
 
   return {
     /**
@@ -67,42 +67,12 @@ export const useCustomWidgets = () => {
       customWidgetType: string,
       customWidget: CustomWidgetComponent<Props>,
     ): void => {
-      const contexts = {
-        sisenseContext,
-        themeContext,
-        customWidgetsContext,
-      };
-
-      /**
-       * Factory function that creates an adapter for the Vue component.
-       * This is called once per component mount by the ExternalComponentAdapterElement.
-       */
-      const createAdapter = () => {
-        return new VueComponentAdapter<Props>(customWidget, contexts);
-      };
-
-      /**
-       * Preact wrapper component that manages the Vue component lifecycle.
-       * Uses ExternalComponentAdapterElement (which uses hooks internally in the correct Preact context)
-       * to ensure the Vue component is:
-       * - Created once on mount
-       * - Updated in-place on props changes (preserving state)
-       * - Properly destroyed on unmount
-       */
-      const CustomWidgetWrapper: CustomWidgetComponentPreact<Props> = (props: Props) => {
-        const adapterElementProps: ExternalComponentAdapterElementProps<Props> = {
-          adapterFactory: createAdapter,
-          componentProps: props,
-        };
-        return createElement(ExternalComponentAdapterElement, adapterElementProps) as ReturnType<
-          CustomWidgetComponentPreact<Props>
-        >;
-      };
-
       if (!context.value.customWidgetsMap.has(customWidgetType)) {
+        // Convert the Vue component into a preact component that manages its lifecycle
+        // (created once on mount, updated in-place on props change, destroyed on unmount).
         context.value.customWidgetsMap.set(
           customWidgetType,
-          CustomWidgetWrapper as CustomWidgetComponentPreact<any>,
+          componentTranslator.toPreactComponent(customWidget) as CustomWidgetComponentPreact<any>,
         );
         context.value = {
           customWidgetsMap: new Map(context.value.customWidgetsMap),

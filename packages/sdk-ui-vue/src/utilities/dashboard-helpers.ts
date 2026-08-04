@@ -1,10 +1,17 @@
 import type { Filter, FilterRelations } from '@sisense/sdk-data';
-import {
-  dashboardHelpers as dashboardHelpersPreact,
-  type DashboardProps as DashboardPropsPreact,
-} from '@sisense/sdk-ui-preact';
+import { dashboardHelpers as dashboardHelpersPreact } from '@sisense/sdk-ui-preact';
 
 import type { DashboardProps } from '../components/dashboard';
+import {
+  toPreactDashboardProps as asPreactDashboardProps,
+  toDashboardProps as asVueDashboardProps,
+} from '../helpers/dashboard-props-preact-translator';
+
+/**
+ * The helpers below manipulate props and never render them, so they convert the object structure
+ * only — passing no component translator, which carries the components in `config.header` through
+ * as they are.
+ */
 
 /**
  * {@inheritDoc @sisense/sdk-ui!dashboardHelpers.replaceFilters}
@@ -24,7 +31,9 @@ export const replaceFilters = (
   dashboard: DashboardProps,
   newFilters: Filter[] | FilterRelations,
 ): DashboardProps => {
-  return dashboardHelpersPreact.replaceFilters(dashboard as DashboardPropsPreact, newFilters);
+  return asVueDashboardProps(
+    dashboardHelpersPreact.replaceFilters(asPreactDashboardProps(dashboard), newFilters),
+  );
 };
 
 /**
@@ -42,7 +51,9 @@ export const replaceFilters = (
  * @returns A new dashboard instance with the new filter added.
  */
 export const addFilter = (dashboard: DashboardProps, newFilter: Filter): DashboardProps => {
-  return dashboardHelpersPreact.addFilter(dashboard as DashboardPropsPreact, newFilter);
+  return asVueDashboardProps(
+    dashboardHelpersPreact.addFilter(asPreactDashboardProps(dashboard), newFilter),
+  );
 };
 
 /**
@@ -60,7 +71,9 @@ export const addFilter = (dashboard: DashboardProps, newFilter: Filter): Dashboa
  * @returns A new dashboard instance with the new filters added.
  */
 export const addFilters = (dashboard: DashboardProps, newFilters: Filter[]): DashboardProps => {
-  return dashboardHelpersPreact.addFilters(dashboard as DashboardPropsPreact, newFilters);
+  return asVueDashboardProps(
+    dashboardHelpersPreact.addFilters(asPreactDashboardProps(dashboard), newFilters),
+  );
 };
 
 /**
@@ -84,10 +97,12 @@ export const replaceFilter = (
   filterToReplace: Filter,
   newFilter: Filter,
 ): DashboardProps => {
-  return dashboardHelpersPreact.replaceFilter(
-    dashboard as DashboardPropsPreact,
-    filterToReplace,
-    newFilter,
+  return asVueDashboardProps(
+    dashboardHelpersPreact.replaceFilter(
+      asPreactDashboardProps(dashboard),
+      filterToReplace,
+      newFilter,
+    ),
   );
 };
 
@@ -106,7 +121,9 @@ export const replaceFilter = (
  * @returns A new dashboard instance with the specified filter removed.
  */
 export const removeFilter = (dashboard: DashboardProps, filterToRemove: Filter): DashboardProps => {
-  return dashboardHelpersPreact.removeFilter(dashboard as DashboardPropsPreact, filterToRemove);
+  return asVueDashboardProps(
+    dashboardHelpersPreact.removeFilter(asPreactDashboardProps(dashboard), filterToRemove),
+  );
 };
 
 /**
@@ -127,5 +144,7 @@ export const removeFilters = (
   dashboard: DashboardProps,
   filtersToRemove: Filter[],
 ): DashboardProps => {
-  return dashboardHelpersPreact.removeFilters(dashboard as DashboardPropsPreact, filtersToRemove);
+  return asVueDashboardProps(
+    dashboardHelpersPreact.removeFilters(asPreactDashboardProps(dashboard), filtersToRemove),
+  );
 };

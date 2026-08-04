@@ -1,4 +1,5 @@
 import { DeclarationReflection, SomeType } from 'typedoc';
+
 import { MarkdownThemeRenderContext } from '../..';
 import { backTicks } from '../../../support/elements';
 import { getDeclarationType } from '../../helpers';
@@ -35,7 +36,9 @@ export function declarationType(
         if (Boolean(obj.getSignature || Boolean(obj.setSignature))) {
           name.push(context.declarationMemberAccessor(obj));
         } else {
-          name.push(backTicks(obj.name));
+          // Carry the optionality marker through, otherwise an inline object type renders
+          // `color`: `string` for a `color?: string` member and reads as required.
+          name.push(backTicks(`${obj.name}${obj.flags.isOptional ? '?' : ''}`));
         }
 
         const theType = getDeclarationType(obj) as SomeType;

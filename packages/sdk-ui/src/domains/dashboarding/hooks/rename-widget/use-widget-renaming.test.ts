@@ -46,14 +46,14 @@ describe('useWidgetRenaming', () => {
     expect(result.current.widgets[0]?.config?.header?.title?.editing?.enabled).toBe(true);
   });
 
-  it('when persistence is set and onChange is called with title/changed, patchWidget is invoked', () => {
+  it('when persistence is set and onChange is called with title/changed, updateWidget is invoked', () => {
     const onChange = vi.fn();
-    const patchWidget = vi.fn().mockResolvedValue(undefined);
+    const updateWidget = vi.fn().mockResolvedValue(undefined);
     const widgets = [createMinimalWidget({ id: 'w1', onChange })];
     const params: UseWidgetRenamingParams = {
       widgets,
       enabled: true,
-      persistence: { patchWidget },
+      persistence: { updateWidget },
     };
 
     const { result } = renderHook(() => useWidgetRenaming(params));
@@ -64,17 +64,17 @@ describe('useWidgetRenaming', () => {
       wrappedOnChange!({ type: 'title/changed', payload: { title: 'Renamed Widget' } });
     });
 
-    expect(patchWidget).toHaveBeenCalledWith('w1', { title: 'Renamed Widget' });
+    expect(updateWidget).toHaveBeenCalledWith('w1', { title: 'Renamed Widget' });
   });
 
   it('forwards onChange to original handler after persistence', () => {
     const onChange = vi.fn();
-    const patchWidget = vi.fn().mockResolvedValue(undefined);
+    const updateWidget = vi.fn().mockResolvedValue(undefined);
     const widgets = [createMinimalWidget({ id: 'w1', onChange })];
     const params: UseWidgetRenamingParams = {
       widgets,
       enabled: true,
-      persistence: { patchWidget },
+      persistence: { updateWidget },
     };
 
     const { result } = renderHook(() => useWidgetRenaming(params));
@@ -93,13 +93,13 @@ describe('useWidgetRenaming', () => {
 
   it('when persistence fails, logs error but still forwards onChange', async () => {
     const onChange = vi.fn();
-    const patchWidget = vi.fn().mockRejectedValue(new Error('Network error'));
+    const updateWidget = vi.fn().mockRejectedValue(new Error('Network error'));
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const widgets = [createMinimalWidget({ id: 'w1', onChange })];
     const params: UseWidgetRenamingParams = {
       widgets,
       enabled: true,
-      persistence: { patchWidget },
+      persistence: { updateWidget },
     };
 
     const { result } = renderHook(() => useWidgetRenaming(params));
@@ -115,7 +115,7 @@ describe('useWidgetRenaming', () => {
       type: 'title/changed',
       payload: { title: 'New Title' },
     });
-    expect(patchWidget).toHaveBeenCalledWith('w1', { title: 'New Title' });
+    expect(updateWidget).toHaveBeenCalledWith('w1', { title: 'New Title' });
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       '[useWidgetRenaming] Failed to persist widget rename:',
       expect.any(Error),
@@ -150,7 +150,7 @@ describe('useWidgetRenaming', () => {
 
   it('FilterWidget: wraps the unified onChange for persistence on title/changed', () => {
     const onChange = vi.fn();
-    const patchWidget = vi.fn().mockResolvedValue(undefined);
+    const updateWidget = vi.fn().mockResolvedValue(undefined);
     const widgets = [
       createMinimalWidget({
         id: 'fw-1',
@@ -163,7 +163,7 @@ describe('useWidgetRenaming', () => {
     const params: UseWidgetRenamingParams = {
       widgets,
       enabled: true,
-      persistence: { patchWidget },
+      persistence: { updateWidget },
     };
 
     const { result } = renderHook(() => useWidgetRenaming(params));
@@ -175,7 +175,7 @@ describe('useWidgetRenaming', () => {
       wrappedOnChange({ type: 'title/changed', payload: { title: 'My Filter' } });
     });
 
-    expect(patchWidget).toHaveBeenCalledWith('fw-1', { title: 'My Filter' });
+    expect(updateWidget).toHaveBeenCalledWith('fw-1', { title: 'My Filter' });
     expect(onChange).toHaveBeenCalledWith({
       type: 'title/changed',
       payload: { title: 'My Filter' },
@@ -185,7 +185,7 @@ describe('useWidgetRenaming', () => {
 
   it('FilterWidget: forwards non-title events (e.g. filter/changed) without persistence calls', () => {
     const onChange = vi.fn();
-    const patchWidget = vi.fn().mockResolvedValue(undefined);
+    const updateWidget = vi.fn().mockResolvedValue(undefined);
     const widgets = [
       createMinimalWidget({
         id: 'fw-1',
@@ -198,7 +198,7 @@ describe('useWidgetRenaming', () => {
     const params: UseWidgetRenamingParams = {
       widgets,
       enabled: true,
-      persistence: { patchWidget },
+      persistence: { updateWidget },
     };
 
     const { result } = renderHook(() => useWidgetRenaming(params));
@@ -208,13 +208,13 @@ describe('useWidgetRenaming', () => {
       getWidgetOnChange(result.current.widgets[0]!)!(event);
     });
 
-    expect(patchWidget).not.toHaveBeenCalled();
+    expect(updateWidget).not.toHaveBeenCalled();
     expect(onChange).toHaveBeenCalledWith(event);
   });
 
   it('does not wrap onChange of a custom widget (it is the persistence callback, not a change-event channel)', () => {
     const persistenceOnChange = vi.fn();
-    const patchWidget = vi.fn().mockResolvedValue(undefined);
+    const updateWidget = vi.fn().mockResolvedValue(undefined);
     const widgets = [
       createMinimalWidget({
         id: 'cw-1',
@@ -225,7 +225,7 @@ describe('useWidgetRenaming', () => {
     const params: UseWidgetRenamingParams = {
       widgets,
       enabled: true,
-      persistence: { patchWidget },
+      persistence: { updateWidget },
     };
 
     const { result } = renderHook(() => useWidgetRenaming(params));

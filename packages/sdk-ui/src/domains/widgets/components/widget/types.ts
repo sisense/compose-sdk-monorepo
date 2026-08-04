@@ -13,9 +13,7 @@ import type { TextWidgetProps } from '../text-widget/types';
  */
 export type WidgetConfig = {
   /**
-   * Configurations for the widget header (e.g. toolbar menu items)
-   *
-   * @alpha
+   * Configuration for the widget header, such as the items available in its menu.
    */
   header?: WidgetHeaderConfig;
   /**

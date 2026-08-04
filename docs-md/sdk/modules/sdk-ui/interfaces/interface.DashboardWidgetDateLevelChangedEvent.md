@@ -22,10 +22,10 @@ Widget oid and the JAQL level descriptor of the new granularity
 > ##### `payload.levelJaql`
 >
 > **levelJaql**: \{
-> `bucket`: `string`;
-> `dateTimeLevel`: `string`;
-> `dim`: `string`;
-> `level`: `string`;
+> `bucket?`: `string`;
+> `dateTimeLevel?`: `string`;
+> `dim?`: `string`;
+> `level?`: `string`;
 > } & `Record`\< `string`, `unknown` \>
 >
 > JAQL of the attribute at the new date level

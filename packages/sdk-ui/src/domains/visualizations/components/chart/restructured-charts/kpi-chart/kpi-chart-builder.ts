@@ -1,3 +1,4 @@
+import { isRendererDataReady } from '../helpers/readiness.js';
 import { ChartBuilder } from '../types.js';
 import {
   getKpiAttributes,
@@ -41,5 +42,6 @@ export const kpiChartBuilder: ChartBuilder<'kpi'> = {
   renderer: {
     ChartRendererComponent: KpiChartRenderer,
     isCorrectRendererProps: isKpiChartRendererProps,
+    isReady: isRendererDataReady,
   },
 };

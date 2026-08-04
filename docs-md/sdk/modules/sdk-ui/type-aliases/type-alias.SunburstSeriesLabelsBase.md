@@ -5,8 +5,8 @@ title: SunburstSeriesLabelsBase
 # Type alias SunburstSeriesLabelsBase
 
 > **SunburstSeriesLabelsBase**: [`SeriesLabelsBase`](type-alias.SeriesLabelsBase.md) & \{
-  `backgroundColor`: `string`;
-  `borderColor`: `string`;
+  `backgroundColor?`: `string`;
+  `borderColor?`: `string`;
  }
 
 > ## `SunburstSeriesLabelsBase.backgroundColor`

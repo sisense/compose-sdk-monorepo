@@ -1,7 +1,10 @@
+import flow from 'lodash-es/flow';
+
 import { DashboardModel } from '@/domains/dashboarding/dashboard-model';
 import { deepMerge } from '@/domains/dashboarding/persistence/deep-merge.js';
 import type { WidgetPropsUpdate } from '@/domains/dashboarding/persistence/update-types.js';
 import { WidgetModel } from '@/domains/widgets/widget-model';
+import { ContextfulTransformer } from '@/shared/utils/utility-types/transformer';
 
 import {
   UseDashboardModelActionType,
@@ -11,36 +14,44 @@ import {
 } from './types.js';
 import { appendWidgetToFirstCell, parseAddWidgetPayload } from './utils.js';
 
-function applyStyleOptionsUpdate(
-  widget: WidgetModel,
-  styleOptions: WidgetPropsUpdate['styleOptions'],
-): WidgetModel {
-  if (!styleOptions) {
-    return widget;
-  }
+/**
+ * Deep-merges a partial `styleOptions` subtree into the widget's existing
+ * `styleOptions`, preserving sibling keys at any depth. Returns the widget
+ * unchanged when no update is provided.
+ * @param styleOptions - The partial style options to merge, if any.
+ * @returns A transformer over a widget that merges its `styleOptions`.
+ */
+const withStyleOptions: ContextfulTransformer<WidgetModel, WidgetPropsUpdate['styleOptions']> =
+  (styleOptions) => (widget) =>
+    // Deep merge subsumes the previously special-cased
+    // `navigator.scrollerLocation` graft: nested plain objects merge recursively,
+    // so a partial subtree lands without dropping sibling keys at any depth.
+    styleOptions
+      ? { ...widget, styleOptions: deepMerge(widget.styleOptions ?? {}, styleOptions) }
+      : widget;
 
-  // Deep merge subsumes the previously special-cased
-  // `navigator.scrollerLocation` graft: nested plain objects merge recursively,
-  // so a partial subtree lands without dropping sibling keys at any depth.
-  return {
-    ...widget,
-    styleOptions: deepMerge(widget.styleOptions ?? {}, styleOptions),
-  };
-}
+/**
+ * Deep-merges a partial `customOptions` subtree into the widget's existing
+ * `customOptions`, preserving sibling keys at any depth. Returns the widget
+ * unchanged when no update is provided.
+ * @param customOptions - The partial custom options to merge, if any.
+ * @returns A transformer over a widget that merges its `customOptions`.
+ */
+const withCustomOptions: ContextfulTransformer<WidgetModel, WidgetPropsUpdate['customOptions']> =
+  (customOptions) => (widget) =>
+    customOptions
+      ? { ...widget, customOptions: deepMerge(widget.customOptions ?? {}, customOptions) }
+      : widget;
 
-function applyCustomOptionsUpdate(
-  widget: WidgetModel,
-  customOptions: WidgetPropsUpdate['customOptions'],
-): WidgetModel {
-  if (!customOptions) {
-    return widget;
-  }
-
-  return {
-    ...widget,
-    customOptions: deepMerge(widget.customOptions ?? {}, customOptions),
-  };
-}
+/**
+ * Sets the widget's `title`. Returns the widget unchanged when the title update
+ * is `undefined`.
+ * @param title - The new title, or `undefined` to leave the widget untouched.
+ * @returns A transformer over a widget that sets its `title`.
+ */
+const withTitle: ContextfulTransformer<WidgetModel, WidgetPropsUpdate['title']> =
+  (title) => (widget) =>
+    title === undefined ? widget : { ...widget, title };
 
 /**
  * Applies a narrow {@link WidgetPropsUpdate} to a {@link WidgetModel} by
@@ -50,10 +61,11 @@ function applyCustomOptionsUpdate(
  * only carries supported keys).
  */
 function applyWidgetPropsUpdate(widget: WidgetModel, update: WidgetPropsUpdate): WidgetModel {
-  return applyCustomOptionsUpdate(
-    applyStyleOptionsUpdate(widget, update.styleOptions),
-    update.customOptions,
-  );
+  return flow(
+    withStyleOptions(update.styleOptions),
+    withCustomOptions(update.customOptions),
+    withTitle(update.title),
+  )(widget);
 }
 
 /**
@@ -78,16 +90,6 @@ export function dashboardReducer(
         ...(state as DashboardModel),
         filters: action.payload,
       };
-    case UseDashboardModelActionType.PATCH_WIDGET: {
-      const model = state as DashboardModel;
-      const { widgetOid, patch } = action.payload;
-      return {
-        ...model,
-        widgets: model.widgets.map((widget) =>
-          widget.oid === widgetOid ? { ...widget, ...patch } : widget,
-        ),
-      };
-    }
     case UseDashboardModelActionType.UPDATE_WIDGET: {
       const model = state as DashboardModel;
       const { widgetOid, update } = action.payload;

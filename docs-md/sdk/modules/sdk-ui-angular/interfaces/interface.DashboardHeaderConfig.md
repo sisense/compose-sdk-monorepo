@@ -6,7 +6,50 @@ title: DashboardHeaderConfig
 
 Configuration for the dashboard header.
 
+Injects custom [items](interface.DashboardHeaderItem.md) into the header and, via
+[`beforeRender`](interface.DashboardHeaderConfig.md#beforerender), reorders or removes the built-in
+items (referenced by [DashboardHeaderTargets](../variables/variable.DashboardHeaderTargets.md)).
+
+## Example
+
+Add a custom item after the title and hide the built-in title:
+```ts
+import { DashboardHeaderTargets, type DashboardConfig } from '@sisense/sdk-ui-angular';
+
+const config: DashboardConfig = {
+  header: {
+    items: [
+      {
+        id: 'export',
+        component: ExportButtonComponent,
+        position: { type: 'after', target: DashboardHeaderTargets.Title },
+      },
+    ],
+    beforeRender: (items) => items.filter((item) => item.id !== DashboardHeaderTargets.Title),
+  },
+};
+```
+
 ## Properties
+
+### beforeRender
+
+> **beforeRender**?: [`DashboardHeaderItemsTransform`](../type-aliases/type-alias.DashboardHeaderItemsTransform.md)
+
+Advanced callback to inspect and rewrite the full, ordered list of header items (built-in +
+custom) right before rendering. The only way to modify or remove built-in items.
+
+***
+
+### items
+
+> **items**?: [`DashboardHeaderItem`](interface.DashboardHeaderItem.md)[]
+
+Custom items to inject into the header.
+
+Each item's `id` must not match a built-in item id (see [DashboardHeaderTargets](../../sdk-ui/variables/variable.DashboardHeaderTargets.md)).
+
+***
 
 ### visible
 

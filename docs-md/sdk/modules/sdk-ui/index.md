@@ -23,7 +23,7 @@ React components and utilities for working with charts
 - [LineChart](charts/function.LineChart.md)
 - [PieChart](charts/function.PieChart.md)
 - [PolarChart](charts/function.PolarChart.md)
-- [SankeyChart](charts/function.SankeyChart.md) <Badge type="beta" text="Beta" />
+- [SankeyChart](charts/function.SankeyChart.md)
 - [ScatterChart](charts/function.ScatterChart.md)
 - [ScattermapChart](charts/function.ScattermapChart.md)
 - [StreamgraphChart](charts/function.StreamgraphChart.md)

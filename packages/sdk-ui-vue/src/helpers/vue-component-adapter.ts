@@ -1,5 +1,9 @@
-import type { CompleteThemeSettingsInternal, CustomSisenseContext } from '@sisense/sdk-ui-preact';
-import type { ExternalComponentAdapter } from '@sisense/sdk-ui-preact';
+import {
+  type CompleteThemeSettingsInternal,
+  type CustomSisenseContext,
+  type CustomWidgetsContextAdapter,
+  type ExternalComponentAdapter,
+} from '@sisense/sdk-ui-preact';
 import { type App, type Component, createApp, type DefineComponent, h, ref, type Ref } from 'vue';
 
 import { customWidgetsContextKey } from '../providers/custom-widgets-provider/custom-widgets-context';
@@ -7,6 +11,19 @@ import { sisenseContextKey } from '../providers/sisense-context-provider/sisense
 import { themeContextConfigKey } from '../providers/theme-provider/theme-context';
 
 type AnyObject = Record<string, any>;
+
+/**
+ * Parent Vue contexts captured when an adapter is created and provided to the adapted component's
+ * isolated Vue app, so it resolves Sisense, theme, and custom-widget context the same way it
+ * would inside the host application tree.
+ *
+ * @internal
+ */
+export type VueComponentAdapterContexts = {
+  sisenseContext: Ref<CustomSisenseContext>;
+  themeContext: Ref<CompleteThemeSettingsInternal>;
+  customWidgetsContext: Ref<CustomWidgetsContextAdapter>;
+};
 
 /**
  * Adapter class that manages the lifecycle of a Vue component
@@ -29,11 +46,7 @@ export class VueComponentAdapter<Props extends AnyObject>
 
   constructor(
     private componentClass: Component<Props> | DefineComponent<Props>,
-    private contexts: {
-      sisenseContext: Ref<CustomSisenseContext>;
-      themeContext: Ref<CompleteThemeSettingsInternal>;
-      customWidgetsContext: Ref<any>;
-    },
+    private contexts: VueComponentAdapterContexts,
   ) {}
 
   /**

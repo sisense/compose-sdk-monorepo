@@ -52,6 +52,12 @@ export interface FilterTileProps {
    * @internal
    */
   renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
+  /**
+   * Renders the tile read-only with a "Linked to filter widget" indicator.
+   *
+   * @internal
+   */
+  linked?: boolean;
 }
 
 /**
@@ -68,6 +74,7 @@ export const FilterTile: React.FC<FilterTileProps> = ({
   defaultDataSource,
   config,
   renderHeaderTitle,
+  linked,
 }: FilterTileProps) => {
   const attribute = filter.attribute;
   const title = attribute.title;
@@ -80,6 +87,7 @@ export const FilterTile: React.FC<FilterTileProps> = ({
     onEdit,
     config,
     renderHeaderTitle,
+    linked,
     ...(defaultDataSource ? { dataSource: defaultDataSource } : null),
   };
   // checking for custom filters first to prevent conversion attempts

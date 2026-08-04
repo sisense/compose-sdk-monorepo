@@ -6,6 +6,7 @@ import { RestApi } from '@/infra/api/rest-api';
 import { DashboardDto } from '@/infra/api/types/dashboard-dto';
 import { PaletteDto } from '@/infra/api/types/palette-dto';
 import { AppSettings } from '@/infra/app/settings/settings';
+import { DashboardUserAuth } from '@/infra/app/settings/types/role-manifest';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { getWidgetIdsFromDashboard } from '@/shared/utils/extract-widget-ids';
 import { CompleteThemeSettingsInternal } from '@/types';
@@ -36,9 +37,15 @@ export interface GetDashboardModelOptions {
   sharedMode?: boolean;
 
   /**
-   * Whether to use the legacy API version for the dashboard model
-   * For example, when 'expand' query parameter is needed to retrieve userAuth
+   * Whether to force the legacy (non-V1) API version for the dashboard model.
    *
+   * `userAuth` is now populated by default via the V1 endpoint (with an automatic
+   * fallback to the legacy endpoint on older Sisense versions), so this flag is no
+   * longer required to retrieve it and is kept for backward compatibility only.
+   *
+   * @deprecated No longer needed to retrieve `userAuth`. Use `includeWidgets` /
+   * `includeFilters` on the default (V1) path instead. This option will be removed
+   * once no consumer relies on it.
    * @default false
    * @internal
    */
@@ -51,6 +58,30 @@ export interface GetDashboardModelOptions {
    * @sisenseInternal
    */
   adminAccess?: boolean;
+}
+
+/**
+ * Fetches `userAuth` from the legacy endpoint as a best-effort fallback for older
+ * Sisense versions that omit it on the V1 endpoint.
+ *
+ * @param api - The REST API instance used to call the legacy endpoint
+ * @param dashboardOid - The OID of the dashboard
+ * @param adminAccess - Whether to fetch with admin-level access
+ * @returns The resolved {@link DashboardUserAuth}, or `undefined` when it is unavailable
+ * or the legacy request fails (so the already-successful dashboard load is not aborted)
+ * @internal
+ */
+async function getLegacyUserAuth(
+  api: RestApi,
+  dashboardOid: string,
+  adminAccess?: boolean,
+): Promise<DashboardUserAuth | undefined> {
+  try {
+    const legacyDashboard = await api.getDashboardLegacy(dashboardOid, { adminAccess });
+    return legacyDashboard?.userAuth;
+  } catch {
+    return undefined;
+  }
 }
 
 /**
@@ -92,10 +123,25 @@ export async function getDashboardModel(
       fields.push('filterRelations');
     }
 
-    dashboard = await api.getDashboard(dashboardOid, { fields, sharedMode, adminAccess });
+    dashboard = await api.getDashboard(dashboardOid, {
+      fields,
+      expand: ['userAuth'],
+      sharedMode,
+      adminAccess,
+    });
 
     if (!dashboard) {
       throw new TranslatableError('errors.dashboardInvalidIdentifier', { dashboardOid });
+    }
+
+    // Older Sisense versions do not return `userAuth` on the V1 endpoint (even with `expand`).
+    // Fall back to the legacy endpoint, which always includes it, so the dashboard model
+    // is populated with user authorization by default without requiring `useLegacyApiVersion`.
+    if (!dashboard.userAuth) {
+      const userAuth = await getLegacyUserAuth(api, dashboardOid, adminAccess);
+      if (userAuth) {
+        dashboard = { ...dashboard, userAuth };
+      }
     }
 
     if (includeWidgets) {
