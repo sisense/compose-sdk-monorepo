@@ -8,6 +8,36 @@ import { StyledColumn } from '../../../../chart-data-options/types';
 import { fontStyleDefault, lineColorDefault, xAxisDefaults } from '../../../defaults/cartesian.js';
 import { Axis, AxisSettings, getDefaultDateFormat } from '../../../translations/axis-section.js';
 
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+/**
+ * Nominal tick intervals for granularities whose real length varies between periods.
+ * They drive the minimum axis range and the detection of gaps in the data. Because
+ * they are approximations, month, quarter, and year axes also receive explicit
+ * calendar tick positions so labels stay on real period boundaries.
+ */
+export const CONTINUOUS_INTERVAL_MS = {
+  years: 364 * MS_PER_DAY,
+  quarters: 91.72 * MS_PER_DAY,
+  months: 28 * MS_PER_DAY,
+} as const;
+
+const CALENDAR_GRANULARITIES = new Set<string>([
+  DateLevels.Years,
+  DateLevels.Quarters,
+  DateLevels.Months,
+]);
+
+/**
+ * Checks whether a granularity has periods of varying length and therefore has to be
+ * advanced by calendar arithmetic rather than by a fixed number of milliseconds.
+ *
+ * @param granularity - The date granularity level
+ * @returns True for month, quarter, and year granularities
+ */
+export const isCalendarContinuousGranularity = (granularity: string): boolean =>
+  CALENDAR_GRANULARITIES.has(granularity);
+
 /**
  * Maps date granularity levels to their corresponding intervals in milliseconds
  *
@@ -17,11 +47,11 @@ import { Axis, AxisSettings, getDefaultDateFormat } from '../../../translations/
 export const getInterval = (granularity: string): number => {
   switch (granularity) {
     case DateLevels.Years:
-      return 31536000000;
+      return CONTINUOUS_INTERVAL_MS.years;
     case DateLevels.Quarters:
-      return 7884000000;
+      return CONTINUOUS_INTERVAL_MS.quarters;
     case DateLevels.Months:
-      return 2592000000;
+      return CONTINUOUS_INTERVAL_MS.months;
     case DateLevels.Weeks:
       return 604800000;
     case DateLevels.Days:
@@ -40,6 +70,120 @@ export const getInterval = (granularity: string): number => {
   }
   console.warn('Unsupported level');
   return 0;
+};
+
+/**
+ * Truncates a timestamp to the UTC start of the calendar period that contains it.
+ *
+ * @param timestamp - Timestamp in milliseconds
+ * @param granularity - The date granularity level
+ * @returns Timestamp of the first millisecond of the containing period
+ */
+const getPeriodStartUtc = (timestamp: number, granularity: string): number => {
+  const date = new Date(timestamp);
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth();
+  switch (granularity) {
+    case DateLevels.Years:
+      return Date.UTC(year, 0, 1);
+    case DateLevels.Quarters:
+      return Date.UTC(year, Math.floor(month / 3) * 3, 1);
+    case DateLevels.Months:
+    default:
+      return Date.UTC(year, month, 1);
+  }
+};
+
+/**
+ * Advances a timestamp by exactly one period of the given granularity.
+ *
+ * Month, quarter, and year granularities step in UTC calendar arithmetic and keep the
+ * time of day and the day of month. Days beyond the end of the target month are clamped
+ * to its last day, so advancing January 31 by a month lands on February 28 rather than
+ * spilling into March.
+ *
+ * All other granularities have a constant length and advance by their fixed interval.
+ *
+ * @param tickValue - Timestamp in milliseconds to advance from
+ * @param granularity - The date granularity level
+ * @returns Timestamp of the next period, in milliseconds
+ */
+export const getNextContinuousDate = (tickValue: number, granularity: string): number => {
+  const date = new Date(tickValue);
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth();
+  const day = date.getUTCDate();
+  const hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes();
+  const seconds = date.getUTCSeconds();
+  const ms = date.getUTCMilliseconds();
+
+  const atClampedDay = (targetYear: number, targetMonth: number): number => {
+    const lastDayOfTargetMonth = new Date(Date.UTC(targetYear, targetMonth + 1, 0)).getUTCDate();
+    return Date.UTC(
+      targetYear,
+      targetMonth,
+      Math.min(day, lastDayOfTargetMonth),
+      hours,
+      minutes,
+      seconds,
+      ms,
+    );
+  };
+
+  switch (granularity) {
+    case DateLevels.Years:
+      return atClampedDay(year + 1, month);
+    case DateLevels.Quarters:
+      return atClampedDay(year, month + 3);
+    case DateLevels.Months:
+      return atClampedDay(year, month + 1);
+    default:
+      return tickValue + getInterval(granularity);
+  }
+};
+
+/**
+ * Builds the list of tick positions covering a range, one per calendar period.
+ *
+ * Both bounds are normalized to the start of their containing period, so the ticks share
+ * the timestamps of the plotted data points instead of drifting away from them as a fixed
+ * millisecond interval would.
+ *
+ * @param min - Timestamp of the earliest data point, in milliseconds
+ * @param max - Timestamp of the latest data point, in milliseconds
+ * @param granularity - The date granularity level
+ * @returns Tick timestamps in ascending order, or undefined when the granularity has
+ * fixed-length periods or the bounds are not finite
+ */
+export const getCalendarTickPositions = (
+  min: number,
+  max: number,
+  granularity: string,
+): number[] | undefined => {
+  if (
+    !isCalendarContinuousGranularity(granularity) ||
+    !Number.isFinite(min) ||
+    !Number.isFinite(max)
+  ) {
+    return undefined;
+  }
+
+  let cursor = getPeriodStartUtc(min, granularity);
+  const endPeriod = getPeriodStartUtc(max, granularity);
+  const ticks: number[] = [];
+  const maxTicks = 10000;
+
+  while (cursor <= endPeriod && ticks.length < maxTicks) {
+    ticks.push(cursor);
+    const next = getNextContinuousDate(cursor, granularity);
+    if (next <= cursor) {
+      break;
+    }
+    cursor = next;
+  }
+
+  return ticks.length > 0 ? ticks : undefined;
 };
 
 /**
@@ -97,9 +241,9 @@ export const getXAxisDatetimeSettings = (
         minInterval: (max - min) / (values.length - 1),
         lastValue: undefined,
       }).minInterval;
-  //TODO look into handling leap years and other exceptions
-  if (interval < 30 * 86400000 && interval > 25 * 86400000) {
-    interval = 2592000000;
+  // Normalize month-like gaps to the nominal continuous-month interval.
+  if (interval < 30 * MS_PER_DAY && interval > 25 * MS_PER_DAY) {
+    interval = CONTINUOUS_INTERVAL_MS.months;
   }
 
   if (values.length > 1 && (isNaN(interval) || interval === 0))
@@ -123,6 +267,12 @@ export const getXAxisDatetimeSettings = (
     month: '%B %Y',
     year: '%Y',
   };
+
+  const tickPositions =
+    granularity && Number.isFinite(min) && Number.isFinite(max)
+      ? getCalendarTickPositions(min, max, granularity)
+      : undefined;
+
   return [
     merge(xAxisDefaults, {
       type: 'datetime',
@@ -146,8 +296,11 @@ export const getXAxisDatetimeSettings = (
       },
       min: min,
       max: max,
+      // tickInterval still drives the minimum range and gap detection, while tickPositions,
+      // when present, determines where labels are actually placed.
       tickInterval: interval,
       minTickInterval: interval,
+      ...(tickPositions && { tickPositions }),
       tickmarkPlacement: 'on',
       startOnTick: true,
       endOnTick: true,

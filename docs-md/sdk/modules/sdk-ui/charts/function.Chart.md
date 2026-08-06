@@ -14,9 +14,9 @@ A chart component displaying total revenue per quarter from the Sample ECommerce
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts/chart&mode=docs'
- width='800'
+ width='100%'
  height='870'
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ## Parameters

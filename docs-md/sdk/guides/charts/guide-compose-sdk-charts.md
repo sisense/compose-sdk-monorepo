@@ -48,9 +48,9 @@ For example, the following code snippets set a chart’s dataset using data from
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide%2Fsimple-chart&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -111,9 +111,9 @@ const sampleData = {
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide%2Fexplicit-data&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -156,9 +156,9 @@ For example, the following code snippets filter a chart’s dataset to only incl
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide%2Ffilter-function&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -207,9 +207,9 @@ For example, the following code snippets filter a chart’s dataset based on the
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide%2Ffilter-component&mode=docs'
- width=800
+ width='100%'
  height=985
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -278,9 +278,9 @@ For example, the following code snippets highlight certain age ranges in a chart
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide%2Fhighlight-function&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -327,9 +327,9 @@ For example, the following code snippets highlight a chart’s data based on age
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide%2Fhighlight-component&mode=docs'
- width=800
+ width='100%'
  height=985
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -467,9 +467,9 @@ This is the simplest example where we have a single `category` and a single `val
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide%2Fone-category-one-value&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -489,9 +489,9 @@ This example adds an additional `value` to the chart . This chart shows the sum 
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide%2Fone-category-two-values&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -514,9 +514,9 @@ This example is similar to the one above in that it uses two `value` measures, b
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide/mixed-chart-types&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ###### Angular
@@ -543,9 +543,9 @@ This example adds an additional `category` to a chart instead of an additional `
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide/two-categories-one-value&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -565,9 +565,9 @@ This example has two `category` attributes and two `value` measures. This chart 
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide/two-categories-two-values&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -594,9 +594,9 @@ This example has a single `category` and a single `value`, but the categories ar
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide/break-by&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -617,9 +617,9 @@ This example shows the same data as the previous example, but the subcategories 
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide/series-to-color-map&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -652,9 +652,9 @@ For example, the following code snippets limit the number of slices in the pie c
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide/style-options&mode=docs'
- width=800
+ width='100%'
  height=1275
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular
@@ -721,9 +721,9 @@ For example, the following code snippets remove the tooltip that shows by defaul
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide/callbacks&mode=docs'
- width=800
+ width='100%'
  height=870
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 ##### Angular

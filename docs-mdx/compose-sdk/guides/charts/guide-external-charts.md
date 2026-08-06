@@ -35,9 +35,9 @@ In this snippet, we’re querying the Sample ECommerce model to get total cost a
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide/external-chart&mode=docs'
- width='800'
+ width='100%'
  height='875'
- style={{ border:'none' }}
+ style={{ maxWidth:'800px', border:'none' }}
 />
 
 ##### Angular

@@ -149,14 +149,14 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
             "custom": {
               "xDisplayValue": "Y-04",
             },
-            "x": 1585785600000,
+            "x": 1585699200000,
             "y": 0,
           },
           {
             "custom": {
               "xDisplayValue": "Y-05",
             },
-            "x": 1588377600000,
+            "x": 1588291200000,
             "y": 0,
           },
           {
@@ -322,14 +322,14 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
             "custom": {
               "xDisplayValue": "Y-04",
             },
-            "x": 1585785600000,
+            "x": 1585699200000,
             "y": 0,
           },
           {
             "custom": {
               "xDisplayValue": "Y-05",
             },
-            "x": 1588377600000,
+            "x": 1588291200000,
             "y": 0,
           },
           {
@@ -509,8 +509,8 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
         "lineWidth": 1,
         "max": 1604188800000,
         "min": 1577836800000,
-        "minRange": 2592000000,
-        "minTickInterval": 2592000000,
+        "minRange": 2419200000,
+        "minTickInterval": 2419200000,
         "minorGridLineColor": "#d1d1d7",
         "minorGridLineWidth": 0,
         "minorTickColor": "#d1d1d7",
@@ -519,7 +519,20 @@ exports[`cartesianData > timeseries treat null as zero 1`] = `
         "startOfWeek": 4,
         "startOnTick": true,
         "tickColor": "#d1d1d7",
-        "tickInterval": 2592000000,
+        "tickInterval": 2419200000,
+        "tickPositions": [
+          1577836800000,
+          1580515200000,
+          1583020800000,
+          1585699200000,
+          1588291200000,
+          1590969600000,
+          1593561600000,
+          1596240000000,
+          1598918400000,
+          1601510400000,
+          1604188800000,
+        ],
         "tickWidth": 0,
         "tickmarkPlacement": "on",
         "title": {
@@ -830,14 +843,14 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
             "custom": {
               "xDisplayValue": "Y-04",
             },
-            "x": 1585785600000,
+            "x": 1585699200000,
             "y": 0,
           },
           {
             "custom": {
               "xDisplayValue": "Y-05",
             },
-            "x": 1588377600000,
+            "x": 1588291200000,
             "y": 0,
           },
           {
@@ -1003,14 +1016,14 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
             "custom": {
               "xDisplayValue": "Y-04",
             },
-            "x": 1585785600000,
+            "x": 1585699200000,
             "y": 0,
           },
           {
             "custom": {
               "xDisplayValue": "Y-05",
             },
-            "x": 1588377600000,
+            "x": 1588291200000,
             "y": 0,
           },
           {
@@ -1190,8 +1203,8 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
         "lineWidth": 1,
         "max": 1604188800000,
         "min": 1577836800000,
-        "minRange": 2592000000,
-        "minTickInterval": 2592000000,
+        "minRange": 2419200000,
+        "minTickInterval": 2419200000,
         "minorGridLineColor": "#d1d1d7",
         "minorGridLineWidth": 0,
         "minorTickColor": "#d1d1d7",
@@ -1200,7 +1213,20 @@ exports[`cartesianData > timeseries treat null as zero 2`] = `
         "startOfWeek": 4,
         "startOnTick": true,
         "tickColor": "#d1d1d7",
-        "tickInterval": 2592000000,
+        "tickInterval": 2419200000,
+        "tickPositions": [
+          1577836800000,
+          1580515200000,
+          1583020800000,
+          1585699200000,
+          1588291200000,
+          1590969600000,
+          1593561600000,
+          1596240000000,
+          1598918400000,
+          1601510400000,
+          1604188800000,
+        ],
         "tickWidth": 0,
         "tickmarkPlacement": "on",
         "title": {
@@ -1518,14 +1544,14 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
             "custom": {
               "xDisplayValue": "Y-04",
             },
-            "x": 1585785600000,
+            "x": 1585699200000,
             "y": 0,
           },
           {
             "custom": {
               "xDisplayValue": "Y-05",
             },
-            "x": 1588377600000,
+            "x": 1588291200000,
             "y": 0,
           },
           {
@@ -1691,14 +1717,14 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
             "custom": {
               "xDisplayValue": "Y-04",
             },
-            "x": 1585785600000,
+            "x": 1585699200000,
             "y": 0,
           },
           {
             "custom": {
               "xDisplayValue": "Y-05",
             },
-            "x": 1588377600000,
+            "x": 1588291200000,
             "y": 0,
           },
           {
@@ -1878,8 +1904,8 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
         "lineWidth": 1,
         "max": 1604188800000,
         "min": 1577836800000,
-        "minRange": 2592000000,
-        "minTickInterval": 2592000000,
+        "minRange": 2419200000,
+        "minTickInterval": 2419200000,
         "minorGridLineColor": "#d1d1d7",
         "minorGridLineWidth": 0,
         "minorTickColor": "#d1d1d7",
@@ -1888,7 +1914,20 @@ exports[`cartesianData > timeseries treat null as zero when negative values 1`] 
         "startOfWeek": 4,
         "startOnTick": true,
         "tickColor": "#d1d1d7",
-        "tickInterval": 2592000000,
+        "tickInterval": 2419200000,
+        "tickPositions": [
+          1577836800000,
+          1580515200000,
+          1583020800000,
+          1585699200000,
+          1588291200000,
+          1590969600000,
+          1593561600000,
+          1596240000000,
+          1598918400000,
+          1601510400000,
+          1604188800000,
+        ],
         "tickWidth": 0,
         "tickmarkPlacement": "on",
         "title": {
@@ -2199,14 +2238,14 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
             "custom": {
               "xDisplayValue": "Y-04",
             },
-            "x": 1585785600000,
+            "x": 1585699200000,
             "y": 0,
           },
           {
             "custom": {
               "xDisplayValue": "Y-05",
             },
-            "x": 1588377600000,
+            "x": 1588291200000,
             "y": 0,
           },
           {
@@ -2372,14 +2411,14 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
             "custom": {
               "xDisplayValue": "Y-04",
             },
-            "x": 1585785600000,
+            "x": 1585699200000,
             "y": 0,
           },
           {
             "custom": {
               "xDisplayValue": "Y-05",
             },
-            "x": 1588377600000,
+            "x": 1588291200000,
             "y": 0,
           },
           {
@@ -2559,8 +2598,8 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
         "lineWidth": 1,
         "max": 1604188800000,
         "min": 1577836800000,
-        "minRange": 2592000000,
-        "minTickInterval": 2592000000,
+        "minRange": 2419200000,
+        "minTickInterval": 2419200000,
         "minorGridLineColor": "#d1d1d7",
         "minorGridLineWidth": 0,
         "minorTickColor": "#d1d1d7",
@@ -2569,7 +2608,20 @@ exports[`cartesianData > timeseries treat null as zero when negative values 2`] 
         "startOfWeek": 4,
         "startOnTick": true,
         "tickColor": "#d1d1d7",
-        "tickInterval": 2592000000,
+        "tickInterval": 2419200000,
+        "tickPositions": [
+          1577836800000,
+          1580515200000,
+          1583020800000,
+          1585699200000,
+          1588291200000,
+          1590969600000,
+          1593561600000,
+          1596240000000,
+          1598918400000,
+          1601510400000,
+          1604188800000,
+        ],
         "tickWidth": 0,
         "tickmarkPlacement": "on",
         "title": {
@@ -2859,9 +2911,9 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
         },
         {
           "custom": {
-            "xDisplayValue": "Y-01",
+            "xDisplayValue": "Y-02",
           },
-          "x": 1580428800000,
+          "x": 1580515200000,
           "y": null,
         },
         {
@@ -2985,8 +3037,8 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
       "lineWidth": 1,
       "max": "N\\A",
       "min": 1577836800000,
-      "minRange": 2592000000,
-      "minTickInterval": 2592000000,
+      "minRange": 2419200000,
+      "minTickInterval": 2419200000,
       "minorGridLineColor": "#d1d1d7",
       "minorGridLineWidth": 0,
       "minorTickColor": "#d1d1d7",
@@ -2995,7 +3047,7 @@ exports[`cartesianData > timeseries with N\\A values 1`] = `
       "startOfWeek": 4,
       "startOnTick": true,
       "tickColor": "#d1d1d7",
-      "tickInterval": 2592000000,
+      "tickInterval": 2419200000,
       "tickWidth": 0,
       "tickmarkPlacement": "on",
       "title": {
@@ -3303,8 +3355,8 @@ exports[`cartesianData > timeseries with one data point 1`] = `
         "lineWidth": 1,
         "max": 1577836800000,
         "min": 1577836800000,
-        "minRange": 2592000000,
-        "minTickInterval": 2592000000,
+        "minRange": 2419200000,
+        "minTickInterval": 2419200000,
         "minorGridLineColor": "#d1d1d7",
         "minorGridLineWidth": 0,
         "minorTickColor": "#d1d1d7",
@@ -3313,7 +3365,10 @@ exports[`cartesianData > timeseries with one data point 1`] = `
         "startOfWeek": 4,
         "startOnTick": true,
         "tickColor": "#d1d1d7",
-        "tickInterval": 2592000000,
+        "tickInterval": 2419200000,
+        "tickPositions": [
+          1577836800000,
+        ],
         "tickWidth": 0,
         "tickmarkPlacement": "on",
         "title": {
@@ -4667,14 +4722,14 @@ exports[`renders a time series chart with break by 1`] = `
           "custom": {
             "xDisplayValue": "Y-04",
           },
-          "x": 1585785600000,
+          "x": 1585699200000,
           "y": null,
         },
         {
           "custom": {
             "xDisplayValue": "Y-05",
           },
-          "x": 1588377600000,
+          "x": 1588291200000,
           "y": null,
         },
         {
@@ -4861,14 +4916,14 @@ exports[`renders a time series chart with break by 1`] = `
           "custom": {
             "xDisplayValue": "Y-04",
           },
-          "x": 1585785600000,
+          "x": 1585699200000,
           "y": null,
         },
         {
           "custom": {
             "xDisplayValue": "Y-05",
           },
-          "x": 1588377600000,
+          "x": 1588291200000,
           "y": null,
         },
         {
@@ -5052,8 +5107,8 @@ exports[`renders a time series chart with break by 1`] = `
       "lineWidth": 1,
       "max": 1604188800000,
       "min": 1577836800000,
-      "minRange": 2592000000,
-      "minTickInterval": 2592000000,
+      "minRange": 2419200000,
+      "minTickInterval": 2419200000,
       "minorGridLineColor": "#d1d1d7",
       "minorGridLineWidth": 0,
       "minorTickColor": "#d1d1d7",
@@ -5062,7 +5117,20 @@ exports[`renders a time series chart with break by 1`] = `
       "startOfWeek": 4,
       "startOnTick": true,
       "tickColor": "#d1d1d7",
-      "tickInterval": 2592000000,
+      "tickInterval": 2419200000,
+      "tickPositions": [
+        1577836800000,
+        1580515200000,
+        1583020800000,
+        1585699200000,
+        1588291200000,
+        1590969600000,
+        1593561600000,
+        1596240000000,
+        1598918400000,
+        1601510400000,
+        1604188800000,
+      ],
       "tickWidth": 0,
       "tickmarkPlacement": "on",
       "title": {
@@ -5308,14 +5376,14 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
           "custom": {
             "xDisplayValue": "Y-04",
           },
-          "x": 1585785600000,
+          "x": 1585699200000,
           "y": null,
         },
         {
           "custom": {
             "xDisplayValue": "Y-05",
           },
-          "x": 1588377600000,
+          "x": 1588291200000,
           "y": null,
         },
         {
@@ -5502,14 +5570,14 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
           "custom": {
             "xDisplayValue": "Y-04",
           },
-          "x": 1585785600000,
+          "x": 1585699200000,
           "y": null,
         },
         {
           "custom": {
             "xDisplayValue": "Y-05",
           },
-          "x": 1588377600000,
+          "x": 1588291200000,
           "y": null,
         },
         {
@@ -5693,8 +5761,8 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
       "lineWidth": 1,
       "max": 1604188800000,
       "min": 1577836800000,
-      "minRange": 2592000000,
-      "minTickInterval": 2592000000,
+      "minRange": 2419200000,
+      "minTickInterval": 2419200000,
       "minorGridLineColor": "#d1d1d7",
       "minorGridLineWidth": 0,
       "minorTickColor": "#d1d1d7",
@@ -5703,7 +5771,20 @@ exports[`renders a time series chart with break by with connectNulls true 1`] = 
       "startOfWeek": 4,
       "startOnTick": true,
       "tickColor": "#d1d1d7",
-      "tickInterval": 2592000000,
+      "tickInterval": 2419200000,
+      "tickPositions": [
+        1577836800000,
+        1580515200000,
+        1583020800000,
+        1585699200000,
+        1588291200000,
+        1590969600000,
+        1593561600000,
+        1596240000000,
+        1598918400000,
+        1601510400000,
+        1604188800000,
+      ],
       "tickWidth": 0,
       "tickmarkPlacement": "on",
       "title": {
@@ -5944,14 +6025,14 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
           "custom": {
             "xDisplayValue": "Y-04",
           },
-          "x": 1585785600000,
+          "x": 1585699200000,
           "y": null,
         },
         {
           "custom": {
             "xDisplayValue": "Y-05",
           },
-          "x": 1588377600000,
+          "x": 1588291200000,
           "y": null,
         },
         {
@@ -6117,14 +6198,14 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
           "custom": {
             "xDisplayValue": "Y-04",
           },
-          "x": 1585785600000,
+          "x": 1585699200000,
           "y": null,
         },
         {
           "custom": {
             "xDisplayValue": "Y-05",
           },
-          "x": 1588377600000,
+          "x": 1588291200000,
           "y": null,
         },
         {
@@ -6304,8 +6385,8 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
       "lineWidth": 1,
       "max": 1604188800000,
       "min": 1577836800000,
-      "minRange": 2592000000,
-      "minTickInterval": 2592000000,
+      "minRange": 2419200000,
+      "minTickInterval": 2419200000,
       "minorGridLineColor": "#d1d1d7",
       "minorGridLineWidth": 0,
       "minorTickColor": "#d1d1d7",
@@ -6314,7 +6395,20 @@ exports[`renders a time series with connectNulls true on one measure 1`] = `
       "startOfWeek": 4,
       "startOnTick": true,
       "tickColor": "#d1d1d7",
-      "tickInterval": 2592000000,
+      "tickInterval": 2419200000,
+      "tickPositions": [
+        1577836800000,
+        1580515200000,
+        1583020800000,
+        1585699200000,
+        1588291200000,
+        1590969600000,
+        1593561600000,
+        1596240000000,
+        1598918400000,
+        1601510400000,
+        1604188800000,
+      ],
       "tickWidth": 0,
       "tickmarkPlacement": "on",
       "title": {
@@ -6555,14 +6649,14 @@ exports[`renders a time series with granularity Month 1`] = `
           "custom": {
             "xDisplayValue": "Y-04",
           },
-          "x": 1585785600000,
+          "x": 1585699200000,
           "y": null,
         },
         {
           "custom": {
             "xDisplayValue": "Y-05",
           },
-          "x": 1588377600000,
+          "x": 1588291200000,
           "y": null,
         },
         {
@@ -6728,14 +6822,14 @@ exports[`renders a time series with granularity Month 1`] = `
           "custom": {
             "xDisplayValue": "Y-04",
           },
-          "x": 1585785600000,
+          "x": 1585699200000,
           "y": null,
         },
         {
           "custom": {
             "xDisplayValue": "Y-05",
           },
-          "x": 1588377600000,
+          "x": 1588291200000,
           "y": null,
         },
         {
@@ -6915,8 +7009,8 @@ exports[`renders a time series with granularity Month 1`] = `
       "lineWidth": 1,
       "max": 1604188800000,
       "min": 1577836800000,
-      "minRange": 2592000000,
-      "minTickInterval": 2592000000,
+      "minRange": 2419200000,
+      "minTickInterval": 2419200000,
       "minorGridLineColor": "#d1d1d7",
       "minorGridLineWidth": 0,
       "minorTickColor": "#d1d1d7",
@@ -6925,7 +7019,20 @@ exports[`renders a time series with granularity Month 1`] = `
       "startOfWeek": 4,
       "startOnTick": true,
       "tickColor": "#d1d1d7",
-      "tickInterval": 2592000000,
+      "tickInterval": 2419200000,
+      "tickPositions": [
+        1577836800000,
+        1580515200000,
+        1583020800000,
+        1585699200000,
+        1588291200000,
+        1590969600000,
+        1593561600000,
+        1596240000000,
+        1598918400000,
+        1601510400000,
+        1604188800000,
+      ],
       "tickWidth": 0,
       "tickmarkPlacement": "on",
       "title": {
@@ -7166,14 +7273,14 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
           "custom": {
             "xDisplayValue": "Y-04",
           },
-          "x": 1585785600000,
+          "x": 1585699200000,
           "y": null,
         },
         {
           "custom": {
             "xDisplayValue": "Y-05",
           },
-          "x": 1588377600000,
+          "x": 1588291200000,
           "y": null,
         },
         {
@@ -7339,14 +7446,14 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
           "custom": {
             "xDisplayValue": "Y-04",
           },
-          "x": 1585785600000,
+          "x": 1585699200000,
           "y": null,
         },
         {
           "custom": {
             "xDisplayValue": "Y-05",
           },
-          "x": 1588377600000,
+          "x": 1588291200000,
           "y": null,
         },
         {
@@ -7526,8 +7633,8 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
       "lineWidth": 1,
       "max": 1604188800000,
       "min": 1577836800000,
-      "minRange": 2592000000,
-      "minTickInterval": 2592000000,
+      "minRange": 2419200000,
+      "minTickInterval": 2419200000,
       "minorGridLineColor": "#d1d1d7",
       "minorGridLineWidth": 0,
       "minorTickColor": "#d1d1d7",
@@ -7536,7 +7643,20 @@ exports[`renders a time series with multiple measures and no break by 1`] = `
       "startOfWeek": 4,
       "startOnTick": true,
       "tickColor": "#d1d1d7",
-      "tickInterval": 2592000000,
+      "tickInterval": 2419200000,
+      "tickPositions": [
+        1577836800000,
+        1580515200000,
+        1583020800000,
+        1585699200000,
+        1588291200000,
+        1590969600000,
+        1593561600000,
+        1596240000000,
+        1598918400000,
+        1601510400000,
+        1604188800000,
+      ],
       "tickWidth": 0,
       "tickmarkPlacement": "on",
       "title": {

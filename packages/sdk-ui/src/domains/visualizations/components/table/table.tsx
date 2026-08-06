@@ -23,9 +23,9 @@ function isCompleteDataSet(dataSet: TableProps['dataSet']): dataSet is Data {
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=tables%2Faggregated-table&mode=docs'
- *  width='800'
+ *  width='100%'
  *  height='870'
- *  style='border:none;'
+ *  style='max-width:800px; border:none;'
  * />
  *
  * @param props - Table properties

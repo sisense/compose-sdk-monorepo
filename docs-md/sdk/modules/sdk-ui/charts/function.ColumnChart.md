@@ -17,9 +17,9 @@ Column chart displaying total revenue per year, broken down by condition, from t
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts%2Fcolumn-chart&mode=docs'
- width='800'
+ width='100%'
  height='870'
- style='border:none;'
+ style='max-width:800px; border:none;'
 />
 
 Additional Column Chart examples:

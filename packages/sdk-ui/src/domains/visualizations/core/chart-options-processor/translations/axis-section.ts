@@ -66,6 +66,8 @@ export type AxisSettings = {
   minPadding?: number;
   maxPadding?: number;
   tickInterval?: number | null;
+  /** Explicit tick positions (ms). When set, Highcharts ignores tickInterval for labeling. */
+  tickPositions?: number[];
   categories?: string[];
   opposite?: boolean;
   plotBands?: AxisPlotBand[];

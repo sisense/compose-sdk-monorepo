@@ -24,9 +24,9 @@ import { pivotQueryStateReducer } from './pivot-query-state-reducer';
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=queries%2Fuse-execute-pivot-query&mode=docs'
- *  width='800'
+ *  width='100%'
  *  height='870'
- *  style='border:none;'
+ *  style='max-width:800px; border:none;'
  * />
  *
  * @returns Query state that contains the status of the query execution, the result data, or the error if any occurred

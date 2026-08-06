@@ -186,6 +186,10 @@ function applyDateFormat(
   return formatInTimeZone(date, cfg.timeZone, format, {
     locale,
     weekStartsOn: cfg.weekFirstDay,
+    // Number weeks the ISO 8601 way, where week one is the week holding the 4th of January.
+    // Without this the locale default applies, which counts the week holding the 1st of January
+    // as week one and reports a week number one higher for most years.
+    firstWeekContainsDate: 4,
   });
 }
 

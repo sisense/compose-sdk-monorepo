@@ -14,9 +14,9 @@ Scatter map chart displaying cost and revenue rank from the Sample ECommerce dat
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts%2Fmap-scatter&mode=docs'
- width='1000'
+ width='100%'
  height='900'
- style='border:none;'
+ style='max-width:1000px; border:none;'
 />
 
 ## Parameters

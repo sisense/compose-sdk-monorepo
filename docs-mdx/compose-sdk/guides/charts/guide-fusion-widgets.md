@@ -30,18 +30,18 @@ Hardcoded dashboard and widget IDs
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide/widget-component&mode=docs'
- width='800'
+ width='100%'
  height='900'
- style={{ border:'none' }}
+ style={{ maxWidth:'800px', border:'none' }}
 />
 
 Retrieve widget IDs using hook
 
 <iframe
  src='https://csdk-playground.sisense.com/?example=charts-guide/widget-hook&mode=docs'
- width='800'
+ width='100%'
  height='975'
- style={{ border:'none' }}
+ style={{ maxWidth:'800px', border:'none' }}
 />
 
 #### Angular

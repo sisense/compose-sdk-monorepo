@@ -12,9 +12,9 @@ import { shouldSkipSisenseContextWaiting } from './chart/helpers/should-skip-sis
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=charts%2Ffunnel-chart&mode=docs'
- *  width='800'
+ *  width='100%'
  *  height='870'
- *  style='border:none;'
+ *  style='max-width:800px; border:none;'
  * />
  *
  * @param props - Funnel chart properties

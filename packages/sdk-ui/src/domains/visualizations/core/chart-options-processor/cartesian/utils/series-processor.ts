@@ -1,3 +1,4 @@
+import { getDataOptionGranularity } from '@/domains/visualizations/core/chart-data-options/utils';
 import { prepareDataLabelsOptions } from '@/domains/visualizations/core/chart-options-processor/series-labels';
 
 import { ChartType, CompleteThemeSettingsInternal } from '../../../../../../types';
@@ -238,6 +239,7 @@ function formatSeriesData(config: FormatSeriesDataConfig) {
       getDateFormatter(dataOptions.x[0], dateFormatter),
       yAxisSettings[index],
       axisClipped[index],
+      getDataOptionGranularity(dataOptions.x[0]),
     );
   }
 

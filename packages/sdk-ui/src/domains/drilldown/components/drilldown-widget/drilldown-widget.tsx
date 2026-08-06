@@ -36,9 +36,9 @@ import { DrilldownBreadcrumbs } from '../drilldown-breadcrumbs/index';
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=use-cases%2Fdrilldown&mode=docs'
- *  width='800'
+ *  width='100%'
  *  height='870'
- *  style='border:none;'
+ *  style='max-width:800px; border:none;'
  * />
  *
  * Additional drilldown examples:

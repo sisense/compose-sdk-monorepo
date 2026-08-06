@@ -31,15 +31,16 @@ describe('when the fiscal year feature flag is disabled', () => {
   test.each([
     {
       locale: enUS,
+      // the last week of 2009 continues into January, so it is week 53 rather than week 1
       date: dec292009,
       format: 'yyyy Q ww',
-      expected: '2009 Q4 01',
+      expected: '2009 Q4 53',
     },
     {
       locale: enUS,
       date: apr142012,
       format: 'yyyy Q w',
-      expected: '2012 Q2 16',
+      expected: '2012 Q2 15',
     },
     {
       locale: enUS,
@@ -229,15 +230,30 @@ describe('when the fiscal year feature flag is disabled', () => {
     },
   );
 
-  describe('different settings for the first day of the week', () => {
+  describe('week numbering across years whose first week is split', () => {
+    // 2011 and 2012 both open with a partial week, so counting the week of January 1st as week
+    // one would report every later week one number too high for the whole year.
     test.each([
-      { date: zero, weekFirstDay: SUN, expected: '1' },
+      { date: new Date(Date.UTC(2011, 6, 11)), expected: '28 2011' },
+      { date: new Date(Date.UTC(2012, 6, 9)), expected: '28 2012' },
+      { date: new Date(Date.UTC(2013, 6, 8)), expected: '28 2013' },
+    ])('Date: $date | Expected: $expected', ({ date, expected }) => {
+      expect(formatDateValue(date, 'ww yyyy', enUS, fiscalDisabledConfig)).toBe(expected);
+    });
+  });
+
+  describe('different settings for the first day of the week', () => {
+    // January 1st 1970 was a Thursday. Week one is the week holding January 4th, so when the
+    // week starts on a Friday, Saturday, or Sunday, January 1st still belongs to the closing
+    // week of 1969.
+    test.each([
+      { date: zero, weekFirstDay: SUN, expected: '53' },
       { date: zero, weekFirstDay: MON, expected: '1' },
       { date: zero, weekFirstDay: TUE, expected: '1' },
       { date: zero, weekFirstDay: WED, expected: '1' },
       { date: zero, weekFirstDay: THU, expected: '1' },
-      { date: zero, weekFirstDay: FRI, expected: '1' },
-      { date: zero, weekFirstDay: SAT, expected: '1' },
+      { date: zero, weekFirstDay: FRI, expected: '52' },
+      { date: zero, weekFirstDay: SAT, expected: '52' },
     ])(
       'Date: $date | Week 1st day: $weekFirstDay | Expected: $expected',
       ({ date, weekFirstDay, expected }) => {

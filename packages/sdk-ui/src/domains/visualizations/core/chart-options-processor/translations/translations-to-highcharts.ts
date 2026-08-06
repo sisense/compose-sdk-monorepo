@@ -24,6 +24,10 @@ import {
   ChartData,
   SeriesValueData,
 } from '../../chart-data/types';
+import {
+  getNextContinuousDate,
+  isCalendarContinuousGranularity,
+} from '../cartesian/utils/axis/date-utils.js';
 import { Stacking } from '../chart-options-service';
 import { AxisMinMax, AxisSettings } from './axis-section';
 import {
@@ -166,6 +170,22 @@ export const addStackingIfSpecified = (
 export const indexMapWhenOnlyY = (categories: string[], index: number) =>
   categories.map((c, categoryIndex) => (index === categoryIndex ? 0 : -1));
 
+/**
+ * Formats a series for a continuous datetime X-axis, inserting placeholder points
+ * for periods that have no data so the timeline stays evenly spaced.
+ *
+ * @param series - Series values to format
+ * @param indexMap - Maps each X-axis position to an index in the series data, or -1 when empty
+ * @param treatNullDataAsZeros - Whether missing values render as zero instead of null
+ * @param interval - Distance between X-axis ticks, in milliseconds
+ * @param maxCategories - Upper bound on the number of placeholder points to insert
+ * @param dateFormatter - Formats a timestamp into the display value of a placeholder point
+ * @param yAxisSettings - Y-axis settings, adjusted when placeholder zeros fall outside the range
+ * @param axisClipped - Flags describing whether the Y-axis range was clipped by the user
+ * @param granularity - Date granularity of the X-axis. Month, quarter, and year granularities
+ * advance by calendar period so placeholder points stay on period boundaries.
+ * @returns The series with placeholder points inserted for empty periods
+ */
 export const formatSeriesContinuousXAxis = (
   series: CategoricalSeriesValues,
   indexMap: number[],
@@ -175,6 +195,7 @@ export const formatSeriesContinuousXAxis = (
   dateFormatter: (time: number) => string,
   yAxisSettings: AxisSettings,
   axisClipped: AxisClipped,
+  granularity?: string,
 ): HighchartsSeriesValues => {
   const input = formatData(series, treatNullDataAsZeros);
   const { title, ...seriesWithoutTitle } = series;
@@ -191,6 +212,7 @@ export const formatSeriesContinuousXAxis = (
       dateFormatter,
       yAxisSettings,
       axisClipped,
+      granularity,
     ),
   };
 };
@@ -213,6 +235,7 @@ const translateNumbersContinuousXAxis = (
   dateFormatter: (time: number) => string,
   yAxisSettings: AxisSettings,
   axisClipped: AxisClipped,
+  granularity?: string,
 ): SeriesPointStructure[] => {
   // eslint-disable-next-line sonarjs/prefer-immediate-return
   const seriesData = indexMap.map((index: number, indexOfIndex: number): SeriesPointStructure => {
@@ -239,10 +262,48 @@ const translateNumbersContinuousXAxis = (
   });
 
   const seriesDataWithNulls: SeriesPointStructure[] = [];
-  let nextTick = -1;
   const halfInterval = interval / 2.0;
-
   let addedTickCount = 0;
+
+  const pushGapPoint = (ticValue: number) => {
+    seriesDataWithNulls.push({
+      custom: { xDisplayValue: dateFormatter(ticValue) },
+      x: ticValue,
+      y: treatNullDataAsZeros ? 0 : null,
+    });
+    if (treatNullDataAsZeros && yAxisSettings?.min && yAxisSettings?.min > 0) {
+      adjustAxis(yAxisSettings, axisClipped);
+    }
+  };
+
+  // Months, quarters, and years vary in length, so advance by calendar period instead of
+  // by a fixed number of milliseconds. Fixed steps accumulate drift and eventually place a
+  // period's data next to the neighbouring period's label.
+  if (granularity && isCalendarContinuousGranularity(granularity)) {
+    let expectedNext: number | undefined;
+    seriesData.forEach((s) => {
+      const x = typeof s.x === 'number' && Number.isFinite(s.x) ? s.x : undefined;
+      if (x !== undefined && expectedNext !== undefined) {
+        let cursor = expectedNext;
+        while (cursor < x - halfInterval) {
+          addedTickCount++;
+          if (addedTickCount > maxCategories) break;
+          pushGapPoint(cursor);
+          const next = getNextContinuousDate(cursor, granularity);
+          if (next <= cursor) break;
+          cursor = next;
+        }
+      }
+      seriesDataWithNulls.push(s);
+      if (x !== undefined) {
+        expectedNext = getNextContinuousDate(x, granularity);
+      }
+    });
+
+    return handleIsolatedYAxisPointsMarker(seriesDataWithNulls);
+  }
+
+  let nextTick = -1;
   seriesData.forEach((s) => {
     if (s.x && nextTick === -1) {
       nextTick = s.x + halfInterval;
@@ -253,15 +314,7 @@ const translateNumbersContinuousXAxis = (
       while (missingTicks > 0) {
         addedTickCount++;
         if (addedTickCount > maxCategories) break;
-        const ticValue = s.x - interval * missingTicks;
-        seriesDataWithNulls.push({
-          custom: { xDisplayValue: dateFormatter(ticValue) },
-          x: ticValue,
-          y: treatNullDataAsZeros ? 0 : null,
-        });
-        if (treatNullDataAsZeros && yAxisSettings?.min && yAxisSettings?.min > 0) {
-          adjustAxis(yAxisSettings, axisClipped);
-        }
+        pushGapPoint(s.x - interval * missingTicks);
 
         missingTicks--;
         nextTick += interval;

@@ -66,9 +66,9 @@ function withNavigatorScrollSave(
  *
  * <iframe
  *  src='https://csdk-playground.sisense.com/?example=fusion-assets%2Ffusion-widgets&mode=docs'
- *  width='800'
+ *  width='100%'
  *  height='870'
- *  style='border:none;'
+ *  style='max-width:800px; border:none;'
  * />
  *
  * @group Fusion Assets

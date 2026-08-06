@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.33.1] - 2026-08-06
+
+### Changed
+- Fix misaligned date labels and data points in charts with continuous timeline enabled.
+
+
 ## [2.33.0] - 2026-08-04
 
 ### Added

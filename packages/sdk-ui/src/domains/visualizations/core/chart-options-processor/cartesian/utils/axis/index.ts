@@ -1,7 +1,15 @@
 // Re-export all axis utility functions for backward compatibility and easy access
 
 // Date and datetime utilities
-export { getInterval, getDateFormatter, getXAxisDatetimeSettings } from './date-utils.js';
+export {
+  CONTINUOUS_INTERVAL_MS,
+  getInterval,
+  getNextContinuousDate,
+  getCalendarTickPositions,
+  isCalendarContinuousGranularity,
+  getDateFormatter,
+  getXAxisDatetimeSettings,
+} from './date-utils.js';
 
 // Axis settings builders
 export { getXAxisSettings, getYAxisSettings, getYClippings } from './axis-settings.js';
