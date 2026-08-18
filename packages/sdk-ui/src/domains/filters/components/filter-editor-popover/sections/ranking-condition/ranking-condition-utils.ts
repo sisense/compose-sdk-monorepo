@@ -14,6 +14,23 @@ export function isRankingCondition(condition: string): condition is RankingCondi
   return condition === FilterOption.TOP || condition === FilterOption.BOTTOM;
 }
 
+/**
+ * Removes the ranking conditions from a condition list, unless the edited filter already uses one.
+ *
+ * The exception keeps an existing ranking filter editable: dropping its condition would open the
+ * editor onto a selection that is missing from the list, leaving the control blank. It also matches
+ * Fusion, which keeps the currently applied filter kind available however the permissions read.
+ *
+ * @param editedFilter - The filter being edited, or `null` when creating a new one
+ * @returns A transformer that drops the ranking entries from a list of condition items
+ */
+export const withoutRankingConditions =
+  (editedFilter: Filter | null) =>
+  <T extends { value: string }>(conditionItems: readonly T[]): readonly T[] =>
+    editedFilter && isRankingFilter(editedFilter)
+      ? conditionItems
+      : conditionItems.filter((item) => !isRankingCondition(item.value));
+
 export function getRankingCountFromFilter(filter: Filter): number {
   if (!isRankingFilter(filter)) {
     return DEFAULT_RANKING_COUNT;

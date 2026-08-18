@@ -8,7 +8,9 @@ import { FilterRelations, SortDirection } from './dimensional-model/interfaces.j
 import * as measureFactory from './dimensional-model/measures/factory.js';
 import {
   AggregationTypes,
+  CALCULATED_DIMENSION_JAQL_TYPE,
   DataType,
+  FilterJaql,
   FormulaJaql,
   JaqlSortDirection,
   MetadataTypes,
@@ -224,6 +226,69 @@ describe('utils', () => {
         id: dataSource.id,
         live: false,
         address: dataSource.address,
+      });
+    });
+  });
+
+  describe('createFilterFromJaql calculated-dimension calendar operand', () => {
+    // A Fusion widget filter over a calculated dimension whose operand is a raw date column. Fusion
+    // stores the operand with `table`/`column` and no date level; rebuilding the filter keeps only
+    // `dim`, so the raw column reference has to be restored when the JAQL is emitted again.
+    // Without it the analytical engine cannot resolve `[Commerce.Date (Calendar)]` and answers
+    // "The dimension, <datasource>.[Commerce.Date (Calendar)], was not found".
+    // `FilterJaql` cannot describe this shape: it extends `BaseJaql`, which requires `dim`, `table`
+    // and `column`, none of which a formula-based element has (see the "reconcile FilterJaql and
+    // FilterJaqlInternal" TODO in `createFilterFromJaql`). This local type keeps every field of the
+    // fixture strictly checked, leaving a single cast at the call boundary.
+    type CalculatedDimensionOperand = {
+      table: string;
+      column: string;
+      dim: string;
+      datatype: `${DataType}`;
+      title: string;
+    };
+    type CalculatedDimensionFilterJaql = {
+      type: typeof CALCULATED_DIMENSION_JAQL_TYPE;
+      title: string;
+      formula: string;
+      datatype: `${DataType}`;
+      context: Record<string, CalculatedDimensionOperand>;
+      filter: { from: number; to: number };
+    };
+
+    const calculatedDimensionFilterJaql: CalculatedDimensionFilterJaql = {
+      type: CALCULATED_DIMENSION_JAQL_TYPE,
+      title: 'DDIFF',
+      formula: "ddIFF([date], CASE WHEN [brandId]>=0 THEN '2009-11-01' ELSE [date] END)",
+      datatype: 'numeric',
+      context: {
+        '[brandId]': {
+          table: 'Commerce',
+          column: 'Brand ID',
+          dim: '[Commerce.Brand ID]',
+          datatype: 'numeric',
+          title: 'Brand ID',
+        },
+        '[date]': {
+          table: 'Commerce',
+          column: 'Date',
+          dim: '[Commerce.Date (Calendar)]',
+          datatype: 'datetime',
+          title: 'Date',
+        },
+      },
+      filter: { from: 1, to: 5 },
+    };
+
+    const asFilterJaql = (jaql: CalculatedDimensionFilterJaql) => jaql as unknown as FilterJaql;
+
+    test('emits the raw table/column of the calendar operand', () => {
+      const filter = createFilterFromJaql(asFilterJaql(calculatedDimensionFilterJaql));
+
+      expect(filter.jaql().jaql.context['[date]']).toMatchObject({
+        dim: '[Commerce.Date (Calendar)]',
+        table: 'Commerce',
+        column: 'Date',
       });
     });
   });

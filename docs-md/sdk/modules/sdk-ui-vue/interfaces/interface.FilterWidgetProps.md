@@ -48,6 +48,14 @@ Parent filters for cascading behavior. Out of scope for phase 1.
 
 ### Widget
 
+#### config
+
+> **config**?: [`FilterWidgetConfig`](interface.FilterWidgetConfig.md)
+
+Configuration of the widget.
+
+***
+
 #### filterType
 
 > **filterType**?: [`FilterWidgetFilterType`](../type-aliases/type-alias.FilterWidgetFilterType.md)

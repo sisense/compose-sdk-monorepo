@@ -4,104 +4,10 @@ title: WidgetConfig
 
 # Type alias WidgetConfig
 
-> **WidgetConfig**: `object`
+> **WidgetConfig**: [`ChartWidgetConfig`](../interfaces/interface.ChartWidgetConfig.md) \| [`CustomWidgetConfig`](../interfaces/interface.CustomWidgetConfig.md) \| [`FilterWidgetConfig`](../interfaces/interface.FilterWidgetConfig.md) \| [`PivotTableWidgetConfig`](../interfaces/interface.PivotTableWidgetConfig.md) \| [`TextWidgetConfig`](../interfaces/interface.TextWidgetConfig.md)
 
-Configuration of the widget.
+Configuration of a widget — the union of every widget-type-specific configuration.
 
-## Type declaration
-
-### `actions`
-
-**actions**?: `object`
-
-Configuration for actions available on the widget, such as
-downloading the widget's data.
-
-> #### `actions.downloadCsv`
->
-> **downloadCsv**?: `object`
->
-> Configuration for the "Download as CSV" action, which adds an item to the
-> widget's header menu that exports the widget's underlying data as a CSV file.
->
-> ##### Example
->
-> Enable CSV download for a widget:
-> ```ts
-> const widgetConfig: WidgetConfig = {
-> actions: {
-> downloadCsv: {
-> enabled: true,
-> },
-> },
-> };
-> ```
->
-> > ##### `downloadCsv.enabled`
-> >
-> > **enabled**?: `boolean`
-> >
-> > Whether the "Download as CSV" action is enabled for the widget.
-> >
-> > ###### Default
-> >
-> > ```ts
-> > false
-> > ```
-> >
-> >
->
-> #### `actions.downloadExcel`
->
-> **downloadExcel**?: `object`
->
-> Configuration for the "Download as Excel" action, which adds an item to the
-> widget's header menu that exports the widget's underlying data as an Excel (XLSX) file.
->
-> ##### Example
->
-> Enable Excel download for a widget:
-> ```ts
-> const widgetConfig: WidgetConfig = {
-> actions: {
-> downloadExcel: {
-> enabled: true,
-> },
-> },
-> };
-> ```
->
-> > ##### `downloadExcel.enabled`
-> >
-> > **enabled**?: `boolean`
-> >
-> > Whether the "Download as Excel" action is enabled for the widget.
-> >
-> > Note: the widget's `id` is required for Excel export to work, as it is
-> > used to build the export request. Without it, the export fails.
-> >
-> > ###### Default
-> >
-> > ```ts
-> > false
-> > ```
-> >
-> >
->
->
-
-***
-
-### `header`
-
-**header**?: [`WidgetHeaderConfig`](../interfaces/interface.WidgetHeaderConfig.md)
-
-Configuration for the widget header, such as the items available in its menu.
-
-***
-
-### `narrative`
-
-**narrative**?: [`WidgetNarrativeConfig`](type-alias.WidgetNarrativeConfig.md)
-
-Configuration for widget narrative.
+Used where the widget type is not known statically, for example [WidgetModel.config](../fusion-assets/interface.WidgetModel.md#config). When
+the widget type is known, prefer that widget's own configuration type, which lists only the
+options the widget supports.

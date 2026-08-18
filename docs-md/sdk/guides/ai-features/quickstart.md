@@ -13,7 +13,7 @@ This guide offers examples for getting started with:
 
 ## Prerequisites
 
-This guide assumes you already have a React project working with Compose SDK. If you don't already have a working project, follow the [Compose SDK Quickstart](../../getting-started) before continuing here. The additional prerequsities for Generative AI are listed below:
+This guide assumes you already have a React project working with Compose SDK. If you don't already have a working project, follow the [Compose SDK Quickstart](../../getting-started) before continuing here. The additional prerequisites for Generative AI are listed below:
 
 - `@sisense/sdk-ui` version `2.0.0` or higher
 - Sisense Fusion version L2025.2 or higher, with Generative AI and LLM enabled per the [Sisense Documentation](https://docs.sisense.com/main/SisenseLinux/genai.htm)
@@ -120,9 +120,9 @@ Natural language textual insights generated from the data results of the provide
 There are different options for generating NLG insights using a Compose SDK query:
 
 - Use the [`useGetNlgInsights()`](../../modules/sdk-ui/generative-ai/function.useGetNlgInsights.md) hook as an API to return a plain text response, and render it how you like using your own code / component.
-- Use the [`<GetNlgInsights />`](../../modules/sdk-ui/generative-ai/function.GetNlgInsights.md) component to get display the generated text response in a styled container.
+- Use the [`<GetNlgInsights />`](../../modules/sdk-ui/generative-ai/function.GetNlgInsights.md) component to display the generated text response in a styled container.
 
-### useNlgInsights Hook
+### useGetNlgInsights Hook
 
 To use the [`useGetNlgInsights()`](../../modules/sdk-ui/generative-ai/function.useGetNlgInsights.md) hook, call the hook with the query information and handle the returned result.
 
@@ -193,7 +193,7 @@ return (
 
 ## Query Recommendations
 
-Query recommendations are AI-generated queries that you can run on your data model. The provides query recommendations as a standlone capability outside of the conversational analytics flow provided by the [`<Chatbot>`](../../modules/sdk-ui/generative-ai/function.Chatbot.md) component. This enables query recommendation functionality to be delivered in a customized user experience.
+Query recommendations are AI-generated queries that you can run on your data model. The hook provides query recommendations as a standalone capability outside of the conversational analytics flow provided by the [`<Chatbot>`](../../modules/sdk-ui/generative-ai/function.Chatbot.md) component. This enables query recommendation functionality to be delivered in a customized user experience.
 
 To do so, use the [`useGetQueryRecommendations()`](../../modules/sdk-ui/generative-ai/function.useGetQueryRecommendations.md) hook by providing a data model title for the query recommendations and, optionally, the number of recommendations you want to generate.
 
@@ -202,7 +202,7 @@ The hook returns `data` as an array of [`QueryRecommendation`](../../modules/sdk
 - `widgetProps` that can be passed to a [`<Widget>`](../../modules/sdk-ui/dashboards/function.Widget.md) component to render the results of the generated question.
 - other properties e.g `detailedDescription`
 
-In this example, we simply show the list of suggested questions. In practice, the other propeties are then useful if/when a user selects one of the generated questions.
+In this example, we simply show the list of suggested questions. In practice, the other properties are then useful if/when a user selects one of the generated questions.
 
 ```ts
 import { useGetQueryRecommendations, QueryRecommendation } from '@sisense/sdk-ui/ai';

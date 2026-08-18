@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ChartRendererProps } from '@/domains/visualizations/components/chart/types.js';
@@ -67,6 +67,12 @@ export type KpiChartRendererProps = {
   onDataPointClick?: ChartRendererProps['onDataPointClick'];
   onDataPointContextMenu?: ChartRendererProps['onDataPointContextMenu'];
   onBeforeRender?: ChartRendererProps['onBeforeRender'];
+  /**
+   * Paint signal for the consumer `onReady` contract (Fusion `domready` / PDF) — the KPI
+   * counterpart of the Highcharts `load` / `render` events other renderers forward. See the
+   * paint effect in the component below for when it fires.
+   */
+  onReady?: ChartRendererProps['onReady'];
 };
 
 /** Fallback series color used for the sparkline/value when no theme variant color is set. */
@@ -81,6 +87,13 @@ const TITLE_ROW_EST_PX = 20;
 const COMPACT_VALUE_FONT_PX = 14.4;
 /** Approximate height of the compact (single-line) comparison readout. */
 const COMPACT_COMPARISON_EST_PX = 31;
+
+/**
+ * Period-caption date format used when the category data option carries no `dateFormat` of its
+ * own. Month precision: the caption names the period the headline covers, and the card has no
+ * room for a longer string.
+ */
+const DEFAULT_PERIOD_DATE_FORMAT = 'MMM yyyy';
 
 /**
  * KPI chart renderer.
@@ -98,6 +111,7 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
   onDataPointClick,
   onDataPointContextMenu,
   onBeforeRender,
+  onReady,
 }) => {
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
@@ -161,18 +175,67 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
     [chartData.comparison, finalRenderOptions.comparison],
   );
 
+  const dataPoint = useMemo(
+    () => toKpiDataPoint(finalRenderOptions, dataOptions, chartData.categoryValue),
+    [finalRenderOptions, dataOptions, chartData.categoryValue],
+  );
+
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
-      kpiOnDataPointClick?.(toKpiDataPoint(finalRenderOptions), event.nativeEvent);
+      kpiOnDataPointClick?.(dataPoint, event.nativeEvent);
     },
-    [kpiOnDataPointClick, finalRenderOptions],
+    [kpiOnDataPointClick, dataPoint],
   );
+  // Suppresses the browser's native context menu before handing the event on, matching what the
+  // Highcharts-based renderers do for their own `contextmenu` point event (see
+  // `apply-event-handlers.ts`). Consumers of `onDataPointContextMenu` -- Jump to Dashboard above
+  // all -- open their own menu at the pointer position, and without this the native menu opens on
+  // top of it. Only reached when a handler is wired up (see the `onContextMenu` prop below), so a
+  // card with no context-menu consumer keeps the browser's default behavior.
   const handleContextMenu = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
-      kpiOnDataPointContextMenu?.(toKpiDataPoint(finalRenderOptions), event.nativeEvent);
+      event.preventDefault();
+      kpiOnDataPointContextMenu?.(dataPoint, event.nativeEvent);
     },
-    [kpiOnDataPointContextMenu, finalRenderOptions],
+    [kpiOnDataPointContextMenu, dataPoint],
   );
+
+  // Paint signal feeding the consumer `onReady` prop (Fusion `domready` / PDF). The card has no
+  // single Highcharts instance whose `load`/`render` event could stand in for the whole thing, so
+  // paint is reported from a passive effect: React runs it after the commit is in the DOM, i.e.
+  // once the title, value and comparison are painted. That covers the sparkline too --
+  // `HighchartsReact` creates and updates its chart in a LAYOUT effect of a child component, and
+  // React flushes every child effect before this parent one, so the sparkline SVG is already
+  // drawn (its own animation is off, see `sparkline-options.ts`) whenever this fires.
+  //
+  // The FIRST commit is deliberately excluded: the card lays itself out from its own measured box
+  // (tier, sparkline room -- see the `useElementSize` calls above), and that box is only measured
+  // in the layout effects OF that first commit. Signaling there would report a pre-layout card --
+  // one whose sparkline hasn't even been decided on, let alone drawn -- to a consumer that
+  // snapshots on `onReady`. `hasLaidOut` flips in a mount layout effect declared after those
+  // measurements (layout effects run in hook order), so the next commit is the first one rendered
+  // from a measured box, and it is the one that signals.
+  //
+  // Deliberately no dependency array on the signal itself: it fires on every commit from then on,
+  // mirroring Highcharts' own per-redraw `render` event, so a later relayout (resize, tier change,
+  // sparkline dropped for lack of room) re-signals rather than leaving the consumer with a stale
+  // first paint. `useChartOnReady` collapses the repeats into one rising edge per load cycle.
+  //
+  // Declared above the no-results early return so the terminal empty overlay reports paint as
+  // well: the KPI renderer owns both of its empty states, and `hasNoResults` therefore never
+  // reports "no results" for KPI on RegularChart's behalf (see `has-no-results.ts`) -- nothing
+  // else would fire `onReady` for an empty KPI card.
+  const onReadyRef = useRef(onReady);
+  onReadyRef.current = onReady;
+  const [hasLaidOut, setHasLaidOut] = useState(false);
+  useLayoutEffect(() => {
+    setHasLaidOut(true);
+  }, []);
+  useEffect(() => {
+    if (hasLaidOut) {
+      onReadyRef.current?.();
+    }
+  });
 
   const { value, valueTitle, valueColor, valuePeriodMs, sparklinePoints } = finalRenderOptions;
   const noDataText = designOptions.value.noDataText;
@@ -189,12 +252,17 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
   const titleText = designOptions.title.text ?? valueTitle;
   // `title.enabled` switches the whole title section; the show* parts opt their own piece out.
   const showTitleText = designOptions.title.enabled && designOptions.title.showValueTitle;
+  // The category column's own `dateFormat` (explicit, or inherited from a formatted level
+  // attribute by `normalizeColumn`) governs every place the card displays a category value --
+  // the period caption here and the sparkline tooltip below. Each site keeps its own fallback,
+  // since they need different precision when the consumer specified nothing.
+  const categoryDateFormat = dataOptions.category?.dateFormat;
   const period =
     designOptions.title.enabled &&
     designOptions.title.showCategoryTitle &&
     valuePeriodMs !== undefined &&
     !isNaN(valuePeriodMs)
-      ? dateFormatter(new Date(valuePeriodMs), 'MMM yyyy')
+      ? dateFormatter(new Date(valuePeriodMs), categoryDateFormat ?? DEFAULT_PERIOD_DATE_FORMAT)
       : undefined;
 
   // The theme accent (first palette color): the value text's DEFAULT color — indicator parity,
@@ -395,6 +463,13 @@ export const KpiChartRenderer: React.FC<KpiChartRendererProps> = ({
             chartType={designOptions.sparkline.chartType}
             color={sparklineColor}
             numberFormatConfig={chartData.numberFormatConfig}
+            dateFormat={categoryDateFormat}
+            // The measure's own title, not `titleText`: the tooltip's leading label plays the role
+            // of a series name, so it names the measure regardless of any card title override.
+            valueTitle={valueTitle}
+            // The accent, not `sparklineColor`: the latter is adjusted for contrast against the
+            // card, and the tooltip doesn't sit on the card -- it has the standard white body.
+            tooltipValueColor={accentColor}
           />
         ) : undefined
       }

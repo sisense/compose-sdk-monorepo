@@ -14,6 +14,12 @@ Dashboard filters panel configuration
 
 Configures the available actions within the filters panel.
 
+When using `DashboardById` or a dashboard model loaded with `useGetDashboardModel` and
+translated by `dashboardModelTranslator.toDashboardProps()`, each default below will be derived
+from the current user's permissions on that dashboard, if the Sisense Fusion instance provides
+it. Otherwise the documented default will be used. Explicit configuration values have the
+highest precedence, and will override any defaults.
+
 #### Type declaration
 
 > ##### `actions.addFilter`
@@ -28,7 +34,9 @@ Configures the available actions within the filters panel.
 > >
 > > Determines whether the possibility to create a new filter is enabled.
 > >
-> > If not specified, the default value is `false`.
+> > ###### Default
+> >
+> > `false`, or the user's permission to create filters on a Fusion dashboard
 > >
 > >
 >
@@ -44,7 +52,9 @@ Configures the available actions within the filters panel.
 > >
 > > Determines whether the possibility to delete a filter is enabled.
 > >
-> > If not specified, the default value is `false`.
+> > ###### Default
+> >
+> > `false`, or the user's permission to delete filters on a Fusion dashboard
 > >
 > >
 >
@@ -60,7 +70,15 @@ Configures the available actions within the filters panel.
 > >
 > > Determines whether the possibility to edit an existing filter is enabled.
 > >
-> > If not specified, the default value is `false`.
+> > This governs the editor for an existing filter, which is a different editor from the one
+> > `addFilter` opens. Changing a filter's value from its tile is always available and is not
+> > affected by this setting.
+> >
+> > ###### Default
+> >
+> > `false`, or `true` on a Fusion dashboard, where opening this editor is not
+> > permission-gated and editing a filter changes only the current user's own view of the
+> > dashboard
 > >
 > >
 >

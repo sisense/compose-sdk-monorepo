@@ -8,6 +8,7 @@ export * from './chart.component';
 export * from './column-chart.component';
 export * from './funnel-chart.component';
 export * from './indicator-chart.component';
+export * from './kpi-chart.component';
 export * from './line-chart.component';
 export * from './pie-chart.component';
 export * from './pivot-table.component';

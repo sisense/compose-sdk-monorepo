@@ -15,7 +15,7 @@ export type UseWidgetCsvDownloadParams = {
  * Applies dashboard-level CSV download settings to each widget's `config`.
  *
  * Reads `config.widgetsPanel.actions.downloadCsv.enabled` and merges it into
- * `widget.config.actions.downloadCsv` for every widget.
+ * `widget.config.actions.downloadCsv` for every widget that supports data export.
  * Widget-level `config.actions.downloadCsv.enabled` takes precedence when defined, so the dashboard-level config acts as a
  * default rather than replacing explicit widget configuration.
  *
@@ -27,7 +27,15 @@ export function useWidgetCsvDownload({ widgets, enabled }: UseWidgetCsvDownloadP
   widgets: WidgetProps[];
 } {
   return useMemo(() => {
-    const widgetsWithDownloadCsv = widgets.map((widget) => {
+    const widgetsWithDownloadCsv = widgets.map((widget): WidgetProps => {
+      if (
+        widget.widgetType !== 'chart' &&
+        widget.widgetType !== 'pivot' &&
+        widget.widgetType !== 'custom'
+      ) {
+        return widget;
+      }
+
       if (widget.config?.actions?.downloadCsv?.enabled !== undefined) {
         return widget;
       }

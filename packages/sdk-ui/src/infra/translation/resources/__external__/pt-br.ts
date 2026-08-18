@@ -232,6 +232,10 @@ const translation: TranslationDictionary = {
     placeholders: {
       setFilter: 'Definir filtro',
     },
+    selectedCount: '{{count}} selecionados',
+    allExceptCount: 'Todos exceto {{count}}',
+    setupTitle: 'Configurar um widget de filtro',
+    setupSubtitle: 'Defina uma dimensão e configure como o filtro funciona',
   },
   unsupportedFilterMessage: 'Filtro não suportado (aplicado à consulta de dados)',
   unsupportedFilter: 'Filtro não suportado {{filter}}',

@@ -29,20 +29,25 @@ type TableChartWidgetProps = Extract<WidgetProps, { widgetType: 'chart' }> & {
 
 /**
  * Identifies table chart widgets eligible for resize-state persistence, i.e.
- * `styleOptions.columns.resizable !== false` (defaults to `true`). Shared by
- * `wireWidget` and `withTableColumnWidths` to keep the rule in one place.
+ * `styleOptions.columns.resizable !== false` (defaults to `true`) and not in
+ * `styleOptions.columns.width: 'auto'` mode, where columns always take an even share of the
+ * table width and resizing is disabled (Fusion parity). Shared by `wireWidget` and
+ * `withTableColumnWidths` to keep the rule in one place.
  */
 function isResizableTableChartWidget(widget: WidgetProps): widget is TableChartWidgetProps {
-  return (
-    widget.widgetType === 'chart' &&
-    'chartType' in widget &&
-    widget.chartType === 'table' &&
-    'styleOptions' in widget &&
-    !!widget.styleOptions &&
-    // Narrowing by `widgetType`/`chartType` does not narrow `styleOptions` to the table-specific
-    // shape, so cast to {@link TableColumnsStyleOptions} to read `columns.resizable`.
-    (widget.styleOptions as TableColumnsStyleOptions).columns?.resizable !== false
-  );
+  if (
+    widget.widgetType !== 'chart' ||
+    !('chartType' in widget) ||
+    widget.chartType !== 'table' ||
+    !('styleOptions' in widget) ||
+    !widget.styleOptions
+  ) {
+    return false;
+  }
+  // Narrowing by `widgetType`/`chartType` does not narrow `styleOptions` to the table-specific
+  // shape, so cast to {@link TableColumnsStyleOptions} to read `columns`.
+  const columns = (widget.styleOptions as TableColumnsStyleOptions).columns;
+  return columns?.resizable !== false && columns?.width !== 'auto';
 }
 
 const DEBOUNCE_MS = 500;

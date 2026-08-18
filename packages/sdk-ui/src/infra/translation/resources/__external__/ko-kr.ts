@@ -227,6 +227,10 @@ const translation: TranslationDictionary = {
     placeholders: {
       setFilter: '필터 설정',
     },
+    selectedCount: '{{count}}개 선택됨',
+    allExceptCount: '{{count}}개 제외한 모두',
+    setupTitle: '필터 위젯 설정',
+    setupSubtitle: '차원을 설정하고 필터 작동 방식을 구성하세요',
   },
   unsupportedFilterMessage: '지원되지 않는 필터(데이터 쿼리에 적용됨)',
   unsupportedFilter: '지원되지 않는 필터 {{filter}}',

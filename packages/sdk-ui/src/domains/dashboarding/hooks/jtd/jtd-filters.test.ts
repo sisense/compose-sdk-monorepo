@@ -4,14 +4,23 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
-import { DataPoint, DataPointEntry, ScatterDataPoint } from '../../../../types.js';
 import {
+  AttributeDataPointEntry,
+  BasicDataPointEntry,
+  DataPoint,
+  DataPointEntry,
+  KpiDataPoint,
+  ScatterDataPoint,
+} from '../../../../types.js';
+import {
+  convertKpiToDataPoint,
   filterByAllowedDimensions,
   getFiltersFromDataPoint,
   getFiltersFromRegularDataPoint,
   getFiltersFromScatterDataPoint,
   getFormulaContextFilters,
   handleFormulaDuplicateFilters,
+  isKpiDataPoint,
   isScatterDataPoint,
   mergeJtdFilters,
   normalizeDateForGranularity,
@@ -104,6 +113,27 @@ describe('jtd-filters', () => {
     toJSON: () => ({}),
     jaql: () => ({ jaql: 'mock' }),
   } as unknown as Attribute;
+
+  // Fully typed KPI entry builders -- the KPI card's point carries ONE entry per data option, and
+  // these are the exact shapes it produces. `dataOption` only needs to be a valid `Column`, and the
+  // value/comparison entries are plain `BasicDataPointEntry`s (no `measure`), which is all the
+  // filter extraction ever looks at -- so no fixture here needs a type escape.
+  //
+  // The attribute is passed in rather than closed over: several inner describes shadow
+  // `mockCategoryAttribute` with an identically shaped mock, and a filter built from one does not
+  // `toEqual` a filter built from the other, so each test supplies the one it asserts against.
+  const kpiCategoryEntry = (attribute: Attribute): AttributeDataPointEntry => ({
+    dataOption: { name: 'Category', type: 'text-attribute' },
+    attribute,
+    value: 'Apparel',
+    displayValue: 'Apparel',
+  });
+
+  const kpiValueEntry = (value: number, displayValue: string): BasicDataPointEntry => ({
+    dataOption: { name: 'Revenue', type: 'number' },
+    value,
+    displayValue,
+  });
 
   describe('isScatterDataPoint', () => {
     it('should identify data points with breakByColor as scatter data points', () => {
@@ -1205,6 +1235,100 @@ describe('jtd-filters', () => {
         expect(filters).toHaveLength(1);
         expectFilterMatch(filters[0], filterFactory.members(mockAttribute, ['123']));
       });
+    });
+
+    describe('KPI data points', () => {
+      // The KPI card reports ONE entry per data option rather than arrays, so feeding its point
+      // straight into the regular extraction iterates a plain object and throws -- which took out
+      // Jump to Dashboard on any KPI card that has a category.
+      it('should generate a filter from the single category entry', () => {
+        const kpiDataPoint: KpiDataPoint = {
+          entries: {
+            value: kpiValueEntry(90, '90'),
+            category: kpiCategoryEntry(mockCategoryAttribute),
+          },
+        };
+
+        const filters = getFiltersFromDataPoint(kpiDataPoint);
+
+        expect(filters).toHaveLength(1);
+        expectFilterMatch(filters[0], filterFactory.members(mockCategoryAttribute, ['Apparel']));
+      });
+
+      it('should produce no filters for a KPI point with no category (total mode)', () => {
+        const kpiDataPoint: KpiDataPoint = {
+          entries: { value: kpiValueEntry(90, '90') },
+        };
+
+        expect(getFiltersFromDataPoint(kpiDataPoint)).toHaveLength(0);
+      });
+
+      it('should ignore the comparison measure entry, which is not a filterable dimension', () => {
+        const kpiDataPoint: KpiDataPoint = {
+          entries: {
+            value: kpiValueEntry(90, '90'),
+            comparison: kpiValueEntry(100, '100'),
+          },
+        };
+
+        expect(getFiltersFromDataPoint(kpiDataPoint)).toHaveLength(0);
+      });
+    });
+  });
+
+  describe('convertKpiToDataPoint', () => {
+    it('should lift each single entry into the regular array-shaped entries', () => {
+      const categoryEntry = kpiCategoryEntry(mockCategoryAttribute);
+      const valueEntry = kpiValueEntry(90, '90');
+      const comparisonEntry = kpiValueEntry(100, '100');
+
+      expect(
+        convertKpiToDataPoint({
+          entries: { value: valueEntry, category: categoryEntry, comparison: comparisonEntry },
+        }),
+      ).toEqual({
+        entries: {
+          category: [categoryEntry],
+          value: [valueEntry, comparisonEntry],
+          breakBy: [],
+        },
+      });
+    });
+
+    it('should produce empty entry arrays for a point with no entries at all', () => {
+      expect(convertKpiToDataPoint({})).toEqual({
+        entries: { category: [], value: [], breakBy: [] },
+      });
+    });
+  });
+
+  describe('isKpiDataPoint', () => {
+    it('should identify a point whose entries are single objects', () => {
+      expect(
+        isKpiDataPoint({ entries: { category: kpiCategoryEntry(mockCategoryAttribute) } }),
+      ).toBe(true);
+    });
+
+    it('should not identify a regular array-shaped data point', () => {
+      expect(
+        isKpiDataPoint({
+          entries: { category: [kpiCategoryEntry(mockCategoryAttribute)], value: [] },
+        }),
+      ).toBe(false);
+    });
+
+    it('should not identify a scatter data point', () => {
+      expect(
+        isKpiDataPoint({
+          x: 1,
+          y: 2,
+          entries: { breakByColor: kpiCategoryEntry(mockCategoryAttribute) },
+        }),
+      ).toBe(false);
+    });
+
+    it('should not identify a point without entries', () => {
+      expect(isKpiDataPoint({ value: 100 })).toBe(false);
     });
   });
 

@@ -108,6 +108,28 @@ describe('tooltip utils', () => {
       expect(html).toContain('42');
     });
 
+    it('when breakBy is empty, selects Y by the styled column custom name overriding the title', () => {
+      const chartDataOptions = createCartesianOptions({
+        y: [
+          baseMeasureColumn('Alpha'),
+          {
+            ...baseMeasureColumn('Beta'),
+            name: 'Custom Beta',
+            numberFormatConfig: { name: 'Numbers', decimalScale: 2 } as NumberFormatConfig,
+          },
+        ],
+      });
+      const ctx = createPointContext({
+        series: { name: 'Custom Beta', color: '#111' },
+        point: { name: '', color: '#222', y: 42 },
+      });
+
+      const html = cartesianDataFormatter(ctx, chartDataOptions);
+
+      expect(html).toContain('Custom Beta');
+      expect(html).toContain('42.00');
+    });
+
     it('formats a second X dimension when two X axes and custom xValue are present', () => {
       const chartDataOptions = createCartesianOptions({
         x: [

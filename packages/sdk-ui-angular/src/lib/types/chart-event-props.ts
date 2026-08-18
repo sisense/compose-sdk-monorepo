@@ -16,6 +16,7 @@ import type {
   DataPointEventHandler,
   DataPointsEventHandler,
   IndicatorDataPointEventHandler,
+  KpiDataPointEventHandler,
   PivotTableDataPointEventHandler,
   ScatterDataPointEventHandler,
   ScatterDataPointsEventHandler,
@@ -163,6 +164,31 @@ export interface IndicatorChartEventProps extends BaseChartEventProps {
    * @internal
    */
   dataPointClick?: IndicatorDataPointEventHandler;
+}
+
+/**
+ * Event props for KPI chart which uses KpiDataPoint type
+ * to describe data points for events.
+ */
+export interface KpiChartEventProps extends BaseChartEventProps {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!KpiChartProps.onBeforeRender}
+   *
+   * @category Callbacks
+   */
+  beforeRender?: KpiBeforeRenderHandler;
+  /**
+   * {@inheritDoc @sisense/sdk-ui!KpiChartProps.onDataPointClick}
+   *
+   * @category Callbacks
+   */
+  dataPointClick?: KpiDataPointEventHandler;
+  /**
+   * {@inheritDoc @sisense/sdk-ui!KpiChartProps.onDataPointContextMenu}
+   *
+   * @category Callbacks
+   */
+  dataPointContextMenu?: KpiDataPointEventHandler;
 }
 
 /**

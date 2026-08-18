@@ -601,6 +601,7 @@ export class Gauge {
           angleRad2 = arcEndAngleRad;
           break;
         case '≤':
+        case '<=':
           if (value < min) {
             break;
           }
@@ -612,6 +613,7 @@ export class Gauge {
           );
           break;
         case '≥':
+        case '>=':
           if (value > max) {
             break;
           }
@@ -635,6 +637,7 @@ export class Gauge {
           );
           break;
         case '≠':
+        case '!=':
           if (value < min || value > max) {
             angleRad1 = arcStartAngleRad;
             angleRad2 = arcEndAngleRad;

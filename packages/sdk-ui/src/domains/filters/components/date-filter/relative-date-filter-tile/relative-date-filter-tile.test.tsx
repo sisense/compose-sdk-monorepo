@@ -107,6 +107,21 @@ describe('RelativeDateFilterTile tests', () => {
     expect(calendarDay).not.toBeInTheDocument();
   });
 
+  it('should give the count input a minimum width', () => {
+    const props = {
+      title: 'Test Title',
+      filter: filterFactory.dateRelativeTo(mockAttributeDays, 0, 2) as RelativeDateFilter,
+      arrangement: 'horizontal' as FilterVariant,
+      onUpdate: vi.fn(),
+    };
+    render(
+      <MockedSisenseContextProvider>
+        <RelativeDateFilterTile {...props} />
+      </MockedSisenseContextProvider>,
+    );
+    expect(screen.getByDisplayValue('2')).toHaveStyle({ minWidth: '60px' });
+  });
+
   it('should not have delete button by default', async () => {
     const props = {
       title: 'Test Title',

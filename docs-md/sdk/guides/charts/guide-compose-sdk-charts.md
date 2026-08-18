@@ -146,7 +146,7 @@ You can use filters on a single chart or use the same filter to filter multiple 
 #### Filter functions
 
 The `sdk-data` module contains factory functions to create text, number, and date filters on specified attributes.
-Call one or more of these functions to create filters that you then use to set the value of a chart's `filter` property.
+Call one or more of these functions to create filters that you then use to set the value of a chart's `filters` property.
 
 Use this filtering option when you know what you want to filter on when writing your code or you want to create a dynamic filter without using Compose SDK filtering UI components.
 
@@ -197,7 +197,7 @@ chart = {
 
 The `sdk-ui` modules contain UI components for creating user-defined filters. You can use the filters created by these components to filter one of more charts.
 
-Add one or more of these components to create filters that you then use to set the value of a chart's `filter` property.
+Add one or more of these components to create filters that you then use to set the value of a chart's `filters` property.
 
 Use this filtering option when you want to use pre-built components to allow your users to set filters.
 
@@ -680,8 +680,9 @@ chart = {
       independentSlicesCount: 4,
       selectedConvolutionType: 'bySlicesCount',
     },
-    labels: {
-      categories: false,
+    seriesLabels: {
+      enabled: true,
+      showCategory: false,
     },
     width: 550,
     height: 400,

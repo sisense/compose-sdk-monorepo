@@ -106,7 +106,7 @@ As an example, let's change the look and feel of our charts using the following 
 styleOptions={{
   width: 600,
   height: 400,
-  legend: { enabled: true, position: 'right' },
+  legend: { enabled: true, align: 'right', verticalAlign: 'middle', items: { layout: 'vertical' } },
 }}
 ```
 
@@ -116,7 +116,7 @@ styleOptions={{
 styleOptions={{
   width: 400,
   height: 400,
-  labels: { enabled: true, categories: false, value: false },
+  seriesLabels: { enabled: true, showCategory: false, showValue: false },
   legend: { enabled: false },
 }}
 ```

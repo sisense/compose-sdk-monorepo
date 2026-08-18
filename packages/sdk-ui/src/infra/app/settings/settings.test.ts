@@ -159,6 +159,32 @@ describe('getSettings function', () => {
     expect(settings.ai.featureModelType).toBeUndefined();
   });
 
+  it('resolves aiAssistantAccess from globals props', async () => {
+    const clientWithAccess = (aiAssistantAccess: boolean | undefined) => ({
+      get: vi.fn().mockImplementation((url: string) => {
+        switch (url) {
+          case 'api/globals':
+            return Promise.resolve({
+              ...mockGlobals,
+              props: { ...mockGlobals.props, aiAssistantAccess },
+            });
+          case 'api/v2/settings/ai':
+            return Promise.resolve({ narration: { enabled: false, sisenseAIEnabled: false } });
+          default:
+            return null;
+        }
+      }),
+      url: 'http://test.com/',
+    });
+
+    expect((await getAppSettings({}, clientWithAccess(true), true)).aiAssistantAccess).toBe(true);
+    expect((await getAppSettings({}, clientWithAccess(false), true)).aiAssistantAccess).toBe(false);
+    // Absent is not a grant — the contribution never arrived.
+    expect((await getAppSettings({}, clientWithAccess(undefined), true)).aiAssistantAccess).toBe(
+      false,
+    );
+  });
+
   it('allows consumers to read arbitrary loosely-typed feature flags from ai.featureFlags', async () => {
     const settings = await getAppSettings({}, mockHttpClient, false);
 

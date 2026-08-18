@@ -123,7 +123,7 @@ Filters that will highlight query results
 
 #### config
 
-> **config**: [`WidgetConfig`](../type-aliases/type-alias.WidgetConfig.md) \| `undefined`
+> **config**: [`PivotTableWidgetConfig`](../interfaces/interface.PivotTableWidgetConfig.md) \| `undefined`
 
 Configuration of the widget
 

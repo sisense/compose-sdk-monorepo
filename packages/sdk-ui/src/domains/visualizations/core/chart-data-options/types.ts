@@ -850,8 +850,6 @@ export type SankeyChartDataOptionsInternal = {
  * Which number becomes the KPI headline when {@link KpiChartDataOptions.category} is set.
  * 'last' — the last date bucket; 'total' — aggregate over the whole period
  * (computed by a separate ungrouped query — correct SQL semantics).
- *
- * @beta
  */
 export type KpiValueMode = 'last' | 'total';
 
@@ -859,7 +857,31 @@ export type KpiValueMode = 'last' | 'total';
  * What the KPI headline value is compared against.
  * Each variant carries its own baseline, so invalid combinations are unrepresentable.
  *
- * @beta
+ * Variants:
+ *
+ * - `{ type: 'previous-period' }` — compares the last category bucket against the one before it.
+ *   Requires {@link KpiChartDataOptions.category}.
+ * - `{ type: 'delta', value }` — compares against a second measure, reporting the difference and
+ *   the percent change with an up/down arrow.
+ * - `{ type: 'target', target }` — treats the baseline as a goal and reads out progress toward it,
+ *   e.g. '82% of goal' with '$12K to go'. Accepts a measure or a fixed number.
+ * - `{ type: 'value', value }` — shows a second measure's value beside the headline, with no delta
+ *   math and no delta coloring.
+ *
+ * For the measure-backed variants, wrapping the measure in a {@link StyledMeasureColumn} lets its
+ * `numberFormatConfig` format the readout — the delta for `'delta'`, the amount-to-go for
+ * `'target'`. Both fall back to the headline value's own format config.
+ *
+ * @example
+ * Against the preceding period:
+ * ```ts
+ * comparison: { type: 'previous-period' }
+ * ```
+ * @example
+ * Against a fixed goal:
+ * ```ts
+ * comparison: { type: 'target', target: 250000 }
+ * ```
  */
 export type KpiComparison =
   /** Compares the last category bucket against the previous one. Requires `category`. */
@@ -892,8 +914,6 @@ export type KpiComparison =
  * Configuration for how to query aggregate data and assign data to a
  * {@link KpiChartType | KPI chart}.
  *
- * @beta
- *
  * @example
  * ```tsx
  * <KpiChart
@@ -914,9 +934,16 @@ export interface KpiChartDataOptions {
    * current-period caption, the 'previous-period' comparison, and the `valueMode` semantics.
    * Granularity comes from the column.
    *
+   * A {@link StyledColumn} wrapper's `dateFormat` formats every place the card displays the
+   * category value — the period caption and the sparkline tooltip.
+   *
    * @example
    * ```ts
    * category: DM.Commerce.Date.Months
+   * ```
+   * @example
+   * ```ts
+   * category: { column: DM.Commerce.Date.Months, dateFormat: 'MM/yyyy' }
    * ```
    */
   category?: Column | StyledColumn;
@@ -927,7 +954,7 @@ export interface KpiChartDataOptions {
    * ```ts
    * valueMode: 'total' // aggregate over the whole period instead of the last category bucket
    * ```
-   * @defaultValue 'last'
+   * @default 'last'
    */
   valueMode?: KpiValueMode;
   /**

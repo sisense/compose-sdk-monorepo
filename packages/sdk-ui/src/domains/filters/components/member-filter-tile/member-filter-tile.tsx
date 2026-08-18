@@ -6,6 +6,13 @@ import merge from 'lodash-es/merge';
 
 import { useGetFilterMembersInternal } from '@/domains/filters/hooks/use-get-filter-members';
 import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-filter';
+import {
+  applyMemberToggle,
+  asClearAllSelection,
+  asSelectAllSelection,
+  toggleSelectedMemberActivation,
+  withMembersFilterSelection,
+} from '@/domains/filters/shared/members-filter-selection';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import ErrorBoundaryBox from '@/infra/error-boundary/error-boundary-box';
 import { cloneFilterAndToggleDisabled } from '@/shared/utils/filters';
@@ -15,7 +22,7 @@ import { ScrollWrapperOnScrollEvent } from '../filter-editor-popover/common/scro
 import { FilterTileContainer, FilterTileDesignOptions } from '../filter-tile-container';
 import { FilterTileConfig } from '../filter-tile/types';
 import { MemberList } from './member-list';
-import { Member, SelectedMember } from './members-reducer';
+import { Member } from './members-reducer';
 import { PillSection } from './pill-section';
 
 const LIST_SCROLL_LOAD_MORE_THRESHOLD = 0.75;
@@ -168,28 +175,18 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
 
   const updateFilterFromMembersList = useCallback(
     (member: Member, isSelected: boolean) => {
-      if (enableMultiSelection) {
-        const newSelectedMembers = isSelected
-          ? addSelectedMember(selectedMembers, member)
-          : removeSelectedMember(selectedMembers, member);
-
-        const isAllMembersSelected =
-          newSelectedMembers.length === allMembers.length && membersAllItemsLoaded;
-        const isNoSearchValue = searchValue.length === 0;
-        const isAnyDisabledMember = newSelectedMembers.some(
-          (selectedMember) => selectedMember.inactive,
-        );
-        const shouldResetFilter = isAllMembersSelected && isNoSearchValue && !isAnyDisabledMember;
-
-        updateFilter(
-          // If all members are selected, we should reset the filter to match the behavior in Fusion
-          shouldResetFilter
-            ? withSelectedMembers(filter, [], !excludeMembers)
-            : withSelectedMembers(filter, newSelectedMembers, excludeMembers),
-        );
-      } else {
-        updateFilter(withSelectedMembers(filter, [member], excludeMembers));
-      }
+      const nextSelection = applyMemberToggle(
+        { selectedMembers, excludeMembers },
+        member,
+        isSelected,
+        {
+          enableMultiSelection,
+          loadedMembersCount: allMembers.length,
+          allItemsLoaded: membersAllItemsLoaded,
+          hasSearchFilter: searchValue.length > 0,
+        },
+      );
+      updateFilter(withMembersFilterSelection(filter, nextSelection));
     },
     [
       enableMultiSelection,
@@ -232,11 +229,15 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
                 linked
                   ? undefined
                   : (memberKey) => {
-                      const newSelectedMembers = toggleActivationInSelectedMemberByMemberKey(
-                        selectedMembers,
-                        memberKey,
+                      updateFilter(
+                        withMembersFilterSelection(filter, {
+                          selectedMembers: toggleSelectedMemberActivation(
+                            selectedMembers,
+                            memberKey,
+                          ),
+                          excludeMembers,
+                        }),
                       );
-                      updateFilter(withSelectedMembers(filter, newSelectedMembers, excludeMembers));
                     }
               }
               excludeMembers={excludeMembers}
@@ -250,8 +251,12 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
             isMembersLoading={membersLoading}
             selectedMembers={selectedMembers}
             onSelectMember={updateFilterFromMembersList}
-            checkAllMembers={() => updateFilter(withSelectedMembers(filter, [], true))}
-            uncheckAllMembers={() => updateFilter(withSelectedMembers(filter, [], false))}
+            checkAllMembers={() =>
+              updateFilter(withMembersFilterSelection(filter, asSelectAllSelection()))
+            }
+            uncheckAllMembers={() =>
+              updateFilter(withMembersFilterSelection(filter, asClearAllSelection()))
+            }
             excludeMembers={excludeMembers}
             enableMultiSelection={enableMultiSelection}
             disabled={tileDisabled}
@@ -271,6 +276,8 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
         header: { hasBackgroundFilter },
       })}
       locked={filter.config.locked}
+      toggleVisible={config?.actions?.toggleFilter?.visible}
+      expandVisible={config?.actions?.expandFilter?.visible}
       linked={linked}
       menuItems={menuItems}
       onDelete={onDelete}
@@ -278,91 +285,3 @@ export const MemberFilterTile: FunctionComponent<MemberFilterTileProps> = asSise
     />
   );
 });
-
-/**
- * Creates new MembersFilter with new selected members list
- */
-function withSelectedMembers(
-  filter: MembersFilter,
-  selectedMembers: SelectedMember[],
-  excludeMembers: boolean,
-): MembersFilter {
-  const { activeFilterMembers, inactiveFilterMembers } =
-    splitToActiveAndInactiveFilterMembers(selectedMembers);
-
-  const config = {
-    guid: filter.config.guid,
-    excludeMembers: excludeMembers,
-    deactivatedMembers: inactiveFilterMembers,
-    backgroundFilter: filter.config.backgroundFilter,
-    enableMultiSelection: filter.config.enableMultiSelection,
-  };
-
-  return filterFactory.members(filter.attribute, activeFilterMembers, config) as MembersFilter;
-}
-
-/**
- * Splits all selected members into active and inactive filter members.
- *
- * @param selectedMembers - all selected members, both active and inactive
- */
-function splitToActiveAndInactiveFilterMembers(selectedMembers: SelectedMember[]): {
-  activeFilterMembers: string[];
-  inactiveFilterMembers: string[];
-} {
-  const splittedFilterMembers: {
-    activeFilterMembers: string[];
-    inactiveFilterMembers: string[];
-  } = {
-    activeFilterMembers: [],
-    inactiveFilterMembers: [],
-  };
-  selectedMembers.forEach((selectedMember) => {
-    if (selectedMember.inactive) {
-      splittedFilterMembers.inactiveFilterMembers.push(selectedMember.key);
-    } else {
-      splittedFilterMembers.activeFilterMembers.push(selectedMember.key);
-    }
-  });
-  return splittedFilterMembers;
-}
-
-/**
- * Returns new `selectedMembers` array with added `selectedMemberToAdd`.
- * Won't add this member if it's already present in `selectedMembers`.
- */
-function addSelectedMember(
-  selectedMembers: SelectedMember[],
-  selectedMemberToAdd: SelectedMember,
-): SelectedMember[] {
-  if (!selectedMembers.some((selectedMember) => selectedMember.key === selectedMemberToAdd.key)) {
-    return [...selectedMembers, selectedMemberToAdd];
-  }
-  return selectedMembers;
-}
-
-/**
- * Returns new `selectedMembers` array without `selectedMemberToRemove`.
- */
-function removeSelectedMember(
-  selectedMembers: SelectedMember[],
-  selectedMemberToRemove: SelectedMember,
-): SelectedMember[] {
-  return selectedMembers.filter(
-    (selectedMember) => selectedMember.key !== selectedMemberToRemove.key,
-  );
-}
-
-/**
- * Returns new `selectedMembers` array with toggled activation of one member.
- */
-function toggleActivationInSelectedMemberByMemberKey(
-  selectedMembers: SelectedMember[],
-  selectedMemberKeyToToggleActivation: string,
-): SelectedMember[] {
-  return selectedMembers.map((selectedMember) =>
-    selectedMember.key === selectedMemberKeyToToggleActivation
-      ? { ...selectedMember, inactive: !selectedMember.inactive }
-      : selectedMember,
-  );
-}

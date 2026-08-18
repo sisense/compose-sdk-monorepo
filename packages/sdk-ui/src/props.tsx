@@ -1806,8 +1806,6 @@ export interface CalendarHeatmapChartProps extends BaseChartProps, CalendarHeatm
 
 /**
  * Event props for the {@link KpiChart} component.
- *
- * @beta
  */
 export interface KpiChartEventProps extends BaseChartEventProps {
   /**
@@ -1829,12 +1827,50 @@ export interface KpiChartEventProps extends BaseChartEventProps {
    * @category Callbacks
    */
   onBeforeRender?: KpiBeforeRenderHandler;
+  /**
+   * A callback that allows you to modify the retrieved data before the KPI card is
+   * computed from it. Whatever the callback returns is what the card is built from.
+   *
+   * This is the data-level hook, applied to the raw query result — use it to rescale,
+   * patch, or filter values. To adjust the already computed card instead, use the
+   * render-level {@link KpiChartEventProps.onBeforeRender | `onBeforeRender`}.
+   *
+   * The data passed in is the query result, so its shape follows how the KPI queried it:
+   *
+   * - **One query** — the usual case. The data holds one row per `category` bucket, or a
+   *   single row when no `category` is configured.
+   * - **Two queries** — `valueMode: 'total'` combined with a `category`. A whole-period
+   *   aggregate cannot be derived from the per-bucket rows (summing per-bucket averages,
+   *   for instance, would be wrong), so it is fetched by a second, ungrouped query and
+   *   merged into the same result: one extra row carrying the aggregate, plus an extra
+   *   column marking which rows are buckets and which one is the total. The callback still
+   *   runs once, over the already merged result.
+   *
+   * So always spread and map the data you were given rather than rebuilding it from
+   * scratch — preserve any columns and rows you do not intend to change.
+   *
+   * @example
+   * Present a revenue measure in thousands:
+   * ```ts
+   * onDataReady={(data) => ({
+   *   ...data,
+   *   rows: data.rows.map((row) =>
+   *     row.map((cell, index) =>
+   *       data.columns[index].name === 'Revenue' && typeof cell === 'number'
+   *         ? cell / 1000
+   *         : cell,
+   *     ),
+   *   ),
+   * })}
+   * ```
+   *
+   * @category Callbacks
+   */
+  onDataReady?: (data: Data) => Data;
 }
 
 /**
  * Props of the {@link KpiChart} component.
- *
- * @beta
  *
  * @example
  * ```tsx
@@ -1862,4 +1898,17 @@ export interface KpiChartProps extends BaseChartProps, KpiChartEventProps {
    * @category Chart
    */
   styleOptions?: KpiStyleOptions;
+  // Re-declared so the KPI-specific documentation wins over the generic one this interface
+  // would otherwise inherit through `BaseChartProps`. The Angular and Vue wrappers inherit
+  // their own docs from this member, so the override has to live here to reach them.
+  //
+  // The reference is package-qualified because those wrappers pull this member into their own
+  // package scope, where `KpiChartEventProps` is not exported -- an unqualified reference
+  // resolves inside `sdk-ui` but fails there.
+  /**
+   * {@inheritDoc @sisense/sdk-ui!KpiChartEventProps.onDataReady}
+   *
+   * @category Callbacks
+   */
+  onDataReady?: (data: Data) => Data;
 }

@@ -1077,11 +1077,16 @@ export interface TableStyleOptions {
      * Modes of columns width
      * 'auto' - all columns will have the same width and fit the table width (no horizontal scroll)
      * 'content' - columns width will be based on content (default option)
+     *
+     * In `'auto'` mode the even column width takes precedence over any per-column `width` set in
+     * `dataOptions`, and interactive resizing is disabled regardless of `resizable` configuration.
      */
     width?: 'auto' | 'content';
     /**
      * Enables interactive resizing of column widths by dragging the column border.
      * Default value is `true`. Set to `false` to disable.
+     *
+     * Ignored when `width` is `'auto'`, where resizing is always disabled.
      */
     resizable?: boolean;
     /**
@@ -1644,67 +1649,166 @@ export interface SankeyStyleOptions extends BaseStyleOptions {
 /**
  * Chart type of the sparkline embedded in a KPI chart.
  *
- * @beta
+ * - `'line'` — straight segments connecting the points.
+ * - `'spline'` — a smoothed curve through the points.
+ * - `'area'` — a line with the region beneath it filled.
+ * - `'column'` — one vertical bar per point.
  */
 export type KpiSparklineType = 'line' | 'spline' | 'area' | 'column';
 
 /**
  * Configuration that defines styling of the KPI chart sparkline.
  * The sparkline is rendered only when {@link KpiChartDataOptions.category} is set.
- *
- * @beta
  */
 export type KpiSparklineStyleOptions = {
   /**
    * Boolean flag that defines whether the sparkline is shown.
-   *
-   * @defaultValue true when `KpiChartDataOptions.category` is set
+   * @default true when `KpiChartDataOptions.category` is set
    */
   enabled?: boolean;
   /**
    * Chart type of the sparkline.
-   *
-   * @defaultValue 'area'
+   * @default 'area'
    */
   chartType?: KpiSparklineType;
 };
 
 /**
  * Computed comparison shown on a KPI card. Mirrors the {@link KpiComparison} input,
- * with all math resolved.
+ * with all math resolved: the variant here matches the variant configured there, and every
+ * derived figure the card displays is already calculated.
  *
- * @beta
+ * Every variant carries a `label` — the caption rendered next to the readout. Alongside it:
+ *
+ * - `previous-period` — `baseline` (the bucket before the last one), `deltaValue` (last bucket
+ *   minus `baseline`), and `deltaPercent`. Always measured between the last two buckets, so a
+ *   `valueMode: 'total'` headline does not shift it.
+ * - `delta` — the same three figures, with `baseline` read from the comparison measure rather
+ *   than from the preceding bucket.
+ * - `target` — `target` (the fixed number, or the target measure's value), `percentOfTarget`, and
+ *   `toGo`: `target` minus the headline value, going negative once the goal is beaten.
+ * - `value` — a single `value`, the comparison measure's own number, with no delta math applied.
+ *
+ * `deltaPercent` and `percentOfTarget` are expressed in percentage points — `12.5` means 12.5%.
+ * Each is undefined when its denominator (`baseline` and `target` respectively) is `0`, where the
+ * ratio has no meaning.
  */
 export type KpiComparisonInfo =
   | {
+      /** Identifies the previous-period comparison. */
       type: 'previous-period';
+      /** Value of the category bucket preceding the last one. */
       baseline: number;
+      /**
+       * Last bucket's value minus `baseline`. Negative when the metric declined.
+       *
+       * Always measured between the last two buckets, so it is unaffected by
+       * `valueMode: 'total'` moving the headline to a whole-period aggregate.
+       */
       deltaValue: number;
+      /**
+       * `deltaValue` as a share of `Math.abs(baseline)`, in percentage points —
+       * `12.5` means a 12.5% rise. Undefined when `baseline` is `0`, where the
+       * relative change is not defined.
+       */
       deltaPercent?: number;
+      /** Localized caption shown next to the delta, inferred from the category granularity, e.g. `'vs prior month'`. */
       label: string;
     }
-  | { type: 'delta'; baseline: number; deltaValue: number; deltaPercent?: number; label: string }
-  | { type: 'target'; target: number; percentOfTarget?: number; toGo: number; label: string }
-  | { type: 'value'; value: number; label: string };
+  | {
+      /** Identifies the comparison against a second measure. */
+      type: 'delta';
+      /** Queried value of the comparison measure. */
+      baseline: number;
+      /** Headline value minus `baseline`. Negative when the headline trails the baseline. */
+      deltaValue: number;
+      /**
+       * `deltaValue` as a share of `Math.abs(baseline)`, in percentage points.
+       * Undefined when `baseline` is `0`.
+       */
+      deltaPercent?: number;
+      /** Caption shown next to the delta. Defaults to the comparison measure's title. */
+      label: string;
+    }
+  | {
+      /** Identifies the target (goal) comparison. */
+      type: 'target';
+      /** The goal: the fixed number given, or the queried value of the target measure. */
+      target: number;
+      /**
+       * Headline value as a share of `target`, in percentage points — `82` renders as
+       * '82% of goal'. Undefined when `target` is `0`.
+       */
+      percentOfTarget?: number;
+      /**
+       * Amount still needed to reach the goal: `target` minus the headline value.
+       * Negative once the goal has been exceeded.
+       */
+      toGo: number;
+      /** Display label of the goal: the target measure's title, or the formatted fixed number. */
+      label: string;
+    }
+  | {
+      /** Identifies the plain secondary-value comparison. */
+      type: 'value';
+      /** Queried value of the comparison measure, shown as-is with no delta math applied. */
+      value: number;
+      /** Caption shown next to the value. Defaults to the comparison measure's title. */
+      label: string;
+    };
 
 /**
  * Data point in a KPI chart — the card represents a single aggregated point.
  *
- * @beta
+ * Like {@link IndicatorDataPoint}, the whole card is one data point, so every zone is exposed
+ * through the standard `entries` structure keyed by the {@link KpiChartDataOptions} field it
+ * comes from. `comparison` carries the resolved comparison math on top, since figures such as
+ * `deltaPercent` or `toGo` are derived rather than queried and so have no data option of their own.
+ *
+ * @example
+ * Reading the zones of a clicked KPI card:
+ * ```tsx
+ * <KpiChart
+ *   dataSet={DM.DataSource}
+ *   dataOptions={{
+ *     value: measureFactory.sum(DM.Commerce.Revenue),
+ *     category: DM.Commerce.Date.Months,
+ *   }}
+ *   onDataPointClick={(point) => {
+ *     point.entries?.value?.displayValue; // '1.5K'
+ *     point.entries?.category?.value; // '2026-03-01T00:00:00'
+ *     point.comparison?.label; // 'vs prior month'
+ *   }}
+ * />
+ * ```
  */
 export type KpiDataPoint = {
-  /** Headline value. */
-  value?: number;
-  /** Last category bucket as epoch milliseconds, when a category dimension is set. */
-  date?: number;
   /** Resolved comparison shown on the card, when a comparison is active. */
   comparison?: KpiComparisonInfo;
+  /**
+   * A collection of data point entries that represents values for all related `dataOptions`.
+   */
+  entries?: {
+    /** Data point entry for the `value` data option — the headline measure. */
+    value?: DataPointEntry;
+    /**
+     * Data point entry for the `category` data option — the bucket the headline value belongs to.
+     * Absent when no category is set, and when `valueMode: 'total'` makes the headline an
+     * aggregate over every bucket rather than one of them.
+     */
+    category?: DataPointEntry;
+    /**
+     * Data point entry for the comparison's own measure, carrying that measure's queried value:
+     * the baseline of a `'delta'` comparison, the target of a measure-backed `'target'`, or the
+     * secondary value of a `'value'` comparison. Absent for `'previous-period'` and fixed-number
+     * `'target'` comparisons, which have no measure of their own.
+     */
+    comparison?: DataPointEntry;
+  };
 };
 
 /**
  * A handler function that allows to customize what happens when a KPI chart is clicked.
- *
- * @beta
  */
 export type KpiDataPointEventHandler = (
   /** Data point that was clicked */
@@ -1716,23 +1820,34 @@ export type KpiDataPointEventHandler = (
 /**
  * Render options of a KPI chart, as computed from the query result.
  * Passed to {@link KpiBeforeRenderHandler} for customization before painting.
- *
- * @beta
  */
 export type KpiRenderOptions = {
+  /** The headline number. Undefined when the query produced no value to show. */
   value?: number;
+  /** Title text of the card — the `text` override from {@link KpiTitleStyleOptions}, or the value measure's title. */
   valueTitle: string;
+  /** Resolved color of the headline value, as derived from the value measure's color configuration. */
   valueColor?: string;
+  /**
+   * Category bucket the headline value was read from, as epoch milliseconds. Drives the
+   * period caption in the title section, e.g. 'DEC 2013'.
+   *
+   * Undefined when there is no single bucket to caption: no `category` configured,
+   * a non-date category, or `valueMode: 'total'` making the headline a whole-period aggregate.
+   */
   valuePeriodMs?: number;
+  /** Resolved comparison shown on the card, when a comparison is configured and computable. */
   comparison?: KpiComparisonInfo;
+  /**
+   * Points of the sparkline, one per category bucket, ordered as queried. A `null` `y` marks
+   * a gap in the line and is never rendered as zero.
+   */
   sparklinePoints?: { x: number; y: number | null }[];
 };
 
 /**
  * A handler function that allows to customize the computed KPI render options
  * before the card is rendered. The returned options are then used when painting the card.
- *
- * @beta
  */
 export type KpiBeforeRenderHandler = (
   /** KPI render options */
@@ -1740,7 +1855,7 @@ export type KpiBeforeRenderHandler = (
 ) => KpiRenderOptions;
 
 /**
- * Identifies one of the built-in icons available for KPI conditional icons -- see {@link KpiIcon}.
+ * Identifies one of the built-in icons available for KPI conditional icons — see {@link KpiIcon}.
  *
  * The set follows the familiar conditional-formatting taxonomy: trend arrows, status marks,
  * traffic-light shapes (recolorable via the icon's `color`), and rating/flag extras.
@@ -1749,8 +1864,6 @@ export type KpiBeforeRenderHandler = (
  * ```ts
  * const iconName: KpiIconName = 'arrow-up';
  * ```
- *
- * @beta
  */
 export type KpiIconName =
   // trend
@@ -1779,9 +1892,9 @@ export type KpiIconName =
  * {@link KpiIconCondition} matches.
  *
  * Variants:
- * - `text` -- a custom unicode glyph, emoji, or short text.
- * - `built-in` -- a curated SVG icon bundled with the SDK, selected by typed name.
- * - `svg-path` -- arbitrary SVG geometry: the `d` attribute of a single `<path>` element,
+ * - `text` — a custom unicode glyph, emoji, or short text.
+ * - `built-in` — a curated SVG icon bundled with the SDK, selected by typed name.
+ * - `svg-path` — arbitrary SVG geometry: the `d` attribute of a single `<path>` element,
  *   e.g. copied from an icon set or a Figma export. Drawn on a 24x24 grid unless `viewBox`
  *   says otherwise, and rendered filled with the icon color.
  *
@@ -1795,8 +1908,6 @@ export type KpiIconName =
  *   { icon: { type: 'text', value: '⚠', color: '#cf222e' }, expression: '1000000', operator: '<=' },
  * ]
  * ```
- *
- * @beta
  */
 export type KpiIcon =
   | {
@@ -1822,8 +1933,7 @@ export type KpiIcon =
       d: string;
       /**
        * Coordinate grid the path is drawn on.
-       *
-       * @defaultValue '0 0 24 24'
+       * @default '0 0 24 24'
        */
       viewBox?: string;
       /** Icon color. Defaults to the headline value color. */
@@ -1833,8 +1943,6 @@ export type KpiIcon =
 /**
  * Condition that shows a {@link KpiIcon} next to the KPI headline value or comparison readout
  * when it matches. Conditions are evaluated in order; the first match wins.
- *
- * @beta
  */
 export type KpiIconCondition = {
   /** Icon rendered when the condition matches. */
@@ -1848,8 +1956,6 @@ export type KpiIconCondition = {
 /**
  * Text size of the KPI headline value: `'auto'` scales the number to fit the card, or a fixed
  * font size in pixels (must be a positive number).
- *
- * @beta
  */
 export type KpiTextSize = 'auto' | number;
 
@@ -1857,16 +1963,13 @@ export type KpiTextSize = 'auto' | number;
  * Configuration that defines styling of the KPI headline value.
  *
  * To color the headline value, set a color (uniform or conditional) on the value measure in
- * {@link KpiChartDataOptions.value} -- the standard measure-coloring mechanism used across the
+ * {@link KpiChartDataOptions.value} — the standard measure-coloring mechanism used across the
  * SDK.
- *
- * @beta
  */
 export type KpiValueStyleOptions = {
   /**
    * Text size of the headline value: `'auto'` to scale it to the card, or a fixed size in px.
-   *
-   * @defaultValue 'auto'
+   * @default 'auto'
    */
   textSize?: KpiTextSize;
   /**
@@ -1884,40 +1987,36 @@ export type KpiValueStyleOptions = {
 
 /**
  * Configuration that defines styling of the KPI card title.
- *
- * @beta
  */
 export type KpiTitleStyleOptions = {
   /**
    * Boolean flag that defines whether the whole title section (title text and
    * category caption) is shown.
-   *
-   * @defaultValue true
+   * @default true
    */
   enabled?: boolean;
-  /** Title text. Defaults to the value measure title. */
+  /**
+   * Title text.
+   * @default the `value` measure's title
+   */
   text?: string;
   /**
    * Boolean flag that defines whether the title text (the `text` override, or the
    * value measure's title) is shown within the title section.
-   *
-   * @defaultValue true
+   * @default true
    */
   showValueTitle?: boolean;
   /**
    * Boolean flag that defines whether the current category bucket caption
    * (e.g. 'DEC 2013') is shown within the title section. Applicable when
    * {@link KpiChartDataOptions.category} is set.
-   *
-   * @defaultValue true
+   * @default true
    */
   showCategoryTitle?: boolean;
 };
 
 /**
  * Configuration that defines styling of the KPI comparison readout.
- *
- * @beta
  */
 export type KpiComparisonStyleOptions = {
   /**
@@ -1929,19 +2028,20 @@ export type KpiComparisonStyleOptions = {
    * For 'target' comparisons: 'percent' shows only the percent-of-goal line
    * (`percentOfTarget`), 'value' shows only the amount-to-go line (`toGo`), and 'both' shows
    * the percent line with the amount-to-go beneath it.
-   *
-   * @defaultValue 'percent'
+   * @default 'percent'
    */
   display?: 'percent' | 'value' | 'both';
-  /** Caption next to the delta, e.g. 'vs last year'. Defaults to an i18n label inferred from context. */
+  /**
+   * Caption next to the delta, e.g. 'vs last year'.
+   * @default a localized label inferred from the `comparison` type and `category` granularity
+   */
   label?: string;
   /**
    * Template for the 'target' comparison's percent-of-goal readout, replacing the localized
    * default. `{{percent}}` interpolates the formatted percent (e.g. '82%') and `{{goal}}` the
    * target's display label (the target measure's title, or the formatted number for a fixed
    * target).
-   *
-   * @defaultValue localized '{{percent}} of goal'
+   * @default localized `'{{percent}} of goal'`
    *
    * @example
    * ```ts
@@ -1952,8 +2052,7 @@ export type KpiComparisonStyleOptions = {
   /**
    * Template for the 'target' comparison's amount-to-go readout, replacing the localized
    * default. `{{value}}` interpolates the formatted remaining amount (e.g. '$250K').
-   *
-   * @defaultValue localized '{{value}} to go'
+   * @default localized `'{{value}} to go'`
    *
    * @example
    * ```ts
@@ -1965,8 +2064,7 @@ export type KpiComparisonStyleOptions = {
    * Color of the delta readout. Conditions evaluate against `deltaPercent`
    * ('delta' / 'previous-period' comparisons) or `percentOfTarget` ('target').
    * Not applicable to the 'value' comparison (colored by its own measure).
-   *
-   * @defaultValue sign-based: positive delta green, negative red
+   * @default sign-based: positive delta `green`, negative `red`
    *
    * @example “down is good” metric (churn, cost):
    * ```ts
@@ -1982,8 +2080,7 @@ export type KpiComparisonStyleOptions = {
   color?: DataColorOptions;
   /**
    * Whether the up/down arrow is shown next to the delta.
-   *
-   * @defaultValue true
+   * @default true
    */
   showIcon?: boolean;
   /** Condition-driven icons next to the comparison readout; first match wins. */
@@ -1992,36 +2089,36 @@ export type KpiComparisonStyleOptions = {
 
 /**
  * Configuration that defines styling of the KPI card container.
- *
- * @beta
  */
 export type KpiCardStyleOptions = {
-  /** Card background color. Text and sparkline switch to white for contrast on dark backgrounds. */
+  /**
+   * Card background color.
+   *
+   * When the color is given as a hex string and is dark enough that white text reads better
+   * against it, the headline text and the sparkline switch to white automatically. Colors in
+   * other notations (named colors, `rgb()`, `hsl()`) are applied as given, without that switch.
+   * @default the theme's `chart.backgroundColor`
+   */
   backgroundColor?: string;
   /**
    * Horizontal alignment of the card text.
-   *
-   * @defaultValue 'left'
+   * @default 'left'
    */
   textAlign?: 'left' | 'center' | 'right';
   /**
    * Boolean flag that defines whether the card border is shown.
-   *
-   * @defaultValue false
+   * @default false
    */
   showBorder?: boolean;
   /**
    * Corner radius of the card in pixels.
-   *
-   * @defaultValue 8
+   * @default 8
    */
   cornerRadius?: number;
 };
 
 /**
  * Configuration options that define functional style of the various elements of a KPI chart.
- *
- * @beta
  *
  * @example
  * ```tsx
@@ -2041,9 +2138,15 @@ export type KpiCardStyleOptions = {
  */
 export interface KpiStyleOptions extends Pick<BaseStyleOptions, 'width' | 'height'> {
   /**
-   * Card layout mode.
+   * Which of the two readouts gets the headline role on the card.
    *
-   * @defaultValue 'standard'
+   * - `'standard'` — the value is the headline, scaled large to fit the card, with the
+   *   comparison beneath it in the compact role.
+   * - `'comparison-first'` — the two swap: the comparison becomes the large headline and the
+   *   value moves below it. Useful when the change matters more than the absolute number.
+   *   Falls back to `'standard'` when no comparison is configured, so the card is never left
+   *   with an empty headline.
+   * @default 'standard'
    */
   layout?: 'standard' | 'comparison-first';
   /** Headline value styling. */

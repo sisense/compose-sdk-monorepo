@@ -136,6 +136,7 @@ export const RelativeDateFilter: FunctionComponent<RelativeDateFilterProps> = (p
         </div>
         <BasicInput
           className={'csdk-w-[60px]'}
+          inputStyle={{ minWidth: 60 }}
           type={'number'}
           placeholder={t('dateFilter.count')}
           value={count?.toString() ?? ''}

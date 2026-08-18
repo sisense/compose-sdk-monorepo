@@ -143,6 +143,10 @@ export interface JumpToDashboardConfig {
   /**
    * Configuration for the target dashboard display.
    * This configuration will be merged with target dashboard config, having higher priority
+   *
+   * Opts a target referenced by `id` into edit mode, which is disabled by default for
+   * such targets — see {@link JtdTarget}.
+   *
    * @default {}
    */
   targetDashboardConfig?: DashboardConfig;
@@ -235,6 +239,18 @@ export interface JumpToDashboardConfigForPivot extends Omit<JumpToDashboardConfi
 /**
  * Target dashboard for Jump To Dashboard functionality.
  * Supports both dashboard ID reference and in-code dashboard object.
+ *
+ * A target referenced by `id` is loaded from the Sisense instance, but — unlike
+ * {@link DashboardById} — it is always rendered read-only by default: the loaded dashboard's
+ * edit-mode default, which follows the current user's permission to edit that dashboard, is
+ * intentionally ignored, so a drill-through popup never shows layout drag handles or widget
+ * deletion. To allow editing in the popup, enable it explicitly through
+ * `targetDashboardConfig.widgetsPanel.editMode.enabled` of {@link JumpToDashboardConfig}.
+ *
+ * A target given as `dashboard` props skips that read-only default, since its configuration comes
+ * from the calling code rather than from the user's permissions. `targetDashboardConfig`, when
+ * provided, still merges over it with higher priority.
+ *
  * @see JumpToDashboardConfig
  * @see DashboardProps
  */

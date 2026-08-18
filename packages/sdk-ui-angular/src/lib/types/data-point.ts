@@ -4,6 +4,7 @@ import {
   CalendarHeatmapDataPoint,
   DataPoint,
   IndicatorDataPoint,
+  KpiDataPoint,
   PivotTableDataPoint,
   ScatterDataPoint,
   ScattermapDataPoint,
@@ -52,6 +53,16 @@ export type IndicatorDataPointEvent = {
   nativeEvent: MouseEvent;
 };
 
+/**
+ * Event of a data point on a KPI card.
+ */
+export type KpiDataPointEvent = {
+  /** Data point that was clicked or right-clicked */
+  point: KpiDataPoint;
+  /** Native MouseEvent */
+  nativeEvent: MouseEvent;
+};
+
 export type CalendarHeatmapDataPointEvent = {
   /** Data point that was clicked */
   point: CalendarHeatmapDataPoint;
@@ -80,7 +91,8 @@ export type ChartDataPointClickEvent =
   | AreamapDataPointEvent
   | ScattermapDataPointEvent
   | IndicatorDataPointEvent
-  | CalendarHeatmapDataPointEvent;
+  | CalendarHeatmapDataPointEvent
+  | KpiDataPointEvent;
 
 export type WidgetDataPointClickEvent =
   | ChartDataPointClickEvent
@@ -91,7 +103,8 @@ export type ChartDataPointContextMenuEvent =
   | DataPointEvent
   | ScatterDataPointEvent
   | BoxplotDataPointEvent
-  | CalendarHeatmapDataPointEvent;
+  | CalendarHeatmapDataPointEvent
+  | KpiDataPointEvent;
 
 export type WidgetDataPointContextMenuEvent =
   | ChartDataPointContextMenuEvent
@@ -156,6 +169,11 @@ export type BoxplotDataPointEventHandler = (event: BoxplotDataPointEvent) => voi
 
 /** Click handler for when a data point on Indicator is clicked. */
 export type IndicatorDataPointEventHandler = (event: IndicatorDataPointEvent) => void;
+
+/**
+ * Handler for when a data point on a KPI card is clicked or right-clicked.
+ */
+export type KpiDataPointEventHandler = (event: KpiDataPointEvent) => void;
 
 /**
  * Click handler for when a data point on Chart is clicked.

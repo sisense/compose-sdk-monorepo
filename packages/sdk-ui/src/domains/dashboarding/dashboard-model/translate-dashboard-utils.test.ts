@@ -1,4 +1,9 @@
-import { Dimension, isFilterRelations } from '@sisense/sdk-data';
+import {
+  Dimension,
+  isCascadingFilter,
+  isFilterRelations,
+  isMembersFilter,
+} from '@sisense/sdk-data';
 import isEqual from 'lodash-es/isEqual';
 
 import { CommonFiltersApplyMode } from '@/domains/dashboarding/common-filters/types';
@@ -815,7 +820,7 @@ describe('translate-dashboard-utils', () => {
         oid: 'test-widget-oid',
         type: 'chart/column',
         subtype: 'column',
-        datasource: { title: 'test' } as any,
+        datasource: { title: 'test' },
         metadata: {
           panels,
         },
@@ -1239,7 +1244,7 @@ describe('translate-dashboard-utils', () => {
     ];
 
     it('should find dimension in rows panel and return with row location', () => {
-      const result = findDimensionByInstanceId(mockPanels as any, 'category-dim');
+      const result = findDimensionByInstanceId(mockPanels, 'category-dim');
 
       expect(result).toBeDefined();
       expect(result).toHaveProperty('dimension');
@@ -1248,7 +1253,7 @@ describe('translate-dashboard-utils', () => {
     });
 
     it('should find dimension in columns panel and return with column location', () => {
-      const result = findDimensionByInstanceId(mockPanels as any, 'gender-dim');
+      const result = findDimensionByInstanceId(mockPanels, 'gender-dim');
 
       expect(result).toBeDefined();
       expect(result).toHaveProperty('dimension');
@@ -1257,7 +1262,7 @@ describe('translate-dashboard-utils', () => {
     });
 
     it('should find datetime dimension with level in rows panel', () => {
-      const result = findDimensionByInstanceId(mockPanels as any, 'date-months-dim');
+      const result = findDimensionByInstanceId(mockPanels, 'date-months-dim');
 
       expect(result).toBeDefined();
       expect(result).toHaveProperty('dimension');
@@ -1267,7 +1272,7 @@ describe('translate-dashboard-utils', () => {
     });
 
     it('should find measure in values panel and return without location', () => {
-      const result = findDimensionByInstanceId(mockPanels as any, 'revenue-measure');
+      const result = findDimensionByInstanceId(mockPanels, 'revenue-measure');
 
       expect(result).toBeDefined();
       expect(result).not.toHaveProperty('location');
@@ -1275,7 +1280,7 @@ describe('translate-dashboard-utils', () => {
     });
 
     it('should return undefined for non-existent instanceId', () => {
-      const result = findDimensionByInstanceId(mockPanels as any, 'non-existent-id');
+      const result = findDimensionByInstanceId(mockPanels, 'non-existent-id');
 
       expect(result).toBeUndefined();
     });
@@ -1365,7 +1370,7 @@ describe('translate-dashboard-utils', () => {
 
     it('should return undefined when widget has no drillToDashboardConfig', () => {
       const widget = createMockWidget();
-      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+      const result = extractPivotTargetsConfigFromWidgetDto(widget);
 
       expect(result).toBeUndefined();
     });
@@ -1375,7 +1380,7 @@ describe('translate-dashboard-utils', () => {
         enabled: true,
         version: '1',
       });
-      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+      const result = extractPivotTargetsConfigFromWidgetDto(widget);
 
       expect(result).toBeUndefined();
     });
@@ -1386,7 +1391,7 @@ describe('translate-dashboard-utils', () => {
         version: '1',
         dashboardIds: [],
       });
-      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+      const result = extractPivotTargetsConfigFromWidgetDto(widget);
 
       expect(result).toBeUndefined();
     });
@@ -1404,7 +1409,7 @@ describe('translate-dashboard-utils', () => {
         ],
       });
 
-      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+      const result = extractPivotTargetsConfigFromWidgetDto(widget);
 
       expect(result).toBeDefined();
       expect(result).toBeInstanceOf(Map);
@@ -1435,7 +1440,7 @@ describe('translate-dashboard-utils', () => {
         ],
       });
 
-      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+      const result = extractPivotTargetsConfigFromWidgetDto(widget);
 
       expect(result).toBeDefined();
       expect(result!.size).toBe(3);
@@ -1471,7 +1476,7 @@ describe('translate-dashboard-utils', () => {
         ],
       });
 
-      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+      const result = extractPivotTargetsConfigFromWidgetDto(widget);
 
       expect(result).toBeDefined();
       expect(result!.size).toBe(1);
@@ -1504,7 +1509,7 @@ describe('translate-dashboard-utils', () => {
         ],
       });
 
-      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+      const result = extractPivotTargetsConfigFromWidgetDto(widget);
 
       expect(result).toBeDefined();
       expect(result!.size).toBe(2); // Only found dimensions
@@ -1536,7 +1541,7 @@ describe('translate-dashboard-utils', () => {
         ],
       });
 
-      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+      const result = extractPivotTargetsConfigFromWidgetDto(widget);
 
       expect(result).toBeDefined();
       expect(result!.size).toBe(0);
@@ -1561,7 +1566,7 @@ describe('translate-dashboard-utils', () => {
         ],
       });
 
-      const result = extractPivotTargetsConfigFromWidgetDto(widget as any);
+      const result = extractPivotTargetsConfigFromWidgetDto(widget);
 
       // Verify that the Map was created correctly
       expect(result).toBeDefined();
@@ -1610,7 +1615,7 @@ describe('translate-dashboard-utils', () => {
       oid: 'widget-1',
       type: 'chart/column',
       subtype: 'column',
-      datasource: { title: 'test' } as any,
+      datasource: { title: 'test' },
       metadata: { panels: [] },
       style: {},
       title: 'Test Widget',
@@ -1954,7 +1959,7 @@ describe('translate-dashboard-utils', () => {
         oid: 'widget-1',
         type: 'chart/column',
         subtype: 'column',
-        datasource: { title: 'test' } as any,
+        datasource: { title: 'test' },
         metadata: { panels: [] },
         style: {},
         title: 'Chart',
@@ -2007,7 +2012,7 @@ describe('translate-dashboard-utils', () => {
         oid: 'widget-1',
         type: 'chart/column',
         subtype: 'column',
-        datasource: { title: 'test' } as any,
+        datasource: { title: 'test' },
         metadata: { panels: [] },
         style: {},
         title: 'Chart',
@@ -2032,7 +2037,7 @@ describe('translate-dashboard-utils', () => {
         oid: 'test-widget-oid',
         type,
         subtype: type.split('/')[1],
-        datasource: { title: 'test' } as any,
+        datasource: { title: 'test' },
         metadata: {
           panels: panels || [],
         },
@@ -2285,6 +2290,79 @@ describe('translate-dashboard-utils', () => {
         filter: { members: [] },
       },
       instanceid,
+    });
+
+    it('maps Fusion all:true to FilterWidget select-all (excludeMembers: true)', () => {
+      const result = extractDashboardFilters([
+        {
+          jaql: {
+            dim: '[Commerce.Country]',
+            table: 'Commerce',
+            column: 'Country',
+            title: 'Country',
+            datatype: 'text' as const,
+            filter: { all: true, multiSelection: true },
+          },
+          instanceid: 'all-true-guid',
+        },
+      ]);
+      expect(Array.isArray(result)).toBe(true);
+      const filters = result as import('@sisense/sdk-data').Filter[];
+      expect(isMembersFilter(filters[0])).toBe(true);
+      if (!isMembersFilter(filters[0])) return;
+      expect(filters[0].members).toEqual([]);
+      expect(filters[0].config.excludeMembers).toBe(true);
+      expect(filters[0].config.guid).toBe('all-true-guid');
+    });
+
+    it('keeps cleared include (members:[], no all) as excludeMembers: false', () => {
+      const result = extractDashboardFilters([makeFilterDto('clear-guid', '[Commerce.Country]')]);
+      const filters = result as import('@sisense/sdk-data').Filter[];
+      expect(isMembersFilter(filters[0])).toBe(true);
+      if (!isMembersFilter(filters[0])) return;
+      expect(filters[0].members).toEqual([]);
+      expect(filters[0].config.excludeMembers).toBe(false);
+    });
+
+    it('maps CascadingFilterDto level all:true to select-all (excludeMembers: true)', () => {
+      const result = extractDashboardFilters([
+        {
+          isCascading: true,
+          instanceid: 'cascading-all-guid',
+          levels: [
+            {
+              dim: '[Commerce.Country]',
+              table: 'Commerce',
+              column: 'Country',
+              title: 'Country',
+              datatype: 'text' as const,
+              filter: { all: true, multiSelection: true },
+              instanceid: 'level-country',
+            },
+            {
+              dim: '[Commerce.Gender]',
+              table: 'Commerce',
+              column: 'Gender',
+              title: 'Gender',
+              datatype: 'text' as const,
+              filter: { all: true, multiSelection: true },
+              instanceid: 'level-gender',
+            },
+          ],
+        },
+      ]);
+      expect(Array.isArray(result)).toBe(true);
+      const filters = result as import('@sisense/sdk-data').Filter[];
+      expect(isCascadingFilter(filters[0])).toBe(true);
+      if (!isCascadingFilter(filters[0])) return;
+      expect(filters[0].config.guid).toBe('cascading-all-guid');
+      expect(filters[0].filters).toHaveLength(2);
+      for (const level of filters[0].filters) {
+        expect(isMembersFilter(level)).toBe(true);
+        if (!isMembersFilter(level)) return;
+        expect(level.members).toEqual([]);
+        expect(level.config.excludeMembers).toBe(true);
+      }
     });
 
     it('returns flat filter array when no filterRelationsDtoOptions is provided', () => {

@@ -3,7 +3,7 @@ import { DataSource, Filter, FilterRelations } from '@sisense/sdk-data';
 import type { VisualizationStateUpdate } from '@/infra/plugins/widget-plugins/types';
 import { CustomWidgetEventProps, CustomWidgetStyleOptions, GenericDataOptions } from '@/types';
 
-import { WidgetConfig } from '../widget/types';
+import { CustomWidgetConfig } from '../widget/widget-config';
 
 /**
  * Props for the Custom Widget component
@@ -54,12 +54,11 @@ export interface CustomWidgetProps extends CustomWidgetEventProps {
   styleOptions?: CustomWidgetStyleOptions;
 
   /**
-   * Widget configuration (e.g. the header menu)
+   * Configuration of the widget
    *
    * @category Widget
-   * @internal
    */
-  config?: WidgetConfig;
+  config?: CustomWidgetConfig;
 
   /**
    * Title of the widget

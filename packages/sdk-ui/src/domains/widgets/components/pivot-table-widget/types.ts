@@ -14,7 +14,7 @@ import type {
 import type { PivotTableDataPointEventHandler } from '@/props';
 import { PivotTableDrilldownOptions, PivotTableWidgetStyleOptions } from '@/types';
 
-import { WidgetConfig } from '../widget/types';
+import { PivotTableWidgetConfig } from '../widget/widget-config';
 
 export type { PivotTableWidgetChangeEvent, PivotTableWidgetDrilldownSelectionsChangedEvent };
 
@@ -64,7 +64,7 @@ export interface PivotTableWidgetProps {
    *
    * @category Widget
    */
-  config?: WidgetConfig;
+  config?: PivotTableWidgetConfig;
 
   /**
    * React nodes to be rendered at the top of component, before the table

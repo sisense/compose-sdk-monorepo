@@ -24,6 +24,7 @@ import {
   getRankingStateFromFilter,
   isRankingCondition,
   RankingConditionControls,
+  withoutRankingConditions,
 } from '../ranking-condition/index.js';
 import { getMembersWithDeactivated } from '../utils.js';
 import { NumericCondition, NumericConditionFilterData, NumericConditionType } from './types.js';
@@ -89,7 +90,7 @@ export const NumericConditionSection = ({
   onChange,
 }: NumericConditionSectionProps) => {
   const { t } = useTranslation();
-  const { membersOnlyMode } = useFilterEditorContext();
+  const { membersOnlyMode, rankingVisible } = useFilterEditorContext();
   const [condition, setCondition] = useState<NumericConditionType>(
     getNumericFilterCondition(filter, conditionItems[0].value),
   );
@@ -106,7 +107,12 @@ export const NumericConditionSection = ({
   const multiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
 
-  const conditionItemsToUse = membersOnlyMode ? membersOnlyConditionItems : conditionItems;
+  const conditionItemsToUse = useMemo(() => {
+    if (membersOnlyMode) {
+      return membersOnlyConditionItems;
+    }
+    return rankingVisible ? conditionItems : withoutRankingConditions(filter)(conditionItems);
+  }, [membersOnlyMode, rankingVisible, filter]);
   const translatedConditionItems = useMemo(
     () =>
       conditionItemsToUse.map((item) => ({

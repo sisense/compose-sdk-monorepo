@@ -25,10 +25,16 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
         multiSelect: {
           visible: true,
         },
+        ranking: {
+          visible: true,
+        },
       },
       editFilter: {
         enabled: false,
         multiSelect: {
+          visible: true,
+        },
+        ranking: {
           visible: true,
         },
       },
@@ -41,6 +47,12 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
       lockFilter: {
         enabled: false,
       },
+      toggleFilter: {
+        visible: true,
+      },
+      expandFilter: {
+        visible: true,
+      },
     },
   },
   toolbar: {
@@ -49,6 +61,7 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
   widgetsPanel: {
     responsive: false,
     editMode: {
+      deleteWidget: { enabled: true },
       duplicateWidget: { enabled: false },
       renameWidget: { enabled: false },
       enabled: false,

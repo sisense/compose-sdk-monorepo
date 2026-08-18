@@ -13,19 +13,24 @@ import debounce from 'lodash-es/debounce';
 
 import { ScrollWrapperOnScrollEvent } from '@/domains/filters/components/filter-editor-popover/common/scroll-wrapper';
 import { SingleSelect } from '@/domains/filters/components/filter-editor-popover/common/select';
-import { SearchableMultiSelect } from '@/domains/filters/components/filter-editor-popover/common/select/searchable-multi-select';
-import { SearchableSingleSelect } from '@/domains/filters/components/filter-editor-popover/common/select/searchable-single-select';
-import type { SelectItem } from '@/domains/filters/components/filter-editor-popover/common/select/types';
 import { granularities } from '@/domains/filters/components/filter-editor-popover/sections/common/granularities';
-import type { SelectedMember } from '@/domains/filters/components/member-filter-tile/members-reducer';
+import type { Member } from '@/domains/filters/components/member-filter-tile/members-reducer';
 import { useGetFilterMembersInternal } from '@/domains/filters/hooks/use-get-filter-members';
 import { useSynchronizedFilter } from '@/domains/filters/hooks/use-synchronized-filter';
+import {
+  applyMemberToggle,
+  asClearAllSelection,
+  asSelectAllSelection,
+  withMembersFilterSelection,
+} from '@/domains/filters/shared/members-filter-selection';
 import { useFireOnReady } from '@/domains/widgets/hooks/use-fire-on-ready';
 import { usePrevious } from '@/shared/hooks/use-previous';
 import { createLevelAttribute } from '@/shared/utils/create-level-attribute';
 import { isSameAttribute } from '@/shared/utils/filters';
 
 import { filterWidgetDesign, membersFilterWidgetDesign } from './filter-widget-design';
+import filterWidgetSetupImage from './images/filter-widget-setup.svg';
+import { MembersFilterSelect } from './members-filter-select';
 import type { FilterWidgetProps } from './types';
 
 const LIST_SCROLL_LOAD_MORE_THRESHOLD = 0.75;
@@ -84,12 +89,11 @@ export function asSingleSelectionMembers(members: readonly string[]): string[] {
 }
 
 /**
- * Renders a searchable member-select dropdown using the existing CSDK filter editor select
- * components (SearchableMultiSelect / SearchableSingleSelect).
+ * Renders a searchable members dropdown for FilterWidget using {@link MembersFilterSelect}
+ * (filter-editor look + unified select-all / explicit / exclude state machine).
  *
- * For datetime attributes, renders two side-by-side dropdowns: a date-level granularity
- * selector (Year / Quarter / Month / Week / Day) and a searchable member value selector,
- * matching the Fusion filter editor popup UI.
+ * For datetime attributes, renders two side-by-side controls: a date-level granularity
+ * selector and the members value selector.
  *
  * Used internally by FilterWidget to provide the 'members' filter type UI.
  */
@@ -150,6 +154,8 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     return createLevelAttribute(attribute as DimensionalLevelAttribute, resolvedGranularity);
   }, [isDateAttribute, attribute, resolvedGranularity]);
 
+  const [searchValue, setSearchValue] = useState('');
+
   // searchFilter drives the text-search API query for list (non-date) dimensions.
   // For date dimensions this is unused — member fetch is driven by the level attribute only.
   const [searchFilter, setSearchFilter] = useState<Filter>(() =>
@@ -164,6 +170,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   useEffect(() => {
     if (prevExpressionRef.current === attribute.expression) return;
     prevExpressionRef.current = attribute.expression;
+    setSearchValue('');
     setSearchFilter(
       attribute.expression
         ? filterFactory.contains(attribute, '')
@@ -185,17 +192,20 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     [attribute],
   );
 
-  const onSearchUpdate = useCallback(
+  const onSearchValueChange = useCallback(
     (search: string) => {
-      debouncedSetSearchFilter(search);
+      setSearchValue(search);
+      if (!isDateAttribute) {
+        debouncedSetSearchFilter(search);
+      }
     },
-    [debouncedSetSearchFilter],
+    [debouncedSetSearchFilter, isDateAttribute],
   );
 
   // Cast rationale: the 'members' filter type UI operates on MembersFilter; a
   // non-members filter injected for the same dimension is intentionally taken
   // over as a members filter on first user selection (same-dim override
-  // semantics), preserving its guid via withSelectedMembers.
+  // semantics), preserving its guid via withMembersFilterSelection.
   const { filter, updateFilter } = useSynchronizedFilter<MembersFilter>(
     filterFromProps as MembersFilter | null,
     updateFilterFromProps as (f: MembersFilter) => void,
@@ -224,7 +234,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     const nextMembers = isMultiselect ? filter.members : asSingleSelectionMembers(filter.members);
     updateFilter(
       // Cast rationale: filterFactory.members returns the base Filter type but always
-      // constructs a MembersFilter (same as createEmptyFilter / withSelectedMembers).
+      // constructs a MembersFilter (same as createEmptyFilter / withMembersFilterSelection).
       filterFactory.members(filter.attribute, nextMembers, {
         guid: filter.config.guid,
         excludeMembers: filter.config.excludeMembers,
@@ -238,13 +248,19 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   // Rebuild when dimension or date granularity changes. Filter is seeded once, so
   // expression-only comparison misses host level pushes (empty→Quarters or
   // Years→Quarters) while the seeded filter still carries the previous level.
+  // Preserve members + excludeMembers — clearing them flashes "Set filter" after
+  // select-all when createLevelAttribute briefly differs from filter.attribute.
   useEffect(() => {
     if (!updateFilterFromProps) return;
     if (isSameAttribute(filter.attribute, effectiveAttribute)) return;
     updateFilter(
       // Cast rationale: filterFactory.members returns the base Filter type but always
       // constructs a MembersFilter (same as the createEmptyFilter seed above).
-      filterFactory.members(effectiveAttribute, [], {
+      filterFactory.members(effectiveAttribute, filter.members, {
+        guid: filter.config.guid,
+        excludeMembers: filter.config.excludeMembers,
+        deactivatedMembers: filter.config.deactivatedMembers,
+        backgroundFilter: filter.config.backgroundFilter,
         enableMultiSelection: isMultiselect,
       }) as MembersFilter,
     );
@@ -257,6 +273,8 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     data,
     loadMore: loadMoreMembers,
     isLoading: membersLoading,
+    isAllItemsLoaded: membersAllItemsLoaded,
+    totalMembersCount,
   } = useGetFilterMembersInternal({
     filter,
     defaultDataSource: dataSource,
@@ -267,6 +285,7 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     ),
     allowMissingMembers: true,
     count: QUERY_MEMBERS_COUNT,
+    includeTotalCount: true,
     // No dimension picked yet (the editor mounts the dropdown before one exists) —
     // an empty-dim query is rejected by the analytical engine ("Jaql element
     // doesn't contain dim"), so keep it disabled until a real attribute arrives.
@@ -286,28 +305,22 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     alignedMembersData ?? {
       selectedMembers: [],
       allMembers: [],
-      excludeMembers: false,
+      // Prefer the synchronized filter flag — falling back to `false` flashes
+      // "Set filter" for select-all while the members query is still aligning.
+      excludeMembers: filter.config.excludeMembers,
       enableMultiSelection: filter.config.enableMultiSelection ?? false,
     };
 
-  // Map Member[] to SelectItem<string>[]
-  const items: SelectItem<string>[] = useMemo(
-    () => allMembers.map((m) => ({ value: m.key, displayValue: m.title })),
-    [allMembers],
-  );
-
-  const selectedKeys: string[] = useMemo(
-    () => selectedMembers.filter((m) => !m.inactive).map((m) => m.key),
+  const selectedCount = useMemo(
+    () => selectedMembers.filter((m) => !m.inactive).length,
     [selectedMembers],
   );
-
-  const selectedKey: string | undefined = selectedKeys[0];
 
   // Keep the widget in sync with its linked filter: reflect all members even if the
   // widget itself was configured single-select but the shared filter gained several.
   const effectiveMultiselect = getEffectiveMultiselect(
     isMultiselect,
-    selectedKeys.length,
+    selectedCount,
     enableMultiSelection,
   );
 
@@ -320,30 +333,40 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
     [loadMoreMembers, membersLoading],
   );
 
-  // ── Multiselect ────────────────────────────────────────────────────────────
-  const handleMultiChange = useCallback(
-    (newKeys: string[]) => {
-      const newSelectedMembers: SelectedMember[] = newKeys.map((key) => {
-        const member = allMembers.find((m) => m.key === key);
-        return { key, title: member?.title ?? key, inactive: false };
-      });
-      updateFilter(withSelectedMembers(filter, newSelectedMembers, excludeMembers));
+  const handleSelectMember = useCallback(
+    (member: Member, isSelected: boolean) => {
+      const nextSelection = applyMemberToggle(
+        { selectedMembers, excludeMembers },
+        member,
+        isSelected,
+        {
+          enableMultiSelection: effectiveMultiselect,
+          loadedMembersCount: allMembers.length,
+          allItemsLoaded: !!membersAllItemsLoaded,
+          hasSearchFilter: searchValue.length > 0,
+        },
+      );
+      updateFilter(withMembersFilterSelection(filter, nextSelection));
     },
-    [allMembers, excludeMembers, filter, updateFilter],
+    [
+      selectedMembers,
+      excludeMembers,
+      effectiveMultiselect,
+      allMembers.length,
+      membersAllItemsLoaded,
+      searchValue,
+      filter,
+      updateFilter,
+    ],
   );
 
-  // ── Single-select ──────────────────────────────────────────────────────────
-  const [singleSelectKey, setSingleSelectKey] = useState(0);
+  const handleSelectAll = useCallback(() => {
+    updateFilter(withMembersFilterSelection(filter, asSelectAllSelection()));
+  }, [filter, updateFilter]);
 
-  const handleSingleChange = useCallback(
-    (key: string) => {
-      const member = allMembers.find((m) => m.key === key);
-      const selectedMember: SelectedMember = { key, title: member?.title ?? key, inactive: false };
-      updateFilter(withSelectedMembers(filter, [selectedMember], excludeMembers));
-      setSingleSelectKey((k) => k + 1);
-    },
-    [allMembers, excludeMembers, filter, updateFilter],
-  );
+  const handleClearAll = useCallback(() => {
+    updateFilter(withMembersFilterSelection(filter, asClearAllSelection()));
+  }, [filter, updateFilter]);
 
   // ── Date level change ──────────────────────────────────────────────────────
   const translatedGranularities = useMemo(
@@ -380,22 +403,71 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
   // All hooks are called above unconditionally to satisfy the Rules of Hooks.
   const design = membersFilterWidgetDesign;
 
+  const membersSelect = (
+    <MembersFilterSelect
+      members={allMembers}
+      selectedMembers={selectedMembers}
+      excludeMembers={excludeMembers}
+      enableMultiSelection={effectiveMultiselect}
+      isMembersLoading={membersLoading}
+      searchValue={searchValue}
+      onSearchValueChange={onSearchValueChange}
+      showSearch={!isDateAttribute}
+      onSelectMember={handleSelectMember}
+      onSelectAll={handleSelectAll}
+      onClearAll={handleClearAll}
+      onListScroll={handleListScroll}
+      placeholder={placeholder}
+      placeholderColor={design.placeholder.color}
+      width="100%"
+      fieldStyle={design.selectField}
+      totalMembersCount={searchValue.length === 0 ? totalMembersCount : undefined}
+    />
+  );
+
   if (!attribute.expression) {
+    const empty = filterWidgetDesign.noDimPlaceholder;
     return (
       <div
         data-testid="filter-widget-no-dimension"
         style={{
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           height: '100%',
-          ...filterWidgetDesign.noDimPlaceholder,
+          padding: 24,
+          boxSizing: 'border-box',
+          textAlign: 'center',
+          color: empty.color,
         }}
       >
-        {t(
-          'filterWidget.selectDimensionPlaceholder',
-          'Select a dimension to configure this filter',
-        )}
+        <div
+          style={{
+            ...empty.title,
+            marginBottom: empty.gapTitleToSubtitle,
+          }}
+        >
+          {t('filterWidget.setupTitle', 'Set up a filter widget')}
+        </div>
+        <div
+          style={{
+            ...empty.subtitle,
+            marginBottom: empty.gapSubtitleToImage,
+          }}
+        >
+          {t('filterWidget.setupSubtitle', 'Set a dimension and configure how the filter works')}
+        </div>
+        <img
+          src={filterWidgetSetupImage}
+          alt=""
+          style={{
+            width: '100%',
+            maxWidth: empty.imageMaxWidth,
+            height: 'auto',
+            display: 'block',
+          }}
+        />
       </div>
     );
   }
@@ -427,86 +499,12 @@ export const FilterWidgetDropdown: FunctionComponent<FilterWidgetDropdownProps> 
             />
           </div>
           <div data-testid="filter-widget-members-select" style={{ flex: 1, minWidth: 0 }}>
-            {effectiveMultiselect ? (
-              <SearchableMultiSelect<string>
-                width="100%"
-                values={selectedKeys}
-                placeholder={placeholder}
-                placeholderColor={design.placeholder.color}
-                onChange={handleMultiChange}
-                onListScroll={handleListScroll}
-                showListLoader={membersLoading}
-                showSearch={false}
-                items={items}
-                fieldStyle={design.selectField}
-              />
-            ) : (
-              <SearchableSingleSelect<string>
-                key={singleSelectKey}
-                width="100%"
-                value={selectedKey}
-                placeholder={placeholder}
-                placeholderColor={design.placeholder.color}
-                onChange={handleSingleChange}
-                onListScroll={handleListScroll}
-                showListLoader={membersLoading}
-                showSearch={false}
-                items={items}
-                fieldStyle={design.selectField}
-              />
-            )}
+            {membersSelect}
           </div>
         </div>
       ) : (
-        <div data-testid="filter-widget-members-select">
-          {effectiveMultiselect ? (
-            <SearchableMultiSelect<string>
-              items={items}
-              values={selectedKeys}
-              placeholder={placeholder}
-              placeholderColor={design.placeholder.color}
-              onChange={handleMultiChange}
-              onListScroll={handleListScroll}
-              showListLoader={membersLoading}
-              onSearchUpdate={onSearchUpdate}
-              width="100%"
-              fieldStyle={design.selectField}
-            />
-          ) : (
-            <SearchableSingleSelect<string>
-              key={singleSelectKey}
-              items={items}
-              value={selectedKey}
-              placeholder={placeholder}
-              placeholderColor={design.placeholder.color}
-              onChange={handleSingleChange}
-              onListScroll={handleListScroll}
-              showListLoader={membersLoading}
-              onSearchUpdate={onSearchUpdate}
-              width="100%"
-              fieldStyle={design.selectField}
-            />
-          )}
-        </div>
+        <div data-testid="filter-widget-members-select">{membersSelect}</div>
       )}
     </div>
   );
 };
-
-function withSelectedMembers(
-  filter: MembersFilter,
-  selectedMembers: SelectedMember[],
-  excludeMembers: boolean,
-): MembersFilter {
-  const active = selectedMembers.filter((m) => !m.inactive).map((m) => m.key);
-  const inactive = selectedMembers.filter((m) => m.inactive).map((m) => m.key);
-  // Cast rationale: filterFactory.members returns the base Filter type but always
-  // constructs a MembersFilter instance.
-  return filterFactory.members(filter.attribute, active, {
-    guid: filter.config.guid,
-    excludeMembers,
-    deactivatedMembers: inactive,
-    backgroundFilter: filter.config.backgroundFilter,
-    enableMultiSelection: filter.config.enableMultiSelection,
-  }) as MembersFilter;
-}

@@ -28,7 +28,6 @@ import { CascadingFilterDto, FilterDto, LayoutDto } from '@/infra/api/types/dash
 
 /**
  * Translates a {@link Filter} to a {@link FilterDto}.
- *
  * @param filter - The filter to translate.
  * @returns FilterDto
  * @internal
@@ -88,6 +87,34 @@ function getFilterBaseDto(filter: Filter): FilterDto {
 function membersFilterToDto(filter: MembersFilter) {
   const filterDto = getFilterBaseDto(filter);
 
+  // Select-all (empty exclusions) must round-trip as Fusion `{ all: true }`,
+  // not `{ exclude: { members: [] } }`
+  // from MembersFilter.filterJaql().
+  if (filter.config.excludeMembers && filter.members.length === 0) {
+    filterDto.jaql.filter = {
+      all: true,
+      multiSelection: filter.config.enableMultiSelection,
+    };
+
+    if (filter.config.backgroundFilter) {
+      setInnerFilter(
+        filterDto.jaql,
+        regularFilterToFilterDto(filter.config.backgroundFilter).jaql.filter,
+      );
+    }
+
+    // Same turned-off nested exclude as the normal path — deactivated members
+    // must survive select-all round-trips.
+    if (filter.config.deactivatedMembers.length > 0) {
+      setInnerFilter(filterDto.jaql, {
+        exclude: { members: filter.config.deactivatedMembers },
+        turnedOff: true,
+      });
+    }
+
+    return filterDto;
+  }
+
   (filterDto.jaql.filter as IncludeMembersFilterJaql).multiSelection =
     filter.config.enableMultiSelection;
 
@@ -140,7 +167,6 @@ function rankingFilterToDto(filter: RankingFilter): FilterDto {
 
 /**
  * Recursively sets the inner filter of a parent filter.
- *
  * @param parentFilter - The parent filter.
  * @param innerFilter - The inner filter.
  * @internal

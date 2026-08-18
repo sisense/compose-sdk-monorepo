@@ -7,6 +7,7 @@ type FilterEditorContextValue = {
   dataSources: DataSource[];
   parentFilters: Filter[];
   membersOnlyMode: boolean;
+  rankingVisible: boolean;
 };
 
 const FilterEditorContext = createContext<FilterEditorContextValue>({
@@ -14,6 +15,7 @@ const FilterEditorContext = createContext<FilterEditorContextValue>({
   dataSources: [],
   parentFilters: [],
   membersOnlyMode: false,
+  rankingVisible: true,
 });
 
 /** @internal */
@@ -34,6 +36,7 @@ export const FilterEditorContextProvider = ({
   );
   const parentFilters = useMemo(() => value.parentFilters ?? [], [value.parentFilters]);
   const membersOnlyMode = useMemo(() => value.membersOnlyMode ?? false, [value.membersOnlyMode]);
+  const rankingVisible = useMemo(() => value.rankingVisible ?? true, [value.rankingVisible]);
   const dataSources = useMemo(() => value.dataSources ?? [], [value.dataSources]);
 
   useEffect(() => {
@@ -44,7 +47,7 @@ export const FilterEditorContextProvider = ({
 
   return (
     <FilterEditorContext.Provider
-      value={{ defaultDataSource, dataSources, parentFilters, membersOnlyMode }}
+      value={{ defaultDataSource, dataSources, parentFilters, membersOnlyMode, rankingVisible }}
     >
       {children}
     </FilterEditorContext.Provider>

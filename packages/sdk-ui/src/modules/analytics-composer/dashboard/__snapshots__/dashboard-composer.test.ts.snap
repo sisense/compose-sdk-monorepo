@@ -1121,7 +1121,7 @@ export default function CodeExample() {
       },
     }];
     const filters: Filter[] | FilterRelations = [
-        filterFactory.members(DM.Country.Country, []),
+        filterFactory.members(DM.Country.Country, [], { disabled: false, locked: false, enableMultiSelection: true, excludeMembers: true, deactivatedMembers: [] }),
         filterFactory.members(DM.Commerce.Date.Years, ['2013-01-01T00:00:00']),
         filterFactory.greaterThan(DM.Commerce.Revenue, 0)
         ];

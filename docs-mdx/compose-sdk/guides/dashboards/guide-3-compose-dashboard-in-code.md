@@ -88,7 +88,7 @@ This isn't a very interesting dashboard. Let’s improve this in the next exampl
 
 ## Add Dashboard Filters, Other Widgets, and Set Up Layout
 
-Below is the code for the same Sample Ecommerce dashboard created programatically.
+Below is the code for the same Sample Ecommerce dashboard created programmatically.
 
 ##### React
 
@@ -168,7 +168,7 @@ const numberFormat: NumberFormatConfig = {
 
 const lineChartStyleOptions: LineStyleOptions = {
   subtype: 'line/spline',
-  lineWidth: { width: 'bold' },
+  line: { width: 3 },
   yAxis: {
     title: { enabled: true, text: 'SALES' },
   },

@@ -172,9 +172,19 @@ export const FiltersPanel = asSisenseComponent({
           lockFilter: {
             enabled: config?.actions?.lockFilter?.enabled,
           },
+          toggleFilter: {
+            visible: config?.actions?.toggleFilter?.visible,
+          },
+          expandFilter: {
+            visible: config?.actions?.expandFilter?.visible,
+          },
         },
       }),
-      [config?.actions?.lockFilter?.enabled],
+      [
+        config?.actions?.lockFilter?.enabled,
+        config?.actions?.toggleFilter?.visible,
+        config?.actions?.expandFilter?.visible,
+      ],
     );
 
     // Write-back operates on `allFilters` (not the visible-only `filters`) so hidden

@@ -2,7 +2,7 @@
 title: KpiChartProps
 ---
 
-# Interface KpiChartProps <Badge type="beta" text="Beta" />
+# Interface KpiChartProps
 
 Props of the [KpiChart](../charts/function.KpiChart.md) component.
 
@@ -168,8 +168,26 @@ Context menu handler callback for the KPI card.
 
 > **onDataReady**?: (`data`) => [`Data`](../../sdk-data/interfaces/interface.Data.md)
 
-A callback that allows to modify data immediately after it has been retrieved.
-It can be used to inject modification of queried data.
+A callback that allows you to modify the retrieved data before the KPI card is
+computed from it. Whatever the callback returns is what the card is built from.
+
+This is the data-level hook, applied to the raw query result — use it to rescale,
+patch, or filter values. To adjust the already computed card instead, use the
+render-level [`onBeforeRender`](interface.KpiChartEventProps.md#onbeforerender).
+
+The data passed in is the query result, so its shape follows how the KPI queried it:
+
+- **One query** — the usual case. The data holds one row per `category` bucket, or a
+  single row when no `category` is configured.
+- **Two queries** — `valueMode: 'total'` combined with a `category`. A whole-period
+  aggregate cannot be derived from the per-bucket rows (summing per-bucket averages,
+  for instance, would be wrong), so it is fetched by a second, ungrouped query and
+  merged into the same result: one extra row carrying the aggregate, plus an extra
+  column marking which rows are buckets and which one is the total. The callback still
+  runs once, over the already merged result.
+
+So always spread and map the data you were given rather than rebuilding it from
+scratch — preserve any columns and rows you do not intend to change.
 
 ##### Parameters
 

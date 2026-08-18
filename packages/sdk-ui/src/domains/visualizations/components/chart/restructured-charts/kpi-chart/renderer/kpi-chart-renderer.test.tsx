@@ -1,6 +1,7 @@
 /** @vitest-environment jsdom */
 import { measureFactory } from '@sisense/sdk-data';
-import { fireEvent, render } from '@testing-library/react';
+import type Highcharts from '@sisense/sisense-charts';
+import { createEvent, fireEvent, render } from '@testing-library/react';
 import get from 'lodash-es/get';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
@@ -12,12 +13,35 @@ import { translateKpiStyleOptionsToDesignOptions } from '../design-options/desig
 import { KpiChartData } from '../types.js';
 import { KpiChartRenderer } from './kpi-chart-renderer.js';
 
-vi.mock('highcharts-react-official', () => ({
-  default: () => <div>Mock Sparkline</div>,
+// `paintLog` records the interleaving of sparkline draws and `onReady` paint signals, so the
+// readiness tests below can assert that the card never reports paint before the sparkline has
+// drawn. `sparklineOptionsSpy` captures the options the renderer built, so the date-format tests
+// can run the real tooltip formatter rather than re-deriving it.
+const { paintLog, sparklineOptionsSpy, dateFormatterMock } = vi.hoisted(() => ({
+  paintLog: [] as string[],
+  sparklineOptionsSpy: vi.fn(),
+  // Ignores the requested format so the assertions below stay on the ISO-ish text; the format
+  // argument itself is asserted from `dateFormatterMock.mock.calls` where it matters.
+  dateFormatterMock: vi.fn((date: Date) => date.toISOString().slice(0, 7)),
 }));
 
+vi.mock('highcharts-react-official', async () => {
+  // The real HighchartsReact creates and updates its chart from a LAYOUT effect; the mock keeps
+  // that timing so the paint-order assertion tests the same effect ordering production relies on.
+  const { useLayoutEffect } = await import('react');
+  return {
+    default: function MockSparkline(props: { options: Highcharts.Options }) {
+      sparklineOptionsSpy(props.options);
+      useLayoutEffect(() => {
+        paintLog.push('sparkline');
+      });
+      return <div>Mock Sparkline</div>;
+    },
+  };
+});
+
 vi.mock('@/shared/hooks/useDateFormatter.js', () => ({
-  useDateFormatter: () => (date: Date) => date.toISOString().slice(0, 7),
+  useDateFormatter: () => dateFormatterMock,
 }));
 
 // Resolves keys called WITH interpolation params against the real en dictionary (i18next-style
@@ -54,6 +78,16 @@ const dataOptionsWithDate = translateKpiChartDataOptions({
   category: DM.Commerce.Date.Months,
 });
 const dataOptionsPlain = translateKpiChartDataOptions({ value: revenue });
+const dataOptionsWithCustomDateFormat = translateKpiChartDataOptions({
+  value: revenue,
+  category: { column: DM.Commerce.Date.Months, dateFormat: 'MMMM yyyy' },
+});
+// A numeric (non-datetime) column: `normalizeColumn` gives it no `dateFormat`, unlike every
+// `DateDimension` level -- the only way a KPI category reaches the renderer without one.
+const dataOptionsWithFormatlessCategory = translateKpiChartDataOptions({
+  value: revenue,
+  category: DM.Commerce.DateMonth,
+});
 
 /** Reads `element`'s parent, failing loudly (not with a silent `null`) if it has none. */
 function requireParent(element: Element | null): HTMLElement {
@@ -87,6 +121,9 @@ function mockCardSize(width = 600, height = 300) {
 describe('KpiChartRenderer', () => {
   beforeEach(() => {
     translateMock.mockClear();
+    paintLog.length = 0;
+    sparklineOptionsSpy.mockClear();
+    dateFormatterMock.mockClear();
     // Default to a roomy card so tier-driven degradation doesn't interfere with unrelated
     // assertions; the tier-degradation tests below override this per case.
     mockCardSize();
@@ -240,6 +277,141 @@ describe('KpiChartRenderer', () => {
       />,
     );
     expect(document.querySelector('[data-kpi-area="title"]')).toBeNull();
+  });
+
+  describe("the category data option's dateFormat", () => {
+    const JUNE_15_2020 = Date.UTC(2020, 5, 15);
+    const chartData: KpiChartData = {
+      type: 'kpi',
+      hasRows: true,
+      value: 1500,
+      valueTitle: 'Total Revenue',
+      valuePeriodMs: JUNE_15_2020,
+      sparklinePoints: [
+        { x: Date.UTC(2020, 4, 15), y: 1200 },
+        { x: JUNE_15_2020, y: 1500 },
+      ],
+    };
+
+    /** Formats a sparkline point through the tooltip formatter the renderer just built. */
+    function formatSparklineTooltip(point: { x: number; y: number }): string {
+      const options = sparklineOptionsSpy.mock.calls.at(-1)?.[0] as Highcharts.Options;
+      const formatter = options.tooltip?.formatter as (
+        this: Highcharts.TooltipFormatterContextObject,
+      ) => string;
+      return formatter.call(point as Highcharts.TooltipFormatterContextObject);
+    }
+
+    it('formats both the period caption and the sparkline tooltip when set explicitly', () => {
+      render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithCustomDateFormat}
+          designOptions={translateKpiStyleOptionsToDesignOptions(
+            {},
+            dataOptionsWithCustomDateFormat,
+          )}
+        />,
+      );
+
+      expect(dateFormatterMock).toHaveBeenCalledWith(new Date(JUNE_15_2020), 'MMMM yyyy');
+
+      dateFormatterMock.mockClear();
+      formatSparklineTooltip({ x: JUNE_15_2020, y: 1500 });
+      expect(dateFormatterMock).toHaveBeenCalledWith(new Date(JUNE_15_2020), 'MMMM yyyy');
+    });
+
+    it("honors the level attribute's own format when the consumer set none, matching other charts", () => {
+      render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithDate}
+          designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsWithDate)}
+        />,
+      );
+
+      // `DateDimension.Months` carries 'yyyy-MM'; `normalizeColumn` copies it onto the column.
+      expect(dateFormatterMock).toHaveBeenCalledWith(new Date(JUNE_15_2020), 'yyyy-MM');
+
+      dateFormatterMock.mockClear();
+      formatSparklineTooltip({ x: JUNE_15_2020, y: 1500 });
+      expect(dateFormatterMock).toHaveBeenCalledWith(new Date(JUNE_15_2020), 'yyyy-MM');
+    });
+
+    it('falls back to the card defaults when the category carries no format at all', () => {
+      render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithFormatlessCategory}
+          designOptions={translateKpiStyleOptionsToDesignOptions(
+            {},
+            dataOptionsWithFormatlessCategory,
+          )}
+        />,
+      );
+
+      expect(dateFormatterMock).toHaveBeenCalledWith(new Date(JUNE_15_2020), 'MMM yyyy');
+
+      dateFormatterMock.mockClear();
+      formatSparklineTooltip({ x: JUNE_15_2020, y: 1500 });
+      expect(dateFormatterMock).toHaveBeenCalledWith(new Date(JUNE_15_2020), 'MMM d, yyyy');
+    });
+  });
+
+  describe('sparkline tooltip', () => {
+    const JUNE_15_2020 = Date.UTC(2020, 5, 15);
+    const chartData: KpiChartData = {
+      type: 'kpi',
+      hasRows: true,
+      value: 1500,
+      valueTitle: 'Total Revenue',
+      valuePeriodMs: JUNE_15_2020,
+      sparklinePoints: [
+        { x: Date.UTC(2020, 4, 15), y: 1200 },
+        { x: JUNE_15_2020, y: 1500 },
+      ],
+    };
+
+    function formatSparklineTooltip(): string {
+      const options = sparklineOptionsSpy.mock.calls.at(-1)?.[0] as Highcharts.Options;
+      const formatter = options.tooltip?.formatter as (
+        this: Highcharts.TooltipFormatterContextObject,
+      ) => string;
+      return formatter.call({
+        x: JUNE_15_2020,
+        y: 1500,
+      } as Highcharts.TooltipFormatterContextObject);
+    }
+
+    const renderWithCardBackground = (backgroundColor?: string) =>
+      render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithDate}
+          designOptions={translateKpiStyleOptionsToDesignOptions(
+            backgroundColor ? { card: { backgroundColor } } : {},
+            dataOptionsWithDate,
+          )}
+        />,
+      );
+
+    it("leads with the measure's title, like the series name in other chart tooltips", () => {
+      renderWithCardBackground();
+      expect(formatSparklineTooltip()).toContain('Total Revenue');
+    });
+
+    it('colors the value with the accent even when the sparkline itself was recolored for the card', () => {
+      // A white card pushes the sparkline off the accent (poor contrast against white) and onto the
+      // theme text color -- but the tooltip has its own white body, so it keeps the accent.
+      renderWithCardBackground('#ffffff');
+      const seriesColor = (
+        (sparklineOptionsSpy.mock.calls.at(-1)?.[0] as Highcharts.Options)
+          .series?.[0] as Highcharts.SeriesLineOptions
+      ).color;
+
+      expect(seriesColor).not.toBe('#00cee6');
+      expect(formatSparklineTooltip()).toContain('color:#00cee6');
+    });
   });
 
   it('renders a conditional icon next to the value', () => {
@@ -1126,6 +1298,98 @@ describe('KpiChartRenderer', () => {
     });
   });
 
+  describe('onReady', () => {
+    const chartData: KpiChartData = {
+      type: 'kpi',
+      hasRows: true,
+      value: 1500,
+      valueTitle: 'Total Revenue',
+      sparklinePoints: [
+        { x: 1, y: 1000 },
+        { x: 2, y: 1500 },
+      ],
+    };
+
+    it('signals paint once the card is committed to the DOM', () => {
+      const onReady = vi.fn();
+      const { getByText } = render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithDate}
+          designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsWithDate)}
+          onReady={onReady}
+        />,
+      );
+      expect(getByText('1.5K')).toBeTruthy();
+      expect(onReady).toHaveBeenCalled();
+    });
+
+    it('signals paint only after the sparkline has drawn', () => {
+      render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithDate}
+          designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsWithDate)}
+          onReady={() => paintLog.push('onReady')}
+        />,
+      );
+      expect(paintLog).toContain('onReady');
+      expect(paintLog.indexOf('sparkline')).toBe(0);
+      expect(paintLog.indexOf('onReady')).toBeGreaterThan(paintLog.indexOf('sparkline'));
+    });
+
+    it('signals paint for the terminal no-results overlay too', () => {
+      const onReady = vi.fn();
+      const { queryByRole } = render(
+        <KpiChartRenderer
+          chartData={{ type: 'kpi', hasRows: false, valueTitle: 'Total Revenue' }}
+          dataOptions={dataOptionsWithDate}
+          designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsWithDate)}
+          onReady={onReady}
+        />,
+      );
+      expect(queryByRole('figure')).toBeNull();
+      expect(onReady).toHaveBeenCalled();
+    });
+
+    it('re-signals paint when the card re-renders with new data', () => {
+      const onReady = vi.fn();
+      const designOptions = translateKpiStyleOptionsToDesignOptions({}, dataOptionsWithDate);
+      const { rerender, getByText } = render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithDate}
+          designOptions={designOptions}
+          onReady={onReady}
+        />,
+      );
+      const callsAfterFirstPaint = onReady.mock.calls.length;
+
+      rerender(
+        <KpiChartRenderer
+          chartData={{ ...chartData, value: 2500 }}
+          dataOptions={dataOptionsWithDate}
+          designOptions={designOptions}
+          onReady={onReady}
+        />,
+      );
+
+      expect(getByText('2.5K')).toBeTruthy();
+      expect(onReady.mock.calls.length).toBeGreaterThan(callsAfterFirstPaint);
+    });
+
+    it('renders without an onReady handler', () => {
+      const { getByText } = render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithDate}
+          designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsWithDate)}
+        />,
+      );
+      expect(getByText('1.5K')).toBeTruthy();
+    });
+  });
+
   describe('accessibility and events', () => {
     const chartData: KpiChartData = {
       type: 'kpi',
@@ -1133,6 +1397,7 @@ describe('KpiChartRenderer', () => {
       value: 90,
       valueTitle: 'Total Revenue',
       valuePeriodMs: 1000,
+      categoryValue: '1970-01-01T00:00:01',
       comparison: {
         type: 'previous-period',
         baseline: 100,
@@ -1212,14 +1477,30 @@ describe('KpiChartRenderer', () => {
       fireEvent.click(getByRole('figure'));
       expect(onDataPointClick).toHaveBeenCalledWith(
         {
-          value: 90,
-          date: 1000,
           comparison: {
             type: 'previous-period',
             baseline: 100,
             deltaValue: -10,
             deltaPercent: -10,
             label: 'kpi.comparison.vsPriorMonth',
+          },
+          entries: {
+            value: {
+              dataOption: dataOptionsWithDate.value,
+              measure: dataOptionsWithDate.value.column,
+              value: 90,
+              displayValue: '90',
+            },
+            // The category entry carries the bucket's own raw value, not `valuePeriodMs`'s
+            // epoch -- the form every other chart's `entries.category` uses.
+            category: {
+              dataOption: dataOptionsWithDate.category,
+              attribute: dataOptionsWithDate.category!.column,
+              value: '1970-01-01T00:00:01',
+              displayValue: '1970-01',
+            },
+            // 'previous-period' compares the headline measure against its own prior bucket,
+            // so there is no separate measure to hang a comparison entry off.
           },
         },
         expect.any(MouseEvent),
@@ -1258,6 +1539,39 @@ describe('KpiChartRenderer', () => {
       );
       fireEvent.contextMenu(getByRole('figure'));
       expect(onDataPointContextMenu).toHaveBeenCalledTimes(1);
+    });
+
+    it('suppresses the native browser context menu when onDataPointContextMenu is provided', () => {
+      // Without this, the browser's own context menu opens on top of whatever menu the consumer
+      // renders (e.g. Jump to Dashboard), leaving the card's right-click effectively unusable.
+      const onDataPointContextMenu = vi.fn();
+      const { getByRole } = render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithDate}
+          designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsWithDate)}
+          onDataPointContextMenu={onDataPointContextMenu}
+        />,
+      );
+      const event = createEvent.contextMenu(getByRole('figure'));
+      fireEvent(getByRole('figure'), event);
+
+      expect(event.defaultPrevented).toBe(true);
+    });
+
+    it('leaves the native browser context menu alone when no onDataPointContextMenu is provided', () => {
+      const { getByRole } = render(
+        <KpiChartRenderer
+          chartData={chartData}
+          dataOptions={dataOptionsWithDate}
+          designOptions={translateKpiStyleOptionsToDesignOptions({}, dataOptionsWithDate)}
+          onDataPointClick={vi.fn()}
+        />,
+      );
+      const event = createEvent.contextMenu(getByRole('figure'));
+      fireEvent(getByRole('figure'), event);
+
+      expect(event.defaultPrevented).toBe(false);
     });
   });
 

@@ -66,6 +66,23 @@ const withDragHandleInTitle =
     return { ...props, styleOptions } as WidgetProps;
   };
 
+/** Maps a widget's props to a customized version of them. */
+type WidgetPropsTransformer = (widget: WidgetProps) => WidgetProps;
+
+/**
+ * Composes widget props transformers, dropping the ones a configuration flag switched off.
+ *
+ * Lets a caller keep one transformer per line and gate a line with `flag && transformer`, instead of
+ * threading conditionals through the composition itself.
+ *
+ * @param transformers - The transformers to compose, in application order, `false` when switched off
+ * @returns A transformer applying every enabled transformer in order
+ */
+const composeWidgetTransformers = (
+  ...transformers: readonly (WidgetPropsTransformer | false)[]
+): WidgetPropsTransformer =>
+  flow(transformers.filter((transformer): transformer is WidgetPropsTransformer => !!transformer));
+
 const Wrapper = styled.div`
   overflow: hidden;
 `;
@@ -123,6 +140,13 @@ export interface EditableLayoutProps {
      * @default true
      */
     showDragHandleIcon?: boolean;
+
+    /**
+     * Flag indicating whether the "Delete widget" menu item is offered on each widget header.
+     *
+     * @default true
+     */
+    deleteWidgetEnabled?: boolean;
   };
 }
 
@@ -140,7 +164,10 @@ export const EditableLayout = ({
 }: EditableLayoutProps) => {
   const { themeSettings } = useThemeContext();
   const { t } = useTranslation();
-  const { showDragHandleIcon = true } = useMemo(() => config ?? {}, [config]);
+  const { showDragHandleIcon = true, deleteWidgetEnabled = true } = useMemo(
+    () => config ?? {},
+    [config],
+  );
 
   const [isDragging, setIsDragging] = useState(false);
   const [draggingWidgetId, setDraggingWidgetId] = useState<string | null>(null);
@@ -319,14 +346,19 @@ export const EditableLayout = ({
                                       }
                                     >
                                       {(() => {
-                                        const customizedProps = flow(
-                                          withHeaderMenuItem({
-                                            type: 'action',
-                                            id: WidgetHeaderMenuTargets.DeleteWidget,
-                                            caption: t('widgetHeader.menu.deleteWidget'),
-                                            onClick: () =>
-                                              onCellDelete(columnIndex, rowIndex, subcell.widgetId),
-                                          }),
+                                        const customizedProps = composeWidgetTransformers(
+                                          deleteWidgetEnabled &&
+                                            withHeaderMenuItem({
+                                              type: 'action',
+                                              id: WidgetHeaderMenuTargets.DeleteWidget,
+                                              caption: t('widgetHeader.menu.deleteWidget'),
+                                              onClick: () =>
+                                                onCellDelete(
+                                                  columnIndex,
+                                                  rowIndex,
+                                                  subcell.widgetId,
+                                                ),
+                                            }),
                                           withHeaderMenuItem({
                                             type: 'action',
                                             id: WidgetHeaderMenuTargets.DistributeEqualWidth,

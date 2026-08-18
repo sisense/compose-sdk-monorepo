@@ -13,6 +13,7 @@ import type { ChartWidgetProps } from '@/domains/widgets/components/chart-widget
 import { isTextWidgetProps } from '@/domains/widgets/components/text-widget/text-widget.js';
 import type { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { Widget } from '@/domains/widgets/components/widget/widget';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
 import { MenuProvider } from '@/infra/contexts/menu-provider/menu-provider';
 import { ModalProvider } from '@/infra/contexts/modal-provider/modal-provider.js';
 import { SisenseContextProvider } from '@/infra/contexts/sisense-context/sisense-context-provider.js';
@@ -141,6 +142,48 @@ describe('useComposedDashboard', () => {
       // `config` comes from the internal (mutable-on-duplication) state, so a tabber's
       // show/hide mapping survives into the returned model.
       expect(result.current.dashboard.config?.tabbers).toEqual(tabbers);
+    });
+  });
+
+  describe('edit-mode affordances require isEditing', () => {
+    // `editMode.enabled` can now arrive as a permission-derived default, so it reaches consumers that
+    // render widgets outside a `Dashboard` (e.g. `WidgetById`). Those consumers never set `isEditing`,
+    // and this invariant is what keeps duplicate/rename from leaking into them.
+    const editModeConfig = (isEditing?: boolean) => ({
+      widgetsPanel: {
+        editMode: {
+          enabled: true,
+          applyChangesAsBatch: { enabled: false },
+          duplicateWidget: { enabled: true },
+          renameWidget: { enabled: true },
+          ...(isEditing === undefined ? {} : { isEditing }),
+        },
+      },
+    });
+
+    const composeWith = (config: ComposableDashboardProps['config']) =>
+      renderHook(() => useComposedDashboard({ widgets: [widgetPropsMock], config }), {
+        wrapper: CombinedProvider,
+      }).result.current.dashboard.widgets[0];
+
+    const menuItemIds = (widget: WidgetProps) =>
+      (widget.config?.header?.menu?.items ?? []).map(({ id }) => id);
+
+    const isTitleEditable = (widget: WidgetProps) => widget.config?.header?.title?.editing?.enabled;
+
+    it('adds the duplicate and rename affordances while editing', () => {
+      // Positive control: proves the assertions below observe the real affordances.
+      const widget = composeWith(editModeConfig(true));
+
+      expect(menuItemIds(widget)).toContain(WidgetHeaderMenuTargets.DuplicateWidget);
+      expect(isTitleEditable(widget)).toBe(true);
+    });
+
+    it('adds neither affordance when isEditing is not set', () => {
+      const widget = composeWith(editModeConfig());
+
+      expect(menuItemIds(widget)).not.toContain(WidgetHeaderMenuTargets.DuplicateWidget);
+      expect(isTitleEditable(widget)).toBeUndefined();
     });
   });
 

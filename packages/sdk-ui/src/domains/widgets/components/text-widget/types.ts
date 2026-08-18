@@ -1,7 +1,7 @@
 import type { TextWidgetDataPointEventHandler } from '@/props';
 import { TextWidgetStyleOptions } from '@/types';
 
-import { WidgetConfig } from '../widget/types';
+import { TextWidgetConfig } from '../widget/widget-config';
 
 /**
  * Props for the `TextWidget` component.
@@ -24,10 +24,9 @@ export interface TextWidgetProps {
   onDataPointClick?: TextWidgetDataPointEventHandler;
 
   /**
-   * Widget configuration (e.g. the header menu)
+   * Configuration of the widget
    *
    * @category Widget
-   * @internal
    */
-  config?: WidgetConfig;
+  config?: TextWidgetConfig;
 }

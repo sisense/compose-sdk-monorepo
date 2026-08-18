@@ -15,6 +15,12 @@ Widgets panel configuration
 Configuration for actions available on all widgets in the panel, such as
 downloading each widget's data.
 
+When using [DashboardById](../fusion-assets/function.DashboardById.md) or a dashboard model loaded with
+[useGetDashboardModel](../fusion-assets/function.useGetDashboardModel.md) and translated by `dashboardModelTranslator.toDashboardProps()`,
+each default below will be derived from the current user's permissions on that dashboard, if
+the Sisense Fusion instance provides it. Otherwise the documented default will be used.
+Explicit configuration values have the highest precedence, and will override any defaults.
+
 #### Type declaration
 
 > ##### `actions.downloadCsv`
@@ -48,9 +54,7 @@ downloading each widget's data.
 > >
 > > ###### Default
 > >
-> > ```ts
-> > false
-> > ```
+> > `false`, or the user's permission to export widget data on a Fusion dashboard
 > >
 > >
 >
@@ -85,9 +89,7 @@ downloading each widget's data.
 > >
 > > ###### Default
 > >
-> > ```ts
-> > false
-> > ```
+> > `false`, or the user's permission to export widget data on a Fusion dashboard
 > >
 > >
 >

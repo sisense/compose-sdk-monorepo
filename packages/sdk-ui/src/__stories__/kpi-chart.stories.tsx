@@ -185,6 +185,65 @@ export const coloredTile = template(
   [withCardSize],
 );
 
+/**
+ * A dark tile, where the theme accent isn't legible so the sparkline itself falls back to white.
+ * Hover a point: the tooltip keeps the standard white body every other chart's tooltip has, and
+ * colors its value with the accent -- not with the sparkline's white, which would vanish there.
+ */
+export const darkTileSparklineTooltip = template(
+  {
+    chartType: 'kpi',
+    dataSet: kpiData,
+    dataOptions: { value: revenue, category: months } satisfies KpiChartDataOptions,
+    styleOptions: {
+      sparkline: { chartType: 'area' },
+      card: { backgroundColor: '#1a1a2e', cornerRadius: 12 },
+    } satisfies KpiStyleOptions,
+  },
+  [withCardSize],
+);
+
+const singleBucketData: Data = {
+  columns: kpiData.columns,
+  rows: [['2026-06-01T00:00:00', 7100, 7300]],
+};
+
+/**
+ * A category narrowed down to one bucket (e.g. by a filter). The lone point can't anchor a line
+ * segment, so it renders as a standalone marker instead of a blank sparkline.
+ */
+export const singlePointSparkline = template(
+  {
+    chartType: 'kpi',
+    dataSet: singleBucketData,
+    dataOptions: { value: revenue, category: months } satisfies KpiChartDataOptions,
+    styleOptions: { sparkline: { chartType: 'line' } } satisfies KpiStyleOptions,
+  },
+  [withCardSize],
+);
+
+const sparseData: Data = {
+  columns: kpiData.columns,
+  // A cell with no numeric data becomes a sparkline gap, leaving each real value isolated from the
+  // other -- neither run of values is long enough to stroke a line segment.
+  rows: [
+    ['2026-01-01T00:00:00', 5400, 5100],
+    ['2026-02-01T00:00:00', { data: null }, { data: null }],
+    ['2026-03-01T00:00:00', 5800, 5900],
+  ],
+};
+
+/** Same rendering gap as {@link singlePointSparkline}, reached via gaps rather than a short series. */
+export const isolatedPointsSparkline = template(
+  {
+    chartType: 'kpi',
+    dataSet: sparseData,
+    dataOptions: { value: revenue, category: months } satisfies KpiChartDataOptions,
+    styleOptions: { sparkline: { chartType: 'line' } } satisfies KpiStyleOptions,
+  },
+  [withCardSize],
+);
+
 const largeValueData: Data = {
   columns: kpiData.columns,
   rows: [

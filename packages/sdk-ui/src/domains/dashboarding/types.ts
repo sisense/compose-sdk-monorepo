@@ -240,6 +240,12 @@ export interface WidgetsPanelConfig {
   /**
    * Configuration for actions available on all widgets in the panel, such as
    * downloading each widget's data.
+   *
+   * When using {@link DashboardById} or a dashboard model loaded with
+   * {@link useGetDashboardModel} and translated by `dashboardModelTranslator.toDashboardProps()`,
+   * each default below will be derived from the current user's permissions on that dashboard, if
+   * the Sisense Fusion instance provides it. Otherwise the documented default will be used.
+   * Explicit configuration values have the highest precedence, and will override any defaults.
    */
   actions?: {
     /**
@@ -265,7 +271,7 @@ export interface WidgetsPanelConfig {
       /**
        * Whether the "Download as CSV" action is enabled for all widgets in the panel.
        *
-       * @default false
+       * @default `false`, or the user's permission to export widget data on a Fusion dashboard
        */
       enabled?: boolean;
     };
@@ -292,7 +298,7 @@ export interface WidgetsPanelConfig {
       /**
        * Whether the "Download as Excel" action is enabled for all widgets in the panel.
        *
-       * @default false
+       * @default `false`, or the user's permission to export widget data on a Fusion dashboard
        */
       enabled?: boolean;
     };
@@ -301,6 +307,14 @@ export interface WidgetsPanelConfig {
 
 /**
  * Edit mode configuration
+ *
+ * When using {@link DashboardById} or a dashboard model loaded with
+ * {@link useGetDashboardModel} and translated by `dashboardModelTranslator.toDashboardProps()`,
+ * some defaults below may be derived from the current user's permissions on that dashboard, if the
+ * Sisense Fusion instance provides it. Otherwise the documented default will be used.
+ * Explicit configuration values have the highest precedence, and will override any defaults.
+ * If persistence is used when defaults derived from permissions are overridden, the Sisense Fusion
+ * API will reject changes where the current user is not allowed to perform the update.
  */
 export interface EditModeConfig {
   /**
@@ -310,9 +324,9 @@ export interface EditModeConfig {
    *
    * When persistence is enabled combined with `editMode` for a Fusion dashboard, changes to the layout will saved to Fusion.
    *
-   * @default false
+   * @default `false`, or the user's permission to toggle edit mode on a Fusion dashboard
    */
-  enabled: boolean;
+  enabled?: boolean;
   /**
    * Indicates whether the dashboard is currently in edit mode.
    *
@@ -335,7 +349,7 @@ export interface EditModeConfig {
      * If `false`, the layout changes will be applied immediately after the user makes each change,
      * without confirmation or the ability to cancel/undo.
      *
-     * @default: true
+     * @default `true`
      * */
     enabled: boolean;
     /**
@@ -355,6 +369,22 @@ export interface EditModeConfig {
    */
   showDragHandleIcon?: boolean;
   /**
+   * Configuration for the widget deletion feature.
+   *
+   * @internal
+   */
+  deleteWidget?: {
+    /**
+     * When `true`, adds a "Delete widget" menu item to each widget header.
+     * On click, removes the widget from the layout.
+     * Only has effect when edit mode is also enabled (`editMode.enabled`).
+     *
+     * @default `true`, or the user's permission to delete widgets on a Fusion dashboard
+     * @internal
+     */
+    enabled?: boolean;
+  };
+  /**
    * Configuration for the widget duplication feature.
    *
    * @internal
@@ -366,7 +396,8 @@ export interface EditModeConfig {
      * Only has effect when edit mode is also enabled (`editMode.enabled`) and batch mode is disabled (`editMode.applyChangesAsBatch.enabled`).
      * If batch mode is enabled, "Duplicate widget" menu item won't be applied because it would not be possible to undo/redo the duplication.
      *
-     * If not specified, the default value is `false`.
+     * @default `false`, or the user's permissions to duplicate and create widgets on a
+     * Fusion dashboard (both permissions required)
      * @internal
      */
     enabled: boolean;
@@ -378,9 +409,10 @@ export interface EditModeConfig {
     /**
      * When `true`, adds a "Rename widget" menu item to each widget header.
      * On click, triggers inline title editing of the widget.
-     * Only has effect when edit mode is also enabled (`editMode.enabled`).
+     * Only has effect when edit mode is also enabled (`editMode.enabled`) and batch mode is disabled (`editMode.applyChangesAsBatch.enabled`).
+     * If batch mode is enabled, the "Rename widget" menu item won't be applied because it would not be possible to undo/redo the rename.
      *
-     * If not specified, the default value is `false`.
+     * @default `false`, or the user's permission to rename widgets on a Fusion dashboard
      */
     enabled: boolean;
   };

@@ -10,7 +10,7 @@ In this guide we’ll use [Plotly.js](https://plotly.com/javascript/) charts, bu
 
 In order to display your Sisense data in a 3rd party chart, you need to:
 
-- Query you Sisense instance for the data you want
+- Query your Sisense instance for the data you want
 - Transform the data you receive from Sisense to the format required by the charting library you’re using
 - Apply the formatted data to the 3rd party chart.
 
@@ -93,7 +93,7 @@ data = [
 ];
 ```
 
-And turn in into this data, organized as three arrays, one for the age ranges, one for the corresponding total cost values, and one for the corresponding total revenue values:
+And turn it into this data, organized as three arrays, one for the age ranges, one for the corresponding total cost values, and one for the corresponding total revenue values:
 
 ```ts
 x1 = ['0-18', '19-24', '25-34', '35-44', '45-54', '55-64', '65+'];

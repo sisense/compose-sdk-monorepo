@@ -31,7 +31,7 @@ export function isRendererReady(state: ChartReadinessState): boolean {
 }
 
 /**
- * Readiness for renderers that never report paint (areamap, kpi): ready once the query
+ * Readiness for renderers that never report paint (areamap): ready once the query
  * has finished and there is either chart data to render or a terminal empty state.
  * `rendererPainted` is ignored.
  * @param state - Current loading and data signals.

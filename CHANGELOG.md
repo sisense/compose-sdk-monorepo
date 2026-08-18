@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.34.0] - 2026-08-18
+
+### Added
+- Promote `KpiChart` to General Availability (GA) for React, Angular, and Vue
+- Add per-widget-type configuration so each widget type lists only the options it supports
+- Derive dashboard configuration defaults from Fusion dashboard permissions (e.g. edit mode, filter editing, duplicate widget, download to csv etc.)
+
+### Changed
+- Improve `KpiChart`:
+  - Change `onReady` to fire immediately rather than when data settles
+  - Align `KpiDataPoint` with other chart types
+  - Enhance sparkline behavior and appearance
+  - General improvements in logic and formatting
+- Fix `auto` column width translation to `styleOptions` for fusion table widgets
+- Fix conditional colors not rendering as bands on the Indicator gauge dial
+- Fix calculated dimension date filter failures due to missing granularity
+- Fix missing tooltip values when using `name` with styled measure column
+- Fix "Select all" in `MemberFilterTile` and `FilterWidget` to align with Fusion
+
+
 ## [2.33.1] - 2026-08-06
 
 ### Changed

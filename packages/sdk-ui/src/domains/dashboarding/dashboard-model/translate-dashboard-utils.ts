@@ -4,9 +4,11 @@ import {
   createFilterFromJaql,
   Dimension,
   Filter,
+  filterFactory,
   FilterRelations,
   FormulaContext,
   FormulaJaql,
+  isMembersFilter,
   Measure,
   MetadataTypes,
 } from '@sisense/sdk-data';
@@ -108,15 +110,45 @@ const createFilterFromFilterDto = (filterDto: FilterDto): Filter => {
     filterDto.disabled,
     filterDto.locked,
   );
-  return filter;
+  // sdk-data maps `{ all: true }` to an empty include (`excludeMembers: false`),
+  // which FilterWidget shows as "Set filter". Remap to inverted select-all here so the
+  // dashboard selection behavior remains consistent without changing sdk-data.
+  const clause = filterDto.jaql?.filter as { all?: boolean } | undefined;
+  return clause?.all ? asFilterWidgetSelectAll(filter) : filter;
 };
+
+/**
+ * Converts a cleared-include MembersFilter into FilterWidget select-all
+ * (`excludeMembers: true`, empty list). No-op for non-members / non-empty filters.
+ * @param filter - Filter produced by JAQL translation
+ * @returns Select-all MembersFilter when the input was a cleared include; otherwise `filter`
+ * @internal
+ */
+function asFilterWidgetSelectAll(filter: Filter): Filter {
+  if (!isMembersFilter(filter) || filter.members.length > 0 || filter.config.excludeMembers) {
+    return filter;
+  }
+  return filterFactory.members(filter.attribute, [], {
+    guid: filter.config.guid,
+    disabled: filter.config.disabled,
+    locked: filter.config.locked,
+    enableMultiSelection: filter.config.enableMultiSelection,
+    excludeMembers: true,
+    deactivatedMembers: filter.config.deactivatedMembers,
+    ...(filter.config.backgroundFilter ? { backgroundFilter: filter.config.backgroundFilter } : {}),
+  });
+}
 
 const createFilterFromCascadingFilterDto = (
   cascadingFilterDto: CascadingFilterDto,
 ): CascadingFilter => {
   const { levels, instanceid, disabled, locked } = cascadingFilterDto;
 
-  const innerFilters = levels.map((level) => createFilterFromJaql(level, level.instanceid));
+  const innerFilters = levels.map((level) => {
+    const filter = createFilterFromJaql(level, level.instanceid);
+    const clause = level.filter as { all?: boolean } | undefined;
+    return clause?.all ? asFilterWidgetSelectAll(filter) : filter;
+  });
   return new CascadingFilter(innerFilters, { guid: instanceid, disabled, locked });
 };
 
@@ -293,7 +325,6 @@ const translateToJtdConfig = (
 
 /**
  * Extract pivot targets configuration from widget DTO and build Map-based targets
- *
  * @param widget - Widget DTO with drillToDashboardConfig
  * @returns Map of dimensions/measures to their targets or undefined if no targets found
  * @internal
@@ -387,10 +418,8 @@ function jumpToDashboardConfigFromJtdDtoSlice(
 /**
  * Converts a Fusion {@link WidgetDto}'s `drillToDashboardConfig` into Compose SDK JumpToDashboardConfig | JumpToDashboardConfigForPivot
  * {@link JumpToDashboardConfig} {@link JumpToDashboardConfigForPivot} for use with {@link useJtdWidget}
- *
  * @param widget - Fusion widget DTO (or the subset of fields used for JTD translation)
  * @returns JTD config, or `undefined` when there is no versioned JTD DTO or the widget type does not support JTD
- *
  * @group Dashboards
  */
 export function jumpToDashboardConfigFromWidgetDto(
@@ -528,7 +557,6 @@ function jtdConfigToDto(config: JumpToDashboardConfig): JtdConfigDto {
  * a deterministic one (the positional pivot-dim id, e.g. `"rows.0"`) onto the matched
  * item so the targets resolve again on reload — `findDimensionByInstanceId` matches it
  * by string equality. Returns the (possibly newly-stamped) panels alongside the config.
- *
  * @internal
  */
 function pivotJtdConfigToDto(
@@ -549,10 +577,7 @@ function pivotJtdConfigToDto(
   const dashboardIds: Array<JtdTargetDto | JtdPivotTargetDto> = [];
 
   config.targets.forEach((targets, dimension) => {
-    const pivotDimId = dimensionToPivotDimId(
-      dimension as Parameters<typeof dimensionToPivotDimId>[0],
-      panels,
-    );
+    const pivotDimId = dimensionToPivotDimId(dimension, panels);
     if (!pivotDimId) {
       console.warn(
         '[pivotJtdConfigToDto] Could not locate a pivot dimension for a JTD target; skipping it.',
@@ -591,7 +616,6 @@ function pivotJtdConfigToDto(
 /**
  * Applies {@link SpecificWidgetOptions} to a {@link WidgetDto}.
  * Merges filtersOptions and jtdConfig into the DTO for persistence.
- *
  * @internal
  */
 export function withSpecificWidgetOptions(
@@ -672,7 +696,6 @@ export function withSpecificWidgetOptions(
  * Consumed by {@link withDashboardWidgetContext} to re-project this context onto a
  * freshly-translated {@link WidgetDto} on add/duplicate, so dashboard-level config
  * survives the model → DTO write path.
- *
  * @internal
  */
 export type WidgetContext = {
@@ -690,7 +713,6 @@ export type WidgetContext = {
  * does not know about other widgets' ids. This overlays the dashboard-level
  * show/hide mapping back onto those tabs by index. No-op for non-tabber DTOs or
  * when there is no tabber config.
- *
  * @internal
  */
 export function withTabberWidgetConfig(
@@ -719,7 +741,6 @@ export function withTabberWidgetConfig(
  *
  * This is the single seam that re-attaches dashboard-level widget config on
  * add/duplicate; a new per-widget side-channel adds its projection here.
- *
  * @internal
  */
 export function withDashboardWidgetContext(
@@ -748,7 +769,6 @@ export function translateTabbersOptions(widgets: WidgetDto[] = []): TabbersConfi
 
 /**
  * Replace all shared formulas, which defined by id references, in the dashboard with their actual values.
- *
  * @param dashboard - The dashboard DTO to replace shared formulas in
  * @param api - The REST API instance
  * @returns The dashboard DTO with shared formulas, defined by id references, replaced
@@ -776,7 +796,6 @@ export async function withSharedFormulas(
 
 /**
  * Extracts unique shared formulas ids from widgets
- *
  * @param widgets - An array of widgets to extract shared formulas from
  * @returns An array of unique shared formulas ids
  * @internal
@@ -799,7 +818,6 @@ function getSharedFormulas(widgets: WidgetDto[]): string[] {
 
 /**
  * Applies shared formulas to a widget
- *
  * @param widget - The widget to apply shared formulas to
  * @param sharedFormulasDictionary - A dictionary of shared formulas
  * @returns The widget with shared formulas applied
@@ -847,7 +865,6 @@ function applySharedFormulas(
 
 /**
  * Find dimension or measure by instanceId in widget panels and convert to proper type
- *
  * @param panels - Widget metadata panels to search
  * @param pivotDimension - Instance ID to find, this is not a PivotDimId, it is the instanceId of the dimension or measure
  * @returns Dimension/Measure object with optional location info or undefined if not found

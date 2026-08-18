@@ -7,6 +7,7 @@ import { sampleEcommerceDashboard as dashboardMock } from '@/domains/dashboardin
 import { samplePivotDashboard } from '@/domains/dashboarding/dashboard-model/__mocks__/sample-pivot-dashboard.js';
 import { jumpToDashboardConfigFromWidgetDto } from '@/domains/dashboarding/dashboard-model/translate-dashboard-utils.js';
 import type { JtdConfigDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
+import type { WidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config';
 import {
   BoxplotChartDataOptions,
   PivotTableDataOptions,
@@ -29,6 +30,7 @@ import {
   PivotTableWidgetStyleOptions,
 } from '@/types';
 
+import type { WidgetModel } from '../widget-model.js';
 import {
   fromChartWidgetProps,
   fromCustomWidgetProps,
@@ -1864,10 +1866,14 @@ describe('WidgetModelTranslator', () => {
     });
 
     describe('Widget narrative round-trip', () => {
+      /** `WidgetModel.config` spans every widget type; only chart and pivot carry a narrative. */
+      const narrativeOf = (model: WidgetModel): WidgetNarrativeConfig | undefined =>
+        model.config && 'narrative' in model.config ? model.config.narrative : undefined;
+
       it('maps style.narration from Fusion DTO into config.narrative only', () => {
         const dto = cloneDeep(advancedLineChartWidgetDto);
         const model = fromWidgetDto(dto);
-        expect(model.config?.narrative).toEqual(
+        expect(narrativeOf(model)).toEqual(
           expect.objectContaining({
             displayLocation: 'above',
             verbosity: 'low',
@@ -1882,9 +1888,8 @@ describe('WidgetModelTranslator', () => {
           delete (dto.style.narration as Record<string, unknown>).autoShow;
         }
         const model = fromWidgetDto(dto);
-        expect(model.config?.narrative == null || !('autoShow' in model.config.narrative)).toBe(
-          true,
-        );
+        const narrative = narrativeOf(model);
+        expect(narrative == null || !('autoShow' in narrative)).toBe(true);
         const out = toWidgetDto(model);
         expect(out.style.narration == null || !('autoShow' in out.style.narration)).toBe(true);
       });
@@ -1893,7 +1898,7 @@ describe('WidgetModelTranslator', () => {
         const dto = cloneDeep(advancedLineChartWidgetDto);
         (dto.style.narration as { autoShow?: boolean }).autoShow = true;
         const model = fromWidgetDto(dto);
-        expect(model.config?.narrative?.autoShow).toBe(true);
+        expect(narrativeOf(model)?.autoShow).toBe(true);
         const out = toWidgetDto(model);
         expect((out.style.narration as { autoShow?: boolean })?.autoShow).toBe(true);
       });

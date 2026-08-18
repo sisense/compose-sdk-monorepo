@@ -15,7 +15,7 @@ export type UseWidgetExcelDownloadParams = {
  * Applies dashboard-level Excel download settings to each widget's `config`.
  *
  * Reads `config.widgetsPanel.actions.downloadExcel.enabled` and merges it into
- * `widget.config.actions.downloadExcel` for every widget.
+ * `widget.config.actions.downloadExcel` for every widget that supports data export.
  * Widget-level `config.actions.downloadExcel.enabled` takes precedence when defined, so the dashboard-level config acts as a
  * default rather than replacing explicit widget configuration.
  *
@@ -26,7 +26,15 @@ export function useWidgetExcelDownload({ widgets, enabled }: UseWidgetExcelDownl
   widgets: WidgetProps[];
 } {
   return useMemo(() => {
-    const widgetsWithDownloadExcel = widgets.map((widget) => {
+    const widgetsWithDownloadExcel = widgets.map((widget): WidgetProps => {
+      if (
+        widget.widgetType !== 'chart' &&
+        widget.widgetType !== 'pivot' &&
+        widget.widgetType !== 'custom'
+      ) {
+        return widget;
+      }
+
       if (widget.config?.actions?.downloadExcel?.enabled !== undefined) {
         return widget;
       }

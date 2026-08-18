@@ -4,9 +4,13 @@ import { render, waitFor } from '@testing-library/react';
 import { merge as deepMerge } from 'ts-deepmerge';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { DashboardConfig } from '@/domains/dashboarding/types';
+import { DashboardConfig, DashboardProps } from '@/domains/dashboarding/types';
 
 import { JtdDashboard } from './jtd-dashboard';
+
+// Set per test to simulate what the target dashboard's permissions imply for edit mode.
+let targetEditModeEnabled: boolean | undefined;
+let targetFilterActionsEnabled: boolean | undefined;
 
 // Mock the Dashboard component to capture props
 vi.mock('@/domains/dashboarding/dashboard', () => ({
@@ -26,8 +30,32 @@ vi.mock('@/domains/dashboarding/dashboard-model/use-dashboard-model/use-dashboar
           filters: [],
           config: {
             toolbar: { visible: true },
-            filtersPanel: { visible: true, collapsedInitially: false },
-            widgetsPanel: { responsive: false },
+            filtersPanel: {
+              visible: true,
+              collapsedInitially: false,
+              // Simulates the filter-action defaults the translator derives from the target
+              // dashboard's permissions. `undefined` leaves them out, as an unpermissioned
+              // dashboard would.
+              ...(targetFilterActionsEnabled === undefined
+                ? {}
+                : {
+                    actions: {
+                      addFilter: { enabled: targetFilterActionsEnabled },
+                      editFilter: { enabled: targetFilterActionsEnabled },
+                      deleteFilter: { enabled: targetFilterActionsEnabled },
+                      reorderFilters: { enabled: targetFilterActionsEnabled },
+                      lockFilter: { enabled: targetFilterActionsEnabled },
+                    },
+                  }),
+            },
+            widgetsPanel: {
+              responsive: false,
+              // Simulates the edit-mode default the translator derives from the target dashboard's
+              // permissions. `undefined` leaves it out, as an unpermissioned dashboard would.
+              ...(targetEditModeEnabled === undefined
+                ? {}
+                : { editMode: { enabled: targetEditModeEnabled } }),
+            },
           },
         },
         isLoading: false,
@@ -68,6 +96,8 @@ describe('JtdDashboard', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    targetEditModeEnabled = undefined;
+    targetFilterActionsEnabled = undefined;
   });
 
   describe('dashboard config merging', () => {
@@ -279,6 +309,133 @@ describe('JtdDashboard', () => {
         expect(config.filtersPanel?.visible).toBe(true);
         expect(config.filtersPanel?.collapsedInitially).toBe(false);
         expect(config.widgetsPanel?.responsive).toBe(false);
+      });
+    });
+  });
+
+  describe('read-only by default', () => {
+    const readConfig = () => {
+      const dashboardElement = document.querySelector('[data-testid="mocked-dashboard"]');
+      expect(dashboardElement).toBeInTheDocument();
+      return JSON.parse(dashboardElement?.getAttribute('data-config') || '{}');
+    };
+
+    it('keeps a drill-through popup read-only when the user may edit the target dashboard', async () => {
+      // Without the pin the target's permission-derived default would put drag handles and a
+      // "Delete Widget" menu item inside the popup.
+      targetEditModeEnabled = true;
+
+      render(
+        <JtdDashboard
+          dashboard="test-dashboard-id"
+          filters={mockFilters}
+          mergeTargetDashboardFilters={false}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(readConfig().widgetsPanel?.editMode?.enabled).toBe(false);
+      });
+    });
+
+    it('still lets a jump-to-dashboard configuration opt into editing explicitly', async () => {
+      targetEditModeEnabled = true;
+
+      render(
+        <JtdDashboard
+          dashboard="test-dashboard-id"
+          filters={mockFilters}
+          mergeTargetDashboardFilters={false}
+          dashboardConfig={{ widgetsPanel: { editMode: { enabled: true } } }}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(readConfig().widgetsPanel?.editMode?.enabled).toBe(true);
+      });
+    });
+
+    it('keeps filter actions off when the user may change filters on the target dashboard', async () => {
+      // Adding, editing, deleting or locking a filter inside a drill-through popup produces changes
+      // that vanish when the popup closes, so the target's permission-derived defaults must not
+      // reach it.
+      targetFilterActionsEnabled = true;
+
+      render(
+        <JtdDashboard
+          dashboard="test-dashboard-id"
+          filters={mockFilters}
+          mergeTargetDashboardFilters={false}
+        />,
+      );
+
+      await waitFor(() => {
+        const actions = readConfig().filtersPanel?.actions;
+        expect(actions?.addFilter?.enabled).toBe(false);
+        expect(actions?.editFilter?.enabled).toBe(false);
+        expect(actions?.deleteFilter?.enabled).toBe(false);
+        expect(actions?.reorderFilters?.enabled).toBe(false);
+        expect(actions?.lockFilter?.enabled).toBe(false);
+      });
+    });
+
+    it('still lets a jump-to-dashboard configuration opt into filter actions explicitly', async () => {
+      targetFilterActionsEnabled = false;
+
+      render(
+        <JtdDashboard
+          dashboard="test-dashboard-id"
+          filters={mockFilters}
+          mergeTargetDashboardFilters={false}
+          dashboardConfig={{ filtersPanel: { actions: { addFilter: { enabled: true } } } }}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(readConfig().filtersPanel?.actions?.addFilter?.enabled).toBe(true);
+      });
+    });
+
+    it('does not override filter actions when the caller passes dashboard props directly', async () => {
+      const inlineDashboard: DashboardProps = {
+        title: 'Inline dashboard',
+        widgets: [],
+        filters: [],
+        config: { filtersPanel: { actions: { deleteFilter: { enabled: true } } } },
+      };
+
+      render(
+        <JtdDashboard
+          dashboard={inlineDashboard}
+          filters={mockFilters}
+          mergeTargetDashboardFilters={false}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(readConfig().filtersPanel?.actions?.deleteFilter?.enabled).toBe(true);
+      });
+    });
+
+    it('does not override edit mode when the caller passes dashboard props directly', async () => {
+      // That config is the caller's own, not derived from permissions, so it keeps precedence.
+      const inlineDashboard: DashboardProps = {
+        title: 'Inline dashboard',
+        widgets: [],
+        filters: [],
+        config: { widgetsPanel: { editMode: { enabled: true } } },
+      };
+
+      render(
+        <JtdDashboard
+          dashboard={inlineDashboard}
+          filters={mockFilters}
+          mergeTargetDashboardFilters={false}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(readConfig().widgetsPanel?.editMode?.enabled).toBe(true);
       });
     });
   });

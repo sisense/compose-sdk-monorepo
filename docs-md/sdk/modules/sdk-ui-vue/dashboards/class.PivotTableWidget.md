@@ -99,7 +99,7 @@ Configurations for how to interpret and present the data passed to the table
 
 #### config
 
-> **`readonly`** **config**?: [`WidgetConfig`](../type-aliases/type-alias.WidgetConfig.md)
+> **`readonly`** **config**?: [`PivotTableWidgetConfig`](../interfaces/interface.PivotTableWidgetConfig.md)
 
 Configuration of the widget
 

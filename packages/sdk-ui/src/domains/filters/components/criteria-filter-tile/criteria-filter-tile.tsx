@@ -183,6 +183,8 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
         }}
         design={tileDesignOptions}
         locked={filter.config.locked}
+        toggleVisible={config?.actions?.toggleFilter?.visible}
+        expandVisible={config?.actions?.expandFilter?.visible}
         menuItems={menuItems}
         onDelete={onDelete}
         onEdit={onEdit}

@@ -7,6 +7,7 @@ import {
   ChartDataOptionsInternal,
   StyledMeasureColumn,
 } from '../../chart-data-options/types';
+import { getDataOptionTitle } from '../../chart-data-options/utils.js';
 import { renderForecastTooltipString } from '../advanced-analytics/tooltips/forecast-tooltip.js';
 import { renderTrendTooltipString } from '../advanced-analytics/tooltips/trend-tooltip.js';
 import { isForecastSeries, isTrendSeries } from '../advanced-chart-options.js';
@@ -28,13 +29,20 @@ function getRoundedPercentageString(percentage: number | undefined): string | un
   return percentage !== undefined ? `${Math.round(percentage)}` : undefined;
 }
 
+/**
+ * Matches the hovered series back to its Y data option.
+ *
+ * Compares against {@link getDataOptionTitle}, the same resolution the series name itself is built
+ * from, so a styled column's optional `name` override still resolves. Matching `column.title`
+ * instead would miss such a series, leaving the value unformatted and dropped from the tooltip.
+ */
 function resolveCartesianYDataOption(
   cartesian: CartesianChartDataOptionsInternal,
   seriesName: string,
 ): StyledMeasureColumn | undefined {
   return cartesian.breakBy.length > 0
     ? cartesian.y?.find((y) => y.enabled)
-    : cartesian.y?.find((y) => y.column.title === seriesName);
+    : cartesian.y?.find((y) => getDataOptionTitle(y) === seriesName);
 }
 
 function buildCartesianAxisDisplayValues(

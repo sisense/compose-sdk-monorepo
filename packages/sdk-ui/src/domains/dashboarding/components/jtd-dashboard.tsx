@@ -25,6 +25,46 @@ interface JtdDashboardProps {
 }
 
 /**
+ * Keeps a jump-to-dashboard popup read-only by default.
+ *
+ * The target dashboard's props carry defaults derived from the user's permissions on that dashboard,
+ * so without this a user allowed to edit the target would get drag handles, a "Delete Widget" menu
+ * item and filter add/edit/delete affordances inside a drill-through popup — changes that are
+ * discarded when the popup closes. This layer sits above those derived defaults and below
+ * `dashboardConfig`, so a jump-to-dashboard configuration can still opt into editing explicitly.
+ *
+ * Keep an entry here for every structural flag in `PERMISSION_MAPPINGS`. Only structural ones: the
+ * widget download actions are derived too, but exporting reads the data the popup already shows and
+ * changes nothing, so they are deliberately left out and a drill-through popup keeps whatever the
+ * target dashboard's permissions grant.
+ */
+const JTD_READ_ONLY_CONFIG: DashboardConfig = {
+  widgetsPanel: {
+    editMode: {
+      enabled: false,
+      // Redundant while `enabled` is pinned — every action requires edit mode — but the pin carries
+      // an entry for every permission-derived structural flag, so it keeps holding if that changes.
+      deleteWidget: { enabled: false },
+      duplicateWidget: { enabled: false },
+      renameWidget: { enabled: false },
+    },
+  },
+  filtersPanel: {
+    actions: {
+      addFilter: { enabled: false },
+      editFilter: { enabled: false },
+      deleteFilter: { enabled: false },
+      reorderFilters: { enabled: false },
+      lockFilter: { enabled: false },
+      // `toggleFilter.visible` and `expandFilter.visible` are deliberately left out. Unlike the
+      // entries above they hide view affordances rather than block a write, and a drill-through
+      // popup should keep them: switching a filter off or expanding a tile is part of reading the
+      // popup, and neither change outlives it. The one-entry-per-flag rule covers structural flags.
+    },
+  },
+};
+
+/**
  * Type guard to check if dashboard prop is a DashboardId (string)
  */
 const isDashboardId = (dashboard: DashboardId | DashboardProps): dashboard is DashboardId => {
@@ -111,10 +151,15 @@ export const JtdDashboard = withTracking({ componentName: 'JtdDashboard', config
       // TODO - check if relevant:
       // No need to merge finalDashboardProps?.config with default config.
       // The default dashboard config will be applied inside Dashboard component.
-      const baseConfig = useDefaults(
+      const targetConfig = useDefaults(
         finalDashboardProps?.config,
         shouldLoadDashboard ? DEFAULT_DASHBOARD_BY_ID_CONFIG : DEFAULT_DASHBOARD_CONFIG,
       );
+      const readOnlyTargetConfig = useDefaults(JTD_READ_ONLY_CONFIG, targetConfig);
+      // The pin applies only when the target is loaded by id — there its config carries defaults
+      // derived from the user's permissions on that dashboard. When the caller passes dashboard props
+      // directly, the config is their own and must keep the highest precedence.
+      const baseConfig = shouldLoadDashboard ? readOnlyTargetConfig : targetConfig;
 
       // TODO - check if relevant:
       // This entire useMemo could be replaced with:

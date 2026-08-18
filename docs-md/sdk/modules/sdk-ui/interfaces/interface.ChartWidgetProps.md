@@ -54,7 +54,7 @@ Configurations for how to interpret and present the data passed to the chart
 
 #### config
 
-> **config**?: [`WidgetConfig`](../type-aliases/type-alias.WidgetConfig.md)
+> **config**?: [`ChartWidgetConfig`](interface.ChartWidgetConfig.md)
 
 Configuration of the widget
 

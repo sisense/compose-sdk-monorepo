@@ -573,6 +573,13 @@ export const isDimensionalLevelAttribute = (v: AnyObject): v is DimensionalLevel
 };
 
 /**
+ * Decoration appended to the dimension expression of a datetime field
+ * (`[Table.Column (Calendar)]`). It is added for display and is not part of any data model key, so a
+ * calendar dimension needs an explicit table/column reference to stay resolvable.
+ */
+const CALENDAR_DIM_SUFFIX = '(Calendar)';
+
+/**
  * Represents a Calculated Attribute (a calculated dimension) in a Dimensional Model.
  *
  * A calculated attribute is a formula-based {@link Attribute}. Like a calculated measure it
@@ -745,11 +752,17 @@ export class DimensionalCalculatedAttribute extends DimensionalElement implement
       // it either a level or an explicit `table`/`column`. Removing the level alone would make it
       // unresolvable ("dimension not found"), so we add the raw `table`/`column` reference instead
       // (the way the UI does). Non-date attributes carry no granularity keys, so they are untouched.
+      //
+      // A calendar dimension can also arrive with no granularity at all — that is how a raw date
+      // operand is rebuilt when a Fusion widget or filter is translated. There is no level to strip
+      // then, but the reference is still needed, so that the dimension is described the same way
+      // whichever path built it.
+      const isObjectEntry = entry && typeof entry === 'object';
       const hasDateGranularity =
-        entry &&
-        typeof entry === 'object' &&
-        ('level' in entry || 'dateTimeLevel' in entry || 'bucket' in entry);
-      if (hasDateGranularity) {
+        isObjectEntry && ('level' in entry || 'dateTimeLevel' in entry || 'bucket' in entry);
+      const isCalendarDim =
+        isObjectEntry && typeof entry.dim === 'string' && entry.dim.includes(CALENDAR_DIM_SUFFIX);
+      if (hasDateGranularity || isCalendarDim) {
         // When the entry is the raw context object (no `jaql()` method), clone it before mutating
         // so the consumer-provided input is never modified. Objects returned by `jaql(true)` are
         // already fresh, so they can be mutated in place.

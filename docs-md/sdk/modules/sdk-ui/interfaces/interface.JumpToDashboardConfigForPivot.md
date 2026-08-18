@@ -209,6 +209,9 @@ Configuration for the modal window that will display the target dashboard
 Configuration for the target dashboard display.
 This configuration will be merged with target dashboard config, having higher priority
 
+Opts a target referenced by `id` into edit mode, which is disabled by default for
+such targets — see [JtdTarget](../type-aliases/type-alias.JtdTarget.md).
+
 #### Default
 
 ```ts

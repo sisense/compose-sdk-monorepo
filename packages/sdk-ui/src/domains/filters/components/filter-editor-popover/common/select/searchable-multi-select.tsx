@@ -1,7 +1,6 @@
 import React, { CSSProperties, useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styled from '@emotion/styled';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 import {
@@ -11,53 +10,20 @@ import {
 import { StyledSearchInput } from '@/domains/filters/components/filter-editor-popover/common/select/searchable-single-select';
 import { SmallLoader } from '@/domains/filters/components/filter-editor-popover/common/small-loader';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
-import { Themable } from '@/infra/contexts/theme-provider/types';
 import { Popper } from '@/shared/components/popper';
 import { DEFAULT_TEXT_COLOR } from '@/shared/const';
 
 import { ArrowDownIcon } from '../../../icons';
 import { SelectField, SelectLabel } from './base';
 import { MultiSelectItem } from './multi-select-item';
+import {
+  SearchableSelectContent,
+  SearchableSelectContentList,
+  SearchableSelectContentToolbar,
+  SearchableSelectContentToolbarButton,
+} from './searchable-select-content';
 import { SelectItem } from './types';
 import { getSelectedItemsDisplayValue } from './utils';
-
-const Content = styled.div<Themable>`
-  max-height: 320px;
-  color: ${({ theme }) => theme.general.popover.input.dropdownList.textColor};
-  background-color: ${({ theme }) => theme.general.popover.input.dropdownList.backgroundColor};
-  border-radius: ${({ theme }) => theme.general.popover.input.dropdownList.cornerRadius};
-  box-shadow: ${({ theme }) => theme.general.popover.input.dropdownList.shadow};
-`;
-
-const ContentToolbar = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: end;
-  align-items: center;
-  border-bottom: 1px solid #e7e8ea;
-  margin: 0 10px 0 10px;
-  height: 32px;
-`;
-
-const ContentToolbarButton = styled.button<Themable>`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  border: none;
-  background: none;
-  color: ${({ theme }) => theme.typography.hyperlinkColor};
-  &:hover {
-    color: ${({ theme }) => theme.typography.hyperlinkHoverColor};
-  }
-  padding: 0;
-  font-size: 11px;
-  &:disabled {
-    opacity: 0.4;
-  }
-`;
-
-const ContentList = styled.div<Themable>`
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  color: ${({ theme }) => theme.general.popover.content.clickableList.item.textColor};
-`;
 
 type SearchableMultiSelectProps<Value> = {
   values?: Value[];
@@ -194,7 +160,7 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
           preventClickPropagation={true}
         >
           <ScrollWrapper onScroll={onListScroll}>
-            <Content
+            <SearchableSelectContent
               theme={themeSettings}
               style={{
                 minWidth: selectElementRef.current?.clientWidth,
@@ -205,24 +171,24 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
               data-testid="csdk-searchable-multi-select-content"
               aria-label="Searchable multi-select content"
             >
-              <ContentToolbar>
-                <ContentToolbarButton
+              <SearchableSelectContentToolbar>
+                <SearchableSelectContentToolbarButton
                   style={{ marginRight: '8px' }}
                   disabled={items.length === values.length}
                   onClick={handleSelectAll}
                   theme={themeSettings}
                 >
                   {t('filterEditor.buttons.selectAll')}
-                </ContentToolbarButton>
-                <ContentToolbarButton
+                </SearchableSelectContentToolbarButton>
+                <SearchableSelectContentToolbarButton
                   disabled={!values.length}
                   onClick={handleClearAll}
                   theme={themeSettings}
                 >
                   {t('filterEditor.buttons.clearAll')}
-                </ContentToolbarButton>
-              </ContentToolbar>
-              <ContentList aria-label="List" theme={themeSettings}>
+                </SearchableSelectContentToolbarButton>
+              </SearchableSelectContentToolbar>
+              <SearchableSelectContentList aria-label="List" theme={themeSettings}>
                 {items.map((item, index) => (
                   <MultiSelectItem
                     key={index}
@@ -232,8 +198,8 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
                   />
                 ))}
                 {showListLoader && <SmallLoader />}
-              </ContentList>
-            </Content>
+              </SearchableSelectContentList>
+            </SearchableSelectContent>
           </ScrollWrapper>
         </Popper>
       </div>

@@ -3,7 +3,7 @@ import type { Attribute, DataSource, Filter } from '@sisense/sdk-data';
 import type { FilterWidgetChangeEvent } from '@/domains/widgets/change-events';
 import type { WidgetContainerStyleOptions } from '@/types';
 
-import type { WidgetConfig } from '../widget/types';
+import type { FilterWidgetConfig } from '../widget/widget-config';
 
 /**
  * `FilterWidgetFilterType` selects the rendering type for a filter widget.
@@ -139,11 +139,11 @@ export interface FilterWidgetProps {
    */
   styleOptions?: WidgetContainerStyleOptions;
   /**
-   * Widget configuration (e.g. the header menu).
+   * Configuration of the widget.
    *
-   * @internal
+   * @category Widget
    */
-  config?: WidgetConfig;
+  config?: FilterWidgetConfig;
   /**
    * When true, renders only the dropdown content without the WidgetContainer chrome.
    * Use in contexts where the host (Fusion dashboard, widget editor) provides its own chrome.

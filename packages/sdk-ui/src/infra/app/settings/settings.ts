@@ -157,6 +157,11 @@ type ServerSettings = {
    * From `api/globals` props.isManagedService; `false` for on-prem.
    */
   isManaged: boolean;
+  /**
+   * Whether the current user may use the AI Assistant.
+   * From `api/globals` props.aiAssistantAccess; anything but an explicit `true` denies.
+   */
+  aiAssistantAccess: boolean;
   narrative: {
     /** From `api/v2/settings/ai` narration.enabled */
     isEnabled: boolean;
@@ -362,6 +367,7 @@ async function loadServerSettings(
     serverFeatures,
     ai,
     isManaged: props?.isManagedService === true,
+    aiAssistantAccess: props?.aiAssistantAccess === true,
     narrative: {
       isEnabled: apiNarration.isEnabled,
       canGenerateNarrativeViaAI:

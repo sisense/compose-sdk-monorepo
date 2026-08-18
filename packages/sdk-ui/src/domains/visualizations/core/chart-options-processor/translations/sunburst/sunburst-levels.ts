@@ -40,13 +40,14 @@ export function prepareSunburstLevels(
         <div style="text-align: center; transform: translateY(calc(-50% + 15px))">
           <div style="color: ${
             themeSettings?.chart?.secondaryTextColor ?? '#9EA2AB'
-          }; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 18px">${
+          }; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 18px; line-height: 22px">${
           this.point.name
         }</div>
           ${tooltipSeparator()}
           <div style="
             font-weight: 600;
             font-size: 18px;
+            line-height: 22px;
             color: ${themeSettings?.chart?.textColor ?? '#5B6372'}
             "
             >${formatNumberWithFallback(value, rawConfig, defaultNumberFormattingEnabled)}</div>

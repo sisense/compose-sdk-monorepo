@@ -23,6 +23,16 @@ function displayLabel(styled: { column: { title?: string; name: string } }): str
 }
 
 /**
+ * A cell whose unparsed (`displayValue`) form differs from its parsed (`compareValue`) one --
+ * as a real datetime cell does, holding `'2026-03-01T00:00:00'` alongside its epoch. Plain
+ * values stringify their own `displayValue`, which is enough for every other column type.
+ */
+type CellSpec = { value: number | string | null; displayValue: string };
+
+const isCellSpec = (cell: number | string | null | CellSpec): cell is CellSpec =>
+  typeof cell === 'object' && cell !== null;
+
+/**
  * Builds a `DataTable` for tests. Cells carry a pre-built `compareValue` (as the real
  * data-processing pipeline would produce), so `getValue` returns exactly the given
  * value without re-parsing a `displayValue` string. `null` simulates a missing/blank
@@ -31,19 +41,22 @@ function displayLabel(styled: { column: { title?: string; name: string } }): str
  */
 function makeTable(
   columns: { name: string; type: string }[],
-  rows: (number | string | null)[][],
+  rows: (number | string | null | CellSpec)[][],
 ): DataTable {
   return {
     columns: columns.map((column, index) => ({ ...column, index, direction: 0 })),
     rows: rows.map((row) =>
-      row.map((value) => ({
-        displayValue: value === null ? '' : String(value),
-        compareValue: {
-          value: value === null ? NaN : value,
-          valueUndefined: value === null,
-          valueIsNaN: value === null,
-        },
-      })),
+      row.map((cell) => {
+        const value = isCellSpec(cell) ? cell.value : cell;
+        return {
+          displayValue: isCellSpec(cell) ? cell.displayValue : value === null ? '' : String(value),
+          compareValue: {
+            value: value === null ? NaN : value,
+            valueUndefined: value === null,
+            valueIsNaN: value === null,
+          },
+        };
+      }),
     ),
   };
 }
@@ -88,6 +101,54 @@ describe('kpi - getKpiChartData', () => {
       expect(result.valuePeriodMs).toBe(MAR);
     });
 
+    it("keeps the last bucket's unparsed category value alongside its epoch", () => {
+      // `categoryValue` feeds the data point's `entries.category`, which downstream filter
+      // builders parse -- so it must be the query's own date string, not the epoch.
+      const dataOptions = translateKpiChartDataOptions({
+        value: revenue,
+        category: DM.Commerce.Date.Months,
+        valueMode: 'last',
+      });
+      const table = makeTable(
+        [
+          { name: DM.Commerce.Date.Months.name, type: 'datetime' },
+          { name: revenue.name, type: 'number' },
+        ],
+        [
+          [{ value: FEB, displayValue: '2026-02-01T00:00:00' }, 120],
+          [{ value: MAR, displayValue: '2026-03-01T00:00:00' }, 90],
+        ],
+      );
+
+      const result = getKpiChartData(dataOptions, table);
+
+      expect(result.categoryValue).toBe('2026-03-01T00:00:00');
+      expect(result.valuePeriodMs).toBe(MAR);
+    });
+
+    it('keeps a non-datetime category value, which has no epoch to caption the header with', () => {
+      const dataOptions = translateKpiChartDataOptions({
+        value: revenue,
+        category: DM.Commerce.Gender,
+        valueMode: 'last',
+      });
+      const table = makeTable(
+        [
+          { name: DM.Commerce.Gender.name, type: 'text' },
+          { name: revenue.name, type: 'number' },
+        ],
+        [
+          ['Male', 120],
+          ['Female', 90],
+        ],
+      );
+
+      const result = getKpiChartData(dataOptions, table);
+
+      expect(result.categoryValue).toBe('Female');
+      expect(result.valuePeriodMs).toBeUndefined();
+    });
+
     it("reads the headline from the '$kpiRowType'='total' row for valueMode 'total', excluding it from the buckets", () => {
       const dataOptions = translateKpiChartDataOptions({
         value: revenue,
@@ -116,8 +177,74 @@ describe('kpi - getKpiChartData', () => {
         { x: FEB, y: 120 },
         { x: MAR, y: 90 },
       ]);
-      // valueMode 'total' has no single "current" bucket, so no period caption
+      // valueMode 'total' has no single "current" bucket, so no period caption -- and no
+      // category value to identify the headline with either
       expect(result.valuePeriodMs).toBeUndefined();
+      expect(result.categoryValue).toBeUndefined();
+    });
+
+    it("falls back to last-bucket semantics for valueMode 'total' when the '$kpiRowType' column is absent", () => {
+      // Reachable without a query: an explicit `Data` dataset never runs the dual-query
+      // merge, and an `onDataReady` handler that rebuilds `columns` drops the marker.
+      // Either way there is no whole-period total row to read.
+      const dataOptions = translateKpiChartDataOptions({
+        value: revenue,
+        category: DM.Commerce.Date.Months,
+        valueMode: 'total',
+      });
+      const table = makeTable(
+        [
+          { name: DM.Commerce.Date.Months.name, type: 'datetime' },
+          { name: revenue.name, type: 'number' },
+        ],
+        [
+          [JAN, 100],
+          [FEB, 120],
+          [MAR, 90],
+        ],
+      );
+
+      const result = getKpiChartData(dataOptions, table);
+
+      expect(result.value).toBe(90);
+      expect(result.valuePeriodMs).toBe(MAR);
+      expect(result.sparklinePoints).toEqual([
+        { x: JAN, y: 100 },
+        { x: FEB, y: 120 },
+        { x: MAR, y: 90 },
+      ]);
+    });
+
+    it("keeps the headline undefined for valueMode 'total' when the marker column is present but carries no total row", () => {
+      // The merge ran and the ungrouped query legitimately returned nothing, so the data
+      // itself says "no total" -- distinct from the marker column being missing entirely,
+      // which is why the fallback keys on the column and not on the row.
+      const dataOptions = translateKpiChartDataOptions({
+        value: revenue,
+        category: DM.Commerce.Date.Months,
+        valueMode: 'total',
+      });
+      const table = makeTable(
+        [
+          { name: DM.Commerce.Date.Months.name, type: 'datetime' },
+          { name: revenue.name, type: 'number' },
+          { name: KPI_ROW_TYPE_COLUMN, type: 'string' },
+        ],
+        [
+          [JAN, 100, 'bucket'],
+          [FEB, 120, 'bucket'],
+        ],
+      );
+
+      const result = getKpiChartData(dataOptions, table);
+
+      expect(result.hasRows).toBe(true);
+      expect(result.value).toBeUndefined();
+      expect(result.valuePeriodMs).toBeUndefined();
+      expect(result.sparklinePoints).toEqual([
+        { x: JAN, y: 100 },
+        { x: FEB, y: 120 },
+      ]);
     });
 
     it('single-query path (no $kpiRowType column): every row is a bucket', () => {

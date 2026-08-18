@@ -122,6 +122,7 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
                 onEdit={onEdit ? () => onEdit?.(index) : undefined}
                 renderHeaderTitle={index === 0 ? renderHeaderTitle : undefined}
                 menuItems={menuItems}
+                config={config}
               />
             );
           });
@@ -136,6 +137,9 @@ export const CascadingFilterTile = asSisenseComponent({ componentName: 'Cascadin
           },
         }}
         locked={filter.config.locked}
+        // Only the switch belongs to this container: its own header is hidden, so the
+        // expand/collapse control is rendered by each level tile instead.
+        toggleVisible={config?.actions?.toggleFilter?.visible}
         onDelete={onDelete}
       />
     );

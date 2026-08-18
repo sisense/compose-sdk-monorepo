@@ -227,6 +227,10 @@ const translation: TranslationDictionary = {
     placeholders: {
       setFilter: 'Filtre ayarla',
     },
+    selectedCount: '{{count}} seçildi',
+    allExceptCount: '{{count}} hariç tümü',
+    setupTitle: "Filtre widget'ını ayarlayın",
+    setupSubtitle: 'Bir boyut seçin ve filtrenin nasıl çalışacağını yapılandırın',
   },
   unsupportedFilterMessage: 'Desteklenmeyen filtre (veri sorgusuna uygulandı)',
   unsupportedFilter: 'Desteklenmeyen filtre {{filter}}',

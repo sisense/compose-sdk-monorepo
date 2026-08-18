@@ -56,8 +56,6 @@ describe('getEffectiveMultiselect', () => {
   });
 
   it('reflects the filter: single-select widget shows multi when the linked filter has >1 member', () => {
-    // Cross-filtering / external multi-select injected several members into the shared
-    // filter; the widget must reflect the filter instead of truncating to the first.
     expect(getEffectiveMultiselect(false, 3, false)).toBe(true);
   });
 
@@ -71,7 +69,7 @@ describe('getEffectiveMultiselect', () => {
 });
 
 // ── Render tests ─────────────────────────────────────────────────────────────
-// Mock the member query hook and the leaf select components so the dropdown's own
+// Mock the member query hook and MembersFilterSelect so the dropdown's own
 // branching (single vs multi vs date, selection handlers, scroll-load, placeholder)
 // is exercised without a live query or the heavy select UI.
 
@@ -83,6 +81,7 @@ let mockMembersData: {
   enableMultiSelection: boolean;
 } | null = null;
 let mockMembersLoading = false;
+let mockAllItemsLoaded = true;
 
 // Structural subset of GetFilterMembersParams covering the fields these tests assert.
 // Typing the mock at its boundary lets `mock.calls` be consumed via inference (no casts).
@@ -92,6 +91,7 @@ const mockUseGetFilterMembers = vi.fn((_params: MembersHookParams) => ({
   data: mockMembersData,
   loadMore: mockLoadMore,
   isLoading: mockMembersLoading,
+  isAllItemsLoaded: mockAllItemsLoaded,
 }));
 
 vi.mock('@/domains/filters/hooks/use-get-filter-members', () => ({
@@ -103,36 +103,45 @@ vi.mock('react-i18next', async (importOriginal) => {
   return { ...actual, useTranslation: () => ({ t: (key: string) => key }) };
 });
 
-vi.mock(
-  '@/domains/filters/components/filter-editor-popover/common/select/searchable-multi-select',
-  () => ({
-    SearchableMultiSelect: ({ values, onChange, onListScroll, onSearchUpdate }: any) => (
-      <div>
-        <div data-testid="multi-select" />
-        <div data-testid="multi-values">{JSON.stringify(values)}</div>
-        <button data-testid="multi-change" onClick={() => onChange(['France', 'Italy'])} />
-        <button
-          data-testid="multi-scroll"
-          onClick={() => onListScroll({ top: 0.9, direction: 'down' })}
-        />
-        <button data-testid="multi-search" onClick={() => onSearchUpdate?.('fra')} />
+vi.mock('./members-filter-select', () => ({
+  MembersFilterSelect: ({
+    selectedMembers,
+    excludeMembers,
+    enableMultiSelection,
+    onSelectMember,
+    onSelectAll,
+    onClearAll,
+    onListScroll,
+    onSearchValueChange,
+  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test stub only reads the props it renders
+  any) => (
+    <div>
+      <div data-testid={enableMultiSelection ? 'multi-select' : 'single-select'} />
+      <div data-testid="select-value">
+        {selectedMembers.length === 0
+          ? excludeMembers
+            ? 'includeAll'
+            : ''
+          : selectedMembers.map((m: { key: string }) => m.key).join(',')}
       </div>
-    ),
-  }),
-);
-
-vi.mock(
-  '@/domains/filters/components/filter-editor-popover/common/select/searchable-single-select',
-  () => ({
-    SearchableSingleSelect: ({ value, onChange }: any) => (
-      <div>
-        <div data-testid="single-select" />
-        <div data-testid="single-value">{value ?? ''}</div>
-        <button data-testid="single-change" onClick={() => onChange('France')} />
-      </div>
-    ),
-  }),
-);
+      <button
+        data-testid="multi-change"
+        onClick={() => onSelectMember({ key: 'France', title: 'France' }, true)}
+      />
+      <button data-testid="select-all" onClick={() => onSelectAll()} />
+      <button data-testid="clear-all" onClick={() => onClearAll()} />
+      <button
+        data-testid="single-change"
+        onClick={() => onSelectMember({ key: 'France', title: 'France' }, true)}
+      />
+      <button
+        data-testid="multi-scroll"
+        onClick={() => onListScroll({ top: 0.9, direction: 'down' })}
+      />
+      <button data-testid="multi-search" onClick={() => onSearchValueChange?.('fra')} />
+    </div>
+  ),
+}));
 
 vi.mock('@/domains/filters/components/filter-editor-popover/common/select', () => ({
   SingleSelect: ({ value, onChange }: any) => (
@@ -162,6 +171,7 @@ describe('FilterWidgetDropdown', () => {
       enableMultiSelection: false,
     };
     mockMembersLoading = false;
+    mockAllItemsLoaded = true;
   });
 
   afterEach(() => {
@@ -170,10 +180,14 @@ describe('FilterWidgetDropdown', () => {
 
   it('renders the placeholder when the attribute has no expression', () => {
     const empty = createAttribute({ name: 'x', expression: '', type: 'text' });
-    const { queryByTestId, getByText } = render(<FilterWidgetDropdown attribute={empty} />);
+    const { queryByTestId, getByText, getByTestId } = render(
+      <FilterWidgetDropdown attribute={empty} />,
+    );
     expect(queryByTestId('multi-select')).toBeNull();
     expect(queryByTestId('single-select')).toBeNull();
-    expect(getByText('filterWidget.selectDimensionPlaceholder')).toBeInTheDocument();
+    expect(getByTestId('filter-widget-no-dimension')).toBeInTheDocument();
+    expect(getByText('filterWidget.setupTitle')).toBeInTheDocument();
+    expect(getByText('filterWidget.setupSubtitle')).toBeInTheDocument();
   });
 
   it('renders the multi-select control for a multiselect widget', () => {
@@ -205,7 +219,7 @@ describe('FilterWidgetDropdown', () => {
     expect(queryByTestId('single-select')).toBeNull();
   });
 
-  it('calls onFilterUpdate with the selected members on a multi change', () => {
+  it('calls onFilterUpdate with the selected member on a multi change', () => {
     const onFilterUpdate = vi.fn();
     const { getByTestId } = render(
       <FilterWidgetDropdown
@@ -215,9 +229,43 @@ describe('FilterWidgetDropdown', () => {
       />,
     );
     fireEvent.click(getByTestId('multi-change'));
+    expect(onFilterUpdate).toHaveBeenCalled();
+    const updated = onFilterUpdate.mock.calls[0][0];
+    expect(updated.members).toEqual(['France']);
+    expect(updated.config.excludeMembers).toBe(false);
+  });
+
+  it('select-all emits empty exclusions (inverted select-all)', () => {
+    const onFilterUpdate = vi.fn();
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={textAttribute}
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+    fireEvent.click(getByTestId('select-all'));
     expect(onFilterUpdate).toHaveBeenCalledTimes(1);
     const updated = onFilterUpdate.mock.calls[0][0];
-    expect(updated.members).toEqual(['France', 'Italy']);
+    expect(updated.members).toEqual([]);
+    expect(updated.config.excludeMembers).toBe(true);
+  });
+
+  it('clear-all emits empty inclusions', () => {
+    const onFilterUpdate = vi.fn();
+    mockMembersData!.excludeMembers = true;
+    const { getByTestId } = render(
+      <FilterWidgetDropdown
+        attribute={textAttribute}
+        isMultiselect={true}
+        onFilterUpdate={onFilterUpdate}
+      />,
+    );
+    fireEvent.click(getByTestId('clear-all'));
+    expect(onFilterUpdate).toHaveBeenCalledTimes(1);
+    const updated = onFilterUpdate.mock.calls[0][0];
+    expect(updated.members).toEqual([]);
+    expect(updated.config.excludeMembers).toBe(false);
   });
 
   it('calls onFilterUpdate with a single member on a single change', () => {
@@ -279,8 +327,6 @@ describe('FilterWidgetDropdown', () => {
       );
       const callsBefore = mockUseGetFilterMembers.mock.calls.length;
       fireEvent.click(getByTestId('multi-search'));
-      // Flush the 300ms search debounce; the resulting state update re-renders the
-      // dropdown, so the members hook is re-invoked with the new search filter.
       act(() => {
         vi.advanceTimersByTime(400);
       });
@@ -296,13 +342,9 @@ describe('FilterWidgetDropdown', () => {
     const { getByTestId } = render(
       <FilterWidgetDropdown attribute={textAttribute} isMultiselect={false} filter={filter} />,
     );
-    expect(getByTestId('single-value').textContent).toBe('Italy');
+    expect(getByTestId('select-value').textContent).toBe('Italy');
   });
 
-  // ── isMultiselect toggle realigns the filter (SNS-131674) ────────────────────
-  // The synchronized filter's enableMultiSelection is seeded once, so a live toggle
-  // of isMultiselect (widget editor / standalone) was previously ignored. Mirrors the
-  // filter editor popup's MembersSection reduce-on-toggle behavior.
   it('drops the selection to a single member when switching from multi to single', () => {
     const onFilterUpdate = vi.fn();
     const multiFilter = filterFactory.members(textAttribute, ['France', 'Italy'], {
@@ -333,12 +375,6 @@ describe('FilterWidgetDropdown', () => {
     expect(emitted.config.enableMultiSelection).toBe(false);
   });
 
-  // ── Dimension change rebuilds the filter (SNS-131802) ────────────────────────
-  // The synchronized filter is seeded once (useSynchronizedFilter useState). In the
-  // widget editor the dropdown mounts BEFORE a dimension is picked (empty attribute)
-  // and receives the real attribute via a prop swap — without a rebuild the member
-  // query keeps targeting the stale (empty or previous) attribute forever, so the
-  // dropdown stays empty with no request and no error.
   const getMembersHookCalls = (fromIndex = 0): MembersHookParams[] =>
     mockUseGetFilterMembers.mock.calls.slice(fromIndex).map(([params]) => params);
 
@@ -364,17 +400,12 @@ describe('FilterWidgetDropdown', () => {
 
     const callsAfterSwap = getMembersHookCalls(callsBeforeSwap);
     const enabledCalls = callsAfterSwap.filter((params) => params.enabled);
-    // Every enabled query after the swap targets the NEW attribute — a transient
-    // enabled call still carrying the stale empty filter would hit the analytical
-    // engine with an empty dim.
     expect(enabledCalls.length).toBeGreaterThan(0);
     enabledCalls.forEach((params) => {
       expect(params.filter.attribute.expression).toBe('[Country.Country]');
     });
   });
 
-  // Host may push a non-Years level on first pick; query must follow that
-  // granularity, not the Years default left in local state after empty mount.
   it('queries members at the prop granularity after mounting empty then receiving a non-Years date level', () => {
     const empty = createAttribute({ name: '', expression: '', type: 'text' });
     const quarters = createLevelAttribute(
@@ -412,7 +443,6 @@ describe('FilterWidgetDropdown', () => {
     });
   });
 
-  // Same expression, new level from the host — must not keep querying Years.
   it('queries members at the new level after a same-expression Years to Quarters prop update', () => {
     const years = DM.Commerce.Date.Years;
     const quarters = createLevelAttribute(years as DimensionalLevelAttribute, DateLevels.Quarters);
@@ -449,9 +479,6 @@ describe('FilterWidgetDropdown', () => {
   });
 
   it('disables the member query while no dimension is picked (empty attribute)', () => {
-    // The editor mounts the dropdown before a dimension exists; querying an empty
-    // dimension is rejected by the analytical engine ("Jaql element doesn't contain
-    // dim") — the query must stay disabled until a real attribute arrives.
     const empty = createAttribute({ name: '', expression: '', type: 'text' });
     render(<FilterWidgetDropdown attribute={empty} isMultiselect={true} />);
 
@@ -481,15 +508,11 @@ describe('FilterWidgetDropdown', () => {
       />,
     );
 
-    // Every enabled query after the swap targets the NEW attribute — none may still
-    // carry the previous dimension's filter.
     const enabledCalls = getMembersHookCalls(callsBeforeSwap).filter((params) => params.enabled);
     expect(enabledCalls.length).toBeGreaterThan(0);
     enabledCalls.forEach((params) => {
       expect(params.filter.attribute.expression).toBe('[Brand.Brand]');
     });
-    // The rebuilt (empty) selection for the new dimension is propagated to the host,
-    // so the editor records a cleared selection instead of the old dimension's members.
     expect(onFilterUpdate).toHaveBeenCalled();
     const emitted = onFilterUpdate.mock.calls.at(-1)![0];
     expect(emitted.members).toEqual([]);

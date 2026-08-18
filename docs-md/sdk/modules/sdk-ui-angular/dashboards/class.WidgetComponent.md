@@ -118,7 +118,7 @@ Configurations for how to interpret and present the data passed to the chart
 
 #### config
 
-> **config**: [`WidgetConfig`](../type-aliases/type-alias.WidgetConfig.md) \| `undefined`
+> **config**: [`ChartWidgetConfig`](../interfaces/interface.ChartWidgetConfig.md) \| [`CustomWidgetConfig`](../interfaces/interface.CustomWidgetConfig.md) \| [`FilterWidgetConfig`](../interfaces/interface.FilterWidgetConfig.md) \| [`PivotTableWidgetConfig`](../interfaces/interface.PivotTableWidgetConfig.md) \| [`TextWidgetConfig`](../interfaces/interface.TextWidgetConfig.md) \| `undefined`
 
 Configuration of the widget
 
@@ -182,7 +182,7 @@ Widget type
 
 #### beforeRender
 
-> **beforeRender**: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md) \| [`IndicatorBeforeRenderHandler`](../type-aliases/type-alias.IndicatorBeforeRenderHandler.md) \| [`KpiBeforeRenderHandler`](../../sdk-ui/type-aliases/type-alias.KpiBeforeRenderHandler.md) \| `undefined`
+> **beforeRender**: [`BeforeRenderHandler`](../type-aliases/type-alias.BeforeRenderHandler.md) \| [`IndicatorBeforeRenderHandler`](../type-aliases/type-alias.IndicatorBeforeRenderHandler.md) \| [`KpiBeforeRenderHandler`](../type-aliases/type-alias.KpiBeforeRenderHandler.md) \| `undefined`
 
 A callback that allows you to customize the underlying chart element before it is rendered. The returned options are then used when rendering the chart.
 

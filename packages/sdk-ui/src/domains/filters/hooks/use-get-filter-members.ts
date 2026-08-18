@@ -61,6 +61,15 @@ export interface GetFilterMembersParams extends HookEnableParam {
    * @internal
    */
   allowMissingMembers?: boolean;
+  /**
+   * When true, also fetches the total member count (via query `includeRowCount`)
+   * without loading every page. Exposed as {@link GetFilterMembersResult.totalMembersCount}.
+   *
+   * If not specified, the default value is `false`
+   *
+   * @internal
+   */
+  includeTotalCount?: boolean;
 }
 
 /**
@@ -157,6 +166,15 @@ export type GetFilterMembersResult = FilterMembersState & {
    * @internal
    */
   isAllItemsLoaded: boolean;
+  /**
+   * Total member count for the executed member query (ignores page `count`/`offset`,
+   * but reflects `parentFilters` and the background filter, including any text search).
+   * Populated only when {@link GetFilterMembersParams.includeTotalCount} is enabled
+   * and the Sisense instance supports the row-count API; otherwise `undefined`.
+   *
+   * @internal
+   */
+  totalMembersCount?: number;
 };
 
 /**
@@ -172,6 +190,7 @@ export const useGetFilterMembersInternal = ({
   count,
   enabled,
   allowMissingMembers = false,
+  includeTotalCount = false,
 }: GetFilterMembersParams): GetFilterMembersResult => {
   if (!isMembersFilter(filter)) {
     throw new TranslatableError('errors.notAMembersFilter');
@@ -190,7 +209,7 @@ export const useGetFilterMembersInternal = ({
   if (backgroundFilter) {
     queryFilters.push(backgroundFilter);
   }
-  const { data, loadMore, isAllItemsLoaded, ...loadState } = useExecuteQueryInternal({
+  const { data, loadMore, isAllItemsLoaded, rowCount, ...loadState } = useExecuteQueryInternal({
     // prioritize attribute dataSource for the use case of multi-source dashboard
     dataSource: filterAttribute.dataSource
       ? convertDataSource(filterAttribute.dataSource)
@@ -199,6 +218,7 @@ export const useGetFilterMembersInternal = ({
     filters: queryFilters,
     count,
     enabled,
+    includeRowCount: includeTotalCount,
   });
 
   const { app } = useSisenseContext();
@@ -305,6 +325,7 @@ export const useGetFilterMembersInternal = ({
       data: undefined,
       loadMore,
       isAllItemsLoaded,
+      totalMembersCount: includeTotalCount ? rowCount : undefined,
     };
   }
 
@@ -313,6 +334,7 @@ export const useGetFilterMembersInternal = ({
     data: resultData,
     loadMore,
     isAllItemsLoaded,
+    totalMembersCount: includeTotalCount ? rowCount : undefined,
   };
 };
 

@@ -3,10 +3,24 @@
  * @internal
  */
 export const filterWidgetDesign = {
-  /** Defines the placeholder shown before a dimension is configured. */
+  /** Empty state shown before a dimension is configured (editor / new widget). */
   noDimPlaceholder: {
-    color: '#aaa',
-    fontSize: 13,
+    color: '#666666',
+    title: {
+      fontSize: 30,
+      fontWeight: 600,
+      lineHeight: '36px',
+      letterSpacing: '-0.5px',
+    },
+    subtitle: {
+      fontSize: 18,
+      fontWeight: 600,
+      lineHeight: '24px',
+      letterSpacing: '0px',
+    },
+    gapTitleToSubtitle: 8,
+    gapSubtitleToImage: 24,
+    imageMaxWidth: 480,
   },
 } as const;
 

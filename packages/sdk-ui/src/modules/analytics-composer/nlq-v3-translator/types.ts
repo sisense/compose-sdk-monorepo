@@ -22,7 +22,7 @@ import {
   SeriesStyle,
   ValueStyle,
 } from '@/domains/visualizations/core/chart-data-options/types.js';
-import type { WidgetConfig, WidgetType } from '@/domains/widgets/components/widget/types.js';
+import type { ChartWidgetConfig, WidgetType } from '@/domains/widgets/components/widget/types.js';
 import type {
   WidgetHeaderMenuConfig,
   WidgetHeaderTitleConfig,
@@ -439,12 +439,13 @@ type WithCommonWidgetJSON<Base, Type extends WidgetType> = Base & {
 // ─── Widget JSON types ────────────────────────────────────────────────────────
 
 /**
- * JSON-safe subset of {@link WidgetConfig} (drops function-bearing menu items).
- * Structurally assignable to {@link WidgetConfig} because `items` is optional on the runtime type.
+ * JSON-safe subset of {@link ChartWidgetConfig} (drops function-bearing menu items).
+ * Structurally assignable to every widget config because `items` is optional on the runtime type
+ * and the widget-specific configs only ever drop keys from {@link ChartWidgetConfig}.
  *
  * @internal
  */
-export type WidgetConfigJSON = Pick<WidgetConfig, 'actions'> & {
+export type WidgetConfigJSON = Pick<ChartWidgetConfig, 'actions'> & {
   header?: {
     title?: WidgetHeaderTitleConfig;
     menu?: Pick<WidgetHeaderMenuConfig, 'enabled'>;

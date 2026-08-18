@@ -33,37 +33,10 @@ export type {
 // dashboard persistence layer so view-time interactions survive reloads.
 export { useSyncedState, type UseSyncedStateOptions } from '../shared/hooks/use-synced-state';
 
-// Charts
-export { KpiChart } from '../domains/visualizations/components/kpi-chart';
-export type { KpiChartProps, KpiChartEventProps } from '../props';
-export type {
-  KpiChartDataOptions,
-  KpiComparison,
-  KpiValueMode,
-} from '../domains/visualizations/core/chart-data-options/types';
-export type {
-  KpiStyleOptions,
-  KpiValueStyleOptions,
-  KpiTitleStyleOptions,
-  KpiComparisonStyleOptions,
-  KpiSparklineStyleOptions,
-  KpiSparklineType,
-  KpiCardStyleOptions,
-  KpiTextSize,
-  KpiIconCondition,
-  KpiIcon,
-  KpiIconName,
-  KpiComparisonInfo,
-  KpiRenderOptions,
-  KpiBeforeRenderHandler,
-  KpiDataPoint,
-  KpiDataPointEventHandler,
-  KpiChartType,
-} from '../types';
-
 // FilterWidget types — referenced by the public WidgetProps union, so they must be
 // docs-visible. The FilterWidget component itself remains @alpha (alpha.ts).
 export type {
   FilterWidgetProps,
   FilterWidgetFilterType,
 } from '../domains/widgets/components/filter-widget/index.js';
+export type { FilterWidgetConfig } from '../domains/widgets/components/widget/index.js';

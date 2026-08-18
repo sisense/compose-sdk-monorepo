@@ -14,6 +14,7 @@ import {
   DEFAULT_RANKING_COUNT,
   getRankingStateFromFilter,
   isRankingCondition,
+  withoutRankingConditions,
 } from './ranking-condition-utils.js';
 
 const attribute = createAttribute({
@@ -33,6 +34,47 @@ const revenueAttribute = createAttribute({
 const measure = createMeasure(measureFactory.sum(revenueAttribute));
 
 describe('ranking-condition-utils', () => {
+  describe('withoutRankingConditions', () => {
+    const conditionItems = [
+      { value: FilterOption.EQUALS_NUMERIC },
+      { value: FilterOption.TOP },
+      { value: FilterOption.BOTTOM },
+    ];
+
+    it('drops the ranking conditions', () => {
+      const result = withoutRankingConditions(filterFactory.members(attribute, []))(conditionItems);
+
+      expect(result).toEqual([{ value: FilterOption.EQUALS_NUMERIC }]);
+    });
+
+    it('drops the ranking conditions when creating a filter', () => {
+      expect(withoutRankingConditions(null)(conditionItems)).toEqual([
+        { value: FilterOption.EQUALS_NUMERIC },
+      ]);
+    });
+
+    it('keeps every condition when the edited filter is itself a ranking filter', () => {
+      // Dropping them would leave the editor's condition control on a value missing from its list,
+      // so an existing ranking filter would open blank and could not be edited.
+      const rankingFilter = createRankingFilter(
+        filterFactory.members(attribute, []),
+        FilterOption.TOP,
+        5,
+        measure,
+      );
+      assert(rankingFilter);
+
+      expect(withoutRankingConditions(rankingFilter)(conditionItems)).toEqual(conditionItems);
+    });
+
+    it('does not mutate the given list', () => {
+      const items = [...conditionItems];
+      withoutRankingConditions(null)(items);
+
+      expect(items).toEqual(conditionItems);
+    });
+  });
+
   it('identifies ranking conditions', () => {
     expect(isRankingCondition(FilterOption.TOP)).toBe(true);
     expect(isRankingCondition(FilterOption.BOTTOM)).toBe(true);

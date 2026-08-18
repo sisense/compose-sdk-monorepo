@@ -38,4 +38,5 @@ export type DeploymentProps = {
   SisenseManagedLLM?: boolean;
   llmBYOK?: boolean;
   InfusionApps: boolean;
+  aiAssistantAccess?: boolean;
 };

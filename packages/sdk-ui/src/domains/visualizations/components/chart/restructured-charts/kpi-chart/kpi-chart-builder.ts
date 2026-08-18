@@ -1,4 +1,4 @@
-import { isRendererDataReady } from '../helpers/readiness.js';
+import { isRendererReady } from '../helpers/readiness.js';
 import { ChartBuilder } from '../types.js';
 import {
   getKpiAttributes,
@@ -20,6 +20,10 @@ import { isKpiChartRendererProps, KpiChartRenderer } from './renderer/index.js';
  *
  * Provides a complete configuration for building KPI charts,
  * including data processing, styling, and rendering capabilities.
+ *
+ * `onReady` (Fusion `domready` / PDF): the renderer reports its own paint via
+ * `KpiChartRendererProps.onReady` once the card is committed to the DOM (sparkline
+ * included), so readiness follows the shared chart-render contract below.
  * @internal
  */
 export const kpiChartBuilder: ChartBuilder<'kpi'> = {
@@ -42,6 +46,6 @@ export const kpiChartBuilder: ChartBuilder<'kpi'> = {
   renderer: {
     ChartRendererComponent: KpiChartRenderer,
     isCorrectRendererProps: isKpiChartRendererProps,
-    isReady: isRendererDataReady,
+    isReady: isRendererReady,
   },
 };

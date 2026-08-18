@@ -23,7 +23,9 @@ const createChartDataOptions = (
 const createPointContext = (
   overrides: Partial<HighchartsDataPointContext> = {},
 ): HighchartsDataPointContext => ({
-  series: { name: 'revenue', color: '#111111' },
+  // Highcharts receives the data option's resolved title as the series name (see
+  // `formatSeries` in translations-to-highcharts), not the underlying column name.
+  series: { name: 'Revenue', color: '#111111' },
   x: '2024',
   y: 100,
   point: { name: '', color: '#222222', y: 100 },
@@ -40,7 +42,7 @@ describe('getCategoryTooltipSettings', () => {
   it('formatter renders series name and value', () => {
     const settings = getCategoryTooltipSettings(undefined, createChartDataOptions());
     const html = settings.formatter!.call(createPointContext());
-    expect(html).toContain('revenue');
+    expect(html).toContain('Revenue');
     expect(html).toContain('100');
   });
 
@@ -116,6 +118,24 @@ describe('getCategoryTooltipSettings', () => {
     const ctx = createPointContext({ y: 42 });
     const html = settings.formatter!.call(ctx);
     // 42 * 100 = 4,200% — confirms formatting was applied, not raw String(42)
+    expect(html).toContain('4,200%');
+  });
+
+  it('formatter resolves the number format by the styled column custom name overriding the title', () => {
+    const dataOptions = createChartDataOptions({
+      y: [
+        {
+          column: { title: 'Revenue', name: 'revenue', type: 'number' },
+          enabled: true,
+          chartType: 'column',
+          name: 'Custom Revenue',
+          numberFormatConfig: { name: 'Percent', decimalScale: 0 },
+        },
+      ],
+    });
+    const settings = getCategoryTooltipSettings(undefined, dataOptions, false);
+    const ctx = createPointContext({ series: { name: 'Custom Revenue', color: '#111' }, y: 42 });
+    const html = settings.formatter!.call(ctx);
     expect(html).toContain('4,200%');
   });
 });

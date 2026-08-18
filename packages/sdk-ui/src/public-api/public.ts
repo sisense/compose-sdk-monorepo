@@ -26,6 +26,7 @@ export { AreamapChart } from '../domains/visualizations/components/areamap-chart
 export { AreaRangeChart } from '../domains/visualizations/components/area-range-chart';
 export { CalendarHeatmapChart } from '../domains/visualizations/components/calendar-heatmap-chart';
 export { SankeyChart } from '../domains/visualizations/components/sankey-chart';
+export { KpiChart } from '../domains/visualizations/components/kpi-chart';
 
 // Dashboarding
 export {
@@ -125,6 +126,13 @@ export {
   type WidgetConfig,
   type WidgetType,
   type WithCommonWidgetProps,
+} from '../domains/widgets/components/widget';
+// Widget-type-specific configuration — each lists only the options its widget supports
+export type {
+  ChartWidgetConfig,
+  CustomWidgetConfig,
+  PivotTableWidgetConfig,
+  TextWidgetConfig,
 } from '../domains/widgets/components/widget';
 // Widget header configuration
 export type {
@@ -330,6 +338,9 @@ export type {
   AreaRangeMeasureColumn,
   RangeChartDataOptions,
   SankeyChartDataOptions,
+  KpiChartDataOptions,
+  KpiComparison,
+  KpiValueMode,
   ChartDataOptions,
   RegularChartDataOptions,
   CommonDataOptions,
@@ -381,6 +392,8 @@ export type {
   AreamapChartProps,
   AreaRangeChartProps,
   SankeyChartProps,
+  KpiChartProps,
+  KpiChartEventProps,
   ContextMenuProps,
   DrilldownBreadcrumbsProps,
   DrilldownWidgetConfig,
@@ -416,6 +429,7 @@ export type {
   TableChartType,
   RangeChartType,
   SankeyChartType,
+  KpiChartType,
   TextStyle,
   DataColorCondition,
   ConditionalDataColorOptions,
@@ -493,6 +507,17 @@ export type {
   CalendarHeatmapStyleOptions,
   CalendarHeatmapViewType,
   SankeyStyleOptions,
+  KpiStyleOptions,
+  KpiValueStyleOptions,
+  KpiTitleStyleOptions,
+  KpiComparisonStyleOptions,
+  KpiSparklineStyleOptions,
+  KpiSparklineType,
+  KpiCardStyleOptions,
+  KpiTextSize,
+  KpiIconCondition,
+  KpiIcon,
+  KpiIconName,
   ChartStyleOptions,
   RegularChartStyleOptions,
   ValueToColorMap,
@@ -544,6 +569,11 @@ export type {
   PivotTableDataPoint,
   AreamapDataPoint,
   ScattermapDataPoint,
+  KpiDataPoint,
+  KpiDataPointEventHandler,
+  KpiComparisonInfo,
+  KpiRenderOptions,
+  KpiBeforeRenderHandler,
   CustomWidgetDataPoint,
   CustomWidgetDataPointEventHandler,
   CustomWidgetDataPointContextMenuHandler,

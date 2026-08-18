@@ -43,6 +43,31 @@ const getValueCustomBackgroundColor = (
   return null;
 };
 
+const toThreshold = (expression: string): number =>
+  expression.trim() === '' ? NaN : Number(expression);
+
+/**
+ * Builds the gauge dial segments, renaming each threshold to the `data` key the legacy renderer
+ * reads.
+ */
+const getValueConditions = (dataOptions: IndicatorChartDataOptions) => {
+  const colorOptions = getValueColorOptions(dataOptions);
+
+  if (!colorOptions || typeof colorOptions === 'string' || colorOptions.type !== 'conditional') {
+    return undefined;
+  }
+
+  const conditions = (colorOptions.conditions ?? [])
+    .map(({ expression, operator, color }) => ({
+      data: toThreshold(expression),
+      operator,
+      color,
+    }))
+    .filter(({ data }) => Number.isFinite(data));
+
+  return conditions.length ? conditions : undefined;
+};
+
 export const createLegacyChartDataOptions = (
   chartData: IndicatorChartData,
   chartDesignOptions: IndicatorChartDesignOptions,
@@ -57,12 +82,14 @@ export const createLegacyChartDataOptions = (
   const numberConfigForMax = getNumberFormatConfigForColumn(dataOptions, 'max');
 
   const valueCustomBgColor = getValueCustomBackgroundColor(chartData, dataOptions);
+  const valueConditions = getValueConditions(dataOptions);
 
   const defaultSkin = chartDesignOptions.indicatorType === 'gauge' ? 1 : 'vertical';
 
   return {
     ...defaultIndicatorData,
     ...(valueCustomBgColor ? { color: valueCustomBgColor } : null),
+    ...(valueConditions ? { conditions: valueConditions } : null),
     type:
       convertToLegacyChartType(
         chartDesignOptions.indicatorType,

@@ -1,6 +1,6 @@
 # 4 | Third Party Drilldown Chart
 
-In this section, you'll how to drill down when using a 3rd party charting library. In this guide, we'll switch out our Compose SDK chart with a chart from [Plotly.js](https://plotly.com/javascript/).
+In this section, you'll see how to drill down when using a 3rd party charting library. In this guide, we'll switch out our Compose SDK chart with a chart from [Plotly.js](https://plotly.com/javascript/).
 
 ## Plotly Wrapper
 
@@ -26,7 +26,7 @@ export const PlotlyBarChart: React.FC<Props> = ({ rawData, onDataPointsSelected,
 };
 ```
 
-Next, you to keep track of the data points selected for drilling down. To do so, create a state variable:
+Next, you need to keep track of the data points selected for drilling down. To do so, create a state variable:
 
 ```ts
 const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -243,7 +243,7 @@ export const PlotlyDrilldownChart = () => {
   return (
     <DrilldownWidget
       initialDimension={DM.Commerce.AgeRange}
-      drilldownDimensions={[
+      drilldownPaths={[
         DM.Commerce.Gender,
         DM.Commerce.Condition,
         DM.Category.Category
@@ -305,7 +305,7 @@ export const PlotlyDrilldownChart = () => {
   return (
     <DrilldownWidget
       initialDimension={DM.Commerce.AgeRange}
-      drilldownDimensions={[
+      drilldownPaths={[
         DM.Commerce.Gender,
         DM.Commerce.Condition,
         DM.Category.Category

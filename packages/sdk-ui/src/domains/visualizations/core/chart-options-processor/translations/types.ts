@@ -127,7 +127,6 @@ export const KPI_CHART_TYPES = ['kpi'] as const;
  * KPI chart types.
  *
  * @expandType
- * @beta
  */
 export type KpiChartType = (typeof KPI_CHART_TYPES)[number];
 

@@ -137,6 +137,85 @@ describe('FilterTileContainer', () => {
       const tileSwitch = screen.queryByRole('switch');
       expect(tileSwitch).toBeNull();
     });
+
+    it('should render the switch by default', async () => {
+      setup(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer renderContent={() => <></>} onToggleDisabled={() => {}} />
+        </I18nextProvider>,
+      );
+      expect(
+        await screen.findByRole('switch', { name: 'Enable/disable filter' }),
+      ).toBeInTheDocument();
+    });
+
+    it('should not render the switch when it is configured as not visible', async () => {
+      setup(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer
+            renderContent={() => <></>}
+            onToggleDisabled={() => {}}
+            toggleVisible={false}
+          />
+        </I18nextProvider>,
+      );
+      expect(screen.queryByRole('switch')).toBeNull();
+    });
+
+    it('should drop the footer when the switch is hidden and there is nothing else in it', async () => {
+      // The footer has a top border and a minimum height, so keeping it with no controls left
+      // would render an empty bordered strip.
+      setup(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer renderContent={() => <></>} toggleVisible={false} />
+        </I18nextProvider>,
+      );
+      expect(screen.queryByRole('contentinfo')).toBeNull();
+    });
+
+    it('should keep the footer when the switch is hidden but deletion is offered', async () => {
+      setup(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer
+            renderContent={() => <></>}
+            onDelete={() => {}}
+            toggleVisible={false}
+          />
+        </I18nextProvider>,
+      );
+      expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+    });
+
+    it('should keep a locked tile’s footer, which holds no controls either way', async () => {
+      // Nothing but `locked` can bring the footer back here: deletion is not offered and the switch
+      // is withheld, so the assertion isolates the locked branch.
+      setup(
+        <I18nextProvider i18n={i18nextInstance}>
+          <FilterTileContainer renderContent={() => <></>} locked={true} toggleVisible={false} />
+        </I18nextProvider>,
+      );
+      expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+    });
+  });
+
+  describe('expand/collapse control', () => {
+    it('should render the expand/collapse control by default', async () => {
+      setup(<FilterTileContainer renderContent={() => <></>} />);
+      expect(await screen.findByTestId('expand-collapse-button')).toBeInTheDocument();
+    });
+
+    it('should not render the expand/collapse control when it is configured as not visible', async () => {
+      setup(<FilterTileContainer renderContent={() => <></>} expandVisible={false} />);
+      expect(screen.queryByTestId('expand-collapse-button')).toBeNull();
+    });
+
+    it('should keep the tile collapsed when the expand/collapse control is hidden', async () => {
+      // Hiding the control must not change which state the tile starts in.
+      const renderContent = vi.fn(() => <></>);
+      setup(<FilterTileContainer renderContent={renderContent} expandVisible={false} />);
+
+      expect(renderContent).toHaveBeenCalledWith(true, false);
+    });
   });
 
   // Linked (FilterWidget-controlled) tile — read-only with an indicator.

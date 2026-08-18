@@ -27,6 +27,7 @@ import {
   getRankingStateFromFilter,
   isRankingCondition,
   RankingConditionControls,
+  withoutRankingConditions,
 } from './ranking-condition/index.js';
 import {
   createExcludeMembersFilter,
@@ -162,7 +163,7 @@ export const TextConditionSection = ({
   onChange,
 }: TextConditionSectionProps) => {
   const { t } = useTranslation();
-  const { membersOnlyMode } = useFilterEditorContext();
+  const { membersOnlyMode, rankingVisible } = useFilterEditorContext();
   const [condition, setCondition] = useState<TextConditionType>(getTextFilterCondition(filter));
   const [value, setValue] = useState(getTextFilterValue(filter) as string);
   const [selectedMembers, setSelectedMembers] = useState(
@@ -175,7 +176,12 @@ export const TextConditionSection = ({
   const multiSelectChanged =
     typeof prevMultiSelectEnabled !== 'undefined' && prevMultiSelectEnabled !== multiSelectEnabled;
 
-  const conditionItemsToUse = membersOnlyMode ? onlyMembersConditionItems : conditionItems;
+  const conditionItemsToUse = useMemo(() => {
+    if (membersOnlyMode) {
+      return onlyMembersConditionItems;
+    }
+    return rankingVisible ? conditionItems : withoutRankingConditions(filter)(conditionItems);
+  }, [membersOnlyMode, rankingVisible, filter]);
   const translatedConditionItems = useMemo(
     () => conditionItemsToUse.map((item) => ({ ...item, displayValue: t(item.displayValue) })),
     [t, conditionItemsToUse],

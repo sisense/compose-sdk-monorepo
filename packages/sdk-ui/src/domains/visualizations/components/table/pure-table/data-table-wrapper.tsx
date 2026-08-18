@@ -103,8 +103,12 @@ export const DataTableWrapper = ({
     customStyles && customStyles.showFieldTypeIcon !== undefined
       ? customStyles.showFieldTypeIcon
       : true;
-  const isResizable = customStyles?.columns?.resizable !== false;
-  const controlledWidths = customStyles?.columns?.widths;
+  // 'auto' spreads the columns evenly over the available width. It is authoritative: per-column
+  // widths, persisted widths and drag-resizing are all ignored while it is on, so the table always
+  // fits its container without a horizontal scroll — matching Fusion's automatic width mode.
+  const isAutoColumnWidth = customStyles?.columns?.width === 'auto';
+  const isResizable = !isAutoColumnWidth && customStyles?.columns?.resizable !== false;
+  const controlledWidths = isAutoColumnWidth ? undefined : customStyles?.columns?.widths;
   const columnMinWidth = customStyles?.columns?.minWidth ?? MIN_WIDTH;
   const columnMaxWidth = customStyles?.columns?.maxWidth ?? MAX_WIDTH;
   // Guard against a misconfigured bounds pair (e.g. minWidth > maxWidth) so drag-resize
@@ -115,19 +119,20 @@ export const DataTableWrapper = ({
   const verticalPadding = customStyles?.paddingVertical || DEFAULT_PADDING;
   const horizontalPadding = customStyles?.paddingHorizontal || DEFAULT_PADDING;
 
-  // subtract scrollbar width to avoid horizontal scroll and crop of the right border
-  const widthVal =
-    customStyles?.columns?.width === 'auto'
-      ? (width - horizontalPadding * 2 - getScrollbarWidth()) / dataOptions.columns.length
-      : undefined;
+  // Subtract the scrollbar width to avoid horizontal scroll and crop of the right border.
+  const autoColumnWidth = isAutoColumnWidth
+    ? (width - horizontalPadding * 2 - getScrollbarWidth()) / dataOptions.columns.length
+    : undefined;
 
   const columnsOptions = useMemo(
     () =>
       dataOptions.columns.map((col) => ({
         isHtml: 'isHtml' in col && !!col.isHtml,
-        width: 'width' in col ? col.width : widthVal,
+        // In 'auto' mode the even share wins over a per-column width — a width carried over from
+        // a Fusion widget's saved column sizes would otherwise reintroduce horizontal scroll.
+        width: autoColumnWidth ?? ('width' in col ? col.width : undefined),
       })),
-    [dataOptions.columns, widthVal],
+    [dataOptions.columns, autoColumnWidth],
   );
 
   const [fontsLoaded, setFontsLoaded] = useState(document.fonts?.status === 'loaded');
@@ -166,6 +171,11 @@ export const DataTableWrapper = ({
   const effectiveColumnWidths = useMemo(
     () =>
       dataTable.columns.map((_column, colIndex) => {
+        // Widths resized before switching to 'auto' must not linger over the even share.
+        if (isAutoColumnWidth) {
+          // eslint-disable-next-line security/detect-object-injection
+          return columnWidths[colIndex];
+        }
         // eslint-disable-next-line security/detect-object-injection
         const controlledWidth = controlledWidths?.[colIndex];
         if (controlledWidth !== undefined) {
@@ -179,7 +189,7 @@ export const DataTableWrapper = ({
         // eslint-disable-next-line security/detect-object-injection
         return columnWidths[colIndex];
       }),
-    [controlledWidths, dataTable.columns, columnWidths, resizedWidths],
+    [isAutoColumnWidth, controlledWidths, dataTable.columns, columnWidths, resizedWidths],
   );
 
   // `columnKey` is set to the column's index (see the `<Column>` element below) rather than

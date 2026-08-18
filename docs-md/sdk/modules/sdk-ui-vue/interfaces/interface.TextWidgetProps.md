@@ -10,6 +10,14 @@ Props for the `TextWidget` component.
 
 ### Widget
 
+#### config
+
+> **config**?: [`TextWidgetConfig`](interface.TextWidgetConfig.md)
+
+Configuration of the widget
+
+***
+
 #### styleOptions
 
 > **styleOptions**: [`TextWidgetStyleOptions`](../../sdk-ui/type-aliases/type-alias.TextWidgetStyleOptions.md)

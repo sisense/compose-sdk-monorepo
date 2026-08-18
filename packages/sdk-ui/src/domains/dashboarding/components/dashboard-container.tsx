@@ -113,6 +113,7 @@ export const DashboardContainer = ({
               onLayoutChange={onLayoutChange}
               config={{
                 showDragHandleIcon: config?.widgetsPanel?.editMode?.showDragHandleIcon,
+                deleteWidgetEnabled: config?.widgetsPanel?.editMode?.deleteWidget?.enabled,
               }}
             />
           ) : (

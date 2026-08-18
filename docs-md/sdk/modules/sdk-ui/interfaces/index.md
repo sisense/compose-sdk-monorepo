@@ -29,6 +29,7 @@ TypeScript interfaces for components and hooks listed above
 - [ChartEventProps](interface.ChartEventProps.md)
 - [ChartProps](interface.ChartProps.md)
 - [ChartThemeSettings](interface.ChartThemeSettings.md)
+- [ChartWidgetConfig](interface.ChartWidgetConfig.md)
 - [ChartWidgetProps](interface.ChartWidgetProps.md)
 - [ChatbotProps](interface.ChatbotProps.md)
 - [ChatConfig](interface.ChatConfig.md)
@@ -36,6 +37,7 @@ TypeScript interfaces for components and hooks listed above
 - [ContextMenuProps](interface.ContextMenuProps.md)
 - [CriteriaFilterTileProps](interface.CriteriaFilterTileProps.md)
 - [CustomWidgetComponentProps](interface.CustomWidgetComponentProps.md)
+- [CustomWidgetConfig](interface.CustomWidgetConfig.md)
 - [CustomWidgetEventProps](interface.CustomWidgetEventProps.md)
 - [CustomWidgetProps](interface.CustomWidgetProps.md)
 - [DashboardByIdConfig](interface.DashboardByIdConfig.md)
@@ -72,6 +74,7 @@ TypeScript interfaces for components and hooks listed above
 - [FiltersPanelConfig](interface.FiltersPanelConfig.md)
 - [FiltersPanelProps](interface.FiltersPanelProps.md)
 - [FilterTileProps](interface.FilterTileProps.md)
+- [FilterWidgetConfig](interface.FilterWidgetConfig.md) <Badge type="beta" text="Beta" />
 - [FilterWidgetProps](interface.FilterWidgetProps.md) <Badge type="beta" text="Beta" />
 - [FontsLoaderSettings](interface.FontsLoaderSettings.md)
 - [FunnelChartProps](interface.FunnelChartProps.md)
@@ -100,10 +103,10 @@ TypeScript interfaces for components and hooks listed above
 - [IndicatorChartProps](interface.IndicatorChartProps.md)
 - [JumpToDashboardConfig](interface.JumpToDashboardConfig.md)
 - [JumpToDashboardConfigForPivot](interface.JumpToDashboardConfigForPivot.md)
-- [KpiChartDataOptions](interface.KpiChartDataOptions.md) <Badge type="beta" text="Beta" />
-- [KpiChartEventProps](interface.KpiChartEventProps.md) <Badge type="beta" text="Beta" />
-- [KpiChartProps](interface.KpiChartProps.md) <Badge type="beta" text="Beta" />
-- [KpiStyleOptions](interface.KpiStyleOptions.md) <Badge type="beta" text="Beta" />
+- [KpiChartDataOptions](interface.KpiChartDataOptions.md)
+- [KpiChartEventProps](interface.KpiChartEventProps.md)
+- [KpiChartProps](interface.KpiChartProps.md)
+- [KpiStyleOptions](interface.KpiStyleOptions.md)
 - [LegendItemsOptions](interface.LegendItemsOptions.md)
 - [LegendSymbolsOptions](interface.LegendSymbolsOptions.md)
 - [LegendTitleOptions](interface.LegendTitleOptions.md)
@@ -123,6 +126,7 @@ TypeScript interfaces for components and hooks listed above
 - [PivotTableDataOptions](interface.PivotTableDataOptions.md)
 - [PivotTableProps](interface.PivotTableProps.md)
 - [PivotTableStyleOptions](interface.PivotTableStyleOptions.md)
+- [PivotTableWidgetConfig](interface.PivotTableWidgetConfig.md)
 - [PivotTableWidgetProps](interface.PivotTableWidgetProps.md)
 - [PolarChartProps](interface.PolarChartProps.md)
 - [PolarStyleOptions](interface.PolarStyleOptions.md)
@@ -153,6 +157,7 @@ TypeScript interfaces for components and hooks listed above
 - [TableDataOptions](interface.TableDataOptions.md)
 - [TableProps](interface.TableProps.md)
 - [TableStyleOptions](interface.TableStyleOptions.md)
+- [TextWidgetConfig](interface.TextWidgetConfig.md)
 - [TextWidgetProps](interface.TextWidgetProps.md)
 - [ThemeSettings](interface.ThemeSettings.md)
 - [ThemeSettingsFont](interface.ThemeSettingsFont.md)

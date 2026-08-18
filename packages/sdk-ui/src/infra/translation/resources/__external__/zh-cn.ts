@@ -208,6 +208,10 @@ const translation: TranslationDictionary = {
     placeholders: {
       setFilter: '设置筛选器',
     },
+    selectedCount: '已选择 {{count}} 项',
+    allExceptCount: '除 {{count}} 项以外的全部',
+    setupTitle: '设置筛选器小部件',
+    setupSubtitle: '设置维度并配置筛选器的工作方式',
   },
   unsupportedFilterMessage: '不支持的筛选器（已应用于数据查询）',
   unsupportedFilter: '不支持的筛选器{{filter}}',

@@ -6,6 +6,7 @@ import { DashboardDto } from '@/infra/api/types/dashboard-dto.js';
 import { AppSettings } from '@/infra/app/settings/settings.js';
 import { CompleteThemeSettingsInternal } from '@/types.js';
 
+import { asPermissionDerivedConfig } from './as-permission-derived-config.js';
 import { DashboardModel } from './dashboard-model.js';
 import {
   extractDashboardFilters,
@@ -33,6 +34,7 @@ export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps
     widgetsOptions,
     config,
     styleOptions,
+    userAuth,
   } = dashboardModel;
   return {
     id: oid,
@@ -41,6 +43,9 @@ export function toDashboardProps(dashboardModel: DashboardModel): DashboardProps
     widgets: widgetModels.map(widgetModelTranslator.toWidgetProps),
     layoutOptions,
     config: {
+      // Defaults implied by the dashboard's permissions. They sit below the developer's props, which
+      // the `Dashboard` component merges on top, so props keep the highest precedence.
+      ...asPermissionDerivedConfig(userAuth),
       tabbers: config.tabbers,
     },
     filters,

@@ -1,6 +1,13 @@
+import { measureFactory } from '@sisense/sdk-data';
+
+import * as DM from '@/__test-helpers__/sample-ecommerce';
+import type { StyledMeasureColumn } from '@/domains/visualizations/core/chart-data-options/types.js';
+
+import { translateKpiChartDataOptions } from '../data-options/data-options.js';
 import { KpiChartData, KpiComparisonData } from '../types.js';
 import {
   buildTargetReadout,
+  comparisonMeasureColumn,
   comparisonMeasureNumberFormatConfig,
   computeHeadlineMaxHeightPx,
   formatDelta,
@@ -40,6 +47,17 @@ const tTurkish = makeT({
   'kpi.percentFormat': '{{sign}}%{{value}}',
   'kpi.target.ofGoal': 'hedefe göre {{percent}}',
   'kpi.target.toGo': '{{value}} kaldı',
+});
+
+const revenue = measureFactory.sum(DM.Commerce.Revenue);
+const cost = measureFactory.sum(DM.Commerce.Cost);
+/** The normalized form a measure takes inside internal data options. */
+const styledCost: StyledMeasureColumn = { column: cost };
+
+const dataOptionsPlain = translateKpiChartDataOptions({ value: revenue });
+const dataOptionsWithDate = translateKpiChartDataOptions({
+  value: revenue,
+  category: DM.Commerce.Date.Months,
 });
 
 describe('formatKpiValue', () => {
@@ -398,11 +416,160 @@ describe('toKpiRenderOptions / toKpiDataPoint', () => {
       sparklinePoints: [{ x: 1, y: 100 }],
     });
 
-    expect(toKpiDataPoint(renderOptions)).toEqual({
-      value: 120,
-      date: 1000,
+    expect(toKpiDataPoint(renderOptions, dataOptionsWithDate, '2013-01-01T00:00:00')).toEqual({
       comparison: renderOptions.comparison,
+      entries: {
+        value: {
+          dataOption: dataOptionsWithDate.value,
+          measure: dataOptionsWithDate.value.column,
+          value: 120,
+          displayValue: '120',
+        },
+        // 'previous-period' compares the headline measure against its own prior bucket, so
+        // there's no separate measure -- and therefore no comparison entry.
+        category: {
+          dataOption: dataOptionsWithDate.category,
+          attribute: dataOptionsWithDate.category!.column,
+          value: '2013-01-01T00:00:00',
+          displayValue: '2013-01',
+        },
+      },
     });
+  });
+});
+
+describe('comparisonMeasureColumn', () => {
+  it('reads the measure of a measure-backed comparison', () => {
+    expect(comparisonMeasureColumn({ type: 'delta', value: styledCost })).toBe(styledCost);
+    expect(comparisonMeasureColumn({ type: 'value', value: styledCost })).toBe(styledCost);
+    expect(comparisonMeasureColumn({ type: 'target', target: styledCost })).toBe(styledCost);
+  });
+
+  it('has no measure for previous-period, a fixed-number target, or no comparison', () => {
+    expect(comparisonMeasureColumn({ type: 'previous-period' })).toBeUndefined();
+    expect(comparisonMeasureColumn({ type: 'target', target: 500 })).toBeUndefined();
+    expect(comparisonMeasureColumn(undefined)).toBeUndefined();
+  });
+});
+
+describe('toKpiDataPoint entries', () => {
+  /** Render options carrying only a headline value, for cases that don't exercise the comparison. */
+  const valueOnlyRenderOptions = { value: 120, valueTitle: 'Total Revenue' };
+
+  it('omits the value entry when there is no headline value', () => {
+    expect(toKpiDataPoint({ valueTitle: 'Total Revenue' }, dataOptionsPlain).entries).toEqual({});
+  });
+
+  it('omits the category entry when no category is configured', () => {
+    const { entries } = toKpiDataPoint(valueOnlyRenderOptions, dataOptionsPlain, 'ignored');
+    expect(entries?.category).toBeUndefined();
+  });
+
+  it("omits the category entry for valueMode 'total', whose headline spans every bucket", () => {
+    // The data layer leaves `categoryValue` unset in that mode -- the headline is the aggregate
+    // over all buckets, so no single bucket identifies it.
+    const { entries } = toKpiDataPoint(valueOnlyRenderOptions, dataOptionsWithDate, undefined);
+    expect(entries?.category).toBeUndefined();
+  });
+
+  it('carries a non-datetime category through unparsed', () => {
+    const dataOptions = translateKpiChartDataOptions({
+      value: revenue,
+      category: DM.Commerce.Gender,
+    });
+    const { entries } = toKpiDataPoint(valueOnlyRenderOptions, dataOptions, 'Female');
+    expect(entries?.category).toMatchObject({ value: 'Female', displayValue: 'Female' });
+  });
+
+  it("maps a 'delta' comparison's baseline onto its own measure's entry", () => {
+    const dataOptions = translateKpiChartDataOptions({
+      value: revenue,
+      comparison: { type: 'delta', value: cost },
+    });
+    const { entries } = toKpiDataPoint(
+      {
+        ...valueOnlyRenderOptions,
+        comparison: {
+          type: 'delta',
+          baseline: 100,
+          deltaValue: 20,
+          deltaPercent: 20,
+          label: 'Total Cost',
+        },
+      },
+      dataOptions,
+    );
+    expect(entries?.comparison).toMatchObject({
+      dataOption: { column: cost },
+      measure: cost,
+      value: 100,
+      displayValue: '100',
+    });
+  });
+
+  it("maps a measure-backed 'target' onto the target measure's entry", () => {
+    const dataOptions = translateKpiChartDataOptions({
+      value: revenue,
+      comparison: { type: 'target', target: cost },
+    });
+    const { entries } = toKpiDataPoint(
+      {
+        ...valueOnlyRenderOptions,
+        comparison: { type: 'target', target: 200, percentOfTarget: 60, toGo: 80, label: 'Target' },
+      },
+      dataOptions,
+    );
+    expect(entries?.comparison).toMatchObject({ value: 200, displayValue: '200' });
+  });
+
+  it("maps a 'value' comparison onto the secondary measure's entry, with that measure's format", () => {
+    const dataOptions = translateKpiChartDataOptions({
+      value: revenue,
+      comparison: {
+        type: 'value',
+        value: { column: cost, numberFormatConfig: { name: 'Currency', symbol: '$' } },
+      },
+    });
+    const { entries } = toKpiDataPoint(
+      {
+        ...valueOnlyRenderOptions,
+        comparison: { type: 'value', value: 250000, label: 'Total Cost' },
+      },
+      dataOptions,
+    );
+    expect(entries?.comparison).toMatchObject({ value: 250000, displayValue: '$250K' });
+  });
+
+  it('has no comparison entry for a fixed-number target, which has no measure of its own', () => {
+    const dataOptions = translateKpiChartDataOptions({
+      value: revenue,
+      comparison: { type: 'target', target: 500 },
+    });
+    const { entries } = toKpiDataPoint(
+      {
+        ...valueOnlyRenderOptions,
+        comparison: { type: 'target', target: 500, percentOfTarget: 24, toGo: 380, label: '500' },
+      },
+      dataOptions,
+    );
+    expect(entries?.comparison).toBeUndefined();
+  });
+
+  it('drops the comparison entry when onBeforeRender swapped the comparison type', () => {
+    // The configured measure describes a different quantity than the one on display, so
+    // attaching it would mislabel the entry -- same guard `toComparisonDisplay` applies.
+    const dataOptions = translateKpiChartDataOptions({
+      value: revenue,
+      comparison: { type: 'delta', value: cost },
+    });
+    const { entries } = toKpiDataPoint(
+      {
+        ...valueOnlyRenderOptions,
+        comparison: { type: 'value', value: 250000, label: 'Swapped' },
+      },
+      dataOptions,
+    );
+    expect(entries?.comparison).toBeUndefined();
   });
 });
 

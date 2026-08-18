@@ -6,6 +6,14 @@ title: EditModeConfig
 
 Edit mode configuration
 
+When using [DashboardById](../fusion-assets/function.DashboardById.md) or a dashboard model loaded with
+[useGetDashboardModel](../fusion-assets/function.useGetDashboardModel.md) and translated by `dashboardModelTranslator.toDashboardProps()`,
+some defaults below may be derived from the current user's permissions on that dashboard, if the
+Sisense Fusion instance provides it. Otherwise the documented default will be used.
+Explicit configuration values have the highest precedence, and will override any defaults.
+If persistence is used when defaults derived from permissions are overridden, the Sisense Fusion
+API will reject changes where the current user is not allowed to perform the update.
+
 ## Properties
 
 ### applyChangesAsBatch
@@ -29,7 +37,9 @@ Configuration for the edit mode user experience
 > If `false`, the layout changes will be applied immediately after the user makes each change,
 > without confirmation or the ability to cancel/undo.
 >
-> @default: true
+> ###### Default
+>
+> `true`
 >
 > ##### `applyChangesAsBatch.historyLimit`
 >
@@ -51,7 +61,7 @@ Configuration for the edit mode user experience
 
 ### enabled
 
-> **enabled**: `boolean`
+> **enabled**?: `boolean`
 
 If `true` the editable layout feature is enabled for the end user.
 
@@ -61,9 +71,7 @@ When persistence is enabled combined with `editMode` for a Fusion dashboard, cha
 
 #### Default
 
-```ts
-false
-```
+`false`, or the user's permission to toggle edit mode on a Fusion dashboard
 
 ***
 
@@ -92,9 +100,12 @@ Configuration for the widget renaming feature.
 >
 > When `true`, adds a "Rename widget" menu item to each widget header.
 > On click, triggers inline title editing of the widget.
-> Only has effect when edit mode is also enabled (`editMode.enabled`).
+> Only has effect when edit mode is also enabled (`editMode.enabled`) and batch mode is disabled (`editMode.applyChangesAsBatch.enabled`).
+> If batch mode is enabled, the "Rename widget" menu item won't be applied because it would not be possible to undo/redo the rename.
 >
-> If not specified, the default value is `false`.
+> ###### Default
+>
+> `false`, or the user's permission to rename widgets on a Fusion dashboard
 >
 >
 

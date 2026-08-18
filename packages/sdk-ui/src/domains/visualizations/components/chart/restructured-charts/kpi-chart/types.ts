@@ -53,6 +53,13 @@ export type KpiChartData = {
   valueColor?: string;
   /** Last date bucket as epoch milliseconds — shown in the header when the headline is the last bucket. */
   valuePeriodMs?: number;
+  /**
+   * Raw value of the category cell the headline was read from (e.g. `'2013-01-01T00:00:00'`),
+   * as opposed to {@link valuePeriodMs}'s parsed epoch. This is the form every other chart's
+   * `entries.category` carries, so it's what downstream filter builders (cross-filtering, JTD)
+   * can parse. Set only when the headline is a single bucket — never for `valueMode: 'total'`.
+   */
+  categoryValue?: string | number;
   numberFormatConfig?: NumberFormatConfig;
   comparison?: KpiComparisonData;
   /** `null` points are gaps in the sparkline, never rendered as zero. */

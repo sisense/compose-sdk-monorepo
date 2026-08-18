@@ -34,6 +34,8 @@ export type {
   FiltersPanelChangeEventHandler,
   IndicatorDataPointEvent,
   IndicatorDataPointEventHandler,
+  KpiDataPointEvent,
+  KpiDataPointEventHandler,
   ScatterDataPointEvent,
   ScatterDataPointEventHandler,
   ScatterDataPointsEvent,

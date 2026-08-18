@@ -31,6 +31,7 @@ import {
   getRankingStateFromFilter,
   isRankingCondition,
   RankingConditionControls,
+  withoutRankingConditions,
 } from '../ranking-condition/index.js';
 import { DatetimeLimits } from '../types.js';
 import { DatetimeExcludeConditionForm } from './condition-forms/datetime-exclude-condition-form.js';
@@ -133,7 +134,7 @@ export const DatetimeConditionSection = ({
   onChange,
 }: DatetimeConditionSectionProps) => {
   const { t } = useTranslation();
-  const { membersOnlyMode } = useFilterEditorContext();
+  const { membersOnlyMode, rankingVisible } = useFilterEditorContext();
   const initialFilterData = getDatetimeConditionFilterData(filter);
   const [condition, setCondition] = useState<DatetimeConditionType>(initialFilterData.condition);
   const [editedFilter, setEditedFilter] = useState<Filter | null>(initialFilterData.editedFilter);
@@ -142,7 +143,12 @@ export const DatetimeConditionSection = ({
     initialFilterData.rankingMeasure,
   );
   const [granularity, setGranularity] = useState(initialFilterData.granularity);
-  const conditionItemsToUse = membersOnlyMode ? membersOnlyConditionItems : conditionItems;
+  const conditionItemsToUse = useMemo(() => {
+    if (membersOnlyMode) {
+      return membersOnlyConditionItems;
+    }
+    return rankingVisible ? conditionItems : withoutRankingConditions(filter)(conditionItems);
+  }, [membersOnlyMode, rankingVisible, filter]);
   const translatedConditionItems = useMemo(
     () =>
       conditionItemsToUse.map((item) => ({

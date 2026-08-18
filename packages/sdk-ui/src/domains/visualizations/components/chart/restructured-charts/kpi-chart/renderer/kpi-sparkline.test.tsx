@@ -21,6 +21,18 @@ const points: SparklinePoint[] = [
   { x: 2, y: 90 },
 ];
 
+const JUNE_15_2020 = Date.UTC(2020, 5, 15);
+const datePoints: SparklinePoint[] = [{ x: JUNE_15_2020, y: 100 }];
+
+/** Runs the built tooltip formatter over the given point, as Highcharts would. */
+function formatTooltip(point: { x: number; y: number }): string {
+  const options = optionsSpy.mock.calls.at(-1)?.[0] as Highcharts.Options;
+  const formatter = options.tooltip?.formatter as (
+    this: Highcharts.TooltipFormatterContextObject,
+  ) => string;
+  return formatter.call(point as Highcharts.TooltipFormatterContextObject);
+}
+
 describe('KpiSparkline', () => {
   beforeEach(() => {
     optionsSpy.mockClear();
@@ -102,6 +114,33 @@ describe('KpiSparkline', () => {
       width: 500,
       height: 120,
     });
+  });
+
+  it("formats the tooltip's date with the category's dateFormat when one is set", () => {
+    render(
+      <KpiSparkline points={datePoints} chartType="line" color="#123456" dateFormat="yyyy Q" />,
+    );
+
+    expect(formatTooltip({ x: JUNE_15_2020, y: 100 })).toContain('2020 Q2');
+  });
+
+  it("falls back to the card's default date format when the category carries none", () => {
+    render(<KpiSparkline points={datePoints} chartType="line" color="#123456" />);
+
+    expect(formatTooltip({ x: JUNE_15_2020, y: 100 })).toContain('Jun 15, 2020');
+  });
+
+  it("leads the tooltip with the measure's title when one is passed", () => {
+    render(
+      <KpiSparkline
+        points={datePoints}
+        chartType="line"
+        color="#123456"
+        valueTitle="Total Revenue"
+      />,
+    );
+
+    expect(formatTooltip({ x: JUNE_15_2020, y: 100 })).toContain('Total Revenue');
   });
 
   it('keeps the sparkline container aria-hidden, and its wrapped Highcharts container stretches to 100% of the cell', () => {

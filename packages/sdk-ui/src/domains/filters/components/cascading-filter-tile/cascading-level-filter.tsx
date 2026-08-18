@@ -22,6 +22,7 @@ import { getSlightlyDifferentColor, TRIANGLE_COLOR_ADJUSTMENT } from '@/shared/u
 import { CriteriaFilterTile } from '../criteria-filter-tile/index.js';
 import { DateRangeFilterTile, RelativeDateFilterTile } from '../date-filter/index.js';
 import { CompleteFilterTileDesignOptions } from '../filter-tile-container.js';
+import type { FilterTileConfig } from '../filter-tile/types.js';
 import { MemberFilterTile } from '../member-filter-tile/index.js';
 
 /**
@@ -49,6 +50,13 @@ export type CascadingLevelFilterTileProps = {
 
   /** Menu items to be displayed in the cascading level filter header */
   menuItems: MenuItem[];
+
+  /**
+   * Config of the containing cascading filter tile, whose control visibility applies to every level.
+   *
+   * @internal
+   */
+  config?: FilterTileConfig;
 
   /**
    * Render header title
@@ -88,10 +96,15 @@ export const CascadingLevelFilterTile = ({
   onEdit,
   menuItems,
   renderHeaderTitle,
+  config,
 }: CascadingLevelFilterTileProps) => {
   const { themeSettings } = useThemeContext();
   const { backgroundColor: bgColor } = themeSettings.general;
   const triangleColor = getSlightlyDifferentColor(bgColor, TRIANGLE_COLOR_ADJUSTMENT);
+  // Each level renders a tile of its own, so the containing tile's control visibility has to be
+  // carried over — otherwise a hidden control would reappear on every level.
+  const toggleVisible = config?.actions?.toggleFilter?.visible;
+  const expandVisible = config?.actions?.expandFilter?.visible;
   const filterTileConfig = useMemo(
     () => ({
       actions: {
@@ -99,6 +112,8 @@ export const CascadingLevelFilterTile = ({
           // Disables the default filter tile "lock/unlock" menu item
           enabled: false,
         },
+        toggleFilter: { visible: toggleVisible },
+        expandFilter: { visible: expandVisible },
       },
       header: {
         menu: {
@@ -107,7 +122,7 @@ export const CascadingLevelFilterTile = ({
         },
       },
     }),
-    [menuItems],
+    [menuItems, toggleVisible, expandVisible],
   );
 
   const attribute = filter.attribute;

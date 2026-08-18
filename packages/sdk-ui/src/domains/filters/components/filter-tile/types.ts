@@ -33,5 +33,32 @@ export type FilterTileConfig = {
        */
       enabled?: boolean;
     };
+    /**
+     * Configuration for turning the filter on and off from the tile.
+     *
+     * @internal
+     */
+    toggleFilter?: {
+      /**
+       * Determines whether the enable/disable switch is shown on the tile.
+       *
+       * If not specified, the default value is `true`.
+       */
+      visible?: boolean;
+    };
+    /**
+     * Configuration for expanding and collapsing the tile.
+     *
+     * @internal
+     */
+    expandFilter?: {
+      /**
+       * Determines whether the expand/collapse control is shown on the tile.
+       *
+       * If not specified, the default value is `true`. Hiding the control leaves the tile in the
+       * state it would otherwise have started in.
+       */
+      visible?: boolean;
+    };
   };
 };

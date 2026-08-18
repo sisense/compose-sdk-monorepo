@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react';
 
+import { withoutUndefinedDerivedFlags } from '@/domains/dashboarding/dashboard-model/as-permission-derived-config';
 import * as dashboardModelTranslator from '@/domains/dashboarding/dashboard-model/dashboard-model-translator';
 import { useDashboardModelInternal } from '@/domains/dashboarding/dashboard-model/use-dashboard-model/use-dashboard-model';
 import { dashboardChangeEventToUseDashboardModelAction } from '@/domains/dashboarding/dashboard-model/use-dashboard-model/use-dashboard-model-utils';
-import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { TranslatableError } from '@/infra/translation/translatable-error';
 import { LoadingOverlay } from '@/shared/components/loading-overlay';
@@ -47,7 +47,6 @@ export const DashboardById = asSisenseComponent({
   componentName: 'DashboardById',
 })(({ dashboardOid, config: propConfig }: DashboardByIdProps) => {
   const config = useDefaults(propConfig, DEFAULT_DASHBOARD_BY_ID_CONFIG);
-  const { app } = useSisenseContext();
 
   const { dashboard, isLoading, isError, error, dispatchChanges } = useDashboardModelInternal({
     dashboardOid,
@@ -79,27 +78,16 @@ export const DashboardById = asSisenseComponent({
     return dashboard && dashboardModelTranslator.toDashboardProps(dashboard);
   }, [dashboard]);
 
+  // This is the props layer of the config merge below, so anything set here wins over the defaults
+  // derived from the dashboard's permissions in `toDashboardProps`. Every permission-derived flag is
+  // therefore carried through from `propConfig` untouched — nothing computes them here — which is
+  // what lets a developer's explicit value override the permissions while leaving the derived
+  // default in place when they say nothing.
   const propsConfigInternal: DashboardConfig = useMemo(
-    () => ({
-      ...propConfig,
-      widgetsPanel: {
-        ...propConfig?.widgetsPanel,
-        editMode: {
-          ...propConfig?.widgetsPanel?.editMode,
-          duplicateWidget: {
-            enabled: propConfig?.widgetsPanel?.editMode?.duplicateWidget?.enabled ?? false,
-          },
-          renameWidget: {
-            enabled: propConfig?.widgetsPanel?.editMode?.renameWidget?.enabled ?? false,
-          },
-          enabled: Boolean(
-            app?.settings?.user?.permissions?.dashboards?.edit_layout &&
-              propConfig?.widgetsPanel?.editMode?.enabled,
-          ),
-        },
-      },
-    }),
-    [propConfig, app?.settings?.user?.permissions?.dashboards?.edit_layout],
+    // Flags a developer set to an explicit `undefined` mean "no preference", exactly like omitting
+    // them, so they must not reach the merge — see `withoutUndefinedDerivedFlags`.
+    () => withoutUndefinedDerivedFlags(propConfig ?? {}),
+    [propConfig],
   );
 
   const dashboardConfig = useDefaults<DashboardConfig>(

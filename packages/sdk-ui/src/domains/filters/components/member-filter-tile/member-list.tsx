@@ -3,6 +3,10 @@ import { CSSProperties, FunctionComponent, useMemo } from 'react';
 import styled from '@emotion/styled';
 
 import { MemberRadio } from '@/domains/filters/components/common/member-radio';
+import {
+  asSelectionListMembership,
+  isMemberVisuallySelected,
+} from '@/domains/filters/shared/members-filter-selection';
 
 import { Checkbox } from '../common';
 import {
@@ -181,15 +185,12 @@ export const MemberList: FunctionComponent<MemberListProps> = ({
             mode={enableMultiSelection ? 'checkbox' : 'radio'}
             checked={
               enableMultiSelection
-                ? // when excludeMembers is true, checking (ticking) a member means deselecting it.
-                  // In other words, selected member is unchecked
-                  selectedMembersMap.has(member.key) === !excludeMembers
+                ? isMemberVisuallySelected(member.key, selectedMembersMap, excludeMembers)
                 : selectedMembersMap.has(member.key)
             }
             onCheck={(isChecked) => {
               if (enableMultiSelection) {
-                // when excludeMembers is true, unchecking (unticking) a member means selecting it
-                onSelectMember(member, excludeMembers ? !isChecked : isChecked);
+                onSelectMember(member, asSelectionListMembership(isChecked, excludeMembers));
               } else {
                 onSelectMember(member, isChecked);
               }

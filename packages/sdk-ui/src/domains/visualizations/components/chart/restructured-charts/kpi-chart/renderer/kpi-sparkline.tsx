@@ -19,7 +19,30 @@ export type KpiSparklineProps = {
   chartType: SparklineChartType;
   color: string;
   numberFormatConfig?: NumberFormatConfig;
+  /**
+   * Date format for the tooltip's category value, taken from the category data option's
+   * `dateFormat`. Falls back to {@link DEFAULT_TOOLTIP_DATE_FORMAT} when unset.
+   */
+  dateFormat?: string;
+  /**
+   * Headline measure's title, shown as the tooltip's leading label -- the KPI card's counterpart
+   * of the series name other chart tooltips lead with.
+   */
+  valueTitle?: string;
+  /**
+   * Color of the tooltip's value, defaulting to `color`. The theme accent belongs here: `color` is
+   * dimmed or flipped to white for contrast against the card, which the tooltip's own white body
+   * doesn't share -- see {@link SparklineFormatting.valueColor}.
+   */
+  tooltipValueColor?: string;
 };
+
+/**
+ * Tooltip date format used when the category data option carries no `dateFormat` of its own.
+ * Day-precision, unlike the card's period caption: a tooltip labels one individual bucket, so it
+ * has to stay unambiguous at every granularity the sparkline can plot.
+ */
+const DEFAULT_TOOLTIP_DATE_FORMAT = 'MMM d, yyyy';
 
 /**
  * Renders the KPI card's inline sparkline. Hidden from assistive tech (`aria-hidden`) since it's
@@ -31,7 +54,15 @@ export type KpiSparklineProps = {
  * Highcharts' own container auto-detection.
  * @internal
  */
-export function KpiSparkline({ points, chartType, color, numberFormatConfig }: KpiSparklineProps) {
+export function KpiSparkline({
+  points,
+  chartType,
+  color,
+  numberFormatConfig,
+  dateFormat,
+  valueTitle,
+  tooltipValueColor,
+}: KpiSparklineProps) {
   const dateFormatter = useDateFormatter();
   const areaRef = useRef<HTMLDivElement>(null);
   const { width, height } = useElementSize(areaRef);
@@ -44,13 +75,27 @@ export function KpiSparkline({ points, chartType, color, numberFormatConfig }: K
         color,
         {
           numberFormatConfig,
-          formatDate: (epochMs) => dateFormatter(new Date(epochMs), 'MMM d, yyyy'),
+          formatDate: (epochMs) =>
+            dateFormatter(new Date(epochMs), dateFormat ?? DEFAULT_TOOLTIP_DATE_FORMAT),
+          valueTitle,
+          valueColor: tooltipValueColor,
         },
         // Not yet measured (0x0) -- omit the size and let Highcharts auto-detect for the very
         // first paint rather than explicitly sizing it to nothing.
         width > 0 && height > 0 ? { width, height } : undefined,
       ),
-    [points, chartType, color, numberFormatConfig, dateFormatter, width, height],
+    [
+      points,
+      chartType,
+      color,
+      numberFormatConfig,
+      dateFormat,
+      valueTitle,
+      tooltipValueColor,
+      dateFormatter,
+      width,
+      height,
+    ],
   );
 
   return (

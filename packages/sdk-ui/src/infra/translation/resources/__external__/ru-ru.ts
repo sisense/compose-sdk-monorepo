@@ -230,6 +230,10 @@ const translation: TranslationDictionary = {
     placeholders: {
       setFilter: 'Установить фильтр',
     },
+    selectedCount: 'Выбрано: {{count}}',
+    allExceptCount: 'Все, кроме {{count}}',
+    setupTitle: 'Настройте виджет фильтр',
+    setupSubtitle: 'Выберите измерение и настройте работу фильтра',
   },
   unsupportedFilterMessage: 'Неподдерживаемый фильтр (применен к запросу данных)',
   unsupportedFilter: 'Неподдерживаемый фильтр {{filter}}',

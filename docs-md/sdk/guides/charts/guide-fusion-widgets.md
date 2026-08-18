@@ -20,7 +20,7 @@ There are also some properties which are specific to `WidgetById` components.
 
 In addition to any other chart properties you want to use with a `WidgetById`, you need to specify the `dashboardOid` and `widgetOid`, which identify which widget from your Sisense instance is displayed in the `WidgetById`.
 
-You can get the `dashboardOid` and `widgetOid` from the widget’s embed code in Sisense instance or using the Sisense REST API. You can also use the the `useGetDashboardModel` and `useGetDashboardModels` hooks in React/Vue or the `DashboardService` functions with the same names in Angular, to get `dashboardOid` and `widgetOid` values for a dashboard and its widgets.
+You can get the `dashboardOid` and `widgetOid` from the widget’s embed code in your Sisense instance or using the Sisense REST API. You can also use the `useGetDashboardModel` and `useGetDashboardModels` hooks in React/Vue or the `DashboardService` functions with the same names in Angular, to get `dashboardOid` and `widgetOid` values for a dashboard and its widgets.
 
 For example, the following code snippets get a chart or charts from a Sisense dashboard:
 

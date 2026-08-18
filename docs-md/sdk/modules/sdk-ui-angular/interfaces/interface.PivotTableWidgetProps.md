@@ -46,7 +46,7 @@ Configurations for how to interpret and present the data passed to the table
 
 #### config
 
-> **config**?: [`WidgetConfig`](../type-aliases/type-alias.WidgetConfig.md)
+> **config**?: [`PivotTableWidgetConfig`](interface.PivotTableWidgetConfig.md)
 
 Configuration of the widget
 

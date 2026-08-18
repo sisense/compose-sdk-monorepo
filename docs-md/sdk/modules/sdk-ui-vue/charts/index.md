@@ -17,6 +17,7 @@ Vue components and utilities for working with charts
 - [ColumnChart](class.ColumnChart.md)
 - [FunnelChart](class.FunnelChart.md)
 - [IndicatorChart](class.IndicatorChart.md)
+- [KpiChart](class.KpiChart.md)
 - [LineChart](class.LineChart.md)
 - [PieChart](class.PieChart.md)
 - [PolarChart](class.PolarChart.md)

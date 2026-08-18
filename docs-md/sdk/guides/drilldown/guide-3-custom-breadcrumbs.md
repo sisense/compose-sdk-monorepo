@@ -41,7 +41,7 @@ For example, here you can see the clear button in the first chip and the current
 
 To create these chips, you can start to apply some of the properties mentioned above in your component code.
 
-- Use `filterDisplayValues` to define which breadcrumbs to show
+- Use `filtersDisplayValues` to define which breadcrumbs to show
 - Use `clearDrilldownSelections` to return the chart to its original state when the clear button in the first chip is clicked
 - Use `currentDimension` to build the last drilldown chip
 
@@ -61,19 +61,19 @@ return (
 
 Now you can fill in the remaining chips for the current drilldown hierarchy.
 
-You know how many chips to create based on the number of elements in the `filterDisplayValue` array. Each element in the array is an array itself of a drilldown level. When a single data point is selected for drilling down, the drilldown level is an array with a single element. If more than one data point is selected for drilling down, the drilldown level is an array containing all the selected points.
+You know how many chips to create based on the number of elements in the `filtersDisplayValues` array. Each element in the array is an array itself of a drilldown level. When a single data point is selected for drilling down, the drilldown level is an array with a single element. If more than one data point is selected for drilling down, the drilldown level is an array containing all the selected points.
 
-For example, consider the chart we discussed in previous sections where the `initialDimension` is **Age range** and the `drilldownDimensions` are **Gender**, **Condition**, and **Category**. If a user initially selects the **25-34** and **35-44** age ranges, drills down on category, and the selects the **New** category to drill down by age, the `filterDisplayValue` array will look like this:
+For example, consider the chart we discussed in previous sections where the `initialDimension` is **Age range** and the `drilldownPaths` are **Gender**, **Condition**, and **Category**. If a user initially selects the **25-34** and **35-44** age ranges, drills down on category, and then selects the **New** category to drill down by age, the `filtersDisplayValues` array will look like this:
 
 ```ts
 [['25-34', '35-44'], ['New']];
 ```
 
-Here two similar types of chips are used to display the values in the `filtersDisplayValue` array. In both types of chips, a value from `filtersDisplayValue` is used to show which dimensions have been selected for drilling down. If the value contains multiple category selections, you can choose how to display those. Here we choose to separate them with a pipe character (`|`).
+Here two similar types of chips are used to display the values in the `filtersDisplayValues` array. In both types of chips, a value from `filtersDisplayValues` is used to show which dimensions have been selected for drilling down. If the value contains multiple category selections, you can choose how to display those. Here we choose to separate them with a pipe character (`|`).
 
 The difference between the two types of chips is whether they are clickable or not. Clickable chips allow users to go back up the drilldown hierarchy. You go back up the hierarchy using the `sliceDrilldownSelections` callback.
 
-Here you can see the two types of chips. The clickable chips are blue and the others are gray. Clickable chips where it makes sense to move back up the drilldown hierarchy. Non-clickable chips are used in all other cases.
+Here you can see the two types of chips. The clickable chips are blue and the others are gray. Clickable chips are used where it makes sense to move back up the drilldown hierarchy. Non-clickable chips are used in all other cases.
 
 ![Breadcrumb chip types](../../img/drilldown-guide/breadcrumb-chips.png 'Breadcrumb chip types')
 
@@ -120,7 +120,7 @@ For example, the following code shows the breadcrumbs component right below the 
 ```ts
 <DrilldownWidget
   initialDimension={DM.Commerce.AgeRange}
-  drilldownDimensions={[
+  drilldownPaths={[
     DM.Commerce.Gender,
     DM.Commerce.Condition,
     DM.Category.Category,

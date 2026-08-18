@@ -62,6 +62,7 @@ export const FilterEditor = ({
         dataSources: dataSourcesInternal,
         parentFilters: parentFiltersInternal,
         membersOnlyMode: config?.membersOnlyMode ?? false,
+        rankingVisible: config?.ranking?.visible ?? true,
       }}
     >
       {valueType === 'text' && (

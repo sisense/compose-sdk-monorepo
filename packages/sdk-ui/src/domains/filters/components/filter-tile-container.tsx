@@ -141,6 +141,20 @@ interface FilterTileContainerProps {
   onEdit?: () => void;
   locked?: boolean;
   /**
+   * Determines whether the enable/disable switch is rendered. Rendered by default; hiding it leaves
+   * the filter in whichever state it already has.
+   *
+   * @internal
+   */
+  toggleVisible?: boolean;
+  /**
+   * Determines whether the expand/collapse control is rendered. Rendered by default; hiding it
+   * leaves the tile in the state it would otherwise have started in.
+   *
+   * @internal
+   */
+  expandVisible?: boolean;
+  /**
    * Renders the tile read-only: controls stay visible but inert (unlike `locked`),
    * plus a "Linked to filter widget" indicator with an info tooltip.
    *
@@ -244,6 +258,8 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
     onEdit,
     locked = false,
     linked = false,
+    toggleVisible = true,
+    expandVisible = true,
     menuItems,
     renderHeaderTitle = (title) => title,
   } = props;
@@ -256,6 +272,12 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
     props.design ?? {},
   ) as CompleteFilterTileDesignOptions;
   const [collapsed, setCollapsed] = useState(true);
+  // The footer holds the delete button and the enable/disable switch, and carries a top border and a
+  // minimum height of its own. Withholding the switch makes it possible for both to be absent at
+  // once, which would leave an empty bordered strip, so the footer goes with them. A locked tile is
+  // the exception: it renders no footer content either, but has always kept the footer, and dropping
+  // it there would change tiles this configuration does not touch.
+  const shouldShowFooter = design.footer.shouldBeShown && (locked || !!onDelete || toggleVisible);
 
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
@@ -286,7 +308,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
               shouldShowBorder={design.header.hasBorder}
               style={{ color: textColor, ...inertStyle }}
             >
-              {!locked && design.header.isCollapsible && (
+              {!locked && design.header.isCollapsible && expandVisible && (
                 <IconButton
                   sx={{ p: '4px', ...(linked ? { opacity: LINKED_TILE_DIM } : {}) }}
                   onClick={() => setCollapsed((value) => !value)}
@@ -414,7 +436,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
             </LinkedTooltip>
           </div>
         )}
-        {isVertical(arrangement) && design.footer.shouldBeShown && (
+        {isVertical(arrangement) && shouldShowFooter && (
           <Footer style={{ ...inertStyle, ...(linked ? { opacity: LINKED_TILE_FOOTER_DIM } : {}) }}>
             {onDelete && !locked && (
               <IconButton
@@ -429,7 +451,7 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
                 />
               </IconButton>
             )}
-            {!locked && (
+            {!locked && toggleVisible && (
               <SisenseSwitchButton
                 checked={!disabled}
                 disabled={linked}

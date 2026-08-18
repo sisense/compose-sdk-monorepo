@@ -10,6 +10,8 @@ import { CompleteThemeSettingsInternal } from '@/types';
 
 import { DataTableWrapper } from './data-table-wrapper.js';
 import { calcColumnWidths } from './helpers/calc-column-widths.js';
+import { DEFAULT_PADDING } from './styles/style-constants.js';
+import { TableCustomStyles } from './types.js';
 
 type CapturedTableProps = {
   onColumnResizeEndCallback?: (newWidth: number, columnKey: string) => void;
@@ -29,6 +31,12 @@ const resetFdtCapture = () => {
   fdtCapture.columns.length = 0;
   fdtCapture.tableProps = undefined;
 };
+
+// jsdom performs no layout, so the real helper reports a bogus scrollbar width. Pin it to 0 so
+// the expected 'auto' column width stays a plain (tableWidth - padding) / columnCount.
+vi.mock('@/shared/utils/get-scrollbar-width', () => ({
+  getScrollbarWidth: () => 0,
+}));
 
 vi.mock('fixed-data-table-2', () => ({
   Cell: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -199,5 +207,92 @@ describe('DataTableWrapper column resize', () => {
     });
 
     expect(onColumnsResize).toHaveBeenCalledWith([200, expectedCostWidth]);
+  });
+});
+
+describe("DataTableWrapper 'auto' column width", () => {
+  const TABLE_WIDTH = 600;
+  // DataTableWrapper lays 'auto' columns out over the table width minus its horizontal padding
+  // (DEFAULT_PADDING on each side) and the scrollbar width (mocked to 0 above).
+  const expectedAutoWidth = (TABLE_WIDTH - DEFAULT_PADDING * 2) / dataTable.columns.length;
+
+  const renderAutoWidthTable = (columns: TableCustomStyles['columns'] = {}) =>
+    render(
+      <DataTableWrapper
+        dataTable={dataTable}
+        dataOptions={dataOptions}
+        height={400}
+        width={TABLE_WIDTH}
+        themeSettings={themeSettings}
+        onSortUpdate={vi.fn()}
+        customStyles={{ columns: { width: 'auto', ...columns } }}
+      />,
+    );
+
+  beforeEach(() => {
+    resetFdtCapture();
+  });
+
+  it('spreads columns evenly over the available table width', () => {
+    renderAutoWidthTable();
+
+    expect(fdtCapture.columns[0]?.width).toBe(expectedAutoWidth);
+    expect(fdtCapture.columns[1]?.width).toBe(expectedAutoWidth);
+  });
+
+  it('takes precedence over per-column widths coming from data options', () => {
+    render(
+      <DataTableWrapper
+        dataTable={dataTable}
+        dataOptions={{
+          columns: [
+            { column: { name: 'AgeRange', type: 'string' }, width: 300 },
+            { column: { name: 'Cost', type: 'number' }, width: 250 },
+          ],
+        }}
+        height={400}
+        width={TABLE_WIDTH}
+        themeSettings={themeSettings}
+        onSortUpdate={vi.fn()}
+        customStyles={{ columns: { width: 'auto' } }}
+      />,
+    );
+
+    expect(fdtCapture.columns[0]?.width).toBe(expectedAutoWidth);
+    expect(fdtCapture.columns[1]?.width).toBe(expectedAutoWidth);
+  });
+
+  it('takes precedence over controlled (persisted) column widths', () => {
+    renderAutoWidthTable({ widths: [180, 220] });
+
+    expect(fdtCapture.columns[0]?.width).toBe(expectedAutoWidth);
+    expect(fdtCapture.columns[1]?.width).toBe(expectedAutoWidth);
+  });
+
+  it('disables column resizing even when resizable is explicitly true', () => {
+    const onColumnsResize = vi.fn();
+    renderAutoWidthTable({ resizable: true, onColumnsResize });
+
+    expect(fdtCapture.columns[0]?.isResizable).toBe(false);
+    expect(fdtCapture.columns[1]?.isResizable).toBe(false);
+    expect(fdtCapture.tableProps?.onColumnResizeEndCallback).toBeUndefined();
+    expect(onColumnsResize).not.toHaveBeenCalled();
+  });
+
+  it("keeps resizing enabled for the default 'content' width mode", () => {
+    render(
+      <DataTableWrapper
+        dataTable={dataTable}
+        dataOptions={dataOptions}
+        height={400}
+        width={TABLE_WIDTH}
+        themeSettings={themeSettings}
+        onSortUpdate={vi.fn()}
+        customStyles={{ columns: { width: 'content' } }}
+      />,
+    );
+
+    expect(fdtCapture.columns[0]?.isResizable).toBe(true);
+    expect(fdtCapture.tableProps?.onColumnResizeEndCallback).toBeTypeOf('function');
   });
 });

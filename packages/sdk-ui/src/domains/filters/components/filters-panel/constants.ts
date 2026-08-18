@@ -12,10 +12,16 @@ export const DEFAULT_FILTERS_PANEL_CONFIG: DeepRequired<FiltersPanelConfig> = {
       multiSelect: {
         visible: true,
       },
+      ranking: {
+        visible: true,
+      },
     },
     editFilter: {
       enabled: false,
       multiSelect: {
+        visible: true,
+      },
+      ranking: {
         visible: true,
       },
     },
@@ -27,6 +33,12 @@ export const DEFAULT_FILTERS_PANEL_CONFIG: DeepRequired<FiltersPanelConfig> = {
     },
     lockFilter: {
       enabled: false,
+    },
+    toggleFilter: {
+      visible: true,
+    },
+    expandFilter: {
+      visible: true,
     },
   },
 };

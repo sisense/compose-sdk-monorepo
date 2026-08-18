@@ -26,6 +26,20 @@ function readMeasureValue(row: Row, column: Column): number | undefined {
   return typeof raw === 'number' && Number.isFinite(raw) ? raw : undefined;
 }
 
+/**
+ * Reads a cell in its unparsed form (`rawValue`, falling back to `displayValue`) — the same
+ * `rawValue ?? displayValue` rule the cartesian x-value pipeline uses, so a datetime category
+ * yields its query string (`'2013-01-01T00:00:00'`) rather than `getValue`'s parsed epoch.
+ *
+ * @param row - Row holding the cell
+ * @param column - Column selecting the cell within the row
+ * @returns The cell's unparsed value, or `undefined` when the row has no such cell
+ */
+function readRawValue(row: Row, column: Column): string | number | undefined {
+  const cell = row[column.index];
+  return cell ? cell.rawValue ?? cell.displayValue : undefined;
+}
+
 /** Narrows a `'target'` comparison's baseline to its fixed-number variant, without an `as` cast. */
 function isFixedTarget(target: StyledMeasureColumn | number): target is number {
   return typeof target === 'number';
@@ -159,6 +173,13 @@ function buildComparison(
  * merged total row's date cell is a blank placeholder that parses to `NaN` -- letting it
  * anywhere near bucket iteration, sparkline building, or prior-bucket lookups would corrupt
  * them. When the marker column is absent (the single-query path), every row is a bucket.
+ *
+ * Because the marker column is what makes the total row readable, `valueMode: 'total'`
+ * falls back to `'last'` semantics whenever that column is missing -- the result never went
+ * through the merge, so there is no whole-period aggregate to read. That covers explicit
+ * `Data` datasets (no query runs, so no merge) and an `onDataReady` handler that rebuilt
+ * `columns` instead of spreading them. A blank headline is the worse answer in both cases:
+ * the last bucket is a real number drawn from the rows actually supplied.
  */
 export function getKpiChartData(
   dataOptions: KpiChartDataOptionsInternal,
@@ -194,6 +215,7 @@ export function getKpiChartData(
 
   let value: number | undefined;
   let valuePeriodMs: number | undefined;
+  let categoryValue: string | number | undefined;
   let sparklinePoints: { x: number; y: number | null }[] | undefined;
   let lastBucketValue: number | undefined;
   let priorBucketValue: number | undefined;
@@ -211,7 +233,14 @@ export function getKpiChartData(
     lastBucketValue = lastBucketRow ? readMeasureValue(lastBucketRow, valueColumn) : undefined;
     priorBucketValue = priorBucketRow ? readMeasureValue(priorBucketRow, valueColumn) : undefined;
 
-    if (dataOptions.valueMode === 'total') {
+    // A `'total'` headline is the ungrouped total row produced by the dual-query merge in
+    // `load-data.ts`. Absent the marker column, the result never went through that merge --
+    // explicit `Data` (no query runs at all), or an `onDataReady` handler that rebuilt
+    // `columns` -- so no whole-period aggregate exists to read, and every row here is a
+    // plain bucket. Fall back to last-bucket semantics rather than render a blank headline.
+    // (Marker column present but no `'total'` row is a different case: the ungrouped query
+    // legitimately returned nothing, so `undefined` is the honest answer and stands.)
+    if (dataOptions.valueMode === 'total' && rowTypeColumn) {
       // The headline is the whole-period aggregate -- it isn't tied to a single bucket,
       // so there's no "current period" epoch to caption the header with.
       currentRow = totalRow;
@@ -223,6 +252,9 @@ export function getKpiChartData(
         const rawPeriod = getValue(lastBucketRow, categoryColumn);
         valuePeriodMs =
           typeof rawPeriod === 'number' && Number.isFinite(rawPeriod) ? rawPeriod : undefined;
+        // Unlike the epoch above, this is kept for every category type (a non-datetime category
+        // has no period to caption the header with, but still identifies the bucket).
+        categoryValue = readRawValue(lastBucketRow, categoryColumn);
       }
     }
   } else {
@@ -245,6 +277,7 @@ export function getKpiChartData(
     value,
     valueColor: resolveValueColor(dataOptions.value, value),
     valuePeriodMs,
+    categoryValue,
     sparklinePoints,
     comparison,
   };

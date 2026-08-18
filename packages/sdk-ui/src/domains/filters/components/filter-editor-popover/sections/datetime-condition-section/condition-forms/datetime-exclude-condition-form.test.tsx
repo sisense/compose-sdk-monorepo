@@ -43,6 +43,7 @@ describe('DatetimeExcludeConditionForm', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeExcludeConditionForm
@@ -67,6 +68,7 @@ describe('DatetimeExcludeConditionForm', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeExcludeConditionForm
@@ -119,6 +121,7 @@ describe('DatetimeExcludeConditionForm', () => {
             dataSources: [],
             parentFilters,
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeExcludeConditionForm
@@ -171,6 +174,7 @@ describe('DatetimeExcludeConditionForm', () => {
             dataSources: [],
             parentFilters,
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeExcludeConditionForm
@@ -219,6 +223,7 @@ describe('DatetimeExcludeConditionForm', () => {
             dataSources: [],
             parentFilters,
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeExcludeConditionForm
@@ -251,6 +256,7 @@ describe('DatetimeExcludeConditionForm', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeExcludeConditionForm
@@ -278,6 +284,7 @@ describe('DatetimeExcludeConditionForm', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeExcludeConditionForm
@@ -302,6 +309,7 @@ describe('DatetimeExcludeConditionForm', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeExcludeConditionForm
@@ -326,6 +334,7 @@ describe('DatetimeExcludeConditionForm', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeExcludeConditionForm

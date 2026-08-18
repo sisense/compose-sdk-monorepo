@@ -27,10 +27,16 @@ const contextProviderProps: SisenseContextProviderProps = {
 
 const measure = measureFactory.sum(DM.Commerce.Revenue);
 
-async function selectCondition(user: ReturnType<typeof setup>['user'], conditionLabel: string) {
+async function openConditionSelect(user: ReturnType<typeof setup>['user']) {
   const conditionSection = await screen.findByLabelText('Datetime condition section');
-  const conditionSelect = within(conditionSection).getByLabelText('Condition select');
+  // The section's own select comes first; a condition form rendered beneath it, such as the exclude
+  // form, contributes a second control under the same label.
+  const [conditionSelect] = within(conditionSection).getAllByLabelText('Condition select');
   await user.click(conditionSelect);
+}
+
+async function selectCondition(user: ReturnType<typeof setup>['user'], conditionLabel: string) {
+  await openConditionSelect(user);
   const conditionSelectContent = await screen.findByLabelText('Single-select content');
   await user.click(within(conditionSelectContent).getByText(conditionLabel));
 }
@@ -48,6 +54,7 @@ describe('DatetimeConditionSection ranking', () => {
             dataSources: [DM.DataSource],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeConditionSection
@@ -81,6 +88,7 @@ describe('DatetimeConditionSection ranking', () => {
             dataSources: [DM.DataSource],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeConditionSection
@@ -98,5 +106,67 @@ describe('DatetimeConditionSection ranking', () => {
     expect(onChange).toHaveBeenCalled();
     const lastCall = onChange.mock.calls.at(-1)?.[0];
     expect(lastCall === null || !isRankingFilter(lastCall)).toBe(true);
+  });
+
+  it('offers no ranking conditions when ranking is not visible', async () => {
+    const { user } = setup(
+      <SisenseContextProvider {...contextProviderProps}>
+        <FilterEditorContextProvider
+          value={{
+            defaultDataSource: DM.DataSource,
+            dataSources: [DM.DataSource],
+            parentFilters: [],
+            membersOnlyMode: false,
+            rankingVisible: false,
+          }}
+        >
+          <DatetimeConditionSection
+            filter={filterFactory.members(DM.Commerce.Date.Weeks, ['2024-01-01T00:00:00'], {
+              excludeMembers: true,
+            })}
+            selected={true}
+            multiSelectEnabled={true}
+            onChange={vi.fn()}
+          />
+        </FilterEditorContextProvider>
+      </SisenseContextProvider>,
+    );
+
+    await openConditionSelect(user);
+    const conditionSelectContent = await screen.findByLabelText('Single-select content');
+
+    expect(within(conditionSelectContent).queryByText('Top')).not.toBeInTheDocument();
+    expect(within(conditionSelectContent).queryByText('Bottom')).not.toBeInTheDocument();
+    expect(within(conditionSelectContent).getByText('Is not')).toBeInTheDocument();
+  });
+
+  it('keeps the ranking conditions when the edited filter already ranks', async () => {
+    // Otherwise the condition control would open on a value missing from its own list.
+    const { user } = setup(
+      <SisenseContextProvider {...contextProviderProps}>
+        <FilterEditorContextProvider
+          value={{
+            defaultDataSource: DM.DataSource,
+            dataSources: [DM.DataSource],
+            parentFilters: [],
+            membersOnlyMode: false,
+            rankingVisible: false,
+          }}
+        >
+          <DatetimeConditionSection
+            filter={filterFactory.topRanking(DM.Commerce.Date.Weeks, measure, 2)}
+            selected={true}
+            multiSelectEnabled={true}
+            onChange={vi.fn()}
+          />
+        </FilterEditorContextProvider>
+      </SisenseContextProvider>,
+    );
+
+    await openConditionSelect(user);
+    const conditionSelectContent = await screen.findByLabelText('Single-select content');
+
+    expect(within(conditionSelectContent).getByText('Top')).toBeInTheDocument();
+    expect(within(conditionSelectContent).getByText('Bottom')).toBeInTheDocument();
   });
 });

@@ -3,7 +3,7 @@ import { Data } from '@sisense/sdk-data';
 
 import { Chart } from '../domains/visualizations/components/chart';
 import { IndicatorChart } from '../domains/visualizations/components/indicator-chart';
-import { IndicatorStyleOptions, NumberFormatConfig } from '../types';
+import { ConditionalDataColorOptions, IndicatorStyleOptions, NumberFormatConfig } from '../types';
 import { templateForComponent } from './template';
 
 const template = templateForComponent(Chart);
@@ -219,6 +219,44 @@ export const numericIndicatorWithConditionalColorOptions = template({
     subtype: 'indicator/numeric',
     numericSubtype: 'numericSimple',
     skin: 'vertical',
+  },
+});
+
+const gaugeColorConditions: ConditionalDataColorOptions = {
+  type: 'conditional',
+  conditions: [
+    { color: '#d2504b', expression: '64', operator: '<' },
+    { color: '#ef9b95', expression: '128', operator: '<' },
+    { color: '#ffcb8c', expression: '192', operator: '<' },
+    { color: '#4caf50', expression: '192', operator: '≥' },
+  ],
+};
+
+const conditionallyColoredGaugeDataOptions = {
+  ...indicatorChartDataOptions,
+  value: [{ column: indicatorChartDataOptions.value[0], color: gaugeColorConditions }],
+};
+
+export const thinGaugeIndicatorWithConditionalColorOptions = template({
+  chartType: 'indicator',
+  ...indicatorProps,
+  dataOptions: conditionallyColoredGaugeDataOptions,
+  styleOptions: {
+    ...basicStyleOptions,
+    subtype: 'indicator/gauge',
+    skin: 2,
+  },
+});
+
+// No bands by design: `drawGauge` only draws them for `skin: 2`, matching Fusion.
+export const thickGaugeIndicatorWithConditionalColorOptions = template({
+  chartType: 'indicator',
+  ...indicatorProps,
+  dataOptions: conditionallyColoredGaugeDataOptions,
+  styleOptions: {
+    ...basicStyleOptions,
+    subtype: 'indicator/gauge',
+    skin: 1,
   },
 });
 

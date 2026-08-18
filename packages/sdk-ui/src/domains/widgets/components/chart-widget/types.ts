@@ -9,7 +9,7 @@ import type {
 import type { ChartEventProps } from '@/props';
 import { ChartDataOptions, ChartType, ChartWidgetStyleOptions, DrilldownOptions } from '@/types';
 
-import { WidgetConfig } from '../widget/types';
+import { ChartWidgetConfig } from '../widget/widget-config';
 
 export type { ChartWidgetChangeEvent, ChartWidgetDrilldownSelectionsChangedEvent };
 
@@ -74,7 +74,7 @@ export interface ChartWidgetProps extends ChartEventProps {
    *
    * @category Widget
    */
-  config?: WidgetConfig;
+  config?: ChartWidgetConfig;
 
   /**
    * React nodes to be rendered at the top of component, before the chart

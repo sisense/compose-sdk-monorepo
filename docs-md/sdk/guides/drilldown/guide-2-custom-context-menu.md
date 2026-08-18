@@ -2,7 +2,7 @@
 
 In this section, you'll learn how to customize the look and feel of a drilldown chart by providing a custom context menu.
 
-You can use any components of you choose as the basis for a custom context menu. In this guide, we use the [Material UI Menu component](https://mui.com/material-ui/react-menu/) as the basis for the custom context menu.
+You can use any components you choose as the basis for a custom context menu. In this guide, we use the [Material UI Menu component](https://mui.com/material-ui/react-menu/) as the basis for the custom context menu.
 
 ## Props
 
@@ -58,7 +58,7 @@ Finally, you need to add the drilldown options to the context menu. Do that by a
 
 The `itemSections` array contains information about the current drilldown dimension and the remaining possible dimensions to drill down on.
 
-For example, consider the chart we discussed in the previous section where the `initialDimension` is **Age Range** and the `drilldownDimensions` are **Gender**, **Condition**, and **Category**. Before drilling down on the chart, the `itemSections` array contains the following:
+For example, consider the chart we discussed in the previous section where the `initialDimension` is **Age Range** and the `drilldownPaths` are **Gender**, **Condition**, and **Category**. Before drilling down on the chart, the `itemSections` array contains the following:
 
 ```ts
 [
@@ -139,7 +139,7 @@ Once you have a custom context menu component, you need to apply it to your char
 ```ts
 <DrilldownWidget
   initialDimension={DM.Commerce.AgeRange}
-  drilldownDimensions={[
+  drilldownPaths={[
     DM.Commerce.Gender,
     DM.Commerce.Condition,
     DM.Category.Category,

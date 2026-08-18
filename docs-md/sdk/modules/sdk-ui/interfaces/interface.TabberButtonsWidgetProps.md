@@ -36,6 +36,14 @@ Filters that will highlight query results
 
 ### Widget
 
+#### config
+
+> **config**?: [`CustomWidgetConfig`](interface.CustomWidgetConfig.md)
+
+Configuration of the widget
+
+***
+
 #### description
 
 > **description**?: `string`

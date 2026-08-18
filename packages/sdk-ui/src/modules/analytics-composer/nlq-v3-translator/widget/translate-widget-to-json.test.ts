@@ -1,3 +1,5 @@
+import type { WidgetProps } from '@/domains/widgets/components/widget/types.js';
+
 import {
   MOCK_DATA_SOURCE_SAMPLE_ECOMMERCE,
   MOCK_NORMALIZED_TABLES_SAMPLE_ECOMMERCE,
@@ -44,7 +46,9 @@ describe('translateWidgetToJSON — chart round-trip', () => {
 
   it('serializes dataSource as title string only', () => {
     const fromResult = translateWidgetFromJSON({ data: chartWidgetJSON, context });
-    const csdk = getSuccessData(fromResult);
+    // Narrowed to the chart variant so `config` is typed as `ChartWidgetConfig`, which is the only
+    // widget config carrying the download actions asserted below.
+    const csdk = getSuccessData(fromResult) as Extract<WidgetProps, { widgetType: 'chart' }>;
     const withDataSource = {
       ...csdk,
       dataSource: {

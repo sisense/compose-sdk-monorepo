@@ -135,6 +135,28 @@ describe('attributeFactory.customFormula date-context granularity', () => {
     });
   });
 
+  it('references the raw table/column of a calendar dimension that carries no granularity', () => {
+    // A calendar dimension translated from Fusion arrives without any level key, because Fusion
+    // references the raw column. There is no level to strip, but the raw table/column reference is
+    // still added, so that a calendar dimension reaches the backend described the same way whether
+    // it was authored in code or translated from Fusion.
+    const rawCalendarDate = new DimensionalAttribute(
+      'L_RECEIPTDATE',
+      '[lineitem.L_RECEIPTDATE (Calendar)]',
+      'text-attribute',
+    );
+
+    const calcDim = attributeFactory.customFormula('Date prefix', 'left([date], 10)', {
+      date: rawCalendarDate,
+    });
+
+    expect(calcDim.jaql().jaql.context['[date]']).toMatchObject({
+      dim: '[lineitem.L_RECEIPTDATE (Calendar)]',
+      table: 'lineitem',
+      column: 'L_RECEIPTDATE',
+    });
+  });
+
   it('leaves non-date context attributes untouched (no table/column added)', () => {
     const calcDim = attributeFactory.customFormula('x', 'Concat([ageRange], [gender])', {
       ageRange,

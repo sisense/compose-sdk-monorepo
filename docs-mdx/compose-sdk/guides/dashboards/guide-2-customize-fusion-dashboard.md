@@ -123,7 +123,7 @@ On the other hand, `DashboardProps` is a set of properties for the generic `Dash
 
 Following the design principle of Separation of Concerns, `DashboardProps` and `Dashboard` are no longer coupled to the `DashboardModel`.
 
-It is still very simple to translate the `DashboardModel` to `DashboardProps` using the provided utilty function, `dashboardModelTranslator.toDashboardProps`, and you have access to all elements of the dashboard for manipulation, which we will demonstrate in the next example.
+It is still very simple to translate the `DashboardModel` to `DashboardProps` using the provided utility function, `dashboardModelTranslator.toDashboardProps`, and you have access to all elements of the dashboard for manipulation, which we will demonstrate in the next example.
 
 ## Customize Embedded Fusion Dashboard
 

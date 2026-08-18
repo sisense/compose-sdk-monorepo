@@ -68,7 +68,7 @@ export type KpiComparisonProps = {
   compact: boolean;
   /**
    * Card text alignment, applied to the readout's flex alignment (mirrors the value/title).
-   * @defaultValue 'left'
+   * @default 'left'
    */
   textAlign?: CardTextAlign;
   onColor: boolean;

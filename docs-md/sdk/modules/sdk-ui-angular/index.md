@@ -19,6 +19,7 @@ Angular components and utilities for working with charts
 - [ColumnChartComponent](charts/class.ColumnChartComponent.md)
 - [FunnelChartComponent](charts/class.FunnelChartComponent.md)
 - [IndicatorChartComponent](charts/class.IndicatorChartComponent.md)
+- [KpiChartComponent](charts/class.KpiChartComponent.md)
 - [LineChartComponent](charts/class.LineChartComponent.md)
 - [PieChartComponent](charts/class.PieChartComponent.md)
 - [PolarChartComponent](charts/class.PolarChartComponent.md)

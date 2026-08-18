@@ -41,6 +41,7 @@ describe('DatetimeMembersSection', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeMembersSection
@@ -66,6 +67,7 @@ describe('DatetimeMembersSection', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeMembersSection
@@ -122,6 +124,7 @@ describe('DatetimeMembersSection', () => {
             dataSources: [],
             parentFilters,
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeMembersSection
@@ -178,6 +181,7 @@ describe('DatetimeMembersSection', () => {
             dataSources: [],
             parentFilters,
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeMembersSection
@@ -222,6 +226,7 @@ describe('DatetimeMembersSection', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeMembersSection
@@ -248,6 +253,7 @@ describe('DatetimeMembersSection', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeMembersSection
@@ -274,6 +280,7 @@ describe('DatetimeMembersSection', () => {
             dataSources: [],
             parentFilters: [],
             membersOnlyMode: false,
+            rankingVisible: true,
           }}
         >
           <DatetimeMembersSection

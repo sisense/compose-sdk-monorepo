@@ -1279,9 +1279,15 @@ export function toWidgetDto(
     appSettings,
   );
 
+  // `WidgetModel.config` spans every widget type; only the chart and pivot configs carry a narrative.
+  const narrativeConfig =
+    widgetModel.config && 'narrative' in widgetModel.config
+      ? widgetModel.config.narrative
+      : undefined;
+
   const styleWithDtoNarration = mergeWidgetStyleWithNarrativeForDto(
     styleWithWidgetDesign,
-    widgetModel.config?.narrative,
+    narrativeConfig,
   );
 
   const widget: WidgetDto = {

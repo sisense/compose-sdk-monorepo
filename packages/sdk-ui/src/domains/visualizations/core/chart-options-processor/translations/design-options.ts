@@ -261,11 +261,16 @@ export type TableDesignOptions = {
      * Modes of columns width
      * 'auto' - all columns will have the same width and fit the table width (no horizontal scroll)
      * 'content' - columns width will be based on content (default option)
+     *
+     * In `'auto'` mode the even column width takes precedence over any per-column `width` set in
+     * `dataOptions`, and interactive resizing is disabled regardless of `resizable` configuration.
      */
     width?: 'auto' | 'content';
     /**
      * Enables interactive resizing of column widths by dragging the column border.
      * Default value is `true`. Set to `false` to disable.
+     *
+     * Ignored when `width` is `'auto'`, where resizing is always disabled.
      */
     resizable?: boolean;
     /**

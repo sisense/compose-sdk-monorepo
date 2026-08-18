@@ -227,6 +227,10 @@ const translation: TranslationDictionary = {
     placeholders: {
       setFilter: 'フィルターを設定',
     },
+    selectedCount: '{{count}} 件選択',
+    allExceptCount: '{{count}} 件を除くすべて',
+    setupTitle: 'フィルターウィジェットを設定',
+    setupSubtitle: 'ディメンションを設定し、フィルターの動作を構成します',
   },
   unsupportedFilterMessage: 'サポートされていないフィルター（データクエリに適用）',
   unsupportedFilter: 'サポートされていないフィルター{{filter}}',

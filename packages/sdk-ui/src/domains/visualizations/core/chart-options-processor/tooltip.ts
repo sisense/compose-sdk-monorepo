@@ -4,6 +4,7 @@ import {
   CartesianChartDataOptionsInternal,
   ChartDataOptionsInternal,
 } from '../chart-data-options/types';
+import { getDataOptionTitle } from '../chart-data-options/utils.js';
 import { formatNumberWithFallback } from './translations/number-format-config.js';
 import { spanSegment, tooltipSeparator, tooltipWrapper } from './translations/scatter-tooltip.js';
 import {
@@ -31,8 +32,10 @@ const formatTooltipContent = (
 
   // Find number format configuration
   const getNumberFormatConfig = () => {
+    // Matched by `getDataOptionTitle`, the same resolution the series name is built from, so a
+    // styled column's optional `name` override (or a `title`) still resolves to its own format.
     const matchingY = cartesianChartDataOptions.y?.find(
-      (y) => y.column.name === highchartsDataPoint.series.name,
+      (y) => getDataOptionTitle(y) === highchartsDataPoint.series.name,
     );
 
     if (matchingY?.numberFormatConfig) {

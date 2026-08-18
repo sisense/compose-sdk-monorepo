@@ -30,7 +30,7 @@ To demonstrate how to add a drilldown experience to a Compose SDK chart, let's s
 Once you have a chart that you want to add a drilldown experience to, you need to wrap the chart in a `<DrilldownWidget>` and provide it with:
 
 - `initialDimension`: The initial dimension that the wrapped chart will show
-- `drilldownDimensions`: List of drilldown options that users can choose to drill down on
+- `drilldownPaths`: List of drilldown options that users can choose to drill down on
 
 The widget then provides the chart with:
 
@@ -42,7 +42,7 @@ For example, wrapping a chart in a `<DrilldownWidget>` may look something like t
 ```ts
 <DrilldownWidget
   initialDimension={DM.Commerce.AgeRange}
-  drilldownDimensions={
+  drilldownPaths={
     [DM.Commerce.Gender,
     DM.Commerce.Condition,
     DM.Category.Category
@@ -56,7 +56,7 @@ For example, wrapping a chart in a `<DrilldownWidget>` may look something like t
 </DrilldownWidget>
 ```
 
-Here you can see that the `initialDimension` is set to be **Age Range**, as it was in the chart before adding drilldown functionality. Also, the `drilldownDimensions` is set to a list of the drilldown options. In this case, users can drill down on the **Gender**, **Condition**, and **Category** dimensions.
+Here you can see that the `initialDimension` is set to be **Age Range**, as it was in the chart before adding drilldown functionality. Also, the `drilldownPaths` is set to a list of the drilldown options. In this case, users can drill down on the **Gender**, **Condition**, and **Category** dimensions.
 
 ## Apply to Chart
 
@@ -73,7 +73,7 @@ That should leave you with code that looks something like this:
 ```ts
 <DrilldownWidget
   initialDimension={DM.Commerce.AgeRange}
-  drilldownDimensions={[
+  drilldownPaths={[
     DM.Commerce.Gender,
     DM.Commerce.Condition,
     DM.Category.Category
@@ -109,7 +109,7 @@ That should leave you with code that looks something like this:
 
 ## Results
 
-At this point, you have a chart that you can drill down on. You can start the drilldown process by either clicking a a data point or selecting a number of data points.
+At this point, you have a chart that you can drill down on. You can start the drilldown process by either clicking a data point or selecting a number of data points.
 
 For example, if you click on the 35-44 age range, you get a context menu with the drilldown category options you set in your code.
 
@@ -127,7 +127,7 @@ As you drill down, the breadcrumbs keep track of the actions you've performed. Y
 
 ## Next Up
 
-In this section you learned how to create a drilldown experience using Compose SDK components. In the next section, you'll see how to customize the look and feel of a drilldown chart by providing custom context menu.
+In this section you learned how to create a drilldown experience using Compose SDK components. In the next section, you'll see how to customize the look and feel of a drilldown chart by providing a custom context menu.
 
 Go to the [next lesson](./guide-2-custom-context-menu.md).
 
@@ -144,7 +144,7 @@ export const DrilldownChart = () => {
   return (
     <DrilldownWidget
         initialDimension={DM.Commerce.AgeRange}
-        drilldownDimensions={[DM.Commerce.Gender, DM.Commerce.Condition, DM.Category.Category]}
+        drilldownPaths={[DM.Commerce.Gender, DM.Commerce.Condition, DM.Category.Category]}
     >
       {({ drilldownDimension, drilldownFilters, onDataPointsSelected, onContextMenu }) => (
         <Chart

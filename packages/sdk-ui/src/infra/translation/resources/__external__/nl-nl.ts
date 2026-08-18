@@ -228,6 +228,10 @@ const translation: TranslationDictionary = {
     placeholders: {
       setFilter: 'Filter instellen',
     },
+    selectedCount: '{{count}} geselecteerd',
+    allExceptCount: 'Alles behalve {{count}}',
+    setupTitle: 'Filterwidget instellen',
+    setupSubtitle: 'Stel een dimensie in en configureer hoe het filter werkt',
   },
   unsupportedFilterMessage: 'Niet-ondersteund filter (toegepast op de gegevensquery)',
   unsupportedFilter: 'Niet-ondersteund filter {{filter}}',

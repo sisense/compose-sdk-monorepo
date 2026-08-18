@@ -37,6 +37,54 @@ describe('baseFilterToFilterDto', () => {
     expect(result.jaql.filter).toMatchSnapshot();
   });
 
+  it('should round-trip select-all (empty exclusions) as Fusion all:true', () => {
+    const filter = filterFactory.members(DM.Commerce.Gender, [], {
+      guid: 'select-all-id',
+      excludeMembers: true,
+      enableMultiSelection: true,
+    });
+    const result = filterToFilterDto(filter) as FilterDto;
+
+    expect(result.jaql.filter).toEqual({
+      all: true,
+      multiSelection: true,
+    });
+  });
+
+  it('should preserve deactivated members on select-all as turned-off nested exclude', () => {
+    const filter = filterFactory.members(DM.Commerce.Gender, [], {
+      guid: 'select-all-deactivated-id',
+      excludeMembers: true,
+      enableMultiSelection: true,
+      deactivatedMembers: ['Male'],
+    });
+    const result = filterToFilterDto(filter) as FilterDto;
+
+    expect(result.jaql.filter).toMatchObject({
+      all: true,
+      multiSelection: true,
+      filter: {
+        exclude: { members: ['Male'] },
+        turnedOff: true,
+      },
+    });
+  });
+
+  it('should keep cleared include (empty members, excludeMembers false) as members:[]', () => {
+    const filter = filterFactory.members(DM.Commerce.Gender, [], {
+      guid: 'clear-id',
+      excludeMembers: false,
+      enableMultiSelection: true,
+    });
+    const result = filterToFilterDto(filter) as FilterDto;
+
+    expect(result.jaql.filter).toMatchObject({
+      members: [],
+      multiSelection: true,
+    });
+    expect(result.jaql.filter).not.toHaveProperty('all');
+  });
+
   it('should return correctly translated members filter with background filter', () => {
     const config = {
       excludeMembers: false,

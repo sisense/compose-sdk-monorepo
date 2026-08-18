@@ -3,14 +3,29 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vites
 
 import { WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
+import type { MenuItem } from '@/shared/types/menu-item';
 
 import * as DM from '../../../../__test-helpers__/sample-ecommerce.js';
 import { EditableLayout, EditableLayoutProps } from './editable-layout.js';
 
-// Mock dependencies
+// Mock dependencies. The header menu items the layout contributes are surfaced as an attribute, so
+// tests can assert which built-in actions a widget is offered.
 vi.mock('@/domains/widgets/components/widget', () => ({
-  Widget: ({ id, widgetType }: { id: string; widgetType: string }) => (
-    <div data-testid={`widget-${id}`} data-widget-type={widgetType}>
+  Widget: ({
+    id,
+    widgetType,
+    config,
+  }: {
+    id: string;
+    widgetType: string;
+    config?: { header?: { menu?: { items?: MenuItem[] } } };
+  }) => (
+    <div
+      data-testid={`widget-${id}`}
+      data-widget-type={widgetType}
+      data-menu-items={(config?.header?.menu?.items ?? []).map((item) => item.id).join(',')}
+    >
       {widgetType} Widget
     </div>
   ),
@@ -115,6 +130,12 @@ vi.mock('@/shared/components/menu/menu-button', () => ({
 vi.useFakeTimers();
 
 describe('EditableLayout', () => {
+  /** Ids of the header menu items a rendered widget was given. */
+  const headerMenuItemIds = (widgetId: string): string[] => {
+    const items = screen.getByTestId(`widget-${widgetId}`).getAttribute('data-menu-items') ?? '';
+    return items ? items.split(',') : [];
+  };
+
   // Save the original dispatchEvent
   const originalDispatchEvent = window.dispatchEvent;
 
@@ -263,6 +284,21 @@ describe('EditableLayout', () => {
 
       const chartWidgetWrapper = screen.getByTestId('draggable-widget-widget1');
       expect(chartWidgetWrapper).toHaveAttribute('data-drag-handle-visible', 'true');
+    });
+
+    it('should offer the delete widget menu item by default', () => {
+      render(<EditableLayout {...defaultProps} />);
+
+      expect(headerMenuItemIds('widget1')).toContain(WidgetHeaderMenuTargets.DeleteWidget);
+      expect(headerMenuItemIds('widget2')).toContain(WidgetHeaderMenuTargets.DeleteWidget);
+    });
+
+    it('should omit the delete widget menu item when config.deleteWidgetEnabled is false', () => {
+      render(<EditableLayout {...defaultProps} config={{ deleteWidgetEnabled: false }} />);
+
+      expect(headerMenuItemIds('widget1')).not.toContain(WidgetHeaderMenuTargets.DeleteWidget);
+      // The rest of the layout's menu items are untouched.
+      expect(headerMenuItemIds('widget1')).toContain(WidgetHeaderMenuTargets.DistributeEqualWidth);
     });
   });
 

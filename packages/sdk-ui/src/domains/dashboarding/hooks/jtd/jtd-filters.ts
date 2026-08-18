@@ -17,7 +17,7 @@ import {
 } from '@/domains/visualizations/core/chart-data-processor/data-table-date-period';
 import { isChartWidgetProps } from '@/domains/widgets/components/widget-by-id/utils';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
-import { DataPoint, DataPointEntry, ScatterDataPoint } from '@/types';
+import { DataPoint, DataPointEntry, KpiDataPoint, ScatterDataPoint } from '@/types';
 
 import { JtdConfig } from './jtd-types.js';
 
@@ -408,9 +408,61 @@ export const getFiltersFromRegularDataPoint = (point: DataPoint): Filter[] => {
 };
 
 /**
+ * Checks whether a data point is a {@link KpiDataPoint}.
+ *
+ * The KPI card reports exactly one entry per data option, so its `entries.category` /
+ * `entries.value` are single `DataPointEntry` objects where every other chart's point carries
+ * arrays. That difference is what this checks -- and why the KPI point can't be fed to
+ * {@link getFiltersFromRegularDataPoint} directly (see {@link convertKpiToDataPoint}).
+ *
+ * @param point - The data point to check
+ * @returns True if the point carries the KPI card's single-entry shape, false otherwise
+ * @internal
+ */
+export const isKpiDataPoint = (
+  point: DataPoint | ScatterDataPoint | KpiDataPoint,
+): point is KpiDataPoint => {
+  const entries = point.entries;
+  if (!entries) {
+    return false;
+  }
+  return (
+    ('category' in entries && !Array.isArray(entries.category)) ||
+    ('value' in entries && !Array.isArray(entries.value))
+  );
+};
+
+/**
+ * Converts a {@link KpiDataPoint} into the regular {@link DataPoint} shape the JTD filter
+ * extraction works with, by lifting each single entry into a one-element array. Same role
+ * `convertPivotToDataPoint` plays for pivot cells.
+ *
+ * The KPI card has no break-by dimension, so `breakBy` is always empty; the comparison measure's
+ * entry joins the headline measure under `value`, since both describe measures rather than
+ * filterable dimensions.
+ *
+ * @param point - The KPI data point
+ * @returns The equivalent regular data point
+ * @internal
+ */
+export const convertKpiToDataPoint = (point: KpiDataPoint): DataPoint => {
+  const entries = point.entries ?? {};
+  return {
+    entries: {
+      category: entries.category ? [entries.category] : [],
+      value: [entries.value, entries.comparison].filter(
+        (entry): entry is DataPointEntry => !!entry,
+      ),
+      breakBy: [],
+    },
+  };
+};
+
+/**
  * Extracts filters from a data point for Jump To Dashboard functionality.
  *
- * This function handles both regular DataPoint and ScatterDataPoint types:
+ * This function handles regular DataPoint, ScatterDataPoint and KpiDataPoint types:
+ * - If data point carries the KPI card's single-entry shape, normalize it first
  * - If data point has scatter properties (breakByColor/breakByPoint), process as scatter chart
  * - Otherwise, process as regular chart (category/breakBy entries)
  * - Scatter properties take priority over regular properties when both exist
@@ -419,8 +471,12 @@ export const getFiltersFromRegularDataPoint = (point: DataPoint): Filter[] => {
  * @returns Array of filters generated from the data point
  * @internal
  */
-export const getFiltersFromDataPoint = (point: DataPoint | ScatterDataPoint): Filter[] => {
-  if (isScatterDataPoint(point)) {
+export const getFiltersFromDataPoint = (
+  point: DataPoint | ScatterDataPoint | KpiDataPoint,
+): Filter[] => {
+  if (isKpiDataPoint(point)) {
+    return getFiltersFromRegularDataPoint(convertKpiToDataPoint(point));
+  } else if (isScatterDataPoint(point)) {
     return getFiltersFromScatterDataPoint(point);
   } else {
     return getFiltersFromRegularDataPoint(point);

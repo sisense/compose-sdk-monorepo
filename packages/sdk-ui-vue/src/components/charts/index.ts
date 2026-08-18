@@ -12,6 +12,7 @@ export { TreemapChart, type TreemapChartProps } from './treemap-chart';
 export { SunburstChart, type SunburstChartProps } from './sunburst-chart';
 export { PolarChart, type PolarChartProps } from './polar-chart';
 export { IndicatorChart, type IndicatorChartProps } from './indicator-chart';
+export { KpiChart, type KpiChartProps } from './kpi-chart';
 export { Chart, type ChartProps } from './chart';
 export { BoxplotChart, type BoxplotChartProps } from './boxplot-chart';
 export { AreamapChart, type AreamapChartProps } from './areamap-chart';

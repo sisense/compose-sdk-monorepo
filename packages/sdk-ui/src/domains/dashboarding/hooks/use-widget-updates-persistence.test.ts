@@ -29,6 +29,15 @@ function makeTableWidget(id: string, resizable = true) {
   } as never;
 }
 
+function makeAutoWidthTableWidget(id: string) {
+  return {
+    id,
+    widgetType: 'chart' as const,
+    chartType: 'table' as const,
+    styleOptions: { columns: { width: 'auto' as const, resizable: true } },
+  } as never;
+}
+
 function makeCustomWidget(
   id: string,
   customOptions: Record<string, unknown> = {},
@@ -234,6 +243,29 @@ describe('useWidgetUpdatesPersistence', () => {
       (result.current.widgets[0] as { styleOptions?: { columns?: { onColumnsResize?: unknown } } })
         .styleOptions?.columns?.onColumnsResize,
     ).toBeUndefined();
+  });
+
+  it('does not inject onColumnsResize when columns width is auto', () => {
+    const widgets = [makeAutoWidthTableWidget('table-a')];
+
+    const { result } = renderHook(() =>
+      useWidgetUpdatesPersistence(widgets, vi.fn(), makePersistence()),
+    );
+
+    expect(
+      (result.current.widgets[0] as { styleOptions?: { columns?: { onColumnsResize?: unknown } } })
+        .styleOptions?.columns?.onColumnsResize,
+    ).toBeUndefined();
+  });
+
+  it('leaves an auto-width table widget untouched', () => {
+    const widgets = [makeAutoWidthTableWidget('table-a')];
+
+    const { result } = renderHook(() =>
+      useWidgetUpdatesPersistence(widgets, vi.fn(), makePersistence()),
+    );
+
+    expect(result.current.widgets[0]).toBe(widgets[0]);
   });
 
   it('optimistically applies table column widths to local widget state', () => {

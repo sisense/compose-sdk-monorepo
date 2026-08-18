@@ -1,9 +1,18 @@
-import type { KpiComparisonInternal } from '@/domains/visualizations/core/chart-data-options/types.js';
+import type {
+  KpiChartDataOptionsInternal,
+  KpiComparisonInternal,
+  StyledMeasureColumn,
+} from '@/domains/visualizations/core/chart-data-options/types.js';
+import {
+  createFormatter,
+  getDataPointMetadata,
+} from '@/domains/visualizations/core/chart-options-processor/data-points.js';
 import {
   applyFormat,
   getCompleteNumberFormatConfig,
 } from '@/domains/visualizations/core/chart-options-processor/translations/number-format-config.js';
 import type {
+  DataPointEntry,
   KpiComparisonInfo,
   KpiDataPoint,
   KpiIconCondition,
@@ -342,14 +351,116 @@ export function toKpiRenderOptions(
 }
 
 /**
- * Builds the click/context-menu payload from the (possibly `onBeforeRender`-adjusted) render options.
+ * Reads the comparison's own measure column -- the one queried alongside the headline -- or
+ * `undefined` when the comparison has none (`'previous-period'`, or a fixed-number `'target'`).
+ *
+ * @param comparison - Internal comparison config to read the measure from
+ * @returns The comparison's measure column, or `undefined` when it has none
  * @internal
  */
-export function toKpiDataPoint(renderOptions: KpiRenderOptions): KpiDataPoint {
+export function comparisonMeasureColumn(
+  comparison: KpiComparisonInternal | undefined,
+): StyledMeasureColumn | undefined {
+  if (!comparison) {
+    return undefined;
+  }
+  switch (comparison.type) {
+    case 'delta':
+    case 'value':
+      return comparison.value;
+    case 'target':
+      return typeof comparison.target === 'number' ? undefined : comparison.target;
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Picks the figure that IS the comparison measure's queried value, as opposed to the figures
+ * derived from it (`deltaValue`, `deltaPercent`, `toGo`, ...) which belong to no data option.
+ * `'previous-period'`'s `baseline` is deliberately excluded: it's a prior bucket of the headline
+ * measure, not a measure of its own, and has no data option to hang an entry off.
+ *
+ * @param comparison - Public comparison info to read the queried value from
+ * @returns The comparison measure's queried value, or `undefined` when it has no measure
+ */
+function comparisonMeasureValue(comparison: KpiComparisonInfo): number | undefined {
+  switch (comparison.type) {
+    case 'delta':
+      return comparison.baseline;
+    case 'target':
+      return comparison.target;
+    case 'value':
+      return comparison.value;
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Builds a measure-backed entry, formatted with that measure's own config.
+ *
+ * @param measure - Measure column the entry describes
+ * @param value - Queried value of that measure
+ * @returns The data point entry for the measure
+ */
+function toMeasureEntry(measure: StyledMeasureColumn, value: number): DataPointEntry {
   return {
-    value: renderOptions.value,
-    date: renderOptions.valuePeriodMs,
+    ...getDataPointMetadata(measure),
+    value,
+    displayValue: formatKpiValue(value, measure.numberFormatConfig),
+  };
+}
+
+/**
+ * Builds the click/context-menu payload: the standard `entries` structure, keyed by the
+ * `KpiChartDataOptions` field each zone comes from, plus the resolved `comparison` math.
+ *
+ * Numbers come from the (possibly `onBeforeRender`-adjusted) render options, so entries always
+ * describe what the card actually shows. `categoryValue` is the exception -- it's the raw
+ * category cell of the bucket the query resolved (`KpiChartData.categoryValue`), since
+ * `onBeforeRender` can only restate the period as an epoch, not as the attribute's own value.
+ *
+ * @param renderOptions - Render options the card was painted from
+ * @param dataOptions - Internal KPI data options supplying each entry's column metadata
+ * @param categoryValue - Raw category value of the bucket the headline was read from
+ * @returns The public data point passed to click/context-menu handlers
+ * @internal
+ */
+export function toKpiDataPoint(
+  renderOptions: KpiRenderOptions,
+  dataOptions: KpiChartDataOptionsInternal,
+  categoryValue?: string | number,
+): KpiDataPoint {
+  const entries: NonNullable<KpiDataPoint['entries']> = {};
+
+  if (renderOptions.value !== undefined) {
+    entries.value = toMeasureEntry(dataOptions.value, renderOptions.value);
+  }
+
+  if (dataOptions.category && categoryValue !== undefined) {
+    entries.category = {
+      ...getDataPointMetadata(dataOptions.category),
+      value: categoryValue,
+      displayValue: createFormatter(dataOptions.category)(categoryValue),
+    };
+  }
+
+  // Guarded on the type still matching, same rule as `toComparisonDisplay`: an `onBeforeRender`
+  // consumer can swap the comparison's type outright, and the configured measure then describes
+  // a different quantity than the one on display -- attaching it would mislabel the entry.
+  const comparisonMeasure = comparisonMeasureColumn(dataOptions.comparison);
+  const comparisonValue =
+    renderOptions.comparison?.type === dataOptions.comparison?.type && renderOptions.comparison
+      ? comparisonMeasureValue(renderOptions.comparison)
+      : undefined;
+  if (comparisonMeasure && comparisonValue !== undefined) {
+    entries.comparison = toMeasureEntry(comparisonMeasure, comparisonValue);
+  }
+
+  return {
     comparison: renderOptions.comparison,
+    entries,
   };
 }
 
