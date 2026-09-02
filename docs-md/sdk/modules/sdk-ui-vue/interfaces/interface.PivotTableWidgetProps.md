@@ -4,7 +4,7 @@ title: PivotTableWidgetProps
 
 # Interface PivotTableWidgetProps
 
-Props for the [PivotTableWidget](../../sdk-ui/dashboards/function.PivotTableWidget.md) component
+Props of the [`PivotTableWidget`](../dashboards/class.PivotTableWidget.md) component.
 
 ## Properties
 

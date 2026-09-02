@@ -9,6 +9,7 @@ import {
   isDataSource,
   Measure,
 } from '@sisense/sdk-data';
+import isEqual from 'lodash-es/isEqual';
 
 import {
   isMeasureColumn,
@@ -22,6 +23,7 @@ import { TranslatableError } from '@/infra/translation/translatable-error';
 import {
   executeQueryWithCache,
   executeQuery as executeQueryWithoutCache,
+  executeQueryWithRowCount,
 } from '../../../../query-execution/core/execute-query';
 import { TableDataOptionsInternal } from '../../../core/chart-data-options/types';
 import { DataColumnNamesMapping } from '../../../core/chart-data-options/validate-data-options';
@@ -34,6 +36,33 @@ type UseDataProps = {
   filterRelations: FilterRelationsJaql | undefined;
   count: number;
   offset: number;
+  /**
+   * Whether to additionally request the query's total row count, ignoring
+   * `count`/`offset` paging. See {@link TableProps.includeTotalRows}.
+   */
+  includeTotalRows?: boolean;
+};
+
+/**
+ * Represents the absolute row range covered by `data` for a query-backed (`DataSource`) table.
+ *
+ * `start` is inclusive. `end` is exclusive.
+ * @internal
+ */
+export type LoadedRowRange = { start: number; end: number };
+
+type UseTableDataResult = {
+  data: Data | null;
+  dataOptions: TableDataOptionsInternal | null;
+  dataColumnNamesMapping: DataColumnNamesMapping;
+  /** `null` for static (already fully in-memory) data. */
+  loadedRowRange: LoadedRowRange | null;
+  /**
+   * Total row count of the table's query, ignoring `count`/`offset` paging.
+   * Populated only when `includeTotalRows` is enabled and the Sisense instance
+   * supports the row count API; `undefined` otherwise.
+   */
+  rowCount?: number;
 };
 
 export const getTableAttributesAndMeasures = (dataOptions: TableDataOptionsInternal) => {
@@ -60,7 +89,8 @@ export const useTableData = ({
   filterRelations,
   count,
   offset,
-}: UseDataProps): [Data | null, TableDataOptionsInternal | null, DataColumnNamesMapping] => {
+  includeTotalRows,
+}: UseDataProps): UseTableDataResult => {
   const setError = useSetError();
   const [data, setData] = useState(isDataSource(dataSet) ? null : dataSet);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,6 +100,30 @@ export const useTableData = ({
   const [dataColumnNamesMapping, setDataColumnNamesMapping] = useState(
     originalDataColumnNamesMapping,
   );
+  const [rowCount, setRowCount] = useState<number | undefined>(undefined);
+  const loadedRowRangeRef = useRef<LoadedRowRange | null>(null);
+  const [loadedRowRange, setLoadedRowRange] = useState<LoadedRowRange | null>(null);
+
+  // Identifies the query itself, independent of `offset`. When it changes, the loaded window
+  // and exhaustion flag from the previous query no longer apply and must not suppress the
+  // first fetch of the new one (e.g. an empty result landing at the same offset as a reset).
+  // Compared by value, not reference, since callers may pass new but equivalent object/array
+  // literals across renders (e.g. plain page-forward navigation) without that being a real
+  // query change.
+  const queryIdentity = {
+    dataSet,
+    originalDataOptions,
+    filters,
+    filterRelations,
+    count,
+    includeTotalRows,
+  };
+  const previousQueryIdentityRef = useRef(queryIdentity);
+  if (!isEqual(previousQueryIdentityRef.current, queryIdentity)) {
+    previousQueryIdentityRef.current = queryIdentity;
+    loadedRowRangeRef.current = null;
+    isMoreDataAvailable.current = true;
+  }
 
   useEffect(() => {
     let ignore = false;
@@ -83,27 +137,44 @@ export const useTableData = ({
         return;
       }
 
-      if (!app || (!isMoreDataAvailable.current && offset > 0)) return;
+      // Skip only when extending sequentially past a window already known to be exhausted.
+      // A jump to a different (e.g. earlier) offset must still fetch even if the last
+      // sequential fetch ran out of data further ahead.
+      const isSequentialContinuation =
+        loadedRowRangeRef.current !== null && offset === loadedRowRangeRef.current.end;
+      if (!app || (isSequentialContinuation && !isMoreDataAvailable.current)) return;
       setIsLoading(true);
 
-      const executeQuery = app.settings.queryCacheConfig?.enabled
+      const baseExecuteQuery = app.settings.queryCacheConfig?.enabled
         ? executeQueryWithCache
         : executeQueryWithoutCache;
 
-      executeQuery(
-        {
-          dataSource: dataSet,
-          dimensions: attributes,
-          measures,
-          filters,
-          filterRelations,
-          count: count + 1,
-          offset,
-          // ungroup is needed so query without aggregation returns correct result
-          ungroup: true,
-        },
-        app,
-      )
+      const queryDescription = {
+        dataSource: dataSet,
+        dimensions: attributes,
+        measures,
+        filters,
+        filterRelations,
+        count: count + 1,
+        offset,
+        // ungroup is needed so query without aggregation returns correct result
+        ungroup: true,
+      };
+
+      const dataPromise = includeTotalRows
+        ? executeQueryWithRowCount(queryDescription, app, undefined, baseExecuteQuery).then(
+            (result) => {
+              if (!ignore) setRowCount(result.rowCount);
+              return result.data;
+            },
+          )
+        : baseExecuteQuery(queryDescription, app);
+
+      if (!includeTotalRows) {
+        setRowCount(undefined);
+      }
+
+      dataPromise
         .then((queryResult) => {
           if (ignore) return;
 
@@ -112,21 +183,24 @@ export const useTableData = ({
             ? queryResult.rows.slice(0, count)
             : queryResult.rows;
 
-          if (offset > 0) {
-            setData((d) => {
-              const length = d?.rows.length;
-              const prev = !length ? null : length > offset ? d.rows.slice(0, offset) : d.rows;
-              return {
-                columns: queryResult.columns,
-                rows: !prev ? rows : [...prev, ...rows],
-              };
-            });
-          } else {
-            setData({
-              columns: queryResult.columns,
-              rows,
-            });
-          }
+          const previousRange = loadedRowRangeRef.current;
+          // Appends only when this batch picks up exactly where the loaded window left off;
+          // any other offset (e.g. a jump to a distant page) replaces the loaded window instead.
+          const isContiguousExtension = previousRange !== null && offset === previousRange.end;
+
+          setData((d) =>
+            isContiguousExtension && d
+              ? { columns: queryResult.columns, rows: [...d.rows, ...rows] }
+              : { columns: queryResult.columns, rows },
+          );
+
+          const newRange: LoadedRowRange = {
+            start: isContiguousExtension ? previousRange.start : offset,
+            end: offset + rows.length,
+          };
+          loadedRowRangeRef.current = newRange;
+          setLoadedRowRange(newRange);
+
           setDataOptions(originalDataOptions);
           setDataColumnNamesMapping(originalDataColumnNamesMapping);
         })
@@ -142,6 +216,9 @@ export const useTableData = ({
       setData(dataSet);
       setDataOptions(originalDataOptions);
       setDataColumnNamesMapping(originalDataColumnNamesMapping);
+      loadedRowRangeRef.current = null;
+      setLoadedRowRange(null);
+      setRowCount(undefined);
     }
 
     // Set up cleanup function to ignore async fetch results of previous render
@@ -159,9 +236,16 @@ export const useTableData = ({
     filterRelations,
     offset,
     count,
+    includeTotalRows,
     isInitialized,
     setError,
   ]);
 
-  return [isLoading ? null : data, dataOptions, dataColumnNamesMapping];
+  return {
+    data: isLoading ? null : data,
+    dataOptions,
+    dataColumnNamesMapping,
+    loadedRowRange,
+    rowCount,
+  };
 };

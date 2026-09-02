@@ -371,6 +371,9 @@ export default [
       '**/.nx/**',
       '**/.storybook/**',
       '**/*.config.{ts,js,mjs,cjs}',
+      // Vite bundles `vite.config.ts` to a transient `vite.config.ts.timestamp-<ms>-<rand>.mjs`
+      // beside it, imports it, then unlinks it. It could lead eslint to fail with ENOENT.
+      '**/*.timestamp-*.mjs',
       '**/*.workspace.{ts,js}',
       'eslint.config.mjs',
       'eslint-rules/**',

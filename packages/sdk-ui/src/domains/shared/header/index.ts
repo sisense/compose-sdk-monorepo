@@ -20,3 +20,8 @@ export {
   DEFAULT_HEADER_ITEM_SIZE,
 } from './header-item-size.js';
 export { createHeaderSpacerItem } from './header-spacer-item.js';
+export {
+  asBuiltInHeaderItem,
+  isBuiltInHeaderItem,
+  partitionBuiltInHeaderItems,
+} from './built-in-header-item.js';

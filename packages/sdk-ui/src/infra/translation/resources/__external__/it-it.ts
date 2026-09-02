@@ -235,6 +235,26 @@ const translation: TranslationDictionary = {
     allExceptCount: 'Tutti tranne {{count}}',
     setupTitle: 'Configura un widget filtro',
     setupSubtitle: 'Imposta una dimensione e configura come funziona il filtro',
+    conditionUnsupported: 'La condizione è disponibile per i campi di testo e numerici',
+    conditionNotRepresentable: 'Questa condizione non può essere modificata qui',
+    controls: {
+      findInList: "Cerca nell'elenco",
+      enterValue: 'Inserisci il valore...',
+      noMatches: 'Nessuna corrispondenza',
+      clearSelection: 'Cancella selezione',
+      overflowCount: '+{{count}}',
+      select: 'Seleziona',
+      selectDateLevel: 'Seleziona il livello di data',
+      selectCondition: 'Seleziona condizione',
+      selectConnector: 'Seleziona E/O',
+      addCondition: '+ Aggiungi condizione',
+      fillOrRemoveCondition: 'Compila o rimuovi la condizione',
+      rangeOrderError: 'Il secondo valore deve essere superiore al primo',
+      betweenMin: 'Minimo',
+      betweenMax: 'Massimo',
+      selectValues: 'Seleziona {{level}}',
+      clear: 'Cancella',
+    },
   },
   unsupportedFilterMessage: 'Filtro non supportato (applicato alla query dei dati)',
   unsupportedFilter: 'Filtro non supportato {{filter}}',
@@ -365,6 +385,10 @@ const translation: TranslationDictionary = {
       selectAll: 'Seleziona tutto',
       clearAll: 'Cancella tutto',
     },
+    tooltips: {
+      selectAllPartiallyLoaded:
+        'Non tutti i valori sono visualizzati. Scorri la lista verso il basso per caricare i valori rimanenti. Puoi anche usare la condizione "Non è" qui sotto per escludere valori specifici.',
+    },
     labels: {
       includeAll: 'Includi tutto (nessun filtro applicato)',
       allowMultiSelection: 'Consenti selezione multipla per le liste',
@@ -397,6 +421,7 @@ const translation: TranslationDictionary = {
       greaterThan: 'Maggiore di',
       greaterThanOrEqual: 'Uguale o maggiore di',
       isWithin: "È all'interno",
+      between: 'Tra',
       top: 'Top',
       bottom: 'Ultimi',
     },
@@ -499,6 +524,7 @@ const translation: TranslationDictionary = {
     },
     table: {
       label: 'Tabella dati',
+      totalRows: 'Totale: {{formattedCount}} righe',
     },
     sankey: {
       alerts: {

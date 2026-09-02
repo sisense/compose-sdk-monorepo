@@ -61,6 +61,27 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
                     Gender
                   </span>
                 </div>
+                <button
+                  aria-label="Filter tile menu"
+                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1ax21c5-MuiButtonBase-root-MuiIconButton-root"
+                  tabindex="0"
+                  type="button"
+                >
+                  <svg
+                    fill="none"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      clip-rule="evenodd"
+                      d="M11 7C11 6.44772 11.4477 6 12 6C12.5523 6 13 6.44772 13 7C13 7.55228 12.5523 8 12 8C11.4477 8 11 7.55228 11 7ZM11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12ZM12 16C11.4477 16 11 16.4477 11 17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17C13 16.4477 12.5523 16 12 16Z"
+                      fill="#5B6372"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </button>
               </header>
               <main
                 style="color: rgb(91, 99, 114); position: relative;"
@@ -80,7 +101,8 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
                   </div>
                 </div>
                 <div
-                  style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
+                  data-testid="filter-tile-locked-overlay"
+                  style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: rgb(255, 255, 255); opacity: 0.5;"
                 />
               </main>
             </div>
@@ -120,6 +142,27 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
                     Age Range
                   </span>
                 </div>
+                <button
+                  aria-label="Filter tile menu"
+                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1ax21c5-MuiButtonBase-root-MuiIconButton-root"
+                  tabindex="0"
+                  type="button"
+                >
+                  <svg
+                    fill="none"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      clip-rule="evenodd"
+                      d="M11 7C11 6.44772 11.4477 6 12 6C12.5523 6 13 6.44772 13 7C13 7.55228 12.5523 8 12 8C11.4477 8 11 7.55228 11 7ZM11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12ZM12 16C11.4477 16 11 16.4477 11 17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17C13 16.4477 12.5523 16 12 16Z"
+                      fill="#5B6372"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </button>
               </header>
               <main
                 style="color: rgb(91, 99, 114); position: relative;"
@@ -139,7 +182,8 @@ exports[`CascadingFilterTile > should render a locked CascadingFilterTile compon
                   </div>
                 </div>
                 <div
-                  style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: white; opacity: 0.5;"
+                  data-testid="filter-tile-locked-overlay"
+                  style="position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background-color: rgb(255, 255, 255); opacity: 0.5;"
                 />
               </main>
             </div>

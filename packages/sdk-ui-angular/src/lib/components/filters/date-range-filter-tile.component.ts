@@ -125,6 +125,12 @@ export class DateRangeFilterTileComponent implements AfterViewInit, OnChanges, O
   lastDate: DateRangeFilterTileProps['lastDate'];
 
   /**
+   * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.config}
+   */
+  @Input()
+  config: DateRangeFilterTileProps['config'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.onChange}
    */
   @Output()
@@ -179,6 +185,7 @@ export class DateRangeFilterTileComponent implements AfterViewInit, OnChanges, O
 
   private getPreactComponentProps(): DateRangeFilterTilePropsPreact {
     return {
+      config: this.config,
       title: this.title,
       attribute: this.attribute,
       dataSource: this.dataSource,

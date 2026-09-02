@@ -23,15 +23,22 @@ import { WidgetsPanelLayout } from '@/domains/dashboarding/dashboard-model';
 import { withOptionallyDisabledAutoHeight } from '@/domains/dashboarding/utils';
 import { Widget } from '@/domains/widgets/components/widget';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import {
+  withHeaderItems,
+  withHeaderItemsTransform,
+} from '@/domains/widgets/helpers/header-items-utils';
 import { withHeaderMenuItem } from '@/domains/widgets/helpers/header-menu-utils';
 import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets';
+import { WidgetHeaderTargets } from '@/domains/widgets/shared/widget-header/widget-header-targets';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { useSyncedState } from '@/shared/hooks/use-synced-state';
-import { composeTitleHandlers } from '@/shared/utils/combine-handlers';
-import type { RenderTitleHandler } from '@/types';
 
 import { CellDropOverlay } from './components/cell-drop-overlay';
-import { DraggableWidgetWrapper } from './components/draggable-widget-wrapper';
+import { createDragIconItem } from './components/drag-icon-header-item';
+import {
+  DraggableWidgetWrapper,
+  type WidgetDragHandle,
+} from './components/draggable-widget-wrapper';
 import { EditableLayoutRow } from './components/editable-layout-row';
 import { ResizableColumns } from './components/resizable-columns';
 import { RowDropOverlay } from './components/row-drop-overlay';
@@ -47,24 +54,50 @@ import { SmartPointerSensor } from './smart-pointer-sensor';
 import { getDraggingWidgetId, isEditableLayoutDragData, isEditableLayoutDropData } from './utils';
 
 /**
- * Adds the drag-handle renderTitle handler before the widget's existing one.
- * Order matters: drag handle runs first so the title area is wrapped for DnD.
- * @param withDragHandle - The renderTitle handler to add before the widget's existing one.
- * @returns A function that adds the drag-handle renderTitle handler before the widget's existing one.
+ * The header items that make up the widget's drag area, left to right: the drag icon, the JTD icon,
+ * the title and the spacers on either side of it. The action buttons on the right are left alone.
  */
-const withDragHandleInTitle =
-  (withDragHandle: RenderTitleHandler) =>
-  (props: Readonly<WidgetProps>): WidgetProps => {
-    const existingHeader = props.styleOptions?.header;
-    const styleOptions = {
-      ...props.styleOptions,
-      header: {
-        ...(existingHeader ?? {}),
-        renderTitle: composeTitleHandlers(withDragHandle, existingHeader?.renderTitle),
-      },
-    };
-    return { ...props, styleOptions } as WidgetProps;
-  };
+const DRAGGABLE_HEADER_ITEM_IDS: ReadonlySet<string> = new Set<string>([
+  WidgetHeaderTargets.DragIcon,
+  WidgetHeaderTargets.JtdIcon,
+  WidgetHeaderTargets.TitleAlignmentSpacer,
+  WidgetHeaderTargets.Title,
+  WidgetHeaderTargets.Spacer,
+]);
+
+/**
+ * Makes the widget header's title row the drag area.
+ *
+ * Two contributions: the built-in drag-icon item, and an `onBeforeRender` transform wraps every item of the drag area in a grab area —
+ * the drag icon as dnd-kit's activator, the rest as plain grab areas. Wrapping the spacers as well is
+ * what keeps the empty part of the row draggable, including for a widget with no title at all.
+ *
+ * @param dragHandle - The activators provided by the widget's draggable wrapper.
+ * @returns A function that turns a widget's header into its drag area.
+ */
+const withDragHandleInHeader =
+  (dragHandle: WidgetDragHandle) =>
+  (props: Readonly<WidgetProps>): WidgetProps =>
+    flow(
+      dragHandle.iconVisible
+        ? withHeaderItems([
+            createDragIconItem({
+              color: dragHandle.iconColor,
+              withActivator: dragHandle.withActivator,
+            }),
+          ])
+        : (widget: Readonly<WidgetProps>): WidgetProps => widget,
+      withHeaderItemsTransform((items) =>
+        items.map((item) =>
+          DRAGGABLE_HEADER_ITEM_IDS.has(item.id) && item.id !== WidgetHeaderTargets.DragIcon
+            ? {
+                ...item,
+                component: (itemProps) => dragHandle.withGrabArea(item.component(itemProps)),
+              }
+            : item,
+        ),
+      ),
+    )(props);
 
 /** Maps a widget's props to a customized version of them. */
 type WidgetPropsTransformer = (widget: WidgetProps) => WidgetProps;
@@ -336,7 +369,7 @@ export const EditableLayout = ({
                                   },
                                 }}
                               >
-                                {(withDragHandle) => (
+                                {(dragHandle) => (
                                   <>
                                     <Cell
                                       height={isAutoHeightRow ? 'auto' : subcell.height}
@@ -366,7 +399,7 @@ export const EditableLayout = ({
                                             onClick: () =>
                                               onCellDistributeEqualWidth(columnIndex, rowIndex),
                                           }),
-                                          withDragHandleInTitle(withDragHandle),
+                                          withDragHandleInHeader(dragHandle),
                                         )(widgetProps);
                                         return <Widget {...customizedProps} />;
                                       })()}

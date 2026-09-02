@@ -236,6 +236,26 @@ const translation: TranslationDictionary = {
     allExceptCount: 'Todos exceto {{count}}',
     setupTitle: 'Configurar um widget de filtro',
     setupSubtitle: 'Defina uma dimensão e configure como o filtro funciona',
+    conditionUnsupported: 'A condição está disponível para campos de texto e numéricos',
+    conditionNotRepresentable: 'Esta condição não pode ser editada aqui',
+    controls: {
+      findInList: 'Pesquisar na lista',
+      enterValue: 'Digite o valor...',
+      noMatches: 'Nenhuma correspondência',
+      clearSelection: 'Limpar seleção',
+      overflowCount: '+{{count}}',
+      select: 'Selecionar',
+      selectDateLevel: 'Selecionar nível de data',
+      selectCondition: 'Selecionar condição',
+      selectConnector: 'Selecionar E/OU',
+      addCondition: '+ Adicionar condição',
+      fillOrRemoveCondition: 'Preencha ou remova a condição',
+      rangeOrderError: 'O segundo valor deve ser maior que o primeiro',
+      betweenMin: 'Mínimo',
+      betweenMax: 'Máximo',
+      selectValues: 'Selecionar {{level}}',
+      clear: 'Limpar',
+    },
   },
   unsupportedFilterMessage: 'Filtro não suportado (aplicado à consulta de dados)',
   unsupportedFilter: 'Filtro não suportado {{filter}}',
@@ -366,6 +386,10 @@ const translation: TranslationDictionary = {
       selectAll: 'Selecionar tudo',
       clearAll: 'Limpar tudo',
     },
+    tooltips: {
+      selectAllPartiallyLoaded:
+        'Nem todos os valores são exibidos. Role a lista para baixo para carregar os valores restantes. Você também pode usar a condição "Não é" abaixo para excluir valores específicos.',
+    },
     labels: {
       includeAll: 'Incluir tudo (nenhum filtro aplicado)',
       allowMultiSelection: 'Permitir seleção múltipla para listas',
@@ -398,6 +422,7 @@ const translation: TranslationDictionary = {
       greaterThan: 'Maior que',
       greaterThanOrEqual: 'Igual ou maior que',
       isWithin: 'Está dentro',
+      between: 'Entre',
       top: 'Top',
       bottom: 'Últimos',
     },
@@ -500,6 +525,7 @@ const translation: TranslationDictionary = {
     },
     table: {
       label: 'Tabela de dados',
+      totalRows: 'Total de linhas: {{formattedCount}}',
     },
     sankey: {
       alerts: {

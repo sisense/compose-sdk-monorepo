@@ -12,7 +12,7 @@ title: FilterWidgetFilterType
 - `'dateRange'`    — date-range picker. Planned.
 - `'period'`       — relative-period picker. Planned.
 - `'numericRange'` — numeric range slider. Planned.
-- `'condition'`    — conditional / formula filter builder. Planned.
+- `'condition'`    — string condition builder with optional AND/OR chaining (text attributes only). Implemented.
 
 ## Example
 

@@ -4,7 +4,7 @@ title: CustomWidgetProps
 
 # Interface CustomWidgetProps
 
-Props for the Custom Widget component
+Props for the custom widget component
 
 ## Properties
 

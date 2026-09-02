@@ -1,10 +1,8 @@
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { FilterTileMenuTargets } from '@/domains/filters/components/filter-tile/filter-tile-menu-targets';
 import type { MenuActionItem } from '@/shared/types/menu-item';
-
-/** Id for the lock/unlock menu item of the filter tile. */
-export const FILTER_TILE_LOCK_MENU_ITEM_ID = 'filter-tile-lock';
 
 /**
  * Builds the lock menu item for the filter tile.
@@ -30,7 +28,7 @@ export function useFilterTileLockMenuItem({
   return useMemo(() => {
     return {
       type: 'action' as const,
-      id: FILTER_TILE_LOCK_MENU_ITEM_ID,
+      id: FilterTileMenuTargets.Lock,
       caption: lockCaption(),
       onClick: onLockToggle,
     };

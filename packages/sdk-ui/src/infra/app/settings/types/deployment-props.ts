@@ -39,4 +39,7 @@ export type DeploymentProps = {
   llmBYOK?: boolean;
   InfusionApps: boolean;
   aiAssistantAccess?: boolean;
+  pulseAgentic?: {
+    enabled: boolean;
+  };
 };

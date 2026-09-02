@@ -185,7 +185,7 @@ export const WithCustomizedHeader = template({
 });
 
 export const WithCustomToolbar = template({
-  title: 'Widget With Customized Header and Custom Toolbar',
+  title: 'Widget With Customized Header and Custom Header Items',
   ...cartesianArgs,
   styleOptions: {
     ...chartStyleOptions,
@@ -193,12 +193,22 @@ export const WithCustomToolbar = template({
       titleAlignment: 'Center',
       backgroundColor: 'bisque',
       titleTextColor: 'chocolate',
-      renderToolbar: (onRefresh) => (
-        <>
-          <button onClick={onRefresh}>Refresh</button>
-          <button>Other Button</button>
-        </>
-      ),
+    },
+  },
+  config: {
+    header: {
+      items: [
+        {
+          id: 'first-button',
+          size: { width: 90 },
+          component: () => <button>First Button</button>,
+        },
+        {
+          id: 'other-button',
+          size: { width: 90 },
+          component: () => <button>Other Button</button>,
+        },
+      ],
     },
   },
 });

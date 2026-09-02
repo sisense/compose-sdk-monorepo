@@ -22,6 +22,17 @@ export { extractCombinedFilters } from '../domains/widgets/components/widget-by-
 // Theming
 export { useThemeContext } from '../infra/contexts/theme-provider';
 
+// Filter widget control theming — for a host design panel that has to show, and recognize,
+// the colors a control takes from the dashboard theme when nothing has been restyled.
+export {
+  filterWidgetThemeColorsFromDesignSettings,
+  getFilterWidgetControlDefaults,
+} from '../domains/widgets/components/filter-widget/filter-widget-theme';
+export type {
+  FilterWidgetControlColorDefaults,
+  FilterWidgetDesignSettingsLike,
+} from '../domains/widgets/components/filter-widget/filter-widget-theme';
+
 // App settings hook and type
 export { useAppSettings } from '../shared/hooks/use-app-settings';
 export { useHttpClient } from '../shared/hooks/use-http-client';
@@ -55,7 +66,6 @@ export {
 
 // Others
 export type { NlqChartWidgetStyleOptions } from '../types';
-export type { RenderToolbarHandler, RenderTitleHandler } from '../types';
 export { isChartWidgetProps } from '../domains/widgets/components/widget-by-id/utils.js';
 export { isPivotTableWidgetProps } from '../domains/widgets/components/widget-by-id/utils.js';
 
@@ -77,6 +87,17 @@ export { useDashboardPersistence } from '../domains/dashboarding/dashboard-model
 /* recommended approach */
 export { createDashboardPersistenceManager } from '../domains/dashboarding/persistence/persistence-manager.js';
 export type { DashboardPersistenceManager } from '../domains/dashboarding/persistence/types.js';
+
+export { type ChartTableToggleLabels } from '../domains/widgets/chart-table-toggle/chart-table-toggle-button.js';
+export {
+  useChartTableToggle,
+  type UseChartTableToggleOptions,
+} from '../domains/widgets/chart-table-toggle/use-chart-table-toggle.js';
+export {
+  useWidgetsChartTableToggle,
+  type ChartTableToggleWidget,
+  type UseWidgetsChartTableToggleOptions,
+} from '../domains/widgets/chart-table-toggle/use-widgets-chart-table-toggle.js';
 
 // Query Definition (read-only pills above widget in canvas)
 export {

@@ -125,15 +125,11 @@ describe('ThemeProvider', () => {
     });
   });
 
-  it('should throw an error if theme loading fails', async () => {
+  it('should fall back to default theme settings and warn if theme loading fails', async () => {
     getThemeSettingsByOidMock.mockRejectedValue(new Error('Failed to load theme'));
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-    const ChildComponent = () => {
-      return <div data-testid="child">Child component with invalid theme from server</div>;
-    };
-
-    let caughtError: Error | undefined;
-
+    const onError = vi.fn();
     useSisenseContextMock.mockReturnValue({
       app: { httpClient: {} } as any,
       isInitialized: true,
@@ -141,22 +137,100 @@ describe('ThemeProvider', () => {
         enabled: false,
       },
       errorBoundary: {
-        showErrorBox: false,
-        onError: (error: Error) => {
-          caughtError = error;
-        },
+        showErrorBox: true,
+        onError,
       },
     });
 
+    let actuallyRenderedThemeSettings: CompleteThemeSettingsInternal | undefined;
+    const ChildComponent = () => {
+      const { themeSettings } = useThemeContext();
+      actuallyRenderedThemeSettings = themeSettings;
+      return <div data-testid="child">Child component with invalid theme from server</div>;
+    };
+
     render(
-      <ThemeProvider theme="invalid_oid">
+      <ThemeProvider theme="invalid_oid" skipTracking>
         <ChildComponent />
       </ThemeProvider>,
     );
 
+    // A theme that cannot be loaded is no longer fatal - children keep rendering.
+    const childElement = await screen.findByTestId('child');
+    expect(childElement).toBeInTheDocument();
+
     await waitFor(() => {
-      expect(caughtError).toBeInstanceOf(Error);
-      expect(caughtError!.message).toBe('Failed to load theme');
+      expect(consoleWarnSpy).toHaveBeenCalledOnce();
     });
+    expect(consoleWarnSpy.mock.calls[0][0]).toContain('Failed to load theme');
+    expect(actuallyRenderedThemeSettings).toEqual(getDefaultThemeSettings());
+
+    // The Sisense context `onError` callback is reserved for fatal errors, since its contract allows
+    // returning a React node to replace the failed subtree.
+    expect(onError).not.toHaveBeenCalled();
+  });
+
+  it('should fall back to parent theme settings when a nested theme oid fails to load', async () => {
+    getThemeSettingsByOidMock.mockRejectedValue(new Error('Failed to load theme'));
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const parentTheme: ThemeSettings = {
+      general: {
+        brandColor: '#abcdef',
+      },
+    };
+
+    let actuallyRenderedThemeSettings: CompleteThemeSettingsInternal | undefined;
+    const ChildComponent = () => {
+      const { themeSettings } = useThemeContext();
+      actuallyRenderedThemeSettings = themeSettings;
+      return <div data-testid="child">Child component with invalid nested theme</div>;
+    };
+
+    render(
+      <ThemeProvider theme={parentTheme} skipTracking>
+        <ThemeProvider theme="invalid_oid" skipTracking>
+          <ChildComponent />
+        </ThemeProvider>
+      </ThemeProvider>,
+    );
+
+    const childElement = await screen.findByTestId('child');
+    expect(childElement).toBeInTheDocument();
+
+    // The failed nested theme falls back to the parent theme, not to the default one.
+    await waitFor(() => {
+      expect(actuallyRenderedThemeSettings).toEqual({
+        ...getDefaultThemeSettings(),
+        general: {
+          ...getDefaultThemeSettings().general,
+          brandColor: '#abcdef',
+        },
+      });
+    });
+  });
+
+  it('should not crash when the Sisense context provides no tracking config', async () => {
+    // `ThemeProvider` sets `shouldSkipSisenseContextWaiting`, so it must tolerate a partial
+    // context. Reading `tracking.enabled` unguarded threw during render - including from the
+    // tracking effect's dependency array, so no theme failure was needed to trip it - and the
+    // error boundary replaced the subtree with an error box.
+    useSisenseContextMock.mockReturnValue({
+      app: { defaultDataSource: 'someDataSource' },
+      isInitialized: true,
+      errorBoundary: {
+        showErrorBox: true,
+      },
+    });
+
+    render(
+      <ThemeProvider skipTracking>
+        <div data-testid="child">Child component without tracking config</div>
+      </ThemeProvider>,
+    );
+
+    const childElement = await screen.findByTestId('child');
+    expect(childElement).toBeInTheDocument();
+    expect(screen.queryByLabelText('error-box')).not.toBeInTheDocument();
   });
 });

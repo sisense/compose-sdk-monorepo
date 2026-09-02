@@ -5,5 +5,17 @@ export {
   RelativeDateFilterTile,
   type RelativeDateFilterTileProps,
 } from './relative-date-filter-tile';
-export { FilterTile, type FilterTileProps } from './filter-tile';
-export { FiltersPanel, type FiltersPanelProps } from './filters-panel';
+export {
+  FilterTile,
+  type FilterTileProps,
+  FilterTileMenuTargets,
+  type FilterTileActionsConfig,
+  type FilterTileConfig,
+  type FilterTileHeaderConfig,
+  type FilterTileMenuActionItem,
+  type FilterTileMenuConfig,
+  type FilterTileMenuItem,
+  type FilterTileMenuSubmenuItem,
+  type FilterTileMenuTarget,
+} from './filter-tile';
+export { FiltersPanel, type FiltersPanelProps, type FiltersPanelConfig } from './filters-panel';

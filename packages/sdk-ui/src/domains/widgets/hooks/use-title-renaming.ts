@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { WidgetChangeEvent } from '@/domains/widgets/change-events.js';
+import type { WidgetTitleChangedEvent } from '@/domains/widgets/change-events.js';
 import type { TitleEditorConfig } from '@/domains/widgets/shared/widget-header/types.js';
 import { WidgetHeaderMenuTargets } from '@/domains/widgets/shared/widget-header/widget-header-menu-targets.js';
 import type { MenuActionItem } from '@/shared/types/menu-item.js';
@@ -11,7 +11,7 @@ export type UseTitleRenamingParams = {
   /** Whether inline title renaming is enabled. */
   enabled: boolean;
   /** Handler called when the user commits a new title. */
-  onChange?: (event: WidgetChangeEvent) => void;
+  onChange?: (event: WidgetTitleChangedEvent) => void;
 };
 
 /** Result of the title renaming hook. */

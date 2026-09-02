@@ -16,6 +16,14 @@ Date level attribute the filter is based on
 
 ***
 
+### config
+
+> **config**?: [`FilterTileConfig`](interface.FilterTileConfig.md)
+
+Configuration for the filter tile.
+
+***
+
 ### dataSource
 
 > **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)

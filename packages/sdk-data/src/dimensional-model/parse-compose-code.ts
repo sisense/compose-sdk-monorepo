@@ -72,6 +72,12 @@ export function splitAtDepthZero(str: string, delimiter: string): string[] {
         continue;
       }
     } else {
+      // Backslash escape — the next char is literal, never a string terminator
+      if (char === '\\' && nextChar !== undefined) {
+        current += char + nextChar;
+        i++;
+        continue;
+      }
       if (char !== stringChar) {
         current += char;
         continue;
@@ -121,6 +127,11 @@ function findDelimiterAtDepthZero(str: string, delimiter: string): number {
       if (')]}'.includes(char)) depth--;
       if (char === delimiter && depth === 0) return i;
     } else {
+      // Backslash escape — the next char is literal, never a string terminator
+      if (char === '\\' && nextChar !== undefined) {
+        i++;
+        continue;
+      }
       if (char !== stringChar) continue;
       if (nextChar === stringChar) {
         i++;
@@ -163,6 +174,11 @@ export function findMatchingCloseParen(str: string, openParenIndex: number): num
       if (')]}'.includes(char) && --depth === 0) return i;
       i++;
     } else {
+      // Backslash escape — the next char is literal, never a string terminator
+      if (char === '\\' && nextChar !== undefined) {
+        i += 2;
+        continue;
+      }
       if (char !== stringChar) {
         i++;
         continue;
@@ -188,9 +204,25 @@ export function findMatchingCloseParen(str: string, openParenIndex: number): num
  */
 function unquote(key: string): string {
   if ((key.startsWith("'") && key.endsWith("'")) || (key.startsWith('"') && key.endsWith('"'))) {
-    return key.slice(1, -1);
+    return unescapeQuotes(key.slice(1, -1), key[0]);
   }
   return key;
+}
+
+/**
+ * Unescapes quotes inside an already-unwrapped string literal.
+ * Both the backslash-escaped (\') and doubled ('') forms occur in composeCode.
+ *
+ * @param content - The string contents, without its surrounding quotes
+ * @param quote - The quote character that wrapped the contents
+ * @returns The contents with escaped quotes reduced to literal ones
+ * @internal
+ */
+function unescapeQuotes(content: string, quote: string): string {
+  // One pass, not two: replacing `\'` first would turn `A\'\'B` into `A''B`, which a second pass
+  // over doubled quotes would then collapse to `A'B`, losing one. Static patterns per quote char.
+  const pattern = quote === '"' ? /""|\\"/g : /''|\\'/g;
+  return content.replace(pattern, quote);
 }
 
 /**
@@ -217,7 +249,8 @@ export function parseComposeCodeToFunctionCall(composeCode: string): FunctionCal
   }
 
   // Parse function call: functionName(args...)
-  const match = trimmed.match(/^([a-zA-Z_$][a-zA-Z0-9_.$]*)\s*\((.*)\)$/);
+  // `[\s\S]` not `.` — args may span newlines; the `s` flag needs ES2018, this package is ES6
+  const match = trimmed.match(/^([a-zA-Z_$][a-zA-Z0-9_.$]*)\s*\(([\s\S]*)\)$/);
   if (!match) {
     throw new Error(`Invalid composeCode format: expected function call, got '${trimmed}'`);
   }
@@ -286,10 +319,7 @@ function parseArgumentValue(value: string): Arg {
     (value.startsWith("'") && value.endsWith("'")) ||
     (value.startsWith('"') && value.endsWith('"'))
   ) {
-    const quote = value[0];
-    const content = value.slice(1, -1);
-    // Unescape quotes: replace '' with ' and "" with "
-    return content.replace(new RegExp(`${quote}${quote}`, 'g'), quote);
+    return unescapeQuotes(value.slice(1, -1), value[0]);
   }
 
   // Handle arrays
@@ -319,14 +349,15 @@ function parseArgumentValue(value: string): Arg {
     return parseObject(objectContent) as unknown as Arg;
   }
 
+  // Handle composeCode references (DM.*) before the nested-call check below: a column name may
+  // itself contain parentheses (e.g. `DM.T.[[COUNT(DISTINCT ID)]]`) and is never a function call.
+  if (value.startsWith('DM.')) {
+    return value;
+  }
+
   // Handle function calls (nested)
   if (value.includes('(') && value.includes(')')) {
     return parseComposeCodeToFunctionCall(value);
-  }
-
-  // Handle composeCode references (DM.*)
-  if (value.startsWith('DM.')) {
-    return value;
   }
 
   // Fallback: return as string

@@ -147,10 +147,6 @@ export type {
   ScattermapMarkers,
   CalendarHeatmapViewType,
 
-  // Models:
-  WidgetModel,
-  DashboardModel,
-
   // Charts related:
   BeforeRenderHandler,
   DataPoint,
@@ -173,13 +169,6 @@ export type {
   WidgetsPanelColumnLayout,
   WidgetId,
   WidgetsOptions,
-  WidgetConfig,
-  ChartWidgetConfig,
-  PivotTableWidgetConfig,
-  CustomWidgetConfig,
-  TextWidgetConfig,
-  FilterWidgetConfig,
-  WidgetHeaderConfig,
   WidgetHeaderMenuActionItem,
   WidgetHeaderMenuConfig,
   WidgetHeaderMenuItem,
@@ -211,7 +200,6 @@ export type {
   PivotTableNonSelectableDrilldownOptions,
   Member,
   FilterVariant,
-  FilterWidgetProps,
   FilterWidgetFilterType,
   TranslationConfig,
   Plugin,

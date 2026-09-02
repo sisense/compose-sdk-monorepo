@@ -1,26 +1,9 @@
-import {
-  Attribute,
-  createCalculatedAttribute,
-  filterFactory,
-  isRankingFilter,
-  measureFactory,
-} from '@sisense/sdk-data';
-import { describe, expect, it } from 'vitest';
+import { filterFactory, isRankingFilter, measureFactory } from '@sisense/sdk-data';
+import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 
 import * as DM from '@/__test-helpers__/sample-ecommerce';
 
-import { getFilterEditorValueType, isSupportedByFilterEditor } from './utils.js';
-
-/** Builds a calculated-dimension attribute the way a Fusion-created CD filter deserializes. */
-function createCdAttribute(datatype?: string): Attribute {
-  return createCalculatedAttribute({
-    type: 'calculated_dimension',
-    title: 'right([Age Range],1)',
-    formula: 'right([Age Range],1)',
-    ...(datatype ? { datatype } : {}),
-    context: { '[Age Range]': { dim: '[Commerce.Age Range]', datatype: 'text' } },
-  });
-}
+import { asUtcDate, convertDateToMemberString, isSupportedByFilterEditor } from './utils.js';
 
 describe('filter-editor-popover utils', () => {
   it('supports ranking filters in the filter editor', () => {
@@ -30,29 +13,77 @@ describe('filter-editor-popover utils', () => {
     expect(isRankingFilter(filter)).toBe(true);
     expect(isSupportedByFilterEditor(filter)).toBe(true);
   });
+});
 
-  describe('getFilterEditorValueType', () => {
-    it('resolves regular attributes by their type', () => {
-      expect(getFilterEditorValueType(DM.Commerce.AgeRange)).toBe('text');
-      expect(getFilterEditorValueType(DM.Commerce.Revenue)).toBe('numeric');
-      expect(getFilterEditorValueType(DM.Commerce.Date.Years)).toBe('datetime');
-    });
+describe('convertDateToMemberString', () => {
+  const ORIGINAL_TZ = process.env.TZ;
 
-    it('resolves calculated dimensions by their data type, defaulting to text', () => {
-      // `type` is the metadata kind, so it cannot be used to pick an editor
-      expect(createCdAttribute('text').type).toBe('calculatedattribute');
-      expect(getFilterEditorValueType(createCdAttribute('text'))).toBe('text');
-      expect(getFilterEditorValueType(createCdAttribute('numeric'))).toBe('numeric');
-      // one built in code carries no `datatype`, and text is the only type supported for a CD
-      expect(getFilterEditorValueType(createCdAttribute())).toBe('text');
-    });
-
-    it('returns null when no editor applies', () => {
-      // a date CD would crash the datetime editor, which needs LevelAttribute.setGranularity
-      expect(getFilterEditorValueType(createCdAttribute('datetime'))).toBeNull();
-      // an unrecognized data type is not editable, whether or not it is calculated
-      expect(getFilterEditorValueType(createCdAttribute('blob'))).toBeNull();
-      expect(getFilterEditorValueType({ type: 'blob' } as Attribute)).toBeNull();
-    });
+  afterAll(() => {
+    process.env.TZ = ORIGINAL_TZ;
   });
+
+  describe.each(['UTC', 'Europe/Kiev', 'Asia/Tokyo', 'America/New_York', 'Pacific/Honolulu'])(
+    'in %s',
+    (tz) => {
+      beforeEach(() => {
+        process.env.TZ = tz;
+      });
+
+      it('names the day the date represents regardless of the viewer timezone', () => {
+        const date = new Date('2013-12-02T00:00:00.000Z');
+
+        expect(convertDateToMemberString(date)).toBe('2013-12-02T00:00:00');
+      });
+
+      it('pads single-digit months and days', () => {
+        const date = new Date('2024-01-05T00:00:00.000Z');
+
+        expect(convertDateToMemberString(date)).toBe('2024-01-05T00:00:00');
+      });
+    },
+  );
+});
+
+describe('asUtcDate', () => {
+  const ORIGINAL_TZ = process.env.TZ;
+
+  afterAll(() => {
+    process.env.TZ = ORIGINAL_TZ;
+  });
+
+  describe.each(['UTC', 'Europe/Kiev', 'Asia/Tokyo', 'America/New_York', 'Pacific/Honolulu'])(
+    'in %s',
+    (tz) => {
+      beforeEach(() => {
+        process.env.TZ = tz;
+      });
+
+      it('anchors a timezone-less value to UTC midnight of the day it names', () => {
+        expect(asUtcDate('2013-12-02T00:00:00').toISOString()).toBe('2013-12-02T00:00:00.000Z');
+      });
+
+      it('anchors a date-only value to UTC midnight of the day it names', () => {
+        expect(asUtcDate('2013-12-02').toISOString()).toBe('2013-12-02T00:00:00.000Z');
+      });
+
+      it('keeps the instant of a value that already carries a timezone', () => {
+        expect(asUtcDate('2013-12-02T00:00:00Z').toISOString()).toBe('2013-12-02T00:00:00.000Z');
+        expect(asUtcDate('2013-12-02T00:00:00+02:00').toISOString()).toBe(
+          '2013-12-01T22:00:00.000Z',
+        );
+      });
+
+      it('passes a Date through untouched', () => {
+        const date = new Date('2013-12-02T00:00:00.000Z');
+
+        expect(asUtcDate(date)).toBe(date);
+      });
+
+      it('round-trips through convertDateToMemberString', () => {
+        expect(convertDateToMemberString(asUtcDate('2013-12-02T00:00:00'))).toBe(
+          '2013-12-02T00:00:00',
+        );
+      });
+    },
+  );
 });

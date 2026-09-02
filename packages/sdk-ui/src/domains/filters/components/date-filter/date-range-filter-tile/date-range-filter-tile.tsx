@@ -76,9 +76,7 @@ export interface DateRangeFilterTileProps {
    */
   tileDesignOptions?: FilterTileDesignOptions;
   /**
-   * Config for the filter tile
-   *
-   * @internal
+   * Configuration for the filter tile.
    */
   config?: FilterTileConfig;
 

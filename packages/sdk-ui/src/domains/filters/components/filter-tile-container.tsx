@@ -375,13 +375,14 @@ export const FilterTileContainer: FunctionComponent<FilterTileContainerProps> = 
           {renderContent(collapsed, (disabled ?? false) || linked)}
           {locked && design.header.shouldBeShown && (
             <div
+              data-testid="filter-tile-locked-overlay"
               style={{
                 position: 'absolute',
                 top: '4px',
                 left: '4px',
                 right: '4px',
                 bottom: '4px',
-                backgroundColor: 'white',
+                backgroundColor: bgColor,
                 opacity: 0.5,
               }}
             />

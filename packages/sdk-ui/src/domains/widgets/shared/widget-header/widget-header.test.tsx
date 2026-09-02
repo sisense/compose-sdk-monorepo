@@ -1,32 +1,21 @@
 /** @vitest-environment jsdom */
-import type { ReactNode } from 'react';
-
 import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { describe, expect, it, Mock, vi } from 'vitest';
 
+import { asBuiltInHeaderItem, HeaderItem } from '@/domains/shared/header';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
+import type { AlignmentTypes } from '@/types';
 
-import type { InfoButtonConfig, TitleEditorConfig, WidgetHeaderConfig } from './types';
+import { WIDGET_HEADER_ITEM_SIZE } from './constants';
+import type { WidgetHeaderConfig, WidgetHeaderItem } from './types';
 import { WidgetHeader } from './widget-header';
-import { WidgetHeaderMenu } from './widget-header-menu';
-import { WidgetHeaderToolbar } from './widget-header-toolbar';
+import { WidgetHeaderTargets } from './widget-header-targets';
 
 vi.mock('@/infra/contexts/theme-provider', () => ({
   useThemeContext: vi.fn(),
 }));
 
-vi.mock('./widget-header-toolbar', () => ({
-  WidgetHeaderToolbar: vi.fn(() => <div data-testid="widget-header-toolbar">Toolbar</div>),
-}));
-
-vi.mock('./widget-header-menu', () => ({
-  WidgetHeaderMenu: vi.fn(() => <div data-testid="widget-header-menu">Menu</div>),
-}));
-
 const mockUseThemeContext = useThemeContext as Mock;
-const mockWidgetHeaderToolbar = WidgetHeaderToolbar as Mock;
-const mockWidgetHeaderMenu = WidgetHeaderMenu as Mock;
 
 const defaultThemeSettings = {
   themeSettings: {
@@ -40,13 +29,48 @@ const defaultThemeSettings = {
         dividerLineColor: '#e6e6e6',
       },
     },
-    typography: {
-      fontFamily: '"Open Sans",sans-serif',
-    },
+    typography: { fontFamily: '"Open Sans",sans-serif' },
   },
 };
 
-const defaultInfoButtonConfig: InfoButtonConfig = {};
+/** Test id the shared header renderer gives an item's layout cell. */
+const itemTestId = (id: string) => `header-item-${id}`;
+
+/** Ids of the rendered header items, in visual (left-to-right) order. */
+const renderedItemIds = (container: HTMLElement): string[] =>
+  Array.from(container.querySelectorAll('[data-testid^="header-item-"]')).map((cell) =>
+    (cell.getAttribute('data-testid') as string).replace('header-item-', ''),
+  );
+
+/**
+ * A widget-contributed item: marked built-in, so it may claim a reserved slot id. Stands in for what
+ * a feature hook produces — the header only cares about the id and the content.
+ */
+const contributed = (id: string, label = id): HeaderItem =>
+  asBuiltInHeaderItem({ id, component: () => <span data-testid={label}>{label}</span> });
+
+const TITLE_ITEM = contributed(WidgetHeaderTargets.Title, 'title');
+const INFO_BUTTON_ITEM = contributed(WidgetHeaderTargets.InfoButton, 'info');
+
+/**
+ * Renders the header. Everything reaches it through `config.items`: `items` here are the widget's own
+ * (marked) contributions, `consumerItems` the unmarked ones a consumer would pass.
+ */
+const renderHeader = ({
+  items = [TITLE_ITEM, INFO_BUTTON_ITEM],
+  config,
+  styleOptions,
+}: {
+  items?: readonly HeaderItem[];
+  config?: WidgetHeaderConfig;
+  styleOptions?: Parameters<typeof WidgetHeader>[0]['styleOptions'];
+} = {}) =>
+  render(
+    <WidgetHeader
+      config={{ ...config, items: [...items, ...((config?.items ?? []) as HeaderItem[])] }}
+      styleOptions={styleOptions}
+    />,
+  );
 
 describe('WidgetHeader', () => {
   beforeEach(() => {
@@ -54,262 +78,294 @@ describe('WidgetHeader', () => {
     mockUseThemeContext.mockReturnValue(defaultThemeSettings);
   });
 
-  it('renders title from props', () => {
-    const { getByText } = render(
-      <WidgetHeader
-        title="My Widget Title"
-        infoButtonConfig={defaultInfoButtonConfig}
-        onRefresh={vi.fn()}
-      />,
-    );
+  describe('the header adds no content of its own', () => {
+    it('renders only the spacers when the widget contributes nothing', () => {
+      const { container } = renderHeader({ items: [] });
 
-    expect(getByText('My Widget Title')).toBeInTheDocument();
+      expect(renderedItemIds(container)).toEqual([
+        WidgetHeaderTargets.TitleAlignmentSpacer,
+        WidgetHeaderTargets.Spacer,
+      ]);
+    });
+
+    it('renders exactly the items the widget contributed, in slot order', () => {
+      const { container } = renderHeader({ items: [INFO_BUTTON_ITEM, TITLE_ITEM] });
+
+      expect(renderedItemIds(container)).toEqual([
+        WidgetHeaderTargets.TitleAlignmentSpacer,
+        WidgetHeaderTargets.Title,
+        WidgetHeaderTargets.Spacer,
+        WidgetHeaderTargets.InfoButton,
+      ]);
+    });
+
+    it('leaves an unfilled slot as an anchor a position can still target', () => {
+      // No menu item was contributed, yet `before: Menu` resolves.
+      const { container } = renderHeader({
+        config: {
+          items: [
+            {
+              id: 'help',
+              position: { type: 'before', target: WidgetHeaderTargets.Menu },
+              component: () => <span>Help</span>,
+            },
+          ],
+        },
+      });
+
+      expect(renderedItemIds(container)).toEqual([
+        WidgetHeaderTargets.TitleAlignmentSpacer,
+        WidgetHeaderTargets.Title,
+        WidgetHeaderTargets.Spacer,
+        WidgetHeaderTargets.InfoButton,
+        'help',
+      ]);
+    });
   });
 
-  it('renders without title when title is not provided', () => {
-    const { getByTestId } = render(
-      <WidgetHeader infoButtonConfig={defaultInfoButtonConfig} onRefresh={vi.fn()} />,
-    );
+  describe('consumer items (config.items / config.onBeforeRender)', () => {
+    it('places an item with no position after the trailing spacer', () => {
+      const { container } = renderHeader({
+        config: { items: [{ id: 'export', component: () => <span>Export</span> }] },
+      });
 
-    expect(getByTestId('widget-header-toolbar')).toBeInTheDocument();
+      expect(renderedItemIds(container)).toEqual([
+        WidgetHeaderTargets.TitleAlignmentSpacer,
+        WidgetHeaderTargets.Title,
+        WidgetHeaderTargets.Spacer,
+        'export',
+        WidgetHeaderTargets.InfoButton,
+      ]);
+    });
+
+    it('places a "first" item before everything, including the leading spacer', () => {
+      const { container } = renderHeader({
+        config: {
+          items: [{ id: 'back', position: { type: 'first' }, component: () => <span>Back</span> }],
+        },
+      });
+
+      expect(renderedItemIds(container)[0]).toBe('back');
+    });
+
+    it('places an "after Title" item right next to the title', () => {
+      const { container } = renderHeader({
+        config: {
+          items: [
+            {
+              id: 'live',
+              position: { type: 'after', target: WidgetHeaderTargets.Title },
+              component: () => <span>LIVE</span>,
+            },
+          ],
+        },
+      });
+
+      expect(renderedItemIds(container)).toEqual([
+        WidgetHeaderTargets.TitleAlignmentSpacer,
+        WidgetHeaderTargets.Title,
+        'live',
+        WidgetHeaderTargets.Spacer,
+        WidgetHeaderTargets.InfoButton,
+      ]);
+    });
+
+    it('passes the resolved size to the item component and applies it to the cell', () => {
+      const component = vi.fn(() => <span>Clock</span>);
+      const { getByTestId } = renderHeader({
+        config: { items: [{ id: 'clock', size: { width: 80 }, component }] },
+      });
+
+      expect(component).toHaveBeenCalledWith({
+        size: { width: 80, height: WIDGET_HEADER_ITEM_SIZE },
+      });
+      expect(getByTestId(itemTestId('clock'))).toHaveStyle({ width: '80px' });
+    });
+
+    it('rejects an unmarked consumer item that claims a reserved slot id', () => {
+      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const { queryByTestId } = renderHeader({
+        config: {
+          items: [
+            {
+              id: WidgetHeaderTargets.Title,
+              component: () => <span data-testid="forged">forged</span>,
+            },
+          ],
+        },
+      });
+
+      expect(consoleError).toHaveBeenCalledOnce();
+      expect(queryByTestId('forged')).not.toBeInTheDocument();
+
+      consoleError.mockRestore();
+    });
+
+    it('removes a contributed item through onBeforeRender', () => {
+      const { container } = renderHeader({
+        config: {
+          onBeforeRender: (items) =>
+            items.filter((item) => item.id !== WidgetHeaderTargets.InfoButton),
+        },
+      });
+
+      expect(renderedItemIds(container)).not.toContain(WidgetHeaderTargets.InfoButton);
+    });
+
+    it('does not pass unfilled slots to onBeforeRender', () => {
+      const onBeforeRender = vi.fn((items) => [...items]);
+      renderHeader({ config: { onBeforeRender } });
+
+      expect(onBeforeRender.mock.calls[0][0].map((item: { id: string }) => item.id)).toEqual([
+        WidgetHeaderTargets.TitleAlignmentSpacer,
+        WidgetHeaderTargets.Title,
+        WidgetHeaderTargets.Spacer,
+        WidgetHeaderTargets.InfoButton,
+      ]);
+    });
   });
 
-  it('uses renderTitle from styleOptions when provided', () => {
-    const renderTitle = vi.fn((title: ReactNode) => (
-      <span data-testid="custom-title">Custom: {title}</span>
-    ));
-    const { getByTestId } = render(
-      <WidgetHeader
-        title="Original Title"
-        infoButtonConfig={defaultInfoButtonConfig}
-        onRefresh={vi.fn()}
-        styleOptions={{ renderTitle }}
-      />,
-    );
+  describe('slot validation', () => {
+    it('throws when a contributed item claims an id with no slot', () => {
+      // Only SDK code can mark an item, so an unregistered built-in is a bug to surface, not to
+      // paper over by treating it as an ordinary item.
+      expect(() => renderHeader({ items: [contributed('unregistered')] })).toThrow(/has no slot/);
+    });
 
-    expect(renderTitle).toHaveBeenCalledWith('Original Title');
-    expect(getByTestId('custom-title')).toHaveTextContent('Custom: Original Title');
+    it("throws when a contributed item claims one of the header's own spacer slots", () => {
+      expect(() => renderHeader({ items: [contributed(WidgetHeaderTargets.Spacer)] })).toThrow(
+        /owned by the widget header/,
+      );
+    });
+
+    it('throws when two contributed items claim the same slot', () => {
+      expect(() =>
+        renderHeader({ items: [TITLE_ITEM, contributed(WidgetHeaderTargets.Title)] }),
+      ).toThrow(/Duplicate built-in/);
+    });
   });
 
-  it('renders toolbar with infoButtonConfig, onRefresh and styleOptions', () => {
-    const onRefresh = vi.fn();
-    const infoButtonConfig: InfoButtonConfig = {
-      dataSetName: 'Sample ECommerce',
-      description: 'Sample dataset',
-    };
-    const styleOptions = { backgroundColor: '#f0f0f0' };
+  describe('slot ordering', () => {
+    it('orders the leading icons drag-then-JTD, before the title alignment spacer', () => {
+      const { container } = renderHeader({
+        items: [
+          contributed(WidgetHeaderTargets.JtdIcon, 'jtd'),
+          contributed(WidgetHeaderTargets.DragIcon, 'drag'),
+          TITLE_ITEM,
+        ],
+      });
 
-    render(
-      <WidgetHeader
-        title="Widget"
-        infoButtonConfig={infoButtonConfig}
-        onRefresh={onRefresh}
-        styleOptions={styleOptions}
-      />,
-    );
+      expect(renderedItemIds(container).slice(0, 3)).toEqual([
+        WidgetHeaderTargets.DragIcon,
+        WidgetHeaderTargets.JtdIcon,
+        WidgetHeaderTargets.TitleAlignmentSpacer,
+      ]);
+    });
 
-    expect(mockWidgetHeaderToolbar).toHaveBeenCalledWith(
-      expect.objectContaining({
-        infoButtonConfig,
-        onRefresh,
-        styleOptions,
-      }),
-      undefined,
-    );
+    it('orders the trailing actions clear-selection, info, narrative, menu', () => {
+      const { container } = renderHeader({
+        items: [
+          contributed(WidgetHeaderTargets.Menu, 'menu'),
+          contributed(WidgetHeaderTargets.NarrativeToggle, 'narrative'),
+          INFO_BUTTON_ITEM,
+          contributed(WidgetHeaderTargets.ClearSelectionButton, 'clear'),
+        ],
+      });
+
+      expect(renderedItemIds(container).slice(-4)).toEqual([
+        WidgetHeaderTargets.ClearSelectionButton,
+        WidgetHeaderTargets.InfoButton,
+        WidgetHeaderTargets.NarrativeToggle,
+        WidgetHeaderTargets.Menu,
+      ]);
+    });
+
+    it('renders a contributed item at the slot width, not at its own', () => {
+      // The header owns layout: a contributed item's own `size` does not override the slot's.
+      const { getByTestId } = renderHeader({
+        items: [{ ...contributed(WidgetHeaderTargets.DragIcon, 'drag'), size: { width: 200 } }],
+      });
+
+      expect(getByTestId(itemTestId(WidgetHeaderTargets.DragIcon))).not.toHaveStyle({
+        width: '200px',
+      });
+    });
+
+    it('places items contributed through config.items into their slots too', () => {
+      // How dashboard-level features (JTD, drag handle, common filters) reach the header.
+      const { container } = renderHeader({
+        config: { items: [contributed(WidgetHeaderTargets.DragIcon, 'drag') as WidgetHeaderItem] },
+      });
+
+      expect(renderedItemIds(container)[0]).toBe(WidgetHeaderTargets.DragIcon);
+    });
   });
 
-  it('renders the menu with config.menu', () => {
-    const config: WidgetHeaderConfig = {
-      menu: {
-        enabled: true,
-        items: [{ type: 'action', id: 'export', caption: 'Export', onClick: vi.fn() }],
-      },
-    };
+  describe('title alignment (the spacers around the title)', () => {
+    const spacerFlex = (container: HTMLElement, id: string) =>
+      container.querySelector<HTMLElement>(`[data-testid="${itemTestId(id)}"]`)?.style.flex;
 
-    const { getByTestId } = render(
-      <WidgetHeader
-        title="Widget"
-        infoButtonConfig={defaultInfoButtonConfig}
-        onRefresh={vi.fn()}
-        config={config}
-      />,
-    );
+    it.each([
+      ['Left', '0 0 auto', '1 1 auto'],
+      ['Center', '1 1 auto', '1 1 auto'],
+      ['Right', '1 1 auto', '0 0 auto'],
+    ] as const)('grows the right spacers for %s alignment', (titleAlignment, leading, trailing) => {
+      const { container } = renderHeader({ styleOptions: { titleAlignment } });
 
-    expect(getByTestId('widget-header-menu')).toBeInTheDocument();
-    expect(mockWidgetHeaderMenu).toHaveBeenCalledWith({ config: config.menu }, undefined);
+      expect(spacerFlex(container, WidgetHeaderTargets.TitleAlignmentSpacer)).toBe(leading);
+      expect(spacerFlex(container, WidgetHeaderTargets.Spacer)).toBe(trailing);
+    });
+
+    it('accepts a differently-cased alignment, as the previous text-align behavior did', () => {
+      const { container } = renderHeader({
+        styleOptions: { titleAlignment: 'center' as AlignmentTypes },
+      });
+
+      expect(spacerFlex(container, WidgetHeaderTargets.TitleAlignmentSpacer)).toBe('1 1 auto');
+      expect(spacerFlex(container, WidgetHeaderTargets.Spacer)).toBe('1 1 auto');
+    });
+
+    it('falls back to the theme alignment when styleOptions does not set one', () => {
+      const { container } = renderHeader();
+
+      // The mocked theme aligns the title left, so only the trailing spacer grows.
+      expect(spacerFlex(container, WidgetHeaderTargets.TitleAlignmentSpacer)).toBe('0 0 auto');
+      expect(spacerFlex(container, WidgetHeaderTargets.Spacer)).toBe('1 1 auto');
+    });
   });
 
-  it('does not render divider when theme dividerLine is false and no styleOptions', () => {
-    const { container } = render(
-      <WidgetHeader infoButtonConfig={defaultInfoButtonConfig} onRefresh={vi.fn()} />,
-    );
+  describe('divider', () => {
+    it('does not render the divider when theme dividerLine is false and no styleOptions', () => {
+      const { container } = renderHeader();
 
-    const headerRoot = container.querySelector('[data-component="widget-header"]');
-    expect(headerRoot?.children.length).toBe(1);
-  });
+      expect(container.querySelector('[data-component="widget-header"]')?.children.length).toBe(1);
+    });
 
-  it('renders divider when theme dividerLine is true', () => {
-    mockUseThemeContext.mockReturnValue({
-      themeSettings: {
-        ...defaultThemeSettings.themeSettings,
-        widget: {
-          ...defaultThemeSettings.themeSettings.widget,
-          header: {
-            ...defaultThemeSettings.themeSettings.widget.header,
-            dividerLine: true,
+    it('renders the divider when theme dividerLine is true', () => {
+      mockUseThemeContext.mockReturnValue({
+        themeSettings: {
+          ...defaultThemeSettings.themeSettings,
+          widget: {
+            ...defaultThemeSettings.themeSettings.widget,
+            header: { ...defaultThemeSettings.themeSettings.widget.header, dividerLine: true },
           },
         },
-      },
-    });
+      });
 
-    const { container } = render(
-      <WidgetHeader infoButtonConfig={defaultInfoButtonConfig} onRefresh={vi.fn()} />,
-    );
-
-    const headerRoot = container.querySelector('[data-component="widget-header"]');
-    expect(headerRoot?.children.length).toBe(2);
-    expect(container.querySelector('[data-component="widget-header-divider"]')).toBeInTheDocument();
-  });
-
-  it('renders divider when styleOptions dividerLine is true', () => {
-    const { container } = render(
-      <WidgetHeader
-        infoButtonConfig={defaultInfoButtonConfig}
-        onRefresh={vi.fn()}
-        styleOptions={{ dividerLine: true }}
-      />,
-    );
-
-    const headerRoot = container.querySelector('[data-component="widget-header"]');
-    expect(headerRoot?.children.length).toBe(2);
-    expect(container.querySelector('[data-component="widget-header-divider"]')).toBeInTheDocument();
-  });
-
-  it('passes styleOptions to toolbar so header styles can be applied', () => {
-    const styleOptions = { backgroundColor: '#abcdef' };
-    render(
-      <WidgetHeader
-        infoButtonConfig={defaultInfoButtonConfig}
-        onRefresh={vi.fn()}
-        styleOptions={styleOptions}
-      />,
-    );
-
-    expect(mockWidgetHeaderToolbar).toHaveBeenCalledWith(
-      expect.objectContaining({ styleOptions }),
-      undefined,
-    );
-  });
-
-  it('passes config undefined to the menu when config is not provided', () => {
-    render(
-      <WidgetHeader
-        title="Widget"
-        infoButtonConfig={defaultInfoButtonConfig}
-        onRefresh={vi.fn()}
-      />,
-    );
-
-    expect(mockWidgetHeaderMenu).toHaveBeenCalledWith({ config: undefined }, undefined);
-  });
-
-  describe('title editing (rename) render path', () => {
-    const makeTitleEditor = (overrides: Partial<TitleEditorConfig> = {}): TitleEditorConfig => ({
-      isEditing: false,
-      onCommit: vi.fn(),
-      onCancel: vi.fn(),
-      onEditingChange: vi.fn(),
-      ...overrides,
-    });
-
-    it('renders the title through the inline editor (not editing) when titleEditor is provided', () => {
-      const { getByText, container } = render(
-        <WidgetHeader
-          title="My Widget Title"
-          infoButtonConfig={defaultInfoButtonConfig}
-          onRefresh={vi.fn()}
-          titleEditor={makeTitleEditor({ isEditing: false })}
-        />,
-      );
+      const { container } = renderHeader();
 
       expect(
-        container.querySelector('[data-component="inline-text-editor-text"]'),
+        container.querySelector('[data-component="widget-header-divider"]'),
       ).toBeInTheDocument();
-      expect(getByText('My Widget Title')).toBeInTheDocument();
     });
 
-    it('renders an input pre-filled with the title when isEditing is true', () => {
-      const { container } = render(
-        <WidgetHeader
-          title="My Widget Title"
-          infoButtonConfig={defaultInfoButtonConfig}
-          onRefresh={vi.fn()}
-          titleEditor={makeTitleEditor({ isEditing: true })}
-        />,
-      );
+    it('renders the divider when styleOptions dividerLine is true', () => {
+      const { container } = renderHeader({ styleOptions: { dividerLine: true } });
 
-      const input = container.querySelector<HTMLInputElement>(
-        '[data-component="inline-text-editor-input"]',
-      );
-      expect(input).toBeInTheDocument();
-      expect(input).toHaveValue('My Widget Title');
-    });
-
-    it('commits the edited title on Enter', async () => {
-      const user = userEvent.setup();
-      const onCommit = vi.fn();
-      const { getByRole } = render(
-        <WidgetHeader
-          title="Old Title"
-          infoButtonConfig={defaultInfoButtonConfig}
-          onRefresh={vi.fn()}
-          titleEditor={makeTitleEditor({ isEditing: true, onCommit })}
-        />,
-      );
-
-      const input = getByRole('textbox');
-      await user.clear(input);
-      await user.type(input, 'New Title');
-      await user.keyboard('{Enter}');
-
-      expect(onCommit).toHaveBeenCalledWith('New Title');
-    });
-
-    it('cancels editing on Escape', async () => {
-      const user = userEvent.setup();
-      const onCancel = vi.fn();
-      const onCommit = vi.fn();
-      const { getByRole } = render(
-        <WidgetHeader
-          title="Old Title"
-          infoButtonConfig={defaultInfoButtonConfig}
-          onRefresh={vi.fn()}
-          titleEditor={makeTitleEditor({ isEditing: true, onCancel, onCommit })}
-        />,
-      );
-
-      const input = getByRole('textbox');
-      await user.clear(input);
-      await user.type(input, 'Discarded');
-      await user.keyboard('{Escape}');
-
-      expect(onCancel).toHaveBeenCalledTimes(1);
-      expect(onCommit).not.toHaveBeenCalled();
-    });
-
-    it('renders the plain title (no inline editor) when titleEditor is absent', () => {
-      const { container, getByText } = render(
-        <WidgetHeader
-          title="My Widget Title"
-          infoButtonConfig={defaultInfoButtonConfig}
-          onRefresh={vi.fn()}
-        />,
-      );
-
-      expect(getByText('My Widget Title')).toBeInTheDocument();
       expect(
-        container.querySelector('[data-component="inline-text-editor-text"]'),
-      ).not.toBeInTheDocument();
+        container.querySelector('[data-component="widget-header-divider"]'),
+      ).toBeInTheDocument();
     });
   });
 });

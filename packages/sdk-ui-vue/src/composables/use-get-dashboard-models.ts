@@ -1,6 +1,5 @@
 import type {
   ClientApplication,
-  DashboardModel,
   DataState,
   GetDashboardModelsParams,
 } from '@sisense/sdk-ui-preact';
@@ -11,6 +10,7 @@ import {
 } from '@sisense/sdk-ui-preact';
 import { toRefs, watch } from 'vue';
 
+import type { DashboardModel } from '../components/dashboard/dashboard-model';
 import { useReducer } from '../helpers/use-reducer';
 import { getSisenseContext, getThemeContext } from '../providers';
 import type { MaybeRefOrWithRefs } from '../types';

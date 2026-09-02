@@ -631,6 +631,80 @@ describe('useComposedDashboard', () => {
       expect(result.current.filterWidgetLinkedIds).toEqual([]);
     });
 
+    /**
+     * The Fusion "Compose SDK compatible" contract, which is narrower than it looks: the host
+     * bridge forwards `filters/updated` but DROPS `widget/dateLevelChanged`, so a level change
+     * never reaches the widget's stored metadata — the host keeps pushing the dashboard back with
+     * the widget at the level it was saved at. The committed level therefore has to be read from
+     * the filter, which the host does round-trip; taking it from the widget attribute reverted a
+     * Years commit to Quarters and re-published the year's member as a quarter.
+     */
+    it('keeps a committed level when the host echoes the widget back at the old one', async () => {
+      const quartersFilter = filterFactory.members(DM.Commerce.Date.Quarters, [
+        '2013-10-01T00:00:00',
+      ]);
+      const dateWidget = (attribute: Attribute): WidgetProps =>
+        ({
+          id: 'fw-date',
+          widgetType: 'filter',
+          attribute,
+          filterType: 'members',
+        } as unknown as WidgetProps);
+
+      const props = (filters: Filter[]): ComposableDashboardProps => ({
+        // The host's copy of the widget never leaves Quarters — its level event was dropped.
+        widgets: [dateWidget(DM.Commerce.Date.Quarters)],
+        filters,
+        widgetsOptions: {
+          'fw-date': { filterWidgetOptions: { filterId: quartersFilter.config.guid } },
+        },
+        layoutOptions: { widgetsPanel: layoutWith(['fw-date']) },
+      });
+
+      const { result, rerender } = renderHook(
+        (p: ComposableDashboardProps) => useComposedDashboard(p),
+        {
+          wrapper: CombinedProvider,
+          initialProps: props([quartersFilter]),
+        },
+      );
+
+      const widgetOf = (r: typeof result) =>
+        r.current.dashboard.widgets[0] as unknown as {
+          attribute: Attribute;
+          filter: Filter | null;
+          onChange: (event: { type: string; payload: Record<string, unknown> }) => void;
+        };
+
+      // The widget commits Years + 2009, reporting the level first and the selection second.
+      const yearsAttribute = DM.Commerce.Date.Years;
+      const committed = filterFactory.members(yearsAttribute, ['2009-01-01T00:00:00']);
+      act(() => {
+        widgetOf(result).onChange({
+          type: 'dateLevel/changed',
+          payload: { attribute: yearsAttribute },
+        });
+      });
+      act(() => {
+        widgetOf(result).onChange({ type: 'filter/changed', payload: { filter: committed } });
+      });
+
+      await waitFor(() => {
+        expect(getFilters(result)).toHaveLength(1);
+      });
+      expect(getFilters(result)[0].attribute).toEqual(yearsAttribute);
+
+      // The host applies the filters and pushes its dashboard back — widget still at Quarters.
+      rerender(props(getFilters(result)));
+
+      await waitFor(() => {
+        expect(getFilters(result)).toHaveLength(1);
+      });
+      expect(getFilters(result)[0].attribute).toEqual(yearsAttribute);
+      // And the widget is still handed the filter it committed, not nothing.
+      expect(widgetOf(result).filter?.attribute).toEqual(yearsAttribute);
+    });
+
     it('keeps the filter when the widget stays in the layout (no false positive)', async () => {
       const linkedFilter = filterFactory.members(DM.Commerce.Gender, ['Female']);
       const fw = makeFilterWidget('fw1');

@@ -107,13 +107,8 @@ export const toWidgetPropsFromQuery = (
 
     const chartRecommendations = getChartRecommendationsOrDefault(chartRecommendationsOriginal);
     const chartType = chartRecommendations.chartType.toLowerCase() as ChartType;
-
     const widgetStyleOptions: WidgetStyleOptions = {
       cornerRadius: 'Small',
-      header: {
-        // remove info button and render empty toolbar instead
-        renderToolbar: () => null,
-      },
     };
 
     const { metadataColumns, metadataFilters } = splitMetadata(simplifiedMetadata);

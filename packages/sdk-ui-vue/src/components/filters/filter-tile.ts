@@ -1,9 +1,32 @@
-import { FilterTile as FilterTilePreact } from '@sisense/sdk-ui-preact';
-import type { FilterTileProps as FilterTilePropsPreact } from '@sisense/sdk-ui-preact';
+import { FilterTileMenuTargets, FilterTile as FilterTilePreact } from '@sisense/sdk-ui-preact';
+import type {
+  FilterTileActionsConfig,
+  FilterTileConfig,
+  FilterTileHeaderConfig,
+  FilterTileMenuActionItem,
+  FilterTileMenuConfig,
+  FilterTileMenuItem,
+  FilterTileMenuSubmenuItem,
+  FilterTileMenuTarget,
+  FilterTileProps as FilterTilePropsPreact,
+} from '@sisense/sdk-ui-preact';
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 
 import { setupHelper } from '../../helpers/setup-helper';
+
+/** Reexport related types */
+export {
+  FilterTileMenuTargets,
+  type FilterTileActionsConfig,
+  type FilterTileConfig,
+  type FilterTileHeaderConfig,
+  type FilterTileMenuActionItem,
+  type FilterTileMenuConfig,
+  type FilterTileMenuItem,
+  type FilterTileMenuSubmenuItem,
+  type FilterTileMenuTarget,
+};
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!FilterTile | `FilterTile`} component.
@@ -68,6 +91,10 @@ export const FilterTile = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!FilterTileProps.onEdit}
      */
     onEdit: Function as PropType<FilterTileProps['onEdit']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!FilterTileProps.config}
+     */
+    config: Object as PropType<FilterTileProps['config']>,
   },
   setup: (props) => setupHelper(FilterTilePreact, props),
 });

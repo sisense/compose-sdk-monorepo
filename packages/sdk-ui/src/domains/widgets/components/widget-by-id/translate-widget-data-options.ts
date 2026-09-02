@@ -32,6 +32,7 @@ import {
   CategoricalChartDataOptions,
   Color,
   IndicatorChartDataOptions,
+  KpiChartDataOptions,
   MultiColumnValueToColorMap,
   NumberFormatConfig,
   SankeyChartDataOptions,
@@ -54,6 +55,7 @@ import {
   CurrencyPosition,
   DatetimeMask,
   FusionWidgetType,
+  KpiWidgetStyle,
   NumericMask,
   Panel,
   PanelItem,
@@ -470,6 +472,94 @@ function extractSankeyChartDataOptions(
   };
 }
 
+/**
+ * Extracts the `comparison` data option for a kpi widget, based on its subtype:
+ * - `kpi/goal` reads a `target` panel (measure) → `{ type: 'target', target }`
+ * - `kpi/trend` reads a `comparisonValue` panel (measure) → `{ type: 'delta', value }`
+ * - `kpi/value` reads the same `comparisonValue` panel → `{ type: 'value', value }`, shown
+ *   beside the headline with no delta maths
+ * - `kpi/previous-period` reads no panel — the baseline is the category bucket preceding the
+ *   last one, so the comparison is fully determined by the subtype
+ * - `kpi/standard` (or no subtype) has no comparison
+ *
+ * A `'previous-period'` comparison needs {@link KpiChartDataOptions.category} to have a
+ * baseline to read. It is still returned when the `category` panel is empty: the data layer
+ * resolves it to no comparison rather than erroring, so the card degrades to a plain value
+ * instead of failing to render.
+ *
+ * @param panels - Fusion widget panels (`target` for kpi/goal, `comparisonValue` for kpi/trend)
+ * @param widgetSubtype - The kpi Fusion subtype (`kpi/standard`, `kpi/goal`, `kpi/trend`, or
+ * `kpi/previous-period`)
+ * @param paletteColors - Optional custom palette colors for column coloring
+ * @returns The comparison data option, or `undefined` when the subtype has none
+ * @internal
+ */
+function extractKpiComparison(
+  panels: Panel[],
+  widgetSubtype: string | undefined,
+  paletteColors?: Color[],
+): KpiChartDataOptions['comparison'] {
+  if (widgetSubtype === 'kpi/goal') {
+    const [target] = createColumnsFromPanelItems<StyledMeasureColumn>(
+      panels,
+      'target',
+      paletteColors,
+    );
+    return target && { type: 'target', target };
+  }
+  if (widgetSubtype === 'kpi/trend' || widgetSubtype === 'kpi/value') {
+    const [comparisonValue] = createColumnsFromPanelItems<StyledMeasureColumn>(
+      panels,
+      'comparisonValue',
+      paletteColors,
+    );
+    // Same panel, different reading: `kpi/trend` runs delta maths against the measure,
+    // `kpi/value` shows it as-is beside the headline. Sharing the panel means switching
+    // between the two in the Design tab keeps the measure the user already picked.
+    const type = widgetSubtype === 'kpi/trend' ? 'delta' : 'value';
+    return comparisonValue && { type, value: comparisonValue };
+  }
+  if (widgetSubtype === 'kpi/previous-period') {
+    return { type: 'previous-period' };
+  }
+  return undefined;
+}
+
+/**
+ * Extracts data options for the `'kpi'` Fusion widget type: headline value, optional
+ * trend category, and a comparison shaped by the widget's subtype (`kpi/standard`,
+ * `kpi/goal`, `kpi/trend`, or `kpi/previous-period`) — see {@link extractKpiComparison}.
+ *
+ * `valueMode` is read from the DTO style rather than from a panel: it has no panel of its own,
+ * the same way boxplot's `boxType` / `outliersEnabled` are lifted out of `BoxplotWidgetStyle`
+ * — see {@link KpiWidgetStyle.valueMode}. It is omitted when unset so the chart's own `'last'`
+ * default applies, rather than being baked in here.
+ *
+ * @param panels - Fusion widget panels (`value`, optional `category`)
+ * @param widgetSubtype - The kpi Fusion subtype, used to select the comparison shape
+ * @param widgetStyle - Fusion DTO style for the widget, read for `valueMode`
+ * @param paletteColors - Optional custom palette colors for column coloring
+ * @returns KPI chart data options
+ * @internal
+ */
+function extractKpiChartDataOptions(
+  panels: Panel[],
+  widgetSubtype: string | undefined,
+  widgetStyle: KpiWidgetStyle,
+  paletteColors?: Color[],
+): KpiChartDataOptions {
+  const [value] = createColumnsFromPanelItems<StyledMeasureColumn>(panels, 'value', paletteColors);
+  const [category] = createColumnsFromPanelItems<StyledColumn>(panels, 'category', paletteColors);
+  const comparison = extractKpiComparison(panels, widgetSubtype, paletteColors);
+
+  return {
+    value,
+    ...(category && { category }),
+    ...(comparison && { comparison }),
+    ...(widgetStyle.valueMode && { valueMode: widgetStyle.valueMode }),
+  };
+}
+
 function extractScatterChartDataOptions(
   panels: Panel[],
   paletteColors?: Color[],
@@ -789,6 +879,7 @@ export function extractDataOptions(
   panels: Panel[],
   style: WidgetStyle,
   customPaletteColors?: Color[],
+  widgetSubtype?: string,
 ): WidgetDataOptions {
   if (isCartesianWidget(fusionWidgetType)) {
     return extractCartesianChartDataOptions(panels, fusionWidgetType, customPaletteColors);
@@ -804,6 +895,14 @@ export function extractDataOptions(
   }
   if (fusionWidgetType === 'sankey') {
     return extractSankeyChartDataOptions(panels, customPaletteColors);
+  }
+  if (fusionWidgetType === 'kpi') {
+    return extractKpiChartDataOptions(
+      panels,
+      widgetSubtype,
+      style as KpiWidgetStyle,
+      customPaletteColors,
+    );
   }
   if (isTableFusionWidget(fusionWidgetType)) {
     return extractTableChartDataOptions(panels, style as TableWidgetStyle, customPaletteColors);

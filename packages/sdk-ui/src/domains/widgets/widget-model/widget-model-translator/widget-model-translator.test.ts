@@ -10,6 +10,7 @@ import type { JtdConfigDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
 import type { WidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config';
 import {
   BoxplotChartDataOptions,
+  KpiChartDataOptions,
   PivotTableDataOptions,
 } from '@/domains/visualizations/core/chart-data-options/types';
 import type { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
@@ -17,6 +18,7 @@ import {
   BoxplotWidgetStyle,
   CalendarHeatmapWidgetStyle,
   CartesianWidgetStyle,
+  KpiWidgetStyle,
   PivotWidgetStyle,
   ScattermapWidgetStyle,
   ScatterWidgetStyle,
@@ -419,6 +421,99 @@ describe('WidgetModelTranslator', () => {
 
       const pointPanel = resWidgetDto.metadata.panels.find(({ name }) => name === 'point');
       expect(pointPanel!.items).toEqual([]);
+    });
+
+    describe('kpi subtype derivation', () => {
+      const kpiDataSource = {
+        title: 'Sample ECommerce',
+        id: 'localhost_aSampleIAAaECommerce',
+        address: 'LocalHost',
+        database: 'aSampleIAAaECommerce',
+      };
+
+      const toKpiDto = (dataOptions: KpiChartDataOptions) =>
+        toWidgetDto(
+          fromChartWidgetProps({
+            chartType: 'kpi',
+            dataSource: 'Sample ECommerce',
+            dataOptions,
+          }),
+          kpiDataSource,
+        );
+
+      const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+
+      it('derives kpi/previous-period from a previous-period comparison', () => {
+        const dto = toKpiDto({
+          value: sumRevenue,
+          category: Commerce.Date.Months,
+          comparison: { type: 'previous-period' },
+        });
+
+        expect(dto.subtype).toBe('kpi/previous-period');
+        // The baseline is the preceding category bucket, so no comparison panel is written.
+        const panelNames = dto.metadata.panels
+          .map(({ name }) => name)
+          .filter((name) => name !== 'filters');
+        expect(panelNames).toEqual(['value', 'category']);
+      });
+
+      it('derives kpi/standard, kpi/goal and kpi/trend from their comparisons', () => {
+        expect(toKpiDto({ value: sumRevenue }).subtype).toBe('kpi/standard');
+        expect(
+          toKpiDto({
+            value: sumRevenue,
+            comparison: { type: 'target', target: measureFactory.sum(Commerce.Cost, 'Goal') },
+          }).subtype,
+        ).toBe('kpi/goal');
+        expect(
+          toKpiDto({
+            value: sumRevenue,
+            comparison: { type: 'delta', value: measureFactory.sum(Commerce.Cost, 'Baseline') },
+          }).subtype,
+        ).toBe('kpi/trend');
+      });
+
+      it('round-trips valueMode through the DTO style', () => {
+        // valueMode is a data option with no panel, so it is persisted in the widget style and
+        // lifted back out on the way in — the round-trip is the only thing keeping the two in
+        // sync, hence asserting both directions here.
+        const dto = toKpiDto({
+          value: sumRevenue,
+          category: Commerce.Date.Months,
+          valueMode: 'total',
+        });
+
+        expect((dto.style as KpiWidgetStyle).valueMode).toBe('total');
+
+        const backIn = fromWidgetDto(dto);
+        expect((backIn.dataOptions as KpiChartDataOptions).valueMode).toBe('total');
+      });
+
+      it('derives kpi/goal from a fixed-number target, not just a measure one', () => {
+        const dto = toKpiDto({
+          value: sumRevenue,
+          category: Commerce.Date.Months,
+          comparison: { type: 'target', target: 250000 },
+        });
+
+        expect(dto.subtype).toBe('kpi/goal');
+        const target = dto.metadata.panels.find(({ name }) => name === 'target');
+        expect(target!.items[0].jaql).toEqual({ formula: '250000', title: '250000' });
+      });
+
+      it('derives kpi/value from a plain value comparison', () => {
+        const dto = toKpiDto({
+          value: sumRevenue,
+          comparison: { type: 'value', value: measureFactory.sum(Commerce.Cost, 'Other') },
+        });
+
+        expect(dto.subtype).toBe('kpi/value');
+        const panelNames = dto.metadata.panels
+          .map(({ name }) => name)
+          .filter((name) => name !== 'filters');
+        expect(panelNames).toEqual(['value', 'comparisonValue']);
+      });
     });
 
     it('should write seriesToColorMap to the "Break By / Color" panel item format.members', () => {
@@ -2063,6 +2158,16 @@ describe('WidgetModelTranslator', () => {
         isMultiselect: boolean;
         filterType: string;
         parentFilters?: { attribute: { expression: string } }[];
+        dimensionFilters?: { attribute: { expression: string } }[];
+        styleOptions?: {
+          border?: boolean;
+          borderColor?: string;
+          control?: {
+            primaryText?: string;
+            size?: string;
+            accentColor?: string;
+          };
+        };
       };
 
     it('translates a text filter widget DTO to FilterWidgetProps', () => {
@@ -2189,6 +2294,28 @@ describe('WidgetModelTranslator', () => {
       expect(toFilterProps(makeFilterWidgetDto()).parentFilters).toEqual([]);
     });
 
+    it('passes the same widget filters as dimensionFilters, the restriction the filter must encode', () => {
+      const props = toFilterProps(
+        makeFilterWidgetDto({
+          filtersPanelItems: [
+            {
+              jaql: {
+                table: 'Commerce',
+                column: 'Age Range',
+                dim: '[Commerce.Age Range]',
+                datatype: 'text',
+                title: 'Age Range',
+                filter: { members: ['0-18'] },
+              },
+            },
+          ],
+        }),
+      );
+
+      expect(props.dimensionFilters).toEqual(props.parentFilters);
+      expect(props.dimensionFilters?.[0].attribute.expression).toBe('[Commerce.Age Range]');
+    });
+
     it('falls back to defaults for a programmatic model without filterWidgetData', () => {
       const model = fromWidgetDto(makeFilterWidgetDto());
       const props = toCommonWidgetProps({
@@ -2225,6 +2352,26 @@ describe('WidgetModelTranslator', () => {
       expect(props.styleOptions?.backgroundColor).toBe('#ff0000');
       expect(props.styleOptions?.border).toBe(true);
       expect(props.styleOptions?.borderColor).toBe('#0000ff');
+    });
+
+    it('puts the persisted control styling under styleOptions.control', () => {
+      const props = toFilterProps(
+        makeFilterWidgetDto({
+          style: {
+            filterDesign: {
+              primaryText: '#131F29',
+              size: 'l',
+              accentColor: '#94F5F0',
+              unknownFutureKnob: true,
+            },
+          },
+        }),
+      );
+      expect(props.styleOptions?.control).toEqual({
+        primaryText: '#131F29',
+        size: 'l',
+        accentColor: '#94F5F0',
+      });
     });
   });
 });

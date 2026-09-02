@@ -1,61 +1,27 @@
 import {
-  Attribute,
-  DimensionalCalculatedAttribute,
   Filter,
   isCustomFilter,
-  isDatetime,
   isMeasureFilter,
   isMembersFilter,
-  isNumber,
   isNumericFilter,
   isRankingFilter,
   isRelativeDateFilter,
-  isText,
   isTextFilter,
   MembersFilter,
-  MetadataTypes,
   NumericOperators,
   RelativeDateFilter,
 } from '@sisense/sdk-data';
 
+import { parseISOWithTimezoneCheck } from '@/shared/utils/parseISOWithTimezoneCheck';
+
+export {
+  getFilterAttributeValueType,
+  getFilterEditorValueType,
+  type FilterAttributeValueType,
+} from '@/domains/filters/shared/filter-attribute-value-type.js';
+
 export function isSupportedByFilterEditor(filter: Filter): boolean {
   return !isCustomFilter(filter);
-}
-
-/**
- * Resolves which editor the given attribute should be edited with.
- * @param attribute - Attribute to resolve the editor for
- * @returns The value type of the applicable editor, or `null` when none applies, meaning the
- * attribute is not editable
- * @internal
- */
-export function getFilterEditorValueType(
-  attribute: Attribute,
-): 'text' | 'numeric' | 'datetime' | null {
-  // A calculated dimension reports the metadata kind `'calculatedattribute'` as its `type`, which
-  // is not a value type; the value type of its formula is carried in `dataType` instead. One built
-  // in code carries no `dataType` at all, and text is the only data type Sisense supports for a
-  // calculated dimension, so an absent one is read as text rather than as non-editable. A
-  // `dataType` that is present but unrecognized falls through to `null`, as any other attribute
-  // with an unrecognized type does.
-  const isCalculated = MetadataTypes.isCalculatedAttribute(attribute);
-  const valueType =
-    (isCalculated
-      ? (attribute as DimensionalCalculatedAttribute).dataType ?? 'text'
-      : attribute.type) ?? '';
-
-  if (isText(valueType)) {
-    return 'text';
-  }
-  if (isNumber(valueType)) {
-    return 'numeric';
-  }
-  if (isDatetime(valueType)) {
-    // The datetime editor changes granularity through `LevelAttribute.setGranularity`, which a
-    // calculated attribute does not implement, so a date calculated dimension is not editable.
-    return isCalculated ? null : 'datetime';
-  }
-  return null;
 }
 
 export function isIncludeAllFilter(filter: Filter): filter is MembersFilter {
@@ -99,15 +65,25 @@ export function isRelativeDateFilterWithoutAnchor(filter: Filter): filter is Rel
 }
 
 /**
+ * Resolves a filter date value into the UTC-midnight Date the filter editor works with.
+ *
+ * Timezone-less strings name a calendar day rather than an instant, so they are anchored to UTC.
+ */
+export function asUtcDate(value: string | Date): Date {
+  return typeof value === 'string' ? parseISOWithTimezoneCheck(value) : value;
+}
+
+/**
  * Formats a given Date object into a string in the format "YYYY-MM-DDT00:00:00".
  *
+ * Reads the UTC calendar fields, matching the convention in {@link asUtcDate}.
  * @param {Date} date - The Date object to format.
  * @returns {string} The formatted date string in "YYYY-MM-DDT00:00:00" format.
  */
 export function convertDateToMemberString(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
 
   return `${year}-${month}-${day}T00:00:00`;
 }

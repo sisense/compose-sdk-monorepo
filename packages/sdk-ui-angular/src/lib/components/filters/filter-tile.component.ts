@@ -11,6 +11,15 @@ import {
 } from '@angular/core';
 import {
   ComponentAdapter,
+  type FilterTileActionsConfig,
+  type FilterTileConfig,
+  type FilterTileHeaderConfig,
+  type FilterTileMenuActionItem,
+  type FilterTileMenuConfig,
+  type FilterTileMenuItem,
+  type FilterTileMenuSubmenuItem,
+  type FilterTileMenuTarget,
+  FilterTileMenuTargets,
   FilterTile as FilterTilePreact,
   type FilterTileProps as FilterTilePropsPreact,
 } from '@sisense/sdk-ui-preact';
@@ -32,6 +41,19 @@ import type {
   FilterChangeEvent,
   FilterEditEvent,
 } from '../../types';
+
+/** Reexport related types */
+export {
+  FilterTileMenuTargets,
+  type FilterTileActionsConfig,
+  type FilterTileConfig,
+  type FilterTileHeaderConfig,
+  type FilterTileMenuActionItem,
+  type FilterTileMenuConfig,
+  type FilterTileMenuItem,
+  type FilterTileMenuSubmenuItem,
+  type FilterTileMenuTarget,
+};
 
 /**
  * Props of the {@link FilterTileComponent}.
@@ -107,6 +129,12 @@ export class FilterTileComponent implements AfterViewInit, OnChanges, OnDestroy 
   defaultDataSource: FilterTileProps['defaultDataSource'];
 
   /**
+   * {@inheritDoc @sisense/sdk-ui!FilterTileProps.config}
+   */
+  @Input()
+  config: FilterTileProps['config'];
+
+  /**
    * {@inheritDoc FilterTileProps.filterChange}
    */
   @Output()
@@ -176,6 +204,7 @@ export class FilterTileComponent implements AfterViewInit, OnChanges, OnDestroy 
       .hasListeners;
 
     return {
+      config: this.config,
       filter: this.filter,
       defaultDataSource: this.defaultDataSource,
       onChange: (...[filter]: Arguments<FilterTilePropsPreact['onChange']>) =>

@@ -36,6 +36,7 @@ import {
   CategoricalChartDataOptions,
   ChartDataOptions,
   IndicatorChartDataOptions,
+  KpiChartDataOptions,
   PivotTableDataOptions,
   SankeyChartDataOptions,
   ScatterChartDataOptions,
@@ -46,6 +47,7 @@ import {
 import { ChartWidgetProps } from '@/domains/widgets/components/chart-widget/types';
 import { CommonWidgetProps } from '@/domains/widgets/components/common-widget/types';
 import { CustomWidgetProps } from '@/domains/widgets/components/custom-widget/types';
+import { extractFilterWidgetControlStyle } from '@/domains/widgets/components/filter-widget/filter-widget-design';
 import { FilterWidgetFilterType } from '@/domains/widgets/components/filter-widget/types';
 import { PivotTableWidgetProps } from '@/domains/widgets/components/pivot-table-widget/types';
 import { TextWidgetProps } from '@/domains/widgets/components/text-widget/types';
@@ -68,6 +70,7 @@ import {
   toColumnWidgetStyle,
   toFunnelWidgetStyle,
   toIndicatorWidgetStyle,
+  toKpiWidgetStyle,
   toLineWidgetStyle,
   toPieWidgetStyle,
   toPivotTableWidgetStyle,
@@ -128,6 +131,7 @@ import {
   FunnelStyleOptions,
   GenericDataOptions,
   IndicatorStyleOptions,
+  KpiStyleOptions,
   LineStyleOptions,
   PieStyleOptions,
   PivotTableDrilldownOptions,
@@ -149,6 +153,7 @@ import {
 import { WidgetDataOptions, WidgetModel } from '../widget-model';
 import { processTabberWidget } from './process-tabber-widget';
 import {
+  isSerializableKpiTarget,
   toAreamapPanels,
   toAreaPanels,
   toBarPanels,
@@ -158,6 +163,7 @@ import {
   toCustomWidgetPanels,
   toFunnelPanels,
   toIndicatorPanels,
+  toKpiPanels,
   toLinePanels,
   toPiePanels,
   toPivotTablePanels,
@@ -546,6 +552,8 @@ function extractFilterWidgetData(
     filterType: normalizeFilterWidgetType(style?.filterType ?? style?.subtype),
     // allowMultiselect: legacy Fusion DTO field; multiSelection: current Fusion filter field
     isMultiselect: style?.allowMultiselect !== false && style?.multiSelection !== false,
+    // `style.filterDesign` is the host's persisted key for the control's styling.
+    controlStyleOptions: extractFilterWidgetControlStyle(style?.filterDesign),
   };
 }
 
@@ -575,11 +583,15 @@ function toFilterWidgetProps(widgetModel: WidgetModel): CommonWidgetProps {
     // The widget's own filters (DTO 'filters' panel) narrow the member list;
     // dashboard filters are appended separately in useCommonFilters.
     parentFilters: widgetModel.filters,
+    // The same filters again, as the restriction the published filter has to encode. Kept
+    // separate because only `parentFilters` goes on to collect the dashboard's own filters.
+    dimensionFilters: widgetModel.filters,
     // Carry the widget-design container style (space around, corner radius, shadow,
     // border, background, header) so the CSDK-rendered FilterWidget's WidgetContainer
     // applies the same Widget Style as every other widget type. (`styleOptions` is
     // already typed WidgetStyleOptions on WidgetModel, so no inner cast is needed.)
-    styleOptions: widgetModel.styleOptions,
+    // The control's own styling rides along under `control`, beside the chrome.
+    styleOptions: { ...widgetModel.styleOptions, control: data.controlStyleOptions },
   } as CommonWidgetProps;
 }
 
@@ -773,7 +785,13 @@ const processStandardWidget = (params: {
   return {
     fusionWidgetType: fusionType,
     customWidgetType: '',
-    dataOptions: extractDataOptions(fusionType, panels, widgetStyle, variantColors),
+    dataOptions: extractDataOptions(
+      fusionType,
+      panels,
+      widgetStyle,
+      variantColors,
+      widgetDto.subtype,
+    ),
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- extractStyleOptions returns a wider union including TabberButtonsWidgetStyleOptions, which is excluded here by design
     styleOptions: extractStyleOptions(fusionType, widgetDto) as
       | ChartStyleOptions
@@ -1221,6 +1239,21 @@ export function toWidgetDto(
     panels.push(...toSankeyPanels(widgetModel.dataOptions as SankeyChartDataOptions));
     subtype = subtype || chartType;
     style = toSankeyWidgetStyle(widgetModel.styleOptions as SankeyStyleOptions);
+  } else if (chartType === 'kpi') {
+    const kpiDataOptions = widgetModel.dataOptions as KpiChartDataOptions;
+    panels.push(...toKpiPanels(kpiDataOptions));
+    subtype =
+      subtype ||
+      (isSerializableKpiTarget(kpiDataOptions.comparison)
+        ? 'kpi/goal'
+        : kpiDataOptions.comparison?.type === 'delta'
+        ? 'kpi/trend'
+        : kpiDataOptions.comparison?.type === 'previous-period'
+        ? 'kpi/previous-period'
+        : kpiDataOptions.comparison?.type === 'value'
+        ? 'kpi/value'
+        : 'kpi/standard');
+    style = toKpiWidgetStyle(widgetModel.styleOptions as KpiStyleOptions, kpiDataOptions.valueMode);
   } else if (chartType === 'sunburst') {
     panels.push(...toSunburstPanels(widgetModel.dataOptions as CategoricalChartDataOptions));
     subtype = subtype || chartType;

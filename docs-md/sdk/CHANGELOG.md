@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.35.0] - 2026-09-01
+
+### Added
+- Add `includeTotalRows` (beta) into `Table` component props to display and paginate by the total row count
+- Add automatic height support for `Table` component
+- Add widget header customization via `WidgetProps.config.header.items` and `WidgetProps.config.header.onBeforeRender` (React only)
+- Promote `FilterTile` header menu customization to General Availability (GA)
+- Promote filter lock/unlock functionality to General Availability (GA)
+
+### Changed
+- Fix formula-driven conditional coloring not applying on `Indicator` widget
+- Fix filter editor date picker showing a date one day off outside UTC
+- Fix date picker to open on the month of a selected date and support jumping to the earliest date
+- Fix "Select all" in the filter editor to stay disabled until all members finish loading
+- Improve `FilterWidget` component (internal testing)
+
+
 ## [2.34.0] - 2026-08-18
 
 ### Added

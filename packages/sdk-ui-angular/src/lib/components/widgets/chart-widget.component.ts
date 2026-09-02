@@ -32,13 +32,21 @@ import {
   ChartDataPointsEvent,
 } from '../../types/data-point';
 import type { Arguments } from '../../types/utility-types';
+import { type ChartWidgetConfig } from './widget-config';
 
 /**
  * Props of the {@link ChartWidgetComponent}.
  */
 export interface ChartWidgetProps
-  extends WithoutPreactChartEventProps<ChartWidgetPropsPreact>,
-    ChartEventProps {}
+  extends Omit<WithoutPreactChartEventProps<ChartWidgetPropsPreact>, 'config'>,
+    ChartEventProps {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: ChartWidgetConfig;
+}
 
 /**
  * The Chart Widget component extending {@link ChartComponent} to support widget style options.

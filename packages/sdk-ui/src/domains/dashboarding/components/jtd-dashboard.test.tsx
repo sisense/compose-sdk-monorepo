@@ -417,6 +417,50 @@ describe('JtdDashboard', () => {
       });
     });
 
+    it('keeps locking out of a props-targeted popup, which a hand-assembled dashboard defaults on', async () => {
+      // `DEFAULT_DASHBOARD_CONFIG` turns locking on for a dashboard composed from props. A popup
+      // discards its writes, so that default must not reach one: the read-only pin sits under the
+      // caller's config but over the code defaults.
+      const inlineDashboard: DashboardProps = {
+        title: 'Inline dashboard',
+        widgets: [],
+        filters: [],
+      };
+
+      render(
+        <JtdDashboard
+          dashboard={inlineDashboard}
+          filters={mockFilters}
+          mergeTargetDashboardFilters={false}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(readConfig().filtersPanel?.actions?.lockFilter?.enabled).toBe(false);
+      });
+    });
+
+    it('still lets a props-targeted popup opt into locking explicitly', async () => {
+      const inlineDashboard: DashboardProps = {
+        title: 'Inline dashboard',
+        widgets: [],
+        filters: [],
+        config: { filtersPanel: { actions: { lockFilter: { enabled: true } } } },
+      };
+
+      render(
+        <JtdDashboard
+          dashboard={inlineDashboard}
+          filters={mockFilters}
+          mergeTargetDashboardFilters={false}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(readConfig().filtersPanel?.actions?.lockFilter?.enabled).toBe(true);
+      });
+    });
+
     it('does not override edit mode when the caller passes dashboard props directly', async () => {
       // That config is the caller's own, not derived from permissions, so it keeps precedence.
       const inlineDashboard: DashboardProps = {

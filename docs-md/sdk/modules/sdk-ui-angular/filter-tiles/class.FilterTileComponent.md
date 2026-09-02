@@ -88,6 +88,14 @@ Theme service
 
 ### Other
 
+#### config
+
+> **config**: [`FilterTileConfig`](../interfaces/interface.FilterTileConfig.md) \| `undefined`
+
+Configuration for the filter tile.
+
+***
+
 #### defaultDataSource
 
 > **defaultDataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| `undefined`

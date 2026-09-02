@@ -93,6 +93,14 @@ Attribute to filter on. A query will run to fetch all this attribute's members
 
 ***
 
+#### config
+
+> **config**: [`FilterTileConfig`](../interfaces/interface.FilterTileConfig.md) \| `undefined`
+
+Configuration for the filter tile.
+
+***
+
 #### dataSource
 
 > **dataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| `undefined`

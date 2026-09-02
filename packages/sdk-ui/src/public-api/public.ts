@@ -146,6 +146,20 @@ export {
   WidgetHeaderMenuTargets,
   type WidgetHeaderMenuTarget,
 } from '../domains/widgets/shared/widget-header/widget-header-menu-targets';
+// Widget header items configuration
+export type {
+  WidgetHeaderItem,
+  WidgetHeaderItemComponent,
+  WidgetHeaderItemComponentProps,
+  WidgetHeaderItemPosition,
+  WidgetHeaderItemSize,
+  WidgetHeaderItemsTransform,
+  WidgetResolvedHeaderItem,
+} from '../domains/widgets/shared/widget-header/widget-header-config';
+export {
+  WidgetHeaderTargets,
+  type WidgetHeaderTarget,
+} from '../domains/widgets/shared/widget-header/widget-header-targets';
 export { type CustomWidgetProps } from '../domains/widgets/components/custom-widget';
 export { DrilldownBreadcrumbs } from '../domains/drilldown/components/drilldown-breadcrumbs';
 export type {
@@ -238,7 +252,19 @@ export {
   type FiltersPanelProps,
   type FiltersPanelConfig,
 } from '../domains/filters/components/filters-panel';
-export { FilterTile, type FilterTileProps } from '../domains/filters/components/filter-tile';
+export {
+  FilterTile,
+  type FilterTileProps,
+  type FilterTileConfig,
+  type FilterTileHeaderConfig,
+  type FilterTileActionsConfig,
+  type FilterTileMenuConfig,
+  type FilterTileMenuItem,
+  type FilterTileMenuActionItem,
+  type FilterTileMenuSubmenuItem,
+  FilterTileMenuTargets,
+  type FilterTileMenuTarget,
+} from '../domains/filters/components/filter-tile';
 export { type FilterVariant } from '../domains/filters/components/common/filter-utils';
 export {
   useGetFilterMembers,

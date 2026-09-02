@@ -2,9 +2,9 @@ import { measureFactory } from '@sisense/sdk-data';
 
 import { Commerce } from '@/__test-helpers__/sample-ecommerce';
 import { SankeyChartDataOptions } from '@/domains/visualizations/core/chart-data-options/types.js';
-import type { GenericDataOptions } from '@/types';
+import type { GenericDataOptions, KpiChartDataOptions } from '@/types';
 
-import { toCustomWidgetPanels, toSankeyPanels } from './to-widget-dto-panels';
+import { toCustomWidgetPanels, toKpiPanels, toSankeyPanels } from './to-widget-dto-panels';
 
 describe('toCustomWidgetPanels', () => {
   it('returns an empty array when dataOptions is undefined', () => {
@@ -149,5 +149,114 @@ describe('toSankeyPanels', () => {
 
     expect(panels[0].items[0].format?.members).toEqual(expectedMembers);
     expect(panels[0].items[1].format?.members).toEqual(expectedMembers);
+  });
+});
+
+describe('toKpiPanels', () => {
+  const sumRevenue = measureFactory.sum(Commerce.Revenue, 'Total Revenue');
+
+  it('emits only the value panel when category and comparison are unset', () => {
+    const dataOptions: KpiChartDataOptions = { value: sumRevenue };
+
+    const panels = toKpiPanels(dataOptions);
+
+    expect(panels.map((panel) => panel.name)).toEqual(['value']);
+    expect((panels[0].items[0].jaql as { agg?: string }).agg).toBe('sum');
+  });
+
+  it('emits a category panel when set', () => {
+    const dataOptions: KpiChartDataOptions = { value: sumRevenue, category: Commerce.AgeRange };
+
+    const panels = toKpiPanels(dataOptions);
+
+    expect(panels.map((panel) => panel.name)).toEqual(['value', 'category']);
+  });
+
+  it('emits a target panel for a measure-column target comparison', () => {
+    const target = measureFactory.sum(Commerce.Cost, 'Cost Target');
+    const dataOptions: KpiChartDataOptions = {
+      value: sumRevenue,
+      comparison: { type: 'target', target },
+    };
+
+    const panels = toKpiPanels(dataOptions);
+
+    expect(panels.map((panel) => panel.name)).toEqual(['value', 'target']);
+  });
+
+  it('writes a literal-number target as a constant formula panel item', () => {
+    // Fusion has no literal-number item; a fixed goal is a constant formula there, so that is
+    // what a number serializes to. It comes back as a measure column, not a number.
+    const dataOptions: KpiChartDataOptions = {
+      value: sumRevenue,
+      comparison: { type: 'target', target: 10000 },
+    };
+
+    const panels = toKpiPanels(dataOptions);
+
+    expect(panels.map((panel) => panel.name)).toEqual(['value', 'target']);
+    expect(panels[1].items[0].jaql).toEqual({ formula: '10000', title: '10000' });
+  });
+
+  it('drops a non-finite target, which has no valid constant-formula form', () => {
+    // Writing `{ formula: 'NaN' }` would build a panel the query engine rejects, so these fall
+    // back to no target panel — and, via isSerializableKpiTarget, to a non-goal subtype.
+    for (const target of [NaN, Infinity, -Infinity]) {
+      const panels = toKpiPanels({
+        value: sumRevenue,
+        comparison: { type: 'target', target },
+      });
+      expect(panels.map((panel) => panel.name)).toEqual(['value']);
+    }
+  });
+
+  it('writes finite edge-case targets as formulas', () => {
+    for (const [target, formula] of [
+      [0, '0'],
+      [-500, '-500'],
+      [0.5, '0.5'],
+    ] as const) {
+      const panels = toKpiPanels({
+        value: sumRevenue,
+        comparison: { type: 'target', target },
+      });
+      expect(panels[1].items[0].jaql).toEqual({ formula, title: formula });
+    }
+  });
+
+  it('emits a comparisonValue panel for a delta comparison', () => {
+    const baseline = measureFactory.sum(Commerce.Cost, 'Previous Cost');
+    const dataOptions: KpiChartDataOptions = {
+      value: sumRevenue,
+      comparison: { type: 'delta', value: baseline },
+    };
+
+    const panels = toKpiPanels(dataOptions);
+
+    expect(panels.map((panel) => panel.name)).toEqual(['value', 'comparisonValue']);
+  });
+
+  it('emits no comparison panel for previous-period (the subtype carries it)', () => {
+    const dataOptions: KpiChartDataOptions = {
+      value: sumRevenue,
+      category: Commerce.AgeRange,
+      comparison: { type: 'previous-period' },
+    };
+
+    const panels = toKpiPanels(dataOptions);
+
+    expect(panels.map((panel) => panel.name)).toEqual(['value', 'category']);
+  });
+
+  it('emits a comparisonValue panel for the plain value comparison, same as delta', () => {
+    const comparisonValue = measureFactory.sum(Commerce.Cost, 'Secondary');
+    const dataOptions: KpiChartDataOptions = {
+      value: sumRevenue,
+      comparison: { type: 'value', value: comparisonValue },
+    };
+
+    const panels = toKpiPanels(dataOptions);
+
+    expect(panels.map((panel) => panel.name)).toEqual(['value', 'comparisonValue']);
   });
 });

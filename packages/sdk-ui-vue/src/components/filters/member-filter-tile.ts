@@ -98,6 +98,10 @@ export const MemberFilterTile = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onEdit}
      */
     onEdit: Function as PropType<MemberFilterTileProps['onEdit']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.config}
+     */
+    config: Object as PropType<MemberFilterTileProps['config']>,
   },
   setup: (props) => setupHelper(MemberFilterTilePreact, props),
 });

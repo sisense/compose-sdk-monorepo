@@ -21,6 +21,7 @@ import {
   SearchableSelectContentList,
   SearchableSelectContentToolbar,
   SearchableSelectContentToolbarButton,
+  SearchableSelectContentToolbarButtonWithTooltip,
 } from './searchable-select-content';
 import { SelectItem } from './types';
 import { getSelectedItemsDisplayValue } from './utils';
@@ -39,6 +40,11 @@ type SearchableMultiSelectProps<Value> = {
   fieldStyle?: CSSProperties;
   /** Sets the trigger-label color when no values are selected. */
   placeholderColor?: string;
+  /**
+   * Whether every item of the underlying list has been loaded. While `false`, `Select All`
+   * is disabled, since it could only reach the items paged in so far. Defaults to `true`.
+   */
+  allItemsLoaded?: boolean;
 };
 
 /** @internal */
@@ -54,6 +60,7 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
     width,
     fieldStyle,
     placeholderColor,
+    allItemsLoaded = true,
   } = props;
   const { t } = useTranslation();
   const { themeSettings } = useThemeContext();
@@ -81,6 +88,9 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
   const handleClearAll = useCallback(() => {
     onChange?.([]);
   }, [onChange]);
+
+  const isSelectAllBlockedByPaging = !allItemsLoaded;
+  const isSelectAllDisabled = isSelectAllBlockedByPaging || items.length === values.length;
 
   const onClose = useCallback(() => {
     setOpen(false);
@@ -159,35 +169,36 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
           style={{ maxHeight: 300 }}
           preventClickPropagation={true}
         >
-          <ScrollWrapper onScroll={onListScroll}>
-            <SearchableSelectContent
-              theme={themeSettings}
-              style={{
-                minWidth: selectElementRef.current?.clientWidth,
-                maxWidth:
-                  selectElementRef.current?.clientWidth &&
-                  selectElementRef.current?.clientWidth * 2,
-              }}
-              data-testid="csdk-searchable-multi-select-content"
-              aria-label="Searchable multi-select content"
-            >
-              <SearchableSelectContentToolbar>
-                <SearchableSelectContentToolbarButton
-                  style={{ marginRight: '8px' }}
-                  disabled={items.length === values.length}
-                  onClick={handleSelectAll}
-                  theme={themeSettings}
-                >
-                  {t('filterEditor.buttons.selectAll')}
-                </SearchableSelectContentToolbarButton>
-                <SearchableSelectContentToolbarButton
-                  disabled={!values.length}
-                  onClick={handleClearAll}
-                  theme={themeSettings}
-                >
-                  {t('filterEditor.buttons.clearAll')}
-                </SearchableSelectContentToolbarButton>
-              </SearchableSelectContentToolbar>
+          <SearchableSelectContent
+            theme={themeSettings}
+            style={{
+              minWidth: selectElementRef.current?.clientWidth,
+              maxWidth:
+                selectElementRef.current?.clientWidth && selectElementRef.current?.clientWidth * 2,
+            }}
+            data-testid="csdk-searchable-multi-select-content"
+            aria-label="Searchable multi-select content"
+          >
+            <SearchableSelectContentToolbar>
+              <SearchableSelectContentToolbarButtonWithTooltip
+                style={{ marginRight: '8px' }}
+                disabled={isSelectAllDisabled}
+                onClick={handleSelectAll}
+                theme={themeSettings}
+                tooltipTitle={t('filterEditor.tooltips.selectAllPartiallyLoaded')}
+                disableTooltip={!isSelectAllBlockedByPaging}
+              >
+                {t('filterEditor.buttons.selectAll')}
+              </SearchableSelectContentToolbarButtonWithTooltip>
+              <SearchableSelectContentToolbarButton
+                disabled={!values.length}
+                onClick={handleClearAll}
+                theme={themeSettings}
+              >
+                {t('filterEditor.buttons.clearAll')}
+              </SearchableSelectContentToolbarButton>
+            </SearchableSelectContentToolbar>
+            <ScrollWrapper onScroll={onListScroll}>
               <SearchableSelectContentList aria-label="List" theme={themeSettings}>
                 {items.map((item, index) => (
                   <MultiSelectItem
@@ -199,8 +210,8 @@ export function SearchableMultiSelect<Value = unknown>(props: SearchableMultiSel
                 ))}
                 {showListLoader && <SmallLoader />}
               </SearchableSelectContentList>
-            </SearchableSelectContent>
-          </ScrollWrapper>
+            </ScrollWrapper>
+          </SearchableSelectContent>
         </Popper>
       </div>
     </ClickAwayListener>

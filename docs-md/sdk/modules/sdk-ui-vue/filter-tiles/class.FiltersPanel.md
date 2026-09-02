@@ -44,7 +44,7 @@ FiltersPanel props
 
 ### config
 
-> **`readonly`** **config**?: [`FiltersPanelConfig`](../../sdk-ui/interfaces/interface.FiltersPanelConfig.md)
+> **`readonly`** **config**?: [`FiltersPanelConfig`](../interfaces/interface.FiltersPanelConfig.md)
 
 The configuration for the filters panel
 

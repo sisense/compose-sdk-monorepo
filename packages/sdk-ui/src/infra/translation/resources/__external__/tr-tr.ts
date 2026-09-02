@@ -231,6 +231,26 @@ const translation: TranslationDictionary = {
     allExceptCount: '{{count}} hariç tümü',
     setupTitle: "Filtre widget'ını ayarlayın",
     setupSubtitle: 'Bir boyut seçin ve filtrenin nasıl çalışacağını yapılandırın',
+    conditionUnsupported: 'Koşul metin ve sayısal alanlar için kullanılabilir',
+    conditionNotRepresentable: 'Bu koşul burada düzenlenemez',
+    controls: {
+      findInList: 'Listede ara',
+      enterValue: 'Değer girin...',
+      noMatches: 'Eşleşme yok',
+      clearSelection: 'Seçimi temizle',
+      overflowCount: '+{{count}}',
+      select: 'Seçin',
+      selectDateLevel: 'Tarih düzeyi seçin',
+      selectCondition: 'Koşul seç',
+      selectConnector: 'VE/VEYA seç',
+      addCondition: '+ Koşul ekle',
+      fillOrRemoveCondition: 'Doldurun veya koşulu kaldırın',
+      rangeOrderError: 'İkinci değer birinciden büyük olmalıdır',
+      betweenMin: 'Minimum',
+      betweenMax: 'Maksimum',
+      selectValues: '{{level}} seçin',
+      clear: 'Temizle',
+    },
   },
   unsupportedFilterMessage: 'Desteklenmeyen filtre (veri sorgusuna uygulandı)',
   unsupportedFilter: 'Desteklenmeyen filtre {{filter}}',
@@ -361,6 +381,10 @@ const translation: TranslationDictionary = {
       selectAll: 'Tümünü seç',
       clearAll: 'Tümünü temizle',
     },
+    tooltips: {
+      selectAllPartiallyLoaded:
+        'Tüm değerler görüntülenmiyor. Kalan değerleri yüklemek için listeyi aşağı kaydırın. Belirli değerleri hariç tutmak için aşağıdaki "Değildir" koşulunu da kullanabilirsiniz.',
+    },
     labels: {
       includeAll: 'Tümünü dahil et (filtre uygulanmadı)',
       allowMultiSelection: 'Listeler için çoklu seçime izin ver',
@@ -393,6 +417,7 @@ const translation: TranslationDictionary = {
       greaterThan: 'Büyüktür',
       greaterThanOrEqual: 'Eşit veya büyüktür',
       isWithin: 'İçindedir',
+      between: 'Arasında',
       top: 'İlk',
       bottom: 'Son',
     },
@@ -494,6 +519,7 @@ const translation: TranslationDictionary = {
     },
     table: {
       label: 'Veri tablosu',
+      totalRows: 'Toplam: {{formattedCount}} satır',
     },
     sankey: {
       alerts: {

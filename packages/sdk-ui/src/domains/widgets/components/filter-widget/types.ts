@@ -6,13 +6,132 @@ import type { WidgetContainerStyleOptions } from '@/types';
 import type { FilterWidgetConfig } from '../widget/widget-config';
 
 /**
+ * Height of the filter control, as a step rather than a pixel value.
+ * Maps to pixel heights: `xs`=24, `s`=28, `m`=32, `l`=36, `xl`=40.
+ *
+ * @example
+ * ```ts
+ * const size: FilterWidgetControlSize = 'l';
+ * ```
+ *
+ * @beta
+ */
+export type FilterWidgetControlSize = 'xs' | 's' | 'm' | 'l' | 'xl';
+
+/**
+ * Corner roundness of the filter control, as a step rather than a pixel value.
+ * Maps to pixel radii: `none`=0, `xs`=2, `s`=4, `m`=6, `l`=8, `xl`=20.
+ *
+ * @example
+ * ```ts
+ * const cornerRadius: FilterWidgetControlCornerRadius = 'xl';
+ * ```
+ *
+ * @beta
+ */
+export type FilterWidgetControlCornerRadius = 'none' | 'xs' | 's' | 'm' | 'l' | 'xl';
+
+/**
+ * Horizontal placement of the filter control inside the widget.
+ *
+ * @example
+ * ```ts
+ * const alignHorizontal: FilterWidgetControlAlignHorizontal = 'center';
+ * ```
+ *
+ * @beta
+ */
+export type FilterWidgetControlAlignHorizontal = 'left' | 'center' | 'right';
+
+/**
+ * Vertical placement of the filter control inside the widget.
+ *
+ * @example
+ * ```ts
+ * const alignVertical: FilterWidgetControlAlignVertical = 'middle';
+ * ```
+ *
+ * @beta
+ */
+export type FilterWidgetControlAlignVertical = 'top' | 'middle' | 'bottom';
+
+/**
+ * Styling of the filter control itself — the field the user picks values in — as opposed to
+ * the widget container around it.
+ *
+ * Omitted properties fall back to the dashboard theme, and then to the SDK defaults
+ * (`size` and `cornerRadius` `'s'`, left/middle alignment, standard light palette).
+ *
+ * @example
+ * ```tsx
+ * <FilterWidget
+ *   attribute={DM.Commerce.AgeRange}
+ *   styleOptions={{
+ *     control: {
+ *       primaryText: '#131F29',
+ *       background: '#FFFFFF',
+ *       accentColor: '#94F5F0',
+ *       size: 'l',
+ *       cornerRadius: 'm',
+ *     },
+ *   }}
+ * />
+ * ```
+ *
+ * @beta
+ */
+export type FilterWidgetControlStyleOptions = {
+  /** Selected value, chevron, and option text in the open list. */
+  primaryText?: string;
+  /** Placeholder, search icon, `+N`, disabled and empty copy. */
+  secondaryText?: string;
+  /** Fill of the control and of the open list. */
+  background?: string;
+  /** When false, the control has no border. The open list has no border either way. */
+  borderEnabled?: boolean;
+  /** Border color of the control, when `borderEnabled` is true. */
+  borderColor?: string;
+  /**
+   * Brand / accent for the control's primary action — the date panel's Apply button — and
+   * for any selection highlight the design fills with the brand color.
+   */
+  accentColor?: string;
+  /** Height of the control. Rows in the open list stay 30px. @defaultValue 's' (28px) */
+  size?: FilterWidgetControlSize;
+  /** Corner roundness of the control and of the open list. @defaultValue 's' (4px) */
+  cornerRadius?: FilterWidgetControlCornerRadius;
+  /** @defaultValue 'left' */
+  alignHorizontal?: FilterWidgetControlAlignHorizontal;
+  /** @defaultValue 'middle' */
+  alignVertical?: FilterWidgetControlAlignVertical;
+};
+
+/**
+ * Styling of a filter widget: the container, plus the filter control inside it.
+ *
+ * @example
+ * ```tsx
+ * <FilterWidget
+ *   attribute={DM.Commerce.AgeRange}
+ *   styleOptions={{ backgroundColor: '#F4F4F8', control: { size: 'l', cornerRadius: 'm' } }}
+ * />
+ * ```
+ *
+ * @beta
+ */
+export type FilterWidgetStyleOptions = WidgetContainerStyleOptions & {
+  /** Styling of the filter control. */
+  control?: FilterWidgetControlStyleOptions;
+};
+
+/**
  * `FilterWidgetFilterType` selects the rendering type for a filter widget.
  *
  * - `'members'`      — searchable member-select dropdown. Implemented.
  * - `'dateRange'`    — date-range picker. Planned.
  * - `'period'`       — relative-period picker. Planned.
  * - `'numericRange'` — numeric range slider. Planned.
- * - `'condition'`    — conditional / formula filter builder. Planned.
+ * - `'condition'`    — string condition builder with optional AND/OR chaining (text attributes only). Implemented.
  *
  * @example
  * The following selects the member-select dropdown rendering:
@@ -80,6 +199,7 @@ export interface FilterWidgetProps {
   title?: string;
   /**
    * How the filter is rendered. Defaults to `'members'` (searchable member-select dropdown).
+   * `'condition'` renders a string condition control for text attributes.
    * Additional types will be added as they are implemented.
    *
    * @defaultValue 'members'
@@ -122,22 +242,30 @@ export interface FilterWidgetProps {
    */
   onChange?: (event: FilterWidgetChangeEvent) => void;
   /**
-   * Parent filters for cascading behavior. Out of scope for phase 1.
+   * Everything that narrows the member list: the widget's own dimension filters, plus any
+   * dashboard filters the widget opted in to. Scopes the member query only.
    *
    * @category Data
    */
   parentFilters?: Filter[];
   /**
-   * Style options for the widget container (look & feel, border, shadow, etc.).
+   * The widget's own dimension filters — the permanent restriction on which members this widget
+   * may select, as opposed to the transient dashboard state also present in `parentFilters`.
    *
-   * Note: the default header toolbar (info button with datasource/refresh) is
-   * always hidden for this widget — those actions do not apply to a filter
-   * control. A custom `header.renderToolbar` is still invoked, but receives an
-   * empty default toolbar.
+   * The published filter encodes them, so that selecting all values filters the dashboard by the
+   * allowed members rather than by every member of the dimension. Pass the same filters here and
+   * in `parentFilters`.
+   *
+   * @category Data
+   */
+  dimensionFilters?: Filter[];
+  /**
+   * Style options for the widget container (look & feel, border, shadow, etc.), and for the
+   * filter control inside it under `control`.
    *
    * @category Widget
    */
-  styleOptions?: WidgetContainerStyleOptions;
+  styleOptions?: FilterWidgetStyleOptions;
   /**
    * Configuration of the widget.
    *
@@ -146,7 +274,7 @@ export interface FilterWidgetProps {
   config?: FilterWidgetConfig;
   /**
    * When true, renders only the dropdown content without the WidgetContainer chrome.
-   * Use in contexts where the host (Fusion dashboard, widget editor) provides its own chrome.
+   * Use when the host application already provides its own widget chrome.
    *
    * @internal
    */

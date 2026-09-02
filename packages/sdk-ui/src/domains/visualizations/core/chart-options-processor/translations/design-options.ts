@@ -230,13 +230,13 @@ export type TableColorOptions = {
 export type TableDesignOptions = {
   /**
    * Vertical padding around whole table
-   * Default value is 20
+   * Default value is 8
    *
    */
   paddingVertical?: number;
   /**
    * Horizontal padding around whole table
-   * Default value is 20
+   * Default value is 8
    *
    */
   paddingHorizontal?: number;

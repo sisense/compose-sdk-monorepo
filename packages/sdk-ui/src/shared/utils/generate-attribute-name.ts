@@ -1,7 +1,7 @@
 import { TFunction } from '@sisense/sdk-common';
 import { DateLevels } from '@sisense/sdk-data';
 
-const datetimeTraslationKeysByGranularity = {
+const datetimeTraslationKeysByGranularity: Partial<Record<string, string>> = {
   [DateLevels.Years]: 'attribute.datetimeName.years',
   [DateLevels.Quarters]: 'attribute.datetimeName.quarters',
   [DateLevels.Months]: 'attribute.datetimeName.months',
@@ -16,12 +16,8 @@ export function generateAttributeName(
   columnName: string,
   granularity?: string,
 ): string {
-  return granularity
-    ? t(
-        datetimeTraslationKeysByGranularity[
-          granularity as keyof typeof datetimeTraslationKeysByGranularity
-        ],
-        { columnName },
-      )
-    : columnName;
+  const translationKey = granularity ? datetimeTraslationKeysByGranularity[granularity] : undefined;
+  // A granularity outside the map — Fusion's 30-minute and 1-minute buckets — keeps the plain
+  // column name. Naming it from a missing key would leave the attribute nameless.
+  return translationKey ? t(translationKey, { columnName }) : columnName;
 }

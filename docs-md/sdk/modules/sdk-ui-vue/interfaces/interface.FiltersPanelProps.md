@@ -10,7 +10,7 @@ Props of the [`FiltersPanel`](../filter-tiles/class.FiltersPanel.md) component.
 
 ### config
 
-> **config**?: [`FiltersPanelConfig`](../../sdk-ui/interfaces/interface.FiltersPanelConfig.md)
+> **config**?: [`FiltersPanelConfig`](interface.FiltersPanelConfig.md)
 
 The configuration for the filters panel
 

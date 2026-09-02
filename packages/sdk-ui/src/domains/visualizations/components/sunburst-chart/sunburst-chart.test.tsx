@@ -138,4 +138,20 @@ describe('Sunburst Chart', () => {
 
     expect(await findByTestId('chart-root')).toBeInTheDocument();
   });
+
+  it('render a sunburst with a value and no categories', async () => {
+    const { findByTestId, container } = render(
+      <SunburstChart dataSet={dataSet} dataOptions={{ category: [], value: [meas1] }} />,
+    );
+
+    expect(await findByTestId('chart-root')).toBeInTheDocument();
+
+    const dataLabels = [...container.querySelectorAll('.highcharts-data-label')];
+
+    // Only the center total is labeled: with no categories there are no rings. A second, nameless
+    // point used to reach Highcharts here, which labels nameless points with an internal id.
+    expect(dataLabels).toHaveLength(1);
+    expect(dataLabels[0].textContent).toContain('Quantity');
+    expect(container.textContent).not.toMatch(/highcharts-[a-z0-9]+-\d+/);
+  });
 });

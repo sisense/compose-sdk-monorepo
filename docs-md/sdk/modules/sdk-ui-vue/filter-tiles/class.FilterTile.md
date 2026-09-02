@@ -36,6 +36,14 @@ FilterTile props
 
 ## Properties
 
+### config
+
+> **`readonly`** **config**?: [`FilterTileConfig`](../interfaces/interface.FilterTileConfig.md)
+
+Configuration for the filter tile.
+
+***
+
 ### defaultDataSource
 
 > **`readonly`** **defaultDataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)

@@ -2,17 +2,16 @@
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import {
-  FILTER_TILE_LOCK_MENU_ITEM_ID,
-  useFilterTileLockMenuItem,
-} from './use-filter-tile-lock-menu-item.js';
+import { FilterTileMenuTargets } from '@/domains/filters/components/filter-tile/filter-tile-menu-targets';
+
+import { useFilterTileLockMenuItem } from './use-filter-tile-lock-menu-item.js';
 
 describe('useFilterTileLockMenuItem', () => {
   it('returns correct lock menu item', () => {
     const onLockToggle = vi.fn();
     const { result } = renderHook(() => useFilterTileLockMenuItem({ locked: false, onLockToggle }));
 
-    expect(result.current.id).toBe(FILTER_TILE_LOCK_MENU_ITEM_ID);
+    expect(result.current.id).toBe(FilterTileMenuTargets.Lock);
     expect(result.current.caption).toBe('filterTile.menu.lock');
     expect(result.current.onClick).toBeDefined();
   });

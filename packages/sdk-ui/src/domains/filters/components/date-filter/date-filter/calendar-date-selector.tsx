@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import styled from '@emotion/styled';
 import dayjs from 'dayjs';
@@ -32,6 +32,14 @@ export type DayjsDateRange = {
   from: dayjs.Dayjs;
   to: dayjs.Dayjs;
 };
+
+function getEarliestDate(dates: dayjs.Dayjs[] | undefined): Date | undefined {
+  if (!dates?.length) {
+    return undefined;
+  }
+
+  return dates.reduce((earliest, date) => (date.isBefore(earliest) ? date : earliest)).toDate();
+}
 
 export type CalendarDateSelectorProps = {
   selectorMode: SelectorMode;
@@ -80,6 +88,10 @@ export function CalendarDateSelector({
     }
   };
 
+  const [openToDate, setOpenToDate] = useState<Date | undefined>(() =>
+    selectorMode === 'multiPointsSelector' ? getEarliestDate(selectedDates) : undefined,
+  );
+
   const { themeSettings } = useThemeContext();
   const startDate = selectedDateRange?.from?.toDate();
   const endDate = selectedDateRange?.to?.toDate();
@@ -102,12 +114,14 @@ export function CalendarDateSelector({
           enabledButtons={buttons}
           limit={limit}
           onDateSelected={(selectedDate) => {
+            setOpenToDate(selectedDate.toDate());
             onDateSelected(dayjs(selectedDate));
           }}
         />
       )}
       <StyledDatePicker
         theme={themeSettings}
+        openToDate={openToDate}
         selected={
           selectorMode === 'pointSelector'
             ? selectedDate?.toDate()

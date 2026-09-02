@@ -17,7 +17,10 @@ import {
   WidgetStyleOptions,
 } from '@/types';
 
-import type { FilterWidgetFilterType } from '../components/filter-widget/types';
+import type {
+  FilterWidgetControlStyleOptions,
+  FilterWidgetFilterType,
+} from '../components/filter-widget/types';
 import type { WidgetConfig, WidgetType } from '../components/widget/types';
 
 /**
@@ -128,6 +131,7 @@ export interface WidgetModel {
     attribute: Attribute;
     filterType: FilterWidgetFilterType;
     isMultiselect: boolean;
+    controlStyleOptions?: FilterWidgetControlStyleOptions;
   };
 }
 

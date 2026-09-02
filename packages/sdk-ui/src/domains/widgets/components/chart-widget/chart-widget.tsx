@@ -4,23 +4,29 @@ import { getDataSourceName } from '@sisense/sdk-data';
 import omit from 'lodash-es/omit';
 
 import { Chart } from '@/domains/visualizations/components/chart';
-import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
+import { isTable } from '@/domains/visualizations/core/chart-options-processor/translations/types';
+import { useWidgetHeaderInfoButton } from '@/domains/widgets/shared/widget-header/features/use-widget-header-info-button';
+import { useWidgetHeaderMenu } from '@/domains/widgets/shared/widget-header/features/use-widget-header-menu';
+import { useWidgetHeaderTitle } from '@/domains/widgets/shared/widget-header/features/use-widget-header-title';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
+import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { HighchartsOptions } from '@/props';
 import {
   DynamicSizeContainer,
   getWidgetDefaultSize,
 } from '@/shared/components/dynamic-size-container';
+import { useElementHeight } from '@/shared/hooks/use-element-height';
 import { combineHandlers } from '@/shared/utils/combine-handlers';
-import { ChartWidgetStyleOptions, DrilldownSelection } from '@/types';
+import { ChartWidgetStyleOptions, DrilldownSelection, TableStyleOptions } from '@/types';
 
+import { withHeaderItemsInConfig } from '../../helpers/header-items-utils';
 import { useHighlightSelection } from '../../hooks/use-highlight-selection';
 import { useTrackWidgetInit } from '../../hooks/use-track-widget-init';
-import { useWidgetHeaderManagement } from '../../hooks/use-widget-header-management';
 import { getWidgetEntityId } from '../../hooks/widget-entity-id';
 import { getChartWidgetName, getWidgetTitle } from '../../hooks/widget-tracking-adapters';
 import { WidgetContainer } from '../../shared/widget-container';
+import { getWidgetOverheadHeight } from '../../shared/widget-style-utils';
 import { ChartWidgetProps } from './types';
 import { useChartWidgetCsvDownload } from './use-chart-widget-csv-download.js';
 import { useChartWidgetExcelDownload } from './use-chart-widget-excel-download.js';
@@ -80,12 +86,36 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
       }),
     [chartType, styleOptions?.header?.hidden],
   );
+  const { themeSettings } = useThemeContext();
+  const [tableHeight, setTableHeight] = useState<number | undefined>();
+  const { ref: topSlotRef, height: topSlotHeight } = useElementHeight<HTMLDivElement>();
+
+  // Auto height currently applies to table charts only; every other chart type keeps its
+  // configured or inherited height, and never receives an `onHeightChange` handler.
+  const isAutoHeight =
+    !!chartType &&
+    isTable(chartType) &&
+    !!(styleOptions as TableStyleOptions | undefined)?.isAutoHeight;
+
+  const overheadHeight = getWidgetOverheadHeight({
+    styleOptions,
+    themeSettings,
+    hasHeader: !styleOptions?.header?.hidden,
+  });
+
+  const handleTableHeightChange = useCallback((nextHeight: number) => {
+    setTableHeight(nextHeight);
+  }, []);
+
   const size = useMemo(
     () => ({
       width,
-      height,
+      height:
+        isAutoHeight && tableHeight !== undefined
+          ? tableHeight + overheadHeight + topSlotHeight
+          : height,
     }),
-    [width, height],
+    [width, height, isAutoHeight, tableHeight, overheadHeight, topSlotHeight],
   );
 
   const [refreshCounter, setRefreshCounter] = useState(0);
@@ -101,14 +131,14 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     [onChange],
   );
 
-  const { headerConfig: headerConfigWithRenaming, titleEditor } = useWidgetHeaderManagement({
+  const headerConfigWithTitle = useWidgetHeaderTitle(props.config?.header, {
     title: props.title,
-    onChange: props.onChange as (event: WidgetChangeEvent) => void,
-    headerConfig: props.config?.header,
+    styleOptions: styleOptions?.header,
+    onChange: props.onChange,
   });
 
-  const { headerConfig: headerConfigWithCsv } = useChartWidgetCsvDownload({
-    baseHeaderConfig: headerConfigWithRenaming,
+  const { headerConfig: headerConfigWithCsvDownload } = useChartWidgetCsvDownload({
+    baseHeaderConfig: headerConfigWithTitle,
     title: props.title,
     chartType,
     dataOptions,
@@ -118,8 +148,8 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     config: props.config,
   });
 
-  const { headerConfig } = useChartWidgetExcelDownload({
-    baseHeaderConfig: headerConfigWithCsv,
+  const { headerConfig: headerConfigWithExcelDownload } = useChartWidgetExcelDownload({
+    baseHeaderConfig: headerConfigWithCsvDownload,
     title: props.title,
     chartType,
     dataOptions,
@@ -136,11 +166,28 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
 
   const {
     contentAreaRef,
-    styleOptionsWithNarrative,
+    narrativeToggleItem,
     narrativeTopSlot,
     narrativeBottomSlot,
     narrativeAloneContent,
   } = useChartWidgetNarrative({ propsWithDrilldown, styleOptions });
+
+  const headerConfigWithNarrative = useMemo(
+    () =>
+      narrativeToggleItem
+        ? withHeaderItemsInConfig([narrativeToggleItem])(headerConfigWithExcelDownload)
+        : headerConfigWithExcelDownload,
+    [headerConfigWithExcelDownload, narrativeToggleItem],
+  );
+
+  const refresh = useCallback(() => setRefreshCounter((counter) => counter + 1), []);
+  const headerConfigWithInfoButton = useWidgetHeaderInfoButton(headerConfigWithNarrative, {
+    styleOptions: styleOptions?.header,
+    dataSetName: dataSource && getDataSourceName(dataSource),
+    description,
+    onRefresh: refresh,
+  });
+  const fullHeaderConfig = useWidgetHeaderMenu(headerConfigWithInfoButton);
 
   const highlightSelection = useHighlightSelection({
     chartType,
@@ -176,6 +223,7 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     dataSet: dataSource,
     styleOptions: styleOptionsWithoutSizing,
     refreshCounter: refreshCounter,
+    onHeightChange: isAutoHeight ? handleTableHeightChange : undefined,
     onDataPointClick: useMemo(
       () => combineHandlers([highlightSelection.onDataPointClick, props.onDataPointClick]),
       [highlightSelection.onDataPointClick, props.onDataPointClick],
@@ -211,19 +259,16 @@ export const ChartWidget: FunctionComponent<ChartWidgetProps> = asSisenseCompone
     <DynamicSizeContainer defaultSize={defaultSize} size={size}>
       <WidgetContainer
         {...props}
-        styleOptions={styleOptionsWithNarrative}
-        headerConfig={headerConfig}
-        titleEditor={titleEditor}
+        styleOptions={styleOptions}
+        headerConfig={fullHeaderConfig}
         contentAreaRef={contentAreaRef}
         topSlot={
-          <>
+          <div ref={isAutoHeight ? topSlotRef : undefined}>
             {props.topSlot}
             {narrativeTopSlot}
             {breadcrumbs}
-          </>
+          </div>
         }
-        dataSetName={dataSource && getDataSourceName(dataSource)}
-        onRefresh={() => setRefreshCounter(refreshCounter + 1)}
         bottomSlot={
           <>
             {narrativeBottomSlot}

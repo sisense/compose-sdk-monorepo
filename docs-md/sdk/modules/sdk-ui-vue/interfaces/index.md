@@ -54,7 +54,14 @@ TypeScript interfaces for components and composables listed above
 - [FilterMembersErrorState](interface.FilterMembersErrorState.md)
 - [FilterMembersLoadingState](interface.FilterMembersLoadingState.md)
 - [FilterMembersSuccessState](interface.FilterMembersSuccessState.md)
+- [FiltersPanelConfig](interface.FiltersPanelConfig.md)
 - [FiltersPanelProps](interface.FiltersPanelProps.md)
+- [FilterTileActionsConfig](interface.FilterTileActionsConfig.md)
+- [FilterTileConfig](interface.FilterTileConfig.md)
+- [FilterTileHeaderConfig](interface.FilterTileHeaderConfig.md)
+- [FilterTileMenuActionItem](interface.FilterTileMenuActionItem.md)
+- [FilterTileMenuConfig](interface.FilterTileMenuConfig.md)
+- [FilterTileMenuSubmenuItem](interface.FilterTileMenuSubmenuItem.md)
 - [FilterTileProps](interface.FilterTileProps.md)
 - [FilterWidgetConfig](interface.FilterWidgetConfig.md) <Badge type="beta" text="Beta" />
 - [FilterWidgetProps](interface.FilterWidgetProps.md) <Badge type="beta" text="Beta" />

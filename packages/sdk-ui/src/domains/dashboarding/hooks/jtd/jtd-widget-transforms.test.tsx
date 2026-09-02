@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as widgetUtils from '@/domains/widgets/components/widget-by-id/utils';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import { WidgetHeaderTargets } from '@/domains/widgets/shared/widget-header/widget-header-targets';
 import { PivotTableDataPoint } from '@/types';
 
 import * as jtdFormatters from './jtd-formatters.js';
@@ -440,7 +441,11 @@ describe('jtd-widget-transforms', () => {
   });
 
   describe('addJtdIconToHeader', () => {
-    it('should add JTD icon to widget with title', () => {
+    /** The contributed JTD-icon header item, if the transform added one. */
+    const jtdIconItemOf = (widget: WidgetProps) =>
+      widget.config?.header?.items?.find((item) => item.id === WidgetHeaderTargets.JtdIcon);
+
+    it('should switch on the built-in JTD icon header item for chart widgets', () => {
       vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(true);
       vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(false);
       const widgetWithTitle = { ...mockChartWidgetProps, title: 'My Chart' };
@@ -448,8 +453,9 @@ describe('jtd-widget-transforms', () => {
       const result = addJtdIconToHeader(widgetWithTitle);
 
       expect(result).not.toBe(widgetWithTitle);
-      expect((result as any).styleOptions?.header?.renderTitle).toBeDefined();
-      expect(typeof (result as any).styleOptions?.header?.renderTitle).toBe('function');
+      // Title should be preserved
+      expect(result.widgetType === 'chart' ? result.title : undefined).toBe('My Chart');
+      expect(jtdIconItemOf(result)).toBeDefined();
     });
 
     it('should return unchanged props for non-supported widgets (text, custom)', () => {
@@ -461,85 +467,36 @@ describe('jtd-widget-transforms', () => {
       expect(result).toBe(mockChartWidgetProps);
     });
 
-    it('should add header renderTitle function for chart widgets', () => {
+    it('should switch on the built-in JTD icon header item for pivot widgets', () => {
+      vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(false);
+      vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(true);
+
+      const result = addJtdIconToHeader({
+        ...mockPivotWidgetProps,
+        title: 'Pivot Table',
+      } as WidgetProps);
+
+      expect(jtdIconItemOf(result)).toBeDefined();
+    });
+
+    it('should preserve the rest of the header config', () => {
       vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(true);
       vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(false);
-      const widgetWithTitle = { ...mockChartWidgetProps, title: 'Original Title' };
 
-      const result = addJtdIconToHeader(widgetWithTitle);
-
-      expect(result).not.toBe(widgetWithTitle);
-      expect((result as any).title).toBe('Original Title'); // Title should be preserved
-      expect((result as any).styleOptions?.header?.renderTitle).toBeDefined();
-    });
-
-    it('should handle empty string title', () => {
-      const widgetWithEmptyTitle = { ...mockChartWidgetProps, title: '' };
-
-      const result = addJtdIconToHeader(widgetWithEmptyTitle);
-
-      expect(result).toBe(widgetWithEmptyTitle);
-    });
-
-    it('should add JTD icon to pivot widgets', () => {
-      vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(false);
-      vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(true);
-
-      const mockPivotProps = {
-        ...mockPivotWidgetProps,
-        title: 'Pivot Table',
-      };
-
-      const result = addJtdIconToHeader(mockPivotProps);
-
-      expect(result).not.toBe(mockPivotProps);
-      expect((result as any).styleOptions?.header?.renderTitle).toBeDefined();
-      expect(typeof (result as any).styleOptions?.header?.renderTitle).toBe('function');
-    });
-
-    it('should compose with existing renderTitle instead of overriding it', () => {
-      vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(true);
-
-      const existingRenderTitle = vi.fn((element) => element);
-      const widgetWithRenderTitle = {
+      const onBeforeRender = vi.fn((items) => [...items]);
+      const widgetWithHeaderConfig = {
         ...mockChartWidgetProps,
-        styleOptions: { header: { renderTitle: existingRenderTitle } },
-      } as any;
+        styleOptions: { header: { backgroundColor: 'red', titleAlignment: 'Center' as const } },
+        config: { header: { menu: { items: [] }, onBeforeRender } },
+      } as WidgetProps;
 
-      const result = addJtdIconToHeader(widgetWithRenderTitle);
-      const newRenderTitle = (result as any).styleOptions?.header?.renderTitle;
+      const result = addJtdIconToHeader(widgetWithHeaderConfig);
 
-      expect(newRenderTitle).toBeDefined();
-      expect(newRenderTitle).not.toBe(existingRenderTitle);
-
-      newRenderTitle('title text');
-
-      expect(existingRenderTitle).toHaveBeenCalledWith('title text');
-    });
-
-    it('should preserve existing header properties for pivot widgets', () => {
-      vi.mocked(widgetUtils.isChartWidgetProps).mockReturnValue(false);
-      vi.mocked(widgetUtils.isPivotTableWidgetProps).mockReturnValue(true);
-
-      const mockPivotProps = {
-        ...mockPivotWidgetProps,
-        id: 'pivot-widget-1',
-        widgetType: 'pivot' as const,
-        title: 'Pivot Table',
-        styleOptions: {
-          header: {
-            backgroundColor: 'red',
-            titleAlignment: 'center' as const,
-          },
-        },
-      } as any;
-
-      const result = addJtdIconToHeader(mockPivotProps);
-
-      expect(result).not.toBe(mockPivotProps);
       expect((result as any).styleOptions?.header?.backgroundColor).toBe('red');
-      expect((result as any).styleOptions?.header?.titleAlignment).toBe('center');
-      expect((result as any).styleOptions?.header?.renderTitle).toBeDefined();
+      expect((result as any).styleOptions?.header?.titleAlignment).toBe('Center');
+      expect(result.config?.header?.menu).toEqual({ items: [] });
+      expect(result.config?.header?.onBeforeRender).toBe(onBeforeRender);
+      expect(jtdIconItemOf(result)).toBeDefined();
     });
   });
 });

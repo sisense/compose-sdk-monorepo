@@ -108,6 +108,10 @@ export const DateRangeFilterTile = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.onEdit}
      */
     onEdit: Function as PropType<DateRangeFilterTileProps['onEdit']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!DateRangeFilterTileProps.config}
+     */
+    config: Object as PropType<DateRangeFilterTileProps['config']>,
   },
   setup: (props) => setupHelper(DateRangeFilterTilePreact, props),
 });

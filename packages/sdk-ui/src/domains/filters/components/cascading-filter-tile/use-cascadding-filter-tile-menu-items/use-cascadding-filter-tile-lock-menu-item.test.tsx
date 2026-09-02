@@ -2,7 +2,7 @@
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { FILTER_TILE_LOCK_MENU_ITEM_ID } from '@/domains/filters/shared/use-filter-tile-menu-items/use-filter-tile-lock-menu-item';
+import { FilterTileMenuTargets } from '@/domains/filters/components/filter-tile/filter-tile-menu-targets';
 
 import { useCascadingFilterTileLockMenuItem } from './use-cascadding-filter-tile-lock-menu-item.js';
 
@@ -13,7 +13,7 @@ describe('useCascadingFilterTileLockMenuItem', () => {
       useCascadingFilterTileLockMenuItem({ locked: false, onLockToggle }),
     );
 
-    expect(result.current.id).toBe(FILTER_TILE_LOCK_MENU_ITEM_ID);
+    expect(result.current.id).toBe(FilterTileMenuTargets.Lock);
     expect(result.current.caption).toBe('filterTile.menu.lockGroup');
     expect(result.current.onClick).toBeDefined();
   });

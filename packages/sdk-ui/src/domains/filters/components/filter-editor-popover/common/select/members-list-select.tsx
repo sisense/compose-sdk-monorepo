@@ -47,6 +47,7 @@ export const MembersListSelect = ({
     data: membersData,
     isLoading: membersLoading,
     loadMore: loadMoreMembers,
+    isAllItemsLoaded: allMembersLoaded,
   } = useGetFilterMembers({
     parentFilters: useMemo(
       () => [...parentFilters, filterFactory.contains(attribute, searchValue)],
@@ -95,6 +96,7 @@ export const MembersListSelect = ({
       showListLoader={membersLoading}
       showSearch={showSearch}
       onSearchUpdate={debouncedSetSearchValue}
+      allItemsLoaded={allMembersLoaded}
     />
   ) : (
     <SearchableSingleSelect<string>

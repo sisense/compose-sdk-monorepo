@@ -50,9 +50,11 @@ export interface RelativeDateFilterTileProps {
    */
   tileDesignOptions?: FilterTileDesignOptions;
   /**
-   * Config for the filter tile
+   * Configuration for the filter tile.
    *
-   * @internal
+   * The tile menu — both the built-in lock item and any custom items — lives in the tile header,
+   * which this component renders only when `arrangement` is `'vertical'`. Set `arrangement`
+   * accordingly to use `config.header.menu` or `config.actions.lockFilter` here.
    */
   config?: FilterTileConfig;
 

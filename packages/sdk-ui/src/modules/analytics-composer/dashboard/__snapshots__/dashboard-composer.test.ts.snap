@@ -953,6 +953,7 @@ export default function CodeExample() {
       filters: [],
       styleOptions: {
         rowsPerPage: 25,
+        isAutoHeight: true,
         header: {
           color: {
             enabled: true,
@@ -1617,7 +1618,6 @@ export default function CodeExample() {
                 ],
                 'time': 1729175082658,
               },
-              'automaticHeight': true,
             },
           },
         },

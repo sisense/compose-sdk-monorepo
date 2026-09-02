@@ -24,13 +24,21 @@ import {
 import { SisenseContextService } from '../../services/sisense-context.service';
 import { ThemeService } from '../../services/theme.service';
 import { BaseChartEventProps, WithoutPreactChartEventProps } from '../../types';
+import { type WidgetConfig } from './widget-config';
 
 /**
  * Props of the {@link WidgetByIdComponent}.
  */
 export interface WidgetByIdProps
-  extends WithoutPreactChartEventProps<WidgetByIdPropsPreact>,
-    BaseChartEventProps {}
+  extends Omit<WithoutPreactChartEventProps<WidgetByIdPropsPreact>, 'config'>,
+    BaseChartEventProps {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.config}
+   *
+   * @category Widget
+   */
+  config?: WidgetConfig;
+}
 
 /**
  * The `WidgetById` component, which is a thin wrapper on {@link ChartWidgetComponent},

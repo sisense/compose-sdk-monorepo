@@ -2,6 +2,7 @@ import { DataSource } from '@sisense/sdk-data';
 
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 import { ContextfulTransformer } from '@/shared/utils/utility-types/transformer';
+import { TableStyleOptions } from '@/types';
 
 import { DashboardConfig, WidgetsPanelColumnLayout } from './types.js';
 
@@ -119,6 +120,27 @@ export const withResolvedWidgetDataSource: ContextfulTransformer<
 };
 
 /**
+ * Reads the auto-height flag from a widget.
+ *
+ * Auto height is supported by pivot tables and by table charts. `ChartWidgetProps` is not
+ * discriminated by `chartType`, so its `styleOptions` is the union of every chart's style options
+ * and TypeScript cannot narrow it from the `chartType === 'table'` check; a table chart always
+ * carries `TableStyleOptions` at runtime, which is why the narrowing is asserted here.
+ *
+ * @param widgetProps - The widget props to read.
+ * @returns True when the widget supports auto height and has it enabled.
+ */
+const isAutoHeightEnabled = (widgetProps: WidgetProps): boolean => {
+  if (widgetProps.widgetType === 'pivot') {
+    return !!widgetProps.styleOptions?.isAutoHeight;
+  }
+  if (widgetProps.widgetType === 'chart' && widgetProps.chartType === 'table') {
+    return !!(widgetProps.styleOptions as TableStyleOptions | undefined)?.isAutoHeight;
+  }
+  return false;
+};
+
+/**
  * With optionally disabled auto height.
  *
  * @param widgetProps - The widget props to disable the auto height for.
@@ -129,15 +151,13 @@ export const withOptionallyDisabledAutoHeight = (
   widgetProps: WidgetProps,
   shouldDisable: boolean,
 ): WidgetProps => {
-  if (
-    widgetProps.widgetType === 'pivot' &&
-    widgetProps.styleOptions?.isAutoHeight &&
-    shouldDisable
-  ) {
+  if (shouldDisable && isAutoHeightEnabled(widgetProps)) {
+    // Same narrowing limitation as in `isAutoHeightEnabled`: the spread is structurally valid for
+    // both supported widget types, but the union cannot express that without the assertion.
     return {
       ...widgetProps,
       styleOptions: { ...widgetProps.styleOptions, isAutoHeight: false },
-    };
+    } as WidgetProps;
   }
   return widgetProps;
 };
@@ -149,5 +169,5 @@ export const withOptionallyDisabledAutoHeight = (
  * @returns True if all widgets have auto height, false otherwise.
  */
 export const checkForAutoHeight = (widgetProps: WidgetProps[]): boolean => {
-  return widgetProps.every((w) => w.widgetType === 'pivot' && w.styleOptions?.isAutoHeight);
+  return widgetProps.every(isAutoHeightEnabled);
 };

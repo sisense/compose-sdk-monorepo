@@ -33,9 +33,7 @@ export interface CascadingFilterTileProps {
   /** Filter edit callback */
   onEdit?: (levelIndex: number) => void;
   /**
-   * Config for the filter tile
-   *
-   * @internal
+   * Configuration for the filter tile.
    */
   config?: FilterTileConfig;
   /**

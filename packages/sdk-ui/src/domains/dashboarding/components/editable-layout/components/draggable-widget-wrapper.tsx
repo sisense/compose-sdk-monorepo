@@ -1,4 +1,4 @@
-import { ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback, useMemo } from 'react';
 
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
@@ -6,7 +6,6 @@ import styled from '@emotion/styled';
 
 import { Z_INDEX_ACTIVE_DRAGGABLE } from '@/domains/dashboarding/components/editable-layout/const';
 import { EditableLayoutDragData } from '@/domains/dashboarding/components/editable-layout/types';
-import { DragHandleIcon } from '@/shared/icons/drag-handle-icon';
 
 const Wrapper = styled.div<{
   transform?: string | null;
@@ -17,21 +16,38 @@ const Wrapper = styled.div<{
   position: relative;
 `;
 
-const DragHandleWrapper = styled.div`
+/**
+ * A stretch of the widget header that starts a drag. Every piece of the header's drag area — the drag
+ * icon, the JTD icon, the title and the spacers — is wrapped in one of these, so the whole title row
+ * is grabbable rather than just the handle icon.
+ */
+const DragGrabArea = styled.div`
   cursor: move;
   display: flex;
-  width: 100%;
-  min-height: 20px;
   align-items: center;
-  svg {
-    margin-right: 4px;
-  }
-
-  & > div {
-    width: 100%;
-    height: 100%;
-  }
+  width: 100%;
+  height: 100%;
+  min-width: 0;
 `;
+
+/**
+ * The drag activators a draggable widget hands to its header.
+ *
+ * @internal
+ */
+export interface WidgetDragHandle {
+  /** Whether the drag-handle icon should be shown as the header's drag-icon item. */
+  iconVisible: boolean;
+  /** Color to draw the drag-handle icon in. */
+  iconColor?: string;
+  /**
+   * Wraps the header's primary drag affordance (the drag-icon item). Same grab behavior as
+   * {@link WidgetDragHandle.withGrabArea}, plus it registers the element as dnd-kit's activator node.
+   */
+  withActivator: (element: ReactNode) => ReactNode;
+  /** Wraps any other part of the header's drag area, so it starts a drag too. */
+  withGrabArea: (element: ReactNode) => ReactNode;
+}
 
 /**
  * Props for the DraggableWidgetWrapper component
@@ -48,9 +64,10 @@ type DraggableWidgetWrapperProps = {
    */
   data: EditableLayoutDragData;
   /**
-   * The child elements to render inside the wrapper
+   * The child elements to render inside the wrapper, given the drag activators to place in the
+   * widget header.
    */
-  children: (withDragHandle: (element: ReactNode) => ReactNode) => ReactNode;
+  children: (dragHandle: WidgetDragHandle) => ReactNode;
   /**
    * Options for drag handle
    */
@@ -79,16 +96,29 @@ export const DraggableWidgetWrapper = ({
   });
 
   const shouldShowDragHandleIcon = dragHandleOptions?.icon?.visible ?? true;
-  const withDragHandle = useCallback(
+  // The listeners are plain pointer handlers, so every part of the drag area can share them; only the
+  // primary affordance takes the activator ref (dnd-kit uses it for the activator's a11y attributes,
+  // and falls back to the draggable node when no activator is registered).
+  const withActivator = useCallback(
     (element: ReactNode) => (
-      <DragHandleWrapper ref={setActivatorNodeRef} {...listeners}>
-        {shouldShowDragHandleIcon && (
-          <DragHandleIcon aria-label="drag-handle" color={dragHandleOptions?.icon?.color} />
-        )}
-        <div>{element}</div>
-      </DragHandleWrapper>
+      <DragGrabArea ref={setActivatorNodeRef} {...listeners}>
+        {element}
+      </DragGrabArea>
     ),
-    [listeners, dragHandleOptions, shouldShowDragHandleIcon, setActivatorNodeRef],
+    [listeners, setActivatorNodeRef],
+  );
+  const withGrabArea = useCallback(
+    (element: ReactNode) => <DragGrabArea {...listeners}>{element}</DragGrabArea>,
+    [listeners],
+  );
+  const dragHandle = useMemo<WidgetDragHandle>(
+    () => ({
+      iconVisible: shouldShowDragHandleIcon,
+      iconColor: dragHandleOptions?.icon?.color,
+      withActivator,
+      withGrabArea,
+    }),
+    [shouldShowDragHandleIcon, dragHandleOptions?.icon?.color, withActivator, withGrabArea],
   );
 
   return (
@@ -99,7 +129,7 @@ export const DraggableWidgetWrapper = ({
       zIndex={transform ? Z_INDEX_ACTIVE_DRAGGABLE : 10}
       data-testid={`draggable-widget-${id}`}
     >
-      {children(withDragHandle)}
+      {children(dragHandle)}
     </Wrapper>
   );
 };

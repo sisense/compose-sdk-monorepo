@@ -156,10 +156,15 @@ export const JtdDashboard = withTracking({ componentName: 'JtdDashboard', config
         shouldLoadDashboard ? DEFAULT_DASHBOARD_BY_ID_CONFIG : DEFAULT_DASHBOARD_CONFIG,
       );
       const readOnlyTargetConfig = useDefaults(JTD_READ_ONLY_CONFIG, targetConfig);
-      // The pin applies only when the target is loaded by id — there its config carries defaults
-      // derived from the user's permissions on that dashboard. When the caller passes dashboard props
-      // directly, the config is their own and must keep the highest precedence.
-      const baseConfig = shouldLoadDashboard ? readOnlyTargetConfig : targetConfig;
+      // On the props path the pin cannot sit on top: the caller's own config must keep the highest
+      // precedence. It goes under that config and over the code defaults instead, so a permissive
+      // default — `filtersPanel.actions.lockFilter.enabled`, which a hand-assembled dashboard turns
+      // on — cannot reach a popup whose writes are discarded, while an explicit opt-in still can.
+      const proCodeReadOnlyDefaults = useDefaults(JTD_READ_ONLY_CONFIG, DEFAULT_DASHBOARD_CONFIG);
+      const proCodeConfig = useDefaults(finalDashboardProps?.config, proCodeReadOnlyDefaults);
+      // The by-id path pins on top, because there the target's config carries defaults derived from
+      // the user's permissions on that dashboard rather than anything the caller wrote.
+      const baseConfig = shouldLoadDashboard ? readOnlyTargetConfig : proCodeConfig;
 
       // TODO - check if relevant:
       // This entire useMemo could be replaced with:

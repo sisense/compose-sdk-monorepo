@@ -1022,13 +1022,13 @@ export type IndicatorStyleOptions = (
 export interface TableStyleOptions {
   /**
    * Vertical padding around whole table
-   * Default value is 20px
+   * Default value is 8px
    *
    */
   paddingVertical?: number;
   /**
    * Horizontal padding around whole table
-   * Default value is 20px
+   * Default value is 8px
    *
    */
   paddingHorizontal?: number;
@@ -1056,6 +1056,16 @@ export interface TableStyleOptions {
    * 3. Default value of 500px (for component without header) or 525px (for component with header).
    */
   height?: number;
+  /**
+   * Boolean flag whether the height of the component should be automatically adjusted to fit the content
+   *
+   * When enabled, the table grows to fit all rows of the current page without an inner vertical
+   * scrollbar, and reports its height to the containing dashboard row.
+   *
+   * Default value is `false`. Widgets loaded from a Fusion dashboard instead follow the dashboard's
+   * own setting.
+   */
+  isAutoHeight?: boolean;
   /**
    * Header options
    */
@@ -3143,20 +3153,6 @@ export interface WidgetContainerStyleOptions {
     dividerLineColor?: string;
     /** Header background color */
     backgroundColor?: string;
-    /**
-     * Custom toolbar to render to the right of the title
-     *
-     * @sisenseInternal
-     * @deprecated - should be moved out from StyleOptions
-     */
-    renderToolbar?: RenderToolbarHandler;
-    /**
-     * Custom title to render in widget header
-     *
-     * @sisenseInternal
-     * @deprecated - should be moved out from StyleOptions
-     */
-    renderTitle?: RenderTitleHandler;
   };
 }
 
@@ -3170,18 +3166,6 @@ export type NlqChartWidgetStyleOptions = {
     hidden?: boolean;
   };
 };
-
-/** @sisenseInternal */
-export type RenderToolbarHandler = (
-  onRefresh: () => void,
-  defaultToolbar: JSX.Element,
-) => JSX.Element | null;
-
-/** @sisenseInternal */
-export type RenderTitleHandler = (defaultHeaderTitle: ReactNode) => ReactNode;
-
-/** @internal */
-export type TextWidgetRenderToolbarHandler = (defaultToolbar: ReactNode) => ReactNode;
 
 /** Style settings defining the look and feel of the widget created in Fusion */
 export interface WidgetByIdStyleOptions extends WidgetContainerStyleOptions {
@@ -3230,18 +3214,6 @@ export type TextWidgetStyleOptions = {
      * @internal
      */
     hidden?: boolean;
-    /**
-     * Custom toolbar to render to the right of the title
-     *
-     * @internal
-     */
-    renderToolbar?: TextWidgetRenderToolbarHandler;
-    /**
-     * Custom title to render in widget header
-     *
-     * @internal
-     */
-    renderTitle?: RenderTitleHandler;
   };
 };
 

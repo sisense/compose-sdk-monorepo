@@ -28,20 +28,45 @@ type SingleSelectProps<Value> = {
   style?: CSSProperties;
   /** Applies inline styles to the select trigger. */
   fieldStyle?: CSSProperties;
+  /** Applies inline styles to the open list panel (portaled, so not inherited from the trigger). */
+  contentStyle?: CSSProperties;
   className?: string;
   onChange?: (value: Value) => void;
+  /** Selected-item checkmark color (e.g. Filter Style `accentColor`). */
   primaryColor?: string;
   primaryBackgroundColor?: string;
 };
 
-/** @internal */
+/**
+ * Renders a compact single-value dropdown used by FilterWidget date-level
+ * selection and the filter editor.
+ *
+ * @param props - Single-select properties, including items, value, and Filter Style
+ *   trigger / list / accent colors.
+ * @returns Single-select dropdown element.
+ * @internal
+ */
 export function SingleSelect<Value = unknown>(props: SingleSelectProps<Value>) {
-  const { value, items, style, fieldStyle, className, onChange, ...rest } = props;
+  const {
+    value,
+    items,
+    style,
+    fieldStyle,
+    contentStyle,
+    className,
+    onChange,
+    primaryColor,
+    ...rest
+  } = props;
 
   const { themeSettings } = useThemeContext();
   const [open, setOpen] = useState(false);
   const selectElementRef = useRef<HTMLDivElement | null>(null);
   const selectedItem = items.find((item) => item.value === value);
+  const textColor =
+    typeof fieldStyle?.color === 'string'
+      ? fieldStyle.color
+      : themeSettings.general.popover.input.textColor || DEFAULT_TEXT_COLOR;
 
   const handleItemSelect = useCallback(
     (newValue: Value) => {
@@ -65,27 +90,36 @@ export function SingleSelect<Value = unknown>(props: SingleSelectProps<Value>) {
           {...rest}
         >
           {selectedItem?.icon && <SelectIconContainer>{selectedItem?.icon}</SelectIconContainer>}
-          <SelectLabel theme={themeSettings} aria-label="Value">
+          <SelectLabel theme={themeSettings} aria-label="Value" style={{ color: textColor }}>
             <>{selectedItem?.displayValue ?? selectedItem?.value}</>
           </SelectLabel>
           <ArrowDownIcon
             aria-label="Select icon"
-            fill={themeSettings.general.popover.input.textColor || DEFAULT_TEXT_COLOR}
+            fill={textColor}
             style={{
               minWidth: '24px',
               transform: `rotate(${open ? 180 : 0}deg)`,
             }}
           />
         </SelectField>
-        <Popper open={open} anchorEl={selectElementRef.current} preventClickPropagation={true}>
+        <Popper
+          open={open}
+          anchorEl={selectElementRef.current}
+          style={{
+            borderRadius: contentStyle?.borderRadius ?? 4,
+          }}
+          preventClickPropagation={true}
+        >
           <Content
             theme={themeSettings}
             style={{
               minWidth: selectElementRef.current?.clientWidth,
               maxWidth:
                 selectElementRef.current?.clientWidth && selectElementRef.current?.clientWidth * 2,
+              ...contentStyle,
             }}
             aria-label="Single-select content"
+            data-testid="filter-widget-date-level-select-content"
           >
             {items.map((item, index) => (
               <SingleSelectItem
@@ -93,6 +127,7 @@ export function SingleSelect<Value = unknown>(props: SingleSelectProps<Value>) {
                 {...item}
                 selected={item.value === value}
                 onSelect={handleItemSelect}
+                style={primaryColor ? { color: primaryColor } : undefined}
               />
             ))}
           </Content>

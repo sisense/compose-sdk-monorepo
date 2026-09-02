@@ -1,19 +1,17 @@
 export type {
   WidgetHeaderConfig,
+  WidgetHeaderItem,
+  WidgetHeaderItemComponent,
+  WidgetHeaderItemComponentProps,
+  WidgetHeaderItemPosition,
+  WidgetHeaderItemSize,
+  WidgetHeaderItemsTransform,
   WidgetHeaderMenuConfig,
   WidgetHeaderMenuItem,
   WidgetHeaderTitleConfig,
+  WidgetResolvedHeaderItem,
 } from './widget-header-config.js';
-
-/**
- * Config for the info button (data passed into the header/toolbar API)
- */
-export type InfoButtonConfig = {
-  dataSetName?: string;
-  description?: string;
-  errorMessages?: string[];
-  warningMessages?: string[];
-};
+export { WidgetHeaderTargets, type WidgetHeaderTarget } from './widget-header-targets.js';
 
 /**
  * Configuration for inline title editing (e.g. rename widget).

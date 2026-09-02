@@ -86,6 +86,10 @@ export const CriteriaFilterTile = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.onEdit}
      */
     onEdit: Function as PropType<CriteriaFilterTileProps['onEdit']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.config}
+     */
+    config: Object as PropType<CriteriaFilterTileProps['config']>,
   },
 
   setup: (props) => setupHelper(CriteriaFilterTilePreact, props),

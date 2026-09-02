@@ -109,6 +109,12 @@ export class MemberFilterTileComponent implements AfterViewInit, OnChanges, OnDe
   filter!: MemberFilterTileProps['filter'];
 
   /**
+   * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.config}
+   */
+  @Input()
+  config: MemberFilterTileProps['config'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!MemberFilterTileProps.onChange}
    */
   @Output()
@@ -163,6 +169,7 @@ export class MemberFilterTileComponent implements AfterViewInit, OnChanges, OnDe
 
   private getPreactComponentProps(): MemberFilterTilePropsPreact {
     return {
+      config: this.config,
       title: this.title,
       dataSource: this.dataSource,
       attribute: this.attribute,

@@ -20,9 +20,7 @@ export type UnsupportedFilterTileProps = {
   /** Callback to handle filter change (used for lock toggle) */
   onChange?: (filter: Filter) => void;
   /**
-   * Config for the filter tile
-   *
-   * @internal
+   * Configuration for the filter tile.
    */
   config?: FilterTileConfig;
   /**
@@ -31,6 +29,12 @@ export type UnsupportedFilterTileProps = {
    * @internal
    */
   renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
+  /**
+   * When true, the tile is linked to a FilterWidget and rendered read-only.
+   *
+   * @internal
+   */
+  linked?: boolean;
 };
 
 /**
@@ -46,6 +50,7 @@ export const UnsupportedFilterTile = ({
   onChange,
   config,
   renderHeaderTitle,
+  linked,
 }: UnsupportedFilterTileProps) => {
   const { t } = useTranslation();
   const menuItems = useFilterTileMenuItems(filter, config, onChange);
@@ -61,6 +66,7 @@ export const UnsupportedFilterTile = ({
       locked={filter.config.locked}
       toggleVisible={config?.actions?.toggleFilter?.visible}
       expandVisible={config?.actions?.expandFilter?.visible}
+      linked={linked}
       menuItems={menuItems}
       onDelete={onDelete}
       onEdit={onEdit}

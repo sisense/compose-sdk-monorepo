@@ -232,6 +232,26 @@ const translation: TranslationDictionary = {
     allExceptCount: 'Alles behalve {{count}}',
     setupTitle: 'Filterwidget instellen',
     setupSubtitle: 'Stel een dimensie in en configureer hoe het filter werkt',
+    conditionUnsupported: 'Voorwaarde is beschikbaar voor tekst- en numerieke velden',
+    conditionNotRepresentable: 'Deze voorwaarde kan hier niet worden bewerkt',
+    controls: {
+      findInList: 'Zoeken in de lijst',
+      enterValue: 'Voer waarde in...',
+      noMatches: 'Geen overeenkomsten',
+      clearSelection: 'Selectie wissen',
+      overflowCount: '+{{count}}',
+      select: 'Selecteren',
+      selectDateLevel: 'Datumniveau selecteren',
+      selectCondition: 'Conditie selecteren',
+      selectConnector: 'EN/OF selecteren',
+      addCondition: '+ Conditie toevoegen',
+      fillOrRemoveCondition: 'Vul in of verwijder de conditie',
+      rangeOrderError: 'De tweede waarde moet groter zijn dan de eerste',
+      betweenMin: 'Minimum',
+      betweenMax: 'Maximum',
+      selectValues: '{{level}} selecteren',
+      clear: 'Wissen',
+    },
   },
   unsupportedFilterMessage: 'Niet-ondersteund filter (toegepast op de gegevensquery)',
   unsupportedFilter: 'Niet-ondersteund filter {{filter}}',
@@ -363,6 +383,10 @@ const translation: TranslationDictionary = {
       selectAll: 'Alles selecteren',
       clearAll: 'Alles wissen',
     },
+    tooltips: {
+      selectAllPartiallyLoaded:
+        'Niet alle waarden worden weergegeven. Scroll in de lijst naar beneden om de resterende waarden te laden. U kunt ook de voorwaarde "Is niet" hieronder gebruiken om specifieke waarden uit te sluiten.',
+    },
     labels: {
       includeAll: 'Alles opnemen (geen filter toegepast)',
       allowMultiSelection: 'Meervoudige selectie toestaan voor lijsten',
@@ -395,6 +419,7 @@ const translation: TranslationDictionary = {
       greaterThan: 'Groter dan',
       greaterThanOrEqual: 'Gelijk aan of groter dan',
       isWithin: 'Is binnen',
+      between: 'Tussen',
       top: 'Top',
       bottom: 'Laatste',
     },
@@ -497,6 +522,7 @@ const translation: TranslationDictionary = {
     },
     table: {
       label: 'Gegevenstabel',
+      totalRows: 'Totaal aantal rijen: {{formattedCount}}',
     },
     sankey: {
       alerts: {

@@ -34,9 +34,17 @@ export type {
 export { useSyncedState, type UseSyncedStateOptions } from '../shared/hooks/use-synced-state';
 
 // FilterWidget types — referenced by the public WidgetProps union, so they must be
-// docs-visible. The FilterWidget component itself remains @alpha (alpha.ts).
+// docs-visible. Deliberately ungrouped: the docs list the component at the top level and
+// a reader reaches these by navigating from it. The FilterWidget component itself remains
+// @alpha (alpha.ts) until it is ready for pro-code use.
 export type {
   FilterWidgetProps,
   FilterWidgetFilterType,
+  FilterWidgetStyleOptions,
+  FilterWidgetControlStyleOptions,
+  FilterWidgetControlSize,
+  FilterWidgetControlCornerRadius,
+  FilterWidgetControlAlignHorizontal,
+  FilterWidgetControlAlignVertical,
 } from '../domains/widgets/components/filter-widget/index.js';
 export type { FilterWidgetConfig } from '../domains/widgets/components/widget/index.js';

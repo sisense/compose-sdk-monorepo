@@ -437,6 +437,15 @@ describe('extractDashboardFiltersForWidget', () => {
       ] as FilterDto[];
     });
 
+    it('should carry the parent filter identity onto its background filter', () => {
+      // A FilterWidget excludes its own linked filter from its member query by guid; without
+      // the identity the background hanging off it survived that and pinned the dropdown.
+      const { filters } = extractDashboardFiltersForWidget(dummyDashboard, dummyWidget);
+      const backgrounds = filters.slice(-2);
+
+      expect(backgrounds.map((f) => f.config.guid)).toEqual(['filter-1', 'filter-2']);
+    });
+
     it('should extract background filters as "slice" filters', () => {
       const { filters, highlights } = extractDashboardFiltersForWidget(dummyDashboard, dummyWidget);
 

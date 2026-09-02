@@ -109,8 +109,16 @@ TypeScript type aliases for components and hooks listed above
 - [FilterMembersState](type-alias.FilterMembersState.md)
 - [FiltersIgnoringRules](type-alias.FiltersIgnoringRules.md)
 - [FilterThemeSettings](type-alias.FilterThemeSettings.md)
+- [FilterTileMenuItem](type-alias.FilterTileMenuItem.md)
+- [FilterTileMenuTarget](type-alias.FilterTileMenuTarget.md)
 - [FilterVariant](type-alias.FilterVariant.md)
+- [FilterWidgetControlAlignHorizontal](type-alias.FilterWidgetControlAlignHorizontal.md) <Badge type="beta" text="Beta" />
+- [FilterWidgetControlAlignVertical](type-alias.FilterWidgetControlAlignVertical.md) <Badge type="beta" text="Beta" />
+- [FilterWidgetControlCornerRadius](type-alias.FilterWidgetControlCornerRadius.md) <Badge type="beta" text="Beta" />
+- [FilterWidgetControlSize](type-alias.FilterWidgetControlSize.md) <Badge type="beta" text="Beta" />
+- [FilterWidgetControlStyleOptions](type-alias.FilterWidgetControlStyleOptions.md) <Badge type="beta" text="Beta" />
 - [FilterWidgetFilterType](type-alias.FilterWidgetFilterType.md) <Badge type="beta" text="Beta" />
+- [FilterWidgetStyleOptions](type-alias.FilterWidgetStyleOptions.md) <Badge type="beta" text="Beta" />
 - [FormatDataSetOptions](type-alias.FormatDataSetOptions.md)
 - [FormatDateOptions](type-alias.FormatDateOptions.md)
 - [GenericDataOptions](type-alias.GenericDataOptions.md)
@@ -257,8 +265,12 @@ TypeScript type aliases for components and hooks listed above
 - [ValueToColorMap](type-alias.ValueToColorMap.md)
 - [WidgetConfig](type-alias.WidgetConfig.md)
 - [WidgetDataOptions](type-alias.WidgetDataOptions.md)
+- [WidgetHeaderItemComponent](type-alias.WidgetHeaderItemComponent.md)
+- [WidgetHeaderItemPosition](type-alias.WidgetHeaderItemPosition.md)
+- [WidgetHeaderItemsTransform](type-alias.WidgetHeaderItemsTransform.md)
 - [WidgetHeaderMenuItem](type-alias.WidgetHeaderMenuItem.md)
 - [WidgetHeaderMenuTarget](type-alias.WidgetHeaderMenuTarget.md)
+- [WidgetHeaderTarget](type-alias.WidgetHeaderTarget.md)
 - [WidgetId](type-alias.WidgetId.md)
 - [WidgetModelErrorState](type-alias.WidgetModelErrorState.md)
 - [WidgetModelLoadingState](type-alias.WidgetModelLoadingState.md)
@@ -267,6 +279,7 @@ TypeScript type aliases for components and hooks listed above
 - [WidgetNarrativeConfig](type-alias.WidgetNarrativeConfig.md)
 - [WidgetNarrativeDisplayLocation](type-alias.WidgetNarrativeDisplayLocation.md)
 - [WidgetProps](type-alias.WidgetProps.md)
+- [WidgetResolvedHeaderItem](type-alias.WidgetResolvedHeaderItem.md)
 - [WidgetsOptions](type-alias.WidgetsOptions.md)
 - [WidgetsPanelLayout](type-alias.WidgetsPanelLayout.md)
 - [WidgetStyleOptions](type-alias.WidgetStyleOptions.md)

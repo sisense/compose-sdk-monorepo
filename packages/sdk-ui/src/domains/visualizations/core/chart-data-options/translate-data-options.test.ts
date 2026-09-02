@@ -1,4 +1,11 @@
-import { analyticsFactory, Attribute, Column, Measure, MeasureColumn } from '@sisense/sdk-data';
+import {
+  analyticsFactory,
+  Attribute,
+  Column,
+  Measure,
+  MeasureColumn,
+  measureFactory,
+} from '@sisense/sdk-data';
 import { describe } from 'vitest';
 
 import { ChartType } from '../../../../types';
@@ -100,6 +107,22 @@ const indicatorChartDataOptions: IndicatorChartDataOptions = {
   secondary: [meas2Styled],
   min: [meas1min],
   max: [meas1max],
+};
+
+const formulaThresholdMeasure: Measure = measureFactory.customFormula('FormulaThreshold', '100');
+
+const meas1WithFormulaCondition: StyledMeasureColumn = {
+  ...meas1Styled,
+  color: {
+    type: 'conditional',
+    conditions: [
+      { color: 'red', operator: '<', expression: '', valueMeasure: formulaThresholdMeasure },
+    ],
+  },
+};
+
+const indicatorChartDataOptionsWithFormulaCondition: IndicatorChartDataOptions = {
+  value: [meas1WithFormulaCondition],
 };
 
 const scatterDataOptions1: ScatterChartDataOptions = {
@@ -219,6 +242,15 @@ describe('translate data options', () => {
       const chartType = 'indicator';
       const chartDataOptions = translateChartDataOptions(chartType, indicatorChartDataOptions);
       verifyColumns(getMeasures(chartDataOptions, chartType), [meas1, meas2, meas1min, meas1max]);
+    });
+
+    it('includes a formula-driven color condition measure for indicator data options', () => {
+      const chartType = 'indicator';
+      const chartDataOptions = translateChartDataOptions(
+        chartType,
+        indicatorChartDataOptionsWithFormulaCondition,
+      );
+      verifyColumns(getMeasures(chartDataOptions, chartType), [meas1, formulaThresholdMeasure]);
     });
 
     it('returns correct measures for full scatter data options', () => {

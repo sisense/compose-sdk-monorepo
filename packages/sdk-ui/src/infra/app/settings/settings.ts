@@ -162,6 +162,11 @@ type ServerSettings = {
    * From `api/globals` props.aiAssistantAccess; anything but an explicit `true` denies.
    */
   aiAssistantAccess: boolean;
+  /**
+   * Deployment master switch for Agentic Pulse alerts.
+   * From `api/globals` props.pulseAgentic.enabled; anything but an explicit `true` denies.
+   */
+  pulseAgenticEnabled: boolean;
   narrative: {
     /** From `api/v2/settings/ai` narration.enabled */
     isEnabled: boolean;
@@ -368,6 +373,7 @@ async function loadServerSettings(
     ai,
     isManaged: props?.isManagedService === true,
     aiAssistantAccess: props?.aiAssistantAccess === true,
+    pulseAgenticEnabled: props?.pulseAgentic?.enabled === true,
     narrative: {
       isEnabled: apiNarration.isEnabled,
       canGenerateNarrativeViaAI:

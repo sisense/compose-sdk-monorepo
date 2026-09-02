@@ -110,7 +110,9 @@ export interface FiltersPanelConfig {
     /**
      * Configuration for locking a filter.
      *
-     * @internal
+     * A locked filter is rendered read-only: its value cannot be changed from the tile, and the
+     * tile's edit, delete, and enable/disable controls are hidden. Locked filters are also left
+     * untouched by cross-filtering.
      */
     lockFilter?: {
       /**
@@ -120,8 +122,12 @@ export interface FiltersPanelConfig {
        * moment of use. This flag reproduces only the permission half of that requirement, so
        * enabling it offers locking in the filters panel even outside edit mode.
        *
-       * @default `false`, or the user's permissions to both use advanced filters and
-       * toggle edit mode on a Fusion dashboard
+       * On a dashboard loaded by `DashboardById` the Fusion permissions are the only thing that
+       * grants locking, so it stays off when the instance reports none. A panel or dashboard
+       * assembled from props has no permissions to consult and defaults to on.
+       *
+       * @default `true`, or the user's permissions to both use advanced filters and
+       * toggle edit mode on a dashboard loaded by `DashboardById`
        */
       enabled?: boolean;
     };

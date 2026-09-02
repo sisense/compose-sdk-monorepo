@@ -9,6 +9,7 @@ import {
   ColoringService,
   getColoringServiceByColorOptions,
 } from '../../../../../core/chart-data-options/coloring';
+import { withResolvedConditionValues } from '../../../../../core/chart-data-options/coloring/conditional-coloring';
 import { LegacyIndicatorChartOptions } from '../types';
 
 /**
@@ -27,12 +28,18 @@ export type AllowedIndicatorColoringTypes = 'Static' | 'Absolute';
  * Returns the color options from the indicator data options.
  *
  * @param dataOptions - The indicator data options to extract the color options from.
+ * @param colorConditionValues - Resolved values of formula-driven color condition measures,
+ * keyed by their query column name, used to substitute condition thresholds.
  * @returns The color options from the indicator data options.
+ * @internal
  */
-export function getValueColorOptions(dataOptions: IndicatorChartDataOptions) {
+export function getValueColorOptions(
+  dataOptions: IndicatorChartDataOptions,
+  colorConditionValues?: Record<string, number>,
+) {
   const value = dataOptions.value?.[0];
-  if (value && 'color' in value) {
-    return value.color;
+  if (value && 'color' in value && value.color) {
+    return withResolvedConditionValues(colorConditionValues)(value.color);
   }
   return undefined;
 }

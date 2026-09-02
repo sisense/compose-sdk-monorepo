@@ -10,9 +10,9 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { Mock, Mocked } from 'vitest';
 
+import { WidgetModel } from '../components/widgets/widget-model';
 import { type WidgetProps } from '../components/widgets/widget.component';
 import { toPreactWidgetProps, toWidgetProps } from '../helpers/widget-props-preact-translator';
-import { type WidgetModel } from '../sdk-ui-core-exports';
 import { SisenseContextService } from './sisense-context.service';
 import { ThemeService } from './theme.service';
 import { type JumpToDashboardConfig, WidgetService } from './widget.service';

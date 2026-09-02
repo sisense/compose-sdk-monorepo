@@ -2,6 +2,51 @@ import { FilterJaql } from '../../types.js';
 import { createFilterMatcher } from './filter-matcher-utils.js';
 
 describe('createFilterMatcher', () => {
+  describe('datetime members', () => {
+    const datetimeMembersJaql = {
+      datatype: 'datetime',
+      filter: { members: ['2010-01-01T00:00:00'] },
+    } as FilterJaql;
+
+    it('matches a member on the same instant', () => {
+      const filterMatcher = createFilterMatcher(datetimeMembersJaql);
+
+      expect(filterMatcher('2010-01-01T00:00:00')).toBe(true);
+      expect(filterMatcher('2011-01-01T00:00:00')).toBe(false);
+    });
+
+    /**
+     * A pivot on a date dimension asks the matcher about every header cell, and a subtotal
+     * caption is not a date. This used to throw `RangeError: Invalid time value` out of
+     * `toISOString()` and take down the whole render.
+     */
+    it('does not match — and does not throw on — a value that is not a date at all', () => {
+      const filterMatcher = createFilterMatcher(datetimeMembersJaql);
+
+      expect(() => filterMatcher('Q1 2010 Total')).not.toThrow();
+      expect(filterMatcher('Q1 2010 Total')).toBe(false);
+      expect(filterMatcher('Grand Total')).toBe(false);
+    });
+
+    it('still matches an unparseable value against an equally unparseable member', () => {
+      const filterMatcher = createFilterMatcher({
+        datatype: 'datetime',
+        filter: { members: ['Q1 2010 Total'] },
+      } as FilterJaql);
+
+      expect(filterMatcher('Q1 2010 Total')).toBe(true);
+    });
+
+    it('does not match one unparseable value against a different one', () => {
+      const filterMatcher = createFilterMatcher({
+        datatype: 'datetime',
+        filter: { members: ['Grand Total'] },
+      } as FilterJaql);
+
+      expect(filterMatcher('Q1 2010 Total')).toBe(false);
+    });
+  });
+
   it('should create a filter matcher for specific items', () => {
     const membersFilterJaql = {
       datatype: 'text',

@@ -17,6 +17,7 @@ import { getDefaultDateMask } from '@/domains/query-execution/core/date-formats/
 import { usePrevious } from '@/shared/hooks/use-previous';
 import { createLevelAttribute } from '@/shared/utils/create-level-attribute';
 import { isSameAttribute } from '@/shared/utils/filters';
+import { parseISOWithTimezoneCheck } from '@/shared/utils/parseISOWithTimezoneCheck';
 
 import { SingleSelect } from '../common';
 import { ScrollWrapperOnScrollEvent } from '../common/scroll-wrapper';
@@ -207,14 +208,16 @@ export const DatetimeMembersSection = (props: DatetimeMembersSectionProps) => {
   );
 
   const selectedDaysMembers = useMemo(() => {
-    return isDaysLevel ? selectedMembers.map((member) => new Date(member)) : undefined;
+    return isDaysLevel
+      ? selectedMembers.map((member) => parseISOWithTimezoneCheck(member))
+      : undefined;
   }, [selectedMembers, isDaysLevel]);
 
   const normalizedLimits = useMemo(() => {
     return limits
       ? {
-          minDate: limits.minDate ? new Date(limits.minDate) : undefined,
-          maxDate: limits.maxDate ? new Date(limits.maxDate) : undefined,
+          minDate: limits.minDate ? parseISOWithTimezoneCheck(limits.minDate) : undefined,
+          maxDate: limits.maxDate ? parseISOWithTimezoneCheck(limits.maxDate) : undefined,
         }
       : undefined;
   }, [limits]);

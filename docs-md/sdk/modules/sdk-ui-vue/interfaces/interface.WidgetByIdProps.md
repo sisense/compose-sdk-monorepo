@@ -57,7 +57,7 @@ If not specified, the default value is `false`.
 
 #### config
 
-> **config**?: [`ChartWidgetConfig`](interface.ChartWidgetConfig.md)
+> **config**?: [`WidgetConfig`](../type-aliases/type-alias.WidgetConfig.md)
 
 Configuration of the widget
 

@@ -2,6 +2,7 @@
 import { fireEvent, render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { WidgetHeaderTargets } from '../../shared/widget-header/widget-header-targets';
 import { isTextWidgetProps, TextWidget } from './text-widget';
 import { TextWidgetProps } from './types';
 
@@ -150,80 +151,47 @@ describe('TextWidget', () => {
         expect(headerElement).toBeInTheDocument();
       });
 
-      it('should render custom title when renderTitle is provided', () => {
-        const customTitle = 'Custom Widget Title';
-        const renderTitleMock = vi.fn(() => <div data-testid="custom-title">{customTitle}</div>);
-
+      it('renders a custom header item from config.header.items', () => {
         const props: TextWidgetProps = {
           styleOptions: {
             html: '<p>Sample Text</p>',
             bgColor: '#ffffff',
             vAlign: 'valign-top',
+            header: {},
+          },
+          config: {
             header: {
-              renderTitle: renderTitleMock,
+              items: [
+                {
+                  id: 'custom',
+                  size: { width: 80 },
+                  component: () => <div data-testid="custom-header-item">Custom</div>,
+                },
+              ],
             },
           },
         };
-        const { getByTestId, getByText } = render(<TextWidget {...props} />);
+        const { getByTestId } = render(<TextWidget {...props} />);
 
-        expect(renderTitleMock).toHaveBeenCalledWith(null);
-        expect(getByTestId('custom-title')).toBeInTheDocument();
-        expect(getByText(customTitle)).toBeInTheDocument();
+        expect(getByTestId('custom-header-item')).toBeInTheDocument();
       });
 
-      it('should render custom toolbar when renderToolbar is provided', () => {
-        const customToolbar = 'Custom Toolbar';
-        const renderToolbarMock = vi.fn(() => (
-          <div data-testid="custom-toolbar">{customToolbar}</div>
-        ));
-
+      it('never renders the info button — a text widget has no query to inspect', () => {
         const props: TextWidgetProps = {
           styleOptions: {
             html: '<p>Sample Text</p>',
             bgColor: '#ffffff',
             vAlign: 'valign-top',
-            header: {
-              renderToolbar: renderToolbarMock,
-            },
+            header: {},
           },
         };
-        const { getByTestId, getByText } = render(<TextWidget {...props} />);
+        const { container, queryByTestId } = render(<TextWidget {...props} />);
 
-        expect(renderToolbarMock).toHaveBeenCalledWith(null);
-        expect(getByTestId('custom-toolbar')).toBeInTheDocument();
-        expect(getByText(customToolbar)).toBeInTheDocument();
+        expect(container.querySelector('.text-widget-header')).toBeInTheDocument();
+        expect(queryByTestId('header-item-widget-header-info-button')).not.toBeInTheDocument();
       });
 
-      it('should render both custom title and toolbar when both are provided', () => {
-        const customTitle = 'Custom Title';
-        const customToolbar = 'Custom Toolbar';
-        const renderTitleMock = vi.fn(() => <div data-testid="custom-title">{customTitle}</div>);
-        const renderToolbarMock = vi.fn(() => (
-          <div data-testid="custom-toolbar">{customToolbar}</div>
-        ));
-
-        const props: TextWidgetProps = {
-          styleOptions: {
-            html: '<p>Sample Text</p>',
-            bgColor: '#ffffff',
-            vAlign: 'valign-top',
-            header: {
-              renderTitle: renderTitleMock,
-              renderToolbar: renderToolbarMock,
-            },
-          },
-        };
-        const { getByTestId, getByText } = render(<TextWidget {...props} />);
-
-        expect(renderTitleMock).toHaveBeenCalledWith(null);
-        expect(renderToolbarMock).toHaveBeenCalledWith(null);
-        expect(getByTestId('custom-title')).toBeInTheDocument();
-        expect(getByTestId('custom-toolbar')).toBeInTheDocument();
-        expect(getByText(customTitle)).toBeInTheDocument();
-        expect(getByText(customToolbar)).toBeInTheDocument();
-      });
-
-      it('should render empty title and toolbar sections when header is provided but no render functions', () => {
+      it('renders only the spacers when nothing is configured — a text widget has no title', () => {
         const props: TextWidgetProps = {
           styleOptions: {
             html: '<p>Sample Text</p>',
@@ -234,65 +202,60 @@ describe('TextWidget', () => {
         };
         const { container } = render(<TextWidget {...props} />);
 
-        const headerElement = container.querySelector('.text-widget-header');
-        expect(headerElement).toBeInTheDocument();
-
-        // Should have title and toolbar divs but they should be empty
-        const titleElement = headerElement?.querySelector('div:first-child');
-        const toolbarElement = headerElement?.querySelector('div:last-child');
-
-        expect(titleElement).toBeInTheDocument();
-        expect(toolbarElement).toBeInTheDocument();
-        expect(titleElement?.textContent).toBe('');
-        expect(toolbarElement?.textContent).toBe('');
+        const renderedIds = Array.from(
+          container.querySelectorAll('[data-testid^="header-item-"]'),
+        ).map((cell) => (cell.getAttribute('data-testid') as string).replace('header-item-', ''));
+        expect(renderedIds).toEqual([
+          WidgetHeaderTargets.TitleAlignmentSpacer,
+          WidgetHeaderTargets.Spacer,
+        ]);
       });
 
-      it('should handle renderTitle returning null', () => {
-        const renderTitleMock = vi.fn(() => null);
-
+      // The header is an overlay on top of the body, and the body is itself a click target (e.g. a
+      // jump-to-dashboard source). The strip and its empty spacers must therefore be transparent to
+      // the pointer, or a click on the text lands on the spacer instead.
+      it('lets clicks through the header overlay and its spacers to the body underneath', () => {
         const props: TextWidgetProps = {
           styleOptions: {
             html: '<p>Sample Text</p>',
             bgColor: '#ffffff',
             vAlign: 'valign-top',
-            header: {
-              renderTitle: renderTitleMock,
-            },
+            header: {},
           },
         };
         const { container } = render(<TextWidget {...props} />);
 
-        expect(renderTitleMock).toHaveBeenCalledWith(null);
-        const headerElement = container.querySelector('.text-widget-header');
-        expect(headerElement).toBeInTheDocument();
+        const headerElement = container.querySelector('.text-widget-header') as HTMLElement;
+        expect(getComputedStyle(headerElement).pointerEvents).toBe('none');
 
-        const titleElement = headerElement?.querySelector('div:first-child');
-        expect(titleElement).toBeInTheDocument();
-        expect(titleElement?.textContent).toBe('');
+        const spacers = container.querySelectorAll<HTMLElement>('[data-testid^="header-item-"]');
+        expect(spacers.length).toBeGreaterThan(0);
+        spacers.forEach((spacer) => expect(spacer.style.pointerEvents).toBe('none'));
       });
 
-      it('should handle renderToolbar returning null', () => {
-        const renderToolbarMock = vi.fn(() => null);
-
+      it('keeps a rendered header item clickable inside the pass-through overlay', () => {
         const props: TextWidgetProps = {
           styleOptions: {
             html: '<p>Sample Text</p>',
             bgColor: '#ffffff',
             vAlign: 'valign-top',
+            header: {},
+          },
+          config: {
             header: {
-              renderToolbar: renderToolbarMock,
+              items: [
+                {
+                  id: 'custom',
+                  size: { width: 80 },
+                  component: () => <div data-testid="custom-header-item">Custom</div>,
+                },
+              ],
             },
           },
         };
-        const { container } = render(<TextWidget {...props} />);
+        const { getByTestId } = render(<TextWidget {...props} />);
 
-        expect(renderToolbarMock).toHaveBeenCalledWith(null);
-        const headerElement = container.querySelector('.text-widget-header');
-        expect(headerElement).toBeInTheDocument();
-
-        const toolbarElement = headerElement?.querySelector('div:last-child');
-        expect(toolbarElement).toBeInTheDocument();
-        expect(toolbarElement?.textContent).toBe('');
+        expect(getByTestId('header-item-custom').style.pointerEvents).toBe('auto');
       });
     });
 

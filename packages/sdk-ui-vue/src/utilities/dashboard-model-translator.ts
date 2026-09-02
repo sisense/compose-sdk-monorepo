@@ -1,9 +1,7 @@
-import {
-  type DashboardModel,
-  dashboardModelTranslator as dashboardModelTranslatorPreact,
-} from '@sisense/sdk-ui-preact';
+import { dashboardModelTranslator as dashboardModelTranslatorPreact } from '@sisense/sdk-ui-preact';
 
 import type { DashboardProps } from '../components/dashboard';
+import type { DashboardModel } from '../components/dashboard/dashboard-model';
 import { toDashboardProps as toVueDashboardProps } from '../helpers/dashboard-props-preact-translator';
 
 /**

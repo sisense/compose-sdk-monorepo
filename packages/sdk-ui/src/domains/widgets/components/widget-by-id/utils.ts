@@ -4,14 +4,8 @@ import { WidgetModel } from '@/domains/widgets/widget-model';
 import { WidgetTypeInternal } from '@/domains/widgets/widget-model/types.js';
 import { TranslatableError } from '@/infra/translation/translatable-error.js';
 import { ChartProps, PivotTableProps } from '@/props';
-import { combineHandlers, composeToolbarHandlers } from '@/shared/utils/combine-handlers';
-import {
-  ChartStyleOptions,
-  ChartType,
-  CustomWidgetEventProps,
-  RenderToolbarHandler,
-  WidgetContainerStyleOptions,
-} from '@/types.js';
+import { combineHandlers } from '@/shared/utils/combine-handlers';
+import { ChartStyleOptions, ChartType, CustomWidgetEventProps } from '@/types.js';
 
 import { ChartWidgetProps } from '../chart-widget/types';
 import { CommonWidgetProps } from '../common-widget/types';
@@ -51,6 +45,7 @@ const fusionWidgetTypeToChartType: Partial<Record<FusionWidgetType, ChartType>> 
   sankey: 'sankey',
   'chart/scatter': 'scatter',
   indicator: 'indicator',
+  kpi: 'kpi',
   'chart/boxplot': 'boxplot',
   'map/scatter': 'scattermap',
   'map/area': 'areamap',
@@ -189,6 +184,7 @@ export function isSupportedWidgetType(
     'sankey',
     'chart/scatter',
     'indicator',
+    'kpi',
     'tablewidget',
     'tablewidgetagg',
     'pivot',
@@ -491,26 +487,6 @@ export function registerDataPointsSelectedHandler(
   if (isChartWidgetProps(widgetProps) || isCustomWidgetProps(widgetProps)) {
     widgetProps.onDataPointsSelected = combineHandlers([widgetProps.onDataPointsSelected, handler]);
   }
-}
-
-/**
- * Registers new "renderToolbar" handler for the constructed component
- *
- * @internal
- */
-export function registerRenderToolbarHandler(
-  widgetProps: WidgetProps,
-  handler: RenderToolbarHandler,
-): void {
-  const widgetStyleOptions = widgetProps.styleOptions as WidgetContainerStyleOptions;
-
-  widgetProps.styleOptions = {
-    ...widgetStyleOptions,
-    header: {
-      ...widgetStyleOptions?.header,
-      renderToolbar: composeToolbarHandlers(widgetStyleOptions?.header?.renderToolbar, handler),
-    },
-  } as ChartStyleOptions;
 }
 
 export function getEnabledPanelItems(panels: Panel[], panelName: string) {

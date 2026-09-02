@@ -335,4 +335,27 @@ describe('criteria tests', () => {
     );
     expect(await screen.findByLabelText('Filter tile menu')).toBeInTheDocument();
   });
+
+  it('renders linked indicator and disables controls when linked to a FilterWidget', async () => {
+    const textAttribute = createAttribute({
+      name: 'Brand',
+      type: 'text-attribute',
+      expression: '[Commerce.Brand]',
+    });
+    render(
+      <MockedSisenseContextProvider>
+        <CriteriaFilterTile
+          title="Brand"
+          filter={filterFactory.contains(textAttribute, 'd')}
+          onUpdate={vi.fn()}
+          onDelete={vi.fn()}
+          linked
+        />
+      </MockedSisenseContextProvider>,
+    );
+
+    expect(await screen.findByTestId('filter-tile-linked-indicator')).toBeInTheDocument();
+    expect(screen.getByTestId('filter-delete-button')).toBeDisabled();
+    expect(screen.getByRole('switch', { name: 'Enable/disable filter' })).toBeDisabled();
+  });
 });

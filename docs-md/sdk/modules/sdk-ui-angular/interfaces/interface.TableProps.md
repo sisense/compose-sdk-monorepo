@@ -63,6 +63,24 @@ const sampleData = {
 
 Filters that will slice query results
 
+***
+
+#### includeTotalRows <Badge type="beta" text="Beta" />
+
+> **includeTotalRows**?: `boolean`
+
+Boolean flag whether to request the total row count of the table's query,
+ignoring the `count`/`offset` paging used to load table pages.
+
+When enabled, the total is shown next to the pagination control and used to
+render accurate page-number links, including direct links to the last pages.
+
+Row count feature requires a Sisense instance version of 2026.3.0 or greater.
+On older versions, the table still loads and paginates as before, and the
+total-rows label is not shown.
+
+If not specified, the default value is `false`
+
 ### Callbacks
 
 #### dataReady

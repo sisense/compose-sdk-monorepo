@@ -1,13 +1,23 @@
 import { ChartWidget as ChartWidgetPreact } from '@sisense/sdk-ui-preact';
-import type { ChartWidgetProps } from '@sisense/sdk-ui-preact';
+import type { ChartWidgetProps as ChartWidgetPropsPreact } from '@sisense/sdk-ui-preact';
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 
 import { setupHelper } from '../../helpers/setup-helper';
 import type { Chart } from '../charts';
+import type { ChartWidgetConfig } from './widget-config';
 
-// Note: uses direct reexport as a temporary workaround for getting the correct API docs
-export { ChartWidgetProps };
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!ChartWidget | `ChartWidget`} component.
+ */
+export interface ChartWidgetProps extends Omit<ChartWidgetPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!ChartWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: ChartWidgetConfig;
+}
 
 /**
  * The Chart Widget component extending the {@link Chart} component to support widget style options.

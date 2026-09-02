@@ -1,11 +1,13 @@
 /** @vitest-environment jsdom */
-import { renderHook } from '@testing-library/react';
+import { render, renderHook } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { WidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config';
 import { useSisenseContextMock } from '@/infra/contexts/sisense-context/__mocks__/sisense-context';
 import type { SisenseContextPayload } from '@/infra/contexts/sisense-context/sisense-context';
 
+import { WidgetHeaderTargets } from '../../shared/widget-header/widget-header-targets';
 import type { ChartWidgetProps } from './types';
 import { useChartWidgetNarrative } from './use-chart-widget-narrative';
 
@@ -13,8 +15,12 @@ vi.mock('@/infra/contexts/sisense-context/sisense-context');
 vi.mock('@/domains/narrative/components/widget-narrative', () => ({
   WidgetNarrative: () => null,
 }));
+// A real (if bare) button, so a test can drive the contributed narrative-toggle item the way the
+// header does — by rendering its component and clicking it.
 vi.mock('@/domains/narrative/components/narrative-trigger-button', () => ({
-  NarrativeTriggerButton: () => null,
+  NarrativeTriggerButton: ({ onClick }: { onClick: () => void }) => (
+    <button data-testid="widget-narrative-trigger-button" onClick={onClick} />
+  ),
 }));
 
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
@@ -115,18 +121,15 @@ describe('useChartWidgetNarrative', () => {
       expect(result.current.narrativeAloneContent).toBeNull();
     });
 
-    it('does not inject the trigger toolbar when global narrativeConfig.enabled=false', () => {
+    it('does not contribute the trigger button when global narrativeConfig.enabled=false', () => {
       useSisenseContextMock.mockReturnValue(makeContextMock({ globalNarrativeEnabled: false }));
-      const originalStyleOptions = {
-        header: { hidden: false },
-      } as ChartWidgetProps['styleOptions'];
       const { result } = renderHook(() =>
         useChartWidgetNarrative({
           propsWithDrilldown: makeProps({ enabled: true, autoShow: false }),
-          styleOptions: originalStyleOptions,
+          styleOptions: { header: { hidden: false } } as ChartWidgetProps['styleOptions'],
         }),
       );
-      expect(result.current.styleOptionsWithNarrative).toBe(originalStyleOptions);
+      expect(result.current.narrativeToggleItem).toBeUndefined();
     });
 
     it('shows narrative when global narrativeConfig.enabled=true and the widget enables it', () => {
@@ -207,63 +210,60 @@ describe('useChartWidgetNarrative', () => {
     });
   });
 
-  describe('trigger button toolbar injection', () => {
-    it('injects renderToolbar when autoShow=false and canGenerateNarrativeViaAI=true', () => {
+  describe('trigger button contribution', () => {
+    it('contributes the trigger button when autoShow=false and canGenerateNarrativeViaAI=true', () => {
       const { result } = renderHook(() =>
         useChartWidgetNarrative({
           propsWithDrilldown: makeProps({ enabled: true, autoShow: false }),
           styleOptions: undefined,
         }),
       );
-      expect(result.current.styleOptionsWithNarrative?.header?.renderToolbar).toBeDefined();
+      expect(result.current.narrativeToggleItem?.id).toBe(WidgetHeaderTargets.NarrativeToggle);
     });
 
-    it('passes styleOptions through unchanged when autoShow=true (no trigger needed)', () => {
-      const originalStyleOptions = {
-        header: { hidden: false },
-      } as ChartWidgetProps['styleOptions'];
+    it('does not contribute the trigger button when autoShow=true (no trigger needed)', () => {
       const { result } = renderHook(() =>
         useChartWidgetNarrative({
           propsWithDrilldown: makeProps({ enabled: true, autoShow: true }),
-          styleOptions: originalStyleOptions,
+          styleOptions: undefined,
         }),
       );
-      expect(result.current.styleOptionsWithNarrative).toBe(originalStyleOptions);
+      expect(result.current.narrativeToggleItem).toBeUndefined();
     });
 
-    it('passes styleOptions through unchanged when canGenerateNarrativeViaAI=false', () => {
+    it('does not contribute the trigger button when canGenerateNarrativeViaAI=false', () => {
       useSisenseContextMock.mockReturnValue(makeContextMock({ canGenerateNarrativeViaAI: false }));
-      const originalStyleOptions = {
-        header: { hidden: false },
-      } as ChartWidgetProps['styleOptions'];
       const { result } = renderHook(() =>
         useChartWidgetNarrative({
           propsWithDrilldown: makeProps({ enabled: true, autoShow: false }),
-          styleOptions: originalStyleOptions,
+          styleOptions: undefined,
         }),
       );
-      expect(result.current.styleOptionsWithNarrative).toBe(originalStyleOptions);
+      expect(result.current.narrativeToggleItem).toBeUndefined();
     });
 
-    it('wraps existing renderToolbar when one is already provided', () => {
-      const existingToolbar = vi.fn(() => <div data-testid="existing-toolbar" />);
-      const originalStyleOptions = {
-        header: { renderToolbar: existingToolbar },
-      } as unknown as ChartWidgetProps['styleOptions'];
-
+    it('shows the narrative once the toggle is clicked', async () => {
+      const user = userEvent.setup();
       const { result } = renderHook(() =>
         useChartWidgetNarrative({
-          propsWithDrilldown: makeProps({ enabled: true, autoShow: false }),
-          styleOptions: originalStyleOptions,
+          propsWithDrilldown: makeProps({
+            enabled: true,
+            autoShow: false,
+            displayLocation: 'below',
+          }),
+          styleOptions: undefined,
         }),
       );
 
-      const renderToolbar = result.current.styleOptionsWithNarrative?.header?.renderToolbar;
-      expect(renderToolbar).toBeDefined();
+      // Nothing is shown until the toggle is used; the item is opaque to the widget, so this drives
+      // it the way the header does — by rendering its component.
+      expect(result.current.narrativeBottomSlot).toBeNull();
+      const { getByTestId } = render(
+        <>{result.current.narrativeToggleItem?.component({ size: { width: 28, height: 28 } })}</>,
+      );
+      await user.click(getByTestId('widget-narrative-trigger-button'));
 
-      // Calling renderToolbar should invoke the original toolbar
-      renderToolbar?.(() => {}, <div data-testid="default-toolbar" />);
-      expect(existingToolbar).toHaveBeenCalledOnce();
+      expect(result.current.narrativeBottomSlot).not.toBeNull();
     });
   });
 

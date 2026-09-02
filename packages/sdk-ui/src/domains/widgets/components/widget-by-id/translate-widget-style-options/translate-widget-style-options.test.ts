@@ -9,6 +9,7 @@ import {
   FunnelStyleOptions,
   LineStyleOptions,
   StackableStyleOptions,
+  TableStyleOptions,
 } from '@/types.js';
 
 import { jaqlMock } from '../__mocks__/jaql-mock.js';
@@ -1017,9 +1018,12 @@ describe('translate widget style options', () => {
       };
 
       const expectedOptions = {
-        columns: { alternatingColor: { enabled: true } },
+        columns: { alternatingColor: { enabled: true }, width: undefined },
         rows: { alternatingColor: { enabled: false } },
         header: { color: { enabled: true } },
+        rowsPerPage: undefined,
+        // Fusion treats a missing `automaticHeight` as enabled.
+        isAutoHeight: true,
       };
 
       expect(extractStyleOptions('tablewidget', mockWidgetDto('', widgetStyle, []))).toEqual(
@@ -1029,6 +1033,24 @@ describe('translate widget style options', () => {
         expectedOptions,
       );
     });
+
+    it.each([
+      { automaticHeight: true, expected: true },
+      { automaticHeight: false, expected: false },
+      { automaticHeight: undefined, expected: true },
+    ])(
+      'maps automaticHeight $automaticHeight to isAutoHeight $expected',
+      ({ automaticHeight, expected }) => {
+        const widgetStyle = { 'colors/headers': true, automaticHeight };
+
+        const styleOptions = extractStyleOptions(
+          'tablewidget',
+          mockWidgetDto('', widgetStyle, []),
+        ) as TableStyleOptions;
+
+        expect(styleOptions.isAutoHeight).toBe(expected);
+      },
+    );
     it('should extract table column auto width correctly', () => {
       const widgetStyleAutoWidth = {
         'width/window': true,

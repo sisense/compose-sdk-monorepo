@@ -1,3 +1,5 @@
+import { FormulaJaql } from '@sisense/sdk-data';
+
 import {
   ConditionalDataColorOptions,
   DataColorOptions,
@@ -16,6 +18,21 @@ import {
   PanelColorFormatRange,
   PanelColorFormatSingle,
 } from './types.js';
+
+const formulaJaql: FormulaJaql = {
+  title: 'Target',
+  formula: 'sum([D0447-281])',
+  context: {
+    '[D0447-281]': {
+      title: 'Total Revenue',
+      dim: '[Commerce.Revenue]',
+      datatype: 'numeric',
+      agg: 'sum',
+      table: 'Commerce',
+      column: 'Revenue',
+    },
+  },
+};
 
 describe('createValueColorOptions', () => {
   const paletteColors = ['#00cee6'] as Color[];
@@ -124,6 +141,24 @@ describe('createValueColorOptions', () => {
       ],
       defaultColor: '#00cee6',
     });
+  });
+
+  it('should create a conditional color option with a resolved measure for a formula-driven condition', () => {
+    const format = {
+      type: 'condition',
+      conditions: [
+        { expression: '10', color: 'blue', operator: '>' },
+        { expression: { jaql: formulaJaql }, color: 'red', operator: '<' },
+      ],
+    } as PanelColorFormatConditional;
+    const options = createValueColorOptions(format, paletteColors) as ConditionalDataColorOptions;
+
+    expect(options.conditions).toHaveLength(2);
+    expect(options.conditions![0]).toEqual({ expression: '10', color: 'blue', operator: '>' });
+    expect(options.conditions![1].color).toBe('red');
+    expect(options.conditions![1].operator).toBe('<');
+    expect(options.conditions![1].valueMeasure).toBeDefined();
+    expect(options.conditions![1].valueMeasure!.name).toBe('Target');
   });
 
   it('should create uniform color options for unknown type', () => {
@@ -283,21 +318,51 @@ describe('createPanelColorFormat', () => {
     });
   });
 
-  it('should create conditional format and filter non-string expressions', () => {
+  it('should create conditional format, converting a formula-driven condition back into a jaql expression', () => {
+    const dataOptions = createValueColorOptions(
+      {
+        type: 'condition',
+        conditions: [{ expression: { jaql: formulaJaql }, color: 'red', operator: '<' }],
+      } as PanelColorFormatConditional,
+      paletteColors,
+    ) as ConditionalDataColorOptions;
+
     const options: ConditionalDataColorOptions = {
       type: 'conditional',
       conditions: [
         { color: 'red', expression: 'value > 10', operator: '>' },
         { color: 'blue', expression: 'value < 0', operator: '<' },
-        { color: 'green', expression: { jaql: {} } as unknown as string, operator: '=' },
+        dataOptions.conditions![0],
       ],
       defaultColor: '#00cee6',
     };
-    expect(createPanelColorFormat(options, paletteColors)).toEqual({
+    const roundTripped = createPanelColorFormat(options, paletteColors);
+
+    expect(roundTripped).toEqual({
       type: 'condition',
       conditions: [
         { color: 'red', expression: 'value > 10', operator: '>' },
         { color: 'blue', expression: 'value < 0', operator: '<' },
+        {
+          color: 'red',
+          expression: {
+            // `context.column`/`context.table` are intentionally dropped by the JAQL <-> measure
+            // conversion, so only the fields that survive the round trip are asserted here.
+            jaql: expect.objectContaining({
+              formula: formulaJaql.formula,
+              title: formulaJaql.title,
+              context: {
+                '[D0447-281]': expect.objectContaining({
+                  title: 'Total Revenue',
+                  dim: '[Commerce.Revenue]',
+                  datatype: 'numeric',
+                  agg: 'sum',
+                }),
+              },
+            }),
+          },
+          operator: '<',
+        },
       ],
     });
   });

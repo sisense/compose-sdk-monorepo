@@ -14,7 +14,12 @@ import { DateIcon } from '../../../../icons';
 import { useDatetimeFormatter } from '../../../hooks/use-datetime-formatter';
 import { SelectField, SelectLabel } from '../base';
 import { CalendarRangeValue, CalendarSelectLimits, CalendarSelectTypes } from './types';
-import { getCalendarDateSelectorMode, getCalendarSelectedItemsDisplayValue } from './utils';
+import {
+  getCalendarDateSelectorMode,
+  getCalendarSelectedItemsDisplayValue,
+  toLocalCalendarDate,
+  toUtcCalendarDate,
+} from './utils';
 
 type BaseCalendarSelectProps = {
   limits?: CalendarSelectLimits;
@@ -55,7 +60,7 @@ export function CalendarSelect(props: CalendarSelectProps) {
   const handleDateChange = useCallback(
     (date: dayjs.Dayjs) => {
       if (type === CalendarSelectTypes.SINGLE_SELECT) {
-        onChange?.(date.toDate());
+        onChange?.(toUtcCalendarDate(date));
       }
     },
     [type, onChange],
@@ -64,7 +69,7 @@ export function CalendarSelect(props: CalendarSelectProps) {
   const handleDatesChange = useCallback(
     (dates: dayjs.Dayjs[]) => {
       if (type === CalendarSelectTypes.MULTI_SELECT) {
-        onChange?.(dates.map((date) => date.toDate()));
+        onChange?.(dates.map(toUtcCalendarDate));
       }
     },
     [type, onChange],
@@ -77,8 +82,8 @@ export function CalendarSelect(props: CalendarSelectProps) {
         type === CalendarSelectTypes.RANGE_TO_SELECT
       ) {
         onChange?.({
-          from: range.from.toDate(),
-          to: range.to.toDate(),
+          from: toUtcCalendarDate(range.from),
+          to: toUtcCalendarDate(range.to),
         });
       }
     },
@@ -87,14 +92,14 @@ export function CalendarSelect(props: CalendarSelectProps) {
 
   const selectedDate = useMemo(() => {
     if (type === CalendarSelectTypes.SINGLE_SELECT && value) {
-      return dayjs(value);
+      return toLocalCalendarDate(value);
     }
     return undefined;
   }, [type, value]);
 
   const selectedDates = useMemo(() => {
     if (type === CalendarSelectTypes.MULTI_SELECT && value?.length) {
-      return value.map((date) => dayjs(date));
+      return value.map(toLocalCalendarDate);
     }
     return undefined;
   }, [type, value]);
@@ -105,8 +110,8 @@ export function CalendarSelect(props: CalendarSelectProps) {
       type === CalendarSelectTypes.RANGE_TO_SELECT
     ) {
       return {
-        ...(value?.from && { from: dayjs(value.from) }),
-        ...(value?.to && { to: dayjs(value.to) }),
+        ...(value?.from && { from: toLocalCalendarDate(value.from) }),
+        ...(value?.to && { to: toLocalCalendarDate(value.to) }),
       };
     }
     return undefined;
@@ -130,8 +135,8 @@ export function CalendarSelect(props: CalendarSelectProps) {
   const normalizedLimits = useMemo(() => {
     return limits
       ? {
-          minDate: limits.minDate ? dayjs(limits.minDate) : undefined,
-          maxDate: limits.maxDate ? dayjs(limits.maxDate) : undefined,
+          minDate: limits.minDate ? toLocalCalendarDate(limits.minDate) : undefined,
+          maxDate: limits.maxDate ? toLocalCalendarDate(limits.maxDate) : undefined,
         }
       : undefined;
   }, [limits]);

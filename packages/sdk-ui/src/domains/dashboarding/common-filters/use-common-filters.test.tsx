@@ -11,9 +11,10 @@ import {
   isTextWidgetProps,
 } from '@/domains/widgets/components/widget-by-id/utils';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import { WidgetHeaderTargets } from '@/domains/widgets/shared/widget-header/widget-header-targets';
 import { MenuOptions } from '@/infra/contexts/menu-provider/types';
 import { DataPointEventHandler, DataPointsEventHandler } from '@/props';
-import { CartesianChartDataOptions, DataPoint, RenderToolbarHandler } from '@/types';
+import { CartesianChartDataOptions, DataPoint } from '@/types';
 
 import { useCommonFilters } from './use-common-filters.js';
 
@@ -80,7 +81,7 @@ describe('useCommonFilters', () => {
    */
   const getChartDataPointHandler = (
     widget: WidgetProps,
-    key: 'onDataPointClick' | 'onDataPointsSelected' | 'onRenderToolbar',
+    key: 'onDataPointClick' | 'onDataPointsSelected',
   ) => {
     // Dynamic handler lookup on chart-widget props in a test helper; `any` mirrors the previous
     // (implicit-any) behavior so the result is assignable to the various handler types.
@@ -88,11 +89,14 @@ describe('useCommonFilters', () => {
   };
 
   /**
-   * Helper function to render toolbar callback from chart widget props
+   * Helper reading the "clear selection" built-in header item input off connected widget props.
    */
-  const getRenderToolbarHandler = (widget: WidgetProps) => {
-    return isChartWidgetProps(widget) ? widget.styleOptions?.header?.renderToolbar : undefined;
-  };
+  const getClearSelectionButtonItem = (widget: WidgetProps) =>
+    isChartWidgetProps(widget)
+      ? widget.config?.header?.items?.find(
+          (item) => item.id === WidgetHeaderTargets.ClearSelectionButton,
+        )
+      : undefined;
 
   describe('connectToWidgetProps()', () => {
     let widgetPropsMock: WidgetProps;
@@ -444,7 +448,7 @@ describe('useCommonFilters', () => {
       expect(connectedWidget.onBeforeMenuOpen).toEqual(onBeforeMenuOpen);
     });
 
-    it('should clear selected filters via connected onRenderToolbar handler', async () => {
+    it('should clear selected filters via the connected clear-selection input', async () => {
       const initialFilters = [
         filterFactory.members(DM.Commerce.AgeRange, ['0-18'], { guid: '123' }),
       ];
@@ -453,13 +457,12 @@ describe('useCommonFilters', () => {
         shouldAffectFilters: true,
       });
 
-      const onRenderToolbar: RenderToolbarHandler | undefined =
-        getRenderToolbarHandler(connectedWidget);
+      const clearSelectionItem = getClearSelectionButtonItem(connectedWidget);
 
-      expect(onRenderToolbar).toBeDefined();
-      if (!onRenderToolbar) return;
+      expect(clearSelectionItem).toBeDefined();
+      if (!clearSelectionItem) return;
 
-      render(onRenderToolbar(() => {}, null as unknown as JSX.Element));
+      render(<>{clearSelectionItem.component({ size: { width: 28, height: 28 } })}</>);
 
       expect(await screen.findByText('commonFilter.clearSelectionButton')).toBeInTheDocument();
 
@@ -606,7 +609,7 @@ describe('useCommonFilters', () => {
       expect(getProperty(connectedWidget, 'filters')).toEqual([backgroundFilter]);
     });
 
-    it('should clear selected filters with keeping background filters via connected onRenderToolbar handler', async () => {
+    it('should clear selected filters with keeping background filters via the connected clear-selection input', async () => {
       const backgroundFilter = filterFactory.members(DM.Commerce.AgeRange, [
         '0-18',
         '19-24',
@@ -622,13 +625,12 @@ describe('useCommonFilters', () => {
         shouldAffectFilters: true,
       });
 
-      const onRenderToolbar: RenderToolbarHandler | undefined =
-        getRenderToolbarHandler(connectedWidget);
+      const clearSelectionItem = getClearSelectionButtonItem(connectedWidget);
 
-      expect(onRenderToolbar).toBeDefined();
-      if (!onRenderToolbar) return;
+      expect(clearSelectionItem).toBeDefined();
+      if (!clearSelectionItem) return;
 
-      render(onRenderToolbar(() => {}, null as unknown as JSX.Element));
+      render(<>{clearSelectionItem.component({ size: { width: 28, height: 28 } })}</>);
 
       expect(await screen.findByText('commonFilter.clearSelectionButton')).toBeInTheDocument();
 

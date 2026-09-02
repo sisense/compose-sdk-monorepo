@@ -56,9 +56,7 @@ export interface MemberFilterTileProps {
   /** Design options for the tile @internal */
   tileDesignOptions?: FilterTileDesignOptions;
   /**
-   * Config for the filter tile
-   *
-   * @internal
+   * Configuration for the filter tile.
    */
   config?: FilterTileConfig;
 

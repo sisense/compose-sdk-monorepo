@@ -185,6 +185,35 @@ describe('getSettings function', () => {
     );
   });
 
+  it('resolves pulseAgenticEnabled from globals props', async () => {
+    const clientWithFlag = (enabled: boolean | undefined) => ({
+      get: vi.fn().mockImplementation((url: string) => {
+        switch (url) {
+          case 'api/globals':
+            return Promise.resolve({
+              ...mockGlobals,
+              props: {
+                ...mockGlobals.props,
+                pulseAgentic: enabled === undefined ? undefined : { enabled },
+              },
+            });
+          case 'api/v2/settings/ai':
+            return Promise.resolve({ narration: { enabled: false, sisenseAIEnabled: false } });
+          default:
+            return null;
+        }
+      }),
+      url: 'http://test.com/',
+    });
+
+    expect((await getAppSettings({}, clientWithFlag(true), true)).pulseAgenticEnabled).toBe(true);
+    expect((await getAppSettings({}, clientWithFlag(false), true)).pulseAgenticEnabled).toBe(false);
+    // Absent is not a grant on the client, regardless of ai-integration's own absent-key default.
+    expect((await getAppSettings({}, clientWithFlag(undefined), true)).pulseAgenticEnabled).toBe(
+      false,
+    );
+  });
+
   it('allows consumers to read arbitrary loosely-typed feature flags from ai.featureFlags', async () => {
     const settings = await getAppSettings({}, mockHttpClient, false);
 

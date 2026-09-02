@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { MenuActionItem } from '@/shared/types/menu-item';
 
-import { FILTER_TILE_LOCK_MENU_ITEM_ID } from '../../../shared/use-filter-tile-menu-items/use-filter-tile-lock-menu-item';
+import { FilterTileMenuTargets } from '../../filter-tile/filter-tile-menu-targets';
 
 /**
  * Builds the lock menu item for the cascading filter tile.
@@ -29,7 +29,7 @@ export function useCascadingFilterTileLockMenuItem({
   return useMemo(() => {
     return {
       type: 'action' as const,
-      id: FILTER_TILE_LOCK_MENU_ITEM_ID,
+      id: FilterTileMenuTargets.Lock,
       caption: lockCaption(),
       onClick: onLockToggle,
     };

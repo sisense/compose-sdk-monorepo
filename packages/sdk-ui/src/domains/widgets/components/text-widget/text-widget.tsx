@@ -1,9 +1,10 @@
-import { FunctionComponent, type MouseEvent } from 'react';
+import { FunctionComponent, type MouseEvent, useMemo } from 'react';
 
 import styled from '@emotion/styled';
 import DOMPurify from 'dompurify';
 import get from 'lodash-es/get';
 
+import { HeaderItemsRenderer } from '@/domains/shared/header';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import {
@@ -15,7 +16,12 @@ import {
 import { useTrackWidgetInit } from '../../hooks/use-track-widget-init';
 import { getWidgetEntityId } from '../../hooks/widget-entity-id';
 import { getTextWidgetName, getWidgetTitle } from '../../hooks/widget-tracking-adapters';
-import { WidgetHeaderMenu } from '../../shared/widget-header/widget-header-menu';
+import {
+  WIDGET_HEADER_ITEM_SIZE,
+  WIDGET_HEADER_ITEMS_GAP,
+} from '../../shared/widget-header/constants';
+import { useWidgetHeaderMenu } from '../../shared/widget-header/features/use-widget-header-menu';
+import { useResolvedWidgetHeaderItems } from '../../shared/widget-header/use-resolved-widget-header-items';
 import { WidgetSpaceAround } from '../../shared/widget-style-utils';
 import { TextWidgetProps } from './types';
 
@@ -72,6 +78,14 @@ const TextWidgetContainer = styled.div<Stylable>`
   }
 `;
 
+/**
+ * The text widget has no title bar of its own: the header floats over the top of the body, revealed
+ * on hover. Because it overlays the content, the strip itself must stay transparent to the pointer —
+ * its full-width spacer would otherwise sit between the cursor and the text and swallow every click
+ * on the widget body (which is itself a click target, e.g. as a jump-to-dashboard source). Header
+ * item cells that actually drew something take pointer events back (see `HeaderItemCell`), so the
+ * menu and any custom items stay clickable.
+ */
 const TextWidgetHeader = styled.div`
   position: absolute;
   width: 100%;
@@ -80,12 +94,9 @@ const TextWidgetHeader = styled.div`
   left: 0;
   padding: 5px 10px;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   visibility: hidden;
-`;
-
-const TextWidgetHeaderTitle = styled.div`
-  flex-grow: 1;
+  pointer-events: none;
 `;
 
 const InnerHtml = styled.div`
@@ -110,6 +121,10 @@ export const TextWidget: FunctionComponent<TextWidgetProps> = asSisenseComponent
   const sanitizedHtml = DOMPurify.sanitize(html);
   const { themeSettings } = useThemeContext();
 
+  // A text widget has no title and no query result: the only header feature it uses is the menu.
+  const fullHeaderConfig = useWidgetHeaderMenu(props.config?.header);
+  const resolvedHeaderItems = useResolvedWidgetHeaderItems({ config: fullHeaderConfig });
+
   const handleContainerClick = (event: MouseEvent<HTMLDivElement>) => {
     if (props.onDataPointClick) {
       const point: TextWidgetDataPoint = {
@@ -129,12 +144,12 @@ export const TextWidget: FunctionComponent<TextWidgetProps> = asSisenseComponent
         cursor={props.onDataPointClick ? 'pointer' : 'default'}
       >
         {!isHeaderHidden && (
-          <TextWidgetHeader className={'text-widget-header'}>
-            <TextWidgetHeaderTitle>{header?.renderTitle?.(null)}</TextWidgetHeaderTitle>
-            <div>
-              {header?.renderToolbar?.(null)}
-              <WidgetHeaderMenu config={props.config?.header?.menu} />
-            </div>
+          <TextWidgetHeader className={'text-widget-header'} data-component="header-container">
+            <HeaderItemsRenderer
+              items={resolvedHeaderItems}
+              defaultSize={WIDGET_HEADER_ITEM_SIZE}
+              gap={WIDGET_HEADER_ITEMS_GAP}
+            />
           </TextWidgetHeader>
         )}
         <InnerHtml dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />

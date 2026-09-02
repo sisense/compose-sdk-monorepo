@@ -18,6 +18,8 @@ import type {
   FunnelStyleOptions,
   GaugeIndicatorStyleOptions,
   IndicatorStyleOptions,
+  KpiStyleOptions,
+  KpiValueMode,
   LegendOptions,
   LineOptions,
   LineStyleOptions,
@@ -50,6 +52,7 @@ import type {
   CalendarHeatmapWidgetStyle,
   CartesianWidgetStyle,
   FunnelWidgetStyle,
+  KpiWidgetStyle,
   PivotWidgetStyle,
   PolarWidgetStyle,
   SankeyWidgetStyle,
@@ -638,6 +641,39 @@ export function toSankeyWidgetStyle(styleOptions: SankeyStyleOptions): SankeyWid
 }
 
 /**
+ * Converts kpi chart style options to Fusion KpiWidgetStyle DTO.
+ * Inverse of {@link extractKpiChartStyleOptions}. Carries every style group whole, including
+ * fields with no Design control — see {@link KpiWidgetStyle}.
+ *
+ * `valueMode` lives on {@link KpiChartDataOptions} in the WidgetModel rather than on
+ * `styleOptions`, so it is passed in separately and written into the DTO style — the same
+ * treatment `boxType` / `outliersEnabled` get in {@link toBoxplotWidgetStyle}. It is omitted
+ * when unset, leaving the chart's own `'last'` default to apply on the way back in.
+ *
+ * @param styleOptions - Kpi style options from WidgetModel.styleOptions
+ * @param valueMode - Headline value mode from WidgetModel.dataOptions.valueMode
+ * @returns Fusion KpiWidgetStyle for the widget DTO
+ * @internal
+ */
+export function toKpiWidgetStyle(
+  styleOptions: KpiStyleOptions,
+  valueMode?: KpiValueMode,
+): KpiWidgetStyle {
+  // Every group is carried whole. Fields with no Design control (`comparison.color`,
+  // a `'spline'` sparkline, `card.backgroundColor`, …) are still round-tripped rather than
+  // dropped — see {@link KpiWidgetStyle} for why erasing them would be the worse default.
+  return {
+    ...(styleOptions.layout && { layout: styleOptions.layout }),
+    ...(valueMode && { valueMode }),
+    ...(styleOptions.value && { value: styleOptions.value }),
+    ...(styleOptions.title && { title: styleOptions.title }),
+    ...(styleOptions.sparkline && { sparkline: styleOptions.sparkline }),
+    ...(styleOptions.comparison && { comparison: styleOptions.comparison }),
+    ...(styleOptions.card && { card: styleOptions.card }),
+  };
+}
+
+/**
  * Converts treemap chart style options to Fusion TreemapWidgetStyle DTO.
  * Inverse of {@link extractTreemapChartStyleOptions}.
  *
@@ -928,6 +964,7 @@ export function toTableWidgetStyle(styleOptions: TableStyleOptions): TableWidget
     'colors/columns': styleOptions.columns?.alternatingColor?.enabled ?? false,
     'width/content': columnsWidth === 'content' || columnsWidth === undefined,
     'width/window': columnsWidth === 'auto',
+    ...(styleOptions.isAutoHeight !== undefined && { automaticHeight: styleOptions.isAutoHeight }),
   };
 }
 

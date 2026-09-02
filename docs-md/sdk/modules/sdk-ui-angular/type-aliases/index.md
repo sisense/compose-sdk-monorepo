@@ -80,6 +80,8 @@ TypeScript type aliases for components and services listed above
 - [FilterEditEventHandler](type-alias.FilterEditEventHandler.md)
 - [FiltersPanelChangeEvent](type-alias.FiltersPanelChangeEvent.md)
 - [FiltersPanelChangeEventHandler](type-alias.FiltersPanelChangeEventHandler.md)
+- [FilterTileMenuItem](type-alias.FilterTileMenuItem.md)
+- [FilterTileMenuTarget](type-alias.FilterTileMenuTarget.md)
 - [FilterVariant](type-alias.FilterVariant.md)
 - [FilterWidgetFilterType](type-alias.FilterWidgetFilterType.md) <Badge type="beta" text="Beta" />
 - [FormatDataSetOptions](type-alias.FormatDataSetOptions.md)

@@ -45,7 +45,7 @@ export const DEFAULT_DASHBOARD_CONFIG: DeepRequired<
         enabled: false,
       },
       lockFilter: {
-        enabled: false,
+        enabled: true,
       },
       toggleFilter: {
         visible: true,
@@ -86,6 +86,13 @@ export const DEFAULT_DASHBOARD_BY_ID_CONFIG: DeepRequired<
   }
 > = {
   ...DEFAULT_DASHBOARD_CONFIG,
+  filtersPanel: {
+    ...DEFAULT_DASHBOARD_CONFIG.filtersPanel,
+    actions: {
+      ...DEFAULT_DASHBOARD_CONFIG.filtersPanel.actions,
+      lockFilter: { enabled: false },
+    },
+  },
   persist: false,
   sharedMode: false,
 };

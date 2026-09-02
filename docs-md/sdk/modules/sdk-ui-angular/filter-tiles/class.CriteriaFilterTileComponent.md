@@ -92,6 +92,14 @@ Arrangement of the filter inputs. Use vertical for standard filter tiles and hor
 
 ***
 
+#### config
+
+> **config**: [`FilterTileConfig`](../interfaces/interface.FilterTileConfig.md) \| `undefined`
+
+Configuration for the filter tile.
+
+***
+
 #### filter
 
 > **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)

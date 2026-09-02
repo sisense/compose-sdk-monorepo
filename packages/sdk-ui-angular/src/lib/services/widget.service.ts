@@ -15,6 +15,7 @@ import {
   createThemeContextConnector,
 } from '../component-wrapper-helpers';
 import { type DashboardConfig } from '../components/dashboard/dashboard.component';
+import { type WidgetModel } from '../components/widgets/widget-model';
 import { type WidgetProps } from '../components/widgets/widget.component';
 import { TrackableService } from '../decorators/trackable.decorator';
 import { toPreactWidgetProps, toWidgetProps } from '../helpers/widget-props-preact-translator';
@@ -78,7 +79,7 @@ export class WidgetService {
    * @param params - Parameters to identify the target widget
    * @returns Widget model
    */
-  async getWidgetModel(params: GetWidgetModelParams) {
+  async getWidgetModel(params: GetWidgetModelParams): Promise<WidgetModel> {
     const { dashboardOid, widgetOid } = params;
     const app = await this.sisenseContextService.getApp();
     return getWidgetModel(app.httpClient, dashboardOid, widgetOid);

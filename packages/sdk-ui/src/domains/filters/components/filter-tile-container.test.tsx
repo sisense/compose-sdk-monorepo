@@ -4,6 +4,8 @@ import { I18nextProvider } from 'react-i18next';
 import { screen } from '@testing-library/react';
 
 import { setup } from '@/__test-helpers__';
+import { getDefaultThemeSettings } from '@/infra/contexts/theme-provider/default-theme-settings.js';
+import { ThemeContext } from '@/infra/contexts/theme-provider/theme-context.js';
 import { i18nextInstance } from '@/infra/translation/initialize-i18n.js';
 
 import { FilterTileContainer } from './filter-tile-container.js';
@@ -293,5 +295,28 @@ describe('FilterTileContainer', () => {
       // tabIndex=0 keeps the tooltip reachable via keyboard focus.
       expect(info).toHaveAttribute('tabindex', '0');
     });
+  });
+
+  describe('locked overlay', () => {
+    it('should not render the overlay when the tile is not locked', async () => {
+      setup(<FilterTileContainer renderContent={() => <></>} />);
+      expect(screen.queryByTestId('filter-tile-locked-overlay')).toBeNull();
+    });
+
+    it.each([
+      ['light', false, '#ffffff'],
+      ['dark', true, '#16161C'],
+    ])(
+      'should tint the overlay with the %s theme background rather than a hardcoded white',
+      async (_name, isDarkMode, expectedColor) => {
+        setup(
+          <ThemeContext.Provider value={{ themeSettings: getDefaultThemeSettings(isDarkMode) }}>
+            <FilterTileContainer renderContent={() => <></>} locked />
+          </ThemeContext.Provider>,
+        );
+        const overlay = await screen.findByTestId('filter-tile-locked-overlay');
+        expect(overlay).toHaveStyle({ backgroundColor: expectedColor });
+      },
+    );
   });
 });

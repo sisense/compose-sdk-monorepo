@@ -102,6 +102,7 @@ examples/plugins-demo/demo-plugin/.prettierrc
 examples/plugins-demo/angular/.angular
 
 .reports/changelog-release.md
+.reports/releases/
 .reports/doc-tag-usage-report/TAG_USAGE_REPORT.md
 .reports/.personal/
 

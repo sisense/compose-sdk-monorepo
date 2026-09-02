@@ -31,13 +31,21 @@ import type {
   PivotTableEventProps,
   WithoutPreactChartEventProps,
 } from '../../types';
+import { type PivotTableWidgetConfig } from './widget-config';
 
 /**
  * Props of the {@link PivotTableWidgetComponent}.
  */
 export interface PivotTableWidgetProps
-  extends WithoutPreactChartEventProps<PivotTableWidgetPropsPreact>,
-    PivotTableEventProps {}
+  extends Omit<WithoutPreactChartEventProps<PivotTableWidgetPropsPreact>, 'config'>,
+    PivotTableEventProps {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: PivotTableWidgetConfig;
+}
 
 /**
  * The Pivot Table Widget component extends the {@link PivotTableComponent} component to support widget features,

@@ -133,10 +133,15 @@ export function getDashboardBackgroundFilters(
 ) {
   const dashboardBackgroundFilters: FilterDto[] = [];
 
-  splitCascadingDashboardFilters(dashboardFilters).forEach(({ jaql }) => {
+  splitCascadingDashboardFilters(dashboardFilters).forEach(({ jaql, instanceid }) => {
     const { backgroundFilter } = extractFilterModelFromJaql(jaql);
     if (backgroundFilter) {
       dashboardBackgroundFilters.push({
+        /* Its parent's identity, so a consumer that drops a particular filter drops the
+           background hanging off it too. A FilterWidget excludes its own linked filter from its
+           member query — self-filtering would pin the dropdown to the selection it just made —
+           and without this the background survived that exclusion and did the pinning anyway. */
+        instanceid,
         jaql: {
           ...jaql,
           filter: backgroundFilter,
@@ -245,7 +250,7 @@ function getHighlightsAllowedPanelNames(widgetType: FusionWidgetType) {
     case 'pivot2':
       return ['rows', 'columns'];
     default:
-      // Note: all other widgets are not support highlight filters. For example: funnel, table, indicator
+      // Note: all other widgets are not support highlight filters. For example: funnel, table, indicator, kpi
       return [];
   }
 }

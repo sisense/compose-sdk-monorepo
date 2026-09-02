@@ -149,6 +149,13 @@ export type IndicatorChartData = {
   secondary?: number;
   min?: number;
   max?: number;
+  /**
+   * Resolved values of formula-driven color condition measures, keyed by their query
+   * column name (see `DataColorCondition.valueMeasure`).
+   *
+   * @internal
+   */
+  colorConditionValues?: Record<string, number>;
 };
 
 /**

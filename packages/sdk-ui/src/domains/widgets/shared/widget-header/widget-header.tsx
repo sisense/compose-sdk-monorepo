@@ -1,63 +1,49 @@
-import { useTranslation } from 'react-i18next';
-
 import styled from '@emotion/styled';
 import Divider from '@mui/material/Divider';
 import get from 'lodash-es/get';
 
+import { HeaderItemsRenderer } from '@/domains/shared/header';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
-import { InlineTextEditor } from '@/shared/components/inline-text-editor/inline-text-editor.js';
-import { AlignmentTypes, WidgetContainerStyleOptions } from '@/types';
+import { WidgetContainerStyleOptions } from '@/types';
 
-import { InfoButtonConfig, TitleEditorConfig, WidgetHeaderConfig } from './types.js';
-import { WidgetHeaderMenu } from './widget-header-menu.js';
-import { WidgetHeaderToolbar } from './widget-header-toolbar.js';
+import {
+  WIDGET_HEADER_ITEM_SIZE,
+  WIDGET_HEADER_ITEMS_GAP,
+  WIDGET_HEADER_MIN_HEIGHT,
+} from './constants.js';
+import { WidgetHeaderConfig } from './types.js';
+import { useResolvedWidgetHeaderItems } from './use-resolved-widget-header-items.js';
 
 export interface WidgetHeaderProps {
-  onRefresh: () => void;
-  title?: string;
-  /** Configuration options for the info button */
-  infoButtonConfig: InfoButtonConfig;
   /** Style options for the widget header */
   styleOptions?: WidgetContainerStyleOptions['header'];
-  /** Header configuration (e.g. the header menu). */
+  /**
+   * Header configuration: every item that lands in the header — the widget's own (marked built-ins),
+   * the consumer's, and `onBeforeRender`.
+   */
   config?: WidgetHeaderConfig;
-  /** Inline title editor config (injected at runtime when rename is enabled). */
-  titleEditor?: TitleEditorConfig;
-}
-
-function getTextAlignment(type: AlignmentTypes): 'left' | 'center' | 'right' {
-  return type.toLowerCase() as 'left' | 'center' | 'right';
 }
 
 type WidgetHeaderStyleable = {
   styleOptions?: WidgetContainerStyleOptions['header'];
 };
 
+/**
+ * Widget header.
+ *
+ * Pure layout: {@link useResolvedWidgetHeaderItems} orders the widget's items into the header's slots
+ * and applies the consumer's {@link WidgetHeaderConfig}, and this draws the result as a single row
+ * plus the divider underneath.
+ */
 export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
-  title,
-  infoButtonConfig,
   styleOptions,
-  onRefresh,
   config,
-  titleEditor,
 }: WidgetHeaderProps) => {
   const { themeSettings } = useThemeContext();
-  const { t } = useTranslation();
   const showDivider = get(styleOptions, 'dividerLine', themeSettings.widget.header.dividerLine);
 
-  const titleContent = titleEditor ? (
-    <InlineTextEditor
-      value={title ?? ''}
-      isEditing={titleEditor.isEditing}
-      onEditingChange={titleEditor.onEditingChange}
-      onCommit={titleEditor.onCommit}
-      onCancel={titleEditor.onCancel}
-      placeholder={t('widgetHeader.addTitle')}
-    />
-  ) : (
-    title
-  );
+  const resolvedItems = useResolvedWidgetHeaderItems({ config, styleOptions });
 
   return (
     <div data-component="widget-header">
@@ -66,18 +52,11 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
         theme={themeSettings}
         data-component="header-container"
       >
-        <Title styleOptions={styleOptions} theme={themeSettings} data-component="title">
-          {styleOptions?.renderTitle?.(titleContent) ?? titleContent}
-        </Title>
-        {/* Note: the menu button is rendered after the toolbar so it stays fixed on the right side */}
-        <ToolbarContainer data-component="toolbar-container">
-          <WidgetHeaderToolbar
-            infoButtonConfig={infoButtonConfig}
-            styleOptions={styleOptions}
-            onRefresh={onRefresh}
-          />
-          <WidgetHeaderMenu config={config?.menu} />
-        </ToolbarContainer>
+        <HeaderItemsRenderer
+          items={resolvedItems}
+          defaultSize={WIDGET_HEADER_ITEM_SIZE}
+          gap={WIDGET_HEADER_ITEMS_GAP}
+        />
       </HeaderContainer>
       {showDivider && (
         <WidgetHeaderDivider
@@ -96,30 +75,9 @@ const HeaderContainer = styled.div<WidgetHeaderStyleable & Themable>`
   align-items: center;
   padding-left: 8px;
   padding-right: 8px;
-  min-height: 32px;
+  min-height: ${WIDGET_HEADER_MIN_HEIGHT}px;
   background-color: ${({ styleOptions, theme }) =>
     styleOptions?.backgroundColor || theme.widget.header.backgroundColor};
-`;
-
-const Title = styled.div<WidgetHeaderStyleable & Themable>`
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-align: ${({ styleOptions, theme }) =>
-    getTextAlignment(styleOptions?.titleAlignment || theme.widget.header.titleAlignment)};
-  color: ${({ styleOptions, theme }) =>
-    styleOptions?.titleTextColor || theme.widget.header.titleTextColor};
-  font-family: ${({ theme }) => theme.typography?.fontFamily ?? 'inherit'};
-  font-size: ${({ theme }) => {
-    const size = theme.widget.header.titleFontSize;
-    return typeof size === 'number' ? `${size}px` : size;
-  }};
-`;
-
-const ToolbarContainer = styled.div`
-  margin-left: auto;
-  display: flex;
-  align-items: center;
 `;
 
 const WidgetHeaderDivider = styled(Divider)<WidgetHeaderStyleable & Themable>`

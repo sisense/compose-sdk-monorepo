@@ -1,11 +1,9 @@
 import { Widget as WidgetPreact } from '@sisense/sdk-ui-preact';
 import type {
-  ChartWidgetProps,
-  CustomWidgetProps,
-  FilterWidgetProps,
-  PivotTableWidgetProps as PivotTableWidgetPropsPreact,
+  CustomWidgetProps as CustomWidgetPropsPreact,
+  FilterWidgetProps as FilterWidgetPropsPreact,
   SoftUnion,
-  TextWidgetProps,
+  TextWidgetProps as TextWidgetPropsPreact,
   WidgetProps as WidgetPropsPreact,
   WithCommonWidgetProps,
 } from '@sisense/sdk-ui-preact';
@@ -13,10 +11,49 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 
 import { setupHelper } from '../../helpers/setup-helper';
+import type { ChartWidgetProps } from './chart-widget';
+import type { PivotTableWidgetProps } from './pivot-table-widget';
+import type { CustomWidgetConfig, FilterWidgetConfig, TextWidgetConfig } from './widget-config';
 
-export { WithCommonWidgetProps, TextWidgetProps, CustomWidgetProps };
+export { WithCommonWidgetProps };
 
-export interface PivotTableWidgetProps extends PivotTableWidgetPropsPreact {}
+/**
+ * Props for the text widget component.
+ */
+export interface TextWidgetProps extends Omit<TextWidgetPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!TextWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: TextWidgetConfig;
+}
+
+/**
+ * Props for the custom widget component
+ */
+export interface CustomWidgetProps extends Omit<CustomWidgetPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!CustomWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: CustomWidgetConfig;
+}
+
+/**
+ * Props for the filter widget component.
+ *
+ * @beta
+ */
+export interface FilterWidgetProps extends Omit<FilterWidgetPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!FilterWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: FilterWidgetConfig;
+}
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!Widget | `Widget`} component.

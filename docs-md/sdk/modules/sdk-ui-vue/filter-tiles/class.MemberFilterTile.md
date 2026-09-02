@@ -55,6 +55,14 @@ Attribute to filter on. A query will run to fetch all this attribute's members
 
 ***
 
+### config
+
+> **`readonly`** **config**?: [`FilterTileConfig`](../interfaces/interface.FilterTileConfig.md)
+
+Configuration for the filter tile.
+
+***
+
 ### dataSource
 
 > **`readonly`** **dataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)

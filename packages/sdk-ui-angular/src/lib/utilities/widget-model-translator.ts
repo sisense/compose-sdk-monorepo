@@ -1,7 +1,4 @@
-import {
-  type WidgetModel,
-  widgetModelTranslator as widgetModelTranslatorPreact,
-} from '@sisense/sdk-ui-preact';
+import { widgetModelTranslator as widgetModelTranslatorPreact } from '@sisense/sdk-ui-preact';
 
 import {
   ChartProps,
@@ -10,6 +7,7 @@ import {
   PivotTableWidgetProps,
   TableProps,
   type TextWidgetProps,
+  type WidgetModel,
   type WidgetProps,
 } from '../components';
 import * as fromPreactChart from '../helpers/chart-props-preact-translator';

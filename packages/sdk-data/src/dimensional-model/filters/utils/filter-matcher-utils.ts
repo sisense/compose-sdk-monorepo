@@ -21,7 +21,13 @@ const defaultDatetimeFormatter: Formatter = (value?: string | number) => {
   if (value === undefined) {
     return undefined;
   }
-  return new Date(value).toISOString();
+  const asDate = new Date(value);
+  /* Not every value reaching a datetime matcher is a date. A pivot on a date dimension
+     asks it about each header cell, and a subtotal caption ("Q1 2010 Total") is not
+     parseable — `toISOString()` throws `RangeError: Invalid time value` on those, taking
+     the whole render down with it. Falling back to the raw value keeps the matcher's one
+     job intact: an unparseable cell does not equal an ISO member, so it does not match. */
+  return Number.isNaN(asDate.getTime()) ? `${value}` : asDate.toISOString();
 };
 const defaultMatcher = () => false;
 

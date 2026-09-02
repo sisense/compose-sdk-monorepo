@@ -73,6 +73,12 @@ TypeScript interfaces for components and hooks listed above
 - [FilterMembersSuccessState](interface.FilterMembersSuccessState.md)
 - [FiltersPanelConfig](interface.FiltersPanelConfig.md)
 - [FiltersPanelProps](interface.FiltersPanelProps.md)
+- [FilterTileActionsConfig](interface.FilterTileActionsConfig.md)
+- [FilterTileConfig](interface.FilterTileConfig.md)
+- [FilterTileHeaderConfig](interface.FilterTileHeaderConfig.md)
+- [FilterTileMenuActionItem](interface.FilterTileMenuActionItem.md)
+- [FilterTileMenuConfig](interface.FilterTileMenuConfig.md)
+- [FilterTileMenuSubmenuItem](interface.FilterTileMenuSubmenuItem.md)
 - [FilterTileProps](interface.FilterTileProps.md)
 - [FilterWidgetConfig](interface.FilterWidgetConfig.md) <Badge type="beta" text="Beta" />
 - [FilterWidgetProps](interface.FilterWidgetProps.md) <Badge type="beta" text="Beta" />
@@ -175,6 +181,9 @@ TypeScript interfaces for components and hooks listed above
 - [WidgetByIdStyleOptions](interface.WidgetByIdStyleOptions.md)
 - [WidgetContainerStyleOptions](interface.WidgetContainerStyleOptions.md)
 - [WidgetHeaderConfig](interface.WidgetHeaderConfig.md)
+- [WidgetHeaderItem](interface.WidgetHeaderItem.md)
+- [WidgetHeaderItemComponentProps](interface.WidgetHeaderItemComponentProps.md)
+- [WidgetHeaderItemSize](interface.WidgetHeaderItemSize.md)
 - [WidgetHeaderMenuActionItem](interface.WidgetHeaderMenuActionItem.md)
 - [WidgetHeaderMenuConfig](interface.WidgetHeaderMenuConfig.md)
 - [WidgetHeaderMenuSubmenuItem](interface.WidgetHeaderMenuSubmenuItem.md)

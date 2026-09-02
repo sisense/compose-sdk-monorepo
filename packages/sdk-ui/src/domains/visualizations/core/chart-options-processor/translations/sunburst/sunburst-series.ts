@@ -25,6 +25,15 @@ export function prepareSunburstDataItems(
     custom: { level: 0, levelsCount: chartData.xAxisCount },
   };
 
+  // When chart has no categories, attaching a value to a root to prevent Highcharts id label
+  if (dataOptions.breakBy.length === 0) {
+    const rootValue = chartData.series[0]?.data[0]?.value;
+
+    return typeof rootValue === 'number' && !Number.isNaN(rootValue)
+      ? [{ ...rootDataItem, value: rootValue }]
+      : [];
+  }
+
   // prepareTreemapDataItems used here because treemap and sunburst
   // have similar data items structure, just sunburst need few more changes after
   const dataItems = prepareTreemapDataItems(chartData, dataOptions, themeSettings).map((item) => {

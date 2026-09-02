@@ -90,11 +90,30 @@ export const translateCategoricalChartDataOptions = (
   };
 };
 
+/**
+ * Extracts the hidden measures backing the value column's formula-driven conditional color
+ * rules, so they get added to the query alongside it.
+ */
+const getColorConditionMeasures = (
+  value: StyledMeasureColumn[] | undefined,
+): StyledMeasureColumn[] => {
+  const color = value?.[0]?.color;
+  if (!color || typeof color === 'string' || color.type !== 'conditional') {
+    return [];
+  }
+  return (color.conditions ?? [])
+    .filter((condition) => condition.valueMeasure)
+    .map((condition) => ({ column: condition.valueMeasure! }));
+};
+
 const translateIndicatorChartDataOptions = (
   indicatorChartDataOptions: IndicatorChartDataOptions,
 ): IndicatorChartDataOptionsInternal => {
+  const value = indicatorChartDataOptions.value?.map((c) => normalizeMeasureColumn(c));
+  const colorConditionMeasures = getColorConditionMeasures(value);
+
   return {
-    value: indicatorChartDataOptions.value?.map((c) => normalizeMeasureColumn(c)),
+    value,
     secondary: indicatorChartDataOptions.secondary?.map((c) => normalizeMeasureColumn(c)),
     min: indicatorChartDataOptions.min
       ?.map((c) => normalizeMeasureColumn(c))
@@ -102,6 +121,7 @@ const translateIndicatorChartDataOptions = (
     max: indicatorChartDataOptions.max
       ?.map((c) => normalizeMeasureColumn(c))
       ?.map(withDefaultAggregation('max')),
+    ...(colorConditionMeasures.length && { colorConditionMeasures }),
   };
 };
 
@@ -187,7 +207,7 @@ export function getStyledMeasureColumns(
   let targetDataOptionKeys: string[] = [];
 
   if (isIndicator(chartType)) {
-    targetDataOptionKeys = ['value', 'secondary', 'min', 'max'];
+    targetDataOptionKeys = ['value', 'secondary', 'min', 'max', 'colorConditionMeasures'];
   } else if (isScatter(chartType)) {
     targetDataOptionKeys = ['x', 'y', 'breakByColor', 'size'];
   } else if (isCartesian(chartType) || isCategorical(chartType) || isRange(chartType)) {

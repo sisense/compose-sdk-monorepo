@@ -231,6 +231,26 @@ const translation: TranslationDictionary = {
     allExceptCount: '{{count}} 件を除くすべて',
     setupTitle: 'フィルターウィジェットを設定',
     setupSubtitle: 'ディメンションを設定し、フィルターの動作を構成します',
+    conditionUnsupported: '条件はテキストフィールドと数値フィールドで利用できます',
+    conditionNotRepresentable: 'この条件はここでは編集できません',
+    controls: {
+      findInList: 'リスト内を検索',
+      enterValue: '値を入力...',
+      noMatches: '一致する項目がありません',
+      clearSelection: '選択をクリア',
+      overflowCount: '+{{count}}',
+      select: '選択',
+      selectDateLevel: '日付レベルを選択',
+      selectCondition: '条件を選択',
+      selectConnector: 'AND/ORを選択',
+      addCondition: '+ 条件を追加',
+      fillOrRemoveCondition: '入力するか、条件を削除してください',
+      rangeOrderError: '2つ目の値は1つ目より大きくする必要があります',
+      betweenMin: '最小値',
+      betweenMax: '最大値',
+      selectValues: '{{level}}を選択',
+      clear: 'クリア',
+    },
   },
   unsupportedFilterMessage: 'サポートされていないフィルター（データクエリに適用）',
   unsupportedFilter: 'サポートされていないフィルター{{filter}}',
@@ -359,6 +379,10 @@ const translation: TranslationDictionary = {
       selectAll: 'すべて選択',
       clearAll: 'すべてクリア',
     },
+    tooltips: {
+      selectAllPartiallyLoaded:
+        'すべての値が表示されていません。リストを下にスクロールして残りの値を読み込んでください。下の「ではない」条件を使用して特定の値を除外することもできます。',
+    },
     labels: {
       includeAll: 'すべて含める（フィルター適用なし）',
       allowMultiSelection: 'リストの複数選択を許可',
@@ -391,6 +415,7 @@ const translation: TranslationDictionary = {
       greaterThan: 'より大きい',
       greaterThanOrEqual: '以上',
       isWithin: '以内',
+      between: '範囲',
       top: '上位',
       bottom: '下位',
     },
@@ -493,6 +518,7 @@ const translation: TranslationDictionary = {
     },
     table: {
       label: 'データテーブル',
+      totalRows: '合計: {{formattedCount}} 行',
     },
     sankey: {
       alerts: {

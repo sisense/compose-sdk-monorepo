@@ -32,6 +32,7 @@ TypeScript interfaces for components and services listed above
 - [CriteriaFilterTileProps](interface.CriteriaFilterTileProps.md)
 - [CustomWidgetComponentProps](interface.CustomWidgetComponentProps.md)
 - [CustomWidgetConfig](interface.CustomWidgetConfig.md)
+- [CustomWidgetProps](interface.CustomWidgetProps.md)
 - [DashboardByIdConfig](interface.DashboardByIdConfig.md)
 - [DashboardByIdProps](interface.DashboardByIdProps.md)
 - [DashboardConfig](interface.DashboardConfig.md)
@@ -52,6 +53,12 @@ TypeScript interfaces for components and services listed above
 - [ExecuteQueryParams](interface.ExecuteQueryParams.md)
 - [FiltersPanelConfig](interface.FiltersPanelConfig.md)
 - [FiltersPanelProps](interface.FiltersPanelProps.md)
+- [FilterTileActionsConfig](interface.FilterTileActionsConfig.md)
+- [FilterTileConfig](interface.FilterTileConfig.md)
+- [FilterTileHeaderConfig](interface.FilterTileHeaderConfig.md)
+- [FilterTileMenuActionItem](interface.FilterTileMenuActionItem.md)
+- [FilterTileMenuConfig](interface.FilterTileMenuConfig.md)
+- [FilterTileMenuSubmenuItem](interface.FilterTileMenuSubmenuItem.md)
 - [FilterTileProps](interface.FilterTileProps.md)
 - [FilterWidgetConfig](interface.FilterWidgetConfig.md) <Badge type="beta" text="Beta" />
 - [FilterWidgetProps](interface.FilterWidgetProps.md) <Badge type="beta" text="Beta" />

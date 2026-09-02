@@ -27,6 +27,7 @@ import {
   FunnelStyleOptions,
   GaugeIndicatorStyleOptions,
   IndicatorStyleOptions,
+  KpiStyleOptions,
   LegendPosition,
   LineStyleOptions,
   LineWidth,
@@ -60,6 +61,7 @@ import {
   FusionWidgetType,
   IndicatorWidgetStyle,
   isValidScrollerLocation,
+  KpiWidgetStyle,
   Panel,
   PieWidgetStyle,
   PivotWidgetStyle,
@@ -733,6 +735,10 @@ function extractScatterChartStyleOptions(
 export function extractTableChartStyleOptions(widgetStyle: TableWidgetStyle): TableStyleOptions {
   return {
     rowsPerPage: widgetStyle.pageSize,
+    // Fusion treats a missing `automaticHeight` as enabled, so a dashboard loaded from a Fusion
+    // instance renders with auto height unless it explicitly opts out. This deliberately differs
+    // from the pivot translator, which passes the raw value through and defaults to `false`.
+    isAutoHeight: widgetStyle.automaticHeight ?? true,
     header: {
       color: {
         enabled: widgetStyle['colors/headers'],
@@ -889,6 +895,24 @@ function extractSankeyChartStyleOptions(widgetStyle: SankeyWidgetStyle): SankeyS
     nodeWidth: widgetStyle.nodeWidth,
     nodePadding: widgetStyle.nodePadding,
     minLinkWidth: widgetStyle.minLinkWidth,
+  };
+}
+
+/**
+ * Extracts kpi chart style options from WidgetDto. Covers only the Design-tab-editable
+ * subset of {@link KpiStyleOptions} — see {@link KpiWidgetStyle}.
+ *
+ * @param widgetStyle - Fusion DTO style for a `'kpi'` widget
+ * @returns The Design-tab-editable subset of KPI style options
+ */
+function extractKpiChartStyleOptions(widgetStyle: KpiWidgetStyle): KpiStyleOptions {
+  return {
+    ...(widgetStyle.layout && { layout: widgetStyle.layout }),
+    ...(widgetStyle.value && { value: widgetStyle.value }),
+    ...(widgetStyle.title && { title: widgetStyle.title }),
+    ...(widgetStyle.sparkline && { sparkline: widgetStyle.sparkline }),
+    ...(widgetStyle.comparison && { comparison: widgetStyle.comparison }),
+    ...(widgetStyle.card && { card: widgetStyle.card }),
   };
 }
 
@@ -1091,6 +1115,8 @@ export function extractStyleOptions<WType extends FusionWidgetType>(
       return extractSunburstChartStyleOptions(style as SunburstWidgetStyle);
     case 'sankey':
       return extractSankeyChartStyleOptions(style as SankeyWidgetStyle);
+    case 'kpi':
+      return extractKpiChartStyleOptions(style as KpiWidgetStyle);
     case 'chart/pie':
       return extractPieChartStyleOptions(widgetSubtype, style as PieWidgetStyle);
     case 'tablewidget':

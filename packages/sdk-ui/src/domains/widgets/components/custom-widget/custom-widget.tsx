@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { getDataSourceName } from '@sisense/sdk-data';
 
 import { AbstractDataPointWithEntries } from '@/domains/dashboarding/common-filters/types';
+import { useWidgetHeaderInfoButton } from '@/domains/widgets/shared/widget-header/features/use-widget-header-info-button';
+import { useWidgetHeaderMenu } from '@/domains/widgets/shared/widget-header/features/use-widget-header-menu';
+import { useWidgetHeaderTitle } from '@/domains/widgets/shared/widget-header/features/use-widget-header-title';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 import { withErrorBoundary } from '@/infra/decorators/component-decorators/with-error-boundary';
@@ -85,7 +88,7 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
     [widgetProps.styleOptions?.width, widgetProps.styleOptions?.height],
   );
 
-  const { headerConfig: headerConfigWithCsv } = useCustomWidgetCsvDownload({
+  const { headerConfig: headerConfigWithCsvDownload } = useCustomWidgetCsvDownload({
     dataSource,
     dataOptions: widgetProps.dataOptions,
     filters: widgetProps.filters,
@@ -94,8 +97,8 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
     config: widgetProps.config,
   });
 
-  const { headerConfig } = useCustomWidgetExcelDownload({
-    baseHeaderConfig: headerConfigWithCsv,
+  const { headerConfig: headerConfigWithExcelDownload } = useCustomWidgetExcelDownload({
+    baseHeaderConfig: headerConfigWithCsvDownload,
     title: widgetProps.title,
     dataOptions: widgetProps.dataOptions,
     dataSource,
@@ -105,18 +108,23 @@ export const CustomWidget: FunctionComponent<CustomWidgetProps> = asSisenseCompo
     filters: widgetProps.filters,
   });
 
+  const headerConfigWithTitle = useWidgetHeaderTitle(headerConfigWithExcelDownload, {
+    title: widgetProps.title,
+    styleOptions: widgetProps.styleOptions?.header,
+  });
+  const headerConfigWithInfoButton = useWidgetHeaderInfoButton(headerConfigWithTitle, {
+    styleOptions: widgetProps.styleOptions?.header,
+    dataSetName: dataSource && getDataSourceName(dataSource),
+    description,
+  });
+  const fullHeaderConfig = useWidgetHeaderMenu(headerConfigWithInfoButton);
+
   const wrapperDefaultSize = useMemo(() => getWidgetDefaultSize('line', { hasHeader: true }), []);
   const chartDefaultSize = useMemo(() => getWidgetDefaultSize('line'), []);
 
   return (
     <DynamicSizeContainer size={containerSize} defaultSize={wrapperDefaultSize}>
-      <WidgetContainer
-        title={widgetProps.title}
-        description={description}
-        styleOptions={widgetProps.styleOptions}
-        headerConfig={headerConfig}
-        dataSetName={dataSource && getDataSourceName(dataSource)}
-      >
+      <WidgetContainer styleOptions={widgetProps.styleOptions} headerConfig={fullHeaderConfig}>
         {CustomVisualizationWithErrorBoundary ? (
           <DynamicSizeContainer defaultSize={chartDefaultSize}>
             {(size) => (

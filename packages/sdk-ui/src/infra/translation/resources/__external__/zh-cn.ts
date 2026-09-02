@@ -212,6 +212,26 @@ const translation: TranslationDictionary = {
     allExceptCount: '除 {{count}} 项以外的全部',
     setupTitle: '设置筛选器小部件',
     setupSubtitle: '设置维度并配置筛选器的工作方式',
+    conditionUnsupported: '条件适用于文本字段和数值字段',
+    conditionNotRepresentable: '此条件无法在此处编辑',
+    controls: {
+      findInList: '在列表中查找',
+      enterValue: '输入值...',
+      noMatches: '无匹配项',
+      clearSelection: '清除选择',
+      overflowCount: '+{{count}}',
+      select: '选择',
+      selectDateLevel: '选择日期级别',
+      selectCondition: '选择条件',
+      selectConnector: '选择 AND/OR',
+      addCondition: '+ 添加条件',
+      fillOrRemoveCondition: '填写或移除此条件',
+      rangeOrderError: '第二个值必须大于第一个值',
+      betweenMin: '最小值',
+      betweenMax: '最大值',
+      selectValues: '选择{{level}}',
+      clear: '清除',
+    },
   },
   unsupportedFilterMessage: '不支持的筛选器（已应用于数据查询）',
   unsupportedFilter: '不支持的筛选器{{filter}}',
@@ -329,6 +349,10 @@ const translation: TranslationDictionary = {
       selectAll: '全选',
       clearAll: '全部清除',
     },
+    tooltips: {
+      selectAllPartiallyLoaded:
+        '未显示所有值。向下滚动列表以加载其余值。您也可以使用下方的"不是"条件来排除特定值。',
+    },
     labels: {
       includeAll: '包含全部（未应用筛选器）',
       allowMultiSelection: '允许列表的多选',
@@ -361,6 +385,7 @@ const translation: TranslationDictionary = {
       greaterThan: '大于',
       greaterThanOrEqual: '大于或等于',
       isWithin: '在...范围内',
+      between: '介于',
       top: '前',
       bottom: '后',
     },
@@ -461,6 +486,7 @@ const translation: TranslationDictionary = {
     },
     table: {
       label: '数据表',
+      totalRows: '共 {{formattedCount}} 行',
     },
     sankey: {
       alerts: {

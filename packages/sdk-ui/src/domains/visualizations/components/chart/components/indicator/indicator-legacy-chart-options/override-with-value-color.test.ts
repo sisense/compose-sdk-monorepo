@@ -1,3 +1,4 @@
+import { Measure } from '@sisense/sdk-data';
 import cloneDeep from 'lodash-es/cloneDeep';
 
 import { DataColorOptions, IndicatorChartDataOptions } from '../../../../../../../types';
@@ -53,6 +54,30 @@ describe('getValueColorOptions', () => {
     const result = getValueColorOptions(dataOptions);
 
     expect(result).toBeUndefined();
+  });
+
+  it('should substitute a resolved formula value into a conditional expression', () => {
+    const targetMeasure = { name: 'Target' } as unknown as Measure;
+    const dataOptions: IndicatorChartDataOptions = {
+      value: [
+        {
+          name: 'Some Data',
+          color: {
+            type: 'conditional',
+            conditions: [
+              { color: 'red', operator: '<', expression: '', valueMeasure: targetMeasure },
+            ],
+          },
+        },
+      ],
+    };
+
+    const result = getValueColorOptions(dataOptions, { Target: 42 }) as DataColorOptions;
+
+    expect(result).toEqual({
+      type: 'conditional',
+      conditions: [{ color: 'red', operator: '<', expression: '42', valueMeasure: targetMeasure }],
+    });
   });
 });
 

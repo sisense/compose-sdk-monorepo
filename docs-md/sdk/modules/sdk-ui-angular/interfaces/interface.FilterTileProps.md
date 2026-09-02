@@ -8,6 +8,14 @@ Props of the [FilterTileComponent](../filter-tiles/class.FilterTileComponent.md)
 
 ## Properties
 
+### config
+
+> **config**?: [`FilterTileConfig`](interface.FilterTileConfig.md)
+
+Configuration for the filter tile.
+
+***
+
 ### defaultDataSource
 
 > **defaultDataSource**?: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md)

@@ -8,10 +8,20 @@ import {
 } from '@sisense/sdk-data';
 
 import { JtdConfigDto } from '@/domains/dashboarding/hooks/jtd/jtd-types';
-import { DashStyle, WidgetContainerStyleOptions } from '@/types';
+import {
+  DashStyle,
+  KpiCardStyleOptions,
+  KpiComparisonStyleOptions,
+  KpiSparklineStyleOptions,
+  KpiTitleStyleOptions,
+  KpiValueMode,
+  KpiValueStyleOptions,
+  WidgetContainerStyleOptions,
+} from '@/types';
 
 import { HierarchyId } from '../../../../domains/drilldown/hierarchy-model';
 import { LEGACY_DESIGN_TYPES } from '../../../../infra/themes/legacy-design-settings';
+import type { FilterWidgetControlStyleOptions } from '../filter-widget/types';
 
 /**
  * The type of a widget on a dashboard that is a variant of Cartesian widget.
@@ -57,6 +67,7 @@ export type FusionWidgetType =
   | CategoricalWidgetType
   | 'chart/scatter'
   | 'indicator'
+  | 'kpi'
   | 'sankey'
   | TabularWidgetType
   | 'chart/boxplot'
@@ -91,6 +102,11 @@ export type WidgetSubtype =
   | 'line/polar'
   | 'indicator/numeric'
   | 'indicator/gauge'
+  | 'kpi/standard'
+  | 'kpi/goal'
+  | 'kpi/trend'
+  | 'kpi/previous-period'
+  | 'kpi/value'
   | 'bubble/scatter'
   | 'treemap'
   | 'sunburst'
@@ -446,7 +462,7 @@ export type PanelColorFormatConditionSimple = {
 
 export type PanelColorFormatConditionJaql = {
   color: string;
-  expression: { jaql: unknown };
+  expression: { jaql: Jaql };
   operator: PanelColorFormatConditionOperator;
 };
 
@@ -673,6 +689,11 @@ export type TableWidgetStyle = {
   'width/window': boolean;
   pageSize: number;
   /**
+   * Whether the widget grows to fit all rows of the current page. Fusion treats a missing value
+   * as enabled.
+   */
+  automaticHeight?: boolean;
+  /**
    * Live table UI state written by Fusion's table widget. `colResize.columns` is the
    * authoritative source of on-screen column widths — unlike `panels.items[].colSize`
    * (a write-once snapshot that goes stale once a column is disabled/re-enabled), it's
@@ -781,6 +802,39 @@ export type SankeyWidgetStyle = {
   minLinkWidth?: number;
 };
 
+/**
+ * DTO style for the `'kpi'` Fusion widget type. Mirrors {@link KpiStyleOptions} group for
+ * group, plus `valueMode`, which is a data option with nowhere else to live (see the field's
+ * own note).
+ *
+ * Each group is carried whole rather than narrowed to the fields the Design tab can edit. A
+ * missing control is a reason not to *offer* a field, not a reason to discard one an SDK
+ * author set: dropping it here would silently erase, say, a `comparison.color` inversion for a
+ * "down is good" metric the first time the widget was saved from Fusion. Fusion passes
+ * `widget.style` to the chart verbatim, so the extra fields take effect there too.
+ *
+ * Which fields have a Design control is documented on the controls themselves; as of now only
+ * `value.conditionalIcons` and `comparison.conditionalIcons` have none. `card`'s border, corner
+ * radius and background are set by Fusion's generic Widget Design Styling feature rather than a
+ * KPI-specific control.
+ */
+export type KpiWidgetStyle = {
+  layout?: 'standard' | 'comparison-first';
+  /**
+   * Which number the card headlines when a `category` is set: the last bucket, or an aggregate
+   * over the whole period. This is a {@link KpiChartDataOptions} field rather than a style one —
+   * it changes the value queried, not how it looks — but it has no Fusion panel to live in and
+   * a single Design-tab control fits it, so it is persisted here and lifted back into the data
+   * options on the way out. Same treatment `boxType` / `outliersEnabled` get for boxplot.
+   */
+  valueMode?: KpiValueMode;
+  value?: KpiValueStyleOptions;
+  title?: KpiTitleStyleOptions;
+  sparkline?: KpiSparklineStyleOptions;
+  comparison?: KpiComparisonStyleOptions;
+  card?: KpiCardStyleOptions;
+};
+
 export type BoxplotWidgetStyle = WidgetContainerStyleOptions & {
   seriesLabels?: LabelsStyle;
   dataLimits?: DataLimits;
@@ -883,6 +937,7 @@ export type WidgetStyle = {
   | TreemapWidgetStyle
   | SunburstWidgetStyle
   | SankeyWidgetStyle
+  | KpiWidgetStyle
   | BoxplotWidgetStyle
   | ScattermapWidgetStyle
   | AreamapWidgetStyle
@@ -911,6 +966,11 @@ export type FilterWidgetDtoStyle = {
   allowMultiselect?: boolean;
   /** Whether the dropdown allows selecting multiple members (current Fusion field). */
   multiSelection?: boolean;
+  /**
+   * The host's persisted styling for the filter control. The key stays `filterDesign` because
+   * saved dashboards carry it; the props read it into `styleOptions.control`.
+   */
+  filterDesign?: FilterWidgetControlStyleOptions;
 };
 
 export enum FiltersMergeStrategyEnum {

@@ -15,7 +15,7 @@ export type UsePivotWidgetCsvDownloadParams = Pick<
   PivotTableWidgetProps,
   'title' | 'dataOptions' | 'filters' | 'highlights' | 'config' | 'dataSource'
 > & {
-  /** Header config from {@link useWidgetHeaderManagement} (rename menu, etc.). */
+  /** Header config from {@link useWidgetHeaderTitle} (rename menu, etc.). */
   baseHeaderConfig: WidgetHeaderConfig;
 };
 

@@ -1,18 +1,19 @@
-import { type FunctionComponent, useEffect, useRef } from 'react';
+import { type FunctionComponent, useEffect, useMemo, useRef } from 'react';
 
 import { getDataSourceName } from '@sisense/sdk-data';
 
 import { useTrackWidgetInit } from '@/domains/widgets/hooks/use-track-widget-init';
-import { useWidgetHeaderManagement } from '@/domains/widgets/hooks/use-widget-header-management';
 import { getWidgetEntityId } from '@/domains/widgets/hooks/widget-entity-id';
 import {
   getFilterWidgetName,
   getWidgetTitle,
 } from '@/domains/widgets/hooks/widget-tracking-adapters';
 import { WidgetContainer } from '@/domains/widgets/shared/widget-container/widget-container.js';
+import { useWidgetHeaderMenu } from '@/domains/widgets/shared/widget-header/features/use-widget-header-menu';
+import { useWidgetHeaderTitle } from '@/domains/widgets/shared/widget-header/features/use-widget-header-title';
+import { ThemeProvider, useThemeContext } from '@/infra/contexts/theme-provider';
 import { asSisenseComponent } from '@/infra/decorators/component-decorators/as-sisense-component';
 
-import type { WidgetChangeEvent } from '../../change-events';
 import { FilterWidgetDropdown } from './filter-widget-dropdown';
 import type { FilterWidgetProps } from './types';
 
@@ -25,7 +26,6 @@ import type { FilterWidgetProps } from './types';
  *
  * Filter values are NOT affected by other dashboard filters — the member list
  * always shows all available values for the dimension.
- *
  * @example
  * ```tsx
  * const [filter, setFilter] = useState<Filter | null>(null);
@@ -60,18 +60,30 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
     filter = null,
     onChange,
     parentFilters,
+    dimensionFilters,
     isMultiselect,
+    filterType,
     onReady,
     excludedDateLevels,
   } = props;
 
-  const { headerConfig, titleEditor } = useWidgetHeaderManagement({
+  /* Split once: the control's own styling goes to the control, and the rest — the widget
+     chrome — to the container, which has no use for `control`. */
+  const { control: controlStyleOptions, ...containerStyleOptions } = styleOptions ?? {};
+
+  /* A filter widget's chrome is the theme's filter panel colour, so it reads as the filters it
+     belongs with rather than as an ordinary widget. Defaulted here rather than in
+     WidgetContainer, whose `unset` is the right default for every other widget type. */
+  const { themeSettings } = useThemeContext();
+  const filterPanelBackground = themeSettings.filter.panel.backgroundColor;
+
+  const headerConfigWithTitle = useWidgetHeaderTitle(config?.header, {
     title: title || attribute.name,
-    headerConfig: config?.header,
-    // Same widening cast as ChartWidget/PivotTableWidget — the hook only emits
-    // title/changed, which is a member of FilterWidgetChangeEvent.
-    onChange: onChange as (event: WidgetChangeEvent) => void,
+    styleOptions: styleOptions?.header,
+    onChange,
   });
+
+  const fullHeaderConfig = useWidgetHeaderMenu(headerConfigWithTitle);
 
   useTrackWidgetInit({
     widgetType: 'filter',
@@ -83,63 +95,70 @@ export const FilterWidget: FunctionComponent<FilterWidgetProps> = asSisenseCompo
   // Persist the attribute name as the widget title when the user has not set one,
   // so the auto-title is saved (via the same title/changed channel as a manual
   // rename) instead of only being displayed as a fallback. Emitted once per
-  // attribute; re-emits only if the attribute changes while the title is still unset.
-  const defaultedTitleForAttributeRef = useRef<string | null>(null);
+  // DIMENSION, and re-emitted only if the dimension changes while the title is still
+  // unset — picking a different field renames an unnamed widget, but choosing a
+  // different date level on a widget that already has its name does not. The level is
+  // part of the attribute's name (`Years in Date`), so keying this on the name renamed
+  // the widget, and its linked filter tile with it, on every granularity change.
+  const defaultedTitleForDimensionRef = useRef<string | null>(null);
   useEffect(() => {
     if (
       !title &&
       attribute.name &&
       onChange &&
-      defaultedTitleForAttributeRef.current !== attribute.name
+      defaultedTitleForDimensionRef.current !== attribute.expression
     ) {
-      defaultedTitleForAttributeRef.current = attribute.name;
+      defaultedTitleForDimensionRef.current = attribute.expression;
       onChange({ type: 'title/changed', payload: { title: attribute.name } });
     }
-  }, [title, attribute.name, onChange]);
+  }, [title, attribute.name, attribute.expression, onChange]);
 
   const dropdown = (
     <FilterWidgetDropdown
       attribute={attribute}
       dataSource={dataSource}
       filter={filter}
+      filterType={filterType}
       onFilterUpdate={(newFilter) =>
         onChange?.({ type: 'filter/changed', payload: { filter: newFilter } })
       }
       parentFilters={parentFilters}
+      dimensionFilters={dimensionFilters}
       isMultiselect={isMultiselect}
       onDateLevelChange={(newAttribute) =>
         onChange?.({ type: 'dateLevel/changed', payload: { attribute: newAttribute } })
       }
       onReady={onReady}
       excludedDateLevels={excludedDateLevels}
+      controlStyleOptions={controlStyleOptions}
     />
   );
 
-  // In Fusion-hosted contexts (non-CSDK dashboard, widget editor), the host provides
+  // In host-embedded contexts (non-CSDK dashboard, widget editor), the host provides
   // the widget chrome. Skip WidgetContainer to avoid height-collapse and double chrome.
   if (containerless) return dropdown;
 
   return (
     <WidgetContainer
-      title={title || attribute.name}
       styleOptions={{
-        ...styleOptions,
+        ...containerStyleOptions,
+        // `??`, so a background chosen in Widget Style still wins over the theme's.
+        backgroundColor: containerStyleOptions.backgroundColor ?? filterPanelBackground,
         header: {
-          ...styleOptions?.header,
-          // Hide the default info button: it surfaces datasource/refresh actions
-          // that do not apply to a filter control (no query result to refresh).
-          // A consumer-supplied renderToolbar still runs, but receives an EMPTY
-          // default toolbar so it cannot re-surface the broken info button.
-          // The toolbar menu (e.g. Delete) renders separately either way.
-          renderToolbar: (onRefresh) =>
-            styleOptions?.header?.renderToolbar?.(onRefresh, <></>) ?? <></>,
+          ...containerStyleOptions.header,
+          backgroundColor: containerStyleOptions.header?.backgroundColor ?? filterPanelBackground,
         },
       }}
-      headerConfig={headerConfig}
-      titleEditor={titleEditor}
-      dataSetName={dataSource ? getDataSourceName(dataSource) : undefined}
+      headerConfig={fullHeaderConfig}
     >
-      {dropdown}
+      {/* WidgetContainer republishes its own background as `chart.backgroundColor` for its
+          content, which is right for a chart — the plot sits on the card. A filter control is
+          not: its background is the Filter Style `Background` token, whose default is the
+          widget background role. Restore that here so painting the chrome with the filter
+          panel colour does not drag the control's default along with it. */}
+      <ThemeProvider theme={{ chart: { backgroundColor: themeSettings.chart.backgroundColor } }}>
+        {dropdown}
+      </ThemeProvider>
     </WidgetContainer>
   );
 });

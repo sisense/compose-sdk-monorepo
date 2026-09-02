@@ -32,6 +32,7 @@ import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   IndicatorChartDataOptions,
+  KpiChartDataOptions,
   SankeyChartDataOptions,
   ScatterChartDataOptions,
 } from '../../../../types.js';
@@ -650,6 +651,256 @@ describe('utils for widget data options translation', () => {
         verifyColumn(secondary![0], panels[1].items[0]);
         verifyColumn(min![0], panels[2].items[0]);
         verifyColumn(max![0], panels[3].items[0]);
+      });
+
+      it('should select the first item of the value and category panels for kpi', () => {
+        const panels: Panel[] = [
+          {
+            name: 'value',
+            items: [
+              {
+                jaql: jaqlMock.costAggregated,
+              },
+              {
+                jaql: jaqlMock.formula,
+              },
+            ],
+          },
+          {
+            name: 'category',
+            items: [
+              {
+                jaql: jaqlMock.date,
+              },
+              {
+                jaql: jaqlMock.category,
+              },
+            ],
+          },
+        ];
+
+        const dataOptions = extractDataOptions('kpi', panels, styleMock);
+        const { value, category } = dataOptions as KpiChartDataOptions;
+
+        verifyColumn(value, panels[0].items[0]);
+        verifyColumn(category!, panels[1].items[0]);
+      });
+
+      it('should omit category from kpi data options when the panel is empty', () => {
+        const panels: Panel[] = [
+          {
+            name: 'value',
+            items: [
+              {
+                jaql: jaqlMock.costAggregated,
+              },
+            ],
+          },
+          { name: 'category', items: [] },
+        ];
+
+        const dataOptions = extractDataOptions('kpi', panels, styleMock);
+        const { value, category } = dataOptions as KpiChartDataOptions;
+
+        verifyColumn(value, panels[0].items[0]);
+        expect(category).toBeUndefined();
+      });
+
+      it('should return a target comparison for the kpi/goal subtype', () => {
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'target', items: [{ jaql: jaqlMock.formula }] },
+        ];
+
+        const dataOptions = extractDataOptions('kpi', panels, styleMock, undefined, 'kpi/goal');
+        const { comparison } = dataOptions as KpiChartDataOptions;
+
+        expect(comparison?.type).toBe('target');
+        if (comparison?.type === 'target' && typeof comparison.target !== 'number') {
+          verifyColumn(comparison.target, panels[1].items[0]);
+        }
+      });
+
+      it('should return a delta comparison for the kpi/trend subtype', () => {
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'comparisonValue', items: [{ jaql: jaqlMock.formula }] },
+        ];
+
+        const dataOptions = extractDataOptions('kpi', panels, styleMock, undefined, 'kpi/trend');
+        const { comparison } = dataOptions as KpiChartDataOptions;
+
+        expect(comparison?.type).toBe('delta');
+        if (comparison?.type === 'delta') {
+          verifyColumn(comparison.value, panels[1].items[0]);
+        }
+      });
+
+      it('should omit comparison for kpi/goal when the target panel is empty', () => {
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'target', items: [] },
+        ];
+
+        const dataOptions = extractDataOptions('kpi', panels, styleMock, undefined, 'kpi/goal');
+        const { comparison } = dataOptions as KpiChartDataOptions;
+
+        expect(comparison).toBeUndefined();
+      });
+
+      it('should omit comparison for kpi/trend when the comparisonValue panel is empty', () => {
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'comparisonValue', items: [] },
+        ];
+
+        const dataOptions = extractDataOptions('kpi', panels, styleMock, undefined, 'kpi/trend');
+        const { comparison } = dataOptions as KpiChartDataOptions;
+
+        expect(comparison).toBeUndefined();
+      });
+
+      it('should return a plain value comparison for the kpi/value subtype', () => {
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'comparisonValue', items: [{ jaql: jaqlMock.formula }] },
+        ];
+
+        const dataOptions = extractDataOptions('kpi', panels, styleMock, undefined, 'kpi/value');
+        const { comparison } = dataOptions as KpiChartDataOptions;
+
+        expect(comparison?.type).toBe('value');
+        if (comparison?.type === 'value') {
+          verifyColumn(comparison.value, panels[1].items[0]);
+        }
+      });
+
+      it('should read the same panel for kpi/trend and kpi/value, differing only in type', () => {
+        // Sharing `comparisonValue` is what lets a user switch between the two subtypes without
+        // re-picking the measure, so the two readings must stay in step.
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'comparisonValue', items: [{ jaql: jaqlMock.formula }] },
+        ];
+
+        const asTrend = extractDataOptions('kpi', panels, styleMock, undefined, 'kpi/trend');
+        const asValue = extractDataOptions('kpi', panels, styleMock, undefined, 'kpi/value');
+        const trendComparison = (asTrend as KpiChartDataOptions).comparison;
+        const valueComparison = (asValue as KpiChartDataOptions).comparison;
+
+        expect(trendComparison?.type).toBe('delta');
+        expect(valueComparison?.type).toBe('value');
+        // Compared whole rather than narrowing to `.value` first: the claim is that the two
+        // readings differ *only* in the discriminant, which this states directly — and it
+        // needs no type guard, so the assertion can never be skipped.
+        expect(trendComparison).toEqual({ ...valueComparison, type: 'delta' });
+      });
+
+      it('should omit comparison for kpi/value when the comparisonValue panel is empty', () => {
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'comparisonValue', items: [] },
+        ];
+
+        const dataOptions = extractDataOptions('kpi', panels, styleMock, undefined, 'kpi/value');
+
+        expect((dataOptions as KpiChartDataOptions).comparison).toBeUndefined();
+      });
+
+      it('should return a previous-period comparison for the kpi/previous-period subtype', () => {
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'category', items: [{ jaql: jaqlMock.date }] },
+        ];
+
+        const dataOptions = extractDataOptions(
+          'kpi',
+          panels,
+          styleMock,
+          undefined,
+          'kpi/previous-period',
+        );
+        const { comparison } = dataOptions as KpiChartDataOptions;
+
+        expect(comparison).toEqual({ type: 'previous-period' });
+      });
+
+      it('should keep the previous-period comparison when the category panel is empty', () => {
+        // The baseline comes from the category, but an empty panel is not an error here: the
+        // data layer resolves the comparison to nothing and the card falls back to a plain
+        // value, so the subtype stays intact rather than being silently rewritten.
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'category', items: [] },
+        ];
+
+        const dataOptions = extractDataOptions(
+          'kpi',
+          panels,
+          styleMock,
+          undefined,
+          'kpi/previous-period',
+        );
+        const { category, comparison } = dataOptions as KpiChartDataOptions;
+
+        expect(category).toBeUndefined();
+        expect(comparison).toEqual({ type: 'previous-period' });
+      });
+
+      it('should ignore comparison panels for the kpi/previous-period subtype', () => {
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'category', items: [{ jaql: jaqlMock.date }] },
+          { name: 'target', items: [{ jaql: jaqlMock.formula }] },
+          { name: 'comparisonValue', items: [{ jaql: jaqlMock.formula }] },
+        ];
+
+        const dataOptions = extractDataOptions(
+          'kpi',
+          panels,
+          styleMock,
+          undefined,
+          'kpi/previous-period',
+        );
+        const { comparison } = dataOptions as KpiChartDataOptions;
+
+        expect(comparison).toEqual({ type: 'previous-period' });
+      });
+
+      it('should read valueMode from the widget style', () => {
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'category', items: [{ jaql: jaqlMock.date }] },
+        ];
+        const style = { valueMode: 'total' } as WidgetStyle;
+
+        const dataOptions = extractDataOptions('kpi', panels, style, undefined, 'kpi/standard');
+
+        expect((dataOptions as KpiChartDataOptions).valueMode).toBe('total');
+      });
+
+      it('should omit valueMode when the widget style does not set it', () => {
+        // Left unset rather than defaulted to 'last' here, so the chart's own default applies.
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'category', items: [{ jaql: jaqlMock.date }] },
+        ];
+
+        const dataOptions = extractDataOptions('kpi', panels, styleMock, undefined, 'kpi/standard');
+
+        expect('valueMode' in (dataOptions as KpiChartDataOptions)).toBe(false);
+      });
+
+      it('should omit comparison for the kpi/standard subtype regardless of panels', () => {
+        const panels: Panel[] = [
+          { name: 'value', items: [{ jaql: jaqlMock.costAggregated }] },
+          { name: 'target', items: [{ jaql: jaqlMock.formula }] },
+        ];
+
+        const dataOptions = extractDataOptions('kpi', panels, styleMock, undefined, 'kpi/standard');
+        const { comparison } = dataOptions as KpiChartDataOptions;
+
+        expect(comparison).toBeUndefined();
       });
 
       it('should return correct data options for scatter chart', () => {

@@ -7,10 +7,16 @@ import type { MenuItem } from '@/shared/types/menu-item';
 import { convertMenuItemToLegacySectionItem } from '@/shared/utils/menu-item-converters.js';
 
 export interface WidgetMenuButtonProps {
+  /** Resolved menu items to show when the button is clicked. */
   menuItems: MenuItem[];
+  /** Size (px) of the button. Falls back to the {@link MenuButton} default. */
+  size?: number;
 }
 
-export const WidgetMenuButton = ({ menuItems }: WidgetMenuButtonProps) => {
+/**
+ * Renders the widget header's "⋮" menu button, opening the resolved menu items on click.
+ */
+export const WidgetMenuButton = ({ menuItems, size }: WidgetMenuButtonProps) => {
   const { themeSettings } = useThemeContext();
   const { openMenu } = useMenu();
   const handleClick = useCallback(
@@ -41,6 +47,7 @@ export const WidgetMenuButton = ({ menuItems }: WidgetMenuButtonProps) => {
       onClick={handleClick}
       ariaLabel="widget header menu"
       color={themeSettings.widget.header.titleTextColor}
+      size={size}
     />
   );
 };

@@ -10,7 +10,7 @@ import { WidgetTypeInternal } from '@/domains/widgets/widget-model/types';
 import { MenuIds } from '@/infra/contexts/menu-provider/menu-ids';
 import { OpenMenuFn } from '@/infra/contexts/menu-provider/types';
 import { clearMembersFilter, isIncludeAllFilter, isSameAttribute } from '@/shared/utils/filters';
-import { ChartDataOptions, DataPoint, RenderToolbarHandler } from '@/types';
+import { ChartDataOptions, DataPoint } from '@/types';
 
 import { withCascadingFiltersConversion } from './cascading-utils.js';
 import {
@@ -27,14 +27,14 @@ import {
   PureFilter,
 } from './types.js';
 import { getAllowedFilters } from './utils.js';
-import { WidgetHeaderClearSelectionButton } from './widget-header-clear-selection-button.js';
 
 type CommonFiltersConnectionProps = Pick<
   ChartWidgetProps,
   'highlights' | 'onDataPointClick' | 'onDataPointsSelected' | 'onDataPointContextMenu'
 > & {
   filters: Filter[];
-  renderToolbar: RenderToolbarHandler;
+  /** Clears the widget's common-filter selection; absent when there is nothing to clear. */
+  clearSelection?: () => void;
 };
 
 const defaultCommonFiltersOptions: CompleteCommonFiltersOptions = {
@@ -210,7 +210,7 @@ export function prepareCommonFiltersConnectionProps(
       updateFilters(mergeFilters(pureFilters, selectedFilters));
     };
 
-    // registers "renderToolbar" handler
+    // switches on the built-in "clear selection" header item
     const selectedFilters = enabledFilters.filter((f) =>
       selectableAttributes?.some(
         (a) =>
@@ -227,15 +227,7 @@ export function prepareCommonFiltersConnectionProps(
     };
 
     if (hasSelection) {
-      props.renderToolbar = (onRefresh, defaultToolbar) => {
-        const key = selectableAttributes.map(({ expression }) => expression).join(';');
-        return (
-          <div key={key} style={{ display: 'flex' }}>
-            <WidgetHeaderClearSelectionButton onClick={clearSelection} />
-            {defaultToolbar}
-          </div>
-        );
-      };
+      props.clearSelection = clearSelection;
     }
   }
 

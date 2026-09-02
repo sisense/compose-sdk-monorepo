@@ -97,6 +97,18 @@ Arrangement of the filter inputs. Use vertical for standard filter tiles and hor
 
 ***
 
+#### config
+
+> **config**: [`FilterTileConfig`](../interfaces/interface.FilterTileConfig.md) \| `undefined`
+
+Configuration for the filter tile.
+
+The tile menu — both the built-in lock item and any custom items — lives in the tile header,
+which this component renders only when `arrangement` is `'vertical'`. Set `arrangement`
+accordingly to use `config.header.menu` or `config.actions.lockFilter` here.
+
+***
+
 #### filter
 
 > **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)

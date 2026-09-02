@@ -779,6 +779,13 @@ export type IndicatorChartDataOptionsInternal = {
   secondary?: StyledMeasureColumn[];
   min?: StyledMeasureColumn[];
   max?: StyledMeasureColumn[];
+  /**
+   * Hidden measures whose resolved values are the comparison thresholds for the
+   * value column's formula-driven conditional color rules (see `DataColorCondition.valueMeasure`).
+   *
+   * @internal
+   */
+  colorConditionMeasures?: StyledMeasureColumn[];
 };
 
 /** @internal */

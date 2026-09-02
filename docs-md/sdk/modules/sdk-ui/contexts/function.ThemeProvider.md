@@ -10,6 +10,10 @@ Theme provider, which allows you to adjust the look and feel of child components
 
 Components not wrapped in a theme provider use the current theme from the connected Fusion instance by default.
 
+When `theme` is a theme OID that cannot be loaded — for example, a theme that does not exist in
+the connected Sisense instance — the provider keeps rendering its children with the inherited
+theme settings and reports the failure as a console warning.
+
 ## Parameters
 
 | Parameter | Type | Description |

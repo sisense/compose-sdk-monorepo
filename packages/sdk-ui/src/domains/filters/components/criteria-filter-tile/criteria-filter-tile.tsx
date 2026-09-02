@@ -48,9 +48,7 @@ export interface CriteriaFilterTileProps {
    */
   tileDesignOptions?: FilterTileDesignOptions;
   /**
-   * Config for the filter tile
-   *
-   * @internal
+   * Configuration for the filter tile.
    */
   config?: FilterTileConfig;
 
@@ -60,6 +58,12 @@ export interface CriteriaFilterTileProps {
    * @internal
    */
   renderHeaderTitle?: (title: React.ReactNode) => React.ReactNode;
+  /**
+   * When true, the tile is linked to a FilterWidget and rendered read-only.
+   *
+   * @internal
+   */
+  linked?: boolean;
 }
 
 /**
@@ -100,6 +104,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
       tileDesignOptions,
       config,
       renderHeaderTitle,
+      linked,
     } = props;
 
     const { filter, updateFilter } = useSynchronizedFilter(filterFromProps, updateFilterFromProps);
@@ -159,7 +164,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
       <FilterTileContainer
         title={title}
         renderHeaderTitle={renderHeaderTitle}
-        renderContent={(collapsed) => {
+        renderContent={(collapsed, tileDisabled) => {
           return collapsed && isVertical(arrangement) ? (
             <CriteriaFilterDisplay filterType={filterOption} values={collapsedDisplayValues} />
           ) : (
@@ -168,7 +173,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
               arrangement={arrangement}
               defaultValues={values}
               onUpdate={updateValues}
-              disabled={disabled}
+              disabled={tileDisabled}
               measures={measures}
               attribute={filter.attribute}
             />
@@ -185,6 +190,7 @@ export const CriteriaFilterTile = asSisenseComponent({ componentName: 'CriteriaF
         locked={filter.config.locked}
         toggleVisible={config?.actions?.toggleFilter?.visible}
         expandVisible={config?.actions?.expandFilter?.visible}
+        linked={linked}
         menuItems={menuItems}
         onDelete={onDelete}
         onEdit={onEdit}

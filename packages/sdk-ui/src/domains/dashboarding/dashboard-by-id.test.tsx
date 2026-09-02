@@ -413,7 +413,9 @@ describe('DashboardById', () => {
         const actions = renderActions();
 
         // No userAuth at all: nothing is derived, so every code default stands — including
-        // `editFilter.enabled: false`, which the derivation would otherwise grant.
+        // `editFilter.enabled: false`, which the derivation would otherwise grant, and
+        // `lockFilter.enabled: false`, which `DEFAULT_DASHBOARD_BY_ID_CONFIG` overrides back off so
+        // that a dashboard loaded by id never grants locking Fusion did not report.
         expect(actions.addFilter.enabled).toBe(false);
         expect(actions.editFilter.enabled).toBe(false);
         expect(actions.deleteFilter.enabled).toBe(false);

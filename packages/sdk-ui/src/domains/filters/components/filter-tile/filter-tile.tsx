@@ -41,9 +41,7 @@ export interface FilterTileProps {
   /** Default data source used for filter tiles */
   defaultDataSource?: DataSource;
   /**
-   * Configurations for the filter tile
-   *
-   * @internal
+   * Configuration for the filter tile.
    */
   config?: FilterTileConfig;
   /**
@@ -135,6 +133,7 @@ export const FilterTile: React.FC<FilterTileProps> = ({
       design={{ header: { isCollapsible: false } }}
       onDelete={onDelete}
       onChange={onChange}
+      linked={linked}
     />
   );
 };

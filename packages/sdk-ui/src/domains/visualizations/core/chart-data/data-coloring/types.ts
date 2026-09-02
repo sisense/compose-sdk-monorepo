@@ -1,3 +1,5 @@
+import { Measure } from '@sisense/sdk-data';
+
 /**
  * All possible color options for data.
  */
@@ -148,4 +150,15 @@ export type DataColorCondition = {
    * Supported operators for `expression`
    */
   operator: '<' | '>' | '≤' | '<=' | '≥' | '>=' | '=' | '≠' | '!=';
+  /**
+   * Measure whose resolved value is used as the comparison threshold instead of the
+   * literal `expression`, for a condition originating from a Fusion formula-driven
+   * color rule rather than a literal number. Once added to the query (see
+   * `IndicatorChartDataOptionsInternal.colorConditionMeasures`), `valueMeasure.name` is the
+   * query column its resolved value appears under — read live, since the query's
+   * unique-naming step may rename the measure in place after this is set.
+   *
+   * @internal
+   */
+  valueMeasure?: Measure;
 };

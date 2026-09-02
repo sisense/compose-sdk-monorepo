@@ -7,7 +7,7 @@ import type { DashboardPersistenceManager } from '../../persistence/types.js';
 
 /**
  * Widget variants whose `onChange` accepts a {@link WidgetChangeEvent} and whose
- * header supports inline title editing (see `useWidgetHeaderManagement`). Custom
+ * header supports inline title editing (see `useWidgetHeaderTitle`). Custom
  * widgets are excluded — their `onChange` is the persistence-facing
  * `VisualizationStateUpdate` callback, not a change-event channel.
  */

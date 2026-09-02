@@ -1,4 +1,5 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
+import { trackProductEvent } from '@sisense/sdk-tracking';
 import {
   type CompleteThemeSettingsInternal,
   getDefaultThemeSettings,
@@ -8,6 +9,7 @@ import {
 import { BehaviorSubject, Observable, skip } from 'rxjs';
 import { merge } from 'ts-deepmerge';
 
+import packageVersion from '../../version';
 import { track, TrackableService } from '../decorators/trackable.decorator';
 import { type ThemeSettings } from '../sdk-ui-core-exports';
 import { SisenseContextService } from './sisense-context.service';
@@ -130,7 +132,43 @@ export class ThemeService {
 
       this._themeSettings$.next(mergedThemeSettings);
     } catch (error) {
-      this._themeSettings$.error(error);
+      // A theme that fails to load is not fatal. Erroring the subject would terminate it permanently,
+      // leaving every subscriber stuck and making later `updateThemeSettings` calls no-ops. Keeping
+      // the last emitted value instead means subscribers stay on the previously applied theme - the
+      // server theme, or the default settings the subject was created with.
+      const errorMessage = error instanceof Error ? error.message : String(error);
+
+      console.warn(`ThemeService: ${errorMessage}. Falling back to the current theme.`);
+      void this.trackThemeError(errorMessage);
+    }
+  }
+
+  /**
+   * Reports a non-fatal theme loading failure to the usage analytics endpoint.
+   *
+   * Preserves the `sdkError` event that used to be sent indirectly: erroring the theme settings
+   * subject made `CustomThemeProvider` throw, which the React `ErrorTracker` caught and reported.
+   */
+  private async trackThemeError(errorMessage: string) {
+    try {
+      const app = await this.sisenseContextService.getApp();
+      const trackingEnabled = app.settings?.trackingConfig?.enabled ?? true;
+
+      if (app?.httpClient) {
+        void trackProductEvent(
+          'sdkError',
+          {
+            packageName: 'sdk-ui-angular',
+            packageVersion,
+            component: 'ThemeService',
+            error: errorMessage,
+          },
+          app.httpClient,
+          !trackingEnabled,
+        );
+      }
+    } catch (e) {
+      console.warn('tracking error', e);
     }
   }
 

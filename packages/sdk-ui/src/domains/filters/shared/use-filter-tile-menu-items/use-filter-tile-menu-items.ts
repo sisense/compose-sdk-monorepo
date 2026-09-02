@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import { Filter } from '@sisense/sdk-data';
 
+import { resolveHeaderMenuItems } from '@/domains/shared/header';
 import type { MenuItem } from '@/shared/types/menu-item';
 
 import type { FilterTileConfig } from '../../components/filter-tile/types';
@@ -31,11 +32,18 @@ export function useFilterTileMenuItems<T extends Filter>(
     ),
   });
 
-  const lockEnabled = config?.actions?.lockFilter?.enabled ?? false;
+  const lockEnabled = config?.actions?.lockFilter?.enabled ?? true;
+  const menuEnabled = config?.header?.menu?.enabled;
   const externalItems = config?.header?.menu?.items;
 
+  // Routed through the shared seam so visibility and empty-submenu pruning behave exactly as they
+  // do for the widget header menu — see `shared/header/__dev_docs__/header-menu-architecture.md`.
   return useMemo(
-    () => [...(lockEnabled ? [lockMenuItem] : []), ...(externalItems ?? [])],
-    [lockEnabled, lockMenuItem, externalItems],
+    () =>
+      resolveHeaderMenuItems({
+        enabled: menuEnabled,
+        items: [...(lockEnabled ? [lockMenuItem] : []), ...(externalItems ?? [])],
+      }),
+    [menuEnabled, lockEnabled, lockMenuItem, externalItems],
   );
 }

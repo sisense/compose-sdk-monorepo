@@ -1,9 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-
-import Tooltip from '@mui/material/Tooltip';
-
 import {
   CustomDataCellFormatter,
   CustomHeaderCellFormatter,
@@ -16,9 +11,9 @@ import {
   registerDataPointsSelectedHandler,
 } from '@/domains/widgets/components/widget-by-id/utils';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import { withHeaderItems } from '@/domains/widgets/helpers/header-items-utils.js';
 import { DEFAULT_HYPERLINK_COLOR } from '@/infra/contexts/theme-provider/default-theme-settings';
 import { PivotTableDataPointEventHandler } from '@/props.js';
-import { JtdJumpableIcon } from '@/shared/icons/jtd-jumpable-icon';
 import { combineHandlers } from '@/shared/utils/combine-handlers';
 import { DataPoint, PivotTableDataPoint } from '@/types';
 
@@ -35,6 +30,7 @@ import {
   handlePivotDataPointClick,
   handleTextWidgetClick,
 } from './jtd-handlers.js';
+import { createJtdIconItem } from './jtd-header-item.js';
 import {
   getJumpToDashboardMenuItem,
   getJumpToDashboardMenuItemForMultiplePoints,
@@ -42,22 +38,6 @@ import {
 import { JtdActions, JtdWidgetTransformConfig } from './jtd-types.js';
 
 const jumpToDashboardMenuId = 'jump-to-dashboard-menu';
-
-/**
- * JTD Jumpable Icon with tooltip
- * @internal
- */
-const JtdJumpableIconWithTooltip = () => {
-  const { t } = useTranslation();
-
-  return (
-    <Tooltip title={t('jumpToDashboard.jumpableTooltip')} placement="top" arrow>
-      <div>
-        <JtdJumpableIcon />
-      </div>
-    </Tooltip>
-  );
-};
 
 /**
  * Add pointer cursor to chart widgets that support it
@@ -540,35 +520,10 @@ export const applyPivotLinkStyling = (
  * @internal
  */
 export const addJtdIconToHeader = (widgetProps: WidgetProps): WidgetProps => {
-  // Only add header to widgets that support header styleOptions (chart and pivot widgets)
+  // Only chart and pivot widgets carry a JTD target, so only they get the icon
   if (!isChartWidgetProps(widgetProps) && !isPivotTableWidgetProps(widgetProps)) {
     return widgetProps;
   }
 
-  const prevHeader = widgetProps.styleOptions?.header || {};
-  const prevRenderTitle = prevHeader.renderTitle;
-  const jtdRenderTitle = (element: ReactNode): ReactNode => {
-    const titleContent = prevRenderTitle ? prevRenderTitle(element) : element;
-
-    return (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <JtdJumpableIconWithTooltip />
-        {/* same class names as the parent element to preserve title positioning */}
-        <div className="csdk-w-full csdk-whitespace-nowrap csdk-overflow-hidden">
-          {titleContent}
-        </div>
-      </div>
-    );
-  };
-
-  return {
-    ...widgetProps,
-    styleOptions: {
-      ...widgetProps.styleOptions,
-      header: {
-        ...prevHeader,
-        renderTitle: jtdRenderTitle,
-      },
-    },
-  };
+  return withHeaderItems([createJtdIconItem()])(widgetProps);
 };

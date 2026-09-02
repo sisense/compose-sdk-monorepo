@@ -92,6 +92,10 @@ export const RelativeDateFilterTile = defineComponent({
      * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.onEdit}
      */
     onEdit: Function as PropType<RelativeDateFilterTileProps['onEdit']>,
+    /**
+     * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.config}
+     */
+    config: Object as PropType<RelativeDateFilterTileProps['config']>,
   },
   setup: (props) => setupHelper(RelativeDateFilterTilePreact, props),
 });

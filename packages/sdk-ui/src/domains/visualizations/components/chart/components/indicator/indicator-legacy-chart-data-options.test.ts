@@ -1,4 +1,4 @@
-import { MeasureColumn } from '@sisense/sdk-data';
+import { Measure, MeasureColumn } from '@sisense/sdk-data';
 
 import { DataColorCondition, DataColorOptions, IndicatorChartDataOptions } from '@/types';
 
@@ -131,6 +131,33 @@ describe('indicator-legacy-chart-data-options', () => {
         withConditions([
           { color: '#kept', expression: '50', operator: '<' },
           { color: '#dropped', expression, operator: '<' },
+        ]),
+      );
+
+      expect(conditions).toEqual([{ data: 50, operator: '<', color: '#kept' }]);
+    });
+
+    it('resolves a formula-driven condition using colorConditionValues from chartData', () => {
+      const targetMeasure = { name: 'Target' } as unknown as Measure;
+      const { conditions } = createLegacyChartDataOptions(
+        { ...chartData, colorConditionValues: { Target: 25000000 } },
+        chartDesignOptions,
+        withConditions([
+          { color: '#e74c3c', expression: '', operator: '<', valueMeasure: targetMeasure },
+        ]),
+      );
+
+      expect(conditions).toEqual([{ data: 25000000, operator: '<', color: '#e74c3c' }]);
+    });
+
+    it('drops a formula-driven condition whose value is missing from colorConditionValues', () => {
+      const targetMeasure = { name: 'Target' } as unknown as Measure;
+      const { conditions } = createLegacyChartDataOptions(
+        chartData,
+        chartDesignOptions,
+        withConditions([
+          { color: '#kept', expression: '50', operator: '<' },
+          { color: '#dropped', expression: '', operator: '<', valueMeasure: targetMeasure },
         ]),
       );
 

@@ -291,7 +291,7 @@ describe('extractUnsupportedStyleOptions', () => {
 
   describe('tablewidget / tablewidgetagg', () => {
     it.each(['tablewidget', 'tablewidgetagg'] as const)(
-      'extracts borders/wordwrap/scroll/tableState/automaticHeight for %s',
+      'extracts borders/wordwrap/scroll/tableState for %s',
       (widgetType) => {
         const style = {
           'borders/all': true,
@@ -315,8 +315,15 @@ describe('extractUnsupportedStyleOptions', () => {
           'wordwrap/rows': false,
           scroll: true,
           tableState: { foo: 'bar' },
-          automaticHeight: false,
         });
+      },
+    );
+
+    it.each(['tablewidget', 'tablewidgetagg'] as const)(
+      'no longer treats automaticHeight as unsupported for %s',
+      (widgetType) => {
+        const style = { automaticHeight: false } as unknown as WidgetStyle;
+        expect(extractUnsupportedStyleOptions(widgetType, style)).toEqual({});
       },
     );
   });

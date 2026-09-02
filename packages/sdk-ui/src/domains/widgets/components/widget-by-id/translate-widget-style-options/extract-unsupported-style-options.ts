@@ -205,7 +205,6 @@ const TABLE_UNSUPPORTED_KEYS = [
   'wordwrap/rows',
   'scroll',
   'tableState',
-  'automaticHeight',
 ] as const;
 
 function extractTableUnsupported(style: TableWidgetStyle): UnsupportedStyleOptions {

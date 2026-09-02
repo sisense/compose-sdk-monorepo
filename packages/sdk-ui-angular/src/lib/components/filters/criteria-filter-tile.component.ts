@@ -112,6 +112,12 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
   tileDesignOptions: CriteriaFilterTileProps['tileDesignOptions'];
 
   /**
+   * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.config}
+   */
+  @Input()
+  config: CriteriaFilterTileProps['config'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!CriteriaFilterTileProps.onUpdate}
    */
   @Output()
@@ -166,6 +172,7 @@ export class CriteriaFilterTileComponent implements AfterViewInit, OnChanges, On
 
   private getPreactComponentProps(): CriteriaFilterTilePropsPreact {
     return {
+      config: this.config,
       title: this.title,
       filter: this.filter,
       arrangement: this.arrangement,

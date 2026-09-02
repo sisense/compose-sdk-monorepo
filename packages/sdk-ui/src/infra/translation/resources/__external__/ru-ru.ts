@@ -234,6 +234,26 @@ const translation: TranslationDictionary = {
     allExceptCount: 'Все, кроме {{count}}',
     setupTitle: 'Настройте виджет фильтр',
     setupSubtitle: 'Выберите измерение и настройте работу фильтра',
+    conditionUnsupported: 'Условие доступно для текстовых и числовых полей',
+    conditionNotRepresentable: 'Это условие нельзя редактировать здесь',
+    controls: {
+      findInList: 'Поиск в списке',
+      enterValue: 'Введите значение...',
+      noMatches: 'Нет совпадений',
+      clearSelection: 'Очистить выбор',
+      overflowCount: '+{{count}}',
+      select: 'Выбрать',
+      selectDateLevel: 'Выберите уровень даты',
+      selectCondition: 'Выберите условие',
+      selectConnector: 'Выберите И/ИЛИ',
+      addCondition: '+ Добавить условие',
+      fillOrRemoveCondition: 'Заполните или удалите условие',
+      rangeOrderError: 'Второе значение должно быть больше первого',
+      betweenMin: 'Минимум',
+      betweenMax: 'Максимум',
+      selectValues: 'Выберите {{level}}',
+      clear: 'Очистить',
+    },
   },
   unsupportedFilterMessage: 'Неподдерживаемый фильтр (применен к запросу данных)',
   unsupportedFilter: 'Неподдерживаемый фильтр {{filter}}',
@@ -363,6 +383,10 @@ const translation: TranslationDictionary = {
       selectAll: 'Выбрать все',
       clearAll: 'Очистить все',
     },
+    tooltips: {
+      selectAllPartiallyLoaded:
+        'Отображаются не все значения. Прокрутите список вниз, чтобы загрузить остальные значения. Вы также можете использовать условие "Не является" ниже, чтобы исключить определенные значения.',
+    },
     labels: {
       includeAll: 'Включить все (фильтр не применен)',
       allowMultiSelection: 'Разрешить множественный выбор для списков',
@@ -395,6 +419,7 @@ const translation: TranslationDictionary = {
       greaterThan: 'Больше',
       greaterThanOrEqual: 'Равно или больше',
       isWithin: 'В пределах',
+      between: 'Между',
       top: 'Топ',
       bottom: 'Последние',
     },
@@ -497,6 +522,7 @@ const translation: TranslationDictionary = {
     },
     table: {
       label: 'Таблица данных',
+      totalRows: 'Всего строк: {{formattedCount}}',
     },
     sankey: {
       alerts: {

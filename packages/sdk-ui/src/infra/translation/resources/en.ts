@@ -224,6 +224,30 @@ export const translation = {
     allExceptCount: 'All except {{count}}',
     setupTitle: 'Set up a filter widget',
     setupSubtitle: 'Set a dimension and configure how the filter works',
+    conditionUnsupported: 'Condition is available for text and numeric fields',
+    conditionNotRepresentable: 'This condition cannot be edited here',
+    controls: {
+      findInList: 'Find in the list',
+      /** Free-text value box in Condition mode (not a member search). */
+      enterValue: 'Enter value...',
+      noMatches: 'No matches',
+      clearSelection: 'Clear selection',
+      overflowCount: '+{{count}}',
+      select: 'Select',
+      selectDateLevel: 'Select date level',
+      selectCondition: 'Select condition',
+      selectConnector: 'Select AND/OR',
+      /** `level` arrives already translated, e.g. `Select Quarter`. */
+      selectValues: 'Select {{level}}',
+      clear: 'Clear',
+      addCondition: '+ Add condition',
+      fillOrRemoveCondition: 'Fill this or remove the condition',
+      /** Between bounds: upper must exceed lower. */
+      rangeOrderError: 'Second value must be greater than the first',
+      /** Accessible names for Between min/max inputs (no visible labels). */
+      betweenMin: 'Minimum',
+      betweenMax: 'Maximum',
+    },
   },
   unsupportedFilterMessage: 'Unsupported Filter (applied to the data query)',
   unsupportedFilter: 'Unsupported filter {{filter}}',
@@ -353,6 +377,10 @@ export const translation = {
       selectAll: 'Select All',
       clearAll: 'Clear All',
     },
+    tooltips: {
+      selectAllPartiallyLoaded:
+        'Not all values displayed. Scroll down the list to load remaining values. You can also use "Is not" condition below to exclude specific values.',
+    },
     labels: {
       includeAll: 'Include all (no filter applied)',
       allowMultiSelection: 'Allow multiselect for lists',
@@ -385,6 +413,8 @@ export const translation = {
       greaterThan: 'Greater than',
       greaterThanOrEqual: 'Equals or greater than',
       isWithin: 'Is within',
+      /** FilterWidget numeric Condition operator list / trigger (no value placeholders). */
+      between: 'Between',
       top: 'Top',
       bottom: 'Bottom',
     },
@@ -487,6 +517,7 @@ export const translation = {
     },
     table: {
       label: 'Data table',
+      totalRows: 'Total: {{formattedCount}} rows',
     },
     sankey: {
       alerts: {

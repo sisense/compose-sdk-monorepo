@@ -9,18 +9,24 @@ import { CompleteThemeSettingsInternal, isThemeOid, ThemeOid, ThemeSettings } fr
 import { useThemeContext } from './theme-context';
 
 /**
- * Returns the theme settings for the given theme OID or theme settings and error if it happened.
+ * Returns the theme settings for the given theme OID or theme settings, along with a non-fatal
+ * error if loading a theme by OID failed.
  *
  * If the given theme is a theme OID, the theme settings will be fetched from the Sisense instance.
  * If the given theme is a theme settings object, the theme settings will be merged with parent's one and
  * returned as is.
  *
+ * The returned theme settings are always usable: when loading by OID fails they fall back to the
+ * inherited theme settings (the parent provider's, or the default ones at the root), and the failure
+ * is surfaced through `error` for the caller to report.
+ *
  * @param userTheme Theme OID or theme settings object
- * @returns Theme settings and error if it happened
+ * @returns The effective theme settings, and the theme loading error if one occurred
  */
-export function useThemeSettings(
-  userTheme?: ThemeOid | ThemeSettings,
-): [CompleteThemeSettingsInternal, null] | [null, Error] {
+export function useThemeSettings(userTheme?: ThemeOid | ThemeSettings): {
+  themeSettings: CompleteThemeSettingsInternal;
+  error: Error | null;
+} {
   const parentThemeSettings = useThemeContext().themeSettings;
   const [loadedThemeSettings, setLoadedThemeSettings] =
     useState<CompleteThemeSettingsInternal | null>(null);
@@ -60,11 +66,7 @@ export function useThemeSettings(
     return parentThemeSettings;
   }, [loadedThemeSettings, parentThemeSettings, userTheme]);
 
-  if (themeError) {
-    return [null, themeError];
-  }
-
-  return [currentThemeSettings, null];
+  return { themeSettings: currentThemeSettings, error: themeError };
 }
 
 function mergeThemeSettings(

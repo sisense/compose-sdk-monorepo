@@ -231,6 +231,26 @@ const translation: TranslationDictionary = {
     allExceptCount: '{{count}}개 제외한 모두',
     setupTitle: '필터 위젯 설정',
     setupSubtitle: '차원을 설정하고 필터 작동 방식을 구성하세요',
+    conditionUnsupported: '조건은 텍스트 및 숫자 필드에서 사용할 수 있습니다',
+    conditionNotRepresentable: '이 조건은 여기에서 편집할 수 없습니다',
+    controls: {
+      findInList: '목록에서 찾기',
+      enterValue: '값 입력...',
+      noMatches: '일치하는 항목 없음',
+      clearSelection: '선택 지우기',
+      overflowCount: '+{{count}}',
+      select: '선택',
+      selectDateLevel: '날짜 수준 선택',
+      selectCondition: '조건 선택',
+      selectConnector: 'AND/OR 선택',
+      addCondition: '+ 조건 추가',
+      fillOrRemoveCondition: '입력하거나 조건을 제거하세요',
+      rangeOrderError: '두 번째 값은 첫 번째 값보다 커야 합니다',
+      betweenMin: '최솟값',
+      betweenMax: '최댓값',
+      selectValues: '{{level}} 선택',
+      clear: '지우기',
+    },
   },
   unsupportedFilterMessage: '지원되지 않는 필터(데이터 쿼리에 적용됨)',
   unsupportedFilter: '지원되지 않는 필터 {{filter}}',
@@ -358,6 +378,10 @@ const translation: TranslationDictionary = {
       selectAll: '모두 선택',
       clearAll: '모두 지우기',
     },
+    tooltips: {
+      selectAllPartiallyLoaded:
+        '모든 값이 표시되지 않았습니다. 목록을 아래로 스크롤하여 나머지 값을 불러오세요. 아래의 "아님" 조건을 사용하여 특정 값을 제생할 수도 있습니다.',
+    },
     labels: {
       includeAll: '모두 포함(필터 적용 안 함)',
       allowMultiSelection: '목록에 대해 다중 선택 허용',
@@ -390,6 +414,7 @@ const translation: TranslationDictionary = {
       greaterThan: '보다 큼',
       greaterThanOrEqual: '보다 크거나 같음',
       isWithin: '내부에 있음',
+      between: '사이',
       top: '상위',
       bottom: '하위',
     },
@@ -491,6 +516,7 @@ const translation: TranslationDictionary = {
     },
     table: {
       label: '데이터 테이블',
+      totalRows: '합계: {{formattedCount}}행',
     },
     sankey: {
       alerts: {

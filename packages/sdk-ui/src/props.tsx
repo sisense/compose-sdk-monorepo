@@ -37,6 +37,7 @@ import {
 import { HighchartsOptions } from './domains/visualizations/core/chart-options-processor/chart-options-service';
 import type { ChartWidgetProps } from './domains/widgets/components/chart-widget/types';
 import { FiltersMergeStrategy } from './domains/widgets/components/widget-by-id/types';
+import type { WidgetConfig } from './domains/widgets/components/widget/widget-config';
 import { type AppConfig } from './infra/app/types';
 import type { Module } from './infra/modules';
 import type { Plugin } from './infra/plugins/types';
@@ -1251,12 +1252,40 @@ export interface TableProps extends BaseChartEventProps {
   styleOptions?: TableStyleOptions;
 
   /**
+   * Boolean flag whether to request the total row count of the table's query,
+   * ignoring the `count`/`offset` paging used to load table pages.
+   *
+   * When enabled, the total is shown next to the pagination control and used to
+   * render accurate page-number links, including direct links to the last pages.
+   *
+   * Row count feature requires a Sisense instance version of 2026.3.0 or greater.
+   * On older versions, the table still loads and paginates as before, and the
+   * total-rows label is not shown.
+   *
+   * If not specified, the default value is `false`
+   *
+   * @category Data
+   * @beta
+   */
+  includeTotalRows?: boolean;
+
+  /**
    * Used to force a refresh of the table from outside the table component
    * Since added to dependencies of useEffect, will trigger a query execution
    *
    * @internal
    */
   refreshCounter?: number;
+
+  /**
+   * Callback function that is called when the auto-height table reports the height it needs
+   * to render the current page without an inner scrollbar.
+   *
+   * Only called when `styleOptions.isAutoHeight` is enabled.
+   *
+   * @internal
+   */
+  onHeightChange?: (height: number) => void;
 }
 
 /**
@@ -1406,7 +1435,7 @@ export interface ScatterChartProps
 export interface WidgetByIdProps
   extends Omit<
     ChartWidgetProps,
-    'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions' | 'drilldownOptions'
+    'dataSource' | 'dataOptions' | 'chartType' | 'styleOptions' | 'drilldownOptions' | 'config'
   > {
   /**
    * Identifier of the widget
@@ -1478,6 +1507,12 @@ export interface WidgetByIdProps
    * @internal
    */
   drilldownOptions?: DrilldownOptions | PivotTableDrilldownOptions;
+  /**
+   * Configuration of the widget
+   *
+   * @category Widget
+   */
+  config?: WidgetConfig;
 }
 
 /**

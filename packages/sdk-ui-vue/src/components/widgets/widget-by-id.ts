@@ -5,11 +5,19 @@ import type { PropType } from 'vue';
 
 import { setupHelper } from '../../helpers/setup-helper';
 import type { ChartWidget } from './chart-widget';
+import type { WidgetConfig } from './widget-config';
 
 /**
  * Props of the {@link @sisense/sdk-ui-vue!WidgetById | `WidgetById`} component.
  */
-export interface WidgetByIdProps extends WidgetByIdPropsPreact {}
+export interface WidgetByIdProps extends Omit<WidgetByIdPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!WidgetByIdProps.config}
+   *
+   * @category Widget
+   */
+  config?: WidgetConfig;
+}
 
 /**
  * The `WidgetById` component, which is a thin wrapper on the {@link ChartWidget} component,

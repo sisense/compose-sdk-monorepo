@@ -3,13 +3,15 @@ import { type FunctionComponent, useCallback, useMemo, useState } from 'react';
 import { Attribute, getDataSourceName } from '@sisense/sdk-data';
 import omit from 'lodash-es/omit';
 
-import { NarrativeTriggerButton } from '@/domains/narrative/components/narrative-trigger-button';
+import { createNarrativeToggleItem } from '@/domains/narrative/components/narrative-toggle-header-item.js';
 import { WidgetNarrative } from '@/domains/narrative/components/widget-narrative';
 import { getWidgetNarrativeConfigFromWidgetProps } from '@/domains/narrative/core/get-widget-narrative-from-widget-props.js';
 import { getCompleteWidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config.js';
 import { PivotTable } from '@/domains/visualizations/components/pivot-table';
-import type { WidgetChangeEvent } from '@/domains/widgets/change-events';
 import type { WithCommonWidgetProps } from '@/domains/widgets/components/widget/types';
+import { useWidgetHeaderInfoButton } from '@/domains/widgets/shared/widget-header/features/use-widget-header-info-button';
+import { useWidgetHeaderMenu } from '@/domains/widgets/shared/widget-header/features/use-widget-header-menu';
+import { useWidgetHeaderTitle } from '@/domains/widgets/shared/widget-header/features/use-widget-header-title';
 import { DataOptionLocation, DrilldownSelection } from '@/index';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import { useThemeContext } from '@/infra/contexts/theme-provider';
@@ -20,8 +22,8 @@ import {
 } from '@/shared/components/dynamic-size-container';
 import { useElementHeight } from '@/shared/hooks/use-element-height';
 
+import { withHeaderItemsInConfig } from '../../helpers/header-items-utils';
 import { useTrackWidgetInit } from '../../hooks/use-track-widget-init';
-import { useWidgetHeaderManagement } from '../../hooks/use-widget-header-management';
 import { getWidgetEntityId } from '../../hooks/widget-entity-id';
 import { getPivotWidgetName, getWidgetTitle } from '../../hooks/widget-tracking-adapters';
 import { WidgetContainer } from '../../shared/widget-container';
@@ -114,14 +116,14 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
 
   const { styleOptions, dataSource = app?.defaultDataSource, dataOptions, onChange } = props;
 
-  const { headerConfig: headerConfigWithRenaming, titleEditor } = useWidgetHeaderManagement({
+  const headerConfigWithTitle = useWidgetHeaderTitle(props.config?.header, {
     title: props.title,
-    onChange: props.onChange as (event: WidgetChangeEvent) => void,
-    headerConfig: props.config?.header,
+    styleOptions: styleOptions?.header,
+    onChange: props.onChange,
   });
 
-  const { headerConfig: headerConfigWithCsv } = usePivotWidgetCsvDownload({
-    baseHeaderConfig: headerConfigWithRenaming,
+  const { headerConfig: headerConfigWithCsvDownload } = usePivotWidgetCsvDownload({
+    baseHeaderConfig: headerConfigWithTitle,
     title: props.title,
     dataOptions,
     dataSource,
@@ -130,8 +132,8 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     config: props.config,
   });
 
-  const { headerConfig } = usePivotWidgetExcelDownload({
-    baseHeaderConfig: headerConfigWithCsv,
+  const { headerConfig: headerConfigWithExcelDownload } = usePivotWidgetExcelDownload({
+    baseHeaderConfig: headerConfigWithCsvDownload,
     title: props.title,
     dataOptions,
     dataSource,
@@ -192,29 +194,29 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     completeNarrativeConfig.enabled &&
     !completeNarrativeConfig.autoShow;
 
-  const containerStyleOptions = useMemo(() => {
-    if (!showNarrativeTrigger) return styleOptions;
-    return {
-      ...styleOptions,
-      header: {
-        ...styleOptions?.header,
-        renderToolbar: (_onRefresh: () => void, defaultToolbar: JSX.Element) => {
-          const toolbar = styleOptions?.header?.renderToolbar
-            ? styleOptions.header.renderToolbar(_onRefresh, defaultToolbar)
-            : defaultToolbar;
-          return (
-            <>
-              {toolbar}
-              <NarrativeTriggerButton
-                isVisible={narrativeVisible}
-                onClick={() => setNarrativeVisible((v) => !v)}
-              />
-            </>
-          );
-        },
-      },
-    };
-  }, [showNarrativeTrigger, styleOptions, setNarrativeVisible, narrativeVisible]);
+  // Contributed as a built-in header item, so it keeps a reserved id that `position` /
+  // `onBeforeRender` can address like any other built-in.
+  const headerConfigWithNarrative = useMemo(
+    () =>
+      showNarrativeTrigger
+        ? withHeaderItemsInConfig([
+            createNarrativeToggleItem({
+              isVisible: narrativeVisible,
+              onToggle: () => setNarrativeVisible((v) => !v),
+            }),
+          ])(headerConfigWithExcelDownload)
+        : headerConfigWithExcelDownload,
+    [showNarrativeTrigger, headerConfigWithExcelDownload, narrativeVisible, setNarrativeVisible],
+  );
+
+  const refresh = useCallback(() => setRefreshCounter((counter) => counter + 1), []);
+  const headerConfigWithInfoButton = useWidgetHeaderInfoButton(headerConfigWithNarrative, {
+    styleOptions: styleOptions?.header,
+    dataSetName: dataSource && getDataSourceName(dataSource),
+    description: props.description,
+    onRefresh: refresh,
+  });
+  const fullHeaderConfig = useWidgetHeaderMenu(headerConfigWithInfoButton);
 
   const narrativeShouldShow =
     !!app?.settings?.narrativeConfig?.enabled &&
@@ -288,9 +290,8 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
     >
       <WidgetContainer
         {...props}
-        styleOptions={containerStyleOptions}
-        headerConfig={headerConfig}
-        titleEditor={titleEditor}
+        styleOptions={styleOptions}
+        headerConfig={fullHeaderConfig}
         topSlot={
           hasTopSlotContent ? (
             <div ref={isAutoHeight ? topSlotRef : undefined}>
@@ -302,8 +303,6 @@ export const PivotTableWidget: FunctionComponent<PivotTableWidgetProps> = asSise
             </div>
           ) : undefined
         }
-        dataSetName={dataSource && getDataSourceName(dataSource)}
-        onRefresh={() => setRefreshCounter(refreshCounter + 1)}
         bottomSlot={
           <>
             {narrativeShouldShow && completeNarrativeConfig.displayLocation === 'below' ? (

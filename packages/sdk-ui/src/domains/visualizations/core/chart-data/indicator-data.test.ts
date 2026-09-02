@@ -136,6 +136,26 @@ describe('indicatorData', () => {
     expect(result).toEqual(emptyIndicatorData);
   });
 
+  it('should resolve colorConditionMeasures values into colorConditionValues', () => {
+    const result = indicatorData(
+      {
+        ...indicatorChartDataOptions,
+        colorConditionMeasures: [
+          {
+            column: {
+              name: 'Total Revenue',
+              aggregation: 'sum',
+              title: 'Total Revenue',
+            },
+          },
+        ],
+      },
+      dataTable,
+    );
+
+    expect(result.colorConditionValues).toEqual({ 'Total Revenue': 38.76 });
+  });
+
   it("should return empty chart data when in tableData no column with the same name as 'value' in dataOptions", () => {
     const columnsWithBrokenColumnName = [
       {

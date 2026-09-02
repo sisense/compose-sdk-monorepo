@@ -35,9 +35,6 @@ describe('CustomSuperJSON', () => {
         expect(widgetProps).toBeDefined();
         if (!widgetProps) return;
 
-        // disregard styleOptions.header.renderToolbar, which is a function
-        delete (widgetProps as any).styleOptions.header.renderToolbar;
-
         expect(CustomSuperJSON.parse(CustomSuperJSON.stringify(widgetProps))).toStrictEqual(
           widgetProps,
         );

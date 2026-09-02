@@ -8,7 +8,7 @@ import {
   getThemeSettingsByOid,
 } from '@sisense/sdk-ui-preact';
 import { BehaviorSubject, firstValueFrom, take, toArray } from 'rxjs';
-import { Mock, Mocked } from 'vitest';
+import { Mock, Mocked, MockInstance } from 'vitest';
 
 import { ThemeService } from '.';
 import { SisenseContextService } from './sisense-context.service';
@@ -396,6 +396,59 @@ describe('ThemeService', () => {
         typography: 'manual-typography-settings',
         general: 'general-settings',
       });
+    });
+  });
+
+  describe('theme loading failures', () => {
+    const defaultThemeSettingsMock: CompleteThemeSettingsInternal = {
+      chart: 'chart-settings',
+      palette: 'palette-settings',
+      typography: 'typography-settings',
+      general: 'general-settings',
+    } as unknown as CompleteThemeSettingsInternal;
+
+    let consoleWarnSpy: MockInstance<typeof console.warn>;
+
+    beforeEach(() => {
+      getDefaultThemeSettingsMock.mockReturnValue(defaultThemeSettingsMock);
+      getThemeSettingsByOidMock.mockRejectedValue(new Error('Theme not found'));
+      consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      consoleWarnSpy.mockRestore();
+    });
+
+    it('should keep the current theme settings and warn when loading a theme oid fails', async () => {
+      themeService = new ThemeService(sisenseContextServiceMock);
+      await delay(0);
+
+      await themeService.updateThemeSettings('invalid-theme-oid');
+
+      // A theme that cannot be loaded is not fatal - the previously applied theme is kept.
+      expect(await firstValueFrom(themeService.themeSettings$)).toEqual(defaultThemeSettingsMock);
+      expect(consoleWarnSpy).toHaveBeenCalledOnce();
+      expect(consoleWarnSpy.mock.calls[0][0]).toContain('Theme not found');
+    });
+
+    it('should keep the theme settings subject alive so later updates still apply', async () => {
+      themeService = new ThemeService(sisenseContextServiceMock);
+      await delay(0);
+
+      await themeService.updateThemeSettings('invalid-theme-oid');
+
+      // Erroring the subject used to terminate it permanently, turning every later update into a
+      // no-op and making `getThemeSettings` throw.
+      await themeService.updateThemeSettings({
+        typography: 'recovered-typography-settings',
+      } as unknown as CompleteThemeSettingsInternal);
+
+      const expectedThemeSettings = {
+        ...defaultThemeSettingsMock,
+        typography: 'recovered-typography-settings',
+      };
+      expect(await firstValueFrom(themeService.themeSettings$)).toEqual(expectedThemeSettings);
+      expect(themeService.getThemeSettings()).toEqual(expectedThemeSettings);
     });
   });
 });

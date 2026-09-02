@@ -1,7 +1,8 @@
-import type { ClientApplication, GetWidgetModelParams, WidgetModel } from '@sisense/sdk-ui-preact';
+import type { ClientApplication, GetWidgetModelParams } from '@sisense/sdk-ui-preact';
 import { dataLoadStateReducer, getWidgetModel } from '@sisense/sdk-ui-preact';
 import { toRefs, watch } from 'vue';
 
+import type { WidgetModel } from '../components/widgets/widget-model';
 import { useReducer } from '../helpers/use-reducer';
 import { getSisenseContext } from '../providers';
 import type { MaybeRefOrWithRefs } from '../types';

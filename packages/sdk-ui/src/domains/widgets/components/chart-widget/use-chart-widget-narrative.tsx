@@ -2,10 +2,11 @@
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 
-import { NarrativeTriggerButton } from '@/domains/narrative/components/narrative-trigger-button';
+import { createNarrativeToggleItem } from '@/domains/narrative/components/narrative-toggle-header-item';
 import { WidgetNarrative } from '@/domains/narrative/components/widget-narrative';
 import { getWidgetNarrativeConfigFromWidgetProps } from '@/domains/narrative/core/get-widget-narrative-from-widget-props.js';
 import { getCompleteWidgetNarrativeConfig } from '@/domains/narrative/core/widget-narrative-config';
+import type { HeaderItem } from '@/domains/shared/header';
 import type { WithCommonWidgetProps } from '@/domains/widgets/components/widget/types';
 import { useSisenseContext } from '@/infra/contexts/sisense-context/sisense-context';
 import type { ChartWidgetStyleOptions } from '@/types';
@@ -20,8 +21,8 @@ type UseChartWidgetNarrativeParams = {
 type UseChartWidgetNarrativeReturn = {
   /** Ref to pass to WidgetContainer — measures the content area for height constraints. */
   contentAreaRef: RefObject<HTMLDivElement | null>;
-  /** styleOptions extended with the narrative trigger button injected into the header toolbar when applicable. */
-  styleOptionsWithNarrative: ChartWidgetStyleOptions | undefined;
+  /** The built-in narrative-toggle header item; `undefined` when the toggle does not apply. */
+  narrativeToggleItem: HeaderItem | undefined;
   /** Narrative element for the top slot; non-null only when displayLocation is `above` and narrative is visible. */
   narrativeTopSlot: ReactNode;
   /** Narrative element for the bottom slot; non-null only when displayLocation is `below` and narrative is visible. */
@@ -32,7 +33,7 @@ type UseChartWidgetNarrativeReturn = {
 
 /**
  * Encapsulates all narrative-related logic for ChartWidget:
- * options resolution, visibility state, trigger-button toolbar injection, and height constraints.
+ * options resolution, visibility state, trigger-button contribution, and height constraints.
  *
  * @internal
  */
@@ -58,29 +59,18 @@ export function useChartWidgetNarrative({
     completeNarrativeConfig.enabled &&
     !completeNarrativeConfig.autoShow;
 
-  const styleOptionsWithNarrative = useMemo<ChartWidgetStyleOptions | undefined>(() => {
-    if (!showNarrativeTrigger) return styleOptions;
-    return {
-      ...styleOptions,
-      header: {
-        ...styleOptions?.header,
-        renderToolbar: (_onRefresh: () => void, defaultToolbar: JSX.Element) => {
-          const toolbar = styleOptions?.header?.renderToolbar
-            ? styleOptions.header.renderToolbar(_onRefresh, defaultToolbar)
-            : defaultToolbar;
-          return (
-            <>
-              {toolbar}
-              <NarrativeTriggerButton
-                isVisible={narrativeVisible}
-                onClick={() => setNarrativeVisible((v) => !v)}
-              />
-            </>
-          );
-        },
-      },
-    };
-  }, [showNarrativeTrigger, styleOptions, narrativeVisible, setNarrativeVisible]);
+  // Contributed as a built-in header item, so it keeps a reserved id that `position` /
+  // `onBeforeRender` can address like any other built-in.
+  const narrativeToggleItem = useMemo<HeaderItem | undefined>(
+    () =>
+      showNarrativeTrigger
+        ? createNarrativeToggleItem({
+            isVisible: narrativeVisible,
+            onToggle: () => setNarrativeVisible((v) => !v),
+          })
+        : undefined,
+    [showNarrativeTrigger, narrativeVisible, setNarrativeVisible],
+  );
 
   const narrativeShouldShow =
     !!app?.settings?.narrativeConfig?.enabled &&
@@ -146,7 +136,7 @@ export function useChartWidgetNarrative({
 
   return {
     contentAreaRef,
-    styleOptionsWithNarrative,
+    narrativeToggleItem,
     narrativeTopSlot: displayLocation === 'above' ? narrativeNode : null,
     narrativeBottomSlot: displayLocation === 'below' ? narrativeNode : null,
     narrativeAloneContent: displayLocation === 'alone' ? narrativeNode : null,

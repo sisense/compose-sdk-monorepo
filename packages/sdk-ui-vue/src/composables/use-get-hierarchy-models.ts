@@ -2,7 +2,6 @@ import type {
   ClientApplication,
   GetHierarchyModelsParams,
   HierarchyModel,
-  WidgetModel,
 } from '@sisense/sdk-ui-preact';
 import { dataLoadStateReducer, getHierarchyModels } from '@sisense/sdk-ui-preact';
 import { toRefs, watch } from 'vue';

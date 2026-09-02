@@ -12,8 +12,8 @@ import {
 import {
   type BeforeMenuOpenHandler,
   ComponentAdapter,
-  CustomWidgetProps,
-  type FilterWidgetProps,
+  type CustomWidgetProps as CustomWidgetPropsPreact,
+  type FilterWidgetProps as FilterWidgetPropsPreact,
   type SoftUnion,
   TextWidgetProps as TextWidgetPropsPreact,
   Widget as WidgetPreact,
@@ -42,13 +42,51 @@ import {
 } from '../../types/data-point';
 import { ChartWidgetProps } from './chart-widget.component';
 import { PivotTableWidgetProps } from './pivot-table-widget.component';
+import {
+  type CustomWidgetConfig,
+  type FilterWidgetConfig,
+  type TextWidgetConfig,
+} from './widget-config';
 
 /**
  * Props for the text widget.
  */
 export interface TextWidgetProps
-  extends WithoutPreactChartEventProps<TextWidgetPropsPreact>,
-    TextWidgetEventProps {}
+  extends Omit<WithoutPreactChartEventProps<TextWidgetPropsPreact>, 'config'>,
+    TextWidgetEventProps {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!TextWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: TextWidgetConfig;
+}
+
+/**
+ * Props for a custom widget.
+ */
+export interface CustomWidgetProps extends Omit<CustomWidgetPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!CustomWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: CustomWidgetConfig;
+}
+
+/**
+ * Props for the filter widget.
+ *
+ * @beta
+ */
+export interface FilterWidgetProps extends Omit<FilterWidgetPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!FilterWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: FilterWidgetConfig;
+}
 
 /**
  * {@inheritDoc @sisense/sdk-ui!WithCommonWidgetProps}

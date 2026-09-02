@@ -97,6 +97,14 @@ Date level attribute the filter is based on
 
 ***
 
+#### config
+
+> **config**: [`FilterTileConfig`](../interfaces/interface.FilterTileConfig.md) \| `undefined`
+
+Configuration for the filter tile.
+
+***
+
 #### dataSource
 
 > **dataSource**: [`DataSource`](../../sdk-data/type-aliases/type-alias.DataSource.md) \| `undefined`

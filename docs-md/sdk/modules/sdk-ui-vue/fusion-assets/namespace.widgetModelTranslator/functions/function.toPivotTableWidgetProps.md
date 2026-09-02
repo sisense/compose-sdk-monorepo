@@ -4,7 +4,7 @@ title: toPivotTableWidgetProps
 
 # Function toPivotTableWidgetProps
 
-> **toPivotTableWidgetProps**(`widgetModel`): [`PivotTableWidgetProps`](../../../../sdk-ui/interfaces/interface.PivotTableWidgetProps.md)
+> **toPivotTableWidgetProps**(`widgetModel`): [`PivotTableWidgetProps`](../../../interfaces/interface.PivotTableWidgetProps.md)
 
 Translates a [WidgetModel](../../interface.WidgetModel.md) to the props for rendering a pivot table widget.
 
@@ -16,7 +16,7 @@ Translates a [WidgetModel](../../interface.WidgetModel.md) to the props for rend
 
 ## Returns
 
-[`PivotTableWidgetProps`](../../../../sdk-ui/interfaces/interface.PivotTableWidgetProps.md)
+[`PivotTableWidgetProps`](../../../interfaces/interface.PivotTableWidgetProps.md)
 
 ## Example
 

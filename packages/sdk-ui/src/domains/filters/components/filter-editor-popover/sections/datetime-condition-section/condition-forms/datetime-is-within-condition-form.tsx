@@ -14,11 +14,12 @@ import {
 import { useThemeContext } from '@/infra/contexts/theme-provider/theme-context.js';
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
 import { createLevelAttribute } from '@/shared/utils/create-level-attribute.js';
+import { parseISOWithTimezoneCheck } from '@/shared/utils/parseISOWithTimezoneCheck';
 
 import { Input, SingleSelect } from '../../../common/index.js';
 import { CalendarSelect } from '../../../common/select/calendar-select/calendar-select.js';
 import { CalendarSelectTypes } from '../../../common/select/calendar-select/types.js';
-import { isRelativeDateFilterWithAnchor } from '../../../utils.js';
+import { asUtcDate, isRelativeDateFilterWithAnchor } from '../../../utils.js';
 import { dateLevelGranularities as granularities } from '../../common/granularities.js';
 import { DatetimeLimits } from '../../types.js';
 
@@ -96,7 +97,7 @@ function getDatetimeIsWithinConditionFilterData(
       count: filter.count,
       position:
         filter.operator === DateOperators.Last ? DatetimePosition.BEFORE : DatetimePosition.AFTER,
-      baseDate: new Date(filter.anchor!),
+      baseDate: asUtcDate(filter.anchor!),
       attribute: filter.attribute as DimensionalLevelAttribute,
     };
   }
@@ -216,8 +217,8 @@ export const DatetimeIsWithinConditionForm = ({
   const normalizedLimits = useMemo(() => {
     return limits
       ? {
-          minDate: limits.minDate ? new Date(limits.minDate) : undefined,
-          maxDate: limits.maxDate ? new Date(limits.maxDate) : undefined,
+          minDate: limits.minDate ? parseISOWithTimezoneCheck(limits.minDate) : undefined,
+          maxDate: limits.maxDate ? parseISOWithTimezoneCheck(limits.maxDate) : undefined,
         }
       : undefined;
   }, [limits]);

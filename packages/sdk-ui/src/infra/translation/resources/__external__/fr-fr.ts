@@ -237,6 +237,26 @@ const translation: TranslationDictionary = {
     allExceptCount: 'Tous sauf {{count}}',
     setupTitle: 'Configurer un widget de filtre',
     setupSubtitle: 'Définissez une dimension et configurez le fonctionnement du filtre',
+    conditionUnsupported: 'La condition est disponible pour les champs texte et numériques',
+    conditionNotRepresentable: 'Cette condition ne peut pas être modifiée ici',
+    controls: {
+      findInList: 'Rechercher dans la liste',
+      enterValue: 'Entrez la valeur...',
+      noMatches: 'Aucune correspondance',
+      clearSelection: 'Effacer la sélection',
+      overflowCount: '+{{count}}',
+      select: 'Sélectionner',
+      selectDateLevel: 'Sélectionner le niveau de date',
+      selectCondition: 'Sélectionner une condition',
+      selectConnector: 'Sélectionner ET/OU',
+      addCondition: '+ Ajouter une condition',
+      fillOrRemoveCondition: 'Remplir ou supprimer la condition',
+      rangeOrderError: 'La deuxième valeur doit être supérieure à la première',
+      betweenMin: 'Minimum',
+      betweenMax: 'Maximum',
+      selectValues: 'Sélectionner {{level}}',
+      clear: 'Effacer',
+    },
   },
   unsupportedFilterMessage: 'Filtre non pris en charge (appliqué à la requête de données)',
   unsupportedFilter: 'Filtre non pris en charge {{filter}}',
@@ -369,6 +389,10 @@ const translation: TranslationDictionary = {
       selectAll: 'Tout sélectionner',
       clearAll: 'Tout effacer',
     },
+    tooltips: {
+      selectAllPartiallyLoaded:
+        "Toutes les valeurs ne sont pas affichées. Faites défiler la liste vers le bas pour charger les valeurs restantes. Vous pouvez également utiliser la condition « N'est pas » ci-dessous pour exclure des valeurs spécifiques.",
+    },
     labels: {
       includeAll: 'Tout inclure (aucun filtre appliqué)',
       allowMultiSelection: 'Autoriser la sélection multiple pour les listes',
@@ -401,6 +425,7 @@ const translation: TranslationDictionary = {
       greaterThan: 'Supérieur à',
       greaterThanOrEqual: 'Égal ou supérieur à',
       isWithin: 'Est dans',
+      between: 'Entre',
       top: 'Top',
       bottom: 'Derniers',
     },
@@ -503,6 +528,7 @@ const translation: TranslationDictionary = {
     },
     table: {
       label: 'Tableau de données',
+      totalRows: 'Total : {{formattedCount}} lignes',
     },
     sankey: {
       alerts: {

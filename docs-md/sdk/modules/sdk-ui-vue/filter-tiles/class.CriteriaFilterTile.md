@@ -52,6 +52,14 @@ Arrangement of the filter inputs. Use vertical for standard filter tiles and hor
 
 ***
 
+### config
+
+> **`readonly`** **config**?: [`FilterTileConfig`](../interfaces/interface.FilterTileConfig.md)
+
+Configuration for the filter tile.
+
+***
+
 ### filter
 
 > **`readonly`** **filter**: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)

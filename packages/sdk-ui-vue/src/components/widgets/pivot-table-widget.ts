@@ -1,13 +1,22 @@
-import {
-  PivotTableWidget as PivotTableWidgetPreact,
-  type PivotTableWidgetProps,
-} from '@sisense/sdk-ui-preact';
+import { PivotTableWidget as PivotTableWidgetPreact } from '@sisense/sdk-ui-preact';
+import type { PivotTableWidgetProps as PivotTableWidgetPropsPreact } from '@sisense/sdk-ui-preact';
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 
 import { setupHelper } from '../../helpers/setup-helper';
+import type { PivotTableWidgetConfig } from './widget-config';
 
-export { PivotTableWidgetProps };
+/**
+ * Props of the {@link @sisense/sdk-ui-vue!PivotTableWidget | `PivotTableWidget`} component.
+ */
+export interface PivotTableWidgetProps extends Omit<PivotTableWidgetPropsPreact, 'config'> {
+  /**
+   * {@inheritDoc @sisense/sdk-ui!PivotTableWidgetProps.config}
+   *
+   * @category Widget
+   */
+  config?: PivotTableWidgetConfig;
+}
 
 /**
  * The PivotTableWidget component extending the {@link PivotTable} component to support widget style options.

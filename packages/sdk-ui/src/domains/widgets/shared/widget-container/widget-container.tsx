@@ -7,11 +7,8 @@ import { ThemeProvider, useThemeContext } from '@/infra/contexts/theme-provider'
 import { Themable } from '@/infra/contexts/theme-provider/types.js';
 import { WidgetContainerStyleOptions } from '@/types';
 
-import {
-  useWidgetErrorsAndWarnings,
-  WidgetErrorsAndWarningsProvider,
-} from '../widget-errors-and-warnings-context.js';
-import { TitleEditorConfig, WidgetHeaderConfig } from '../widget-header/types.js';
+import { WidgetErrorsAndWarningsProvider } from '../widget-errors-and-warnings-context.js';
+import { WidgetHeaderConfig } from '../widget-header/types.js';
 import { WidgetHeader } from '../widget-header/widget-header.js';
 import { getShadowValue, WidgetCornerRadius, WidgetSpaceAround } from '../widget-style-utils.js';
 
@@ -20,20 +17,18 @@ type Styleable = {
 };
 
 export interface WidgetContainerProps {
-  dataSetName?: string;
   styleOptions?: WidgetContainerStyleOptions;
   /**
-   * Header configuration (e.g. the header menu items). Passed to {@link WidgetHeader} as `config`.
+   * The widget's **fully composed** header configuration — the single channel every header item
+   * travels through: the items the widget composed from the header features it uses (marked as
+   * built-ins), the items dashboard-level features contributed, the consumer's own items, and the
+   * consumer's `onBeforeRender`. This is the end of the widget's feature chain, not the raw
+   * `config.header` the widget received.
    */
   headerConfig?: WidgetHeaderConfig;
-  /** Inline title editor config (when rename is enabled). Passed to {@link WidgetHeader}. */
-  titleEditor?: TitleEditorConfig;
-  title?: string;
-  description?: string;
   topSlot?: ReactNode;
   bottomSlot?: ReactNode;
   children: ReactNode;
-  onRefresh?: () => void;
   /**
    * Ref attached to the content area below the header (topSlot + chart + bottomSlot).
    * Use to measure the available height for narrative-to-chart ratio calculations.
@@ -53,19 +48,13 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = (props) => {
 
 /** @internal */
 export const RawWidgetContainer: React.FC<WidgetContainerProps> = ({
-  dataSetName,
   styleOptions,
   headerConfig,
-  titleEditor,
-  title,
-  description,
   topSlot,
   bottomSlot,
   children,
-  onRefresh = () => {},
   contentAreaRef,
 }: WidgetContainerProps) => {
-  const { errors, warnings } = useWidgetErrorsAndWarnings();
   const { themeSettings } = useThemeContext();
 
   const contentTheme = useMemo(
@@ -90,19 +79,7 @@ export const RawWidgetContainer: React.FC<WidgetContainerProps> = ({
           data-component="widget-container-card"
         >
           {!styleOptions?.header?.hidden && (
-            <WidgetHeader
-              title={title}
-              infoButtonConfig={{
-                dataSetName,
-                description,
-                errorMessages: errors,
-                warningMessages: warnings,
-              }}
-              styleOptions={styleOptions?.header}
-              config={headerConfig}
-              titleEditor={titleEditor}
-              onRefresh={onRefresh}
-            />
+            <WidgetHeader styleOptions={styleOptions?.header} config={headerConfig} />
           )}
           <WidgetContentArea
             ref={contentAreaRef}

@@ -19,6 +19,7 @@ import {
   createPluginContextConnector,
   createSisenseContextConnector,
 } from '../component-wrapper-helpers';
+import { type DashboardModel } from '../components/dashboard/dashboard-model';
 import {
   type DashboardConfig,
   type DashboardProps,
@@ -66,7 +67,10 @@ export class DashboardService {
    * @param options - Advanced configuration options
    * @returns Dashboard model
    */
-  async getDashboardModel(dashboardOid: string, options?: GetDashboardModelOptions) {
+  async getDashboardModel(
+    dashboardOid: string,
+    options?: GetDashboardModelOptions,
+  ): Promise<DashboardModel> {
     const app = await this.sisenseContextService.getApp();
     const themeSettings = this.themeService.getThemeSettings();
     return getDashboardModel(app.httpClient, dashboardOid, options, themeSettings, app.settings);
@@ -78,7 +82,7 @@ export class DashboardService {
    * @param options - Advanced configuration options
    * @returns Dashboard models array
    */
-  async getDashboardModels(options?: GetDashboardModelsOptions) {
+  async getDashboardModels(options?: GetDashboardModelsOptions): Promise<DashboardModel[]> {
     const app = await this.sisenseContextService.getApp();
     const themeSettings = this.themeService.getThemeSettings();
     return getDashboardModels(app.httpClient, options, themeSettings, app.settings);

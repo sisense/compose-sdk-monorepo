@@ -90,12 +90,26 @@ Total height of the component, which is considered in the following order of pri
 
 ***
 
+### isAutoHeight
+
+> **isAutoHeight**?: `boolean`
+
+Boolean flag whether the height of the component should be automatically adjusted to fit the content
+
+When enabled, the table grows to fit all rows of the current page without an inner vertical
+scrollbar, and reports its height to the containing dashboard row.
+
+Default value is `false`. Widgets loaded from a Fusion dashboard instead follow the dashboard's
+own setting.
+
+***
+
 ### paddingHorizontal
 
 > **paddingHorizontal**?: `number`
 
 Horizontal padding around whole table
-Default value is 20px
+Default value is 8px
 
 ***
 
@@ -104,7 +118,7 @@ Default value is 20px
 > **paddingVertical**?: `number`
 
 Vertical padding around whole table
-Default value is 20px
+Default value is 8px
 
 ***
 

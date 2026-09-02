@@ -1,5 +1,10 @@
 /* eslint-disable no-case-declarations */
-import { normalizeName } from '@sisense/sdk-data';
+import {
+  createDimensionalElementFromJaql,
+  Measure,
+  MetadataTypes,
+  normalizeName,
+} from '@sisense/sdk-data';
 
 import { scaleBrightness, toGray } from '@/shared/utils/color/index.js';
 
@@ -15,7 +20,8 @@ import {
 import { Color, MultiColumnValueToColorMap, ValueToColorMap } from '../../../../types.js';
 import {
   PanelColorFormat,
-  PanelColorFormatConditionSimple,
+  PanelColorFormatCondition,
+  PanelColorFormatConditionJaql,
   PanelColorFormatRange,
   PanelItem,
   PanelMembersFormat,
@@ -95,6 +101,52 @@ const createRangeDataColorOptions = (
   }
 };
 
+/**
+ * Checks whether a Fusion color condition's threshold is a formula JAQL rather than a literal
+ * numeric-string expression.
+ *
+ * @param condition - The Fusion color condition to check.
+ * @returns True if the condition's expression is a formula JAQL.
+ * @internal
+ */
+const isJaqlCondition = (
+  condition: PanelColorFormatCondition,
+): condition is PanelColorFormatConditionJaql => typeof condition.expression !== 'string';
+
+/**
+ * Type-narrowing wrapper around {@link MetadataTypes.isMeasure}, which only returns `boolean`.
+ *
+ * @param element - The dimensional element to check.
+ * @returns True if the element is a {@link Measure}.
+ * @internal
+ */
+const isMeasureElement = (element: unknown): element is Measure => MetadataTypes.isMeasure(element);
+
+/**
+ * Converts a single Fusion color condition into a {@link DataColorCondition}.
+ *
+ * A literal condition keeps its numeric-string `expression`. A formula-driven condition
+ * (its threshold is a Fusion formula JAQL rather than a literal number) is translated into
+ * a {@link Measure} on `valueMeasure`, whose resolved value is compared against instead.
+ *
+ * @param condition - The Fusion color condition to convert.
+ * @returns The converted {@link DataColorCondition}.
+ * @internal
+ */
+const createValueColorCondition = (condition: PanelColorFormatCondition) => {
+  const { color, operator } = condition;
+  if (isJaqlCondition(condition)) {
+    const element = createDimensionalElementFromJaql(condition.expression.jaql);
+    return {
+      color,
+      operator,
+      expression: '',
+      valueMeasure: isMeasureElement(element) ? element : undefined,
+    };
+  }
+  return { color, operator, expression: condition.expression };
+};
+
 export const createValueColorOptions = (
   format?: PanelColorFormat,
   customPaletteColors?: Color[],
@@ -115,16 +167,7 @@ export const createValueColorOptions = (
     case 'condition':
       return {
         type: 'conditional',
-        conditions: format.conditions
-          .filter(
-            (condition): condition is PanelColorFormatConditionSimple =>
-              typeof condition.expression === 'string',
-          )
-          .map(({ color, expression, operator }) => ({
-            color,
-            expression,
-            operator,
-          })),
+        conditions: format.conditions.map(createValueColorCondition),
         defaultColor: getPaletteColor(customPaletteColors, 0),
       } as ConditionalDataColorOptions;
     default:
@@ -226,13 +269,12 @@ export const createPanelColorFormat = (
     case 'conditional':
       return {
         type: 'condition',
-        conditions: (options.conditions || [])
-          .filter((condition) => typeof condition.expression === 'string')
-          .map(({ color, expression, operator }) => ({
-            color: color || defaultColor,
-            expression,
-            operator,
-          })),
+        conditions: (options.conditions || []).map(
+          ({ color, expression, operator, valueMeasure }): PanelColorFormatCondition =>
+            valueMeasure
+              ? { color: color || defaultColor, operator, expression: valueMeasure.jaql() }
+              : { color: color || defaultColor, expression, operator },
+        ),
       };
     default:
       return {

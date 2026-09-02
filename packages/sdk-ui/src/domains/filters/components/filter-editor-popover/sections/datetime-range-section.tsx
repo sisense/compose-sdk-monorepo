@@ -8,6 +8,8 @@ import {
   isDateRangeFilter,
 } from '@sisense/sdk-data';
 
+import { parseISOWithTimezoneCheck } from '@/shared/utils/parseISOWithTimezoneCheck';
+
 import { SelectableSection } from '../common/index.js';
 import {
   CalendarRangeValue,
@@ -15,6 +17,7 @@ import {
   CalendarSelectTypes,
 } from '../common/select/calendar-select/index.js';
 import { useDatetimeFormatter } from '../hooks/use-datetime-formatter.js';
+import { asUtcDate } from '../utils.js';
 import { DatetimeLimits } from './types.js';
 
 const DATETIME_RANGE_FORMAT = 'yyyy-MM-dd';
@@ -32,17 +35,17 @@ export const DatetimeRangeSection = (props: DatetimeRangeSectionProps) => {
   const { t } = useTranslation();
   const formatter = useDatetimeFormatter();
   const [from, setFrom] = useState<Date | undefined>(
-    isDateRangeFilter(filter) && filter.valueA ? new Date(filter.valueA) : undefined,
+    isDateRangeFilter(filter) && filter.valueA ? asUtcDate(filter.valueA) : undefined,
   );
   const [to, setTo] = useState<Date | undefined>(
-    isDateRangeFilter(filter) && filter.valueB ? new Date(filter.valueB) : undefined,
+    isDateRangeFilter(filter) && filter.valueB ? asUtcDate(filter.valueB) : undefined,
   );
   const rangeValue = useMemo(() => ({ from, to }), [from, to]);
   const normalizedLimits = useMemo(() => {
     return limits
       ? {
-          minDate: limits.minDate ? new Date(limits.minDate) : undefined,
-          maxDate: limits.maxDate ? new Date(limits.maxDate) : undefined,
+          minDate: limits.minDate ? parseISOWithTimezoneCheck(limits.minDate) : undefined,
+          maxDate: limits.maxDate ? parseISOWithTimezoneCheck(limits.maxDate) : undefined,
         }
       : undefined;
   }, [limits]);

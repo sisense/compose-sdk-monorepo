@@ -1,11 +1,14 @@
 import { DataSource } from '@sisense/sdk-data';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { describe, expect, it } from 'vitest';
 
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
 
 import { DashboardConfig, WidgetsPanelColumnLayout } from './types.js';
 import {
+  checkForAutoHeight,
   isDashboardHeaderVisible,
+  withOptionallyDisabledAutoHeight,
   withResolvedWidgetDataSource,
   withWidgetAppendedToPanelLayout,
 } from './utils.js';
@@ -119,5 +122,98 @@ describe('isDashboardHeaderVisible', () => {
     // visible, regardless of unrelated fields such as `filtersPanel.visible`.
     const config: DashboardConfig = { filtersPanel: { visible: false } };
     expect(isDashboardHeaderVisible(config)).toBe(true);
+  });
+});
+
+const tableWidget = (isAutoHeight?: boolean): WidgetProps => ({
+  id: 'table-1',
+  widgetType: 'chart',
+  chartType: 'table',
+  dataOptions: { columns: [] },
+  ...(isAutoHeight === undefined ? {} : { styleOptions: { isAutoHeight } }),
+});
+
+const pivotWidget = (isAutoHeight?: boolean): WidgetProps => ({
+  id: 'pivot-1',
+  widgetType: 'pivot',
+  dataOptions: {},
+  ...(isAutoHeight === undefined ? {} : { styleOptions: { isAutoHeight } }),
+});
+
+// A table widget carrying sibling style options, so transformations can be asserted whole rather
+// than only on `isAutoHeight`. `ChartWidgetProps` is not discriminated by `chartType`, so the
+// table-only style option is not assignable through the union in a literal; hence the cast.
+const tableWidgetWithStyle = (isAutoHeight: boolean): WidgetProps =>
+  ({
+    id: 'table-1',
+    widgetType: 'chart',
+    chartType: 'table',
+    dataOptions: { columns: [] },
+    styleOptions: {
+      isAutoHeight,
+      rowsPerPage: 25,
+      header: { color: { enabled: true } },
+    },
+  } as unknown as WidgetProps);
+
+const isAutoHeightOf = (widget: WidgetProps): boolean | undefined =>
+  (widget as { styleOptions?: { isAutoHeight?: boolean } }).styleOptions?.isAutoHeight;
+
+describe('checkForAutoHeight', () => {
+  it('accepts a table chart with auto height enabled', () => {
+    expect(checkForAutoHeight([tableWidget(true)])).toBe(true);
+  });
+
+  it('accepts a row mixing pivot and table when both opt in', () => {
+    expect(checkForAutoHeight([pivotWidget(true), tableWidget(true)])).toBe(true);
+  });
+
+  it('rejects a table chart that has not opted in', () => {
+    expect(checkForAutoHeight([tableWidget(false)])).toBe(false);
+    expect(checkForAutoHeight([tableWidget()])).toBe(false);
+  });
+
+  it('rejects a row where any widget does not support auto height', () => {
+    expect(checkForAutoHeight([tableWidget(true), chartWidget()])).toBe(false);
+  });
+
+  it('rejects non-table chart types even when styleOptions say otherwise', () => {
+    const barWithFlag = {
+      ...chartWidget(),
+      styleOptions: { isAutoHeight: true },
+    } as unknown as WidgetProps;
+
+    expect(checkForAutoHeight([barWithFlag])).toBe(false);
+  });
+});
+
+describe('withOptionallyDisabledAutoHeight', () => {
+  it('disables auto height on a table chart and preserves every other field', () => {
+    expect(withOptionallyDisabledAutoHeight(tableWidgetWithStyle(true), true)).toEqual(
+      tableWidgetWithStyle(false),
+    );
+  });
+
+  it('does not mutate the widget it was given', () => {
+    const widget = tableWidgetWithStyle(true);
+    const before = cloneDeep(widget);
+
+    withOptionallyDisabledAutoHeight(widget, true);
+
+    expect(widget).toEqual(before);
+  });
+
+  it('disables auto height on a pivot when asked', () => {
+    expect(isAutoHeightOf(withOptionallyDisabledAutoHeight(pivotWidget(true), true))).toBe(false);
+  });
+
+  it('leaves the widget untouched when not asked to disable', () => {
+    const widget = tableWidget(true);
+    expect(withOptionallyDisabledAutoHeight(widget, false)).toBe(widget);
+  });
+
+  it('leaves an unsupported widget type untouched', () => {
+    const widget = chartWidget();
+    expect(withOptionallyDisabledAutoHeight(widget, true)).toBe(widget);
   });
 });

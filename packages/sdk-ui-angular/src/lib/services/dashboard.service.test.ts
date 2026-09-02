@@ -11,7 +11,7 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { Mock, Mocked } from 'vitest';
 
-import { type DashboardModel } from '../sdk-ui-core-exports';
+import { DashboardModel } from '../components/dashboard/dashboard-model';
 import { DashboardService } from './dashboard.service';
 import { SisenseContextService } from './sisense-context.service';
 import { ThemeService } from './theme.service';

@@ -10,6 +10,8 @@ import {
   CartesianChartDataOptions,
   CategoricalChartDataOptions,
   IndicatorChartDataOptions,
+  KpiChartDataOptions,
+  KpiComparison,
   PivotTableDataOptions,
   SankeyChartDataOptions,
   ScatterChartDataOptions,
@@ -685,6 +687,97 @@ export function toSankeyPanels(dataOptions: SankeyChartDataOptions): Panel[] {
     { name: 'category', items: toSankeyCategoryItems(dataOptions) },
     { name: 'value', items: valueItems },
   ];
+}
+
+/**
+ * Builds DTO panels for a kpi widget: `value` (always), `category` (when set), and a
+ * comparison panel driven by `dataOptions.comparison.type`:
+ * - `'target'` → a `target` panel, from either a measure column or a fixed number
+ *   (see {@link toFixedTargetPanelItem})
+ * - `'delta'` → a `comparisonValue` panel
+ * - `'previous-period'` → no panel; the `kpi/previous-period` subtype carries it on its own,
+ *   with the baseline read from the `category` panel's preceding bucket
+ * - `'value'` → the same `comparisonValue` panel; `kpi/value` distinguishes it from `'delta'`
+ *
+ * Inverse of {@link extractKpiChartDataOptions} / {@link extractKpiComparison}.
+ *
+ * @param dataOptions - Kpi chart data options from the WidgetModel
+ * @returns Panels for the `kpi` widget DTO
+ * @internal
+ */
+/**
+ * Whether a `'target'` comparison can be written to a Fusion `target` panel.
+ *
+ * A measure column always can. A number can only when it is finite: `NaN` and `Infinity`
+ * have no valid constant-formula form, and writing `{ formula: 'NaN' }` would produce a panel
+ * the query engine rejects — worse than the old behaviour of dropping it. Callers that place
+ * the panel and callers that pick the `kpi/goal` subtype must agree, so both ask this rather
+ * than re-deriving the rule.
+ *
+ * @param comparison - The kpi comparison from the widget model's data options
+ * @returns true when a `target` panel should be emitted
+ * @internal
+ */
+export function isSerializableKpiTarget(
+  comparison: KpiChartDataOptions['comparison'],
+): comparison is Extract<KpiComparison, { type: 'target' }> {
+  return (
+    comparison?.type === 'target' &&
+    (typeof comparison.target !== 'number' || Number.isFinite(comparison.target))
+  );
+}
+
+/**
+ * Builds the `target` panel item for a `'target'` comparison's fixed number.
+ *
+ * Fusion has no literal-number panel item, so the number is written as a constant formula —
+ * the shape Fusion's own Target panel seeds for a fixed goal, and the one indicator uses for a
+ * gauge's min/max. It reads back as a measure column rather than a number, so the round-trip
+ * preserves behaviour but not the exact type. That is the deliberate trade: the alternative
+ * was dropping the panel, which also cost the widget its `kpi/goal` subtype and so lost the
+ * goal comparison entirely rather than just its authored form.
+ *
+ * @param target - Fixed target value from `comparison.target`
+ * @returns Fusion panel item holding the value as a constant formula
+ * @internal
+ */
+function toFixedTargetPanelItem(target: number): PanelItem {
+  const formula = `${target}`;
+  return { jaql: { formula, title: formula } };
+}
+
+export function toKpiPanels(dataOptions: KpiChartDataOptions): Panel[] {
+  const panels: Panel[] = [
+    { name: 'value', items: [createPanelItem(normalizeMeasureColumn(dataOptions.value))] },
+  ];
+
+  if (dataOptions.category) {
+    panels.push({
+      name: 'category',
+      items: [createPanelItem(normalizeColumn(dataOptions.category))],
+    });
+  }
+
+  const { comparison } = dataOptions;
+  if (isSerializableKpiTarget(comparison)) {
+    panels.push({
+      name: 'target',
+      items: [
+        typeof comparison.target === 'number'
+          ? toFixedTargetPanelItem(comparison.target)
+          : createPanelItem(normalizeMeasureColumn(comparison.target)),
+      ],
+    });
+  } else if (comparison?.type === 'delta' || comparison?.type === 'value') {
+    // Both variants carry a single measure and share the panel; the subtype is what says
+    // whether it is read as a delta baseline or shown as-is.
+    panels.push({
+      name: 'comparisonValue',
+      items: [createPanelItem(normalizeMeasureColumn(comparison.value))],
+    });
+  }
+
+  return panels;
 }
 
 /**

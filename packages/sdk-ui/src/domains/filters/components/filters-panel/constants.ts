@@ -32,7 +32,7 @@ export const DEFAULT_FILTERS_PANEL_CONFIG: DeepRequired<FiltersPanelConfig> = {
       enabled: false,
     },
     lockFilter: {
-      enabled: false,
+      enabled: true,
     },
     toggleFilter: {
       visible: true,

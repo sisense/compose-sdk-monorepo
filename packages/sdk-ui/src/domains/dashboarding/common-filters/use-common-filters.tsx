@@ -13,13 +13,14 @@ import {
   registerDataPointClickHandler,
   registerDataPointContextMenuHandler,
   registerDataPointsSelectedHandler,
-  registerRenderToolbarHandler,
 } from '@/domains/widgets/components/widget-by-id/utils.js';
 import { WidgetProps } from '@/domains/widgets/components/widget/types';
+import { withHeaderItems } from '@/domains/widgets/helpers/header-items-utils.js';
 import { BeforeMenuOpenHandler, OpenMenuFn } from '@/infra/contexts/menu-provider/types.js';
 import { getFiltersArray } from '@/shared/utils/filter-relations.js';
 import { isSameAttribute } from '@/shared/utils/filters.js';
 
+import { createClearSelectionButtonItem } from './clear-selection-button.js';
 import { prepareCommonFiltersConnectionProps } from './common-filters-connector.js';
 import { connectFilterWidgetToProps } from './filter-widget-connector.js';
 import { CommonFiltersOptions } from './types.js';
@@ -151,13 +152,10 @@ export const useCommonFilters = ({
           commonFiltersConnectionProps.onDataPointContextMenu,
         );
       }
-      if (commonFiltersConnectionProps.renderToolbar) {
-        registerRenderToolbarHandler(
-          connectedWidgetProps,
-          commonFiltersConnectionProps.renderToolbar,
-        );
-      }
-      return connectedWidgetProps;
+      const { clearSelection } = commonFiltersConnectionProps;
+      return clearSelection
+        ? withHeaderItems([createClearSelectionButtonItem(clearSelection)])(connectedWidgetProps)
+        : connectedWidgetProps;
     },
     [
       regularCommonFilters,

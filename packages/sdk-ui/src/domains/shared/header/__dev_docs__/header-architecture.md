@@ -2,8 +2,8 @@
 
 A single, framework-agnostic model for configuring the items shown in a component header
 (title, buttons, menu, …). It lets end users **inject** new header items, and — through
-`onBeforeRender` — **modify or remove** the built-in ones. Today it powers the **Dashboard**
-header; Widget and FilterTile are planned to adopt the same core.
+`onBeforeRender` — **modify or remove** the built-in ones. Today it powers the **Dashboard** and
+**Widget** headers; FilterTile is planned to adopt the same core.
 
 > Source: `src/domains/shared/header/`
 > Future sizing direction (measured allocator): see [`future-sizing.md`](./future-sizing.md).
@@ -20,10 +20,14 @@ A header is a **single ordered list of items** rendered in one flex row.
   item with the id `DashboardHeaderTargets.Title`; the spacer has `DashboardHeaderTargets.Spacer`.
 - Each item has a stable **`id`**, a **`component`** to draw, an optional **`position`**, and an
   optional **`size`** (fixed pixels).
-- Layout uses a **center spacer**, not a growing title: the title takes its natural content width
-  on the left, the spacer grows to fill the middle, and action items sit on the right. So
-  `after: Title` lands right next to the title text, and the right group stays right-aligned even
-  if the title is removed.
+- **Spacers absorb the free width; the title never does.** The title takes its natural content
+  width and is the only item that shrinks (ellipsizing) under pressure, so `after: Title` always
+  lands right next to the title text and action items keep their size. How many spacers there are is
+  a per-component decision: the dashboard has one **center spacer** after the title; the widget has
+  **one on each side of the title** (§6), which is how it positions the title left / center / right.
+- **A spacer that isn't absorbing anything is still a real item.** It renders as a zero-width cell
+  rather than being dropped, so a `before`/`after` position anchored to it resolves to the same spot
+  whatever the current alignment is.
 - Built-in items expose their ids as **public target constants** (`DashboardHeaderTargets`). Those
   ids are the anchors that custom items target.
 - **Conditionally-shown built-ins stay in the model as hidden anchors.** A built-in that the config
@@ -39,12 +43,19 @@ A header is a **single ordered list of items** rendered in one flex row.
  Title    (ellipsizes)                                        spacer
 ```
 
+(That is the dashboard's row; the widget's, with its second spacer, is in §6.)
+
 ### Injecting vs. modifying
 
 - **`config.header.items`** can only **add new** items. Reusing a built-in id (including a hidden
   one) **logs a `console.error` and ignores that item** — built-ins can't be overridden via
   `items`. Duplicating another custom id **throws** (a clear authoring bug). Both rules keep
   injection predictable and prevent accidental breakage of built-in behavior.
+- **The component's own features contribute through that same `items` array**, marked with
+  `asBuiltInHeaderItem`, which stamps a module-private `Symbol` key that is not spellable in the
+  public item type. The marking is what lets a contribution claim a reserved id; a consumer's item still can't. One
+  channel for everything that lands in a header means a component needs no private config surface for
+  its own features (§6).
 - **Modifying or removing built-in items** is an advanced operation done in
   **`config.header.onBeforeRender`**, which receives the full, already-ordered list (every
   `position` resolved) and returns the final list.
@@ -82,7 +93,7 @@ interface HeaderConfig {
 `fill` (the title is `truncate`, the spacer is `grow`, action buttons/menu are `content`) is
 internal CSS sizing that is never exposed to users.
 
-### Public per-component types (`dashboard-header-config.ts`) — `@alpha`
+### Public per-component types (`dashboard-header-config.ts`)
 
 Mirror the internal shapes but: drop `fill`/`hidden`, keep `position.target` as `string` (so an
 item can anchor to a built-in **or** to another custom item), and give `size` Dashboard-specific
@@ -119,8 +130,8 @@ interface DashboardHeaderConfig {
 }
 ```
 
-A future `WidgetHeaderItem` / `WidgetHeaderConfig` (etc.) would follow the same pattern with its own
-target ids and size defaults.
+`WidgetHeaderItem` / `WidgetHeaderConfig` (§6) follow the same pattern with their own target ids and
+size defaults; a future `FilterTileHeaderItem` (etc.) would too.
 
 ---
 
@@ -239,7 +250,57 @@ config.header = {
 
 ---
 
-## 6. Plugins & Modules API
+## 6. Widget integration
+
+The widget header applies the same model with one governing idea: **the header owns layout, features
+own content.** Nothing about a title, an info button or a menu is built into the header — each is a
+feature, and a widget's header is the set of features that widget has.
+
+### Principles
+
+- **A widget composes what it has, and never disables what it lacks.** A filter control has no query
+  result to describe, so it never creates an info button; a text widget has no title. There is no
+  switch to turn a default off, which means adding a feature never obliges other widgets to opt out
+  of it.
+- **One feature, one hook, one shape.** Each feature is a hook of the form
+  `(headerConfig, params?) => headerConfig`, so a widget's header reads as a chain of the features it
+  uses, and a reader sees the whole set at the call site.
+- **One channel in.** Everything that lands in a header travels through `config.header.items`. What
+  an item _is_ decides how it is placed: a **marked** item (§1) claims a reserved slot — whether the
+  widget composed it or an outside feature contributed it by transforming widget props — while an
+  unmarked item is the consumer's and is positioned by its `position`.
+- **A slot table, not declaration order, decides where things go.** It also supplies each item's
+  `fill`: a feature says what its item draws, never how wide it sits. Consequently a marked item must
+  claim a registered slot — anything else is an authoring bug and throws.
+- **An empty slot is still an anchor.** A slot nothing filled is built and then dropped before
+  render, so `before: Menu` resolves the same whether or not this widget has a menu.
+- **The header's own items are pure layout.** It builds exactly two: the spacers on either side of
+  the title. Which one absorbs the free width _is_ the title alignment, so the header needs no
+  alignment concept beyond them.
+
+### Shape
+
+```text
+a widget                                   the header
+  useWidgetHeader<Feature>(config, …)        spacers  (layout, from titleAlignment)
+  … one line per feature it has             +
+  ────────────────────────────────────►      marked items → their slots
+        headerConfig                         unmarked items → their `position`
+                                             → onBeforeRender → render
+```
+
+Slots left to right: the leading icons, the alignment spacer, the title, the growing spacer, then the
+trailing actions. `WidgetContainer` takes one header prop and the widget passes it the end of its
+chain; the header receives no other content.
+
+The features live in `widget-header/features/` (one file each, with its tests); the slot table and
+the spacers sit beside them. Items contributed from outside a widget — a JTD icon, the editable
+layout's drag icon, a clear-selection button — live with the feature that owns them and reach the
+header through the same `items` array.
+
+---
+
+## 7. Plugins & Modules API
 
 Header customization is also the seam for non-end-user integrations. Both the **plugin system**
 (which will be able to modify component props before render) and the **modules API** can contribute to a
@@ -250,35 +311,64 @@ the plugin/modules pipelines lands in a later milestone; the model is already de
 
 ---
 
-## 7. Extending to other components
+## 8. Extending to other components
 
 1. Define a `*HeaderTargets` constant with the component's built-in item ids (include a `Spacer`).
-2. Build the built-in items: title with `fill: 'truncate'`, then `createHeaderSpacerItem(<spacer id>)`,
-   then action items (`fill: 'content'` for icon buttons). Mark conditionally-shown built-ins
-   `hidden: !shouldShow` rather than omitting them, so they remain valid positioning anchors.
-3. Add component-specific `*HeaderItem` / `*HeaderItemPosition` / `*HeaderConfig` types
+2. Build the built-in items: the title (`fill: 'truncate'`), the spacer(s), then the action items
+   (`fill: 'content'` for icon buttons). One spacer after the title is enough when the title is
+   always leading (the dashboard); add a second one before it when the component positions its title
+   (the widget, §6) — an idle spacer stays as a zero-width `fill: 'content'` item so it remains an
+   anchor. Give every action item its own id: one item per thing the user can see, never a wrapper
+   around several. Mark conditionally-shown built-ins `hidden: !shouldShow` rather than omitting
+   them, so they remain valid positioning anchors.
+3. Make each item its own feature — one file, one hook of the shape
+   `(headerConfig, params?) => headerConfig` (§6) — and let each component compose the features it
+   has rather than switching off the ones it lacks. Features
+   outside the component contribute their items through the public `items` array, marked with
+   `asBuiltInHeaderItem`, and place them by a **slot table** of reserved ids (the widget's
+   `WIDGET_HEADER_SLOTS`) rather than by declaration order. Never a render callback, and never a
+   private config channel: the component then needs no knowledge of what a feature's item draws, and
+   every item stays addressable by id.
+4. Add component-specific `*HeaderItem` / `*HeaderItemPosition` / `*HeaderConfig` types
    (keeping `position.target` as `string`, documenting `*HeaderTargets` as the built-in anchors)
-   and expose `header?: …Config` on the component config (tag `@alpha` initially).
-4. Render via `useResolvedHeaderItems(builtIns, config.header, { autoAnchorId: <spacer id> })`
+   and expose `header?: …Config` on the component config.
+5. Render via `useResolvedHeaderItems(builtIns, config.header, { autoAnchorId: <spacer id> })`
    and `<HeaderItemsRenderer />`.
+6. Let every item — the component's own and the features' — travel through the config's `items`
+   array, marked as built-in. Not a render callback, and not a second prop: one channel is what keeps
+   every item addressable by id and reachable from `onBeforeRender`.
 
-Roadmap: **M1 Dashboard (done)** → M2 Widget → M3 FilterTile → M4 plugin/modules wiring →
-M5 advanced sizing ([`future-sizing.md`](./future-sizing.md)) + Angular/Vue ports.
+Roadmap: **M1 Dashboard (done)** → **M2 Widget (done)** → M3 FilterTile → M4 plugin/modules wiring
+→ M5 advanced sizing ([`future-sizing.md`](./future-sizing.md)). The dashboard's and the widget's
+items are both ported to Angular and Vue; a port is one framework-flavored item/config type pair
+plus the props translation that swaps the components.
 
 The header **menu** has its own parallel roadmap — see
 [`header-menu-architecture.md`](./header-menu-architecture.md) §4.
 
 ---
 
-## 8. Why this shape
+## 9. Why this shape
 
 - **One flat list** mirrors how Widget/FilterTile already lay out (leading title + trailing
   actions), so the model fits all three without per-component layout concepts.
-- **A center spacer** (not a growing title) keeps positional intuition matching the visual result
-  and keeps the right group right-aligned regardless of the title.
+- **Spacers absorb the free width, never the title** keeps positional intuition matching the visual
+  result (`after: Title` really is next to the title text) and keeps the action group right-aligned
+  regardless of the title. Alignment is then just _which spacer grows_, so it needs no separate
+  concept — and an idle spacer stays a zero-width item, so positions anchored to it don't move.
+- **One item per visible thing** (no toolbar wrapper) is what makes every part of a header
+  addressable by id — enough on its own that no render-callback slot has to live alongside the
+  model.
 - **Public width = fixed pixels; internal `fill` for title/spacer** keeps the authored API tiny
   while still supporting the two CSS behaviors built-ins need.
 - **Add-only `items` + `onBeforeRender` for built-ins** makes the common case (inject) safe, while
   keeping the full power (modify/remove/reorder) behind one explicit hook shared by end users,
   plugins, and the modules API.
+- **A component composes the items it has, instead of disabling the ones it lacks** keeps every
+  widget's header honest with one less thing to remember: adding an item feature never obliges other
+  widgets to opt out of it, and a slot left empty is still an anchor.
+- **One channel, with a marking instead of a private config** keeps the public shape as the only
+  shape: a feature's item and a user's item are the same kind of thing, so they get the same
+  positioning, validation and `onBeforeRender` treatment, and the header stays ignorant of what its
+  features draw. A slot table, not declaration order, is what makes that safe.
 - **Pure resolver** keeps ordering logic unit-testable and side-effect-free.

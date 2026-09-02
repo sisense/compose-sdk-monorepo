@@ -8,15 +8,19 @@ export interface WidgetHeaderMenuProps {
    * Configuration options for the widget header menu
    */
   config?: WidgetHeaderMenuConfig;
+  /**
+   * Size (px) of the menu button, as resolved by the header layout.
+   */
+  size?: number;
 }
 
 /**
  * Renders the widget header menu button, or nothing when the menu is disabled or has no items.
  */
-export function WidgetHeaderMenu({ config }: WidgetHeaderMenuProps): JSX.Element | null {
+export function WidgetHeaderMenu({ config, size }: WidgetHeaderMenuProps): JSX.Element | null {
   const menuItems = resolveHeaderMenuItems(config);
 
   if (!menuItems.length) return null;
 
-  return <WidgetMenuButton menuItems={menuItems} />;
+  return <WidgetMenuButton menuItems={menuItems} size={size} />;
 }

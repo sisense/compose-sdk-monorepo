@@ -12,9 +12,10 @@ type NarrativeTriggerButtonProps = {
 };
 
 /**
- * Toolbar icon button that triggers on-demand narrative generation when autoShow=false.
+ * Header icon button that triggers on-demand narrative generation when autoShow=false.
  * Shows a "generate" icon when the narrative is hidden and a "hide" icon when visible.
- * Rendered inside the widget header toolbar via an injected renderToolbar wrapper.
+ * Rendered as the built-in `WidgetHeaderTargets.NarrativeToggle` header item, which the widget
+ * contributes through `config.header.items` (see `createNarrativeToggleItem`).
  *
  * @param props - Component props.
  * @param props.onClick - Callback fired when the button is clicked.

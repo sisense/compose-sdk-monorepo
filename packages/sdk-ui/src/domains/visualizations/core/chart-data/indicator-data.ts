@@ -19,6 +19,19 @@ const valueFromFirstRow = (
   return [undefined, undefined];
 };
 
+const colorConditionValuesFromRow = (
+  dataTable: DataTable,
+  colorConditionMeasures: StyledMeasureColumn[] | undefined,
+): Record<string, number> | undefined => {
+  if (!colorConditionMeasures?.length) {
+    return undefined;
+  }
+  const entries = colorConditionMeasures
+    .map((measure) => [measure.column.name, valueFromFirstRow(dataTable, [measure])[0]] as const)
+    .filter((entry): entry is [string, number] => entry[1] !== undefined);
+  return entries.length ? Object.fromEntries(entries) : undefined;
+};
+
 // Given chart source and data options, generate indicator data
 export const indicatorData = (
   dataOptions: IndicatorChartDataOptionsInternal,
@@ -39,6 +52,10 @@ export const indicatorData = (
   const [secondary] = valueFromFirstRow(dataTable, dataOptions.secondary);
   const [min] = valueFromFirstRow(dataTable, dataOptions.min);
   const [max] = valueFromFirstRow(dataTable, dataOptions.max);
+  const colorConditionValues = colorConditionValuesFromRow(
+    dataTable,
+    dataOptions.colorConditionMeasures,
+  );
 
   return {
     type: 'indicator',
@@ -46,5 +63,6 @@ export const indicatorData = (
     secondary,
     min,
     max,
+    ...(colorConditionValues && { colorConditionValues }),
   };
 };

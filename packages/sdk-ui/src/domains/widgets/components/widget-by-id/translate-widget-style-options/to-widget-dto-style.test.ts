@@ -13,6 +13,7 @@ import type {
   FunnelStyleOptions,
   GaugeIndicatorStyleOptions,
   IndicatorStyleOptions,
+  KpiStyleOptions,
   LegendOptions,
   LineStyleOptions,
   Markers,
@@ -27,6 +28,7 @@ import type {
   ScatterStyleOptions,
   StackableStyleOptions,
   SunburstStyleOptions,
+  TableStyleOptions,
   TreemapStyleOptions,
   WidgetStyleOptions,
 } from '@/types.js';
@@ -35,6 +37,7 @@ import type {
   CartesianWidgetStyle,
   FunnelWidgetStyle,
   IndicatorWidgetStyle,
+  KpiWidgetStyle,
   PieWidgetStyle,
   PivotWidgetStyle,
   PolarWidgetStyle,
@@ -42,6 +45,7 @@ import type {
   ScattermapWidgetStyle,
   ScatterWidgetStyle,
   SunburstWidgetStyle,
+  TableWidgetStyle,
   TreemapWidgetStyle,
   WidgetDto,
   WidgetStyle,
@@ -57,6 +61,7 @@ import {
   toDataLimitsStyle,
   toFunnelWidgetStyle,
   toIndicatorWidgetStyle,
+  toKpiWidgetStyle,
   toLegendStyle,
   toLineCustomWidthStyle,
   toLineDashStyle,
@@ -73,6 +78,7 @@ import {
   toScatterWidgetStyle,
   toSeriesLabelsStyle,
   toSunburstWidgetStyle,
+  toTableWidgetStyle,
   toTreemapWidgetStyle,
   toWidgetDesign,
   withWidgetDesign,
@@ -1723,6 +1729,135 @@ describe('to-widget-dto-style', () => {
     });
   });
 
+  describe('toKpiWidgetStyle', () => {
+    it('maps KpiStyleOptions fields to KpiWidgetStyle DTO', () => {
+      const styleOptions: KpiStyleOptions = {
+        layout: 'comparison-first',
+        title: { enabled: false, showValueTitle: true, showCategoryTitle: false },
+        sparkline: { enabled: false, chartType: 'line' },
+        comparison: { display: 'both', showIcon: false },
+        card: { textAlign: 'center', showBorder: true, cornerRadius: 4 },
+      };
+
+      expect(toKpiWidgetStyle(styleOptions)).toEqual({
+        layout: 'comparison-first',
+        title: { enabled: false, showValueTitle: true, showCategoryTitle: false },
+        sparkline: { enabled: false, chartType: 'line' },
+        comparison: { display: 'both', showIcon: false },
+        card: { textAlign: 'center', showBorder: true, cornerRadius: 4 },
+      });
+    });
+
+    it('omits fields that were never set', () => {
+      expect(toKpiWidgetStyle({})).toEqual({});
+    });
+
+    it('writes valueMode, which comes from dataOptions rather than styleOptions', () => {
+      expect(toKpiWidgetStyle({}, 'total')).toEqual({ valueMode: 'total' });
+      expect(toKpiWidgetStyle({ layout: 'standard' }, 'last')).toEqual({
+        layout: 'standard',
+        valueMode: 'last',
+      });
+    });
+
+    it('omits valueMode when not supplied, leaving the chart default to apply', () => {
+      expect(toKpiWidgetStyle({ layout: 'standard' })).toEqual({ layout: 'standard' });
+    });
+
+    it('keeps comparison fields that have no Design control (label, color, conditionalIcons, …)', () => {
+      // A missing control means the field cannot be edited in Fusion, not that an
+      // SDK-authored value should be destroyed the first time the widget is saved there.
+      const styleOptions: KpiStyleOptions = {
+        comparison: {
+          display: 'percent',
+          label: 'vs last year',
+          color: { type: 'uniform', color: 'green' },
+          conditionalIcons: [],
+        },
+      };
+
+      expect(toKpiWidgetStyle(styleOptions)).toEqual({ comparison: styleOptions.comparison });
+    });
+
+    it('keeps comparison when only fields without a control are set', () => {
+      expect(toKpiWidgetStyle({ comparison: { label: 'vs last year' } })).toEqual({
+        comparison: { label: 'vs last year' },
+      });
+    });
+
+    it('keeps every sparkline chartType, including spline and column', () => {
+      expect(toKpiWidgetStyle({ sparkline: { enabled: true, chartType: 'spline' } })).toEqual({
+        sparkline: { enabled: true, chartType: 'spline' },
+      });
+      expect(toKpiWidgetStyle({ sparkline: { enabled: true, chartType: 'column' } })).toEqual({
+        sparkline: { enabled: true, chartType: 'column' },
+      });
+    });
+
+    it('keeps the card background, which the generic widget styling owns', () => {
+      expect(toKpiWidgetStyle({ card: { backgroundColor: '#123456' } })).toEqual({
+        card: { backgroundColor: '#123456' },
+      });
+    });
+
+    it('round-trips the value group, which the CSDK-mode editor reads back', () => {
+      // In CSDK mode Fusion renders through fromWidgetDto rather than passing widget.style to
+      // the chart verbatim, so a group missing here is silently dropped for those users only.
+      const styleOptions: KpiStyleOptions = {
+        value: { textSize: 35.2, noDataText: 'No data yet' },
+      };
+      const widgetDto = {
+        type: 'kpi',
+        subtype: 'kpi/standard' as WidgetSubtype,
+        style: toKpiWidgetStyle(styleOptions),
+        metadata: { panels: [] },
+      } as unknown as WidgetDto;
+
+      expect((toKpiWidgetStyle(styleOptions) as KpiWidgetStyle).value).toEqual(styleOptions.value);
+      expect((extractStyleOptions('kpi', widgetDto) as KpiStyleOptions).value).toEqual(
+        styleOptions.value,
+      );
+    });
+
+    it('round-trips every style group, controls or not', () => {
+      const styleOptions: KpiStyleOptions = {
+        layout: 'comparison-first',
+        value: { textSize: 24, noDataText: 'n/a' },
+        title: { enabled: true, text: 'Revenue' },
+        sparkline: { enabled: true, chartType: 'column' },
+        comparison: { display: 'both', showIcon: false, toGoText: '{{value}} remaining' },
+        card: { textAlign: 'right', backgroundColor: '#101010', cornerRadius: 2 },
+      };
+      const widgetDto = {
+        type: 'kpi',
+        subtype: 'kpi/goal' as WidgetSubtype,
+        style: toKpiWidgetStyle(styleOptions),
+        metadata: { panels: [] },
+      } as unknown as WidgetDto;
+
+      expect(extractStyleOptions('kpi', widgetDto)).toEqual(styleOptions);
+    });
+
+    it('round-trips with extractStyleOptions for kpi', () => {
+      const originalStyle: KpiWidgetStyle = {
+        layout: 'comparison-first',
+        title: { enabled: false, showValueTitle: true, showCategoryTitle: false },
+        sparkline: { enabled: false, chartType: 'line' },
+        comparison: { display: 'both', showIcon: false },
+        card: { textAlign: 'center', showBorder: true, cornerRadius: 4 },
+      };
+      const widgetDto = {
+        type: 'kpi',
+        subtype: 'kpi/standard' as WidgetSubtype,
+        style: originalStyle,
+        metadata: { panels: [] },
+      } as unknown as WidgetDto;
+      const extracted = extractStyleOptions('kpi', widgetDto) as KpiStyleOptions;
+      const restored = toKpiWidgetStyle(extracted);
+      expect(restored).toEqual(originalStyle);
+    });
+  });
+
   describe('toSunburstWidgetStyle', () => {
     it('returns default sunburst style when styleOptions is minimal', () => {
       const result = toSunburstWidgetStyle({});
@@ -1856,5 +1991,43 @@ describe('to-widget-dto-style', () => {
       expect(restored.rowHeight).toBe(originalStyle.rowHeight);
       expect(restored.colors).toEqual(originalStyle.colors);
     });
+  });
+
+  describe('toTableWidgetStyle', () => {
+    it('maps isAutoHeight to automaticHeight on the DTO', () => {
+      expect(toTableWidgetStyle({ isAutoHeight: true }).automaticHeight).toBe(true);
+      expect(toTableWidgetStyle({ isAutoHeight: false }).automaticHeight).toBe(false);
+    });
+
+    it('omits automaticHeight when isAutoHeight is undefined', () => {
+      expect('automaticHeight' in toTableWidgetStyle({})).toBe(false);
+    });
+
+    it.each([true, false])(
+      'round-trips automaticHeight %s for a table widget',
+      (automaticHeight) => {
+        const originalStyle = {
+          'colors/columns': true,
+          'colors/headers': true,
+          'colors/rows': false,
+          'width/content': true,
+          'width/window': false,
+          pageSize: 25,
+          automaticHeight,
+        } as TableWidgetStyle;
+        const widgetDto = {
+          type: 'tablewidget',
+          subtype: '' as WidgetSubtype,
+          style: originalStyle,
+          metadata: { panels: [] },
+        } as unknown as WidgetDto;
+
+        const extracted = extractStyleOptions('tablewidget', widgetDto) as TableStyleOptions;
+        const restored = toTableWidgetStyle(extracted);
+
+        expect(extracted.isAutoHeight).toBe(automaticHeight);
+        expect(restored.automaticHeight).toBe(automaticHeight);
+      },
+    );
   });
 });

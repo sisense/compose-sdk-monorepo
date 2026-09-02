@@ -31,6 +31,19 @@ parent Sisense Context.
 
 ***
 
+#### dimensionFilters
+
+> **dimensionFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
+
+The widget's own dimension filters — the permanent restriction on which members this widget
+may select, as opposed to the transient dashboard state also present in `parentFilters`.
+
+The published filter encodes them, so that selecting all values filters the dashboard by the
+allowed members rather than by every member of the dimension. Pass the same filters here and
+in `parentFilters`.
+
+***
+
 #### filter
 
 > **filter**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md) \| `null`
@@ -44,7 +57,8 @@ For standalone use, pass explicitly.
 
 > **parentFilters**?: [`Filter`](../../sdk-data/interfaces/interface.Filter.md)[]
 
-Parent filters for cascading behavior. Out of scope for phase 1.
+Everything that narrows the member list: the widget's own dimension filters, plus any
+dashboard filters the widget opted in to. Scopes the member query only.
 
 ### Widget
 
@@ -61,6 +75,7 @@ Configuration of the widget.
 > **filterType**?: [`FilterWidgetFilterType`](../type-aliases/type-alias.FilterWidgetFilterType.md)
 
 How the filter is rendered. Defaults to `'members'` (searchable member-select dropdown).
+`'condition'` renders a string condition control for text attributes.
 Additional types will be added as they are implemented.
 
 ##### Default Value
@@ -87,14 +102,10 @@ true
 
 #### styleOptions
 
-> **styleOptions**?: [`WidgetContainerStyleOptions`](interface.WidgetContainerStyleOptions.md)
+> **styleOptions**?: [`FilterWidgetStyleOptions`](../type-aliases/type-alias.FilterWidgetStyleOptions.md)
 
-Style options for the widget container (look & feel, border, shadow, etc.).
-
-Note: the default header toolbar (info button with datasource/refresh) is
-always hidden for this widget — those actions do not apply to a filter
-control. A custom `header.renderToolbar` is still invoked, but receives an
-empty default toolbar.
+Style options for the widget container (look & feel, border, shadow, etc.), and for the
+filter control inside it under `control`.
 
 ***
 

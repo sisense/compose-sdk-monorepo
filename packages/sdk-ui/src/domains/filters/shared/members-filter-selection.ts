@@ -22,7 +22,7 @@ export type MembersFilterSelection = {
 
 /**
  * Context needed to decide whether a multi-select toggle should collapse into
- * the select-all / include-all representation (Fusion parity).
+ * the select-all / include-all representation (same rule as classic members filters).
  * @internal
  */
 export type MemberToggleContext = {
@@ -58,7 +58,7 @@ export function asClearAllSelection(): MembersFilterSelection {
  *
  * In multi-select, when every loaded member ends up selected, pagination is
  * complete, there is no search filter, and no deactivated members, the
- * selection collapses the same way Fusion does:
+ * selection collapses the same way classic members filters do:
  * - include mode → select-all (`[], excludeMembers: true`)
  * - exclude mode → include-all (`[], excludeMembers: false`)
  * @param selection - Current selection state

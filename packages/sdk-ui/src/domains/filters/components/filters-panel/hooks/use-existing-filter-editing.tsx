@@ -10,7 +10,7 @@ import {
 import clone from 'lodash-es/clone';
 
 import { FilterEditorPopover } from '@/domains/filters/components/filter-editor-popover/filter-editor-popover';
-import { getFilterEditorValueType } from '@/domains/filters/components/filter-editor-popover/utils';
+import { getFilterAttributeValueType } from '@/domains/filters/shared/filter-attribute-value-type.js';
 
 import type { UseExistingFilterEditingConfig } from '../types';
 
@@ -118,7 +118,7 @@ export const useExistingFilterEditing = ({
 };
 
 export function isFilterSupportEditing(filter: Filter): boolean {
-  return isCascadingFilter(filter) || getFilterEditorValueType(filter.attribute) !== null;
+  return isCascadingFilter(filter) || getFilterAttributeValueType(filter.attribute) !== null;
 }
 
 /**

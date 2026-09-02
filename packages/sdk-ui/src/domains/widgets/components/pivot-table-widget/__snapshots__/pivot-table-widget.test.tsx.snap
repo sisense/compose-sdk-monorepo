@@ -31,36 +31,58 @@ exports[`PivotTableWidget > should render empty pivot table widget 1`] = `
                   data-component="header-container"
                 >
                   <div
-                    class="css-1tbf5m4"
-                    data-component="title"
+                    class="css-13phkbw"
+                    data-testid="header-items-row"
                   >
-                    Pivot table widget title
-                  </div>
-                  <div
-                    class="css-1qt6g1x"
-                    data-component="toolbar-container"
-                  >
-                    <button
-                      aria-label="Click to view full details"
-                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-19vz14z-MuiButtonBase-root-MuiIconButton-root"
-                      data-mui-internal-clone-element="true"
-                      data-testid="widget-header-info-icon-button"
-                      style="color: rgb(0, 0, 0); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
-                      tabindex="0"
-                      type="button"
+                    <div
+                      class="css-0"
+                      data-testid="header-item-widget-header-title-alignment-spacer"
+                      style="display: flex; align-items: center; flex: 0 0 auto; height: 28px; pointer-events: none;"
+                    />
+                    <div
+                      class="css-0"
+                      data-testid="header-item-widget-header-title"
+                      style="display: flex; align-items: center; flex: 0 1 auto; min-width: 0; height: 28px; pointer-events: auto;"
                     >
-                      <svg
-                        height="24"
-                        viewBox="0 0 24 24"
-                        width="24"
-                        xmlns="http://www.w3.org/2000/svg"
+                      <div
+                        class="css-1mw06bf"
+                        data-component="title"
                       >
-                        <path
-                          d="M11.5 20a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zm0-1a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zm-.5-8h1v5h-1v-5zm0-1v-.998h1V10h-1z"
-                          fill="#5B6372"
-                        />
-                      </svg>
-                    </button>
+                        Pivot table widget title
+                      </div>
+                    </div>
+                    <div
+                      class="css-0"
+                      data-testid="header-item-widget-header-spacer"
+                      style="display: flex; align-items: center; flex: 1 1 auto; min-width: 0; height: 28px; pointer-events: none;"
+                    />
+                    <div
+                      class="css-0"
+                      data-testid="header-item-widget-header-info-button"
+                      style="display: flex; align-items: center; flex: 0 0 auto; height: 28px; pointer-events: auto;"
+                    >
+                      <button
+                        aria-label="Click to view full details"
+                        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-19vz14z-MuiButtonBase-root-MuiIconButton-root"
+                        data-mui-internal-clone-element="true"
+                        data-testid="widget-header-info-icon-button"
+                        style="color: rgb(0, 0, 0); font-family: "Open Sans","Roboto","Helvetica","Arial",sans-serif;"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <svg
+                          height="24"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M11.5 20a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zm0-1a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zm-.5-8h1v5h-1v-5zm0-1v-.998h1V10h-1z"
+                            fill="#5B6372"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

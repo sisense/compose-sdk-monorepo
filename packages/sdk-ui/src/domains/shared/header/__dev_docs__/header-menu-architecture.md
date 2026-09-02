@@ -6,7 +6,8 @@ behind the "⋮" button. It is the sibling of the unified header **items** model
 row, this configures what sits _inside the header's menu_.
 
 Today it powers the **Widget** header menu (`WidgetProps.config.header.menu`, public since
-SNS-130723). FilterTile and Dashboard are planned to adopt the same core.
+SNS-130723) and the **FilterTile** menu (`FilterTileProps.config.header.menu`, public since
+SNS-130722). Dashboard is planned to adopt the same core.
 
 > Source: `src/domains/shared/header/resolve-header-menu-items.ts`,
 > `src/domains/widgets/shared/widget-header/`
@@ -168,8 +169,10 @@ type WidgetHeaderMenuTarget =
 ```
 
 `WidgetHeaderMenuItem` is **structurally assignable** to the internal `MenuItem`, so the widget
-passes config straight through with no casts. A future `FilterTileHeaderMenuItem` /
-`DashboardHeaderMenuItem` follows the same pattern.
+passes config straight through with no casts. `FilterTileMenuItem`
+(`filters/components/filter-tile/filter-tile-config.ts`) follows the same pattern — named without the
+`Header` infix because a filter tile has only one menu, so there is nothing to disambiguate. A future
+`DashboardHeaderMenuItem` joins them.
 
 > **Why not export `MenuItem` itself?** The name is far too generic for a public surface, and
 > `MenuItemSection` — an unrelated shape used by data-point context menus — is already public.
@@ -239,9 +242,9 @@ Each milestone is **purely additive** to the interface shipped in M1 — see §5
 - Built-in ids centralized **and made public** as `WidgetHeaderMenuTargets` / `WidgetHeaderMenuTarget`.
 - Built-ins always lead the menu, user items follow (`withBuiltInMenuItem`, §3) — aligning Widget with
   the FilterTile.
-- Single resolution seam `resolveHeaderMenuItems`; menu rendering detached from
-  `WidgetHeaderToolbar` into `WidgetHeaderMenu` (the toolbar is now only what
-  `styleOptions.header.renderToolbar` can replace).
+- Single resolution seam `resolveHeaderMenuItems`; menu rendering detached from the header's toolbar
+  into `WidgetHeaderMenu`. (The toolbar itself was later dissolved into individual header items — see
+  [`header-architecture.md`](./header-architecture.md) §6.)
 
 ### M2 — `position`
 
@@ -296,9 +299,14 @@ returns the final list — the only way to modify, reorder, or remove built-in i
 
 ### M4 — FilterTile & Dashboard adopt the same core
 
-- `FilterTileConfig.header.menu` already has the target shape; move it onto
-  `resolveHeaderMenuItems`, add `enabled`, and reconcile its built-in-first ordering with the
-  widget's `auto` semantics.
+- **FilterTile — done (SNS-130722).** Both menu-item hooks
+  (`use-filter-tile-menu-items`, `use-cascadding-filter-tile-menu-items`) now funnel through
+  `resolveHeaderMenuItems`, so the tile menu inherits visibility and empty-submenu pruning instead of
+  passing items through raw — which had made `FilterTileMenuSubmenuItem`'s documented "a submenu with
+  no items is not rendered" false for tiles. `FilterTileMenuConfig.enabled` was added alongside,
+  matching the widget. Built-in-first ordering already agreed with `auto` (§3), so nothing moved.
+- The built-in lock id is public as `FilterTileMenuTargets.Lock`
+  (`filter-tile-menu-lock`), the FilterTile counterpart of `WidgetHeaderMenuTargets`.
 - The dashboard header menu is currently `MenuItemSection[]` fed to `useDashboardHeaderMenuItem`.
   Converge it onto the same item model so `DashboardConfig.header.menu` can be configured like the
   widget's.
@@ -397,7 +405,7 @@ Four invariants keep that table true, and all four are load-bearing:
   transform hook, stable built-in target ids, a pure resolver.
 - **One flat resolver seam** keeps ordering rules from drifting per component, which is exactly what
   happened before it existed (widget vs. FilterTile ordering, duplicated
-  "enabled && items.length" checks in `widget-header-toolbar` and `text-widget`).
+  "enabled && items.length" checks in the widget header's toolbar and `text-widget`).
 - **Per-component public types over a shared `MenuItem`** keeps names meaningful in docs and lets
   each component narrow its own target ids later.
 - **`enabled` separate from an empty `items`** distinguishes "the host turned the menu off" from

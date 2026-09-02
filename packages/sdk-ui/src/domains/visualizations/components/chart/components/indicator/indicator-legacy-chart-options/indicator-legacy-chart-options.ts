@@ -63,7 +63,7 @@ export const createIndicatorLegacyChartOptions = (
     );
   }
 
-  const customColorOptions = getValueColorOptions(dataOptions);
+  const customColorOptions = getValueColorOptions(dataOptions, chartData.colorConditionValues);
   if (customColorOptions && chartData.value && isNumber(chartData.value)) {
     legacyChartOptions = overrideWithValueColor(
       customColorOptions,

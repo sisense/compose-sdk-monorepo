@@ -114,6 +114,12 @@ export class RelativeDateFilterTileComponent implements AfterViewInit, OnChanges
   limit: RelativeDateFilterTileProps['limit'];
 
   /**
+   * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.config}
+   */
+  @Input()
+  config: RelativeDateFilterTileProps['config'];
+
+  /**
    * {@inheritDoc @sisense/sdk-ui!RelativeDateFilterTileProps.onUpdate}
    */
   @Output()
@@ -168,6 +174,7 @@ export class RelativeDateFilterTileComponent implements AfterViewInit, OnChanges
 
   private getPreactComponentProps(): RelativeDateFilterTilePropsPreact {
     return {
+      config: this.config,
       title: this.title,
       filter: this.filter,
       arrangement: this.arrangement,
